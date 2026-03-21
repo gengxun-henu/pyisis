@@ -19,9 +19,49 @@ git push -u origin main
 ###################33
 创建gitｈｕｂ仓库
 
-gh repo create pyisis --private --source=. --remote=origin --push
+cd /你的工程目录
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+gh repo create 仓库名 --public --source=. --remote=origin --push
+
 ✓ Created repository gengxun-henu/pyisis on github.com
 
+然后：
+git remote -v
+要是想以SSH方式，应该是这样：
+origin  git@github.com:你的用户名/仓库名.git (fetch)
+origin  git@github.com:你的用户名/仓库名.git (push)
+如果显示了https:
+则：
+git remote set-url origin git@github.com:gengxun-henu/pyisis.git
+git push -u origin main
 
 ＃ I have　ａｄｄ　ｗａｔｔ　ＴｏｏｌＫｉｔ?
 但是一用这个加速器，好像VSCODE不能用？但是应该不影响？就是GIT时加速，然后再关闭，再用ＣＯＰＩＬＯＴ
+
+
+
+
+推荐流程：SSH连接GITHUB
+ssh -T git@github.com
+gh auth status
+gh config set git_protocol ssh
+cd /你的工程目录
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+gh repo create 仓库名 --public --source=. --remote=origin --push
+git remote -v
+
+
+＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃＃
+日常工作：
+git add .
+git commit -m "Initial commit"
+git push
+
+
+git pull --rebase

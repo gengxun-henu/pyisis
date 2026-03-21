@@ -259,3 +259,40 @@
 - Notes / follow-up:
   - `methods_inventory_summary.csv` and the per-class CSV inventory under `class_bind_methods_details/` are now further out of date for these two classes and should be regenerated or synchronized in a later maintenance pass.
   - The next control-side quick wins are still the versioned control-point wrappers (`ControlPointV0001/V0002/V0003`) or another lightweight validation/helper class, not `BundleAdjust`.
+
+[2026-03-22] Control Networks quick-win batch: ControlPointV0001 + ControlPointV0002 + ControlPointV0003
+- Extended `isis_pybind_standalone/src/control/bind_control_core.cpp` with lightweight versioned control-point bindings for:
+  - `ControlPointV0001`
+    - PVL constructor from `PvlObject` plus target name
+    - `point_data()` / `log_data()` serialized protobuf bytes adapters
+    - `point_data_debug_string()` / `log_data_debug_string()` helpers
+  - `ControlPointV0002`
+    - PVL constructor
+    - upgrade constructor from `ControlPointV0001`
+    - `point_data()` / `log_data()` serialized protobuf bytes adapters
+    - `point_data_debug_string()` / `log_data_debug_string()` helpers
+  - `ControlPointV0003`
+    - PVL constructor
+    - upgrade constructor from `ControlPointV0002`
+    - `point_data()` serialized protobuf bytes adapter
+    - `point_data_debug_string()` helper
+- Binding strategy note:
+  - returned protobuf/QSharedPointer surfaces are intentionally adapted to Python-facing `bytes` and debug strings rather than exposing raw protobuf pointer/reference lifetimes directly
+  - this keeps the batch small and safe without taking on a separate protobuf-binding dependency layer
+- Re-exported `ControlPointV0001`, `ControlPointV0002`, and `ControlPointV0003` in `isis_pybind_standalone/python/isis_pybind/__init__.py`
+- Updated `isis_pybind_standalone/todo_pybind11.csv` to mark all three versioned control-point wrappers as converted
+- Extended focused unit coverage in `isis_pybind_standalone/tests/unitTest/control_core_unit_test.py`
+  - added minimal local PVL builders for version 1/2/3 control points
+  - added serialization/debug-string coverage for direct PVL construction
+  - added upgrade-path checks for `V0001 -> V0002` and `V0002 -> V0003`
+- Extended broad smoke coverage in `isis_pybind_standalone/tests/smoke_import.py`
+  - added symbol-presence checks for the three versioned control-point wrappers
+  - added minimum runtime construction / serialization checks for direct and upgrade paths
+- Validation completed with `/home/gengxun/miniconda3/envs/asp360_new/bin/python`:
+  - `cmake --build build -j2`
+  - `PYTHONPATH=tests/unitTest /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v control_core_unit_test`
+  - `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+- Notes / follow-up:
+  - while validating this batch, `isis_pybind_standalone/src/bind_sensor.cpp` also needed a one-line repair to restore the existing `Sensor.universal_longitude()` binding that had been truncated in the working tree; without that fix the module would not relink and the new control-side validation could not run
+  - `class_bind_methods_details/control_control_point_v000*.csv` and `methods_inventory_summary.csv` are now stale for these classes and should be regenerated or synchronized in a later maintenance pass
+  - the next Control Networks candidate should stay on the lightweight side unless more `Bundle*` dependency surface is deliberately opened

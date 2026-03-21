@@ -31,8 +31,7 @@ void bind_sensor(py::module_ &m) {
              return Isis::SurfacePoint(self.GetSurfacePoint());
            })
       .def("universal_latitude", [](Isis::Sensor &self) { return self.UniversalLatitude(); })
-      .def("universal_longitude", [](Isis::Sensor &self) { return self.
-          (); })
+               .def("universal_longitude", [](Isis::Sensor &self) { return self.UniversalLongitude(); })
       .def("phase_angle", &Isis::Sensor::PhaseAngle)
       .def("emission_angle", &Isis::Sensor::EmissionAngle)
       .def("incidence_angle", &Isis::Sensor::IncidenceAngle)

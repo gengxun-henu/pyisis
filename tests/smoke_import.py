@@ -43,6 +43,9 @@ HAS_CONTROL_BINDINGS = all(
         "ControlNet",
         "ControlNetDiff",
         "ControlPointList",
+        "ControlPointV0001",
+        "ControlPointV0002",
+        "ControlPointV0003",
         "BundleObservationSolveSettings",
         "BundleSettings",
         "BundleTargetBody",
@@ -94,6 +97,9 @@ def test_basic_symbols_present():
     assert hasattr(ip, "BundleObservationSolveSettings")
     assert hasattr(ip, "BundleSettings")
     assert hasattr(ip, "BundleTargetBody")
+    assert hasattr(ip, "ControlPointV0001")
+    assert hasattr(ip, "ControlPointV0002")
+    assert hasattr(ip, "ControlPointV0003")
     assert hasattr(ip, "Transform")
     assert hasattr(ip, "Interpolator")
     assert hasattr(ip, "Enlarge")
@@ -225,6 +231,103 @@ End
         return pvl
 
 
+def make_control_point_v0001_object():
+        pvl = ip.Pvl()
+        pvl.from_string(
+                """
+Object = ControlPoint
+    PointId = CPV1
+    PointType = Ground
+    X = 1000.0
+    Y = 2000.0
+    Z = 3000.0
+    Group = Measure
+        SerialNumber = SN-V1
+        Sample = 10.5
+        Line = 20.5
+        AprioriSample = 10.5
+        AprioriLine = 20.5
+        SampleSigma = 0.5
+        LineSigma = 0.5
+        MeasureType = Manual
+        Reference = True
+        GoodnessOfFit = 0.9
+    EndGroup
+EndObject
+End
+"""
+        )
+        return pvl.find_object("ControlPoint")
+
+
+def make_control_point_v0002_object():
+        pvl = ip.Pvl()
+        pvl.from_string(
+                """
+Object = ControlPoint
+    PointId = CPV2
+    PointType = Ground
+    AprioriX = 1000.0
+    AprioriY = 2000.0
+    AprioriZ = 3000.0
+    AdjustedX = 1001.0
+    AdjustedY = 2001.0
+    AdjustedZ = 3001.0
+    Group = Measure
+        SerialNumber = SN-V2
+        Sample = 11.5
+        Line = 21.5
+        SampleResidual = 0.0
+        LineResidual = 0.0
+        AprioriSample = 11.5
+        AprioriLine = 21.5
+        SampleSigma = 0.25
+        LineSigma = 0.25
+        MeasureType = Manual
+        Reference = True
+        GoodnessOfFit = 0.8
+    EndGroup
+EndObject
+End
+"""
+        )
+        return pvl.find_object("ControlPoint")
+
+
+def make_control_point_v0003_object():
+        pvl = ip.Pvl()
+        pvl.from_string(
+                """
+Object = ControlPoint
+    PointId = CPV3
+    PointType = Fixed
+    AprioriX = 1100.0
+    AprioriY = 2100.0
+    AprioriZ = 3100.0
+    AdjustedX = 1101.0
+    AdjustedY = 2101.0
+    AdjustedZ = 3101.0
+    Group = Measure
+        SerialNumber = SN-V3
+        Sample = 12.5
+        Line = 22.5
+        SampleResidual = 0.1
+        LineResidual = 0.2
+        AprioriSample = 12.4
+        AprioriLine = 22.4
+        SampleSigma = 0.2
+        LineSigma = 0.2
+        MeasureType = Manual
+        Reference = True
+        GoodnessOfFit = 0.7
+    EndGroup
+EndObject
+End
+"""
+        )
+        return pvl.find_object("ControlPoint")
+
+
 def test_basic_base_objects_work():
     if HAS_CONTROL_BINDINGS:
         log_data = ip.ControlMeasureLogData(
@@ -274,6 +377,23 @@ def test_basic_base_objects_work():
             point_list_path.write_text("P1\nP2\n", encoding="utf-8")
             point_list = ip.ControlPointList(ip.FileName(str(point_list_path)))
             assert len(point_list) == 2
+
+        control_point_v0001 = ip.ControlPointV0001(make_control_point_v0001_object(), "Mars")
+        assert len(control_point_v0001.point_data()) > 0
+        assert len(control_point_v0001.log_data()) > 0
+
+        control_point_v0002 = ip.ControlPointV0002(make_control_point_v0002_object())
+        assert len(control_point_v0002.point_data()) > 0
+        assert len(control_point_v0002.log_data()) > 0
+
+        control_point_v0002_upgrade = ip.ControlPointV0002(control_point_v0001)
+        assert control_point_v0002_upgrade.point_data() == control_point_v0001.point_data()
+
+        control_point_v0003 = ip.ControlPointV0003(make_control_point_v0003_object())
+        assert len(control_point_v0003.point_data()) > 0
+
+        control_point_v0003_upgrade = ip.ControlPointV0003(control_point_v0002)
+        assert len(control_point_v0003_upgrade.point_data()) > 0
 
         cube = ip.Cube()
         cube.open(str(PROJECT_ROOT.parent / "isis" / "tests" / "data" / "mosrange" / "EN0108828322M_iof.cub"), "r")

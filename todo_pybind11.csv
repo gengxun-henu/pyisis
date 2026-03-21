@@ -24,9 +24,9 @@ Control Networks,ControlNetVersioner,未转换,
 Control Networks,ControlNetVitals,未转换,Qt 类型/信号槽较多
 Control Networks,ControlPoint,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
 Control Networks,ControlPointList,已转换,2026-03-21 已在 bind_control_core.cpp 暴露文件读取/索引/统计注册接口
-Control Networks,ControlPointV0001,未转换,
-Control Networks,ControlPointV0002,未转换,
-Control Networks,ControlPointV0003,未转换,
+Control Networks,ControlPointV0001,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL 构造与 protobuf bytes/debug-string 适配接口
+Control Networks,ControlPointV0002,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口
+Control Networks,ControlPointV0003,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口
 Control Networks,CsmBundleObservation,未转换,
 Control Networks,ImageOverlap,未转换,
 Control Networks,InterestOperator,未转换,抽象基类/纯虚接口

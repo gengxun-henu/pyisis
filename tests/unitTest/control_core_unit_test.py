@@ -10,6 +10,100 @@ class ControlCoreUnitTest(unittest.TestCase):
         self.addCleanup(cube.close)
         return cube
 
+    def make_control_point_v0001_object(self):
+        pvl = ip.Pvl()
+        pvl.from_string(
+            """
+Object = ControlPoint
+    PointId = CPV1
+    PointType = Ground
+    X = 1000.0
+    Y = 2000.0
+    Z = 3000.0
+    Group = Measure
+        SerialNumber = SN-V1
+        Sample = 10.5
+        Line = 20.5
+        AprioriSample = 10.5
+        AprioriLine = 20.5
+        SampleSigma = 0.5
+        LineSigma = 0.5
+        MeasureType = Manual
+        Reference = True
+        GoodnessOfFit = 0.9
+    EndGroup
+EndObject
+End
+"""
+        )
+        return pvl.find_object("ControlPoint")
+
+    def make_control_point_v0002_object(self):
+        pvl = ip.Pvl()
+        pvl.from_string(
+            """
+Object = ControlPoint
+    PointId = CPV2
+    PointType = Ground
+    AprioriX = 1000.0
+    AprioriY = 2000.0
+    AprioriZ = 3000.0
+    AdjustedX = 1001.0
+    AdjustedY = 2001.0
+    AdjustedZ = 3001.0
+    Group = Measure
+        SerialNumber = SN-V2
+        Sample = 11.5
+        Line = 21.5
+        SampleResidual = 0.0
+        LineResidual = 0.0
+        AprioriSample = 11.5
+        AprioriLine = 21.5
+        SampleSigma = 0.25
+        LineSigma = 0.25
+        MeasureType = Manual
+        Reference = True
+        GoodnessOfFit = 0.8
+    EndGroup
+EndObject
+End
+"""
+        )
+        return pvl.find_object("ControlPoint")
+
+    def make_control_point_v0003_object(self):
+        pvl = ip.Pvl()
+        pvl.from_string(
+            """
+Object = ControlPoint
+    PointId = CPV3
+    PointType = Fixed
+    AprioriX = 1100.0
+    AprioriY = 2100.0
+    AprioriZ = 3100.0
+    AdjustedX = 1101.0
+    AdjustedY = 2101.0
+    AdjustedZ = 3101.0
+    Group = Measure
+        SerialNumber = SN-V3
+        Sample = 12.5
+        Line = 22.5
+        SampleResidual = 0.1
+        LineResidual = 0.2
+        AprioriSample = 12.4
+        AprioriLine = 22.4
+        SampleSigma = 0.2
+        LineSigma = 0.2
+        MeasureType = Manual
+        Reference = True
+        GoodnessOfFit = 0.7
+    EndGroup
+EndObject
+End
+"""
+        )
+        return pvl.find_object("ControlPoint")
+
     def test_bundle_target_body_minimal_configuration(self):
         target_body = ip.BundleTargetBody()
         target_body.set_solve_settings(
@@ -415,6 +509,36 @@ class ControlCoreUnitTest(unittest.TestCase):
             self.assertTrue(pvl_log.has_keyword("TotalPoints"))
             self.assertEqual(pvl_log.find_keyword("TotalPoints")[0], "3")
             self.assertTrue(pvl_log.has_keyword("InvalidPoints"))
+
+    def test_control_point_v0001_serialization_helpers(self):
+        point = ip.ControlPointV0001(self.make_control_point_v0001_object(), "Mars")
+
+        self.assertGreater(len(point.point_data()), 0)
+        self.assertGreater(len(point.log_data()), 0)
+        self.assertIn("CPV1", point.point_data_debug_string())
+        self.assertIn("0.9", point.log_data_debug_string())
+
+    def test_control_point_v0002_from_pvl_and_upgrade(self):
+        direct_point = ip.ControlPointV0002(self.make_control_point_v0002_object())
+        old_point = ip.ControlPointV0001(self.make_control_point_v0001_object(), "Mars")
+        upgraded_point = ip.ControlPointV0002(old_point)
+
+        self.assertGreater(len(direct_point.point_data()), 0)
+        self.assertGreater(len(direct_point.log_data()), 0)
+        self.assertIn("CPV2", direct_point.point_data_debug_string())
+        self.assertEqual(upgraded_point.point_data(), old_point.point_data())
+        self.assertEqual(upgraded_point.log_data(), old_point.log_data())
+        self.assertIn("CPV1", upgraded_point.point_data_debug_string())
+
+    def test_control_point_v0003_from_pvl_and_upgrade(self):
+        direct_point = ip.ControlPointV0003(self.make_control_point_v0003_object())
+        old_point = ip.ControlPointV0002(self.make_control_point_v0002_object())
+        upgraded_point = ip.ControlPointV0003(old_point)
+
+        self.assertGreater(len(direct_point.point_data()), 0)
+        self.assertIn("CPV3", direct_point.point_data_debug_string())
+        self.assertGreater(len(upgraded_point.point_data()), 0)
+        self.assertIn("CPV2", upgraded_point.point_data_debug_string())
 
     def test_measure_validation_results_round_trip(self):
         results = ip.MeasureValidationResults()

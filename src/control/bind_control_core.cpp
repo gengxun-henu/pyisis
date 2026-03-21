@@ -27,6 +27,9 @@
 #include "ControlNet.h"
 #include "ControlPoint.h"
 #include "ControlPointList.h"
+#include "ControlPointV0001.h"
+#include "ControlPointV0002.h"
+#include "ControlPointV0003.h"
 #include "FileName.h"
 #include "MaximumLikelihoodWFunctions.h"
 #include "MeasureValidationResults.h"
@@ -831,6 +834,96 @@ void bind_control_core(py::module_ &m)
          .def("__len__", &Isis::ControlPointList::Size)
          .def("__repr__", [](Isis::ControlPointList &self)
               { return "ControlPointList(size=" + std::to_string(self.Size()) + ")"; });
+
+     py::class_<Isis::ControlPointV0001> control_point_v0001(m, "ControlPointV0001");
+
+     control_point_v0001
+         .def(py::init([](Isis::PvlObject &point_object, const std::string &target_name)
+                       {
+                            return std::make_unique<Isis::ControlPointV0001>(point_object, stdStringToQString(target_name));
+                       }),
+              py::arg("point_object"),
+              py::arg("target_name"))
+         .def("point_data", [](Isis::ControlPointV0001 &self)
+              {
+                   return py::bytes(self.pointData()->SerializeAsString());
+              })
+         .def("log_data", [](Isis::ControlPointV0001 &self)
+              {
+                   return py::bytes(self.logData()->SerializeAsString());
+              })
+         .def("point_data_debug_string", [](Isis::ControlPointV0001 &self)
+              {
+                   return self.pointData()->DebugString();
+              })
+         .def("log_data_debug_string", [](Isis::ControlPointV0001 &self)
+              {
+                   return self.logData()->DebugString();
+              })
+         .def("__repr__", [](Isis::ControlPointV0001 &self)
+              {
+                   return "ControlPointV0001(bytes=" + std::to_string(self.pointData()->ByteSizeLong()) + ")";
+              });
+
+     py::class_<Isis::ControlPointV0002> control_point_v0002(m, "ControlPointV0002");
+
+     control_point_v0002
+         .def(py::init([](Isis::PvlObject &point_object)
+                       {
+                            return std::make_unique<Isis::ControlPointV0002>(point_object);
+                       }),
+              py::arg("point_object"))
+         .def(py::init([](Isis::ControlPointV0001 &old_point)
+                       {
+                            return std::make_unique<Isis::ControlPointV0002>(old_point);
+                       }),
+              py::arg("old_point"))
+         .def("point_data", [](Isis::ControlPointV0002 &self)
+              {
+                   return py::bytes(self.pointData()->SerializeAsString());
+              })
+         .def("log_data", [](Isis::ControlPointV0002 &self)
+              {
+                   return py::bytes(self.logData()->SerializeAsString());
+              })
+         .def("point_data_debug_string", [](Isis::ControlPointV0002 &self)
+              {
+                   return self.pointData()->DebugString();
+              })
+         .def("log_data_debug_string", [](Isis::ControlPointV0002 &self)
+              {
+                   return self.logData()->DebugString();
+              })
+         .def("__repr__", [](Isis::ControlPointV0002 &self)
+              {
+                   return "ControlPointV0002(bytes=" + std::to_string(self.pointData()->ByteSizeLong()) + ")";
+              });
+
+     py::class_<Isis::ControlPointV0003> control_point_v0003(m, "ControlPointV0003");
+
+     control_point_v0003
+         .def(py::init([](Isis::PvlObject &point_object)
+                       {
+                            return std::make_unique<Isis::ControlPointV0003>(point_object);
+                       }),
+              py::arg("point_object"))
+         .def(py::init([](Isis::ControlPointV0002 &old_point)
+                       {
+                            return std::make_unique<Isis::ControlPointV0003>(old_point);
+                       }),
+              py::arg("old_point"))
+         .def("point_data", [](Isis::ControlPointV0003 &self)
+              {
+                   return py::bytes(self.pointData().SerializeAsString());
+              })
+         .def("point_data_debug_string", [](Isis::ControlPointV0003 &self)
+              {
+                   return self.pointData().DebugString();
+              })
+         .def("__repr__", [](Isis::ControlPointV0003 &self)
+              {
+                   return "ControlPointV0003(bytes=" + std::to_string(self.pointData().ByteSizeLong()) + ")";
+              });
 
      py::class_<Isis::MeasureValidationResults> measure_validation_results(m, "MeasureValidationResults");
 

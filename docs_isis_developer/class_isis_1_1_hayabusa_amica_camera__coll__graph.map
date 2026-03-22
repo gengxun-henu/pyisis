@@ -1,5 +1,0 @@
-<map id="Isis::HayabusaAmicaCamera" name="Isis::HayabusaAmicaCamera">
-<area shape="rect" id="node1" title="This is the camera model for the Hayabusa AMICA camera." alt="" coords="18,568,211,729"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_framing_camera.html" title="Generic class for Framing Cameras." alt="" coords="22,391,207,520"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="5,5,224,343"/>
-</map>

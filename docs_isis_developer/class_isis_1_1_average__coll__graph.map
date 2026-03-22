@@ -1,8 +1,0 @@
-<map id="Isis::Average" name="Isis::Average">
-<area shape="rect" id="node1" title="Functor for reduce using average functionality." alt="" coords="167,649,266,747"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_reduce.html" title="Reduce the pixel dimensions of an image." alt="" coords="140,471,293,600"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,85,65,167"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_portal.html" title="Buffer for containing a two dimensional section of an image." alt="" coords="114,61,223,191"/>
-<area shape="rect" id="node5" title=" " alt="" coords="246,85,285,167"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_cube.html" title="IO Handler for Isis Cubes." alt="" coords="351,5,463,247"/>
-</map>

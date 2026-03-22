@@ -1,6 +1,0 @@
-<map id="Isis::AbstractTableDelegate" name="Isis::AbstractTableDelegate">
-<area shape="rect" id="node1" title="Base class for delegates which create, read, and save data in the tables." alt="" coords="105,135,287,296"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_measure_table_delegate.html" title="Delegate for creating, reading, and saving data in the measure table." alt="" coords="5,344,189,505"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_point_table_delegate.html" title="Delegate for creating, reading, and saving data in the point table." alt="" coords="213,344,376,505"/>
-<area shape="rect" id="node2" href="$class_q_object.html" title=" " alt="" coords="161,5,230,87"/>
-</map>

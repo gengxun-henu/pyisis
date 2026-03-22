@@ -1,5 +1,0 @@
-<map id="Isis::MoveToTopSceneWorkOrder" name="Isis::MoveToTopSceneWorkOrder">
-<area shape="rect" id="node1" title="Move images on top of all other images in a mosaic scene This workorder is synchronous and undoable." alt="" coords="5,840,221,1033"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_mosaic_scene_work_order.html" title="Work order associated with a MosaicSceneWidget." alt="" coords="17,615,209,792"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_work_order.html" title="Provide Undo/redo abilities, serialization, and history for an operation." alt="" coords="38,5,188,567"/>
-</map>

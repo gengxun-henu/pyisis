@@ -1,6 +1,0 @@
-<map id="Isis::FxBinder" name="Isis::FxBinder">
-<area shape="rect" id="node1" title="This is the parent class to the various function classes." alt="" coords="163,5,266,183"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_inline_void_fx.html" title="This class is used to bind function names with corresponding InlineCalculator functions that do not t..." alt="" coords="5,231,128,344"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_parameter_fx.html" title="This class is used to bind function names with corresponding Calculator functions that take a paramet..." alt="" coords="152,231,277,344"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_void_fx.html" title="This class is used to bind function names with corresponding Calculator functions that do not take pa..." alt="" coords="301,231,392,344"/>
-</map>

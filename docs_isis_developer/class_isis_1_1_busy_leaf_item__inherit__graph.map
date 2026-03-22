@@ -1,6 +1,0 @@
-<map id="Isis::BusyLeafItem" name="Isis::BusyLeafItem">
-<area shape="rect" id="node1" title="A leaf item that is not ready for user interaction." alt="" coords="123,648,254,777"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_null_data_item.html" title="Base class for an item without data." alt="" coords="5,359,182,600"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_abstract_tree_item.html" title="Base class for an item in the tree." alt="" coords="111,5,265,311"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_abstract_leaf_item.html" title="Base class for leaf items in the tree." alt="" coords="206,359,360,600"/>
-</map>

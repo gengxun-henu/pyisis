@@ -1,4 +1,0 @@
-<map id="Isis::CisscalFile" name="Isis::CisscalFile">
-<area shape="rect" id="node1" title="Extends TextFile to handle Cassini ISS calibration files." alt="" coords="5,375,144,504"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_text_file.html" title="Provides access to sequential ASCII stream I/O." alt="" coords="7,5,142,327"/>
-</map>

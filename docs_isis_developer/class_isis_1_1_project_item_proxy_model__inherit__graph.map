@@ -1,5 +1,0 @@
-<map id="Isis::ProjectItemProxyModel" name="Isis::ProjectItemProxyModel">
-<area shape="rect" id="node1" title="Allows access to items in a ProjectItemModel through a proxy model." alt="" coords="5,440,197,825"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_project_item_model.html" title="Provides access to data stored in a Project through Qt&#39;s model&#45;view framework." alt="" coords="21,135,181,392"/>
-<area shape="rect" id="node3" href="$class_q_standard_item_model.html" title=" " alt="" coords="29,5,173,87"/>
-</map>

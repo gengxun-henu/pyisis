@@ -1,3 +1,0 @@
-<map id="Isis::LoCameraFiducialMap" name="Isis::LoCameraFiducialMap">
-<area shape="rect" id="node1" title="Computes map from image coordinates to focal plane based on fiducials." alt="" coords="5,5,186,103"/>
-</map>

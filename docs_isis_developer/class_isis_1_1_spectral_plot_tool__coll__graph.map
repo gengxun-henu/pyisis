@@ -1,5 +1,0 @@
-<map id="Isis::SpectralPlotTool" name="Isis::SpectralPlotTool">
-<area shape="rect" id="node1" title="Plot cube DN statistics against the cube band numbers." alt="" coords="5,1064,180,1321"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_plot_tool.html" title="Parent class for plotting tools which provides common functionality." alt="" coords="12,695,173,1016"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_tool.html" title="Base class for the Qisis tools." alt="" coords="5,5,180,647"/>
-</map>

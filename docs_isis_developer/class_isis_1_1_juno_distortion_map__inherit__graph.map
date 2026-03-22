@@ -1,4 +1,0 @@
-<map id="Isis::JunoDistortionMap" name="Isis::JunoDistortionMap">
-<area shape="rect" id="node1" title="Distort/undistort focal plane coordinates for Juno&#39;s JunoCam camera." alt="" coords="13,407,206,552"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_distortion_map.html" title="Distort/undistort focal plane coordinates." alt="" coords="5,5,214,359"/>
-</map>

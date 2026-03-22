@@ -1,5 +1,0 @@
-<map id="Isis::Reduce" name="Isis::Reduce">
-<area shape="rect" id="node1" title="Reduce the pixel dimensions of an image." alt="" coords="38,5,191,359"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_average.html" title="Functor for reduce using average functionality." alt="" coords="5,407,104,504"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_nearest.html" title="Functor for reduce using near functionality." alt="" coords="128,407,224,504"/>
-</map>

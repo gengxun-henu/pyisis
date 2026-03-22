@@ -1,5 +1,0 @@
-<map id="Isis::ProcessImportVicar" name="Isis::ProcessImportVicar">
-<area shape="rect" id="node1" title="Import a Vicar file." alt="" coords="9,584,175,665"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_process_import.html" title="Byte swapper." alt="" coords="24,295,160,536"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_process.html" title="Base class for all cube processing derivatives." alt="" coords="5,5,179,247"/>
-</map>

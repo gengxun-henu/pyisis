@@ -1,5 +1,0 @@
-<map id="Isis::NirCamera" name="Isis::NirCamera">
-<area shape="rect" id="node1" title="This is the camera model for the Clementine Near Infrared Camera." alt="" coords="22,696,207,857"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_framing_camera.html" title="Generic class for Framing Cameras." alt="" coords="22,519,207,648"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="5,5,224,471"/>
-</map>

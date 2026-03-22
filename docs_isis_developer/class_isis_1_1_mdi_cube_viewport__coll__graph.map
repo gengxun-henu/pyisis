@@ -1,7 +1,0 @@
-<map id="Isis::MdiCubeViewport" name="Isis::MdiCubeViewport">
-<area shape="rect" id="node1" title="Cube display widget for certain Isis MDI applications." alt="" coords="131,729,284,955"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_cube_viewport.html" title="Widget to display Isis cubes for qt apps." alt="" coords="133,167,282,680"/>
-<area shape="rect" id="node3" href="$class_q_abstract_scroll_area.html" title=" " alt="" coords="5,5,146,87"/>
-<area shape="rect" id="node4" title=" " alt="" coords="170,5,245,87"/>
-<area shape="rect" id="node5" href="$class_q_vector.html" title=" " alt="" coords="269,5,442,87"/>
-</map>

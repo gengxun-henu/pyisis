@@ -1,8 +1,0 @@
-<map id="Isis::PvlObject" name="Isis::PvlObject">
-<area shape="rect" id="node1" title="Contains Pvl Groups and Pvl Objects." alt="" coords="145,407,252,648"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_pvl.html" title="Container for cube&#45;like labels." alt="" coords="122,696,275,985"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_pvl_container.html" title="Contains more than one keyword&#45;value pair." alt="" coords="116,5,281,359"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_plugin.html" title="Loads plugins from a shared library." alt="" coords="5,1057,104,1171"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_preference.html" title="Reads user preferences from a data file." alt="" coords="128,1041,269,1187"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_session_log.html" title=" " alt="" coords="293,1033,422,1195"/>
-</map>

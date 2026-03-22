@@ -1,8 +1,0 @@
-<map id="Isis::ProcessByBrick" name="Isis::ProcessByBrick">
-<area shape="rect" id="node1" title="Process cubes by brick." alt="" coords="291,455,447,696"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_process_by_line.html" title="Process cubes by line." alt="" coords="5,752,170,1009"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_process_by_sample.html" title="Process cubes by sample." alt="" coords="193,776,358,985"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_process_by_spectra.html" title="Process cubes by spectra." alt="" coords="381,744,546,1017"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_process_by_tile.html" title="Process cubes by tile." alt="" coords="569,760,734,1001"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_process.html" title="Base class for all cube processing derivatives." alt="" coords="280,5,458,407"/>
-</map>

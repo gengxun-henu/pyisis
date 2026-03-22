@@ -1,8 +1,0 @@
-<map id="Isis::ExportControlNetWorkOrder" name="Isis::ExportControlNetWorkOrder">
-<area shape="rect" id="node1" title="Write a project control network to a user&#45;specified location." alt="" coords="125,793,338,1003"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_work_order.html" title="Provide Undo/redo abilities, serialization, and history for an operation." alt="" coords="156,183,307,744"/>
-<area shape="rect" id="node3" href="$class_q_action.html" title=" " alt="" coords="5,5,74,87"/>
-<area shape="rect" id="node4" href="$class_q_undo_command.html" title=" " alt="" coords="98,5,221,87"/>
-<area shape="rect" id="node5" title=" " alt="" coords="244,5,366,87"/>
-<area shape="rect" id="node6" title=" " alt="" coords="390,5,436,87"/>
-</map>

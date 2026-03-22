@@ -1,5 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_isis_1_1_infix_to_postfix.html" title="Converter for math equations." alt="" coords="5,32,136,60"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_cube_infix_to_postfix.html" title="Converter for math equations." alt="" coords="184,5,345,33"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_inline_infix_to_postfix.html" title="A parser for converting equation strings to postfix." alt="" coords="184,57,345,85"/>
-</map>

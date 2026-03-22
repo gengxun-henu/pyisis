@@ -1,4 +1,0 @@
-<map id="Isis::GridPolygonSeeder" name="Isis::GridPolygonSeeder">
-<area shape="rect" id="node1" title="Seed points using a grid." alt="" coords="5,311,168,472"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_polygon_seeder.html" title="This class is used as the base class for all PolygonSeeder objects." alt="" coords="9,5,164,263"/>
-</map>

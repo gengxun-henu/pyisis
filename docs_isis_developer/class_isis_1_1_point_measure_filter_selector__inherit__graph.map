@@ -1,5 +1,0 @@
-<map id="Isis::PointMeasureFilterSelector" name="Isis::PointMeasureFilterSelector">
-<area shape="rect" id="node1" title="Allows users to choose filters for filtering points and measures." alt="" coords="5,504,212,681"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_filter_selector.html" title="Base class for filter selectors." alt="" coords="20,135,197,456"/>
-<area shape="rect" id="node3" href="$class_q_widget.html" title=" " alt="" coords="72,5,145,87"/>
-</map>

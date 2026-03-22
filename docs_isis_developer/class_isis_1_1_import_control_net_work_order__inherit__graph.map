@@ -1,6 +1,0 @@
-<map id="Isis::ImportControlNetWorkOrder" name="Isis::ImportControlNetWorkOrder">
-<area shape="rect" id="node1" title="Add control networks to a project c Asks the user for a list of control nets and copies them into the..." alt="" coords="5,792,217,1001"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_work_order.html" title="Provide Undo/redo abilities, serialization, and history for an operation." alt="" coords="34,135,188,744"/>
-<area shape="rect" id="node3" href="$class_q_action.html" title=" " alt="" coords="17,5,85,87"/>
-<area shape="rect" id="node4" href="$class_q_undo_command.html" title=" " alt="" coords="110,5,232,87"/>
-</map>

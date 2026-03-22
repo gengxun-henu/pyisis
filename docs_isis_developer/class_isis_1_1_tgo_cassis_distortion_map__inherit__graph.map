@@ -1,4 +1,0 @@
-<map id="Isis::TgoCassisDistortionMap" name="Isis::TgoCassisDistortionMap">
-<area shape="rect" id="node1" title="Distort/undistort focal plane coordinates." alt="" coords="12,407,207,536"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_distortion_map.html" title="Distort/undistort focal plane coordinates." alt="" coords="5,5,214,359"/>
-</map>

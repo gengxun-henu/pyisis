@@ -1,4 +1,0 @@
-<map id="Isis::WarningWidget" name="Isis::WarningWidget">
-<area shape="rect" id="node1" title="Displays the NoWarning icon as default and the Warning icon in case of exception and also pops up a a..." alt="" coords="5,135,187,312"/>
-<area shape="rect" id="node2" href="$class_q_object.html" title=" " alt="" coords="61,5,131,87"/>
-</map>

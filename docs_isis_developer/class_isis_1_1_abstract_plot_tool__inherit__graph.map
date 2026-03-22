@@ -1,9 +1,0 @@
-<map id="Isis::AbstractPlotTool" name="Isis::AbstractPlotTool">
-<area shape="rect" id="node1" title="Parent class for plotting tools which provides common functionality." alt="" coords="309,824,471,1145"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_histogram_tool.html" title="Tool for histograms." alt="" coords="5,1217,180,1427"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_spatial_plot_tool.html" title="Spatial Plots." alt="" coords="204,1209,378,1435"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_spectral_plot_tool.html" title="Plot cube DN statistics against the cube band numbers." alt="" coords="403,1193,577,1451"/>
-<area shape="rect" id="node7" href="$class_isis_1_1_stereo_tool.html" title="Tool for computing parallax." alt="" coords="601,1193,776,1451"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_tool.html" title="Base class for the Qisis tools." alt="" coords="303,135,477,776"/>
-<area shape="rect" id="node3" href="$class_q_object.html" title=" " alt="" coords="355,5,425,87"/>
-</map>

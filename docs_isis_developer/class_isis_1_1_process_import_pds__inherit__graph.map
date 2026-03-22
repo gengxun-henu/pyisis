@@ -1,5 +1,0 @@
-<map id="Isis::ProcessImportPds" name="Isis::ProcessImportPds">
-<area shape="rect" id="node1" title="Convert PDS archive files to Isis format." alt="" coords="5,744,207,985"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_process_import.html" title="Byte swapper." alt="" coords="38,455,174,696"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_process.html" title="Base class for all cube processing derivatives." alt="" coords="17,5,195,407"/>
-</map>

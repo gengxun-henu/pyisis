@@ -1,5 +1,0 @@
-<map id="Isis::InfixToPostfix" name="Isis::InfixToPostfix">
-<area shape="rect" id="node1" title="Converter for math equations." alt="" coords="107,5,249,167"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_cube_infix_to_postfix.html" title="Converter for math equations." alt="" coords="5,215,167,344"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_inline_infix_to_postfix.html" title="A parser for converting equation strings to postfix." alt="" coords="191,215,352,344"/>
-</map>

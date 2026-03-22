@@ -1,4 +1,0 @@
-<map id="Isis::NaifDskShape" name="Isis::NaifDskShape">
-<area shape="rect" id="node1" title="Provides support for NAIF&#39;s Digital Shape Kernel (DSK)" alt="" coords="5,519,219,824"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_shape_model.html" title="Define shapes and provide utilities for Isis targets." alt="" coords="18,5,206,471"/>
-</map>

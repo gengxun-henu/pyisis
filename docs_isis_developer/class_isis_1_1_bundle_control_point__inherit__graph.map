@@ -1,5 +1,0 @@
-<map id="Isis::BundleControlPoint" name="Isis::BundleControlPoint">
-<area shape="rect" id="node1" title="This class holds information about a control point that BundleAdjust needs to run correctly." alt="" coords="5,135,234,376"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_bundle_lidar_control_point.html" title="This class holds information about a lidar control point that BundleAdjust requires." alt="" coords="17,424,222,713"/>
-<area shape="rect" id="node2" href="$class_q_vector.html" title=" " alt="" coords="16,5,223,87"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="Isis::PointParentItem" name="Isis::PointParentItem">
-<area shape="rect" id="node1" title="Tree item that is a parent and represents a control point." alt="" coords="128,729,273,843"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_point_item.html" title="Base class for a point item in the tree." alt="" coords="193,375,357,680"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_abstract_tree_item.html" title="Base class for an item in the tree." alt="" coords="61,5,215,311"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_abstract_parent_item.html" title="Base class for an item that is a parent in the tree." alt="" coords="5,407,169,648"/>
-<area shape="rect" id="node4" title=" " alt="" coords="256,117,294,199"/>
-</map>

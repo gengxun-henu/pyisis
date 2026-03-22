@@ -1,5 +1,0 @@
-<map id="Isis::MocWideAngleDetectorMap" name="Isis::MocWideAngleDetectorMap">
-<area shape="rect" id="node1" title="Convert between parent image coordinates and detector coordinates." alt="" coords="11,728,225,857"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_line_scan_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="5,455,231,680"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="22,5,214,407"/>
-</map>

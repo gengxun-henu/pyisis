@@ -1,7 +1,0 @@
-<map id="Isis::AbstractNullDataItem" name="Isis::AbstractNullDataItem">
-<area shape="rect" id="node1" title="Base class for an item without data." alt="" coords="75,488,251,729"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_busy_leaf_item.html" title="A leaf item that is not ready for user interaction." alt="" coords="5,777,137,907"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_root_item.html" title="The root of a tree." alt="" coords="160,777,353,907"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_tree_item.html" title="Base class for an item in the tree." alt="" coords="86,135,240,440"/>
-<area shape="rect" id="node3" href="$class_q_object.html" title=" " alt="" coords="128,5,198,87"/>
-</map>

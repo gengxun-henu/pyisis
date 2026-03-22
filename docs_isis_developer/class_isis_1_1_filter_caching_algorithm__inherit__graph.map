@@ -1,4 +1,0 @@
-<map id="Isis::FilterCachingAlgorithm" name="Isis::FilterCachingAlgorithm">
-<area shape="rect" id="node1" title="This algorithm is designed for applications that use ProcessByQuickFilter or very similar I/O pattern..." alt="" coords="5,167,200,280"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_cube_caching_algorithm.html" title="This is the parent of the caching algorithms." alt="" coords="5,5,200,119"/>
-</map>

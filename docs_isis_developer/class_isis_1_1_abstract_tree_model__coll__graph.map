@@ -1,7 +1,0 @@
-<map id="Isis::AbstractTreeModel" name="Isis::AbstractTreeModel">
-<area shape="rect" id="node1" title="Base class for tree models." alt="" coords="5,489,217,827"/>
-<area shape="rect" id="node2" href="$class_q_object.html" title=" " alt="" coords="27,320,96,401"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_root_item.html" title="The root of a tree." alt="" coords="120,296,313,425"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_abstract_null_data_item.html" title="Base class for an item without data." alt="" coords="31,5,207,247"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_abstract_parent_item.html" title="Base class for an item that is a parent in the tree." alt="" coords="231,5,394,247"/>
-</map>

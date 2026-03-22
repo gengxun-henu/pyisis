@@ -1,4 +1,0 @@
-<map id="Isis::IrregularBodyCameraGroundMap" name="Isis::IrregularBodyCameraGroundMap">
-<area shape="rect" id="node1" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="5,375,212,536"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_ground_map.html" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="22,5,195,327"/>
-</map>

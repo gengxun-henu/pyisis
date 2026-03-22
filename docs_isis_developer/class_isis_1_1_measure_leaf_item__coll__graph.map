@@ -1,7 +1,0 @@
-<map id="Isis::MeasureLeafItem" name="Isis::MeasureLeafItem">
-<area shape="rect" id="node1" title="A leaf node in the tree structure that represents a control measure." alt="" coords="120,713,272,811"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_measure_item.html" title="Base class for a measure item in the tree." alt="" coords="184,375,360,664"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_abstract_tree_item.html" title="Base class for an item in the tree." alt="" coords="57,5,212,311"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_abstract_leaf_item.html" title="Base class for leaf items in the tree." alt="" coords="5,399,160,640"/>
-<area shape="rect" id="node4" title=" " alt="" coords="253,117,291,199"/>
-</map>

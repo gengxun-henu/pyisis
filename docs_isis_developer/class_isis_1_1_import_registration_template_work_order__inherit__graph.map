@@ -1,6 +1,0 @@
-<map id="Isis::ImportRegistrationTemplateWorkOrder" name="Isis::ImportRegistrationTemplateWorkOrder">
-<area shape="rect" id="node1" title="Add registration templates to a project." alt="" coords="5,792,207,1049"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_work_order.html" title="Provide Undo/redo abilities, serialization, and history for an operation." alt="" coords="29,135,183,744"/>
-<area shape="rect" id="node3" href="$class_q_action.html" title=" " alt="" coords="12,5,80,87"/>
-<area shape="rect" id="node4" href="$class_q_undo_command.html" title=" " alt="" coords="105,5,227,87"/>
-</map>

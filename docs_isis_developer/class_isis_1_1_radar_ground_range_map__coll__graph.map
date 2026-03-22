@@ -1,6 +1,0 @@
-<map id="Isis::RadarGroundRangeMap" name="Isis::RadarGroundRangeMap">
-<area shape="rect" id="node1" title="Construct a mapping between image sample and Radar ground range." alt="" coords="5,939,196,1036"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_focal_plane_map.html" title="Convert between distorted focal plane and detector coordinates." alt="" coords="7,568,194,889"/>
-<area shape="rect" id="node3" title=" " alt="" coords="71,5,130,87"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_camera.html" title=" " alt="" coords="269,167,487,504"/>
-</map>

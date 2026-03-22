@@ -1,8 +1,0 @@
-<map id="Isis::TargetGetInfoWorkOrder" name="Isis::TargetGetInfoWorkOrder">
-<area shape="rect" id="node1" title="This work order allows the user to view target body info." alt="" coords="136,793,327,987"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_work_order.html" title="Provide Undo/redo abilities, serialization, and history for an operation." alt="" coords="156,183,307,744"/>
-<area shape="rect" id="node3" href="$class_q_action.html" title=" " alt="" coords="5,5,74,87"/>
-<area shape="rect" id="node4" href="$class_q_undo_command.html" title=" " alt="" coords="98,5,221,87"/>
-<area shape="rect" id="node5" title=" " alt="" coords="244,5,366,87"/>
-<area shape="rect" id="node6" title=" " alt="" coords="390,5,436,87"/>
-</map>

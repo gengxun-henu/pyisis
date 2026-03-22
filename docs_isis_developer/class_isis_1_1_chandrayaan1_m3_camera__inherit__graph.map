@@ -1,5 +1,0 @@
-<map id="Isis::Chandrayaan1M3Camera" name="Isis::Chandrayaan1M3Camera">
-<area shape="rect" id="node1" title="Chandrayaan1 M3 Camera Model." alt="" coords="15,712,214,857"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_line_scan_camera.html" title="Generic class for Line Scan Cameras." alt="" coords="39,519,190,664"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="5,5,224,471"/>
-</map>

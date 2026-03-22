@@ -1,5 +1,0 @@
-<map id="Isis::CrismCamera" name="Isis::CrismCamera">
-<area shape="rect" id="node1" title="MRO CRISM camera model." alt="" coords="38,584,191,761"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_line_scan_camera.html" title="Generic class for Line Scan Cameras." alt="" coords="39,391,190,536"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_camera.html" title=" " alt="" coords="5,5,224,343"/>
-</map>

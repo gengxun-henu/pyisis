@@ -1,5 +1,0 @@
-<map id="Isis::MoveDownOneSceneWorkOrder" name="Isis::MoveDownOneSceneWorkOrder">
-<area shape="rect" id="node1" title="Move images, one by one, below the immediately&#45;below intersecting image in a scene This workorder is ..." alt="" coords="5,888,244,1081"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_mosaic_scene_work_order.html" title="Work order associated with a MosaicSceneWidget." alt="" coords="29,663,220,840"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_work_order.html" title="Provide Undo/redo abilities, serialization, and history for an operation." alt="" coords="48,5,201,615"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="Isis::KaguyaTcCameraDistortionMap" name="Isis::KaguyaTcCameraDistortionMap">
-<area shape="rect" id="node1" title="Distort/undistort focal plane coordinates for Kaguya&#39;s TC cameras." alt="" coords="5,875,240,1036"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_distortion_map.html" title="Distort/undistort focal plane coordinates." alt="" coords="146,568,355,825"/>
-<area shape="rect" id="node3" title=" " alt="" coords="43,295,162,376"/>
-<area shape="rect" id="node4" title=" " alt="" coords="217,5,276,87"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_camera.html" title=" " alt="" coords="399,167,617,504"/>
-</map>

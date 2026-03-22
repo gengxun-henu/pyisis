@@ -1,9 +1,0 @@
-<map id="Isis::InterestOperator" name="Isis::InterestOperator">
-<area shape="rect" id="node1" title="Interest Operator class." alt="" coords="319,599,534,1064"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_forstner_operator.html" title="Forstner interest operator." alt="" coords="5,1120,154,1233"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_gradient_operator.html" title="Gradient interest operator." alt="" coords="178,1120,328,1233"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_moravec_operator.html" title="Moravec Interest Operator." alt="" coords="351,1112,501,1241"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_no_operator.html" title="no interest operator" alt="" coords="525,1120,642,1233"/>
-<area shape="rect" id="node7" href="$class_isis_1_1_standard_deviation_operator.html" title="Standard deviation interest operator." alt="" coords="667,1120,874,1233"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_control_net_valid_measure.html" title="ControlNetValidMeasure class." alt="" coords="317,5,536,551"/>
-</map>

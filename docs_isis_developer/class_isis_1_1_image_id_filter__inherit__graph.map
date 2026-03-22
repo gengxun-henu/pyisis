@@ -1,5 +1,0 @@
-<map id="Isis::ImageIdFilter" name="Isis::ImageIdFilter">
-<area shape="rect" id="node1" title="Allows filtering by image ID." alt="" coords="25,712,200,937"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_string_filter.html" title="Base class for filters that are string&#45;based." alt="" coords="31,519,194,664"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="5,5,220,471"/>
-</map>

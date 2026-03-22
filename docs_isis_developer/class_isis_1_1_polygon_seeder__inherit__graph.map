@@ -1,6 +1,0 @@
-<map id="Isis::PolygonSeeder" name="Isis::PolygonSeeder">
-<area shape="rect" id="node1" title="This class is used as the base class for all PolygonSeeder objects." alt="" coords="197,5,352,263"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_grid_polygon_seeder.html" title="Seed points using a grid." alt="" coords="5,311,168,472"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_limit_polygon_seeder.html" title="Seed points using a grid." alt="" coords="191,319,358,464"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_strip_polygon_seeder.html" title="Seed points using a grid with a staggered pattern." alt="" coords="381,319,547,464"/>
-</map>

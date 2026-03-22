@@ -1,6 +1,0 @@
-<map id="Isis::PvlContainer" name="Isis::PvlContainer">
-<area shape="rect" id="node1" title="Contains more than one keyword&#45;value pair." alt="" coords="53,5,218,359"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers." alt="" coords="5,447,127,608"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects." alt="" coords="151,407,258,648"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_pvl.html" title="Container for cube&#45;like labels." alt="" coords="128,696,281,985"/>
-</map>

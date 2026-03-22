@@ -1,8 +1,0 @@
-<map id="Isis::AbstractStringFilter" name="Isis::AbstractStringFilter">
-<area shape="rect" id="node1" title="Base class for filters that are string&#45;based." alt="" coords="199,648,362,793"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_chooser_name_filter.html" title="Allows filtering by the chooser name." alt="" coords="5,849,169,1059"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_image_id_filter.html" title="Allows filtering by image ID." alt="" coords="193,841,368,1067"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_point_id_filter.html" title="Filter by control point id string." alt="" coords="392,849,553,1059"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="173,135,388,600"/>
-<area shape="rect" id="node3" href="$class_q_widget.html" title=" " alt="" coords="244,5,317,87"/>
-</map>

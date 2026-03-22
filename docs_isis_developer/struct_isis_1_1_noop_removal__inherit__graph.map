@@ -1,8 +1,0 @@
-<map id="Isis::NoopRemoval&lt; T &gt;" name="Isis::NoopRemoval&lt; T &gt;">
-<area shape="rect" id="node1" title="Supplies a NOOP default for removal of a CollectorMap entry." alt="" coords="401,5,566,87"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_collector_map.html" title=" " alt="" coords="5,135,178,408"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_collector_map.html" title=" " alt="" coords="201,135,374,408"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_collector_map.html" title=" " alt="" coords="397,135,570,408"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_collector_map.html" title=" " alt="" coords="594,143,736,400"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_collector_map.html" title="Collector/container for arbitrary items." alt="" coords="759,135,957,408"/>
-</map>

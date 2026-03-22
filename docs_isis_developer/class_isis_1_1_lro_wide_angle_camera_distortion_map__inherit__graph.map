@@ -1,4 +1,0 @@
-<map id="Isis::LroWideAngleCameraDistortionMap" name="Isis::LroWideAngleCameraDistortionMap">
-<area shape="rect" id="node1" title="Distort/undistort focal plane coordinates." alt="" coords="5,407,230,616"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_distortion_map.html" title="Distort/undistort focal plane coordinates." alt="" coords="13,5,222,359"/>
-</map>

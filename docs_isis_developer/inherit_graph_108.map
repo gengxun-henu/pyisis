@@ -1,6 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_isis_1_1_image_importer.html" title="Imports images with standard formats into Isis as cubes." alt="" coords="5,57,140,85"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_j_p2_importer.html" title="Imports JPEG 2000 images as Isis cubes." alt="" coords="188,5,309,33"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_qt_importer.html" title="Imports a series of standard image formats with Qt facilities." alt="" coords="192,57,305,85"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_tiff_importer.html" title="Imports TIFF images as Isis cubes." alt="" coords="190,109,307,137"/>
-</map>

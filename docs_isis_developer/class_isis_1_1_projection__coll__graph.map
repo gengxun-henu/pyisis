@@ -1,8 +1,0 @@
-<map id="Isis::Projection" name="Isis::Projection">
-<area shape="rect" id="node1" title="Base class for Map Projections." alt="" coords="176,649,321,1035"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_world_mapper.html" title="Create a mapping between a projection and other coordinate system." alt="" coords="5,360,132,537"/>
-<area shape="rect" id="node3" title=" " alt="" coords="156,408,216,489"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_pvl_group.html" title="Contains multiple PvlContainers." alt="" coords="251,368,372,529"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_pvl_container.html" title="Contains more than one keyword&#45;value pair." alt="" coords="229,5,394,311"/>
-<area shape="rect" id="node6" title=" " alt="" coords="418,408,463,489"/>
-</map>

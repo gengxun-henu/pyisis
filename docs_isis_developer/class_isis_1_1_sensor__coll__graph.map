@@ -1,9 +1,0 @@
-<map id="Isis::Sensor" name="Isis::Sensor">
-<area shape="rect" id="node1" title="Class for computing sensor ground coordinates." alt="" coords="471,792,689,1033"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_spice.html" title="Obtain SPICE information for a spacecraft." alt="" coords="316,391,527,728"/>
-<area shape="rect" id="node3" href="$class_isis_1_1i_time.html" title="Parse and return pieces of a time string." alt="" coords="5,21,150,295"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude." alt="" coords="173,5,310,311"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_target.html" title="This class is used to create and store valid Isis targets." alt="" coords="334,13,509,303"/>
-<area shape="rect" id="node6" title=" " alt="" coords="534,117,629,199"/>
-<area shape="rect" id="node7" title=" " alt="" coords="667,519,712,600"/>
-</map>

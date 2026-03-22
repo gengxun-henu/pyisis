@@ -1,4 +1,0 @@
-<map id="Isis::NewGroundSourceLocationDialog" name="Isis::NewGroundSourceLocationDialog">
-<area shape="rect" id="node1" title="Dialog used by ControlPointEditWidget to select a new location for ground source files." alt="" coords="5,135,243,264"/>
-<area shape="rect" id="node2" href="$class_q_file_dialog.html" title=" " alt="" coords="79,5,169,87"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="Isis::CameraSkyMap" name="Isis::CameraSkyMap">
-<area shape="rect" id="node1" title="Convert between undistorted focal plane and ra/dec coordinates." alt="" coords="280,5,424,215"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_c_s_m_sky_map.html" title="Convert between undistorted focal plane and ra/dec coordinates." alt="" coords="5,287,134,384"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_line_scan_camera_sky_map.html" title="Convert between undistorted focal plane and ra/dec coordinates." alt="" coords="158,279,357,392"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_radar_sky_map.html" title="Convert between slantrange/groundrange and ra/dec coordinates." alt="" coords="380,271,514,400"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_vims_sky_map.html" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="537,263,666,408"/>
-</map>

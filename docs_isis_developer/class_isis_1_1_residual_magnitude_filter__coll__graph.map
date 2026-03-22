@@ -1,5 +1,0 @@
-<map id="Isis::ResidualMagnitudeFilter" name="Isis::ResidualMagnitudeFilter">
-<area shape="rect" id="node1" title="Filters by residual magnitude." alt="" coords="17,728,208,953"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_number_filter.html" title="Base class for filters that are number&#45;based." alt="" coords="25,519,200,680"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="5,5,220,471"/>
-</map>

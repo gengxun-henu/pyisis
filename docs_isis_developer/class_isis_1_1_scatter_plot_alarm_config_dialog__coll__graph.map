@@ -1,4 +1,0 @@
-<map id="Isis::ScatterPlotAlarmConfigDialog" name="Isis::ScatterPlotAlarmConfigDialog">
-<area shape="rect" id="node1" title="This is the configuration dialog for alarming scatter plots between the plot window and cube viewport..." alt="" coords="5,135,229,280"/>
-<area shape="rect" id="node2" href="$class_q_dialog.html" title=" " alt="" coords="83,5,151,87"/>
-</map>

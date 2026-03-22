@@ -1,6 +1,0 @@
-<map id="Isis::RootItem" name="Isis::RootItem">
-<area shape="rect" id="node1" title="The root of a tree." alt="" coords="93,648,286,777"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_null_data_item.html" title="Base class for an item without data." alt="" coords="5,359,182,600"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_abstract_tree_item.html" title="Base class for an item in the tree." alt="" coords="112,5,267,311"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_abstract_parent_item.html" title="Base class for an item that is a parent in the tree." alt="" coords="205,359,369,600"/>
-</map>

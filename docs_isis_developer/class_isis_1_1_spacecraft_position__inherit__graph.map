@@ -1,4 +1,0 @@
-<map id="Isis::SpacecraftPosition" name="Isis::SpacecraftPosition">
-<area shape="rect" id="node1" title="Provides swap observer/target and improved light time correction." alt="" coords="30,503,216,696"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_spice_position.html" title="Obtain SPICE position information for a body." alt="" coords="5,5,241,455"/>
-</map>

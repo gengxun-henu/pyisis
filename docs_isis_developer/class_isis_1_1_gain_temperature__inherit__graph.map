@@ -1,4 +1,0 @@
-<map id="Isis::GainTemperature" name="Isis::GainTemperature">
-<area shape="rect" id="node1" title="GaingTemperature Module &#45; Applies temperature&#45;dependant gain correction (column)" alt="" coords="5,407,155,520"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_module.html" title="Module manages HiRISE calibration vectors from various sources." alt="" coords="24,5,136,359"/>
-</map>

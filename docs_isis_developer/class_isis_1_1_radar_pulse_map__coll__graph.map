@@ -1,6 +1,0 @@
-<map id="Isis::RadarPulseMap" name="Isis::RadarPulseMap">
-<area shape="rect" id="node1" title="Convert between alpha image coordinates and radar sample, time coordinates." alt="" coords="5,859,194,1052"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="9,568,190,809"/>
-<area shape="rect" id="node3" title=" " alt="" coords="70,5,129,87"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_camera.html" title=" " alt="" coords="269,167,487,504"/>
-</map>

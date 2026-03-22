@@ -1,5 +1,0 @@
-<map id="Isis::BulletAllHitsRayCallback" name="Isis::BulletAllHitsRayCallback">
-<area shape="rect" id="node1" title="Bullet ray tracing callback to return all intersections along a ray&#39;s path." alt="" coords="88,167,285,376"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,168,103"/>
-<area shape="rect" id="node3" href="$class_q_vector.html" title=" " alt="" coords="192,5,381,103"/>
-</map>

@@ -1,4 +1,0 @@
-<map id="Isis::PushFrameCameraGroundMap" name="Isis::PushFrameCameraGroundMap">
-<area shape="rect" id="node1" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="5,375,236,504"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_ground_map.html" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="34,5,207,327"/>
-</map>

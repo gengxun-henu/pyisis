@@ -1,5 +1,0 @@
-<map id="Isis::LambertAzimuthalEqualArea" name="Isis::LambertAzimuthalEqualArea">
-<area shape="rect" id="node1" title="Lambert Azimuthal Equal Area Map Projection." alt="" coords="5,1288,221,1577"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_t_projection.html" title="Base class for Map TProjections." alt="" coords="31,567,195,1240"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_projection.html" title="Base class for Map Projections." alt="" coords="34,5,192,519"/>
-</map>

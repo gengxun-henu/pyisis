@@ -1,7 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_isis_1_1_basis_function.html" title="Generic linear equation class." alt="" coords="5,57,139,85"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_basis1_variable_function.html" title="Time based linear equation class." alt="" coords="187,5,373,33"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_nth_order_polynomial.html" title="NthOrderPolynomial basis function." alt="" coords="196,57,364,85"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_polynomial_bivariate.html" title="Nth degree Polynomial with two variables." alt="" coords="197,109,363,137"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_polynomial_univariate.html" title="Nth degree Polynomial with one variable." alt="" coords="421,5,594,33"/>
-</map>

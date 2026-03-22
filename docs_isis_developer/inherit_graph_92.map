@@ -1,6 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_isis_1_1_fx_binder.html" title="This is the parent class to the various function classes." alt="" coords="5,57,108,85"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_inline_void_fx.html" title="This class is used to bind function names with corresponding InlineCalculator functions that do not t..." alt="" coords="157,5,280,33"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_parameter_fx.html" title="This class is used to bind function names with corresponding Calculator functions that take a paramet..." alt="" coords="156,57,281,85"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_void_fx.html" title="This class is used to bind function names with corresponding Calculator functions that do not take pa..." alt="" coords="173,109,264,137"/>
-</map>

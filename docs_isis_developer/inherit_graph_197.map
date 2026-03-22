@@ -1,5 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_isis_1_1_selection.html" title="Pure Virtual Parent Class for all Selection classes." alt="" coords="5,5,110,33"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_centroid.html" title="Selection class derived from the Pure Virtual Parent Class for all Selection classes." alt="" coords="158,5,257,33"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_centroid_apollo_pan.html" title="Selection class derived from the Pure Virtual Parent Class for all Selection classes." alt="" coords="305,5,463,33"/>
-</map>

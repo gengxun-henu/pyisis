@@ -1,6 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_isis_1_1_polygon_seeder.html" title="This class is used as the base class for all PolygonSeeder objects." alt="" coords="5,57,144,85"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_grid_polygon_seeder.html" title="Seed points using a grid." alt="" coords="194,5,356,33"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_limit_polygon_seeder.html" title="Seed points using a grid." alt="" coords="192,57,358,85"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_strip_polygon_seeder.html" title="Seed points using a grid with a staggered pattern." alt="" coords="192,109,358,137"/>
-</map>

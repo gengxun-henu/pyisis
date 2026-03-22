@@ -1,7 +1,0 @@
-<map id="Isis::PvlFormat" name="Isis::PvlFormat">
-<area shape="rect" id="node1" title="Formats a Pvl name value pair to Isis standards." alt="" coords="135,649,250,971"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,400,71,481"/>
-<area shape="rect" id="node3" title=" " alt="" coords="173,400,212,481"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_pvl.html" title="Container for cube&#45;like labels." alt="" coords="236,296,389,585"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects." alt="" coords="259,5,366,247"/>
-</map>

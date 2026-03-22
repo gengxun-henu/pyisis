@@ -1,5 +1,0 @@
-<map id="Isis::PointTypeFilter" name="Isis::PointTypeFilter">
-<area shape="rect" id="node1" title="Filters by point type." alt="" coords="32,728,193,937"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_multiple_choice_filter.html" title="Base class for combo box type filters." alt="" coords="6,519,219,680"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_abstract_filter.html" title="Base class for control net filters." alt="" coords="5,5,220,471"/>
-</map>

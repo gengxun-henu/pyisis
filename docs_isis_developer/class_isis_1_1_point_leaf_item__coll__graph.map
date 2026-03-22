@@ -1,7 +1,0 @@
-<map id="Isis::PointLeafItem" name="Isis::PointLeafItem">
-<area shape="rect" id="node1" title="A leaf node in the tree structure that represents a control point." alt="" coords="126,729,258,827"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_point_item.html" title="Base class for a point item in the tree." alt="" coords="184,375,349,680"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_abstract_tree_item.html" title="Base class for an item in the tree." alt="" coords="53,5,208,311"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_abstract_leaf_item.html" title="Base class for leaf items in the tree." alt="" coords="5,407,160,648"/>
-<area shape="rect" id="node4" title=" " alt="" coords="247,117,286,199"/>
-</map>

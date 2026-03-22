@@ -1,7 +1,0 @@
-<map id="Isis::AbstractFilterSelector" name="Isis::AbstractFilterSelector">
-<area shape="rect" id="node1" title="Base class for filter selectors." alt="" coords="237,135,413,456"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_image_image_filter_selector.html" title="Allows users to choose filters for filtering connected images." alt="" coords="5,512,205,673"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_image_point_filter_selector.html" title="Allows users to choose filters for filtering images and points." alt="" coords="228,512,422,673"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_point_measure_filter_selector.html" title="Allows users to choose filters for filtering points and measures." alt="" coords="446,504,652,681"/>
-<area shape="rect" id="node2" href="$class_q_widget.html" title=" " alt="" coords="289,5,361,87"/>
-</map>

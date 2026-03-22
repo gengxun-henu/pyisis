@@ -1,7 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_isis_1_1_auto_reg.html" title="Auto Registration class." alt="" coords="5,57,107,85"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_gruen.html" title="Gruen pattern matching algorithm." alt="" coords="197,5,283,33"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_maximum_correlation.html" title="Maximum correlation pattern matching." alt="" coords="155,57,325,85"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_minimum_difference.html" title="Minimum difference pattern matching." alt="" coords="158,109,322,137"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_adaptive_gruen.html" title="Gruen (adaptive) pattern matching." alt="" coords="373,5,509,33"/>
-</map>

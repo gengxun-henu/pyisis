@@ -1,5 +1,0 @@
-<map id="Isis::ImageImageFilterSelector" name="Isis::ImageImageFilterSelector">
-<area shape="rect" id="node1" title="Allows users to choose filters for filtering connected images." alt="" coords="5,504,205,665"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_filter_selector.html" title="Base class for filter selectors." alt="" coords="17,135,193,456"/>
-<area shape="rect" id="node3" href="$class_q_widget.html" title=" " alt="" coords="69,5,141,87"/>
-</map>

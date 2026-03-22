@@ -1,7 +1,0 @@
-<map id="QThread" name="QThread">
-<area shape="rect" id="node1" title=" " alt="" coords="398,5,469,87"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_cube_data_thread.html" title="Encapsulation of Cube I/O with Change Notifications." alt="" coords="5,151,190,440"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_cube_data_thread_tester.html" title=" " alt="" coords="214,135,437,456"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_image_overlap_set.html" title="This class is used to find the overlaps between all the images in a list of serial numbers." alt="" coords="461,159,622,432"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_socket_thread.html" title=" " alt="" coords="645,231,777,360"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_r_t_c_ray_hit.html" title=" " alt="" coords="5,32,96,60"/>
-<area shape="rect" id="node2" href="$struct_isis_1_1_r_t_c_multi_hit_ray.html" title="Struct for capturing multiple intersections when using embree::rtcintersectscene." alt="" coords="150,5,298,33"/>
-<area shape="rect" id="node3" href="$struct_isis_1_1_r_t_c_occlusion_ray.html" title="Struct for capturing occluded plates when using embree::rtcintersectscene." alt="" coords="144,57,304,85"/>
-</map>

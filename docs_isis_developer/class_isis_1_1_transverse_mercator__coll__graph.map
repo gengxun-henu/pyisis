@@ -1,9 +1,0 @@
-<map id="Isis::TransverseMercator" name="Isis::TransverseMercator">
-<area shape="rect" id="node1" title="TransverseMercator Map Projection." alt="" coords="321,1195,487,1436"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_t_projection.html" title="Base class for Map TProjections." alt="" coords="332,648,476,1145"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_projection.html" title="Base class for Map Projections." alt="" coords="198,199,343,584"/>
-<area shape="rect" id="node4" title=" " alt="" coords="27,5,87,87"/>
-<area shape="rect" id="node5" title=" " alt="" coords="367,351,496,432"/>
-<area shape="rect" id="node6" title=" " alt="" coords="548,351,587,432"/>
-<area shape="rect" id="node7" title=" " alt="" coords="677,351,773,432"/>
-</map>

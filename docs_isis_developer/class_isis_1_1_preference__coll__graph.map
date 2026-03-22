@@ -1,5 +1,0 @@
-<map id="Isis::Preference" name="Isis::Preference">
-<area shape="rect" id="node1" title="Reads user preferences from a data file." alt="" coords="12,632,152,777"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_pvl.html" title="Container for cube&#45;like labels." alt="" coords="5,295,159,584"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects." alt="" coords="28,5,136,247"/>
-</map>

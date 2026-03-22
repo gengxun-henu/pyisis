@@ -1,8 +1,0 @@
-<map id="Isis::PushFrameCamera" name="Isis::PushFrameCamera">
-<area shape="rect" id="node1" title="Generic class for Push Frame Cameras." alt="" coords="202,824,365,953"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_lro_wide_angle_camera.html" title="LRO Wide Angle Camera Model." alt="" coords="5,1009,183,1187"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_marci_camera.html" title="Marci Camera Model." alt="" coords="207,1009,360,1187"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_themis_vis_camera.html" title="THEMIS VIS Camera Model." alt="" coords="384,1001,583,1195"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera.html" title=" " alt="" coords="174,311,393,776"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_sensor.html" title="Class for computing sensor ground coordinates." alt="" coords="174,5,393,263"/>
-</map>

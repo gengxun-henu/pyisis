@@ -1,6 +1,0 @@
-<map id="Isis::ImageFileListViewWorkOrder" name="Isis::ImageFileListViewWorkOrder">
-<area shape="rect" id="node1" title="View an image list in an image file list widget." alt="" coords="5,792,224,1001"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_work_order.html" title="Provide Undo/redo abilities, serialization, and history for an operation." alt="" coords="38,135,191,744"/>
-<area shape="rect" id="node3" href="$class_q_action.html" title=" " alt="" coords="20,5,89,87"/>
-<area shape="rect" id="node4" href="$class_q_undo_command.html" title=" " alt="" coords="113,5,236,87"/>
-</map>

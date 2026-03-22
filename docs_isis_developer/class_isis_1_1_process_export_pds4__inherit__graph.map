@@ -1,5 +1,0 @@
-<map id="Isis::ProcessExportPds4" name="Isis::ProcessExportPds4">
-<area shape="rect" id="node1" title="Process class for exporting cubes to PDS4 standards." alt="" coords="5,968,193,1529"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_process_export.html" title="Process class for exporting cubes." alt="" coords="29,455,169,920"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_process.html" title="Base class for all cube processing derivatives." alt="" coords="10,5,188,407"/>
-</map>

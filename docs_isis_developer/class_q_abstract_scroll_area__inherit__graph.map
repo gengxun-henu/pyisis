@@ -1,8 +1,0 @@
-<map id="QAbstractScrollArea" name="QAbstractScrollArea">
-<area shape="rect" id="node1" title=" " alt="" coords="333,5,473,87"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_cube_viewport.html" title="Widget to display Isis cubes for qt apps." alt="" coords="134,135,283,680"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_table_view_content.html" title=" " alt="" coords="307,215,499,600"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_tree_view_content.html" title=" " alt="" coords="523,239,707,576"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_independent_cube_viewport.html" title="General purpose Cube display widget." alt="" coords="5,744,209,937"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_mdi_cube_viewport.html" title="Cube display widget for certain Isis MDI applications." alt="" coords="233,728,386,953"/>
-</map>

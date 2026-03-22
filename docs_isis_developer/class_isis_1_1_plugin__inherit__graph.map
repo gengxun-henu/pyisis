@@ -1,5 +1,0 @@
-<map id="Isis::Plugin" name="Isis::Plugin">
-<area shape="rect" id="node1" title="Loads plugins from a shared library." alt="" coords="33,632,131,745"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_pvl.html" title="Container for cube&#45;like labels." alt="" coords="5,295,159,584"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_pvl_object.html" title="Contains Pvl Groups and Pvl Objects." alt="" coords="28,5,136,247"/>
-</map>

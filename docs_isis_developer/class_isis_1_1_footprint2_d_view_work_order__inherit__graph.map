@@ -1,6 +1,0 @@
-<map id="Isis::Footprint2DViewWorkOrder" name="Isis::Footprint2DViewWorkOrder">
-<area shape="rect" id="node1" title="View an image list&#39;s footprints in a footprint view." alt="" coords="5,792,214,1017"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_work_order.html" title="Provide Undo/redo abilities, serialization, and history for an operation." alt="" coords="33,135,186,744"/>
-<area shape="rect" id="node3" href="$class_q_action.html" title=" " alt="" coords="15,5,84,87"/>
-<area shape="rect" id="node4" href="$class_q_undo_command.html" title=" " alt="" coords="108,5,231,87"/>
-</map>

@@ -1,4 +1,0 @@
-<map id="Isis::ApolloMetricDistortionMap" name="Isis::ApolloMetricDistortionMap">
-<area shape="rect" id="node1" title="Apollo Metric Distortion Map." alt="" coords="8,407,211,536"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_distortion_map.html" title="Distort/undistort focal plane coordinates." alt="" coords="5,5,214,359"/>
-</map>

@@ -1,4 +1,0 @@
-<map id="Isis::PushFrameCameraDetectorMap" name="Isis::PushFrameCameraDetectorMap">
-<area shape="rect" id="node1" title="Convert between parent image coordinates and detector coordinates." alt="" coords="5,455,244,712"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_detector_map.html" title="Convert between parent image coordinates and detector coordinates." alt="" coords="28,5,221,407"/>
-</map>

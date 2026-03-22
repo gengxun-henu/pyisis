@@ -1,5 +1,0 @@
-<map id="Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;" name="Isis::CollectorMap&lt; K, T, ComparePolicy, RemovalPolicy, CopyPolicy &gt;">
-<area shape="rect" id="node1" title="Collector/container for arbitrary items." alt="" coords="81,135,279,408"/>
-<area shape="rect" id="node2" href="$struct_isis_1_1_noop_removal.html" title="Supplies a NOOP default for removal of a CollectorMap entry." alt="" coords="5,5,171,87"/>
-<area shape="rect" id="node3" href="$struct_isis_1_1_default_copy.html" title="(Default) Policy for copying map elements" alt="" coords="194,5,350,87"/>
-</map>

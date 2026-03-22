@@ -1,8 +1,0 @@
-<map id="Isis::Reduce" name="Isis::Reduce">
-<area shape="rect" id="node1" title="Reduce the pixel dimensions of an image." alt="" coords="104,1113,258,1243"/>
-<area shape="rect" id="node2" title=" " alt="" coords="17,5,76,87"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_buffer.html" title="Buffer for reading and writing cube data." alt="" coords="41,247,188,584"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_portal.html" title="Buffer for containing a two dimensional section of an image." alt="" coords="76,864,185,993"/>
-<area shape="rect" id="node5" title=" " alt="" coords="122,5,160,87"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_cube.html" title="IO Handler for Isis Cubes." alt="" coords="262,808,375,1049"/>
-</map>

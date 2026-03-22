@@ -1,5 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$class_isis_1_1_cube_io_handler.html" title="Handles converting buffers to and from disk." alt="" coords="5,32,143,60"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_cube_bsq_handler.html" title="IO Handler for Isis Cubes using the BSQ format." alt="" coords="191,5,340,33"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_cube_tile_handler.html" title="IO Handler for Isis Cubes using the tile format." alt="" coords="192,57,339,85"/>
-</map>

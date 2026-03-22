@@ -1,8 +1,0 @@
-<map id="Isis::AbstractImageItem" name="Isis::AbstractImageItem">
-<area shape="rect" id="node1" title="Base class for an image item in the tree." alt="" coords="198,488,359,729"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_connection_parent_item.html" title="Tree item that is a parent and represents an image." alt="" coords="5,777,186,891"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_image_leaf_item.html" title="Tree item that is a leaf and represents an image." alt="" coords="210,785,347,883"/>
-<area shape="rect" id="node6" href="$class_isis_1_1_image_parent_item.html" title="Tree item that is a parent and represents an image." alt="" coords="371,785,521,883"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_abstract_tree_item.html" title="Base class for an item in the tree." alt="" coords="201,135,355,440"/>
-<area shape="rect" id="node3" href="$class_q_object.html" title=" " alt="" coords="244,5,313,87"/>
-</map>

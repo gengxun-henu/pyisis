@@ -1,5 +1,0 @@
-<map id="Isis::SaveAsDialog" name="Isis::SaveAsDialog">
-<area shape="rect" id="node1" title="Widget to save(Save As) Isis cubes(used in qview) to display the FileDialog to select the output cube..." alt="" coords="5,408,148,553"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_file_dialog.html" title="Class for browsing cubes." alt="" coords="18,135,135,360"/>
-<area shape="rect" id="node3" href="$class_q_file_dialog.html" title=" " alt="" coords="32,5,121,87"/>
-</map>

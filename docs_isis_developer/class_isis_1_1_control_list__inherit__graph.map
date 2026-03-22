@@ -1,5 +1,0 @@
-<map id="Isis::ControlList" name="Isis::ControlList">
-<area shape="rect" id="node1" title="Maintains a list of Controls so that control nets can easily be copied from one Project to another,..." alt="" coords="45,135,158,376"/>
-<area shape="rect" id="node2" href="$class_q_object.html" title=" " alt="" coords="5,5,75,87"/>
-<area shape="rect" id="node3" href="$class_q_list.html" title=" " alt="" coords="99,5,226,87"/>
-</map>

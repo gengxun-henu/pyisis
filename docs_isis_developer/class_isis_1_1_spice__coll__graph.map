@@ -1,8 +1,0 @@
-<map id="Isis::Spice" name="Isis::Spice">
-<area shape="rect" id="node1" title="Obtain SPICE information for a spacecraft." alt="" coords="243,697,454,1035"/>
-<area shape="rect" id="node2" href="$class_isis_1_1i_time.html" title="Parse and return pieces of a time string." alt="" coords="5,328,150,601"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_longitude.html" title="This class is designed to encapsulate the concept of a Longitude." alt="" coords="173,312,310,617"/>
-<area shape="rect" id="node4" href="$class_isis_1_1_angle.html" title="Defines an angle and provides unit conversions." alt="" coords="188,5,295,263"/>
-<area shape="rect" id="node5" href="$class_isis_1_1_target.html" title="This class is used to create and store valid Isis targets." alt="" coords="334,320,509,609"/>
-<area shape="rect" id="node6" title=" " alt="" coords="534,424,629,505"/>
-</map>

@@ -1,4 +1,0 @@
-<map id="Isis::RadarGroundMap" name="Isis::RadarGroundMap">
-<area shape="rect" id="node1" title="Convert between undistorted focal plane coordinate (slant range) and ground coordinates." alt="" coords="15,375,168,648"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_camera_ground_map.html" title="Convert between undistorted focal plane and ground coordinates." alt="" coords="5,5,178,327"/>
-</map>

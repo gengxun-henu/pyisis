@@ -1,5 +1,0 @@
-<map id="Isis::LunarAzimuthalEqualArea" name="Isis::LunarAzimuthalEqualArea">
-<area shape="rect" id="node1" title="Modified Lambert Azimuthal Equal&#45;Area Map Projection." alt="" coords="5,1288,206,1497"/>
-<area shape="rect" id="node2" href="$class_isis_1_1_t_projection.html" title="Base class for Map TProjections." alt="" coords="24,567,187,1240"/>
-<area shape="rect" id="node3" href="$class_isis_1_1_projection.html" title="Base class for Map Projections." alt="" coords="26,5,185,519"/>
-</map>

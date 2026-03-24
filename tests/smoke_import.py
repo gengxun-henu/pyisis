@@ -7,7 +7,7 @@ import tempfile
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 BUILD_PYTHON_DIR = PROJECT_ROOT / "build" / "python"
-WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT.parent / "isis" / "tests" / "data" / "isisdata" / "mockup"
+WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT/ "tests" / "data" / "isisdata" / "mockup"
 
 
 def _has_leap_second_kernels(data_root):

@@ -7,7 +7,8 @@ from contextlib import contextmanager
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BUILD_PYTHON_DIR = PROJECT_ROOT / "build" / "python"
-WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT.parent / "isis" / "tests" / "data" / "isisdata" / "mockup"
+#WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT.parent / "isis" / "tests" / "data" / "isisdata" / "mockup"
+WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT / "tests" / "data" / "isisdata" / "mockup"
 
 
 def _has_leap_second_kernels(data_root):
@@ -201,4 +202,5 @@ def make_sky_target_label(shape_model=None):
 
 
 def workspace_test_data_path(*parts):
-    return PROJECT_ROOT.parent / "isis" / "tests" / "data" / Path(*parts)
+    #return PROJECT_ROOT.parent / "isis" / "tests" / "data" / Path(*parts)
+    return PROJECT_ROOT/ "tests" / "data" / Path(*parts)

@@ -1,0 +1,117 @@
+name: ci-pybind
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/ci-pybind.yml
+      - Github_actions_build_test_steps.md
+      - CMakeLists.txt
+      - environment.yml
+      - python/**
+      - src/**
+      - tests/**
+  pull_request:
+    paths:
+      - .github/workflows/ci-pybind.yml
+      - Github_actions_build_test_steps.md
+      - CMakeLists.txt
+      - environment.yml
+      - python/**
+      - src/**
+      - tests/**
+
+concurrency:
+  group: ci-pybind-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build and test isis_pybind_standalone
+    runs-on: ubuntu-22.04
+    timeout-minutes: 120
+    permissions:
+      contents: read
+
+    env:
+      PYBIND_DIR: .
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-file: environment.yml
+          environment-name: asp360_new
+          cache-environment: true
+          cache-downloads: true
+          init-shell: bash
+
+      - name: Install CI-only dependencies
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          micromamba install -n asp360_new -y \
+            -c conda-forge \
+            -c usgs-astrogeology \
+            python=3.12 \
+            pybind11 \
+            "isis=9.0.0"
+
+      - name: Verify external ISIS prefix
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          echo "CONDA_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISIS_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISISROOT=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
+
+          test -d "$CONDA_PREFIX/include/isis"
+          test -f "$CONDA_PREFIX/lib/libisis.so"
+          test -f "$CONDA_PREFIX/lib/Camera.plugin"
+
+      - name: Show toolchain summary
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          python --version
+          cmake --version
+          ninja --version
+
+      - name: Configure CMake
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" \
+            -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
+            -DISIS_PREFIX="$CONDA_PREFIX"
+
+      - name: Build extension
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          cmake --build "$BUILD_DIR" --parallel 2
+
+      - name: Run CTest suite
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          ctest --test-dir "$BUILD_DIR" --output-on-failure
+
+      - name: Run smoke import
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          "$CONDA_PREFIX/bin/python" "$PYBIND_DIR/tests/smoke_import.py"

@@ -113,6 +113,9 @@ jobs:
           cmake --version
           ninja --version
 
+      - name: Clean build directory
+        run: rm -rf "$BUILD_DIR"
+
       - name: Configure CMake
         shell: bash -l {0}
         run: |

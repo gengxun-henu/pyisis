@@ -9,7 +9,6 @@ on:
       - .github/workflows/ci-pybind.yml
       - Github_actions_build_test_steps.md
       - CMakeLists.txt
-      - environment.yml
       - python/**
       - src/**
       - tests/**
@@ -18,7 +17,6 @@ on:
       - .github/workflows/ci-pybind.yml
       - Github_actions_build_test_steps.md
       - CMakeLists.txt
-      - environment.yml
       - python/**
       - src/**
       - tests/**
@@ -49,7 +47,6 @@ jobs:
       - name: Set up micromamba
         uses: mamba-org/setup-micromamba@v2
         with:
-          environment-file: environment.yml
           environment-name: asp360_new
           cache-environment: true
           cache-downloads: true
@@ -62,9 +59,8 @@ jobs:
           micromamba install -n asp360_new -y \
             -c conda-forge \
             -c usgs-astrogeology \
-            python=3.12 \
-            pybind11 \
             "isis=9.0.0"
+          micromamba install python=3.12 pybind11
 
       - name: Verify external ISIS prefix
         shell: bash -l {0}

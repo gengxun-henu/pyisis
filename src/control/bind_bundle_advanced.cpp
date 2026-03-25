@@ -36,8 +36,8 @@
 #include "SurfacePoint.h"
 #include "helpers.h"
 
-#include "/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleResults/BundleResults.h"
-#include "/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h"
+#include "BundleResults.h"
+#include "BundleSolutionInfo.h"
 
 namespace py = pybind11;
 

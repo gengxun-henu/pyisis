@@ -52,7 +52,7 @@ jobs:
           cache-downloads: true
           init-shell: bash
 
-      - name: Install CI-only dependencies
+      - name: Install ISIS
         shell: bash -l {0}
         run: |
           micromamba activate asp360_new
@@ -60,7 +60,36 @@ jobs:
             -c conda-forge \
             -c usgs-astrogeology \
             "isis=9.0.0"
-          micromamba install python=3.12 pybind11
+
+      - name: Verify ISIS installation and output information
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          echo "=== ISIS Installation Verification ==="
+          echo "CONDA_PREFIX: $CONDA_PREFIX"
+          echo ""
+          echo "=== Checking ISIS directories and files ==="
+          test -d "$CONDA_PREFIX/include/isis" && echo "✓ ISIS include directory found: $CONDA_PREFIX/include/isis"
+          test -f "$CONDA_PREFIX/lib/libisis.so" && echo "✓ ISIS library found: $CONDA_PREFIX/lib/libisis.so"
+          test -f "$CONDA_PREFIX/lib/Camera.plugin" && echo "✓ Camera plugin found: $CONDA_PREFIX/lib/Camera.plugin"
+          echo ""
+          echo "=== Python version provided by ISIS ==="
+          which python
+          python --version
+          echo ""
+          echo "=== ISIS environment packages ==="
+          micromamba list | grep -E "(isis|python|pybind)" || true
+          echo ""
+          echo "=== ISIS installation verified successfully ==="
+
+      - name: Install pybind11
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          echo "=== Installing pybind11 ==="
+          micromamba install -y pybind11
+          echo "=== pybind11 installation completed ==="
+          pybind11-config --version || echo "pybind11-config not found in PATH"
 
       - name: Verify external ISIS prefix
         shell: bash -l {0}

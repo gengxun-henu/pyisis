@@ -1,22 +1,22 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Affine,Math,isis/src/base/objs/Affine/Affine.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+Affine,Math,isis/src/base/objs/Affine/Affine.h,isis_pybind_standalone/src/base/bind_base_math.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Default constructor plus core solve/transform APIs are exposed; static matrix helpers remain unbound.
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Affine,isis_pybind.Affine,N,Python class symbol not found in current binding files
-Construction/Enum,Affine(),isis_pybind.Affine(),N,Constructor binding not detected in current binding files
-Public API,"void Solve(const double x[], const double y[], const double xp[], const double yp[], int n)",isis_pybind.Affine.solve,N,Method not found in current binding files
-Static/Factory,static AMatrix getIdentity(),isis_pybind.Affine.get_identity,N,Method not found in current binding files
-Public API,void Identity(),isis_pybind.Affine.identity,N,Method not found in current binding files
-Public API,"void Translate(double tx, double ty)",isis_pybind.Affine.translate,N,Method not found in current binding files
-Public API,void Rotate(double rot),isis_pybind.Affine.rotate,N,Method not found in current binding files
-Public API,void Scale(double scaleFactor),isis_pybind.Affine.scale,N,Method not found in current binding files
-Public API,"void Compute(double x, double y)",isis_pybind.Affine.compute,N,Method not found in current binding files
-Public API,double xp() const { return p_xp,isis_pybind.Affine.xp,N,Method not found in current binding files
-Public API,double yp() const { return p_yp,isis_pybind.Affine.yp,N,Method not found in current binding files
-Public API,"void ComputeInverse(double xp, double yp)",isis_pybind.Affine.compute_inverse,N,Method not found in current binding files
-Public API,double x() const { return p_x,isis_pybind.Affine.x,N,Method not found in current binding files
-Public API,double y() const { return p_y,isis_pybind.Affine.y,N,Method not found in current binding files
-Public API,std::vector<double> Coefficients(int var),isis_pybind.Affine.coefficients,N,Method not found in current binding files
-Public API,std::vector<double> InverseCoefficients(int var),isis_pybind.Affine.inverse_coefficients,N,Method not found in current binding files
-Public API,AMatrix Forward() const { return (p_matrix.copy()),isis_pybind.Affine.forward,N,Method not found in current binding files
-Public API,AMatrix Inverse() const { return (p_invmat.copy()),isis_pybind.Affine.inverse,N,Method not found in current binding files
+Class Symbol,Affine,isis_pybind.Affine,Y,Exposed via bind_base_math.cpp and re-exported from isis_pybind.__init__
+Construction/Enum,Affine(),isis_pybind.Affine(),Y,Default constructor bound in bind_base_math.cpp
+Public API,"void Solve(const double x[], const double y[], const double xp[], const double yp[], int n)",isis_pybind.Affine.solve,Y,Bound in bind_base_math.cpp
+Static/Factory,static AMatrix getIdentity(),isis_pybind.Affine.get_identity,N,Static identity-matrix helper is not currently exposed in bind_base_math.cpp
+Public API,void Identity(),isis_pybind.Affine.identity,Y,Bound in bind_base_math.cpp
+Public API,"void Translate(double tx, double ty)",isis_pybind.Affine.translate,Y,Bound in bind_base_math.cpp
+Public API,void Rotate(double rot),isis_pybind.Affine.rotate,Y,Bound in bind_base_math.cpp (upstream API expects degrees)
+Public API,void Scale(double scaleFactor),isis_pybind.Affine.scale,Y,Bound in bind_base_math.cpp
+Public API,"void Compute(double x, double y)",isis_pybind.Affine.compute,Y,Bound in bind_base_math.cpp
+Public API,double xp() const { return p_xp,isis_pybind.Affine.xp,Y,Bound in bind_base_math.cpp
+Public API,double yp() const { return p_yp,isis_pybind.Affine.yp,Y,Bound in bind_base_math.cpp
+Public API,"void ComputeInverse(double xp, double yp)",isis_pybind.Affine.compute_inverse,Y,Bound in bind_base_math.cpp
+Public API,double x() const { return p_x,isis_pybind.Affine.x,Y,Bound in bind_base_math.cpp
+Public API,double y() const { return p_y,isis_pybind.Affine.y,Y,Bound in bind_base_math.cpp
+Public API,std::vector<double> Coefficients(int var),isis_pybind.Affine.coefficients,Y,Bound in bind_base_math.cpp
+Public API,std::vector<double> InverseCoefficients(int var),isis_pybind.Affine.inverse_coefficients,Y,Bound in bind_base_math.cpp
+Public API,AMatrix Forward() const { return (p_matrix.copy()),isis_pybind.Affine.forward,N,Forward matrix accessor is not currently exposed in bind_base_math.cpp
+Public API,AMatrix Inverse() const { return (p_invmat.copy()),isis_pybind.Affine.inverse,N,Inverse matrix accessor is not currently exposed in bind_base_math.cpp

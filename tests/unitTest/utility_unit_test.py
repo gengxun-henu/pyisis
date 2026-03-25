@@ -21,11 +21,27 @@ class ColumnUnitTest(unittest.TestCase):
         column.set_name("TestColumn")
         self.assertEqual(column.name(), "TestColumn")
 
+    def test_column_set_name_rejects_name_wider_than_width(self):
+        """Test setting a name wider than the configured width raises"""
+        column = ip.Column()
+        column.set_width(5)
+
+        with self.assertRaises(ip.IException):
+            column.set_name("TooLongName")
+
     def test_column_set_width(self):
         """Test setting and getting column width"""
         column = ip.Column()
         column.set_width(20)
         self.assertEqual(column.width(), 20)
+
+    def test_column_set_width_rejects_existing_name_that_is_too_wide(self):
+        """Test shrinking width below the current name length raises"""
+        column = ip.Column()
+        column.set_name("LongName")
+
+        with self.assertRaises(ip.IException):
+            column.set_width(4)
 
     def test_column_set_type(self):
         """Test setting and getting column type"""
@@ -51,11 +67,28 @@ class ColumnUnitTest(unittest.TestCase):
         column.set_alignment(ip.Column.Align.Decimal)
         self.assertEqual(column.alignment(), ip.Column.Align.Decimal)
 
+    def test_column_set_alignment_rejects_decimal_for_string_type(self):
+        """Test decimal alignment is rejected for string columns"""
+        column = ip.Column()
+        column.set_type(ip.Column.Type.String)
+
+        with self.assertRaises(ip.IException):
+            column.set_alignment(ip.Column.Align.Decimal)
+
     def test_column_set_precision(self):
         """Test setting and getting column precision"""
         column = ip.Column()
+        column.set_type(ip.Column.Type.Real)
+        column.set_alignment(ip.Column.Align.Decimal)
         column.set_precision(5)
         self.assertEqual(column.precision(), 5)
+
+    def test_column_set_precision_requires_real_or_pixel_type(self):
+        """Test precision raises for unsupported column types"""
+        column = ip.Column()
+
+        with self.assertRaises(ip.IException):
+            column.set_precision(5)
 
     def test_column_full_configuration(self):
         """Test configuring a column with all parameters"""

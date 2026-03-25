@@ -88,6 +88,9 @@ def temporary_raw_input_file(name="example.raw"):
 
 def test_basic_symbols_present():
     assert hasattr(ip, "Progress")
+    assert hasattr(ip, "Calculator")
+    assert hasattr(ip, "Affine")
+    assert hasattr(ip, "BasisFunction")
     assert hasattr(ip, "Process")
     assert hasattr(ip, "ProcessByBrick")
     assert hasattr(ip, "ProcessByLine")

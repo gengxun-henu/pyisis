@@ -7,6 +7,11 @@ import math
 from _unit_test_support import ip
 
 
+def make_basis_function():
+    """Create a concrete BasisFunction using the bound upstream constructor signature."""
+    return ip.BasisFunction("unit_test_basis", 1, 3)
+
+
 class CalculatorUnitTest(unittest.TestCase):
     """Test suite for Calculator class bindings"""
 
@@ -187,7 +192,7 @@ class AffineUnitTest(unittest.TestCase):
         """Test rotation transformation"""
         affine = ip.Affine()
         affine.identity()
-        affine.rotate(math.pi / 2)  # 90 degrees
+        affine.rotate(90.0)
 
         affine.compute(1.0, 0.0)
         self.assertAlmostEqual(affine.xp(), 0.0, places=10)
@@ -215,14 +220,16 @@ class BasisFunctionUnitTest(unittest.TestCase):
     """Test suite for BasisFunction class bindings"""
 
     def test_basis_function_construction(self):
-        """Test basic BasisFunction construction"""
-        basis = ip.BasisFunction()
+        """Test BasisFunction construction with the upstream constructor signature"""
+        basis = make_basis_function()
         self.assertIsNotNone(basis)
         self.assertIn("BasisFunction", repr(basis))
+        self.assertEqual(basis.variables(), 1)
+        self.assertEqual(basis.coefficients(), 3)
 
     def test_basis_function_coefficients(self):
         """Test setting and using coefficients"""
-        basis = ip.BasisFunction()
+        basis = make_basis_function()
 
         # Set some coefficients
         coefs = [1.0, 2.0, 3.0]
@@ -233,9 +240,10 @@ class BasisFunctionUnitTest(unittest.TestCase):
 
     def test_basis_function_name(self):
         """Test getting function name"""
-        basis = ip.BasisFunction()
+        basis = make_basis_function()
         name = basis.name()
         self.assertIsInstance(name, str)
+        self.assertEqual(name, "unit_test_basis")
 
 
 if __name__ == '__main__':

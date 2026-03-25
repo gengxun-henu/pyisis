@@ -194,7 +194,7 @@ class BundleAdvancedUnitTest(unittest.TestCase):
 
         # Create a surface point
         surface_point = ip.SurfacePoint()
-        surface_point.set_rectangular(
+        surface_point.set_rectangular_coordinates(
             ip.Displacement(1000.0, ip.Displacement.Units.Meters),
             ip.Displacement(2000.0, ip.Displacement.Units.Meters),
             ip.Displacement(3000.0, ip.Displacement.Units.Meters)

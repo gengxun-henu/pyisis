@@ -116,7 +116,7 @@ void bind_base_pattern(py::module_ &m) {
            py::arg("cube"), py::arg("rotation") = 0.0, py::arg("scale") = 1.0, py::arg("band") = 1,
            "Load chip from cube")
       .def("load",
-           py::overload_cast<Isis::Cube &, const Isis::Affine &, const bool, const int>(
+           py::overload_cast<Isis::Cube &, const Isis::Affine &, const bool &, const int>(
                &Isis::Chip::Load),
            py::arg("cube"), py::arg("affine"), py::arg("keep_poly") = true, py::arg("band") = 1,
            "Load chip from cube with affine transformation")
@@ -268,10 +268,14 @@ void bind_base_pattern(py::module_ &m) {
            "Get registration distance (returns tuple of sample and line distances)")
       .def("success", &Isis::AutoReg::Success, "Check if registration was successful")
       .def("goodness_of_fit", &Isis::AutoReg::GoodnessOfFit, "Get goodness of fit")
-      .def("is_ideal",
-           &Isis::AutoReg::IsIdeal,
-           py::arg("fit"),
-           "Check if fit is ideal")
+      
+      // 2026-03-25 12:52:34,Geng Xun, ignore the is_ideal method for now since it is 
+      // an inline method that is not defined in the source code, and attempting to bind it with pybind11 causes compilation errors.  We can revisit this method later if it is defined in the source code and we want to expose it to Python.
+      // inline bool is_ideal(const Fit &fit) const; --- IGNORE ---
+      //.def("is_ideal",
+      //     &Isis::AutoReg::IsIdeal,
+      //     py::arg("fit"),
+      //     "Check if fit is ideal")
       .def("chip_sample", &Isis::AutoReg::ChipSample, "Get chip sample position")
       .def("chip_line", &Isis::AutoReg::ChipLine, "Get chip line position")
       .def("cube_sample", &Isis::AutoReg::CubeSample, "Get cube sample position")

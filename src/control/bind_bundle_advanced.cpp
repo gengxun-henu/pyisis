@@ -23,9 +23,7 @@
 #include "BundleObservation.h"
 #include "BundleObservationSolveSettings.h"
 #include "BundleObservationVector.h"
-#include "BundleResults.h"
 #include "BundleSettings.h"
-#include "BundleSolutionInfo.h"
 #include "BundleTargetBody.h"
 #include "Camera.h"
 #include "ControlMeasure.h"
@@ -37,6 +35,9 @@
 #include "Statistics.h"
 #include "SurfacePoint.h"
 #include "helpers.h"
+
+#include "/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleResults/BundleResults.h"
+#include "/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h"
 
 namespace py = pybind11;
 
@@ -153,11 +154,9 @@ void bind_bundle_advanced(py::module_ &m)
          .def("copy", [](const Isis::BundleMeasure &self)
               { return Isis::BundleMeasure(self); })
          .def("__repr__", [](const Isis::BundleMeasure &self)
-              {
-                   return "BundleMeasure(serial='" + qStringToStdString(self.cubeSerialNumber()) +
-                          "', sample=" + std::to_string(self.sample()) +
-                          ", line=" + std::to_string(self.line()) + ")";
-              });
+              { return "BundleMeasure(serial='" + qStringToStdString(self.cubeSerialNumber()) +
+                       "', sample=" + std::to_string(self.sample()) +
+                       ", line=" + std::to_string(self.line()) + ")"; });
 
      // ─── BundleControlPoint ─────────────────────────────────────────────
      py::class_<Isis::BundleControlPoint, std::shared_ptr<Isis::BundleControlPoint>> bundle_control_point(m, "BundleControlPoint");
@@ -166,8 +165,7 @@ void bind_bundle_advanced(py::module_ &m)
          .def(py::init([](Isis::BundleSettings &settings, Isis::ControlPoint *point)
                        {
                             Isis::BundleSettingsQsp settingsQsp(new Isis::BundleSettings(settings));
-                            return std::make_shared<Isis::BundleControlPoint>(settingsQsp, point);
-                       }),
+                            return std::make_shared<Isis::BundleControlPoint>(settingsQsp, point); }),
               py::arg("settings"),
               py::arg("point"),
               py::keep_alive<1, 3>())
@@ -191,17 +189,24 @@ void bind_bundle_advanced(py::module_ &m)
          .def("type", &Isis::BundleControlPoint::type)
          .def("coord_type_reports", &Isis::BundleControlPoint::coordTypeReports)
          .def("coord_type_bundle", &Isis::BundleControlPoint::coordTypeBundle)
-         .def("number_parameters", &Isis::BundleControlPoint::numberParameters)
+         // 2026-03-25 12:05:28, fix a bug where corrections, apriori_sigmas, adjusted_sigmas, and weights were not properly exposed to Python
+         .def("corrections", &Isis::BundleControlPoint::corrections, py::return_value_policy::reference_internal)
+         .def("apriori_sigmas", &Isis::BundleControlPoint::aprioriSigmas, py::return_value_policy::reference_internal)
+         .def("adjusted_sigmas", &Isis::BundleControlPoint::adjustedSigmas, py::return_value_policy::reference_internal)
+         .def("weights", &Isis::BundleControlPoint::weights, py::return_value_policy::reference_internal)
+         .def("nic_vector", &Isis::BundleControlPoint::nicVector, py::return_value_policy::reference_internal)
+         .def("cholmod_q_matrix", &Isis::BundleControlPoint::cholmodQMatrix, py::return_value_policy::reference_internal)
+         // the USGS ISIS source code does not have a method to get the number of parameters for a BundleControlPoint, so we will not expose it to Python until it is added to the source code
+         //.def("number_parameters", &Isis::BundleControlPoint::numberParameters)
+
          .def("format_bundle_output_summary_string", [](const Isis::BundleControlPoint &self, bool error_propagation)
               { return qStringToStdString(self.formatBundleOutputSummaryString(error_propagation)); }, py::arg("error_propagation"))
          .def("format_bundle_output_detail_string", [](const Isis::BundleControlPoint &self, bool error_propagation, bool solve_radius)
               { return qStringToStdString(self.formatBundleOutputDetailString(error_propagation, solve_radius)); }, py::arg("error_propagation"), py::arg("solve_radius") = false)
          .def("__len__", &Isis::BundleControlPoint::numberOfMeasures)
          .def("__repr__", [](const Isis::BundleControlPoint &self)
-              {
-                   return "BundleControlPoint(id='" + qStringToStdString(self.id()) +
-                          "', measures=" + std::to_string(self.numberOfMeasures()) + ")";
-              });
+              { return "BundleControlPoint(id='" + qStringToStdString(self.id()) +
+                       "', measures=" + std::to_string(self.numberOfMeasures()) + ")"; });
 
      // ─── BundleObservation (abstract base class) ────────────────────────
      py::class_<Isis::BundleObservation, std::shared_ptr<Isis::BundleObservation>> bundle_observation(m, "BundleObservation");
@@ -218,10 +223,8 @@ void bind_bundle_advanced(py::module_ &m)
          .def("parameter_list", [](Isis::BundleObservation &self)
               { return qStringListToVector(self.parameterList()); })
          .def("__repr__", [](Isis::BundleObservation &self)
-              {
-                   return "BundleObservation(instrument_id='" + qStringToStdString(self.instrumentId()) +
-                          "', index=" + std::to_string(self.index()) + ")";
-              });
+              { return "BundleObservation(instrument_id='" + qStringToStdString(self.instrumentId()) +
+                       "', index=" + std::to_string(self.index()) + ")"; });
 
      // ─── BundleObservationVector ────────────────────────────────────────
      py::class_<Isis::BundleObservationVector> bundle_observation_vector(m, "BundleObservationVector");
@@ -243,8 +246,7 @@ void bind_bundle_advanced(py::module_ &m)
                    {
                         result.append(py::cast(obs));
                    }
-                   return result;
-              }, py::arg("instrument_id"))
+                   return result; }, py::arg("instrument_id"))
          .def("__len__", &Isis::BundleObservationVector::size)
          .def("__getitem__", [](Isis::BundleObservationVector &self, int index) -> Isis::BundleObservationQsp
               {
@@ -252,12 +254,9 @@ void bind_bundle_advanced(py::module_ &m)
                    {
                         throw py::index_error("BundleObservationVector index out of range");
                    }
-                   return self[index];
-              }, py::arg("index"))
+                   return self[index]; }, py::arg("index"))
          .def("__repr__", [](const Isis::BundleObservationVector &self)
-              {
-                   return "BundleObservationVector(size=" + std::to_string(self.size()) + ")";
-              });
+              { return "BundleObservationVector(size=" + std::to_string(self.size()) + ")"; });
 
      // ─── BundleLidarRangeConstraint ─────────────────────────────────────
      py::class_<Isis::BundleLidarRangeConstraint, std::shared_ptr<Isis::BundleLidarRangeConstraint>> bundle_lidar_range_constraint(m, "BundleLidarRangeConstraint");
@@ -275,10 +274,8 @@ void bind_bundle_advanced(py::module_ &m)
          .def("copy", [](const Isis::BundleLidarRangeConstraint &self)
               { return Isis::BundleLidarRangeConstraint(self); })
          .def("__repr__", [](Isis::BundleLidarRangeConstraint &self)
-              {
-                   return "BundleLidarRangeConstraint(observed=" + std::to_string(self.rangeObserved()) +
-                          ", computed=" + std::to_string(self.rangeComputed()) + ")";
-              });
+              { return "BundleLidarRangeConstraint(observed=" + std::to_string(self.rangeObserved()) +
+                       ", computed=" + std::to_string(self.rangeComputed()) + ")"; });
 
      // ─── BundleLidarControlPoint ────────────────────────────────────────
      py::class_<Isis::BundleLidarControlPoint, Isis::BundleControlPoint, std::shared_ptr<Isis::BundleLidarControlPoint>> bundle_lidar_control_point(m, "BundleLidarControlPoint");
@@ -292,10 +289,8 @@ void bind_bundle_advanced(py::module_ &m)
          .def("range", &Isis::BundleLidarControlPoint::range)
          .def("sigma_range", &Isis::BundleLidarControlPoint::sigmaRange)
          .def("__repr__", [](Isis::BundleLidarControlPoint &self)
-              {
-                   return "BundleLidarControlPoint(id='" + qStringToStdString(self.id()) +
-                          "', range_constraints=" + std::to_string(self.numberRangeConstraints()) + ")";
-              });
+              { return "BundleLidarControlPoint(id='" + qStringToStdString(self.id()) +
+                       "', range_constraints=" + std::to_string(self.numberRangeConstraints()) + ")"; });
 
      // ─── BundleLidarPointVector ─────────────────────────────────────────
      py::class_<Isis::BundleLidarPointVector> bundle_lidar_point_vector(m, "BundleLidarPointVector");
@@ -314,49 +309,35 @@ void bind_bundle_advanced(py::module_ &m)
                    {
                         throw py::index_error("BundleLidarPointVector index out of range");
                    }
-                   return self[index];
-              }, py::arg("index"))
+                   return self[index]; }, py::arg("index"))
          .def("copy", [](const Isis::BundleLidarPointVector &self)
               { return Isis::BundleLidarPointVector(self); })
          .def("__repr__", [](const Isis::BundleLidarPointVector &self)
-              {
-                   return "BundleLidarPointVector(size=" + std::to_string(self.size()) + ")";
-              });
+              { return "BundleLidarPointVector(size=" + std::to_string(self.size()) + ")"; });
 
      // ─── BundleResults ──────────────────────────────────────────────────
      py::class_<Isis::BundleResults> bundle_results(m, "BundleResults");
 
      bundle_results
          .def(py::init<>())
-         .def(py::init<const Isis::BundleResults &>(), py::arg("other"))
+         .def(py::init([](const Isis::BundleResults &other)
+                       {
+                            auto copy = std::make_unique<Isis::BundleResults>();
+                            copy->copyForPyBind(other);
+                            return copy; }),
+              py::arg("other"))
          .def("initialize", &Isis::BundleResults::initialize)
          .def("resize_sigma_statistics_vectors", &Isis::BundleResults::resizeSigmaStatisticsVectors, py::arg("number_images"))
          // ── Residual setters ──
          .def("set_rms_xy_residuals", &Isis::BundleResults::setRmsXYResiduals, py::arg("rx"), py::arg("ry"), py::arg("rxy"))
          // ── Sigma range setters ──
-         .def("set_sigma_coord1_range", [](Isis::BundleResults &self,
-                                           const Isis::Distance &min_dist,
-                                           const Isis::Distance &max_dist,
-                                           const std::string &min_point_id,
-                                           const std::string &max_point_id)
-              { self.setSigmaCoord1Range(min_dist, max_dist, stdStringToQString(min_point_id), stdStringToQString(max_point_id)); },
-              py::arg("min_dist"), py::arg("max_dist"), py::arg("min_point_id"), py::arg("max_point_id"))
-         .def("set_sigma_coord2_range", [](Isis::BundleResults &self,
-                                           const Isis::Distance &min_dist,
-                                           const Isis::Distance &max_dist,
-                                           const std::string &min_point_id,
-                                           const std::string &max_point_id)
-              { self.setSigmaCoord2Range(min_dist, max_dist, stdStringToQString(min_point_id), stdStringToQString(max_point_id)); },
-              py::arg("min_dist"), py::arg("max_dist"), py::arg("min_point_id"), py::arg("max_point_id"))
-         .def("set_sigma_coord3_range", [](Isis::BundleResults &self,
-                                           const Isis::Distance &min_dist,
-                                           const Isis::Distance &max_dist,
-                                           const std::string &min_point_id,
-                                           const std::string &max_point_id)
-              { self.setSigmaCoord3Range(min_dist, max_dist, stdStringToQString(min_point_id), stdStringToQString(max_point_id)); },
-              py::arg("min_dist"), py::arg("max_dist"), py::arg("min_point_id"), py::arg("max_point_id"))
-         .def("set_rms_from_sigma_statistics", &Isis::BundleResults::setRmsFromSigmaStatistics,
-              py::arg("rms_coord1"), py::arg("rms_coord2"), py::arg("rms_coord3"))
+         .def("set_sigma_coord1_range", [](Isis::BundleResults &self, const Isis::Distance &min_dist, const Isis::Distance &max_dist, const std::string &min_point_id, const std::string &max_point_id)
+              { self.setSigmaCoord1Range(min_dist, max_dist, stdStringToQString(min_point_id), stdStringToQString(max_point_id)); }, py::arg("min_dist"), py::arg("max_dist"), py::arg("min_point_id"), py::arg("max_point_id"))
+         .def("set_sigma_coord2_range", [](Isis::BundleResults &self, const Isis::Distance &min_dist, const Isis::Distance &max_dist, const std::string &min_point_id, const std::string &max_point_id)
+              { self.setSigmaCoord2Range(min_dist, max_dist, stdStringToQString(min_point_id), stdStringToQString(max_point_id)); }, py::arg("min_dist"), py::arg("max_dist"), py::arg("min_point_id"), py::arg("max_point_id"))
+         .def("set_sigma_coord3_range", [](Isis::BundleResults &self, const Isis::Distance &min_dist, const Isis::Distance &max_dist, const std::string &min_point_id, const std::string &max_point_id)
+              { self.setSigmaCoord3Range(min_dist, max_dist, stdStringToQString(min_point_id), stdStringToQString(max_point_id)); }, py::arg("min_dist"), py::arg("max_dist"), py::arg("min_point_id"), py::arg("max_point_id"))
+         .def("set_rms_from_sigma_statistics", &Isis::BundleResults::setRmsFromSigmaStatistics, py::arg("rms_coord1"), py::arg("rms_coord2"), py::arg("rms_coord3"))
          // ── Observation/parameter count setters ──
          .def("set_number_rejected_observations", &Isis::BundleResults::setNumberRejectedObservations, py::arg("number_observations"))
          .def("set_number_image_observations", &Isis::BundleResults::setNumberImageObservations, py::arg("number_observations"))
@@ -471,13 +452,14 @@ void bind_bundle_advanced(py::module_ &m)
               { return self.observations(); }, py::return_value_policy::reference_internal)
          // ── Copy and repr ──
          .def("copy", [](const Isis::BundleResults &self)
-              { return Isis::BundleResults(self); })
-         .def("__repr__", [](const Isis::BundleResults &self)
               {
-                   return "BundleResults(converged=" + std::string(self.converged() ? "True" : "False") +
-                          ", sigma0=" + std::to_string(self.sigma0()) +
-                          ", iterations=" + std::to_string(self.iterations()) + ")";
-              });
+                  auto copy = std::make_unique<Isis::BundleResults>();
+                  copy->copyForPyBind(self);
+                  return copy; })
+         .def("__repr__", [](const Isis::BundleResults &self)
+              { return "BundleResults(converged=" + std::string(self.converged() ? "True" : "False") +
+                       ", sigma0=" + std::to_string(self.sigma0()) +
+                       ", iterations=" + std::to_string(self.iterations()) + ")"; });
 
      // ─── BundleSolutionInfo ─────────────────────────────────────────────
      py::class_<Isis::BundleSolutionInfo> bundle_solution_info(m, "BundleSolutionInfo");
@@ -488,21 +470,23 @@ void bind_bundle_advanced(py::module_ &m)
               { self.setRunTime(stdStringToQString(run_time)); }, py::arg("run_time"))
          .def("set_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setName(stdStringToQString(name)); }, py::arg("name"))
-         .def("set_output_statistics", &Isis::BundleSolutionInfo::setOutputStatistics, py::arg("statistics_results"))
+         .def("set_output_statistics", [](Isis::BundleSolutionInfo &self, const Isis::BundleResults &statistics_results)
+              { self.setOutputStatisticsForPyBind(statistics_results); }, py::arg("statistics_results"))
          .def("set_output_control_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setOutputControlName(stdStringToQString(name)); }, py::arg("name"))
          .def("id", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.id()); })
          .def("input_control_net_file_name", [](const Isis::BundleSolutionInfo &self)
-              { return qStringToStdString(self.inputControlNetFileName()); })
+              { return qStringToStdString(self.inputControlNetFileNameForPyBind()); })
          .def("output_control_net_file_name", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.outputControlNetFileName()); })
          .def("output_control_name", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.outputControlName()); })
          .def("input_lidar_data_file_name", [](const Isis::BundleSolutionInfo &self)
-              { return qStringToStdString(self.inputLidarDataFileName()); })
+              { return qStringToStdString(self.inputLidarDataFileNameForPyBind()); })
          .def("bundle_settings", &Isis::BundleSolutionInfo::bundleSettings)
-         .def("bundle_results", &Isis::BundleSolutionInfo::bundleResults)
+         .def("bundle_results", [](const Isis::BundleSolutionInfo &self)
+              { return self.cloneBundleResultsForPyBind(); }, py::return_value_policy::take_ownership)
          .def("run_time", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.runTime()); })
          .def("name", [](const Isis::BundleSolutionInfo &self)
@@ -520,14 +504,9 @@ void bind_bundle_advanced(py::module_ &m)
          .def("output_points_csv", &Isis::BundleSolutionInfo::outputPointsCSV)
          .def("output_lidar_csv", &Isis::BundleSolutionInfo::outputLidarCSV)
          .def("output_residuals", &Isis::BundleSolutionInfo::outputResiduals)
-         .def("surface_point_coord_name", [](const Isis::BundleSolutionInfo &self,
-                                             Isis::SurfacePoint::CoordinateType type,
-                                             Isis::SurfacePoint::CoordIndex coord_index)
-              { return qStringToStdString(self.surfacePointCoordName(type, coord_index)); },
-              py::arg("type"), py::arg("coord_index"))
+         .def("surface_point_coord_name", [](const Isis::BundleSolutionInfo &self, Isis::SurfacePoint::CoordinateType type, Isis::SurfacePoint::CoordIndex coord_index)
+              { return qStringToStdString(self.surfacePointCoordName(type, coord_index)); }, py::arg("type"), py::arg("coord_index"))
          .def("__repr__", [](const Isis::BundleSolutionInfo &self)
-              {
-                   return "BundleSolutionInfo(name='" + qStringToStdString(self.name()) +
-                          "', run_time='" + qStringToStdString(self.runTime()) + "')";
-              });
+              { return "BundleSolutionInfo(name='" + qStringToStdString(self.name()) +
+                       "', run_time='" + qStringToStdString(self.runTime()) + "')"; });
 }

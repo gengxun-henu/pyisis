@@ -157,10 +157,10 @@ Mars Reconnaissance Orbiter,ZeroBufferSmooth,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,ZeroDark,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,ZeroDarkRate,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,ZeroReverse,未转换,抽象基类/纯虚接口
-Math,Affine,未转换,
+Math,Affine,已转换,2026-03-25 已在 bind_base_math.cpp 暴露默认构造/求解/正反变换接口；静态矩阵工厂与矩阵访问仍待补
 Math,Basis1VariableFunction,未转换,抽象基类/纯虚接口
-Math,BasisFunction,未转换,
-Math,Calculator,未转换,
+Math,BasisFunction,已转换,2026-03-25 已在 bind_base_math.cpp 暴露三参构造/系数/求值接口
+Math,Calculator,已转换,2026-03-25 已在 bind_base_math.cpp 暴露 RPN 计算器主接口；Minimum2/Maximum2 上游源码未实现
 Math,CubeCalculator,未转换,
 Math,CubeInfixToPostfix,未转换,
 Math,FunctionTools,未转换,抽象基类/纯虚接口
@@ -292,7 +292,7 @@ System,Plugin,未转换,
 Trace Gas Orbiter,TgoCassisCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Trace Gas Orbiter,TgoCassisDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Utility,Area3D,未转换,
-Utility,Column,未转换,
+Utility,Column,已转换,2026-03-25 已在 bind_base_utility.cpp 暴露 Column/Align/Type，补充顶层导出并新增约束单测
 Utility,CubeStretch,未转换,
 Utility,Displacement,已转换,
 Utility,Distance,已转换,

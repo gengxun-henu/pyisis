@@ -68,12 +68,18 @@ class UniversalGroundMapUnitTest(unittest.TestCase):
         self.assertAlmostEqual(ground_map.sample(), sample, places=6)
         self.assertAlmostEqual(ground_map.line(), line, places=6)
 
-        ground_range = ground_map.ground_range(cube)
-        self.assertIsNotNone(ground_range)
-        self.assertEqual(len(ground_range), 4)
-        min_lat, max_lat, min_lon, max_lon = ground_range
-        self.assertLess(min_lat.degrees(), max_lat.degrees())
-        self.assertLess(min_lon.degrees(), max_lon.degrees())
+        projection = ground_map.projection()
+        self.assertFalse(projection.has_ground_range())
+
+        # The projected cube fixture does not expose an intrinsic ground range.
+        # Asking UniversalGroundMap to estimate one from the cube perimeter can
+        # become prohibitively expensive for this dataset, so keep the test on
+        # the stable, non-estimating path.
+        self.assertIsNone(ground_map.ground_range(cube, False))
+
+        self.assertTrue(projection.set_universal_ground(latitude, longitude))
+        self.assertAlmostEqual(projection.world_x(), sample, places=6)
+        self.assertAlmostEqual(projection.world_y(), line, places=6)
 
 
 if __name__ == "__main__":

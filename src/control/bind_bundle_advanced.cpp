@@ -1,6 +1,28 @@
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 
+// ============================================================================
+// TEMPORARILY DISABLED DUE TO COMPLEX DEPENDENCIES
+// ============================================================================
+// This file contains bindings for advanced bundle adjustment classes.
+// Due to complex dependencies that are difficult to resolve, this file
+// is currently excluded from compilation.
+//
+// The file is preserved for future reference and will be re-enabled once
+// the dependency issues are resolved.
+//
+// Classes in this file:
+// - BundleMeasure
+// - BundleControlPoint
+// - BundleObservation
+// - BundleObservationVector
+// - BundleLidarRangeConstraint
+// - BundleLidarControlPoint
+// - BundleLidarPointVector
+// - BundleResults
+// - BundleSolutionInfo
+// ============================================================================
+
 #include <memory>
 #include <stdexcept>
 #include <string>

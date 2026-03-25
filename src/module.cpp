@@ -6,7 +6,8 @@
 namespace py = pybind11;
 
 void bind_control_core(py::module_ &m);
-void bind_bundle_advanced(py::module_ &m);
+// Temporarily disabled due to complex dependencies - will be re-enabled once resolved
+// void bind_bundle_advanced(py::module_ &m);
 void bind_sensor(py::module_ &m);
 void bind_camera(py::module_ &m);
 void bind_camera_maps(py::module_ &m);
@@ -56,5 +57,6 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_low_level_cube_io(m);
   bind_high_level_cube_io(m);
   bind_control_core(m);
-  bind_bundle_advanced(m);
+  // Temporarily disabled due to complex dependencies - will be re-enabled once resolved
+  // bind_bundle_advanced(m);
 }

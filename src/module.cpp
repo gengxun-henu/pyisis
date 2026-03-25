@@ -25,6 +25,7 @@ void bind_base_shape_support(py::module_ &m);
 void bind_base_math(py::module_ &m);
 void bind_base_utility(py::module_ &m);
 void bind_base_pattern(py::module_ &m);
+void bind_base_filters(py::module_ &m);
 void bind_mission_cameras(py::module_ &m);
 void bind_camera_factory(py::module_ &m);
 void bind_statistics(py::module_ &m);
@@ -51,6 +52,7 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_base_math(m);
   bind_base_utility(m);
   bind_base_pattern(m);
+  bind_base_filters(m);
   bind_mission_cameras(m);
   bind_camera_factory(m);
   bind_statistics(m);

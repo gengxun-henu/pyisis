@@ -1,6 +1,6 @@
 ---
-description: "Use when creating or substantially rewriting pybind11 binding source/header files under isis_pybind_standalone/src. Ensures new pybind files include upstream header author metadata, current date, version info, and consistent file header structure."
-applyTo: "isis_pybind_standalone/src/**/*.{cpp,h}"
+description: "Use when creating or substantially rewriting pybind11 binding source/header files under src/. Ensures new pybind files include upstream header author metadata, current date, version info, and consistent file header structure."
+applyTo: "src/**/*.{cpp,h}"
 ---
 
 # Pybind File Header Conventions
@@ -69,7 +69,7 @@ When upstream author metadata is missing, use this exact wording unless the user
 
 Use this template as the default starting point:
 
-- `isis_pybind_standalone/doc_pybind11_learning/pybind_file_header_template.md`
+- `doc_pybind11_learning/pybind_file_header_template.md`
 
 ## Non-goals
 

@@ -2,6 +2,8 @@
 
 This reference explains how to keep pybind workflow status aligned with the repository tracking files.
 
+All paths below are relative to the repository root.
+
 ## Primary progress files
 
 Always consider these files during pybind work:
@@ -55,9 +57,4 @@ Keep notes concise and operational. Future work should be able to answer:
 - what remains open
 - whether remaining issues are code gaps or environment gaps
 
-## Common mistakes
-
-- finishing a binding task but not updating `pybind_progress_log.md`
-- treating `todo_pybind11.csv` as a narrative progress log instead of an inventory/tracking table
-- marking CSV status as complete before validating actual exposure
-- omitting blockers, forcing future work to rediscover them
+Common mistakes: finishing a binding task without updating `pybind_progress_log.md`, treating `todo_pybind11.csv` as narrative prose instead of inventory, marking CSV status complete before validating actual exposure, and omitting blockers that future work would need.

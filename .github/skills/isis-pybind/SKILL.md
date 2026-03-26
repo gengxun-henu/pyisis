@@ -1,37 +1,32 @@
 ---
 name: isis-pybind
-description: 'Implement, extend, test, or maintain pybind11 bindings for USGS ISIS in `isis_pybind_standalone`. Use when the user asks to 继续做 ISIS pybind 绑定, 给某个 ISIS 类写 pybind11 绑定, 补 unit test / smoke test, 分析 todo_pybind11.csv / methods_inventory_summary.csv, 或更新 pybind_progress_log.md progress.'
+description: 'Implement, extend, test, or maintain pybind11 bindings for USGS ISIS in this repository. Use when the user asks to 继续做 ISIS pybind 绑定, 给某个 ISIS 类写 pybind11 绑定, 补 unit test / smoke test, 分析 todo_pybind11.csv / methods_inventory_summary.csv, 或更新 pybind_progress_log.md progress.'
 argument-hint: '[class or task] e.g. Cube binding, camera tests, update todo_pybind11'
 user-invocable: true
 ---
 
 # ISIS Pybind Workflow
 
-Use this skill for repeatable pybind11 work in `isis_pybind_standalone`, especially when the request involves:
+Use this skill for repeatable pybind11 work in this repository, especially when the request involves:
 
 - binding a new ISIS C++ class or method into Python
-- extending an existing binding in `isis_pybind_standalone/src/`
-- adding or fixing Python tests in `isis_pybind_standalone/tests/`
+- extending an existing binding in `src/`
+- adding or fixing Python tests in `tests/`
 - reviewing binding coverage from `class_bind_methods_details/`
 - updating `pybind_progress_log.md` after implementation progress
 
+All paths below are relative to the repository root unless noted otherwise.
+
 This skill is **workflow-oriented**. It does not replace the repository-wide rules in:
 
-- `../../instructions.md`
+- `../../copilot-instructions.md`
 - `../../instructions/pybind-testing.instructions.md`
 
 Follow those existing instructions in addition to this skill.
 
 ## When to Use
 
-Use this skill when the user mentions keywords such as:
-
-- `pybind`, `pybind11`, `ISIS binding`, `isis_pybind_standalone`
-- `绑定`, `补绑定`, `继续做绑定`, `补测试`
-- `todo_pybind11`, `methods_inventory_summary`, `*_methods.csv`
-- specific ISIS class names that should be exposed to Python
-
-Do **not** use this skill for general ISIS C++ development outside the binding workflow unless the request is clearly about Python exposure or validation.
+Use this skill for requests about pybind bindings, pybind tests, binding coverage inventory, progress tracking, or exposing a specific ISIS class to Python. Do **not** use it for general ISIS C++ development unless the request is clearly about Python exposure or pybind validation.
 
 ## Default Inputs to Inspect First
 
@@ -41,9 +36,9 @@ Before changing code, inspect these files in this order:
 2. `class_bind_methods_details/methods_inventory_summary.csv`
 3. the target class detail CSV under `class_bind_methods_details/`
 4. `pybind_progress_log.md`
-5. similar binding implementations under `./src/`
+5. similar binding implementations under `src/`
 6. Python exports under `isis_pybind/__init__.py`
-7. similar tests under `./tests/unitTest/`
+7. similar tests under `tests/unitTest/`
 
 If a target class is not specified, start from the summary CSV and prefer high-priority, low-open-item targets.
 
@@ -54,7 +49,7 @@ If a target class is not specified, start from the summary CSV and prefer high-p
 - Identify the ISIS class, methods, or module to bind.
 - Use `methods_inventory_summary.csv` to find candidate classes.
 - Open the matching `*_methods.csv` file to understand which methods are still marked `N` or `Partial`.
-- Check whether the binding already exists in `./src/` before adding anything new.
+- Check whether the binding already exists in `src/` before adding anything new.
 
 See [binding workflow reference](./references/binding-workflow.md).
 
@@ -72,8 +67,7 @@ See [binding workflow reference](./references/binding-workflow.md).
 - Prefer focused `unittest` coverage in `tests/unitTest/`.
 - Keep `tests/smoke_import.py` fast and broad; only add minimum symbol or integration checks there.
 - Reuse `tests/unitTest/_unit_test_support.py` rather than duplicating fixtures.
-
-See [testing and validation reference](./references/testing.md).
+- See [testing and validation reference](./references/testing.md) for detailed validation sequencing and reporting expectations.
 
 ### 4. Validate with the correct environment
 
@@ -87,13 +81,11 @@ Treat Python ABI mismatches or missing runtime data separately from binding regr
 
 After a binding task is completed, update the relevant progress artifacts:
 
-- `./pybind_progress_log.md`
-- `./todo_pybind11.csv` when the pending binding inventory or tracked status source changes
+- `pybind_progress_log.md`
+- `todo_pybind11.csv` when the pending binding inventory or tracked status source changes
 - the relevant method inventory CSV if the task requires status synchronization
 
-Record blockers or uncertainties explicitly.
-
-See [progress maintenance reference](./references/progress.md).
+Record blockers or uncertainties explicitly. See [progress maintenance reference](./references/progress.md).
 
 ## Constraints and Non-goals
 
@@ -107,7 +99,7 @@ See [progress maintenance reference](./references/progress.md).
 
 A pybind task is usually ready to report when all relevant items below are satisfied:
 
-- binding code updated in `isis_pybind_standalone/src/`
+- binding code updated in `src/`
 - package export updated if needed
 - focused test added or updated
 - smallest relevant validation run with the `asp360_new` Python interpreter

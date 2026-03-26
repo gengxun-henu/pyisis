@@ -1,11 +1,11 @@
 ---
-description: "Use when editing Python unit tests under isis_pybind_standalone/tests/unitTest. Keeps module docstrings and Created/Last Modified metadata consistent for new or meaningfully expanded test files."
-applyTo: "isis_pybind_standalone/tests/unitTest/**/*.py"
+description: "Use when editing Python unit tests under tests/unitTest/. Keeps module docstrings and Created/Last Modified metadata consistent for new or meaningfully expanded test files."
+applyTo: "tests/unitTest/**/*.py"
 ---
 
 # Pybind Python Test Metadata Rules
 
-Use these rules when creating or editing Python unit test files under `isis_pybind_standalone/tests/unitTest/`.
+Use these rules when creating or editing Python unit test files under `tests/unitTest/`.
 
 ## Goal
 

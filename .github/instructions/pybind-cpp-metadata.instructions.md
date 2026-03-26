@@ -1,11 +1,11 @@
 ---
-description: "Use when editing pybind11 C++ binding files under isis_pybind_standalone/src. Keeps file-level Created/Updated metadata stable and requires concise date tracking for meaningful binding additions or fixes."
-applyTo: "isis_pybind_standalone/src/**/*.{cpp,h}"
+description: "Use when editing pybind11 C++ binding files under src/. Keeps file-level Created/Updated metadata stable and requires concise date tracking for meaningful binding additions or fixes."
+applyTo: "src/**/*.{cpp,h}"
 ---
 
 # Pybind C++ Metadata Maintenance Rules
 
-Use these rules when editing existing pybind11 C++ binding source or helper header files under `isis_pybind_standalone/src/`.
+Use these rules when editing existing pybind11 C++ binding source or helper header files under `src/`.
 
 This instruction complements `pybind-file-header.instructions.md`:
 

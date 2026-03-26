@@ -2,9 +2,11 @@
 
 This reference focuses on how to validate ISIS pybind11 work without confusing environment issues for binding regressions.
 
+All paths below are relative to the repository root.
+
 ## Interpreter rule
 
-Prefer this Python interpreter for all `isis_pybind_standalone` validation work:
+Prefer this Python interpreter for all validation work in this repository:
 
 - the `asp360_new` environment's Python interpreter
 
@@ -19,12 +21,12 @@ After modifying a binding or test, use this default order:
 
 1. run the smallest relevant focused unit test
 2. run the related unit test group if needed
-3. run `isis_pybind_standalone/tests/smoke_import.py`
+3. run `tests/smoke_import.py`
 4. if the task touches installation expectations, verify install-tree import too
 
 ## Focused unit test expectations
 
-Prefer small `unittest` files under `isis_pybind_standalone/tests/unitTest/`.
+Prefer small `unittest` files under `tests/unitTest/`.
 
 For most value-like or utility bindings, verify:
 
@@ -36,11 +38,11 @@ For most value-like or utility bindings, verify:
 
 Reuse:
 
-- `./tests/unitTest/_unit_test_support.py`
+- `tests/unitTest/_unit_test_support.py`
 
 ## Smoke test expectations
 
-Keep `./tests/smoke_import.py`:
+Keep `tests/smoke_import.py`:
 
 - fast
 - stable

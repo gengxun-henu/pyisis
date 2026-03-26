@@ -1,14 +1,16 @@
 # Binding Workflow Reference
 
-This reference explains the default sequence for implementing or extending pybind11 bindings for ISIS classes in `isis_pybind_standalone`.
+This reference explains the default sequence for implementing or extending pybind11 bindings for ISIS classes in this repository.
+
+All paths below are relative to the repository root.
 
 ## Start from inventory, not from guesswork
 
 When the user does not provide a specific class, begin with:
 
-1. `./todo_pybind11.csv`
-2. `./class_bind_methods_details/methods_inventory_summary.csv`
-3. `./pybind_progress_log.md`
+1. `todo_pybind11.csv`
+2. `class_bind_methods_details/methods_inventory_summary.csv`
+3. `pybind_progress_log.md`
 
 Recommended prioritization:
 
@@ -24,9 +26,9 @@ For a chosen class:
 
 1. open the matching `*_methods.csv`
 2. inspect the corresponding C++ header under `isis/src/` or `SensorUtilities/`
-3. inspect the current binding file under `./src/`
+3. inspect the current binding file under `src/`
 4. inspect similar bound classes for pybind11 style consistency
-5. inspect Python exports in `./python/isis_pybind/__init__.py`
+5. inspect Python exports in `python/isis_pybind/__init__.py`
 
 ## Typical implementation flow
 
@@ -40,9 +42,9 @@ For a chosen class:
 
 Common locations include:
 
-- `./src/module.cpp`
-- `./src/base/*.cpp`
-- `./src/*.cpp`
+- `src/module.cpp`
+- `src/base/*.cpp`
+- `src/*.cpp`
 
 Guidelines:
 
@@ -55,7 +57,7 @@ Guidelines:
 
 If the class or helper is intended for package-level access, update:
 
-- `./python/isis_pybind/__init__.py`
+- `python/isis_pybind/__init__.py`
 
 ### 4. Check exception behavior
 
@@ -68,9 +70,4 @@ When the bound API can fail, verify how the current binding surface translates e
 - separate binding additions from unrelated refactors
 - keep Python naming coherent with existing exports
 
-## Common pitfalls
-
-- assuming every C++ overload should be exposed exactly as-is
-- adding bindings without updating package exports when needed
-- exposing methods that require runtime data but providing no test strategy
-- forgetting to sync task progress after the binding is complete
+Common pitfalls: assuming every C++ overload should be exposed exactly as-is, forgetting package exports when needed, exposing runtime-dependent methods without a test strategy, and forgetting to sync progress records after completion.

@@ -14,6 +14,10 @@
  * Binding author: Geng Xun
  * Created: 2026-03-25
  * Purpose: Expose Stretch, GaussianStretch, QuickFilter, Kernels, and CSVReader classes to Python via pybind11.
+ *
+ * Note: Many methods use lambda wrappers to convert between Qt types (QString, QVector)
+ *       and Python/C++ standard types (std::string, std::vector). This is necessary because
+ *       pybind11 does not natively support Qt types. Conversion helpers are provided in helpers.h.
  */
 
 #include <pybind11/pybind11.h>

@@ -233,7 +233,10 @@ void bind_base_geometry(py::module_ &m) {
       .def("lines", &Isis::Interpolator::Lines)
       .def("hot_sample", &Isis::Interpolator::HotSample)
       .def("hot_line", &Isis::Interpolator::HotLine)
-      .def("__repr__", [](Isis::Interpolator &) { return "Interpolator()"; });
+      .def("__repr__", [](Isis::Interpolator &self) {
+        return "Interpolator(samples=" + std::to_string(self.Samples()) +
+               ", lines=" + std::to_string(self.Lines()) + ")";
+      });
 
   py::class_<Isis::Enlarge, Isis::Transform> enlarge(m, "Enlarge");
 

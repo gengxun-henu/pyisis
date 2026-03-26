@@ -30,20 +30,7 @@
 
 namespace py = pybind11;
 
-namespace
-{
-     // Helper function to convert QVector<double> to std::vector<double>
-     std::vector<double> qVectorToStdVector(const QVector<double> &qvec)
-     {
-          return std::vector<double>(qvec.begin(), qvec.end());
-     }
-
-     // Helper function to convert std::vector<double> to QVector<double>
-     QVector<double> stdVectorToQVector(const std::vector<double> &vec)
-     {
-          return QVector<double>(vec.begin(), vec.end());
-     }
-} // namespace
+// Vector conversion functions now provided by helpers.h
 
 void bind_base_math(py::module_ &m)
 {
@@ -94,7 +81,9 @@ void bind_base_math(py::module_ &m)
          .def("minimum_line", &Isis::Calculator::MinimumLine, "Get minimum line value")
          .def("maximum_line", &Isis::Calculator::MaximumLine, "Get maximum line value")
 
-         // 2026-03-25 12:58:58, fix the pybind error, these two methods are not implemented in the source code, so we will not expose them to Python until they are implemented in the source code
+         // NOTE: Minimum2() and Maximum2() are not implemented in the ISIS C++ library
+         // and cannot be bound until they are added to the upstream source code.
+         // See: isis/src/base/objs/Calculator/Calculator.h
          //.def("minimum2", &Isis::Calculator::Minimum2, "Get minimum of top two elements")
          //.def("maximum2", &Isis::Calculator::Maximum2, "Get maximum of top two elements")
          // Comparison operations
@@ -126,7 +115,7 @@ void bind_base_math(py::module_ &m)
          .def("arccosine_h", &Isis::Calculator::ArccosineH, "Compute inverse hyperbolic cosine")
          .def("arctangent_h", &Isis::Calculator::ArctangentH, "Compute inverse hyperbolic tangent")
          .def("__repr__", [](const Isis::Calculator &self)
-              { return "Calculator()"; });
+              { return self.Empty() ? "Calculator(empty)" : "Calculator(has_data)"; });
 
      /**
       * @brief Bindings for the Isis::Affine class

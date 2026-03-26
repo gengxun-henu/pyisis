@@ -1,6 +1,22 @@
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 
+/**
+ * @file
+ * @brief Pybind11 bindings for ISIS support and utility classes
+ *
+ * This file contains bindings for core ISIS utility classes including:
+ *   - FileName: File name and path handling
+ *   - iTime: Time representation
+ *   - SerialNumber: Cube identification
+ *   - SerialNumberList: Collection of serial numbers
+ *   - ObservationNumber: Observation identification
+ *
+ * Note: Many methods use lambda wrappers to convert between Qt types (QString)
+ *       and Python/C++ standard types (std::string). This is necessary because
+ *       pybind11 does not natively support Qt types. Conversion helpers are provided in helpers.h.
+ */
+
 #include <string>
 #include <vector>
 
@@ -20,16 +36,7 @@
 
 namespace py = pybind11;
 
-namespace {
-std::vector<std::string> qStringStdVectorToStdVector(const std::vector<QString> &values) {
-  std::vector<std::string> result;
-  result.reserve(values.size());
-  for (const QString &value : values) {
-    result.push_back(qStringToStdString(value));
-  }
-  return result;
-}
-}  // namespace
+// Vector conversion functions now provided by helpers.h
 
 void bind_base_support(py::module_ &m) {
   py::register_exception<Isis::IException>(m, "IException");
@@ -230,7 +237,7 @@ void bind_base_support(py::module_ &m) {
            py::arg("filename"))
       .def("possible_serial_numbers",
            [](Isis::SerialNumberList &self, const std::string &observation_number) {
-             return qStringStdVectorToStdVector(
+             return qStringVectorToStdVector(
                  self.possibleSerialNumbers(stdStringToQString(observation_number)));
            },
            py::arg("observation_number"))
@@ -268,7 +275,7 @@ void bind_base_support(py::module_ &m) {
       .def("possible_serial",
            [](Isis::ObservationNumber &self, const std::string &observation_number,
               Isis::SerialNumberList &list) {
-             return qStringStdVectorToStdVector(
+             return qStringVectorToStdVector(
                  self.PossibleSerial(stdStringToQString(observation_number), list));
            },
            py::arg("observation_number"), py::arg("list"))

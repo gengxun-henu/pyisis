@@ -268,10 +268,11 @@ void bind_base_pattern(py::module_ &m) {
            "Get registration distance (returns tuple of sample and line distances)")
       .def("success", &Isis::AutoReg::Success, "Check if registration was successful")
       .def("goodness_of_fit", &Isis::AutoReg::GoodnessOfFit, "Get goodness of fit")
-      
-      // 2026-03-25 12:52:34,Geng Xun, ignore the is_ideal method for now since it is 
-      // an inline method that is not defined in the source code, and attempting to bind it with pybind11 causes compilation errors.  We can revisit this method later if it is defined in the source code and we want to expose it to Python.
-      // inline bool is_ideal(const Fit &fit) const; --- IGNORE ---
+
+      // NOTE: IsIdeal() is an inline method not fully defined in the ISIS C++ library headers,
+      // causing compilation errors when binding with pybind11. This method cannot be bound
+      // until it is properly implemented in the upstream source code.
+      // See: isis/src/base/objs/AutoReg/AutoReg.h (inline bool IsIdeal(const Fit &fit) const)
       //.def("is_ideal",
       //     &Isis::AutoReg::IsIdeal,
       //     py::arg("fit"),

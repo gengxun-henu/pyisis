@@ -58,7 +58,10 @@ void bind_base_target(py::module_ &m) {
                   },
                   py::arg("label"),
                   py::arg("mapping_group"))
-      .def("__repr__", [](const Isis::Target &) { return std::string("Target()"); });
+      .def("__repr__", [](const Isis::Target &self) {
+        std::string name = qStringToStdString(self.name());
+        return "Target(name='" + name + "')";
+      });
 
   py::class_<Isis::ShapeModelFactory, std::unique_ptr<Isis::ShapeModelFactory, py::nodelete>>(m, "ShapeModelFactory")
       .def_static("create",

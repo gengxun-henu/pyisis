@@ -250,6 +250,8 @@ class LeastSquaresUnitTest(unittest.TestCase):
     """Test suite for LeastSquares class bindings"""
 
     def test_least_squares_construction(self):
+        """Test LeastSquares construction with BasisFunction"""
+        basis = make_basis_function()
         """Test basic LeastSquares construction"""
         basis = ip.PolynomialUnivariate(2)  # degree 2 polynomial
         ls = ip.LeastSquares(basis)
@@ -260,6 +262,30 @@ class LeastSquaresUnitTest(unittest.TestCase):
 
     def test_least_squares_add_known(self):
         """Test adding known data points"""
+        basis = make_basis_function()
+        ls = ip.LeastSquares(basis)
+
+        # Add a known data point
+        ls.add_known([1.0], 2.0, 1.0)
+        self.assertEqual(ls.knowns(), 1)
+
+        # Add another
+        ls.add_known([2.0], 4.0)
+        self.assertEqual(ls.knowns(), 2)
+
+    def test_least_squares_solve_method_enum(self):
+        """Test SolveMethod enum values"""
+        self.assertTrue(hasattr(ip.LeastSquares, 'SolveMethod'))
+        self.assertTrue(hasattr(ip.LeastSquares.SolveMethod, 'SVD'))
+        self.assertTrue(hasattr(ip.LeastSquares.SolveMethod, 'QRD'))
+        self.assertTrue(hasattr(ip.LeastSquares.SolveMethod, 'SPARSE'))
+
+    def test_least_squares_simple_fit(self):
+        """Test a simple linear fit"""
+        basis = ip.BasisFunction("linear", 1, 2)
+        ls = ip.LeastSquares(basis)
+
+        # Fit y = 2x + 1
         basis = ip.PolynomialUnivariate(1)  # linear fit
         ls = ip.LeastSquares(basis)
 
@@ -301,6 +327,11 @@ class LeastSquaresUnitTest(unittest.TestCase):
         ls.add_known([1.0], 3.0)
         ls.add_known([2.0], 5.0)
 
+        self.assertEqual(ls.knowns(), 3)
+
+        # Solve the system
+        result = ls.solve()
+        self.assertIsNotNone(result)
         ls.solve()
         residuals = ls.residuals()
 
@@ -341,12 +372,67 @@ class LeastSquaresUnitTest(unittest.TestCase):
 class MatrixUnitTest(unittest.TestCase):
     """Test suite for Matrix class bindings"""
 
+    def test_matrix_default_construction(self):
+        """Test default Matrix construction"""
     def test_matrix_construction(self):
         """Test basic Matrix construction"""
         mat = ip.Matrix()
         self.assertIsNotNone(mat)
         self.assertIn("Matrix", repr(mat))
 
+    def test_matrix_sized_construction(self):
+        """Test Matrix construction with specified dimensions"""
+        mat = ip.Matrix(3, 3)
+        self.assertIsNotNone(mat)
+        self.assertEqual(mat.rows(), 3)
+        self.assertEqual(mat.columns(), 3)
+
+    def test_matrix_sized_construction_with_value(self):
+        """Test Matrix construction with dimensions and initial value"""
+        mat = ip.Matrix(2, 2, 5.0)
+        self.assertIsNotNone(mat)
+        self.assertEqual(mat.rows(), 2)
+        self.assertEqual(mat.columns(), 2)
+
+    def test_matrix_identity(self):
+        """Test creating identity matrix"""
+        mat = ip.Matrix.identity(3)
+        self.assertIsNotNone(mat)
+        self.assertEqual(mat.rows(), 3)
+        self.assertEqual(mat.columns(), 3)
+
+    def test_matrix_element_access(self):
+        """Test getting and setting matrix elements"""
+        mat = ip.Matrix(2, 2, 0.0)
+
+        # Set elements
+        mat[0, 0] = 1.0
+        mat[0, 1] = 2.0
+        mat[1, 0] = 3.0
+        mat[1, 1] = 4.0
+
+        # Get elements
+        self.assertAlmostEqual(mat[0, 0], 1.0, places=12)
+        self.assertAlmostEqual(mat[0, 1], 2.0, places=12)
+        self.assertAlmostEqual(mat[1, 0], 3.0, places=12)
+        self.assertAlmostEqual(mat[1, 1], 4.0, places=12)
+
+    def test_matrix_operations(self):
+        """Test basic matrix operations"""
+        mat1 = ip.Matrix.identity(2)
+        mat2 = ip.Matrix.identity(2)
+
+        # Test addition
+        result = mat1.add(mat2)
+        self.assertIsNotNone(result)
+
+        # Test multiplication by scalar
+        result = mat1.multiply(2.0)
+        self.assertIsNotNone(result)
+
+    def test_matrix_transpose(self):
+        """Test matrix transpose"""
+        mat = ip.Matrix(2, 3, 1.0)
     def test_matrix_construction_with_size(self):
         """Test Matrix construction with size"""
         mat = ip.Matrix(3, 4)
@@ -382,6 +468,17 @@ class MatrixUnitTest(unittest.TestCase):
         self.assertEqual(transposed.rows(), 3)
         self.assertEqual(transposed.columns(), 2)
 
+    def test_matrix_determinant_trace(self):
+        """Test determinant and trace calculations"""
+        mat = ip.Matrix.identity(3)
+
+        # Determinant of identity matrix should be 1
+        det = mat.determinant()
+        self.assertAlmostEqual(det, 1.0, places=10)
+
+        # Trace of 3x3 identity matrix should be 3
+        trace = mat.trace()
+        self.assertAlmostEqual(trace, 3.0, places=10)
     def test_matrix_operations(self):
         """Test basic matrix operations"""
         mat1 = ip.Matrix(2, 2, 1.0)
@@ -403,6 +500,39 @@ class PolynomialUnivariateUnitTest(unittest.TestCase):
 
     def test_polynomial_univariate_construction(self):
         """Test PolynomialUnivariate construction"""
+        poly = ip.PolynomialUnivariate(2)  # degree 2 polynomial
+        self.assertIsNotNone(poly)
+        self.assertIn("PolynomialUnivariate", repr(poly))
+        self.assertEqual(poly.variables(), 1)
+        self.assertEqual(poly.coefficients(), 3)  # degree 2 has 3 coefficients: c0 + c1*x + c2*x^2
+
+    def test_polynomial_univariate_expand(self):
+        """Test expanding polynomial with variables"""
+        poly = ip.PolynomialUnivariate(2)
+        poly.expand([2.0])  # Expand at x=2.0
+        # The expansion should work without errors
+
+    def test_polynomial_univariate_inherits_basis_function(self):
+        """Test that PolynomialUnivariate inherits from BasisFunction"""
+        poly = ip.PolynomialUnivariate(1)
+        # Should have BasisFunction methods
+        self.assertTrue(hasattr(poly, 'set_coefficients'))
+        self.assertTrue(hasattr(poly, 'name'))
+        self.assertTrue(hasattr(poly, 'variables'))
+        self.assertTrue(hasattr(poly, 'coefficients'))
+
+    def test_polynomial_univariate_derivatives(self):
+        """Test derivative calculations"""
+        poly = ip.PolynomialUnivariate(2)
+        poly.set_coefficients([1.0, 2.0, 3.0])  # 1 + 2x + 3x^2
+
+        # Test derivative with respect to variable
+        deriv = poly.derivative_var(2.0)
+        self.assertIsNotNone(deriv)
+
+        # Test derivative with respect to coefficient
+        deriv_coef = poly.derivative_coef(2.0, 0)
+        self.assertIsNotNone(deriv_coef)
         poly = ip.PolynomialUnivariate(2)  # degree 2
         self.assertIsNotNone(poly)
         self.assertIn("PolynomialUnivariate", repr(poly))
@@ -445,6 +575,25 @@ class PolynomialBivariateUnitTest(unittest.TestCase):
 
     def test_polynomial_bivariate_construction(self):
         """Test PolynomialBivariate construction"""
+        poly = ip.PolynomialBivariate(2)  # degree 2 polynomial
+        self.assertIsNotNone(poly)
+        self.assertIn("PolynomialBivariate", repr(poly))
+        self.assertEqual(poly.variables(), 2)
+
+    def test_polynomial_bivariate_expand(self):
+        """Test expanding polynomial with variables"""
+        poly = ip.PolynomialBivariate(1)
+        poly.expand([1.0, 2.0])  # Expand at x=1.0, y=2.0
+        # The expansion should work without errors
+
+    def test_polynomial_bivariate_inherits_basis_function(self):
+        """Test that PolynomialBivariate inherits from BasisFunction"""
+        poly = ip.PolynomialBivariate(1)
+        # Should have BasisFunction methods
+        self.assertTrue(hasattr(poly, 'set_coefficients'))
+        self.assertTrue(hasattr(poly, 'name'))
+        self.assertTrue(hasattr(poly, 'variables'))
+        self.assertTrue(hasattr(poly, 'coefficients'))
         poly = ip.PolynomialBivariate(2)  # degree 2
         self.assertIsNotNone(poly)
         self.assertIn("PolynomialBivariate", repr(poly))

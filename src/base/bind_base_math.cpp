@@ -185,6 +185,14 @@ void bind_base_math(py::module_ &m)
 
      /**
       * @brief Bindings for the Isis::LeastSquares class
+      * LeastSquares class provides functionality for solving least squares problems
+      * and performing curve fitting operations.
+      * @see Isis::LeastSquares
+      */
+     py::class_<Isis::LeastSquares> least_squares(m, "LeastSquares");
+
+     // Bind the SolveMethod enum
+     py::enum_<Isis::LeastSquares::SolveMethod>(least_squares, "SolveMethod")
       * LeastSquares class provides functionality for least squares fitting
       * @see Isis::LeastSquares
       */
@@ -194,6 +202,42 @@ void bind_base_math(py::module_ &m)
          .value("SPARSE", Isis::LeastSquares::SPARSE)
          .export_values();
 
+     least_squares
+         .def(py::init<Isis::BasisFunction &>(), py::arg("basis"), "Construct LeastSquares with a basis function")
+         // Data input methods
+         .def("add_known", &Isis::LeastSquares::AddKnown,
+              py::arg("input"),
+              py::arg("expected"),
+              py::arg("weight") = 1.0,
+              "Add a known data point with optional weight")
+         .def("weight", &Isis::LeastSquares::Weight,
+              py::arg("index"),
+              py::arg("weight"),
+              "Set weight for a specific equation")
+         // Query methods
+         .def("get_input", &Isis::LeastSquares::GetInput, py::arg("row"), "Get input variables for a row")
+         .def("get_expected", &Isis::LeastSquares::GetExpected, py::arg("row"), "Get expected value for a row")
+         .def("rows", &Isis::LeastSquares::Rows, "Get number of rows (equations)")
+         .def("knowns", &Isis::LeastSquares::Knowns, "Get number of known data points")
+         .def("get_sigma0", &Isis::LeastSquares::GetSigma0, "Get standard deviation of unit weight")
+         .def("get_degrees_of_freedom", &Isis::LeastSquares::GetDegreesOfFreedom, "Get degrees of freedom")
+         .def("get_epsilons", &Isis::LeastSquares::GetEpsilons, "Get epsilon values for sparse solver")
+         // Solution methods
+         .def("solve", &Isis::LeastSquares::Solve,
+              py::arg("method") = Isis::LeastSquares::SVD,
+              "Solve the least squares system")
+         .def("evaluate", &Isis::LeastSquares::Evaluate, py::arg("input"), "Evaluate using solved coefficients")
+         // Results methods
+         .def("residuals", &Isis::LeastSquares::Residuals, "Get all residuals")
+         .def("residual", &Isis::LeastSquares::Residual, py::arg("i"), "Get a single residual")
+         // Configuration methods
+         .def("reset", &Isis::LeastSquares::Reset, "Reset the solver")
+         .def("reset_sparse", &Isis::LeastSquares::ResetSparse, "Reset the sparse solver")
+         .def("set_parameter_weights", &Isis::LeastSquares::SetParameterWeights,
+              py::arg("weights"),
+              "Set parameter weights")
+         .def("set_number_of_constrained_parameters", &Isis::LeastSquares::SetNumberOfConstrainedParameters,
+              py::arg("n"),
      py::class_<Isis::LeastSquares>(m, "LeastSquares")
          .def(py::init<Isis::BasisFunction &>(), py::arg("basis"))
          .def("add_known", &Isis::LeastSquares::AddKnown,
@@ -238,6 +282,38 @@ void bind_base_math(py::module_ &m)
 
      /**
       * @brief Bindings for the Isis::Matrix class
+      * Matrix class provides functionality for matrix operations and linear algebra.
+      * @see Isis::Matrix
+      */
+     py::class_<Isis::Matrix>(m, "Matrix")
+         .def(py::init<>(), "Construct an empty matrix")
+         .def(py::init<int, int>(), py::arg("rows"), py::arg("columns"), "Construct a matrix with specified dimensions")
+         .def(py::init<int, int, double>(), py::arg("rows"), py::arg("columns"), py::arg("value"), "Construct a matrix with specified dimensions and initial value")
+         // Static factory methods
+         .def_static("identity", &Isis::Matrix::Identity, py::arg("n"), "Create an identity matrix of size n x n")
+         // Query methods - Note: Rows() and Columns() are non-const in ISIS, so we cast away const carefully
+         .def("rows", [](Isis::Matrix &self) { return self.Rows(); }, "Get number of rows")
+         .def("columns", [](Isis::Matrix &self) { return self.Columns(); }, "Get number of columns")
+         .def("determinant", &Isis::Matrix::Determinant, "Calculate the determinant")
+         .def("trace", &Isis::Matrix::Trace, "Calculate the trace")
+         .def("eigenvalues", &Isis::Matrix::Eigenvalues, "Get eigenvalues")
+         // Matrix operations
+         .def("add", &Isis::Matrix::Add, py::arg("matrix"), "Add two matrices")
+         .def("subtract", &Isis::Matrix::Subtract, py::arg("matrix"), "Subtract two matrices")
+         .def("multiply", py::overload_cast<Isis::Matrix &>(&Isis::Matrix::Multiply), py::arg("matrix"), "Multiply two matrices")
+         .def("multiply", py::overload_cast<double>(&Isis::Matrix::Multiply), py::arg("scalar"), "Multiply matrix by scalar")
+         .def("multiply_element_wise", &Isis::Matrix::MultiplyElementWise, py::arg("matrix"), "Element-wise multiplication")
+         .def("transpose", &Isis::Matrix::Transpose, "Get transpose of the matrix")
+         .def("inverse", &Isis::Matrix::Inverse, "Get inverse of the matrix")
+         .def("eigenvectors", &Isis::Matrix::Eigenvectors, "Get eigenvectors")
+         // Element access - Use non-const access for getting/setting values
+         .def("__getitem__", [](Isis::Matrix &self, std::pair<int, int> idx) {
+              return self[idx.first][idx.second];
+         }, py::arg("index"), "Get element at (row, column)")
+         .def("__setitem__", [](Isis::Matrix &self, std::pair<int, int> idx, double value) {
+              self[idx.first][idx.second] = value;
+         }, py::arg("index"), py::arg("value"), "Set element at (row, column)")
+         .def("__repr__", [](Isis::Matrix &self)
       * Matrix class provides functionality for matrix operations
       * @see Isis::Matrix
       */
@@ -285,6 +361,34 @@ void bind_base_math(py::module_ &m)
 
      /**
       * @brief Bindings for the Isis::PolynomialUnivariate class
+      * PolynomialUnivariate class provides functionality for 1D polynomial operations.
+      * Inherits from BasisFunction.
+      * @see Isis::PolynomialUnivariate
+      */
+     py::class_<Isis::PolynomialUnivariate, Isis::BasisFunction>(m, "PolynomialUnivariate")
+         .def(py::init<int>(), py::arg("degree"), "Construct a univariate polynomial of specified degree")
+         .def("expand", &Isis::PolynomialUnivariate::Expand, py::arg("vars"), "Expand the polynomial with variables")
+         .def("derivative_var", &Isis::PolynomialUnivariate::DerivativeVar,
+              py::arg("value"),
+              "Calculate derivative with respect to the variable")
+         .def("derivative_coef", &Isis::PolynomialUnivariate::DerivativeCoef,
+              py::arg("value"),
+              py::arg("coef_index"),
+              "Calculate derivative with respect to a coefficient")
+         .def("__repr__", [](const Isis::PolynomialUnivariate &self)
+              { return "PolynomialUnivariate(coefficients=" + std::to_string(self.Coefficients()) + ")"; });
+
+     /**
+      * @brief Bindings for the Isis::PolynomialBivariate class
+      * PolynomialBivariate class provides functionality for 2D polynomial operations.
+      * Inherits from BasisFunction.
+      * @see Isis::PolynomialBivariate
+      */
+     py::class_<Isis::PolynomialBivariate, Isis::BasisFunction>(m, "PolynomialBivariate")
+         .def(py::init<int>(), py::arg("degree"), "Construct a bivariate polynomial of specified degree")
+         .def("expand", &Isis::PolynomialBivariate::Expand, py::arg("vars"), "Expand the polynomial with variables")
+         .def("__repr__", [](const Isis::PolynomialBivariate &self)
+              { return "PolynomialBivariate(coefficients=" + std::to_string(self.Coefficients()) + ")"; });
       * PolynomialUnivariate class provides functionality for univariate polynomial operations
       * @see Isis::PolynomialUnivariate
       */

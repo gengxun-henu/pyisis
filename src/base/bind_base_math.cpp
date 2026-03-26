@@ -245,6 +245,7 @@ void bind_base_math(py::module_ &m)
      /**
       * @brief Bindings for the Isis::Matrix class
       * Matrix class provides functionality for matrix operations and linear algebra.
+      * Note: Matrix requires explicit dimensions - no default constructor available.
       * @see Isis::Matrix
       */
      py::class_<Isis::Matrix>(m, "Matrix")
@@ -252,7 +253,7 @@ void bind_base_math(py::module_ &m)
          .def(py::init<int, int, double>(), py::arg("rows"), py::arg("columns"), py::arg("value"), "Construct a matrix with specified dimensions and initial value")
          // Static factory methods
          .def_static("identity", &Isis::Matrix::Identity, py::arg("n"), "Create an identity matrix of size n x n")
-         // Query methods - Note: Rows() and Columns() are non-const in ISIS, so we cast away const carefully
+         // Query methods - Note: Rows() and Columns() are non-const in ISIS, so we use lambdas to work around this limitation
          .def("rows", [](Isis::Matrix &self) { return self.Rows(); }, "Get number of rows")
          .def("columns", [](Isis::Matrix &self) { return self.Columns(); }, "Get number of columns")
          .def("determinant", &Isis::Matrix::Determinant, "Calculate the determinant")

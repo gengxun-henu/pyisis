@@ -367,6 +367,37 @@ class LeastSquaresUnitTest(unittest.TestCase):
         ls.reset()
         self.assertEqual(ls.knowns(), 0)
 
+    @unittest.expectedFailure  # Documents ISIS library bug
+    def test_least_squares_double_solve_accumulation_bug(self):
+        """Known bug: calling solve() twice accumulates residuals
+
+        This test documents a known bug in the ISIS C++ library where
+        calling solve() multiple times on the same LeastSquares object
+        accumulates residuals instead of replacing them.
+
+        Workaround: Create a new LeastSquares object for each solve operation.
+        """
+        basis = ip.PolynomialUnivariate(1)
+        ls = ip.LeastSquares(basis)
+
+        # Add some data points
+        ls.add_known([1.0], 2.0)
+        ls.add_known([2.0], 4.0)
+
+        # First solve
+        ls.solve()
+        residuals_first = ls.residuals()
+        first_count = len(residuals_first)
+
+        # Second solve - this should replace residuals, not accumulate
+        ls.solve()
+        residuals_second = ls.residuals()
+        second_count = len(residuals_second)
+
+        # Bug: residuals_second will have double the entries
+        self.assertEqual(first_count, second_count,
+                        "Bug: solve() should replace residuals, not accumulate them")
+
 
 class MatrixUnitTest(unittest.TestCase):
     """Test suite for Matrix class bindings"""
@@ -384,6 +415,15 @@ class MatrixUnitTest(unittest.TestCase):
         self.assertIsNotNone(mat)
         self.assertEqual(mat.rows(), 2)
         self.assertEqual(mat.columns(), 2)
+
+    def test_matrix_initial_value_propagation(self):
+        """Test that initial value is correctly propagated to all elements"""
+        mat = ip.Matrix(3, 3, 7.5)
+        # Verify all elements have the initial value
+        for i in range(3):
+            for j in range(3):
+                self.assertEqual(mat[i, j], 7.5,
+                                f"Element [{i},{j}] should be 7.5")
 
     def test_matrix_identity(self):
         """Test creating identity matrix"""

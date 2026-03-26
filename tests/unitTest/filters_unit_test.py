@@ -103,6 +103,30 @@ class TestStretch(unittest.TestCase):
         self.assertIn("Stretch", repr_str)
         self.assertIn("pairs=", repr_str)
 
+    def test_parse_simple(self):
+        """Test parsing stretch pairs from a string"""
+        stretch = Stretch()
+        # Parse a simple stretch string with two pairs
+        stretch.parse("0:0 100:255")
+        self.assertEqual(stretch.pairs(), 2)
+        # Verify the pairs were parsed correctly
+        self.assertEqual(stretch.input(0), 0.0)
+        self.assertEqual(stretch.output(0), 0.0)
+        self.assertEqual(stretch.input(1), 100.0)
+        self.assertEqual(stretch.output(1), 255.0)
+
+    def test_parse_with_histogram(self):
+        """Test parsing stretch pairs with histogram reference"""
+        hist = Histogram(0.0, 100.0, 256)
+        # Add some data to the histogram
+        for i in range(100):
+            hist.add_data(float(i))
+
+        stretch = Stretch()
+        # Parse with histogram (tests the fixed lambda wrapper)
+        stretch.parse("0:0 100:255", hist)
+        self.assertEqual(stretch.pairs(), 2)
+
 
 @unittest.skipUnless(ISIS_PYBIND_AVAILABLE, f"isis_pybind not available: {IMPORT_ERROR if not ISIS_PYBIND_AVAILABLE else ''}")
 class TestGaussianStretch(unittest.TestCase):
@@ -182,6 +206,40 @@ class TestQuickFilter(unittest.TestCase):
         qfilter = QuickFilter(100, 5, 5)
         repr_str = repr(qfilter)
         self.assertIn("QuickFilter", repr_str)
+
+    def test_validation_ns_positive(self):
+        """Test that ns must be positive"""
+        with self.assertRaises(ValueError) as context:
+            QuickFilter(0, 5, 5)
+        self.assertIn("ns must be positive", str(context.exception))
+
+        with self.assertRaises(ValueError) as context:
+            QuickFilter(-1, 5, 5)
+        self.assertIn("ns must be positive", str(context.exception))
+
+    def test_validation_width_height_odd(self):
+        """Test that width and height must be odd numbers"""
+        with self.assertRaises(ValueError) as context:
+            QuickFilter(100, 4, 5)  # Even width
+        self.assertIn("width and height must be odd", str(context.exception))
+
+        with self.assertRaises(ValueError) as context:
+            QuickFilter(100, 5, 4)  # Even height
+        self.assertIn("width and height must be odd", str(context.exception))
+
+        with self.assertRaises(ValueError) as context:
+            QuickFilter(100, 6, 6)  # Both even
+        self.assertIn("width and height must be odd", str(context.exception))
+
+    def test_validation_width_height_positive(self):
+        """Test that width and height must be positive"""
+        with self.assertRaises(ValueError) as context:
+            QuickFilter(100, -3, 5)  # Negative width (but odd)
+        self.assertIn("width and height must be positive", str(context.exception))
+
+        with self.assertRaises(ValueError) as context:
+            QuickFilter(100, 5, -3)  # Negative height (but odd)
+        self.assertIn("width and height must be positive", str(context.exception))
 
 
 @unittest.skipUnless(ISIS_PYBIND_AVAILABLE, f"isis_pybind not available: {IMPORT_ERROR if not ISIS_PYBIND_AVAILABLE else ''}")

@@ -142,4 +142,5 @@ jobs:
         shell: bash -l {0}
         run: |
           micromamba activate asp360_new
-          "$CONDA_PREFIX/bin/python" "$PYBIND_DIR/tests/smoke_import.py"
+          PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
+            "$CONDA_PREFIX/bin/python" "$PYBIND_DIR/tests/smoke_import.py"

@@ -158,7 +158,7 @@ void bind_base_filters(py::module_ &m) {
            &Isis::GaussianStretch::Map,
            py::arg("value"),
            "Apply the Gaussian stretch mapping to a value")
-      .def("__repr__", []() {
+      .def("__repr__", [](const Isis::GaussianStretch &) {
         return "GaussianStretch()";
       });
 

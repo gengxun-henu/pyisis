@@ -6,7 +6,7 @@ from _unit_test_support import ip
 class ReadCubeUnitTest(unittest.TestCase):
     def test_read_cube_dimensions(self):
         cube = ip.Cube()
-        strPath = "/home/gengxun/miniconda3/envs/asp360_new/data/hayabusa2/test_data/20180801/hyb2_onc_20180801_211413_tpf_l2a.cal.cub"
+        strPath = "./tests/data/lronaccal/truth/M1333276014R.near.crop.cub"
         cube.open(strPath, "r")
         self.addCleanup(cube.close)
         self.assertEqual(cube.sample_count(), 1024)

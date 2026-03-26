@@ -136,6 +136,7 @@ pybind11_add_module(_isis_core
   src/bind_camera.cpp
   src/bind_camera_maps.cpp
   src/bind_camera_hierarchy.cpp
+  src/bind_cube.cpp
   src/bind_statistics.cpp
   src/bind_low_level_cube_io.cpp
   src/bind_high_level_cube_io.cpp

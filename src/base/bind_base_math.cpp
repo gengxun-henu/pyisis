@@ -199,7 +199,10 @@ void bind_base_math(py::module_ &m)
          .export_values();
 
      least_squares
-         .def(py::init<Isis::BasisFunction &>(), py::arg("basis"), "Construct LeastSquares with a basis function")
+         .def(py::init<Isis::BasisFunction &>(),
+              py::arg("basis"),
+              py::keep_alive<1, 2>(),  // Keep basis alive as long as LeastSquares exists
+              "Construct LeastSquares with a basis function")
          // Data input methods
          .def("add_known", &Isis::LeastSquares::AddKnown,
               py::arg("input"),

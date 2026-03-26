@@ -111,7 +111,9 @@ void bind_base_filters(py::module_ &m) {
            py::arg("pairs"),
            "Parse stretch pairs from a string")
       .def("parse",
-           static_cast<void (Isis::Stretch::*)(const QString &, const Isis::Histogram *)>(&Isis::Stretch::Parse),
+           [](Isis::Stretch &self, const std::string &pairs, const Isis::Histogram &hist) {
+             self.Parse(QString::fromStdString(pairs), &hist);
+           },
            py::arg("pairs"),
            py::arg("hist"),
            "Parse stretch pairs from a string with histogram reference")
@@ -153,6 +155,7 @@ void bind_base_filters(py::module_ &m) {
            py::arg("histogram"),
            py::arg("mean") = 0.0,
            py::arg("standard_deviation") = 1.0,
+           py::keep_alive<1, 2>(),  // Keep histogram alive as long as GaussianStretch exists
            "Construct a GaussianStretch with a histogram and optional mean/standard deviation")
       .def("map",
            &Isis::GaussianStretch::Map,

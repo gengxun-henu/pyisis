@@ -114,11 +114,13 @@ void bind_base_pattern(py::module_ &m) {
            py::overload_cast<Isis::Cube &, const double, const double, const int>(
                &Isis::Chip::Load),
            py::arg("cube"), py::arg("rotation") = 0.0, py::arg("scale") = 1.0, py::arg("band") = 1,
+           py::keep_alive<1, 2>(),  // Keep cube alive as long as Chip exists
            "Load chip from cube")
       .def("load",
            py::overload_cast<Isis::Cube &, const Isis::Affine &, const bool &, const int>(
                &Isis::Chip::Load),
            py::arg("cube"), py::arg("affine"), py::arg("keep_poly") = true, py::arg("band") = 1,
+           py::keep_alive<1, 2>(),  // Keep cube alive as long as Chip exists
            "Load chip from cube with affine transformation")
       .def("extract",
            py::overload_cast<int, int, int, int>(&Isis::Chip::Extract),

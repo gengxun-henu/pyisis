@@ -162,10 +162,10 @@ Math,Basis1VariableFunction,未转换,抽象基类/纯虚接口
 Math,BasisFunction,已转换,2026-03-25 已在 bind_base_math.cpp 暴露三参构造/系数/求值接口
 Math,Calculator,已转换,2026-03-25 已在 bind_base_math.cpp 暴露 RPN 计算器主接口；Minimum2/Maximum2 上游源码未实现
 Math,CubeCalculator,未转换,
-Math,CubeInfixToPostfix,未转换,
+Math,CubeInfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造与继承的 convert/tokenize_equation 接口
 Math,FunctionTools,未转换,抽象基类/纯虚接口
-Math,InfixToPostfix,未转换,
-Math,InlineInfixToPostfix,未转换,
+Math,InfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/convert/tokenize_equation 接口
+Math,InlineInfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造与继承的 convert/tokenize_equation 接口
 Math,LeastSquares,未转换,
 Math,Matrix,未转换,
 Math,MaximumLikelihoodWFunctions,未转换,

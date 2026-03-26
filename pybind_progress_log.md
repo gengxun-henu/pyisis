@@ -2,6 +2,21 @@
 
 ## 2026-03-26
 
+- InfixToPostfix family binding progress:
+  - Added `Isis::InfixToPostfix`, `Isis::CubeInfixToPostfix`, and `Isis::InlineInfixToPostfix` bindings in `src/base/bind_base_math.cpp`.
+  - `InfixToPostfix` exposes default constructor, `convert(str)`, `tokenize_equation(str)`, and `__repr__`.
+  - `CubeInfixToPostfix` registered as subclass of `InfixToPostfix`; inherits `convert`/`tokenize_equation`, adds cube-specific variable recognition.
+  - `InlineInfixToPostfix` registered as subclass of `InfixToPostfix`; inherits `convert`/`tokenize_equation`, adds inline variable/scalar handling.
+  - QString ↔ std::string conversion handled via existing `helpers.h` utilities.
+  - Re-exported all three classes from `python/isis_pybind/__init__.py`.
+  - Extended `tests/unitTest/math_unit_test.py` with focused unit tests: construction, repr, convert, tokenize_equation, inheritance checks, and subclass-specific expressions.
+  - Added smoke-level symbol presence checks for all three in `tests/smoke_import.py`.
+- Tracking sync:
+  - Updated `todo_pybind11.csv` to mark `Math,InfixToPostfix`, `Math,CubeInfixToPostfix`, and `Math,InlineInfixToPostfix` as `已转换`.
+  - Updated `class_bind_methods_details/base_infix_to_postfix_methods.csv`, `base_cube_infix_to_postfix_methods.csv`, `base_inline_infix_to_postfix_methods.csv`, and `methods_inventory_summary.csv` to match actual exported state.
+- Validation status:
+  - Build/test validation pending: ISIS headers not available in current sandbox. Code follows established patterns from existing bind_base_math.cpp bindings.
+
 - CubeStretch binding progress:
   - Added `Isis::CubeStretch` binding in `src/base/bind_base_filters.cpp` as a `Stretch`-derived value type.
   - Exposed Python constructors from `(name, stretch_type, band_number)`, `Stretch`, `Stretch + stretch_type`, and copy construction.

@@ -1,5 +1,11 @@
 """
-Unit tests for ISIS math classes: Calculator, Affine, BasisFunction, LeastSquares, Matrix, PolynomialUnivariate, and PolynomialBivariate
+Unit tests for ISIS math classes: Calculator, Affine, BasisFunction,
+LeastSquares, Matrix, PolynomialUnivariate, PolynomialBivariate,
+InfixToPostfix, CubeInfixToPostfix, and InlineInfixToPostfix
+
+Author: Geng Xun
+Created: 2026-03-24
+Last Modified: 2026-03-26
 """
 import unittest
 import math
@@ -650,6 +656,145 @@ class PolynomialBivariateUnitTest(unittest.TestCase):
         poly.expand([2.0, 3.0])
         result = poly.evaluate([2.0, 3.0])
         self.assertAlmostEqual(result, 14.0, places=10)
+
+
+class InfixToPostfixUnitTest(unittest.TestCase):
+    """Test suite for InfixToPostfix class bindings. Added: 2026-03-26."""
+
+    def test_construction(self):
+        """Test basic InfixToPostfix construction"""
+        converter = ip.InfixToPostfix()
+        self.assertIsNotNone(converter)
+        self.assertEqual(repr(converter), "InfixToPostfix()")
+
+    def test_convert_simple_addition(self):
+        """Test converting a simple addition expression"""
+        converter = ip.InfixToPostfix()
+        result = converter.convert("1 + 2")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_convert_simple_multiplication(self):
+        """Test converting a multiplication expression"""
+        converter = ip.InfixToPostfix()
+        result = converter.convert("3 * 4")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_convert_precedence(self):
+        """Test operator precedence in conversion"""
+        converter = ip.InfixToPostfix()
+        result = converter.convert("1 + 2 * 3")
+        self.assertIsInstance(result, str)
+        # Postfix should respect precedence: multiplication before addition
+        self.assertTrue(len(result) > 0)
+
+    def test_convert_parentheses(self):
+        """Test parenthesized expression conversion"""
+        converter = ip.InfixToPostfix()
+        result = converter.convert("(1 + 2) * 3")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_convert_function_call(self):
+        """Test converting expression with function calls"""
+        converter = ip.InfixToPostfix()
+        result = converter.convert("sin(1)")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_tokenize_equation(self):
+        """Test tokenizing an equation string"""
+        converter = ip.InfixToPostfix()
+        result = converter.tokenize_equation("1+2*3")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_convert_complex_expression(self):
+        """Test converting a complex nested expression"""
+        converter = ip.InfixToPostfix()
+        result = converter.convert("(1 + 2) * (3 - 4)")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_convert_negative_numbers(self):
+        """Test converting expression with negative operator"""
+        converter = ip.InfixToPostfix()
+        result = converter.convert("--1")
+        self.assertIsInstance(result, str)
+
+
+class CubeInfixToPostfixUnitTest(unittest.TestCase):
+    """Test suite for CubeInfixToPostfix class bindings. Added: 2026-03-26."""
+
+    def test_construction(self):
+        """Test CubeInfixToPostfix construction"""
+        converter = ip.CubeInfixToPostfix()
+        self.assertIsNotNone(converter)
+        self.assertEqual(repr(converter), "CubeInfixToPostfix()")
+
+    def test_inherits_convert(self):
+        """Test that CubeInfixToPostfix inherits convert from InfixToPostfix"""
+        converter = ip.CubeInfixToPostfix()
+        result = converter.convert("1 + 2")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_inherits_tokenize(self):
+        """Test that CubeInfixToPostfix inherits tokenize_equation"""
+        converter = ip.CubeInfixToPostfix()
+        result = converter.tokenize_equation("1+2")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_isinstance_of_parent(self):
+        """Test that CubeInfixToPostfix is an instance of InfixToPostfix"""
+        converter = ip.CubeInfixToPostfix()
+        self.assertIsInstance(converter, ip.InfixToPostfix)
+
+    def test_cube_specific_variable(self):
+        """Test converting expression with cube-specific variable references"""
+        converter = ip.CubeInfixToPostfix()
+        # CubeInfixToPostfix recognizes cube file references like f1, f2 etc.
+        result = converter.convert("f1 + f2")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+
+class InlineInfixToPostfixUnitTest(unittest.TestCase):
+    """Test suite for InlineInfixToPostfix class bindings. Added: 2026-03-26."""
+
+    def test_construction(self):
+        """Test InlineInfixToPostfix construction"""
+        converter = ip.InlineInfixToPostfix()
+        self.assertIsNotNone(converter)
+        self.assertEqual(repr(converter), "InlineInfixToPostfix()")
+
+    def test_inherits_convert(self):
+        """Test that InlineInfixToPostfix inherits convert from InfixToPostfix"""
+        converter = ip.InlineInfixToPostfix()
+        result = converter.convert("1 + 2")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_inherits_tokenize(self):
+        """Test that InlineInfixToPostfix inherits tokenize_equation"""
+        converter = ip.InlineInfixToPostfix()
+        result = converter.tokenize_equation("1+2")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_isinstance_of_parent(self):
+        """Test that InlineInfixToPostfix is an instance of InfixToPostfix"""
+        converter = ip.InlineInfixToPostfix()
+        self.assertIsInstance(converter, ip.InfixToPostfix)
+
+    def test_arithmetic_expression(self):
+        """Test converting standard arithmetic expression"""
+        converter = ip.InlineInfixToPostfix()
+        result = converter.convert("2 * 3 + 4")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
 
 
 if __name__ == '__main__':

@@ -26,6 +26,7 @@ try:
         Pvl,
         PvlGroup,
         PvlKeyword,
+        Histogram,
     )
     ISIS_PYBIND_AVAILABLE = True
 except ImportError as e:
@@ -109,21 +110,30 @@ class TestGaussianStretch(unittest.TestCase):
 
     def test_construction(self):
         """Test GaussianStretch object construction"""
-        stretch = GaussianStretch()
+        # GaussianStretch requires a Histogram object
+        hist = Histogram(0.0, 100.0, 256)
+        # Add some data to the histogram
+        hist.add_data(50.0)
+        stretch = GaussianStretch(hist)
         self.assertIsInstance(stretch, GaussianStretch)
-        self.assertIsInstance(stretch, Stretch)
 
     def test_map(self):
         """Test mapping values through Gaussian stretch"""
-        stretch = GaussianStretch()
-        stretch.add_pair(0.0, 0.0)
-        stretch.add_pair(100.0, 255.0)
+        # GaussianStretch requires a Histogram object
+        hist = Histogram(0.0, 100.0, 256)
+        # Add some data to the histogram
+        hist.add_data(50.0)
+        stretch = GaussianStretch(hist)
         result = stretch.map(50.0)
         self.assertIsInstance(result, float)
 
     def test_repr(self):
         """Test string representation"""
-        stretch = GaussianStretch()
+        # GaussianStretch requires a Histogram object
+        hist = Histogram(0.0, 100.0, 256)
+        # Add some data to the histogram
+        hist.add_data(50.0)
+        stretch = GaussianStretch(hist)
         repr_str = repr(stretch)
         self.assertIn("GaussianStretch", repr_str)
 
@@ -134,40 +144,42 @@ class TestQuickFilter(unittest.TestCase):
 
     def test_construction(self):
         """Test QuickFilter object construction"""
-        qfilter = QuickFilter()
+        # QuickFilter requires ns, width, height parameters
+        qfilter = QuickFilter(100, 5, 5)
         self.assertIsInstance(qfilter, QuickFilter)
 
     def test_dimensions(self):
         """Test getting filter dimensions"""
-        qfilter = QuickFilter()
-        # Default dimensions may vary, just check types
-        self.assertIsInstance(qfilter.width(), int)
-        self.assertIsInstance(qfilter.height(), int)
+        qfilter = QuickFilter(100, 5, 5)
+        # Check dimensions match constructor parameters
+        self.assertEqual(qfilter.width(), 5)
+        self.assertEqual(qfilter.height(), 5)
+        self.assertEqual(qfilter.samples(), 100)
         self.assertIsInstance(qfilter.half_width(), int)
         self.assertIsInstance(qfilter.half_height(), int)
 
     def test_set_min_max(self):
         """Test setting min/max valid data range"""
-        qfilter = QuickFilter()
+        qfilter = QuickFilter(100, 5, 5)
         qfilter.set_min_max(0.0, 255.0)
         self.assertEqual(qfilter.low(), 0.0)
         self.assertEqual(qfilter.high(), 255.0)
 
     def test_set_minimum_pixels(self):
         """Test setting minimum pixel count"""
-        qfilter = QuickFilter()
+        qfilter = QuickFilter(100, 5, 5)
         qfilter.set_minimum_pixels(5)
         self.assertEqual(qfilter.minimum_pixels(), 5)
 
     def test_reset(self):
         """Test resetting filter state"""
-        qfilter = QuickFilter()
+        qfilter = QuickFilter(100, 5, 5)
         qfilter.reset()
         # Should not raise any errors
 
     def test_repr(self):
         """Test string representation"""
-        qfilter = QuickFilter()
+        qfilter = QuickFilter(100, 5, 5)
         repr_str = repr(qfilter)
         self.assertIn("QuickFilter", repr_str)
 

@@ -145,9 +145,10 @@ void bind_base_filters(py::module_ &m) {
   /**
    * @brief Bindings for the Isis::GaussianStretch class
    * GaussianStretch applies a Gaussian-based stretch to pixel values.
+   * Inherits from Stretch but bound independently due to pybind11 limitations.
    * @see Isis::GaussianStretch
    */
-  py::class_<Isis::GaussianStretch, Isis::Stretch>(m, "GaussianStretch")
+  py::class_<Isis::GaussianStretch>(m, "GaussianStretch")
       .def(py::init<>())
       .def("map",
            &Isis::GaussianStretch::Map,
@@ -163,7 +164,11 @@ void bind_base_filters(py::module_ &m) {
    * @see Isis::QuickFilter
    */
   py::class_<Isis::QuickFilter>(m, "QuickFilter")
-      .def(py::init<>())
+      .def(py::init<int, int, int>(),
+           py::arg("ns"),
+           py::arg("width"),
+           py::arg("height"),
+           "Construct a QuickFilter with the specified number of samples, width, and height")
       // Public API methods
       .def("average",
            &Isis::QuickFilter::Average,

@@ -309,7 +309,7 @@ class LeastSquaresUnitTest(unittest.TestCase):
         ls.add_known([3.0], 7.0)
 
         # Solve using SVD
-        result = ls.solve(ip.LeastSquaresSolveMethod.SVD)
+        result = ls.solve(ip.LeastSquares.SolveMethod.SVD)
         self.assertEqual(result, 0)  # Success
 
         # Evaluate at known points
@@ -332,7 +332,6 @@ class LeastSquaresUnitTest(unittest.TestCase):
         # Solve the system
         result = ls.solve()
         self.assertIsNotNone(result)
-        ls.solve()
         residuals = ls.residuals()
 
         # For a perfect fit, residuals should be near zero

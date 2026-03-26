@@ -163,7 +163,7 @@ void bind_base_pattern(py::module_ &m) {
 
   // GradientFilterType enum
   py::enum_<Isis::AutoReg::GradientFilterType>(autoreg, "GradientFilterType")
-      .value("None", Isis::AutoReg::None)
+      .value("NoFilter", Isis::AutoReg::None)  // Renamed from "None" to avoid Python keyword
       .value("Sobel", Isis::AutoReg::Sobel)
       .export_values();
 

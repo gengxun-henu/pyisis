@@ -8,6 +8,7 @@ from ._isis_core import (
     AbstractPlate,
     Affine,
     AlphaCube,
+    AutoReg,
     # Temporarily disabled - bind_bundle_advanced is excluded from compilation
     # BundleControlPoint,
     BundleImage,
@@ -24,6 +25,7 @@ from ._isis_core import (
     BundleTargetBody,
     BasisFunction,
     Calculator,
+    Chip,
     Column,
     CSVReader,
     LeastSquares,
@@ -279,6 +281,8 @@ __all__ = [
     "Angle",
     "AbstractPlate",
     "Affine",
+    "AutoReg",
+    "Chip",
     # Temporarily disabled - bind_bundle_advanced is excluded from compilation
     # "BundleControlPoint",
     "BundleImage",

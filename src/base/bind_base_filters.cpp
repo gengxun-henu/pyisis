@@ -171,7 +171,19 @@ void bind_base_filters(py::module_ &m) {
    * @see Isis::QuickFilter
    */
   py::class_<Isis::QuickFilter>(m, "QuickFilter")
-      .def(py::init<int, int, int>(),
+      .def(py::init([](int ns, int width, int height) {
+               // Validate parameters according to ISIS requirements
+               if (ns <= 0) {
+                   throw py::value_error("ns must be positive");
+               }
+               if (width % 2 == 0 || height % 2 == 0) {
+                   throw py::value_error("width and height must be odd numbers");
+               }
+               if (width <= 0 || height <= 0) {
+                   throw py::value_error("width and height must be positive");
+               }
+               return new Isis::QuickFilter(ns, width, height);
+           }),
            py::arg("ns"),
            py::arg("width"),
            py::arg("height"),

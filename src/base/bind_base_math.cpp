@@ -114,7 +114,7 @@ void bind_base_math(py::module_ &m)
          .def("arcsine_h", &Isis::Calculator::ArcsineH, "Compute inverse hyperbolic sine")
          .def("arccosine_h", &Isis::Calculator::ArccosineH, "Compute inverse hyperbolic cosine")
          .def("arctangent_h", &Isis::Calculator::ArctangentH, "Compute inverse hyperbolic tangent")
-         .def("__repr__", [](const Isis::Calculator &self)
+         .def("__repr__", [](Isis::Calculator &self)
               { return self.Empty() ? "Calculator(empty)" : "Calculator(has_data)"; });
 
      /**

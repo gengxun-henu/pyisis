@@ -318,7 +318,7 @@ void bind_base_math(py::module_ &m)
      py::class_<Isis::InfixToPostfix>(m, "InfixToPostfix")
          .def(py::init<>(), "Construct an InfixToPostfix converter with default operators")
          .def("convert", [](Isis::InfixToPostfix &self, const std::string &infix)
-              { return qStringToStdString(self.Convert(stdStringToQString(infix))); },
+              { return qStringToStdString(self.convert(stdStringToQString(infix))); },
               py::arg("infix"),
               "Convert an infix expression string to postfix notation")
          .def("tokenize_equation", [](Isis::InfixToPostfix &self, const std::string &equation)

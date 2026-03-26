@@ -120,7 +120,7 @@ class AutoRegUnitTest(unittest.TestCase):
 
     def test_autoreg_gradient_filter_type_enum(self):
         """Test AutoReg GradientFilterType enum values are accessible"""
-        self.assertIsNotNone(ip.AutoReg.GradientFilterType.None)
+        self.assertIsNotNone(ip.AutoReg.GradientFilterType.NoFilter)  # Renamed from None to avoid Python keyword
         self.assertIsNotNone(ip.AutoReg.GradientFilterType.Sobel)
 
 

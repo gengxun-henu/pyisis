@@ -9,9 +9,14 @@
  *   - isis/src/base/objs/Calculator/Calculator.h
  *   - isis/src/base/objs/Affine/Affine.h
  *   - isis/src/base/objs/BasisFunction/BasisFunction.h
+ *   - isis/src/base/objs/InfixToPostfix/InfixToPostfix.h
+ *   - isis/src/base/objs/CubeInfixToPostfix/CubeInfixToPostfix.h
+ *   - isis/src/base/objs/InlineInfixToPostfix/InlineInfixToPostfix.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Purpose: Expose Calculator, Affine, and BasisFunction classes to Python via pybind11.
+ * Updated: 2026-03-26
+ * Purpose: Expose Calculator, Affine, BasisFunction, InfixToPostfix,
+ *          CubeInfixToPostfix, and InlineInfixToPostfix classes to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
@@ -21,6 +26,9 @@
 #include "Calculator.h"
 #include "Affine.h"
 #include "BasisFunction.h"
+#include "InfixToPostfix.h"
+#include "CubeInfixToPostfix.h"
+#include "InlineInfixToPostfix.h"
 #include "LeastSquares.h"
 #include "Matrix.h"
 #include "PolynomialUnivariate.h"
@@ -298,4 +306,49 @@ void bind_base_math(py::module_ &m)
          .def("expand", &Isis::PolynomialBivariate::Expand, py::arg("vars"), "Expand the polynomial with variables")
          .def("__repr__", [](const Isis::PolynomialBivariate &self)
               { return "PolynomialBivariate(degree=" + std::to_string((int)sqrt(self.Coefficients()) - 1) + ")"; });
+
+     // Added: 2026-03-26 - expose InfixToPostfix expression conversion classes
+
+     /**
+      * @brief Bindings for the Isis::InfixToPostfix class
+      * InfixToPostfix converts mathematical infix expressions to postfix notation.
+      * Source header author(s): not explicitly stated in upstream header
+      * @see Isis::InfixToPostfix
+      */
+     py::class_<Isis::InfixToPostfix>(m, "InfixToPostfix")
+         .def(py::init<>(), "Construct an InfixToPostfix converter with default operators")
+         .def("convert", [](Isis::InfixToPostfix &self, const std::string &infix)
+              { return qStringToStdString(self.Convert(stdStringToQString(infix))); },
+              py::arg("infix"),
+              "Convert an infix expression string to postfix notation")
+         .def("tokenize_equation", [](Isis::InfixToPostfix &self, const std::string &equation)
+              { return qStringToStdString(self.TokenizeEquation(stdStringToQString(equation))); },
+              py::arg("equation"),
+              "Tokenize an equation string, separating operators and operands")
+         .def("__repr__", [](const Isis::InfixToPostfix &)
+              { return "InfixToPostfix()"; });
+
+     /**
+      * @brief Bindings for the Isis::CubeInfixToPostfix class
+      * CubeInfixToPostfix extends InfixToPostfix with cube-specific variables
+      * such as phase, incidence, emission angles and file-based references.
+      * Source header author(s): not explicitly stated in upstream header
+      * @see Isis::CubeInfixToPostfix
+      */
+     py::class_<Isis::CubeInfixToPostfix, Isis::InfixToPostfix>(m, "CubeInfixToPostfix")
+         .def(py::init<>(), "Construct a CubeInfixToPostfix converter with cube-specific operators")
+         .def("__repr__", [](const Isis::CubeInfixToPostfix &)
+              { return "CubeInfixToPostfix()"; });
+
+     /**
+      * @brief Bindings for the Isis::InlineInfixToPostfix class
+      * InlineInfixToPostfix extends InfixToPostfix with inline variable/scalar
+      * handling for processing expressions that reference column-based data.
+      * Source header author(s): not explicitly stated in upstream header
+      * @see Isis::InlineInfixToPostfix
+      */
+     py::class_<Isis::InlineInfixToPostfix, Isis::InfixToPostfix>(m, "InlineInfixToPostfix")
+         .def(py::init<>(), "Construct an InlineInfixToPostfix converter with inline-specific operators")
+         .def("__repr__", [](const Isis::InlineInfixToPostfix &)
+              { return "InlineInfixToPostfix()"; });
 }

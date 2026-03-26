@@ -372,14 +372,6 @@ class LeastSquaresUnitTest(unittest.TestCase):
 class MatrixUnitTest(unittest.TestCase):
     """Test suite for Matrix class bindings"""
 
-    def test_matrix_default_construction(self):
-        """Test default Matrix construction"""
-    def test_matrix_construction(self):
-        """Test basic Matrix construction"""
-        mat = ip.Matrix()
-        self.assertIsNotNone(mat)
-        self.assertIn("Matrix", repr(mat))
-
     def test_matrix_sized_construction(self):
         """Test Matrix construction with specified dimensions"""
         mat = ip.Matrix(3, 3)

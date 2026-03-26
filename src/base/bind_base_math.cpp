@@ -245,7 +245,6 @@ void bind_base_math(py::module_ &m)
       * @see Isis::Matrix
       */
      py::class_<Isis::Matrix>(m, "Matrix")
-         .def(py::init<>(), "Construct an empty matrix")
          .def(py::init<int, int>(), py::arg("rows"), py::arg("columns"), "Construct a matrix with specified dimensions")
          .def(py::init<int, int, double>(), py::arg("rows"), py::arg("columns"), py::arg("value"), "Construct a matrix with specified dimensions and initial value")
          // Static factory methods

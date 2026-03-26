@@ -18,6 +18,7 @@ from _unit_test_support import ip
 
 
 Stretch = ip.Stretch
+CubeStretch = ip.CubeStretch
 GaussianStretch = ip.GaussianStretch
 QuickFilter = ip.QuickFilter
 Kernels = ip.Kernels
@@ -154,6 +155,66 @@ class TestGaussianStretch(unittest.TestCase):
         self.assertIn("GaussianStretch", repr_str)
 
 
+class TestCubeStretch(unittest.TestCase):
+    """Test cases for CubeStretch class. Added: 2026-03-26."""
+
+    def test_construction_defaults(self):
+        """Test CubeStretch default construction metadata."""
+        stretch = CubeStretch()
+        self.assertIsInstance(stretch, CubeStretch)
+        self.assertEqual(stretch.get_name(), "DefaultStretch")
+        self.assertEqual(stretch.get_type(), "Default")
+        self.assertEqual(stretch.get_band_number(), 1)
+        self.assertEqual(stretch.pairs(), 0)
+
+    def test_construction_with_metadata(self):
+        """Test CubeStretch construction with explicit metadata."""
+        stretch = CubeStretch("PreviewStretch", "Manual", 3)
+        self.assertEqual(stretch.get_name(), "PreviewStretch")
+        self.assertEqual(stretch.get_type(), "Manual")
+        self.assertEqual(stretch.get_band_number(), 3)
+
+    def test_construct_from_stretch(self):
+        """Test CubeStretch construction from Stretch preserves pairs."""
+        base = Stretch()
+        base.add_pair(0.0, 0.0)
+        base.add_pair(100.0, 255.0)
+
+        stretch = CubeStretch(base, "Linear")
+        self.assertEqual(stretch.get_type(), "Linear")
+        self.assertEqual(stretch.pairs(), 2)
+        self.assertEqual(stretch.input(0), 0.0)
+        self.assertEqual(stretch.output(1), 255.0)
+
+    def test_setters_and_equality(self):
+        """Test CubeStretch metadata mutation and equality."""
+        left = CubeStretch("A", "Manual", 1)
+        left.add_pair(0.0, 0.0)
+        left.add_pair(10.0, 20.0)
+
+        right = CubeStretch(left)
+        self.assertTrue(left == right)
+
+        right.set_name("B")
+        right.set_type("Binary")
+        right.set_band_number(2)
+
+        self.assertEqual(right.get_name(), "B")
+        self.assertEqual(right.get_type(), "Binary")
+        self.assertEqual(right.get_band_number(), 2)
+        self.assertFalse(left == right)
+
+    def test_repr(self):
+        """Test CubeStretch string representation."""
+        stretch = CubeStretch("DisplayStretch", "Linear", 2)
+        stretch.add_pair(0.0, 0.0)
+        repr_str = repr(stretch)
+        self.assertIn("CubeStretch", repr_str)
+        self.assertIn("DisplayStretch", repr_str)
+        self.assertIn("Linear", repr_str)
+        self.assertIn("band_number=2", repr_str)
+
+
 class TestQuickFilter(unittest.TestCase):
     """Test cases for QuickFilter class"""
 
@@ -264,17 +325,16 @@ class TestKernels(unittest.TestCase):
         version = kernels.camera_version()
         self.assertIsInstance(version, int)
 
-def test_manage_unmanage_on_empty_kernel_set(self):
-    """Empty Kernels remains vacuously managed even after un_manage()."""
-    kernels = Kernels()
-    self.assertEqual(kernels.size(), 0)
+    def test_manage_unmanage_on_empty_kernel_set(self):
+        """Empty Kernels remains vacuously managed even after un_manage()."""
+        kernels = Kernels()
+        self.assertEqual(kernels.size(), 0)
 
-    kernels.manage()
-    self.assertTrue(kernels.is_managed())
+        kernels.manage()
+        self.assertTrue(kernels.is_managed())
 
-    kernels.un_manage()
-    self.assertTrue(kernels.is_managed())
-    
+        kernels.un_manage()
+        self.assertTrue(kernels.is_managed())
 
     def test_clear(self):
         """Test clearing kernels"""

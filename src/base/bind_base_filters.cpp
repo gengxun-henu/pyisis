@@ -7,6 +7,7 @@
  *
  * Source ISIS headers:
  *   - isis/src/base/objs/Stretch/Stretch.h
+ *   - isis/src/base/objs/CubeStretch/CubeStretch.h
  *   - isis/src/base/objs/GaussianStretch/GaussianStretch.h
  *   - isis/src/base/objs/QuickFilter/QuickFilter.h
  *   - isis/src/base/objs/Kernels/Kernels.h
@@ -24,6 +25,7 @@
 #include <pybind11/stl.h>
 
 #include "Stretch.h"
+#include "CubeStretch.h"
 #include "GaussianStretch.h"
 #include "QuickFilter.h"
 #include "Kernels.h"
@@ -113,6 +115,74 @@ void bind_base_filters(py::module_ &m)
          .def("copy_pairs", &Isis::Stretch::CopyPairs, py::arg("other"), "Copy pairs from another Stretch object")
          .def("__repr__", [](const Isis::Stretch &self)
               { return "Stretch(pairs=" + std::to_string(self.Pairs()) + ")"; });
+
+     /**
+      * @brief Bindings for the Isis::CubeStretch class
+      * CubeStretch extends Stretch with cube-specific metadata such as name, type, and band number.
+      * @see Isis::CubeStretch
+      */
+     py::class_<Isis::CubeStretch, Isis::Stretch>(m, "CubeStretch")
+         .def(py::init([](const std::string &name, const std::string &stretch_type, int band_number)
+                       {
+                         return new Isis::CubeStretch(
+                             stdStringToQString(name),
+                             stdStringToQString(stretch_type),
+                             band_number);
+                       }),
+              py::arg("name") = "DefaultStretch",
+              py::arg("stretch_type") = "Default",
+              py::arg("band_number") = 1,
+              "Construct a CubeStretch with optional name, stretch type, and band number")
+         .def(py::init<const Isis::CubeStretch &>(),
+              py::arg("other"),
+              "Construct a CubeStretch by copying another CubeStretch")
+         .def(py::init<const Isis::Stretch &>(),
+              py::arg("stretch"),
+              "Construct a CubeStretch from a Stretch")
+         .def(py::init([](const Isis::Stretch &stretch, const std::string &stretch_type)
+                       {
+                         return new Isis::CubeStretch(stretch, stdStringToQString(stretch_type));
+                       }),
+              py::arg("stretch"),
+              py::arg("stretch_type"),
+              "Construct a CubeStretch from a Stretch and stretch type")
+         .def("get_type",
+              [](const Isis::CubeStretch &self)
+              { return qStringToStdString(self.getType()); },
+              "Get the stretch type")
+         .def("set_type",
+              [](Isis::CubeStretch &self, const std::string &stretch_type)
+              { self.setType(stdStringToQString(stretch_type)); },
+              py::arg("stretch_type"),
+              "Set the stretch type")
+         .def("get_name",
+              [](const Isis::CubeStretch &self)
+              { return qStringToStdString(self.getName()); },
+              "Get the stretch name")
+         .def("set_name",
+              [](Isis::CubeStretch &self, const std::string &name)
+              { self.setName(stdStringToQString(name)); },
+              py::arg("name"),
+              "Set the stretch name")
+         .def("get_band_number",
+              &Isis::CubeStretch::getBandNumber,
+              "Get the associated band number")
+         .def("set_band_number",
+              &Isis::CubeStretch::setBandNumber,
+              py::arg("band_number"),
+              "Set the associated band number")
+         .def("__eq__",
+              [](Isis::CubeStretch &self, Isis::CubeStretch &other)
+              { return self == other; },
+              py::arg("other"),
+              "Compare two CubeStretch objects for equality")
+         .def("__repr__", [](const Isis::CubeStretch &self)
+              {
+                return "CubeStretch(name='" + qStringToStdString(self.getName()) +
+                       "', type='" + qStringToStdString(self.getType()) +
+                       "', band_number=" + std::to_string(self.getBandNumber()) +
+                       ", pairs=" + std::to_string(self.Pairs()) + ")";
+              });
 
      /**
       * @brief Bindings for the Isis::GaussianStretch class

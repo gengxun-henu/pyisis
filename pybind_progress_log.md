@@ -2,6 +2,19 @@
 
 ## 2026-03-26
 
+- CubeStretch binding progress:
+  - Added `Isis::CubeStretch` binding in `src/base/bind_base_filters.cpp` as a `Stretch`-derived value type.
+  - Exposed Python constructors from `(name, stretch_type, band_number)`, `Stretch`, `Stretch + stretch_type`, and copy construction.
+  - Exposed cube-stretch metadata accessors/mutators: `get_name`, `set_name`, `get_type`, `set_type`, `get_band_number`, `set_band_number`, plus equality and `__repr__`.
+  - Re-exported `CubeStretch` from both `python/isis_pybind/__init__.py` and `build/python/isis_pybind/__init__.py` so direct unit-test runs see the symbol immediately.
+  - Extended `tests/unitTest/filters_unit_test.py` with focused `CubeStretch` coverage and fixed the existing `TestKernels` indentation issue so all filters tests are discoverable again.
+- Tracking sync:
+  - Updated `todo_pybind11.csv` to mark `Utility,CubeStretch` as `已转换`.
+- Validation status:
+  - Passed build: `cmake -S . -B build && cmake --build build -j4`
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/filters_unit_test.py -v`
+  - Passed smoke check: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -c "import isis_pybind as ip; print('SMOKE_OK', hasattr(ip, 'CubeStretch'), ip.CubeStretch().get_name())"`
+
   - Added a module-level `SKIP_HIGH_LEVEL_CUBE_IO_TESTS = True` switch in `tests/unitTest/high_level_cube_io_unit_test.py`.
   - Applied a class-level conditional skip with comments so the whole suite is intentionally disabled until the high-level cube I/O binding/runtime configuration is completed.
   - This keeps the test file in place for later re-enable while avoiding noisy false-negative failures during the current incomplete setup phase.

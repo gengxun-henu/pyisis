@@ -222,7 +222,7 @@ add_test(
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
 set_tests_properties(python-unit-tests PROPERTIES
-  ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python")
+  ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python;LD_LIBRARY_PATH=${ISIS_LIBRARY_DIR}")
 
 message(STATUS "Using external ISIS prefix: ${ISIS_PREFIX}")
 message(STATUS "Using ISIS include dir: ${ISIS_INCLUDE_DIR}")

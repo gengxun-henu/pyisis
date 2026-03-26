@@ -490,7 +490,143 @@ tests/unitTest/
 
 ## Coding Standards
 
-### 1. File Header Template
+### 1. Creation Time Tracking Rules
+
+**Purpose**: Track the history of code development by documenting creation and modification timestamps.
+
+#### 1.1 C++ Binding Files (.cpp)
+
+All C++ binding files must include the following in their header documentation:
+
+```cpp
+/**
+ * @file
+ * @brief Pybind11 bindings for ISIS [category] classes
+ *
+ * Source ISIS headers:
+ *   - isis/src/[path]/[ClassName]/[ClassName].h
+ * Binding author: [Author Name]
+ * Created: YYYY-MM-DD
+ * Last Modified: YYYY-MM-DD (update this date whenever significant changes are made)
+ * Purpose: [Brief description]
+ */
+```
+
+**Rules**:
+- **Created**: Must be set when the file is first created (YYYY-MM-DD format)
+- **Last Modified**: Must be updated whenever:
+  - New classes are added to the file
+  - Existing bindings are modified (new methods, changed signatures, bug fixes)
+  - Documentation is significantly updated
+- **Method-level tracking**: For individual methods or classes within a file, use inline comments:
+  ```cpp
+  // Added: 2026-03-26 - Bind Matrix::determinant() method
+  .def("determinant", &Isis::Matrix::Determinant, "Calculate matrix determinant")
+  ```
+
+#### 1.2 C++ Header Files (.h)
+
+When creating new helper header files (e.g., custom converters, utility functions):
+
+```cpp
+// Copyright (c) 2026 Geng Xun, Henan University
+// SPDX-License-Identifier: MIT
+
+/**
+ * @file
+ * @brief [Brief description]
+ * @author [Author Name]
+ * @date Created: YYYY-MM-DD
+ * @date Last Modified: YYYY-MM-DD
+ */
+```
+
+**Rules**:
+- Update "Last Modified" date when functions/classes are added or modified
+- For individual functions, add inline comments with creation date:
+  ```cpp
+  // Added: 2026-03-26 - Convert QString to std::string
+  std::string qStringToStdString(const QString& qstr);
+  ```
+
+#### 1.3 Python Test Files (.py)
+
+All Python unit test files must include creation tracking in the module docstring:
+
+```python
+"""
+Unit tests for ISIS [category] classes
+
+Author: [Author Name]
+Created: YYYY-MM-DD
+Last Modified: YYYY-MM-DD
+
+Test coverage:
+  - ClassName1: [brief description]
+  - ClassName2: [brief description]
+"""
+```
+
+**Rules**:
+- **Module-level docstring**: Must include Created and Last Modified dates
+- **Last Modified**: Update when:
+  - New test classes are added
+  - Significant test methods are added
+  - Existing tests are modified to fix bugs or improve coverage
+- **Test method tracking**: For individual test methods, use docstrings with creation info:
+  ```python
+  def test_matrix_determinant(self):
+      """
+      Test Matrix determinant calculation
+      Added: 2026-03-26
+      """
+      matrix = ip.Matrix(3, 3)
+      # test code...
+  ```
+
+#### 1.4 Class and Method Addition Workflow
+
+When adding new classes or methods to existing files, follow this workflow:
+
+**Step 1: Update file header**
+```cpp
+// Update Last Modified date in file header
+// Last Modified: 2026-03-26
+```
+
+**Step 2: Add inline comment for new code**
+```cpp
+// Added: 2026-03-26 - PolynomialUnivariate class bindings
+py::class_<Isis::PolynomialUnivariate, Isis::BasisFunction>(m, "PolynomialUnivariate")
+    .def(py::init<int>(), py::arg("degree"), "Construct polynomial of given degree")
+    // ... methods ...
+```
+
+**Step 3: Update test file**
+```python
+# Update Last Modified in module docstring
+# Last Modified: 2026-03-26
+
+# Add test class with creation date
+class PolynomialUnivariateUnitTest(unittest.TestCase):
+    """
+    Test suite for PolynomialUnivariate bindings
+    Added: 2026-03-26
+    """
+```
+
+#### 1.5 Version Control Best Practices
+
+While git provides a complete history, inline timestamps serve additional purposes:
+
+- **Quick reference**: Developers can see when code was added without checking git log
+- **Code review**: Reviewers can identify recent changes at a glance
+- **Documentation**: Timestamps provide context in code documentation
+- **Granularity**: Track individual methods/classes within large files
+
+**Important**: Timestamps complement but do not replace proper git commit messages and version control practices.
+
+### 2. File Header Template
 
 ```cpp
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -516,7 +652,7 @@ tests/unitTest/
 namespace py = pybind11;
 ```
 
-### 2. Binding Patterns
+### 3. Binding Patterns
 
 **Simple Class**:
 ```cpp
@@ -544,7 +680,7 @@ std::vector<double> qVectorToStdVector(const QVector<double> &qvec) {
 }
 ```
 
-### 3. Unit Test Patterns
+### 4. Unit Test Patterns
 
 ```python
 import unittest
@@ -568,7 +704,7 @@ if __name__ == '__main__':
     unittest.main()
 ```
 
-### 4. Documentation
+### 5. Documentation
 
 - Every class binding must include a docstring
 - Every method must include a parameter description and return value

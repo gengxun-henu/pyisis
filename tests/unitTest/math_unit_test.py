@@ -1,5 +1,5 @@
 """
-Unit tests for ISIS math classes: Calculator, Affine, and BasisFunction
+Unit tests for ISIS math classes: Calculator, Affine, BasisFunction, LeastSquares, Matrix, PolynomialUnivariate, and PolynomialBivariate
 """
 import unittest
 import math
@@ -244,6 +244,232 @@ class BasisFunctionUnitTest(unittest.TestCase):
         name = basis.name()
         self.assertIsInstance(name, str)
         self.assertEqual(name, "unit_test_basis")
+
+
+class LeastSquaresUnitTest(unittest.TestCase):
+    """Test suite for LeastSquares class bindings"""
+
+    def test_least_squares_construction(self):
+        """Test basic LeastSquares construction"""
+        basis = ip.PolynomialUnivariate(2)  # degree 2 polynomial
+        ls = ip.LeastSquares(basis)
+        self.assertIsNotNone(ls)
+        self.assertIn("LeastSquares", repr(ls))
+        self.assertEqual(ls.rows(), 0)
+        self.assertEqual(ls.knowns(), 0)
+
+    def test_least_squares_add_known(self):
+        """Test adding known data points"""
+        basis = ip.PolynomialUnivariate(1)  # linear fit
+        ls = ip.LeastSquares(basis)
+
+        # Add some known points for a linear relationship: y = 2x + 1
+        ls.add_known([0.0], 1.0)
+        ls.add_known([1.0], 3.0)
+        ls.add_known([2.0], 5.0)
+
+        self.assertEqual(ls.knowns(), 3)
+        self.assertEqual(ls.rows(), 3)
+
+    def test_least_squares_solve_svd(self):
+        """Test solving least squares with SVD method"""
+        basis = ip.PolynomialUnivariate(1)  # linear fit
+        ls = ip.LeastSquares(basis)
+
+        # Add known points for y = 2x + 1
+        ls.add_known([0.0], 1.0)
+        ls.add_known([1.0], 3.0)
+        ls.add_known([2.0], 5.0)
+        ls.add_known([3.0], 7.0)
+
+        # Solve using SVD
+        result = ls.solve(ip.LeastSquaresSolveMethod.SVD)
+        self.assertEqual(result, 0)  # Success
+
+        # Evaluate at known points
+        self.assertAlmostEqual(ls.evaluate([0.0]), 1.0, places=10)
+        self.assertAlmostEqual(ls.evaluate([1.0]), 3.0, places=10)
+        self.assertAlmostEqual(ls.evaluate([2.0]), 5.0, places=10)
+
+    def test_least_squares_residuals(self):
+        """Test getting residuals from fit"""
+        basis = ip.PolynomialUnivariate(1)
+        ls = ip.LeastSquares(basis)
+
+        # Add points with some noise
+        ls.add_known([0.0], 1.0)
+        ls.add_known([1.0], 3.0)
+        ls.add_known([2.0], 5.0)
+
+        ls.solve()
+        residuals = ls.residuals()
+
+        # For a perfect fit, residuals should be near zero
+        self.assertEqual(len(residuals), 3)
+        for res in residuals:
+            self.assertAlmostEqual(res, 0.0, places=10)
+
+    def test_least_squares_get_input_expected(self):
+        """Test getting input and expected values"""
+        basis = ip.PolynomialUnivariate(1)
+        ls = ip.LeastSquares(basis)
+
+        ls.add_known([1.5], 3.0)
+        ls.add_known([2.5], 5.0)
+
+        input_0 = ls.get_input(0)
+        self.assertAlmostEqual(input_0[0], 1.5, places=10)
+        self.assertAlmostEqual(ls.get_expected(0), 3.0, places=10)
+
+        input_1 = ls.get_input(1)
+        self.assertAlmostEqual(input_1[0], 2.5, places=10)
+        self.assertAlmostEqual(ls.get_expected(1), 5.0, places=10)
+
+    def test_least_squares_reset(self):
+        """Test resetting least squares"""
+        basis = ip.PolynomialUnivariate(1)
+        ls = ip.LeastSquares(basis)
+
+        ls.add_known([1.0], 2.0)
+        ls.add_known([2.0], 4.0)
+        self.assertEqual(ls.knowns(), 2)
+
+        ls.reset()
+        self.assertEqual(ls.knowns(), 0)
+
+
+class MatrixUnitTest(unittest.TestCase):
+    """Test suite for Matrix class bindings"""
+
+    def test_matrix_construction(self):
+        """Test basic Matrix construction"""
+        mat = ip.Matrix()
+        self.assertIsNotNone(mat)
+        self.assertIn("Matrix", repr(mat))
+
+    def test_matrix_construction_with_size(self):
+        """Test Matrix construction with size"""
+        mat = ip.Matrix(3, 4)
+        self.assertEqual(mat.rows(), 3)
+        self.assertEqual(mat.columns(), 4)
+
+    def test_matrix_construction_with_value(self):
+        """Test Matrix construction with initial value"""
+        mat = ip.Matrix(2, 2, 5.0)
+        self.assertEqual(mat.rows(), 2)
+        self.assertEqual(mat.columns(), 2)
+        # Note: We can't easily test the values without __getitem__ working properly
+
+    def test_matrix_identity(self):
+        """Test creating identity matrix"""
+        identity = ip.Matrix.identity(3)
+        self.assertEqual(identity.rows(), 3)
+        self.assertEqual(identity.columns(), 3)
+
+        # Identity matrix should have determinant of 1
+        self.assertAlmostEqual(identity.determinant(), 1.0, places=10)
+
+    def test_matrix_trace(self):
+        """Test matrix trace calculation"""
+        identity = ip.Matrix.identity(3)
+        # Trace of 3x3 identity is 3
+        self.assertAlmostEqual(identity.trace(), 3.0, places=10)
+
+    def test_matrix_transpose(self):
+        """Test matrix transpose"""
+        mat = ip.Matrix(2, 3)
+        transposed = mat.transpose()
+        self.assertEqual(transposed.rows(), 3)
+        self.assertEqual(transposed.columns(), 2)
+
+    def test_matrix_operations(self):
+        """Test basic matrix operations"""
+        mat1 = ip.Matrix(2, 2, 1.0)
+        mat2 = ip.Matrix(2, 2, 2.0)
+
+        # Test addition
+        result = mat1.add(mat2)
+        self.assertEqual(result.rows(), 2)
+        self.assertEqual(result.columns(), 2)
+
+        # Test scalar multiplication
+        result = mat1.multiply(3.0)
+        self.assertEqual(result.rows(), 2)
+        self.assertEqual(result.columns(), 2)
+
+
+class PolynomialUnivariateUnitTest(unittest.TestCase):
+    """Test suite for PolynomialUnivariate class bindings"""
+
+    def test_polynomial_univariate_construction(self):
+        """Test PolynomialUnivariate construction"""
+        poly = ip.PolynomialUnivariate(2)  # degree 2
+        self.assertIsNotNone(poly)
+        self.assertIn("PolynomialUnivariate", repr(poly))
+        # Degree 2 polynomial has 3 coefficients (a0 + a1*x + a2*x^2)
+        self.assertEqual(poly.coefficients(), 3)
+        self.assertEqual(poly.variables(), 1)
+
+    def test_polynomial_univariate_expand(self):
+        """Test expanding polynomial"""
+        poly = ip.PolynomialUnivariate(2)
+        poly.expand([2.0])  # Expand at x=2
+        # After expand, we should be able to use the polynomial
+        # The expand method sets up the basis function terms
+
+    def test_polynomial_univariate_evaluate(self):
+        """Test evaluating polynomial"""
+        poly = ip.PolynomialUnivariate(2)
+
+        # Set coefficients for: 1 + 2x + 3x^2
+        poly.set_coefficients([1.0, 2.0, 3.0])
+
+        # Evaluate at x = 2: 1 + 2(2) + 3(2^2) = 1 + 4 + 12 = 17
+        poly.expand([2.0])
+        result = poly.evaluate([2.0])
+        self.assertAlmostEqual(result, 17.0, places=10)
+
+    def test_polynomial_univariate_derivative(self):
+        """Test polynomial derivative calculations"""
+        poly = ip.PolynomialUnivariate(2)
+        poly.set_coefficients([1.0, 2.0, 3.0])  # 1 + 2x + 3x^2
+
+        # Derivative at x=2 should be: 2 + 6x = 2 + 12 = 14
+        poly.expand([2.0])
+        deriv = poly.derivative_var(2.0)
+        self.assertAlmostEqual(deriv, 14.0, places=10)
+
+
+class PolynomialBivariateUnitTest(unittest.TestCase):
+    """Test suite for PolynomialBivariate class bindings"""
+
+    def test_polynomial_bivariate_construction(self):
+        """Test PolynomialBivariate construction"""
+        poly = ip.PolynomialBivariate(2)  # degree 2
+        self.assertIsNotNone(poly)
+        self.assertIn("PolynomialBivariate", repr(poly))
+        self.assertEqual(poly.variables(), 2)
+        # Degree 2 bivariate has 6 coefficients
+        # (1, x, y, x^2, xy, y^2)
+        self.assertEqual(poly.coefficients(), 6)
+
+    def test_polynomial_bivariate_expand(self):
+        """Test expanding bivariate polynomial"""
+        poly = ip.PolynomialBivariate(1)  # degree 1
+        poly.expand([1.0, 2.0])  # Expand at x=1, y=2
+        # After expand, we should be able to use the polynomial
+
+    def test_polynomial_bivariate_evaluate(self):
+        """Test evaluating bivariate polynomial"""
+        poly = ip.PolynomialBivariate(1)  # Linear: a + bx + cy
+
+        # Set coefficients for: 1 + 2x + 3y
+        poly.set_coefficients([1.0, 2.0, 3.0])
+
+        # Evaluate at x=2, y=3: 1 + 2(2) + 3(3) = 1 + 4 + 9 = 14
+        poly.expand([2.0, 3.0])
+        result = poly.evaluate([2.0, 3.0])
+        self.assertAlmostEqual(result, 14.0, places=10)
 
 
 if __name__ == '__main__':

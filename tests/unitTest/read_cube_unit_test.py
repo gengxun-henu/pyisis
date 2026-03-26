@@ -7,9 +7,8 @@ class ReadCubeUnitTest(unittest.TestCase):
     def test_read_cube_dimensions(self):
         """Test reading cube dimensions from a test file"""
         cube = ip.Cube()
-        # Use a test data file from the repository
-        cube_path = workspace_test_data_path("mroCtxImage", "ctxTestImage.cub")
-        cube.open(str(cube_path), "r")
+        strPath = "./tests/data/lronaccal/truth/M1333276014R.near.crop.cub"
+        cube.open(strPath, "r")
         self.addCleanup(cube.close)
 
         # Verify we can read dimensions (actual values depend on test file)

@@ -221,6 +221,9 @@ add_test(
     -p "*_unit_test.py"
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
+set_tests_properties(python-unit-tests PROPERTIES
+  ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python")
+
 message(STATUS "Using external ISIS prefix: ${ISIS_PREFIX}")
 message(STATUS "Using ISIS include dir: ${ISIS_INCLUDE_DIR}")
 message(STATUS "Using ISIS dependency include dir: ${ISIS_DEP_INCLUDE_DIR}")

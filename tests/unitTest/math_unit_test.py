@@ -796,6 +796,20 @@ class InlineInfixToPostfixUnitTest(unittest.TestCase):
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
 
+    def test_scalar_expression(self):
+        """Test converting expression with scalar values typical of inline data"""
+        converter = ip.InlineInfixToPostfix()
+        result = converter.convert("3.14 * 2.0")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    def test_nested_function_expression(self):
+        """Test converting nested function expression"""
+        converter = ip.InlineInfixToPostfix()
+        result = converter.convert("abs(sin(0.5))")
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
 
 if __name__ == '__main__':
     unittest.main()

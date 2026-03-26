@@ -149,7 +149,11 @@ void bind_base_filters(py::module_ &m) {
    * @see Isis::GaussianStretch
    */
   py::class_<Isis::GaussianStretch>(m, "GaussianStretch")
-      .def(py::init<>())
+      .def(py::init<Isis::Histogram &, const double, const double>(),
+           py::arg("histogram"),
+           py::arg("mean") = 0.0,
+           py::arg("standard_deviation") = 1.0,
+           "Construct a GaussianStretch with a histogram and optional mean/standard deviation")
       .def("map",
            &Isis::GaussianStretch::Map,
            py::arg("value"),

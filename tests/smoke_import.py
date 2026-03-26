@@ -8,7 +8,9 @@ import tempfile
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 BUILD_PYTHON_DIR = PROJECT_ROOT / "build" / "python"
 WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT/ "tests" / "data" / "isisdata" / "mockup"
-
+print(f"Using workspace ISISDATA mockup at {WORKSPACE_ISISDATA_MOCKUP}")
+print(f"Using PROJECT_ROOT at {PROJECT_ROOT}")
+print(f"Using BUILD_PYTHON_DIR at {BUILD_PYTHON_DIR}")
 
 def _has_leap_second_kernels(data_root):
     lsk_dir = Path(data_root) / "base" / "kernels" / "lsk"
@@ -19,6 +21,8 @@ def _ensure_isisdata_for_tests():
     configured = os.environ.get("ISISDATA")
 
     if configured and _has_leap_second_kernels(configured):
+        print(f"ISISDATA is already configured to {configured} and contains leap second kernels.")
+        print(f"Leap second kernels are required for some tests, so this environment variable will be used as is.")
         return
 
     if WORKSPACE_ISISDATA_MOCKUP.exists() and _has_leap_second_kernels(WORKSPACE_ISISDATA_MOCKUP):
@@ -31,7 +35,6 @@ if BUILD_PYTHON_DIR.exists():
     sys.path.insert(0, str(BUILD_PYTHON_DIR))
 
 import isis_pybind as ip
-
 
 HAS_CONTROL_BINDINGS = all(
     hasattr(ip, name)
@@ -426,7 +429,7 @@ def test_basic_base_objects_work():
         assert len(control_point_v0003_upgrade.point_data()) > 0
 
         cube = ip.Cube()
-        cube.open(str(PROJECT_ROOT.parent / "isis" / "tests" / "data" / "mosrange" / "EN0108828322M_iof.cub"), "r")
+        cube.open(str(PROJECT_ROOT / "tests" / "data" / "mosrange" / "EN0108828322M_iof.cub"), "r")
         try:
             camera = cube.camera()
             bundle_image = ip.BundleImage(camera, "SMOKE-SN", "smoke.cub")

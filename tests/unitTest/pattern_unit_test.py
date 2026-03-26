@@ -48,11 +48,12 @@ class ChipUnitTest(unittest.TestCase):
         """Test checking if coordinates are inside chip"""
         chip = ip.Chip()
         chip.set_size(10, 10)
+        chip.tack_cube(100.0, 200.0)
 
-        self.assertTrue(chip.is_inside_chip(5.0, 5.0))
-        self.assertTrue(chip.is_inside_chip(1.0, 1.0))
-        self.assertFalse(chip.is_inside_chip(0.0, 0.0))
-        self.assertFalse(chip.is_inside_chip(11.0, 11.0))
+        self.assertTrue(chip.is_inside_chip(100.0, 200.0))
+        self.assertTrue(chip.is_inside_chip(96.0, 196.0))
+        self.assertFalse(chip.is_inside_chip(95.0, 195.0))
+        self.assertFalse(chip.is_inside_chip(105.0, 205.0))
 
     def test_chip_set_valid_range(self):
         """Test setting valid pixel range"""
@@ -69,9 +70,12 @@ class ChipUnitTest(unittest.TestCase):
         chip = ip.Chip()
         chip.set_size(5, 5)
         chip.tack_cube(100.0, 200.0)
+        chip.set_chip_position(chip.tack_sample(), chip.tack_line())
 
-        self.assertEqual(chip.tack_sample(), 100)
-        self.assertEqual(chip.tack_line(), 200)
+        self.assertEqual(chip.tack_sample(), 3)
+        self.assertEqual(chip.tack_line(), 3)
+        self.assertAlmostEqual(chip.cube_sample(), 100.0, places=12)
+        self.assertAlmostEqual(chip.cube_line(), 200.0, places=12)
 
     def test_chip_set_chip_position(self):
         """Test setting chip position"""

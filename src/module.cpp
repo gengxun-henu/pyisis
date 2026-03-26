@@ -12,7 +12,6 @@ void bind_sensor(py::module_ &m);
 void bind_camera(py::module_ &m);
 void bind_camera_maps(py::module_ &m);
 void bind_camera_hierarchy(py::module_ &m);
-void bind_cube(py::module_ &m);
 void bind_base_support(py::module_ &m);
 void bind_base_geometry(py::module_ &m);
 void bind_base_ground_map(py::module_ &m);
@@ -40,7 +39,6 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_camera(m);
   bind_camera_maps(m);
   bind_camera_hierarchy(m);
-  bind_cube(m);
   bind_base_support(m);
   bind_base_geometry(m);
   bind_base_ground_map(m);

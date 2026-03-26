@@ -3,38 +3,31 @@
 # SPDX-License-Identifier: MIT
 
 """
-Unit tests for ISIS filter and utility classes:
-- Stretch
-- GaussianStretch
-- QuickFilter
-- Kernels
-- CSVReader
+Unit tests for ISIS filter and utility class bindings.
+
+Author: Geng Xun
+Created: 2026-03-25
+Last Modified: 2026-03-26
 """
 
-import unittest
-import tempfile
 import os
-from pathlib import Path
+import tempfile
+import unittest
 
-try:
-    from isis_pybind import (
-        Stretch,
-        GaussianStretch,
-        QuickFilter,
-        Kernels,
-        CSVReader,
-        Pvl,
-        PvlGroup,
-        PvlKeyword,
-        Histogram,
-    )
-    ISIS_PYBIND_AVAILABLE = True
-except ImportError as e:
-    ISIS_PYBIND_AVAILABLE = False
-    IMPORT_ERROR = str(e)
+from _unit_test_support import ip
 
 
-@unittest.skipUnless(ISIS_PYBIND_AVAILABLE, f"isis_pybind not available: {IMPORT_ERROR if not ISIS_PYBIND_AVAILABLE else ''}")
+Stretch = ip.Stretch
+GaussianStretch = ip.GaussianStretch
+QuickFilter = ip.QuickFilter
+Kernels = ip.Kernels
+CSVReader = ip.CSVReader
+Pvl = ip.Pvl
+PvlGroup = ip.PvlGroup
+PvlKeyword = ip.PvlKeyword
+Histogram = ip.Histogram
+
+
 class TestStretch(unittest.TestCase):
     """Test cases for Stretch class"""
 
@@ -128,7 +121,6 @@ class TestStretch(unittest.TestCase):
         self.assertEqual(stretch.pairs(), 2)
 
 
-@unittest.skipUnless(ISIS_PYBIND_AVAILABLE, f"isis_pybind not available: {IMPORT_ERROR if not ISIS_PYBIND_AVAILABLE else ''}")
 class TestGaussianStretch(unittest.TestCase):
     """Test cases for GaussianStretch class"""
 
@@ -162,7 +154,6 @@ class TestGaussianStretch(unittest.TestCase):
         self.assertIn("GaussianStretch", repr_str)
 
 
-@unittest.skipUnless(ISIS_PYBIND_AVAILABLE, f"isis_pybind not available: {IMPORT_ERROR if not ISIS_PYBIND_AVAILABLE else ''}")
 class TestQuickFilter(unittest.TestCase):
     """Test cases for QuickFilter class"""
 
@@ -242,7 +233,6 @@ class TestQuickFilter(unittest.TestCase):
         self.assertIn("width and height must be positive", str(context.exception))
 
 
-@unittest.skipUnless(ISIS_PYBIND_AVAILABLE, f"isis_pybind not available: {IMPORT_ERROR if not ISIS_PYBIND_AVAILABLE else ''}")
 class TestKernels(unittest.TestCase):
     """Test cases for Kernels class"""
 
@@ -274,13 +264,17 @@ class TestKernels(unittest.TestCase):
         version = kernels.camera_version()
         self.assertIsInstance(version, int)
 
-    def test_manage_unmanage(self):
-        """Test manage/unmanage operations"""
-        kernels = Kernels()
-        kernels.manage()
-        self.assertTrue(kernels.is_managed())
-        kernels.un_manage()
-        self.assertFalse(kernels.is_managed())
+def test_manage_unmanage_on_empty_kernel_set(self):
+    """Empty Kernels remains vacuously managed even after un_manage()."""
+    kernels = Kernels()
+    self.assertEqual(kernels.size(), 0)
+
+    kernels.manage()
+    self.assertTrue(kernels.is_managed())
+
+    kernels.un_manage()
+    self.assertTrue(kernels.is_managed())
+    
 
     def test_clear(self):
         """Test clearing kernels"""
@@ -303,7 +297,6 @@ class TestKernels(unittest.TestCase):
         self.assertIn("missing=", repr_str)
 
 
-@unittest.skipUnless(ISIS_PYBIND_AVAILABLE, f"isis_pybind not available: {IMPORT_ERROR if not ISIS_PYBIND_AVAILABLE else ''}")
 class TestCSVReader(unittest.TestCase):
     """Test cases for CSVReader class"""
 

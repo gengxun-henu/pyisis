@@ -30,7 +30,7 @@ Control Networks,ControlPointV0003,已转换,2026-03-22 已在 bind_control_core
 Control Networks,CsmBundleObservation,未转换,
 Control Networks,ImageOverlap,未转换,
 Control Networks,InterestOperator,未转换,抽象基类/纯虚接口
-Control Networks,InterestOperatorFactory,未转换,工厂类，静态创建接口较多
+Control Networks,InterestOperatorFactory,已转换,2026-03-27 已在 bind_interest_operator_factory.cpp 暴露 create 静态工厂方法
 Control Networks,IsisBundleObservation,未转换,
 Control Networks,LidarControlPoint,未转换,
 Control Networks,MeasureValidationResults,已转换,2026-03-21 已在 bind_control_core.cpp 暴露验证状态/失败消息/字符串格式化接口

@@ -140,6 +140,7 @@ pybind11_add_module(_isis_core
   src/bind_low_level_cube_io.cpp
   src/bind_high_level_cube_io.cpp
   src/control/bind_control_core.cpp
+  src/control/bind_interest_operator_factory.cpp
   # Temporarily disabled due to complex dependencies - will be re-enabled once resolved
   # src/control/bind_bundle_advanced.cpp
   src/base/bind_base_support.cpp

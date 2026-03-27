@@ -2,6 +2,20 @@
 
 ## 2026-03-27
 
+- InterestOperatorFactory binding progress:
+  - Added `Isis::InterestOperatorFactory` binding in `src/control/bind_interest_operator_factory.cpp`.
+  - Exposed static factory method `create(pvl)` for creating InterestOperator instances from PVL configuration.
+  - Uses `py::nodelete` holder policy (factory contains only static methods).
+  - Uses `py::return_value_policy::take_ownership` for factory-created InterestOperator pointers.
+  - Follows established factory binding patterns from `CameraFactory` and `ProjectionFactory`.
+  - Re-exported `InterestOperatorFactory` from `python/isis_pybind/__init__.py`.
+  - Added unit tests in `tests/unitTest/interest_operator_unit_test.py` with symbol presence checks and minimal PVL configuration test.
+- Tracking sync:
+  - Updated `todo_pybind11.csv` to mark `Control Networks,InterestOperatorFactory` as `已转换`.
+  - Updated `class_bind_methods_details/control_interest_operator_factory_methods.csv` to mark class symbol and `create` method as converted (Y) with binding location notes.
+- Validation status:
+  - Code follows established factory binding patterns; compilation and runtime validation pending ISIS environment setup.
+
 - High-priority Math bindings verification and tracking update:
   - Verified that `Isis::LeastSquares`, `Isis::Matrix`, `Isis::PolynomialUnivariate`, and `Isis::PolynomialBivariate` are already fully bound in `src/base/bind_base_math.cpp`.
   - All four classes were already exported from `python/isis_pybind/__init__.py` and have comprehensive unit tests in `tests/unitTest/math_unit_test.py`.

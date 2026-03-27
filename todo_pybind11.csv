@@ -30,7 +30,7 @@ Control Networks,ControlPointV0003,已转换,2026-03-22 已在 bind_control_core
 Control Networks,CsmBundleObservation,未转换,
 Control Networks,ImageOverlap,未转换,
 Control Networks,InterestOperator,未转换,抽象基类/纯虚接口
-Control Networks,InterestOperatorFactory,未转换,工厂类，静态创建接口较多
+Control Networks,InterestOperatorFactory,已转换,2026-03-27 已在 bind_interest_operator_factory.cpp 暴露 create 静态工厂方法
 Control Networks,IsisBundleObservation,未转换,
 Control Networks,LidarControlPoint,未转换,
 Control Networks,MeasureValidationResults,已转换,2026-03-21 已在 bind_control_core.cpp 暴露验证状态/失败消息/字符串格式化接口
@@ -162,18 +162,18 @@ Math,Basis1VariableFunction,未转换,抽象基类/纯虚接口
 Math,BasisFunction,已转换,2026-03-25 已在 bind_base_math.cpp 暴露三参构造/系数/求值接口
 Math,Calculator,已转换,2026-03-25 已在 bind_base_math.cpp 暴露 RPN 计算器主接口；Minimum2/Maximum2 上游源码未实现
 Math,CubeCalculator,未转换,
-Math,CubeInfixToPostfix,未转换,
+Math,CubeInfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造与继承的 convert/tokenize_equation 接口
 Math,FunctionTools,未转换,抽象基类/纯虚接口
-Math,InfixToPostfix,未转换,
-Math,InlineInfixToPostfix,未转换,
-Math,LeastSquares,未转换,
-Math,Matrix,未转换,
+Math,InfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/convert/tokenize_equation 接口
+Math,InlineInfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造与继承的 convert/tokenize_equation 接口
+Math,LeastSquares,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/数据输入/求解/残差/配置接口并补充单测
+Math,Matrix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/矩阵运算/线性代数接口并补充单测
 Math,MaximumLikelihoodWFunctions,未转换,
 Math,NthOrderPolynomial,未转换,
 Math,NumericalApproximation,未转换,抽象基类/纯虚接口
 Math,NumericalAtmosApprox,未转换,
-Math,PolynomialBivariate,未转换,
-Math,PolynomialUnivariate,未转换,
+Math,PolynomialBivariate,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/expand 接口并补充单测
+Math,PolynomialUnivariate,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/expand/derivative 接口并补充单测
 Math,SurfaceModel,未转换,
 Near Earth Asteroid Rendezvous - Shoemaker,MsiCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Messenger,MdisCamera,已转换,"第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖"

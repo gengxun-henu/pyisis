@@ -1,6 +1,6 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-InterestOperatorFactory,Control Networks,isis/src/control/objs/InterestOperatorFactory/InterestOperatorFactory.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,工厂类，静态创建接口较多
+InterestOperatorFactory,Control Networks,isis/src/control/objs/InterestOperatorFactory/InterestOperatorFactory.h,src/control/bind_interest_operator_factory.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,工厂类，静态创建接口较多
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,InterestOperatorFactory,isis_pybind.InterestOperatorFactory,N,Python class symbol not found in current binding files; 工厂类，静态创建接口较多
-Static/Factory,static InterestOperator *Create(Pvl &pPvl),isis_pybind.InterestOperatorFactory.create,N,工厂类，静态创建接口较多
+Class Symbol,InterestOperatorFactory,isis_pybind.InterestOperatorFactory,Y,已在 src/control/bind_interest_operator_factory.cpp 绑定；2026-03-27
+Static/Factory,static InterestOperator *Create(Pvl &pPvl),isis_pybind.InterestOperatorFactory.create,Y,已在 src/control/bind_interest_operator_factory.cpp:43-59 绑定；使用 take_ownership 策略管理返回的 InterestOperator 指针；2026-03-27

@@ -214,16 +214,23 @@ if(NOT Python3_SITEARCH STREQUAL Python3_SITELIB)
     DESTINATION "${Python3_SITEARCH}/${ISIS_PYBIND_PACKAGE_NAME}")
 endif()
 
+set(_test_ld_library_path "${ISIS_LIBRARY_DIR}")
+if(DEFINED ENV{LD_LIBRARY_PATH} AND NOT "$ENV{LD_LIBRARY_PATH}" STREQUAL "")
+  set(_test_ld_library_path "${_test_ld_library_path}:$ENV{LD_LIBRARY_PATH}")
+endif()
+
+set_tests_properties(python-unit-tests PROPERTIES
+  ENVIRONMENT
+    "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python"
+    "LD_LIBRARY_PATH=${_test_ld_library_path}"
+    "ISISDATA=${CMAKE_CURRENT_SOURCE_DIR}/tests/data/isisdata/mockup")
 add_test(
   NAME python-unit-tests
   COMMAND "${Python3_EXECUTABLE}" -m unittest discover
     -s "${CMAKE_CURRENT_SOURCE_DIR}/tests/unitTest"
     -p "*_unit_test.py"
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
-
-set_tests_properties(python-unit-tests PROPERTIES
-  ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python;LD_LIBRARY_PATH=${ISIS_LIBRARY_DIR};ISISDATA=${CMAKE_CURRENT_SOURCE_DIR}/tests/data/isisdata/mockup")
-
+  
 message(STATUS "Using external ISIS prefix: ${ISIS_PREFIX}")
 message(STATUS "Using ISIS include dir: ${ISIS_INCLUDE_DIR}")
 message(STATUS "Using ISIS dependency include dir: ${ISIS_DEP_INCLUDE_DIR}")

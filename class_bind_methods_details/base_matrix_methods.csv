@@ -2,19 +2,22 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 Matrix,SensorUtilities,isis/src/base/objs/Matrix/Matrix.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,ISIS 同级 SensorUtilities 库；轻量值类型
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Matrix,isis_pybind.Matrix,N,Python class symbol not found in current binding files; ISIS 同级 SensorUtilities 库；轻量值类型
-Construction/Enum,Matrix(),isis_pybind.Matrix(),N,ISIS 同级 SensorUtilities 库；轻量值类型
-Static/Factory,static Matrix Identity(const int n),isis_pybind.Matrix.identity,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,inline int Rows() { return p_matrix.dim1(),isis_pybind.Matrix.rows,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,inline int Columns() { return p_matrix.dim2(),isis_pybind.Matrix.columns,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,double Determinant(),isis_pybind.Matrix.determinant,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,double Trace(),isis_pybind.Matrix.trace,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,std::vector<double> Eigenvalues(),isis_pybind.Matrix.eigenvalues,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Mutation/Configuration,Matrix Add(Matrix &matrix),isis_pybind.Matrix.add,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,Matrix Subtract(Matrix &matrix),isis_pybind.Matrix.subtract,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,Matrix Multiply(Matrix &matrix),isis_pybind.Matrix.multiply,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,Matrix Multiply(double scalar),isis_pybind.Matrix.multiply,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,Matrix MultiplyElementWise(Matrix &matrix),isis_pybind.Matrix.multiply_element_wise,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,Matrix Transpose(),isis_pybind.Matrix.transpose,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,Matrix Inverse(),isis_pybind.Matrix.inverse,N,ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,Matrix Eigenvectors(),isis_pybind.Matrix.eigenvectors,N,ISIS 同级 SensorUtilities 库；轻量值类型
+Class Symbol,Matrix,isis_pybind.Matrix,Y,Bound in src/base/bind_base_math.cpp
+Construction/Enum,Matrix(int rows, int columns),isis_pybind.Matrix(),Y,Constructor with dimensions bound
+Construction/Enum,Matrix(int rows, int columns, double value),isis_pybind.Matrix(),Y,Constructor with dimensions and initial value bound
+Static/Factory,static Matrix Identity(const int n),isis_pybind.Matrix.identity,Y,Bound as static identity method
+Public API,inline int Rows() { return p_matrix.dim1(),isis_pybind.Matrix.rows,Y,Bound as rows (lambda wrapper for non-const)
+Public API,inline int Columns() { return p_matrix.dim2(),isis_pybind.Matrix.columns,Y,Bound as columns (lambda wrapper for non-const)
+Public API,double Determinant(),isis_pybind.Matrix.determinant,Y,Bound as determinant
+Public API,double Trace(),isis_pybind.Matrix.trace,Y,Bound as trace
+Public API,std::vector<double> Eigenvalues(),isis_pybind.Matrix.eigenvalues,Y,Bound as eigenvalues
+Mutation/Configuration,Matrix Add(Matrix &matrix),isis_pybind.Matrix.add,Y,Bound as add
+Public API,Matrix Subtract(Matrix &matrix),isis_pybind.Matrix.subtract,Y,Bound as subtract
+Public API,Matrix Multiply(Matrix &matrix),isis_pybind.Matrix.multiply,Y,Bound as multiply (overloaded)
+Public API,Matrix Multiply(double scalar),isis_pybind.Matrix.multiply,Y,Bound as multiply (overloaded)
+Public API,Matrix MultiplyElementWise(Matrix &matrix),isis_pybind.Matrix.multiply_element_wise,Y,Bound as multiply_element_wise
+Public API,Matrix Transpose(),isis_pybind.Matrix.transpose,Y,Bound as transpose
+Public API,Matrix Inverse(),isis_pybind.Matrix.inverse,Y,Bound as inverse
+Public API,Matrix Eigenvectors(),isis_pybind.Matrix.eigenvectors,Y,Bound as eigenvectors
+Public API,double operator[](int row, int col),isis_pybind.Matrix.__getitem__,Y,Bound as __getitem__ with tuple index
+Public API,void operator[](int row, int col) = value,isis_pybind.Matrix.__setitem__,Y,Bound as __setitem__ with tuple index

@@ -28,6 +28,7 @@ from ._isis_core import (
     Chip,
     Column,
     CSVReader,
+    IString,
     LeastSquares,
     Matrix,
     InfixToPostfix,
@@ -230,6 +231,11 @@ from ._isis_core import (
     is_msb,
     pixel_type_enumeration,
     pixel_type_name,
+    to_bool,
+    to_int,
+    to_big_int,
+    to_double,
+    to_string,
 )
 
 __all__ = [
@@ -241,6 +247,7 @@ __all__ = [
     "CameraGroundMap",
     "CameraSkyMap",
     "Column",
+    "IString",
     "FramingCamera",
     "LineScanCamera",
     "LineScanCameraDetectorMap",
@@ -460,4 +467,9 @@ __all__ = [
     "VoyagerCamera",
     "CameraFactory",
     "Cube",
+    "to_bool",
+    "to_int",
+    "to_big_int",
+    "to_double",
+    "to_string",
 ]

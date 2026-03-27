@@ -136,7 +136,7 @@ jobs:
         shell: bash -l {0}
         run: |
           micromamba activate asp360_new
-          ctest --test-dir "$BUILD_DIR" --output-on-failure
+          ctest --test-dir "$BUILD_DIR" --output-on-failure --verbose
 
       - name: Run smoke import
         shell: bash -l {0}

@@ -322,7 +322,7 @@ void bind_base_math(py::module_ &m)
               py::arg("infix"),
               "Convert an infix expression string to postfix notation")
          .def("tokenize_equation", [](Isis::InfixToPostfix &self, const std::string &equation)
-              { return qStringToStdString(self.TokenizeEquation(stdStringToQString(equation))); },
+              { return qStringToStdString(self.tokenizeEquation(stdStringToQString(equation))); },
               py::arg("equation"),
               "Tokenize an equation string, separating operators and operands")
          .def("__repr__", [](const Isis::InfixToPostfix &)

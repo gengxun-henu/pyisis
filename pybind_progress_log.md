@@ -2,6 +2,15 @@
 
 ## 2026-03-27
 
+- Cube unit test expansion:
+  - Created `tests/unitTest/cube_unit_test.py` with comprehensive unit tests for the `Cube` binding class.
+  - Test suites cover: construction (default and from FileName), create/close lifecycle, close with remove, dimensions, pixel type, format (Bsq/Tile), byte order (Lsb/Msb), access modes (read-only/read-write), reopen, file_name, label/has_group/put_group/delete_group, base/multiplier/set_base_multiplier, label_size/labels_attached/set_labels_attached, stores_dn_data, physical_band, is_projected, has_blob/has_table, read/write with LineManager/SampleManager/BandManager, statistics (default, by band, with valid range), histogram (default, by band, with valid range), clear_io_cache, set_min_max, and multi-band write/read integration.
+  - Tests are self-contained: all cube files are created in `temporary_directory()` fixtures with `addCleanup` teardown.
+  - Follows existing patterns from `distance_unit_test.py`, `low_level_cube_io_unit_test.py`, and `_unit_test_support.py`.
+- Validation status:
+  - Python syntax validated with `python3 -m py_compile cube_unit_test.py` — passed.
+  - Full functional validation requires `asp360_new` conda environment with libisis.so on LD_LIBRARY_PATH (CI environment).
+
 - InterestOperatorFactory binding progress:
   - Added `Isis::InterestOperatorFactory` binding in `src/control/bind_interest_operator_factory.cpp`.
   - Exposed static factory method `create(pvl)` for creating InterestOperator instances from PVL configuration.

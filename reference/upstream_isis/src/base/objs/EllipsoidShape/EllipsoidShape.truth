@@ -1,0 +1,45 @@
+Radii=[3396.19,3396.19,3376.2]
+Begin testing Ellipsoid Shape Model class....
+
+  Testing constructors...
+    Shape  name is Ellipsoid
+    Shape2  name is Ellipsoid
+    Shape is DEM type?No
+
+  Testing method intersectSurface with failure...
+    Do we have an intersection? 0
+    Intersection failed 
+
+  Testing method calculateLocalNormal with intersection failure...
+**PROGRAMMER ERROR** A valid intersection must be defined before computing the surface normal.
+
+Testing method intersectSurface...
+    Do we have an intersection? 0
+   Set a pixel in the image and check again.
+    Do we have an intersection? 1
+     surface point = (-2105.830811, -2380.77411, 1189.409824)
+
+ Testing intersectSurface using surfacepoint from parent class...
+    Do we have an intersection? 1
+
+ Testing intersectSurface using lat/lon from parent class...
+    Do we have an intersection? 1
+
+  Testing class method calculateLocalNormal...
+    local normal = (-0.6196003462, -0.7004971413, 0.3541174467
+
+  Testing class method calculateSurfaceNormal...
+    surface normal = (-0.6196003462, -0.7004971413, 0.3541174467
+
+  Testing class method calculateDefaultNormal...
+    default normal = (-0.6196003462, -0.7004971413, 0.3541174467
+
+  Testing localRadius method ...
+    Local radius = 3393.711719
+
+  Testing setHasIntersection method
+    Do we have an intersection? 0
+
+  Testing setSurfacePoint method ...
+     Do we have an intersection? 1
+     surface point = (-2105.830811, -2380.77411, 1189.409824

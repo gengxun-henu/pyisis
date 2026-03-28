@@ -1,0 +1,784 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application name="grid" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Add a graticule or rectangular grid to the input image
+  </brief>
+
+  <description>
+    This program superimposes a user-defined grid on an input image. <br/><br/>
+    <b>Two types of grids are available:</b>
+    <blockquote>
+    1.  A graticule based on <def link="Latitude">latitude</def> and 
+        <def link="Longitude">longitude</def> coordinates where (MODE=GROUND).<br/>
+    2.  A simple rectangular grid based on line and sample coordinates where (MODE=IMAGE).<br/>
+    </blockquote>
+
+    Defaults: 
+    <ul>
+    <li> MODE = GROUND </li>
+    <li> BASELAT = 0.0 </li>
+    <li> BASELON = 0.0 </li>
+    <li> LATINC = 10 </li>
+    <li> LONINC = 10 </li>
+    </ul>
+    
+    Use the GROUND mode for images that have SPICE or map projection information.  
+    Use the IMAGE mode for images that do not have SPICE or map projection information,
+    or to draw grid lines based on sample and line information.
+    <br/><br/>
+    The grid pattern will intersect a specific origin of either (latitude,longitude) 
+    or (sample,line) position.  Grid lines are drawn at intervals from the origin based 
+    on the increment values defined by the user.  The graticule produced may not match 
+    the image coordinates exactly, so the result will have outer grid cells that 
+    might have different heights and widths than the interior grid cells.  In 
+    addition, if the LATINC and LONINC are too large compared with your image 
+    <def link="Scale">map scale</def>, the grid lines may miss your image. If the 
+    increments are too small, the grid lines may be overly dense. <br/><br/>
+    
+    This application will draw grids on either ISIS <def link="Level0">level0</def>, 
+    <def link="Level1">level1</def> (with successful <i>spiceinit</i>), and
+    <def link="Level2">level2</def> <def link="Cube">cubes</def>, or mosaics.  
+    The mapping information in the labels will be used to draw grid lines on mosaics 
+    and Level2 images.  If the
+    latitude and longitude information cannot be calculated or extracted using the image 
+    label contents, then use the IMAGE mode.<br/><br/>
+    
+     For Cubes with an associated band-dependent camera model (latitude, longitude coordinates do not correspond to the same sample, line coordinates 
+     in each band,) the grid is recalculated for each band.<br/><br/>    
+						     
+    <b>Example Parameter Settings for Grids:</b><br/> 
+    Example 1: Superimpose a basic latitude/longitude graticule with grid lines drawn
+    every 10 degrees based on zero: <br/> 
+    MODE=GROUND BASELAT=0 BASELON=0 LATINC=10 LONINC=10<br/><br/>
+
+    Example 2: Superimpose a graticule on an input image that intersects at line 23 and
+    sample 17, with vertical lines drawn every 30 pixels and horizontal lines every 
+    40 pixels: <br/>
+    MODE=IMAGE BASELINE=23 BASESAMPLE=17 SINC=30 LINC=40<br/>
+    <b>Note:  MODE=GROUND cannot be used when sample and line coordinates are used.</b><br/><br/>
+
+    Example 3: Superimpose a latitude/longitude graticule with a grid intersection at 
+    -5.0 degree latitude and 140.0 degree longitude, with latitude lines drawn every 2.5 
+    degrees and longitude lines drawn every 3 degrees:<br/>
+    MODE=GROUND BASELAT=-5.0 BASELON=140 LATINC=2.5 LONINC=3 <br/><br/>
+    
+    Example 4:  Superimpose a latitude/longitude graticule within a subarea of an image
+    (full latitude and longitude extent), with a grid line drawn every 2.5 degrees
+    between latitudes -8 and -1 degrees and only between longitudes 140 and 145 degrees: <br/>
+    MODE=GROUND BASELAT=0 BASELON=0 LATINC=2.5 LONINC=2.5 MINLAT=-8 MAXLAT=-1 MINLON=140 
+    MAXLON=145 Bound=yes<br/><br/>
+    
+    For complex grids, the <i>grid</i> application can be run multiple times with different 
+    parameter settings for each successive run that builds onto the previous output file.
+    The TICKS option can be used to draw short ticks instead of grid lines.  The  
+    OUTLINE option will draw grid lines along the outside edges of the first and last samples 
+    and lines of the input file.  The BOUNDARY option will either draw grid lines around 
+    the outside edges of the input file or around the bounding box specified by the user 
+    with MINLAT, MAXLAT, MINLON, and MAXLON parameters.<br/><br/>
+    
+     
+  </description>
+
+  <category>
+    <categoryItem>Utility</categoryItem>
+    <categoryItem>Map Projection</categoryItem>
+  </category>
+
+ <seeAlso>
+    <applications>
+      <item>stats</item>
+    </applications>
+  </seeAlso>
+
+  <history>
+    <change name="Sean Crosby" date="2007-03-16">
+      Original version 
+    </change>
+    <change name="Steven Lambright" date="2007-07-27">
+      Added category: Map Projection
+    </change>
+    <change name="Steven Lambright" date="2008-04-22">
+      Fixed problems with mapping outside of the projection space and with
+      0lat/0lon boundaries.
+    </change>
+    <change name="Steven Lambright" date="2008-05-12">
+      Removed references to CubeInfo 
+    </change>
+    <change name="Steven Lambright" date="2008-06-12">
+      Added outline option
+    </change>
+    <change name="Steven Lambright" date="2009-01-06">
+      Changed how mode=ground works
+    </change>
+    <change name="Steven Lambright" date="2010-05-06">
+      Added TICKS options
+    </change>
+    <change name="Steven Lambright" date="2010-07-22">
+      Added LINEWIDTH option
+    </change>
+    <change name="Mackenzie Boyd" date="2011-01-21">
+      Added more line options, to change output to be HRS, LRS, NULL, or a DN.
+    </change>
+    <change name="Steven Lambright" date="2011-01-25">
+      Bug fixes for projections that use PositiveWest or Planetographic
+      coordinate systems. The BASELAT and BASELON parameters are now expected
+      to be in the units of the projection (if your cube has a planetographic
+      latitude system, and baselat=50, then there will be a line at the
+      planetographic latitude of 50).
+    </change>
+    <change name="Steven Lambright" date="2011-01-26">
+      Added BOUNDARY, MINLAT, MAXLAT, MINLON and MAXLON options.
+    </change>
+    <change name="Steven Lambright" date="2011-12-08">
+      Fixed a bug with the outline option. If the image had a larger number of
+      samples than number of lines, all of the data at sample > number of lines
+      would be considered a grid line. This could result in a large portion of
+      the image losing legitimate DN values for the grid value. Fixes #607.
+    </change>
+    <change name="Steven Lambright" date="2012-01-04">
+      Tested and documented for the January 2012 release. The documentation
+      updates included were recommended by Chris Isbell.
+    </change>
+    <change name="Adam Licht" date="2012-12-26">
+      Added functionality to choose the source of image background. Pixel Values
+      for behind the grid can now be the image pixel value, HRS, LRS, NULL, or a DN.
+    </change>
+    <change name="Steven Lambright" date="2012-12-31">
+      Incorporated Adam Licht's changes into Isis. This included re-formatting to match
+      current Isis 3 coding standards, removal of error checking of conditions that
+      cannot happen, fixes with running in batch mode/resetting of variable states
+      between runs, some re-positioning of parameter locations, and creating
+      tests. These changes shouldn't break any existing scripts that utilize grid. Fixes #917.
+    </change>
+    <change name="Moses Milazzo" date="2013-03-24">
+      Added to documentation to alert the user to the fact that providing a poorly chosen 
+      starting point or grid increment may result in unexpected behavior. Fixes #178.
+    </change>
+    <change name="Ella Mae Lee" date="2013-07-18">
+      Updated the documentation and added examples. Fixes #178.
+    </change>
+    <change name="Janet Barrett" date="2014-06-23">
+      Modified so that the output cube characteristics are obtained from the input cube
+      and/or cube characteristics specified on the command line. Fixes #2063.
+    </change>
+    <change name="Kristin Berry" date="2014-11-25">
+      Modified to work on Cubes with associated band-dependent camera models. Now 
+      when MODE="GROUND" on a Cube with a band-dependent camera model, the grid will 
+      be re-calculated for each band. Fixes #2191.
+    </change>
+    <change name="Kristin Berry" date="2017-02-16">
+      Fixed error introduced in last change which caused grid to no longer work on multi-band 
+      cubes without camera models (for example: a mosaic will not have a camera model.) Fixes #4586. 
+    </change>
+    <change name="Jesse Mapel" date="2017-06-26">
+      Added a flag to extend the grid past the longitude domain boundary. Fixes #2185. 
+    </change>
+    <change name="Kaitlyn Lee" date="2020-10-26">
+      Converted application and tests for Gtest conversion.  
+    </change>
+  </history>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input cube 
+        </brief>
+        <description>
+          Use this parameter to select the input file.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+      <parameter name="TO">
+        <type>cube</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output cube
+        </brief>
+        <description>
+          This file will contain the gridded image. 
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Grid Type">
+      <parameter name="MODE">
+        <type>string</type>
+        <default><item>GROUND</item></default> 
+        <brief>Grid options</brief>
+        <description>
+          This allows for selection of either IMAGE or GROUND coordinates when drawing the grid.
+        </description>
+        <list>
+          <option value = "IMAGE">
+            <brief>Add a rectangular grid in terms of lines and samples</brief>
+            <description>
+              A grid will be inserted into the image with spacing and position
+              defined in line and sample coordinates.
+            </description>
+            <exclusions>
+              <item>BASELAT</item>
+              <item>BASELON</item>
+              <item>LATINC</item>
+              <item>LONINC</item>
+              <item>MINLAT</item>
+              <item>MAXLAT</item>
+              <item>MINLON</item>
+              <item>MAXLON</item>
+              <item>BOUNDARY</item>
+            </exclusions>
+          </option>
+
+          <option value="GROUND">
+            <brief>Add a grid (graticule) in terms of lat/lon coordinates</brief>
+            <description>
+              A grid will be inserted into the image with spacing and position
+              defined in <def link="Latitude">latitude</def> and <def link=
+	      "Longitude">longitude</def> coordinates.
+            </description>
+            <exclusions>
+              <item>LINC</item>
+              <item>SINC</item>
+              <item>BASELINE</item>
+              <item>BASESAMPLE</item>
+            </exclusions>
+          </option>
+        </list>
+      </parameter>
+
+      <parameter name="TICKS">
+        <type>boolean</type>
+        <default><item>false</item></default>
+        <brief>Draw ticks instead of lines</brief>
+        <description>
+          Draw ticks at grid line intersections (instead of drawing full lines).
+        </description>
+        <inclusions>
+          <item>DIAGONALTICKS</item>
+          <item>TICKSIZE</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="OUTLINE">
+        <type>boolean</type>
+        <default><item>false</item></default>
+        <brief>Outline the image</brief>
+        <description>
+          This will draw grid lines at the very edges of the image.
+        </description>
+      </parameter>
+
+      <parameter name="BOUNDARY">
+        <type>boolean</type>
+        <default><item>false</item></default>
+        <brief>Include grid lines at the lat/lon extent of the image or as defined by the ground options</brief>
+        <description>
+          This will draw grid lines (or ticks) at the lat/lon extents of the
+          image or those extents as provided by user input MINLAT, MAXLAT,
+          MINLON, and MAXLON.
+        </description>
+      </parameter>
+
+      <parameter name="EXTENDGRID">
+        <type>boolean</type>
+        <default><item>false</item></default>
+        <brief>If the grid should be extended past the longitude domain boundary.</brief>
+        <description>
+          If false, the grid will stop at the longitude domain boundary, -180
+          to 180 or 0 to 360, if the minimum or maximum longitude values are
+          outside of the domain range. If true, the grid will extend all the
+          way to the minimum and maximum longitudes regardless of the domain.
+        </description>
+      </parameter>
+    </group>
+
+    <group name="Image Grid Parameters">
+      <parameter name="BASELINE">
+        <type>integer</type>
+        <default><item>1</item></default>
+        <brief>Starting line</brief>
+        <description>
+          Starting line of grid.  This, along with BASESAMPLE, defines the
+          starting point (line) for drawing the grid.
+        </description>
+        <minimum inclusive="yes">1</minimum>
+      </parameter>
+
+      <parameter name="BASESAMPLE">
+        <type>integer</type>
+        <default><item>1</item></default>
+        <brief>Starting sample</brief>
+        <description>
+          Starting sample of grid.  This, along with BASELINE, defines the
+          starting point (sample) for drawing the grid.
+        </description>
+        <minimum inclusive="yes">1</minimum>
+      </parameter>
+
+      <parameter name="LINC">
+        <type>integer</type>
+        <default><item>100</item></default>
+        <brief>Line increment</brief>
+        <description>
+          This defines the line increment when drawing the grid, starting at
+          BASELINE. The line increment is the spacing between lines.
+        </description>
+        <minimum inclusive="yes">1</minimum>
+      </parameter>
+
+      <parameter name="SINC">
+        <type>integer</type>
+        <default><item>100</item></default>
+        <brief>Sample increment</brief>
+        <description>
+          This defines the sample increment when drawing the grid, starting at
+          BASESAMPLE. The sample increment is the spacing between samples.
+        </description>
+        <minimum inclusive="yes">1</minimum>
+      </parameter>
+    </group>
+
+    <group name="Ground Grid Parameters">
+      <parameter name="BASELAT">
+        <type>double</type>
+        <default><item>0.0</item></default>
+        <brief>Starting latitude</brief>
+        <description>
+          This is the latitude on which LATINC is mathematically based. 
+          This establishes a starting point for a global 'virtual' grid where
+          latitude lines are drawn where the input image intersects the virtual
+          grid. The application assumes user input reflects proper units (e.g.
+          <def link="Planetographic Latitude">planetographic</def>, <def 
+	  link="Planetocentric Latitude">planetocentric latitude</def>) as 
+	  defined within the image.
+        </description>
+        <minimum inclusive="yes">-90.0</minimum>
+      </parameter>
+
+      <parameter name="BASELON">
+        <type>double</type>
+        <default><item>0.0</item></default>
+        <brief>Starting longitude</brief>
+        <description>
+          This is the longitude on which LONINC is mathematically based. 
+          This establishes a starting point for a global 'virtual' grid
+          where longitude lines are drawn where the input image intersects the
+          virtual grid.
+        </description>
+        <minimum inclusive="yes">-360.0</minimum>
+      </parameter>
+
+      <parameter name="LATINC">
+        <type>double</type>
+        <default><item>10.0</item></default>
+        <brief>Latitude increment</brief>
+        <description>
+          This defines the latitude increment, based on BASELAT, on which grid
+          lines are drawn. This establishes a global 'virtual' grid where
+          latitude lines are drawn only where the input image intersects the
+          virtual grid.
+        </description>
+        <minimum inclusive="yes">0.0</minimum>
+      </parameter>
+
+      <parameter name="LONINC">
+        <type>double</type>
+        <default><item>10.0</item></default>
+        <brief>Longitude increment</brief>
+        <description>
+          This defines the longitude increment, based on BASELON, on which grid
+          lines are drawn. This establishes a global 'virtual' grid where
+          longitude lines are drawn only where the input image intersects the
+          virtual grid.
+        </description>
+        <minimum inclusive="yes">0.0</minimum>
+      </parameter>
+    </group>
+
+    <group name="Ground Grid Limits">
+      <parameter name="MINLAT">
+        <type>double</type>
+        <internalDefault>Automatic</internalDefault>
+        <brief>Lowest latitude value to extend grid lines</brief>
+        <description>
+          This defines the minimum latitude to which longitude grid lines will
+          extend. If BOUNDARY is selected, a latitude line will be drawn at this
+          latitude.
+        </description>
+        <minimum inclusive="yes">-90</minimum>
+        <maximum inclusive="yes">90</maximum>
+      </parameter>
+
+      <parameter name="MAXLAT">
+        <type>double</type>
+        <internalDefault>Automatic</internalDefault>
+        <brief>Highest latitude value to extend grid lines</brief>
+        <description>
+          This defines the maximum latitude to which longitude grid lines will
+          extend. If BOUNDARY is selected, a latitude line will be drawn at this
+          latitude.
+        </description>
+        <minimum inclusive="yes">-90</minimum>
+        <maximum inclusive="yes">90</maximum>
+        <greaterThan><item>MINLAT</item></greaterThan>
+      </parameter>
+
+      <parameter name="MINLON">
+        <type>double</type>
+        <internalDefault>Automatic</internalDefault>
+        <brief>Lowest longitude value to extend grid lines</brief>
+        <description>
+          This defines the minimum longitude to which latitude grid lines will
+          extend. If BOUNDARY is selected, a longitude line will be drawn at
+          this longitude.
+        </description>
+        <minimum inclusive="yes">-360</minimum>
+        <maximum inclusive="yes">360</maximum>
+      </parameter>
+
+      <parameter name="MAXLON">
+        <type>double</type>
+        <internalDefault>Automatic</internalDefault>
+        <brief>Highest longitude value to extend grid lines</brief>
+        <description>
+          This defines the maximum longitude to which latitude grid lines will
+          extend. If BOUNDARY is selected, a longitude line will be drawn at
+          this longitude.
+        </description>
+        <minimum inclusive="yes">-360</minimum>
+        <maximum inclusive="yes">360</maximum>
+        <greaterThan><item>MINLON</item></greaterThan>
+      </parameter>
+    </group>
+
+    <group name="Line Parameters">
+      <parameter name="LINEWIDTH">
+        <type>integer</type>
+        <default><item>1</item></default>
+        <brief>Thickness of lines (pixels)</brief>
+        <description>
+          This defines the thickness of grid lines in pixels.
+        </description>
+        <minimum inclusive="yes">1</minimum>
+        <odd />
+      </parameter>
+
+      <parameter name="LINEVALUE">
+        <type>string</type>
+        <default><item>HRS</item></default>
+        <brief>Select grid line value assignment option</brief>
+        <description>
+          With this option choose <def link="Digital Number">DN</def>, <def>LRS</def>, 
+	  <def>HRS</def>, or <def>NULL</def> to define how to assign 
+	  the grid line value.  Use DNVALUE parameter to assign a number if DN
+	  option is chosen.
+        </description>
+        <list>
+          <option value="HRS">
+            <brief>Use HRS DN value</brief>
+            <description>
+              Use the special pixel value HRS (High Representation Saturation)
+              as the grid line value. This may vary with bit type used.
+            </description>
+            <exclusions><item>DNVALUE</item></exclusions>
+          </option>
+          <option value="LRS">
+            <brief>Use LRS DN value</brief>
+            <description>
+              Use the special pixel value LRS (Low Representation Saturation)
+              as the grid line value. This may vary with bit type used.
+            </description>
+            <exclusions><item>DNVALUE</item></exclusions>
+          </option>
+          <option value="NULL">
+            <brief>Use NULL DN value</brief>
+            <description>
+              Use the special pixel value NULL as the grid line value. This may
+              vary with bit type used.
+            </description>
+            <exclusions><item>DNVALUE</item></exclusions>
+          </option>
+
+          <option value="DN">
+            <brief>Use given DN value</brief>
+            <description>
+              Use the DN value specified in the DNVALUE parameter. It is
+              recommended to run the <i>stats</i> application on the cube before 
+	      selecting a DN value.
+            </description>
+          </option>
+        </list>
+      </parameter>
+      <parameter name="DNVALUE">
+        <type>double</type>
+        <brief>DN value to be used</brief>
+        <description>
+          This is the DN value to be used as the value of the grid lines when
+          LINEVALUE=DN. It is beneficial to first run the <i>stats</i> application
+          to determine image minimum and maximum values.
+        </description>
+      </parameter>
+    </group>
+
+    <group name="Background Type">
+      <parameter name="BKGNDVALUE">
+        <type>string</type>
+        <default><item>IMAGE</item></default>
+        <brief>Select background DN value assignment option</brief>
+        <description>
+          This option allows for any DN value, HRS, LRS, or NULL special pixel
+          values to be chosen as the background value.
+        </description>
+        <list>
+          <option value="IMAGE">
+            <brief>Use the input cube value</brief>
+            <description>
+              Use the input cube pixel value as the background value. This will
+              superimpose the grid on top of the input image.
+            </description>
+            <exclusions><item>BKGNDDNVALUE</item></exclusions>
+          </option>
+          <option value="HRS">
+            <brief>Use HRS DN value</brief>
+            <description>
+              Use the special pixel value HRS (High Representation Saturation)
+              as the background value. This may vary with bit type used.
+            </description>
+            <exclusions><item>BKGNDDNVALUE</item></exclusions>
+          </option>
+          <option value="LRS">
+            <brief>Use LRS DN value</brief>
+            <description>
+              Use the special pixel value LRS (Low Representation Saturation)
+              as the background value. This may vary with bit type used.
+            </description>
+            <exclusions><item>BKGNDDNVALUE</item></exclusions>
+          </option>
+          <option value="NULL">
+            <brief>Use NULL DN value</brief>
+            <description>
+              Use the special pixel value NULL as the background value. This may
+              vary with bit type used.
+            </description>
+            <exclusions><item>BKGNDDNVALUE</item></exclusions>
+          </option>
+          <option value="DN">
+            <brief>Use given DN value</brief>
+            <description>
+              Use the DN value specified in the BKGNDDNVALUE parameter. It is 
+              recommended to run the <i>stats</i> application on the cube before selecting a DN
+              value.
+            </description>
+            <inclusions><item>BKGNDDNVALUE</item></inclusions>
+          </option>
+        </list>
+      </parameter>
+      <parameter name="BKGNDDNVALUE">
+        <type>double</type>
+        <brief>DN value to be used</brief>
+        <description>
+          This is the DN value to be used as the value of the background when
+          BKGNDVALUE=DN. It may be beneficial to first run the <i>stats</i> application
+          to determine image minimum and maximum values.
+        </description>
+      </parameter>
+    </group>
+
+    <group name="Tick Parameters">
+      <parameter name="DIAGONALTICKS">
+        <type>boolean</type>
+        <default><item>false</item></default>
+        <brief>Draw tick marks diagonally ('x' instead of '+')</brief>
+        <description>
+          Draw tick marks diagonally (creating an 'x'), instead of default
+          vertical/horizontal ('+')
+        </description>
+      </parameter>
+
+      <parameter name="TICKSIZE">
+        <type>integer</type>
+        <default><item>5</item></default>
+        <brief>Size (length) of tickmarks (pixels)</brief>
+        <description>
+          This defines the width and height (which are always equal) of the tick
+          marks in pixels.
+        </description>
+        <minimum inclusive="yes">1</minimum>
+        <odd />
+      </parameter>
+    </group>
+
+  </groups>
+
+  <examples>
+    <example>
+      <brief>Basic latitude/longitude graticule</brief>
+      <description>
+        In this example, the latitude and longitude grid lines are drawn every 10 
+	degrees starting at 0.0 degree latitude and longitude.
+      </description>
+      <terminalInterface>
+        <commandLine> 
+          from=aeolis_reduced.cub to=grid_ex1.cub
+        </commandLine>
+        <description>
+          Superimpose grid lines using default settings.
+        </description>
+      </terminalInterface>
+      <guiInterfaces>
+        <guiInterface>
+          <image width="558" height="900" src="assets/images/grid_ex1_gui.png">
+            <brief>Example GUI</brief>
+            <description>Screenshot of GUI with default parameters. 
+	    </description>
+            <thumbnail width="139" height="225" caption="Grid GUI" src="assets/thumbs/grid_ex1_gui_thumb.png" />
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+      <inputImages>
+        <image src="assets/images/aeolis_reduced.png" width="895" height="622">
+          <brief>Input file</brief>
+          <description>This is the ungridded input image.
+          </description>
+          <thumbnail caption="Input image" src="assets/thumbs/aeolis_reduced_thumb.png" width="179" height="124"/>
+          <parameterName>From</parameterName>
+        </image>
+      </inputImages>
+
+      <outputImages>
+        <image src="assets/images/grid_ex1.png" width="895" height="622">
+          <brief> Gridded output file</brief>
+          <description> 
+	     This file is gridded every 10 degrees in latitude and longitude starting at 
+	     0.0 degree latitude and longitude.
+          </description>
+          <thumbnail caption="Gridded output image" src="assets/thumbs/grid_ex1_thumb.png" width="179" height="124"/>
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+    </example>
+
+    <example>
+      <brief>Simple rectangular grid</brief>
+      <description>
+        In this example, the grid lines are drawn based on the line and sample 
+	coordinates entered by the user in IMAGE mode.
+      </description>
+      <terminalInterface>
+        <commandLine> 
+          from=aeolis_reduced.cub to=grid_ex2.cub mode=image baseline=23 basesamp=17 sinc=30 linc=40
+        </commandLine>
+        <description>
+          Superimpose grid lines using line and sample coordinates.
+        </description>
+      </terminalInterface>
+      <guiInterfaces>
+        <guiInterface>
+          <image width="558" height="900" src="assets/images/grid_ex2_gui.png">
+            <brief>Example GUI</brief>
+            <description>Screenshot of GUI with parameter settings defined by the user. 
+	    </description>
+            <thumbnail width="139" height="225" caption="Grid GUI" src="assets/thumbs/grid_ex2_gui_thumb.png" />
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+      <inputImages>
+        <image src="assets/images/aeolis_reduced.png" width="895" height="622">
+          <brief>Input file</brief>
+          <description>This is the ungridded input image.
+          </description>
+          <thumbnail caption="Input image" src="assets/thumbs/aeolis_reduced_thumb.png" width="179" height="124"/>
+          <parameterName>From</parameterName>
+        </image>
+      </inputImages>
+
+      <outputImages>
+        <image src="assets/images/grid_ex2.png" width="895" height="622">
+          <brief> Output file</brief>
+          <description> 
+	     The grid lines intersect at line 23 and sample 17, with vertical lines
+	     drawn every 30 pixels and horizontal lines every 40 pixels outward from the origin.
+          </description>
+          <thumbnail caption="Gridded output image" src="assets/thumbs/grid_ex2_thumb.png" width="179" height="124"/>
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+    </example>
+
+    <example>
+      <brief>Insert a graticule within the input image</brief>
+      <description>
+        In this example, the grid lines are drawn based on a set of user-defined
+	values for the different latitude and longitude parameters.  The graticule 
+	is drawn only within the minimum and maximum latitude and longitude extents 
+	entered by the user.
+      </description>
+      <terminalInterface>
+        <commandLine> 
+          from=aeolis_reduced.cub to=grid_ex4.cub mode=ground baselat=0 baselon=0 latinc=2.5 
+	  loninc=2.5 minlat=-8 maxlat=-1 minlon=140 maxlon=145 bound=yes
+        </commandLine>
+        <description>
+          Superimpose grid lines using 2.5 degrees latitude and longitude increments from an 
+	  origin (0,0) defined by the user.  The outer edges of the graticule bounding box will be
+	  gridded (BOUND=YES).
+        </description>
+      </terminalInterface>
+      <guiInterfaces>
+        <guiInterface>
+          <image width="558" height="900" src="assets/images/grid_ex3_gui.png">
+            <brief>Example GUI</brief>
+            <description>Screenshot of GUI with parameter settings defined by the user. 
+	    </description>
+            <thumbnail width="139" height="225" caption="Grid GUI" src="assets/thumbs/grid_ex3_gui_thumb.png" />
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+      <inputImages>
+        <image src="assets/images/aeolis_reduced.png" width="895" height="622">
+          <brief>Input file</brief>
+          <description>This is the ungridded input image.
+          </description>
+          <thumbnail caption="Input image" src="assets/thumbs/aeolis_reduced_thumb.png" width="179" height="124"/>
+          <parameterName>From</parameterName>
+        </image>
+      </inputImages>
+
+      <outputImages>
+        <image src="assets/images/grid_ex4.png" width="895" height="622">
+          <brief> Output file</brief>
+          <description> 
+	     The grid lines intersect at 0.0 degree latitude and longitude, and increments
+	     every 2.5 degrees in latitude and longitude.  The outer edges of the
+	     bounding box around the minimum and maximum extents are gridded (BOUND=YES).
+          </description>
+          <thumbnail caption="Gridded output image using BOUND=YES" src="assets/thumbs/grid_ex4_thumb.png" width="179" height="124"/>
+          <parameterName>TO</parameterName>
+        </image>
+        <image src="assets/images/grid_ex4b.png" width="895" height="622">
+          <brief> Second output file using BOUND=NO</brief>
+          <description> 
+	     The grid lines intersect at 0.0 degree latitude and longitude, and increments
+	     every 2.5 degrees in latitude and longitude.  The outer edges of the
+	     bounding box are not gridded (BOUND=NO). <br/><br/>
+	     Command line:<br/>
+	     grid from=aeolis_reduced.cub to=grid_ex4b.cub mode=ground baselat=0 baselon=0 latinc=2.5 
+	     loninc=2.5 minlat=-8 maxlat=-1 minlon=140 maxlon=145 bound=no
+          </description>
+          <thumbnail caption="Gridded output image using BOUND=NO" src="assets/thumbs/grid_ex4b_thumb.png" width="179" height="124"/>
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+    </example>
+
+
+  </examples>
+
+</application>

@@ -1,0 +1,46 @@
+Unit Test for MdisCamera...
+FileName: EW0089570936I.cub
+CK Frame: -236800
+
+Kernel IDs: 
+CK Frame ID = -236000
+CK Reference ID = 1
+SPK Target ID = -236
+SPK Reference ID = 1
+
+Shutter open = 234355674.731676608
+Shutter close = 234355674.953676611
+Focal Length = 78.559574972
+
+For upper left corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For upper right corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For lower left corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For lower right corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For center pixel position ...
+Latitude OK
+Longitude OK
+
+
+Testing name methods ...
+Spacecraft Name Long: Messenger
+Spacecraft Name Short: Messenger
+Instrument Name Long: Mercury Dual Imaging System Wide Angle Camera
+Instrument Name Short: MDIS-WAC
+
+Spacecraft Name Long: Messenger
+Spacecraft Name Short: Messenger
+Instrument Name Long: Mercury Dual Imaging System Narrow Angle Camera
+Instrument Name Short: MDIS-NAC
+

@@ -1,6 +1,7 @@
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 
+#include <memory>
 #include <vector>
 
 #include <pybind11/pybind11.h>
@@ -473,7 +474,9 @@ void bind_low_level_cube_io(py::module_ &m) {
 
   cube.def(py::init<>())
       .def(py::init([](const Isis::FileName &file_name, const std::string &access) {
-             return Isis::Cube(file_name, stdStringToQString(access));
+                               // Updated: 2026-03-28 - construct on the heap to avoid copying
+                               // Isis::Cube, which owns raw pointers and is not safe to shallow-copy.
+                               return std::make_unique<Isis::Cube>(file_name, stdStringToQString(access));
            }),
            py::arg("file_name"), py::arg("access") = "r")
       .def("open",

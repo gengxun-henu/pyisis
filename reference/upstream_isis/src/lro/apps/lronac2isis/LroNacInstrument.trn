@@ -1,0 +1,212 @@
+#
+# The group names listed here are the native names used by
+# applications to get the foreign names and values
+#
+# There is only one level of groups the groups are not
+# allowed to be nested
+#
+# The Group names can NOT be repeated.
+#
+# InputGroup is a comma delimited list of objects and/or
+# groups in the foreign label. Traversing this list will
+# lead to the correct level to find the foreign keyword.
+#
+# InputKey is the keyword within the group which holds
+# the information.
+#
+# InputDefault is the value used if there is no value for
+# the keyword
+#
+# Translation is the native and corresponding foreign values.
+# Translation may be repeated as needed.
+#
+Group = SpacecraftName
+  Auto           = 1
+  InputKey       = MISSION_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = SpacecraftName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = InstrumentHostName
+  Auto           = 1
+  InputKey       = INSTRUMENT_HOST_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = InstrumentHostName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = InstrumentHostId
+  Auto           = 1
+  InputKey       = INSTRUMENT_HOST_ID
+  InputDefault   = UNKNOWN
+  OutputName     = InstrumentHostId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = InstrumentName
+  Auto           = 1
+  InputKey       = INSTRUMENT_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = InstrumentName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = InstrumentId
+  Auto           = 1
+  InputKey       = INSTRUMENT_ID
+  InputDefault   = UNKNOWN
+  OutputName     = InstrumentId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = FrameId
+  Auto           = 1
+  InputKey       = FRAME_ID
+  InputGroup     = ROOT
+  InputPosition  = ROOT
+  InputDefault   = UNKNOWN
+  OutputName     = FrameId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = TargetName
+  Auto           = 1
+  InputKey       = TARGET_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = TargetName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = MissionPhaseName
+  Auto           = 1
+  InputKey       = MISSION_PHASE_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = MissionPhaseName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = PrerollTime
+  Auto           = 1
+  InputKey       = LRO:PREROLL_TIME
+  InputDefault   = UNKNOWN
+  OutputName     = PrerollTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = StartTime
+  Auto           = 1
+  InputKey       = START_TIME
+  InputDefault   = UNKNOWN
+  OutputName     = StartTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = StopTime
+  Auto           = 1
+  InputKey       = STOP_TIME
+  InputDefault   = UNKNOWN
+  OutputName     = StopTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockPrerollCount
+  Auto           = 1
+  InputKey       = LRO:SPACECRAFT_CLOCK_PREROLL_COUNT
+  InputDefault   = UNKNOWN
+  OutputName     = SpacecraftClockPrerollCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockStartCount
+  Auto           = 1
+  InputKey       = SPACECRAFT_CLOCK_START_COUNT
+  InputDefault   = UNKNOWN
+  OutputName     = SpacecraftClockStartCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockStopCount
+  Auto           = 1
+  InputKey       = SPACECRAFT_CLOCK_STOP_COUNT
+  InputDefault   = UNKNOWN
+  OutputName     = SpacecraftClockStopCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = LineExposureDuration
+  Auto           = 1
+  InputKey       = LINE_EXPOSURE_DURATION
+  InputDefault   = UNKNOWN
+  OutputName     = LineExposureDuration
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = TemperatureSCS
+  Auto           = 1
+  InputKey       = LRO:TEMPERATURE_SCS
+  InputDefault   = UNKNOWN
+  OutputName     = TemperatureSCS
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = TemperatureFPA
+  Auto           = 1
+  InputKey       = LRO:TEMPERATURE_FPA
+  InputDefault   = UNKNOWN
+  OutputName     = TemperatureFPA
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = TemperatureFPGA
+  Auto           = 1
+  InputKey       = LRO:TEMPERATURE_FPGA
+  InputDefault   = UNKNOWN
+  OutputName     = TemperatureFPGA
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = TemperatureTelescope
+  Auto           = 1
+  InputKey       = LRO:TEMPERATURE_TELESCOPE
+  InputDefault   = UNKNOWN
+  OutputName     = TemperatureTelescope
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpatialSumming
+  Auto           = 1
+  InputKey       = CROSSTRACK_SUMMING
+  InputDefault   = UNKNOWN
+  OutputName     = SpatialSumming
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SampleFirstPixel
+  Auto           = 1
+  InputDefault   = 0
+  OutputName     = SampleFirstPixel
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+End

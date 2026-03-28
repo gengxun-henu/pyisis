@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="cnetref" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    The application cnetref finds the best reference for a Control
+    Point based on criteria like Emission Angle or Incidence Angle or
+    Resolution or Interest 
+  </brief>
+
+  <description>
+    <p> The application cnetref finds the best reference for a <def>Control 
+    Point</def> based on user specified Criteria. </p> 
+
+    <p> Application takes in as input the <def>Control Net</def> CNET and its 
+    corresponding images list FROMLIST. FROMLIST contains the filenames of all 
+    the images that are part of the input Control Net.</p>  
+    
+    <p> The resulting output Control Net is placed in the user specified file 
+    ONET. The Id and Description for the output Control Net can be specified in 
+    NETWORKID and DESCRIPTION parameters respectively. If the values are not 
+    entered then the information is taken from the input Control 
+    Net.</p>
+
+    <p>Best Reference for the Control Point can be chosen based on the
+    following four CRITERIAs. For all the criterias, picking the best Reference 
+    is skipped if the Control Point is not Free or if either the Control 
+    Point or the Reference is EditLocked. <br/><br/>
+    <b>1.  EMISSION </b>: Of all the valid Control Measures in a Control 
+    Point, the Control Measure with the least Emission Angle will be chosen as 
+    the Reference.<br/><br/> 
+    <b>2. INCIDENCE</b>: Of all the valid Control Measures in a Control 
+    Point, the Control Measure with the least Incidence Angle will be chosen as 
+    the Reference.<br/><br/>
+    <b>3. RESOLUTION</b>: Of all the valid Control Measures in a Control 
+    Point, the Control Measure with the best Resolution TYPE will be 
+    chosen as the Reference. All the images in the Control Net must have the 
+    resolution in the same units.
+    <br/> The best Resolution can be chosen from the following TYPEs:<br/>
+      <b>a. HIGH</b> - The Control Measure with the Highest Resolution will be 
+      chosen as the Reference.<br/> 
+      <b>b. LOW</b> - The Control Measure with the Least Resolution will be 
+      chosen as the Reference.<br/> 
+      <b>c. MEAN</b> - The Mean Resolution is calculated from the Resolution  
+      all the images within each Control Point. The Control Measure closest to 
+      the Mean Resolution will be chosen as the Reference.<br/> 
+     <b> d. NEAREST</b> - The Control Measure with the Resolution closest to 
+      this user specified value  in RESVALUE will be chosen as the 
+      Reference. 
+      <br/> 
+      <b>e. RANGE</b> - The first Control Measure in the MINRES - MAXRES 
+      Range will be chosen as the Reference. <br/><br/>
+    <b>4. INTEREST</b>: Of all the valid Control Measures in a Control 
+    Point, the Control Measure with the best Interest will be chosen as the 
+    Reference. This option uses an interest operator to find the most 
+    interesting point in the area near each Control Point of a Control Net. The 
+    area is defined by the keywords DeltaLine and DeltaSample. The application 
+    starts by finding the best Interest for each valid Control Measure in a 
+    Control Point. Then the Control Measure with the best Interest among all the 
+    valid Control Measures in the Control Point is chosen as the Reference. 
+    After the new Reference is chosen, all the Control Measures are aligned to 
+    the new Reference's location. The movement of the Control Point can be 
+    limited to the Overlaps by enabling LIMIT and entering the list in 
+    OVERLAPLIST. The Overlaplist contains the Serial Number and their 
+    intersections. The intersections information can be got from the application 
+     <b>findimageoverlaps</b>. If an exact match of the Control 
+    Measure's Serial Number in the overlaplist fails then this option finds 
+    image overlaps by getting intersection of the individual image footprints. 
+    If the overlapslist is not specified, then the Point can be moved in the 
+    area defined by DeltaLine and DeltaSample. 
+    </p>
+    <p>
+    The Interest operator reads in a chip of size Delta Samples and Lines from 
+    each Control Measure(<def>Cube</def>) in a point.  If the Overlap list is 
+    included then the overlap polygon is taken into consideration when the chip 
+    reads the cube. For each pixel in the chip, it extracts a sub chip of box 
+    size (Samples, Lines) around the pixel. It first checks the pixel for 
+    validity as specified in the DEFFILE. If the pixel passes the above tests, 
+    then the Interest is calculated for the box around the pixel using the 
+    chosen algorithm. This way it calculates the interest for all the pixels in 
+    the chosen area (chip) around the Control Measure and the best Interest 
+    (highest value) is chosen among them. The best Interest is calculated for 
+    all the Control Measures in a Control Point.                                                        
+    <br/> The application then selects the best Interest of all the valid 
+    Control Measures in the Control Point and chooses it as the Reference. It 
+    then moves all the other valid Control Measures to the chosen Reference by 
+    mapping the Reference Lat/Lon to a sample, line in the Control Measure. It 
+    then creates a new Control Net using these new "more interesting" Control 
+    Points. If the BestReferenceIndex is not calculated because no Interest was 
+    calculated for all the Control Measures or if the BestReferenceIndex's 
+    Interest is invalid(less than the threshold Interest) then the Control Point 
+    is set to be ignored. <br/> 
+    <br/>Interest Algorithm could be:  <br/>
+    <b>1. Standard Deviation</b><br/> 
+    <b>2. Gradient</b> <br/> <br/>
+     The options for the Interest Operator is defined in PVL group in the 
+     DEFFILE. The DEFFILE should have the Operator Group relevant for the 
+      Interest Operator plugin. It defines the algorithm(Name) to be used to calculate 
+      the interest, the box size (Samples, Lines) and the distance (DeltaSamp, 
+      DeltaLine) the algorithm is allowed to move the point from the current 
+      position. It defines the minimum interest (MinimumInterest) value for the 
+      interest to be considered a best interest. If the point must be static 
+      then set the DeltaSamp and DeltaLine to zero. 
+      <br/> All the keywords in the Operator Group are required for this 
+      Criteria.<br/>
+      <b>Example:</b><br/> </p>
+      <p><div style="font-family: Arial, Helvetica, Geneva, sans-serif; font-size:95%">
+      <table border="0" cellspacing="0" cellpadding="0">
+      <tr><th colspan="3" align="left">Group = Operator</th></tr>
+      <tr><td width="25"></td><td align="left">Name </td>
+        <td>= StandardDeviation</td></tr>
+      <tr><td width="25"></td><td align="left">Samples </td>
+        <td>= Positive Integer</td></tr>
+      <tr><td width="25"></td><td align="left">Lines </td>
+        <td>= Positive Integer</td></tr> 
+      <tr><td width="25"></td><td align="left">DeltaLine  </td>
+        <td>= Positive Integer</td></tr> 
+      <tr><td width="25"></td><td align="left">DeltaSample</td>
+        <td>= Positive Integer</td></tr> 
+      <tr><td width="25"></td><td align="left">MinimumInterest </td>
+        <td>= Double</td></tr>
+      <tr><th colspan="3" align="left">EndGroup</th><td></td></tr> 
+      </table></div> 
+      <br/> 
+
+    <b>Note:  </b><br/> 1.If Control Measures with no camera is encountered, 
+     then the application is halted and no ouput Control Net is generated.
+    <br/> 2. The values Samples, Lines, DeltaLine, DeltaSamp, MinimumInterest 
+    for the Operator are entirely dependent on the images in the Control Net. 
+    Recommended preprocessing would be to run "gradient" filter or "svfilter" 
+    and run "hist" to get the image stats and set the values for the Operator 
+    accordingly. <br/><br/>
+    For all the criterias except Interest, the application first validates each 
+    measure for the properties specified in the "ValidMeasure" PvlGroup in 
+    DEFFILE. The Validity test is optional for all the Criterias.<br/></p> 
+
+    <p>Validation is little different if using the Interest Critera. The 
+    Interest Operator while finding Interest for a Valid Control Measure, first 
+    Validates each Sample, Line location in the DeltaSample, DeltaLine area 
+    of the Control Measure and then calculates the Interest for that location. 
+    This way the expensive Interest calculation is bypassed for an invalid 
+    Sample, Line location. Validity test is also performed after moving the 
+    Control Measure to the new location of the BestReference chosen after the 
+    Interest operation for all the Control Measures in the Control Point.  If 
+    the moved Control Measure fails the Validity test, then it is set to be 
+    Ignored. </p> 
+
+    <p>Following is the format for the Pvl DEFFILE file with the 
+    defaults for Control Measure validation:   
+   <br/></p> 
+
+    <p><div style="font-family: Arial, Helvetica, Geneva, sans-serif; font-size:95%">
+         <table border="0"><tr><td width="40"></td><td>
+          <table border="0" cellspacing="0" cellpadding="0">
+          <tr><th colspan="3" align="left">Group=ValidMeasure </th></tr>
+          <tr><td width="25"></td><td align="left">MinDN 
+          </td>
+              <td>= Default is Min DN value (depends on the pixel size of the 
+                image)
+              </td></tr>
+          <tr><td></td><td align="left">MaxDN </td>
+              <td>= Default is Max DN value (depends on the pixel size of the 
+                image) </td></tr> 
+          <tr><td></td><td align="left">MinEmission </td>
+              <td>= 0 (Default)</td></tr>
+          <tr><td></td><td align="left">MaxEmission </td>
+              <td>= 135 (Default) </td></tr> 
+          <tr><td></td><td align="left">MinIncidence </td>
+              <td>= 0 (Default) </td></tr>
+          <tr><td></td><td align="left">MaxIncidence </td>
+              <td>= 135 (Default) </td></tr> 
+          <tr><td></td><td align="left">MinResolution </td>
+              <td>= 0 (Default) </td></tr>
+          <tr><td></td><td align="left">MaxResolution </td>
+              <td>= Max Double</td></tr> 
+          <tr><td></td><td align="left">PixelsFromEdge</td>
+              <td>= 0 (Default) OR</td></tr> 
+          <tr><td></td><td align="left">MetersFromEdge</td>
+              <td>= 0 (Default) </td></tr> 
+          <tr><th colspan="3" align="left">EndGroup</th><td></td></tr> 
+          </table></td></tr>
+    </table>
+    </div>
+    <br/>
+    </p>
+    If the Control Measure does not pass the validity test, then it will be 
+    be Ignored. If the number of Valid Control Measures in a Control Point is 
+    less than 2, then the Control Point is Ignored.<br/> <br/> 
+    If the "Required" parameters are not entered or misspelled, then the 
+    application will throw an error. If "Optional" parameters are not entered 
+    then the Control Measure will not be validated against that option.
+    <br/> 
+    <p>The entire Control Net processing can be logged in an output LOG 
+      file. Log information such as Control Point and Control Measure details 
+    and change statistics are placed in LOG file if specified in PVL. Following 
+    is the format of the Log File:</p>
+       <p><div style="font-family: Arial, Helvetica, Geneva, sans-serif; font-size:95%">
+         <table border="0"><tr><td width="40"></td><td>
+          <table border="0" cellspacing="0" cellpadding="0">
+            <tr><td colspan="4"  align="left">Object = PointDetails</td></tr>
+            <tr><td width="10"></td>
+            <td colspan="3"  align="left">PointId = </td></tr>
+            <tr><td colspan="4"><br/></td></tr>
+            <tr><td width="10"></td>
+            <td colspan="3"  align="left">Group = MeasureDetails</td></tr>
+            <tr><td colspan="2"></td><td colspan="2">
+            <table border="0" cellspacing="0" cellpadding="0" >
+            <tr><td width="10"></td> 
+            <td  align="left">SerialNum </td><td align="left">=</td></tr>
+            <tr><td width="10"></td> 
+            <td  align="left">EmissionAngle </td><td>=</td></tr>      
+            <tr><td width="10"></td>  
+            <td  align="left">IncidenceAngle </td><td>=</td></tr> 
+            <tr><td width="10"></td> 
+            <td  align="left">Resolution</td><td>=</td></tr>
+            <tr><td width="10"></td>
+            <td  align="left">DNValue </td><td>=</td></tr> 
+            <tr><td width="10"></td>  
+            <td  align="left">SampleResidual </td><td>=</td></tr> 
+            <tr><td width="10"></td>  
+            <td  align="left">LineResidual </td><td>=</td></tr>      
+            <tr><td width="10"></td>
+            <td  align="left">ResidualMagnitude</td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">SampleShift </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">LineShift </td><td>=</td></tr>      
+             <tr><td width="10"></td> 
+            <td  align="left">PixelShift </td><td>=</td></tr>      
+            <tr><td width="10"></td>
+            <td  align="left">Reference </td><td>=</td></tr>      
+            </table></td></tr> 
+
+            <tr><td width="10"></td> <td colspan="3"  align="left">EndGroup</td></tr>
+            
+            <tr><td colspan="4"><br/></td></tr>
+
+            <tr><td width="10"></td> 
+              <td colspan="3">Group = MeasureDetails</td></tr>      
+            <tr><td colspan="2"></td><td colspan="2">
+            <table border="0" cellspacing="0" cellpadding="0" >
+            <tr><td width="10"></td> 
+            <td  align="left">SerialNum </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">OriginalLocation </td><td>=</td></tr>      
+            <tr><td width="10"></td>  
+            <td  align="left">EmissionAngle </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">IncidenceAngle </td><td>=</td></tr>      
+            <tr><td width="10"></td>  
+            <td  align="left">Resolution </td><td>=</td></tr>      
+            <tr><td width="10"></td>
+            <td  align="left">DNValue </td><td>=</td></tr>      
+            <tr><td width="10"></td>  
+            <td  align="left">SampleResidual </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">LineResidual </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">ResidualMagnitude </td><td>=</td></tr>      
+            <tr><td width="10"></td>  
+            <td  align="left">SampleShift </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">LineShift </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">PixelShift </td><td>=</td></tr>  
+           </table></td></tr>
+            <tr><td width="10"></td>
+            <td colspan="3"  align="left">EndGroup</td></tr>
+
+            <tr><td colspan="4"><br/></td></tr>
+
+
+           <tr><td width="10"></td> 
+              <td colspan="3"  align="left">Group = 
+                ReferenceChangeDetails</td></tr>  
+            <tr><td colspan="2"></td><td colspan="2">
+            <table border="0" cellspacing="0" cellpadding="0" >
+            <tr><td width="10"></td>  
+            <td  align="left">PrevSerialNumber </td><td>=</td></tr>      
+            <tr><td width="10"></td>  
+            <td  align="left">PrevIncAngle </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">PrevLocation </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">NewSerialNumber </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">NewLeastIncAngle </td><td>=</td></tr>      
+            <tr><td width="10"></td> 
+            <td  align="left">NewLocation </td><td>=</td></tr>
+            </table></td></tr>     
+            <tr><td width="10"></td>
+            <td colspan="3"  align="left">EndGroup</td></tr> 
+
+            <tr><td colspan="4"><br/></td></tr>
+
+          <tr><td colspan="4"  align="left">EndObject</td></tr></table>
+    </td></tr> </table></div>
+
+    </p> 
+  </description>
+
+  <category>
+    <categoryItem>Control Networks</categoryItem>
+  </category>
+
+  <history>
+    <change name="Stuart Sides" date="2005-08-20">
+      Original version
+    </change>
+    <change name="Steven Koechle" date="2008-09-25">
+      Tweaked to compile and run with current version of Isis
+    </change>
+    <change name="Steven Lambright" date="2008-11-04">
+      Added support for image overlap files, new optional parameter "OVERLAPLIST"
+    </change>
+    <change name="Steven Lambright" date="2008-11-14">
+      "OVERLAPLIST" is now a required parameter.
+    </change>
+    <change name="Steven Koechle" date="2009-01-20">
+      Fixed Memory Leaks, Changed Deletion of cubes to use an iterator
+    </change>
+    <change name="Steven Koechle" date="2009-04-24">
+      If a control measure fails SetUniversalGround it is now ignored.
+    </change>
+    <change name="Travis Addair" date="2009-08-11">
+      Interest operator parameters are now placed into the print file.
+    </change>
+    <change name="Sharmila Prasad" date="2010-03-30">
+      Added Emission Angle criteria in the interest operator plugin for the
+      best interest point to be considered. Also Check that the best interest
+      point has DN value in the Valid Min and Max DN range.
+    </change>
+    <change name="Sharmila Prasad" date="2010-04-20">
+      Logging and documentation-specify output log file for the results to be
+      sent to else printed to print.prt. If images with no camera is
+      encountered, the application is closed.
+    </change>
+    <change name="Sharmila Prasad" date="2010-05-04">
+      Make the overlap list optional incase a control network has no overlap
+      list. Added a checkbox to indicate whether the overlap list is available or
+      not and modified the app accordingly
+    </change>
+    <change name="Sharmila Prasad" date="2010-05-10">
+      Renamed to cnetref
+    </change>
+    <change name="Sharmila Prasad" date="2010-05-11">
+      Calculate interest for Control Points with no Reference point and Control 
+      Points with Measures less than 2. Include Min and Max Incidence Angle 
+      filter and make parameters NETWORKID and DESCRIPTION optional..
+    </change>
+    <change name="Steven Lambright" date="2010-05-27">
+      Using an overlap list should be much more accurate and restrictive now.
+      Added MINRES and MAXRES parameters. Fixed potential segmentation fault.
+      Restored program's history.
+    </change>
+    <change name="Sharmila Prasad" date="2010-06-10">
+      Find reference based on Emission, Incidence angles or interest or 
+      Resolution. Added new parameters to accomodate the new options
+    </change>
+    <change name="Sharmila Prasad" date="2010-06-11">
+      Added documentation and tests
+    </change>
+    <change name="Sharmila Prasad" date="2010-06-18">
+      Added documentation, display error for Interest option with no DefFile.
+    </change>
+    <change name="Sharmila Prasad" date="2010-06-18">
+      Use Standard Options Pixels/Meters from Edge
+    </change>
+    <change name="Sharmila Prasad" date="2010-10-06">
+      Made changes for binary control net
+    </change>
+    <change name="Sharmila Prasad" date="2010-10-15">
+      Use single copy of Control Net
+    </change>
+    <change name="Sharmila Prasad" date="2010-10-18">
+      Input DefFile Validation before any processing
+    </change>
+    <change name="Sharmila Prasad" date="2010-10-22">
+      Reset apriori for source==Reference
+    </change>
+    <change name="Sharmila Prasad" date="2010-10-27">
+      Log, if Reference changed and apriorisource==Reference
+    </change>
+    <change name="Sharmila Prasad" date="2010-11-09">
+      Update documentation regarding Template DefFile
+    </change>
+    <change name="Sharmila Prasad" date="2010-12-29">
+      Updated for binary control net and fixed the app tests accordingly
+    </change>
+    <change name="Christopher Austin" date="2011-01-19">
+      Altered to compile with the new Control redesign.
+    </change>
+    <change name="Sharmila Prasad" date="2011-02-24">
+      Fixed the app tests
+    </change>
+    <change name="Sharmila Prasad" date="2011-05-14">
+      Added ability to validate Measure by Sample/Line Residuals and Residual 
+      Magnitude
+    </change>
+    <change name="Sharmila Prasad" date="2011-05-24">
+      Helper function to edit DefFile
+    </change>
+    <change name="Debbie A. Cook and Tracie Sucharski" date="2011-06-07">
+      Changed point types "Ground" to "Fixed" and "Tie" to "Free"
+    </change>
+    <change name="Sharmila Prasad" date="2011-07-29">
+      Improved the Log messages
+    </change>
+    <change name="Sharmila Prasad" date="2011-08-03">
+      Fixed the statistics
+    </change>
+    <change name="Sharmila Prasad, Bonnie Redding, Mark Rosiek" date="2011-10-06">
+      Updated the documentation and added missing tests for criteria resolution 
+    </change>
+    <change name="Sharmila Prasad" date="2011-11-23">
+      Updated the documentation. Edited to work for control nets with Reference 
+      not set. Fixes #589 and #584 
+    </change>
+    <change name="Debbie A. Cook" date="2013-02-11">
+      Changed selection of reference by mean resolution to use the first measure for points 
+      with only 2 measures.  References #775.
+    </change>
+    <change name="Kimberly Oyama and Steven Lambright" date="2013-02-25">
+      Changed error handling such that, when an error occurs, this program will not choose that
+      measure as reference instead of throwing an error and stopping. References #825.
+    </change>
+</history>
+
+<groups>
+    <group name="Files">
+      <parameter name="FROMLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          List of Input cubes in the Control Net
+        </brief>
+        <description>
+         This file contains all the the cube filenames which are 
+          associated with the input Control Net.
+        </description>
+        <filter>
+          *.lis
+        </filter>
+      </parameter>
+
+      <parameter name="CNET">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input Control Net
+        </brief>
+        <description>
+          This file must contain Control Net with valid Control Points and 
+          Control Measures
+        </description>
+        <filter>
+          *.net
+        </filter>
+      </parameter>
+
+      <parameter name="ONET">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output Control Net
+        </brief>
+        <description>
+          This file will contain the new adjusted Control Net
+        </description>
+      </parameter>
+
+      <parameter name="LOG">
+        <type>filename</type>
+         <internalDefault>None</internalDefault>
+        <fileMode>output</fileMode>
+        <brief>Optional output log file</brief>
+        <description>
+          This file stores log information such as Control Point and Control 
+          Measure details and change statistics in PVL. 
+        </description>
+        <filter>
+          *.*
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Information">
+        <parameter name="NETWORKID">
+          <internalDefault>None</internalDefault>
+          <type>string</type>
+          <brief>
+              Output Control Net ID
+          </brief>
+          <description>
+              The ID or name of the output Control Net. This 
+              string should be unique. If not specified, the ID is taken from 
+              the input Control Net.
+          </description>
+        </parameter>
+
+        <parameter name="DESCRIPTION">
+        <type>string</type> 
+         <internalDefault>None</internalDefault>
+        <brief>
+            The description of the Output Control Net.
+        </brief>
+        <description>
+            A string describing purpose of this Output Control Net. If not specified, the ID is taken from 
+            the input Control Net.
+        </description>
+      </parameter>
+    </group>
+
+    <group name="Reference">
+        <parameter name="CRITERIA">
+        <type>string</type>
+        <default>
+          <item>EMISSION</item>
+        </default>
+        <brief>Criteria in choosing the best Reference in a Control Point 
+          </brief>
+        <description>
+          This parameter lets the user choose one of the four ways to choose the 
+          best Reference in a Control Point.
+        </description>
+
+        <list>
+          <option value="EMISSION">
+            <brief>Reference is chosen based on the Best Emission Angle </brief>
+            <description>
+              This option chooses a valid Control Measure with the least 
+              Emission Angle (closer to zero) among all the other Control 
+              Measures in a Control Point as the best Reference.
+            </description>
+            <exclusions>
+              <item>LIMIT</item>
+              <item>OVERLAPLIST</item>
+              <item>TYPE</item>
+              <item>RESVALUE</item>
+              <item>MINRES</item>
+              <item>MAXRES</item>
+           </exclusions>
+          </option>
+
+          <option value="INCIDENCE">
+            <brief>Reference is chosen based on the Best Incidence Angle 
+              </brief>
+            <description>
+              This option chooses a valid Control Measure with the least 
+              Incidence Angle (closer to zero) among all the other Control 
+              Measures in a Control Point as the best Reference.
+            </description>
+            <exclusions>
+              <item>LIMIT</item>
+              <item>OVERLAPLIST</item>
+              <item>TYPE</item>
+              <item>RESVALUE</item>
+              <item>MINRES</item>
+              <item>MAXRES</item>
+           </exclusions>
+          </option>
+
+           <option value="INTEREST">
+            <brief>Reference is chosen based on the Best Interest </brief>
+            <description>
+              This option finds the most interesting area near each Control 
+              Point of a Control Net depending on the best Interest. The 
+              Control Measure with the best Interest (highest value) among all 
+              other Control Measures in a Control Point will be chosen as the 
+              Reference. Interest is calculated by an interest algorithm 
+              Standard Deviation or Gradient. 
+            </description>
+            <exclusions>
+              <item>TYPE</item>
+              <item>RESVALUE</item>
+              <item>MINRES</item>
+              <item>MAXRES</item>
+            </exclusions> 
+          </option>
+
+          <option value="RESOLUTION">
+            <brief> Reference is chosen based on the Resolution</brief>
+            <description>
+              This option chooses the Reference based on the Control Measure's 
+              Resolution. There are different ways as to how the Resolution will 
+              be chosen as the best value.
+            </description>
+            <exclusions>
+              <item>LIMIT</item>
+              <item>OVERLAPLIST</item>
+           </exclusions>
+            <inclusions>
+              <item>TYPE</item>
+            </inclusions>
+          </option>
+        </list> 
+          </parameter> 
+
+      <parameter name="DEFFILE">
+          <type>filename</type>
+          <fileMode>input</fileMode>
+          <internalDefault>None</internalDefault>
+          <brief>
+          PVL file containing the options for which a Control Measure 
+          has to be validated and/or operator plugin if Interest criteria is 
+          chosen. 
+          </brief>
+          <description>
+          PVL file containing the options for which a Control Measure 
+          has to be validated and/or operator plugin if Interest criteria is 
+          chosen. Refer to documentation for DEFFILE format.
+          </description>
+          <filter>
+            *
+          </filter>
+
+          <helpers >
+            <helper name="H1">
+              <function>View</function>
+              <brief>View DefFile</brief>
+              <description>
+                This helper button will print the definition file to the session
+                log of the application
+              </description>
+	      <icon>$ISISROOT/appdata/images/icons/labels.png</icon>
+            </helper>
+            <helper name="H2">
+              <function>Edit</function>
+              <brief>Edit DefFile</brief>
+              <description>
+                This helper button opens an editor to able to edit the DefFile
+              </description>
+	      <icon>$ISISROOT/appdata/images/icons/labels.png</icon>
+            </helper>
+          </helpers>
+
+        </parameter>
+
+      </group> 
+
+    <group name="Interest">
+        <parameter name="LIMIT">
+          <type>boolean</type>
+          <internalDefault>false</internalDefault>
+          <brief>
+          Limit the movement of all Control Measures to be within their 
+          overlaps 
+          </brief>
+          <description>
+           Limit the movement of all Control Measures to be within their 
+          overlaps. The application makes sure that when enabled, even if the 
+            point moves it will be within the defined overlap area. Uncheck 
+            LIMIT if there is no overlap list for example Control Net from 
+            seedgrid application or if it is ok if  the point moves beyond the 
+            overlap area. 
+          </description>
+          <inclusions>
+            <item>OVERLAPLIST</item>
+          </inclusions>
+        </parameter>
+  
+        <parameter name="OVERLAPLIST">
+          <type>filename</type>
+          <internalDefault>None</internalDefault>
+          <fileMode>input</fileMode>
+          <brief>This is the list of image overlaps corresponding to this 
+            Control Net 
+          </brief>
+          <description>
+            Use this parameter to select the filename which contains the
+            overlap list. You can obtain this file by running the application 
+            "findimageoverlaps."
+          </description>
+          <filter>
+            *
+          </filter>
+        </parameter>
+    </group>
+
+    <group name="Resolution">
+        <parameter name="TYPE">
+          <type>string</type>
+          <default><item>HIGH</item></default>
+          <brief>Choose the Resolution type</brief>
+          <description>
+            This parameter lets the user choose the different Resolution choices 
+            available
+          </description>
+          <list>
+            <option value="HIGH">
+            <brief>Reference is chosen based on Highest Resolution
+                </brief>
+              <description>This option chooses a valid Control Measure with the 
+              highest Resolution 
+              </description>
+              <exclusions>
+                <item>RESVALUE</item>
+                <item>MINRES</item>
+                <item>MAXRES</item>
+              </exclusions>
+            </option>
+            
+            <option value="LOW">
+            <brief>Reference is chosen based on Least Resolution
+                </brief>
+              <description>
+              This option chooses a valid Control Measure with the lowest 
+              Resolution 
+              </description>
+              <exclusions>
+                <item>RESVALUE</item>
+                <item>MINRES</item>
+                <item>MAXRES</item>
+              </exclusions>
+            </option>
+
+            <option value="MEAN">
+            <brief>Reference is chosen based on Mean of all the Resolutions
+            </brief>
+              <description>
+                This option first calculates the Mean of the Resolution of all 
+                the Control Measures in a Control Point and then chooses the 
+                Control Measure with the Resolution closest to the Mean on the 
+                higher Resolution side as Control Point Reference.
+              </description>
+              <exclusions>
+                <item>RESVALUE</item>
+                <item>MINRES</item>
+                <item>MAXRES</item>
+              </exclusions>
+            </option>
+
+            <option value="NEAREST">
+              <brief>Reference is chosen based on Nearness to RESVALUE</brief> 
+                <description> This option chooses the Control Measure whose 
+                Resolution is closest to the user specified value in RESVALUE 
+                as Control Point Reference.
+              </description>
+              <exclusions>
+                <item>MINRES</item>
+                <item>MAXRES</item>
+              </exclusions>
+            </option>
+
+            <option value="RANGE">
+              <brief>Reference is chosen if within MINRES, MAXRES Range</brief>
+              <description>
+              This option chooses the first Control Measure whose Resolution is 
+              within the specified Resolution Range MINRES, MAXRES as Control 
+              Point Reference. 
+              </description>
+              <exclusions>
+                <item>RESVALUE</item>
+              </exclusions>
+            </option>
+          </list>
+        </parameter>
+      
+      <parameter name="RESVALUE">
+        <type>double</type>
+          <internalDefault>0</internalDefault>
+          <brief>Resolution Number</brief>
+          <description>
+            This parameter is associated with the parameter NEAREST and holds 
+            the Resolution value. The Control Measure closest to this value is 
+            chosen as the Control Point Reference. 
+          </description>
+        </parameter>
+
+      <parameter name="MINRES">
+        <type>double</type> 
+        <internalDefault>0</internalDefault>
+        <brief>Minimum Image Resolution
+        </brief>
+        <description>
+          This parameter is associated with parameters RANGE and MAXRES and 
+          represents the Minimum Resolution for a Control Measure to be 
+          considered to be a Control Point Reference.
+        </description>
+      </parameter>
+      
+      <parameter name="MAXRES">
+        <type>double</type> 
+        <internalDefault>0</internalDefault>
+        <brief>Maximum Image Resolution
+        </brief>
+        <description>
+          This parameter is associated with parameters RANGE and MINRES and 
+          represents the Maximum Resolution for a Control Measure to be 
+          considered to be a Control Point Reference. 
+        </description>
+      </parameter>
+      </group>
+  </groups>
+</application>

@@ -1,0 +1,162 @@
+#
+# The group names listed here are the native names used by
+# applications to get the foreign names and values
+#
+# There is only one level of groups the groups are not
+# allowed to be nested
+#
+# The Group names can NOT be repeated.
+#
+# InputGroup is a comma delimited list of objects and/or
+# groups in the foreign label. Traversing this list will
+# lead to the correct level to find the foreign keyword.
+#
+# InputKey is the keyword within the group which holds
+# the information.
+#
+# InputDefault is the value used if there is no value for
+# the keyword
+#
+# Translation is the native and corresponding foreign values.
+# Translation may be repeated as needed.
+#
+Group = SpacecraftName
+  Auto           = 1
+  InputKey       = INSTRUMENT_HOST_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = SpacecraftName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = InstrumentId
+  Auto           = 1
+  InputKey       = INSTRUMENT_ID
+  InputDefault   = UNKNOWN
+  OutputName     = InstrumentId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = TargetName
+  Auto           = 1
+  InputKey       = TARGET_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = TargetName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (Mars, MARS)
+End_Group
+
+Group = StartTime
+  Auto           = 1
+  InputKey       = START_TIME
+  InputDefault   = -9999
+  OutputName     = StartTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = StopTime
+  Auto           = 1
+  InputKey       = STOP_TIME
+  InputDefault   = -9999
+  OutputName     = StopTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockStartCount
+  Auto           = 1
+  InputKey       = SPACECRAFT_CLOCK_START_COUNT
+  InputDefault   = -9999
+  OutputName     = SpacecraftClockStartCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockStopCount
+  Auto           = 1
+  InputKey       = SPACECRAFT_CLOCK_STOP_COUNT
+  InputDefault   = -9999
+  OutputName     = SpacecraftClockStopCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SensorId
+  Auto           = 1
+  InputKey       = MRO:SENSOR_ID
+  InputDefault   = UNKNOWN
+  OutputName     = SensorId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ShutterModeId
+  Auto           = 1
+  InputKey       = SHUTTER_MODE_ID
+  InputDefault   = UNKNOWN
+  OutputName     = ShutterModeId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+ 
+Group = FrameRate
+  Auto           = 1
+  InputKey       = MRO:FRAME_RATE
+  InputDefault   = UNKNOWN
+  OutputName     = FrameRate
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ExposureParameter
+  Auto           = 1
+  InputKey       = MRO:EXPOSURE_PARAMETER
+  InputDefault   = Null
+  OutputName     = ExposureParameter
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+ 
+Group = PixelAveragingWidth
+  Auto           = 1
+  InputKey       = PIXEL_AVERAGING_WIDTH
+  InputDefault   = UNKNOWN
+  OutputName     = PixelAveragingWidth
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ScanModeId
+  Auto           = 1
+  InputKey       = SCAN_MODE_ID
+  InputDefault   = UNKNOWN
+  OutputName     = ScanModeId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SamplingModeId
+  Auto           = 1
+  InputKey       = SAMPLING_MODE_ID
+  InputDefault   = UNKNOWN
+  OutputName     = SamplingModeId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = NaifIkCode
+  Auto           = 1
+  InputKey       = MRO:SENSOR_ID
+  InputDefault   = UNKNOWN
+  OutputName     = NaifIkCode
+  OutputPosition = (Object, IsisCube, Group, Kernels)
+  Translation    = (-74017, S)
+  Translation    = (-74018, L)
+  Translation    = (-74017, J)
+  Translation    = (*, *)
+End_Group
+
+End
+

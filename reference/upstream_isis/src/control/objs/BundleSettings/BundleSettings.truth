@@ -1,0 +1,439 @@
+Unit test for BundleSettings...
+Printing PVL group with settings from the default constructor...
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="No" solveRadius="No" controlPointCoordTypeReports="0" controlPointCoordTypeBundle="0" updateCubeLabel="No" errorPropagation="No" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="N/A" pointCoord2="N/A" pointCoord3="N/A"/>
+        <outlierRejectionOptions rejection="No" multiplier="N/A"/>
+        <convergenceCriteriaOptions convergenceCriteria="Sigma0" threshold="1.0e-10" maximumIterations="50"/>
+        <maximumLikelihoodEstimation/>
+        <outputFileOptions fileNamePrefix=""/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+                <aprioriPointingSigmas>
+                    <sigma>N/A</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+                <aprioriPositionSigmas/>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+Testing copy constructor...
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="No" solveRadius="No" controlPointCoordTypeReports="0" controlPointCoordTypeBundle="0" updateCubeLabel="No" errorPropagation="No" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="N/A" pointCoord2="N/A" pointCoord3="N/A"/>
+        <outlierRejectionOptions rejection="No" multiplier="N/A"/>
+        <convergenceCriteriaOptions convergenceCriteria="Sigma0" threshold="1.0e-10" maximumIterations="50"/>
+        <maximumLikelihoodEstimation/>
+        <outputFileOptions fileNamePrefix=""/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+                <aprioriPointingSigmas>
+                    <sigma>N/A</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+                <aprioriPositionSigmas/>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+Testing assignment operator to set this equal to itself...
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="No" solveRadius="No" controlPointCoordTypeReports="0" controlPointCoordTypeBundle="0" updateCubeLabel="No" errorPropagation="No" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="N/A" pointCoord2="N/A" pointCoord3="N/A"/>
+        <outlierRejectionOptions rejection="No" multiplier="N/A"/>
+        <convergenceCriteriaOptions convergenceCriteria="Sigma0" threshold="1.0e-10" maximumIterations="50"/>
+        <maximumLikelihoodEstimation/>
+        <outputFileOptions fileNamePrefix=""/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+                <aprioriPointingSigmas>
+                    <sigma>N/A</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+                <aprioriPositionSigmas/>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+Testing assignment operator to create a new settings object...
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="No" solveRadius="No" controlPointCoordTypeReports="0" controlPointCoordTypeBundle="0" updateCubeLabel="No" errorPropagation="No" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="N/A" pointCoord2="N/A" pointCoord3="N/A"/>
+        <outlierRejectionOptions rejection="No" multiplier="N/A"/>
+        <convergenceCriteriaOptions convergenceCriteria="Sigma0" threshold="1.0e-10" maximumIterations="50"/>
+        <maximumLikelihoodEstimation/>
+        <outputFileOptions fileNamePrefix=""/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+                <aprioriPointingSigmas>
+                    <sigma>N/A</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+                <aprioriPositionSigmas/>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+Testing mutator methods...
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="Yes" solveRadius="Yes" controlPointCoordTypeReports="1" controlPointCoordTypeBundle="1" updateCubeLabel="Yes" errorPropagation="Yes" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="1000.0" pointCoord2="2000.0" pointCoord3="3000.0"/>
+        <outlierRejectionOptions rejection="Yes" multiplier="4.0"/>
+        <convergenceCriteriaOptions convergenceCriteria="ParameterCorrections" threshold="0.25" maximumIterations="26"/>
+        <maximumLikelihoodEstimation>
+            <model type="Huber" quantile="0.27"/>
+            <model type="Welsch" quantile="28.0"/>
+            <model type="HuberModified" quantile="29.0"/>
+            <model type="Chen" quantile="30.0"/>
+        </maximumLikelihoodEstimation>
+        <outputFileOptions fileNamePrefix="TestFilePrefix"/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="Yes" interpolationType="4">
+                <aprioriPointingSigmas/>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="7" degree="5" solveDegree="6" solveOverHermiteSpline="Yes" interpolationType="4">
+                <aprioriPositionSigmas>
+                    <sigma>7000.0</sigma>
+                    <sigma>8000.0</sigma>
+                    <sigma>9000.0</sigma>
+                </aprioriPositionSigmas>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="2" degree="21" solveDegree="1" solveTwist="Yes" solveOverExisting="Yes" interpolationType="4">
+                <aprioriPointingSigmas>
+                    <sigma>22.0</sigma>
+                    <sigma>23.0</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="PositionOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveOverHermiteSpline="Yes" interpolationType="4">
+                <aprioriPositionSigmas>
+                    <sigma>17000.0</sigma>
+                </aprioriPositionSigmas>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="Yes" solveRadius="No" controlPointCoordTypeReports="0" controlPointCoordTypeBundle="0" updateCubeLabel="Yes" errorPropagation="Yes" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="N/A" pointCoord2="N/A" pointCoord3="N/A"/>
+        <outlierRejectionOptions rejection="No" multiplier="N/A"/>
+        <convergenceCriteriaOptions convergenceCriteria="Sigma0" threshold="1.0e-10" maximumIterations="50"/>
+        <maximumLikelihoodEstimation/>
+        <outputFileOptions fileNamePrefix="TestFilePrefix"/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+                <aprioriPointingSigmas>
+                    <sigma>N/A</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+                <aprioriPositionSigmas/>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="Yes" solveRadius="No" controlPointCoordTypeReports="0" controlPointCoordTypeBundle="0" updateCubeLabel="Yes" errorPropagation="Yes" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="N/A" pointCoord2="N/A" pointCoord3="N/A"/>
+        <outlierRejectionOptions rejection="No" multiplier="N/A"/>
+        <convergenceCriteriaOptions convergenceCriteria="Sigma0" threshold="1.0e-10" maximumIterations="50"/>
+        <maximumLikelihoodEstimation/>
+        <outputFileOptions fileNamePrefix="TestFilePrefix"/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+                <aprioriPointingSigmas>
+                    <sigma>N/A</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+                <aprioriPositionSigmas/>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+Testing accessor methods...
+Get BundleObservationSolveSettings with name InstrumentId = Instrument1
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="Yes" interpolationType="4">
+        <aprioriPointingSigmas/>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="7" degree="5" solveDegree="6" solveOverHermiteSpline="Yes" interpolationType="4">
+        <aprioriPositionSigmas>
+            <sigma>7000.0</sigma>
+            <sigma>8000.0</sigma>
+            <sigma>9000.0</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Now get BundleObservationSolveSettings at index 1
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="2" degree="21" solveDegree="1" solveTwist="Yes" solveOverExisting="Yes" interpolationType="4">
+        <aprioriPointingSigmas>
+            <sigma>22.0</sigma>
+            <sigma>23.0</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="PositionOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveOverHermiteSpline="Yes" interpolationType="4">
+        <aprioriPositionSigmas>
+            <sigma>17000.0</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+"Huber" "0.27"
+"Welsch" "28.0"
+"HuberModified" "29.0"
+"Chen" "30.0"
+
+Testing static enum-to-string and string-to-enum methods...
+"Sigma0"
+"ParameterCorrections"
+
+Testing XML serialization 1: write XML from BundleSettings object...
+Serializing test XML object to file:
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="Yes" solveRadius="No" controlPointCoordTypeReports="0" controlPointCoordTypeBundle="0" updateCubeLabel="Yes" errorPropagation="Yes" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="N/A" pointCoord2="N/A" pointCoord3="N/A"/>
+        <outlierRejectionOptions rejection="No" multiplier="N/A"/>
+        <convergenceCriteriaOptions convergenceCriteria="Sigma0" threshold="1.0e-10" maximumIterations="50"/>
+        <maximumLikelihoodEstimation/>
+        <outputFileOptions fileNamePrefix="TestFilePrefix"/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+                <aprioriPointingSigmas>
+                    <sigma>N/A</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+                <aprioriPositionSigmas/>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+Testing XML: Object deserialized as (should match object above):
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="Yes" solveRadius="No" controlPointCoordTypeReports="0" controlPointCoordTypeBundle="0" updateCubeLabel="Yes" errorPropagation="Yes" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="N/A" pointCoord2="N/A" pointCoord3="N/A"/>
+        <outlierRejectionOptions rejection="No" multiplier="N/A"/>
+        <convergenceCriteriaOptions convergenceCriteria="Sigma0" threshold="1.0e-10" maximumIterations="50"/>
+        <maximumLikelihoodEstimation/>
+        <outputFileOptions fileNamePrefix="TestFilePrefix"/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+                <aprioriPointingSigmas>
+                    <sigma>N/A</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+                <aprioriPositionSigmas/>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+Testing XML serialization 2: write XML from BundleSettings object...
+Serializing test XML object to file:
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="Yes" solveRadius="Yes" controlPointCoordTypeReports="1" controlPointCoordTypeBundle="1" updateCubeLabel="Yes" errorPropagation="Yes" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="1000.0" pointCoord2="2000.0" pointCoord3="3000.0"/>
+        <outlierRejectionOptions rejection="Yes" multiplier="4.0"/>
+        <convergenceCriteriaOptions convergenceCriteria="ParameterCorrections" threshold="0.25" maximumIterations="26"/>
+        <maximumLikelihoodEstimation>
+            <model type="Huber" quantile="0.27"/>
+            <model type="Welsch" quantile="28.0"/>
+            <model type="HuberModified" quantile="29.0"/>
+            <model type="Chen" quantile="30.0"/>
+        </maximumLikelihoodEstimation>
+        <outputFileOptions fileNamePrefix="TestFilePrefix"/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="Yes" interpolationType="4">
+                <aprioriPointingSigmas/>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="7" degree="5" solveDegree="6" solveOverHermiteSpline="Yes" interpolationType="4">
+                <aprioriPositionSigmas>
+                    <sigma>7000.0</sigma>
+                    <sigma>8000.0</sigma>
+                    <sigma>9000.0</sigma>
+                </aprioriPositionSigmas>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="2" degree="21" solveDegree="1" solveTwist="Yes" solveOverExisting="Yes" interpolationType="4">
+                <aprioriPointingSigmas>
+                    <sigma>22.0</sigma>
+                    <sigma>23.0</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="PositionOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveOverHermiteSpline="Yes" interpolationType="4">
+                <aprioriPositionSigmas>
+                    <sigma>17000.0</sigma>
+                </aprioriPositionSigmas>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+Testing XML: Object deserialized as (should match object above):
+
+<bundleSettings>
+    <globalSettings>
+        <validateNetwork>Yes</validateNetwork>
+        <solveOptions solveObservationMode="Yes" solveRadius="Yes" controlPointCoordTypeReports="1" controlPointCoordTypeBundle="1" updateCubeLabel="Yes" errorPropagation="Yes" createInverseMatrix="No"/>
+        <aprioriSigmas pointCoord1="1000.0" pointCoord2="2000.0" pointCoord3="N/A"/>
+        <outlierRejectionOptions rejection="Yes" multiplier="4.0"/>
+        <convergenceCriteriaOptions convergenceCriteria="ParameterCorrections" threshold="0.25" maximumIterations="26"/>
+        <maximumLikelihoodEstimation>
+            <model type="Huber" quantile="0.27"/>
+            <model type="Welsch" quantile="28.0"/>
+            <model type="HuberModified" quantile="29.0"/>
+            <model type="Chen" quantile="30.0"/>
+        </maximumLikelihoodEstimation>
+        <outputFileOptions fileNamePrefix="TestFilePrefix"/>
+    </globalSettings>
+    <observationSolveSettingsList>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="Yes" interpolationType="4">
+                <aprioriPointingSigmas/>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="7" degree="5" solveDegree="6" solveOverHermiteSpline="Yes" interpolationType="4">
+                <aprioriPositionSigmas>
+                    <sigma>7000.0</sigma>
+                    <sigma>8000.0</sigma>
+                    <sigma>9000.0</sigma>
+                </aprioriPositionSigmas>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+        <bundleObservationSolveSettings>
+            
+            <instrumentId></instrumentId>
+            <instrumentPointingOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="2" degree="21" solveDegree="1" solveTwist="Yes" solveOverExisting="Yes" interpolationType="4">
+                <aprioriPointingSigmas>
+                    <sigma>22.0</sigma>
+                    <sigma>23.0</sigma>
+                </aprioriPointingSigmas>
+            </instrumentPointingOptions>
+            <instrumentPositionOptions solveOption="PositionOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveOverHermiteSpline="Yes" interpolationType="4">
+                <aprioriPositionSigmas>
+                    <sigma>17000.0</sigma>
+                </aprioriPositionSigmas>
+            </instrumentPositionOptions>
+        </bundleObservationSolveSettings>
+    </observationSolveSettingsList>
+</bundleSettings> 
+
+
+Testing error throws...
+**ERROR** Unable to find BundleObservationSolveSettings with index = [32].
+**ERROR** Unable to find BundleObservationSolveSettings with index = [-1].
+**PROGRAMMER ERROR** Unknown bundle convergence criteria [Pickles].
+**PROGRAMMER ERROR** Unknown convergence criteria enum [33].
+**PROGRAMMER ERROR** For bundle adjustments with multiple maximum likelihood estimators, the first model must be of type HUBER or HUBER_MODIFIED.

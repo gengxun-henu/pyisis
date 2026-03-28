@@ -28,6 +28,8 @@ All paths below are relative to the repository root unless noted otherwise.
 ## Additional instructions to follow
 
 - For pybind11 binding and test work, also follow `.github/instructions/pybind-testing.instructions.md`.
+- For upstream ISIS API reading, lifecycle analysis, and behavior-driven test design, also follow `.github/instructions/pybind-upstream-source-reading.instructions.md`.
+- For deciding what belongs in `reference/` versus `tests/data/`, also follow `.github/instructions/reference-data-layout.instructions.md`.
 - For pybind source and helper header metadata conventions, also follow `.github/instructions/pybind-cpp-metadata.instructions.md`.
 - For newly created or substantially rewritten binding C++ files, also follow `.github/instructions/pybind-file-header.instructions.md`.
 - For Python unit-test metadata conventions, also follow `.github/instructions/pybind-python-test-metadata.instructions.md`.
@@ -38,6 +40,7 @@ All paths below are relative to the repository root unless noted otherwise.
 - For binding implementation or extension, inspect `todo_pybind11.csv`, `class_bind_methods_details/`, and `src/` first.
 - For Python validation or test additions, inspect `tests/` and `python/` first.
 - For package-level exports, inspect `python/isis_pybind/__init__.py`.
+- When referring to mirrored upstream USGS ISIS source in this repository, default to repository-relative paths under `reference/upstream_isis/`.
 - For progress tracking, update `pybind_progress_log.md` and `todo_pybind11.csv` when the tracked binding inventory or completion context changes.
 - For workflow-oriented pybind tasks, also use `.github/skills/isis-pybind/SKILL.md`.
 

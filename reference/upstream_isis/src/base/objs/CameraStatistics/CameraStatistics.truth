@@ -1,0 +1,96 @@
+UnitTest for Camera Statistics
+
+UserParameters:
+  Linc = 1
+  Sinc = 1
+
+Latitude:
+  LatitudeMinimum = -20.7434
+  LatitudeMaximum = -18.6861
+  LatitudeAverage = -19.7168
+  LatitudeStandardDeviation = 0.588351
+
+Longitude:
+  LongitudeMinimum = 59.5748
+  LongitudeMaximum = 61.7607
+  LongitudeAverage = 60.6741
+  LongitudeStandardDeviation = 0.625054
+
+SampleResolution:
+  SampleResolutionMinimum = 244.735
+  SampleResolutionMaximum = 245.676
+  SampleResolutionAverage = 245.015
+  SampleResolutionStandardDeviation = 0.181039
+
+LineResolution:
+  LineResolutionMinimum = 244.735
+  LineResolutionMaximum = 245.676
+  LineResolutionAverage = 245.015
+  LineResolutionStandardDeviation = 0.181039
+
+Resolution:
+  ResolutionMinimum = 244.735
+  ResolutionMaximum = 245.676
+  ResolutionAverage = 245.015
+  ResolutionStandardDeviation = 0.181039
+
+ObliqueSampleResolution:
+  ObliqueSampleResolutionMinimum = 244.735
+  ObliqueSampleResolutionMaximum = 246.963
+  ObliqueSampleResolutionAverage = 245.396
+  ObliqueSampleResolutionStandardDeviation = 0.428052
+
+ObliqueLineResolution:
+  ObliqueLineResolutionMinimum = 244.735
+  ObliqueLineResolutionMaximum = 246.963
+  ObliqueLineResolutionAverage = 245.396
+  ObliqueLineResolutionStandardDeviation = 0.428052
+
+ObliqueResolution:
+  ObliqueResolutionMinimum = 244.735
+  ObliqueResolutionMaximum = 246.963
+  ObliqueResolutionAverage = 245.396
+  ObliqueResolutionStandardDeviation = 0.428052
+
+AspectRatio:
+  AspectRatioMinimum = 1
+  AspectRatioMaximun = 1
+  AspectRatioAverage = 1
+  AspectRatioStandardDeviation = 0
+
+PhaseAngle:
+  PhaseMinimum = 26.0542
+  PhaseMaximum = 33.9011
+  PhaseAverage = 30.0178
+  PhaseStandardDeviation = 1.63682
+
+EmissionAngle:
+  EmissionMinimum = 0.0111345
+  EmissionMaximum = 5.85131
+  EmissionAverage = 2.98667
+  EmissionStandardDeviation = 1.12568
+
+IncidenceAngle:
+  IncidenceMinimum = 28.747
+  IncidenceMaximum = 31.5688
+  IncidenceAverage = 30.1627
+  IncidenceStandardDeviation = 0.588357
+
+LocalSolarTime:
+  LocalSolarTimeMinimum = 10.4192
+  LocalSolarTimeMaximum = 10.5649
+  LocalSolarTimeAverage = 10.4925
+  LocalSolarTimeStandardDeviation = 0.0416703
+
+LocalRadius:
+  LocalRadiusMinimum = 1.7374e+06
+  LocalRadiusMaximum = 1.7374e+06
+  LocalRadiusAverage = 1.7374e+06
+  LocalRadiusStandardDeviation = 0
+
+NorthAzimuth:
+  NorthAzimuthMinimum = 0.000765718
+  NorthAzimuthMaximum = 360
+  NorthAzimuthAverage = 356.025
+  NorthAzimuthStandardDeviation = 28.4507
+

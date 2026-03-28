@@ -1,0 +1,60 @@
+UnitTest for Angle
+
+Testing constructors
+  Default constructor - valid?:  0 values: -1.79769313e+308 and -1.79769313e+308
+  
+  Null input and degree output:  -1.79769313e+308 degrees
+  Valid? 0
+  
+  Degree input and radian output:  0.523598776 radians
+  Valid? 1
+  30.0 degrees
+  Radian input and degree output:  30 degrees
+  30.0
+  Copy constructor:  30 degrees
+
+Testing mutators
+  setDegrees:  180 degrees
+  setRadians:  3.14159265 radians
+
+Testing operators
+  QDebug operator:   0.785398 <radians> (45 <degrees>)
+  Assignment operator:  45 degrees
+  + and - operators...
+    angle + angle: 90 degrees
+    angle += angle: 150 degrees
+    angle -= angle: 90 degrees
+    angle - angle: 30 degrees
+  * and / operators...
+    double * angle: 60 degrees
+    angle *= double: 120 degrees
+    angle /= double: 60 degrees
+    angle / double: 30 degrees
+
+Testing logical operators
+  angle1 == angle2?  0
+  angle1 == angle2?  1
+  angle1 == angle2?  0
+  angle1 <  angle2?  1
+  angle1 <  (angle1 + epsilon)?  0
+  angle2 >  (angle2 - epsilon)?  0
+  angle1 <= angle2?  1
+  angle1 <  angle2?  **PROGRAMMER ERROR** Cannot compare a invalid angles with the < operator.
+  angle1 <  angle2?  **PROGRAMMER ERROR** Cannot compare a invalid angles with the < operator.
+  angle1 <=  angle2?  **PROGRAMMER ERROR** Cannot compare a invalid angles with the < operator.
+  angle1 >  angle2?  0
+  angle1 >  angle2?  **PROGRAMMER ERROR** Cannot compare a invalid angles with the > operator.
+  angle1 >= angle2?  0
+  angle1 >= angle2?  **PROGRAMMER ERROR** Cannot compare a invalid angles with the > operator.
+
+Testing protected methods
+  Degree wrap value = 360
+  Radian wrap value = 6.28318531
+  Degree angle set to 60
+  Radian angle set to 0.5
+-70.258368055556 degrees
+70.503055555556 degrees
+**PROGRAMMER ERROR** [100] is not a vaid input to Angle. It needs to be of the form: "dd mm ss.ss".
+**PROGRAMMER ERROR** [70 11] is not a vaid input to Angle. It needs to be of the form: "dd mm ss.ss".
+**PROGRAMMER ERROR** [this 79 should 00 fail 0.111] is not a vaid input to Angle. It needs to be of the form: "dd mm ss.ss".
+100.0 degrees

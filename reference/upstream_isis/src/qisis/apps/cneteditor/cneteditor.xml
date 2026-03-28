@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="cneteditor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Interactive control network editor
+  </brief>
+
+  <description>
+    <p>
+      Cneteditor allows a user to visualize control point and measure attributes
+      and to edit them interactively. The user can toggle between control point
+      coordinate and sigma display in Latitude, Longitude, Radius or XYZ format.
+      Select keywords from a control network file are imported into a table of
+      editable rows and columns. <strong>Always make a backup copy of the input
+      file before using this program. There is no "undo" capability yet.</strong>
+    </p>
+    <p>
+      The basic utility of this program is to set control points or control
+      measures to "ignore" or "EditLock," and to modify A Priori SP coordinate
+      sigma values (in either lat/lon/radius or XYZ format). The control point
+      type can be changed to "Constrained," "Fixed," or "Free." There are columns
+      such as PointID or Reference which should not be changed. If control points
+      or measures are set to "yes" for EditLock, the user is prompted to verify
+      updated values.
+    </p>
+    <p>
+      The control network file is loaded either by entering the filename after
+      the program name on the command line or by using the file selection menu
+      after invoking the program.
+    </p>
+    <p>
+      Command line example:
+      <pre>cneteditor control_network_file.net</pre>
+    </p>
+    <p>
+      On the menu bar are drop down menus "File," "Tables," "Coordinate Display,"
+      and "Help."  The options under "File" are "Open," "Save," "Save As,"
+      "Close," and "Quit." The options under "Tables" are "Freeze Tables" and
+      "Enable Sorting." The options under "Coordinate Display" are "X,Y,Z" and
+      "Lat,Lon,Radius." The icons are activated only after a control network file
+      has been loaded. When the sorting icon is enabled, the <strong>"^"
+      (ascending)</strong> or <strong>"v" (descending)</strong> symbol appears in
+      the activated column heading. The sort is performed by clicking on the
+      symbol or by clicking on a different column of interest while sorting is
+      enabled.
+    </p>
+    <p>
+      The "Freeze Tables" icon (ice cube) is used to temporarily turn off the
+      filtering function. It freezes the table so that edits to a cell can be
+      performed without screen refresh. When the edits are completed, turn off
+      the freeze pane by clicking on the icon again. Once the freeze icon is
+      off, the edited information is updated in memory but not saved to disk.
+      Use the "save" or "save as" options under "File" to save the file to disk.
+    </p>
+    <p>
+      When the tables are not frozen the cells are updated based on the filters
+      that have been applied as soon as a cell is edited. If more than one cell
+      in a row needs to be edited then freeze the pane before changing any of
+      the cells.
+    </p>
+    <p>
+      The "Coordinate Display" icons ("X,Y,Z" and "Lat, Lon, Radius") toggle
+      display of coordinates and sigmas between the two formats. Latitude/Longitude
+      coordinate units are decimal degrees. Radius and XYZ coordinate units are
+      meters. All coordinate sigma units are meters.
+    </p>
+    <p>
+      The filters tabs presently available are "Control Points and Measures" and
+      "Images and Points." Filters for points and sigmas correspond to the active
+      coordinate display format ("X,Y,Z" or "Lat, Lon, Radius"). The tab for
+      "Connections" is displayed but not implemented yet so there are no keyword
+      options available when the tab is selected.
+    </p>
+    <p>
+      The results of the filters are displayed in the "Control Point Table,
+      "Control Measure Table," and the "Point View" tree.
+    </p>
+    <p>
+      The green "+" icon can be used to add a new filter or a new filter group.
+      Click the "+" icon inside the bounding box to add a new filter. Select a
+      keyword to filter with such as "PointType." The "And" or "Or" logic type
+      radio button must also be selected.
+    </p>
+    <p>
+      Click the "+" icon outside the bounding box to add a new filter group.
+      Select a keyword to filter with such as "GoodnessOfFit."  The "And" or
+      "Or" logic type radio button must also be selected.
+    </p>
+    <p>
+      The drop-down menu under the filter tabs lists keywords that can be
+      selected for the filters. Additional filtering options can be chosen to
+      include or exclude specific values by clicking on the radio icons. A text
+      box will be displayed for keywords that require text or numbers. <strong>
+      Be careful with extra spaces when entering text, verify entry by reading
+      the filter statement if the expected result is empty.</strong>
+    </p>
+    <p>
+      The ">=" or "&lt;=" symbols are used to enter the cutoff numbers for
+      specific keywords that are stored as numbers, and when selected there may
+      be an option to select the "inclusive" or "exclusive" filter.
+    </p>
+    <p>
+      The "Effect" option is used to select "Point" and/or "Measure." The
+      default is both "Point" and "Measure" so there is an "X" within the radio
+      icons. To turn off one or the other option, click on the desired radio
+      icon; "X" means selected and no "X" means not selected.
+    </p>
+    <p>
+      For the "Control Points and Measures" tab, the "Min count for points" is
+      used to define how many measures a control point must have for a
+      particular filter. The default value is "1" so the filtering is applied to
+      control points that have at least one measure. If the "Control point"
+      option under "Effect" is turned off, then the min count is not used.
+    </p>
+    <p>
+      <strong>Warning:</strong> Not all filters have the same effect. For
+      example, some keywords require minimum and/or maximum values while others
+      require text entries. <strong>It is best to read the statement above the
+      filter options to see exactly what the options that has been selected is
+      performing</strong>.
+    </p>
+    <p>
+      <strong>Editing cells:</strong>
+      <br/><br/>
+      Click on the cell to type the value, or double-click on the cell to see
+      the valid values in the drop-down menu to select from. If no valid values
+      exist, then type the text in the cell.
+    </p>
+    <p>
+      <strong>Copying to all cells:</strong>
+      <br/><br/>
+      Select a cell that has the content that will be copied to all cells under
+      a column. Click on the selected cell to activate, and then hold down the
+      right icon to select "copy to all cells."
+    </p>
+    <p>
+      For more help click on "What"s This?" under Help, or use Shift+F1. Once
+      you see the "?" on the screen, click on the screen to see the information.
+    </p>
+  </description>
+
+  <category>
+    <categoryItem>Control Networks</categoryItem>
+    <categoryItem>Display</categoryItem>
+  </category>
+
+  <history>
+    <change name="Eric Hyer" date="2011-03-07">
+      Original version
+    </change>
+    <change name="Jai Rideout" date="2011-10-07">
+      Added documentation in preparation for the October release. Credit goes to
+      Janet Richie and Ella Lee for their help in preparing the documentation.
+    </change>
+    <change name="Jai Rideout" date="2012-01-04">
+      No longer crashes if unknown column titles are found in cneteditor
+      QSettings. Fixes #616.
+    </change>
+    <change name="Jai Rideout" date="2012-01-20">
+      Added measure type, line, and sample filters. Added a couple of existing
+      filters to the image-point filter selector and fixed typos in a few of the
+      filter description strings. Fixes #645.
+    </change>
+    <change name="Jai Rideout" date="2012-01-20">
+      Added Eric Hyer's final changes to this application that allow users to
+      load a cube list and have cube filenames display instead of cube serial
+      numbers. "Cube serial number" filter is now called "Image ID", as users
+      may be either filtering on cube serial numbers or cube filenames. Fixes
+      #304.
+    </change>
+    <change name="Steven Lambright and Jai Rideout" date="2012-03-28">
+      Edit-locked points and measures now appear non-editable in the point and
+      measure tables. Fixes #356.
+    </change>
+    <change name="Jai Rideout" date="2012-03-28">
+      Points with any edit-locked measures can no longer be deleted. Fixes #621.
+    </change>
+    <change name="Jai Rideout and Steven Lambright" date="2012-04-09">
+      Sorting is now configurable through a sorting dialog, including the
+      ability to enable/disable sorting and set table size limits for automatic
+      enabling of sorting on either the point or measure table. Fixes #360.
+    </change>
+    <change name="Jai Rideout" date="2012-05-02">
+      Added several new filters for filtering points/measures, as well as
+      images/points. The new filters include: a priori/adjuted lat/lon/radius,
+      a priori/adjusted lat/lon/radius sigma, jigsaw rejected points, jigsaw
+      rejected measures, sample and line shift. Fixes #367.
+    </change>
+    <change name="Steven Lambright and Kim Oyama" date="2012-05-30">
+      Improved user interface for the new sorting options to be (hopefully)
+      extremely obvious what the options are, how they work, and why your
+      tables are not sorting (when they aren't sorting). Fixes #838.
+    </change>
+    <change name="Ian Humphrey" date="2015-10-07">
+      Updated icons. Fixes #1041.
+    </change>
+    <change name="Ian Humphrey" date="2015-11-16">
+      Fixed a couple missing icons. References #1041.
+    </change>
+    <change name="Ken Edmundson" date="2024-02-23">
+      Added 1) capability to display point coordinates and sigmas in either
+      lat/lon/radius or XYZ format; 2) menu items and menu bar icons to toggle
+      between coordinate formats; 3) new filters for the XYZ coordinate format;
+      4) updated documentation. References #5421.
+    </change>
+  </history>
+</application>

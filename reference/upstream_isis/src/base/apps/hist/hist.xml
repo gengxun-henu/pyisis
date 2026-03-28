@@ -1,0 +1,236 @@
+<?xml version="1.0"?>
+<application name="hist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Generates a histogram table of cube in text format
+  </brief>
+
+  <description>
+    This program reads a single band from a cube and creates a tabular
+    representation of the histogram.  If a band specification is not
+    given for the input file then the program will default to using the
+    first band.  The output results can then be viewed in a graphical
+    form by using your favorite spreadsheet (e.g., Excel) or other
+    graphing package (e.g., IDL, GNU plotutils).
+  </description>
+
+  <category>
+    <categoryItem>Math and Statistics</categoryItem>
+  </category>
+
+  <history>
+    <change name="Tracie Sucharski" date="2002-09-11">
+      Original version
+    </change>
+    <change name="K Teal Thompson" date="2002-11-21">
+      Add example
+    </change>
+    <change name="K Teal Thompson" date="2002-12-09">
+      Make images smaller
+    </change>
+    <change name="Tracie Sucharski" date="2002-12-09">
+      TO parameter is now always output.  Add FORMAT parameter.
+    </change>
+    <change name="K Teal Thompson" date="2003-03-19">
+      Added thumb and image directories.
+    </change>
+    <change name="Stuart Sides" date="2003-04-04">
+      Fixed problem with isiscvs not checking in the thumb and image directories.
+    </change>
+    <change name="Stuart Sides" date="2003-05-16">
+      Modified schema location from astogeology... to isis.astrogeology..."
+    </change>
+    <change name="Stuart Sides" date="2003-07-29">
+      Modified filename parameters to be cube parameters where necessary
+    </change>
+    <change name="Jeff Anderson" date="2003-08-27">
+      Changed default extension handling mechansim
+    </change>
+    <change name="Stuart Sides" date="2004-12-17">
+      Fixed a bug for the text output option, where a c string was going out of bounds.
+    </change>
+    <change name="Jeff Anderson" date="2005-05-23">
+      Removed postscript capabilities due to camgraph difficulties with
+      64-bit compiling.
+    </change>
+    <change name="Elizabeth Miller" date="2005-10-25">
+        Added truth file to fix appTest
+    </change>
+    <change name="Jeff Anderson" date="2006-10-18">
+      Added NBINS, MINIMUM, and MAXIMUM parameters
+    </change>
+    <change name="Elizabeth Miller" date="2007-01-08">
+      Added plot of histogram in ui mode, and added parameters to set values on the
+      plot
+    </change>
+    <change name="Steven Lambright" date="2008-05-06">
+      Histogram object no longer has SetRange, updated to use SetValidRange
+    </change>
+    <change name="Steven Lambright" date="2008-05-12">
+      Removed references to CubeInfo
+    </change>
+    <change name="Noah Hilt" date="2008-08-01">
+      Changed the plot window to the new HistogramToolWindow
+    </change>
+    <change name="Tyler Wilson" date="2015-09-01">
+      Changed SetValidRange call to SetBinRange so correct number
+      of user-specified bins displayed in grapical/text output.
+      See Ref #2188.
+    </change>
+    <change name="Curtis Rose" date="2016-06-10">
+     Changed the application to fail immediately if the TO argument is not
+     entered from the commandline. Fixes #3914.
+    </change>
+    <change name="Austin Sanders" date="2020-06-08">
+      Updated logic such that min/max values are no longer calculated from .cub
+      if values are provided by the user.  Fixes #3881.
+    </change>
+    <change name="Kaitlyn Lee" date="2020-06-11">
+      Added "Pixels Below Min" and "Pixels Above Max" to the CSV output and changed how the data is
+      outputted. Originally, the CSV output and the GUI histogram would use the DN value in the
+      middle of a bin to represent that bin. That is, the CSV output used to have a "DN" value that
+      was the bin's middle pixel DN. This was not intuitive to users. Removed the "DN" value and added "MinInclusive" and "MaxExclusive" to the CSV so that bins are represented by their min/max values. These changes were also reflected in the histrogram creation. The x-axis is now based off of the min value of a bin instead of the middle value. These changes were made alongside changes made to Histogram and cnethist.
+    </change>
+    <change name="Kristin Berry" date="2020-06-25">
+      Re-added the ability to set number of bins without setting min/max values after the last update. 
+      Follow-on to #3881.
+    </change>
+    <change name="Stuart Sides" date="2020-09-02">
+      Added GUI helper for filling in computed min/max. Fixed #3880.
+    </change>
+  </history>
+
+  <oldName>
+    <item>histplane</item>
+  </oldName>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Single plane of a cube to get statistics from
+        </brief>
+        <description>
+  	      The file specification for the input cube. The histogram will be
+          calculated for one plane only. The default plane is one (1).
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+      <parameter name="TO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output text file
+        </brief>
+        <description>
+          Output text file containing the tabular representation
+          of the histogram.
+        </description>
+        <internalDefault>None</internalDefault>
+        <filter>
+          *.txt
+        </filter>
+      </parameter>
+    </group>
+
+
+    <group name="Options">
+      <parameter name="MINIMUM">
+        <type>double</type>
+        <internalDefault>Computed</internalDefault>
+        <brief>
+          Minimum DN value in histogram
+        </brief>
+        <description>
+          Minimum DN value in histogram.  If not entered it will automatically be computed.
+        </description>
+        <helpers>
+          <helper name="H1">
+            <function>helperButtonCalcMinMax</function>
+            <brief>Fill in the auto calculated MINIMUM and MAXIMUM for the input cube</brief>
+            <description>
+              This button will calculate what the default MINIMUM and MAXIMUM values would be
+              and fills the respective GUI fields with them.
+            </description>
+            <icon>$ISISROOT/appdata/images/icons/exec.png</icon>
+          </helper>
+        </helpers>
+        <lessThan>
+          <item>MAXIMUM</item>
+        </lessThan>
+      </parameter>
+
+      <parameter name="MAXIMUM">
+        <type>double</type>
+        <internalDefault>Computed</internalDefault>
+        <brief>
+          Maximum DN value in histogram
+        </brief>
+        <description>
+          Maximum DN value in histogram.  If not entered it will automatically be computed.
+        </description>
+      </parameter>
+
+      <parameter name="NBINS">
+        <type>integer</type>
+        <internalDefault>Computed</internalDefault>
+        <brief>
+          Bins in the histogram
+        </brief>
+        <description>
+          Number of bins in the histogram.  If not entered it will automatically be computed.
+        </description>
+      </parameter>
+    </group>
+
+    <group name="Plot Options">
+      <parameter name="TITLE">
+        <type>string</type>
+        <brief>
+          Plot Title
+        </brief>
+        <description>
+          This will be the title for the plot of the histogram.  The plot will only be shown in ui mode.
+        </description>
+        <internalDefault>Default</internalDefault>
+      </parameter>
+      <parameter name="XAXIS">
+        <type>string</type>
+        <brief>
+          X-Axis Title
+        </brief>
+        <description>
+          This will be the title for the x axis, which represents the pixel value (or DN), in the plot of the histogram.  The plot will only be shown in ui mode.
+        </description>
+        <internalDefault>Default</internalDefault>
+      </parameter>
+      <parameter name="FREQAXIS">
+        <type>string</type>
+        <brief>
+          Frequency Y-Axis Title
+        </brief>
+        <description>
+          This will be the title for the y axis to the right of the histogram
+          plot, which represents the frequency of the pixel value. The plot will
+          only be shown in GUI mode.
+        </description>
+        <internalDefault>Default</internalDefault>
+      </parameter>
+      <parameter name="PERCENTAXIS">
+        <type>string</type>
+        <brief>
+          Percent Y-Axis Title
+        </brief>
+        <description>
+          This will be the title for the y axis to the left of the histogram
+          plot, which represents the percentage of pixel seen so far. The plot
+          will only be shown in GUI mode.
+        </description>
+        <internalDefault>Default</internalDefault>
+      </parameter>
+    </group>
+  </groups>
+</application>

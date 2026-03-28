@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="camstats" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Generates and outputs camera statistics for a cube in raw camera geometry
+  </brief>
+
+  <description>
+    <p>
+    This program generates camera statistics from a user-supplied
+    <def>Level0</def> or <def>Level1</def> cube.  The output of camstats can be
+     directed to a <def>PVL</def> file or a comma-delimited text file (flat file).
+    For each output group, the program will calculate the minimum, maximum,
+    average, and standard  deviation values.  The output groups are listed below:
+    <blockquote>
+    <ul>
+      <li><def link="Latitude">Latitude</def></li>
+      <li><def link="Longitude">Longitude</def></li>
+      <li><def link="Sample Resolution">Sample Resolution</def></li>
+      <li><def link="Line Resolution">Line Resolution</def></li>
+      <li><def link="Pixel Resolution">Pixel Resolution</def></li>
+      <li><def link="Oblique Line Resolution">Oblique Line Resolution</def></li>
+      <li><def link="Oblique Sample Resolution">Oblique Sample Resolution</def></li>
+      <li><def link="Oblique Pixel Resolution">Oblique Pixel Resolution</def></li>
+      <li><def>Aspect Ratio</def></li>
+      <li><def link="Phase Angle">Phase Angle</def></li>
+      <li><def link="Emission Angle">EmissionAngle</def></li>
+      <li><def link="Incidence Angle">Incidence Angle</def></li>
+      <li><def link="Local Solar Time">Local Solar Time</def></li>
+      <li><def link="North Azimuth">North Azimuth</def></li>
+    </ul>
+    </blockquote>
+    </p>
+    <p>
+    The output values are calculated using the entire image area.  However, 
+    the number of data collection points for the statistics can be controlled 
+    by using the line increment (LINC) and sample increment (SINC) parameters.  
+    The default value for LINC and SINC are 1.  If the default value is used,
+    then every line and sample of the image is used in the calculation of the 
+    output values.  The increment value can be increased to reduce program
+    execution time. If a value other than 1, for example the number 10, is 
+    assigned to LINC and SINC, then every tenth line and tenth sample of the
+    image are used in the calculation of the output values.  The edges of the 
+    image are always sampled even if the increment does not fall on the edge.
+    Keep in mind that sparse increments assigned to LINC and SINC are 
+    susceptible to an adverse effect on the accuracy of the statistics.
+    </p>
+    <p>
+    The statistics are output both to the screen and to the print.prt file in PVL format.
+    Additionally, if the user specifies a file using the TO parameter, the statistics are written to
+    that file in PVL format (default) or as a comma-separated-value text file (FLAT file), depending
+    on the FORMAT parameter.
+    </p>
+    <p>
+    If the output file exists and the APPEND parameter is set to "no", the contents will be
+    overwritten.
+    </p>
+  </description>
+
+  <history>
+    <change name="Robert Sucharski" date="2007-01-22">
+      Original version.
+    </change>
+    <change name="Steven Lambright" date="2007-08-14">
+      Added an application test.
+    </change>
+    <change name="Kris Becker" date="2008-02-27"> 
+      Check for special pixel values and write them as NULL values in keywords 
+      and the flat text file.
+    </change>
+    <change name="Steven Lambright" date="2008-05-12">
+      Removed references to CubeInfo .
+    </change>
+    <change name="Christopher Austin" date="2008-06-11">
+      Added the ATTACH option.
+    </change>
+    <change name="Steven Koechle" date="2008-11-12">
+      Camstats now outputs history to the cube when it finishes execution.
+    </change>
+    <change name="Tammy Becker" date="2012-01-19">
+      Modified documentation and added Glossary links.
+    </change>
+    <change name="Janet Richie, Ella Mae Lee" date="2012-11-20">
+      Modified documentation, fixes #1174.
+    </change>
+    <change name="Lynn Weller" date="2013-02-25">
+      Removed links to applications imbedded in text and replaced with
+      italicized application name.  Added application links to the
+      "Related Objects and Documents" section of the documentation.
+       Fixes mantis ticket #1525.
+    </change>
+    <change name="Jeffrey Covington" date="2015-02-19">
+      Updated FORMAT and APPEND documentation to be more clear. Made general
+      edits for clarity.
+    </change>
+    <change name="Andrew Stebenne" date="2015-04-03">
+      Removed the filter on the TO parameter so that any file can be used for output. Updated
+      documentation to clarify the existence and functioning of a few quirks. Addresses redmine
+      ticket #175.
+    </change>
+    <change name="Tyler Wilson"  date="2016-08-17">
+      Added statistics for ObliqueLineResolution/ObliqueSampleResolution,
+      and Oblique Pixel Resolution. References #476, #4100.
+    </change>
+  </history>
+
+  <category>
+    <categoryItem>Cameras</categoryItem>
+  </category>
+
+  <seeAlso>
+    <applications>
+      <item>spiceinit</item>
+      <item>qmos</item>
+      <item>getkey</item>
+    </applications>
+  </seeAlso>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input cube filename
+        </brief>
+        <description>
+          Input cube with appropriate camera labels (refer to <i>spiceinit</i>).
+          The input must be a <def>Level0</def> or <def>Level1</def> cube.
+        </description>
+        <filter>
+          *.cub *.CUB
+        </filter>
+      </parameter>
+      <parameter name="ATTACH">
+        <type>boolean</type>
+        <brief>
+          Attach results to the cube's label
+        </brief>
+        <description>
+          If this option is selected, the output camera statistics will be
+          attached to the input cube's label under the group "CameraStatistics."
+          <p>
+          Applications such as <i>qmos</i> reference the attached label for 
+          geometric information of the cube.
+          </p>
+        </description>
+        <default><item>FALSE</item></default>
+      </parameter>
+
+      <parameter name="TO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Ouput text filename
+        </brief>
+        <internalDefault>None</internalDefault>
+        <description>
+          A text file in label format (<def>PVL</def>), which will contain the 
+	  results of <i>camstats</i>.  This output file, for example, can be used 
+	  with the <i>getkey</i> application to pass the results to other programs
+          when developing scripts.  
+          <p>
+          Alternatively, the output can be written to a text file format, 
+          see the "FORMAT" parameter for more information.
+          </p>
+          The format is ignored unless the "TO" parameter is specified.
+        </description>
+      </parameter>
+      <parameter name="FORMAT">
+        <type>string</type>
+        <brief>
+          Output file format (PVL or FLAT)
+        </brief>
+        <description>
+          This is the format type for the output file. <def>PVL</def> format is the 
+	  default. The format is ignored unless the TO parameter is specified.
+        </description>  
+        <default><item>PVL</item></default>
+        <list>
+          <option value="PVL">
+            <brief>
+              Format the output file specified by TO as PVL. This format
+              can be read using the <i>getkey</i> program.
+            </brief>
+            <description>
+              Output the results to a PVL formatted file specified by TO.
+            </description>
+          </option>
+          <option value="FLAT">
+            <brief>
+              Format the output file specified by TO as a comma delimited text file.
+            </brief>
+            <description>
+              Output the results to a comma delimited text file specified by TO. 
+              This file format can easily be imported into spreadsheet applications
+              like Excel.
+            </description>
+          </option>
+        </list>
+      </parameter>
+ 
+      <parameter name="APPEND">
+        <type>boolean</type>
+        <brief>
+          Append results to output file specified by TO.
+        </brief>
+        <description>
+          <p>
+            If this option is not selected, the output from the <i>camstats</i> 
+	    application is appended to the output file. If this option is
+	    set to "NO" or "FALSE," any information in the TO file is 
+	    overwritten.
+          </p>
+          <p>
+            Note: This will append the formatted results to the end of the TO 
+            file without regard to the formatting of the current contents.
+          </p>
+        </description>
+        <default><item>FALSE</item></default>
+      </parameter>
+    </group>
+
+    <group name="Option">
+      <parameter name="LINC">
+        <type>integer</type>
+        <brief>
+          Line Increment
+        </brief>
+        <description>
+          LINC will control the number of lines where statistical data are collected.  
+	  If a LINC of 10 is entered, every tenth <def link="Line">line</def> will be 
+	  used in the data collection. This parameter as well as the SINC parameter
+          are primarily used to reduce runtime for very large images by collecting
+          data from a smaller statistical sample rather than the entire image.  
+          <p>
+            Note: Keep in mind that if the LINC increment is set too sparsely, this 
+	    could adversely influence the accuracy of the statistics.
+          </p> 
+        </description>
+        <default><item>1</item></default>
+      </parameter>
+
+     <parameter name="SINC">
+        <type>integer</type>
+        <brief>
+          Sample Increment
+        </brief>
+        <description>
+          SINC will control the number of samples where statistical data are 
+	  collected.  If a SINC of 10 is entered, every tenth <def 
+	  link="Sample">sample</def> will be used in the data collection.
+          This parameter as well as the LINC parameter are primarily used to reduce
+          runtime for very large images by collecting data from a smaller
+          statistical sample rather than the entire image.
+          <p>
+            Keep in mind that if the SINC increment is set too sparsely, 
+	    this could adversely influence the accuracy of the statistics.
+          </p>
+        </description>
+        <default><item>1</item></default>
+      </parameter>
+    </group>
+   </groups>
+</application>
+

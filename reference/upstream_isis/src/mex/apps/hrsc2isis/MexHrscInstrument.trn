@@ -1,0 +1,126 @@
+# Translations for HRSC Stereo and SRC instrument.
+# ISIS cube label Instrument group
+
+Group = SpacecraftName
+  Auto           = 1
+  InputKey       = INSTRUMENT_HOST_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = SpacecraftName
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = InstrumentId
+  Auto           = 1
+  InputKey       = DETECTOR_ID
+  OutputName     = InstrumentId
+  OutputPosition = (Group, Instrument)
+  Translation    = (HRSC, "MEX_HRSC_HEAD")
+  Translation    = (HRSC, "MEX_HRSC_S2")
+  Translation    = (HRSC, "MEX_HRSC_RED")
+  Translation    = (HRSC, "MEX_HRSC_P2")
+  Translation    = (HRSC, "MEX_HRSC_BLUE")
+  Translation    = (HRSC, "MEX_HRSC_NADIR")
+  Translation    = (HRSC, "MEX_HRSC_GREEN")
+  Translation    = (HRSC, "MEX_HRSC_P1")
+  Translation    = (HRSC, "MEX_HRSC_IR")
+  Translation    = (HRSC, "MEX_HRSC_S1")
+  Translation    = (SRC, "MEX_HRSC_SRC")
+End_Group
+
+Group = StartTime
+  Auto           = 1
+  InputKey       = START_TIME
+  OutputName     = StartTime
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = StopTime
+  Auto           = 1
+  InputKey       = STOP_TIME
+  OutputName     = StopTime
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockStartCount
+  Auto           = 1
+  InputKey       = SPACECRAFT_CLOCK_START_COUNT
+  OutputName     = SpacecraftClockStartCount
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockStopCount
+  Auto           = 1
+  InputKey       = SPACECRAFT_CLOCK_STOP_COUNT
+  OutputName     = SpacecraftClockStopCount
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = MissionPhaseName
+  Auto           = 1
+  InputKey       = MISSION_PHASE_NAME
+  OutputName     = MissionPhaseName
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = TargetName
+  Auto           = 1
+  InputKey       = TARGET_NAME
+  OutputName     = TargetName
+  OutputPosition = (Group, Instrument)
+  Translation    = (Mars, MARS)
+  Translation    = (Phobos, PHOBOS)
+  Translation    = (Deimos, DEIMOS)
+  Translation    = (Cal, CAL)
+End_Group
+
+Group = Summing
+  Auto           = 1
+  Optional       = 1
+  InputKey       = MACROPIXEL_SIZE
+  OutputName     = Summing
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ExpousreDuration
+  Auto           = 1
+  Optional       = 1
+  InputKey       = EXPOSURE_DURATION
+  OutputName     = ExposureDuration
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = FocalPlaneTemperature
+  Auto           = 1
+  Optional       = 1
+  InputKey       = FOCAL_PLANE_TEMPERATURE
+  OutputName     = FocalPlaneTemperature
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = LensTemperature
+  Auto           = 1
+  Optional       = 1
+  InputKey       = LENS_TEMPERATURE
+  OutputName     = LensTemperature
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = InstrumentTemperature
+  Auto           = 1
+  Optional       = 1
+  InputKey       = INSTRUMENT_TEMPERATURE
+  OutputName     = InstrumentTemperature
+  OutputPosition = (Group, Instrument)
+  Translation    = (*, *)
+End_Group
+End

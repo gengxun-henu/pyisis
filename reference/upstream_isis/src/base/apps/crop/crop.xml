@@ -1,0 +1,503 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="crop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Extracts a sub-area from a cube 
+  </brief>
+
+  <description>
+    <p>
+      This program extracts a sub-area from a <def link="Cube">cube</def> based 
+      on user defined parameter values.  The extracted area can also be 
+      sub-sampled by specifying a <def link="Line">line</def> and <def 
+      link="Sample">sample</def> increment. 
+    </p>
+    <p> 
+      A sub-area selected for extraction must be 
+      contiguous. That is, the program will not allow non-continuous cropping 
+      such as lines 1-5, 10-30, and 80-100. However, the contiguous area can be 
+      sub-sampled by specifying how many pixels to increment or skip.  For 
+      example, to select every third line (1, 4, 7, 10 ...) to be written to 
+      the output cube, use a line increment (LINC) of three.
+    </p>
+    <p>
+      The parameter PROPSPICE applies to <def>Level1</def> images.  The 
+      <def>SPICE</def> information must have been propagated to the cropped 
+      output cube to obtain any camera geometry or photometric information.  
+      The default setting for PROPSPICE is "TRUE."  When the default setting is 
+      used, all the keywords in the labels of the input file are transferred to 
+      the output file.  In addition, the keywords that describe the area that was 
+      extracted out of the input cube are also added to the AlphaCube group in 
+      the labels.
+    </p>
+    <p>
+      For a <def>Level1</def> image, the keywords contained within the AlphaCube 
+      group in the labels describe the original file size and the area that was 
+      extracted. The AlphaCube and SPICE kernels information are very important 
+      to compute accurate geometric and photometric information using the cropped 
+      <def>Level1</def> cube.
+    </p>
+<p>
+<table border="">
+  <tr>
+    <th>Level1 labels using PROPSPICE=TRUE:</th>
+    <th>Level1 labels using PROPSPICE=FALSE:</th>
+  </tr>
+<tr>
+<td>
+<small>
+<pre>
+Group = Kernels                                                               
+    <b>NaifFrameCode             = -53031				
+    LeapSecond                 = $base/kernels/lsk/naif0009.tls		      
+    TargetAttitudeShape       = $base/kernels/pck/pck00009.tpc
+    TargetPosition            = (Table, $base/kernels/spk/de405.bsp) 	 
+    InstrumentPointing        = (Table, $odyssey/kernels/ck/m01_sc_ext11.bc,
+                                 $odyssey/kernels/fk/m01_v29.tf)	
+    Instrument                = Null					 
+    SpacecraftClock           = $odyssey/kernels/sclk/ORB1_SCLKSCET.00187.tsc
+    InstrumentPosition        = (Table, $odyssey/kernels/spk/m01_ext11.bsp)
+    InstrumentAddendum        = $odyssey/kernels/iak/themisAddendum003.ti
+    ShapeModel                = $base/dems/molaMarsPlanetaryRadius0005.cub
+    InstrumentPositionQuality = Reconstructed				
+    InstrumentPointingQuality = Reconstructed				
+    CameraVersion             = 2</b>					
+  End_Group
+
+  Group = AlphaCube                                                           
+    AlphaSamples        = 320						      
+    AlphaLines          = 3600						      
+    AlphaStartingSample = 99.5						      
+    AlphaStartingLine   = 9.5						      
+    AlphaEndingSample   = 199.5 					      
+    AlphaEndingLine     = 109.5 					      
+    BetaSamples         = 100						      
+    BetaLines           = 100						      
+  End_Group								      
+</pre>
+</small>
+</td>
+<td>
+<small>
+<pre>
+Group = Kernels
+    <b>NaifFrameCode = -53031</b>
+End_Group
+
+
+ Group = AlphaCube
+   AlphaSamples        = 320
+   AlphaLines	       = 3600
+   AlphaStartingSample = 99.5
+   AlphaStartingLine   = 9.5
+   AlphaEndingSample   = 199.5
+   AlphaEndingLine     = 109.5
+   BetaSamples         = 100
+   BetaLines	       = 100
+ End_Group
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+</pre>
+</small>
+</td>
+</tr>
+</table>
+</p>
+    <p>
+      For a <def>Level2</def> image or a mosaic, the Mapping group keywords in 
+      the labels are updated or removed depending on the settings used to crop 
+      the input image.  Once an image has been cropped, the keywords 
+      MinimumLatitude, MaximumLatitude, MinimumLongitude, and MaximumLongitude 
+      are recomputed and the values updated in the labels for rectangular 
+      projections with straight line meridians and parallels.  The keywords are 
+      removed from the labels for projections with curved meridians and 
+      parallels.  Use the <i>map2map</i> application if the keywords 
+      MinimumLatitude, MaximumLatitude, MinimumLongitude, and MaximumLongitude 
+      must be retained in the labels.  If the parameters LINC and SINC are not 1 
+      and the values are equal, then the map <def>Scale</def> and <def 
+      link="Pixel Resolution">PixelResolution</def> are recomputed and the values
+      updated in the labels.  Otherwise, Scale and PixelResolution keywords and
+      values are removed 
+      from the labels.  The UpperLeftCornerX and UpperLeftCornerY are recomputed
+      based on the settings used to crop the input image and updated in the labels
+      for all projections as shown in the example below.  
+    </p>
+
+<p>
+<table border="">
+  <tr>
+    <th>Level2 labels of uncropped image:</th>
+    <th>Level2 labels of cropped image:</th>
+  </tr>
+<tr>
+<td>
+<small>
+<pre>
+Group = Mapping                                           
+  ProjectionName       = Equirectangular		  
+  CenterLongitude      = 0				  
+  TargetName	       = MOON				  
+  EquatorialRadius     = 1737400.0 &lt;meters&gt;	  
+  PolarRadius	       = 1737400.0 &lt;meters&gt;	  
+  LatitudeType         = Planetocentric 		  
+  LongitudeDirection   = PositiveEast			  
+  LongitudeDomain      = 180				  
+  MinimumLatitude      = -60.62302099			  
+  MaximumLatitude      = -59.30333301			  
+  MinimumLongitude     = -161.213427			  
+  MaximumLongitude     = -158.574051			  
+  <b>UpperLeftCornerX     = -2444266.0</b>		  
+  <b>UpperLeftCornerY     = -1798275.5</b>		  
+  <b>PixelResolution      = 7.5 &lt;meters/pixel&gt;</b>
+  <b>Scale 	       = 4043.1133898866 &lt;pixels/degree&gt;</b>
+  CenterLatitude       = -60
+  CenterLatitudeRadius = 1737400.0
+End_Group
+</pre>
+</small>
+</td>
+<td>
+<small>
+<pre>
+Group = Mapping
+   ProjectionName	= Equirectangular
+   CenterLongitude	= 0
+   TargetName		= MOON
+   EquatorialRadius	= 1737400.0 &lt;meters&gt;
+   PolarRadius  	= 1737400.0 &lt;meters&gt;
+   LatitudeType 	= Planetocentric
+   LongitudeDirection	= PositiveEast
+   LongitudeDomain	= 180
+   <b>UpperLeftCornerX     = -2429273.5</b>
+   <b>UpperLeftCornerY     = -1813268.0</b>
+   <b>PixelResolution	= 15.0 &lt;meters/pixel&gt;</b>
+   <b>Scale		= 2021.5566949433 &lt;pixels/degree&gt;</b>
+   CenterLatitude	= -60
+   CenterLatitudeRadius = 1737400.0
+End_Group
+
+
+
+
+</pre>
+</small>
+</td>
+</tr>
+</table>
+</p>
+    <p>
+    <b>WARNING:</b><br />
+      If the cropped image is displayed with the application <i>qview</i>, the latitude 
+      and longitude reported by the application will be correct for the cropped files. 
+      The <i>mappt</i> application can be used to compute the <def link="Latitude">latitude</def> 
+      and <def link="Longitude">longitude</def> at a specific point in a cropped cube.  
+      <br /><br/> 
+      The minimum and maximum latitude and longitude range are not recomputed and the 
+      keywords are deleted from the labels when the input image is in a non-rectangular
+      projection.  Unfortunately there is not a generic way to update the ranges for 
+      all projections so only the values for rectangular projections are recalculated
+      and updated in the labels.
+      <br /><br/> 
+      The cropped images may be included in a list to create a mosaic with 
+      <i>automos</i>. All the cropped images included in the input list must contain 
+      the same mapping values. If <i>automos</i> fails because of the cropped images, 
+      the user may need to specify the MINLAT, MAXLAT, MINLON, and MAXLON values of 
+      the output mosaic for some ISIS versions.      
+    </p>
+  </description>
+
+  <category>
+    <categoryItem>Trim and Mask</categoryItem>
+  </category>
+
+  <seeAlso>
+    <applications>
+     <item>mapmos</item>
+    </applications>
+  </seeAlso>
+
+  <history>
+    <change name="Jim Mathews" date="1994-04-20">
+      Original version
+    </change>
+    <change name="Jeff Anderson" date="2002-08-05">
+      Converted to Isis 3.0
+    </change>
+    <change name="K Teal Thompson" date="2002-11-18">
+      Added examples
+    </change>
+    <change name="Jeff Anderson" date="2003-01-28">
+      Removed crop from the Utility category
+    </change>
+    <change name="K Teal Thompson" date="2003-02-03">
+      Make images smaller
+    </change>
+    <change name="K Teal Thompson" date="2003-02-04">
+      Added red rectangle to input image of example to illustrate crop area.
+    </change>
+    <change name="K Teal Thompson" date="2003-03-19">
+       Moved images to /assets/image directory and thumbnails to /assets/thumb directory.
+    </change>
+    <change name="Stuart Sides" date="2003-04-04">
+      Fixed problem with isiscvs not checking in the thumb and image directories.
+    </change>
+    <change name="Stuart Sides" date="2003-04-25">
+      Added extraction labels
+    </change>
+    <change name="Stuart Sides" date="2003-05-16">
+      Modified schema location from astrogeology... to isis.astrogeology..."
+    </change>
+    <change name="Stuart Sides" date="2003-07-29">
+      Modified filename parameters to be cube parameters where necessary
+    </change>
+    <change name="Jeff Anderson" date="2004-02-16">
+      Replaced extraction group with AlphaCube group and propagated other
+      labels.
+    </change>
+    <change name="Jeff Anderson" date="2004-02-16">
+      Added LINC and SINC parameters and set defaults for all parameters
+    </change>
+    <change name="Brendan George" date="2006-12-29">
+      Fixed to allow input band selection
+    </change>
+    <change name="Elizabeth Miller" date="2007-02-01">
+      Modified to adjust the upper left corner x and y values in the mapping group 
+      of the output cube if the input cube is projected
+    </change>
+    <change name="Steven Lambright" date="2008-05-13">
+      Removed references to CubeInfo 
+    </change>
+    <change name="Steven Lambright" date="2008-08-04">
+      Added spice propagation option PROPSPICE. Fixed description of NLINES, NSAMPLES
+      and now line associated and sample associated tables are modified when crop is run.
+    </change>
+    <change name="Steven Lambright" date="2008-08-06">
+      Changed default of PROPSPICE to true. Sample/Line associated tables are no longer modified
+      due to conflicts with other programs, such as pad, which doesn't know what data values
+      to add to the tables.
+    </change>
+    <change name="Steven Lambright" date="2009-06-30">
+      When an invalid projection exists the proper error should now be thrown.
+    </change>
+    <change name="Janet Barrett" date="2009-10-21">
+      Now uses the SubArea class to produce output cube labels 
+      with corrected Mapping, Instrument, and AlphaCube groups.
+    </change>
+    <change name="Tracie Sucharski" date="2012-12-06">
+      Removed unnecessary include of Projection.h.  References #775
+    </change>
+    <change name="Stuart Sides" date="2013-06-23">
+      Modified the calculations for number of lines and samples to use double precision math
+      and then round up instead of integer math with truncation. When the number of lines or
+      samples does not divide evenly by the linc or sinc values there will be one additional
+      line or sample in the output cube.
+    </change>
+    <change name="Janet Barrett" date="2014-02-10">
+      Delete input cube between successive runs of the program. This makes sure that the
+      projection information is initialized each time the program is run in the GUI.
+      Fixes #1500.
+    </change>
+     <change name="Ella Mae Lee" date="2014-04-02">
+      Updated the documentation, fixes #1622 and #1688.
+    </change>
+    <change name="Jeffrey Covington" date="2015-01-15">
+      Removed unreachable code.
+    </change>
+  </history>
+
+  <oldName>
+    <item>dsk2dsk</item>
+    <item>sfrom</item>
+  </oldName>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input cube
+        </brief>
+        <description>
+  	      This is the input cube that will be cropped.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+
+      <parameter name="TO">
+        <type>cube</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output cropped cube
+        </brief>
+        <description>
+          The smaller output <def link="Cube">cube</def> containing the results of <i>crop</i>.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Sample Extraction">
+      <parameter name="SAMPLE">
+        <type>integer</type>
+        <brief>Starting Sample</brief>
+        <default><item>1</item></default>
+        <description>
+          This is the starting sample of the area to extract.  It must be inside
+          the cube area.
+        </description>
+
+        <minimum inclusive="yes">1</minimum>
+      </parameter>
+
+      <parameter name="NSAMPLES">
+        <type>integer</type>
+        <brief>Number of Samples</brief>
+        <internalDefault>All samples</internalDefault>
+        <description>
+          This defines how many samples to extract from the input cube,
+          if SINC is 1. Otherwise, the number of samples actually extracted
+	  from the input cube is NSAMPLES/SINC.
+        </description>
+
+        <minimum inclusive="yes">1</minimum>
+      </parameter>
+
+      <parameter name="SINC">
+        <type>integer</type>
+        <brief>Sample increment</brief>
+        <default><item>1</item></default>
+        <description>
+          This specifies the sample increment to use when extracting from the 
+	  input cube. This effectively skips samples when the value is greater
+	  than 1.  For example, if SINC=2 and SAMPLE=1 the output cube would 
+	  contain samples 1, 3, 5, 7, and so on.  Note that this reduces the size 
+	  of the output cube as specified by NSAMPLES.  That is, if NSAMPLES=200 
+	  and SINC=2, the output cube will have 100 samples.
+        </description>
+
+        <minimum inclusive="yes">1</minimum>
+      </parameter>
+    </group>
+
+    <group name="Line Extraction">
+      <parameter name="LINE">
+        <type>integer</type>
+        <brief>Starting Line</brief>
+        <default><item>1</item></default>
+        <description>
+          This is the starting line of the area to extract.  It must be inside the cube.
+        </description>
+
+        <minimum inclusive="yes">1</minimum>
+      </parameter>
+
+      <parameter name="NLINES">
+        <type>integer</type>
+        <brief>Number of Lines</brief>
+        <internalDefault>All lines</internalDefault>
+        <description>
+          This defines how many lines will be extracted from the input cube,
+          if LINC is 1. Otherwise, the number of lines actually extracted from 
+	  the input cube is NLINES/LINC.
+        </description>
+
+        <minimum inclusive="yes">1</minimum>
+      </parameter>
+
+      <parameter name="LINC">
+        <type>integer</type>
+        <brief>Line increment</brief>
+        <default><item>1</item></default>
+        <description>
+          This specifies the line increment to use when extracting from the 
+	  input cube. This effectively skips lines when the value is greater
+	  than 1.  For example if LINC=2 and LINE=5
+          the output cube would contain lines 5, 7, 9, 11, and so on.  Note that
+          this reduces the size of the output cube as specified by NLINES.
+          That is, if NLINES=200 and LINC=2, the output cube will have 100
+          lines.
+        </description>
+
+        <minimum inclusive="yes">1</minimum>
+      </parameter>
+    </group>
+
+    <group name="MISC">
+      <parameter name="PROPSPICE">
+        <type>boolean</type>
+        <default><item>true</item></default>
+        <brief>
+          Propagate SPICE information to output cube
+        </brief>
+        <description>
+          This specifies whether or not to propagate the <def>SPICE</def> Kernels group 
+	  to the output file for a <def>Level 1</def> image.  If this parameter is set to 
+	  "False," then there will be no camera model available to compute 
+	  geometric and photometric information using the cropped cube. 
+        </description>
+      </parameter>
+    </group>
+  </groups>
+
+  <examples>
+    <example>
+      <brief>Extract a 200x300 sub-area</brief>
+      <description>
+        Extract 200 samples by 300 lines sub-area from the input file.
+      </description>
+      <terminalInterface>
+        <commandLine> f=peaks.cub t=crop.cub samp=100 line=200 nsamp=200 nline=300 
+        </commandLine>
+        <description>
+        In this example, crop will extract a 200x300 sub-area that starts at sample 100 
+	and line 200 from the input cube.
+        </description>
+      </terminalInterface>
+
+      <inputImages>
+        <image src="assets/image/peaks.1.jpg" width="500" height="500">
+          <brief> Input image</brief>
+          <description>This is the full size input image.  The area (200x300) 
+	  to be "cropped" is outlined in red.
+          </description>
+          <thumbnail caption="Input image" src="assets/thumb/peaks.1.jpg" width="200" height="200"/>
+          <parameterName>FROM</parameterName>
+        </image>
+      </inputImages>
+
+      <outputImages>
+        <image src="assets/image/peaks.crop.jpg" width="200" height="300">
+          <brief> Cropped output image</brief>
+          <description> This is the cropped output image that is 200x300, samples and lines respectively.
+          </description>
+          <thumbnail caption="Output image showing the results of the crop application." src="assets/thumb/peaks.crop.jpg" width="133" height="200"/>
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+
+      <guiInterfaces>
+        <guiInterface>
+          <image width="673" height="723" src="assets/image/cropgui.jpg">
+            <brief>Example GUI</brief>
+            <description>This is a screenshot of crop.  The GUI shows the parameters filled to extract a 200x300 pixel sub-area from the input image. </description>
+            <thumbnail width="186" height="200" caption="Crop GUI" src="assets/thumb/cropgui.jpg" />
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+    </example>
+  </examples>
+</application>

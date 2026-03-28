@@ -1,0 +1,46 @@
+Unit Test for LroNarrowAngleCamera...
+FileName: M111607830RE_crop.cub
+CK Frame: -85610
+
+Kernel IDs: 
+CK Frame ID = -85000
+CK Reference ID = 1
+SPK Target ID = -85
+SPK Reference ID = 1
+
+For upper left corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For upper right corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For lower left corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For lower right corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For center pixel position ...
+Latitude OK
+Longitude OK
+
+
+Testing name methods ...
+Spacecraft Name Long: Lunar Reconnaissance Orbiter
+Spacecraft Name Short: LRO
+Instrument Name Long: Narrow Angle Camera Right
+Instrument Name Short: NACR
+
+Spacecraft Name Long: Lunar Reconnaissance Orbiter
+Spacecraft Name Short: LRO
+Instrument Name Long: Narrow Angle Camera Left
+Instrument Name Short: NACL
+
+
+Testing exceptions:
+
+**PROGRAMMER ERROR** File does not appear to be a Lunar Reconnaissance Orbiter Image: -130102 is not a supported instrument kernel code for Lunar Reconnaissance Orbiter.

@@ -1,0 +1,1196 @@
+Unit test for BundleUtilities...
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Testing BundleObservationSolveSettings...
+
+Printing PVL group with settings from the default constructor...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>N/A</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas/>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing copy constructor...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>N/A</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas/>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing assignment operator to set this equal to itself...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>N/A</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas/>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing assignment operator to create a new settings object...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>N/A</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas/>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing mutator methods...
+setInstrument(), setInstrumentPointingSettings(), setInstrumentPositionSettings()
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId>MyInstrumentId</instrumentId>
+    <instrumentPointingOptions solveOption="AnglesAndVelocity" numberCoefSolved="2" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>3.0</sigma>
+            <sigma>4.0</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="PositionOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveOverHermiteSpline="Yes" interpolationType="4">
+        <aprioriPositionSigmas>
+            <sigma>800.0</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas/>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas/>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>N/A</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="PositionOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas>
+            <sigma>N/A</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesAndVelocity" numberCoefSolved="2" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="PositionAndVelocity" numberCoefSolved="2" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesVelocityAndAcceleration" numberCoefSolved="3" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="PositionVelocityAndAcceleration" numberCoefSolved="3" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId>MyInstrumentId</instrumentId>
+    <instrumentPointingOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="6" degree="4" solveDegree="5" solveTwist="No" solveOverExisting="Yes" interpolationType="4">
+        <aprioriPointingSigmas>
+            <sigma>1.0</sigma>
+            <sigma>N/A</sigma>
+            <sigma>3.0</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="8" degree="6" solveDegree="7" solveOverHermiteSpline="Yes" interpolationType="4">
+        <aprioriPositionSigmas>
+            <sigma>8.0</sigma>
+            <sigma>9.0</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing static unused enum-to-string and string-to-enum methods...
+"None"
+"AnglesOnly"
+"AnglesAndVelocity"
+"AnglesVelocityAndAcceleration"
+"AllPolynomialCoefficients"
+"None"
+"PositionOnly"
+"PositionAndVelocity"
+"PositionVelocityAndAcceleration"
+"AllPolynomialCoefficients"
+
+Testing XML: write XML from BundleObservationSolveSettings object...
+Testing XML: read XML to BundleObservationSolveSettings object...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas/>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas/>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing XML: read XML to BundleObservationSolveSettings object...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>N/A</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="PositionOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas>
+            <sigma>N/A</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing XML: read XML to BundleObservationSolveSettings object...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesAndVelocity" numberCoefSolved="2" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="PositionAndVelocity" numberCoefSolved="2" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing XML: read XML to BundleObservationSolveSettings object...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesVelocityAndAcceleration" numberCoefSolved="3" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="PositionVelocityAndAcceleration" numberCoefSolved="3" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing XML: read XML to BundleObservationSolveSettings object...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId>MyInstrumentId</instrumentId>
+    <instrumentPointingOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="6" degree="4" solveDegree="5" solveTwist="No" solveOverExisting="Yes" interpolationType="4">
+        <aprioriPointingSigmas>
+            <sigma>1.0</sigma>
+            <sigma>N/A</sigma>
+            <sigma>3.0</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="8" degree="6" solveDegree="7" solveOverHermiteSpline="Yes" interpolationType="4">
+        <aprioriPositionSigmas>
+            <sigma>8.0</sigma>
+            <sigma>9.0</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing XML: read XML with no attributes or values to object...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas/>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas/>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+Testing error throws...
+**ERROR** Unknown bundle instrument pointing solve option Nonsense.
+**PROGRAMMER ERROR** Unknown pointing solve option enum [-1].
+**ERROR** Unknown bundle instrument position solve option Nonsense.
+**PROGRAMMER ERROR** Unknown position solve option enum [-2].
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Testing BundleImage...
+Constructing BundleImage object from null camera...
+setting null parentBundleObservation to BundleImage...
+Access camera and parentObservation ...
+serial number =  "TestImageSerialNumber"
+file name     =  "TestImageFileName"
+Testing copy constructor...
+serial number =  "TestImageSerialNumber"
+file name     =  "TestImageFileName"
+Testing assignment operator to set this equal to itself...
+serial number =  "TestImageSerialNumber"
+file name     =  "TestImageFileName"
+Testing assignment operator to create a new object...
+serial number =  "TestImageSerialNumber"
+file name     =  "TestImageFileName"
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Testing IsisBundleObservation...
+Constructing empty IsisBundleObservation object...
+Constructing IsisBundleObservation object from BundleImage...
+Testing assignment operator to set this equal to itself...
+Testing assignment operator to create a new object...
+Testing copy constructor...
+Testing mutators and accessors...
+    Set/get solve settings using with CAMESOLVE=NONE...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas/>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas/>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+    output bundle observation...
+0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,
+0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,
+  X  (km)          0.00000000            0.00000000               0.00000000                 N/A            N/A        m
+  Y  (km)          0.00000000            0.00000000               0.00000000                 N/A            N/A        m
+  Z  (km)          0.00000000            0.00000000               0.00000000                 N/A            N/A        m
+ RA  (dd)          0.00000000            0.00000000               0.00000000                 N/A            N/A        dd
+DEC  (dd)          0.00000000            0.00000000               0.00000000                 N/A            N/A        dd
+TWI  (dd)          0.00000000            0.00000000               0.00000000                 N/A            N/A        dd
+
+  X  (km)          0.00000000            0.00000000               0.00000000                 N/A            N/A        m
+  Y  (km)          0.00000000            0.00000000               0.00000000                 N/A            N/A        m
+  Z  (km)          0.00000000            0.00000000               0.00000000                 N/A            N/A        m
+ RA  (dd)          0.00000000            0.00000000               0.00000000                 N/A            N/A        dd
+DEC  (dd)          0.00000000            0.00000000               0.00000000                 N/A            N/A        dd
+TWI  (dd)          0.00000000            0.00000000               0.00000000                 N/A            N/A        dd
+
+    Set solve settings using with TWIST=FALSE...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId>MyInstrumentId</instrumentId>
+    <instrumentPointingOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="6" degree="4" solveDegree="5" solveTwist="No" solveOverExisting="Yes" interpolationType="4">
+        <aprioriPointingSigmas>
+            <sigma>1.0</sigma>
+            <sigma>N/A</sigma>
+            <sigma>3.0</sigma>
+        </aprioriPointingSigmas>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="AllPolynomialCoefficients" numberCoefSolved="8" degree="6" solveDegree="7" solveOverHermiteSpline="Yes" interpolationType="4">
+        <aprioriPositionSigmas>
+            <sigma>8.0</sigma>
+            <sigma>9.0</sigma>
+            <sigma>N/A</sigma>
+        </aprioriPositionSigmas>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+    output bundle observation...
+0.0,0.0,0.0,8.0,0.00000000,0.0,0.0,0.0,9.0,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,8.0,0.00000000,0.0,0.0,0.0,9.0,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,8.0,0.00000000,0.0,0.0,0.0,9.0,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,1.0,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,3.0,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,1.0,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,3.0,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,FREE,0.00000000,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,
+0.0,0.0,0.0,8.0,N/A,0.0,0.0,0.0,9.0,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,8.0,N/A,0.0,0.0,0.0,9.0,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,8.0,N/A,0.0,0.0,0.0,9.0,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,1.0,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,3.0,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,1.0,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,3.0,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,FREE,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,
+  X  (km)          0.00000000            0.00000000               0.00000000                 8.0            N/A        m
+    (km/s)         0.00000000            0.00000000               0.00000000                 9.0            N/A        m/s
+   (km/s^2)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^2
+   (km/s^3)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^3
+   (km/s^4)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^4
+   (km/s^5)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^5
+   (km/s^6)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^6
+   (km/s^7)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^7
+  Y  (km)          0.00000000            0.00000000               0.00000000                 8.0            N/A        m
+    (km/s)         0.00000000            0.00000000               0.00000000                 9.0            N/A        m/s
+   (km/s^2)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^2
+   (km/s^3)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^3
+   (km/s^4)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^4
+   (km/s^5)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^5
+   (km/s^6)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^6
+   (km/s^7)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^7
+  Z  (km)          0.00000000            0.00000000               0.00000000                 8.0            N/A        m
+    (km/s)         0.00000000            0.00000000               0.00000000                 9.0            N/A        m/s
+   (km/s^2)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^2
+   (km/s^3)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^3
+   (km/s^4)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^4
+   (km/s^5)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^5
+   (km/s^6)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^6
+   (km/s^7)        0.00000000            0.00000000               0.00000000                FREE            N/A        m/s^7
+ RA  (dd)          0.00000000            0.00000000               0.00000000                 1.0            N/A        dd
+    (dd/s)         0.00000000            0.00000000               0.00000000                FREE            N/A        dd/s
+   (dd/s^2)        0.00000000            0.00000000               0.00000000                 3.0            N/A        dd/s^2
+   (dd/s^3)        0.00000000            0.00000000               0.00000000                FREE            N/A        dd/s^3
+   (dd/s^4)        0.00000000            0.00000000               0.00000000                FREE            N/A        dd/s^4
+   (dd/s^5)        0.00000000            0.00000000               0.00000000                FREE            N/A        dd/s^5
+DEC  (dd)          0.00000000            0.00000000               0.00000000                 1.0            N/A        dd
+    (dd/s)         0.00000000            0.00000000               0.00000000                FREE            N/A        dd/s
+   (dd/s^2)        0.00000000            0.00000000               0.00000000                 3.0            N/A        dd/s^2
+   (dd/s^3)        0.00000000            0.00000000               0.00000000                FREE            N/A        dd/s^3
+   (dd/s^4)        0.00000000            0.00000000               0.00000000                FREE            N/A        dd/s^4
+   (dd/s^5)        0.00000000            0.00000000               0.00000000                FREE            N/A        dd/s^5
+TWI  (dd)          0.00000000            0.00000000               0.00000000                 N/A            N/A        dd
+    (dd/s)         0.00000000            0.00000000               0.00000000                 N/A            N/A        dd/s
+   (dd/s^2)        0.00000000            0.00000000               0.00000000                 N/A            N/A        dd/s^2
+   (dd/s^3)        0.00000000            0.00000000               0.00000000                 N/A            N/A        dd/s^3
+   (dd/s^4)        0.00000000            0.00000000               0.00000000                 N/A            N/A        dd/s^4
+   (dd/s^5)        0.00000000            0.00000000               0.00000000                 N/A            N/A        dd/s^5
+
+  X  (km)          0.00000000            0.00000000               0.00000000                 8.0            0.00000000        m
+    (km/s)         0.00000000            0.00000000               0.00000000                 9.0            0.00000000        m/s
+   (km/s^2)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^2
+   (km/s^3)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^3
+   (km/s^4)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^4
+   (km/s^5)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^5
+   (km/s^6)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^6
+   (km/s^7)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^7
+  Y  (km)          0.00000000            0.00000000               0.00000000                 8.0            0.00000000        m
+    (km/s)         0.00000000            0.00000000               0.00000000                 9.0            0.00000000        m/s
+   (km/s^2)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^2
+   (km/s^3)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^3
+   (km/s^4)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^4
+   (km/s^5)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^5
+   (km/s^6)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^6
+   (km/s^7)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^7
+  Z  (km)          0.00000000            0.00000000               0.00000000                 8.0            0.00000000        m
+    (km/s)         0.00000000            0.00000000               0.00000000                 9.0            0.00000000        m/s
+   (km/s^2)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^2
+   (km/s^3)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^3
+   (km/s^4)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^4
+   (km/s^5)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^5
+   (km/s^6)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^6
+   (km/s^7)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        m/s^7
+ RA  (dd)          0.00000000            0.00000000               0.00000000                 1.0            0.00000000        dd
+    (dd/s)         0.00000000            0.00000000               0.00000000                FREE            0.00000000        dd/s
+   (dd/s^2)        0.00000000            0.00000000               0.00000000                 3.0            0.00000000        dd/s^2
+   (dd/s^3)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        dd/s^3
+   (dd/s^4)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        dd/s^4
+   (dd/s^5)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        dd/s^5
+DEC  (dd)          0.00000000            0.00000000               0.00000000                 1.0            0.00000000        dd
+    (dd/s)         0.00000000            0.00000000               0.00000000                FREE            0.00000000        dd/s
+   (dd/s^2)        0.00000000            0.00000000               0.00000000                 3.0            0.00000000        dd/s^2
+   (dd/s^3)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        dd/s^3
+   (dd/s^4)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        dd/s^4
+   (dd/s^5)        0.00000000            0.00000000               0.00000000                FREE            0.00000000        dd/s^5
+TWI  (dd)          0.00000000            0.00000000               0.00000000                 N/A            N/A        dd
+    (dd/s)         0.00000000            0.00000000               0.00000000                 N/A            N/A        dd/s
+   (dd/s^2)        0.00000000            0.00000000               0.00000000                 N/A            N/A        dd/s^2
+   (dd/s^3)        0.00000000            0.00000000               0.00000000                 N/A            N/A        dd/s^3
+   (dd/s^4)        0.00000000            0.00000000               0.00000000                 N/A            N/A        dd/s^4
+   (dd/s^5)        0.00000000            0.00000000               0.00000000                 N/A            N/A        dd/s^5
+
+    Set solve settings using with CAMSOLVE=ALL and TWIST=TRUE...
+
+<bundleObservationSolveSettings>
+    
+    <instrumentId></instrumentId>
+    <instrumentPointingOptions solveOption="AnglesOnly" numberCoefSolved="1" degree="2" solveDegree="2" solveTwist="Yes" solveOverExisting="No" interpolationType="3">
+        <aprioriPointingSigmas/>
+    </instrumentPointingOptions>
+    <instrumentPositionOptions solveOption="None" numberCoefSolved="0" degree="2" solveDegree="2" solveOverHermiteSpline="No" interpolationType="3">
+        <aprioriPositionSigmas/>
+    </instrumentPositionOptions>
+</bundleObservationSolveSettings> 
+
+
+index =  "1"
+instrument id =  "InstrumentId2"
+number parameters =      "3"
+parameter list:  ("X", "Y", "Z", "RA", "DEC", "TWIST")
+image names:     ()
+parameter weights :     0.0     0.0     0.0     
+parameter corrections : 0.0     0.0     0.0     
+apriori sigmas :        0.0     0.0     0.0     
+adjusted sigmas :       0.0     0.0     0.0     
+    output bundle observation...
+0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,0.0,N/A,0.0,0.0,0.0,0.0,N/A,0.0,0.0,0.0,0.0,N/A,
+  X  (km)          0.00000000            0.00000000               0.00000000                 N/A            N/A        m
+  Y  (km)          0.00000000            0.00000000               0.00000000                 N/A            N/A        m
+  Z  (km)          0.00000000            0.00000000               0.00000000                 N/A            N/A        m
+ RA  (dd)          0.00000000            0.00000000               0.00000000                 0.0            N/A        dd
+DEC  (dd)          0.00000000            0.00000000               0.00000000                 0.0            N/A        dd
+TWI  (dd)          0.00000000            0.00000000               0.00000000                 0.0            N/A        dd
+
+0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,N/A,N/A,0.0,0.0,0.0,0.0,0.00000000,0.0,0.0,0.0,0.0,0.00000000,0.0,0.0,0.0,0.0,0.00000000,
+init exterior orientiation successful?   "Yes"
+apply param corrections successful?
+**ERROR** Unable to apply parameter corrections to IsisBundleObservation.
+**ERROR** Instrument rotation is NULL, but pointing solve option is AnglesOnly.
+
+    add another image...
+    access images by serial number...
+TestImageFileName
+TestImage2FileName
+
+Testing exceptions...
+**ERROR** Unable to apply parameter corrections to IsisBundleObservation.
+**ERROR** Instrument position is NULL, but position solve option is PositionOnly.
+**ERROR** Unable to apply parameter corrections to IsisBundleObservation.
+**ERROR** Instrument rotation is NULL, but pointing solve option is AnglesOnly.
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Testing BundleObservationVector...
+
+number of parameters:  "0"
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Testing BundleControlPoint...
+BCP test 1 - Create FreePoint with free point containing 2 measures (note that first measure is ignored, second measure is not ignored)
+     and no apriori or adjusted coordinate values or sigmas set...
+Type of BundleControlPoint 1: 2
+Set BundleControlPoint 1 to rejected - is rejected? "Yes"
+Set BundleControlPoint 1 to non-rejected - is rejected? "No"
+Number of rejected measures: 0
+Set number of rejected measures: 2
+Zero out number of rejected measures: 0
+       FreePoint           FREE    1 of 1  3.54            Null            Null            Null             N/A             N/A             N/A
+
+ Label: FreePoint
+Status: FREE
+  Rays: 1 of 1
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE             Null           0.00000000          0.00000000                Null              FREE               N/A
+ LONGITUDE             Null           0.00000000          0.00000000                Null              FREE               N/A
+    RADIUS             Null           0.00000000          0.00000000                Null               N/A               N/A
+
+
+       FreePoint           FREE    1 of 1  3.54            Null            Null            Null             N/A             N/A             N/A
+
+ Label: FreePoint
+Status: FREE
+  Rays: 1 of 1
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE             Null           0.00000000          0.00000000                Null              FREE               N/A
+ LONGITUDE             Null           0.00000000          0.00000000                Null              FREE               N/A
+    RADIUS             Null           0.00000000          0.00000000                Null               N/A               N/A
+
+
+
+BCP test 2 - Modify FreePoint - setAdjustedSurfacePoint(0,0,10) and addMeasure()
+       FreePoint           FREE    2 of 2  3.54      0.00000000      0.00000000      0.01000000             N/A             N/A             N/A
+
+ Label: FreePoint
+Status: FREE
+  Rays: 2 of 2
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE       0.00000000           0.00000000          0.00000000          0.00000000              FREE               N/A
+ LONGITUDE       0.00000000           0.00000000          0.00000000          0.00000000              FREE               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000               N/A               N/A
+
+
+aprioriSigmas:   "N/A" "N/A" "N/A"
+weights:         0 0 1e+50
+corrections:     0 0 0
+adjustedSigmas:  "N/A" "N/A" "N/A"
+nicVector:       0 0 0
+qMatrix:
+ New Block 
+
+Residual rms: 3.53553
+
+BCP test 3 - Create FreePoint - identical to previous, but with solveRadius=true
+ and apriori lat/lon/rad <= 0.  Test adding a measure to a BundleControlPoint.
+       FreePoint           FREE    2 of 2  3.54      0.00000000      0.00000000      0.01000000             N/A             N/A             N/A
+
+ Label: FreePoint
+Status: FREE
+  Rays: 2 of 2
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE       0.00000000           0.00000000          0.00000000          0.00000000              FREE               N/A
+ LONGITUDE       0.00000000           0.00000000          0.00000000          0.00000000              FREE               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000              FREE               N/A
+
+
+aprioriSigmas:   "N/A" "N/A" "N/A"
+weights:         0 0 0
+
+BCP test 4 - Create FreePoint - solveRadius=true, apriori lat/lon/rad > 0 
+                    from globals - coordinate type = Latitudinal
+       FreePoint           FREE    2 of 2  3.54      0.00000000      0.00000000      0.01000000             N/A             N/A             N/A
+
+ Label: FreePoint
+Status: FREE
+  Rays: 2 of 2
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE       0.00000000           0.00000000          0.00000000          0.00000000        2.00000000               N/A
+ LONGITUDE       0.00000000           0.00000000          0.00000000          0.00000000        3.00000000               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000        4.00000000               N/A
+
+
+aprioriSigmas:   "2.0" "3.0" "4.0"
+weights:         25 11.1111 62500
+
+Raw control point equal to original?     "Yes"
+Raw control point is rejected?           "No"
+Adjusted SurfacePoint (Lat, Lon, Rad) =  "0.0" "0.0" "10.0"
+
+BCP test 5 - Create FixedPoint from empty fixed point, solveRadius = F adjusted surface point (90, 180, 10)...
+      FixedPoint          FIXED    0 of 0  0.00     90.00000000    180.00000000      0.01000000             N/A             N/A             N/A
+
+ Label: FixedPoint
+Status: FIXED
+  Rays: 0 of 0
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE      90.00000000           0.00000000          0.00000000         90.00000000             FIXED               N/A
+ LONGITUDE     180.00000000           0.00000000          0.00000000        180.00000000             FIXED               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000               N/A               N/A
+
+
+BCP test 6 - Create FixedPoint from empty fixed point, solveRadius = True
+ adjusted surface point (90, 180, 10)...
+      FixedPoint          FIXED    0 of 0  0.00     90.00000000    180.00000000      0.01000000             N/A             N/A             N/A
+
+ Label: FixedPoint
+Status: FIXED
+  Rays: 0 of 0
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE      90.00000000           0.00000000          0.00000000         90.00000000             FIXED               N/A
+ LONGITUDE     180.00000000           0.00000000          0.00000000        180.00000000             FIXED               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000             FIXED               N/A
+
+
+aprioriSigmas:   "NULL" "NULL" "NULL"
+weights:         1e+50 1e+50 1e+50
+
+BCP test 7 - Create ConstrainedPoint with solveRadius=false and adjusted surface point (0, 0, 10), no constraints set, coordType=Latitudinal ...
+ConstrainedPoint    CONSTRAINED    0 of 0  0.00      0.00000000      0.00000000      0.01000000             N/A             N/A             N/A
+
+ Label: ConstrainedPoint
+Status: CONSTRAINED
+  Rays: 0 of 0
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE       0.00000000           0.00000000          0.00000000          0.00000000               N/A               N/A
+ LONGITUDE       0.00000000           0.00000000          0.00000000          0.00000000               N/A               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000               N/A               N/A
+
+
+aprioriSigmas:   "NULL" "NULL" "NULL"
+weights:         0 0 1e+50
+
+BCP test 8 - Create ConstrainedPoint - no constraints, solveRadius=true, apriori lat/lon/rad <= 0, 
+     and adjustedsurface point (0, 0, 10)
+ConstrainedPoint    CONSTRAINED    0 of 0  0.00      0.00000000      0.00000000      0.01000000             N/A             N/A             N/A
+
+ Label: ConstrainedPoint
+Status: CONSTRAINED
+  Rays: 0 of 0
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE       0.00000000           0.00000000          0.00000000          0.00000000               N/A               N/A
+ LONGITUDE       0.00000000           0.00000000          0.00000000          0.00000000               N/A               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000               N/A               N/A
+
+
+aprioriSigmas:   "NULL" "NULL" "NULL"
+weights:         0 0 0
+
+BCP test 9 - Create ConstrainedPoint - no constraints,  solveRadius=true, apriori lat/lon/rad > 0 (valid global sigmas)
+ConstrainedPoint    CONSTRAINED    0 of 0  0.00      0.00000000      0.00000000      0.01000000             N/A             N/A             N/A
+
+ Label: ConstrainedPoint
+Status: CONSTRAINED
+  Rays: 0 of 0
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE       0.00000000           0.00000000          0.00000000          0.00000000        2.00000000               N/A
+ LONGITUDE       0.00000000           0.00000000          0.00000000          0.00000000        3.00000000               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000        4.00000000               N/A
+
+
+aprioriSigmas:   "2.0" "3.0" "4.0"
+weights:         25 11.1111 62500
+
+
+BCP test 10 - Create ConstrainedPoint from constrained point with adjusted  
+    pt (32, 120, 1000) & apriori pt with constraints from covar, solveRadius=F...
+ConstrainedPoint    CONSTRAINED    0 of 0  0.00     32.00000000    120.00000000      1.00000000     28.65696495     26.45751311     38.45488734
+
+ Label: ConstrainedPoint
+Status: CONSTRAINED
+  Rays: 0 of 0
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE      32.00000000           0.00000000          0.00000000         32.00000000       28.65696494       28.65696495
+ LONGITUDE     120.00000000           0.00000000          0.00000000        120.00000000       26.45751311       26.45751311
+    RADIUS       1.00000000           0.00000000          0.00000000          1.00000000               N/A       38.45488734
+
+
+BCP test 11 - Create ConstrainedPoint from constrained point with adjusted  surface pt (32, 120, 1000) 
+     & apriori pt with constraints from covar, solveRadius=T...
+ConstrainedPoint    CONSTRAINED    0 of 0  0.00     32.00000000    120.00000000      1.00000000     28.65696495     26.45751311     38.45488734
+
+ Label: ConstrainedPoint
+Status: CONSTRAINED
+  Rays: 0 of 0
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE      32.00000000           0.00000000          0.00000000         32.00000000       28.65696494       28.65696495
+ LONGITUDE     120.00000000           0.00000000          0.00000000        120.00000000       26.45751311       26.45751311
+    RADIUS       1.00000000           0.00000000          0.00000000          1.00000000       38.45488734       38.45488734
+
+
+aprioriSigmas:   "28.65696494252" "26.457513107566" "38.454887341483"
+weights:         1217.7 1027.41 676.234
+
+BCP test 12 - Create copy of FreePoint using copy constructor...
+       FreePoint           FREE    2 of 2  3.54      0.00000000      0.00000000      0.01000000             N/A             N/A             N/A
+
+Output for formatBundleOutputDetailString(...) with solveForRadius = false:
+ Label: FreePoint
+Status: FREE
+  Rays: 2 of 2
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE       0.00000000           0.00000000          0.00000000          0.00000000        2.00000000               N/A
+ LONGITUDE       0.00000000           0.00000000          0.00000000          0.00000000        3.00000000               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000        4.00000000               N/A
+
+
+BCP test 13 - Output for formatBundleOutputDetailString(...) with solveForRadius = true:
+ Label: FreePoint
+Status: FREE
+  Rays: 2 of 2
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE       0.00000000           0.00000000          0.00000000          0.00000000        2.00000000               N/A
+ LONGITUDE       0.00000000           0.00000000          0.00000000          0.00000000        3.00000000               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000        4.00000000               N/A
+
+
+
+BCP test 14 - Overwrite existing object with FixedPoint information...
+      FixedPoint          FIXED    0 of 0  0.00     90.00000000    180.00000000      0.01000000             N/A             N/A             N/A
+
+ Label: FixedPoint
+Status: FIXED
+  Rays: 0 of 0
+
+     Point         Initial               Total               Total              Final             Initial             Final
+Coordinate          Value             Correction          Correction            Value             Accuracy          Accuracy
+                 (dd/dd/km)           (dd/dd/km)           (Meters)           (dd/dd/km)          (Meters)          (Meters)
+  LATITUDE      90.00000000           0.00000000          0.00000000         90.00000000             FIXED               N/A
+ LONGITUDE     180.00000000           0.00000000          0.00000000        180.00000000             FIXED               N/A
+    RADIUS       0.01000000           0.00000000          0.00000000          0.01000000               N/A               N/A
+
+
+
+BCP test 15 - Coordtype=Rect, Free, solveRad=F
+       FreePoint           FREE    1 of 1  3.54      0.01000000      0.00000000      0.00000000             N/A             N/A             N/A
+
+ Label: FreePoint
+Status: FREE
+  Rays: 1 of 1
+
+        Point         Initial              Total              Final             Initial              Final
+   Coordinate         Value             Correction            Value             Accuracy          Accuracy
+                    (km/km/km)             (km)           (km/km/km)          (Meters)          (Meters)
+ BODY-FIXED-X       0.01000000          0.00000000          0.01000000              FREE               N/A
+ BODY-FIXED-Y       0.00000000          0.00000000          0.00000000              FREE               N/A
+ BODY-FIXED-Z       0.00000000          0.00000000          0.00000000              FREE               N/A
+
+
+weights:         0 0 0
+
+BCP test 16 - Coordtype=Rect, Free, solveRad=T
+       FreePoint           FREE    1 of 1  3.54      0.01000000      0.00000000      0.00000000             N/A             N/A             N/A
+
+ Label: FreePoint
+Status: FREE
+  Rays: 1 of 1
+
+        Point         Initial              Total              Final             Initial              Final
+   Coordinate         Value             Correction            Value             Accuracy          Accuracy
+                    (km/km/km)             (km)           (km/km/km)          (Meters)          (Meters)
+ BODY-FIXED-X       0.01000000          0.00000000          0.01000000        2.00000000               N/A
+ BODY-FIXED-Y       0.00000000          0.00000000          0.00000000        3.00000000               N/A
+ BODY-FIXED-Z       0.00000000          0.00000000          0.00000000        4.00000000               N/A
+
+
+weights:         250000 111111 62500
+
+
+BCP test 17 - Coordtype=Rect, Fixed, solveRad=F
+      FixedPoint          FIXED    0 of 0  0.00      0.00000000      0.00000000      1.00000000             N/A             N/A             N/A
+
+ Label: FixedPoint
+Status: FIXED
+  Rays: 0 of 0
+
+        Point         Initial              Total              Final             Initial              Final
+   Coordinate         Value             Correction            Value             Accuracy          Accuracy
+                    (km/km/km)             (km)           (km/km/km)          (Meters)          (Meters)
+ BODY-FIXED-X       0.00000000          0.00000000          0.00000000             FIXED               N/A
+ BODY-FIXED-Y       0.00000000          0.00000000          0.00000000             FIXED               N/A
+ BODY-FIXED-Z       1.00000000          0.00000000          1.00000000             FIXED               N/A
+
+
+weights:         1e+50 1e+50 1e+50
+
+
+BCP test 18 - Create ConstrainedPoint with solveRadius=false and adjusted surface point (0, 0, 1000), no constraints set, and coordType = Rect ...
+ConstrainedPoint    CONSTRAINED    0 of 0  0.00      0.00000000      0.00000000      1.00000000             N/A             N/A             N/A
+
+ Label: ConstrainedPoint
+Status: CONSTRAINED
+  Rays: 0 of 0
+
+        Point         Initial              Total              Final             Initial              Final
+   Coordinate         Value             Correction            Value             Accuracy          Accuracy
+                    (km/km/km)             (km)           (km/km/km)          (Meters)          (Meters)
+ BODY-FIXED-X       0.00000000          0.00000000          0.00000000               N/A               N/A
+ BODY-FIXED-Y       0.00000000          0.00000000          0.00000000               N/A               N/A
+ BODY-FIXED-Z       1.00000000          0.00000000          1.00000000               N/A               N/A
+
+
+aprioriSigmas:   "NULL" "NULL" "NULL"
+weights:         0 0 0
+
+BCP test 19 - Create ConstrainedPoint with solveRadius=false and adjusted surface point (0, 0, 1000), valid globals, and coordType = Rect ...
+ConstrainedPoint    CONSTRAINED    0 of 0  0.00      0.00000000      0.00000000      1.00000000             N/A             N/A             N/A
+
+ Label: ConstrainedPoint
+Status: CONSTRAINED
+  Rays: 0 of 0
+
+        Point         Initial              Total              Final             Initial              Final
+   Coordinate         Value             Correction            Value             Accuracy          Accuracy
+                    (km/km/km)             (km)           (km/km/km)          (Meters)          (Meters)
+ BODY-FIXED-X       0.00000000          0.00000000          0.00000000        2.00000000               N/A
+ BODY-FIXED-Y       0.00000000          0.00000000          0.00000000        3.00000000               N/A
+ BODY-FIXED-Z       1.00000000          0.00000000          1.00000000        4.00000000               N/A
+
+
+aprioriSigmas:   "2.0" "3.0" "4.0"
+weights:         250000 111111 62500
+
+BCP test 20 - Create ConstrainedPoint from constrained point with adjusted  
+ pt (32, 120, 1000) & apriori pt from Test 10 with constraints from covar, solveRadius=F, 
+coordType=Rectangular...
+
+ConstrainedPoint    CONSTRAINED    0 of 0  0.00     -0.42402405      0.73443119      0.52991926     10.00000000     50.00000000     20.00000000
+
+ Label: ConstrainedPoint
+Status: CONSTRAINED
+  Rays: 0 of 0
+
+        Point         Initial              Total              Final             Initial              Final
+   Coordinate         Value             Correction            Value             Accuracy          Accuracy
+                    (km/km/km)             (km)           (km/km/km)          (Meters)          (Meters)
+ BODY-FIXED-X      -0.42402405          0.00000000         -0.42402405       10.00000000       10.00000000
+ BODY-FIXED-Y       0.73443119          0.00000000          0.73443119       50.00000000       50.00000000
+ BODY-FIXED-Z       0.52991926          0.00000000          0.52991926       20.00000000       20.00000000
+
+
+BCP test 21 - Test invalid coordinate type  
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Testing BundleMeasure...
+**PROGRAMMER ERROR** In BundleMeasure::observationSolveSettings: parent observation has not been set.
+parent control point id "FixedPoint"
+parent image id "TestImageSerialNumber"
+
+rejected? "Yes"
+measure sample  "1.0"
+measure line    "2.0"
+sample residual "-3.0"
+line residual "4.0"
+residual magnitude "5.0"
+measure serial number "NotIgnored"
+focal x "-1.79769313486231e+308"
+focal y "-1.79769313486231e+308"
+computed focal x "-1.79769313486231e+308"
+computed focal y "-1.79769313486231e+308"
+observation index "0"
+
+rejected? "Yes"
+measure sample  "1.0"
+measure line    "2.0"
+sample residual "-3.0"
+line residual "4.0"
+residual magnitude "5.0"
+measure serial number "NotIgnored"
+focal x "-1.79769313486231e+308"
+focal y "-1.79769313486231e+308"
+computed focal x "-1.79769313486231e+308"
+computed focal y "-1.79769313486231e+308"
+observation index "0"
+
+rejected? "Yes"
+measure sample  "1.0"
+measure line    "2.0"
+sample residual "-3.0"
+line residual "4.0"
+residual magnitude "5.0"
+measure serial number "NotIgnored"
+focal x "-1.79769313486231e+308"
+focal y "-1.79769313486231e+308"
+computed focal x "-1.79769313486231e+308"
+computed focal y "-1.79769313486231e+308"
+observation index "0"
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+Testing BundleTargetBody...
+
+Create an empty BundleTargetBody
+
+
+
+Convert strings to TargetRadiiSolveMethods and back
+
+0
+"None"
+1
+"MeanRadius"
+2
+"Radii"
+
+Setup the BundleTargetBody to solve for everything but mean radius
+
+POLE RA          -2.00000000           0.00000000         -2.00000000              FREE               N/A
+POLE RAv         -3.00000000           0.00000000         -3.00000000              FREE               N/A
+POLE DEC         -4.00000000           0.00000000         -4.00000000              FREE               N/A
+POLE DECv        -6.00000000           0.00000000         -6.00000000              FREE               N/A
+  PM             -8.00000000           0.00000000         -8.00000000              FREE               N/A
+  PMv           -10.00000000           0.00000000        -10.00000000              FREE               N/A
+  RadiusA        12.00000000           0.00000000         12.00000000              13.0               N/A
+  RadiusB        14.00000000           0.00000000         14.00000000             0.001               N/A
+  RadiusC        15.00000000           0.00000000         15.00000000              17.0               N/A
+
+
+POLE RA          -2.00000000           0.00000000         -2.00000000              FREE        0.00000000
+POLE RAv         -3.00000000           0.00000000         -3.00000000              FREE        0.00000000
+POLE DEC         -4.00000000           0.00000000         -4.00000000              FREE        0.00000000
+POLE DECv        -6.00000000           0.00000000         -6.00000000              FREE        0.00000000
+  PM             -8.00000000           0.00000000         -8.00000000              FREE        0.00000000
+  PMv           -10.00000000           0.00000000        -10.00000000              FREE        0.00000000
+  RadiusA        12.00000000           0.00000000         12.00000000              13.0        0.00000000
+  RadiusB        14.00000000           0.00000000         14.00000000             0.001        0.00000000
+  RadiusC        15.00000000           0.00000000         15.00000000              17.0        0.00000000
+
+-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 0.0059171597633136, 1000000.0, 0.0034602076124567
+
+Apply some corrections
+
+0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+
+POLE RA          -2.00000000          57.29577951         55.29577951              FREE        0.00000000
+POLE RAv         -3.00000000         -40.10704566        -43.10704566              FREE        0.00000000
+POLE DEC         -4.00000000          28.07493196         24.07493196              FREE        0.00000000
+POLE DECv        -6.00000000         -19.65245237        -25.65245237              FREE        0.00000000
+  PM             -8.00000000          13.75671666          5.75671666              FREE        0.00000000
+  PMv           -10.00000000          -9.62970166        -19.62970166              FREE        0.00000000
+  RadiusA        12.00000000           0.11764900         12.11764900              13.0        0.00000000
+  RadiusB        14.00000000          -0.08235430         13.91764570             0.001        0.00000000
+  RadiusC        15.00000000           0.05764801         15.05764801              17.0        0.00000000
+
+-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 0.0059171597633136, 1000000.0, 0.0034602076124567
+
+1.0, -0.7, 0.49, -0.343, 0.2401, -0.16807, 0.117649, -0.0823543, 0.05764801
+
+POLE RA          -2.00000000         114.59155903        112.59155903              FREE        0.00000000
+POLE RAv         -3.00000000          22.91831181         19.91831181              FREE        0.00000000
+POLE DEC         -4.00000000          97.40282517         93.40282517              FREE        0.00000000
+POLE DECv        -6.00000000          56.60823016         50.60823016              FREE        0.00000000
+  PM             -8.00000000          97.64346745         89.64346745              FREE        0.00000000
+  PMv           -10.00000000          82.64572420         72.64572420              FREE        0.00000000
+  RadiusA        12.00000000           1.88921000         13.88921000              13.0        0.00000000
+  RadiusB        14.00000000           1.86636280         15.86636280             0.001        0.00000000
+  RadiusC        15.00000000           2.20123682         17.20123682              17.0        0.00000000
+
+-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 0.0059171597633136, 1000000.0, 0.0034602076124567
+
+2.0, 0.4, 1.7, 0.988, 1.7042, 1.44244, 1.88921, 1.8663628, 2.20123682
+
+Test acccessors
+
+Pole Right Ascension
+true true false
+Pole Declination
+true true false
+Prime Meridian
+true true false
+Radii
+true false
+Parameter Count
+3 9
+Parameter Solutions
+
+Apriori Sigmas
+-1.0, -1.0, -1.0, -1.0, -1.0, -1.0, 13.0, 0.001, 17.0
+Adjusted Sigmas
+0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
+Pole Right Ascension Coefficients
+112.59155902616 degrees, 19.918311805233 degrees, 0.0 degrees
+Pole Declination Coefficients
+93.40282517224 degrees, 50.608230158925 degrees, 0.0 degrees
+Prime Meridian Coefficients
+89.643467446195 degrees, 72.64572420085 degrees, 0.0 degrees
+VtPV
+3.48331e+06
+Local Radius
+14160.275174221 meters
+
+Test copy constructor
+
+POLE RA          -2.00000000         114.59155903        112.59155903              FREE        0.00000000
+POLE RAv         -3.00000000          22.91831181         19.91831181              FREE        0.00000000
+POLE DEC         -4.00000000          97.40282517         93.40282517              FREE        0.00000000
+POLE DECv        -6.00000000          56.60823016         50.60823016              FREE        0.00000000
+  PM             -8.00000000          97.64346745         89.64346745              FREE        0.00000000
+  PMv           -10.00000000          82.64572420         72.64572420              FREE        0.00000000
+  RadiusA        12.00000000           1.88921000         13.88921000              13.0        0.00000000
+  RadiusB        14.00000000           1.86636280         15.86636280             0.001        0.00000000
+  RadiusC        15.00000000           2.20123682         17.20123682              17.0        0.00000000
+
+Switch free and valid sigmas
+
+POLE RA          -2.00000000           0.00000000         -2.00000000               0.2        0.00000000
+POLE RAv         -3.00000000           0.00000000         -3.00000000               3.5        0.00000000
+POLE DEC         -4.00000000           0.00000000         -4.00000000               5.0        0.00000000
+POLE DECv        -6.00000000           0.00000000         -6.00000000               7.0        0.00000000
+  PM             -8.00000000           0.00000000         -8.00000000               9.0        0.00000000
+  PMv           -10.00000000           0.00000000        -10.00000000              11.0        0.00000000
+  RadiusA        12.00000000           0.00000000         12.00000000              FREE        0.00000000
+  RadiusB        14.00000000           0.00000000         14.00000000              FREE        0.00000000
+  RadiusC        15.00000000           0.00000000         15.00000000              FREE        0.00000000
+
+82070.158750294, 267.98419183769, 131.31225400047, 66.996047959423, 40.528473456935, 27.130630991833, -1.0, -1.0, -1.0
+
+Test assignment operator
+
+Self assignment
+POLE RA          -2.00000000         114.59155903        112.59155903              FREE        0.00000000
+POLE RAv         -3.00000000          22.91831181         19.91831181              FREE        0.00000000
+POLE DEC         -4.00000000          97.40282517         93.40282517              FREE        0.00000000
+POLE DECv        -6.00000000          56.60823016         50.60823016              FREE        0.00000000
+  PM             -8.00000000          97.64346745         89.64346745              FREE        0.00000000
+  PMv           -10.00000000          82.64572420         72.64572420              FREE        0.00000000
+  RadiusA        12.00000000           1.88921000         13.88921000              13.0        0.00000000
+  RadiusB        14.00000000           1.86636280         15.86636280             0.001        0.00000000
+  RadiusC        15.00000000           2.20123682         17.20123682              17.0        0.00000000
+
+Assignment to other
+POLE RA          -2.00000000           0.00000000         -2.00000000               0.2        0.00000000
+POLE RAv         -3.00000000           0.00000000         -3.00000000               3.5        0.00000000
+POLE DEC         -4.00000000           0.00000000         -4.00000000               5.0        0.00000000
+POLE DECv        -6.00000000           0.00000000         -6.00000000               7.0        0.00000000
+  PM             -8.00000000           0.00000000         -8.00000000               9.0        0.00000000
+  PMv           -10.00000000           0.00000000        -10.00000000              11.0        0.00000000
+  RadiusA        12.00000000           0.00000000         12.00000000              FREE        0.00000000
+  RadiusB        14.00000000           0.00000000         14.00000000              FREE        0.00000000
+  RadiusC        15.00000000           0.00000000         15.00000000              FREE        0.00000000
+
+Setup a BundleTargetBody that solves for only mean radius
+
+MeanRadius       20.00000000           0.00000000         20.00000000              21.0        0.00000000
+
+0.0022675736961451
+
+20000.0 meters
+
+Switch free and valid sigmas
+
+MeanRadius       20.00000000           0.00000000         20.00000000              FREE        0.00000000
+
+-1.0
+
+Test reading from a PvlObject
+
+POLE RA          15.00000000           0.00000000         15.00000000             0.487        0.00000000
+POLE RAv         10.00000000           0.00000000         10.00000000              1.01        0.00000000
+POLE DEC         25.00000000           0.00000000         25.00000000               2.3        0.00000000
+POLE DECv         5.00000000           0.00000000          5.00000000              0.03        0.00000000
+  PM             20.00000000           0.00000000         20.00000000               2.4        0.00000000
+  PMv            30.00000000           0.00000000         30.00000000              10.0        0.00000000
+  RadiusA         0.00200000           0.00000000          0.00200000           2.0e-04        0.00000000
+  RadiusB         0.00300000           0.00000000          0.00300000           3.0e-04        0.00000000
+  RadiusC         0.00400000           0.00000000          0.00400000           4.0e-04        0.00000000
+
+Test error throws
+
+**PROGRAMMER ERROR** In BundleTargetBody::applyParameterCorrections: correction and m_targetParameter vectors sizes don't match.
+**ERROR** Unable to apply parameter corrections to BundleTargetBody.
+**PROGRAMMER ERROR** Angle cannot be a non-Null special pixel.
+**PROGRAMMER ERROR** Unknown target body radius solution method [Invalid Method].
+**PROGRAMMER ERROR** Unknown target body radius solve method enum [-1].
+**PROGRAMMER ERROR** The triaxial radii can only be accessed when solving for triaxial radii.
+**PROGRAMMER ERROR** The mean radius can only be accessed when solving for mean radius.
+**PROGRAMMER ERROR** Local radius can only be found if triaxial radii were solved for.
+**USER ERROR** RaValue must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** RaSigma must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** RaVelocityValue must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** RaVelocitySigma must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** RaAccelerationValue must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** RaAccelerationSigma must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** DecValue must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** DecSigma must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** DecVelocityValue must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** DecVelocitySigma must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** DecAccelerationValue must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** DecAccelerationSigma must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** PmValue must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** PmValue must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** PmVelocityValue must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** PmVelocitySigma must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** PmAccelerationValue must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** PmAccelerationSigma must be a valid double (>= 0; blank defaults to 0).
+**USER ERROR** RadiusAValue must be a valid double (blank defaults to 0).
+**USER ERROR** RadiusAValue must be >= 0.
+**USER ERROR** RadiusASigma must be a valid double (blank defaults to 0).
+**USER ERROR** RadiusASigma must be >= 0.
+**USER ERROR** RadiusBValue must be a valid double (blank defaults to 0).
+**USER ERROR** RadiusBValue must be >= 0.
+**USER ERROR** RadiusBSigma must be a valid double (blank defaults to 0).
+**USER ERROR** RadiusBSigma must be >= 0.
+**USER ERROR** RadiusCValue must be a valid double (blank defaults to 0).
+**USER ERROR** RadiusCValue must be >= 0.
+**USER ERROR** RadiusCSigma must be a valid double (blank defaults to 0).
+**USER ERROR** RadiusCSigma must be >= 0.
+**USER ERROR** MeanRadiusValue must be a valid double (blank defaults to 0).
+**USER ERROR** MeanRadiusValue must be >= 0.
+**USER ERROR** MeanRadiusSigma must be a valid double (blank defaults to 0).
+**USER ERROR** MeanRadiusSigma must be >= 0.
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX

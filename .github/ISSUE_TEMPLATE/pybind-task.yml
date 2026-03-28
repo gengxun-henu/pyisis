@@ -1,0 +1,130 @@
+name: "Pybind task"
+description: "Track one pybind binding task for exactly one upstream ISIS C++ class or one related method cluster."
+title: "[pybind] "
+labels:
+  - pybind-task
+  - ready-for-agent
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this issue for **one** upstream ISIS C++ class or **one** related method cluster only.
+
+        Rules for this task:
+        - one GitHub agent task = one class or one method cluster
+        - must add the smallest relevant unit test
+        - must pass build + unit + smoke
+        - automated repair budget = 5 attempts maximum
+        - if attempt 5 still fails, write blocker summary, label it, and stop this task
+
+  - type: input
+    id: target_class
+    attributes:
+      label: Target upstream class
+      description: Name the upstream ISIS C++ class for this task.
+      placeholder: Cube
+    validations:
+      required: true
+
+  - type: textarea
+    id: target_scope
+    attributes:
+      label: Task scope
+      description: Describe the exact method cluster or bug-fix scope. Keep it narrow.
+      placeholder: |
+        Only handle these methods:
+        - set_base_multiplier
+        - base
+        - multiplier
+    validations:
+      required: true
+
+  - type: textarea
+    id: upstream_paths
+    attributes:
+      label: Upstream source paths
+      description: Use repository-relative paths under reference/upstream_isis.
+      placeholder: |
+        reference/upstream_isis/.../Cube.h
+        reference/upstream_isis/.../Cube.cpp
+        reference/upstream_isis/.../Cube/unitTest.cpp
+    validations:
+      required: true
+
+  - type: textarea
+    id: local_context
+    attributes:
+      label: Local repository files to inspect first
+      description: List the local inventory, binding, and test files that should be read first.
+      placeholder: |
+        todo_pybind11.csv
+        class_bind_methods_details/methods_inventory_summary.csv
+        class_bind_methods_details/base_cube_methods.csv
+        src/...
+        tests/unitTest/...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected_changes
+    attributes:
+      label: Expected file changes
+      description: List the files likely to change for binding, tests, exports, and progress tracking.
+      placeholder: |
+        src/...
+        tests/unitTest/..._unit_test.py
+        python/isis_pybind/__init__.py
+        pybind_progress_log.md
+    validations:
+      required: true
+
+  - type: textarea
+    id: minimal_validation
+    attributes:
+      label: Minimal validation plan
+      description: Specify the smallest build/test/smoke path that should be run.
+      placeholder: |
+        1. Build extension
+        2. Run the targeted unit test file
+        3. Run tests/smoke_import.py
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: done_definition
+    attributes:
+      label: Definition of done
+      options:
+        - label: Only one upstream class or one related method cluster is in scope
+          required: true
+        - label: The task includes the smallest relevant unit test update
+          required: true
+        - label: The task must pass build + unit + smoke before completion
+          required: true
+        - label: Progress and inventory files must be updated if the binding surface changed
+          required: true
+        - label: If automated repair reaches 5 failed attempts, this task must be marked blocked and stopped
+          required: true
+
+  - type: textarea
+    id: blocker_template
+    attributes:
+      label: Blocker summary template
+      description: Fill this only if the task becomes blocked.
+      placeholder: |
+        Attempt count:
+        Last failing step:
+        Most likely root cause:
+        Classification: binding bug / test bug / environment / upstream behavior / unknown
+        Recommended next human action:
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      options:
+        - high
+        - medium
+        - low
+    validations:
+      required: true

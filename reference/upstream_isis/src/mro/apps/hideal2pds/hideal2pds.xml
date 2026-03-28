@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="hideal2pds" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+      Export an Isis mosaicked ideal cube from a HiRISE image to a PDS product
+      containing related spice data.
+  </brief>
+
+  <description>
+    <pre>
+      This application takes an Isis cube from the HiRISE instrument that
+      has been jitter corrected and mosaicked and exports it to a PDS product
+      with detached label and spice tables.
+
+      The following output files will be created using the file name passed in by the user.
+      <OL>
+        <LI>
+          PDS image file with the extension .img
+        </LI>
+        <LI>
+          PDS label file with the extension .lbl
+        </LI>
+        <LI>
+          PDS binary ck table file with the suffix _INSTRUMENT_POINTING_TABLE.dat
+        </LI>
+        <LI>
+          PDS binary spk table file with the suffix _INSTRUMENT_POSITION_TABLE.dat
+        </LI>
+        <LI>
+          PDS binary body rotation table file with the suffix _BODY_ROTATION_TABLE.dat
+        </LI>
+        <LI>
+          PDS binary sun position table file with the suffix _SUN_POSITION_TABLE.dat
+        </LI>
+      </OL>
+
+      The output PDS image will be unsigned word 16 bit type, MSB, BSQ format
+      and the resolution will be in meters.
+
+      Note that the IMAGE_JITTER_CORRECTED keyword is copied from the input
+      cube. If the input cube has been run through an older version of hijitter,
+      this value will be set to UNK, since it is not known whether the image
+      values have been jitter corrected.
+
+    </pre>
+  </description>
+
+  <category>
+    <missionItem>Mars Reconnaissance Orbiter</missionItem>
+  </category>
+
+  <history>
+    <change name="Jeannie Backer" date="2012-11-21">
+      Original Version of hideal2pds. Fixes #678.
+    </change>
+    <change name="Makayla Shepherd" date="2015-10-06">
+      Added stretch parameters. Fixes #1761.
+    </change>
+    <change name="Tyler Wilson" date="2019-02-08">
+      Added an option to control the output bits.  min = 8, max =16, default = 10.  Fixes #5527.
+    </change>
+    <change name="Timothy Giroux" date="2020-09-08">
+      Output label now has the correct SAMPLE_BIT_MASK value according to bits input. Fixes #3978.
+    </change>
+  </history>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Isis ideal camera cube to be exported to PDS format
+        </brief>
+        <description>
+          The Ideal cube from a HiRISE image containing the related spice data
+          to be exported to PDS.
+        </description>
+        <filter>
+          *.cub *.lbl
+        </filter>
+      </parameter>
+
+      <parameter name="TO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output PDS file name.
+        </brief>
+        <description>
+          The file name of the output PDS image. This value will also be used
+          for the name of the detached label and table files.
+        </description>
+        <filter>
+          *.img
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Special Keywords">
+      <parameter name="VERSION">
+        <type>string</type>
+        <default>
+          <item>1.0</item>
+        </default>
+        <brief>
+          Value for the output PDS keyword PRODUCT_VERSION_ID
+        </brief>
+        <description>
+          This parameter allows the user to specify the value of the standard
+          PDS keyword  PRODUCT_VERSION_ID within the output PDS label. This
+          keyword will be located in the Root of the PDS PVL label. This value
+          defaults to 1.0.
+        </description>
+      </parameter>
+
+      <parameter name="RATIONALE_DESC">
+        <type>string</type>
+        <internalDefault>Preserve Original Rationale Description</internalDefault>
+        <brief>
+          Value for the output PDS keyword RATIONALE_DESC
+        </brief>
+        <description>
+          This parameter allows the user to specify the value of the standard
+          PDS keyword RATIONALE_DESC within the output PDS label. This keyword
+          will be located in the ROOT of the PDS PVL label. Note that if a
+          keyword value is not entered, the value will be read from the input
+          cube labels.  If it does not exist there, the program will throw an ]
+          error.
+        </description>
+      </parameter>
+    </group>
+    <group name="Stretch">
+          <parameter name="TYPE">
+        <type>string</type>
+        <default><item>AUTOMATIC</item></default>
+        <brief>
+          Select the type of stretch
+        </brief>
+        <description>
+          This parameter is used to select one of two ways to stretch output
+          pixels.  The are AUTOMATIC or MANUAL.
+        </description>
+        <list>
+          <option value="AUTOMATIC">
+            <brief>Automatically calculate stretch</brief>
+            <description>Automatically calculate stretch</description>
+            <exclusions>
+              <item>MIN</item>
+              <item>MAX</item>
+            </exclusions>
+          </option>
+          <option value="MANUAL">
+            <brief>User defined stretch</brief>
+            <description>User defined stretch</description>
+              <exclusions>
+              <item>MINPER</item>
+              <item>MAXPER</item>
+            </exclusions>
+          </option>
+        </list>
+      </parameter>
+          <parameter name="MIN">
+              <type>double</type>
+              <brief>
+                  Lower bound of the stretch
+              </brief>
+              <description>
+                  Lower bound for the manually specified stretch.
+              </description>
+          </parameter>
+          <parameter name="MAX">
+              <type>double</type>
+              <brief>
+                  Upper bound of the stretch
+              </brief>
+              <description>
+                  Upper bound for the manually specified stretch.
+              </description>
+          </parameter>
+          <parameter name="MINPER">
+          <type>double</type>
+          <default>
+            <item>0.0</item>
+          </default>
+          <brief>
+            Minimum DN valid percentage
+          </brief>
+          <description>
+            The cumulative percentage value to be mapped to the minimum
+            valid pixel for the specified number of bits. For example: With BITS=10
+            and MINPER=1.0, the DN which corresponds to the cummulative
+            percent of 1.0 will be mapped to 3, where 0 represents NULL, 1
+            represents LRS and 2 represents LIS.
+          </description>
+          <minimum inclusive="yes">0.0</minimum>
+          <maximum inclusive="yes">100.0</maximum>
+          <lessThanOrEqual>
+              <item>
+                  MAXPER
+                </item>
+          </lessThanOrEqual>
+        </parameter>
+
+        <parameter name="MAXPER">
+          <type>double</type>
+          <default>
+            <item>100.0</item>
+          </default>
+          <brief>
+            Mazimum DN valid percentage
+          </brief>
+          <description>
+            The cumulative percentage value to be mapped to the maximum
+            valid pixel for the specified number of bits. For example: With BITS=10
+            and MINPER=99.0, the DN which corresponds to the cummulative
+            percent of 99.0 will be mapped to 1021, 1021=(2**bits)-1-2.
+            Where 1023 represents HIS and 1022 represents HRS.
+          </description>
+          <minimum inclusive="yes">0.0</minimum>
+          <maximum inclusive="yes">100.0</maximum>
+          <greaterThanOrEqual>
+              <item>
+                MINPER
+              </item>
+          </greaterThanOrEqual>
+        </parameter>
+      </group>
+      <group name="Output Controls">
+        <parameter name="BITS">
+          <type>integer</type>
+          <default>
+            <item>10</item>
+          </default>
+          <brief>
+            Number of bits for the output DN
+          </brief>
+          <description>
+            The number of bits to compress the input data to. The valid data as
+            well as the five special pixel values (NULL, LIS, LRS, HIS, HRS) will be
+            compressed into this number of bits. The output data type will be
+            automaticity choosen using this value. A value of 8 will create
+            unsigned byte output files. Values from 9 to 16 will create unsigned
+            word output files. Unused bits in the unsigned word output file will be
+            set to zero.
+          </description>
+          <minimum inclusive="yes">8</minimum>
+          <maximum inclusive="yes">16</maximum>
+        </parameter>
+
+      </group>
+
+
+  </groups>
+</application>

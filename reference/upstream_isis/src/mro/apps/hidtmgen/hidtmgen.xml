@@ -1,0 +1,781 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="hidtmgen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Generates PDS products from a DTM and/or orthorectified images.
+  </brief>
+
+  <description>
+    <p>
+      This application is designed to produce a set of PDS products from an ISIS Digital Terrain
+      Model (DTM) cube and/or a list of MRO HiRISE orthorectified images. The purpose of this 
+      program is to:
+      <ol>
+        <li>
+          Export the input cubes to PDS-formatted images.
+        </li>
+        <li>
+          Modify the output label to include extra information.
+        </li>
+      </ol>
+    </p>
+    <p>
+      The input DTM file for this program must have been generated using a set of
+      HiRISE stereo pair images. If both input orthorecitfied files and an input DTM have
+      been provided by the user, they should all have the same original stereo pair source.
+      These files are usually generated using Socet Set and require some processing before
+      they are passed into this program. In some cases, restrictions to the input file names
+      are enforced. See the documentation for the DTM and ORTHOTOLIST parameters for details.
+    </p>
+
+    The table below indicates the requirements for program parameters under the
+    indicated conditions.
+    <table border="1">
+      <tr>
+        <th>DEFAULTNAMES</th>
+        <th>Input file type</th>
+        <th>Required Parameters</th>
+        <th>Required PARAMSPVL Keywords</th>
+      </tr>
+      <tr>
+        <td rowspan="3">FALSE</td>
+        <td>Both DTM and ORTHOFROMLIST provided</td>
+        <td>
+          The following parameters are enabled:
+          <ul>
+            <li>DTMTO (required)</li>
+            <li>DTM_PRODUCT_ID (required)</li>
+            <li>ORTHOTOLIST (required)</li>
+            <li>ORTHOPRODUCTIDLIST (required)</li>
+            <li>PARAMSPVL (required)</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>DATA_SET_ID</li>
+            <li>DATA_SET_NAME</li>
+            <li>PRODUCER_INSTITUION_NAME</li>
+            <li>PRODUCER_ID</li>
+            <li>PRODUCER_FULL_NAME</li>
+            <li>PRODUCING_INSTITUTION</li>
+            <li>PRODUCT_VERSION_ID</li>
+            <li>RATIONALE_DESC</li>
+            <li>SOFTWARE_NAME</li>
+            <li>DTM_SOURCE_PRODUCT_ID</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>DTM provided only</td>
+        <td>
+          The following parameters are enabled:
+          <ul>
+            <li>DTMTO (required)</li>
+            <li>DTM_PRODUCT_ID (required)</li>
+            <li>PARAMSPVL (required)</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>DATA_SET_ID</li>
+            <li>DATA_SET_NAME</li>
+            <li>PRODUCER_INSTITUION_NAME</li>
+            <li>PRODUCER_ID</li>
+            <li>PRODUCER_FULL_NAME</li>
+            <li>PRODUCING_INSTITUTION</li>
+            <li>PRODUCT_VERSION_ID</li>
+            <li>RATIONALE_DESC</li>
+            <li>SOFTWARE_NAME</li>
+            <li>DTM_SOURCE_PRODUCT_ID</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>ORTHOFROMLIST provided only</td>
+        <td>
+          The following parameters are enabled:
+          <ul>
+            <li>ORTHOTOLIST (required)</li>
+            <li>ORTHOPRODUCTIDLIST (required)</li>
+            <li>PARAMSPVL (required)</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>DATA_SET_ID</li>
+            <li>DATA_SET_NAME</li>
+            <li>PRODUCER_INSTITUION_NAME</li>
+            <li>PRODUCER_ID</li>
+            <li>PRODUCER_FULL_NAME</li>
+            <li>PRODUCING_INSTITUTION</li>
+            <li>PRODUCT_VERSION_ID</li>
+            <li>RATIONALE_DESC</li>
+            <li>SOFTWARE_NAME</li>
+            <li>ORTHO_SOURCE_DTM_ID</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td rowspan="3">TRUE</td>
+        <td>Both DTM and ORTHOFROMLIST provided</td>
+        <td>
+          The following parameters are enabled:
+          <ul>
+            <li>OUTPUTDIR (optional - defaults to current working directory)</li>
+             <li>
+               Ortho input file name requirements - each file must have orbit/target IDs for
+               itself, as described in the documentation for the ORTHOFROMLIST parameter.
+            </li>
+            <li>OUTPUTDIR (optional - defaults to current working directory)</li>
+            <li>ORTHOSEQUENCENUMBERLIST (required)</li>
+            <li>PARAMSPVL (required)</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>DATA_SET_ID</li>
+            <li>DATA_SET_NAME</li>
+            <li>PRODUCER_INSTITUION_NAME</li>
+            <li>PRODUCER_ID</li>
+            <li>PRODUCER_FULL_NAME</li>
+            <li>PRODUCING_INSTITUTION</li>
+            <li>PRODUCT_VERSION_ID</li>
+            <li>RATIONALE_DESC</li>
+            <li>SOFTWARE_NAME</li>
+            <li>DTM_SOURCE_PRODUCT_ID</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>DTM provided only</td>
+        <td>
+          The following parameters are enabled:
+          <ul>
+            <li>OUTPUTDIR (optional - defaults to current working directory)</li>
+            <li>PARAMSPVL (required)</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>DATA_SET_ID</li>
+            <li>DATA_SET_NAME</li>
+            <li>PRODUCER_INSTITUION_NAME</li>
+            <li>PRODUCER_ID</li>
+            <li>PRODUCER_FULL_NAME</li>
+            <li>PRODUCING_INSTITUTION</li>
+            <li>PRODUCT_VERSION_ID</li>
+            <li>RATIONALE_DESC</li>
+            <li>SOFTWARE_NAME</li>
+            <li>DTM_SOURCE_PRODUCT_ID</li>
+          </ul>
+        </td>
+      </tr>
+      <tr>
+        <td>ORTHOFROMLIST provided only</td>
+        <td>
+          The following parameters are enabled:
+          <ul>
+             <li>
+               File name requirements - input orthorectified file names must have orbit/target IDs for
+               itself, as described in the documentation for the ORTHOFROMLIST parameter.
+            </li>
+            <li>OUTPUTDIR (optional - defaults to current working directory)</li>
+            <li>ORTHOSEQUENCENUMBERLIST (required)</li>
+            <li>PARAMSPVL (required)</li>
+          </ul>
+        </td>
+        <td>
+          <ul>
+            <li>DATA_SET_ID</li>
+            <li>DATA_SET_NAME</li>
+            <li>PRODUCER_INSTITUION_NAME</li>
+            <li>PRODUCER_ID</li>
+            <li>PRODUCER_FULL_NAME</li>
+            <li>PRODUCING_INSTITUTION</li>
+            <li>PRODUCT_VERSION_ID</li>
+            <li>RATIONALE_DESC</li>
+            <li>SOFTWARE_NAME</li>
+            <li>ORTHO_SOURCE_DTM_ID</li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+
+  </description>
+
+  <category>
+    <missionItem>Mars Reconnaissance Orbiter</missionItem>
+  </category>
+
+  <seeAlso>
+    <applications>
+      <item>
+        hirdrgen
+      </item>
+      <item>
+        isis2pds
+      </item>
+    </applications>
+  </seeAlso>
+
+  <history>
+    <change name="Mackenzie Boyd" date="2011-05-13">
+      0riginal Version.
+    </change>
+    <change name="Tracie Sucharski" date="2012-12-06">
+      Changed to use TProjection instead of Projection. References #775.
+    </change>
+    <change name="Lynn Weller" date="2012-01-22">
+      Application category name changed from Import and Export to Mars Reconnaissance Orbiter. 
+      Fixes mantis ticket #951.
+    </change>
+    <change name="Jeannie Backer" date="2013-09-11">
+      Modified the code to add SOURCE_PRODUCT_ID values individually when they are generated by the
+      program. Otherwise, if the user enters a value for SOURCE_PRODUCT_ID as a string, they must
+      include braces for array values. Fixed code to read the PRODUCT_VERSION_ID from the
+      PARAMSPVL file if the user has not entered a value. Added PRODUCT_VERSION_ID value to params
+      default file. Fixed spelling in error message and user documentation. Changed IString objects
+      to QStrings. Brought code closer to ISIS coding standards. Improved code test coverage. 
+      Fixes ticket #757, #946.
+    </change>
+    <change name="Jeannie Backer" date="2015-10-02">
+      Backwards Compatibility Issue:  The command line parameters were changed to generalize this
+      program's capabilities, as requested by the HiRISE mission representatives. This will impact
+      processing scripts/pipelines.
+
+      Modified the program to be able to process any number of orthorectified input files. 
+      Also, a DTM is no longer a required input for this program. Updated the output file names and
+      keyword values generated when DEFAULTNAMES=TRUE. The following parameters were added,
+      removed, or replaced:
+      1. ORTHO1, ORTHO2, ORTHO3, and ORTHO4 replaced with ORTHOFROMLIST.
+      2. ORTHO1TO, ORTHO2TO, ORTHO3TO, and ORTHO4TO replaced with ORTHOTOLIST.
+      3. ORTHO1_PRODUCT_ID, ORTHO2_PRODUCT_ID, ORTHO3_PRODUCT_ID,
+          and ORTHO4_PRODUCT_ID replaced with ORTHOPRODUCTIDLIST.
+      4. PRODUCER_FULL_NAME, RATIONALE_DESC, and PRODUCT_VERSION_ID
+          removed since they are required in the PARAMSPVL input file.
+      5. ORTHOSEQUENCENUMBERLIST added to be able to generate default names for
+          orthorectified files. 
+      Fixes ticket #801
+    </change>
+    <change name="Jeannie Backer" date="2016-08-19">
+      Modified the code so that when DEFAULTNAMES=true, then
+      SOURCE_PRODUCT_ID = (DTM_PRODUCT_ID,  pSP_xxxxxx_xxxx) where
+      pSP_xxxxxx_xxxx is the first 15 characters of the ortho product ID described in 
+      the documentation. References #801.
+    </change>
+  </history>
+  
+  <groups>
+    <group name="Output Options">
+
+      <parameter name="DEFAULTNAMES">
+        <type>boolean</type>
+        <default><item>TRUE</item></default>
+        <brief>
+          Indicates whether the program will generate the output file names and PRODUCT_IDs. 
+          Input names must match expected form.
+        </brief>
+        <description>
+          <p>
+            This parameter is used for convenience so that output file names and PRODUCT_IDs
+            do not need to be specified by the user. 
+
+            If this parameter is selected, then the parameters DTMTO, ORTHOTOLIST,
+            DTM_PRODUCT_ID, and ORTHOPRODUCTIDLIST are disabled since the program will use
+            the default output values for these.
+
+            See the table in the main description of this program for specific requirements.
+
+            If this parameter is selected, the names of the output files will match the
+            corresponding PRODUCT_IDs (minus the file path and extension).
+
+            The values for each PRODUCT_ID is generated using the name of the input cube, the
+            corresponding sequence number (for orthorectified output images), and other cube
+            attributes. For this reason, input orthorectified file names of a certain form are
+            required. See the documentation for the ORTHOFROMLIST parameter for specifications.
+            Also, certain keyword values are provided by the PARAMSPVL file. See the 
+            documentation for PARAMSPVL  for specifications.
+          </p>
+
+          <pre>
+The output PRODUCT_IDs used when DEFAULTNAMES=TRUE are explained below.
+
+For DTMs files the form is 
+<strong>DTems_xxxxxx_xxxx_xxxxxx_xxxx_vnn</strong>
+    <strong>e</strong> is the code for the type of elevation data 
+          <em>E</em> for areoid elevations 
+          <em>R</em> for radii (hidtmgen does not currently support this option)
+    <strong>m</strong> is the map projection code 
+          <em>E</em> for equirectangular
+          <em>P</em> for polar stereographic
+    <strong>s</strong> is the grid spacing (i.e. map scale) code
+          <em>A</em> for 0.25 m 
+          <em>B</em> for 0.5 m 
+          <em>C</em> for 1.0 m 
+          <em>D</em> for 2.0 m
+          etc. 
+          <em>Z</em> is used if no match is found, a 10% tolerance on the 
+             resolution value is used to catch values that are close. 
+    <strong>xxxxx_xxxx_yyyyy_yyyy</strong> is the orbit (five digit) number 
+          and target (four digit) codes
+          for the stereo pairs used to create this DTM
+    <strong>v</strong> is the code for the producing institution 
+          <em>U</em> for USGS 
+          <em>A</em> for University of Arizona 
+          <em>C</em> for CalTech 
+          <em>N</em> for NASA Ames 
+          <em>J</em> for JPL 
+          <em>O</em> for Ohio State 
+          <em>Z</em> for other 
+    <strong>nn</strong> is the 2 digit product version ID number 
+
+For orthorectified image files, the form is 
+<strong>pSP_xxxxxx_xxxx_ccc_s_nn_ORTHO</strong>
+    <strong>p</strong> is the code for the mission phase
+          <em>E</em> for Extended Science Phase
+          <em>P</em> for Primary Science Phase
+    <strong>xxxxxx_xxxx</strong> is the orbit number and target code for this ORTHO
+    <strong>ccc</strong> is the color content code
+          <em>RED</em> for visible RED, 1 band image
+          <em>IRB</em> for 3 band enhanced color (IR, RED, BG)
+    <strong>s</strong> is the grid spacing (i.e. map scale) code
+          <em>A</em> for 0.25 m 
+          <em>B</em> for 0.5 m 
+          <em>C</em> for 1.0 m 
+       	  <em>D</em> for 2.0 m
+          etc. 
+          <em>Z</em> is used if no match is found, a 10% tolerance on the 
+             resolution value is used to catch values that are close. 
+    <strong>nn</strong> is a sequence number to distinguish between orthorectified images
+          from the same HiRISE observation that may be created from different DTMs.
+    <strong>ORTHO</strong> indicates that the image has been orthorectified
+
+NOTE: The first 15 characters of the product ID pSP_xxxxxx_xxxx are taken
+      directly from the first 15 characters of the input ortho file name.
+
+          </pre>
+        </description>
+        <exclusions>
+          <item>DTMTO</item>   
+          <item>ORTHOTOLIST</item>   
+          <item>DTM_PRODUCT_ID</item>   
+          <item>ORTHOPRODUCTIDLIST</item>   
+        </exclusions>
+        <inclusions>
+          <item>OUTPUTDIR</item>
+          <item>ORTHOSEQUENCENUMBERLIST</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="OUTPUTDIR">
+        <type>string</type>
+        <default><item>./</item></default>
+        <brief>
+          Directory for output products.
+        </brief>
+        <description>
+          The directory where output image files will be written. This parameter only applies when 
+          DEFAULTNAMES=TRUE. The default is the current working directory.
+        </description>
+      </parameter>
+    </group>
+
+    <group name="DTM Parameters">
+
+      <parameter name="DTM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>The name of the input DTM file.</brief>
+        <description>
+          The name of the DTM file to be exported. The given file must be an ISIS cube
+          whose label contains a mapping group. This DTM, usually created using Socet Set, must be
+          generated from a stereo pair of MRO HiRISE images. The user may specify the corresponding
+          output file name using the DTMTO parameter. Otherwise, the output file name can
+          be generated by hidtmgen by setting DEFAULTNAMES=TRUE.
+          <b> Note: </b> DTM is not a required parameter. The user may choose to only export a list 
+          orthorectified images.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+        <internalDefault>None</internalDefault>
+      </parameter>
+
+      <parameter name="DTMTO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>DTM output file name.</brief>
+        <description>
+          The name of the exported DTM file. 
+          This parameter is required when DTM has been provided and DEFAULTNAMES=FALSE.
+        </description>
+        <filter> *.IMG </filter> 
+        <internalDefault>Automatic</internalDefault>
+        <inclusions>
+          <item>DTM</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="DTM_PRODUCT_ID">
+        <type>string</type>
+        <brief>User specified ID for the output DTM product.</brief>
+        <description>
+          The PRODUCT_ID for the output DTM product. 
+          This parameter is required when DTM has been provided and DEFAULTNAMES=FALSE.
+        </description>
+        <internalDefault>None</internalDefault>
+        <inclusions>
+          <item>DTM</item>
+        </inclusions>
+      </parameter>
+
+      </group>
+
+    <group name="Orthorectified Cube Parameters">
+        
+      <parameter name="ORTHOFROMLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          A list file names for input orthorectified cubes.
+        </brief>
+        <description>
+          A list of orthorectified images to be exported. The given files in this list must be ISIS 
+          cubes from the MRO HiRISE camera that have been orthorectified to the input DTM, if 
+          provided. The user may specify the corresponding output file names using the ORTHOTOLIST 
+          parameter. Otherwise, these output file names can be generated by hidtmgen by setting
+          DEFAULTNAMES=TRUE. In this case, the name of each input image file in this list must
+          begin with the prefix pSP_######_####_ where p is the code for the mission phase and
+          the #'s represent the orbit number followed by the target code for this image.
+        </description>
+        <filter>
+          *.txt *.lis *.lst
+        </filter>
+        <internalDefault>Automatic</internalDefault>
+      </parameter>
+
+      <parameter name="ORTHOTOLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          An ordered list of output file names for PDS products corresponding to the list of input orthorectified cubes.
+        </brief>
+        <description>
+          An ordered list of output PDS file names. It is expected that the order of the  file
+          names in this list will correspond to the orthorectified cubes in the ORTHOFROMLIST.
+          Each file in this list should have a full path to the output location where the PDS
+          file will be created. 
+
+          Note that the DEFAULTNAMES and OUTPUTDIR options may be
+          selected instead of ORTHOTOLIST if the user prefers to specify only the location of the
+          output PDS files (and not the file names). 
+
+          This parameter is required when ORTHOFROMLIST has been provided and DEFAULTNAMES=FALSE.
+        </description>
+        <filter>
+          *.txt *.lis *.lst
+        </filter>
+        <internalDefault>Automatic</internalDefault>
+        <inclusions>
+          <item>ORTHOFROMLIST</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="ORTHOPRODUCTIDLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          An ordered list of user specified PRODUCT_ID values corresponding to each of the
+          orthorectified input images given in the ORTHOFROMLIST.
+        </brief>
+        <description>
+          An ordered list of strings representing the PRODUCT_ID values that correspond to each of the
+          input orthorectified images given in the ORTHOFROMLIST. This parameter is required when
+          ORTHOFROMLIST has been provided and DEFAULTNAMES=FALSE.
+
+        </description>
+        <filter>
+          *.txt *.lis *.lst
+        </filter>
+        <internalDefault>Automatic</internalDefault>
+        <inclusions>
+          <item>ORTHOFROMLIST</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="ORTHOSEQUENCENUMBERLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          An ordered list of user specified sequence numbers corresponding to each of the
+          orthorectified input images given in the ORTHOFROMLIST.
+        </brief>
+        <description>
+          An ordered list of two digit sequence numbers that correspond to each of the input images
+          given in the ORTHOFROMLIST. These sequence numbers are used to distinguish between
+          orthorectified images from the same HiRISE observation that may be created from different
+          DTMs. This parameter is required when ORTHOFROMLIST has been provided and
+          DEFAULTNAMES=TRUE.
+        </description>
+        <filter>
+          *.txt *.lis *.lst
+        </filter>
+        <internalDefault>Automatic</internalDefault>
+        <inclusions>
+          <item>ORTHOFROMLIST</item>
+        </inclusions>
+      </parameter>
+
+    </group>
+
+      
+    <group name="Label Information">
+
+      <parameter name="PARAMSPVL">
+        <type>filename</type>
+        <default><item>$ISISROOT/appdata/templates/hidtmgen/hidtmgenParamsTemplate.pvl</item></default>
+        <brief>
+          PVL-formatted file containing required keyword values.
+        </brief>
+        <description>
+          This should be a PVL-formatted file that contains the keywords indicated below.
+          <br/>
+          <br/>
+           Keywords that are always required:<br/>
+          <ul>
+            <li>DATA_SET_ID</li>
+            <li>DATA_SET_NAME</li>
+            <li>PRODUCER_INSTITUION_NAME</li>
+            <li>PRODUCER_ID</li>
+            <li>PRODUCER_FULL_NAME</li>
+            <li>PRODUCING_INSTITUTION*</li>
+            <li>PRODUCT_VERSION_ID**</li>
+            <li>RATIONALE_DESC</li>
+            <li>SOFTWARE_NAME</li>
+          </ul>
+          <pre>
+<strong>*</strong>  The <strong>PRODUCING_INSTITUTION</strong> value must be a single character code: 
+       <em>U</em> for USGS 
+       <em>A</em> for University of Arizona 
+       <em>C</em> for CalTech 
+       <em>N</em> for NASA Ames 
+       <em>J</em> for JPL 
+       <em>O</em> for Ohio State 
+       <em>Z</em> for other 
+<strong>**</strong> The <strong>PRODUCT_VERSION_ID</strong> must be a real number (i.e. double 
+   precision) value. When DEFAULTNAMES=TRUE this number will be used
+   to generate the 2 digit version ID code used as the last two digits
+   of the output DTM's PRODUCT_ID.
+        <strong>Case 1:</strong> If the number given is greater than 10,
+                the first two digits will be used for the output code.
+        <strong>Case 2:</strong> If it is of the form N.0 (where N is between 0 and 9),
+                the output code will be 0N.
+        <strong>Case 3:</strong> If it is of the form N.M (where N and M are between
+                0 and 9), the output code will be NM.
+        <strong>Case 4:</strong> If it is less than 1.0, the output code will be 0N,
+                where N is the first significant digit
+                (i.e the first non-zero from the left).
+   Note that except for the special case of N.0, the most significant
+   digits are used. 
+
+          </pre>
+          Keywords that are required under particular circumstances:<br/>
+          <ul>
+            <li>DTM_SOURCE_PRODUCT_ID (required if DTM provided) *</li>
+            <li>ORTHO_SOURCE_DTM_ID (required if DTM was not provided) **</li>
+          </ul>
+          <pre>
+*  The <strong>DTM_SOURCE_PRODUCT_ID</strong> is an array that indicates the source of the input DTM.
+   If the user enters a DTM, this value must be an array containing the PRODUCT_IDs
+   of the stereo pair used to generate the DTM.
+
+** The <strong>ORTHO_SOURCE_DTM_ID</strong> is the PRODUCT_ID of the DTM used to generate the given
+   orthorectified input cubes.
+
+          </pre>
+        </description>
+      </parameter>
+
+    </group>
+
+    <group name="Output Data Options">
+
+      <parameter name="ENDIAN">
+        <type>string</type>
+        <default>
+          <item>LSB</item>
+        </default>
+        <brief>Endianness of the output bytes for all output files.</brief>
+        <description>
+          This parameter is used to select the output data storage order. The output can be
+	        streamed starting with the most significant byte (MSB) or starting
+	        with the least significant bytes (LSB). The choice should be made by
+	        the user depending upon the format read by the system architecture
+	        from which they plan to read the raw data.
+        </description>
+        <list>
+          <option value="LSB">
+            <brief>Least significant byte.</brief>
+            <description>
+              The least significant byte will be the first byte output.
+            </description>
+          </option>
+          <option value="MSB">
+            <brief>Most significant byte.</brief>
+            <description>
+            The most significant byte will be the first byte output.
+            </description>
+          </option>
+        </list>
+      </parameter>
+
+      <parameter name="NULL">
+        <type>boolean</type>
+        <default><item>true</item></default>
+        <brief>Dedicates a DN value for null pixels in output DTM product.</brief>
+        <description>
+          If set to true, the minimum value of the raw output data will be
+          reserved for null pixels. The actual value used for null pixels will
+          be denoted in the print.prt file as well as displayed onscreen.
+        </description>
+      </parameter>
+
+      <parameter name="LRS">
+        <type>boolean</type>
+        <default><item>false</item></default>
+        <brief>Dedicates a DN value for LRS pixels in output DTM product.</brief>
+        <description>
+          If set to true, then an output DN value is set aside for the LRS input pixels.
+          The actual DN value used for LRS pixels will be denoted in the print.prt
+          file as well as displayed onscreen.
+        </description>
+      </parameter>
+
+      <parameter name="LIS">
+        <type>boolean</type>
+        <default><item>false</item></default>
+        <brief>Dedicates a DN value for LIS pixels in output DTM product.</brief>
+        <description>
+          If set to true, then an output DN value is set aside for the LIS input pixels.
+          The actual DN value used for LIS pixels will be denoted in the print.prt
+          file as well as displayed onscreen.
+        </description>
+      </parameter>
+
+      <parameter name="HIS">
+        <type>boolean</type>
+        <default><item>false</item></default>
+        <brief>Dedicates a DN value for HIS pixels in output DTM product.</brief>
+        <description>
+          If set to true, then an output DN value is set aside for the HIS input pixels.
+          The actual DN value used for HIS pixels will be denoted in the print.prt
+          file as well as displayed onscreen.
+        </description>
+      </parameter>
+
+      <parameter name="HRS">
+        <type>boolean</type>
+        <default><item>false</item></default>
+        <brief>Dedicates a DN value for HRS pixels in output DTM product.</brief>
+        <description>
+          If set to true, then an output DN value is set aside for the HRS input pixels.
+          The actual DN value used for HRS pixels will be denoted in the print.prt
+          file as well as displayed onscreen.
+        </description>
+      </parameter>
+
+      <parameter name="DTMBITTYPE">
+        <type>string</type>
+        <default>
+          <item>32BIT</item>
+        </default>
+        <brief>Bit type of output DTM file.</brief>
+        <description>
+          Bit type of output:
+          <ul>
+            <li>8-bit (0=black, 255=white)</li>
+            <li>16-bit unsigned (0=black, 65535=white)</li>
+            <li>16-bit signed (-32767=black, 32768=white)</li>
+            <li>32-bit (1.17549435e-38=black, 3.40282347e+38=white)</li>
+          </ul>
+        </description>
+        <list>
+          <option value="8BIT">
+            <brief>Output 8-bit data in DTM product.</brief>
+            <description>
+              Pixels are in 8-bit data range (0 to 255).
+            </description>
+          </option>         
+          <option value="U16BIT">
+            <brief>Output 16-bit unsigned data in DTM product.</brief>
+            <description>
+              Pixels are in the 16-bit data range (0 to 65535).
+            </description>
+          </option>
+          <option value="S16BIT">
+            <brief>Output 16-bit signed data in DTM product.</brief>
+            <description>
+              Pixels are in 16-bit signed data range (-32768 to 32767).
+            </description>
+          </option>
+          <option value="32BIT">
+            <brief>Output 32-bit data in DTM product.</brief>
+            <description>
+              Pixels are in the 32-bit floating point data range
+              (-3.40282347e+38 to 3.40282347e+38).
+            </description>
+         </option>
+        </list>
+      </parameter>
+
+      <parameter name="ORTHOBITTYPE">
+        <type>string</type>
+        <default>
+          <item>8BIT</item>
+        </default>
+        <brief>Bit type of orthorectified output files.</brief>
+        <description>
+          Bit type of output:
+          <ul>
+            <li>8-bit (0=black, 255=white)</li>
+            <li>16-bit unsigned (0=black, 65535=white)</li>
+            <li>16-bit signed (-32767=black, 32768=white)</li>
+            <li>32-bit (1.17549435e-38=black, 3.40282347e+38=white)</li>
+          </ul>
+        </description>
+        <list>
+          <option value="8BIT">
+            <brief>Output 8-bit data in orthorectified PDS products.</brief>
+            <description>
+              Pixels are in 8-bit data range (0 to 255).
+            </description>
+            <!--<exclusions>
+              <item>ENDIAN</item>
+            </exclusions>!-->
+          </option>         
+          <option value="U16BIT">
+            <brief>Output 16-bit unsigned data in orthorectified PDS products.</brief>
+            <description>
+              Pixels are in the 16-bit data range (0 to 65535).
+            </description>
+          </option>
+          <option value="S16BIT">
+            <brief>Output 16-bit signed data in orthorectified PDS products.</brief>
+            <description>
+              Pixels are in 16-bit signed data range (-32768 to 32767).
+            </description>
+          </option>
+          <option value="32BIT">
+            <brief>Output 32-bit data in orthorectified PDS products.</brief>
+            <description>
+              Pixels are in the 32-bit floating point data range
+              (-3.40282347e+38 to 3.40282347e+38).
+            </description>
+         </option>
+        </list>
+      </parameter>
+    </group>
+
+  </groups>
+</application>

@@ -1,0 +1,63 @@
+Testing Isis::ProcessGroundPolygons Class ... 
+File Name: ProcessGroundPolygonsTest.cub
+Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 
+Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.070946 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 
+Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 
+Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 
+Band: 1 DN: 0.0726764 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0761372 Band: 1 DN: 0.0761372 Band: 1 DN: 0.0761372 Band: 1 DN: 0.0761372 
+Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 
+Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 
+Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 
+Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0761372 Band: 1 DN: 0.0761372 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0692156 
+Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0674852 Band: 1 DN: 0.0657548 
+Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0761372 Band: 1 DN: 0.0744068 Band: 1 DN: 0.0726764 
+Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0726764 Band: 1 DN: 0.0657548 Band: 1 DN: 0.0588333 
+Band: 1 DN: 0.0726764 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 
+Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 Band: 1 DN: 0.0692156 
+Band: 1 DN: 0.0692156 
+Band: 2 DN: 0.121396 Band: 2 DN: 0.121396 Band: 2 DN: 0.121396 
+Band: 2 DN: 0.126674 Band: 2 DN: 0.126674 Band: 2 DN: 0.110302 Band: 2 DN: 0.0939311 Band: 2 DN: 0.0939311 
+Band: 2 DN: 0.126674 Band: 2 DN: 0.126674 Band: 2 DN: 0.108787 Band: 2 DN: 0.0909011 Band: 2 DN: 0.0909011 Band: 2 DN: 0.0909011 Band: 2 DN: 0.0909011 
+Band: 2 DN: 0.126674 Band: 2 DN: 0.084841 Band: 2 DN: 0.083326 Band: 2 DN: 0.081811 Band: 2 DN: 0.081811 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 
+Band: 2 DN: 0.084841 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 Band: 2 DN: 0.0939311 Band: 2 DN: 0.0939311 
+Band: 2 DN: 0.084841 Band: 2 DN: 0.084841 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 Band: 2 DN: 0.084841 Band: 2 DN: 0.084841 
+Band: 2 DN: 0.084841 Band: 2 DN: 0.084841 Band: 2 DN: 0.0909011 Band: 2 DN: 0.0909011 Band: 2 DN: 0.0909011 Band: 2 DN: 0.0909011 
+Band: 2 DN: 0.084841 Band: 2 DN: 0.084841 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 
+Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 Band: 2 DN: 0.084841 Band: 2 DN: 0.084841 Band: 2 DN: 0.083326 Band: 2 DN: 0.081811 
+Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 Band: 2 DN: 0.089386 Band: 2 DN: 0.0909011 Band: 2 DN: 0.089386 Band: 2 DN: 0.087871 
+Band: 2 DN: 0.084841 Band: 2 DN: 0.084841 Band: 2 DN: 0.086356 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 
+Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 Band: 2 DN: 0.086356 Band: 2 DN: 0.084841 Band: 2 DN: 0.086356 Band: 2 DN: 0.087871 
+Band: 2 DN: 0.087871 Band: 2 DN: 0.084841 Band: 2 DN: 0.086356 Band: 2 DN: 0.087871 Band: 2 DN: 0.087871 
+Band: 2 DN: 0.084841 Band: 2 DN: 0.084841 Band: 2 DN: 0.084841 
+Band: 2 DN: 0.084841 
+File Name: ProcessGroundPolygonsTest_count.cub
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 2 Band: 1 DN: 1 Band: 1 DN: 1 
+Band: 1 DN: 1 Band: 1 DN: 1 Band: 1 DN: 1 
+Band: 1 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 2 Band: 2 DN: 1 Band: 2 DN: 1 
+Band: 2 DN: 1 Band: 2 DN: 1 Band: 2 DN: 1 
+Band: 2 DN: 1 

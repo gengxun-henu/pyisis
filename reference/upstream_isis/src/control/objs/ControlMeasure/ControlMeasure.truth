@@ -1,0 +1,263 @@
+Test 1 Default values
+Printing measure:
+Object = ControlNetwork
+  NetworkId    = Identifier
+  TargetName   = Null
+  UserName     = Null
+  Created      = Yesterday
+  LastModified = Yesterday
+  Description  = Null
+  Version      = 5
+
+  Object = ControlPoint
+    PointType   = Free
+    PointId     = CP01
+    ChooserName = Me
+    DateTime    = Yesterday
+
+    Group = ControlMeasure
+      SerialNumber = Null
+      MeasureType  = Candidate
+      ChooserName  = ManuallySet
+      DateTime     = 2001-01-01T00:00:00
+    End_Group
+  End_Object
+End_Object
+End
+Done printing measure.
+
+Test 2
+Printing measure:
+Object = ControlNetwork
+  NetworkId    = Identifier
+  TargetName   = Null
+  UserName     = Null
+  Created      = Yesterday
+  LastModified = Yesterday
+  Description  = Null
+  Version      = 5
+
+  Object = ControlPoint
+    PointType   = Free
+    PointId     = CP01
+    ChooserName = Me
+    DateTime    = Yesterday
+
+    Group = ControlMeasure
+      SerialNumber   = Test
+      MeasureType    = Candidate
+      ChooserName    = Bob
+      DateTime       = 2005-05-03T00:00:00
+      Ignore         = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+    End_Group
+  End_Object
+End_Object
+End
+Done printing measure.
+
+Test 3
+Printing measure:
+Object = ControlNetwork
+  NetworkId    = Identifier
+  TargetName   = Null
+  UserName     = Null
+  Created      = Yesterday
+  LastModified = Yesterday
+  Description  = Null
+  Version      = 5
+
+  Object = ControlPoint
+    PointType   = Free
+    PointId     = CP01
+    ChooserName = Me
+    DateTime    = Yesterday
+
+    Group = ControlMeasure
+      SerialNumber   = Test
+      MeasureType    = Candidate
+      ChooserName    = Bob
+      DateTime       = 2005-05-03T00:00:00
+      Ignore         = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+    End_Group
+  End_Object
+End_Object
+End
+Done printing measure.
+
+Test 4
+Printing measure:
+Object = ControlNetwork
+  NetworkId    = Identifier
+  TargetName   = Null
+  UserName     = Null
+  Created      = Yesterday
+  LastModified = Yesterday
+  Description  = Null
+  Version      = 5
+
+  Object = ControlPoint
+    PointType   = Free
+    PointId     = CP01
+    ChooserName = Me
+    DateTime    = Yesterday
+
+    Group = ControlMeasure
+      SerialNumber   = Test
+      MeasureType    = Manual
+      ChooserName    = Bob
+      DateTime       = 2005-05-03T00:00:00
+      EditLock       = True
+      Ignore         = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+    End_Group
+  End_Object
+End_Object
+End
+Done printing measure.
+
+Test 5
+Printing measure:
+Object = ControlNetwork
+  NetworkId    = Identifier
+  TargetName   = Null
+  UserName     = Null
+  Created      = Yesterday
+  LastModified = Yesterday
+  Description  = Null
+  Version      = 5
+
+  Object = ControlPoint
+    PointType   = Free
+    PointId     = CP01
+    ChooserName = Me
+    DateTime    = Yesterday
+
+    Group = ControlMeasure
+      SerialNumber   = Test
+      MeasureType    = Manual
+      ChooserName    = Bob
+      DateTime       = 2005-05-03T00:00:00
+      Ignore         = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+    End_Group
+  End_Object
+End_Object
+End
+Done printing measure.
+
+Test 6
+Printing measure:
+Object = ControlNetwork
+  NetworkId    = Identifier
+  TargetName   = Null
+  UserName     = Null
+  Created      = Yesterday
+  LastModified = Yesterday
+  Description  = Null
+  Version      = 5
+
+  Object = ControlPoint
+    PointType   = Free
+    PointId     = CP01
+    ChooserName = Me
+    DateTime    = Yesterday
+
+    Group = ControlMeasure
+      SerialNumber   = Test
+      MeasureType    = RegisteredSubPixel
+      ChooserName    = Bob
+      DateTime       = 2005-05-03T00:00:00
+      Ignore         = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+    End_Group
+  End_Object
+End_Object
+End
+Done printing measure.
+
+Test 7
+AprioriLine=5
+AprioriSample=2
+ChooserName=Bob
+CubeSerialNumber=Test
+DateTime=2005-05-03T00:00:00
+Line=2
+LineResidual=4
+LineSigma=0.21
+Sample=1
+SampleResidual=-3
+SampleSigma=0.01
+ResidualMagnitude=5
+MeasureType=RegisteredSubPixel
+Test 8
+5
+5
+
+Test 9
+Testing point editLock on reference measure
+Reference point ok
+Nonreference point ok
+
+Test 10
+Testing == operator on the same measures
+Measure1 == Measure1   TRUE
+
+Test 11
+Testing == operator on two different measures
+Measure1 == Measure2   FALSE
+
+Test 12
+Testing != operator on the same measures
+Measure1 != Measure1   FALSE
+
+Test 13
+Testing != operator on two different measures
+Measure1 != Measure2   TRUE
+**PROGRAMMER ERROR** Cannot set log data with invalid information stored in the ControlMeasureLogData.
+
+Test 14: Testing accessor methods
+Measure was not rejected.
+Measure HasChooserName():  true
+Measure HasDateTime():  true

@@ -1,0 +1,344 @@
+UnitTest for ControlNet ....
+
+******* test cube connection graph ************
+testing ignoring measures..............................
+starting graph
+ALPHA ----(1) [p0]---- BRAVO
+
+ignore a measure
+
+un-ignore a measure
+ALPHA ----(1) [p0]---- BRAVO
+
+testing measure addition to point already in network...
+add point with only 1 measure
+ALPHA ----(1) [p0]---- BRAVO
+
+add a measure
+ALPHA ----(2) [p0,p1]---- BRAVO
+
+add another measure
+ALPHA ----(2) [p0,p1]---- BRAVO
+ALPHA ----(1) [p1]---- CHARLIE
+BRAVO ----(1) [p1]---- CHARLIE
+
+testing setting point to ignored.......................
+ignore p1
+ALPHA ----(1) [p0]---- BRAVO
+
+un-ignore p1
+ALPHA ----(2) [p0,p1]---- BRAVO
+ALPHA ----(1) [p1]---- CHARLIE
+BRAVO ----(1) [p1]---- CHARLIE
+
+testing measure deletion & addition....................
+ALPHA ----(1) [p1]---- BRAVO
+ALPHA ----(1) [p1]---- CHARLIE
+BRAVO ----(1) [p1]---- CHARLIE
+
+ALPHA ----(1) [p1]---- BRAVO
+ALPHA ----(1) [p1]---- CHARLIE
+ALPHA ----(1) [p0]---- DELTA
+BRAVO ----(1) [p1]---- CHARLIE
+
+testing FindClosest....................
+Closest Point ID: p1
+
+testing getAdjacentImages....................
+Adjacent Images: 
+  BRAVO
+  CHARLIE
+  DELTA
+
+testing point deletion.................................
+ALPHA ----(1) [p0]---- DELTA
+
+******* Done testing cube graph ***************
+
+
+testing GetCubeSerials... (NOTE: unittest sorts the results)
+  ALPHA
+  BRAVO
+  CHARLIE
+  DELTA
+
+testing set target.................................
+Set target using empty PVL.
+        TargetName = 
+
+Set target using actual PVL.
+Group = Mapping
+  TargetName = Mars
+End_Group
+End
+        TargetName = Mars
+
+Set empty target.
+        TargetName = 
+
+Set Mars target.
+        TargetName = Mars
+
+Test adding control points with identical id numbers ...
+**PROGRAMMER ERROR** ControlPoint must have unique Id.
+
+Test deleting nonexistant control point id ...
+**USER ERROR** point Id [T0002] does not exist in the network.
+
+Test deleting nonexistant control point index ...
+**PROGRAMMER ERROR** Index [7] out of range.
+
+Writing ControlNet to temp.txt in Pvl format
+Reading ControlNet from temp.txt
+Writing ControlNet to temp2.txt in Pvl format
+Diffing temp.txt and temp2.txt
+Test read/write of binary control networks ...
+Writing ControlNet to temp.bin in binary format
+Reading ControlNet from temp.bin
+Writing ControlNet to temp.txt in Pvl format
+Reading Pvl from temp.txt and then printing
+
+Object = ControlNetwork
+  NetworkId    = Test
+  TargetName   = Mars
+  UserName     = TSucharski
+  Created      = 2010-07-10T12:50:15
+  LastModified = 2010-07-10T12:50:55
+  Description  = "UnitTest of ControlNetwork"
+  Version      = 5
+
+  Object = ControlPoint
+    PointType                = Fixed
+    PointId                  = T0000
+    ChooserName              = autoseed
+    DateTime                 = 2010-08-27T17:10:06
+    EditLock                 = True
+    AprioriXYZSource         = Basemap
+    AprioriXYZSourceFile     = /work1/tsucharski/basemap.cub
+    AprioriRadiusSource      = DEM
+    AprioriRadiusSourceFile  = $base/dems/molaMarsPlanetaryRadius0003.cub
+
+    # AprioriLatitude = 31.999999989922 <degrees>
+    AprioriX                 = -424.024048 <meters>
+
+    # AprioriLongitude = 119.99999999551 <degrees>
+    AprioriY                 = 734.4311949 <meters>
+
+    # AprioriRadius = 999.99999984142 <meters>
+    AprioriZ                 = 529.919264 <meters>
+
+    # AprioriLatitudeSigma = 28.65696494252 <meters>  AprioriLongitudeSigma = 26.457513107566 <meters>  AprioriRadiusSigma = 38.454887341483 <meters>
+    AprioriCovarianceMatrix  = (100.0, 0.0, 0.0, 2500.0, 0.0, 400.0)
+    LatitudeConstrained      = True
+    LongitudeConstrained     = True
+    RadiusConstrained        = True
+
+    # AdjustedLatitude = 31.999999989922 <degrees>
+    AdjustedX                = -424.024048 <meters>
+
+    # AdjustedLongitude = 119.99999999551 <degrees>
+    AdjustedY                = 734.4311949 <meters>
+
+    # AdjustedRadius = 999.99999984142 <meters>
+    AdjustedZ                = 529.919264 <meters>
+
+    # AdjustedLatitudeSigma = 28.65696494252 <meters>  AdjustedLongitudeSigma = 26.457513107566 <meters>  AdjustedRadiusSigma = 38.454887341483 <meters>
+    AdjustedCovarianceMatrix = (100.0, 0.0, 0.0, 2500.0, 0.0, 400.0)
+
+    Group = ControlMeasure
+      SerialNumber   = id0
+      MeasureType    = RegisteredSubPixel
+      ChooserName    = cnetref
+      DateTime       = 2010-08-27T17:10:06
+      EditLock       = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+      GoodnessOfFit  = 0.53523
+      Reference      = True
+    End_Group
+
+    Group = ControlMeasure
+      SerialNumber   = id1
+      MeasureType    = Candidate
+      ChooserName    = autoseed
+      DateTime       = 2010-08-27T17:10:06
+      Ignore         = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+      GoodnessOfFit  = 1.07046
+    End_Group
+  End_Object
+
+  Object = ControlPoint
+    PointType   = Free
+    PointId     = T0001
+    ChooserName = autoseed
+    DateTime    = 2010-08-27T17:10:06
+    Ignore      = True
+
+    Group = ControlMeasure
+      SerialNumber   = id0
+      MeasureType    = RegisteredSubPixel
+      ChooserName    = cnetref
+      DateTime       = 2010-08-27T17:10:06
+      EditLock       = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+      GoodnessOfFit  = 0.53523
+      Reference      = True
+    End_Group
+
+    Group = ControlMeasure
+      SerialNumber   = id1
+      MeasureType    = Candidate
+      ChooserName    = autoseed
+      DateTime       = 2010-08-27T17:10:06
+      Ignore         = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+      GoodnessOfFit  = 1.07046
+    End_Group
+  End_Object
+
+  Object = ControlPoint
+    PointType   = Free
+    PointId     = T0003
+    ChooserName = autoseed
+    DateTime    = 2010-08-27T17:10:06
+
+    Group = ControlMeasure
+      SerialNumber   = id0
+      MeasureType    = RegisteredSubPixel
+      ChooserName    = cnetref
+      DateTime       = 2010-08-27T17:10:06
+      EditLock       = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+      GoodnessOfFit  = 0.53523
+      Reference      = True
+    End_Group
+
+    Group = ControlMeasure
+      SerialNumber   = id1
+      MeasureType    = Candidate
+      ChooserName    = autoseed
+      DateTime       = 2010-08-27T17:10:06
+      Ignore         = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+      GoodnessOfFit  = 1.07046
+    End_Group
+  End_Object
+
+  Object = ControlPoint
+    PointType   = Free
+    PointId     = T0004
+    ChooserName = autoseed
+    DateTime    = 2010-08-27T17:10:06
+
+    Group = ControlMeasure
+      SerialNumber   = id0
+      MeasureType    = RegisteredSubPixel
+      ChooserName    = cnetref
+      DateTime       = 2010-08-27T17:10:06
+      EditLock       = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+      GoodnessOfFit  = 0.53523
+      Reference      = True
+    End_Group
+
+    Group = ControlMeasure
+      SerialNumber   = id1
+      MeasureType    = Candidate
+      ChooserName    = autoseed
+      DateTime       = 2010-08-27T17:10:06
+      Ignore         = True
+      Sample         = 1.0
+      Line           = 2.0
+      Diameter       = 15.0
+      AprioriSample  = 2.0
+      AprioriLine    = 5.0
+      SampleSigma    = 0.01 <pixels>
+      LineSigma      = 0.21 <pixels>
+      SampleResidual = -3.0 <pixels>
+      LineResidual   = 4.0 <pixels>
+      GoodnessOfFit  = 1.07046
+    End_Group
+  End_Object
+End_Object
+End
+
+Writing ControlNet to temp2.bin in binary format
+Reading ControlNet from temp2.bin
+Diffing temp.bin and temp2.bin
+Read/Write of binary files OK.
+    ALPHA
+    BRAVO
+    CHARLIE
+    DELTA
+ALPHA ----(1) [p0]---- DELTA
+
+
+Testing getEdgeCount: 1
+Getting measures in cube with SN: ALPHA: 
+Serial Number: ALPHA
+Testing GetSerialConnections
+
+Testing GetSerialConnections()
+  Island Count = 2
+
+Testing take() functionality to take owernship of the points in a ControlNet:
+Original control net number of points: 1
+Number of points taken out: 1
+Now there should be zero points in the original control net. There are: 0
+And zero pointIDs in the original control net. There are: 0

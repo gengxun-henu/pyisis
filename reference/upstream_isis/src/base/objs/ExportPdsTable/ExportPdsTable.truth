@@ -1,0 +1,23 @@
+Testing export LSB with table containing each field type...
+ReimportedLsbTable
+Double Value	Integer Value	Text Value	Real Value
+3.14159			3				PI			3.1428570747375
+2.71828			2				e			2.0
+
+Testing export MSB with table containing each field type...
+In this case, record bytes > number of bytes of actual data. So padding will be added to the end of each record.
+ReimportedMsbTable
+Double Value	Integer Value	Text Value	Real Value
+3.14159			3				PI			3.1428570747375
+2.71828			2				e			2.0
+
+Testing errors ...
+**ERROR** Unable to export Isis::Table object to PDS. The Isis::Table record size [18] is larger than the record bytes allowed in the PDS file [17].
+**ERROR** Unable to export the Isis Table [TableToExport] to a PDS table using the requested byte order [L]. Valid values are MSB or LSB.
+
+Testing static method, formatPdsTableName()...
+formatPdsTableName(Table) = TABLE
+formatPdsTableName(IsisTable) = ISIS_TABLE
+formatPdsTableName(Isis) = ISIS_TABLE
+formatPdsTableName(CamelCase) = CAMEL_CASE_TABLE
+formatPdsTableName(CamelCase2) = CAMEL_CASE2_TABLE

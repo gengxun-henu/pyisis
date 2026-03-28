@@ -1,0 +1,39 @@
+Unit Test for HiresCamera...
+FileName: lhd0147b.200.lev1.cub
+CK Frame: -40001
+
+Kernel IDs: 
+CK Frame ID = -40000
+CK Reference ID = 1
+SPK Target ID = -40
+SPK Reference ID = 1
+
+Shutter open = -181413458.096343249
+Shutter close = -181413458.095276237
+
+For upper left corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For upper right corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For lower left corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For lower right corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For center pixel position ...
+Latitude OK
+Longitude OK
+
+
+Testing name methods ...
+Spacecraft Name Long: Clementine 1
+Spacecraft Name Short: Clementine1
+Instrument Name Long: High Resolution Camera
+Instrument Name Short: HiRES

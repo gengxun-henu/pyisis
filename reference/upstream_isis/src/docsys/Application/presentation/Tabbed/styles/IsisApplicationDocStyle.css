@@ -1,0 +1,181 @@
+  /*  ISIS APPLICATION PROGRAMMING DOC STYLE SHEET
+   *  FILENAME: IsisApplicationDocStyle.css
+   *
+   *  Purpose: formatting style sheet for 
+   *           Isis Application documentation
+   *
+   *  Author:  Jacob Cain, USGS, 09/19/2024
+   */
+
+    #overview {
+      padding-top: 1rem;
+    }
+
+    /* ----------------------------------------------------------------
+    Accordions for Parameter info */
+
+    .acc-flex-head {
+      background-position: left 1.25rem center;
+      display: flex;
+      padding: 0;
+      align-items: center;
+    }
+
+    .acc-param-name {
+      min-width: 20ex;
+      padding: 0.5rem 0.75rem 0.5rem 3.5rem;
+    }
+
+    .acc-param-desc {
+      font-weight: normal;
+      padding: 0.5rem 1.25rem 0.5rem 0.75rem;
+    }
+
+    /* Change Expansion symbols */
+    .acc-flex-head[aria-expanded="false"], .acc-flex-head[aria-expanded="false"]:hover {
+      background-image: url(../../../../assets/img/usa-icons/expand_more.svg);
+    }
+    .acc-flex-head, .acc-flex-head:hover {
+      background-image: url(../../../../assets/img/usa-icons/expand_less.svg);
+    }
+
+    /* Every other blue*/
+    .acc-param > h4:nth-child(4n+1) > button {
+      background-color: #D8F2FF;
+    }
+    .acc-param > h4:nth-child(4n+1) > button:hover {
+      background-color: #c2e8fb;
+    }
+    .acc-param > div:nth-child(4n+2) {
+      border-bottom: 0.25rem solid #D8F2FF;
+      border-left: 0.25rem solid #D8F2FF;
+      border-right: 0.25rem solid #D8F2FF;
+    }
+
+    /* Different table style if within parameter info */
+    .usa-accordion__content tbody > tr:nth-child(odd) {
+      background-color: unset;
+    }
+    .usa-accordion__content table {
+      border-collapse: collapse;
+    }
+    .usa-accordion__content tbody > tr {
+      border-bottom: 2px solid lightgray;
+    }
+
+    /* ----------------------------------------------------------------
+     * Text Tables */
+
+     /* LEVEL 1: outside level of table cells */
+     /* LEVEL 2: level of table cells nested inside an outer table */
+
+    .tableCellLevel1_type, .tableCellLevel2_type {
+      font-style: italic;
+    }
+
+    .tableCellLevel1_name, .tableCellLevel2_name {
+      font-weight: bold;
+    }
+
+    .tableCellLevel2, .tableCellLevel2_type, .tableCellLevel2_name, .tableCellLevel2_description {
+      border: 1px solid gray;
+      font-size: 80%;
+    }
+
+    .tableCellLevel2_name {
+      min-width: 18ex;
+      word-wrap: break-word;
+    }
+
+    /* ----------------------------------------------------------------
+     * TABS: tab styles */
+
+    .tab-line {
+      border-top: 2px solid lightgray;
+      border-bottom: 2px solid lightgray;
+      overflow-x: auto;
+    }
+
+    .tab-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+    }
+
+    .tab-list > li {
+      padding: 0 1rem;
+    }
+
+    .tab {
+      padding: 0.5rem 0;
+      cursor: pointer;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .tabOn {
+      color: black;
+      border-bottom: 4px solid #2672de;
+      font-weight: bold;
+    }
+
+    .tabOff {
+      color: #666666;
+    }
+
+    .tabOff:hover {
+      color: #2672de;
+      border-bottom: 4px solid #2672de;
+    }
+
+
+    /* -------------------------------------------------------------
+     * Command Line Examples */
+
+    .cmd-line {
+      padding: 1rem;
+      border-radius: 0.3rem;
+      background-color: #444;
+      color: white;
+      display: block;
+    }
+
+    .cmd-line-caption {
+      font-style: italic;
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+
+
+    /* -------------------------------------------------------------
+      * Example Images */
+
+    .ex-image-box {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      flex-wrap: wrap;
+      border: 2px solid lightgray;
+      border-radius: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 2rem;
+      justify-content: center;
+    }
+
+    .ex-image-img-div {
+      flex: 0 0 fit-content;
+    }
+
+    .ex-image-img {
+      border: 2px solid black;
+      max-width: 250px;
+      max-height: 250px;
+      width: auto;
+      height: auto;
+    }
+
+    .ex-image-desc {
+      flex: 1 1 200px;
+    }
+

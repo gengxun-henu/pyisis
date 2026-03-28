@@ -1,0 +1,68 @@
+/*  ISIS STYLE SHEET
+ *  FILENAME: print.css
+ *
+ *  Purpose: Additions to css for printing.
+ *
+ *  Author: Jacob Cain, USGS, 19/09/2024
+ */
+
+body {
+  background-color: white ;
+}
+
+pre, .cmd-line {
+  white-space: pre-wrap;
+  border: 1px solid slategrey;
+  background-color: whitesmoke;
+  color: black;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: unset;
+}
+
+.acc-param > div:nth-child(2n) {
+  border: none;
+}
+
+.acc-param > h4:nth-child(2n+1) > button {
+  background-color: unset;
+  border: 2px solid black;
+}
+
+table tr {
+  border-bottom: 2px solid gray;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: black;
+}
+
+div {
+  clear: left ;
+}
+
+/* Hide Menu and Tab Controls */
+.isisMenu, .tab-line, header, footer {
+  display: none !important;
+}
+
+/* Show all tabs/expand all accordions */
+#overview, 
+#Parameters, 
+#Example1, 
+#Example2, 
+#Example3, 
+#Example4, 
+#Example5, 
+.usa-accordion__content,
+.print-only {
+  display: block !important;
+}
+
+h1.print-only {
+  margin-top: 6rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 10px dotted black;
+  margin-bottom: 3rem;
+}

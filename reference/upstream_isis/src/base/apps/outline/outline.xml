@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="outline" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Outlines contiguous regions in a cube
+  </brief>
+
+  <description>
+    This program will draw boundaries or outline contigous regions in a cube. By
+    contiguous regions we mean those which are all of the same pixel value.
+  </description>
+
+  <history>
+    <change name="Kris Becker" date="1986-11-04">
+      Original version
+    </change>
+
+    <change name="Jeff Anderson" date="2003-04-21">
+      Ported to Isis 3.0
+    </change>
+    <change name="Stuart Sides" date="2003-05-16">
+      Modified schema location from astogeology... to isis.astrogeology..."
+    </change>
+    <change name="Stuart Sides" date="2003-05-30">
+      Added modifications to apptest by Kim
+    </change>
+    <change name="Stuart Sides" date="2003-07-29">
+      Modified filename parameters to be cube parameters where necessary
+    </change>
+    <change name="Steven Lambright" date="2008-05-13">
+      Removed references to CubeInfo
+    </change>
+    <change name="Kelvin Rodriguez" date="2016-06-27">
+      Added examples
+    </change>
+  </history>
+
+  <category>
+    <categoryItem>Trim and Mask</categoryItem>
+  </category>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input cube to outline
+        </brief>
+        <description>
+          Use this parameter to select the filename. All bands within the file
+          will be outlined.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+
+      <parameter name="TO">
+        <type>cube</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output cube
+        </brief>
+        <description>
+          This file will contain the results of the outlined cube.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Options">
+      <parameter name="BOUNDARY">
+        <type>double</type>
+        <brief>Boundary pixel value</brief>
+        <description>
+          This defines pixel value which will be placed at the boundary of
+          contiguous regions.  This value should not occur in the input cube.
+        </description>
+      </parameter>
+
+      <parameter name="CLEAR">
+        <type>boolean</type>
+        <default><item>TRUE</item></default>
+        <brief>Clear pixels inside boundaries</brief>
+        <description>
+          Setting this option to true will case all pixels found inside the
+          boundaries to be set to NULL.  Otherwise the pixels will be left
+          alone.
+        </description>
+      </parameter>
+
+      <parameter name="EDGES">
+        <type>boolean</type>
+        <default><item>TRUE</item></default>
+        <brief>Set pixels at edges of cube</brief>
+        <description>
+          Setting this option to true will case all pixels around the edge of
+          the cube to be set to the boundary pixel value. Otherwise they will
+          be left alone or set to NULL.
+        </description>
+      </parameter>
+
+    </group>
+  </groups>
+
+  <examples>
+    <example>
+      <brief> Artificial Cube as input. </brief>
+      <description>
+        This example shows how the Outline application draws boundaries around contiguous pixels.
+      </description>
+      <terminalInterface>
+        <commandLine> IN=in.cub OUT=out.cub BOUNDARY=255 CLEAR=False EDGES=True
+        </commandLine>
+        <description>
+        This will set the borders around the contiguous pixels to 255 and will leave the pixels
+        contained within the regions at their original value.
+        </description>
+      </terminalInterface>
+
+      <inputImages>
+        <image src="assets/snapshots/input-snapshot.png" width="800" height="800">
+          <brief> Input image for outline</brief>
+          <description>
+            This is the 800 by 800 input image for the outline example.
+            This is an artificial cube for the sake of demonstration.
+          </description>
+          <thumbnail caption=" Input artificial cube." src="assets/thumbnails/input-thumbnail.png" width="200" height="200"/>
+          <parameterName>FROM</parameterName>
+        </image>
+      </inputImages>
+
+      <outputImages>
+        <image src="assets/snapshots/output-snapshot.png" width="800" height="800">
+          <brief> Output image for outline</brief>
+          <description>
+            This is the 800 by 800 output image demonstrating the results of Outline.
+            White lines (DN = 255) mark the boundaries between contiguous pixels.
+            This is with Clear=False, Edges=True and Boundary=255.
+          </description>
+          <thumbnail caption="Output image clearly demonstrating the boundaries created by Outline." src="assets/thumbnails/output-thumbnail.png" width="200" height="200"/>
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+
+      <guiInterfaces>
+        <guiInterface>
+          <image width="469" height="400" src="assets/snapshots/gui-snapshot.png">
+            <brief>Example Gui</brief>
+            <description>
+              Screenshot of GUI for yhr Outline application.
+            </description>
+            <thumbnail width="113" height="200" caption="Outline Gui" src="assets/thumbnails/gui-thumbnail.png" />
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+    </example>
+  </examples>
+</application>

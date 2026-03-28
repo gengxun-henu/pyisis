@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="pds2isis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation=
+"http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>Import PDS or ISIS2 image into ISIS cube format</brief>
+
+  <description>
+    <p>
+      This program converts a PDS or ISIS2 formatted file to an ISIS3
+      <def link="Cube">cube</def> format.  The standard PDS image is defined in
+      the "FROM" parameter, and not the "IMAGE" parameter.  If the PDS file has
+      a detached label file and an image file, both are required to exist in the
+      working directory.  If the label is detached, the detached label filename
+      is defined as the input file for the "FROM" parameter.  The "IMAGE" parameter
+      does not need to be defined, unless the program fails to find the image file
+      specifed in the label file upon the program's execution.
+
+      The default settings normally work for most PDS products, but occasionally
+      the user may need to modify the default values in order to obtain an image
+      that meets their specific requirements.
+     </p>
+     <p>
+      The incoming <def link="Special Pixels">special pixel</def> values in the
+      PDS file are assigned equivalent values for special pixels in ISIS.  The
+      order of precedence for special pixels in ISIS from highest to lowest
+      priority is the following:
+      <blockquote>
+      <ol>
+        <li><def>NULL</def></li>
+	<li><def>HRS</def></li>
+	<li><def>LRS</def></li>
+	<li><def>HIS</def></li>
+	<li><def>LIS</def></li>
+      </ol>
+      </blockquote>
+      If any incoming <def link="Digital Number">pixel value</def> falls within
+      two different special pixel types, the <def link="Special Pixels">special
+      pixel</def> with the higher priority is assigned.  The user may also
+      specify a range of pixel values to be assigned to the different special pixels.
+      If the range of pixel values defined by the user for the different special
+      pixels overlap, the special pixel with the highest priority is assigned.  For
+      example, if NULLMIN=0.0, NULLMAX=3.0, LISMIN=3.0, and LISMAX=5.0, the actual
+      raw value 3.0 can be assigned as a NULL or LIS, but is translated to NULL because
+      NULL has a higher priority than LIS.
+    </p>
+    <p>
+      It should be noted if any incoming <def link="Digital Number">pixel values</def>
+      are equal to one of the ISIS <def link="Special Pixels">special pixel</def>
+      values for the corresponding bit type, those pixels will be special in the
+      output cube. The special pixel values for each bit type can be found
+      <a href="https://github.com/USGS-Astrogeology/ISIS3/wiki/SpecialPixels">here</a>.
+      This is most commonly an issue with 8-bit data. If you are working with
+      an 8-bit image and need either 0 or 255, either convert the data to 16-bit
+      or use Stretch after ingestion.
+    </p>
+    <p>
+      The conversion of images from ISIS2 to ISIS3
+      follows the same rules as PDS images, except that the label information
+      is propagated to the output file.
+     </p>
+     <p>
+      The best option to convert files from ISIS2 to ISIS is to maintain all the
+      input file settings, and do not change the <def link="Bit Type">bit type</def>
+      or change any incoming pixel values to <def link="Special Pixels">special pixels</def>.
+      When an ISIS2 <def>Level1</def> image is imported into ISIS3, it is
+      important to note the label information is not propagated from the ISIS2 to
+      the ISIS cube file. For an ISIS2 <def>Level2</def> image or mosaic file,
+      a limited set of label information is transferred to the ISIS labels that
+      include the "Instrument," "<def link="Band">BandBin</def>," and
+      "<def link="Map Projection">Mapping</def>" groups.
+    </p>
+  </description>
+
+  <history>
+    <change name="Kris Becker" date="1997-05-01">
+      Original version.
+    </change>
+    <change name="Stuart Sides" date="2003-05-15">
+      Wrote for Isis 3.
+    </change>
+    <change name="Stuart Sides" date="2003-05-16">
+      Modified schema location from "astrogeology" to "isis.astrogeology."
+    </change>
+    <change name="Stuart Sides" date="2003-06-04">
+      Fixed Makefile.
+    </change>
+    <change name="Stuart Sides" date="2003-10-10">
+      Converted to use new IsisImport instead of IsisPdsImport.
+    </change>
+    <change name="Stuart Sides" date="2004-02-20">
+      Converted to use the new IsisImportPds class and added
+      import labels to the output cube.
+    </change>
+    <change name="Brendan George" date="2006-09-28">
+        Documentation fixes.
+    </change>
+    <change name="Stuart Sides" date="2007-01-25">
+        Added ability to transfers Isis2 instrument and bandbin
+        information.
+    </change>
+   <change name="Tracie Sucharski" date="2007-04-10">
+       Added LatitudeType2 group to translation table to handle CTX cubes.
+       Additonal changes to projection translation tables for other possible
+       values for Longitude direction, latitude type.  If the min or max
+       longitude values are greater than 180, change longitude domain to 360.
+       Only call TranslateIsis2Labels if pds file is an Isis2 cube.
+   </change>
+   <change name="Steven Lambright" date="2007-08-07">
+       Added support for copying some PDS labels, if they exist, into the output.
+   </change>
+   <change name="Steven Koechle" date="2007-08-29">
+       Added special pixel ranges. Added examples.
+   </change>
+    <change name="Steven Lambright" date="2008-05-13">
+      Removed references to CubeInfo.
+    </change>
+    <change name="Christopher Austin" date="2008-09-15">
+      Fixed problem with special pixel range functionality and documentation.
+      Added HIS and LIS range options.
+    </change>
+    <change name="Stuart Sides" date="2012-08-08">
+      Added translations for BAND_BIN_CENTER, BAND_BIN_WIDTH, and BAND_BIN_FILTER_NUMBER from
+      NIMS RDR products fixes #1029.
+    </change>
+    <change name="Ella Mae Lee" date="2012-11-09">
+      Improve the documentation, document capability to import ISIS2 images,
+      fixes #1172.
+    </change>
+    <change name="Kimberly Oyama" date="2012-11-21">
+      Added app tests for BIP and BIL formatted input. References #819.
+    </change>
+    <change name="Tyler Wilson" date ="2016-02-25">
+     Added an app test for opening Galileo NIMS qubes saved in VAX format.  Modified the filter
+     tag on FROM parameter in this document to also recognize *.qub files.  All changes
+     relating to converting VAX to IEEE were made in ProcessImport, ProcessImportPds.
+     References:  #2368.
+    </change>
+    <change name="Summer Stapleton" date="2017-06-27">
+     Added conditional to check whether default offsets and multipliers where changed from their
+     default values and log them if so.
+    </change>
+
+  </history>
+
+  <category>
+    <categoryItem>Import and Export</categoryItem>
+  </category>
+
+  <groups>
+
+    <group name="Files">
+
+      <parameter name="FROM">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input PDS, PDS label, or ISIS2 file
+        </brief>
+        <description>
+          Specify a PDS file, PDS label file, or ISIS2 cube file.  If the
+	  input file is a PDS detached label file and the companion image
+	  file is not in the same directory, use the parameter "IMAGE" to
+	  define the location and filename of the image, otherwise just
+	  enter the label file name.
+        </description>
+        <filter>
+          *.lbl *.img *.qub
+        </filter>
+      </parameter>
+
+      <parameter name="IMAGE">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Detached image file
+        </brief>
+        <description>
+          Use this parameter if the pointer to the image data in the
+          detached label file (FROM) is incorrrect.
+        </description>
+        <internalDefault>
+          Cube data embedded with label or file pointer in label file
+        </internalDefault>
+        <filter>
+          *.img
+        </filter>
+      </parameter>
+
+      <parameter name="TO">
+         <type>cube</type>
+         <fileMode>output</fileMode>
+         <brief>
+           Output cube file
+         </brief>
+         <description>
+           Use this parameter to specify the output cube filename.
+         </description>
+         <filter>
+           *.cub
+         </filter>
+       </parameter>
+
+    </group>
+
+    <group name="Special Pixels">
+
+      <parameter name="SETNULLRANGE">
+        <type>boolean</type>
+        <default>
+          <item>NO</item>
+        </default>
+        <brief>Option to convert pixel values to NULL</brief>
+        <description>
+	  If this option is set to "yes" or "true", a range of input raw pixels
+	  defined by the NULLMIN and NULLMAX parameters are converted to <def>NULL</def>
+	  pixels.  All other valid pixels that do not fall within the ranges
+	  specified for LIS, LRS, HIS, and HRS pixels are transferred to the output file
+	  unchanged.  If the <def link="Bit Type">bit type</def> of the input
+	  file is changed, the NULL and HRS <def link="Special Pixels">special
+	  pixels</def> may be incorrectly set to valid pixel values.  For example,
+	  if a raw 8-bit file is output to 16 or 32-bit, the pixel values "0"
+	  and "255" may be converted to actual values instead of retaining the
+	  special pixel property.  If the output file remains as 8-bit, then "0"
+	  stays as NULL and "255" stays as HRS.
+        </description>
+        <inclusions>
+          <item>NULLMIN</item>
+          <item>NULLMAX</item>
+        </inclusions>
+      </parameter>
+      <parameter name="NULLMIN">
+        <type>double</type>
+        <brief> Minimum value for NULL</brief>
+        <description>
+          Minimum pixel value to set to <def>NULL</def>.  All values greater than or equal to
+	  NULLMIN and less than or equal to NULLMAX are converted to NULL.
+        </description>
+        <inclusions>
+          <item>SETNULLRANGE</item>
+        </inclusions>
+      </parameter>
+      <parameter name="NULLMAX">
+        <type>double</type>
+        <brief> Maximum value for NULL </brief>
+        <description>
+          Maximum pixel value to set to <def>NULL</def>.  All values greater than or equal to
+	  NULLMIN and less than or equal to NULLMAX are converted to NULL.
+        </description>
+        <inclusions>
+          <item>SETNULLRANGE</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="SETHRSRANGE">
+        <type>boolean</type>
+        <default>
+          <item>NO</item>
+        </default>
+        <brief>Option to convert pixel values to HRS</brief>
+        <description>
+	  If this option is set to "yes" or "true", a range of input raw pixels
+	  defined by the HRSMIN and HRSMAX parameters are converted to HRS
+	  pixels.  All other valid pixels that do not fall within the ranges
+	  specified for LIS, LRS, HIS, and NULL pixels are transferred to the output file
+	  unchanged.  If the <def link="Bit Type">bit type</def> of the input
+	  file is changed, the NULL and HRS <def link="Special Pixels">special
+	  pixels</def> may be incorrectly set to valid pixel values.  For example,
+	  if a raw 8-bit file is output to 16 or 32-bit, the pixel values "0"
+	  and "255" may be converted to actual values instead of retaining the
+	  special pixel property.  If the output file remains as 8-bit, then "0"
+	  stays as NULL and "255" stays as HRS.
+        </description>
+        <inclusions>
+          <item>HRSMIN</item>
+          <item>HRSMAX</item>
+        </inclusions>
+      </parameter>
+      <parameter name="HRSMIN">
+        <type>double</type>
+        <brief> Minimum value for HRS</brief>
+        <description>
+          Minimum pixel value to set to <def>HRS</def>.  All values greater than or equal to
+	  HRSMIN and less than or equal to HRSMAX are converted to HRS.
+        </description>
+        <inclusions>
+          <item>SETHRSRANGE</item>
+        </inclusions>
+      </parameter>
+      <parameter name="HRSMAX">
+        <type>double</type>
+        <brief> Maximum value for HRS</brief>
+        <description>
+          Maximum pixel value to set to <def>HRS</def>.  All values greater than or equal to
+	  HRSMIN and less than or equal to HRSMAX are converted to HRS.
+        </description>
+        <inclusions>
+          <item>SETHRSRANGE</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="SETHISRANGE">
+        <type>boolean</type>
+        <default>
+          <item>NO</item>
+        </default>
+        <brief>Option to convert pixel values to HIS</brief>
+        <description>
+	  If this option is set to "yes" or "true", a range of input raw pixels
+	  defined by the HISMIN and HISMAX parameters are converted to HIS
+	  pixels.  All other valid pixels that do not fall within the ranges
+	  specified for LIS, LRS, HRS, and NULL pixels are transferred to the
+	  output file unchanged.
+        </description>
+        <inclusions>
+          <item>HISMIN</item>
+          <item>HISMAX</item>
+        </inclusions>
+      </parameter>
+      <parameter name="HISMIN">
+        <type>double</type>
+        <brief> Minimum value for HIS</brief>
+        <description>
+          Minimum pixel value to set to <def>HIS</def>.  All values greater than or equal to
+	  HISMIN and less than or equal to HISMAX are converted to HIS.
+        </description>
+        <inclusions>
+          <item>SETHISRANGE</item>
+        </inclusions>
+      </parameter>
+      <parameter name="HISMAX">
+        <type>double</type>
+        <brief> Maximum value for HIS</brief>
+        <description>
+          Maximum pixel value to set to <def>HIS</def>.  All values greater than or equal to
+	  HISMIN and less than or equal to HISMAX are converted to HIS.
+        </description>
+        <inclusions>
+          <item>SETHISRANGE</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="SETLRSRANGE">
+        <type>boolean</type>
+        <default>
+          <item>NO</item>
+        </default>
+        <brief>Option to convert pixel values to LRS</brief>
+        <description>
+	  If this option is set to "yes" or "true", a range of input raw pixels
+	  defined by the LRSMIN and LRSMAX parameters are converted to LRS
+	  pixels.  All other valid pixels that do not fall within the ranges
+	  specified for LIS, HIS, HRS, and NULL pixels are transferred to the
+	  output file unchanged.
+        </description>
+        <inclusions>
+          <item>LRSMIN</item>
+          <item>LRSMAX</item>
+        </inclusions>
+      </parameter>
+      <parameter name="LRSMIN">
+        <type>double</type>
+        <brief> Minimum value for LRS</brief>
+        <description>
+          Minimum pixel value to set to <def>LRS</def>.  All values greater than or equal to
+	  LRSMIN and less than or equal to LRSMAX are converted to LRS.
+        </description>
+        <inclusions>
+          <item>SETLRSRANGE</item>
+        </inclusions>
+      </parameter>
+      <parameter name="LRSMAX">
+        <type>double</type>
+        <brief> Maximum value for LRS </brief>
+        <description>
+          Maximum pixel value to set to <def>LRS</def>.  All values greater than or equal to
+	  LRSMIN and less than or equal to LRSMAX are converted to LRS.
+        </description>
+        <inclusions>
+          <item>SETLRSRANGE</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="SETLISRANGE">
+        <type>boolean</type>
+        <default>
+          <item>NO</item>
+        </default>
+        <brief>Option to convert pixel values to LIS</brief>
+        <description>
+	  If this option is set to "yes" or "true", a range of input raw pixels
+	  defined by the LISMIN and LISMAX parameters are converted to LIS
+	  pixels.  All other valid pixels that do not fall within the ranges
+	  specified for LRS, HIS, HRS, and NULL pixels are transferred to the
+	  output file unchanged.
+        </description>
+        <inclusions>
+          <item>LISMIN</item>
+          <item>LISMAX</item>
+        </inclusions>
+      </parameter>
+      <parameter name="LISMIN">
+        <type>double</type>
+        <brief> Minimum value for LIS </brief>
+        <description>
+          Minimum pixel value to set to <def>LIS</def>.  All values greater than or equal to
+	  LISMIN and less than or equal to LISMAX are converted to LIS.
+        </description>
+        <inclusions>
+          <item>SETLISRANGE</item>
+        </inclusions>
+      </parameter>
+      <parameter name="LISMAX">
+        <type>double</type>
+        <brief> Maximum value for LIS </brief>
+        <description>
+          Maximum pixel value to set to <def>LIS</def>.  All values greater than or equal to
+	  LISMIN and less than or equal to LISMAX are converted to LIS.
+        </description>
+        <inclusions>
+          <item>SETLISRANGE</item>
+        </inclusions>
+      </parameter>
+
+    </group>
+
+  </groups>
+
+  <examples>
+    <example>
+      <brief>
+        Convert PDS file to ISIS format with pds2isis
+      </brief>
+      <description>
+        The example ingests a PDS formatted file, and outputs an ISIS cube file
+	using the default settings for the program.
+      </description>
+      <terminalInterface>
+        <commandLine>
+	   from=input.img to=out.cub
+        </commandLine>
+        <description>
+	   This example shows the use of pds2isis to create an ISIS cube file.
+        </description>
+      </terminalInterface>
+
+      <guiInterfaces>
+        <guiInterface>
+          <image width="450" height="550" src="assets/images/pds2isisGUI.jpg">
+            <brief>
+	       Example GUI
+            </brief>
+            <description>
+	       Screenshot shows the pds2isis GUI with the parameter settings.
+            </description>
+            <thumbnail width="164" height="200" caption="Pds2isis GUI"
+             src="assets/thumbs/pds2isisGUI.jpg" />
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+
+      <dataFiles>
+        <dataFile path="assets/input.img">
+          <brief>
+	     The PDS formatted input file
+          </brief>
+          <description>
+	      This is a PDS image with attached labels.
+          </description>
+          <parameterName>FROM</parameterName>
+        </dataFile>
+      </dataFiles>
+
+      <outputImages>
+        <image width="458" height="550" src="assets/images/out.jpg">
+          <brief>
+	      The ISIS output cube file
+          </brief>
+          <description>
+	      This screenshot displays the ouput of the pds2isis application.
+          </description>
+          <thumbnail caption= "The ISIS image cube after conversion"
+          src="assets/thumbs/out.jpg" width="167" height="200"/>
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+    </example>
+  </examples>
+
+</application>

@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="cnetedit" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation=
+"http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Edit control networks
+  </brief>
+
+  <description>
+    <p>
+      This application applies a series of edits to a <def>control network</def>
+      based on the <def>control point</def> IDs and <def>control measure</def>
+      cube filenames specified in various edit lists.  All edit operations are
+      optional, and performed in a sequential order that cannot be changed.  If
+      the user wises to perform any edit operations in a different order, it is
+      suggested that they run the application multiple times in a pipeline
+      fashion.
+    </p>
+    <p>
+      The primary, and most typical, function of this application is to
+      selectively delete unwanted points and measures from a network by flagging
+      them as "ignored".  Other operations are generally in place to facilitate
+      this purpose, but can also be used on their own.
+    </p>
+    <p>
+      The available operations are as follows:
+      <ol>
+        <li>Unlock</li>
+        <li>Ignore</li>
+        <li>Delete</li>
+        <li>Lock</li>
+      </ol>
+      Before any points or measures are ignored and deleted, the listed points
+      and measures can be unlocked if edit locked in the input.  Listed points
+      and measures can then be ignored, and subsequently any ignored points and
+      measures can be deleted from the network.  The deletion operation deletes
+      all ignored points and measures, not just those specified in the lists.
+      Finally, any listed points or measures can be locked to prevent further
+      modification.
+    </p>
+    <p>
+      Additional options include the ability to preserve points with less than a
+      single valid measure, ability to retain the <def link="Reference
+        Measure">reference</def>, and the ability to print detailed logging results to a text file.
+    </p>
+  </description>
+
+  <history>
+    <change name="Tracie Sucharski" date="2008-08-14">
+      Original version
+    </change>
+    <change name="Christopher Austin" date="2008-12-29">
+      Added options, including EXCLUDELIST and DELETE
+    </change>
+    <change name="Christopher Austin" date="2009-01-09">
+      Renamed EXCLUDELIST to IGNORELIST and made other similar name changes.
+    </change>
+    <change name="Sharmila Prasad" date="2009-07-17">
+      Renamed IGNORELIST to FROMLIST and made other similar name changes
+      Added options HOLD and UNHOLD
+      Set the default as FALSE for DELETE Ignored Control Points and Measures
+    </change>
+    <change name="Sharmila Prasad" date="2009-07-24">
+      Renamed IGNORELIST to FROMLIST and  reverted back to previous format
+    </change>
+    <change name="Sharmila Prasad" date="2009-08-11">
+      Set the default as FALSE for DELETE Ignored Control Points and Measures
+    </change>
+    <change name="Christopher Austin" date="2009-08-11">
+      Fixed an out of index bug.
+    </change>
+    <change name="Sharmila Prasad" date="2009-08-25">
+      Added parameter LOG to write logs into the file if explicitly stated,
+      parameter POINTLIST to read Control Point ID's from a file
+      reverted DELETE default to be TRUE
+    </change>
+    <change name="Sharmila Prasad" date="2009-09-14">
+      Added parameter PRESERVE with default FALSE. If set the Control Points with
+      Measures equal to one are not deleted
+    </change>
+    <change name="Travis Addair" date="2010-11-24">
+      Added optional measure validity check, removed a redundant deletion
+      pass, and fixed a bug causing points to be deleted before all measures
+      had been checked.
+    </change>
+    <change name="Travis Addair" date="2010-11-29">
+      Changed parameter FROMLIST to CUBELIST and ALLFROMLIST to FROMLIST.
+    </change>
+    <change name="Travis Addair" date="2010-11-30">
+      Added progress bar for validity checking and automatic logging of the
+      DEFFILE to the print file when entered.
+    </change>
+    <change name="Travis Addair" date="2010-12-08">
+      Added check to ensure that ignored reference measures are not deleted,
+      but that the entire point is deleted instead, by setting the containing
+      point to ignored whenever the reference is.
+    </change>
+    <change name="Travis Addair" date="2010-12-20">
+      Added information to the log file pertaining to each point and measure
+      ignored/deleted with an associated reason why.
+    </change>
+    <change name="Christopher Austin" date="2011-01-18">
+      Altered to compile with the new Control redesign.
+    </change>
+    <change name="Sharmila Prasad" date="2011-05-14">
+      Validate DefFile before processing. Added ability to validate measure
+      by sample/line residuals or Residual Magnitude
+    </change>
+    <change name="Sharmila Prasad" date="2011-05-23">
+      Helper function to be able to edit the Deffile.
+    </change>
+    <change name="Sharmila Prasad" date="2011-06-02">
+      Added option RETAIN_REFERENCE to retain reference even if not validated or
+      if it is in the ignore CubeList
+    </change>
+    <change name="Debbie A. Cook and Tracie Sucharski" date="2011-06-07">
+      Changed point type "ground" to "fixed"
+    </change>
+    <change name="James Alexander Crough" date="2011-07-13">
+      Changed output of ignored points to show EditLocked points as ignored.
+    </change>
+    <change name="James Alexander Crough" date="2011-07-14">
+      Changed output again this time in order to seperate skipping EditLocked
+      points into their own PVL objects.
+    </change>
+    <change name="Travis Addair" date="2012-02-24">
+      Changed from ignoring/deletion program to a series of sequential
+      and optional operations (unlock, ignore, delete, lock).  Added MEASURELIST
+      to allow editing specific measures.  Updated documentation.
+    </change>
+    <change name="Steven Lambright" date="2012-05-03">
+      Added "IGNOREALL" option. Fixes #293.
+    </change>
+    <change name="Kristin Berry" date="2015-07-30"> 
+      Updated so that behavior is consistent with documentation. Now when a reference
+      measure is removed, the whole point is only removed if IGNOREALL is true. 
+      Fixes #2238.
+    </change>
+    <change name="Tyler Wilson" date="2016-01-04">
+      Fixed a problem with single measure points being deleted when running a validity
+      check even when delete = false.  Zero measure points are now deleted no matter what.
+      Ref #2342.
+    </change>
+  </history>
+
+  <category>
+    <categoryItem>Control Networks</categoryItem>
+  </category>
+
+  <groups>
+    <group name="Files">
+
+      <parameter name="CNET">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input control network
+        </brief>
+        <description>
+          A control network generated from programs such as autoseed or qnet.
+        </description>
+        <filter>
+          *.net
+        </filter>
+      </parameter>
+
+      <parameter name="ONET">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output control network
+        </brief>
+        <description>
+          Updated control network with the applied edits.
+        </description>
+        <filter>
+          *.net
+        </filter>
+      </parameter>
+
+      <parameter name="LOG">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <internalDefault>
+          None
+        </internalDefault>
+        <brief>
+          Log of all ignored or deleted points and measures
+        </brief>
+        <description>
+          This file provides a PVL record of all points and measures ignored or
+          deleted from the input network.  It also makes note of points and
+          measures that could not be ignored or deleted, and provides rationales
+          for each.
+        </description>
+        <filter>
+          *.pvl *.txt
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Edit Lists" >
+       <parameter name="POINTLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>
+          List of IDs mapping to points to be edited
+        </brief>
+        <description>
+          The given edit operations will be applied to all the points in the
+          control network mapped by the IDs in this list.  Each entry in this
+          list should be a control point ID on its own line.  Operations such as
+          unlocking, ignoring, and locking will only be applied at the point
+          level (e.g. locking lat/lon but not measurements).  Deleting a point,
+          however, will remove it and all its measures from the network.
+        </description>
+        <filter>
+          *.lis
+        </filter>
+      </parameter>
+
+      <parameter name="CUBELIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>
+          List of cube filenames to be edited
+        </brief>
+        <description>
+          The given edit operations will be applied to all the measurements
+          taken on a cube in this list.  This information is derived from the
+          measurement's cube serial number, mapping to a filename in this list.
+        </description>
+        <filter>
+          *.lis
+        </filter>
+      </parameter>
+
+      <parameter name="MEASURELIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>
+          List of paired Point IDs and cube filenames
+        </brief>
+        <description>
+          A file containing a list of paired Point IDs and cube filenames,
+          uniquely identifying specific measures to be edited.  Each pairing
+          must be on its own line and have the Point ID and filename separated
+          by a comma (',').
+        </description>
+        <filter>
+          *.lis *.csv
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Edit Operations">
+      <parameter name="UNLOCK">
+        <type>boolean</type>
+        <default><item>False</item></default>
+        <brief>
+          Unlock listed points and measures
+        </brief>
+        <description>
+          Any listed point or measure will have its edit lock removed if it has
+          one in the input network.  If not, nothing will happen to the point or
+          measure and processing will continue.  Unlocking a point does not
+          automatically unlock its measurements, except for the reference.
+        </description>
+      </parameter>
+      <parameter name="IGNORE">
+        <type>boolean</type>
+        <default><item>True</item></default>
+        <brief>
+          Ignore listed points and measures
+        </brief>
+        <description>
+          Any listed point or measure will be ignored. 
+          Ignoring can sometimes fail, for example, if the point or measure is
+          edit locked, and the UNLOCK operation is not enabled.
+        </description>
+        <inclusions>
+          <item>CHECKVALID</item>
+        </inclusions>
+      </parameter>
+      <parameter name="DELETE">
+        <type>boolean</type>
+        <default><item>TRUE</item></default>
+        <brief>
+          Delete ignored points and measures
+        </brief>
+        <description>
+          Any ignored point or measure will be deleted, regardless of whether
+          or not it is present in an edit list.  Deleting a point will delete
+          all its measurements in the process.  If any control point has less
+          than two remaining measures after all measurement deletions have been
+          performed, then that point will be deleted as well.  This can be
+          prevented by enabling the PRESERVE option.  Furthermore, the
+          RETAIN_REFERENCE option can be enabled to prevent reference measures
+          from being deleted under any circumstance.
+        </description>
+        <inclusions>
+          <item>PRESERVE</item>
+          <item>RETAIN_REFERENCE</item>
+        </inclusions>
+      </parameter>
+      <parameter name="LOCK">
+        <type>boolean</type>
+        <default><item>False</item></default>
+        <brief>
+          Lock listed points and measures
+        </brief>
+        <description>
+          Any listed point or measure will have its edit lock set if it does not
+          already have one in the input network.  Otherwise, nothing will happen
+          to the point or measure and processing will continue.  Locking a point
+          does not automatically lock its measurements, except for the
+          reference.
+        </description>
+      </parameter>
+    </group>
+
+    <group name="Validity Check" >
+      <parameter name="CHECKVALID">
+        <type>boolean</type>
+        <default><item>False</item></default>
+        <brief>
+          Ignore all control measures outside user-specified tolerances
+        </brief>
+        <description>
+          If enabled, the application will check the validity of each control
+          measure against the tolerances set in the relevant definition file
+          (DEFFILE).  Because validity checking requires camera information not
+          contained within the control measure itself, a list of all cubes in
+          the network is necessary (FROMLIST), and could result in a noticeably
+          more time-intensive run of the program.  For the aforementioned
+          reasons, this option is disabled by default.
+        </description>
+        <inclusions>
+          <item>FROMLIST</item>
+          <item>DEFFILE</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="FROMLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          List of all Input cubes in the control network
+        </brief>
+        <description>
+          This parameter specifies a list of cube names corresponding to the
+          serial numbers for every control measure in the input control
+          network.
+        </description>
+        <filter>
+          *.lis
+        </filter>
+      </parameter>
+
+      <parameter name="DEFFILE">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          PVL file containing the description of the Validity Keywords
+        </brief>
+        <description>
+          This parameter specifies a PVL file containing descriptions for the
+          validity keywords when the user chooses to perform a validity check
+          on each of the measures in the input control network.  Invalid control
+          measures will be ignored and, unless otherwise specified, removed.
+        </description>
+        <filter>
+          *.def
+        </filter>
+        <helpers >
+          <helper name="H1">
+            <function>PrintTemp</function>
+            <brief>View DefFile</brief>
+            <description>
+              This helper button will print the definition file to the session
+              log of the application
+            </description>
+	    <icon>$ISISROOT/appdata/images/icons/labels.png</icon>
+          </helper>
+          <helper name="H2">
+            <function>EditDefFile</function>
+            <brief>Edit DefFile</brief>
+            <description>
+              This helper button opens an editor to able to edit the DefFile
+            </description>
+	    <icon>$ISISROOT/appdata/images/icons/labels.png</icon>
+          </helper>
+        </helpers>
+      </parameter>
+    </group>
+
+    <group name="Deletion Options">
+      <parameter name="PRESERVE">
+        <type>boolean</type>
+        <default><item>FALSE</item></default>
+        <brief>
+          Do not delete points with only one remaining measure
+        </brief>
+        <description>
+          PRESERVE is only applied when DELETE=YES. This option will prevent the DELETE operation from removing control
+          points that only have one measure remaining at the end of the deletion process.
+        </description>
+      </parameter>
+      <parameter name="RETAIN_REFERENCE">
+        <type>boolean</type>
+        <default><item>False</item></default>
+        <brief>
+          Never ignore a reference measure unless the entire point is removed
+        </brief>
+        <description>
+          RETAIN_REFERENCE is only applied when DELETE=YES. This option will prevent reference measures from being ignored 
+          when they are included in the MEASURELIST, CUBELIST, or determined to be invalid when CHECKVALID is used. It does 
+          not prevent them from being deleted if they are already ignored prior to running cnetedit. Note: After the deletion process, 
+          if the RETAIN_REFERENCE=YES and the reference measure is the only remaining single measure of a point and PRESERVE=NO,
+          the entire point will be deleted. In order to gurarntee retaining a reference in this case, set both PRESERVE=YES 
+          and RETAIN_REFERENCE=YES.
+        </description>
+      </parameter>
+      <parameter name="IGNOREALL">
+        <type>boolean</type>
+        <default><item>False</item></default>
+        <brief>
+          Ignore the whole point when the reference measure is ignored
+        </brief>
+        <description>
+          If a reference measure is ignored, the whole point is ignored. If DELETE=yes, 
+          then the whole point will be deleted. 
+        </description>
+      </parameter>
+    </group>
+
+  </groups>
+
+</application>
+

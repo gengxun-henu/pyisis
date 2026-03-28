@@ -1,0 +1,124 @@
+# Translates CaSSIS PSA Calibrated xml labels into the Instrument PvlGroup values
+# for the ingested ISIS cube labels.
+
+Group = SpacecraftName
+  Auto                 = 1
+  InputPosition        = (Observation_Area, Observing_System, Observing_System_Component)
+  InputKeyDependencies = "tag@type|Host"
+  InputKey             = name
+  OutputName           = SpacecraftName
+  OutputPosition       = (Object,IsisCube,Group,Instrument)
+  Translation          = ("TRACE GAS ORBITER", "TGO")
+End_Group
+
+Group = InstrumentId
+  Auto                 = 1
+  InputPosition        = (Observation_Area, Observing_System, Observing_System_Component)
+  InputKeyDependencies = "tag@type|Instrument"
+  InputKey             = name
+  OutputName           = InstrumentId
+  OutputPosition       = (Object,IsisCube,Group,Instrument)
+  Translation          = (*, *)
+End_Group
+
+Group = Expanded
+  Auto                 = 1
+  InputDefault         = 1
+  InputPosition        = (Observation_Area, Observing_System, Observing_System_Component)
+  InputKeyDependencies = "tag@type|Host"
+  InputKey             = name
+  OutputName           = Expanded
+  OutputPosition       = (Object,IsisCube,Group,Instrument)
+  Translation          = (1, *)
+End_Group
+
+Group = TargetName
+  Auto                 = 1
+  InputPosition        = (Observation_Area, Target_Identification)
+  InputKey             = name
+  OutputName           = TargetName
+  OutputPosition       = (Object,IsisCube,Group,Instrument)
+  Translation          = (*, *)
+End_Group
+
+Group = StartTime
+  Auto                 = 1
+  InputPosition        = (Observation_Area, Time_Coordinates)
+  InputKey             = start_date_time
+  OutputName           = StartTime
+  OutputPosition       = (Object,IsisCube,Group,Instrument)
+  Translation          = (*, *)
+End_Group
+
+Group = ExposureDuration
+  Auto                 = 1
+  InputPosition        = (Observation_Area, Mission_Area, em16_tgo_cas:Cassis_Data, em16_tgo_cas:PEHK_Derived_Data)
+  InputKey             = em16_tgo_cas:exposure_time
+  OutputName           = ExposureDuration
+  OutputPosition       = (Object, IsisCube, Group, Instrument)
+  Translation          = (*, *)
+End_Group
+
+Group = Filter
+  Auto                 = 1
+  InputPosition        = (Observation_Area, Mission_Area, em16_tgo_cas:Cassis_Data, em16_tgo_cas:HK_Derived_Data)
+  InputKey             = em16_tgo_cas:filter
+  OutputName           = Filter
+  OutputPosition       = (Object,IsisCube,Group,Instrument)
+  Translation          = (*, *)
+End_Group
+
+Group = FilterName
+  Auto                 = 1
+  InputPosition        = (Observation_Area, Mission_Area, em16_tgo_cas:Cassis_Data, em16_tgo_cas:HK_Derived_Data)
+  InputKey             = em16_tgo_cas:filter
+  OutputName           = Filter
+  OutputPosition       = (Object,IsisCube,Group,BandBin)
+  Translation          = (*, *)
+End_Group
+
+Group = Center
+  Auto                 = 1
+  InputPosition  = (Observation_Area, Mission_Area, em16_tgo_cas:Cassis_Data, em16_tgo_cas:HK_Derived_Data)
+  InputKey       = em16_tgo_cas:filter
+  OutputName     = Center
+  OutputPosition = (Object, IsisCube, Group, BandBin)
+  Translation    = (678.2, PAN)
+  Translation    = (494.8, BLU)
+  Translation    = (836.0, RED)
+  Translation    = (939.3, NIR)
+End_Group
+
+Group = Width
+  Auto                 = 1
+  InputPosition  = (Observation_Area, Mission_Area, em16_tgo_cas:Cassis_Data, em16_tgo_cas:HK_Derived_Data)
+  InputKey       = em16_tgo_cas:filter
+  OutputName     = Width
+  OutputPosition = (Object, IsisCube, Group, BandBin)
+  Translation    = (231.9, PAN)
+  Translation    = (121.8, BLU)
+  Translation    = (98.5, RED)
+  Translation    = (133.6, NIR)
+End_Group
+
+Group = Expanded
+  Auto                 = 1
+  Optional             = 1
+  InputPosition        = (CaSSIS_Header, DERIVED_HEADER_DATA)
+  InputKey             = Expanded
+  OutputName           = Expanded
+  OutputPosition       = (Object, IsisCube, Group, Instrument)
+  Translation          = (*, *)
+End_Group
+
+Group = UniqueIdentifier
+  Auto                 = 1
+  Optional             = 1
+  InputPosition  = (Observation_Area, Mission_Area, em16_tgo_cas:Cassis_Data, em16_tgo_cas:Image_Command)
+  InputKey       = em16_tgo_cas:unique_identifier
+  OutputName     = UniqueIdentifier
+  OutputPosition = (Object, IsisCube, Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+End

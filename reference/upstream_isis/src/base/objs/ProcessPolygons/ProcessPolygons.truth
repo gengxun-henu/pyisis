@@ -1,0 +1,15 @@
+Testing Isis::ProcessPolygons Class ... 
+FileName: processPolygonsTest.cub
+Band: 1 DN: 4 Band: 1 DN: 4 Band: 1 DN: 4 
+Band: 1 DN: 4.2 Band: 1 DN: 4 Band: 1 DN: 4 
+Band: 1 DN: 4.53846 Band: 1 DN: 4.2 Band: 1 DN: 4 
+Band: 2 DN: 5 Band: 2 DN: 5 Band: 2 DN: 5 
+Band: 2 DN: 5.2 Band: 2 DN: 5 Band: 2 DN: 5 
+Band: 2 DN: 5.53846 Band: 2 DN: 5.2 Band: 2 DN: 5 
+FileName: processPolygonsTest_count.cub
+Band: 1 DN: 15 Band: 1 DN: 16 Band: 1 DN: 16 
+Band: 1 DN: 15 Band: 1 DN: 16 Band: 1 DN: 16 
+Band: 1 DN: 13 Band: 1 DN: 15 Band: 1 DN: 15 
+Band: 2 DN: 15 Band: 2 DN: 16 Band: 2 DN: 16 
+Band: 2 DN: 15 Band: 2 DN: 16 Band: 2 DN: 16 
+Band: 2 DN: 13 Band: 2 DN: 15 Band: 2 DN: 15 

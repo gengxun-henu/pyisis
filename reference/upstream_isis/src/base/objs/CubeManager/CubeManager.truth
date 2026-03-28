@@ -1,0 +1,52 @@
+CubeManager Unit Test
+Verify proper cubes have been read
+Cube FileNames: 
+  1 : isisTruth
+  2 : isisTruth
+  3 : blobTruth
+  4 : blobTruth
+  5 : isisTruth
+  6 : isisTruth
+
+Verify We Don't Have Duplicates...
+  Cube # | Equals 1 | Equals 2 | Equals 3 | Equals 4 | Equals 5 | Equals 6
+  Cube 1 |        1 |        1 |        0 |        0 |        0 |        0
+  Cube 2 |        1 |        1 |        0 |        0 |        0 |        0
+  Cube 3 |        0 |        0 |        1 |        1 |        0 |        0
+  Cube 4 |        0 |        0 |        1 |        1 |        0 |        0
+  Cube 5 |        0 |        0 |        0 |        0 |        1 |        1
+  Cube 6 |        0 |        0 |        0 |        0 |        1 |        1
+
+Verify cube attributes have been taken into account
+  Cube # | # of Bands
+  Cube 1 | 2
+  Cube 2 | 2
+  Cube 3 | 1
+  Cube 4 | 1
+  Cube 5 | 1
+  Cube 6 | 1
+
+Verify blobTruth cubes have been cleaned
+Cube FileNames: 
+  1 : isisTruth
+  2 : isisTruth
+  3 : (cleaned)
+  4 : (cleaned)
+  5 : isisTruth
+  6 : isisTruth
+
+Set number of open cubes to 2
+
+Currently managed cubes:
+  1 : isisTruth
+  2 : blobTruth
+
+Opened isisTruth2.cub.
+Verify isisTruth2.cub is now managed and limit of 2 is enforced:
+  1 : blobTruth
+  2 : isisTruth2
+
+Setting number of open cubes > 60 percent of system open file limit
+
+Attempting to open a file that does not exist:
+  **I/O ERROR** Unable to open [dne.cub].

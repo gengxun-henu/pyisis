@@ -1,0 +1,69 @@
+Unit test for PolygonTools
+
+Coordinates of polygon 1:(0 0, 0 1, 1 1, 1 0, 0 0)
+
+Coordinates of polygon 2:(360 1, 359 1, 359 0, 360 0, 360 1)
+
+Coordinates of hole for polygon 2:(359.75 0.75, 359.25 0.75, 359.25 0.25, 359.75 0.25, 359.75 0.75)
+
+Copy of the multipolygon = MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)), ((360 1, 359 1, 359 0, 360 0, 360 1), (359.75 0.75, 359.25 0.75, 359.25 0.25, 359.75 0.25, 359.75 0.75)))
+
+Lon/Lat polygon = MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)), ((360 1, 359 1, 359 0, 360 0, 360 1), (359.75 0.75, 359.25 0.75, 359.25 0.25, 359.75 0.25, 359.75 0.75)))
+
+X/Y polygon radius (1) = MULTIPOLYGON (((0 0, 0 0.0174532925199433, 0.0174506342989556 0.0174532925199433, 0.0174532925199433 0, 0 0)), ((6.282228347624011 0.0174532925199433, 6.2647777133250555 0.0174532925199433, 6.265732014659642 0, 6.283185307179586 0, 6.282228347624011 0.0174532925199433), (6.278284062137848 0.0130899693899575, 6.269558163510833 0.0130899693899575, 6.270035651001087 0.0043633231299858, 6.278762214189675 0.0043633231299858, 6.278284062137848 0.0130899693899575)))
+
+X/Y polygon radius (10) = MULTIPOLYGON (((0 0, 0 0.174532925199433, 0.1745063429895559 0.174532925199433, 0.174532925199433 0, 0 0)), ((62.822283476240116 0.174532925199433, 62.64777713325055 0.174532925199433, 62.65732014659642 0, 62.83185307179586 0, 62.822283476240116 0.174532925199433), (62.78284062137848 0.1308996938995747, 62.695581635108326 0.1308996938995747, 62.70035651001086 0.0436332312998582, 62.787622141896755 0.0436332312998582, 62.78284062137848 0.1308996938995747)))
+
+Lat/Lon polygon from X/Y with radius (10) = MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)), ((360 1, 358.99999999999994 1, 358.99999999999994 0, 360 0, 360 1), (359.74999999999994 0.75, 359.24999999999994 0.75, 359.24999999999994 0.25, 359.74999999999994 0.25, 359.74999999999994 0.75)))
+
+Coordinates of Lon/Lat polygon:(172 -31, 174 -14, 188 -16, 188 -33, 172 -31)
+
+Coordinates of Sample/Line polygon:MULTIPOLYGON (((24 9.9, 1200 26, 1200 1000, 9.200000000000001 1000, 24 9.9)))
+
+Testing LatLonToSampleLine() with coords outside of the valid range.
+Coordinates of Sample/Line polygon:MULTIPOLYGON (((290 210, 160 620, 450 960, 1100 720, 290 210)))
+
+Well Knowen Text Polygon:
+MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)), ((360 1, 359 1, 359 0, 360 0, 360 1), (359.75 0.75, 359.25 0.75, 359.25 0.25, 359.75 0.25, 359.75 0.75)))
+
+GML Ploygon:
+<?xml version="1.0" encoding="utf-8" ?>
+<ogr:FeatureCollection
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://ogr.maptools.org/ "
+    xmlns:ogr="http://ogr.maptools.org/"
+    xmlns:gml="http://www.opengis.net/gml">
+  <gml:boundedBy>
+    <gml:Box>
+      <gml:coord><gml:X>0</gml:X><gml:Y>0</gml:Y></gml:coord>
+      <gml:coord><gml:X>360</gml:X><gml:Y>1</gml:Y></gml:coord>
+    </gml:Box>
+  </gml:boundedBy>
+
+  <gml:featureMember>
+   <ogr:multi_polygon fid="0">
+      <ogr:ID>test</ogr:ID>
+      <ogr:geometryProperty><gml:MultiPolygon><gml:polygonMember><gml:Polygon><gml:outerBoundaryIs><gml:LinearRing><gml:coordinates>0,0 0,1 1,1 1,0 0,0 360,1 359,1 359,0 360,0 360,1 359.75,0.75 359.25,0.75 359.25,0.25 359.75,0.25 359.75,0.75 </gml:coordinates></gml:LinearRing></gml:outerBoundaryIs></gml:Polygon></gml:polygonMember></gml:MultiPolygon></ogr:geometryProperty>
+    </ogr:multi_polygon>
+  </gml:featureMember>
+</ogr:FeatureCollection>
+GML Thickness:
+1.35030864197531e-05
+
+
+Testing Despike
+Input: LINEARRING (1 1, 5 1, 5.00000000001 -10, 5.00000000001 5, 1 5, 1 1)
+Output: LINEARRING (1 1, 5 1, 5.00000000001 5, 1 5, 1 1)
+
+
+Testing FixGeometry
+Input: LINEARRING (1 1, 5 1, 5 5, 5.00000000000001 5, 1 5, 1 1)
+Output: LINEARRING (1 1, 5 1, 5.00000000000001 5, 1 5, 1 1)
+
+
+Testing Equal
+Same Poly Equal?                     1 - 1
+Rearranged Poly Equal?               1 - 1
+Past 15 Places Equal?                1 - 0
+At 15 Place Difference Equal?        0 - 0
+Significantly Different Equal?       0 - 0

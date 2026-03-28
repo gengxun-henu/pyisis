@@ -1,0 +1,61 @@
+Unit Test for VikingCamera...
+FileName: f348b26.cub
+CK Frame: -30002
+
+Kernel IDs: 
+CK Frame ID = -30000
+CK Reference ID = 2
+SPK Target ID = -30
+SPK Reference ID = 2
+
+Shutter open = -707255998.826805711
+Shutter close = -707255998.826669931
+
+For upper left corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For upper right corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For lower left corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For lower right corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For center pixel position ...
+Latitude OK
+Longitude OK
+
+--------------------------------------------
+
+Testing name methods:
+
+Spacecraft Name Long: Viking Orbiter 2
+Spacecraft Name Short: Viking2
+Instrument Name Long: Visual Imaging Subsystem Camera B
+Instrument Name Short: VISB
+
+Spacecraft Name Long: Viking Orbiter 1
+Spacecraft Name Short: Viking1
+Instrument Name Long: Visual Imaging Subsystem Camera A
+Instrument Name Short: VISA
+
+Spacecraft Name Long: Viking Orbiter 1
+Spacecraft Name Short: Viking1
+Instrument Name Long: Visual Imaging Subsystem Camera B
+Instrument Name Short: VISB
+
+Spacecraft Name Long: Viking Orbiter 2
+Spacecraft Name Short: Viking2
+Instrument Name Long: Visual Imaging Subsystem Camera A
+Instrument Name Short: VISA
+
+
+Testing exceptions:
+
+**USER ERROR** File does not appear to be a Viking image. SpacecraftName [HAYABUSA] is invalid Viking value.

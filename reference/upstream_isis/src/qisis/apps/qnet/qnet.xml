@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="qnet" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Create and edit control networks
+  </brief>
+
+  <description>
+    <p>
+      This program will create and edit <def>control network</def>s.  Before running  qnet,
+      you will need to create a text file containing a list of all cubes in the control
+      network, 1 cube per line. These cubes must be un-projected, <def>level1</def> cubes.
+      Optionally, you can also input an existing control network or when prompted
+      for the control network, select the "Cancel" button, and a new control network 
+      will be created.  
+    </p>
+
+    <p>
+      In addition to selecting <def>control point</def>s between level 1 un-projected images,
+      qnet may also be used to select ground control points, both Fixed  and
+      Constrained points.   To select ground control points, you must select
+      a ground source image.  This could be a Dem or shaded relief version
+      of a Dem, a projected basemap or a level 1 image with updated camera
+      pointing.  Optionally, a radius source file, Dem may also be entered 
+      which would provide radii for the ground control point.  These files
+      are entered from the <strong>File Menu</strong> on the main Qnet window.
+      The ground source image is immediately displayed in the main Qnet
+      window and new ground control points may be created by right-clicking
+      on the ground source cube display.
+    </p>
+
+    <p>
+      This program is an ISIS GUI application. To run it, type its name in a
+      terminal, with no arguments. This will start a blank session, having the
+      main Qnet window and the control network navigator window.
+
+      There are 3 core windows used in this application.
+    </p>
+
+    <h3>Qnet window</h3>
+     The main qnet window is similar to the qview application.  You will see
+     many of the same tools, such as "Band Selection", "Zoom", "Pan",
+     "Stretch" and "Find" along the right border. The "Tie" tool is the last
+     button along the right toolbar. It will be the default tool selected when
+     "qnet" is launched.
+    <p>
+      In this window, select the "Open network" button or the open action (from 
+      File menu), and open the file containing the list of cubes in the network. 
+      You will then be prompted for the control network file. If you are editing 
+      an existing one, choose that file.  If you are creating a new control 
+      network, choose the "Cancel" button.
+    </p>
+    <p>
+      Cubes may be displayed in the main qnet window throught two methods.
+    <font size="-1"><ol>
+      <li>Select a Point Id from those listed in the Control Network Navigator window,
+         then single-click "View Cube(s)".</li>
+      <li>In the Control Network Navigator window, change the combo-box selection
+         from Points to Cubes, then double-click a cube filename, or single-click
+         the cube filename, then single-click the "View Cube(s)" button.</li>
+    </ol></font>
+    </p>
+    <p>
+      Control Points will be drawn on the displayed cubes with the following colors:
+    <font size="-1"><ul>
+      <li><strong>green "+"</strong> control point</li>
+      <li><strong>magenta "+"</strong> ground point</li>
+      <li><strong>yellow "+"</strong> ignore point</li>
+      <li><strong>red "+"</strong> point currently being edited (i.e. in Qnet Tool window)</li>
+    </ul></font>
+    </p>
+      When the "Tie" tool is activated, the mouse buttons have the following 
+      function in the cube viewports of the main qnet window:
+    <font size="-1"><ul>
+      <li><strong>Left Button:</strong>  Modify the closest control point</li>
+      <li><strong>Middle Button:</strong>  Delete the closest control point</li>
+      <li><strong>Right Button:</strong>  Create new control point</li>
+    </ul></font>
+
+    <h3>Control Network Navigator window</h3>
+    <p>
+      The Control Network Navigator displays a list of cubes or points in the
+      control network.  The user may choose to open cube(s) in the qnet window,
+      edit a control point or filter the point or cube lists on different attributes.
+      By default, double-clicking on a Point Id in the point list will display
+      that control point in the Qnet Tool window.  Double-clicking on a filename
+      in the Cube list will display the chosen cube in the qnet main window.
+    </p>
+    <p>
+      <strong>Points</strong> This is the default list for the Control Network Navigator.  
+      When this is selected, the user may click any of the following buttons:
+    </p>
+    <p><font size="-1"><ul>
+      <li><strong>"View Cube(s)"</strong> to open all cubes containing the selected 
+      point(s)</li>
+      <li><strong>"Modify Point"</strong> (or <strong>double click</strong> list 
+      item) to edit the point using the Qnet Tool</li>
+      <li><strong>"Ignore Point(s)"</strong> to set selected points to "Ignore"</li>
+      <li><strong>"Delete Point(s)"</strong> to remove selected points from the 
+      control network</li>
+      <li><strong>"Filter"</strong> to list all points from the currently displayed
+      list that meet the new filtering criteria selected.  **Note** If the 
+      currently displayed list is already filtered, the new list will only 
+      display points that meet the criteria of all filters previously chosen
+      until the user resets the list.</li>
+      <li><strong>"Show All"</strong> to reset the displayed list to all points in 
+      the network</li>
+    </ul></font></p>
+    <blockquote>There are 9 filters for the points list which display the following:
+      <blockquote>
+      <p><font size="-1"><ul>
+        <li><strong>Jigsaw Errors:</strong> points with bundle adjustment errors within
+        the user specified range</li>
+        <li><strong>Registration Errors:</strong> points with sub-pixel registration
+        errors within the user specified range</li>
+        <li><strong>Point ID:</strong> points whose Point Id contains the user 
+        specified string</li>
+        <li><strong>Number of Measures:</strong> points that are contained in (at 
+        least or no more than) the user specified number of images.  The control point
+        will contain at least the given number of <def>control measure</def>s.</li>
+        <li><strong>Point Properties:</strong> points that have the user specified 
+          property.  There are 3 options and any combination may be chosen.</li>
+          <ul>
+              <li>Filter by Point Type(s)</li>
+              <li>Filter by Ignore Status
+                    Note: If all of the measures in a point are ignored, then 
+                          this point will be returned in the ignored point filter.</li>
+              <li>Filter by Edit Lock Status</li>
+          </ul>
+        <li><strong>Range:</strong> points that lie within the user specified 
+        latitudinal and longitudinal ranges</li>
+        <li><strong>Distance:</strong> points that are within the user specified 
+        distance of some other point in the control network</li>
+        <li><strong>Measure Properties:</strong> points that contain at least one 
+          control measure that matches the selected criteria</li>
+          <ul>
+            <li>Filter by Measure Type(s)</li>
+            <li>Filter by Ignore Status</li>
+            <li>Filter by Edit Lock Status</li>
+          </ul>
+        <li><strong>Goodness of Fit:</strong> points that contain at least one measure 
+        whose Goodness of Fit is within the user specified range</li>
+        <li><strong>Cube Name(s):</strong> points that contain at a measure whose 
+        serial number matches that of the user chosen cube filename</li>
+      </ul></font></p>
+      </blockquote>
+    </blockquote>
+    <p>
+      <strong>Cubes</strong> When this is selected, the user may click any of the 
+      following buttons:
+    </p>
+    <p><font size="-1"><ul>
+      <li><strong>"View Cube(s)"</strong> to open all selected cubes</li>
+      <li><strong>"Filter"</strong> to list all cubes from the currently displayed
+      list that meet the new filtering criteria selected. <br /> **Note** If the 
+      currently displayed list is already filtered, the new list will only 
+      display cubes that meet the criteria of all filters previously chosen
+      until the user resets the list.</li>
+      <li><strong>"Show All"</strong> to reset the list to all images in the network</li>
+    </ul></font></p>
+    <blockquote>There are 3 filters for the cubes list which display the following:
+      <blockquote>
+      <p><font size="-1"><ul>
+        <li><strong>Cube Name:</strong> cubes whose file name contains the user 
+             specified string</li>
+        <li><strong>Number of Points:</strong> cubes containing (at least or no more 
+              than) the user specified number of points</li>
+        <li><strong>Distance:</strong> cubes that contain at least one pair of points 
+            that are within the user specified distance from each other</li>
+      </ul></font></p>
+      </blockquote>
+    </blockquote>
+    
+    <h3>Qnet Tool window</h3>
+    <p>
+      This is the point editor window of qnet for modifying or creating a control
+      point.  This window will display information about the control point and
+      two control measures are displayed.  Initially the measures displayed will
+      be the "Reference" cube on the left and the next cube in the control point
+      on the right. The measures displayed in the left and right side can be 
+      chosen from the combo-boxes under the labels "Left Measure" and
+      "Right Measure".  Only the control measure in the right view can be
+      moved, so if you want to move the reference measure, you must display it
+      in the right view. You can select the previous or next right measure with the
+      shortcuts <strong>PageUp</strong> and <strong>PageDown</strong>, respectively.
+    </p>
+    <h4>Changing Measure Locations</h4>
+      <p>
+      The measure location can be adjusted by:
+    <ul>
+      <li>Move the cursor location under the crosshair by clicking the left mouse
+          button</li>
+      <li>Move 1 pixel at a time by using arrow keys on the keyboard</li>
+      <li>Move 1 pixel at a time by using arrow buttons above the right view</li>
+    </ul>
+    </p>
+    <h4>Other Point Editor Functions</h4>
+      <p>Along the right border of the window:</p>
+      <ul>
+        <li><strong>Geom:</strong>   Geometrically match the right view to the left
+            view</li>
+        <li><strong>Rotate:</strong>   Rotate the right view using either the dial
+            or entering degrees </li>
+        <li><strong>Show control points:</strong>  Draw crosshairs at all control
+             point locations visible within the view</li>
+        <li><strong>Show crosshair:</strong>  Show a red crosshair across the entire
+            view</li>
+        <li><strong>Circle:</strong>  Draw circle which may help center measure
+            on a crater</li>
+      </ul>
+      <p>Below the left view:</p>
+      <ul>
+        <li><strong>Blink controls:</strong>  Blink the left and right view in the
+            left view window using the "Blink Start" button (with play icon) and 
+            "Blink Stop" button (with stop icon).  Both arrow keys above the right view 
+            and the keyboard arrow keys may be used to move the right view while
+            blinking.</li>
+        <li><strong>Find:</strong> Center the right view so that the same latitude / 
+            longitude is under the crosshair as the left view. <strong>Shortcut: F</strong></li>
+      </ul>
+      <p>Below the right view:</p>
+      <ul>
+        <li><strong>Register:</strong>  Sub-pixel register the the right view to
+            the left view. <strong>Shortcut: R</strong></li>
+        <li><strong>Undo Registration:</strong> Undo the sub-pixel registration.
+            <strong>Shortcut: U</strong></li>
+        <li><strong>Save Measure:</strong>  Save the control measure under the
+            right view to the edit control point. <strong>Shortcut: M</strong></li>
+      </ul>
+      <p>Along the bottom:</p>
+      <ul>
+        <li><strong>Add Measure(s) to Point:</strong>  Add control measure(s) to the 
+            current control point.  A dialog will show all cubes in the network with
+            those that fall at this control point's latitude and longitude highlighted.
+            All cubes chosen will be added as control measures to this control point.
+            <strong>Shortcut: A</strong></li>
+        <li><strong>Save Point:</strong> Save the edit control point to the control
+            network. <strong>Shortcut: P</strong></li>
+      </ul>
+    <h3>Measure Table window</h3>
+    <p>This window will show all control measure data for the current edit control
+       point.  The table can be sorted by clicking on any of the headers.</p>
+  </description>
+
+  <category>
+    <categoryItem>Control Networks</categoryItem>
+    <categoryItem>Display</categoryItem>
+  </category>
+
+  <history>
+    <change name="Jeff Anderson, Elizabeth Miller, Stuart Sides, Tracie Sucharski" date="2006-11-01">
+      Original version
+    </change>
+    <change name="Steven Lambright" date="2007-07-23">
+      Added to Control Networks category
+    </change>
+    <change name="Tracie Sucharski" date="2008-10-06">
+      Refactor of underlying classes
+    </change>
+    <change name="Jeannie Walldren" date="2008-11-24">
+      Changed the name of the "Tie Point Tool" window to "Qnet Tool". 
+      
+      Added "Close" command to the drop down File menu on the "Qnet Tool" 
+      window's  menu bar.  
+      
+      Added Qt's wait cursor (i.e. clock or hourglass) to indicate that there is
+      background activity when the "Filter" or "View Cube(s)" buttons have been
+      clicked on the "Control Network Navigator" window. 
+      
+      Added message box when the user creates a new point and tries to give it a
+      Point ID that already exists in the Control network.  Previously this
+      resulted in a PROGRAMMER ERROR from ControlPoint. Now, the user will be
+      alerted in a message box and prompted to enter a new value for the Point
+      ID.  
+
+      Replaced references to PointEdit class with ControlPointEdit.
+
+      Added "Goodness of Fit" to "Qnet Tool" right and left measure info.
+    </change>
+    <change name="Jeannie Walldren" date="2008-11-26">
+      Added "Goodness of Fit" filter to the tabs for the "Points" section of the 
+      "Control Network Navigator" window.  This filter returns all points that 
+      have at least one measure that falls inside the user specified range.
+
+      Added "Number of Measures" to "Qnet Tool" window below "Point ID".
+
+      Modified code to pre-set the Point ID value in the "New Point Dialog" 
+      window to the last Point ID entered in the dialog box. This value is 
+      highlighted so the user may begin typing over the name without needing to 
+      backspace.
+
+      Changed the "Qnet Tool" title bar to display the name of the ControlNet 
+      file open.
+
+      Added message box when saving an "Ignore" point in the "Qnet Tool" to ask 
+      if user wants to set Ignore=false.
+
+      Modified the "Distance" filter in the "Points" section of the "Control 
+      Network Navigator" window to improve efficiency and accuracy.
+    </change>
+    <change name="Tracie Sucharski" date="2008-11-26">
+      Removed plot tool and all polygon references-this funtionality will be in 
+      qmos.
+    </change>
+    <change name="Jeannie Walldren" date="2008-12-03">
+      Modified the "Distance" filter in the "Cubes" section of the "Control 
+      Network Navigator" window to improve efficiency and accuracy, and to allow 
+      the user to select a distance in meters or pixels.
+    </change>
+    <change name="Jeannie Walldren" date="2008-12-08">
+      Added connection from "x" in upper right corner to "Exit" command under 
+      the "File" menu of the main window.
+    </change>
+    <change name="Jeannie Walldren" date="2008-12-10">
+      Added functionality to "Qnet Tool" can set, view, edit and save changes 
+      for a template file.  This is located in the "Options" menu under 
+      "Registration" as the "Set registration template" and "View/edit 
+      registration template" actions.  Added "What's this?" descriptions to 
+      "Qnet Tool" window actions.
+    </change>
+    <change name="Tracie Sucharski" date="2008-12-19">
+      Added "Ignore Points" and "Delete Points" to the Control Navigator tool.
+    </change>
+    <change name="Jeannie Walldren" date="2008-12-29">
+      Added question boxes when the "Delete Points" or "Ignore Points" buttons 
+      are clicked in the Control Navigator to verify that the user wants to 
+      delete or ignore the selected points.  Disabled "Ground Point" checkbox 
+      in Qnet Tool window and added dialog window for determining 
+      lat/lon/radius if user chooses to toggle the "Hold Point" checkbox to
+      true.
+    </change>
+    <change name="Jeannie Walldren" date="2008-12-30">
+      Modified Qnet Tool "Save Point" button to set the left and right measures
+      to Ignore=False if the user chooses to set the point's Ignore=False.  
+      Also, "Save Point" button will now update ChooserName and DateTime 
+      keywords for altered measures.  Modified Control Network Navigator points
+      list to set most recently edited point to the current item so that it may
+      be easily deleted.
+    </change>
+    <change name="Jeannie Walldren" date="2008-12-31">
+      Added keyboard shortcuts to buttons in Control Network Navigator window. 
+      Added question box to Qnet Tool "Save Point" button to ask user whether 
+      the reference measure should be replaced with the measure in the left
+      viewport. 
+    </change>
+    <change name="Jeannie Walldren" date="2009-01-08">
+      Updated user documentation.  Modified Control Network Navigator window to 
+      filter on existing filtered list until user selects the "Show All" button,
+      which will bring up all points in the control net or images in the serial
+      number list.
+    </change>
+    <change name="Jeannie Walldren" date="2009-01-26">
+      Added "Cube Name" filter to "Points" tab of Control Network Navigator 
+      window.
+    </change>
+    <change name="Eric Hyer" date="2010-03-22">
+      Discontinued forcing of gui style to windows
+    </change>
+    <change name="Eric Hyer" date="2010-05-20">
+      Connected FindTool's recordPoint signal to AdvancedTrackTool's record slot
+    </change>
+    <change name="Jeannie Walldren" date="2010-06-14">
+      Modified to uncheck "Held" in the QnetTool window if the "Cancel" button 
+      is clicked in the Hold Point Dialog. Added a filter of Measure Properties 
+      by Ignore Status to the Navigation Tool's Point Filters. Modified 
+      Navigation Tool's Point Type filter to treat points as ignored if all 
+      measures are ignored. Fixed bug that did not show proper colors of points 
+      unless the QnetTool was open.  Updated documentation. 
+    </change>
+    <change name="Jeannie Walldren" date="2010-07-01">
+      Modified to reopen the Navigation Tool whenever the Tie Tool on the tool 
+      pad is activated. Modified to draw points selected in the QnetTool last 
+      so they are always visible on top of the other points. Added some 
+      documentation.
+    </change>
+    <change name="Tracie Sucharski" date="2010-11-09">
+      Fixed a bug in the Navigator when using the double-click option on the
+      Cube list.
+    </change>
+    <change name="Eric Hyer" date="2010-11-19">
+      Implement drawing control measures in the edit window displays.
+    </change>
+    <change name="Eric Hyer" date="2010-11-22">
+      Added functionality to stretch the control point editor displays.
+    </change>
+    <change name="Eric Hyer" date="2010-12-03">
+      In the new point and measure dialogs, put selected items at top of the list.
+    </change>
+    <change name="Eric Hyer" date="2010-12-08">
+      Organize the look of the control point editor and add icons.  Display the
+      sub-pixel registration template filename.
+    </change>
+    <change name="Eric Hyer" date="2010-12-14">
+      Added an editor for the sub-pixel registration template file.
+    </change>
+    <change name="Tracie Sucharski" date="2010-12-17">
+      Converted from the Pvl control network keywords to the binary version.
+    </change>
+    <change name="Tracie Sucharski" date="2011-03-08">
+      Implemented ground point selection.
+    </change>
+    <change name="Tracie Sucharski" date="2011-04-04">
+      Implement the SetApriori dialog.  Use the reference measure's lat/lon
+      when adding new measures.  Print progress when reading control network
+      and initialize the cameras on the images.
+    </change>
+    <change name="Tracie Sucharski" date="2011-04-13">
+      Allow the SetApriori dialog to stay open and fill values from the 
+      current edit point.
+    </change>
+    <change name="Tracie Sucharski" date="2011-04-20">
+      When saving measure, if the left measure equals the right measure,
+      copy right into left.
+    </change>
+    <change name="Tracie Sucharski" date="2011-04-28">
+      In the Maximum residual filter, sort points by residual in descending order.
+      Fix bug in SetApriori dialog with edit locked points.
+    </change>
+    <change name="Tracie Sucharski" date="2011-05-05">
+      Update values in point editor in response to input to the SetApriori dialog.
+    </change>
+    <change name="Tracie Sucharski" date="2011-05-20">
+      Fixed bugs in the measure type filter and reference measures.
+    </change>
+    <change name="Tracie Sucharski" date="2011-06-08">
+      Changed Control Point types Ground to Fixed and Tie to Free.
+    </change>
+    <change name="Tracie Sucharski" date="2011-06-15">
+      When changes are made to a measure or point, change the text
+      color in the Save buttons to red.
+    </change>
+    <change name="Tracie Sucharski" date="2011-06-27">
+      Forgot to turn Save buttons to red after auto-registration or using
+      the Find button.
+    </change>
+    <change name="Tracie Sucharski" date="2011-06-28">
+      Create a table showing the control measures with their corresponding data for
+      the current edit control point.
+    </change>
+    <change name="Tracie Sucharski" date="2011-07-05">
+      Added control point type to editor as a combo box.  Added error checking for
+      edit locked points and refresh measure table.
+    </change>
+    <change name="Tracie Sucharski" date="2011-07-07">
+      Grey out the Open Ground and Open Dem in the File menu until the cube list
+      and control network have been opened.
+    </change>
+    <change name="Tracie Sucharski" date="2011-07-12">
+      Added point registration error filter to the Navigator.
+    </change>
+    <change name="Tracie Sucharski" date="2011-07-18">
+      Allow ground file to be loaded on the left of the point editor.
+    </change>
+    <change name="Tracie Sucharski" date="2011-07-25">
+      Fixed a bug when deleting points from the Navigator.  Add option to the
+      SetApriori dialog for calculating the surface point.
+    </change>
+    <change name="Tracie Sucharski" date="2011-07-27">
+      Fixed bug reading the radius from the Dem.
+    </change>
+    <change name="Tracie Sucharski" date="2011-08-03">
+      Highlight thte reference measure in the file selection combo boxes.
+      Implement bilinear interpolation when reading radius from the Dem.
+    </change>
+    <change name="Tracie Sucharski" date="2011-08-08">
+      Fixed bug when creating a new control network, forgot to set the 
+      Target which caused program to crash when creating a new ground point.
+    </change>
+    <change name="Tracie Sucharski" date="2011-09-15">
+      Speed up the blinking and drawing of control points on the cube
+      viewports for large control networks.  Add an option for displaying
+      other points besides the current edit point in the editor displays.
+      If a control point has sigmas, do not erase when the point has been
+      re-located.  Fixed the blinking problem with the measure table.
+    </change>
+    <change name="Tracie Sucharski" date="2011-09-16">
+      Fixed bug when adding measures to a point when a ground source file
+      is opened.  Draw fixed and constrained points on the ground source
+      display.  If creating a ground point and no images intersect the 
+      point, print an error.  In the new point dialog display the 
+      intersecting images at the stop of the file selection list.
+    </change>
+    <change name="Tracie Sucharski" date="2011-09-22">
+      Fixed the problem with duplicate warnings when saving Ignored measures.
+    </change>
+    <change name="Tracie Sucharski" date="2011-09-29">
+      Updated documentation.  Implemented the "What's This" functionality
+      to the control point editor.
+    </change>
+    <change name="Tracie Sucharski" date="2011-10-21">
+      Fixed bug that caused qnet to crash when creating a new control network.
+    </change>
+    <change name="Tracie Sucharski" date="2011-10-31">
+      Changed the Save button on the qnet tool to save to current network,
+      rather than a "Save As".
+    </change>
+    <change name="Tracie Sucharski" date="2011-11-09">
+      Fixed problem caused by an image in the list which did not have any
+      measure associated with it.
+    </change>
+    <change name="Tracie Sucharski" date="2011-12-05">
+      Fixed bug with measure table not displaying all information when 
+      table has been sorted.
+    </change>
+    <change name="Tracie Sucharski" date="2012-01-11">
+      Add error checking for creating point with invalid latitude, longitude.
+    </change>
+    <change name="Tracie Sucharski" date="2012-05-07">
+      Fixed following bugs:  error when attempting to geom when using a ground
+      source as the reference measure, problem un-locking a measure even
+      if the point is un-locked and when changing between geom and rotate options,
+      chips were not resettting correctly.
+    </change>
+    <change name="Tracie Sucharski" date="2012-05-08">
+      Fixed bug that resulted in seg fault when deleting a point by middle clicking
+      on a cubeviewport after creating a ground point.
+    </change>
+    <change name="Tracie Sucharski" date="2012-06-12">
+      Fix made on 2012-05-07 caused a bug which would not allow a new measure
+      to be set as the reference measure.
+    </change>
+    <change name="Tracie Sucharski" date="2012-07-30">
+      Fixed bug which caused program to crash when left clicking on a cube when
+      there are no control points.
+    </change>
+    <change name="Tracie Sucharski" date="2012-09-28">
+      Fixed bug that resulted in a qt assert error when loading or creating a new
+      ground point if the ground source file had the Instrument group in the labels.
+    </change>
+    <change name="Tracie Sucharski" date="2012-10-05">
+      Improved error checking for opening a ground source file with the same serial
+      number as a cube in the cube list.  This is not allowed, so an error with suggested
+      solution is printed.
+    </change>
+    <change name="Tracie Sucharski" date="2013-05-16">
+      Fixed bugs when attempting to delete a point in an empty network, deleting all
+      measures in a point.  Fixed repetitive warnings when the current edit point does
+      not fall on the ground source.  Fixes #1491, #1493, #1655.
+    </change>
+    <change name="Tracie Sucharski" date="2013-12-06">
+      Fixed following bugs: seg fault when selecting a new reference measure and moving
+      the point, seg fault when moving edit locked points without un-locking.
+      Also, improved error checking on ignored reference measures on constrained and
+      fixed points.  Fixes #1603, #1624.
+    </change>
+    <change name="Ian Humphrey" date="2015-10-07">
+      Updated icons. Fixes #1041.
+    </change>
+    <change name="Ian Humphrey" date="2015-11-19">
+      Added shortcuts to Qnet Tool window for selecting right measures, registration, saving 
+      measures, saving a point, adding a new measure, find, and saving the control network. Fixes
+      #2324.
+    </change>
+    <change name="Makayla Shepherd" date="2017-01-04">
+      Fixed an issue that caused the Control Network Navigator to go behind the qnet main window 
+      when using Gnome or Cinnamon. Fixes #4541.
+    </change>
+  </history>
+</application>

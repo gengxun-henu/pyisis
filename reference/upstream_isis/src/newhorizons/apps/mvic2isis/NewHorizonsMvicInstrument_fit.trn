@@ -1,0 +1,154 @@
+#
+# This translation file is used to produce the ISIS Instrument label group
+# for the New Horizons MVIC camera.
+#
+Group = SpacecraftName
+  Auto           = 1
+  InputKey       = HOSTNAME
+  InputPosition  = FITSLABELS
+  InputDefault   = UNKNOWN
+  OutputName     = SpacecraftName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = ("NEW HORIZONS", "NEW HORIZONS")
+End_Group
+
+Group = InstrumentId
+  Auto           = 1
+  InputKey       = INSTRU
+  InputPosition  = FITSLABELS
+  InputDefault   = UNKNOWN
+  OutputName     = InstrumentId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (MVIC, mvi)
+End_Group
+
+Group = TargetName
+  Auto           = 1
+  InputKey       = TARGET
+  InputPosition  = FITSLABELS
+  InputDefault   = UNKNOWN
+  OutputName     = TargetName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (Jupiter, JUPITER)
+  Translation    = (IO, IO)
+  Translation    = (Pluto, PLUTO)
+  Translation    = (Charon, CHARON)
+  Translation    = (Sky, SKY)
+  Translation    = (*, *)
+End_Group
+
+Group = MidObservationTime
+  Auto           = 1
+  InputKey       = SPCUTCAL
+  InputPosition  = FITSLABELS
+  OutputName     = MidObservationTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# Commented out until/if we have start and stop times
+# Currently there are only center of exposure times
+#Group = StopTime
+#  Auto           = 1
+#  InputKey       = SPCUTCAL
+#  InputPosition  = FITSLABELS
+#  OutputName     = StopTime
+#  OutputPosition = (Object, IsisCube, Group, Instrument)
+#  Translation    = (*, *)
+#End_Group
+
+Group = SpacecraftClockStartCount
+  Auto           = 1
+  InputKey       = SPCSCLK0
+  InputPosition  = FITSLABELS
+  OutputName     = SpacecraftClockStartCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# Commented out until/if we have start and stop times
+# Currently there are only center of exposure times
+#Group = SpacecraftClockStopCount
+#  Auto           = 1
+#  InputKey       = SPCSCDP
+#  InputPosition  = FITSLABELS
+#  OutputName     = SpacecraftClockStopCount
+#  OutputPosition = (Object, IsisCube, Group, Instrument)
+#  Translation    = (*, *)
+#End_Group
+
+Group = ExposureDuration
+  Auto           = 1
+  InputKey       = RALPHEXP
+  InputPosition  = FITSLABELS
+  OutputName     = ExposureDuration
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = Detector
+  Auto           = 1
+  InputKey       = DETECTOR
+  InputPosition  = FITSLABELS
+  OutputName     = Detector
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = PanCcd
+  Optional       = 1
+  Auto           = 1
+  InputKey       = PANCCD
+  InputPosition  = FITSLABELS
+  OutputName     = PanCcd
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = HwSide
+  Auto           = 1
+  InputKey       = SIDE
+  InputPosition  = FITSLABELS
+  OutputName     = HwSide
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ScanType
+  Auto           = 1
+  InputKey       = SCANTYPE
+  InputPosition  = FITSLABELS
+  OutputName     = ScanType
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = InstrumentMode
+  Auto           = 1
+  InputKey       = MODE
+  InputPosition  = FITSLABELS
+  OutputName     = InstrumentMode
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = RalphExposureDuration
+  Auto           = 1
+  InputKey       = RALPHEXP
+  InputPosition  = FITSLABELS
+  OutputName     = RalphExposureDuration
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = TdiRate
+  Auto           = 1
+  Optional       = 1
+  InputKey       = TDIRATE
+  InputPosition  = FITSLABELS
+  OutputName     = TdiRate
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+End

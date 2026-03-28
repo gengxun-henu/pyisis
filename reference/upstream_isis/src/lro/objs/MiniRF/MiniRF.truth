@@ -1,0 +1,48 @@
+Unit Test for MiniRFCamera...
+FileName: FSR_CDR_LV1_01801_0R.cub
+CK Frame: -86001
+
+For upper left corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For upper right corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For lower left corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For lower right corner ...
+DeltaSample = 0.000000000
+DeltaLine = 0.000000000
+
+For center pixel position ...
+Latitude OK
+Longitude OK
+
+RightAscension = 144.785941008
+Declination = -46.290650078
+
+
+Testing name methods ...
+Spacecraft Name Long: Chandrayaan 1
+Spacecraft Name Short: Chan1
+Instrument Name Long: Miniature Synthetic Aperture Radar
+Instrument Name Short: Mini-SAR
+
+Spacecraft Name Long: Lunar Reconnaissance Orbiter
+Spacecraft Name Short: LRO
+Instrument Name Long: Miniature Radio Frequency
+Instrument Name Short: Mini-RF
+
+
+Kernel ID error messages: 
+**USER ERROR** Cannot generate CK for MiniRF.
+**USER ERROR** Cannot generate CK for MiniRF.
+
+Testing a Level-2 cube: 
+
+For a central pixel position ...
+SetImage succeeded.

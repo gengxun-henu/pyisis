@@ -1,0 +1,883 @@
+#
+# The group names listed here are the native names used by
+# applications to get the foreign names and values
+#
+# There is only one level of groups the groups are not
+# allowed to be nested
+#
+# The Group names can NOT be repeated.
+#
+# InputGroup is a comma delimited list of objects and/or
+# groups in the foreign label. Traversing this list will
+# lead to the correct level to find the foreign keyword.
+#
+# InputKey is the keyword within the group which holds
+# the information.
+#
+# InputDefault is the value used if there is no value for
+# the keyword
+#
+# Translation is the native and corresponding foreign values.
+# Translation may be repeated as needed.
+#
+Group = SpacecraftName
+  Auto           = 1
+  InputKey       = INSTRUMENT_HOST_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = SpacecraftName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = InstrumentId
+  Auto           = 1
+  InputKey       = INSTRUMENT_ID
+  InputDefault   = UNKNOWN
+  OutputName     = InstrumentId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = TargetName
+  Auto           = 1
+  InputKey       = TARGET_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = TargetName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (Mars, MARS)
+  Translation    = (Phobos, PHOBOS)
+  Translation    = (Deimos, DEIMOS)
+  Translation    = (Moon, MOON)
+  Translation    = (Cal, CAL)
+  Translation    = (Sky, *)
+End_Group
+
+Group = StartTime
+  Auto           = 1
+  InputKey       = START_TIME
+  InputGroup     = TIME_PARAMETERS
+  InputPosition  = TIME_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = StartTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = StopTime
+  Auto           = 1
+  InputKey       = STOP_TIME
+  InputGroup     = TIME_PARAMETERS
+  InputPosition  = TIME_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = StopTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ObservationStartCount
+  Auto           = 1
+  InputKey       = MRO:OBSERVATION_START_COUNT
+  InputGroup     = TIME_PARAMETERS
+  InputPosition  = TIME_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = ObservationStartCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockStartCount
+  Auto           = 1
+  InputKey       = SPACECRAFTCLOCK_START_COUNT
+  InputGroup     = TIME_PARAMETERS
+  InputPosition  = TIME_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = SpacecraftClockStartCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockStopCount
+  Auto           = 1
+  InputKey       = SPACECRAFTCLOCK_STOP_COUNT
+  InputGroup     = TIME_PARAMETERS
+  InputPosition  = TIME_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = SpacecraftClockStopCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ReadoutStartCount
+  Auto           = 1
+  InputKey       = MRO:READOUT_START_COUNT
+  InputGroup     = TIME_PARAMETERS
+  InputPosition  = TIME_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = ReadoutStartCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = CalibrationStartTime
+  Auto           = 1
+  InputKey       = MRO:CALIBRATION_START_TIME
+  InputGroup     = TIME_PARAMETERS
+  InputPosition  = TIME_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = CalibrationStartTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = CalibrationStartCount
+  Auto           = 1
+  InputKey       = MRO:CALIBRATION_START_COUNT
+  InputGroup     = TIME_PARAMETERS
+  InputPosition  = TIME_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = CalibrationStartCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = AnalogPowerStartTime
+  Auto           = 1
+  Optional       = 1
+  InputKey       = MRO:ANALOG_POWER_START_TIME
+  InputGroup     = TIME_PARAMETERS
+  InputPosition  = TIME_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = AnalogPowerStartTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = AnalogPowerStartCount
+  Auto           = 1
+  Optional       = 1
+  InputKey       = MRO:ANALOG_POWER_START_COUNT
+  InputGroup     = TIME_PARAMETERS
+  InputPosition  = TIME_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = AnalogPowerStartCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = MissionPhaseName
+  Auto           = 1
+  InputKey       = MISSION_PHASE_NAME
+  InputDefault   = UNKNOWN
+  OutputName     = MissionPhaseName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = LineExposureDuration
+  Auto           = 1
+  InputKey       = MRO:LINE_EXPOSURE_DURATION
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = LineExposureDuration
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ScanExposureDuration
+  Auto           = 1
+  InputKey       = MRO:SCAN_EXPOSURE_DURATION
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = ScanExposureDuration
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = DeltaLineTimerCount
+  Auto           = 1
+  InputKey       = MRO:DELTA_LINE_TIMER_COUNT
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = DeltaLineTimerCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = Summing
+  Auto           = 1
+  InputKey       = MRO:BINNING
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = Summing
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (1, 1)
+  Translation    = (2, 2)
+  Translation    = (3, 3)
+  Translation    = (4, 4)
+  Translation    = (8, 8)
+  Translation    = (16, 16)
+  Translation    = (*, *)
+End_Group
+
+Group = Tdi
+  Auto           = 1
+  InputKey       = MRO:TDI
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = Tdi
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (8, 8)
+  Translation    = (32, 32)
+  Translation    = (64, 64)
+  Translation    = (128, 128)
+  Translation    = (*, *)
+End_Group
+
+#
+# Added by Stuart Sides 2006-04-12
+Group = FocusPositionCount
+  Auto           = 1
+  InputKey       = MRO:FOCUS_POSITION_COUNT
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = FocusPositionCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = PoweredCpmmFlag
+  Auto           = 1
+  InputKey       = MRO:POWERED_CPMM_FLAG
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = UNKNOWN
+  OutputName     = PoweredCpmmFlag
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (On, ON)
+  Translation    = (Off, OFF)
+  Translation    = (*, *)
+End_Group
+
+Group = CpmmNumber
+  Auto           = 1
+  InputKey       = MRO:CPMM_NUMBER
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = CpmmNumber
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (0, 0)
+  Translation    = (1, 1)
+  Translation    = (2, 2)
+  Translation    = (3, 3)
+  Translation    = (4, 4)
+  Translation    = (5, 5)
+  Translation    = (6, 6)
+  Translation    = (7, 7)
+  Translation    = (8, 8)
+  Translation    = (9, 9)
+  Translation    = (10, 10)
+  Translation    = (11, 11)
+  Translation    = (12, 12)
+  Translation    = (13, 13)
+  Translation    = (*, *)
+End_Group
+
+Group = CcdId
+  Auto           = 1
+  InputKey       = MRO:CPMM_NUMBER
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = CcdId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (RED0, 0)
+  Translation    = (RED1, 1)
+  Translation    = (RED2, 2)
+  Translation    = (RED3, 3)
+  Translation    = (BG12, 4)
+  Translation    = (RED4, 5)
+  Translation    = (IR10, 6)
+  Translation    = (IR11, 7)
+  Translation    = (RED5, 8)
+  Translation    = (BG13, 9)
+  Translation    = (RED6, 10)
+  Translation    = (RED7, 11)
+  Translation    = (RED8, 12)
+  Translation    = (RED9, 13)
+  Translation    = (*, *)
+End_Group
+
+Group = ChannelNumber
+  Auto           = 1
+  InputKey       = MRO:CHANNEL_NUMBER
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = ChannelNumber
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (0, 0)
+  Translation    = (1, 1)
+  Translation    = (*, *)
+End_Group
+
+Group = LookupTableType
+  Auto           = 1
+  InputKey       = MRO:LOOKUP_TABLE_TYPE
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = UNKNOWN
+  OutputName     = LookupTableType
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (None, NONE)
+  Translation    = (SquareRoot, SQUARE-ROOT)
+  Translation    = (Linear, LINEAR)
+  Translation    = (Stored, STORED)
+  Translation    = (N/A, N/A)
+  Translation    = (*, *)
+End_Group
+
+Group = LookupTableNumber
+  Auto           = 1
+  InputKey       = MRO:LOOKUP_TABLE_NUMBER
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = LookupTableNumber
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = LookupTable
+  Auto           = 1
+  InputKey       = MRO:LOOKUP_CONVERSION_TABLE
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = NULL
+  OutputName     = LookupTable
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = LookupTableMinimum
+  Auto           = 1
+  InputKey       = MRO:LOOKUP_TABLE_MINIMUM
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = LookupTableMinimum
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = LookupTableMaximum
+  Auto           = 1
+  InputKey       = MRO:LOOKUP_TABLE_MAXIMUM
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = LookupTableMaximum
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = LookupTableMedian
+  Auto           = 1
+  InputKey       = MRO:LOOKUP_TABLE_MEDIAN
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = LookupTableMedian
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = LookupTableKValue
+  Auto           = 1
+  InputKey       = MRO:LOOKUP_TABLE_K_VALUE
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = LookupTableKValue
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = StimulationLampFlag
+  Auto           = 1
+  InputKey       = MRO:STIMULATION_LAMP_FLAG
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = UNKNOWN
+  OutputName     = StimulationLampFlag
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (On, ON)
+  Translation    = (Off, OFF)
+  Translation    = (*, *)
+End_Group
+
+Group = HeaterControlFlag
+  Auto           = 1
+  InputKey       = MRO:HEATER_CONTROL_FLAG
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = UNKNOWN
+  OutputName     = HeaterControlFlag
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (On, ON)
+  Translation    = (Off, OFF)
+  Translation    = (*, *)
+End_Group
+
+Group = OptBnchFlexureTemperature
+  Auto           = 1
+  InputKey       = MRO:OPT_BNCH_FLEXURE_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = OptBnchFlexureTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = OptBnchMirrorTemperature
+  Auto           = 1
+  InputKey       = MRO:OPT_BNCH_MIRROR_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = OptBnchMirrorTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = OptBnchFoldFlatTemperature
+  Auto           = 1
+  InputKey       = MRO:OPT_BNCH_FOLD_FLAT_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = OptBnchFoldFlatTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = OptBnchFpaTemperature
+  Auto           = 1
+  InputKey       = MRO:OPT_BNCH_FPA_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = OptBnchFpaTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = OptBnchFpeTemperature
+  Auto           = 1
+  InputKey       = MRO:OPT_BNCH_FPE_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = OptBnchFpeTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = OptBnchLivingRmTemperature
+  Auto           = 1
+  InputKey       = MRO:OPT_BNCH_LIVING_RM_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = OptBnchLivingRmTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = OptBnchBoxBeamTemperature
+  Auto           = 1
+  InputKey       = MRO:OPT_BNCH_BOX_BEAM_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = OptBnchBoxBeamTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = OptBnchCoverTemperature
+  Auto           = 1
+  InputKey       = MRO:OPT_BNCH_COVER_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = OptBnchCoverTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = FieldStopTemperature
+  Auto           = 1
+  InputKey       = MRO:FIELD_STOP_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = FieldStopTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = FpaPositiveYTemperature
+  Auto           = 1
+  InputKey       = MRO:FPA_POSITIVE_Y_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = FpaPositiveYTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = FpaNegativeYTemperature
+  Auto           = 1
+  InputKey       = MRO:FPA_NEGATIVE_Y_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = FpaNegativeYTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = FpeTemperature
+  Auto           = 1
+  InputKey       = MRO:FPE_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = FpeTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = PrimaryMirrorMntTemperature
+  Auto           = 1
+  InputKey       = MRO:PRIMARY_MIRROR_MNT_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = PrimaryMirrorMntTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = PrimaryMirrorTemperature
+  Auto           = 1
+  InputKey       = MRO:PRIMARY_MIRROR_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = PrimaryMirrorTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = PrimaryMirrorBafTemperature
+  Auto           = 1
+  InputKey       = MRO:PRIMARY_MIRROR_BAF_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = PrimaryMirrorBafTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = MsTrussLeg0ATemperature
+  Auto           = 1
+  InputKey       = MRO:MS_TRUSS_LEG_0_A_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = MsTrussLeg0ATemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = MsTrussLeg0BTemperature
+  Auto           = 1
+  InputKey       = MRO:MS_TRUSS_LEG_0_B_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = MsTrussLeg0BTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = MsTrussLeg120ATemperature
+  Auto           = 1
+  InputKey       = MRO:MS_TRUSS_LEG_120_A_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = MsTrussLeg120ATemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = MsTrussLeg120BTemperature
+  Auto           = 1
+  InputKey       = MRO:MS_TRUSS_LEG_120_B_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = MsTrussLeg120BTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = MsTrussLeg240ATemperature
+  Auto           = 1
+  InputKey       = MRO:MS_TRUSS_LEG_240_A_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = MsTrussLeg240ATemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = MsTrussLeg240BTemperature
+  Auto           = 1
+  InputKey       = MRO:MS_TRUSS_LEG_240_B_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = MsTrussLeg240BTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = BarrelBaffleTemperature
+  Auto           = 1
+  InputKey       = MRO:BARREL_BAFFLE_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = BarrelBaffleTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SunShadeTemperature
+  Auto           = 1
+  InputKey       = MRO:SUN_SHADE_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = SunShadeTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpiderLeg30Temperature
+  Auto           = 1
+  InputKey       = MRO:SPIDER_LEG_30_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = SpiderLeg30Temperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpiderLeg150Temperature
+  Auto           = 1
+  InputKey       = MRO:SPIDER_LEG_150_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = SpiderLeg150Temperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpiderLeg270Temperature
+  Auto           = 1
+  InputKey       = MRO:SPIDER_LEG_270_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = SpiderLeg270Temperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SecMirrorMtrRngTemperature
+  Auto           = 1
+  InputKey       = MRO:SEC_MIRROR_MTR_RNG_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = SecMirrorMtrRngTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SecMirrorTemperature
+  Auto           = 1
+  InputKey       = MRO:SEC_MIRROR_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = SecMirrorTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SecMirrorBaffleTemperature
+  Auto           = 1
+  InputKey       = MRO:SEC_MIRROR_BAFFLE_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = SecMirrorBaffleTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = IeaTemperature
+  Auto           = 1
+  InputKey       = MRO:IEA_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = IeaTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = FocusMotorTemperature
+  Auto           = 1
+  InputKey       = MRO:FOCUS_MOTOR_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = FocusMotorTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = IePwsBoardTemperature
+  Auto           = 1
+  InputKey       = MRO:IE_PWS_BOARD_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = IePwsBoardTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = CpmmPwsBoardTemperature
+  Auto           = 1
+  InputKey       = MRO:CPMM_PWS_BOARD_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = CpmmPwsBoardTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = MechTlmBoardTemperature
+  Auto           = 1
+  InputKey       = MRO:MECH_TLM_BOARD_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = MechTlmBoardTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = InstContBoardTemperature
+  Auto           = 1
+  InputKey       = MRO:INST_CONT_BOARD_TEMPERATURE
+  InputGroup     = TEMPERATURE_PARAMETERS
+  InputPosition  = TEMPERATURE_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = InstContBoardTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = DllLockedFlag
+  Auto           = 1
+  InputKey       = MRO:DLL_LOCKED_FLAG
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = DllLockedFlag
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (YES, YES)
+  Translation    = (NO, NO)
+  Translation    = (UNKNOWN, UNKNOWN)
+  Translation    = (*, *)
+End_Group
+
+Group = DllResetCount
+  Auto           = 1
+  InputKey       = MRO:DLL_RESET_COUNT
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = DllResetCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = DllLockedOnceFlag
+  Auto           = 1
+  InputKey       = MRO:DLL_LOCKED_ONCE_FLAG
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = DllLockedOnceFlag
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (YES, YES)
+  Translation    = (NO, NO)
+  Translation    = (UNKNOWN, UNKNOWN)
+  Translation    = (*, *)
+End_Group
+
+Group = DllFrequenceCorrectCount
+  Auto           = 1
+  InputKey       = MRO:DLL_FREQUENCY_CORRECT_COUNT
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = DllFrequenceCorrectCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ADCTimingSetting
+  Auto           = 1
+  InputKey       = MRO:ADC_TIMING_SETTINGS
+  InputGroup     = INSTRUMENT_SETTING_PARAMETERS
+  InputPosition  = INSTRUMENT_SETTING_PARAMETERS
+  InputDefault   = -9999
+  OutputName     = ADCTimingSetting
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+End

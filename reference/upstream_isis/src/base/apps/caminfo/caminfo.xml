@@ -1,0 +1,1048 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="caminfo" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Outputs a PVL file that contains camera information.
+  </brief>
+
+  <description>
+  <p>
+    This program compiles and outputs various spacecraft and instrument-related information such as
+    geometric, polygon, and mapping information.
+  </p>
+  <p>
+    The user must supply a <def>Level1</def> cube. If the supplied cube does not have SPICE information
+    associated with it, then caminfo can be used to generate the SPICE information by running the
+    spiceinit program on the cube. Caminfo will not run spiceinit by default. If the input cube already
+    has SPICE information associated with it, then any user updates to the SPICE information will be
+    lost when the option to run spiceinit is chosen. This results from using system defaults when
+    running the spiceinit program from within caminfo.
+  </p>
+  <p>
+    Some information in the output PVL file will consist of a compilation of information for all the
+    bands in the cube and will be listed in the "Common" object of the PVL. Other information for a given
+    band will be placed in the "BandSet" object of the PVL. The user can select the check boxes to control
+    the information that will be output to the PVL file. If the POLYGON or USELABEL option is chosen,
+    the image polygon is output in Well-Known Text format (WKT).
+  </p>
+  <p>
+    The output file can be in PVL or CSV (Comma Separated Value) format. The "APPEND" option allows
+    the new generated information to be appended to the output file. This is especially useful for
+    CSV file format. If the CSV format is chosen, only Camstats, Statistics and Geometry options
+    are allowed. Isis Label, Original Label and Polygon options are disabled for CSV format.
+  </p>
+  <p>
+    The following is an example of caminfo output generated when in PVL format:
+  </p>
+<pre>
+Object = Caminfo
+  Object = Parameters
+    Program     = caminfo
+    IsisVersion = "6.0.0  | 2021-11-08"
+    RunDate     = 2021-11-08T16:03:25
+    IsisId      = Viking1/VISB/33322515
+    From        = default.cub
+    Lines       = 1056
+    Samples     = 1204
+    Bands       = 1
+  End_Object
+
+  Object = Camstats
+    MinimumLatitude                          = 9.9286479874788
+    MaximumLatitude                          = 10.434709753119
+    MinimumLongitude                         = 255.64554871862
+    MaximumLongitude                         = 256.14606952525
+    MinimumResolution                        = 18.840683425668
+    MaximumResolution                        = 18.985953877822
+    MinimumPhase                             = 79.756143590222
+    MaximumPhase                             = 81.304900313013
+    MinimumEmission                          = 10.798462835458
+    MaximumEmission                          = 13.502630463571
+    MinimumIncidence                         = 69.941096124192
+    MaximumIncidence                         = 70.311944975377
+    LocalTimeMinimum                         = 7.7698055422189
+    LocalTimeMaximum                         = 7.8031735959943
+    ObliqueResolutionMinimum                 = 19.180671135452
+    ObliqueResolutionMaximum                 = 19.525658668048
+    LatitudeMinimum                          = 9.9286479874788
+    LatitudeMaximum                          = 10.434709753119
+    LatitudeAverage                          = 10.181983206084
+    LatitudeStandardDeviation                = 0.11084102743244
+    LongitudeMinimum                         = 255.64554871862
+    LongitudeMaximum                         = 256.14606952525
+    LongitudeAverage                         = 255.89390491018
+    LongitudeStandardDeviation               = 0.10658330458136
+    SampleResolutionMinimum                  = 18.840683425668
+    SampleResolutionMaximum                  = 18.985953877822
+    SampleResolutionAverage                  = 18.90816559308
+    SampleResolutionStandardDeviation        = 0.03806000717263
+    LineResolutionMinimum                    = 18.840683425668
+    LineResolutionMaximum                    = 18.985953877822
+    LineResolutionAverage                    = 18.90816559308
+    LineResolutionStandardDeviation          = 0.03806000717263
+    ResolutionMinimum                        = 18.840683425668
+    ResolutionMaximum                        = 18.985953877822
+    ResolutionAverage                        = 18.90816559308
+    ResolutionStandardDeviation              = 0.03806000717263
+    ObliqueSampleResolutionMinimum           = 19.180671135452
+    ObliqueSampleResolutionMaximum           = 19.525658668048
+    ObliqueSampleResolutionAverage           = 19.342626220123
+    ObliqueSampleResolutionStandardDeviation = 0.078013435023247
+    ObliqueLineResolutionMinimum             = 19.180671135452
+    ObliqueLineResolutionMaximum             = 19.525658668048
+    ObliqueLineResolutionAverage             = 19.342626220123
+    ObliqueLineResolutionStandardDeviation   = 0.078013435023247
+    ObliqueResolutionMinimum                 = 19.180671135452
+    ObliqueResolutionMaximum                 = 19.525658668048
+    ObliqueResolutionAverage                 = 19.342626220123
+    ObliqueResolutionStandardDeviation       = 0.078013435023247
+    AspectRatioMinimum                       = 1.0
+    AspectRatioMaximun                       = 1.0
+    AspectRatioAverage                       = 1.0
+    AspectRatioStandardDeviation             = 0.0
+    PhaseMinimum                             = 79.756143590222
+    PhaseMaximum                             = 81.304900313013
+    PhaseAverage                             = 80.529097153288
+    PhaseStandardDeviation                   = 0.44420861263609
+    EmissionMinimum                          = 10.798462835458
+    EmissionMaximum                          = 13.502630463571
+    EmissionAverage                          = 12.15148695101
+    EmissionStandardDeviation                = 0.56543791358687
+    IncidenceMinimum                         = 69.941096124192
+    IncidenceMaximum                         = 70.311944975377
+    IncidenceAverage                         = 70.127459134075
+    IncidenceStandardDeviation               = 0.10249039126455
+    LocalSolarTimeMinimum                    = 7.7698055422189
+    LocalSolarTimeMaximum                    = 7.8031735959943
+    LocalSolarTimeAverage                    = 7.7863626216564
+    LocalSolarTimeStandardDeviation          = 0.0071055546192044
+    LocalRadiusMinimum                       = 3410663.3374636
+    LocalRadiusMaximum                       = 3413492.0662692
+    LocalRadiusAverage                       = 3412205.8144925
+    LocalRadiusStandardDeviation             = 648.57630709534
+    NorthAzimuthMinimum                      = 312.29940658864
+    NorthAzimuthMaximum                      = 350.59781250672
+    NorthAzimuthAverage                      = 332.96766151063
+    NorthAzimuthStandardDeviation            = 0.67383189481403
+  End_Object
+  Object = Statistics
+    MeanValue         = 127.49950846428
+    StandardDeviation = 73.322672255332
+    MinimumValue      = 1.0
+    MaximumValue      = 254.0
+    PercentHIS        = 0.0
+    PercentHRS        = 0.0
+    PercentLIS        = 0.0
+    PercentLRS        = 0.0
+    PercentNull       = 0.39208006141146
+    TotalPixels       = 1271424.0
+  End_Object
+
+  Object = Geometry
+    BandsUsed                  = 1
+    ReferenceBand              = 1
+    OriginalBand               = 1
+    Target                     = MARS
+    StartTime                  = 1977-07-09T20:05:51.5549999
+    EndTime                    = 1977-07-09T20:05:51.5549999
+    CenterLine                 = 528.0
+    CenterSample               = 602.0
+    CenterLatitude             = 10.181441241544
+    CenterLongitude            = 255.89292858176
+    CenterRadius               = 3412288.6569795
+    RightAscension             = 310.2070335306
+    Declination                = -46.327246785573
+    UpperLeftLongitude         = 255.64554871862
+    UpperLeftLatitude          = 10.086794246642
+    LowerLeftLongitude         = 255.9665140608
+    LowerLeftLatitude          = 9.9286479874788
+    LowerRightLongitude        = 256.14606952525
+    LowerRightLatitude         = 10.279980559326
+    UpperRightLongitude        = 255.82316035995
+    UpperRightLatitude         = 10.434709753119
+    PhaseAngle                 = 80.528381932125
+    EmissionAngle              = 12.133564327344
+    IncidenceAngle             = 70.127983116628
+    NorthAzimuth               = 332.65918495755
+    OffNadir                   = 9.9273765143684
+    SolarLongitude             = 294.73518830595
+    LocalTime                  = 7.7862975330952
+    TargetCenterDistance       = 4160.7294345949
+    SlantDistance              = 762.37204454685
+    SampleResolution           = 18.904248467739
+    LineResolution             = 18.904248467739
+    PixelResolution            = 18.904248467739
+    MeanGroundResolution       = 18.913336783207
+    SubSolarAzimuth            = 92.033828158995
+    SubSolarGroundAzimuth      = 118.87356333938
+    SubSolarLatitude           = -22.740326163641
+    SubSolarLongitude          = 319.09846558533
+    SubSpacecraftAzimuth       = 240.08514246484
+    SubSpacecraftGroundAzimuth = 267.5318718687
+    SubSpacecraftLatitude      = 10.078847382918
+    SubSpacecraftLongitude     = 253.65422317887
+    ParallaxX                  = 0.0092584344626292
+    ParallaxY                  = -0.21479478922806
+    ShadowX                    = 1.3359751287274
+    ShadowY                    = 2.4227562280136
+    HasLongitudeBoundary       = FALSE
+    HasNorthPole               = FALSE
+    HasSouthPole               = FALSE
+    ObliqueSampleResolution    = 19.336214219327
+    ObliqueLineResolution      = 19.336214219327
+    ObliquePixelResolution     = 19.336214219327
+    ObliqueDetectorResolution  = 19.336214219327
+  End_Object
+
+  Object = Polygon
+    CentroidLine      = 532.66229285952
+    CentroidSample    = 607.53672501071
+    CentroidLatitude  = 10.182356969859
+    CentroidLongitude = 255.89519621876
+    CentroidRadius    = 3412287.9074048
+    SurfaceArea       = 488.62348528983
+    GlobalCoverage    = 3.34e-04
+    SampleIncrement   = 100
+    LineIncrement     = 100
+    GisFootprint      = "MULTIPOLYGON (((255.6453583908695464
+                         10.0867904619605451, 255.6595956593271808
+                         10.1154635791014531, 255.6737985789073946
+                         10.1442167552830451, 255.6881259667616746
+                         10.1730800310205129, 255.7027887280425205
+                         10.2020508692057152, 255.7175464122890958
+                         10.2309373753062509, 255.7323280160563286
+                         10.2598036242839878, 255.7471695983951463
+                         10.2887800727178256, 255.7620066213459609
+                         10.3177301971434758, 255.7771588010552364
+                         10.3467436152087995, 255.7924323644433002
+                         10.3757139048525477, 255.8075274901822809
+                         10.4046456113999994, 255.8225576458768842
+                         10.4339028570360366, 255.8232309017442674
+                         10.4348585119487165, 255.8535629696708327
+                         10.4205061458771606, 255.8842203998140121
+                         10.4058889295564381, 255.9146926592250963
+                         10.3911941292862764, 255.9448791821614861
+                         10.3769097524926277, 255.9753755414272689
+                         10.3618204978158026, 256.0059617087890729
+                         10.3471682641369771, 256.0365409379967332
+                         10.3326326218834055, 256.0673265067632087
+                         10.3179152985589759, 256.0981249116282470
+                         10.3034581806665066, 256.1290667758755148
+                         10.2883581640098658, 256.1462671420772494
+                         10.2799873531353612, 256.1313444916623325
+                         10.2505255615226378, 256.1164688049674965
+                         10.2211844686142967, 256.1015973558028804
+                         10.1918949732268587, 256.0864534778274333
+                         10.1626571600747884, 256.0716550668443006
+                         10.1332939690604054, 256.0565706797236203
+                         10.1038668950864672, 256.0413878221121422
+                         10.0746328450545697, 256.0264747810802533
+                         10.0452711724688157, 256.0113369395158998
+                         10.0160982210436202, 255.9964691286714640
+                         9.9870846040898869, 255.9818453002924059
+                         9.9582018695888550, 255.9671085090266160
+                         9.9294365117128915, 255.9664455687814666
+                         9.9285018702230925, 255.9357798586855210
+                         9.9434114437963252, 255.9050300094461079
+                         9.9582188907694906, 255.8742299406974041
+                         9.9731382004096076, 255.8438364438290193
+                         9.9885593036033100, 255.8131996628023330
+                         10.0033543110909680, 255.7829726827725949
+                         10.0181299803242059, 255.7526929277649685
+                         10.0329436706484874, 255.7222678124940103
+                         10.0480687769201324, 255.6922853314939630
+                         10.0632502943012838, 255.6620952745569184
+                         10.0783572884044883, 255.6453583908695464
+                         10.0867904619605451)))"
+
+    Group = Mapping
+      TargetName         = MARS
+      EquatorialRadius   = 3396190.0
+      PolarRadius        = 3376200.0
+      LatitudeType       = Planetocentric
+      LongitudeDirection = PositiveEast
+      LongitudeDomain    = 360
+      MinimumLatitude    = 9.9284293968724
+      MaximumLatitude    = 10.434928853234
+      MinimumLongitude   = 255.64532672113
+      MaximumLongitude   = 256.14630113081
+      PixelResolution    = 18.840630601657
+      ProjectionName     = Sinusoidal
+      CenterLongitude    = 255.89292858176
+    End_Group
+  End_Object
+End_Object
+End
+
+</pre>
+
+  <p>
+    Output values that do not have a minimum/maximum range associated with them
+    are calculated at the center of the image.
+  </p>
+  <p>
+    Definitions for most of the values output in the PVL file can be found in
+    the ISIS documentation glossary including: <def><b>SubSpacecraftLatitude</b></def>,
+    <def><b>SubSpacecraftLongitude</b></def>, <def><b>SubSolarLatitude</b></def>,
+    <def><b>SubSolarLongitude</b></def>, <def><b>NorthAzimuth</b></def>,
+    <def><b>SpacecraftAzimuth</b></def>, <def><b>SubSolarAzimuth</b></def>,
+    <def><b>ObliqueLineResolution</b></def>, <def><b>ObliqueSampleResolution</b></def>,
+    <def><b>ObliquePixelResolution</b></def>, and <def><b>ObliqueDetectorResolution</b></def>
+  </p>
+  </description>
+
+  <history>
+    <change name="Robert Sucharski" date="2007-04-10">
+      Original version
+    </change>
+    <change name="Steven Lambright" date="2007-08-10">
+      Added an application test
+    </change>
+    <change name="Steven Koechle" date="2007-11-01">
+      Fixed WKT calls
+    </change>
+    <change name="Tracie Sucharski" date="2007-11-09">
+      Remove ToWKT calls and PolygonTools.h inclusion.  The geos package now
+      has a method to return a WKT string, so the ToWKT method has been
+      removed from the PolygonTools class.
+    </change>
+    <change name="Kris Becker" date="2007-12-07">
+      Made the following modifications:  fixed typo in PercentNull and
+      MaximumLongitude keywords; use the base file name for generation of
+      temporary files to further ensure uniqueness; run camstats once if
+      there is only one band - doubles execution speed for single band
+      images when CAMSTATS option is used; substitute the NULL string for
+      all special pixel values; added corner pixel keywords for PDS
+      compatibility; added phase, emission, incidence angles
+      and line and sample pixel resolution at the center pixel; added test
+      for intersection of longitude domain, north and south poles and
+      keywords that report them; added option to output ISIS cube labels;
+      corrected computations for parallax and shadow keywords.
+     </change>
+     <change name="Kris Becker" date="2007-12-19">
+       Renamed the HasLongitudeDomain keyword to HasLongitudeBoundary.
+       Makes more sense.
+     </change>
+     <change name="Kris Becker" date="2008-02-27">
+       Corrected method call to compute polygon with proper parameters as
+       well as correct band number.  Added code to better honor specific
+       cube attributes (such as band numbers) in computations.  Also will
+       produce NULL valued keywords where NULLs are a produced instead of
+       the real value for the ISIS NULL pixel value.
+     </change>
+     <change name="Steven Lambright" date="2008-05-12">
+       Removed references to CubeInfo
+     </change>
+     <change name="Bob Sucharski" date="2008-07-31">
+       Added Camera Test option  to test for a valid camera at center of image
+       and return an error and end if a valid camera cannot be created.
+     </change>
+     <change name="Kris Becker" date="2008-09-22">
+       Reworked the output PVL format;  added more keywords to the Common object
+       that indicate versions and dates;  added more values to Geometry and
+       Polygon object.
+     </change>
+     <change name="Kris Becker" date="2008-10-22">
+       Corrected generation of polygon for multi-band data.  It created a
+       POLYGON union instead of the required MULTIPOLYGON.
+     </change>
+     <change name="Kris Becker" date="2008-10-30">
+       The target center distance and subspacecraft latitude were not properly
+       propagated to the output PVL file and consequently were invalid.  This
+       has been corrected.
+     </change>
+     <change name="Kris Becker" date="2008-12-29">
+       Added RightAscension, Declination, SubSolarGroundAzimuth, and
+       SubSpacecraftGroundAzimuth computations; added center line/sample image
+       coordinate used to compute center geometry; added check of valid image
+       line/sample coordinates when testing for north/south poles (some camera
+       models return valid states when coordinates are outside of image
+       boundaries).
+     </change>
+     <change name="Kris Becker" date="2009-02-26">
+       Modified to actually exclude the unconditional computation of the image
+       polygon to assist in some geometry values.  It is no longer computed if
+       the user does not select the POLYGON option.  The implications of this
+       are that some of the keywords in the output Geometry group are no
+       longer ever relevant.  These keywords were all moved to the Polygon
+       group.  These keywords are:   CentroidLine, CentroidSample,
+       CentroidLatitude, CentroidLongitude, CentroidRadius and SurfaceArea.
+       User will no longer see these values if the POLYGON option is not
+       selected.  Also the Radius keyword in the Polygon group has been
+       removed as it is redundant with CentroidRadius.
+     </change>
+     <change name="Kris Becker" date="2009-05-29">
+       Added PIXINC parameter to allow user to specify number of pixels to
+       skip around the perimeter of the image to compute the polygon.
+     </change>
+     <change name="Kris Becker" date="2009-05-29">
+       Fixed bug where image was a 0 longitude boundary crosser.  It would
+       typically fail when determining centroid information unless converted
+       to 180 domain.  This will also be used at the poles as it seems to work
+       better in the 180 domain as well.  (This process projects the footprint
+       to a Sinusoidal projection to determine area which requires an equal
+       area projection, such as Sinusoidal.)
+     </change>
+     <change name="Kris Becker" date="2009-07-08">
+       Added the MAXEMISSION and MAXINCIDENCE limit parameters to better
+       control limb and terminator polygon generation.
+     </change>
+     <change name="Kris Becker" date="2009-08-24">
+       Allow disabling of shape model use when constructing polygons that
+       contain limbs.
+     </change>
+     <change name="Mackenzie Boyd" date="2010-06-14">
+       Removed polygon options group and placed the options within output
+       options. Added inclusion for parameters related to polygons to only be
+       available when polygons are selected. Made TO option not have a
+       default of None, updated documentation and modified formatting.
+     </change>
+     <change name="Jai Rideout" date="2011-02-17">
+       Replaced PIXINC with POLYSINC and POLYLINC. Renamed SINC and LINC to
+       STATSSINC and STATSLINC.
+     </change>
+     <change name="Sharmila Prasad" date="2011-02-24">
+       Added option for the output file to be in CSV format and also ability
+       to append to the existing output file.
+     </change>
+     <change name="Jai Rideout" date="2011-03-01">
+       Renamed STATSSINC and STATSLINC back to SINC and LINC.
+     </change>
+     <change name="Sharmila Prasad" date="2011-03-02">
+       Fix App tests and add header for flat file if file does not exist.
+     </change>
+     <change name="Jai Rideout" date="2011-03-03">
+       Fixed incorrect CSV output format.
+     </change>
+     <change name="Christopher Austin" date="2011-03-18">
+       Rewrote the entire application to no longer have hard-coded values for
+       CSV, including the removal of duplicated code, updated includes, and
+       corrected the CSV to display the same values as the PVL does.
+     </change>
+     <change name="Christopher Austin" date="2011-03-18">
+       Added new parameters including FLATINC.
+     </change>
+     <change name="Christopher Austin" date="2011-03-22">
+       Changed the new parameter's names. (INCTYPE, NUMVERTICES)
+     </change>
+     <change name="Christopher Austin" date="2011-05-12">
+      Added smarts to the VERTICES option.
+    </change>
+     <change name="Travis Addair" date="2011-07-27">
+       Added INCREASEPRECISION option for creating an Image Polygon, the same
+       one as used by "footprintinit".
+    </change>
+    <change name="Kris Becker" date="2012-11-23">
+        The computation of ParallaxX/ParallaxY and ShadowX/ShadowY values was
+        not properly implemented. Updated documentation with a new example.
+        Fixes #1296.
+    </change>
+    <change name="Janet Barrett" date="2013-01-29">
+      Added the USELABEL option. This will allow the user to request that the
+      footprint be read from the labels of the input image file rather than
+      regenerating the footprint. Fixes #1452.
+    </change>
+    <change name="Janet Richie" date="2013-02-25">
+      Reviewed documentation. References #1452.
+    </change>
+    <change name="Kaitlyn Lee" date="2019-04-22">
+      Added oblique sample, line, detector, and pixel resolutions to the
+      geometry PVL group. Updated example output in application description
+      so that the addded oblique elements are included. Fixes #2205.
+    </change>
+    <change name="Amy Stamile" date="2021-08-18">
+      Added the USECAMSTATSTBL option. This allows caminfo to extract existing
+      camera statistics from the CameraStatistics Table of the input cube instead
+      of recalculating CameraStatistics.  Fixes #3605.
+
+      Updated caminfo to output all CameraStatistics Keywords when running CAMSTATS.
+    </change>
+    <change name="Amy Stamile" date="2021-11-04">
+      Changed parameter default values for MAXEMISSION and MAXINCIDENCE to be
+      synchronized with footprintinit default values of the same parameters.
+      This corrects inconsistencies of footprint generation failing in caminfo
+      but passing in footprintinit. Fixes #4651.
+    </change>
+    <change name="Adam Paquette" date="2021-07-06">
+      Updated CAMSTATS parameter decision tree to allow users to extract
+      camstats even if the cube contains a camstats table. Fixes #4919.
+    </change>
+  </history>
+
+  <category>
+    <categoryItem>Cameras</categoryItem>
+  </category>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Filename of a cube
+        </brief>
+        <description>
+          Input cube with appropriate camera labels (Instrument and kernel groups).  This file must be in raw
+          camera space, which is a "level 1" cube.
+        </description>
+        <filter>
+          *.cub *.CUB
+        </filter>
+      </parameter>
+      <parameter name="TO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output PVL filename
+        </brief>
+        <description>
+          A text file in label format (PVL) which will contain the results of this program.  This file can
+          be used in conjunction with the "getkey" program in order to pass the results to another
+          program when developing scripts.
+        </description>
+        <filter>
+          *.txt *.pvl
+        </filter>
+      </parameter>
+      </group>
+
+    <group name="General Output Options">
+      <parameter name="FORMAT">
+        <type>string</type>
+         <default><item>PVL</item></default>
+         <brief>Format type of Output file (FLAT or PVL)</brief>
+         <description>
+         Specify the Output format type, FLAT or PVL style.
+         </description>
+         <list>
+           <option value="PVL">
+            <brief>Create PVL output</brief>
+            <description>
+               Caminfo data to be generated in PVL format
+            </description>
+            </option>
+           <option value="FLAT">
+            <brief> Create CSV output </brief>
+            <description>
+              Caminfo data to be generated in Comma Separated Value (CSV) format
+            </description>
+             <exclusions>
+               <item>ISISLABEL</item>
+               <item>ORIGINALLABEL</item>
+               <item>POLYGON</item>
+               <item>USELABEL</item>
+             </exclusions>
+           </option>
+         </list>
+      </parameter>
+
+      <parameter name="APPEND">
+        <type>boolean</type>
+        <default><item>false</item></default>
+        <brief>Append caminfo information to existing data file</brief>
+        <description> Append caminfo information to existing file. This will append the
+          caminfo data to the filename specified for the TO parameter beginning at a
+          new line.
+         </description>
+      </parameter>
+
+      <parameter name="GEOMETRY">
+        <type>boolean</type>
+        <brief>
+          Include geometry information
+        </brief>
+        <description>
+          Get geometry information from the camera at the center of the image.
+          These data are listed under the Geometry Object heading.  The keyword/values
+          contained therein are listed here:
+
+          <UL>
+            <LI>BandsUsed</LI>
+            <LI>ReferenceBand</LI>
+            <LI>OriginalBand</LI>
+            <LI>Target</LI>
+            <LI>StartTime</LI>
+            <LI>EndTime</LI>
+            <LI>CenterLine</LI>
+            <LI>CenterSample</LI>
+            <LI>CenterLatitude</LI>
+            <LI>CenterLongitude</LI>
+            <LI>CenterRadius</LI>
+            <LI>RightAscension</LI>
+            <LI>Declination</LI>
+            <LI>UpperLeftLongitude</LI>
+            <LI>UpperLeftLatitude</LI>
+            <LI>LowerLeftLongitude</LI>
+            <LI>LowerLeftLatitude</LI>
+            <LI>LowerRightLongitude</LI>
+            <LI>LowerRightLatitude</LI>
+            <LI>UpperRightLongitude</LI>
+            <LI>UpperRightLatitude</LI>
+            <LI>PhaseAngle</LI>
+            <LI>EmissionAngle</LI>
+            <LI>IncidenceAngle</LI>
+            <LI>NorthAzimuth</LI>
+            <LI>OffNadir</LI>
+            <LI>SolarLongitude</LI>
+            <LI>LocalTime</LI>
+            <LI>TargetCenterDistance</LI>
+            <LI>SlantDistance</LI>
+            <LI>SampleResolution</LI>
+            <LI>LineResolution</LI>
+            <LI>PixelResolution</LI>
+            <LI>MeanGroundResolution</LI>
+            <LI>SubSolarAzimuth</LI>
+            <LI>SubSolarGroundAzimuth</LI>
+            <LI>SubSolarLatitude</LI>
+            <LI>SubSolarLongitude</LI>
+            <LI>SubSpacecraftAzimuth</LI>
+            <LI>SubSpacecraftGroundAzimuth</LI>
+            <LI>SubSpacecraftLatitude</LI>
+            <LI>SubSpacecraftLongitude</LI>
+            <LI>ParallaxX</LI>
+            <LI>ParallaxY</LI>
+            <LI>ShadowX</LI>
+            <LI>ShadowY</LI>
+            <LI>HasLongitudeBoundary</LI>
+            <LI>HasNorthPole</LI>
+            <LI>HasSouthPole</LI>
+            <LI>ObliqueSampleResolution</LI>
+            <LI>ObliqueLineResolution</LI>
+            <LI>ObliquePixelResolution</LI>
+            <LI>ObliqueDetectorResolution</LI>
+          </UL>
+        </description>
+        <default><item>TRUE</item></default>
+      </parameter>
+
+
+      <parameter name="ISISLABEL">
+        <type>boolean</type>
+        <brief>
+          Include ISIS label
+        </brief>
+        <description>
+          This option will extract the ISIS label and write it to the output PVL
+          file.
+        </description>
+        <default><item>FALSE</item></default>
+      </parameter>
+
+      <parameter name="ORIGINALLABEL">
+        <type>boolean</type>
+        <brief>
+          Include the original label
+        </brief>
+        <description>
+          Include the original labels of the cube in the PVL.
+        </description>
+        <default><item>FALSE</item></default>
+      </parameter>
+
+      <parameter name="STATISTICS">
+        <type>boolean</type>
+        <brief>
+          Include DN statistics
+        </brief>
+        <description>
+          Include DN statistics for all bands within the cube.  These data are
+          contained in the Statistics object.  The keyword/values contained
+          therein are:
+          <UL>
+            <LI>MeanValue</LI>
+            <LI>StandardDeviation</LI>
+            <LI>MinimumValue</LI>
+            <LI>MaximumValue</LI>
+            <LI>PercentHIS</LI>
+            <LI>PercentHRS</LI>
+            <LI>PercentLIS</LI>
+            <LI>PrecentLRS</LI>
+            <LI>PercentNull</LI>
+            <LI>TotalPixels </LI>
+          </UL>
+        </description>
+        <default><item>FALSE</item></default>
+      </parameter>
+
+      <parameter name="CAMSTATS">
+        <type>boolean</type>
+        <brief>
+          Get camera statistics information
+        </brief>
+        <description>
+          Run camstats to get camera information that can be expressed as a range.
+          Camstats will run on the entire cube (common object), and for each band (bandset object).
+          The default linc and sinc for camstats is "1". The user can select a different linc and sinc.
+          Output values are the same as camstats:
+          <UL>
+            <LI>LocalTimeMinimum</LI>
+            <LI>LocalTimeMaximum</LI>
+            <LI>ObliqueResolutionMinimum</LI>
+            <LI>ObliqueResolutionMaximum</LI>
+            <LI>LatitudeMinimum</LI>
+            <LI>LatitudeMaximum</LI>
+            <LI>LatitudeAverage</LI>
+            <LI>LatitudeStandardDeviation</LI>
+            <LI>LongitudeMinimum</LI>
+            <LI>LongitudeMaximum</LI>
+            <LI>LongitudeAverage</LI>
+            <LI>LongitudeStandardDeviation</LI>
+            <LI>SampleResolutionMinimum</LI>
+            <LI>SampleResolutionMaximum</LI>
+            <LI>SampleResolutionAverage</LI>
+            <LI>SampleResolutionStandardDeviation</LI>
+            <LI>LineResolutionMinimum</LI>
+            <LI>LineResolutionMaximum</LI>
+            <LI>LineResolutionAverage</LI>
+            <LI>LineResolutionStandardDeviation</LI>
+            <LI>ResolutionMinimum</LI>
+            <LI>ResolutionMaximum</LI>
+            <LI>ResolutionAverage</LI>
+            <LI>ResolutionStandardDeviation</LI>
+            <LI>ObliqueSampleResolutionMinimum</LI>
+            <LI>ObliqueSampleResolutionMaximum</LI>
+            <LI>ObliqueSampleResolutionAverage</LI>
+            <LI>ObliqueSampleResolutionStandardDeviation</LI>
+            <LI>ObliqueLineResolutionMinimum</LI>
+            <LI>ObliqueLineResolutionMaximum</LI>
+            <LI>ObliqueLineResolutionAverage</LI>
+            <LI>ObliqueLineResolutionStandardDeviation</LI>
+            <LI>ObliqueResolutionMinimum</LI>
+            <LI>ObliqueResolutionMaximum</LI>
+            <LI>ObliqueResolutionAverage</LI>
+            <LI>ObliqueResolutionStandardDeviation</LI>
+            <LI>AspectRatioMinimum</LI>
+            <LI>AspectRatioMaximun</LI>
+            <LI>AspectRatioAverage</LI>
+            <LI>AspectRatioStandardDeviation</LI>
+            <LI>PhaseMinimum</LI>
+            <LI>PhaseMaximum</LI>
+            <LI>PhaseAverage</LI>
+            <LI>PhaseStandardDeviation</LI>
+            <LI>EmissionMinimum</LI>
+            <LI>EmissionMaximum</LI>
+            <LI>EmissionAverage</LI>
+            <LI>EmissionStandardDeviation</LI>
+            <LI>IncidenceMinimum</LI>
+            <LI>IncidenceMaximum</LI>
+            <LI>IncidenceAverage</LI>
+            <LI>IncidenceStandardDeviation</LI>
+            <LI>LocalSolarTimeMinimum</LI>
+            <LI>LocalSolarTimeMaximum</LI>
+            <LI>LocalSolarTimeAverage</LI>
+            <LI>LocalSolarTimeStandardDeviation</LI>
+            <LI>LocalRadiusMinimum</LI>
+            <LI>LocalRadiusMaximum</LI>
+            <LI>LocalRadiusAverage</LI>
+            <LI>LocalRadiusStandardDeviation</LI>
+            <LI>NorthAzimuthMinimum</LI>
+            <LI>NorthAzimuthMaximum</LI>
+            <LI>NorthAzimuthAverage</LI>
+            <LI>NorthAzimuthStandardDeviation</LI>
+          </UL>
+
+          There are also duplicate output values included for backwards compatibility with
+          old versions of caminfo:
+         <UL>
+            <LI>MinimumLatitude</LI>
+            <LI>MaximumLatitude</LI>
+            <LI>MinimumLongitude</LI>
+            <LI>MaximumLongitude</LI>
+            <LI>MinimumResolution</LI>
+            <LI>MaximumResolution</LI>
+            <LI>MinimumPhase</LI>
+            <LI>MaximumPhase</LI>
+            <LI>MinimumEmission</LI>
+            <LI>MaximumEmission</LI>
+            <LI>MinimumIncidence</LI>
+            <LI>MaximumIncidence</LI>
+          </UL>
+        </description>
+        <inclusions>
+          <item>USECAMSTATSTBL</item>
+          <item>SINC</item>
+          <item>LINC</item>
+        </inclusions>
+        <default><item>FALSE</item></default>
+      </parameter>
+
+      <parameter name="USECAMSTATSTBL">
+        <type>boolean</type>
+        <brief>
+          Reads the camstats data from the input cube's CameraStatistics Table, if exists.
+        </brief>
+        <description>
+          This first checks if the CameraStatistics Table exists in input cube label and
+          extracts statistics from table instead of running CAMSTATS. If table does not
+          exist, caminfo will continue to run CAMSTATS.
+        </description>
+        <default><item>FALSE</item></default>
+      </parameter>
+
+      <parameter name="LINC">
+        <type>integer</type>
+        <brief>
+          LINC line increments for camstats
+        </brief>
+        <description>
+          This is the line increment used by camstats.
+        </description>
+        <default><item>1</item></default>
+        <minimum inclusive="true">1</minimum>
+      </parameter>
+
+      <parameter name="SINC">
+        <type>integer</type>
+        <brief>
+          SINC sample increments for camstats
+        </brief>
+        <description>
+          This is the sample increment used by camstats.
+        </description>
+        <default><item>1</item></default>
+        <minimum inclusive="true">1</minimum>
+      </parameter>
+    </group>
+
+    <group name="Polygon Output  Options">
+      <parameter name="USELABEL">
+        <type>boolean</type>
+        <default><item>FALSE</item></default>
+        <brief>
+          Get footprint blob from label
+        </brief>
+        <description>
+          Read the footprint blob from the image label instead of creating the
+          footprint.
+        </description>
+        <exclusions>
+          <item>POLYGON</item>
+          <item>INCTYPE</item>
+          <item>INCREASEPRECISION</item>
+          <item>NUMVERTICES</item>
+          <item>POLYLINC</item>
+          <item>POLYSINC</item>
+          <item>MAXEMISSION</item>
+          <item>MAXINCIDENCE</item>
+        </exclusions>
+      </parameter>
+      <parameter name="POLYGON">
+        <type>boolean</type>
+        <default><item>FALSE</item></default>
+        <brief>
+          Create polygon information
+        </brief>
+        <description>
+          Use the imagePolygon class to gather polygon information.  The output
+          polygon will be in well-known text format (WKT).  These data are
+          contained within the Polygon object.   The keyword/values contained
+          therein are:
+            <UL>
+              <LI>CentroidLine</LI>
+              <LI>CentroidSample</LI>
+              <LI>CentroidLatitude</LI>
+              <LI>CentroidLongitude</LI>
+              <LI>CentroidRadius</LI>
+              <LI>SurfaceArea</LI>
+              <LI>GlobalCoverage</LI>
+              <LI>GisFootprint</LI>
+            </UL>
+        </description>
+        <exclusions>
+          <item>USELABEL</item>
+        </exclusions>
+        <inclusions>
+          <item>INCTYPE</item>
+          <item>INCREASEPRECISION</item>
+          <item>NUMVERTICES</item>
+          <item>POLYLINC</item>
+          <item>POLYSINC</item>
+          <item>MAXEMISSION</item>
+          <item>MAXINCIDENCE</item>
+        </inclusions>
+      </parameter>
+
+      <parameter name="INCTYPE">
+        <type>string</type>
+        <default><item>LINCSINC</item></default>
+        <brief>
+          Polygon quality
+        </brief>
+        <description>
+          When true, use NUMVERTICES to set an approximate number of steps for
+          the footprint. Otherwise use POLYLINC and POLYSINC to create the
+          polygon based on the dimensions of the cube.
+        </description>
+        <list>
+          <option value="LINCSINC">
+            <brief>
+              Use POLYLINC and POLYSINC for polygon quality
+            </brief>
+            <description>
+              Enable this option to use the number of samples and lines to skip
+              around the perimeter of the image to compute the polygon
+              footprint.
+            </description>
+            <exclusions>
+              <item>NUMVERTICES</item>
+            </exclusions>
+          </option>
+          <option value="VERTICES">
+            <brief>
+              Use NUMVERTICES for polygon quality
+            </brief>
+            <description>
+              Enable this option to use a total number of vertices around the
+              perimeter of the image to compute the polygon footprint.
+            </description>
+            <exclusions>
+              <item>POLYLINC</item>
+              <item>POLYSINC</item>
+            </exclusions>
+          </option>
+        </list>
+      </parameter>
+
+      <parameter name="INCREASEPRECISION">
+        <type>boolean</type>
+        <default><item>FALSE</item></default>
+        <brief>Allow automatic adjustments to fix invalid polygons</brief>
+        <description>
+          Enabling this option will allow the automatic reduction of the SINC
+          and LINC parameters whenever their current values result in an invalid
+          polygon. In addition, a results group will be created with the
+          keywords SINC/LINC which reveal what SINC/LINC values were actually
+          used for the creation of the footprint.
+
+          NOTE: This parameter can result in a drastic increase in running time
+          as well as a change to user input values.
+        </description>
+      </parameter>
+
+      <parameter name="POLYLINC">
+        <type>integer</type>
+        <internalDefault>10% of the cube's total lines</internalDefault>
+        <brief>
+          Polygon line increment
+        </brief>
+        <description>
+          Specifies the number of lines to skip around the perimeter of the
+          image to compute the polygon footprint.  Note that currently, an
+          increment of 1 will not work for pushframe instruments such as
+          THEMIS-VIS.
+        </description>
+        <minimum inclusive="true">1</minimum>
+      </parameter>
+
+      <parameter name="POLYSINC">
+        <type>integer</type>
+        <internalDefault>10% of the cube's total samples</internalDefault>
+        <brief>
+          Polygon sample increment
+        </brief>
+        <description>
+          Specifies the number of samples to skip around the perimeter of the
+          image to compute the polygon footprint.  Note that currently, an
+          increment of 1 will not work for pushframe instruments such as
+          THEMIS-VIS.
+        </description>
+        <minimum inclusive="true">1</minimum>
+      </parameter>
+
+      <parameter name="NUMVERTICES">
+        <type>integer</type>
+        <default><item>40</item></default>
+        <brief>
+          Polygon steps
+        </brief>
+        <description>
+          Specifies the approximate number of vertices (+/- 3) to take around
+          the image to compute the polygon footprint. (In limb images, the
+          number of steps can be much more or less than 3 off.) Note that
+          currently, an increment of 4 or less will not work for pushframe
+          instruments such as THEMIS-VIS.
+        </description>
+        <minimum inclusive="true">4</minimum>
+      </parameter>
+
+      <parameter name="MAXEMISSION">
+        <type>double</type>
+        <brief>
+          Maximum emission angle to include in polygon
+        </brief>
+        <description>
+            <p>
+                Specifies the maximum emission angle that a polygon point is
+                allowed to have.
+
+                Note: If needing to eliminate limb data
+                that cause numerous ragged spikes, set MAXEMISSION=89.5.
+                Limb data will generally result in odd polygon footprints as the
+                geometry becomes unstable at the limb due to obliqueness
+                particularly when using a DEM for the shape model (see spiceinit).
+                Setting this parameter to 89.5 restricts the emission angle to create better
+                behaved polygons at the limb while sacrificing some (very oblique) data.
+            </p>
+            <p>
+                Note: For images that have been run through spiceinit with a DEM, the
+                emission angle range may need to be decreased. This will avoid the
+                instability that occurs at the limb and will avoid spiking of the
+                data.
+            </p>
+        </description>
+        <default><item>180.0</item></default>
+      </parameter>
+
+      <parameter name="MAXINCIDENCE">
+        <type>double</type>
+        <brief>
+          Maximum incidence angle to include in polygon
+        </brief>
+        <description>
+            Specifies the maximum incidence angle that a polygon point is
+            allowed to have.
+
+            Note: if needing to eliminate terminator data that will typically
+            be lost in photometric corrections, set MAXINCIDENCE=120.0.
+            Setting this parameter to 120.0 restricts the incidence angle to
+            create more data relevant polygons at the terminator while sacrificing some
+            (non-photometric) data.
+        </description>
+        <default><item>180.0</item></default>
+      </parameter>
+    </group>
+
+     <group name="SPICE Option">
+        <parameter name="SPICE">
+          <type>boolean</type>
+          <default><item>FALSE</item></default>
+          <brief>
+            Run spiceinit on the input
+          </brief>
+          <description>
+              If the user sets this to true then the spiceinit program will be
+              run on the input file.  Spiceinit will use the system SPICE kernels,
+              so any updates to SPICE information will be lost.  Spiceinit is in
+              this program to facilitate UPC processing.
+          </description>
+        </parameter>
+        </group>
+
+    <group name="Camera Test">
+      <parameter name="VCAMERA">
+        <type>boolean</type>
+        <default><item>FALSE</item></default>
+        <brief>
+          Test image center for valid camera
+        </brief>
+        <description>
+          If the user sets this parameter to true, a test will determine if a
+          valid camera can be created at the center of the image band.  If a
+          valid camera cannot be created the program will end.  The default is to
+          output any available information without testing the camera.
+        </description>
+      </parameter>
+    </group>
+   </groups>
+</application>

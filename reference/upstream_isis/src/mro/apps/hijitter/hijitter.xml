@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="hijitter" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+     Correct jitter in input cubes and output corrected undistorted cubes
+  </brief>
+
+  <description>
+  <pre>
+     This application computes angular corrections from pixel offsets in the
+     input jitter file and applies the corrections to the undistorted output 
+     cube.  This application is procedural in that it runs other applications.
+     It runs through a series of applications twice.  The first time it applies 
+     the jitter corrections and calculates additional pitch rate and yaw angles 
+     to center the remaining camera pointing errors around zero.  The output 
+     cube files are deleted and the series of applications is run again, 
+     including the additional pitch rate and yaw corrections.
+
+     The first step it performs is to run spiceinit on all the FROMLIST cubes 
+     with the parameter attach=no.  A version of the MASTER file is saved and 
+     run through the application spicefit to remove noise in the camera 
+     pointing.  This file will be used in the noproj runs as the match cube.  
+     The next application run is appjit and it needs to load the Spice from the 
+     files directly in order have access to Spice information not typically 
+     stored on the Isis cube labels. This application applies the corrections 
+     from the JITTER file to the camera pointing in the FROMLIST cubes.  Now the 
+     FROMLIST cubes are run through noproj, removing the jitter from the pixel 
+     positions and the camera distortion.  The results are measured on adjacent
+     ccd's by the application hijitreg and used to compute the additional pitch 
+     rate and yaw required to center the errors around zero.  
+
+     Now the procedure is repeated with the calculated pitch and yaw passed into 
+     appjit as input parameters.  The jitter-reduced and distortion-free output 
+     cubes are created by the final set of noproj runs on adjacent ccd's. 
+
+     If crop=true then the application crops the extended portion of the   
+     image. The starting line and number of lines parameter for <i><b>crop</b></i> 
+     application is calculated from the ephemeris time in the  jitter  
+     correction file. LineRate is used to get the starting and ending line 
+     information.
+    </pre>
+  </description>
+
+  <category>
+    <missionItem>Mars Reconnaissance Orbiter</missionItem>
+  </category>  
+
+  <history>
+   <change name="Steven Lambright" date="2008-12-17">
+     Original Version
+   </change>
+    <change name="Debbie A. Cook" date="2009-01-14">
+      Added documentation
+    </change>
+    <change name="Jai Rideout" date="2011-08-04">
+      Made a small modification to the code in FindRed(...) that created a Pvl
+      object for each file in the file list. FileList's overloaded
+      '[]' operator that was used inside of the call to Filename's constructor
+      confused the compiler on Ubuntu 10.04 systems.
+    </change>
+    <change name="Debbie A. Cook" date="2011-08-15">
+      Added an option to run ckwriter to create a ck with jitter for correcting
+      image geometry.
+    </change>
+    <change name="Debbie A. Cook" date="2011-12-21">
+      Fixed the loop that calculated pitch to only loop the number of overlaps
+      (count).
+    </change>
+    <change name="Sharmila Prasad" date="2011-12-27">
+     Added an option to crop the extended portion of the image using the jitter 
+     correction file 
+    </change>
+    <change name="Sharmila Prasad" date="2012-02-05">
+     Crop option false by default 
+    </change>
+    <change name="Debbie A. Cook" date="2012-07-06">
+     Updated Spice members to be more compliant with Isis standards. References #972.
+    </change>
+    <change name="Jeannie Backer" date="2012-11-21">
+     Modified to work with IR and BG ccd images.  Fixed bug with computation of 
+     yaw and pitch. Fixes #795.
+    </change>
+  </history>
+
+  <groups>
+    <group name="Input Files">
+      <parameter name="FROMLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Cubes to correct
+        </brief>
+        <description>
+          This file is a list of the file specifications for the input cubes all 
+          from the save observation and containing pointing errors due to jitter 
+          modeled by the pixel offsets in the JITTER file. The list should be in 
+          ascending order, by CCD.  Each CCD in the list must have at least one
+          overlapping CCD.
+        </description>
+        <filter>
+          *.lis *.txt
+        </filter>
+      </parameter>
+
+      <parameter name="JITTER">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Ascii table of pixel offsets representing jitter for a given time
+        </brief>
+        <description>
+          The file specification of the Ascii table of pixel offsets modeling 
+          the jitter errors in the camera pointing based on time.  The table has 
+          three columns:  sampleOffset, lineOffset, and ephemerisTimeSeconds.
+        </description>
+        <filter>
+          *.txt
+        </filter>
+      </parameter>
+
+      <parameter name="REGDEF">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          The Auto Registration template used in hijitreg
+        </brief>
+        <description>
+           The registration template for correlating the overlapping input cubes 
+           of the observation.  See hijitreg for more information.
+        </description>
+        <filter>
+          *.txt *.def
+        </filter>
+      </parameter>
+
+      <parameter name="TOLIST">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          The list of the corrected undistorted cubes to be created
+        </brief>
+        <description>
+          This list of output files should contain a file to correspond to each 
+          input file.  The output files will have both the jitter removed, as 
+          modeled in the input JITTER file, and camera distortions by the 
+          application noproj.  The MASTER file with its camera pointing adjusted
+          by the application spicefit, will be used as the MATCH file in noproj 
+        </description>
+        <internalDefault>Automatic</internalDefault>
+      </parameter>
+    </group>
+
+    <group name="Options">
+      <parameter name="MASTER">
+        <type>integer</type>
+        <minimum inclusive="yes">0</minimum>
+        <maximum inclusive="yes">13</maximum>
+        <brief>
+          The file to use as the MASTER
+        </brief>
+        <description>
+            The application appjit applies the jitter corrections to the 
+            camera pointing in the MASTER file first and then copies it to the 
+            other files in the FROMLIST.  The MASTER file is also used as the 
+            MATCH file in the application NOPROJ
+        </description>
+        <default><item>5</item></default>
+      </parameter>
+      <parameter name="DEGREE">
+        <type>integer</type>
+        <brief>
+          The degree of fit used in appjit
+        </brief>
+        <description>
+          Enter the degree of the polynomial to fit to the data
+        </description>
+        <default><item>2</item></default>
+      </parameter>
+      <parameter name="JITTERCK">
+        <type>filename</type>
+        <brief>
+          Optional jittery ck file for using to correct spice"
+        </brief>
+        <description>
+          Optionally enter the name of an output Naif ck containing
+          the jittery pointing data.  This ck can be used in spiceinit
+          as the csmithed camera pointing to get correct pointing on
+          mission cubes (not noproj'd).  The default is to not create
+          the jittery ck.
+        </description>
+        <internalDefault>None</internalDefault>
+      </parameter>
+      <parameter name="CROP">
+        <type>boolean</type>     
+        <default><item>false</item></default>
+        <brief>
+          Crop the top and bottom extending portion of the image
+        </brief>      
+        <description>
+          Crop the top and bottom extending portion of CCDs in the image using 
+          the jitter file's first and last non zero corrections. This option 
+          when enabled removes the lines at the beginning and end of the image 
+          as determined by the jitter file
+        </description>  
+      </parameter>     
+    </group>
+  </groups>
+</application>

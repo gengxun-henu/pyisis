@@ -1,0 +1,16 @@
+APPNAME = thmproc
+
+I02343002RDR.lev2.cub.TOLERANCE = 0.00000000001
+
+include $(ISISROOT)/make/isismake.tsts
+
+commands:
+	$(CP) $(INPUT)/I02343002RDR.QUB $(OUTPUT)/input_I02343002RDR.QUB; \
+	$(APPNAME) FROM=$(OUTPUT)/input_I02343002RDR.QUB \
+	TO=$(OUTPUT)/I02343002RDR.lev1.cub \
+	MAPPING=no BANDS=2 > /dev/null; \
+	$(CP) $(INPUT)/I02343002RDR.cub $(OUTPUT)/input_I02343002RDR.cub; \
+	$(APPNAME) FROM=$(OUTPUT)/input_I02343002RDR.cub \
+	TO=$(OUTPUT)/I02343002RDR.lev2.cub \
+	BANDS=1 PIXRES=951.5269 INGEST=NO > /dev/null; \
+	$(RM) $(OUTPUT)/input_*

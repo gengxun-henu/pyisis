@@ -1,0 +1,298 @@
+#
+# The group names listed here are the native names used by
+# applications to get the foreign names and values
+#
+# There is only one level of groups the groups are not
+# allowed to be nested
+#
+# The Group names can NOT be repeated.
+#
+# InputGroup is a comma delimited list of objects and/or
+# groups in the foreign label. Traversing this list will
+# lead to the correct level to find the foreign keyword.
+#
+# InputKey is the keyword within the group which holds
+# the information.
+#
+# InputDefault is the value used if there is no value for
+# the keyword
+#
+# Translation is the native and corresponding foreign values.
+# Translation may be repeated as needed.
+#
+
+Group = PhaseAngle
+  Auto           = 1
+  Optional       = 1
+  InputKey       = PHASE_ANGLE
+  InputGroup     = FitsLabel
+  InputPosition  = ROOT
+  OutputName     = PhaseAngle
+  OutputPosition = (Group, MissionData)
+  Translation    = (*, *)
+End_Group
+
+Group = IncidenceAngle
+  Auto           = 1
+  Optional       = 1
+  InputKey       = INCIDENCE_ANGLE
+  InputGroup     = FitsLabel
+  InputPosition  = ROOT
+  OutputName     = IncidenceAngle
+  OutputPosition = (Group, MissionData)
+  Translation    = (*, *)
+End_Group
+
+Group = EmissionAngle
+  Auto           = 1
+  Optional       = 1
+  InputKey       = EMISSION_ANGLE
+  InputGroup     = FitsLabel
+  InputPosition  = ROOT
+  OutputName     = EmissionAngle
+  OutputPosition = (Group, MissionData)
+  Translation    = (*, *)
+End_Group
+
+Group = CenterLatitude
+  Auto           = 1
+  Optional       = 1
+  InputKey       = HAY:FOOTPRINT_CENTER_LATITUDE
+  InputGroup     = ROOT
+  InputPosition  = ROOT
+  OutputName     = CenterLatitude
+  OutputPosition = (Group, MissionData)
+  Translation    = (*, *)
+End_Group
+
+Group = CenterLongitude
+  Auto           = 1
+  Optional       = 1
+  InputKey       = HAY:FOOTPRINT_CENTER_LONGITUDE
+  InputGroup     = ROOT
+  InputPosition  = ROOT
+  OutputName     = CenterLongitude
+  OutputPosition = (Group, MissionData)
+  Translation    = (*, *)
+End_Group
+
+Group = CornersLatitude
+  Auto           = 1
+  Optional       = 1
+  InputKey       = HAY:FOOTPRINT_CORNER_LATITUDE
+  InputGroup     = ROOT
+  InputPosition  = ROOT
+  OutputName     = CornersLatitude
+  OutputPosition = (Group, MissionData)
+  Translation    = (*, *)
+End_Group
+
+Group = CornersLongitude
+  Auto           = 1
+  Optional       = 1
+  InputKey       = HAY:FOOTPRINT_CORNER_LONGITUDE
+  InputGroup     = ROOT
+  InputPosition  = ROOT
+  OutputName     = CornersLongitude
+  OutputPosition = (Group, MissionData)
+  Translation    = (*, *)
+End_Group
+
+Group = Pixel0Wavelength
+  Auto           = 1
+  Optional       = 1
+  InputKey       = PIXEL0
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = Pixel0Wavelength
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = WavelengthInterval
+  Auto           = 1
+  Optional       = 1
+  InputKey       = WLENINT
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = WavelengthInterval
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = StackingEndTime
+  Auto           = 1
+  Optional       = 1
+  InputKey       = TIME
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = StackingEndTime
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = SWHistMode
+  Auto           = 1
+  Optional       = 1
+  InputKey       = HIST
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = SWHistMode
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = SWLIDARMode
+  Auto           = 1
+  Optional       = 1
+  InputKey       = LIDAR
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = SWLIDARMode
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = SWFLashMode
+  Auto           = 1
+  Optional       = 1
+  InputKey       = FLASH
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = SWFLashMode
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = SWRawMode
+  Auto           = 1
+  Optional       = 1
+  InputKey       = RAW
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = SWRawMode
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = SWDeviationOutput
+  Auto           = 1
+  Optional       = 1
+  InputKey       = DEV
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = SWDeviationOutput
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = SWMaxMinOutput
+  Auto           = 1
+  Optional       = 1
+  InputKey       = MAXMIN
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = SWMinMaxOutput
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = HWPower
+  Auto           = 1
+  Optional       = 1
+  InputKey       = POWER
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = HWPower
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = HWChopper
+  Auto           = 1
+  Optional       = 1
+  InputKey       = CHOPPER
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = HWChopper
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = HWChopperMode
+  Auto           = 1
+  Optional       = 1
+  InputKey       = CHOPMODE
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = HWChopperMode
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = HWTEC
+  Auto           = 1
+  Optional       = 1
+  InputKey       = TEC
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = HWTEC
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = HWTECModeV
+  Auto           = 1
+  Optional       = 1
+  InputKey       = TECTEMPV
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = HWTECModeV
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = HWTECModeC
+  Auto           = 1
+  Optional       = 1
+  InputKey       = TECTEMPC
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = HWTECModeC
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = HWLamp
+  Auto           = 1
+  Optional       = 1
+  InputKey       = LAMP
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = HWLamp
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = HWLED
+  Auto           = 1
+  Optional       = 1
+  InputKey       = LED
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = HWLED
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = DarkCurrentSubtraction
+  Auto           = 1
+  Optional       = 1
+  InputKey       = SUBTDARK
+  InputGroup     = FitsLabel
+  InputPosition  = FitsLabel
+  OutputName     = DarkCurrentSubtraction
+  OutputPosition = (Group, Archive)
+  Translation    = (*, *)
+End_Group
+End

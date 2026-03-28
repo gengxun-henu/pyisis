@@ -1,0 +1,835 @@
+
+Testing Camera's spacecraft and instrument name methods...
+InstrumentNameLong: Unknown
+InstrumentNameShort: Unknown
+SpacecraftNameLong: Unknown
+SpacecraftNameShort: Unknown
+
+Camera* from: $ISISTESTDATA/isis/src/mgs/unitTestData/ab102401.lev2.cub
+Pixel Ifov: 
+-0.014 , -0.014
+0.014 , -0.014
+0.014 , 0.014
+-0.014 , 0.014
+Line: 453, Sample: 534
+Lat: 18.221, Lon: 226.671
+RightAscension: 347.016, Declination: -51.2677
+
+SetImage (sample, line): Yes
+
+NorthAzimuth: 269.544
+SunAzimuth: 168.17
+SpacecraftAzimuth: 184.591
+OffNadirAngle: 44.4012
+CelestialNorthClockAngle: 186.19
+RaDecResolution: 0.0216226
+
+GroundAzimuth in North: 59.9718
+GroundAzimuth in North: 89.4306
+GroundAzimuth in North: 78.9509
+GroundAzimuth in North: 281.049
+GroundAzimuth in North: 1.11971e-05
+GroundAzimuth in South: 120.028
+GroundAzimuth in South: 90.5694
+GroundAzimuth in South: 101.049
+GroundAzimuth in South: 258.951
+GroundAzimuth in South: 180
+
+PlanetocentricLatitude: 26.8158
+PositiveEast360Longitude: 228.968
+
+SetUniversalGround(lat, lon): 1
+SetRightAscensionDeclination(ra, dec): 1
+HasProjection: 1
+IsBandIndependent called...
+ReferenceBand: 0
+HasReferenceBand: 0
+SetBand called, band: 7
+Sample: 408
+Line: 962
+
+Testing SetImage with positive time offset...
+Line: 453, Sample: 534
+Lat: 18.2, Lon: 227
+RightAscension: 347, Declination: -51.3
+
+SetImage (sample, line, deltaT): Yes
+
+NorthAzimuth: 270
+SunAzimuth: 168
+SpacecraftAzimuth: 185
+OffNadirAngle: 44.4
+CelestialNorthClockAngle: 186
+RaDecResolution: 0.0216
+PlanetocentricLatitude: 26.8
+PositiveEast360Longitude: 229
+
+Testing SetImage with negative time offset...
+Line: 453, Sample: 534
+Lat: 18.2, Lon: 227
+RightAscension: 347, Declination: -51.3
+
+SetImage (sample, line, deltaT): Yes
+
+NorthAzimuth: 270
+SunAzimuth: 168
+SpacecraftAzimuth: 185
+OffNadirAngle: 44.4
+CelestialNorthClockAngle: 186
+RaDecResolution: 0.0216
+PlanetocentricLatitude: 26.8
+PositiveEast360Longitude: 229
+
+GroundRange: 0
+IntersectsLongitudeDomain: 0
+PixelResolution: 628
+ExposureDuration: 0.4
+ObliquePixelResolution: 746
+LineResolution: 628
+ObliqueLineResolution: 746
+SampleResolution: 628
+ObliqueSampleResolution: 746
+DetectorResolution: 157
+ObliqueDetectorResolution: 187
+LowestImageResolution: 2047
+HighestImageResolution: 430
+Calling BasicMapping (pvl)...
+BasicMapping PVL: 
+Object = IsisCube
+  Object = Core
+    StartByte   = 65537
+    Format      = Tile
+    TileSamples = 128
+    TileLines   = 128
+
+    Group = Dimensions
+      Samples = 959
+      Lines   = 1404
+      Bands   = 1
+    End_Group
+
+    Group = Pixels
+      Type       = Real
+      ByteOrder  = Lsb
+      Base       = 0.0
+      Multiplier = 1.0
+    End_Group
+  End_Object
+
+  Group = Instrument
+    SpacecraftName        = "MARS GLOBAL SURVEYOR"
+    InstrumentId          = MOC-WA
+    TargetName            = Mars
+    StartTime             = 1997-10-20T10:58:37.46
+    StopTime              = 1997-10-20T11:03:44.66
+    CrosstrackSumming     = 4
+    DowntrackSumming      = 4
+    FocalPlaneTemperature = 213.1
+    GainModeId            = 1A
+    LineExposureDuration  = 100.000000 <milliseconds>
+    MissionPhaseName      = AB-1
+    OffsetModeId          = 5
+    SpacecraftClockCount  = 561812335:32
+    RationaleDesc         = "OLYMPUS MONS SPECIAL RED WIDE ANGLE"
+    FirstLineSample       = 673
+  End_Group
+
+  Group = Archive
+    DataSetId           = MGS-M-MOC-NA/WA-2-DSDP-L0-V1.0
+    ProductId           = AB-1-024/01
+    ProducerId          = MGS_MOC_TEAM
+    ProductCreationTime = 1999-01-15T20:40:59
+    SoftwareName        = "makepds 1.3"
+    UploadId            = moc_p024_v1.sasf
+    ImageNumber         = 7293-024/01
+    ImageKeyId          = 56181-024/01
+  End_Group
+
+  Group = BandBin
+    FilterName   = RED
+    OriginalBand = 1
+    Center       = 0.6134 <micrometers>
+    Width        = 5.0e-02 <micrometers>
+  End_Group
+
+  Group = Kernels
+    NaifFrameCode             = -94032
+    LeapSecond                = $base/kernels/lsk/naif0008.tls
+    TargetAttitudeShape       = $base/kernels/pck/pck00008.tpc
+    TargetPosition            = $base/kernels/spk/de405.bsp
+    Instrument                = $mgs/kernels/ik/moc20.ti
+    SpacecraftClock           = $mgs/kernels/sclk/MGS_SCLKSCET.00061.tsc
+    InstrumentAddendum        = $mgs/kernels/iak/mocAddendum004.ti
+    InstrumentPointing        = $mgs/kernels/ck/mgs_sc_ab1.bc
+    InstrumentPosition        = $mgs/kernels/spk/mgs_ab1.bsp
+    ShapeModel                = $base/dems/molaMarsPlanetaryRadius0004.cub
+    InstrumentPositionQuality = Reconstructed
+    InstrumentPointingQuality = Reconstructed
+    CameraVersion             = 1
+  End_Group
+
+  Group = Radiometry
+    CalibrationKernel = /usgs/cpkgs/isis3/data/mgs/calibration/moccal.ker.001
+    CoefficientFile   = $MGS/calibration/mocRedWA.coef
+
+    #  Radiometric equation in moccal
+    #  r = (pixel - z + off) / a - g / ex - dc
+    a                 = 16.03
+    off               = 25.0
+    ex                = 100.0
+    z                 = 27.67658
+    dc                = 1.33691e-03
+    g                 = 0.123262
+
+    #  Reflectance = r * iof, where iof = (s * s) / w0
+    w0                = 3.991
+    s                 = 1.4234269469347
+    iof               = 0.50767834459028
+  End_Group
+
+  Group = Mapping
+    ProjectionName         = Sinusoidal
+    CenterLongitude        = 227.95679808356
+    TargetName             = Mars
+    EquatorialRadius       = 3396190.0 <meters>
+    PolarRadius            = 3376200.0 <meters>
+    LatitudeType           = Planetocentric
+    LongitudeDirection     = PositiveEast
+    LongitudeDomain        = 360
+    MinimumLatitude        = 10.766902750622
+    MaximumLatitude        = 34.44419678224
+    MinimumLongitude       = 219.7240455337
+    MaximumLongitude       = 236.18955063342
+    UpperLeftCornerX       = -480000.0 <meters>
+    UpperLeftCornerY       = 2042000.0 <meters>
+    PixelResolution        = 1000.0 <meters/pixel>
+    Scale                  = 59.274697523306 <pixels/degree>
+    TrueScaleLatitude      = 0.0
+    LineProjectionOffset   = -2041.5
+    SampleProjectionOffset = -479.5
+  End_Group
+
+  Group = AlphaCube
+    AlphaSamples        = 640
+    AlphaLines          = 768
+    AlphaStartingSample = 0.5
+    AlphaStartingLine   = 0.5
+    AlphaEndingSample   = 640.5
+    AlphaEndingLine     = 768.5
+    BetaSamples         = 640
+    BetaLines           = 768
+  End_Group
+End_Object
+
+Object = Label
+  Bytes = 65536
+End_Object
+
+Object = History
+  Name      = IsisCube
+  StartByte = 5832705
+  Bytes     = 4341
+End_Object
+
+Group = Mapping
+  TargetName         = Mars
+  EquatorialRadius   = 3396190.0 <meters>
+  PolarRadius        = 3376200.0 <meters>
+  LatitudeType       = Planetocentric
+  LongitudeDirection = PositiveEast
+  LongitudeDomain    = 360
+  MinimumLatitude    = 10.763445899478
+  MaximumLatitude    = 34.449775120271
+  MinimumLongitude   = 218.13667853438
+  MaximumLongitude   = 237.62560286587
+  PixelResolution    = 429.5263218
+  ProjectionName     = Sinusoidal
+End_Group
+End
+
+FocalLength: 11.2
+PixelPitch: 0.007
+Samples: 959
+Lines: 1404
+Bands: 1
+ParentLines: 768
+ParentSamples: 640
+1
+0.0216
+Calling Distortion, FocalPlane, Detector, Ground, and Sky Map functions... Done.
+Calling IgnoreProjection (false)...
+
+Testing SetUniversalGround(lat,lon,radius)...
+Has intersection 1
+Latitude = 18.2
+Longitude = 227
+Radius = 3.41e+06
+Point = -2225 -2359 1068
+
+Test Forward/Reverse Camera Calculations At Center Of Image...
+Sample = 480
+Line = 702
+SetImage (sample, line): Yes
+Latitude = 22.6
+Longitude = 228
+Radius = 3.4e+06
+Point = -2102 -2329 1307
+SetUniversalGround (lat, lon, radius): 1
+Sample = 479.5
+Line = 702
+
+
+/---------- Test Polar Boundary Conditions
+
+Camera* from: $ISISTESTDATA/isis/src/clementine/unitTestData/lub5992r.292.lev1.phot.cub
+Pixel Ifov: 
+-0.0115 , -0.0115
+0.0115 , -0.0115
+0.0115 , 0.0115
+-0.0115 , 0.0115
+Basic Mapping: 
+Group = Mapping
+  TargetName         = MOON
+  EquatorialRadius   = 1737400.0 <meters>
+  PolarRadius        = 1737400.0 <meters>
+  LatitudeType       = Planetocentric
+  LongitudeDirection = PositiveEast
+  LongitudeDomain    = 360
+  MinimumLatitude    = 87.83
+  MaximumLatitude    = 90.0
+  MinimumLongitude   = 0.0
+  MaximumLongitude   = 360.0
+  PixelResolution    = 194.06
+  ProjectionName     = Sinusoidal
+End_Group
+End
+
+180 Domain Range: 
+Latitude Range: 87.83 to 90
+Longitude Range: -180 to 180
+
+Test Forward/Reverse Camera Calculations At Center Of Image...
+Sample = 192
+Line = 144
+SetImage (sample, line): Yes
+Latitude = 89.23
+Longitude = 12.57
+Radius = 1.736e+06
+Point = 22.82 5.089 1736
+SetUniversalGround (cam2->UniversalLatitude(), cam2->UniversalLongitude()): 1
+Sample = 192
+Line = 144
+
+
+/---------- Test Local Photometric Angles...
+
+Flat DEM Surface...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/f319b18_ideal_flat.cub
+Sample = 625
+Line = 575
+SetImage (sample, line): Yes
+Normal = 0.03228, 0.1276, -0.9913
+Phase = 57.32
+Emission = 59.59
+Incidence = 2.835
+
+45 Degree DEM Surface Facing Left...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/f319b18_ideal_45left.cub
+Sample = 625
+Line = 575
+SetImage (sample, line): Yes
+Normal = 0.7105, -0.08428, -0.6986
+Phase = 57.32
+Emission = 60.94
+Incidence = 46.41
+
+45 Degree DEM Surface Facing Top...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/f319b18_ideal_45top.cub
+Sample = 625
+Line = 575
+SetImage (sample, line): Yes
+Normal = 0.1945, 0.7705, -0.607
+Phase = 57.32
+Emission = 17.41
+Incidence = 42.49
+
+45 Degree DEM Surface Facing Right...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/f319b18_ideal_45right.cub
+Sample = 625
+Line = 575
+SetImage (sample, line): Yes
+Normal = -0.6648, 0.264, -0.6988
+Phase = 57.32
+Emission = 76.84
+Incidence = 44.07
+
+45 Degree DEM Surface Facing Bottom...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/f319b18_ideal_45bottom.cub
+Sample = 625
+Line = 575
+SetImage (sample, line): Yes
+Normal = -0.1491, -0.5904, -0.7932
+Phase = 57.32
+Emission = 103.8
+Incidence = 47.67
+
+80 Degree DEM Surface Facing Left...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/f319b18_ideal_80left.cub
+Sample = 625
+Line = 575
+SetImage (sample, line): Yes
+Normal = 0.9617, -0.2209, -0.1622
+Phase = 57.32
+Emission = 74.77
+Incidence = 81.75
+
+80 Degree DEM Surface Facing Top...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/f319b18_ideal_80top.cub
+Sample = 625
+Line = 575
+SetImage (sample, line): Yes
+Normal = 0.2423, 0.9696, -0.03452
+Phase = 57.32
+Emission = 23.84
+Incidence = 77.87
+
+80 Degree DEM Surface Facing Right...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/f319b18_ideal_80right.cub
+Sample = 625
+Line = 575
+SetImage (sample, line): Yes
+Normal = -0.9512, 0.2624, -0.1626
+Phase = 57.32
+Emission = 95.57
+Incidence = 79.42
+
+80 Degree DEM Surface Facing Bottom...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/f319b18_ideal_80bottom.cub
+Sample = 625
+Line = 575
+SetImage (sample, line): Yes
+Normal = -0.231, -0.9267, -0.2965
+Phase = 57.32
+Emission = 138.2
+Incidence = 82.91
+
+Point Does Not Intersect DEM...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/f319b18_ideal_flat.cub
+Sample = 1
+Line = 1
+SetImage (sample, line): No
+Normal = 0, 0, 0
+Angles could not be calculated.
+
+Cube with Ellipsoidal Shape Model...
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/CM_1515945709_1.ir.cub
+Sample = 20
+Line = 20
+SetImage (sample, line): Yes
+Normal = -0.4343, -0.2875, -0.8536
+Phase = 35.54
+Emission = 48.1
+Incidence = 59.11
+
+
+Testing non-square pixel Ifov using Hires vims cube
+Camera* from: $ISISTESTDATA/isis/src/base/unitTestData/CM_1515945709_1.ir.cub
+Pixel Ifov: 
+-0.0515 , -0.1
+-0.05046 , -0.1
+-0.04942 , -0.1
+-0.04838 , -0.1
+-0.04734 , -0.1
+-0.0463 , -0.1
+-0.04526 , -0.1
+-0.04422 , -0.1
+-0.04318 , -0.1
+-0.04214 , -0.1
+-0.0411 , -0.1
+-0.04006 , -0.1
+-0.03902 , -0.1
+-0.03797 , -0.1
+-0.03693 , -0.1
+-0.03589 , -0.1
+-0.03485 , -0.1
+-0.03381 , -0.1
+-0.03277 , -0.1
+-0.03173 , -0.1
+-0.03069 , -0.1
+-0.02965 , -0.1
+-0.02861 , -0.1
+-0.02757 , -0.1
+-0.02653 , -0.1
+-0.02549 , -0.1
+-0.02445 , -0.1
+-0.02341 , -0.1
+-0.02237 , -0.1
+-0.02133 , -0.1
+-0.02029 , -0.1
+-0.01925 , -0.1
+-0.01821 , -0.1
+-0.01717 , -0.1
+-0.01613 , -0.1
+-0.01509 , -0.1
+-0.01405 , -0.1
+-0.01301 , -0.1
+-0.01196 , -0.1
+-0.01092 , -0.1
+-0.009884 , -0.1
+-0.008843 , -0.1
+-0.007803 , -0.1
+-0.006763 , -0.1
+-0.005722 , -0.1
+-0.004682 , -0.1
+-0.003641 , -0.1
+-0.002601 , -0.1
+-0.001561 , -0.1
+-0.0005202 , -0.1
+0.0005202 , -0.1
+0.001561 , -0.1
+0.002601 , -0.1
+0.003641 , -0.1
+0.004682 , -0.1
+0.005722 , -0.1
+0.006763 , -0.1
+0.007803 , -0.1
+0.008843 , -0.1
+0.009884 , -0.1
+0.01092 , -0.1
+0.01196 , -0.1
+0.01301 , -0.1
+0.01405 , -0.1
+0.01509 , -0.1
+0.01613 , -0.1
+0.01717 , -0.1
+0.01821 , -0.1
+0.01925 , -0.1
+0.02029 , -0.1
+0.02133 , -0.1
+0.02237 , -0.1
+0.02341 , -0.1
+0.02445 , -0.1
+0.02549 , -0.1
+0.02653 , -0.1
+0.02757 , -0.1
+0.02861 , -0.1
+0.02965 , -0.1
+0.03069 , -0.1
+0.03173 , -0.1
+0.03277 , -0.1
+0.03381 , -0.1
+0.03485 , -0.1
+0.03589 , -0.1
+0.03693 , -0.1
+0.03797 , -0.1
+0.03902 , -0.1
+0.04006 , -0.1
+0.0411 , -0.1
+0.04214 , -0.1
+0.04318 , -0.1
+0.04422 , -0.1
+0.04526 , -0.1
+0.0463 , -0.1
+0.04734 , -0.1
+0.04838 , -0.1
+0.04942 , -0.1
+0.05046 , -0.1
+0.0515 , -0.1
+0.0515 , -0.09798
+0.0515 , -0.09596
+0.0515 , -0.09394
+0.0515 , -0.09192
+0.0515 , -0.0899
+0.0515 , -0.08788
+0.0515 , -0.08586
+0.0515 , -0.08384
+0.0515 , -0.08182
+0.0515 , -0.0798
+0.0515 , -0.07778
+0.0515 , -0.07576
+0.0515 , -0.07374
+0.0515 , -0.07172
+0.0515 , -0.0697
+0.0515 , -0.06768
+0.0515 , -0.06566
+0.0515 , -0.06364
+0.0515 , -0.06162
+0.0515 , -0.0596
+0.0515 , -0.05758
+0.0515 , -0.05556
+0.0515 , -0.05354
+0.0515 , -0.05152
+0.0515 , -0.04949
+0.0515 , -0.04747
+0.0515 , -0.04545
+0.0515 , -0.04343
+0.0515 , -0.04141
+0.0515 , -0.03939
+0.0515 , -0.03737
+0.0515 , -0.03535
+0.0515 , -0.03333
+0.0515 , -0.03131
+0.0515 , -0.02929
+0.0515 , -0.02727
+0.0515 , -0.02525
+0.0515 , -0.02323
+0.0515 , -0.02121
+0.0515 , -0.01919
+0.0515 , -0.01717
+0.0515 , -0.01515
+0.0515 , -0.01313
+0.0515 , -0.01111
+0.0515 , -0.009091
+0.0515 , -0.007071
+0.0515 , -0.005051
+0.0515 , -0.00303
+0.0515 , -0.00101
+0.0515 , 0.00101
+0.0515 , 0.00303
+0.0515 , 0.005051
+0.0515 , 0.007071
+0.0515 , 0.009091
+0.0515 , 0.01111
+0.0515 , 0.01313
+0.0515 , 0.01515
+0.0515 , 0.01717
+0.0515 , 0.01919
+0.0515 , 0.02121
+0.0515 , 0.02323
+0.0515 , 0.02525
+0.0515 , 0.02727
+0.0515 , 0.02929
+0.0515 , 0.03131
+0.0515 , 0.03333
+0.0515 , 0.03535
+0.0515 , 0.03737
+0.0515 , 0.03939
+0.0515 , 0.04141
+0.0515 , 0.04343
+0.0515 , 0.04545
+0.0515 , 0.04747
+0.0515 , 0.04949
+0.0515 , 0.05152
+0.0515 , 0.05354
+0.0515 , 0.05556
+0.0515 , 0.05758
+0.0515 , 0.0596
+0.0515 , 0.06162
+0.0515 , 0.06364
+0.0515 , 0.06566
+0.0515 , 0.06768
+0.0515 , 0.0697
+0.0515 , 0.07172
+0.0515 , 0.07374
+0.0515 , 0.07576
+0.0515 , 0.07778
+0.0515 , 0.0798
+0.0515 , 0.08182
+0.0515 , 0.08384
+0.0515 , 0.08586
+0.0515 , 0.08788
+0.0515 , 0.0899
+0.0515 , 0.09192
+0.0515 , 0.09394
+0.0515 , 0.09596
+0.0515 , 0.09798
+0.0515 , 0.1
+0.0515 , 0.1
+0.05046 , 0.1
+0.04942 , 0.1
+0.04838 , 0.1
+0.04734 , 0.1
+0.0463 , 0.1
+0.04526 , 0.1
+0.04422 , 0.1
+0.04318 , 0.1
+0.04214 , 0.1
+0.0411 , 0.1
+0.04006 , 0.1
+0.03902 , 0.1
+0.03797 , 0.1
+0.03693 , 0.1
+0.03589 , 0.1
+0.03485 , 0.1
+0.03381 , 0.1
+0.03277 , 0.1
+0.03173 , 0.1
+0.03069 , 0.1
+0.02965 , 0.1
+0.02861 , 0.1
+0.02757 , 0.1
+0.02653 , 0.1
+0.02549 , 0.1
+0.02445 , 0.1
+0.02341 , 0.1
+0.02237 , 0.1
+0.02133 , 0.1
+0.02029 , 0.1
+0.01925 , 0.1
+0.01821 , 0.1
+0.01717 , 0.1
+0.01613 , 0.1
+0.01509 , 0.1
+0.01405 , 0.1
+0.01301 , 0.1
+0.01196 , 0.1
+0.01092 , 0.1
+0.009884 , 0.1
+0.008843 , 0.1
+0.007803 , 0.1
+0.006763 , 0.1
+0.005722 , 0.1
+0.004682 , 0.1
+0.003641 , 0.1
+0.002601 , 0.1
+0.001561 , 0.1
+0.0005202 , 0.1
+-0.0005202 , 0.1
+-0.001561 , 0.1
+-0.002601 , 0.1
+-0.003641 , 0.1
+-0.004682 , 0.1
+-0.005722 , 0.1
+-0.006763 , 0.1
+-0.007803 , 0.1
+-0.008843 , 0.1
+-0.009884 , 0.1
+-0.01092 , 0.1
+-0.01196 , 0.1
+-0.01301 , 0.1
+-0.01405 , 0.1
+-0.01509 , 0.1
+-0.01613 , 0.1
+-0.01717 , 0.1
+-0.01821 , 0.1
+-0.01925 , 0.1
+-0.02029 , 0.1
+-0.02133 , 0.1
+-0.02237 , 0.1
+-0.02341 , 0.1
+-0.02445 , 0.1
+-0.02549 , 0.1
+-0.02653 , 0.1
+-0.02757 , 0.1
+-0.02861 , 0.1
+-0.02965 , 0.1
+-0.03069 , 0.1
+-0.03173 , 0.1
+-0.03277 , 0.1
+-0.03381 , 0.1
+-0.03485 , 0.1
+-0.03589 , 0.1
+-0.03693 , 0.1
+-0.03797 , 0.1
+-0.03902 , 0.1
+-0.04006 , 0.1
+-0.0411 , 0.1
+-0.04214 , 0.1
+-0.04318 , 0.1
+-0.04422 , 0.1
+-0.04526 , 0.1
+-0.0463 , 0.1
+-0.04734 , 0.1
+-0.04838 , 0.1
+-0.04942 , 0.1
+-0.05046 , 0.1
+-0.0515 , 0.1
+-0.0515 , 0.09798
+-0.0515 , 0.09596
+-0.0515 , 0.09394
+-0.0515 , 0.09192
+-0.0515 , 0.0899
+-0.0515 , 0.08788
+-0.0515 , 0.08586
+-0.0515 , 0.08384
+-0.0515 , 0.08182
+-0.0515 , 0.0798
+-0.0515 , 0.07778
+-0.0515 , 0.07576
+-0.0515 , 0.07374
+-0.0515 , 0.07172
+-0.0515 , 0.0697
+-0.0515 , 0.06768
+-0.0515 , 0.06566
+-0.0515 , 0.06364
+-0.0515 , 0.06162
+-0.0515 , 0.0596
+-0.0515 , 0.05758
+-0.0515 , 0.05556
+-0.0515 , 0.05354
+-0.0515 , 0.05152
+-0.0515 , 0.04949
+-0.0515 , 0.04747
+-0.0515 , 0.04545
+-0.0515 , 0.04343
+-0.0515 , 0.04141
+-0.0515 , 0.03939
+-0.0515 , 0.03737
+-0.0515 , 0.03535
+-0.0515 , 0.03333
+-0.0515 , 0.03131
+-0.0515 , 0.02929
+-0.0515 , 0.02727
+-0.0515 , 0.02525
+-0.0515 , 0.02323
+-0.0515 , 0.02121
+-0.0515 , 0.01919
+-0.0515 , 0.01717
+-0.0515 , 0.01515
+-0.0515 , 0.01313
+-0.0515 , 0.01111
+-0.0515 , 0.009091
+-0.0515 , 0.007071
+-0.0515 , 0.005051
+-0.0515 , 0.00303
+-0.0515 , 0.00101
+-0.0515 , -0.00101
+-0.0515 , -0.00303
+-0.0515 , -0.005051
+-0.0515 , -0.007071
+-0.0515 , -0.009091
+-0.0515 , -0.01111
+-0.0515 , -0.01313
+-0.0515 , -0.01515
+-0.0515 , -0.01717
+-0.0515 , -0.01919
+-0.0515 , -0.02121
+-0.0515 , -0.02323
+-0.0515 , -0.02525
+-0.0515 , -0.02727
+-0.0515 , -0.02929
+-0.0515 , -0.03131
+-0.0515 , -0.03333
+-0.0515 , -0.03535
+-0.0515 , -0.03737
+-0.0515 , -0.03939
+-0.0515 , -0.04141
+-0.0515 , -0.04343
+-0.0515 , -0.04545
+-0.0515 , -0.04747
+-0.0515 , -0.04949
+-0.0515 , -0.05152
+-0.0515 , -0.05354
+-0.0515 , -0.05556
+-0.0515 , -0.05758
+-0.0515 , -0.0596
+-0.0515 , -0.06162
+-0.0515 , -0.06364
+-0.0515 , -0.06566
+-0.0515 , -0.06768
+-0.0515 , -0.0697
+-0.0515 , -0.07172
+-0.0515 , -0.07374
+-0.0515 , -0.07576
+-0.0515 , -0.07778
+-0.0515 , -0.0798
+-0.0515 , -0.08182
+-0.0515 , -0.08384
+-0.0515 , -0.08586
+-0.0515 , -0.08788
+-0.0515 , -0.0899
+-0.0515 , -0.09192
+-0.0515 , -0.09394
+-0.0515 , -0.09596
+-0.0515 , -0.09798
+-0.0515 , -0.1

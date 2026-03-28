@@ -1,5 +1,19 @@
 cmake_minimum_required(VERSION 3.18)
 
+if(NOT DEFINED CMAKE_CXX_COMPILER AND DEFINED ENV{CONDA_PREFIX})
+  find_program(CONDA_CXX_COMPILER
+    NAMES x86_64-conda-linux-gnu-c++
+    HINTS
+      "$ENV{CONDA_PREFIX}/bin"
+      "$ENV{CONDA_PREFIX}/../bin"
+      "$ENV{CONDA_PREFIX}/../../bin")
+
+  if(CONDA_CXX_COMPILER)
+    set(CMAKE_CXX_COMPILER "${CONDA_CXX_COMPILER}" CACHE FILEPATH
+      "C++ compiler selected from the active conda toolchain" FORCE)
+  endif()
+endif()
+
 project(isis_pybind_standalone LANGUAGES CXX)
 
 enable_testing()
@@ -160,6 +174,10 @@ pybind11_add_module(_isis_core
   src/mission/bind_mission_cameras.cpp
   src/bind_camera_factory.cpp)
 
+target_compile_definitions(_isis_core
+  PRIVATE
+    _GNU_SOURCE)
+
 set_source_files_properties(
   src/base/bind_base_shape.cpp
   PROPERTIES COMPILE_OPTIONS "-fpermissive")
@@ -219,17 +237,19 @@ if(DEFINED ENV{LD_LIBRARY_PATH} AND NOT "$ENV{LD_LIBRARY_PATH}" STREQUAL "")
   set(_test_ld_library_path "${_test_ld_library_path}:$ENV{LD_LIBRARY_PATH}")
 endif()
 
-set_tests_properties(python-unit-tests PROPERTIES
-  ENVIRONMENT
-    "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python"
-    "LD_LIBRARY_PATH=${_test_ld_library_path}"
-    "ISISDATA=${CMAKE_CURRENT_SOURCE_DIR}/tests/data/isisdata/mockup")
 add_test(
   NAME python-unit-tests
   COMMAND "${Python3_EXECUTABLE}" -m unittest discover
     -s "${CMAKE_CURRENT_SOURCE_DIR}/tests/unitTest"
     -p "*_unit_test.py"
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
+
+set_tests_properties(python-unit-tests PROPERTIES
+  ENVIRONMENT
+    "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python"
+    "LD_LIBRARY_PATH=${_test_ld_library_path}"
+    "ISISDATA=${CMAKE_CURRENT_SOURCE_DIR}/tests/data/isisdata/mockup")
+
   
 message(STATUS "Using external ISIS prefix: ${ISIS_PREFIX}")
 message(STATUS "Using ISIS include dir: ${ISIS_INCLUDE_DIR}")

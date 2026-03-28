@@ -1,0 +1,639 @@
+# Translation for TGO CaSSIS export from mosaic to PDS4 product.
+#
+# Note these translations must be are ordered based on the required PDS4 order.
+#
+# history 2018-05-18 Kaitlyn Lee - Moved mosaic keywords from tgoCassisExport.trn.
+# history 2018-06-16 Kristin Berry - Added geometry keywords. 
+# history 2019-06-12 Kristin Berry - Updated east_azimuth default value to 0.0 from 0, fix swapped 
+#                                    Line/Sample values in geom:horizontal_display_axis and 
+#				     geom:vertical_display_axis, updated Mission_Area to use cas 
+#				     namespace instead of cassis, removed non-PDS4-compliant 
+#                                    CaSSIS_Header, removed data-type description and moved to code, 
+#                                    as it now depends on whether a 2D or 3D image is being exported. 
+# history 2020-09-22 Kristin Berry - Added stitched browse product LID and UID in Observation_Context
+#                                    and added information about SPICE kernels to labels
+# history 2021-06-07 Kristin Berry  - Added footprint information. 
+
+
+Group = LidVid
+  Auto            = 1
+  Debug           = 1
+  InputKey        = LID
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = lidvid_reference
+  OutputPosition  = (Product_Observational, Reference_List, Internal_Reference)
+  Translation     = (*, *)
+End_Group
+
+Group = LidVidReference
+  Auto            = 1
+  InputDefault    = data_to_calibrated_products
+  OutputName      = reference_type
+  OutputPosition  = (Product_Observational, Reference_List, Internal_Reference)
+  Translation     = (*, *)
+End_Group
+
+Group = StartTime
+  Auto            = 1
+  Optional        = 1
+  InputKey        = StartTime
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = start_date_time
+  OutputPosition  = (Product_Observational, Observation_Area, Time_Coordinates)
+  Translation     = (*, *)
+End_Group
+
+Group = StopTime
+  Auto            = 1
+  Optional        = 1
+  InputKey        = StopTime
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = stop_date_time
+  OutputPosition  = (Product_Observational, Observation_Area, Time_Coordinates)
+  Translation     = (*, *)
+End_Group
+
+Group = LocalTime
+  Auto            = 1
+  Optional        = 1
+  InputKey        = LocalTime
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = local_true_solar_time
+  OutputPosition  = (Product_Observational, Observation_Area, Time_Coordinates) 
+  Translation     = (*, *)
+End_Group
+
+Group = SolarLongitude
+  Auto            = 1
+  Optional        = 1
+  InputKey        = SolarLongitude
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = solar_longitude
+  OutputPosition  = (Product_Observational, Observation_Area, Time_Coordinates)
+  Translation     = (*, *)
+End_Group
+
+# Geometry area
+
+Group = HorizontalDisplayAxis
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = Sample
+  OutputName      = geom:horizontal_display_axis
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Image_Display_Geometry, geom:Display_Direction)
+  Translation     = (*, *)
+End_Group
+
+Group = HorizontalDisplayDirection
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = "Left to Right"
+  OutputName      = geom:horizontal_display_direction
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Image_Display_Geometry, geom:Display_Direction)
+  Translation     = (*, *)
+End_Group
+
+Group = VerticalDisplayAxis
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = Line
+  OutputName      = geom:vertical_display_axis
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Image_Display_Geometry, geom:Display_Direction)
+  Translation     = (*, *)
+End_Group
+
+Group = VerticalDisplayDirection
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = "Top to Bottom"
+  OutputName      = geom:vertical_display_direction
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Image_Display_Geometry, geom:Display_Direction)
+  Translation     = (*, *)
+End_Group
+
+Group = NorthAzimuth
+  Auto            = 1
+  Optional        = 1
+  InputKey        = NorthAzimuth
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = geom:north_azimuth
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Image_Display_Geometry, geom:Object_Orientation_North_East)
+  Translation     = (*, *)
+End_Group
+
+Group = EastAzimuth
+  Auto            = 1
+  InputKey        = EastAzimuth
+  InputDefault    = 0.0
+  OutputName      = geom:east_azimuth
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Image_Display_Geometry, geom:Object_Orientation_North_East)
+  Translation     = (*, *)
+End_Group
+
+Group = ReferenceFrame
+  Auto            = 1
+  Optional        = 1
+  InputKey        = ReferenceFrame
+  InputDefault    = "J2000"
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = geom:name
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Image_Display_Geometry, geom:Object_Orientation_North_East, geom:Reference_Frame_Identification)
+  Translation     = (*, *)
+End_Group
+
+Group = GeomRefTime
+  Auto            = 1
+  Optional        = 1
+  InputKey        = StartTime
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = geom:geometry_reference_time_utc
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter)
+  Translation     = (*, *)
+End_Group
+
+Group = SubsolarAzimuth
+  Auto            = 1
+  Optional        = 1
+  InputKey        = SubsolarAzimuth
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = geom:subsolar_azimuth
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Surface_Geometry, geom:Surface_Geometry_Specific)
+  Translation     = (*, *)
+End_Group
+
+Group = ReferencePixelLocation
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = Center
+  OutputName      = geom:reference_pixel_location
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Illumination_Geometry, geom:Illumination_Specific)
+  Translation     = (*, *)
+End_Group
+
+Group = IncidenceAngle
+  Auto            = 1
+  Optional        = 1
+  InputKey        = IncidenceAngle
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = geom:incidence_angle
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Illumination_Geometry, geom:Illumination_Specific)
+  Translation     = (*, *)
+End_Group
+
+Group = EmissionAngle
+  Auto            = 1
+  Optional        = 1
+  InputKey        = EmissionAngle
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = geom:emission_angle
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry,geom:Geometry_Orbiter, geom:Illumination_Geometry, geom:Illumination_Specific )
+  Translation     = (*, *)
+End_Group
+
+Group = PhaseAngle
+  Auto            = 1
+  Optional        = 1
+  InputKey        = PhaseAngle
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = geom:phase_angle
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry,geom:Geometry_Orbiter, geom:Illumination_Geometry, geom:Illumination_Specific )
+  Translation     = (*, *)
+End_Group
+
+# Export Footprint Coordinates 
+
+Group = Corner1Lattiude
+  Auto            = 1
+  Optional        = 1
+  InputKey        = Corner1Latitude
+  InputPosition   = (IsisCube, Archive)
+  OutputSiblings =  ("geom:reference_pixel_location|Lower Left Corner")
+  OutputName      = geom:pixel_latitude
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Surface_Geometry, geom:Surface_Geometry_Specific, geom:Footprint_Vertices, geom:Pixel_Intercept)
+  Translation     = (*, *)
+End_Group
+
+Group = Corner1Longitude
+  Auto            = 1
+  Optional        = 1
+  InputKey        = Corner1Longitude
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = geom:pixel_longitude
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Surface_Geometry, geom:Surface_Geometry_Specific, geom:Footprint_Vertices, geom:Pixel_Intercept)
+  Translation     = (*, *)
+End_Group
+
+Group = Corner2Lattiude
+  Auto            = 1
+  Optional        = 1
+  InputKey        = Corner2Latitude
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = geom:pixel_latitude
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Surface_Geometry, geom:Surface_Geometry_Specific, geom:Footprint_Vertices, new@geom:Pixel_Intercept2)
+  OutputSiblings = ("geom:reference_pixel_location|Lower Right Corner")
+  Translation     = (*, *)
+End_Group
+
+Group = Corner2Longitude
+  Auto            = 1
+  Optional        = 1
+  InputKey        = Corner2Longitude
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = geom:pixel_longitude
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Surface_Geometry, geom:Surface_Geometry_Specific, geom:Footprint_Vertices, geom:Pixel_Intercept2)
+  Translation     = (*, *)
+End_Group
+
+Group = Corner3Lattiude
+  Auto            = 1
+  Optional        = 1
+  InputKey        = Corner3Latitude
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = geom:pixel_latitude
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Surface_Geometry, geom:Surface_Geometry_Specific, geom:Footprint_Vertices, new@geom:Pixel_Intercept3)
+  OutputSiblings  = ("geom:reference_pixel_location|Upper Left Corner")
+  Translation     = (*, *)
+End_Group
+
+Group = Corner3Longitude
+  Auto            = 1
+  Optional        = 1
+  InputKey        = Corner3Longitude
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = geom:pixel_longitude
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Surface_Geometry, geom:Surface_Geometry_Specific, geom:Footprint_Vertices, geom:Pixel_Intercept3)
+  Translation     = (*, *)
+End_Group
+
+Group = Corner4Lattiude
+  Auto            = 1
+  Optional        = 1
+  InputKey        = Corner4Latitude
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = geom:pixel_latitude
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Surface_Geometry, geom:Surface_Geometry_Specific, geom:Footprint_Vertices, new@geom:Pixel_Intercept4)
+  OutputSiblings  = ("geom:reference_pixel_location|Upper Right Corner")
+  Translation     = (*, *)
+End_Group
+
+Group = Corner4Longitude
+  Auto            = 1
+  Optional        = 1
+  InputKey        = Corner4Longitude
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = geom:pixel_longitude
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:Geometry_Orbiter, geom:Surface_Geometry, geom:Surface_Geometry_Specific, geom:Footprint_Vertices, geom:Pixel_Intercept4)
+  Translation     = (*, *)
+End_Group
+
+Group = SmithedMetakernel
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = em16_cassis.tm
+  OutputName      = geom:spice_kernel_file_name
+  OutputPosition  = (Product_Observational, Observation_Area, Discipline_Area, geom:Geometry, geom:SPICE_Kernel_Files,
+                     geom:SPICE_Kernel_Identification)
+  Translation     = (*, *)
+End_Group
+
+# Investigation Area
+Group = MissionName
+  Auto            = 1
+  Optional        = 1
+  InputKey        = SpacecraftName
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = name
+  OutputSiblings  = (type|Mission)
+  OutputPosition  = (Observation_Area, Investigation_Area)
+  Translation     = (*, *)
+End_Group
+
+# Observing System
+Group = SpacecraftName
+  Auto            = 1
+  Optional        = 1
+  InputKey        = SpacecraftName
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = name
+  OutputSiblings  = (type|Spacecraft)
+  OutputPosition  = (Observation_Area, Observing_System, new@Observing_System_Component)
+  Translation     = (*, *)
+End_Group
+
+Group = InstrumentId
+  Auto            = 1
+  Optional        = 1
+  InputKey       = InstrumentId
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = name
+  OutputSiblings  = (type|Instrument)
+  OutputPosition  = (Observation_Area, Observing_System, new@Observing_System_Component)
+  Translation     = (*, *)
+End_Group
+
+# Internal Reference
+
+Group = InternalReference
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = "urn:esa:psa:context:investigation:mission.tgo"
+  OutputName      = lid_reference
+  OutputPosition  = (Observation_Area, Investigation_Area, Internal_Reference)
+  Translation     = (*, *)
+End_Group
+
+Group = InternalReferenceType
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = "data_to_investigation"
+  OutputName      = reference_type
+  OutputPosition  = (Observation_Area, Investigation_Area, Internal_Reference)
+  Translation     = (*, *)
+End_Group
+
+Group = InternalReferenceComment
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = "This is the PDS4 logical identifier for the ExoMars Trace Gas Orbiter mission."
+  OutputName      = comment
+  OutputPosition  = (Observation_Area, Investigation_Area, Internal_Reference)
+  Translation     = (*, *)
+End_Group
+
+# Added for Alias_List
+Group = AliasList
+  Auto            = 1
+  Optional        = 1
+  InputKey        = ObservationId
+  InputPosition   = (IsisCube, Mosaic)
+  OutputName      = alternate_id
+  OutputPosition  = (Product_Observational, Identification_Area, Alias_List, Alias)
+  Translation     = (*, *)
+End_Group
+
+Group = Comment
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = "CaSSIS Internal Identifier"
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = comment
+  OutputPosition  = (Product_Observational, Identification_Area, Alias_List, Alias)
+  Translation     = (*, *)
+End_Group
+
+# New Mission_Area exports
+Group = MissionPhase
+  Auto            = 1
+  Optional        = 1
+  InputKey        = MissionPhase
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = psa:mission_phase_name
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, psa:Mission_Information)
+  Translation     = (*, *)
+End_Group
+
+Group = SubInstrumentIdentifier
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = SCI
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = psa:identifier
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, psa:Sub-Instrument)
+  Translation     = (*, *)
+End_Group
+
+Group = SubInstrumentName
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = "CASSIS Science"
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = psa:name
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, psa:Sub-Instrument)
+  Translation     = (*, *)
+End_Group
+
+
+Group = SubInstrumentType
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = Imager
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = psa:type
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, psa:Sub-Instrument)
+  Translation     = (*, *)
+End_Group
+
+Group = ProcessingSoftwareTitle
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = Geometry_Pipeline 
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = psa:processing_software_title
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, psa:Processing_Context)
+  Translation     = (*, *)
+End_Group
+
+Group = ProcessingSoftwareVersion
+  Auto            = 1
+  Optional        = 1
+  InputDefault    = 1.0.1
+  InputKey        = GeometryPipelineVersion
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = psa:processing_software_version
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, psa:Processing_Context)
+  Translation     = (*, *)
+End_Group
+
+# Observation_Context
+Group = InstrumentPointingMode
+  Auto            = 1
+  Optional        = 1
+  InputDefault   = "No pointing" 
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = psa:instrument_pointing_mode
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, psa:Observation_Context)
+  Translation     = (*, *)
+End_Group
+
+Group = InstrumentPointingDescription
+  Auto            = 1
+  Optional        = 1
+  InputDefault   = "No pointing"
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = psa:instrument_pointing_description
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, psa:Observation_Context)
+  Translation     = (*, *)
+End_Group
+
+Group = ObservationContextIdentifier
+  Auto            = 1
+  InputKey        = UID
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = psa:observation_identifier
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, psa:Observation_Context)
+  Translation     = (*, *)
+End_Group
+
+Group = IFOV
+  Auto            = 1
+  Optional        = 1
+  InputKey        = IFOV
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:instrument_ifov
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:instrument_information)
+  Translation     = (*, *)
+End_Group
+
+
+Group = IFOVUnit
+  Auto            = 1
+  Optional        = 1
+  InputKey        = IFOVUnit
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:instrument_ifov_unit
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:instrument_information)
+  Translation     = (*, *)
+End_Group
+
+Group = FiltersAvailable
+  Auto            = 1
+  Optional        = 1
+  InputKey        = FiltersAvailable
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:filters_available
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:instrument_information)
+  Translation     = (*, *)
+End_Group
+
+Group = FocalLength
+  Auto            = 1
+  Optional        = 1
+  InputKey        = FocalLength
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:focal_length
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:telescope_information)
+  Translation     = (*, *)
+End_Group
+
+Group = FocalLengthUnit
+  Auto            = 1
+  Optional        = 1
+  InputKey        = FocalLengthUnit
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:focal_length_unit
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:telescope_information)
+  Translation     = (*, *)
+End_Group
+
+Group = TelescopeFNumber
+  Auto            = 1
+  Optional        = 1
+  InputKey        = FNumber
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:f_number
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:telescope_information)
+  Translation     = (*, *)
+End_Group
+
+Group = TelescopeType
+  Auto            = 1
+  Optional        = 1
+  InputKey        = TelescopeType
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:telescope_type
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:telescope_information)
+  Translation     = (*, *)
+End_Group
+
+Group = DetectorDescription
+  Auto            = 1
+  Optional        = 1
+  InputKey        = TelescopeType
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:description
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:detector_information)
+  Translation     = (*, *)
+End_Group
+
+Group = PixelHeight
+  Auto            = 1
+  Optional        = 1
+  InputKey        = PixelHeight
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:pixel_height
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:detector_information)
+  Translation     = (*, *)
+End_Group
+
+Group = PixelHeightUnit
+  Auto            = 1
+  Optional        = 1
+  InputKey        = PixelHeightUnit
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:pixel_height_unit
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:detector_information)
+  Translation     = (*, *)
+End_Group
+
+Group = PixelWidth
+  Auto            = 1
+  Optional        = 1
+  InputKey        = PixelWidth
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:pixel_width
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:detector_information)
+  Translation     = (*, *)
+End_Group
+
+Group = PixelWidthUnit
+  Auto            = 1
+  Optional        = 1
+  InputKey        = PixelWidthUnit
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:pixel_width_unit
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:detector_information)
+  Translation     = (*, *)
+End_Group
+
+Group = DetectorType
+  Auto            = 1
+  Optional        = 1
+  InputKey        = DetectorType
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:detector_type
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:detector_information)
+  Translation     = (*, *)
+End_Group
+
+Group = ReadNoise
+  Auto            = 1
+  Optional        = 1
+  InputKey        = ReadNoise
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:read_noise
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:detector_information)
+  Translation     = (*, *)
+End_Group
+
+Group = ReadNoiseUnit
+  Auto            = 1
+  Optional        = 1
+  InputKey        = ReadNoise
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:read_noise_unit
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:detector_information)
+  Translation     = (*, *)
+End_Group
+
+Group = SmithedCK
+  Auto            = 1
+  Optional        = 1
+  InputKey        = SmithedCK 
+  InputPosition   = (IsisCube, Archive)
+  OutputName      = cas:smithedck
+  OutputPosition  = (Product_Observational, Observation_Area, Mission_Area, cas:CASSIS_Data, cas:geometry_information)
+  Translation     = (*, *)
+End_Group
+
+
+

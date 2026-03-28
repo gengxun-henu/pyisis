@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<application name="unitTest" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Unit test for IsisRubberSheet class
+  </brief>
+
+  <description>
+    Just a test only a test
+  </description>
+
+  <category>
+    <categoryItem>Scripting</categoryItem>
+  </category>
+
+  <history>
+    <change name="Stuart Sides" date="2002-02-13">
+      Original Version
+    </change>
+    <change name="Stuart Sides" date="2003-05-16">
+      Modified schema from astrogeology... isis.astrogeology...
+    </change>
+    <change name="Jeannie Backer" date="2011-08-19">
+      Replaced test cube path /tmp/... with $temporary/...
+    </change>
+    <change name="Steven Lambright and Mathew Eis" date="2012-11-06">
+      Fixed (the lack of) deletion of temporary files. Fixes #1009.
+    </change>
+  </history>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Test cube
+        </brief>
+        <description>
+          Test cube
+        </description>
+        <filter>
+          *.cub
+        </filter>
+        <default><item>$ISISTESTDATA/isis/src/base/unitTestData/isisTruth.cub</item></default>
+      </parameter>
+      <parameter name="TO">
+        <type>cube</type>
+        <fileMode>output</fileMode>
+        <pixelType>real</pixelType>
+        <brief>
+          Test cube
+        </brief>
+        <description>
+          Test cube
+        </description>
+        <filter>
+          *.cub
+        </filter>
+        <default><item>$temporary/isisRubberSheet_01.cub</item></default>
+      </parameter>
+    </group>
+  </groups>
+</application>
+

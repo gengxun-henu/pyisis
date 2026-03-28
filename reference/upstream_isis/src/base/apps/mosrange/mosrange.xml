@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="mosrange" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation=
+"http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Compute the lat/lon range of a set of camera images for mosaicking
+  </brief>
+
+  <description>
+    <p>
+      <i>mosrange</i> computes and outputs the <def link="Latitude">latitude</def>
+      and <def link="Longitude">longitude</def> ranges of a set of <def link="Level1">Level1</def>
+      images (i.e. non-projected), as well as the <def link="Pixel Resolution"> pixel
+      resolution</def> and the <def link="Oblique Pixel Resolution"> oblique pixel resolution</def>.
+      It creates a <a href="../cam2map/cam2map.html" target="_blank">cam2map</a> ready map file
+      with the extents of the latitude/longitude ranges of the image set.
+    </p>
+
+    <p>
+      The user can select the type of <def link="Map Projection">map projection</def>
+      preferred by two different ways. The PROJECTION parameter allows direct 
+      specification of an ISIS supported projection.  Or, the user can select a 
+      map file from the ISIS map template system that contains the projection name.  
+      If none of these options are used, then <b>Equirectangular</b> is the default.
+    </p>
+
+    <p>
+      <i>mosrange</i> provides better control over the values of the latitude/longitude 
+      ranges by providing a PRECISION parameter.  This parameter specifies the 
+      maximum number of digits of precision for many of the Mapping group parameters 
+      used to project images.
+    </p>
+    
+    <p>
+      ONERROR, ERRORLOG, and ERRORLIST parameters offer better error handling and
+      diagnostics when problems are encountered processing the input file list.
+      ONERROR dictates whether <i>mosrange</i> will abort or continue when an error
+      occurs. If ONERROR=FAIL (default behavior), <i>mosrange</i> aborts upon error
+      without generating a map file. If ONERROR=CONTINUE, <i>mosrange</i> produces
+      an output map file with data collected from all successfully processed images.
+      A detailed list of files that fail and their associated errors are written to
+      the ERRORLOG file if provided. A simple list of failed files is written to the
+      ERRORLIST file if provided.
+    </p>
+ 
+    <p>
+      The primary use of <i>mosrange</i> is to provide a quick, simple and batchable means of
+      creating map files for projections.
+    </p>
+    
+    <p>
+      An example of the output generated is:
+    </p>
+<pre>
+Group = Mapping
+  ProjectionName          = Equirectangular
+  TargetName              = Mercury
+  <def link="Equatorial Radius" >EquatorialRadius</def>        = 2440000.0  &lt;meters&gt;   
+  <def link="Polar Radius" >PolarRadius</def>             = 2440000.0 &lt;meters&gt;
+  <def link="Latitude Type">LatitudeType</def>            = <def link="Planetocentric Latitude">Planetocentric</def>
+  <def link="Longitude Direction">LongitudeDirection</def>      = <def link="Positive East Longitude">PositiveEast</def>
+  <def link="Longitude Domain">LongitudeDomain</def>         = 360
+  <def link="Pixel Resolution">PixelResolution</def>         = 505.3668 &lt;meters/pixel&gt; 
+  <def link="Oblique Pixel Resolution">ObliquePixelResolution</def> = 791.251 &lt;meters/pixel&gt;
+  <def>Scale</def>                   = 84.2676 &lt;pixels/degree&gt;
+  MinPixelResolution      = 483.45317995544 &lt;meters&gt;
+  MaxPixelResolution      = 527.28051834369 &lt;meters&gt;
+  CenterLongitude         = 165.9728
+  CenterLatitude          = -13.6612
+  MinimumLatitude         = -21.5164
+  MaximumLatitude         = -5.806
+  MinimumLongitude        = 133.7863
+  MaximumLongitude        = 198.1593
+
+  # Actual Parameters without precision applied
+  PreciseCenterLongitude  = 165.97281458717
+  PreciseCenterLatitude   = -13.661167089917
+  PreciseMinimumLatitude  = -21.516314016725
+  PreciseMaximumLatitude  = -5.806020163109
+  PreciseMinimumLongitude = 133.78639979231
+  PreciseMaximumLongitude = 198.15922938202
+End_Group
+End
+ </pre>
+  </description>
+
+  <category>
+    <categoryItem>Map Projection</categoryItem>
+  </category>
+
+  <history>
+    <change name="Kris Becker" date="2006-03-26">
+      Original version
+    </change>
+    <change name="Kris Becker" date="2008-06-27">
+      Removed references to CubeInfo due to refactor
+    </change>
+    <change name="Kris Becker" date="2009-08-13">
+        Added parameters  LATTYPE, LONDIR and LONDOM;  Now computes pixel Scale 
+        in pixels/degree;  added additional parameters to the output map file so 
+        it is more compliant with projection requirements based upon input 
+        parameters and established mapping group keywords.
+    </change>
+    <change name="Kris Becker" date="2009-09-18">
+        Added TargetName to output map file.
+    </change>
+    <change name="Mackenzie Boyd" date="2010-07-19">
+        Modified program to have output go to print.prt file in addition to 
+        other outputs.
+    </change>
+    <change name="Kris Becker" date="2010-11-02">
+        Added more detail to error reporting so the offending file can be 
+        more readily identified.
+    </change>
+    <change name="Kris Becker, Lynn Weller" date="2012-01-22">
+        Updated the documentation
+    </change>
+    <change name="Debbie A. Cook" date="2012-07-06">
+       Updated Spice members to be more compliant with Isis coding standards. References #972.
+    </change>
+    <change name="Debbie A. Cook" date="2012-10-11">
+       Updated to use new Target class. References Mantis tickets #775 and #1114.
+    </change>
+    <change name="Tyler Wilson" date="2016-08-25">
+       Updated to use updated Camera/CameraPointInfo classes which include improved approximations
+       to Pixel/Detector/Line/Sample resolutions, as well as providing the ability for developers
+       to order the fields in CSV/Pvl output.  References #476.
+    </change>
+    <change name="Kris Becker" date="2019-03-11">
+        Added ERRORLOG, ERRORLIST and ONERROR flags to provide better control
+        error behavior and provide diagnostics when problems are encountered
+        processing input file list.
+    </change>
+    <change name="Ken Edmundson" date="2023-09-07">
+        Moved Kris Becker's 2019-03-11 changes from UofA code base to USGS. Updated documentation.
+        Cleaned up unnecessary blank lines and commented code in mosrange.cpp. References #3606.
+    </change>
+ </history>
+  <groups>
+    <group name="Files">
+      <parameter name="FROMLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input cube file list to compute range for
+        </brief>
+        <description>
+          Use this parameter to select the filename of a cube with
+          camera labels.
+        </description>
+        <filter>
+          *.lis
+        </filter>
+      </parameter>
+
+      <parameter name="MAP">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <defaultPath>$ISISROOT/appdata/templates/maps</defaultPath>
+        <internalDefault>None</internalDefault>
+          <filter>*.map *.cub</filter>
+        <brief>
+          An existing MAP file that will be used to determine the name of the 
+          projection
+        </brief>
+        <description>
+            If this file is given, only the ProjectionName keyword is used to 
+            determine the type of projection desired.  If you know the type 
+            already as well as the proper spelling required by ISIS, then you 
+            may use PROJECTION as an alternative to this file.
+        </description>
+      </parameter>
+
+      <parameter name="TO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <internalDefault>None</internalDefault>
+        <filter>*.map</filter>
+        <brief>
+          Output map projection file generated from the list
+        </brief>
+        <description>
+          This file will contain a map projection file suitable for projecting 
+          the given set of images.  This file will contain all the parameters 
+          suitable for using directly in cam2map.
+        </description>
+      </parameter>
+
+      <parameter name="LOG">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>
+          Writes the specifics for each file to this file
+        </brief>
+        <description>
+            Each input file will have its geometry computed and the results can 
+            be written to this file.
+        </description>
+      </parameter>
+    </group>
+    <group name="Mapping">
+      <parameter name="PROJECTION">
+        <type>string</type>
+        <default><item>None</item></default>
+        <internalDefault>None</internalDefault>
+        <brief>
+           Name of projection you want to create
+        </brief>
+        <description>
+          Use this named projection as the type of projection you wish to 
+          create.  It should be the complete valid name as required by the 
+          cam2map application.   This name can also be provided in the MAP 
+          parameter if you do not know the proper spelling/format required for 
+          ISIS projections.
+        </description>
+      </parameter>
+
+      <parameter name="LATTYPE">
+        <type>string</type>
+        <brief>
+          Latitude type
+        </brief>
+        <description>
+          The latitude type for the projection.  It can either be Planetocentric or Planetographic.
+           PLANETOCENTRIC is the default.
+        </description>
+        <default>
+          <item>PLANETOCENTRIC</item>
+        </default>
+        <list>
+          <option value="PLANETOCENTRIC">
+            <brief>
+              Planetocentric
+            </brief>
+            <description>
+              Sets the latitude type in the mapping template to Planetocentric.
+            </description>
+          </option>
+          <option value="PLANETOGRAPHIC">
+            <brief>
+              Planetographic
+            </brief>
+            <description>
+              Sets the latitude type in the mapping template to Planetographic.
+            </description>
+          </option>
+        </list>
+      </parameter>
+
+      <parameter name="LONDIR">
+        <type>string</type>
+        <brief>
+          Longitude Direction
+        </brief>
+        <description>
+          The longitude direction for the projection.  It can have a direction of Positive East 
+          or Positive West.  POSITIVEEAST is the default.
+        </description>
+        <default>
+          <item>POSITIVEEAST</item>
+        </default>
+        <list>
+          <option value="POSITIVEEAST">
+            <brief>
+              PositiveEast Longitude Direction
+            </brief>
+            <description>
+              Sets the longitude direction in the mapping template to PositiveEast.
+            </description>
+          </option>
+          <option value="POSITIVEWEST">
+            <brief>
+              PositiveWest Longitude Direction
+            </brief>
+            <description>
+              Sets the longitude direction in the mapping template to PositiveWest.
+            </description>
+          </option>
+        </list>
+      </parameter>
+
+      <parameter name="LONDOM">
+        <type>string</type>
+        <brief>
+          Longitude Domain
+        </brief>
+        <description>
+          The longitude domain for the projection.  It can either have a domain of 180 or 360.  
+          360 is the default.
+        </description>
+        <default>
+          <item>360</item>
+        </default>
+        <list>
+          <option value="360">
+            <brief>
+              0 to 360 Degree Longitude Domain
+            </brief>
+            <description>
+              Sets the longitude domain in the mapping template to 360 degrees.
+            </description>
+          </option>
+          <option value="180">
+            <brief>
+              -180 to 180 Degree Longitude Domain
+            </brief>
+            <description>
+              Sets the longitude domain in the mapping template to 180 degrees.
+            </description>
+          </option>
+        </list>
+      </parameter>
+        
+      <parameter name="PRECISION">
+        <type>integer</type>
+        <default><item>12</item></default>
+        <brief>
+           Digits of precision to use for latitude/longitude specifications
+        </brief>
+        <description>
+            <p>
+                This parameter provides some control over how the Latitude and 
+                Longitude min/max values are written to the map file.  Note that 
+                this is useful for creating easy values to use in subsequent 
+                applications that may require these values.  If these values are not 
+                specified, about 12 digits of precision will be used.
+            </p>
+            <p>
+                Note that you can use a negative number which has the effect of 
+                rounding the whole integral number.  A value of 0 will produce 
+                an integral whole number, effectively removing the decimal 
+                portion of the numbers.  A positive number will truncate up
+                (maximums using the ceil function) or down (minimums using the 
+                floor function) range values such as MinimumLatitude and 
+                MaximumLatitude.  The pixel resolution is rounded using same 
+                technique (with the rint fuction).
+            </p>
+                <TABLE  border="1" cellpadding="3" cellspacing="2" 
+                       summary="This table shows the different effect of the PRECISION 
+                        parameter on select data values.">
+                <TR>
+                  <TH colspan="3">PRECISION Examples</TH>
+                </TR>
+                    <TR>
+                      <TH>Value</TH>
+                      <TH align="center">PRECISION</TH>
+                      <TH>Result</TH>
+                    </TR>
+                    <TR>
+                       <TD>118.08747089457</TD>
+                       <TD align="center">12 (Default)</TD>
+                       <TD>118.08747089457</TD>
+                    </TR>
+                    <TR>
+                       <TD>118.08747089457</TD>
+                       <TD align="center">5</TD>
+                       <TD>118.0875</TD>
+                    </TR>
+                   <TR>
+                       <TD>118.08747089457</TD>
+                       <TD align="center">1</TD>
+                       <TD>118.1</TD>
+                    </TR>
+                    <TR>
+                       <TD>118.08747089457</TD>
+                       <TD align="center">0</TD>
+                       <TD>118.0</TD>
+                    </TR>
+                    <TR>
+                       <TD>118.08747089457</TD>
+                       <TD align="center">-1</TD>
+                       <TD>120.0</TD>
+                    </TR>
+                   <TR>
+                       <TD>118.08747089457</TD>
+                       <TD align="center">-2</TD>
+                       <TD>100.0</TD>
+                    </TR>
+                  <TR>
+                       <TD>118.08747089457</TD>
+                       <TD align="center">-3</TD>
+                       <TD>0.0 (Bad!)</TD>
+                    </TR>
+                </TABLE>
+        </description>
+      </parameter>
+    </group>
+    
+    <group name="Errorhandling">
+      <parameter name="ONERROR">
+        <type>string</type>
+        <brief>
+          Define behavior when a file error occurs
+        </brief>
+        <description>
+          This flag is provided to specify what action is to be
+          taken should an error occur processing the input file
+          list. A detailed list of errors for each file will be
+          recorded to ERRORLOG if a file name is provided. A list
+          containing the file names that failed will be written
+          to ERRORLIST if provided. If ONERROR=FAIL, a single
+          error will result in an abort. FAIL is the default
+          (to preserve existing behavior).
+        </description>
+        <default>
+          <item>FAIL</item>
+        </default>
+        <list>
+          <option value="CONTINUE">
+            <brief>
+              Continue processing all the input file list if an error occurs
+            </brief>
+            <description>
+              Continue to produce an output map file with data collected from
+              any number of successfully processed images when one or more
+              errors are encountered with the input processing list. This option
+              will cause the application to continue processing all files and
+              generate a mapping file if at least one is successful.
+            </description>
+          </option>
+          <option value="FAIL">
+            <brief>
+              Terminate the application when an error occurs
+            </brief>
+            <description>
+              If any file produces an error when determining mapping statistics,
+              ONERROR=FAIL will cause the application to abort with an error
+              without generating a map file. The filename and detailed error are
+              written to ERRORLOG if provided. The filename alone is written to
+              ERRORLIST if provided.
+            </description>
+          </option>
+        </list>
+      </parameter>
+      <parameter name="ERRORLOG">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>
+          Writes detailed information for each failed file to a PVL file
+        </brief>
+        <description>
+            Each file that encounters an error will produce the issue
+            that cased the error. The ERRORLOG file can be specified to
+            get a detailed account of why each file failed to successfully
+            complete. Data collected from this process will be written
+            to the specified ERRORLOG in the form of a PVL object.
+        </description>
+      </parameter>
+
+      <parameter name="ERRORLIST">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>
+          Record filename of each cube that failed to this file
+        </brief>
+        <description>
+            The filename of each cube that encountered an error will be
+            written to this file if provided. The ERRORLIST file can be
+            used to difference against the input list to determine all
+            the successful files included in the mapping statistics.
+        </description>
+      </parameter>
+    </group>
+  </groups>
+</application>

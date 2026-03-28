@@ -1,0 +1,176 @@
+Unit test for Projection ...
+
+///////////////////////////////////////////////////////////
+Test Error Throws from the constructor...
+
+Test for missing Mapping Group
+**ERROR** Projection failed.  Invalid label group [Mapping].
+**ERROR** Unable to find PVL group [Mapping].
+///////////////////////////////////////////////////////////
+
+Projection Specifications
+Is Equatorial Cylindrical: 0
+Has ground range:          1
+Rotation:                  0
+Pixel Resolution:      1
+Resolution:      1
+Projection name = None
+Pixel resolution = 1
+
+///////////////////////////////////////////////////////////
+
+Test == operator options...
+
+Test == operator with names not matching, but resolutions do
+Projection 1 resolution = 1
+Projection 2 resolution = 1
+Projection 1 name = None
+Projection 2 name = Something
+Result:   No match
+
+Test == operator with pixel resolutions not matching, but names do
+Projection 1 resolution = 1
+Projection 2 resolution = 0.5
+Projection 1 name = None
+Projection 2 name = None
+Result:  No match
+
+Test == operator with both resolution and name matching
+Projection 1 resolution = 1
+Projection 2 resolution = 0.5
+Projection 1 name = None
+Projection 2 name = None
+Result:  Match
+
+///////////////////////////////////////////////////////////
+
+Testing xyRange methods...
+
+Projection 2 name = None
+Get ground range from the labels...  
+Has a ground range:  1
+Find coordinate range ...  
+Minimum X:              150
+Maximum X:              1900
+Minimum Y:              135
+Maximum Y:              170
+
+Testing Ground coordinate routines
+Setting latitude to (-91,  0):  0
+Is Good:                        0
+Setting latitude to ( 91,  0):  0
+Is Good:                        0
+Setting position to (60,  -5):  1
+Is Good:                        1
+XCoord:                         -50
+YCoord:                         150
+
+Testing Universal Ground coordinate routines
+Setting position to (57.3920057293825,  355):  1
+Is Good:                                       1
+XCoord:                                        3550
+YCoord:                                        150
+
+PolarStereographic Projection Specifications
+Is Equatorial Cylindrical: 0
+Has ground range:          1
+Rotation:                  0
+
+Setting position to (-90.000000000000767, 0.0)
+Is Good:                                       1
+XCoord:                                        0
+YCoord:                                        0
+
+Testing projection coordinate routines
+Setting x/y position to (-2550,15):  1
+Is Good:                             1
+XCoord:                              -2250
+YCoord:                              15
+WorldX:                              -2250
+WorldY:                              15
+
+Testing world coordinate routines
+Setting world x/y position to (-4500,45):  1
+Is Good:                                   1
+XCoord:                                    -2250
+YCoord:                                    15
+WorldX:                                    -4500
+WorldY:                                    45
+ToProjectionX (-4500):                     -2250
+ToProjectionY (45):                        15
+ToWorldX:                                  -4500
+ToWorldY:                                  45
+Resolution:                                0.5
+Scale:                                     1.948077660234
+
+Testing IsSky method
+0
+1
+
+Testing Name and comparision routines
+Name:        None
+ProjectionType = 0
+Version:     1.0
+operator==:  0
+operator!=:  1
+Testing static conversion methods 
+ 0 degrees in hours: 0
+ 0 degrees in HMS format: 00h 00m 00.0s
+ 0 degrees in DMS format: 0 00m 00.0s
+ 30.5 degrees in hours: 2.033333333333
+ 30.5 degrees in HMS format: 02h 02m 00.0s
+ 30.5 degrees in DMS format: 30 30m 00.0s
+ 40.3472 degrees in hours: 2.689813333333
+ 40.3472 degrees in HMS format: 02h 41m 23.328s
+ 40.3472 degrees in DMS format: 40 20m 49.920s
+ 45 degrees in Hours: 3
+ 45 degrees in HMS format: 03h 00m 00.0s
+ 45 degrees in DMS format: 45 00m 00.0s
+ 180 degrees in Hours: 12
+ 180 degrees in HMS format: 12h 00m 00.0s
+ 180 degrees in DMS format: 180 00m 00.0s
+ 360 degrees in Hours: 24
+ 360 degrees in HMS format: 24h 00m 00.0s
+ 360 degrees in DMS format: 360 00m 00.0s
+**ERROR** Unable to convert to projection x.  The given x-value [-1.79769313486231e+308] is invalid.
+**ERROR** Unable to convert to projection y.  The given y-value [-1.79769313486231e+308] is invalid.
+**ERROR** Unable to convert to world x.  The given x-value [-1.79769313486231e+308] is invalid.
+**ERROR** Unable to convert to world y.  The given y-value [-1.79769313486231e+308] is invalid.
+///////////////////////////////////////////////////////////
+
+Rotation Tests
+Rotation:     90
+Testing Ground coordinate routines
+Setting latitude to (-91,  0):  0
+Is Good:                        0
+Setting latitude to ( 91,  0):  0
+Is Good:                        0
+Setting position to (60,  -5):  1
+Is Good:                        1
+XCoord:                         150
+YCoord:                         50
+
+Testing projection coordinate routines
+Setting x/y position to (150,50):  1
+Is Good:                             1
+XCoord:                              150
+YCoord:                              50
+WorldX:                              150
+WorldY:                              50
+
+Testing Mapping() methods
+Group = Mapping
+  TargetName         = Moon
+  ProjectionName     = MyProjection
+  LatitudeType       = Planetographic
+  LongitudeDirection = PositiveEast
+  LongitudeDomain    = 360
+  PixelResolution    = 2.0
+  MinimumLatitude    = 45
+  MaximumLatitude    = 80.0
+  MinimumLongitude   = 15.0
+  MaximumLongitude   = 190.0
+  Rotation           = 90.0
+End_Group
+End
+

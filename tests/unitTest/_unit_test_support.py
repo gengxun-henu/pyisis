@@ -6,7 +6,12 @@ from contextlib import contextmanager
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-BUILD_PYTHON_DIR = PROJECT_ROOT / "build" / "python"
+BUILD_PYTHON_DIR = Path(
+    os.environ.get(
+        "ISIS_PYBIND_BUILD_DIR",
+        str(PROJECT_ROOT / "build" / "python"),
+    )
+)
 #WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT.parent / "isis" / "tests" / "data" / "isisdata" / "mockup"
 WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT / "tests" / "data" / "isisdata" / "mockup"
 
@@ -204,3 +209,80 @@ def make_sky_target_label(shape_model=None):
 def workspace_test_data_path(*parts):
     #return PROJECT_ROOT.parent / "isis" / "tests" / "data" / Path(*parts)
     return PROJECT_ROOT/ "tests" / "data" / Path(*parts)
+
+
+def close_cube_quietly(cube, remove=False):
+    if cube is None:
+        return
+
+    try:
+        if cube.is_open():
+            cube.close(remove=remove)
+    except Exception:
+        pass
+
+
+def make_test_cube(
+    temp_dir,
+    name="test.cub",
+    samples=8,
+    lines=6,
+    bands=1,
+    pixel_type=None,
+    cube_format=None,
+    byte_order=None,
+    labels_attached=None,
+    base_multiplier=None,
+):
+    if pixel_type is None:
+        pixel_type = ip.PixelType.Real
+
+    cube_path = temp_dir / name
+    cube = ip.Cube()
+    cube.set_dimensions(samples, lines, bands)
+    cube.set_pixel_type(pixel_type)
+
+    if cube_format is not None:
+        cube.set_format(cube_format)
+
+    if byte_order is not None:
+        cube.set_byte_order(byte_order)
+
+    if labels_attached is not None:
+        cube.set_labels_attached(labels_attached)
+
+    if base_multiplier is not None:
+        base, multiplier = base_multiplier
+        cube.set_base_multiplier(base, multiplier)
+
+    cube.create(str(cube_path))
+    return cube, cube_path
+
+
+def make_closed_test_cube(temp_dir, **kwargs):
+    cube, cube_path = make_test_cube(temp_dir, **kwargs)
+    cube.close()
+    return cube_path
+
+
+def open_cube(path, access="r"):
+    cube = ip.Cube()
+    cube.open(str(path), access)
+    return cube
+
+
+def fill_cube_with_constant(cube, value):
+    manager = ip.LineManager(cube)
+    manager.begin()
+    while not manager.end():
+        for index in range(len(manager)):
+            manager[index] = value
+        cube.write(manager)
+        manager.next()
+
+
+def make_filled_cube(temp_dir, value=5.0, **kwargs):
+    cube, cube_path = make_test_cube(temp_dir, **kwargs)
+    fill_cube_with_constant(cube, value)
+    cube.close()
+    return cube_path

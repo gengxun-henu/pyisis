@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application name="msi2isis"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Import NEAR MSI files into ISIS format
+  </brief>
+  <description>
+    This program will import raw images, acquired from the Near Earth Asteroid
+    Rendezvous - Shoemaker (NEAR Shoemaker) mission's Multispectral Imager
+    (MSI) instrument, to ISIS data file format.
+
+    The raw image must be in FITS (Flexible Image Transport) format and
+    have a PDS label file that points to the location of the FITS image. You
+    must input either the label file or the FITS file for the "TO" input
+    parameter.  Projected images are not supported.  Please note if the FITS
+    file is given, the label file must exist in the same directory or the
+    program will throw an error.
+
+    This program will verify that the input files are valid by checking the
+    following label keyword values.  An error will be  thrown if any of these
+    criteria are not met.
+    <ul>
+      <li>INSTRUMENT_ID = MSI</li>
+      <li>LINE_SAMPLES = 537</li>
+      <li>LINES = 244</li>
+      <li>SAMPLE_DISPLAY_DIRECTION = RIGHT</li>
+      <li>LINE_DISPLAY_DIRECTION = UP</li>
+    </ul>
+
+    The output cube- successfully imported into ISIS goes through the following
+    processes:
+    <ul>
+      <li>Convert the raw FITS image data to an ISIS cube.</li>
+      <li> Save the labels from the input PDS label file to the output
+           ISIS cube. Note that FITS labels are not transferred. </li>
+      <li>Enlarge the image from 537 samples x 244 lines to 537 x 412 using the
+          user-specified interpolation algorithm. Defaults to cubic
+          convolution.</li>
+      <li>Flip the image vertically, i.e. across the horizontal axis.</li>
+      <li>Trim 33 pixels from the top, bottom, left and right sides. These
+            pixels along the borders will be set to nulls.</li>
+    </ul>
+
+    <h3>Image Trimming</h3>
+    <p>
+        Shortly after orbit insertion around Eros, the NEAR spacecraft
+        experienced a failed burn that contaminated the MSI instrument with
+        hydrazine. The NEAR/MSI team developed a preliminary remediation [1] of
+        the blur effect of the contamination using FFTs to correct the point
+        spread function (PSF). A residual side effect of this correction was
+        degradation of ~33 pixels on all edges of the images.  As a result, by
+        default, NEAR/MSI images are trimmed 33 pixels around all edges after
+        import. MSI images requiring trmming of these data are of the form
+        m0132069107f4_2p_iof_dbl.img.
+    </p>
+    <p>
+        Additional remediation work of the PSF function used to correct MSI
+        images was performed by Golish [2] that resulted in an enhanced PDF
+        correction that did not introduce edge-artifacts as was seen in [1].
+        The TRIM parameter was added to optionally retain the 33 pixels around
+        the image edges when the dataset from [2] is used. File names that do
+        not require trimming are of the form m0132069107f4_2p_iof_gbl.img (note
+        the <e>gbl</e>).
+    </p>
+    <p>
+        Note the images produced by Golish [2] have already been expanded. So
+        msi2isis was altered to check for the expanded size (in lines only) to
+        allow for the full frame to be ingested. In this case, the intermediate
+        step to interpolate in the line dimension to expand the the number of
+        lines from 244 to 412 is not needed and excluded from ingestion
+        processing. All other (label) checks were left to complete the
+        validation of the input files.
+    </p>
+    <br/>
+    <h2>References</h2>
+    <br/>
+    <cite>
+      1. Li, H., et al. (2002) Preliminary Remediation of Scattered Light in
+      NEAR MSI Images. Icarus 155, 244-252. <a
+      href="https://www.sciencedirect.com/science/article/abs/pii/S0019103501967454">
+      https://doi.org/10.1006/icar.2001.6745</a>
+    </cite>
+    <br/>
+    <br/>
+    <cite>
+      2. Golish, D.R., et al. (2021) Improved Remediation of NEAR MSI Images of
+      Asteroid (433) Eros. LPSC LII, Abstract
+      <a href="https://www.hou.usra.edu/meetings/lpsc2021/pdf/1682.pdf">
+      #1682</a>.
+    </cite>
+    <br/>
+    <br/>
+  </description>
+
+  <history>
+    <change name="Jeannie Backer" date="2013-03-27">
+      Original version of msi2isis. References #1248.
+    </change>
+     <change name="Kristin Berry" date="2014-05-19">
+         Updated to add labels from the input PDS label file to the output ISIS
+         cube. References #2088.
+    </change>
+     <change name="Kris Becker" date="2019-08-15">
+         Correct SpacecraftClockStartCount/SpacecraftClockStopCount values to be
+         compatible with NAIF SCLK kernels that enables use in the camera model.
+         Save original values in new keywords prepended with "Original".
+    </change>
+    <change name="Kris Becker" date="2021-02-19">
+         Added the TRIM parameter to optionally trim data around the edges of
+         some MSI images due to degradation resulting from remediation of the
+         PSF.
+    </change>
+  </history>
+
+  <seeAlso>
+    <applications>
+      <item>fits2isis</item>
+      <item>enlarge</item>
+      <item>flip</item>
+      <item>trim</item>
+    </applications>
+  </seeAlso>
+
+  <category>
+    <missionItem>Near Earth Asteroid Rendezvous</missionItem>
+  </category>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input NEAR MSI file to be converted to an ISIS cube
+        </brief>
+        <description>
+          Name of the input NEAR MSI image file to be imported into ISIS
+          format. You may enter the label or the image file. If the image
+          file is given, the program will search in the same directory for a
+          label file with the same base name as the image file base name.
+        </description>
+        <filter>
+          *.lbl *.fit *.fits
+        </filter>
+      </parameter>
+
+      <parameter name="TO">
+        <type>cube</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output ISIS cube filename
+        </brief>
+        <description>
+          Name of the ISIS output cube file that has been imported, enlarged,
+          flipped, and trimmed.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Scaling Parameters">
+      <parameter name="INTERP">
+        <type>string</type>
+        <default>
+          <item>CUBICCONVOLUTION</item>
+        </default>
+        <brief>Type of interpolation for enlarge process</brief>
+        <description>
+          This is the type of interpolation to be performed on the input when
+          the image is enlarged from 537 samples x 244 lines to
+          537 samples x 412 lines.
+        </description>
+        <list>
+          <option value="CUBICCONVOLUTION">
+            <brief>Cubic Convolution interpolation</brief>
+            <description>
+              Each output pixel is set to the value calculated by
+              a cubic convolution interpolation of the calculated input pixel.
+            </description>
+          </option>
+          <option value="NEARESTNEIGHBOR">
+            <brief>Nearest Neighbor</brief>
+            <description>
+              Each output pixel is set to the pixel nearest the
+              calculated input pixel.
+            </description>
+          </option>
+          <option value="BILINEAR">
+            <brief>Bi-Linear interpolation</brief>
+            <description>
+              Each output pixel is set to the value calculated by
+              a bi-linear interpolation of the calculated input pixel.
+            </description>
+          </option>
+        </list>
+      </parameter>
+    </group>
+
+    <group name="Trimming Parameters">
+      <parameter name="TRIM">
+        <type>boolean</type>
+        <brief>Trim all image border edges</brief>
+        <description>
+           This parameter is provided to turn off trimming 33 pixels from the
+           edge of images. When TRIM=TRUE, 33 pixels on all sides of the
+           expanded image are set to NULL but not removed. The source of this
+           degradation is image edge-effects created from the remediation of
+           hydrazine contamination of the MSI filters. If TRIM=FALSE, no pixels
+           around the edge of the images are NULLed. This is useful to retain
+           image edges that originate from several alternative archive sources
+           [2].
+        </description>
+        <default><item>true</item></default>
+      </parameter>
+    </group>
+  </groups>
+
+  <examples>
+    <example>
+      <brief>
+        Usage of this import application
+      </brief>
+      <description>
+        This example shows how to import an MSI fits file to the ISIS
+        cube format using the label file.
+      </description>
+      <terminalInterface>
+        <commandLine>
+          from=msi_raw_file.lbl to=imported.cub
+        </commandLine>
+        <description>
+          The command line arguments to import a file to cube format.
+        </description>
+      </terminalInterface>
+      <guiInterfaces>
+        <guiInterface>
+          <image width="550" height="494" src="assets/images/msi2isisGUI.jpg">
+            <brief>
+              The application's GUI
+            </brief>
+            <description>
+              Example with parameters set to import MSI raw image to a cube.
+            </description>
+            <thumbnail width="200" height="180" caption="GUI Example" src="assets/thumbs/msi2isisGUI.jpg"/>
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+      <inputImages>
+        <image src="assets/images/fits2isis.cub.jpg" width="550" height="601">
+          <brief>
+            Original image
+          </brief>
+          <description>
+            Example of raw NEAR MSI image without the enlarge, flip, and trim processes performed by msi2isis.
+          </description>
+          <thumbnail width="183" height="200" caption="Raw image" src="assets/thumbs/fits2isis.cub.jpg" />
+          <parameterName>FROM</parameterName>
+        </image>
+      </inputImages>
+      <outputImages>
+        <image src="assets/images/imported.cub.jpg" width="550" height="603">
+          <brief>
+            Imported NEAR MSI cube
+          </brief>
+          <description>
+            Example of imported NEAR MSI image with the enlarge, flip, and trim processes applied.
+          </description>
+          <thumbnail width="182" height="200" caption="Imported cube" src="assets/thumbs/imported.cub.jpg" />
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+    </example>
+  </examples>
+</application>

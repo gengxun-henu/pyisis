@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<application name="hist" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Unit test for ProgramLauncher class
+  </brief>
+
+  <description>
+    Just a test only a test
+  </description>
+
+  <category>
+    <categoryItem>Scripting</categoryItem>
+  </category>
+
+  <history>
+    <change name="Jeff Anderson" date="2002-02-07">
+      Original Version
+    </change>
+    <change name="Stuart Sides" date="2003-05-16">
+      Modified schema from astrogeology... isis.astrogeology...
+    </change>
+    <change name="Jeannie Backer" date="2011-08-19">
+      Replaced test cube path /tmp/... with $temporary/...
+    </change>
+    <change name="Ian Humphrey" date="2014-06-23">
+      Replaced test cube path /ISISROOT/testData/... with $base/... #2054
+    </change>
+  </history>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>filename</type>
+        <brief>
+          Test cube
+        </brief>
+        <description>
+          Test cube
+        </description>
+        <filter>
+          *.cub
+        </filter>
+        <default><item>$ISISTESTDATA/isis/src/base/unitTestData/isisTruth.cub</item></default>
+      </parameter>
+      <parameter name="TO">
+        <type>filename</type>
+        <brief>
+          Test cube
+        </brief>
+        <description>
+          Test cube
+        </description>
+        <filter>
+          *.cub
+        </filter>
+        <default><item>$temporary/junk.dat</item></default>
+      </parameter>
+    </group>
+  </groups>
+</application>

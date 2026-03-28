@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="tgocassisrdrgen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Converts CaSSIS cubes into PDS 4 standard format
+  </brief>
+
+  <description>
+    "Tgocassisrdrgen" is an app that converts CaSSIS cubes, which are 3D images
+    captured by the CaSSIS camera on board the European Space Agency's ExoMars
+    Trace Gas Orbiter, into PDS 4 standard format.
+  </description>
+
+  <history>
+    <change name="Adam Paquette" date="2017-05-23">
+      Original Version
+    </change>
+    <change name="Makayla Shepherd" date="2017-06-01">
+      Added detached label.
+    </change>
+    <change name="Adam Paquette" date="2017-06-02">
+      Added the cassis specific translation file for label output.
+    </change>
+    <change name="Adam Paquette" date="2017-06-04">
+      Changed the order that the elements appear in the output label.
+    </change>
+    <change name="Marjorie Hahn" date="2017-06-05">
+      Added a default test to ensure that if the exported PDS4 data is reingested,
+      then it is the same as the original cube.
+    </change>
+    <change name="Marjorie Hahn" date="2017-06-08">
+      Moved code to write out .img and .xml PDS4 data to WritePds4 in ProcessExportPds4.
+    </change>
+    <change name="Kaitlyn Lee" date="2018-05-16">
+      Added parameter PRODUCTID to set the ProductId keyword. If the product id is
+      not specified by the user, set the ProductId keyword to the observation id.
+    </change>
+    <change name="Kaitlyn Lee" date="2018-05-21">
+      Added the check to see if the input cube is a mosaic. If it is, instead of
+      the Instrument group, the cube will have a Mosaic group. So, the ProductId
+      will now be written to the Mosaic group.
+    </change>
+    <change name="Kristin Berry" date="2018-06-12">
+      Updated to use the tgoCassisExportMosaic.trn translation file when the input cube is a mosaic.
+    </change>
+    <change name="Kristin Berry" date="2019-03-01">
+      Added TITLE and VERSIONID optional parameters to specify these values in the exported PDS4 label. 
+      Fixed bug that disabled reading of mosaics with Archive groups. 
+    </change>
+    <change name="Kristin Berry" date="2019-06-15">
+      Updated logicalID and schema to new values. Add code needed to set the pixel description in the output
+      file and to output the focal length without units as required by the cassis schema. 
+    </change>
+  </history>
+
+  <category>
+    <missionItem>ExoMars Trace Gas Orbiter</missionItem>
+  </category>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input RDR CaSSIS formated ISIS cube
+        </brief>
+        <description>
+          Input cube that is a CaSSIS formated RDR cube, to be translated into a corresponding .img
+          file and associated detached pds4 label. Currently, the cube must be a CaSSIS specific cube to
+          be translated at all.
+        </description>
+        <filter>*.cub</filter>
+      </parameter>
+
+      <parameter name="TO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output IMG file. Also determines XML file name.
+        </brief>
+        <description>
+          Output IMG file where the image data will be. The value that is entered also determines
+          the name of the detached XML label, where the .img extension is replaced with .xml.
+          Example: test.img is entered, the detached label would be named test.xml
+        </description>
+        <filter>*.img</filter>
+      </parameter>
+    </group>
+
+    <group name="Keywords">
+      <parameter name="PRODUCTID">
+        <type>string</type>
+        <internalDefault>None</internalDefault>
+        <brief>
+          Product ID value
+        </brief>
+        <description>
+          Update the default Product ID value. This value will be the last section of the PDS4 logical_identifier value.
+        </description>
+      </parameter>
+      <parameter name="TITLE">
+        <type>string</type>
+        <internalDefault>None</internalDefault>
+        <brief>
+          Product ID value
+        </brief>
+        <description>
+          Update the default Title value. 
+        </description>
+      </parameter>
+      <parameter name="VERSIONID">
+        <type>string</type>
+        <internalDefault>None</internalDefault>
+        <brief>
+          Product ID value
+        </brief>
+        <description>
+          Update the default Version ID value. 
+        </description>
+      </parameter>
+    </group>
+
+  </groups>
+</application>

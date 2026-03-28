@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="cnetcombinept" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Combine one to many control networks with common control points.
+  </brief>
+
+  <description>
+    <p>
+      This program will create a control network by combining control points
+      from one or more control networks into single points that satisfy image
+      distance criteria. It employs a more robust/direct technique than
+      <em>cnetmerge</em>. This technique evaluates each control point in all
+      input networks by finding all candidate merger control points who have a
+      measure within IMAGETOL. Then, for each candidate point, the average
+      distance of the measures in the candidate to a measure in the source
+      point is computed. If the average distance to any measure in the source
+      point is less than IMAGETOL, then the candidate point and source point
+      are merged. The candidate control point is disabled so that it will
+      never be considered for another merger and the now augmented control
+      point is added back to the search pool for further merger considerations,
+      which can occur when other common measures are considered.
+    </p>
+    <p>
+       When all control points have been searched and all mergers have taken
+       place, a new single combined control network is created.
+    </p>
+    <p>
+        Note that this application can be ran more than once and directly on the
+        output of any past run (in other words, you need only provide a single
+        network, if desired).
+    </p>
+  </description>
+
+  <seeAlso>
+    <applications>
+      <item>cnetmerge</item>
+    </applications>
+  </seeAlso>
+
+  <history>
+    <change name="Kris Becker" date="2015-10-11">
+      Original Version
+    </change>
+    <change name="Kris Becker" date="2015-10-22">
+      Corrected the count when SAVEMINS=TRUE.
+    </change>
+    <change name="Kris Becker" date="2015-11-13">
+      Uses modified ControlNet class  which provides the ability to take
+      ownership of all points in the control net efficiently. This is needed
+      in order to ensure only a single copies of control points are utlized to
+      minimize memory overhead.
+    </change>
+    <change name="Jeannie Backer" date="2016-03-11">
+      Added program to ISIS package.
+    </change>
+    <change name="Jeannie Backer" date="2016-04-22">
+      Modified to set the new control net's target and radii by using the input control net's
+      values. References #3892
+    </change>
+    <change name="Kris Becker" date="2016-12-05">
+      Modified merging algorithm and parameters. Fixes #4558.
+    </change>
+    <change name="Jesse Mapel" date="2016-12-06">
+      Created new tests and updated documentation. References #4558.
+    </change>
+    <change name="Tyler Wilson" date="2017-06-29">
+      Modified ControlPointMerger::merge function to properly hand combining control points
+      that contain the same control measures in each point.  Fixes #4869.
+    </change>
+    <change name="Tyler Wilson" date="2017-06-29">
+      Modified ControlPointMerger::merge function so that merged control measure types
+      are set to candidate (except when they have the same reference measure).  Fixes #4870.
+    </change>
+    <change name="Tyler Wilson" date="2017-06-29">
+      cnetcombinept now properly sets apriori lat/lon values to adjusted values.  Fixes #4772.
+    </change>
+    <change name="Jesse Mapel" date="2018-07-06">
+      Removed calls to set control net target radii because they are no longer needed by
+      the control network. Fixes #5457.
+    </change>
+    <change name="Jesse Mapel" date="2020-06-09">
+      Added a the LOGFILE argmuent that generates a log of which
+      control points were merged together.
+    </change>
+  </history>
+
+  <category>
+    <categoryItem>Control Networks</categoryItem>
+  </category>
+
+  <groups>
+    <group name="Input">
+
+      <parameter name="CNETBASE">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>Master control network file to match</brief>
+        <description>
+          The base control network file to which others will be matched.
+        </description>
+        <filter>*.net *.cnet *.ctl</filter>
+      </parameter>
+
+      <parameter name="CNETFROM">
+         <type>filename</type>
+        <fileMode>input</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>Merger control network file</brief>
+        <description>
+          A control network that will be matched to the base (i.e. master) network.
+        </description>
+        <filter>*.net *.cnet *.ctl</filter>
+      </parameter>
+
+      <parameter name="CNETLIST">
+          <type>filename</type>
+        <fileMode>input</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>List of merger control network files</brief>
+        <description>
+          A list of control network file names that will be matched to the base (i.e. master) network.
+        </description>
+        <filter>*.lis *.txt</filter>
+      </parameter>
+    </group>
+
+    <group name="Output">
+      <parameter name="ONET">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>
+          Merged Control Network
+        </brief>
+        <description>
+          The output Control Network, which is the combined result of the input
+          networks.
+        </description>
+        <filter>*.net *.cnet *.ctl</filter>
+      </parameter>
+
+      <parameter name="TOSN">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <internalDefault>None</internalDefault>
+        <brief>
+          Write a list of all serial numbers contained in the network
+        </brief>
+        <description>
+           Provided with a filename in this option, all the cube serial numbers
+           that are contained in the network are written to this file as soon as
+           it is determined in the processing.
+        </description>
+        <filter>*.lis</filter>
+      </parameter>
+
+      <parameter name="NETWORKID">
+        <type>string</type>
+        <internalDefault>None</internalDefault>
+        <brief>The NetworkId keyword value for the merged ControlNet</brief>
+        <description>
+          The NetworkId keyword for the newly merged ControlNet will be set to
+          this given value. The Networkid is a single word identifier or name
+          assigned to a Control Network.
+        </description>
+      </parameter>
+
+      <parameter name="DESCRIPTION">
+        <type>string</type>
+        <internalDefault>None</internalDefault>
+        <brief>The Description keyword value for the merged ControlNet</brief>
+        <description>
+          The Description keyword for the newly merged ControlNet will be set
+          to this given value.  This should be a brief description of the
+          purpose of the merged control network.
+        </description>
+      </parameter>
+
+      <parameter name="LOGFILE">
+        <type>filename</type>
+        <internalDefault>None</internalDefault>
+        <brief>File that logs which points were merged together</brief>
+        <description>
+          A four column CSV file that contains which input control points were
+          merged into output control points. The first column contains the
+          ID of each output control point that had at least one input control
+          point merged into it. The second column contains the number of measures
+          in the input control point. The third column contains the number of
+          measures in the output control point. The fourth column contains a
+          space separated list of the IDs of input control points that were
+          merged into the output control point.
+        </description>
+      </parameter>
+    </group>
+
+    <group name="Parameters">
+        <parameter name="IMAGETOL">
+            <type>double</type>
+            <default><item>1.0</item></default>
+           <brief>Pixel distance tolerance to determine merge of point</brief>
+           <description>
+             The acceptable distance, in pixels, for merging points.
+           </description>
+        </parameter>
+
+        <parameter name="KDNODES">
+           <type>integer</type>
+           <default><item>10</item></default>
+           <brief>Specify the leaf size of the kd-tree</brief>
+           <description>
+              Number of leaves in the kd-tree structure.
+           </description>
+        </parameter>
+
+       <parameter name="SETAPRIORIBEST">
+           <type>boolean</type>
+           <brief>
+              Reset the apriori surface point to best available
+           </brief>
+           <description>
+               When TRUE, all points apriori latitude/longitude surface point is
+               updated to use the best one available. This is often the
+               resulting coordinate after jigsaw has adjusted the surface point.
+           </description>
+           <default><item>false</item></default>
+       </parameter>
+
+       <parameter name="CLEANNET">
+           <type>boolean</type>
+           <default><item>true</item></default>
+           <brief>Remove all invalid or ignored control points/measures</brief>
+           <description>
+             <p>
+                 When true, all invalid or ignored control points and measures
+                 are removed from the output control network as one of
+                 the main objectives of this application is to remove
+                 redundancies and mimimize the size of networks. However, for
+                 evaluation purposes, you can set this to false, which will
+                 preserve all control points.
+             </p>
+             <p>
+                 When specifying the minimum number of measures/control point
+                 using the MINMEASURES parameter, any control point that does
+                 not meet this criteria will also be removed from the netwrk
+                 when CLEANNET=true, otherwise these points will be set to
+                 ignored.
+             </p>
+           </description>
+       </parameter>
+
+       <parameter name="CLEANMEASURES">
+           <type>boolean</type>
+           <default><item>true</item></default>
+           <brief>Remove all invalid or ignored control measures</brief>
+           <description>
+             <p>
+                 When true, all invalid or ignored control points and measures
+                 are removed from the output control network as one of
+                 the main objectives of this application is to remove
+                 redundancies and mimimize the size of networks. However, for
+                 evaluation purposes, you can set this to false, which will
+                 preserve all control points.
+             </p>
+             <p>
+                 When specifying the minimum number of measures/control point
+                 using the MINMEASURES parameter, any control point that does
+                 not meet this criteria will also be removed from the netwrk
+                 when CLEANNET=true, otherwise these points will be set to
+                 ignored.
+             </p>
+           </description>
+       </parameter>
+
+        <parameter name="MINMEASURES">
+            <type>integer</type>
+            <default><item>0</item></default>
+            <brief>Select minimim number of valid measures/point</brief>
+            <description>
+                 This allows users to disable points that have less than
+                 MINMEASURES control measures/control point. For example, if you
+                 want to flag all points as ignored with 2 measures or less, set
+                 MINMEASURES=3. Points that don't meet this critieria are set to
+                 ignore and are subject to the CLEANNET action requested by the
+                 user (i.e., all ignored points are removed from the network if
+                 CLEANNET=true).
+            </description>
+        </parameter>
+
+    </group>
+  </groups>
+</application>

@@ -1,0 +1,334 @@
+  /*  ISIS STYLE SHEET
+   *  FILENAME: IsisStyleCommon.css
+   *
+   *  Purpose: formatting style sheet for all pages
+   *
+   *  Author:  Deborah Lee Soltesz, USGS, 04/03/2002
+   */
+
+
+    /* Page Layout */
+
+    #page {
+      display: flex;
+      flex-direction: row;
+      margin: 1rem 2rem;
+    }
+
+    .sidenav {
+      margin: 0rem 2rem 4rem;
+      width: 14rem;
+      flex-shrink: 0;
+    }
+
+    main {
+      margin: 0rem 2rem;
+      padding: 0.2rem 1rem;
+      flex-grow: 1;
+      overflow-x: auto;
+    }
+
+    
+    /* Mobile Menu */
+
+    .logo-bar {
+      display: flex;
+      flex-direction: row;
+    }
+
+    .nav-m-logo{
+      height: 44px;
+      margin: 3px 0px 1px 10px;
+    }
+
+    .name-bar {
+      margin: auto;
+    }
+
+    .isis-name {
+      margin-left: 13px;
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    .topnav-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      background-color: #00264c;
+      color: white;
+      border-top: 5px solid white;
+    }
+
+    .topnav-container > button {
+      cursor: pointer;
+    }
+
+    .usa-nav {
+      width: 20rem !important;
+    }
+
+    .usa-nav__close {
+      cursor: pointer;
+    }
+
+    /* Elements */
+
+    h1, h2, h3 {
+      color: #336699 ;
+    }
+
+    a {
+      color: #005ea2
+    }
+
+    pre {
+      overflow: auto;
+      background: whitesmoke;
+      border-radius: 0.2rem;
+      padding: 1rem;
+    }
+
+    /* Logo/Brand */
+
+    #isis-banner {
+      background: url(https://asc-docs.s3.us-west-2.amazonaws.com/common/img/PIA26068.jpg) no-repeat;
+      background-position: 50% 75%;
+      color: white;
+      padding: 3rem;
+      background-size: cover;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .title-overlay {
+      transform: translateX(-5%);
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: bold;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+      padding: 10px;
+      border-radius: 5px;
+      margin: 5px;
+    }
+
+    .title-overlay h3 {
+      margin: 0;
+    }
+
+    .image-credit-fixed {
+      width: 100%;
+      padding: 5px 45px;
+      background-color: #333;
+      color: #D1D3D4;
+      text-align: right;
+      font-size: .75rem;
+      line-height: 1.25rem;
+    }
+
+    .image-credit-fixed p {
+      margin: 5px 0;
+    }
+
+    .image-credit-fixed a {
+      color: #D1D3D4;
+      text-decoration: none;
+    }
+
+    .isis-logo {
+      background-image: url(../img/isis-logo-br.svg);
+      background-repeat: no-repeat;
+      background-size: contain;
+      height: 12rem;
+      width: 15rem;
+    }
+
+    #nav-title {
+      display: flex;
+      flex-wrap: nowrap;
+      padding: 13px;
+      height: 95px;
+      align-items: center;
+    }
+
+    #nav-title-logo {
+      height: 65px;
+      width: 65px;
+      max-width: unset;
+    }
+
+    #nav-title-text-box {
+      height: fit-content;
+      margin-bottom: 6px;
+      margin-left: 4px;
+    }
+
+    #nav-title-text {
+      font-family: Source Sans Pro Web, Helvetica Neue, Helvetica, Roboto, Arial, sans-serif;
+      font-weight: 700;
+      font-size: large;
+      font-style: normal;
+    }
+
+
+    /* Header Search Customization */
+
+    #usgs-header-search-button {
+      position: static;
+      margin-top: 18px;
+      height: 32px;
+      padding: 0 12px;
+      width: 45px;
+      min-width: 2rem;
+    }
+
+    .usa-banner__lock-image-pd {
+      height: 1.7ex;
+      width: 2ex;
+    }
+
+
+    /* Card List (applications by category) */
+
+    .card-list-sm {
+      column-count: auto;
+      column-width: 14rem;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .card-list-sm > li {
+      border: 2px solid #e6e6e6;
+      border-radius: .25rem;
+      list-style-type: none;
+      width: 14rem;
+      margin-bottom: 0.6rem;
+      display: inline-flex;
+    }
+
+    .card-list-sm > li > a {
+      display: block;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      width: calc(14rem - 4px);
+    }
+
+    .card-list-sm > li > a:hover {
+      background-color: #f0f0f0;
+    }
+
+
+    /* Tables */
+
+    table {
+      border-collapse: collapse;
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: #D8F2FF;
+    }
+
+    tbody > tr > th {
+      text-align: left;
+      padding: 6px;
+    }
+
+    tbody > tr > td {
+      padding: 6px;
+    }
+
+    td > ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .old-name {
+      font-weight: 500;
+      font-style: italic;
+    }
+
+
+    /* -------------------------------------------------------------
+     * tableFormattedInformation */
+
+    table.tableFormattedInformation {
+      border-collapse: collapse;
+    }
+
+    table.tableFormattedInformation td, table.tableFormattedInformation th {
+      border: 2px solid #1b1b1b;
+    }
+
+    table.tableFormattedInformation th {
+      text-align: center;
+    }
+
+    /* -------------------------------------------------------------
+     * Image Table: style for images with caption displayed in basic table */
+
+    .imageTable {
+      border: 0;
+      margin: 1rem;
+    }
+
+    .imageTable tr {
+      vertical-align: top;
+    }
+
+    .imageTable th, .imageTable td {
+      background-color: white;
+      border: 0;
+    }
+
+    .imageTable img {
+      border: 2px solid black;
+    }
+
+    /* ----------------------------------------------------------------
+     * History table */
+
+    .tableCellHistory_date {
+      font-style: italic ;
+    }
+
+    .tableCellHistory_name {
+      font-weight: bold;
+      min-width: 18ex;
+    }
+
+    /* ----------------------------------------------------------------
+     * CAPTION: caption text styles */
+
+    .caption /* defines style for a text caption using page's default color */
+    {
+      font-family: Arial, Helvetica, Geneva, sans-serif ;
+      font-size: 80% ;
+    }
+ 
+    /* ----------------------------------------------------------------
+     * Page format/hiding. should be at bottom of css */
+
+    .print-only {
+      display: none;
+    }
+
+    /* Wide Screens */
+    @media screen and (min-width: 801px) {
+        .narrow-only {
+            display: none;
+        }
+    }
+
+    /* Narrow Screens */
+    @media screen and (min-width: 0px) and (max-width: 800px) {
+        .wide-only {
+            display: none;
+        }
+
+        .isisMenu {
+            display: none;
+        }
+    }

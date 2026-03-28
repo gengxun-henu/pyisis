@@ -1,0 +1,141 @@
+Testing FindCubeId method :  5
+
+=============== Testing Basic Read ===============
+  CubeDataThreadTester::ReadBrick
+    Requester is me? Yes
+    Data:
+      0	0	20	20
+
+  Notify done with this brick
+
+
+=============== Testing Multiple Non-Conflicting Cube Reads ===============
+  CubeDataThreadTester::ReadBrick
+    Requester is me? Yes
+    Data:
+      0	0	0	20	20	20
+
+  CubeDataThreadTester::ReadBrick
+    Requester is me? Yes
+    Data:
+      1221	1206	1221
+
+  Notify done with this brick
+  Notify done with first brick
+
+
+=============== Testing Exact Overlap Cube Reads ===============
+
+  CubeDataThreadTester::ReadBrick
+    Requester is me? Yes
+    Data:
+      20	20
+
+  CubeDataThreadTester::ReadBrick
+    Requester is me? Yes
+    Data:
+      20	20
+
+  Notify done with this brick
+  Notify done with first brick
+
+
+=============== Testing Basic R/W ===============
+
+  CubeDataThreadTester::ReadWriteBrick
+    Changing Brick : Index 0 Becoming 5
+
+    Old Data: 
+      2	3	3	4
+    New Data: 
+      5	3	3	4
+
+  Notify done with this brick
+  CubeDataThreadTester::ReadBrick
+    Requester is me? Yes
+    Data:
+      5	3	3	4
+
+  Notify done with this brick
+
+
+=============== Testing Multiple Non-Conflicting Cube R/W ===============
+
+  CubeDataThreadTester::ReadWriteBrick
+    Changing Brick : Index 0 Becoming 5
+
+    Old Data: 
+      5	3	4
+    New Data: 
+      5	3	4
+
+  CubeDataThreadTester::ReadWriteBrick
+    Changing Brick : Index 0 Becoming 5
+
+    Old Data: 
+      2	3	4
+    New Data: 
+      5	3	4
+
+  Notify done with this brick
+  Notify done with first brick
+
+
+=============== Testing Conflicting Cube R/W ===============
+  CubeDataThreadTester::ReadWriteBrick
+    Changing Brick : Index 0 Becoming 5
+
+    Old Data: 
+      5	3	4
+    New Data: 
+      5	3	4
+
+  Breaking Deadlock From Test 3
+  Notify done with first brick
+  CubeDataThreadTester::ReadWriteBrick
+    Changing Brick : Index 0 Becoming 5
+
+    Old Data: 
+      5	3	4
+    New Data: 
+      5	3	4
+
+  Notify done with this brick
+
+
+=============== Testing Change Notification ===============
+  CubeDataThreadTester::ReadWriteBrick
+    Changing Brick : Index 0 Becoming 5
+
+    Old Data: 
+      6
+    New Data: 
+      5
+
+  Notify done with this brick
+  CubeDataThreadTester::BrickChanged
+    Data:
+      5
+
+
+Creating Deadlock then trying to remove cubes
+=============== Testing Conflicting Cube R/W ===============
+  CubeDataThreadTester::ReadWriteBrick
+    Changing Brick : Index 0 Becoming 5
+
+    Old Data: 
+      5	3	4
+    New Data: 
+      5	3	4
+
+**PROGRAMMER ERROR** CubeDataThread::RemoveCube failed cube ID [3] has requested Bricks.
+**PROGRAMMER ERROR** CubeDataThread::RemoveCube failed because cube ID [-1] not found.
+Remove cube succeeded
+
+
+Deleting CubeDataThread with allocated bricks...
+
+
+Cleanup Tester
+Deleting Temporary R/W Cubes
+Unit Test Complete

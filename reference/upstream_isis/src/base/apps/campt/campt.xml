@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="campt" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation=
+"http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Computes geometric and photometric information at a given pixel location
+  </brief>
+
+  <description>
+    <p>
+    Campt computes geometric and photometric information at a given pixel
+    location or list of pixel locations in the input image <def link="Cube">cube</def>.
+    The program computes spacecraft and instrument related information, and other types of
+    coordinates as described later in this document. The user will have a choice of coordinates
+    in which to output the information as well as a choice in the output format of the
+    information acquired.
+    </p>
+    <p>
+    Note the input image cube has preliminary requirements:
+    <ul>
+      <li>The input image requires <def>SPICE</def> information (see <i>spiceinit</i>).</li>
+      <li>The input image cube must be a <def>Level0</def>  or a <def>Level1</def> ISIS cube.</li>
+      <li>To use a <def>Level2</def> file as the input image (see <i>mappt</i>).</li>
+    </ul>
+    </p>
+    <p>
+    The point of interest in the image can be entered as <def>Latitude</def>/<def>Longitude</def>
+    coordinates or <def>Sample</def>/<def>Line</def> coordinates. Keep in mind
+    that the input <def>Latitude</def> and <def>Longitude</def> values entered
+    will be interpreted as <def link="Universal Coordinate">Universal
+    Coordinates</def> (ISIS default) regardless of the target body. In the
+    output, all positions are in <def link="Body Fixed Coordinate">Body-Fixed</def>
+    Coordinates. Multiple points of interest may be specified by providing a comma-delimited
+    flatfile of coordinates.
+    </p>
+    <p>
+    The following is a partial list of coordinates computed in the <i>campt</i> application:<br />
+    <br />
+    <b>Geometric Information</b>: <def>Latitude</def>, <def>Longitude</def>, <def>Oblique Detector Resolution</def>,
+       <def>Line Resolution</def>, <def>Oblique Line Resolution</def> <br />
+    <br />
+    <b>Photometric Information</b>: <def link="Phase Angle">Phase</def>,
+    <def link="Emission Angle">Emission</def>, and <def link="Incidence
+    Angle">Incidence Angles</def>  <br />
+    <br />
+    <b>In addition</b>, this application will return a list of other spacecraft,
+    sun and instrument-related information including but not limited to
+    <def>Spacecraft Position</def>, <def>Spacecraft Azimuth</def>,
+    <def link="SubSpacecraft Longitude">Sub-Spacecraft Longitude</def>,
+    <def>SubSolar Latitude</def>, <def>SubSolar Longitude</def>, and
+    Time information (<def>Ephemeris Time</def>, <def>UTC</def>).
+    </p>
+    <p>
+    You may choose the format of the output file. The option list includes
+    a choice of a <def>PVL</def> file or a flat file. A PVL file is a text
+    file in label format, while the flat file is a comma-delimited text file
+    that is easily imported into most databases and digital spreadsheets
+    such as Microsoft Excel. Below is an example of <i>campt</i> output in <def>PVL</def>
+    format. You can skim the left column of this PVL-formatted output file for
+    a thorough listing of the types of coordinates, sun and instrument-related
+    information computed when using <i>campt</i>.
+    </p>
+
+    <pre>
+Group = GroundPoint
+  Filename                   = $ISISDATA/base/examples/ab102401.cub
+  <def>Sample</def>                     = 1.0
+  <def>Line</def>                       = 1.0
+  <def link="Digital Number">PixelValue</def>                 = 0.0607816
+  <def link="Right Ascension">RightAscension</def>             = 65.749350916052 &lt;DEGREE&gt;
+  <def>Declination</def>                = -18.390093214966 &lt;DEGREE&gt;
+  <def link="Planetocentric Latitude">PlanetocentricLatitude</def>     = 34.444196777763 &lt;DEGREE&gt;
+  <def link="Planetographic Latitude">PlanetographicLatitude</def>     = 34.760399604837 &lt;DEGREE&gt;
+  <def link="Positive East Longitude">PositiveEastLongitude</def>      = 223.84999971299 &lt;DEGREE&gt;
+  <def link="Positive West Longitude">PositiveWestLongitude</def>      = 136.15000028701 &lt;DEGREE&gt;
+  <def link="Body Fixed Coordinate">BodyFixedCoordinate</def>        = (-2015.9595225544, -1936.6155808127, 1917.2574858384) &lt;km&gt;
+  <def link="Local Radius">LocalRadius</def>                = 3389756.4767145 &lt;m&gt;
+  <def link="Sample Resolution">SampleResolution</def>           = 536.05556350077 &lt;m/pixel&gt;
+  <def link="Line Resolution">LineResolution</def>             = 536.05556350077 &lt;m/pixel&gt;
+  <def link="Oblique Detector Resolution">ObliqueDetectorResolution</def>  = 151.26661909292 &lt;m/pixel&gt;
+  <def link="Oblique Pixel Resolution">ObliquePixelResolution</def>     = 605.06647637166 &lt;m/pixel&gt;
+  <def link="Oblique Line Resolution">ObliqueLineResolution</def>      = 605.06647637166 &lt;m/pixel&gt;
+  <def link="Oblique Sample Resolution">ObliqueSampleResolution</def>    = 605.06647637166 &lt;m/pixel&gt;
+  # Spacecraft Information
+  SpacecraftPosition         = (-2025.6211429076, -2130.1417975758, 2009.318879871) &lt;km&gt;
+  <def link="Spacecraft Azimuth">SpacecraftAzimuth</def>          = 0.006855593033889 &lt;DEGREE&gt;
+  <def link="Slant Distance">SlantDistance</def>              = 214.52515878961 &lt;km&gt;
+  <def link="Target Center Distance">TargetCenterDistance</def>       = 3560.6189705415 &lt;km&gt;
+  <def link="SubSpacecraft Latitude">SubSpacecraftLatitude</def>      = 34.354896748841 &lt;DEGREE&gt;
+  <def link="SubSpacecraft Longitude">SubSpacecraftLongitude</def>     = 226.44072947174 &lt;DEGREE&gt;
+  SpacecraftAltitude         = 170.83335389965 &lt;km&gt;
+  <def link="Off Nadir Angle">OffNadirAngle</def>              = 36.149255932304 &lt;DEGREE&gt;
+  <def link="SubSpacecraft Ground Azimuth">SubSpacecraftGroundAzimuth</def> = 91.64525294858 &lt;DEGREE&gt;
+
+  # Sun Information
+  SunPosition                = (-177337948.13839, 112957442.69098, -33704752.205292) &lt;km&gt;
+  <def link="Sun Azimuth">SubSolarAzimuth</def>            = 172.30460990873 &lt;DEGREE&gt;
+  SolarDistance             = 1.4234246174889 &lt;AU&gt;
+  <def link="SubSolar Latitude">SubSolarLatitude</def>           = -9.1071705738361 &lt;DEGREE&gt;
+  <def link="SubSolar Longitude">SubSolarLongitude</def>          = 147.50443340123 &lt;DEGREE&gt;
+  <def link="Subsolar Ground Azimuth">SubSolarGroundAzimuth</def>      = 254.69139701227 &lt;DEGREE&gt;
+
+  # Illumination and Other
+  <def link="Phase Angle">Phase</def>                      = 120.59515694473 &lt;DEGREE&gt;
+  <def link="Incidence Angle">Incidence</def>                  = 84.106289446623 &lt;DEGREE&gt;
+  <def link="Emission Angle">Emission</def>                   = 38.288719431206 &lt;DEGREE&gt;
+  <def link="North Azimuth">NorthAzimuth</def>               = 261.46910874636 &lt;DEGREE&gt;
+
+  # Time
+  <def link="Ephemeris Time">EphemerisTime</def>              = -69382819.160519 &lt;seconds&gt;
+  <def>UTC</def>                        = 1997-10-20T10:58:37.6570806
+  LocalSolarTime             = 17.089704420784 &lt;hour&gt;
+  <def link="Solar Longitude">SolarLongitude</def>             = 201.83159041209 &lt;DEGREE&gt;
+  Error                      = NULL
+End_Group
+    </pre>
+  </description>
+
+  <category>
+    <categoryItem>Cameras</categoryItem>
+  </category>
+
+  <history>
+    <change name="Jeff Anderson" date="2005-02-04">
+      Original version
+    </change>
+    <change name="Elizabeth Ribelin" date="2005-06-20">
+        Fixed bug in Latitude range
+    </change>
+    <change name="Jacob Danton" date="2005-12-02">
+        Added appTest
+    </change>
+    <change name="Jacob Danton" date="2006-01-23">
+        Fixed appTest to comply to changes in String
+    </change>
+    <change name="Elizabeth Miller" date="2006-03-23">
+        Fixed appTest files to comply with changes to all camera models
+    </change>
+    <change name="Elizabeth Miller" date="2006-03-27">
+      Modified to output a flatfile as well as a pvl, make GUI consistent with skypt
+    </change>
+    <change name="Elizabeth Miller" date="2006-04-19">
+      Added additional output
+    </change>
+    <change name="Elizabeth Miller" date="2006-07-31">
+      Modified to use OffNadirAngle instead of SpacecraftRoll angle due to
+      changes made to the camera class
+    </change>
+    <change name="Sean Crosby" date="2007-04-12">
+      Added RightAscension and Declination to PVL output.  Program now requires
+      user to specify a filename when using FLAT option.  Increased precision in
+      flatfile output and updated appTest truthdata.
+    </change>
+    <change name="Steven Lambright" date="2008-04-21">
+      Added default values for the lines and samples
+    </change>
+    <change name="Steven Lambright" date="2008-05-12">
+      Removed references to CubeInfo
+    </change>
+    <change name="Steven Koechle" date="2008-08-19">
+      Removed unnecessary duplicate cube creation
+    </change>
+    <change name="Janet Barrett" date="2008-11-15">
+      Added SubSolarGroundAzimuth and SubSpacecraftGroundAzimuth
+      to PVL output. The SubSolarGroundAzimuth is the clockwise
+      angle on the ground between a line drawn from the ground
+      point to the North pole of the body and a line drawn from
+      the ground point to the subsolar point. The
+      SubSpacecraftGroundAzimuth is defined similarly except it
+      uses the subspacecraft point.
+    </change>
+    <change name="Steven Lambright" date="2009-01-05">
+      Added the ALLOWOUTSIDE option
+    </change>
+    <change name="Mackenzie Boyd" date="2009-08-24">
+      Modified to use new class CameraPointInfo
+    </change>
+    <change name="Mackenzie Boyd" date="2009-09-14">
+      Added missed functionality for defaulting to center sample/line
+    </change>
+    <change name="Tammy Becker" date="2012-01-13">
+      Modified documentation and added Glossary links
+    </change>
+    <change name="Janet Richie, Ella Mae Lee" date="2012-11-20">
+      Modified the documentation, fixes #1173
+    </change>
+    <change name="Lynn Weller" date="2013-02-25">
+      Removed links to applications imbedded in text and replaced with
+      italicized application name.  Added application links to the
+      "Related Objects and Documents" section of the documentation.
+      Fixes mantis ticket #1525.
+    </change>
+    <change name="Ian Humphrey" date="2014-11-05">
+      Added new parameters, USECOORDLIST, COORDLIST, and COORDTYPE for processing a list of
+      points as input. Reorganized campt. Fixes #1449.
+    </change>
+    <change name="Ian Humphrey" date="2015-03-03">
+      Updated documentation. References #1449.
+    </change>
+    <change name="Tyler Wilson" date="2016-08-17">
+      Checked in new test data, and added support for changes made to the CameraPointInfo
+      and Camera classes that incorporate new estimates for Pixel/Line/Sample/Detetctor resolution
+      and now allow a developer to control the order in which fields are output in both PVL and
+      CSV format.  References #476, #4100.
+    </change>
+    <change name="Kaj Williams" date="2017-06-13">
+      Resolved issue where the default value for the "allowoutside" parameter was supposed
+      to be set to "true", but the default _behavior_ of campt was instead consistent with a
+      setting of "false". In addition, corrected behavior where
+      manually setting "allowoutside" to "false" was ignored. Ref # 2258.
+    </change>
+    <change name="Kaitlyn Lee" date="2018-02-16">
+      Removed units on look direction vectors to make them unitless. Fixes #5125.
+    </change>
+    <change name="Kristin Berry, Jesse Mapel, and Stuart Sides" date="2021-02-10">
+      Modified to output Nulls when using a CSM Camera model and some values are not available.
+    </change>
+  </history>
+
+  <oldName>
+    <item>levpt</item>
+    <item>lev1pt</item>
+    <item>photostat</item>
+  </oldName>
+
+  <seeAlso>
+    <applications>
+      <item>spiceinit</item>
+      <item>mappt</item>
+      <item>getkey</item>
+    </applications>
+  </seeAlso>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input cube filename
+        </brief>
+        <description>
+          Input image, which requires <def>SPICE</def> (see <i>spiceinit</i>)
+          and must be a <def>Level0</def> or a <def>Level1</def> ISIS cube.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+
+      <parameter name = "USECOORDLIST">
+        <type>boolean</type>
+        <default><item>FALSE</item></default>
+        <brief>
+          Enable coordinate list parameters in the GUI
+        </brief>
+        <description>
+          Selecting this parameter will enable the 'COORDLIST' and 'COORDTYPE' parameters in the
+          GUI.
+          <p>
+            Note that this parameter is optional when running <i>campt</i> on the
+            command line.
+          </p>
+        </description>
+        <inclusions>
+          <item>COORDLIST</item>
+          <item>COORDTYPE</item>
+        </inclusions>
+        <exclusions>
+          <item>TYPE</item>
+          <item>SAMPLE</item>
+          <item>LINE</item>
+          <item>LATITUDE</item>
+          <item>LONGITUDE</item>
+        </exclusions>
+      </parameter>
+
+      <parameter name="COORDLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input comma-delimited file of image or ground coordinates
+        </brief>
+        <internalDefault>None</internalDefault>
+        <description>
+          An input comma-delimited flatfile of image coordinates or ground coordinates.
+          This allows the program to process multiple coordinates in a single run of <i>campt</i>,
+          and output the results to the specified output file.
+          <p>
+            Expected order for image coordinates: sample, line<br/>
+            Expected order for ground coordinates: latitude, longitude
+          </p>
+          <p>
+            The "Error" keyword will only appear when using a coordinate list. The value of "Error"
+            will then be NULL unless an error occurs during the processing of a coordinate in the
+            coordinate list. Then, the value of this keyword will be the error message. This allows
+            for <i>campt</i> to continue processing the remaining coordinates in the coordinate
+            list.
+          </p>
+          <p>
+            For the input of Latitude and Longitude, campt expects
+            <def>Planetocentric Latitude</def> (within -90 to 90 boundary) and
+            <def>Positive East Longitude</def> (with 0-360 boundary) to find the location in the
+            input camera image.
+          </p>
+        </description>
+        <exclusions>
+          <item>TYPE</item>
+          <item>SAMPLE</item>
+          <item>LINE</item>
+          <item>LATITUDE</item>
+          <item>LONGITUDE</item>
+        </exclusions>
+      </parameter>
+
+      <parameter name="COORDTYPE">
+        <type>string</type>
+        <brief>Coordinate type selection (Image or Ground) for 'COORDLIST'</brief>
+        <list>
+          <option value="IMAGE">
+            <brief>Interprets coordinates in 'COORDLIST' as sample/line</brief>
+            <description>
+              This option interprets the coordinates provided in the input coordinate list file
+              as sample/line and will compute latitude/longitude and Projection x/y.
+            </description>
+          </option>
+          <option value="GROUND">
+            <brief>Interprets the coordinates in 'COORDLIST' as latitude/longitude</brief>
+            <description>
+              This option interprets the coordinates provided in the input coordinate list file
+              as latitude/longitude and will compute sample/line and Projection x/y.
+            </description>
+          </option>
+        </list>
+        <description>
+          This parameter is used to select the type of coordinates entered in the coordinate list
+          file, which will be used to determine the method to compute the geometric
+          and photometric information.
+        </description>
+  <exclusions>
+    <item>TYPE</item>
+  </exclusions>
+      </parameter>
+
+      <parameter name="TO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>Output text filename</brief>
+        <internalDefault>None</internalDefault>
+        <description>
+          A text file in label format (<def>PVL</def>) which will
+          contain the results of <i>campt</i>.  This file can
+          be used in conjunction with the <i>getkey</i> application
+          in order to pass the results to another program when developing
+          scripts.
+        </description>
+      </parameter>
+
+      <parameter name="FORMAT">
+        <type>string</type>
+        <brief>
+          Output format (PVL or FLAT)
+        </brief>
+        <description>
+          Format type for output file.  PVL format is default.
+        </description>
+        <default><item>PVL</item></default>
+        <list>
+          <option value="PVL">
+            <brief>
+              PVL format
+            </brief>
+            <description>
+              Output file will be in PVL format
+            </description>
+          </option>
+          <option value="FLAT">
+            <brief>
+              Flat file format
+            </brief>
+            <description>
+              Output file will be a comma-delimited flatfile.  This file format
+              can easily be imported into <i>Excel</i>.
+            </description>
+          </option>
+        </list>
+      </parameter>
+
+      <parameter name="APPEND">
+        <type>boolean</type>
+        <brief>
+          Option to append results to output file
+        </brief>
+        <description>
+          If this option is selected, the output from the application will be
+          appended to the output file.  If it is not selected, any information
+          in the 'TO' file will be overwritten.
+        </description>
+        <default><item>TRUE</item></default>
+      </parameter>
+
+      <parameter name="ALLOWOUTSIDE">
+        <type>boolean</type>
+        <brief>
+          Allow sample/line values outside the image to be reported
+        </brief>
+        <description>
+          The Allowoutside parameter influences how <i>campt</i> will report
+          resulting latitude/longitude and sample/line coordinates that fall
+          outside the input cube pixel boundaries.
+          <p>
+          The default is set to True, which allows <i>campt</i> to return
+          the values that are outside the cube pixel boundaries. For example,
+          a given latitude/longitude might return a sample location of -1.0
+          (a single whole pixel coordinate off the left side of the image).
+          This is a feature of the ISIS camera models.
+          </p>
+          <p>
+          When set to False, if a returned coordinate is off the image,
+          <i>campt</i> will fail.  This failure can be indicated and ignored
+          within a batch script when only coordinates that fall within the
+          image cube pixel boundaries are desired.
+          </p>
+        </description>
+        <default><item>TRUE</item></default>
+      </parameter>
+      <parameter name="ALLOWERROR">
+        <type>boolean</type>
+        <brief>
+          Allow campt to output results regardless of errors. 
+        </brief>
+        <description>
+          The Allowerror parameter enables <i>campt</i> to return results despite any errors. 
+          Errors will be listed under "Error" in the result table, providing the user with information 
+          about points that may lack surface intersection.
+          <p>
+            By default, <i>campt</i> is set to False, causing it to throw an error if any occur.
+          </p>
+          <p>
+            If <i>campt</i> is set to True, errors will be displayed in the error section of the results table instead of being thrown.
+          </p>
+        </description>
+        <default><item>FALSE</item></default>
+      </parameter>
+    </group>
+
+    <group name="Position">
+      <parameter name="TYPE">
+        <type>string</type>
+        <brief>Coordinate type selection (Image or Ground)</brief>
+        <default><item>IMAGE</item></default>
+        <list>
+          <option value="IMAGE">
+            <brief>Interprets the coordinate as sample/line</brief>
+            <description>
+              This option interprets the coordinate as sample/line and will
+              compute latitude/longitude and Projection x/y.
+            </description>
+            <exclusions>
+              <item>LATITUDE</item>
+              <item>LONGITUDE</item>
+            </exclusions>
+          </option>
+          <option value="GROUND">
+            <brief>Interprets the coordinates as latitude/longitude</brief>
+            <description>
+              This option interprets the coordinate as latitude/longitude and
+              will compute sample/line and Projection x/y.
+            </description>
+            <exclusions>
+              <item>LINE</item>
+              <item>SAMPLE</item>
+            </exclusions>
+          </option>
+        </list>
+        <description>
+          This parameter is used to select the type of coordinate entered,
+          which will be used to determine the method to compute the geometric
+          and photometric information.
+        </description>
+      </parameter>
+
+      <parameter name="SAMPLE">
+        <type>double</type>
+        <brief>
+          Sample position to report
+        </brief>
+        <internalDefault>Center sample</internalDefault>
+        <description>
+            This is the <def>Sample</def> position used to compute information
+            at a given pixel location in the input image cube.
+        </description>
+      </parameter>
+
+      <parameter name="LINE">
+        <type>double</type>
+
+        <brief>
+          Line position to report
+        </brief>
+      <internalDefault>Center line</internalDefault>
+        <description>
+            This is the <def>Line</def> position used to compute information
+            at a given pixel location in the input image cube.
+        </description>
+      </parameter>
+
+      <parameter name="LATITUDE">
+        <type>double</type>
+        <brief>
+          Latitude (planetocentric) position
+        </brief>
+        <description>
+            This is the <def>Planetocentric Latitude</def> (within -90 to 90
+            boundary) used to find the location in the input camera image.
+            <p>
+              Refer to <def>Latitude Type</def>.
+            </p>
+        </description>
+        <minimum inclusive="yes">-90.0</minimum>
+        <maximum inclusive="yes">90.0</maximum>
+      </parameter>
+
+      <parameter name="LONGITUDE">
+        <type>double</type>
+        <brief>
+          Longitude (Positive East 360) position
+        </brief>
+        <description>
+            This is the <def>Positive East Longitude</def> (with 0-360 boundary)
+            used to find the location in the input camera image.
+            <p>
+              Refer to <def>Longitude Direction</def> and
+              <def>Longitude Domain</def>.
+            </p>
+        </description>
+        <minimum inclusive="yes">0.0</minimum>
+        <maximum inclusive="yes">360.0</maximum>
+      </parameter>
+    </group>
+  </groups>
+</application>

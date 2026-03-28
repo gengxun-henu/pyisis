@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "Pybind workflow quick guide"
+    url: "https://github.com/gengxun-henu/pyisis/blob/main/.github/workflows/README.md"
+    about: "Read this before opening or running a pybind agent task. Explains one-task scope, CI gates, retry budget, and blocker handling."
+  - name: "Repository Copilot instructions"
+    url: "https://github.com/gengxun-henu/pyisis/blob/main/.github/copilot-instructions.md"
+    about: "Repository-wide rules for pybind work, testing, upstream source reading, and reference versus tests/data layout."
+  - name: "ISIS pybind skill reference"
+    url: "https://github.com/gengxun-henu/pyisis/blob/main/.github/skills/isis-pybind/SKILL.md"
+    about: "Use this as the task workflow reference for selecting scope, inspecting inventory, implementing bindings, validating tests, and updating progress."

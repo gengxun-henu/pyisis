@@ -1,0 +1,213 @@
+Group = PixelSize
+  Auto           = 1
+  Optional       = 1
+  InputKey       = PIXSIZE
+  InputPosition  = FITSLABELS
+  OutputName     = PixelSize
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = PixelFov
+  Auto           = 1
+  Optional       = 1
+  InputKey       = PIXFOV
+  InputPosition  = FITSLABELS
+  OutputName     = PixelFov
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = Gain
+  Auto           = 1
+  Optional       = 1
+  InputKey       = GAIN
+  InputPosition  = FITSLABELS
+  OutputName     = Gain
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = ReadNoise
+  Auto           = 1
+  Optional       = 1
+  InputKey       = READNOI
+  InputPosition  = FITSLABELS
+  OutputName     = ReadNoise
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = TdiRate
+  Auto           = 1
+  Optional       = 1
+  InputKey       = TDIRATE
+  InputPosition  = FITSLABELS
+  OutputName     = TdiRate
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = SolarSpectrumResolved
+  Auto           = 1
+  InputKey       = RSOLAR
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = SolarSpectrumResolved
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = SolarSpectrumUnresolved
+  Auto           = 1
+  InputKey       = PSOLAR
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = SolarSpectrumUnresolved
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = PholusSpectrumResolved
+  Auto           = 1
+  InputKey       = RPHOLUS
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = PholusSpectrumResolved
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = PholusSpectrumUnresolved
+  Auto           = 1
+  InputKey       = PPHOLUS
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = PholusSpectrumUnresolved
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = CharonSpectrumResolved
+  Auto           = 1
+  InputKey       = RCHARON
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = CharonSpectrumResolved
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = CharonSpectrumUnresolved
+  Auto           = 1
+  InputKey       = PCHARON
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = CharonSpectrumUnresolved
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = JupiterSpectrumResolved
+  Auto           = 1
+  InputKey       = RJUPITER
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = JupiterSpectrumResolved
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = JupiterSpectrumUnresolved
+  Auto           = 1
+  InputKey       = PJUPITER
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = JupiterSpectrumUnresolved
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = PlutoSpectrumResolved
+  Auto           = 1
+  Optional       = 1
+  InputKey       = RPLUTO
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = PlutoSpectrumResolved
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = PlutoSpectrumUnresolved
+  Auto           = 1
+  Optional       = 1
+  InputKey       = PPLUTO
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = PlutoSpectrumUnresolved
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = SolarPivotWavelength
+  Auto           = 1
+  InputKey       = WSOLAR
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = SolarPivotWavelength
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = JupiterPivotWavelength
+  Auto           = 1
+  InputKey       = WJUPITER
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = JupiterPivotWavelength
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = PholusPivotWavelength
+  Auto           = 1
+  InputKey       = WPHOLUS
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = PholusPivotWavelength
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = PlutoPivotWavelength
+  Auto           = 1
+  InputKey       = WPLUTO
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = PlutoPivotWavelength
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = CharonPivotWavelength
+  Auto           = 1
+  InputKey       = WCHARON
+  InputPosition  = FITSLABELS
+  InputDefault   = 0.0
+  OutputName     = CharonPivotWavelength
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+Group = FlatFile
+  Auto           = 1
+  Optional       = 1
+  InputKey       = FLAT
+  InputPosition  = FITSLABELS
+  OutputName     = FlatFile
+  OutputPosition = (Object, IsisCube, Group, RadiometricCalibration)
+  Translation    = (*, *)
+End_Group
+
+End

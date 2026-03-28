@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="spiceserver" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Spiceinit Server
+  </brief>
+
+  <description>
+    This is the server-side program to handle spiceinit web requests. The input
+    is the spiceinit program's hex-encoded message (POSTED to a web server). The
+    output file is what needs to be sent back to the client. This program is
+    generally run by a web server and not by hand. The script:
+      "isis/src/base/apps/spiceserver/assets/spiceinit.cgi"
+    is an example of a perl script wrapper for running a spice server and using
+    this program.
+  </description>
+
+  <category>
+    <categoryItem>Cameras</categoryItem>
+  </category>
+
+  <history>
+    <change name="Steven Lambright and Jai Rideout" date="2011-09-02">
+      Original Version
+    </change>
+    <change name="Debbie A. Cook" date="2012-07-06">
+       Updated Spice members to be more compliant with Isis coding standards.
+       References #972.
+    </change>
+    <change name="Steven Lambright" date="2012-09-05">
+      Added parameter CHECKVERSION in order to increase the testability of this program.
+    </change>
+    <change name="Jeannie Backer" date="2013-02-26">
+      Added ability to load multiple ck database files from the system using a
+      conf file. Changed methods to lower camel case and added "g_" prefix to
+      global variables to comply with Isis3 standards. References #924.
+    </change>
+    <change name="Stuart Sides" date="2013-07-11">
+        Modified so the kernel quality parameters from XML are tested as case insensitive. This
+        change was made in a branch of ISIS, but was not yet moved to the publice version yet.
+    </change>
+    <change name="Kimberly Oyama" date="2014-04-28">
+      Instead of opening $base/testdata/isisTruth.cub spiceserver now creates a cube from the label
+      information that it receives from spiceinit. This change was made because the camera classes
+      (Camera, CameraFactory, Sensor, Spice,...) now take a cube as input to their constructors
+      instead of a pvl. The isisTruth.cub dimensions did not match the dimensions in the label
+      (from spiceinit), causing spiceserver to return an incorrect end time for the spice
+      information. Added TEMPFILE parameter for testing purposes. Fixes #2030.
+    </change>
+    <change name="Makayla Shepherd" date="2015-09-08">
+      Modified to open the temporary cube correctly. Fixes #2213.
+    </change>
+    <change name="Tyler Wilson" date="2019-02-11">
+      Modified the version check.  Now all versions of ISIS3 >= 3.5.*.* will be acceptable
+      to the application.
+    </change>
+    <change name="Adam Paquette" date="2021-08-10">
+      Removed commented out debugging code that should be run in SpiceClient/spiceinit.
+    </change>
+    <change name="Jacob Cain" date="2022-11-22">
+      Changed TEMPFILE type to cube. Fixes #4780.
+    </change>
+  </history>
+
+  <groups>
+    <group name="Input Files">
+      <parameter name="FROM">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          The input hex file POSTed by spiceinit
+        </brief>
+        <description>
+          This is the content of the request sent by spiceinit. It contains cube
+            labels and parameters used for initializing naif kernels to get
+            camera information. There is no personally identifiable information
+            in this file.
+        </description>
+        <filter>*.dat</filter>
+      </parameter>
+
+      <parameter name="TO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          The output hex file to be sent back to spiceinit.
+        </brief>
+        <description>
+          The output hex file which contains the necessary information for
+            spiceinit to complete. This contains binary data with Isis
+            compressed SPICE data, labels, and source file names.
+        </description>
+        <filter>*.dat</filter>
+      </parameter>
+    </group>
+
+    <group name="Options">
+      <parameter name="CHECKVERSION">
+        <type>boolean</type>
+        <default><item>true</item></default>
+        <brief>
+          Verify the input hex-encoded file reports the same Isis version as the current version
+          of Isis (requester's version matches server's version).
+        </brief>
+        <description>
+          The input file (which comes from spiceinit's SpiceClient) contains the version of Isis
+          that the requester is running. No guarantees can be made for the validity/usability of
+          the results of the Isis versions of the client and server don't match. This option
+          causes spiceserver to throw an error if the versions of Isis do not match.
+        </description>
+      </parameter>
+
+      <parameter name="TEMPFILE">
+        <type>cube</type>
+        <fileMode>output</fileMode>
+        <default><item>/tmp/spice_web_service/inputLabels.cub</item></default>
+        <brief>
+          Location of temp cube
+        </brief>
+        <description>
+          This parameter was added for testing purposes only. The spice server has access to the
+          default location but the app tests will use their own output directory as the temp cube
+          location.
+        </description>
+        <filter>*.cub</filter>
+      </parameter>
+    </group>
+  </groups>
+
+</application>

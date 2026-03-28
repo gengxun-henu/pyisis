@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="messckgen" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Generates MESSENGER CKs
+  </brief>
+
+  <description>
+    Generates MESSENGER CKs from previous CK DB file, along with the latest
+    pivot and attitude history DB files.
+  </description>
+
+  <history>
+    <change name="Travis Addair" date="2011-10-26">
+      Original version
+    </change>
+  </history>
+
+  <category>
+    <categoryItem>System</categoryItem>
+  </category>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input CK kernel.xxxx.db file
+        </brief>
+        <description>
+          The CK PVL group DB file used to generate the new DB file. Defaulted
+          to use $ISISDATA/messenger/kernels/ck/kernels.????.db.  This file is
+          primarily used to extract formatting and old groups that need to be
+          updated and transferred to the new CK DB file.
+        </description>
+        <internalDefault>
+          Automatic
+        </internalDefault>
+        <filter>
+          *.db
+        </filter>
+      </parameter>
+
+      <parameter name="TO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output CK kernel.xxxx.db file
+        </brief>
+        <description>
+          The new DB file that is the matching CK file.  Defaulted to use
+          $ISISDATA/messenger/kernels/ck/kernels.????.db.
+        </description>
+        <internalDefault>
+          Automatic
+        </internalDefault>
+        <filter>
+          *.db
+        </filter>
+      </parameter>
+
+      <parameter name="PIVOT">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          The CK pivot file
+        </brief>
+        <description>
+          The latest CK pivot file used to extract new date ranges and the
+          latest pivot file.  Defaulted to use
+          $ISISDATA/messenger/kernels/ck/pivot_kernels.????.db.
+        </description>
+        <internalDefault>
+          Automatic
+        </internalDefault>
+        <filter>
+          *.db
+        </filter>
+      </parameter>
+
+      <parameter name="ATTHIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          The CK attitude history file
+        </brief>
+        <description>
+          The latest CK pivot file used to extract new date ranges and the
+          latest attitude history file.  Defaulted to use
+          $ISISDATA/messenger/kernels/ck/atthist_kernels.????.db.
+        </description>
+        <internalDefault>
+          Automatic
+        </internalDefault>
+        <filter>
+          *.db
+        </filter>
+      </parameter>
+    </group>
+  </groups>
+</application>

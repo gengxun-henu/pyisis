@@ -1,0 +1,13 @@
+Unit Test for PixelFOV...
+FileName: $ISISTESTDATA/isis/src/dawn/unitTestData/FC21B0001010_09049002212F5D.cub
+Pixel IFOV for center pixel position ...
+Vertex 1 Latitude OK
+Vertex 1 Longitude OK
+Vertex 2 Latitude OK
+Vertex 2 Longitude OK
+Vertex 3 Latitude OK
+Vertex 3 Longitude OK
+Vertex 4 Latitude OK
+Vertex 4 Longitude OK
+
+Full FOV functionality is tested by pixel2map's app test.

@@ -1,0 +1,1282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="shadowtau" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+   Estimate optical depth (tau) using information from shadow measurements
+  </brief>
+
+  <description>
+    <p>
+      This program estimates the optical depth (tau) values using a table file
+      that consists of measurements collected at different locations on
+      <def>Level1</def> images with ISIS <i>qview</i> or another image
+      display program.  Information for different images can be entered into
+      a single table file.  The input values gathered are the average
+      <def link="Digital Number">density</def> measurements
+      of a dark shadow and its photometric properties, and the average
+      density of an unshadowed level-surface near the measured dark shadow on a
+      <def>Level1</def> image that are output to a table file.  The table file
+      contains one line per image point of the measured values separated by a
+      comma or space in the following order:
+      <ol>
+        <li>Image ID</li>
+        <li><def link="Incidence Angle">Incidence angle</def> of the measured
+	    dark shadow</li>
+        <li><def link="Emission Angle">Emission angle</def> of the measured
+	    dark shadow</li>
+        <li><def link="Phase Angle">Phase angle</def> of the measured dark shadow</li>
+        <li>The average DN (<def link="Radiance">radiance</def>) of a level
+	    unshadowed area</li>
+        <li>The average DN (radiance) of a dark shadowed area</li>
+      </ol>
+    </p>
+    <p>
+      The image below shows an example of areas that could be measured on a
+      <def>Level1</def> image using the qview tools.  The tracking tool is used
+      to obtain the phase, incidence, and emission angles of the dark shadow.
+      The statistics tool in <i>qview</i> is used to obtain the
+      average density of the selected area on a dark shadow and an unshadowed
+      area near the dark shadow. The average pixel values can be added to the
+      tracking window, under notes, for each point, and saved to an output file.
+      Another option is to record the information using a text editor.
+      <br /> <br />
+      <blockquote>
+      <img src="assets/images/shadowtau_qview.jpg" alt="QVIEW Example" width="529" height="519" />
+      <br /> <br />
+      </blockquote>
+    </p>
+    <p>
+      Whatever method is used to record the information into a table file,
+      the input file to shadowtau must have required column information in a
+      specific order.  Note: the program qview does not output the photometric
+      information in the correct order, so the user must modify the output
+      before using the table file in shadowtau.
+    </p>
+    <p>
+      The following is an example of the input text file after it has been reordered:
+      <br />
+      <pre>
+     PSP_001414_1780_RED5.cub, 54.3287, 17.7148, 70.0486, 0.0943, 0.0667265
+     PSP_001414_1780_RED5.cub, 54.3283, 17.7173, 70.0506, 0.0926, 0.0653045
+     PSP_001414_1780_RED5.cub, 54.3191, 17.7427, 70.0657, 0.0888, 0.069008
+     PSP_001414_1780_RED5.cub, 54.3716, 17.7178, 70.0861, 0.0888, 0.0506262
+     PSP_001414_1780_RED5.cub, 54.3709, 17.7292, 70.0956, 0.091, 0.0518498
+     </pre>
+     </p>
+     <p>
+       The following is the result of shadowtau; the bolded values are estimated
+       tau and albedo values, respectively:<br />
+       <pre>
+     PSP_001414_1780_RED5.cub, 54.3287, 17.7148, 70.0486, 0.0943, 0.0667265, <b>0.43133</b>, <b>0.120277</b>
+     PSP_001414_1780_RED5.cub, 54.3283, 17.7173, 70.0506, 0.0926, 0.0653045, <b>0.424314</b>, <b>0.117599</b>
+     PSP_001414_1780_RED5.cub, 54.3191, 17.7427, 70.0657, 0.0888, 0.069008, <b>0.482241</b>, <b>0.0944602</b>
+     PSP_001414_1780_RED5.cub, 54.3716, 17.7178, 70.0861, 0.0888, 0.0506262, <b>0.307933</b>, <b>0.134256</b>
+     PSP_001414_1780_RED5.cub, 54.3709, 17.7292, 70.0956, 0.091, 0.0518498, <b>0.311609</b>, <b>0.138582</b>
+       </pre>
+    </p>
+    <p>
+      For each line in the table file above, the model results for the tau
+      and <def link="Albedo">albedo</def> of the surface are appended to
+      the end of the input line as shown in bold, and exported to the output
+      file.  All the results are based on user-selected photometric and
+      atmospheric models, and either the default or user-modified parameter values.
+      Most of the parameters default to appropriate values for Mars red filter
+      images since it is the only other planet with modest atmospheric optical
+      depths besides Earth.  The results from the program are useful as an initial value
+      for the "tau" parameter when a photometric correction is applied to the images.
+    </p>
+    <p>
+      The surface and atmosphere models use the same assumptions as the
+      <i>photomet</i> photometric correction software, so the estimated
+      optical depths are useful for processing images with that program.  In
+      other words, the optical depth calculated by this program is model-dependent;
+      however, it is exactly the model-dependent value that will produce the most
+      effective photometric correction in <i>photomet</i>.
+    </p>
+<small>
+<br/>
+<hr>
+<br/>
+<h2><b><center>SURFACE PHOTOMETRIC FUNCTION MODELS</center></b></h2>
+<br/>
+
+</hr>
+<table border="1">
+<caption><b>Available photometric function models and required parameter names</b></caption>
+<tr>
+<th>Name</th>
+<th>Required parameter names</th>
+</tr>
+<tr>
+<td> Hapkehen </td>
+<td>B0, hg1, hg2, hh, theta, wh</td>
+</tr>
+<tr>
+<td> Hapkeleg </td>
+<td>Theta, wh, bh, ch, hh, b0, zerob0st</td>
+</tr>  <tr>
+<td> Lambert </td>
+<td>None</td>
+</tr>
+<tr>
+<td> LommelSeeliger </td>
+<td>None</td>
+</tr>
+<tr>
+<td> LunarLambert </td>
+<td>L</td>
+</tr>
+<tr>
+<td> LunarLambertEmpirical <b>(Disabled until next release)</b> </td>
+<td>Datafile</td>
+</tr>
+<tr>
+<td> LunarLambertMcEwen </td>
+<td>None</td>
+</tr>
+<tr>
+<td> Minnaert </td>
+<td>K</td>
+</tr>
+<tr>
+<td> MinnaertEmpirical <b>(Disabled until next release)</b> </td>
+<td>Datafile</td>
+</tr>
+</table>
+<br/>
+<br/>
+
+<table border="1">
+<caption><b>Photometric model parameter names and settings</b></caption>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>ISIS default</th>
+<th>Valid range</th>
+</tr>
+<tr>
+<td>B0</td>
+<td>Hapke opposition surge component</td>
+<td>0.0</td>
+<td>0 &lt;= value</td>
+</tr>
+
+<tr>
+<td>Bh</td>
+<td>Hapke Legendre coefficient for single particle phase function</td>
+<td>0.0</td>
+<td>-1 &lt;= value &lt;= 1</td>
+</tr>
+
+<tr>
+<td>Ch</td>
+<td>Hapke Legendre coefficient for single particle phase function</td>
+<td>0.0</td>
+<td>-1 &lt;= value &lt;= 1</td>
+</tr>
+<tr>
+<td>Hg1</td>
+<td>Hapke Henyey Greenstein coefficient for single particle phase function</td>
+<td>0.213</td>
+<td>0 &lt;= value &lt;= 1</td>
+</tr>
+<tr>
+<td>Hg2</td>
+<td>Hapke Henyey Greenstein coefficient for single particle phase function</td>
+<td>1.0</td>
+<td>0 &lt;= value &lt;= 1</td>
+</tr>
+<tr>
+<td>Hh</td>
+<td>Hapke opposition surge component</td>
+<td>0.0</td>
+<td>0 &lt;= value</td>
+</tr>
+<tr>
+<td>K</td>
+<td>Minnaert function exponent</td>
+<td>0.52</td>
+<td>0 &lt;= value</td>
+</tr>
+<tr>
+<td>L</td>
+<td>Lunar-Lambert function weight</td>
+<td>0.52</td>
+<td>No limit</td>
+</tr>
+<tr>
+<td>Theta</td>
+<td>Hapke macroscopic roughness component</td>
+<td>8.0</td>
+<td>0 &lt;= value &lt;= 90</td>
+</tr>
+<tr>
+<td>Wh</td>
+<td>Hapke single scattering albedo component</td>
+<td>0.52</td>
+<td>0 &lt; value &lt;= 1</td>
+</tr>
+<tr>
+<td>Zerob0st</td>
+<td>Flag to set opposition surge B0 to zero</td>
+<td>True</td>
+<td>True or False</td>
+</tr>
+<tr>
+<td>Datafile</td>
+<td>Input PVL file for empirical functions</td>
+<td>None</td>
+<td>String</td>
+</tr>
+</table>
+<br/>
+<p>
+The functions are defined as follows, where phase is the <def link="Phase Angle">
+phase angle</def>, and u0 and u are the cosines of the <def link="Incidence Angle">
+incidence</def> and <def link="Emission Angle">emission angles</def>, respectively:
+</p>
+<dl>
+<dt><b>Lambert </b></dt>
+<dd>  FUNC=u0 </dd>
+
+<dt><b>LommelSeeliger </b></dt>
+<dd>  FUNC=u0/(u0+u)</dd>
+
+<dt><b>Minnaert </b></dt>
+<dd>  FUNC=u0**K * u**(K-1)</dd>
+
+<dt><b>LunarLambert (Lunar-Lambert, "lunar" part is Lommel-Seeliger) </b></dt>
+<dd>  FUNC=(1-L)*u0 + 2*L*u0/(u0+u)</dd>
+
+<dt><b>MinnaertEmpirical </b></dt>
+<dd>  FUNC=B(phase) * u0**K(phase) * u**(K(phase)-1)</dd>
+
+<dt><b>LunarLambertEmpirical </b></dt>
+<dd>  FUNC=B(phase) * ((1-L)*u0 + 2*L*u0/(u0+u))</dd>
+</dl>
+
+<hr>
+<br/>
+<h2><b><center>ATMOSPHERIC PHOTOMETRIC FUNCTION MODELS</center></b></h2>
+<br/>
+</hr>
+<table border="1">
+<caption><b>Available atmosphereic functions and required parameter names</b></caption>
+<tr>
+<th>Function model name</th>
+<th>Required parameters</th>
+</tr>
+<tr>
+<td> Anisotropic1 </td>
+<td>Bha, hnorm, wha</td>
+</tr>
+<tr>
+<td> Anisotropic2 </td>
+<td>Bha, hnorm, wha</td>
+</tr>
+<tr>
+<td> HapkeAtm1 </td>
+<td>Hga, hnorm, wha</td>
+</tr>
+<tr>
+<td> HapkeAtm2 </td>
+<td>Hga, hnorm, wha</td>
+</tr>
+<tr>
+<td> Isotropic1 </td>
+<td>Hnorm, wha</td>
+</tr>
+<tr>
+<td> Isotropic2 </td>
+<td>Hnorm, wha</td>
+</tr>
+</table>
+
+
+<br/>
+<br/>
+
+<table border="1">
+<caption><b>Atmospheric models parameter names and settings</b></caption>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th>ISIS Default</th>
+<th>Valid Range</th>
+</tr>
+<tr>
+<td>Bha</td>
+<td>Coefficient of the single particle Legendre phase function</td>
+<td>0.95</td>
+<td>-1 &lt;= value &lt;= 1</td>
+</tr>
+<tr>
+<td>Hga</td>
+<td>Coefficient of single particle Henyey Greenstein phase function</td>
+<td>0.7</td>
+<td>-1 &lt; value &lt; 1</td>
+</tr>
+<tr>
+<td>Hnorm</td>
+<td>Atmospheric shell thickness normalized to the planet radius</td>
+<td>0.003</td>
+<td>0 &lt;= value</td>
+</tr>
+<tr>
+<td>Wha</td>
+<td>Single scattering albedo of atmospheric particles</td>
+<td>0.9</td>
+<td>0 &lt; value &lt; 1</td>
+</tr>
+</table>
+<br/>
+<hr>
+</hr>
+</small>
+<br/>
+
+<pre>
+References:
+
+Chandrasekhar, S., 1960.  Radiative Transfer. Dover, 393 pp.
+Hapke, B. W., 1981. Bidirectional reflectance spectroscopy 1: Theory.
+   J. Geophys. Res., pp. 86,3039-3054.
+Hapke, B., 1984. Bidirectional reflectance spectroscopy 3: Corrections for
+   macroscopic roughness. Icarus, 59, pp. 41-59.
+Hapke, B., 1986. Bidirectional reflectance spectroscopy 4: The extinction
+   coefficient and the opposition effect. Icarus, 67, pp. 264-280.
+Johnson, J. R., et al., 1999, Preliminary Results on Photometric Properties of
+   Materials at the Sagan Memorial Station, Mars, J. Geophys. Res., 104, 8809.
+Kirk, R. L., Thompson, K. T., Becker, T. L., and Lee, E. M., 2000.
+   Photometric modelling for planetary cartography. Lunar Planet. Sci., XXXI,
+   Abstract #2025, Lunar and Planetary Institute, Houston (CD-ROM).
+Kirk, R. L., Thompson, K. T., and Lee, E. M., 2001. Photometry of the
+   martian atmosphere:  An improved practical model for cartography and
+   photoclinometry. Lunar Planet. Sci., XXXII, Abstract #1874, Lunar and
+   Planetary Institute, Houston (CD-ROM).
+McEwen, A. S., 1991. Photometric functions for photoclinometry and other
+   applications.  Icarus, 92, pp. 298-311.
+Tanaka, K. L., and and Davis, P. A., 1988, Tectonic History of the Syria
+   Planum Provice of Mars, J. Geophys. Res., 93, 14,893.
+Thorpe, T. E., 1973, Mariner 9 Photometric Observations of Mars from
+   November 1971 through March 1972, Icarus, 20, 482.
+Tomasko, M. G., et al., 1999, Properties of Dust in the Martian Atmosphere
+   from the Imager on Mars Pathfinder, J. Geophys. Res., 104, 8987
+</pre>
+</description>
+
+  <category>
+    <categoryItem>Radiometric and Photometric Correction</categoryItem>
+  </category>
+
+  <seeAlso>
+    <applications>
+      <item>qview</item>
+      <item>photomet</item>
+    </applications>
+  </seeAlso>
+
+  <history>
+    <change name="Randy Kirk" date= "1999-11-27">
+        USGS Flagstaff Original Version
+    </change>
+    <change name="Sharmila Prasad &amp; Janet Barrett" date="2011-09-04">
+      Isis3 Original version, shadow_tau ported from isis2 to shadowtau in isis3  
+    </change>
+    <change name="Janet Barrett" date="2012-01-05">
+      Tested code to make sure it gives the same results as the ISIS2 version.
+      Created app tests.
+    </change>
+    <change name="Ella Mae Lee" date="2012-11-20">
+      Improve shadowtau documentation, change ZEROB0STANDARD to ZEROB0ST,
+      modified remaining ISIS2 parameter values to ISIS3 values, and
+      disabled the use of a datafile with the empirical functions because
+      of a bug in the program, fixes #455.
+    </change>
+    <change name="Janet Barrett" date="2012-12-07">
+      PLEASE NOTE (in reference to change made on 2012-11-20): The backwards compatibility for
+      the shorter ZEROB0ST parameter name has not been fully implemented in ISIS. As a result,
+      this change has been removed and the full ZEROB0STANDARD parameter name must be used.
+      Support for aliases (deprecated values) must be fully implemented in ISIS before the shorter
+      parameter name (ZEROB0ST) will be available. Fixes #1288.
+    </change>
+    <change name="Lynn Weller" date="2013-02-25">
+      Removed links to applications imbedded in text and replaced with
+      italicized application name.  Added application links to the
+      "Related Objects and Documents" section of the documentation.
+      Fixes mantis ticket #1525.
+    </change>
+    <change name="Kimberly Oyama and Janet Barrett" date="2013-04-10">
+      Removed the "NONE" option from the "ATMNAME" parameter because an
+      atmospheric model is required for calculating tau. Fixes #1313.
+    </change>
+  </history>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+            Input text file name
+        </brief>
+        <description>
+          Input text file name with Image ID, incidence, emission, and phase
+	  angle of the measured dark shadow, average DN value of flat area
+	  and  average DN value of a dark shadowed area
+        </description>
+        <filter>
+          *.txt
+        </filter>
+      </parameter>
+      <parameter name="TO">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+            Output text file name
+        </brief>
+        <description>
+          Output text file name with the input ImageID, incidence, emission,
+	  and phase angle of the measured dark shadow, average DN value of
+	  flat area, average DN value of a dark shadowed area, plus the
+	  estimated tau (optical depth) and albedo (albedo of the surface)
+	  values appended to each input line.
+        </description>
+        <filter>
+          *.txt
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Photometric Model">
+      <parameter name="PHTNAME">
+        <type>combo</type>
+        <brief>
+          Photometric model to be used
+        </brief>
+        <description>
+          Specify the name of the surface photometric function model to apply
+          to the input image.  The available options are the following:<br/>
+          <dl>
+          <dt><b>HAPKEHEN</b></dt>
+           <dd>
+              Derive model albedo using the complete Hapke model with Henyey-Greenstein
+	      single-particle phase function whose coefficients are hg1 and hg2,
+	      plus single scattering albedo wh, opposition surge parameters hh and
+	      b0, and macroscopic roughness theta.  For a smooth model with opposition
+	      effect use theta=0. <br/>
+	      <br/>
+	      The table below shows the Hapke parameters for Mars from Johnson et
+	      al. (1999) for IMP data  of Photometry Flats (soil) and may be reasonably
+	      representative of Mars as a whole.  Note that (hg1, hg2=1.0) is
+	      equivalent to (-hg1, hg2=0.0). <br/>
+	      <br/>
+	      <table border="1">
+	      <caption><b>Parameter settings for Mars</b></caption>
+	      <tr>
+	      <th>Band</th>
+	      <th>Wh</th>
+	      <th>B0</th>
+	      <th>Hh</th>
+	      <th>Hg1</th>
+	      <th>Hg2</th>
+	      </tr>
+	      <tr>
+	      <td>Red</td>
+	      <td>0.52</td>
+	      <td>0.025</td>
+	      <td>0.17</td>
+	      <td>0.213</td>
+	      <td>1.0</td>
+	      </tr>
+	      <tr>
+	      <td>Green</td>
+	      <td>0.29</td>
+	      <td>0.29</td>
+	      <td>0.17</td>
+	      <td>0.19</td>
+	      <td>1.0</td>
+	      </tr>
+	      <tr>
+	      <td>Blue</td>
+	      <td>0.16</td>
+	      <td>0.995</td>
+	      <td>0.17</td>
+	      <td>0.145</td>
+	      <td>1.0</td>
+	      </tr>
+	      </table>
+          </dd>
+          <dt><b>HAPKELEG</b></dt>
+          <dd>
+              Derive model albedo using complete Hapke model with Henyey Legendre
+	      two-term Legendre polynomial phase function whose coefficients are bh
+	      and ch, plus single scattering albedo wh, opposition surge parameters
+	      hh and b0, and macroscopic roughness theta.
+          </dd>
+          <dt><b>LAMBERT </b></dt>
+          <dd>
+              A simple photometric model which predicts that light incident on a
+	      surface is scattered uniformly in all directions; the total amount
+	      of reflected light depends on the incidence angle of the illumination.
+	      This function does not depend upon the outgoing light direction.
+          </dd>
+          <dt><b>LOMMELSEELIGER</b></dt>
+          <dd>
+              This model takes into account the <def>radiance</def> that results from
+              single scattering (scattering of collimated incident light) and
+              does not take into account the radiance that results from multiple
+              scattering (scattering of diffuse light which has made its way
+              indirectly to the same position by being scattered one or more
+              times). This model depends on the incidence and emission angles.
+          </dd>
+          <dt><b>LUNARLAMBERTMCEWEN</b></dt>
+          <dd>
+              This model was developed specifically for use with the Moon, and
+              designed to be used in conjunction with the Moon(MoonAlbedo)
+              normalization model.
+          </dd>
+          <dt><b>LUNARLAMBERTEMPIRICAL</b>, <b>LUNARLAMBERT</b>,
+	  <b>MINNAERTEMPIRICAL</b>, and <b>MINNAERT</b>
+	  </dt>
+          <dd>
+              These models combine a weighted sum of the LommelSeeliger and
+              Lambert models. Given a suitable value for the LunarLambert
+              function weight, L, these models fit the true
+	      <def link="Reflectance">reflectance</def> behavior
+              of many planetary surfaces equally well as the Hapke model. These
+              models also depend on the incidence and emission angles.
+          </dd>
+          </dl>
+	  <p>
+	     LUNARLAMBERTEMPIRICAL and MINNAERTEMPIRICAL photometric models, and
+	     the parameter name DATAFILE are disabled until the next release.
+	     There was a problem using the two functions listed above.
+	  </p>
+        </description>
+
+        <internalDefault>HAPKEHEN</internalDefault>
+        <default>
+          <item>HAPKEHEN</item>
+        </default>
+        <list>
+          <option value="HAPKEHEN">
+            <brief>
+              Hapke-Henyey-Greenstein Photometric Model
+            </brief>
+            <description>
+              Derive model albedo using complete Hapke model with Henyey-Greenstein
+	      single-particle phase function.
+            </description>
+            <inclusions>
+              <item>THETA</item>
+              <item>WH</item>
+              <item>HG1</item>
+              <item>HG2</item>
+              <item>HH</item>
+              <item>B0</item>
+              <item>ZEROB0STANDARD</item>
+            </inclusions>
+            <exclusions>
+              <item>BH</item>
+              <item>CH</item>
+              <item>L</item>
+              <item>K</item>
+              <!-- item DATAFILE item -->
+            </exclusions>
+          </option>
+          <option value="HAPKELEG">
+            <brief>
+              Hapke Legendre Polynomial Photometric Model
+            </brief>
+            <description>
+              Derive model albedo using complete Hapke model with Henyey Legendre
+	      two-term Legendre polynomial phase function.
+            </description>
+            <inclusions>
+              <item>THETA</item>
+              <item>WH</item>
+              <item>BH</item>
+              <item>CH</item>
+              <item>HH</item>
+              <item>B0</item>
+              <item>ZEROB0STANDARD</item>
+            </inclusions>
+            <exclusions>
+              <item>HG1</item>
+              <item>HG2</item>
+              <item>L</item>
+              <item>K</item>
+              <!-- item DATAFILE item -->
+            </exclusions>
+          </option>
+          <option value="LAMBERT">
+            <brief>
+              Lambert Photometric Model
+            </brief>
+            <description>
+              Simple photometric model which predicts that light
+              incident on a surface is scattered uniformly in all directions.
+            </description>
+            <exclusions>
+              <item>THETA</item>
+              <item>WH</item>
+              <item>HG1</item>
+              <item>HG2</item>
+              <item>HH</item>
+              <item>B0</item>
+              <item>ZEROB0STANDARD</item>
+              <item>BH</item>
+              <item>CH</item>
+              <item>L</item>
+              <item>K</item>
+              <!-- item DATAFILE item -->
+            </exclusions>
+          </option>
+          <option value="LOMMELSEELIGER">
+            <brief>
+              Lommel-Seeliger Photometric Model
+            </brief>
+            <description>
+              This model takes into account the <def link="Radiance">radiance</def>
+	      that results from single scattering (scattering of collimated
+	      incident light).
+            </description>
+            <exclusions>
+              <item>THETA</item>
+              <item>WH</item>
+              <item>HG1</item>
+              <item>HG2</item>
+              <item>BH</item>
+              <item>CH</item>
+              <item>HH</item>
+              <item>B0</item>
+              <item>ZEROB0STANDARD</item>
+              <item>L</item>
+              <item>K</item>
+              <!-- item DATAFILE item -->
+            </exclusions>
+          </option>
+          <!--
+	  <option value="LUNARLAMBERTEMPIRICAL">
+            <brief>
+              Lunar Lambert Empirical Photometric Model
+            </brief>
+            <description>
+              This model combines a weighted sum of the LommelSeeliger and
+              Lambert models.
+            </description>
+            <exclusions>
+              <item>THETA</item>
+              <item>WH</item>
+              <item>HG1</item>
+              <item>HG2</item>
+              <item>BH</item>
+              <item>CH</item>
+              <item>HH</item>
+              <item>B0</item>
+              <item>ZEROB0STANDARD</item>
+              <item>K</item>
+              <item>L</item>
+              <item>DATAFILE</item>
+            </exclusions>
+          </option>
+	  //-->
+
+          <option value="LUNARLAMBERTMCEWEN">
+            <brief>
+              Lunar Lambert-McEwen Photometric Model
+            </brief>
+            <description>
+              This model was designed for the Moon to be used in conjunction with the
+              MoonAlbedo normalization model.
+            </description>
+            <exclusions>
+              <item>THETA</item>
+              <item>WH</item>
+              <item>HG1</item>
+              <item>HG2</item>
+              <item>BH</item>
+              <item>CH</item>
+              <item>HH</item>
+              <item>B0</item>
+              <item>ZEROB0STANDARD</item>
+              <item>L</item>
+              <item>K</item>
+              <!-- item DATAFILE item -->
+            </exclusions>
+          </option>
+          <option value="LUNARLAMBERT">
+            <brief>
+              Lunar Lambert Photometric Model
+            </brief>
+            <description>
+              This model combines a weighted sum of the LommelSeeliger and
+              Lambert models.
+            </description>
+            <inclusions>
+              <item>L</item>
+            </inclusions>
+            <exclusions>
+              <item>THETA</item>
+              <item>WH</item>
+              <item>HG1</item>
+              <item>HG2</item>
+              <item>BH</item>
+              <item>CH</item>
+              <item>HH</item>
+              <item>B0</item>
+              <item>ZEROB0STANDARD</item>
+              <item>K</item>
+              <!-- item DATAFILE item -->
+            </exclusions>
+          </option>
+	 <!--
+         <option value="MINNAERTEMPIRICAL">
+            <brief>
+              Minnaert Empirical Photometric Model
+            </brief>
+            <description>
+              This model combines a weighted sum of the LommelSeeliger and
+              Lambert models.
+            </description>
+            <exclusions>
+              <item>THETA</item>
+              <item>WH</item>
+              <item>HG1</item>
+              <item>HG2</item>
+              <item>BH</item>
+              <item>CH</item>
+              <item>HH</item>
+              <item>B0</item>
+              <item>ZEROB0STANDARD</item>
+              <item>K</item>
+              <item>L</item>
+              <item>DATAFILE</item>
+            </exclusions>
+          </option>
+	  //-->
+          <option value="MINNAERT">
+            <brief>
+              Minnaert Photometric Model
+            </brief>
+            <description>
+              This model combines a weighted sum of the LommelSeeliger and
+              Lambert models.
+            </description>
+            <inclusions>
+              <item>K</item>
+            </inclusions>
+            <exclusions>
+              <item>THETA</item>
+              <item>WH</item>
+              <item>HG1</item>
+              <item>HG2</item>
+              <item>BH</item>
+              <item>CH</item>
+              <item>HH</item>
+              <item>B0</item>
+              <item>ZEROB0STANDARD</item>
+              <item>L</item>
+              <!-- item DATAFILE item -->
+            </exclusions>
+          </option>
+        </list>
+      </parameter>
+
+      <parameter name="THETA">
+        <type>string</type>
+        <brief>
+          Macroscopic roughness angle
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The "macroscopic roughness" of the surface as it affects
+	  the photometric behavior, used for Hapkehen or Hapkeleg.
+	  This is the RMS slope at scales larger than the distance
+	  photons penetrate the surface but smaller than a pixel.
+	  See Hapke (1986).  The roughness correction, which is
+	  evaluated if theta is given any value other than 0.0, but
+	  is extremely slow.  See Hapke (1986).
+        </description>
+        <minimum inclusive="yes">0.0</minimum>
+        <maximum inclusive="yes">90.0</maximum>
+      </parameter>
+
+      <parameter name="WH">
+        <type>string</type>
+        <brief>
+          Single scattering albedo
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The Hapke single scattering albedo of surface particles,
+	  see Hapke (1981).
+        </description>
+        <minimum inclusive="no">0.0</minimum>
+        <maximum inclusive="yes">1.0</maximum>
+      </parameter>
+
+      <parameter name="HG1">
+        <type>string</type>
+        <brief>
+          Hapke Henyey Greenstein coefficient
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          Asymmetry parameter used in Hapke Henyey Greenstein model
+	  for the scattering phase function of single particles in the
+	  surface.  See Hapke (1981).  The two-parameter Henyey Greenstein
+	  function is as follows:
+	  <blockquote>
+	  P(phase)=(1-hg2) * (1-hg1**2)/(1+hg1**2+2*hg1*cos(phase))**1.5
+	  + hg2  * (1-hg1**2)/(1+hg1**2-2*hg1*cos(phase))**1.5
+	  </blockquote>
+        </description>
+        <minimum inclusive="no">-1.0</minimum>
+        <maximum inclusive="no">1.0</maximum>
+      </parameter>
+
+      <parameter name="HG2">
+        <type>string</type>
+        <brief>
+          Hapke Henyey Greenstein Coefficient
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The Hapke Henyey Greenstein coefficient for single particle phase
+          function.  The second parameter of the two-parameter Henyey-Greenstein
+	  model for the scattering phase function of single particles in the
+	  surface.  This parameter controls the proportions in a linear
+	  mixture of ordinary Heneyey Greenstein phase functions with asymmetry
+	  parameters equal to +hg1 and -hg1.  See HG1 for the full formula.
+        </description>
+        <minimum inclusive="yes">0.0</minimum>
+        <maximum inclusive="yes">1.0</maximum>
+      </parameter>
+
+      <parameter name="BH">
+        <type>string</type>
+        <brief>
+          Hapke Legendre coefficient
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The Hapke Legendre coefficient for single particle phase
+          function.  A two-term Legendre polynomial is used for the scattering
+	  phase function of single particles in the surface:
+	  <blockquote>
+	  P(phase) = 1 + bh * p1(cos(phase)) + ch * p2(cos(phase)) <br/>
+	  </blockquote>
+	  Bh is not to be confused with the Legendre coefficient bha
+	  of the phase function for atmospheric particles, used when
+	  atmname=anisotropic1 or anisotropic2.
+        </description>
+        <minimum inclusive="no">-1.0</minimum>
+        <maximum inclusive="no">1.0</maximum>
+      </parameter>
+
+      <parameter name="CH">
+        <type>string</type>
+        <brief>
+          Hapke Legendre coefficient
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The Hapke Legendre coefficient for single particle phase
+          function.  A two-term Legendre polynomial is used for the scattering
+	  phase function of single particles in the surface: <br/>
+	  <blockquote>
+          P(phase) = 1 + bh * p1(cos(phase)) + ch * p2(cos(phase))
+	  </blockquote>
+        </description>
+        <minimum inclusive="no">-1.0</minimum>
+        <maximum inclusive="no">1.0</maximum>
+      </parameter>
+
+      <parameter name="HH">
+        <type>string</type>
+        <brief>
+          Hapke opposition surge
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The Hapke opposition surge component.  The width parameter for the opposition
+	  effect for the surface if Hapkehen or Hapkeleg is used.  See Hapke (1984).
+        </description>
+        <minimum inclusive="yes">0.0</minimum>
+      </parameter>
+
+      <parameter name="B0">
+        <type>string</type>
+        <brief>
+          Hapke opposition surge
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The Hapke opposition surge component.  The magnitude of the opposition
+	  effect for the surface if Hapkehen or Hapkeleg is used.  See Hapke (1984).
+        </description>
+        <minimum inclusive="yes">0.0</minimum>
+      </parameter>
+
+      <parameter name="ZEROB0STANDARD">
+        <type>string</type>
+        <brief>
+           Specifies if opposition surge is set to zero under standard conditions
+        </brief>
+        <default><item>TRUE</item></default>
+        <description>
+          This specifies if the opposition surge component B0 is set to zero
+          during the standard conditions phase.  The program will automatically
+	  default to "true" if "ZEROB0STANDARD" is not defined by the user.
+        </description>
+        <list>
+          <option value="FALSE">
+            <brief>
+              B0 will not be set to zero for standard conditions phase
+            </brief>
+            <description>
+              This option specifies that the opposition surge B0 will not be set to zero
+              during the standard conditions phase.
+            </description>
+          </option>
+          <option value="TRUE">
+            <brief>
+              B0 will be set to zero for standard conditions phase
+            </brief>
+            <description>
+              This option specifies that the opposition surge B0 will be set to zero
+              during the standard conditions phase.
+            </description>
+          </option>
+        </list>
+      </parameter>
+
+      <parameter name="L">
+        <type>string</type>
+        <brief>
+          Lunar-Lambert function weight
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The Lunar Lambert function weight that governs limb-darkening
+	  in the lunar lambert photometric function:
+          <blockquote>
+	  Func=(1-L)*u0 + 2*L*u0/(u0+u)
+          </blockquote>
+	  The values generally fall in the range from 0 (Lambert function) to 1
+	  (Lommel-Seeliger or "lunar" function).
+        </description>
+      </parameter>
+
+      <parameter name="K">
+        <type>string</type>
+        <brief>
+          Minnaert function exponent
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The Minnaert function exponent that governs limb-darkening in the
+	  Minnaert photometric function:
+          <blockquote>
+	  Func=u0**K * u**(K-1)
+          </blockquote>
+          The values generally fall in the range from 0.5 ("lunar-like",
+	  almost no limb darkening) to 1.0 (Lambert function).
+        </description>
+        <minimum inclusive="yes">0.0</minimum>
+      </parameter>
+
+       <!--
+       <parameter name="DATAFILE">
+        <type>filename</type>
+         <fileMode>input</fileMode>
+        <brief>
+	  PVL file with parameter values for empirical functions
+        </brief>
+        <filter>*.txt</filter>
+        <description>
+          <p>
+          This file contains a table of parameter values for Lunar Lambert
+	  Empirical (PHASELIST, LLIST, PHASECURVELIST) and Minnaert Empirical
+	  (PHASELIST, KLIST, PHASECURVELIST) functions.  The file may contain
+	  sets of values for both empirical functions, generally intended to
+	  represent the same Hapke model (same planetary surface).  The
+          <i>phoempglobal</i> program can be used to calculate the parameter
+          values that best approximate a Hapke model. The output file from
+	  <i>phoempglobal</I> can be used as input for the datafile parameter.
+          </p>
+	  <p>
+          The example below is for Mars red filter images.  The phase angles
+	  (PhaseList) at
+	  which the coefficient values for the Lunar Lambert Empirical (LList)
+	  and the Minnaert Empirical (KLIST) approximation are calculated,
+	  along with the brightness (PhaseCurveList) values at those points.
+	  The values for each parameter must be entered on a single line.
+	  The example belows shows the values on two or three lines for
+	  presentation only. Remember, the values must be on a single line
+	  in the input file.
+          </p>
+<pre>
+
+  Object = PhotometricModel
+    Group = Algorithm
+      PhtName = LunarLambertEmpirical
+
+     The numbers below are entered on a single line in the text file for each
+	 parameter name (see $ISISROOT/appdata/templates/photometry/marsred.pvl).
+
+     PhaseList = "0.,10.,20.,30.,40.,50.,60.,70.,80.,90.,100.,110.,120.,130.,
+                  140.,150.,160.,170.,180."
+      LList = "0.946,0.748,0.616,0.522,0.435,0.350,0.266,0.187,0.118,0.062,0.018,
+              -0.012,-0.027,-0.035,-0.036,-0.037,-0.031,-0.012,-0.010"
+      PhaseCurveList = "0.1578,0.1593,0.1558,0.1484,0.1391,0.1292,0.1194,0.1099,
+                       0.1008,0.09176,0.08242,0.07234,0.06165,0.05106,0.04091,
+		       0.03137,0.02171,0.01038,0."
+    EndGroup
+
+    Group = Algorithm
+      PhtName = MinnaertEmpirical
+      PhaseList = "0.,10.,20.,30.,40.,50.,60.,70.,80.,90.,100.,110.,120.,130.,
+                  140.,150.,160.,170.,180."
+      KList = "0.518,0.595,0.660,0.709,0.753,0.796,0.837,0.875,0.904,0.922,
+              0.926,0.935,0.954,0.986,1.019,1.063,1.099,1.095,1.090"
+      PhaseCurveList = "0.1574,0.1582,0.1546,0.1470,0.1375,0.1273,0.1174,0.1077,
+                       0.09797,0.08750,0.07594,0.06466,0.05471,0.04665,0.03935,
+		       0.03339,0.02642,0.01482,0."
+    EndGroup
+  EndObject
+ </pre>
+        </description>
+      </parameter>
+ //-->
+
+    </group>
+     <group name="Atmospheric Model">
+      <parameter name="ATMNAME">
+        <type>combo</type>
+        <brief>
+          Atmospheric model to be used
+        </brief>
+        <description>
+          This is the name of the atmospheric photometric function model to be
+	  applied;the atmospheric model will be considered when the tau value is
+          calculated. The models ending with "1" use a first order scattering
+          approximation. Those ending with "2" use a second order scattering
+          approximation, and are slower but more accurate than the first order
+          scattering approximation. The atmospheric correction can be used with
+          only three atmospheric normalization models: albedoatm, shadeatm, and
+          topoatm. See Kirk et al. (2001).
+	  <br/>
+	  <br/>
+          <b>
+	    The table below are photometric parameter values for Mars,
+	    adopted from Tomasko et al. (1999):
+          </b><br/>
+	  <table border="1">
+	    <tr>
+	    <th>Band</th>
+	    <th>Wha</th>
+	    <th>Hga</th>
+	    </tr>
+	    <tr>
+	    <td>Red</td>
+	    <td>0.95</td>
+	    <td>0.68</td>
+	    </tr>
+	    <tr>
+	    <td>Blue</td>
+	    <td>0.76</td>
+	    <td>0.78</td>
+	    </tr>
+	    </table>
+          <br/>
+        </description>
+        <internalDefault>HAPKEATM1</internalDefault>
+        <default>
+          <item>HAPKEATM1</item>
+        </default>
+        <list>
+          <option value="ANISOTROPIC1">
+            <brief>
+              Anisotropic 1 atmospheric model
+            </brief>
+            <description>
+              Uses Chandrasekhar's solution for anisotropic scattering described
+              by a one-term Legendre polynomial.
+            </description>
+            <inclusions>
+              <item>HNORM</item>
+              <item>BHA</item>
+              <item>WHA</item>
+            </inclusions>
+            <exclusions>
+              <item>HGA</item>
+            </exclusions>
+          </option>
+          <option value="ANISOTROPIC2">
+            <brief>
+              Anisotropic 2 atmospheric model
+            </brief>
+            <description>
+              Uses Chandrasekhar's solution for anisotropic scattering described
+              by a one-term Legendre polynomial.
+            </description>
+            <inclusions>
+              <item>HNORM</item>
+              <item>BHA</item>
+              <item>WHA</item>
+            </inclusions>
+            <exclusions>
+              <item>HGA</item>
+            </exclusions>
+          </option>
+          <option value="HAPKEATM1">
+            <brief>
+              Hapke 1 Atmospheric Model
+            </brief>
+            <description>
+              A one-term Henyey Greenstein function is used.
+            </description>
+            <inclusions>
+              <item>HNORM</item>
+              <item>HGA</item>
+              <item>WHA</item>
+            </inclusions>
+            <exclusions>
+              <item>BHA</item>
+            </exclusions>
+          </option>
+          <option value="HAPKEATM2">
+            <brief>
+             Hapke 2 atmospheric model
+            </brief>
+            <description>
+              A one-term Henyey Greenstein function is used.
+            </description>
+            <inclusions>
+              <item>HNORM</item>
+              <item>HGA</item>
+              <item>WHA</item>
+            </inclusions>
+            <exclusions>
+              <item>BHA</item>
+            </exclusions>
+          </option>
+          <option value="ISOTROPIC1">
+            <brief>
+              Isotropic 1 atmospheric model
+            </brief>
+            <description>
+              Uses Chandrasekhar's solution for isotropic scattering.
+            </description>
+            <inclusions>
+              <item>HNORM</item>
+              <item>WHA</item>
+            </inclusions>
+            <exclusions>
+              <item>HGA</item>
+              <item>BHA</item>
+            </exclusions>
+          </option>
+          <option value="ISOTROPIC2">
+            <brief>
+              Isotropic 2 atmospheric model
+            </brief>
+            <description>
+              Uses Chandrasekhar's solution for isotropic scattering.
+            </description>
+            <inclusions>
+              <item>HNORM</item>
+              <item>WHA</item>
+            </inclusions>
+            <exclusions>
+              <item>HGA</item>
+              <item>BHA</item>
+            </exclusions>
+          </option>
+        </list>
+      </parameter>
+
+      <parameter name="HGA">
+        <type>string</type>
+        <brief>
+          Henyey Greenstein coefficient
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The coefficient of single particle Henyey Greenstein phase
+          function.  Henyey-Greenestein asymmetry parameter for atmospheric
+	  particle phase function, used in hapkeatm1 and hapkeatm2 atmospheric models.
+	  Not to be confused with corresponding parameter hg1 for the
+	  surface particles.
+        </description>
+        <minimum inclusive="no">-1.0</minimum>
+        <maximum inclusive="no">1.0</maximum>
+      </parameter>
+
+      <parameter name="WHA">
+        <type>string</type>
+        <brief>
+          Single scattering albedo
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The single scattering albedo of atmospheric particles.
+        </description>
+        <minimum inclusive="no">0.0</minimum>
+        <maximum inclusive="yes">1.0</maximum>
+      </parameter>
+
+      <parameter name="BHA">
+        <type>string</type>
+        <brief>
+          Legendre coefficient
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The coefficient of the single particle Legendre phase function.
+	  Coefficient of p1 (cosine) term of atmospheric particle phase
+	  function, used in anisotropic1 and anisotropic2 atmospheric models. Not to be confused
+	  with corresponding coefficient bh for the surface particles.
+        </description>
+        <minimum inclusive="yes">-1.0</minimum>
+        <maximum inclusive="yes">1.0</maximum>
+      </parameter>
+
+      <parameter name="HNORM">
+        <type>string</type>
+        <brief>
+          Atmospheric shell thickness
+        </brief>
+        <default><item>None Specified</item></default>
+        <internalDefault>None Specified</internalDefault>
+        <description>
+          The atmospheric shell thickness normalized to the planet
+          radius, used to modify angles to get more accurate path lengths
+	  near the terminator (Ratio of scale height to the planetary
+	  radius).  The hnorm parameter is defined as "0.003" for Mars,
+	  which is the only planet for which the atmospheric modes are currently
+	  used.
+        </description>
+        <minimum inclusive="yes">0.0</minimum>
+      </parameter>
+    </group>
+
+  </groups>
+</application>

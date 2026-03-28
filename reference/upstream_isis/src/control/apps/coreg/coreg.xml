@@ -1,0 +1,529 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="coreg" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Subpixel registration of a pair of images
+  </brief>
+
+  <description>
+    <p>
+      This program co-regsisters two images using an image-wide averaged
+      sample/line translation with the TRANSLATE option or a set of variable
+      sample/line translations with the WARP option.   The program computes local
+      translations spaced evenly throughout the image.  The number and spacing
+      of local translations is user defined.  This allows for many output
+      options including 1) directly creating the translated image,  2)
+      creating a control network which can be used in other programs (e.g.,
+      translate, warp and qview-matchtool) or 3) creating a flat-field file
+      usable in spreadsheets or plotting packages to visualize magnitude and
+      direction of varying translations.
+
+      For the TRANSLATE option, this implies that the internal geometry of both
+      images be nearly the same so that the translation can be computed. That
+      is, this program will not work if the translation varies significantly
+      throughout the image. If condition of near constant translation is met
+      then the translation can be computed  to sub-pixel accuracy.
+
+      If the internal geometry of both images do not match well, or a simple
+      line/sample shift is not sufficient to register the images, the WARP
+      option is a better choice than TRANSLATE because this uses the local
+      translations to perform a rubber-sheet transformation.  This option must
+      be used with caution.  It works very well with a well distributed
+      collection of accurate control points across the image plane.
+    </p>
+    <p>
+      NOTE:  While coreg uses a predefined autoreg parameter template, there are
+      a variety of pattern matching algorithms and parameter settings that can
+      be used to optimize the success and accuracy of the co-registration
+      attempt with the control point measures.   It is recommended that you review the
+      <a href="https://astrogeology.usgs.gov/docs/concepts/control-networks/pattern-matching/">Pattern
+      Matching</a> page from the "Related Objects and Documents" section below.
+      It is essential for using this application to understand how to create a
+      "registration template" file and how to size your search and pattern
+      chips.  We will continue with the discussion of functionality of this
+      program assuming the reader has a fundamental knowledge of Automatic
+      Registration. The user can also refer to the autoregtemplate application
+      that offers a gui interface for creating an autoreg template file.
+      Below we give an example of an autoreg parameter template file (DEFFILE):
+    </p>
+
+    <pre>
+      Object = AutoRegistration
+        Group = Algorithm
+          Name         = MaximumCorrelation
+          Tolerance    = 0.7
+        EndGroup
+
+        Group = PatternChip
+          Samples = 20
+          Lines   = 20
+          ValidMinimum = 1400
+          ValidPercent = 75
+        EndGroup
+
+        Group = SearchChip
+          Samples = 90
+          Lines   = 90
+          ValidMinimum = 1400
+          ValidPercent = 75
+        EndGroup
+      EndObject
+    </pre>
+
+    <p>
+      For further discussion of the parameters used in this DEFFILE, see the
+      <a href="https://astrogeology.usgs.gov/docs/concepts/control-networks/pattern-matching/">Pattern
+      Matching</a> document.  Briefly, the example DEFFILE will allow a
+      successful registration only where the MaximumCorrelation
+      algorithm's goodness-of-fit result is >=0.7, pixel value is >1400, and at
+      least 75% of the pixels in both the PatternChip or the SearchChip are
+      valid pixels.
+    </p>
+
+    <p>
+      This program requires two input cubes, one which will be translated (FROM)
+      and the other is held fixed (MATCH).   The images must have the same
+      number of samples and lines and can have only one band (use cube
+      attributes to extract a single band if necessary).  A grid will be defined
+      across the held image using either the user parameters, ROWS and COLUMNS, or
+      calculated based on the image size and the search chip size as follows:
+      COLUMNS = (image samples - 1) / search chip samples + 1, and similarly for
+      ROWS.  Conceptually, the sparse grid defined by ROWS and COLUMNS will be
+      laid on top of both images with even spacing between the rows (or columns)
+      and but no row will touch the top or bottom of the image.  That is, the
+      grid is internal to the image.
+    </p>
+
+    <p>
+      At each grid intersection, the local translation will be computed.  This is done
+      by centering the search chip at the grid intersection for the image to
+      be translated (FROM) and centering the pattern chip at the grid
+      intersection for the held image (MATCH).  The pattern chip is walked
+      through the search chip to find the best registration (if any).  Again,
+      see the <a href="https://astrogeology.usgs.gov/docs/concepts/control-networks/pattern-matching/">
+      Pattern Matching</a> document for further details.  The local translation is
+      recorded at all grid intersections that had a successful registration.
+      The results are written to a control network and/or flat-file if requested.
+      The average of the local translations is then used to compute an overall sub-pixel
+      translation which can be applied to the FROM image and written as the output image (TO).
+    </p>
+
+    <p>
+      Some tips to improve odds of a successful registration are provided.  In
+      general a small pattern chip size makes registration more difficult.
+      Depending on your dataset, 20x20 is probably a good starting point.  The
+      larger the translation, the larger the search chip size will need to be;
+      if your translation is only a couple of pixels, you should make the search
+      chip only slightly larger than the pattern (e.g., 25x25 vs 20x20).
+      However if the translation is large you will need to expand the search
+      area.  For example, if the translation is roughly 45 pixels and your
+      pattern is 20x20 the search area should be, roughly, 20+2*45 or 110x110.
+    </p>
+    <p>
+      The output control point network file (ONET) can be visually overlayed on the
+      the displayed input images using the qview-MatchTool.  The qview image display
+      application will allow you to evaluate and interactively edit the network within the
+      MatchTool.
+    </p>
+   </description>
+
+  <category>
+    <categoryItem>Registration and Pattern Matching</categoryItem>
+  </category>
+
+  <oldName>
+      <item>coreg2</item>
+      <item>coregpr</item>
+      <item>coregpr2</item>
+  </oldName>
+
+  <seeAlso>
+    <applications>
+      <item>autoregtemplate</item>
+      <item>warp</item>
+      <item>translate</item>
+    </applications>
+    <documents>
+      <document>
+        <title>Pattern Matching in ISIS</title>
+        <source>
+          <path>https://astrogeology.usgs.gov/docs/concepts/control-networks/pattern-matching/</path>
+        </source>
+      </document>
+    </documents>
+  </seeAlso>
+
+  <history>
+    <change name="Kris Becker" date="2000-08-07">
+      Original Version.
+    </change>
+    <change name="Elizabeth Ribelin" date="2005-08-25">
+      Ported to Isis3.0.
+    </change>
+    <change name="Elizabeth Miller" date="2005-10-14">
+      Added warp option and fixed bug in control net creation.
+    </change>
+    <change name="Elizabeth Miller" date="2006-03-23">
+      Fixed appTest.
+    </change>
+    <change name="Jacob Danton" date="2006-01-06">
+      Fixed appTest to comply with changes made to the ControlMeasure class.
+    </change>
+    <change name="Jacob Danton" date="2006-04-05">
+      Added error reporting when the registration was a failure.
+    </change>
+    <change name="Kris Becker" date="2006-06-15">
+      Set the MATCH file as the reference image so it can be used in subsequent
+      processing.  Implemented use of unique serial numbers for each image.
+      Issues still remain with handling band-to-band registrations within files.
+      One alternative is to extract bands to separate files as a fallback
+      approach is to use filenames as the serial number.  This
+      solution/alterntive is unique to coreg, however.
+    </change>
+    <change name="Brendan George" date="2006-10-02">
+      Modified call for current time to point to Time class, instead of
+      Application class.
+    </change>
+    <change name="Brendan George" date="2006-12-08">
+      Modified to reflect changes to the SerialNumber class.
+    </change>
+    <change name="Steven Lambright" date="2008-06-23">
+      Updated to properly check AutoReg::Register()'s return status.
+    </change>
+    <change name="Noah Hilt" date="2008-08-13">
+      Added two new optional arguments to AutoReg: WindowSize and
+      DistanceTolerance. These two arguments affect how AutoReg gathers and
+      compares data for surface modeling and accuracy. Added more statistics to
+      the Translation group, including min/max and standard deviation of
+      line/sample changes. Added the AutoReg statistics to be displayed as well.
+    </change>
+    <change name="Travis Addair" date="2009-08-10">
+      Auto registration parameters are now placed into the print file.
+    </change>
+    <change name="Eric Hyer" date="2010-02-09">
+      Auto registration parameters now placed into the print file before
+      potential throwing of exceptions.
+    </change>
+    <change name="Janet Barrett" date="2010-07-30">
+      Changed REGDEF parameter name to DEFFILE. Changed CNETFILE parameter name
+      to ONET.
+    </change>
+    <change name="Debbie A. Cook and Tracie Sucharski" date="2011-06-07">
+      Changed point types "Ground" to "Fixed" and "Tie" to "Free".
+    </change>
+    <change name="Kris Becker" date="2011-09-26">
+      Corrected parameter change to warp application (CONTROL is now CNET);
+      added application test for parameter changes.
+    </change>
+    <change name="Kris Becker" date="2011-10-07">
+      The documentation has been updated with review and contributions from
+      Ella Lee, Chris Isbell and Moses Millazzo.
+    </change>
+    <change name="Travis Addair" date="2012-01-26">
+      Added back GoodnessOfFit to Control Network and flatfile, mistakenly
+      removed during binary Control Network conversion.
+    </change>
+    <change name="Tracie Sucharski" date="2012-08-02">
+      Set networkId to Coreg in the output control network.
+    </change>
+    <change name="Tammy Becker" date="2012-08-09">
+      Modified the documentation a bit and informed the user of the new
+      qview-MatchTool that will now display the output network.
+    </change>
+    <change name="Kimberly Oyama" date="2013-12-30">
+      Replaced the spaces in the point ID with underscores. References #1551.
+    </change>
+    <change name="Jeannie Backer" date="2016-04-22">
+      Modified to use the FROM cube labels to set target instead of the TargetName.
+      Updated the truth data for the cnet test. Added notarget test. References #3892
+    </change>
+  </history>
+
+  <groups>
+    <group name="Input Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input Image to be Translated
+        </brief>
+        <description>
+          This cube will be translated to register to the MATCH (reference) cube.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+
+      <parameter name="MATCH">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          The input image which will be held as the Reference.
+        </brief>
+        <description>
+          This cube will be held as the reference and the FROM cube will be translated to match this cube.
+          The sample/line measurements recorded from this image are basically the defined output coordinates
+          that the FROM image will be mapped to.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+
+      <parameter name="DEFFILE">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          The Auto Registration template
+        </brief>
+        <description>
+          The parameter template to use for the Autoregistration functionality. The default template
+          calls the Maximum Correlation pattern matching algorithm with predefined parameter values.
+          There are other templates available in the system autoreg/template directory.  Also, the user
+          can use the 'autoregtemplate' application to create a new template file.
+        </description>
+        <helpers>
+          <helper name="H1">
+            <function>helperButtonLog</function>
+            <brief>View file in log area</brief>
+            <description>This helper button will display the regdef file in the log area</description>
+	    <icon>$ISISROOT/appdata/images/icons/view_text.png</icon>
+          </helper>
+        </helpers>
+        <filter>
+          *.def
+        </filter>
+        <default><item>$ISISROOT/appdata/templates/autoreg/coreg.maxcor.p2020.s5050.def</item></default>
+        <defaultPath>$ISISROOT/appdata/templates/autoreg</defaultPath>
+      </parameter>
+    </group>
+
+    <group name="Output Cube">
+        <parameter name="TO">
+          <type>cube</type>
+          <fileMode>output</fileMode>
+          <brief>
+              Output Cube
+          </brief>
+          <description>
+              Output cube containing the translated or warped data.
+          </description>
+          <internalDefault>None</internalDefault>
+          <filter>
+            *.cub
+          </filter>
+        </parameter>
+
+        <parameter name="TRANSFORM">
+            <type>string</type>
+            <brief>
+                Tranformation Type
+            </brief>
+            <description>
+                The tranformation type to use on the output file.  The options are TRANSLATE or WARP.
+                If WARP is selected, the ONET and DEGREE parameters are required.
+                Defaults to TRANSLATE.
+            </description>
+            <default><item>TRANSLATE</item></default>
+            <list>
+                <option value="TRANSLATE">
+                    <brief>
+                        Output Translated Image
+                    </brief>
+                    <description>
+                        Runs the translate application on the input file to create the output file.
+                    </description>
+                    <exclusions><item>DEGREE</item></exclusions>
+                </option>
+                <option value="WARP">
+                    <brief>
+                        Output Warped Image
+                    </brief>
+                    <description>
+                        Runs the warp application on the input file to create the output file.  If this
+                        option is selected, the ONET and DEGREE parameters must also
+                        be entered.
+                    </description>
+                </option>
+            </list>
+        </parameter>
+        <parameter name="DEGREE">
+            <type>integer</type>
+            <brief>
+                Degree for Warp Transformation
+            </brief>
+            <description>
+                The degree to be used in the warp transformation for the linear regression
+                model.  Defaults to 1.
+            </description>
+            <default><item>1</item></default>
+        </parameter>
+
+        <parameter name="INTERP">
+            <type>string</type>
+            <brief>
+                Interpolation used for transformation
+            </brief>
+            <description>
+                This will be the interpolation type used to generate the output file in either the
+                translate or warp application.  Defaults to NEARESTNEIGHBOR.
+            </description>
+            <default><item>CUBICCONVOLUTION</item></default>
+            <list>
+                <option value="NEARESTNEIGHBOR">
+                    <brief>
+                        Nearest Neighbor Interpolation
+                    </brief>
+                    <description>
+                        Nearest Neighbor Interpolation will be used in the transformation
+                        to create the output file.
+                    </description>
+                </option>
+                <option value="BILINEAR">
+                    <brief>
+                        Bilinear Interpolation
+                    </brief>
+                    <description>
+                        Bilinear Interpolation will be used in the transformation to create
+                        the output file.
+                    </description>
+                </option>
+                <option value="CUBICCONVOLUTION">
+                    <brief>
+                        Cubic Convolution Interpolation
+                    </brief>
+                    <description>
+                        Cubic Convolution Interpolation will be used in the tranformation
+                        to create the output file.
+                    </description>
+                </option>
+            </list>
+        </parameter>
+
+       </group>
+
+    <group name= "ControlNetOptions">
+            <parameter name="ONET">
+          <type>filename</type>
+          <fileMode>output</fileMode>
+          <brief>
+               Pvl file of ControlNet
+          </brief>
+          <description>
+               This file will contain the Control Point network results of coreg in a binary
+               format.  This is required if the WARP option is selected for the output file.
+               The resulting control points in this file can be viewed using the qview-MatchTool.
+               If the coregistration fails between any measures, the points and measures remain
+               in this output file with a flag called Ignore=True.
+          </description>
+          <internalDefault>None</internalDefault>
+          <filter>
+            *.net *.txt
+          </filter>
+        </parameter>
+
+        <parameter name="FLATFILE">
+          <type>filename</type>
+          <fileMode>output</fileMode>
+          <brief>
+               Text file of coreg data
+          </brief>
+          <description>
+               This file will contain the Control Point network results of coreg in a readable format.
+               The control point information will be comma separated and contain the sample, line positions
+               in the first input (FROM) cube, the sample, line position found in the search (MATCH)
+               reference cube, and the sample difference and line difference between the two.
+               This output file will only contain the points and measures that resulted in a successful
+               registration.
+          </description>
+          <internalDefault>None</internalDefault>
+          <filter>
+            *.txt *.lis *.lst
+          </filter>
+        </parameter>
+
+        <parameter name= "ROWS">
+            <type>integer</type>
+            <brief>
+                Number of Rows of Points to use.
+            </brief>
+            <description>
+                The number of rows of points to establish in the coreg process.  If not entered,
+                it will default to ROWS = (image lines - 1) / search chip lines + 1.
+            </description>
+            <internalDefault>Automatic</internalDefault>
+            <minimum inclusive="true">1</minimum>
+        </parameter>
+
+        <parameter name= "COLUMNS">
+            <type>integer</type>
+            <brief>
+                Number of Columns of Points to use.
+            </brief>
+            <description>
+                The number of columns of points to establish in the coreg process.  If not entered,
+                it will default to COLUMNS = (image samples - 1) / search chip samples + 1.
+            </description>
+            <internalDefault>Automatic</internalDefault>
+            <minimum inclusive="true">1</minimum>
+        </parameter>
+
+
+    </group>
+  </groups>
+
+  <examples>
+    <example>
+      <brief> Coregistration of 2 Images </brief>
+      <description>
+        This example shows the coreg application.  The rows and columns parameters are left as default.
+        <pre>
+Sample,Line,TranslatedSample,TranslatedLine,SampleDifference,LineDifference,GoodnessOfFit
+211.875,164.283,200,133,-11.8751,-31.2829,0.991597
+211.766,429.437,200,398,-11.7661,-31.4369,0.995987
+        </pre>
+        The above text file is the ffile.txt file created when coreg is ran.  The flat file is comma seperated
+        and can easily be imported into excel.
+      </description>
+      <terminalInterface>
+        <commandLine> from=./lunar1.cub match=./lunar2.cub t=out.cub flatfile=ffile.txt
+        </commandLine>
+        <description>
+        Just run coreg on 2 images.
+        </description>
+      </terminalInterface>
+
+      <inputImages>
+        <image src="assets/image/lunar1.jpg" width="500" height="500">
+          <brief> First Input image for coreg</brief>
+          <description>This is the 800 by 800 input image to be translated for the coreg example.
+          </description>
+          <thumbnail caption=" First Input  image" src="assets/thumb/lunar1.jpg" width="200" height="200"/>
+          <parameterName>FROM</parameterName>
+        </image>
+        <image src="assets/image/lunar2.jpg" width="500" height="500">
+          <brief> Second Input image for coreg</brief>
+          <description>This is the 800 by 800 input image to be held for the coreg example.
+          </description>
+          <thumbnail caption=" Second Input  image" src="assets/thumb/lunar2.jpg" width="200" height="200"/>
+          <parameterName>MATCH</parameterName>
+        </image>
+      </inputImages>
+
+      <outputImages>
+        <image src="assets/image/out.jpg" width="500" height="500">
+          <brief> Output image for coreg</brief>
+          <description> This is the 800 by 800 output image that results.
+          </description>
+          <thumbnail caption="Output image showing results of the coreg application." src="assets/thumb/out.jpg" width="200" height="200"/>
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+
+    </example>
+  </examples>
+
+
+</application>

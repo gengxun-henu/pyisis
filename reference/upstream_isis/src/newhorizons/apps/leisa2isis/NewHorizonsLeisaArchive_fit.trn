@@ -1,0 +1,42 @@
+#
+# This translation file is used to produce the ISIS Archive label group
+# for the New Horizons LEISA camera.
+#
+
+Group = MidObservationTime
+  Auto           = 1
+  InputKey       = SPCSCET
+  InputPosition  = FITSLABELS
+  OutputName     = MidObservationTime
+  OutputPosition = (Object, IsisCube, Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = ObservationDuration
+  Auto           = 1
+  InputKey       = DURMET
+  InputPosition  = FITSLABELS
+  OutputName     = ObservationDuration
+  OutputPosition = (Object, IsisCube, Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = Detector
+  Auto           = 1
+  InputKey       = DETECTOR
+  InputPosition  = FITSLABELS
+  OutputName     = Detector
+  OutputPosition = (Object, IsisCube, Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+Group = ScanType
+  Auto           = 1
+  InputKey       = SCANTYPE
+  InputPosition  = FITSLABELS
+  OutputName     = ScanType
+  OutputPosition = (Object, IsisCube, Group, Archive)
+  Translation    = (*, *)
+End_Group
+
+End

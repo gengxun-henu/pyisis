@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<application name="sigmastretch" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Apply a Sigma Stretch to a cube.
+  </brief>
+
+  <description>
+    This application is a translation of the Davinci script "sstretch" (Arizona
+    State University, http://davinci.asu.edu).  This program will stretch a cube
+    according to the following formula for each pixel in the image:
+    <pre>
+      new_dn = (old_dn - avg) * (variance / stddev)
+    </pre>
+    where <i>avg</i> and <i>stddev</i> are the statistical average and standard
+    deviation of all valid pixels in the current band.  The <i>variance</i> is a
+    user-specified parameter, VARIANCE, that affects how much the histogram of
+    the image is widened, and does not represent the statistical variance of the
+    image.
+  </description>
+
+  <category>
+    <categoryItem>Math and Statistics</categoryItem>
+  </category>
+
+    <seeAlso>
+    <applications>
+      <item>stretch</item>
+      <item>decorstretch</item>
+      <item>gaussstretch</item>
+    </applications>
+  </seeAlso>
+
+  <history>
+    <change name="Travis Addair" date="2011-09-08">
+      Original translation of Davinci's "sstretch" script into Isis 3.
+    </change>
+    <change name="Steven Lambright" date="2012-02-24">
+      This program now takes advantage of multiple global processing threads.
+    </change>
+  </history>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input cube to stretch
+        </brief>
+        <description>
+          The input cube to which the sigma stretch will be applied.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+
+      <parameter name="TO">
+        <type>cube</type>
+        <pixelType>real</pixelType>
+        <fileMode>output</fileMode>
+        <brief>
+          Output cube
+        </brief>
+        <description>
+          The resultant cube containing the image after being stretched.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Parameters">
+      <parameter name="VARIANCE">
+        <type>double</type>
+        <brief>
+          Non-uniformity of the output's histogram
+        </brief>
+        <description>
+          The nonuniformity of the output image's histogram.  For values less
+          than 1.0, the distribution will be closer to uniform.  This value must
+          be greater than 0.0.
+        </description>
+        <default><item>40.0</item></default>
+        <minimum inclusive="no">0.0</minimum>
+      </parameter>
+    </group>
+  </groups>
+
+  <examples>
+    <example>
+      <brief>
+        Two THEMIS Images
+      </brief>
+      <description>
+        This example shows a typical usage of sigmastretch as part of THEMIS
+        mosaic creation.  As input, the two images have very high contrast, and
+        as such, blending the overlapping area will result in an awkward
+        transition between the image bounds.  By running sigmastretch first, the
+        resulting images have less contrast, and can be mosaicked with good
+        results.  The default value for the VARIANCE of 40.0 here is used, as is
+        typical in THEMIS processing.
+      </description>
+      <terminalInterface>
+        <commandLine>
+          from=I01086005.cub to=I01086005.fx.cub;
+          sigmastretch from=I23851018.cub to=I23851018.fx.cub
+        </commandLine>
+        <description>
+          We're running the program once for each image.  Without using multiple
+          images, it's hard to see the differences due to "qview" automatically
+          stretching the image for viewing.  When mosaicked, however, the
+          contrast is especially noticeable.
+        </description>
+      </terminalInterface>
+
+      <guiInterfaces>
+        <guiInterface>
+          <image width="614" height="750" src="assets/images/gui1.jpg">
+            <brief>
+              Example GUI for I01086005.cub  
+            </brief>
+            <description>
+              Screenshot of the GUI with parameters set to stretch the first
+              image.
+            </description>
+            <thumbnail caption="The first sigmastretch GUI"
+              src="assets/thumbs/gui1.jpg" width="164" height="200" />
+          </image>
+        </guiInterface>
+        <guiInterface>
+          <image width="614" height="750" src="assets/images/gui2.jpg">
+            <brief>
+              Example GUI for I23851018.cub  
+            </brief>
+            <description>
+              Screenshot of the GUI with parameters set to stretch the second
+              image.
+            </description>
+            <thumbnail caption="The second sigmastretch GUI"
+              src="assets/thumbs/gui2.jpg" width="164" height="200" />
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+
+      <inputImages>
+        <image src="assets/images/before.jpg" width="512" height="512">
+          <brief>
+            Mosaic of the input images for sigmastretch
+          </brief>
+          <description>
+            This is a cropped subsection of the mosaic of the input images
+            before being stretched.  Note the sharp contrast between the two
+            images when mosaicked.
+          </description>
+          <thumbnail caption="Mosaic of unstretched input images"
+            src="assets/thumbs/before.jpg" width="200" height="200" />
+          <parameterName>FROM</parameterName>
+        </image>
+      </inputImages>
+
+      <outputImages>
+        <image src="assets/images/after.jpg" width="512" height="512">
+          <brief>
+            Mosaic of the output images for sigmastretch
+          </brief>
+          <description> 
+            This is the same subarea of a mosaic of the output images after
+            being stretched.  The contrast is now much more subtle, making the
+            images ready to be blended together along their overlapping areas.
+          </description>
+          <thumbnail
+            caption="Mosaic showing results of the sigmastretch application"
+            src="assets/thumbs/after.jpg" width="200" height="200" />
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+    </example>
+  </examples>
+</application>

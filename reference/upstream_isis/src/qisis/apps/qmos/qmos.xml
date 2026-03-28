@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="qmos" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Display and analyze cube footprints
+  </brief>
+
+  <description>
+    This is a tool for visualizing image footprints for a mosaic.
+
+    <p/>qmos is designed specifically for visualizing large amounts of images,
+    how images overlap, where control points lie on the images, and how
+    jigsaw has moved control points.
+
+    <p/>qmos only supports files which have latitude and longitude information
+    associated with them. Global projections are also not supported. If your
+    files meet these requirements, it is beneficial to run a couple of Isis
+    programs on your files before loading them into qmos. The programs you
+    should run are:
+    <ul>
+      <li>
+        <i>
+          camstats from=future_input_to_qmos.cub attach=true
+          sinc=... linc=...
+        </i>
+      </li>
+      <br/>
+      This enables qmos to give you the emission angle, incidence angle, and
+      resolution in the <b>File List</b>
+      <li>
+        <i>
+          footprintinit from=future_input_to_qmos.cub sinc=... linc=...
+        </i>
+      </li>
+      <br/>
+      This enables qmos to use the given footprints instead of trying to
+      calculate its own. The 'linc' and 'sinc' parameters can have a significant
+      effect on your image's footprint. Also, images without footprints cannot
+      be opened more than one at a time. Running footprintinit will
+      significantly speed up loading images into qmos.
+    </ul>
+
+    To see more documentation, launch qmos and go to "Help -> qmos Help."
+  </description>
+
+  <category>
+    <categoryItem>Display</categoryItem>
+  </category>
+
+  <history>
+    <change name="Stacy Alley" date="2009-05-20">
+      Original version
+    </change>
+    <change name="Eric Hyer" date="2010-03-22">
+      Discontinued forcing of gui style to windows
+    </change>
+    <change name="Steven Lambright" date="2011-09-28">
+      Rewrote the underlying functionality and re-factored the majority of the
+      code base to make a quicker, more-intuitive and more maintainable
+      program. Updated user documentation to be much more complete.
+    </change>
+    <change name="Steven Lambright" date="2011-10-05">
+      Improved documentation in preparation for the October release. Working
+      with me to help figure out the best ways to document qmos were Orrin
+      Thomas and Trent Hare. Fixes #427
+    </change>
+    <change name="Kimberly Oyama and Steven Lambright" date="2012-07-26">
+      Added the 'Auto Grid' functionality, an options dialog, the option to select
+      the source of the latitude and longitude extents, and an 'Auto Apply' option to
+      update the grid as parameters are changed to the grid tool. Also changed the
+      draw and clear grid buttons to a single 'Show Grid' check button. Updated the
+      documentation to include these changes. Fixes #604.
+    </change>
+    <change name="Steven Lambright" date="2012-12-27">
+      Added a 'Phase Angle' column to the list of opened files. This column behaves exactly
+      like the other camera angle columns with respect to visibility and sorting. Fixes #1093.
+    </change>
+    <change name="Steven Lambright" date="2013-01-09">
+      Added some color coding options for the jigsaw movement arrows in the control network
+      tool. You can now color code this arrows on the number of measures in a point or on the
+      maximum residual magnitude of the measures in the point. Fixes #479.
+    </change>
+    <change name="Steven Lambright" date="2013-02-01">
+      Fixed a bug that caused qmos to sometimes freeze, in the grid tool, when the maximum longitude
+      was set to a negative value. Fixes #1060.
+    </change>
+    <change name="Steven Lambright" date="2013-02-12">
+      Improved map file capabilities. Please see the help pages inside of qmos (Help -> qmos Help)
+      for descriptions and explanations of the new functionality. Fixes #1034.
+    </change>
+    <change name="Steven Lambright" date="2013-03-06">
+      The grid tool should no longer crash when it cannot compute image extents automatically.
+      Fixes #1547.
+    </change>
+    <change name="Steven Lambright" date="2013-03-19">
+      The grid tool's "Auto Grid" option will now remember it's state between qmos runs. There is
+      now an option to set the current file list columns as the default. These changes will not
+      impact what is stored/loaded from projects. If you try to open a project and cancel the
+      original state of qmos is now properly preserved, instead of closing all open files/settings.
+      The grid tool's handling of the 180 longitude domain has been improved: the longitude extents
+      sometimes failed to cross the 0 boundary and the longitude extent sliders were in 0-360 still,
+      instead of -180 to 180.
+    </change>
+    <change name="Ian Humphrey" date="2015-10-07">
+      Updated icons. Fixes #1041.
+    </change>
+  </history>
+</application>

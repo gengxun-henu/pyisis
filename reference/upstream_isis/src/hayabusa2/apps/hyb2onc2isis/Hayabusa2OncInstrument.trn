@@ -1,0 +1,504 @@
+#
+# This translation file is used to produce the ISIS Instrument label group
+# for the Hayabusa 2 ONC-W1, ONC-W2, and ONC-T cameras.
+# Translation = (left,right) convert the input "right" to the "left"
+#
+
+Group = SpacecraftName
+  Auto           = 1
+  InputKey       = SPCECRFT
+  InputPosition  = FitsLabels
+  OutputName     = SpacecraftName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (HAYABUSA-2, HAYABUSA2)
+  Translation    = (*, *)
+End_Group
+
+Group = InstrumentId
+  Auto           = 1
+  InputKey       = P_NAME
+  InputKey       = NAIFNAME
+  InputPosition  = FitsLabels
+  OutputName     = InstrumentId
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (ONC-T, "HAYABUSA2_ONC-T")
+  Translation    = (ONC-W1, "HAYABUSA2_ONC-W1")
+  Translation    = (ONC-W2, "HAYABUSA2_ONC-W2")
+End_Group
+
+Group = InstrumentName
+  Auto           = 1
+  InputKey       = INSTRUME
+  InputPosition  = FitsLabels
+  OutputName     = InstrumentName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = OriginalTargetName
+  Auto           = 1
+  InputKey       = TARGET
+  InputPosition  = FitsLabels
+  OutputName     = OriginalTargetName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (Ryugu, RYUGU)
+  Translation    = (Earth, EARTH)
+  Translation    = (Moon, MOON)
+  Translation    = (*, *)
+End_Group
+
+Group = TargetName
+  Auto           = 1
+  InputKey       = TARGET
+  InputPosition  = FitsLabels
+  OutputName     = TargetName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (Ryugu, RYUGU)
+  Translation    = (Earth, EARTH)
+  Translation    = (Moon, MOON)
+  Translation    = (*, *)
+End_Group
+
+# According to the FITS files, this is the actual start time, DATE-OBS is the center time
+Group = StartTime
+  Auto           = 1
+  InputKey       = DATE-BEG
+  InputPosition  = FitsLabels
+  OutputName     = StartTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = StopTime
+  Auto           = 1
+  InputKey       = DATE-END
+  InputPosition  = FitsLabels
+  OutputName     = StopTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ExposureDuration
+  Auto           = 1
+  InputKey       = EXPOSURE
+  InputKey       = XPOSURE
+  InputPosition  = FitsLabels
+  OutputName     = ExposureDuration
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockStartCount
+  Auto           = 1
+  InputKey       = P_SCCSC
+  InputKey       = SCCL-BEG
+  InputPosition  = FitsLabels
+  OutputName     = SpacecraftClockStartCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SpacecraftClockEndCount
+  Auto           = 1
+  InputKey       = P_SCCEC
+  InputKey       = SCCL-END
+  InputPosition  = FitsLabels
+  OutputName     = SpacecraftClockStartCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# in increments of 1/32 sec and represented in hex.
+Group = RawSpacecraftClockCount
+  Auto           = 1
+  InputKey       = ti_0
+  InputPosition  = FitsLabels
+  OutputName     = RawSpacecraftClockCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+#s/c counter at data recorded time
+Group = OnboardDataRecordedTime
+  Auto           = 1
+  Optional       = 1
+  InputKey       = P_RECTI
+  InputPosition  = FitsExtras
+  OutputName     = OnboardDataRecordedTime
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = Binning
+  Auto           = 1
+  InputKey       = P_BINN
+  InputKey       = NPIXBIN
+  InputPosition  = FitsLabels
+  OutputName     = Binning
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# selected image areas (units: pixel coords of the detector):
+Group = SelectedImageAreaX1
+  Auto           = 1
+  InputKey       = P_OPOSX1
+  InputKey       = ROI_LLX
+  InputPosition  = FitsLabels
+  OutputName     = SelectedImageAreaX1
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SelectedImageAreaY1
+  Auto           = 1
+  InputKey       = P_OPOSY1
+  InputKey       = ROI_LLY
+  InputPosition  = FitsLabels
+  OutputName     = SelectedImageAreaY1
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SelectedImageAreaX2
+  Auto           = 1
+  Optional       = 1
+  InputKey       = P_OPOSX2
+  InputKey       = ROI_URX
+  InputPosition  = FitsLabels
+  OutputName     = SelectedImageAreaX2
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SelectedImageAreaY2
+  Auto           = 1
+  Optional       = 1
+  InputKey       = P_OPOSY2
+  InputKey       = ROI_URY
+  InputPosition  = FitsLabels
+  OutputName     = SelectedImageAreaY2
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SelectedImageAreaX3
+  Auto           = 1
+  Optional       = 1
+  InputKey       = P_OPOSX3
+  InputPosition  = FitsLabels
+  OutputName     = SelectedImageAreaX3
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SelectedImageAreaY3
+  Auto           = 1
+  Optional       = 1
+  InputKey       = P_OPOSY3
+  InputPosition  = FitsLabels
+  OutputName     = SelectedImageAreaY3
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SelectedImageAreaX4
+  Auto           = 1
+  InputKey       = P_OPOSX4
+  InputKey       = ROI_URX
+  InputPosition  = FitsLabels
+  OutputName     = SelectedImageAreaX4
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SelectedImageAreaY4
+  Auto           = 1
+  InputKey       = P_OPOSY4
+  InputKey       = ROI_URY
+  InputPosition  = FitsLabels
+  OutputName     = SelectedImageAreaY4
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SmearCorrection
+  Auto           = 1
+  InputKey       = SMEARCR
+  InputPosition  = FitsLabels
+  OutputName     = SmearCorrection
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = OffsetCorrection
+  Auto           = 1
+  InputKey       = OFFSETCR
+  InputKey       = AOFFSET
+  InputPosition  = FitsLabels
+  OutputName     = OffsetCorrection
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = FlatCorrection
+  Auto           = 1
+  InputKey       = FLATCR
+  InputPosition  = FitsLabels
+  OutputName     = FlatCorrection
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = RadianceConversion
+  Auto           = 1
+  InputKey       = RADIANCE
+  InputKey       = RADCONV
+  InputPosition  = FitsLabels
+  OutputName     = RadianceConversion
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = PhotometricCorrection
+  Auto           = 1
+  InputKey       = PHOTOCR
+  InputPosition  = FitsLabels
+  OutputName     = PhotometricCorrection
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = BandRegistration
+  Auto           = 1
+  Optional       = 1
+  InputKey       = REGIST
+  InputPosition  = FitsLabels
+  OutputName     = BandRegistration
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = L2BFlatFileName
+  Auto           = 1
+  InputKey       = L2BFLTFN
+  InputKey       = FLATFN
+  InputPosition  = FitsLabels
+  OutputName     = L2BFlatFileName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = L2BSystemEfficiencyFileName
+  Auto           = 1
+  Optional       = 1
+  InputKey       = L2BEFCFN
+  InputPosition  = FitsLabels
+  OutputName     = L2BSystemEfficiencyFileName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = L2CShapeModelFileName
+  Auto           = 1
+  Optional       = 1
+  InputKey       = L2CSHPFN
+  InputKey       = SHAPEFN
+  InputPosition  = FitsLabels
+  OutputName     = L2CShapeModelFileName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = L2DPhaseFunctionFileName
+  Auto           = 1
+  Optional       = 1
+  InputKey       = L2DPHSFN
+  InputKey       = PHASEFN
+  InputPosition  = FitsLabels
+  OutputName     = L2DPhaseFunctionFileName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = L2DShapeModelFileName
+  Auto           = 1
+  Optional       = 1
+  InputKey       = L2DSHPFN
+  InputKey       = SHAPEFN
+  InputPosition  = FitsLabels
+  OutputName     = L2DShapeModelFileName
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# the following image ID is assigned by the onboard image processor:
+Group = ImageID
+  Auto           = 1
+  Optional       = 1
+  InputKey       = P_IMGID
+  InputPosition  = FitsExtras
+  OutputName     = ImageID
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = SubImageCount
+  Auto           = 1
+  InputKey       = NSUBIMG
+  InputPosition  = FitsLabels
+  OutputName     = SubImageCount
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# the following are housekeeping keywords:
+Group = BusLineVoltage
+  Auto           = 1
+  InputKey       = BUS_V
+  InputPosition  = FitsLabels
+  OutputName     = BusLineVoltage
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = ONCCurrent
+  Auto           = 1
+  InputKey       = ONC_I
+  InputPosition  = FitsLabels
+  OutputName     = ONCCurrent
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+Group = FLACCurrent
+  Auto           = 1
+  InputKey       = FLAC_I
+  InputPosition  = FitsLabels
+  OutputName     = FLACCurrent
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# ONC-AE temperature (units: C)
+Group = ONCAETemperature
+  Auto           = 1
+  InputKey       = ONC_AET
+  InputPosition  = FitsLabels
+  OutputName     = ONCAETemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# ONC-T optics temperature (units: C)
+Group = ONCTOpticsTemperature
+  Auto           = 1
+  InputKey       = T_OPTT
+  InputPosition  = FitsLabels
+  OutputName     = ONCTOpticsTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# ONC-T CCD temperature (units: C)
+Group = ONCTCCDTemperature
+  Auto           = 1
+  InputKey       = T_CCDT
+  InputPosition  = FitsLabels
+  OutputName     = ONCTCCDTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# ONC-T electric circuit temperature (units: C)
+Group = ONCTElectricCircuitTemperature
+  Auto           = 1
+  InputKey       = T_ELET
+  InputPosition  = FitsLabels
+  OutputName     = ONCTElectricCircuitTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# ONC-W1 optics temperature (units: C)
+Group = ONCW1OpticsTemperature
+  Auto           = 1
+  InputKey       = W1_OPTT
+  InputPosition  = FitsLabels
+  OutputName     = ONCW1OpticsTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# ONC-W1 CCD temperature (units: C)
+Group = ONCW1CCDTemperature
+  Auto           = 1
+  InputKey       = W1_CCDT
+  InputPosition  = FitsLabels
+  OutputName     = ONCW1CCDTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# ONC-W1 electric circuit temperature (units: C)
+Group = ONCW1ElectricCircuitTemperature
+  Auto           = 1
+  InputKey       = W1_ELET
+  InputPosition  = FitsLabels
+  OutputName     = ONCW1ElectricCircuitTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# ONC-W2 optics temperature (units: C)
+Group = ONCW2OpticsTemperature
+  Auto           = 1
+  InputKey       = W2_OPTT
+  InputPosition  = FitsLabels
+  OutputName     = ONCW2OpticsTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# ONC-W2 CCD temperature (units: C)
+Group = ONCW2CCDTemperature
+  Auto           = 1
+  InputKey       = W2_CCDT
+  InputPosition  = FitsLabels
+  OutputName     = ONCW2CCDTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# ONC-W2 electric circuit temperature (units: C)
+Group = ONCW2ElectricCircuitTemperature
+  Auto           = 1
+  InputKey       = W2_ELET
+  InputPosition  = FitsLabels
+  OutputName     = ONCW2ElectricCircuitTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# FLA-C temperature (units: C)
+Group = FLACTemperature
+  Auto           = 1
+  InputKey       = FLAC_T
+  InputPosition  = FitsLabels
+  OutputName     = FLACTemperature
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+# Output mode (compression type)
+Group = Compression
+  Auto           = 1
+  InputKey       = P_CMPSTY
+  InputKey       = IMGCMPRV
+  InputPosition  = FitsLabels
+  OutputName     = Compression
+  OutputPosition = (Object, IsisCube, Group, Instrument)
+  Translation    = (*, *)
+End_Group
+
+End

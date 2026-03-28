@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="chan1m32isis" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+ <brief>
+    Import Chandrayaan-1 Moon Mineralogy Mapper (M3) images into ISIS cubes
+ </brief>
+
+ <description>
+    This program imports Chandrayaan-1 Moon Mineralogy Mapper (M3) Level 1B (L1B) or Level 0 (L0) PDS
+    products into ISIS cubes.
+    <p>
+      The level 1B PDS data files have been processed to have north up and east to the right. This processing
+      is removed during the import of the data into ISIS. If the level 1B file is missing lines, the program will add 
+      lines of data containing the special pixel value NULL to pad the image to the correct number of lines. The
+      location of missing lines is determined by looking for time differences between adjacent records of the 
+      UTC_TIME table greater than the exposture duration. 
+    </p>
+    <p>
+      Chandrayaan-1 M3 L1B PDS data products consist of:
+      <ul>
+        <li> A detached PDS label file </li> 
+        <li> A multiple-band image file containing the calibrated spectral radiance image data in units 
+      of (W/m^2/µm/sr)</li>
+        <li> A 3-band image file containing pixel location data </li>
+        <li> A 10 band image file containing observation geometry </li>
+      </ul>
+    </p>
+    <p>
+      The level 0 PDS data files were not flipped or mirrored from the orientation they were in when collected. The level
+      0 files are missing the same lines as the level 1B files, but they do not contain the necessary information to add
+      NULL lines as do the level 1B products.
+    </p>
+    <p>
+      Chandrayaan-1 M3 L0 PDS data products consist of:
+      <ul>
+        <li> An detached PDS label file </li>
+        <li> A multi-band file containing the raw data </li>
+        </ul>
+    </p>
+
+ </description>
+
+  <history>
+    <change name="Steven Lambright and Tracie Sucharski" date="2013-03-12">
+      Original version
+    </change>
+    <change name="Stuart Sides" date="2014-04-03">
+      Updated documentation after reviews
+    </change>
+    <change name="Stuart Sides" date="2014-04-18">
+      Added missing line detection and correction based on the TIM table for level 1B products.
+    </change>
+    <change name="Stuart Sides" date="2015-03-25">
+      Recalculted the STARTTIME and STOPTIMeE keywords from the clock counts.
+    </change>
+  </history>
+
+  <category>
+    <missionItem>Chandrayaan 1</missionItem>
+  </category>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input detached PDS formatted Chandrayaan-1 M3 label file
+        </brief>
+        <description>
+          This file is a detached PDS formatted label which contains pointers to the following files:
+          <ul>
+            <li>Multi-band image of calibrated spectral radiance level 1B data or raw level 0 data (*_RDN.IMG, *_L0.IMG) </li>
+            <li>Three band image containing position of each image pixel on the Moon (*_LOC.IMG). Not used for L0 label files.</li>
+            <li>Ten band image containing observation geometry (*_OBS.IMG). Not used for L0 label files.</li>
+          </ul>
+        </description>
+        <filter>
+          *.LBL
+        </filter>
+      </parameter>
+
+      <parameter name="TO">
+         <type>cube</type>
+         <fileMode>output</fileMode>
+         <brief>
+           Output calibrated spectral radiance image cube
+         </brief>
+         <description>
+           Output ISIS cube containing calibrated spectral radiance pixels (units of W/m^2/µm/sr) or level 0 raw data.
+         </description>
+         <filter>
+           *.cub
+         </filter>
+       </parameter>
+
+       <parameter name="LOC">
+         <type>cube</type>
+         <fileMode>output</fileMode>
+         <internalDefault>None</internalDefault>
+         <brief>
+           Optional output file containing lunar surface location of all radiance image pixels.
+         </brief>
+         <description>
+           This is an optional output file containing location information for the center of all pixels 
+           contained in the radiance image file (L1B) created from the "TO" parameter. The output 
+           ISIS cube will 3 band containing the following:
+           <ol>
+             <li>Planetocentric latitude in decimal degrees</li>
+             <li>Longitude in decimal degrees</li>
+             <li>Radius in meters from the Moon center</li>
+           </ol>
+           If the "TO" parameter is not an L1B product then this keyword will be ignored.  
+         </description>
+         <filter>
+           *.cub
+         </filter>
+       </parameter>
+
+       <parameter name="OBS">
+         <type>cube</type>
+         <fileMode>output</fileMode>
+         <internalDefault>None</internalDefault>
+         <brief>
+           Optional output file containing observation geometry information for all radiance image pixels.
+         </brief>
+         <description>
+           This is an optional output file containing observation geometry information for each
+           pixel in the  radiance image. The output ISIS cube with have ten bands containing the following:
+           <ol>
+             <li> To-sun azimuth angle (decimal degrees, clockwise from local north)</li>
+             <li> To-sun zenith angle (incidence angle in decimal degrees, zero at zenith)</li>
+             <li> To-sensor azimuth angle (decimal degrees, clockwise from local north)</li>
+             <li> To-sensor zenith angle (emission angle in decimal degrees, zero at zenith)</li>
+             <li> Observation phase angle (decimal degrees, in plane of to-sun and to-sensor rays)</li>
+             <li> To-sun path length (decimal au with scene mean subtracted and noted in PDS label)</li>
+             <li> To-sensor path length (decimal meters)</li>
+             <li> Surface slope from DEM (decimal degrees, zero at horizontal)</li>
+             <li> Surface aspect from DEM (decimal degrees, clockwise from local north)</li>
+             <li> Local cosine i (unitless, cosine of angle between to-sun and local DEM facet normal vectors)</li>
+           </ol>
+           If the "TO"  parameter is not an L1B product then this keyword will be ignored.  
+         </description>
+         <filter>
+           *.cub
+         </filter>
+       </parameter>
+    </group>
+  </groups>
+</application>
+

@@ -1,0 +1,84 @@
+PDS_VERSION_ID = NULL       
+
+/* File format and length */
+RECORD_TYPE = NULL
+RECORD_BYTES = NULL
+FILE_RECORDS = NULL
+^IMAGE = NULL
+
+OBJECT = IMAGE
+  LINES = NULL
+  LINE_SAMPLES = NULL
+  BANDS = NULL
+  OFFSET = NULL
+  SCALING_FACTOR = NULL
+  NOTE = NULL
+  SAMPLE_BITS = NULL
+  SAMPLE_BIT_MASK = NULL
+  SAMPLE_TYPE = NULL
+  MISSING_CONSTANT = NULL
+  VALID_MINIMUM = NULL
+  VALID_MAXIMUM = NULL
+END_OBJECT = IMAGE
+
+/* Identification Information */
+DATA_SET_ID = NULL
+DATA_SET_NAME = NULL
+PRODUCER_INSTITUTION_NAME = NULL
+PRODUCER_ID = NULL
+PRODUCER_FULL_NAME = NULL
+PRODUCT_ID = NULL
+PRODUCT_VERSION_ID = NULL
+INSTRUMENT_HOST_NAME = NULL
+INSTRUMENT_HOST_ID = NULL
+INSTRUMENT_NAME = NULL
+INSTRUMENT_ID = NULL
+TARGET_NAME = NULL
+SOURCE_PRODUCT_ID = NULL
+RATIONALE_DESC = NULL
+SOFTWARE_NAME = NULL
+
+OBJECT = IMAGE_MAP_PROJECTION
+  ^DATA_SET_MAP_PROJECTION     = "DSMAP.CAT"
+  MAP_PROJECTION_TYPE = NULL
+  PROJECTION_LATITUDE_TYPE     = PLANETOCENTRIC
+  /* NOTE: The EQUIRECTANGULAR projection is based on the formula  */
+  /* for a sphere. To eliminate confusion in the                   */
+  /* IMAGE_MAP_PROJECTION object we have set all three radii,      */
+  /* A_AXIS_RADIUS, B_AXIS_RADIUS, and C_AXIS_RADIUS to the same   */
+  /* number. The value recorded in the three radii is the local    */
+  /* radius at the center latitude on the Mars ellipsoid. That is, */
+  /* equatorial radius of 3396.190000 km and polar radius of       */
+  /* 3376.200000 kilometers. Using the local radius of the         */
+  /* ellipsoid implies that the MAP_SCALE and MAP_RESOLUTION are   */
+  /* true at the center latitude. */
+  A_AXIS_RADIUS = NULL
+  B_AXIS_RADIUS = NULL
+  C_AXIS_RADIUS = NULL
+  COORDINATE_SYSTEM_NAME = NULL
+  POSITIVE_LONGITUDE_DIRECTION = NULL
+  KEYWORD_LATITUDE_TYPE = NULL
+  /* NOTE:  CENTER_LATITUDE and CENTER_LONGITUDE describe the location  */
+  /* of the center of projection, which is not necessarily equal to the */
+  /* location of the center point of the image.                         */
+  CENTER_LATITUDE = NULL
+  CENTER_LONGITUDE = NULL
+  LINE_FIRST_PIXEL = NULL
+  LINE_LAST_PIXEL = NULL
+  SAMPLE_FIRST_PIXEL = NULL
+  SAMPLE_LAST_PIXEL = NULL
+  MAP_PROJECTION_ROTATION = NULL
+  MAP_RESOLUTION = NULL
+  MAP_SCALE = NULL
+  MAXIMUM_LATITUDE = NULL
+  MINIMUM_LATITUDE = NULL
+  LINE_PROJECTION_OFFSET = NULL
+  SAMPLE_PROJECTION_OFFSET = NULL
+  EASTERNMOST_LONGITUDE = NULL
+  WESTERNMOST_LONGITUDE = NULL  
+END_OBJECT = IMAGE_MAP_PROJECTION
+
+OBJECT = VIEWING_PARAMETERS
+  NORTH_AZIMUTH = NULL              
+END_OBJECT = VIEWING_PARAMETERS
+END

@@ -1,0 +1,626 @@
+Testing Isis::ProcessMapMosaic Class ... 
+Testing Mosaic 1
+base/unitTestData/ProcessMapMosaic/unitTest1.cub is inside the mosaic
+base/unitTestData/ProcessMapMosaic/unitTest2.cub is inside the mosaic
+Mosaic label: 
+Object = IsisCube
+  Object = Core
+    StartByte   = 65537
+    Format      = Tile
+    TileSamples = 124
+    TileLines   = 125
+
+    Group = Dimensions
+      Samples = 124
+      Lines   = 125
+      Bands   = 1
+    End_Group
+
+    Group = Pixels
+      Type       = UnsignedByte
+      ByteOrder  = Lsb
+      Base       = 0.0
+      Multiplier = 1.0
+    End_Group
+  End_Object
+
+  Group = Mapping
+    ProjectionName     = Sinusoidal
+    CenterLongitude    = 30.5
+    TargetName         = MOON
+    EquatorialRadius   = 1737400.0 <meters>
+    PolarRadius        = 1737400.0 <meters>
+    LatitudeType       = Planetocentric
+    LongitudeDirection = PositiveEast
+    LongitudeDomain    = 360
+    MinimumLatitude    = -5.5
+    MaximumLatitude    = -4.0
+    MinimumLongitude   = 29.5
+    MaximumLongitude   = 31.0
+    UpperLeftCornerX   = -15195.585618718 <meters>
+    UpperLeftCornerY   = -121074.5047685 <meters>
+    PixelResolution    = 245.09009062449 <meters/pixel>
+    Scale              = 123.72328210776 <pixels/degree>
+  End_Group
+End_Object
+
+Object = Label
+  Bytes = 65536
+End_Object
+
+Object = History
+  Name      = IsisCube
+  StartByte = 81037
+  Bytes     = 3020
+End_Object
+End
+Testing Mosaic 2
+base/unitTestData/ProcessMapMosaic/unitTest1.cub is inside the mosaic
+base/unitTestData/ProcessMapMosaic/unitTest2.cub is inside the mosaic
+Mosaic label: 
+Object = IsisCube
+  Object = Core
+    StartByte   = 65537
+    Format      = Tile
+    TileSamples = 248
+    TileLines   = 249
+
+    Group = Dimensions
+      Samples = 248
+      Lines   = 249
+      Bands   = 1
+    End_Group
+
+    Group = Pixels
+      Type       = UnsignedByte
+      ByteOrder  = Lsb
+      Base       = 0.0
+      Multiplier = 1.0
+    End_Group
+  End_Object
+
+  Group = Mapping
+    ProjectionName     = Sinusoidal
+    CenterLongitude    = 30.5
+    TargetName         = MOON
+    EquatorialRadius   = 1737400.0 <meters>
+    PolarRadius        = 1737400.0 <meters>
+    LatitudeType       = Planetocentric
+    LongitudeDirection = PositiveEast
+    LongitudeDomain    = 360
+    MinimumLatitude    = -6.0
+    MaximumLatitude    = -4.0
+    MinimumLongitude   = 29.0
+    MaximumLongitude   = 31.0
+    UpperLeftCornerX   = -45586.756856155 <meters>
+    UpperLeftCornerY   = -121074.5047685 <meters>
+    PixelResolution    = 245.09009062449 <meters/pixel>
+    Scale              = 123.72328210776 <pixels/degree>
+  End_Group
+End_Object
+
+Object = Label
+  Bytes = 65536
+End_Object
+
+Object = History
+  Name      = IsisCube
+  StartByte = 127289
+  Bytes     = 3020
+End_Object
+End
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	10
+Mosaic Data: -1.79769e+308	-1.79769e+308	10
+Mosaic Data: -1.79769e+308	-1.79769e+308	10
+Mosaic Data: -1.79769e+308	-1.79769e+308	13
+Mosaic Data: -1.79769e+308	-1.79769e+308	16
+Mosaic Data: -1.79769e+308	-1.79769e+308	15
+Mosaic Data: -1.79769e+308	-1.79769e+308	14
+Mosaic Data: -1.79769e+308	-1.79769e+308	17
+Mosaic Data: -1.79769e+308	-1.79769e+308	21
+Mosaic Data: -1.79769e+308	-1.79769e+308	20
+Mosaic Data: -1.79769e+308	-1.79769e+308	19
+Mosaic Data: -1.79769e+308	-1.79769e+308	22
+Mosaic Data: -1.79769e+308	31	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	31	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	24
+Mosaic Data: -1.79769e+308	-1.79769e+308	26
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	31	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	39	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	30
+Mosaic Data: -1.79769e+308	-1.79769e+308	31
+Mosaic Data: -1.79769e+308	-1.79769e+308	29
+Mosaic Data: -1.79769e+308	-1.79769e+308	26
+Mosaic Data: -1.79769e+308	-1.79769e+308	24
+Mosaic Data: -1.79769e+308	31	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	31	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	25
+Mosaic Data: -1.79769e+308	-1.79769e+308	26
+Mosaic Data: -1.79769e+308	31	23
+Mosaic Data: -1.79769e+308	-1.79769e+308	19
+Mosaic Data: -1.79769e+308	-1.79769e+308	20
+Mosaic Data: -1.79769e+308	-1.79769e+308	21
+Mosaic Data: -1.79769e+308	-1.79769e+308	19
+Mosaic Data: -1.79769e+308	-1.79769e+308	15
+Mosaic Data: -1.79769e+308	-1.79769e+308	15
+Mosaic Data: -1.79769e+308	-1.79769e+308	15
+Mosaic Data: -1.79769e+308	-1.79769e+308	15
+Mosaic Data: -1.79769e+308	-1.79769e+308	11
+Mosaic Data: -1.79769e+308	-1.79769e+308	9
+Mosaic Data: -1.79769e+308	-1.79769e+308	10
+Mosaic Data: -1.79769e+308	-1.79769e+308	10
+Mosaic Data: -1.79769e+308	-1.79769e+308	33
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+Mosaic Data: -1.79769e+308	-1.79769e+308	-1.79769e+308
+
+Testing Mosaic where the input (x, y) is negative, according to the output cube.
+The mosaic was successfull.
+Mosaic label: 
+Object = IsisCube
+  Object = Core
+    StartByte   = 65537
+    Format      = Tile
+    TileSamples = 38
+    TileLines   = 25
+
+    Group = Dimensions
+      Samples = 38
+      Lines   = 25
+      Bands   = 1
+    End_Group
+
+    Group = Pixels
+      Type       = UnsignedByte
+      ByteOrder  = Lsb
+      Base       = 0.0
+      Multiplier = 1.0
+    End_Group
+  End_Object
+
+  Group = Mapping
+    ProjectionName     = Sinusoidal
+    CenterLongitude    = 30.5
+    TargetName         = MOON
+    EquatorialRadius   = 1737400.0 <meters>
+    PolarRadius        = 1737400.0 <meters>
+    LatitudeType       = Planetocentric
+    LongitudeDirection = PositiveEast
+    LongitudeDomain    = 360
+    MinimumLatitude    = -4.9
+    MaximumLatitude    = -4.7
+    MinimumLongitude   = 30.7
+    MaximumLongitude   = 31
+    UpperLeftCornerX   = 5882.1621749878 <meters>
+    UpperLeftCornerY   = -142397.34265283 <meters>
+    PixelResolution    = 245.09009062449 <meters/pixel>
+    Scale              = 123.72328210776 <pixels/degree>
+  End_Group
+End_Object
+
+Object = Label
+  Bytes = 65536
+End_Object
+
+Object = Table
+  Name        = InstrumentPointing
+  StartByte   = 66487
+  Bytes       = 40
+  Records     = 1
+  ByteOrder   = Lsb
+  Description = "Created by spiceinit"
+  Kernels     = ($clementine1/kernels/fk/clem_v11.tf,
+                 $Clementine1/kernels/ck/clem_5sc.bck)
+
+  Group = Field
+    Name = J2000Q0
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = J2000Q1
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = J2000Q2
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = J2000Q3
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = ET
+    Type = Double
+    Size = 1
+  End_Group
+End_Object
+
+Object = Table
+  Name        = InstrumentPosition
+  StartByte   = 66527
+  Bytes       = 32
+  Records     = 1
+  ByteOrder   = Lsb
+  Description = "Created by spiceinit"
+  Kernels     = $Clementine1/kernels/spk/SPKMERGE_940219_940504_CLEMV001b.bsp
+
+  Group = Field
+    Name = J2000X
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = J2000Y
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = J2000Z
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = ET
+    Type = Double
+    Size = 1
+  End_Group
+End_Object
+
+Object = Table
+  Name           = BodyRotation
+  StartByte      = 66559
+  Bytes          = 40
+  Records        = 1
+  ByteOrder      = Lsb
+  Description    = "Created by spiceinit"
+  Kernels        = ($base/kernels/spk/de405.bsp,
+                    $base/kernels/pck/pck00008.tpc,
+                    $base/kernels/pck/lunar_de403_1950-2199_pa.bpc,
+                    $base/kernels/fk/lunarMeanEarth001.tf)
+  SolarLongitude = 150.63510050494
+
+  Group = Field
+    Name = J2000Q0
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = J2000Q1
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = J2000Q2
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = J2000Q3
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = ET
+    Type = Double
+    Size = 1
+  End_Group
+End_Object
+
+Object = Table
+  Name        = SunPosition
+  StartByte   = 66599
+  Bytes       = 32
+  Records     = 1
+  ByteOrder   = Lsb
+  Description = "Created by spiceinit"
+  Kernels     = $base/kernels/spk/de405.bsp
+
+  Group = Field
+    Name = J2000X
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = J2000Y
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = J2000Z
+    Type = Double
+    Size = 1
+  End_Group
+
+  Group = Field
+    Name = ET
+    Type = Double
+    Size = 1
+  End_Group
+End_Object
+
+Object = History
+  Name      = IsisCube
+  StartByte = 71980
+  Bytes     = 3020
+End_Object
+
+Object = OriginalLabel
+  Name      = IsisCube
+  StartByte = 66631
+  Bytes     = 5349
+End_Object
+End
+
+Testing Mosaic containing cropped image.
+base/unitTestData/ProcessMapMosaic/unitTest_crop.cub is inside the mosaic
+base/unitTestData/ProcessMapMosaic/unitTest_nocrop.cub is inside the mosaic
+Mosaic label: 
+Object = IsisCube
+  Object = Core
+    StartByte   = 65537
+    Format      = Tile
+    TileSamples = 443
+    TileLines   = 128
+
+    Group = Dimensions
+      Samples = 2215
+      Lines   = 3271
+      Bands   = 1
+    End_Group
+
+    Group = Pixels
+      Type       = Real
+      ByteOrder  = Lsb
+      Base       = 0.0
+      Multiplier = 1.0
+    End_Group
+  End_Object
+
+  Group = Mapping
+    ProjectionName     = Sinusoidal
+    CenterLongitude    = 227.87092862105
+    TargetName         = Mars
+    EquatorialRadius   = 3396190.0 <meters>
+    PolarRadius        = 3376200.0 <meters>
+    LatitudeType       = Planetocentric
+    LongitudeDirection = PositiveEast
+    LongitudeDomain    = 360
+    UpperLeftCornerX   = -475029.8023764 <meters>
+    UpperLeftCornerY   = 2042714.0507253 <meters>
+    PixelResolution    = 429.50253379421 <meters/pixel>
+    Scale              = 138.00779473796 <pixels/degree>
+  End_Group
+End_Object
+
+Object = Label
+  Bytes = 65536
+End_Object
+
+Object = History
+  Name      = IsisCube
+  StartByte = 29551617
+  Bytes     = 3519
+End_Object
+End

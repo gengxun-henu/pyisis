@@ -1,0 +1,326 @@
+name: agent-pybind-task-draft
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "GitHub issue number for this pybind task"
+        required: true
+        type: string
+      target_scope:
+        description: "One upstream class or one method cluster only"
+        required: true
+        type: string
+      attempt:
+        description: "Automated repair attempt number (1-5)"
+        required: true
+        default: "1"
+        type: string
+      unit_test_target:
+        description: "Optional unittest target or test file stem, for example tests.unitTest.cube_unit_test or cube_unit_test.CubeBaseMultiplierTest"
+        required: false
+        default: ""
+        type: string
+      update_progress:
+        description: "Whether this task is expected to update progress artifacts"
+        required: true
+        default: true
+        type: boolean
+
+  # Enable this once you are ready to gate agent PRs automatically.
+  # pull_request:
+  #   paths:
+  #     - .github/workflows/agent-pybind-task-draft.yml
+  #     - .github/ISSUE_TEMPLATE/pybind-task.yml
+  #     - .github/copilot-instructions.md
+  #     - .github/instructions/**
+  #     - CMakeLists.txt
+  #     - python/**
+  #     - src/**
+  #     - tests/**
+  #     - todo_pybind11.csv
+  #     - pybind_progress_log.md
+  #     - class_bind_methods_details/**
+
+concurrency:
+  group: agent-pybind-task-${{ github.ref }}-${{ inputs.issue_number || 'manual' }}
+  cancel-in-progress: true
+
+jobs:
+  budget-guard:
+    name: Budget guard
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Validate retry budget
+        shell: bash
+        run: |
+          attempt="${{ inputs.attempt }}"
+          if ! [[ "$attempt" =~ ^[0-9]+$ ]]; then
+            echo "attempt must be an integer" >&2
+            exit 1
+          fi
+          if [ "$attempt" -lt 1 ] || [ "$attempt" -gt 5 ]; then
+            echo "attempt must be between 1 and 5" >&2
+            exit 1
+          fi
+          echo "Attempt $attempt / 5 accepted"
+
+  build:
+    name: Configure and build
+    runs-on: ubuntu-22.04
+    needs: budget-guard
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    env:
+      PYBIND_DIR: .
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: asp360_new
+          cache-environment: true
+          cache-downloads: true
+          init-shell: bash
+
+      - name: Install ISIS and pybind11
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          micromamba install -n asp360_new -y \
+            -c conda-forge \
+            -c usgs-astrogeology \
+            "isis=9.0.0" pybind11 ninja
+
+      - name: Configure environment
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          echo "CONDA_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISIS_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISISROOT=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
+
+      - name: Clean build directory
+        run: rm -rf "$BUILD_DIR"
+
+      - name: Configure CMake
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" \
+            -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
+            -DISIS_PREFIX="$CONDA_PREFIX"
+
+      - name: Build extension
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          cmake --build "$BUILD_DIR" --parallel 2
+
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ github.run_id }}
+          path: |
+            build/CMakeFiles/CMakeOutput.log
+            build/CMakeFiles/CMakeError.log
+            build/Testing/**
+          if-no-files-found: ignore
+
+  unit-tests:
+    name: Targeted unit validation
+    runs-on: ubuntu-22.04
+    needs: build
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    env:
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: asp360_new
+          cache-environment: true
+          cache-downloads: true
+          init-shell: bash
+
+      - name: Install ISIS and pybind11
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          micromamba install -n asp360_new -y \
+            -c conda-forge \
+            -c usgs-astrogeology \
+            "isis=9.0.0" pybind11 ninja
+
+      - name: Configure runtime environment
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          echo "CONDA_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISIS_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISISROOT=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
+
+      - name: Rebuild extension for this runner
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          cmake -S . -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" \
+            -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
+            -DISIS_PREFIX="$CONDA_PREFIX"
+          cmake --build "$BUILD_DIR" --parallel 2
+
+      - name: Run targeted unittest or full CTest group
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          export PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}"
+          if [ -n "${{ inputs.unit_test_target }}" ]; then
+            "$CONDA_PREFIX/bin/python" -X faulthandler -m unittest -v "${{ inputs.unit_test_target }}"
+          else
+            ctest --test-dir "$BUILD_DIR" -R python-unit-tests --output-on-failure
+          fi
+
+  smoke-import:
+    name: Smoke import
+    runs-on: ubuntu-22.04
+    needs: unit-tests
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    env:
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - name: Set up micromamba
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: asp360_new
+          cache-environment: true
+          cache-downloads: true
+          init-shell: bash
+
+      - name: Install ISIS and pybind11
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          micromamba install -n asp360_new -y \
+            -c conda-forge \
+            -c usgs-astrogeology \
+            "isis=9.0.0" pybind11 ninja
+
+      - name: Configure runtime environment
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          echo "CONDA_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISIS_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISISROOT=$CONDA_PREFIX" >> "$GITHUB_ENV"
+          echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
+
+      - name: Rebuild extension for this runner
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          cmake -S . -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" \
+            -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
+            -DISIS_PREFIX="$CONDA_PREFIX"
+          cmake --build "$BUILD_DIR" --parallel 2
+
+      - name: Run smoke_import.py
+        shell: bash -l {0}
+        run: |
+          micromamba activate asp360_new
+          PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
+            "$CONDA_PREFIX/bin/python" -X faulthandler tests/smoke_import.py
+
+  blocker-summary:
+    name: Blocker summary
+    runs-on: ubuntu-22.04
+    if: failure()
+    needs:
+      - build
+      - unit-tests
+      - smoke-import
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Write step summary
+        shell: bash
+        run: |
+          {
+            echo "## Pybind task failure summary"
+            echo ""
+            echo "- Issue: #${{ inputs.issue_number }}"
+            echo "- Target scope: ${{ inputs.target_scope }}"
+            echo "- Attempt: ${{ inputs.attempt }} / 5"
+            echo "- Required gate: build + unit + smoke"
+            echo ""
+            echo "If this is attempt 5, mark the issue or PR as blocked, add a blocker summary, and stop automatic repair for this task."
+            echo "Next task should come from the ready-for-agent queue."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment on issue when attempt reaches 5
+        if: ${{ inputs.issue_number != '' && inputs.attempt == '5' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = Number('${{ inputs.issue_number }}');
+            const body = [
+              'Automated pybind repair budget reached 5 attempts.',
+              '',
+              `Target scope: ${{ inputs.target_scope }}`,
+              '',
+              'Please add a blocker summary with:',
+              '- last failing step',
+              '- most likely root cause',
+              '- classification: binding bug / test bug / environment / upstream behavior / unknown',
+              '- recommended next human action',
+              '',
+              'This task should stop here and the next task should be selected from the `ready-for-agent` queue.'
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body
+            });
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              labels: ['blocked', 'needs-human-review']
+            });

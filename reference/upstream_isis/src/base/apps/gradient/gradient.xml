@@ -1,0 +1,328 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="gradient" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+
+  <brief>
+    Apply Sobel or Roberts gradient to a cube
+  </brief>
+
+  <description>
+    This program will apply a Sobel or Roberts gradient filter to a cube.
+    These gradient filters will highlight edges of an image. Gradient filters typically are used
+    to highlight the differences in the brightness of adjacent pixels in a cube, and also the 
+    edges of the transitions in the image data.
+    The output will contain the calculated magnitude of the spatial graident of the input cube.
+    The calculation method can be set to either exact or approximate and can be 
+    specified with the 'METHOD' parameter. 
+    NOTE: When a calculation must be done where one or more values are
+    special pixels, the output will be NULL. If this causes unexpected
+    results, you can run <i>stretch</i> to change ithe input special pixel(s) to 
+    a <def link="Digital Number">Digital Number (DN)</def> that is appropriate for calculation. 
+    For example, if the image contains <def link="HIS">High Instrument Saturation (HIS)</def> 
+    values, you may choose to stretch these to 255 prior to running the gradient filter.
+  </description>
+
+  <history>
+    <change name="Tracie Sucharski" date="2002-12-18">
+       Original version
+    </change>
+    <change name="Kim Sides" date="2003-05-13">
+      Added application test
+    </change>
+    <change name="Stuart Sides" date="2003-05-16">
+  Modified schema location from astogeology... to isis.astrogeology..."
+    </change>
+    <change name="Stuart Sides" date="2003-07-29">
+      Modified filename parameters to be cube parameters where necessary
+    </change>
+    <change name="Drew Davidson" date="2005-08-16">
+      Added examples
+    </change>
+    <change name="Brendan George" date="2005-11-07">
+      Modified to handle Special Pixels
+    </change>
+    <change name="Ian Humphrey" date="2015-05-18">
+      Added METHOD parameter to allow for either exact or approximate 
+      calculation of the gradient magnitude. Updated and added tests.
+      Updated documentation. Fixes #1741.
+    </change>
+  </history>
+
+  <category>
+    <categoryItem>Filters</categoryItem>
+  </category>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input cube
+        </brief>
+        <description>
+          Use this parameter to select the filename. All bands within the file
+          will have the gradient applied.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+
+      <parameter name="TO">
+        <type>cube</type>
+        <fileMode>output</fileMode>
+        <pixelType>real</pixelType>
+        <brief>
+          Output cube
+        </brief>
+        <description>
+          This file will contain the estimated or exact absolute magnitude of 
+          the gradient.
+        </description>
+      </parameter>
+    </group>
+
+    <group name="Gradient Settings">
+      <parameter name="GRADTYPE">
+        <type>string</type>
+        <brief>Type of gradient (Sobel, Roberts)</brief>
+        <default>
+          <item>SOBEL</item>
+        </default>
+        <description>
+          This chooses the gradient type.  The possibilities
+          are Sobel, which uses a 3 x 3 boxcar to calculate the gradient magnitude, 
+          or Roberts, which uses a 2 x 2 boxcar to calculate the gradient magnitudes.
+        </description>
+        <list>
+          <option value="SOBEL">
+            <brief>Sobel gradient (3x3)</brief>
+            <description>
+            The Sobel gradient uses a 3 x 3 boxcar that makes the gradient calculation slow 
+            but less susceptible to noise. It will also create higher output for edges than 
+            the Roberts gradient.
+            <!--pre>
+
+            The following 3x3 boxcars estimate the gradient magnitudes in the vertical and 
+            horizontal directions for each point in the image: 
+
+                      -1  0  1             1  2  1
+                G<sub>x</sub> =  -2  0  2       G<sub>y</sub> =  0  0  0
+                      -1  0  1            -1 -2 -1
+
+            These estimated gradient magnitudes can then be used to calculate the gradient
+            magnitude for each point in the image:
+           
+                G = sqrt(G<sub>x</sub><sup>2</sup> + G<sub>y</sub><sup>2</sup>)  (EXACT)
+                G = |G<sub>x</sub> + G<sub>y</sub>|        (APPROXIMATE)
+
+            Here is an equation for an approximate Sobel gradient based on the following input pixels:
+
+                                             P<sub>1</sub> P<sub>2</sub> P<sub>3</sub>
+                Input (3x3 boxcar):          P<sub>4</sub> <strong>P<sub>5</sub></strong> P<sub>6</sub>
+                                             P<sub>7</sub> P<sub>8</sub> P<sub>9</sub>
+
+                out(<strong>P<sub>5</sub></strong>) = |(P<sub>1</sub> + (2*P<sub>2</sub>) + P<sub>3</sub>) - (P<sub>7</sub> + (2*P<sub>8</sub>) + P<sub>9</sub>)|
+                        + |(P<sub>3</sub> + (2*P<sub>6</sub>) + P<sub>9</sub>) - (P<sub>1</sub> + (2*P<sub>4</sub>) + P<sub>7</sub>)|
+              </pre-->
+            </description>
+          </option>
+          <option value="ROBERTS">
+            <brief>Roberts gradient (2x2)</brief>
+            <description>
+            The Roberts gradient uses a 2 x 2 boxcar that makes the gradient caluclation fast
+            but sensitive to noise.  It also works best on sharp, obvious edges.
+
+            <!--pre>
+                    Equation for Roberts gradient based on these input pixels:
+                                                IP1 IP2
+                   Input (3x3 boxcar):  IP3 IP4
+
+                      out = |IP1 - IP4| + |IP2 - IP3|
+
+                Uses the following 2x2 boxcars to calculate the gradient.
+
+                    Gx =  1  0         Gy =  0  1
+                                  0 -1              -1  0
+            </pre-->
+            </description>
+          </option>
+        </list>
+      </parameter>
+      <parameter name="METHOD">
+        <type>string</type>
+        <brief>Method for calculating the gradient (Approximate, Exact)</brief>
+        <default>
+          <item>APPROXIMATE</item>
+        </default>
+        <description>
+          This specifies how the gradient magnitudes are calculated. The possibilities are
+          exact, which uses the square root of the sum of squares, or approximate, which
+          uses the sum of absolutes.
+        </description>
+        <list>
+          <option value="APPROXIMATE">
+            <brief>Approximate the gradient magnitudes</brief>
+            <description>
+              An approximate calculation can be achieved using the sum of absolute values of the 
+              gradient components. This method is a bit faster than the exact calculation method. 
+              The approximate gradient magnitude is calculated as follows:
+              <pre>
+              G = |G<sub>x</sub>| + |G<sub>y</sub>|
+              </pre>
+            </description>
+          </option>
+          <option value="EXACT">
+            <brief>Calculate the exact values of the  gradient magnitudes</brief>
+            <description>
+              An exact calculation can be achieved using the square root of the sum of the squares
+              of the gradient components. This method is slower than the approximate calculation method.
+              The exact gradient magnitude is calculated as follows:
+              <pre>
+              G = sqrt(G<sub>x</sub><sup>2</sup> + G<sub>y</sub><sup>2</sup>)
+              </pre> 
+            </description>
+          </option>
+        </list>
+      </parameter>
+    </group>
+
+  </groups>
+  <examples>
+    <example>
+      <brief>
+      Applying a sobel filter
+      </brief>
+      <description>
+        The use of the Sobel gradient here creates an output image which helps 
+	to highlight the edges.   
+      </description>
+      <terminalInterface>
+        <commandLine>
+	  from= peaks.cub 
+	  to=sobelPeaks.cub
+	  gradtype=sobel
+	</commandLine>
+	<description>
+	This example shows the use of the sobel filter in order to highlight 
+	edges
+	</description>
+      </terminalInterface>
+   
+      <guiInterfaces>
+        <guiInterface>
+	  <image width="440" height="625" src="assets/images/sobelGui.jpg">
+	    <brief>
+	    Example GUI
+	    </brief>
+	    <description>
+	      Screenshot of the GUI with parameters set to filter using a sobel
+	      configuration
+	    </description>
+	    <thumbnail width="220" height="312" caption="gradient gui" 
+	     src="assets/thumbs/sobelGui.jpg" />
+	  </image>
+	</guiInterface>
+      </guiInterfaces>
+ 
+      <inputImages>
+        <image width="505" height="505" src="assets/images/peaks.jpg">
+	  <brief>
+	    Input image before the filter.
+	  </brief>
+	  <description>
+	    This is the image as it was taken originally. 
+	  </description>
+	  <thumbnail caption= "The image before the filter" 
+	   src="assets/thumbs/peaks.jpg" width="200" height="200"/>
+	  <parameterName>FROM</parameterName>
+	</image>
+      </inputImages>
+      
+      <outputImages>
+        <image width="500" height="500" src="assets/images/sobel.jpg">
+	  <brief>
+	  Output image after the gradient was applied
+	  </brief>
+	  <description>
+	    As you can see, sharp edges on the image have been emphasized, while
+	    areas of more constant DNs have been de-emphasized. 
+	  </description>
+	  <thumbnail caption= "The image after the filter" 
+	  src="assets/thumbs/sobel.jpg" width="200" height="200"/>
+	  <parameterName>TO</parameterName>
+	</image>
+      </outputImages>
+    </example>
+    <example>
+      <brief>
+      Applying a roberts filter
+      </brief>
+      <description>
+        
+      </description>
+      <terminalInterface>
+        <commandLine>
+	  from= peaks.cub 
+	  to=robertsPeaks.cub
+	  gradtype=roberts
+	</commandLine>
+	<description>
+	This example shows the use of the roberts filter in order to highlight 
+	edges
+	</description>
+      </terminalInterface>
+   
+      <guiInterfaces>
+        <guiInterface>
+	  <image width="440" height="625" src="assets/images/robertsGui.jpg">
+	    <brief>
+	    Example GUI
+	    </brief>
+	    <description>
+	      Screenshot of the GUI with parameters set to filter using a roberts
+	      gradient
+	    </description>
+	    <thumbnail width="148" height="200" caption="gradient gui" 
+	     src="assets/thumbs/robertsGui.jpg" />
+	  </image>
+	</guiInterface>
+      </guiInterfaces>
+ 
+      <inputImages>
+        <image width="505" height="505" src="assets/images/peaks.jpg">
+	  <brief>
+	    Input image before the filter.
+	  </brief>
+	  <description>
+	    This is the image as it was taken originally. 
+	  </description>
+	  <thumbnail caption= "The image before the filter" 
+	   src="assets/thumbs/peaks.jpg" width="200" height="200"/>
+	  <parameterName>FROM</parameterName>
+	</image>
+      </inputImages>
+      
+      <outputImages>
+        <image width="500" height="500" src="assets/images/roberts.jpg">
+	  <brief>
+	  Output image after the roberts gradient
+	  </brief>
+	  <description>
+	  The use of the Roberts gradient here creates an output image which 
+	  helps to highlight the edges. Since the Roberts filter uses a smaller
+	  boxcar, less of the image is taken into consideration at each processing
+	  step and thus the image can be created faster. The tradeoff is that images
+	  that have had the Roberts gradient applied tend be effected more by noise
+	  in the image.
+	  </description>
+	  <thumbnail caption= "The image after the filter" 
+	  src="assets/thumbs/roberts.jpg" width="200" height="200"/>
+	  <parameterName>TO</parameterName>
+	</image>
+      </outputImages>
+    </example>
+  </examples>
+
+</application>

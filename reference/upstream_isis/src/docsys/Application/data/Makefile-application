@@ -1,0 +1,42 @@
+include $(ISISROOT)/make/isismake.os
+
+# ISIS APPLICATION DOC MAKEFILE
+#   Process the XML files deposited by application
+#   makefiles
+#   dls - deborah lee soltesz - 3/3/2003
+
+APPSDIR = $(ISISROOT)/doc/Application
+DEST_PRES_DIR = $(APPSDIR)/presentation
+TABSTYLEDIR = ../../presentation/Tabbed/styles
+TABDIR = $(DEST_PRES_DIR)/Tabbed
+
+APP = $(shell basename `pwd`)
+
+
+
+
+help:
+	echo "Do not run make in this directory!" 
+	echo "Run make from $ISISROOT/src/docsys/Application to remake Application documentation."
+
+#------
+# DOCS: generate documentation
+
+docs: tabbed
+
+tabbed: $(TABDIR)/$(APP)/$(APP).html 
+
+$(TABDIR)/$(APP)/$(APP).html: $(APP).xml $(TABSTYLEDIR)/IsisApplicationDocStyle.xsl 
+
+  # TABBED
+  # run style sheet for Tabbed presentation
+
+	echo "          [$(APP)]" 
+	mkdir -p $(TABDIR)/$(APP) 
+	if test -d assets;\
+	then \
+	  rsync -lHptr --delete --rsh=ssh assets $(TABDIR)/$(APP) ; \
+	fi 
+	$(XALAN) $(XALAN_PARAM_OPTION) menuPath "'../../../../'" $(XALAN_OUTFILE_OPTION) $(TABDIR)/$(APP)/$(APP).html $(XALAN_INFILE_OPTION) $(APP).xml $(XALAN_XSL_OPTION) $(TABSTYLEDIR)/IsisApplicationDocStyle.xsl 
+	touch $(APPSDIR)
+

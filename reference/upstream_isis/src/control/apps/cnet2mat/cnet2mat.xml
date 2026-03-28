@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="cnet2mat" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Converts an Isis control network file to an ISIS2 match point file.
+  </brief>
+
+  <description>
+    <p>
+      This program converts an Isis control network file to an ISIS2 match
+      point file.
+    </p>
+    <p>
+      The following indicates how the Isis MeasureType is translated to an Isis2 Class
+      <ul>
+        <li> Ignored measure is translated to "U" (Unmeasured)</li>
+        <li> Ignored point is translated to "U" (Unmeasured) for all measures</li>
+        <li> Reference is translated to "T" (Truth)</li>
+        <li> RegisteredSubPixel is tranlated to "S" (SubPixel)</li>
+        <li> RegisteredPixel is translated to "M" (Measured)</li>
+        <li> Manual is translated to "M" (Measured)</li>
+        <li> Candidate is tranlated to "A" (Approximate)</li>
+      </ul>
+    </p>
+  </description>
+
+  <category>
+    <categoryItem>Control Networks</categoryItem>
+    <categoryItem>Import and Export</categoryItem>
+  </category>
+
+  <history>
+    <change name="Brendan George" date="2007-08-10">
+      Original version
+    </change>
+    <change name="Stuart Sides" date="2008-03-12">
+        Added ability to use ISIS2 keyword IMAGE_NUMBER. Fixed bug where the
+        diameter was being written as an Isis::Null when it had not been set.
+    </change>
+    <change name="Christopher Austin" date="2009-09-29">
+      Changed the default point class of 'U' to 'M' to prevent qmatch issues.
+    </change>
+    <change name="Christopher Austin" date="2009-10-07">
+      All Ignored Control Measures as well as all Control Measures inside
+      ignored Control Points will now have the Type Unmeasured.
+    </change>
+    <change name="Jeannie Walldren" date="2010-12-01">
+      Modified to be compatible with binary control network.  Added errors apptest.
+    </change>
+    <change name="Christopher Austin" date="2011-01-18">
+      Altered to compile with the new Control redesign.
+    </change>
+    <change name="Travis Addair" date="2011-04-11">
+      Changed parameter CONTROL to CNET for consistency.
+    </change>
+  </history>
+
+  <groups>
+    <group name="Isis 3 Files">
+        <parameter name="LIST3">
+          <type>filename</type>
+          <fileMode>input</fileMode>
+          <brief>
+            List of ISIS input cubes in the match point file.
+          </brief>
+          <description>
+          A text file containing one column of ISIS cube file names. Every file
+          used in the match point file should be represented in this list. The
+          cubes must be available for the program to open and must be in the
+          same order as the Isis2 cubes in LIST2
+          </description>
+          <filter>
+            *.lis
+          </filter>
+        </parameter>
+
+        <parameter name="CNET">
+          <type>filename</type>
+          <fileMode>input</fileMode>
+          <brief>
+              Isis output control network file
+          </brief>
+          <description>
+            Use this parameter to specify the control network file containing
+            the information to be translated into ISIS2 format
+            </description>
+          <filter>
+            *.ctl
+          </filter>
+        </parameter>
+    </group>
+
+    <group name="ISIS 2 Files">
+      <parameter name="LIST2">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          List of ISIS2 input cubes in the match point file.
+        </brief>
+        <description>
+          A text file containing one column of ISIS2 cube file names. Every file
+          used in the match point file should be represented in this list. The
+          cubes must be available for the program to open and must be in the
+          same order as the Isis cubes in LIST3
+        </description>
+        <filter>
+          *.lis
+        </filter>
+      </parameter>
+
+      <parameter name="MATCH">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+            ISIS2 match point file
+        </brief>
+        <description>
+          Use this parameter to specify the target location of the output
+          control network file
+        </description>
+        <filter>
+          *.mat
+        </filter>
+      </parameter>
+    </group>
+ </groups>
+</application>

@@ -1,0 +1,60 @@
+Testing ProgramLauncher Class ... 
+
+Testing ls, grep, sed and pipes ... 
+
+ProgramLauncher.cpp
+ProgramLauncher.h
+ProgramLauncher.truth
+Testing stats ... 
+
+Group = Results
+  From                    = unitTest.cub
+  Band                    = 1
+  Average                 = 24.999999961853
+  StandardDeviation       = 14.728323083889
+  Variance                = 216.92350086341
+  Median                  = 24.489967193103
+  Mode                    = 0.0
+  Skew                    = 0.10388815464838
+  Minimum                 = 0.0
+  Maximum                 = 50.0
+  Sum                     = 62499.999904633
+  TotalPixels             = 2500
+  ValidPixels             = 2500
+  OverValidMaximumPixels  = 0
+  UnderValidMinimumPixels = 0
+  NullPixels              = 0
+  LisPixels               = 0
+  LrsPixels               = 0
+  HisPixels               = 0
+  HrsPixels               = 0
+End_Group
+
+Testing non-existant Isis program... 
+
+**ERROR** Program [chocolatelab] does not appear to be a valid Isis program.
+
+Testing using Isis program as a system program without pid... 
+
+Group = Results
+  From                    = unitTest.cub
+  Band                    = 1
+  Average                 = 24.999999961853
+  StandardDeviation       = 14.728323083889
+  Variance                = 216.92350086341
+  Median                  = 24.489967193103
+  Mode                    = 0.0
+  Skew                    = 0.10388815464838
+  Minimum                 = 0.0
+  Maximum                 = 50.0
+  Sum                     = 62499.999904633
+  TotalPixels             = 2500
+  ValidPixels             = 2500
+  OverValidMaximumPixels  = 0
+  UnderValidMinimumPixels = 0
+  NullPixels              = 0
+  LisPixels               = 0
+  LrsPixels               = 0
+  HisPixels               = 0
+  HrsPixels               = 0
+End_Group

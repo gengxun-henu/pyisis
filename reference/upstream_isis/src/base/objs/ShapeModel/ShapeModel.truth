@@ -1,0 +1,124 @@
+Begin testing Shape Model base class....
+
+  Shape name is Test
+    Do we have an intersection? 0
+    Do we have an ellipsoid intersection? 0
+    Test resolution() error message when there is no intersection:
+**PROGRAMMER ERROR** No valid intersection point for computing resolution.
+    Test setNormal(double,double,double) error message when there is no intersection:
+**ERROR** No intersection point is known.  A normal cannot be set.
+    Test setNormal(vector) error message when there is no intersection:
+**ERROR** No intersection point is known.  A normal cannot be set.
+    Set a pixel in the image and check again.
+
+    Testing pure virtual method intersectSurface...
+    intersectSurface called with observer position = -2399.54, -2374.03, 1277.68
+                                 lookDirection = 0.957458, -0.0219727, -0.287736
+    Do we have an intersection? 1
+    Do we have an ellipsoid intersection? 1
+    Get the resolution:         1
+    surface point = (-2123.36, -2380.37, 1194.68)
+
+  Testing class method normal() when no normal exists...
+    Do we have a normal? 0
+**ERROR** The normal has not been computed.
+
+  Testing photometric angle calculations before normal computation...
+    Do we have a normal? 0
+    Emission angle = 46.9663    Incidence angle = 85.3411
+
+  Testing class method calculateLocalNormal...
+    Do we have a normal? 1
+    local normal = (-0.581842, -0.703663, 0.407823)
+
+  Testing class method calculateSurfaceNormal...
+    surface normal = (-0.623384, -0.698838, 0.350738)
+
+  Testing photometric angle calculations with undersize normal...
+    Emission angle = 180    Incidence angle = 180
+
+  Testing photometric angle calculations with oversize normal...
+    Emission angle = 0    Incidence angle = 0
+  Testing class method calculateDefaultNormal...
+    default normal = (-0.623384, -0.698838, 0.350738)
+
+  Testing photometric angle calculations...
+    Emission angle = 46.9663    Incidence angle = 85.3411    Phase angle = 40.7873
+
+  Testing localRadius method ...
+    Local radius = 6357.02
+
+  Testing intersection with occlusion check...
+    Do we have an intersection? 1
+    Do we have an ellipsoid intersection? 1
+    Is the intersection visible? 0
+    Is the intersection visible from just above it? 1
+    Calculate the ellipsoid normal
+      Do we have a normal? 1
+      local normal = (-0.623384, -0.698838, 0.350738)
+
+  Testing setHasIntersection method
+    Do we have an intersection? 0
+    Get the resolution:             Test resolution() error message when there is no intersection:
+**PROGRAMMER ERROR** No valid intersection point for computing resolution.
+    Attempt to calculate the ellipsoid normal without an intersection
+**PROGRAMMER ERROR** A valid intersection must be defined before computing the surface normal.
+
+  Testing setSurfacePoint method ...
+     Do we have an intersection? 1
+    Get the resolution:         1
+     surface point = (-3962.86, -4442.53, 2229.65)
+
+  Testing ellipsoid methods in base class
+    Do we have an intersection? 0
+    Get the resolution:             Test resolution() error message when there is no intersection:
+**PROGRAMMER ERROR** No valid intersection point for computing resolution.
+
+    Testing  failing of method intersectEllipsoid...
+    intersectSurface called with observer position = -2399.54, -2374.03, 1277.68
+                                 lookDirection = -1, 1, 1
+    ...  intersectSurface method failed -- no intersection
+    Do we have an intersection? 0
+    Get the resolution:             Test resolution() error message when there is no intersection:
+**PROGRAMMER ERROR** No valid intersection point for computing resolution.
+
+    Testing  method intersectEllipsoid...
+    intersectSurface called with observer position = -2399.54, -2374.03, 1277.68
+                                 lookDirection = 0.957458, -0.0219727, -0.287736
+    surface point = (-2105.83, -2380.77, 1189.41)
+    Do we have an intersection? 1
+    Get the resolution:         1
+    surface point = (-2105.83, -2380.77, 1189.41)
+
+    Testing  method calculateEllipsoidalSurfaceNormal with invalid intersection...
+**PROGRAMMER ERROR** Cannot convert an invalid surface point to a naif array.
+
+    Testing  method setHasIntersection false...
+    Do we have an intersection? 0
+    Get the resolution:             Test resolution() error message when there is no intersection:
+**PROGRAMMER ERROR** No valid intersection point for computing resolution.
+
+    Testing  method calculateEllipsoidalSurfaceNormal with no intersection...
+**PROGRAMMER ERROR** Cannot convert an invalid surface point to a naif array.
+
+    Testing  method calculateEllipsoidalSurfaceNormal with valid intersection...
+    intersectSurface called with observer position = -2399.54, -2374.03, 1277.68
+                                 lookDirection = 0.957458, -0.0219727, -0.287736
+    Intersection set
+      Do we have a normal? 0
+      Do we have a normal? 1
+      local normal = (-0.6196, -0.700497, 0.354117)
+
+    Testing  method targetRadii...
+      true normal = (-0.6196, -0.700497, 0.354117)
+
+  Testing default constructor...
+    Shape is DefaultConstructor
+    Do we have an intersection? 0
+    Is there a normal? 0
+    Test resolution() error message when there is no target:
+**PROGRAMMER ERROR** No valid intersection point for computing resolution.
+    Test targetRadii() error message when there is no target:
+**PROGRAMMER ERROR** Unable to find target radii for ShapeModel. Target is NULL.
+    Is there a normal? 1
+    Number of normal components = 3

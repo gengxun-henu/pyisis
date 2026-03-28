@@ -1,0 +1,42 @@
+UnitTest for ControlNetStatistics ....
+
+CNET=$ISISTESTDATA/isis/src/base/unitTestData/cnet/cnetbin.net
+Serial File=$ISISTESTDATA/isis/src/base/unitTestData/cnet/serialNum.lis
+Group = ControlNetSummary
+  TotalImages        = 5
+  ImagesInControlNet = 5
+  TotalPoints        = 26
+  ValidPoints        = 23
+  IgnoredPoints      = 3
+  FixedPoints        = 4
+  ConstrainedPoints  = 4
+  FreePoints         = 18
+  EditLockPoints     = 6
+  TotalMeasures      = 67
+  ValidMeasures      = 67
+  IgnoredMeasures    = 0
+  EditLockMeasures   = 12
+  AvgResidual        = 0.8209947634983
+  MinResidual        = 0.34925920901844
+  MaxResidual        = 1.3044618001498
+  MinLineResidual    = 0.19049660113262
+  MaxLineResidual    = 0.78582173003339
+  MinSampleResidual  = 0.15681307917043
+  MaxSampleResidual  = 1.2365890243586
+  MinLineShift       = Null
+  MaxLineShift       = Null
+  MinSampleShift     = Null
+  MaxSampleShift     = Null
+  AvgPixelShift      = NA
+  MinPixelShift      = NA
+  MaxPixelShift      = NA
+  MinGoodnessOfFit   = 0.5
+  MaxGoodnessOfFit   = 6.0
+  MinEccentricity    = NA
+  MaxEccentricity    = NA
+  MinPixelZScore     = NA
+  MaxPixelZScore     = NA
+  MinConvexHullRatio = 0.19412950245137
+  MaxConvexHullRatio = 0.50094529369064
+  AvgConvexHullRatio = 0.32202234372808
+End_Group

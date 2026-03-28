@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<application name="map2cam" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd"> 
+
+  <brief>
+    Convert map projected image to a raw camera image
+  </brief>
+  
+  <description>
+    This program will geometrically transform a <def link="Map Projected">map projected</def> image 
+    (ISIS <def link="Level2">level2</def> <def link="Cube">cube</def> or mosaic) into an ISIS 
+    <def link="Level1">level1</def> cube using a level1 cube as input to match.  This allows for example 
+    a Viking base map to be converted to a MOC raw geometry image.
+
+    <p>
+     The main purpose of this program is to facilitate control point selection between a level1 cube and a 
+     base map.  The MATCH image and the resulting TO file can be opened in the program <i>qnet</i> along with other
+     level1 cubes for building a control network with ties to ground. 
+    </p>
+  </description>
+  
+  <category>
+    <categoryItem>Map Projection</categoryItem>
+  </category>
+
+  <history>
+    <change name="Kay Edwards" date="1987-09-02">
+      Original version
+    </change>
+    <change name="Jeff Anderson" date="2003-06-06">
+      Converted to Isis 3.0 
+    </change>
+    <change name="Jacob Danton" date="2005-12-05">
+      Fixed a bug in BandChange, added appTest 
+    </change>
+    <change name="Elizabeth Miller" date="2006-03-23">
+      Fixed appTest to reflect changes made to all camera models
+    </change>
+    <change name="Steven Lambright" date="2006-06-22">
+      Fixed typo in user documentation
+    </change>
+    <change name="Steven Lambright" date="2008-05-13">
+      Removed references to CubeInfo 
+    </change>
+    <change name="Lynn Weller and Debbie A. Cook" date="2012-01-17">
+      Updated documentation text, added glossary links, and improved compatability with Isis documentation.
+    </change>
+    <change name="Travis Addair" date="2012-04-23">
+      SPICE tables are now propagated from the MATCH cube to the output.
+    </change>
+    <change name="Debbie A. Cook" date="2012-12-06">
+      Changed to use TProjection instead of Projection.  References #775
+    </change>
+    <change name="Steven Lambright" date="2013-02-12">
+      Fixed an issue that caused this program to trim output images erroneously. This problem,
+      and the recommended solution, was provided by Jeff Anderson. Fixes #984.
+    </change>
+  </history>
+
+  <oldName>
+    <item>lev2tolev1</item>
+    <item>base2l1</item>
+    <item>base</item>
+  </oldName>
+  
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input map projected cube to geometrically transform
+        </brief>
+        <description>
+          The specification of the input cube to be projected.  The cube must
+          contain a valid Mapping group in the labels.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+
+      <parameter name="MATCH">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Raw instrument cube to match
+        </brief>
+        <description>
+          This cube defines the raw instrument geometry to be matched.  The
+          output file will have the same labels (Kernels and Instrument
+          group).  Note the Band group will represent data from the
+          raw camera and the content of the cube may not match.  For example,
+          using the MOLA base as the FROM file and a MOC Wide Angle Red cube
+          as the MATCH, will have labels which indicate geometry for the MOC
+          WA red camera but the pixels will contain MOLA elevations.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+
+      <parameter name="TO">
+        <type>cube</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output raw instrument cube
+        </brief>
+        <description>
+          This cube will contain data whose geometric properties are identical
+          to those of the MATCH cube.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+    </group>
+
+    <group name="Options">
+      <parameter name="INTERP">
+        <type>string</type>
+        <default>
+          <item>CUBICCONVOLUTION</item>
+        </default>
+        <brief>Type of interpolation</brief>
+        <description>
+          This is the type of interpolation to be performed on the input.
+        </description>
+        <list>
+          <option value="NEARESTNEIGHBOR">
+            <brief>Nearest Neighbor</brief>
+            <description> 
+              Each output pixel will be set to the pixel nearest the
+              calculated input pixel.
+            </description>
+          </option>
+          <option value="BILINEAR">
+            <brief>Bi-Linear interpolation</brief>
+            <description> 
+              Each output pixel will be set to the value calculated by
+              a bi-linear interpolation of the calculated input pixel.
+            </description>
+          </option>
+          <option value="CUBICCONVOLUTION">
+            <brief>Cubic Convolution interpolation</brief>
+            <description> 
+              Each output pixel will be set to the value calculated by
+              a cubic convolution interpolation of the calculated input pixel.
+            </description>
+          </option>
+        </list>
+      </parameter>
+    </group>
+  </groups>
+
+  <examples>
+    <example>
+      <brief>Typical usage</brief> 
+      <description>
+        In this example, the map2cam application is used to map a base map into 
+        the same geometry as the matching Messenger level 1 image.  The output
+        file can then be used to select control points.  Sometimes matching
+        features can be found easier when features when a comparing level 1 
+        image to another level 1 image.
+      </description>
+      <terminalInterface>
+        <description>
+          This is what to type to run this example in command line mode.
+        </description>
+        <commandLine>
+          from=M10_Equi_1000meters_Clon180.cub 
+          match=EN0108821402M.cal.cub 
+          to=M10_match_EN0108821402M.cub interp=CUBICCONVOLUTION
+        </commandLine>
+      </terminalInterface>
+      <guiInterfaces>
+        <guiInterface>
+          <image src="assets/images/map2cam_gui.jpg" width="728" height="451">
+            <brief>Example GUI</brief>
+            <description>
+              Screen shot of GUI with parameters filled in to create
+              a level 1 version of a base map for selecting control
+              in a Messenger image.
+            </description>
+            <thumbnail caption="" src="assets/thumbs/map2cam_gui_thumb.jpg" width="200" height="200"/>
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+
+      <inputImages>
+        <image src="assets/images/FromFile_Mariner10_Level2.jpg" width="496" height="496">
+          <brief>Input level 2 image (map)</brief>
+          <description>
+            This is the image that will be mapped into a level 1 image using the
+            geometry of the MATCH image.
+          </description>
+          <parameterName>FROM</parameterName>
+          <thumbnail caption="Basemap image from Mariner 10" src="assets/thumbs/FromFile_Mariner10_Level2_thumb.jpg" width="200" height="200"/>
+        </image>
+        <image src="assets/images/MatchFile_Messenger_Lev1.jpg" width="496" height="496">
+          <brief>Image to match</brief>
+          <description>
+            The geometry of this image will be used to create the level 1 version 
+            of the FROM image, which will be output as the TO image.
+          </description>
+          <parameterName>MATCH</parameterName>
+          <thumbnail caption="Messenger image to match" src="assets/thumbs/MatchFile_Messenger_Lev1_thumb.jpg" width="200" height="200"/>
+        </image>
+      </inputImages>
+
+      <outputImages>
+        <image src="assets/images/ToFile_M10_Match_Messenger.jpg" width="496" height="496">
+          <brief>Output image</brief>
+          <description>
+            The level 1 version of the FROM image
+          </description>
+          <parameterName>TO</parameterName>
+          <thumbnail caption="Mariner 10 basemap mapped into Messenger level 1 space" src="assets/thumbs/ToFile_M10_Match_Messenger_thumb.jpg" width="200" height="200"/>
+        </image>
+      </outputImages>
+    </example>
+  </examples>
+</application> 

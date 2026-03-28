@@ -1,0 +1,75 @@
+/** This is free and unencumbered software released into the public domain.
+
+The authors of ISIS do not claim copyright on the contents of this file.
+For more details about the LICENSE terms and the AUTHORS, you will
+find files of those names at the top level of this repository. **/
+
+/* SPDX-License-Identifier: CC0-1.0 */
+#define GUIHELPERS
+#include "Isis.h"
+
+#include "noproj.h"
+
+#include "Application.h"
+#include "CameraDetectorMap.h"
+
+using namespace std;
+using namespace Isis;
+
+static void LoadMatchSummingMode();
+static void LoadInputSummingMode();
+
+map <QString, void *> GuiHelpers() {
+  map <QString, void *> helper;
+  helper ["LoadMatchSummingMode"] = (void *) LoadMatchSummingMode;
+  helper ["LoadInputSummingMode"] = (void *) LoadInputSummingMode;
+  return helper;
+}
+
+void IsisMain() {
+  UserInterface &ui = Application::GetUserInterface();
+  noproj(ui);
+}
+
+// Helper function to get output summing mode from cube to MATCH
+void LoadMatchSummingMode() {
+  QString file;
+  UserInterface &ui = Application::GetUserInterface();
+
+  // Get camera from cube to match
+  if((ui.GetString("SOURCE") == "FROMMATCH") && (ui.WasEntered("MATCH"))) {
+    file = ui.GetCubeName("MATCH");
+  }
+  else {
+    file = ui.GetCubeName("FROM");
+  }
+
+// Open the input cube and get the camera object
+  Cube c;
+  c.open(file);
+  Camera *cam = c.camera();
+
+  ui.Clear("SUMMINGMODE");
+  ui.PutDouble("SUMMINGMODE", cam->DetectorMap()->SampleScaleFactor());
+
+  ui.Clear("SOURCE");
+  ui.PutAsString("SOURCE", "FROMUSER");
+}
+
+// Helper function to get output summing mode from input cube (FROM)
+void LoadInputSummingMode() {
+  UserInterface &ui = Application::GetUserInterface();
+
+  // Get camera from cube to match
+  QString file = ui.GetCubeName("FROM");
+  // Open the input cube and get the camera object
+  Cube c;
+  c.open(file);
+  Camera *cam = c.camera();
+
+  ui.Clear("SUMMINGMODE");
+  ui.PutDouble("SUMMINGMODE", cam->DetectorMap()->SampleScaleFactor());
+
+  ui.Clear("SOURCE");
+  ui.PutAsString("SOURCE", "FROMUSER");
+}

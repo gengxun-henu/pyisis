@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="mask" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Set pixels to NULL using a mask cube
+  </brief>
+  <description>
+    This program masks (or NULLs) pixels in an input cube.
+    <p>
+      Requirements
+      <ul>
+        <li>The input cube must be a level 1 or level 2 ISIS cube or mosaic (single or
+          multiband)</li>
+        <li>If the MASK option is used, you will need an input cube, either a single band cube or
+          specify one band of a multiband cube (see Example 1), containing the mask.</li>
+      </ul>
+    </p>
+    <p>
+    There are four ways to use the mask program; and, with all four options, listed below, you
+    will use the PRESERVE parameter. As the name implies, you will "preserve" pixels either inside
+    (which is the program default) or outside a given range.
+    Preserve=inside: means the program will preserve pixels inside the provided range, and pixels
+    that are not inside the range are nulled.
+    Preserve=outside: means the program will preserve pixels outside the provided range, and
+    pixels that are not outside the range are nulled.
+    </p>    
+    <p>
+      Three Ways to Mask:
+      <ol>
+        <li>The input cube can be masked without specifying a mask cube file by using the minimum
+          and maximum parameters. Pixels outside the specified range are set to NULL. If
+          preserve=outside is specified, the pixels outside the range are preserved.</li>
+        <li>You can input a mask cube file. All the corresponding pixels in the input cube are
+          retained for all valid pixels in the mask cube file. If the minimum and maximum values
+          are entered also, then the pixels in the masked cube are checked to determine whether
+          the pixel in the input file should be retained.</li>
+        <li>You can input a mask cube file in addition to using the minimum and maximum
+          parameters.</li>
+      </ol>
+    </p>
+    <p>
+      Note that due to the way masking works, an output file will be created regardless of whether
+      or not the mask was applied to the corresponding input. To determine the degree to which an
+      input cube was masked, look for the "PixelsMasked" group in print.prt . If no pixels were
+      masked, there will be a comment present which reads "No pixels were masked in this image".
+    </p>
+  </description>
+  <history>
+    <change name="Kris Becker" date="1990-12-03">
+      Original version
+    </change>
+    <change name="Tracie Sucharski" date="2002-06-19">
+      Ported to Isis 3.0
+    </change>
+    <change name="Kim Sides" date="2003-05-13">
+      Added application test
+    </change>
+    <change name="Stuart Sides" date="2003-05-16">
+      Modified schema location from astogeology... to isis.astrogeology..."
+    </change>
+    <change name="Stuart Sides" date="2003-07-29">
+      Modified filename parameters to be cube parameters where necessary
+    </change>
+   <change name="Sharmila Prasad" date="2009-08-24">
+      Set Internal Default for "MASK" to be "FROM" 
+    </change>
+    <change name="Steven Lambright" date="2010-10-13">
+      Removed printf and now respecting cube attributes set on input cube
+    </change>
+    <change name="Kimberly Oyama" date="2014-03-03">
+      Made default MASK parameter work when FROM cube has multiple bands. Updated Documentation.
+      Added examples. Fixes #1871.
+    </change>
+    <change name="Andrew Stebenne" date="2015-03-22">
+      Specify that an output cube will be created whether or not the mask was applied. Add an output
+      group to print.prt to indicate how many pixels were masked in the output image. Implements
+      recommendation #898. 
+    </change>
+  </history>
+  <category>
+    <categoryItem>Trim and Mask</categoryItem>
+  </category>
+  <seeAlso>
+    <applications>
+      <item>bandtrim</item>
+    </applications>
+  </seeAlso>
+  <groups>
+    <group name="Files">
+      <parameter name="FROM">
+        <type>cube</type>
+        <fileMode>input</fileMode>
+        <brief>
+          Input cube to mask
+        </brief>
+        <description>
+          Use this parameter to select the filename. All bands within the file
+          will be masked.
+        </description>
+        <filter>
+          *.cub
+        </filter>
+      </parameter>
+      <parameter name="MASK">
+         <type>cube</type>
+         <fileMode>input</fileMode>
+         <brief>
+           Mask cube
+         </brief>
+         <description>
+           Use this parameter to select the filename to be used as the mask. If you enter a
+           multiband cube you must specify the band. If this parameter is not explicitly entered,
+           each band of the FROM cube will be used as its own mask.
+         </description>
+        <internalDefault>
+          NULL
+        </internalDefault>
+         <filter>
+           *.cub
+         </filter>
+       </parameter>
+      <parameter name="TO">
+        <type>cube</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output cube
+        </brief>
+        <description>
+          This file will contain the results of the masked cube
+        </description>
+      </parameter>
+    </group>
+    <group name="Mask Options">
+      <parameter name="MINIMUM">
+        <type>double</type>
+        <internalDefault>
+          ISIS minimum
+        </internalDefault>
+        <lessThanOrEqual>
+          <item> MAXIMUM </item>
+        </lessThanOrEqual>
+        <brief>Minimum value of range to mask</brief>
+        <description>
+          This defines the minimum range of valid data in the mask cube.
+        </description>
+      </parameter>
+      <parameter name="MAXIMUM">
+        <type>double</type>
+        <internalDefault>
+          ISIS maximum
+        </internalDefault>
+        <greaterThanOrEqual>
+          <item> MINIMUM </item>
+        </greaterThanOrEqual>
+        <brief>Maximum value of range to mask</brief>
+        <description>
+          This defines the maximum range of valid data in the mask cube.
+        </description>
+      </parameter>
+      <parameter name="PRESERVE">
+        <type>string</type>
+        <default>
+          <item>INSIDE</item>
+        </default>
+        <brief>Indicates whether to preserve pixels inside or outside of range.</brief>
+        <description>
+          This parameter indicates whether the pixels chosen to mask are within the range given
+          or outside the range given.  If INSIDE,  pixels inside of given range will be preserved,
+          and if OUTSIDE, pixels outside the range will be masked.
+        </description>
+        <list>
+          <option value="INSIDE">
+            <brief> Preserve inside range </brief>
+            <description>
+              If the mask pixel is inside the given range (indicated with the MINIUMUM
+              and MAXIMUM parameters), the input pixel will be preserved in the output
+              cube, otherwise it will be NULLed.
+            </description>
+          </option>
+          <option value="OUTSIDE">
+            <brief> Preserve outside range </brief>
+            <description>
+              If the mask pixel is outside the given range (indicated with the MINIMUM
+              and MAXIMUM parameters), the input pixel will be preserved in the output
+              file, otherwise it will be NULLed.
+            </description>
+          </option>
+        </list>
+      </parameter>
+    </group>
+    <group name="Special Pixels">
+      <parameter name="SPIXELS">
+	<type>string</type>
+	<default>
+	  <item>NULL</item>
+	</default>
+	<brief>Special pixels to include as mask</brief>
+	<description>
+	  This indicates which special pixel values are to be included as valid pixels in the mask.
+          For example, a NULL in the mask cube will cause the output to be NULL if the NULL or ALL
+          option is selected.  If NONE is selected, then the input pixel will be propagated to
+          the output cube.
+	</description>
+	<list>
+	  <option value="NONE">
+	    <brief> None </brief>
+	    <description>
+	      No special pixels are considered valid in the mask.
+	    </description>
+	  </option>
+	  <option value="NULL">
+	    <brief> Null pixels </brief>
+	    <description>
+	      Null pixels will be included in the mask.
+	    </description>
+	  </option>
+	  <option value="ALL">
+	    <brief> All special pixels </brief>
+	    <description>
+	      All special pixels included in the mask range
+	    </description>
+	  </option>
+	</list>
+      </parameter>
+    </group>
+  </groups>
+  <examples>
+    <example>
+      <brief>
+        An example of using a single band from the input cube as a mask.
+      </brief>
+      <description>
+        This is an example of a mask that is comprised of one band of the multiband input cube.
+        It shows how the larger band (band 1) is cropped when the smaller band (band 9) is used
+        as the mask. Note the +9 at the end of the file name specifies a single band.
+      </description>
+      <terminalInterface>
+        <commandLine>
+          mask from=I06107001RDR.cub to=I06107001RDR_MaskByBand9.cub mask=I06107001RDR.cub+9
+        </commandLine>
+        <description>
+          An example of how to run this program from the command line.
+        </description>
+      </terminalInterface>
+      <guiInterfaces>
+        <guiInterface>
+          <image width="727" height="923" src="assets/images/maskByBandGui.jpg">
+          <brief>
+            Example GUI
+          </brief>
+            <description>
+              An example of how to run this program using the GUI. 
+            </description>
+            <thumbnail width="242" height="306" src="assets/images/maskByBandGui.jpg" caption="Example of GUI command"/>
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+      <inputImages>
+        <image src="assets/images/maskByBandInput.jpg" width="533" height="1230">
+          <brief> Input image for mask</brief>
+          <description>
+            This is the input image for the mask example.
+          </description>
+          <thumbnail caption="Input image" src="assets/images/maskByBandInput.jpg" width="200" height="400"/>
+          <parameterName>FROM</parameterName>
+        </image>
+      </inputImages>
+      <outputImages>
+        <image src="assets/images/maskByBandOutput.jpg" width="535" height="1225">
+          <brief> Output image for mask</brief>
+          <description>
+            This is the output image that results. You can see that band 1 has been cropped to the
+            same length as band 9.
+          </description>
+          <thumbnail caption="Output image showing results of the mask application." src="assets/images/maskByBandOutput.jpg" width="200" height="400"/>
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+    </example>
+    <example>
+      <brief>
+        An example of not specifying a mask.
+      </brief>
+      <description>
+        This example does not specify a mask. Each band of the input cube will be used as its own
+        mask. The effect is the specified DNs are stenciled out using the minimum and maximum
+        values.
+      </description>
+      <terminalInterface>
+        <commandLine>
+          mask from=I06107001RDR.cub to=I06107001RDR_MaskByDN.cub minimum=-0.000143
+          maximum=-0.000116 preserve=outside
+        </commandLine>
+        <description>
+          An example of how to run this program from the command line.
+        </description>
+      </terminalInterface>
+      <guiInterfaces>
+        <guiInterface>
+          <image width="726" height="921" src="assets/images/maskByDNGui.jpg">
+          <brief>
+            Example GUI
+          </brief>
+            <description>
+              An example of how to run this program using the GUI. 
+            </description>
+            <thumbnail width="242" height="307" src="assets/images/maskByDNGui.jpg" caption="Example of GUI command"/>
+          </image>
+        </guiInterface>
+      </guiInterfaces>
+      <inputImages>
+        <image src="assets/images/MaskByDNInput.jpg" width="719" height="1190">
+          <brief> Input image for mask</brief>
+          <description>
+            This is the input image for the mask example.
+          </description>
+          <thumbnail caption="Input image" src="assets/images/MaskByDNInput.jpg" width="200" height="400"/>
+          <parameterName>FROM</parameterName>
+        </image>
+      </inputImages>
+      <outputImages>
+        <image src="assets/images/MaskByDNOutput.jpg" width="813" height="1207">
+          <brief> Output image for mask</brief>
+          <description> This is the output image that results.
+          </description>
+          <thumbnail caption="Output image showing results of the mask application." src="assets/images/MaskByDNOutput.jpg" width="200" height="400"/>
+          <parameterName>TO</parameterName>
+        </image>
+      </outputImages>
+    </example>
+  </examples>
+</application>

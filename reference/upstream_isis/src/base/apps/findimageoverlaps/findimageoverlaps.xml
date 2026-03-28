@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application name="findimageoverlaps" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://isis.astrogeology.usgs.gov/Schemas/Application/application.xsd">
+  <brief>
+    Uses the input image footprints to find their intersections and writes these
+    intersections to a file for used in other programs such as autoseed.
+  </brief>
+
+  <description>
+    Several programs in Isis have an input parameter "OVERLAPLIST." This program
+    is designed to produce the OVERLAPLIST for other Isis programs to use.<br />
+    <br />
+
+    An overlap list is a file describing how the images in a file list intersect
+    each other. The output contains encoded information that describes
+    how many cubes overlap in a particular latitude/longitude area. For example,
+    it might define "lub0454d.342.cub and lub0421c.342.cub overlap in longitudes
+    262.2 degrees to 270.3 degrees and latitudes -58.3 degrees to -60.3
+    degrees." The information in the file is much more precise than that, but
+    the general idea of the data is the same. Having image intersection
+    information is key for problems such as initial control point placement
+    <br /><br />
+
+    The overlap list is generated using the footprints of the input images. A
+    requirement to running this program is running footprintinit on all
+    of your input files. The precision of the footprints directly affects the
+    precision of the overlap list/intersection information. If you
+    re-spiceinit or in any way change the SPICE data of an image then you should
+    re-run footprintinit and this program to update your image intersection
+    information. Programs that do not change SPICE data (for example,
+    calibration) do not require you to re-run this program.<br /><br />
+
+    The algorithm for finding these overlaps is:
+    <ol>
+      <li>
+        Create a list of the image footprints
+      </li>
+      <li>
+        For each combination of items in the list (in the order of 1,2 1,3
+        1,4 2,3 2,4 3,4) where the first item is the left hand side and the
+        second item is the right hand side, do the following:
+        <ol>
+          <li>
+            If the left and right hand side have overlapping serial numbers
+            associated with them then move on to the next combination of items
+            in the list.
+          </li>
+          <li>
+            If the lat/lon area associated with the left and right hand side are
+            identical, then copy the serial numbers from the right hand side
+            into the left hand side and delete the right hand side.
+          </li>
+          <li>
+            If the right hand side is empty or extremely tiny then delete it.
+          </li>
+          <li>
+            Intersect the left and right hand side.
+            <ol>
+              <li>
+                If the intersection is empty or extremely tiny then move on to the
+                next combination of items in the list.
+              </li>
+              <li>
+                If the intersection is equal to the left hand side, then update
+                the right hand side to be itself minus the intersection. Update
+                the left hand side to have the right hand side's serial numbers.
+                Move on to the next combination of items in the list.
+              </li>
+              <li>
+                If the intersection is equal to the right hand side, then update
+                the left hand side to be itself minus the intersection. Update
+                the right hand side to have the left hand side's serial numbers.
+                Move on to the next combination of items in the list.
+              </li>
+              <li>
+                Subtract the intersection from the left hand side. If this fails,
+                try to subtract the right hand side from the left hand side to
+                automatically correct. Update the left hand side. Add the
+                intersection as a new item in the list with the serial numbers
+                of the left hand side.
+              </li>
+            </ol>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </description>
+
+  <category>
+    <categoryItem>Control Networks</categoryItem>
+  </category>
+
+  <history>
+    <change name="Steven Lambright" date="2008-11-03">
+      Original version
+    </change>
+    <change name="Steven Lambright" date="2008-11-24">
+      Added the "DETAILED" and "ERRORS" parameters.
+    </change>
+    <change name="Steven Lambright" date="2009-01-07">
+      Added the number of errors to the results output
+    </change>
+    <change name="Steven Lambright" date="2009-05-27">
+      Uses different method call to ImageOverlapSet for optimization
+    </change>
+    <change name="Steven Lambright" date="2009-05-28">
+      The input list will be internally sorted by serial number so that
+      one list of input images will always produce the same results regardless 
+      of the sort order.
+    </change>
+    <change name="Christopher Austin" date="2010-03-26">
+      Added an error when no new overlaps are calculated. (i.e. All overlaps
+      contain only a single Serial Number)
+    </change>
+    <change name="Christopher Austin" date="2010-09-27">
+      Moved the above error handling to ImageOverlapSet.
+    </change>
+    <change name="Steven Lambright" date="2011-09-26">
+      Improved documentation in preparation for the October release. Working
+      with me to document findimageoverlaps was Ra'ad Saleh and Bob Sucharski.
+    </change>
+    <change name="Marjorie Hahn" date="2016-08-05">
+      Fixed a bug where ImageOverlapSet was not recording overlaps where 
+      one image is fully enveloped within another. Fixes #2199.
+    </change>
+    <change name="Marjorie Hahn" date="2016-10-03">
+      Added an exception for giving findimageoverlaps a cube list of only 
+      one cube. Fixes #4200.
+    </change>
+    <change name="Ian Humphrey" date="2017-05-23">
+      Added a tryLock to avoid a segfault that could occur on OSX. Fixes #4810.
+    </change>
+  </history>
+
+  <groups>
+    <group name="Files">
+      <parameter name="FROMLIST">
+        <type>filename</type>
+        <fileMode>input</fileMode>
+        <brief>
+          List of input cubes to be intersected
+        </brief>
+        <description>
+          Use this parameter to specify the cubes for which we will find the
+          intersections of. If you are working with a control network then this
+          is the list of files associated with the control network.
+        </description>
+        <filter>
+          *.lis
+        </filter>
+      </parameter>
+
+      <parameter name="OVERLAPLIST">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <brief>
+          Output overlap list
+        </brief>
+        <description>
+          This file will contain the intersected image footprints in a non-human
+          readable format.
+        </description>
+      </parameter>
+
+      <parameter name="ERRORS">
+        <type>filename</type>
+        <fileMode>output</fileMode>
+        <internalDefault>No Error Output</internalDefault>
+        <brief>
+          Error list file for errors generated when making the overlap list
+        </brief>
+        <description>
+          This file will contain the errors that occurred while calculating the
+          image overlaps. These errors are typically caused by complicated
+          math involving arbitrary polygons failing to produce an understandable
+          result and can often be alleviated by simplifying the input polygons.
+          Basically, the errors might be fixed by reducing the precision of
+          your image footprints; but increasing precision might fix them too.
+        </description>
+      </parameter>
+    </group>
+
+    <group name="Settings">
+      <parameter name="DETAILED">
+        <type>boolean</type>
+        <brief>
+          Output detailed error information
+        </brief>
+        <description>
+          When this is set to true, and there is an errors file, the maximum
+          amount of information about each error is printed to the errors file.
+          When this is false, only filenames will be reported in the errors
+          file.
+        </description>
+        <default><item>false</item></default>
+      </parameter>
+    </group>
+  </groups>
+</application>

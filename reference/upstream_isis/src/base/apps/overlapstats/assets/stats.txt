@@ -1,0 +1,5 @@
+Overlap ID	Thickness		Area			Image Count	Serial Numbers in Overlap	Image Files in Overlap
+2		0.06439827965256548	       50169352228.7270	2		MGS/610591822:96/MOC-WA/RED	cube1.cub
+										MGS/610768297:128/MOC-WA/RED	cube2.cub
+4		0.05980171131732826	       46317196316.4220	2		MGS/610768297:128/MOC-WA/RED	cube2.cub
+										MGS/610944772:128/MOC-WA/RED	cube3.cub

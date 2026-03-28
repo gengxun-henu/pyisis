@@ -1,0 +1,129 @@
+Unit test for Pixel
+Testing 0.0 ... 
+IsSpecial:     0
+IsValid:  1
+IsNull:   0
+IsLow:    0
+IsHigh:   0
+IsHrs:    0
+IsHis:    0
+IsLrs:    0
+IsLis:    0
+
+Testing Isis::Null ... 
+IsSpecial:     1
+IsValid:  0
+IsNull:   1
+IsLow:    0
+IsHigh:   0
+IsHrs:    0
+IsHis:    0
+IsLrs:    0
+IsLis:    0
+
+Testing Isis::Lis ... 
+IsSpecial:     1
+IsValid:  0
+IsNull:   0
+IsLow:    1
+IsHigh:   0
+IsHrs:    0
+IsHis:    0
+IsLrs:    0
+IsLis:    1
+
+Testing Isis::Lrs ... 
+IsSpecial:     1
+IsValid:  0
+IsNull:   0
+IsLow:    1
+IsHigh:   0
+IsHrs:    0
+IsHis:    0
+IsLrs:    1
+IsLis:    0
+
+Testing Isis::His ... 
+IsSpecial:     1
+IsValid:  0
+IsNull:   0
+IsLow:    0
+IsHigh:   1
+IsHrs:    0
+IsHis:    1
+IsLrs:    0
+IsLis:    0
+
+Testing Hrs ... 
+IsSpecial:     1
+IsValid:  0
+IsNull:   0
+IsLow:    0
+IsHigh:   1
+IsHrs:    1
+IsHis:    0
+IsLrs:    0
+IsLis:    0
+
+Testing float 0.0 ... 
+IsSpecial:     0
+Testing Pixel instantiation with normal DN ...
+Sample:   1
+Line:   2
+Band:   100
+DN:   123.45
+IsSpecial: 0
+IsValid: 1
+IsNull: 0
+IsHigh: 0
+IsLow: 0
+IsHrs: 0
+IsHis: 0
+IsLrs: 0
+IsLis: 0
+ToString: 123.45
+ToFloat: 123.45
+ToDouble: 123.45
+To8Bit: 123
+To16Bit: 123
+To32Bit: 123.45
+
+Testing Pixel instantiation with Hrs ...
+Sample:   1
+Line:   20
+Band:   37
+DN:   -1.79769e+308
+IsSpecial: 1
+IsValid: 0
+IsNull: 0
+IsHigh: 1
+IsLow: 0
+IsHrs: 1
+IsHis: 0
+IsLrs: 0
+IsLis: 0
+ToString: Hrs
+ToDouble: -1.79769e+308
+ToFloat: 1
+To8Bit: 1
+To16Bit: 1
+To32Bit: 1
+
+Testing empty constructor
+Sample:   0
+Line:   0
+Band:   0
+DN:   -1.79769e+308
+
+Testing copy constructor
+Sample:   1
+Line:   20
+Band:   37
+DN:   -1.79769e+308
+
+Testing copy assignment operator
+Sample:   0
+Line:   0
+Band:   0
+DN:   -1.79769e+308
+

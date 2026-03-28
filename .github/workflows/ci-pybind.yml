@@ -28,7 +28,7 @@ concurrency:
 jobs:
   build-and-test:
     name: Build and test isis_pybind_standalone
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
     timeout-minutes: 120
     permissions:
       contents: read

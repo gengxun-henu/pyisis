@@ -68,7 +68,7 @@ jobs:
 
   build:
     name: Configure and build
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
     needs: budget-guard
     timeout-minutes: 120
     permissions:
@@ -142,7 +142,7 @@ jobs:
 
   unit-tests:
     name: Targeted unit validation
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
     needs: build
     timeout-minutes: 60
     permissions:
@@ -207,7 +207,7 @@ jobs:
 
   smoke-import:
     name: Smoke import
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
     needs: unit-tests
     timeout-minutes: 30
     permissions:
@@ -268,7 +268,7 @@ jobs:
 
   blocker-summary:
     name: Blocker summary
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
     if: failure()
     needs:
       - build

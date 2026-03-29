@@ -149,6 +149,7 @@ def test_basic_symbols_present():
     assert hasattr(ip, "Buffer")
     assert hasattr(ip, "BufferManager")
     assert hasattr(ip, "BandManager")
+    assert hasattr(ip, "BoxcarManager")
     assert hasattr(ip, "Brick")
     assert hasattr(ip, "Portal")
     assert hasattr(ip, "AlphaCube")

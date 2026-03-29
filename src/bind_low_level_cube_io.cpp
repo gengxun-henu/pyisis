@@ -9,6 +9,7 @@
 
 #include "AlphaCube.h"
 #include "BandManager.h"
+#include "BoxcarManager.h"
 #include "Brick.h"
 #include "Buffer.h"
 #include "BufferManager.h"
@@ -242,6 +243,12 @@ void bind_low_level_cube_io(py::module_ &m) {
            py::arg("buffer_lines") = 128)
       .def("set_tile", &Isis::TileManager::SetTile, py::arg("tile"), py::arg("band") = 1)
       .def("tiles", &Isis::TileManager::Tiles);
+
+  py::class_<Isis::BoxcarManager, Isis::BufferManager>(m, "BoxcarManager")
+      .def(py::init<const Isis::Cube &, const int &, const int &>(),
+           py::arg("cube"),
+           py::arg("box_samples"),
+           py::arg("box_lines"));
 
   py::class_<Isis::AlphaCube>(m, "AlphaCube")
        .def(py::init<Isis::Cube &>(), py::arg("cube"))

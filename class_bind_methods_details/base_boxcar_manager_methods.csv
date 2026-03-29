@@ -1,6 +1,6 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-BoxcarManager,Low Level Cube I/O,isis/src/base/objs/BoxcarManager/BoxcarManager.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+BoxcarManager,Low Level Cube I/O,isis/src/base/objs/BoxcarManager/BoxcarManager.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,BoxcarManager,isis_pybind.BoxcarManager,N,Python class symbol not found in current binding files
-Construction/Enum,BoxcarManager(),isis_pybind.BoxcarManager(),N,Constructor binding not detected in current binding files
+Class Symbol,BoxcarManager,isis_pybind.BoxcarManager,Y,Python class symbol exposed in src/bind_low_level_cube_io.cpp line 247-251
+Construction/Enum,BoxcarManager(const Isis::Cube &cube, const int &boxSamples, const int &boxLines),isis_pybind.BoxcarManager(cube, box_samples, box_lines),Y,Constructor binding added 2026-03-29; inherits BufferManager iteration methods (begin, next, end)

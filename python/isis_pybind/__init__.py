@@ -46,6 +46,7 @@ from ._isis_core import (
     ControlPointV0003,
     ApolloMetricCamera,
     ApolloPanoramicCamera,
+    BoxcarManager,
     Brick,
     Buffer,
     BufferManager,

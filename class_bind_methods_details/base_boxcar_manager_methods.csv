@@ -1,4 +1,20 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+BoxcarManager,Low Level Cube I/O,isis/src/base/objs/BoxcarManager/BoxcarManager.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Inherits BufferManager iteration methods (begin/next/end/set_position)
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,BoxcarManager,isis_pybind.BoxcarManager,Y,Bound as py::class_<Isis::BoxcarManager, Isis::BufferManager>
+Construction/Enum,BoxcarManager(const Isis::Cube &cube, const int &boxSamples, const int &boxLines),isis_pybind.BoxcarManager(cube, box_samples, box_lines),Y,Constructor takes cube reference and boxcar dimensions
+Inherited Methods,begin(),begin(),Y,Inherited from BufferManager
+Inherited Methods,next(),next(),Y,Inherited from BufferManager
+Inherited Methods,end(),end(),Y,Inherited from BufferManager
+Inherited Methods,set_position(BigInt map),set_position(map),Y,Inherited from BufferManager
+Inherited Methods,sample(int index=0),sample(index=0),Y,Inherited from Buffer via BufferManager
+Inherited Methods,line(int index=0),line(index=0),Y,Inherited from Buffer via BufferManager
+Inherited Methods,band(int index=0),band(index=0),Y,Inherited from Buffer via BufferManager
+Inherited Methods,sample_dimension(),sample_dimension(),Y,Inherited from Buffer via BufferManager
+Inherited Methods,line_dimension(),line_dimension(),Y,Inherited from Buffer via BufferManager
+Inherited Methods,band_dimension(),band_dimension(),Y,Inherited from Buffer via BufferManager
+
 BoxcarManager,Low Level Cube I/O,isis/src/base/objs/BoxcarManager/BoxcarManager.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes

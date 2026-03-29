@@ -172,3 +172,28 @@
 - Known blockers:
   - `Calculator::Minimum2` and `Calculator::Maximum2` remain intentionally unbound because they are declared in `Calculator.h` but not implemented in the upstream ISIS `Calculator.cpp`.
   - `Affine` still does not expose the static identity-matrix helper or forward/inverse matrix accessors; these remain inventory gaps, not regressions from this task.
+
+- NthOrderPolynomial binding progress:
+  - Added `Isis::NthOrderPolynomial` binding in `src/base/bind_base_math.cpp`.
+  - Inherits from `BasisFunction` with `py::class_<Isis::NthOrderPolynomial, Isis::BasisFunction>`.
+  - Constructor: `NthOrderPolynomial(degree)` — creates a 2-variable polynomial with `degree` coefficients.
+  - Override: `expand(vars)` — computes `pow(t1, i) - pow(t2, i)` terms for i from degree down to 1.
+  - Re-exported `NthOrderPolynomial` from `python/isis_pybind/__init__.py`.
+  - Added smoke check in `tests/smoke_import.py`.
+  - Added focused unit tests in `tests/unitTest/math_unit_test.py`:
+    - construction with various degrees (1, 3, 6)
+    - variables/coefficients consistency
+    - isinstance(poly, BasisFunction) check
+    - name() returns "NthOrderPolynomial"
+    - expand + evaluate matches upstream unit test expectations
+    - individual term access after expand
+    - wrong variable count raises exception
+    - __repr__ formatting
+- Tracking sync:
+  - Updated `todo_pybind11.csv` to mark `Math,NthOrderPolynomial` as `已转换`.
+  - Updated `class_bind_methods_details/base_nth_order_polynomial_methods.csv` to mark all 3 items as converted.
+  - Updated `class_bind_methods_details/methods_inventory_summary.csv` to reflect 100% conversion.
+- Validation status:
+  - Build environment not available in sandbox; requires CI validation with `asp360_new` interpreter.
+- Known blockers:
+  - None. NthOrderPolynomial is a pure math class with no external dependencies.

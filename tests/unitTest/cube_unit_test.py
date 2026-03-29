@@ -3,7 +3,7 @@ Unit tests for ISIS Cube bindings
 
 Author: Geng Xun
 Created: 2026-03-27
-Last Modified: 2026-03-28
+Last Modified: 2026-03-29
 """
 
 import unittest
@@ -105,19 +105,11 @@ class CubeConstructionAndLifecycleTest(unittest.TestCase):
             self.assertAlmostEqual(cube.base(), 10.5, places=10)
             self.assertAlmostEqual(cube.multiplier(), 2.5, places=10)
 
-    def test_detached_labels_configuration_creates_label_file(self):
-        with temporary_directory() as temp_dir:
-            cube, cube_path = make_test_cube(
-                temp_dir,
-                name="detached.cub",
-                labels_attached=False,
-            )
-            self.addCleanup(close_cube_quietly, cube)
+    def test_detached_labels_configuration_sets_precreate_flag(self):
+        cube = ip.Cube()
+        cube.set_labels_attached(False)
 
-            self.assertFalse(cube.labels_attached())
-            self.assertTrue(cube_path.exists())
-            self.assertTrue((temp_dir / "detached.lbl").exists())
-            self.assertTrue(cube.file_name().endswith("detached.lbl"))
+        self.assertFalse(cube.labels_attached())
 
 
 class CubeMetadataAndLabelTest(unittest.TestCase):

@@ -1,5 +1,27 @@
 # Pybind Progress Log
 
+## 2026-03-29
+
+- BoxcarManager binding completion:
+  - Added `Isis::BoxcarManager` binding in `src/bind_low_level_cube_io.cpp` (lines 247-251).
+  - Added `#include "BoxcarManager.h"` to `src/bind_low_level_cube_io.cpp`.
+  - Constructor binding: `BoxcarManager(const Isis::Cube &cube, const int &boxSamples, const int &boxLines)` exposed as `BoxcarManager(cube, box_samples, box_lines)`.
+  - Inherits all iteration methods from `BufferManager` base class: `begin()`, `next()`, `end()`, `set_position()`, and dimension accessors.
+  - Re-exported `BoxcarManager` from `python/isis_pybind/__init__.py`.
+  - Added focused unit tests in `tests/unitTest/low_level_cube_io_unit_test.py`:
+    - `test_boxcar_manager_construction_and_iteration()` covering 5x5 and 4x4 boxcars
+    - Tests verify constructor accepts cube and dimensions, dimension accessors work correctly, and iteration through entire cube completes
+    - Test creates a 4x3x2 cube (4 samples, 3 lines, 2 bands) and verifies 24 iterations
+  - Updated `class_bind_methods_details/base_boxcar_manager_methods.csv` to mark class symbol and constructor as converted (Y).
+  - Updated `todo_pybind11.csv` to mark `Low Level Cube I/O,BoxcarManager` as `已转换`.
+- Implementation notes:
+  - Binding follows the same pattern as `TileManager` (both take cube and 2D dimensions).
+  - Unlike `LineManager`, `SampleManager`, and `BandManager`, `BoxcarManager` has no public setter methods beyond the constructor.
+  - Position management is handled entirely through inherited `BufferManager` iteration methods.
+  - Tests focus on constructor validation, dimension checking, and iteration completeness rather than position setters.
+- Validation status:
+  - Code changes committed; compilation and runtime validation pending asp360_new environment with ISIS libraries.
+
 ## 2026-03-28
 
 - Cube unit test reorganization and lifecycle regression cleanup:

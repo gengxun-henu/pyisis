@@ -79,7 +79,7 @@ High Level Cube I/O,TiffImporter,未转换,
 Low Level Cube I/O,AlphaCube,已转换,
 Low Level Cube I/O,BandManager,已转换,2026-03-21 已在 bind_low_level_cube_io.cpp 暴露构造与 set_band(...)
 Low Level Cube I/O,Blobber,未转换,抽象基类/纯虚接口
-Low Level Cube I/O,BoxcarManager,未转换,
+Low Level Cube I/O,BoxcarManager,已转换,2026-03-29 已在 bind_low_level_cube_io.cpp 暴露构造; 继承 BufferManager 迭代方法
 Low Level Cube I/O,Brick,已转换,需注意内存生命周期与数据视图映射
 Low Level Cube I/O,Buffer,已转换,需注意内存生命周期与数据视图映射
 Low Level Cube I/O,BufferManager,已转换,需注意内存生命周期与数据视图映射

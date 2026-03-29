@@ -190,6 +190,156 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         self.assertEqual(table.records(), 0)
         self.assertIn("Table(name='Example'", repr(table))
 
+    def test_boxcar_manager_construction(self):
+        """Test BoxcarManager construction with various boxcar sizes"""
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        cube_path = temp_dir / "boxcar_test.cub"
+        cube = ip.Cube()
+        cube.set_dimensions(10, 10, 1)
+        cube.set_pixel_type(ip.PixelType.Real)
+        cube.create(str(cube_path))
+        self.addCleanup(cube.close)
+
+        # Initialize cube data so reads work
+        line_mgr = ip.LineManager(cube)
+        line_mgr.begin()
+        while not line_mgr.end():
+            for i in range(len(line_mgr)):
+                line_mgr[i] = float(line_mgr.line())
+            cube.write(line_mgr)
+            line_mgr.next()
+
+        # Test 5x5 boxcar
+        boxcar5 = ip.BoxcarManager(cube, 5, 5)
+        self.assertEqual(boxcar5.sample_dimension(), 5)
+        self.assertEqual(boxcar5.line_dimension(), 5)
+        self.assertEqual(boxcar5.band_dimension(), 1)
+
+        # Test 3x3 boxcar
+        boxcar3 = ip.BoxcarManager(cube, 3, 3)
+        self.assertEqual(boxcar3.sample_dimension(), 3)
+        self.assertEqual(boxcar3.line_dimension(), 3)
+
+    def test_boxcar_manager_iteration(self):
+        """Test BoxcarManager iteration through cube positions"""
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        cube_path = temp_dir / "boxcar_iteration_test.cub"
+        cube = ip.Cube()
+        cube.set_dimensions(6, 6, 1)
+        cube.set_pixel_type(ip.PixelType.Real)
+        cube.create(str(cube_path))
+        self.addCleanup(cube.close)
+
+        # Initialize cube with line manager
+        line_mgr = ip.LineManager(cube)
+        line_mgr.begin()
+        while not line_mgr.end():
+            for i in range(len(line_mgr)):
+                line_mgr[i] = 10.0
+            cube.write(line_mgr)
+            line_mgr.next()
+
+        # Test iteration
+        boxcar = ip.BoxcarManager(cube, 3, 3)
+        count = 0
+        boxcar.begin()
+        self.assertFalse(boxcar.end())
+
+        while not boxcar.end():
+            count += 1
+            # Verify we can read at each position
+            cube.read(boxcar)
+            # BoxcarManager iterates pixel-by-pixel
+            boxcar.next()
+
+        # Should iterate through all pixels: 6 samples * 6 lines * 1 band
+        self.assertEqual(count, 36)
+
+    def test_boxcar_manager_edge_positions(self):
+        """Test BoxcarManager handles edge positions with negative coordinates"""
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        cube_path = temp_dir / "boxcar_edge_test.cub"
+        cube = ip.Cube()
+        cube.set_dimensions(4, 4, 1)
+        cube.set_pixel_type(ip.PixelType.Real)
+        cube.create(str(cube_path))
+        self.addCleanup(cube.close)
+
+        # Initialize data
+        line_mgr = ip.LineManager(cube)
+        line_mgr.begin()
+        while not line_mgr.end():
+            for i in range(len(line_mgr)):
+                line_mgr[i] = 5.0
+            cube.write(line_mgr)
+            line_mgr.next()
+
+        # 5x5 boxcar on 4x4 cube will have edge positions with negative coords
+        boxcar = ip.BoxcarManager(cube, 5, 5)
+        boxcar.begin()
+
+        # At the first position, upper-left corner should have negative coords
+        # Based on BoxcarManager.cpp: soff = (int)((boxSamples - 1) / 2) * -1
+        # For 5x5: soff = (5-1)/2 * -1 = -2, so first sample position is 1-2 = -1
+        self.assertLessEqual(boxcar.sample(), 0)
+        self.assertLessEqual(boxcar.line(), 0)
+
+        # Should still be able to read safely
+        try:
+            cube.read(boxcar)
+        except Exception as e:
+            self.fail(f"Edge position read failed: {e}")
+
+    def test_boxcar_manager_different_sizes(self):
+        """Test BoxcarManager with different boxcar dimensions"""
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        cube_path = temp_dir / "boxcar_sizes_test.cub"
+        cube = ip.Cube()
+        cube.set_dimensions(8, 6, 1)
+        cube.set_pixel_type(ip.PixelType.Real)
+        cube.create(str(cube_path))
+        self.addCleanup(cube.close)
+
+        # Initialize
+        line_mgr = ip.LineManager(cube)
+        line_mgr.begin()
+        while not line_mgr.end():
+            for i in range(len(line_mgr)):
+                line_mgr[i] = 1.0
+            cube.write(line_mgr)
+            line_mgr.next()
+
+        # Test rectangular boxcar (4x4)
+        boxcar44 = ip.BoxcarManager(cube, 4, 4)
+        self.assertEqual(boxcar44.sample_dimension(), 4)
+        self.assertEqual(boxcar44.line_dimension(), 4)
+
+        # Test asymmetric boxcar (3x5)
+        boxcar35 = ip.BoxcarManager(cube, 3, 5)
+        self.assertEqual(boxcar35.sample_dimension(), 3)
+        self.assertEqual(boxcar35.line_dimension(), 5)
+
+        # Verify both can iterate
+        boxcar44.begin()
+        self.assertFalse(boxcar44.end())
+        cube.read(boxcar44)
+
+        boxcar35.begin()
+        self.assertFalse(boxcar35.end())
+        cube.read(boxcar35)
+
 
 if __name__ == "__main__":
     unittest.main()

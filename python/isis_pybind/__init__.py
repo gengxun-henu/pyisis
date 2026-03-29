@@ -52,6 +52,7 @@ from ._isis_core import (
     BufferManager,
     BandManager,
     ByteOrder,
+    BoxcarManager,
     Camera,
     CameraDetectorMap,
     CameraDistortionMap,

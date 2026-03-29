@@ -82,6 +82,42 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         self.assertEqual(manager.line(), 1)
         self.assertEqual(manager.band(), 1)
 
+    def test_boxcar_manager_construction_and_iteration(self):
+        """Test BoxcarManager with 5x5 and 4x4 boxcars."""
+        cube = self.make_test_cube()
+
+        # Test 5x5 boxcar
+        manager_5x5 = ip.BoxcarManager(cube, 5, 5)
+        self.assertTrue(manager_5x5.begin())
+        self.assertEqual(manager_5x5.sample_dimension(), 5)
+        self.assertEqual(manager_5x5.line_dimension(), 5)
+        self.assertEqual(manager_5x5.band_dimension(), 1)
+
+        # Test basic iteration
+        iteration_count = 0
+        manager_5x5.begin()
+        while not manager_5x5.end():
+            iteration_count += 1
+            # Verify that we can access dimensions at each step
+            self.assertGreater(manager_5x5.sample_dimension(), 0)
+            self.assertGreater(manager_5x5.line_dimension(), 0)
+            manager_5x5.next()
+
+        # BoxcarManager should iterate through entire cube (4 samples x 3 lines x 2 bands)
+        expected_iterations = 4 * 3 * 2
+        self.assertEqual(iteration_count, expected_iterations)
+
+        # Test 4x4 boxcar
+        manager_4x4 = ip.BoxcarManager(cube, 4, 4)
+        self.assertEqual(manager_4x4.sample_dimension(), 4)
+        self.assertEqual(manager_4x4.line_dimension(), 4)
+        self.assertEqual(manager_4x4.band_dimension(), 1)
+
+        # Test that begin and next work properly
+        self.assertTrue(manager_4x4.begin())
+        self.assertFalse(manager_4x4.end())
+        self.assertTrue(manager_4x4.next())
+
     def test_brick_portal_and_alpha_cube(self):
         brick = ip.Brick(4, 4, 1, ip.PixelType.Real)
         brick.set_base_position(2, 3, 1)

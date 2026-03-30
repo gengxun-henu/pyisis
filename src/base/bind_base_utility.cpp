@@ -7,15 +7,18 @@
  *
  * Source ISIS headers:
  *   - isis/src/base/objs/Column/Column.h
+ *   - isis/src/base/objs/LineEquation/LineEquation.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Purpose: Expose Column and related utility classes to Python via pybind11.
+ * Updated: 2026-03-30
+ * Purpose: Expose Column, LineEquation, and related utility classes to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 #include "Column.h"
+#include "LineEquation.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -84,5 +87,67 @@ void bind_base_utility(py::module_ &m) {
         return "Column(name='" + qStringToStdString(self.Name()) + "', " +
                "width=" + std::to_string(self.Width()) + ", " +
                "precision=" + std::to_string(self.Precision()) + ")";
+      });
+
+  /**
+   * @brief Bindings for the Isis::LineEquation class
+   *
+   * Source ISIS header: isis/src/base/objs/LineEquation/LineEquation.h
+   * Source class: LineEquation
+   * Source header author(s): Debbie A. Cook (2006-10-19)
+   * Binding author: Geng Xun
+   * Created: 2026-03-30
+   * Updated: 2026-03-30
+   * Purpose: Expose cartesian line equation utilities to Python.
+   *
+   * LineEquation provides functionality for creating and using cartesian line equations.
+   * Computes slope and intercept from two points. Throws exceptions for vertical lines
+   * (identical x-coordinates) and undefined lines (less than 2 points).
+   * @see Isis::LineEquation
+   */
+  py::class_<Isis::LineEquation>(m, "LineEquation")
+      .def(py::init<>(),
+           "Construct an empty LineEquation object")
+      .def(py::init<double, double, double, double>(),
+           py::arg("x1"), py::arg("y1"), py::arg("x2"), py::arg("y2"),
+           "Construct a LineEquation from two points (x1,y1) and (x2,y2)")
+      .def("add_point",
+           &Isis::LineEquation::AddPoint,
+           py::arg("x"), py::arg("y"),
+           "Add a point to the line equation. Line is defined after 2 points are added")
+      .def("slope",
+           &Isis::LineEquation::Slope,
+           "Compute and return the slope of the line")
+      .def("intercept",
+           &Isis::LineEquation::Intercept,
+           "Compute and return the y-intercept of the line")
+      .def("points",
+           &Isis::LineEquation::Points,
+           "Return the number of points added to the line equation")
+      .def("have_slope",
+           &Isis::LineEquation::HaveSlope,
+           "Return whether the slope has been computed")
+      .def("have_intercept",
+           &Isis::LineEquation::HaveIntercept,
+           "Return whether the intercept has been computed")
+      .def("defined",
+           &Isis::LineEquation::Defined,
+           "Return whether the line is fully defined (has 2 points)")
+      .def("__repr__", [](const Isis::LineEquation &self) {
+        std::string repr = "LineEquation(";
+        if (self.Defined()) {
+          try {
+            double slope = const_cast<Isis::LineEquation&>(self).Slope();
+            double intercept = const_cast<Isis::LineEquation&>(self).Intercept();
+            repr += "slope=" + std::to_string(slope) +
+                    ", intercept=" + std::to_string(intercept);
+          } catch (...) {
+            repr += "defined=True, vertical_line=True";
+          }
+        } else {
+          repr += "points=" + std::to_string(self.Points());
+        }
+        repr += ")";
+        return repr;
       });
 }

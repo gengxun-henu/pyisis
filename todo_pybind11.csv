@@ -305,6 +305,7 @@ Utility,ImportPdsTable,未转换,
 Utility,Kernels,未转换,
 Utility,Latitude,已转换,
 Utility,LineEquation,已转换,
+Utility,LineEquation,已转换,2026-03-30 已在 bind_base_utility.cpp 暴露默认构造/二点构造/add_point/slope/intercept/points/defined/have_slope/have_intercept 接口并补充单测
 Utility,Longitude,已转换,
 Utility,Pixel,未转换,
 Utility,PolygonTools,未转换,

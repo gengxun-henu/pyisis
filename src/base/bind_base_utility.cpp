@@ -12,6 +12,7 @@
  * Created: 2026-03-24
  * Updated: 2026-03-30
  * Purpose: Expose Column, LineEquation and related utility classes to Python via pybind11.
+ * Purpose: Expose Column, LineEquation, and related utility classes to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
@@ -97,6 +98,18 @@ void bind_base_utility(py::module_ &m) {
    * Note: The upstream ISIS header has inline methods (Defined, Points, HaveSlope, HaveIntercept)
    * that are not marked const, requiring const_cast workarounds in __repr__.
    *
+   *
+   * Source ISIS header: isis/src/base/objs/LineEquation/LineEquation.h
+   * Source class: LineEquation
+   * Source header author(s): Debbie A. Cook (2006-10-19)
+   * Binding author: Geng Xun
+   * Created: 2026-03-30
+   * Updated: 2026-03-30
+   * Purpose: Expose cartesian line equation utilities to Python.
+   *
+   * LineEquation provides functionality for creating and using cartesian line equations.
+   * Computes slope and intercept from two points. Throws exceptions for vertical lines
+   * (identical x-coordinates) and undefined lines (less than 2 points).
    * @see Isis::LineEquation
    */
   py::class_<Isis::LineEquation>(m, "LineEquation")
@@ -141,6 +154,26 @@ void bind_base_utility(py::module_ &m) {
           }
         } else {
           repr += "defined=False, points=" + std::to_string(self.Points());
+           "Return whether the slope has been computed")
+      .def("have_intercept",
+           &Isis::LineEquation::HaveIntercept,
+           "Return whether the intercept has been computed")
+      .def("defined",
+           &Isis::LineEquation::Defined,
+           "Return whether the line is fully defined (has 2 points)")
+      .def("__repr__", [](const Isis::LineEquation &self) {
+        std::string repr = "LineEquation(";
+        if (self.Defined()) {
+          try {
+            double slope = const_cast<Isis::LineEquation&>(self).Slope();
+            double intercept = const_cast<Isis::LineEquation&>(self).Intercept();
+            repr += "slope=" + std::to_string(slope) +
+                    ", intercept=" + std::to_string(intercept);
+          } catch (...) {
+            repr += "defined=True, vertical_line=True";
+          }
+        } else {
+          repr += "points=" + std::to_string(self.Points());
         }
         repr += ")";
         return repr;

@@ -120,6 +120,9 @@ class CubeConstructionAndLifecycleTest(unittest.TestCase):
 
             cube.close()
 
+        # Explicitly close to ensure clean destructor behavior
+        cube.close()
+
 
 class CubeMetadataAndLabelTest(unittest.TestCase):
     """Behavioral tests for Cube metadata, labels, and group helpers."""

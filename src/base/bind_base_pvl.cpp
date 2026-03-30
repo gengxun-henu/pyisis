@@ -17,6 +17,7 @@
 #include "PvlGroup.h"
 #include "PvlKeyword.h"
 #include "PvlObject.h"
+#include "PvlSequence.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -301,4 +302,81 @@ void bind_base_pvl(py::module_ &m) {
       .def("__repr__", [](Isis::Pvl &self) {
         return "Pvl(" + pvlLikeToString(self) + ")";
       });
+
+  /**
+   * @brief Bindings for the Isis::PvlSequence class
+   *
+   * Source ISIS header: reference/upstream_isis/src/base/objs/PvlSequence/PvlSequence.h
+   * Source class: Isis::PvlSequence
+   * Source header author(s): Jeff Anderson (2005-02-16)
+   * Binding author: Geng Xun
+   * Created: 2026-03-30
+   * Updated: 2026-03-30
+   * Purpose: Parse and return elements of a Pvl sequence (array of arrays)
+   *
+   * This function creates Python bindings for the Isis::PvlSequence class using pybind11.
+   * PvlSequence represents a 2D array structure commonly used in ISIS PVL files, where
+   * a keyword value contains multiple arrays like: Keyword = ((a,b,c), (d,e))
+   *
+   * @see Isis::PvlSequence
+   * @param m The pybind11 module to which the bindings will be added.
+   * @author Geng Xun
+   * @date 2026-03-30
+   */
+  py::class_<Isis::PvlSequence> pvl_sequence(m, "PvlSequence");
+
+  pvl_sequence
+      .def(py::init<>())
+      .def("size", &Isis::PvlSequence::Size,
+           "Get the number of arrays in the sequence")
+      .def("clear", &Isis::PvlSequence::Clear,
+           "Clear all arrays from the sequence")
+      .def("__len__", &Isis::PvlSequence::Size)
+      .def("__getitem__",
+           [](const Isis::PvlSequence &self, int index) -> std::vector<std::string> {
+             // Convert the returned vector<QString>& to vector<string>
+             return qStringVectorToStdVector(const_cast<Isis::PvlSequence&>(self)[index]);
+           },
+           py::arg("index"),
+           "Get the array at the specified index")
+      .def("assign_from_keyword",
+           [](Isis::PvlSequence &self, Isis::PvlKeyword &key) -> Isis::PvlSequence& {
+             self = key;
+             return self;
+           },
+           py::arg("keyword"),
+           "Assign sequence from a PvlKeyword")
+      .def("add_array",
+           [](Isis::PvlSequence &self, const std::string &array) -> Isis::PvlSequence& {
+             self += stdStringToQString(array);
+             return self;
+           },
+           py::arg("array"),
+           "Add a string array to the sequence (e.g., '(a,b,c)')")
+      .def("add_string_vector",
+           [](Isis::PvlSequence &self, std::vector<std::string> &values) -> Isis::PvlSequence& {
+             std::vector<QString> qvalues = stdVectorToQStringVector(values);
+             self += qvalues;
+             return self;
+           },
+           py::arg("values"),
+           "Add a list of strings as an array to the sequence")
+      .def("add_int_vector",
+           [](Isis::PvlSequence &self, std::vector<int> &values) -> Isis::PvlSequence& {
+             self += values;
+             return self;
+           },
+           py::arg("values"),
+           "Add a list of integers as an array to the sequence")
+      .def("add_double_vector",
+           [](Isis::PvlSequence &self, std::vector<double> &values) -> Isis::PvlSequence& {
+             self += values;
+             return self;
+           },
+           py::arg("values"),
+           "Add a list of doubles as an array to the sequence")
+      .def("__repr__",
+           [](const Isis::PvlSequence &self) {
+             return "PvlSequence(size=" + std::to_string(self.Size()) + ")";
+           });
 }

@@ -190,7 +190,7 @@ Parsing,PvlFormatPds,未转换,
 Parsing,PvlGroup,已转换,
 Parsing,PvlKeyword,已转换,Qt 类型/信号槽较多
 Parsing,PvlObject,已转换,
-Parsing,PvlSequence,未转换,
+Parsing,PvlSequence,已转换,
 Parsing,PvlToken,未转换,
 Parsing,PvlTokenizer,未转换,
 Parsing,PvlToPvlTranslationManager,未转换,

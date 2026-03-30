@@ -154,26 +154,6 @@ void bind_base_utility(py::module_ &m) {
           }
         } else {
           repr += "defined=False, points=" + std::to_string(self.Points());
-           "Return whether the slope has been computed")
-      .def("have_intercept",
-           &Isis::LineEquation::HaveIntercept,
-           "Return whether the intercept has been computed")
-      .def("defined",
-           &Isis::LineEquation::Defined,
-           "Return whether the line is fully defined (has 2 points)")
-      .def("__repr__", [](const Isis::LineEquation &self) {
-        std::string repr = "LineEquation(";
-        if (self.Defined()) {
-          try {
-            double slope = const_cast<Isis::LineEquation&>(self).Slope();
-            double intercept = const_cast<Isis::LineEquation&>(self).Intercept();
-            repr += "slope=" + std::to_string(slope) +
-                    ", intercept=" + std::to_string(intercept);
-          } catch (...) {
-            repr += "defined=True, vertical_line=True";
-          }
-        } else {
-          repr += "points=" + std::to_string(self.Points());
         }
         repr += ")";
         return repr;

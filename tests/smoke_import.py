@@ -96,6 +96,7 @@ def test_basic_symbols_present():
     assert hasattr(ip, "Calculator")
     assert hasattr(ip, "Affine")
     assert hasattr(ip, "BasisFunction")
+    assert hasattr(ip, "NthOrderPolynomial")
     assert hasattr(ip, "InfixToPostfix")
     assert hasattr(ip, "CubeInfixToPostfix")
     assert hasattr(ip, "InlineInfixToPostfix")

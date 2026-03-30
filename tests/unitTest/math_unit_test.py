@@ -1,11 +1,11 @@
 """
 Unit tests for ISIS math classes: Calculator, Affine, BasisFunction,
 LeastSquares, Matrix, PolynomialUnivariate, PolynomialBivariate,
-InfixToPostfix, CubeInfixToPostfix, and InlineInfixToPostfix
+NthOrderPolynomial, InfixToPostfix, CubeInfixToPostfix, and InlineInfixToPostfix
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-03-26
+Last Modified: 2026-03-29
 """
 import unittest
 import math
@@ -656,6 +656,91 @@ class PolynomialBivariateUnitTest(unittest.TestCase):
         poly.expand([2.0, 3.0])
         result = poly.evaluate([2.0, 3.0])
         self.assertAlmostEqual(result, 14.0, places=10)
+
+
+class NthOrderPolynomialUnitTest(unittest.TestCase):
+    """Test suite for NthOrderPolynomial class bindings. Added: 2026-03-29."""
+
+    def test_construction(self):
+        """Test NthOrderPolynomial construction with various degrees"""
+        poly = ip.NthOrderPolynomial(3)
+        self.assertIsNotNone(poly)
+        self.assertIn("NthOrderPolynomial", repr(poly))
+        self.assertEqual(poly.variables(), 2)
+        self.assertEqual(poly.coefficients(), 3)
+
+    def test_construction_degree_1(self):
+        """Test degree-1 polynomial"""
+        poly = ip.NthOrderPolynomial(1)
+        self.assertEqual(poly.variables(), 2)
+        self.assertEqual(poly.coefficients(), 1)
+
+    def test_construction_degree_6(self):
+        """Test degree-6 polynomial (from upstream unit test)"""
+        poly = ip.NthOrderPolynomial(6)
+        self.assertEqual(poly.variables(), 2)
+        self.assertEqual(poly.coefficients(), 6)
+
+    def test_inherits_basis_function(self):
+        """Test that NthOrderPolynomial inherits from BasisFunction"""
+        poly = ip.NthOrderPolynomial(3)
+        self.assertIsInstance(poly, ip.BasisFunction)
+        self.assertTrue(hasattr(poly, 'set_coefficients'))
+        self.assertTrue(hasattr(poly, 'evaluate'))
+        self.assertTrue(hasattr(poly, 'expand'))
+        self.assertTrue(hasattr(poly, 'name'))
+        self.assertTrue(hasattr(poly, 'term'))
+        self.assertTrue(hasattr(poly, 'coefficient'))
+
+    def test_name(self):
+        """Test name() returns the expected class name"""
+        poly = ip.NthOrderPolynomial(3)
+        self.assertEqual(poly.name(), "NthOrderPolynomial")
+
+    def test_expand_and_evaluate(self):
+        """Test expand + evaluate matches upstream unit test expectations.
+        Upstream: degree=3, coefs=[0.5, 0.5, 0.5], vars=[2.0, 3.0]
+        Terms: pow(2,3)-pow(3,3)=-19, pow(2,2)-pow(3,2)=-5, pow(2,1)-pow(3,1)=-1
+        Result: 0.5*(-19) + 0.5*(-5) + 0.5*(-1) = -12.5
+        """
+        poly = ip.NthOrderPolynomial(3)
+        poly.set_coefficients([0.5, 0.5, 0.5])
+        result = poly.evaluate([2.0, 3.0])
+        self.assertAlmostEqual(result, -12.5, places=10)
+
+    def test_expand_and_evaluate_second(self):
+        """Test expand + evaluate with vars=[1.0, -2.0] from upstream.
+        Terms: pow(1,3)-pow(-2,3)=9, pow(1,2)-pow(-2,2)=-3, pow(1,1)-pow(-2,1)=3
+        Result: 0.5*(9) + 0.5*(-3) + 0.5*(3) = 4.5
+        """
+        poly = ip.NthOrderPolynomial(3)
+        poly.set_coefficients([0.5, 0.5, 0.5])
+        result = poly.evaluate([1.0, -2.0])
+        self.assertAlmostEqual(result, 4.5, places=10)
+
+    def test_terms_after_expand(self):
+        """Test that individual terms are accessible after expand"""
+        poly = ip.NthOrderPolynomial(3)
+        poly.set_coefficients([0.5, 0.5, 0.5])
+        poly.expand([2.0, 3.0])
+        # Terms: pow(2,3)-pow(3,3)=-19, pow(2,2)-pow(3,2)=-5, pow(2,1)-pow(3,1)=-1
+        self.assertAlmostEqual(poly.term(0), -19.0, places=10)
+        self.assertAlmostEqual(poly.term(1), -5.0, places=10)
+        self.assertAlmostEqual(poly.term(2), -1.0, places=10)
+
+    def test_expand_wrong_variable_count_raises(self):
+        """Test that expand raises when given wrong number of variables"""
+        poly = ip.NthOrderPolynomial(3)
+        with self.assertRaises(Exception):
+            poly.expand([1.0])  # needs 2 variables, not 1
+
+    def test_repr(self):
+        """Test __repr__ formatting"""
+        poly = ip.NthOrderPolynomial(3)
+        r = repr(poly)
+        self.assertIn("NthOrderPolynomial", r)
+        self.assertIn("variables=2", r)
+        self.assertIn("coefficients=3", r)
 
 
 class InfixToPostfixUnitTest(unittest.TestCase):

@@ -76,6 +76,92 @@ class PvlUnitTest(unittest.TestCase):
         pvl.find_object("Archive").delete_object("Product")
         self.assertFalse(pvl.find_object("Archive").has_object("Product"))
 
+    def test_pvl_sequence_construction(self):
+        """Test PvlSequence construction and basic properties."""
+        seq = ip.PvlSequence()
+        self.assertEqual(seq.size(), 0)
+        self.assertEqual(len(seq), 0)
+        self.assertIn("size=0", repr(seq))
+
+    def test_pvl_sequence_clear(self):
+        """Test clearing an empty sequence is safe."""
+        seq = ip.PvlSequence()
+        seq.clear()
+        self.assertEqual(seq.size(), 0)
+
+    def test_pvl_sequence_add_string_array(self):
+        """Test adding arrays using string notation."""
+        seq = ip.PvlSequence()
+        seq.add_array("(a,b,c)")
+        self.assertEqual(seq.size(), 1)
+        self.assertEqual(len(seq[0]), 3)
+
+        seq.add_array("(d,e)")
+        self.assertEqual(seq.size(), 2)
+        self.assertEqual(len(seq[1]), 2)
+
+    def test_pvl_sequence_add_vector_types(self):
+        """Test adding vectors of different types."""
+        seq = ip.PvlSequence()
+
+        # Add string vector
+        seq.add_string_vector(["x", "y", "z"])
+        self.assertEqual(seq.size(), 1)
+        self.assertEqual(len(seq[0]), 3)
+
+        # Add int vector
+        seq.add_int_vector([1, 2, 3, 4])
+        self.assertEqual(seq.size(), 2)
+        self.assertEqual(len(seq[1]), 4)
+
+        # Add double vector
+        seq.add_double_vector([1.5, 2.5, 3.5])
+        self.assertEqual(seq.size(), 3)
+        self.assertEqual(len(seq[2]), 3)
+
+    def test_pvl_sequence_indexing(self):
+        """Test 2D array indexing."""
+        seq = ip.PvlSequence()
+        seq.add_array("(alpha,beta,gamma)")
+        seq.add_array("(one,two)")
+
+        # Check first array
+        array0 = seq[0]
+        self.assertEqual(len(array0), 3)
+        self.assertEqual(array0[0], "alpha")
+        self.assertEqual(array0[1], "beta")
+        self.assertEqual(array0[2], "gamma")
+
+        # Check second array
+        array1 = seq[1]
+        self.assertEqual(len(array1), 2)
+        self.assertEqual(array1[0], "one")
+        self.assertEqual(array1[1], "two")
+
+    def test_pvl_sequence_from_keyword(self):
+        """Test assigning sequence from PvlKeyword."""
+        keyword = ip.PvlKeyword("TestKey")
+        keyword.add_value("(red,green,blue)")
+        keyword.add_value("(10,20,30)")
+
+        seq = ip.PvlSequence()
+        seq.assign_from_keyword(keyword)
+
+        self.assertEqual(seq.size(), 2)
+        self.assertEqual(len(seq[0]), 3)
+        self.assertEqual(seq[0][0], "red")
+
+    def test_pvl_sequence_clear_after_adding(self):
+        """Test clearing a populated sequence."""
+        seq = ip.PvlSequence()
+        seq.add_array("(a,b,c)")
+        seq.add_array("(d,e,f)")
+        self.assertEqual(seq.size(), 2)
+
+        seq.clear()
+        self.assertEqual(seq.size(), 0)
+        self.assertEqual(len(seq), 0)
+
 
 if __name__ == "__main__":
     unittest.main()

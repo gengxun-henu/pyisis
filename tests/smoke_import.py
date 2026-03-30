@@ -145,6 +145,7 @@ def test_basic_symbols_present():
     assert hasattr(ip, "JP2Error")
     assert hasattr(ip, "JP2Decoder")
     assert hasattr(ip, "JP2Encoder")
+    assert hasattr(ip, "LineEquation")
     assert hasattr(ip, "PixelType")
     assert hasattr(ip, "ByteOrder")
     assert hasattr(ip, "Buffer")

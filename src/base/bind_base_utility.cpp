@@ -11,6 +11,7 @@
  * Binding author: Geng Xun
  * Created: 2026-03-24
  * Updated: 2026-03-30
+ * Purpose: Expose Column, LineEquation and related utility classes to Python via pybind11.
  * Purpose: Expose Column, LineEquation, and related utility classes to Python via pybind11.
  */
 
@@ -91,6 +92,12 @@ void bind_base_utility(py::module_ &m) {
 
   /**
    * @brief Bindings for the Isis::LineEquation class
+   * Added: 2026-03-30 - expose LineEquation utility class
+   *
+   * LineEquation provides functionality for creating and using cartesian line equations.
+   * Note: The upstream ISIS header has inline methods (Defined, Points, HaveSlope, HaveIntercept)
+   * that are not marked const, requiring const_cast workarounds in __repr__.
+   *
    *
    * Source ISIS header: isis/src/base/objs/LineEquation/LineEquation.h
    * Source class: LineEquation
@@ -107,14 +114,14 @@ void bind_base_utility(py::module_ &m) {
    */
   py::class_<Isis::LineEquation>(m, "LineEquation")
       .def(py::init<>(),
-           "Construct an empty LineEquation object")
+           "Default constructor - creates an undefined line equation")
       .def(py::init<double, double, double, double>(),
            py::arg("x1"), py::arg("y1"), py::arg("x2"), py::arg("y2"),
-           "Construct a LineEquation from two points (x1,y1) and (x2,y2)")
+           "Construct a line equation from two points")
       .def("add_point",
            &Isis::LineEquation::AddPoint,
            py::arg("x"), py::arg("y"),
-           "Add a point to the line equation. Line is defined after 2 points are added")
+           "Add a point to the line equation (max 2 points)")
       .def("slope",
            &Isis::LineEquation::Slope,
            "Compute and return the slope of the line")
@@ -126,6 +133,27 @@ void bind_base_utility(py::module_ &m) {
            "Return the number of points added to the line equation")
       .def("have_slope",
            &Isis::LineEquation::HaveSlope,
+           "Check if the slope has been computed")
+      .def("have_intercept",
+           &Isis::LineEquation::HaveIntercept,
+           "Check if the intercept has been computed")
+      .def("defined",
+           &Isis::LineEquation::Defined,
+           "Check if the line equation is defined (has 2 points)")
+      .def("__repr__", [](Isis::LineEquation &self) {
+        // Note: Using non-const reference because upstream methods are not const
+        std::string repr = "LineEquation(";
+        if (self.Defined()) {
+          repr += "defined=True, ";
+          repr += "points=" + std::to_string(self.Points());
+          if (self.HaveSlope()) {
+            repr += ", slope=" + std::to_string(self.Slope());
+          }
+          if (self.HaveIntercept()) {
+            repr += ", intercept=" + std::to_string(self.Intercept());
+          }
+        } else {
+          repr += "defined=False, points=" + std::to_string(self.Points());
            "Return whether the slope has been computed")
       .def("have_intercept",
            &Isis::LineEquation::HaveIntercept,

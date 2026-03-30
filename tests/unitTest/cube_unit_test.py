@@ -115,9 +115,10 @@ class CubeConstructionAndLifecycleTest(unittest.TestCase):
                 bands=1,
                 labels_attached=False,
             )
-            self.addCleanup(close_cube_quietly, cube)
 
             self.assertFalse(cube.labels_attached())
+
+            cube.close()
 
 
 class CubeMetadataAndLabelTest(unittest.TestCase):

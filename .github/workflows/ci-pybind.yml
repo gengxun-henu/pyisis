@@ -50,7 +50,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
@@ -138,7 +137,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix

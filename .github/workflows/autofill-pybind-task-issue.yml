@@ -23,7 +23,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 1
-          lfs: true
 
       - name: Build autofill suggestion payload
         id: build-payload

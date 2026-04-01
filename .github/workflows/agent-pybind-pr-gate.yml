@@ -34,7 +34,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true
 
       - name: Summarize changed files
         id: diff
@@ -104,7 +103,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
@@ -157,7 +155,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          lfs: true
 
       - name: Audit progress/export metadata changes
         shell: bash

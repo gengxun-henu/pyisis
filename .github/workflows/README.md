@@ -68,10 +68,20 @@ Purpose:
 - dispatch the task workflow with attempt `1`
 - switch the issue from `ready-for-agent` to `agent-active`
 
+## `autofill-pybind-task-issue.yml`
+
+Use this as the issue-form helper before dispatch.
+
+Purpose:
+- let a human open a `pybind-task` issue with only the target class filled in
+- infer suggested scope, local context, expected changes, validation steps, and unit-test target from local inventory files
+- update blank issue-form sections in place so the issue is easier to review before adding `ready-for-agent`
+
 Characteristics:
-- triggered by the `issues` event when the `ready-for-agent` label is added
-- only acts on open issues that also have the `pybind-task` label
-- leaves malformed issues in human-review state instead of silently dispatching a bad run
+- triggered by `issues` on open, edit, or reopen
+- only acts on issues that already have the `pybind-task` label
+- fills blank sections only, so manual edits are preserved on later updates
+- can suggest a default issue title like `[pybind] Cube` when the title is left at the template stub
 
 ## How they should work together
 

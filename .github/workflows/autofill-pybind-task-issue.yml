@@ -1,0 +1,309 @@
+name: autofill-pybind-task-issue
+
+on:
+  issues:
+    types:
+      - opened
+      - edited
+      - reopened
+
+concurrency:
+  group: autofill-pybind-task-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  autofill:
+    if: contains(github.event.issue.labels.*.name, 'pybind-task')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          lfs: true
+
+      - name: Build autofill suggestion payload
+        id: build-payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import csv
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          event = json.loads(Path(os.environ["GITHUB_EVENT_PATH"]).read_text(encoding="utf-8"))
+          issue = event["issue"]
+          body = issue.get("body") or ""
+          original_title = (issue.get("title") or "").strip()
+
+          def escape_regex(value: str) -> str:
+              return re.escape(value)
+
+          def normalize_value(value: str) -> str:
+              normalized = (value or "").replace("\r", "").strip()
+              if not normalized or normalized == "_No response_":
+                  return ""
+              return normalized
+
+          def extract_section(text: str, heading: str) -> str:
+              pattern = re.compile(
+                  rf"(?:^|\n)### {escape_regex(heading)}\s*\n([\s\S]*?)(?=\n### |$)",
+                  re.M,
+              )
+              match = pattern.search(text)
+              return normalize_value(match.group(1) if match else "")
+
+          def replace_section(text: str, heading: str, new_value: str) -> tuple[str, bool]:
+              pattern = re.compile(
+                  rf"((?:^|\n)### {escape_regex(heading)}\s*\n)([\s\S]*?)(?=\n### |$)",
+                  re.M,
+              )
+              match = pattern.search(text)
+              if not match:
+                  return text, False
+
+              current = normalize_value(match.group(2))
+              if current:
+                  return text, False
+
+              replacement = match.group(1) + new_value.strip() + "\n"
+              return text[:match.start()] + replacement + text[match.end():], True
+
+          def camel_to_snake(name: str) -> str:
+              s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", name)
+              s2 = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1)
+              return s2.replace("__", "_").lower()
+
+          target_class = extract_section(body, "Target upstream class")
+          if not target_class:
+              payload = {
+                  "changed": False,
+                  "title": original_title,
+                  "body": body,
+                  "filled_sections": [],
+                  "comment": "",
+              }
+              Path("autofill-payload.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+              raise SystemExit(0)
+
+          summary_path = Path("class_bind_methods_details/methods_inventory_summary.csv")
+          if not summary_path.exists():
+              raise SystemExit(f"Missing inventory summary: {summary_path}")
+
+          module_test_map = {
+              "Control Networks": "tests/unitTest/control_core_unit_test.py",
+              "Geometry": "tests/unitTest/geometry_unit_test.py",
+              "High Level Cube I/O": "tests/unitTest/high_level_cube_io_unit_test.py",
+              "Low Level Cube I/O": "tests/unitTest/low_level_cube_io_unit_test.py",
+              "Map Projection": "tests/unitTest/projection_unit_test.py",
+              "Math": "tests/unitTest/math_unit_test.py",
+              "Parsing": "tests/unitTest/pvl_unit_test.py",
+              "Pattern Matching": "tests/unitTest/pattern_unit_test.py",
+              "Spice, Instruments, and Cameras": "tests/unitTest/camera_unit_test.py",
+              "Statistics": "tests/unitTest/statistics_unit_test.py",
+              "Utility": "tests/unitTest/utility_unit_test.py",
+          }
+          class_test_overrides = {
+              "Cube": "tests/unitTest/cube_unit_test.py",
+              "Distance": "tests/unitTest/distance_unit_test.py",
+              "Latitude": "tests/unitTest/latitude_unit_test.py",
+              "Longitude": "tests/unitTest/longitude_unit_test.py",
+              "UniversalGroundMap": "tests/unitTest/universal_ground_map_unit_test.py",
+              "InterestOperatorFactory": "tests/unitTest/interest_operator_unit_test.py",
+              "SerialNumberList": "tests/unitTest/serial_number_unit_test.py",
+              "SerialNumber": "tests/unitTest/serial_number_unit_test.py",
+              "ObservationNumber": "tests/unitTest/serial_number_unit_test.py",
+              "CameraDetectorMap": "tests/unitTest/camera_maps_unit_test.py",
+              "CameraDistortionMap": "tests/unitTest/camera_maps_unit_test.py",
+              "CameraFocalPlaneMap": "tests/unitTest/camera_maps_unit_test.py",
+              "CameraGroundMap": "tests/unitTest/camera_maps_unit_test.py",
+              "CameraSkyMap": "tests/unitTest/camera_maps_unit_test.py",
+              "SurfacePoint": "tests/unitTest/surface_point_unit_test.py",
+              "Displacement": "tests/unitTest/displacement_unit_test.py",
+          }
+
+          rows = []
+          with summary_path.open(newline="", encoding="utf-8") as handle:
+              reader = csv.DictReader(handle)
+              for row in reader:
+                  class_name = (row.get("Class") or "").strip()
+                  if class_name == target_class:
+                      rows.append(row)
+
+          module_category = ""
+          detail_csv = ""
+          binding_file = ""
+          source_path = ""
+          todo_status = ""
+          open_items = ""
+
+          if len(rows) == 1:
+              row = rows[0]
+              module_category = (row.get("Module Category") or "").strip()
+              generated_csv = (row.get("Generated CSV") or "").strip()
+              detail_csv = f"class_bind_methods_details/{generated_csv}" if generated_csv else ""
+              binding_file = (row.get("Binding") or "").strip()
+              if binding_file in {"", "N/A"}:
+                  binding_file = ""
+              source_path = (row.get("Source") or "").strip()
+              todo_status = (row.get("Todo Status") or "").strip()
+              open_items = (row.get("Open Items") or "").strip()
+
+          default_test = class_test_overrides.get(target_class)
+          if not default_test:
+              snake_file = Path("tests/unitTest") / f"{camel_to_snake(target_class)}_unit_test.py"
+              if snake_file.exists():
+                  default_test = str(snake_file)
+              else:
+                  default_test = module_test_map.get(module_category, "")
+
+          unit_test_target = extract_section(body, "Unit test target (optional)")
+          if not unit_test_target and default_test.endswith(".py"):
+              unit_test_target = default_test[:-3].replace("/", ".")
+
+          ref_root = Path("reference/upstream_isis")
+          upstream_candidates = []
+          seen_upstream = set()
+
+          def add_candidate(path: Path):
+              rel = str(path).replace('\\', '/')
+              if rel not in seen_upstream:
+                  seen_upstream.add(rel)
+                  upstream_candidates.append(rel)
+
+          if ref_root.exists():
+              for pattern in (f"{target_class}.h", f"{target_class}.cpp"):
+                  for path in sorted(ref_root.rglob(pattern))[:5]:
+                      add_candidate(path)
+                      for parent in [path.parent, path.parent.parent if path.parent.parent != path.parent else path.parent]:
+                          unit_test = parent / "unitTest.cpp"
+                          if unit_test.exists():
+                              add_candidate(unit_test)
+              if not upstream_candidates:
+                  for path in sorted(ref_root.rglob(f"*{target_class}*"))[:5]:
+                      if path.is_file():
+                          add_candidate(path)
+
+          progress_expected = bool(todo_status != "已转换" or open_items not in {"", "0"})
+
+          def bullet(items: list[str]) -> str:
+              return "\n".join(f"- {item}" for item in items if item)
+
+          if len(rows) > 1:
+              scope_text = (
+                  f"Ambiguous class name detected for `{target_class}` across multiple module categories. "
+                  "Narrow this issue to one module category before adding `ready-for-agent`."
+              )
+          elif detail_csv:
+              open_items_text = open_items or "unknown"
+              scope_text = (
+                  f"Start with `{target_class}` only. Use `{detail_csv}` as the primary inventory source and keep the task narrowed "
+                  f"to one method cluster or one bug fix. Current inventory status: `{todo_status or 'unknown'}`, open items: `{open_items_text}`."
+              )
+          else:
+              scope_text = (
+                  f"Start with `{target_class}` only and narrow the issue to one method cluster or one bug fix after checking local inventory files."
+              )
+
+          local_context_items = [
+              "todo_pybind11.csv",
+              "class_bind_methods_details/methods_inventory_summary.csv",
+                            detail_csv,
+                            binding_file,
+                            default_test,
+                            "python/isis_pybind/__init__.py",
+                            "pybind_progress_log.md" if progress_expected else "",
+                    ]
+
+                    expected_change_items = [
+                            binding_file or "src/...",
+                            default_test or "tests/unitTest/..._unit_test.py",
+                            "python/isis_pybind/__init__.py",
+                            "pybind_progress_log.md" if progress_expected else "",
+                            "todo_pybind11.csv" if progress_expected else "",
+                    ]
+
+                    validation_steps = [
+                            "1. Build extension",
+                            f"2. Run `{default_test}`" if default_test else "2. Run the smallest relevant `python-unit-tests` target",
+                            "3. Run `tests/smoke_import.py`",
+                    ]
+
+                    section_suggestions = {
+                            "Task scope": scope_text,
+                            "Upstream source paths": bullet(upstream_candidates) or "- reference/upstream_isis/... (auto-search did not find a unique upstream path; fill manually)",
+                            "Local repository files to inspect first": bullet(local_context_items),
+                            "Expected file changes": bullet(expected_change_items),
+                            "Minimal validation plan": "\n".join(validation_steps),
+                            "Unit test target (optional)": unit_test_target or "tests.unitTest.... (auto-resolve if needed)",
+                            "Priority": "medium",
+                    }
+
+                    updated_body = body
+                    filled_sections = []
+                    for heading, suggestion in section_suggestions.items():
+                            updated_body, changed = replace_section(updated_body, heading, suggestion)
+                            if changed:
+                                    filled_sections.append(heading)
+
+                    updated_title = original_title
+                    if original_title.strip() == "[pybind]":
+                            updated_title = f"[pybind] {target_class}"
+
+                    changed = (updated_body != body) or (updated_title != original_title)
+
+                    comment = ""
+                    if changed and filled_sections:
+                            lines = [
+                                    "Autofill suggestions were added from local pybind inventory metadata.",
+                                    "",
+                                    f"- Target class: `{target_class}`",
+                                    f"- Filled sections: {', '.join(f'`{item}`' for item in filled_sections)}",
+                                    "",
+                                    "Please review the suggestions before adding `ready-for-agent`, especially if the class name is ambiguous or the upstream path guess looks too broad.",
+                            ]
+                            comment = "\n".join(lines)
+
+                    payload = {
+                            "changed": changed,
+                            "title": updated_title,
+                            "body": updated_body,
+                            "filled_sections": filled_sections,
+                            "comment": comment,
+                    }
+                    Path("autofill-payload.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                    PY
+
+            - name: Update issue body with autofill suggestions
+                uses: actions/github-script@v7
+                with:
+                    script: |
+                        const fs = require('fs');
+                        const payload = JSON.parse(fs.readFileSync('autofill-payload.json', 'utf8'));
+                        if (!payload.changed) {
+                            core.info('No autofill changes required.');
+                            return;
+                        }
+
+                        await github.rest.issues.update({
+                            owner: context.repo.owner,
+                            repo: context.repo.repo,
+                            issue_number: context.payload.issue.number,
+                            title: payload.title,
+                            body: payload.body,
+                        });
+
+                        if (payload.comment) {
+                            await github.rest.issues.createComment({
+                                owner: context.repo.owner,
+                                repo: context.repo.repo,
+                                issue_number: context.payload.issue.number,
+                                body: payload.comment,
+                            });
+                        }

@@ -19,6 +19,11 @@ body:
         - automated repair budget = 5 attempts maximum
         - if attempt 5 still fails, write blocker summary, label it, and stop this task
 
+        Minimal fast-path:
+        - you may submit this form with only the target class filled in
+        - the repository automation will try to infer the remaining context from local inventory files
+        - if the inference is incomplete or ambiguous, edit the suggested sections manually before adding `ready-for-agent`
+
   - type: input
     id: target_class
     attributes:
@@ -32,71 +37,61 @@ body:
     id: target_scope
     attributes:
       label: Task scope
-      description: Describe the exact method cluster or bug-fix scope. Keep it narrow.
+      description: Describe the exact method cluster or bug-fix scope. Keep it narrow. You may leave this blank and let automation suggest a first draft.
       placeholder: |
         Only handle these methods:
         - set_base_multiplier
         - base
         - multiplier
-    validations:
-      required: true
 
   - type: textarea
     id: upstream_paths
     attributes:
       label: Upstream source paths
-      description: Use repository-relative paths under reference/upstream_isis.
+      description: Use repository-relative paths under reference/upstream_isis. You may leave this blank for auto-suggestions.
       placeholder: |
         reference/upstream_isis/.../Cube.h
         reference/upstream_isis/.../Cube.cpp
         reference/upstream_isis/.../Cube/unitTest.cpp
-    validations:
-      required: true
 
   - type: textarea
     id: local_context
     attributes:
       label: Local repository files to inspect first
-      description: List the local inventory, binding, and test files that should be read first.
+      description: List the local inventory, binding, and test files that should be read first. You may leave this blank for auto-suggestions.
       placeholder: |
         todo_pybind11.csv
         class_bind_methods_details/methods_inventory_summary.csv
         class_bind_methods_details/base_cube_methods.csv
         src/...
         tests/unitTest/...
-    validations:
-      required: true
 
   - type: textarea
     id: expected_changes
     attributes:
       label: Expected file changes
-      description: List the files likely to change for binding, tests, exports, and progress tracking.
+      description: List the files likely to change for binding, tests, exports, and progress tracking. You may leave this blank for auto-suggestions.
       placeholder: |
         src/...
         tests/unitTest/..._unit_test.py
         python/isis_pybind/__init__.py
         pybind_progress_log.md
-    validations:
-      required: true
 
   - type: textarea
     id: minimal_validation
     attributes:
       label: Minimal validation plan
-      description: Specify the smallest build/test/smoke path that should be run.
+      description: Specify the smallest build/test/smoke path that should be run. You may leave this blank for auto-suggestions.
       placeholder: |
         1. Build extension
         2. Run the targeted unit test file
         3. Run tests/smoke_import.py
-    validations:
-      required: true
 
   - type: input
     id: unit_test_target
     attributes:
       label: Unit test target (optional)
-      description: Optional unittest module or test case path used by the automated dispatch workflow.
+      description: Optional unittest module or test case path used by the automated dispatch workflow. Leave blank to let automation suggest one.
       placeholder: tests.unitTest.cube_unit_test or cube_unit_test.CubeBaseMultiplierTest
     validations:
       required: false
@@ -107,15 +102,10 @@ body:
       label: Definition of done
       options:
         - label: Only one upstream class or one related method cluster is in scope
-          required: true
         - label: The task includes the smallest relevant unit test update
-          required: true
         - label: The task must pass build + unit + smoke before completion
-          required: true
         - label: Progress and inventory files must be updated if the binding surface changed
-          required: true
         - label: If automated repair reaches 5 failed attempts, this task must be marked blocked and stopped
-          required: true
 
   - type: textarea
     id: blocker_template
@@ -133,9 +123,8 @@ body:
     id: priority
     attributes:
       label: Priority
+      description: Optional initial priority. Leave blank if you want the autofill workflow to set a default suggestion.
       options:
         - high
         - medium
         - low
-    validations:
-      required: true

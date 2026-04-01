@@ -12,11 +12,13 @@
  *   - isis/src/base/objs/InfixToPostfix/InfixToPostfix.h
  *   - isis/src/base/objs/CubeInfixToPostfix/CubeInfixToPostfix.h
  *   - isis/src/base/objs/InlineInfixToPostfix/InlineInfixToPostfix.h
+ *   - isis/src/base/objs/NthOrderPolynomial/NthOrderPolynomial.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Updated: 2026-03-26
+ * Updated: 2026-03-29
  * Purpose: Expose Calculator, Affine, BasisFunction, InfixToPostfix,
- *          CubeInfixToPostfix, and InlineInfixToPostfix classes to Python via pybind11.
+ *          CubeInfixToPostfix, InlineInfixToPostfix, and NthOrderPolynomial
+ *          classes to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
@@ -33,6 +35,7 @@
 #include "Matrix.h"
 #include "PolynomialUnivariate.h"
 #include "PolynomialBivariate.h"
+#include "NthOrderPolynomial.h"
 #include "Buffer.h"
 #include "helpers.h"
 
@@ -306,6 +309,25 @@ void bind_base_math(py::module_ &m)
          .def("expand", &Isis::PolynomialBivariate::Expand, py::arg("vars"), "Expand the polynomial with variables")
          .def("__repr__", [](const Isis::PolynomialBivariate &self)
               { return "PolynomialBivariate(degree=" + std::to_string((int)sqrt(self.Coefficients()) - 1) + ")"; });
+
+     // Added: 2026-03-29 - expose NthOrderPolynomial (inherits BasisFunction, 2-variable nth-degree)
+
+     /**
+      * @brief Bindings for the Isis::NthOrderPolynomial class
+      * NthOrderPolynomial creates an nth order polynomial basis function with 2 variables.
+      * Expand computes pow(t1, i) - pow(t2, i) terms for i from degree down to 1.
+      * Inherits from BasisFunction.
+      * Source header author(s): not explicitly stated in upstream header
+      * @see Isis::NthOrderPolynomial
+      */
+     py::class_<Isis::NthOrderPolynomial, Isis::BasisFunction>(m, "NthOrderPolynomial")
+         .def(py::init<int>(), py::arg("degree"),
+              "Construct an NthOrderPolynomial of the specified degree (2 variables, degree coefficients)")
+         .def("expand", &Isis::NthOrderPolynomial::Expand, py::arg("vars"),
+              "Expand the polynomial with a 2-element variable vector")
+         .def("__repr__", [](const Isis::NthOrderPolynomial &self)
+              { return "NthOrderPolynomial(variables=" + std::to_string(self.Variables()) +
+                       ", coefficients=" + std::to_string(self.Coefficients()) + ")"; });
 
      // Added: 2026-03-26 - expose InfixToPostfix expression conversion classes
 

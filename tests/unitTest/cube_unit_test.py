@@ -106,10 +106,22 @@ class CubeConstructionAndLifecycleTest(unittest.TestCase):
             self.assertAlmostEqual(cube.multiplier(), 2.5, places=10)
 
     def test_detached_labels_configuration_sets_precreate_flag(self):
-        cube = ip.Cube()
-        cube.set_labels_attached(False)
+        with temporary_directory() as temp_dir:
+            cube, cube_path = make_test_cube(
+                temp_dir,
+                name="detached.cub",
+                samples=2,
+                lines=2,
+                bands=1,
+                labels_attached=False,
+            )
 
-        self.assertFalse(cube.labels_attached())
+            self.assertFalse(cube.labels_attached())
+
+            cube.close()
+
+        # Explicitly close to ensure clean destructor behavior
+        cube.close()
 
 
 class CubeMetadataAndLabelTest(unittest.TestCase):

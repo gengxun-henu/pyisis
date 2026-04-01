@@ -1,5 +1,45 @@
 # Pybind Progress Log
 
+## 2026-03-30
+
+- PvlSequence binding completion:
+  - Added `Isis::PvlSequence` binding in `src/base/bind_base_pvl.cpp` (lines 306-382).
+  - Added `#include "PvlSequence.h"` to `src/base/bind_base_pvl.cpp`.
+  - Constructor binding: `PvlSequence()` default constructor exposed.
+  - Core methods bound:
+    - `size()` - get number of arrays in the sequence
+    - `clear()` - clear all arrays from the sequence
+    - `__len__` - Python len() support (alias to size())
+    - `__getitem__` - 2D array indexing with QString to string conversion
+    - `__repr__` - Python repr() support showing size
+  - Assignment and addition methods bound:
+    - `assign_from_keyword(keyword)` - assign sequence from PvlKeyword (wraps operator=)
+    - `add_array(array)` - add string array like "(a,b,c)" (wraps operator+=)
+    - `add_string_vector(values)` - add list of strings as array (wraps operator+=)
+    - `add_int_vector(values)` - add list of integers as array (wraps operator+=)
+    - `add_double_vector(values)` - add list of doubles as array (wraps operator+=)
+  - Re-exported `PvlSequence` from `python/isis_pybind/__init__.py`.
+  - Added comprehensive unit tests in `tests/unitTest/pvl_unit_test.py`:
+    - `test_pvl_sequence_construction()` - construction and basic properties
+    - `test_pvl_sequence_clear()` - clearing empty sequence is safe
+    - `test_pvl_sequence_add_string_array()` - adding arrays using string notation
+    - `test_pvl_sequence_add_vector_types()` - adding string/int/double vectors
+    - `test_pvl_sequence_indexing()` - 2D array access and element retrieval
+    - `test_pvl_sequence_from_keyword()` - assignment from PvlKeyword
+    - `test_pvl_sequence_clear_after_adding()` - clearing populated sequence
+  - Updated `class_bind_methods_details/base_pvl_sequence_methods.csv` to mark all 10 methods as converted (Y).
+  - Updated `todo_pybind11.csv` to mark `Parsing,PvlSequence` as `已转换`.
+- Implementation notes:
+  - Binding follows existing PVL class patterns (PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl).
+  - All QString conversions use existing helpers (qStringToStdString, stdStringToQString, qStringVectorToStdVector, stdVectorToQStringVector).
+  - Operator overloads mapped to explicit Python methods for clarity.
+  - 2D array structure accessed via __getitem__ returns Python list of strings.
+  - Comprehensive file header metadata following repository conventions.
+- Validation status:
+  - Code changes committed; compilation and runtime validation pending asp360_new environment with ISIS libraries.
+  - Manual code review confirms correct pybind11 patterns and helper usage.
+  - Test structure follows existing repository test patterns.
+
 ## 2026-03-29
 
 - BoxcarManager binding completion:
@@ -194,3 +234,28 @@
 - Known blockers:
   - `Calculator::Minimum2` and `Calculator::Maximum2` remain intentionally unbound because they are declared in `Calculator.h` but not implemented in the upstream ISIS `Calculator.cpp`.
   - `Affine` still does not expose the static identity-matrix helper or forward/inverse matrix accessors; these remain inventory gaps, not regressions from this task.
+
+- NthOrderPolynomial binding progress:
+  - Added `Isis::NthOrderPolynomial` binding in `src/base/bind_base_math.cpp`.
+  - Inherits from `BasisFunction` with `py::class_<Isis::NthOrderPolynomial, Isis::BasisFunction>`.
+  - Constructor: `NthOrderPolynomial(degree)` — creates a 2-variable polynomial with `degree` coefficients.
+  - Override: `expand(vars)` — computes `pow(t1, i) - pow(t2, i)` terms for i from degree down to 1.
+  - Re-exported `NthOrderPolynomial` from `python/isis_pybind/__init__.py`.
+  - Added smoke check in `tests/smoke_import.py`.
+  - Added focused unit tests in `tests/unitTest/math_unit_test.py`:
+    - construction with various degrees (1, 3, 6)
+    - variables/coefficients consistency
+    - isinstance(poly, BasisFunction) check
+    - name() returns "NthOrderPolynomial"
+    - expand + evaluate matches upstream unit test expectations
+    - individual term access after expand
+    - wrong variable count raises exception
+    - __repr__ formatting
+- Tracking sync:
+  - Updated `todo_pybind11.csv` to mark `Math,NthOrderPolynomial` as `已转换`.
+  - Updated `class_bind_methods_details/base_nth_order_polynomial_methods.csv` to mark all 3 items as converted.
+  - Updated `class_bind_methods_details/methods_inventory_summary.csv` to reflect 100% conversion.
+- Validation status:
+  - Build environment not available in sandbox; requires CI validation with `asp360_new` interpreter.
+- Known blockers:
+  - None. NthOrderPolynomial is a pure math class with no external dependencies.

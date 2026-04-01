@@ -1,5 +1,4 @@
 build/
-class_bind_methods_details/
 doc_development_process/
 doc_pybind11_learning/
 *.pyc

@@ -30,9 +30,52 @@ jobs:
     outputs:
       changed_tests: ${{ steps.diff.outputs.changed_tests }}
     steps:
+      - name: Configure GitHub SSH transport
+        shell: bash
+        env:
+          ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ACTIONS_CHECKOUT_SSH_KEY:-}" ]; then
+            echo "::error::Missing secret ACTIONS_CHECKOUT_SSH_KEY. This workflow requires SSH checkout via ssh.github.com:443."
+            exit 1
+          fi
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          python3 - <<'PY'
+          from pathlib import Path
+
+          config_path = Path.home() / ".ssh" / "config"
+          begin_marker = "# BEGIN github-actions github ssh\n"
+          end_marker = "# END github-actions github ssh\n"
+          managed_block = (
+              begin_marker
+              + "Host github.com\n"
+              + "  HostName ssh.github.com\n"
+              + "  Port 443\n"
+              + "  User git\n"
+              + "  IdentitiesOnly yes\n"
+              + "  StrictHostKeyChecking no\n"
+              + end_marker
+          )
+
+          existing = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
+          while begin_marker in existing and end_marker in existing:
+              start = existing.index(begin_marker)
+              end = existing.index(end_marker, start) + len(end_marker)
+              existing = existing[:start] + existing[end:]
+          existing = existing.lstrip("\n")
+          updated = managed_block if not existing else managed_block + "\n" + existing
+          config_path.write_text(updated, encoding="utf-8")
+          PY
+          chmod 600 "$HOME/.ssh/config"
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
+          ssh-strict: false
+          persist-credentials: true
           fetch-depth: 0
 
       - name: Summarize changed files
@@ -75,6 +118,7 @@ jobs:
     name: Build and smoke gate
     needs: prepare
     uses: ./.github/workflows/reusable-pybind-build.yml
+    secrets: inherit
     with:
       artifact-prefix: pr-gate
       fallback-conda-prefix: /home/gengxun/miniconda3/envs/asp360_new
@@ -99,9 +143,52 @@ jobs:
       FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
       CHANGED_TESTS: ${{ needs.prepare.outputs.changed_tests }}
     steps:
+      - name: Configure GitHub SSH transport
+        shell: bash
+        env:
+          ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ACTIONS_CHECKOUT_SSH_KEY:-}" ]; then
+            echo "::error::Missing secret ACTIONS_CHECKOUT_SSH_KEY. This workflow requires SSH checkout via ssh.github.com:443."
+            exit 1
+          fi
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          python3 - <<'PY'
+          from pathlib import Path
+
+          config_path = Path.home() / ".ssh" / "config"
+          begin_marker = "# BEGIN github-actions github ssh\n"
+          end_marker = "# END github-actions github ssh\n"
+          managed_block = (
+              begin_marker
+              + "Host github.com\n"
+              + "  HostName ssh.github.com\n"
+              + "  Port 443\n"
+              + "  User git\n"
+              + "  IdentitiesOnly yes\n"
+              + "  StrictHostKeyChecking no\n"
+              + end_marker
+          )
+
+          existing = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
+          while begin_marker in existing and end_marker in existing:
+              start = existing.index(begin_marker)
+              end = existing.index(end_marker, start) + len(end_marker)
+              existing = existing[:start] + existing[end:]
+          existing = existing.lstrip("\n")
+          updated = managed_block if not existing else managed_block + "\n" + existing
+          config_path.write_text(updated, encoding="utf-8")
+          PY
+          chmod 600 "$HOME/.ssh/config"
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
+          ssh-strict: false
+          persist-credentials: true
           fetch-depth: 0
 
       - name: Resolve conda-backed ISIS prefix
@@ -151,9 +238,52 @@ jobs:
     permissions:
       contents: read
     steps:
+      - name: Configure GitHub SSH transport
+        shell: bash
+        env:
+          ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "${ACTIONS_CHECKOUT_SSH_KEY:-}" ]; then
+            echo "::error::Missing secret ACTIONS_CHECKOUT_SSH_KEY. This workflow requires SSH checkout via ssh.github.com:443."
+            exit 1
+          fi
+          mkdir -p "$HOME/.ssh"
+          chmod 700 "$HOME/.ssh"
+          python3 - <<'PY'
+          from pathlib import Path
+
+          config_path = Path.home() / ".ssh" / "config"
+          begin_marker = "# BEGIN github-actions github ssh\n"
+          end_marker = "# END github-actions github ssh\n"
+          managed_block = (
+              begin_marker
+              + "Host github.com\n"
+              + "  HostName ssh.github.com\n"
+              + "  Port 443\n"
+              + "  User git\n"
+              + "  IdentitiesOnly yes\n"
+              + "  StrictHostKeyChecking no\n"
+              + end_marker
+          )
+
+          existing = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
+          while begin_marker in existing and end_marker in existing:
+              start = existing.index(begin_marker)
+              end = existing.index(end_marker, start) + len(end_marker)
+              existing = existing[:start] + existing[end:]
+          existing = existing.lstrip("\n")
+          updated = managed_block if not existing else managed_block + "\n" + existing
+          config_path.write_text(updated, encoding="utf-8")
+          PY
+          chmod 600 "$HOME/.ssh/config"
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
+          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
+          ssh-strict: false
+          persist-credentials: true
           fetch-depth: 0
 
       - name: Audit progress/export metadata changes

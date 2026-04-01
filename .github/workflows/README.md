@@ -2,6 +2,20 @@
 
 This directory currently contains several workflow roles.
 
+## Shared checkout rule
+
+All workflows that clone this repository are expected to force SSH checkout through `ssh.github.com:443`.
+
+Required repository or organization secret:
+
+- `ACTIONS_CHECKOUT_SSH_KEY`: private SSH key with read access to this repository
+
+Implementation notes:
+
+- each workflow configures `~/.ssh/config` so `github.com` is routed to `ssh.github.com` on port `443`
+- each `actions/checkout@v4` step passes `ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}` to avoid fallback to HTTPS
+- reusable workflows must receive the secret via `secrets: inherit` or an explicit secret mapping from the caller
+
 ## `ci-pybind.yml`
 
 Use this as the repository-level baseline CI.

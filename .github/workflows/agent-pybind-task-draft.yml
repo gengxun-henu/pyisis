@@ -1,6 +1,12 @@
-name: agent-pybind-task-draft
+# Deprecated legacy fallback workflow.
+# Replaced by:
+# - .github/workflows/agent-pybind-task.yml
+# - .github/workflows/agent-pybind-pr-gate.yml
+# Keep this file only as a short-term rollback reference while the new split workflows stabilize.
+name: agent-pybind-task-draft (deprecated legacy)
 
 on:
+  # Legacy manual-only entry point retained temporarily for rollback and comparison.
   workflow_dispatch:
     inputs:
       issue_number:
@@ -27,7 +33,7 @@ on:
         default: true
         type: boolean
 
-  # Enable this once you are ready to gate agent PRs automatically.
+  # Deprecated: PR gating now lives in .github/workflows/agent-pybind-pr-gate.yml.
   # pull_request:
   #   paths:
   #     - .github/workflows/agent-pybind-task-draft.yml

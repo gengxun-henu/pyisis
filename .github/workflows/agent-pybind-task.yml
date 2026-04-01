@@ -1,0 +1,630 @@
+name: agent-pybind-task
+
+on:
+  workflow_dispatch:
+    inputs:
+      target_class:
+        description: "One upstream ISIS class name, for example BoxcarManager"
+        required: true
+        type: string
+      issue_number:
+        description: "Optional GitHub issue number for this task"
+        required: false
+        default: ""
+        type: string
+      attempt:
+        description: "Automated repair attempt number (1-5)"
+        required: false
+        default: "1"
+        type: string
+      unit_test_target_override:
+        description: "Optional unittest target override, for example tests/unitTest/cube_unit_test.py or cube_unit_test.CubeBaseMultiplierTest"
+        required: false
+        default: ""
+        type: string
+
+concurrency:
+  group: agent-pybind-task-${{ github.ref }}-${{ inputs.target_class }}-${{ inputs.issue_number || 'manual' }}
+  cancel-in-progress: true
+
+jobs:
+  budget-guard:
+    name: Budget guard
+    runs-on: self-hosted
+    steps:
+      - name: Validate retry budget
+        shell: bash
+        run: |
+          set -euo pipefail
+          attempt="${{ inputs.attempt }}"
+          if ! [[ "$attempt" =~ ^[0-9]+$ ]]; then
+            echo "attempt must be an integer" >&2
+            exit 1
+          fi
+          if [ "$attempt" -lt 1 ] || [ "$attempt" -gt 5 ]; then
+            echo "attempt must be between 1 and 5" >&2
+            exit 1
+          fi
+          echo "Attempt $attempt / 5 accepted"
+
+  resolve-task:
+    name: Resolve task context
+    runs-on: self-hosted
+    needs: budget-guard
+    outputs:
+      target_class: ${{ steps.resolve.outputs.target_class }}
+      module_category: ${{ steps.resolve.outputs.module_category }}
+      detail_csv: ${{ steps.resolve.outputs.detail_csv }}
+      binding_file: ${{ steps.resolve.outputs.binding_file }}
+      source_path: ${{ steps.resolve.outputs.source_path }}
+      unit_test_file: ${{ steps.resolve.outputs.unit_test_file }}
+      progress_expected: ${{ steps.resolve.outputs.progress_expected }}
+      todo_status: ${{ steps.resolve.outputs.todo_status }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Resolve class metadata from local inventory
+        id: resolve
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import csv
+          import json
+          import os
+          import re
+          from pathlib import Path
+
+          target = "${{ inputs.target_class }}".strip()
+          override = "${{ inputs.unit_test_target_override }}".strip()
+          summary_path = Path("class_bind_methods_details/methods_inventory_summary.csv")
+          if not summary_path.exists():
+              raise SystemExit(f"::error::Missing inventory summary: {summary_path}")
+
+          def camel_to_snake(name: str) -> str:
+              s1 = re.sub(r"(.)([A-Z][a-z]+)", r"\1_\2", name)
+              s2 = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", s1)
+              return s2.replace("__", "_").lower()
+
+          module_test_map = {
+              "Control Networks": "tests/unitTest/control_core_unit_test.py",
+              "Geometry": "tests/unitTest/geometry_unit_test.py",
+              "High Level Cube I/O": "tests/unitTest/high_level_cube_io_unit_test.py",
+              "Low Level Cube I/O": "tests/unitTest/low_level_cube_io_unit_test.py",
+              "Map Projection": "tests/unitTest/projection_unit_test.py",
+              "Math": "tests/unitTest/math_unit_test.py",
+              "Parsing": "tests/unitTest/pvl_unit_test.py",
+              "Pattern Matching": "tests/unitTest/pattern_unit_test.py",
+              "Spice, Instruments, and Cameras": "tests/unitTest/camera_unit_test.py",
+              "Statistics": "tests/unitTest/statistics_unit_test.py",
+              "Utility": "tests/unitTest/utility_unit_test.py",
+          }
+          class_test_overrides = {
+              "Cube": "tests/unitTest/cube_unit_test.py",
+              "Distance": "tests/unitTest/distance_unit_test.py",
+              "Latitude": "tests/unitTest/latitude_unit_test.py",
+              "Longitude": "tests/unitTest/longitude_unit_test.py",
+              "UniversalGroundMap": "tests/unitTest/universal_ground_map_unit_test.py",
+              "InterestOperatorFactory": "tests/unitTest/interest_operator_unit_test.py",
+              "SerialNumberList": "tests/unitTest/serial_number_unit_test.py",
+              "SerialNumber": "tests/unitTest/serial_number_unit_test.py",
+              "ObservationNumber": "tests/unitTest/serial_number_unit_test.py",
+              "CameraDetectorMap": "tests/unitTest/camera_maps_unit_test.py",
+              "CameraDistortionMap": "tests/unitTest/camera_maps_unit_test.py",
+              "CameraFocalPlaneMap": "tests/unitTest/camera_maps_unit_test.py",
+              "CameraGroundMap": "tests/unitTest/camera_maps_unit_test.py",
+              "CameraSkyMap": "tests/unitTest/camera_maps_unit_test.py",
+              "SurfacePoint": "tests/unitTest/surface_point_unit_test.py",
+              "Displacement": "tests/unitTest/displacement_unit_test.py",
+          }
+
+          rows = []
+          with summary_path.open(newline="", encoding="utf-8") as handle:
+              reader = csv.DictReader(handle)
+              for row in reader:
+                  class_name = (row.get("Class") or "").strip()
+                  if class_name == target:
+                      rows.append(row)
+
+          if not rows:
+              raise SystemExit(f"::error::Class '{target}' was not found in {summary_path}")
+
+          if len(rows) > 1:
+              categories = ", ".join(sorted((row.get("Module Category") or "").strip() for row in rows))
+              raise SystemExit(
+                  f"::error::Class '{target}' is ambiguous across module categories: {categories}. "
+                  "Use a unique class name or extend the resolver mapping."
+              )
+
+          row = rows[0]
+          module_category = (row.get("Module Category") or "").strip()
+          generated_csv = (row.get("Generated CSV") or "").strip()
+          detail_csv = f"class_bind_methods_details/{generated_csv}" if generated_csv else ""
+          binding_file = (row.get("Binding") or "").strip()
+          source_path = (row.get("Source") or "").strip()
+          todo_status = (row.get("Todo Status") or "").strip()
+          open_items = (row.get("Open Items") or "").strip()
+
+          if binding_file in {"", "N/A"}:
+              binding_file = ""
+
+          default_test = class_test_overrides.get(target)
+          if not default_test:
+              snake_file = Path("tests/unitTest") / f"{camel_to_snake(target)}_unit_test.py"
+              if snake_file.exists():
+                  default_test = str(snake_file)
+              else:
+                  default_test = module_test_map.get(module_category, "")
+
+          unit_test_file = override or default_test
+          progress_expected = "1" if todo_status != "已转换" or open_items not in {"", "0"} else "0"
+
+          resolved = {
+              "target_class": target,
+              "module_category": module_category,
+              "detail_csv": detail_csv,
+              "binding_file": binding_file,
+              "source_path": source_path,
+              "unit_test_file": unit_test_file,
+              "progress_expected": progress_expected,
+              "todo_status": todo_status,
+          }
+
+          Path("resolved-task.json").write_text(
+              json.dumps(resolved, indent=2, ensure_ascii=False) + "\n",
+              encoding="utf-8",
+          )
+
+          output_path = Path(os.environ["GITHUB_OUTPUT"])
+          with output_path.open("a", encoding="utf-8") as handle:
+              for key, value in resolved.items():
+                  handle.write(f"{key}={value}\n")
+
+          summary_path = Path(os.environ["GITHUB_STEP_SUMMARY"])
+          with summary_path.open("a", encoding="utf-8") as summary:
+              summary.write("## Resolved pybind task context\n\n")
+              summary.write(f"- Target class: `{target}`\n")
+              summary.write(f"- Module category: `{module_category or 'unknown'}`\n")
+              summary.write(f"- Detail CSV: `{detail_csv or 'missing'}`\n")
+              summary.write(f"- Binding file: `{binding_file or 'not yet mapped'}`\n")
+              summary.write(f"- Upstream source: `{source_path or 'not recorded'}`\n")
+              summary.write(f"- Suggested unit test: `{unit_test_file or 'fallback to ctest python-unit-tests'}`\n")
+              summary.write(f"- Todo status: `{todo_status or 'unknown'}`\n")
+              summary.write(f"- Progress sync expected: `{progress_expected}`\n")
+          PY
+
+      - name: Upload resolved task artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: resolved-task-${{ github.run_id }}
+          path: resolved-task.json
+          if-no-files-found: error
+
+  build:
+    name: Configure and build
+    runs-on: self-hosted
+    needs:
+      - budget-guard
+      - resolve-task
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    env:
+      PYBIND_DIR: .
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+
+      - name: Verify existing local toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "=== Existing local environment verification ==="
+          echo "CONDA_PREFIX=$CONDA_PREFIX"
+          test -d "$CONDA_PREFIX/include/isis" && echo "✓ ISIS headers found"
+          test -f "$CONDA_PREFIX/lib/libisis.so" && echo "✓ libisis.so found"
+          test -f "$CONDA_PREFIX/lib/Camera.plugin" && echo "✓ Camera.plugin found"
+          command -v cmake
+          command -v ninja
+          "$PYTHON_BIN" --version
+          "$PYTHON_BIN" - <<'PY'
+          import pybind11
+          import sys
+          print('python', sys.version.split()[0])
+          print('pybind11', pybind11.__version__)
+          PY
+
+      - name: Clean build directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$BUILD_DIR"
+
+      - name: Configure CMake
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DISIS_PREFIX="$ISIS_PREFIX"
+
+      - name: Build extension
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
+
+      - name: Summarize build failure
+        if: failure()
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$PYTHON_BIN" - <<'PY'
+          import os
+          import re
+          from collections import deque
+          from pathlib import Path
+
+          build_log = Path("build/build.log")
+          if not build_log.exists():
+              print("::warning::Build log not found; skipping failure summary.")
+              raise SystemExit(0)
+
+          lines = build_log.read_text(encoding="utf-8", errors="replace").splitlines()
+          source_pattern = re.compile(r'([^\s"\']+\.cpp)')
+          error_pattern = re.compile(r'(fatal error:| error: |undefined reference to|collect2: error:|ninja: build stopped:)')
+          line_number_pattern = re.compile(r'([^\s:]+\.cpp):(\d+)(?::(\d+))?:')
+
+          current_cpp = None
+          recent_lines = deque(maxlen=12)
+          summaries = []
+          seen_keys = set()
+
+          def normalize_path(path_text: str) -> str:
+              return path_text.strip().strip('"\'')
+
+          for raw_line in lines:
+              line = raw_line.rstrip()
+              recent_lines.append(line)
+              cpp_matches = source_pattern.findall(line)
+              if cpp_matches:
+                  current_cpp = normalize_path(cpp_matches[-1])
+              if not error_pattern.search(line):
+                  continue
+              annotated_file = current_cpp or "unknown"
+              annotated_line = None
+              annotated_col = None
+              location_match = line_number_pattern.search(line)
+              if location_match:
+                  annotated_file = normalize_path(location_match.group(1))
+                  annotated_line = location_match.group(2)
+                  annotated_col = location_match.group(3)
+              key = (annotated_file, line)
+              if key in seen_keys:
+                  continue
+              seen_keys.add(key)
+              summaries.append(
+                  {
+                      "file": annotated_file,
+                      "line": annotated_line,
+                      "col": annotated_col,
+                      "message": line.strip(),
+                      "excerpt": "\n".join(recent_lines),
+                  }
+              )
+
+          if not summaries:
+              print("::warning::Build failed, but no compiler-style error summary could be extracted from build.log.")
+              raise SystemExit(0)
+
+          job_summary_path = Path(os.environ["GITHUB_STEP_SUMMARY"])
+          with job_summary_path.open("a", encoding="utf-8") as summary_handle:
+              summary_handle.write("## Build failure summary\n\n")
+              for index, item in enumerate(summaries[:10], start=1):
+                  summary_handle.write(f"### {index}. `{item['file']}`\n\n")
+                  summary_handle.write(f"- Error: `{item['message']}`\n")
+                  if item["line"]:
+                      location = f"line `{item['line']}`"
+                      if item["col"]:
+                          location += f", column `{item['col']}`"
+                      summary_handle.write(f"- Location: {location}\n")
+                  summary_handle.write("\n```text\n")
+                  summary_handle.write(item["excerpt"])
+                  summary_handle.write("\n```\n\n")
+                  annotation = f"file={item['file']}"
+                  if item["line"]:
+                      annotation += f",line={item['line']}"
+                  if item["col"]:
+                      annotation += f",col={item['col']}"
+                  print(f"::error {annotation}::{item['message']}")
+          PY
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: task-build-logs-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            ${{ env.BUILD_DIR }}/build.log
+            ${{ env.BUILD_DIR }}/CMakeCache.txt
+            ${{ env.BUILD_DIR }}/CMakeFiles/CMakeOutput.log
+            ${{ env.BUILD_DIR }}/CMakeFiles/CMakeError.log
+            ${{ env.BUILD_DIR }}/Testing/Temporary/**
+
+      - name: Upload build artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: task-build-tree-${{ github.run_id }}
+          path: ${{ env.BUILD_DIR }}
+          if-no-files-found: error
+
+  unit-tests:
+    name: Targeted unit validation
+    runs-on: self-hosted
+    needs:
+      - build
+      - resolve-task
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    env:
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: task-build-tree-${{ github.run_id }}
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Run targeted unittest or fallback CTest group
+        shell: bash
+        env:
+          RESOLVED_UNIT_TEST: ${{ needs.resolve-task.outputs.unit_test_file }}
+          UNIT_TEST_OVERRIDE: ${{ inputs.unit_test_target_override }}
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          export PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}"
+          target="$UNIT_TEST_OVERRIDE"
+          if [ -z "$target" ]; then
+            target="$RESOLVED_UNIT_TEST"
+          fi
+
+          if [ -n "$target" ] && [ -f "$target" ]; then
+            echo "Running unit test file: $target"
+            "$PYTHON_BIN" -X faulthandler "$target" -v 2>&1 | tee "$BUILD_DIR/unit.log"
+          elif [ -n "$target" ]; then
+            echo "Running unittest target: $target"
+            "$PYTHON_BIN" -X faulthandler -m unittest -v "$target" 2>&1 | tee "$BUILD_DIR/unit.log"
+          else
+            echo "No specific unit test mapping found; falling back to ctest -R python-unit-tests"
+            ctest --test-dir "$BUILD_DIR" -R python-unit-tests --output-on-failure 2>&1 | tee "$BUILD_DIR/unit.log"
+          fi
+
+      - name: Upload unit test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: task-unit-logs-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            ${{ env.BUILD_DIR }}/unit.log
+            ${{ env.BUILD_DIR }}/Testing/Temporary/**
+
+  smoke-import:
+    name: Smoke import
+    runs-on: self-hosted
+    needs: build
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    env:
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: task-build-tree-${{ github.run_id }}
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Run smoke_import.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
+            "$PYTHON_BIN" -X faulthandler tests/smoke_import.py 2>&1 | tee "$BUILD_DIR/smoke.log"
+
+      - name: Upload smoke logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: task-smoke-logs-${{ github.run_id }}
+          if-no-files-found: warn
+          path: ${{ env.BUILD_DIR }}/smoke.log
+
+  progress-check:
+    name: Progress consistency check
+    runs-on: self-hosted
+    needs:
+      - resolve-task
+      - unit-tests
+      - smoke-import
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    env:
+      DETAIL_CSV: ${{ needs.resolve-task.outputs.detail_csv }}
+      BINDING_FILE: ${{ needs.resolve-task.outputs.binding_file }}
+      PROGRESS_EXPECTED: ${{ needs.resolve-task.outputs.progress_expected }}
+      TARGET_CLASS: ${{ needs.resolve-task.outputs.target_class }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Validate progress files when binding state likely changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          default_branch="${{ github.event.repository.default_branch }}"
+          git fetch origin "$default_branch" --depth=1 >/dev/null 2>&1 || true
+          if git rev-parse --verify "origin/$default_branch" >/dev/null 2>&1; then
+            base_ref="origin/$default_branch"
+          else
+            base_ref="HEAD^"
+          fi
+
+          diff_files="$(git diff --name-only "$base_ref"...HEAD || true)"
+          echo "Changed files relative to $base_ref:" >> "$GITHUB_STEP_SUMMARY"
+          if [ -n "$diff_files" ]; then
+            printf '%s\n' "$diff_files" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "(none)" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+          if [ "$PROGRESS_EXPECTED" != "1" ]; then
+            echo "Progress sync is not required for $TARGET_CLASS based on current inventory status." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          if [ -z "$diff_files" ]; then
+            echo "::notice::No committed changes detected against $base_ref; skipping progress sync enforcement."
+            exit 0
+          fi
+
+          if ! printf '%s\n' "$diff_files" | grep -Eq '^(src/|python/isis_pybind/__init__\.py)'; then
+            echo "No binding/export changes detected; progress sync check skipped." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          changed_progress=0
+          if printf '%s\n' "$diff_files" | grep -Fxq 'pybind_progress_log.md'; then
+            changed_progress=1
+          fi
+          if printf '%s\n' "$diff_files" | grep -Fxq 'todo_pybind11.csv'; then
+            changed_progress=1
+          fi
+          if [ -n "$DETAIL_CSV" ] && printf '%s\n' "$diff_files" | grep -Fxq "$DETAIL_CSV"; then
+            changed_progress=1
+          fi
+
+          if [ "$changed_progress" -ne 1 ]; then
+            echo "::error::Binding/export files changed for $TARGET_CLASS but progress artifacts were not updated. Expected one or more of: pybind_progress_log.md, todo_pybind11.csv, $DETAIL_CSV"
+            exit 1
+          fi
+
+          echo "Progress artifacts updated as expected for $TARGET_CLASS." >> "$GITHUB_STEP_SUMMARY"
+
+  blocker-summary:
+    name: Blocker summary
+    runs-on: self-hosted
+    if: failure()
+    needs:
+      - resolve-task
+      - build
+      - unit-tests
+      - smoke-import
+      - progress-check
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Write step summary
+        shell: bash
+        run: |
+          {
+            echo "## Pybind task failure summary"
+            echo ""
+            echo "- Target class: ${{ needs.resolve-task.outputs.target_class }}"
+            echo "- Module category: ${{ needs.resolve-task.outputs.module_category }}"
+            echo "- Suggested unit test: ${{ needs.resolve-task.outputs.unit_test_file || '(fallback to ctest python-unit-tests)' }}"
+            echo "- Issue: #${{ inputs.issue_number || 'n/a' }}"
+            echo "- Attempt: ${{ inputs.attempt }} / 5"
+            echo "- Required gate: build + unit + smoke + progress"
+            echo ""
+            echo "If this is attempt 5, mark the issue or PR as blocked, add a blocker summary, and stop automatic repair for this task."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment on issue when attempt reaches 5
+        if: ${{ inputs.issue_number != '' && inputs.attempt == '5' }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = Number('${{ inputs.issue_number }}');
+            const body = [
+              'Automated pybind repair budget reached 5 attempts.',
+              '',
+              `Target class: ${{ needs.resolve-task.outputs.target_class }}`,
+              `Module category: ${{ needs.resolve-task.outputs.module_category }}`,
+              '',
+              'Please add a blocker summary with:',
+              '- last failing step',
+              '- most likely root cause',
+              '- classification: binding bug / test bug / environment / upstream behavior / unknown',
+              '- recommended next human action',
+              '',
+              'This task should stop here and the next task should be selected from the `ready-for-agent` queue.'
+            ].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body,
+            });
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              labels: ['blocked', 'needs-human-review'],
+            });

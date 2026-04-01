@@ -1,0 +1,305 @@
+name: agent-pybind-pr-gate
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/agent-pybind-*.yml
+      - .github/workflows/dispatch-pybind-task-from-issue.yml
+      - .github/ISSUE_TEMPLATE/pybind-task.yml
+      - .github/copilot-instructions.md
+      - .github/instructions/**
+      - CMakeLists.txt
+      - python/**
+      - src/**
+      - tests/**
+      - todo_pybind11.csv
+      - pybind_progress_log.md
+      - class_bind_methods_details/**
+
+concurrency:
+  group: agent-pybind-pr-gate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prepare:
+    name: Prepare PR context
+    runs-on: self-hosted
+    outputs:
+      changed_tests: ${{ steps.diff.outputs.changed_tests }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Summarize changed files
+        id: diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          base_sha="${{ github.event.pull_request.base.sha }}"
+          head_sha="${{ github.event.pull_request.head.sha }}"
+          changed_files="$(git diff --name-only "$base_sha" "$head_sha")"
+          printf '%s\n' "$changed_files" > changed-files.txt
+
+          changed_tests=$(printf '%s\n' "$changed_files" | grep '^tests/unitTest/.*_unit_test\.py$' || true)
+          {
+            echo 'changed_tests<<EOF'
+            printf '%s\n' "$changed_tests"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## PR gate change summary"
+            echo ""
+            echo "Base SHA: \`$base_sha\`"
+            echo "Head SHA: \`$head_sha\`"
+            echo ""
+            echo "### Changed files"
+            echo "```text"
+            printf '%s\n' "$changed_files"
+            echo "```"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload PR change summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-gate-context-${{ github.run_id }}
+          path: changed-files.txt
+          if-no-files-found: error
+
+  build:
+    name: Build on existing local environment
+    runs-on: self-hosted
+    needs: prepare
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    env:
+      PYBIND_DIR: .
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+
+      - name: Verify existing local toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "=== Existing local environment verification ==="
+          echo "CONDA_PREFIX=$CONDA_PREFIX"
+          test -d "$CONDA_PREFIX/include/isis" && echo "✓ ISIS headers found"
+          test -f "$CONDA_PREFIX/lib/libisis.so" && echo "✓ libisis.so found"
+          test -f "$CONDA_PREFIX/lib/Camera.plugin" && echo "✓ Camera.plugin found"
+          command -v cmake
+          command -v ninja
+          "$PYTHON_BIN" --version
+          "$PYTHON_BIN" - <<'PY'
+          import pybind11
+          import sys
+          print('python', sys.version.split()[0])
+          print('pybind11', pybind11.__version__)
+          PY
+
+      - name: Clean build directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$BUILD_DIR"
+
+      - name: Configure CMake
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DISIS_PREFIX="$ISIS_PREFIX"
+
+      - name: Build extension
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-gate-build-logs-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            ${{ env.BUILD_DIR }}/build.log
+            ${{ env.BUILD_DIR }}/CMakeCache.txt
+            ${{ env.BUILD_DIR }}/CMakeFiles/CMakeOutput.log
+            ${{ env.BUILD_DIR }}/CMakeFiles/CMakeError.log
+            ${{ env.BUILD_DIR }}/Testing/Temporary/**
+
+      - name: Upload build artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-gate-build-tree-${{ github.run_id }}
+          path: ${{ env.BUILD_DIR }}
+          if-no-files-found: error
+
+  smoke-import:
+    name: Smoke import gate
+    runs-on: self-hosted
+    needs: build
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    env:
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pr-gate-build-tree-${{ github.run_id }}
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Run smoke_import.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
+            "$PYTHON_BIN" -X faulthandler tests/smoke_import.py 2>&1 | tee "$BUILD_DIR/smoke.log"
+
+      - name: Upload smoke logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-gate-smoke-logs-${{ github.run_id }}
+          if-no-files-found: warn
+          path: ${{ env.BUILD_DIR }}/smoke.log
+
+  unit-tests:
+    name: Python unit-test gate
+    runs-on: self-hosted
+    needs:
+      - build
+      - prepare
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    env:
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
+      CHANGED_TESTS: ${{ needs.prepare.outputs.changed_tests }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: pr-gate-build-tree-${{ github.run_id }}
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Run changed unit tests or fallback CTest python group
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          export PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}"
+
+          if [ -n "$CHANGED_TESTS" ]; then
+            : > "$BUILD_DIR/unit.log"
+            while IFS= read -r test_file; do
+              [ -z "$test_file" ] && continue
+              echo "=== Running $test_file ===" | tee -a "$BUILD_DIR/unit.log"
+              "$PYTHON_BIN" -X faulthandler "$test_file" -v 2>&1 | tee -a "$BUILD_DIR/unit.log"
+            done <<< "$CHANGED_TESTS"
+          else
+            echo "No changed unit-test files detected; running ctest -R python-unit-tests" | tee "$BUILD_DIR/unit.log"
+            ctest --test-dir "$BUILD_DIR" -R python-unit-tests --output-on-failure 2>&1 | tee -a "$BUILD_DIR/unit.log"
+          fi
+
+      - name: Upload unit test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-gate-unit-logs-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            ${{ env.BUILD_DIR }}/unit.log
+            ${{ env.BUILD_DIR }}/Testing/Temporary/**
+
+  metadata-audit:
+    name: Metadata audit
+    runs-on: self-hosted
+    needs: prepare
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Audit progress/export metadata changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          base_sha="${{ github.event.pull_request.base.sha }}"
+          head_sha="${{ github.event.pull_request.head.sha }}"
+          changed_files="$(git diff --name-only "$base_sha" "$head_sha")"
+
+          src_changed=0
+          metadata_changed=0
+          if printf '%s\n' "$changed_files" | grep -Eq '^(src/|python/isis_pybind/__init__\.py)'; then
+            src_changed=1
+          fi
+          if printf '%s\n' "$changed_files" | grep -Eq '^(pybind_progress_log\.md|todo_pybind11\.csv|class_bind_methods_details/)'; then
+            metadata_changed=1
+          fi
+
+          {
+            echo "## Metadata audit"
+            echo ""
+            if [ "$src_changed" -eq 1 ] && [ "$metadata_changed" -eq 0 ]; then
+              echo "- Warning: binding/export files changed without progress metadata updates. This may be fine for bug-fix-only PRs, but please double-check inventory sync."
+              echo "::warning::Binding/export files changed without progress metadata updates."
+            else
+              echo "- Metadata consistency looks reasonable for this PR."
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"

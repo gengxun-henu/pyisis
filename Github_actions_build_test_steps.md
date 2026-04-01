@@ -2,7 +2,7 @@
 
 本文档说明如何在当前仓库中启用并使用 `isis_pybind_standalone` 的 GitHub Actions CI。
 
-以下说明默认 **`isis_pybind_standalone` 本身就是 GitHub 上的独立仓库根目录**。
+以下说明默认 **`isis_pybind_standalone` 本身就是 GitHub 上的独立仓库根目录**，并且 workflow 主要运行在你自己的 **self-hosted runner（本机 PC）** 上。
 
 对应 workflow 文件：`.github/workflows/ci-pybind.yml`
 
@@ -14,15 +14,18 @@
 
 - `.github/workflows/ci-pybind.yml`
 - `CMakeLists.txt`
-- `environment.yml`
 - `tests/smoke_import.py`
 - `tests/data/isisdata/mockup`
 
-这套 CI 的前提不是编当前仓库里的 ISIS 源码，而是在 CI 环境里安装一个**外部 ISIS 前缀**，并要求它至少包含：
+这套 CI 的前提不是编当前仓库里的 ISIS 源码，而是直接复用一个**外部 ISIS / conda 前缀**，并要求它至少包含：
 
 - `include/isis`
 - `lib/libisis.so`
 - `lib/Camera.plugin`
+
+workflow 会优先使用 runner 已经提供的 `CONDA_PREFIX`。如果 runner 没有预先设置 `CONDA_PREFIX`，当前版本会回退到：
+
+- `/home/gengxun/miniconda3/envs/asp360_new`
 
 ---
 
@@ -70,11 +73,8 @@
 `ci-pybind.yml` 的执行流程如下：
 
 1. checkout 仓库（含 Git LFS）
-2. 用 `mamba-org/setup-micromamba@v2` 创建 `asp360_new` 环境
-3. 在 CI 环境里额外安装：
-   - `python=3.12`
-   - `pybind11`
-   - `isis=9.0.0`
+2. 优先读取 runner 已有的 `CONDA_PREFIX`
+3. 如果 `CONDA_PREFIX` 没有设置，则回退到 `/home/gengxun/miniconda3/envs/asp360_new`
 4. 检查外部 ISIS 前缀是否完整：
    - `include/isis`
    - `lib/libisis.so`
@@ -84,6 +84,8 @@
    - `ISISROOT`
    - `ISISDATA`
    - `LD_LIBRARY_PATH`
+   - `CMAKE_PREFIX_PATH`
+   - `PYTHON_BIN`
 6. 使用 CMake 配置 `isis_pybind_standalone`
 7. 编译 `_isis_core`
 8. 运行 `ctest --output-on-failure`
@@ -137,13 +139,13 @@
 
 重点看这几个 step：
 
-### `Install CI-only dependencies`
+### `Resolve conda-backed ISIS prefix`
 
 如果失败，通常是：
 
-- conda 解析环境失败
-- `isis=9.0.0` 没有成功安装
-- channel 解析太慢或包版本冲突
+- runner 没有传入 `CONDA_PREFIX`
+- fallback 路径 `/home/gengxun/miniconda3/envs/asp360_new` 不存在
+- 目标前缀中缺少 `include/isis`、`lib/libisis.so` 或 `lib/Camera.plugin`
 
 ### `Verify external ISIS prefix`
 
@@ -183,14 +185,20 @@ workflow 会自动设置：
 - `ISIS_PREFIX=$CONDA_PREFIX`
 - `ISISROOT=$CONDA_PREFIX`
 - `ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup`
+- `CMAKE_PREFIX_PATH=$CONDA_PREFIX`
+- `PYTHON_BIN=$CONDA_PREFIX/bin/python`
 
 其中：
 
 - `ISIS_PREFIX`：给 CMakeLists.txt 用
 - `ISISROOT`：给 ISIS 运行时逻辑用
 - `ISISDATA`：给测试数据与内核查找用
+- `CMAKE_PREFIX_PATH`：让 CMake 优先从目标 conda 前缀寻找 Python、pybind11、Qt 和 ISIS 相关依赖
+- `PYTHON_BIN`：确保 configure、ctest 和 smoke import 使用同一个 Python 解释器
 
 如果以后你改了 mockup 数据路径，记得同步更新 workflow。
+
+如果你把 self-hosted runner 的启动脚本配置成总是导出正确的 `CONDA_PREFIX`，workflow 就会优先使用它；fallback 路径只是一个保底兜底方案。
 
 ---
 
@@ -212,7 +220,7 @@ workflow 会自动设置：
 
 推荐按这个顺序排：
 
-1. 先看 `Install CI-only dependencies`
+1. 先看 `Resolve conda-backed ISIS prefix`
 2. 再看 `Verify external ISIS prefix`
 3. 再看 `Configure CMake`
 4. 再看 `Build extension`
@@ -250,7 +258,7 @@ workflow 会自动设置：
 2. push 到 GitHub
 3. 打开 `Actions` 页面
 4. 看 `ci-pybind` 是否按预期完成：
-   - 环境创建成功
+   - 找到正确的 conda / ISIS 前缀
    - 找到外部 ISIS 前缀
    - CMake 配置成功
    - build 成功

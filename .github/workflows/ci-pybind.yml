@@ -2,6 +2,12 @@ name: ci-pybind
 
 on:
   workflow_dispatch:
+    inputs:
+      print_full_method_inventory:
+        description: "Print every class and method CSV row to the Actions log"
+        required: false
+        default: false
+        type: boolean
   push:
     branches:
       - main
@@ -28,15 +34,21 @@ concurrency:
 jobs:
   build-and-test:
     name: Build and test isis_pybind_standalone
-    runs-on: ubuntu-22.04
+    runs-on: self-hosted
     timeout-minutes: 120
     permissions:
       contents: read
+
+    defaults:
+      run:
+        shell: bash
 
     env:
       PYBIND_DIR: .
       BUILD_DIR: build
       PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
+      PRINT_FULL_METHOD_INVENTORY: ${{ github.event.inputs.print_full_method_inventory == 'true' && '1' || '0' }}
 
     steps:
       - name: Checkout repository
@@ -44,27 +56,14 @@ jobs:
         with:
           lfs: true
 
-      - name: Set up micromamba
-        uses: mamba-org/setup-micromamba@v2
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
         with:
-          environment-name: asp360_new
-          cache-environment: true
-          cache-downloads: true
-          init-shell: bash
-
-      - name: Install ISIS
-        shell: bash -l {0}
-        run: |
-          micromamba activate asp360_new
-          micromamba install -n asp360_new -y \
-            -c conda-forge \
-            -c usgs-astrogeology \
-            "isis=9.0.0"
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
 
       - name: Verify ISIS installation and output information
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
+          set -euo pipefail
           echo "=== ISIS Installation Verification ==="
           echo "CONDA_PREFIX: $CONDA_PREFIX"
           echo ""
@@ -73,74 +72,215 @@ jobs:
           test -f "$CONDA_PREFIX/lib/libisis.so" && echo "✓ ISIS library found: $CONDA_PREFIX/lib/libisis.so"
           test -f "$CONDA_PREFIX/lib/Camera.plugin" && echo "✓ Camera plugin found: $CONDA_PREFIX/lib/Camera.plugin"
           echo ""
-          echo "=== Python version provided by ISIS ==="
-          which python
-          python --version
+          echo "=== Python version provided by resolved prefix ==="
+          command -v python
+          "$PYTHON_BIN" --version
           echo ""
-          echo "=== ISIS environment packages ==="
-          micromamba list | grep -E "(isis|python|pybind)" || true
+          echo "=== pybind11 import check ==="
+          "$PYTHON_BIN" - <<'PY'
+          import pybind11
+          print(f"pybind11 version: {pybind11.__version__}")
+          PY
           echo ""
           echo "=== ISIS installation verified successfully ==="
 
-      - name: Install pybind11
-        shell: bash -l {0}
-        run: |
-          micromamba activate asp360_new
-          echo "=== Installing pybind11 ==="
-          micromamba install -y pybind11
-          echo "=== pybind11 installation completed ==="
-          pybind11-config --version || echo "pybind11-config not found in PATH"
-
-      - name: Verify external ISIS prefix
-        shell: bash -l {0}
-        run: |
-          micromamba activate asp360_new
-          echo "CONDA_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISIS_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISISROOT=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup" >> "$GITHUB_ENV"
-          echo "LD_LIBRARY_PATH=$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
-
-          test -d "$CONDA_PREFIX/include/isis"
-          test -f "$CONDA_PREFIX/lib/libisis.so"
-          test -f "$CONDA_PREFIX/lib/Camera.plugin"
-
       - name: Show toolchain summary
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
-          python --version
+          set -euo pipefail
+          "$PYTHON_BIN" --version
           cmake --version
           ninja --version
+
+      - name: Show binding inventory summary
+        run: |
+          set -euo pipefail
+          "$PYTHON_BIN" - <<'PY'
+          import csv
+          from pathlib import Path
+
+          summary_path = Path("class_bind_methods_details/methods_inventory_summary.csv")
+          if not summary_path.exists():
+              print(f"Binding inventory summary not found: {summary_path}")
+              raise SystemExit(0)
+
+          print("=== Binding Inventory Summary ===")
+          with summary_path.open(newline="", encoding="utf-8") as handle:
+              reader = csv.DictReader(handle)
+              for row in reader:
+                  print(
+                      f"[{row['Module Category']}] {row['Class']}: "
+                      f"status={row['Todo Status']}, binding={row['Binding']}, "
+                      f"open_items={row['Open Items']}, completion={row['Completion Percent']}%"
+                  )
+          print("=== End Binding Inventory Summary ===")
+          PY
+
+      - name: Show full class and method inventory (optional)
+        if: env.PRINT_FULL_METHOD_INVENTORY == '1'
+        run: |
+          set -euo pipefail
+          "$PYTHON_BIN" - <<'PY'
+          import csv
+          from pathlib import Path
+
+          details_dir = Path("class_bind_methods_details")
+          csv_files = sorted(details_dir.glob("*_methods.csv"))
+          print("=== Full Binding Method Inventory ===")
+          for csv_file in csv_files:
+              print(f"--- {csv_file} ---")
+              with csv_file.open(newline="", encoding="utf-8") as handle:
+                  reader = csv.reader(handle)
+                  for row in reader:
+                      print(",".join(row))
+          print("=== End Full Binding Method Inventory ===")
+          PY
 
       - name: Clean build directory
         run: rm -rf "$BUILD_DIR"
 
       - name: Configure CMake
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
+          set -euo pipefail
           cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" \
-            -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
-            -DISIS_PREFIX="$CONDA_PREFIX"
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DISIS_PREFIX="$ISIS_PREFIX"
 
       - name: Build extension
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
-          cmake --build "$BUILD_DIR" --parallel 2
+          set -euo pipefail
+          set -o pipefail
+          cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
+
+      - name: Summarize build failure
+        if: failure()
+        run: |
+          set -euo pipefail
+          "$PYTHON_BIN" - <<'PY'
+          import re
+          from collections import deque
+          from pathlib import Path
+
+          build_log = Path("build/build.log")
+          if not build_log.exists():
+            print("::warning::Build log not found; skipping failure summary.")
+            raise SystemExit(0)
+
+          lines = build_log.read_text(encoding="utf-8", errors="replace").splitlines()
+
+          source_pattern = re.compile(r'([^\s"\']+\.cpp)')
+          error_pattern = re.compile(r'(fatal error:| error: |undefined reference to|collect2: error:|ninja: build stopped:)')
+          line_number_pattern = re.compile(r'([^\s:]+\.cpp):(\d+)(?::(\d+))?:')
+
+          current_cpp = None
+          recent_lines = deque(maxlen=12)
+          summaries = []
+          seen_keys = set()
+
+          def normalize_path(path_text: str) -> str:
+            return path_text.strip().strip('"\'')
+
+          for raw_line in lines:
+            line = raw_line.rstrip()
+            recent_lines.append(line)
+
+            cpp_matches = source_pattern.findall(line)
+            if cpp_matches:
+              current_cpp = normalize_path(cpp_matches[-1])
+
+            if not error_pattern.search(line):
+              continue
+
+            annotated_file = current_cpp or "unknown"
+            annotated_line = None
+            annotated_col = None
+
+            location_match = line_number_pattern.search(line)
+            if location_match:
+              annotated_file = normalize_path(location_match.group(1))
+              annotated_line = location_match.group(2)
+              annotated_col = location_match.group(3)
+
+            key = (annotated_file, line)
+            if key in seen_keys:
+              continue
+            seen_keys.add(key)
+
+            excerpt = "\n".join(recent_lines)
+            summaries.append(
+              {
+                "file": annotated_file,
+                "line": annotated_line,
+                "col": annotated_col,
+                "message": line.strip(),
+                "excerpt": excerpt,
+              }
+            )
+
+          if not summaries:
+            print("::warning::Build failed, but no compiler-style error summary could be extracted from build.log.")
+            raise SystemExit(0)
+
+          print("::group::Build failure summary")
+          print("Detected compiler/build errors:")
+
+          job_summary_path = Path.cwd() / Path(__import__('os').environ["GITHUB_STEP_SUMMARY"])
+          with job_summary_path.open("a", encoding="utf-8") as summary_handle:
+            summary_handle.write("## Build failure summary\n\n")
+            summary_handle.write("The CI parser extracted the following likely failing translation units and recent error context.\n\n")
+
+            for index, item in enumerate(summaries[:10], start=1):
+              file_name = item["file"]
+              message = item["message"]
+              line_no = item["line"]
+              col_no = item["col"]
+              annotation = f"file={file_name}"
+              if line_no:
+                annotation += f",line={line_no}"
+              if col_no:
+                annotation += f",col={col_no}"
+
+              print(f"[{index}] {file_name}")
+              print(message)
+              print(item["excerpt"])
+              print("-" * 80)
+              print(f"::error {annotation}::{message}")
+
+              summary_handle.write(f"### {index}. `{file_name}`\n\n")
+              summary_handle.write(f"- Error: `{message}`\n")
+              if line_no:
+                summary_handle.write(f"- Location: line `{line_no}`")
+                if col_no:
+                  summary_handle.write(f", column `{col_no}`")
+                summary_handle.write("\n")
+              summary_handle.write("\n```text\n")
+              summary_handle.write(item["excerpt"])
+              summary_handle.write("\n```\n\n")
+
+          print("::endgroup::")
+          PY
 
       - name: Run CTest suite
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
-          ctest --test-dir "$BUILD_DIR" --output-on-failure -V
+          set -euo pipefail
+          set -o pipefail
+          ctest --test-dir "$BUILD_DIR" --output-on-failure -V 2>&1 | tee "$BUILD_DIR/ctest.log"
 
       - name: Run smoke import
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
+          set -euo pipefail
           PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
-            "$CONDA_PREFIX/bin/python" "$PYBIND_DIR/tests/smoke_import.py"
+            "$PYTHON_BIN" "$PYBIND_DIR/tests/smoke_import.py"
+
+      - name: Upload build and test logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-pybind-logs
+          if-no-files-found: warn
+          path: |
+            ${{ env.BUILD_DIR }}/build.log
+            ${{ env.BUILD_DIR }}/ctest.log
+            ${{ env.BUILD_DIR }}/Testing/Temporary/**

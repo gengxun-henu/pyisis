@@ -1,0 +1,126 @@
+name: dispatch-pybind-task-from-issue
+
+on:
+  issues:
+    types:
+      - labeled
+
+concurrency:
+  group: dispatch-pybind-task-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  dispatch:
+    if: >-
+      github.event.issue.state == 'open' &&
+      github.event.label.name == 'ready-for-agent' &&
+      contains(github.event.issue.labels.*.name, 'pybind-task') &&
+      !contains(github.event.issue.labels.*.name, 'agent-active') &&
+      !contains(github.event.issue.labels.*.name, 'blocked')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      actions: write
+      issues: write
+    steps:
+      - name: Parse issue form and dispatch pybind task workflow
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const body = issue.body || '';
+
+            function escapeRegex(value) {
+              return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+
+            function normalizeValue(value) {
+              const normalized = (value || '').replace(/\r/g, '').trim();
+              if (!normalized || normalized === '_No response_') {
+                return '';
+              }
+              return normalized;
+            }
+
+            function extractSection(heading) {
+              const pattern = new RegExp(
+                `(?:^|\\n)### ${escapeRegex(heading)}\\s*\\n([\\s\\S]*?)(?=\\n### |$)`,
+                'm'
+              );
+              const match = body.match(pattern);
+              return normalizeValue(match ? match[1] : '');
+            }
+
+            const targetClass = extractSection('Target upstream class');
+            const unitTestTarget = extractSection('Unit test target (optional)');
+
+            if (!targetClass) {
+              const parseFailureBody = [
+                'Automatic pybind task dispatch could not parse this issue.',
+                '',
+                'Expected to find a populated `Target upstream class` section in the issue form body.',
+                'Please edit the issue without removing the form headings, then add `ready-for-agent` again.',
+              ].join('\n');
+
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: parseFailureBody,
+              });
+
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: ['needs-human-review'],
+              });
+
+              core.setFailed('Missing Target upstream class section in issue form body.');
+              return;
+            }
+
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'agent-pybind-task.yml',
+              ref: context.payload.repository.default_branch,
+              inputs: {
+                target_class: targetClass,
+                issue_number: String(issue.number),
+                attempt: '1',
+                unit_test_target_override: unitTestTarget,
+              },
+            });
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              labels: ['agent-active'],
+            });
+
+            await github.rest.issues.removeLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              name: 'ready-for-agent',
+            });
+
+            const dispatchBody = [
+              'Queued `agent-pybind-task.yml` from this issue.',
+              '',
+              `- target class: ${targetClass}`,
+              `- attempt: 1 / 5`,
+              `- unit test target: ${unitTestTarget || '(auto-resolve or fallback to ctest python-unit-tests)'}`,
+              `- progress handling: auto-detected by workflow`,
+              '',
+              '`ready-for-agent` was consumed and replaced with `agent-active`.',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue.number,
+              body: dispatchBody,
+            });

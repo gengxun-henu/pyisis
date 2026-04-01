@@ -1,0 +1,44 @@
+name: Resolve conda-backed ISIS prefix
+description: >-
+  Resolve the ISIS/conda prefix for self-hosted runners, prefer an existing CONDA_PREFIX,
+  fall back to a configured local env path, and export the runtime variables used by build/test jobs.
+inputs:
+  fallback-conda-prefix:
+    description: Fallback conda environment prefix used when CONDA_PREFIX is not already set on the runner.
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Resolve prefix and export runtime environment
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        # On this repository's self-hosted runners we intentionally reuse the pre-provisioned
+        # asp360_new environment instead of re-creating it with micromamba on every workflow run.
+        RESOLVED_PREFIX="${CONDA_PREFIX:-}"
+        if [[ -n "$RESOLVED_PREFIX" ]]; then
+          echo "Detected existing CONDA_PREFIX from runner: $RESOLVED_PREFIX"
+        elif [[ -d "${{ inputs.fallback-conda-prefix }}" ]]; then
+          RESOLVED_PREFIX="${{ inputs.fallback-conda-prefix }}"
+          echo "CONDA_PREFIX was not preset; using fallback prefix: $RESOLVED_PREFIX"
+        else
+          echo "::error::Neither CONDA_PREFIX nor fallback prefix '${{ inputs.fallback-conda-prefix }}' is available on this runner."
+          exit 1
+        fi
+
+        test -d "$RESOLVED_PREFIX/include/isis"
+        test -f "$RESOLVED_PREFIX/lib/libisis.so"
+        test -f "$RESOLVED_PREFIX/lib/Camera.plugin"
+        test -x "$RESOLVED_PREFIX/bin/python"
+
+        {
+          echo "CONDA_PREFIX=$RESOLVED_PREFIX"
+          echo "ISIS_PREFIX=$RESOLVED_PREFIX"
+          echo "ISISROOT=$RESOLVED_PREFIX"
+          echo "PYTHON_BIN=$RESOLVED_PREFIX/bin/python"
+          echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup"
+          echo "CMAKE_PREFIX_PATH=$RESOLVED_PREFIX${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}"
+          echo "LD_LIBRARY_PATH=$RESOLVED_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+          echo "PATH=$RESOLVED_PREFIX/bin:$PATH"
+        } >> "$GITHUB_ENV"

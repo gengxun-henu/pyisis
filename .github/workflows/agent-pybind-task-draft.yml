@@ -73,60 +73,52 @@ jobs:
     timeout-minutes: 120
     permissions:
       contents: read
+    defaults:
+      run:
+        shell: bash
     env:
       PYBIND_DIR: .
       BUILD_DIR: build
       PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           lfs: true
 
-      - name: Set up micromamba
-        uses: mamba-org/setup-micromamba@v2
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
         with:
-          environment-name: asp360_new
-          cache-environment: true
-          cache-downloads: true
-          init-shell: bash
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
 
-      - name: Install ISIS and pybind11
-        shell: bash -l {0}
+      - name: Verify resolved toolchain
         run: |
-          micromamba activate asp360_new
-          micromamba install -n asp360_new -y \
-            -c conda-forge \
-            -c usgs-astrogeology \
-            "isis=9.0.0" pybind11 ninja
-
-      - name: Configure environment
-        shell: bash -l {0}
-        run: |
-          micromamba activate asp360_new
-          echo "CONDA_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISIS_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISISROOT=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup" >> "$GITHUB_ENV"
-          echo "LD_LIBRARY_PATH=$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
+          set -euo pipefail
+          echo "CONDA_PREFIX: $CONDA_PREFIX"
+          "$PYTHON_BIN" --version
+          "$PYTHON_BIN" - <<'PY'
+          import pybind11
+          print(f"pybind11 version: {pybind11.__version__}")
+          PY
+          cmake --version
+          ninja --version
 
       - name: Clean build directory
         run: rm -rf "$BUILD_DIR"
 
       - name: Configure CMake
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
+          set -euo pipefail
           cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" \
-            -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
-            -DISIS_PREFIX="$CONDA_PREFIX"
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DISIS_PREFIX="$ISIS_PREFIX"
 
       - name: Build extension
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
+          set -euo pipefail
           cmake --build "$BUILD_DIR" --parallel 2
 
       - name: Upload build logs on failure
@@ -147,60 +139,40 @@ jobs:
     timeout-minutes: 60
     permissions:
       contents: read
+    defaults:
+      run:
+        shell: bash
     env:
       BUILD_DIR: build
       PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           lfs: true
 
-      - name: Set up micromamba
-        uses: mamba-org/setup-micromamba@v2
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
         with:
-          environment-name: asp360_new
-          cache-environment: true
-          cache-downloads: true
-          init-shell: bash
-
-      - name: Install ISIS and pybind11
-        shell: bash -l {0}
-        run: |
-          micromamba activate asp360_new
-          micromamba install -n asp360_new -y \
-            -c conda-forge \
-            -c usgs-astrogeology \
-            "isis=9.0.0" pybind11 ninja
-
-      - name: Configure runtime environment
-        shell: bash -l {0}
-        run: |
-          micromamba activate asp360_new
-          echo "CONDA_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISIS_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISISROOT=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup" >> "$GITHUB_ENV"
-          echo "LD_LIBRARY_PATH=$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
 
       - name: Rebuild extension for this runner
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
+          set -euo pipefail
           cmake -S . -B "$BUILD_DIR" -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" \
-            -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
-            -DISIS_PREFIX="$CONDA_PREFIX"
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DISIS_PREFIX="$ISIS_PREFIX"
           cmake --build "$BUILD_DIR" --parallel 2
 
       - name: Run targeted unittest or full CTest group
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
+          set -euo pipefail
           export PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}"
           if [ -n "${{ inputs.unit_test_target }}" ]; then
-            "$CONDA_PREFIX/bin/python" -X faulthandler -m unittest -v "${{ inputs.unit_test_target }}"
+            "$PYTHON_BIN" -X faulthandler -m unittest -v "${{ inputs.unit_test_target }}"
           else
             ctest --test-dir "$BUILD_DIR" -R python-unit-tests --output-on-failure
           fi
@@ -212,59 +184,39 @@ jobs:
     timeout-minutes: 30
     permissions:
       contents: read
+    defaults:
+      run:
+        shell: bash
     env:
       BUILD_DIR: build
       PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           lfs: true
 
-      - name: Set up micromamba
-        uses: mamba-org/setup-micromamba@v2
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
         with:
-          environment-name: asp360_new
-          cache-environment: true
-          cache-downloads: true
-          init-shell: bash
-
-      - name: Install ISIS and pybind11
-        shell: bash -l {0}
-        run: |
-          micromamba activate asp360_new
-          micromamba install -n asp360_new -y \
-            -c conda-forge \
-            -c usgs-astrogeology \
-            "isis=9.0.0" pybind11 ninja
-
-      - name: Configure runtime environment
-        shell: bash -l {0}
-        run: |
-          micromamba activate asp360_new
-          echo "CONDA_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISIS_PREFIX=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISISROOT=$CONDA_PREFIX" >> "$GITHUB_ENV"
-          echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup" >> "$GITHUB_ENV"
-          echo "LD_LIBRARY_PATH=$CONDA_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
 
       - name: Rebuild extension for this runner
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
+          set -euo pipefail
           cmake -S . -B "$BUILD_DIR" -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_PREFIX_PATH="$CONDA_PREFIX" \
-            -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
-            -DISIS_PREFIX="$CONDA_PREFIX"
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DISIS_PREFIX="$ISIS_PREFIX"
           cmake --build "$BUILD_DIR" --parallel 2
 
       - name: Run smoke_import.py
-        shell: bash -l {0}
         run: |
-          micromamba activate asp360_new
+          set -euo pipefail
           PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
-            "$CONDA_PREFIX/bin/python" -X faulthandler tests/smoke_import.py
+            "$PYTHON_BIN" -X faulthandler tests/smoke_import.py
 
   blocker-summary:
     name: Blocker summary
@@ -300,6 +252,21 @@ jobs:
         with:
           script: |
             const issueNumber = Number('${{ inputs.issue_number }}');
+            async function removeLabelIfPresent(name) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issueNumber,
+                  name,
+                });
+              }
+              catch (error) {
+                if (error.status !== 404) {
+                  throw error;
+                }
+              }
+            }
             const body = [
               'Automated pybind repair budget reached 5 attempts.',
               '',
@@ -325,3 +292,5 @@ jobs:
               issue_number: issueNumber,
               labels: ['blocked', 'needs-human-review']
             });
+            await removeLabelIfPresent('agent-active');
+            await removeLabelIfPresent('ready-for-agent');

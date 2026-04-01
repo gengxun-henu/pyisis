@@ -3,12 +3,14 @@ description: "Track one pybind binding task for exactly one upstream ISIS C++ cl
 title: "[pybind] "
 labels:
   - pybind-task
-  - ready-for-agent
 body:
   - type: markdown
     attributes:
       value: |
         Use this issue for **one** upstream ISIS C++ class or **one** related method cluster only.
+
+        This template opens the issue with `pybind-task` only.
+        Add `ready-for-agent` **after** a quick human review confirms the scope is actionable.
 
         Rules for this task:
         - one GitHub agent task = one class or one method cluster
@@ -89,6 +91,15 @@ body:
         3. Run tests/smoke_import.py
     validations:
       required: true
+
+  - type: input
+    id: unit_test_target
+    attributes:
+      label: Unit test target (optional)
+      description: Optional unittest module or test case path used by the automated dispatch workflow.
+      placeholder: tests.unitTest.cube_unit_test or cube_unit_test.CubeBaseMultiplierTest
+    validations:
+      required: false
 
   - type: checkboxes
     id: done_definition

@@ -214,96 +214,96 @@ jobs:
           local_context_items = [
               "todo_pybind11.csv",
               "class_bind_methods_details/methods_inventory_summary.csv",
-                            detail_csv,
-                            binding_file,
-                            default_test,
-                            "python/isis_pybind/__init__.py",
-                            "pybind_progress_log.md" if progress_expected else "",
-                    ]
+              detail_csv,
+              binding_file,
+              default_test,
+              "python/isis_pybind/__init__.py",
+              "pybind_progress_log.md" if progress_expected else "",
+          ]
 
-                    expected_change_items = [
-                            binding_file or "src/...",
-                            default_test or "tests/unitTest/..._unit_test.py",
-                            "python/isis_pybind/__init__.py",
-                            "pybind_progress_log.md" if progress_expected else "",
-                            "todo_pybind11.csv" if progress_expected else "",
-                    ]
+          expected_change_items = [
+              binding_file or "src/...",
+              default_test or "tests/unitTest/..._unit_test.py",
+              "python/isis_pybind/__init__.py",
+              "pybind_progress_log.md" if progress_expected else "",
+              "todo_pybind11.csv" if progress_expected else "",
+          ]
 
-                    validation_steps = [
-                            "1. Build extension",
-                            f"2. Run `{default_test}`" if default_test else "2. Run the smallest relevant `python-unit-tests` target",
-                            "3. Run `tests/smoke_import.py`",
-                    ]
+          validation_steps = [
+              "1. Build extension",
+              f"2. Run `{default_test}`" if default_test else "2. Run the smallest relevant `python-unit-tests` target",
+              "3. Run `tests/smoke_import.py`",
+          ]
 
-                    section_suggestions = {
-                            "Task scope": scope_text,
-                            "Upstream source paths": bullet(upstream_candidates) or "- reference/upstream_isis/... (auto-search did not find a unique upstream path; fill manually)",
-                            "Local repository files to inspect first": bullet(local_context_items),
-                            "Expected file changes": bullet(expected_change_items),
-                            "Minimal validation plan": "\n".join(validation_steps),
-                            "Unit test target (optional)": unit_test_target or "tests.unitTest.... (auto-resolve if needed)",
-                            "Priority": "medium",
-                    }
+          section_suggestions = {
+              "Task scope": scope_text,
+              "Upstream source paths": bullet(upstream_candidates) or "- reference/upstream_isis/... (auto-search did not find a unique upstream path; fill manually)",
+              "Local repository files to inspect first": bullet(local_context_items),
+              "Expected file changes": bullet(expected_change_items),
+              "Minimal validation plan": "\n".join(validation_steps),
+              "Unit test target (optional)": unit_test_target or "tests.unitTest.... (auto-resolve if needed)",
+              "Priority": "medium",
+          }
 
-                    updated_body = body
-                    filled_sections = []
-                    for heading, suggestion in section_suggestions.items():
-                            updated_body, changed = replace_section(updated_body, heading, suggestion)
-                            if changed:
-                                    filled_sections.append(heading)
+          updated_body = body
+          filled_sections = []
+          for heading, suggestion in section_suggestions.items():
+              updated_body, changed = replace_section(updated_body, heading, suggestion)
+              if changed:
+                  filled_sections.append(heading)
 
-                    updated_title = original_title
-                    if original_title.strip() == "[pybind]":
-                            updated_title = f"[pybind] {target_class}"
+          updated_title = original_title
+          if original_title.strip() == "[pybind]":
+              updated_title = f"[pybind] {target_class}"
 
-                    changed = (updated_body != body) or (updated_title != original_title)
+          changed = (updated_body != body) or (updated_title != original_title)
 
-                    comment = ""
-                    if changed and filled_sections:
-                            lines = [
-                                    "Autofill suggestions were added from local pybind inventory metadata.",
-                                    "",
-                                    f"- Target class: `{target_class}`",
-                                    f"- Filled sections: {', '.join(f'`{item}`' for item in filled_sections)}",
-                                    "",
-                                    "Please review the suggestions before adding `ready-for-agent`, especially if the class name is ambiguous or the upstream path guess looks too broad.",
-                            ]
-                            comment = "\n".join(lines)
+          comment = ""
+          if changed and filled_sections:
+              lines = [
+                  "Autofill suggestions were added from local pybind inventory metadata.",
+                  "",
+                  f"- Target class: `{target_class}`",
+                  f"- Filled sections: {', '.join(f'`{item}`' for item in filled_sections)}",
+                  "",
+                  "Please review the suggestions before adding `ready-for-agent`, especially if the class name is ambiguous or the upstream path guess looks too broad.",
+              ]
+              comment = "\n".join(lines)
 
-                    payload = {
-                            "changed": changed,
-                            "title": updated_title,
-                            "body": updated_body,
-                            "filled_sections": filled_sections,
-                            "comment": comment,
-                    }
-                    Path("autofill-payload.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-                    PY
+          payload = {
+              "changed": changed,
+              "title": updated_title,
+              "body": updated_body,
+              "filled_sections": filled_sections,
+              "comment": comment,
+          }
+          Path("autofill-payload.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+          PY
 
-            - name: Update issue body with autofill suggestions
-                uses: actions/github-script@v7
-                with:
-                    script: |
-                        const fs = require('fs');
-                        const payload = JSON.parse(fs.readFileSync('autofill-payload.json', 'utf8'));
-                        if (!payload.changed) {
-                            core.info('No autofill changes required.');
-                            return;
-                        }
+      - name: Update issue body with autofill suggestions
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const payload = JSON.parse(fs.readFileSync('autofill-payload.json', 'utf8'));
+            if (!payload.changed) {
+              core.info('No autofill changes required.');
+              return;
+            }
 
-                        await github.rest.issues.update({
-                            owner: context.repo.owner,
-                            repo: context.repo.repo,
-                            issue_number: context.payload.issue.number,
-                            title: payload.title,
-                            body: payload.body,
-                        });
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              title: payload.title,
+              body: payload.body,
+            });
 
-                        if (payload.comment) {
-                            await github.rest.issues.createComment({
-                                owner: context.repo.owner,
-                                repo: context.repo.repo,
-                                issue_number: context.payload.issue.number,
-                                body: payload.comment,
-                            });
-                        }
+            if (payload.comment) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.payload.issue.number,
+                body: payload.comment,
+              });
+            }

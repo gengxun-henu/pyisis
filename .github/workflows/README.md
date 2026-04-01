@@ -1,21 +1,35 @@
 # Pybind workflow guide
 
-This directory currently contains three different workflow roles.
+This directory currently contains several workflow roles.
 
 ## `ci-pybind.yml`
 
 Use this as the repository-level baseline CI.
 
 Purpose:
-- validate normal pushes and pull requests
+- validate normal pushes to `main` and manual CI dispatches
 - verify that the repository can configure, build, run the unit-test suite, and run `tests/smoke_import.py`
-- act as the broad regression gate for ongoing development
+- act as the broad regression gate for ongoing development after changes land on the mainline
 
 Characteristics:
-- triggered by push and pull_request
+- triggered by push and workflow_dispatch
 - broad repository coverage
 - not task-budget aware
 - not tied to one specific upstream class or one specific issue
+
+## `reusable-pybind-build.yml`
+
+Use this as the shared build/smoke building block for pybind CI workflows.
+
+Purpose:
+- centralize checkout + local conda/ISIS resolution + CMake configure/build + smoke import
+- keep artifact naming, build-log upload, and build failure summaries consistent across workflows
+- provide downstream jobs with a reusable build artifact instead of duplicating build boilerplate
+
+Characteristics:
+- triggered only through `workflow_call`
+- shared by `ci-pybind.yml` and `agent-pybind-pr-gate.yml`
+- uploads build logs and optional smoke logs with consistent naming
 
 ## `agent-pybind-task-draft.yml` (deprecated legacy)
 
@@ -93,14 +107,15 @@ Recommended usage:
 4. Let `dispatch-pybind-task-from-issue.yml` queue `agent-pybind-task.yml`
 5. Let the GitHub agent work on a PR for that issue
 6. Let `agent-pybind-pr-gate.yml` act as the narrow PR gate for agent-task changes
-7. Keep `ci-pybind.yml` as the broad repository-level CI gate on PRs and merges
+7. Keep `ci-pybind.yml` as the broad repository-level CI gate on merges to `main` and manual dispatches
 
 In short:
 - `dispatch-pybind-task-from-issue.yml` = queue bridge from issue form to task workflow
 - `agent-pybind-task.yml` = primary narrow task loop with retry budget
 - `agent-pybind-pr-gate.yml` = PR-only automatic gate for task-related changes
 - `agent-pybind-task-draft.yml` = deprecated legacy fallback during migration
-- `ci-pybind.yml` = broad repository regression check
+- `ci-pybind.yml` = broad repository regression check for pushes/manual runs
+- `reusable-pybind-build.yml` = shared build/smoke plumbing for CI and PR gate
 
 ## Queue rule
 

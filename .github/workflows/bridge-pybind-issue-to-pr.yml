@@ -17,7 +17,7 @@ on:
         default: ""
         type: string
       runner_profile:
-        description: "Optional runner profile override for manual dispatch: self-hosted-http, self-hosted-watt, self-hosted-ssh, github-hosted"
+        description: "Optional downstream task workflow runner profile override: self-hosted-http, self-hosted-watt, self-hosted-ssh, github-hosted"
         required: false
         default: ""
         type: string
@@ -31,7 +31,7 @@ jobs:
     name: Resolve runner mode
     uses: ./.github/workflows/reusable-runner-config.yml
     with:
-      runner_profile: ${{ inputs.runner_profile }}
+      runner_profile: github-hosted
 
   bridge:
     name: Bootstrap task branch and draft PR
@@ -46,6 +46,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
     steps:
       - name: Normalize GitHub checkout transport for WATT HTTPS
+        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' }}
         shell: bash
         run: |
           set -euo pipefail

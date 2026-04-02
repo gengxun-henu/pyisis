@@ -52,6 +52,7 @@ jobs:
       BUILD_DIR: build
       PYTHONUNBUFFERED: "1"
       FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      GH_TOKEN: ${{ github.token }}
       PRINT_FULL_METHOD_INVENTORY: ${{ github.event.inputs.print_full_method_inventory == 'true' && '1' || '0' }}
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
@@ -105,6 +106,49 @@ jobs:
           if [ -f "$HOME/.ssh/config" ]; then
             chmod 600 "$HOME/.ssh/config"
           fi
+
+      - name: Preflight GitHub HTTPS checkout path on self-hosted runner
+        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          retry() {
+            local max_attempts="$1"
+            shift
+            local attempt=1
+            local delay=5
+            until "$@"; do
+              if [ "$attempt" -ge "$max_attempts" ]; then
+                echo "Command failed after ${attempt} attempts: $*" >&2
+                return 1
+              fi
+              echo "Attempt ${attempt}/${max_attempts} failed, retrying in ${delay}s: $*" >&2
+              sleep "$delay"
+              attempt=$((attempt + 1))
+              delay=$((delay * 2))
+            done
+          }
+
+          auth_header="$(python3 - <<'PY'
+          import base64
+          import os
+          print(base64.b64encode(f"x-access-token:{os.environ['GH_TOKEN']}".encode()).decode())
+          PY
+          )"
+
+          {
+            echo "## Self-hosted checkout preflight (report-inventory)"
+            echo ""
+            echo "- runner mode: \`${{ needs.resolve_runner.outputs.runner_mode }}\`"
+            echo "- network profile: \`${{ needs.resolve_runner.outputs.network_profile }}\`"
+            echo "- use_watt: \`${{ needs.resolve_runner.outputs.use_watt }}\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
+          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
+          retry 4 git -c http.sslVerify=true -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD >/dev/null
 
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -243,6 +287,7 @@ jobs:
       BUILD_DIR: build
       PYTHONUNBUFFERED: "1"
       FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      GH_TOKEN: ${{ github.token }}
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
@@ -294,6 +339,49 @@ jobs:
           if [ -f "$HOME/.ssh/config" ]; then
             chmod 600 "$HOME/.ssh/config"
           fi
+
+      - name: Preflight GitHub HTTPS checkout path on self-hosted runner
+        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          retry() {
+            local max_attempts="$1"
+            shift
+            local attempt=1
+            local delay=5
+            until "$@"; do
+              if [ "$attempt" -ge "$max_attempts" ]; then
+                echo "Command failed after ${attempt} attempts: $*" >&2
+                return 1
+              fi
+              echo "Attempt ${attempt}/${max_attempts} failed, retrying in ${delay}s: $*" >&2
+              sleep "$delay"
+              attempt=$((attempt + 1))
+              delay=$((delay * 2))
+            done
+          }
+
+          auth_header="$(python3 - <<'PY'
+          import base64
+          import os
+          print(base64.b64encode(f"x-access-token:{os.environ['GH_TOKEN']}".encode()).decode())
+          PY
+          )"
+
+          {
+            echo "## Self-hosted checkout preflight (run-ctest)"
+            echo ""
+            echo "- runner mode: \`${{ needs.resolve_runner.outputs.runner_mode }}\`"
+            echo "- network profile: \`${{ needs.resolve_runner.outputs.network_profile }}\`"
+            echo "- use_watt: \`${{ needs.resolve_runner.outputs.use_watt }}\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
+          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
+          retry 4 git -c http.sslVerify=true -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD >/dev/null
 
       - name: Checkout repository
         uses: actions/checkout@v4

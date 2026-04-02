@@ -2,9 +2,10 @@
 #
 # Switching strategy:
 # - Set `active_profile` to one of the profiles listed below.
-# - Keep `self-hosted-http` as the default stable path.
-# - Use `self-hosted-watt` only for manual or diagnostic runs when WATT/Hosts routing
-#   is intentionally being evaluated.
+# - This repository currently defaults to `self-hosted-watt` because direct GitHub
+#   access is not stable enough on the local network without WATT/Hosts acceleration.
+# - Switch back to `self-hosted-http` only when plain direct HTTPS becomes stable enough
+#   for unattended automation.
 
 active_profile: self-hosted-watt
 

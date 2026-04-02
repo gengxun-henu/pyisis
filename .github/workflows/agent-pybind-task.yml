@@ -147,6 +147,25 @@ jobs:
             echo "curl executable was not found in PATH or FALLBACK_CONDA_PREFIX/bin" >&2
             return 1
           }
+
+          resolve_openssl() {
+            if command -v openssl >/dev/null 2>&1; then
+              command -v openssl
+              return 0
+            fi
+
+            if [ -n "${FALLBACK_CONDA_PREFIX:-}" ] && [ -x "${FALLBACK_CONDA_PREFIX}/bin/openssl" ]; then
+              printf '%s\n' "${FALLBACK_CONDA_PREFIX}/bin/openssl"
+              return 0
+            fi
+
+            echo "openssl executable was not found in PATH or FALLBACK_CONDA_PREFIX/bin" >&2
+            return 1
+          }
+
+          github_auth_header() {
+            python3 -c "import base64, os; print(base64.b64encode(('x-access-token:' + os.environ['GH_TOKEN']).encode()).decode())"
+          }
           EOF
           chmod 700 "$helper_path"
           echo "AGENT_PYBIND_HELPERS=$helper_path" >> "$GITHUB_ENV"
@@ -174,13 +193,15 @@ jobs:
           set -euo pipefail
           source "$AGENT_PYBIND_HELPERS"
           curl_bin="$(resolve_curl)"
+          openssl_bin="$(resolve_openssl)"
+          auth_header="$(github_auth_header)"
 
           {
             echo "## WATT GitHub acceleration check"
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
 
-          for host in github.com api.github.com; do
+          for host in github.com api.github.com objects.githubusercontent.com; do
             resolved_ip="$(getent hosts "$host" | awk '{print $1}' | head -n1 || true)"
             echo "$host -> ${resolved_ip:-unresolved}"
             echo "- ${host}: \`${resolved_ip:-unresolved}\`" >> "$GITHUB_STEP_SUMMARY"
@@ -190,14 +211,23 @@ jobs:
               exit 1
             fi
 
-            if [ "$resolved_ip" != "127.0.0.1" ]; then
+            if [ "$host" != "objects.githubusercontent.com" ] && [ "$resolved_ip" != "127.0.0.1" ]; then
               echo "::error::Expected ${host} to resolve to 127.0.0.1 for WATT/Steam++ routing, got ${resolved_ip}."
               exit 1
             fi
           done
 
-          "$curl_bin" --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
-          "$curl_bin" --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
+          {
+            echo ""
+            echo "### TLS certificate probe"
+            echo '```text'
+            echo | "$openssl_bin" s_client -connect github.com:443 -servername github.com 2>/dev/null | "$openssl_bin" x509 -noout -issuer -subject -dates || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          retry 4 "$curl_bin" --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
+          retry 4 "$curl_bin" --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
+          retry 4 git -c http.sslVerify=true -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD >/dev/null
 
       - name: Report non-WATT network path
         if: ${{ !(needs.resolve_runner.outputs.runner_mode == 'self-hosted' && needs.resolve_runner.outputs.use_watt == 'true') }}
@@ -218,6 +248,7 @@ jobs:
           set -euo pipefail
           source "$AGENT_PYBIND_HELPERS"
           curl_bin="$(resolve_curl)"
+          auth_header="$(github_auth_header)"
           https_proxy_status="no"
           http_proxy_status="no"
           no_proxy_status="no"
@@ -248,6 +279,9 @@ jobs:
             echo "Checking $url"
             retry 4 "$curl_bin" --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 "$url" >/dev/null
           done
+
+          echo "Checking authenticated git HTTPS probe for ${GITHUB_REPOSITORY}"
+          retry 4 git -c http.sslVerify=true -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD >/dev/null
 
       - name: Checkout repository over HTTPS with retry
         shell: bash

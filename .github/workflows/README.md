@@ -13,8 +13,8 @@ Supported modes:
 
 Supported named profiles:
 
-- `self-hosted-http` — default stable self-hosted HTTPS path
-- `self-hosted-watt` — self-hosted HTTPS path explicitly marked for WATT/Hosts experiments
+- `self-hosted-http` — self-hosted HTTPS path for plain direct network access when unattended GitHub connectivity is stable enough
+- `self-hosted-watt` — current default self-hosted HTTPS path for WATT/Hosts-accelerated GitHub access
 - `self-hosted-ssh` — self-hosted SSH checkout fallback over `ssh.github.com:443`
 - `github-hosted` — GitHub-hosted baseline runner with micromamba environment setup
 
@@ -120,6 +120,7 @@ Characteristics:
 - idempotent for the same issue number and target class
 - writes a backlink comment on the issue with the draft PR URL and branch name
 - keeps the issue queue and PR lane explicitly connected inside the repository automation
+- the bridge workflow itself is lightweight and should prefer `github-hosted`; any `runner_profile` input is forwarded to the downstream `agent-pybind-task.yml` dispatch rather than forcing the bridge job onto self-hosted infrastructure
 
 ## `agent-pybind-pr-gate.yml`
 
@@ -145,6 +146,9 @@ Purpose:
 - dispatch `bridge-pybind-issue-to-pr.yml`
 - switch the issue from `ready-for-agent` to `agent-active`
 
+Characteristics:
+- lightweight issue-queue workflow; prefer `github-hosted` so label handling and dispatch are not blocked by self-hosted checkout/network instability
+
 ## `autofill-pybind-task-issue.yml`
 
 Use this as the issue-form helper before dispatch.
@@ -160,6 +164,7 @@ Characteristics:
 - fills blank sections only, so manual edits are preserved on later updates
 - can suggest a default issue title like `[pybind] Cube` when the title is left at the template stub
 - now uses the shared runner configuration bootstrap before scheduling its job
+- this workflow is intentionally lightweight and should prefer `github-hosted` so issue autofill is not blocked by self-hosted WATT checkout problems
 
 ## `runner-host-sanity-check.yml`
 
@@ -203,6 +208,11 @@ In short:
 - `reusable-pybind-build.yml` = shared build/smoke plumbing for CI and PR gate
 - `runner-host-sanity-check.yml` = manual host-level git/ssh/proxy hygiene audit
 
+Practical split:
+
+- keep heavy build/test workflows on `self-hosted-watt` when the local ISIS/conda environment and domestic-network acceleration are required
+- keep lightweight issue/autofill/dispatch workflows on `github-hosted` so queue handling, issue comments, and draft PR creation do not depend on self-hosted checkout stability
+
 ## Queue rule
 
 The intended queue rule is:
@@ -243,8 +253,8 @@ Key fields:
 
 Recommended usage:
 
-1. Keep `active_profile: self-hosted-http` as the default repository setting for normal automated runs
-2. Switch to `self-hosted-watt` only when you intentionally want to test or use WATT/Hosts routing on a self-hosted runner
+1. Keep `active_profile: self-hosted-watt` as the default repository setting while the local network still relies on WATT/Hosts acceleration for stable unattended GitHub access
+2. Switch to `self-hosted-http` only after plain direct HTTPS has been verified stable enough for unattended automation without WATT/Hosts assistance
 3. Switch to `self-hosted-ssh` only when the runner network needs the `ssh.github.com:443` fallback path for git checkout
 4. Use `github-hosted` as the slow-but-stable baseline when self-hosted networking is not trustworthy
 5. Keep the rest of the workflow files unchanged; they read the mode and checkout transport through the shared runner resolver outputs
@@ -253,11 +263,11 @@ Recommended usage:
 
 The current migration strategy is intentionally conservative:
 
-- default self-hosted checkout now prefers the `self-hosted-http` profile
+- default self-hosted checkout currently prefers the `self-hosted-watt` profile because the local network still depends on WATT/Hosts acceleration for stable GitHub access
 - SSH checkout logic and the `ACTIONS_CHECKOUT_SSH_KEY` secret are retained as fallback and are not removed yet
-- WATT/Hosts routing is retained as an explicit self-hosted profile but is not recommended as the default automated path
+- `self-hosted-http` remains available as the plain HTTPS fallback once direct unattended access becomes reliable enough
 - observe a few workflow runs before any deeper cleanup, focusing on:
   - checkout duration
   - checkout failure rate / retry frequency
   - whether the SSH secret is still used in practice
-- only after those runs stay stable should you consider changing the profile defaults inside `.github/runner-config.yml` or the fallback defaults inside `.github/actions/resolve-runner-config/action.yml`
+- only after plain direct HTTPS stays stable for those runs should you consider changing the profile defaults inside `.github/runner-config.yml` or the fallback defaults inside `.github/actions/resolve-runner-config/action.yml`

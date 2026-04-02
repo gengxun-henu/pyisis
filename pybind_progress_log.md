@@ -1,5 +1,29 @@
 # Pybind Progress Log
 
+## 2026-04-02
+
+- MaximumCorrelation binding completion:
+  - Added `Isis::MaximumCorrelation` binding in `src/base/bind_base_pattern.cpp` (lines 313-322).
+  - Added `#include "MaximumCorrelation.h"` to `src/base/bind_base_pattern.cpp`.
+  - Constructor binding: `MaximumCorrelation(Pvl &pvl)` exposed with `py::keep_alive<1, 2>()` policy.
+  - Inherits all methods from `AutoReg` base class including chip access, configuration, and registration.
+  - Re-exported `MaximumCorrelation` from `python/isis_pybind/__init__.py`.
+  - Added comprehensive unit tests in `tests/unitTest/pattern_unit_test.py`:
+    - `test_maximum_correlation_construction()` - construction with PVL configuration
+    - `test_maximum_correlation_inherited_methods()` - verify inherited AutoReg methods work
+    - `test_maximum_correlation_repr()` - test __repr__ method
+  - Updated `class_bind_methods_details/base_maximum_correlation_methods.csv` to mark both entries as converted (Y).
+  - Updated `todo_pybind11.csv` to mark `Pattern Matching,MaximumCorrelation` as `已转换`.
+- Implementation notes:
+  - MaximumCorrelation is a concrete implementation of AutoReg abstract base class.
+  - Protected virtual methods (MatchAlgorithm, CompareFits, IdealFit, AlgorithmName) are not directly bound as they are internal algorithm implementation details.
+  - Python users interact with MaximumCorrelation through inherited AutoReg interface: construct with PVL, load chips, call register().
+  - Best fit value is 1.0 (perfect correlation), matching upstream implementation.
+  - File header metadata follows repository conventions with upstream source attribution.
+- Validation status:
+  - Code changes committed; compilation and runtime validation pending CI build with ISIS libraries.
+  - Manual code review confirms correct pybind11 patterns, inheritance, and test structure.
+
 ## 2026-03-30
 
 - PvlSequence binding completion:

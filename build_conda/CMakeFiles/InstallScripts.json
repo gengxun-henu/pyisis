@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/build_conda/cmake_install.cmake"
-	],
-	"Parallel" : false
-}

@@ -1,0 +1,10 @@
+name: asp360_new
+channels:
+  - conda-forge
+  - usgs-astrogeology
+dependencies:
+  - python
+  - cmake
+  - ninja
+  - pybind11
+  - isis=9.0.0

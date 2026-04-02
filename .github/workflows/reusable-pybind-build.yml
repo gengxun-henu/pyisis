@@ -4,57 +4,83 @@ on:
   workflow_call:
     secrets:
       ACTIONS_CHECKOUT_SSH_KEY:
-        required: true
+        required: false
     inputs:
-      artifact-prefix:
+      runner_mode:
+        description: Selected runner mode from the shared runner config workflow.
+        required: true
+        type: string
+      runs_on_json:
+        description: JSON string suitable for fromJSON(...) in runs-on.
+        required: true
+        type: string
+      use_ssh_checkout:
+        description: Legacy compatibility flag for callers that still pass an SSH checkout preference. The reusable workflow now normalizes to HTTPS checkout for WATT/host-routed GitHub access.
+        required: true
+        type: string
+      needs_dynamic_conda_setup:
+        description: Whether this workflow should create a micromamba/conda environment on the runner.
+        required: true
+        type: string
+      artifact_prefix:
         description: Prefix used for build/smoke artifact names.
         required: true
         type: string
-      fallback-conda-prefix:
+      fallback_conda_prefix:
         description: Fallback local conda prefix used on self-hosted runners.
         required: true
         type: string
-      pybind-dir:
+      pybind_dir:
         description: Repository-relative source directory passed to cmake -S.
         required: false
         default: .
         type: string
-      build-dir:
+      build_dir:
         description: Repository-relative build output directory.
         required: false
         default: build
         type: string
-      run-smoke-import:
+      run_smoke_import:
         description: Whether to run tests/smoke_import.py after a successful build.
         required: false
         default: true
         type: boolean
-      upload-build-artifact:
+      upload_build_artifact:
         description: Whether to upload the configured build tree for downstream jobs.
         required: false
         default: true
         type: boolean
+      hosted_environment_file:
+        description: Conda environment file used when runner-mode=github-hosted.
+        required: false
+        default: .github/conda/pybind-ci-environment.yml
+        type: string
+      hosted_environment_name:
+        description: Conda environment name used when runner-mode=github-hosted.
+        required: false
+        default: asp360_new
+        type: string
     outputs:
-      build-artifact-name:
+      build_artifact_name:
         description: Uploaded build tree artifact name.
         value: ${{ jobs.build.outputs.build_artifact_name }}
-      build-log-artifact-name:
+      build_log_artifact_name:
         description: Uploaded build log artifact name.
         value: ${{ jobs.build.outputs.build_log_artifact_name }}
-      smoke-log-artifact-name:
+      smoke_log_artifact_name:
         description: Uploaded smoke log artifact name.
-        value: ${{ jobs.smoke-import.outputs.smoke_log_artifact_name }}
-      build-succeeded:
+        value: ${{ jobs.smoke_import.outputs.smoke_log_artifact_name }}
+      build_succeeded:
         description: Whether the configure/build stage succeeded.
         value: ${{ jobs.build.outputs.build_succeeded }}
-      smoke-succeeded:
+      smoke_succeeded:
         description: Whether smoke_import.py succeeded when enabled.
-        value: ${{ jobs.smoke-import.outputs.smoke_succeeded }}
+        value: ${{ jobs.smoke_import.outputs.smoke_succeeded }}
 
 jobs:
   build:
     name: Reusable build
-    runs-on: self-hosted
+    runs-on: ${{ fromJSON(inputs.runs_on_json) }}
     timeout-minutes: 120
     permissions:
       contents: read
@@ -63,71 +89,114 @@ jobs:
       build_log_artifact_name: ${{ steps.artifact-names.outputs.build_log_artifact_name }}
       build_succeeded: ${{ steps.mark-build.outputs.build_succeeded }}
     env:
-      PYBIND_DIR: ${{ inputs.pybind-dir }}
-      BUILD_DIR: ${{ inputs.build-dir }}
+      PYBIND_DIR: ${{ inputs.pybind_dir }}
+      BUILD_DIR: ${{ inputs.build_dir }}
       PYTHONUNBUFFERED: "1"
-      FALLBACK_CONDA_PREFIX: ${{ inputs.fallback-conda-prefix }}
+      FALLBACK_CONDA_PREFIX: ${{ inputs.fallback_conda_prefix }}
+      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/${{ inputs.hosted_environment_name }}
     steps:
-      - name: Configure GitHub SSH transport
+      - name: Normalize GitHub checkout transport for WATT HTTPS
         shell: bash
-        env:
-          ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
         run: |
           set -euo pipefail
-          if [ -z "${ACTIONS_CHECKOUT_SSH_KEY:-}" ]; then
-            echo "::error::Missing secret ACTIONS_CHECKOUT_SSH_KEY. This workflow requires SSH checkout via ssh.github.com:443."
-            exit 1
-          fi
-          mkdir -p "$HOME/.ssh"
-          chmod 700 "$HOME/.ssh"
+
+          cleanup_git_insteadof() {
+            local scope="$1"
+            local output
+            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
+            if [ -z "$output" ]; then
+              return 0
+            fi
+
+            while IFS= read -r line; do
+              [ -n "$line" ] || continue
+              key="${line%% *}"
+              value="${line#* }"
+              case "$value" in
+                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
+                  git config "$scope" --unset-all "$key" || true
+                  ;;
+              esac
+            done <<< "$output"
+          }
+
+          cleanup_git_insteadof --global
+          cleanup_git_insteadof --system
+
           python3 - <<'PY'
           from pathlib import Path
 
           config_path = Path.home() / ".ssh" / "config"
           begin_marker = "# BEGIN github-actions github ssh\n"
           end_marker = "# END github-actions github ssh\n"
-          managed_block = (
-              begin_marker
-              + "Host github.com\n"
-              + "  HostName ssh.github.com\n"
-              + "  Port 443\n"
-              + "  User git\n"
-              + "  IdentitiesOnly yes\n"
-              + "  StrictHostKeyChecking no\n"
-              + end_marker
-          )
 
-          existing = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
+          if not config_path.exists():
+              raise SystemExit(0)
+
+          existing = config_path.read_text(encoding="utf-8")
           while begin_marker in existing and end_marker in existing:
               start = existing.index(begin_marker)
               end = existing.index(end_marker, start) + len(end_marker)
               existing = existing[:start] + existing[end:]
-          existing = existing.lstrip("\n")
-          updated = managed_block if not existing else managed_block + "\n" + existing
-          config_path.write_text(updated, encoding="utf-8")
+          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
           PY
-          chmod 600 "$HOME/.ssh/config"
+          if [ -f "$HOME/.ssh/config" ]; then
+            chmod 600 "$HOME/.ssh/config"
+          fi
 
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
-          ssh-strict: false
+          token: ${{ github.token }}
           persist-credentials: true
           fetch-depth: 0
+
+      - name: Report checkout transport diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote_url="$(git remote get-url origin)"
+          {
+            echo "## Checkout transport diagnostics (reusable build)"
+            echo ""
+            echo "- origin: \`${remote_url}\`"
+            echo ""
+            echo "### git url rewrite rules"
+            echo '```text'
+            git config --global --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if printf '%s\n' "$remote_url" | grep -Eq '^(git@|ssh://git@|git@ssh\.github\.com)'; then
+            echo "::error::Checkout is still using SSH transport: ${remote_url}"
+            exit 1
+          fi
 
       - name: Compute artifact names
         id: artifact-names
         shell: bash
         run: |
           set -euo pipefail
-          echo "build_artifact_name=${{ inputs.artifact-prefix }}-build-tree-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
-          echo "build_log_artifact_name=${{ inputs.artifact-prefix }}-build-logs-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+          echo "build_artifact_name=${{ inputs.artifact_prefix }}-build-tree-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+          echo "build_log_artifact_name=${{ inputs.artifact_prefix }}-build-logs-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up micromamba for GitHub-hosted runner
+        if: ${{ inputs.needs_dynamic_conda_setup == 'true' }}
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: ${{ inputs.hosted_environment_name }}
+          environment-file: ${{ inputs.hosted_environment_file }}
+          cache-environment: true
+          cache-downloads: true
+          init-shell: bash
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
         with:
+          runner-mode: ${{ inputs.runner_mode }}
           fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Verify local toolchain
         shell: bash
@@ -203,18 +272,18 @@ jobs:
             ${{ env.BUILD_DIR }}/Testing/Temporary/**
 
       - name: Upload build artifact
-        if: ${{ success() && inputs.upload-build-artifact }}
+        if: ${{ success() && inputs.upload_build_artifact }}
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.artifact-names.outputs.build_artifact_name }}
           path: ${{ env.BUILD_DIR }}
           if-no-files-found: error
 
-  smoke-import:
+  smoke_import:
     name: Reusable smoke import
-    if: ${{ inputs.run-smoke-import }}
+    if: ${{ inputs.run_smoke_import }}
     needs: build
-    runs-on: self-hosted
+    runs-on: ${{ fromJSON(inputs.runs_on_json) }}
     timeout-minutes: 30
     permissions:
       contents: read
@@ -222,69 +291,112 @@ jobs:
       smoke_log_artifact_name: ${{ steps.artifact-names.outputs.smoke_log_artifact_name }}
       smoke_succeeded: ${{ steps.mark-smoke.outputs.smoke_succeeded }}
     env:
-      BUILD_DIR: ${{ inputs.build-dir }}
+      BUILD_DIR: ${{ inputs.build_dir }}
       PYTHONUNBUFFERED: "1"
-      FALLBACK_CONDA_PREFIX: ${{ inputs.fallback-conda-prefix }}
+      FALLBACK_CONDA_PREFIX: ${{ inputs.fallback_conda_prefix }}
+      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/${{ inputs.hosted_environment_name }}
     steps:
-      - name: Configure GitHub SSH transport
+      - name: Normalize GitHub checkout transport for WATT HTTPS
         shell: bash
-        env:
-          ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
         run: |
           set -euo pipefail
-          if [ -z "${ACTIONS_CHECKOUT_SSH_KEY:-}" ]; then
-            echo "::error::Missing secret ACTIONS_CHECKOUT_SSH_KEY. This workflow requires SSH checkout via ssh.github.com:443."
-            exit 1
-          fi
-          mkdir -p "$HOME/.ssh"
-          chmod 700 "$HOME/.ssh"
+
+          cleanup_git_insteadof() {
+            local scope="$1"
+            local output
+            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
+            if [ -z "$output" ]; then
+              return 0
+            fi
+
+            while IFS= read -r line; do
+              [ -n "$line" ] || continue
+              key="${line%% *}"
+              value="${line#* }"
+              case "$value" in
+                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
+                  git config "$scope" --unset-all "$key" || true
+                  ;;
+              esac
+            done <<< "$output"
+          }
+
+          cleanup_git_insteadof --global
+          cleanup_git_insteadof --system
+
           python3 - <<'PY'
           from pathlib import Path
 
           config_path = Path.home() / ".ssh" / "config"
           begin_marker = "# BEGIN github-actions github ssh\n"
           end_marker = "# END github-actions github ssh\n"
-          managed_block = (
-              begin_marker
-              + "Host github.com\n"
-              + "  HostName ssh.github.com\n"
-              + "  Port 443\n"
-              + "  User git\n"
-              + "  IdentitiesOnly yes\n"
-              + "  StrictHostKeyChecking no\n"
-              + end_marker
-          )
 
-          existing = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
+          if not config_path.exists():
+              raise SystemExit(0)
+
+          existing = config_path.read_text(encoding="utf-8")
           while begin_marker in existing and end_marker in existing:
               start = existing.index(begin_marker)
               end = existing.index(end_marker, start) + len(end_marker)
               existing = existing[:start] + existing[end:]
-          existing = existing.lstrip("\n")
-          updated = managed_block if not existing else managed_block + "\n" + existing
-          config_path.write_text(updated, encoding="utf-8")
+          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
           PY
-          chmod 600 "$HOME/.ssh/config"
+          if [ -f "$HOME/.ssh/config" ]; then
+            chmod 600 "$HOME/.ssh/config"
+          fi
 
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
-          ssh-strict: false
+          token: ${{ github.token }}
           persist-credentials: true
           fetch-depth: 0
+
+      - name: Report checkout transport diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote_url="$(git remote get-url origin)"
+          {
+            echo "## Checkout transport diagnostics (reusable smoke)"
+            echo ""
+            echo "- origin: \`${remote_url}\`"
+            echo ""
+            echo "### git url rewrite rules"
+            echo '```text'
+            git config --global --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if printf '%s\n' "$remote_url" | grep -Eq '^(git@|ssh://git@|git@ssh\.github\.com)'; then
+            echo "::error::Checkout is still using SSH transport: ${remote_url}"
+            exit 1
+          fi
 
       - name: Compute smoke artifact name
         id: artifact-names
         shell: bash
         run: |
           set -euo pipefail
-          echo "smoke_log_artifact_name=${{ inputs.artifact-prefix }}-smoke-logs-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+          echo "smoke_log_artifact_name=${{ inputs.artifact_prefix }}-smoke-logs-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up micromamba for GitHub-hosted runner
+        if: ${{ inputs.needs_dynamic_conda_setup == 'true' }}
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: ${{ inputs.hosted_environment_name }}
+          environment-file: ${{ inputs.hosted_environment_file }}
+          cache-environment: true
+          cache-downloads: true
+          init-shell: bash
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
         with:
+          runner-mode: ${{ inputs.runner_mode }}
           fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Download build artifact
         uses: actions/download-artifact@v4

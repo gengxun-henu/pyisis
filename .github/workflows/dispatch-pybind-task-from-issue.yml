@@ -10,6 +10,10 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  resolve_runner:
+    name: Resolve runner mode
+    uses: ./.github/workflows/reusable-runner-config.yml
+
   dispatch:
     if: >-
       github.event.issue.state == 'open' &&
@@ -17,7 +21,8 @@ jobs:
       contains(github.event.issue.labels.*.name, 'pybind-task') &&
       !contains(github.event.issue.labels.*.name, 'agent-active') &&
       !contains(github.event.issue.labels.*.name, 'blocked')
-    runs-on: ubuntu-latest
+    needs: resolve_runner
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
     permissions:
       contents: read
       actions: write

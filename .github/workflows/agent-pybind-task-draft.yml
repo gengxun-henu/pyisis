@@ -53,10 +53,14 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  resolve_runner:
+    name: Resolve runner mode
+    uses: ./.github/workflows/reusable-runner-config.yml
+
   budget-guard:
     name: Budget guard
-    #runs-on: ubuntu-22.04
-    runs-on: self-hosted
+    needs: resolve_runner
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
     steps:
       - name: Validate retry budget
         shell: bash
@@ -74,8 +78,10 @@ jobs:
 
   build:
     name: Configure and build
-    runs-on: self-hosted
-    needs: budget-guard
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    needs:
+      - resolve_runner
+      - budget-guard
     timeout-minutes: 120
     permissions:
       contents: read
@@ -86,9 +92,12 @@ jobs:
       PYBIND_DIR: .
       BUILD_DIR: build
       PYTHONUNBUFFERED: "1"
-      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
       - name: Configure GitHub SSH transport
+        if: ${{ needs.resolve_runner.outputs.use_ssh_checkout == 'true' }}
         shell: bash
         env:
           ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
@@ -131,14 +140,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
+          ssh-key: ${{ needs.resolve_runner.outputs.use_ssh_checkout == 'true' && secrets.ACTIONS_CHECKOUT_SSH_KEY || '' }}
           ssh-strict: false
           persist-credentials: true
+
+      - name: Set up micromamba for GitHub-hosted runner
+        if: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup == 'true' }}
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: asp360_new
+          environment-file: .github/conda/pybind-ci-environment.yml
+          cache-environment: true
+          cache-downloads: true
+          init-shell: bash
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
         with:
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Verify resolved toolchain
         run: |
@@ -182,8 +203,10 @@ jobs:
 
   unit-tests:
     name: Targeted unit validation
-    runs-on: self-hosted
-    needs: build
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    needs:
+      - resolve_runner
+      - build
     timeout-minutes: 60
     permissions:
       contents: read
@@ -193,9 +216,12 @@ jobs:
     env:
       BUILD_DIR: build
       PYTHONUNBUFFERED: "1"
-      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
       - name: Configure GitHub SSH transport
+        if: ${{ needs.resolve_runner.outputs.use_ssh_checkout == 'true' }}
         shell: bash
         env:
           ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
@@ -238,14 +264,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
+          ssh-key: ${{ needs.resolve_runner.outputs.use_ssh_checkout == 'true' && secrets.ACTIONS_CHECKOUT_SSH_KEY || '' }}
           ssh-strict: false
           persist-credentials: true
+
+      - name: Set up micromamba for GitHub-hosted runner
+        if: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup == 'true' }}
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: asp360_new
+          environment-file: .github/conda/pybind-ci-environment.yml
+          cache-environment: true
+          cache-downloads: true
+          init-shell: bash
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
         with:
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Rebuild extension for this runner
         run: |
@@ -269,8 +307,10 @@ jobs:
 
   smoke-import:
     name: Smoke import
-    runs-on: self-hosted
-    needs: unit-tests
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    needs:
+      - resolve_runner
+      - unit-tests
     timeout-minutes: 30
     permissions:
       contents: read
@@ -280,9 +320,12 @@ jobs:
     env:
       BUILD_DIR: build
       PYTHONUNBUFFERED: "1"
-      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
       - name: Configure GitHub SSH transport
+        if: ${{ needs.resolve_runner.outputs.use_ssh_checkout == 'true' }}
         shell: bash
         env:
           ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
@@ -325,14 +368,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
+          ssh-key: ${{ needs.resolve_runner.outputs.use_ssh_checkout == 'true' && secrets.ACTIONS_CHECKOUT_SSH_KEY || '' }}
           ssh-strict: false
           persist-credentials: true
+
+      - name: Set up micromamba for GitHub-hosted runner
+        if: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup == 'true' }}
+        uses: mamba-org/setup-micromamba@v2
+        with:
+          environment-name: asp360_new
+          environment-file: .github/conda/pybind-ci-environment.yml
+          cache-environment: true
+          cache-downloads: true
+          init-shell: bash
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
         with:
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Rebuild extension for this runner
         run: |
@@ -352,9 +407,10 @@ jobs:
 
   blocker-summary:
     name: Blocker summary
-    runs-on: self-hosted
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
     if: failure()
     needs:
+      - resolve_runner
       - build
       - unit-tests
       - smoke-import

@@ -1,0 +1,142 @@
+name: Resolve workflow runner config
+description: >-
+  Read .github/runner-config.yml, validate the selected mode, and emit normalized
+  outputs that downstream workflows can use for runs-on, checkout transport, and
+  environment setup decisions.
+inputs:
+  config-path:
+    description: Repository-relative path to the runner configuration file.
+    required: false
+    default: .github/runner-config.yml
+outputs:
+  runner_mode:
+    description: Selected runner mode (`self-hosted` or `github-hosted`).
+    value: ${{ steps.resolve.outputs.runner_mode }}
+  runs_on_json:
+    description: JSON string suitable for `fromJSON(...)` in `runs-on`.
+    value: ${{ steps.resolve.outputs.runs_on_json }}
+  use_ssh_checkout:
+    description: Whether jobs should force SSH checkout over ssh.github.com:443.
+    value: ${{ steps.resolve.outputs.use_ssh_checkout }}
+  checkout_transport:
+    description: Normalized checkout transport hint.
+    value: ${{ steps.resolve.outputs.checkout_transport }}
+  environment_strategy:
+    description: Normalized environment preparation strategy.
+    value: ${{ steps.resolve.outputs.environment_strategy }}
+  needs_dynamic_conda_setup:
+    description: Whether the runner mode needs micromamba/conda setup inside workflows.
+    value: ${{ steps.resolve.outputs.needs_dynamic_conda_setup }}
+  fallback_conda_prefix:
+    description: Fallback conda prefix for self-hosted mode.
+    value: ${{ steps.resolve.outputs.fallback_conda_prefix }}
+runs:
+  using: composite
+  steps:
+    - name: Resolve runner configuration
+      id: resolve
+      shell: bash
+      run: |
+        set -euo pipefail
+        python3 - <<'PY'
+        import ast
+        import json
+        import os
+        import re
+        from pathlib import Path
+
+        config_path = Path('${{ inputs.config-path }}')
+        defaults = {
+            'mode': 'self-hosted',
+            'github_hosted_runner': 'ubuntu-22.04',
+            'self_hosted_labels': ['self-hosted'],
+            'self_hosted_checkout_transport': 'ssh',
+            'github_hosted_checkout_transport': 'https',
+            'self_hosted_environment_strategy': 'existing-conda',
+            'github_hosted_environment_strategy': 'micromamba',
+            'fallback_conda_prefix': '/home/gengxun/miniconda3/envs/asp360_new',
+        }
+
+        if not config_path.exists():
+            config = defaults.copy()
+            diagnostics = [
+                f'Configuration file not found: {config_path}',
+                'Falling back to defaults (self-hosted mode).',
+            ]
+        else:
+            parsed = {}
+            diagnostics = []
+            for raw_line in config_path.read_text(encoding='utf-8').splitlines():
+                line = raw_line.split('#', 1)[0].strip()
+                if not line:
+                    continue
+                if ':' not in line:
+                    diagnostics.append(f'Ignored malformed line: {raw_line.strip()}')
+                    continue
+                key, value = line.split(':', 1)
+                key = key.strip()
+                value = value.strip()
+                if key == 'self_hosted_labels':
+                    try:
+                        parsed[key] = ast.literal_eval(value)
+                    except Exception as exc:
+                        diagnostics.append(f'Failed to parse self_hosted_labels, using default: {exc}')
+                else:
+                    parsed[key] = value
+            config = defaults.copy()
+            config.update(parsed)
+
+        mode = str(config.get('mode', defaults['mode'])).strip().lower()
+        if mode not in {'self-hosted', 'github-hosted'}:
+            diagnostics.append(f"Unsupported mode '{mode}', falling back to self-hosted.")
+            mode = 'self-hosted'
+
+        labels = config.get('self_hosted_labels', defaults['self_hosted_labels'])
+        if isinstance(labels, str):
+            labels = [item.strip() for item in labels.split(',') if item.strip()]
+        if not isinstance(labels, list) or not labels:
+            diagnostics.append('self_hosted_labels was empty or invalid, falling back to [self-hosted].')
+            labels = defaults['self_hosted_labels']
+
+        github_hosted_runner = str(config.get('github_hosted_runner', defaults['github_hosted_runner'])).strip() or defaults['github_hosted_runner']
+        if mode == 'self-hosted':
+            runs_on_value = labels
+            checkout_transport = str(config.get('self_hosted_checkout_transport', defaults['self_hosted_checkout_transport'])).strip().lower()
+            environment_strategy = str(config.get('self_hosted_environment_strategy', defaults['self_hosted_environment_strategy'])).strip().lower()
+        else:
+            runs_on_value = github_hosted_runner
+            checkout_transport = str(config.get('github_hosted_checkout_transport', defaults['github_hosted_checkout_transport'])).strip().lower()
+            environment_strategy = str(config.get('github_hosted_environment_strategy', defaults['github_hosted_environment_strategy'])).strip().lower()
+
+        use_ssh_checkout = 'true' if checkout_transport == 'ssh' else 'false'
+        needs_dynamic_conda_setup = 'true' if environment_strategy == 'micromamba' else 'false'
+        fallback_conda_prefix = str(config.get('fallback_conda_prefix', defaults['fallback_conda_prefix'])).strip() or defaults['fallback_conda_prefix']
+
+        outputs = {
+            'runner_mode': mode,
+            'runs_on_json': json.dumps(runs_on_value),
+            'use_ssh_checkout': use_ssh_checkout,
+            'checkout_transport': checkout_transport,
+            'environment_strategy': environment_strategy,
+            'needs_dynamic_conda_setup': needs_dynamic_conda_setup,
+            'fallback_conda_prefix': fallback_conda_prefix,
+        }
+
+        output_path = Path(os.environ['GITHUB_OUTPUT'])
+        with output_path.open('a', encoding='utf-8') as handle:
+            for key, value in outputs.items():
+                handle.write(f'{key}={value}\n')
+
+        summary_path = Path(os.environ['GITHUB_STEP_SUMMARY'])
+        with summary_path.open('a', encoding='utf-8') as summary:
+            summary.write('## Resolved workflow runner configuration\n\n')
+            summary.write(f"- Mode: `{mode}`\n")
+            summary.write(f"- runs-on: `{runs_on_value}`\n")
+            summary.write(f"- Checkout transport: `{checkout_transport}`\n")
+            summary.write(f"- Environment strategy: `{environment_strategy}`\n")
+            summary.write(f"- Fallback conda prefix: `{fallback_conda_prefix}`\n")
+            if diagnostics:
+                summary.write('\n### Diagnostics\n')
+                for item in diagnostics:
+                    summary.write(f'- {item}\n')
+        PY

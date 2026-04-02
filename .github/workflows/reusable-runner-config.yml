@@ -1,0 +1,50 @@
+name: reusable-runner-config
+
+on:
+  workflow_call:
+    outputs:
+      runner_mode:
+        description: Selected runner mode.
+        value: ${{ jobs.resolve.outputs.runner_mode }}
+      runs_on_json:
+        description: JSON string for downstream fromJSON usage in runs-on.
+        value: ${{ jobs.resolve.outputs.runs_on_json }}
+      use_ssh_checkout:
+        description: Whether downstream jobs should configure SSH checkout.
+        value: ${{ jobs.resolve.outputs.use_ssh_checkout }}
+      checkout_transport:
+        description: Normalized checkout transport.
+        value: ${{ jobs.resolve.outputs.checkout_transport }}
+      environment_strategy:
+        description: Normalized environment setup strategy.
+        value: ${{ jobs.resolve.outputs.environment_strategy }}
+      needs_dynamic_conda_setup:
+        description: Whether downstream jobs should install micromamba/conda.
+        value: ${{ jobs.resolve.outputs.needs_dynamic_conda_setup }}
+      fallback_conda_prefix:
+        description: Shared fallback conda prefix.
+        value: ${{ jobs.resolve.outputs.fallback_conda_prefix }}
+
+jobs:
+  resolve:
+    name: Resolve runner configuration
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+    outputs:
+      runner_mode: ${{ steps.resolve.outputs.runner_mode }}
+      runs_on_json: ${{ steps.resolve.outputs.runs_on_json }}
+      use_ssh_checkout: ${{ steps.resolve.outputs.use_ssh_checkout }}
+      checkout_transport: ${{ steps.resolve.outputs.checkout_transport }}
+      environment_strategy: ${{ steps.resolve.outputs.environment_strategy }}
+      needs_dynamic_conda_setup: ${{ steps.resolve.outputs.needs_dynamic_conda_setup }}
+      fallback_conda_prefix: ${{ steps.resolve.outputs.fallback_conda_prefix }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Resolve shared runner config
+        id: resolve
+        uses: ./.github/actions/resolve-runner-config

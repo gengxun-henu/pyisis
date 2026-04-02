@@ -1,0 +1,20 @@
+# Unified workflow runner configuration
+# mode: self-hosted | github-hosted
+mode: self-hosted
+
+# GitHub-hosted runner image used when mode=github-hosted
+github_hosted_runner: ubuntu-22.04
+
+# Labels used when mode=self-hosted
+self_hosted_labels: [self-hosted]
+
+# Checkout transport hints
+self_hosted_checkout_transport: https
+github_hosted_checkout_transport: https
+
+# Environment preparation strategy hints
+self_hosted_environment_strategy: existing-conda
+github_hosted_environment_strategy: micromamba
+
+# Shared local fallback used by self-hosted runners
+fallback_conda_prefix: /home/gengxun/miniconda3/envs/asp360_new

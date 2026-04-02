@@ -1,11 +1,19 @@
 name: Resolve conda-backed ISIS prefix
 description: >-
-  Resolve the ISIS/conda prefix for self-hosted runners, prefer an existing CONDA_PREFIX,
-  fall back to a configured local env path, and export the runtime variables used by build/test jobs.
+  Resolve the ISIS/conda prefix for either self-hosted or GitHub-hosted runners and export
+  the runtime variables used by build/test jobs.
 inputs:
+  runner-mode:
+    description: Selected workflow runner mode (`self-hosted` or `github-hosted`).
+    required: false
+    default: self-hosted
   fallback-conda-prefix:
     description: Fallback conda environment prefix used when CONDA_PREFIX is not already set on the runner.
     required: true
+  hosted-conda-prefix:
+    description: Resolved conda environment prefix for GitHub-hosted runners after micromamba setup.
+    required: false
+    default: ""
 runs:
   using: composite
   steps:
@@ -14,17 +22,33 @@ runs:
       run: |
         set -euo pipefail
 
-        # On this repository's self-hosted runners we intentionally reuse the pre-provisioned
-        # asp360_new environment instead of re-creating it with micromamba on every workflow run.
-        RESOLVED_PREFIX="${CONDA_PREFIX:-}"
-        if [[ -n "$RESOLVED_PREFIX" ]]; then
-          echo "Detected existing CONDA_PREFIX from runner: $RESOLVED_PREFIX"
-        elif [[ -d "${{ inputs.fallback-conda-prefix }}" ]]; then
-          RESOLVED_PREFIX="${{ inputs.fallback-conda-prefix }}"
-          echo "CONDA_PREFIX was not preset; using fallback prefix: $RESOLVED_PREFIX"
+        RUNNER_MODE="${{ inputs.runner-mode }}"
+        RESOLVED_PREFIX=""
+
+        if [[ "$RUNNER_MODE" == "github-hosted" ]]; then
+          if [[ -n "${{ inputs.hosted-conda-prefix }}" && -d "${{ inputs.hosted-conda-prefix }}" ]]; then
+            RESOLVED_PREFIX="${{ inputs.hosted-conda-prefix }}"
+            echo "Using GitHub-hosted conda prefix: $RESOLVED_PREFIX"
+          elif [[ -n "${CONDA_PREFIX:-}" && -d "${CONDA_PREFIX:-}" ]]; then
+            RESOLVED_PREFIX="$CONDA_PREFIX"
+            echo "Using pre-activated GitHub-hosted CONDA_PREFIX: $RESOLVED_PREFIX"
+          else
+            echo "::error::GitHub-hosted mode requires a prepared conda prefix. Expected '${{ inputs.hosted-conda-prefix }}' or CONDA_PREFIX."
+            exit 1
+          fi
         else
-          echo "::error::Neither CONDA_PREFIX nor fallback prefix '${{ inputs.fallback-conda-prefix }}' is available on this runner."
-          exit 1
+          # On this repository's self-hosted runners we intentionally reuse the pre-provisioned
+          # asp360_new environment instead of re-creating it with micromamba on every workflow run.
+          RESOLVED_PREFIX="${CONDA_PREFIX:-}"
+          if [[ -n "$RESOLVED_PREFIX" ]]; then
+            echo "Detected existing CONDA_PREFIX from runner: $RESOLVED_PREFIX"
+          elif [[ -d "${{ inputs.fallback-conda-prefix }}" ]]; then
+            RESOLVED_PREFIX="${{ inputs.fallback-conda-prefix }}"
+            echo "CONDA_PREFIX was not preset; using fallback prefix: $RESOLVED_PREFIX"
+          else
+            echo "::error::Neither CONDA_PREFIX nor fallback prefix '${{ inputs.fallback-conda-prefix }}' is available on this runner."
+            exit 1
+          fi
         fi
 
         test -d "$RESOLVED_PREFIX/include/isis"

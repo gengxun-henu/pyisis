@@ -1,0 +1,208 @@
+name: runner-host-sanity-check
+
+on:
+  workflow_dispatch:
+    inputs:
+      fail_on_findings:
+        description: Fail the workflow when git/ssh contamination findings are detected.
+        required: false
+        default: false
+        type: boolean
+      run_checkout_probe:
+        description: Run an HTTPS checkout probe and report the resulting origin URL.
+        required: false
+        default: true
+        type: boolean
+
+concurrency:
+  group: runner-host-sanity-check-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  resolve_runner:
+    name: Resolve runner mode
+    uses: ./.github/workflows/reusable-runner-config.yml
+
+  host_audit:
+    name: Audit runner git/ssh state
+    needs: resolve_runner
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    permissions:
+      contents: read
+    env:
+      FAIL_ON_FINDINGS: ${{ inputs.fail_on_findings && 'true' || 'false' }}
+      RUN_CHECKOUT_PROBE: ${{ inputs.run_checkout_probe && 'true' || 'false' }}
+    steps:
+      - name: Collect pre-checkout runner diagnostics
+        id: precheck
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          findings=0
+          touch runner-precheck.log
+
+          note_finding() {
+            findings=1
+            local message="$1"
+            echo "::warning::${message}"
+            printf '%s\n' "WARNING: ${message}" >> runner-precheck.log
+          }
+
+          print_block() {
+            local title="$1"
+            shift
+            {
+              echo "### ${title}"
+              echo '```text'
+              "$@" 2>&1 || true
+              echo '```'
+              echo
+            } >> "$GITHUB_STEP_SUMMARY"
+          }
+
+          {
+            echo "## Runner host git/ssh sanity check"
+            echo
+            echo "- runner mode: \`${{ needs.resolve_runner.outputs.runner_mode }}\`"
+            echo "- runs-on: \`${{ needs.resolve_runner.outputs.runs_on_json }}\`"
+            echo "- configured checkout transport hint: \`${{ needs.resolve_runner.outputs.checkout_transport }}\`"
+            echo "- fail on findings: \`${FAIL_ON_FINDINGS}\`"
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          print_block "git config --global insteadof" git config --global --get-regexp '^url\..*\.insteadof$'
+          print_block "git config --system insteadof" git config --system --get-regexp '^url\..*\.insteadof$'
+          print_block "git config origins" git config --list --show-origin
+          print_block "ssh config github matches" grep -nE 'github\.com|ssh\.github\.com|Host[[:space:]]+github\.com|ProxyCommand|IdentityFile' "$HOME/.ssh/config"
+          print_block "service environment (if available)" sh -c 'systemctl show actions.runner.* --property=Environment 2>/dev/null || true'
+          print_block "git ssh environment variables" sh -c 'env | grep -E "^(GIT_SSH|GIT_SSH_COMMAND|SSH_AUTH_SOCK)=" || true'
+          print_block "proxy environment variables" sh -c 'env | grep -Ei "^(http|https|all|no)_proxy=" || true'
+          print_block "ssh -G github.com" sh -c 'ssh -G github.com 2>/dev/null | grep -Ei "^(hostname|port|user|identityfile|proxycommand)\b" || true'
+
+          if git config --global --get-regexp '^url\..*\.insteadof$' 2>/dev/null | grep -Eq 'git@github.com:|git@ssh.github.com:|ssh://git@github.com/|ssh://git@ssh.github.com:443/'; then
+            note_finding 'Global git insteadof rules still rewrite GitHub HTTPS-style access to SSH.'
+          fi
+
+          if git config --system --get-regexp '^url\..*\.insteadof$' 2>/dev/null | grep -Eq 'git@github.com:|git@ssh.github.com:|ssh://git@github.com/|ssh://git@ssh.github.com:443/'; then
+            note_finding 'System git insteadof rules still rewrite GitHub HTTPS-style access to SSH.'
+          fi
+
+          if git config --global --get core.sshCommand >/dev/null 2>&1; then
+            note_finding 'Global core.sshCommand is set.'
+          fi
+
+          if git config --system --get core.sshCommand >/dev/null 2>&1; then
+            note_finding 'System core.sshCommand is set.'
+          fi
+
+          if [ -f "$HOME/.ssh/config" ] && grep -Eq '^[[:space:]]*Host[[:space:]]+github\.com\b|^[[:space:]]*HostName[[:space:]]+ssh\.github\.com\b|^[[:space:]]*Hostname[[:space:]]+ssh\.github\.com\b' "$HOME/.ssh/config"; then
+            note_finding '~/.ssh/config still contains github.com -> ssh.github.com routing or direct github.com host blocks.'
+          fi
+
+          if env | grep -E '^(GIT_SSH|GIT_SSH_COMMAND)=' >/dev/null 2>&1; then
+            note_finding 'Process environment still exports GIT_SSH or GIT_SSH_COMMAND.'
+          fi
+
+          echo "findings=${findings}" >> "$GITHUB_OUTPUT"
+
+      - name: Normalize GitHub checkout transport for WATT HTTPS
+        if: ${{ env.RUN_CHECKOUT_PROBE == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          cleanup_git_insteadof() {
+            local scope="$1"
+            local output
+            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
+            if [ -z "$output" ]; then
+              return 0
+            fi
+
+            while IFS= read -r line; do
+              [ -n "$line" ] || continue
+              key="${line%% *}"
+              value="${line#* }"
+              case "$value" in
+                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
+                  git config "$scope" --unset-all "$key" || true
+                  ;;
+              esac
+            done <<< "$output"
+          }
+
+          cleanup_git_insteadof --global
+          cleanup_git_insteadof --system
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          config_path = Path.home() / '.ssh' / 'config'
+          begin_marker = '# BEGIN github-actions github ssh\n'
+          end_marker = '# END github-actions github ssh\n'
+
+          if not config_path.exists():
+              raise SystemExit(0)
+
+          existing = config_path.read_text(encoding='utf-8')
+          while begin_marker in existing and end_marker in existing:
+              start = existing.index(begin_marker)
+              end = existing.index(end_marker, start) + len(end_marker)
+              existing = existing[:start] + existing[end:]
+          config_path.write_text(existing.lstrip('\n'), encoding='utf-8')
+          PY
+
+          if [ -f "$HOME/.ssh/config" ]; then
+            chmod 600 "$HOME/.ssh/config"
+          fi
+
+      - name: Checkout repository
+        if: ${{ env.RUN_CHECKOUT_PROBE == 'true' }}
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          persist-credentials: true
+          fetch-depth: 1
+
+      - name: Report checkout probe diagnostics
+        if: ${{ env.RUN_CHECKOUT_PROBE == 'true' }}
+        id: checkout-probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote_url="$(git remote get-url origin)"
+          {
+            echo "## Checkout probe"
+            echo
+            echo "- origin: \`${remote_url}\`"
+            echo
+            echo "### git url rewrite rules after normalization"
+            echo '```text'
+            git config --global --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true
+            echo '```'
+            echo
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          findings="${{ steps.precheck.outputs.findings }}"
+          if printf '%s\n' "$remote_url" | grep -Eq '^(git@|ssh://git@|git@ssh\.github\.com)'; then
+            findings=1
+            echo '::warning::Checkout probe still resolved origin to SSH transport.'
+          fi
+
+          echo "findings=${findings}" >> "$GITHUB_OUTPUT"
+
+      - name: Enforce failure on findings
+        if: ${{ always() && env.FAIL_ON_FINDINGS == 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          findings="${{ steps.precheck.outputs.findings }}"
+          if [ "${RUN_CHECKOUT_PROBE}" = "true" ] && [ -n "${{ steps.checkout-probe.outputs.findings }}" ]; then
+            findings="${{ steps.checkout-probe.outputs.findings }}"
+          fi
+          if [ "${findings}" = "1" ]; then
+            echo '::error::Runner host sanity check detected git/ssh contamination findings.'
+            exit 1
+          fi
+          echo 'No findings detected under strict mode.'

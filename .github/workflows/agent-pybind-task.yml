@@ -28,9 +28,25 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  budget-guard:
-    name: Budget guard
-    runs-on: self-hosted
+  resolve_runner:
+    name: Resolve runner mode
+    uses: ./.github/workflows/reusable-runner-config.yml
+
+  pybind-task:
+    name: Resolve, build, and validate
+    needs: resolve_runner
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    timeout-minutes: 240
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+    env:
+      PYBIND_DIR: .
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Validate retry budget
         shell: bash
@@ -47,67 +63,168 @@ jobs:
           fi
           echo "Attempt $attempt / 5 accepted"
 
-  resolve-task:
-    name: Resolve task context
-    runs-on: self-hosted
-    needs: budget-guard
-    outputs:
-      target_class: ${{ steps.resolve.outputs.target_class }}
-      module_category: ${{ steps.resolve.outputs.module_category }}
-      detail_csv: ${{ steps.resolve.outputs.detail_csv }}
-      binding_file: ${{ steps.resolve.outputs.binding_file }}
-      source_path: ${{ steps.resolve.outputs.source_path }}
-      unit_test_file: ${{ steps.resolve.outputs.unit_test_file }}
-      progress_expected: ${{ steps.resolve.outputs.progress_expected }}
-      todo_status: ${{ steps.resolve.outputs.todo_status }}
-    steps:
-      - name: Configure GitHub SSH transport
+      - name: Install workflow helpers
         shell: bash
-        env:
-          ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
         run: |
           set -euo pipefail
-          if [ -z "${ACTIONS_CHECKOUT_SSH_KEY:-}" ]; then
-            echo "::error::Missing secret ACTIONS_CHECKOUT_SSH_KEY. This workflow requires SSH checkout via ssh.github.com:443."
-            exit 1
+          helper_path="$RUNNER_TEMP/agent_pybind_helpers.sh"
+          cat > "$helper_path" <<'EOF'
+          retry() {
+            local max_attempts="$1"
+            shift
+            local attempt=1
+            local delay=5
+            until "$@"; do
+              if [ "$attempt" -ge "$max_attempts" ]; then
+                echo "Command failed after ${attempt} attempts: $*" >&2
+                return 1
+              fi
+              echo "Attempt ${attempt}/${max_attempts} failed, retrying in ${delay}s: $*" >&2
+              sleep "$delay"
+              attempt=$((attempt + 1))
+              delay=$((delay * 2))
+            done
+          }
+
+          resolve_curl() {
+            if command -v curl >/dev/null 2>&1; then
+              command -v curl
+              return 0
+            fi
+
+            if [ -n "${FALLBACK_CONDA_PREFIX:-}" ] && [ -x "${FALLBACK_CONDA_PREFIX}/bin/curl" ]; then
+              printf '%s\n' "${FALLBACK_CONDA_PREFIX}/bin/curl"
+              return 0
+            fi
+
+            echo "curl executable was not found in PATH or FALLBACK_CONDA_PREFIX/bin" >&2
+            return 1
+          }
+          EOF
+          chmod 700 "$helper_path"
+          echo "AGENT_PYBIND_HELPERS=$helper_path" >> "$GITHUB_ENV"
+
+      - name: Normalize network mode for self-hosted WATT runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "HTTP_PROXY="
+            echo "HTTPS_PROXY="
+            echo "http_proxy="
+            echo "https_proxy="
+            echo "ALL_PROXY="
+            echo "all_proxy="
+            echo "NO_PROXY="
+            echo "no_proxy="
+          } >> "$GITHUB_ENV"
+
+      - name: Validate WATT host routing for GitHub on self-hosted runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          source "$AGENT_PYBIND_HELPERS"
+          curl_bin="$(resolve_curl)"
+
+          {
+            echo "## WATT GitHub acceleration check"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          for host in github.com api.github.com; do
+            resolved_ip="$(getent hosts "$host" | awk '{print $1}' | head -n1 || true)"
+            echo "$host -> ${resolved_ip:-unresolved}"
+            echo "- ${host}: \`${resolved_ip:-unresolved}\`" >> "$GITHUB_STEP_SUMMARY"
+
+            if [ -z "$resolved_ip" ]; then
+              echo "::error::${host} did not resolve on this runner."
+              exit 1
+            fi
+
+            if [ "$resolved_ip" != "127.0.0.1" ]; then
+              echo "::error::Expected ${host} to resolve to 127.0.0.1 for WATT/Steam++ routing, got ${resolved_ip}."
+              exit 1
+            fi
+          done
+
+          "$curl_bin" --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
+          "$curl_bin" --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
+
+      - name: Network preflight for GitHub HTTPS endpoints
+        shell: bash
+        run: |
+          set -euo pipefail
+          source "$AGENT_PYBIND_HELPERS"
+          curl_bin="$(resolve_curl)"
+          https_proxy_status="no"
+          http_proxy_status="no"
+          no_proxy_status="no"
+          if [ -n "${HTTPS_PROXY:-}" ]; then
+            https_proxy_status="yes"
           fi
-          mkdir -p "$HOME/.ssh"
-          chmod 700 "$HOME/.ssh"
-          python3 - <<'PY'
-          from pathlib import Path
+          if [ -n "${HTTP_PROXY:-}" ]; then
+            http_proxy_status="yes"
+          fi
+          if [ -n "${NO_PROXY:-}" ]; then
+            no_proxy_status="yes"
+          fi
+          {
+            echo "## Network preflight"
+            echo ""
+            echo "- curl executable: \`${curl_bin}\`"
+            echo "- HTTPS proxy configured: `${https_proxy_status}`"
+            echo "- HTTP proxy configured: `${http_proxy_status}`"
+            echo "- NO_PROXY configured: `${no_proxy_status}`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
 
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-          managed_block = (
-              begin_marker
-              + "Host github.com\n"
-              + "  HostName ssh.github.com\n"
-              + "  Port 443\n"
-              + "  User git\n"
-              + "  IdentitiesOnly yes\n"
-              + "  StrictHostKeyChecking no\n"
-              + end_marker
-          )
+          for url in \
+            https://github.com \
+            https://api.github.com \
+            https://codeload.github.com
+          do
+            echo "Checking $url"
+            retry 4 "$curl_bin" --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 "$url" >/dev/null
+          done
 
-          existing = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          existing = existing.lstrip("\n")
-          updated = managed_block if not existing else managed_block + "\n" + existing
-          config_path.write_text(updated, encoding="utf-8")
+      - name: Checkout repository over HTTPS with retry
+        shell: bash
+        run: |
+          set -euo pipefail
+          source "$AGENT_PYBIND_HELPERS"
+          auth_header="$(python3 - <<'PY'
+          import base64
+          import os
+          token = os.environ["GH_TOKEN"]
+          print(base64.b64encode(f"x-access-token:{token}".encode()).decode())
           PY
-          chmod 600 "$HOME/.ssh/config"
+          )"
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
-          ssh-strict: false
-          persist-credentials: true
-          fetch-depth: 0
+          cd "$GITHUB_WORKSPACE"
+          if [ -d .git ]; then
+            git reset --hard >/dev/null 2>&1 || true
+            git clean -ffdx >/dev/null 2>&1 || true
+          fi
+
+          git init .
+          git config --local advice.detachedHead false
+          git config --local gc.auto 0
+          git config --local http.sslVerify true
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${auth_header}"
+          git remote remove origin >/dev/null 2>&1 || true
+          git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
+
+          retry 5 git fetch --no-tags --prune --depth=1 origin "$GITHUB_SHA"
+          git checkout --force FETCH_HEAD
+          git clean -ffdx
+
+      - name: Ensure inventory summary exists
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ ! -f class_bind_methods_details/methods_inventory_summary.csv ]; then
+            python3 class_bind_methods_details/generate_methods_csv.py
+          fi
 
       - name: Resolve class metadata from local inventory
         id: resolve
@@ -239,92 +356,50 @@ jobs:
               summary.write(f"- Progress sync expected: `{progress_expected}`\n")
           PY
 
-      - name: Upload resolved task artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: resolved-task-${{ github.run_id }}
-          path: resolved-task.json
-          if-no-files-found: error
-
-  build:
-    name: Configure and build
-    runs-on: self-hosted
-    needs:
-      - budget-guard
-      - resolve-task
-    timeout-minutes: 120
-    permissions:
-      contents: read
-    env:
-      PYBIND_DIR: .
-      BUILD_DIR: build
-      PYTHONUNBUFFERED: "1"
-      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
-    steps:
-      - name: Configure GitHub SSH transport
+      - name: Resolve conda-backed ISIS prefix
         shell: bash
-        env:
-          ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
         run: |
           set -euo pipefail
-          if [ -z "${ACTIONS_CHECKOUT_SSH_KEY:-}" ]; then
-            echo "::error::Missing secret ACTIONS_CHECKOUT_SSH_KEY. This workflow requires SSH checkout via ssh.github.com:443."
+          resolved_prefix="${CONDA_PREFIX:-}"
+          if [[ -n "$resolved_prefix" ]]; then
+            echo "Detected existing CONDA_PREFIX from runner: $resolved_prefix"
+          elif [[ -d "$FALLBACK_CONDA_PREFIX" ]]; then
+            resolved_prefix="$FALLBACK_CONDA_PREFIX"
+            echo "CONDA_PREFIX was not preset; using fallback prefix: $resolved_prefix"
+          else
+            echo "::error::Neither CONDA_PREFIX nor fallback prefix '$FALLBACK_CONDA_PREFIX' is available on this runner."
             exit 1
           fi
-          mkdir -p "$HOME/.ssh"
-          chmod 700 "$HOME/.ssh"
-          python3 - <<'PY'
-          from pathlib import Path
 
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-          managed_block = (
-              begin_marker
-              + "Host github.com\n"
-              + "  HostName ssh.github.com\n"
-              + "  Port 443\n"
-              + "  User git\n"
-              + "  IdentitiesOnly yes\n"
-              + "  StrictHostKeyChecking no\n"
-              + end_marker
-          )
+          test -d "$resolved_prefix/include/isis"
+          test -f "$resolved_prefix/lib/libisis.so"
+          test -f "$resolved_prefix/lib/Camera.plugin"
+          test -x "$resolved_prefix/bin/python"
 
-          existing = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          existing = existing.lstrip("\n")
-          updated = managed_block if not existing else managed_block + "\n" + existing
-          config_path.write_text(updated, encoding="utf-8")
-          PY
-          chmod 600 "$HOME/.ssh/config"
+          {
+            echo "CONDA_PREFIX=$resolved_prefix"
+            echo "ISIS_PREFIX=$resolved_prefix"
+            echo "ISISROOT=$resolved_prefix"
+            echo "PYTHON_BIN=$resolved_prefix/bin/python"
+            echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup"
+            echo "CMAKE_PREFIX_PATH=$resolved_prefix${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}"
+            echo "LD_LIBRARY_PATH=$resolved_prefix/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+            echo "PATH=$resolved_prefix/bin:$PATH"
+          } >> "$GITHUB_ENV"
 
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
-          ssh-strict: false
-          persist-credentials: true
-          fetch-depth: 0
-
-      - name: Resolve conda-backed ISIS prefix
-        uses: ./.github/actions/resolve-conda-isis-prefix
-        with:
-          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
-
-      - name: Verify existing local toolchain
+      - name: Verify local toolchain
         shell: bash
         run: |
           set -euo pipefail
-          echo "=== Existing local environment verification ==="
+          echo "=== Local environment verification ==="
           echo "CONDA_PREFIX=$CONDA_PREFIX"
           test -d "$CONDA_PREFIX/include/isis" && echo "✓ ISIS headers found"
           test -f "$CONDA_PREFIX/lib/libisis.so" && echo "✓ libisis.so found"
           test -f "$CONDA_PREFIX/lib/Camera.plugin" && echo "✓ Camera.plugin found"
           command -v cmake
+          cmake --version
           command -v ninja
+          ninja --version
           "$PYTHON_BIN" --version
           "$PYTHON_BIN" - <<'PY'
           import pybind11
@@ -357,12 +432,113 @@ jobs:
           set -o pipefail
           cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
 
-      - name: Summarize build failure
-        if: failure()
+      - name: Run targeted unittest or fallback CTest group
+        if: ${{ success() }}
+        shell: bash
+        env:
+          RESOLVED_UNIT_TEST: ${{ steps.resolve.outputs.unit_test_file }}
+          UNIT_TEST_OVERRIDE: ${{ inputs.unit_test_target_override }}
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          export PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}"
+          target="$UNIT_TEST_OVERRIDE"
+          if [ -z "$target" ]; then
+            target="$RESOLVED_UNIT_TEST"
+          fi
+
+          if [ -n "$target" ] && [ -f "$target" ]; then
+            echo "Running unit test file: $target"
+            "$PYTHON_BIN" -X faulthandler "$target" -v 2>&1 | tee "$BUILD_DIR/unit.log"
+          elif [ -n "$target" ]; then
+            echo "Running unittest target: $target"
+            "$PYTHON_BIN" -X faulthandler -m unittest -v "$target" 2>&1 | tee "$BUILD_DIR/unit.log"
+          else
+            echo "No specific unit test mapping found; falling back to ctest -R python-unit-tests"
+            ctest --test-dir "$BUILD_DIR" -R python-unit-tests --output-on-failure 2>&1 | tee "$BUILD_DIR/unit.log"
+          fi
+
+      - name: Run smoke_import.py
+        if: ${{ success() }}
         shell: bash
         run: |
           set -euo pipefail
-          "$PYTHON_BIN" - <<'PY'
+          set -o pipefail
+          PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
+            "$PYTHON_BIN" -X faulthandler tests/smoke_import.py 2>&1 | tee "$BUILD_DIR/smoke.log"
+
+      - name: Validate progress files when binding state likely changed
+        if: ${{ success() }}
+        shell: bash
+        env:
+          DETAIL_CSV: ${{ steps.resolve.outputs.detail_csv }}
+          BINDING_FILE: ${{ steps.resolve.outputs.binding_file }}
+          PROGRESS_EXPECTED: ${{ steps.resolve.outputs.progress_expected }}
+          TARGET_CLASS: ${{ steps.resolve.outputs.target_class }}
+        run: |
+          set -euo pipefail
+          source "$AGENT_PYBIND_HELPERS"
+          default_branch="${{ github.event.repository.default_branch || 'main' }}"
+          retry 5 git fetch origin "$default_branch" --depth=1 >/dev/null 2>&1 || true
+          if git rev-parse --verify "origin/$default_branch" >/dev/null 2>&1; then
+            base_ref="origin/$default_branch"
+          else
+            base_ref="HEAD^"
+          fi
+
+          diff_files="$(git diff --name-only "$base_ref"...HEAD || true)"
+          {
+            echo "## Progress consistency check"
+            echo ""
+            echo "Changed files relative to $base_ref:"
+            echo '```text'
+            if [ -n "$diff_files" ]; then
+              printf '%s\n' "$diff_files"
+            else
+              echo "(none)"
+            fi
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$PROGRESS_EXPECTED" != "1" ]; then
+            echo "Progress sync is not required for $TARGET_CLASS based on current inventory status." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          if [ -z "$diff_files" ]; then
+            echo "::notice::No committed changes detected against $base_ref; skipping progress sync enforcement."
+            exit 0
+          fi
+
+          if ! printf '%s\n' "$diff_files" | grep -Eq '^(src/|python/isis_pybind/__init__\.py)'; then
+            echo "No binding/export changes detected; progress sync check skipped." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          changed_progress=0
+          if printf '%s\n' "$diff_files" | grep -Fxq 'pybind_progress_log.md'; then
+            changed_progress=1
+          fi
+          if printf '%s\n' "$diff_files" | grep -Fxq 'todo_pybind11.csv'; then
+            changed_progress=1
+          fi
+          if [ -n "$DETAIL_CSV" ] && printf '%s\n' "$diff_files" | grep -Fxq "$DETAIL_CSV"; then
+            changed_progress=1
+          fi
+
+          if [ "$changed_progress" -ne 1 ]; then
+            echo "::error::Binding/export files changed for $TARGET_CLASS but progress artifacts were not updated. Expected one or more of: pybind_progress_log.md, todo_pybind11.csv, $DETAIL_CSV"
+            exit 1
+          fi
+
+          echo "Progress artifacts updated as expected for $TARGET_CLASS." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Summarize build failure
+        if: ${{ failure() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
           import os
           import re
           from collections import deque
@@ -442,363 +618,16 @@ jobs:
                   print(f"::error {annotation}::{item['message']}")
           PY
 
-      - name: Upload build logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: task-build-logs-${{ github.run_id }}
-          if-no-files-found: warn
-          path: |
-            ${{ env.BUILD_DIR }}/build.log
-            ${{ env.BUILD_DIR }}/CMakeCache.txt
-            ${{ env.BUILD_DIR }}/CMakeFiles/CMakeOutput.log
-            ${{ env.BUILD_DIR }}/CMakeFiles/CMakeError.log
-            ${{ env.BUILD_DIR }}/Testing/Temporary/**
-
-      - name: Upload build artifact
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: task-build-tree-${{ github.run_id }}
-          path: ${{ env.BUILD_DIR }}
-          if-no-files-found: error
-
-  unit-tests:
-    name: Targeted unit validation
-    runs-on: self-hosted
-    needs:
-      - build
-      - resolve-task
-    timeout-minutes: 60
-    permissions:
-      contents: read
-    env:
-      BUILD_DIR: build
-      PYTHONUNBUFFERED: "1"
-      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
-    steps:
-      - name: Configure GitHub SSH transport
-        shell: bash
-        env:
-          ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
-        run: |
-          set -euo pipefail
-          if [ -z "${ACTIONS_CHECKOUT_SSH_KEY:-}" ]; then
-            echo "::error::Missing secret ACTIONS_CHECKOUT_SSH_KEY. This workflow requires SSH checkout via ssh.github.com:443."
-            exit 1
-          fi
-          mkdir -p "$HOME/.ssh"
-          chmod 700 "$HOME/.ssh"
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-          managed_block = (
-              begin_marker
-              + "Host github.com\n"
-              + "  HostName ssh.github.com\n"
-              + "  Port 443\n"
-              + "  User git\n"
-              + "  IdentitiesOnly yes\n"
-              + "  StrictHostKeyChecking no\n"
-              + end_marker
-          )
-
-          existing = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          existing = existing.lstrip("\n")
-          updated = managed_block if not existing else managed_block + "\n" + existing
-          config_path.write_text(updated, encoding="utf-8")
-          PY
-          chmod 600 "$HOME/.ssh/config"
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
-          ssh-strict: false
-          persist-credentials: true
-          fetch-depth: 0
-
-      - name: Resolve conda-backed ISIS prefix
-        uses: ./.github/actions/resolve-conda-isis-prefix
-        with:
-          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: task-build-tree-${{ github.run_id }}
-          path: ${{ env.BUILD_DIR }}
-
-      - name: Run targeted unittest or fallback CTest group
-        shell: bash
-        env:
-          RESOLVED_UNIT_TEST: ${{ needs.resolve-task.outputs.unit_test_file }}
-          UNIT_TEST_OVERRIDE: ${{ inputs.unit_test_target_override }}
-        run: |
-          set -euo pipefail
-          set -o pipefail
-          export PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}"
-          target="$UNIT_TEST_OVERRIDE"
-          if [ -z "$target" ]; then
-            target="$RESOLVED_UNIT_TEST"
-          fi
-
-          if [ -n "$target" ] && [ -f "$target" ]; then
-            echo "Running unit test file: $target"
-            "$PYTHON_BIN" -X faulthandler "$target" -v 2>&1 | tee "$BUILD_DIR/unit.log"
-          elif [ -n "$target" ]; then
-            echo "Running unittest target: $target"
-            "$PYTHON_BIN" -X faulthandler -m unittest -v "$target" 2>&1 | tee "$BUILD_DIR/unit.log"
-          else
-            echo "No specific unit test mapping found; falling back to ctest -R python-unit-tests"
-            ctest --test-dir "$BUILD_DIR" -R python-unit-tests --output-on-failure 2>&1 | tee "$BUILD_DIR/unit.log"
-          fi
-
-      - name: Upload unit test logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: task-unit-logs-${{ github.run_id }}
-          if-no-files-found: warn
-          path: |
-            ${{ env.BUILD_DIR }}/unit.log
-            ${{ env.BUILD_DIR }}/Testing/Temporary/**
-
-  smoke-import:
-    name: Smoke import
-    runs-on: self-hosted
-    needs: build
-    timeout-minutes: 30
-    permissions:
-      contents: read
-    env:
-      BUILD_DIR: build
-      PYTHONUNBUFFERED: "1"
-      FALLBACK_CONDA_PREFIX: /home/gengxun/miniconda3/envs/asp360_new
-    steps:
-      - name: Configure GitHub SSH transport
-        shell: bash
-        env:
-          ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
-        run: |
-          set -euo pipefail
-          if [ -z "${ACTIONS_CHECKOUT_SSH_KEY:-}" ]; then
-            echo "::error::Missing secret ACTIONS_CHECKOUT_SSH_KEY. This workflow requires SSH checkout via ssh.github.com:443."
-            exit 1
-          fi
-          mkdir -p "$HOME/.ssh"
-          chmod 700 "$HOME/.ssh"
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-          managed_block = (
-              begin_marker
-              + "Host github.com\n"
-              + "  HostName ssh.github.com\n"
-              + "  Port 443\n"
-              + "  User git\n"
-              + "  IdentitiesOnly yes\n"
-              + "  StrictHostKeyChecking no\n"
-              + end_marker
-          )
-
-          existing = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          existing = existing.lstrip("\n")
-          updated = managed_block if not existing else managed_block + "\n" + existing
-          config_path.write_text(updated, encoding="utf-8")
-          PY
-          chmod 600 "$HOME/.ssh/config"
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
-          ssh-strict: false
-          persist-credentials: true
-          fetch-depth: 0
-
-      - name: Resolve conda-backed ISIS prefix
-        uses: ./.github/actions/resolve-conda-isis-prefix
-        with:
-          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: task-build-tree-${{ github.run_id }}
-          path: ${{ env.BUILD_DIR }}
-
-      - name: Run smoke_import.py
-        shell: bash
-        run: |
-          set -euo pipefail
-          set -o pipefail
-          PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
-            "$PYTHON_BIN" -X faulthandler tests/smoke_import.py 2>&1 | tee "$BUILD_DIR/smoke.log"
-
-      - name: Upload smoke logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: task-smoke-logs-${{ github.run_id }}
-          if-no-files-found: warn
-          path: ${{ env.BUILD_DIR }}/smoke.log
-
-  progress-check:
-    name: Progress consistency check
-    runs-on: self-hosted
-    needs:
-      - resolve-task
-      - unit-tests
-      - smoke-import
-    timeout-minutes: 20
-    permissions:
-      contents: read
-    env:
-      DETAIL_CSV: ${{ needs.resolve-task.outputs.detail_csv }}
-      BINDING_FILE: ${{ needs.resolve-task.outputs.binding_file }}
-      PROGRESS_EXPECTED: ${{ needs.resolve-task.outputs.progress_expected }}
-      TARGET_CLASS: ${{ needs.resolve-task.outputs.target_class }}
-    steps:
-      - name: Configure GitHub SSH transport
-        shell: bash
-        env:
-          ACTIONS_CHECKOUT_SSH_KEY: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
-        run: |
-          set -euo pipefail
-          if [ -z "${ACTIONS_CHECKOUT_SSH_KEY:-}" ]; then
-            echo "::error::Missing secret ACTIONS_CHECKOUT_SSH_KEY. This workflow requires SSH checkout via ssh.github.com:443."
-            exit 1
-          fi
-          mkdir -p "$HOME/.ssh"
-          chmod 700 "$HOME/.ssh"
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-          managed_block = (
-              begin_marker
-              + "Host github.com\n"
-              + "  HostName ssh.github.com\n"
-              + "  Port 443\n"
-              + "  User git\n"
-              + "  IdentitiesOnly yes\n"
-              + "  StrictHostKeyChecking no\n"
-              + end_marker
-          )
-
-          existing = config_path.read_text(encoding="utf-8") if config_path.exists() else ""
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          existing = existing.lstrip("\n")
-          updated = managed_block if not existing else managed_block + "\n" + existing
-          config_path.write_text(updated, encoding="utf-8")
-          PY
-          chmod 600 "$HOME/.ssh/config"
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}
-          ssh-strict: false
-          persist-credentials: true
-          fetch-depth: 0
-
-      - name: Validate progress files when binding state likely changed
-        shell: bash
-        run: |
-          set -euo pipefail
-          default_branch="${{ github.event.repository.default_branch }}"
-          git fetch origin "$default_branch" --depth=1 >/dev/null 2>&1 || true
-          if git rev-parse --verify "origin/$default_branch" >/dev/null 2>&1; then
-            base_ref="origin/$default_branch"
-          else
-            base_ref="HEAD^"
-          fi
-
-          diff_files="$(git diff --name-only "$base_ref"...HEAD || true)"
-          echo "Changed files relative to $base_ref:" >> "$GITHUB_STEP_SUMMARY"
-          if [ -n "$diff_files" ]; then
-            printf '%s\n' "$diff_files" >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "(none)" >> "$GITHUB_STEP_SUMMARY"
-          fi
-
-          if [ "$PROGRESS_EXPECTED" != "1" ]; then
-            echo "Progress sync is not required for $TARGET_CLASS based on current inventory status." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-
-          if [ -z "$diff_files" ]; then
-            echo "::notice::No committed changes detected against $base_ref; skipping progress sync enforcement."
-            exit 0
-          fi
-
-          if ! printf '%s\n' "$diff_files" | grep -Eq '^(src/|python/isis_pybind/__init__\.py)'; then
-            echo "No binding/export changes detected; progress sync check skipped." >> "$GITHUB_STEP_SUMMARY"
-            exit 0
-          fi
-
-          changed_progress=0
-          if printf '%s\n' "$diff_files" | grep -Fxq 'pybind_progress_log.md'; then
-            changed_progress=1
-          fi
-          if printf '%s\n' "$diff_files" | grep -Fxq 'todo_pybind11.csv'; then
-            changed_progress=1
-          fi
-          if [ -n "$DETAIL_CSV" ] && printf '%s\n' "$diff_files" | grep -Fxq "$DETAIL_CSV"; then
-            changed_progress=1
-          fi
-
-          if [ "$changed_progress" -ne 1 ]; then
-            echo "::error::Binding/export files changed for $TARGET_CLASS but progress artifacts were not updated. Expected one or more of: pybind_progress_log.md, todo_pybind11.csv, $DETAIL_CSV"
-            exit 1
-          fi
-
-          echo "Progress artifacts updated as expected for $TARGET_CLASS." >> "$GITHUB_STEP_SUMMARY"
-
-  blocker-summary:
-    name: Blocker summary
-    runs-on: self-hosted
-    if: failure()
-    needs:
-      - resolve-task
-      - build
-      - unit-tests
-      - smoke-import
-      - progress-check
-    permissions:
-      contents: read
-      issues: write
-      pull-requests: write
-    steps:
-      - name: Write step summary
+      - name: Write failure summary
+        if: ${{ failure() }}
         shell: bash
         run: |
           {
             echo "## Pybind task failure summary"
             echo ""
-            echo "- Target class: ${{ needs.resolve-task.outputs.target_class }}"
-            echo "- Module category: ${{ needs.resolve-task.outputs.module_category }}"
-            echo "- Suggested unit test: ${{ needs.resolve-task.outputs.unit_test_file || '(fallback to ctest python-unit-tests)' }}"
+            echo "- Target class: ${{ steps.resolve.outputs.target_class || inputs.target_class }}"
+            echo "- Module category: ${{ steps.resolve.outputs.module_category || 'unknown' }}"
+            echo "- Suggested unit test: ${{ steps.resolve.outputs.unit_test_file || '(fallback to ctest python-unit-tests)' }}"
             echo "- Issue: #${{ inputs.issue_number || 'n/a' }}"
             echo "- Attempt: ${{ inputs.attempt }} / 5"
             echo "- Required gate: build + unit + smoke + progress"
@@ -807,34 +636,52 @@ jobs:
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Comment on issue when attempt reaches 5
-        if: ${{ inputs.issue_number != '' && inputs.attempt == '5' }}
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const issueNumber = Number('${{ inputs.issue_number }}');
-            const body = [
-              'Automated pybind repair budget reached 5 attempts.',
-              '',
-              `Target class: ${{ needs.resolve-task.outputs.target_class }}`,
-              `Module category: ${{ needs.resolve-task.outputs.module_category }}`,
-              '',
-              'Please add a blocker summary with:',
-              '- last failing step',
-              '- most likely root cause',
-              '- classification: binding bug / test bug / environment / upstream behavior / unknown',
-              '- recommended next human action',
-              '',
-              'This task should stop here and the next task should be selected from the `ready-for-agent` queue.'
-            ].join('\n');
-            await github.rest.issues.createComment({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber,
-              body,
-            });
-            await github.rest.issues.addLabels({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: issueNumber,
-              labels: ['blocked', 'needs-human-review'],
-            });
+        if: ${{ failure() && inputs.issue_number != '' && inputs.attempt == '5' }}
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -euo pipefail
+          source "$AGENT_PYBIND_HELPERS"
+          curl_bin="$(resolve_curl)"
+          body_file="$RUNNER_TEMP/agent-pybind-blocker-comment.md"
+          cat > "$body_file" <<EOF
+          Automated pybind repair budget reached 5 attempts.
+
+          Target class: ${{ steps.resolve.outputs.target_class || inputs.target_class }}
+          Module category: ${{ steps.resolve.outputs.module_category || 'unknown' }}
+
+          Please add a blocker summary with:
+          - last failing step
+          - most likely root cause
+          - classification: binding bug / test bug / environment / upstream behavior / unknown
+          - recommended next human action
+
+          This task should stop here and the next task should be selected from the `ready-for-agent` queue.
+          EOF
+
+          comment_payload="$(python3 - "$body_file" <<'PY'
+          import json
+          import pathlib
+          import sys
+          print(json.dumps({"body": pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")}))
+          PY
+          )"
+
+          labels_payload='{"labels":["blocked","needs-human-review"]}'
+          api_root="https://api.github.com/repos/${GITHUB_REPOSITORY}/issues/${{ inputs.issue_number }}"
+
+          retry 4 "$curl_bin" --fail --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer ${GH_TOKEN}" \
+            --header "Accept: application/vnd.github+json" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            --data "$comment_payload" \
+            "${api_root}/comments" >/dev/null
+
+          retry 4 "$curl_bin" --fail --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer ${GH_TOKEN}" \
+            --header "Accept: application/vnd.github+json" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            --data "$labels_payload" \
+            "${api_root}/labels" >/dev/null

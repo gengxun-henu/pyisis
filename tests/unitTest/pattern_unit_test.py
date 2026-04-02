@@ -1,5 +1,9 @@
 """
-Unit tests for ISIS pattern matching classes: Chip and AutoReg
+Unit tests for ISIS pattern matching classes: Chip, AutoReg, and MaximumCorrelation
+
+Author: Geng Xun
+Created: 2026-03-24
+Last Modified: 2026-04-02
 """
 import unittest
 
@@ -126,6 +130,109 @@ class AutoRegUnitTest(unittest.TestCase):
         """Test AutoReg GradientFilterType enum values are accessible"""
         self.assertIsNotNone(ip.AutoReg.GradientFilterType.NoFilter)  # Renamed from None to avoid Python keyword
         self.assertIsNotNone(ip.AutoReg.GradientFilterType.Sobel)
+
+
+class MaximumCorrelationUnitTest(unittest.TestCase):
+    """Test suite for MaximumCorrelation class bindings.
+
+    Added: 2026-04-02
+    """
+
+    def test_maximum_correlation_construction(self):
+        """Test MaximumCorrelation construction with PVL configuration"""
+        # Create PVL configuration for MaximumCorrelation
+        pvl = ip.Pvl()
+        autoreg_obj = ip.PvlObject("AutoRegistration")
+
+        # Algorithm group
+        alg_group = ip.PvlGroup("Algorithm")
+        alg_group.add_keyword(ip.PvlKeyword("Name", "MaximumCorrelation"))
+        alg_group.add_keyword(ip.PvlKeyword("Tolerance", "0.7"))
+        alg_group.add_keyword(ip.PvlKeyword("SubpixelAccuracy", "True"))
+        autoreg_obj.add_group(alg_group)
+
+        # PatternChip group
+        pattern_group = ip.PvlGroup("PatternChip")
+        pattern_group.add_keyword(ip.PvlKeyword("Samples", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("Lines", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("ValidPercent", "50"))
+        autoreg_obj.add_group(pattern_group)
+
+        # SearchChip group
+        search_group = ip.PvlGroup("SearchChip")
+        search_group.add_keyword(ip.PvlKeyword("Samples", "35"))
+        search_group.add_keyword(ip.PvlKeyword("Lines", "35"))
+        autoreg_obj.add_group(search_group)
+
+        pvl.add_object(autoreg_obj)
+
+        # Construct MaximumCorrelation
+        max_corr = ip.MaximumCorrelation(pvl)
+        self.assertIsNotNone(max_corr)
+        self.assertIn("MaximumCorrelation", repr(max_corr))
+
+    def test_maximum_correlation_inherited_methods(self):
+        """Test that MaximumCorrelation inherits AutoReg methods"""
+        # Create PVL configuration
+        pvl = ip.Pvl()
+        autoreg_obj = ip.PvlObject("AutoRegistration")
+
+        alg_group = ip.PvlGroup("Algorithm")
+        alg_group.add_keyword(ip.PvlKeyword("Name", "MaximumCorrelation"))
+        alg_group.add_keyword(ip.PvlKeyword("Tolerance", "0.7"))
+        autoreg_obj.add_group(alg_group)
+
+        pattern_group = ip.PvlGroup("PatternChip")
+        pattern_group.add_keyword(ip.PvlKeyword("Samples", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("Lines", "15"))
+        autoreg_obj.add_group(pattern_group)
+
+        search_group = ip.PvlGroup("SearchChip")
+        search_group.add_keyword(ip.PvlKeyword("Samples", "35"))
+        search_group.add_keyword(ip.PvlKeyword("Lines", "35"))
+        autoreg_obj.add_group(search_group)
+
+        pvl.add_object(autoreg_obj)
+
+        max_corr = ip.MaximumCorrelation(pvl)
+
+        # Test inherited chip access methods
+        self.assertIsNotNone(max_corr.pattern_chip())
+        self.assertIsNotNone(max_corr.search_chip())
+        self.assertIsNotNone(max_corr.fit_chip())
+
+        # Test inherited configuration methods
+        self.assertTrue(max_corr.sub_pixel_accuracy())
+        self.assertAlmostEqual(max_corr.tolerance(), 0.7, places=6)
+
+    def test_maximum_correlation_repr(self):
+        """Test MaximumCorrelation __repr__"""
+        pvl = ip.Pvl()
+        autoreg_obj = ip.PvlObject("AutoRegistration")
+
+        alg_group = ip.PvlGroup("Algorithm")
+        alg_group.add_keyword(ip.PvlKeyword("Name", "MaximumCorrelation"))
+        alg_group.add_keyword(ip.PvlKeyword("Tolerance", "0.7"))
+        autoreg_obj.add_group(alg_group)
+
+        pattern_group = ip.PvlGroup("PatternChip")
+        pattern_group.add_keyword(ip.PvlKeyword("Samples", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("Lines", "15"))
+        autoreg_obj.add_group(pattern_group)
+
+        search_group = ip.PvlGroup("SearchChip")
+        search_group.add_keyword(ip.PvlKeyword("Samples", "35"))
+        search_group.add_keyword(ip.PvlKeyword("Lines", "35"))
+        autoreg_obj.add_group(search_group)
+
+        pvl.add_object(autoreg_obj)
+
+        max_corr = ip.MaximumCorrelation(pvl)
+        repr_str = repr(max_corr)
+
+        self.assertIn("MaximumCorrelation", repr_str)
+        self.assertIn("status=", repr_str)
+        self.assertIn("goodness_of_fit=", repr_str)
 
 
 if __name__ == '__main__':

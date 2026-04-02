@@ -207,7 +207,7 @@ Pattern Matching,Gruen,未转换,
 Pattern Matching,ImageOverlapSet,未转换,
 Pattern Matching,ImagePolygon,未转换,
 Pattern Matching,LimitPolygonSeeder,未转换,
-Pattern Matching,MaximumCorrelation,未转换,
+Pattern Matching,MaximumCorrelation,已转换,2026-04-02 已在 bind_base_pattern.cpp 暴露构造函数，继承 AutoReg 全部方法
 Pattern Matching,MinimumDifference,未转换,
 Pattern Matching,NormModelFactory,未转换,工厂类，静态创建接口较多
 Pattern Matching,PhotoModelFactory,未转换,工厂类，静态创建接口较多

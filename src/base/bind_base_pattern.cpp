@@ -8,9 +8,11 @@
  * Source ISIS headers:
  *   - isis/src/base/objs/Chip/Chip.h
  *   - isis/src/base/objs/AutoReg/AutoReg.h
+ *   - isis/src/base/objs/MaximumCorrelation/MaximumCorrelation.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Purpose: Expose Chip and AutoReg pattern matching classes to Python via pybind11.
+ * Updated: 2026-04-02
+ * Purpose: Expose Chip, AutoReg, and MaximumCorrelation pattern matching classes to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
@@ -18,6 +20,7 @@
 
 #include "Chip.h"
 #include "AutoReg.h"
+#include "MaximumCorrelation.h"
 #include "Cube.h"
 #include "Affine.h"
 #include "Statistics.h"
@@ -288,6 +291,33 @@ void bind_base_pattern(py::module_ &m) {
       .def("__repr__", [](const Isis::AutoReg &self) {
         std::string status = self.Success() ? "Success" : "Failed";
         return "AutoReg(status=" + status + ", " +
+               "goodness_of_fit=" + std::to_string(self.GoodnessOfFit()) + ")";
+      });
+
+  /**
+   * @brief Bindings for the Isis::MaximumCorrelation class
+   * MaximumCorrelation implements maximum correlation pattern matching algorithm.
+   * It finds the best match by computing correlation between pattern and subsearch chips.
+   * Best fit = 1.0 (pattern and subsearch chips are identical).
+   *
+   * Source ISIS header: isis/src/base/objs/MaximumCorrelation/MaximumCorrelation.h
+   * Source header author(s): not explicitly stated in upstream header
+   * Binding author: Geng Xun
+   * Created: 2026-04-02
+   * Updated: 2026-04-02
+   *
+   * @see Isis::MaximumCorrelation
+   * @see Isis::AutoReg
+   * Added: 2026-04-02 - expose MaximumCorrelation concrete AutoReg implementation
+   */
+  py::class_<Isis::MaximumCorrelation, Isis::AutoReg>(m, "MaximumCorrelation")
+      .def(py::init<Isis::Pvl &>(),
+           py::arg("pvl"),
+           py::keep_alive<1, 2>(),  // Keep Pvl alive as long as MaximumCorrelation exists
+           "Construct a MaximumCorrelation object with PVL configuration")
+      .def("__repr__", [](const Isis::MaximumCorrelation &self) {
+        std::string status = self.Success() ? "Success" : "Failed";
+        return "MaximumCorrelation(status=" + status + ", " +
                "goodness_of_fit=" + std::to_string(self.GoodnessOfFit()) + ")";
       });
 }

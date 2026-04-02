@@ -9,6 +9,7 @@ from ._isis_core import (
     Affine,
     AlphaCube,
     AutoReg,
+    MaximumCorrelation,
     # Temporarily disabled - bind_bundle_advanced is excluded from compilation
     # BundleControlPoint,
     BundleImage,
@@ -292,6 +293,7 @@ __all__ = [
     "AbstractPlate",
     "Affine",
     "AutoReg",
+    "MaximumCorrelation",
     "Chip",
     # Temporarily disabled - bind_bundle_advanced is excluded from compilation
     # "BundleControlPoint",

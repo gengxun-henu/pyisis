@@ -28,7 +28,7 @@ jobs:
       actions: write
       issues: write
     steps:
-      - name: Parse issue form and dispatch pybind task workflow
+      - name: Parse issue form and dispatch issue-to-PR bridge workflow
         uses: actions/github-script@v7
         with:
           script: |
@@ -88,12 +88,11 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'agent-pybind-task.yml',
+              workflow_id: 'bridge-pybind-issue-to-pr.yml',
               ref: context.payload.repository.default_branch,
               inputs: {
-                target_class: targetClass,
                 issue_number: String(issue.number),
-                attempt: '1',
+                target_class: targetClass,
                 unit_test_target_override: unitTestTarget,
               },
             });
@@ -113,12 +112,13 @@ jobs:
             });
 
             const dispatchBody = [
-              'Queued `agent-pybind-task.yml` from this issue.',
+              'Queued `bridge-pybind-issue-to-pr.yml` from this issue.',
               '',
               `- target class: ${targetClass}`,
-              `- attempt: 1 / 5`,
+              `- issue: #${issue.number}`,
               `- unit test target: ${unitTestTarget || '(auto-resolve or fallback to ctest python-unit-tests)'}`,
-              `- progress handling: auto-detected by workflow`,
+              '- next automation step: create or reuse a bootstrap branch and open/update a draft PR',
+              '- follow-up validation: dispatch `agent-pybind-task.yml` against that bootstrap branch',
               '',
               '`ready-for-agent` was consumed and replaced with `agent-active`.',
             ].join('\n');

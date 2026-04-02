@@ -2,7 +2,16 @@ name: reusable-runner-config
 
 on:
   workflow_call:
+    inputs:
+      runner_profile:
+        description: Optional runner profile override for manual or caller-specific dispatches.
+        required: false
+        default: ''
+        type: string
     outputs:
+      runner_profile:
+        description: Selected named runner profile.
+        value: ${{ jobs.resolve.outputs.runner_profile }}
       runner_mode:
         description: Selected runner mode.
         value: ${{ jobs.resolve.outputs.runner_mode }}
@@ -24,6 +33,12 @@ on:
       fallback_conda_prefix:
         description: Shared fallback conda prefix.
         value: ${{ jobs.resolve.outputs.fallback_conda_prefix }}
+      network_profile:
+        description: Named network profile hint.
+        value: ${{ jobs.resolve.outputs.network_profile }}
+      use_watt:
+        description: Whether the selected profile is marked as using WATT/Hosts routing.
+        value: ${{ jobs.resolve.outputs.use_watt }}
 
 jobs:
   resolve:
@@ -32,6 +47,7 @@ jobs:
     permissions:
       contents: read
     outputs:
+      runner_profile: ${{ steps.resolve.outputs.runner_profile }}
       runner_mode: ${{ steps.resolve.outputs.runner_mode }}
       runs_on_json: ${{ steps.resolve.outputs.runs_on_json }}
       use_ssh_checkout: ${{ steps.resolve.outputs.use_ssh_checkout }}
@@ -39,6 +55,8 @@ jobs:
       environment_strategy: ${{ steps.resolve.outputs.environment_strategy }}
       needs_dynamic_conda_setup: ${{ steps.resolve.outputs.needs_dynamic_conda_setup }}
       fallback_conda_prefix: ${{ steps.resolve.outputs.fallback_conda_prefix }}
+      network_profile: ${{ steps.resolve.outputs.network_profile }}
+      use_watt: ${{ steps.resolve.outputs.use_watt }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -48,3 +66,5 @@ jobs:
       - name: Resolve shared runner config
         id: resolve
         uses: ./.github/actions/resolve-runner-config
+        with:
+          profile-override: ${{ inputs.runner_profile }}

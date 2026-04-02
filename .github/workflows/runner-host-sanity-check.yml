@@ -64,9 +64,14 @@ jobs:
           {
             echo "## Runner host git/ssh sanity check"
             echo
+            echo "- runner profile: \`${{ needs.resolve_runner.outputs.runner_profile }}\`"
             echo "- runner mode: \`${{ needs.resolve_runner.outputs.runner_mode }}\`"
             echo "- runs-on: \`${{ needs.resolve_runner.outputs.runs_on_json }}\`"
             echo "- configured checkout transport hint: \`${{ needs.resolve_runner.outputs.checkout_transport }}\`"
+            echo "- network profile: \`${{ needs.resolve_runner.outputs.network_profile }}\`"
+            echo "- environment strategy: \`${{ needs.resolve_runner.outputs.environment_strategy }}\`"
+            echo "- use ssh checkout: \`${{ needs.resolve_runner.outputs.use_ssh_checkout }}\`"
+            echo "- use watt hint: \`${{ needs.resolve_runner.outputs.use_watt }}\`"
             echo "- fail on findings: \`${FAIL_ON_FINDINGS}\`"
             echo
           } >> "$GITHUB_STEP_SUMMARY"

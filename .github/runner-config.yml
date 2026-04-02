@@ -1,20 +1,45 @@
 # Unified workflow runner configuration
-# mode: self-hosted | github-hosted
-mode: self-hosted
+#
+# Switching strategy:
+# - Set `active_profile` to one of the profiles listed below.
+# - Keep `self-hosted-http` as the default stable path.
+# - Use `self-hosted-watt` only for manual or diagnostic runs when WATT/Hosts routing
+#   is intentionally being evaluated.
 
-# GitHub-hosted runner image used when mode=github-hosted
-github_hosted_runner: ubuntu-22.04
-
-# Labels used when mode=self-hosted
-self_hosted_labels: [self-hosted]
-
-# Checkout transport hints
-self_hosted_checkout_transport: https
-github_hosted_checkout_transport: https
-
-# Environment preparation strategy hints
-self_hosted_environment_strategy: existing-conda
-github_hosted_environment_strategy: micromamba
+active_profile: self-hosted-watt
 
 # Shared local fallback used by self-hosted runners
 fallback_conda_prefix: /home/gengxun/miniconda3/envs/asp360_new
+
+profiles:
+  self-hosted-http:
+    mode: self-hosted
+    labels: [self-hosted]
+    checkout_transport: https
+    environment_strategy: existing-conda
+    network_profile: plain-http
+    use_watt: false
+
+  self-hosted-watt:
+    mode: self-hosted
+    labels: [self-hosted]
+    checkout_transport: https
+    environment_strategy: existing-conda
+    network_profile: watt-hosts
+    use_watt: true
+
+  self-hosted-ssh:
+    mode: self-hosted
+    labels: [self-hosted]
+    checkout_transport: ssh
+    environment_strategy: existing-conda
+    network_profile: ssh-fallback
+    use_watt: false
+
+  github-hosted:
+    mode: github-hosted
+    github_hosted_runner: ubuntu-22.04
+    checkout_transport: https
+    environment_strategy: micromamba
+    network_profile: github-hosted
+    use_watt: false

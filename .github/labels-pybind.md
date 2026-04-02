@@ -35,10 +35,11 @@ Use these labels to manage the GitHub-web pybind task queue.
 
 1. Open an issue with `pybind-task`
 2. Review the scope; when the issue is truly actionable, add `ready-for-agent`
-3. Let the dispatch workflow replace `ready-for-agent` with `agent-active` when work starts
-4. If CI fails, optionally add one classification label such as `binding-bug` or `ci-failure`
-5. If retry budget reaches 5 and the task still fails, add `blocked` + `needs-human-review`, remove `agent-active`, and stop
-6. When the task is complete, remove transient labels and add `done`
+3. Let the dispatch workflow replace `ready-for-agent` with `agent-active`, create or reuse the task branch, and open/update the draft PR
+4. Push task-specific coding commits to that draft PR branch so the PR gate validates the real changes
+5. If CI fails, optionally add one classification label such as `binding-bug` or `ci-failure`
+6. If retry budget reaches 5 and the task still fails, add `blocked` + `needs-human-review`, remove `agent-active`, and stop
+7. When the task is complete, remove transient labels and add `done`
 
 ## Notes
 

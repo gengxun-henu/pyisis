@@ -51,6 +51,8 @@ Use this instruction when binding, testing, or debugging a USGS ISIS class.
 - Do not trust the `.h` alone for stateful classes.
 - For `Cube`, `Camera`, factories, I/O classes, and manager classes, assume the `.cpp` is required.
 - Use repository-relative paths in instructions and reports so the same guidance works in local runs, GitHub web review, and GitHub Actions.
+- When a binding or binding-status change is completed, sync the tracking artifacts in the same task: `todo_pybind11.csv`, `class_bind_methods_details/methods_inventory_summary.csv`, and the target `class_bind_methods_details/*_methods.csv`.
+- Treat code plus the target `*_methods.csv` as the immediate source of truth while editing, and do not leave `methods_inventory_summary.csv` stale after a class is newly bound or its coverage materially changes.
 - If a setter fails after `create()` or `open()`, treat it as a pre-create lifecycle method.
 - If upstream usage contradicts your guess from the header, follow upstream usage.
 - If Python behavior intentionally differs from raw C++, test the exported Python API.

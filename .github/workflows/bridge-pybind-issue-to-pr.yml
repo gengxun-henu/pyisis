@@ -1,0 +1,411 @@
+name: bridge-pybind-issue-to-pr
+
+on:
+  workflow_dispatch:
+    inputs:
+      issue_number:
+        description: "GitHub issue number for this pybind task"
+        required: true
+        type: string
+      target_class:
+        description: "One upstream ISIS class name, for example BoxcarManager"
+        required: true
+        type: string
+      unit_test_target_override:
+        description: "Optional unittest target override, for example tests/unitTest/cube_unit_test.py or cube_unit_test.CubeBaseMultiplierTest"
+        required: false
+        default: ""
+        type: string
+      runner_profile:
+        description: "Optional runner profile override for manual dispatch: self-hosted-http, self-hosted-watt, self-hosted-ssh, github-hosted"
+        required: false
+        default: ""
+        type: string
+
+concurrency:
+  group: bridge-pybind-issue-to-pr-${{ inputs.issue_number }}
+  cancel-in-progress: false
+
+jobs:
+  resolve_runner:
+    name: Resolve runner mode
+    uses: ./.github/workflows/reusable-runner-config.yml
+    with:
+      runner_profile: ${{ inputs.runner_profile }}
+
+  bridge:
+    name: Bootstrap task branch and draft PR
+    needs: resolve_runner
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Normalize GitHub checkout transport for WATT HTTPS
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          cleanup_git_insteadof() {
+            local scope="$1"
+            local output
+            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
+            if [ -z "$output" ]; then
+              return 0
+            fi
+
+            while IFS= read -r line; do
+              [ -n "$line" ] || continue
+              key="${line%% *}"
+              value="${line#* }"
+              case "$value" in
+                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
+                  git config "$scope" --unset-all "$key" || true
+                  ;;
+              esac
+            done <<< "$output"
+          }
+
+          cleanup_git_insteadof --global
+          cleanup_git_insteadof --system
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          config_path = Path.home() / ".ssh" / "config"
+          begin_marker = "# BEGIN github-actions github ssh\n"
+          end_marker = "# END github-actions github ssh\n"
+
+          if not config_path.exists():
+              raise SystemExit(0)
+
+          existing = config_path.read_text(encoding="utf-8")
+          while begin_marker in existing and end_marker in existing:
+              start = existing.index(begin_marker)
+              end = existing.index(end_marker, start) + len(end_marker)
+              existing = existing[:start] + existing[end:]
+          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
+          PY
+
+          if [ -f "$HOME/.ssh/config" ]; then
+            chmod 600 "$HOME/.ssh/config"
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Report checkout transport diagnostics
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote_url="$(git remote get-url origin)"
+          {
+            echo "## Checkout transport diagnostics"
+            echo ""
+            echo "- origin: \`${remote_url}\`"
+            echo ""
+            echo "### git url rewrite rules"
+            echo '```text'
+            git config --global --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if printf '%s\n' "$remote_url" | grep -Eq '^(git@|ssh://git@|git@ssh\.github\.com)'; then
+            echo "::error::Checkout is still using SSH transport: ${remote_url}"
+            exit 1
+          fi
+
+      - name: Fetch issue context and render draft PR body
+        id: prepare
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+
+            const issueNumber = Number('${{ inputs.issue_number }}');
+            const fallbackTargetClass = '${{ inputs.target_class }}'.trim();
+            const unitTestOverride = '${{ inputs.unit_test_target_override }}'.trim();
+
+            const issue = (await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+            })).data;
+
+            const issueBody = issue.body || '';
+
+            function escapeRegex(value) {
+              return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            }
+
+            function normalizeValue(value) {
+              const normalized = (value || '').replace(/\r/g, '').trim();
+              if (!normalized || normalized === '_No response_') {
+                return '';
+              }
+              return normalized;
+            }
+
+            function extractSection(heading) {
+              const pattern = new RegExp(
+                `(?:^|\\n)### ${escapeRegex(heading)}\\s*\\n([\\s\\S]*?)(?=\\n### |$)`,
+                'm'
+              );
+              const match = issueBody.match(pattern);
+              return normalizeValue(match ? match[1] : '');
+            }
+
+            function slugify(value) {
+              const slug = value
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .slice(0, 40)
+                .replace(/-+$/g, '');
+              return slug || 'task';
+            }
+
+            function section(title, value, fence = false) {
+              if (!value) {
+                return `## ${title}\n\n_Not provided in the issue form._`;
+              }
+              if (fence) {
+                return `## ${title}\n\n\`\`\`text\n${value}\n\`\`\``;
+              }
+              return `## ${title}\n\n${value}`;
+            }
+
+            const targetClass = fallbackTargetClass || extractSection('Target upstream class');
+            if (!targetClass) {
+              core.setFailed('Missing target class for bridge-pybind-issue-to-pr workflow.');
+              return;
+            }
+
+            const branchName = `agent/issue-${issueNumber}-${slugify(targetClass)}`;
+            const prTitle = `[pybind][agent] #${issueNumber} ${targetClass}`;
+            const issueContext = {
+              issue_number: issueNumber,
+              issue_title: issue.title,
+              issue_url: issue.html_url,
+              issue_body: issueBody,
+              target_class: targetClass,
+              task_scope: extractSection('Task scope'),
+              upstream_paths: extractSection('Upstream source paths'),
+              local_context: extractSection('Local repository files to inspect first'),
+              expected_changes: extractSection('Expected file changes'),
+              minimal_validation: extractSection('Minimal validation plan'),
+              unit_test_target: unitTestOverride || extractSection('Unit test target (optional)'),
+              blocker_template: extractSection('Blocker summary template'),
+              priority: extractSection('Priority'),
+              branch_name: branchName,
+              pr_title: prTitle,
+            };
+
+            const prBody = [
+              '<!-- pybind-agent-bridge -->',
+              `Closes #${issueNumber}`,
+              '',
+              '## Task handoff',
+              '',
+              `- Source issue: #${issueNumber}`,
+              `- Target upstream class: \`${targetClass}\``,
+              `- Bootstrap branch: \`${branchName}\``,
+              `- Suggested unit test target: ${issueContext.unit_test_target ? `\`${issueContext.unit_test_target}\`` : '_auto-resolve or fallback to ctest python-unit-tests_'}`,
+              `- Priority: ${issueContext.priority ? `\`${issueContext.priority}\`` : '_not specified_'}`,
+              '',
+              'Use this draft PR as the working branch for the coding agent or a human contributor. Push all task-specific commits to the bootstrap branch above so the PR gate can validate the real changes.',
+              '',
+              section('Task scope', issueContext.task_scope),
+              '',
+              section('Upstream source paths', issueContext.upstream_paths, true),
+              '',
+              section('Local repository files to inspect first', issueContext.local_context, true),
+              '',
+              section('Expected file changes', issueContext.expected_changes, true),
+              '',
+              section('Minimal validation plan', issueContext.minimal_validation, true),
+              '',
+              section('Blocker summary template', issueContext.blocker_template, true),
+              '',
+              '## Agent coding checklist',
+              '',
+              '- [ ] Read the linked issue and the repository pybind instructions',
+              '- [ ] Implement the narrowest safe binding/test change for this task',
+              '- [ ] Update progress metadata if the binding surface changes',
+              '- [ ] Run the smallest relevant validation path',
+              '- [ ] Convert this PR out of draft only after build + unit + smoke look healthy',
+            ].join('\n');
+
+            fs.writeFileSync('bridge-context.json', JSON.stringify(issueContext, null, 2) + '\n');
+            fs.writeFileSync('bridge-pr-body.md', prBody + '\n');
+
+            core.setOutput('branch_name', branchName);
+            core.setOutput('pr_title', prTitle);
+            core.setOutput('target_class', targetClass);
+            core.setOutput('unit_test_target', issueContext.unit_test_target || '');
+
+            core.summary
+              .addHeading('Issue to PR bridge context', 2)
+              .addRaw(`- Issue: #${issueNumber}\n`)
+              .addRaw(`- Target class: \`${targetClass}\`\n`)
+              .addRaw(`- Bootstrap branch: \`${branchName}\`\n`)
+              .addRaw(`- Suggested unit test target: ${issueContext.unit_test_target ? `\`${issueContext.unit_test_target}\`` : '_not provided_'}\n`);
+            await core.summary.write();
+
+      - name: Create or reuse bootstrap branch
+        id: branch
+        shell: bash
+        env:
+          BRANCH_NAME: ${{ steps.prepare.outputs.branch_name }}
+          ISSUE_NUMBER: ${{ inputs.issue_number }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch || 'main' }}
+        run: |
+          set -euo pipefail
+
+          git fetch origin "$DEFAULT_BRANCH" --depth=1
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git ls-remote --exit-code --heads origin "$BRANCH_NAME" >/dev/null 2>&1; then
+            echo "Bootstrap branch already exists: $BRANCH_NAME"
+            echo "created_branch=false" >> "$GITHUB_OUTPUT"
+          else
+            git checkout -B "$BRANCH_NAME" "origin/$DEFAULT_BRANCH"
+            git commit --allow-empty -m "chore(agent): bootstrap pybind task branch for #$ISSUE_NUMBER"
+            git push --set-upstream origin "$BRANCH_NAME"
+            echo "created_branch=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create or update draft PR and dispatch task workflow
+        id: bridge
+        uses: actions/github-script@v7
+        env:
+          BRANCH_NAME: ${{ steps.prepare.outputs.branch_name }}
+          PR_TITLE: ${{ steps.prepare.outputs.pr_title }}
+          TARGET_CLASS: ${{ steps.prepare.outputs.target_class }}
+          UNIT_TEST_TARGET: ${{ steps.prepare.outputs.unit_test_target }}
+          RUNNER_PROFILE: ${{ inputs.runner_profile }}
+        with:
+          script: |
+            const fs = require('fs');
+
+            const issueContext = JSON.parse(fs.readFileSync('bridge-context.json', 'utf8'));
+            const prBody = fs.readFileSync('bridge-pr-body.md', 'utf8');
+            const branchName = process.env.BRANCH_NAME;
+            const prTitle = process.env.PR_TITLE;
+            const baseBranch = context.payload.repository.default_branch || 'main';
+            const issueNumber = issueContext.issue_number;
+            const headRef = `${context.repo.owner}:${branchName}`;
+            const bridgeMarker = `<!-- pybind-agent-bridge:issue-${issueNumber} -->`;
+
+            const existingPulls = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: headRef,
+              base: baseBranch,
+              per_page: 100,
+            });
+
+            let pullRequest;
+            if (existingPulls.data.length > 0) {
+              pullRequest = existingPulls.data[0];
+              pullRequest = (await github.rest.pulls.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pull_number: pullRequest.number,
+                title: prTitle,
+                body: prBody,
+                state: 'open',
+              })).data;
+            }
+            else {
+              pullRequest = (await github.rest.pulls.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: prTitle,
+                head: branchName,
+                base: baseBranch,
+                body: prBody,
+                draft: true,
+              })).data;
+            }
+
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pullRequest.number,
+              labels: ['pybind-task', 'agent-active'],
+            });
+
+            const commentBody = [
+              bridgeMarker,
+              `Draft PR ready for this task: #${pullRequest.number}`,
+              '',
+              `- PR: ${pullRequest.html_url}`,
+              `- Branch: \`${branchName}\``,
+              `- Target class: \`${process.env.TARGET_CLASS}\``,
+              `- Unit test target: ${process.env.UNIT_TEST_TARGET ? `\`${process.env.UNIT_TEST_TARGET}\`` : '(auto-resolve or fallback to ctest python-unit-tests)'}`,
+              '',
+              'Next step: push the coding changes to the bootstrap branch above. The PR gate will start validating once the PR contains real file changes.',
+            ].join('\n');
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              per_page: 100,
+            });
+            const existingBridgeComment = comments.find((comment) => comment.body && comment.body.includes(bridgeMarker));
+
+            if (existingBridgeComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existingBridgeComment.id,
+                body: commentBody,
+              });
+            }
+            else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issueNumber,
+                body: commentBody,
+              });
+            }
+
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'agent-pybind-task.yml',
+              ref: baseBranch,
+              inputs: {
+                target_class: process.env.TARGET_CLASS,
+                issue_number: String(issueNumber),
+                attempt: '1',
+                unit_test_target_override: process.env.UNIT_TEST_TARGET,
+                runner_profile: process.env.RUNNER_PROFILE || '',
+                git_ref: branchName,
+                pull_request_number: String(pullRequest.number),
+              },
+            });
+
+            core.setOutput('pull_request_number', String(pullRequest.number));
+            core.setOutput('pull_request_url', pullRequest.html_url);
+
+            core.summary
+              .addHeading('Bridge result', 2)
+              .addRaw(`- Draft PR: #${pullRequest.number}\n`)
+              .addRaw(`- PR URL: ${pullRequest.html_url}\n`)
+              .addRaw(`- Branch: \`${branchName}\`\n`)
+              .addRaw('- Validation workflow `agent-pybind-task.yml` was dispatched against the bootstrap branch.\n');
+            await core.summary.write();

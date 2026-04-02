@@ -11,6 +11,7 @@ body:
 
         This template opens the issue with `pybind-task` only.
         Add `ready-for-agent` **after** a quick human review confirms the scope is actionable.
+        Once that label is applied, repository automation will create or refresh a bootstrap branch and open a draft PR for the task before validation is dispatched.
 
         Rules for this task:
         - one GitHub agent task = one class or one method cluster
@@ -23,6 +24,7 @@ body:
         - you may submit this form with only the target class filled in
         - the repository automation will try to infer the remaining context from local inventory files
         - if the inference is incomplete or ambiguous, edit the suggested sections manually before adding `ready-for-agent`
+        - after `ready-for-agent`, push coding changes to the automation-created draft PR branch for this issue
 
   - type: input
     id: target_class

@@ -22,6 +22,21 @@ on:
         required: false
         default: ""
         type: string
+      git_ref:
+        description: "Optional git branch or ref to validate instead of the dispatch SHA"
+        required: false
+        default: ""
+        type: string
+      pull_request_number:
+        description: "Optional existing pull request number associated with this task"
+        required: false
+        default: ""
+        type: string
+      runner_profile:
+        description: "Optional runner profile override for manual dispatch: self-hosted-http, self-hosted-watt, self-hosted-ssh, github-hosted"
+        required: false
+        default: ""
+        type: string
 
 concurrency:
   group: agent-pybind-task-${{ github.ref }}-${{ inputs.target_class }}-${{ inputs.issue_number || 'manual' }}
@@ -31,6 +46,8 @@ jobs:
   resolve_runner:
     name: Resolve runner mode
     uses: ./.github/workflows/reusable-runner-config.yml
+    with:
+      runner_profile: ${{ inputs.runner_profile }}
 
   pybind-task:
     name: Resolve, build, and validate
@@ -47,6 +64,11 @@ jobs:
       PYTHONUNBUFFERED: "1"
       FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
       GH_TOKEN: ${{ github.token }}
+      REQUESTED_RUNNER_PROFILE: ${{ inputs.runner_profile }}
+      SELECTED_RUNNER_PROFILE: ${{ needs.resolve_runner.outputs.runner_profile }}
+      SELECTED_NETWORK_PROFILE: ${{ needs.resolve_runner.outputs.network_profile }}
+      SELECTED_USE_WATT: ${{ needs.resolve_runner.outputs.use_watt }}
+      SELECTED_RUNNER_MODE: ${{ needs.resolve_runner.outputs.runner_mode }}
     steps:
       - name: Validate retry budget
         shell: bash
@@ -62,6 +84,31 @@ jobs:
             exit 1
           fi
           echo "Attempt $attempt / 5 accepted"
+
+      - name: Report selected runner profile
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "Requested runner profile override: ${REQUESTED_RUNNER_PROFILE:-<none>}"
+          echo "Selected runner profile: ${SELECTED_RUNNER_PROFILE}"
+          echo "Selected runner mode: ${SELECTED_RUNNER_MODE}"
+          echo "Selected network profile: ${SELECTED_NETWORK_PROFILE}"
+          echo "Selected use_watt: ${SELECTED_USE_WATT}"
+          echo "Requested git ref override: ${{ inputs.git_ref || '<none>' }}"
+          echo "Associated pull request: ${{ inputs.pull_request_number || 'n/a' }}"
+
+          {
+            echo "## Runner selection"
+            echo ""
+            echo "- requested runner profile override: \`${REQUESTED_RUNNER_PROFILE:-<none>}\`"
+            echo "- selected runner profile: \`${SELECTED_RUNNER_PROFILE}\`"
+            echo "- selected runner mode: \`${SELECTED_RUNNER_MODE}\`"
+            echo "- selected network profile: \`${SELECTED_NETWORK_PROFILE}\`"
+            echo "- selected use_watt: \`${SELECTED_USE_WATT}\`"
+            echo "- requested git ref override: \`${{ inputs.git_ref || '<none>' }}\`"
+            echo "- associated pull request: \`${{ inputs.pull_request_number || 'n/a' }}\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Install workflow helpers
         shell: bash
@@ -105,6 +152,7 @@ jobs:
           echo "AGENT_PYBIND_HELPERS=$helper_path" >> "$GITHUB_ENV"
 
       - name: Normalize network mode for self-hosted WATT runner
+        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' && needs.resolve_runner.outputs.use_watt == 'true' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -120,6 +168,7 @@ jobs:
           } >> "$GITHUB_ENV"
 
       - name: Validate WATT host routing for GitHub on self-hosted runner
+        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' && needs.resolve_runner.outputs.use_watt == 'true' }}
         shell: bash
         run: |
           set -euo pipefail
@@ -149,6 +198,19 @@ jobs:
 
           "$curl_bin" --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
           "$curl_bin" --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
+
+      - name: Report non-WATT network path
+        if: ${{ !(needs.resolve_runner.outputs.runner_mode == 'self-hosted' && needs.resolve_runner.outputs.use_watt == 'true') }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "## Network mode"
+            echo ""
+            echo "- WATT-specific proxy reset and hosts validation were skipped for profile \`${SELECTED_RUNNER_PROFILE}\`."
+            echo "- Effective network profile: \`${SELECTED_NETWORK_PROFILE}\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Network preflight for GitHub HTTPS endpoints
         shell: bash
@@ -214,7 +276,14 @@ jobs:
           git remote remove origin >/dev/null 2>&1 || true
           git remote add origin "https://github.com/${GITHUB_REPOSITORY}.git"
 
-          retry 5 git fetch --no-tags --prune --depth=1 origin "$GITHUB_SHA"
+          checkout_ref="${{ inputs.git_ref }}"
+          if [ -n "$checkout_ref" ]; then
+            echo "Fetching requested git ref: $checkout_ref"
+            retry 5 git fetch --no-tags --prune --depth=1 origin "$checkout_ref"
+          else
+            echo "Fetching dispatch SHA: $GITHUB_SHA"
+            retry 5 git fetch --no-tags --prune --depth=1 origin "$GITHUB_SHA"
+          fi
           git checkout --force FETCH_HEAD
           git clean -ffdx
 
@@ -240,6 +309,8 @@ jobs:
 
           target = "${{ inputs.target_class }}".strip()
           override = "${{ inputs.unit_test_target_override }}".strip()
+          git_ref_override = "${{ inputs.git_ref }}".strip()
+          pull_request_number = "${{ inputs.pull_request_number }}".strip()
           summary_path = Path("class_bind_methods_details/methods_inventory_summary.csv")
           if not summary_path.exists():
               raise SystemExit(f"::error::Missing inventory summary: {summary_path}")
@@ -324,6 +395,8 @@ jobs:
 
           resolved = {
               "target_class": target,
+              "git_ref_override": git_ref_override,
+              "pull_request_number": pull_request_number,
               "module_category": module_category,
               "detail_csv": detail_csv,
               "binding_file": binding_file,
@@ -347,6 +420,8 @@ jobs:
           with summary_path.open("a", encoding="utf-8") as summary:
               summary.write("## Resolved pybind task context\n\n")
               summary.write(f"- Target class: `{target}`\n")
+              summary.write(f"- Git ref override: `{git_ref_override or 'none'}`\n")
+              summary.write(f"- Associated pull request: `{pull_request_number or 'n/a'}`\n")
               summary.write(f"- Module category: `{module_category or 'unknown'}`\n")
               summary.write(f"- Detail CSV: `{detail_csv or 'missing'}`\n")
               summary.write(f"- Binding file: `{binding_file or 'not yet mapped'}`\n")
@@ -629,6 +704,7 @@ jobs:
             echo "- Module category: ${{ steps.resolve.outputs.module_category || 'unknown' }}"
             echo "- Suggested unit test: ${{ steps.resolve.outputs.unit_test_file || '(fallback to ctest python-unit-tests)' }}"
             echo "- Issue: #${{ inputs.issue_number || 'n/a' }}"
+            echo "- Pull request: #${{ inputs.pull_request_number || 'n/a' }}"
             echo "- Attempt: ${{ inputs.attempt }} / 5"
             echo "- Required gate: build + unit + smoke + progress"
             echo ""

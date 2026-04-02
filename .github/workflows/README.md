@@ -11,6 +11,13 @@ Supported modes:
 - `self-hosted`
 - `github-hosted`
 
+Supported named profiles:
+
+- `self-hosted-http` — default stable self-hosted HTTPS path
+- `self-hosted-watt` — self-hosted HTTPS path explicitly marked for WATT/Hosts experiments
+- `self-hosted-ssh` — self-hosted SSH checkout fallback over `ssh.github.com:443`
+- `github-hosted` — GitHub-hosted baseline runner with micromamba environment setup
+
 In `self-hosted` mode, workflows follow the checkout transport configured in `.github/runner-config.yml` and reuse the pre-provisioned local conda/ISIS environment. The current recommended default is HTTPS so self-hosted runners can benefit from local proxy or acceleration tools when available.
 
 In `github-hosted` mode, workflows use the configured GitHub-hosted runner image (currently `ubuntu-22.04` by default), checkout over normal HTTPS, and create a micromamba-based build environment inside the workflow.
@@ -89,13 +96,30 @@ Use this as the primary single-class task workflow.
 Purpose:
 - run validation for one upstream ISIS C++ class at a time
 - auto-resolve inventory/test context from local CSV files
+- validate either the dispatched SHA or an explicit bootstrap task branch created from an issue
 - enforce the retry budget for task execution on the existing self-hosted conda/ISIS environment
 
 Characteristics:
 - triggered by `workflow_dispatch`, either manually or via the issue dispatcher workflow
-- centered on `target_class`, with optional issue and unit-test override inputs
+- centered on `target_class`, with optional issue, PR, git-ref, and unit-test override inputs
 - validates build + unit + smoke + progress consistency
 - now follows `.github/runner-config.yml` and can either reuse the local conda/ISIS environment or create a GitHub-hosted micromamba environment
+
+## `bridge-pybind-issue-to-pr.yml`
+
+Use this as the explicit bridge between an actionable issue and an editable draft PR.
+
+Purpose:
+- consume the parsed issue context after `ready-for-agent`
+- create or reuse a stable bootstrap branch for that task
+- open or refresh a draft PR that carries the issue context forward into the coding phase
+- dispatch `agent-pybind-task.yml` against the bootstrap branch so validation targets the same work branch
+
+Characteristics:
+- triggered by `workflow_dispatch`, normally from `dispatch-pybind-task-from-issue.yml`
+- idempotent for the same issue number and target class
+- writes a backlink comment on the issue with the draft PR URL and branch name
+- keeps the issue queue and PR lane explicitly connected inside the repository automation
 
 ## `agent-pybind-pr-gate.yml`
 
@@ -117,8 +141,8 @@ Use this as the queue bridge between the issue form and the task workflow.
 
 Purpose:
 - watch for a reviewed pybind issue to receive `ready-for-agent`
-- parse the issue-form sections needed by `agent-pybind-task.yml`
-- dispatch the task workflow with attempt `1`
+- parse the issue-form sections needed by the branch/PR bridge workflow
+- dispatch `bridge-pybind-issue-to-pr.yml`
 - switch the issue from `ready-for-agent` to `agent-active`
 
 ## `autofill-pybind-task-issue.yml`
@@ -162,15 +186,17 @@ Recommended usage:
 1. Open one issue using the pybind task issue template
 2. Keep the issue scope to one class or one method cluster only
 3. Review the issue quickly and add `ready-for-agent` only when the scope is actionable
-4. Let `dispatch-pybind-task-from-issue.yml` queue `agent-pybind-task.yml`
-5. Let the GitHub agent work on a PR for that issue
-6. Let `agent-pybind-pr-gate.yml` act as the narrow PR gate for agent-task changes
-7. Keep `ci-pybind.yml` as the broad repository-level CI gate on merges to `main` and manual dispatches
+4. Let `dispatch-pybind-task-from-issue.yml` queue `bridge-pybind-issue-to-pr.yml`
+5. Let the bridge workflow open or refresh the bootstrap draft PR and dispatch `agent-pybind-task.yml` against that task branch
+6. Let the GitHub agent or a human contributor push coding changes to the draft PR branch
+7. Let `agent-pybind-pr-gate.yml` act as the narrow PR gate for agent-task changes
+8. Keep `ci-pybind.yml` as the broad repository-level CI gate on merges to `main` and manual dispatches
 
 In short:
 - `.github/runner-config.yml` = top-level runner mode switch for all workflows
-- `dispatch-pybind-task-from-issue.yml` = queue bridge from issue form to task workflow
-- `agent-pybind-task.yml` = primary narrow task loop with retry budget
+- `dispatch-pybind-task-from-issue.yml` = queue bridge from issue form to issue/PR bridge workflow
+- `bridge-pybind-issue-to-pr.yml` = explicit issue -> bootstrap branch -> draft PR bridge
+- `agent-pybind-task.yml` = primary narrow task loop with retry budget, now branch-aware
 - `agent-pybind-pr-gate.yml` = PR-only automatic gate for task-related changes
 - `agent-pybind-task-draft.yml` = deprecated legacy fallback during migration
 - `ci-pybind.yml` = broad repository regression check for pushes/manual runs
@@ -192,7 +218,8 @@ The recommended queue path is now semi-automated:
 
 - `pybind-task.yml` opens the issue with `pybind-task`
 - a human review adds `ready-for-agent` when the scope is truly actionable
-- `dispatch-pybind-task-from-issue.yml` consumes `ready-for-agent`, adds `agent-active`, and dispatches `agent-pybind-task.yml`
+- `dispatch-pybind-task-from-issue.yml` consumes `ready-for-agent`, adds `agent-active`, and dispatches `bridge-pybind-issue-to-pr.yml`
+- `bridge-pybind-issue-to-pr.yml` creates or reuses the bootstrap branch, opens/updates the draft PR, comments back on the issue, and dispatches `agent-pybind-task.yml` against that branch
 
 Keep `agent-pybind-task-draft.yml` only as a temporary legacy fallback for experiments or recovery runs during migration.
 
@@ -204,29 +231,33 @@ Current control file:
 
 Key fields:
 
-- `mode`: active workflow runner mode (`self-hosted` or `github-hosted`)
-- `github_hosted_runner`: image used when mode is GitHub-hosted
-- `self_hosted_labels`: label list used when mode is self-hosted
-- `self_hosted_checkout_transport` / `github_hosted_checkout_transport`: checkout transport hints
-- `self_hosted_environment_strategy` / `github_hosted_environment_strategy`: environment setup hints
+- `active_profile`: selected named runtime profile
+- `profiles.<name>.mode`: resolved runner mode (`self-hosted` or `github-hosted`)
+- `profiles.<name>.labels`: label list used for self-hosted profiles
+- `profiles.<name>.github_hosted_runner`: image used by the `github-hosted` profile
+- `profiles.<name>.checkout_transport`: checkout transport hint for that profile
+- `profiles.<name>.environment_strategy`: environment setup hint for that profile
+- `profiles.<name>.network_profile`: human-readable network hint such as `plain-http`, `watt-hosts`, or `ssh-fallback`
+- `profiles.<name>.use_watt`: whether the profile is explicitly marked as using WATT/Hosts routing
 - `fallback_conda_prefix`: shared fallback prefix for self-hosted environments
 
 Recommended usage:
 
-1. Set `mode: self-hosted` when you want to reuse the existing local `asp360_new` runner environment
-2. Set `mode: github-hosted` when you want workflows to run on `ubuntu-22.04` and create the environment dynamically with micromamba
-3. Keep `self_hosted_checkout_transport: https` as the preferred self-hosted default when local proxy or acceleration tools improve GitHub HTTPS access
-4. Switch `self_hosted_checkout_transport` back to `ssh` only when the runner network needs the `ssh.github.com:443` fallback path
-5. Keep the rest of the workflow files unchanged; they now read the mode and checkout transport through the shared runner resolver
+1. Keep `active_profile: self-hosted-http` as the default repository setting for normal automated runs
+2. Switch to `self-hosted-watt` only when you intentionally want to test or use WATT/Hosts routing on a self-hosted runner
+3. Switch to `self-hosted-ssh` only when the runner network needs the `ssh.github.com:443` fallback path for git checkout
+4. Use `github-hosted` as the slow-but-stable baseline when self-hosted networking is not trustworthy
+5. Keep the rest of the workflow files unchanged; they read the mode and checkout transport through the shared runner resolver outputs
 
 ## Migration note for self-hosted HTTPS checkout
 
 The current migration strategy is intentionally conservative:
 
-- default self-hosted checkout now prefers HTTPS
+- default self-hosted checkout now prefers the `self-hosted-http` profile
 - SSH checkout logic and the `ACTIONS_CHECKOUT_SSH_KEY` secret are retained as fallback and are not removed yet
+- WATT/Hosts routing is retained as an explicit self-hosted profile but is not recommended as the default automated path
 - observe a few workflow runs before any deeper cleanup, focusing on:
   - checkout duration
   - checkout failure rate / retry frequency
   - whether the SSH secret is still used in practice
-- only after those runs stay stable should you consider changing the fallback defaults inside `.github/actions/resolve-runner-config/action.yml`
+- only after those runs stay stable should you consider changing the profile defaults inside `.github/runner-config.yml` or the fallback defaults inside `.github/actions/resolve-runner-config/action.yml`

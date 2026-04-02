@@ -8,7 +8,14 @@ inputs:
     description: Repository-relative path to the runner configuration file.
     required: false
     default: .github/runner-config.yml
+  profile-override:
+    description: Optional runner profile override such as self-hosted-http, self-hosted-watt, self-hosted-ssh, or github-hosted.
+    required: false
+    default: ''
 outputs:
+  runner_profile:
+    description: Selected named runner profile from .github/runner-config.yml.
+    value: ${{ steps.resolve.outputs.runner_profile }}
   runner_mode:
     description: Selected runner mode (`self-hosted` or `github-hosted`).
     value: ${{ steps.resolve.outputs.runner_mode }}
@@ -30,6 +37,12 @@ outputs:
   fallback_conda_prefix:
     description: Fallback conda prefix for self-hosted mode.
     value: ${{ steps.resolve.outputs.fallback_conda_prefix }}
+  network_profile:
+    description: Named network profile hint such as plain-http, watt-hosts, ssh-fallback, or github-hosted.
+    value: ${{ steps.resolve.outputs.network_profile }}
+  use_watt:
+    description: Whether the selected profile is explicitly marked as using WATT/Hosts routing.
+    value: ${{ steps.resolve.outputs.use_watt }}
 runs:
   using: composite
   steps:
@@ -42,11 +55,48 @@ runs:
         import ast
         import json
         import os
-        import re
         from pathlib import Path
 
         config_path = Path('${{ inputs.config-path }}')
         defaults = {
+            'active_profile': 'self-hosted-http',
+            'fallback_conda_prefix': '/home/gengxun/miniconda3/envs/asp360_new',
+        }
+        default_profiles = {
+            'self-hosted-http': {
+                'mode': 'self-hosted',
+                'labels': ['self-hosted'],
+                'checkout_transport': 'https',
+                'environment_strategy': 'existing-conda',
+                'network_profile': 'plain-http',
+                'use_watt': False,
+            },
+            'self-hosted-watt': {
+                'mode': 'self-hosted',
+                'labels': ['self-hosted'],
+                'checkout_transport': 'https',
+                'environment_strategy': 'existing-conda',
+                'network_profile': 'watt-hosts',
+                'use_watt': True,
+            },
+            'self-hosted-ssh': {
+                'mode': 'self-hosted',
+                'labels': ['self-hosted'],
+                'checkout_transport': 'ssh',
+                'environment_strategy': 'existing-conda',
+                'network_profile': 'ssh-fallback',
+                'use_watt': False,
+            },
+            'github-hosted': {
+                'mode': 'github-hosted',
+                'github_hosted_runner': 'ubuntu-22.04',
+                'checkout_transport': 'https',
+                'environment_strategy': 'micromamba',
+                'network_profile': 'github-hosted',
+                'use_watt': False,
+            },
+        }
+        legacy_defaults = {
             'mode': 'self-hosted',
             'github_hosted_runner': 'ubuntu-22.04',
             'self_hosted_labels': ['self-hosted'],
@@ -54,65 +104,181 @@ runs:
             'github_hosted_checkout_transport': 'https',
             'self_hosted_environment_strategy': 'existing-conda',
             'github_hosted_environment_strategy': 'micromamba',
-            'fallback_conda_prefix': '/home/gengxun/miniconda3/envs/asp360_new',
+            'fallback_conda_prefix': defaults['fallback_conda_prefix'],
         }
+
+        def parse_scalar(value):
+            value = value.strip()
+            if not value:
+                return ''
+            lowered = value.lower()
+            if lowered == 'true':
+                return True
+            if lowered == 'false':
+                return False
+            if value.startswith('[') and value.endswith(']'):
+                inner = value[1:-1].strip()
+                if not inner:
+                    return []
+                return [item.strip().strip('"').strip("'") for item in inner.split(',') if item.strip()]
+            if value.startswith('{') or value.startswith(('"', "'")):
+                try:
+                    return ast.literal_eval(value)
+                except Exception:
+                    return value
+            try:
+                if value.isdigit() or (value.startswith('-') and value[1:].isdigit()):
+                    return int(value)
+            except Exception:
+                pass
+            return value
+
+        def parse_config_file(path):
+            parsed = {}
+            diagnostics = []
+            current_section = None
+            current_profile = None
+
+            for line_number, raw_line in enumerate(path.read_text(encoding='utf-8').splitlines(), start=1):
+                uncommented = raw_line.split('#', 1)[0].rstrip()
+                if not uncommented.strip():
+                    continue
+
+                indent = len(uncommented) - len(uncommented.lstrip(' '))
+                stripped = uncommented.strip()
+
+                if indent == 0:
+                    current_profile = None
+                    if stripped.endswith(':') and ':' not in stripped[:-1]:
+                        current_section = stripped[:-1].strip()
+                        if current_section == 'profiles':
+                            parsed.setdefault('profiles', {})
+                        continue
+                    if ':' not in stripped:
+                        diagnostics.append(f'Ignored malformed line {line_number}: {raw_line.strip()}')
+                        current_section = None
+                        continue
+                    key, value = stripped.split(':', 1)
+                    parsed[key.strip()] = parse_scalar(value)
+                    current_section = None
+                    continue
+
+                if current_section == 'profiles':
+                    if indent == 2 and stripped.endswith(':') and ':' not in stripped[:-1]:
+                        current_profile = stripped[:-1].strip()
+                        parsed['profiles'].setdefault(current_profile, {})
+                        continue
+                    if indent == 4 and current_profile and ':' in stripped:
+                        key, value = stripped.split(':', 1)
+                        parsed['profiles'][current_profile][key.strip()] = parse_scalar(value)
+                        continue
+
+                diagnostics.append(f'Ignored unsupported line {line_number}: {raw_line.strip()}')
+
+            return parsed, diagnostics
+
+        def normalize_bool(value, default=False):
+            if isinstance(value, bool):
+                return value
+            if isinstance(value, str):
+                lowered = value.strip().lower()
+                if lowered in {'true', 'yes', '1', 'on'}:
+                    return True
+                if lowered in {'false', 'no', '0', 'off'}:
+                    return False
+            return default
+
+        def normalize_labels(value, fallback, diagnostics):
+            labels = value
+            if isinstance(labels, str):
+                labels = [item.strip() for item in labels.split(',') if item.strip()]
+            if not isinstance(labels, list) or not labels:
+                diagnostics.append('self-hosted labels were empty or invalid, falling back to [self-hosted].')
+                labels = fallback
+            return labels
 
         if not config_path.exists():
             config = defaults.copy()
+            config['profiles'] = default_profiles.copy()
             diagnostics = [
                 f'Configuration file not found: {config_path}',
-                'Falling back to defaults (self-hosted mode).',
+                'Falling back to defaults (self-hosted-http profile).',
             ]
         else:
-            parsed = {}
-            diagnostics = []
-            for raw_line in config_path.read_text(encoding='utf-8').splitlines():
-                line = raw_line.split('#', 1)[0].strip()
-                if not line:
-                    continue
-                if ':' not in line:
-                    diagnostics.append(f'Ignored malformed line: {raw_line.strip()}')
-                    continue
-                key, value = line.split(':', 1)
-                key = key.strip()
-                value = value.strip()
-                if key == 'self_hosted_labels':
-                    try:
-                        parsed[key] = ast.literal_eval(value)
-                    except Exception as exc:
-                        diagnostics.append(f'Failed to parse self_hosted_labels, using default: {exc}')
-                else:
-                    parsed[key] = value
+            parsed, diagnostics = parse_config_file(config_path)
             config = defaults.copy()
             config.update(parsed)
 
-        mode = str(config.get('mode', defaults['mode'])).strip().lower()
-        if mode not in {'self-hosted', 'github-hosted'}:
-            diagnostics.append(f"Unsupported mode '{mode}', falling back to self-hosted.")
-            mode = 'self-hosted'
+        requested_profile = '${{ inputs.profile-override }}'.strip()
+        profiles = config.get('profiles')
+        fallback_conda_prefix = str(config.get('fallback_conda_prefix', defaults['fallback_conda_prefix'])).strip() or defaults['fallback_conda_prefix']
 
-        labels = config.get('self_hosted_labels', defaults['self_hosted_labels'])
-        if isinstance(labels, str):
-            labels = [item.strip() for item in labels.split(',') if item.strip()]
-        if not isinstance(labels, list) or not labels:
-            diagnostics.append('self_hosted_labels was empty or invalid, falling back to [self-hosted].')
-            labels = defaults['self_hosted_labels']
+        if isinstance(profiles, dict) and profiles:
+            merged_profiles = {name: values.copy() for name, values in default_profiles.items()}
+            for profile_name, profile_values in profiles.items():
+                if isinstance(profile_values, dict):
+                    merged = merged_profiles.get(profile_name, {}).copy()
+                    merged.update(profile_values)
+                    merged_profiles[profile_name] = merged
 
-        github_hosted_runner = str(config.get('github_hosted_runner', defaults['github_hosted_runner'])).strip() or defaults['github_hosted_runner']
-        if mode == 'self-hosted':
-            runs_on_value = labels
-            checkout_transport = str(config.get('self_hosted_checkout_transport', defaults['self_hosted_checkout_transport'])).strip().lower()
-            environment_strategy = str(config.get('self_hosted_environment_strategy', defaults['self_hosted_environment_strategy'])).strip().lower()
+            active_profile = requested_profile or str(config.get('active_profile', defaults['active_profile'])).strip() or defaults['active_profile']
+            if requested_profile:
+                diagnostics.append(f"Applied workflow input profile override: {requested_profile}")
+            if active_profile not in merged_profiles:
+                source = 'profile override' if requested_profile else 'active_profile'
+                diagnostics.append(f"Unknown {source} '{active_profile}', falling back to self-hosted-http.")
+                active_profile = defaults['active_profile']
+            selected_profile = merged_profiles[active_profile]
+
+            mode = str(selected_profile.get('mode', 'self-hosted')).strip().lower()
+            if mode not in {'self-hosted', 'github-hosted'}:
+                diagnostics.append(f"Unsupported mode '{mode}' in profile '{active_profile}', falling back to self-hosted.")
+                mode = 'self-hosted'
+
+            if mode == 'self-hosted':
+                labels = normalize_labels(
+                    selected_profile.get('labels', selected_profile.get('self_hosted_labels', legacy_defaults['self_hosted_labels'])),
+                    legacy_defaults['self_hosted_labels'],
+                    diagnostics,
+                )
+                runs_on_value = labels
+                checkout_transport = str(selected_profile.get('checkout_transport', legacy_defaults['self_hosted_checkout_transport'])).strip().lower()
+                environment_strategy = str(selected_profile.get('environment_strategy', legacy_defaults['self_hosted_environment_strategy'])).strip().lower()
+            else:
+                github_hosted_runner = str(selected_profile.get('github_hosted_runner', selected_profile.get('runner', legacy_defaults['github_hosted_runner']))).strip() or legacy_defaults['github_hosted_runner']
+                runs_on_value = github_hosted_runner
+                checkout_transport = str(selected_profile.get('checkout_transport', legacy_defaults['github_hosted_checkout_transport'])).strip().lower()
+                environment_strategy = str(selected_profile.get('environment_strategy', legacy_defaults['github_hosted_environment_strategy'])).strip().lower()
+
+            runner_profile = active_profile
+            network_profile = str(selected_profile.get('network_profile', 'plain-http' if mode == 'self-hosted' else 'github-hosted')).strip() or ('plain-http' if mode == 'self-hosted' else 'github-hosted')
+            use_watt = 'true' if normalize_bool(selected_profile.get('use_watt', network_profile == 'watt-hosts')) else 'false'
         else:
-            runs_on_value = github_hosted_runner
-            checkout_transport = str(config.get('github_hosted_checkout_transport', defaults['github_hosted_checkout_transport'])).strip().lower()
-            environment_strategy = str(config.get('github_hosted_environment_strategy', defaults['github_hosted_environment_strategy'])).strip().lower()
+            mode = str(config.get('mode', legacy_defaults['mode'])).strip().lower()
+            if mode not in {'self-hosted', 'github-hosted'}:
+                diagnostics.append(f"Unsupported legacy mode '{mode}', falling back to self-hosted.")
+                mode = 'self-hosted'
+
+            labels = normalize_labels(config.get('self_hosted_labels', legacy_defaults['self_hosted_labels']), legacy_defaults['self_hosted_labels'], diagnostics)
+            github_hosted_runner = str(config.get('github_hosted_runner', legacy_defaults['github_hosted_runner'])).strip() or legacy_defaults['github_hosted_runner']
+            if mode == 'self-hosted':
+                runs_on_value = labels
+                checkout_transport = str(config.get('self_hosted_checkout_transport', legacy_defaults['self_hosted_checkout_transport'])).strip().lower()
+                environment_strategy = str(config.get('self_hosted_environment_strategy', legacy_defaults['self_hosted_environment_strategy'])).strip().lower()
+                network_profile = 'ssh-fallback' if checkout_transport == 'ssh' else 'plain-http'
+            else:
+                runs_on_value = github_hosted_runner
+                checkout_transport = str(config.get('github_hosted_checkout_transport', legacy_defaults['github_hosted_checkout_transport'])).strip().lower()
+                environment_strategy = str(config.get('github_hosted_environment_strategy', legacy_defaults['github_hosted_environment_strategy'])).strip().lower()
+                network_profile = 'github-hosted'
+            runner_profile = 'legacy-default'
+            use_watt = 'false'
 
         use_ssh_checkout = 'true' if checkout_transport == 'ssh' else 'false'
         needs_dynamic_conda_setup = 'true' if environment_strategy == 'micromamba' else 'false'
-        fallback_conda_prefix = str(config.get('fallback_conda_prefix', defaults['fallback_conda_prefix'])).strip() or defaults['fallback_conda_prefix']
 
         outputs = {
+            'runner_profile': runner_profile,
             'runner_mode': mode,
             'runs_on_json': json.dumps(runs_on_value),
             'use_ssh_checkout': use_ssh_checkout,
@@ -120,6 +286,8 @@ runs:
             'environment_strategy': environment_strategy,
             'needs_dynamic_conda_setup': needs_dynamic_conda_setup,
             'fallback_conda_prefix': fallback_conda_prefix,
+            'network_profile': network_profile,
+            'use_watt': use_watt,
         }
 
         output_path = Path(os.environ['GITHUB_OUTPUT'])
@@ -130,10 +298,13 @@ runs:
         summary_path = Path(os.environ['GITHUB_STEP_SUMMARY'])
         with summary_path.open('a', encoding='utf-8') as summary:
             summary.write('## Resolved workflow runner configuration\n\n')
+            summary.write(f"- Profile: `{runner_profile}`\n")
             summary.write(f"- Mode: `{mode}`\n")
             summary.write(f"- runs-on: `{runs_on_value}`\n")
             summary.write(f"- Checkout transport: `{checkout_transport}`\n")
             summary.write(f"- Environment strategy: `{environment_strategy}`\n")
+            summary.write(f"- Network profile: `{network_profile}`\n")
+            summary.write(f"- use_watt: `{use_watt}`\n")
             summary.write(f"- Fallback conda prefix: `{fallback_conda_prefix}`\n")
             if diagnostics:
                 summary.write('\n### Diagnostics\n')

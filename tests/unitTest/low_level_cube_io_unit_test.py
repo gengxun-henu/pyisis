@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-03
-Last Modified: 2026-04-03
+Last Modified: 2026-04-04
 """
 
 import unittest
@@ -11,18 +11,29 @@ from _unit_test_support import ip, temporary_directory
 
 
 class LowLevelCubeIoUnitTest(unittest.TestCase):
-    def make_test_cube(self):
+    def make_test_cube(self, samples=4, lines=3, bands=2, name="band_manager_test.cub"):
         temp_dir_cm = temporary_directory()
         temp_dir = temp_dir_cm.__enter__()
         self.addCleanup(temp_dir_cm.__exit__, None, None, None)
 
-        cube_path = temp_dir / "band_manager_test.cub"
+        cube_path = temp_dir / name
         cube = ip.Cube()
-        cube.set_dimensions(4, 3, 2)
+        cube.set_dimensions(samples, lines, bands)
         cube.set_pixel_type(ip.PixelType.Real)
         cube.create(str(cube_path))
         self.addCleanup(cube.close)
         return cube
+
+    def fill_test_cube_with_position_codes(self, cube):
+        manager = ip.LineManager(cube)
+        manager.begin()
+        while not manager.end():
+            for index in range(len(manager)):
+                manager[index] = float(
+                    manager.band() * 100 + manager.line() * 10 + manager.sample(index)
+                )
+            cube.write(manager)
+            manager.next()
 
     def test_pixel_type_and_byte_order_helpers(self):
         self.assertEqual(ip.pixel_type_name(ip.PixelType.Real), "Real")
@@ -88,6 +99,100 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         self.assertEqual(manager.sample(), 4)
         self.assertEqual(manager.line(), 1)
         self.assertEqual(manager.band(), 1)
+
+    def test_line_manager_direct_positioning_and_exceptions(self):
+        cube = self.make_test_cube(name="line_manager_test.cub")
+        self.fill_test_cube_with_position_codes(cube)
+
+        manager = ip.LineManager(cube)
+        self.assertEqual(manager.sample_dimension(), cube.sample_count())
+        self.assertEqual(manager.line_dimension(), 1)
+        self.assertEqual(manager.band_dimension(), 1)
+
+        self.assertTrue(manager.set_line(2))
+        self.assertEqual(manager.sample(), 1)
+        self.assertEqual(manager.line(), 2)
+        self.assertEqual(manager.band(), 1)
+        cube.read(manager)
+        self.assertEqual(manager.double_buffer(), [121.0, 122.0, 123.0, 124.0])
+
+        self.assertTrue(manager.set_line(3, 2))
+        self.assertEqual(manager.line(), 3)
+        self.assertEqual(manager.band(), 2)
+        cube.read(manager)
+        self.assertEqual(manager.double_buffer(), [231.0, 232.0, 233.0, 234.0])
+
+        with self.assertRaises(Exception):
+            manager.set_line(0)
+
+        with self.assertRaises(Exception):
+            manager.set_line(1, 0)
+
+    def test_sample_manager_direct_positioning_and_exceptions(self):
+        cube = self.make_test_cube(name="sample_manager_test.cub")
+        self.fill_test_cube_with_position_codes(cube)
+
+        manager = ip.SampleManager(cube)
+        self.assertEqual(manager.sample_dimension(), 1)
+        self.assertEqual(manager.line_dimension(), cube.line_count())
+        self.assertEqual(manager.band_dimension(), 1)
+
+        self.assertTrue(manager.set_sample(3))
+        self.assertEqual(manager.sample(), 3)
+        self.assertEqual(manager.line(), 1)
+        self.assertEqual(manager.band(), 1)
+        cube.read(manager)
+        self.assertEqual(manager.double_buffer(), [113.0, 123.0, 133.0])
+
+        self.assertTrue(manager.set_sample(2, 2))
+        self.assertEqual(manager.sample(), 2)
+        self.assertEqual(manager.band(), 2)
+        cube.read(manager)
+        self.assertEqual(manager.double_buffer(), [212.0, 222.0, 232.0])
+
+        with self.assertRaises(Exception):
+            manager.set_sample(0)
+
+        with self.assertRaises(Exception):
+            manager.set_sample(1, 0)
+
+    def test_tile_manager_positioning_iteration_and_exceptions(self):
+        cube = self.make_test_cube(samples=5, lines=4, bands=2, name="tile_manager_test.cub")
+        self.fill_test_cube_with_position_codes(cube)
+
+        manager = ip.TileManager(cube, 2, 3)
+        self.assertEqual(manager.sample_dimension(), 2)
+        self.assertEqual(manager.line_dimension(), 3)
+        self.assertEqual(manager.band_dimension(), 1)
+
+        self.assertTrue(manager.set_tile(2))
+        self.assertEqual(manager.sample(), 3)
+        self.assertEqual(manager.line(), 1)
+        self.assertEqual(manager.band(), 1)
+        cube.read(manager)
+        self.assertEqual(manager.double_buffer(), [113.0, 114.0, 123.0, 124.0, 133.0, 134.0])
+
+        self.assertTrue(manager.set_tile(2, 2))
+        self.assertEqual(manager.sample(), 3)
+        self.assertEqual(manager.line(), 1)
+        self.assertEqual(manager.band(), 2)
+        cube.read(manager)
+        self.assertEqual(manager.double_buffer(), [213.0, 214.0, 223.0, 224.0, 233.0, 234.0])
+
+        iteration_count = 0
+        manager.begin()
+        while not manager.end():
+            iteration_count += 1
+            manager.next()
+
+        self.assertEqual(iteration_count, 12)
+        self.assertEqual(manager.tiles(), 12)
+
+        with self.assertRaises(Exception):
+            manager.set_tile(0)
+
+        with self.assertRaises(Exception):
+            manager.set_tile(1, 0)
 
     def test_boxcar_manager_construction_and_iteration(self):
         """Test BoxcarManager with 5x5 and 4x4 boxcars."""

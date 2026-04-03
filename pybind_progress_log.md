@@ -1,5 +1,19 @@
 # Pybind Progress Log
 
+## 2026-04-04
+
+- Low-level cube I/O manager test gap closure:
+  - Audited `BoxcarManager` against the local binding and test suite and confirmed it already had direct Python unit coverage in `tests/unitTest/low_level_cube_io_unit_test.py`; no new `BoxcarManager` binding work was required.
+  - Identified the remaining directly untested peer manager bindings in the same module as `LineManager`, `SampleManager`, and `TileManager`.
+  - Extended `tests/unitTest/low_level_cube_io_unit_test.py` with focused direct tests for those three classes:
+    - `test_line_manager_direct_positioning_and_exceptions()` verifies buffer dimensions, `set_line(...)` positioning, readback values, and invalid line/band exception paths.
+    - `test_sample_manager_direct_positioning_and_exceptions()` verifies buffer dimensions, `set_sample(...)` positioning, readback values, and invalid sample/band exception paths.
+    - `test_tile_manager_positioning_iteration_and_exceptions()` verifies tile dimensions, `set_tile(...)` positioning, readback values, full iteration count, `tiles()` total, and invalid tile/band exception paths.
+  - Added a small shared helper inside the low-level test module to populate test cubes with position-coded DN values so manager readback assertions follow upstream traversal semantics instead of only checking symbol presence.
+- Validation status:
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p 'low_level_cube_io_unit_test.py' -v` (`19` tests, `OK`)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
 ## 2026-04-03
 
 - High-level cube I/O test suite partial re-enable:

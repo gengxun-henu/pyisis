@@ -33,6 +33,8 @@ jobs:
   resolve_runner:
     name: Resolve runner mode
     uses: ./.github/workflows/reusable-runner-config.yml
+    with:
+      runner_profile: github-hosted
 
   prepare:
     name: Prepare PR context

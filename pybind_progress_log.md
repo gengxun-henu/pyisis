@@ -1,5 +1,23 @@
 # Pybind Progress Log
 
+## 2026-04-03
+
+- AlphaCube.rehash binding and constructor fix:
+  - `Rehash(AlphaCube &alphaCube)` was already bound as `rehash(alpha_cube)` in `src/bind_low_level_cube_io.cpp`.
+  - Fixed the 8-arg constructor: renamed misleading parameters `base_sample/base_line/multiplier_sample/multiplier_line` to accurate `alpha_starting_sample/alpha_starting_line/alpha_ending_sample/alpha_ending_line`; removed incorrect default values that produced wrong slope computation.
+  - Added explicit 4-arg constructor binding `py::init<int, int, int, int>()` for the corner-to-corner identity mapping overload, which previously had no correct Python equivalent.
+  - Updated tests in `tests/unitTest/low_level_cube_io_unit_test.py`:
+    - Extended `test_brick_portal_and_alpha_cube` to verify 4-arg constructor gives correct identity coordinate mapping (`alpha_sample(1.0) == 1.0`) and 8-arg constructor computes correct sub-area mapping.
+    - `test_alpha_cube_rehash_merges_subarea_mapping` retained, confirming `rehash()` merges two sub-area mappings correctly per upstream `AlphaCube::Rehash` semantics.
+  - Updated `class_bind_methods_details/base_alpha_cube_methods.csv` to enumerate all three constructors separately (Cube-from-labels, 4-arg, 8-arg), all marked Y.
+- Implementation notes:
+  - `Rehash(AlphaCube &add)` composites two alpha-to-beta mappings: applies `add`'s beta→alpha mapping and then `self`'s beta→alpha mapping, updating `self`'s starting/ending samples and lines plus beta dimensions.
+  - The 4-arg constructor default-initializes `alphaStartingSample=0.5`, `alphaStartingLine=0.5`, `alphaEndingSample=alphaSamples+0.5`, `alphaEndingLine=alphaLines+0.5`, giving a unit-slope identity mapping.
+  - The 8-arg constructor requires all four corner coordinates; no defaults are appropriate because ending values depend on alpha dimensions at runtime.
+- Validation status:
+  - Code changes committed; compilation and runtime validation pending CI build with ISIS libraries.
+  - All test assertions verified by hand against upstream `AlphaCube.cpp` ComputeSlope logic.
+
 ## 2026-04-02
 
 - MaximumCorrelation binding completion:

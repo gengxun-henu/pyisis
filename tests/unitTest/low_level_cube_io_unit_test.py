@@ -141,13 +141,22 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         self.assertEqual(portal.line(), 20)
         self.assertEqual(portal.band(), 1)
 
+        # 4-arg constructor: corner-to-corner identity mapping
         alpha_cube = ip.AlphaCube(100, 200, 100, 200)
         self.assertEqual(alpha_cube.alpha_samples(), 100)
         self.assertEqual(alpha_cube.alpha_lines(), 200)
         self.assertEqual(alpha_cube.beta_samples(), 100)
         self.assertEqual(alpha_cube.beta_lines(), 200)
-        self.assertIsInstance(alpha_cube.alpha_sample(1.0), float)
-        self.assertIsInstance(alpha_cube.beta_line(10.0), float)
+        # Corner-to-corner mapping: alpha coords equal beta coords
+        self.assertAlmostEqual(alpha_cube.alpha_sample(1.0), 1.0)
+        self.assertAlmostEqual(alpha_cube.beta_line(10.0), 10.0)
+
+        # 8-arg constructor: explicit starting/ending coordinates
+        sub_cube = ip.AlphaCube(100, 200, 50, 100, 1.5, 1.5, 51.5, 101.5)
+        self.assertEqual(sub_cube.alpha_samples(), 100)
+        self.assertEqual(sub_cube.beta_samples(), 50)
+        self.assertAlmostEqual(sub_cube.alpha_sample(0.5), 1.5)
+        self.assertAlmostEqual(sub_cube.alpha_sample(50.5), 51.5)
 
     def test_alpha_cube_rehash_merges_subarea_mapping(self):
         source = ip.AlphaCube(4, 8, 2, 3, 1.5, 2.5, 3.5, 5.5)

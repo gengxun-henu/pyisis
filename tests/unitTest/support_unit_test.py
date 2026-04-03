@@ -35,6 +35,38 @@ class FileNameAndITimeUnitTest(unittest.TestCase):
             self.assertTrue(file_name.file_exists())
             self.assertEqual(file_name.original(), str(file_path))
 
+    def test_file_list_constructs_from_filename_and_supports_iteration(self):
+        with temporary_text_file(
+            "files.lis",
+            "first.cub\n# ignored comment\n// another comment\n\"quoted,entry.cub\"\nsecond.cub\n",
+        ) as list_path:
+            file_list = ip.FileList(ip.FileName(str(list_path)))
+
+            self.assertEqual(len(file_list), 3)
+            self.assertEqual(file_list.size(), 3)
+            self.assertEqual(file_list[0].to_string(), "first.cub")
+            self.assertEqual(file_list[1].to_string(), "quoted,entry.cub")
+            self.assertEqual(file_list[-1].to_string(), "second.cub")
+            self.assertEqual(
+                [entry.to_string() for entry in file_list],
+                ["first.cub", "quoted,entry.cub", "second.cub"],
+            )
+            self.assertIn("FileList(size=3)", repr(file_list))
+
+    def test_file_list_read_text_and_write_round_trip(self):
+        file_list = ip.FileList()
+        file_list.read_text("alpha.cub\n\"beta,gamma.cub\"\n")
+
+        with temporary_text_file("written_files.lis", "") as output_path:
+            file_list.write(str(output_path))
+
+            self.assertEqual(len(file_list), 2)
+            self.assertEqual(file_list.to_string().splitlines(), ["alpha.cub", "beta,gamma.cub"])
+            self.assertEqual(
+                output_path.read_text(encoding="utf-8").splitlines(),
+                ["alpha.cub", "beta,gamma.cub"],
+            )
+
     def test_itime_string_constructor_and_accessors(self):
         time_value = self._make_itime_or_skip("2001-01-02T03:04:05")
         self.assertEqual(time_value.year(), 2001)

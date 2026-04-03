@@ -1,10 +1,10 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-FileList,Parsing,isis/src/base/objs/FileList/FileList.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+FileList,Parsing,isis/src/base/objs/FileList/FileList.h,isis_pybind_standalone/src/base/bind_base_support.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-03 通过 read_text/to_string 适配流式接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,FileList,isis_pybind.FileList,N,Python class symbol not found in current binding files
-Construction/Enum,FileList(),isis_pybind.FileList(),N,Constructor binding not detected in current binding files
-Read/Write IO,void read(FileName listFile),isis_pybind.FileList.read,N,Method not found in current binding files
-Read/Write IO,void read(std::istream &in),isis_pybind.FileList.read,N,Method not found in current binding files
-Read/Write IO,void write(FileName outputFileList),isis_pybind.FileList.write,N,Method not found in current binding files
-Read/Write IO,void write(std::ostream &out),isis_pybind.FileList.write,N,Method not found in current binding files
+Class Symbol,FileList,isis_pybind.FileList,Y,Bound in src/base/bind_base_support.cpp with repr/index/iteration helpers
+Construction/Enum,FileList(),isis_pybind.FileList(),Y,Exposes default constructor plus FileName/std::string path constructors
+Read/Write IO,void read(FileName listFile),isis_pybind.FileList.read,Y,Bound directly and also accepts Python str paths
+Read/Write IO,void read(std::istream &in),isis_pybind.FileList.read_text,Y,Adapted to Python text input via read_text(contents)
+Read/Write IO,void write(FileName outputFileList),isis_pybind.FileList.write,Y,Bound directly and also accepts Python str paths
+Read/Write IO,void write(std::ostream &out),isis_pybind.FileList.to_string,Y,Adapted to Python text output via to_string()

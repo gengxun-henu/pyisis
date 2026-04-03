@@ -6,6 +6,7 @@
  * @brief Pybind11 bindings for ISIS support and utility classes
  *
  * This file contains bindings for core ISIS utility classes including:
+ *   - FileList: File list parsing and serialization helpers
  *   - FileName: File name and path handling
  *   - iTime: Time representation
  *   - SerialNumber: Cube identification
@@ -18,11 +19,13 @@
  */
 
 #include <string>
+#include <sstream>
 #include <vector>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "FileList.h"
 #include "Cube.h"
 #include "FileName.h"
 #include "IException.h"
@@ -89,6 +92,65 @@ void bind_base_support(py::module_ &m) {
       .def("__str__", [](const Isis::FileName &self) { return qStringToStdString(self.toString()); })
       .def("__repr__", [](const Isis::FileName &self) {
         return "FileName('" + qStringToStdString(self.toString()) + "')";
+      });
+
+  // Added: 2026-04-03 - expose FileList with path-based IO and Python-friendly iteration helpers.
+  py::class_<Isis::FileList>(m, "FileList")
+      .def(py::init<>())
+      .def(py::init<const Isis::FileName &>(), py::arg("list_file"))
+      .def(py::init([](const std::string &list_file) {
+             return Isis::FileList(Isis::FileName(stdStringToQString(list_file)));
+           }),
+           py::arg("list_file"))
+      .def("read", static_cast<void (Isis::FileList::*)(Isis::FileName)>(&Isis::FileList::read),
+           py::arg("list_file"))
+      .def("read",
+           [](Isis::FileList &self, const std::string &list_file) {
+             self.read(Isis::FileName(stdStringToQString(list_file)));
+           },
+           py::arg("list_file"))
+      .def("read_text",
+           [](Isis::FileList &self, const std::string &contents) {
+             std::istringstream input(contents);
+             self.read(input);
+           },
+           py::arg("contents"))
+      .def("write", static_cast<void (Isis::FileList::*)(Isis::FileName)>(&Isis::FileList::write),
+           py::arg("output_file_list"))
+      .def("write",
+           [](Isis::FileList &self, const std::string &output_file_list) {
+             self.write(Isis::FileName(stdStringToQString(output_file_list)));
+           },
+           py::arg("output_file_list"))
+      .def("to_string",
+           [](Isis::FileList &self) {
+             std::ostringstream output;
+             self.write(output);
+             return output.str();
+           })
+      .def("size", [](const Isis::FileList &self) { return self.size(); })
+      .def("__len__", [](const Isis::FileList &self) { return self.size(); })
+      .def("__getitem__",
+           [](const Isis::FileList &self, int index) {
+             int normalizedIndex = index;
+             if (normalizedIndex < 0) {
+               normalizedIndex += self.size();
+             }
+
+             if (normalizedIndex < 0 || normalizedIndex >= self.size()) {
+               throw py::index_error("FileList index out of range");
+             }
+
+             return self[normalizedIndex];
+           },
+           py::arg("index"))
+      .def("__iter__",
+           [](Isis::FileList &self) {
+             return py::make_iterator(self.begin(), self.end());
+           },
+           py::keep_alive<0, 1>())
+      .def("__repr__", [](const Isis::FileList &self) {
+        return "FileList(size=" + std::to_string(self.size()) + ")";
       });
 
   py::class_<Isis::iTime>(m, "iTime")

@@ -2,6 +2,18 @@
 
 ## 2026-04-03
 
+- FileList binding completion:
+  - Added `Isis::FileList` binding in `src/base/bind_base_support.cpp` alongside `FileName` and `SerialNumberList`.
+  - Exposed constructors for empty, `FileName`, and Python `str` path inputs.
+  - Exposed file-based `read(...)` / `write(...)` plus Python-friendly stream adapters `read_text(contents)` and `to_string()` for the upstream `std::istream` / `std::ostream` overloads.
+  - Added Python conveniences: `size()`, `__len__`, `__getitem__` with negative indexing, `__iter__`, and `__repr__`.
+  - Re-exported `FileList` from `python/isis_pybind/__init__.py`.
+  - Added focused unit coverage in `tests/unitTest/support_unit_test.py` for path construction, comment skipping, quoted comma-preserving entries, text round-trip writeout, indexing, and iteration.
+  - Updated `todo_pybind11.csv`, `class_bind_methods_details/base_file_list_methods.csv`, and `class_bind_methods_details/methods_inventory_summary.csv` to mark `FileList` as converted.
+- Validation status:
+  - Passed build: `cmake -S . -B build && cmake --build build -j4 --target _isis_core` under `asp360_new`.
+  - Passed focused unit test: `ISIS_PYBIND_BUILD_DIR=$PWD/build/python python -X faulthandler tests/unitTest/support_unit_test.py -v` under `asp360_new`.
+
 - AutoRegFactory binding completion:
   - Created new binding file `src/base/bind_auto_reg_factory.cpp` following InterestOperatorFactory pattern.
   - Static method binding: `AutoRegFactory::Create(Pvl &pvl)` exposed as `AutoRegFactory.create(pvl)` with `py::return_value_policy::take_ownership`.

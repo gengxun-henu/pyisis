@@ -15,6 +15,8 @@ on:
       - .github/workflows/ci-pybind.yml
       - .github/workflows/reusable-runner-config.yml
       - .github/workflows/reusable-pybind-build.yml
+      - .github/workflows/reusable-pybind-build-self-hosted.yml
+      - .github/workflows/reusable-pybind-build-github-hosted.yml
       - .github/actions/resolve-runner-config/**
       - .github/actions/resolve-conda-isis-prefix/**
       - .github/actions/setup-hosted-micromamba/**
@@ -270,9 +272,77 @@ jobs:
       run_smoke_import: true
       upload_build_artifact: true
 
-  run-ctest:
-    name: Run CTest suite
-    if: ${{ always() && needs.build_and_smoke.outputs.build_succeeded == 'true' }}
+  run-ctest-self-hosted:
+    name: Run CTest suite (self-hosted local cache)
+    if: ${{ always() && needs.resolve_runner.outputs.runner_mode == 'self-hosted' && needs.build_and_smoke.outputs.build_succeeded == 'true' }}
+    needs:
+      - resolve_runner
+      - build_and_smoke
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    env:
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      LOCAL_BUILD_CACHE_DIR: ${{ needs.build_and_smoke.outputs.local_build_cache_dir }}
+    steps:
+      - name: Checkout repository through normalized local action
+        uses: ./.github/actions/normalized-safe-checkout
+        with:
+          runner-mode: self-hosted
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          summary-context: run-ctest-self-hosted
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: self-hosted
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ""
+
+      - name: Restore build tree from self-hosted local cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "$LOCAL_BUILD_CACHE_DIR" ]; then
+            echo "::error::Reusable build workflow did not publish a self-hosted local build cache directory."
+            exit 1
+          fi
+          if [ ! -d "$LOCAL_BUILD_CACHE_DIR" ]; then
+            echo "::error::Expected self-hosted local build cache directory does not exist: $LOCAL_BUILD_CACHE_DIR"
+            exit 1
+          fi
+          rm -rf "$BUILD_DIR"
+          cp -a "$LOCAL_BUILD_CACHE_DIR" "$BUILD_DIR"
+
+      - name: Run CTest suite
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          ctest --test-dir "$BUILD_DIR" --output-on-failure -V 2>&1 | tee "$BUILD_DIR/ctest.log"
+
+      - name: Summarize self-hosted CTest logs
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "## Self-hosted CTest logs"
+            echo ""
+            echo "- local build cache: \`$LOCAL_BUILD_CACHE_DIR\`"
+            echo "- ctest log: \`$BUILD_DIR/ctest.log\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  run-ctest-github-hosted:
+    name: Run CTest suite (github-hosted artifact path)
+    if: ${{ always() && needs.resolve_runner.outputs.runner_mode == 'github-hosted' && needs.build_and_smoke.outputs.build_succeeded == 'true' }}
     needs:
       - resolve_runner
       - build_and_smoke

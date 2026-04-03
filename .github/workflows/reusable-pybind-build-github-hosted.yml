@@ -1,0 +1,302 @@
+name: reusable-pybind-build-github-hosted
+
+on:
+  workflow_call:
+    secrets:
+      ACTIONS_CHECKOUT_SSH_KEY:
+        required: false
+    inputs:
+      runner_mode:
+        description: Selected runner mode from the shared runner config workflow.
+        required: true
+        type: string
+      runs_on_json:
+        description: JSON string suitable for fromJSON(...) in runs-on.
+        required: true
+        type: string
+      use_ssh_checkout:
+        description: Legacy compatibility flag for callers that still pass an SSH checkout preference. The reusable workflow now normalizes to HTTPS checkout for WATT/host-routed GitHub access.
+        required: true
+        type: string
+      needs_dynamic_conda_setup:
+        description: Whether this workflow should create a micromamba/conda environment on the runner.
+        required: true
+        type: string
+      artifact_prefix:
+        description: Prefix used for build/smoke artifact names.
+        required: true
+        type: string
+      fallback_conda_prefix:
+        description: Fallback local conda prefix used on self-hosted runners.
+        required: true
+        type: string
+      pybind_dir:
+        description: Repository-relative source directory passed to cmake -S.
+        required: false
+        default: .
+        type: string
+      build_dir:
+        description: Repository-relative build output directory.
+        required: false
+        default: build
+        type: string
+      run_smoke_import:
+        description: Whether to run tests/smoke_import.py after a successful build.
+        required: false
+        default: true
+        type: boolean
+      upload_build_artifact:
+        description: Whether to upload the configured build tree for downstream jobs.
+        required: false
+        default: true
+        type: boolean
+      hosted_environment_file:
+        description: Conda environment file used when runner-mode=github-hosted.
+        required: false
+        default: .github/conda/pybind-ci-environment.yml
+        type: string
+      hosted_environment_name:
+        description: Conda environment name used when runner-mode=github-hosted.
+        required: false
+        default: asp360_new
+        type: string
+    outputs:
+      build_artifact_name:
+        description: Uploaded build tree artifact name.
+        value: ${{ jobs.build.outputs.build_artifact_name }}
+      build_log_artifact_name:
+        description: Uploaded build log artifact name.
+        value: ${{ jobs.build.outputs.build_log_artifact_name }}
+      smoke_log_artifact_name:
+        description: Uploaded smoke log artifact name.
+        value: ${{ jobs.smoke_import.outputs.smoke_log_artifact_name }}
+      build_succeeded:
+        description: Whether the configure/build stage succeeded.
+        value: ${{ jobs.build.outputs.build_succeeded }}
+      smoke_succeeded:
+        description: Whether smoke_import.py succeeded when enabled.
+        value: ${{ jobs.smoke_import.outputs.smoke_succeeded }}
+      local_build_cache_dir:
+        description: Always blank on github-hosted runs.
+        value: ${{ jobs.build.outputs.local_build_cache_dir }}
+
+jobs:
+  build:
+    name: Reusable build
+    runs-on: ${{ fromJSON(inputs.runs_on_json) }}
+    timeout-minutes: 120
+    permissions:
+      contents: read
+    outputs:
+      build_artifact_name: ${{ steps.artifact-names.outputs.build_artifact_name }}
+      build_log_artifact_name: ${{ steps.artifact-names.outputs.build_log_artifact_name }}
+      build_succeeded: ${{ steps.mark-build.outputs.build_succeeded }}
+      local_build_cache_dir: ${{ steps.blank-local-cache.outputs.local_build_cache_dir }}
+    env:
+      PYBIND_DIR: ${{ inputs.pybind_dir }}
+      BUILD_DIR: ${{ inputs.build_dir }}
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: ${{ inputs.fallback_conda_prefix }}
+      GH_TOKEN: ${{ github.token }}
+      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/${{ inputs.hosted_environment_name }}
+    steps:
+      - name: Checkout repository through normalized local action
+        uses: ./.github/actions/normalized-safe-checkout
+        with:
+          runner-mode: github-hosted
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          summary-context: reusable-build-github-hosted
+
+      - name: Compute artifact names
+        id: artifact-names
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "build_artifact_name=${{ inputs.artifact_prefix }}-build-tree-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+          echo "build_log_artifact_name=${{ inputs.artifact_prefix }}-build-logs-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+
+      - name: Publish blank local cache output
+        id: blank-local-cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "local_build_cache_dir=" >> "$GITHUB_OUTPUT"
+
+      - name: Set up micromamba for GitHub-hosted runner
+        if: ${{ inputs.needs_dynamic_conda_setup == 'true' }}
+        uses: ./.github/actions/setup-hosted-micromamba
+        with:
+          environment-name: ${{ inputs.hosted_environment_name }}
+          environment-file: ${{ inputs.hosted_environment_file }}
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: github-hosted
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Verify local toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "=== Local environment verification ==="
+          echo "CONDA_PREFIX=$CONDA_PREFIX"
+          test -d "$CONDA_PREFIX/include/isis" && echo "✓ ISIS headers found"
+          test -f "$CONDA_PREFIX/lib/libisis.so" && echo "✓ libisis.so found"
+          test -f "$CONDA_PREFIX/lib/Camera.plugin" && echo "✓ Camera.plugin found"
+          command -v cmake
+          cmake --version
+          command -v ninja
+          ninja --version
+          "$PYTHON_BIN" --version
+          "$PYTHON_BIN" - <<'PY'
+          import pybind11
+          import sys
+          print('python', sys.version.split()[0])
+          print('pybind11', pybind11.__version__)
+          PY
+
+      - name: Clean build directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$BUILD_DIR"
+
+      - name: Configure CMake
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DISIS_PREFIX="$ISIS_PREFIX"
+
+      - name: Build extension
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
+
+      - name: Mark build success
+        if: ${{ success() }}
+        id: mark-build
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "build_succeeded=true" >> "$GITHUB_OUTPUT"
+
+      - name: Summarize build failure
+        if: ${{ failure() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$PYTHON_BIN" scripts/build_log_analyzer.py "$BUILD_DIR/build.log"
+
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.artifact-names.outputs.build_log_artifact_name }}
+          if-no-files-found: warn
+          path: |
+            ${{ env.BUILD_DIR }}/build.log
+            ${{ env.BUILD_DIR }}/CMakeCache.txt
+            ${{ env.BUILD_DIR }}/CMakeFiles/CMakeOutput.log
+            ${{ env.BUILD_DIR }}/CMakeFiles/CMakeError.log
+            ${{ env.BUILD_DIR }}/Testing/Temporary/**
+
+      - name: Upload build artifact
+        if: ${{ success() && inputs.upload_build_artifact }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.artifact-names.outputs.build_artifact_name }}
+          path: ${{ env.BUILD_DIR }}
+          if-no-files-found: error
+
+  smoke_import:
+    name: Reusable smoke import
+    if: ${{ inputs.run_smoke_import }}
+    needs: build
+    runs-on: ${{ fromJSON(inputs.runs_on_json) }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    outputs:
+      smoke_log_artifact_name: ${{ steps.artifact-names.outputs.smoke_log_artifact_name }}
+      smoke_succeeded: ${{ steps.mark-smoke.outputs.smoke_succeeded }}
+    env:
+      BUILD_DIR: ${{ inputs.build_dir }}
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: ${{ inputs.fallback_conda_prefix }}
+      GH_TOKEN: ${{ github.token }}
+      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/${{ inputs.hosted_environment_name }}
+    steps:
+      - name: Checkout repository through normalized local action
+        uses: ./.github/actions/normalized-safe-checkout
+        with:
+          runner-mode: github-hosted
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          summary-context: reusable-smoke-github-hosted
+
+      - name: Compute smoke artifact name
+        id: artifact-names
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "smoke_log_artifact_name=${{ inputs.artifact_prefix }}-smoke-logs-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
+
+      - name: Set up micromamba for GitHub-hosted runner
+        if: ${{ inputs.needs_dynamic_conda_setup == 'true' }}
+        uses: ./.github/actions/setup-hosted-micromamba
+        with:
+          environment-name: ${{ inputs.hosted_environment_name }}
+          environment-file: ${{ inputs.hosted_environment_file }}
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: github-hosted
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.build_artifact_name }}
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Run smoke_import.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
+            "$PYTHON_BIN" -X faulthandler tests/smoke_import.py 2>&1 | tee "$BUILD_DIR/smoke.log"
+
+      - name: Mark smoke success
+        if: ${{ success() }}
+        id: mark-smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "smoke_succeeded=true" >> "$GITHUB_OUTPUT"
+
+      - name: Upload smoke logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.artifact-names.outputs.smoke_log_artifact_name }}
+          if-no-files-found: warn
+          path: ${{ env.BUILD_DIR }}/smoke.log

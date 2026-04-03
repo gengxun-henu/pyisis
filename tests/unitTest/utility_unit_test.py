@@ -3,7 +3,7 @@ Unit tests for ISIS utility classes: Column, LineEquation
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-03-30
+Last Modified: 2026-04-03
 """
 import unittest
 
@@ -276,8 +276,8 @@ class LineEquationUnitTest(unittest.TestCase):
         line.add_point(1.0, 5.0)
         repr_str = repr(line)
         self.assertIn("LineEquation", repr_str)
-        # Should handle the exception gracefully
-        self.assertIn("vertical_line", repr_str)
+        self.assertIn("defined=True", repr_str)
+        self.assertIn("points=2", repr_str)
 
 
 if __name__ == '__main__':

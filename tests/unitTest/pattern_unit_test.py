@@ -365,7 +365,7 @@ class AutoRegFactoryUnitTest(unittest.TestCase):
         pvl.add_object(autoreg_obj)
 
         # Should raise IException due to missing Algorithm group
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(ip.IException):
             ip.AutoRegFactory.create(pvl)
 
     def test_auto_reg_factory_unknown_algorithm(self):
@@ -391,7 +391,7 @@ class AutoRegFactoryUnitTest(unittest.TestCase):
         pvl.add_object(autoreg_obj)
 
         # Should raise IException for unknown algorithm
-        with self.assertRaises(RuntimeError):
+        with self.assertRaises(ip.IException):
             ip.AutoRegFactory.create(pvl)
 
 

@@ -23,7 +23,7 @@ on:
         required: true
         type: string
       artifact_prefix:
-        description: Prefix used for build/smoke artifact names.
+        description: Prefix used for build/smoke artifact names or self-hosted local cache directories.
         required: true
         type: string
       fallback_conda_prefix:
@@ -46,7 +46,7 @@ on:
         default: true
         type: boolean
       upload_build_artifact:
-        description: Whether to upload the configured build tree for downstream jobs.
+        description: Whether the github-hosted workflow should upload the configured build tree for downstream jobs.
         required: false
         default: true
         type: boolean
@@ -62,456 +62,57 @@ on:
         type: string
     outputs:
       build_artifact_name:
-        description: Uploaded build tree artifact name.
-        value: ${{ jobs.build.outputs.build_artifact_name }}
+        description: Uploaded build tree artifact name for github-hosted runs.
+        value: ${{ jobs.self_hosted.outputs.build_artifact_name || jobs.github_hosted.outputs.build_artifact_name }}
       build_log_artifact_name:
-        description: Uploaded build log artifact name.
-        value: ${{ jobs.build.outputs.build_log_artifact_name }}
+        description: Uploaded build log artifact name for github-hosted runs.
+        value: ${{ jobs.self_hosted.outputs.build_log_artifact_name || jobs.github_hosted.outputs.build_log_artifact_name }}
       smoke_log_artifact_name:
-        description: Uploaded smoke log artifact name.
-        value: ${{ jobs.smoke_import.outputs.smoke_log_artifact_name }}
+        description: Uploaded smoke log artifact name for github-hosted runs.
+        value: ${{ jobs.self_hosted.outputs.smoke_log_artifact_name || jobs.github_hosted.outputs.smoke_log_artifact_name }}
       build_succeeded:
         description: Whether the configure/build stage succeeded.
-        value: ${{ jobs.build.outputs.build_succeeded }}
+        value: ${{ jobs.self_hosted.outputs.build_succeeded || jobs.github_hosted.outputs.build_succeeded }}
       smoke_succeeded:
         description: Whether smoke_import.py succeeded when enabled.
-        value: ${{ jobs.smoke_import.outputs.smoke_succeeded }}
+        value: ${{ jobs.self_hosted.outputs.smoke_succeeded || jobs.github_hosted.outputs.smoke_succeeded }}
+      local_build_cache_dir:
+        description: Self-hosted local build cache directory for downstream jobs on the same runner machine.
+        value: ${{ jobs.self_hosted.outputs.local_build_cache_dir || jobs.github_hosted.outputs.local_build_cache_dir }}
 
 jobs:
-  build:
-    name: Reusable build
-    runs-on: ${{ fromJSON(inputs.runs_on_json) }}
-    timeout-minutes: 120
-    permissions:
-      contents: read
-    outputs:
-      build_artifact_name: ${{ steps.artifact-names.outputs.build_artifact_name }}
-      build_log_artifact_name: ${{ steps.artifact-names.outputs.build_log_artifact_name }}
-      build_succeeded: ${{ steps.mark-build.outputs.build_succeeded }}
-    env:
-      PYBIND_DIR: ${{ inputs.pybind_dir }}
-      BUILD_DIR: ${{ inputs.build_dir }}
-      PYTHONUNBUFFERED: "1"
-      FALLBACK_CONDA_PREFIX: ${{ inputs.fallback_conda_prefix }}
-      GH_TOKEN: ${{ github.token }}
-      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
-      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/${{ inputs.hosted_environment_name }}
-    steps:
-      - name: Normalize GitHub checkout transport before checkout
-        shell: bash
-        run: |
-          set -euo pipefail
+  self_hosted:
+    if: ${{ inputs.runner_mode == 'self-hosted' }}
+    uses: ./.github/workflows/reusable-pybind-build-self-hosted.yml
+    secrets: inherit
+    with:
+      runner_mode: ${{ inputs.runner_mode }}
+      runs_on_json: ${{ inputs.runs_on_json }}
+      use_ssh_checkout: ${{ inputs.use_ssh_checkout }}
+      needs_dynamic_conda_setup: ${{ inputs.needs_dynamic_conda_setup }}
+      artifact_prefix: ${{ inputs.artifact_prefix }}
+      fallback_conda_prefix: ${{ inputs.fallback_conda_prefix }}
+      pybind_dir: ${{ inputs.pybind_dir }}
+      build_dir: ${{ inputs.build_dir }}
+      run_smoke_import: ${{ inputs.run_smoke_import }}
+      upload_build_artifact: ${{ inputs.upload_build_artifact }}
+      hosted_environment_file: ${{ inputs.hosted_environment_file }}
+      hosted_environment_name: ${{ inputs.hosted_environment_name }}
 
-          cleanup_git_insteadof() {
-            local scope="$1"
-            local output
-            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
-            if [ -z "$output" ]; then
-              return 0
-            fi
-
-            while IFS= read -r line; do
-              [ -n "$line" ] || continue
-              key="${line%% *}"
-              value="${line#* }"
-              case "$value" in
-                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
-                  git config "$scope" --unset-all "$key" || true
-                  ;;
-              esac
-            done <<< "$output"
-          }
-
-          cleanup_git_insteadof --global
-          cleanup_git_insteadof --system
-
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-
-          if not config_path.exists():
-              raise SystemExit(0)
-
-          existing = config_path.read_text(encoding="utf-8")
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
-          PY
-
-          if [ -f "$HOME/.ssh/config" ]; then
-            chmod 600 "$HOME/.ssh/config"
-          fi
-
-      - name: Preflight GitHub HTTPS checkout path on self-hosted runner
-        if: ${{ inputs.runner_mode == 'self-hosted' }}
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-
-          retry() {
-            local max_attempts="$1"
-            shift
-            local attempt=1
-            local delay=5
-            until "$@"; do
-              if [ "$attempt" -ge "$max_attempts" ]; then
-                echo "Command failed after ${attempt} attempts: $*" >&2
-                return 1
-              fi
-              echo "Attempt ${attempt}/${max_attempts} failed, retrying in ${delay}s: $*" >&2
-              sleep "$delay"
-              attempt=$((attempt + 1))
-              delay=$((delay * 2))
-            done
-          }
-
-          auth_header="$(python3 - <<'PY'
-          import base64
-          import os
-          print(base64.b64encode(f"x-access-token:{os.environ['GH_TOKEN']}".encode()).decode())
-          PY
-          )"
-
-          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
-          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
-          retry 4 git -c http.sslVerify=true -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD >/dev/null
-
-      - name: Self-heal stale checkout workspace on self-hosted runner
-        if: ${{ inputs.runner_mode == 'self-hosted' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          workspace_dir="${GITHUB_WORKSPACE:?}"
-          if [ ! -d "$workspace_dir/.git" ]; then
-            echo "No existing .git directory detected under $workspace_dir; workspace is already clean enough."
-            exit 0
-          fi
-
-          if git -C "$workspace_dir" rev-parse --verify HEAD >/dev/null 2>&1; then
-            echo "Existing checkout HEAD is healthy; no cleanup required."
-            exit 0
-          fi
-
-          echo "::warning::Detected stale or corrupt checkout metadata in $workspace_dir (HEAD is missing). Removing workspace contents before actions/checkout."
-          find "$workspace_dir" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ github.token }}
-          persist-credentials: true
-          fetch-depth: 0
-
-      - name: Report checkout transport diagnostics
-        uses: ./.github/actions/normalized-safe-checkout
-        with:
-          runner-mode: ${{ inputs.runner_mode }}
-          github-token: ${{ github.token }}
-          skip-checkout: "true"
-          summary-context: reusable-build
-
-      - name: Compute artifact names
-        id: artifact-names
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "build_artifact_name=${{ inputs.artifact_prefix }}-build-tree-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
-          echo "build_log_artifact_name=${{ inputs.artifact_prefix }}-build-logs-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
-
-      - name: Set up micromamba for GitHub-hosted runner
-        if: ${{ inputs.needs_dynamic_conda_setup == 'true' }}
-        uses: ./.github/actions/setup-hosted-micromamba
-        with:
-          environment-name: ${{ inputs.hosted_environment_name }}
-          environment-file: ${{ inputs.hosted_environment_file }}
-          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
-          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
-
-      - name: Resolve conda-backed ISIS prefix
-        uses: ./.github/actions/resolve-conda-isis-prefix
-        with:
-          runner-mode: ${{ inputs.runner_mode }}
-          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
-          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
-
-      - name: Verify local toolchain
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "=== Local environment verification ==="
-          echo "CONDA_PREFIX=$CONDA_PREFIX"
-          test -d "$CONDA_PREFIX/include/isis" && echo "✓ ISIS headers found"
-          test -f "$CONDA_PREFIX/lib/libisis.so" && echo "✓ libisis.so found"
-          test -f "$CONDA_PREFIX/lib/Camera.plugin" && echo "✓ Camera.plugin found"
-          command -v cmake
-          cmake --version
-          command -v ninja
-          ninja --version
-          "$PYTHON_BIN" --version
-          "$PYTHON_BIN" - <<'PY'
-          import pybind11
-          import sys
-          print('python', sys.version.split()[0])
-          print('pybind11', pybind11.__version__)
-          PY
-
-      - name: Clean build directory
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -rf "$BUILD_DIR"
-
-      - name: Configure CMake
-        shell: bash
-        run: |
-          set -euo pipefail
-          cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_VERBOSE_MAKEFILE=ON \
-            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
-            -DPython3_EXECUTABLE="$PYTHON_BIN" \
-            -DISIS_PREFIX="$ISIS_PREFIX"
-
-      - name: Build extension
-        shell: bash
-        run: |
-          set -euo pipefail
-          set -o pipefail
-          cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
-
-      - name: Mark build success
-        if: ${{ success() }}
-        id: mark-build
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "build_succeeded=true" >> "$GITHUB_OUTPUT"
-
-      - name: Summarize build failure
-        if: ${{ failure() }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          "$PYTHON_BIN" scripts/build_log_analyzer.py "$BUILD_DIR/build.log"
-
-      - name: Upload build logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.artifact-names.outputs.build_log_artifact_name }}
-          if-no-files-found: warn
-          path: |
-            ${{ env.BUILD_DIR }}/build.log
-            ${{ env.BUILD_DIR }}/CMakeCache.txt
-            ${{ env.BUILD_DIR }}/CMakeFiles/CMakeOutput.log
-            ${{ env.BUILD_DIR }}/CMakeFiles/CMakeError.log
-            ${{ env.BUILD_DIR }}/Testing/Temporary/**
-
-      - name: Upload build artifact
-        if: ${{ success() && inputs.upload_build_artifact }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.artifact-names.outputs.build_artifact_name }}
-          path: ${{ env.BUILD_DIR }}
-          if-no-files-found: error
-
-  smoke_import:
-    name: Reusable smoke import
-    if: ${{ inputs.run_smoke_import }}
-    needs: build
-    runs-on: ${{ fromJSON(inputs.runs_on_json) }}
-    timeout-minutes: 30
-    permissions:
-      contents: read
-    outputs:
-      smoke_log_artifact_name: ${{ steps.artifact-names.outputs.smoke_log_artifact_name }}
-      smoke_succeeded: ${{ steps.mark-smoke.outputs.smoke_succeeded }}
-    env:
-      BUILD_DIR: ${{ inputs.build_dir }}
-      PYTHONUNBUFFERED: "1"
-      FALLBACK_CONDA_PREFIX: ${{ inputs.fallback_conda_prefix }}
-      GH_TOKEN: ${{ github.token }}
-      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
-      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/${{ inputs.hosted_environment_name }}
-    steps:
-      - name: Normalize GitHub checkout transport before checkout
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          cleanup_git_insteadof() {
-            local scope="$1"
-            local output
-            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
-            if [ -z "$output" ]; then
-              return 0
-            fi
-
-            while IFS= read -r line; do
-              [ -n "$line" ] || continue
-              key="${line%% *}"
-              value="${line#* }"
-              case "$value" in
-                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
-                  git config "$scope" --unset-all "$key" || true
-                  ;;
-              esac
-            done <<< "$output"
-          }
-
-          cleanup_git_insteadof --global
-          cleanup_git_insteadof --system
-
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-
-          if not config_path.exists():
-              raise SystemExit(0)
-
-          existing = config_path.read_text(encoding="utf-8")
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
-          PY
-
-          if [ -f "$HOME/.ssh/config" ]; then
-            chmod 600 "$HOME/.ssh/config"
-          fi
-
-      - name: Preflight GitHub HTTPS checkout path on self-hosted runner
-        if: ${{ inputs.runner_mode == 'self-hosted' }}
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-
-          retry() {
-            local max_attempts="$1"
-            shift
-            local attempt=1
-            local delay=5
-            until "$@"; do
-              if [ "$attempt" -ge "$max_attempts" ]; then
-                echo "Command failed after ${attempt} attempts: $*" >&2
-                return 1
-              fi
-              echo "Attempt ${attempt}/${max_attempts} failed, retrying in ${delay}s: $*" >&2
-              sleep "$delay"
-              attempt=$((attempt + 1))
-              delay=$((delay * 2))
-            done
-          }
-
-          auth_header="$(python3 - <<'PY'
-          import base64
-          import os
-          print(base64.b64encode(f"x-access-token:{os.environ['GH_TOKEN']}".encode()).decode())
-          PY
-          )"
-
-          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
-          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
-          retry 4 git -c http.sslVerify=true -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD >/dev/null
-
-      - name: Self-heal stale checkout workspace on self-hosted runner
-        if: ${{ inputs.runner_mode == 'self-hosted' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          workspace_dir="${GITHUB_WORKSPACE:?}"
-          if [ ! -d "$workspace_dir/.git" ]; then
-            echo "No existing .git directory detected under $workspace_dir; workspace is already clean enough."
-            exit 0
-          fi
-
-          if git -C "$workspace_dir" rev-parse --verify HEAD >/dev/null 2>&1; then
-            echo "Existing checkout HEAD is healthy; no cleanup required."
-            exit 0
-          fi
-
-          echo "::warning::Detected stale or corrupt checkout metadata in $workspace_dir (HEAD is missing). Removing workspace contents before actions/checkout."
-          find "$workspace_dir" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ github.token }}
-          persist-credentials: true
-          fetch-depth: 0
-
-      - name: Report checkout transport diagnostics
-        uses: ./.github/actions/normalized-safe-checkout
-        with:
-          runner-mode: ${{ inputs.runner_mode }}
-          github-token: ${{ github.token }}
-          skip-checkout: "true"
-          summary-context: reusable-smoke
-
-      - name: Compute smoke artifact name
-        id: artifact-names
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "smoke_log_artifact_name=${{ inputs.artifact_prefix }}-smoke-logs-${{ github.run_id }}" >> "$GITHUB_OUTPUT"
-
-      - name: Set up micromamba for GitHub-hosted runner
-        if: ${{ inputs.needs_dynamic_conda_setup == 'true' }}
-        uses: ./.github/actions/setup-hosted-micromamba
-        with:
-          environment-name: ${{ inputs.hosted_environment_name }}
-          environment-file: ${{ inputs.hosted_environment_file }}
-          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
-          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
-
-      - name: Resolve conda-backed ISIS prefix
-        uses: ./.github/actions/resolve-conda-isis-prefix
-        with:
-          runner-mode: ${{ inputs.runner_mode }}
-          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
-          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
-
-      - name: Download build artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: ${{ needs.build.outputs.build_artifact_name }}
-          path: ${{ env.BUILD_DIR }}
-
-      - name: Run smoke_import.py
-        shell: bash
-        run: |
-          set -euo pipefail
-          set -o pipefail
-          PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
-            "$PYTHON_BIN" -X faulthandler tests/smoke_import.py 2>&1 | tee "$BUILD_DIR/smoke.log"
-
-      - name: Mark smoke success
-        if: ${{ success() }}
-        id: mark-smoke
-        shell: bash
-        run: |
-          set -euo pipefail
-          echo "smoke_succeeded=true" >> "$GITHUB_OUTPUT"
-
-      - name: Upload smoke logs
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.artifact-names.outputs.smoke_log_artifact_name }}
-          if-no-files-found: warn
-          path: ${{ env.BUILD_DIR }}/smoke.log
+  github_hosted:
+    if: ${{ inputs.runner_mode == 'github-hosted' }}
+    uses: ./.github/workflows/reusable-pybind-build-github-hosted.yml
+    secrets: inherit
+    with:
+      runner_mode: ${{ inputs.runner_mode }}
+      runs_on_json: ${{ inputs.runs_on_json }}
+      use_ssh_checkout: ${{ inputs.use_ssh_checkout }}
+      needs_dynamic_conda_setup: ${{ inputs.needs_dynamic_conda_setup }}
+      artifact_prefix: ${{ inputs.artifact_prefix }}
+      fallback_conda_prefix: ${{ inputs.fallback_conda_prefix }}
+      pybind_dir: ${{ inputs.pybind_dir }}
+      build_dir: ${{ inputs.build_dir }}
+      run_smoke_import: ${{ inputs.run_smoke_import }}
+      upload_build_artifact: ${{ inputs.upload_build_artifact }}
+      hosted_environment_file: ${{ inputs.hosted_environment_file }}
+      hosted_environment_name: ${{ inputs.hosted_environment_name }}

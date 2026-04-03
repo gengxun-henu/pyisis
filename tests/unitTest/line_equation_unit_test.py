@@ -3,7 +3,7 @@ Unit tests for ISIS LineEquation bindings
 
 Author: Geng Xun
 Created: 2026-03-30
-Last Modified: 2026-03-30
+Last Modified: 2026-04-03
 """
 
 import unittest
@@ -42,7 +42,7 @@ class TestLineEquationConstruction(unittest.TestCase):
 
     def test_constructor_with_vertical_line_raises(self):
         """Test that vertical line (same x values) raises exception."""
-        with self.assertRaises(RuntimeError) as context:
+        with self.assertRaises(ip.IException) as context:
             ip.LineEquation(1.0, 1.0, 1.0, 5.0)
         self.assertIn("identical", str(context.exception).lower())
 
@@ -72,7 +72,7 @@ class TestLineEquationAddPoint(unittest.TestCase):
         line_eq = ip.LineEquation()
         line_eq.add_point(1.0, 2.0)
         line_eq.add_point(3.0, 4.0)
-        with self.assertRaises(RuntimeError) as context:
+        with self.assertRaises(ip.IException) as context:
             line_eq.add_point(5.0, 6.0)
         self.assertIn("already defined", str(context.exception).lower())
 
@@ -82,7 +82,7 @@ class TestLineEquationAddPoint(unittest.TestCase):
         line_eq.add_point(1.0, 1.0)
         line_eq.add_point(1.0, 5.0)
         self.assertTrue(line_eq.defined())
-        with self.assertRaises(RuntimeError) as context:
+        with self.assertRaises(ip.IException) as context:
             _ = line_eq.slope()
         self.assertIn("identical", str(context.exception).lower())
 
@@ -117,20 +117,22 @@ class TestLineEquationSlopeIntercept(unittest.TestCase):
     def test_slope_before_defined_raises(self):
         """Test that calling slope before line is defined raises exception."""
         line_eq = ip.LineEquation()
-        with self.assertRaises(RuntimeError) as context:
+        with self.assertRaises(ip.IException) as context:
             _ = line_eq.slope()
         self.assertIn("undefined", str(context.exception).lower())
 
     def test_intercept_before_defined_raises(self):
         """Test that calling intercept before line is defined raises exception."""
         line_eq = ip.LineEquation()
-        with self.assertRaises(RuntimeError) as context:
+        with self.assertRaises(ip.IException) as context:
             _ = line_eq.intercept()
         self.assertIn("undefined", str(context.exception).lower())
 
     def test_slope_computed_once(self):
         """Test that slope is cached after first computation."""
-        line_eq = ip.LineEquation(1.0, 2.0, 3.0, 4.0)
+        line_eq = ip.LineEquation()
+        line_eq.add_point(1.0, 2.0)
+        line_eq.add_point(3.0, 4.0)
         self.assertFalse(line_eq.have_slope())
         slope1 = line_eq.slope()
         self.assertTrue(line_eq.have_slope())
@@ -139,7 +141,9 @@ class TestLineEquationSlopeIntercept(unittest.TestCase):
 
     def test_intercept_computed_once(self):
         """Test that intercept is cached after first computation."""
-        line_eq = ip.LineEquation(1.0, 2.0, 3.0, 4.0)
+        line_eq = ip.LineEquation()
+        line_eq.add_point(1.0, 2.0)
+        line_eq.add_point(3.0, 4.0)
         self.assertFalse(line_eq.have_intercept())
         intercept1 = line_eq.intercept()
         self.assertTrue(line_eq.have_intercept())
@@ -161,14 +165,18 @@ class TestLineEquationStatusMethods(unittest.TestCase):
 
     def test_have_slope_after_computation(self):
         """Test have_slope returns True after slope is computed."""
-        line_eq = ip.LineEquation(1.0, 2.0, 3.0, 4.0)
+        line_eq = ip.LineEquation()
+        line_eq.add_point(1.0, 2.0)
+        line_eq.add_point(3.0, 4.0)
         self.assertFalse(line_eq.have_slope())
         _ = line_eq.slope()
         self.assertTrue(line_eq.have_slope())
 
     def test_have_intercept_after_computation(self):
         """Test have_intercept returns True after intercept is computed."""
-        line_eq = ip.LineEquation(1.0, 2.0, 3.0, 4.0)
+        line_eq = ip.LineEquation()
+        line_eq.add_point(1.0, 2.0)
+        line_eq.add_point(3.0, 4.0)
         self.assertFalse(line_eq.have_intercept())
         _ = line_eq.intercept()
         self.assertTrue(line_eq.have_intercept())
@@ -196,8 +204,9 @@ class TestLineEquationRepr(unittest.TestCase):
 
     def test_repr_defined_without_slope_intercept(self):
         """Test repr for defined line without computed slope/intercept."""
-        line_eq = ip.LineEquation(1.0, 2.0, 3.0, 4.0)
-        # Don't call slope() or intercept() yet
+        line_eq = ip.LineEquation()
+        line_eq.add_point(1.0, 2.0)
+        line_eq.add_point(3.0, 4.0)
         repr_str = repr(line_eq)
         self.assertIn("LineEquation", repr_str)
         self.assertIn("defined=True", repr_str)

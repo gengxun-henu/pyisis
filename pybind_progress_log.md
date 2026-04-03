@@ -2,6 +2,28 @@
 
 ## 2026-04-03
 
+- Test data path stabilization for `read_cube_unit_test.py`:
+  - Replaced the cwd-sensitive hardcoded path `./tests/data/lronaccal/truth/M1333276014R.near.crop.cub` with `workspace_test_data_path("lronaccal", "truth", "M1333276014R.near.crop.cub")`.
+  - This makes the test data lookup stable relative to the repository root/helper implementation instead of depending on whether the process is launched from `tests/unitTest/` or the repository root.
+  - Added a clear existence assertion so missing repository test data reports as a direct fixture problem.
+  - Verified that other unit tests referencing repository fixture cubes already use `workspace_test_data_path(...)`; no additional cwd-sensitive `./tests/data/...` path remained in `tests/unitTest/*_unit_test.py` after this fix.
+- Skip-status clarification from full unit-test discovery:
+  - `skipped=5` comes from 1 temporarily disabled `bundle_advanced_unit_test` class setup skip and 4 temporarily disabled tests in `high_level_cube_io_unit_test.py`.
+  - These skips are intentional suite gates, not regressions from the current path fix.
+- Validation status:
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p 'read_cube_unit_test.py'`
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p '*_unit_test.py'` from repository root (`389` tests, `OK`, `5` skipped, `1` expected failure)
+
+- LineEquation / AutoRegFactory test expectation alignment:
+  - Fixed `tests/unitTest/line_equation_unit_test.py` to match upstream ISIS `LineEquation.cpp` behavior instead of assuming generic `RuntimeError` translation and lazy constructor semantics.
+  - Updated exception assertions to expect `ip.IException` for vertical-line construction, undefined line access, identical-x slope failures, and third-point insertion failures.
+  - Corrected slope/intercept cache-state tests to use the incremental `add_point(...)` path; upstream two-point constructor eagerly computes and caches slope/intercept.
+  - Adjusted `LineEquation` repr coverage to validate the stable Python-visible representation for vertical lines without requiring a synthetic `vertical_line` marker that upstream ISIS does not provide.
+  - Updated `tests/unitTest/pattern_unit_test.py` factory-failure assertions to expect `ip.IException`, matching the bound ISIS `AutoRegFactory::Create(...)` failure type.
+- Validation status:
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v line_equation_unit_test.py pattern_unit_test.py utility_unit_test.py` from `tests/unitTest/`
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p '*_unit_test.py'` from repository root (`389` tests, `OK`, `5` skipped, `1` expected failure)
+
 - AutoReg binding completion (remaining public methods):
   - Added 7 missing method bindings to `src/base/bind_base_pattern.cpp`:
     - `minimum_z_score()` → `MinimumZScore()` — returns minimum pattern z-score threshold

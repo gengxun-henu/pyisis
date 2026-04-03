@@ -114,7 +114,7 @@ class AutoRegUnitTest(unittest.TestCase):
     """Test suite for AutoReg class bindings"""
 
     @classmethod
-    def _make_max_corr(cls, tolerance=0.7, subpixel=True):
+    def _make_maximum_correlation(cls, tolerance=0.7, subpixel=True):
         """Helper to create a MaximumCorrelation instance for testing AutoReg methods."""
         pvl = ip.Pvl()
         autoreg_obj = ip.PvlObject("AutoRegistration")
@@ -161,12 +161,12 @@ class AutoRegUnitTest(unittest.TestCase):
 
     def test_autoreg_minimum_z_score(self):
         """Test AutoReg minimum_z_score returns configured value. Added: 2026-04-03"""
-        _pvl, mc = self._make_max_corr()
+        _pvl, mc = self._make_maximum_correlation()
         self.assertAlmostEqual(mc.minimum_z_score(), 1.5, places=6)
 
     def test_autoreg_z_scores(self):
         """Test AutoReg z_scores returns a tuple of two floats. Added: 2026-04-03"""
-        _pvl, mc = self._make_max_corr()
+        _pvl, mc = self._make_maximum_correlation()
         scores = mc.z_scores()
         self.assertIsInstance(scores, tuple)
         self.assertEqual(len(scores), 2)
@@ -176,31 +176,31 @@ class AutoRegUnitTest(unittest.TestCase):
 
     def test_autoreg_registration_statistics(self):
         """Test AutoReg registration_statistics returns a Pvl object. Added: 2026-04-03"""
-        _pvl, mc = self._make_max_corr()
+        _pvl, mc = self._make_maximum_correlation()
         stats = mc.registration_statistics()
         self.assertIsInstance(stats, ip.Pvl)
 
     def test_autoreg_most_lenient_tolerance(self):
         """Test AutoReg most_lenient_tolerance returns a float. Added: 2026-04-03"""
-        _pvl, mc = self._make_max_corr()
+        _pvl, mc = self._make_maximum_correlation()
         val = mc.most_lenient_tolerance()
         self.assertIsInstance(val, float)
 
     def test_autoreg_algorithm_name(self):
         """Test AutoReg algorithm_name returns the concrete algorithm name. Added: 2026-04-03"""
-        _pvl, mc = self._make_max_corr()
+        _pvl, mc = self._make_maximum_correlation()
         name = mc.algorithm_name()
         self.assertEqual(name, "MaximumCorrelation")
 
     def test_autoreg_reg_template(self):
         """Test AutoReg reg_template returns a PvlGroup. Added: 2026-04-03"""
-        _pvl, mc = self._make_max_corr()
+        _pvl, mc = self._make_maximum_correlation()
         tmpl = mc.reg_template()
         self.assertIsInstance(tmpl, ip.PvlGroup)
 
     def test_autoreg_updated_template(self):
         """Test AutoReg updated_template returns a PvlGroup reflecting current settings. Added: 2026-04-03"""
-        _pvl, mc = self._make_max_corr()
+        _pvl, mc = self._make_maximum_correlation()
         tmpl = mc.updated_template()
         self.assertIsInstance(tmpl, ip.PvlGroup)
 

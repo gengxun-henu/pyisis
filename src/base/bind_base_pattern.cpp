@@ -293,11 +293,11 @@ void bind_base_pattern(py::module_ &m) {
            "Get minimum pattern z-score threshold")
       .def("z_scores",
            [](const Isis::AutoReg &self) {
-             double score1, score2;
-             self.ZScores(score1, score2);
-             return py::make_tuple(score1, score2);
+             double z_score_min, z_score_max;
+             self.ZScores(z_score_min, z_score_max);
+             return py::make_tuple(z_score_min, z_score_max);
            },
-           "Get z-scores of the pattern chip (returns tuple of score1, score2)")
+           "Get z-scores of the pattern chip (returns tuple of z_score_min, z_score_max)")
       .def("registration_statistics", &Isis::AutoReg::RegistrationStatistics,
            "Get registration statistics as a Pvl object")
       .def("most_lenient_tolerance", &Isis::AutoReg::MostLenientTolerance,

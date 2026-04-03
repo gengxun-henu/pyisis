@@ -269,7 +269,8 @@ void bind_low_level_cube_io(py::module_ &m) {
       .def("alpha_line", &Isis::AlphaCube::AlphaLine, py::arg("beta_line"))
       .def("beta_sample", &Isis::AlphaCube::BetaSample, py::arg("alpha_sample"))
       .def("beta_line", &Isis::AlphaCube::BetaLine, py::arg("alpha_line"))
-      .def("update_group", &Isis::AlphaCube::UpdateGroup, py::arg("group"));
+      .def("rehash", &Isis::AlphaCube::Rehash, py::arg("alpha_cube"))
+      .def("update_group", &Isis::AlphaCube::UpdateGroup, py::arg("cube"));
 
   py::class_<Isis::TableField> table_field(m, "TableField");
 

@@ -1,3 +1,10 @@
+"""低层级 Cube I/O 绑定的单元测试
+
+Author: Geng Xun
+Created: 2026-04-03
+Last Modified: 2026-04-03
+"""
+
 import unittest
 
 from _unit_test_support import ip, temporary_directory
@@ -141,6 +148,27 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         self.assertEqual(alpha_cube.beta_lines(), 200)
         self.assertIsInstance(alpha_cube.alpha_sample(1.0), float)
         self.assertIsInstance(alpha_cube.beta_line(10.0), float)
+
+    def test_alpha_cube_rehash_merges_subarea_mapping(self):
+        source = ip.AlphaCube(4, 8, 2, 3, 1.5, 2.5, 3.5, 5.5)
+        subarea = ip.AlphaCube(2, 3, 2, 4, 1.5, 1.5, 2.5, 3.5)
+
+        self.assertEqual(source.beta_lines(), 3)
+
+        source.rehash(subarea)
+
+        self.assertEqual(source.alpha_samples(), 4)
+        self.assertEqual(source.alpha_lines(), 8)
+        self.assertEqual(source.beta_samples(), subarea.beta_samples())
+        self.assertEqual(source.beta_lines(), subarea.beta_lines())
+        self.assertAlmostEqual(source.alpha_sample(0.5), 2.5)
+        self.assertAlmostEqual(source.alpha_line(0.5), 3.5)
+        self.assertAlmostEqual(source.alpha_sample(source.beta_samples()), 3.25)
+        self.assertAlmostEqual(source.alpha_line(source.beta_lines()), 5.25)
+        self.assertAlmostEqual(source.alpha_sample(source.beta_samples() + 0.5), 3.5)
+        self.assertAlmostEqual(source.alpha_line(source.beta_lines() + 0.5), 5.5)
+        self.assertAlmostEqual(source.beta_sample(2.5), 0.5)
+        self.assertAlmostEqual(source.beta_line(3.5), 0.5)
 
     def test_table_field_scalar_and_text_values(self):
         numeric_field = ip.TableField("Value", ip.TableField.Type.Double)

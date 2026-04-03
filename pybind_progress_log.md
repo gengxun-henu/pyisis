@@ -1,5 +1,47 @@
 # Pybind Progress Log
 
+## 2026-04-04
+
+- PhotoModelFactory / AtmosModelFactory 工厂绑定完成：
+  - 新增 `src/base/bind_base_photometry.cpp`，集中暴露 `PhotoModelFactory.create(pvl)` 与 `AtmosModelFactory.create(pvl, photo_model)`，并注册最小 `PhotoModel` / `AtmosModel` 基类表面以承接工厂返回值与参数类型。
+  - 在 `src/module.cpp` 和 `CMakeLists.txt` 中接入新的 photometry 绑定文件。
+  - 在 `python/isis_pybind/__init__.py` 顶层重导出 `PhotoModelFactory` 与 `AtmosModelFactory`。
+  - 新增聚焦单测 `tests/unitTest/atmos_model_factory_unit_test.py`：覆盖两个工厂类符号可见性、`PhotoModelFactory.create(...)` 成功/失败路径，以及 `AtmosModelFactory.create(...)` 的成功/失败路径。
+  - 其中 `AtmosModel.algorithm_name()` 断言按上游 `reference/upstream_isis/src/base/objs/AtmosModel/AtmosModel.cpp` 行为校正为 `"Unknown"`；同时验证默认 `tau=0.28` 与 `wha=0.95`，避免把派生类名猜测当成绑定契约。
+  - 已同步更新 `base_photo_model_factory_methods.csv`、`base_atmos_model_factory_methods.csv`、`methods_inventory_summary.csv` 与 `todo_pybind11.csv`。
+- Validation status:
+  - Failed (environment/toolchain issue, unrelated to this change): `cmake --build build -j2` 使用旧构建树和 `/usr/bin/c++` 时，在 `std::mutex`/`pthread_*clock*` 头层面报错，错误在未改动文件 `src/module.cpp` / `src/bind_sensor.cpp` 即出现。
+  - Passed: `CC=/home/gengxun/miniconda3/bin/x86_64-conda-linux-gnu-cc CXX=/home/gengxun/miniconda3/bin/x86_64-conda-linux-gnu-c++ cmake -S . -B build_agent79 -DPython3_EXECUTABLE=/home/gengxun/miniconda3/envs/asp360_new/bin/python -DISIS_PREFIX=/home/gengxun/miniconda3/envs/asp360_new && cmake --build build_agent79 -j2`
+  - Passed: `ISIS_PYBIND_BUILD_DIR=$PWD/build_agent79/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p 'atmos_model_factory_unit_test.py' -v` (`6` tests, `OK`)
+  - Passed: `PYTHONPATH=$PWD/build_agent79/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -c "import isis_pybind as ip; print(hasattr(ip, 'PhotoModelFactory'), hasattr(ip, 'AtmosModelFactory'))"` (`True True`)
+
+- Low-level cube I/O manager test gap closure:
+  - Audited `BoxcarManager` against the local binding and test suite and confirmed it already had direct Python unit coverage in `tests/unitTest/low_level_cube_io_unit_test.py`; no new `BoxcarManager` binding work was required.
+  - Identified the remaining directly untested peer manager bindings in the same module as `LineManager`, `SampleManager`, and `TileManager`.
+  - Extended `tests/unitTest/low_level_cube_io_unit_test.py` with focused direct tests for those three classes:
+    - `test_line_manager_direct_positioning_and_exceptions()` verifies buffer dimensions, `set_line(...)` positioning, readback values, and invalid line/band exception paths.
+    - `test_sample_manager_direct_positioning_and_exceptions()` verifies buffer dimensions, `set_sample(...)` positioning, readback values, and invalid sample/band exception paths.
+    - `test_tile_manager_positioning_iteration_and_exceptions()` verifies tile dimensions, `set_tile(...)` positioning, readback values, full iteration count, `tiles()` total, and invalid tile/band exception paths.
+  - Added a small shared helper inside the low-level test module to populate test cubes with position-coded DN values so manager readback assertions follow upstream traversal semantics instead of only checking symbol presence.
+- Validation status:
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p 'low_level_cube_io_unit_test.py' -v` (`19` tests, `OK`)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- Additional low-level direct-test expansion:
+  - Extended `tests/unitTest/low_level_cube_io_unit_test.py` with more direct coverage for already bound low-level classes that previously had only partial or indirect assertions:
+    - `test_band_manager_readback_and_exceptions()` verifies `BandManager` band-vector readback on the stable single-argument `set_band(sample)` path and invalid argument exceptions.
+    - `test_brick_set_brick_and_count()` verifies `Brick.set_brick(...)`, brick traversal count via `bricks()`, and invalid brick-index exceptions.
+    - `test_portal_hotspot_controls_base_position()` verifies `Portal.set_hot_spot(...)` affects the base sample/line chosen by `set_position(...)` exactly as upstream `floor(sample - hotSpot)` logic specifies.
+    - `test_table_field_pvl_group_and_validation_errors()` verifies `TableField.pvl_group()` metadata export plus vector-size and text-length validation errors.
+    - `test_table_record_missing_field_raises()` verifies named field lookup failure raises `IException`.
+    - `test_table_round_trip_and_add_record_failures()` verifies `Table.write(...)` / file constructor round-trip for association metadata and record payload plus add-record failure modes for empty-shape and mismatched-record tables.
+  - While validating, discovered the local `build/python` package was stale relative to the current branch: `python/isis_pybind/__init__.py` exported `AtmosModelFactory` but the built `_isis_core` module had not yet been rebuilt, causing import failure before tests could run.
+  - Resynchronized build artifacts by re-running the documented `asp360_new` configure + build pipeline so `build/python/isis_pybind/_isis_core...so` matched the current source export surface.
+- Validation status:
+  - Passed rebuild: `cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" -DISIS_PREFIX="$CONDA_PREFIX" && cmake --build build -j"$(nproc)"` under `asp360_new`
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p 'low_level_cube_io_unit_test.py' -v` (`25` tests, `OK`)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
 ## 2026-04-03
 
 - High-level cube I/O test suite partial re-enable:

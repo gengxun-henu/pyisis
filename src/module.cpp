@@ -5,6 +5,7 @@
 
 namespace py = pybind11;
 
+void bind_base_photometry(py::module_ &m);
 void bind_control_core(py::module_ &m);
 // Temporarily disabled due to complex dependencies - will be re-enabled once resolved
 // void bind_bundle_advanced(py::module_ &m);
@@ -45,6 +46,7 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_base_geometry(m);
   bind_base_ground_map(m);
   bind_base_surface(m);
+  bind_base_photometry(m);
   bind_base_pvl(m);
   bind_base_projection(m);
   bind_base_projection_types(m);

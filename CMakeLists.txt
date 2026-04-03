@@ -161,6 +161,7 @@ pybind11_add_module(_isis_core
   src/base/bind_base_geometry.cpp
   src/base/bind_base_ground_map.cpp
   src/base/bind_base_surface.cpp
+  src/base/bind_base_photometry.cpp
   src/base/bind_base_pvl.cpp
   src/base/bind_base_projection.cpp
   src/base/bind_base_projection_types.cpp

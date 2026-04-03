@@ -39,14 +39,10 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Checkout repository with normalized HTTPS transport
-        uses: ./.github/actions/normalized-safe-checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
-          github-token: ${{ github.token }}
-          fetch-depth: "0"
-          persist-credentials: "true"
-          summary-context: bridge-bootstrap
+          fetch-depth: 0
 
       - name: Fetch issue context and render draft PR body
         id: prepare

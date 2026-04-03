@@ -19,14 +19,10 @@ jobs:
       contents: read
       issues: write
     steps:
-      - name: Checkout repository with normalized HTTPS transport
-        uses: ./.github/actions/normalized-safe-checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
-          runner-mode: github-hosted
-          github-token: ${{ github.token }}
-          fetch-depth: "1"
-          persist-credentials: "true"
-          summary-context: autofill-pybind-task-issue
+          fetch-depth: 1
 
       - name: Ensure inventory summary exists
         shell: bash

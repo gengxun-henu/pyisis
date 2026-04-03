@@ -1,7 +1,7 @@
 name: Normalized safe checkout
 description: >-
   Normalize GitHub HTTPS checkout transport, optionally preflight/self-heal a
-  self-hosted workspace, run actions/checkout, and emit transport diagnostics.
+  self-hosted workspace, optionally run actions/checkout, and emit transport diagnostics.
 inputs:
   runner-mode:
     description: Selected runner mode (`self-hosted` or `github-hosted`).
@@ -18,6 +18,12 @@ inputs:
     description: persist-credentials argument forwarded to actions/checkout.
     required: false
     default: "true"
+  skip-checkout:
+    description: >-
+      When `true`, assume the repository is already checked out and skip the
+      internal actions/checkout step so this local action can run after checkout.
+    required: false
+    default: "false"
   summary-context:
     description: Human-readable context label used in step summary headings.
     required: false
@@ -92,7 +98,7 @@ runs:
         fi
 
     - name: Preflight GitHub HTTPS checkout path on self-hosted runner
-      if: ${{ inputs.runner-mode == 'self-hosted' && inputs.enable-preflight != 'false' }}
+      if: ${{ inputs.skip-checkout != 'true' && inputs.runner-mode == 'self-hosted' && inputs.enable-preflight != 'false' }}
       shell: bash
       env:
         GH_TOKEN: ${{ inputs.github-token }}
@@ -136,7 +142,7 @@ runs:
         retry 4 git -c http.sslVerify=true -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD >/dev/null
 
     - name: Self-heal stale checkout workspace on self-hosted runner
-      if: ${{ inputs.runner-mode == 'self-hosted' && inputs.enable-self-heal != 'false' }}
+      if: ${{ inputs.skip-checkout != 'true' && inputs.runner-mode == 'self-hosted' && inputs.enable-self-heal != 'false' }}
       shell: bash
       env:
         SUMMARY_CONTEXT: ${{ inputs.summary-context }}
@@ -168,11 +174,29 @@ runs:
         find "$workspace_dir" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
 
     - name: Checkout repository
+      if: ${{ inputs.skip-checkout != 'true' }}
       uses: actions/checkout@v4
       with:
         token: ${{ inputs.github-token }}
         persist-credentials: ${{ inputs.persist-credentials }}
         fetch-depth: ${{ inputs.fetch-depth }}
+
+    - name: Verify existing checkout workspace
+      if: ${{ inputs.skip-checkout == 'true' }}
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        workspace_dir="${GITHUB_WORKSPACE:?}"
+        if [ ! -d "$workspace_dir/.git" ]; then
+          echo "::error::normalized-safe-checkout was asked to skip checkout, but no existing .git directory was found under $workspace_dir"
+          exit 1
+        fi
+
+        if ! git -C "$workspace_dir" rev-parse --verify HEAD >/dev/null 2>&1; then
+          echo "::error::normalized-safe-checkout was asked to skip checkout, but the existing workspace under $workspace_dir does not have a valid HEAD"
+          exit 1
+        fi
 
     - name: Report checkout transport diagnostics
       if: ${{ inputs.report-diagnostics != 'false' }}
@@ -182,7 +206,7 @@ runs:
         SUMMARY_CONTEXT: ${{ inputs.summary-context }}
       run: |
         set -euo pipefail
-        remote_url="$(git remote get-url origin)"
+        remote_url="$(git -C "${GITHUB_WORKSPACE:?}" remote get-url origin)"
         echo "remote_url=$remote_url" >> "$GITHUB_OUTPUT"
 
         {

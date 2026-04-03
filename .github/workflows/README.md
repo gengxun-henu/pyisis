@@ -40,11 +40,14 @@ Note: this secret is required only when the active runner mode uses SSH checkout
 
 Implementation notes:
 
-- most workflows now route repository checkout through `./.github/actions/normalized-safe-checkout`, which centralizes HTTPS normalization, self-hosted preflight, stale-workspace self-healing, `actions/checkout@v4`, and checkout transport diagnostics
+- `./.github/actions/normalized-safe-checkout` now supports a post-checkout mode via `skip-checkout: "true"`, so workflows can do a plain `actions/checkout@v4` first and then reuse the local action for transport cleanup validation and diagnostics
+- heavyweight build/test workflows are being migrated to that pattern: explicit checkout in the workflow, then `normalized-safe-checkout` as a non-first-step local action
+- lightweight `github-hosted` issue/PR helper workflows should prefer plain `actions/checkout@v4` instead of calling a checkout-owning local action as the first step, because local actions are resolved from the checked-out workspace
 - when the resolved checkout transport is `ssh`, workflows configure `~/.ssh/config` so `github.com` is routed to `ssh.github.com` on port `443`
 - when the resolved checkout transport is `ssh`, `actions/checkout@v4` receives `ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}` to avoid fallback to HTTPS
 - when the resolved checkout transport is `https`, workflows skip the SSH setup step and use the default HTTPS checkout flow
 - reusable workflows that need checkout still receive secrets via `secrets: inherit`, but they only require `ACTIONS_CHECKOUT_SSH_KEY` when the resolved checkout transport requests SSH checkout
+- workflows that still need pre-checkout normalization/preflight/self-heal should keep those steps in the workflow job before `actions/checkout@v4`, then invoke `normalized-safe-checkout` in post-checkout mode for diagnostics
 
 ## `ci-pybind.yml`
 
@@ -122,7 +125,7 @@ Characteristics:
 - idempotent for the same issue number and target class
 - writes a backlink comment on the issue with the draft PR URL and branch name
 - keeps the issue queue and PR lane explicitly connected inside the repository automation
-- the bridge workflow itself is lightweight and should prefer `github-hosted` so bootstrap branch and draft PR creation do not depend on self-hosted infrastructure
+- the bridge workflow itself is lightweight and should prefer `github-hosted` plus plain `actions/checkout@v4` so bootstrap branch and draft PR creation do not depend on self-hosted infrastructure or local-action bootstrap ordering
 
 ## `agent-pybind-pr-gate.yml`
 
@@ -165,8 +168,7 @@ Characteristics:
 - only acts on issues that already have the `pybind-task` label
 - fills blank sections only, so manual edits are preserved on later updates
 - can suggest a default issue title like `[pybind] Cube` when the title is left at the template stub
-- now uses the shared runner configuration bootstrap before scheduling its job
-- this workflow is intentionally lightweight and should prefer `github-hosted` so issue autofill is not blocked by self-hosted WATT checkout problems
+- this workflow is intentionally lightweight and should prefer `github-hosted` plus plain `actions/checkout@v4` so issue autofill is not blocked by self-hosted WATT checkout problems or local-action bootstrap failures
 
 ## `runner-host-sanity-check.yml`
 

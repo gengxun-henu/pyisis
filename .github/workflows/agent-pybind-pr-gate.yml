@@ -10,6 +10,8 @@ on:
       - .github/ISSUE_TEMPLATE/pybind-task.yml
       - .github/actions/resolve-runner-config/**
       - .github/actions/resolve-conda-isis-prefix/**
+      - .github/actions/setup-hosted-micromamba/**
+      - .github/actions/normalized-safe-checkout/**
       - .github/runner-config.yml
       - .github/conda/**
       - .github/copilot-instructions.md
@@ -39,83 +41,14 @@ jobs:
     outputs:
       changed_tests: ${{ steps.diff.outputs.changed_tests }}
     steps:
-      - name: Normalize GitHub checkout transport for WATT HTTPS
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          cleanup_git_insteadof() {
-            local scope="$1"
-            local output
-            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
-            if [ -z "$output" ]; then
-              return 0
-            fi
-
-            while IFS= read -r line; do
-              [ -n "$line" ] || continue
-              key="${line%% *}"
-              value="${line#* }"
-              case "$value" in
-                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
-                  git config "$scope" --unset-all "$key" || true
-                  ;;
-              esac
-            done <<< "$output"
-          }
-
-          cleanup_git_insteadof --global
-          cleanup_git_insteadof --system
-
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-
-          if not config_path.exists():
-              raise SystemExit(0)
-
-          existing = config_path.read_text(encoding="utf-8")
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
-          PY
-
-          if [ -f "$HOME/.ssh/config" ]; then
-            chmod 600 "$HOME/.ssh/config"
-          fi
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout repository with normalized HTTPS transport
+        uses: ./.github/actions/normalized-safe-checkout
         with:
-          token: ${{ github.token }}
-          persist-credentials: true
-          fetch-depth: 0
-
-      - name: Report checkout transport diagnostics
-        shell: bash
-        run: |
-          set -euo pipefail
-          remote_url="$(git remote get-url origin)"
-          {
-            echo "## Checkout transport diagnostics"
-            echo ""
-            echo "- origin: \`${remote_url}\`"
-            echo ""
-            echo "### git url rewrite rules"
-            echo '```text'
-            git config --global --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-
-          if printf '%s\n' "$remote_url" | grep -Eq '^(git@|ssh://git@|git@ssh\.github\.com)'; then
-            echo "::error::Checkout is still using SSH transport: ${remote_url}"
-            exit 1
-          fi
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          persist-credentials: "true"
+          summary-context: pr-gate-prepare
 
       - name: Summarize changed files
         id: diff
@@ -191,93 +124,23 @@ jobs:
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
-      - name: Normalize GitHub checkout transport for WATT HTTPS
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          cleanup_git_insteadof() {
-            local scope="$1"
-            local output
-            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
-            if [ -z "$output" ]; then
-              return 0
-            fi
-
-            while IFS= read -r line; do
-              [ -n "$line" ] || continue
-              key="${line%% *}"
-              value="${line#* }"
-              case "$value" in
-                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
-                  git config "$scope" --unset-all "$key" || true
-                  ;;
-              esac
-            done <<< "$output"
-          }
-
-          cleanup_git_insteadof --global
-          cleanup_git_insteadof --system
-
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-
-          if not config_path.exists():
-              raise SystemExit(0)
-
-          existing = config_path.read_text(encoding="utf-8")
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
-          PY
-
-          if [ -f "$HOME/.ssh/config" ]; then
-            chmod 600 "$HOME/.ssh/config"
-          fi
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout repository with normalized HTTPS transport
+        uses: ./.github/actions/normalized-safe-checkout
         with:
-          token: ${{ github.token }}
-          persist-credentials: true
-          fetch-depth: 0
-
-      - name: Report checkout transport diagnostics
-        shell: bash
-        run: |
-          set -euo pipefail
-          remote_url="$(git remote get-url origin)"
-          {
-            echo "## Checkout transport diagnostics"
-            echo ""
-            echo "- origin: \`${remote_url}\`"
-            echo ""
-            echo "### git url rewrite rules"
-            echo '```text'
-            git config --global --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-
-          if printf '%s\n' "$remote_url" | grep -Eq '^(git@|ssh://git@|git@ssh\.github\.com)'; then
-            echo "::error::Checkout is still using SSH transport: ${remote_url}"
-            exit 1
-          fi
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          persist-credentials: "true"
+          summary-context: pr-gate-unit-tests
 
       - name: Set up micromamba for GitHub-hosted runner
         if: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup == 'true' }}
-        uses: mamba-org/setup-micromamba@v2
+        uses: ./.github/actions/setup-hosted-micromamba
         with:
           environment-name: asp360_new
           environment-file: .github/conda/pybind-ci-environment.yml
-          cache-environment: true
-          cache-downloads: true
-          init-shell: bash
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
@@ -330,83 +193,14 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Normalize GitHub checkout transport for WATT HTTPS
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          cleanup_git_insteadof() {
-            local scope="$1"
-            local output
-            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
-            if [ -z "$output" ]; then
-              return 0
-            fi
-
-            while IFS= read -r line; do
-              [ -n "$line" ] || continue
-              key="${line%% *}"
-              value="${line#* }"
-              case "$value" in
-                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
-                  git config "$scope" --unset-all "$key" || true
-                  ;;
-              esac
-            done <<< "$output"
-          }
-
-          cleanup_git_insteadof --global
-          cleanup_git_insteadof --system
-
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-
-          if not config_path.exists():
-              raise SystemExit(0)
-
-          existing = config_path.read_text(encoding="utf-8")
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
-          PY
-
-          if [ -f "$HOME/.ssh/config" ]; then
-            chmod 600 "$HOME/.ssh/config"
-          fi
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout repository with normalized HTTPS transport
+        uses: ./.github/actions/normalized-safe-checkout
         with:
-          token: ${{ github.token }}
-          persist-credentials: true
-          fetch-depth: 0
-
-      - name: Report checkout transport diagnostics
-        shell: bash
-        run: |
-          set -euo pipefail
-          remote_url="$(git remote get-url origin)"
-          {
-            echo "## Checkout transport diagnostics"
-            echo ""
-            echo "- origin: \`${remote_url}\`"
-            echo ""
-            echo "### git url rewrite rules"
-            echo '```text'
-            git config --global --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-
-          if printf '%s\n' "$remote_url" | grep -Eq '^(git@|ssh://git@|git@ssh\.github\.com)'; then
-            echo "::error::Checkout is still using SSH transport: ${remote_url}"
-            exit 1
-          fi
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          persist-credentials: "true"
+          summary-context: pr-gate-metadata-audit
 
       - name: Audit progress/export metadata changes
         shell: bash

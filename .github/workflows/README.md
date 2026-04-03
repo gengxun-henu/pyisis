@@ -40,6 +40,7 @@ Note: this secret is required only when the active runner mode uses SSH checkout
 
 Implementation notes:
 
+- most workflows now route repository checkout through `./.github/actions/normalized-safe-checkout`, which centralizes HTTPS normalization, self-hosted preflight, stale-workspace self-healing, `actions/checkout@v4`, and checkout transport diagnostics
 - when the resolved checkout transport is `ssh`, workflows configure `~/.ssh/config` so `github.com` is routed to `ssh.github.com` on port `443`
 - when the resolved checkout transport is `ssh`, `actions/checkout@v4` receives `ssh-key: ${{ secrets.ACTIONS_CHECKOUT_SSH_KEY }}` to avoid fallback to HTTPS
 - when the resolved checkout transport is `https`, workflows skip the SSH setup step and use the default HTTPS checkout flow
@@ -91,18 +92,19 @@ Characteristics:
 
 ## `agent-pybind-task.yml`
 
-Use this as the primary single-class task workflow.
+Use this as the manual single-class validation workflow.
 
 Purpose:
 - run validation for one upstream ISIS C++ class at a time
 - auto-resolve inventory/test context from local CSV files
-- validate either the dispatched SHA or an explicit bootstrap task branch created from an issue
+- validate either the manually selected SHA or an explicit bootstrap task branch created from an issue
 - enforce the retry budget for task execution on the existing self-hosted conda/ISIS environment
 
 Characteristics:
-- triggered by `workflow_dispatch`, either manually or via the issue dispatcher workflow
+- triggered by `workflow_dispatch`
 - centered on `target_class`, with optional issue, PR, git-ref, and unit-test override inputs
 - validates build + unit + smoke + progress consistency
+- intended for manual spot-checks, focused diagnostics, or ad hoc follow-up validation rather than the default issue queue path
 - now follows `.github/runner-config.yml` and can either reuse the local conda/ISIS environment or create a GitHub-hosted micromamba environment
 
 ## `bridge-pybind-issue-to-pr.yml`
@@ -113,14 +115,14 @@ Purpose:
 - consume the parsed issue context after `ready-for-agent`
 - create or reuse a stable bootstrap branch for that task
 - open or refresh a draft PR that carries the issue context forward into the coding phase
-- dispatch `agent-pybind-task.yml` against the bootstrap branch so validation targets the same work branch
+- stop after the draft PR handoff so a human or GitHub coding agent can continue on that branch
 
 Characteristics:
 - triggered by `workflow_dispatch`, normally from `dispatch-pybind-task-from-issue.yml`
 - idempotent for the same issue number and target class
 - writes a backlink comment on the issue with the draft PR URL and branch name
 - keeps the issue queue and PR lane explicitly connected inside the repository automation
-- the bridge workflow itself is lightweight and should prefer `github-hosted`; any `runner_profile` input is forwarded to the downstream `agent-pybind-task.yml` dispatch rather than forcing the bridge job onto self-hosted infrastructure
+- the bridge workflow itself is lightweight and should prefer `github-hosted` so bootstrap branch and draft PR creation do not depend on self-hosted infrastructure
 
 ## `agent-pybind-pr-gate.yml`
 
@@ -138,7 +140,7 @@ Characteristics:
 
 ## `dispatch-pybind-task-from-issue.yml`
 
-Use this as the queue bridge between the issue form and the task workflow.
+Use this as the queue bridge between the issue form and the draft-PR bridge workflow.
 
 Purpose:
 - watch for a reviewed pybind issue to receive `ready-for-agent`
@@ -192,7 +194,7 @@ Recommended usage:
 2. Keep the issue scope to one class or one method cluster only
 3. Review the issue quickly and add `ready-for-agent` only when the scope is actionable
 4. Let `dispatch-pybind-task-from-issue.yml` queue `bridge-pybind-issue-to-pr.yml`
-5. Let the bridge workflow open or refresh the bootstrap draft PR and dispatch `agent-pybind-task.yml` against that task branch
+5. Let the bridge workflow open or refresh the bootstrap draft PR and stop there for handoff
 6. Let the GitHub agent or a human contributor push coding changes to the draft PR branch
 7. Let `agent-pybind-pr-gate.yml` act as the narrow PR gate for agent-task changes
 8. Keep `ci-pybind.yml` as the broad repository-level CI gate on merges to `main` and manual dispatches
@@ -201,7 +203,7 @@ In short:
 - `.github/runner-config.yml` = top-level runner mode switch for all workflows
 - `dispatch-pybind-task-from-issue.yml` = queue bridge from issue form to issue/PR bridge workflow
 - `bridge-pybind-issue-to-pr.yml` = explicit issue -> bootstrap branch -> draft PR bridge
-- `agent-pybind-task.yml` = primary narrow task loop with retry budget, now branch-aware
+- `agent-pybind-task.yml` = manual narrow validation workflow with retry budget, now branch-aware
 - `agent-pybind-pr-gate.yml` = PR-only automatic gate for task-related changes
 - `agent-pybind-task-draft.yml` = deprecated legacy fallback during migration
 - `ci-pybind.yml` = broad repository regression check for pushes/manual runs
@@ -229,7 +231,7 @@ The recommended queue path is now semi-automated:
 - `pybind-task.yml` opens the issue with `pybind-task`
 - a human review adds `ready-for-agent` when the scope is truly actionable
 - `dispatch-pybind-task-from-issue.yml` consumes `ready-for-agent`, adds `agent-active`, and dispatches `bridge-pybind-issue-to-pr.yml`
-- `bridge-pybind-issue-to-pr.yml` creates or reuses the bootstrap branch, opens/updates the draft PR, comments back on the issue, and dispatches `agent-pybind-task.yml` against that branch
+- `bridge-pybind-issue-to-pr.yml` creates or reuses the bootstrap branch, opens/updates the draft PR, comments back on the issue, and then waits for a human or GitHub coding agent to continue on that branch
 
 Keep `agent-pybind-task-draft.yml` only as a temporary legacy fallback for experiments or recovery runs during migration.
 

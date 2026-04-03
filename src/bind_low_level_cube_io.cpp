@@ -251,7 +251,7 @@ void bind_low_level_cube_io(py::module_ &m) {
            py::arg("box_lines"));
 
   py::class_<Isis::AlphaCube>(m, "AlphaCube")
-       .def(py::init<Isis::Cube &>(), py::arg("cube"))
+      .def(py::init<Isis::Cube &>(), py::arg("cube"))
       .def(py::init<int, int, int, int, double, double, double, double>(),
            py::arg("alpha_samples"),
            py::arg("alpha_lines"),

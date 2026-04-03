@@ -146,13 +146,12 @@ jobs:
 
       - name: Set up micromamba for GitHub-hosted runner
         if: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup == 'true' }}
-        uses: mamba-org/setup-micromamba@v2
+        uses: ./.github/actions/setup-hosted-micromamba
         with:
           environment-name: asp360_new
           environment-file: .github/conda/pybind-ci-environment.yml
-          cache-environment: true
-          cache-downloads: true
-          init-shell: bash
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
@@ -270,13 +269,12 @@ jobs:
 
       - name: Set up micromamba for GitHub-hosted runner
         if: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup == 'true' }}
-        uses: mamba-org/setup-micromamba@v2
+        uses: ./.github/actions/setup-hosted-micromamba
         with:
           environment-name: asp360_new
           environment-file: .github/conda/pybind-ci-environment.yml
-          cache-environment: true
-          cache-downloads: true
-          init-shell: bash
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
@@ -374,13 +372,12 @@ jobs:
 
       - name: Set up micromamba for GitHub-hosted runner
         if: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup == 'true' }}
-        uses: mamba-org/setup-micromamba@v2
+        uses: ./.github/actions/setup-hosted-micromamba
         with:
           environment-name: asp360_new
           environment-file: .github/conda/pybind-ci-environment.yml
-          cache-environment: true
-          cache-downloads: true
-          init-shell: bash
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix

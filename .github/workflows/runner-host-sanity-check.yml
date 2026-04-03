@@ -111,64 +111,16 @@ jobs:
 
           echo "findings=${findings}" >> "$GITHUB_OUTPUT"
 
-      - name: Normalize GitHub checkout transport for WATT HTTPS
+      - name: Checkout repository with normalized HTTPS transport
         if: ${{ env.RUN_CHECKOUT_PROBE == 'true' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          cleanup_git_insteadof() {
-            local scope="$1"
-            local output
-            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
-            if [ -z "$output" ]; then
-              return 0
-            fi
-
-            while IFS= read -r line; do
-              [ -n "$line" ] || continue
-              key="${line%% *}"
-              value="${line#* }"
-              case "$value" in
-                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
-                  git config "$scope" --unset-all "$key" || true
-                  ;;
-              esac
-            done <<< "$output"
-          }
-
-          cleanup_git_insteadof --global
-          cleanup_git_insteadof --system
-
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / '.ssh' / 'config'
-          begin_marker = '# BEGIN github-actions github ssh\n'
-          end_marker = '# END github-actions github ssh\n'
-
-          if not config_path.exists():
-              raise SystemExit(0)
-
-          existing = config_path.read_text(encoding='utf-8')
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          config_path.write_text(existing.lstrip('\n'), encoding='utf-8')
-          PY
-
-          if [ -f "$HOME/.ssh/config" ]; then
-            chmod 600 "$HOME/.ssh/config"
-          fi
-
-      - name: Checkout repository
-        if: ${{ env.RUN_CHECKOUT_PROBE == 'true' }}
-        uses: actions/checkout@v4
+        uses: ./.github/actions/normalized-safe-checkout
         with:
-          token: ${{ github.token }}
-          persist-credentials: true
-          fetch-depth: 1
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+          github-token: ${{ github.token }}
+          fetch-depth: "1"
+          persist-credentials: "true"
+          summary-context: runner-host-checkout-probe
+          report-diagnostics: "false"
 
       - name: Report checkout probe diagnostics
         if: ${{ env.RUN_CHECKOUT_PROBE == 'true' }}

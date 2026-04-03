@@ -1,0 +1,202 @@
+name: Normalized safe checkout
+description: >-
+  Normalize GitHub HTTPS checkout transport, optionally preflight/self-heal a
+  self-hosted workspace, run actions/checkout, and emit transport diagnostics.
+inputs:
+  runner-mode:
+    description: Selected runner mode (`self-hosted` or `github-hosted`).
+    required: false
+    default: self-hosted
+  github-token:
+    description: GitHub token passed through to actions/checkout and preflight checks.
+    required: true
+  fetch-depth:
+    description: fetch-depth argument forwarded to actions/checkout.
+    required: false
+    default: "0"
+  persist-credentials:
+    description: persist-credentials argument forwarded to actions/checkout.
+    required: false
+    default: "true"
+  summary-context:
+    description: Human-readable context label used in step summary headings.
+    required: false
+    default: checkout
+  enable-preflight:
+    description: Whether to run GitHub HTTPS preflight checks on self-hosted runners.
+    required: false
+    default: "true"
+  enable-self-heal:
+    description: Whether to remove a stale self-hosted workspace when HEAD is missing.
+    required: false
+    default: "true"
+  report-diagnostics:
+    description: Whether to append checkout transport diagnostics to the step summary.
+    required: false
+    default: "true"
+outputs:
+  remote-url:
+    description: The origin URL after checkout.
+    value: ${{ steps.diagnostics.outputs.remote_url }}
+runs:
+  using: composite
+  steps:
+    - name: Normalize GitHub checkout transport for WATT HTTPS
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        cleanup_git_insteadof() {
+          local scope="$1"
+          local output
+          output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
+          if [ -z "$output" ]; then
+            return 0
+          fi
+
+          while IFS= read -r line; do
+            [ -n "$line" ] || continue
+            key="${line%% *}"
+            value="${line#* }"
+            case "$value" in
+              git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
+                git config "$scope" --unset-all "$key" || true
+                ;;
+            esac
+          done <<< "$output"
+        }
+
+        cleanup_git_insteadof --global
+        cleanup_git_insteadof --system
+
+        python3 - <<'PY'
+        from pathlib import Path
+
+        config_path = Path.home() / ".ssh" / "config"
+        begin_marker = "# BEGIN github-actions github ssh\n"
+        end_marker = "# END github-actions github ssh\n"
+
+        if not config_path.exists():
+            raise SystemExit(0)
+
+        existing = config_path.read_text(encoding="utf-8")
+        while begin_marker in existing and end_marker in existing:
+            start = existing.index(begin_marker)
+            end = existing.index(end_marker, start) + len(end_marker)
+            existing = existing[:start] + existing[end:]
+        config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
+        PY
+
+        if [ -f "$HOME/.ssh/config" ]; then
+          chmod 600 "$HOME/.ssh/config"
+        fi
+
+    - name: Preflight GitHub HTTPS checkout path on self-hosted runner
+      if: ${{ inputs.runner-mode == 'self-hosted' && inputs.enable-preflight != 'false' }}
+      shell: bash
+      env:
+        GH_TOKEN: ${{ inputs.github-token }}
+        SUMMARY_CONTEXT: ${{ inputs.summary-context }}
+      run: |
+        set -euo pipefail
+
+        retry() {
+          local max_attempts="$1"
+          shift
+          local attempt=1
+          local delay=5
+          until "$@"; do
+            if [ "$attempt" -ge "$max_attempts" ]; then
+              echo "Command failed after ${attempt} attempts: $*" >&2
+              return 1
+            fi
+            echo "Attempt ${attempt}/${max_attempts} failed, retrying in ${delay}s: $*" >&2
+            sleep "$delay"
+            attempt=$((attempt + 1))
+            delay=$((delay * 2))
+          done
+        }
+
+        auth_header="$(python3 - <<'PY'
+        import base64
+        import os
+        print(base64.b64encode(f"x-access-token:{os.environ['GH_TOKEN']}".encode()).decode())
+        PY
+        )"
+
+        {
+          echo "## Self-hosted checkout preflight (${SUMMARY_CONTEXT})"
+          echo ""
+          echo "- runner mode: \`${{ inputs.runner-mode }}\`"
+          echo ""
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
+        retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
+        retry 4 git -c http.sslVerify=true -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD >/dev/null
+
+    - name: Self-heal stale checkout workspace on self-hosted runner
+      if: ${{ inputs.runner-mode == 'self-hosted' && inputs.enable-self-heal != 'false' }}
+      shell: bash
+      env:
+        SUMMARY_CONTEXT: ${{ inputs.summary-context }}
+      run: |
+        set -euo pipefail
+
+        workspace_dir="${GITHUB_WORKSPACE:?}"
+
+        if [ ! -d "$workspace_dir/.git" ]; then
+          echo "No existing .git directory detected under $workspace_dir; workspace is already clean enough."
+          exit 0
+        fi
+
+        if git -C "$workspace_dir" rev-parse --verify HEAD >/dev/null 2>&1; then
+          echo "Existing checkout HEAD is healthy; no cleanup required."
+          exit 0
+        fi
+
+        echo "::warning::Detected stale or corrupt checkout metadata in $workspace_dir (HEAD is missing). Removing workspace contents before actions/checkout."
+
+        {
+          echo "### Self-healed stale checkout (${SUMMARY_CONTEXT})"
+          echo ""
+          echo "- workspace: \`$workspace_dir\`"
+          echo "- action: removed stale workspace contents because \`git rev-parse --verify HEAD\` failed before checkout"
+          echo ""
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        find "$workspace_dir" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ inputs.github-token }}
+        persist-credentials: ${{ inputs.persist-credentials }}
+        fetch-depth: ${{ inputs.fetch-depth }}
+
+    - name: Report checkout transport diagnostics
+      if: ${{ inputs.report-diagnostics != 'false' }}
+      id: diagnostics
+      shell: bash
+      env:
+        SUMMARY_CONTEXT: ${{ inputs.summary-context }}
+      run: |
+        set -euo pipefail
+        remote_url="$(git remote get-url origin)"
+        echo "remote_url=$remote_url" >> "$GITHUB_OUTPUT"
+
+        {
+          echo "## Checkout transport diagnostics (${SUMMARY_CONTEXT})"
+          echo ""
+          echo "- origin: \`${remote_url}\`"
+          echo ""
+          echo "### git url rewrite rules"
+          echo '```text'
+          git config --global --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true
+          echo '```'
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        if printf '%s\n' "$remote_url" | grep -Eq '^(git@|ssh://git@|git@ssh\.github\.com)'; then
+          echo "::error::Checkout is still using SSH transport: ${remote_url}"
+          exit 1
+        fi

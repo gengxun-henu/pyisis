@@ -16,11 +16,6 @@ on:
         required: false
         default: ""
         type: string
-      runner_profile:
-        description: "Optional downstream task workflow runner profile override: self-hosted-http, self-hosted-watt, self-hosted-ssh, github-hosted"
-        required: false
-        default: ""
-        type: string
 
 concurrency:
   group: bridge-pybind-issue-to-pr-${{ inputs.issue_number }}
@@ -41,88 +36,17 @@ jobs:
       contents: write
       pull-requests: write
       issues: write
-      actions: write
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Normalize GitHub checkout transport for WATT HTTPS
-        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          cleanup_git_insteadof() {
-            local scope="$1"
-            local output
-            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
-            if [ -z "$output" ]; then
-              return 0
-            fi
-
-            while IFS= read -r line; do
-              [ -n "$line" ] || continue
-              key="${line%% *}"
-              value="${line#* }"
-              case "$value" in
-                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
-                  git config "$scope" --unset-all "$key" || true
-                  ;;
-              esac
-            done <<< "$output"
-          }
-
-          cleanup_git_insteadof --global
-          cleanup_git_insteadof --system
-
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-
-          if not config_path.exists():
-              raise SystemExit(0)
-
-          existing = config_path.read_text(encoding="utf-8")
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
-          PY
-
-          if [ -f "$HOME/.ssh/config" ]; then
-            chmod 600 "$HOME/.ssh/config"
-          fi
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout repository with normalized HTTPS transport
+        uses: ./.github/actions/normalized-safe-checkout
         with:
-          token: ${{ github.token }}
-          persist-credentials: true
-          fetch-depth: 0
-
-      - name: Report checkout transport diagnostics
-        shell: bash
-        run: |
-          set -euo pipefail
-          remote_url="$(git remote get-url origin)"
-          {
-            echo "## Checkout transport diagnostics"
-            echo ""
-            echo "- origin: \`${remote_url}\`"
-            echo ""
-            echo "### git url rewrite rules"
-            echo '```text'
-            git config --global --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true
-            echo '```'
-          } >> "$GITHUB_STEP_SUMMARY"
-
-          if printf '%s\n' "$remote_url" | grep -Eq '^(git@|ssh://git@|git@ssh\.github\.com)'; then
-            echo "::error::Checkout is still using SSH transport: ${remote_url}"
-            exit 1
-          fi
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          persist-credentials: "true"
+          summary-context: bridge-bootstrap
 
       - name: Fetch issue context and render draft PR body
         id: prepare
@@ -285,7 +209,7 @@ jobs:
             echo "created_branch=true" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Create or update draft PR and dispatch task workflow
+      - name: Create or update draft PR
         id: bridge
         uses: actions/github-script@v7
         env:
@@ -293,7 +217,6 @@ jobs:
           PR_TITLE: ${{ steps.prepare.outputs.pr_title }}
           TARGET_CLASS: ${{ steps.prepare.outputs.target_class }}
           UNIT_TEST_TARGET: ${{ steps.prepare.outputs.unit_test_target }}
-          RUNNER_PROFILE: ${{ inputs.runner_profile }}
         with:
           script: |
             const fs = require('fs');
@@ -356,7 +279,7 @@ jobs:
               `- Target class: \`${process.env.TARGET_CLASS}\``,
               `- Unit test target: ${process.env.UNIT_TEST_TARGET ? `\`${process.env.UNIT_TEST_TARGET}\`` : '(auto-resolve or fallback to ctest python-unit-tests)'}`,
               '',
-              'Next step: push the coding changes to the bootstrap branch above. The PR gate will start validating once the PR contains real file changes.',
+              'Next step: assign the GitHub coding agent or push local coding changes to the bootstrap branch above. The PR gate will start validating once the PR contains real file changes.',
             ].join('\n');
 
             const comments = await github.paginate(github.rest.issues.listComments, {
@@ -384,22 +307,6 @@ jobs:
               });
             }
 
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'agent-pybind-task.yml',
-              ref: baseBranch,
-              inputs: {
-                target_class: process.env.TARGET_CLASS,
-                issue_number: String(issueNumber),
-                attempt: '1',
-                unit_test_target_override: process.env.UNIT_TEST_TARGET,
-                runner_profile: process.env.RUNNER_PROFILE || '',
-                git_ref: branchName,
-                pull_request_number: String(pullRequest.number),
-              },
-            });
-
             core.setOutput('pull_request_number', String(pullRequest.number));
             core.setOutput('pull_request_url', pullRequest.html_url);
 
@@ -408,5 +315,5 @@ jobs:
               .addRaw(`- Draft PR: #${pullRequest.number}\n`)
               .addRaw(`- PR URL: ${pullRequest.html_url}\n`)
               .addRaw(`- Branch: \`${branchName}\`\n`)
-              .addRaw('- Validation workflow `agent-pybind-task.yml` was dispatched against the bootstrap branch.\n');
+              .addRaw('- The draft PR is ready for a human or GitHub coding agent to continue on the bootstrap branch.\n');
             await core.summary.write();

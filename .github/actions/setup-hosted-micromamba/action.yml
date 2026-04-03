@@ -1,0 +1,99 @@
+name: Setup hosted micromamba
+description: >-
+  Install a lightweight micromamba binary and create or reuse the configured
+  conda environment prefix for GitHub-hosted jobs without depending on an
+  external GitHub Action repository.
+inputs:
+  environment-name:
+    description: Logical environment name used when target-prefix is omitted.
+    required: false
+    default: asp360_new
+  environment-file:
+    description: Repository-relative conda environment file.
+    required: true
+  root-prefix:
+    description: Micromamba root prefix.
+    required: false
+    default: ""
+  target-prefix:
+    description: Full target prefix for the created environment.
+    required: false
+    default: ""
+outputs:
+  conda_prefix:
+    description: Resolved environment prefix.
+    value: ${{ steps.setup.outputs.conda_prefix }}
+runs:
+  using: composite
+  steps:
+    - name: Install micromamba and create environment
+      id: setup
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        retry() {
+          local max_attempts="$1"
+          shift
+          local attempt=1
+          local delay=5
+          until "$@"; do
+            if [ "$attempt" -ge "$max_attempts" ]; then
+              echo "Command failed after ${attempt} attempts: $*" >&2
+              return 1
+            fi
+            echo "Attempt ${attempt}/${max_attempts} failed, retrying in ${delay}s: $*" >&2
+            sleep "$delay"
+            attempt=$((attempt + 1))
+            delay=$((delay * 2))
+          done
+        }
+
+        environment_name="${{ inputs.environment-name }}"
+        environment_file="${{ inputs.environment-file }}"
+        root_prefix="${{ inputs.root-prefix }}"
+        target_prefix="${{ inputs.target-prefix }}"
+
+        if [ ! -f "$environment_file" ]; then
+          echo "::error::Environment file not found: $environment_file"
+          exit 1
+        fi
+
+        if [ -z "$root_prefix" ]; then
+          root_prefix="${RUNNER_TEMP}/micromamba-root"
+        fi
+
+        if [ -z "$target_prefix" ]; then
+          target_prefix="$root_prefix/envs/$environment_name"
+        fi
+
+        binary_dir="${RUNNER_TEMP}/micromamba-bin"
+        micromamba_bin="$binary_dir/micromamba"
+        archive_path="${RUNNER_TEMP}/micromamba-linux-64.tar.bz2"
+
+        mkdir -p "$binary_dir" "$root_prefix" "$(dirname "$target_prefix")"
+
+        if [ ! -x "$micromamba_bin" ]; then
+          retry 4 curl --fail --silent --show-error --location --output "$archive_path" https://micro.mamba.pm/api/micromamba/linux-64/latest
+          tar -xjf "$archive_path" -C "$binary_dir" --strip-components=1 bin/micromamba
+          chmod +x "$micromamba_bin"
+        fi
+
+        if [ -x "$target_prefix/bin/python" ] && [ -d "$target_prefix/conda-meta" ]; then
+          echo "Reusing existing hosted conda prefix: $target_prefix"
+        else
+          retry 2 "$micromamba_bin" create --yes --root-prefix "$root_prefix" --prefix "$target_prefix" --file "$environment_file"
+        fi
+
+        {
+          echo "conda_prefix=$target_prefix"
+        } >> "$GITHUB_OUTPUT"
+
+        {
+          echo "### Hosted micromamba environment"
+          echo ""
+          echo "- root prefix: \`$root_prefix\`"
+          echo "- target prefix: \`$target_prefix\`"
+          echo "- environment file: \`$environment_file\`"
+          echo ""
+        } >> "$GITHUB_STEP_SUMMARY"

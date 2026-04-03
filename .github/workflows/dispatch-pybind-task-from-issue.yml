@@ -120,7 +120,8 @@ jobs:
               `- issue: #${issue.number}`,
               `- unit test target: ${unitTestTarget || '(auto-resolve or fallback to ctest python-unit-tests)'}`,
               '- next automation step: create or reuse a bootstrap branch and open/update a draft PR',
-              '- follow-up validation: dispatch `agent-pybind-task.yml` against that bootstrap branch',
+              '- next human step: assign the GitHub coding agent or push local coding changes to that bootstrap branch',
+              '- follow-up validation: the PR gate starts automatically after real file changes reach the draft PR branch',
               '',
               '`ready-for-agent` was consumed and replaced with `agent-active`.',
             ].join('\n');

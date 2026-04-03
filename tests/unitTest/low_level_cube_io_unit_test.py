@@ -100,6 +100,28 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         self.assertEqual(manager.line(), 1)
         self.assertEqual(manager.band(), 1)
 
+    def test_band_manager_readback_and_exceptions(self):
+        cube = self.make_test_cube(name="band_manager_direct_test.cub")
+        self.fill_test_cube_with_position_codes(cube)
+
+        manager = ip.BandManager(cube)
+        self.assertEqual(manager.sample_dimension(), 1)
+        self.assertEqual(manager.line_dimension(), 1)
+        self.assertEqual(manager.band_dimension(), cube.band_count())
+
+        self.assertTrue(manager.set_band(2))
+        self.assertEqual(manager.sample(), 2)
+        self.assertEqual(manager.line(), 1)
+        self.assertEqual(manager.band(), 1)
+        cube.read(manager)
+        self.assertEqual(manager.double_buffer(), [112.0, 212.0])
+
+        with self.assertRaises(ip.IException):
+            manager.set_band(0)
+
+        with self.assertRaises(ip.IException):
+            manager.set_band(1, 0)
+
     def test_line_manager_direct_positioning_and_exceptions(self):
         cube = self.make_test_cube(name="line_manager_test.cub")
         self.fill_test_cube_with_position_codes(cube)
@@ -263,6 +285,38 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         self.assertAlmostEqual(sub_cube.alpha_sample(0.5), 1.5)
         self.assertAlmostEqual(sub_cube.alpha_sample(50.5), 51.5)
 
+    def test_brick_set_brick_and_count(self):
+        cube = self.make_test_cube(name="brick_manager_test.cub")
+        self.fill_test_cube_with_position_codes(cube)
+
+        brick = ip.Brick(cube, 2, 2, 1)
+        self.assertEqual(brick.bricks(), 8)
+
+        self.assertTrue(brick.set_brick(2))
+        self.assertEqual(brick.sample(), 3)
+        self.assertEqual(brick.line(), 1)
+        self.assertEqual(brick.band(), 1)
+        cube.read(brick)
+        self.assertEqual(brick.double_buffer(), [113.0, 114.0, 123.0, 124.0])
+
+        with self.assertRaises(ip.IException):
+            brick.set_brick(0)
+
+    def test_portal_hotspot_controls_base_position(self):
+        portal = ip.Portal(3, 3, ip.PixelType.Real)
+
+        portal.set_hot_spot(1.0, 1.0)
+        portal.set_position(10.0, 20.0, 2)
+        self.assertEqual(portal.sample(), 9)
+        self.assertEqual(portal.line(), 19)
+        self.assertEqual(portal.band(), 2)
+
+        portal.set_hot_spot(-0.5, -0.5)
+        portal.set_position(10.0, 20.0, 1)
+        self.assertEqual(portal.sample(), 10)
+        self.assertEqual(portal.line(), 20)
+        self.assertEqual(portal.band(), 1)
+
     def test_alpha_cube_rehash_merges_subarea_mapping(self):
         source = ip.AlphaCube(4, 8, 2, 3, 1.5, 2.5, 3.5, 5.5)
         subarea = ip.AlphaCube(2, 3, 2, 4, 1.5, 1.5, 2.5, 3.5)
@@ -307,6 +361,22 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         real_field.set_value([1.5, 2.5])
         self.assertEqual(real_field.value(), [1.5, 2.5])
 
+    def test_table_field_pvl_group_and_validation_errors(self):
+        integer_field = ip.TableField("Indices", ip.TableField.Type.Integer, 3)
+        group = integer_field.pvl_group()
+        self.assertEqual(group.name(), "Field")
+        self.assertEqual(group.keyword("Name")[0], "Indices")
+        self.assertEqual(group.keyword("Type")[0], "Integer")
+        self.assertEqual(group.keyword("Size")[0], "3")
+        self.assertEqual(integer_field.bytes(), 12)
+
+        with self.assertRaises(ip.IException):
+            integer_field.set_value([1, 2])
+
+        text_field = ip.TableField("Code", ip.TableField.Type.Text, 4)
+        with self.assertRaises(ip.IException):
+            text_field.set_value("TOO-LONG")
+
     def test_table_record_access_and_string_conversion(self):
         value_field = ip.TableField("Value", ip.TableField.Type.Double)
         value_field.set_value(3.5)
@@ -329,6 +399,11 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         self.assertEqual(len(record), 2)
         self.assertEqual(record["First"].value(), 1.0)
         self.assertEqual(record["Second"].value(), 2.0)
+
+    def test_table_record_missing_field_raises(self):
+        record = ip.TableRecord("1,2", ",", ["First", "Second"], 2)
+        with self.assertRaises(ip.IException):
+            _ = record["Missing"]
 
     def test_table_basic_management(self):
         record = ip.TableRecord()
@@ -367,6 +442,44 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         table.clear()
         self.assertEqual(table.records(), 0)
         self.assertIn("Table(name='Example'", repr(table))
+
+    def test_table_round_trip_and_add_record_failures(self):
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        record = ip.TableRecord()
+        value_field = ip.TableField("Value", ip.TableField.Type.Double)
+        value_field.set_value(4.5)
+        name_field = ip.TableField("Name", ip.TableField.Type.Text, 8)
+        name_field.set_value("DEIMOS")
+        record.add_field(value_field)
+        record.add_field(name_field)
+
+        table = ip.Table("RoundTrip", record)
+        table.set_association(ip.Table.Association.Lines)
+        table.add_record(record)
+
+        table_path = temp_dir / "roundtrip_table.bin"
+        table.write(str(table_path))
+
+        loaded = ip.Table("RoundTrip", str(table_path))
+        self.assertEqual(loaded.name(), "RoundTrip")
+        self.assertTrue(loaded.is_line_associated())
+        self.assertFalse(loaded.is_band_associated())
+        self.assertEqual(loaded.records(), 1)
+        self.assertEqual(loaded[0]["Name"].value().rstrip("\x00"), "DEIMOS")
+
+        empty_shape_table = ip.Table("ReadOnlyShape")
+        with self.assertRaises(ip.IException):
+            empty_shape_table.add_record(record)
+
+        mismatched_record = ip.TableRecord()
+        only_field = ip.TableField("Only", ip.TableField.Type.Double)
+        only_field.set_value(1.0)
+        mismatched_record.add_field(only_field)
+        with self.assertRaises(ip.IException):
+            table.add_record(mismatched_record)
 
     def test_boxcar_manager_construction(self):
         """Test BoxcarManager construction with various boxcar sizes"""

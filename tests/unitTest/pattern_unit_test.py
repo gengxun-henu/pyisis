@@ -113,6 +113,34 @@ class ChipUnitTest(unittest.TestCase):
 class AutoRegUnitTest(unittest.TestCase):
     """Test suite for AutoReg class bindings"""
 
+    @classmethod
+    def _make_maximum_correlation(cls, tolerance=0.7, subpixel=True):
+        """Helper to create a MaximumCorrelation instance for testing AutoReg methods."""
+        pvl = ip.Pvl()
+        autoreg_obj = ip.PvlObject("AutoRegistration")
+
+        alg_group = ip.PvlGroup("Algorithm")
+        alg_group.add_keyword(ip.PvlKeyword("Name", "MaximumCorrelation"))
+        alg_group.add_keyword(ip.PvlKeyword("Tolerance", str(tolerance)))
+        if subpixel:
+            alg_group.add_keyword(ip.PvlKeyword("SubpixelAccuracy", "True"))
+        autoreg_obj.add_group(alg_group)
+
+        pattern_group = ip.PvlGroup("PatternChip")
+        pattern_group.add_keyword(ip.PvlKeyword("Samples", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("Lines", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("ValidPercent", "50"))
+        pattern_group.add_keyword(ip.PvlKeyword("MinimumZScore", "1.5"))
+        autoreg_obj.add_group(pattern_group)
+
+        search_group = ip.PvlGroup("SearchChip")
+        search_group.add_keyword(ip.PvlKeyword("Samples", "35"))
+        search_group.add_keyword(ip.PvlKeyword("Lines", "35"))
+        autoreg_obj.add_group(search_group)
+
+        pvl.add_object(autoreg_obj)
+        return pvl, ip.MaximumCorrelation(pvl)
+
     def test_autoreg_register_status_enum(self):
         """Test AutoReg RegisterStatus enum values are accessible"""
         self.assertIsNotNone(ip.AutoReg.RegisterStatus.SuccessPixel)
@@ -130,6 +158,51 @@ class AutoRegUnitTest(unittest.TestCase):
         """Test AutoReg GradientFilterType enum values are accessible"""
         self.assertIsNotNone(ip.AutoReg.GradientFilterType.NoFilter)  # Renamed from None to avoid Python keyword
         self.assertIsNotNone(ip.AutoReg.GradientFilterType.Sobel)
+
+    def test_autoreg_minimum_z_score(self):
+        """Test AutoReg minimum_z_score returns configured value. Added: 2026-04-03"""
+        _pvl, mc = self._make_maximum_correlation()
+        self.assertAlmostEqual(mc.minimum_z_score(), 1.5, places=6)
+
+    def test_autoreg_z_scores(self):
+        """Test AutoReg z_scores returns a tuple of two floats. Added: 2026-04-03"""
+        _pvl, mc = self._make_maximum_correlation()
+        scores = mc.z_scores()
+        self.assertIsInstance(scores, tuple)
+        self.assertEqual(len(scores), 2)
+        # Before registration, z-scores are initialised to zero
+        self.assertIsInstance(scores[0], float)
+        self.assertIsInstance(scores[1], float)
+
+    def test_autoreg_registration_statistics(self):
+        """Test AutoReg registration_statistics returns a Pvl object. Added: 2026-04-03"""
+        _pvl, mc = self._make_maximum_correlation()
+        stats = mc.registration_statistics()
+        self.assertIsInstance(stats, ip.Pvl)
+
+    def test_autoreg_most_lenient_tolerance(self):
+        """Test AutoReg most_lenient_tolerance returns a float. Added: 2026-04-03"""
+        _pvl, mc = self._make_maximum_correlation()
+        val = mc.most_lenient_tolerance()
+        self.assertIsInstance(val, float)
+
+    def test_autoreg_algorithm_name(self):
+        """Test AutoReg algorithm_name returns the concrete algorithm name. Added: 2026-04-03"""
+        _pvl, mc = self._make_maximum_correlation()
+        name = mc.algorithm_name()
+        self.assertEqual(name, "MaximumCorrelation")
+
+    def test_autoreg_reg_template(self):
+        """Test AutoReg reg_template returns a PvlGroup. Added: 2026-04-03"""
+        _pvl, mc = self._make_maximum_correlation()
+        tmpl = mc.reg_template()
+        self.assertIsInstance(tmpl, ip.PvlGroup)
+
+    def test_autoreg_updated_template(self):
+        """Test AutoReg updated_template returns a PvlGroup reflecting current settings. Added: 2026-04-03"""
+        _pvl, mc = self._make_maximum_correlation()
+        tmpl = mc.updated_template()
+        self.assertIsInstance(tmpl, ip.PvlGroup)
 
 
 class MaximumCorrelationUnitTest(unittest.TestCase):

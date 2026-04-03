@@ -199,7 +199,7 @@ Parsing,PvlTranslationTable,未转换,
 Parsing,XmlToPvlTranslationManager,未转换,
 Pattern Matching,AdaptiveGruen,未转换,
 Pattern Matching,AtmosModelFactory,未转换,工厂类，静态创建接口较多
-Pattern Matching,AutoReg,未转换,抽象基类/纯虚接口
+Pattern Matching,AutoReg,已转换,2026-04-03 已在 bind_base_pattern.cpp 暴露全部公共方法（抽象基类，通过子类使用）
 Pattern Matching,AutoRegFactory,已转换,2026-04-03 已在 bind_auto_reg_factory.cpp 暴露 create 静态工厂方法
 Pattern Matching,Chip,未转换,抽象基类/纯虚接口
 Pattern Matching,GridPolygonSeeder,未转换,

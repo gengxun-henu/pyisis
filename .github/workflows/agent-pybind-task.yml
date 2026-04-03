@@ -69,6 +69,7 @@ jobs:
       SELECTED_NETWORK_PROFILE: ${{ needs.resolve_runner.outputs.network_profile }}
       SELECTED_USE_WATT: ${{ needs.resolve_runner.outputs.use_watt }}
       SELECTED_RUNNER_MODE: ${{ needs.resolve_runner.outputs.runner_mode }}
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
       - name: Validate retry budget
         shell: bash
@@ -466,35 +467,11 @@ jobs:
           PY
 
       - name: Resolve conda-backed ISIS prefix
-        shell: bash
-        run: |
-          set -euo pipefail
-          resolved_prefix="${CONDA_PREFIX:-}"
-          if [[ -n "$resolved_prefix" ]]; then
-            echo "Detected existing CONDA_PREFIX from runner: $resolved_prefix"
-          elif [[ -d "$FALLBACK_CONDA_PREFIX" ]]; then
-            resolved_prefix="$FALLBACK_CONDA_PREFIX"
-            echo "CONDA_PREFIX was not preset; using fallback prefix: $resolved_prefix"
-          else
-            echo "::error::Neither CONDA_PREFIX nor fallback prefix '$FALLBACK_CONDA_PREFIX' is available on this runner."
-            exit 1
-          fi
-
-          test -d "$resolved_prefix/include/isis"
-          test -f "$resolved_prefix/lib/libisis.so"
-          test -f "$resolved_prefix/lib/Camera.plugin"
-          test -x "$resolved_prefix/bin/python"
-
-          {
-            echo "CONDA_PREFIX=$resolved_prefix"
-            echo "ISIS_PREFIX=$resolved_prefix"
-            echo "ISISROOT=$resolved_prefix"
-            echo "PYTHON_BIN=$resolved_prefix/bin/python"
-            echo "ISISDATA=$GITHUB_WORKSPACE/tests/data/isisdata/mockup"
-            echo "CMAKE_PREFIX_PATH=$resolved_prefix${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}"
-            echo "LD_LIBRARY_PATH=$resolved_prefix/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
-            echo "PATH=$resolved_prefix/bin:$PATH"
-          } >> "$GITHUB_ENV"
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Verify local toolchain
         shell: bash

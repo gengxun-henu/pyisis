@@ -13,6 +13,35 @@
 - Validation status:
   - Passed build: `cmake -S . -B build && cmake --build build -j4 --target _isis_core` under `asp360_new`.
   - Passed focused unit test: `ISIS_PYBIND_BUILD_DIR=$PWD/build/python python -X faulthandler tests/unitTest/support_unit_test.py -v` under `asp360_new`.
+- AutoReg binding completion (remaining public methods):
+  - Added 7 missing method bindings to `src/base/bind_base_pattern.cpp`:
+    - `minimum_z_score()` → `MinimumZScore()` — returns minimum pattern z-score threshold
+    - `z_scores()` → `ZScores(double&, double&)` — returns tuple(score1, score2) via lambda
+    - `registration_statistics()` → `RegistrationStatistics()` — returns Pvl statistics object
+    - `most_lenient_tolerance()` → `MostLenientTolerance()` — virtual, returns algorithm-specific minimum tolerance
+    - `algorithm_name()` → `AlgorithmName()` — pure virtual, returns algorithm name string via lambda (QString→std::string)
+    - `reg_template()` → `RegTemplate()` — returns PvlGroup with original registration template parameters
+    - `updated_template()` → `UpdatedTemplate()` — returns PvlGroup reflecting current settings
+  - Added `#include "Pvl.h"` and `#include "PvlGroup.h"` for return types.
+  - Added 7 focused unit tests in `tests/unitTest/pattern_unit_test.py` (AutoRegUnitTest class):
+    - `test_autoreg_minimum_z_score()` — validates MinimumZScore matches PVL configuration
+    - `test_autoreg_z_scores()` — validates z_scores returns tuple of 2 floats
+    - `test_autoreg_registration_statistics()` — validates return type is Pvl
+    - `test_autoreg_most_lenient_tolerance()` — validates return type is float
+    - `test_autoreg_algorithm_name()` — validates concrete subclass returns "MaximumCorrelation"
+    - `test_autoreg_reg_template()` — validates return type is PvlGroup
+    - `test_autoreg_updated_template()` — validates return type is PvlGroup
+  - Updated `class_bind_methods_details/base_auto_reg_methods.csv`: 44 Y, 2 N (AutoReg() constructor not bindable for abstract class; IsIdeal inline not linkable).
+  - Updated `class_bind_methods_details/methods_inventory_summary.csv`: AutoReg 95.65% complete.
+  - Updated `todo_pybind11.csv`: AutoReg marked as 已转换.
+  - Note: IsIdeal(double) remains unbindable — it is declared inline in AutoReg.h but its definition depends on a private Fit enum not exposed in the public header, causing linker errors.
+- Implementation notes:
+  - AutoReg is an abstract base class (pure virtual AlgorithmName and MatchAlgorithm). It cannot be instantiated directly from Python.
+  - All AutoReg methods are exercised through MaximumCorrelation subclass in tests.
+  - PvlGroup return type used by reg_template() and updated_template() is already bound in bind_base_pvl.cpp.
+- Validation status:
+  - Code changes ready for CI build validation.
+  - Build requires ISIS libraries not available in this sandbox.
 
 - AutoRegFactory binding completion:
   - Created new binding file `src/base/bind_auto_reg_factory.cpp` following InterestOperatorFactory pattern.

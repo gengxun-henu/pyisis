@@ -104,7 +104,7 @@ jobs:
       - name: Checkout repository through normalized local action
         uses: ./.github/actions/normalized-safe-checkout
         with:
-          runner-mode: github-hosted
+          runner-mode: ${{ inputs.runner_mode }}
           github-token: ${{ github.token }}
           fetch-depth: "0"
           summary-context: reusable-build-github-hosted
@@ -136,7 +136,7 @@ jobs:
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
         with:
-          runner-mode: github-hosted
+          runner-mode: ${{ inputs.runner_mode }}
           fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
           hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
@@ -243,7 +243,7 @@ jobs:
       - name: Checkout repository through normalized local action
         uses: ./.github/actions/normalized-safe-checkout
         with:
-          runner-mode: github-hosted
+          runner-mode: ${{ inputs.runner_mode }}
           github-token: ${{ github.token }}
           fetch-depth: "0"
           summary-context: reusable-smoke-github-hosted
@@ -267,7 +267,7 @@ jobs:
       - name: Resolve conda-backed ISIS prefix
         uses: ./.github/actions/resolve-conda-isis-prefix
         with:
-          runner-mode: github-hosted
+          runner-mode: ${{ inputs.runner_mode }}
           fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
           hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 

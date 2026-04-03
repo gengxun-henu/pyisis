@@ -2,6 +2,17 @@
 
 ## 2026-04-03
 
+- High-level cube I/O test suite partial re-enable:
+  - Removed the suite-level gate in `tests/unitTest/high_level_cube_io_unit_test.py` by setting `SKIP_HIGH_LEVEL_CUBE_IO_TESTS = False`.
+  - Kept stable `ExportDescription` coverage active and converted the currently unstable JP2-related cases to explicit local skips with documented reasons.
+  - `test_export_description_channel_configuration` and `test_export_description_channel_description_construction` now run and pass in the current `asp360_new` environment.
+  - `test_jp2_decoder_and_encoder_minimal_surface` remains skipped because `JP2Decoder.is_jp2(...)` currently reports the fake `.jp2` text fixture as JP2, so the minimal-surface expectation is not stable yet.
+  - `test_jp2_error_accumulates_text_and_flush_raises` remains skipped because `JP2Error.message` does not reflect the expected accumulated text and calling `flush()` is followed by a native crash during teardown in this build.
+- Validation status:
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p 'high_level_cube_io_unit_test.py' -v` (`2` passed, `2` skipped)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p '*_unit_test.py'` from repository root (`389` tests, `OK`, `3` skipped, `1` expected failure)
+  - Result: global unit-test skip count dropped from `5` to `3` after re-enabling the stable high-level cube I/O coverage.
+
 - Test data path stabilization for `read_cube_unit_test.py`:
   - Replaced the cwd-sensitive hardcoded path `./tests/data/lronaccal/truth/M1333276014R.near.crop.cub` with `workspace_test_data_path("lronaccal", "truth", "M1333276014R.near.crop.cub")`.
   - This makes the test data lookup stable relative to the repository root/helper implementation instead of depending on whether the process is launched from `tests/unitTest/` or the repository root.

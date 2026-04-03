@@ -100,6 +100,7 @@ jobs:
       PYTHONUNBUFFERED: "1"
       FALLBACK_CONDA_PREFIX: ${{ inputs.fallback_conda_prefix }}
       GH_TOKEN: ${{ github.token }}
+      SELF_HOSTED_CACHE_ROOT: $HOME/.cache/pyisis-gha
     steps:
       - name: Checkout repository through normalized local action
         uses: ./.github/actions/normalized-safe-checkout
@@ -108,6 +109,36 @@ jobs:
           github-token: ${{ github.token }}
           fetch-depth: "0"
           summary-context: reusable-build-self-hosted
+
+      - name: Cleanup stale self-hosted build caches
+        shell: bash
+        run: |
+          set -euo pipefail
+          cache_root="$SELF_HOSTED_CACHE_ROOT"
+          mkdir -p "$cache_root"
+
+          stale_entries="$(find "$cache_root" -mindepth 1 -maxdepth 1 -type d -mtime +7 -print || true)"
+          if [ -n "$stale_entries" ]; then
+            while IFS= read -r stale_dir; do
+              [ -n "$stale_dir" ] || continue
+              rm -rf "$stale_dir"
+            done <<< "$stale_entries"
+          fi
+
+          {
+            echo "## Self-hosted cache cleanup"
+            echo ""
+            echo "- cache root: \`$cache_root\`"
+            if [ -n "$stale_entries" ]; then
+              echo "- removed stale cache directories older than 7 days:"
+              echo '```text'
+              printf '%s\n' "$stale_entries"
+              echo '```'
+            else
+              echo "- no stale cache directories older than 7 days were found."
+            fi
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Publish self-hosted static outputs
         id: static-outputs
@@ -123,12 +154,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cache_dir="$HOME/.cache/pyisis-gha/${GITHUB_RUN_ID}/${{ inputs.artifact_prefix }}-build"
+          cache_dir="$SELF_HOSTED_CACHE_ROOT/${GITHUB_RUN_ID}/${{ inputs.artifact_prefix }}-build"
+          machine_name="$(hostname -f 2>/dev/null || hostname)"
           echo "local_build_cache_dir=$cache_dir" >> "$GITHUB_OUTPUT"
           {
             echo "## Self-hosted build cache"
             echo ""
             echo "- local build cache dir: \`$cache_dir\`"
+            echo "- runner name: \`${RUNNER_NAME:-unknown}\`"
+            echo "- machine name: \`$machine_name\`"
             echo "- artifact uploads are intentionally skipped on self-hosted runs to avoid extra GitHub artifact dependencies."
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
@@ -232,14 +266,24 @@ jobs:
           LOCAL_BUILD_CACHE_DIR: ${{ steps.cache-paths.outputs.local_build_cache_dir }}
         run: |
           set -euo pipefail
+          machine_name="$(hostname -f 2>/dev/null || hostname)"
           rm -rf "$LOCAL_BUILD_CACHE_DIR"
           mkdir -p "$(dirname "$LOCAL_BUILD_CACHE_DIR")"
           cp -a "$BUILD_DIR" "$LOCAL_BUILD_CACHE_DIR"
+          cat > "$LOCAL_BUILD_CACHE_DIR/.cache-metadata" <<EOF
+          runner_name=${RUNNER_NAME:-unknown}
+          machine_name=$machine_name
+          git_sha=${GITHUB_SHA:-unknown}
+          run_id=${GITHUB_RUN_ID:-unknown}
+          artifact_prefix=${{ inputs.artifact_prefix }}
+          created_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          EOF
           {
             echo "### Local reuse summary"
             echo ""
             echo "- cached build tree: \`$LOCAL_BUILD_CACHE_DIR\`"
             echo "- build log: \`$BUILD_DIR/build.log\`"
+            echo "- metadata file: \`$LOCAL_BUILD_CACHE_DIR/.cache-metadata\`"
             if [ -f "$BUILD_DIR/smoke.log" ]; then
               echo "- smoke log: \`$BUILD_DIR/smoke.log\`"
             fi

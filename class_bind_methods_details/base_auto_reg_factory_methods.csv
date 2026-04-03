@@ -1,6 +1,6 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-AutoRegFactory,Pattern Matching,isis/src/base/objs/AutoRegFactory/AutoRegFactory.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,工厂类，静态创建接口较多
+AutoRegFactory,Pattern Matching,isis/src/base/objs/AutoRegFactory/AutoRegFactory.h,src/base/bind_auto_reg_factory.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,工厂类，静态创建接口较多
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,AutoRegFactory,isis_pybind.AutoRegFactory,N,Python class symbol not found in current binding files; 工厂类，静态创建接口较多
-Static/Factory,static AutoReg *Create(Pvl &pvl),isis_pybind.AutoRegFactory.create,N,工厂类，静态创建接口较多
+Class Symbol,AutoRegFactory,isis_pybind.AutoRegFactory,Y,2026-04-03 已在 bind_auto_reg_factory.cpp 暴露静态工厂方法
+Static/Factory,static AutoReg *Create(Pvl &pvl),isis_pybind.AutoRegFactory.create,Y,2026-04-03 暴露 create 静态工厂方法；使用 take_ownership 返回策略；从 PVL 配置创建 AutoReg 实例

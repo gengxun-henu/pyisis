@@ -11,7 +11,7 @@
  *   - isis/src/base/objs/MaximumCorrelation/MaximumCorrelation.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Updated: 2026-04-02
+ * Updated: 2026-04-03
  * Purpose: Expose Chip, AutoReg, and MaximumCorrelation pattern matching classes to Python via pybind11.
  */
 
@@ -25,6 +25,8 @@
 #include "Affine.h"
 #include "Statistics.h"
 #include "Interpolator.h"
+#include "Pvl.h"
+#include "PvlGroup.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -286,6 +288,29 @@ void bind_base_pattern(py::module_ &m) {
       .def("chip_line", &Isis::AutoReg::ChipLine, "Get chip line position")
       .def("cube_sample", &Isis::AutoReg::CubeSample, "Get cube sample position")
       .def("cube_line", &Isis::AutoReg::CubeLine, "Get cube line position")
+      // Added: 2026-04-03 - expose remaining AutoReg query methods
+      .def("minimum_z_score", &Isis::AutoReg::MinimumZScore,
+           "Get minimum pattern z-score threshold")
+      .def("z_scores",
+           [](const Isis::AutoReg &self) {
+             double score1, score2;
+             self.ZScores(score1, score2);
+             return py::make_tuple(score1, score2);
+           },
+           "Get z-scores of the pattern chip (returns tuple of score1, score2)")
+      .def("registration_statistics", &Isis::AutoReg::RegistrationStatistics,
+           "Get registration statistics as a Pvl object")
+      .def("most_lenient_tolerance", &Isis::AutoReg::MostLenientTolerance,
+           "Get the most lenient tolerance specific to algorithm")
+      .def("algorithm_name",
+           [](const Isis::AutoReg &self) {
+             return qStringToStdString(self.AlgorithmName());
+           },
+           "Get the algorithm name")
+      .def("reg_template", &Isis::AutoReg::RegTemplate,
+           "Get registration template parameters as PvlGroup")
+      .def("updated_template", &Isis::AutoReg::UpdatedTemplate,
+           "Get updated registration template reflecting current settings as PvlGroup")
       // Registration operation
       .def("register", &Isis::AutoReg::Register, "Perform registration")
       .def("__repr__", [](const Isis::AutoReg &self) {

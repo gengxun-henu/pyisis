@@ -1,50 +1,50 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-AutoReg,Pattern Matching,isis/src/base/objs/AutoReg/AutoReg.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+AutoReg,Pattern Matching,isis/src/base/objs/AutoReg/AutoReg.h,src/base/bind_base_pattern.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口；通过子类（MaximumCorrelation等）使用
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,AutoReg,isis_pybind.AutoReg,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
-Construction/Enum,"RegisterStatus enum (SuccessPixel, SuccessSubPixel, PatternChipNotEnoughValidData, FitChipNoData, FitChipToleranceNotMet, SurfaceModelNotEnoughValidData, SurfaceModelSolutionInvalid, SurfaceModelDistanceInvalid, PatternZScoreNotMet, AdaptiveAlgorithmFailed)",isis_pybind.AutoReg.RegisterStatus,N,抽象基类/纯虚接口
-Construction/Enum,"GradientFilterType enum (None, Sobel)",isis_pybind.AutoReg.GradientFilterType,N,抽象基类/纯虚接口
-Construction/Enum,AutoReg(),isis_pybind.AutoReg(),N,抽象基类/纯虚接口
-Public API,inline Chip *PatternChip() { return &p_patternChip,isis_pybind.AutoReg.pattern_chip,N,抽象基类/纯虚接口
-Public API,inline Chip *SearchChip() { return &p_searchChip,isis_pybind.AutoReg.search_chip,N,抽象基类/纯虚接口
-Public API,inline Chip *FitChip() { return &p_fitChip,isis_pybind.AutoReg.fit_chip,N,抽象基类/纯虚接口
-Public API,inline Chip *RegistrationPatternChip() { if (p_gradientFilterType == None) { return &p_patternChip,isis_pybind.AutoReg.registration_pattern_chip,N,抽象基类/纯虚接口
-Public API,inline Chip *RegistrationSearchChip() { if (p_gradientFilterType == None) { return &p_searchChip,isis_pybind.AutoReg.registration_search_chip,N,抽象基类/纯虚接口
-Public API,inline Chip *ReducedPatternChip() { return &p_reducedPatternChip,isis_pybind.AutoReg.reduced_pattern_chip,N,抽象基类/纯虚接口
-Public API,inline Chip *ReducedSearchChip() { return &p_reducedSearchChip,isis_pybind.AutoReg.reduced_search_chip,N,抽象基类/纯虚接口
-Public API,inline Chip *ReducedFitChip() { return &p_reducedFitChip,isis_pybind.AutoReg.reduced_fit_chip,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetSubPixelAccuracy(bool on),isis_pybind.AutoReg.set_sub_pixel_accuracy,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetPatternValidPercent(const double percent),isis_pybind.AutoReg.set_pattern_valid_percent,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetSubsearchValidPercent(const double percent),isis_pybind.AutoReg.set_subsearch_valid_percent,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetTolerance(double tolerance),isis_pybind.AutoReg.set_tolerance,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetChipInterpolator(const QString &interpolator),isis_pybind.AutoReg.set_chip_interpolator,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetSurfaceModelWindowSize(int size),isis_pybind.AutoReg.set_surface_model_window_size,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetSurfaceModelDistanceTolerance(double distance),isis_pybind.AutoReg.set_surface_model_distance_tolerance,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetReductionFactor(int reductionFactor),isis_pybind.AutoReg.set_reduction_factor,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetPatternZScoreMinimum(double minimum),isis_pybind.AutoReg.set_pattern_z_score_minimum,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetGradientFilterType(const QString &gradientFilterType),isis_pybind.AutoReg.set_gradient_filter_type,N,抽象基类/纯虚接口
-Public API,QString GradientFilterString() const,isis_pybind.AutoReg.gradient_filter_string,N,抽象基类/纯虚接口
-Public API,bool SubPixelAccuracy() { return p_subpixelAccuracy,isis_pybind.AutoReg.sub_pixel_accuracy,N,抽象基类/纯虚接口
-Public API,int ReductionFactor() { return p_reduceFactor,isis_pybind.AutoReg.reduction_factor,N,抽象基类/纯虚接口
-Public API,double PatternValidPercent() const { return p_patternValidPercent,isis_pybind.AutoReg.pattern_valid_percent,N,抽象基类/纯虚接口
-Public API,double SubsearchValidPercent() const { return p_subsearchValidPercent,isis_pybind.AutoReg.subsearch_valid_percent,N,抽象基类/纯虚接口
-Public API,inline double Tolerance() const { return p_tolerance,isis_pybind.AutoReg.tolerance,N,抽象基类/纯虚接口
-Public API,double WindowSize() const { return p_windowSize,isis_pybind.AutoReg.window_size,N,抽象基类/纯虚接口
-Public API,double DistanceTolerance() const { return p_distanceTolerance,isis_pybind.AutoReg.distance_tolerance,N,抽象基类/纯虚接口
-Public API,"void Distance(double &sampDistance, double &lineDistance) { sampDistance = p_sampMovement",isis_pybind.AutoReg.distance,N,抽象基类/纯虚接口
-Public API,AutoReg::RegisterStatus Register(),isis_pybind.AutoReg.register,N,抽象基类/纯虚接口
-Public API,inline bool Success() const { return (p_registrationStatus == SuccessPixel || p_registrationStatus == SuccessSubPixel),isis_pybind.AutoReg.success,N,抽象基类/纯虚接口
-Public API,inline double GoodnessOfFit() const { return p_goodnessOfFit,isis_pybind.AutoReg.goodness_of_fit,N,抽象基类/纯虚接口
-Query,inline bool IsIdeal(double fit),isis_pybind.AutoReg.is_ideal,N,抽象基类/纯虚接口
-Public API,inline double ChipSample() const { return p_chipSample,isis_pybind.AutoReg.chip_sample,N,抽象基类/纯虚接口
-Public API,inline double ChipLine() const { return p_chipLine,isis_pybind.AutoReg.chip_line,N,抽象基类/纯虚接口
-Public API,inline double CubeSample() const { return p_cubeSample,isis_pybind.AutoReg.cube_sample,N,抽象基类/纯虚接口
-Public API,inline double CubeLine() const { return p_cubeLine,isis_pybind.AutoReg.cube_line,N,抽象基类/纯虚接口
-Public API,double MinimumZScore() const { return p_minimumPatternZScore,isis_pybind.AutoReg.minimum_z_score,N,抽象基类/纯虚接口
-Public API,"void ZScores(double &score1, double &score2) const { score1 = p_zScoreMin",isis_pybind.AutoReg.z_scores,N,抽象基类/纯虚接口
-Public API,Pvl RegistrationStatistics(),isis_pybind.AutoReg.registration_statistics,N,抽象基类/纯虚接口
-Public API,virtual double MostLenientTolerance() { return DBL_MIN,isis_pybind.AutoReg.most_lenient_tolerance,N,抽象基类/纯虚接口
-Public API,virtual QString AlgorithmName() const = 0,isis_pybind.AutoReg.algorithm_name,N,抽象基类/纯虚接口
-Public API,PvlGroup RegTemplate(),isis_pybind.AutoReg.reg_template,N,抽象基类/纯虚接口
-Public API,PvlGroup UpdatedTemplate(),isis_pybind.AutoReg.updated_template,N,抽象基类/纯虚接口
+Class Symbol,AutoReg,isis_pybind.AutoReg,Y,抽象基类，已在 bind_base_pattern.cpp 暴露
+Construction/Enum,"RegisterStatus enum (SuccessPixel, SuccessSubPixel, PatternChipNotEnoughValidData, FitChipNoData, FitChipToleranceNotMet, SurfaceModelNotEnoughValidData, SurfaceModelSolutionInvalid, SurfaceModelDistanceInvalid, PatternZScoreNotMet, AdaptiveAlgorithmFailed)",isis_pybind.AutoReg.RegisterStatus,Y,
+Construction/Enum,"GradientFilterType enum (None, Sobel)",isis_pybind.AutoReg.GradientFilterType,Y,None renamed to NoFilter to avoid Python keyword conflict
+Construction/Enum,AutoReg(),isis_pybind.AutoReg(),N,纯虚类不可直接实例化；通过子类构造
+Public API,inline Chip *PatternChip() { return &p_patternChip,isis_pybind.AutoReg.pattern_chip,Y,
+Public API,inline Chip *SearchChip() { return &p_searchChip,isis_pybind.AutoReg.search_chip,Y,
+Public API,inline Chip *FitChip() { return &p_fitChip,isis_pybind.AutoReg.fit_chip,Y,
+Public API,inline Chip *RegistrationPatternChip() { if (p_gradientFilterType == None) { return &p_patternChip,isis_pybind.AutoReg.registration_pattern_chip,Y,
+Public API,inline Chip *RegistrationSearchChip() { if (p_gradientFilterType == None) { return &p_searchChip,isis_pybind.AutoReg.registration_search_chip,Y,
+Public API,inline Chip *ReducedPatternChip() { return &p_reducedPatternChip,isis_pybind.AutoReg.reduced_pattern_chip,Y,
+Public API,inline Chip *ReducedSearchChip() { return &p_reducedSearchChip,isis_pybind.AutoReg.reduced_search_chip,Y,
+Public API,inline Chip *ReducedFitChip() { return &p_reducedFitChip,isis_pybind.AutoReg.reduced_fit_chip,Y,
+Mutation/Configuration,void SetSubPixelAccuracy(bool on),isis_pybind.AutoReg.set_sub_pixel_accuracy,Y,
+Mutation/Configuration,void SetPatternValidPercent(const double percent),isis_pybind.AutoReg.set_pattern_valid_percent,Y,
+Mutation/Configuration,void SetSubsearchValidPercent(const double percent),isis_pybind.AutoReg.set_subsearch_valid_percent,Y,
+Mutation/Configuration,void SetTolerance(double tolerance),isis_pybind.AutoReg.set_tolerance,Y,
+Mutation/Configuration,void SetChipInterpolator(const QString &interpolator),isis_pybind.AutoReg.set_chip_interpolator,Y,
+Mutation/Configuration,void SetSurfaceModelWindowSize(int size),isis_pybind.AutoReg.set_surface_model_window_size,Y,
+Mutation/Configuration,void SetSurfaceModelDistanceTolerance(double distance),isis_pybind.AutoReg.set_surface_model_distance_tolerance,Y,
+Mutation/Configuration,void SetReductionFactor(int reductionFactor),isis_pybind.AutoReg.set_reduction_factor,Y,
+Mutation/Configuration,void SetPatternZScoreMinimum(double minimum),isis_pybind.AutoReg.set_pattern_z_score_minimum,Y,
+Mutation/Configuration,void SetGradientFilterType(const QString &gradientFilterType),isis_pybind.AutoReg.set_gradient_filter_type,Y,
+Public API,QString GradientFilterString() const,isis_pybind.AutoReg.gradient_filter_string,Y,
+Public API,bool SubPixelAccuracy() { return p_subpixelAccuracy,isis_pybind.AutoReg.sub_pixel_accuracy,Y,
+Public API,int ReductionFactor() { return p_reduceFactor,isis_pybind.AutoReg.reduction_factor,Y,
+Public API,double PatternValidPercent() const { return p_patternValidPercent,isis_pybind.AutoReg.pattern_valid_percent,Y,
+Public API,double SubsearchValidPercent() const { return p_subsearchValidPercent,isis_pybind.AutoReg.subsearch_valid_percent,Y,
+Public API,inline double Tolerance() const { return p_tolerance,isis_pybind.AutoReg.tolerance,Y,
+Public API,double WindowSize() const { return p_windowSize,isis_pybind.AutoReg.window_size,Y,
+Public API,double DistanceTolerance() const { return p_distanceTolerance,isis_pybind.AutoReg.distance_tolerance,Y,
+Public API,"void Distance(double &sampDistance, double &lineDistance) { sampDistance = p_sampMovement",isis_pybind.AutoReg.distance,Y,返回 tuple(samp_distance, line_distance)
+Public API,AutoReg::RegisterStatus Register(),isis_pybind.AutoReg.register,Y,
+Public API,inline bool Success() const { return (p_registrationStatus == SuccessPixel || p_registrationStatus == SuccessSubPixel),isis_pybind.AutoReg.success,Y,
+Public API,inline double GoodnessOfFit() const { return p_goodnessOfFit,isis_pybind.AutoReg.goodness_of_fit,Y,
+Query,inline bool IsIdeal(double fit),isis_pybind.AutoReg.is_ideal,N,inline 方法在上游头文件中未完整定义，无法绑定
+Public API,inline double ChipSample() const { return p_chipSample,isis_pybind.AutoReg.chip_sample,Y,
+Public API,inline double ChipLine() const { return p_chipLine,isis_pybind.AutoReg.chip_line,Y,
+Public API,inline double CubeSample() const { return p_cubeSample,isis_pybind.AutoReg.cube_sample,Y,
+Public API,inline double CubeLine() const { return p_cubeLine,isis_pybind.AutoReg.cube_line,Y,
+Public API,double MinimumZScore() const { return p_minimumPatternZScore,isis_pybind.AutoReg.minimum_z_score,Y,
+Public API,"void ZScores(double &score1, double &score2) const { score1 = p_zScoreMin",isis_pybind.AutoReg.z_scores,Y,返回 tuple(score1, score2)
+Public API,Pvl RegistrationStatistics(),isis_pybind.AutoReg.registration_statistics,Y,
+Public API,virtual double MostLenientTolerance() { return DBL_MIN,isis_pybind.AutoReg.most_lenient_tolerance,Y,
+Public API,virtual QString AlgorithmName() const = 0,isis_pybind.AutoReg.algorithm_name,Y,纯虚方法，通过子类调用
+Public API,PvlGroup RegTemplate(),isis_pybind.AutoReg.reg_template,Y,
+Public API,PvlGroup UpdatedTemplate(),isis_pybind.AutoReg.updated_template,Y,

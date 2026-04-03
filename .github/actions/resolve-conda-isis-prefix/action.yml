@@ -25,36 +25,52 @@ runs:
         RUNNER_MODE="${{ inputs.runner-mode }}"
         RESOLVED_PREFIX=""
 
+        is_valid_isis_prefix() {
+          local candidate="${1:-}"
+          [[ -n "$candidate" ]] || return 1
+          [[ -d "$candidate/include/isis" ]] || return 1
+          [[ -f "$candidate/lib/libisis.so" ]] || return 1
+          [[ -f "$candidate/lib/Camera.plugin" ]] || return 1
+          [[ -x "$candidate/bin/python" ]] || return 1
+        }
+
         if [[ "$RUNNER_MODE" == "github-hosted" ]]; then
-          if [[ -n "${{ inputs.hosted-conda-prefix }}" && -d "${{ inputs.hosted-conda-prefix }}" ]]; then
+          if is_valid_isis_prefix "${{ inputs.hosted-conda-prefix }}"; then
             RESOLVED_PREFIX="${{ inputs.hosted-conda-prefix }}"
             echo "Using GitHub-hosted conda prefix: $RESOLVED_PREFIX"
-          elif [[ -n "${CONDA_PREFIX:-}" && -d "${CONDA_PREFIX:-}" ]]; then
+          elif is_valid_isis_prefix "${CONDA_PREFIX:-}"; then
             RESOLVED_PREFIX="$CONDA_PREFIX"
             echo "Using pre-activated GitHub-hosted CONDA_PREFIX: $RESOLVED_PREFIX"
           else
-            echo "::error::GitHub-hosted mode requires a prepared conda prefix. Expected '${{ inputs.hosted-conda-prefix }}' or CONDA_PREFIX."
+            if [[ -n "${CONDA_PREFIX:-}" ]]; then
+              echo "::warning::Existing CONDA_PREFIX '${CONDA_PREFIX}' is not an ISIS-ready environment."
+            fi
+            echo "::error::GitHub-hosted mode requires a prepared ISIS-ready conda prefix. Expected '${{ inputs.hosted-conda-prefix }}' or CONDA_PREFIX."
             exit 1
           fi
         else
           # On this repository's self-hosted runners we intentionally reuse the pre-provisioned
           # asp360_new environment instead of re-creating it with micromamba on every workflow run.
-          RESOLVED_PREFIX="${CONDA_PREFIX:-}"
-          if [[ -n "$RESOLVED_PREFIX" ]]; then
-            echo "Detected existing CONDA_PREFIX from runner: $RESOLVED_PREFIX"
-          elif [[ -d "${{ inputs.fallback-conda-prefix }}" ]]; then
+          if is_valid_isis_prefix "${CONDA_PREFIX:-}"; then
+            RESOLVED_PREFIX="${CONDA_PREFIX}"
+            echo "Using existing self-hosted CONDA_PREFIX: $RESOLVED_PREFIX"
+          elif [[ -n "${CONDA_PREFIX:-}" ]]; then
+            echo "::warning::Detected existing CONDA_PREFIX from runner but it is not ISIS-ready: ${CONDA_PREFIX}"
+            if is_valid_isis_prefix "${{ inputs.fallback-conda-prefix }}"; then
+              RESOLVED_PREFIX="${{ inputs.fallback-conda-prefix }}"
+              echo "Falling back to configured self-hosted prefix: $RESOLVED_PREFIX"
+            else
+              echo "::error::Existing CONDA_PREFIX '${CONDA_PREFIX}' is not ISIS-ready, and fallback prefix '${{ inputs.fallback-conda-prefix }}' is also invalid."
+              exit 1
+            fi
+          elif is_valid_isis_prefix "${{ inputs.fallback-conda-prefix }}"; then
             RESOLVED_PREFIX="${{ inputs.fallback-conda-prefix }}"
             echo "CONDA_PREFIX was not preset; using fallback prefix: $RESOLVED_PREFIX"
           else
-            echo "::error::Neither CONDA_PREFIX nor fallback prefix '${{ inputs.fallback-conda-prefix }}' is available on this runner."
+            echo "::error::Neither CONDA_PREFIX nor fallback prefix '${{ inputs.fallback-conda-prefix }}' is available as an ISIS-ready environment on this runner."
             exit 1
           fi
         fi
-
-        test -d "$RESOLVED_PREFIX/include/isis"
-        test -f "$RESOLVED_PREFIX/lib/libisis.so"
-        test -f "$RESOLVED_PREFIX/lib/Camera.plugin"
-        test -x "$RESOLVED_PREFIX/bin/python"
 
         {
           echo "CONDA_PREFIX=$RESOLVED_PREFIX"

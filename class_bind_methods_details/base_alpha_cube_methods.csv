@@ -3,7 +3,9 @@ AlphaCube,Low Level Cube I/O,isis/src/base/objs/AlphaCube/AlphaCube.h,isis_pybin
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,AlphaCube,isis_pybind.AlphaCube,Y,Python class symbol is exported
-Construction/Enum,AlphaCube(),isis_pybind.AlphaCube(),Y,Constructor is explicitly bound
+Construction/Enum,AlphaCube(Cube &cube),isis_pybind.AlphaCube(cube),Y,Constructor from existing cube labels
+Construction/Enum,"AlphaCube(int,int,int,int)","isis_pybind.AlphaCube(alpha_samples,alpha_lines,beta_samples,beta_lines)",Y,4-arg corner-to-corner constructor
+Construction/Enum,"AlphaCube(int,int,int,int,double,double,double,double)","isis_pybind.AlphaCube(alpha_samples,alpha_lines,beta_samples,beta_lines,alpha_starting_sample,alpha_starting_line,alpha_ending_sample,alpha_ending_line)",Y,8-arg full-specification constructor
 Public API,inline int AlphaLines() const { return p_alphaLines,isis_pybind.AlphaCube.alpha_lines,Y,Current Python name
 Public API,inline int AlphaSamples() const { return p_alphaSamples,isis_pybind.AlphaCube.alpha_samples,Y,Current Python name
 Public API,inline int BetaLines() const { return p_betaLines,isis_pybind.AlphaCube.beta_lines,Y,Current Python name
@@ -13,4 +15,4 @@ Public API,inline double AlphaSample(double betaSample) { return p_sampSlope * (
 Public API,inline double BetaLine(double alphaLine) { return (alphaLine - p_alphaStartingLine) / p_lineSlope + 0.5,isis_pybind.AlphaCube.beta_line,Y,Current Python name
 Public API,inline double BetaSample(double alphaSample) { return (alphaSample - p_alphaStartingSample) / p_sampSlope + 0.5,isis_pybind.AlphaCube.beta_sample,Y,Current Python name
 Public API,void UpdateGroup(Cube &cube),isis_pybind.AlphaCube.update_group,Y,Current Python name
-Public API,void Rehash(AlphaCube &alphaCube),isis_pybind.AlphaCube.rehash,N,Method not found in current binding files
+Public API,void Rehash(AlphaCube &alphaCube),isis_pybind.AlphaCube.rehash,Y,Current Python name

@@ -114,8 +114,23 @@ jobs:
               return;
             }
 
-            const branchName = `agent/issue-${issueNumber}-${slugify(targetClass)}`;
-            const prTitle = `[pybind][agent] #${issueNumber} ${targetClass}`;
+            // Derive a more specific task identifier from the issue title when the task
+            // is method-scoped, e.g. "[pybind] AlphaCube::Rehash方法绑定" -> "AlphaCube::Rehash".
+            // Requires PascalCase class name (uppercase first letter) to match ISIS naming
+            // convention and avoid false positives. Falls back to plain class name for
+            // whole-class tasks.
+            let taskIdentifier = targetClass;
+            const methodScopeMatch = issue.title.match(/\b([A-Z][A-Za-z0-9_]*)::([A-Za-z][A-Za-z0-9_]*)\b/);
+            if (methodScopeMatch) {
+              const scopeClass = methodScopeMatch[1];
+              const scopeMethod = methodScopeMatch[2];
+              if (scopeClass.toLowerCase() === targetClass.toLowerCase()) {
+                taskIdentifier = `${scopeClass}::${scopeMethod}`;
+              }
+            }
+
+            const branchName = `agent/issue-${issueNumber}-${slugify(taskIdentifier)}`;
+            const prTitle = `[pybind][agent] #${issueNumber} ${taskIdentifier}`;
             const issueContext = {
               issue_number: issueNumber,
               issue_title: issue.title,
@@ -263,11 +278,60 @@ jobs:
               })).data;
             }
 
-            await github.rest.issues.addLabels({
+            // Apply labels to the PR using GraphQL with explicit node IDs to avoid
+            // confusing pull request IDs with label IDs (REST addLabels can trigger
+            // a validation error when the underlying API resolves node IDs).
+            const labelsToAdd = ['pybind-task', 'agent-active'];
+
+            const labelQuery = await github.graphql(`
+              query($owner: String!, $repo: String!, $number: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  pullRequest(number: $number) {
+                    id
+                  }
+                  labels(first: 100) {
+                    # 100 is sufficient; repositories rarely have more labels than this.
+                    nodes {
+                      id
+                      name
+                    }
+                  }
+                }
+              }
+            `, {
               owner: context.repo.owner,
               repo: context.repo.repo,
-              issue_number: pullRequest.number,
-              labels: ['pybind-task', 'agent-active'],
+              number: pullRequest.number,
+            });
+
+            const prNodeId = labelQuery.repository.pullRequest?.id;
+            if (!prNodeId) {
+              throw new Error(`Could not resolve node id for pull request #${pullRequest.number}`);
+            }
+
+            const missingLabels = labelsToAdd.filter(
+              (name) => !labelQuery.repository.labels.nodes.some((l) => l.name === name)
+            );
+            if (missingLabels.length > 0) {
+              throw new Error(`Repository labels not found: ${missingLabels.join(', ')}`);
+            }
+
+            const labelIds = labelsToAdd.map(
+              (name) => labelQuery.repository.labels.nodes.find((l) => l.name === name)?.id
+            );
+
+            await github.graphql(`
+              mutation($labelableId: ID!, $labelIds: [ID!]!) {
+                addLabelsToLabelable(input: {
+                  labelableId: $labelableId,
+                  labelIds: $labelIds
+                }) {
+                  clientMutationId
+                }
+              }
+            `, {
+              labelableId: prNodeId,
+              labelIds,
             });
 
             const commentBody = [

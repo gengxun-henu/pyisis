@@ -139,7 +139,7 @@ Characteristics:
 - triggered by `pull_request`
 - gate/checker only; it does not dispatch tasks or comment on issues
 - reuses the build artifact across smoke/unit jobs
-- now resolves its runner mode from `.github/runner-config.yml`
+- currently pins `github-hosted` for reliability because the gate depends on official artifact actions and should not be blocked by self-hosted action-download instability
 
 ## `dispatch-pybind-task-from-issue.yml`
 
@@ -216,6 +216,7 @@ Practical split:
 
 - keep heavy build/test workflows on `self-hosted-watt` when the local ISIS/conda environment and domestic-network acceleration are required
 - keep lightweight issue/autofill/dispatch workflows on `github-hosted` so queue handling, issue comments, and draft PR creation do not depend on self-hosted checkout stability
+- allow `agent-pybind-pr-gate.yml` to remain on `github-hosted` as the stable PR baseline when self-hosted action bootstrap or artifact-download networking is flaky
 
 ## Queue rule
 

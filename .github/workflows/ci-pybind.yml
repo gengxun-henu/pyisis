@@ -15,6 +15,8 @@ on:
       - .github/workflows/ci-pybind.yml
       - .github/workflows/reusable-runner-config.yml
       - .github/workflows/reusable-pybind-build.yml
+      - .github/workflows/reusable-pybind-build-self-hosted.yml
+      - .github/workflows/reusable-pybind-build-github-hosted.yml
       - .github/actions/resolve-runner-config/**
       - .github/actions/resolve-conda-isis-prefix/**
       - .github/actions/setup-hosted-micromamba/**
@@ -60,123 +62,12 @@ jobs:
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
 
     steps:
-      - name: Normalize GitHub checkout transport before checkout
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          cleanup_git_insteadof() {
-            local scope="$1"
-            local output
-            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
-            if [ -z "$output" ]; then
-              return 0
-            fi
-
-            while IFS= read -r line; do
-              [ -n "$line" ] || continue
-              key="${line%% *}"
-              value="${line#* }"
-              case "$value" in
-                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
-                  git config "$scope" --unset-all "$key" || true
-                  ;;
-              esac
-            done <<< "$output"
-          }
-
-          cleanup_git_insteadof --global
-          cleanup_git_insteadof --system
-
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-
-          if not config_path.exists():
-              raise SystemExit(0)
-
-          existing = config_path.read_text(encoding="utf-8")
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
-          PY
-
-          if [ -f "$HOME/.ssh/config" ]; then
-            chmod 600 "$HOME/.ssh/config"
-          fi
-
-      - name: Preflight GitHub HTTPS checkout path on self-hosted runner
-        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' }}
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-
-          retry() {
-            local max_attempts="$1"
-            shift
-            local attempt=1
-            local delay=5
-            until "$@"; do
-              if [ "$attempt" -ge "$max_attempts" ]; then
-                echo "Command failed after ${attempt} attempts: $*" >&2
-                return 1
-              fi
-              echo "Attempt ${attempt}/${max_attempts} failed, retrying in ${delay}s: $*" >&2
-              sleep "$delay"
-              attempt=$((attempt + 1))
-              delay=$((delay * 2))
-            done
-          }
-
-          auth_header="$(python3 - <<'PY'
-          import base64
-          import os
-          print(base64.b64encode(f"x-access-token:{os.environ['GH_TOKEN']}".encode()).decode())
-          PY
-          )"
-
-          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
-          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
-          retry 4 git -c http.sslVerify=true -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD >/dev/null
-
-      - name: Self-heal stale checkout workspace on self-hosted runner
-        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          workspace_dir="${GITHUB_WORKSPACE:?}"
-          if [ ! -d "$workspace_dir/.git" ]; then
-            echo "No existing .git directory detected under $workspace_dir; workspace is already clean enough."
-            exit 0
-          fi
-
-          if git -C "$workspace_dir" rev-parse --verify HEAD >/dev/null 2>&1; then
-            echo "Existing checkout HEAD is healthy; no cleanup required."
-            exit 0
-          fi
-
-          echo "::warning::Detected stale or corrupt checkout metadata in $workspace_dir (HEAD is missing). Removing workspace contents before actions/checkout."
-          find "$workspace_dir" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Report checkout transport diagnostics
+      - name: Checkout repository through normalized local action
         uses: ./.github/actions/normalized-safe-checkout
         with:
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
-          skip-checkout: "true"
+          fetch-depth: "0"
           summary-context: report-inventory
 
       - name: Set up micromamba for GitHub-hosted runner
@@ -270,9 +161,129 @@ jobs:
       run_smoke_import: true
       upload_build_artifact: true
 
-  run-ctest:
-    name: Run CTest suite
-    if: ${{ always() && needs.build_and_smoke.outputs.build_succeeded == 'true' }}
+  run-ctest-self-hosted:
+    name: Run CTest suite (self-hosted local cache)
+    if: ${{ always() && needs.resolve_runner.outputs.runner_mode == 'self-hosted' && needs.build_and_smoke.outputs.build_succeeded == 'true' }}
+    needs:
+      - resolve_runner
+      - build_and_smoke
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYBIND_DIR: .
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      LOCAL_BUILD_CACHE_DIR: ${{ needs.build_and_smoke.outputs.local_build_cache_dir }}
+    steps:
+      - name: Checkout repository through normalized local action
+        uses: ./.github/actions/normalized-safe-checkout
+        with:
+          runner-mode: self-hosted
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          summary-context: run-ctest-self-hosted
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: self-hosted
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ""
+
+      - name: Restore build tree from self-hosted local cache
+        id: restore-cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          current_machine_name="$(hostname -f 2>/dev/null || hostname)"
+          current_runner_name="${RUNNER_NAME:-unknown}"
+          current_git_sha="${GITHUB_SHA:-unknown}"
+          metadata_file="$LOCAL_BUILD_CACHE_DIR/.cache-metadata"
+          cache_ready=true
+          reason=""
+
+          if [ -z "$LOCAL_BUILD_CACHE_DIR" ]; then
+            cache_ready=false
+            reason="local_build_cache_dir output was empty"
+          elif [ ! -d "$LOCAL_BUILD_CACHE_DIR" ]; then
+            cache_ready=false
+            reason="cache directory does not exist: $LOCAL_BUILD_CACHE_DIR"
+          elif [ ! -f "$metadata_file" ]; then
+            cache_ready=false
+            reason="cache metadata file is missing: $metadata_file"
+          else
+            # shellcheck disable=SC1090
+            source "$metadata_file"
+            cached_machine_name="${machine_name:-unknown}"
+            cached_runner_name="${runner_name:-unknown}"
+            cached_git_sha="${git_sha:-unknown}"
+            if [ "$cached_machine_name" != "$current_machine_name" ]; then
+              cache_ready=false
+              reason="machine name mismatch between cache metadata and current host"
+            elif [ "$cached_runner_name" != "$current_runner_name" ]; then
+              cache_ready=false
+              reason="runner name mismatch between cache metadata and current runner"
+            elif [ "$cached_git_sha" != "$current_git_sha" ]; then
+              cache_ready=false
+              reason="git SHA mismatch between cache metadata and current workflow context"
+            fi
+          fi
+
+          if [ "$cache_ready" = true ]; then
+            rm -rf "$BUILD_DIR"
+            cp -a "$LOCAL_BUILD_CACHE_DIR" "$BUILD_DIR"
+            echo "cache_ready=true" >> "$GITHUB_OUTPUT"
+            echo "cache_reason=reused self-hosted local build cache" >> "$GITHUB_OUTPUT"
+          else
+            echo "cache_ready=false" >> "$GITHUB_OUTPUT"
+            echo "cache_reason=$reason" >> "$GITHUB_OUTPUT"
+            echo "::warning::Self-hosted local build cache not reusable: $reason"
+          fi
+
+      - name: Rebuild locally when self-hosted cache cannot be reused
+        if: ${{ steps.restore-cache.outputs.cache_ready != 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$BUILD_DIR"
+          cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DISIS_PREFIX="$ISIS_PREFIX"
+          cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0
+
+      - name: Run CTest suite
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          ctest --test-dir "$BUILD_DIR" --output-on-failure -V 2>&1 | tee "$BUILD_DIR/ctest.log"
+
+      - name: Summarize self-hosted CTest logs
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "## Self-hosted CTest logs"
+            echo ""
+            echo "- local build cache: \`$LOCAL_BUILD_CACHE_DIR\`"
+            echo "- cache restore status: \`${{ steps.restore-cache.outputs.cache_ready || 'false' }}\`"
+            echo "- cache restore note: \`${{ steps.restore-cache.outputs.cache_reason || 'n/a' }}\`"
+            echo "- ctest log: \`$BUILD_DIR/ctest.log\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  run-ctest-github-hosted:
+    name: Run CTest suite (github-hosted artifact path)
+    if: ${{ always() && needs.resolve_runner.outputs.runner_mode == 'github-hosted' && needs.build_and_smoke.outputs.build_succeeded == 'true' }}
     needs:
       - resolve_runner
       - build_and_smoke
@@ -291,123 +302,12 @@ jobs:
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
-      - name: Normalize GitHub checkout transport before checkout
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          cleanup_git_insteadof() {
-            local scope="$1"
-            local output
-            output="$(git config "$scope" --get-regexp '^url\..*\.insteadof$' 2>/dev/null || true)"
-            if [ -z "$output" ]; then
-              return 0
-            fi
-
-            while IFS= read -r line; do
-              [ -n "$line" ] || continue
-              key="${line%% *}"
-              value="${line#* }"
-              case "$value" in
-                git@github.com:*|git@ssh.github.com:*|ssh://git@github.com/*|ssh://git@ssh.github.com:443/*)
-                  git config "$scope" --unset-all "$key" || true
-                  ;;
-              esac
-            done <<< "$output"
-          }
-
-          cleanup_git_insteadof --global
-          cleanup_git_insteadof --system
-
-          python3 - <<'PY'
-          from pathlib import Path
-
-          config_path = Path.home() / ".ssh" / "config"
-          begin_marker = "# BEGIN github-actions github ssh\n"
-          end_marker = "# END github-actions github ssh\n"
-
-          if not config_path.exists():
-              raise SystemExit(0)
-
-          existing = config_path.read_text(encoding="utf-8")
-          while begin_marker in existing and end_marker in existing:
-              start = existing.index(begin_marker)
-              end = existing.index(end_marker, start) + len(end_marker)
-              existing = existing[:start] + existing[end:]
-          config_path.write_text(existing.lstrip("\n"), encoding="utf-8")
-          PY
-
-          if [ -f "$HOME/.ssh/config" ]; then
-            chmod 600 "$HOME/.ssh/config"
-          fi
-
-      - name: Preflight GitHub HTTPS checkout path on self-hosted runner
-        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' }}
-        shell: bash
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-
-          retry() {
-            local max_attempts="$1"
-            shift
-            local attempt=1
-            local delay=5
-            until "$@"; do
-              if [ "$attempt" -ge "$max_attempts" ]; then
-                echo "Command failed after ${attempt} attempts: $*" >&2
-                return 1
-              fi
-              echo "Attempt ${attempt}/${max_attempts} failed, retrying in ${delay}s: $*" >&2
-              sleep "$delay"
-              attempt=$((attempt + 1))
-              delay=$((delay * 2))
-            done
-          }
-
-          auth_header="$(python3 - <<'PY'
-          import base64
-          import os
-          print(base64.b64encode(f"x-access-token:{os.environ['GH_TOKEN']}".encode()).decode())
-          PY
-          )"
-
-          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://github.com >/dev/null
-          retry 4 curl --fail --silent --show-error --location --head --connect-timeout 10 --max-time 30 https://api.github.com >/dev/null
-          retry 4 git -c http.sslVerify=true -c "http.https://github.com/.extraheader=AUTHORIZATION: basic ${auth_header}" ls-remote "https://github.com/${GITHUB_REPOSITORY}.git" HEAD >/dev/null
-
-      - name: Self-heal stale checkout workspace on self-hosted runner
-        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' }}
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          workspace_dir="${GITHUB_WORKSPACE:?}"
-          if [ ! -d "$workspace_dir/.git" ]; then
-            echo "No existing .git directory detected under $workspace_dir; workspace is already clean enough."
-            exit 0
-          fi
-
-          if git -C "$workspace_dir" rev-parse --verify HEAD >/dev/null 2>&1; then
-            echo "Existing checkout HEAD is healthy; no cleanup required."
-            exit 0
-          fi
-
-          echo "::warning::Detected stale or corrupt checkout metadata in $workspace_dir (HEAD is missing). Removing workspace contents before actions/checkout."
-          find "$workspace_dir" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Report checkout transport diagnostics
+      - name: Checkout repository through normalized local action
         uses: ./.github/actions/normalized-safe-checkout
         with:
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
-          skip-checkout: "true"
+          fetch-depth: "0"
           summary-context: run-ctest
 
       - name: Set up micromamba for GitHub-hosted runner

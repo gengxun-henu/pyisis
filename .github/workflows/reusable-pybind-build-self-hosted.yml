@@ -1,0 +1,291 @@
+name: reusable-pybind-build-self-hosted
+
+on:
+  workflow_call:
+    secrets:
+      ACTIONS_CHECKOUT_SSH_KEY:
+        required: false
+    inputs:
+      runner_mode:
+        description: Selected runner mode from the shared runner config workflow.
+        required: true
+        type: string
+      runs_on_json:
+        description: JSON string suitable for fromJSON(...) in runs-on.
+        required: true
+        type: string
+      use_ssh_checkout:
+        description: Legacy compatibility flag for callers that still pass an SSH checkout preference.
+        required: true
+        type: string
+      needs_dynamic_conda_setup:
+        description: Whether this workflow should create a micromamba/conda environment on the runner.
+        required: true
+        type: string
+      artifact_prefix:
+        description: Prefix used for local build cache directories.
+        required: true
+        type: string
+      fallback_conda_prefix:
+        description: Fallback local conda prefix used on self-hosted runners.
+        required: true
+        type: string
+      pybind_dir:
+        description: Repository-relative source directory passed to cmake -S.
+        required: false
+        default: .
+        type: string
+      build_dir:
+        description: Repository-relative build output directory.
+        required: false
+        default: build
+        type: string
+      run_smoke_import:
+        description: Whether to run tests/smoke_import.py after a successful build.
+        required: false
+        default: true
+        type: boolean
+      upload_build_artifact:
+        description: Compatibility input retained for the shared wrapper; ignored on self-hosted runs.
+        required: false
+        default: true
+        type: boolean
+      hosted_environment_file:
+        description: Compatibility input retained for the shared wrapper; ignored on self-hosted runs.
+        required: false
+        default: .github/conda/pybind-ci-environment.yml
+        type: string
+      hosted_environment_name:
+        description: Compatibility input retained for the shared wrapper; ignored on self-hosted runs.
+        required: false
+        default: asp360_new
+        type: string
+    outputs:
+      build_artifact_name:
+        description: Always blank on self-hosted runs because the build tree stays on local runner storage.
+        value: ${{ jobs.build_and_smoke.outputs.build_artifact_name }}
+      build_log_artifact_name:
+        description: Always blank on self-hosted runs because logs stay on local runner storage.
+        value: ${{ jobs.build_and_smoke.outputs.build_log_artifact_name }}
+      smoke_log_artifact_name:
+        description: Always blank on self-hosted runs because logs stay on local runner storage.
+        value: ${{ jobs.build_and_smoke.outputs.smoke_log_artifact_name }}
+      build_succeeded:
+        description: Whether the configure/build stage succeeded.
+        value: ${{ jobs.build_and_smoke.outputs.build_succeeded }}
+      smoke_succeeded:
+        description: Whether smoke_import.py succeeded when enabled.
+        value: ${{ jobs.build_and_smoke.outputs.smoke_succeeded }}
+      local_build_cache_dir:
+        description: Local cached build tree path that downstream self-hosted jobs can reuse on the same runner machine.
+        value: ${{ jobs.build_and_smoke.outputs.local_build_cache_dir }}
+
+jobs:
+  build_and_smoke:
+    name: Reusable build and smoke (self-hosted local cache)
+    runs-on: ${{ fromJSON(inputs.runs_on_json) }}
+    timeout-minutes: 150
+    permissions:
+      contents: read
+    outputs:
+      build_artifact_name: ${{ steps.static-outputs.outputs.build_artifact_name }}
+      build_log_artifact_name: ${{ steps.static-outputs.outputs.build_log_artifact_name }}
+      smoke_log_artifact_name: ${{ steps.static-outputs.outputs.smoke_log_artifact_name }}
+      build_succeeded: ${{ steps.mark-build.outputs.build_succeeded }}
+      smoke_succeeded: ${{ steps.mark-smoke.outputs.smoke_succeeded || steps.mark-smoke-skipped.outputs.smoke_succeeded }}
+      local_build_cache_dir: ${{ steps.cache-paths.outputs.local_build_cache_dir }}
+    env:
+      PYBIND_DIR: ${{ inputs.pybind_dir }}
+      BUILD_DIR: ${{ inputs.build_dir }}
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: ${{ inputs.fallback_conda_prefix }}
+      GH_TOKEN: ${{ github.token }}
+      SELF_HOSTED_CACHE_ROOT: $HOME/.cache/pyisis-gha
+    steps:
+      - name: Checkout repository through normalized local action
+        uses: ./.github/actions/normalized-safe-checkout
+        with:
+          runner-mode: self-hosted
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          summary-context: reusable-build-self-hosted
+
+      - name: Cleanup stale self-hosted build caches
+        shell: bash
+        run: |
+          set -euo pipefail
+          cache_root="$SELF_HOSTED_CACHE_ROOT"
+          mkdir -p "$cache_root"
+
+          stale_entries="$(find "$cache_root" -mindepth 1 -maxdepth 1 -type d -mtime +7 -print || true)"
+          if [ -n "$stale_entries" ]; then
+            while IFS= read -r stale_dir; do
+              [ -n "$stale_dir" ] || continue
+              rm -rf "$stale_dir"
+            done <<< "$stale_entries"
+          fi
+
+          {
+            echo "## Self-hosted cache cleanup"
+            echo ""
+            echo "- cache root: \`$cache_root\`"
+            if [ -n "$stale_entries" ]; then
+              echo "- removed stale cache directories older than 7 days:"
+              echo '```text'
+              printf '%s\n' "$stale_entries"
+              echo '```'
+            else
+              echo "- no stale cache directories older than 7 days were found."
+            fi
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Publish self-hosted static outputs
+        id: static-outputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "build_artifact_name=" >> "$GITHUB_OUTPUT"
+          echo "build_log_artifact_name=" >> "$GITHUB_OUTPUT"
+          echo "smoke_log_artifact_name=" >> "$GITHUB_OUTPUT"
+
+      - name: Compute self-hosted local cache path
+        id: cache-paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          cache_dir="$SELF_HOSTED_CACHE_ROOT/${GITHUB_RUN_ID}/${{ inputs.artifact_prefix }}-build"
+          machine_name="$(hostname -f 2>/dev/null || hostname)"
+          echo "local_build_cache_dir=$cache_dir" >> "$GITHUB_OUTPUT"
+          {
+            echo "## Self-hosted build cache"
+            echo ""
+            echo "- local build cache dir: \`$cache_dir\`"
+            echo "- runner name: \`${RUNNER_NAME:-unknown}\`"
+            echo "- machine name: \`$machine_name\`"
+            echo "- artifact uploads are intentionally skipped on self-hosted runs to avoid extra GitHub artifact dependencies."
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: self-hosted
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ""
+
+      - name: Verify local toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "=== Local environment verification ==="
+          echo "CONDA_PREFIX=$CONDA_PREFIX"
+          test -d "$CONDA_PREFIX/include/isis" && echo "✓ ISIS headers found"
+          test -f "$CONDA_PREFIX/lib/libisis.so" && echo "✓ libisis.so found"
+          test -f "$CONDA_PREFIX/lib/Camera.plugin" && echo "✓ Camera.plugin found"
+          command -v cmake
+          cmake --version
+          command -v ninja
+          ninja --version
+          "$PYTHON_BIN" --version
+          "$PYTHON_BIN" - <<'PY'
+          import pybind11
+          import sys
+          print('python', sys.version.split()[0])
+          print('pybind11', pybind11.__version__)
+          PY
+
+      - name: Clean build directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$BUILD_DIR"
+
+      - name: Configure CMake
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DISIS_PREFIX="$ISIS_PREFIX"
+
+      - name: Build extension
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
+
+      - name: Mark build success
+        if: ${{ success() }}
+        id: mark-build
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "build_succeeded=true" >> "$GITHUB_OUTPUT"
+
+      - name: Summarize build failure
+        if: ${{ failure() }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          "$PYTHON_BIN" scripts/build_log_analyzer.py "$BUILD_DIR/build.log"
+
+      - name: Run smoke_import.py locally on self-hosted runner
+        if: ${{ success() && inputs.run_smoke_import }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
+            "$PYTHON_BIN" -X faulthandler tests/smoke_import.py 2>&1 | tee "$BUILD_DIR/smoke.log"
+
+      - name: Mark smoke success
+        if: ${{ success() && inputs.run_smoke_import }}
+        id: mark-smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "smoke_succeeded=true" >> "$GITHUB_OUTPUT"
+
+      - name: Mark smoke skipped
+        if: ${{ success() && !inputs.run_smoke_import }}
+        id: mark-smoke-skipped
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "smoke_succeeded=true" >> "$GITHUB_OUTPUT"
+
+      - name: Persist build tree to self-hosted local cache
+        if: ${{ success() }}
+        shell: bash
+        env:
+          LOCAL_BUILD_CACHE_DIR: ${{ steps.cache-paths.outputs.local_build_cache_dir }}
+        run: |
+          set -euo pipefail
+          machine_name="$(hostname -f 2>/dev/null || hostname)"
+          rm -rf "$LOCAL_BUILD_CACHE_DIR"
+          mkdir -p "$(dirname "$LOCAL_BUILD_CACHE_DIR")"
+          cp -a "$BUILD_DIR" "$LOCAL_BUILD_CACHE_DIR"
+          cat > "$LOCAL_BUILD_CACHE_DIR/.cache-metadata" <<EOF
+          runner_name=${RUNNER_NAME:-unknown}
+          machine_name=$machine_name
+          git_sha=${GITHUB_SHA:-unknown}
+          run_id=${GITHUB_RUN_ID:-unknown}
+          artifact_prefix=${{ inputs.artifact_prefix }}
+          created_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          EOF
+          {
+            echo "### Local reuse summary"
+            echo ""
+            echo "- cached build tree: \`$LOCAL_BUILD_CACHE_DIR\`"
+            echo "- build log: \`$BUILD_DIR/build.log\`"
+            echo "- metadata file: \`$LOCAL_BUILD_CACHE_DIR/.cache-metadata\`"
+            if [ -f "$BUILD_DIR/smoke.log" ]; then
+              echo "- smoke log: \`$BUILD_DIR/smoke.log\`"
+            fi
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"

@@ -189,17 +189,6 @@ jobs:
           set -euo pipefail
           cmake --build "$BUILD_DIR" --parallel 2
 
-      - name: Upload build logs on failure
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-logs-${{ github.run_id }}
-          path: |
-            build/CMakeFiles/CMakeOutput.log
-            build/CMakeFiles/CMakeError.log
-            build/Testing/**
-          if-no-files-found: ignore
-
   unit-tests:
     name: Targeted unit validation
     runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}

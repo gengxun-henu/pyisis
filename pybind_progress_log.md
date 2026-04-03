@@ -2,6 +2,32 @@
 
 ## 2026-04-03
 
+- AutoRegFactory binding completion:
+  - Created new binding file `src/base/bind_auto_reg_factory.cpp` following InterestOperatorFactory pattern.
+  - Static method binding: `AutoRegFactory::Create(Pvl &pvl)` exposed as `AutoRegFactory.create(pvl)` with `py::return_value_policy::take_ownership`.
+  - Factory class uses `py::class_<Isis::AutoRegFactory, std::unique_ptr<Isis::AutoRegFactory, py::nodelete>>` pattern since it only contains static methods.
+  - Added binding declaration and call to `src/module.cpp` (line 12 and line 65).
+  - Added `src/base/bind_auto_reg_factory.cpp` to `CMakeLists.txt` build sources (line 173).
+  - Re-exported `AutoRegFactory` from `python/isis_pybind/__init__.py`.
+  - Added comprehensive unit tests in `tests/unitTest/pattern_unit_test.py`:
+    - `test_auto_reg_factory_symbol_presence()` - verify symbol and create method are accessible
+    - `test_auto_reg_factory_create_maximum_correlation()` - create MaximumCorrelation via factory and verify configuration
+    - `test_auto_reg_factory_invalid_pvl()` - test error handling for incomplete PVL
+    - `test_auto_reg_factory_unknown_algorithm()` - test error handling for unknown algorithm names
+  - Updated `class_bind_methods_details/base_auto_reg_factory_methods.csv` to mark both entries (class symbol and create method) as converted (Y).
+  - Updated `todo_pybind11.csv` to mark `Pattern Matching,AutoRegFactory` as `已转换`.
+- Implementation notes:
+  - AutoRegFactory is a static factory class that creates AutoReg instances from PVL configuration using ISIS plugin system.
+  - The factory reads the Algorithm group from PVL to determine which concrete AutoReg subclass to instantiate (MaximumCorrelation, MinimumDifference, Gruen, AdaptiveGruen).
+  - Uses take_ownership return policy since factory creates new instances that Python should manage.
+  - Follows exact same pattern as InterestOperatorFactory binding for consistency.
+  - Comprehensive docstring documents PVL structure requirements and error conditions.
+  - File header metadata follows repository conventions with upstream source attribution (Jeff Anderson 2005-05-04).
+- Validation status:
+  - Code changes ready for build validation.
+  - Test structure follows existing repository patterns and covers factory creation, configuration verification, and error handling.
+  - Awaiting build + unit test + smoke test validation.
+
 - AlphaCube.rehash binding and constructor fix:
   - `Rehash(AlphaCube &alphaCube)` was already bound as `rehash(alpha_cube)` in `src/bind_low_level_cube_io.cpp`.
   - Fixed the 8-arg constructor: renamed misleading parameters `base_sample/base_line/multiplier_sample/multiplier_line` to accurate `alpha_starting_sample/alpha_starting_line/alpha_ending_sample/alpha_ending_line`; removed incorrect default values that produced wrong slope computation.

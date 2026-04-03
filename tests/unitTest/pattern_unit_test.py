@@ -1,9 +1,9 @@
 """
-Unit tests for ISIS pattern matching classes: Chip, AutoReg, and MaximumCorrelation
+Unit tests for ISIS pattern matching classes: Chip, AutoReg, MaximumCorrelation, and AutoRegFactory
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-02
+Last Modified: 2026-04-03
 """
 import unittest
 
@@ -233,6 +233,93 @@ class MaximumCorrelationUnitTest(unittest.TestCase):
         self.assertIn("MaximumCorrelation", repr_str)
         self.assertIn("status=", repr_str)
         self.assertIn("goodness_of_fit=", repr_str)
+
+
+class AutoRegFactoryUnitTest(unittest.TestCase):
+    """Test suite for AutoRegFactory class bindings.
+
+    Added: 2026-04-03
+    """
+
+    def test_auto_reg_factory_symbol_presence(self):
+        """Test AutoRegFactory symbol is accessible"""
+        self.assertIsNotNone(ip.AutoRegFactory)
+        self.assertTrue(hasattr(ip.AutoRegFactory, 'create'))
+
+    def test_auto_reg_factory_create_maximum_correlation(self):
+        """Test creating MaximumCorrelation instance via factory"""
+        # Create PVL configuration
+        pvl = ip.Pvl()
+        autoreg_obj = ip.PvlObject("AutoRegistration")
+
+        # Algorithm group with MaximumCorrelation
+        alg_group = ip.PvlGroup("Algorithm")
+        alg_group.add_keyword(ip.PvlKeyword("Name", "MaximumCorrelation"))
+        alg_group.add_keyword(ip.PvlKeyword("Tolerance", "0.7"))
+        autoreg_obj.add_group(alg_group)
+
+        # PatternChip group
+        pattern_group = ip.PvlGroup("PatternChip")
+        pattern_group.add_keyword(ip.PvlKeyword("Samples", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("Lines", "15"))
+        autoreg_obj.add_group(pattern_group)
+
+        # SearchChip group
+        search_group = ip.PvlGroup("SearchChip")
+        search_group.add_keyword(ip.PvlKeyword("Samples", "35"))
+        search_group.add_keyword(ip.PvlKeyword("Lines", "35"))
+        autoreg_obj.add_group(search_group)
+
+        pvl.add_object(autoreg_obj)
+
+        # Create AutoReg instance via factory
+        autoreg = ip.AutoRegFactory.create(pvl)
+        self.assertIsNotNone(autoreg)
+
+        # Verify it's an AutoReg instance with expected methods
+        self.assertTrue(hasattr(autoreg, 'pattern_chip'))
+        self.assertTrue(hasattr(autoreg, 'search_chip'))
+        self.assertTrue(hasattr(autoreg, 'tolerance'))
+
+        # Verify configuration was applied
+        self.assertAlmostEqual(autoreg.tolerance(), 0.7, places=6)
+
+    def test_auto_reg_factory_invalid_pvl(self):
+        """Test AutoRegFactory.create with invalid PVL raises exception"""
+        # Create incomplete PVL without required groups
+        pvl = ip.Pvl()
+        autoreg_obj = ip.PvlObject("AutoRegistration")
+        pvl.add_object(autoreg_obj)
+
+        # Should raise IException due to missing Algorithm group
+        with self.assertRaises(RuntimeError):
+            ip.AutoRegFactory.create(pvl)
+
+    def test_auto_reg_factory_unknown_algorithm(self):
+        """Test AutoRegFactory.create with unknown algorithm raises exception"""
+        pvl = ip.Pvl()
+        autoreg_obj = ip.PvlObject("AutoRegistration")
+
+        # Algorithm group with invalid/unknown algorithm name
+        alg_group = ip.PvlGroup("Algorithm")
+        alg_group.add_keyword(ip.PvlKeyword("Name", "NonExistentAlgorithm"))
+        autoreg_obj.add_group(alg_group)
+
+        pattern_group = ip.PvlGroup("PatternChip")
+        pattern_group.add_keyword(ip.PvlKeyword("Samples", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("Lines", "15"))
+        autoreg_obj.add_group(pattern_group)
+
+        search_group = ip.PvlGroup("SearchChip")
+        search_group.add_keyword(ip.PvlKeyword("Samples", "35"))
+        search_group.add_keyword(ip.PvlKeyword("Lines", "35"))
+        autoreg_obj.add_group(search_group)
+
+        pvl.add_object(autoreg_obj)
+
+        # Should raise IException for unknown algorithm
+        with self.assertRaises(RuntimeError):
+            ip.AutoRegFactory.create(pvl)
 
 
 if __name__ == '__main__':

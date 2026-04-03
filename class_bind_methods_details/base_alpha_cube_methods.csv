@@ -13,4 +13,4 @@ Public API,inline double AlphaSample(double betaSample) { return p_sampSlope * (
 Public API,inline double BetaLine(double alphaLine) { return (alphaLine - p_alphaStartingLine) / p_lineSlope + 0.5,isis_pybind.AlphaCube.beta_line,Y,Current Python name
 Public API,inline double BetaSample(double alphaSample) { return (alphaSample - p_alphaStartingSample) / p_sampSlope + 0.5,isis_pybind.AlphaCube.beta_sample,Y,Current Python name
 Public API,void UpdateGroup(Cube &cube),isis_pybind.AlphaCube.update_group,Y,Current Python name
-Public API,void Rehash(AlphaCube &alphaCube),isis_pybind.AlphaCube.rehash,N,Method not found in current binding files
+Public API,void Rehash(AlphaCube &alphaCube),isis_pybind.AlphaCube.rehash,Y,Current Python name

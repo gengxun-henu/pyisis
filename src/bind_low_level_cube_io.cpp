@@ -251,16 +251,21 @@ void bind_low_level_cube_io(py::module_ &m) {
            py::arg("box_lines"));
 
   py::class_<Isis::AlphaCube>(m, "AlphaCube")
-       .def(py::init<Isis::Cube &>(), py::arg("cube"))
+      .def(py::init<Isis::Cube &>(), py::arg("cube"))
+      .def(py::init<int, int, int, int>(),
+           py::arg("alpha_samples"),
+           py::arg("alpha_lines"),
+           py::arg("beta_samples"),
+           py::arg("beta_lines"))
       .def(py::init<int, int, int, int, double, double, double, double>(),
            py::arg("alpha_samples"),
            py::arg("alpha_lines"),
            py::arg("beta_samples"),
            py::arg("beta_lines"),
-           py::arg("base_sample") = 0.5,
-           py::arg("base_line") = 0.5,
-           py::arg("multiplier_sample") = 1.0,
-           py::arg("multiplier_line") = 1.0)
+           py::arg("alpha_starting_sample"),
+           py::arg("alpha_starting_line"),
+           py::arg("alpha_ending_sample"),
+           py::arg("alpha_ending_line"))
       .def("alpha_samples", &Isis::AlphaCube::AlphaSamples)
       .def("alpha_lines", &Isis::AlphaCube::AlphaLines)
       .def("beta_samples", &Isis::AlphaCube::BetaSamples)

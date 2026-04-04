@@ -1,37 +1,349 @@
-name: CI Pybind
+name: ci-pybind
 
 on:
   workflow_dispatch:
     inputs:
-      runner_profile:
-        description: 'Runner profile override'
-        required: false
-        default: 'github-hosted'
-        type: string
       print_full_method_inventory:
-        description: 'Print full method inventory'
-        required: true
-        default: 'false'
+        description: "Print every class and method CSV row to the Actions log"
+        required: false
+        default: false
         type: boolean
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/ci-pybind.yml
+      - .github/workflows/reusable-runner-config.yml
+      - .github/workflows/reusable-pybind-build.yml
+      - .github/workflows/reusable-pybind-build-self-hosted.yml
+      - .github/workflows/reusable-pybind-build-github-hosted.yml
+      - .github/actions/resolve-runner-config/**
+      - .github/actions/resolve-conda-isis-prefix/**
+      - .github/actions/setup-hosted-micromamba/**
+      - .github/actions/normalized-safe-checkout/**
+      - .github/runner-config.yml
+      - .github/conda/**
+      - Github_actions_build_test_steps.md
+      - CMakeLists.txt
+      - scripts/build_log_analyzer.py
+      - python/**
+      - src/**
+      - tests/**
+
+concurrency:
+  group: ci-pybind-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   resolve_runner:
-    runs-on: ${{ inputs.runner_profile }}
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Run tests
-      run: pytest tests/
+    name: Resolve runner mode
+    uses: ./.github/workflows/reusable-runner-config.yml
 
-  run_workflow:
+  report-inventory:
+    name: Report binding inventory
     needs: resolve_runner
-    uses: ./.github/workflows/runner-config.yml
-    with:
-      runner_profile: ${{ github.event.inputs.runner_profile }}
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
 
-  print_inventory:
-    needs: run_workflow
-    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    env:
+      PYBIND_DIR: .
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      GH_TOKEN: ${{ github.token }}
+      PRINT_FULL_METHOD_INVENTORY: ${{ github.event.inputs.print_full_method_inventory == 'true' && '1' || '0' }}
+      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
+
     steps:
-    - name: Print full method inventory
-      run: echo 'Full Inventory'
+      - name: Checkout repository through normalized local action
+        uses: ./.github/actions/normalized-safe-checkout
+        with:
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          summary-context: report-inventory
+
+      - name: Set up micromamba for GitHub-hosted runner
+        if: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup == 'true' }}
+        uses: ./.github/actions/setup-hosted-micromamba
+        with:
+          environment-name: asp360_new
+          environment-file: .github/conda/pybind-ci-environment.yml
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Ensure inventory summary exists
+        run: |
+          set -euo pipefail
+          if [ ! -f class_bind_methods_details/methods_inventory_summary.csv ]; then
+            "$PYTHON_BIN" class_bind_methods_details/generate_methods_csv.py
+          fi
+
+      - name: Show inventory reporting toolchain summary
+        run: |
+          set -euo pipefail
+          "$PYTHON_BIN" --version
+
+      - name: Show binding inventory summary
+        run: |
+          set -euo pipefail
+          "$PYTHON_BIN" - <<'PY'
+          import csv
+          from pathlib import Path
+
+          summary_path = Path("class_bind_methods_details/methods_inventory_summary.csv")
+          if not summary_path.exists():
+              print(f"Binding inventory summary not found: {summary_path}")
+              raise SystemExit(0)
+
+          print("=== Binding Inventory Summary ===")
+          with summary_path.open(newline="", encoding="utf-8") as handle:
+              reader = csv.DictReader(handle)
+              for row in reader:
+                  print(
+                      f"[{row['Module Category']}] {row['Class']}: "
+                      f"status={row['Todo Status']}, binding={row['Binding']}, "
+                      f"open_items={row['Open Items']}, completion={row['Completion Percent']}%"
+                  )
+          print("=== End Binding Inventory Summary ===")
+          PY
+
+      - name: Show full class and method inventory (optional)
+        if: env.PRINT_FULL_METHOD_INVENTORY == '1'
+        run: |
+          set -euo pipefail
+          "$PYTHON_BIN" - <<'PY'
+          import csv
+          from pathlib import Path
+
+          details_dir = Path("class_bind_methods_details")
+          csv_files = sorted(details_dir.glob("*_methods.csv"))
+          print("=== Full Binding Method Inventory ===")
+          for csv_file in csv_files:
+              print(f"--- {csv_file} ---")
+              with csv_file.open(newline="", encoding="utf-8") as handle:
+                  reader = csv.reader(handle)
+                  for row in reader:
+                      print(",".join(row))
+          print("=== End Full Binding Method Inventory ===")
+          PY
+
+  build_and_smoke:
+    name: Build and smoke-test isis_pybind_standalone
+    needs:
+      - resolve_runner
+      - report-inventory
+    uses: ./.github/workflows/reusable-pybind-build.yml
+    secrets: inherit
+    with:
+      runner_mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+      runs_on_json: ${{ needs.resolve_runner.outputs.runs_on_json }}
+      use_ssh_checkout: 'false'
+      needs_dynamic_conda_setup: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup }}
+      artifact_prefix: ci-pybind
+      fallback_conda_prefix: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      pybind_dir: .
+      build_dir: build
+      run_smoke_import: true
+      upload_build_artifact: true
+
+  run-ctest-self-hosted:
+    name: Run CTest suite (self-hosted local cache)
+    if: ${{ always() && needs.resolve_runner.outputs.runner_mode == 'self-hosted' && needs.build_and_smoke.outputs.build_succeeded == 'true' }}
+    needs:
+      - resolve_runner
+      - build_and_smoke
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    env:
+      PYBIND_DIR: .
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      LOCAL_BUILD_CACHE_DIR: ${{ needs.build_and_smoke.outputs.local_build_cache_dir }}
+    steps:
+      - name: Checkout repository through normalized local action
+        uses: ./.github/actions/normalized-safe-checkout
+        with:
+          runner-mode: self-hosted
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          summary-context: run-ctest-self-hosted
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: self-hosted
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ""
+
+      - name: Restore build tree from self-hosted local cache
+        id: restore-cache
+        shell: bash
+        run: |
+          set -euo pipefail
+          current_machine_name="$(hostname -f 2>/dev/null || hostname)"
+          current_runner_name="${RUNNER_NAME:-unknown}"
+          current_git_sha="${GITHUB_SHA:-unknown}"
+          metadata_file="$LOCAL_BUILD_CACHE_DIR/.cache-metadata"
+          cache_ready=true
+          reason=""
+
+          if [ -z "$LOCAL_BUILD_CACHE_DIR" ]; then
+            cache_ready=false
+            reason="local_build_cache_dir output was empty"
+          elif [ ! -d "$LOCAL_BUILD_CACHE_DIR" ]; then
+            cache_ready=false
+            reason="cache directory does not exist: $LOCAL_BUILD_CACHE_DIR"
+          elif [ ! -f "$metadata_file" ]; then
+            cache_ready=false
+            reason="cache metadata file is missing: $metadata_file"
+          else
+            # shellcheck disable=SC1090
+            source "$metadata_file"
+            cached_machine_name="${machine_name:-unknown}"
+            cached_runner_name="${runner_name:-unknown}"
+            cached_git_sha="${git_sha:-unknown}"
+            if [ "$cached_machine_name" != "$current_machine_name" ]; then
+              cache_ready=false
+              reason="machine name mismatch between cache metadata and current host"
+            elif [ "$cached_runner_name" != "$current_runner_name" ]; then
+              cache_ready=false
+              reason="runner name mismatch between cache metadata and current runner"
+            elif [ "$cached_git_sha" != "$current_git_sha" ]; then
+              cache_ready=false
+              reason="git SHA mismatch between cache metadata and current workflow context"
+            fi
+          fi
+
+          if [ "$cache_ready" = true ]; then
+            rm -rf "$BUILD_DIR"
+            cp -a "$LOCAL_BUILD_CACHE_DIR" "$BUILD_DIR"
+            echo "cache_ready=true" >> "$GITHUB_OUTPUT"
+            echo "cache_reason=reused self-hosted local build cache" >> "$GITHUB_OUTPUT"
+          else
+            echo "cache_ready=false" >> "$GITHUB_OUTPUT"
+            echo "cache_reason=$reason" >> "$GITHUB_OUTPUT"
+            echo "::warning::Self-hosted local build cache not reusable: $reason"
+          fi
+
+      - name: Rebuild locally when self-hosted cache cannot be reused
+        if: ${{ steps.restore-cache.outputs.cache_ready != 'true' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf "$BUILD_DIR"
+          cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_VERBOSE_MAKEFILE=ON \
+            -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
+            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DISIS_PREFIX="$ISIS_PREFIX"
+          cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0
+
+      - name: Run CTest suite
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          ctest --test-dir "$BUILD_DIR" --output-on-failure -V 2>&1 | tee "$BUILD_DIR/ctest.log"
+
+      - name: Summarize self-hosted CTest logs
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          {
+            echo "## Self-hosted CTest logs"
+            echo ""
+            echo "- local build cache: \`$LOCAL_BUILD_CACHE_DIR\`"
+            echo "- cache restore status: \`${{ steps.restore-cache.outputs.cache_ready || 'false' }}\`"
+            echo "- cache restore note: \`${{ steps.restore-cache.outputs.cache_reason || 'n/a' }}\`"
+            echo "- ctest log: \`$BUILD_DIR/ctest.log\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  run-ctest-github-hosted:
+    name: Run CTest suite (github-hosted artifact path)
+    if: ${{ always() && needs.resolve_runner.outputs.runner_mode == 'github-hosted' && needs.build_and_smoke.outputs.build_succeeded == 'true' }}
+    needs:
+      - resolve_runner
+      - build_and_smoke
+    runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    timeout-minutes: 90
+    permissions:
+      contents: read
+    defaults:
+      run:
+        shell: bash
+    env:
+      BUILD_DIR: build
+      PYTHONUNBUFFERED: "1"
+      FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
+      GH_TOKEN: ${{ github.token }}
+      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
+    steps:
+      - name: Checkout repository through normalized local action
+        uses: ./.github/actions/normalized-safe-checkout
+        with:
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+          github-token: ${{ github.token }}
+          fetch-depth: "0"
+          summary-context: run-ctest
+
+      - name: Set up micromamba for GitHub-hosted runner
+        if: ${{ needs.resolve_runner.outputs.needs_dynamic_conda_setup == 'true' }}
+        uses: ./.github/actions/setup-hosted-micromamba
+        with:
+          environment-name: asp360_new
+          environment-file: .github/conda/pybind-ci-environment.yml
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Resolve conda-backed ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
+          fallback-conda-prefix: ${{ env.FALLBACK_CONDA_PREFIX }}
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build_and_smoke.outputs.build_artifact_name }}
+          path: ${{ env.BUILD_DIR }}
+
+      - name: Run CTest suite
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          ctest --test-dir "$BUILD_DIR" --output-on-failure -V 2>&1 | tee "$BUILD_DIR/ctest.log"
+
+      - name: Upload CTest logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-pybind-ctest-logs-${{ github.run_id }}
+          if-no-files-found: warn
+          path: |
+            ${{ env.BUILD_DIR }}/ctest.log
+            ${{ env.BUILD_DIR }}/Testing/Temporary/**

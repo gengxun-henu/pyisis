@@ -2,6 +2,32 @@
 
 ## 2026-04-05
 
+- MocLabels 和 MocWideAngleDetectorMap 绑定完成：
+  - 扩展 `src/mgs/bind_mgs_utilities.cpp`，同时暴露 `MocLabels` 和 `MocWideAngleDetectorMap`。
+  - MocLabels 绑定：
+    - 绑定两个构造函数：`MocLabels(Cube &cube)` 和 `MocLabels(const QString &file)`（接受 std::string）。
+    - 绑定相机类型查询方法：`narrow_angle()`, `wide_angle()`, `wide_angle_red()`, `wide_angle_blue()`。
+    - 绑定求和模式方法：`crosstrack_summing()`, `downtrack_summing()`, `first_line_sample()`。
+    - 绑定仪器配置方法：`focal_plane_temperature()`, `line_rate()`, `exposure_duration()`, `start_time()`。
+    - 绑定检测器/样本转换方法：`detectors()`, `start_detector(int)`, `end_detector(int)`, `sample(int)`。
+    - 绑定星历和增益/偏移方法：`ephemeris_time(double)`, `gain(int)`, `offset(int)`。
+    - 实现描述性 `__repr__`，显示相机类型和求和模式。
+  - MocWideAngleDetectorMap 绑定：
+    - 绑定构造函数 `MocWideAngleDetectorMap(Camera*, double et_start, double line_rate, MocLabels*)`，使用 `keep_alive` 保持 Camera 和 MocLabels 引用。
+    - 继承自 `LineScanCameraDetectorMap`，自动获得所有父类方法。
+    - 绑定核心方法 `set_parent(sample, line)` 和 `set_detector(sample, line)`，处理可变求和模式（crosstrack summing 13/27）。
+    - 实现描述性 `__repr__`，显示 et_start 和 line_rate。
+  - 在 `python/isis_pybind/__init__.py` 顶层重导出 `MocLabels` 和 `MocWideAngleDetectorMap`。
+  - 扩展单测 `tests/unitTest/mgs_utilities_unit_test.py`：
+    - 新增 `MocLabelsUnitTest`：验证类存在、构造函数签名、所有公共方法签名存在。
+    - 新增 `MocWideAngleDetectorMapUnitTest`：验证类存在、所有方法签名存在、从 LineScanCameraDetectorMap 继承。
+  - 已同步更新：
+    - `mgs_moc_labels_methods.csv`（22 项全部标记为 Y）。
+    - `mgs_moc_wide_angle_detector_map_methods.csv`（4 项全部标记为 Y）。
+    - `methods_inventory_summary.csv`（两个类状态更新为"已转换"，完成度 100%）。
+    - `todo_pybind11.csv`（两个类状态更新为"已转换"）。
+- Validation status: 待 CI 构建和测试验证
+
 - MocNarrowAngleSumming 绑定完成：
   - 新增 `src/mgs/bind_mgs_utilities.cpp`，暴露 MGS 相关工具类。
   - 绑定 `MocNarrowAngleSumming(int csum, int ss)` 构造函数。

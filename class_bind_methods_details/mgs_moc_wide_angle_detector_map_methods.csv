@@ -2,7 +2,8 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 MocWideAngleDetectorMap,Mars Global Surveyor,isis/src/mgs/objs/MocWideAngleCamera/MocWideAngleDetectorMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,MocWideAngleDetectorMap,isis_pybind.MocWideAngleDetectorMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类"
-Construction/Enum,"MocWideAngleDetectorMap(Camera *parent, const double etStart, const double lineRate, MocLabels *moclab) : LineScanCameraDetectorMap(parent, etStart, lineRate) { p_moclab = moclab",isis_pybind.MocWideAngleDetectorMap(),N,"亦属 Spice, Instruments, and Cameras 相关类"
-Mutation/Configuration,"virtual bool SetParent(const double sample, const double line)",isis_pybind.MocWideAngleDetectorMap.set_parent,N,"亦属 Spice, Instruments, and Cameras 相关类"
-Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.MocWideAngleDetectorMap.set_detector,N,"亦属 Spice, Instruments, and Cameras 相关类"
+Class Symbol,MocWideAngleDetectorMap,isis_pybind.MocWideAngleDetectorMap,Y,"2026-04-05 已在 src/mgs/bind_mgs_utilities.cpp 暴露，继承自 LineScanCameraDetectorMap"
+Construction/Enum,"MocWideAngleDetectorMap(Camera *parent, const double etStart, const double lineRate, MocLabels *moclab) : LineScanCameraDetectorMap(parent, etStart, lineRate) { p_moclab = moclab",isis_pybind.MocWideAngleDetectorMap(),Y,"2026-04-05 已暴露构造函数，参数为 parent/et_start/line_rate/moclab，使用 keep_alive 保持引用"
+Mutation/Configuration,"virtual bool SetParent(const double sample, const double line)",isis_pybind.MocWideAngleDetectorMap.set_parent,Y,"2026-04-05 已暴露，处理可变求和模式（crosstrack summing 13/27）的父坐标转换"
+Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.MocWideAngleDetectorMap.set_detector,Y,"2026-04-05 已暴露，处理可变求和模式（crosstrack summing 13/27）的检测器坐标转换"
+

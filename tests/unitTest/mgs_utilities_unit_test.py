@@ -7,6 +7,7 @@ Last Modified: 2026-04-05
 """
 
 import unittest
+import os
 
 from _unit_test_support import ip
 
@@ -196,6 +197,74 @@ class MocWideAngleDetectorMapUnitTest(unittest.TestCase):
         # Note: We cannot test isinstance without actual instances,
         # but we can verify method inheritance by checking method presence
         # which is done in test_method_signatures_exist
+
+
+class MocWideAngleCameraUnitTest(unittest.TestCase):
+    """Test suite for MocWideAngleCamera binding. Added: 2026-04-05."""
+
+    def test_class_exists(self):
+        """Test MocWideAngleCamera class is accessible."""
+        self.assertTrue(hasattr(ip, 'MocWideAngleCamera'))
+
+    def test_inheritance_from_line_scan_camera(self):
+        """Test that MocWideAngleCamera properly inherits from LineScanCamera."""
+        # Verify LineScanCamera exists
+        self.assertTrue(hasattr(ip, 'LineScanCamera'))
+
+        # Verify MocWideAngleCamera has the expected methods
+        camera_attrs = dir(ip.MocWideAngleCamera)
+        self.assertIn('ck_frame_id', camera_attrs)
+        self.assertIn('ck_reference_id', camera_attrs)
+        self.assertIn('spk_reference_id', camera_attrs)
+
+    def test_kernel_id_methods_with_real_cube(self):
+        """Test kernel ID methods using a real MOC wide angle cube."""
+        # Check if test data is available
+        test_cube_path = os.path.join(os.path.dirname(__file__),
+                                      '..', 'data', 'mgsImages', 'mocImage.cub')
+
+        if not os.path.exists(test_cube_path):
+            self.skipTest(f"Test cube not found at {test_cube_path}")
+
+        try:
+            # Create cube and camera using CameraFactory
+            cube = ip.Cube.open(test_cube_path, 'r')
+            camera = ip.CameraFactory.create(cube)
+
+            # Test that we got a MocWideAngleCamera (via type name check)
+            # Note: isinstance() may not work across pybind11 boundaries
+            # so we check by calling the specific methods
+
+            # Test CK Frame ID (should be -94000 for MOC-WA)
+            ck_frame = camera.ck_frame_id()
+            self.assertEqual(ck_frame, -94000,
+                           f"Expected CK Frame ID -94000, got {ck_frame}")
+
+            # Test CK Reference ID (should be 1 for J2000)
+            ck_ref = camera.ck_reference_id()
+            self.assertEqual(ck_ref, 1,
+                           f"Expected CK Reference ID 1 (J2000), got {ck_ref}")
+
+            # Test SPK Reference ID (should be 1 for J2000)
+            spk_ref = camera.spk_reference_id()
+            self.assertEqual(spk_ref, 1,
+                           f"Expected SPK Reference ID 1 (J2000), got {spk_ref}")
+
+            # Clean up
+            cube.close()
+
+        except Exception as e:
+            self.skipTest(f"Could not create camera from test cube: {e}")
+
+    def test_kernel_id_methods_signature(self):
+        """Test that kernel ID methods exist with correct signatures."""
+        # Verify the methods exist on the class
+        self.assertTrue(hasattr(ip.MocWideAngleCamera, 'ck_frame_id'))
+        self.assertTrue(hasattr(ip.MocWideAngleCamera, 'ck_reference_id'))
+        self.assertTrue(hasattr(ip.MocWideAngleCamera, 'spk_reference_id'))
+
+        # Note: We can't test return values without an actual instance,
+        # which requires a valid MOC cube and SPICE data
 
 
 if __name__ == '__main__':

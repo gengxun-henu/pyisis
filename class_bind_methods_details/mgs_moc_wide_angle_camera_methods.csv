@@ -3,7 +3,7 @@ MocWideAngleCamera,Mars Global Surveyor,isis/src/mgs/objs/MocWideAngleCamera/Moc
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,MocWideAngleCamera,isis_pybind.MocWideAngleCamera,Y,"Python class symbol is exported; constructor exposure may be limited; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,MocWideAngleCamera(),isis_pybind.MocWideAngleCamera(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkFrameId() const { return (-94000); },isis_pybind.MocWideAngleCamera.ck_frame_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkReferenceId() const { return (1); },isis_pybind.MocWideAngleCamera.ck_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int SpkReferenceId() const { return (1); },isis_pybind.MocWideAngleCamera.spk_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Construction/Enum,MocWideAngleCamera(),isis_pybind.MocWideAngleCamera(),N,"Constructor requires Cube& and SPICE data; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int CkFrameId() const { return (-94000); },isis_pybind.MocWideAngleCamera.ck_frame_id,Y,"Bound 2026-04-05; returns -94000 for MOC-WA instrument code"
+Public API,virtual int CkReferenceId() const { return (1); },isis_pybind.MocWideAngleCamera.ck_reference_id,Y,"Bound 2026-04-05; returns 1 for J2000 reference frame"
+Public API,virtual int SpkReferenceId() const { return (1); },isis_pybind.MocWideAngleCamera.spk_reference_id,Y,"Bound 2026-04-05; returns 1 for J2000 reference frame"

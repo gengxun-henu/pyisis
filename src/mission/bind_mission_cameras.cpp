@@ -95,7 +95,13 @@ void bind_mission_cameras(py::module_ &m) {
   py::class_<Isis::HrscCamera, Isis::LineScanCamera>(m, "HrscCamera");
   py::class_<Isis::MexHrscSrcCamera, Isis::FramingCamera>(m, "MexHrscSrcCamera");
   py::class_<Isis::MocNarrowAngleCamera, Isis::LineScanCamera>(m, "MocNarrowAngleCamera");
-  py::class_<Isis::MocWideAngleCamera, Isis::LineScanCamera>(m, "MocWideAngleCamera");
+  py::class_<Isis::MocWideAngleCamera, Isis::LineScanCamera>(m, "MocWideAngleCamera")
+      .def("ck_frame_id", &Isis::MocWideAngleCamera::CkFrameId,
+           "CK frame ID - Instrument Code from spacit run on CK")
+      .def("ck_reference_id", &Isis::MocWideAngleCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::MocWideAngleCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
   py::class_<Isis::HiriseCamera, Isis::LineScanCamera>(m, "HiriseCamera");
   py::class_<Isis::CTXCamera, Isis::LineScanCamera>(m, "CTXCamera");
   py::class_<Isis::CrismCamera, Isis::LineScanCamera>(m, "CrismCamera");

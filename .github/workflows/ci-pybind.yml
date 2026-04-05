@@ -95,19 +95,22 @@ jobs:
       - name: Ensure inventory summary exists
         run: |
           set -euo pipefail
+          python_bin="${PYTHON_BIN:-python3}"
           if [ ! -f class_bind_methods_details/methods_inventory_summary.csv ]; then
-            "$PYTHON_BIN" class_bind_methods_details/generate_methods_csv.py
+            "$python_bin" class_bind_methods_details/generate_methods_csv.py
           fi
 
       - name: Show inventory reporting toolchain summary
         run: |
           set -euo pipefail
-          "$PYTHON_BIN" --version
+          python_bin="${PYTHON_BIN:-python3}"
+          "$python_bin" --version
 
       - name: Show binding inventory summary
         run: |
           set -euo pipefail
-          "$PYTHON_BIN" - <<'PY'
+          python_bin="${PYTHON_BIN:-python3}"
+          "$python_bin" - <<'PY'
           import csv
           from pathlib import Path
 
@@ -132,7 +135,8 @@ jobs:
         if: env.PRINT_FULL_METHOD_INVENTORY == '1'
         run: |
           set -euo pipefail
-          "$PYTHON_BIN" - <<'PY'
+          python_bin="${PYTHON_BIN:-python3}"
+          "$python_bin" - <<'PY'
           import csv
           from pathlib import Path
 
@@ -263,12 +267,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          python_bin="${PYTHON_BIN:-python3}"
           rm -rf "$BUILD_DIR"
           cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
-            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DPython3_EXECUTABLE="$python_bin" \
             -DISIS_PREFIX="$ISIS_PREFIX"
           cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0
 

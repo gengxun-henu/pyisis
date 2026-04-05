@@ -178,6 +178,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          python_bin="${PYTHON_BIN:-python3}"
           echo "=== Local environment verification ==="
           echo "CONDA_PREFIX=$CONDA_PREFIX"
           test -d "$CONDA_PREFIX/include/isis" && echo "✓ ISIS headers found"
@@ -187,8 +188,8 @@ jobs:
           cmake --version
           command -v ninja
           ninja --version
-          "$PYTHON_BIN" --version
-          "$PYTHON_BIN" - <<'PY'
+          "$python_bin" --version
+          "$python_bin" - <<'PY'
           import pybind11
           import sys
           print('python', sys.version.split()[0])
@@ -205,11 +206,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          python_bin="${PYTHON_BIN:-python3}"
           cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
-            -DPython3_EXECUTABLE="$PYTHON_BIN" \
+            -DPython3_EXECUTABLE="$python_bin" \
             -DISIS_PREFIX="$ISIS_PREFIX"
 
       - name: Build extension
@@ -232,7 +234,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          "$PYTHON_BIN" scripts/build_log_analyzer.py "$BUILD_DIR/build.log"
+          python_bin="${PYTHON_BIN:-python3}"
+          "$python_bin" scripts/build_log_analyzer.py "$BUILD_DIR/build.log"
 
       - name: Run smoke_import.py locally on self-hosted runner
         if: ${{ success() && inputs.run_smoke_import }}
@@ -240,8 +243,9 @@ jobs:
         run: |
           set -euo pipefail
           set -o pipefail
+          python_bin="${PYTHON_BIN:-python3}"
           PYTHONPATH="$BUILD_DIR/python${PYTHONPATH:+:$PYTHONPATH}" \
-            "$PYTHON_BIN" -X faulthandler tests/smoke_import.py 2>&1 | tee "$BUILD_DIR/smoke.log"
+            "$python_bin" -X faulthandler tests/smoke_import.py 2>&1 | tee "$BUILD_DIR/smoke.log"
 
       - name: Mark smoke success
         if: ${{ success() && inputs.run_smoke_import }}

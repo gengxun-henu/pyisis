@@ -101,9 +101,16 @@ jobs:
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/${{ inputs.hosted_environment_name }}
     steps:
-      - name: Checkout repository through normalized local action
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
         with:
+          skip-checkout: "true"
           runner-mode: ${{ inputs.runner_mode }}
           github-token: ${{ github.token }}
           fetch-depth: "0"
@@ -199,9 +206,14 @@ jobs:
         if: ${{ failure() }}
         shell: bash
         run: |
-          set -euo pipefail
           python_bin="${PYTHON_BIN:-python3}"
-          "$python_bin" scripts/build_log_analyzer.py "$BUILD_DIR/build.log"
+          if [ ! -f scripts/build_log_analyzer.py ]; then
+            echo "::warning::scripts/build_log_analyzer.py not found; skipping build failure summary."
+          elif [ ! -f "$BUILD_DIR/build.log" ]; then
+            echo "::warning::$BUILD_DIR/build.log not found; skipping build failure summary."
+          else
+            "$python_bin" scripts/build_log_analyzer.py "$BUILD_DIR/build.log"
+          fi
 
       - name: Upload build logs
         if: always()
@@ -243,9 +255,16 @@ jobs:
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/${{ inputs.hosted_environment_name }}
     steps:
-      - name: Checkout repository through normalized local action
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
         with:
+          skip-checkout: "true"
           runner-mode: ${{ inputs.runner_mode }}
           github-token: ${{ github.token }}
           fetch-depth: "0"

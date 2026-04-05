@@ -62,12 +62,18 @@ jobs:
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
 
     steps:
-      - name: Checkout repository through normalized local action
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
         with:
+          skip-checkout: "true"
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
-          fetch-depth: "0"
           summary-context: report-inventory
 
       - name: Set up micromamba for GitHub-hosted runner
@@ -181,12 +187,18 @@ jobs:
       FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
       LOCAL_BUILD_CACHE_DIR: ${{ needs.build_and_smoke.outputs.local_build_cache_dir }}
     steps:
-      - name: Checkout repository through normalized local action
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
         with:
+          skip-checkout: "true"
           runner-mode: self-hosted
           github-token: ${{ github.token }}
-          fetch-depth: "0"
           summary-context: run-ctest-self-hosted
 
       - name: Resolve conda-backed ISIS prefix
@@ -302,12 +314,18 @@ jobs:
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
-      - name: Checkout repository through normalized local action
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
         with:
+          skip-checkout: "true"
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
-          fetch-depth: "0"
           summary-context: run-ctest
 
       - name: Set up micromamba for GitHub-hosted runner

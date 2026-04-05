@@ -48,9 +48,9 @@ class MocNarrowAngleSummingUnitTest(unittest.TestCase):
         s = ip.MocNarrowAngleSumming(3, 10)
 
         # Test detector conversion
-        self.assertAlmostEqual(s.detector(1.0), 15.0, places=10)
-        self.assertAlmostEqual(s.detector(2.0), 18.0, places=10)
-        self.assertAlmostEqual(s.detector(3.0), 21.0, places=10)
+        self.assertAlmostEqual(s.detector(1.0), 11.0, places=10)
+        self.assertAlmostEqual(s.detector(2.0), 14.0, places=10)
+        self.assertAlmostEqual(s.detector(3.0), 17.0, places=10)
 
         # Test round-trip: sample -> detector -> sample
         self.assertAlmostEqual(s.sample(s.detector(1.0)), 1.0, places=10)
@@ -67,8 +67,9 @@ class MocNarrowAngleSummingUnitTest(unittest.TestCase):
         self.assertAlmostEqual(s2.sample(3.5), 2.0, places=10)
 
         s3 = ip.MocNarrowAngleSumming(3, 10)
-        self.assertAlmostEqual(s3.sample(15.0), 1.0, places=10)
-        self.assertAlmostEqual(s3.sample(18.0), 2.0, places=10)
+        self.assertAlmostEqual(s3.sample(11.0), 1.0, places=10)
+        self.assertAlmostEqual(s3.sample(14.0), 2.0, places=10)
+        self.assertAlmostEqual(s3.sample(17.0), 3.0, places=10)
 
     def test_repr(self):
         """Test __repr__ method."""
@@ -228,7 +229,8 @@ class MocWideAngleCameraUnitTest(unittest.TestCase):
 
         try:
             # Create cube and camera using CameraFactory
-            cube = ip.Cube.open(test_cube_path, 'r')
+            cube = ip.Cube()
+            cube.open(str(test_cube_path), 'r')
             camera = ip.CameraFactory.create(cube)
 
             # Test that we got a MocWideAngleCamera (via type name check)

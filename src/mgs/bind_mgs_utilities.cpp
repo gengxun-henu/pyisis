@@ -1,19 +1,13 @@
 // Source ISIS header: reference/upstream_isis/src/mgs/objs/MocNarrowAngleSumming/MocNarrowAngleSumming.h
-// Source ISIS header: reference/upstream_isis/src/mgs/objs/MocWideAngleCamera/MocWideAngleDistortionMap.h
-// Source class: MocNarrowAngleSumming, MocWideAngleDistortionMap
-// Source header author(s): not explicitly stated in upstream header
-// Binding author: Geng Xun
-// Created: 2026-04-05
-// Updated: 2026-04-05
-// Purpose: pybind11 bindings for Mars Global Surveyor MOC utilities
 // Source ISIS header: reference/upstream_isis/src/mgs/objs/MocLabels/MocLabels.h
 // Source ISIS header: reference/upstream_isis/src/mgs/objs/MocWideAngleCamera/MocWideAngleDetectorMap.h
-// Source classes: MocNarrowAngleSumming, MocLabels, MocWideAngleDetectorMap
+// Source ISIS header: reference/upstream_isis/src/mgs/objs/MocWideAngleCamera/MocWideAngleDistortionMap.h
+// Source classes: MocNarrowAngleSumming, MocLabels, MocWideAngleDetectorMap, MocWideAngleDistortionMap
 // Source header author(s): not explicitly stated in upstream headers
 // Binding author: Geng Xun
 // Created: 2026-04-05
 // Updated: 2026-04-05
-// Purpose: pybind11 bindings for Mars Global Surveyor MOC utilities including narrow angle summing, labels, and wide angle detector map
+// Purpose: pybind11 bindings for Mars Global Surveyor MOC utilities including summing, labels, detector map, and distortion map
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT

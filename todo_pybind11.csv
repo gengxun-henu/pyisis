@@ -127,10 +127,8 @@ Mars Global Surveyor,MocLabels,已转换,"2026-04-05 已在 src/mgs/bind_mgs_uti
 Mars Global Surveyor,MocNarrowAngleCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Mars Global Surveyor,MocNarrowAngleSumming,已转换,"2026-04-05 已在 src/mgs/bind_mgs_utilities.cpp 暴露全部方法（构造函数、detector、sample）"
 Mars Global Surveyor,MocWideAngleCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mars Global Surveyor,MocWideAngleDetectorMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类"
-Mars Global Surveyor,MocWideAngleDistortionMap,已转换,"Bound in src/mgs/bind_mgs_utilities.cpp; inherits CameraDistortionMap"
 Mars Global Surveyor,MocWideAngleDetectorMap,已转换,"2026-04-05 已在 src/mgs/bind_mgs_utilities.cpp 暴露构造函数与 set_parent/set_detector 方法，继承自 LineScanCameraDetectorMap"
-Mars Global Surveyor,MocWideAngleDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Global Surveyor,MocWideAngleDistortionMap,已转换,"2026-04-05 已在 src/mgs/bind_mgs_utilities.cpp 暴露构造函数与 set_focal_plane/set_undistorted_focal_plane 方法，继承自 CameraDistortionMap"
 Mars Reconnaissance Orbiter,CrismCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Mars Reconnaissance Orbiter,CTXCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Mars Reconnaissance Orbiter,GainChannelNormalize,未转换,抽象基类/纯虚接口

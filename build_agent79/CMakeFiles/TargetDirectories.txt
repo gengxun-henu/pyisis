@@ -1,8 +1,0 @@
-/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/build_agent79/CMakeFiles/_isis_core.dir
-/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/build_agent79/CMakeFiles/test.dir
-/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/build_agent79/CMakeFiles/edit_cache.dir
-/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/build_agent79/CMakeFiles/rebuild_cache.dir
-/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/build_agent79/CMakeFiles/list_install_components.dir
-/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/build_agent79/CMakeFiles/install.dir
-/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/build_agent79/CMakeFiles/install/local.dir
-/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/build_agent79/CMakeFiles/install/strip.dir

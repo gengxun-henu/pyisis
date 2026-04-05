@@ -2,8 +2,8 @@
 
 ## 2026-04-05
 
-- MocLabels 和 MocWideAngleDetectorMap 绑定完成：
-  - 扩展 `src/mgs/bind_mgs_utilities.cpp`，同时暴露 `MocLabels` 和 `MocWideAngleDetectorMap`。
+- MocLabels、MocWideAngleDetectorMap 和 MocWideAngleDistortionMap 绑定完成：
+  - 扩展 `src/mgs/bind_mgs_utilities.cpp`，同时暴露 `MocLabels`、`MocWideAngleDetectorMap` 和 `MocWideAngleDistortionMap`。
   - MocLabels 绑定：
     - 绑定两个构造函数：`MocLabels(Cube &cube)` 和 `MocLabels(const QString &file)`（接受 std::string）。
     - 绑定相机类型查询方法：`narrow_angle()`, `wide_angle()`, `wide_angle_red()`, `wide_angle_blue()`。
@@ -17,15 +17,22 @@
     - 继承自 `LineScanCameraDetectorMap`，自动获得所有父类方法。
     - 绑定核心方法 `set_parent(sample, line)` 和 `set_detector(sample, line)`，处理可变求和模式（crosstrack summing 13/27）。
     - 实现描述性 `__repr__`，显示 et_start 和 line_rate。
-  - 在 `python/isis_pybind/__init__.py` 顶层重导出 `MocLabels` 和 `MocWideAngleDetectorMap`。
+  - MocWideAngleDistortionMap 绑定：
+    - 绑定构造函数 `MocWideAngleDistortionMap(Camera*, bool red)`，使用 `keep_alive` 保持父相机引用。
+    - 继承自 `CameraDistortionMap`，自动获得父类畸变坐标访问接口。
+    - 绑定核心方法 `set_focal_plane(dx, dy)` 和 `set_undistorted_focal_plane(ux, uy)`，分别执行畸变/去畸变焦平面坐标转换。
+    - 实现描述性 `__repr__`，便于调试区分绑定对象。
+  - 在 `python/isis_pybind/__init__.py` 顶层重导出 `MocLabels`、`MocWideAngleDetectorMap` 和 `MocWideAngleDistortionMap`。
   - 扩展单测 `tests/unitTest/mgs_utilities_unit_test.py`：
     - 新增 `MocLabelsUnitTest`：验证类存在、构造函数签名、所有公共方法签名存在。
     - 新增 `MocWideAngleDetectorMapUnitTest`：验证类存在、所有方法签名存在、从 LineScanCameraDetectorMap 继承。
+    - 新增 `MocWideAngleDistortionMapUnitTest`：验证类存在、核心方法签名存在、并继承 `CameraDistortionMap` 基础接口。
   - 已同步更新：
     - `mgs_moc_labels_methods.csv`（22 项全部标记为 Y）。
     - `mgs_moc_wide_angle_detector_map_methods.csv`（4 项全部标记为 Y）。
-    - `methods_inventory_summary.csv`（两个类状态更新为"已转换"，完成度 100%）。
-    - `todo_pybind11.csv`（两个类状态更新为"已转换"）。
+    - `mgs_moc_wide_angle_distortion_map_methods.csv`（4 项全部标记为 Y）。
+    - `methods_inventory_summary.csv`（三个类状态更新为"已转换"，完成度 100%）。
+    - `todo_pybind11.csv`（三个类状态更新为"已转换"）。
 - Validation status: 待 CI 构建和测试验证
 
 - MocNarrowAngleSumming 绑定完成：

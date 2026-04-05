@@ -134,6 +134,7 @@ from ._isis_core import (
     MocNarrowAngleCamera,
     MocNarrowAngleSumming,
     MocWideAngleCamera,
+    MocWideAngleDistortionMap,
     MocWideAngleDetectorMap,
     MsiCamera,
     MultivariateStatistics,

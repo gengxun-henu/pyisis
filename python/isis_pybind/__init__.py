@@ -462,6 +462,7 @@ __all__ = [
     "MocNarrowAngleCamera",
     "MocNarrowAngleSumming",
     "MocWideAngleCamera",
+    "MocWideAngleDistortionMap",
     "MocWideAngleDetectorMap",
     "HiriseCamera",
     "CTXCamera",

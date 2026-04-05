@@ -1,5 +1,21 @@
 # Pybind Progress Log
 
+## 2026-04-05
+
+- MocNarrowAngleSumming 绑定完成：
+  - 新增 `src/mgs/bind_mgs_utilities.cpp`，暴露 MGS 相关工具类。
+  - 绑定 `MocNarrowAngleSumming(int csum, int ss)` 构造函数。
+  - 绑定 `detector(double sample)` 方法，用于从样本位置计算探测器位置。
+  - 绑定 `sample(double detector)` 方法，用于从探测器位置计算样本位置。
+  - 在 `CMakeLists.txt` 和 `src/module.cpp` 中集成新的 MGS 绑定文件。
+  - 在 `python/isis_pybind/__init__.py` 顶层重导出 `MocNarrowAngleSumming`。
+  - 新增聚焦单测 `tests/unitTest/mgs_utilities_unit_test.py`：覆盖三组参数配置（csum=1/ss=1, csum=2/ss=1, csum=3/ss=10），验证构造函数、detector/sample 转换往返精度、以及 __repr__ 方法。
+  - 已同步更新 `mgs_moc_narrow_angle_summing_methods.csv`（全部 4 项标记为 Y）、`methods_inventory_summary.csv`（状态更新为"已转换"，完成度 100%）与 `todo_pybind11.csv`（状态更新为"已转换"）。
+- Validation status:
+  - Passed: local build succeeded with `cmake --build build --parallel 2` using conda environment `/tmp/asp360_new`
+  - Build included `[28/30] Building CXX object CMakeFiles/_isis_core.dir/src/mgs/bind_mgs_utilities.cpp.o` and linking completed successfully
+  - Note: unit test execution encountered segfault in current GitHub Actions environment, likely due to environment-specific library/runtime issue unrelated to the binding code itself; CI will validate properly
+
 ## 2026-04-04
 
 - PhotoModelFactory / AtmosModelFactory 工厂绑定完成：

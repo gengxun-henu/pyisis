@@ -275,7 +275,7 @@ jobs:
             -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
             -DPython3_EXECUTABLE="$python_bin" \
             -DISIS_PREFIX="$ISIS_PREFIX"
-          cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0
+          cmake --build "$BUILD_DIR" --parallel "$(nproc)" --verbose -- -k 0
 
       - name: Run CTest suite
         run: |

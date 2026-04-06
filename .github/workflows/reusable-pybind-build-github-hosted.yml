@@ -192,7 +192,7 @@ jobs:
         run: |
           set -euo pipefail
           set -o pipefail
-          cmake --build "$BUILD_DIR" --parallel 2 --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
+          cmake --build "$BUILD_DIR" --parallel "$(nproc)" --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
 
       - name: Mark build success
         if: ${{ success() }}

@@ -105,7 +105,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ github.token }}
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
@@ -113,7 +113,7 @@ jobs:
           skip-checkout: "true"
           runner-mode: ${{ inputs.runner_mode }}
           github-token: ${{ github.token }}
-          fetch-depth: "0"
+          fetch-depth: "1"
           summary-context: reusable-build-github-hosted
 
       - name: Compute artifact names
@@ -259,7 +259,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ github.token }}
-          fetch-depth: 0
+          fetch-depth: 1
 
       - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
@@ -267,7 +267,7 @@ jobs:
           skip-checkout: "true"
           runner-mode: ${{ inputs.runner_mode }}
           github-token: ${{ github.token }}
-          fetch-depth: "0"
+          fetch-depth: "1"
           summary-context: reusable-smoke-github-hosted
 
       - name: Compute smoke artifact name

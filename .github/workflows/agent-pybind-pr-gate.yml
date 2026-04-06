@@ -50,7 +50,7 @@ jobs:
         with:
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
-          fetch-depth: "0"
+          fetch-depth: "1"
           summary-context: pr-gate-prepare
 
       - name: Summarize changed files
@@ -124,7 +124,7 @@ jobs:
         with:
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
-          fetch-depth: "0"
+          fetch-depth: "1"
           summary-context: pr-gate-unit-tests
 
       - name: Set up micromamba for GitHub-hosted runner
@@ -192,7 +192,7 @@ jobs:
         with:
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
-          fetch-depth: "0"
+          fetch-depth: "1"
           summary-context: pr-gate-metadata-audit
 
       - name: Audit progress/export metadata changes

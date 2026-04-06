@@ -31,6 +31,7 @@ void bind_base_pattern(py::module_ &m);
 void bind_base_filters(py::module_ &m);
 void bind_mission_cameras(py::module_ &m);
 void bind_mgs_utilities(py::module_ &m);
+void bind_lro_utilities(py::module_ &m);
 void bind_camera_factory(py::module_ &m);
 void bind_statistics(py::module_ &m);
 void bind_low_level_cube_io(py::module_ &m);
@@ -60,6 +61,7 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_base_filters(m);
   bind_mission_cameras(m);
   bind_mgs_utilities(m);
+  bind_lro_utilities(m);
   bind_camera_factory(m);
   bind_statistics(m);
   bind_low_level_cube_io(m);

@@ -2,7 +2,7 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 Hyb2OncDistortionMap,Hayabusa2,isis/src/hayabusa2/objs/Hyb2OncCamera/Hyb2OncDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Hyb2OncDistortionMap,isis_pybind.Hyb2OncDistortionMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,Hyb2OncDistortionMap(Camera *parent, double zDirection = 1.0),isis_pybind.Hyb2OncDistortionMap(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,virtual bool SetFocalPlane(double dx, double dy),isis_pybind.Hyb2OncDistortionMap.set_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,virtual bool SetUndistortedFocalPlane(double ux, double uy),isis_pybind.Hyb2OncDistortionMap.set_undistorted_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,Hyb2OncDistortionMap,isis_pybind.Hyb2OncDistortionMap,Y,"2026-04-06 已在 bind_mission_cameras.cpp 绑定"
+Construction/Enum,Hyb2OncDistortionMap(Camera *parent, double zDirection = 1.0),isis_pybind.Hyb2OncDistortionMap(),Y,"2026-04-06 已暴露构造器"
+Mutation/Configuration,virtual bool SetFocalPlane(double dx, double dy),isis_pybind.Hyb2OncDistortionMap.set_focal_plane,Y,"2026-04-06 已暴露"
+Mutation/Configuration,virtual bool SetUndistortedFocalPlane(double ux, double uy),isis_pybind.Hyb2OncDistortionMap.set_undistorted_focal_plane,Y,"2026-04-06 已暴露"

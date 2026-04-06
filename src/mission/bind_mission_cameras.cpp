@@ -1,20 +1,30 @@
 // Binding author: Geng Xun
+// Created: 2026-04-06
 // Updated: 2026-04-06
-// Purpose: pybind11 bindings for mission-specific camera models, including MEX HRSC public APIs
+// Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
+
+#include <sstream>
+#include <utility>
+#include <vector>
+
+#include <QList>
+#include <QPointF>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 #include "ApolloMetricCamera.h"
 #include "ApolloPanoramicCamera.h"
+#include "Camera.h"
 #include "Chandrayaan1M3Camera.h"
 #include "ClipperNacRollingShutterCamera.h"
 #include "ClipperPushBroomCamera.h"
 #include "ClipperWacFcCamera.h"
 #include "CrismCamera.h"
+#include "Cube.h"
 #include "CTXCamera.h"
 #include "DawnFcCamera.h"
 #include "DawnVirCamera.h"
@@ -25,6 +35,7 @@
 #include "HiriseCamera.h"
 #include "HrscCamera.h"
 #include "Hyb2OncCamera.h"
+#include "Hyb2OncDistortionMap.h"
 #include "IssNACamera.h"
 #include "IssWACamera.h"
 #include "iTime.h"
@@ -50,6 +61,7 @@
 #include "NewHorizonsMvicFrameCamera.h"
 #include "NewHorizonsMvicTdiCamera.h"
 #include "NirCamera.h"
+#include "NirsDetectorMap.h"
 #include "OsirisRexOcamsCamera.h"
 #include "OsirisRexTagcamsCamera.h"
 #include "PushFrameCamera.h"
@@ -68,6 +80,21 @@
 
 namespace py = pybind11;
 
+namespace {
+
+std::vector<std::pair<double, double>> toOffsetPairs(const QList<QPointF> &offsets) {
+     std::vector<std::pair<double, double>> result;
+     result.reserve(offsets.size());
+
+     for (const QPointF &offset : offsets) {
+          result.emplace_back(offset.x(), offset.y());
+     }
+
+     return result;
+}
+
+}  // namespace
+
 void bind_mission_cameras(py::module_ &m) {
   py::class_<Isis::ApolloMetricCamera, Isis::FramingCamera>(m, "ApolloMetricCamera");
   py::class_<Isis::ApolloPanoramicCamera, Isis::LineScanCamera>(m, "ApolloPanoramicCamera");
@@ -85,9 +112,87 @@ void bind_mission_cameras(py::module_ &m) {
   py::class_<Isis::DawnFcCamera, Isis::FramingCamera>(m, "DawnFcCamera");
   py::class_<Isis::DawnVirCamera, Isis::LineScanCamera>(m, "DawnVirCamera");
   py::class_<Isis::SsiCamera, Isis::FramingCamera>(m, "SsiCamera");
-  py::class_<Isis::HayabusaAmicaCamera, Isis::FramingCamera>(m, "HayabusaAmicaCamera");
-  py::class_<Isis::HayabusaNirsCamera, Isis::FramingCamera>(m, "HayabusaNirsCamera");
-  py::class_<Isis::Hyb2OncCamera, Isis::FramingCamera>(m, "Hyb2OncCamera");
+  py::class_<Isis::HayabusaAmicaCamera, Isis::FramingCamera>(m, "HayabusaAmicaCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Hayabusa AMICA camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::HayabusaAmicaCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::HayabusaAmicaCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::HayabusaAmicaCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::HayabusaAmicaCamera::SpkReferenceId);
+  py::class_<Isis::HayabusaNirsCamera, Isis::FramingCamera>(m, "HayabusaNirsCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Hayabusa NIRS camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::HayabusaNirsCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::HayabusaNirsCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::HayabusaNirsCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::HayabusaNirsCamera::SpkReferenceId)
+      .def("pixel_ifov_offsets",
+           [](Isis::HayabusaNirsCamera &self) {
+             return toOffsetPairs(self.PixelIfovOffsets());
+           },
+           "Return pixel IFOV offsets as a list of (x, y) tuples in focal-plane units.");
+  py::class_<Isis::Hyb2OncCamera, Isis::FramingCamera>(m, "Hyb2OncCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Hayabusa2 ONC camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::Hyb2OncCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::Hyb2OncCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::Hyb2OncCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::Hyb2OncCamera::SpkReferenceId);
+  py::class_<Isis::NirsDetectorMap, Isis::CameraDetectorMap>(m, "NirsDetectorMap")
+      .def(py::init<double, Isis::Camera *>(),
+           py::arg("exposure_duration"),
+           py::arg("parent") = nullptr,
+           py::keep_alive<1, 3>(),
+           "Construct the Hayabusa NIRS detector map helper.")
+      .def("set_exposure_duration",
+           &Isis::NirsDetectorMap::setExposureDuration,
+           py::arg("exposure_duration"),
+           "Update the constant exposure duration returned by the detector map.")
+      .def("exposure_duration",
+           &Isis::NirsDetectorMap::exposureDuration,
+           py::arg("sample"),
+           py::arg("line"),
+           py::arg("band"),
+           "Return the configured exposure duration for the provided detector position.");
+  py::class_<Isis::Hyb2OncDistortionMap, Isis::CameraDistortionMap>(m, "Hyb2OncDistortionMap")
+      .def(py::init<Isis::Camera *, double>(),
+           py::arg("parent"),
+           py::arg("z_direction") = 1.0,
+           py::keep_alive<1, 2>(),
+           "Construct the Hayabusa2 ONC distortion map helper.")
+      .def("set_focal_plane",
+           &Isis::Hyb2OncDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map distorted focal-plane coordinates to undistorted coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::Hyb2OncDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map undistorted focal-plane coordinates to distorted coordinates.")
+      .def("__repr__", [](const Isis::Hyb2OncDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<Hyb2OncDistortionMap>";
+        return stream.str();
+      });
   py::class_<Isis::JunoCamera, Isis::FramingCamera>(m, "JunoCamera");
   py::class_<Isis::KaguyaMiCamera, Isis::LineScanCamera>(m, "KaguyaMiCamera");
   py::class_<Isis::KaguyaTcCamera, Isis::LineScanCamera>(m, "KaguyaTcCamera");

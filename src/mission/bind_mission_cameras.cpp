@@ -1,7 +1,12 @@
+// Binding author: Geng Xun
+// Updated: 2026-04-06
+// Purpose: pybind11 bindings for mission-specific camera models, including MEX HRSC public APIs
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include "ApolloMetricCamera.h"
 #include "ApolloPanoramicCamera.h"
@@ -22,6 +27,7 @@
 #include "Hyb2OncCamera.h"
 #include "IssNACamera.h"
 #include "IssWACamera.h"
+#include "iTime.h"
 #include "JunoCamera.h"
 #include "KaguyaMiCamera.h"
 #include "KaguyaTcCamera.h"
@@ -122,8 +128,32 @@ void bind_mission_cameras(py::module_ &m) {
            "SPK Reference ID - J2000");
   py::class_<Isis::Mariner10Camera, Isis::FramingCamera>(m, "Mariner10Camera");
   py::class_<Isis::MdisCamera, Isis::FramingCamera>(m, "MdisCamera");
-  py::class_<Isis::HrscCamera, Isis::LineScanCamera>(m, "HrscCamera");
-  py::class_<Isis::MexHrscSrcCamera, Isis::FramingCamera>(m, "MexHrscSrcCamera");
+  py::class_<Isis::HrscCamera, Isis::LineScanCamera>(m, "HrscCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an HRSC line-scan camera model from an opened Cube.")
+      .def("ck_frame_id", &Isis::HrscCamera::CkFrameId,
+           "CK frame ID - Instrument Code from spacit run on CK")
+      .def("ck_reference_id", &Isis::HrscCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::HrscCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::MexHrscSrcCamera, Isis::FramingCamera>(m, "MexHrscSrcCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Mars Express HRSC SRC framing camera model from an opened Cube.")
+      .def("shutter_open_close_times", &Isis::MexHrscSrcCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times for the given center exposure time.")
+      .def("ck_frame_id", &Isis::MexHrscSrcCamera::CkFrameId,
+           "CK frame ID - Instrument Code from spacit run on CK")
+      .def("ck_reference_id", &Isis::MexHrscSrcCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::MexHrscSrcCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
   py::class_<Isis::MocNarrowAngleCamera, Isis::LineScanCamera>(m, "MocNarrowAngleCamera");
   py::class_<Isis::MocWideAngleCamera, Isis::LineScanCamera>(m, "MocWideAngleCamera")
       .def("ck_frame_id", &Isis::MocWideAngleCamera::CkFrameId,

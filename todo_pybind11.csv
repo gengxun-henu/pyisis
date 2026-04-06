@@ -121,8 +121,8 @@ Map Projection,TProjection,已转换,抽象基类/纯虚接口
 Map Projection,TransverseMercator,已转换,已导出基础投影类型
 Map Projection,UpturnedEllipsoidTransverseAzimuthal,已转换,已导出基础投影类型
 Map Projection,WorldMapper,已转换,抽象基类/纯虚接口
-Mars Express,HrscCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mars Express,MexHrscSrcCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Express,HrscCamera,已转换,"2026-04-06 已在 bind_mission_cameras.cpp 暴露 Cube 构造与 ck_frame_id/ck_reference_id/spk_reference_id；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Express,MexHrscSrcCamera,已转换,"2026-04-06 已在 bind_mission_cameras.cpp 暴露 Cube 构造、shutter_open_close_times 与 ck_frame_id/ck_reference_id/spk_reference_id；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Mars Global Surveyor,MocLabels,已转换,"2026-04-05 已在 src/mgs/bind_mgs_utilities.cpp 暴露全部公共方法（构造函数、相机类型查询、求和模式、检测器/样本转换）"
 Mars Global Surveyor,MocNarrowAngleCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Mars Global Surveyor,MocNarrowAngleSumming,已转换,"2026-04-05 已在 src/mgs/bind_mgs_utilities.cpp 暴露全部方法（构造函数、detector、sample）"

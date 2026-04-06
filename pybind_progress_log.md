@@ -2,6 +2,21 @@
 
 ## 2026-04-06
 
+- Mars Express mex 相机绑定补齐完成：
+  - 扩展 `src/mission/bind_mission_cameras.cpp`，为 `HrscCamera` 暴露 `HrscCamera(Cube&)` 构造以及 `ck_frame_id()` / `ck_reference_id()` / `spk_reference_id()` 三个公开 SPICE/CK ID 方法。
+  - 同文件为 `MexHrscSrcCamera` 暴露 `MexHrscSrcCamera(Cube&)` 构造、`shutter_open_close_times(time, exposure_duration)` 以及 `ck_frame_id()` / `ck_reference_id()` / `spk_reference_id()`。
+  - 为 `std::pair<iTime, iTime>` 返回值补入 `<pybind11/stl.h>`，确保 `shutter_open_close_times(...)` 能直接映射为 Python 二元组。
+  - 新增 `tests/unitTest/mex_camera_unit_test.py`：
+    - 对 `HrscCamera` 进行类符号、继承关系、直接构造与本地 `tests/data/socet/h2254_0000_s12-cropped.cub` 行为检查。
+    - 对 `MexHrscSrcCamera` 进行类符号、继承关系与新增方法表面检查（当前仓库无稳定本地 SRC cube fixture，暂未加入行为级断言）。
+  - 更新 `tests/smoke_import.py`，补充 `HrscCamera` 与 `MexHrscSrcCamera` 顶层符号检查。
+  - 已同步更新：
+    - `class_bind_methods_details/mex_hrsc_camera_methods.csv`
+    - `class_bind_methods_details/mex_mex_hrsc_src_camera_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+    - `todo_pybind11.csv`
+- Validation status: 待本地构建与聚焦单测验证
+
 - photometry 相关单测预期已按上游真实行为校正：
   - 更新 `tests/unitTest/anisotropic1_unit_test.py`，将 `Anisotropic1.algorithm_name()` 预期从具体算法名改为上游构造默认值 `"Unknown"`，并保留对具体 Python 类符号与 `__repr__` 类名前缀的检查。
   - 更新 `tests/unitTest/atmos_model_factory_unit_test.py`，确认 `NormModelFactory.create(...)` 返回的对象在 Python 中可分派为 `AlbedoAtm`，但 `algorithm_name()` 仍遵循上游 `NormModel` 默认值 `"Unknown"`。

@@ -23,6 +23,7 @@
 
 #include <pybind11/pybind11.h>
 
+#include "Anisotropic1.h"
 #include "AlbedoAtm.h"
 #include "AtmosModel.h"
 #include "AtmosModelFactory.h"
@@ -114,6 +115,18 @@ void bind_base_photometry(py::module_ &m) {
       .def("__repr__",
            [](const Isis::AtmosModel &self) {
              return "AtmosModel(algorithm='" + self.AlgorithmName() + "')";
+           });
+
+  py::class_<Isis::Anisotropic1, Isis::AtmosModel>(m, "Anisotropic1")
+      .def(py::init<Isis::Pvl &, Isis::PhotoModel &>(),
+           py::arg("pvl"),
+           py::arg("photo_model"),
+           py::keep_alive<1, 2>(),
+           py::keep_alive<1, 3>(),
+           "Create an Anisotropic1 atmospheric model with the given PVL configuration and PhotoModel.")
+      .def("__repr__",
+           [](const Isis::Anisotropic1 &self) {
+             return "Anisotropic1(algorithm='" + qStringToStdString(self.AlgorithmName()) + "')";
            });
 
   py::class_<Isis::AtmosModelFactory,

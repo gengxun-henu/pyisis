@@ -1,6 +1,6 @@
 // Binding author: Geng Xun
 // Created: 2026-04-06
-// Updated: 2026-04-06
+// Updated: 2026-04-06  Added TgoCassisCamera methods + TgoCassisDistortionMap binding
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -71,6 +71,7 @@
 #include "RollingShutterCamera.h"
 #include "SsiCamera.h"
 #include "TgoCassisCamera.h"
+#include "TgoCassisDistortionMap.h"
 #include "ThemisIrCamera.h"
 #include "ThemisVisCamera.h"
 #include "UvvisCamera.h"
@@ -282,7 +283,58 @@ void bind_mission_cameras(py::module_ &m) {
   py::class_<Isis::OsirisRexTagcamsCamera, Isis::FramingCamera>(m, "OsirisRexTagcamsCamera");
   py::class_<Isis::RosettaOsirisCamera, Isis::FramingCamera>(m, "RosettaOsirisCamera");
   py::class_<Isis::RosettaVirtisCamera, Isis::LineScanCamera>(m, "RosettaVirtisCamera");
-  py::class_<Isis::TgoCassisCamera, Isis::FramingCamera>(m, "TgoCassisCamera");
+  py::class_<Isis::TgoCassisCamera, Isis::FramingCamera>(m, "TgoCassisCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a TGO CaSSIS framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::TgoCassisCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::TgoCassisCamera::CkFrameId,
+           "CK frame ID - TGO CaSSIS instrument code (TGO_CASSIS_FSA)")
+      .def("ck_reference_id", &Isis::TgoCassisCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_target_id", &Isis::TgoCassisCamera::SpkTargetId,
+           "SPK Target Body ID - TGO spacecraft (-143)")
+      .def("spk_reference_id", &Isis::TgoCassisCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::TgoCassisDistortionMap, Isis::CameraDistortionMap>(m, "TgoCassisDistortionMap")
+      .def(py::init<Isis::Camera *, int>(),
+           py::arg("parent"),
+           py::arg("naif_ik_code"),
+           py::keep_alive<1, 2>(),
+           "Construct the TGO CaSSIS rational distortion map.\n\n"
+           "Args:\n"
+           "    parent: Pointer to the parent Camera object\n"
+           "    naif_ik_code: NAIF IK code for the instrument")
+      .def("set_focal_plane",
+           &Isis::TgoCassisDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Compute undistorted focal plane (x,y) from distorted (x,y).\n\n"
+           "Args:\n"
+           "    dx: Distorted focal plane x, in millimeters\n"
+           "    dy: Distorted focal plane y, in millimeters\n\n"
+           "Returns:\n"
+           "    True if successful")
+      .def("set_undistorted_focal_plane",
+           &Isis::TgoCassisDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Compute distorted focal plane (x,y) from undistorted (x,y).\n\n"
+           "Args:\n"
+           "    ux: Undistorted focal plane x, in millimeters\n"
+           "    uy: Undistorted focal plane y, in millimeters\n\n"
+           "Returns:\n"
+           "    True if successful")
+      .def("__repr__", [](const Isis::TgoCassisDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<TgoCassisDistortionMap>";
+        return stream.str();
+      });
   py::class_<Isis::VikingCamera, Isis::FramingCamera>(m, "VikingCamera");
   py::class_<Isis::VoyagerCamera, Isis::FramingCamera>(m, "VoyagerCamera");
 }

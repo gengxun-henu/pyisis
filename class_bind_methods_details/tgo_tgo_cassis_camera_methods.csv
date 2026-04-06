@@ -3,9 +3,9 @@ TgoCassisCamera,Trace Gas Orbiter,isis/src/tgo/objs/TgoCassisCamera/TgoCassisCam
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,TgoCassisCamera,isis_pybind.TgoCassisCamera,Y,"Python class symbol is exported; constructor exposure may be limited; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,TgoCassisCamera(),isis_pybind.TgoCassisCamera(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,"virtual std::pair <iTime, iTime> ShutterOpenCloseTimes(double time, double exposureDuration)",isis_pybind.TgoCassisCamera.shutter_open_close_times,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkFrameId() const,isis_pybind.TgoCassisCamera.ck_frame_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkReferenceId() const,isis_pybind.TgoCassisCamera.ck_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int SpkTargetId() const,isis_pybind.TgoCassisCamera.spk_target_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int SpkReferenceId() const,isis_pybind.TgoCassisCamera.spk_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Construction/Enum,TgoCassisCamera(),isis_pybind.TgoCassisCamera(),Y,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,"virtual std::pair <iTime, iTime> ShutterOpenCloseTimes(double time, double exposureDuration)",isis_pybind.TgoCassisCamera.shutter_open_close_times,Y,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int CkFrameId() const,isis_pybind.TgoCassisCamera.ck_frame_id,Y,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int CkReferenceId() const,isis_pybind.TgoCassisCamera.ck_reference_id,Y,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int SpkTargetId() const,isis_pybind.TgoCassisCamera.spk_target_id,Y,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int SpkReferenceId() const,isis_pybind.TgoCassisCamera.spk_reference_id,Y,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"

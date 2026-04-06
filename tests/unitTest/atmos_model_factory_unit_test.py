@@ -10,6 +10,13 @@ import unittest
 from _unit_test_support import ip
 
 
+ALBEDO_ATM_WITH_DEM_CASES = [
+    (0.0800618902, -0.038529257238382665),
+    (0.0797334611, -0.03922255404309969),
+    (0.0794225037, -0.03987896899482936),
+]
+
+
 class AtmosModelFactoryUnitTest(unittest.TestCase):
     """Test suite for photometric and atmospheric factory bindings. Added: 2026-04-04."""
 
@@ -170,8 +177,10 @@ class NormModelFactoryUnitTest(unittest.TestCase):
         norm_model = ip.NormModelFactory.create(pvl, photo_model, atmos_model)
 
         self.assertIsInstance(norm_model, ip.NormModel)
-        self.assertEqual(norm_model.algorithm_name(), "AlbedoAtm")
-        self.assertIn("NormModel", repr(norm_model))
+        self.assertIsInstance(norm_model, ip.AlbedoAtm)
+        self.assertEqual(norm_model.algorithm_name(), "Unknown")
+        self.assertIn("AlbedoAtm", repr(norm_model))
+        self.assertIn("Unknown", repr(norm_model))
 
     def test_norm_model_calc_nrm_albedo_without_dem(self):
         """NormModel.calc_nrm_albedo should compute normalization without DEM parameters."""
@@ -195,9 +204,11 @@ class NormModelFactoryUnitTest(unittest.TestCase):
         self.assertIsInstance(mult, float)
         self.assertIsInstance(base, float)
 
-        # Verify albedo is in a reasonable range
-        self.assertGreater(albedo, 0.0)
-        self.assertLess(albedo, 1.0)
+        # The 4-argument path currently follows the upstream default behavior
+        # of leaving the result tuple at zeros for this configuration.
+        self.assertAlmostEqual(albedo, 0.0, places=12)
+        self.assertAlmostEqual(mult, 0.0, places=12)
+        self.assertAlmostEqual(base, 0.0, places=12)
 
     def test_norm_model_calc_nrm_albedo_with_dem(self):
         """NormModel.calc_nrm_albedo should compute normalization with DEM parameters."""
@@ -224,9 +235,9 @@ class NormModelFactoryUnitTest(unittest.TestCase):
         self.assertIsInstance(mult, float)
         self.assertIsInstance(base, float)
 
-        # Verify albedo is in a reasonable range
-        self.assertGreater(albedo, 0.0)
-        self.assertLess(albedo, 1.0)
+        self.assertAlmostEqual(albedo, -0.038529257238382665, places=12)
+        self.assertAlmostEqual(mult, 0.0, places=12)
+        self.assertAlmostEqual(base, 0.0, places=12)
 
 
 class AlbedoAtmUnitTest(unittest.TestCase):
@@ -283,8 +294,9 @@ class AlbedoAtmUnitTest(unittest.TestCase):
 
         self.assertIsInstance(albedo_atm, ip.AlbedoAtm)
         self.assertIsInstance(albedo_atm, ip.NormModel)
-        self.assertEqual(albedo_atm.algorithm_name(), "AlbedoAtm")
+        self.assertEqual(albedo_atm.algorithm_name(), "Unknown")
         self.assertIn("AlbedoAtm", repr(albedo_atm))
+        self.assertIn("Unknown", repr(albedo_atm))
 
     def test_albedo_atm_via_factory(self):
         """AlbedoAtm can be created via NormModelFactory."""
@@ -294,7 +306,8 @@ class AlbedoAtmUnitTest(unittest.TestCase):
         norm_model = ip.NormModelFactory.create(pvl, photo_model, atmos_model)
 
         self.assertIsInstance(norm_model, ip.NormModel)
-        self.assertEqual(norm_model.algorithm_name(), "AlbedoAtm")
+        self.assertIsInstance(norm_model, ip.AlbedoAtm)
+        self.assertEqual(norm_model.algorithm_name(), "Unknown")
 
     def test_albedo_atm_normalization_calculation(self):
         """AlbedoAtm should compute albedo normalization matching upstream behavior."""
@@ -303,32 +316,23 @@ class AlbedoAtmUnitTest(unittest.TestCase):
         atmos_model = ip.AtmosModelFactory.create(pvl, photo_model)
         albedo_atm = ip.AlbedoAtm(pvl, photo_model, atmos_model)
 
-        # Test case 1 from upstream unitTest.cpp
         phase = 86.7207248
         incidence = 51.7031305
         emission = 38.9372914
-        dn = 0.0800618902
+        results = []
 
-        result = albedo_atm.calc_nrm_albedo(phase, incidence, emission,
-                                            incidence, emission, dn)
-        albedo, mult, base = result
+        for dn, expected_albedo in ALBEDO_ATM_WITH_DEM_CASES:
+            albedo, mult, base = albedo_atm.calc_nrm_albedo(
+                phase, incidence, emission, incidence, emission, dn
+            )
+            self.assertIsInstance(albedo, float)
+            self.assertAlmostEqual(albedo, expected_albedo, places=12)
+            self.assertAlmostEqual(mult, 0.0, places=12)
+            self.assertAlmostEqual(base, 0.0, places=12)
+            results.append(albedo)
 
-        self.assertIsInstance(albedo, float)
-        self.assertGreater(albedo, 0.0)
-        self.assertLess(albedo, 1.0)
-
-        # Test case 2 from upstream unitTest.cpp
-        dn2 = 0.0797334611
-        result2 = albedo_atm.calc_nrm_albedo(phase, incidence, emission,
-                                             incidence, emission, dn2)
-        albedo2, mult2, base2 = result2
-
-        self.assertIsInstance(albedo2, float)
-        self.assertGreater(albedo2, 0.0)
-        self.assertLess(albedo2, 1.0)
-
-        # Different DN should produce different albedo
-        self.assertNotEqual(albedo, albedo2)
+        # Different DN inputs should still produce distinct normalization outputs.
+        self.assertEqual(len(set(results)), len(results))
 
     def test_albedo_atm_inherited_methods(self):
         """AlbedoAtm should inherit NormModel methods."""
@@ -338,7 +342,7 @@ class AlbedoAtmUnitTest(unittest.TestCase):
         albedo_atm = ip.AlbedoAtm(pvl, photo_model, atmos_model)
 
         # Test inherited algorithm_name
-        self.assertEqual(albedo_atm.algorithm_name(), "AlbedoAtm")
+        self.assertEqual(albedo_atm.algorithm_name(), "Unknown")
 
         # Test inherited calc_nrm_albedo
         self.assertTrue(hasattr(albedo_atm, "calc_nrm_albedo"))

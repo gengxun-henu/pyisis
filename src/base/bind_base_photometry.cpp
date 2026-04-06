@@ -70,7 +70,7 @@ void bind_base_photometry(py::module_ &m) {
                   py::arg("cosang"),
                   "Compute arccosine using ISIS photometric utility logic")
       .def("__repr__",
-           [](const Isis::PhotoModel &self) {
+                          [](const Isis::PhotoModel &self) -> std::string {
              return "PhotoModel(algorithm='" + qStringToStdString(self.AlgorithmName()) + "')";
            });
 
@@ -84,7 +84,7 @@ void bind_base_photometry(py::module_ &m) {
                   py::return_value_policy::take_ownership,
                   "Create a PhotoModel instance from PVL configuration.")
       .def("__repr__",
-           [](const Isis::PhotoModelFactory &) {
+                          [](const Isis::PhotoModelFactory &) -> std::string {
              return "PhotoModelFactory()";
            });
 
@@ -113,7 +113,7 @@ void bind_base_photometry(py::module_ &m) {
       .def("atmos_hga", &Isis::AtmosModel::AtmosHga, "Get the atmospheric hga value")
       .def("atmos_tauref", &Isis::AtmosModel::AtmosTauref, "Get the atmospheric tauref value")
       .def("__repr__",
-           [](const Isis::AtmosModel &self) {
+                          [](const Isis::AtmosModel &self) -> std::string {
              return "AtmosModel(algorithm='" + self.AlgorithmName() + "')";
            });
 
@@ -125,8 +125,8 @@ void bind_base_photometry(py::module_ &m) {
            py::keep_alive<1, 3>(),
            "Create an Anisotropic1 atmospheric model with the given PVL configuration and PhotoModel.")
       .def("__repr__",
-           [](const Isis::Anisotropic1 &self) {
-             return "Anisotropic1(algorithm='" + qStringToStdString(self.AlgorithmName()) + "')";
+                          [](const Isis::Anisotropic1 &self) -> std::string {
+                               return "Anisotropic1(algorithm='" + self.AlgorithmName() + "')";
            });
 
   py::class_<Isis::AtmosModelFactory,
@@ -140,7 +140,7 @@ void bind_base_photometry(py::module_ &m) {
                   py::return_value_policy::take_ownership,
                   "Create an AtmosModel instance from PVL configuration and a PhotoModel.")
       .def("__repr__",
-           [](const Isis::AtmosModelFactory &) {
+                          [](const Isis::AtmosModelFactory &) -> std::string {
              return "AtmosModelFactory()";
            });
 
@@ -176,7 +176,7 @@ void bind_base_photometry(py::module_ &m) {
            py::arg("wavelength"),
            "Set the normalization wavelength")
       .def("__repr__",
-           [](const Isis::NormModel &self) {
+           [](const Isis::NormModel &self) -> std::string {
              return "NormModel(algorithm='" + self.AlgorithmName() + "')";
            });
 
@@ -201,7 +201,7 @@ void bind_base_photometry(py::module_ &m) {
                   py::return_value_policy::take_ownership,
                   "Create a NormModel instance from PVL configuration, a PhotoModel, and an AtmosModel.")
       .def("__repr__",
-           [](const Isis::NormModelFactory &) {
+                          [](const Isis::NormModelFactory &) -> std::string {
              return "NormModelFactory()";
            });
 
@@ -216,7 +216,7 @@ void bind_base_photometry(py::module_ &m) {
            py::keep_alive<1, 4>(),  // Keep atmos_model alive
            "Construct an AlbedoAtm normalization model from PVL configuration")
       .def("__repr__",
-           [](const Isis::AlbedoAtm &self) {
+                          [](const Isis::AlbedoAtm &self) -> std::string {
              return "AlbedoAtm(algorithm='" + self.AlgorithmName() + "')";
            });
 }

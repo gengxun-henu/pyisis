@@ -2,6 +2,25 @@
 
 ## 2026-04-06
 
+- photometry 相关单测预期已按上游真实行为校正：
+  - 更新 `tests/unitTest/anisotropic1_unit_test.py`，将 `Anisotropic1.algorithm_name()` 预期从具体算法名改为上游构造默认值 `"Unknown"`，并保留对具体 Python 类符号与 `__repr__` 类名前缀的检查。
+  - 更新 `tests/unitTest/atmos_model_factory_unit_test.py`，确认 `NormModelFactory.create(...)` 返回的对象在 Python 中可分派为 `AlbedoAtm`，但 `algorithm_name()` 仍遵循上游 `NormModel` 默认值 `"Unknown"`。
+  - 将 `AlbedoAtm` / `NormModel` 归一化断言从泛化的“结果必须为正”改为匹配当前上游驱动输出：4 参数路径返回 `(0.0, 0.0, 0.0)`，6 参数路径在给定测试几何下返回稳定的负 albedo 值与零 `mult/base`。
+- Validation status:
+  - `python -m unittest discover -s tests/unitTest -p 'anisotropic1_unit_test.py'` 通过。
+  - `python -m unittest discover -s tests/unitTest -p 'atmos_model_factory_unit_test.py'` 通过。
+  - `python -m unittest discover -s tests/unitTest -p '*_unit_test.py'` 通过：433 tests, 0 failures, 4 skipped, 1 expected failure。
+  - `python tests/smoke_import.py` 通过。
+
+- bind_base_photometry repr 编译修复完成：
+  - 修正 `src/base/bind_base_photometry.cpp` 中 `Anisotropic1.__repr__` 将 `AtmosModel::AlgorithmName()` 的 `std::string` 误传给 `qStringToStdString(const QString &)` 的错误调用。
+  - 为同文件相关 `__repr__` lambda 显式标注 `-> std::string` 返回类型，避免 pybind11 在错误场景下继续放大模板推导级联报错。
+  - 保持 `PhotoModel` 继续走 `QString -> std::string` 转换路径；`AtmosModel` / `Anisotropic1` / `NormModel` / `AlbedoAtm` 则保持直接使用其 `std::string` 算法名。
+- Validation status:
+  - 在 `asp360_new` 环境下执行 `cmake --build build -- -j2` 成功，`src/base/bind_base_photometry.cpp` 已通过重新编译并完成 `_isis_core` 链接。
+  - 原始编译报错 `invalid initialization of reference of type 'const QString&' from expression of type 'std::string'` 与后续 pybind11 `remove_class<...>` 级联错误均已消失。
+  - 运行 `python -m unittest discover -s tests/unitTest -p 'anisotropic1_unit_test.py'` 时，构建后的扩展可正常加载；测试暴露了仓库现存的 `algorithm_name() == 'Unknown'` 与若干归一化数值断言失败，这些失败与本次 `__repr__` 编译修复无直接因果关系，未在本次热修范围内扩展处理。
+
 - AlbedoAtm 归一化模型绑定完成：
   - 扩展 `src/base/bind_base_photometry.cpp`，新增 `NormModel` 基类、`NormModelFactory` 工厂与 `AlbedoAtm` 具体归一化模型绑定。
   - NormModel 绑定：

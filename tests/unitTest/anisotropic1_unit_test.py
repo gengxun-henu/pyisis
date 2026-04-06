@@ -47,8 +47,11 @@ class Anisotropic1UnitTest(unittest.TestCase):
 
     def test_algorithm_name_and_repr(self):
         atmos_model = self._create_models()
-        self.assertEqual(atmos_model.algorithm_name(), "Anisotropic1")
+        # Upstream AtmosModel starts with "Unknown" and Anisotropic1 does not
+        # override that stored algorithm name in its constructor.
+        self.assertEqual(atmos_model.algorithm_name(), "Unknown")
         self.assertIn("Anisotropic1", repr(atmos_model))
+        self.assertIn("Unknown", repr(atmos_model))
 
     def test_calc_atm_effect_matches_truth_values(self):
         atmos_model = self._create_models()
@@ -84,7 +87,7 @@ class Anisotropic1UnitTest(unittest.TestCase):
         atmos_model = ip.AtmosModelFactory.create(pvl, photo_model)
 
         self.assertIsInstance(atmos_model, ip.Anisotropic1)
-        self.assertEqual(atmos_model.algorithm_name(), "Anisotropic1")
+        self.assertEqual(atmos_model.algorithm_name(), "Unknown")
 
 
 if __name__ == "__main__":

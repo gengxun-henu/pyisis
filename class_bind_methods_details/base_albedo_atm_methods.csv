@@ -1,6 +1,6 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-AlbedoAtm,Radiometric And Photometric Correction,isis/src/base/objs/AlbedoAtm/AlbedoAtm.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+AlbedoAtm,Radiometric And Photometric Correction,isis/src/base/objs/AlbedoAtm/AlbedoAtm.h,src/base/bind_base_photometry.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,AlbedoAtm,isis_pybind.AlbedoAtm,N,Python class symbol not found in current binding files
-Construction/Enum,AlbedoAtm(),isis_pybind.AlbedoAtm(),N,Constructor binding not detected in current binding files
+Class Symbol,AlbedoAtm,isis_pybind.AlbedoAtm,Y,2026-04-06 Bound in bind_base_photometry.cpp with constructor and inherited NormModel methods
+Construction/Enum,AlbedoAtm(Pvl&, PhotoModel&, AtmosModel&),isis_pybind.AlbedoAtm(),Y,2026-04-06 Bound with py::keep_alive for dependency lifetime management

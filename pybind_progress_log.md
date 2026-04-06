@@ -2,6 +2,32 @@
 
 ## 2026-04-06
 
+- AlbedoAtm 归一化模型绑定完成：
+  - 扩展 `src/base/bind_base_photometry.cpp`，新增 `NormModel` 基类、`NormModelFactory` 工厂与 `AlbedoAtm` 具体归一化模型绑定。
+  - NormModel 绑定：
+    - 绑定 `algorithm_name()` 方法，返回归一化算法名称。
+    - 绑定两个重载的 `calc_nrm_albedo(...)`：一个不带 DEM 参数（4 参数版本），另一个带 DEM 局部入射/发射角（6 参数版本），均返回 `(albedo, mult, base)` 三元组。
+    - 绑定 `set_norm_wavelength(wavelength)` 方法用于设置归一化波长（MoonAlbedo 需要）。
+    - 实现描述性 `__repr__`，显示算法名称。
+  - NormModelFactory 绑定：
+    - 绑定两个静态 `create(...)` 重载：
+      - `create(pvl, photo_model)` 用于不需要大气模型的归一化模型。
+      - `create(pvl, photo_model, atmos_model)` 用于需要大气校正的归一化模型（如 AlbedoAtm）。
+    - 使用 `py::return_value_policy::take_ownership` 确保 Python 拥有工厂返回的 C++ 对象生命周期。
+  - AlbedoAtm 绑定：
+    - 绑定构造函数 `AlbedoAtm(Pvl&, PhotoModel&, AtmosModel&)`，使用 `py::keep_alive` 保持 PVL、PhotoModel 和 AtmosModel 引用在 AlbedoAtm 生命周期内有效。
+    - 作为 `NormModel` 子类绑定，自动继承所有父类方法（calc_nrm_albedo/algorithm_name/set_norm_wavelength）。
+    - 实现描述性 `__repr__`，显示 "AlbedoAtm" 算法名称。
+  - 在 `python/isis_pybind/__init__.py` 顶层重导出 `NormModel`、`NormModelFactory`、`PhotoModel`、`AtmosModel` 和 `AlbedoAtm`。
+  - 扩展单测 `tests/unitTest/atmos_model_factory_unit_test.py`：
+    - 新增 `NormModelFactoryUnitTest`：验证 NormModelFactory 符号存在、create 方法签名、AlbedoAtm 实例创建、以及 calc_nrm_albedo 两个重载（带/不带 DEM 参数）的计算正确性。
+    - 新增 `AlbedoAtmUnitTest`：验证 AlbedoAtm 类存在、构造函数签名、通过工厂创建、继承的 NormModel 方法、以及归一化计算与上游 C++ 单测匹配的行为（测试来自 `reference/upstream_isis/src/base/objs/AlbedoAtm/unitTest.cpp` 的真实几何和 DN 值）。
+    - 所有测试验证返回值类型、合理范围约束（albedo 在 0.0-1.0）以及不同 DN 值产生不同 albedo 结果。
+  - 已同步更新：
+    - `base_albedo_atm_methods.csv`（2 项全部标记为 Y）。
+    - `methods_inventory_summary.csv`（AlbedoAtm 状态更新为"已转换"，完成度 100%）。
+    - `todo_pybind11.csv`（AlbedoAtm 状态更新为"已转换"）。
+- Validation status: 待 CI 构建和测试验证
 - Mission camera ledger synchronization completed for currently missing upstream mission-model inventory entries:
   - Added new `todo_pybind11.csv` rows for LRO, Hayabusa, Hayabusa2, OSIRIS-REx, Dawn, and Kaguya camera-model classes plus tightly coupled helper/map classes under `reference/upstream_isis/src/*/objs/`.
   - Added new `class_bind_methods_details/*_methods.csv` detail ledgers for the following classes:

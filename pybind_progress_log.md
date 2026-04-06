@@ -27,6 +27,11 @@
     - `base_albedo_atm_methods.csv`（2 项全部标记为 Y）。
     - `methods_inventory_summary.csv`（AlbedoAtm 状态更新为"已转换"，完成度 100%）。
     - `todo_pybind11.csv`（AlbedoAtm 状态更新为"已转换"）。
+- AlbedoAtm / Anisotropic1 台账冲突复核完成：
+  - 复核 `src/base/bind_base_photometry.cpp` 与 `python/isis_pybind/__init__.py` 后，确认 `AlbedoAtm` 与 `NormModelFactory` 均已直接绑定并顶层导出。
+  - 纠正 `base_norm_model_factory_methods.csv`、`methods_inventory_summary.csv` 与 `todo_pybind11.csv` 中对 `NormModelFactory` 的陈旧“未转换”记录，统一更新为已转换且 100% 覆盖。
+  - 复核 `Anisotropic1` 后确认当前仓库仅在 `AtmosModelFactory.create(...)` 的 PVL 算法路径中间接使用该模型，尚未直接导出 `ip.Anisotropic1` 类符号。
+  - 为避免后续再次误判，已在 `base_anisotropic1_methods.csv`、`methods_inventory_summary.csv` 与 `todo_pybind11.csv` 中补充“工厂间接可用、但非直接类绑定”的说明。
 - Validation status: 待 CI 构建和测试验证
 - Mission camera ledger synchronization completed for currently missing upstream mission-model inventory entries:
   - Added new `todo_pybind11.csv` rows for LRO, Hayabusa, Hayabusa2, OSIRIS-REx, Dawn, and Kaguya camera-model classes plus tightly coupled helper/map classes under `reference/upstream_isis/src/*/objs/`.
@@ -42,6 +47,30 @@
 - Validation status:
   - Inventory synchronization only; no C++ binding code or Python tests changed in this step.
   - Consistency should be verified by checking that each new class appears in `todo_pybind11.csv`, has a matching detail CSV, and has a matching summary row.
+
+- Mission camera ledger synchronization follow-up completed for the remaining user-requested upstream mission-model inventory:
+  - Added new `todo_pybind11.csv` rows for Apollo, Cassini, Chandrayaan-1, Clementine, Clipper, Galileo, Juno, Lunar Orbiter, Mariner, Messenger helper map, New Horizons, Mars Odyssey, Rosetta, Viking, and Voyager camera-model classes plus tightly coupled helper/map classes under `reference/upstream_isis/src/*/objs/`.
+  - Added matching `class_bind_methods_details/*_methods.csv` detail ledgers for:
+    - Apollo: `ApolloMetricCamera`, `ApolloMetricDistortionMap`, `ApolloPanoramicCamera`, `ApolloPanoramicDetectorMap`
+    - Cassini: `IssNACamera`, `IssWACamera`, `VimsCamera`, `VimsGroundMap`, `VimsSkyMap`
+    - Chandrayaan-1: `Chandrayaan1M3Camera`, `Chandrayaan1M3DistortionMap`
+    - Clementine: `HiresCamera`, `LwirCamera`, `NirCamera`, `UvvisCamera`, `ClementineUvvisDistortionMap`
+    - Clipper: `ClipperNacRollingShutterCamera`, `ClipperPushBroomCamera`, `ClipperWacFcCamera`
+    - Galileo: `SsiCamera`
+    - Juno: `JunoCamera`, `JunoDistortionMap`
+    - Lunar Orbiter: `LoCameraFiducialMap`, `LoHighCamera`, `LoHighDistortionMap`, `LoMediumCamera`, `LoMediumDistortionMap`
+    - Mariner: `Mariner10Camera`
+    - Messenger: `TaylorCameraDistortionMap`
+    - New Horizons: `NewHorizonsLeisaCamera`, `NewHorizonsLorriCamera`, `NewHorizonsLorriDistortionMap`, `NewHorizonsMvicFrameCamera`, `NewHorizonsMvicFrameCameraDistortionMap`, `NewHorizonsMvicTdiCamera`, `NewHorizonsMvicTdiCameraDistortionMap`
+    - Mars Odyssey: `ThemisIrCamera`, `ThemisIrDistortionMap`, `ThemisVisCamera`, `ThemisVisDistortionMap`
+    - Rosetta: `RosettaOsirisCamera`, `RosettaOsirisCameraDistortionMap`, `RosettaVirtisCamera`
+    - Viking: `VikingCamera`
+    - Voyager: `VoyagerCamera`
+  - Synchronized `class_bind_methods_details/methods_inventory_summary.csv` with matching generated CSV names, module categories, repository-relative source paths, and initial `未转换` / `N` counts.
+  - Explicitly did not add duplicate rows for already tracked `mex` / `near` / `tgo` mission camera classes; `mer` currently has no matching camera-model headers under `reference/upstream_isis/src/mer/objs/`, so no pseudo inventory rows were created.
+- Validation status:
+  - Inventory synchronization only; no C++ binding code or Python tests changed in this step.
+  - Consistency should be verified by checking that each newly added mission class appears in `todo_pybind11.csv`, has a matching detail CSV, and has a matching summary row.
 
 ## 2026-04-05
 

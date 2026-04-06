@@ -553,3 +553,17 @@
   - Build environment not available in sandbox; requires CI validation with `asp360_new` interpreter.
 - Known blockers:
   - None. NthOrderPolynomial is a pure math class with no external dependencies.
+
+## 2026-04-06
+
+- Anisotropic1 binding progress:
+  - Added `Isis::Anisotropic1` binding in `src/base/bind_base_photometry.cpp` with constructor `(Pvl, PhotoModel)` and repr using the upstream algorithm name.
+  - Exported `AtmosModel`, `PhotoModel`, and `Anisotropic1` at the package level and added smoke symbol checks.
+- Test coverage:
+  - Added `tests/unitTest/anisotropic1_unit_test.py` mirroring upstream truth outputs for `CalcAtmEffect` under standard conditions and two non-standard geometries, plus factory instance verification.
+  - Updated `tests/smoke_import.py` to assert the new atmospheric symbols are present.
+- Tracking sync:
+  - Marked Anisotropic1 as converted in `todo_pybind11.csv`, `class_bind_methods_details/base_anisotropic1_methods.csv`, and `methods_inventory_summary.csv`.
+- Validation status:
+  - `python -m unittest discover -s tests/unitTest -p 'anisotropic1_unit_test.py'` fails with `ModuleNotFoundError: isis_pybind` because the extension is not built in this sandbox.
+  - `cmake -S . -B build -DCMAKE_BUILD_TYPE=Release` fails early: `pybind11` package config not found (and ISIS toolchain not configured), so extension build was not possible here.

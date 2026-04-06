@@ -2,6 +2,27 @@
 
 ## 2026-04-06
 
+- Hayabusa / Hayabusa2 mission camera 首轮绑定完成：
+  - 扩展 `src/mission/bind_mission_cameras.cpp`，为 `HayabusaAmicaCamera`、`HayabusaNirsCamera`、`Hyb2OncCamera` 暴露 `Cube&` 构造、`shutter_open_close_times(...)` 与 `ck_frame_id()` / `ck_reference_id()` / `spk_reference_id()`。
+  - 同文件新增 `NirsDetectorMap` 与 `Hyb2OncDistortionMap` mission helper 绑定，分别暴露 `set_exposure_duration()` / `exposure_duration(...)` 与 `set_focal_plane()` / `set_undistorted_focal_plane()`。
+  - 为 `HayabusaNirsCamera::PixelIfovOffsets()` 增加 Python 友好适配，导出为 `list[(x, y)]`，避免直接暴露 `QList<QPointF>` Qt 容器类型。
+  - 在 `python/isis_pybind/__init__.py` 顶层重导出 `NirsDetectorMap` 与 `Hyb2OncDistortionMap`。
+  - 新增 `tests/unitTest/hayabusa_camera_unit_test.py`：覆盖 5 个类的顶层可见性、相机方法表面检查，以及 `NirsDetectorMap` 的 focused 运行时行为。
+  - 更新 `tests/smoke_import.py`，补充 Hayabusa/Hayabusa2 新增类的顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/hayabusa_hayabusa_amica_camera_methods.csv`
+    - `class_bind_methods_details/hayabusa_hayabusa_nirs_camera_methods.csv`
+    - `class_bind_methods_details/hayabusa_nirs_detector_map_methods.csv`
+    - `class_bind_methods_details/hayabusa2_hyb2_onc_camera_methods.csv`
+    - `class_bind_methods_details/hayabusa2_hyb2_onc_distortion_map_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake -S . -B build -DISIS_PREFIX="$CONDA_PREFIX" && cmake --build build -j2` under `asp360_new`
+  - Passed: `python -m unittest discover -s tests/unitTest -p 'hayabusa_camera_unit_test.py' -v`
+  - Passed: `python tests/smoke_import.py`
+  - Note: 当前仓库尚缺稳定的 Hayabusa / Hayabusa2 本地 cube fixture，因此本轮以绑定表面与 helper 行为验证为主；真实 mission camera 几何回归测试后续补齐。
+
 - Mars Express mex 相机绑定补齐完成：
   - 扩展 `src/mission/bind_mission_cameras.cpp`，为 `HrscCamera` 暴露 `HrscCamera(Cube&)` 构造以及 `ck_frame_id()` / `ck_reference_id()` / `spk_reference_id()` 三个公开 SPICE/CK ID 方法。
   - 同文件为 `MexHrscSrcCamera` 暴露 `MexHrscSrcCamera(Cube&)` 构造、`shutter_open_close_times(time, exposure_duration)` 以及 `ck_frame_id()` / `ck_reference_id()` / `spk_reference_id()`。

@@ -2,7 +2,7 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 NirsDetectorMap,Hayabusa,isis/src/hayabusa/objs/HayabusaNirsCamera/NirsDetectorMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,NirsDetectorMap,isis_pybind.NirsDetectorMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,NirsDetectorMap(double exposureDuration, Camera *parent),isis_pybind.NirsDetectorMap(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,void setExposureDuration(double exposureDuration),isis_pybind.NirsDetectorMap.set_exposure_duration,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual double exposureDuration(const double sample, const double line, const int band) const,isis_pybind.NirsDetectorMap.exposure_duration,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,NirsDetectorMap,isis_pybind.NirsDetectorMap,Y,"2026-04-06 已在 bind_mission_cameras.cpp 绑定"
+Construction/Enum,NirsDetectorMap(double exposureDuration, Camera *parent),isis_pybind.NirsDetectorMap(),Y,"2026-04-06 已暴露构造器，支持 parent=None 的 focused 测试路径"
+Mutation/Configuration,void setExposureDuration(double exposureDuration),isis_pybind.NirsDetectorMap.set_exposure_duration,Y,"2026-04-06 已暴露"
+Public API,virtual double exposureDuration(const double sample, const double line, const int band) const,isis_pybind.NirsDetectorMap.exposure_duration,Y,"2026-04-06 已暴露"

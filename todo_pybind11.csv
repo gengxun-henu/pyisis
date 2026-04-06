@@ -214,7 +214,7 @@ Pattern Matching,PhotoModelFactory,已转换,2026-04-04 已在 bind_base_photome
 Pattern Matching,PolygonSeeder,未转换,抽象基类/纯虚接口
 Pattern Matching,PolygonSeederFactory,未转换,工厂类，静态创建接口较多
 Pattern Matching,StripPolygonSeeder,未转换,
-Radiometric And Photometric Correction,AlbedoAtm,未转换,
+Radiometric And Photometric Correction,AlbedoAtm,已转换,2026-04-06 已在 bind_base_photometry.cpp 暴露构造函数与继承的 NormModel 方法（calc_nrm_albedo/algorithm_name）
 Radiometric And Photometric Correction,Anisotropic1,未转换,
 Radiometric And Photometric Correction,Anisotropic2,未转换,
 Radiometric And Photometric Correction,AtmosModel,未转换,抽象基类/纯虚接口

@@ -87,9 +87,39 @@ void bind_mission_cameras(py::module_ &m) {
   py::class_<Isis::KaguyaTcCamera, Isis::LineScanCamera>(m, "KaguyaTcCamera");
   py::class_<Isis::LoHighCamera, Isis::FramingCamera>(m, "LoHighCamera");
   py::class_<Isis::LoMediumCamera, Isis::FramingCamera>(m, "LoMediumCamera");
-  py::class_<Isis::LroNarrowAngleCamera, Isis::LineScanCamera>(m, "LroNarrowAngleCamera");
-  py::class_<Isis::LroWideAngleCamera, Isis::PushFrameCamera>(m, "LroWideAngleCamera");
-  py::class_<Isis::MiniRF, Isis::RadarCamera>(m, "MiniRF");
+  py::class_<Isis::LroNarrowAngleCamera, Isis::LineScanCamera>(m, "LroNarrowAngleCamera")
+      .def("ck_frame_id", &Isis::LroNarrowAngleCamera::CkFrameId,
+           "CK frame ID - Instrument Code from spacit run on CK")
+      .def("ck_reference_id", &Isis::LroNarrowAngleCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::LroNarrowAngleCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::LroWideAngleCamera, Isis::PushFrameCamera>(m, "LroWideAngleCamera")
+      .def("set_band", &Isis::LroWideAngleCamera::SetBand,
+           py::arg("band"),
+           "Set the band for camera model calculations.\n\n"
+           "Each band may have different focal length, boresight, and distortion parameters.\n\n"
+           "Args:\n"
+           "    band: Band number (1-based)")
+      .def("is_band_independent", &Isis::LroWideAngleCamera::IsBandIndependent,
+           "Check if camera parameters are band-independent.\n\n"
+           "Returns:\n"
+           "    True if parameters vary by band, False otherwise")
+      .def("ck_frame_id", &Isis::LroWideAngleCamera::CkFrameId,
+           "CK frame ID - Instrument Code from spacit run on CK")
+      .def("ck_reference_id", &Isis::LroWideAngleCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::LroWideAngleCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::MiniRF, Isis::RadarCamera>(m, "MiniRF")
+      .def("ck_frame_id", &Isis::MiniRF::CkFrameId,
+           "CK frame ID - throws exception as CK cannot be generated for MiniRF")
+      .def("ck_reference_id", &Isis::MiniRF::CkReferenceId,
+           "CK Reference ID - throws exception as CK cannot be generated for MiniRF")
+      .def("spk_target_id", &Isis::MiniRF::SpkTargetId,
+           "SPK Target Body ID - Lunar Reconnaissance Orbiter spacecraft")
+      .def("spk_reference_id", &Isis::MiniRF::SpkReferenceId,
+           "SPK Reference ID - J2000");
   py::class_<Isis::Mariner10Camera, Isis::FramingCamera>(m, "Mariner10Camera");
   py::class_<Isis::MdisCamera, Isis::FramingCamera>(m, "MdisCamera");
   py::class_<Isis::HrscCamera, Isis::LineScanCamera>(m, "HrscCamera");

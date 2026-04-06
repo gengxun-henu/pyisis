@@ -2,6 +2,18 @@
 
 ## 2026-04-06
 
+- TGO (Trace Gas Orbiter) CaSSIS 任务相机绑定完成：
+  - 扩展 `src/mission/bind_mission_cameras.cpp`，为 `TgoCassisCamera` 暴露 `TgoCassisCamera(Cube&)` 构造、`shutter_open_close_times(time, exposure_duration)`、`ck_frame_id()`、`ck_reference_id()`、`spk_target_id()` 和 `spk_reference_id()` 共 6 个公开方法。
+  - 同文件新增 `TgoCassisDistortionMap` 绑定（继承 `CameraDistortionMap`），暴露 `TgoCassisDistortionMap(Camera*, int)` 构造、`set_focal_plane(dx, dy)`、`set_undistorted_focal_plane(ux, uy)` 和 `__repr__`。
+  - 在 `python/isis_pybind/__init__.py` 顶层重导出 `TgoCassisDistortionMap`。
+  - 新增 `tests/unitTest/tgo_camera_unit_test.py`：覆盖 2 个类的顶层可见性、继承关系、方法表面检查及继承基类方法验证。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/tgo_tgo_cassis_camera_methods.csv` (1/7 → 7/7 = 100%)
+    - `class_bind_methods_details/tgo_tgo_cassis_distortion_map_methods.csv` (0/4 → 4/4 = 100%)
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Note: GUI 相关类已按要求跳过，不做绑定。
+
 - Hayabusa / Hayabusa2 mission camera 首轮绑定完成：
   - 扩展 `src/mission/bind_mission_cameras.cpp`，为 `HayabusaAmicaCamera`、`HayabusaNirsCamera`、`Hyb2OncCamera` 暴露 `Cube&` 构造、`shutter_open_close_times(...)` 与 `ck_frame_id()` / `ck_reference_id()` / `spk_reference_id()`。
   - 同文件新增 `NirsDetectorMap` 与 `Hyb2OncDistortionMap` mission helper 绑定，分别暴露 `set_exposure_duration()` / `exposure_duration(...)` 与 `set_focal_plane()` / `set_undistorted_focal_plane()`。

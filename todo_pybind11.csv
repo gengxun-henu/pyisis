@@ -297,7 +297,7 @@ Statistics,Statistics,已转换,Qt 类型/信号槽较多
 Statistics,VecFilter,已转换,
 System,Plugin,未转换,
 Trace Gas Orbiter,TgoCassisCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Trace Gas Orbiter,TgoCassisDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Trace Gas Orbiter,TgoCassisDistortionMap,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Dawn,DawnFcCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Dawn,DawnFcDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Dawn,DawnVirCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"

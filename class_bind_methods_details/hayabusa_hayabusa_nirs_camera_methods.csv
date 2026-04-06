@@ -1,0 +1,11 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+HayabusaNirsCamera,Hayabusa,isis/src/hayabusa/objs/HayabusaNirsCamera/HayabusaNirsCamera.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,HayabusaNirsCamera,isis_pybind.HayabusaNirsCamera,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Construction/Enum,HayabusaNirsCamera(Cube &cube),isis_pybind.HayabusaNirsCamera(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int CkFrameId() const { return (-130000); },isis_pybind.HayabusaNirsCamera.ck_frame_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int CkReferenceId() const { return (1); },isis_pybind.HayabusaNirsCamera.ck_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int SpkReferenceId() const { return (1); },isis_pybind.HayabusaNirsCamera.spk_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual std::pair<iTime, iTime> ShutterOpenCloseTimes(double time, double exposureDuration),isis_pybind.HayabusaNirsCamera.shutter_open_close_times,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual QList<QPointF> PixelIfovOffsets(),isis_pybind.HayabusaNirsCamera.pixel_ifov_offsets,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"

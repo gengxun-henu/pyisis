@@ -1,0 +1,8 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+DawnFcDistortionMap,Dawn,isis/src/dawn/objs/DawnFcCamera/DawnFcDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,DawnFcDistortionMap,isis_pybind.DawnFcDistortionMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Construction/Enum,DawnFcDistortionMap(Camera *parent, double k1, double zDirection = 1.0),isis_pybind.DawnFcDistortionMap(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mutation/Configuration,bool SetFocalPlane(const double ux, const double uy),isis_pybind.DawnFcDistortionMap.set_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mutation/Configuration,bool SetUndistortedFocalPlane(const double dx, const double dy),isis_pybind.DawnFcDistortionMap.set_undistorted_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"

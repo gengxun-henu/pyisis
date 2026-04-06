@@ -1,5 +1,22 @@
 # Pybind Progress Log
 
+## 2026-04-06
+
+- Mission camera ledger synchronization completed for currently missing upstream mission-model inventory entries:
+  - Added new `todo_pybind11.csv` rows for LRO, Hayabusa, Hayabusa2, OSIRIS-REx, Dawn, and Kaguya camera-model classes plus tightly coupled helper/map classes under `reference/upstream_isis/src/*/objs/`.
+  - Added new `class_bind_methods_details/*_methods.csv` detail ledgers for the following classes:
+    - LRO: `LroNarrowAngleCamera`, `LroNarrowAngleDistortionMap`, `LroWideAngleCamera`, `LroWideAngleCameraDistortionMap`, `LroWideAngleCameraFocalPlaneMap`, `MiniRF`
+    - Hayabusa: `HayabusaAmicaCamera`, `HayabusaNirsCamera`, `NirsDetectorMap`
+    - Hayabusa2: `Hyb2OncCamera`, `Hyb2OncDistortionMap`
+    - OSIRIS-REx: `OsirisRexOcamsCamera`, `OsirisRexDistortionMap`, `OsirisRexTagcamsCamera`, `OsirisRexTagcamsDistortionMap`
+    - Dawn: `DawnFcCamera`, `DawnFcDistortionMap`, `DawnVirCamera`
+    - Kaguya: `KaguyaMiCamera`, `KaguyaMiCameraDistortionMap`, `KaguyaTcCamera`, `KaguyaTcCameraDistortionMap`
+  - Synchronized `class_bind_methods_details/methods_inventory_summary.csv` with matching generated CSV names, module categories, source paths, and initial `未转换` / `N` counts.
+  - Scope intentionally excludes app code and non-camera processing utilities; this is an inventory expansion only, not a binding implementation pass.
+- Validation status:
+  - Inventory synchronization only; no C++ binding code or Python tests changed in this step.
+  - Consistency should be verified by checking that each new class appears in `todo_pybind11.csv`, has a matching detail CSV, and has a matching summary row.
+
 ## 2026-04-05
 
 - MocLabels、MocWideAngleDetectorMap 和 MocWideAngleDistortionMap 绑定完成：

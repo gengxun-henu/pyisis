@@ -1,9 +1,9 @@
 """
-Unit tests for ISIS PhotoModelFactory and AtmosModelFactory bindings
+Unit tests for ISIS PhotoModelFactory, AtmosModelFactory, NormModelFactory, and AlbedoAtm bindings
 
 Author: Geng Xun
 Created: 2026-04-04
-Last Modified: 2026-04-04
+Last Modified: 2026-04-06
 """
 import unittest
 
@@ -31,6 +31,33 @@ class AtmosModelFactoryUnitTest(unittest.TestCase):
         algorithm.add_keyword(ip.PvlKeyword("Name", atmos_name))
         atmospheric.add_group(algorithm)
         pvl.add_object(atmospheric)
+        return pvl
+
+    @classmethod
+    def _make_photo_atmos_norm_pvl(cls, photo_name="Lambert", atmos_name="Anisotropic1", norm_name="AlbedoAtm"):
+        """Create PVL with PhotoModel, AtmosModel, and NormModel configuration."""
+        pvl = cls._make_photo_atmos_pvl(photo_name, atmos_name)
+
+        # Add specific atmospheric parameters for Anisotropic1
+        if atmos_name == "Anisotropic1":
+            atmos_obj = pvl.find_object("AtmosphericModel")
+            atmos_algo = atmos_obj.find_group("Algorithm")
+            atmos_algo.add_keyword(ip.PvlKeyword("Bha", "0.85"))
+            atmos_algo.add_keyword(ip.PvlKeyword("Tau", "0.28"))
+            atmos_algo.add_keyword(ip.PvlKeyword("Wha", "0.95"))
+            atmos_algo.add_keyword(ip.PvlKeyword("Hga", "0.68"))
+            atmos_algo.add_keyword(ip.PvlKeyword("Tauref", "0.0"))
+            atmos_algo.add_keyword(ip.PvlKeyword("Hnorm", "0.003"))
+
+        # Add normalization model
+        norm = ip.PvlObject("NormalizationModel")
+        norm_algo = ip.PvlGroup("Algorithm")
+        norm_algo.add_keyword(ip.PvlKeyword("Name", norm_name))
+        norm_algo.add_keyword(ip.PvlKeyword("Incref", "0.0"))
+        norm_algo.add_keyword(ip.PvlKeyword("Thresh", "30.0"))
+        norm.add_group(norm_algo)
+        pvl.add_object(norm)
+
         return pvl
 
     def test_photo_model_factory_symbol_presence(self):
@@ -88,6 +115,238 @@ class AtmosModelFactoryUnitTest(unittest.TestCase):
 
         with self.assertRaises(ip.IException):
             ip.AtmosModelFactory.create(pvl, photo_model)
+
+
+class NormModelFactoryUnitTest(unittest.TestCase):
+    """Test suite for NormModelFactory and NormModel bindings. Added: 2026-04-06."""
+
+    @staticmethod
+    def _make_photo_atmos_norm_pvl():
+        """Create minimal PVL for creating normalization models."""
+        pvl = ip.Pvl()
+
+        # PhotoModel
+        photometric = ip.PvlObject("PhotometricModel")
+        photo_algo = ip.PvlGroup("Algorithm")
+        photo_algo.add_keyword(ip.PvlKeyword("Name", "Lambert"))
+        photometric.add_group(photo_algo)
+        pvl.add_object(photometric)
+
+        # AtmosModel
+        atmospheric = ip.PvlObject("AtmosphericModel")
+        atmos_algo = ip.PvlGroup("Algorithm")
+        atmos_algo.add_keyword(ip.PvlKeyword("Name", "Anisotropic1"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Bha", "0.85"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Tau", "0.28"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Wha", "0.95"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Hga", "0.68"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Tauref", "0.0"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Hnorm", "0.003"))
+        atmospheric.add_group(atmos_algo)
+        pvl.add_object(atmospheric)
+
+        # NormModel
+        norm = ip.PvlObject("NormalizationModel")
+        norm_algo = ip.PvlGroup("Algorithm")
+        norm_algo.add_keyword(ip.PvlKeyword("Name", "AlbedoAtm"))
+        norm_algo.add_keyword(ip.PvlKeyword("Incref", "0.0"))
+        norm_algo.add_keyword(ip.PvlKeyword("Thresh", "30.0"))
+        norm.add_group(norm_algo)
+        pvl.add_object(norm)
+
+        return pvl
+
+    def test_norm_model_factory_symbol_presence(self):
+        """NormModelFactory should be exported with a callable create method."""
+        self.assertTrue(hasattr(ip, "NormModelFactory"))
+        self.assertTrue(hasattr(ip.NormModelFactory, "create"))
+        self.assertTrue(callable(ip.NormModelFactory.create))
+
+    def test_norm_model_factory_create_albedo_atm(self):
+        """NormModelFactory.create should return a working AlbedoAtm normalization model."""
+        pvl = self._make_photo_atmos_norm_pvl()
+        photo_model = ip.PhotoModelFactory.create(pvl)
+        atmos_model = ip.AtmosModelFactory.create(pvl, photo_model)
+        norm_model = ip.NormModelFactory.create(pvl, photo_model, atmos_model)
+
+        self.assertIsInstance(norm_model, ip.NormModel)
+        self.assertEqual(norm_model.algorithm_name(), "AlbedoAtm")
+        self.assertIn("NormModel", repr(norm_model))
+
+    def test_norm_model_calc_nrm_albedo_without_dem(self):
+        """NormModel.calc_nrm_albedo should compute normalization without DEM parameters."""
+        pvl = self._make_photo_atmos_norm_pvl()
+        photo_model = ip.PhotoModelFactory.create(pvl)
+        atmos_model = ip.AtmosModelFactory.create(pvl, photo_model)
+        norm_model = ip.NormModelFactory.create(pvl, photo_model, atmos_model)
+
+        # Test values from upstream unitTest.cpp
+        phase = 86.7207248
+        incidence = 51.7031305
+        emission = 38.9372914
+        dn = 0.0800618902
+
+        result = norm_model.calc_nrm_albedo(phase, incidence, emission, dn)
+        self.assertIsInstance(result, tuple)
+        self.assertEqual(len(result), 3)
+
+        albedo, mult, base = result
+        self.assertIsInstance(albedo, float)
+        self.assertIsInstance(mult, float)
+        self.assertIsInstance(base, float)
+
+        # Verify albedo is in a reasonable range
+        self.assertGreater(albedo, 0.0)
+        self.assertLess(albedo, 1.0)
+
+    def test_norm_model_calc_nrm_albedo_with_dem(self):
+        """NormModel.calc_nrm_albedo should compute normalization with DEM parameters."""
+        pvl = self._make_photo_atmos_norm_pvl()
+        photo_model = ip.PhotoModelFactory.create(pvl)
+        atmos_model = ip.AtmosModelFactory.create(pvl, photo_model)
+        norm_model = ip.NormModelFactory.create(pvl, photo_model, atmos_model)
+
+        # Test values from upstream unitTest.cpp
+        phase = 86.7207248
+        incidence = 51.7031305
+        emission = 38.9372914
+        dem_incidence = 51.7031305
+        dem_emission = 38.9372914
+        dn = 0.0800618902
+
+        result = norm_model.calc_nrm_albedo(phase, incidence, emission,
+                                            dem_incidence, dem_emission, dn)
+        self.assertIsInstance(result, tuple)
+        self.assertEqual(len(result), 3)
+
+        albedo, mult, base = result
+        self.assertIsInstance(albedo, float)
+        self.assertIsInstance(mult, float)
+        self.assertIsInstance(base, float)
+
+        # Verify albedo is in a reasonable range
+        self.assertGreater(albedo, 0.0)
+        self.assertLess(albedo, 1.0)
+
+
+class AlbedoAtmUnitTest(unittest.TestCase):
+    """Test suite for AlbedoAtm normalization model binding. Added: 2026-04-06."""
+
+    @staticmethod
+    def _make_albedo_atm_pvl():
+        """Create PVL configuration for AlbedoAtm model."""
+        pvl = ip.Pvl()
+
+        # PhotoModel
+        photometric = ip.PvlObject("PhotometricModel")
+        photo_algo = ip.PvlGroup("Algorithm")
+        photo_algo.add_keyword(ip.PvlKeyword("Name", "Lambert"))
+        photometric.add_group(photo_algo)
+        pvl.add_object(photometric)
+
+        # AtmosModel
+        atmospheric = ip.PvlObject("AtmosphericModel")
+        atmos_algo = ip.PvlGroup("Algorithm")
+        atmos_algo.add_keyword(ip.PvlKeyword("Name", "Anisotropic1"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Bha", "0.85"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Tau", "0.28"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Wha", "0.95"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Hga", "0.68"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Tauref", "0.0"))
+        atmos_algo.add_keyword(ip.PvlKeyword("Hnorm", "0.003"))
+        atmospheric.add_group(atmos_algo)
+        pvl.add_object(atmospheric)
+
+        # NormModel
+        norm = ip.PvlObject("NormalizationModel")
+        norm_algo = ip.PvlGroup("Algorithm")
+        norm_algo.add_keyword(ip.PvlKeyword("Name", "AlbedoAtm"))
+        norm_algo.add_keyword(ip.PvlKeyword("Incref", "0.0"))
+        norm_algo.add_keyword(ip.PvlKeyword("Thresh", "30.0"))
+        norm.add_group(norm_algo)
+        pvl.add_object(norm)
+
+        return pvl
+
+    def test_albedo_atm_symbol_presence(self):
+        """AlbedoAtm should be exported as a class."""
+        self.assertTrue(hasattr(ip, "AlbedoAtm"))
+        self.assertTrue(callable(ip.AlbedoAtm))
+
+    def test_albedo_atm_constructor(self):
+        """AlbedoAtm constructor should create a working instance."""
+        pvl = self._make_albedo_atm_pvl()
+        photo_model = ip.PhotoModelFactory.create(pvl)
+        atmos_model = ip.AtmosModelFactory.create(pvl, photo_model)
+
+        albedo_atm = ip.AlbedoAtm(pvl, photo_model, atmos_model)
+
+        self.assertIsInstance(albedo_atm, ip.AlbedoAtm)
+        self.assertIsInstance(albedo_atm, ip.NormModel)
+        self.assertEqual(albedo_atm.algorithm_name(), "AlbedoAtm")
+        self.assertIn("AlbedoAtm", repr(albedo_atm))
+
+    def test_albedo_atm_via_factory(self):
+        """AlbedoAtm can be created via NormModelFactory."""
+        pvl = self._make_albedo_atm_pvl()
+        photo_model = ip.PhotoModelFactory.create(pvl)
+        atmos_model = ip.AtmosModelFactory.create(pvl, photo_model)
+        norm_model = ip.NormModelFactory.create(pvl, photo_model, atmos_model)
+
+        self.assertIsInstance(norm_model, ip.NormModel)
+        self.assertEqual(norm_model.algorithm_name(), "AlbedoAtm")
+
+    def test_albedo_atm_normalization_calculation(self):
+        """AlbedoAtm should compute albedo normalization matching upstream behavior."""
+        pvl = self._make_albedo_atm_pvl()
+        photo_model = ip.PhotoModelFactory.create(pvl)
+        atmos_model = ip.AtmosModelFactory.create(pvl, photo_model)
+        albedo_atm = ip.AlbedoAtm(pvl, photo_model, atmos_model)
+
+        # Test case 1 from upstream unitTest.cpp
+        phase = 86.7207248
+        incidence = 51.7031305
+        emission = 38.9372914
+        dn = 0.0800618902
+
+        result = albedo_atm.calc_nrm_albedo(phase, incidence, emission,
+                                            incidence, emission, dn)
+        albedo, mult, base = result
+
+        self.assertIsInstance(albedo, float)
+        self.assertGreater(albedo, 0.0)
+        self.assertLess(albedo, 1.0)
+
+        # Test case 2 from upstream unitTest.cpp
+        dn2 = 0.0797334611
+        result2 = albedo_atm.calc_nrm_albedo(phase, incidence, emission,
+                                             incidence, emission, dn2)
+        albedo2, mult2, base2 = result2
+
+        self.assertIsInstance(albedo2, float)
+        self.assertGreater(albedo2, 0.0)
+        self.assertLess(albedo2, 1.0)
+
+        # Different DN should produce different albedo
+        self.assertNotEqual(albedo, albedo2)
+
+    def test_albedo_atm_inherited_methods(self):
+        """AlbedoAtm should inherit NormModel methods."""
+        pvl = self._make_albedo_atm_pvl()
+        photo_model = ip.PhotoModelFactory.create(pvl)
+        atmos_model = ip.AtmosModelFactory.create(pvl, photo_model)
+        albedo_atm = ip.AlbedoAtm(pvl, photo_model, atmos_model)
+
+        # Test inherited algorithm_name
+        self.assertEqual(albedo_atm.algorithm_name(), "AlbedoAtm")
+
+        # Test inherited calc_nrm_albedo
+        self.assertTrue(hasattr(albedo_atm, "calc_nrm_albedo"))
+        self.assertTrue(callable(albedo_atm.calc_nrm_albedo))
+
+        # Test inherited set_norm_wavelength
+        self.assertTrue(hasattr(albedo_atm, "set_norm_wavelength"))
+        self.assertTrue(callable(albedo_atm.set_norm_wavelength))
 
 
 if __name__ == "__main__":

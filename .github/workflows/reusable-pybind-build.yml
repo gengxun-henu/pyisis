@@ -45,6 +45,11 @@ on:
         required: false
         default: true
         type: boolean
+      ccache_max_size:
+        description: Maximum size for the self-hosted ccache directory, for example 5G or 10G.
+        required: false
+        default: 10G
+        type: string
       upload_build_artifact:
         description: Whether the github-hosted workflow should upload the configured build tree for downstream jobs.
         required: false
@@ -95,6 +100,7 @@ jobs:
       pybind_dir: ${{ inputs.pybind_dir }}
       build_dir: ${{ inputs.build_dir }}
       run_smoke_import: ${{ inputs.run_smoke_import }}
+      ccache_max_size: ${{ inputs.ccache_max_size }}
       upload_build_artifact: ${{ inputs.upload_build_artifact }}
       hosted_environment_file: ${{ inputs.hosted_environment_file }}
       hosted_environment_name: ${{ inputs.hosted_environment_name }}

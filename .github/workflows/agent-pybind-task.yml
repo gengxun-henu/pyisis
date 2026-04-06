@@ -52,6 +52,11 @@ on:
         required: false
         default: auto
         type: string
+      ccache_max_size:
+        description: "Maximum size for the self-hosted ccache directory, for example 5G or 10G"
+        required: false
+        default: "10G"
+        type: string
 
 concurrency:
   group: agent-pybind-task-${{ github.ref }}-${{ inputs.target_class }}-${{ inputs.issue_number || 'manual' }}
@@ -527,6 +532,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          ccache_max_size="${{ inputs.ccache_max_size }}"
           ccache_bin=""
           if command -v ccache >/dev/null 2>&1; then
             ccache_bin="$(command -v ccache)"
@@ -540,22 +546,24 @@ jobs:
             mkdir -p "$ccache_dir"
             {
               echo "CCACHE_DIR=$ccache_dir"
-              echo "CCACHE_MAXSIZE=10G"
+              echo "CCACHE_MAXSIZE=$ccache_max_size"
               echo "CCACHE_COMPRESS=true"
               echo "CCACHE_COMPILERCHECK=content"
               echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE"
               echo "CCACHE_BIN=$ccache_bin"
             } >> "$GITHUB_ENV"
-            "$ccache_bin" --set-config=max_size=10G >/dev/null 2>&1 || true
+            "$ccache_bin" --set-config=max_size="$ccache_max_size" >/dev/null 2>&1 || true
             "$ccache_bin" --set-config=compression=true >/dev/null 2>&1 || true
             "$ccache_bin" --zero-stats >/dev/null 2>&1 || true
             echo "ccache_available=true" >> "$GITHUB_OUTPUT"
             echo "ccache_bin=$ccache_bin" >> "$GITHUB_OUTPUT"
             echo "ccache_dir=$ccache_dir" >> "$GITHUB_OUTPUT"
+            echo "ccache_max_size=$ccache_max_size" >> "$GITHUB_OUTPUT"
           else
             echo "ccache_available=false" >> "$GITHUB_OUTPUT"
             echo "ccache_bin=" >> "$GITHUB_OUTPUT"
             echo "ccache_dir=" >> "$GITHUB_OUTPUT"
+            echo "ccache_max_size=$ccache_max_size" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Compute self-hosted persistent cache paths

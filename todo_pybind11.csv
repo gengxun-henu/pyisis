@@ -215,7 +215,7 @@ Pattern Matching,PolygonSeeder,未转换,抽象基类/纯虚接口
 Pattern Matching,PolygonSeederFactory,未转换,工厂类，静态创建接口较多
 Pattern Matching,StripPolygonSeeder,未转换,
 Radiometric And Photometric Correction,AlbedoAtm,未转换,
-Radiometric And Photometric Correction,Anisotropic1,未转换,
+Radiometric And Photometric Correction,Anisotropic1,已转换,2026-04-06 已在 bind_base_photometry.cpp 绑定构造函数并补计算结果单测/烟雾符号
 Radiometric And Photometric Correction,Anisotropic2,未转换,
 Radiometric And Photometric Correction,AtmosModel,未转换,抽象基类/纯虚接口
 Radiometric And Photometric Correction,Hapke,未转换,

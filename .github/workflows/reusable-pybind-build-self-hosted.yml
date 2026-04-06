@@ -45,6 +45,26 @@ on:
         required: false
         default: true
         type: boolean
+      clean_build:
+        description: Whether to ignore any persistent self-hosted build cache and force a clean build directory.
+        required: false
+        default: false
+        type: boolean
+      reuse_build_cache:
+        description: Whether to restore and persist a cross-run local build cache on the same self-hosted machine.
+        required: false
+        default: true
+        type: boolean
+      build_jobs:
+        description: Build parallelism for self-hosted builds. Use auto to select nproc.
+        required: false
+        default: auto
+        type: string
+      cache_retention_days:
+        description: Number of days to keep stale self-hosted persistent build caches before cleanup.
+        required: false
+        default: "7"
+        type: string
       upload_build_artifact:
         description: Compatibility input retained for the shared wrapper; ignored on self-hosted runs.
         required: false
@@ -100,13 +120,23 @@ jobs:
       PYTHONUNBUFFERED: "1"
       FALLBACK_CONDA_PREFIX: ${{ inputs.fallback_conda_prefix }}
       GH_TOKEN: ${{ github.token }}
-      SELF_HOSTED_CACHE_ROOT: $HOME/.cache/pyisis-gha
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ github.token }}
           fetch-depth: 1
+
+      - name: Define self-hosted cache roots
+        shell: bash
+        run: |
+          set -euo pipefail
+          cache_root="${HOME}/.cache/pyisis-gha"
+          {
+            echo "SELF_HOSTED_CACHE_ROOT=$cache_root"
+            echo "SELF_HOSTED_BUILD_CACHE_ROOT=$cache_root/builds"
+            echo "SELF_HOSTED_CCACHE_ROOT=$cache_root/ccache"
+          } >> "$GITHUB_ENV"
 
       - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
@@ -122,27 +152,46 @@ jobs:
         run: |
           set -euo pipefail
           cache_root="$SELF_HOSTED_CACHE_ROOT"
-          mkdir -p "$cache_root"
+          build_cache_root="$SELF_HOSTED_BUILD_CACHE_ROOT"
+          retention_days="${{ inputs.cache_retention_days }}"
+          mkdir -p "$cache_root" "$build_cache_root" "$SELF_HOSTED_CCACHE_ROOT"
 
-          stale_entries="$(find "$cache_root" -mindepth 1 -maxdepth 1 -type d -mtime +7 -print || true)"
-          if [ -n "$stale_entries" ]; then
+          stale_persistent_metadata="$(find "$build_cache_root" -type f -name '.cache-metadata' -mtime +"$retention_days" -print || true)"
+          if [ -n "$stale_persistent_metadata" ]; then
+            while IFS= read -r metadata_file; do
+              [ -n "$metadata_file" ] || continue
+              rm -rf "$(dirname "$metadata_file")"
+            done <<< "$stale_persistent_metadata"
+          fi
+
+          legacy_run_scoped_entries="$(find "$cache_root" -mindepth 1 -maxdepth 1 -type d -regextype posix-extended -regex '.*/[0-9]+' -mtime +"$retention_days" -print || true)"
+          if [ -n "$legacy_run_scoped_entries" ]; then
             while IFS= read -r stale_dir; do
               [ -n "$stale_dir" ] || continue
               rm -rf "$stale_dir"
-            done <<< "$stale_entries"
+            done <<< "$legacy_run_scoped_entries"
           fi
 
           {
             echo "## Self-hosted cache cleanup"
             echo ""
             echo "- cache root: \`$cache_root\`"
-            if [ -n "$stale_entries" ]; then
-              echo "- removed stale cache directories older than 7 days:"
+            echo "- persistent build cache root: \`$build_cache_root\`"
+            echo "- ccache root: \`$SELF_HOSTED_CCACHE_ROOT\`"
+            echo "- retention window: \`${retention_days}\` days"
+            if [ -n "$stale_persistent_metadata" ]; then
+              echo "- removed persistent cache entries older than ${retention_days} days:"
               echo '```text'
-              printf '%s\n' "$stale_entries"
+              printf '%s\n' "$stale_persistent_metadata"
               echo '```'
             else
-              echo "- no stale cache directories older than 7 days were found."
+              echo "- no stale persistent cache entries older than ${retention_days} days were found."
+            fi
+            if [ -n "$legacy_run_scoped_entries" ]; then
+              echo "- removed legacy run-scoped cache directories older than ${retention_days} days:"
+              echo '```text'
+              printf '%s\n' "$legacy_run_scoped_entries"
+              echo '```'
             fi
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
@@ -156,21 +205,54 @@ jobs:
           echo "build_log_artifact_name=" >> "$GITHUB_OUTPUT"
           echo "smoke_log_artifact_name=" >> "$GITHUB_OUTPUT"
 
-      - name: Compute self-hosted local cache path
-        id: cache-paths
+      - name: Configure self-hosted ccache
+        id: ccache
         shell: bash
         run: |
           set -euo pipefail
-          cache_dir="$SELF_HOSTED_CACHE_ROOT/${GITHUB_RUN_ID}/${{ inputs.artifact_prefix }}-build"
-          machine_name="$(hostname -f 2>/dev/null || hostname)"
-          echo "local_build_cache_dir=$cache_dir" >> "$GITHUB_OUTPUT"
+          ccache_bin=""
+          if command -v ccache >/dev/null 2>&1; then
+            ccache_bin="$(command -v ccache)"
+          elif [ -n "${FALLBACK_CONDA_PREFIX:-}" ] && [ -x "$FALLBACK_CONDA_PREFIX/bin/ccache" ]; then
+            ccache_bin="$FALLBACK_CONDA_PREFIX/bin/ccache"
+          elif [ -n "${CONDA_PREFIX:-}" ] && [ -x "$CONDA_PREFIX/bin/ccache" ]; then
+            ccache_bin="$CONDA_PREFIX/bin/ccache"
+          fi
+
+          if [ -n "$ccache_bin" ]; then
+            repo_slug="${GITHUB_REPOSITORY//\//-}"
+            ccache_dir="$SELF_HOSTED_CCACHE_ROOT/$repo_slug"
+            mkdir -p "$ccache_dir"
+            {
+              echo "CCACHE_DIR=$ccache_dir"
+              echo "CCACHE_MAXSIZE=10G"
+              echo "CCACHE_COMPRESS=true"
+              echo "CCACHE_COMPILERCHECK=content"
+              echo "CCACHE_BASEDIR=$GITHUB_WORKSPACE"
+              echo "CCACHE_BIN=$ccache_bin"
+            } >> "$GITHUB_ENV"
+            "$ccache_bin" --set-config=max_size=10G >/dev/null 2>&1 || true
+            "$ccache_bin" --set-config=compression=true >/dev/null 2>&1 || true
+            "$ccache_bin" --zero-stats >/dev/null 2>&1 || true
+            echo "ccache_available=true" >> "$GITHUB_OUTPUT"
+            echo "ccache_bin=$ccache_bin" >> "$GITHUB_OUTPUT"
+            echo "ccache_dir=$ccache_dir" >> "$GITHUB_OUTPUT"
+          else
+            echo "ccache_available=false" >> "$GITHUB_OUTPUT"
+            echo "ccache_bin=" >> "$GITHUB_OUTPUT"
+            echo "ccache_dir=" >> "$GITHUB_OUTPUT"
+          fi
+
           {
-            echo "## Self-hosted build cache"
+            echo "## Self-hosted ccache"
             echo ""
-            echo "- local build cache dir: \`$cache_dir\`"
-            echo "- runner name: \`${RUNNER_NAME:-unknown}\`"
-            echo "- machine name: \`$machine_name\`"
-            echo "- artifact uploads are intentionally skipped on self-hosted runs to avoid extra GitHub artifact dependencies."
+            if [ -n "$ccache_bin" ]; then
+              echo "- ccache binary: \`$ccache_bin\`"
+              echo "- ccache dir: \`${ccache_dir}\`"
+              echo "- max size: \`10G\`"
+            else
+              echo "- ccache is not available on this runner; continuing without compiler cache."
+            fi
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"
 
@@ -203,30 +285,196 @@ jobs:
           print('pybind11', pybind11.__version__)
           PY
 
-      - name: Clean build directory
+      - name: Compute self-hosted persistent cache paths
+        id: cache-paths
         shell: bash
+        env:
+          CCACHE_DIR_RESOLVED: ${{ steps.ccache.outputs.ccache_dir }}
         run: |
           set -euo pipefail
-          rm -rf "$BUILD_DIR"
+          python_bin="${PYTHON_BIN:-python3}"
+          machine_name="$(hostname -f 2>/dev/null || hostname)"
+          runner_name="${RUNNER_NAME:-unknown}"
+          runner_slug="$(printf '%s' "$runner_name" | tr -cs 'A-Za-z0-9._-' '-' | sed 's/^-*//; s/-*$//')"
+          ref_name="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME:-detached}}"
+          ref_slug="$(printf '%s' "$ref_name" | tr -cs 'A-Za-z0-9._-' '-' | tr '[:upper:]' '[:lower:]' | sed 's/^-*//; s/-*$//' | cut -c1-80)"
+          if [ -z "$ref_slug" ]; then
+            ref_slug="detached"
+          fi
+          compiler_bin="${CXX:-}"
+          if [ -z "$compiler_bin" ] && [ -n "${CONDA_PREFIX:-}" ] && [ -x "${CONDA_PREFIX}/bin/x86_64-conda-linux-gnu-c++" ]; then
+            compiler_bin="${CONDA_PREFIX}/bin/x86_64-conda-linux-gnu-c++"
+          elif [ -z "$compiler_bin" ] && command -v c++ >/dev/null 2>&1; then
+            compiler_bin="$(command -v c++)"
+          fi
+          if [ -n "$compiler_bin" ]; then
+            compiler_version="$("$compiler_bin" --version 2>/dev/null | head -n1 || true)"
+          else
+            compiler_version="unresolved"
+          fi
+          python_version="$("$python_bin" -c 'import sys; print(sys.version.split()[0])')"
+          cmake_version="$(cmake --version | head -n1 | sed 's/^cmake version //')"
+          cmake_lists_sha="$(sha256sum CMakeLists.txt | awk '{print $1}')"
+          config_fingerprint="$(printf '%s\n' \
+            "artifact_prefix=${{ inputs.artifact_prefix }}" \
+            "build_dir=$BUILD_DIR" \
+            "build_type=Release" \
+            "cmake_lists_sha=$cmake_lists_sha" \
+            "cmake_version=$cmake_version" \
+            "compiler_bin=$compiler_bin" \
+            "compiler_version=$compiler_version" \
+            "conda_prefix=${CONDA_PREFIX:-}" \
+            "isis_prefix=${ISIS_PREFIX:-}" \
+            "pybind_dir=${PYBIND_DIR:-}" \
+            "python_bin=$python_bin" \
+            "python_version=$python_version" \
+            "ref_slug=$ref_slug" \
+            "ccache_dir=${CCACHE_DIR_RESOLVED:-}" | sha256sum | awk '{print $1}' | cut -c1-20)"
+          cache_dir="$SELF_HOSTED_BUILD_CACHE_ROOT/${{ inputs.artifact_prefix }}/$runner_slug/$ref_slug/$config_fingerprint"
+          metadata_path="$cache_dir/.cache-metadata"
+          echo "local_build_cache_dir=$cache_dir" >> "$GITHUB_OUTPUT"
+          echo "cache_metadata_path=$metadata_path" >> "$GITHUB_OUTPUT"
+          echo "config_fingerprint=$config_fingerprint" >> "$GITHUB_OUTPUT"
+          echo "ref_slug=$ref_slug" >> "$GITHUB_OUTPUT"
+          {
+            echo "## Self-hosted build cache"
+            echo ""
+            echo "- local build cache dir: \`$cache_dir\`"
+            echo "- runner name: \`${RUNNER_NAME:-unknown}\`"
+            echo "- machine name: \`$machine_name\`"
+            echo "- ref slug: \`$ref_slug\`"
+            echo "- config fingerprint: \`$config_fingerprint\`"
+            echo "- artifact uploads are intentionally skipped on self-hosted runs to avoid extra GitHub artifact dependencies."
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Restore persistent build tree for incremental self-hosted build
+        id: restore-build-cache
+        if: ${{ inputs.reuse_build_cache && !inputs.clean_build }}
+        shell: bash
+        env:
+          LOCAL_BUILD_CACHE_DIR: ${{ steps.cache-paths.outputs.local_build_cache_dir }}
+          CACHE_METADATA_PATH: ${{ steps.cache-paths.outputs.cache_metadata_path }}
+          EXPECTED_CONFIG_FINGERPRINT: ${{ steps.cache-paths.outputs.config_fingerprint }}
+          EXPECTED_REF_SLUG: ${{ steps.cache-paths.outputs.ref_slug }}
+        run: |
+          set -euo pipefail
+          current_machine_name="$(hostname -f 2>/dev/null || hostname)"
+          current_runner_name="${RUNNER_NAME:-unknown}"
+          cache_ready=true
+          reason="reused persistent self-hosted build cache"
+
+          if [ ! -d "$LOCAL_BUILD_CACHE_DIR" ]; then
+            cache_ready=false
+            reason="cache directory does not exist: $LOCAL_BUILD_CACHE_DIR"
+          elif [ ! -f "$CACHE_METADATA_PATH" ]; then
+            cache_ready=false
+            reason="cache metadata file is missing: $CACHE_METADATA_PATH"
+          else
+            # shellcheck disable=SC1090
+            source "$CACHE_METADATA_PATH"
+            if [ "${machine_name:-unknown}" != "$current_machine_name" ]; then
+              cache_ready=false
+              reason="machine_name mismatch between persistent cache metadata and current workflow context"
+            elif [ "${runner_name:-unknown}" != "$current_runner_name" ]; then
+              cache_ready=false
+              reason="runner_name mismatch between persistent cache metadata and current workflow context"
+            elif [ "${ref_slug:-unknown}" != "$EXPECTED_REF_SLUG" ]; then
+              cache_ready=false
+              reason="ref_slug mismatch between persistent cache metadata and current workflow context"
+            elif [ "${config_fingerprint:-unknown}" != "$EXPECTED_CONFIG_FINGERPRINT" ]; then
+              cache_ready=false
+              reason="config_fingerprint mismatch between persistent cache metadata and current workflow context"
+            fi
+          fi
+
+          echo "cache_ready=$cache_ready" >> "$GITHUB_OUTPUT"
+          echo "cache_reason=$reason" >> "$GITHUB_OUTPUT"
+
+          if [ "$cache_ready" = "true" ]; then
+            rm -rf "$BUILD_DIR"
+            cp -a "$LOCAL_BUILD_CACHE_DIR" "$BUILD_DIR"
+          else
+            echo "::warning::Persistent self-hosted build cache not reusable: $reason"
+          fi
+
+      - name: Prepare build directory
+        shell: bash
+        env:
+          CLEAN_BUILD: ${{ inputs.clean_build && 'true' || 'false' }}
+          RESTORE_READY: ${{ steps.restore-build-cache.outputs.cache_ready || 'false' }}
+        run: |
+          set -euo pipefail
+          if [ "$CLEAN_BUILD" = "true" ]; then
+            rm -rf "$BUILD_DIR"
+            reason="clean_build input requested"
+          elif [ "$RESTORE_READY" != "true" ]; then
+            rm -rf "$BUILD_DIR"
+            reason="no reusable persistent build cache was restored"
+          else
+            reason="reused persistent cache as build directory seed"
+          fi
+          mkdir -p "$(dirname "$BUILD_DIR")"
+          {
+            echo "## Build directory preparation"
+            echo ""
+            echo "- clean_build: \`${CLEAN_BUILD}\`"
+            echo "- cache restored: \`${RESTORE_READY}\`"
+            echo "- decision: ${reason}"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Configure CMake
         shell: bash
         run: |
           set -euo pipefail
           python_bin="${PYTHON_BIN:-python3}"
+          build_cache_seed="${{ steps.restore-build-cache.outputs.cache_ready || 'false' }}"
+          build_dir_state="incremental"
+          if [ "${{ inputs.clean_build && 'true' || 'false' }}" = "true" ] || [ "$build_cache_seed" != "true" ]; then
+            build_dir_state="fresh"
+          fi
+          extra_cmake_args=()
+          if [ -n "${CCACHE_BIN:-}" ]; then
+            extra_cmake_args+=("-DCMAKE_CXX_COMPILER_LAUNCHER=${CCACHE_BIN}")
+          fi
           cmake -S "$PYBIND_DIR" -B "$BUILD_DIR" -G Ninja \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_VERBOSE_MAKEFILE=ON \
             -DCMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH" \
             -DPython3_EXECUTABLE="$python_bin" \
-            -DISIS_PREFIX="$ISIS_PREFIX"
+            -DISIS_PREFIX="$ISIS_PREFIX" \
+            "${extra_cmake_args[@]}"
+
+          {
+            echo "## CMake configure mode"
+            echo ""
+            echo "- build directory state: \`${build_dir_state}\`"
+            echo "- CMAKE_CXX_COMPILER_LAUNCHER: \`${CCACHE_BIN:-disabled}\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Build extension
         shell: bash
+        env:
+          BUILD_JOBS_INPUT: ${{ inputs.build_jobs }}
         run: |
           set -euo pipefail
           set -o pipefail
-          cmake --build "$BUILD_DIR" --parallel "$(nproc)" --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
+          build_jobs="$BUILD_JOBS_INPUT"
+          if [ -z "$build_jobs" ] || [ "$build_jobs" = "auto" ]; then
+            build_jobs="$(nproc)"
+          fi
+          echo "Using self-hosted build parallelism: $build_jobs"
+          cmake --build "$BUILD_DIR" --parallel "$build_jobs" --verbose -- -k 0 2>&1 | tee "$BUILD_DIR/build.log"
+
+          {
+            echo "## Build parallelism"
+            echo ""
+            echo "- requested build_jobs: \`${BUILD_JOBS_INPUT:-auto}\`"
+            echo "- effective build jobs: \`${build_jobs}\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Mark build success
         if: ${{ success() }}
@@ -280,18 +528,25 @@ jobs:
         shell: bash
         env:
           LOCAL_BUILD_CACHE_DIR: ${{ steps.cache-paths.outputs.local_build_cache_dir }}
+          CACHE_METADATA_PATH: ${{ steps.cache-paths.outputs.cache_metadata_path }}
+          CONFIG_FINGERPRINT: ${{ steps.cache-paths.outputs.config_fingerprint }}
+          REF_SLUG: ${{ steps.cache-paths.outputs.ref_slug }}
+          CCACHE_DIR_RESOLVED: ${{ steps.ccache.outputs.ccache_dir }}
         run: |
           set -euo pipefail
           machine_name="$(hostname -f 2>/dev/null || hostname)"
           rm -rf "$LOCAL_BUILD_CACHE_DIR"
           mkdir -p "$(dirname "$LOCAL_BUILD_CACHE_DIR")"
           cp -a "$BUILD_DIR" "$LOCAL_BUILD_CACHE_DIR"
-          cat > "$LOCAL_BUILD_CACHE_DIR/.cache-metadata" <<EOF
+          cat > "$CACHE_METADATA_PATH" <<EOF
           runner_name=${RUNNER_NAME:-unknown}
           machine_name=$machine_name
           git_sha=${GITHUB_SHA:-unknown}
           run_id=${GITHUB_RUN_ID:-unknown}
+          ref_slug=${REF_SLUG}
+          config_fingerprint=${CONFIG_FINGERPRINT}
           artifact_prefix=${{ inputs.artifact_prefix }}
+          ccache_dir=${CCACHE_DIR_RESOLVED:-none}
           created_at=$(date -u +%Y-%m-%dT%H:%M:%SZ)
           EOF
           {
@@ -299,9 +554,27 @@ jobs:
             echo ""
             echo "- cached build tree: \`$LOCAL_BUILD_CACHE_DIR\`"
             echo "- build log: \`$BUILD_DIR/build.log\`"
-            echo "- metadata file: \`$LOCAL_BUILD_CACHE_DIR/.cache-metadata\`"
+            echo "- metadata file: \`$CACHE_METADATA_PATH\`"
             if [ -f "$BUILD_DIR/smoke.log" ]; then
               echo "- smoke log: \`$BUILD_DIR/smoke.log\`"
             fi
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Report ccache statistics
+        if: ${{ always() && steps.ccache.outputs.ccache_available == 'true' }}
+        shell: bash
+        env:
+          CCACHE_BIN_RESOLVED: ${{ steps.ccache.outputs.ccache_bin }}
+        run: |
+          set -euo pipefail
+          stats_file="$RUNNER_TEMP/ccache-stats.txt"
+          "$CCACHE_BIN_RESOLVED" --show-stats --verbose 2>&1 | tee "$stats_file"
+          {
+            echo "## ccache statistics"
+            echo ""
+            echo '```text'
+            cat "$stats_file"
+            echo '```'
             echo ""
           } >> "$GITHUB_STEP_SUMMARY"

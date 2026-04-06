@@ -79,6 +79,8 @@ Characteristics:
 - uploads build logs and optional smoke logs with consistent naming
 - consumes normalized runner settings from `reusable-runner-config.yml`
 - supports both reused local conda/ISIS environments and workflow-created micromamba environments
+- when the resolved mode is `self-hosted`, the reusable path now prefers a persistent cross-run local build cache plus incremental reconfigure/build instead of forcing a clean build every time
+- when `ccache` is available on the self-hosted machine or fallback conda prefix, it is configured automatically to accelerate repeated C++/pybind compilations
 
 ## `agent-pybind-task-draft.yml` (deprecated legacy)
 
@@ -109,6 +111,7 @@ Characteristics:
 - validates build + unit + smoke + progress consistency
 - intended for manual spot-checks, focused diagnostics, or ad hoc follow-up validation rather than the default issue queue path
 - now follows `.github/runner-config.yml` and can either reuse the local conda/ISIS environment or create a GitHub-hosted micromamba environment
+- on `self-hosted`, it now exposes optional `clean_build`, `reuse_build_cache`, and `build_jobs` inputs so manual validation can opt into incremental rebuilds and configurable parallelism
 
 ## `bridge-pybind-issue-to-pr.yml`
 

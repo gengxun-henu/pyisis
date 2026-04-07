@@ -2,6 +2,25 @@
 
 ## 2026-04-07
 
+- ControlNetFilter 首轮稳定小簇绑定完成：
+  - 扩展 `src/control/bind_control_core.cpp`，新增 `ControlNetFilter` 绑定，当前先暴露一组低风险、可稳定验证的接口：`ControlNetFilter(control_net, serial_number_list_file, progress=None)`、`point_edit_lock_filter(...)`、`point_stats_header()`、`point_stats(...)`、`cube_stats_header()`、`set_output_file(...)`、`print_cube_file_serial_num(...)`。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `ControlNetFilter`。
+  - 更新 `tests/smoke_import.py`，补充 `ControlNetFilter` 顶层符号检查。
+  - 扩展 `tests/unitTest/control_core_unit_test.py`：
+    - 新增 `ControlNetFilter` focused 行为覆盖，使用真实 `mosrange` fixture cube + 临时 serial-number list 文件验证构造成功。
+    - 验证 `point_stats_header()` / `point_stats(...)` / `print_cube_file_serial_num(...)` 的输出文本内容。
+    - 验证 `cube_stats_header()` 的输出文本内容。
+    - 验证 `point_edit_lock_filter(...)` 能按 edit-lock 条件过滤控制点。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/control_control_net_filter_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake --build build -j8` under `asp360_new`
+  - Passed: `python -m unittest discover -s tests/unitTest -p 'control_core_unit_test.py' -v` (`16` tests, `OK`)
+  - Passed: `python tests/smoke_import.py`
+  - Note: 本轮按任务要求仅覆盖 `ControlNetFilter` 的一个稳定方法簇；其余依赖更复杂 PVL 条件或几何/距离过滤逻辑的接口后续继续补。
+
 - New Horizons mission camera 相关绑定完成：
   - 扩展 `src/mission/bind_mission_cameras.cpp`，为 `NewHorizonsLeisaCamera` 暴露 `Cube&` 构造、`set_band(...)`、`is_band_independent()` 与 `ck_frame_id()` / `ck_reference_id()` / `spk_reference_id()`。
   - 同文件为 `NewHorizonsLorriCamera` 暴露 `Cube&` 构造、`shutter_open_close_times(...)` 与对应 CK/SPK reference ID 方法，并新增 `NewHorizonsLorriDistortionMap` 绑定（构造 + 焦平面正反变换）。

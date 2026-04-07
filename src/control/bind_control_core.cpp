@@ -21,6 +21,7 @@
 #include "BundleSettings.h"
 #include "BundleObservationSolveSettings.h"
 #include "BundleTargetBody.h"
+#include "ControlNetFilter.h"
 #include "ControlMeasure.h"
 #include "ControlMeasureLogData.h"
 #include "ControlNetDiff.h"
@@ -805,6 +806,40 @@ void bind_control_core(py::module_ &m)
               { return Isis::ControlNet(self); })
          .def("__repr__", [](const Isis::ControlNet &self)
               { return "ControlNet(points=" + std::to_string(self.GetNumPoints()) + ", measures=" + std::to_string(self.GetNumMeasures()) + ")"; });
+
+     // Added: 2026-04-07 - expose initial ControlNetFilter constructor/output helper surface
+     py::class_<Isis::ControlNetFilter> control_net_filter(m, "ControlNetFilter");
+
+     control_net_filter
+         .def(py::init([](Isis::ControlNet &control_net,
+                          const std::string &serial_number_list_file,
+                          Isis::Progress *progress)
+                       {
+                            QString serial_number_list_qstring = stdStringToQString(serial_number_list_file);
+                            return std::make_unique<Isis::ControlNetFilter>(
+                                &control_net,
+                                serial_number_list_qstring,
+                                progress);
+                       }),
+              py::arg("control_net"),
+              py::arg("serial_number_list_file"),
+              py::arg("progress") = nullptr,
+              py::keep_alive<1, 2>(),
+              py::keep_alive<1, 4>())
+         .def("point_edit_lock_filter",
+              &Isis::ControlNetFilter::PointEditLockFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("point_stats_header", &Isis::ControlNetFilter::PointStatsHeader)
+         .def("point_stats", &Isis::ControlNetFilter::PointStats, py::arg("control_point"))
+         .def("cube_stats_header", &Isis::ControlNetFilter::CubeStatsHeader)
+         .def("set_output_file",
+              [](Isis::ControlNetFilter &self, const std::string &print_file)
+              { self.SetOutputFile(stdStringToQString(print_file)); },
+              py::arg("print_file"))
+         .def("print_cube_file_serial_num",
+              &Isis::ControlNetFilter::PrintCubeFileSerialNum,
+              py::arg("control_measure"));
 
      py::class_<Isis::ControlNetDiff> control_net_diff(m, "ControlNetDiff");
 

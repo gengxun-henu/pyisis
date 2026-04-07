@@ -44,6 +44,7 @@ HAS_CONTROL_BINDINGS = all(
         "ControlMeasure",
         "ControlPoint",
         "ControlNet",
+        "ControlNetFilter",
         "ControlNetDiff",
         "ControlPointList",
         "ControlPointV0001",
@@ -128,6 +129,7 @@ def test_basic_symbols_present():
     assert hasattr(ip, "BundleObservationSolveSettings")
     assert hasattr(ip, "BundleSettings")
     assert hasattr(ip, "BundleTargetBody")
+    assert hasattr(ip, "ControlNetFilter")
     # Temporarily disabled - bind_bundle_advanced is excluded from compilation
     # assert hasattr(ip, "BundleMeasure")
     # assert hasattr(ip, "BundleControlPoint")

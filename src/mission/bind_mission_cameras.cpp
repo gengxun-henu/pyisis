@@ -1,5 +1,6 @@
 // Binding author: Geng Xun
 // Created: 2026-04-06
+// Updated: 2026-04-07  Added Rosetta mission bindings (RosettaOsirisCamera, RosettaVirtisCamera, RosettaOsirisCameraDistortionMap) and completed VoyagerCamera binding
 // Updated: 2026-04-07  Added complete OSIRIS-REx mission bindings (OsirisRexOcamsCamera, OsirisRexTagcamsCamera, OsirisRexDistortionMap, OsirisRexTagcamsDistortionMap) and Rosetta mission bindings
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
@@ -526,5 +527,22 @@ void bind_mission_cameras(py::module_ &m) {
         return stream.str();
       });
   py::class_<Isis::VikingCamera, Isis::FramingCamera>(m, "VikingCamera");
-  py::class_<Isis::VoyagerCamera, Isis::FramingCamera>(m, "VoyagerCamera");
+  py::class_<Isis::VoyagerCamera, Isis::FramingCamera>(m, "VoyagerCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Voyager camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::VoyagerCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::VoyagerCamera::CkFrameId,
+           "CK frame ID - Voyager scan platform (VG1/2_SCAN_PLATFORM)")
+      .def("ck_reference_id", &Isis::VoyagerCamera::CkReferenceId,
+           "CK Reference ID - B1950")
+      .def("spk_target_id", &Isis::VoyagerCamera::SpkTargetId,
+           "SPK Target Body ID (-31 for Voyager 1, -32 for Voyager 2)")
+      .def("spk_reference_id", &Isis::VoyagerCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
 }

@@ -811,6 +811,7 @@ void bind_control_core(py::module_ &m)
      py::class_<Isis::ControlNetFilter> control_net_filter(m, "ControlNetFilter");
 
      control_net_filter
+           // Added: 2026-04-07 - extend ControlNetFilter with count-based point/cube filters
          .def(py::init([](Isis::ControlNet &control_net,
                           const std::string &serial_number_list_file,
                           Isis::Progress *progress)
@@ -830,8 +831,16 @@ void bind_control_core(py::module_ &m)
               &Isis::ControlNetFilter::PointEditLockFilter,
               py::arg("pvl_group"),
               py::arg("last_filter"))
+         .def("point_measures_filter",
+              &Isis::ControlNetFilter::PointMeasuresFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
          .def("point_stats_header", &Isis::ControlNetFilter::PointStatsHeader)
          .def("point_stats", &Isis::ControlNetFilter::PointStats, py::arg("control_point"))
+         .def("cube_num_points_filter",
+              &Isis::ControlNetFilter::CubeNumPointsFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
          .def("cube_stats_header", &Isis::ControlNetFilter::CubeStatsHeader)
          .def("set_output_file",
               [](Isis::ControlNetFilter &self, const std::string &print_file)

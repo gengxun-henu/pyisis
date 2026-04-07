@@ -3,6 +3,7 @@
 // Updated: 2026-04-07  Added Rosetta mission bindings (RosettaOsirisCamera, RosettaVirtisCamera, RosettaOsirisCameraDistortionMap) and completed VoyagerCamera binding
 // Updated: 2026-04-07  Added complete OSIRIS-REx mission bindings (OsirisRexOcamsCamera, OsirisRexTagcamsCamera, OsirisRexDistortionMap, OsirisRexTagcamsDistortionMap) and Rosetta mission bindings
 // Updated: 2026-04-07  Completed Viking, Mars Odyssey, Messenger Taylor distortion, and Mariner mission bindings
+// Updated: 2026-04-07  Added Lunar Orbiter camera bindings (LoHighCamera, LoMediumCamera) with fiducial and distortion map helpers
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -45,8 +46,11 @@
 #include "KaguyaMiCamera.h"
 #include "KaguyaTcCamera.h"
 #include "LineScanCamera.h"
+#include "LoCameraFiducialMap.h"
 #include "LoHighCamera.h"
+#include "LoHighDistortionMap.h"
 #include "LoMediumCamera.h"
+#include "LoMediumDistortionMap.h"
 #include "LroNarrowAngleCamera.h"
 #include "LroWideAngleCamera.h"
 #include "LwirCamera.h"
@@ -86,6 +90,7 @@
 #include "VikingCamera.h"
 #include "VimsCamera.h"
 #include "VoyagerCamera.h"
+#include "PvlGroup.h"
 
 namespace py = pybind11;
 
@@ -205,8 +210,102 @@ void bind_mission_cameras(py::module_ &m) {
   py::class_<Isis::JunoCamera, Isis::FramingCamera>(m, "JunoCamera");
   py::class_<Isis::KaguyaMiCamera, Isis::LineScanCamera>(m, "KaguyaMiCamera");
   py::class_<Isis::KaguyaTcCamera, Isis::LineScanCamera>(m, "KaguyaTcCamera");
-  py::class_<Isis::LoHighCamera, Isis::FramingCamera>(m, "LoHighCamera");
-  py::class_<Isis::LoMediumCamera, Isis::FramingCamera>(m, "LoMediumCamera");
+  py::class_<Isis::LoCameraFiducialMap>(m, "LoCameraFiducialMap")
+      .def(py::init<Isis::PvlGroup &, const int>(),
+           py::arg("instrument_group"),
+           py::arg("naif_ik_code"),
+           "Compute fiducial-based focal-plane affine transform coefficients for a Lunar Orbiter camera.")
+      .def("__repr__", [](const Isis::LoCameraFiducialMap &) {
+        std::ostringstream stream;
+        stream << "<LoCameraFiducialMap>";
+        return stream.str();
+      });
+  py::class_<Isis::LoHighCamera, Isis::FramingCamera>(m, "LoHighCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Lunar Orbiter High Resolution camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::LoHighCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::LoHighCamera::CkFrameId,
+           "CK frame ID - LO 3/4/5 instrument code determined at runtime")
+      .def("ck_reference_id", &Isis::LoHighCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::LoHighCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::LoHighDistortionMap, Isis::CameraDistortionMap>(m, "LoHighDistortionMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("parent") = nullptr,
+           py::keep_alive<1, 2>(),
+           "Construct the Lunar Orbiter High Resolution distortion map helper.")
+      .def("set_distortion",
+           &Isis::LoHighDistortionMap::SetDistortion,
+           py::arg("naif_ik_code"),
+           "Load perspective factors and distortion coefficients from the instrument kernel.")
+      .def("set_focal_plane",
+           &Isis::LoHighDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map distorted focal-plane coordinates to undistorted coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::LoHighDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map undistorted focal-plane coordinates to distorted coordinates.")
+      .def("__repr__", [](const Isis::LoHighDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<LoHighDistortionMap>";
+        return stream.str();
+      });
+  auto loMediumCamera =
+      py::class_<Isis::LoMediumCamera, Isis::FramingCamera>(m, "LoMediumCamera")
+          .def(py::init<Isis::Cube &>(),
+               py::arg("cube"),
+               py::keep_alive<1, 2>(),
+               "Construct a Lunar Orbiter Medium Resolution camera model from an opened cube.")
+          .def("shutter_open_close_times",
+               &Isis::LoMediumCamera::ShutterOpenCloseTimes,
+               py::arg("time"),
+               py::arg("exposure_duration"),
+               "Return shutter open/close times as a pair of iTime values.")
+          .def("ck_frame_id", &Isis::LoMediumCamera::CkFrameId,
+               "CK frame ID - LO 3/4/5 instrument code determined at runtime")
+          .def("ck_reference_id", &Isis::LoMediumCamera::CkReferenceId,
+               "CK Reference ID - J2000")
+          .def("spk_reference_id", &Isis::LoMediumCamera::SpkReferenceId,
+               "SPK Reference ID - J2000");
+  py::enum_<Isis::LoMediumCamera::FocalPlaneMapType>(loMediumCamera, "FocalPlaneMapType")
+      .value("Fiducial", Isis::LoMediumCamera::FocalPlaneMapType::Fiducial)
+      .value("Boresight", Isis::LoMediumCamera::FocalPlaneMapType::Boresight)
+      .value("None", Isis::LoMediumCamera::FocalPlaneMapType::None)
+      .export_values();
+  py::class_<Isis::LoMediumDistortionMap, Isis::CameraDistortionMap>(m, "LoMediumDistortionMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("parent") = nullptr,
+           py::keep_alive<1, 2>(),
+           "Construct the Lunar Orbiter Medium Resolution distortion map helper.")
+      .def("set_distortion",
+           &Isis::LoMediumDistortionMap::SetDistortion,
+           py::arg("naif_ik_code"),
+           "Load distortion coefficients from the instrument kernel for the given NAIF IK code.")
+      .def("set_focal_plane",
+           &Isis::LoMediumDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map distorted focal-plane coordinates to undistorted coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::LoMediumDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map undistorted focal-plane coordinates to distorted coordinates.")
+      .def("__repr__", [](const Isis::LoMediumDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<LoMediumDistortionMap>";
+        return stream.str();
+      });
   py::class_<Isis::LroNarrowAngleCamera, Isis::LineScanCamera>(m, "LroNarrowAngleCamera")
       .def("ck_frame_id", &Isis::LroNarrowAngleCamera::CkFrameId,
            "CK frame ID - Instrument Code from spacit run on CK")

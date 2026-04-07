@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-04-06
 // Updated: 2026-04-07  Added Rosetta mission bindings (RosettaOsirisCamera, RosettaVirtisCamera, RosettaOsirisCameraDistortionMap) and completed VoyagerCamera binding
+// Updated: 2026-04-07  Added complete OSIRIS-REx mission bindings (OsirisRexOcamsCamera, OsirisRexTagcamsCamera, OsirisRexDistortionMap, OsirisRexTagcamsDistortionMap) and Rosetta mission bindings
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -63,7 +64,9 @@
 #include "NirCamera.h"
 #include "NirsDetectorMap.h"
 #include "OsirisRexOcamsCamera.h"
+#include "OsirisRexDistortionMap.h"
 #include "OsirisRexTagcamsCamera.h"
+#include "OsirisRexTagcamsDistortionMap.h"
 #include "PushFrameCamera.h"
 #include "RadarCamera.h"
 #include "RosettaOsirisCamera.h"
@@ -280,8 +283,121 @@ void bind_mission_cameras(py::module_ &m) {
   py::class_<Isis::NewHorizonsMvicTdiCamera, Isis::LineScanCamera>(m, "NewHorizonsMvicTdiCamera");
   py::class_<Isis::ThemisIrCamera, Isis::LineScanCamera>(m, "ThemisIrCamera");
   py::class_<Isis::ThemisVisCamera, Isis::PushFrameCamera>(m, "ThemisVisCamera");
-  py::class_<Isis::OsirisRexOcamsCamera, Isis::FramingCamera>(m, "OsirisRexOcamsCamera");
-  py::class_<Isis::OsirisRexTagcamsCamera, Isis::FramingCamera>(m, "OsirisRexTagcamsCamera");
+  py::class_<Isis::OsirisRexOcamsCamera, Isis::FramingCamera>(m, "OsirisRexOcamsCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an OSIRIS-REx OCAMS camera model from an opened cube.\n\n"
+           "OCAMS includes MapCam, PolyCam, and SamCam cameras.")
+      .def("shutter_open_close_times",
+           &Isis::OsirisRexOcamsCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::OsirisRexOcamsCamera::CkFrameId,
+           "CK frame ID - OSIRIS-REx spacecraft instrument code")
+      .def("ck_reference_id", &Isis::OsirisRexOcamsCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::OsirisRexOcamsCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::OsirisRexTagcamsCamera, Isis::FramingCamera>(m, "OsirisRexTagcamsCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an OSIRIS-REx TAGCAMS camera model from an opened cube.\n\n"
+           "TAGCAMS includes NavCam, NFTCam, and StowCam navigation cameras.")
+      .def("shutter_open_close_times",
+           &Isis::OsirisRexTagcamsCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::OsirisRexTagcamsCamera::CkFrameId,
+           "CK frame ID - OSIRIS-REx spacecraft instrument code")
+      .def("ck_reference_id", &Isis::OsirisRexTagcamsCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::OsirisRexTagcamsCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::OsirisRexDistortionMap, Isis::CameraDistortionMap>(m, "OsirisRexDistortionMap")
+      .def(py::init<Isis::Camera *, double>(),
+           py::arg("parent"),
+           py::arg("z_direction") = 1.0,
+           py::keep_alive<1, 2>(),
+           "Construct the OSIRIS-REx OCAMS distortion map.\n\n"
+           "Args:\n"
+           "    parent: Pointer to the parent Camera object\n"
+           "    z_direction: Direction of the z-axis (1.0 or -1.0)")
+      .def("set_distortion",
+           &Isis::OsirisRexDistortionMap::SetDistortion,
+           py::arg("naif_ik_code"),
+           py::arg("filter_name"),
+           "Load distortion coefficients from the instrument kernel for the given NAIF code and filter.")
+      .def("set_focal_plane",
+           &Isis::OsirisRexDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Compute undistorted focal plane (x,y) from distorted (x,y).\n\n"
+           "Args:\n"
+           "    dx: Distorted focal plane x, in millimeters\n"
+           "    dy: Distorted focal plane y, in millimeters\n\n"
+           "Returns:\n"
+           "    True if successful")
+      .def("set_undistorted_focal_plane",
+           &Isis::OsirisRexDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Compute distorted focal plane (x,y) from undistorted (x,y).\n\n"
+           "Args:\n"
+           "    ux: Undistorted focal plane x, in millimeters\n"
+           "    uy: Undistorted focal plane y, in millimeters\n\n"
+           "Returns:\n"
+           "    True if successful")
+      .def("__repr__", [](const Isis::OsirisRexDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<OsirisRexDistortionMap>";
+        return stream.str();
+      });
+  py::class_<Isis::OsirisRexTagcamsDistortionMap, Isis::CameraDistortionMap>(m, "OsirisRexTagcamsDistortionMap")
+      .def(py::init<Isis::Camera *, int, const double>(),
+           py::arg("parent"),
+           py::arg("naif_ik_code"),
+           py::arg("zdir") = 1.0,
+           py::keep_alive<1, 2>(),
+           "Construct the OSIRIS-REx TAGCAMS distortion map with advanced OpenCV model.\n\n"
+           "Args:\n"
+           "    parent: Pointer to the parent Camera object\n"
+           "    naif_ik_code: NAIF IK code for loading distortion coefficients\n"
+           "    zdir: Direction of the z-axis (1.0 or -1.0)")
+      .def("set_camera_temperature",
+           &Isis::OsirisRexTagcamsDistortionMap::SetCameraTemperature,
+           py::arg("temp"),
+           "Set the camera head temperature for temperature-dependent focal length adjustment.\n\n"
+           "Args:\n"
+           "    temp: Camera temperature in Celsius")
+      .def("set_focal_plane",
+           &Isis::OsirisRexTagcamsDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Compute undistorted focal plane (x,y) from distorted (x,y).\n\n"
+           "Args:\n"
+           "    dx: Distorted focal plane x, in millimeters\n"
+           "    dy: Distorted focal plane y, in millimeters\n\n"
+           "Returns:\n"
+           "    True if successful")
+      .def("set_undistorted_focal_plane",
+           &Isis::OsirisRexTagcamsDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Compute distorted focal plane (x,y) from undistorted (x,y).\n\n"
+           "Args:\n"
+           "    ux: Undistorted focal plane x, in millimeters\n"
+           "    uy: Undistorted focal plane y, in millimeters\n\n"
+           "Returns:\n"
+           "    True if successful")
+      .def("__repr__", [](const Isis::OsirisRexTagcamsDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<OsirisRexTagcamsDistortionMap>";
+        return stream.str();
+      });
   py::class_<Isis::RosettaOsirisCamera, Isis::FramingCamera>(m, "RosettaOsirisCamera")
       .def(py::init<Isis::Cube &>(),
            py::arg("cube"),

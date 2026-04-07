@@ -316,10 +316,10 @@ Lunar Reconnaissance Orbiter,LroWideAngleCamera,已转换,"2026-04-06 已在 bin
 Lunar Reconnaissance Orbiter,LroWideAngleCameraDistortionMap,已转换,"2026-04-06 已在 bind_lro_utilities.cpp 暴露带独立失真映射接口"
 Lunar Reconnaissance Orbiter,LroWideAngleCameraFocalPlaneMap,已转换,"2026-04-06 已在 bind_lro_utilities.cpp 暴露带独立焦平面映射接口"
 Lunar Reconnaissance Orbiter,MiniRF,已转换,"2026-04-06 已在 bind_mission_cameras.cpp 暴露完整 SPICE ID 方法（CK 方法抛出异常符合上游行为）"
-OSIRIS-REx,OsirisRexOcamsCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-OSIRIS-REx,OsirisRexDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-OSIRIS-REx,OsirisRexTagcamsCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-OSIRIS-REx,OsirisRexTagcamsDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+OSIRIS-REx,OsirisRexOcamsCamera,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、快门时间与 SPICE ID 方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+OSIRIS-REx,OsirisRexDistortionMap,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数与失真映射方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+OSIRIS-REx,OsirisRexTagcamsCamera,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、快门时间与 SPICE ID 方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+OSIRIS-REx,OsirisRexTagcamsDistortionMap,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、温度配置与失真映射方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Utility,Area3D,未转换,
 Utility,Column,已转换,2026-03-25 已在 bind_base_utility.cpp 暴露 Column/Align/Type，补充顶层导出并新增约束单测
 Utility,CubeStretch,已转换,2026-03-26 已在 bind_base_filters.cpp 暴露构造/元数据/相等比较接口并补充单测

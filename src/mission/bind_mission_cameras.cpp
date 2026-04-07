@@ -3,6 +3,7 @@
 // Updated: 2026-04-07  Added Rosetta mission bindings (RosettaOsirisCamera, RosettaVirtisCamera, RosettaOsirisCameraDistortionMap) and completed VoyagerCamera binding
 // Updated: 2026-04-07  Added complete OSIRIS-REx mission bindings (OsirisRexOcamsCamera, OsirisRexTagcamsCamera, OsirisRexDistortionMap, OsirisRexTagcamsDistortionMap) and Rosetta mission bindings
 // Updated: 2026-04-07  Completed Viking, Mars Odyssey, Messenger Taylor distortion, and Mariner mission bindings
+// Updated: 2026-04-07  Added New Horizons mission camera and distortion helper bindings
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -60,8 +61,11 @@
 #include "MsiCamera.h"
 #include "NewHorizonsLeisaCamera.h"
 #include "NewHorizonsLorriCamera.h"
+#include "NewHorizonsLorriDistortionMap.h"
 #include "NewHorizonsMvicFrameCamera.h"
+#include "NewHorizonsMvicFrameCameraDistortionMap.h"
 #include "NewHorizonsMvicTdiCamera.h"
+#include "NewHorizonsMvicTdiCameraDistortionMap.h"
 #include "NirCamera.h"
 #include "NirsDetectorMap.h"
 #include "OsirisRexOcamsCamera.h"
@@ -321,10 +325,141 @@ void bind_mission_cameras(py::module_ &m) {
   py::class_<Isis::CrismCamera, Isis::LineScanCamera>(m, "CrismCamera");
   py::class_<Isis::MarciCamera, Isis::PushFrameCamera>(m, "MarciCamera");
   py::class_<Isis::MsiCamera, Isis::FramingCamera>(m, "MsiCamera");
-  py::class_<Isis::NewHorizonsLeisaCamera, Isis::LineScanCamera>(m, "NewHorizonsLeisaCamera");
-  py::class_<Isis::NewHorizonsLorriCamera, Isis::FramingCamera>(m, "NewHorizonsLorriCamera");
-  py::class_<Isis::NewHorizonsMvicFrameCamera, Isis::FramingCamera>(m, "NewHorizonsMvicFrameCamera");
-  py::class_<Isis::NewHorizonsMvicTdiCamera, Isis::LineScanCamera>(m, "NewHorizonsMvicTdiCamera");
+  py::class_<Isis::NewHorizonsLeisaCamera, Isis::LineScanCamera>(m, "NewHorizonsLeisaCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a New Horizons LEISA line-scan camera model from an opened cube.")
+      .def("set_band",
+           &Isis::NewHorizonsLeisaCamera::SetBand,
+           py::arg("band"),
+           "Set the active virtual band used by the LEISA focal-plane transforms.")
+      .def("is_band_independent",
+           &Isis::NewHorizonsLeisaCamera::IsBandIndependent,
+           "Return whether the camera model is band independent.")
+      .def("ck_frame_id", &Isis::NewHorizonsLeisaCamera::CkFrameId,
+           "CK frame ID - New Horizons LEISA instrument code (-98000)")
+      .def("ck_reference_id", &Isis::NewHorizonsLeisaCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::NewHorizonsLeisaCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::NewHorizonsLorriCamera, Isis::FramingCamera>(m, "NewHorizonsLorriCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a New Horizons LORRI framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::NewHorizonsLorriCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return simulated shutter open/close times for the center-timed LORRI exposure.")
+      .def("ck_frame_id", &Isis::NewHorizonsLorriCamera::CkFrameId,
+           "CK frame ID - New Horizons LORRI instrument code")
+      .def("ck_reference_id", &Isis::NewHorizonsLorriCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::NewHorizonsLorriCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::NewHorizonsLorriDistortionMap, Isis::CameraDistortionMap>(m, "NewHorizonsLorriDistortionMap")
+      .def(py::init<Isis::Camera *, double, double, double, double>(),
+           py::arg("parent"),
+           py::arg("e2"),
+           py::arg("e5"),
+           py::arg("e6"),
+           py::arg("z_direction") = 1.0,
+           py::keep_alive<1, 2>(),
+           "Construct the New Horizons LORRI distortion map helper.")
+      .def("set_focal_plane",
+           &Isis::NewHorizonsLorriDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map distorted focal-plane coordinates to undistorted coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::NewHorizonsLorriDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map undistorted focal-plane coordinates to distorted coordinates.")
+      .def("__repr__", [](const Isis::NewHorizonsLorriDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<NewHorizonsLorriDistortionMap>";
+        return stream.str();
+      });
+  py::class_<Isis::NewHorizonsMvicFrameCamera, Isis::FramingCamera>(m, "NewHorizonsMvicFrameCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a New Horizons MVIC framing camera model from an opened cube.")
+      .def("set_band",
+           &Isis::NewHorizonsMvicFrameCamera::SetBand,
+           py::arg("band"),
+           "Set the active framelet band and corresponding acquisition time.")
+      .def("shutter_open_close_times",
+           &Isis::NewHorizonsMvicFrameCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times for the MVIC frame exposure.")
+      .def("ck_frame_id", &Isis::NewHorizonsMvicFrameCamera::CkFrameId,
+           "CK frame ID - New Horizons MVIC framing instrument code")
+      .def("ck_reference_id", &Isis::NewHorizonsMvicFrameCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::NewHorizonsMvicFrameCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::NewHorizonsMvicFrameCameraDistortionMap, Isis::CameraDistortionMap>(m, "NewHorizonsMvicFrameCameraDistortionMap")
+      .def(py::init<Isis::Camera *, std::vector<double>, std::vector<double>>(),
+           py::arg("parent"),
+           py::arg("x_distortion_coeffs"),
+           py::arg("y_distortion_coeffs"),
+           py::keep_alive<1, 2>(),
+           "Construct the New Horizons MVIC framing distortion map helper.")
+      .def("set_focal_plane",
+           &Isis::NewHorizonsMvicFrameCameraDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map distorted focal-plane coordinates to undistorted coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::NewHorizonsMvicFrameCameraDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map undistorted focal-plane coordinates to distorted coordinates.")
+      .def("__repr__", [](const Isis::NewHorizonsMvicFrameCameraDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<NewHorizonsMvicFrameCameraDistortionMap>";
+        return stream.str();
+      });
+  py::class_<Isis::NewHorizonsMvicTdiCamera, Isis::LineScanCamera>(m, "NewHorizonsMvicTdiCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a New Horizons MVIC TDI line-scan camera model from an opened cube.")
+      .def("ck_frame_id", &Isis::NewHorizonsMvicTdiCamera::CkFrameId,
+           "CK frame ID - New Horizons MVIC TDI instrument code")
+      .def("ck_reference_id", &Isis::NewHorizonsMvicTdiCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::NewHorizonsMvicTdiCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::NewHorizonsMvicTdiCameraDistortionMap, Isis::CameraDistortionMap>(m, "NewHorizonsMvicTdiCameraDistortionMap")
+      .def(py::init<Isis::Camera *, std::vector<double>, std::vector<double>, std::vector<double>, std::vector<double>>(),
+           py::arg("parent"),
+           py::arg("x_distortion_coeffs"),
+           py::arg("y_distortion_coeffs"),
+           py::arg("residual_col_dist_coeffs"),
+           py::arg("residual_row_dist_coeffs"),
+           py::keep_alive<1, 2>(),
+           "Construct the New Horizons MVIC TDI distortion map helper.")
+      .def("set_focal_plane",
+           &Isis::NewHorizonsMvicTdiCameraDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map distorted focal-plane coordinates to undistorted coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::NewHorizonsMvicTdiCameraDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map undistorted focal-plane coordinates to distorted coordinates.")
+      .def("__repr__", [](const Isis::NewHorizonsMvicTdiCameraDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<NewHorizonsMvicTdiCameraDistortionMap>";
+        return stream.str();
+      });
   py::class_<Isis::ThemisIrCamera, Isis::LineScanCamera>(m, "ThemisIrCamera")
       .def(py::init<Isis::Cube &>(),
            py::arg("cube"),

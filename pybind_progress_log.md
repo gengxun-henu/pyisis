@@ -1,5 +1,32 @@
 # Pybind Progress Log
 
+## 2026-04-07
+
+- Viking / Mars Odyssey / Messenger / Mariner mission 相关绑定完成：
+  - 扩展 `src/mission/bind_mission_cameras.cpp`，为 `VikingCamera` 与 `Mariner10Camera` 暴露 `Cube&` 构造、`shutter_open_close_times(...)` 与对应 CK/SPK ID 方法。
+  - 同文件新增 `TaylorCameraDistortionMap` 绑定，暴露构造、`set_distortion(...)`、`set_focal_plane(...)` 与 `set_undistorted_focal_plane(...)`。
+  - 同文件为 `ThemisIrCamera` / `ThemisVisCamera` 暴露 `Cube&` 构造及其真实上游 band-dependent API：`set_band(...)`、`is_band_independent()`，其中 `ThemisVisCamera` 另外暴露 `band_ephemeris_time_offset(...)`；并补齐 CK/SPK reference ID 方法。
+  - 同文件新增 `ThemisIrDistortionMap` 与 `ThemisVisDistortionMap` 绑定，分别暴露构造和焦平面正反变换接口；`ThemisIrDistortionMap` 额外暴露 `set_band(...)`。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `TaylorCameraDistortionMap`、`ThemisIrDistortionMap` 与 `ThemisVisDistortionMap`。
+  - 新增 `tests/unitTest/legacy_mission_camera_unit_test.py`：覆盖 Viking / Mariner mission 相机、THEMIS 相机与三类 distortion helper 的类可见性、继承关系和方法表面检查。
+  - 更新 `tests/smoke_import.py`，补充 `Mariner10Camera`、`TaylorCameraDistortionMap`、`ThemisIrCamera`、`ThemisIrDistortionMap`、`ThemisVisCamera`、`ThemisVisDistortionMap` 与 `VikingCamera` 顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/viking_viking_camera_methods.csv`
+    - `class_bind_methods_details/mariner_mariner10_camera_methods.csv`
+    - `class_bind_methods_details/messenger_taylor_camera_distortion_map_methods.csv`
+    - `class_bind_methods_details/odyssey_themis_ir_camera_methods.csv`
+    - `class_bind_methods_details/odyssey_themis_ir_distortion_map_methods.csv`
+    - `class_bind_methods_details/odyssey_themis_vis_camera_methods.csv`
+    - `class_bind_methods_details/odyssey_themis_vis_distortion_map_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake -S . -B build -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" -DISIS_PREFIX="$CONDA_PREFIX" && cmake --build build -j2` under `asp360_new`
+  - Passed: `python -m unittest discover -s tests/unitTest -p 'legacy_mission_camera_unit_test.py' -v`
+  - Passed: `python -m unittest discover -s tests/unitTest -p '*camera_unit_test.py' -v` (`61` tests, `OK`)
+  - Passed: `python tests/smoke_import.py`
+  - Note: `Themis*DistortionMap` 在缺少真实 parent camera 的情况下，某些运行时调用会触发上游 helper 生命周期问题；因此 focused 单测保持在稳定的类可见性、继承关系和方法表面层，不把空-parent 崩溃误判为绑定回归。
+
 ## 2026-04-06
 
 - TGO (Trace Gas Orbiter) CaSSIS 任务相机绑定完成：

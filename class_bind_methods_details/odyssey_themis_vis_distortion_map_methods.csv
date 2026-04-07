@@ -1,8 +1,8 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ThemisVisDistortionMap,Mars Odyssey,reference/upstream_isis/src/odyssey/objs/ThemisVisCamera/ThemisVisDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+ThemisVisDistortionMap,Mars Odyssey,reference/upstream_isis/src/odyssey/objs/ThemisVisCamera/ThemisVisDistortionMap.h,src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造与焦平面正反变换；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ThemisVisDistortionMap,isis_pybind.ThemisVisDistortionMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,ThemisVisDistortionMap(),isis_pybind.ThemisVisDistortionMap(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"virtual bool SetFocalPlane(double dx, double dy)",isis_pybind.ThemisVisDistortionMap.set_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(double ux, double uy)",isis_pybind.ThemisVisDistortionMap.set_undistorted_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,ThemisVisDistortionMap,isis_pybind.ThemisVisDistortionMap,Y,"2026-04-07 已在 src/mission/bind_mission_cameras.cpp 注册 ThemisVisDistortionMap 类符号"
+Construction/Enum,ThemisVisDistortionMap(Camera *parent),isis_pybind.ThemisVisDistortionMap(parent=None),Y,"2026-04-07 已暴露 distortion helper 构造函数"
+Mutation/Configuration,"virtual bool SetFocalPlane(double dx, double dy)",isis_pybind.ThemisVisDistortionMap.set_focal_plane,Y,"2026-04-07 已暴露 distorted -> undistorted 焦平面映射"
+Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(double ux, double uy)",isis_pybind.ThemisVisDistortionMap.set_undistorted_focal_plane,Y,"2026-04-07 已暴露 undistorted -> distorted 焦平面映射"

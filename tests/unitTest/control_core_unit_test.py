@@ -1,3 +1,12 @@
+"""
+Unit tests for ISIS control-core bindings.
+
+Author: Geng Xun
+Created: 2026-04-07
+Last Modified: 2026-04-07
+"""
+
+import gc
 import unittest
 
 from _unit_test_support import ip, temporary_directory, workspace_test_data_path
@@ -103,6 +112,41 @@ End
 """
         )
         return pvl.find_object("ControlPoint")
+
+    def make_control_net_filter_fixture(self):
+        cube_path = workspace_test_data_path("mosrange", "EN0108828322M_iof.cub")
+        serial_number = ip.SerialNumber.compose(str(cube_path))
+
+        net = ip.ControlNet()
+
+        locked_point = ip.ControlPoint("LOCKED")
+        locked_point.set_type(ip.ControlPoint.PointType.Fixed)
+        locked_point.set_edit_lock(True)
+        locked_measure = ip.ControlMeasure()
+        locked_measure.set_cube_serial_number(serial_number)
+        locked_measure.set_coordinate(10.0, 20.0)
+        locked_measure.set_type(ip.ControlMeasure.MeasureType.Manual)
+        locked_point.add_measure(locked_measure)
+        locked_point.set_ref_measure(0)
+        net.add_point(locked_point)
+
+        free_point = ip.ControlPoint("FREE")
+        free_point.set_type(ip.ControlPoint.PointType.Free)
+        free_point.set_edit_lock(False)
+        free_measure = ip.ControlMeasure()
+        free_measure.set_cube_serial_number(serial_number)
+        free_measure.set_coordinate(30.0, 40.0)
+        free_measure.set_type(ip.ControlMeasure.MeasureType.Manual)
+        free_point.add_measure(free_measure)
+        free_point.set_ref_measure(0)
+        net.add_point(free_point)
+
+        return net, cube_path, serial_number
+
+    def make_point_edit_lock_group(self, value):
+        group = ip.PvlGroup("Point_EditLock")
+        group.add_keyword(ip.PvlKeyword("EditLock", "True" if value else "False"))
+        return group
 
     def test_bundle_target_body_minimal_configuration(self):
         target_body = ip.BundleTargetBody()
@@ -456,6 +500,67 @@ End
             self.assertEqual(loaded.get_num_points(), 1)
             self.assertEqual(loaded.get_num_measures(), 2)
             self.assertEqual(loaded.get_point("P1").get_ref_measure().get_cube_serial_number(), "ALPHA")
+
+    def test_control_net_filter_output_helpers_write_expected_text(self):
+        net, cube_path, serial_number = self.make_control_net_filter_fixture()
+
+        with temporary_directory() as temp_dir:
+            serial_list_path = temp_dir / "serials.lis"
+            serial_list_path.write_text(f"{cube_path}\n", encoding="utf-8")
+            output_path = temp_dir / "control_net_filter_point_output.csv"
+
+            filter_object = ip.ControlNetFilter(net, str(serial_list_path))
+            filter_object.set_output_file(str(output_path))
+
+            point = net.get_point("LOCKED")
+            measure = point.get_measure(0)
+
+            filter_object.point_stats_header()
+            filter_object.point_stats(point)
+            filter_object.print_cube_file_serial_num(measure)
+
+            del filter_object
+            gc.collect()
+
+            output_text = output_path.read_text(encoding="utf-8")
+            self.assertIn("PointID, PointType, PointIgnored, PointEditLocked", output_text)
+            self.assertIn("LOCKED, Fixed, False, True, 1, 0, 1,", output_text)
+            self.assertIn(str(cube_path), output_text)
+            self.assertIn(serial_number, output_text)
+
+    def test_control_net_filter_cube_stats_header_writes_expected_text(self):
+        net, cube_path, _ = self.make_control_net_filter_fixture()
+
+        with temporary_directory() as temp_dir:
+            serial_list_path = temp_dir / "serials.lis"
+            serial_list_path.write_text(f"{cube_path}\n", encoding="utf-8")
+            output_path = temp_dir / "control_net_filter_cube_output.csv"
+
+            filter_object = ip.ControlNetFilter(net, str(serial_list_path))
+            filter_object.set_output_file(str(output_path))
+            filter_object.cube_stats_header()
+
+            del filter_object
+            gc.collect()
+
+            output_text = output_path.read_text(encoding="utf-8")
+            self.assertIn(
+                "FileName, SerialNumber, ImageTotalPoints, ImagePointsIgnored, ImagePointsEditLocked",
+                output_text,
+            )
+
+    def test_control_net_filter_point_edit_lock_filter_keeps_matching_points(self):
+        net, cube_path, _ = self.make_control_net_filter_fixture()
+
+        with temporary_directory() as temp_dir:
+            serial_list_path = temp_dir / "serials.lis"
+            serial_list_path.write_text(f"{cube_path}\n", encoding="utf-8")
+
+            filter_object = ip.ControlNetFilter(net, str(serial_list_path))
+            filter_object.point_edit_lock_filter(self.make_point_edit_lock_group(True), False)
+
+            self.assertEqual(net.get_num_points(), 1)
+            self.assertEqual(net.get_point(0).get_id(), "LOCKED")
 
     def test_control_net_diff_reports_basic_difference(self):
         diff = ip.ControlNetDiff()

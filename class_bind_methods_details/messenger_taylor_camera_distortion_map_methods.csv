@@ -1,9 +1,9 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-TaylorCameraDistortionMap,Messenger,reference/upstream_isis/src/messenger/objs/MdisCamera/TaylorCameraDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+TaylorCameraDistortionMap,Messenger,reference/upstream_isis/src/messenger/objs/MdisCamera/TaylorCameraDistortionMap.h,src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造、set_distortion 与焦平面正反变换；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,TaylorCameraDistortionMap,isis_pybind.TaylorCameraDistortionMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,TaylorCameraDistortionMap(),isis_pybind.TaylorCameraDistortionMap(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,void SetDistortion(const int naifIkCode),isis_pybind.TaylorCameraDistortionMap.set_distortion,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"bool SetFocalPlane(const double dx, const double dy)",isis_pybind.TaylorCameraDistortionMap.set_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"bool SetUndistortedFocalPlane(const double ux, const double uy)",isis_pybind.TaylorCameraDistortionMap.set_undistorted_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,TaylorCameraDistortionMap,isis_pybind.TaylorCameraDistortionMap,Y,"2026-04-07 已在 src/mission/bind_mission_cameras.cpp 注册 TaylorCameraDistortionMap 类符号"
+Construction/Enum,"TaylorCameraDistortionMap(Camera *parent, double zDirection = 1.0)",isis_pybind.TaylorCameraDistortionMap(parent=None, z_direction=1.0),Y,"2026-04-07 已暴露 distortion helper 构造函数"
+Mutation/Configuration,void SetDistortion(const int naifIkCode),isis_pybind.TaylorCameraDistortionMap.set_distortion,Y,"2026-04-07 已暴露仪器核畸变系数加载接口"
+Mutation/Configuration,"bool SetFocalPlane(const double dx, const double dy)",isis_pybind.TaylorCameraDistortionMap.set_focal_plane,Y,"2026-04-07 已暴露 distorted -> undistorted 焦平面映射"
+Mutation/Configuration,"bool SetUndistortedFocalPlane(const double ux, const double uy)",isis_pybind.TaylorCameraDistortionMap.set_undistorted_focal_plane,Y,"2026-04-07 已暴露 undistorted -> distorted 焦平面映射"

@@ -1,10 +1,11 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ThemisIrCamera,Mars Odyssey,reference/upstream_isis/src/odyssey/objs/ThemisIrCamera/ThemisIrCamera.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+ThemisIrCamera,Mars Odyssey,reference/upstream_isis/src/odyssey/objs/ThemisIrCamera/ThemisIrCamera.h,src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"2026-04-07 已在 bind_mission_cameras.cpp 暴露 Cube 构造、set_band/is_band_independent 与 CK/SPK 参考 ID；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ThemisIrCamera,isis_pybind.ThemisIrCamera,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,ThemisIrCamera(),isis_pybind.ThemisIrCamera(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,"virtual std::pair <iTime, iTime> ShutterOpenCloseTimes(double time, double exposureDuration)",isis_pybind.ThemisIrCamera.shutter_open_close_times,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkFrameId() const { return (-53000); },isis_pybind.ThemisIrCamera.ck_frame_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkReferenceId() const { return (1); },isis_pybind.ThemisIrCamera.ck_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int SpkReferenceId() const { return (1); },isis_pybind.ThemisIrCamera.spk_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,ThemisIrCamera,isis_pybind.ThemisIrCamera,Y,"2026-04-07 已在 src/mission/bind_mission_cameras.cpp 注册 ThemisIrCamera 类符号"
+Construction/Enum,ThemisIrCamera(Cube &cube),isis_pybind.ThemisIrCamera(cube),Y,"2026-04-07 已暴露直接 Cube 构造并保持 Cube 生命周期"
+Public API,void SetBand(const int band),isis_pybind.ThemisIrCamera.set_band,Y,"2026-04-07 已暴露 band-dependent 相机配置接口"
+Public API,bool IsBandIndependent(),isis_pybind.ThemisIrCamera.is_band_independent,Y,"2026-04-07 已暴露 band independence 查询接口"
+Public API,virtual int CkFrameId() const,isis_pybind.ThemisIrCamera.ck_frame_id,Y,"2026-04-07 已暴露 CK frame ID"
+Public API,virtual int CkReferenceId() const,isis_pybind.ThemisIrCamera.ck_reference_id,Y,"2026-04-07 已暴露 CK reference ID (16)"
+Public API,virtual int SpkReferenceId() const,isis_pybind.ThemisIrCamera.spk_reference_id,Y,"2026-04-07 已暴露 SPK reference ID"

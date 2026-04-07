@@ -2,6 +2,7 @@
 // Created: 2026-04-06
 // Updated: 2026-04-07  Added Rosetta mission bindings (RosettaOsirisCamera, RosettaVirtisCamera, RosettaOsirisCameraDistortionMap) and completed VoyagerCamera binding
 // Updated: 2026-04-07  Added complete OSIRIS-REx mission bindings (OsirisRexOcamsCamera, OsirisRexTagcamsCamera, OsirisRexDistortionMap, OsirisRexTagcamsDistortionMap) and Rosetta mission bindings
+// Updated: 2026-04-07  Completed Viking, Mars Odyssey, Messenger Taylor distortion, and Mariner mission bindings
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -76,8 +77,11 @@
 #include "SsiCamera.h"
 #include "TgoCassisCamera.h"
 #include "TgoCassisDistortionMap.h"
+#include "TaylorCameraDistortionMap.h"
 #include "ThemisIrCamera.h"
+#include "ThemisIrDistortionMap.h"
 #include "ThemisVisCamera.h"
+#include "ThemisVisDistortionMap.h"
 #include "UvvisCamera.h"
 #include "VikingCamera.h"
 #include "VimsCamera.h"
@@ -236,8 +240,48 @@ void bind_mission_cameras(py::module_ &m) {
            "SPK Target Body ID - Lunar Reconnaissance Orbiter spacecraft")
       .def("spk_reference_id", &Isis::MiniRF::SpkReferenceId,
            "SPK Reference ID - J2000");
-  py::class_<Isis::Mariner10Camera, Isis::FramingCamera>(m, "Mariner10Camera");
+  py::class_<Isis::Mariner10Camera, Isis::FramingCamera>(m, "Mariner10Camera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Mariner 10 camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::Mariner10Camera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::Mariner10Camera::CkFrameId,
+           "CK frame ID - Mariner 10 scan platform instrument code (-76000)")
+      .def("ck_reference_id", &Isis::Mariner10Camera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::Mariner10Camera::SpkReferenceId,
+           "SPK Reference ID - J2000");
   py::class_<Isis::MdisCamera, Isis::FramingCamera>(m, "MdisCamera");
+  py::class_<Isis::TaylorCameraDistortionMap, Isis::CameraDistortionMap>(m, "TaylorCameraDistortionMap")
+      .def(py::init<Isis::Camera *, double>(),
+           py::arg("parent") = nullptr,
+           py::arg("z_direction") = 1.0,
+           py::keep_alive<1, 2>(),
+           "Construct the Messenger MDIS Taylor-series distortion map helper.")
+      .def("set_distortion",
+           &Isis::TaylorCameraDistortionMap::SetDistortion,
+           py::arg("naif_ik_code"),
+           "Load Taylor-series distortion coefficients from the instrument kernel.")
+      .def("set_focal_plane",
+           &Isis::TaylorCameraDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map distorted focal-plane coordinates to undistorted coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::TaylorCameraDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map undistorted focal-plane coordinates to distorted coordinates.")
+      .def("__repr__", [](const Isis::TaylorCameraDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<TaylorCameraDistortionMap>";
+        return stream.str();
+      });
   py::class_<Isis::HrscCamera, Isis::LineScanCamera>(m, "HrscCamera")
       .def(py::init<Isis::Cube &>(),
            py::arg("cube"),
@@ -281,8 +325,90 @@ void bind_mission_cameras(py::module_ &m) {
   py::class_<Isis::NewHorizonsLorriCamera, Isis::FramingCamera>(m, "NewHorizonsLorriCamera");
   py::class_<Isis::NewHorizonsMvicFrameCamera, Isis::FramingCamera>(m, "NewHorizonsMvicFrameCamera");
   py::class_<Isis::NewHorizonsMvicTdiCamera, Isis::LineScanCamera>(m, "NewHorizonsMvicTdiCamera");
-  py::class_<Isis::ThemisIrCamera, Isis::LineScanCamera>(m, "ThemisIrCamera");
-  py::class_<Isis::ThemisVisCamera, Isis::PushFrameCamera>(m, "ThemisVisCamera");
+  py::class_<Isis::ThemisIrCamera, Isis::LineScanCamera>(m, "ThemisIrCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a THEMIS IR line-scan camera model from an opened cube.")
+      .def("set_band",
+           &Isis::ThemisIrCamera::SetBand,
+           py::arg("band"),
+           "Set the active band for band-dependent timing and distortion behavior.")
+      .def("is_band_independent",
+           &Isis::ThemisIrCamera::IsBandIndependent,
+           "Return whether the camera model is band independent.")
+      .def("ck_frame_id", &Isis::ThemisIrCamera::CkFrameId,
+           "CK frame ID - THEMIS IR instrument code (-53000)")
+      .def("ck_reference_id", &Isis::ThemisIrCamera::CkReferenceId,
+           "CK Reference ID - MARSIAU/J2000 frame code used by the upstream model")
+      .def("spk_reference_id", &Isis::ThemisIrCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::ThemisIrDistortionMap, Isis::CameraDistortionMap>(m, "ThemisIrDistortionMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("parent") = nullptr,
+           py::keep_alive<1, 2>(),
+           "Construct the THEMIS IR distortion map helper.")
+      .def("set_band",
+           &Isis::ThemisIrDistortionMap::SetBand,
+           py::arg("band"),
+           "Set the active detector band used by the distortion coefficients.")
+      .def("set_focal_plane",
+           &Isis::ThemisIrDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map distorted focal-plane coordinates to undistorted coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::ThemisIrDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map undistorted focal-plane coordinates to distorted coordinates.")
+      .def("__repr__", [](const Isis::ThemisIrDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<ThemisIrDistortionMap>";
+        return stream.str();
+      });
+  py::class_<Isis::ThemisVisCamera, Isis::PushFrameCamera>(m, "ThemisVisCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a THEMIS VIS push-frame camera model from an opened cube.")
+      .def("set_band",
+           &Isis::ThemisVisCamera::SetBand,
+           py::arg("band"),
+           "Set the active VIS band for frame timing and detector geometry.")
+      .def("band_ephemeris_time_offset",
+           &Isis::ThemisVisCamera::BandEphemerisTimeOffset,
+           py::arg("band"),
+           "Return the per-band ephemeris-time offset in seconds.")
+      .def("is_band_independent",
+           &Isis::ThemisVisCamera::IsBandIndependent,
+           "Return whether the camera model is band independent.")
+      .def("ck_frame_id", &Isis::ThemisVisCamera::CkFrameId,
+           "CK frame ID - THEMIS VIS instrument code (-53000)")
+      .def("ck_reference_id", &Isis::ThemisVisCamera::CkReferenceId,
+           "CK Reference ID - MARSIAU (16)")
+      .def("spk_reference_id", &Isis::ThemisVisCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::ThemisVisDistortionMap, Isis::CameraDistortionMap>(m, "ThemisVisDistortionMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("parent") = nullptr,
+           py::keep_alive<1, 2>(),
+           "Construct the THEMIS VIS distortion map helper.")
+      .def("set_focal_plane",
+           &Isis::ThemisVisDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map distorted focal-plane coordinates to undistorted coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::ThemisVisDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map undistorted focal-plane coordinates to distorted coordinates.")
+      .def("__repr__", [](const Isis::ThemisVisDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<ThemisVisDistortionMap>";
+        return stream.str();
+      });
   py::class_<Isis::OsirisRexOcamsCamera, Isis::FramingCamera>(m, "OsirisRexOcamsCamera")
       .def(py::init<Isis::Cube &>(),
            py::arg("cube"),
@@ -526,7 +652,24 @@ void bind_mission_cameras(py::module_ &m) {
         stream << "<TgoCassisDistortionMap>";
         return stream.str();
       });
-  py::class_<Isis::VikingCamera, Isis::FramingCamera>(m, "VikingCamera");
+  py::class_<Isis::VikingCamera, Isis::FramingCamera>(m, "VikingCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Viking Orbiter camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::VikingCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::VikingCamera::CkFrameId,
+           "CK frame ID - Viking Orbiter platform code, mission dependent")
+      .def("ck_reference_id", &Isis::VikingCamera::CkReferenceId,
+           "CK Reference ID - B1950")
+      .def("spk_target_id", &Isis::VikingCamera::SpkTargetId,
+           "SPK Target Body ID - Viking Orbiter spacecraft, mission dependent")
+      .def("spk_reference_id", &Isis::VikingCamera::SpkReferenceId,
+           "SPK Reference ID - B1950");
   py::class_<Isis::VoyagerCamera, Isis::FramingCamera>(m, "VoyagerCamera")
       .def(py::init<Isis::Cube &>(),
            py::arg("cube"),

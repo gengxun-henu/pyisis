@@ -1,6 +1,6 @@
 // Binding author: Geng Xun
 // Created: 2026-04-06
-// Updated: 2026-04-06  Added TgoCassisCamera methods + TgoCassisDistortionMap binding
+// Updated: 2026-04-07  Added complete Rosetta mission bindings (RosettaOsirisCamera, RosettaVirtisCamera, RosettaOsirisCameraDistortionMap)
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -67,6 +67,7 @@
 #include "PushFrameCamera.h"
 #include "RadarCamera.h"
 #include "RosettaOsirisCamera.h"
+#include "RosettaOsirisCameraDistortionMap.h"
 #include "RosettaVirtisCamera.h"
 #include "RollingShutterCamera.h"
 #include "SsiCamera.h"
@@ -281,8 +282,82 @@ void bind_mission_cameras(py::module_ &m) {
   py::class_<Isis::ThemisVisCamera, Isis::PushFrameCamera>(m, "ThemisVisCamera");
   py::class_<Isis::OsirisRexOcamsCamera, Isis::FramingCamera>(m, "OsirisRexOcamsCamera");
   py::class_<Isis::OsirisRexTagcamsCamera, Isis::FramingCamera>(m, "OsirisRexTagcamsCamera");
-  py::class_<Isis::RosettaOsirisCamera, Isis::FramingCamera>(m, "RosettaOsirisCamera");
-  py::class_<Isis::RosettaVirtisCamera, Isis::LineScanCamera>(m, "RosettaVirtisCamera");
+  py::class_<Isis::RosettaOsirisCamera, Isis::FramingCamera>(m, "RosettaOsirisCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Rosetta OSIRIS NAC/WAC framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::RosettaOsirisCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::RosettaOsirisCamera::CkFrameId,
+           "CK frame ID - Rosetta orbiter instrument code (-226000)")
+      .def("ck_reference_id", &Isis::RosettaOsirisCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::RosettaOsirisCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::RosettaOsirisCameraDistortionMap, Isis::CameraDistortionMap>(m, "RosettaOsirisCameraDistortionMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("parent"),
+           py::keep_alive<1, 2>(),
+           "Construct the Rosetta OSIRIS polynomial distortion map.\n\n"
+           "Args:\n"
+           "    parent: Pointer to the parent Camera object")
+      .def("set_focal_plane",
+           &Isis::RosettaOsirisCameraDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Compute undistorted focal plane (x,y) from distorted (x,y).\n\n"
+           "Args:\n"
+           "    dx: Distorted focal plane x, in millimeters\n"
+           "    dy: Distorted focal plane y, in millimeters\n\n"
+           "Returns:\n"
+           "    True if successful")
+      .def("set_undistorted_focal_plane",
+           &Isis::RosettaOsirisCameraDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Compute distorted focal plane (x,y) from undistorted (x,y).\n\n"
+           "Args:\n"
+           "    ux: Undistorted focal plane x, in millimeters\n"
+           "    uy: Undistorted focal plane y, in millimeters\n\n"
+           "Returns:\n"
+           "    True if successful")
+      .def("set_un_distorted_x_matrix",
+           &Isis::RosettaOsirisCameraDistortionMap::setUnDistortedXMatrix,
+           py::arg("x_mat"),
+           "Set the undistorted X polynomial coefficient matrix.")
+      .def("set_un_distorted_y_matrix",
+           &Isis::RosettaOsirisCameraDistortionMap::setUnDistortedYMatrix,
+           py::arg("y_mat"),
+           "Set the undistorted Y polynomial coefficient matrix.")
+      .def("set_boresight",
+           &Isis::RosettaOsirisCameraDistortionMap::setBoresight,
+           py::arg("sample"),
+           py::arg("line"),
+           "Set the camera boresight pixel coordinates.")
+      .def("set_pixel_pitch",
+           &Isis::RosettaOsirisCameraDistortionMap::setPixelPitch,
+           py::arg("pitch"),
+           "Set the camera pixel pitch in millimeters.")
+      .def("__repr__", [](const Isis::RosettaOsirisCameraDistortionMap &) {
+        std::ostringstream stream;
+        stream << "<RosettaOsirisCameraDistortionMap>";
+        return stream.str();
+      });
+  py::class_<Isis::RosettaVirtisCamera, Isis::LineScanCamera>(m, "RosettaVirtisCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Rosetta VIRTIS-M line scan camera model from an opened cube.")
+      .def("ck_frame_id", &Isis::RosettaVirtisCamera::CkFrameId,
+           "CK frame ID - VIRTIS instrument code (-226110)")
+      .def("ck_reference_id", &Isis::RosettaVirtisCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::RosettaVirtisCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
   py::class_<Isis::TgoCassisCamera, Isis::FramingCamera>(m, "TgoCassisCamera")
       .def(py::init<Isis::Cube &>(),
            py::arg("cube"),

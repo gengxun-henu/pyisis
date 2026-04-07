@@ -1,8 +1,12 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-RosettaOsirisCameraDistortionMap,Rosetta,reference/upstream_isis/src/rosetta/objs/RosettaOsirisCamera/RosettaOsirisCameraDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+RosettaOsirisCameraDistortionMap,Rosetta,reference/upstream_isis/src/rosetta/objs/RosettaOsirisCamera/RosettaOsirisCameraDistortionMap.h,src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"相机模型/Spice 依赖；已完成绑定"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,RosettaOsirisCameraDistortionMap,isis_pybind.RosettaOsirisCameraDistortionMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,RosettaOsirisCameraDistortionMap(),isis_pybind.RosettaOsirisCameraDistortionMap(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"virtual bool SetFocalPlane(const double dx, const double dy)",isis_pybind.RosettaOsirisCameraDistortionMap.set_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(const double ux, const double uy)",isis_pybind.RosettaOsirisCameraDistortionMap.set_undistorted_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,RosettaOsirisCameraDistortionMap,isis_pybind.RosettaOsirisCameraDistortionMap,Y,"Python class symbol bound in src/mission/bind_mission_cameras.cpp:300-348"
+Construction/Enum,RosettaOsirisCameraDistortionMap(Camera *parent),isis_pybind.RosettaOsirisCameraDistortionMap(),Y,"Constructor bound with py::keep_alive<1,2> for Camera reference"
+Mutation/Configuration,"virtual bool SetFocalPlane(const double dx, const double dy)",isis_pybind.RosettaOsirisCameraDistortionMap.set_focal_plane,Y,"Bound at line 307-316; computes undistorted from distorted focal plane"
+Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(const double ux, const double uy)",isis_pybind.RosettaOsirisCameraDistortionMap.set_undistorted_focal_plane,Y,"Bound at line 317-326; computes distorted from undistorted focal plane"
+Mutation/Configuration,void setUnDistortedXMatrix(LinearAlgebra::Matrix xMat),isis_pybind.RosettaOsirisCameraDistortionMap.set_un_distorted_x_matrix,Y,"Bound at line 327-330; sets X polynomial coefficient matrix"
+Mutation/Configuration,void setUnDistortedYMatrix(LinearAlgebra::Matrix yMat),isis_pybind.RosettaOsirisCameraDistortionMap.set_un_distorted_y_matrix,Y,"Bound at line 331-334; sets Y polynomial coefficient matrix"
+Mutation/Configuration,"void setBoresight(double sample, double line)",isis_pybind.RosettaOsirisCameraDistortionMap.set_boresight,Y,"Bound at line 335-339; sets boresight pixel coordinates"
+Mutation/Configuration,void setPixelPitch(double pitch),isis_pybind.RosettaOsirisCameraDistortionMap.set_pixel_pitch,Y,"Bound at line 340-343; sets pixel pitch in millimeters"

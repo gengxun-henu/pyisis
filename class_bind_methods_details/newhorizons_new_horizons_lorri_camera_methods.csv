@@ -1,10 +1,10 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-NewHorizonsLorriCamera,New Horizons,reference/upstream_isis/src/newhorizons/objs/NewHorizonsLorriCamera/NewHorizonsLorriCamera.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+NewHorizonsLorriCamera,New Horizons,reference/upstream_isis/src/newhorizons/objs/NewHorizonsLorriCamera/NewHorizonsLorriCamera.h,src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,NewHorizonsLorriCamera,isis_pybind.NewHorizonsLorriCamera,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,NewHorizonsLorriCamera(),isis_pybind.NewHorizonsLorriCamera(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,"virtual std::pair <iTime, iTime> ShutterOpenCloseTimes(double time, double exposureDuration)",isis_pybind.NewHorizonsLorriCamera.shutter_open_close_times,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkFrameId() const { return (-98001); },isis_pybind.NewHorizonsLorriCamera.ck_frame_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkReferenceId() const { return (1); },isis_pybind.NewHorizonsLorriCamera.ck_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int SpkReferenceId() const { return (1); },isis_pybind.NewHorizonsLorriCamera.spk_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,NewHorizonsLorriCamera,isis_pybind.NewHorizonsLorriCamera,Y,"2026-04-07 已在 bind_mission_cameras.cpp 暴露类符号"
+Construction/Enum,NewHorizonsLorriCamera(Cube &cube),isis_pybind.NewHorizonsLorriCamera(cube),Y,"2026-04-07 已暴露 Cube 构造函数"
+Public API,"virtual std::pair <iTime, iTime> ShutterOpenCloseTimes(double time, double exposureDuration)",isis_pybind.NewHorizonsLorriCamera.shutter_open_close_times,Y,"2026-04-07 已暴露快门时序辅助接口"
+Public API,virtual int CkFrameId() const { return (-98000); },isis_pybind.NewHorizonsLorriCamera.ck_frame_id,Y,"2026-04-07 已暴露 CK frame ID"
+Public API,virtual int CkReferenceId() const { return (1); },isis_pybind.NewHorizonsLorriCamera.ck_reference_id,Y,"2026-04-07 已暴露 CK reference ID"
+Public API,virtual int SpkReferenceId() const { return (1); },isis_pybind.NewHorizonsLorriCamera.spk_reference_id,Y,"2026-04-07 已暴露 SPK reference ID"

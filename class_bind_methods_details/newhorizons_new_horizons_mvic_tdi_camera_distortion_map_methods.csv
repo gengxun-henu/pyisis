@@ -1,8 +1,8 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-NewHorizonsMvicTdiCameraDistortionMap,New Horizons,reference/upstream_isis/src/newhorizons/objs/NewHorizonsMvicTdiCamera/NewHorizonsMvicTdiCameraDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+NewHorizonsMvicTdiCameraDistortionMap,New Horizons,reference/upstream_isis/src/newhorizons/objs/NewHorizonsMvicTdiCamera/NewHorizonsMvicTdiCameraDistortionMap.h,src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,NewHorizonsMvicTdiCameraDistortionMap,isis_pybind.NewHorizonsMvicTdiCameraDistortionMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,NewHorizonsMvicTdiCameraDistortionMap(),isis_pybind.NewHorizonsMvicTdiCameraDistortionMap(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"virtual bool SetFocalPlane(const double dx, const double dy)",isis_pybind.NewHorizonsMvicTdiCameraDistortionMap.set_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(const double ux, const double uy)",isis_pybind.NewHorizonsMvicTdiCameraDistortionMap.set_undistorted_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,NewHorizonsMvicTdiCameraDistortionMap,isis_pybind.NewHorizonsMvicTdiCameraDistortionMap,Y,"2026-04-07 已在 bind_mission_cameras.cpp 暴露类符号"
+Construction/Enum,"NewHorizonsMvicTdiCameraDistortionMap(Camera *parent, vector<double> xDistortionCoeffs, vector<double> yDistortionCoeffs, vector<double> residualColDistCoeffs, vector<double> residualRowDistCoeffs)",isis_pybind.NewHorizonsMvicTdiCameraDistortionMap(parent, x_distortion_coeffs, y_distortion_coeffs, residual_col_dist_coeffs, residual_row_dist_coeffs),Y,"2026-04-07 已暴露构造函数"
+Mutation/Configuration,"virtual bool SetFocalPlane(const double dx, const double dy)",isis_pybind.NewHorizonsMvicTdiCameraDistortionMap.set_focal_plane,Y,"2026-04-07 已暴露去畸变焦平面转换"
+Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(const double ux, const double uy)",isis_pybind.NewHorizonsMvicTdiCameraDistortionMap.set_undistorted_focal_plane,Y,"2026-04-07 已暴露畸变焦平面转换"

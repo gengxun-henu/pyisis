@@ -2,6 +2,26 @@
 
 ## 2026-04-07
 
+- New Horizons mission camera 相关绑定完成：
+  - 扩展 `src/mission/bind_mission_cameras.cpp`，为 `NewHorizonsLeisaCamera` 暴露 `Cube&` 构造、`set_band(...)`、`is_band_independent()` 与 `ck_frame_id()` / `ck_reference_id()` / `spk_reference_id()`。
+  - 同文件为 `NewHorizonsLorriCamera` 暴露 `Cube&` 构造、`shutter_open_close_times(...)` 与对应 CK/SPK reference ID 方法，并新增 `NewHorizonsLorriDistortionMap` 绑定（构造 + 焦平面正反变换）。
+  - 同文件为 `NewHorizonsMvicFrameCamera` 暴露 `Cube&` 构造、`set_band(...)`、`shutter_open_close_times(...)` 与 CK/SPK reference ID 方法，并新增 `NewHorizonsMvicFrameCameraDistortionMap` 绑定（构造 + 焦平面正反变换）。
+  - 同文件为 `NewHorizonsMvicTdiCamera` 暴露 `Cube&` 构造与 CK/SPK reference ID 方法，并新增 `NewHorizonsMvicTdiCameraDistortionMap` 绑定（构造 + 焦平面正反变换）。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出三类 New Horizons distortion helper。
+  - 更新 `tests/smoke_import.py`，补充 New Horizons mission 相机与 distortion helper 顶层符号检查。
+  - 新增 `tests/unitTest/newhorizons_camera_unit_test.py`：覆盖 New Horizons mission camera / distortion-map 的类可见性、继承关系与方法表面检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/newhorizons_new_horizons_leisa_camera_methods.csv`
+    - `class_bind_methods_details/newhorizons_new_horizons_lorri_camera_methods.csv`
+    - `class_bind_methods_details/newhorizons_new_horizons_lorri_distortion_map_methods.csv`
+    - `class_bind_methods_details/newhorizons_new_horizons_mvic_frame_camera_methods.csv`
+    - `class_bind_methods_details/newhorizons_new_horizons_mvic_frame_camera_distortion_map_methods.csv`
+    - `class_bind_methods_details/newhorizons_new_horizons_mvic_tdi_camera_methods.csv`
+    - `class_bind_methods_details/newhorizons_new_horizons_mvic_tdi_camera_distortion_map_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Note: `NewHorizonsMvicFrameCameraDistortionMap::outputDeltas()` 虽在头文件声明，但上游 `.cpp` 实现被注释掉，本轮不强行绑定未定义符号。
+
 - Viking / Mars Odyssey / Messenger / Mariner mission 相关绑定完成：
   - 扩展 `src/mission/bind_mission_cameras.cpp`，为 `VikingCamera` 与 `Mariner10Camera` 暴露 `Cube&` 构造、`shutter_open_close_times(...)` 与对应 CK/SPK ID 方法。
   - 同文件新增 `TaylorCameraDistortionMap` 绑定，暴露构造、`set_distortion(...)`、`set_focal_plane(...)` 与 `set_undistorted_focal_plane(...)`。

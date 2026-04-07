@@ -5,6 +5,7 @@
 // Updated: 2026-04-07  Completed Viking, Mars Odyssey, Messenger Taylor distortion, and Mariner mission bindings
 // Updated: 2026-04-07  Added Lunar Orbiter camera bindings (LoHighCamera, LoMediumCamera) with fiducial and distortion map helpers
 // Updated: 2026-04-07  Added New Horizons mission camera and distortion helper bindings
+// Updated: 2026-04-07  Completed Apollo, Cassini, Chandrayaan-1, Clementine, Clipper, Galileo, and Juno mission camera/helper bindings
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -21,12 +22,16 @@
 #include <pybind11/stl.h>
 
 #include "ApolloMetricCamera.h"
+#include "ApolloMetricDistortionMap.h"
 #include "ApolloPanoramicCamera.h"
+#include "ApolloPanoramicDetectorMap.h"
 #include "Camera.h"
 #include "Chandrayaan1M3Camera.h"
+#include "Chandrayaan1M3DistortionMap.h"
 #include "ClipperNacRollingShutterCamera.h"
 #include "ClipperPushBroomCamera.h"
 #include "ClipperWacFcCamera.h"
+#include "ClementineUvvisDistortionMap.h"
 #include "CrismCamera.h"
 #include "Cube.h"
 #include "CTXCamera.h"
@@ -44,12 +49,15 @@
 #include "IssWACamera.h"
 #include "iTime.h"
 #include "JunoCamera.h"
+#include "JunoDistortionMap.h"
 #include "KaguyaMiCamera.h"
 #include "KaguyaTcCamera.h"
+#include "Latitude.h"
 #include "LineScanCamera.h"
 #include "LoCameraFiducialMap.h"
 #include "LoHighCamera.h"
 #include "LoHighDistortionMap.h"
+#include "Longitude.h"
 #include "LoMediumCamera.h"
 #include "LoMediumDistortionMap.h"
 #include "LroNarrowAngleCamera.h"
@@ -76,6 +84,7 @@
 #include "OsirisRexDistortionMap.h"
 #include "OsirisRexTagcamsCamera.h"
 #include "OsirisRexTagcamsDistortionMap.h"
+#include "Pvl.h"
 #include "PushFrameCamera.h"
 #include "RadarCamera.h"
 #include "RosettaOsirisCamera.h"
@@ -83,6 +92,7 @@
 #include "RosettaVirtisCamera.h"
 #include "RollingShutterCamera.h"
 #include "SsiCamera.h"
+#include "SurfacePoint.h"
 #include "TgoCassisCamera.h"
 #include "TgoCassisDistortionMap.h"
 #include "TaylorCameraDistortionMap.h"
@@ -93,6 +103,8 @@
 #include "UvvisCamera.h"
 #include "VikingCamera.h"
 #include "VimsCamera.h"
+#include "VimsGroundMap.h"
+#include "VimsSkyMap.h"
 #include "VoyagerCamera.h"
 #include "PvlGroup.h"
 
@@ -114,22 +126,287 @@ std::vector<std::pair<double, double>> toOffsetPairs(const QList<QPointF> &offse
 }  // namespace
 
 void bind_mission_cameras(py::module_ &m) {
-  py::class_<Isis::ApolloMetricCamera, Isis::FramingCamera>(m, "ApolloMetricCamera");
-  py::class_<Isis::ApolloPanoramicCamera, Isis::LineScanCamera>(m, "ApolloPanoramicCamera");
-  py::class_<Isis::IssNACamera, Isis::FramingCamera>(m, "IssNACamera");
-  py::class_<Isis::IssWACamera, Isis::FramingCamera>(m, "IssWACamera");
-  py::class_<Isis::VimsCamera, Isis::Camera>(m, "VimsCamera");
-  py::class_<Isis::Chandrayaan1M3Camera, Isis::LineScanCamera>(m, "Chandrayaan1M3Camera");
-  py::class_<Isis::HiresCamera, Isis::FramingCamera>(m, "HiresCamera");
-  py::class_<Isis::LwirCamera, Isis::FramingCamera>(m, "LwirCamera");
-  py::class_<Isis::NirCamera, Isis::FramingCamera>(m, "NirCamera");
-  py::class_<Isis::UvvisCamera, Isis::FramingCamera>(m, "UvvisCamera");
-  py::class_<Isis::ClipperNacRollingShutterCamera, Isis::RollingShutterCamera>(m, "ClipperNacRollingShutterCamera");
-  py::class_<Isis::ClipperPushBroomCamera, Isis::LineScanCamera>(m, "ClipperPushBroomCamera");
-  py::class_<Isis::ClipperWacFcCamera, Isis::FramingCamera>(m, "ClipperWacFcCamera");
+  py::class_<Isis::ApolloMetricCamera, Isis::FramingCamera>(m, "ApolloMetricCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an Apollo metric framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::ApolloMetricCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times as a pair of iTime values.")
+      .def("ck_frame_id", &Isis::ApolloMetricCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::ApolloMetricCamera::CkReferenceId)
+      .def("spk_target_id", &Isis::ApolloMetricCamera::SpkTargetId)
+      .def("spk_reference_id", &Isis::ApolloMetricCamera::SpkReferenceId);
+  py::class_<Isis::ApolloMetricDistortionMap, Isis::CameraDistortionMap>(m, "ApolloMetricDistortionMap")
+      .def(py::init<Isis::Camera *, double, double, double, double, double, double, double, double>(),
+           py::arg("parent"),
+           py::arg("xp"),
+           py::arg("yp"),
+           py::arg("k1"),
+           py::arg("k2"),
+           py::arg("k3"),
+           py::arg("j1"),
+           py::arg("j2"),
+           py::arg("t0"),
+           py::keep_alive<1, 2>(),
+           "Construct the Apollo metric camera distortion-map helper.")
+      .def("set_focal_plane",
+           &Isis::ApolloMetricDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"))
+      .def("set_undistorted_focal_plane",
+           &Isis::ApolloMetricDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"));
+  py::class_<Isis::ApolloPanoramicCamera, Isis::LineScanCamera>(m, "ApolloPanoramicCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an Apollo panoramic line-scan camera model from an opened cube.")
+      .def("ck_frame_id", &Isis::ApolloPanoramicCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::ApolloPanoramicCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::ApolloPanoramicCamera::SpkReferenceId)
+      .def("int_ori_residuals_report", &Isis::ApolloPanoramicCamera::intOriResidualsReport)
+      .def("int_ori_residual_max", &Isis::ApolloPanoramicCamera::intOriResidualMax)
+      .def("int_ori_residual_mean", &Isis::ApolloPanoramicCamera::intOriResidualMean)
+      .def("int_ori_residual_stdev", &Isis::ApolloPanoramicCamera::intOriResidualStdev);
+  py::class_<Isis::ApolloPanoramicDetectorMap, Isis::CameraDetectorMap>(m, "ApolloPanoramicDetectorMap")
+      .def(py::init<Isis::Camera *, double, double, Isis::Pvl *>(),
+           py::arg("parent"),
+           py::arg("et_middle"),
+           py::arg("line_rate"),
+           py::arg("labels"),
+           py::keep_alive<1, 2>(),
+           py::keep_alive<1, 5>(),
+           "Construct the Apollo panoramic detector-map helper.")
+      .def("set_parent",
+           &Isis::ApolloPanoramicDetectorMap::SetParent,
+           py::arg("sample"),
+           py::arg("line"))
+      .def("set_detector",
+           &Isis::ApolloPanoramicDetectorMap::SetDetector,
+           py::arg("sample"),
+           py::arg("line"))
+      .def("set_line_rate",
+           &Isis::ApolloPanoramicDetectorMap::SetLineRate,
+           py::arg("line_rate"))
+      .def("line_rate", &Isis::ApolloPanoramicDetectorMap::LineRate)
+      .def("mean_residual", &Isis::ApolloPanoramicDetectorMap::meanResidual)
+      .def("max_residual", &Isis::ApolloPanoramicDetectorMap::maxResidual)
+      .def("stdev_residual", &Isis::ApolloPanoramicDetectorMap::stdevResidual);
+  py::class_<Isis::IssNACamera, Isis::FramingCamera>(m, "IssNACamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Cassini ISS narrow-angle framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::IssNACamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"))
+      .def("ck_frame_id", &Isis::IssNACamera::CkFrameId)
+      .def("ck_reference_id", &Isis::IssNACamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::IssNACamera::SpkReferenceId);
+  py::class_<Isis::IssWACamera, Isis::FramingCamera>(m, "IssWACamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Cassini ISS wide-angle framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::IssWACamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"))
+      .def("ck_frame_id", &Isis::IssWACamera::CkFrameId)
+      .def("ck_reference_id", &Isis::IssWACamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::IssWACamera::SpkReferenceId);
+  py::class_<Isis::VimsCamera, Isis::Camera>(m, "VimsCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Cassini VIMS point camera model from an opened cube.")
+      .def("get_camera_type", &Isis::VimsCamera::GetCameraType)
+      .def("ck_frame_id", &Isis::VimsCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::VimsCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::VimsCamera::SpkReferenceId)
+      .def("pixel_ifov_offsets",
+           [](Isis::VimsCamera &self) {
+             return toOffsetPairs(self.PixelIfovOffsets());
+           },
+           "Return pixel IFOV offsets as a list of (x, y) tuples in focal-plane units.");
+  py::class_<Isis::VimsGroundMap, Isis::CameraGroundMap>(m, "VimsGroundMap")
+      .def(py::init<Isis::Camera *, Isis::Pvl &>(),
+           py::arg("parent"),
+           py::arg("labels"),
+           py::keep_alive<1, 2>(),
+           py::keep_alive<1, 3>(),
+           "Construct the Cassini VIMS ground-map helper.")
+      .def("set_focal_plane",
+           &Isis::VimsGroundMap::SetFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           py::arg("uz"))
+      .def("set_ground",
+           static_cast<bool (Isis::VimsGroundMap::*)(const Isis::Latitude &, const Isis::Longitude &)>(&Isis::VimsGroundMap::SetGround),
+           py::arg("latitude"),
+           py::arg("longitude"))
+      .def("set_ground",
+           static_cast<bool (Isis::VimsGroundMap::*)(const Isis::SurfacePoint &)>(&Isis::VimsGroundMap::SetGround),
+           py::arg("surface_point"))
+      .def("init", &Isis::VimsGroundMap::Init, py::arg("labels"));
+  py::class_<Isis::VimsSkyMap, Isis::CameraSkyMap>(m, "VimsSkyMap")
+      .def(py::init<Isis::Camera *, Isis::Pvl &>(),
+           py::arg("parent"),
+           py::arg("labels"),
+           py::keep_alive<1, 2>(),
+           py::keep_alive<1, 3>(),
+           "Construct the Cassini VIMS sky-map helper.")
+      .def("set_focal_plane",
+           &Isis::VimsSkyMap::SetFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           py::arg("uz"))
+      .def("set_sky", &Isis::VimsSkyMap::SetSky, py::arg("ra"), py::arg("dec"))
+      .def("init", &Isis::VimsSkyMap::Init, py::arg("labels"));
+  py::class_<Isis::Chandrayaan1M3Camera, Isis::LineScanCamera>(m, "Chandrayaan1M3Camera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Chandrayaan-1 M3 line-scan camera model from an opened cube.")
+      .def("ck_frame_id", &Isis::Chandrayaan1M3Camera::CkFrameId)
+      .def("ck_reference_id", &Isis::Chandrayaan1M3Camera::CkReferenceId)
+      .def("spk_reference_id", &Isis::Chandrayaan1M3Camera::SpkReferenceId);
+  py::class_<Isis::Chandrayaan1M3DistortionMap, Isis::CameraDistortionMap>(m, "Chandrayaan1M3DistortionMap")
+      .def(py::init<Isis::Camera *, double, double, double, double, double, double, double>(),
+           py::arg("parent"),
+           py::arg("xp"),
+           py::arg("yp"),
+           py::arg("k1"),
+           py::arg("k2"),
+           py::arg("k3"),
+           py::arg("p1"),
+           py::arg("p2"),
+           py::keep_alive<1, 2>(),
+           "Construct the Chandrayaan-1 M3 distortion-map helper.")
+      .def("set_focal_plane",
+           &Isis::Chandrayaan1M3DistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"))
+      .def("set_undistorted_focal_plane",
+           &Isis::Chandrayaan1M3DistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"));
+  py::class_<Isis::HiresCamera, Isis::FramingCamera>(m, "HiresCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Clementine HIRES framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::HiresCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"))
+      .def("ck_frame_id", &Isis::HiresCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::HiresCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::HiresCamera::SpkReferenceId);
+  py::class_<Isis::LwirCamera, Isis::FramingCamera>(m, "LwirCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Clementine LWIR framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::LwirCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"))
+      .def("ck_frame_id", &Isis::LwirCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::LwirCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::LwirCamera::SpkReferenceId);
+  py::class_<Isis::NirCamera, Isis::FramingCamera>(m, "NirCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Clementine NIR framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::NirCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"))
+      .def("ck_frame_id", &Isis::NirCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::NirCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::NirCamera::SpkReferenceId);
+  py::class_<Isis::UvvisCamera, Isis::FramingCamera>(m, "UvvisCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Clementine UVVIS framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::UvvisCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"))
+      .def("ck_frame_id", &Isis::UvvisCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::UvvisCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::UvvisCamera::SpkReferenceId);
+  py::class_<Isis::ClementineUvvisDistortionMap, Isis::CameraDistortionMap>(m, "ClementineUvvisDistortionMap")
+      .def(py::init<Isis::Camera *, double, double, double, double, double, double, double>(),
+           py::arg("parent"),
+           py::arg("xp"),
+           py::arg("yp"),
+           py::arg("k1"),
+           py::arg("k2"),
+           py::arg("k3"),
+           py::arg("p1"),
+           py::arg("p2"),
+           py::keep_alive<1, 2>(),
+           "Construct the Clementine UVVIS distortion-map helper.")
+      .def("set_focal_plane",
+           &Isis::ClementineUvvisDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"))
+      .def("set_undistorted_focal_plane",
+           &Isis::ClementineUvvisDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"));
+  py::class_<Isis::ClipperNacRollingShutterCamera, Isis::RollingShutterCamera>(m, "ClipperNacRollingShutterCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an Europa Clipper NAC rolling-shutter camera model from an opened cube.")
+      .def("ck_frame_id", &Isis::ClipperNacRollingShutterCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::ClipperNacRollingShutterCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::ClipperNacRollingShutterCamera::SpkReferenceId);
+  py::class_<Isis::ClipperPushBroomCamera, Isis::LineScanCamera>(m, "ClipperPushBroomCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an Europa Clipper push-broom camera model from an opened cube.")
+      .def("ck_frame_id", &Isis::ClipperPushBroomCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::ClipperPushBroomCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::ClipperPushBroomCamera::SpkReferenceId);
+  py::class_<Isis::ClipperWacFcCamera, Isis::FramingCamera>(m, "ClipperWacFcCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an Europa Clipper WAC framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::ClipperWacFcCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"))
+      .def("ck_frame_id", &Isis::ClipperWacFcCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::ClipperWacFcCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::ClipperWacFcCamera::SpkReferenceId);
   py::class_<Isis::DawnFcCamera, Isis::FramingCamera>(m, "DawnFcCamera");
   py::class_<Isis::DawnVirCamera, Isis::LineScanCamera>(m, "DawnVirCamera");
-  py::class_<Isis::SsiCamera, Isis::FramingCamera>(m, "SsiCamera");
+  py::class_<Isis::SsiCamera, Isis::FramingCamera>(m, "SsiCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Galileo SSI framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::SsiCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"))
+      .def("ck_frame_id", &Isis::SsiCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::SsiCamera::CkReferenceId)
+      .def("spk_reference_id", &Isis::SsiCamera::SpkReferenceId);
   py::class_<Isis::HayabusaAmicaCamera, Isis::FramingCamera>(m, "HayabusaAmicaCamera")
       .def(py::init<Isis::Cube &>(),
            py::arg("cube"),
@@ -211,7 +488,35 @@ void bind_mission_cameras(py::module_ &m) {
         stream << "<Hyb2OncDistortionMap>";
         return stream.str();
       });
-  py::class_<Isis::JunoCamera, Isis::FramingCamera>(m, "JunoCamera");
+  py::class_<Isis::JunoCamera, Isis::FramingCamera>(m, "JunoCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a JunoCam framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::JunoCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"))
+      .def("ck_frame_id", &Isis::JunoCamera::CkFrameId)
+      .def("ck_reference_id", &Isis::JunoCamera::CkReferenceId)
+      .def("spk_target_id", &Isis::JunoCamera::SpkTargetId)
+      .def("spk_reference_id", &Isis::JunoCamera::SpkReferenceId);
+  py::class_<Isis::JunoDistortionMap, Isis::CameraDistortionMap>(m, "JunoDistortionMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("parent"),
+           py::keep_alive<1, 2>(),
+           "Construct the JunoCam distortion-map helper.")
+      .def("set_distortion",
+           &Isis::JunoDistortionMap::SetDistortion,
+           py::arg("naif_ik_code"))
+      .def("set_focal_plane",
+           &Isis::JunoDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"))
+      .def("set_undistorted_focal_plane",
+           &Isis::JunoDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"));
   py::class_<Isis::KaguyaMiCamera, Isis::LineScanCamera>(m, "KaguyaMiCamera");
   py::class_<Isis::KaguyaTcCamera, Isis::LineScanCamera>(m, "KaguyaTcCamera");
   py::class_<Isis::LoCameraFiducialMap>(m, "LoCameraFiducialMap")

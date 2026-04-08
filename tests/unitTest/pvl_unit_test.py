@@ -1,3 +1,12 @@
+"""
+Unit tests for ISIS PVL and PvlSequence bindings.
+
+Author: Geng Xun
+Created: 2026-03-21
+Last Modified: 2026-03-30
+Updated: 2026-03-30  Geng Xun added PvlSequence regression coverage alongside core PVL keyword, group, object, and container tests.
+"""
+
 import unittest
 
 from _unit_test_support import make_simple_pvl, temporary_text_file, ip

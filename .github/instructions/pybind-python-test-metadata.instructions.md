@@ -11,6 +11,8 @@ Use these rules when creating or editing Python unit test files under `tests/uni
 
 Keep Python test files self-describing with lightweight metadata while preserving clean `unittest` discovery and avoiding excessive docstring churn.
 
+Shared author, date, and short update-summary defaults live in `pybind-metadata-common.instructions.md`.
+
 ## Module docstring rules
 
 - New unit test files should begin with a module docstring that includes:
@@ -18,8 +20,8 @@ Keep Python test files self-describing with lightweight metadata while preservin
   - `Author:`
   - `Created:`
   - `Last Modified:`
-- Use `YYYY-MM-DD` date format.
-- Default author metadata to `Geng Xun` unless the user explicitly requests otherwise.
+- When a test file is meaningfully updated, add one short update-summary line near the top metadata stating:
+  - a concise summary of the new coverage or expectation change
 
 Recommended pattern:
 
@@ -29,6 +31,7 @@ Recommended pattern:
 - `Author: Geng Xun`
 - `Created: 2026-03-26`
 - `Last Modified: 2026-03-26`
+- `Updated: 2026-03-26  Geng Xun added focused regression coverage for Cube construction and pre-create setters.`
 - `"""`
 
 ## Updating existing test files
@@ -38,6 +41,8 @@ Recommended pattern:
   - adding important new test coverage
   - changing expectations because the binding surface changed
   - fixing an actual test bug or environment-handling bug
+- When you update `Last Modified:` for a meaningful test change, also add or refresh one short top-of-file update note summarizing the change in plain language.
+- Keep the note short and coverage-focused; avoid turning the module docstring into a changelog.
 - Do **not** update metadata for trivial formatting-only edits.
 
 ## When metadata is missing

@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-26  Geng Xun added geometry value types plus transform, interpolator, enlarge, and reduce bindings
+// Purpose: pybind11 bindings for ISIS geometry primitives and resampling helpers including Angle, Distance, Latitude, Longitude, Transform, Interpolator, Enlarge, and Reduce
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

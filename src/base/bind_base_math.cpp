@@ -15,7 +15,7 @@
  *   - isis/src/base/objs/NthOrderPolynomial/NthOrderPolynomial.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Updated: 2026-03-29
+ * Updated: 2026-03-29  Geng Xun expanded math bindings with linear algebra, polynomial, and infix/postfix helper coverage
  * Purpose: Expose Calculator, Affine, BasisFunction, InfixToPostfix,
  *          CubeInfixToPostfix, InlineInfixToPostfix, and NthOrderPolynomial
  *          classes to Python via pybind11.

@@ -26,6 +26,14 @@ body:
         - if the inference is incomplete or ambiguous, edit the suggested sections manually before adding `ready-for-agent`
         - after `ready-for-agent`, push coding changes to the automation-created draft PR branch for this issue
 
+        Source-file header convention for the eventual binding code:
+        - keep the issue focused on source metadata content, not final C++ header formatting
+        - new or refreshed pybind source files should use `//` line comments
+        - put copyright and `SPDX-License-Identifier: MIT` at the very top
+        - use `Source ISIS header:` / `Source class:` for single-class files
+        - use `Source ISIS headers:` / `Source classes:` for multi-class files
+        - prefer repository-relative upstream paths under `reference/upstream_isis/...`
+
   - type: input
     id: target_class
     attributes:
@@ -50,7 +58,7 @@ body:
     id: upstream_paths
     attributes:
       label: Upstream source paths
-      description: Use repository-relative paths under reference/upstream_isis. You may leave this blank for auto-suggestions.
+      description: Use repository-relative paths under reference/upstream_isis. These feed source metadata content; the final C++ file header formatting is standardized separately. You may leave this blank for auto-suggestions.
       placeholder: |
         reference/upstream_isis/.../Cube.h
         reference/upstream_isis/.../Cube.cpp

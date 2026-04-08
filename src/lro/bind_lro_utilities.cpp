@@ -6,7 +6,7 @@
 // Source header author(s): Jacob Danton, Steven Lambright, Kris Becker (see individual headers)
 // Binding author: Geng Xun
 // Created: 2026-04-06
-// Updated: 2026-04-06
+// Updated: 2026-04-06  Geng Xun added LRO narrow/wide-angle distortion and focal-plane map bindings
 // Purpose: pybind11 bindings for Lunar Reconnaissance Orbiter (LRO) camera utilities including distortion maps and focal plane map
 
 // Copyright (c) 2026 Geng Xun, Henan University

@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-04-03  Geng Xun expanded low-level cube I/O bindings with managers, table primitives, and Cube histogram/statistics helpers
+// Purpose: pybind11 bindings for low-level ISIS cube I/O types including Cube, buffers, managers, AlphaCube, and table structures
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

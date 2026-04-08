@@ -4,7 +4,7 @@
  * Source header author(s): Jeff Anderson (2005-05-04 original author per header)
  * Binding author: Geng Xun
  * Created: 2026-04-03
- * Updated: 2026-04-03
+ * Updated: 2026-04-03  Geng Xun added AutoRegFactory.create(...) static binding for PVL-driven AutoReg construction
  *
  * Purpose: Expose AutoRegFactory static factory method for creating AutoReg instances from PVL configuration
  */

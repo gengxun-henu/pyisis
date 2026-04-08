@@ -6,7 +6,7 @@
 // Source header author(s): Jeff Anderson
 // Binding author: Geng Xun
 // Created: 2026-03-21
-// Updated: 2026-03-21
+// Updated: 2026-03-21  Geng Xun added UniversalGroundMap image/ground conversion helpers and camera/projection accessors
 // Purpose: Expose Isis::UniversalGroundMap image/ground conversion helpers.
 
 #include <string>

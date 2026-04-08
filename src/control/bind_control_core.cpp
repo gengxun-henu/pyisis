@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-04-08  Geng Xun completed ControlNetFilter point/cube filter bindings and related control-core exposure updates
+// Purpose: pybind11 bindings for ISIS control network core classes, filters, and bundle-control helpers
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 
@@ -831,14 +836,67 @@ void bind_control_core(py::module_ &m)
               &Isis::ControlNetFilter::PointEditLockFilter,
               py::arg("pvl_group"),
               py::arg("last_filter"))
+         // Added: 2026-04-08 - expose remaining upstream ControlNetFilter point/cube filter methods
+         .def("point_pixel_shift_filter",
+              &Isis::ControlNetFilter::PointPixelShiftFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("point_num_measures_edit_lock_filter",
+              &Isis::ControlNetFilter::PointNumMeasuresEditLockFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("point_res_magnitude_filter",
+              &Isis::ControlNetFilter::PointResMagnitudeFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("point_goodness_of_fit_filter",
+              &Isis::ControlNetFilter::PointGoodnessOfFitFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("point_id_filter",
+              &Isis::ControlNetFilter::PointIDFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
          .def("point_measures_filter",
               &Isis::ControlNetFilter::PointMeasuresFilter,
               py::arg("pvl_group"),
               py::arg("last_filter"))
+         .def("point_properties_filter",
+              &Isis::ControlNetFilter::PointPropertiesFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("point_lat_lon_filter",
+              &Isis::ControlNetFilter::PointLatLonFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("point_distance_filter",
+              &Isis::ControlNetFilter::PointDistanceFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("point_measure_properties_filter",
+              &Isis::ControlNetFilter::PointMeasurePropertiesFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("point_cube_names_filter",
+              &Isis::ControlNetFilter::PointCubeNamesFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
          .def("point_stats_header", &Isis::ControlNetFilter::PointStatsHeader)
          .def("point_stats", &Isis::ControlNetFilter::PointStats, py::arg("control_point"))
+         .def("cube_name_expression_filter",
+              &Isis::ControlNetFilter::CubeNameExpressionFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
          .def("cube_num_points_filter",
               &Isis::ControlNetFilter::CubeNumPointsFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("cube_distance_filter",
+              &Isis::ControlNetFilter::CubeDistanceFilter,
+              py::arg("pvl_group"),
+              py::arg("last_filter"))
+         .def("cube_convex_hull_filter",
+              &Isis::ControlNetFilter::CubeConvexHullFilter,
               py::arg("pvl_group"),
               py::arg("last_filter"))
          .def("cube_stats_header", &Isis::ControlNetFilter::CubeStatsHeader)

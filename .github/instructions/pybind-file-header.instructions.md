@@ -14,7 +14,10 @@ Every newly created pybind file should include a short, consistent header commen
 - the **upstream ISIS header/source metadata**
 - the **local pybind binding author metadata**
 - the **current creation/update date**
-- the **version information already used by this repository**
+
+Default to one canonical source-file header layout so new files do not drift between multiple styles.
+
+Shared author, date, and short update-summary defaults live in `pybind-metadata-common.instructions.md`.
 
 ## Required preparation
 
@@ -28,15 +31,20 @@ Before creating the new pybind file header:
 
 Unless the user explicitly requests a different format, include all of the following near the top of the new file:
 
-- `Source ISIS header:` absolute or repository-relative path to the original ISIS header
-- `Source class:` the ISIS class being exposed
+- `Copyright ...` line at the very top of the file
+- `SPDX-License-Identifier: MIT` immediately below copyright
+- a blank line after SPDX before source metadata
+- `Source ISIS header:` plus `Source class:` for a single-class binding file
+- `Source ISIS headers:` plus `Source classes:` for a multi-class or utility binding file
 - `Source header author(s):` author names from the upstream header, if explicitly present
 - `Source header note:` use a clear note when upstream author metadata is absent
-- `Binding author:` default to `Geng Xun` unless the user specifies otherwise
+- `Binding author:` the local binding author
 - `Created:` current date in `YYYY-MM-DD` format
 - `Updated:` current date in `YYYY-MM-DD` format when appropriate
-- existing repository version information, if this repository already places version metadata in the file header
+- one short update summary line near the header when meaningful work is added later
 - a one-line `Purpose:` summary of what the binding file exposes
+
+For upstream mirrored sources, prefer repository-relative paths under `reference/upstream_isis/...`.
 
 ## Rules for author metadata
 
@@ -48,16 +56,18 @@ Unless the user explicitly requests a different format, include all of the follo
 
 ## Rules for date metadata
 
-- Use `YYYY-MM-DD` format.
 - For a brand-new file, set both `Created:` and `Updated:` to the current date.
 - For edits to an existing file, preserve the original `Created:` value when present and refresh `Updated:` only when appropriate.
+- When a meaningful later edit expands the binding surface, add or refresh a short human-readable update note close to the header.
 
 ## Style guidance
 
 - Keep the header concise; do not create a large banner unless the surrounding file style already uses one.
-- Prefer line comments or a compact C-style block that matches nearby binding files.
-- Preserve any existing required version metadata already used in the repository.
-- If a nearby module already has an accepted header style, follow that style while still including the required metadata above.
+- For new or refreshed pybind file headers, default to `//` line comments.
+- Put copyright and SPDX first, then a blank line, then the source/binding metadata.
+- For multi-class files, render `Source ISIS headers:` as a bullet list using `// - ...` lines.
+- Prefer `reference/upstream_isis/...` repository-relative paths over `isis/src/...`, absolute paths, or machine-specific paths.
+- Keep issue text or automation handoff notes as source content only; render the actual C++ file header using the canonical format below instead of pasting issue prose verbatim.
 
 ## Preferred fallback text
 
@@ -70,6 +80,56 @@ When upstream author metadata is missing, use this exact wording unless the user
 Use this template as the default starting point:
 
 - `doc_pybind11_learning/pybind_file_header_template.md`
+
+## Canonical default templates
+
+Single-class binding file:
+
+`// Copyright (c) 2026 Geng Xun, Henan University`
+
+`// SPDX-License-Identifier: MIT`
+
+`//`
+
+`// Source ISIS header: reference/upstream_isis/src/.../ClassName.h`
+
+`// Source class: Isis::ClassName`
+
+`// Source header author(s): ...`
+
+`// Binding author: Geng Xun`
+
+`// Created: YYYY-MM-DD`
+
+`// Updated: YYYY-MM-DD  Geng Xun ...`
+
+`// Purpose: Expose Isis::ClassName ...`
+
+Multi-class or utility binding file:
+
+`// Copyright (c) 2026 Geng Xun, Henan University`
+
+`// SPDX-License-Identifier: MIT`
+
+`//`
+
+`// Source ISIS headers:`
+
+`// - reference/upstream_isis/src/.../FirstClass.h`
+
+`// - reference/upstream_isis/src/.../SecondClass.h`
+
+`// Source classes: FirstClass, SecondClass`
+
+`// Source header author(s): ...`
+
+`// Binding author: Geng Xun`
+
+`// Created: YYYY-MM-DD`
+
+`// Updated: YYYY-MM-DD  Geng Xun ...`
+
+`// Purpose: Expose ...`
 
 ## Non-goals
 

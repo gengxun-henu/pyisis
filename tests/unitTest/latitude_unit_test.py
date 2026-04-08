@@ -1,3 +1,11 @@
+"""
+Unit tests for ISIS Latitude bindings.
+
+Author: Geng Xun
+Created: 2026-03-21
+Last Modified: 2026-03-21
+"""
+
 import unittest
 
 from _unit_test_support import DEGREES, METERS, ip

@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-21  Geng Xun added core Camera bindings covering image/ground conversion, resolution queries, and map accessors
+// Purpose: pybind11 bindings for the ISIS Camera base class and shared camera-side geometry accessors
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

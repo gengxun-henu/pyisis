@@ -3,7 +3,8 @@ Unit tests for ISIS control-core bindings.
 
 Author: Geng Xun
 Created: 2026-04-07
-Last Modified: 2026-04-07
+Last Modified: 2026-04-08
+Updated: 2026-04-08  Geng Xun added ControlNetFilter regression coverage for newly exposed point/cube filters and helpers.
 """
 
 import gc
@@ -154,6 +155,19 @@ End
             group.add_keyword(ip.PvlKeyword("LessThan", str(less_than)))
         if greater_than is not None:
             group.add_keyword(ip.PvlKeyword("GreaterThan", str(greater_than)))
+        return group
+
+    def make_expression_group(self, name, expression):
+        group = ip.PvlGroup(name)
+        group.add_keyword(ip.PvlKeyword("Expression", expression))
+        return group
+
+    def make_point_properties_group(self, point_type=None, ignore=None):
+        group = ip.PvlGroup("Point_Properties")
+        if point_type is not None:
+            group.add_keyword(ip.PvlKeyword("PointType", point_type))
+        if ignore is not None:
+            group.add_keyword(ip.PvlKeyword("Ignore", "True" if ignore else "False"))
         return group
 
     def make_control_net_filter_count_fixture(self):
@@ -639,6 +653,56 @@ End
             )
             self.assertIn("KEEP2", output_text)
             self.assertNotIn("DROP1", output_text)
+
+    def test_control_net_filter_point_id_filter_keeps_matching_points(self):
+        net, cube_path, _ = self.make_control_net_filter_fixture()
+
+        with temporary_directory() as temp_dir:
+            serial_list_path = temp_dir / "serials.lis"
+            serial_list_path.write_text(f"{cube_path}\n", encoding="utf-8")
+
+            filter_object = ip.ControlNetFilter(net, str(serial_list_path))
+            filter_object.point_id_filter(
+                self.make_expression_group("Point_IdExpression", "LOCK*"),
+                False,
+            )
+
+            self.assertEqual(net.get_num_points(), 1)
+            self.assertEqual(net.get_point(0).get_id(), "LOCKED")
+
+    def test_control_net_filter_point_properties_filter_keeps_fixed_points(self):
+        net, cube_path, _ = self.make_control_net_filter_fixture()
+
+        with temporary_directory() as temp_dir:
+            serial_list_path = temp_dir / "serials.lis"
+            serial_list_path.write_text(f"{cube_path}\n", encoding="utf-8")
+
+            filter_object = ip.ControlNetFilter(net, str(serial_list_path))
+            filter_object.point_properties_filter(
+                self.make_point_properties_group(point_type="fixed"),
+                False,
+            )
+
+            self.assertEqual(net.get_num_points(), 1)
+            remaining = net.get_point(0)
+            self.assertEqual(remaining.get_id(), "LOCKED")
+            self.assertTrue(remaining.is_fixed())
+
+    def test_control_net_filter_cube_name_expression_filter_keeps_matching_serials(self):
+        net, cube_path, serial_number = self.make_control_net_filter_fixture()
+
+        with temporary_directory() as temp_dir:
+            serial_list_path = temp_dir / "serials.lis"
+            serial_list_path.write_text(f"{cube_path}\n", encoding="utf-8")
+
+            filter_object = ip.ControlNetFilter(net, str(serial_list_path))
+            filter_object.cube_name_expression_filter(
+                self.make_expression_group("Cube_NameExpression", serial_number[:12]),
+                False,
+            )
+
+            self.assertEqual(net.get_num_points(), 2)
+            self.assertEqual(len(net.get_measures_in_cube(serial_number)), 2)
 
     def test_control_net_filter_cube_num_points_filter_keeps_expected_images(self):
         net, cube_paths, serials = self.make_control_net_filter_count_fixture()

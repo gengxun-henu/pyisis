@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-26  Geng Xun expanded target bindings with shape access, NAIF lookup helpers, and ShapeModelFactory creation support
+// Purpose: pybind11 bindings for ISIS Target metadata, shape attachment helpers, and ShapeModelFactory construction
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

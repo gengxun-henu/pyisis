@@ -10,7 +10,7 @@
  *   - isis/src/base/objs/LineEquation/LineEquation.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Updated: 2026-03-30
+ * Updated: 2026-03-30  Geng Xun added LineEquation bindings and expanded Column utility exposure
  * Purpose: Expose Column, LineEquation and related utility classes to Python via pybind11.
  * Purpose: Expose Column, LineEquation, and related utility classes to Python via pybind11.
  */

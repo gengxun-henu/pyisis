@@ -16,6 +16,8 @@ This instruction complements `pybind-file-header.instructions.md`:
 
 Keep C++ binding metadata consistent over time so file history is visible without causing noisy comment churn.
 
+Shared author, date, and short update-summary defaults live in `pybind-metadata-common.instructions.md`.
+
 ## File-level metadata rules
 
 - Preserve an existing `Created:` date when it is already present.
@@ -26,8 +28,8 @@ Keep C++ binding metadata consistent over time so file history is visible withou
   - fixing a real binding bug or import/runtime issue
   - materially changing file-level documentation
 - Do **not** churn metadata for whitespace-only edits, formatting-only edits, or trivial comment cleanup.
-- Use `YYYY-MM-DD` date format.
-- Default binding author metadata to `Geng Xun` unless the user explicitly requests otherwise.
+- When you refresh `Updated:` for a meaningful binding change, keep the adjacent summary as a compact single-line C++ comment near the file header.
+- Preserve the existing comment style of the file. If the file already uses `Updated:` metadata in a header block, extend that block instead of inventing a second style elsewhere.
 
 ## When metadata is missing
 
@@ -47,6 +49,7 @@ Keep C++ binding metadata consistent over time so file history is visible withou
 Example:
 
 - `// Added: 2026-03-26 - expose Cube::statistics overloads`
+- `// Updated: 2026-04-07  Geng Xun completed Apollo mission camera/helper binding fixes.`
 
 ## Style guidance
 

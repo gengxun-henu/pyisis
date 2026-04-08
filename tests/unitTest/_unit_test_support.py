@@ -1,3 +1,12 @@
+"""
+Shared helpers for ISIS pybind unit tests.
+
+Author: Geng Xun
+Created: 2026-03-21
+Last Modified: 2026-03-28
+Updated: 2026-03-28  Geng Xun added shared test environment bootstrap helpers for ISISDATA, build-directory resolution, and reusable fixture factories.
+"""
+
 import os
 from pathlib import Path
 import sys

@@ -4,6 +4,7 @@ Unit tests for ISIS pattern matching classes: Chip, AutoReg, MaximumCorrelation,
 Author: Geng Xun
 Created: 2026-03-24
 Last Modified: 2026-04-03
+Updated: 2026-04-03  Geng Xun added regression coverage for Chip, AutoReg, MaximumCorrelation, and AutoRegFactory bindings.
 """
 import unittest
 

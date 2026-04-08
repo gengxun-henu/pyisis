@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-04-03
 Last Modified: 2026-04-04
+Updated: 2026-04-04  Geng Xun added focused low-level Cube I/O regression coverage for managers, pixel helpers, and table primitives.
 """
 
 import unittest

@@ -171,6 +171,21 @@ void bind_base_geometry(py::module_ &m) {
 
   stereo
       .def(py::init<>())
+
+      /**
+       * @brief Calculate elevation and related parameters from two cameras
+       * Returns a tuple of (success, radius, latitude, longitude, sepang, error)
+        * where success is a boolean indicating if the calculation was successful,
+        * radius is the calculated radius at the point,
+        * latitude and longitude are the calculated coordinates,
+        * sepang is the separation angle between the two cameras at the point,
+        * and error is an estimate of the error in the elevation calculation.
+        * Note that the radius, latitude, longitude, sepang, and error values are only meaningful if success is True.
+        * This method is useful for performing stereo elevation calculations given two camera models, and the returned parameters can be used to understand the geometry of the observed point in 3D space.
+        * Camera::SetImage() must have been called on both cameras with the same ground point for this method to work correctly, as it relies on the cameras being pointed at the same location on the surface.
+        * The method will return false if either camera does not have a valid surface intersection, which can occur if the cameras are not properly set up or if they are not pointed at the same location
+        * on the surface.
+       */
       .def_static(
           "elevation",
           [](Isis::Camera &cam1, Isis::Camera &cam2) {

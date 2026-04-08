@@ -297,7 +297,7 @@ Statistics,QuickFilter,未转换,
 Statistics,StatCumProbDistDynCalc,未转换,Qt 类型/信号槽较多
 Statistics,Statistics,已转换,Qt 类型/信号槽较多
 Statistics,VecFilter,已转换,
-System,Environment,未转换,2026-04-08 仅做 inventory 预登记，后续补实际 pybind 绑定与方法细化
+System,Environment,已转换,2026-04-08 已在 src/base/bind_base_utility.cpp 暴露静态环境查询接口并新增 focused 单测与 smoke 覆盖
 System,Plugin,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次，先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
 Trace Gas Orbiter,TgoCassisCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Trace Gas Orbiter,TgoCassisDistortionMap,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"

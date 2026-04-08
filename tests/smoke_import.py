@@ -124,6 +124,7 @@ def test_basic_symbols_present():
     assert hasattr(ip, "MultivariateStatistics")
     assert hasattr(ip, "VecFilter")
     assert hasattr(ip, "Angle")
+    assert hasattr(ip, "Environment")
     assert hasattr(ip, "Stereo")
     assert hasattr(ip, "AtmosModel")
     assert hasattr(ip, "Anisotropic1")
@@ -600,6 +601,8 @@ def test_basic_base_objects_work():
 
 
 def test_high_level_process_objects_work():
+    assert isinstance(ip.Environment.get_environment_value("PATH", ""), str)
+
     progress = ip.Progress()
     progress.set_text("Working")
     progress.set_maximum_steps(5)

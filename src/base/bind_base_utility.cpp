@@ -7,11 +7,12 @@
  *
  * Source ISIS headers:
  *   - isis/src/base/objs/Column/Column.h
+ *   - isis/src/base/objs/Environment/Environment.h
  *   - isis/src/base/objs/LineEquation/LineEquation.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Updated: 2026-03-30  Geng Xun added LineEquation bindings and expanded Column utility exposure
- * Purpose: Expose Column, LineEquation and related utility classes to Python via pybind11.
+ * Updated: 2026-04-08  Geng Xun added Environment static utility bindings alongside existing Column and LineEquation exposure
+ * Purpose: Expose Column, Environment, LineEquation, and related utility classes to Python via pybind11.
  * Purpose: Expose Column, LineEquation, and related utility classes to Python via pybind11.
  */
 
@@ -19,12 +20,44 @@
 #include <pybind11/stl.h>
 
 #include "Column.h"
+#include "Environment.h"
 #include "LineEquation.h"
 #include "helpers.h"
 
 namespace py = pybind11;
 
 void bind_base_utility(py::module_ &m) {
+     py::class_<Isis::Environment>(m, "Environment")
+               .def_static(
+                         "user_name",
+                         []() {
+                              return qStringToStdString(Isis::Environment::userName());
+                         },
+                         "Get the current user name from the environment")
+               .def_static(
+                         "host_name",
+                         []() {
+                              return qStringToStdString(Isis::Environment::hostName());
+                         },
+                         "Get the current host name from the environment")
+               .def_static(
+                         "isis_version",
+                         []() {
+                              return qStringToStdString(Isis::Environment::isisVersion());
+                         },
+                         "Get the ISIS version string from $ISISROOT/isis_version.txt")
+               .def_static(
+                         "get_environment_value",
+                         [](const std::string &variable, const std::string &default_value) {
+                              return qStringToStdString(
+                                        Isis::Environment::getEnvironmentValue(
+                                                  stdStringToQString(variable),
+                                                  stdStringToQString(default_value)));
+                         },
+                         py::arg("variable"),
+                         py::arg("default_value") = "",
+                         "Get an environment variable with an optional default value");
+
   /**
    * @brief Bindings for the Isis::Column class
    * Column class provides functionality for formatting and managing table columns.

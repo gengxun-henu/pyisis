@@ -1,12 +1,15 @@
 """
-Unit tests for ISIS utility classes: Column, LineEquation
+Unit tests for ISIS utility classes: Column, Environment, LineEquation
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-03
-Updated: 2026-04-03  Geng Xun expanded utility binding regression coverage for Column constraints and LineEquation helpers.
+Last Modified: 2026-04-08
+Updated: 2026-04-08  Geng Xun added Environment regression coverage alongside existing Column and LineEquation helpers.
 """
+import os
+import tempfile
 import unittest
+from unittest import mock
 
 from _unit_test_support import ip
 
@@ -128,6 +131,49 @@ class ColumnUnitTest(unittest.TestCase):
         self.assertIsNotNone(ip.Column.Type.Real)
         self.assertIsNotNone(ip.Column.Type.String)
         self.assertIsNotNone(ip.Column.Type.Pixel)
+
+
+class EnvironmentUnitTest(unittest.TestCase):
+    """Test suite for Environment static utility bindings."""
+
+    def test_get_environment_value_returns_set_value(self):
+        with mock.patch.dict(os.environ, {"PYISIS_TEST_ENV_VALUE": "bound-value"}, clear=False):
+            self.assertEqual(
+                ip.Environment.get_environment_value("PYISIS_TEST_ENV_VALUE", "fallback"),
+                "bound-value",
+            )
+
+    def test_get_environment_value_uses_default_for_missing_key(self):
+        with mock.patch.dict(os.environ, {}, clear=False):
+            os.environ.pop("PYISIS_TEST_ENV_MISSING", None)
+            self.assertEqual(
+                ip.Environment.get_environment_value("PYISIS_TEST_ENV_MISSING", "fallback"),
+                "fallback",
+            )
+
+    def test_user_name_and_host_name_follow_environment(self):
+        with mock.patch.dict(
+            os.environ,
+            {
+                "USER": "environment-unit-user",
+                "HOST": "environment-unit-host",
+            },
+            clear=False,
+        ):
+            self.assertEqual(ip.Environment.user_name(), "environment-unit-user")
+            self.assertEqual(ip.Environment.host_name(), "environment-unit-host")
+
+    def test_isis_version_reads_from_mock_isisroot(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            version_path = os.path.join(temp_dir, "isis_version.txt")
+            with open(version_path, "w", encoding="utf-8") as version_file:
+                version_file.write("isis9.0.0 # comment\n")
+                version_file.write("2026-04-08\n")
+                version_file.write("unused line\n")
+                version_file.write("beta\n")
+
+            with mock.patch.dict(os.environ, {"ISISROOT": temp_dir}, clear=False):
+                self.assertEqual(ip.Environment.isis_version(), "isis9.0.0 beta | 2026-04-08")
 
 
 class LineEquationUnitTest(unittest.TestCase):

@@ -2,9 +2,9 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 Environment,System,reference/upstream_isis/src/base/objs/Environment/Environment.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,静态环境查询工具；构造函数受保护，实际主要暴露静态接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Environment,isis_pybind.Environment,N,Python class symbol not found in current binding files
-Construction/Enum,~Environment(),isis_pybind.Environment,N,析构函数；构造函数为 protected
-Public API,static QString userName(),isis_pybind.Environment.userName,N,当前用户名
-Public API,static QString hostName(),isis_pybind.Environment.hostName,N,当前主机名
-Public API,static QString isisVersion(),isis_pybind.Environment.isisVersion,N,ISIS 版本号
-Public API,"static QString getEnvironmentValue(QString, QString)",isis_pybind.Environment.getEnvironmentValue,N,按键读取环境变量并支持默认值
+Class Symbol,Environment,isis_pybind.Environment,Y,2026-04-08 已在 src/base/bind_base_utility.cpp 暴露无构造静态工具类符号
+Construction/Enum,~Environment(),isis_pybind.Environment,Y,2026-04-08 Python 侧不开放构造；析构随 py::class_ 生命周期处理
+Public API,static QString userName(),isis_pybind.Environment.userName,Y,2026-04-08 以 Environment.user_name() 暴露并转换为 Python str
+Public API,static QString hostName(),isis_pybind.Environment.hostName,Y,2026-04-08 以 Environment.host_name() 暴露并转换为 Python str
+Public API,static QString isisVersion(),isis_pybind.Environment.isisVersion,Y,2026-04-08 以 Environment.isis_version() 暴露并读取 ISISROOT/version 文件
+Public API,"static QString getEnvironmentValue(QString, QString)",isis_pybind.Environment.getEnvironmentValue,Y,2026-04-08 以 Environment.get_environment_value(variable, default_value='') 暴露

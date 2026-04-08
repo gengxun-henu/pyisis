@@ -96,6 +96,7 @@ from ._isis_core import (
     EmbreeTargetManager,
     EmbreeTargetShape,
     EmbreeShapeModel,
+    Environment,
     ExportDescription,
     FileName,
     FramingCamera,

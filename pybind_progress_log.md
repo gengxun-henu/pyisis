@@ -2,6 +2,20 @@
 
 ## 2026-04-08
 
+- Environment 静态环境查询工具绑定完成：
+  - 扩展 `src/base/bind_base_utility.cpp`，新增 `Environment` 绑定，按 Python 风格暴露 `user_name()`、`host_name()`、`isis_version()` 与 `get_environment_value(variable, default_value='')` 四个静态入口，并保持上游受保护构造函数不在 Python 侧开放。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `Environment`。
+  - 扩展 `tests/unitTest/utility_unit_test.py`：新增 `Environment` focused 覆盖，验证环境变量读取默认值逻辑、`USER`/`HOST` 映射，以及基于临时 `ISISROOT/isis_version.txt` 的版本字符串解析行为。
+  - 更新 `tests/smoke_import.py`，补充 `Environment` 顶层符号与最小环境变量读取检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_environment_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake -S . -B build -DISIS_PREFIX=/home/gengxun/miniconda3/envs/asp360_new -DPython3_EXECUTABLE=/home/gengxun/miniconda3/envs/asp360_new/bin/python && cmake --build build -j2`
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p 'utility_unit_test.py'` (`30` tests, `OK`)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
 - Stereo 几何立体测量 helper 绑定完成：
   - 扩展 `src/base/bind_base_geometry.cpp`，新增 `Stereo` 绑定，暴露默认构造函数，以及 tuple-returning 的 `elevation(cam1, cam2)`、`spherical(latitude, longitude, radius)`、`rectangular(x, y, z)` 三个静态入口。
   - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `Stereo`。

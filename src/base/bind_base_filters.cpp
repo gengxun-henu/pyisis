@@ -14,6 +14,7 @@
  *   - isis/src/base/objs/CSVReader/CSVReader.h
  * Binding author: Geng Xun
  * Created: 2026-03-25
+ * Updated: 2026-03-26  Geng Xun expanded filter and utility bindings with GaussianStretch, QuickFilter, Kernels, and CSVReader coverage
  * Purpose: Expose Stretch, GaussianStretch, QuickFilter, Kernels, and CSVReader classes to Python via pybind11.
  *
  * Note: Many methods use lambda wrappers to convert between Qt types (QString, QVector)

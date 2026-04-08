@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-21  Geng Xun added CameraFactory static bindings for cube-driven camera creation and plugin version queries
+// Purpose: pybind11 bindings for ISIS CameraFactory static helpers that construct and inspect cube-backed cameras
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

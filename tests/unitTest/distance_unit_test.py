@@ -1,3 +1,11 @@
+"""
+Unit tests for ISIS Distance bindings.
+
+Author: Geng Xun
+Created: 2026-03-21
+Last Modified: 2026-03-21
+"""
+
 import unittest
 
 from _unit_test_support import KILOMETERS, METERS, SOLAR_RADII, ip

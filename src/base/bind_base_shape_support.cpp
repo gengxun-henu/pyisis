@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-21  Geng Xun added plate-model, intercept, and target-shape support bindings for DSK, Embree, and Bullet helpers
+// Purpose: pybind11 bindings for ISIS plate geometry, intercept results, and target-shape support utilities used by shape-model workflows
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

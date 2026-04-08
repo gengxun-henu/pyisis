@@ -4,6 +4,7 @@ Unit tests for ISIS utility classes: Column, LineEquation
 Author: Geng Xun
 Created: 2026-03-24
 Last Modified: 2026-04-03
+Updated: 2026-04-03  Geng Xun expanded utility binding regression coverage for Column constraints and LineEquation helpers.
 """
 import unittest
 

@@ -1,3 +1,11 @@
+"""
+Unit tests for ISIS SerialNumber and ObservationNumber bindings.
+
+Author: Geng Xun
+Created: 2026-03-21
+Last Modified: 2026-03-21
+"""
+
 import unittest
 
 from _unit_test_support import ip, temporary_text_file, workspace_test_data_path

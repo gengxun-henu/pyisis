@@ -6,7 +6,7 @@
 // Source header author(s): not explicitly stated in upstream headers
 // Binding author: Geng Xun
 // Created: 2026-04-05
-// Updated: 2026-04-05
+// Updated: 2026-04-05  Geng Xun added MOC labels, summing, detector-map, and distortion-map bindings
 // Purpose: pybind11 bindings for Mars Global Surveyor MOC utilities including summing, labels, detector map, and distortion map
 
 // Copyright (c) 2026 Geng Xun, Henan University

@@ -4,6 +4,7 @@ Unit tests for ISIS Cube bindings
 Author: Geng Xun
 Created: 2026-03-27
 Last Modified: 2026-03-29
+Updated: 2026-03-29  Geng Xun added Cube lifecycle regression coverage for create/open/format/access behavior.
 """
 
 import unittest

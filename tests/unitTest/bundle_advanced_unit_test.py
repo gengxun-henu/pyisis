@@ -1,3 +1,12 @@
+"""
+Unit tests for ISIS advanced bundle-adjustment bindings.
+
+Author: Geng Xun
+Created: 2026-03-24
+Last Modified: 2026-03-25
+Updated: 2026-03-25  Geng Xun added preserved regression coverage for temporarily disabled advanced bundle-adjustment bindings.
+"""
+
 import unittest
 
 from _unit_test_support import ip, temporary_directory, workspace_test_data_path

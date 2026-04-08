@@ -6,6 +6,7 @@ NthOrderPolynomial, InfixToPostfix, CubeInfixToPostfix, and InlineInfixToPostfix
 Author: Geng Xun
 Created: 2026-03-24
 Last Modified: 2026-03-29
+Updated: 2026-03-29  Geng Xun added regression coverage for Calculator, linear algebra, polynomial, and infix/postfix bindings.
 """
 import unittest
 import math

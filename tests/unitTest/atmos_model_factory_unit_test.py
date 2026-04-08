@@ -4,6 +4,7 @@ Unit tests for ISIS PhotoModelFactory, AtmosModelFactory, NormModelFactory, and 
 Author: Geng Xun
 Created: 2026-04-04
 Last Modified: 2026-04-06
+Updated: 2026-04-06  Geng Xun added focused factory-chain and AlbedoAtm regression coverage for photometric model bindings.
 """
 import unittest
 

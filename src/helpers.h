@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-26  Geng Xun consolidated shared QString and QVector conversion helpers used across pybind binding sources
+// Purpose: shared helper utilities for QString/std::string and QVector/std::vector conversions used by pybind11 binding code
+
 #ifndef ISIS_PYBIND_HELPERS_H
 #define ISIS_PYBIND_HELPERS_H
 

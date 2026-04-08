@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-21  Geng Xun added ShapeModel hierarchy bindings covering ellipsoid, DEM, plane, DSK, Embree, and Bullet-backed shape helpers
+// Purpose: pybind11 bindings for ISIS shape-model abstractions and concrete surface-intersection implementations
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

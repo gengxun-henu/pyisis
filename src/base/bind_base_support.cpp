@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-26  Geng Xun expanded support bindings with iTime, serial-number, observation-number, and utility coverage
+// Purpose: pybind11 bindings for core ISIS support utilities including FileName, iTime, SerialNumber, SerialNumberList, and ObservationNumber
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

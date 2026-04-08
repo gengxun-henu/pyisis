@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-04-06  Geng Xun expanded top-level _isis_core module registration to include mission camera, statistics, and cube I/O binding groups
+// Purpose: define the top-level pybind11 _isis_core module and register all binding submodules
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

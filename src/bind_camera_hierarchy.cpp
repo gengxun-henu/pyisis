@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-21  Geng Xun added derived camera hierarchy bindings for framing, line-scan, push-frame, radar, rolling-shutter, CSM, and ideal cameras
+// Purpose: pybind11 bindings for ISIS camera subclass hierarchy and line-scan map accessors layered on the base Camera binding
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

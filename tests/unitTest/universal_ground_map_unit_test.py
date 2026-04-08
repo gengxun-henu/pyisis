@@ -1,3 +1,12 @@
+"""
+Unit tests for ISIS UniversalGroundMap bindings.
+
+Author: Geng Xun
+Created: 2026-03-21
+Last Modified: 2026-03-25
+Updated: 2026-03-25  Geng Xun added camera-backed and projection-backed UniversalGroundMap round-trip coverage.
+"""
+
 import math
 import unittest
 

@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-21  Geng Xun added concrete map-projection type constructors for cylindrical, azimuthal, perspective, and ring-plane projections
+// Purpose: pybind11 bindings for concrete ISIS projection types built on Projection, TProjection, and RingPlaneProjection hierarchies
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

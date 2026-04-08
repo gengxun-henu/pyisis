@@ -10,8 +10,8 @@ Use this instruction when binding, testing, or debugging a USGS ISIS class.
 ## Canonical upstream source location
 
 - In this repository, treat `reference/upstream_isis/` as the default mirror for upstream USGS ISIS source and upstream test code.
-- When referring to upstream files in notes, plans, reviews, GitHub web discussions, or CI-oriented instructions, use repository-relative paths such as `reference/upstream_isis/...` instead of machine-specific absolute paths.
-- This keeps the guidance portable across local development, GitHub web UI review, and GitHub Actions.
+- When referring to upstream files in notes, plans, reviews, GitHub web discussions, or CI-oriented instructions, use repository-relative paths such as `reference/upstream_isis/...`.
+- Keep broader repository layout decisions aligned with `reference-data-layout.instructions.md`.
 - If an expected upstream file is not present under `reference/upstream_isis/`, say so explicitly and do not invent a path.
 
 ## Read in this order
@@ -50,7 +50,6 @@ Use this instruction when binding, testing, or debugging a USGS ISIS class.
 
 - Do not trust the `.h` alone for stateful classes.
 - For `Cube`, `Camera`, factories, I/O classes, and manager classes, assume the `.cpp` is required.
-- Use repository-relative paths in instructions and reports so the same guidance works in local runs, GitHub web review, and GitHub Actions.
 - When a binding or binding-status change is completed, sync the tracking artifacts in the same task: `todo_pybind11.csv`, `class_bind_methods_details/methods_inventory_summary.csv`, and the target `class_bind_methods_details/*_methods.csv`.
 - Treat code plus the target `*_methods.csv` as the immediate source of truth while editing, and do not leave `methods_inventory_summary.csv` stale after a class is newly bound or its coverage materially changes.
 - If a setter fails after `create()` or `open()`, treat it as a pre-create lifecycle method.

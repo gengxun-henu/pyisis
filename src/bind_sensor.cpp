@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-22  Geng Xun expanded Sensor bindings with intersection, angle, slant-distance, solar, and spacecraft metadata accessors
+// Purpose: pybind11 bindings for the ISIS Sensor base class and core observation geometry accessors
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

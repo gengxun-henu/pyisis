@@ -4,7 +4,7 @@
  * Source header author(s): not explicitly stated in upstream header
  * Binding author: Geng Xun
  * Created: 2026-03-27
- * Updated: 2026-03-27
+ * Updated: 2026-03-27  Geng Xun added InterestOperatorFactory.create(...) static binding for PVL-driven operator construction
  *
  * Purpose: Expose InterestOperatorFactory static factory method for creating InterestOperator instances from PVL configuration
  */

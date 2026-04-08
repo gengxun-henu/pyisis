@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-24
+// Updated: 2026-03-25  Geng Xun expanded advanced bundle-adjustment bindings and fixed Python exposure for control-point correction and sigma accessors
+// Purpose: pybind11 bindings for advanced ISIS bundle-adjustment classes, preserved for future re-enable once dependency issues are resolved
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

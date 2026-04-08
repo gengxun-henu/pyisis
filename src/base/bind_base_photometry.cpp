@@ -11,7 +11,7 @@
  * Source header author(s): PhotoModel/AtmosModel/NormModel/AlbedoAtm class headers cite Randy Kirk; Factory headers cite Janet Barrett
  * Binding author: Geng Xun
  * Created: 2026-04-04
- * Updated: 2026-04-06
+ * Updated: 2026-04-06  Geng Xun added photometry factory bindings plus AlbedoAtm and Anisotropic1 concrete model exposure
  *
  * Purpose: Expose photometric, atmospheric, and normalization model bindings including factories and concrete implementations.
  */

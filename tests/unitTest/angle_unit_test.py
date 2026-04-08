@@ -1,3 +1,11 @@
+"""
+Unit tests for ISIS Angle bindings.
+
+Author: Geng Xun
+Created: 2026-03-21
+Last Modified: 2026-03-21
+"""
+
 import math
 import unittest
 

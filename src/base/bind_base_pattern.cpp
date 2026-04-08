@@ -11,7 +11,7 @@
  *   - isis/src/base/objs/MaximumCorrelation/MaximumCorrelation.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Updated: 2026-04-03
+ * Updated: 2026-04-03  Geng Xun added Chip, AutoReg, and MaximumCorrelation pattern-matching bindings
  * Purpose: Expose Chip, AutoReg, and MaximumCorrelation pattern matching classes to Python via pybind11.
  */
 

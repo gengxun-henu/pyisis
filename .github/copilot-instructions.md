@@ -27,6 +27,7 @@ All paths below are relative to the repository root unless noted otherwise.
 
 ## Additional instructions to follow
 
+- For shared authored metadata conventions across pybind C++ files and Python unit tests, also follow `.github/instructions/pybind-metadata-common.instructions.md`.
 - For pybind11 binding and test work, also follow `.github/instructions/pybind-testing.instructions.md`.
 - For upstream ISIS API reading, lifecycle analysis, and behavior-driven test design, also follow `.github/instructions/pybind-upstream-source-reading.instructions.md`.
 - For deciding what belongs in `reference/` versus `tests/data/`, also follow `.github/instructions/reference-data-layout.instructions.md`.
@@ -36,17 +37,8 @@ All paths below are relative to the repository root unless noted otherwise.
 - For C++ naming consistency, follow `.github/instructions/isis-cpp-naming.instructions.md` when editing relevant C++ files.
 - When binding, add '#include <pybind11/pybind11.h>,#include <pybind11/stl.h>' when necessary.
 
-## Task routing
+## Pybind workflow routing
 
-- For binding implementation or extension, inspect `todo_pybind11.csv`, `class_bind_methods_details/`, and `src/` first.
-- For Python validation or test additions, inspect `tests/` and `python/` first.
-- For package-level exports, inspect `python/isis_pybind/__init__.py`.
-- When referring to mirrored upstream USGS ISIS source in this repository, default to repository-relative paths under `reference/upstream_isis/`.
-- For progress tracking, update `pybind_progress_log.md` and `todo_pybind11.csv` when the tracked binding inventory or completion context changes.
-- For workflow-oriented pybind tasks, also use `.github/skills/isis-pybind/SKILL.md`.
-
-## Metadata defaults
-
-- When adding authored comments or header metadata, default the author to `Geng Xun` unless the user specifies otherwise.
-- Default date metadata to the current date unless the user specifies otherwise.
+- For workflow-oriented pybind tasks, use `.github/skills/isis-pybind/SKILL.md` as the main task procedure.
+- Use repository-relative paths such as `reference/upstream_isis/...` when referring to mirrored upstream ISIS source in notes, reviews, or CI-facing guidance.
 

@@ -1,12 +1,12 @@
 // Binding author: Geng Xun
 // Created: 2026-04-06
-// Updated: 2026-04-07  Added Rosetta mission bindings (RosettaOsirisCamera, RosettaVirtisCamera, RosettaOsirisCameraDistortionMap) and completed VoyagerCamera binding
-// Updated: 2026-04-07  Added complete OSIRIS-REx mission bindings (OsirisRexOcamsCamera, OsirisRexTagcamsCamera, OsirisRexDistortionMap, OsirisRexTagcamsDistortionMap) and Rosetta mission bindings
-// Updated: 2026-04-07  Completed Viking, Mars Odyssey, Messenger Taylor distortion, and Mariner mission bindings
-// Updated: 2026-04-07  Added Lunar Orbiter camera bindings (LoHighCamera, LoMediumCamera) with fiducial and distortion map helpers
-// Updated: 2026-04-07  Added New Horizons mission camera and distortion helper bindings
-// Updated: 2026-04-07  Completed Apollo, Cassini, Chandrayaan-1, Clementine, Clipper, Galileo, and Juno mission camera/helper bindings
-// Updated: 2026-04-07  Fixed ApolloPanoramicCamera import-time undefined symbol by wrapping residual report in pybind instead of binding the missing upstream method directly
+// Updated: 2026-04-07  Geng Xun added Rosetta mission bindings (RosettaOsirisCamera, RosettaVirtisCamera, RosettaOsirisCameraDistortionMap) and completed VoyagerCamera binding
+// Updated: 2026-04-07  Geng Xun added complete OSIRIS-REx mission bindings (OsirisRexOcamsCamera, OsirisRexTagcamsCamera, OsirisRexDistortionMap, OsirisRexTagcamsDistortionMap) and Rosetta mission bindings
+// Updated: 2026-04-07  Geng Xun completed Viking, Mars Odyssey, Messenger Taylor distortion, and Mariner mission bindings
+// Updated: 2026-04-07  Geng Xun added Lunar Orbiter camera bindings (LoHighCamera, LoMediumCamera) with fiducial and distortion map helpers
+// Updated: 2026-04-07  Geng Xun added New Horizons mission camera and distortion helper bindings
+// Updated: 2026-04-07  Geng Xun completed Apollo, Cassini, Chandrayaan-1, Clementine, Clipper, Galileo, and Juno mission camera/helper bindings
+// Updated: 2026-04-07  Geng Xun fixed ApolloPanoramicCamera import-time undefined symbol by wrapping residual report in pybind instead of binding the missing upstream method directly
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University

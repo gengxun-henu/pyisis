@@ -4,6 +4,7 @@ Unit tests for ISIS LineEquation bindings
 Author: Geng Xun
 Created: 2026-03-30
 Last Modified: 2026-04-03
+Updated: 2026-04-03  Geng Xun expanded LineEquation regression coverage for constructors, geometry, and failure paths.
 """
 
 import unittest

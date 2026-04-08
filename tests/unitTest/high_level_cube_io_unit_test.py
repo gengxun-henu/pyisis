@@ -1,3 +1,12 @@
+"""
+Unit tests for ISIS high-level cube I/O bindings.
+
+Author: Geng Xun
+Created: 2026-03-21
+Last Modified: 2026-04-04
+Updated: 2026-04-04  Geng Xun added focused ExportDescription and JPEG2000 surface regression coverage with environment-aware skips.
+"""
+
 import unittest
 
 from _unit_test_support import ip, temporary_text_file

@@ -1,3 +1,8 @@
+// Binding author: Geng Xun
+// Created: 2026-03-21
+// Updated: 2026-03-21  Geng Xun added Projection, TProjection, RingPlaneProjection, WorldMapper, and ProjectionFactory bindings
+// Purpose: pybind11 bindings for ISIS projection base classes, world-mapping helpers, and projection factory utilities
+
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 

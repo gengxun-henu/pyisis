@@ -27,6 +27,7 @@
 #include "BundleObservationSolveSettings.h"
 #include "BundleTargetBody.h"
 #include "ControlNetFilter.h"
+#include "ControlNetValidMeasure.h"
 #include "ControlMeasure.h"
 #include "ControlMeasureLogData.h"
 #include "ControlNetDiff.h"
@@ -1090,6 +1091,68 @@ void bind_control_core(py::module_ &m)
          .def("__repr__", [](Isis::MeasureValidationResults &self)
               {
                    return std::string("MeasureValidationResults(valid=") + (self.isValid() ? "True" : "False") + ")";
+              });
+
+     // Added: 2026-04-08 - expose stable ControlNetValidMeasure configuration/query helper cluster
+     py::class_<Isis::ControlNetValidMeasure> control_net_valid_measure(m, "ControlNetValidMeasure");
+
+     control_net_valid_measure
+         .def(py::init<>())
+         .def(py::init<Isis::Pvl &>(),
+              py::arg("pvl"),
+              py::keep_alive<1, 2>())
+         .def("init_std_options", &Isis::ControlNetValidMeasure::InitStdOptions)
+         .def("init_std_options_group", &Isis::ControlNetValidMeasure::InitStdOptionsGroup)
+         .def("parse", &Isis::ControlNetValidMeasure::Parse, py::arg("pvl"))
+         .def("get_log_pvl",
+              &Isis::ControlNetValidMeasure::GetLogPvl,
+              py::return_value_policy::reference_internal)
+         .def("valid_emission_angle", &Isis::ControlNetValidMeasure::ValidEmissionAngle, py::arg("emission_angle"))
+         .def("valid_incidence_angle", &Isis::ControlNetValidMeasure::ValidIncidenceAngle, py::arg("incidence_angle"))
+         .def("valid_dn_value", &Isis::ControlNetValidMeasure::ValidDnValue, py::arg("dn_value"))
+         .def("valid_resolution", &Isis::ControlNetValidMeasure::ValidResolution, py::arg("resolution"))
+         .def("valid_residual_tolerances",
+              &Isis::ControlNetValidMeasure::ValidResidualTolerances,
+              py::arg("sample_residual"),
+              py::arg("line_residual"),
+              py::arg("residual_magnitude"),
+              py::arg("results"))
+         .def("valid_shift_tolerances",
+              &Isis::ControlNetValidMeasure::ValidShiftTolerances,
+              py::arg("sample_shift"),
+              py::arg("line_shift"),
+              py::arg("pixel_shift"),
+              py::arg("results"))
+         .def("get_std_options",
+              &Isis::ControlNetValidMeasure::GetStdOptions,
+              py::return_value_policy::reference_internal)
+         .def("get_statistics",
+              &Isis::ControlNetValidMeasure::GetStatistics,
+              py::return_value_policy::reference_internal)
+         .def("get_min_dn", &Isis::ControlNetValidMeasure::GetMinDN)
+         .def("get_max_dn", &Isis::ControlNetValidMeasure::GetMaxDN)
+         .def("get_min_emission_angle", &Isis::ControlNetValidMeasure::GetMinEmissionAngle)
+         .def("get_max_emission_angle", &Isis::ControlNetValidMeasure::GetMaxEmissionAngle)
+         .def("get_min_incidence_angle", &Isis::ControlNetValidMeasure::GetMinIncidenceAngle)
+         .def("get_max_incidence_angle", &Isis::ControlNetValidMeasure::GetMaxIncidenceAngle)
+         .def("get_pixels_from_edge", &Isis::ControlNetValidMeasure::GetPixelsFromEdge)
+         .def("get_meters_from_edge", &Isis::ControlNetValidMeasure::GetMetersFromEdge)
+         .def("location_string",
+              [](const Isis::ControlNetValidMeasure &self, double sample, double line)
+              {
+                   return qStringToStdString(self.LocationString(sample, line));
+              },
+              py::arg("sample"),
+              py::arg("line"))
+         .def("is_cube_required", &Isis::ControlNetValidMeasure::IsCubeRequired)
+         .def("is_camera_required", &Isis::ControlNetValidMeasure::IsCameraRequired)
+         .def("__repr__",
+              [](Isis::ControlNetValidMeasure &self)
+              {
+                   return "ControlNetValidMeasure(camera_required=" +
+                          std::string(self.IsCameraRequired() ? "True" : "False") +
+                          ", cube_required=" +
+                          std::string(self.IsCubeRequired() ? "True" : "False") + ")";
               });
 
      py::class_<Isis::BundleImage> bundle_image(m, "BundleImage");

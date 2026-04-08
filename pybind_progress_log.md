@@ -2,6 +2,21 @@
 
 ## 2026-04-08
 
+- ControlNetValidMeasure 首轮稳定配置/查询方法簇绑定完成：
+  - 扩展 `src/control/bind_control_core.cpp`，新增 `ControlNetValidMeasure` 绑定，当前先暴露一组不依赖真实控制网几何链路、可稳定单测的方法簇：默认/`Pvl` 构造、`init_std_options()`、`init_std_options_group()`、`parse(...)`、`get_log_pvl()`、`get_std_options()`、`get_statistics()`、阈值 getter、`valid_emission_angle(...)`、`valid_incidence_angle(...)`、`valid_dn_value(...)`、`valid_resolution(...)`、`valid_residual_tolerances(...)`、`valid_shift_tolerances(...)`、`location_string(...)`、`is_cube_required()`、`is_camera_required()`。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `ControlNetValidMeasure`。
+  - 扩展 `tests/unitTest/control_core_unit_test.py`：新增 `ControlNetValidMeasure` focused 覆盖，验证默认配置、`Pvl` 解析后的 requirement flag/阈值行为、residual/shift 容差检查，以及非法 PVL 配置抛错路径。
+  - 更新 `tests/smoke_import.py`，补充 `ControlNetValidMeasure` 顶层符号与最小 helper 检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/control_control_net_valid_measure_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake -S . -B build -DPython3_EXECUTABLE=/home/gengxun/miniconda3/envs/asp360_new/bin/python -DISIS_PREFIX=/home/gengxun/miniconda3/envs/asp360_new && cmake --build build -j2`
+  - Passed: `ISIS_PYBIND_BUILD_DIR=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p 'control_core_unit_test.py' -v` (`25` tests, `OK`)
+  - Passed: `ISIS_PYBIND_BUILD_DIR=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+  - Note: 本轮按 handoff 要求只覆盖 `ControlNetValidMeasure` 的一个稳定方法簇；`PixelsFromEdge(...)` / `MetersFromEdge(...)` / `ValidLatLon(...)` 与五个 `ValidStandardOptions(...)` 重载涉及真实 cube/camera/control-measure 几何链路，继续留待后续批次。
+
 - ControlNetFilter 全量公开过滤器绑定完成：
   - 扩展 `src/control/bind_control_core.cpp`，补齐剩余 13 个上游公开过滤接口：`point_pixel_shift_filter(...)`、`point_num_measures_edit_lock_filter(...)`、`point_res_magnitude_filter(...)`、`point_goodness_of_fit_filter(...)`、`point_id_filter(...)`、`point_properties_filter(...)`、`point_lat_lon_filter(...)`、`point_distance_filter(...)`、`point_measure_properties_filter(...)`、`point_cube_names_filter(...)`、`cube_name_expression_filter(...)`、`cube_distance_filter(...)`、`cube_convex_hull_filter(...)`。
   - 扩展 `tests/unitTest/control_core_unit_test.py`：新增 `point_id_filter(...)`、`point_properties_filter(...)`、`cube_name_expression_filter(...)` 的 focused 覆盖，验证 Python 侧方法可调用且过滤结果符合预期。

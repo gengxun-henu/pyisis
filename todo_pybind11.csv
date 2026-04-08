@@ -344,7 +344,7 @@ Utility,Stretch,未转换,抽象基类/纯虚接口
 Utility,TextFile,未转换,
 Apollo,ApolloMetricCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Apollo,ApolloMetricDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Apollo,ApolloPanoramicCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Apollo,ApolloPanoramicCamera,已转换,"2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 residual/CK/SPK 接口；intOriResidualsReport 通过 pybind wrapper 规避上游未定义符号"
 Apollo,ApolloPanoramicDetectorMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Cassini,IssNACamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Cassini,IssWACamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"

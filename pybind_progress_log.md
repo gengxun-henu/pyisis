@@ -2,6 +2,7 @@
 
 ## 2026-04-07
 
+<<<<<<< HEAD
 - ControlNetFilter 第二轮轻量过滤器补绑完成：
   - 扩展 `src/control/bind_control_core.cpp`，在首轮构造/输出 helper/`point_edit_lock_filter(...)` 基础上，新增 `point_measures_filter(...)` 与 `cube_num_points_filter(...)` 两个上游 count-based 过滤接口。
   - 扩展 `tests/unitTest/control_core_unit_test.py`：
@@ -16,6 +17,21 @@
   - Passed: `ISIS_PYBIND_BUILD_DIR=$PWD/build/python python -m unittest discover -s tests/unitTest -p 'control_core_unit_test.py' -v` (`18` tests, `OK`)
   - Passed: `ISIS_PYBIND_BUILD_DIR=$PWD/build/python python tests/smoke_import.py`
   - Note: 本轮优先补用户 handoff 中建议的两条轻量路线之一各一个代表接口；其余 PVL 条件更复杂或几何依赖更重的过滤器继续留待后续批次。
+=======
+- ApolloPanoramicCamera 导入期未定义符号热修完成：
+  - 定位 `build/python/isis_pybind/_isis_core...so` 导入失败根因为 `ApolloPanoramicCamera::intOriResidualsReport()`：上游头文件 `reference/upstream_isis/src/apollo/objs/ApolloPanoramicCamera/ApolloPanoramicCamera.h` 声明了该方法，但当前链接库未提供对应实现，导致 pybind 直接绑定成员函数地址时生成未定义符号 `_ZN4Isis21ApolloPanoramicCamera21intOriResidualsReportEv`。
+  - 更新 `src/mission/bind_mission_cameras.cpp`，将 `int_ori_residuals_report` 从直接成员函数绑定改为 pybind lambda wrapper，在 Python 侧基于 `int_ori_residual_max()` / `int_ori_residual_mean()` / `int_ori_residual_stdev()` 组装 `PvlGroup("InteriorOrientationResiduals")`，保留 API 表面同时规避链接缺口。
+  - 同步更新：
+    - `class_bind_methods_details/apollo_apollo_panoramic_camera_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+    - `todo_pybind11.csv`
+- Validation status:
+  - Passed: `cmake --build build -j"$(nproc)"` under `asp360_new`
+  - Passed: `PYTHONPATH=$PWD/build/python python -X faulthandler -c "import isis_pybind as ip; ..."` (`IMPORT_OK True True`)
+  - Passed: `python -m unittest discover -s tests/unitTest -p 'extended_mission_camera_unit_test.py' -v` (`10` tests, `OK`)
+  - Passed: `python tests/smoke_import.py`
+  - Passed: `python -m unittest discover -s tests/unitTest -p '*_unit_test.py' -v` (`568` tests, `OK`, `skipped=5`, `expected failures=1`)
+>>>>>>> origin/main
 
 - ControlNetFilter 首轮稳定小簇绑定完成：
   - 扩展 `src/control/bind_control_core.cpp`，新增 `ControlNetFilter` 绑定，当前先暴露一组低风险、可稳定验证的接口：`ControlNetFilter(control_net, serial_number_list_file, progress=None)`、`point_edit_lock_filter(...)`、`point_stats_header()`、`point_stats(...)`、`cube_stats_header()`、`set_output_file(...)`、`print_cube_file_serial_num(...)`。

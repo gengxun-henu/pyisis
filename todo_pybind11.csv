@@ -38,7 +38,7 @@ Control Networks,ObservationNumber,已转换,2026-03-21 已在 bind_base_support
 Control Networks,SerialNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 compose_observation(...)
 Control Networks,SerialNumberList,已转换,2026-03-21 已在 bind_base_support.cpp 暴露构造/增删/查询/索引/观测号辅助接口
 Geometry,Enlarge,已转换,已在 bind_base_geometry.cpp 暴露
-Geometry,Intercept,未转换,2026-04-08 仅做 inventory 预登记，后续补实际 pybind 绑定与方法细化
+Geometry,Intercept,已转换,2026-04-08 完成 Intercept 绑定 ctor 克隆路径与单元测试补充
 Geometry,Interpolator,已转换,已在 bind_base_geometry.cpp 暴露
 Geometry,Reduce,已转换,已在 bind_base_geometry.cpp 暴露
 Geometry,Stereo,已转换,2026-04-08 已在 src/base/bind_base_geometry.cpp 暴露 Stereo 构造与 elevation/spherical/rectangular 静态接口；新增 tests/unitTest/stereo_unit_test.py 与 smoke 覆盖

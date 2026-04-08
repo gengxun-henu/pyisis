@@ -3,9 +3,11 @@ Unit tests for ISIS geometry helper bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-21
+Last Modified: 2026-04-08
+Updated: 2026-04-08  Geng Xun added Intercept constructor coverage for manual geometry inputs
 """
 
+import math
 import unittest
 
 from _unit_test_support import ip, workspace_test_data_path
@@ -110,6 +112,49 @@ class GeometryUnitTest(unittest.TestCase):
         reduce_obj.set_input_boundary(101, 500, 21, 220)
 
         self.assertIn("Reduce(", repr(reduce_obj))
+
+    def test_intercept_manual_construction_clones_shape_and_point(self):
+        plate = ip.TriangularPlate(
+            [
+                [0.0, 0.0, 0.0],
+                [1.0, 0.0, 0.0],
+                [0.0, 1.0, 0.0],
+            ],
+            5,
+        )
+        surface_point = ip.SurfacePoint(
+            ip.Displacement(1.0, ip.Displacement.Units.Meters),
+            ip.Displacement(2.0, ip.Displacement.Units.Meters),
+            ip.Displacement(3.0, ip.Displacement.Units.Meters),
+        )
+
+        intercept = ip.Intercept(
+            [0.0, 0.0, 10.0],
+            [0.0, 0.0, -1.0],
+            surface_point,
+            plate,
+        )
+
+        self.assertTrue(intercept.is_valid())
+        self.assertEqual(intercept.observer(), [0.0, 0.0, 10.0])
+        self.assertEqual(intercept.look_direction_ray(), [0.0, 0.0, -1.0])
+
+        location = intercept.location().to_naif_array()
+        self.assertAlmostEqual(location[0], 1.0, places=8)
+        self.assertAlmostEqual(location[1], 2.0, places=8)
+        self.assertAlmostEqual(location[2], 3.0, places=8)
+
+        shape = intercept.shape()
+        self.assertIsNotNone(shape)
+        self.assertIsNot(shape, plate)
+        self.assertEqual(shape.name(), "TriangularPlate")
+
+        normal = intercept.normal()
+        self.assertEqual(len(normal), 3)
+        separation = intercept.separation_angle([0.0, 0.0, -1.0])
+        self.assertAlmostEqual(separation.degrees(), 180.0, places=8)
+        emission = intercept.emission()
+        self.assertTrue(math.isfinite(emission.degrees()))
 
 
 if __name__ == "__main__":

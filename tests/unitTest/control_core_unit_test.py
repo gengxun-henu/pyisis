@@ -5,6 +5,7 @@ Author: Geng Xun
 Created: 2026-04-07
 Last Modified: 2026-04-08
 Updated: 2026-04-08  Geng Xun added ControlNetStatistics summary/getter regression coverage and retained control-core helper checks.
+Updated: 2026-04-08  Geng Xun added ControlNetValidMeasure configuration/query regression coverage and retained ControlNetFilter helper checks.
 """
 
 import gc
@@ -15,6 +16,55 @@ from _unit_test_support import ip, temporary_directory, workspace_test_data_path
 
 
 class ControlCoreUnitTest(unittest.TestCase):
+    def make_control_net_valid_measure_pvl(
+        self,
+        *,
+        min_dn=None,
+        max_dn=None,
+        min_emission=None,
+        max_emission=None,
+        min_incidence=None,
+        max_incidence=None,
+        min_resolution=None,
+        max_resolution=None,
+        pixels_from_edge=None,
+        meters_from_edge=None,
+        sample_residual=None,
+        line_residual=None,
+        residual_magnitude=None,
+        sample_shift=None,
+        line_shift=None,
+        pixel_shift=None,
+    ):
+        pvl = ip.Pvl()
+        group = ip.PvlGroup("ValidMeasure")
+
+        keyword_values = {
+            "MinDN": min_dn,
+            "MaxDN": max_dn,
+            "MinEmission": min_emission,
+            "MaxEmission": max_emission,
+            "MinIncidence": min_incidence,
+            "MaxIncidence": max_incidence,
+            "MinResolution": min_resolution,
+            "MaxResolution": max_resolution,
+            "PixelsFromEdge": pixels_from_edge,
+            "MetersFromEdge": meters_from_edge,
+            "SampleResidual": sample_residual,
+            "LineResidual": line_residual,
+            "ResidualMagnitude": residual_magnitude,
+            "SampleShift": sample_shift,
+            "LineShift": line_shift,
+            "PixelShift": pixel_shift,
+        }
+
+        for name, value in keyword_values.items():
+            if value is not None:
+                group.add_keyword(ip.PvlKeyword(name, str(value)))
+
+        pvl.add_group(group)
+        return pvl
+
     def open_cube(self, path):
         cube = ip.Cube()
         cube.open(str(path), "r")
@@ -985,6 +1035,149 @@ End
         )
         self.assertEqual(ip.ControlNetStatistics.ImageStats.imgConvexHullRatio.name, "imgConvexHullRatio")
         self.assertIn("ControlNetStatistics(valid_points=2", repr(statistics))
+    def test_control_net_valid_measure_defaults_and_basic_queries(self):
+        validator = ip.ControlNetValidMeasure()
+
+        self.assertEqual(validator.get_min_emission_angle(), 0.0)
+        self.assertEqual(validator.get_max_emission_angle(), 135.0)
+        self.assertEqual(validator.get_min_incidence_angle(), 0.0)
+        self.assertEqual(validator.get_max_incidence_angle(), 135.0)
+        self.assertEqual(validator.get_pixels_from_edge(), 0)
+        self.assertEqual(validator.get_meters_from_edge(), 0.0)
+        self.assertFalse(validator.is_camera_required())
+        self.assertFalse(validator.is_cube_required())
+        self.assertEqual(validator.location_string(0.6, 1.6), "0,1")
+        self.assertTrue(validator.valid_emission_angle(90.0))
+        self.assertFalse(validator.valid_emission_angle(140.0))
+        self.assertTrue(validator.valid_incidence_angle(15.0))
+        self.assertFalse(validator.valid_incidence_angle(150.0))
+        self.assertTrue(validator.valid_dn_value(123.0))
+        self.assertTrue(validator.valid_resolution(1.0))
+        self.assertFalse(validator.valid_resolution(-1.0))
+
+        std_options = validator.get_std_options()
+        self.assertEqual(std_options.find_keyword("MinDN")[0], "NA")
+        self.assertEqual(std_options.find_keyword("MaxDN")[0], "NA")
+        self.assertEqual(int(std_options.find_keyword("PixelsFromEdge")[0]), 0)
+        self.assertEqual(float(std_options.find_keyword("MetersFromEdge")[0]), 0.0)
+
+        statistics = validator.get_statistics()
+        self.assertIsInstance(statistics, ip.PvlGroup)
+
+    def test_control_net_valid_measure_parses_thresholds_and_requirement_flags(self):
+        pvl = self.make_control_net_valid_measure_pvl(
+            min_dn=10.0,
+            max_dn=20.0,
+            min_emission=15.0,
+            max_emission=25.0,
+            min_incidence=5.0,
+            max_incidence=120.0,
+            min_resolution=1.5,
+            max_resolution=3.5,
+            pixels_from_edge=4,
+            meters_from_edge=12.5,
+        )
+
+        validator = ip.ControlNetValidMeasure(pvl)
+
+        self.assertEqual(validator.get_min_dn(), 10.0)
+        self.assertEqual(validator.get_max_dn(), 20.0)
+        self.assertEqual(validator.get_min_emission_angle(), 15.0)
+        self.assertEqual(validator.get_max_emission_angle(), 25.0)
+        self.assertEqual(validator.get_min_incidence_angle(), 5.0)
+        self.assertEqual(validator.get_max_incidence_angle(), 120.0)
+        self.assertEqual(validator.get_pixels_from_edge(), 4)
+        self.assertEqual(validator.get_meters_from_edge(), 12.5)
+        self.assertTrue(validator.is_camera_required())
+        self.assertTrue(validator.is_cube_required())
+        self.assertTrue(validator.valid_dn_value(15.0))
+        self.assertFalse(validator.valid_dn_value(25.0))
+        self.assertTrue(validator.valid_emission_angle(20.0))
+        self.assertFalse(validator.valid_emission_angle(30.0))
+        self.assertTrue(validator.valid_incidence_angle(30.0))
+        self.assertFalse(validator.valid_incidence_angle(130.0))
+        self.assertTrue(validator.valid_resolution(2.0))
+        self.assertFalse(validator.valid_resolution(4.0))
+
+        std_options = validator.get_std_options()
+        self.assertEqual(float(std_options.find_keyword("MinDN")[0]), 10.0)
+        self.assertEqual(float(std_options.find_keyword("MaxDN")[0]), 20.0)
+        self.assertEqual(float(std_options.find_keyword("MinEmission")[0]), 15.0)
+        self.assertEqual(float(std_options.find_keyword("MaxResolution")[0]), 3.5)
+
+        log_pvl = validator.get_log_pvl()
+        self.assertTrue(log_pvl.has_group("StandardOptions"))
+
+    def test_control_net_valid_measure_residual_and_shift_tolerance_checks(self):
+        residual_validator = ip.ControlNetValidMeasure(
+            self.make_control_net_valid_measure_pvl(
+                sample_residual=2.0,
+                line_residual=3.0,
+            )
+        )
+        residual_results = ip.MeasureValidationResults()
+        self.assertTrue(
+            residual_validator.valid_residual_tolerances(
+                1.5,
+                2.5,
+                0.0,
+                residual_results,
+            )
+        )
+        self.assertTrue(residual_results.is_valid())
+
+        failing_residual_results = ip.MeasureValidationResults()
+        self.assertFalse(
+            residual_validator.valid_residual_tolerances(
+                4.0,
+                3.5,
+                0.0,
+                failing_residual_results,
+            )
+        )
+        self.assertFalse(failing_residual_results.is_valid())
+        self.assertIn("Sample Residual", failing_residual_results.to_string())
+        self.assertIn("Line Residual", failing_residual_results.to_string())
+
+        shift_validator = ip.ControlNetValidMeasure(
+            self.make_control_net_valid_measure_pvl(pixel_shift=1.5)
+        )
+        shift_results = ip.MeasureValidationResults()
+        self.assertTrue(
+            shift_validator.valid_shift_tolerances(0.0, 0.0, 1.0, shift_results)
+        )
+        self.assertTrue(shift_results.is_valid())
+
+        failing_shift_results = ip.MeasureValidationResults()
+        self.assertFalse(
+            shift_validator.valid_shift_tolerances(0.0, 0.0, 2.0, failing_shift_results)
+        )
+        self.assertFalse(failing_shift_results.is_valid())
+        self.assertIn("Pixel Shift", failing_shift_results.to_string())
+
+    def test_control_net_valid_measure_rejects_invalid_pvl_ranges(self):
+        with self.assertRaises(ip.IException):
+            ip.ControlNetValidMeasure(
+                self.make_control_net_valid_measure_pvl(min_dn=5.0, max_dn=2.0)
+            )
+
+        with self.assertRaises(ip.IException):
+            ip.ControlNetValidMeasure(
+                self.make_control_net_valid_measure_pvl(
+                    sample_residual=1.0,
+                    line_residual=1.0,
+                    residual_magnitude=2.0,
+                )
+            )
+
+        with self.assertRaises(ip.IException):
+            ip.ControlNetValidMeasure(
+                self.make_control_net_valid_measure_pvl(
+                    sample_shift=1.0,
+                    line_shift=1.0,
+                    pixel_shift=2.0,
+                )
+            )
 
     def test_bundle_image_basic_accessors(self):
         cube = self.open_cube(

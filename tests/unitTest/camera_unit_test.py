@@ -3,7 +3,7 @@ Unit tests for ISIS camera and CameraFactory bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-21
+Last Modified: 2026-04-08
 """
 
 import math
@@ -131,6 +131,60 @@ class CameraUnitTest(unittest.TestCase):
         self.assertFalse(isinstance(camera, ip.LineScanCamera))
         self.assertFalse(isinstance(camera, ip.PushFrameCamera))
         self.assertFalse(isinstance(camera, ip.RadarCamera))
+
+    def test_camera_point_info_with_local_mdis_cube(self):
+        cube = self.open_cube(MDIS_CUBES[0])
+        camera = cube.camera()
+
+        center_sample = camera.samples() / 2.0
+        center_line = camera.lines() / 2.0
+        self.assertTrue(camera.set_image(center_sample, center_line))
+        center_latitude = camera.universal_latitude()
+        center_longitude = camera.universal_longitude()
+
+        point_info = ip.CameraPointInfo()
+        self.assertEqual(repr(point_info), "CameraPointInfo()")
+
+        with self.assertRaises(ip.IException):
+            point_info.set_center()
+
+        point_info.set_cube(str(MDIS_CUBES[0]))
+
+        center_group = point_info.set_center()
+        self.assertEqual(center_group.name(), "GroundPoint")
+        self.assertAlmostEqual(float(center_group.keyword("Sample")[0]), center_sample, places=3)
+        self.assertAlmostEqual(float(center_group.keyword("Line")[0]), center_line, places=3)
+        self.assertAlmostEqual(
+            float(center_group.keyword("PlanetocentricLatitude")[0]),
+            center_latitude,
+            places=6,
+        )
+        self.assertAlmostEqual(
+            float(center_group.keyword("PositiveEast360Longitude")[0]),
+            center_longitude,
+            places=6,
+        )
+
+        image_group = point_info.set_image(center_sample, center_line)
+        self.assertAlmostEqual(float(image_group.keyword("Sample")[0]), center_sample, places=3)
+        self.assertAlmostEqual(float(image_group.keyword("Line")[0]), center_line, places=3)
+
+        sample_group = point_info.set_sample(center_sample)
+        self.assertAlmostEqual(float(sample_group.keyword("Sample")[0]), center_sample, places=3)
+        self.assertAlmostEqual(float(sample_group.keyword("Line")[0]), center_line, places=3)
+
+        line_group = point_info.set_line(center_line)
+        self.assertAlmostEqual(float(line_group.keyword("Sample")[0]), center_sample, places=3)
+        self.assertAlmostEqual(float(line_group.keyword("Line")[0]), center_line, places=3)
+
+        ground_group = point_info.set_ground(center_latitude, center_longitude)
+        self.assertAlmostEqual(float(ground_group.keyword("Sample")[0]), center_sample, places=2)
+        self.assertAlmostEqual(float(ground_group.keyword("Line")[0]), center_line, places=2)
+
+        point_info.set_csv_output(True)
+        csv_group = point_info.set_image(center_sample, center_line)
+        self.assertEqual(csv_group.name(), "GroundPoint")
+        self.assertTrue(csv_group.has_keyword("ObliqueDetectorResolution"))
 
 
 if __name__ == "__main__":

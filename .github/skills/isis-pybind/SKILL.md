@@ -28,6 +28,8 @@ Follow those existing instructions in addition to this skill.
 
 Use this skill for requests about pybind bindings, pybind tests, binding coverage inventory, progress tracking, or exposing a specific ISIS class to Python. Do **not** use it for general ISIS C++ development unless the request is clearly about Python exposure or pybind validation.
 
+If the task becomes a queue-based campaign across many unfinished classes with one-class-at-a-time closure, retry counting, and stop-loss bookkeeping, pair this skill with `.github/skills/pybind-rollout-execution/SKILL.md`.
+
 ## Default Inputs to Inspect First
 
 Before changing code, inspect these files in this order:

@@ -3,7 +3,7 @@ Unit tests for ISIS Angle bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-21
+Last Modified: 2026-04-08
 """
 
 import math
@@ -66,6 +66,53 @@ class AngleUnitTest(unittest.TestCase):
         full_rotation = ip.Angle.full_rotation()
         self.assertTrue(full_rotation.is_valid())
         self.assertAlmostEqual(full_rotation.degrees(), 360.0, places=12)
+
+    def test_arithmetic_and_inplace_operators(self):
+        left = ip.Angle(30.0, DEGREES)
+        right = ip.Angle(15.0, DEGREES)
+
+        self.assertAlmostEqual((left + right).degrees(), 45.0, places=12)
+        self.assertAlmostEqual((left - right).degrees(), 15.0, places=12)
+        self.assertAlmostEqual((left * 2).degrees(), 60.0, places=12)
+        self.assertAlmostEqual((2 * left).degrees(), 60.0, places=12)
+        self.assertAlmostEqual((left / 2).degrees(), 15.0, places=12)
+
+        left += right
+        self.assertAlmostEqual(left.degrees(), 45.0, places=12)
+
+        left -= right
+        self.assertAlmostEqual(left.degrees(), 30.0, places=12)
+
+        left *= 3
+        self.assertAlmostEqual(left.degrees(), 90.0, places=12)
+
+        left /= 2
+        self.assertAlmostEqual(left.degrees(), 45.0, places=12)
+
+    def test_comparison_and_ratio_helpers(self):
+        smaller = ip.Angle(30.0, DEGREES)
+        equal = ip.Angle(math.pi / 6.0, RADIANS)
+        larger = ip.Angle(45.0, DEGREES)
+
+        self.assertEqual(smaller, equal)
+        self.assertNotEqual(smaller, larger)
+        self.assertLess(smaller, larger)
+        self.assertLessEqual(smaller, equal)
+        self.assertGreater(larger, smaller)
+        self.assertGreaterEqual(larger, equal)
+        self.assertAlmostEqual(larger.ratio(smaller), 1.5, places=12)
+
+    def test_angle_accessor_setter_and_wrap_value(self):
+        angle = ip.Angle(30.0, DEGREES)
+
+        self.assertAlmostEqual(angle.angle(DEGREES), 30.0, places=12)
+        self.assertAlmostEqual(angle.angle(RADIANS), math.pi / 6.0, places=12)
+        self.assertAlmostEqual(angle.unit_wrap_value(DEGREES), 360.0, places=12)
+        self.assertAlmostEqual(angle.unit_wrap_value(RADIANS), math.pi * 2.0, places=12)
+
+        angle.set_angle(math.pi / 2.0, RADIANS)
+        self.assertAlmostEqual(angle.degrees(), 90.0, places=12)
+        self.assertEqual(str(angle), "90.0 degrees")
 
 
 if __name__ == "__main__":

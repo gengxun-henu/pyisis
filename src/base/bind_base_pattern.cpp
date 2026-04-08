@@ -9,16 +9,18 @@
  *   - isis/src/base/objs/Chip/Chip.h
  *   - isis/src/base/objs/AutoReg/AutoReg.h
  *   - isis/src/base/objs/MaximumCorrelation/MaximumCorrelation.h
+ *   - isis/src/base/objs/Centroid/Centroid.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Updated: 2026-04-03  Geng Xun added Chip, AutoReg, and MaximumCorrelation pattern-matching bindings
- * Purpose: Expose Chip, AutoReg, and MaximumCorrelation pattern matching classes to Python via pybind11.
+ * Updated: 2026-04-08  Geng Xun added Centroid selection bindings for Chip-based pattern tests.
+ * Purpose: Expose Chip, AutoReg, MaximumCorrelation, and Centroid pattern matching classes to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 #include "Chip.h"
+#include "Centroid.h"
 #include "AutoReg.h"
 #include "MaximumCorrelation.h"
 #include "Cube.h"
@@ -145,6 +147,33 @@ void bind_base_pattern(py::module_ &m) {
         return "Chip(samples=" + std::to_string(self.Samples()) + ", " +
                "lines=" + std::to_string(self.Lines()) + ")";
       });
+
+     /**
+      * @brief Bindings for the Isis::Centroid selection helper.
+      * Centroid performs a flood-fill selection on an input Chip starting from the
+      * current chip position and marks qualifying pixels into a selection Chip.
+      * @see Isis::Centroid
+      */
+     py::class_<Isis::Centroid>(m, "Centroid")
+               .def(py::init<>())
+               .def("select",
+                          [](Isis::Centroid &self, Isis::Chip &input_chip, Isis::Chip &selection_chip) {
+                               return self.select(&input_chip, &selection_chip);
+                          },
+                          py::arg("input_chip"), py::arg("selection_chip"),
+                          py::keep_alive<1, 2>(),
+                          py::keep_alive<1, 3>(),
+                          "Select connected pixels within the configured DN range")
+               .def("set_dn_range",
+                          &Isis::Centroid::setDNRange,
+                          py::arg("minimum_dn"), py::arg("maximum_dn"),
+                          "Set the accepted DN range for centroid selection")
+               .def("get_min_dn", &Isis::Centroid::getMinDN, "Get the current minimum DN")
+               .def("get_max_dn", &Isis::Centroid::getMaxDN, "Get the current maximum DN")
+               .def("__repr__", [](Isis::Centroid &self) {
+                    return "Centroid(min_dn=" + std::to_string(self.getMinDN()) + ", " +
+                                    "max_dn=" + std::to_string(self.getMaxDN()) + ")";
+               });
 
   /**
    * @brief Bindings for the Isis::AutoReg class

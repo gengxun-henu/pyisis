@@ -3,8 +3,8 @@ Unit tests for ISIS pattern matching classes: Chip, AutoReg, MaximumCorrelation,
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-03
-Updated: 2026-04-03  Geng Xun added regression coverage for Chip, AutoReg, MaximumCorrelation, and AutoRegFactory bindings.
+Last Modified: 2026-04-08
+Updated: 2026-04-08  Geng Xun added focused regression coverage for Centroid chip selection bindings.
 """
 import unittest
 
@@ -204,6 +204,69 @@ class AutoRegUnitTest(unittest.TestCase):
         _pvl, mc = self._make_maximum_correlation()
         tmpl = mc.updated_template()
         self.assertIsInstance(tmpl, ip.PvlGroup)
+
+
+class CentroidUnitTest(unittest.TestCase):
+    """Test suite for Centroid class bindings. Added: 2026-04-08."""
+
+    @staticmethod
+    def _make_input_chip():
+        chip = ip.Chip()
+        chip.set_size(5, 5)
+        chip.set_all_values(0.0)
+        chip.set_chip_position(3.0, 3.0)
+
+        for sample, line in ((3, 3), (3, 2), (3, 4), (2, 3), (4, 3)):
+            chip.set_value(sample, line, 10.0)
+
+        chip.set_value(5, 5, 10.0)
+        return chip
+
+    def test_centroid_construction_and_range(self):
+        """Test Centroid construction, getters, and range validation."""
+        centroid = ip.Centroid()
+        self.assertIn("Centroid", repr(centroid))
+        self.assertEqual(centroid.get_min_dn(), 0.0)
+        self.assertEqual(centroid.get_max_dn(), 0.0)
+
+        self.assertEqual(centroid.set_dn_range(5.0, 15.0), 1)
+        self.assertAlmostEqual(centroid.get_min_dn(), 5.0, places=12)
+        self.assertAlmostEqual(centroid.get_max_dn(), 15.0, places=12)
+        self.assertEqual(centroid.set_dn_range(20.0, 10.0), 0)
+
+    def test_centroid_select_marks_connected_pixels(self):
+        """Test Centroid.select flood-fills only the connected in-range region."""
+        centroid = ip.Centroid()
+        self.assertEqual(centroid.set_dn_range(5.0, 15.0), 1)
+
+        input_chip = self._make_input_chip()
+        selection_chip = ip.Chip()
+
+        result = centroid.select(input_chip, selection_chip)
+        self.assertEqual(result, 1)
+        self.assertEqual(selection_chip.samples(), 5)
+        self.assertEqual(selection_chip.lines(), 5)
+
+        for sample, line in ((3, 3), (3, 2), (3, 4), (2, 3), (4, 3)):
+            self.assertAlmostEqual(selection_chip.get_value(sample, line), 1.0, places=12)
+
+        self.assertAlmostEqual(selection_chip.get_value(5, 5), 0.0, places=12)
+        self.assertAlmostEqual(selection_chip.get_value(1, 1), 0.0, places=12)
+
+    def test_centroid_select_returns_empty_when_seed_out_of_range(self):
+        """Test Centroid.select returns an empty selection when the seed DN is excluded."""
+        centroid = ip.Centroid()
+        self.assertEqual(centroid.set_dn_range(20.0, 30.0), 1)
+
+        input_chip = self._make_input_chip()
+        selection_chip = ip.Chip()
+
+        result = centroid.select(input_chip, selection_chip)
+        self.assertEqual(result, 0)
+        self.assertEqual(selection_chip.samples(), 5)
+        self.assertEqual(selection_chip.lines(), 5)
+        self.assertAlmostEqual(selection_chip.get_value(3, 3), 0.0, places=12)
+        self.assertAlmostEqual(selection_chip.get_value(5, 5), 0.0, places=12)
 
 
 class MaximumCorrelationUnitTest(unittest.TestCase):

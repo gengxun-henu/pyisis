@@ -2,8 +2,8 @@
 
 Author: Geng Xun
 Created: 2026-04-03
-Last Modified: 2026-04-04
-Updated: 2026-04-04  Geng Xun added focused low-level Cube I/O regression coverage for managers, pixel helpers, and table primitives.
+Last Modified: 2026-04-08
+Updated: 2026-04-08  Geng Xun added focused low-level Cube I/O regression coverage for Blob file/bytes helpers alongside managers, pixel helpers, and table primitives.
 """
 
 import unittest
@@ -481,6 +481,51 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         mismatched_record.add_field(only_field)
         with self.assertRaises(ip.IException):
             table.add_record(mismatched_record)
+
+    def test_blob_round_trip_copy_and_helper(self):
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        blob_path = temp_dir / "blob_roundtrip.dat"
+
+        blob = ip.Blob("UnitTest", "Blob")
+        blob.set_data(b"ABCD")
+
+        self.assertEqual(blob.name(), "UnitTest")
+        self.assertEqual(blob.type(), "Blob")
+        self.assertEqual(blob.size(), 4)
+        self.assertEqual(blob.get_buffer(), b"ABCD")
+        self.assertEqual(bytes(blob), b"ABCD")
+        self.assertIn("Blob(name='UnitTest'", repr(blob))
+
+        blob.write(str(blob_path))
+
+        label = blob.label()
+        self.assertFalse(ip.is_blob(label))
+        self.assertEqual(label.name(), "Blob")
+        self.assertEqual(label.keyword("Name")[0], "UnitTest")
+        self.assertEqual(label.keyword("Bytes")[0], "0")
+        self.assertTrue(blob_path.exists())
+
+        loaded = ip.Blob("UNITtest", "Blob", str(blob_path))
+        self.assertEqual(loaded.name(), "UNITtest")
+        self.assertEqual(loaded.type(), "Blob")
+        self.assertEqual(loaded.size(), 4)
+        self.assertEqual(loaded.get_buffer(), b"ABCD")
+        self.assertEqual(loaded.label().keyword("Bytes")[0], "4")
+
+        reread = ip.Blob("UnitTest", "Blob")
+        reread.read(str(blob_path))
+        self.assertEqual(reread.get_buffer(), b"ABCD")
+
+        copied = ip.Blob(loaded)
+        copied.take_data(b"XYZ")
+        self.assertEqual(loaded.get_buffer(), b"ABCD")
+        self.assertEqual(copied.get_buffer(), b"XYZ")
+
+        self.assertFalse(ip.is_blob(ip.PvlObject("NotABlob")))
+        self.assertTrue(ip.is_blob(ip.PvlObject("TABLE")))
 
     def test_boxcar_manager_construction(self):
         """Test BoxcarManager construction with various boxcar sizes"""

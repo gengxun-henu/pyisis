@@ -2,6 +2,77 @@
 
 ## 2026-04-08
 
+- Stereo 几何立体测量 helper 绑定完成：
+  - 扩展 `src/base/bind_base_geometry.cpp`，新增 `Stereo` 绑定，暴露默认构造函数，以及 tuple-returning 的 `elevation(cam1, cam2)`、`spherical(latitude, longitude, radius)`、`rectangular(x, y, z)` 三个静态入口。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `Stereo`。
+  - 新增 `tests/unitTest/stereo_unit_test.py`：覆盖 `Stereo()` 可构造、`spherical(...)` / `rectangular(...)` 的轴向样例与 round-trip 行为，并校验 `elevation` 入口已暴露。
+  - 更新 `tests/smoke_import.py`，补充 `Stereo` 顶层符号与最小球坐标/直角坐标转换检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_stereo_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake -S . -B build && cmake --build build -j2`（CMake 检测到 `asp360_new` 的 Python 3.12 解释器并成功重建 `_isis_core`）
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/stereo_unit_test.py` (`6` tests, `OK`)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m pytest tests/smoke_import.py -q` (`8` passed)
+
+- Angle 值类型接口与台账同步完成：
+  - 扩展 `src/base/bind_base_geometry.cpp`，补齐 `Angle` 的 copy/deepcopy、`angle(unit)`、`unit_wrap_value(unit)`、`set_angle(...)`、`ratio(...)`、算术/原地算术/比较运算符，以及 `__str__`。
+  - 扩展 `tests/unitTest/angle_unit_test.py`：新增算术、比较、ratio、unit accessors、`set_angle(...)` 与字符串格式 focused 覆盖。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_angle_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake --build build -j2`
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/angle_unit_test.py` (`9` tests, `OK`)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m pytest tests/smoke_import.py -q` (`8` passed)
+
+- Blob 基础文件/bytes 接口绑定完成：
+  - 扩展 `src/bind_low_level_cube_io.cpp`，新增 `Blob` 绑定，当前先暴露稳定文件/bytes 路径：名称/类型构造、文件构造、拷贝构造、`type()`、`name()`、`size()`、`label()`、`read(file)`、`read(file, labels, keywords)`、`write(file)`、`get_buffer()`、`set_data()`、`take_data()` 与 `__bytes__` / `__repr__`。
+  - 同文件新增 `is_blob(object)` helper，按上游当前 `IsBlob(...)` 语义导出（仅对 `TABLE` 对象返回 `True`）。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `Blob` 与 `is_blob`。
+  - 扩展 `tests/unitTest/low_level_cube_io_unit_test.py`：新增 `Blob` focused 覆盖，验证 bytes round-trip、文件写入/重读、拷贝后缓冲区独立性，以及 `is_blob(...)` 的真实上游语义。
+  - 更新 `tests/smoke_import.py`，补充 `Blob` 顶层符号与最小 bytes helper 检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_blob_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake --build build -j2`
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/low_level_cube_io_unit_test.py` (`26` tests, `OK`)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m pytest tests/smoke_import.py -q` (`8` passed)
+
+- CameraPointInfo 相机点位查询 helper 绑定完成：
+  - 扩展 `src/bind_camera.cpp`，新增 `CameraPointInfo` 绑定，暴露 `set_cube(...)`、`set_csv_output(...)`、`set_image(...)`、`set_center(...)`、`set_sample(...)`、`set_line(...)`、`set_ground(...)` 与 `__repr__`。
+  - 对上游返回 `PvlGroup *` 的查询接口统一使用 `take_ownership` 包装，保持 Python 侧拥有返回结果生命周期，避免悬挂指针。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `CameraPointInfo`。
+  - 扩展 `tests/unitTest/camera_unit_test.py`：基于本地 `tests/data/mosrange/EN0108828322M_iof.cub` 新增 focused 覆盖，验证未设 cube 的失败路径，以及 `set_center` / `set_image` / `set_sample` / `set_line` / `set_ground` 与本地相机中心几何的一致性。
+  - 更新 `tests/smoke_import.py`，补充 `CameraPointInfo` 顶层符号与最小构造检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_camera_point_info_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake --build build -j2`
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/camera_unit_test.py` (`7` tests, `OK`)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m pytest tests/smoke_import.py -q` (`8` passed)
+
+- Centroid 模式匹配质心选择器绑定完成：
+  - 扩展 `src/base/bind_base_pattern.cpp`，新增 `Centroid` 绑定，暴露默认构造、`select(...)`、`set_dn_range(...)`、`get_min_dn()`、`get_max_dn()` 与 `__repr__`。
+  - 其中 `select(...)` 通过 pybind wrapper 将上游 `Chip *` 双指针接口适配为 Python 侧 `select(input_chip, selection_chip)` 的非拥有引用调用。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `Centroid`。
+  - 扩展 `tests/unitTest/pattern_unit_test.py`：新增 `Centroid` focused 覆盖，验证 DN 范围设置、连通域 flood-fill 选择，以及 seed 像素不在范围时返回空选择。
+  - 更新 `tests/smoke_import.py`，补充 `Centroid` 顶层符号与最小构造/范围设置检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_centroid_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake --build build -j2`
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/pattern_unit_test.py` (`29` tests, `OK`)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m pytest tests/smoke_import.py -q` (`8` passed)
+
 - ControlNetStatistics 稳定摘要/标量 getter 方法簇绑定完成：
   - 扩展 `src/control/bind_control_core.cpp`，新增 `ControlNetStatistics` 绑定，当前先暴露一组不依赖 serial-number list / image stats 文件输出的稳定接口：`ControlNetStatistics(control_net, progress=None)`、`ePointDetails` / `ePointIntStats` / `ePointDoubleStats` / `ImageStats` 枚举、`generate_control_net_stats(...)`、`num_*` 计数 getter，以及 residual / shift 标量 getter。
   - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `ControlNetStatistics`。

@@ -2,39 +2,39 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 Angle,Utility,reference/upstream_isis/src/base/objs/Angle/Angle.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,角度值类型；公开运算符较多，后续 pybind 可映射算术/比较/字符串接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Angle,isis_pybind.Angle,N,Python class symbol not found in current binding files
-Construction/Enum,enum Units { Degrees, Radians },isis_pybind.Angle.Units,N,角度单位枚举
-Construction/Enum,Angle(),isis_pybind.Angle(),N,默认构造
-Construction/Enum,"Angle(double angle, Units unit)",isis_pybind.Angle,N,数值加单位构造
-Construction/Enum,"Angle(const Angle &angle)",isis_pybind.Angle,N,拷贝构造
-Construction/Enum,"Angle(QString angle)",isis_pybind.Angle,N,字符串角度解析构造
-Construction/Enum,virtual ~Angle(),isis_pybind.Angle,N,析构函数
-Public API,bool isValid() const,isis_pybind.Angle.isValid,N,合法性检查
-Public API,static Angle fullRotation(),isis_pybind.Angle.fullRotation,N,返回完整圆周角
-Public API,"Angle &operator=(const Angle &angle2)",isis_pybind.Angle.__copy__,N,赋值运算符
-Public API,"Angle operator+(const Angle &angle2) const",isis_pybind.Angle.__add__,N,算术运算符
-Public API,"Angle operator-(const Angle &angle2) const",isis_pybind.Angle.__sub__,N,算术运算符
-Public API,"Angle operator*(double value) const",isis_pybind.Angle.__mul__,N,按标量缩放
-Public API,"friend Angle operator*(double mult, Angle angle)",isis_pybind.Angle.__rmul__,N,右乘重载
-Public API,"Angle operator/(double value) const",isis_pybind.Angle.__truediv__,N,按标量缩放
-Public API,"double operator/(Angle value) const",isis_pybind.Angle.ratio,N,角度比值运算
-Public API,"bool operator<(const Angle &angle2) const",isis_pybind.Angle.__lt__,N,比较运算符
-Public API,"bool operator>(const Angle &angle2) const",isis_pybind.Angle.__gt__,N,比较运算符
-Public API,"void operator+=(const Angle &angle2)",isis_pybind.Angle.__iadd__,N,原地加法
-Public API,"void operator-=(const Angle &angle2)",isis_pybind.Angle.__isub__,N,原地减法
-Public API,"Angle operator*(int value) const",isis_pybind.Angle.__mul__,N,int 重载
-Public API,"void operator*=(double value)",isis_pybind.Angle.__imul__,N,原地乘法
-Public API,"Angle operator/(int value) const",isis_pybind.Angle.__truediv__,N,int 重载
-Public API,"void operator/=(double value)",isis_pybind.Angle.__itruediv__,N,原地除法
-Public API,"bool operator==(const Angle &angle2) const",isis_pybind.Angle.__eq__,N,比较运算符
-Public API,"bool operator!=(const Angle &angle2) const",isis_pybind.Angle.__ne__,N,比较运算符
-Public API,"bool operator<=(const Angle &angle2) const",isis_pybind.Angle.__le__,N,比较运算符
-Public API,"bool operator>=(const Angle &angle2) const",isis_pybind.Angle.__ge__,N,比较运算符
-Public API,double radians() const,isis_pybind.Angle.radians,N,弧度 getter
-Public API,double degrees() const,isis_pybind.Angle.degrees,N,度数 getter
-Public API,"void setRadians(double radians)",isis_pybind.Angle.setRadians,N,弧度 setter
-Public API,"void setDegrees(double degrees)",isis_pybind.Angle.setDegrees,N,度数 setter
-Public API,"virtual QString toString(bool includeUnits = true) const",isis_pybind.Angle.toString,N,字符串格式化
-Public API,"double unitWrapValue(const Units &unit) const",isis_pybind.Angle.unitWrapValue,N,单位 wrap 上界查询
-Public API,"virtual double angle(const Units &unit) const",isis_pybind.Angle.angle,N,按单位读取数值
-Public API,"virtual void setAngle(const double &angle, const Units &unit)",isis_pybind.Angle.setAngle,N,按单位设置数值
+Class Symbol,Angle,isis_pybind.Angle,Y,2026-04-08 已确认顶层类符号已导出
+Construction/Enum,enum Units { Degrees, Radians },isis_pybind.Angle.Units,Y,2026-04-08 已暴露单位枚举 Degrees/Radians
+Construction/Enum,Angle(),isis_pybind.Angle(),Y,2026-04-08 已暴露默认构造
+Construction/Enum,"Angle(double angle, Units unit)",isis_pybind.Angle,Y,2026-04-08 已暴露数值+单位构造
+Construction/Enum,"Angle(const Angle &angle)",isis_pybind.Angle,Y,2026-04-08 已暴露拷贝构造
+Construction/Enum,"Angle(QString angle)",isis_pybind.Angle,Y,2026-04-08 已通过 std::string wrapper 暴露字符串构造
+Construction/Enum,virtual ~Angle(),isis_pybind.Angle,Y,2026-04-08 Python 生命周期已可安全释放 Angle 实例
+Public API,bool isValid() const,isis_pybind.Angle.is_valid,Y,2026-04-08 已暴露合法性检查
+Public API,static Angle fullRotation(),isis_pybind.Angle.full_rotation,Y,2026-04-08 已暴露完整圆周角静态构造
+Public API,"Angle &operator=(const Angle &angle2)",isis_pybind.Angle.__copy__,Y,2026-04-08 已通过 copy/deepcopy 语义覆盖赋值式复制
+Public API,"Angle operator+(const Angle &angle2) const",isis_pybind.Angle.__add__,Y,2026-04-08 已暴露加法运算符
+Public API,"Angle operator-(const Angle &angle2) const",isis_pybind.Angle.__sub__,Y,2026-04-08 已暴露减法运算符
+Public API,"Angle operator*(double value) const",isis_pybind.Angle.__mul__,Y,2026-04-08 已暴露标量乘法；Python int 亦可经数值转换复用
+Public API,"friend Angle operator*(double mult, Angle angle)",isis_pybind.Angle.__rmul__,Y,2026-04-08 已暴露右乘重载
+Public API,"Angle operator/(double value) const",isis_pybind.Angle.__truediv__,Y,2026-04-08 已暴露标量除法；Python int 亦可经数值转换复用
+Public API,"double operator/(Angle value) const",isis_pybind.Angle.ratio,Y,2026-04-08 已通过 ratio(other) 暴露角度比值
+Public API,"bool operator<(const Angle &angle2) const",isis_pybind.Angle.__lt__,Y,2026-04-08 已暴露小于比较
+Public API,"bool operator>(const Angle &angle2) const",isis_pybind.Angle.__gt__,Y,2026-04-08 已暴露大于比较
+Public API,"void operator+=(const Angle &angle2)",isis_pybind.Angle.__iadd__,Y,2026-04-08 已暴露原地加法
+Public API,"void operator-=(const Angle &angle2)",isis_pybind.Angle.__isub__,Y,2026-04-08 已暴露原地减法
+Public API,"Angle operator*(int value) const",isis_pybind.Angle.__mul__,Y,2026-04-08 Python int 参数复用 __mul__ 数值绑定
+Public API,"void operator*=(double value)",isis_pybind.Angle.__imul__,Y,2026-04-08 已暴露原地乘法
+Public API,"Angle operator/(int value) const",isis_pybind.Angle.__truediv__,Y,2026-04-08 Python int 参数复用 __truediv__ 数值绑定
+Public API,"void operator/=(double value)",isis_pybind.Angle.__itruediv__,Y,2026-04-08 已暴露原地除法
+Public API,"bool operator==(const Angle &angle2) const",isis_pybind.Angle.__eq__,Y,2026-04-08 已暴露相等比较
+Public API,"bool operator!=(const Angle &angle2) const",isis_pybind.Angle.__ne__,Y,2026-04-08 已暴露不等比较
+Public API,"bool operator<=(const Angle &angle2) const",isis_pybind.Angle.__le__,Y,2026-04-08 已暴露小于等于比较
+Public API,"bool operator>=(const Angle &angle2) const",isis_pybind.Angle.__ge__,Y,2026-04-08 已暴露大于等于比较
+Public API,double radians() const,isis_pybind.Angle.radians,Y,2026-04-08 已暴露弧度 getter
+Public API,double degrees() const,isis_pybind.Angle.degrees,Y,2026-04-08 已暴露度数 getter
+Public API,"void setRadians(double radians)",isis_pybind.Angle.set_radians,Y,2026-04-08 已暴露弧度 setter
+Public API,"void setDegrees(double degrees)",isis_pybind.Angle.set_degrees,Y,2026-04-08 已暴露度数 setter
+Public API,"virtual QString toString(bool includeUnits = true) const",isis_pybind.Angle.to_string,Y,2026-04-08 已暴露 to_string(include_units=True) 与 __str__
+Public API,"double unitWrapValue(const Units &unit) const",isis_pybind.Angle.unit_wrap_value,Y,2026-04-08 已暴露单位 wrap 上界查询
+Public API,"virtual double angle(const Units &unit) const",isis_pybind.Angle.angle,Y,2026-04-08 已暴露按单位读取数值
+Public API,"virtual void setAngle(const double &angle, const Units &unit)",isis_pybind.Angle.set_angle,Y,2026-04-08 已暴露按单位设置数值

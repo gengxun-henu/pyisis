@@ -41,7 +41,7 @@ Geometry,Enlarge,已转换,已在 bind_base_geometry.cpp 暴露
 Geometry,Intercept,未转换,2026-04-08 仅做 inventory 预登记，后续补实际 pybind 绑定与方法细化
 Geometry,Interpolator,已转换,已在 bind_base_geometry.cpp 暴露
 Geometry,Reduce,已转换,已在 bind_base_geometry.cpp 暴露
-Geometry,Stereo,未转换,2026-04-08 仅做 inventory 预登记，后续补实际 pybind 绑定与方法细化
+Geometry,Stereo,已转换,2026-04-08 已在 src/base/bind_base_geometry.cpp 暴露 Stereo 构造与 elevation/spherical/rectangular 静态接口；新增 tests/unitTest/stereo_unit_test.py 与 smoke 覆盖
 Geometry,SurfacePoint,已转换,
 Geometry,Transform,已转换,已在 bind_base_geometry.cpp 暴露
 Geometry,UniversalGroundMap,已转换,抽象基类/纯虚接口；已导出基础符号
@@ -80,7 +80,7 @@ High Level Cube I/O,TiffExporter,未转换,
 High Level Cube I/O,TiffImporter,未转换,
 Low Level Cube I/O,AlphaCube,已转换,
 Low Level Cube I/O,BandManager,已转换,2026-03-21 已在 bind_low_level_cube_io.cpp 暴露构造与 set_band(...)
-Low Level Cube I/O,Blob,未转换,2026-04-08 仅做 inventory 预登记，后续补实际 pybind 绑定与方法细化
+Low Level Cube I/O,Blob,已转换,2026-04-08 已在 src/bind_low_level_cube_io.cpp 暴露稳定文件/bytes/label 接口与 is_blob helper，并补 focused 单测；默认构造与流式 read/write 后续补
 Low Level Cube I/O,Blobber,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次；抽象基类/纯虚接口；先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
 Low Level Cube I/O,BoxcarManager,已转换,2026-03-29 已在 bind_low_level_cube_io.cpp 暴露构造函数，继承 BufferManager 迭代方法
 Low Level Cube I/O,Brick,已转换,需注意内存生命周期与数据视图映射
@@ -207,7 +207,7 @@ Pattern Matching,AdaptiveGruen,未转换,
 Pattern Matching,AtmosModelFactory,已转换,2026-04-04 已在 bind_base_photometry.cpp 暴露 create 静态工厂方法并补最小工厂链单测
 Pattern Matching,AutoReg,已转换,2026-04-03 已在 bind_base_pattern.cpp 暴露全部公共方法（抽象基类，通过子类使用）
 Pattern Matching,AutoRegFactory,已转换,2026-04-03 已在 bind_auto_reg_factory.cpp 暴露 create 静态工厂方法
-Pattern Matching,Centroid,未转换,2026-04-08 仅做 inventory 预登记，后续补实际 pybind 绑定与方法细化
+Pattern Matching,Centroid,已转换,2026-04-08 已在 src/base/bind_base_pattern.cpp 暴露构造/select/set_dn_range/get_min_dn/get_max_dn，并补 Chip 连通域 focused 单测与 smoke 覆盖
 Pattern Matching,Chip,未转换,抽象基类/纯虚接口
 Pattern Matching,GridPolygonSeeder,未转换,
 Pattern Matching,Gruen,未转换,
@@ -246,7 +246,7 @@ SensorUtilities,Sensor,未转换,ISIS 同级 SensorUtilities 库；抽象基类/
 SensorUtilities,Shape,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
 SensorUtilities,Vec,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
 "Spice, Instruments, and Cameras",Camera,已转换,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测；已通过 Sensor 继承暴露 get_surface_point() 以支撑 measure-level 几何链路
-"Spice, Instruments, and Cameras",CameraPointInfo,未转换,2026-04-08 仅做 inventory 预登记，后续补实际 pybind 绑定与方法细化
+"Spice, Instruments, and Cameras",CameraPointInfo,已转换,2026-04-08 已在 src/bind_camera.cpp 暴露 CameraPointInfo 全部公开入口，并补本地 mosrange focused 单测与 smoke 覆盖
 "Spice, Instruments, and Cameras",CameraDetectorMap,已转换,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
 "Spice, Instruments, and Cameras",CameraDistortionMap,已转换,第七批已补基础单测（局部畸变正反变换）
 "Spice, Instruments, and Cameras",CameraFactory,已转换,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
@@ -324,7 +324,7 @@ OSIRIS-REx,OsirisRexDistortionMap,已转换,"2026-04-07 已在 bind_mission_came
 OSIRIS-REx,OsirisRexTagcamsCamera,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、快门时间与 SPICE ID 方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 OSIRIS-REx,OsirisRexTagcamsDistortionMap,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、温度配置与失真映射方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Utility,Area3D,未转换,
-Utility,Angle,未转换,2026-04-08 仅做 inventory 预登记，后续补实际 pybind 绑定与方法细化
+Utility,Angle,已转换,2026-04-08 已在 src/base/bind_base_geometry.cpp 同步完成 Angle 构造/单位/算术/比较/字符串接口，并扩展 tests/unitTest/angle_unit_test.py
 Utility,Column,已转换,2026-03-25 已在 bind_base_utility.cpp 暴露 Column/Align/Type，补充顶层导出并新增约束单测
 Utility,CollectorMap,未转换,2026-04-08 仅做 inventory 预登记，后续补实际 pybind 绑定与方法细化
 Utility,CubeStretch,已转换,2026-03-26 已在 bind_base_filters.cpp 暴露构造/元数据/相等比较接口并补充单测

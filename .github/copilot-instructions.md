@@ -40,5 +40,6 @@ All paths below are relative to the repository root unless noted otherwise.
 ## Pybind workflow routing
 
 - For workflow-oriented pybind tasks, use `.github/skills/isis-pybind/SKILL.md` as the main task procedure.
+- For queue-based continuous rollout work across unfinished classes (for example 5/10-class batches, one-class-at-a-time closure, retry limits, and blocker bookkeeping), use `.github/skills/pybind-rollout-execution/SKILL.md` as the companion rollout procedure.
 - Use repository-relative paths such as `reference/upstream_isis/...` when referring to mirrored upstream ISIS source in notes, reviews, or CI-facing guidance.
 

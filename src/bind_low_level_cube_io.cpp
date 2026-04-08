@@ -1,11 +1,12 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
-// Updated: 2026-04-03  Geng Xun expanded low-level cube I/O bindings with managers, table primitives, and Cube histogram/statistics helpers
-// Purpose: pybind11 bindings for low-level ISIS cube I/O types including Cube, buffers, managers, AlphaCube, and table structures
+// Updated: 2026-04-08  Geng Xun added Blob file/bytes helpers alongside existing low-level cube I/O bindings
+// Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, Cube, buffers, managers, AlphaCube, and table structures
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 
+#include <cstring>
 #include <memory>
 #include <vector>
 
@@ -14,6 +15,7 @@
 
 #include "AlphaCube.h"
 #include "BandManager.h"
+#include "Blob.h"
 #include "BoxcarManager.h"
 #include "Brick.h"
 #include "Buffer.h"
@@ -128,6 +130,7 @@ void bind_low_level_cube_io(py::module_ &m) {
         py::arg("byte_order"));
   m.def("is_lsb", &Isis::IsLsb);
   m.def("is_msb", &Isis::IsMsb);
+  m.def("is_blob", &Isis::IsBlob, py::arg("object"));
 
   py::class_<Isis::Buffer>(m, "Buffer")
       .def(py::init<>())
@@ -281,6 +284,85 @@ void bind_low_level_cube_io(py::module_ &m) {
       .def("beta_line", &Isis::AlphaCube::BetaLine, py::arg("alpha_line"))
       .def("rehash", &Isis::AlphaCube::Rehash, py::arg("alpha_cube"))
       .def("update_group", &Isis::AlphaCube::UpdateGroup, py::arg("cube"));
+
+     py::class_<Isis::Blob> blob(m, "Blob");
+
+     blob.def(py::init([](const std::string &name, const std::string &type) {
+                               return Isis::Blob(stdStringToQString(name), stdStringToQString(type));
+                          }),
+                          py::arg("name"),
+                          py::arg("type"))
+               .def(py::init([](const std::string &name, const std::string &type, const std::string &file_name) {
+                               return Isis::Blob(stdStringToQString(name), stdStringToQString(type), stdStringToQString(file_name));
+                          }),
+                          py::arg("name"),
+                          py::arg("type"),
+                          py::arg("file_name"))
+               .def(py::init<const Isis::Blob &>(), py::arg("other"))
+               .def("__copy__", [](const Isis::Blob &self) { return Isis::Blob(self); })
+               .def("__deepcopy__", [](const Isis::Blob &self, py::dict) { return Isis::Blob(self); }, py::arg("memo"))
+               .def("type", [](const Isis::Blob &self) { return qStringToStdString(self.Type()); })
+               .def("name", [](const Isis::Blob &self) { return qStringToStdString(self.Name()); })
+               .def("size", &Isis::Blob::Size)
+               .def("label",
+                          [](Isis::Blob &self) -> Isis::PvlObject & { return self.Label(); },
+                          py::return_value_policy::reference_internal)
+               .def("read",
+                          [](Isis::Blob &self, const std::string &file_name, const std::vector<Isis::PvlKeyword> &keywords) {
+                               self.Read(stdStringToQString(file_name), keywords);
+                          },
+                          py::arg("file_name"),
+                          py::arg("keywords") = std::vector<Isis::PvlKeyword>{})
+               .def("read",
+                          [](Isis::Blob &self,
+                                   const std::string &file_name,
+                                   const Isis::Pvl &labels,
+                                   const std::vector<Isis::PvlKeyword> &keywords) {
+                               self.Read(stdStringToQString(file_name), labels, keywords);
+                          },
+                          py::arg("file_name"),
+                          py::arg("labels"),
+                          py::arg("keywords") = std::vector<Isis::PvlKeyword>{})
+               .def("write",
+                          [](Isis::Blob &self, const std::string &file_name) {
+                               self.Write(stdStringToQString(file_name));
+                          },
+                          py::arg("file_name"))
+               .def("get_buffer",
+                          [](Isis::Blob &self) {
+                               if (self.Size() <= 0 || self.getBuffer() == nullptr) {
+                                    return py::bytes();
+                               }
+                               return py::bytes(self.getBuffer(), self.Size());
+                          })
+               .def("set_data",
+                          [](Isis::Blob &self, const py::bytes &data) {
+                               std::string buffer = data;
+                               self.setData(buffer.data(), static_cast<int>(buffer.size()));
+                          },
+                          py::arg("data"))
+               .def("take_data",
+                          [](Isis::Blob &self, const py::bytes &data) {
+                               std::string buffer = data;
+                               char *owned = new char[buffer.size()];
+                               if (!buffer.empty()) {
+                                    std::memcpy(owned, buffer.data(), buffer.size());
+                               }
+                               self.takeData(owned, static_cast<int>(buffer.size()));
+                          },
+                          py::arg("data"))
+               .def("__bytes__",
+                          [](Isis::Blob &self) {
+                               if (self.Size() <= 0 || self.getBuffer() == nullptr) {
+                                    return py::bytes();
+                               }
+                               return py::bytes(self.getBuffer(), self.Size());
+                          })
+               .def("__repr__",
+                          [](const Isis::Blob &self) {
+                               return "Blob(name='" + qStringToStdString(self.Name()) + "', type='" +
+                                                  qStringToStdString(self.Type()) + "', size=" + std::to_string(self.Size()) + ")";
+                          });
 
   py::class_<Isis::TableField> table_field(m, "TableField");
 

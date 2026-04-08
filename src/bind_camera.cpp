@@ -1,7 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
-// Updated: 2026-03-21  Geng Xun added core Camera bindings covering image/ground conversion, resolution queries, and map accessors
-// Purpose: pybind11 bindings for the ISIS Camera base class and shared camera-side geometry accessors
+// Updated: 2026-04-08  Geng Xun added CameraPointInfo bindings alongside core Camera geometry accessors
+// Purpose: pybind11 bindings for the ISIS Camera base class, CameraPointInfo helper, and shared camera-side geometry accessors
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
@@ -13,13 +13,66 @@
 #include "CameraDistortionMap.h"
 #include "CameraFocalPlaneMap.h"
 #include "CameraGroundMap.h"
+#include "CameraPointInfo.h"
 #include "CameraSkyMap.h"
+#include "PvlGroup.h"
 #include "Sensor.h"
 #include "helpers.h"
 
 namespace py = pybind11;
 
 void bind_camera(py::module_ &m) {
+     py::class_<Isis::CameraPointInfo>(m, "CameraPointInfo")
+               .def(py::init<>())
+               .def("set_cube",
+                          [](Isis::CameraPointInfo &self, const std::string &cube_file_name) {
+                               self.SetCube(stdStringToQString(cube_file_name));
+                          },
+                          py::arg("cube_file_name"))
+               .def("set_csv_output", &Isis::CameraPointInfo::SetCSVOutput, py::arg("csv_output"))
+               .def("set_image",
+                          [](Isis::CameraPointInfo &self, double sample, double line, bool outside, bool error) {
+                               return self.SetImage(sample, line, outside, error);
+                          },
+                          py::arg("sample"),
+                          py::arg("line"),
+                          py::arg("outside") = false,
+                          py::arg("error") = false,
+                          py::return_value_policy::take_ownership)
+               .def("set_center",
+                          [](Isis::CameraPointInfo &self, bool outside, bool error) {
+                               return self.SetCenter(outside, error);
+                          },
+                          py::arg("outside") = false,
+                          py::arg("error") = false,
+                          py::return_value_policy::take_ownership)
+               .def("set_sample",
+                          [](Isis::CameraPointInfo &self, double sample, bool outside, bool error) {
+                               return self.SetSample(sample, outside, error);
+                          },
+                          py::arg("sample"),
+                          py::arg("outside") = false,
+                          py::arg("error") = false,
+                          py::return_value_policy::take_ownership)
+               .def("set_line",
+                          [](Isis::CameraPointInfo &self, double line, bool outside, bool error) {
+                               return self.SetLine(line, outside, error);
+                          },
+                          py::arg("line"),
+                          py::arg("outside") = false,
+                          py::arg("error") = false,
+                          py::return_value_policy::take_ownership)
+               .def("set_ground",
+                          [](Isis::CameraPointInfo &self, double latitude, double longitude, bool outside, bool error) {
+                               return self.SetGround(latitude, longitude, outside, error);
+                          },
+                          py::arg("latitude"),
+                          py::arg("longitude"),
+                          py::arg("outside") = false,
+                          py::arg("error") = false,
+                          py::return_value_policy::take_ownership)
+               .def("__repr__", [](const Isis::CameraPointInfo &) { return "CameraPointInfo()"; });
+
   py::class_<Isis::Camera, Isis::Sensor> camera(m, "Camera");
 
   py::enum_<Isis::Camera::CameraType>(camera, "CameraType")

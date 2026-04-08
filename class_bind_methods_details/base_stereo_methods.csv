@@ -2,8 +2,8 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 Stereo,Geometry,reference/upstream_isis/src/base/objs/Stereo/Stereo.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,静态立体测量工具类；上游 unitTest 已覆盖 elevation/spherical/rectangular 三个核心入口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Stereo,isis_pybind.Stereo,N,Python class symbol not found in current binding files
-Construction/Enum,Stereo(),isis_pybind.Stereo(),N,Constructor binding not detected in current binding files
-Public API,"static bool elevation(Camera &cam1, Camera &cam2, double &radius, double &latitude, double &longitude, double &sepang, double &error)",isis_pybind.Stereo.elevation,N,上游 unitTest 直接调用该静态方法验证立体交会输出
-Public API,"static void spherical(const double latitude, const double longitude, const double radius, double &x, double &y, double &z)",isis_pybind.Stereo.spherical,N,上游 unitTest 覆盖球坐标到直角坐标转换
-Public API,"static void rectangular(const double x, const double y, const double z, double &latitude, double &longitude, double &radius)",isis_pybind.Stereo.rectangular,N,上游 unitTest 覆盖直角坐标到球坐标转换
+Class Symbol,Stereo,isis_pybind.Stereo,Y,2026-04-08 已在 src/base/bind_base_geometry.cpp 注册 Stereo 类符号
+Construction/Enum,Stereo(),isis_pybind.Stereo(),Y,2026-04-08 已暴露默认构造函数
+Public API,"static bool elevation(Camera &cam1, Camera &cam2, double &radius, double &latitude, double &longitude, double &sepang, double &error)",isis_pybind.Stereo.elevation,Y,2026-04-08 已通过 tuple wrapper 暴露 elevation(cam1, cam2) -> (success, radius, latitude, longitude, sepang, error)
+Public API,"static void spherical(const double latitude, const double longitude, const double radius, double &x, double &y, double &z)",isis_pybind.Stereo.spherical,Y,2026-04-08 已通过 tuple wrapper 暴露 spherical(latitude, longitude, radius) -> (x, y, z)
+Public API,"static void rectangular(const double x, const double y, const double z, double &latitude, double &longitude, double &radius)",isis_pybind.Stereo.rectangular,Y,2026-04-08 已通过 tuple wrapper 暴露 rectangular(x, y, z) -> (latitude, longitude, radius)

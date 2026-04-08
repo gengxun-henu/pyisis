@@ -1,7 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
-// Updated: 2026-03-26  Geng Xun added geometry value types plus transform, interpolator, enlarge, and reduce bindings
-// Purpose: pybind11 bindings for ISIS geometry primitives and resampling helpers including Angle, Distance, Latitude, Longitude, Transform, Interpolator, Enlarge, and Reduce
+// Updated: 2026-04-08  Geng Xun added Stereo tuple-returning wrappers plus Angle arithmetic/comparison helpers
+// Purpose: pybind11 bindings for ISIS geometry primitives and resampling helpers including Angle, Stereo, Distance, Latitude, Longitude, Transform, Interpolator, Enlarge, and Reduce
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
@@ -18,6 +18,7 @@
 #include "Longitude.h"
 #include "PvlGroup.h"
 #include "Reduce.h"
+#include "Stereo.h"
 #include "Transform.h"
 #include "helpers.h"
 
@@ -47,20 +48,170 @@ void bind_base_geometry(py::module_ &m) {
       .def(py::init<const Isis::Angle &>(), py::arg("other"))
       .def(py::init([](const std::string &angle_text) { return Isis::Angle(stdStringToQString(angle_text)); }),
            py::arg("angle_text"))
+       .def("__copy__", [](const Isis::Angle &self) { return Isis::Angle(self); })
+       .def("__deepcopy__", [](const Isis::Angle &self, py::dict) { return Isis::Angle(self); }, py::arg("memo"))
       .def_static("full_rotation", &Isis::Angle::fullRotation)
       .def("is_valid", &Isis::Angle::isValid)
+      .def("angle", &Isis::Angle::angle, py::arg("unit"))
       .def("radians", &Isis::Angle::radians)
       .def("degrees", &Isis::Angle::degrees)
+      .def("unit_wrap_value", &Isis::Angle::unitWrapValue, py::arg("unit"))
+      .def("set_angle", &Isis::Angle::setAngle, py::arg("angle"), py::arg("unit"))
       .def("set_radians", &Isis::Angle::setRadians, py::arg("radians"))
       .def("set_degrees", &Isis::Angle::setDegrees, py::arg("degrees"))
+      .def("ratio",
+           [](const Isis::Angle &self, const Isis::Angle &other) {
+             return self / other;
+           },
+           py::arg("other"))
+      .def("__add__",
+           [](const Isis::Angle &self, const Isis::Angle &other) {
+             return self + other;
+           },
+           py::is_operator())
+      .def("__sub__",
+           [](const Isis::Angle &self, const Isis::Angle &other) {
+             return self - other;
+           },
+           py::is_operator())
+      .def("__mul__",
+           [](const Isis::Angle &self, double value) {
+             return self * value;
+           },
+           py::arg("value"),
+           py::is_operator())
+      .def("__rmul__",
+           [](const Isis::Angle &self, double value) {
+             return value * self;
+           },
+           py::arg("value"),
+           py::is_operator())
+      .def("__truediv__",
+           [](const Isis::Angle &self, double value) {
+             return self / value;
+           },
+           py::arg("value"),
+           py::is_operator())
+      .def("__iadd__",
+           [](Isis::Angle &self, const Isis::Angle &other) -> Isis::Angle & {
+             self += other;
+             return self;
+           },
+           py::arg("other"),
+           py::return_value_policy::reference_internal,
+           py::is_operator())
+      .def("__isub__",
+           [](Isis::Angle &self, const Isis::Angle &other) -> Isis::Angle & {
+             self -= other;
+             return self;
+           },
+           py::arg("other"),
+           py::return_value_policy::reference_internal,
+           py::is_operator())
+      .def("__imul__",
+           [](Isis::Angle &self, double value) -> Isis::Angle & {
+             self *= value;
+             return self;
+           },
+           py::arg("value"),
+           py::return_value_policy::reference_internal,
+           py::is_operator())
+      .def("__itruediv__",
+           [](Isis::Angle &self, double value) -> Isis::Angle & {
+             self /= value;
+             return self;
+           },
+           py::arg("value"),
+           py::return_value_policy::reference_internal,
+           py::is_operator())
+      .def("__eq__",
+           [](const Isis::Angle &self, const Isis::Angle &other) {
+             return self == other;
+           },
+           py::is_operator())
+      .def("__ne__",
+           [](const Isis::Angle &self, const Isis::Angle &other) {
+             return self != other;
+           },
+           py::is_operator())
+      .def("__lt__",
+           [](const Isis::Angle &self, const Isis::Angle &other) {
+             return self < other;
+           },
+           py::is_operator())
+      .def("__le__",
+           [](const Isis::Angle &self, const Isis::Angle &other) {
+             return self <= other;
+           },
+           py::is_operator())
+      .def("__gt__",
+           [](const Isis::Angle &self, const Isis::Angle &other) {
+             return self > other;
+           },
+           py::is_operator())
+      .def("__ge__",
+           [](const Isis::Angle &self, const Isis::Angle &other) {
+             return self >= other;
+           },
+           py::is_operator())
       .def("to_string",
            [](const Isis::Angle &self, bool include_units) {
              return qStringToStdString(self.toString(include_units));
            },
            py::arg("include_units") = true)
+      .def("__str__",
+           [](const Isis::Angle &self) {
+             return qStringToStdString(self.toString(true));
+           })
       .def("__repr__", [](const Isis::Angle &self) {
         return "Angle(" + std::to_string(self.degrees()) + " deg)";
       });
+
+  py::class_<Isis::Stereo> stereo(m, "Stereo");
+
+  stereo
+      .def(py::init<>())
+      .def_static(
+          "elevation",
+          [](Isis::Camera &cam1, Isis::Camera &cam2) {
+            double radius = 0.0;
+            double latitude = 0.0;
+            double longitude = 0.0;
+            double sepang = 0.0;
+            double error = 0.0;
+
+            bool success = Isis::Stereo::elevation(cam1, cam2, radius, latitude, longitude, sepang, error);
+            return py::make_tuple(success, radius, latitude, longitude, sepang, error);
+          },
+          py::arg("cam1"),
+          py::arg("cam2"))
+      .def_static(
+          "spherical",
+          [](double latitude, double longitude, double radius) {
+            double x = 0.0;
+            double y = 0.0;
+            double z = 0.0;
+
+            Isis::Stereo::spherical(latitude, longitude, radius, x, y, z);
+            return py::make_tuple(x, y, z);
+          },
+          py::arg("latitude"),
+          py::arg("longitude"),
+          py::arg("radius"))
+      .def_static(
+          "rectangular",
+          [](double x, double y, double z) {
+            double latitude = 0.0;
+            double longitude = 0.0;
+            double radius = 0.0;
+
+            Isis::Stereo::rectangular(x, y, z, latitude, longitude, radius);
+            return py::make_tuple(latitude, longitude, radius);
+          },
+          py::arg("x"),
+          py::arg("y"),
+          py::arg("z"))
+      .def("__repr__", [](const Isis::Stereo &) { return "Stereo()"; });
 
   py::class_<Isis::Distance> distance(m, "Distance");
 

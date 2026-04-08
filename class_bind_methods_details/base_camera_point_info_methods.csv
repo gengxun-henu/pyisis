@@ -2,13 +2,13 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 CameraPointInfo,"Spice, Instruments, and Cameras",reference/upstream_isis/src/base/objs/CameraPointInfo/CameraPointInfo.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,campt 风格的相机点位查询工具；返回 PvlGroup* 时需小心所有权与生命周期
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,CameraPointInfo,isis_pybind.CameraPointInfo,N,Python class symbol not found in current binding files
-Construction/Enum,CameraPointInfo(),isis_pybind.CameraPointInfo(),N,默认构造
-Construction/Enum,virtual ~CameraPointInfo(),isis_pybind.CameraPointInfo,N,析构函数
-Public API,"void SetCube(const QString &cubeFileName)",isis_pybind.CameraPointInfo.SetCube,N,设置输入 cube
-Public API,"void SetCSVOutput(bool csvOutput)",isis_pybind.CameraPointInfo.SetCSVOutput,N,切换 CSV/PVL 输出顺序
-Public API,"PvlGroup *SetImage(const double sample, const double line, const bool outside = false, const bool error = false)",isis_pybind.CameraPointInfo.SetImage,N,像点查询；返回指针需额外包装
-Public API,"PvlGroup *SetCenter(const bool outside = false, const bool error = false)",isis_pybind.CameraPointInfo.SetCenter,N,中心点查询；返回指针需额外包装
-Public API,"PvlGroup *SetSample(const double sample, const bool outside = false, const bool error = false)",isis_pybind.CameraPointInfo.SetSample,N,固定 sample 查询；返回指针需额外包装
-Public API,"PvlGroup *SetLine(const double line, const bool outside = false, const bool error = false)",isis_pybind.CameraPointInfo.SetLine,N,固定 line 查询；返回指针需额外包装
-Public API,"PvlGroup *SetGround(const double latitude, const double longitude, const bool outside = false, const bool error = false)",isis_pybind.CameraPointInfo.SetGround,N,地面点查询；返回指针需额外包装
+Class Symbol,CameraPointInfo,isis_pybind.CameraPointInfo,Y,2026-04-08 已在 src/bind_camera.cpp 注册 CameraPointInfo 类符号
+Construction/Enum,CameraPointInfo(),isis_pybind.CameraPointInfo(),Y,2026-04-08 已暴露默认构造
+Construction/Enum,virtual ~CameraPointInfo(),isis_pybind.CameraPointInfo,Y,2026-04-08 Python 生命周期可安全释放 CameraPointInfo 实例
+Public API,"void SetCube(const QString &cubeFileName)",isis_pybind.CameraPointInfo.set_cube,Y,2026-04-08 已暴露输入 cube 设置接口
+Public API,"void SetCSVOutput(bool csvOutput)",isis_pybind.CameraPointInfo.set_csv_output,Y,2026-04-08 已暴露 CSV/PVL 输出顺序切换接口
+Public API,"PvlGroup *SetImage(const double sample, const double line, const bool outside = false, const bool error = false)",isis_pybind.CameraPointInfo.set_image,Y,2026-04-08 已通过 take_ownership wrapper 暴露像点查询结果
+Public API,"PvlGroup *SetCenter(const bool outside = false, const bool error = false)",isis_pybind.CameraPointInfo.set_center,Y,2026-04-08 已通过 take_ownership wrapper 暴露中心点查询结果
+Public API,"PvlGroup *SetSample(const double sample, const bool outside = false, const bool error = false)",isis_pybind.CameraPointInfo.set_sample,Y,2026-04-08 已通过 take_ownership wrapper 暴露固定 sample 查询结果
+Public API,"PvlGroup *SetLine(const double line, const bool outside = false, const bool error = false)",isis_pybind.CameraPointInfo.set_line,Y,2026-04-08 已通过 take_ownership wrapper 暴露固定 line 查询结果
+Public API,"PvlGroup *SetGround(const double latitude, const double longitude, const bool outside = false, const bool error = false)",isis_pybind.CameraPointInfo.set_ground,Y,2026-04-08 已通过 take_ownership wrapper 暴露地面点查询结果

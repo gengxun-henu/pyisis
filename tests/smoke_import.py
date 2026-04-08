@@ -97,6 +97,7 @@ def temporary_raw_input_file(name="example.raw"):
 def test_basic_symbols_present():
     assert hasattr(ip, "Progress")
     assert hasattr(ip, "Calculator")
+    assert hasattr(ip, "Centroid")
     assert hasattr(ip, "Affine")
     assert hasattr(ip, "BasisFunction")
     assert hasattr(ip, "NthOrderPolynomial")
@@ -123,6 +124,7 @@ def test_basic_symbols_present():
     assert hasattr(ip, "MultivariateStatistics")
     assert hasattr(ip, "VecFilter")
     assert hasattr(ip, "Angle")
+    assert hasattr(ip, "Stereo")
     assert hasattr(ip, "AtmosModel")
     assert hasattr(ip, "Anisotropic1")
     assert hasattr(ip, "PhotoModel")
@@ -162,6 +164,7 @@ def test_basic_symbols_present():
     assert hasattr(ip, "BufferManager")
     assert hasattr(ip, "BandManager")
     assert hasattr(ip, "BoxcarManager")
+    assert hasattr(ip, "Blob")
     assert hasattr(ip, "Brick")
     assert hasattr(ip, "Portal")
     assert hasattr(ip, "AlphaCube")
@@ -177,6 +180,7 @@ def test_basic_symbols_present():
     assert hasattr(ip, "CameraDistortionMap")
     assert hasattr(ip, "CameraFocalPlaneMap")
     assert hasattr(ip, "CameraGroundMap")
+    assert hasattr(ip, "CameraPointInfo")
     assert hasattr(ip, "CameraSkyMap")
     assert hasattr(ip, "CameraFactory")
     assert hasattr(ip, "Cube")
@@ -546,10 +550,36 @@ def test_basic_base_objects_work():
     assert latitude.planetocentric(ip.Angle.Units.Degrees) == 10.0
     assert longitude.positive_east(ip.Angle.Units.Degrees) == 20.0
 
+    stereo_x, stereo_y, stereo_z = ip.Stereo.spherical(0.0, 0.0, 1000.0)
+    assert stereo_x == 1.0
+    assert stereo_y == 0.0
+    assert stereo_z == 0.0
+
+    stereo_latitude, stereo_longitude, stereo_radius = ip.Stereo.rectangular(1.0, 0.0, 0.0)
+    assert stereo_latitude == 0.0
+    assert stereo_longitude == 0.0
+    assert stereo_radius == 1.0
+
+    blob = ip.Blob("SmokeBlob", "Blob")
+    blob.set_data(b"XYZ")
+    assert blob.name() == "SmokeBlob"
+    assert blob.type() == "Blob"
+    assert blob.get_buffer() == b"XYZ"
+    assert ip.is_blob(blob.label()) is False
+    assert ip.is_blob(ip.PvlObject("TABLE")) is True
+
+    centroid = ip.Centroid()
+    assert centroid.set_dn_range(1.0, 2.0) == 1
+    assert "Centroid" in repr(centroid)
+
     filename = ip.FileName("$PWD/example.cub")
     assert filename.name() == "example.cub"
     assert filename.base_name() == "example"
     assert filename.extension() == "cub"
+
+    camera_point_info = ip.CameraPointInfo()
+    camera_point_info.set_csv_output(True)
+    assert repr(camera_point_info) == "CameraPointInfo()"
 
     keyword = ip.PvlKeyword("InstrumentId", "HIRISE")
     group = ip.PvlGroup("Instrument")

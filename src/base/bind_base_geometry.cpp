@@ -9,10 +9,13 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <string>
+
 #include "Angle.h"
 #include "Enlarge.h"
 #include "Displacement.h"
 #include "Distance.h"
+#include "IException.h"
 #include "Interpolator.h"
 #include "Latitude.h"
 #include "Longitude.h"
@@ -32,6 +35,16 @@ std::vector<double> toDoubleVector(const py::sequence &values) {
     result.push_back(py::cast<double>(value));
   }
   return result;
+}
+
+void validateStereoCameraState(Isis::Camera &camera, const std::string &camera_name) {
+  if (!camera.HasSurfaceIntersection()) {
+    QString message = QString::fromStdString(camera_name)
+                      + " does not have a valid surface intersection. "
+                        "Call Camera.set_image(...) on both cameras before "
+                        "calling Stereo.elevation().";
+    throw Isis::IException(Isis::IException::Programmer, message, _FILEINFO_);
+  }
 }
 }
 
@@ -189,14 +202,27 @@ void bind_base_geometry(py::module_ &m) {
       .def_static(
           "elevation",
           [](Isis::Camera &cam1, Isis::Camera &cam2) {
+            validateStereoCameraState(cam1, "cam1");
+            validateStereoCameraState(cam2, "cam2");
+
             double radius = 0.0;
             double latitude = 0.0;
             double longitude = 0.0;
             double sepang = 0.0;
             double error = 0.0;
 
-            bool success = Isis::Stereo::elevation(cam1, cam2, radius, latitude, longitude, sepang, error);
-            return py::make_tuple(success, radius, latitude, longitude, sepang, error);
+            try {
+              bool success = Isis::Stereo::elevation(cam1, cam2, radius, latitude, longitude, sepang, error);
+              return py::make_tuple(success, radius, latitude, longitude, sepang, error);
+            }
+            catch (const Isis::IException &) {
+              throw;
+            }
+            catch (const std::exception &e) {
+              QString message = "Stereo.elevation() failed after camera state validation: ";
+              message += e.what();
+              throw Isis::IException(Isis::IException::Programmer, message, _FILEINFO_);
+            }
           },
           py::arg("cam1"),
           py::arg("cam2"))

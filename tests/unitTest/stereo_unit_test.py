@@ -8,10 +8,22 @@ Last Modified: 2026-04-08
 
 import unittest
 
-from _unit_test_support import ip
+from _unit_test_support import ip, workspace_test_data_path
+
+
+MDIS_CUBES = [
+    workspace_test_data_path("mosrange", "EN0108828322M_iof.cub"),
+    workspace_test_data_path("mosrange", "EN0108828327M_iof.cub"),
+]
 
 
 class StereoUnitTest(unittest.TestCase):
+    def open_cube(self, path):
+        cube = ip.Cube()
+        cube.open(str(path), "r")
+        self.addCleanup(cube.close)
+        return cube
+
     def test_default_constructor_is_available(self):
         stereo = ip.Stereo()
         self.assertEqual(repr(stereo), "Stereo()")
@@ -52,6 +64,18 @@ class StereoUnitTest(unittest.TestCase):
     def test_elevation_entry_point_is_exposed(self):
         self.assertTrue(hasattr(ip.Stereo, "elevation"))
         self.assertTrue(callable(ip.Stereo.elevation))
+
+    def test_elevation_raises_when_cameras_lack_surface_intersections(self):
+        cube1 = self.open_cube(MDIS_CUBES[0])
+        cube2 = self.open_cube(MDIS_CUBES[1])
+        cam1 = cube1.camera()
+        cam2 = cube2.camera()
+
+        self.assertFalse(cam1.has_surface_intersection())
+        self.assertFalse(cam2.has_surface_intersection())
+
+        with self.assertRaisesRegex(ip.IException, "Call Camera.set_image"):
+            ip.Stereo.elevation(cam1, cam2)
 
 
 if __name__ == "__main__":

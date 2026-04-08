@@ -1,0 +1,11 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Centroid,Pattern Matching,reference/upstream_isis/src/base/objs/Centroid/Centroid.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,基于 Chip 的质心选择器；依赖模式匹配子系统里的 Chip/Selection 类型
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Centroid,isis_pybind.Centroid,N,Python class symbol not found in current binding files
+Construction/Enum,Centroid(),isis_pybind.Centroid(),N,默认构造
+Construction/Enum,virtual ~Centroid(),isis_pybind.Centroid,N,析构函数
+Public API,"int select(Chip *inputChip, Chip *selectionChip)",isis_pybind.Centroid.select,N,依赖 Chip*；绑定时需处理非拥有指针
+Public API,"int setDNRange(double minimumDN, double maximumDN)",isis_pybind.Centroid.setDNRange,N,设置 DN 范围
+Public API,double getMinDN(),isis_pybind.Centroid.getMinDN,N,最小 DN getter
+Public API,double getMaxDN(),isis_pybind.Centroid.getMaxDN,N,最大 DN getter

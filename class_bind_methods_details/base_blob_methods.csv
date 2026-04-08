@@ -1,0 +1,24 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Blob,Low Level Cube I/O,reference/upstream_isis/src/base/objs/Blob/Blob.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,基础二进制数据块类；后续绑定需处理裸缓冲区与流 IO 生命周期
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Blob,isis_pybind.Blob,N,Python class symbol not found in current binding files
+Public API,"bool IsBlob(PvlObject &obj)",isis_pybind.IsBlob,N,头文件级辅助判断函数
+Construction/Enum,"Blob(const QString &name, const QString &type)",isis_pybind.Blob,N,按名称与类型构造
+Construction/Enum,"Blob(const QString &name, const QString &type, const QString &file)",isis_pybind.Blob,N,按名称/类型/文件构造
+Construction/Enum,"Blob(const Blob &other)",isis_pybind.Blob,N,拷贝构造
+Construction/Enum,Blob() = default,isis_pybind.Blob,N,默认构造
+Construction/Enum,virtual ~Blob(),isis_pybind.Blob,N,析构函数
+Public API,"Blob &operator=(const Blob &other)",isis_pybind.Blob.__copy__,N,赋值运算符
+Public API,QString Type() const,isis_pybind.Blob.Type,N,返回 blob 类型
+Public API,QString Name() const,isis_pybind.Blob.Name,N,返回 blob 名称
+Public API,int Size() const,isis_pybind.Blob.Size,N,返回字节数
+Public API,"PvlObject &Label()",isis_pybind.Blob.Label,N,返回标签对象；后续需明确返回引用策略
+Public API,"void Read(const QString &file, const std::vector<PvlKeyword> keywords = std::vector<PvlKeyword>())",isis_pybind.Blob.Read,N,按文件读取
+Public API,"void Read(const QString &file, const Pvl &pvlLabels, const std::vector<PvlKeyword> keywords = std::vector<PvlKeyword>())",isis_pybind.Blob.Read,N,带外部标签读取
+Public API,"virtual void Read(const Pvl &pvl, std::istream &is, const std::vector<PvlKeyword> keywords = std::vector<PvlKeyword>())",isis_pybind.Blob.Read,N,流读取；风险：std::istream 需额外适配
+Public API,"void Write(const QString &file)",isis_pybind.Blob.Write,N,写入文件
+Public API,"void Write(Pvl &pvl, std::fstream &stm, const QString &detachedFileName = \"\", bool overwrite = true)",isis_pybind.Blob.Write,N,写入流；风险：std::fstream 需额外适配
+Public API,"char *getBuffer()",isis_pybind.Blob.getBuffer,N,裸指针缓冲区；后续可能映射为 bytes/memoryview
+Public API,"void setData(const char *buffer, int nbytes)",isis_pybind.Blob.setData,N,从外部缓冲区复制
+Public API,"void takeData(char *buffer, int nbytes)",isis_pybind.Blob.takeData,N,接管外部缓冲区所有权；生命周期风险较高

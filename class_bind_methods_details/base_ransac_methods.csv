@@ -1,0 +1,13 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Ransac,Math,reference/upstream_isis/src/base/objs/Ransac/Ransac.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,RANSAC 相关线性代数/组合辅助函数集合；全部是 free functions 且大量使用裸指针数组
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Function Group Symbol,Ransac free functions,isis_pybind.Ransac,N,头文件主要提供 free-function API
+Public API,"int choleski_solve(double *a, double *b, int nsize, int flag)",isis_pybind.choleski_solve,N,裸指针矩阵/向量输入；适合 numpy buffer 包装
+Public API,"int inverse(double *a, int nsize)",isis_pybind.inverse,N,原地求逆；裸指针输入
+Public API,"int isymp(int row, int col)",isis_pybind.isymp,N,对称矩阵索引辅助
+Public API,"int indeces_from_set(int *indeces, int set, int set_size, int n)",isis_pybind.indeces_from_set,N,组合采样索引生成；裸指针输出
+Public API,"int binomial_coeficient(int n, int k)",isis_pybind.binomial_coeficient,N,二项式系数辅助
+Public API,"int decompose(double *a, int nsize)",isis_pybind.decompose,N,Cholesky 分解辅助；裸指针输入
+Public API,"int foresub(double *a, double *b, int nsize)",isis_pybind.foresub,N,前代求解辅助；裸指针输入
+Public API,"int backsub(double *a, double *b, int nsize)",isis_pybind.backsub,N,回代求解辅助；裸指针输入

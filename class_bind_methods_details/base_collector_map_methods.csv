@@ -1,0 +1,26 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+CollectorMap,Utility,reference/upstream_isis/src/base/objs/CollectorMap/CollectorMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,策略化模板 multimap 容器；实际 pybind 需先选定具体模板实参和所有权策略
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,"CollectorMap<K, T, ComparePolicy, RemovalPolicy, CopyPolicy>",isis_pybind.CollectorMap,N,模板类符号；需具体化模板参数后才能直接绑定
+Construction/Enum,enum KeyPolicy { UniqueKeys, DuplicateKeys },isis_pybind.CollectorMap.KeyPolicy,N,键唯一/可重复策略
+Construction/Enum,CollectorMap(),isis_pybind.CollectorMap,N,默认构造
+Construction/Enum,"CollectorMap(const KeyPolicy &keyPolicy)",isis_pybind.CollectorMap,N,按键策略构造
+Construction/Enum,virtual ~CollectorMap(),isis_pybind.CollectorMap,N,析构时会应用 RemovalPolicy
+Construction/Enum,"CollectorMap(const CollectorMap &cmap)",isis_pybind.CollectorMap,N,拷贝构造；会使用 CopyPolicy
+Public API,"CollectorMap &operator=(const CollectorMap &cmap)",isis_pybind.CollectorMap.__copy__,N,赋值运算符
+Public API,int size() const,isis_pybind.CollectorMap.size,N,元素个数
+Public API,"int count(const K &key) const",isis_pybind.CollectorMap.count,N,统计某 key 出现次数
+Public API,"void add(const K &key, const T &value)",isis_pybind.CollectorMap.add,N,添加元素
+Public API,"bool exists(const K &key) const",isis_pybind.CollectorMap.exists,N,键存在性检查
+Public API,"T &get(const K &key)",isis_pybind.CollectorMap.get,N,按 key 取值；返回引用策略取决于 T
+Public API,"const T &get(const K &key) const",isis_pybind.CollectorMap.get,N,const 重载
+Public API,"int index(const K &key) const",isis_pybind.CollectorMap.index,N,返回首个匹配键的顺序索引
+Public API,"T &getNth(int nth)",isis_pybind.CollectorMap.getNth,N,按顺序取值；返回引用策略取决于 T
+Public API,"const T &getNth(int nth) const",isis_pybind.CollectorMap.getNth,N,const 重载
+Public API,"const K &key(int nth) const",isis_pybind.CollectorMap.key,N,按顺序取 key
+Public API,"int remove(const K &key)",isis_pybind.CollectorMap.remove,N,删除一个或多个匹配键
+Public API,CollectorConstIter begin() const,isis_pybind.CollectorMap.begin,N,const 迭代器；Python 侧通常改为 __iter__ 包装
+Public API,CollectorConstIter end() const,isis_pybind.CollectorMap.end,N,const 迭代器尾；通常不直接暴露
+Public API,CollectorIter begin(),isis_pybind.CollectorMap.begin,N,可变迭代器；通常不直接暴露
+Public API,CollectorIter end(),isis_pybind.CollectorMap.end,N,可变迭代器尾；通常不直接暴露

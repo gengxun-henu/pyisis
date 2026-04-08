@@ -25,6 +25,15 @@
     - `class_bind_methods_details/methods_inventory_summary.csv`
   - 顺手清理了本文件遗留的合并冲突标记，保留两侧有效历史记录。
 
+- Inventory 台账修复完成（分支切换后 summary / todo 污染清理）：
+  - 清理 `todo_pybind11.csv` 中的重复/冲突条目，去除 `Radiometric And Photometric Correction` 段落里重复的 `AlbedoAtm` / `Anisotropic1` / `Anisotropic2` / `AtmosModel` / `Hapke*` 记录，并去除 `Utility,LineEquation` 的重复空备注行。
+  - 更新 `class_bind_methods_details/generate_methods_csv.py`：在 `_tmp_pybind_inventory.json` 缺失时，改为基于现有 `*_methods.csv` 明细表安全重建 `methods_inventory_summary.csv`，同时在读入 `todo_pybind11.csv` 时按“模块类别 + 类名”去重，避免分支切换后同类多行把 summary 再次写坏。
+  - 同步修正 `class_bind_methods_details/control_control_net_statistics_methods.csv` 与 `class_bind_methods_details/control_control_net_valid_measure_methods.csv` 的 `Binding` 元数据为 `src/control/bind_control_core.cpp`。
+  - 重新生成 `class_bind_methods_details/methods_inventory_summary.csv`，确认 `ControlNetStatistics` / `ControlNetValidMeasure` summary 行恢复正常，且同一 `Module Category + Class` 不再重复。
+- Validation status:
+  - Passed: `python class_bind_methods_details/generate_methods_csv.py`
+  - Passed: summary 唯一性校验（`duplicate_module_class_rows=0`）
+
 ## 2026-04-07
 
 - ControlNetFilter 第二轮轻量过滤器补绑完成：

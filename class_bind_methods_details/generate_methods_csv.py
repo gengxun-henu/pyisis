@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from collections import Counter
 import csv
+from functools import lru_cache
 import json
 import re
 from dataclasses import dataclass
@@ -102,6 +104,31 @@ def load_todo_entries() -> list[TodoEntry]:
         ]
 
 
+def dedupe_todo_entries(entries: list[TodoEntry]) -> list[TodoEntry]:
+    def entry_score(entry: TodoEntry, index: int) -> tuple[int, int, int, int]:
+        converted_rank = 2 if entry.current_status == "已转换" else 1 if entry.current_status else 0
+        note_rank = 1 if entry.note else 0
+        return (converted_rank, note_rank, len(entry.note), index)
+
+    ordered_keys: list[tuple[str, str]] = []
+    seen_keys: set[tuple[str, str]] = set()
+    best_entries: dict[tuple[str, str], TodoEntry] = {}
+    best_scores: dict[tuple[str, str], tuple[int, int, int, int]] = {}
+
+    for index, entry in enumerate(entries):
+        key = (entry.category, entry.class_name)
+        if key not in seen_keys:
+            ordered_keys.append(key)
+            seen_keys.add(key)
+
+        candidate_score = entry_score(entry, index)
+        if key not in best_scores or candidate_score >= best_scores[key]:
+            best_scores[key] = candidate_score
+            best_entries[key] = entry
+
+    return [best_entries[key] for key in ordered_keys]
+
+
 def load_inventory() -> tuple[dict[str, list[dict]], dict[str, list[str]]]:
     if not INVENTORY_JSON.exists():
         return {}, {}
@@ -114,6 +141,43 @@ def load_inventory() -> tuple[dict[str, list[dict]], dict[str, list[str]]]:
         key: value for key, value in data.get("converted", {}).items() if isinstance(value, list)
     }
     return records_by_class, converted_map
+
+
+@lru_cache(maxsize=None)
+def discover_binding_paths(class_name: str) -> tuple[str, ...]:
+    src_root = REPO_ROOT / "isis_pybind_standalone" / "src"
+    if not src_root.exists():
+        return ()
+
+    pattern = re.compile(rf"py::class_<[\s\S]*?\bIsis::{re.escape(class_name)}\b", re.M)
+    matches: list[str] = []
+
+    for path in src_root.rglob("*.cpp"):
+        text = path.read_text(encoding="utf-8", errors="ignore")
+        if pattern.search(text):
+            matches.append(str(path.relative_to(REPO_ROOT)))
+
+    return tuple(matches)
+
+
+def find_existing_detail_csv(entry: TodoEntry) -> Path | None:
+    suffix = f"_{camel_to_snake(entry.class_name)}_methods.csv"
+    candidates = sorted(OUTPUT_DIR.glob(f"*{suffix}"))
+
+    for candidate in candidates:
+        with candidate.open("r", encoding="utf-8-sig", newline="") as f:
+            rows = list(csv.reader(f))
+
+        if len(rows) < 2:
+            continue
+
+        metadata = rows[1]
+        candidate_class = metadata[0].strip() if len(metadata) > 0 else ""
+        candidate_category = metadata[1].strip() if len(metadata) > 1 else ""
+        if candidate_class == entry.class_name and candidate_category == entry.category:
+            return candidate
+
+    return None
 
 
 def locate_header(class_name: str, inventory_records: list[dict]) -> tuple[str | None, str | None]:
@@ -562,32 +626,11 @@ def summarize_rows(
     binding_value = "; ".join(binding_info.binding_files) if binding_info.binding_files else "N/A"
     source_value = header_rel or "N/A"
 
-    if class_symbol_status == "Y":
-        if open_items <= 10:
-            priority_rank = 1
-            suggested_priority = "High"
-            priority_reason = "Already exported in Python with a small remaining API gap"
-        elif open_items <= 30:
-            priority_rank = 2
-            suggested_priority = "Medium"
-            priority_reason = "Already exported in Python, but still has a moderate API gap"
-        else:
-            priority_rank = 3
-            suggested_priority = "Low"
-            priority_reason = "Already exported, but the remaining API surface is large"
-    else:
-        if total_items <= 12:
-            priority_rank = 1
-            suggested_priority = "High"
-            priority_reason = "Not exported yet, but the class looks small enough for a quick win"
-        elif total_items <= 30:
-            priority_rank = 2
-            suggested_priority = "Medium"
-            priority_reason = "Not exported yet and has a moderate public API size"
-        else:
-            priority_rank = 3
-            suggested_priority = "Low"
-            priority_reason = "Not exported yet and likely needs a larger binding effort"
+    priority_rank, suggested_priority, priority_reason = compute_priority(
+        class_symbol_status,
+        open_items,
+        total_items,
+    )
 
     return SummaryRow(
         priority_rank=priority_rank,
@@ -607,6 +650,90 @@ def summarize_rows(
         source=source_value,
         binding=binding_value,
         class_note=entry.note,
+    )
+
+
+def compute_priority(class_symbol_status: str, open_items: int, total_items: int) -> tuple[int, str, str]:
+    if class_symbol_status == "Y":
+        if open_items <= 10:
+            return (1, "High", "Already exported in Python with a small remaining API gap")
+        if open_items <= 30:
+            return (2, "Medium", "Already exported in Python, but still has a moderate API gap")
+        return (3, "Low", "Already exported, but the remaining API surface is large")
+
+    if total_items <= 12:
+        return (1, "High", "Not exported yet, but the class looks small enough for a quick win")
+    if total_items <= 30:
+        return (2, "Medium", "Not exported yet and has a moderate public API size")
+    return (3, "Low", "Not exported yet and likely needs a larger binding effort")
+
+
+def summarize_existing_detail_csv(
+    entry: TodoEntry,
+    detail_path: Path,
+    header_rel: str | None,
+    allow_binding_discovery: bool,
+) -> SummaryRow:
+    with detail_path.open("r", encoding="utf-8-sig", newline="") as f:
+        reader = list(csv.reader(f))
+
+    metadata = reader[1] if len(reader) > 1 else []
+    source_value = metadata[2].strip() if len(metadata) > 2 and metadata[2].strip() else (header_rel or "N/A")
+    binding_value = metadata[3].strip() if len(metadata) > 3 and metadata[3].strip() else "N/A"
+    class_note = entry.note or (metadata[6].strip() if len(metadata) > 6 else "")
+
+    if binding_value == "N/A" and allow_binding_discovery:
+        discovered_paths = discover_binding_paths(entry.class_name)
+        if discovered_paths:
+            binding_value = "; ".join(discovered_paths)
+
+    counts = {"Y": 0, "N": 0, "Partial": 0}
+    class_symbol_status = "Y" if entry.current_status == "已转换" else "N"
+    in_method_table = False
+
+    for row in reader:
+        if not row:
+            continue
+        if row[:5] == ["Group", "C++ Method/Content", "Python Class/Function Name", "Converted", "Notes"]:
+            in_method_table = True
+            continue
+        if not in_method_table or len(row) < 4:
+            continue
+
+        converted = row[3].strip()
+        if converted not in counts:
+            continue
+        counts[converted] += 1
+        if row[0].strip() == "Class Symbol":
+            class_symbol_status = converted
+
+    total_items = sum(counts.values())
+    open_items = counts["N"] + counts["Partial"]
+    completion_percent = (counts["Y"] / total_items * 100.0) if total_items else 0.0
+    priority_rank, suggested_priority, priority_reason = compute_priority(
+        class_symbol_status,
+        open_items,
+        total_items,
+    )
+
+    return SummaryRow(
+        priority_rank=priority_rank,
+        suggested_priority=suggested_priority,
+        priority_reason=priority_reason,
+        class_name=entry.class_name,
+        module_category=entry.category,
+        generated_csv=detail_path.name,
+        todo_status=entry.current_status,
+        class_symbol_status=class_symbol_status,
+        y_count=counts["Y"],
+        n_count=counts["N"],
+        partial_count=counts["Partial"],
+        open_items=open_items,
+        total_items=total_items,
+        completion_percent=completion_percent,
+        source=source_value,
+        binding=binding_value,
+        class_note=class_note,
     )
 
 
@@ -669,15 +796,51 @@ def write_summary_csv(summary_rows: list[SummaryRow]) -> Path:
 
 
 def main() -> None:
-    todo_entries = load_todo_entries()
+    todo_entries = dedupe_todo_entries(load_todo_entries())
     records_by_class, converted_map = load_inventory()
+    class_name_counts = Counter(entry.class_name for entry in todo_entries)
 
     generated = 0
     summary_rows: list[SummaryRow] = []
+
+    if not INVENTORY_JSON.exists():
+        for entry in todo_entries:
+            inventory_records = records_by_class.get(entry.class_name, [])
+            header_rel, _ = locate_header(entry.class_name, inventory_records)
+            detail_path = find_existing_detail_csv(entry)
+
+            if detail_path is not None:
+                summary_rows.append(
+                    summarize_existing_detail_csv(
+                        entry,
+                        detail_path,
+                        header_rel,
+                        allow_binding_discovery=class_name_counts[entry.class_name] == 1,
+                    )
+                )
+                generated += 1
+                continue
+
+            binding_paths = list(dict.fromkeys(converted_map.get(entry.class_name, [])))
+            if not binding_paths and class_name_counts[entry.class_name] == 1:
+                binding_paths = list(discover_binding_paths(entry.class_name))
+            binding_info = parse_bindings(binding_paths, entry.class_name)
+            rows = build_api_rows(entry, header_rel, binding_info)
+            output_path = OUTPUT_DIR / f"{slugify(entry.category)}_{camel_to_snake(entry.class_name)}_methods.csv"
+            summary_rows.append(summarize_rows(entry, output_path, header_rel, binding_info, rows))
+            generated += 1
+
+        summary_path = write_summary_csv(summary_rows)
+        print("Inventory JSON not found; rebuilt summary from existing detail CSV files.")
+        print(f"Generated summary CSV at {summary_path}")
+        return
+
     for entry in todo_entries:
         inventory_records = records_by_class.get(entry.class_name, [])
         header_rel, fallback_scope = locate_header(entry.class_name, inventory_records)
         binding_paths = list(dict.fromkeys(converted_map.get(entry.class_name, [])))
+        if not binding_paths and class_name_counts[entry.class_name] == 1:
+            binding_paths = list(discover_binding_paths(entry.class_name))
         binding_info = parse_bindings(binding_paths, entry.class_name)
         rows = build_api_rows(entry, header_rel, binding_info)
         scope_slug = deduce_scope(entry, inventory_records, fallback_scope)

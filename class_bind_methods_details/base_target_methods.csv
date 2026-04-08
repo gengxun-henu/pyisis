@@ -1,0 +1,35 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Target,"Spice, Instruments, and Cameras",reference/upstream_isis/src/base/objs/Target/Target.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,目标体描述类；与 Spice/ShapeModel/Distance/Angle/Pvl 紧耦合
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Target,isis_pybind.Target,N,Python class symbol not found in current binding files
+Construction/Enum,"Target(Spice *spice, Pvl &label)",isis_pybind.Target,N,依赖外部 Spice 与 Pvl 生命周期
+Construction/Enum,"Target(Pvl &label)",isis_pybind.Target,N,按标签构造
+Construction/Enum,Target(),isis_pybind.Target(),N,默认构造
+Construction/Enum,~Target(),isis_pybind.Target,N,析构函数
+Public API,void init(),isis_pybind.Target.init,N,初始化目标体内部状态
+Public API,bool isSky() const,isis_pybind.Target.isSky,N,是否为天球目标
+Public API,SpiceInt naifBodyCode() const,isis_pybind.Target.naifBodyCode,N,NAIF body code
+Public API,SpiceInt naifPlanetSystemCode() const,isis_pybind.Target.naifPlanetSystemCode,N,NAIF planetary system code
+Public API,QString name() const,isis_pybind.Target.name,N,目标名称
+Public API,QString systemName() const,isis_pybind.Target.systemName,N,所属系统名称
+Public API,std::vector<Distance> radii() const,isis_pybind.Target.radii,N,返回目标半径集合；依赖 Distance 绑定
+Public API,void restoreShape(),isis_pybind.Target.restoreShape,N,恢复原始形体模型
+Public API,void setShapeEllipsoid(),isis_pybind.Target.setShapeEllipsoid,N,切换为椭球模型
+Public API,"void setRadii(std::vector<Distance> radii)",isis_pybind.Target.setRadii,N,设置半径集合
+Public API,"void setName(QString name)",isis_pybind.Target.setName,N,设置名称
+Public API,"void setSpice(Spice *spice)",isis_pybind.Target.setSpice,N,设置 Spice 指针；非拥有引用
+Public API,"ShapeModel *shape() const",isis_pybind.Target.shape,N,返回形体模型指针；需 return_value_policy
+Public API,"Spice *spice() const",isis_pybind.Target.spice,N,返回 Spice 指针；需 return_value_policy
+Public API,int frameType(),isis_pybind.Target.frameType,N,坐标框架类型
+Public API,std::vector<Angle> poleRaCoefs(),isis_pybind.Target.poleRaCoefs,N,极轴 RA 系数
+Public API,std::vector<Angle> poleDecCoefs(),isis_pybind.Target.poleDecCoefs,N,极轴 Dec 系数
+Public API,std::vector<Angle> pmCoefs(),isis_pybind.Target.pmCoefs,N,本初子午线系数
+Public API,"static SpiceInt lookupNaifBodyCode(QString name)",isis_pybind.Target.lookupNaifBodyCode,N,按名称查找 NAIF body code
+Public API,"static PvlGroup radiiGroup(QString target)",isis_pybind.Target.radiiGroup,N,按目标名查找半径组
+Public API,"static PvlGroup radiiGroup(Pvl &cubeLab, const PvlGroup &mapGroup)",isis_pybind.Target.radiiGroup,N,按标签和 map group 查找半径组
+Public API,std::vector<double> poleRaNutPrecCoefs(),isis_pybind.Target.poleRaNutPrecCoefs,N,章动/岁差 RA 系数
+Public API,std::vector<double> poleDecNutPrecCoefs(),isis_pybind.Target.poleDecNutPrecCoefs,N,章动/岁差 Dec 系数
+Public API,std::vector<double> pmNutPrecCoefs(),isis_pybind.Target.pmNutPrecCoefs,N,章动/岁差本初子午线系数
+Public API,std::vector<Angle> sysNutPrecConstants(),isis_pybind.Target.sysNutPrecConstants,N,系统章动/岁差常数
+Public API,std::vector<Angle> sysNutPrecCoefs(),isis_pybind.Target.sysNutPrecCoefs,N,系统章动/岁差系数

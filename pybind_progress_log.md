@@ -2,6 +2,20 @@
 
 ## 2026-04-07
 
+- ApolloPanoramicCamera 导入期未定义符号热修完成：
+  - 定位 `build/python/isis_pybind/_isis_core...so` 导入失败根因为 `ApolloPanoramicCamera::intOriResidualsReport()`：上游头文件 `reference/upstream_isis/src/apollo/objs/ApolloPanoramicCamera/ApolloPanoramicCamera.h` 声明了该方法，但当前链接库未提供对应实现，导致 pybind 直接绑定成员函数地址时生成未定义符号 `_ZN4Isis21ApolloPanoramicCamera21intOriResidualsReportEv`。
+  - 更新 `src/mission/bind_mission_cameras.cpp`，将 `int_ori_residuals_report` 从直接成员函数绑定改为 pybind lambda wrapper，在 Python 侧基于 `int_ori_residual_max()` / `int_ori_residual_mean()` / `int_ori_residual_stdev()` 组装 `PvlGroup("InteriorOrientationResiduals")`，保留 API 表面同时规避链接缺口。
+  - 同步更新：
+    - `class_bind_methods_details/apollo_apollo_panoramic_camera_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+    - `todo_pybind11.csv`
+- Validation status:
+  - Passed: `cmake --build build -j"$(nproc)"` under `asp360_new`
+  - Passed: `PYTHONPATH=$PWD/build/python python -X faulthandler -c "import isis_pybind as ip; ..."` (`IMPORT_OK True True`)
+  - Passed: `python -m unittest discover -s tests/unitTest -p 'extended_mission_camera_unit_test.py' -v` (`10` tests, `OK`)
+  - Passed: `python tests/smoke_import.py`
+  - Passed: `python -m unittest discover -s tests/unitTest -p '*_unit_test.py' -v` (`568` tests, `OK`, `skipped=5`, `expected failures=1`)
+
 - ControlNetFilter 首轮稳定小簇绑定完成：
   - 扩展 `src/control/bind_control_core.cpp`，新增 `ControlNetFilter` 绑定，当前先暴露一组低风险、可稳定验证的接口：`ControlNetFilter(control_net, serial_number_list_file, progress=None)`、`point_edit_lock_filter(...)`、`point_stats_header()`、`point_stats(...)`、`cube_stats_header()`、`set_output_file(...)`、`print_cube_file_serial_num(...)`。
   - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `ControlNetFilter`。

@@ -6,6 +6,7 @@
 // Updated: 2026-04-07  Added Lunar Orbiter camera bindings (LoHighCamera, LoMediumCamera) with fiducial and distortion map helpers
 // Updated: 2026-04-07  Added New Horizons mission camera and distortion helper bindings
 // Updated: 2026-04-07  Completed Apollo, Cassini, Chandrayaan-1, Clementine, Clipper, Galileo, and Juno mission camera/helper bindings
+// Updated: 2026-04-07  Fixed ApolloPanoramicCamera import-time undefined symbol by wrapping residual report in pybind instead of binding the missing upstream method directly
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -169,7 +170,16 @@ void bind_mission_cameras(py::module_ &m) {
       .def("ck_frame_id", &Isis::ApolloPanoramicCamera::CkFrameId)
       .def("ck_reference_id", &Isis::ApolloPanoramicCamera::CkReferenceId)
       .def("spk_reference_id", &Isis::ApolloPanoramicCamera::SpkReferenceId)
-      .def("int_ori_residuals_report", &Isis::ApolloPanoramicCamera::intOriResidualsReport)
+      .def("int_ori_residuals_report",
+           [](const Isis::ApolloPanoramicCamera &self) {
+             Isis::PvlGroup report("InteriorOrientationResiduals");
+             report += Isis::PvlKeyword("Mean", QString::number(self.intOriResidualMean(), 'g', 17));
+             report += Isis::PvlKeyword("Maximum", QString::number(self.intOriResidualMax(), 'g', 17));
+             report += Isis::PvlKeyword("StandardDeviation",
+                                        QString::number(self.intOriResidualStdev(), 'g', 17));
+             return report;
+           },
+           "Return a PVL summary of Apollo panoramic interior-orientation residual statistics.")
       .def("int_ori_residual_max", &Isis::ApolloPanoramicCamera::intOriResidualMax)
       .def("int_ori_residual_mean", &Isis::ApolloPanoramicCamera::intOriResidualMean)
       .def("int_ori_residual_stdev", &Isis::ApolloPanoramicCamera::intOriResidualStdev);

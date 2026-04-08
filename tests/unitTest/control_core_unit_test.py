@@ -4,10 +4,11 @@ Unit tests for ISIS control-core bindings.
 Author: Geng Xun
 Created: 2026-04-07
 Last Modified: 2026-04-08
-Updated: 2026-04-08  Geng Xun added ControlNetFilter regression coverage for newly exposed point/cube filters and helpers.
+Updated: 2026-04-08  Geng Xun added ControlNetStatistics summary/getter regression coverage and retained control-core helper checks.
 """
 
 import gc
+import math
 import unittest
 
 from _unit_test_support import ip, temporary_directory, workspace_test_data_path
@@ -207,6 +208,63 @@ End
         net.add_point(point_one_measure)
 
         return net, (cube1_path, cube2_path), (serial1, serial2)
+
+    def make_control_net_statistics_fixture(self):
+        net = ip.ControlNet()
+
+        fixed_point = ip.ControlPoint("FIXED")
+        fixed_point.set_type(ip.ControlPoint.PointType.Fixed)
+        fixed_point.set_edit_lock(True)
+
+        measure1 = ip.ControlMeasure()
+        measure1.set_cube_serial_number("SN-A")
+        measure1.set_coordinate(10.0, 20.0)
+        measure1.set_apriori_sample(9.0)
+        measure1.set_apriori_line(18.0)
+        measure1.set_residual(3.0, 4.0)
+        measure1.set_type(ip.ControlMeasure.MeasureType.Manual)
+        fixed_point.add_measure(measure1)
+
+        measure2 = ip.ControlMeasure()
+        measure2.set_cube_serial_number("SN-B")
+        measure2.set_coordinate(5.0, 8.0)
+        measure2.set_apriori_sample(4.5)
+        measure2.set_apriori_line(7.0)
+        measure2.set_residual(-1.0, 2.0)
+        measure2.set_edit_lock(True)
+        measure2.set_type(ip.ControlMeasure.MeasureType.Manual)
+        fixed_point.add_measure(measure2)
+        fixed_point.set_ref_measure(0)
+        net.add_point(fixed_point)
+
+        free_point = ip.ControlPoint("FREE")
+        free_point.set_type(ip.ControlPoint.PointType.Free)
+
+        measure3 = ip.ControlMeasure()
+        measure3.set_cube_serial_number("SN-C")
+        measure3.set_coordinate(30.0, 40.0)
+        measure3.set_apriori_sample(31.0)
+        measure3.set_apriori_line(39.0)
+        measure3.set_residual(-2.0, -6.0)
+        measure3.set_type(ip.ControlMeasure.MeasureType.Manual)
+        free_point.add_measure(measure3)
+        free_point.set_ref_measure(0)
+        net.add_point(free_point)
+
+        ignored_point = ip.ControlPoint("IGNORED")
+        ignored_point.set_type(ip.ControlPoint.PointType.Constrained)
+        ignored_point.set_ignored(True)
+
+        ignored_measure = ip.ControlMeasure()
+        ignored_measure.set_cube_serial_number("SN-D")
+        ignored_measure.set_coordinate(50.0, 60.0)
+        ignored_measure.set_type(ip.ControlMeasure.MeasureType.Manual)
+        ignored_measure.set_ignored(True)
+        ignored_point.add_measure(ignored_measure)
+        ignored_point.set_ref_measure(0)
+        net.add_point(ignored_point)
+
+        return net
 
     def test_bundle_target_body_minimal_configuration(self):
         target_body = ip.BundleTargetBody()
@@ -853,6 +911,80 @@ End
         formatted = ranged.to_string("120.5", "220.5", "SN-42", "P42")
         self.assertIn("Control Measure with position (120.5, 220.5)", formatted)
         self.assertIn("Pixel Shift 4.25 is outside range [0, 3]", formatted)
+
+    def test_control_net_statistics_summary_and_scalar_getters(self):
+        statistics = ip.ControlNetStatistics(self.make_control_net_statistics_fixture())
+
+        self.assertEqual(statistics.num_valid_points(), 2)
+        self.assertEqual(statistics.num_fixed_points(), 1)
+        self.assertEqual(statistics.num_constrained_points(), 1)
+        self.assertEqual(statistics.num_free_points(), 1)
+        self.assertEqual(statistics.num_ignored_points(), 1)
+        self.assertEqual(statistics.num_edit_locked_points(), 1)
+        self.assertEqual(statistics.num_measures(), 4)
+        self.assertEqual(statistics.num_valid_measures(), 3)
+        self.assertEqual(statistics.num_ignored_measures(), 1)
+        self.assertEqual(statistics.num_edit_locked_measures(), 2)
+
+        self.assertAlmostEqual(
+            statistics.get_average_residual(),
+            (5.0 + math.sqrt(5.0) + math.sqrt(40.0)) / 3.0,
+            places=12,
+        )
+        self.assertAlmostEqual(statistics.get_minimum_residual(), math.sqrt(5.0), places=12)
+        self.assertAlmostEqual(statistics.get_maximum_residual(), math.sqrt(40.0), places=12)
+        self.assertAlmostEqual(statistics.get_min_line_residual(), 2.0, places=12)
+        self.assertAlmostEqual(statistics.get_max_line_residual(), 6.0, places=12)
+        self.assertAlmostEqual(statistics.get_min_sample_residual(), 1.0, places=12)
+        self.assertAlmostEqual(statistics.get_max_sample_residual(), 3.0, places=12)
+        self.assertAlmostEqual(statistics.get_min_line_shift(), 1.0, places=12)
+        self.assertAlmostEqual(statistics.get_max_line_shift(), 2.0, places=12)
+        self.assertAlmostEqual(statistics.get_min_sample_shift(), 0.5, places=12)
+        self.assertAlmostEqual(statistics.get_max_sample_shift(), 1.0, places=12)
+        self.assertAlmostEqual(statistics.get_min_pixel_shift(), math.sqrt(1.25), places=12)
+        self.assertAlmostEqual(statistics.get_max_pixel_shift(), math.sqrt(5.0), places=12)
+        self.assertAlmostEqual(
+            statistics.get_avg_pixel_shift(),
+            (math.sqrt(5.0) + math.sqrt(1.25) + math.sqrt(2.0)) / 3.0,
+            places=12,
+        )
+
+        summary = ip.PvlGroup("Placeholder")
+        statistics.generate_control_net_stats(summary)
+
+        self.assertEqual(summary.name(), "ControlNetSummary")
+        self.assertEqual(int(summary.find_keyword("TotalPoints")[0]), 3)
+        self.assertEqual(int(summary.find_keyword("ValidPoints")[0]), 2)
+        self.assertEqual(int(summary.find_keyword("IgnoredPoints")[0]), 1)
+        self.assertEqual(int(summary.find_keyword("FixedPoints")[0]), 1)
+        self.assertEqual(int(summary.find_keyword("ConstrainedPoints")[0]), 1)
+        self.assertEqual(int(summary.find_keyword("FreePoints")[0]), 1)
+        self.assertEqual(int(summary.find_keyword("EditLockPoints")[0]), 1)
+        self.assertEqual(int(summary.find_keyword("TotalMeasures")[0]), 4)
+        self.assertEqual(int(summary.find_keyword("ValidMeasures")[0]), 3)
+        self.assertEqual(int(summary.find_keyword("IgnoredMeasures")[0]), 1)
+        self.assertEqual(int(summary.find_keyword("EditLockMeasures")[0]), 2)
+        self.assertAlmostEqual(float(summary.find_keyword("AvgResidual")[0]), statistics.get_average_residual(), places=12)
+        self.assertAlmostEqual(float(summary.find_keyword("MaxLineResidual")[0]), 6.0, places=12)
+        self.assertAlmostEqual(float(summary.find_keyword("MinSampleShift")[0]), 0.5, places=12)
+        self.assertAlmostEqual(float(summary.find_keyword("MaxPixelShift")[0]), math.sqrt(5.0), places=12)
+        self.assertEqual(summary.find_keyword("MinGoodnessOfFit")[0], "NA")
+        self.assertEqual(summary.find_keyword("MaxPixelZScore")[0], "NA")
+
+    def test_control_net_statistics_enums_and_repr(self):
+        statistics = ip.ControlNetStatistics(self.make_control_net_statistics_fixture())
+
+        self.assertEqual(ip.ControlNetStatistics.ePointDetails.total.name, "total")
+        self.assertEqual(
+            ip.ControlNetStatistics.ePointIntStats.validMeasures.name,
+            "validMeasures",
+        )
+        self.assertEqual(
+            ip.ControlNetStatistics.ePointDoubleStats.maxPixelShift.name,
+            "maxPixelShift",
+        )
+        self.assertEqual(ip.ControlNetStatistics.ImageStats.imgConvexHullRatio.name, "imgConvexHullRatio")
+        self.assertIn("ControlNetStatistics(valid_points=2", repr(statistics))
 
     def test_bundle_image_basic_accessors(self):
         cube = self.open_cube(

@@ -18,8 +18,7 @@ Control Networks,ControlMeasureLogData,已转换,Qt 类型/信号槽较多；控
 Control Networks,ControlNet,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
 Control Networks,ControlNetDiff,已转换,2026-03-21 已在 bind_control_core.cpp 暴露 compare(...) 与 tolerances 接口
 Control Networks,ControlNetFilter,已转换,2026-04-08 已在 bind_control_core.cpp 同步暴露全部公开过滤器与输出 helper，并补 focused 单测
-Control Networks,ControlNetStatistics,未转换,
-Control Networks,ControlNetValidMeasure,未转换,
+Control Networks,ControlNetStatistics,已转换,2026-04-08 已在 bind_control_core.cpp 暴露控制网摘要/标量 getter 簇（构造/枚举/GenerateControlNetStats/Num*/residual/shift getters）；image/point 文件输出接口后续补
 Control Networks,ControlNetVersioner,未转换,
 Control Networks,ControlNetVitals,未转换,Qt 类型/信号槽较多
 Control Networks,ControlPoint,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义

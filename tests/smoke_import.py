@@ -46,6 +46,7 @@ HAS_CONTROL_BINDINGS = all(
         "ControlNet",
         "ControlNetFilter",
         "ControlNetDiff",
+        "ControlNetStatistics",
         "ControlPointList",
         "ControlPointV0001",
         "ControlPointV0002",
@@ -130,6 +131,7 @@ def test_basic_symbols_present():
     assert hasattr(ip, "BundleSettings")
     assert hasattr(ip, "BundleTargetBody")
     assert hasattr(ip, "ControlNetFilter")
+    assert hasattr(ip, "ControlNetStatistics")
     # Temporarily disabled - bind_bundle_advanced is excluded from compilation
     # assert hasattr(ip, "BundleMeasure")
     # assert hasattr(ip, "BundleControlPoint")
@@ -428,6 +430,9 @@ def test_basic_base_objects_work():
         diff = ip.ControlNetDiff()
         assert diff is not None
 
+        statistics = ip.ControlNetStatistics(net)
+        assert statistics.num_valid_points() == 1
+        assert statistics.num_valid_measures() == 1
         validation_results = ip.MeasureValidationResults()
         assert validation_results.is_valid() is True
         validation_results.add_failure(

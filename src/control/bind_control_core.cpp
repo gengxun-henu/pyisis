@@ -1,6 +1,6 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
-// Updated: 2026-04-08  Geng Xun completed ControlNetFilter point/cube filter bindings and related control-core exposure updates
+// Updated: 2026-04-08  Geng Xun added ControlNetStatistics summary/getter bindings and related control-core exposure updates
 // Purpose: pybind11 bindings for ISIS control network core classes, filters, and bundle-control helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -31,6 +31,7 @@
 #include "ControlMeasureLogData.h"
 #include "ControlNetDiff.h"
 #include "ControlNet.h"
+#include "ControlNetStatistics.h"
 #include "ControlPoint.h"
 #include "ControlPointList.h"
 #include "ControlPointV0001.h"
@@ -811,6 +812,111 @@ void bind_control_core(py::module_ &m)
               { return Isis::ControlNet(self); })
          .def("__repr__", [](const Isis::ControlNet &self)
               { return "ControlNet(points=" + std::to_string(self.GetNumPoints()) + ", measures=" + std::to_string(self.GetNumMeasures()) + ")"; });
+
+     // Added: 2026-04-08 - expose stable ControlNetStatistics summary/getter cluster
+     py::class_<Isis::ControlNetStatistics> control_net_statistics(m, "ControlNetStatistics");
+
+     py::enum_<Isis::ControlNetStatistics::ePointDetails>(control_net_statistics, "ePointDetails")
+         .value("total", Isis::ControlNetStatistics::total)
+         .value("ignore", Isis::ControlNetStatistics::ignore)
+         .value("locked", Isis::ControlNetStatistics::locked)
+         .value("fixed", Isis::ControlNetStatistics::fixed)
+         .value("constrained", Isis::ControlNetStatistics::constrained)
+         .value("freed", Isis::ControlNetStatistics::freed);
+
+     py::enum_<Isis::ControlNetStatistics::ePointIntStats>(control_net_statistics, "ePointIntStats")
+         .value("totalPoints", Isis::ControlNetStatistics::totalPoints)
+         .value("validPoints", Isis::ControlNetStatistics::validPoints)
+         .value("ignoredPoints", Isis::ControlNetStatistics::ignoredPoints)
+         .value("fixedPoints", Isis::ControlNetStatistics::fixedPoints)
+         .value("constrainedPoints", Isis::ControlNetStatistics::constrainedPoints)
+         .value("freePoints", Isis::ControlNetStatistics::freePoints)
+         .value("editLockedPoints", Isis::ControlNetStatistics::editLockedPoints)
+         .value("totalMeasures", Isis::ControlNetStatistics::totalMeasures)
+         .value("validMeasures", Isis::ControlNetStatistics::validMeasures)
+         .value("ignoredMeasures", Isis::ControlNetStatistics::ignoredMeasures)
+         .value("editLockedMeasures", Isis::ControlNetStatistics::editLockedMeasures);
+
+     py::enum_<Isis::ControlNetStatistics::ePointDoubleStats>(control_net_statistics, "ePointDoubleStats")
+         .value("avgResidual", Isis::ControlNetStatistics::avgResidual)
+         .value("minResidual", Isis::ControlNetStatistics::minResidual)
+         .value("maxResidual", Isis::ControlNetStatistics::maxResidual)
+         .value("minLineResidual", Isis::ControlNetStatistics::minLineResidual)
+         .value("maxLineResidual", Isis::ControlNetStatistics::maxLineResidual)
+         .value("minSampleResidual", Isis::ControlNetStatistics::minSampleResidual)
+         .value("maxSampleResidual", Isis::ControlNetStatistics::maxSampleResidual)
+         .value("avgPixelShift", Isis::ControlNetStatistics::avgPixelShift)
+         .value("minPixelShift", Isis::ControlNetStatistics::minPixelShift)
+         .value("maxPixelShift", Isis::ControlNetStatistics::maxPixelShift)
+         .value("minLineShift", Isis::ControlNetStatistics::minLineShift)
+         .value("maxLineShift", Isis::ControlNetStatistics::maxLineShift)
+         .value("minSampleShift", Isis::ControlNetStatistics::minSampleShift)
+         .value("maxSampleShift", Isis::ControlNetStatistics::maxSampleShift)
+         .value("minGFit", Isis::ControlNetStatistics::minGFit)
+         .value("maxGFit", Isis::ControlNetStatistics::maxGFit)
+         .value("minEccentricity", Isis::ControlNetStatistics::minEccentricity)
+         .value("maxEccentricity", Isis::ControlNetStatistics::maxEccentricity)
+         .value("minPixelZScore", Isis::ControlNetStatistics::minPixelZScore)
+         .value("maxPixelZScore", Isis::ControlNetStatistics::maxPixelZScore);
+
+     py::enum_<Isis::ControlNetStatistics::ImageStats>(control_net_statistics, "ImageStats")
+         .value("imgSamples", Isis::ControlNetStatistics::imgSamples)
+         .value("imgLines", Isis::ControlNetStatistics::imgLines)
+         .value("imgTotalPoints", Isis::ControlNetStatistics::imgTotalPoints)
+         .value("imgIgnoredPoints", Isis::ControlNetStatistics::imgIgnoredPoints)
+         .value("imgFixedPoints", Isis::ControlNetStatistics::imgFixedPoints)
+         .value("imgLockedPoints", Isis::ControlNetStatistics::imgLockedPoints)
+         .value("imgLocked", Isis::ControlNetStatistics::imgLocked)
+         .value("imgConstrainedPoints", Isis::ControlNetStatistics::imgConstrainedPoints)
+         .value("imgFreePoints", Isis::ControlNetStatistics::imgFreePoints)
+         .value("imgConvexHullArea", Isis::ControlNetStatistics::imgConvexHullArea)
+         .value("imgConvexHullRatio", Isis::ControlNetStatistics::imgConvexHullRatio);
+
+     control_net_statistics
+         .def(py::init([](Isis::ControlNet &control_net, Isis::Progress *progress)
+                       {
+                            return std::make_unique<Isis::ControlNetStatistics>(&control_net, progress);
+                       }),
+              py::arg("control_net"),
+              py::arg("progress") = nullptr,
+              py::keep_alive<1, 2>(),
+              py::keep_alive<1, 3>())
+         .def("generate_control_net_stats",
+              [](Isis::ControlNetStatistics &self, Isis::PvlGroup &stats_group)
+              {
+                   self.GenerateControlNetStats(stats_group);
+              },
+              py::arg("stats_group"))
+         .def("num_valid_points", &Isis::ControlNetStatistics::NumValidPoints)
+         .def("num_fixed_points", &Isis::ControlNetStatistics::NumFixedPoints)
+         .def("num_constrained_points", &Isis::ControlNetStatistics::NumConstrainedPoints)
+         .def("num_free_points", &Isis::ControlNetStatistics::NumFreePoints)
+         .def("num_ignored_points", &Isis::ControlNetStatistics::NumIgnoredPoints)
+         .def("num_edit_locked_points", &Isis::ControlNetStatistics::NumEditLockedPoints)
+         .def("num_measures", &Isis::ControlNetStatistics::NumMeasures)
+         .def("num_valid_measures", &Isis::ControlNetStatistics::NumValidMeasures)
+         .def("num_ignored_measures", &Isis::ControlNetStatistics::NumIgnoredMeasures)
+         .def("num_edit_locked_measures", &Isis::ControlNetStatistics::NumEditLockedMeasures)
+         .def("get_average_residual", &Isis::ControlNetStatistics::GetAverageResidual)
+         .def("get_minimum_residual", &Isis::ControlNetStatistics::GetMinimumResidual)
+         .def("get_maximum_residual", &Isis::ControlNetStatistics::GetMaximumResidual)
+         .def("get_min_line_residual", &Isis::ControlNetStatistics::GetMinLineResidual)
+         .def("get_min_sample_residual", &Isis::ControlNetStatistics::GetMinSampleResidual)
+         .def("get_max_line_residual", &Isis::ControlNetStatistics::GetMaxLineResidual)
+         .def("get_max_sample_residual", &Isis::ControlNetStatistics::GetMaxSampleResidual)
+         .def("get_min_line_shift", &Isis::ControlNetStatistics::GetMinLineShift)
+         .def("get_max_line_shift", &Isis::ControlNetStatistics::GetMaxLineShift)
+         .def("get_min_sample_shift", &Isis::ControlNetStatistics::GetMinSampleShift)
+         .def("get_max_sample_shift", &Isis::ControlNetStatistics::GetMaxSampleShift)
+         .def("get_min_pixel_shift", &Isis::ControlNetStatistics::GetMinPixelShift)
+         .def("get_max_pixel_shift", &Isis::ControlNetStatistics::GetMaxPixelShift)
+         .def("get_avg_pixel_shift", &Isis::ControlNetStatistics::GetAvgPixelShift)
+         .def("__repr__",
+              [](const Isis::ControlNetStatistics &self)
+              {
+                   return "ControlNetStatistics(valid_points=" + std::to_string(self.NumValidPoints()) +
+                          ", valid_measures=" + std::to_string(self.NumValidMeasures()) + ")";
+              });
 
      // Added: 2026-04-07 - expose initial ControlNetFilter constructor/output helper surface
      py::class_<Isis::ControlNetFilter> control_net_filter(m, "ControlNetFilter");

@@ -2,6 +2,20 @@
 
 ## 2026-04-08
 
+- ControlNetStatistics 稳定摘要/标量 getter 方法簇绑定完成：
+  - 扩展 `src/control/bind_control_core.cpp`，新增 `ControlNetStatistics` 绑定，当前先暴露一组不依赖 serial-number list / image stats 文件输出的稳定接口：`ControlNetStatistics(control_net, progress=None)`、`ePointDetails` / `ePointIntStats` / `ePointDoubleStats` / `ImageStats` 枚举、`generate_control_net_stats(...)`、`num_*` 计数 getter，以及 residual / shift 标量 getter。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `ControlNetStatistics`。
+  - 扩展 `tests/unitTest/control_core_unit_test.py`：新增 `ControlNetStatistics` focused 覆盖，验证枚举可见性、`GenerateControlNetStats(...)` 生成的 PVL 摘要，以及点/measure 计数、residual、shift getter 与上游实际计数语义（含 edit-locked point 对 locked-measure 计数的影响）。
+  - 更新 `tests/smoke_import.py`，补充 `ControlNetStatistics` 顶层符号与最小构造/查询检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/control_control_net_statistics_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake -S . -B build -DPython3_EXECUTABLE=/home/gengxun/miniconda3/envs/asp360_new/bin/python -DISIS_PREFIX=/home/gengxun/miniconda3/envs/asp360_new && cmake --build build -j2`
+  - Passed: `ISIS_PYBIND_BUILD_DIR=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p 'control_core_unit_test.py' -v` (`27` tests, `OK`)
+  - Passed: `ISIS_PYBIND_BUILD_DIR=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py`
+  - Note: 本轮按 handoff 只覆盖 `ControlNetStatistics` 的稳定摘要/标量 getter 簇；`generate_image_stats()`、`print_image_stats(...)`、`get_image_stats_by_serial_num(...)` 与 `generate_point_stats(...)` 仍留待后续批次。
 - ControlNetFilter 全量公开过滤器绑定完成：
   - 扩展 `src/control/bind_control_core.cpp`，补齐剩余 13 个上游公开过滤接口：`point_pixel_shift_filter(...)`、`point_num_measures_edit_lock_filter(...)`、`point_res_magnitude_filter(...)`、`point_goodness_of_fit_filter(...)`、`point_id_filter(...)`、`point_properties_filter(...)`、`point_lat_lon_filter(...)`、`point_distance_filter(...)`、`point_measure_properties_filter(...)`、`point_cube_names_filter(...)`、`cube_name_expression_filter(...)`、`cube_distance_filter(...)`、`cube_convex_hull_filter(...)`。
   - 扩展 `tests/unitTest/control_core_unit_test.py`：新增 `point_id_filter(...)`、`point_properties_filter(...)`、`cube_name_expression_filter(...)` 的 focused 覆盖，验证 Python 侧方法可调用且过滤结果符合预期。

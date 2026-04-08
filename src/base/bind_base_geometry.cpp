@@ -1,6 +1,6 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
-// Updated: 2026-04-08  Geng Xun added Stereo tuple-returning wrappers plus Angle arithmetic/comparison helpers
+// Updated: 2026-04-08  Geng Xun refined Stereo.elevation camera-state validation and added Angle arithmetic/comparison helpers
 // Purpose: pybind11 bindings for ISIS geometry primitives and resampling helpers including Angle, Stereo, Distance, Latitude, Longitude, Transform, Interpolator, Enlarge, and Reduce
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -37,14 +37,32 @@ std::vector<double> toDoubleVector(const py::sequence &values) {
   return result;
 }
 
-void validateStereoCameraState(Isis::Camera &camera, const std::string &camera_name) {
-  if (!camera.HasSurfaceIntersection()) {
-    QString message = QString::fromStdString(camera_name)
-                      + " does not have a valid surface intersection. "
-                        "Call Camera.set_image(...) on both cameras before "
-                        "calling Stereo.elevation().";
-    throw Isis::IException(Isis::IException::Programmer, message, _FILEINFO_);
+void validateStereoCameraStates(Isis::Camera &cam1, Isis::Camera &cam2) {
+  bool cam1_ready = cam1.HasSurfaceIntersection();
+  bool cam2_ready = cam2.HasSurfaceIntersection();
+
+  if (cam1_ready && cam2_ready) {
+    return;
   }
+
+  QString message;
+  if (!cam1_ready && !cam2_ready) {
+    message = "cam1 and cam2 do not have valid surface intersections. "
+              "Call Camera.set_image(...) on both cameras before calling "
+              "Stereo.elevation().";
+  }
+  else if (!cam1_ready) {
+    message = "cam1 does not have a valid surface intersection. "
+              "Call Camera.set_image(...) on cam1 before calling "
+              "Stereo.elevation().";
+  }
+  else {
+    message = "cam2 does not have a valid surface intersection. "
+              "Call Camera.set_image(...) on cam2 before calling "
+              "Stereo.elevation().";
+  }
+
+  throw Isis::IException(Isis::IException::Programmer, message, _FILEINFO_);
 }
 }
 
@@ -202,8 +220,7 @@ void bind_base_geometry(py::module_ &m) {
       .def_static(
           "elevation",
           [](Isis::Camera &cam1, Isis::Camera &cam2) {
-            validateStereoCameraState(cam1, "cam1");
-            validateStereoCameraState(cam2, "cam2");
+            validateStereoCameraStates(cam1, cam2);
 
             double radius = 0.0;
             double latitude = 0.0;

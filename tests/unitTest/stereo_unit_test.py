@@ -24,6 +24,12 @@ class StereoUnitTest(unittest.TestCase):
         self.addCleanup(cube.close)
         return cube
 
+    def initialize_camera_at_center(self, camera):
+        center_sample = camera.samples() / 2.0
+        center_line = camera.lines() / 2.0
+        self.assertTrue(camera.set_image(center_sample, center_line))
+        self.assertTrue(camera.has_surface_intersection())
+
     def test_default_constructor_is_available(self):
         stereo = ip.Stereo()
         self.assertEqual(repr(stereo), "Stereo()")
@@ -65,7 +71,7 @@ class StereoUnitTest(unittest.TestCase):
         self.assertTrue(hasattr(ip.Stereo, "elevation"))
         self.assertTrue(callable(ip.Stereo.elevation))
 
-    def test_elevation_raises_when_cameras_lack_surface_intersections(self):
+    def test_elevation_raises_when_both_cameras_lack_surface_intersections(self):
         cube1 = self.open_cube(MDIS_CUBES[0])
         cube2 = self.open_cube(MDIS_CUBES[1])
         cam1 = cube1.camera()
@@ -74,7 +80,31 @@ class StereoUnitTest(unittest.TestCase):
         self.assertFalse(cam1.has_surface_intersection())
         self.assertFalse(cam2.has_surface_intersection())
 
-        with self.assertRaisesRegex(ip.IException, "Call Camera.set_image"):
+        with self.assertRaisesRegex(ip.IException, "cam1 and cam2 do not have valid surface intersections"):
+            ip.Stereo.elevation(cam1, cam2)
+
+    def test_elevation_raises_when_cam1_lacks_surface_intersection(self):
+        cube1 = self.open_cube(MDIS_CUBES[0])
+        cube2 = self.open_cube(MDIS_CUBES[1])
+        cam1 = cube1.camera()
+        cam2 = cube2.camera()
+
+        self.initialize_camera_at_center(cam2)
+        self.assertFalse(cam1.has_surface_intersection())
+
+        with self.assertRaisesRegex(ip.IException, "cam1 does not have a valid surface intersection"):
+            ip.Stereo.elevation(cam1, cam2)
+
+    def test_elevation_raises_when_cam2_lacks_surface_intersection(self):
+        cube1 = self.open_cube(MDIS_CUBES[0])
+        cube2 = self.open_cube(MDIS_CUBES[1])
+        cam1 = cube1.camera()
+        cam2 = cube2.camera()
+
+        self.initialize_camera_at_center(cam1)
+        self.assertFalse(cam2.has_surface_intersection())
+
+        with self.assertRaisesRegex(ip.IException, "cam2 does not have a valid surface intersection"):
             ip.Stereo.elevation(cam1, cam2)
 
 

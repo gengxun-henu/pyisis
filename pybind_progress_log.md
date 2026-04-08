@@ -18,8 +18,9 @@
 
 - Stereo 几何立体测量 helper 绑定完成：
   - 扩展 `src/base/bind_base_geometry.cpp`，新增 `Stereo` 绑定，暴露默认构造函数，以及 tuple-returning 的 `elevation(cam1, cam2)`、`spherical(latitude, longitude, radius)`、`rectangular(x, y, z)` 三个静态入口。
+  - 进一步细化 `Stereo.elevation(...)` 的前置状态检查：当 `cam1`、`cam2` 或两者都未先建立有效 surface intersection 时，分别抛出更明确的 `IException`，直接指出是哪一侧相机尚未完成 `Camera.set_image(...)` 初始化。
   - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `Stereo`。
-  - 新增 `tests/unitTest/stereo_unit_test.py`：覆盖 `Stereo()` 可构造、`spherical(...)` / `rectangular(...)` 的轴向样例与 round-trip 行为，并校验 `elevation` 入口已暴露。
+  - 新增 `tests/unitTest/stereo_unit_test.py`：覆盖 `Stereo()` 可构造、`spherical(...)` / `rectangular(...)` 的轴向样例与 round-trip 行为，并校验 `elevation` 入口已暴露；同时补充 `cam1` 未初始化、`cam2` 未初始化、以及两者都未初始化三种异常分支验证。
   - 更新 `tests/smoke_import.py`，补充 `Stereo` 顶层符号与最小球坐标/直角坐标转换检查。
   - 已同步更新：
     - `todo_pybind11.csv`

@@ -50,7 +50,7 @@ jobs:
         with:
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
-          fetch-depth: "1"
+          fetch-depth: "0"
           summary-context: pr-gate-prepare
 
       - name: Summarize changed files
@@ -60,7 +60,7 @@ jobs:
           set -euo pipefail
           base_sha="${{ github.event.pull_request.base.sha }}"
           head_sha="${{ github.event.pull_request.head.sha }}"
-          changed_files="$(git diff --name-only "$base_sha" "$head_sha")"
+          changed_files="$(git diff --name-only "$base_sha...$head_sha")"
 
           changed_tests=$(printf '%s\n' "$changed_files" | grep '^tests/unitTest/.*_unit_test\.py$' || true)
           {
@@ -192,7 +192,7 @@ jobs:
         with:
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
-          fetch-depth: "1"
+          fetch-depth: "0"
           summary-context: pr-gate-metadata-audit
 
       - name: Audit progress/export metadata changes
@@ -201,7 +201,7 @@ jobs:
           set -euo pipefail
           base_sha="${{ github.event.pull_request.base.sha }}"
           head_sha="${{ github.event.pull_request.head.sha }}"
-          changed_files="$(git diff --name-only "$base_sha" "$head_sha")"
+          changed_files="$(git diff --name-only "$base_sha...$head_sha")"
 
           src_changed=0
           metadata_changed=0

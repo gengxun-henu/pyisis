@@ -56,6 +56,27 @@
 
 完成上述基础类后，再进入 shape / photometry 方向的一批类。
 
+当前先明确纳入这一阶段、且仍属于“待绑定 inventory”的类如下：
+
+1. `Anisotropic2`
+2. `HapkeAtm1`
+3. `HapkeAtm2`
+4. `Isotropic1`
+5. `Isotropic2`
+6. `ShadeAtm`
+7. `TopoAtm`
+8. `Hapke`
+9. `PhotoModel`
+10. `AtmosModel`
+11. `NumericalAtmosApprox`
+12. `SurfaceModel`
+
+补充说明：
+
+- `NormModel` 已在当前仓库中完成绑定、顶层导出与测试覆盖，因此不再作为本阶段“待绑定”对象重复登记。
+- `ShapeModel` 也已在当前仓库中完成绑定、顶层导出与测试覆盖，因此不再作为本阶段“待绑定”对象重复登记。
+- 本阶段先继续做 inventory / methods CSV / summary 同步，不在这一轮直接展开 pybind 实现。
+
 这一阶段的工作特点：
 
 - 类之间继承、工厂和算法关系更复杂；
@@ -71,6 +92,43 @@
 ## 第四阶段：最后纳入后端 / 桥接 / 工具类
 
 最后再处理更偏后端、桥接层、内部工具性质的类。
+
+当前先明确纳入这一阶段、且仍属于“待绑定 inventory”的类如下。
+
+### 子组 A：低层 cube 后端 / handler 链
+
+1. `Blobber`
+2. `CubeBsqHandler`
+3. `CubeCachingAlgorithm`
+4. `CubeIoHandler`
+5. `CubeTileHandler`
+6. `RegionalCachingAlgorithm`
+7. `RawCubeChunk`
+8. `OriginalLabel`
+9. `OriginalXmlLabel`
+
+### 子组 B：解析 / 翻译 / 插件桥接
+
+10. `Plugin`
+11. `FileList`
+12. `CSVReader`
+13. `IString`
+14. `LabelTranslationManager`
+15. `PvlTokenizer`
+16. `PvlToken`
+17. `PvlTranslationTable`
+18. `PvlToPvlTranslationManager`
+19. `PvlToXmlTranslationManager`
+20. `XmlToPvlTranslationManager`
+21. `PvlFormat`
+22. `PvlFormatPds`
+
+补充说明：
+
+- 这一阶段不再重复纳入第二阶段中已经提前登记的工具类，例如 `Environment`、`IException`、`Message`、`Progress`、`CollectorMap`、`CubeAttribute`、`Blob`、`Ransac`。
+- 这一阶段也不再混入第三阶段的 shape / photometry 类，例如 `PhotoModel`、`AtmosModel`、`Hapke`、`SurfaceModel`。
+- mission camera、control-network 主线和 SensorUtilities 轻量值类型暂不并入本阶段，以免把“后端 / 桥接 / 工具类”批次再次拉散。
+- 本阶段先继续做 inventory / methods CSV / summary 同步，不在这一轮直接展开 pybind 实现。
 
 这一阶段通常包括以下特点的对象：
 
@@ -121,5 +179,5 @@
 
 - 第一阶段：`Stereo`
 - 第二阶段：`Angle` -> `Blob` -> `CameraPointInfo` -> `Centroid` -> `CollectorMap` -> `CubeAttribute` -> `Environment` -> `IException` -> `Intercept` -> `Message` -> `Progress` -> `Resource` -> `Ransac` -> `Target` -> `TrackingTable`
-- 第三阶段：shape / photometry 一批
-- 第四阶段：后端 / 桥接 / 工具类
+- 第三阶段：`Anisotropic2` -> `HapkeAtm1` -> `HapkeAtm2` -> `Isotropic1` -> `Isotropic2` -> `ShadeAtm` -> `TopoAtm` -> `Hapke` -> `PhotoModel` -> `AtmosModel` -> `NumericalAtmosApprox` -> `SurfaceModel`
+- 第四阶段：`Blobber` -> `CubeBsqHandler` -> `CubeCachingAlgorithm` -> `CubeIoHandler` -> `CubeTileHandler` -> `RegionalCachingAlgorithm` -> `RawCubeChunk` -> `OriginalLabel` -> `OriginalXmlLabel` -> `Plugin` -> `FileList` -> `CSVReader` -> `IString` -> `LabelTranslationManager` -> `PvlTokenizer` -> `PvlToken` -> `PvlTranslationTable` -> `PvlToPvlTranslationManager` -> `PvlToXmlTranslationManager` -> `XmlToPvlTranslationManager` -> `PvlFormat` -> `PvlFormatPds`

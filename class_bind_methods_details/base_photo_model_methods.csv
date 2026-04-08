@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-PhotoModel,Radiometric And Photometric Correction,isis/src/base/objs/PhotoModel/PhotoModel.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+PhotoModel,Radiometric And Photometric Correction,isis/src/base/objs/PhotoModel/PhotoModel.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-08 第三阶段 shape / photometry 批次 inventory 预登记；抽象基类/纯虚接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,PhotoModel,isis_pybind.PhotoModel,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口

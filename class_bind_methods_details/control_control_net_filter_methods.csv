@@ -10,7 +10,7 @@ Public API,"void PointNumMeasuresEditLockFilter(const PvlGroup &pvlGrp, bool pbL
 Public API,"void PointResMagnitudeFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.point_res_magnitude_filter,N,Method not found in current binding files
 Public API,"void PointGoodnessOfFitFilter(const PvlGroup & pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.point_goodness_of_fit_filter,N,Method not found in current binding files
 Public API,"void PointIDFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.point_id_filter,N,Method not found in current binding files
-Public API,"void PointMeasuresFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.point_measures_filter,N,Method not found in current binding files
+Public API,"void PointMeasuresFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.point_measures_filter,Y,2026-04-07 已暴露按点测量数过滤接口
 Public API,"void PointPropertiesFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.point_properties_filter,N,Method not found in current binding files
 Public API,"void PointLatLonFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.point_lat_lon_filter,N,Method not found in current binding files
 Public API,"void PointDistanceFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.point_distance_filter,N,Method not found in current binding files
@@ -19,7 +19,7 @@ Public API,"void PointCubeNamesFilter(const PvlGroup &pvlGrp, bool pbLastFilter)
 Public API,void PointStatsHeader(void),isis_pybind.ControlNetFilter.point_stats_header,Y,2026-04-07 已暴露点统计输出 header helper
 Public API,void PointStats(const ControlPoint &pcPoint),isis_pybind.ControlNetFilter.point_stats,Y,2026-04-07 已暴露单点统计输出 helper
 Public API,"void CubeNameExpressionFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.cube_name_expression_filter,N,Method not found in current binding files
-Public API,"void CubeNumPointsFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.cube_num_points_filter,N,Method not found in current binding files
+Public API,"void CubeNumPointsFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.cube_num_points_filter,Y,2026-04-07 已暴露按影像点数过滤接口
 Public API,"void CubeDistanceFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.cube_distance_filter,N,Method not found in current binding files
 Public API,"void CubeConvexHullFilter(const PvlGroup &pvlGrp, bool pbLastFilter)",isis_pybind.ControlNetFilter.cube_convex_hull_filter,N,Method not found in current binding files
 Public API,void CubeStatsHeader(void),isis_pybind.ControlNetFilter.cube_stats_header,Y,2026-04-07 已暴露影像统计输出 header helper

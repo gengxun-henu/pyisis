@@ -148,6 +148,52 @@ End
         group.add_keyword(ip.PvlKeyword("EditLock", "True" if value else "False"))
         return group
 
+    def make_less_greater_group(self, name, less_than=None, greater_than=None):
+        group = ip.PvlGroup(name)
+        if less_than is not None:
+            group.add_keyword(ip.PvlKeyword("LessThan", str(less_than)))
+        if greater_than is not None:
+            group.add_keyword(ip.PvlKeyword("GreaterThan", str(greater_than)))
+        return group
+
+    def make_control_net_filter_count_fixture(self):
+        cube1_path = workspace_test_data_path("mosrange", "EN0108828322M_iof.cub")
+        cube2_path = workspace_test_data_path("mosrange", "EN0108828327M_iof.cub")
+        serial1 = ip.SerialNumber.compose(str(cube1_path))
+        serial2 = ip.SerialNumber.compose(str(cube2_path))
+
+        net = ip.ControlNet()
+
+        point_two_measures = ip.ControlPoint("KEEP2")
+        point_two_measures.set_type(ip.ControlPoint.PointType.Free)
+
+        measure1 = ip.ControlMeasure()
+        measure1.set_cube_serial_number(serial1)
+        measure1.set_coordinate(10.0, 20.0)
+        measure1.set_type(ip.ControlMeasure.MeasureType.Manual)
+        point_two_measures.add_measure(measure1)
+
+        measure2 = ip.ControlMeasure()
+        measure2.set_cube_serial_number(serial2)
+        measure2.set_coordinate(11.0, 21.0)
+        measure2.set_type(ip.ControlMeasure.MeasureType.Manual)
+        point_two_measures.add_measure(measure2)
+        point_two_measures.set_ref_measure(0)
+        net.add_point(point_two_measures)
+
+        point_one_measure = ip.ControlPoint("DROP1")
+        point_one_measure.set_type(ip.ControlPoint.PointType.Fixed)
+        point_one_measure.set_edit_lock(False)
+        measure3 = ip.ControlMeasure()
+        measure3.set_cube_serial_number(serial1)
+        measure3.set_coordinate(30.0, 40.0)
+        measure3.set_type(ip.ControlMeasure.MeasureType.Manual)
+        point_one_measure.add_measure(measure3)
+        point_one_measure.set_ref_measure(0)
+        net.add_point(point_one_measure)
+
+        return net, (cube1_path, cube2_path), (serial1, serial2)
+
     def test_bundle_target_body_minimal_configuration(self):
         target_body = ip.BundleTargetBody()
         target_body.set_solve_settings(
@@ -561,6 +607,70 @@ End
 
             self.assertEqual(net.get_num_points(), 1)
             self.assertEqual(net.get_point(0).get_id(), "LOCKED")
+
+    def test_control_net_filter_point_measures_filter_keeps_expected_points(self):
+        net, cube_paths, _ = self.make_control_net_filter_count_fixture()
+
+        with temporary_directory() as temp_dir:
+            serial_list_path = temp_dir / "serials.lis"
+            serial_list_path.write_text(
+                "\n".join(str(path) for path in cube_paths) + "\n",
+                encoding="utf-8",
+            )
+            output_path = temp_dir / "control_net_filter_point_measures.csv"
+
+            filter_object = ip.ControlNetFilter(net, str(serial_list_path))
+            filter_object.set_output_file(str(output_path))
+            filter_object.point_measures_filter(
+                self.make_less_greater_group("Point_NumMeasures", 2, 2),
+                True,
+            )
+
+            self.assertEqual(net.get_num_points(), 1)
+            self.assertEqual(net.get_point(0).get_id(), "KEEP2")
+
+            del filter_object
+            gc.collect()
+
+            output_text = output_path.read_text(encoding="utf-8")
+            self.assertIn(
+                "PointID, PointType, PointIgnored, PointEditLocked, TotalMeasures",
+                output_text,
+            )
+            self.assertIn("KEEP2", output_text)
+            self.assertNotIn("DROP1", output_text)
+
+    def test_control_net_filter_cube_num_points_filter_keeps_expected_images(self):
+        net, cube_paths, serials = self.make_control_net_filter_count_fixture()
+
+        with temporary_directory() as temp_dir:
+            serial_list_path = temp_dir / "serials.lis"
+            serial_list_path.write_text(
+                "\n".join(str(path) for path in cube_paths) + "\n",
+                encoding="utf-8",
+            )
+            output_path = temp_dir / "control_net_filter_cube_num_points.csv"
+
+            filter_object = ip.ControlNetFilter(net, str(serial_list_path))
+            filter_object.set_output_file(str(output_path))
+            filter_object.cube_num_points_filter(
+                self.make_less_greater_group("Cube_NumPoints", 1, 1),
+                True,
+            )
+
+            self.assertEqual(len(net.get_measures_in_cube(serials[0])), 0)
+            self.assertEqual(len(net.get_measures_in_cube(serials[1])), 1)
+
+            del filter_object
+            gc.collect()
+
+            output_text = output_path.read_text(encoding="utf-8")
+            self.assertIn(
+                "FileName, SerialNumber, ImageTotalPoints, ImagePointsIgnored, ImagePointsEditLocked",
+                output_text,
+            )
+            self.assertIn(serials[1], output_text)
+            self.assertNotIn(serials[0], output_text)
 
     def test_control_net_diff_reports_basic_difference(self):
         diff = ip.ControlNetDiff()

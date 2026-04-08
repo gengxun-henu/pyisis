@@ -56,6 +56,14 @@ Use this instruction when binding, testing, or debugging a USGS ISIS class.
 - If a setter fails after `create()` or `open()`, treat it as a pre-create lifecycle method.
 - If upstream usage contradicts your guess from the header, follow upstream usage.
 - If Python behavior intentionally differs from raw C++, test the exported Python API.
+- Before binding a method directly, confirm that it has a real implementation in the mirrored upstream source or is otherwise present in the linked runtime library; a declaration alone is not enough.
+- For older ISIS mission-camera and helper classes, assume that some methods may be declared in `.h` but absent from the compiled library until you verify otherwise.
+- If a method is declared upstream but you cannot find an inline definition in the header, cannot find an implementation under `reference/upstream_isis/...`, and cannot confirm that the symbol is exported by the linked library, do not bind the member-function pointer directly.
+- Treat pybind import-time `undefined symbol` failures as a linkability-audit problem first, not automatically as a Python packaging, import-path, or test-discovery problem.
+- When investigating this class of failure, check in order: local binding line, mirrored upstream `.h`, mirrored upstream `.cpp`, upstream usage sites, and then the actual shared-library exports if needed.
+- If the desired Python API is still useful but the upstream method is unavailable, prefer a local pybind wrapper or lambda built from already-implemented stable APIs instead of exposing a missing C++ symbol.
+- If a method is declared in `.h` but has no inline definition in the header and no corresponding implementation in upstream source, record that reason in the target `class_bind_methods_details/*_methods.csv`, account for it explicitly when updating coverage instead of treating it as ordinary unfinished binding work, and add a brief note in `todo_pybind11.csv`.
+- Example: if `ApolloPanoramicCamera::intOriResidualsReport()` is declared in `reference/upstream_isis/src/apollo/objs/ApolloPanoramicCamera/ApolloPanoramicCamera.h` but has no inline header definition and no implementation in upstream source, do not mark it as a routine missing binding item. In `class_bind_methods_details/apollo_apollo_panoramic_camera_methods.csv`, note that the direct method binding is unavailable because upstream provides no implementation and that Python uses a wrapper if one is added. When updating coverage, account for that item explicitly instead of treating it as ordinary unfinished exposure work. In `todo_pybind11.csv`, keep the note short, for example: `头文件声明但上游无实现；直接符号未绑定，Python 侧如需接口则改用 wrapper`.
 
 ## Testing guidance
 

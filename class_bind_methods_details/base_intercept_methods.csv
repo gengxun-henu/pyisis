@@ -2,15 +2,15 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 Intercept,Geometry,reference/upstream_isis/src/base/objs/Intercept/Intercept.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,视线与形体交会结果容器；涉及 SurfacePoint/AbstractPlate/Naif 类型与共享所有权
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Intercept,isis_pybind.Intercept,N,Python class symbol not found in current binding files
-Construction/Enum,Intercept(),isis_pybind.Intercept(),N,默认构造
-Construction/Enum,"Intercept(const NaifVertex &observer, const NaifVector &raydir, SurfacePoint *ipoint, AbstractPlate *shape)",isis_pybind.Intercept,N,主构造；依赖多种几何类型与裸指针
-Construction/Enum,virtual ~Intercept(),isis_pybind.Intercept,N,析构函数
-Public API,bool isValid() const,isis_pybind.Intercept.isValid,N,交会结果有效性检查
-Public API,"const NaifVertex &observer() const",isis_pybind.Intercept.observer,N,返回观测点向量引用
-Public API,"const NaifVector &lookDirectionRay() const",isis_pybind.Intercept.lookDirectionRay,N,返回视线方向向量引用
-Public API,SurfacePoint location() const,isis_pybind.Intercept.location,N,返回交会点
-Public API,NaifVector normal() const,isis_pybind.Intercept.normal,N,返回法向量
-Public API,Angle emission() const,isis_pybind.Intercept.emission,N,返回发射角
-Public API,"Angle separationAngle(const NaifVector &raydir) const",isis_pybind.Intercept.separationAngle,N,与给定视线的夹角
-Public API,"const AbstractPlate *shape() const",isis_pybind.Intercept.shape,N,返回形体对象指针；需处理非拥有指针
+Class Symbol,Intercept,isis_pybind.Intercept,Y,Bound in src/base/bind_base_shape_support.cpp
+Construction/Enum,Intercept(),isis_pybind.Intercept(),Y,默认构造
+Construction/Enum,"Intercept(const NaifVertex &observer, const NaifVector &raydir, SurfacePoint *ipoint, AbstractPlate *shape)",isis_pybind.Intercept(observer, ray_direction, surface_point, shape),Y,Python ctor clones SurfacePoint and shape.clone() for safe ownership
+Construction/Enum,virtual ~Intercept(),isis_pybind.Intercept,Y,析构函数通过类绑定隐式暴露
+Public API,bool isValid() const,isis_pybind.Intercept.is_valid,Y,交会结果有效性检查
+Public API,"const NaifVertex &observer() const",isis_pybind.Intercept.observer,Y,返回观测点向量（list[float]）
+Public API,"const NaifVector &lookDirectionRay() const",isis_pybind.Intercept.look_direction_ray,Y,返回视线方向向量（list[float]）
+Public API,SurfacePoint location() const,isis_pybind.Intercept.location,Y,返回交会点副本
+Public API,NaifVector normal() const,isis_pybind.Intercept.normal,Y,返回法向量（list[float]）
+Public API,Angle emission() const,isis_pybind.Intercept.emission,Y,返回发射角
+Public API,"Angle separationAngle(const NaifVector &raydir) const",isis_pybind.Intercept.separation_angle,Y,与给定视线的夹角
+Public API,"const AbstractPlate *shape() const",isis_pybind.Intercept.shape,Y,返回形体对象引用；None 表示无效

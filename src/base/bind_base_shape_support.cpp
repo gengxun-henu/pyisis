@@ -1,6 +1,6 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
-// Updated: 2026-03-21  Geng Xun added plate-model, intercept, and target-shape support bindings for DSK, Embree, and Bullet helpers
+// Updated: 2026-04-08  Geng Xun added Intercept constructor binding that clones shape/point inputs for safe ownership
 // Purpose: pybind11 bindings for ISIS plate geometry, intercept results, and target-shape support utilities used by shape-model workflows
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -228,6 +228,19 @@ void bind_base_shape_support(py::module_ &m) {
 
 	intercept
 			.def(py::init<>())
+			.def(py::init([](const std::vector<double> &observer,
+											 const std::vector<double> &ray_direction,
+											 const Isis::SurfacePoint &surface_point,
+											 const Isis::AbstractPlate &shape) {
+						 return new Isis::Intercept(toNaifVertex3(observer, "observer"),
+																			 toNaifVector3(ray_direction, "ray_direction"),
+																			 new Isis::SurfacePoint(surface_point),
+																			 shape.clone());
+					 }),
+					 py::arg("observer"),
+					 py::arg("ray_direction"),
+					 py::arg("surface_point"),
+					 py::arg("shape"))
 			.def("is_valid", &Isis::Intercept::isValid)
 			.def("observer",
 					 [](const Isis::Intercept &self) {

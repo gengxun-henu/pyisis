@@ -8,6 +8,9 @@ Updated: 2026-04-09  Geng Xun added CubeAttributeInput/Output and LabelAttachmen
 Updated: 2026-04-09  Geng Xun added TrackingTable focused unit tests.
 Updated: 2026-04-09  Geng Xun aligned TrackingTable index tests with upstream behavior where missing entries are inserted and assigned a new index.
 Updated: 2026-04-09  Geng Xun added Blobber focused tests with self-contained table-backed cube fixtures.
+Updated: 2026-04-09  Geng Xun added focused CubeBsqHandler wrapper coverage for BSQ core-label updates.
+Updated: 2026-04-09  Geng Xun added focused CubeCachingAlgorithm.CacheResult coverage for the abstract caching interface.
+Updated: 2026-04-09  Geng Xun added focused CubeIoHandler wrapper coverage for shared BSQ read/write/cache operations.
 """
 
 import unittest
@@ -16,6 +19,31 @@ from _unit_test_support import ip, temporary_directory
 
 
 class LowLevelCubeIoUnitTest(unittest.TestCase):
+    def make_cube_bsq_label(self, samples=3, lines=2, bands=2):
+        label = ip.Pvl()
+        label.from_string(
+            f"""
+Object = IsisCube
+    Object = Core
+        StartByte = 1
+        Group = Dimensions
+            Samples = {samples}
+            Lines = {lines}
+            Bands = {bands}
+        EndGroup
+        Group = Pixels
+            Type = Real
+            ByteOrder = Lsb
+            Base = 0.0
+            Multiplier = 1.0
+        EndGroup
+    EndObject
+EndObject
+End
+"""
+        )
+        return label
+
     def make_blobber_cube(self, name="blobber_fixture.cub"):
         temp_dir_cm = temporary_directory()
         temp_dir = temp_dir_cm.__enter__()
@@ -59,6 +87,75 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
             ip.label_attachment_enumeration("DETACHED"),
             ip.LabelAttachment.DetachedLabel,
         )
+
+    def test_cube_bsq_handler_updates_core_format_to_band_sequential(self):
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        data_path = temp_dir / "cube_bsq_handler.dat"
+        label = self.make_cube_bsq_label()
+        handler = ip.CubeBsqHandler(str(data_path), label, [1, 2], False)
+
+        updated = self.make_cube_bsq_label()
+        handler.update_labels(updated)
+
+        core = updated.find_object("IsisCube").find_object("Core")
+        self.assertEqual(core.find_keyword("Format")[0], "BandSequential")
+        self.assertTrue(data_path.exists())
+        self.assertGreater(data_path.stat().st_size, 0)
+        self.assertIn("CubeBsqHandler", repr(handler))
+
+    def test_cube_io_handler_reads_writes_and_updates_labels(self):
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        data_path = temp_dir / "cube_io_handler.dat"
+        label = self.make_cube_bsq_label(samples=3, lines=2, bands=1)
+        handler = ip.CubeIoHandler(str(data_path), label, [1], False)
+
+        writer = ip.Brick(3, 2, 1, ip.PixelType.Real)
+        writer.set_base_position(1, 1, 1)
+        for index in range(len(writer)):
+            writer[index] = float(index + 1)
+
+        handler.write(writer)
+        handler.clear_cache()
+
+        reader = ip.Brick(3, 2, 1, ip.PixelType.Real)
+        reader.set_base_position(1, 1, 1)
+        handler.read(reader)
+
+        self.assertEqual(reader.double_buffer(), [1.0, 2.0, 3.0, 4.0, 5.0, 6.0])
+        self.assertGreater(handler.get_data_size(), 0)
+
+        updated = self.make_cube_bsq_label(samples=3, lines=2, bands=1)
+        handler.update_labels(updated)
+        core = updated.find_object("IsisCube").find_object("Core")
+        self.assertEqual(core.find_keyword("Format")[0], "BandSequential")
+
+        handler.set_virtual_bands([1])
+        self.assertIn("CubeIoHandler", repr(handler))
+        self.assertIsNotNone(handler.data_file_mutex())
+
+    def test_cube_caching_algorithm_cache_result_surface(self):
+        self.assertTrue(hasattr(ip, "CubeCachingAlgorithm"))
+
+        empty = ip.CubeCachingAlgorithm.CacheResult()
+        self.assertFalse(empty.algorithm_understood_data())
+        self.assertEqual(empty.get_chunks_to_free(), [])
+        self.assertEqual(len(empty), 0)
+
+        understood = ip.CubeCachingAlgorithm.CacheResult([None, object()])
+        self.assertTrue(understood.algorithm_understood_data())
+        self.assertEqual(understood.get_chunks_to_free(), [None, None])
+        self.assertEqual(len(understood), 2)
+
+        copied = ip.CubeCachingAlgorithm.CacheResult(understood)
+        self.assertTrue(copied.algorithm_understood_data())
+        self.assertEqual(copied.get_chunks_to_free(), [None, None])
+        self.assertIn("CubeCachingAlgorithm.CacheResult", repr(copied))
 
     def test_cube_attribute_input_parses_band_ranges_and_mutators(self):
         attributes = ip.CubeAttributeInput("+3,5-7,9")

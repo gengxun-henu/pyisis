@@ -1,11 +1,11 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-CubeCachingAlgorithm,Low Level Cube I/O,isis/src/base/objs/CubeCachingAlgorithm/CubeCachingAlgorithm.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-08 第四阶段后端 / 桥接 / 工具类批次 inventory 预登记；抽象基类/纯虚接口
+CubeCachingAlgorithm,Low Level Cube I/O,reference/upstream_isis/src/base/objs/CubeCachingAlgorithm/CubeCachingAlgorithm.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已暴露抽象基类符号与 Python-friendly CacheResult；recommendChunksToFree 仍保持抽象接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,CubeCachingAlgorithm,isis_pybind.CubeCachingAlgorithm,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
-Construction/Enum,CubeCachingAlgorithm(),isis_pybind.CubeCachingAlgorithm(),N,抽象基类/纯虚接口
-Public API,CacheResult(),isis_pybind.CubeCachingAlgorithm.cache_result,N,抽象基类/纯虚接口
-Public API,CacheResult(QList<RawCubeChunk *>),isis_pybind.CubeCachingAlgorithm.cache_result,N,抽象基类/纯虚接口
-Public API,CacheResult(const CacheResult &other),isis_pybind.CubeCachingAlgorithm.cache_result,N,抽象基类/纯虚接口
-Public API,bool algorithmUnderstoodData() const,isis_pybind.CubeCachingAlgorithm.algorithm_understood_data,N,抽象基类/纯虚接口
-Public API,QList<RawCubeChunk *> getChunksToFree() const,isis_pybind.CubeCachingAlgorithm.get_chunks_to_free,N,抽象基类/纯虚接口
+Class Symbol,CubeCachingAlgorithm,isis_pybind.CubeCachingAlgorithm,Y,Abstract base symbol exported without unsafe direct construction
+Construction/Enum,CubeCachingAlgorithm(),isis_pybind.CubeCachingAlgorithm(),N,抽象基类/纯虚接口；不强行暴露直接构造
+Public API,CacheResult(),isis_pybind.CubeCachingAlgorithm.CacheResult(),Y,Nested CacheResult exposed with default constructor
+Public API,CacheResult(QList<RawCubeChunk *>),isis_pybind.CubeCachingAlgorithm.CacheResult(...),Y,Python constructor accepts placeholder iterable entries because RawCubeChunk is not yet directly bound
+Public API,CacheResult(const CacheResult &other),isis_pybind.CubeCachingAlgorithm.CacheResult(other),Y,Copy constructor exposed
+Public API,bool algorithmUnderstoodData() const,isis_pybind.CubeCachingAlgorithm.CacheResult.algorithm_understood_data,Y,Directly forwarded
+Public API,QList<RawCubeChunk *> getChunksToFree() const,isis_pybind.CubeCachingAlgorithm.CacheResult.get_chunks_to_free,Y,Adapted to Python list with None placeholders or chunk geometry tuples

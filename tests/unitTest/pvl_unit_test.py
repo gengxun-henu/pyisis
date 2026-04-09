@@ -3,10 +3,12 @@ Unit tests for ISIS PVL and PvlSequence bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-09
+Last Modified: 2026-04-10
 Updated: 2026-03-30  Geng Xun added PvlSequence regression coverage alongside core PVL keyword, group, object, and container tests.
 Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer focused unit tests.
 Updated: 2026-04-09  Geng Xun added PvlFormat, PvlTranslationTable, PvlFormatPds, PvlToPvlTranslationManager unit tests.
+Updated: 2026-04-10  Geng Xun added regressions for protected-helper wrapper bindings on PvlFormat and PvlTranslationTable.
+Updated: 2026-04-10  Geng Xun aligned PVL helper test expectations with upstream ISIS behavior for empty units and PDS uppercase names.
 """
 
 import unittest
@@ -379,12 +381,24 @@ class PvlFormatUnitTest(unittest.TestCase):
         self.assertEqual(result, ip.KeywordType.NoTypeKeyword)
 
     def test_is_single_unit_no_units(self):
-        """is_single_unit() returns False when the keyword has no units."""
+        """is_single_unit() follows upstream ISIS behavior for empty-unit keywords."""
         fmt = ip.PvlFormat()
         kw = ip.PvlKeyword("NoUnits", "42")
         result = fmt.is_single_unit(kw)
-        # Without units, returns False
-        self.assertFalse(result)
+        # Upstream compares all units to keyword.unit(0); empty units therefore match.
+        self.assertTrue(result)
+
+    def test_add_quotes_wraps_values_with_spaces(self):
+        """add_quotes() still exposes the upstream formatting helper behavior."""
+        fmt = ip.PvlFormat()
+        self.assertEqual(fmt.add_quotes("hello world"), '"hello world"')
+
+    def test_is_single_unit_true_when_units_match(self):
+        """is_single_unit() returns True when all units match."""
+        fmt = ip.PvlFormat()
+        kw = ip.PvlKeyword("Distance", "1", "m")
+        kw.add_value("2", "m")
+        self.assertTrue(fmt.is_single_unit(kw))
 
     def test_repr(self):
         """repr(PvlFormat) returns a non-empty string."""
@@ -404,6 +418,7 @@ class PvlTranslationTableUnitTest(unittest.TestCase):
 
     SIMPLE_TABLE = (
         "Group = CoreLines\n"
+        "  Optional = 1\n"
         "  InputPosition = IMAGE\n"
         "  InputKey = LINES\n"
         "  Translation = (*,*)\n"
@@ -411,6 +426,7 @@ class PvlTranslationTableUnitTest(unittest.TestCase):
         "Group = CoreBitsPerPixel\n"
         "  Auto = 1\n"
         "  OutputName = BitsPerPixel\n"
+        "  OutputPosition = IMAGE\n"
         "  InputPosition = IMAGE\n"
         "  InputKey = SAMPLE_BITS\n"
         "  InputDefault = 8\n"
@@ -458,6 +474,23 @@ class PvlTranslationTableUnitTest(unittest.TestCase):
         """is_auto() returns False for groups without Auto."""
         table = self._make_table()
         self.assertFalse(table.is_auto("CoreLines"))
+
+    def test_is_optional_true(self):
+        """is_optional() returns True for groups with Optional = 1."""
+        table = self._make_table()
+        self.assertTrue(table.is_optional("CoreLines"))
+
+    def test_output_name(self):
+        """output_name() returns the configured OutputName value."""
+        table = self._make_table()
+        self.assertEqual(table.output_name("CoreBitsPerPixel"), "BitsPerPixel")
+
+    def test_output_position(self):
+        """output_position() returns the configured OutputPosition keyword."""
+        table = self._make_table()
+        output_position = table.output_position("CoreBitsPerPixel")
+        self.assertEqual(output_position.name(), "OutputPosition")
+        self.assertEqual(output_position[0], "IMAGE")
 
     def test_translate_wildcard(self):
         """translate() passes through values using (*,*) translation rule."""
@@ -511,7 +544,7 @@ class PvlFormatPdsUnitTest(unittest.TestCase):
         kw = ip.PvlKeyword("TestKey", "val")
         result = fmt.format_name(kw)
         self.assertIsInstance(result, str)
-        self.assertIn("TestKey", result)
+        self.assertIn("TESTKEY", result)
 
     def test_format_value(self):
         """format_value() returns a string for the keyword value."""

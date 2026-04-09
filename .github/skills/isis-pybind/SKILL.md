@@ -63,6 +63,17 @@ See [binding workflow reference](./references/binding-workflow.md).
 - If the class is already exported, extend its method surface before inventing alternate wrappers.
 - Update `python/isis_pybind/__init__.py` when a symbol must be re-exported at package level.
 
+#### Common binding hazards to check before compiling
+
+- Audit member-function qualifiers before wrapping operators or arithmetic helpers.
+	- Example: `Quaternion::operator*(const double &)` is **not** `const` in upstream ISIS.
+	- Do not bind it with a lambda that takes `const Isis::Quaternion &` and then calls `a * scalar` directly.
+	- Prefer copying into a mutable local wrapper/object first, or exposing an equivalent const-safe lambda built from a mutable copy.
+- Do not bind upstream `protected` members directly with pybind lambdas.
+	- Example: `PvlFormat::addQuotes(...)`, `PvlFormat::isSingleUnit(...)`, `PvlTranslationTable::hasInputDefault(...)`, `IsAuto(...)`, `IsOptional(...)`, `OutputName(...)`, and `OutputPosition(...)` are protected helpers, not public API.
+	- If Python still needs those semantics, expose them through a local helper subclass or wrapper that safely forwards the protected call, or reimplement a stable public-facing wrapper when the behavior is simple and well verified.
+	- Before adding such wrappers, verify the behavior against `reference/upstream_isis/...` instead of assuming a declaration is callable from pybind.
+
 ### 3. Add focused validation
 
 - Add or update the smallest relevant test first.

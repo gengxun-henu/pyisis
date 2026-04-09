@@ -4,6 +4,7 @@
 // Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer bindings for PVL stream tokenization.
 // Updated: 2026-04-09  Geng Xun added PvlFormat, PvlFormatPds, and PvlTranslationTable bindings.
 // Updated: 2026-04-09  Geng Xun added LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, XmlToPvlTranslationManager bindings.
+// Updated: 2026-04-10  Geng Xun replaced direct protected-member bindings with helper-copy wrappers for PvlFormat and PvlTranslationTable.
 // Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, PvlFormatPds, PvlTranslationTable, LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, and XmlToPvlTranslationManager
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -54,6 +55,47 @@ std::string pvlLikeToString(TPvlLike &value) {
   stream << value;
   return stream.str();
 }
+
+class PvlFormatBindingAccess : public Isis::PvlFormat {
+ public:
+     using Isis::PvlFormat::PvlFormat;
+     PvlFormatBindingAccess(const Isis::PvlFormat &other) : Isis::PvlFormat(other) {}
+
+     QString addQuotesPublic(const QString &value) {
+          return addQuotes(value);
+     }
+
+     bool isSingleUnitPublic(const Isis::PvlKeyword &keyword) {
+          return isSingleUnit(keyword);
+     }
+};
+
+class PvlTranslationTableBindingAccess : public Isis::PvlTranslationTable {
+ public:
+     using Isis::PvlTranslationTable::PvlTranslationTable;
+     PvlTranslationTableBindingAccess(const Isis::PvlTranslationTable &other)
+               : Isis::PvlTranslationTable(other) {}
+
+     bool hasInputDefaultPublic(const QString &translationGroupName) {
+          return hasInputDefault(translationGroupName);
+     }
+
+     bool isAutoPublic(const QString &translationGroupName) {
+          return IsAuto(translationGroupName);
+     }
+
+     bool isOptionalPublic(const QString &translationGroupName) {
+          return IsOptional(translationGroupName);
+     }
+
+     Isis::PvlKeyword outputPositionPublic(const QString &translationGroupName) {
+          return OutputPosition(translationGroupName);
+     }
+
+     QString outputNamePublic(const QString &translationGroupName) {
+          return OutputName(translationGroupName);
+     }
+};
 }  // namespace
 
 /**
@@ -571,13 +613,14 @@ void bind_base_pvl(py::module_ &m) {
            "Return the formatting accuracy (decimal places) for the given keyword.")
       .def("add_quotes",
            [](Isis::PvlFormat &self, const std::string &value) {
-             return qStringToStdString(self.addQuotes(stdStringToQString(value)));
+                               return qStringToStdString(
+                                         PvlFormatBindingAccess(self).addQuotesPublic(stdStringToQString(value)));
            },
            py::arg("value"),
            "Wrap the given string in quotes if needed by this format.")
       .def("is_single_unit",
            [](Isis::PvlFormat &self, const Isis::PvlKeyword &keyword) {
-             return self.isSingleUnit(keyword);
+                               return PvlFormatBindingAccess(self).isSingleUnitPublic(keyword);
            },
            py::arg("keyword"),
            "Return True if all values in the keyword share the same unit.")
@@ -637,31 +680,36 @@ void bind_base_pvl(py::module_ &m) {
            "Translate the given input value using the named translation group.")
       .def("has_input_default",
            [](Isis::PvlTranslationTable &self, const std::string &group_name) {
-             return self.hasInputDefault(stdStringToQString(group_name));
+                               return PvlTranslationTableBindingAccess(self)
+                                         .hasInputDefaultPublic(stdStringToQString(group_name));
            },
            py::arg("group_name"),
            "Return True if the translation group has an input default.")
       .def("is_auto",
            [](Isis::PvlTranslationTable &self, const std::string &group_name) {
-             return self.IsAuto(stdStringToQString(group_name));
+                               return PvlTranslationTableBindingAccess(self)
+                                         .isAutoPublic(stdStringToQString(group_name));
            },
            py::arg("group_name"),
            "Return True if the translation group is marked Auto.")
       .def("is_optional",
            [](Isis::PvlTranslationTable &self, const std::string &group_name) {
-             return self.IsOptional(stdStringToQString(group_name));
+                               return PvlTranslationTableBindingAccess(self)
+                                         .isOptionalPublic(stdStringToQString(group_name));
            },
            py::arg("group_name"),
            "Return True if the translation group is optional.")
       .def("output_name",
            [](Isis::PvlTranslationTable &self, const std::string &group_name) {
-             return qStringToStdString(self.OutputName(stdStringToQString(group_name)));
+                               return qStringToStdString(PvlTranslationTableBindingAccess(self)
+                                                                                                          .outputNamePublic(stdStringToQString(group_name)));
            },
            py::arg("group_name"),
            "Return the output keyword name for the translation group.")
       .def("output_position",
            [](Isis::PvlTranslationTable &self, const std::string &group_name) {
-             return self.OutputPosition(stdStringToQString(group_name));
+                               return PvlTranslationTableBindingAccess(self)
+                                         .outputPositionPublic(stdStringToQString(group_name));
            },
            py::arg("group_name"),
            "Return the PvlKeyword describing the output position for the translation group.")

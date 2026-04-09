@@ -2,6 +2,7 @@
 // Created: 2026-03-21
 // Updated: 2026-04-08  Geng Xun added CameraPointInfo bindings alongside core Camera geometry accessors
 // Updated: 2026-04-09  Geng Xun exposed Camera.target() so Python can inspect attached Target metadata and frame coefficients
+// Updated: 2026-04-10  Geng Xun fixed Quaternion scalar multiplication binding to avoid calling a non-const ISIS operator on a const reference.
 // Purpose: pybind11 bindings for the ISIS Camera base class, CameraPointInfo helper, and shared camera-side geometry accessors
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -210,7 +211,10 @@ void bind_camera(py::module_ &m) {
            [](const Isis::Quaternion &a, const Isis::Quaternion &b) { return a * b; },
            py::is_operator())
       .def("__mul__",
-           [](const Isis::Quaternion &a, double s) { return a * s; },
+           [](const Isis::Quaternion &a, double s) {
+             Isis::Quaternion copy(a);
+             return copy * s;
+           },
            py::is_operator())
       .def("__repr__",
            [](const Isis::Quaternion &self) {

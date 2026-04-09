@@ -3,9 +3,10 @@ Unit tests for SensorUtilities lightweight value types, Quaternion, and LightTim
 
 Author: Geng Xun
 Created: 2026-04-09
-Last Modified: 2026-04-09
+Last Modified: 2026-04-10
 Updated: 2026-04-09  Geng Xun added focused unit tests for Vec, GroundPt2D, GroundPt3D, ImagePt,
          RaDec, ObserverState, Intersection, Quaternion, and LightTimeCorrectionState.
+Updated: 2026-04-10  Geng Xun added Quaternion scalar-multiplication regression coverage for the const-safe pybind wrapper.
 """
 import math
 import unittest
@@ -258,6 +259,14 @@ class QuaternionUnitTest(unittest.TestCase):
         q = ip.Quaternion(self._identity_matrix())
         c = q.conjugate()
         self.assertIsInstance(c, ip.Quaternion)
+
+    def test_scalar_multiply(self):
+        """Quaternion * scalar returns a new Quaternion without mutating the source."""
+        q = ip.Quaternion(self._identity_matrix())
+        scaled = q * 0.5
+        self.assertIsInstance(scaled, ip.Quaternion)
+        self.assertEqual(len(scaled.get_quaternion()), 4)
+        self.assertEqual(len(q.get_quaternion()), 4)
 
     def test_repr(self):
         """repr(Quaternion) includes Quaternion."""

@@ -1,5 +1,14 @@
 # Pybind Progress Log
 
+## 2026-04-10
+
+- Build-break hotfix for `Quaternion` and PVL helper bindings completed:
+  - Updated `src/bind_camera.cpp` so `Quaternion.__mul__(scalar)` no longer calls the upstream non-const `Quaternion::operator*(const double &)` on a `const Isis::Quaternion &`; the binding now multiplies through a mutable local copy instead.
+  - Updated `src/base/bind_base_pvl.cpp` so `PvlFormat.add_quotes(...)`, `PvlFormat.is_single_unit(...)`, `PvlTranslationTable.has_input_default(...)`, `is_auto(...)`, `is_optional(...)`, `output_name(...)`, and `output_position(...)` no longer attempt to bind upstream protected members directly.
+  - The PVL helpers now use local helper-copy wrappers that preserve the existing Python surface while respecting C++ access control and upstream behavior.
+  - Extended focused regressions in `tests/unitTest/sensor_utils_unit_test.py` and `tests/unitTest/pvl_unit_test.py` to cover scalar quaternion multiplication plus the formerly protected PVL helper surface.
+  - Added a new caution block to `.github/skills/isis-pybind/SKILL.md` so future binding work checks const-qualified operators and protected-member exposure before compiling.
+
 ## 2026-04-09
 
 - 新一轮 rollout 第四类 `CSVReader` 完成：

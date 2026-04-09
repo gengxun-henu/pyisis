@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-04-03
-Last Modified: 2026-04-08
+Last Modified: 2026-04-09
 Updated: 2026-04-08  Geng Xun added focused low-level Cube I/O regression coverage for Blob file/bytes helpers alongside managers, pixel helpers, and table primitives.
+Updated: 2026-04-09  Geng Xun added TrackingTable focused unit tests.
 """
 
 import unittest
@@ -676,6 +677,75 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
         boxcar35.begin()
         self.assertFalse(boxcar35.end())
         cube.read(boxcar35)
+
+
+class TrackingTableUnitTest(unittest.TestCase):
+    """Test suite for TrackingTable class bindings. Added: 2026-04-09."""
+
+    def test_construction_default(self):
+        """TrackingTable() constructs without error."""
+        tt = ip.TrackingTable()
+        self.assertIsNotNone(tt)
+
+    def test_to_table_round_trip_empty(self):
+        """An empty TrackingTable serializes to a Table without error."""
+        tt = ip.TrackingTable()
+        tbl = tt.to_table()
+        self.assertIsNotNone(tbl)
+        self.assertIsInstance(tbl, ip.Table)
+
+    def test_file_name_to_pixel_adds_entry(self):
+        """file_name_to_pixel assigns a pixel value and increments the table."""
+        tt = ip.TrackingTable()
+        fn1 = ip.FileName("/tmp/fake_a.cub")
+        sn1 = "MRO/HiRISE/0000000001"
+        pixel1 = tt.file_name_to_pixel(fn1, sn1)
+        # The first entry uses the minimum unsigned value (typically 0 + offset)
+        self.assertIsInstance(pixel1, int)
+
+        fn2 = ip.FileName("/tmp/fake_b.cub")
+        sn2 = "MRO/HiRISE/0000000002"
+        pixel2 = tt.file_name_to_pixel(fn2, sn2)
+        self.assertNotEqual(pixel1, pixel2)
+
+    def test_file_name_to_index_existing(self):
+        """file_name_to_index returns a non-negative index for added entries."""
+        tt = ip.TrackingTable()
+        fn = ip.FileName("/tmp/fake_c.cub")
+        sn = "MRO/HiRISE/0000000003"
+        tt.file_name_to_pixel(fn, sn)
+        idx = tt.file_name_to_index(fn, sn)
+        self.assertGreaterEqual(idx, 0)
+
+    def test_file_name_to_index_missing(self):
+        """file_name_to_index returns -1 for a filename not in the table."""
+        tt = ip.TrackingTable()
+        fn_missing = ip.FileName("/tmp/not_added.cub")
+        idx = tt.file_name_to_index(fn_missing, "NO/SN/123")
+        self.assertEqual(idx, -1)
+
+    def test_pixel_to_sn_round_trip(self):
+        """pixel_to_sn returns the serial number for an added entry."""
+        tt = ip.TrackingTable()
+        fn = ip.FileName("/tmp/fake_d.cub")
+        sn = "TESTMISSION/TESTINSTRUMENT/0000000004"
+        pixel = tt.file_name_to_pixel(fn, sn)
+        retrieved_sn = tt.pixel_to_sn(pixel)
+        self.assertEqual(retrieved_sn, sn)
+
+    def test_pixel_to_file_name_round_trip(self):
+        """pixel_to_file_name returns the FileName for an added entry."""
+        tt = ip.TrackingTable()
+        fn = ip.FileName("/tmp/fake_e.cub")
+        sn = "TESTMISSION/TESTINSTRUMENT/0000000005"
+        pixel = tt.file_name_to_pixel(fn, sn)
+        retrieved_fn = tt.pixel_to_file_name(pixel)
+        self.assertIsInstance(retrieved_fn, ip.FileName)
+
+    def test_repr(self):
+        """__repr__ returns a non-empty string containing 'TrackingTable'."""
+        tt = ip.TrackingTable()
+        self.assertIn("TrackingTable", repr(tt))
 
 
 if __name__ == "__main__":

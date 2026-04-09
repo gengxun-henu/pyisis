@@ -37,6 +37,7 @@
 #include "TableField.h"
 #include "TableRecord.h"
 #include "TileManager.h"
+#include "TrackingTable.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -705,4 +706,59 @@ void bind_low_level_cube_io(py::module_ &m) {
              self.latLonRange(min_lat, max_lat, min_lon, max_lon);
              return py::make_tuple(min_lat, max_lat, min_lon, max_lon);
            });
+
+  // Added: 2026-04-09 - bind Isis::TrackingTable
+  /**
+   * @brief Bindings for the Isis::TrackingTable class
+   * TrackingTable stores a mapping from mosaic tracking-band pixel values to
+   * input image filenames and serial numbers. Used when reading or writing
+   * mosaic tracking cubes.
+   *
+   * Source ISIS header: reference/upstream_isis/src/base/objs/TrackingTable/TrackingTable.h
+   * Source class: Isis::TrackingTable
+   * Source header author(s): Jesse Mapel & Summer Stapleton (2018-07-19)
+   * Binding author: Geng Xun
+   */
+  py::class_<Isis::TrackingTable>(m, "TrackingTable")
+      .def(py::init<>(), "Construct an empty TrackingTable.")
+      .def(py::init<Isis::Table>(),
+           py::arg("table"),
+           "Construct a TrackingTable from an existing ISIS Table object.")
+      .def("to_table",
+           &Isis::TrackingTable::toTable,
+           "Serialize this TrackingTable back to an ISIS Table object.")
+      .def("pixel_to_file_name",
+           [](Isis::TrackingTable &self, unsigned int pixel) {
+             return self.pixelToFileName(pixel);
+           },
+           py::arg("pixel"),
+           "Map a tracking-band pixel value to the corresponding FileName. "
+           "Raises IException if pixel index is out of range.")
+      .def("file_name_to_pixel",
+           [](Isis::TrackingTable &self,
+              const Isis::FileName &file,
+              const std::string &serial_number) {
+             return self.fileNameToPixel(file, stdStringToQString(serial_number));
+           },
+           py::arg("file"), py::arg("serial_number"),
+           "Map a FileName+serial-number pair to its pixel value, "
+           "adding a new entry if the pair is not yet in the table.")
+      .def("file_name_to_index",
+           [](Isis::TrackingTable &self,
+              const Isis::FileName &file,
+              const std::string &serial_number) {
+             return self.fileNameToIndex(file, stdStringToQString(serial_number));
+           },
+           py::arg("file"), py::arg("serial_number"),
+           "Return the 0-based index of a FileName+serial-number pair "
+           "in the table, or -1 if not found.")
+      .def("pixel_to_sn",
+           [](Isis::TrackingTable &self, unsigned int pixel) {
+             return qStringToStdString(self.pixelToSN(pixel));
+           },
+           py::arg("pixel"),
+           "Map a tracking-band pixel value to the corresponding serial number string.")
+      .def("__repr__", [](const Isis::TrackingTable &) {
+        return "TrackingTable()";
+      });
 }

@@ -15,9 +15,9 @@
  *   - isis/src/base/objs/NthOrderPolynomial/NthOrderPolynomial.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Updated: 2026-03-29  Geng Xun expanded math bindings with linear algebra, polynomial, and infix/postfix helper coverage
+ * Updated: 2026-04-09  Geng Xun added SurfaceModel binding (bivariate polynomial surface fitting)
  * Purpose: Expose Calculator, Affine, BasisFunction, InfixToPostfix,
- *          CubeInfixToPostfix, InlineInfixToPostfix, and NthOrderPolynomial
+ *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, and SurfaceModel
  *          classes to Python via pybind11.
  */
 
@@ -36,6 +36,7 @@
 #include "PolynomialUnivariate.h"
 #include "PolynomialBivariate.h"
 #include "NthOrderPolynomial.h"
+#include "SurfaceModel.h"
 #include "Buffer.h"
 #include "helpers.h"
 
@@ -373,4 +374,53 @@ void bind_base_math(py::module_ &m)
          .def(py::init<>(), "Construct an InlineInfixToPostfix converter with inline-specific operators")
          .def("__repr__", [](const Isis::InlineInfixToPostfix &)
               { return "InlineInfixToPostfix()"; });
+
+     // Added: 2026-04-09 - bind Isis::SurfaceModel
+     /**
+      * @brief Bindings for the Isis::SurfaceModel class
+      * SurfaceModel fits a 2nd-degree bivariate polynomial surface z=f(x,y) to
+      * a set of (x,y,z) triplets using least-squares. After calling solve(),
+      * evaluate(x,y) returns the fitted z value and min_max() returns the
+      * local minimum/maximum coordinates.
+      *
+      * Source ISIS header: reference/upstream_isis/src/base/objs/SurfaceModel/SurfaceModel.h
+      * Source class: Isis::SurfaceModel
+      * Source header author(s): Jeff Anderson (2005-05-09)
+      * Binding author: Geng Xun
+      */
+     py::class_<Isis::SurfaceModel>(m, "SurfaceModel")
+         .def(py::init<>(), "Construct a SurfaceModel (empty triplet list, 2nd-degree bivariate polynomial).")
+         .def("add_triplet",
+              &Isis::SurfaceModel::AddTriplet,
+              py::arg("x"), py::arg("y"), py::arg("z"),
+              "Add a single (x, y, z) data point.")
+         .def("add_triplets",
+              [](Isis::SurfaceModel &self,
+                 const std::vector<double> &x,
+                 const std::vector<double> &y,
+                 const std::vector<double> &z) {
+                self.AddTriplets(x, y, z);
+              },
+              py::arg("x"), py::arg("y"), py::arg("z"),
+              "Add a list of (x, y, z) data points from three equal-length sequences.")
+         .def("solve",
+              &Isis::SurfaceModel::Solve,
+              "Fit the surface to all added triplets using least-squares. "
+              "Must be called before evaluate() or min_max().")
+         .def("evaluate",
+              &Isis::SurfaceModel::Evaluate,
+              py::arg("x"), py::arg("y"),
+              "Evaluate the fitted surface at (x, y). Requires prior call to solve().")
+         .def("min_max",
+              [](Isis::SurfaceModel &self) {
+                double x = 0.0, y = 0.0;
+                int rc = self.MinMax(x, y);
+                return py::make_tuple(rc, x, y);
+              },
+              "Find the local minimum or maximum of the fitted surface. "
+              "Returns (status, x, y) where status=0 means success, "
+              "status=1 means the surface is a plane with no extremum.")
+         .def("__repr__", [](const Isis::SurfaceModel &) {
+              return "SurfaceModel()";
+         });
 }

@@ -11,8 +11,8 @@
  *   - isis/src/base/objs/LineEquation/LineEquation.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
- * Updated: 2026-04-08  Geng Xun added Environment static utility bindings alongside existing Column and LineEquation exposure
- * Purpose: Expose Column, Environment, LineEquation, and related utility classes to Python via pybind11.
+ * Updated: 2026-04-09  Geng Xun added Resource binding (PVL keyword container with name/value/status management)
+ * Purpose: Expose Column, Environment, LineEquation, and Resource utility classes to Python via pybind11.
  * Purpose: Expose Column, LineEquation, and related utility classes to Python via pybind11.
  */
 
@@ -23,6 +23,9 @@
 #include "Environment.h"
 #include "LineEquation.h"
 #include "helpers.h"
+#include "PvlKeyword.h"
+#include "PvlObject.h"
+#include "Resource.h"
 
 namespace py = pybind11;
 
@@ -190,5 +193,133 @@ void bind_base_utility(py::module_ &m) {
         }
         repr += ")";
         return repr;
+      });
+
+  // Added: 2026-04-09 - bind Isis::Resource
+  /**
+   * @brief Bindings for the Isis::Resource class
+   * Resource provides a named container of PVL keywords used by ISIS Strategy
+   * classes. It supports keyword get/set/erase, active/discarded status, and
+   * named asset slots. GisGeometry-related methods are not exposed here.
+   *
+   * Source ISIS header: reference/upstream_isis/src/base/objs/Resource/Resource.h
+   * Source class: Isis::Resource
+   * Source header author(s): Kris Becker (2012-07-15)
+   * Binding author: Geng Xun
+   */
+  py::class_<Isis::Resource>(m, "Resource")
+      .def(py::init<>(), "Construct an unnamed Resource (name defaults to 'Resource').")
+      .def(py::init([](const std::string &name) {
+             return Isis::Resource(stdStringToQString(name));
+           }),
+           py::arg("name"),
+           "Construct a Resource with the given name.")
+      .def(py::init<const Isis::Resource &>(), py::arg("other"), "Copy-construct a Resource.")
+      .def("name",
+           [](const Isis::Resource &self) {
+             return qStringToStdString(self.name());
+           },
+           "Return the resource name.")
+      .def("set_name",
+           [](Isis::Resource &self, const std::string &identity) {
+             self.setName(stdStringToQString(identity));
+           },
+           py::arg("identity"),
+           "Set the resource name (also updates the Identity keyword).")
+      .def("is_equal",
+           &Isis::Resource::isEqual,
+           py::arg("other"),
+           "Test whether this Resource and other share the same keyword set.")
+      .def("exists",
+           [](const Isis::Resource &self, const std::string &keyword_name) {
+             return self.exists(stdStringToQString(keyword_name));
+           },
+           py::arg("keyword_name"),
+           "Return True if the named keyword exists.")
+      .def("count",
+           [](const Isis::Resource &self, const std::string &keyword_name) {
+             return self.count(stdStringToQString(keyword_name));
+           },
+           py::arg("keyword_name"),
+           "Return the number of values held by the named keyword.")
+      .def("is_null",
+           [](const Isis::Resource &self,
+              const std::string &keyword_name,
+              int keyword_index) {
+             return self.isNull(stdStringToQString(keyword_name), keyword_index);
+           },
+           py::arg("keyword_name"), py::arg("keyword_index") = 0,
+           "Return True if the specified keyword value is null.")
+      .def("value",
+           [](const Isis::Resource &self,
+              const std::string &keyword_name,
+              int keyword_index) {
+             return qStringToStdString(
+                 self.value(stdStringToQString(keyword_name), keyword_index));
+           },
+           py::arg("keyword_name"), py::arg("keyword_index") = 0,
+           "Return the keyword value as a string.")
+      .def("value",
+           [](const Isis::Resource &self,
+              const std::string &keyword_name,
+              const std::string &default_value,
+              int keyword_index) {
+             return qStringToStdString(
+                 self.value(stdStringToQString(keyword_name),
+                            stdStringToQString(default_value),
+                            keyword_index));
+           },
+           py::arg("keyword_name"), py::arg("default_value"), py::arg("keyword_index") = 0,
+           "Return the keyword value as a string, or default_value if the keyword is absent.")
+      .def("add",
+           [](Isis::Resource &self,
+              const std::string &keyword_name,
+              const std::string &keyword_value) {
+             self.add(stdStringToQString(keyword_name),
+                      stdStringToQString(keyword_value));
+           },
+           py::arg("keyword_name"), py::arg("keyword_value"),
+           "Add a keyword name/value pair.")
+      .def("add",
+           [](Isis::Resource &self, Isis::PvlKeyword &kw) {
+             self.add(kw);
+           },
+           py::arg("keyword"),
+           "Add a PvlKeyword object.")
+      .def("append",
+           [](Isis::Resource &self,
+              const std::string &keyword_name,
+              const std::string &keyword_value) {
+             self.append(stdStringToQString(keyword_name),
+                         stdStringToQString(keyword_value));
+           },
+           py::arg("keyword_name"), py::arg("keyword_value"),
+           "Append a value to an existing keyword (creates it if absent).")
+      .def("erase",
+           [](Isis::Resource &self, const std::string &keyword_name) {
+             return self.erase(stdStringToQString(keyword_name));
+           },
+           py::arg("keyword_name"),
+           "Remove the named keyword. Returns number of keywords removed.")
+      .def("activate",
+           &Isis::Resource::activate,
+           "Mark this resource as active (not discarded).")
+      .def("is_active",
+           &Isis::Resource::isActive,
+           "Return True if this resource is active.")
+      .def("discard",
+           &Isis::Resource::discard,
+           "Mark this resource as discarded (inactive).")
+      .def("is_discarded",
+           &Isis::Resource::isDiscarded,
+           "Return True if this resource has been discarded.")
+      .def("to_pvl",
+           [](Isis::Resource &self, const std::string &pvl_name) {
+             return self.toPvl(stdStringToQString(pvl_name));
+           },
+           py::arg("pvl_name") = "Resource",
+           "Serialize this resource to a PvlObject.")
+      .def("__repr__", [](const Isis::Resource &self) {
+        return "Resource('" + qStringToStdString(self.name()) + "')";
       });
 }

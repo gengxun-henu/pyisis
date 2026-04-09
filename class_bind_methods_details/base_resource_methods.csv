@@ -1,43 +1,43 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Resource,Utility,reference/upstream_isis/src/base/objs/Resource/Resource.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,策略框架资源对象；聚合 PVL 关键字/几何/资产，且含共享数据与 QVariant 资产类型
+Resource,Utility,reference/upstream_isis/src/base/objs/Resource/Resource.h,src/base/bind_base_utility.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/base/bind_base_utility.cpp 完成 PVL/name 核心接口绑定（跳过 GisGeometry 与 QVariant asset 方法）；focused 单测在 tests/unitTest/resource_unit_test.py；smoke 已补符号
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Resource,isis_pybind.Resource,N,Python class symbol not found in current binding files
-Construction/Enum,Resource(),isis_pybind.Resource(),N,默认构造
-Construction/Enum,"Resource(const QString &name)",isis_pybind.Resource,N,按名称构造
-Construction/Enum,"Resource(const QString &name, const PvlFlatMap &profile)",isis_pybind.Resource,N,按 profile 构造；依赖 PvlFlatMap
-Construction/Enum,"Resource(const QString &name, const PvlContainer &profile)",isis_pybind.Resource,N,按 PvlContainer 构造；依赖 PvlContainer
-Construction/Enum,"Resource(const Resource &other)",isis_pybind.Resource,N,拷贝构造
-Construction/Enum,virtual ~Resource(),isis_pybind.Resource,N,析构函数
-Public API,QString name() const,isis_pybind.Resource.name,N,资源名称
-Public API,"void setName(const QString &identity)",isis_pybind.Resource.setName,N,设置资源名称
-Public API,"bool isEqual(const Resource &other) const",isis_pybind.Resource.isEqual,N,语义相等性检查
-Public API,"bool exists(const QString &keywordName) const",isis_pybind.Resource.exists,N,关键字存在性检查
-Public API,"int count(const QString &keywordName) const",isis_pybind.Resource.count,N,关键字出现次数
-Public API,"bool isNull(const QString &keywordName, const int keywordIndex = 0) const",isis_pybind.Resource.isNull,N,关键字值是否为空
-Public API,"const PvlFlatMap &keys() const",isis_pybind.Resource.keys,N,返回关键字映射引用；需处理引用生命周期
-Public API,"QString value(const QString &keywordName, const int &keywordIndex = 0) const",isis_pybind.Resource.value,N,按名取值
-Public API,"QString value(const QString &keywordName, const QString &defValue, const int &keywordIndex = 0) const",isis_pybind.Resource.value,N,带默认值重载
-Public API,"PvlKeyword keyword(const QString &keywordName) const",isis_pybind.Resource.keyword,N,返回完整关键字对象；依赖 PvlKeyword
-Public API,"void add(const QString &keywordName, const QString &keywordValue)",isis_pybind.Resource.add,N,添加键值
-Public API,"void add(const PvlKeyword &keyword)",isis_pybind.Resource.add,N,添加关键字对象
-Public API,"void add(const PvlFlatMap &keys)",isis_pybind.Resource.add,N,批量添加键值映射
-Public API,"void append(const QString &keywordName, const QString &keywordValue)",isis_pybind.Resource.append,N,追加已有关键字值
-Public API,"int erase(const QString &keywordName)",isis_pybind.Resource.erase,N,删除关键字
-Public API,"void add(GisGeometry *geom)",isis_pybind.Resource.add,N,添加几何指针；需明确所有权
-Public API,"void add(SharedGisGeometry &geom)",isis_pybind.Resource.add,N,添加共享几何对象
-Public API,bool hasGeometry() const,isis_pybind.Resource.hasGeometry,N,是否附带几何
-Public API,bool hasValidGeometry() const,isis_pybind.Resource.hasValidGeometry,N,几何有效性检查
-Public API,SharedGisGeometry geometry() const,isis_pybind.Resource.geometry,N,返回共享几何对象
-Public API,void activate(),isis_pybind.Resource.activate,N,设为激活状态
-Public API,bool isActive() const,isis_pybind.Resource.isActive,N,激活状态查询
-Public API,void discard(),isis_pybind.Resource.discard,N,标记为废弃
-Public API,bool isDiscarded() const,isis_pybind.Resource.isDiscarded,N,废弃状态查询
-Public API,"bool hasAsset(const QString &assetName) const",isis_pybind.Resource.hasAsset,N,资产存在性检查
-Public API,"void addAsset(const QString &assetName, QVariant &assetValue)",isis_pybind.Resource.addAsset,N,QVariant 资产写入；后续 pybind 需自定义类型桥接
-Public API,"QVariant asset(const QString &assetName) const",isis_pybind.Resource.asset,N,读取 QVariant 资产
-Public API,"int removeAsset(const QString &assetName)",isis_pybind.Resource.removeAsset,N,删除资产
-Public API,int clearAssets(),isis_pybind.Resource.clearAssets,N,清空资产表
-Public API,"virtual Resource *copy() const",isis_pybind.Resource.copy,N,返回裸指针副本；需 return_value_policy
-Public API,"virtual Resource *clone(const QString &name, const bool &withAssets = false) const",isis_pybind.Resource.clone,N,按名称克隆；返回裸指针
-Public API,"virtual PvlObject toPvl(const QString &pvlName = \"Resource\") const",isis_pybind.Resource.toPvl,N,导出为 PVL 对象
+Class Symbol,Resource,isis_pybind.Resource,Y,py::class_<Isis::Resource> in bind_base_utility.cpp
+Construction/Enum,Resource(),isis_pybind.Resource(),Y,默认构造；name 默认为 "Resource"
+Construction/Enum,"Resource(const QString &name)",isis_pybind.Resource(name),Y,lambda 包装 QString
+Construction/Enum,"Resource(const QString &name, const PvlFlatMap &profile)",N/A,N,跳过；PvlFlatMap 未绑定
+Construction/Enum,"Resource(const QString &name, const PvlContainer &profile)",N/A,N,跳过；与 PvlFlatMap 重载等效
+Construction/Enum,"Resource(const Resource &other)",isis_pybind.Resource(other),Y,拷贝构造
+Construction/Enum,virtual ~Resource(),isis_pybind.Resource,Y,析构由 pybind11 自动管理
+Public API,QString name() const,isis_pybind.Resource.name,Y,lambda 包装 QString
+Public API,"void setName(const QString &identity)",isis_pybind.Resource.set_name,Y,lambda 包装 QString
+Public API,"bool isEqual(const Resource &other) const",isis_pybind.Resource.is_equal,Y,直接绑定
+Public API,"bool exists(const QString &keywordName) const",isis_pybind.Resource.exists,Y,lambda 包装 QString
+Public API,"int count(const QString &keywordName) const",isis_pybind.Resource.count,Y,lambda 包装 QString
+Public API,"bool isNull(const QString &keywordName, const int keywordIndex = 0) const",isis_pybind.Resource.is_null,Y,lambda 包装 QString
+Public API,"const PvlFlatMap &keys() const",N/A,N,跳过；PvlFlatMap 未绑定
+Public API,"QString value(const QString &keywordName, const int &keywordIndex = 0) const",isis_pybind.Resource.value,Y,lambda 包装 QString
+Public API,"QString value(name, defValue, index) const",isis_pybind.Resource.value,Y,带默认值重载；lambda 包装
+Public API,"PvlKeyword keyword(const QString &keywordName) const",N/A,N,暂未暴露；后续可补
+Public API,"void add(const QString &keywordName, const QString &keywordValue)",isis_pybind.Resource.add,Y,lambda 包装 QString
+Public API,"void add(const PvlKeyword &keyword)",isis_pybind.Resource.add,Y,直接绑定
+Public API,"void add(const PvlFlatMap &keys)",N/A,N,跳过；PvlFlatMap 未绑定
+Public API,"void append(const QString &keywordName, const QString &keywordValue)",isis_pybind.Resource.append,Y,lambda 包装 QString
+Public API,"int erase(const QString &keywordName)",isis_pybind.Resource.erase,Y,lambda 包装 QString
+Public API,"void add(GisGeometry *geom)",N/A,N,跳过；GisGeometry 未绑定
+Public API,"void add(SharedGisGeometry &geom)",N/A,N,跳过；GisGeometry 未绑定
+Public API,bool hasGeometry() const,N/A,N,跳过；依赖 GisGeometry
+Public API,bool hasValidGeometry() const,N/A,N,跳过；依赖 GisGeometry
+Public API,SharedGisGeometry geometry() const,N/A,N,跳过；依赖 GisGeometry
+Public API,void activate(),isis_pybind.Resource.activate,Y,直接绑定
+Public API,bool isActive() const,isis_pybind.Resource.is_active,Y,直接绑定
+Public API,void discard(),isis_pybind.Resource.discard,Y,直接绑定
+Public API,bool isDiscarded() const,isis_pybind.Resource.is_discarded,Y,直接绑定
+Public API,"bool hasAsset(const QString &assetName) const",N/A,N,跳过；QVariant 资产系统暂不暴露
+Public API,"void addAsset(const QString &assetName, QVariant &assetValue)",N/A,N,跳过；QVariant 未绑定
+Public API,"QVariant asset(const QString &assetName) const",N/A,N,跳过；QVariant 未绑定
+Public API,"int removeAsset(const QString &assetName)",N/A,N,跳过；QVariant 未绑定
+Public API,int clearAssets(),N/A,N,跳过；QVariant 未绑定
+Public API,"virtual Resource *copy() const",N/A,N,跳过；裸指针返回需额外 lifetime 管理
+Public API,"virtual Resource *clone(const QString &name, ...) const",N/A,N,跳过；裸指针返回需额外 lifetime 管理
+Public API,"virtual PvlObject toPvl(const QString &pvlName) const",isis_pybind.Resource.to_pvl,Y,lambda 包装 QString；返回 PvlObject

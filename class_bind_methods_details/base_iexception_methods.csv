@@ -1,0 +1,17 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+IException,Utility,reference/upstream_isis/src/base/objs/IException/IException.h,src/base/bind_base_support.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/base/bind_base_support.cpp 补充 IExceptionErrorType enum 绑定；IException 本体通过 py::register_exception 以 Python 异常类暴露；focused 单测在 progress_unit_test.py 中同步覆盖
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,IException (as Python exception),isis_pybind.IException,Y,py::register_exception<Isis::IException> in bind_base_support.cpp；可作为 Python 异常捕获
+Class Symbol,IException::ErrorType,isis_pybind.IExceptionErrorType,Y,py::enum_<Isis::IException::ErrorType> added 2026-04-09
+Construction/Enum,IException(),isis_pybind.IException,Y,通过 register_exception 暴露；Python 侧作为异常类使用
+Construction/Enum,IException(ErrorType type ...),N/A,N,register_exception 不支持带参数构造；C++ 侧由运行时抛出
+Construction/Enum,ErrorType::Unknown=1,isis_pybind.IExceptionErrorType.Unknown,Y,enum value
+Construction/Enum,ErrorType::User=2,isis_pybind.IExceptionErrorType.User,Y,enum value
+Construction/Enum,ErrorType::Programmer=3,isis_pybind.IExceptionErrorType.Programmer,Y,enum value
+Construction/Enum,ErrorType::Io=4,isis_pybind.IExceptionErrorType.Io,Y,enum value
+Public API,const char* what() const,isis_pybind.IException.args[0],Y,通过 Python 异常 .args 访问
+Public API,QString toString() const,N/A,N,无 py::class_ 故不能直接调用实例方法
+Public API,void append(const IException &),N/A,N,无 py::class_ 故不能直接调用实例方法
+Public API,ErrorType errorType() const,N/A,N,无 py::class_ 故不能直接调用实例方法
+Static API,QString errorTypeToString(ErrorType),N/A,N,可在需要时通过 lambda 添加

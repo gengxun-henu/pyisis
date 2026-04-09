@@ -1,13 +1,13 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-TrackingTable,Low Level Cube I/O,reference/upstream_isis/src/base/objs/TrackingTable/TrackingTable.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,镶嵌追踪表；把 tracking band 的像素值映射回输入文件名与序列号
+TrackingTable,Low Level Cube I/O,reference/upstream_isis/src/base/objs/TrackingTable/TrackingTable.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/bind_low_level_cube_io.cpp 完成全部公开方法绑定；focused 单测追加在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,TrackingTable,isis_pybind.TrackingTable,N,Python class symbol not found in current binding files
-Construction/Enum,TrackingTable(),isis_pybind.TrackingTable(),N,默认构造
-Construction/Enum,"TrackingTable(Table table)",isis_pybind.TrackingTable,N,按已有 Table 构造
-Construction/Enum,~TrackingTable(),isis_pybind.TrackingTable,N,析构函数
-Public API,Table toTable(),isis_pybind.TrackingTable.toTable,N,转回 ISIS Table；依赖 Table 绑定
-Public API,"FileName pixelToFileName(unsigned int pixel)",isis_pybind.TrackingTable.pixelToFileName,N,像素值映射到文件名
-Public API,"unsigned int fileNameToPixel(FileName file, QString serialNumber)",isis_pybind.TrackingTable.fileNameToPixel,N,文件名+序列号映射到像素值
-Public API,"int fileNameToIndex(FileName file, QString serialNumber)",isis_pybind.TrackingTable.fileNameToIndex,N,文件名+序列号映射到记录索引
-Public API,"QString pixelToSN(unsigned int pixel)",isis_pybind.TrackingTable.pixelToSN,N,像素值映射到序列号
+Class Symbol,TrackingTable,isis_pybind.TrackingTable,Y,py::class_<Isis::TrackingTable> in bind_low_level_cube_io.cpp
+Construction/Enum,TrackingTable(),isis_pybind.TrackingTable(),Y,默认构造
+Construction/Enum,"TrackingTable(Table table)",isis_pybind.TrackingTable(table),Y,按已有 Table 构造
+Construction/Enum,~TrackingTable(),isis_pybind.TrackingTable,Y,析构由 pybind11 自动管理
+Public API,Table toTable(),isis_pybind.TrackingTable.to_table,Y,序列化回 ISIS Table
+Public API,"FileName pixelToFileName(unsigned int pixel)",isis_pybind.TrackingTable.pixel_to_file_name,Y,pixel 越界时抛 IException
+Public API,"unsigned int fileNameToPixel(FileName file, QString serialNumber)",isis_pybind.TrackingTable.file_name_to_pixel,Y,lambda 包装 QString 转换
+Public API,"int fileNameToIndex(FileName file, QString serialNumber)",isis_pybind.TrackingTable.file_name_to_index,Y,lambda 包装 QString 转换
+Public API,"QString pixelToSN(unsigned int pixel)",isis_pybind.TrackingTable.pixel_to_sn,Y,lambda 包装 QString 转换

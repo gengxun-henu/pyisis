@@ -96,6 +96,10 @@ def temporary_raw_input_file(name="example.raw"):
 
 def test_basic_symbols_present():
     assert hasattr(ip, "Progress")
+    assert hasattr(ip, "IExceptionErrorType")
+    assert hasattr(ip, "SurfaceModel")
+    assert hasattr(ip, "TrackingTable")
+    assert hasattr(ip, "Resource")
     assert hasattr(ip, "Calculator")
     assert hasattr(ip, "Centroid")
     assert hasattr(ip, "Affine")

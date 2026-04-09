@@ -886,3 +886,49 @@
 - Validation status:
   - `python -m unittest discover -s tests/unitTest -p 'anisotropic1_unit_test.py'` fails with `ModuleNotFoundError: isis_pybind` because the extension is not built in this sandbox.
   - `cmake -S . -B build -DCMAKE_BUILD_TYPE=Release` fails early: `pybind11` package config not found (and ISIS toolchain not configured), so extension build was not possible here.
+
+## 2026-04-09
+
+### Campaign: pybind rollout batch 1 (5 classes)
+
+Queue document created: `pybind_rollout_classes_20260409.md`
+
+#### Class 1: Progress (已转换)
+- Added `py::class_<Isis::Progress>` binding in `src/base/bind_base_support.cpp`.
+- Exposed: constructor, `set_text/text`, `set_maximum_steps`, `add_steps`, `check_status`, `disable_automatic_display`, `maximum_steps`, `current_step`, `__repr__`.
+- Created `tests/unitTest/progress_unit_test.py` with 10 focused unit tests.
+- Exported `Progress` (existing) and `IExceptionErrorType` in `python/isis_pybind/__init__.py`.
+- Updated smoke: `assert hasattr(ip, "Progress")` already existed; `IExceptionErrorType` added.
+- Tracking: `class_bind_methods_details/base_progress_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` all updated.
+
+#### Class 2: IException (已转换)
+- Added `py::enum_<Isis::IException::ErrorType>(m, "IExceptionErrorType")` with Unknown/User/Programmer/Io.
+- `IException` already registered as Python exception via `py::register_exception` (existing). No full py::class_ possible for the same type.
+- Created `class_bind_methods_details/base_iexception_methods.csv`.
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+#### Class 3: SurfaceModel (已转换)
+- Added `py::class_<Isis::SurfaceModel>` binding in `src/base/bind_base_math.cpp`.
+- Exposed: constructor, `add_triplet`, `add_triplets` (vector overload), `solve`, `evaluate`, `min_max` (returns (status, x, y) tuple), `__repr__`.
+- Added `SurfaceModelUnitTest` class to `tests/unitTest/math_unit_test.py` with 5 focused tests.
+- Exported `SurfaceModel` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_surface_model_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+#### Class 4: TrackingTable (已转换)
+- Added `py::class_<Isis::TrackingTable>` binding in `src/bind_low_level_cube_io.cpp`.
+- Exposed: default constructor, `TrackingTable(Table)`, `to_table`, `pixel_to_file_name`, `file_name_to_pixel`, `file_name_to_index`, `pixel_to_sn`, `__repr__`.
+- Added `TrackingTableUnitTest` class to `tests/unitTest/low_level_cube_io_unit_test.py` with 7 focused tests.
+- Exported `TrackingTable` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_tracking_table_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+#### Class 5: Resource (已转换, Partial)
+- Added `py::class_<Isis::Resource>` binding in `src/base/bind_base_utility.cpp`.
+- Exposed: constructors (default, name, copy), `name/set_name`, `is_equal`, `exists/count/is_null`, `value` (2 overloads), `add` (name+value, PvlKeyword), `append`, `erase`, `activate/is_active/discard/is_discarded`, `to_pvl`, `__repr__`.
+- Skipped: GisGeometry add/has/geometry methods, PvlFlatMap constructors/add, QVariant asset methods, copy()/clone() (bare pointer returns).
+- Created `tests/unitTest/resource_unit_test.py` with 15 focused unit tests.
+- Exported `Resource` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_resource_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Validation status
+- Build environment not available in sandbox; requires CI/asp360_new interpreter.
+- All bindings reviewed for correctness against upstream `.h` and `.cpp`.

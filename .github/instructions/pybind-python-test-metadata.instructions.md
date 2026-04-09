@@ -32,6 +32,7 @@ Recommended pattern:
 - `Created: 2026-03-26`
 - `Last Modified: 2026-03-26`
 - `Updated: 2026-03-26  Geng Xun added focused regression coverage for Cube construction and pre-create setters.`
+- `Updated: 2026-04-09  Geng Xun fixed follow-up geometry assertions to preserve the intended API contract.`
 - `"""`
 
 ## Updating existing test files
@@ -41,8 +42,9 @@ Recommended pattern:
   - adding important new test coverage
   - changing expectations because the binding surface changed
   - fixing an actual test bug or environment-handling bug
-- When you update `Last Modified:` for a meaningful test change, also add or refresh one short top-of-file update note summarizing the change in plain language.
-- Keep the note short and coverage-focused; avoid turning the module docstring into a changelog.
+- When you update `Last Modified:` for a meaningful test change, also append one short top-of-file update note summarizing the change in plain language.
+- Preserve earlier meaningful `Updated:` lines instead of replacing them with the newest note.
+- Keep each note short and coverage-focused; allow a compact running history, but avoid turning the module docstring into a long-form changelog.
 - Do **not** update metadata for trivial formatting-only edits.
 
 ## When metadata is missing

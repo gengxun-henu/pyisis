@@ -3,8 +3,8 @@ Unit tests for ISIS geometry helper bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-08
-Updated: 2026-04-08  Geng Xun added Intercept constructor coverage for manual geometry inputs
+Last Modified: 2026-04-09
+Updated: 2026-04-09  Geng Xun fixed Intercept SurfacePoint regression expectations to match NAIF kilometer coordinates
 """
 
 import math
@@ -140,9 +140,14 @@ class GeometryUnitTest(unittest.TestCase):
         self.assertEqual(intercept.look_direction_ray(), [0.0, 0.0, -1.0])
 
         location = intercept.location().to_naif_array()
-        self.assertAlmostEqual(location[0], 1.0, places=8)
-        self.assertAlmostEqual(location[1], 2.0, places=8)
-        self.assertAlmostEqual(location[2], 3.0, places=8)
+        self.assertAlmostEqual(location[0], 0.001, places=8)
+        self.assertAlmostEqual(location[1], 0.002, places=8)
+        self.assertAlmostEqual(location[2], 0.003, places=8)
+
+        point = intercept.location()
+        self.assertAlmostEqual(point.get_x().meters(), 1.0, places=8)
+        self.assertAlmostEqual(point.get_y().meters(), 2.0, places=8)
+        self.assertAlmostEqual(point.get_z().meters(), 3.0, places=8)
 
         shape = intercept.shape()
         self.assertIsNotNone(shape)

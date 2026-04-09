@@ -7,6 +7,7 @@ Updated: 2026-04-08  Geng Xun added focused low-level Cube I/O regression covera
 Updated: 2026-04-09  Geng Xun added CubeAttributeInput/Output and LabelAttachment focused tests.
 Updated: 2026-04-09  Geng Xun added TrackingTable focused unit tests.
 Updated: 2026-04-09  Geng Xun aligned TrackingTable index tests with upstream behavior where missing entries are inserted and assigned a new index.
+Updated: 2026-04-09  Geng Xun added Blobber focused tests with self-contained table-backed cube fixtures.
 """
 
 import unittest
@@ -15,6 +16,39 @@ from _unit_test_support import ip, temporary_directory
 
 
 class LowLevelCubeIoUnitTest(unittest.TestCase):
+    def make_blobber_cube(self, name="blobber_fixture.cub"):
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        cube_path = temp_dir / name
+        cube = ip.Cube()
+        cube.set_dimensions(2, 2, 1)
+        cube.set_pixel_type(ip.PixelType.Real)
+        cube.create(str(cube_path))
+        self.addCleanup(cube.close)
+
+        field = ip.TableField("DarkPixels", ip.TableField.Type.Double, 3)
+        field.set_value([1.0, 2.0, 3.0])
+
+        record_template = ip.TableRecord()
+        record_template.add_field(field)
+
+        table = ip.Table("HiRISE Calibration Ancillary", record_template)
+        first = ip.TableRecord()
+        first_field = ip.TableField("DarkPixels", ip.TableField.Type.Double, 3)
+        first_field.set_value([1.0, 2.0, 3.0])
+        first.add_field(first_field)
+        second = ip.TableRecord()
+        second_field = ip.TableField("DarkPixels", ip.TableField.Type.Double, 3)
+        second_field.set_value([10.0, 20.0, 30.0])
+        second.add_field(second_field)
+
+        table.add_record(first)
+        table.add_record(second)
+        cube.write(table)
+        return cube, cube_path
+
     def test_label_attachment_helpers_round_trip(self):
         self.assertEqual(ip.label_attachment_name(ip.LabelAttachment.AttachedLabel), "Attached")
         self.assertEqual(
@@ -596,6 +630,57 @@ class LowLevelCubeIoUnitTest(unittest.TestCase):
 
         self.assertFalse(ip.is_blob(ip.PvlObject("NotABlob")))
         self.assertTrue(ip.is_blob(ip.PvlObject("TABLE")))
+
+    def test_blobber_loads_table_backed_cube_and_reports_metadata(self):
+        cube, cube_path = self.make_blobber_cube()
+
+        blobber = ip.Blobber(cube, "HiRISE Calibration Ancillary", "DarkPixels", "BlobberFixture")
+        self.assertEqual(blobber.get_name(), "BlobberFixture")
+        self.assertEqual(blobber.get_blob_name(), "HiRISE Calibration Ancillary")
+        self.assertEqual(blobber.get_field_name(), "DarkPixels")
+        self.assertEqual(blobber.lines(), 2)
+        self.assertEqual(blobber.samples(), 3)
+        self.assertEqual(blobber.size(), 6)
+        self.assertEqual(blobber.row(0), [1.0, 2.0, 3.0])
+        self.assertEqual(blobber[1], [10.0, 20.0, 30.0])
+        self.assertEqual(blobber[(1, 2)], 30.0)
+        self.assertEqual(blobber.value(1, 1), 20.0)
+        self.assertIn("Blobber(name='BlobberFixture'", repr(blobber))
+
+        reloaded = ip.Blobber("HiRISE Calibration Ancillary", "DarkPixels", "ReloadedBlobber")
+        reloaded.load(cube)
+        self.assertEqual(reloaded.row(1), [10.0, 20.0, 30.0])
+
+        cube.close()
+
+        by_name = ip.Blobber("HiRISE Calibration Ancillary", "DarkPixels")
+        by_name.load(str(cube_path))
+        self.assertEqual(by_name[(0, 0)], 1.0)
+
+        reopened = ip.Cube(ip.FileName(str(cube_path)), "r")
+        self.addCleanup(reopened.close)
+        self.assertIsInstance(reopened.read_table("HiRISE Calibration Ancillary"), ip.Table)
+
+    def test_blobber_copy_and_deepcopy_follow_upstream_sharing_rules(self):
+        cube, _ = self.make_blobber_cube(name="blobber_copy.cub")
+        original = ip.Blobber(cube, "HiRISE Calibration Ancillary", "DarkPixels", "OriginalBlobber")
+
+        shallow = ip.Blobber(original)
+        self.assertEqual(shallow[(1, 1)], 20.0)
+        shallow[(1, 1)] = 25.0
+        self.assertEqual(original[(1, 1)], 25.0)
+
+        deep = original.deepcopy()
+        deep.set_name("DeepBlobber")
+        deep[(1, 1)] = 99.0
+        self.assertEqual(deep.get_name(), "DeepBlobber")
+        self.assertEqual(original[(1, 1)], 25.0)
+        self.assertEqual(deep[(1, 1)], 99.0)
+
+        py_deep = original.__deepcopy__({})
+        py_deep[(0, 0)] = -1.0
+        self.assertEqual(original[(0, 0)], 1.0)
+        self.assertEqual(py_deep[(0, 0)], -1.0)
 
     def test_boxcar_manager_construction(self):
         """Test BoxcarManager construction with various boxcar sizes"""

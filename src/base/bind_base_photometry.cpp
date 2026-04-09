@@ -4,14 +4,16 @@
  *   - isis/src/base/objs/PhotoModelFactory/PhotoModelFactory.h
  *   - isis/src/base/objs/AtmosModel/AtmosModel.h
  *   - isis/src/base/objs/AtmosModelFactory/AtmosModelFactory.h
+ *   - isis/src/base/objs/AtmosModel/NumericalAtmosApprox.h
  *   - isis/src/base/objs/NormModel/NormModel.h
  *   - isis/src/base/objs/NormModelFactory/NormModelFactory.h
  *   - isis/src/base/objs/AlbedoAtm/AlbedoAtm.h
- * Source classes: PhotoModel, PhotoModelFactory, AtmosModel, AtmosModelFactory, NormModel, NormModelFactory, AlbedoAtm
+ * Source classes: PhotoModel, PhotoModelFactory, AtmosModel, AtmosModelFactory, NumericalAtmosApprox, NormModel, NormModelFactory, AlbedoAtm
  * Source header author(s): PhotoModel/AtmosModel/NormModel/AlbedoAtm class headers cite Randy Kirk; Factory headers cite Janet Barrett
  * Binding author: Geng Xun
  * Created: 2026-04-04
  * Updated: 2026-04-09  Geng Xun expanded photometry base APIs and added Hapke, ShadeAtm, and TopoAtm for the rollout queue
+ * Updated: 2026-04-09  Geng Xun added NumericalAtmosApprox numerical integration bindings for the third rollout batch.
  *
  * Purpose: Expose photometric, atmospheric, and normalization model bindings including factories and concrete implementations.
  */
@@ -34,6 +36,8 @@
 #include "HapkeAtm2.h"
 #include "Isotropic1.h"
 #include "Isotropic2.h"
+#include "NumericalAtmosApprox.h"
+#include "NumericalApproximation.h"
 #include "NormModel.h"
 #include "NormModelFactory.h"
 #include "PhotoModel.h"
@@ -502,6 +506,61 @@ void bind_base_photometry(py::module_ &m) {
       .def("__repr__",
                           [](const Isis::AtmosModelFactory &) -> std::string {
              return "AtmosModelFactory()";
+           });
+
+  py::class_<Isis::NumericalAtmosApprox> numericalAtmosApprox(m, "NumericalAtmosApprox");
+
+  py::enum_<Isis::NumericalApproximation::InterpType>(numericalAtmosApprox, "InterpType")
+      .value("Linear", Isis::NumericalApproximation::InterpType::Linear)
+      .value("Polynomial", Isis::NumericalApproximation::InterpType::Polynomial)
+      .value("PolynomialNeville", Isis::NumericalApproximation::InterpType::PolynomialNeville)
+      .value("CubicNatural", Isis::NumericalApproximation::InterpType::CubicNatural)
+      .value("CubicClamped", Isis::NumericalApproximation::InterpType::CubicClamped)
+      .value("CubicNatPeriodic", Isis::NumericalApproximation::InterpType::CubicNatPeriodic)
+      .value("CubicNeighborhood", Isis::NumericalApproximation::InterpType::CubicNeighborhood)
+      .value("CubicHermite", Isis::NumericalApproximation::InterpType::CubicHermite)
+      .value("Akima", Isis::NumericalApproximation::InterpType::Akima)
+      .value("AkimaPeriodic", Isis::NumericalApproximation::InterpType::AkimaPeriodic)
+      .export_values();
+
+  py::enum_<Isis::NumericalAtmosApprox::IntegFunc>(numericalAtmosApprox, "IntegFunc")
+      .value("OuterFunction", Isis::NumericalAtmosApprox::IntegFunc::OuterFunction)
+      .value("InnerFunction", Isis::NumericalAtmosApprox::IntegFunc::InnerFunction)
+      .export_values();
+
+  numericalAtmosApprox
+      .def(py::init<const Isis::NumericalApproximation::InterpType &>(),
+           py::arg("interp_type") = Isis::NumericalApproximation::InterpType::CubicNatural,
+           "Construct a NumericalAtmosApprox helper with the chosen interpolation mode.")
+      .def("rombergs_method",
+           &Isis::NumericalAtmosApprox::RombergsMethod,
+           py::arg("atmos_model"),
+           py::arg("sub_function"),
+           py::arg("a"),
+           py::arg("b"),
+           "Integrate the selected atmospheric helper function over the interval [a, b] using Romberg integration.")
+      .def("refine_extended_trap",
+           &Isis::NumericalAtmosApprox::RefineExtendedTrap,
+           py::arg("atmos_model"),
+           py::arg("sub_function"),
+           py::arg("a"),
+           py::arg("b"),
+           py::arg("previous_sum"),
+           py::arg("iteration"),
+           "Perform one refinement step of the extended trapezoidal integration rule for the selected atmospheric helper function.")
+      .def_static("outr_func2_bint",
+                  &Isis::NumericalAtmosApprox::OutrFunc2Bint,
+                  py::arg("atmos_model"),
+                  py::arg("phi"),
+                  "Evaluate the outer atmospheric integration helper at the given azimuth angle.")
+      .def_static("inr_func2_bint",
+                  &Isis::NumericalAtmosApprox::InrFunc2Bint,
+                  py::arg("atmos_model"),
+                  py::arg("mu"),
+                  "Evaluate the inner atmospheric integration helper at the given cosine emission angle.")
+      .def("__repr__",
+           [](const Isis::NumericalAtmosApprox &) -> std::string {
+             return "NumericalAtmosApprox()";
            });
 
   // Added: 2026-04-06 - NormModelFactory binding

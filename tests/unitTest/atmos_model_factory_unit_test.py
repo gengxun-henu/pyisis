@@ -5,6 +5,7 @@ Author: Geng Xun
 Created: 2026-04-04
 Last Modified: 2026-04-09
 Updated: 2026-04-09  Geng Xun added Hapke, ShadeAtm, TopoAtm, and expanded photometry base-class regression coverage for the rollout queue.
+Updated: 2026-04-09  Geng Xun added NumericalAtmosApprox integration regression coverage for the third rollout batch.
 """
 import unittest
 
@@ -510,6 +511,141 @@ class ExpandedAtmosModelBindingUnitTest(unittest.TestCase):
 
         atmos_model.generate_hahg_tables_shadow()
         self.assertAlmostEqual(atmos_model.atmos_hahgsb(), -0.074853393005592, places=12)
+
+
+class NumericalAtmosApproxUnitTest(unittest.TestCase):
+    """Regression coverage for NumericalAtmosApprox integration helpers. Added: 2026-04-09."""
+
+    @staticmethod
+    def _make_anisotropic1_pvl():
+        return AtmosModelFactoryUnitTest._make_photo_atmos_pvl(
+            photo_name="Lambert",
+            atmos_name="Anisotropic1",
+            extra_atmos_keywords={
+                "Bha": "0.85",
+                "Tau": "0.28",
+                "Wha": "0.95",
+                "Hga": "0.68",
+                "Tauref": "0.0",
+                "Hnorm": "0.003",
+            },
+        )
+
+    def _make_atmos_model(self):
+        pvl = self._make_anisotropic1_pvl()
+        photo_model = ip.PhotoModelFactory.create(pvl)
+        atmos_model = ip.AtmosModelFactory.create(pvl, photo_model)
+        return pvl, photo_model, atmos_model
+
+    def test_symbol_enums_and_constructor(self):
+        approx = ip.NumericalAtmosApprox()
+        self.assertIn("NumericalAtmosApprox", repr(approx))
+
+        spline = ip.NumericalAtmosApprox(ip.NumericalAtmosApprox.InterpType.PolynomialNeville)
+        self.assertIsInstance(spline, ip.NumericalAtmosApprox)
+        self.assertEqual(
+            ip.NumericalAtmosApprox.IntegFunc.OuterFunction.name,
+            "OuterFunction",
+        )
+        self.assertEqual(
+            ip.NumericalAtmosApprox.IntegFunc.InnerFunction.name,
+            "InnerFunction",
+        )
+
+    def test_inner_function_invalid_switch_raises(self):
+        _, _, atmos_model = self._make_atmos_model()
+        with self.assertRaises(ip.IException):
+            atmos_model.set_atmos_atm_switch(99)
+
+    def test_integration_helpers_match_upstream_regression_values(self):
+        _, _, atmos_model = self._make_atmos_model()
+        approx = ip.NumericalAtmosApprox(ip.NumericalAtmosApprox.InterpType.PolynomialNeville)
+
+        atmos_model.set_atmos_atm_switch(1)
+        atmos_model.set_atmos_inc(0.0)
+        atmos_model.set_atmos_phi(0.0)
+        atmos_model.set_atmos_hga(0.68)
+        atmos_model.set_atmos_tau(0.28)
+
+        self.assertAlmostEqual(
+            ip.NumericalAtmosApprox.inr_func2_bint(atmos_model, 1.0e-6),
+            -5.260328797107054e-07,
+            places=12,
+        )
+        self.assertAlmostEqual(
+            ip.NumericalAtmosApprox.outr_func2_bint(atmos_model, 0.0),
+            0.1953435404362085,
+            places=12,
+        )
+        self.assertAlmostEqual(
+            approx.refine_extended_trap(
+                atmos_model,
+                ip.NumericalAtmosApprox.IntegFunc.OuterFunction,
+                0.0,
+                180.0,
+                0.0,
+                1,
+            ),
+            35.16183727851753,
+            places=12,
+        )
+        self.assertAlmostEqual(
+            approx.rombergs_method(
+                atmos_model,
+                ip.NumericalAtmosApprox.IntegFunc.OuterFunction,
+                0.0,
+                180.0,
+            ),
+            35.16183727851753,
+            places=12,
+        )
+
+        atmos_model.set_atmos_atm_switch(2)
+        atmos_model.set_atmos_inc(3.0)
+        atmos_model.set_atmos_phi(78.75)
+        atmos_model.set_atmos_hga(0.68)
+        atmos_model.set_atmos_tau(0.28)
+
+        self.assertAlmostEqual(
+            ip.NumericalAtmosApprox.inr_func2_bint(atmos_model, 0.75000025),
+            -0.17742641067474454,
+            places=12,
+        )
+        self.assertAlmostEqual(
+            ip.NumericalAtmosApprox.outr_func2_bint(atmos_model, 78.75),
+            -0.1405840868479181,
+            places=12,
+        )
+
+        running_sum = 0.0
+        expected_refinements = (
+            -25.255292326051478,
+            -25.259588463295287,
+            -25.259590275445944,
+            -25.25959027544632,
+            -25.25959027544632,
+        )
+        for iteration, expected in enumerate(expected_refinements, start=1):
+            running_sum = approx.refine_extended_trap(
+                atmos_model,
+                ip.NumericalAtmosApprox.IntegFunc.OuterFunction,
+                0.0,
+                180.0,
+                running_sum,
+                iteration,
+            )
+            self.assertAlmostEqual(running_sum, expected, places=12)
+
+        self.assertAlmostEqual(
+            approx.rombergs_method(
+                atmos_model,
+                ip.NumericalAtmosApprox.IntegFunc.OuterFunction,
+                0.0,
+                180.0,
+            ),
+            -25.259590270353364,
+            places=12,
+        )
 
 
 class ConcreteNormModelBindingUnitTest(unittest.TestCase):

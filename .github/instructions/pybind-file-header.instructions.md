@@ -58,7 +58,7 @@ For upstream mirrored sources, prefer repository-relative paths under `reference
 
 - For a brand-new file, set both `Created:` and `Updated:` to the current date.
 - For edits to an existing file, preserve the original `Created:` value when present and refresh `Updated:` only when appropriate.
-- When a meaningful later edit expands the binding surface, add or refresh a short human-readable update note close to the header.
+- When a meaningful later edit expands the binding surface, append a short human-readable `Updated:` note close to the header and preserve earlier meaningful update lines.
 
 ## Style guidance
 
@@ -67,6 +67,7 @@ For upstream mirrored sources, prefer repository-relative paths under `reference
 - Put copyright and SPDX first, then a blank line, then the source/binding metadata.
 - For multi-class files, render `Source ISIS headers:` as a bullet list using `// - ...` lines.
 - Prefer `reference/upstream_isis/...` repository-relative paths over `isis/src/...`, absolute paths, or machine-specific paths.
+- Preserve a compact sequence of meaningful `Updated:` lines when later work lands; do not collapse the history back to only the newest entry.
 - Keep issue text or automation handoff notes as source content only; render the actual C++ file header using the canonical format below instead of pasting issue prose verbatim.
 
 ## Preferred fallback text

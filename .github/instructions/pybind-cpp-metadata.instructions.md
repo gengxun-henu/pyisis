@@ -28,7 +28,8 @@ Shared author, date, and short update-summary defaults live in `pybind-metadata-
   - fixing a real binding bug or import/runtime issue
   - materially changing file-level documentation
 - Do **not** churn metadata for whitespace-only edits, formatting-only edits, or trivial comment cleanup.
-- When you refresh `Updated:` for a meaningful binding change, keep the adjacent summary as a compact single-line C++ comment near the file header.
+- When you refresh `Updated:` for a meaningful binding change, append a new compact single-line C++ summary near the file header instead of replacing earlier meaningful update lines.
+- Preserve prior `Updated:` history entries unless they are actually wrong.
 - Preserve the existing comment style of the file. If the file already uses `Updated:` metadata in a header block, extend that block instead of inventing a second style elsewhere.
 
 ## When metadata is missing
@@ -56,6 +57,7 @@ Example:
 - Match the existing indentation and comment style of the file.
 - Keep metadata compact and near the top of the file unless nearby files use another established pattern.
 - If both `Updated:` and `Last Modified:` styles appear in the repository, preserve the style already used by the file you are editing instead of mixing both.
+- Prefer a compact running history of meaningful `Updated:` entries over overwriting the previous note and losing intermediate binding progress.
 
 ## Non-goals
 

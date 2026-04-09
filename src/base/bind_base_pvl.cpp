@@ -1,7 +1,9 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-03-30  Geng Xun expanded PVL bindings with PvlSequence support alongside core keyword, container, group, object, and Pvl classes
-// Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, and PvlSequence
+// Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer bindings for PVL stream tokenization.
+// Updated: 2026-04-09  Geng Xun added PvlFormat and PvlTranslationTable bindings.
+// Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, and PvlTranslationTable
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
@@ -20,10 +22,14 @@
 
 #include "Pvl.h"
 #include "PvlContainer.h"
+#include "PvlFormat.h"
 #include "PvlGroup.h"
 #include "PvlKeyword.h"
 #include "PvlObject.h"
 #include "PvlSequence.h"
+#include "PvlToken.h"
+#include "PvlTokenizer.h"
+#include "PvlTranslationTable.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -384,5 +390,276 @@ void bind_base_pvl(py::module_ &m) {
       .def("__repr__",
            [](const Isis::PvlSequence &self) {
              return "PvlSequence(size=" + std::to_string(self.Size()) + ")";
+           });
+
+  // Added: 2026-04-09 - PvlToken binding
+  py::class_<Isis::PvlToken>(m, "PvlToken")
+      .def(py::init<>(),
+           "Construct a PvlToken with an empty key.")
+      .def(py::init([](const std::string &key) {
+             return Isis::PvlToken(stdStringToQString(key));
+           }),
+           py::arg("key"),
+           "Construct a PvlToken with the given key.")
+      .def("set_key",
+           [](Isis::PvlToken &self, const std::string &key) {
+             self.setKey(stdStringToQString(key));
+           },
+           py::arg("key"),
+           "Set the keyword name for this token.")
+      .def("key",
+           [](const Isis::PvlToken &self) {
+             return qStringToStdString(self.key());
+           },
+           "Return the keyword name.")
+      .def("key_upper",
+           [](const Isis::PvlToken &self) {
+             return qStringToStdString(self.keyUpper());
+           },
+           "Return the keyword name in uppercase.")
+      .def("add_value",
+           [](Isis::PvlToken &self, const std::string &val) {
+             self.addValue(stdStringToQString(val));
+           },
+           py::arg("value"),
+           "Append a value to the token's value list.")
+      .def("value",
+           [](const Isis::PvlToken &self, int index) {
+             return qStringToStdString(self.value(index));
+           },
+           py::arg("index") = 0,
+           "Return the value at the given index (default 0).")
+      .def("value_upper",
+           [](const Isis::PvlToken &self, int index) {
+             return qStringToStdString(self.valueUpper(index));
+           },
+           py::arg("index") = 0,
+           "Return the value at the given index in uppercase.")
+      .def("value_size",
+           &Isis::PvlToken::valueSize,
+           "Return the number of values stored in this token.")
+      .def("value_clear",
+           &Isis::PvlToken::valueClear,
+           "Remove all values from this token.")
+      .def("value_vector",
+           [](const Isis::PvlToken &self) {
+             std::vector<std::string> result;
+             const auto &vec = self.valueVector();
+             result.reserve(vec.size());
+             for (const auto &v : vec) {
+               result.push_back(qStringToStdString(v));
+             }
+             return result;
+           },
+           "Return a copy of all values as a list of strings.")
+      .def("__repr__",
+           [](const Isis::PvlToken &self) {
+             return "PvlToken(key='" + qStringToStdString(self.key()) +
+                    "', values=" + std::to_string(self.valueSize()) + ")";
+           });
+
+  // Added: 2026-04-09 - PvlTokenizer binding
+  py::class_<Isis::PvlTokenizer>(m, "PvlTokenizer")
+      .def(py::init<>(),
+           "Construct an empty PvlTokenizer.")
+      .def("load",
+           [](Isis::PvlTokenizer &self, const std::string &pvl_text,
+              const std::string &terminator) {
+             std::istringstream iss(pvl_text);
+             self.Load(iss, stdStringToQString(terminator));
+           },
+           py::arg("pvl_text"),
+           py::arg("terminator") = "END",
+           "Parse PVL text from a string. Tokens accumulate until the terminator keyword is found.")
+      .def("clear",
+           &Isis::PvlTokenizer::Clear,
+           "Clear all parsed tokens.")
+      .def("get_token_list",
+           [](Isis::PvlTokenizer &self) {
+             std::vector<Isis::PvlToken> copy = self.GetTokenList();
+             return copy;
+           },
+           "Return a copy of the current token list.")
+      .def("__repr__",
+           [](Isis::PvlTokenizer &self) {
+             return "PvlTokenizer(tokens=" +
+                    std::to_string(self.GetTokenList().size()) + ")";
+           });
+
+  // Added: 2026-04-09 - KeywordType enum and PvlFormat binding
+  py::enum_<Isis::KeywordType>(m, "KeywordType")
+      .value("NoTypeKeyword",  Isis::NoTypeKeyword)
+      .value("StringKeyword",  Isis::StringKeyword)
+      .value("BoolKeyword",    Isis::BoolKeyword)
+      .value("IntegerKeyword", Isis::IntegerKeyword)
+      .value("RealKeyword",    Isis::RealKeyword)
+      .value("OctalKeyword",   Isis::OctalKeyword)
+      .value("HexKeyword",     Isis::HexKeyword)
+      .value("BinaryKeyword",  Isis::BinaryKeyword)
+      .value("EnumKeyword",    Isis::EnumKeyword)
+      .export_values();
+
+  py::class_<Isis::PvlFormat>(m, "PvlFormat")
+      .def(py::init<>(),
+           "Construct a default PvlFormat (no keyword-type map).")
+      .def(py::init([](const std::string &file) {
+             return Isis::PvlFormat(stdStringToQString(file));
+           }),
+           py::arg("file"),
+           "Construct a PvlFormat and load a keyword-type map from file.")
+      .def(py::init([](Isis::Pvl &keymap) {
+             return Isis::PvlFormat(keymap);
+           }),
+           py::arg("keymap"),
+           "Construct a PvlFormat and load a keyword-type map from a Pvl object.")
+      .def("add",
+           [](Isis::PvlFormat &self, const std::string &file) {
+             self.add(stdStringToQString(file));
+           },
+           py::arg("file"),
+           "Add keyword-type mappings from a file.")
+      .def("add",
+           [](Isis::PvlFormat &self, Isis::Pvl &keymap) {
+             self.add(keymap);
+           },
+           py::arg("keymap"),
+           "Add keyword-type mappings from a Pvl object.")
+      .def("set_char_limit",
+           [](Isis::PvlFormat &self, unsigned int limit) {
+             self.setCharLimit(limit);
+           },
+           py::arg("limit"),
+           "Set the maximum character limit per line for formatted output.")
+      .def("char_limit",
+           &Isis::PvlFormat::charLimit,
+           "Return the current character limit per line.")
+      .def("format_value",
+           [](Isis::PvlFormat &self, const Isis::PvlKeyword &keyword, int value_index) {
+             return qStringToStdString(self.formatValue(keyword, value_index));
+           },
+           py::arg("keyword"), py::arg("value_index") = 0,
+           "Format the value of a keyword at the given index.")
+      .def("format_name",
+           [](Isis::PvlFormat &self, const Isis::PvlKeyword &keyword) {
+             return qStringToStdString(self.formatName(keyword));
+           },
+           py::arg("keyword"),
+           "Format the name of a keyword.")
+      .def("format_eol",
+           [](Isis::PvlFormat &self) {
+             return qStringToStdString(self.formatEOL());
+           },
+           "Return the end-of-line string used by this format (default: newline).")
+      .def("type",
+           [](Isis::PvlFormat &self, const Isis::PvlKeyword &keyword) {
+             return self.type(keyword);
+           },
+           py::arg("keyword"),
+           "Return the KeywordType for the given keyword name.")
+      .def("accuracy",
+           [](Isis::PvlFormat &self, const Isis::PvlKeyword &keyword) {
+             return self.accuracy(keyword);
+           },
+           py::arg("keyword"),
+           "Return the formatting accuracy (decimal places) for the given keyword.")
+      .def("add_quotes",
+           [](Isis::PvlFormat &self, const std::string &value) {
+             return qStringToStdString(self.addQuotes(stdStringToQString(value)));
+           },
+           py::arg("value"),
+           "Wrap the given string in quotes if needed by this format.")
+      .def("is_single_unit",
+           [](Isis::PvlFormat &self, const Isis::PvlKeyword &keyword) {
+             return self.isSingleUnit(keyword);
+           },
+           py::arg("keyword"),
+           "Return True if all values in the keyword share the same unit.")
+      .def("__repr__",
+           [](const Isis::PvlFormat &) {
+             return "PvlFormat()";
+           });
+
+  // Added: 2026-04-09 - PvlTranslationTable binding
+  py::class_<Isis::PvlTranslationTable>(m, "PvlTranslationTable")
+      .def(py::init([](const std::string &table_text) {
+             std::istringstream iss(table_text);
+             return Isis::PvlTranslationTable(iss);
+           }),
+           py::arg("table_text"),
+           "Construct a PvlTranslationTable from a PVL translation string.")
+      .def("add_table",
+           [](Isis::PvlTranslationTable &self, const std::string &text_or_file) {
+             // Try as a PVL text first (if it contains '=' or Group), else treat as file
+             if (text_or_file.find('=') != std::string::npos ||
+                 text_or_file.find("Group") != std::string::npos) {
+               std::istringstream iss(text_or_file);
+               self.AddTable(iss);
+             } else {
+               self.AddTable(stdStringToQString(text_or_file));
+             }
+           },
+           py::arg("text_or_file"),
+           "Append more translation entries from a PVL string (contains '=' or 'Group') or from a file path.")
+      .def("input_group",
+           [](const Isis::PvlTranslationTable &self, const std::string &group_name, int inst) {
+             return self.InputGroup(stdStringToQString(group_name), inst);
+           },
+           py::arg("group_name"), py::arg("inst") = 0,
+           "Return the PvlKeyword describing the input position for the translation group.")
+      .def("input_keyword_name",
+           [](const Isis::PvlTranslationTable &self, const std::string &group_name) {
+             return qStringToStdString(self.InputKeywordName(stdStringToQString(group_name)));
+           },
+           py::arg("group_name"),
+           "Return the input keyword name for the given translation group.")
+      .def("input_default",
+           [](const Isis::PvlTranslationTable &self, const std::string &group_name) {
+             return qStringToStdString(self.InputDefault(stdStringToQString(group_name)));
+           },
+           py::arg("group_name"),
+           "Return the default input value for the given translation group.")
+      .def("translate",
+           [](const Isis::PvlTranslationTable &self,
+              const std::string &group_name,
+              const std::string &input_key_value) {
+             return qStringToStdString(
+                 self.Translate(stdStringToQString(group_name),
+                                stdStringToQString(input_key_value)));
+           },
+           py::arg("group_name"), py::arg("input_key_value") = "",
+           "Translate the given input value using the named translation group.")
+      .def("has_input_default",
+           [](Isis::PvlTranslationTable &self, const std::string &group_name) {
+             return self.hasInputDefault(stdStringToQString(group_name));
+           },
+           py::arg("group_name"),
+           "Return True if the translation group has an input default.")
+      .def("is_auto",
+           [](Isis::PvlTranslationTable &self, const std::string &group_name) {
+             return self.IsAuto(stdStringToQString(group_name));
+           },
+           py::arg("group_name"),
+           "Return True if the translation group is marked Auto.")
+      .def("is_optional",
+           [](Isis::PvlTranslationTable &self, const std::string &group_name) {
+             return self.IsOptional(stdStringToQString(group_name));
+           },
+           py::arg("group_name"),
+           "Return True if the translation group is optional.")
+      .def("output_name",
+           [](Isis::PvlTranslationTable &self, const std::string &group_name) {
+             return qStringToStdString(self.OutputName(stdStringToQString(group_name)));
+           },
+           py::arg("group_name"),
+           "Return the output keyword name for the translation group.")
+      .def("output_position",
+           [](Isis::PvlTranslationTable &self, const std::string &group_name) {
+             return self.OutputPosition(stdStringToQString(group_name));
+           },
+           py::arg("group_name"),
+           "Return the PvlKeyword describing the output position for the translation group.")
+      .def("__repr__",
+           [](const Isis::PvlTranslationTable &) {
+             return "PvlTranslationTable()";
            });
 }

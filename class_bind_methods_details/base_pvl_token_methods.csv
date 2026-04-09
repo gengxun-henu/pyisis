@@ -1,15 +1,17 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-PvlToken,Parsing,isis/src/base/objs/PvlToken/PvlToken.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-08 第四阶段后端 / 桥接 / 工具类批次 inventory 预登记
+PvlToken,Parsing,reference/upstream_isis/src/base/objs/PvlToken/PvlToken.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/base/bind_base_pvl.cpp 完成绑定
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,PvlToken,isis_pybind.PvlToken,N,Python class symbol not found in current binding files
-Construction/Enum,PvlToken(),isis_pybind.PvlToken(),N,Constructor binding not detected in current binding files
-Mutation/Configuration,void setKey(const QString &k),isis_pybind.PvlToken.set_key,N,Method not found in current binding files
-Public API,QString key() const,isis_pybind.PvlToken.key,N,Method not found in current binding files
-Public API,QString keyUpper() const,isis_pybind.PvlToken.key_upper,N,Method not found in current binding files
-Mutation/Configuration,void addValue(const QString &v),isis_pybind.PvlToken.add_value,N,Method not found in current binding files
-Public API,QString value(const int index = 0) const,isis_pybind.PvlToken.value,N,Method not found in current binding files
-Public API,QString valueUpper(const int index = 0) const,isis_pybind.PvlToken.value_upper,N,Method not found in current binding files
-Public API,int valueSize() const,isis_pybind.PvlToken.value_size,N,Method not found in current binding files
-Public API,void valueClear(),isis_pybind.PvlToken.value_clear,N,Method not found in current binding files
-Public API,inline const std::vector<QString> &valueVector() const { return m_value,isis_pybind.PvlToken.value_vector,N,Method not found in current binding files
+Class Symbol,PvlToken,isis_pybind.PvlToken,Y,Exposed as py::class_<Isis::PvlToken>
+Construction/Enum,PvlToken(),isis_pybind.PvlToken(),Y,Default constructor
+Construction/Enum,"PvlToken(const QString &k)",isis_pybind.PvlToken(key),Y,Key constructor via lambda (accepts str)
+Mutation/Configuration,"void setKey(const QString &k)",isis_pybind.PvlToken.set_key,Y,
+Public API,QString key() const,isis_pybind.PvlToken.key,Y,Returns str
+Public API,QString keyUpper() const,isis_pybind.PvlToken.key_upper,Y,Returns uppercase str
+Mutation/Configuration,"void addValue(const QString &v)",isis_pybind.PvlToken.add_value,Y,
+Public API,"QString value(const int index = 0) const",isis_pybind.PvlToken.value,Y,Returns str; raises on out-of-range
+Public API,"QString valueUpper(const int index = 0) const",isis_pybind.PvlToken.value_upper,Y,Returns uppercase str
+Public API,int valueSize() const,isis_pybind.PvlToken.value_size,Y,
+Public API,void valueClear(),isis_pybind.PvlToken.value_clear,Y,
+Public API,inline const std::vector<QString> &valueVector() const,isis_pybind.PvlToken.value_vector,Y,Returns list[str]
+Python Protocol,__repr__,isis_pybind.PvlToken.__repr__,Y,"PvlToken(key='...', values=N)"

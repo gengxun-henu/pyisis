@@ -9,6 +9,7 @@
  *   - reference/upstream_isis/src/base/objs/CollectorMap/CollectorMap.h
  *   - isis/src/base/objs/Column/Column.h
  *   - isis/src/base/objs/Environment/Environment.h
+ *   - reference/upstream_isis/src/base/objs/IString/IString.h
  *   - isis/src/base/objs/LineEquation/LineEquation.h
  *   - reference/upstream_isis/src/base/objs/Message/Message.h
  *   - reference/upstream_isis/src/base/objs/Plugin/Plugin.h
@@ -18,8 +19,8 @@
  * Updated: 2026-04-09  Geng Xun added CollectorMap binding using the stable int->QString specialization.
  * Updated: 2026-04-09  Geng Xun added Resource binding (PVL keyword container with name/value/status management)
  * Updated: 2026-04-09  Geng Xun added Plugin binding with opaque function-address lookup for runtime plugin resolution tests.
- * Purpose: Expose CollectorMap, Column, Environment, LineEquation, Message helpers, Plugin, and Resource utility classes to Python via pybind11.
- * Purpose: Expose Column, LineEquation, and related utility classes to Python via pybind11.
+ * Updated: 2026-04-09  Geng Xun added IString binding and free-function helpers (to_bool/to_int/to_double/to_string).
+ * Purpose: Expose CollectorMap, Column, Environment, IString, LineEquation, Message helpers, Plugin, and Resource utility classes to Python via pybind11.
  */
 
 #include <cstdint>
@@ -30,6 +31,7 @@
 #include "CollectorMap.h"
 #include "Column.h"
 #include "Environment.h"
+#include "IString.h"
 #include "LineEquation.h"
 #include "Message.h"
 #include "Plugin.h"
@@ -602,4 +604,223 @@ void bind_base_utility(py::module_ &m) {
       .def("__repr__", [](const Isis::Resource &self) {
         return "Resource('" + qStringToStdString(self.name()) + "')";
       });
+
+  // Added: 2026-04-09 - IString binding and module-level free-function helpers
+  // Free functions exposed at module level
+  m.def("to_bool",
+        [](const std::string &s) {
+          return Isis::toBool(stdStringToQString(s));
+        },
+        py::arg("string"),
+        "Convert a string to bool. Recognises true/false/yes/no/on/off/1/0 (case-insensitive).");
+
+  m.def("to_int",
+        [](const std::string &s) {
+          return Isis::toInt(stdStringToQString(s));
+        },
+        py::arg("string"),
+        "Convert a string to int. Raises IException on failure.");
+
+  m.def("to_big_int",
+        [](const std::string &s) -> long long {
+          return static_cast<long long>(Isis::toBigInt(stdStringToQString(s)));
+        },
+        py::arg("string"),
+        "Convert a string to a 64-bit integer. Raises IException on failure.");
+
+  m.def("to_double",
+        [](const std::string &s) {
+          return Isis::toDouble(stdStringToQString(s));
+        },
+        py::arg("string"),
+        "Convert a string to double. Raises IException on failure.");
+
+  m.def("to_string",
+        [](bool v) { return qStringToStdString(Isis::toString(v)); },
+        py::arg("value"),
+        "Convert bool to string.");
+  m.def("to_string",
+        [](int v) { return qStringToStdString(Isis::toString(v)); },
+        py::arg("value"),
+        "Convert int to string.");
+  m.def("to_string",
+        [](long long v) { return qStringToStdString(Isis::toString(static_cast<Isis::BigInt>(v))); },
+        py::arg("value"),
+        "Convert 64-bit integer to string.");
+  m.def("to_string",
+        [](double v, int precision) { return qStringToStdString(Isis::toString(v, precision)); },
+        py::arg("value"), py::arg("precision") = 14,
+        "Convert double to string with optional precision.");
+
+  // IString class binding
+  py::class_<Isis::IString>(m, "IString")
+      .def(py::init<>(), "Construct an empty IString.")
+      .def(py::init<const std::string &>(), py::arg("str"),
+           "Construct IString from a Python str.")
+      .def(py::init<const Isis::IString &>(), py::arg("other"),
+           "Copy-construct from another IString.")
+      .def(py::init<int>(), py::arg("num"),
+           "Construct IString from an integer.")
+      .def(py::init([](double v) { return Isis::IString(v); }), py::arg("num"),
+           "Construct IString from a double.")
+      .def(py::init([](long long v) {
+            return Isis::IString(static_cast<Isis::BigInt>(v));
+           }), py::arg("num"),
+           "Construct IString from a 64-bit integer.")
+
+      // Instance methods
+      .def("trim",
+           [](Isis::IString &self, const std::string &chars) -> std::string {
+             return std::string(self.Trim(chars));
+           },
+           py::arg("chars"),
+           "Remove leading and trailing characters from the given set.")
+      .def_static("trim_static",
+                  [](const std::string &chars, const std::string &str) {
+                    return Isis::IString::Trim(chars, str);
+                  },
+                  py::arg("chars"), py::arg("str"),
+                  "Static: trim leading/trailing chars from str.")
+      .def("trim_head",
+           [](Isis::IString &self, const std::string &chars) -> std::string {
+             return std::string(self.TrimHead(chars));
+           },
+           py::arg("chars"),
+           "Remove leading characters from the given set.")
+      .def_static("trim_head_static",
+                  [](const std::string &chars, const std::string &str) {
+                    return Isis::IString::TrimHead(chars, str);
+                  },
+                  py::arg("chars"), py::arg("str"),
+                  "Static: trim leading chars from str.")
+      .def("trim_tail",
+           [](Isis::IString &self, const std::string &chars) -> std::string {
+             return std::string(self.TrimTail(chars));
+           },
+           py::arg("chars"),
+           "Remove trailing characters from the given set.")
+      .def_static("trim_tail_static",
+                  [](const std::string &chars, const std::string &str) {
+                    return Isis::IString::TrimTail(chars, str);
+                  },
+                  py::arg("chars"), py::arg("str"),
+                  "Static: trim trailing chars from str.")
+      .def("up_case",
+           [](Isis::IString &self) -> std::string {
+             return std::string(self.UpCase());
+           },
+           "Convert the string to uppercase in place and return it.")
+      .def_static("up_case_static",
+                  [](const std::string &str) { return Isis::IString::UpCase(str); },
+                  py::arg("str"),
+                  "Static: return uppercase copy of str.")
+      .def("down_case",
+           [](Isis::IString &self) -> std::string {
+             return std::string(self.DownCase());
+           },
+           "Convert the string to lowercase in place and return it.")
+      .def_static("down_case_static",
+                  [](const std::string &str) { return Isis::IString::DownCase(str); },
+                  py::arg("str"),
+                  "Static: return lowercase copy of str.")
+      .def("to_integer",
+           [](const Isis::IString &self) { return self.ToInteger(); },
+           "Convert the string to an integer. Raises IException on failure.")
+      .def_static("to_integer_static",
+                  [](const std::string &str) { return Isis::IString::ToInteger(str); },
+                  py::arg("str"),
+                  "Static: convert str to integer.")
+      .def("to_double",
+           [](const Isis::IString &self) { return self.ToDouble(); },
+           "Convert the string to a double. Raises IException on failure.")
+      .def_static("to_double_static",
+                  [](const std::string &str) { return Isis::IString::ToDouble(str); },
+                  py::arg("str"),
+                  "Static: convert str to double.")
+      .def("to_big_integer",
+           [](const Isis::IString &self) -> long long {
+             return static_cast<long long>(self.ToBigInteger());
+           },
+           "Convert the string to a 64-bit integer. Raises IException on failure.")
+      .def("token",
+           [](Isis::IString &self, const std::string &separator) -> std::string {
+             Isis::IString sep(separator);
+             return std::string(self.Token(sep));
+           },
+           py::arg("separator"),
+           "Extract and return the next token delimited by any character in separator. Modifies the string in place.")
+      .def_static("split",
+                  [](char separator, const std::string &instr, bool allow_empty) {
+                    std::vector<std::string> tokens;
+                    Isis::IString::Split(separator, instr, tokens, allow_empty);
+                    return tokens;
+                  },
+                  py::arg("separator"), py::arg("instr"),
+                  py::arg("allow_empty") = true,
+                  "Static: split instr on separator char, return list of tokens.")
+      .def("compress",
+           [](Isis::IString &self, bool force) -> std::string {
+             return std::string(self.Compress(force));
+           },
+           py::arg("force") = false,
+           "Compress consecutive whitespace to single spaces (force=True collapses quoted whitespace too).")
+      .def_static("compress_static",
+                  [](const std::string &str, bool force) {
+                    return Isis::IString::Compress(str, force);
+                  },
+                  py::arg("str"), py::arg("force") = false,
+                  "Static: compress whitespace in str.")
+      .def("replace",
+           [](Isis::IString &self, const std::string &from, const std::string &to, int max_count) -> std::string {
+             return std::string(self.Replace(from, to, max_count));
+           },
+           py::arg("from_str"), py::arg("to_str"), py::arg("max_count") = 20,
+           "Replace occurrences of from_str with to_str (up to max_count replacements).")
+      .def("replace_honor_quotes",
+           [](Isis::IString &self, const std::string &from, const std::string &to, bool honor_quotes) -> std::string {
+             return std::string(self.Replace(from, to, honor_quotes));
+           },
+           py::arg("from_str"), py::arg("to_str"), py::arg("honor_quotes"),
+           "Replace from_str with to_str, optionally honouring quoted substrings.")
+      .def("convert",
+           [](Isis::IString &self, const std::string &list_of_chars, char to) -> std::string {
+             return std::string(self.Convert(list_of_chars, to));
+           },
+           py::arg("list_of_chars"), py::arg("to"),
+           "Replace every character in list_of_chars with the character to.")
+      .def("convert_whitespace",
+           [](Isis::IString &self) -> std::string {
+             return std::string(self.ConvertWhiteSpace());
+           },
+           "Replace all whitespace characters (tab, newline, etc.) with a space.")
+      .def("remove",
+           [](Isis::IString &self, const std::string &del) -> std::string {
+             return std::string(self.Remove(del));
+           },
+           py::arg("chars"),
+           "Remove all characters in chars from the string.")
+      .def("equal",
+           [](const Isis::IString &self, const std::string &str) {
+             return self.Equal(str);
+           },
+           py::arg("str"),
+           "Return True if both strings are equal (case-insensitive). Deprecated: prefer ==.")
+
+      // Python protocol methods
+      .def("__str__",
+           [](const Isis::IString &self) { return std::string(self); })
+      .def("__repr__",
+           [](const Isis::IString &self) {
+             return "IString('" + std::string(self) + "')";
+           })
+      .def("__int__",
+           [](const Isis::IString &self) { return self.ToInteger(); })
+      .def("__float__",
+           [](const Isis::IString &self) { return self.ToDouble(); })
+      .def("__len__",
+           [](const Isis::IString &self) { return self.size(); })
+      .def("__eq__",
+           [](const Isis::IString &self, const std::string &other) {
+             return std::string(self) == other;
+           }, py::arg("other"));
 }

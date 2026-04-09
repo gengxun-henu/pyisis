@@ -1,0 +1,62 @@
+方法名,状态,备注
+IString(),Y,默认构造函数
+IString(std::string),Y,从 Python str 构造
+IString(IString const&),Y,拷贝构造
+IString(char*),N,与 std::string 构造重叠，已由 str 构造覆盖
+IString(int),Y,从 int 构造
+IString(double),Y,从 float/double 构造
+IString(BigInt),Y,从 64-bit int 构造（Python int）
+Trim(chars),Y,实例方法；返回修剪后的字符串
+Trim(chars,str),Y,静态方法 trim_static
+TrimHead(chars),Y,实例方法
+TrimHead(chars,str),Y,静态方法 trim_head_static
+TrimTail(chars),Y,实例方法
+TrimTail(chars,str),Y,静态方法 trim_tail_static
+UpCase(),Y,实例方法
+UpCase(str),Y,静态方法 up_case_static
+DownCase(),Y,实例方法
+DownCase(str),Y,静态方法 down_case_static
+ToInteger(),Y,实例方法
+ToInteger(str),Y,静态方法 to_integer_static
+ToBigInteger(),Y,实例方法；返回 Python int
+ToBigInteger(str),N,静态版本未暴露（Python 侧用 to_big_int 自由函数代替）
+ToDouble(),Y,实例方法
+ToDouble(str),Y,静态方法 to_double_static
+ToQt(),N,返回 QString；__str__ 已覆盖字符串转换需求
+Token(separator),Y,实例方法；修改自身并返回 token
+Split(sep,str,tokens),Y,静态方法 split；返回 list[str]
+Compress(force),Y,实例方法
+Compress(str,force),Y,静态方法 compress_static
+Replace(from,to,count),Y,实例方法
+Replace(str,from,to,count),N,静态版本未暴露（简化设计）
+Replace(from,to,honor_quotes),Y,实例方法 replace_honor_quotes
+Replace(str,from,to,honor_quotes),N,静态版本未暴露
+Convert(chars,to),Y,实例方法
+Convert(str,chars,to),N,静态版本未暴露
+ConvertWhiteSpace(),Y,实例方法
+ConvertWhiteSpace(str),N,静态版本未暴露
+Remove(chars),Y,实例方法
+Remove(chars,str),N,静态版本未暴露
+Equal(str),Y,实例方法
+Equal(str1,str2),N,静态版本未暴露（Python 侧用 == 运算符）
+SetDouble(val,prec),N,内部 helper；不面向 Python
+operator int(),Y,通过 __int__ 暴露
+operator double(),Y,通过 __float__ 暴露
+operator BigInt(),N,__int__ 已覆盖
+operator=(int),N,Python 不直接使用赋值运算符
+operator=(double),N,同上
+operator=(BigInt),N,同上
+__str__,Y,返回 std::string 值
+__repr__,Y,IString('...')
+__len__,Y,字符串长度
+__eq__,Y,与 Python str 相等比较
+toBool(str),Y,自由函数 to_bool
+toInt(str),Y,自由函数 to_int
+toBigInt(str),Y,自由函数 to_big_int
+toDouble(str),Y,自由函数 to_double
+toString(bool),Y,自由函数 to_string 重载
+toString(int),Y,自由函数 to_string 重载
+toString(BigInt),Y,自由函数 to_string 重载
+toString(double,prec),Y,自由函数 to_string 重载
+toString(char),N,char 重载未暴露；Python 侧用 str 即可
+toString(uint),N,uint 重载未暴露；Python int 已满足需求

@@ -8,6 +8,7 @@ Author: Geng Xun
 Created: 2026-03-24
 Last Modified: 2026-04-09
 Updated: 2026-03-29  Geng Xun added regression coverage for Calculator, linear algebra, polynomial, and infix/postfix bindings.
+Updated: 2026-04-09  Geng Xun added Ransac helper regression coverage for packed symmetric matrix utilities.
 Updated: 2026-04-09  Geng Xun added SurfaceModel focused unit tests.
 Updated: 2026-04-09  Geng Xun relaxed the planar SurfaceModel min_max regression to match upstream floating-point behavior.
 """
@@ -898,6 +899,45 @@ class InlineInfixToPostfixUnitTest(unittest.TestCase):
         result = converter.convert("abs(sin(0.5))")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
+
+
+class RansacUnitTest(unittest.TestCase):
+    """Focused tests for the Ransac helper submodule."""
+
+    def test_index_helpers_match_packed_symmetric_layout(self):
+        self.assertEqual(ip.Ransac.isymp(0, 0), 0)
+        self.assertEqual(ip.Ransac.isymp(1, 0), 1)
+        self.assertEqual(ip.Ransac.isymp(0, 1), 1)
+        self.assertEqual(ip.Ransac.isymp(1, 1), 2)
+        self.assertEqual(ip.Ransac.binomial_coeficient(6, 3), 20)
+
+    def test_indeces_from_set_returns_expected_combination(self):
+        status, indices = ip.Ransac.indeces_from_set(5, 3, 6)
+        self.assertEqual(status, 1)
+        self.assertEqual(indices, [0, 2, 3])
+
+    def test_choleski_solve_solves_small_system(self):
+        # Packed symmetric matrix for [[4, 1], [1, 3]]
+        packed = [4.0, 1.0, 3.0]
+        rhs = [1.0, 2.0]
+        status, packed_out, solution = ip.Ransac.choleski_solve(packed, rhs, 2, 2)
+
+        self.assertEqual(status, 1)
+        self.assertEqual(len(packed_out), 3)
+        self.assertAlmostEqual(solution[0], 1.0 / 11.0, places=8)
+        self.assertAlmostEqual(solution[1], 7.0 / 11.0, places=8)
+
+    def test_decompose_and_inverse_return_packed_outputs(self):
+        packed = [4.0, 1.0, 3.0]
+        status, decomposed = ip.Ransac.decompose(packed, 2)
+        self.assertEqual(status, 1)
+        self.assertEqual(len(decomposed), 3)
+
+        status_inverse, inverted = ip.Ransac.inverse(decomposed, 2)
+        self.assertEqual(status_inverse, 1)
+        self.assertAlmostEqual(inverted[0], 3.0 / 11.0, places=8)
+        self.assertAlmostEqual(inverted[1], -1.0 / 11.0, places=8)
+        self.assertAlmostEqual(inverted[2], 4.0 / 11.0, places=8)
 
 
 class SurfaceModelUnitTest(unittest.TestCase):

@@ -3,15 +3,25 @@ Unit tests for ISIS Target and shape-model bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-21
+Last Modified: 2026-04-09
+Updated: 2026-04-09  Geng Xun added focused Target tests for camera-derived NAIF metadata and body-rotation coefficient accessors.
 """
 
 import unittest
 
-from _unit_test_support import make_sky_target_label, ip
+from _unit_test_support import make_sky_target_label, ip, workspace_test_data_path
+
+
+MDIS_TARGET_CUBE = workspace_test_data_path("mosrange", "EN0108828322M_iof.cub")
 
 
 class TargetAndShapeUnitTest(unittest.TestCase):
+    def open_cube(self, path):
+        cube = ip.Cube()
+        cube.open(str(path), "r")
+        self.addCleanup(cube.close)
+        return cube
+
     def test_target_sky_basics_follow_cpp_target_unit_test(self):
         label = make_sky_target_label()
 
@@ -80,6 +90,42 @@ End
 
         self.assertEqual(shape.name(), "Ellipsoid")
         self.assertFalse(shape.is_dem())
+
+    def test_camera_derived_target_exposes_naif_and_body_rotation_metadata(self):
+        cube = self.open_cube(MDIS_TARGET_CUBE)
+        camera = cube.camera()
+
+        target = camera.target()
+
+        self.assertIsInstance(target, ip.Target)
+        self.assertEqual(target.name(), "Mercury")
+        self.assertEqual(target.naif_body_code(), ip.Target.lookup_naif_body_code(target.name()))
+        self.assertEqual(target.naif_planet_system_code(), 199)
+        self.assertEqual(target.system_name(), "MERCURY")
+        self.assertIsInstance(target.frame_type(), int)
+
+        pole_ra = target.pole_ra_coefs()
+        pole_dec = target.pole_dec_coefs()
+        pm = target.pm_coefs()
+        pole_ra_np = target.pole_ra_nut_prec_coefs()
+        pole_dec_np = target.pole_dec_nut_prec_coefs()
+        pm_np = target.pm_nut_prec_coefs()
+        sys_constants = target.sys_nut_prec_constants()
+        sys_coefs = target.sys_nut_prec_coefs()
+
+        self.assertEqual(len(pole_ra), 0)
+        self.assertEqual(len(pole_dec), 0)
+        self.assertEqual(len(pm), 0)
+        self.assertTrue(all(isinstance(value, float) for value in pole_ra_np))
+        self.assertTrue(all(isinstance(value, float) for value in pole_dec_np))
+        self.assertTrue(all(isinstance(value, float) for value in pm_np))
+        self.assertTrue(all(isinstance(value, ip.Angle) for value in sys_constants))
+        self.assertTrue(all(isinstance(value, ip.Angle) for value in sys_coefs))
+        self.assertEqual(pole_ra_np, [])
+        self.assertEqual(pole_dec_np, [])
+        self.assertEqual(pm_np, [])
+        self.assertEqual(sys_constants, [])
+        self.assertEqual(sys_coefs, [])
 
     def test_default_shape_types_and_tolerances(self):
         ellipsoid = ip.EllipsoidShape()

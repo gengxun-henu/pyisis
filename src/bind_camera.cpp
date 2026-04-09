@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-04-08  Geng Xun added CameraPointInfo bindings alongside core Camera geometry accessors
+// Updated: 2026-04-09  Geng Xun exposed Camera.target() so Python can inspect attached Target metadata and frame coefficients
 // Purpose: pybind11 bindings for the ISIS Camera base class, CameraPointInfo helper, and shared camera-side geometry accessors
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -17,6 +18,7 @@
 #include "CameraSkyMap.h"
 #include "PvlGroup.h"
 #include "Sensor.h"
+#include "Target.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -156,6 +158,9 @@ void bind_camera(py::module_ &m) {
            py::return_value_policy::reference_internal)
       .def("sky_map",
            [](Isis::Camera &self) -> Isis::CameraSkyMap * { return self.SkyMap(); },
+           py::return_value_policy::reference_internal)
+      .def("target",
+           [](Isis::Camera &self) -> Isis::Target * { return self.target(); },
            py::return_value_policy::reference_internal)
       .def("get_camera_type", &Isis::Camera::GetCameraType)
       .def("ck_frame_id", &Isis::Camera::CkFrameId)

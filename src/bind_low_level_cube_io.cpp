@@ -1,7 +1,8 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
+// Updated: 2026-04-09  Geng Xun exposed CubeAttributeInput/Output and LabelAttachment helpers for cube filename attribute parsing.
 // Updated: 2026-04-08  Geng Xun added Blob file/bytes helpers alongside existing low-level cube I/O bindings
-// Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, Cube, buffers, managers, AlphaCube, and table structures
+// Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, and table structures
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
@@ -22,6 +23,7 @@
 #include "BufferManager.h"
 #include "Camera.h"
 #include "Cube.h"
+#include "CubeAttribute.h"
 #include "Endian.h"
 #include "FileName.h"
 #include "Histogram.h"
@@ -129,9 +131,148 @@ void bind_low_level_cube_io(py::module_ &m) {
   m.def("byte_order_enumeration",
         [](const std::string &byte_order) { return Isis::ByteOrderEnumeration(stdStringToQString(byte_order)); },
         py::arg("byte_order"));
+     py::enum_<Isis::LabelAttachment>(m, "LabelAttachment")
+               .value("AttachedLabel", Isis::AttachedLabel)
+               .value("DetachedLabel", Isis::DetachedLabel)
+               .value("ExternalLabel", Isis::ExternalLabel);
+     m.def("label_attachment_name",
+                    [](Isis::LabelAttachment attachment) {
+                         return qStringToStdString(Isis::LabelAttachmentName(attachment));
+                    },
+                    py::arg("attachment"));
+     m.def("label_attachment_enumeration",
+                    [](const std::string &attachment) {
+                         return Isis::LabelAttachmentEnumeration(stdStringToQString(attachment));
+                    },
+                    py::arg("attachment"));
   m.def("is_lsb", &Isis::IsLsb);
   m.def("is_msb", &Isis::IsMsb);
   m.def("is_blob", &Isis::IsBlob, py::arg("object"));
+
+     py::class_<Isis::CubeAttributeInput>(m, "CubeAttributeInput")
+               .def(py::init<>(), "Construct an empty input cube-attribute parser.")
+               .def(py::init([](const std::string &attribute_text) {
+                               return Isis::CubeAttributeInput(Isis::FileName(stdStringToQString(attribute_text)));
+                          }),
+                          py::arg("attribute_text"),
+                          "Construct an input attribute parser from a filename or attribute string like '+1-3,5'.")
+               .def(py::init<const Isis::FileName &>(),
+                          py::arg("file_name"),
+                          "Construct an input attribute parser from a FileName.")
+               .def("bands",
+                          [](const Isis::CubeAttributeInput &self) {
+                               std::vector<std::string> result;
+                               for (const QString &band : self.bands()) {
+                                    result.push_back(qStringToStdString(band));
+                               }
+                               return result;
+                          },
+                          "Return the expanded list of selected band identifiers.")
+               .def("bands_string",
+                          [](const Isis::CubeAttributeInput &self) {
+                               return qStringToStdString(self.bandsString());
+                          },
+                          "Return the band attribute as a comma-delimited string.")
+               .def("set_bands",
+                          [](Isis::CubeAttributeInput &self, const std::vector<std::string> &bands) {
+                               std::vector<QString> qbands;
+                               qbands.reserve(bands.size());
+                               for (const std::string &band : bands) {
+                                    qbands.push_back(stdStringToQString(band));
+                               }
+                               self.setBands(qbands);
+                          },
+                          py::arg("bands"),
+                          "Replace the current band selection with the provided band identifiers.")
+               .def("to_string",
+                          [](const Isis::CubeAttributeInput &self) {
+                               return qStringToStdString(self.toString());
+                          })
+               .def("add_attribute",
+                          [](Isis::CubeAttributeInput &self, const std::string &attribute) {
+                               self.addAttribute(stdStringToQString(attribute));
+                          },
+                          py::arg("attribute"))
+               .def("add_attributes",
+                          [](Isis::CubeAttributeInput &self, const std::string &attributes) {
+                               self.addAttributes(stdStringToQString(attributes));
+                          },
+                          py::arg("attributes"))
+               .def("set_attributes",
+                          [](Isis::CubeAttributeInput &self, const std::string &attribute_text) {
+                               self.setAttributes(Isis::FileName(stdStringToQString(attribute_text)));
+                          },
+                          py::arg("attribute_text"))
+               .def("__str__",
+                          [](const Isis::CubeAttributeInput &self) {
+                               return qStringToStdString(self.toString());
+                          })
+               .def("__repr__",
+                          [](const Isis::CubeAttributeInput &self) {
+                               return "CubeAttributeInput('" + qStringToStdString(self.toString()) + "')";
+                          });
+
+     py::class_<Isis::CubeAttributeOutput>(m, "CubeAttributeOutput")
+               .def(py::init<>(), "Construct an empty output cube-attribute parser.")
+               .def(py::init([](const std::string &attribute_text) {
+                               return Isis::CubeAttributeOutput(Isis::FileName(stdStringToQString(attribute_text)));
+                          }),
+                          py::arg("attribute_text"),
+                          "Construct an output attribute parser from a filename or attribute string like '+Real+Tile'.")
+               .def(py::init<const Isis::FileName &>(),
+                          py::arg("file_name"),
+                          "Construct an output attribute parser from a FileName.")
+               .def("propagate_pixel_type", &Isis::CubeAttributeOutput::propagatePixelType)
+               .def("propagate_minimum_maximum", &Isis::CubeAttributeOutput::propagateMinimumMaximum)
+               .def("file_format", &Isis::CubeAttributeOutput::fileFormat)
+               .def("file_format_string",
+                          [](const Isis::CubeAttributeOutput &self) {
+                               return qStringToStdString(self.fileFormatString());
+                          })
+               .def("set_file_format", &Isis::CubeAttributeOutput::setFileFormat, py::arg("format"))
+               .def("byte_order", &Isis::CubeAttributeOutput::byteOrder)
+               .def("byte_order_string",
+                          [](const Isis::CubeAttributeOutput &self) {
+                               return qStringToStdString(self.byteOrderString());
+                          })
+               .def("set_byte_order", &Isis::CubeAttributeOutput::setByteOrder, py::arg("order"))
+               .def("minimum", &Isis::CubeAttributeOutput::minimum)
+               .def("maximum", &Isis::CubeAttributeOutput::maximum)
+               .def("set_minimum", &Isis::CubeAttributeOutput::setMinimum, py::arg("minimum"))
+               .def("set_maximum", &Isis::CubeAttributeOutput::setMaximum, py::arg("maximum"))
+               .def("pixel_type", &Isis::CubeAttributeOutput::pixelType)
+               .def("set_pixel_type", &Isis::CubeAttributeOutput::setPixelType, py::arg("pixel_type"))
+               .def("set_label_attachment",
+                          &Isis::CubeAttributeOutput::setLabelAttachment,
+                          py::arg("attachment"))
+               .def("label_attachment", &Isis::CubeAttributeOutput::labelAttachment)
+               .def("to_string",
+                          [](const Isis::CubeAttributeOutput &self) {
+                               return qStringToStdString(self.toString());
+                          })
+               .def("add_attribute",
+                          [](Isis::CubeAttributeOutput &self, const std::string &attribute) {
+                               self.addAttribute(stdStringToQString(attribute));
+                          },
+                          py::arg("attribute"))
+               .def("add_attributes",
+                          [](Isis::CubeAttributeOutput &self, const std::string &attributes) {
+                               self.addAttributes(stdStringToQString(attributes));
+                          },
+                          py::arg("attributes"))
+               .def("set_attributes",
+                          [](Isis::CubeAttributeOutput &self, const std::string &attribute_text) {
+                               self.setAttributes(Isis::FileName(stdStringToQString(attribute_text)));
+                          },
+                          py::arg("attribute_text"))
+               .def("__str__",
+                          [](const Isis::CubeAttributeOutput &self) {
+                               return qStringToStdString(self.toString());
+                          })
+               .def("__repr__",
+                          [](const Isis::CubeAttributeOutput &self) {
+                               return "CubeAttributeOutput('" + qStringToStdString(self.toString()) + "')";
+                          });
 
   py::class_<Isis::Buffer>(m, "Buffer")
       .def(py::init<>())

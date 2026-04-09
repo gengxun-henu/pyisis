@@ -12,10 +12,11 @@
 - rollout 顺序参考：`reference/notes/base_inventory_rollout_order_2026-04-08.md`
 - 进度日志：`pybind_progress_log.md`
 
-**第二阶段已完成：** Stereo, Angle, Blob, CameraPointInfo, Centroid, Intercept, Environment
-**第二阶段待绑定：** Progress, IException, CollectorMap, CubeAttribute, Message, Resource, Ransac, Target, TrackingTable
+**第二阶段已完成：** Stereo, Angle, Blob, CameraPointInfo, Centroid, Intercept, Environment, Progress, IException, CollectorMap, CubeAttribute, Message, Resource, Ransac, Target, TrackingTable
+**第二阶段待绑定：** 无（当前 rollout 台账范围内）
 **第三阶段已完成：** Anisotropic2, HapkeAtm1/2, Isotropic1/2, ShadeAtm, TopoAtm, Hapke, PhotoModel, AtmosModel, AlbedoAtm
-**第三阶段待绑定：** SurfaceModel, NumericalAtmosApprox
+**第三阶段已完成补充：** SurfaceModel
+**第三阶段待绑定：** NumericalAtmosApprox
 **IException 状态说明：** `bind_base_support.cpp` 中已做 `py::register_exception<Isis::IException>(m, "IException")`，但未作完整类绑定（无 ErrorType enum, 无 toString 等方法），todo 标记仍为 `未转换`。
 
 ---
@@ -145,9 +146,9 @@
 
 ---
 
-## 队列 2（后备，不在本次执行）
+## 执行队列 2（已完成，5 类）
 
-6. CubeAttribute, 7. RegionalCachingAlgorithm, 8. OriginalLabel, 9. RawCubeChunk, 10. SubArea
+6. CollectorMap, 7. CubeAttribute, 8. Message, 9. Ransac, 10. Target
 
 ---
 
@@ -160,6 +161,11 @@
 | SurfaceModel | ✅ 完成 | 2026-04-09 | 全部方法绑定；5 个 focused 单测追加至 math_unit_test.py |
 | TrackingTable | ✅ 完成 | 2026-04-09 | 全部方法绑定；7 个 focused 单测追加至 low_level_cube_io_unit_test.py |
 | Resource | ✅ 完成（Partial） | 2026-04-09 | PVL/name 核心接口绑定；跳过 GisGeometry/QVariant；15 个 focused 单测 |
+| CollectorMap | ✅ 完成 | 2026-04-09 | 以稳定的 `CollectorMap<int, QString>` 专用实例暴露；6 个 focused 单测 |
+| CubeAttribute | ✅ 完成 | 2026-04-09 | 暴露 `LabelAttachment`、`CubeAttributeInput`、`CubeAttributeOutput` 与属性 helper；6 个 focused 单测 |
+| Message | ✅ 完成 | 2026-04-09 | 以 `ip.Message` 子模块暴露全部标准消息模板 helper；3 个 focused 单测 |
+| Ransac | ✅ 完成 | 2026-04-09 | 以 `ip.Ransac` 子模块暴露全部 free-function helper；4 个 focused 单测 |
+| Target | ✅ 完成（Partial） | 2026-04-09 | 补齐 NAIF/frame/body-rotation accessor，并通过 `Camera.target()` 暴露运行时 target；显式 `Spice *` API 仍受独立 Spice 绑定缺失阻塞 |
 
 ---
 
@@ -169,6 +175,10 @@
 - 绑定文件 `src/base/bind_base_math.cpp`：SurfaceModel
 - 绑定文件 `src/bind_low_level_cube_io.cpp`：TrackingTable
 - 绑定文件 `src/base/bind_base_utility.cpp`：Resource
+- 绑定文件 `src/base/bind_base_utility.cpp`：CollectorMap + Message
+- 绑定文件 `src/bind_low_level_cube_io.cpp`：CubeAttribute helpers
+- 绑定文件 `src/base/bind_base_math.cpp`：Ransac helpers
+- 绑定文件 `src/base/bind_base_target.cpp` / `src/bind_camera.cpp`：Target + Camera.target()
 - 所有新 class 须在 `python/isis_pybind/__init__.py` 中导出
 - 所有新 class 须在 `tests/smoke_import.py` 补最小 assert
 - 完成后更新：`todo_pybind11.csv`, `class_bind_methods_details/*_methods.csv`, `class_bind_methods_details/methods_inventory_summary.csv`, `pybind_progress_log.md`

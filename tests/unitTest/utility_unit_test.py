@@ -3,7 +3,9 @@ Unit tests for ISIS utility classes: Column, Environment, LineEquation
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-08
+Last Modified: 2026-04-09
+Updated: 2026-04-09  Geng Xun added Message namespace regression coverage for standardized ISIS text templates.
+Updated: 2026-04-09  Geng Xun added CollectorMap focused coverage for unique and duplicate key policies.
 Updated: 2026-04-08  Geng Xun added Environment regression coverage alongside existing Column and LineEquation helpers.
 """
 import os
@@ -12,6 +14,137 @@ import unittest
 from unittest import mock
 
 from _unit_test_support import ip
+
+
+class CollectorMapUnitTest(unittest.TestCase):
+    """Focused tests for the Python-facing CollectorMap specialization."""
+
+    def test_default_constructor_uses_unique_keys(self):
+        collector = ip.CollectorMap()
+        collector.add(1, "One")
+        collector.add(1, "Uno")
+
+        self.assertEqual(len(collector), 1)
+        self.assertEqual(collector.count(1), 1)
+        self.assertEqual(collector.get(1), "Uno")
+        self.assertEqual(collector.index(1), 0)
+
+    def test_duplicate_key_policy_preserves_multiple_values(self):
+        collector = ip.CollectorMap(ip.CollectorMap.KeyPolicy.DuplicateKeys)
+        collector.add(1, "One")
+        collector.add(1, "One #2")
+        collector.add(2, "Two")
+
+        self.assertEqual(len(collector), 3)
+        self.assertEqual(collector.count(1), 2)
+        self.assertEqual(collector.get(1), "One")
+        self.assertEqual(collector.get_nth(1), "One #2")
+        self.assertEqual(collector.key(2), 2)
+
+    def test_exists_contains_and_remove_follow_current_contents(self):
+        collector = ip.CollectorMap(ip.CollectorMap.KeyPolicy.DuplicateKeys)
+        collector.add(4, "Four")
+        collector.add(4, "Four #2")
+
+        self.assertTrue(collector.exists(4))
+        self.assertIn(4, collector)
+        self.assertEqual(collector.remove(4), 2)
+        self.assertFalse(collector.exists(4))
+        self.assertEqual(collector.index(4), -1)
+
+    def test_copy_constructor_preserves_entries(self):
+        collector = ip.CollectorMap(ip.CollectorMap.KeyPolicy.DuplicateKeys)
+        collector.add(7, "Seven")
+        collector.add(8, "Eight")
+
+        copied = ip.CollectorMap(collector)
+        self.assertEqual(copied.items(), [(7, "Seven"), (8, "Eight")])
+        self.assertEqual(repr(copied), "CollectorMap(size=2)")
+
+    def test_missing_key_and_out_of_range_raise_iexception(self):
+        collector = ip.CollectorMap()
+
+        with self.assertRaises(ip.IException):
+            collector.get(5)
+
+        with self.assertRaises(ip.IException):
+            collector.get_nth(0)
+
+        with self.assertRaises(ip.IException):
+            collector.key(0)
+
+    def test_iteration_returns_key_value_pairs_in_order(self):
+        collector = ip.CollectorMap(ip.CollectorMap.KeyPolicy.DuplicateKeys)
+        collector.add(1, "One")
+        collector.add(1, "One #2")
+        collector.add(3, "Three")
+
+        self.assertEqual(list(collector), [(1, "One"), (1, "One #2"), (3, "Three")])
+        self.assertEqual(collector.items(), [(1, "One"), (1, "One #2"), (3, "Three")])
+
+
+class MessageUnitTest(unittest.TestCase):
+    """Regression tests for the Message namespace bindings."""
+
+    def test_keyword_and_array_messages_match_upstream_templates(self):
+        self.assertEqual(
+            ip.Message.ArraySubscriptNotInRange(100000),
+            "Array subscript [100000] is out of array bounds",
+        )
+        self.assertEqual(ip.Message.KeywordAmbiguous("KEY"), "Keyword [KEY] ambiguous")
+        self.assertEqual(ip.Message.KeywordUnrecognized("KEY"), "Keyword [KEY] unrecognized")
+        self.assertEqual(ip.Message.KeywordDuplicated("KEY"), "Keyword [KEY] duplicated")
+        self.assertEqual(ip.Message.KeywordNotArray("KEY"), "Keyword [KEY] is not an array")
+        self.assertEqual(
+            ip.Message.KeywordNotFound("KEY"),
+            "Keyword [KEY] required but was not found",
+        )
+
+    def test_block_and_value_messages_preserve_truncation_behavior(self):
+        self.assertEqual(
+            ip.Message.KeywordBlockInvalid("BLOCK"),
+            "Keyword block [BLOCK] is invalid",
+        )
+        self.assertEqual(
+            ip.Message.KeywordBlockStartMissing("BLOCK", "FOUND"),
+            "Expecting start of keyword block [BLOCK] but found [FOUND]",
+        )
+        self.assertEqual(
+            ip.Message.KeywordBlockEndMissing("BLOCK", "FOUND"),
+            "Expecting end of keyword block [BLOCK] but found [FOUND]",
+        )
+        self.assertEqual(ip.Message.KeywordValueBad("KEY"), "Keyword [KEY] has bad value")
+        self.assertEqual(
+            ip.Message.KeywordValueBad("KEY", "abcdefghijklmnopqrstuvwxyz"),
+            "Keyword [KEY] has bad value [abcdefghijklmnopqrst ...]",
+        )
+        self.assertEqual(
+            ip.Message.KeywordValueExpected("KEY"),
+            "Keyword value for [KEY] expected but was not found",
+        )
+
+    def test_range_list_delimiter_and_file_messages(self):
+        self.assertEqual(
+            ip.Message.KeywordValueNotInRange("KEY", "0", "(0,20]"),
+            "Keyword [KEY=0] is not in the range of (0,20]",
+        )
+        self.assertEqual(
+            ip.Message.KeywordValueNotInList("KEY", "A", ["X", "Y", "Z"]),
+            "Keyword [KEY=A] must be one of [X,Y,Z]",
+        )
+        self.assertEqual(ip.Message.MissingDelimiter(")"), "Missing delimiter [)]")
+        self.assertEqual(
+            ip.Message.MissingDelimiter(")", "abcdefghijklmnopqrstuvwxyz"),
+            "Missing delimiter [)] at or near [abcdefghijklmnopqrst ...]",
+        )
+        self.assertEqual(ip.Message.FileOpen("test.dat"), "Unable to open [test.dat]")
+        self.assertEqual(ip.Message.FileCreate("test.dat"), "Unable to create [test.dat]")
+        self.assertEqual(ip.Message.FileRead("test.dat"), "Unable to read [test.dat]")
+        self.assertEqual(ip.Message.FileWrite("test.dat"), "Unable to write [test.dat]")
+        self.assertEqual(
+            ip.Message.MemoryAllocationFailed(),
+            "Unable to allocate dynamic memory",
+        )
 
 
 class ColumnUnitTest(unittest.TestCase):

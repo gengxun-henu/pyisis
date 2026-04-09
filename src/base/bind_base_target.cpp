@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-03-26  Geng Xun expanded target bindings with shape access, NAIF lookup helpers, and ShapeModelFactory creation support
+// Updated: 2026-04-09  Geng Xun added Target NAIF/frame coefficient accessors for camera-derived targets with active SPICE state
 // Purpose: pybind11 bindings for ISIS Target metadata, shape attachment helpers, and ShapeModelFactory construction
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -28,6 +29,8 @@ void bind_base_target(py::module_ &m) {
   target
       .def(py::init<Isis::Pvl &>(), py::arg("label"))
       .def("is_sky", &Isis::Target::isSky)
+      .def("naif_body_code", &Isis::Target::naifBodyCode)
+      .def("naif_planet_system_code", &Isis::Target::naifPlanetSystemCode)
       .def("name", [](const Isis::Target &self) { return qStringToStdString(self.name()); })
       .def("system_name", [](const Isis::Target &self) { return qStringToStdString(self.systemName()); })
       .def("radii", &Isis::Target::radii)
@@ -39,6 +42,15 @@ void bind_base_target(py::module_ &m) {
              self.setName(stdStringToQString(name));
            },
            py::arg("name"))
+      .def("frame_type", &Isis::Target::frameType)
+      .def("pole_ra_coefs", &Isis::Target::poleRaCoefs)
+      .def("pole_dec_coefs", &Isis::Target::poleDecCoefs)
+      .def("pm_coefs", &Isis::Target::pmCoefs)
+      .def("pole_ra_nut_prec_coefs", &Isis::Target::poleRaNutPrecCoefs)
+      .def("pole_dec_nut_prec_coefs", &Isis::Target::poleDecNutPrecCoefs)
+      .def("pm_nut_prec_coefs", &Isis::Target::pmNutPrecCoefs)
+      .def("sys_nut_prec_constants", &Isis::Target::sysNutPrecConstants)
+      .def("sys_nut_prec_coefs", &Isis::Target::sysNutPrecCoefs)
       .def("shape",
            [](Isis::Target &self) -> py::object {
              Isis::ShapeModel *shape = self.shape();

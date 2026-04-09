@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-04-03
 Last Modified: 2026-04-09
 Updated: 2026-04-08  Geng Xun added focused low-level Cube I/O regression coverage for Blob file/bytes helpers alongside managers, pixel helpers, and table primitives.
+Updated: 2026-04-09  Geng Xun added CubeAttributeInput/Output and LabelAttachment focused tests.
 Updated: 2026-04-09  Geng Xun added TrackingTable focused unit tests.
 Updated: 2026-04-09  Geng Xun aligned TrackingTable index tests with upstream behavior where missing entries are inserted and assigned a new index.
 """
@@ -14,6 +15,73 @@ from _unit_test_support import ip, temporary_directory
 
 
 class LowLevelCubeIoUnitTest(unittest.TestCase):
+    def test_label_attachment_helpers_round_trip(self):
+        self.assertEqual(ip.label_attachment_name(ip.LabelAttachment.AttachedLabel), "Attached")
+        self.assertEqual(
+            ip.label_attachment_enumeration("Attached"),
+            ip.LabelAttachment.AttachedLabel,
+        )
+        self.assertEqual(
+            ip.label_attachment_enumeration("DETACHED"),
+            ip.LabelAttachment.DetachedLabel,
+        )
+
+    def test_cube_attribute_input_parses_band_ranges_and_mutators(self):
+        attributes = ip.CubeAttributeInput("+3,5-7,9")
+
+        self.assertEqual(attributes.to_string(), "+3,5-7,9")
+        self.assertEqual(attributes.bands(), ["3", "5", "6", "7", "9"])
+        self.assertEqual(attributes.bands_string(), "3,5,6,7,9")
+
+        attributes.set_bands(["1-3", "9"])
+        self.assertEqual(attributes.to_string(), "+1-3,9")
+
+        attributes.add_attributes("+11")
+        self.assertEqual(attributes.to_string(), "+1-3,9+11")
+        self.assertIn("CubeAttributeInput", repr(attributes))
+
+    def test_cube_attribute_input_rejects_unknown_attributes(self):
+        with self.assertRaises(ip.IException):
+            ip.CubeAttributeInput("+not-a-band")
+
+    def test_cube_attribute_output_parses_and_reports_core_state(self):
+        attributes = ip.CubeAttributeOutput("+8bit+Tile+0.0:100.1+MSB")
+
+        self.assertFalse(attributes.propagate_pixel_type())
+        self.assertFalse(attributes.propagate_minimum_maximum())
+        self.assertEqual(attributes.pixel_type(), ip.PixelType.UnsignedByte)
+        self.assertEqual(attributes.file_format(), ip.Cube.Format.Tile)
+        self.assertEqual(attributes.file_format_string(), "Tile")
+        self.assertEqual(attributes.byte_order(), ip.ByteOrder.Msb)
+        self.assertEqual(attributes.byte_order_string(), "Msb")
+        self.assertEqual(attributes.minimum(), 0.0)
+        self.assertEqual(attributes.maximum(), 100.1)
+        self.assertEqual(attributes.label_attachment(), ip.LabelAttachment.AttachedLabel)
+
+    def test_cube_attribute_output_mutators_follow_upstream_serialization(self):
+        attributes = ip.CubeAttributeOutput()
+        attributes.set_file_format(ip.Cube.Format.Bsq)
+        attributes.set_pixel_type(ip.PixelType.Real)
+        attributes.set_byte_order(ip.ByteOrder.Msb)
+        attributes.set_label_attachment(ip.LabelAttachment.ExternalLabel)
+        attributes.set_minimum(1.0)
+        attributes.set_maximum(2.0)
+
+        self.assertEqual(
+            attributes.to_string(),
+            "+BandSequential+Real+MSB+External+1.0:2.0",
+        )
+        self.assertIn("CubeAttributeOutput", repr(attributes))
+
+    def test_cube_attribute_output_set_attributes_and_invalid_attribute(self):
+        attributes = ip.CubeAttributeOutput()
+        attributes.set_attributes("+8-bit+Detached")
+        self.assertEqual(attributes.pixel_type(), ip.PixelType.UnsignedByte)
+        self.assertEqual(attributes.label_attachment(), ip.LabelAttachment.DetachedLabel)
+
+        with self.assertRaises(ip.IException):
+            attributes.add_attribute("not-valid")
+
     def make_test_cube(self, samples=4, lines=3, bands=2, name="band_manager_test.cub"):
         temp_dir_cm = temporary_directory()
         temp_dir = temp_dir_cm.__enter__()

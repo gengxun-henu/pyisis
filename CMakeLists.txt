@@ -185,6 +185,7 @@ pybind11_add_module(_isis_core
   src/mission/bind_mission_cameras.cpp
   src/mgs/bind_mgs_utilities.cpp
   src/lro/bind_lro_utilities.cpp
+  src/bind_mro_hical.cpp
   src/bind_camera_factory.cpp)
 
 target_compile_definitions(_isis_core
@@ -207,6 +208,7 @@ target_include_directories(_isis_core
     "${ISIS_DEP_INCLUDE_DIR}/csm"
     "${ISIS_DEP_INCLUDE_DIR}/cspice"
     "${ISIS_DEP_INCLUDE_DIR}/bullet"
+    "${ISIS_DEP_INCLUDE_DIR}/tnt"
     ${PCL_INCLUDE_DIRS}
     ${EIGEN3_INCLUDE_DIR}
     "${ISIS_DEP_INCLUDE_DIR}/qt"

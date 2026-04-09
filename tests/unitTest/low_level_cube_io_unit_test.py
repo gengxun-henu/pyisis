@@ -8,9 +8,13 @@ Updated: 2026-04-09  Geng Xun added CubeAttributeInput/Output and LabelAttachmen
 Updated: 2026-04-09  Geng Xun added TrackingTable focused unit tests.
 Updated: 2026-04-09  Geng Xun aligned TrackingTable index tests with upstream behavior where missing entries are inserted and assigned a new index.
 Updated: 2026-04-09  Geng Xun added Blobber focused tests with self-contained table-backed cube fixtures.
+Updated: 2026-04-09  Geng Xun added focused CubeTileHandler wrapper coverage for tile core-label updates.
 Updated: 2026-04-09  Geng Xun added focused CubeBsqHandler wrapper coverage for BSQ core-label updates.
 Updated: 2026-04-09  Geng Xun added focused CubeCachingAlgorithm.CacheResult coverage for the abstract caching interface.
 Updated: 2026-04-09  Geng Xun added focused CubeIoHandler wrapper coverage for shared BSQ read/write/cache operations.
+Updated: 2026-04-09  Geng Xun added OriginalLabel PVL/blob/file round-trip coverage.
+Updated: 2026-04-09  Geng Xun added RawCubeChunk and RegionalCachingAlgorithm cache-surface regression coverage.
+Updated: 2026-04-09  Geng Xun added OriginalXmlLabel XML/blob/file round-trip coverage.
 """
 
 import unittest
@@ -19,6 +23,21 @@ from _unit_test_support import ip, temporary_directory
 
 
 class LowLevelCubeIoUnitTest(unittest.TestCase):
+    def make_original_xml_text(self):
+        return """<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<Product>
+    <IdentificationArea>
+        <logical_identifier>urn:nasa:pds:hirise:test_product</logical_identifier>
+        <version_id>1.0</version_id>
+    </IdentificationArea>
+    <Observation_Area>
+        <Time_Coordinates>
+            <start_date_time>2026-04-09T00:00:00</start_date_time>
+        </Time_Coordinates>
+    </Observation_Area>
+</Product>
+"""
+
     def make_cube_bsq_label(self, samples=3, lines=2, bands=2):
         label = ip.Pvl()
         label.from_string(
@@ -106,6 +125,26 @@ End
         self.assertGreater(data_path.stat().st_size, 0)
         self.assertIn("CubeBsqHandler", repr(handler))
 
+    def test_cube_tile_handler_updates_core_format_to_tile(self):
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        data_path = temp_dir / "cube_tile_handler.dat"
+        label = self.make_cube_bsq_label(samples=3, lines=2, bands=2)
+        handler = ip.CubeTileHandler(str(data_path), label, [1, 2], False)
+
+        updated = self.make_cube_bsq_label(samples=3, lines=2, bands=2)
+        handler.update_labels(updated)
+
+        core = updated.find_object("IsisCube").find_object("Core")
+        self.assertEqual(core.find_keyword("Format")[0], "Tile")
+        self.assertEqual(core.find_keyword("TileSamples")[0], "3")
+        self.assertEqual(core.find_keyword("TileLines")[0], "2")
+        self.assertTrue(data_path.exists())
+        self.assertGreater(data_path.stat().st_size, 0)
+        self.assertIn("CubeTileHandler", repr(handler))
+
     def test_cube_io_handler_reads_writes_and_updates_labels(self):
         temp_dir_cm = temporary_directory()
         temp_dir = temp_dir_cm.__enter__()
@@ -147,15 +186,65 @@ End
         self.assertEqual(empty.get_chunks_to_free(), [])
         self.assertEqual(len(empty), 0)
 
-        understood = ip.CubeCachingAlgorithm.CacheResult([None, object()])
+        chunk = ip.RawCubeChunk(1, 1, 1, 2, 2, 1, 8)
+        understood = ip.CubeCachingAlgorithm.CacheResult([None, chunk])
         self.assertTrue(understood.algorithm_understood_data())
-        self.assertEqual(understood.get_chunks_to_free(), [None, None])
+        returned = understood.get_chunks_to_free()
+        self.assertIsNone(returned[0])
+        self.assertIsInstance(returned[1], ip.RawCubeChunk)
+        self.assertEqual(returned[1].get_start_sample(), 1)
         self.assertEqual(len(understood), 2)
 
         copied = ip.CubeCachingAlgorithm.CacheResult(understood)
         self.assertTrue(copied.algorithm_understood_data())
-        self.assertEqual(copied.get_chunks_to_free(), [None, None])
+        self.assertIsNone(copied.get_chunks_to_free()[0])
+        self.assertIsInstance(copied.get_chunks_to_free()[1], ip.RawCubeChunk)
         self.assertIn("CubeCachingAlgorithm.CacheResult", repr(copied))
+
+    def test_raw_cube_chunk_mutation_and_type_specific_accessors(self):
+        chunk = ip.RawCubeChunk(3, 4, 1, 4, 5, 1, 8)
+
+        self.assertFalse(chunk.is_dirty())
+        self.assertEqual(chunk.get_start_sample(), 3)
+        self.assertEqual(chunk.get_start_line(), 4)
+        self.assertEqual(chunk.get_start_band(), 1)
+        self.assertEqual(chunk.sample_count(), 2)
+        self.assertEqual(chunk.line_count(), 2)
+        self.assertEqual(chunk.band_count(), 1)
+        self.assertEqual(chunk.get_byte_count(), 8)
+        self.assertEqual(chunk.get_raw_data(), b"\x00" * 8)
+
+        chunk.set_data(7, 0)
+        self.assertTrue(chunk.is_dirty())
+        self.assertEqual(chunk.get_char(0), 7)
+
+        chunk.set_dirty(False)
+        self.assertFalse(chunk.is_dirty())
+
+        chunk.set_raw_data(b"\x34\x12\x00\x00\x00\x00\x80\x3f")
+        self.assertTrue(chunk.is_dirty())
+        self.assertEqual(chunk.get_short(0), 0x1234)
+        self.assertAlmostEqual(chunk.get_float(1), 1.0, places=6)
+        self.assertIn("RawCubeChunk", repr(chunk))
+
+    def test_regional_caching_algorithm_recommends_non_recent_chunks(self):
+        algorithm = ip.RegionalCachingAlgorithm()
+        requested = ip.Buffer(1, 1, 1, ip.PixelType.UnsignedByte)
+
+        chunks = [
+            ip.RawCubeChunk(1, 1, 1, 2, 2, 1, 4),
+            ip.RawCubeChunk(3, 1, 1, 4, 2, 1, 4),
+            ip.RawCubeChunk(5, 1, 1, 6, 2, 1, 4),
+            ip.RawCubeChunk(7, 1, 1, 8, 2, 1, 4),
+        ]
+
+        result = algorithm.recommend_chunks_to_free(chunks, [chunks[0]], requested)
+        self.assertTrue(result.algorithm_understood_data())
+
+        evicted = result.get_chunks_to_free()
+        self.assertEqual(len(evicted), 3)
+        self.assertEqual([chunk.get_start_sample() for chunk in evicted], [3, 5, 7])
+        self.assertIn("RegionalCachingAlgorithm", repr(algorithm))
 
     def test_cube_attribute_input_parses_band_ranges_and_mutators(self):
         attributes = ip.CubeAttributeInput("+3,5-7,9")
@@ -727,6 +816,98 @@ End
 
         self.assertFalse(ip.is_blob(ip.PvlObject("NotABlob")))
         self.assertTrue(ip.is_blob(ip.PvlObject("TABLE")))
+
+    def test_original_label_round_trip_from_pvl_blob_and_file(self):
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        source = ip.Pvl()
+        source.from_string(
+            """
+Group = Instrument
+    SpacecraftName = CASSINI
+    InstrumentId = ISSNA
+EndGroup
+Group = Archive
+    ProductId = N1234567890
+EndGroup
+End
+"""
+        )
+
+        original = ip.OriginalLabel(source)
+        returned = original.return_labels()
+        self.assertEqual(returned.find_group("Instrument").find_keyword("SpacecraftName")[0], "CASSINI")
+        self.assertEqual(returned.find_group("Archive").find_keyword("ProductId")[0], "N1234567890")
+
+        blob = original.to_blob()
+        self.assertIsInstance(blob, ip.Blob)
+        self.assertEqual(blob.name(), "IsisCube")
+        self.assertEqual(blob.type(), "OriginalLabel")
+
+        from_blob = ip.OriginalLabel(blob)
+        self.assertEqual(
+            from_blob.return_labels().find_group("Instrument").find_keyword("InstrumentId")[0],
+            "ISSNA",
+        )
+
+        blob_path = temp_dir / "original_label.blob"
+        blob.write(str(blob_path))
+
+        from_file = ip.OriginalLabel(str(blob_path))
+        self.assertEqual(
+            from_file.return_labels().find_group("Archive").find_keyword("ProductId")[0],
+            "N1234567890",
+        )
+        self.assertIn("OriginalLabel", repr(from_file))
+
+    def test_original_xml_label_round_trip_from_xml_blob_and_file(self):
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        xml_path = temp_dir / "original.xml"
+        xml_path.write_text(self.make_original_xml_text(), encoding="utf-8")
+
+        original = ip.OriginalXmlLabel()
+        self.assertTrue(original.is_empty())
+        original.read_from_xml_file(str(xml_path))
+
+        xml_text = original.return_labels()
+        self.assertIn("<Product>", xml_text)
+        self.assertIn("hirise:test_product", xml_text)
+        self.assertEqual(original.root_tag(), "Product")
+
+        blob = original.to_blob()
+        self.assertIsInstance(blob, ip.Blob)
+        self.assertEqual(blob.name(), "IsisCube")
+        self.assertEqual(blob.type(), "OriginalXmlLabel")
+
+        from_blob_ctor = ip.OriginalXmlLabel(blob)
+        self.assertIn("<logical_identifier>", from_blob_ctor.return_labels())
+
+        from_blob_method = ip.OriginalXmlLabel()
+        from_blob_method.from_blob(blob)
+        self.assertEqual(from_blob_method.return_labels(), from_blob_ctor.return_labels())
+
+        blob_path = temp_dir / "original_xml_label.blob"
+        blob.write(str(blob_path))
+
+        from_file = ip.OriginalXmlLabel(str(blob_path))
+        self.assertIn("<start_date_time>", str(from_file))
+        self.assertIn("OriginalXmlLabel", repr(from_file))
+
+    def test_original_xml_label_invalid_xml_raises(self):
+        temp_dir_cm = temporary_directory()
+        temp_dir = temp_dir_cm.__enter__()
+        self.addCleanup(temp_dir_cm.__exit__, None, None, None)
+
+        bad_xml_path = temp_dir / "bad.xml"
+        bad_xml_path.write_text("<Product><broken></Product>", encoding="utf-8")
+
+        with self.assertRaises(ip.IException):
+            ip.OriginalXmlLabel().read_from_xml_file(str(bad_xml_path))
 
     def test_blobber_loads_table_backed_cube_and_reports_metadata(self):
         cube, cube_path = self.make_blobber_cube()

@@ -3,8 +3,9 @@ Unit tests for ISIS filter and utility class bindings.
 
 Author: Geng Xun
 Created: 2026-03-25
-Last Modified: 2026-03-26
+Last Modified: 2026-04-09
 Updated: 2026-03-26  Geng Xun added regression coverage for filter, stretch, kernel, and CSV utility bindings.
+Updated: 2026-04-09  Geng Xun completed CSVReader regression coverage for table helpers, typed conversion, and file-based construction.
 """
 
 #!/usr/bin/env python3
@@ -377,6 +378,21 @@ class TestCSVReader(unittest.TestCase):
         reader = CSVReader()
         self.assertIsInstance(reader, CSVReader)
 
+    def test_construction_with_file_and_options(self):
+        """Test CSVReader file-loading constructor with parsing options."""
+        with open(self.test_csv, 'w') as f:
+            f.write("# ignored comment\n")
+            f.write("metadata to skip\n")
+            f.write("A,B,C\n")
+            f.write("1,,3\n")
+            f.write("4,,6\n")
+
+        reader = CSVReader(self.test_csv, True, 1, ',', True, True)
+        self.assertEqual(reader.size(), 4)
+        self.assertEqual(reader.rows(), 2)
+        self.assertEqual(reader.columns(), 3)
+        self.assertEqual(reader.get_header(), ["A", "B", "C"])
+
     def test_delimiter(self):
         """Test getting and setting delimiter"""
         reader = CSVReader()
@@ -421,6 +437,20 @@ class TestCSVReader(unittest.TestCase):
         self.assertEqual(reader.size(), 3)  # 3 total lines
         self.assertEqual(reader.rows(), 2)   # 2 data rows (excluding header)
         self.assertEqual(reader.columns(), 3)  # 3 columns
+
+    def test_set_comment_false_keeps_comment_lines(self):
+        """Test disabling comment filtering preserves leading # rows."""
+        with open(self.test_csv, 'w') as f:
+            f.write("# comment,row\n")
+            f.write("1,2\n")
+
+        reader = CSVReader()
+        reader.set_comment(False)
+        reader.read(self.test_csv)
+
+        self.assertEqual(reader.size(), 2)
+        self.assertEqual(reader.rows(), 2)
+        self.assertEqual(reader.get_row(0), ["# comment", "row"])
 
     def test_get_header(self):
         """Test getting header row"""
@@ -498,6 +528,43 @@ class TestCSVReader(unittest.TestCase):
         self.assertEqual(len(col), 2)
         self.assertEqual(col[0], "100")
         self.assertEqual(col[1], "200")
+
+    def test_get_table_and_column_summary_helpers(self):
+        """Test exported table helpers reflect upstream row-width logic."""
+        with open(self.test_csv, 'w') as f:
+            f.write("A,B,C\n")
+            f.write("1,2\n")
+            f.write("3,4,5\n")
+
+        reader = CSVReader()
+        reader.set_header(True)
+        reader.read(self.test_csv)
+
+        table = reader.get_table()
+        self.assertEqual(table, [["1", "2"], ["3", "4", "5"]])
+        self.assertEqual(reader.columns(table), 2)
+        self.assertFalse(reader.is_table_valid(table))
+        self.assertEqual(reader.get_column_summary(table), {2: 1, 3: 1})
+
+    def test_convert_supports_int_and_double_lists(self):
+        """Test CSVReader.convert adapts parsed string lists to numeric Python lists."""
+        with open(self.test_csv, 'w') as f:
+            f.write("A,B\n")
+            f.write("1,2.5\n")
+            f.write("4,5.5\n")
+
+        reader = CSVReader()
+        reader.set_header(True)
+        reader.read(self.test_csv)
+
+        first_column = reader.get_column(0)
+        second_column = reader.get_column(1)
+
+        self.assertEqual(reader.convert(first_column, "int"), [1, 4])
+        self.assertEqual(reader.convert(second_column, "double"), [2.5, 5.5])
+
+        with self.assertRaises(ValueError):
+            reader.convert(first_column, "string")
 
     def test_clear(self):
         """Test clearing data"""

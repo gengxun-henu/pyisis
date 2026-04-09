@@ -2,6 +2,100 @@
 
 ## 2026-04-09
 
+- 新一轮 rollout 第四类 `CSVReader` 完成：
+  - 复核发现 `CSVReader` 并非真正未绑定，而是 `src/base/bind_base_filters.cpp` 与 `tests/unitTest/filters_unit_test.py` 已有基础覆盖，但 inventory 台账完全未同步，且 Python 表面仍缺少 `get_table()` / `columns(table)` / `is_table_valid(table)` / `get_column_summary(table)` / `convert(...)` 与带参数文件构造。
+  - 扩展 `src/base/bind_base_filters.cpp`，补齐文件路径构造、nested-list table helper、列宽摘要 dict 导出，以及 `convert(data, value_type=...)` 数值转换表面。
+  - 扩展 `tests/unitTest/filters_unit_test.py`：新增 `CSVReader` focused 回归，覆盖带参数构造、comment 保留行为、`get_table()` / `columns(table)` / `is_table_valid(table)` / `get_column_summary(table)`，以及 `convert(..., 'int'/'double')` 路径。
+  - 继续保留 `CSVReader` 为直接类绑定，因为上游类本体稳定，且不涉及前面 `Plugin` / `FileList` 那类 Qt 容器继承所有权风险。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_csv_reader_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake --build build -j4`
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/filters_unit_test.py -v` (`52` tests, `OK`)
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- 新一轮 rollout 第三类 `FileList` 完成：
+  - 扩展 `src/base/bind_base_support.cpp`，新增稳定的 `FileList` Python wrapper，内部真实持有 `Isis::FileList`，并转发 `read(...)` / `write(...)`；同时新增 Python-friendly `read_from_string(...)` 与 `to_string()`，用来覆盖上游 `std::istream` / `std::ostream` 路径。
+  - 之所以采用本地 wrapper，而不是直接把 `FileList : QList<FileName>` 作为 pybind 继承类暴露，是为了避免 Qt 容器继承在 Python 侧带来的所有权/析构不稳定性，并保持与前一个 `Plugin` 类似的稳定设计路线。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `FileList`。
+  - 扩展 `tests/unitTest/support_unit_test.py`：新增 `FileListUnitTest`，覆盖文件读入、注释/首列解析、`read_from_string(...)` / `to_string()` round-trip、`append(...)`、空输入异常与缺失文件异常路径。
+  - 更新 `tests/smoke_import.py`，补充 `FileList` 顶层符号检查。
+  - 额外确认了上游解析细节：带双引号的条目会避免逗号截断，但仍按空白 token 化；focused 单测已按 `reference/upstream_isis/src/base/objs/FileList/FileList.cpp` 的真实行为校准。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_file_list_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake --build build -j4`
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/support_unit_test.py -v` (`9` tests, `OK`)
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- 新一轮 rollout 次类 `Plugin` 完成：
+  - 扩展 `src/base/bind_base_utility.cpp`，新增稳定的 `Plugin` Python wrapper，内部真实持有 `Isis::Plugin` 并转发 `read(...)` / `add_group(...)` / `find_group(...)` / `groups()` / `get_plugin(...)`。
+  - 之所以采用本地 wrapper，而不是直接把 `Plugin : Pvl` 作为 pybind 继承类暴露，是因为直接绑定时 Python 侧通过基类 PVL API 写入的 group 状态在 `Plugin` 自身方法里出现了不稳定的可见性分裂，并伴随解释器退出阶段段错误；wrapper 方案稳定保留了上游运行时插件解析行为。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `Plugin`。
+  - 扩展 `tests/unitTest/utility_unit_test.py`：新增 `PluginUnitTest`，验证 wrapper 添加 group 后可成功解析 `IdealCameraPlugin` 地址，并覆盖缺失 routine 的异常路径。
+  - 更新 `tests/smoke_import.py`，补充 `Plugin` 顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_plugin_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake --build build -j"$(nproc)"`
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -X faulthandler -m unittest -v utility_unit_test.PluginUnitTest` (`2` tests, `OK`)
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/utility_unit_test.py` (`41` tests, `OK`)
+    - Passed: `env -u PYTHONPATH ISIS_PYBIND_BUILD_DIR=$PWD/build/python ISISDATA=$PWD/tests/data/isisdata/mockup /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- 新一轮 rollout 首类 `CubeTileHandler` 完成：
+  - 扩展 `src/bind_low_level_cube_io.cpp`，新增安全的 `CubeTileHandler` Python wrapper，内部拥有 `QFile` 与可选 virtual-band 列表，并转发上游 `updateLabels(...)` 以维持真实 tile handler 行为。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `CubeTileHandler`。
+  - 扩展 `tests/unitTest/low_level_cube_io_unit_test.py`：新增 `CubeTileHandler` focused 覆盖，验证最小 Core label 输入、wrapper 构造、data file 初始化以及 `update_labels(...)` 将 `Core.Format` 置为 `Tile` 并写回 `TileSamples` / `TileLines`。
+  - 更新 `tests/smoke_import.py`，补充 `CubeTileHandler` 顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_cube_tile_handler_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE=/home/gengxun/miniconda3/envs/asp360_new/bin/python -DISIS_PREFIX=/home/gengxun/miniconda3/envs/asp360_new && cmake --build build -j"$(nproc)"`
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -X faulthandler -m unittest -v low_level_cube_io_unit_test.LowLevelCubeIoUnitTest.test_cube_tile_handler_updates_core_format_to_tile` (`1` test, `OK`)
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/low_level_cube_io_unit_test.py` (`51` tests, `OK`)
+    - Passed: `env -u PYTHONPATH ISIS_PYBIND_BUILD_DIR=$PWD/build/python ISISDATA=$PWD/tests/data/isisdata/mockup /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- rollout 尾项 `OriginalXmlLabel` 完成：
+  - 扩展 `src/bind_low_level_cube_io.cpp`，新增 `OriginalXmlLabel` 绑定，暴露默认构造、blob-file 构造、`Blob` 构造、`to_blob()`、`from_blob(...)`、`read_from_xml_file(...)`，并将上游 `ReturnLabels() const` 的 `QDomDocument` 适配为 Python-friendly XML string，另补 `root_tag()` / `is_empty()` / `__repr__` 便于检查。
+  - 扩展 `tests/unitTest/low_level_cube_io_unit_test.py`：新增 focused 覆盖，验证 XML 文件读取、blob round-trip、blob-file round-trip，以及坏 XML 的异常路径。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `OriginalXmlLabel`。
+  - 更新 `tests/smoke_import.py`，补充 `OriginalXmlLabel` 顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_original_xml_label_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `/usr/bin/cmake --build build -j2`
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v low_level_cube_io_unit_test.LowLevelCubeIoUnitTest.test_original_xml_label_round_trip_from_xml_blob_and_file low_level_cube_io_unit_test.LowLevelCubeIoUnitTest.test_original_xml_label_invalid_xml_raises` (`2` tests, `OK`)
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/low_level_cube_io_unit_test.py` (`50` tests, `OK`)
+    - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- rollout 尾项中的 MRO HiCal gain 三类（`GainNonLinearity` / `GainTemperature` / `GainUnitConversion`）完成：
+  - 新增 `src/bind_mro_hical.cpp`，以稳定的本地 wrapper 方式暴露三类构造与检查接口；原因是当前链接到的 ISIS 运行库不导出 `HiCalConf` 构造符号，且 `GainUnitConversion` 依赖的 `HiCalConf::sunDistanceAU(Cube *)` 也不存在于任何已链接共享库中，直接 pybind 原始类会在 `_isis_core` import 阶段触发 `undefined symbol`。
+  - 这三个 wrapper 直接读取 `conf_path` 中的 `Hical` profile 与最小必需 label/CSV 信息，稳定复现当前 rollout 所需的核心 Python 行为；其中 `GainUnitConversion` 明确支持 `DN` / `DN/US`，对 `IOF` 则抛出清晰错误说明缺失的上游符号约束。
+  - 为三类统一补充 `name()`、`csv_file()`、`size()`、`data()`、`history()`、`at()/__getitem__` 与 `__repr__`，使其在 Python 侧表现为可检查的轻量模块向量对象。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `GainNonLinearity`、`GainTemperature` 与 `GainUnitConversion`。
+  - 新增 `tests/unitTest/mro_hical_unit_test.py`，使用最小本地 HiCal conf/CSV/label focused 覆盖三类 wrapper 的核心行为与 `IOF` 失败路径。
+  - 更新 `tests/smoke_import.py`，补充三类顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/mro_gain_non_linearity_methods.csv`
+    - `class_bind_methods_details/mro_gain_temperature_methods.csv`
+    - `class_bind_methods_details/mro_gain_unit_conversion_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `/usr/bin/cmake --build build -j2`
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v mro_hical_unit_test` (`5` tests, `OK`)
+    - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
 - rollout 第三批队列已开：`NumericalAtmosApprox -> Blobber -> CubeBsqHandler -> CubeCachingAlgorithm -> CubeIoHandler`
   - 已完成队列首类 `NumericalAtmosApprox`：扩展 `src/base/bind_base_photometry.cpp`，新增 `NumericalAtmosApprox` 绑定，暴露嵌套 `InterpType` / `IntegFunc` 枚举、构造函数、`rombergs_method(...)`、`refine_extended_trap(...)`、`outr_func2_bint(...)` 与 `inr_func2_bint(...)`。
   - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `NumericalAtmosApprox`。

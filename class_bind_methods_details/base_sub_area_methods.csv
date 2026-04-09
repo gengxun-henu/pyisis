@@ -1,8 +1,8 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-SubArea,High Level Cube I/O,isis/src/base/objs/SubArea/SubArea.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+SubArea,High Level Cube I/O,isis/src/base/objs/SubArea/SubArea.h,src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/bind_high_level_cube_io.cpp 暴露 set_sub_area/update_label，并补 focused 单测与 smoke 覆盖
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,SubArea,isis_pybind.SubArea,N,Python class symbol not found in current binding files
-Construction/Enum,SubArea(),isis_pybind.SubArea(),N,Constructor binding not detected in current binding files
-Mutation/Configuration,"void SetSubArea(const int orignl, const int origns, const int sl, const int ss, const int el, const int es, const double linc, const double sinc)",isis_pybind.SubArea.set_sub_area,N,Method not found in current binding files
-Public API,"void UpdateLabel(Cube *icube, Cube *ocube, PvlGroup &results)",isis_pybind.SubArea.update_label,N,Method not found in current binding files
+Class Symbol,SubArea,isis_pybind.SubArea,Y,Bound in src/bind_high_level_cube_io.cpp and re-exported from python/isis_pybind/__init__.py
+Construction/Enum,SubArea(),isis_pybind.SubArea(),Y,Default constructor bound directly
+Mutation/Configuration,"void SetSubArea(const int orignl, const int origns, const int sl, const int ss, const int el, const int es, const double linc, const double sinc)",isis_pybind.SubArea.set_sub_area,Y,Bound with Python-friendly keyword names for original/start/end/increment arguments
+Public API,"void UpdateLabel(Cube *icube, Cube *ocube, PvlGroup &results)",isis_pybind.SubArea.update_label,Y,Wrapped against Cube/PvlGroup references so Python tests can update local cube labels in place

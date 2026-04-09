@@ -11,14 +11,18 @@
  *   - isis/src/base/objs/Environment/Environment.h
  *   - isis/src/base/objs/LineEquation/LineEquation.h
  *   - reference/upstream_isis/src/base/objs/Message/Message.h
+ *   - reference/upstream_isis/src/base/objs/Plugin/Plugin.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
  * Updated: 2026-04-09  Geng Xun exposed Message namespace helpers as a Python submodule.
  * Updated: 2026-04-09  Geng Xun added CollectorMap binding using the stable int->QString specialization.
  * Updated: 2026-04-09  Geng Xun added Resource binding (PVL keyword container with name/value/status management)
- * Purpose: Expose CollectorMap, Column, Environment, LineEquation, Message helpers, and Resource utility classes to Python via pybind11.
+ * Updated: 2026-04-09  Geng Xun added Plugin binding with opaque function-address lookup for runtime plugin resolution tests.
+ * Purpose: Expose CollectorMap, Column, Environment, LineEquation, Message helpers, Plugin, and Resource utility classes to Python via pybind11.
  * Purpose: Expose Column, LineEquation, and related utility classes to Python via pybind11.
  */
+
+#include <cstdint>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -28,12 +32,50 @@
 #include "Environment.h"
 #include "LineEquation.h"
 #include "Message.h"
-#include "helpers.h"
+#include "Plugin.h"
 #include "PvlKeyword.h"
 #include "PvlObject.h"
 #include "Resource.h"
+#include "helpers.h"
 
 namespace py = pybind11;
+
+namespace {
+
+class PluginWrapper {
+  public:
+     PluginWrapper() = default;
+
+     void read(const std::string &fileName) {
+          m_plugin.read(stdStringToQString(fileName));
+     }
+
+     void addGroup(Isis::PvlGroup &group) {
+          m_plugin.addGroup(group);
+     }
+
+     Isis::PvlGroup &findGroup(const std::string &name) {
+          return m_plugin.findGroup(stdStringToQString(name));
+     }
+
+     int groups() const {
+          return m_plugin.groups();
+     }
+
+     std::uintptr_t getPlugin(const std::string &group) {
+          const auto plugin = m_plugin.GetPlugin(stdStringToQString(group));
+          return reinterpret_cast<std::uintptr_t>(plugin);
+     }
+
+     std::string repr() const {
+          return "Plugin(groups=" + std::to_string(m_plugin.groups()) + ")";
+     }
+
+  private:
+     Isis::Plugin m_plugin;
+};
+
+}  // namespace
 
 void bind_base_utility(py::module_ &m) {
      using CollectorMapIntString = Isis::CollectorMap<int, QString>;
@@ -339,6 +381,30 @@ void bind_base_utility(py::module_ &m) {
                "width=" + std::to_string(self.Width()) + ", " +
                "precision=" + std::to_string(self.Precision()) + ")";
       });
+
+     py::class_<PluginWrapper>(m, "Plugin")
+               .def(py::init<>(), "Construct an empty Plugin PVL container.")
+               .def("read",
+                          &PluginWrapper::read,
+                          py::arg("file_name"),
+                          "Read a plugin definition file into this Plugin wrapper.")
+               .def("add_group",
+                          &PluginWrapper::addGroup,
+                          py::arg("group"),
+                          "Add a PVL group containing Library/Routine metadata.")
+               .def("find_group",
+                          &PluginWrapper::findGroup,
+                          py::arg("name"),
+                          py::return_value_policy::reference_internal,
+                          "Return a reference to a named PVL group stored in this Plugin wrapper.")
+               .def("groups",
+                          &PluginWrapper::groups,
+                          "Return the number of top-level groups stored in this Plugin wrapper.")
+               .def("get_plugin",
+                          &PluginWrapper::getPlugin,
+                          py::arg("group"),
+                          "Resolve the named plugin group and return the loaded function address as a Python integer.")
+               .def("__repr__", &PluginWrapper::repr);
 
   /**
    * @brief Bindings for the Isis::LineEquation class

@@ -75,7 +75,7 @@ High Level Cube I/O,ProcessRubberSheet,未转换,流程/回调接口较多
 High Level Cube I/O,QtExporter,未转换,
 High Level Cube I/O,QtImporter,未转换,
 High Level Cube I/O,StreamExporter,未转换,抽象基类/纯虚接口
-High Level Cube I/O,SubArea,未转换,
+High Level Cube I/O,SubArea,已转换,2026-04-09 已在 src/bind_high_level_cube_io.cpp 暴露 set_sub_area/update_label，并补 focused 单测与 smoke 覆盖
 High Level Cube I/O,TiffExporter,未转换,
 High Level Cube I/O,TiffImporter,未转换,
 Low Level Cube I/O,AlphaCube,已转换,
@@ -91,13 +91,13 @@ Low Level Cube I/O,CubeAttribute,已转换,2026-04-09 已在 src/bind_low_level_
 Low Level Cube I/O,CubeBsqHandler,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 通过安全 QFile-owned wrapper 暴露构造/update_labels；focused 单测在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
 Low Level Cube I/O,CubeCachingAlgorithm,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露抽象基类符号与 Python-friendly CacheResult；focused 单测在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
 Low Level Cube I/O,CubeIoHandler,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 通过安全 QFile-owned wrapper 暴露共享 read/write/cache/get_data_size/update_labels 表面；focused 单测在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
-Low Level Cube I/O,CubeTileHandler,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次，先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
+Low Level Cube I/O,CubeTileHandler,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 通过安全 QFile-owned wrapper 暴露构造/update_labels；focused 单测在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
 Low Level Cube I/O,LineManager,已转换,
-Low Level Cube I/O,OriginalLabel,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次，先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
-Low Level Cube I/O,OriginalXmlLabel,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次，先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
+Low Level Cube I/O,OriginalLabel,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露 OriginalLabel 构造/return_labels/to_blob，并补 focused 单测与 smoke 覆盖
+Low Level Cube I/O,OriginalXmlLabel,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露 blob/XML round-trip 与 Python-friendly XML string access，并补 focused 单测与 smoke 覆盖
 Low Level Cube I/O,Portal,已转换,需注意内存生命周期与数据视图映射
-Low Level Cube I/O,RawCubeChunk,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次，先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
-Low Level Cube I/O,RegionalCachingAlgorithm,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次，先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
+Low Level Cube I/O,RawCubeChunk,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露 RawCubeChunk 原始字节块访问/dirty 状态接口，并补 focused 单测与 smoke 覆盖
+Low Level Cube I/O,RegionalCachingAlgorithm,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露 recommend_chunks_to_free，并补 focused 单测与 smoke 覆盖
 Low Level Cube I/O,SampleManager,已转换,
 Low Level Cube I/O,Table,已转换,需注意内存生命周期与数据视图映射
 Low Level Cube I/O,TableField,已转换,需注意内存生命周期与数据视图映射
@@ -139,9 +139,9 @@ Mars Reconnaissance Orbiter,CTXCamera,已转换,"亦属 Spice, Instruments, and 
 Mars Reconnaissance Orbiter,GainChannelNormalize,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,GainFlatField,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,GainLineDrift,未转换,抽象基类/纯虚接口
-Mars Reconnaissance Orbiter,GainNonLinearity,未转换,
-Mars Reconnaissance Orbiter,GainTemperature,未转换,
-Mars Reconnaissance Orbiter,GainUnitConversion,未转换,
+Mars Reconnaissance Orbiter,GainNonLinearity,已转换,Stable local wrapper completed because linked ISIS library does not export required HiCalConf symbols; focused unit test and smoke coverage added
+Mars Reconnaissance Orbiter,GainTemperature,已转换,Stable local wrapper completed because linked ISIS library does not export required HiCalConf symbols; focused unit test and smoke coverage added
+Mars Reconnaissance Orbiter,GainUnitConversion,已转换,Stable local wrapper completed for DN/DN/US because linked ISIS library does not export HiCalConf::sunDistanceAU; focused unit test and smoke coverage added
 Mars Reconnaissance Orbiter,HiBlob,未转换,
 Mars Reconnaissance Orbiter,HiCalConf,未转换,
 Mars Reconnaissance Orbiter,HiCalData,未转换,抽象基类/纯虚接口
@@ -183,8 +183,8 @@ Math,Ransac,已转换,2026-04-09 已在 src/base/bind_base_math.cpp 以 `ip.Rans
 Math,SurfaceModel,已转换,2026-04-09 已在 src/base/bind_base_math.cpp 完成全部公开方法绑定；focused 单测追加在 tests/unitTest/math_unit_test.py；smoke 已补符号
 Near Earth Asteroid Rendezvous - Shoemaker,MsiCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Messenger,MdisCamera,已转换,"第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖"
-Parsing,CSVReader,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次；抽象基类/纯虚接口；先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
-Parsing,FileList,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次，先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
+Parsing,CSVReader,已转换,2026-04-09 已在 src/base/bind_base_filters.cpp 完成 CSVReader 全部 inventory helper 绑定；focused 单测在 tests/unitTest/filters_unit_test.py；smoke 已补符号
+Parsing,FileList,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 通过稳定 wrapper 暴露文件/字符串 I/O helper；focused 单测在 tests/unitTest/support_unit_test.py；smoke 已补符号
 Parsing,FileName,已转换,
 Parsing,IString,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次，先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
 Parsing,iTime,已转换,
@@ -298,7 +298,7 @@ Statistics,StatCumProbDistDynCalc,未转换,Qt 类型/信号槽较多
 Statistics,Statistics,已转换,Qt 类型/信号槽较多
 Statistics,VecFilter,已转换,
 System,Environment,已转换,2026-04-08 已在 src/base/bind_base_utility.cpp 暴露静态环境查询接口并新增 focused 单测与 smoke 覆盖
-System,Plugin,未转换,2026-04-08 第四阶段后端 / 桥接 / 工具类批次，先做 inventory 编目，后续补实际 pybind 绑定与 focused 单测
+System,Plugin,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 通过稳定 wrapper 暴露构造/get_plugin；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Trace Gas Orbiter,TgoCassisCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Trace Gas Orbiter,TgoCassisDistortionMap,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Dawn,DawnFcCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"

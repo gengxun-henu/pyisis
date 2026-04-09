@@ -1,10 +1,10 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-OriginalXmlLabel,Low Level Cube I/O,isis/src/base/objs/OriginalXmlLabel/OriginalXmlLabel.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-08 第四阶段后端 / 桥接 / 工具类批次 inventory 预登记
+OriginalXmlLabel,Low Level Cube I/O,reference/upstream_isis/src/base/objs/OriginalXmlLabel/OriginalXmlLabel.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露 blob/XML round-trip 与 Python-friendly XML string access
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,OriginalXmlLabel,isis_pybind.OriginalXmlLabel,N,Python class symbol not found in current binding files
-Construction/Enum,OriginalXmlLabel(),isis_pybind.OriginalXmlLabel(),N,Constructor binding not detected in current binding files
-Public API,Blob toBlob() const,isis_pybind.OriginalXmlLabel.to_blob,N,Method not found in current binding files
-Public API,void fromBlob(Isis::Blob blob),isis_pybind.OriginalXmlLabel.from_blob,N,Method not found in current binding files
-Read/Write IO,void readFromXmlFile(const FileName &xmlFileName),isis_pybind.OriginalXmlLabel.read_from_xml_file,N,Method not found in current binding files
-Public API,const QDomDocument &ReturnLabels() const,isis_pybind.OriginalXmlLabel.return_labels,N,Method not found in current binding files
+Class Symbol,OriginalXmlLabel,isis_pybind.OriginalXmlLabel,Y,Bound in src/bind_low_level_cube_io.cpp with Python-friendly XML string helpers
+Construction/Enum,OriginalXmlLabel(),isis_pybind.OriginalXmlLabel(),Y,Default constructor bound in src/bind_low_level_cube_io.cpp
+Public API,Blob toBlob() const,isis_pybind.OriginalXmlLabel.to_blob,Y,Direct method binding in src/bind_low_level_cube_io.cpp
+Public API,void fromBlob(Isis::Blob blob),isis_pybind.OriginalXmlLabel.from_blob,Y,Direct method binding in src/bind_low_level_cube_io.cpp
+Read/Write IO,void readFromXmlFile(const FileName &xmlFileName),isis_pybind.OriginalXmlLabel.read_from_xml_file,Y,Wrapped to accept Python string paths via Isis::FileName
+Public API,const QDomDocument &ReturnLabels() const,isis_pybind.OriginalXmlLabel.return_labels,Y,Adapted to return serialized XML string because QDomDocument is not directly bound

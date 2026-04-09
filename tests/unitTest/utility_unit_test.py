@@ -6,6 +6,7 @@ Created: 2026-03-24
 Last Modified: 2026-04-09
 Updated: 2026-04-09  Geng Xun added Message namespace regression coverage for standardized ISIS text templates.
 Updated: 2026-04-09  Geng Xun added CollectorMap focused coverage for unique and duplicate key policies.
+Updated: 2026-04-09  Geng Xun added Plugin focused coverage for runtime plugin address resolution and failure paths.
 Updated: 2026-04-08  Geng Xun added Environment regression coverage alongside existing Column and LineEquation helpers.
 """
 import os
@@ -145,6 +146,39 @@ class MessageUnitTest(unittest.TestCase):
             ip.Message.MemoryAllocationFailed(),
             "Unable to allocate dynamic memory",
         )
+
+
+class PluginUnitTest(unittest.TestCase):
+    """Focused tests for the Plugin runtime loader wrapper."""
+
+    def make_plugin(self, library="IdealCamera", routine="IdealCameraPlugin", group="TestPlugin"):
+        plugin = ip.Plugin()
+        plugin_group = ip.PvlGroup(group)
+        plugin_group.add_keyword(ip.PvlKeyword("Library", library))
+        plugin_group.add_keyword(ip.PvlKeyword("Routine", routine))
+        plugin.add_group(plugin_group)
+        return plugin
+
+    def test_get_plugin_returns_nonzero_function_address(self):
+        os.environ.setdefault("ISISROOT", os.environ.get("CONDA_PREFIX", ""))
+
+        plugin = self.make_plugin()
+        self.assertEqual(plugin.groups(), 1)
+        address = plugin.get_plugin("TestPlugin")
+
+        self.assertIsInstance(address, int)
+        self.assertGreater(address, 0)
+        self.assertIn("Plugin(groups=1)", repr(plugin))
+
+    def test_get_plugin_raises_for_missing_symbol(self):
+        os.environ.setdefault("ISISROOT", os.environ.get("CONDA_PREFIX", ""))
+
+        plugin = self.make_plugin(routine="DefinitelyMissingPluginRoutine")
+
+        with self.assertRaises(ip.IException) as context:
+            plugin.get_plugin("TestPlugin")
+
+        self.assertIn("Unable to find plugin", str(context.exception))
 
 
 class ColumnUnitTest(unittest.TestCase):

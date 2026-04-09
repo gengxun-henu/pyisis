@@ -15,6 +15,7 @@
  * Binding author: Geng Xun
  * Created: 2026-03-25
  * Updated: 2026-03-26  Geng Xun expanded filter and utility bindings with GaussianStretch, QuickFilter, Kernels, and CSVReader coverage
+ * Updated: 2026-04-09  Geng Xun completed CSVReader helper coverage for table summaries, typed conversion, and file-based construction.
  * Purpose: Expose Stretch, GaussianStretch, QuickFilter, Kernels, and CSVReader classes to Python via pybind11.
  *
  * Note: Many methods use lambda wrappers to convert between Qt types (QString, QVector)
@@ -36,6 +37,51 @@
 #include "helpers.h"
 
 namespace py = pybind11;
+
+namespace {
+
+std::vector<std::string> csvAxisToVector(const Isis::CSVReader::CSVAxis &axis) {
+     std::vector<std::string> result;
+     result.reserve(axis.dim());
+     for (int i = 0; i < axis.dim(); i++) {
+          result.push_back(qStringToStdString(axis[i]));
+     }
+     return result;
+}
+
+std::vector<std::vector<std::string>> csvTableToVector(const Isis::CSVReader::CSVTable &table) {
+     std::vector<std::vector<std::string>> result;
+     result.reserve(table.dim());
+     for (int row = 0; row < table.dim(); row++) {
+          result.push_back(csvAxisToVector(table[row]));
+     }
+     return result;
+}
+
+Isis::CSVReader::CSVAxis vectorToCsvAxis(const std::vector<std::string> &values) {
+     Isis::CSVReader::CSVAxis axis(values.size());
+     for (size_t i = 0; i < values.size(); i++) {
+          axis[static_cast<int>(i)] = stdStringToQString(values[i]);
+     }
+     return axis;
+}
+
+Isis::CSVReader::CSVTable vectorToCsvTable(const std::vector<std::vector<std::string>> &rows) {
+     Isis::CSVReader::CSVTable table(rows.size());
+     for (size_t row = 0; row < rows.size(); row++) {
+          table[static_cast<int>(row)] = vectorToCsvAxis(rows[row]);
+     }
+     return table;
+}
+
+char delimiterFromString(const std::string &delimiter) {
+     if (delimiter.size() != 1) {
+          throw py::value_error("delimiter must be a single character string");
+     }
+     return delimiter[0];
+}
+
+}  // namespace
 
 void bind_base_filters(py::module_ &m)
 {
@@ -363,6 +409,26 @@ void bind_base_filters(py::module_ &m)
       */
      py::class_<Isis::CSVReader>(m, "CSVReader")
          .def(py::init<>())
+           .def(py::init([](const std::string &csvfile,
+                                bool header,
+                                int skip,
+                                const std::string &delimiter,
+                                bool keepEmptyParts,
+                                bool ignoreComments) {
+                       return Isis::CSVReader(stdStringToQString(csvfile),
+                                                    header,
+                                                    skip,
+                                                    delimiterFromString(delimiter),
+                                                    keepEmptyParts,
+                                                    ignoreComments);
+                 }),
+                 py::arg("csvfile"),
+                 py::arg("header") = false,
+                 py::arg("skip") = 0,
+                 py::arg("delimiter") = ",",
+                 py::arg("keep_empty_parts") = true,
+                 py::arg("ignore_comments") = true,
+                 "Construct and immediately load a CSV file with parsing options")
          // Query methods
          .def("size",
               &Isis::CSVReader::size,
@@ -373,6 +439,11 @@ void bind_base_filters(py::module_ &m)
          .def("columns",
               static_cast<int (Isis::CSVReader::*)() const>(&Isis::CSVReader::columns),
               "Get the number of columns")
+         .def("columns",
+              [](const Isis::CSVReader &self, const std::vector<std::vector<std::string>> &table)
+              { return self.columns(vectorToCsvTable(table)); },
+              py::arg("table"),
+              "Get the number of columns from a previously exported table")
          .def("have_header",
               &Isis::CSVReader::haveHeader,
               "Check if the CSV has a header row")
@@ -413,37 +484,59 @@ void bind_base_filters(py::module_ &m)
               { self.read(stdStringToQString(fname)); }, py::arg("fname"), "Read a CSV file")
          // Data access methods
          .def("get_header", [](const Isis::CSVReader &self)
-              {
-             Isis::CSVReader::CSVAxis header = self.getHeader();
-             std::vector<std::string> result;
-             for (int i = 0; i < header.dim(); i++) {
-               result.push_back(qStringToStdString(header[i]));
-             }
-             return result; }, "Get the header row")
+              { return csvAxisToVector(self.getHeader()); }, "Get the header row")
          .def("get_row", [](const Isis::CSVReader &self, int index)
-              {
-             Isis::CSVReader::CSVAxis row = self.getRow(index);
-             std::vector<std::string> result;
-             for (int i = 0; i < row.dim(); i++) {
-               result.push_back(qStringToStdString(row[i]));
-             }
-             return result; }, py::arg("index"), "Get a data row by index")
+              { return csvAxisToVector(self.getRow(index)); }, py::arg("index"), "Get a data row by index")
          .def("get_column", [](const Isis::CSVReader &self, int index)
-              {
-             Isis::CSVReader::CSVAxis col = self.getColumn(index);
-             std::vector<std::string> result;
-             for (int i = 0; i < col.dim(); i++) {
-               result.push_back(qStringToStdString(col[i]));
-             }
-             return result; }, py::arg("index"), "Get a column by index")
+              { return csvAxisToVector(self.getColumn(index)); }, py::arg("index"), "Get a column by index")
          .def("get_column", [](const Isis::CSVReader &self, const std::string &hname)
-              {
-             Isis::CSVReader::CSVAxis col = self.getColumn(stdStringToQString(hname));
-             std::vector<std::string> result;
-             for (int i = 0; i < col.dim(); i++) {
-               result.push_back(qStringToStdString(col[i]));
-             }
-             return result; }, py::arg("hname"), "Get a column by header name")
+              { return csvAxisToVector(self.getColumn(stdStringToQString(hname))); }, py::arg("hname"), "Get a column by header name")
+         .def("get_table", [](const Isis::CSVReader &self)
+              { return csvTableToVector(self.getTable()); }, "Get the full parsed table as a nested Python list")
+         .def("is_table_valid",
+              [](const Isis::CSVReader &self, const std::vector<std::vector<std::string>> &table)
+              { return self.isTableValid(vectorToCsvTable(table)); },
+              py::arg("table"),
+              "Check whether every row in the provided table has the same number of columns")
+         .def("get_column_summary",
+              [](const Isis::CSVReader &self, const std::vector<std::vector<std::string>> &table) {
+                   Isis::CSVReader::CSVColumnSummary summary = self.getColumnSummary(vectorToCsvTable(table));
+                   py::dict result;
+                   for (int i = 0; i < summary.size(); i++) {
+                        result[py::int_(summary.key(i))] = py::int_(summary.getNth(i));
+                   }
+                   return result;
+              },
+              py::arg("table"),
+              "Get a Python dict mapping column-count to number of rows with that count")
+         .def("convert",
+              [](const Isis::CSVReader &self,
+                 const std::vector<std::string> &data,
+                 const std::string &value_type) -> py::object {
+                   Isis::CSVReader::CSVAxis axis = vectorToCsvAxis(data);
+                   if (value_type == "int" || value_type == "integer") {
+                        Isis::CSVReader::CSVIntVector converted = self.convert<int>(axis);
+                        std::vector<int> result(converted.dim());
+                        for (int i = 0; i < converted.dim(); i++) {
+                             result[i] = converted[i];
+                        }
+                        return py::cast(result);
+                   }
+
+                   if (value_type == "double" || value_type == "float") {
+                        Isis::CSVReader::CSVDblVector converted = self.convert<double>(axis);
+                        std::vector<double> result(converted.dim());
+                        for (int i = 0; i < converted.dim(); i++) {
+                             result[i] = converted[i];
+                        }
+                        return py::cast(result);
+                   }
+
+                   throw py::value_error("value_type must be 'double'/'float' or 'int'/'integer'");
+              },
+              py::arg("data"),
+              py::arg("value_type") = "double",
+              "Convert a parsed CSV row/column list into numeric Python values")
          .def("clear", &Isis::CSVReader::clear, "Clear all data")
          .def("__repr__", [](const Isis::CSVReader &self)
               { return "CSVReader(rows=" + std::to_string(self.rows()) +

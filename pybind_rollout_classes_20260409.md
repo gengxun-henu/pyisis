@@ -17,7 +17,8 @@
 **第三阶段已完成：** Anisotropic2, HapkeAtm1/2, Isotropic1/2, ShadeAtm, TopoAtm, Hapke, PhotoModel, AtmosModel, AlbedoAtm, NumericalAtmosApprox
 **第三阶段已完成补充：** SurfaceModel
 **第三阶段待绑定：** 无
-**第四阶段当前队列：** CubeBsqHandler, CubeCachingAlgorithm, CubeIoHandler（与第三批剩余队列合并推进）
+**第四阶段已完成补充：** CubeBsqHandler, CubeCachingAlgorithm, CubeIoHandler, OriginalLabel, RawCubeChunk, RegionalCachingAlgorithm, OriginalXmlLabel
+**MRO HiCal 尾项已完成：** GainNonLinearity, GainTemperature, GainUnitConversion（以 stable local wrapper 方式完成）
 **IException 状态说明：** `bind_base_support.cpp` 中已做 `py::register_exception<Isis::IException>(m, "IException")`，但未作完整类绑定（无 ErrorType enum, 无 toString 等方法），todo 标记仍为 `未转换`。
 
 ---
@@ -198,6 +199,13 @@
 | Target | ✅ 完成（Partial） | 2026-04-09 | 补齐 NAIF/frame/body-rotation accessor，并通过 `Camera.target()` 暴露运行时 target；显式 `Spice *` API 仍受独立 Spice 绑定缺失阻塞 |
 | NumericalAtmosApprox | ✅ 完成 | 2026-04-09 | 暴露嵌套 `InterpType` / `IntegFunc` 与全部积分 helper；3 个 focused 单测追加至 atmos_model_factory_unit_test.py |
 | Blobber | ✅ 完成 | 2026-04-09 | 暴露构造/metadata/load/deepcopy/二维索引接口；2 个 focused 单测追加至 low_level_cube_io_unit_test.py，并顺带补 `Cube.read_table()` / `Cube.write(Table)` helper |
+| OriginalLabel | ✅ 完成 | 2026-04-09 | 暴露 PVL/blob/file round-trip；focused 单测追加至 low_level_cube_io_unit_test.py |
+| RawCubeChunk | ✅ 完成 | 2026-04-09 | 暴露原始字节块访问/dirty 状态接口；focused 单测追加至 low_level_cube_io_unit_test.py |
+| RegionalCachingAlgorithm | ✅ 完成 | 2026-04-09 | 暴露 recommend_chunks_to_free；focused 单测追加至 low_level_cube_io_unit_test.py |
+| OriginalXmlLabel | ✅ 完成 | 2026-04-09 | 暴露 blob/XML round-trip 与 Python-friendly XML string access；focused 单测追加至 low_level_cube_io_unit_test.py |
+| GainNonLinearity | ✅ 完成 | 2026-04-09 | 以 stable local wrapper 暴露最小 HiCal gain surface；focused 单测在 mro_hical_unit_test.py |
+| GainTemperature | ✅ 完成 | 2026-04-09 | 以 stable local wrapper 暴露温度修正向量 surface；focused 单测在 mro_hical_unit_test.py |
+| GainUnitConversion | ✅ 完成 | 2026-04-09 | 以 stable local wrapper 暴露 DN/DN/US 分支并为 IOF 给出清晰错误；focused 单测在 mro_hical_unit_test.py |
 
 ---
 

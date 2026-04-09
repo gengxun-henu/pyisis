@@ -1,0 +1,11 @@
+{
+    "python-envs.pythonProjects": [
+        {
+            "path": ".",
+            "envManager": "ms-python.python:conda",
+            "packageManager": "ms-python.python:conda"
+        }
+    ],
+    "python.defaultInterpreterPath": "/home/gengxun/miniconda3/envs/asp360_new/bin/python",
+    "python.terminal.activateEnvironment": true
+}

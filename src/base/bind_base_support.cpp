@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-04-09  Geng Xun added Progress py::class_ binding and IException::ErrorType enum
+// Updated: 2026-04-09  Geng Xun added stable FileList wrapper bindings with file and string I/O helpers.
 // Purpose: pybind11 bindings for core ISIS support utilities including FileName, iTime, SerialNumber, SerialNumberList, ObservationNumber, Progress, and IException
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -23,12 +24,14 @@
  */
 
 #include <string>
+#include <sstream>
 #include <vector>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 #include "Cube.h"
+#include "FileList.h"
 #include "FileName.h"
 #include "IException.h"
 #include "ObservationNumber.h"
@@ -40,6 +43,80 @@
 #include "iTime.h"
 
 namespace py = pybind11;
+
+namespace {
+
+class FileListWrapper {
+  public:
+    FileListWrapper() = default;
+
+    explicit FileListWrapper(const Isis::FileName &listFile) : m_fileList(listFile) {
+    }
+
+    explicit FileListWrapper(const std::string &listFile)
+        : m_fileList(Isis::FileName(stdStringToQString(listFile))) {
+    }
+
+    void read(const Isis::FileName &listFile) {
+      m_fileList.read(listFile);
+    }
+
+    void read(const std::string &listFile) {
+      m_fileList.read(Isis::FileName(stdStringToQString(listFile)));
+    }
+
+    void readFromString(const std::string &text) {
+      std::istringstream input(text);
+      m_fileList.read(input);
+    }
+
+    void write(const Isis::FileName &outputFileList) {
+      m_fileList.write(outputFileList);
+    }
+
+    void write(const std::string &outputFileList) {
+      m_fileList.write(Isis::FileName(stdStringToQString(outputFileList)));
+    }
+
+    std::string toString() {
+      std::ostringstream output;
+      m_fileList.write(output);
+      return output.str();
+    }
+
+    void append(const Isis::FileName &fileName) {
+      m_fileList.push_back(fileName);
+    }
+
+    void append(const std::string &fileName) {
+      m_fileList.push_back(Isis::FileName(stdStringToQString(fileName)));
+    }
+
+    void clear() {
+      m_fileList.clear();
+    }
+
+    int size() const {
+      return m_fileList.size();
+    }
+
+    bool empty() const {
+      return m_fileList.empty();
+    }
+
+    Isis::FileName fileNameAt(int index) const {
+      if (index < 0 || index >= m_fileList.size()) {
+        throw py::index_error("FileList index out of range");
+      }
+
+      return m_fileList[index];
+    }
+
+  private:
+    Isis::FileList m_fileList;
+};
+
+}  // namespace
 
 // Vector conversion functions now provided by helpers.h
 
@@ -151,6 +228,46 @@ void bind_base_support(py::module_ &m) {
       .def("__repr__", [](const Isis::FileName &self) {
         return "FileName('" + qStringToStdString(self.toString()) + "')";
       });
+
+      // Added: 2026-04-09 - expose FileList through a wrapper instead of directly
+      // inheriting from QList<FileName> to keep Python-side ownership stable.
+      py::class_<FileListWrapper>(m, "FileList")
+       .def(py::init<>())
+       .def(py::init<const Isis::FileName &>(), py::arg("list_file"))
+       .def(py::init<const std::string &>(), py::arg("list_file"))
+       .def("read",
+         py::overload_cast<const Isis::FileName &>(&FileListWrapper::read),
+         py::arg("list_file"))
+       .def("read",
+         py::overload_cast<const std::string &>(&FileListWrapper::read),
+         py::arg("list_file"))
+       .def("read_from_string",
+         &FileListWrapper::readFromString,
+         py::arg("text"),
+         "Load file-list entries from in-memory text using the upstream istream parser.")
+       .def("write",
+         py::overload_cast<const Isis::FileName &>(&FileListWrapper::write),
+         py::arg("output_file_list"))
+       .def("write",
+         py::overload_cast<const std::string &>(&FileListWrapper::write),
+         py::arg("output_file_list"))
+       .def("to_string",
+         &FileListWrapper::toString,
+         "Serialize the file list using the upstream ostream writer.")
+       .def("append",
+         py::overload_cast<const Isis::FileName &>(&FileListWrapper::append),
+         py::arg("file_name"))
+       .def("append",
+         py::overload_cast<const std::string &>(&FileListWrapper::append),
+         py::arg("file_name"))
+       .def("clear", &FileListWrapper::clear)
+       .def("size", &FileListWrapper::size)
+       .def("empty", &FileListWrapper::empty)
+       .def("__len__", &FileListWrapper::size)
+       .def("__getitem__", &FileListWrapper::fileNameAt, py::arg("index"))
+       .def("__repr__", [](const FileListWrapper &self) {
+         return "FileList(size=" + std::to_string(self.size()) + ")";
+       });
 
   py::class_<Isis::iTime>(m, "iTime")
       .def(py::init<>())

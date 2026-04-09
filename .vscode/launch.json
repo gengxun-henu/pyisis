@@ -1,0 +1,33 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File (asp360_new)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "python": "/home/gengxun/miniconda3/envs/asp360_new/bin/python",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/build/python:${workspaceFolder}/tests/unitTest",
+                "ISISDATA": "${workspaceFolder}/tests/data/isisdata/mockup"
+            },
+            "justMyCode": false
+        },
+        {
+            "name": "Python: forward_intersection_example_test (asp360_new)",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/tests/unitTest/forward_intersection_example_test.py",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}",
+            "python": "/home/gengxun/miniconda3/envs/asp360_new/bin/python",
+            "env": {
+                "PYTHONPATH": "${workspaceFolder}/build/python:${workspaceFolder}/tests/unitTest",
+                "ISISDATA": "${workspaceFolder}/tests/data/isisdata/mockup"
+            },
+            "justMyCode": false
+        }
+    ]
+}

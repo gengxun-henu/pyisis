@@ -2,6 +2,6 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 GainUnitConversion,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/GainUnitConversion.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,GainUnitConversion,isis_pybind.GainUnitConversion,N,Python class symbol not found in current binding files
-Construction/Enum,"GainUnitConversion() : Module(""GainUnitConversion""), _units(""DN"") { }",isis_pybind.GainUnitConversion(),N,Constructor binding not detected in current binding files
-Construction/Enum,"GainUnitConversion(HiCalConf &conf, const QString &units, Cube *cube) : Module(""GainUnitConversion""), _units(units) { init(conf, cube)",isis_pybind.GainUnitConversion(),N,Constructor binding not detected in current binding files
+Class Symbol,GainUnitConversion,isis_pybind.GainUnitConversion,Y,Exposed in src/bind_mro_hical.cpp via a stable local wrapper with shared data/history helpers because the linked ISIS library does not export HiCalConf::sunDistanceAU or related HiCalConf constructors
+Construction/Enum,"GainUnitConversion() : Module(""GainUnitConversion""), _units(""DN"") { }",isis_pybind.GainUnitConversion(),Y,Default constructor exposed directly
+Construction/Enum,"GainUnitConversion(HiCalConf &conf, const QString &units, Cube *cube) : Module(""GainUnitConversion""), _units(units) { init(conf, cube)",isis_pybind.GainUnitConversion(label, conf_path, units='DN', cube=None),Y,Python-facing wrapper reproduces stable DN and DN/US behavior and raises a clear error for IOF because the required HiCalConf::sunDistanceAU symbol is unavailable in the linked ISIS library

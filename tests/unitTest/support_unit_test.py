@@ -3,12 +3,13 @@ Unit tests for ISIS support utility bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-21
+Last Modified: 2026-04-09
+Updated: 2026-04-09  Geng Xun added focused FileList regression coverage for file and string based list parsing.
 """
 
 import unittest
 
-from _unit_test_support import temporary_text_file, ip
+from _unit_test_support import temporary_directory, temporary_text_file, ip
 
 
 class FileNameAndITimeUnitTest(unittest.TestCase):
@@ -66,6 +67,63 @@ class FileNameAndITimeUnitTest(unittest.TestCase):
         time_value.set_et(12345.0)
         self.assertAlmostEqual(time_value.et(), 12345.0, places=6)
         self.assertIn("iTime(", repr(time_value))
+
+
+class FileListUnitTest(unittest.TestCase):
+    def test_filelist_reads_list_file_and_preserves_first_column_rules(self):
+        with temporary_directory() as temp_dir:
+            list_path = temp_dir / "inputs.lis"
+            list_path.write_text(
+                """
+# ignore me
+   // ignore me too
+alpha.cub trailing columns
+beta.cub,ignored_attribute
+"gamma,file.cub"
+""".lstrip(),
+                encoding="utf-8",
+            )
+
+            file_list = ip.FileList(ip.FileName(str(list_path)))
+
+            self.assertEqual(len(file_list), 3)
+            self.assertEqual(file_list[0].to_string(), "alpha.cub")
+            self.assertEqual(file_list[1].to_string(), "beta.cub")
+            self.assertEqual(file_list[2].to_string(), "gamma,file.cub")
+            self.assertIn("FileList(size=3)", repr(file_list))
+
+    def test_filelist_read_from_string_and_write_round_trip(self):
+        file_list = ip.FileList()
+        file_list.read_from_string("delta.cub\nepsilon.cub extra\n")
+
+        self.assertFalse(file_list.empty())
+        self.assertEqual(file_list.size(), 2)
+        self.assertEqual(file_list.to_string(), "delta.cub\nepsilon.cub\n")
+
+        with temporary_directory() as temp_dir:
+            output_path = temp_dir / "outputs.lis"
+            file_list.write(str(output_path))
+            self.assertEqual(output_path.read_text(encoding="utf-8"), "delta.cub\nepsilon.cub\n")
+
+    def test_filelist_append_supports_python_friendly_population(self):
+        file_list = ip.FileList()
+        file_list.append("one.cub")
+        file_list.append(ip.FileName("two.cub"))
+
+        self.assertEqual(len(file_list), 2)
+        self.assertEqual(file_list[0].name(), "one.cub")
+        self.assertEqual(file_list[1].name(), "two.cub")
+
+    def test_filelist_raises_on_empty_stream_and_missing_file(self):
+        file_list = ip.FileList()
+
+        with self.assertRaises(ip.IException) as empty_error:
+            file_list.read_from_string("\n")
+        self.assertIn("Input Stream Empty", str(empty_error.exception))
+
+        with self.assertRaises(ip.IException) as missing_error:
+            file_list.read("/definitely/not/present/filelist.lis")
+        self.assertIn("Unable to open", str(missing_error.exception))
 
 
 if __name__ == "__main__":

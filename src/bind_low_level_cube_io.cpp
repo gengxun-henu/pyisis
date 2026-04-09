@@ -3,10 +3,14 @@
 // Updated: 2026-04-09  Geng Xun exposed CubeAttributeInput/Output and LabelAttachment helpers for cube filename attribute parsing.
 // Updated: 2026-04-08  Geng Xun added Blob file/bytes helpers alongside existing low-level cube I/O bindings
 // Updated: 2026-04-09  Geng Xun added Blobber bindings and Cube table-write/read helpers for low-level blob/table regression coverage.
+// Updated: 2026-04-09  Geng Xun added a safe CubeTileHandler wrapper binding for tile-core label update coverage.
 // Updated: 2026-04-09  Geng Xun added a safe CubeBsqHandler wrapper binding for BSQ label-update coverage.
 // Updated: 2026-04-09  Geng Xun exposed the abstract CubeCachingAlgorithm symbol and a Python-friendly CacheResult surface.
 // Updated: 2026-04-09  Geng Xun added a safe CubeIoHandler wrapper over the shared BSQ handler surface for read/write/cache regression checks.
-// Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, and table structures
+// Updated: 2026-04-09  Geng Xun added OriginalLabel low-level blob/PVL round-trip bindings.
+// Updated: 2026-04-09  Geng Xun added RawCubeChunk and RegionalCachingAlgorithm low-level cache helpers.
+// Updated: 2026-04-09  Geng Xun added OriginalXmlLabel blob/XML round-trip bindings with Python-friendly XML string access.
+// Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, OriginalLabel, RawCubeChunk, cache helpers, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, and table structures
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
@@ -34,16 +38,20 @@
 #include "CubeBsqHandler.h"
 #include "CubeCachingAlgorithm.h"
 #include "CubeAttribute.h"
+#include "CubeTileHandler.h"
 #include "Endian.h"
 #include "FileName.h"
 #include "Histogram.h"
 #include "LineManager.h"
+#include "OriginalLabel.h"
+#include "OriginalXmlLabel.h"
 #include "PixelType.h"
 #include "Portal.h"
 #include "Pvl.h"
 #include "PvlGroup.h"
 #include "Projection.h"
 #include "RawCubeChunk.h"
+#include "RegionalCachingAlgorithm.h"
 #include "SampleManager.h"
 #include "Statistics.h"
 #include "Table.h"
@@ -183,6 +191,54 @@ class CubeIoHandlerWrapper {
      std::unique_ptr<QFile> m_dataFile;
      std::unique_ptr<QList<int>> m_virtualBands;
      std::unique_ptr<Isis::CubeIoHandler> m_handler;
+};
+
+class CubeTileHandlerWrapper {
+  public:
+     CubeTileHandlerWrapper(
+         const std::string &dataFilePath,
+         const Isis::Pvl &labels,
+         const std::vector<int> &virtualBands,
+         bool alreadyOnDisk)
+         : m_dataFile(std::make_unique<QFile>(stdStringToQString(dataFilePath))) {
+          QIODevice::OpenMode openMode = QIODevice::ReadWrite;
+          if (!alreadyOnDisk) {
+               openMode |= QIODevice::Truncate;
+          }
+
+          if (!m_dataFile->open(openMode)) {
+               QString message = "Failed to open CubeTileHandler data file [" +
+                                 m_dataFile->fileName() + "]";
+               throw Isis::IException(Isis::IException::Io, message, _FILEINFO_);
+          }
+
+          if (!virtualBands.empty()) {
+               m_virtualBands = std::make_unique<QList<int>>();
+               for (int band : virtualBands) {
+                    m_virtualBands->append(band);
+               }
+          }
+
+          m_handler = std::make_unique<Isis::CubeTileHandler>(
+              m_dataFile.get(),
+              m_virtualBands ? m_virtualBands.get() : nullptr,
+              labels,
+              alreadyOnDisk);
+     }
+
+     void updateLabels(Isis::Pvl &labels) {
+          m_handler->updateLabels(labels);
+     }
+
+     std::string repr() const {
+          return "CubeTileHandler(data_file='" +
+                 qStringToStdString(m_dataFile->fileName()) + "')";
+     }
+
+  private:
+     std::unique_ptr<QFile> m_dataFile;
+     std::unique_ptr<QList<int>> m_virtualBands;
+     std::unique_ptr<Isis::CubeTileHandler> m_handler;
 };
 
 py::object tableFieldValue(const Isis::TableField &field) {
@@ -569,6 +625,81 @@ void bind_low_level_cube_io(py::module_ &m) {
       .def("data_file_mutex", &CubeIoHandlerWrapper::dataFileMutex)
       .def("__repr__", &CubeIoHandlerWrapper::repr);
 
+  py::class_<CubeTileHandlerWrapper>(m, "CubeTileHandler")
+      .def(py::init<const std::string &, const Isis::Pvl &, const std::vector<int> &, bool>(),
+           py::arg("data_file_path"),
+           py::arg("labels"),
+           py::arg("virtual_bands") = std::vector<int>{},
+           py::arg("already_on_disk") = false,
+           "Construct a tile cube-I/O handler wrapper using a real data file path,\n"
+           "cube labels, an optional virtual-band mapping, and an on-disk flag.")
+      .def("update_labels",
+           &CubeTileHandlerWrapper::updateLabels,
+           py::arg("labels"),
+           "Update the supplied cube labels so the Core format is marked Tile and tile sizes are recorded.")
+      .def("__repr__", &CubeTileHandlerWrapper::repr);
+
+     py::class_<Isis::RawCubeChunk>(m, "RawCubeChunk")
+               .def(py::init<int, int, int, int, int, int, int>(),
+                          py::arg("start_sample"),
+                          py::arg("start_line"),
+                          py::arg("start_band"),
+                          py::arg("end_sample"),
+                          py::arg("end_line"),
+                          py::arg("end_band"),
+                          py::arg("num_bytes"))
+               .def("is_dirty", &Isis::RawCubeChunk::isDirty)
+               .def("get_raw_data",
+                          [](Isis::RawCubeChunk &self) {
+                               QByteArray &raw = self.getRawData();
+                               return py::bytes(raw.constData(), raw.size());
+                          })
+               .def("set_raw_data",
+                          [](Isis::RawCubeChunk &self, const py::bytes &data) {
+                               std::string raw = data;
+                               self.setRawData(QByteArray(raw.data(), static_cast<int>(raw.size())));
+                          },
+                          py::arg("raw_data"))
+               .def("get_char", &Isis::RawCubeChunk::getChar, py::arg("offset"))
+               .def("get_short", &Isis::RawCubeChunk::getShort, py::arg("offset"))
+               .def("get_float", &Isis::RawCubeChunk::getFloat, py::arg("offset"))
+               .def("get_start_sample", &Isis::RawCubeChunk::getStartSample)
+               .def("get_start_line", &Isis::RawCubeChunk::getStartLine)
+               .def("get_start_band", &Isis::RawCubeChunk::getStartBand)
+               .def("sample_count", &Isis::RawCubeChunk::sampleCount)
+               .def("line_count", &Isis::RawCubeChunk::lineCount)
+               .def("band_count", &Isis::RawCubeChunk::bandCount)
+               .def("get_byte_count", &Isis::RawCubeChunk::getByteCount)
+               .def("set_data",
+                          [](Isis::RawCubeChunk &self, const py::object &value, int offset) {
+                               if (py::isinstance<py::float_>(value)) {
+                                    self.setData(value.cast<float>(), offset);
+                               }
+                               else if (py::isinstance<py::int_>(value)) {
+                                    const int int_value = value.cast<int>();
+                                    if (int_value >= 0 && int_value <= 255) {
+                                         self.setData(static_cast<unsigned char>(int_value), offset);
+                                    }
+                                    else {
+                                         self.setData(static_cast<short>(int_value), offset);
+                                    }
+                               }
+                               else {
+                                    throw py::type_error("RawCubeChunk.set_data expects an int or float value");
+                               }
+                          },
+                          py::arg("value"),
+                          py::arg("offset"))
+               .def("set_dirty", &Isis::RawCubeChunk::setDirty, py::arg("dirty"))
+               .def("__repr__",
+                          [](const Isis::RawCubeChunk &self) {
+                               return "RawCubeChunk(start=(" + std::to_string(self.getStartSample()) + ", " +
+                                                  std::to_string(self.getStartLine()) + ", " + std::to_string(self.getStartBand()) +
+                                                  "), size=(" + std::to_string(self.sampleCount()) + ", " +
+                                                  std::to_string(self.lineCount()) + ", " + std::to_string(self.bandCount()) +
+                                                  "), bytes=" + std::to_string(self.getByteCount()) + ")";
+                          });
+
   py::class_<Isis::CubeCachingAlgorithm> cubeCachingAlgorithm(
       m,
       "CubeCachingAlgorithm",
@@ -578,15 +709,18 @@ void bind_low_level_cube_io(py::module_ &m) {
       .def(py::init<>(), "Construct an empty cache result that signals the algorithm did not understand the data.")
       .def(py::init([](const py::iterable &chunks_to_free) {
              QList<Isis::RawCubeChunk *> chunks;
-             for (py::handle ignored : chunks_to_free) {
-                  (void)ignored;
-                  chunks.append(nullptr);
+             for (py::handle entry : chunks_to_free) {
+                  if (entry.is_none()) {
+                       chunks.append(nullptr);
+                  }
+                  else {
+                       chunks.append(entry.cast<Isis::RawCubeChunk *>());
+                  }
              }
              return Isis::CubeCachingAlgorithm::CacheResult(chunks);
            }),
            py::arg("chunks_to_free"),
-           "Construct a cache result that is marked valid using placeholder chunk slots."
-           " RawCubeChunk objects are not exposed yet, so each iterable item becomes a placeholder entry.")
+           "Construct a cache result from RawCubeChunk objects or None placeholders.")
       .def(py::init<const Isis::CubeCachingAlgorithm::CacheResult &>(), py::arg("other"))
       .def("algorithm_understood_data",
            &Isis::CubeCachingAlgorithm::CacheResult::algorithmUnderstoodData)
@@ -595,14 +729,7 @@ void bind_low_level_cube_io(py::module_ &m) {
              py::list result;
              for (Isis::RawCubeChunk *chunk : self.getChunksToFree()) {
                   if (chunk) {
-                       result.append(py::make_tuple(
-                           chunk->getStartSample(),
-                           chunk->getStartLine(),
-                           chunk->getStartBand(),
-                           chunk->sampleCount(),
-                           chunk->lineCount(),
-                           chunk->bandCount(),
-                           chunk->getByteCount()));
+                       result.append(py::cast(chunk, py::return_value_policy::reference));
                   }
                   else {
                        result.append(py::none());
@@ -610,8 +737,7 @@ void bind_low_level_cube_io(py::module_ &m) {
              }
              return result;
            },
-           "Return a Python-friendly list describing the chunks slated for eviction."
-           " Placeholder entries appear as None when raw chunks are not exposed.")
+           "Return the RawCubeChunk objects slated for eviction, with None for null entries.")
       .def("__len__",
            [](const Isis::CubeCachingAlgorithm::CacheResult &self) {
              return self.getChunksToFree().size();
@@ -622,6 +748,32 @@ void bind_low_level_cube_io(py::module_ &m) {
                     std::string(self.algorithmUnderstoodData() ? "True" : "False") +
                     ", chunks=" + std::to_string(self.getChunksToFree().size()) + ")";
            });
+
+  py::class_<Isis::RegionalCachingAlgorithm, Isis::CubeCachingAlgorithm>(m, "RegionalCachingAlgorithm")
+      .def(py::init<>())
+      .def("recommend_chunks_to_free",
+           [](Isis::RegionalCachingAlgorithm &self,
+              const std::vector<Isis::RawCubeChunk *> &allocated,
+              const std::vector<Isis::RawCubeChunk *> &just_used,
+              const Isis::Buffer &just_requested) {
+             QList<Isis::RawCubeChunk *> allocated_chunks;
+             for (Isis::RawCubeChunk *chunk : allocated) {
+                  allocated_chunks.append(chunk);
+             }
+
+             QList<Isis::RawCubeChunk *> just_used_chunks;
+             for (Isis::RawCubeChunk *chunk : just_used) {
+                  just_used_chunks.append(chunk);
+             }
+
+             return self.recommendChunksToFree(allocated_chunks, just_used_chunks, just_requested);
+           },
+           py::arg("allocated"),
+           py::arg("just_used"),
+           py::arg("just_requested"))
+      .def("__repr__", [](const Isis::RegionalCachingAlgorithm &) {
+        return "RegionalCachingAlgorithm()";
+      });
 
   py::class_<Isis::AlphaCube>(m, "AlphaCube")
       .def(py::init<Isis::Cube &>(), py::arg("cube"))
@@ -727,6 +879,89 @@ void bind_low_level_cube_io(py::module_ &m) {
                           [](const Isis::Blob &self) {
                                return "Blob(name='" + qStringToStdString(self.Name()) + "', type='" +
                                                   qStringToStdString(self.Type()) + "', size=" + std::to_string(self.Size()) + ")";
+                          });
+
+     py::class_<Isis::OriginalLabel>(m, "OriginalLabel")
+               .def(py::init<>(), "Construct an empty OriginalLabel container.")
+               .def(py::init([](const std::string &file_name) {
+                               return Isis::OriginalLabel(stdStringToQString(file_name));
+                          }),
+                          py::arg("file_name"),
+                          "Load an OriginalLabel from a blob file on disk.")
+               .def(py::init<Isis::Blob &>(),
+                          py::arg("blob"),
+                          "Construct an OriginalLabel from an existing Blob object.")
+               .def(py::init<Isis::Pvl>(),
+                          py::arg("pvl"),
+                          "Construct an OriginalLabel from a PVL document.")
+               .def("return_labels",
+                          &Isis::OriginalLabel::ReturnLabels,
+                          "Return the stored original labels as a PVL object.")
+               .def("to_blob",
+                          &Isis::OriginalLabel::toBlob,
+                          "Serialize this OriginalLabel back to a Blob.")
+               .def("__repr__",
+                          [](const Isis::OriginalLabel &self) {
+                               Isis::Pvl labels = self.ReturnLabels();
+                               int object_count = labels.objects();
+                               int group_count = labels.groups();
+                               return "OriginalLabel(objects=" + std::to_string(object_count) +
+                                          ", groups=" + std::to_string(group_count) + ")";
+                          });
+
+     py::class_<Isis::OriginalXmlLabel>(m, "OriginalXmlLabel")
+               .def(py::init<>(), "Construct an empty OriginalXmlLabel container.")
+               .def(py::init([](const std::string &file_name) {
+                               return Isis::OriginalXmlLabel(stdStringToQString(file_name));
+                          }),
+                          py::arg("file_name"),
+                          "Load an OriginalXmlLabel from a serialized blob file on disk.")
+               .def(py::init<Isis::Blob &>(),
+                          py::arg("blob"),
+                          "Construct an OriginalXmlLabel from an existing Blob object.")
+               .def("to_blob",
+                          &Isis::OriginalXmlLabel::toBlob,
+                          "Serialize this OriginalXmlLabel back to a Blob.")
+               .def("from_blob",
+                          &Isis::OriginalXmlLabel::fromBlob,
+                          py::arg("blob"),
+                          "Load this OriginalXmlLabel from a serialized Blob.")
+               .def("read_from_xml_file",
+                          [](Isis::OriginalXmlLabel &self, const std::string &file_name) {
+                               self.readFromXmlFile(Isis::FileName(stdStringToQString(file_name)));
+                          },
+                          py::arg("file_name"),
+                          "Read and parse original XML labels directly from an XML file.")
+               .def("return_labels",
+                          [](const Isis::OriginalXmlLabel &self) {
+                               return qStringToStdString(self.ReturnLabels().toString());
+                          },
+                          "Return the stored original XML labels as a serialized XML string.")
+               .def("root_tag",
+                          [](const Isis::OriginalXmlLabel &self) {
+                               return qStringToStdString(self.ReturnLabels().documentElement().tagName());
+                          },
+                          "Return the XML document root tag name, or an empty string for an empty label.")
+               .def("is_empty",
+                          [](const Isis::OriginalXmlLabel &self) {
+                               return self.ReturnLabels().documentElement().isNull();
+                          },
+                          "Return True when no XML document has been loaded yet.")
+               .def("to_string",
+                          [](const Isis::OriginalXmlLabel &self) {
+                               return qStringToStdString(self.ReturnLabels().toString());
+                          },
+                          "Alias for return_labels().")
+               .def("__str__",
+                          [](const Isis::OriginalXmlLabel &self) {
+                               return qStringToStdString(self.ReturnLabels().toString());
+                          })
+               .def("__repr__",
+                          [](const Isis::OriginalXmlLabel &self) {
+                               const QDomDocument &labels = self.ReturnLabels();
+                               const QString root_tag = labels.documentElement().tagName();
+                               return "OriginalXmlLabel(root='" + qStringToStdString(root_tag) +
+                                          "', length=" + std::to_string(labels.toString().size()) + ")";
                           });
 
      py::class_<Isis::Blobber> blobber(m, "Blobber");

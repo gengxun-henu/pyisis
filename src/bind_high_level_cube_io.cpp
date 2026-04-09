@@ -2,6 +2,7 @@
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added high-level cube I/O process, import, export, progress, and JP2 helper bindings
 // Updated: 2026-04-09  Geng Xun removed the duplicate Progress py::class_ registration so _isis_core imports cleanly under test runners
+// Updated: 2026-04-09  Geng Xun added SubArea bindings with Cube/PvlGroup-aware label update helpers and focused tests
 // Purpose: pybind11 bindings for ISIS high-level cube I/O workflows including Process variants, import/export helpers, and JP2 utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -32,6 +33,7 @@
 #include "ProcessImportPds.h"
 #include "ProcessImportVicar.h"
 #include "Progress.h"
+#include "SubArea.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -461,6 +463,29 @@ void bind_high_level_cube_io(py::module_ &m) {
              self.SetVicarFile(stdStringToQString(vicar_file), vicar_label);
            },
      py::arg("vicar_file"), py::arg("vicar_label"));
+
+  py::class_<Isis::SubArea>(m, "SubArea")
+   .def(py::init<>())
+   .def("set_sub_area", &Isis::SubArea::SetSubArea,
+     py::arg("original_lines"),
+     py::arg("original_samples"),
+     py::arg("start_line"),
+     py::arg("start_sample"),
+     py::arg("end_line"),
+     py::arg("end_sample"),
+     py::arg("line_increment"),
+     py::arg("sample_increment"))
+   .def("update_label",
+     [](Isis::SubArea &self, Isis::Cube &input_cube, Isis::Cube &output_cube, Isis::PvlGroup &results) {
+       self.UpdateLabel(&input_cube, &output_cube, results);
+     },
+     py::arg("input_cube"),
+     py::arg("output_cube"),
+     py::arg("results"))
+   .def("__repr__",
+     [](const Isis::SubArea &) {
+       return "SubArea()";
+     });
 
   py::class_<Isis::ExportDescription> export_description(m, "ExportDescription");
 

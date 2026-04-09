@@ -7,7 +7,10 @@
 // SPDX-License-Identifier: MIT
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
+#include "MathUtils.h"
+#include "SensorUtilities.h"
 #include "Sensor.h"
 #include "SurfacePoint.h"
 #include "helpers.h"
@@ -56,4 +59,127 @@ void bind_sensor(py::module_ &m) {
            [](Isis::Sensor &self) { return qStringToStdString(self.spacecraftNameLong()); })
       .def("spacecraft_name_short",
            [](Isis::Sensor &self) { return qStringToStdString(self.spacecraftNameShort()); });
+
+  // Added: 2026-04-09 - SensorUtilities lightweight value type bindings
+  py::class_<SensorUtilities::Vec>(m, "Vec")
+      .def(py::init<>(), "Construct a zero Vec.")
+      .def(py::init<double, double, double>(),
+           py::arg("x"), py::arg("y"), py::arg("z"),
+           "Construct a Vec with the given x, y, z components.")
+      .def(py::init([](const std::vector<double> &v) {
+             if (v.size() != 3)
+               throw std::invalid_argument("Vec requires exactly 3 elements.");
+             double arr[3] = {v[0], v[1], v[2]};
+             return SensorUtilities::Vec(arr);
+           }),
+           py::arg("data"),
+           "Construct a Vec from a list of 3 doubles.")
+      .def_readwrite("x", &SensorUtilities::Vec::x)
+      .def_readwrite("y", &SensorUtilities::Vec::y)
+      .def_readwrite("z", &SensorUtilities::Vec::z)
+      .def("to_list",
+           [](const SensorUtilities::Vec &self) {
+             return std::vector<double>{self.x, self.y, self.z};
+           },
+           "Return the Vec as a Python list [x, y, z].")
+      .def("__repr__",
+           [](const SensorUtilities::Vec &self) {
+             return "Vec(x=" + std::to_string(self.x) + ", y=" +
+                    std::to_string(self.y) + ", z=" + std::to_string(self.z) + ")";
+           });
+
+  py::class_<SensorUtilities::GroundPt2D>(m, "GroundPt2D")
+      .def(py::init([](double lat, double lon) {
+             SensorUtilities::GroundPt2D g;
+             g.lat = lat;
+             g.lon = lon;
+             return g;
+           }),
+           py::arg("lat") = 0.0, py::arg("lon") = 0.0,
+           "Construct a GroundPt2D with latitude and longitude in radians.")
+      .def_readwrite("lat", &SensorUtilities::GroundPt2D::lat)
+      .def_readwrite("lon", &SensorUtilities::GroundPt2D::lon)
+      .def("__repr__",
+           [](const SensorUtilities::GroundPt2D &self) {
+             return "GroundPt2D(lat=" + std::to_string(self.lat) +
+                    ", lon=" + std::to_string(self.lon) + ")";
+           });
+
+  py::class_<SensorUtilities::GroundPt3D>(m, "GroundPt3D")
+      .def(py::init([](double lat, double lon, double radius) {
+             SensorUtilities::GroundPt3D g;
+             g.lat = lat;
+             g.lon = lon;
+             g.radius = radius;
+             return g;
+           }),
+           py::arg("lat") = 0.0, py::arg("lon") = 0.0, py::arg("radius") = 0.0,
+           "Construct a GroundPt3D with latitude, longitude (radians), and radius (km).")
+      .def_readwrite("lat",    &SensorUtilities::GroundPt3D::lat)
+      .def_readwrite("lon",    &SensorUtilities::GroundPt3D::lon)
+      .def_readwrite("radius", &SensorUtilities::GroundPt3D::radius)
+      .def("__repr__",
+           [](const SensorUtilities::GroundPt3D &self) {
+             return "GroundPt3D(lat=" + std::to_string(self.lat) +
+                    ", lon=" + std::to_string(self.lon) +
+                    ", radius=" + std::to_string(self.radius) + ")";
+           });
+
+  py::class_<SensorUtilities::ImagePt>(m, "ImagePt")
+      .def(py::init([](double line, double sample, int band) {
+             SensorUtilities::ImagePt p;
+             p.line   = line;
+             p.sample = sample;
+             p.band   = band;
+             return p;
+           }),
+           py::arg("line") = 0.0, py::arg("sample") = 0.0, py::arg("band") = 1,
+           "Construct an ImagePt with the given line, sample, and band.")
+      .def_readwrite("line",   &SensorUtilities::ImagePt::line)
+      .def_readwrite("sample", &SensorUtilities::ImagePt::sample)
+      .def_readwrite("band",   &SensorUtilities::ImagePt::band)
+      .def("__repr__",
+           [](const SensorUtilities::ImagePt &self) {
+             return "ImagePt(line=" + std::to_string(self.line) +
+                    ", sample=" + std::to_string(self.sample) +
+                    ", band=" + std::to_string(self.band) + ")";
+           });
+
+  py::class_<SensorUtilities::RaDec>(m, "RaDec")
+      .def(py::init([](double ra, double dec) {
+             SensorUtilities::RaDec r;
+             r.ra  = ra;
+             r.dec = dec;
+             return r;
+           }),
+           py::arg("ra") = 0.0, py::arg("dec") = 0.0,
+           "Construct a RaDec with right ascension and declination in radians.")
+      .def_readwrite("ra",  &SensorUtilities::RaDec::ra)
+      .def_readwrite("dec", &SensorUtilities::RaDec::dec)
+      .def("__repr__",
+           [](const SensorUtilities::RaDec &self) {
+             return "RaDec(ra=" + std::to_string(self.ra) +
+                    ", dec=" + std::to_string(self.dec) + ")";
+           });
+
+  py::class_<SensorUtilities::ObserverState>(m, "ObserverState")
+      .def(py::init<>(), "Construct a default ObserverState.")
+      .def_readwrite("look_vec",       &SensorUtilities::ObserverState::lookVec)
+      .def_readwrite("j2000_look_vec", &SensorUtilities::ObserverState::j2000LookVec)
+      .def_readwrite("sensor_pos",     &SensorUtilities::ObserverState::sensorPos)
+      .def_readwrite("time",           &SensorUtilities::ObserverState::time)
+      .def_readwrite("image_point",    &SensorUtilities::ObserverState::imagePoint)
+      .def("__repr__",
+           [](const SensorUtilities::ObserverState &self) {
+             return "ObserverState(time=" + std::to_string(self.time) + ")";
+           });
+
+  py::class_<SensorUtilities::Intersection>(m, "Intersection")
+      .def(py::init<>(), "Construct a default Intersection.")
+      .def_readwrite("ground_pt", &SensorUtilities::Intersection::groundPt)
+      .def_readwrite("normal",    &SensorUtilities::Intersection::normal)
+      .def("__repr__",
+           [](const SensorUtilities::Intersection &) {
+             return "Intersection()";
+           });
 }

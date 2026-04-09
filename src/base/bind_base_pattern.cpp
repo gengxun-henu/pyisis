@@ -13,8 +13,11 @@
  * Binding author: Geng Xun
  * Created: 2026-03-24
  * Updated: 2026-04-08  Geng Xun added Centroid selection bindings for Chip-based pattern tests.
- * Purpose: Expose Chip, AutoReg, MaximumCorrelation, and Centroid pattern matching classes to Python via pybind11.
+ * Updated: 2026-04-09  Geng Xun added MinimumDifference binding.
+ * Purpose: Expose Chip, AutoReg, MaximumCorrelation, MinimumDifference, and Centroid pattern matching classes to Python via pybind11.
  */
+
+#include <limits>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
@@ -23,6 +26,7 @@
 #include "Centroid.h"
 #include "AutoReg.h"
 #include "MaximumCorrelation.h"
+#include "MinimumDifference.h"
 #include "Cube.h"
 #include "Affine.h"
 #include "Statistics.h"
@@ -372,6 +376,24 @@ void bind_base_pattern(py::module_ &m) {
       .def("__repr__", [](const Isis::MaximumCorrelation &self) {
         std::string status = self.Success() ? "Success" : "Failed";
         return "MaximumCorrelation(status=" + status + ", " +
+               "goodness_of_fit=" + std::to_string(self.GoodnessOfFit()) + ")";
+      });
+
+  // Added: 2026-04-09 - MinimumDifference concrete AutoReg implementation
+  py::class_<Isis::MinimumDifference, Isis::AutoReg>(m, "MinimumDifference")
+      .def(py::init<Isis::Pvl &>(),
+           py::arg("pvl"),
+           py::keep_alive<1, 2>(),
+           "Construct a MinimumDifference object with PVL configuration.")
+      .def("ideal_fit",
+           [](const Isis::MinimumDifference &) { return 0.0; },
+           "Return the ideal fit value (0.0 = perfect match for MinimumDifference).")
+      .def("most_lenient_tolerance",
+           [](const Isis::MinimumDifference &) { return std::numeric_limits<double>::max(); },
+           "Return the most lenient acceptable tolerance (DBL_MAX for MinimumDifference).")
+      .def("__repr__", [](const Isis::MinimumDifference &self) {
+        std::string status = self.Success() ? "Success" : "Failed";
+        return "MinimumDifference(status=" + status + ", " +
                "goodness_of_fit=" + std::to_string(self.GoodnessOfFit()) + ")";
       });
 }

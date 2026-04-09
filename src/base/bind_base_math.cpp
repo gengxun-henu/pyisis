@@ -17,9 +17,10 @@
  * Created: 2026-03-24
  * Updated: 2026-04-09  Geng Xun exposed Ransac helper functions via a Python math submodule.
  * Updated: 2026-04-09  Geng Xun added SurfaceModel binding (bivariate polynomial surface fitting)
+ * Updated: 2026-04-09  Geng Xun added MaximumLikelihoodWFunctions binding (robust estimation).
  * Purpose: Expose Calculator, Affine, BasisFunction, InfixToPostfix,
- *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, Ransac helpers, and SurfaceModel
- *          classes to Python via pybind11.
+ *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, Ransac helpers, SurfaceModel,
+ *          and MaximumLikelihoodWFunctions classes to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
@@ -34,6 +35,7 @@
 #include "InlineInfixToPostfix.h"
 #include "LeastSquares.h"
 #include "Matrix.h"
+#include "MaximumLikelihoodWFunctions.h"
 #include "PolynomialUnivariate.h"
 #include "PolynomialBivariate.h"
 #include "NthOrderPolynomial.h"
@@ -483,4 +485,77 @@ void bind_base_math(py::module_ &m)
          .def("__repr__", [](const Isis::SurfaceModel &) {
               return "SurfaceModel()";
          });
+
+  // Added: 2026-04-09 - MaximumLikelihoodWFunctions binding
+  py::enum_<Isis::MaximumLikelihoodWFunctions::Model>(m, "MaximumLikelihoodModel")
+      .value("Huber",        Isis::MaximumLikelihoodWFunctions::Huber)
+      .value("HuberModified",Isis::MaximumLikelihoodWFunctions::HuberModified)
+      .value("Welsch",       Isis::MaximumLikelihoodWFunctions::Welsch)
+      .value("Chen",         Isis::MaximumLikelihoodWFunctions::Chen)
+      .export_values();
+
+  py::class_<Isis::MaximumLikelihoodWFunctions>(m, "MaximumLikelihoodWFunctions")
+      .def(py::init<>(),
+           "Construct a MaximumLikelihoodWFunctions with the default model (Huber).")
+      .def(py::init<Isis::MaximumLikelihoodWFunctions::Model>(),
+           py::arg("model"),
+           "Construct with the given model and its default tweaking constant.")
+      .def(py::init<Isis::MaximumLikelihoodWFunctions::Model, double>(),
+           py::arg("model"), py::arg("tweaking_constant"),
+           "Construct with the given model and a specific tweaking constant.")
+      .def(py::init<const Isis::MaximumLikelihoodWFunctions &>(),
+           py::arg("other"),
+           "Copy constructor.")
+      .def("set_model",
+           py::overload_cast<Isis::MaximumLikelihoodWFunctions::Model>(
+               &Isis::MaximumLikelihoodWFunctions::setModel),
+           py::arg("model"),
+           "Set the model type using the default tweaking constant.")
+      .def("set_tweaking_constant_default",
+           &Isis::MaximumLikelihoodWFunctions::setTweakingConstantDefault,
+           "Reset the tweaking constant to its default for the current model.")
+      .def("set_tweaking_constant",
+           &Isis::MaximumLikelihoodWFunctions::setTweakingConstant,
+           py::arg("tweaking_constant"),
+           "Set a specific tweaking constant.")
+      .def("model",
+           &Isis::MaximumLikelihoodWFunctions::model,
+           "Return the current model type.")
+      .def("tweaking_constant",
+           &Isis::MaximumLikelihoodWFunctions::tweakingConstant,
+           "Return the current tweaking constant.")
+      .def("sqrt_weight_scaler",
+           &Isis::MaximumLikelihoodWFunctions::sqrtWeightScaler,
+           py::arg("residual_z_score"),
+           "Return the square-root weight scaler for the given residual z-score.")
+      .def("tweaking_constant_quantile",
+           &Isis::MaximumLikelihoodWFunctions::tweakingConstantQuantile,
+           "Return the recommended quantile of the residuals to use as the tweaking constant.")
+      .def("weighted_residual_cutoff",
+           [](Isis::MaximumLikelihoodWFunctions &self) {
+             return qStringToStdString(self.weightedResidualCutoff());
+           },
+           "Return a string describing the weighted residual cutoff.")
+      .def_static("model_to_string",
+                  [](Isis::MaximumLikelihoodWFunctions::Model model) {
+                    return qStringToStdString(
+                        Isis::MaximumLikelihoodWFunctions::modelToString(model));
+                  },
+                  py::arg("model"),
+                  "Convert a Model enum value to its string name.")
+      .def_static("string_to_model",
+                  [](const std::string &model_name) {
+                    return Isis::MaximumLikelihoodWFunctions::stringToModel(
+                        stdStringToQString(model_name));
+                  },
+                  py::arg("model_name"),
+                  "Convert a model name string to its Model enum value.")
+      .def("__repr__",
+           [](const Isis::MaximumLikelihoodWFunctions &self) {
+             return "MaximumLikelihoodWFunctions(model=" +
+                    qStringToStdString(Isis::MaximumLikelihoodWFunctions::modelToString(
+                        self.model())) +
+                    ", tweaking_constant=" +
+                    std::to_string(self.tweakingConstant()) + ")";
+           });
 }

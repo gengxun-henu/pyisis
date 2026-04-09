@@ -216,7 +216,8 @@ target_include_directories(_isis_core
     ${Qt5Core_INCLUDE_DIRS}
     ${Qt5Concurrent_INCLUDE_DIRS}
     ${Qt5Xml_INCLUDE_DIRS}
-    ${Qt5Widgets_INCLUDE_DIRS})
+    ${Qt5Widgets_INCLUDE_DIRS}
+    "${CMAKE_CURRENT_SOURCE_DIR}/reference/SensorUtilities/include")
 
 target_link_libraries(_isis_core
   PRIVATE

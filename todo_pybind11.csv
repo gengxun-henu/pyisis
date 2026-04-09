@@ -173,7 +173,7 @@ Math,InfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/
 Math,InlineInfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造与继承的 convert/tokenize_equation 接口
 Math,LeastSquares,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/数据输入/求解/残差/配置接口并补充单测
 Math,Matrix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/矩阵运算/线性代数接口并补充单测
-Math,MaximumLikelihoodWFunctions,未转换,
+Math,MaximumLikelihoodWFunctions,已转换,2026-04-09 已在 src/base/bind_base_math.cpp 暴露 Model enum/构造函数/set_model/tweaking_constant/sqrt_weight_scaler/model_to_string/string_to_model；focused 单测在 math_unit_test.py
 Math,NthOrderPolynomial,已转换,2026-03-29 已在 bind_base_math.cpp 暴露 NthOrderPolynomial(degree) 与 expand(...)
 Math,NumericalApproximation,未转换,抽象基类/纯虚接口
 Math,NumericalAtmosApprox,已转换,2026-04-09 已在 src/base/bind_base_photometry.cpp 暴露 NumericalAtmosApprox、InterpType/IntegFunc 与积分 helper；focused 单测在 tests/unitTest/atmos_model_factory_unit_test.py；smoke 已补符号
@@ -215,7 +215,7 @@ Pattern Matching,ImageOverlapSet,未转换,
 Pattern Matching,ImagePolygon,未转换,
 Pattern Matching,LimitPolygonSeeder,未转换,
 Pattern Matching,MaximumCorrelation,已转换,2026-04-02 已在 bind_base_pattern.cpp 暴露构造函数，继承 AutoReg 全部方法
-Pattern Matching,MinimumDifference,未转换,
+Pattern Matching,MinimumDifference,已转换,2026-04-09 已在 src/base/bind_base_pattern.cpp 继承 AutoReg 暴露构造函数/ideal_fit/most_lenient_tolerance；focused 单测在 pattern_unit_test.py
 Pattern Matching,NormModelFactory,已转换,2026-04-06 已在 bind_base_photometry.cpp 暴露 create 静态工厂方法与 AtmosModel 重载
 Pattern Matching,PhotoModelFactory,已转换,2026-04-04 已在 bind_base_photometry.cpp 暴露 create 静态工厂方法并补最小工厂链单测
 Pattern Matching,PolygonSeeder,未转换,抽象基类/纯虚接口
@@ -234,17 +234,17 @@ Radiometric And Photometric Correction,PhotoModel,已转换,2026-04-09 已在 sr
 Radiometric And Photometric Correction,ShadeAtm,已转换,2026-04-09 已在 src/base/bind_base_photometry.cpp 暴露构造函数；focused 单测覆盖直接构造/工厂分派/三组 calc_nrm_albedo 真值，smoke 已补符号
 Radiometric And Photometric Correction,TopoAtm,已转换,2026-04-09 已在 src/base/bind_base_photometry.cpp 暴露构造函数；focused 单测覆盖直接构造/工厂分派/三组 calc_nrm_albedo 真值，smoke 已补符号
 SensorUtilities,Body,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
-SensorUtilities,GroundPt2D,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
-SensorUtilities,GroundPt3D,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,GroundPt2D,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 lat/lon 属性；focused 单测在 sensor_utils_unit_test.py
+SensorUtilities,GroundPt3D,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 lat/lon/radius 属性；focused 单测在 sensor_utils_unit_test.py
 SensorUtilities,Illuminator,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
-SensorUtilities,ImagePt,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
-SensorUtilities,Intersection,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,ImagePt,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 line/sample/band 属性；focused 单测在 sensor_utils_unit_test.py
+SensorUtilities,Intersection,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 ground_pt/normal Vec 属性；focused 单测在 sensor_utils_unit_test.py
 SensorUtilities,Matrix,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
-SensorUtilities,ObserverState,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
-SensorUtilities,RaDec,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,ObserverState,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 look_vec/j2000_look_vec/sensor_pos/time/image_point 属性；focused 单测在 sensor_utils_unit_test.py
+SensorUtilities,RaDec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 ra/dec 属性；focused 单测在 sensor_utils_unit_test.py
 SensorUtilities,Sensor,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
 SensorUtilities,Shape,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
-SensorUtilities,Vec,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
+SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z/to_list；focused 单测在 sensor_utils_unit_test.py
 "Spice, Instruments, and Cameras",Camera,已转换,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测；已通过 Sensor 继承暴露 get_surface_point() 以支撑 measure-level 几何链路
 "Spice, Instruments, and Cameras",CameraPointInfo,已转换,2026-04-08 已在 src/bind_camera.cpp 暴露 CameraPointInfo 全部公开入口，并补本地 mosrange focused 单测与 smoke 覆盖
 "Spice, Instruments, and Cameras",CameraDetectorMap,已转换,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
@@ -258,7 +258,7 @@ SensorUtilities,Vec,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
 "Spice, Instruments, and Cameras",FramingCamera,已转换,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已验证层级关系
 "Spice, Instruments, and Cameras",IdealCamera,已转换,相机模型/Spice 依赖
 "Spice, Instruments, and Cameras",IrregularBodyCameraGroundMap,未转换,
-"Spice, Instruments, and Cameras",LightTimeCorrectionState,未转换,
+"Spice, Instruments, and Cameras",LightTimeCorrectionState,已转换,2026-04-09 已在 src/bind_camera.cpp 暴露构造函数/aberration_correction/swap_observer_target/light_time_to_surface；focused 单测在 sensor_utils_unit_test.py
 "Spice, Instruments, and Cameras",LineScanCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
 "Spice, Instruments, and Cameras",LineScanCameraDetectorMap,已转换,第七批已补基础单测（独立构造/时间参数）
 "Spice, Instruments, and Cameras",LineScanCameraGroundMap,已转换,第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测
@@ -268,7 +268,7 @@ SensorUtilities,Vec,未转换,ISIS 同级 SensorUtilities 库；轻量值类型
 "Spice, Instruments, and Cameras",PushFrameCameraCcdLayout,未转换,
 "Spice, Instruments, and Cameras",PushFrameCameraDetectorMap,未转换,
 "Spice, Instruments, and Cameras",PushFrameCameraGroundMap,未转换,
-"Spice, Instruments, and Cameras",Quaternion,未转换,
+"Spice, Instruments, and Cameras",Quaternion,已转换,2026-04-09 已在 src/bind_camera.cpp 暴露构造函数/get_quaternion/set/to_matrix/to_angles/conjugate/qxv/乘法运算符；focused 单测在 sensor_utils_unit_test.py
 "Spice, Instruments, and Cameras",RadarCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
 "Spice, Instruments, and Cameras",RadarGroundMap,未转换,
 "Spice, Instruments, and Cameras",RadarGroundRangeMap,未转换,

@@ -6,6 +6,7 @@ Created: 2026-03-21
 Last Modified: 2026-04-09
 Updated: 2026-03-30  Geng Xun added PvlSequence regression coverage alongside core PVL keyword, group, object, and container tests.
 Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer focused unit tests.
+Updated: 2026-04-09  Geng Xun added PvlFormat, PvlTranslationTable, PvlFormatPds, PvlToPvlTranslationManager unit tests.
 """
 
 import unittest
@@ -487,6 +488,130 @@ class PvlTranslationTableUnitTest(unittest.TestCase):
         """repr(PvlTranslationTable) returns a non-empty string."""
         table = self._make_table()
         self.assertIn("PvlTranslationTable", repr(table))
+
+
+class PvlFormatPdsUnitTest(unittest.TestCase):
+    """Focused unit tests for PvlFormatPds binding. Added: 2026-04-09."""
+
+    def test_construct_default(self):
+        """PvlFormatPds() constructs without error."""
+        fmt = ip.PvlFormatPds()
+        self.assertIsNotNone(fmt)
+
+    def test_format_eol_is_crlf(self):
+        """format_eol() returns CRLF for PDS format."""
+        fmt = ip.PvlFormatPds()
+        eol = fmt.format_eol()
+        self.assertIn("\r", eol)
+        self.assertIn("\n", eol)
+
+    def test_format_name(self):
+        """format_name() returns the keyword name."""
+        fmt = ip.PvlFormatPds()
+        kw = ip.PvlKeyword("TestKey", "val")
+        result = fmt.format_name(kw)
+        self.assertIsInstance(result, str)
+        self.assertIn("TestKey", result)
+
+    def test_format_value(self):
+        """format_value() returns a string for the keyword value."""
+        fmt = ip.PvlFormatPds()
+        kw = ip.PvlKeyword("MyKey", "testval")
+        result = fmt.format_value(kw)
+        self.assertIsInstance(result, str)
+
+    def test_char_limit_inherited(self):
+        """PvlFormatPds inherits char_limit from PvlFormat."""
+        fmt = ip.PvlFormatPds()
+        fmt.set_char_limit(80)
+        self.assertEqual(fmt.char_limit(), 80)
+
+    def test_repr(self):
+        """repr(PvlFormatPds) includes class name."""
+        fmt = ip.PvlFormatPds()
+        self.assertIn("PvlFormatPds", repr(fmt))
+
+    def test_is_instance_of_pvl_format(self):
+        """PvlFormatPds is a subtype of PvlFormat."""
+        fmt = ip.PvlFormatPds()
+        self.assertIsInstance(fmt, ip.PvlFormat)
+
+
+class PvlToPvlTranslationManagerUnitTest(unittest.TestCase):
+    """Focused unit tests for PvlToPvlTranslationManager binding. Added: 2026-04-09."""
+
+    SIMPLE_TABLE = (
+        "Group = CoreLines\n"
+        "  InputPosition = IMAGE\n"
+        "  InputKey = LINES\n"
+        "  Translation = (*,*)\n"
+        "EndGroup\n"
+        "Group = CoreBitsPerPixel\n"
+        "  Auto = 1\n"
+        "  InputPosition = IMAGE\n"
+        "  InputKey = SAMPLE_BITS\n"
+        "  InputDefault = 8\n"
+        "  Translation = (8,8)\n"
+        "  Translation = (16,16)\n"
+        "EndGroup\n"
+        "End\n"
+    )
+
+    def _make_mgr_with_label(self):
+        """Build a PvlToPvlTranslationManager with an input label attached."""
+        input_pvl_text = (
+            "Object = IMAGE\n"
+            "  LINES = 512\n"
+            "  SAMPLE_BITS = 8\n"
+            "EndObject\n"
+            "End\n"
+        )
+        input_label = ip.Pvl()
+        input_label.from_string(input_pvl_text)
+        return ip.PvlToPvlTranslationManager(input_label, self.SIMPLE_TABLE, True)
+
+    def test_construct_from_string(self):
+        """Construct from translation string (from_string=True)."""
+        mgr = ip.PvlToPvlTranslationManager(self.SIMPLE_TABLE, True)
+        self.assertIsNotNone(mgr)
+
+    def test_is_instance_of_label_translation_manager(self):
+        """PvlToPvlTranslationManager is a subtype of LabelTranslationManager."""
+        mgr = ip.PvlToPvlTranslationManager(self.SIMPLE_TABLE, True)
+        self.assertIsInstance(mgr, ip.LabelTranslationManager)
+
+    def test_translate_with_label(self):
+        """translate() returns the translated value from the input label."""
+        input_pvl_text = (
+            "Object = IMAGE\n"
+            "  LINES = 512\n"
+            "  SAMPLE_BITS = 8\n"
+            "EndObject\n"
+            "End\n"
+        )
+        input_label = ip.Pvl()
+        input_label.from_string(input_pvl_text)
+        mgr = ip.PvlToPvlTranslationManager(input_label, self.SIMPLE_TABLE, True)
+        result = mgr.translate("CoreLines")
+        self.assertEqual(result, "512")
+
+    def test_input_has_keyword(self):
+        """input_has_keyword() reflects the input label."""
+        input_pvl_text = (
+            "Object = IMAGE\n"
+            "  LINES = 256\n"
+            "EndObject\n"
+            "End\n"
+        )
+        input_label = ip.Pvl()
+        input_label.from_string(input_pvl_text)
+        mgr = ip.PvlToPvlTranslationManager(input_label, self.SIMPLE_TABLE, True)
+        self.assertTrue(mgr.input_has_keyword("CoreLines"))
+
+    def test_repr(self):
+        """repr includes class name."""
+        mgr = ip.PvlToPvlTranslationManager(self.SIMPLE_TABLE, True)
+        self.assertIn("PvlToPvlTranslationManager", repr(mgr))
 
 
 if __name__ == "__main__":

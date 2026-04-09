@@ -1173,3 +1173,53 @@ Queue document created: `pybind_rollout_classes_20260409.md`
 ### Validation status
 - Build environment not available in sandbox; requires CI/asp360_new interpreter.
 - All bindings reviewed for correctness against upstream `.h` and `.cpp`.
+
+---
+
+## 2026-04-09 第四阶段 Phase-4 批次第二轮（5 类）
+
+### 活跃队列
+1. PvlFormatPds — 已完成
+2. LabelTranslationManager — 已完成（抽象基类，注册继承链）
+3. PvlToPvlTranslationManager — 已完成
+4. PvlToXmlTranslationManager — 已完成（部分，QDomDocument Auto 方法不暴露）
+5. XmlToPvlTranslationManager — 已完成（部分，内部 QDomDocument 不暴露）
+
+### Class 1: PvlFormatPds (已转换)
+- Added `py::class_<Isis::PvlFormatPds, Isis::PvlFormat>` binding in `src/base/bind_base_pvl.cpp`.
+- Exposed: constructors (default, file, Pvl), format_value/format_name/format_eol (CRLF).
+- Inherits all PvlFormat methods including set_char_limit/char_limit/type/accuracy/add_quotes/is_single_unit.
+- Added `PvlFormatPdsUnitTest` class to `tests/unitTest/pvl_unit_test.py` with 7 focused tests.
+- Exported `PvlFormatPds` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_pvl_format_pds_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 2: LabelTranslationManager (已转换, 抽象基类)
+- Added `py::class_<Isis::LabelTranslationManager, Isis::PvlTranslationTable>` binding in `src/base/bind_base_pvl.cpp`.
+- Not instantiable from Python (abstract, pure virtual Translate).
+- Exposed: auto_translate(Pvl), parse_specification(str) -> list[str].
+- Inheritance chain: PvlTranslationTable -> LabelTranslationManager -> PvlToPvlTranslationManager/PvlToXmlTranslationManager/XmlToPvlTranslationManager correctly registered.
+- Exported `LabelTranslationManager` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_label_translation_manager_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 3: PvlToPvlTranslationManager (已转换)
+- Added `py::class_<Isis::PvlToPvlTranslationManager, Isis::LabelTranslationManager>` binding.
+- Exposed: 4 constructors (file, string, label+file, label+string), translate, auto_translate (2 overloads), input_has_keyword, set_label.
+- Added `PvlToPvlTranslationManagerUnitTest` class to `tests/unitTest/pvl_unit_test.py` with 5 focused tests.
+- Exported `PvlToPvlTranslationManager` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_pvl_to_pvl_translation_manager_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 4: PvlToXmlTranslationManager (已转换, 部分)
+- Added `py::class_<Isis::PvlToXmlTranslationManager, Isis::LabelTranslationManager>` binding.
+- Exposed: 2 constructors, translate, input_has_keyword, set_label. Skipped: Auto(QDomDocument) - Qt XML type not Python-friendly.
+- Exported `PvlToXmlTranslationManager` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_pvl_to_xml_translation_manager_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 5: XmlToPvlTranslationManager (已转换, 部分)
+- Added `py::class_<Isis::XmlToPvlTranslationManager, Isis::LabelTranslationManager>` binding.
+- Exposed: 3 constructors (file, string, FileName+file), translate, auto_translate(FileName, Pvl). Internal QDomDocument not exposed.
+- Exported `XmlToPvlTranslationManager` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_xml_to_pvl_translation_manager_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Validation status
+- Build environment not available in sandbox; requires CI/asp360_new interpreter.
+- All bindings reviewed for correctness against upstream `.h` and `.cpp`.

@@ -1,9 +1,14 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-LabelTranslationManager,Parsing,isis/src/base/objs/LabelTranslationManager/LabelTranslationManager.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-08 第四阶段后端 / 桥接 / 工具类批次 inventory 预登记；抽象基类/纯虚接口
+LabelTranslationManager,Parsing,reference/upstream_isis/src/base/objs/LabelTranslationManager/LabelTranslationManager.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 抽象基类；不可从 Python 直接实例化；在 bind_base_pvl.cpp 注册以支持继承链
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,LabelTranslationManager,isis_pybind.LabelTranslationManager,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
-Construction/Enum,LabelTranslationManager(),isis_pybind.LabelTranslationManager(),N,抽象基类/纯虚接口
-Public API,"virtual QString Translate(QString translationGroupName, int findex = 0) = 0",isis_pybind.LabelTranslationManager.translate,N,抽象基类/纯虚接口
-Public API,virtual void Auto(Pvl &outputLabel),isis_pybind.LabelTranslationManager.auto,N,抽象基类/纯虚接口
-Public API,virtual QStringList parseSpecification(QString specification) const,isis_pybind.LabelTranslationManager.parse_specification,N,抽象基类/纯虚接口
+Class Symbol,LabelTranslationManager,isis_pybind.LabelTranslationManager,Y,Registered as non-instantiable abstract base
+Construction/Enum,LabelTranslationManager(),N,Abstract; not exposed to Python
+Construction/Enum,LabelTranslationManager(const QString &transFile),N,Abstract; not exposed
+Construction/Enum,LabelTranslationManager(std::istream &),N,Abstract; not exposed
+Public API,virtual QString Translate(QString translationGroupName int findex) = 0,N,Pure virtual; implemented in concrete subclasses
+Public API,virtual void Auto(Pvl &outputLabel),isis_pybind.LabelTranslationManager.auto_translate,Y,Exposed for subclass use
+Public API,virtual QStringList parseSpecification(QString) const,isis_pybind.LabelTranslationManager.parse_specification,Y,Returns list[str]
+Protected API,virtual PvlKeyword DoTranslation(const QString),N,Protected; internal
+Protected API,"virtual PvlContainer *CreateContainer(const QString, Pvl &)",N,Protected; internal
+Python Protocol,__repr__,isis_pybind.LabelTranslationManager.__repr__,Y,LabelTranslationManager()

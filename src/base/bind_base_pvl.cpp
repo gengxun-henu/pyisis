@@ -2,8 +2,9 @@
 // Created: 2026-03-21
 // Updated: 2026-03-30  Geng Xun expanded PVL bindings with PvlSequence support alongside core keyword, container, group, object, and Pvl classes
 // Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer bindings for PVL stream tokenization.
-// Updated: 2026-04-09  Geng Xun added PvlFormat and PvlTranslationTable bindings.
-// Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, and PvlTranslationTable
+// Updated: 2026-04-09  Geng Xun added PvlFormat, PvlFormatPds, and PvlTranslationTable bindings.
+// Updated: 2026-04-09  Geng Xun added LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, XmlToPvlTranslationManager bindings.
+// Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, PvlFormatPds, PvlTranslationTable, LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, and XmlToPvlTranslationManager
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
@@ -20,16 +21,22 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "FileName.h"
+#include "LabelTranslationManager.h"
 #include "Pvl.h"
 #include "PvlContainer.h"
 #include "PvlFormat.h"
+#include "PvlFormatPds.h"
 #include "PvlGroup.h"
 #include "PvlKeyword.h"
 #include "PvlObject.h"
 #include "PvlSequence.h"
 #include "PvlToken.h"
 #include "PvlTokenizer.h"
+#include "PvlToPvlTranslationManager.h"
+#include "PvlToXmlTranslationManager.h"
 #include "PvlTranslationTable.h"
+#include "XmlToPvlTranslationManager.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -661,5 +668,210 @@ void bind_base_pvl(py::module_ &m) {
       .def("__repr__",
            [](const Isis::PvlTranslationTable &) {
              return "PvlTranslationTable()";
+           });
+
+  // Added: 2026-04-09 - PvlFormatPds binding (PDS-specific PVL formatter)
+  py::class_<Isis::PvlFormatPds, Isis::PvlFormat>(m, "PvlFormatPds")
+      .def(py::init<>(),
+           "Construct a default PvlFormatPds with PDS-specific keyword formatting.")
+      .def(py::init([](const std::string &file) {
+             return Isis::PvlFormatPds(stdStringToQString(file));
+           }),
+           py::arg("file"),
+           "Construct a PvlFormatPds and load a keyword-type map from file.")
+      .def(py::init([](Isis::Pvl &keymap) {
+             return Isis::PvlFormatPds(keymap);
+           }),
+           py::arg("keymap"),
+           "Construct a PvlFormatPds from a Pvl keyword-type map.")
+      .def("format_value",
+           [](Isis::PvlFormatPds &self, const Isis::PvlKeyword &keyword, int value_index) {
+             return qStringToStdString(self.formatValue(keyword, value_index));
+           },
+           py::arg("keyword"), py::arg("value_index") = 0,
+           "Format the value of a keyword at the given index using PDS rules.")
+      .def("format_name",
+           [](Isis::PvlFormatPds &self, const Isis::PvlKeyword &keyword) {
+             return qStringToStdString(self.formatName(keyword));
+           },
+           py::arg("keyword"),
+           "Format the name of a keyword using PDS rules.")
+      .def("format_eol",
+           [](Isis::PvlFormatPds &self) {
+             return qStringToStdString(self.formatEOL());
+           },
+           "Return the PDS end-of-line sequence (CRLF).")
+      .def("__repr__",
+           [](const Isis::PvlFormatPds &) {
+             return "PvlFormatPds()";
+           });
+
+  // Added: 2026-04-09 - LabelTranslationManager abstract base (non-instantiable from Python)
+  py::class_<Isis::LabelTranslationManager, Isis::PvlTranslationTable>(m, "LabelTranslationManager")
+      // No py::init - abstract class cannot be instantiated from Python
+      .def("auto_translate",
+           [](Isis::LabelTranslationManager &self, Isis::Pvl &output_label) {
+             self.Auto(output_label);
+           },
+           py::arg("output_label"),
+           "Translate all Auto-flagged groups into output_label.")
+      .def("parse_specification",
+           [](const Isis::LabelTranslationManager &self, const std::string &specification) {
+             QStringList qs = self.parseSpecification(stdStringToQString(specification));
+             std::vector<std::string> result;
+             result.reserve(qs.size());
+             for (const QString &s : qs) {
+               result.push_back(qStringToStdString(s));
+             }
+             return result;
+           },
+           py::arg("specification"),
+           "Parse a specification string into a list of tokens.")
+      .def("__repr__",
+           [](const Isis::LabelTranslationManager &) {
+             return "LabelTranslationManager()";
+           });
+
+  // Added: 2026-04-09 - PvlToPvlTranslationManager binding (PVL to PVL translation)
+  py::class_<Isis::PvlToPvlTranslationManager, Isis::LabelTranslationManager>(
+      m, "PvlToPvlTranslationManager")
+      .def(py::init([](const std::string &trans_file) {
+             return Isis::PvlToPvlTranslationManager(stdStringToQString(trans_file));
+           }),
+           py::arg("trans_file"),
+           "Construct from a translation table file path.")
+      .def(py::init([](const std::string &trans_text, bool from_string) {
+             std::istringstream iss(trans_text);
+             return Isis::PvlToPvlTranslationManager(iss);
+           }),
+           py::arg("trans_text"), py::arg("from_string"),
+           "Construct from a PVL translation table string (set from_string=True).")
+      .def(py::init([](Isis::Pvl &input_label, const std::string &trans_file) {
+             return Isis::PvlToPvlTranslationManager(input_label,
+                                                      stdStringToQString(trans_file));
+           }),
+           py::arg("input_label"), py::arg("trans_file"),
+           "Construct from an input label and a translation table file path.")
+      .def(py::init([](Isis::Pvl &input_label, const std::string &trans_text, bool from_string) {
+             std::istringstream iss(trans_text);
+             return Isis::PvlToPvlTranslationManager(input_label, iss);
+           }),
+           py::arg("input_label"), py::arg("trans_text"), py::arg("from_string"),
+           "Construct from an input label and a PVL translation string (set from_string=True).")
+      .def("translate",
+           [](Isis::PvlToPvlTranslationManager &self, const std::string &group_name,
+              int findex) {
+             return qStringToStdString(
+                 self.Translate(stdStringToQString(group_name), findex));
+           },
+           py::arg("group_name"), py::arg("findex") = 0,
+           "Translate a single keyword value using the named translation group.")
+      .def("auto_translate",
+           [](Isis::PvlToPvlTranslationManager &self, Isis::Pvl &output_label) {
+             self.Auto(output_label);
+           },
+           py::arg("output_label"),
+           "Translate all Auto-flagged groups into output_label.")
+      .def("auto_translate",
+           [](Isis::PvlToPvlTranslationManager &self,
+              Isis::Pvl &input_label, Isis::Pvl &output_label) {
+             self.Auto(input_label, output_label);
+           },
+           py::arg("input_label"), py::arg("output_label"),
+           "Set input_label and translate all Auto groups into output_label.")
+      .def("input_has_keyword",
+           [](Isis::PvlToPvlTranslationManager &self, const std::string &group_name) {
+             return self.InputHasKeyword(stdStringToQString(group_name));
+           },
+           py::arg("group_name"),
+           "Return True if the input label contains the keyword for the named group.")
+      .def("set_label",
+           [](Isis::PvlToPvlTranslationManager &self, Isis::Pvl &input_label) {
+             self.SetLabel(input_label);
+           },
+           py::arg("input_label"),
+           "Set the input label to use for subsequent translations.")
+      .def("__repr__",
+           [](const Isis::PvlToPvlTranslationManager &) {
+             return "PvlToPvlTranslationManager()";
+           });
+
+  // Added: 2026-04-09 - PvlToXmlTranslationManager binding (PVL to XML translation)
+  py::class_<Isis::PvlToXmlTranslationManager, Isis::LabelTranslationManager>(
+      m, "PvlToXmlTranslationManager")
+      .def(py::init([](const std::string &trans_file) {
+             return Isis::PvlToXmlTranslationManager(stdStringToQString(trans_file));
+           }),
+           py::arg("trans_file"),
+           "Construct from a translation table file path.")
+      .def(py::init([](Isis::Pvl &input_label, const std::string &trans_file) {
+             return Isis::PvlToXmlTranslationManager(input_label,
+                                                      stdStringToQString(trans_file));
+           }),
+           py::arg("input_label"), py::arg("trans_file"),
+           "Construct from an input label and a translation table file path.")
+      .def("translate",
+           [](Isis::PvlToXmlTranslationManager &self, const std::string &group_name,
+              int input_index) {
+             return qStringToStdString(
+                 self.Translate(stdStringToQString(group_name), input_index));
+           },
+           py::arg("group_name"), py::arg("input_index") = 0,
+           "Translate a single keyword value using the named translation group.")
+      .def("input_has_keyword",
+           [](Isis::PvlToXmlTranslationManager &self, const std::string &group_name) {
+             return self.InputHasKeyword(stdStringToQString(group_name));
+           },
+           py::arg("group_name"),
+           "Return True if the input label contains the keyword for the named group.")
+      .def("set_label",
+           [](Isis::PvlToXmlTranslationManager &self, Isis::Pvl &input_label) {
+             self.SetLabel(input_label);
+           },
+           py::arg("input_label"),
+           "Set the input label for subsequent translations.")
+      .def("__repr__",
+           [](const Isis::PvlToXmlTranslationManager &) {
+             return "PvlToXmlTranslationManager()";
+           });
+
+  // Added: 2026-04-09 - XmlToPvlTranslationManager binding (XML to PVL translation)
+  py::class_<Isis::XmlToPvlTranslationManager, Isis::LabelTranslationManager>(
+      m, "XmlToPvlTranslationManager")
+      .def(py::init([](const std::string &trans_file) {
+             return Isis::XmlToPvlTranslationManager(stdStringToQString(trans_file));
+           }),
+           py::arg("trans_file"),
+           "Construct from a translation table file path.")
+      .def(py::init([](const std::string &trans_text, bool from_string) {
+             std::istringstream iss(trans_text);
+             return Isis::XmlToPvlTranslationManager(iss);
+           }),
+           py::arg("trans_text"), py::arg("from_string"),
+           "Construct from a PVL translation text string (set from_string=True).")
+      .def(py::init([](Isis::FileName &input_label, const std::string &trans_file) {
+             return Isis::XmlToPvlTranslationManager(input_label,
+                                                      stdStringToQString(trans_file));
+           }),
+           py::arg("input_label"), py::arg("trans_file"),
+           "Construct from an XML input-label FileName and a translation table file path.")
+      .def("translate",
+           [](Isis::XmlToPvlTranslationManager &self, const std::string &group_name,
+              int findex) {
+             return qStringToStdString(
+                 self.Translate(stdStringToQString(group_name), findex));
+           },
+           py::arg("group_name"), py::arg("findex") = 0,
+           "Translate a single keyword value using the named translation group.")
+      .def("auto_translate",
+           [](Isis::XmlToPvlTranslationManager &self, Isis::FileName &input_label,
+              Isis::Pvl &output_label) {
+             self.Auto(input_label, output_label);
+           },
+           py::arg("input_label"), py::arg("output_label"),
+           "Translate all Auto-flagged groups from input_label (XML FileName) into output_label (Pvl).")
+      .def("__repr__",
+           [](const Isis::XmlToPvlTranslationManager &) {
+             return "XmlToPvlTranslationManager()";
            });
 }

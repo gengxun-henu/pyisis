@@ -1,12 +1,14 @@
 """
 Unit tests for ISIS math classes: Calculator, Affine, BasisFunction,
 LeastSquares, Matrix, PolynomialUnivariate, PolynomialBivariate,
-NthOrderPolynomial, InfixToPostfix, CubeInfixToPostfix, and InlineInfixToPostfix
+NthOrderPolynomial, InfixToPostfix, CubeInfixToPostfix, InlineInfixToPostfix,
+and SurfaceModel
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-03-29
+Last Modified: 2026-04-09
 Updated: 2026-03-29  Geng Xun added regression coverage for Calculator, linear algebra, polynomial, and infix/postfix bindings.
+Updated: 2026-04-09  Geng Xun added SurfaceModel focused unit tests.
 """
 import unittest
 import math
@@ -895,6 +897,73 @@ class InlineInfixToPostfixUnitTest(unittest.TestCase):
         result = converter.convert("abs(sin(0.5))")
         self.assertIsInstance(result, str)
         self.assertTrue(len(result) > 0)
+
+
+class SurfaceModelUnitTest(unittest.TestCase):
+    """Test suite for SurfaceModel class bindings. Added: 2026-04-09."""
+
+    def test_construction(self):
+        """SurfaceModel() constructs without error."""
+        sm = ip.SurfaceModel()
+        self.assertIsNotNone(sm)
+
+    def test_add_triplet_and_solve(self):
+        """add_triplet + solve + evaluate: plane z = x + y."""
+        sm = ip.SurfaceModel()
+        # z = x + y: triplets for a flat plane
+        for x in range(-2, 3):
+            for y in range(-2, 3):
+                sm.add_triplet(float(x), float(y), float(x + y))
+        sm.solve()
+        # Evaluate at a new point
+        z = sm.evaluate(3.0, 4.0)
+        self.assertAlmostEqual(z, 7.0, places=5)
+
+    def test_add_triplets_vector(self):
+        """add_triplets vector overload gives the same result as add_triplet."""
+        xs = [0.0, 1.0, 0.0, 1.0, 2.0, 2.0]
+        ys = [0.0, 0.0, 1.0, 1.0, 0.0, 2.0]
+        zs = [x * x + y * y for x, y in zip(xs, ys)]
+        sm = ip.SurfaceModel()
+        sm.add_triplets(xs, ys, zs)
+        sm.solve()
+        # z = x^2 + y^2; evaluate at (1,1) → should be ~2
+        z = sm.evaluate(1.0, 1.0)
+        self.assertAlmostEqual(z, 2.0, places=4)
+
+    def test_min_max_parabolic_bowl(self):
+        """min_max returns status=0 and the minimum for a paraboloid z = x^2 + y^2."""
+        # Build a dense grid so the fit is well-conditioned
+        xs, ys, zs = [], [], []
+        for xi in range(-3, 4):
+            for yi in range(-3, 4):
+                xs.append(float(xi))
+                ys.append(float(yi))
+                zs.append(float(xi * xi + yi * yi))
+        sm = ip.SurfaceModel()
+        sm.add_triplets(xs, ys, zs)
+        sm.solve()
+        status, x_min, y_min = sm.min_max()
+        self.assertEqual(status, 0)
+        self.assertAlmostEqual(x_min, 0.0, places=4)
+        self.assertAlmostEqual(y_min, 0.0, places=4)
+
+    def test_min_max_plane_returns_nonzero_status(self):
+        """min_max returns status=1 for a plane (no extremum)."""
+        sm = ip.SurfaceModel()
+        # Pure linear plane: z = x (no quadratic terms)
+        for xi in range(-3, 4):
+            for yi in range(-3, 4):
+                sm.add_triplet(float(xi), float(yi), float(xi))
+        sm.solve()
+        status, _x, _y = sm.min_max()
+        self.assertEqual(status, 1)
+
+    def test_repr(self):
+        """__repr__ returns a non-empty string containing 'SurfaceModel'."""
+        sm = ip.SurfaceModel()
+        r = repr(sm)
+        self.assertIn("SurfaceModel", r)
 
 
 if __name__ == '__main__':

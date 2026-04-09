@@ -1,7 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
-// Updated: 2026-03-26  Geng Xun expanded support bindings with iTime, serial-number, observation-number, and utility coverage
-// Purpose: pybind11 bindings for core ISIS support utilities including FileName, iTime, SerialNumber, SerialNumberList, and ObservationNumber
+// Updated: 2026-04-09  Geng Xun added Progress py::class_ binding and IException::ErrorType enum
+// Purpose: pybind11 bindings for core ISIS support utilities including FileName, iTime, SerialNumber, SerialNumberList, ObservationNumber, Progress, and IException
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
@@ -44,7 +44,63 @@ namespace py = pybind11;
 // Vector conversion functions now provided by helpers.h
 
 void bind_base_support(py::module_ &m) {
+  // Register IException as a catchable Python exception (derived from Exception)
   py::register_exception<Isis::IException>(m, "IException");
+
+  // Expose the ErrorType enum so Python code can reference
+  // ip.IExceptionErrorType.Unknown, .User, .Programmer, .Io
+  py::enum_<Isis::IException::ErrorType>(m, "IExceptionErrorType")
+      .value("Unknown", Isis::IException::Unknown)
+      .value("User", Isis::IException::User)
+      .value("Programmer", Isis::IException::Programmer)
+      .value("Io", Isis::IException::Io)
+      .export_values();
+
+  // Added: 2026-04-09 - bind Isis::Progress as a full py::class_
+  py::class_<Isis::Progress>(m, "Progress")
+      .def(py::init<>(),
+           "Construct a Progress reporter. Reads ProgressBarPercent and "
+           "ProgressBar settings from ISIS Preferences. Call "
+           "disable_automatic_display() before set_maximum_steps() if you "
+           "do not want output on stdout/GUI.")
+      .def("set_text",
+           [](Isis::Progress &self, const std::string &text) {
+             self.SetText(stdStringToQString(text));
+           },
+           py::arg("text"),
+           "Set the label text reported at 0% progress.")
+      .def("text",
+           [](const Isis::Progress &self) {
+             return qStringToStdString(self.Text());
+           },
+           "Get the current progress label text.")
+      .def("set_maximum_steps",
+           &Isis::Progress::SetMaximumSteps,
+           py::arg("steps"),
+           "Set the total number of processing steps (must be >= 0). "
+           "Also resets the current step counter to 0.")
+      .def("add_steps",
+           &Isis::Progress::AddSteps,
+           py::arg("steps"),
+           "Adjust the maximum step count by the given amount (nonzero). "
+           "Useful when the initial estimate was approximate.")
+      .def("check_status",
+           &Isis::Progress::CheckStatus,
+           "Advance one step and optionally print progress. "
+           "Raises IException (Programmer) if steps exceed maximum.")
+      .def("disable_automatic_display",
+           &Isis::Progress::DisableAutomaticDisplay,
+           "Suppress automatic stdout/GUI progress output.")
+      .def("maximum_steps",
+           &Isis::Progress::MaximumSteps,
+           "Return the total number of steps.")
+      .def("current_step",
+           &Isis::Progress::CurrentStep,
+           "Return the current step counter (incremented by check_status()).")
+      .def("__repr__", [](const Isis::Progress &self) {
+        return "Progress(steps=" + std::to_string(self.MaximumSteps()) +
+               ", current=" + std::to_string(self.CurrentStep()) + ")";
+      });
 
   /**
    * @brief Bindings for the Isis::FileName class

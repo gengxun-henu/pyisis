@@ -1,15 +1,15 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Progress,Utility,reference/upstream_isis/src/base/objs/Progress/Progress.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程进度报告器；主要用于 Process 派生类中的命令行或 GUI 进度反馈
+Progress,Utility,reference/upstream_isis/src/base/objs/Progress/Progress.h,src/base/bind_base_support.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/base/bind_base_support.cpp 完成 py::class_ 绑定；focused 单测在 tests/unitTest/progress_unit_test.py；smoke 已补符号
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Progress,isis_pybind.Progress,N,Python class symbol not found in current binding files
-Construction/Enum,Progress(),isis_pybind.Progress(),N,默认构造
-Construction/Enum,~Progress(),isis_pybind.Progress,N,析构函数
-Public API,"void SetText(const QString &text)",isis_pybind.Progress.SetText,N,设置进度文本
-Public API,QString Text() const,isis_pybind.Progress.Text,N,获取进度文本
-Public API,"void SetMaximumSteps(const int steps)",isis_pybind.Progress.SetMaximumSteps,N,设置总步数
-Public API,"void AddSteps(const int steps)",isis_pybind.Progress.AddSteps,N,追加步数
-Public API,void CheckStatus(),isis_pybind.Progress.CheckStatus,N,推进并输出当前进度
-Public API,void DisableAutomaticDisplay(),isis_pybind.Progress.DisableAutomaticDisplay,N,关闭自动显示
-Public API,int MaximumSteps() const,isis_pybind.Progress.MaximumSteps,N,总步数 getter
-Public API,int CurrentStep() const,isis_pybind.Progress.CurrentStep,N,当前步数 getter
+Class Symbol,Progress,isis_pybind.Progress,Y,py::class_<Isis::Progress> in bind_base_support.cpp
+Construction/Enum,Progress(),isis_pybind.Progress(),Y,默认构造；constructor 内部读 Preference
+Construction/Enum,~Progress(),isis_pybind.Progress,Y,析构由 pybind11 自动管理
+Public API,"void SetText(const QString &text)",isis_pybind.Progress.set_text,Y,lambda 包装 QString 转换
+Public API,QString Text() const,isis_pybind.Progress.text,Y,lambda 包装 QString 转换
+Public API,"void SetMaximumSteps(const int steps)",isis_pybind.Progress.set_maximum_steps,Y,直接绑定
+Public API,"void AddSteps(const int steps)",isis_pybind.Progress.add_steps,Y,直接绑定
+Public API,void CheckStatus(),isis_pybind.Progress.check_status,Y,直接绑定
+Public API,void DisableAutomaticDisplay(),isis_pybind.Progress.disable_automatic_display,Y,直接绑定
+Public API,int MaximumSteps() const,isis_pybind.Progress.maximum_steps,Y,直接绑定
+Public API,int CurrentStep() const,isis_pybind.Progress.current_step,Y,直接绑定

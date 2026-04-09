@@ -5,6 +5,7 @@ Created: 2026-04-03
 Last Modified: 2026-04-09
 Updated: 2026-04-08  Geng Xun added focused low-level Cube I/O regression coverage for Blob file/bytes helpers alongside managers, pixel helpers, and table primitives.
 Updated: 2026-04-09  Geng Xun added TrackingTable focused unit tests.
+Updated: 2026-04-09  Geng Xun aligned TrackingTable index tests with upstream behavior where missing entries are inserted and assigned a new index.
 """
 
 import unittest
@@ -717,12 +718,15 @@ class TrackingTableUnitTest(unittest.TestCase):
         idx = tt.file_name_to_index(fn, sn)
         self.assertGreaterEqual(idx, 0)
 
-    def test_file_name_to_index_missing(self):
-        """file_name_to_index returns -1 for a filename not in the table."""
+    def test_file_name_to_index_missing_inserts_entry(self):
+        """file_name_to_index inserts a missing filename/serial pair and returns its new index."""
         tt = ip.TrackingTable()
         fn_missing = ip.FileName("/tmp/not_added.cub")
         idx = tt.file_name_to_index(fn_missing, "NO/SN/123")
-        self.assertEqual(idx, -1)
+        self.assertEqual(idx, 0)
+
+        # Upstream TrackingTable appends missing entries instead of returning -1.
+        self.assertEqual(tt.file_name_to_index(fn_missing, "NO/SN/123"), 0)
 
     def test_pixel_to_sn_round_trip(self):
         """pixel_to_sn returns the serial number for an added entry."""

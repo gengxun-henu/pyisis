@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added high-level cube I/O process, import, export, progress, and JP2 helper bindings
+// Updated: 2026-04-09  Geng Xun removed the duplicate Progress py::class_ registration so _isis_core imports cleanly under test runners
 // Purpose: pybind11 bindings for ISIS high-level cube I/O workflows including Process variants, import/export helpers, and JP2 utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -91,21 +92,6 @@ void bind_high_level_cube_io(py::module_ &m) {
   m.attr("BandMatchOrOne") = py::int_(Isis::BandMatchOrOne);
   m.attr("ReadWrite") = py::int_(Isis::ReadWrite);
   m.attr("AllMatchOrOne") = py::int_(Isis::AllMatchOrOne);
-
-  py::class_<Isis::Progress>(m, "Progress")
-   .def(py::init<>())
-   .def("set_text",
-     [](Isis::Progress &self, const std::string &text) {
-       self.SetText(stdStringToQString(text));
-     },
-     py::arg("text"))
-   .def("text", [](const Isis::Progress &self) { return qStringToStdString(self.Text()); })
-   .def("set_maximum_steps", &Isis::Progress::SetMaximumSteps, py::arg("steps"))
-   .def("add_steps", &Isis::Progress::AddSteps, py::arg("steps"))
-   .def("check_status", &Isis::Progress::CheckStatus)
-   .def("disable_automatic_display", &Isis::Progress::DisableAutomaticDisplay)
-   .def("maximum_steps", &Isis::Progress::MaximumSteps)
-   .def("current_step", &Isis::Progress::CurrentStep);
 
   py::class_<Isis::Process>(m, "Process")
    .def(py::init<>())

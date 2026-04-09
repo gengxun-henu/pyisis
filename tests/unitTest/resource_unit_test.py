@@ -4,6 +4,7 @@ Unit tests for ISIS Resource bindings.
 Author: Geng Xun
 Created: 2026-04-09
 Last Modified: 2026-04-09
+Updated: 2026-04-09  Geng Xun aligned Resource.is_equal() tests with upstream name-based, case-insensitive equality semantics.
 """
 import unittest
 
@@ -95,20 +96,20 @@ class ResourceUnitTest(unittest.TestCase):
         self.assertTrue(r.is_active())
         self.assertFalse(r.is_discarded())
 
-    def test_is_equal_same_keywords(self):
-        """Two Resources with identical keywords compare as equal."""
+    def test_is_equal_same_name_case_insensitive(self):
+        """Resources compare equal when their names match case-insensitively."""
+        r1 = ip.Resource("A")
+        r1.add("X", "1")
+        r2 = ip.Resource("a")
+        r2.add("Y", "2")
+        self.assertTrue(r1.is_equal(r2))
+
+    def test_is_equal_different_names(self):
+        """Resources with different names compare as not equal even if keywords match."""
         r1 = ip.Resource("A")
         r1.add("X", "1")
         r2 = ip.Resource("B")
         r2.add("X", "1")
-        self.assertTrue(r1.is_equal(r2))
-
-    def test_is_equal_different_keywords(self):
-        """Two Resources with different keywords compare as not equal."""
-        r1 = ip.Resource("A")
-        r1.add("X", "1")
-        r2 = ip.Resource("B")
-        r2.add("X", "2")
         self.assertFalse(r1.is_equal(r2))
 
     def test_to_pvl(self):

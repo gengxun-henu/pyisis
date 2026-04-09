@@ -2,42 +2,42 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 PhotoModel,Radiometric And Photometric Correction,isis/src/base/objs/PhotoModel/PhotoModel.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-08 第三阶段 shape / photometry 批次 inventory 预登记；抽象基类/纯虚接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,PhotoModel,isis_pybind.PhotoModel,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Class Symbol,PhotoModel,isis_pybind.PhotoModel,Y,2026-04-09 抽象基类符号已暴露；构造仍不开放
 Construction/Enum,PhotoModel(),isis_pybind.PhotoModel(),N,抽象基类/纯虚接口
-Public API,inline QString AlgorithmName() const { return p_photoAlgorithmName,isis_pybind.PhotoModel.algorithm_name,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetStandardConditions(bool standard),isis_pybind.PhotoModel.set_standard_conditions,N,抽象基类/纯虚接口
-Public API,bool StandardConditions() const { return p_standardConditions,isis_pybind.PhotoModel.standard_conditions,N,抽象基类/纯虚接口
-Public API,"double PhtTopder(double phase, double incidence, double emission)",isis_pybind.PhotoModel.pht_topder,N,抽象基类/纯虚接口
-Static/Factory,static double PhtAcos(double cosang),isis_pybind.PhotoModel.pht_acos,N,抽象基类/纯虚接口
-Public API,"double CalcSurfAlbedo(double pha, double inc, double ema)",isis_pybind.PhotoModel.calc_surf_albedo,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoL(const double l) { p_photoL = l,isis_pybind.PhotoModel.set_photo_l,N,抽象基类/纯虚接口
-Public API,inline double PhotoL() const { return p_photoL,isis_pybind.PhotoModel.photo_l,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoK(const double k) { p_photoK = k,isis_pybind.PhotoModel.set_photo_k,N,抽象基类/纯虚接口
-Public API,inline double PhotoK() const { return p_photoK,isis_pybind.PhotoModel.photo_k,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoHg1(const double hg1) { p_photoHg1 = hg1,isis_pybind.PhotoModel.set_photo_hg1,N,抽象基类/纯虚接口
-Public API,inline double PhotoHg1() const { return p_photoHg1,isis_pybind.PhotoModel.photo_hg1,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoHg2(const double hg2) { p_photoHg2 = hg2,isis_pybind.PhotoModel.set_photo_hg2,N,抽象基类/纯虚接口
-Public API,inline double PhotoHg2() const { return p_photoHg2,isis_pybind.PhotoModel.photo_hg2,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoBh(const double bh) { p_photoBh = bh,isis_pybind.PhotoModel.set_photo_bh,N,抽象基类/纯虚接口
-Public API,inline double PhotoBh() const { return p_photoBh,isis_pybind.PhotoModel.photo_bh,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoCh(const double ch) { p_photoCh = ch,isis_pybind.PhotoModel.set_photo_ch,N,抽象基类/纯虚接口
-Public API,inline double PhotoCh() const { return p_photoCh,isis_pybind.PhotoModel.photo_ch,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoWh(const double wh) { p_photoWh = wh,isis_pybind.PhotoModel.set_photo_wh,N,抽象基类/纯虚接口
-Public API,inline double PhotoWh() const { return p_photoWh,isis_pybind.PhotoModel.photo_wh,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoHh(const double hh) { p_photoHh = hh,isis_pybind.PhotoModel.set_photo_hh,N,抽象基类/纯虚接口
-Public API,inline double PhotoHh() const { return p_photoHh,isis_pybind.PhotoModel.photo_hh,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoB0(const double b0) { p_photoB0 = b0,isis_pybind.PhotoModel.set_photo_b0,N,抽象基类/纯虚接口
-Public API,inline double PhotoB0() const { return p_photoB0,isis_pybind.PhotoModel.photo_b0,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoTheta(const double theta) { p_photoTheta = theta,isis_pybind.PhotoModel.set_photo_theta,N,抽象基类/纯虚接口
-Public API,inline double PhotoTheta() const { return p_photoTheta,isis_pybind.PhotoModel.photo_theta,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhoto0B0Standard(const QString &b0standard) { p_photo0B0Standard = b0standard,isis_pybind.PhotoModel.set_photo0_b0_standard,N,抽象基类/纯虚接口
-Public API,inline QString Photo0B0Standard() const { return p_photo0B0Standard,isis_pybind.PhotoModel.photo0_b0_standard,N,抽象基类/纯虚接口
-Public API,"inline double Hfunc(double u, double gamma) { return (1.0 + 2.0 * u) / (1.0 + 2.0 * u * gamma)",isis_pybind.PhotoModel.hfunc,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoPhaseList(const QString) {},isis_pybind.PhotoModel.set_photo_phase_list,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoKList(const QString) {},isis_pybind.PhotoModel.set_photo_k_list,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoLList(const QString) {},isis_pybind.PhotoModel.set_photo_l_list,N,抽象基类/纯虚接口
-Mutation/Configuration,virtual void SetPhotoPhaseCurveList(const QString) {},isis_pybind.PhotoModel.set_photo_phase_curve_list,N,抽象基类/纯虚接口
-Public API,inline std::vector<double> PhotoPhaseList() const { return p_photoPhaseList,isis_pybind.PhotoModel.photo_phase_list,N,抽象基类/纯虚接口
-Public API,inline std::vector<double> PhotoKList() const { return p_photoKList,isis_pybind.PhotoModel.photo_k_list,N,抽象基类/纯虚接口
-Public API,inline std::vector<double> PhotoLList() const { return p_photoLList,isis_pybind.PhotoModel.photo_l_list,N,抽象基类/纯虚接口
-Public API,inline std::vector<double> PhotoPhaseCurveList() const { return p_photoPhaseCurveList,isis_pybind.PhotoModel.photo_phase_curve_list,N,抽象基类/纯虚接口
+Public API,inline QString AlgorithmName() const { return p_photoAlgorithmName,isis_pybind.PhotoModel.algorithm_name,Y,2026-04-09 已绑定并补 focused 单测
+Mutation/Configuration,virtual void SetStandardConditions(bool standard),isis_pybind.PhotoModel.set_standard_conditions,Y,2026-04-09 已绑定
+Public API,bool StandardConditions() const { return p_standardConditions,isis_pybind.PhotoModel.standard_conditions,Y,2026-04-09 已绑定
+Public API,"double PhtTopder(double phase, double incidence, double emission)",isis_pybind.PhotoModel.pht_topder,Y,2026-04-09 已绑定
+Static/Factory,static double PhtAcos(double cosang),isis_pybind.PhotoModel.pht_acos,Y,2026-04-09 已绑定并补回归值检查
+Public API,"double CalcSurfAlbedo(double pha, double inc, double ema)",isis_pybind.PhotoModel.calc_surf_albedo,Y,2026-04-09 已绑定
+Mutation/Configuration,virtual void SetPhotoL(const double l) { p_photoL = l,isis_pybind.PhotoModel.set_photo_l,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline double PhotoL() const { return p_photoL,isis_pybind.PhotoModel.photo_l,Y,2026-04-09 已绑定并补 getter/setter 回归
+Mutation/Configuration,virtual void SetPhotoK(const double k) { p_photoK = k,isis_pybind.PhotoModel.set_photo_k,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline double PhotoK() const { return p_photoK,isis_pybind.PhotoModel.photo_k,Y,2026-04-09 已绑定并补 getter/setter 回归
+Mutation/Configuration,virtual void SetPhotoHg1(const double hg1) { p_photoHg1 = hg1,isis_pybind.PhotoModel.set_photo_hg1,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline double PhotoHg1() const { return p_photoHg1,isis_pybind.PhotoModel.photo_hg1,Y,2026-04-09 已绑定并补 getter/setter 回归
+Mutation/Configuration,virtual void SetPhotoHg2(const double hg2) { p_photoHg2 = hg2,isis_pybind.PhotoModel.set_photo_hg2,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline double PhotoHg2() const { return p_photoHg2,isis_pybind.PhotoModel.photo_hg2,Y,2026-04-09 已绑定并补 getter/setter 回归
+Mutation/Configuration,virtual void SetPhotoBh(const double bh) { p_photoBh = bh,isis_pybind.PhotoModel.set_photo_bh,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline double PhotoBh() const { return p_photoBh,isis_pybind.PhotoModel.photo_bh,Y,2026-04-09 已绑定并补 getter/setter 回归
+Mutation/Configuration,virtual void SetPhotoCh(const double ch) { p_photoCh = ch,isis_pybind.PhotoModel.set_photo_ch,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline double PhotoCh() const { return p_photoCh,isis_pybind.PhotoModel.photo_ch,Y,2026-04-09 已绑定并补 getter/setter 回归
+Mutation/Configuration,virtual void SetPhotoWh(const double wh) { p_photoWh = wh,isis_pybind.PhotoModel.set_photo_wh,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline double PhotoWh() const { return p_photoWh,isis_pybind.PhotoModel.photo_wh,Y,2026-04-09 已绑定并补 getter/setter 回归
+Mutation/Configuration,virtual void SetPhotoHh(const double hh) { p_photoHh = hh,isis_pybind.PhotoModel.set_photo_hh,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline double PhotoHh() const { return p_photoHh,isis_pybind.PhotoModel.photo_hh,Y,2026-04-09 已绑定并补 getter/setter 回归
+Mutation/Configuration,virtual void SetPhotoB0(const double b0) { p_photoB0 = b0,isis_pybind.PhotoModel.set_photo_b0,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline double PhotoB0() const { return p_photoB0,isis_pybind.PhotoModel.photo_b0,Y,2026-04-09 已绑定并补 getter/setter 回归
+Mutation/Configuration,virtual void SetPhotoTheta(const double theta) { p_photoTheta = theta,isis_pybind.PhotoModel.set_photo_theta,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline double PhotoTheta() const { return p_photoTheta,isis_pybind.PhotoModel.photo_theta,Y,2026-04-09 已绑定并补 getter/setter 回归
+Mutation/Configuration,virtual void SetPhoto0B0Standard(const QString &b0standard) { p_photo0B0Standard = b0standard,isis_pybind.PhotoModel.set_photo0_b0_standard,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,inline QString Photo0B0Standard() const { return p_photo0B0Standard,isis_pybind.PhotoModel.photo0_b0_standard,Y,2026-04-09 已绑定并补 getter/setter 回归
+Public API,"inline double Hfunc(double u, double gamma) { return (1.0 + 2.0 * u) / (1.0 + 2.0 * u * gamma)",isis_pybind.PhotoModel.hfunc,Y,2026-04-09 已绑定并补 focused 回归
+Mutation/Configuration,virtual void SetPhotoPhaseList(const QString) {},isis_pybind.PhotoModel.set_photo_phase_list,Y,2026-04-09 已绑定字符串桥接 setter
+Mutation/Configuration,virtual void SetPhotoKList(const QString) {},isis_pybind.PhotoModel.set_photo_k_list,Y,2026-04-09 已绑定字符串桥接 setter
+Mutation/Configuration,virtual void SetPhotoLList(const QString) {},isis_pybind.PhotoModel.set_photo_l_list,Y,2026-04-09 已绑定字符串桥接 setter
+Mutation/Configuration,virtual void SetPhotoPhaseCurveList(const QString) {},isis_pybind.PhotoModel.set_photo_phase_curve_list,Y,2026-04-09 已绑定字符串桥接 setter
+Public API,inline std::vector<double> PhotoPhaseList() const { return p_photoPhaseList,isis_pybind.PhotoModel.photo_phase_list,Y,2026-04-09 已绑定
+Public API,inline std::vector<double> PhotoKList() const { return p_photoKList,isis_pybind.PhotoModel.photo_k_list,Y,2026-04-09 已绑定
+Public API,inline std::vector<double> PhotoLList() const { return p_photoLList,isis_pybind.PhotoModel.photo_l_list,Y,2026-04-09 已绑定
+Public API,inline std::vector<double> PhotoPhaseCurveList() const { return p_photoPhaseCurveList,isis_pybind.PhotoModel.photo_phase_curve_list,Y,2026-04-09 已绑定

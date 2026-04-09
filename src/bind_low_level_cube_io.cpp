@@ -3,6 +3,9 @@
 // Updated: 2026-04-09  Geng Xun exposed CubeAttributeInput/Output and LabelAttachment helpers for cube filename attribute parsing.
 // Updated: 2026-04-08  Geng Xun added Blob file/bytes helpers alongside existing low-level cube I/O bindings
 // Updated: 2026-04-09  Geng Xun added Blobber bindings and Cube table-write/read helpers for low-level blob/table regression coverage.
+// Updated: 2026-04-09  Geng Xun added a safe CubeBsqHandler wrapper binding for BSQ label-update coverage.
+// Updated: 2026-04-09  Geng Xun exposed the abstract CubeCachingAlgorithm symbol and a Python-friendly CacheResult surface.
+// Updated: 2026-04-09  Geng Xun added a safe CubeIoHandler wrapper over the shared BSQ handler surface for read/write/cache regression checks.
 // Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, and table structures
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -15,6 +18,9 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include <QFile>
+#include <QList>
+
 #include "AlphaCube.h"
 #include "BandManager.h"
 #include "Blob.h"
@@ -25,6 +31,8 @@
 #include "BufferManager.h"
 #include "Camera.h"
 #include "Cube.h"
+#include "CubeBsqHandler.h"
+#include "CubeCachingAlgorithm.h"
 #include "CubeAttribute.h"
 #include "Endian.h"
 #include "FileName.h"
@@ -35,6 +43,7 @@
 #include "Pvl.h"
 #include "PvlGroup.h"
 #include "Projection.h"
+#include "RawCubeChunk.h"
 #include "SampleManager.h"
 #include "Statistics.h"
 #include "Table.h"
@@ -47,6 +56,134 @@
 namespace py = pybind11;
 
 namespace {
+
+class CubeBsqHandlerWrapper {
+  public:
+     CubeBsqHandlerWrapper(
+         const std::string &dataFilePath,
+         const Isis::Pvl &labels,
+         const std::vector<int> &virtualBands,
+         bool alreadyOnDisk)
+         : m_dataFile(std::make_unique<QFile>(stdStringToQString(dataFilePath))) {
+          QIODevice::OpenMode openMode = QIODevice::ReadWrite;
+          if (!alreadyOnDisk) {
+               openMode |= QIODevice::Truncate;
+          }
+
+          if (!m_dataFile->open(openMode)) {
+               QString message = "Failed to open CubeBsqHandler data file [" +
+                                 m_dataFile->fileName() + "]";
+               throw Isis::IException(Isis::IException::Io, message, _FILEINFO_);
+          }
+
+          if (!virtualBands.empty()) {
+               m_virtualBands = std::make_unique<QList<int>>();
+               for (int band : virtualBands) {
+                    m_virtualBands->append(band);
+               }
+          }
+
+          m_handler = std::make_unique<Isis::CubeBsqHandler>(
+              m_dataFile.get(),
+              m_virtualBands ? m_virtualBands.get() : nullptr,
+              labels,
+              alreadyOnDisk);
+     }
+
+     void updateLabels(Isis::Pvl &labels) {
+          m_handler->updateLabels(labels);
+     }
+
+     std::string repr() const {
+          return "CubeBsqHandler(data_file='" +
+                 qStringToStdString(m_dataFile->fileName()) + "')";
+     }
+
+  private:
+     std::unique_ptr<QFile> m_dataFile;
+     std::unique_ptr<QList<int>> m_virtualBands;
+     std::unique_ptr<Isis::CubeBsqHandler> m_handler;
+};
+
+class CubeIoHandlerWrapper {
+  public:
+     CubeIoHandlerWrapper(
+         const std::string &dataFilePath,
+         const Isis::Pvl &labels,
+         const std::vector<int> &virtualBands,
+         bool alreadyOnDisk)
+         : m_dataFile(std::make_unique<QFile>(stdStringToQString(dataFilePath))) {
+          QIODevice::OpenMode openMode = QIODevice::ReadWrite;
+          if (!alreadyOnDisk) {
+               openMode |= QIODevice::Truncate;
+          }
+
+          if (!m_dataFile->open(openMode)) {
+               QString message = "Failed to open CubeIoHandler data file [" +
+                                 m_dataFile->fileName() + "]";
+               throw Isis::IException(Isis::IException::Io, message, _FILEINFO_);
+          }
+
+          setVirtualBands(virtualBands);
+          m_handler = std::unique_ptr<Isis::CubeIoHandler>(
+              new Isis::CubeBsqHandler(
+                  m_dataFile.get(),
+                  m_virtualBands ? m_virtualBands.get() : nullptr,
+                  labels,
+                  alreadyOnDisk));
+     }
+
+     void read(Isis::Buffer &buffer) const {
+          m_handler->read(buffer);
+     }
+
+     void write(const Isis::Buffer &buffer) {
+          m_handler->write(buffer);
+     }
+
+     void clearCache(bool blockForWriteCache = true) const {
+          m_handler->clearCache(blockForWriteCache);
+     }
+
+     long long getDataSize() const {
+          return static_cast<long long>(m_handler->getDataSize());
+     }
+
+     void setVirtualBands(const std::vector<int> &virtualBands) {
+          if (virtualBands.empty()) {
+               m_virtualBands.reset();
+               m_handler ? m_handler->setVirtualBands(nullptr) : void();
+               return;
+          }
+
+          m_virtualBands = std::make_unique<QList<int>>();
+          for (int band : virtualBands) {
+               m_virtualBands->append(band);
+          }
+
+          if (m_handler) {
+               m_handler->setVirtualBands(m_virtualBands.get());
+          }
+     }
+
+     void updateLabels(Isis::Pvl &labels) {
+          m_handler->updateLabels(labels);
+     }
+
+     py::capsule dataFileMutex() {
+          return py::capsule(m_handler->dataFileMutex(), "QMutex");
+     }
+
+     std::string repr() const {
+          return "CubeIoHandler(data_file='" +
+                 qStringToStdString(m_dataFile->fileName()) + "')";
+     }
+
+  private:
+     std::unique_ptr<QFile> m_dataFile;
+     std::unique_ptr<QList<int>> m_virtualBands;
+     std::unique_ptr<Isis::CubeIoHandler> m_handler;
+};
 
 py::object tableFieldValue(const Isis::TableField &field) {
      if (field.isText()) {
@@ -401,6 +538,90 @@ void bind_low_level_cube_io(py::module_ &m) {
            py::arg("cube"),
            py::arg("box_samples"),
            py::arg("box_lines"));
+
+  py::class_<CubeBsqHandlerWrapper>(m, "CubeBsqHandler")
+      .def(py::init<const std::string &, const Isis::Pvl &, const std::vector<int> &, bool>(),
+           py::arg("data_file_path"),
+           py::arg("labels"),
+           py::arg("virtual_bands") = std::vector<int>{},
+           py::arg("already_on_disk") = false,
+           "Construct a BSQ cube-I/O handler wrapper using a real data file path,\n"
+           "cube labels, an optional virtual-band mapping, and an on-disk flag.")
+      .def("update_labels",
+           &CubeBsqHandlerWrapper::updateLabels,
+           py::arg("labels"),
+           "Update the supplied cube labels so the Core format is marked BandSequential.")
+      .def("__repr__", &CubeBsqHandlerWrapper::repr);
+
+  py::class_<CubeIoHandlerWrapper>(m, "CubeIoHandler")
+      .def(py::init<const std::string &, const Isis::Pvl &, const std::vector<int> &, bool>(),
+           py::arg("data_file_path"),
+           py::arg("labels"),
+           py::arg("virtual_bands") = std::vector<int>{},
+           py::arg("already_on_disk") = false,
+           "Construct a safe CubeIoHandler wrapper backed by a BSQ handler for shared read/write/cache operations.")
+      .def("read", &CubeIoHandlerWrapper::read, py::arg("buffer"))
+      .def("write", &CubeIoHandlerWrapper::write, py::arg("buffer"))
+      .def("clear_cache", &CubeIoHandlerWrapper::clearCache, py::arg("block_for_write_cache") = true)
+      .def("get_data_size", &CubeIoHandlerWrapper::getDataSize)
+      .def("set_virtual_bands", &CubeIoHandlerWrapper::setVirtualBands, py::arg("virtual_bands"))
+      .def("update_labels", &CubeIoHandlerWrapper::updateLabels, py::arg("labels"))
+      .def("data_file_mutex", &CubeIoHandlerWrapper::dataFileMutex)
+      .def("__repr__", &CubeIoHandlerWrapper::repr);
+
+  py::class_<Isis::CubeCachingAlgorithm> cubeCachingAlgorithm(
+      m,
+      "CubeCachingAlgorithm",
+      "Abstract base class for cube-chunk caching recommendations.");
+
+  py::class_<Isis::CubeCachingAlgorithm::CacheResult>(cubeCachingAlgorithm, "CacheResult")
+      .def(py::init<>(), "Construct an empty cache result that signals the algorithm did not understand the data.")
+      .def(py::init([](const py::iterable &chunks_to_free) {
+             QList<Isis::RawCubeChunk *> chunks;
+             for (py::handle ignored : chunks_to_free) {
+                  (void)ignored;
+                  chunks.append(nullptr);
+             }
+             return Isis::CubeCachingAlgorithm::CacheResult(chunks);
+           }),
+           py::arg("chunks_to_free"),
+           "Construct a cache result that is marked valid using placeholder chunk slots."
+           " RawCubeChunk objects are not exposed yet, so each iterable item becomes a placeholder entry.")
+      .def(py::init<const Isis::CubeCachingAlgorithm::CacheResult &>(), py::arg("other"))
+      .def("algorithm_understood_data",
+           &Isis::CubeCachingAlgorithm::CacheResult::algorithmUnderstoodData)
+      .def("get_chunks_to_free",
+           [](const Isis::CubeCachingAlgorithm::CacheResult &self) {
+             py::list result;
+             for (Isis::RawCubeChunk *chunk : self.getChunksToFree()) {
+                  if (chunk) {
+                       result.append(py::make_tuple(
+                           chunk->getStartSample(),
+                           chunk->getStartLine(),
+                           chunk->getStartBand(),
+                           chunk->sampleCount(),
+                           chunk->lineCount(),
+                           chunk->bandCount(),
+                           chunk->getByteCount()));
+                  }
+                  else {
+                       result.append(py::none());
+                  }
+             }
+             return result;
+           },
+           "Return a Python-friendly list describing the chunks slated for eviction."
+           " Placeholder entries appear as None when raw chunks are not exposed.")
+      .def("__len__",
+           [](const Isis::CubeCachingAlgorithm::CacheResult &self) {
+             return self.getChunksToFree().size();
+           })
+      .def("__repr__",
+           [](const Isis::CubeCachingAlgorithm::CacheResult &self) {
+             return "CubeCachingAlgorithm.CacheResult(understood=" +
+                    std::string(self.algorithmUnderstoodData() ? "True" : "False") +
+                    ", chunks=" + std::to_string(self.getChunksToFree().size()) + ")";
+           });
 
   py::class_<Isis::AlphaCube>(m, "AlphaCube")
       .def(py::init<Isis::Cube &>(), py::arg("cube"))

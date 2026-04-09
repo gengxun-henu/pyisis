@@ -1,7 +1,7 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-CubeBsqHandler,Low Level Cube I/O,isis/src/base/objs/Cube/CubeBsqHandler.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-08 第四阶段后端 / 桥接 / 工具类批次 inventory 预登记
+CubeBsqHandler,Low Level Cube I/O,reference/upstream_isis/src/base/objs/Cube/CubeBsqHandler.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 通过安全 QFile-owned wrapper 暴露 Python 可测构造与 update_labels 接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,CubeBsqHandler,isis_pybind.CubeBsqHandler,N,Python class symbol not found in current binding files
-Construction/Enum,CubeBsqHandler(),isis_pybind.CubeBsqHandler(),N,Constructor binding not detected in current binding files
-Public API,void updateLabels(Pvl &labels),isis_pybind.CubeBsqHandler.update_labels,N,Method not found in current binding files
+Class Symbol,CubeBsqHandler,isis_pybind.CubeBsqHandler,Y,Bound as a safe Python wrapper class that owns QFile and forwards to Isis::CubeBsqHandler
+Construction/Enum,"CubeBsqHandler(const std::string &data_file_path, const Pvl &labels, const std::vector<int> &virtual_bands = {}, bool already_on_disk = false)",isis_pybind.CubeBsqHandler(...),Y,Python constructor adapts the upstream QFile* and QList<int>* inputs into safe Python-owned resources
+Public API,void updateLabels(Pvl &labels),isis_pybind.CubeBsqHandler.update_labels,Y,Forwards to the wrapped handler and updates Core.Format to BandSequential

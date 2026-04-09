@@ -1,16 +1,16 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-CubeIoHandler,Low Level Cube I/O,isis/src/base/objs/Cube/CubeIoHandler.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-08 第四阶段后端 / 桥接 / 工具类批次 inventory 预登记；抽象基类/纯虚接口
+CubeIoHandler,Low Level Cube I/O,reference/upstream_isis/src/base/objs/Cube/CubeIoHandler.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/bind_low_level_cube_io.cpp 通过安全 QFile-owned wrapper 暴露共享 CubeIoHandler 表面（当前后端复用真实 CubeBsqHandler）
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,CubeIoHandler,isis_pybind.CubeIoHandler,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
-Construction/Enum,CubeIoHandler(),isis_pybind.CubeIoHandler(),N,抽象基类/纯虚接口
-Read/Write IO,void read(Buffer &bufferToFill) const,isis_pybind.CubeIoHandler.read,N,抽象基类/纯虚接口
-Read/Write IO,void write(const Buffer &bufferToWrite),isis_pybind.CubeIoHandler.write,N,抽象基类/纯虚接口
-Mutation/Configuration,void addCachingAlgorithm(CubeCachingAlgorithm *algorithm),isis_pybind.CubeIoHandler.add_caching_algorithm,N,抽象基类/纯虚接口
-Mutation/Configuration,void clearCache(bool blockForWriteCache = true) const,isis_pybind.CubeIoHandler.clear_cache,N,抽象基类/纯虚接口
-Public API,BigInt getDataSize() const,isis_pybind.CubeIoHandler.get_data_size,N,抽象基类/纯虚接口
-Mutation/Configuration,void setVirtualBands(const QList<int> *virtualBandList),isis_pybind.CubeIoHandler.set_virtual_bands,N,抽象基类/纯虚接口
-Public API,virtual void updateLabels(Pvl &labels) = 0,isis_pybind.CubeIoHandler.update_labels,N,抽象基类/纯虚接口
-Public API,QMutex *dataFileMutex(),isis_pybind.CubeIoHandler.data_file_mutex,N,抽象基类/纯虚接口
-Public API,"BufferToChunkWriter(CubeIoHandler * ioHandler, QList<Buffer *> buffersToWrite)",isis_pybind.CubeIoHandler.buffer_to_chunk_writer,N,抽象基类/纯虚接口
-Public API,void run(),isis_pybind.CubeIoHandler.run,N,抽象基类/纯虚接口
+Class Symbol,CubeIoHandler,isis_pybind.CubeIoHandler,Y,Python class symbol exported via safe wrapper over the shared CubeIoHandler surface
+Construction/Enum,"CubeIoHandler(data_file_path, labels, virtual_bands=[], already_on_disk=False)",isis_pybind.CubeIoHandler(),Y,Python-friendly wrapper constructor owns QFile and optional virtual-band list
+Read/Write IO,void read(Buffer &bufferToFill) const,isis_pybind.CubeIoHandler.read,Y,Wrapper forwards read(...) to the underlying CubeIoHandler implementation
+Read/Write IO,void write(const Buffer &bufferToWrite),isis_pybind.CubeIoHandler.write,Y,Wrapper forwards write(...) to the underlying CubeIoHandler implementation
+Mutation/Configuration,void addCachingAlgorithm(CubeCachingAlgorithm *algorithm),isis_pybind.CubeIoHandler.add_caching_algorithm,N,Concrete Python-constructible caching algorithm inputs are not yet available on this class surface
+Mutation/Configuration,void clearCache(bool blockForWriteCache = true) const,isis_pybind.CubeIoHandler.clear_cache,Y,Wrapper forwards clearCache(...) with the block-for-write-cache flag
+Public API,BigInt getDataSize() const,isis_pybind.CubeIoHandler.get_data_size,Y,Exposed as Python integer helper
+Mutation/Configuration,void setVirtualBands(const QList<int> *virtualBandList),isis_pybind.CubeIoHandler.set_virtual_bands,Y,Python list[int] adapted to QList<int>
+Public API,virtual void updateLabels(Pvl &labels) = 0,isis_pybind.CubeIoHandler.update_labels,Y,Wrapper forwards to the backing concrete handler
+Public API,QMutex *dataFileMutex(),isis_pybind.CubeIoHandler.data_file_mutex,Y,Exposed as opaque capsule for identity/liveness checks without binding QMutex itself
+Public API,"BufferToChunkWriter(CubeIoHandler * ioHandler, QList<Buffer *> buffersToWrite)",isis_pybind.CubeIoHandler.buffer_to_chunk_writer,N,Internal QRunnable helper intentionally not exposed
+Public API,void run(),isis_pybind.CubeIoHandler.run,N,Internal QRunnable execution helper intentionally not exposed

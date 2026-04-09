@@ -19,6 +19,30 @@
     - `todo_pybind11.csv`
     - `class_bind_methods_details/base_blobber_methods.csv`
     - `class_bind_methods_details/methods_inventory_summary.csv`
+  - 已完成队列第三类 `CubeBsqHandler`：扩展 `src/bind_low_level_cube_io.cpp`，新增安全的 `CubeBsqHandler` Python wrapper，内部拥有 `QFile` 与可选 virtual-band 列表，并转发上游 `updateLabels(...)` 以维持真实 BSQ handler 行为。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `CubeBsqHandler`。
+  - 扩展 `tests/unitTest/low_level_cube_io_unit_test.py`：新增 `CubeBsqHandler` focused 覆盖，验证最小 Core label 输入、wrapper 构造、data file 初始化以及 `update_labels(...)` 将 `Core.Format` 置为 `BandSequential`。
+  - 更新 `tests/smoke_import.py`，补充 `CubeBsqHandler` 顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_cube_bsq_handler_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - 已完成队列第四类 `CubeCachingAlgorithm`：扩展 `src/bind_low_level_cube_io.cpp`，暴露抽象基类符号 `CubeCachingAlgorithm` 以及 Python-friendly 的嵌套 `CacheResult`，将上游 `QList<RawCubeChunk *>` 结果适配为 Python list（在 RawCubeChunk 未直接绑定时使用 `None` 占位）。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `CubeCachingAlgorithm`。
+  - 扩展 `tests/unitTest/low_level_cube_io_unit_test.py`：新增 `CubeCachingAlgorithm.CacheResult` focused 覆盖，验证 default / placeholder-list / copy 三条稳定路径。
+  - 更新 `tests/smoke_import.py`，补充 `CubeCachingAlgorithm` 顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_cube_caching_algorithm_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - 已完成队列第五类 `CubeIoHandler`：扩展 `src/bind_low_level_cube_io.cpp`，新增安全的 `CubeIoHandler` Python wrapper，内部拥有 `QFile` 与可选 virtual-band 列表，并通过真实 `CubeBsqHandler` 后端转发共享 `read(...)` / `write(...)` / `clear_cache(...)` / `get_data_size()` / `set_virtual_bands(...)` / `update_labels(...)` 表面。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `CubeIoHandler`。
+  - 扩展 `tests/unitTest/low_level_cube_io_unit_test.py`：新增 `CubeIoHandler` focused 覆盖，验证 `Brick` 写入/回读、cache 清理、data-size 查询、virtual-band 设置与 `update_labels(...)` 行为。
+  - 更新 `tests/smoke_import.py`，补充 `CubeIoHandler` 顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_cube_io_handler_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
 - Validation status:
   - Passed: `cmake --build build -j"$(nproc)"`
   - Passed: `ISIS_PYBIND_BUILD_DIR=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python atmos_model_factory_unit_test.py NumericalAtmosApproxUnitTest -v` (`3` tests, `OK`)
@@ -26,6 +50,13 @@
   - Passed: `env -u PYTHONPATH ISIS_PYBIND_BUILD_DIR=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
   - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest low_level_cube_io_unit_test.LowLevelCubeIoUnitTest.test_blobber_loads_table_backed_cube_and_reports_metadata low_level_cube_io_unit_test.LowLevelCubeIoUnitTest.test_blobber_copy_and_deepcopy_follow_upstream_sharing_rules` (`2` tests, `OK`)
   - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/low_level_cube_io_unit_test.py` (`42` tests, `OK`)
+  - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+  - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest low_level_cube_io_unit_test.LowLevelCubeIoUnitTest.test_cube_bsq_handler_updates_core_format_to_band_sequential` (`1` test, `OK`)
+  - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+  - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest low_level_cube_io_unit_test.LowLevelCubeIoUnitTest.test_cube_caching_algorithm_cache_result_surface` (`1` test, `OK`)
+  - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+  - Passed: `/usr/bin/cmake --build build -j2`
+  - Passed: `cd tests/unitTest && PYTHONPATH=../../build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest low_level_cube_io_unit_test.LowLevelCubeIoUnitTest.test_cube_io_handler_reads_writes_and_updates_labels` (`1` test, `OK`)
   - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
 
 - rollout 第二批 5 类队列（CollectorMap / CubeAttribute / Message / Ransac / Target）完成：

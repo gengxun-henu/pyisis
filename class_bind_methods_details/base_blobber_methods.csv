@@ -1,18 +1,18 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Blobber,Low Level Cube I/O,isis/src/base/objs/Blobber/Blobber.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-08 第四阶段后端 / 桥接 / 工具类批次 inventory 预登记；抽象基类/纯虚接口
+Blobber,Low Level Cube I/O,reference/upstream_isis/src/base/objs/Blobber/Blobber.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已完成 Blobber 绑定；上游并非抽象类，当前暴露构造/metadata/load/deepcopy/二维索引接口，focused 单测使用自造 table-backed cube 夹具
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Blobber,isis_pybind.Blobber,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
-Construction/Enum,Blobber(),isis_pybind.Blobber(),N,抽象基类/纯虚接口
-Public API,Blobber deepcopy() const,isis_pybind.Blobber.deepcopy,N,抽象基类/纯虚接口
-Mutation/Configuration,void setName(const QString &name) { _name = name,isis_pybind.Blobber.set_name,N,抽象基类/纯虚接口
-Mutation/Configuration,void setBlobName(const QString &bname) { _blobname = bname,isis_pybind.Blobber.set_blob_name,N,抽象基类/纯虚接口
-Mutation/Configuration,void setFieldName(const QString &fname) { _fieldname = fname,isis_pybind.Blobber.set_field_name,N,抽象基类/纯虚接口
-Query,inline int size() const { return (Lines() * Samples()),isis_pybind.Blobber.size,N,抽象基类/纯虚接口
-Public API,inline int Lines() const { return (_buf.dim1()),isis_pybind.Blobber.lines,N,抽象基类/纯虚接口
-Public API,inline int Samples() const { return (_buf.dim2()),isis_pybind.Blobber.samples,N,抽象基类/纯虚接口
-Public API,QString getName() const { return (_name),isis_pybind.Blobber.get_name,N,抽象基类/纯虚接口
-Public API,QString getBlobName() const { return (_blobname),isis_pybind.Blobber.get_blob_name,N,抽象基类/纯虚接口
-Public API,QString getFieldName() const { return (_fieldname),isis_pybind.Blobber.get_field_name,N,抽象基类/纯虚接口
-Read/Write IO,void load(const QString &filename),isis_pybind.Blobber.load,N,抽象基类/纯虚接口
-Read/Write IO,void load(Cube &cube),isis_pybind.Blobber.load,N,抽象基类/纯虚接口
+Class Symbol,Blobber,isis_pybind.Blobber,Y,已在 src/bind_low_level_cube_io.cpp 绑定 py::class_<Isis::Blobber>
+Construction/Enum,Blobber(),isis_pybind.Blobber(),Y,暴露默认构造、(blob_name, field_name, name='Blob') 与 (cube, blob_name, field_name, name='Blob') 重载，以及 copy ctor
+Public API,Blobber deepcopy() const,isis_pybind.Blobber.deepcopy,Y,直接绑定 deepcopy()；同时补 __copy__/__deepcopy__ 保持上游浅拷贝/深拷贝语义
+Mutation/Configuration,void setName(const QString &name) { _name = name,isis_pybind.Blobber.set_name,Y,QString 参数适配为 Python str -> set_name(name)
+Mutation/Configuration,void setBlobName(const QString &bname) { _blobname = bname,isis_pybind.Blobber.set_blob_name,Y,QString 参数适配为 Python str -> set_blob_name(blob_name)
+Mutation/Configuration,void setFieldName(const QString &fname) { _fieldname = fname,isis_pybind.Blobber.set_field_name,Y,QString 参数适配为 Python str -> set_field_name(field_name)
+Query,inline int size() const { return (Lines() * Samples()),isis_pybind.Blobber.size,Y,直接暴露 size()
+Public API,inline int Lines() const { return (_buf.dim1()),isis_pybind.Blobber.lines,Y,直接暴露 lines()
+Public API,inline int Samples() const { return (_buf.dim2()),isis_pybind.Blobber.samples,Y,直接暴露 samples()
+Public API,QString getName() const { return (_name),isis_pybind.Blobber.get_name,Y,QString 返回适配为 Python str；并补 __repr__
+Public API,QString getBlobName() const { return (_blobname),isis_pybind.Blobber.get_blob_name,Y,QString 返回适配为 Python str
+Public API,QString getFieldName() const { return (_fieldname),isis_pybind.Blobber.get_field_name,Y,QString 返回适配为 Python str
+Read/Write IO,void load(const QString &filename),isis_pybind.Blobber.load,Y,暴露 load(file_name)；focused 单测验证 close 后从磁盘重新加载 table-backed cube
+Read/Write IO,void load(Cube &cube),isis_pybind.Blobber.load,Y,暴露 load(cube)；focused 单测验证构造时立即加载与显式 reload 路径

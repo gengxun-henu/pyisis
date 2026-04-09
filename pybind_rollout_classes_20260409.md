@@ -14,9 +14,10 @@
 
 **第二阶段已完成：** Stereo, Angle, Blob, CameraPointInfo, Centroid, Intercept, Environment, Progress, IException, CollectorMap, CubeAttribute, Message, Resource, Ransac, Target, TrackingTable
 **第二阶段待绑定：** 无（当前 rollout 台账范围内）
-**第三阶段已完成：** Anisotropic2, HapkeAtm1/2, Isotropic1/2, ShadeAtm, TopoAtm, Hapke, PhotoModel, AtmosModel, AlbedoAtm
+**第三阶段已完成：** Anisotropic2, HapkeAtm1/2, Isotropic1/2, ShadeAtm, TopoAtm, Hapke, PhotoModel, AtmosModel, AlbedoAtm, NumericalAtmosApprox
 **第三阶段已完成补充：** SurfaceModel
-**第三阶段待绑定：** NumericalAtmosApprox
+**第三阶段待绑定：** 无
+**第四阶段当前队列：** CubeBsqHandler, CubeCachingAlgorithm, CubeIoHandler（与第三批剩余队列合并推进）
 **IException 状态说明：** `bind_base_support.cpp` 中已做 `py::register_exception<Isis::IException>(m, "IException")`，但未作完整类绑定（无 ErrorType enum, 无 toString 等方法），todo 标记仍为 `未转换`。
 
 ---
@@ -152,6 +153,35 @@
 
 ---
 
+## 执行队列 3（当前批次，5 类）
+
+11. NumericalAtmosApprox, 12. Blobber, 13. CubeBsqHandler, 14. CubeCachingAlgorithm, 15. CubeIoHandler
+
+### Class 11: NumericalAtmosApprox
+
+**目标文件：** `src/base/bind_base_photometry.cpp`
+**方法摘要：**
+- `NumericalAtmosApprox()` / `NumericalAtmosApprox(InterpType)`
+- `InterpType` enum（作为 Python 嵌套枚举暴露）
+- `IntegFunc` enum (`OuterFunction`, `InnerFunction`)
+- `rombergs_method(atmos_model, sub_function, a, b)`
+- `refine_extended_trap(atmos_model, sub_function, a, b, previous_sum, iteration)`
+- `outr_func2_bint(atmos_model, phi)`
+- `inr_func2_bint(atmos_model, mu)`
+
+**注意：** `InrFunc2Bint()` 的上游“invalid switch”分支在 Python 中优先被 `AtmosModel.set_atmos_atm_switch(...)` 参数校验截住，因此 focused 单测按 Python 可达契约验证 setter 抛错；积分真值按 `reference/upstream_isis/src/base/objs/AtmosModel/unitTest.cpp` 的两组稳定配置校准。
+
+**单测文件：** `tests/unitTest/atmos_model_factory_unit_test.py`（追加 `NumericalAtmosApproxUnitTest`）
+**Smoke：** 在 `test_basic_symbols_present()` 添加 `assert hasattr(ip, 'NumericalAtmosApprox')`
+
+### 下一个活动类：CubeBsqHandler
+
+**预计目标文件：** `src/bind_low_level_cube_io.cpp`
+**阶段：** 第四阶段后端 / 桥接 / 工具类
+**当前状态：** 待阅读上游 `.h/.cpp` 与本地 low-level I/O 绑定模式后决定最小可行暴露面
+
+---
+
 ## 执行记录
 
 | 类名 | 状态 | 完成日期 | 备注 |
@@ -166,6 +196,8 @@
 | Message | ✅ 完成 | 2026-04-09 | 以 `ip.Message` 子模块暴露全部标准消息模板 helper；3 个 focused 单测 |
 | Ransac | ✅ 完成 | 2026-04-09 | 以 `ip.Ransac` 子模块暴露全部 free-function helper；4 个 focused 单测 |
 | Target | ✅ 完成（Partial） | 2026-04-09 | 补齐 NAIF/frame/body-rotation accessor，并通过 `Camera.target()` 暴露运行时 target；显式 `Spice *` API 仍受独立 Spice 绑定缺失阻塞 |
+| NumericalAtmosApprox | ✅ 完成 | 2026-04-09 | 暴露嵌套 `InterpType` / `IntegFunc` 与全部积分 helper；3 个 focused 单测追加至 atmos_model_factory_unit_test.py |
+| Blobber | ✅ 完成 | 2026-04-09 | 暴露构造/metadata/load/deepcopy/二维索引接口；2 个 focused 单测追加至 low_level_cube_io_unit_test.py，并顺带补 `Cube.read_table()` / `Cube.write(Table)` helper |
 
 ---
 

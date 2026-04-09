@@ -2,6 +2,32 @@
 
 ## 2026-04-09
 
+- rollout 第三批队列已开：`NumericalAtmosApprox -> Blobber -> CubeBsqHandler -> CubeCachingAlgorithm -> CubeIoHandler`
+  - 已完成队列首类 `NumericalAtmosApprox`：扩展 `src/base/bind_base_photometry.cpp`，新增 `NumericalAtmosApprox` 绑定，暴露嵌套 `InterpType` / `IntegFunc` 枚举、构造函数、`rombergs_method(...)`、`refine_extended_trap(...)`、`outr_func2_bint(...)` 与 `inr_func2_bint(...)`。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `NumericalAtmosApprox`。
+  - 扩展 `tests/unitTest/atmos_model_factory_unit_test.py`：新增 `NumericalAtmosApproxUnitTest`，覆盖类/枚举可见性、Python 可达的 invalid-switch 失败路径，以及两组与上游 `reference/upstream_isis/src/base/objs/AtmosModel/unitTest.cpp` 对齐的积分回归数值。
+  - 更新 `tests/smoke_import.py`，补充 `NumericalAtmosApprox` 顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_numerical_atmos_approx_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - 已完成队列次类 `Blobber`：扩展 `src/bind_low_level_cube_io.cpp`，新增 `Blobber` 绑定，暴露默认/命名/`Cube&` 构造、`deepcopy()`、metadata getter/setter、`load(...)` 重载、二维 `row()/value()/set_value()` 与 tuple 索引；同时补充 `Cube.read_table(...)` 与 `Cube.write(Table)` helper 以支持自造 table-backed cube 夹具。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `Blobber`。
+  - 扩展 `tests/unitTest/low_level_cube_io_unit_test.py`：新增 Blobber focused 覆盖，验证 table-backed cube 读取、filename/cube 双路径加载，以及浅拷贝共享 / 深拷贝独立语义。
+  - 更新 `tests/smoke_import.py`，补充 `Blobber` 顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_blobber_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake --build build -j"$(nproc)"`
+  - Passed: `ISIS_PYBIND_BUILD_DIR=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python atmos_model_factory_unit_test.py NumericalAtmosApproxUnitTest -v` (`3` tests, `OK`)
+  - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v atmos_model_factory_unit_test.py` (`29` tests, `OK`)
+  - Passed: `env -u PYTHONPATH ISIS_PYBIND_BUILD_DIR=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+  - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest low_level_cube_io_unit_test.LowLevelCubeIoUnitTest.test_blobber_loads_table_backed_cube_and_reports_metadata low_level_cube_io_unit_test.LowLevelCubeIoUnitTest.test_blobber_copy_and_deepcopy_follow_upstream_sharing_rules` (`2` tests, `OK`)
+  - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/low_level_cube_io_unit_test.py` (`42` tests, `OK`)
+  - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
 - rollout 第二批 5 类队列（CollectorMap / CubeAttribute / Message / Ransac / Target）完成：
   - 扩展 `src/base/bind_base_utility.cpp`，新增稳定的 `CollectorMap<int, QString>` Python 专用实例绑定，并以 `ip.Message` 子模块暴露 `Message` 命名空间全部标准消息模板 helper。
   - 扩展 `src/bind_low_level_cube_io.cpp`，新增 `LabelAttachment`、`label_attachment_name(...)`、`label_attachment_enumeration(...)`、`CubeAttributeInput` 与 `CubeAttributeOutput` 绑定，补齐 cube 文件名属性解析/序列化表面。

@@ -2,6 +2,7 @@
 // Created: 2026-03-21
 // Updated: 2026-04-09  Geng Xun exposed CubeAttributeInput/Output and LabelAttachment helpers for cube filename attribute parsing.
 // Updated: 2026-04-08  Geng Xun added Blob file/bytes helpers alongside existing low-level cube I/O bindings
+// Updated: 2026-04-09  Geng Xun added Blobber bindings and Cube table-write/read helpers for low-level blob/table regression coverage.
 // Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, and table structures
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -17,6 +18,7 @@
 #include "AlphaCube.h"
 #include "BandManager.h"
 #include "Blob.h"
+#include "Blobber.h"
 #include "BoxcarManager.h"
 #include "Brick.h"
 #include "Buffer.h"
@@ -506,6 +508,162 @@ void bind_low_level_cube_io(py::module_ &m) {
                                                   qStringToStdString(self.Type()) + "', size=" + std::to_string(self.Size()) + ")";
                           });
 
+     py::class_<Isis::Blobber> blobber(m, "Blobber");
+
+     blobber
+               .def(py::init<>(), "Construct an empty Blobber with undefined blob and field names.")
+               .def(py::init([](const std::string &blob_name,
+                                const std::string &field_name,
+                                const std::string &name) {
+                               return Isis::Blobber(
+                                   stdStringToQString(blob_name),
+                                   stdStringToQString(field_name),
+                                   stdStringToQString(name));
+                          }),
+                          py::arg("blob_name"),
+                          py::arg("field_name"),
+                          py::arg("name") = "Blob")
+               .def(py::init([](Isis::Cube &cube,
+                                const std::string &blob_name,
+                                const std::string &field_name,
+                                const std::string &name) {
+                               return Isis::Blobber(
+                                   cube,
+                                   stdStringToQString(blob_name),
+                                   stdStringToQString(field_name),
+                                   stdStringToQString(name));
+                          }),
+                          py::arg("cube"),
+                          py::arg("blob_name"),
+                          py::arg("field_name"),
+                          py::arg("name") = "Blob")
+               .def(py::init<const Isis::Blobber &>(), py::arg("other"))
+               .def("deepcopy", &Isis::Blobber::deepcopy)
+               .def("set_name",
+                          [](Isis::Blobber &self, const std::string &name) {
+                               self.setName(stdStringToQString(name));
+                          },
+                          py::arg("name"))
+               .def("set_blob_name",
+                          [](Isis::Blobber &self, const std::string &blob_name) {
+                               self.setBlobName(stdStringToQString(blob_name));
+                          },
+                          py::arg("blob_name"))
+               .def("set_field_name",
+                          [](Isis::Blobber &self, const std::string &field_name) {
+                               self.setFieldName(stdStringToQString(field_name));
+                          },
+                          py::arg("field_name"))
+               .def("size", &Isis::Blobber::size)
+               .def("lines", &Isis::Blobber::Lines)
+               .def("samples", &Isis::Blobber::Samples)
+               .def("get_name",
+                          [](const Isis::Blobber &self) {
+                               return qStringToStdString(self.getName());
+                          })
+               .def("get_blob_name",
+                          [](const Isis::Blobber &self) {
+                               return qStringToStdString(self.getBlobName());
+                          })
+               .def("get_field_name",
+                          [](const Isis::Blobber &self) {
+                               return qStringToStdString(self.getFieldName());
+                          })
+               .def("load",
+                          [](Isis::Blobber &self, const std::string &file_name) {
+                               self.load(stdStringToQString(file_name));
+                          },
+                          py::arg("file_name"))
+               .def("load",
+                          [](Isis::Blobber &self, Isis::Cube &cube) {
+                               self.load(cube);
+                          },
+                          py::arg("cube"))
+               .def("row",
+                          [](const Isis::Blobber &self, int line_index) {
+                               if (line_index < 0 || line_index >= self.Lines()) {
+                                    throw py::index_error("Blobber line index out of range");
+                               }
+                               std::vector<double> row(self.Samples());
+                               for (int sample_index = 0; sample_index < self.Samples(); ++sample_index) {
+                                    row[sample_index] = self[line_index][sample_index];
+                               }
+                               return row;
+                          },
+                          py::arg("line_index"),
+                          "Return a copy of one 0-based row from the loaded blob.")
+               .def("value",
+                          [](const Isis::Blobber &self, int line_index, int sample_index) {
+                               if (line_index < 0 || line_index >= self.Lines() ||
+                                   sample_index < 0 || sample_index >= self.Samples()) {
+                                    throw py::index_error("Blobber indices out of range");
+                               }
+                               return self[line_index][sample_index];
+                          },
+                          py::arg("line_index"),
+                          py::arg("sample_index"),
+                          "Return one 0-based blob value.")
+               .def("set_value",
+                          [](Isis::Blobber &self, int line_index, int sample_index, double value) {
+                               if (line_index < 0 || line_index >= self.Lines() ||
+                                   sample_index < 0 || sample_index >= self.Samples()) {
+                                    throw py::index_error("Blobber indices out of range");
+                               }
+                               self[line_index][sample_index] = value;
+                          },
+                          py::arg("line_index"),
+                          py::arg("sample_index"),
+                          py::arg("value"),
+                          "Mutate one 0-based blob value in-place.")
+               .def("__len__", &Isis::Blobber::Lines)
+               .def("__copy__", [](const Isis::Blobber &self) { return Isis::Blobber(self); })
+               .def("__deepcopy__",
+                          [](const Isis::Blobber &self, py::dict) { return self.deepcopy(); },
+                          py::arg("memo"))
+               .def("__getitem__",
+                          [](const Isis::Blobber &self, int line_index) {
+                               if (line_index < 0 || line_index >= self.Lines()) {
+                                    throw py::index_error("Blobber line index out of range");
+                               }
+                               std::vector<double> row(self.Samples());
+                               for (int sample_index = 0; sample_index < self.Samples(); ++sample_index) {
+                                    row[sample_index] = self[line_index][sample_index];
+                               }
+                               return row;
+                          },
+                          py::arg("line_index"))
+               .def("__getitem__",
+                          [](const Isis::Blobber &self, const std::pair<int, int> &index) {
+                               const int line_index = index.first;
+                               const int sample_index = index.second;
+                               if (line_index < 0 || line_index >= self.Lines() ||
+                                   sample_index < 0 || sample_index >= self.Samples()) {
+                                    throw py::index_error("Blobber indices out of range");
+                               }
+                               return self[line_index][sample_index];
+                          },
+                          py::arg("index"))
+               .def("__setitem__",
+                          [](Isis::Blobber &self, const std::pair<int, int> &index, double value) {
+                               const int line_index = index.first;
+                               const int sample_index = index.second;
+                               if (line_index < 0 || line_index >= self.Lines() ||
+                                   sample_index < 0 || sample_index >= self.Samples()) {
+                                    throw py::index_error("Blobber indices out of range");
+                               }
+                               self[line_index][sample_index] = value;
+                          },
+                          py::arg("index"),
+                          py::arg("value"))
+               .def("__repr__",
+                          [](const Isis::Blobber &self) {
+                               return "Blobber(name='" + qStringToStdString(self.getName()) +
+                                          "', blob_name='" + qStringToStdString(self.getBlobName()) +
+                                          "', field_name='" + qStringToStdString(self.getFieldName()) +
+                                          "', lines=" + std::to_string(self.Lines()) +
+                                          ", samples=" + std::to_string(self.Samples()) + ")";
+                          });
+
   py::class_<Isis::TableField> table_field(m, "TableField");
 
   py::enum_<Isis::TableField::Type>(table_field, "Type")
@@ -797,6 +955,14 @@ void bind_low_level_cube_io(py::module_ &m) {
              return self.deleteBlob(stdStringToQString(name), stdStringToQString(type));
            },
            py::arg("name"), py::arg("type"))
+      .def("read_table",
+           [](Isis::Cube &self, const std::string &name) {
+             return self.readTable(stdStringToQString(name));
+           },
+           py::arg("name"))
+      .def("write",
+           static_cast<void (Isis::Cube::*)(const Isis::Table &)>(&Isis::Cube::write),
+           py::arg("table"))
       .def("clear_io_cache", &Isis::Cube::clearIoCache)
       .def("camera",
            [](Isis::Cube &self) -> Isis::Camera * { return self.camera(); },

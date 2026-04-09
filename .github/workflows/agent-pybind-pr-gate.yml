@@ -45,9 +45,16 @@ jobs:
     outputs:
       changed_tests: ${{ steps.diff.outputs.changed_tests }}
     steps:
-      - name: Checkout repository through normalized local action
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
         with:
+          skip-checkout: "true"
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
           fetch-depth: "0"
@@ -119,9 +126,16 @@ jobs:
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
-      - name: Checkout repository through normalized local action
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 1
+
+      - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
         with:
+          skip-checkout: "true"
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
           fetch-depth: "1"
@@ -187,9 +201,16 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Checkout repository through normalized local action
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Normalize and verify checkout transport
         uses: ./.github/actions/normalized-safe-checkout
         with:
+          skip-checkout: "true"
           runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
           github-token: ${{ github.token }}
           fetch-depth: "0"

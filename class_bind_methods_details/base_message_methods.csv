@@ -1,26 +1,26 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Message,Utility,reference/upstream_isis/src/base/objs/Message/Message.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,标准错误消息模板命名空间；更适合按 module-level free functions 暴露
+Message,Utility,reference/upstream_isis/src/base/objs/Message/Message.h,src/base/bind_base_utility.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已按 Python 子模块 `ip.Message` 暴露全部标准消息模板函数并补 focused 单测
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Namespace Symbol,Message namespace,isis_pybind.Message,N,命名空间符号；更适合作为模块级函数集合导出
-Public API,"QString ArraySubscriptNotInRange(int index)",isis_pybind.Message.ArraySubscriptNotInRange,N,数组越界消息
-Public API,"QString KeywordAmbiguous(const QString &key)",isis_pybind.Message.KeywordAmbiguous,N,关键字歧义消息
-Public API,"QString KeywordUnrecognized(const QString &key)",isis_pybind.Message.KeywordUnrecognized,N,关键字未识别消息
-Public API,"QString KeywordDuplicated(const QString &key)",isis_pybind.Message.KeywordDuplicated,N,关键字重复消息
-Public API,"QString KeywordNotArray(const QString &key)",isis_pybind.Message.KeywordNotArray,N,标量被误用为数组
-Public API,"QString KeywordNotFound(const QString &key)",isis_pybind.Message.KeywordNotFound,N,关键字缺失消息
-Public API,"QString KeywordBlockInvalid(const QString &block)",isis_pybind.Message.KeywordBlockInvalid,N,已弃用消息模板
-Public API,"QString KeywordBlockStartMissing(const QString &block, const QString &found)",isis_pybind.Message.KeywordBlockStartMissing,N,已弃用消息模板
-Public API,"QString KeywordBlockEndMissing(const QString &block, const QString &found)",isis_pybind.Message.KeywordBlockEndMissing,N,已弃用消息模板
-Public API,"QString KeywordValueBad(const QString &key)",isis_pybind.Message.KeywordValueBad,N,值错误消息
-Public API,"QString KeywordValueBad(const QString &key, const QString &value)",isis_pybind.Message.KeywordValueBad,N,带值的错误消息重载
-Public API,"QString KeywordValueExpected(const QString &key)",isis_pybind.Message.KeywordValueExpected,N,缺少值消息
-Public API,"QString KeywordValueNotInRange(const QString &key, const QString &value, const QString &range)",isis_pybind.Message.KeywordValueNotInRange,N,范围错误消息
-Public API,"QString KeywordValueNotInList(const QString &key, const QString &value, const std::vector<QString> &list)",isis_pybind.Message.KeywordValueNotInList,N,枚举列表错误；依赖 std::vector<QString>
-Public API,"QString MissingDelimiter(const char delimiter)",isis_pybind.Message.MissingDelimiter,N,分隔符缺失消息
-Public API,"QString MissingDelimiter(const char delimiter, const QString &near)",isis_pybind.Message.MissingDelimiter,N,带上下文的分隔符缺失重载
-Public API,"QString FileOpen(const QString &filename)",isis_pybind.Message.FileOpen,N,文件打开失败消息
-Public API,"QString FileCreate(const QString &filename)",isis_pybind.Message.FileCreate,N,文件创建失败消息
-Public API,"QString FileRead(const QString &filename)",isis_pybind.Message.FileRead,N,文件读取失败消息
-Public API,"QString FileWrite(const QString &filename)",isis_pybind.Message.FileWrite,N,文件写入失败消息
-Public API,QString MemoryAllocationFailed(),isis_pybind.Message.MemoryAllocationFailed,N,内存分配失败消息
+Namespace Symbol,Message namespace,isis_pybind.Message,Y,已作为 Python 子模块导出
+Public API,"QString ArraySubscriptNotInRange(int index)",isis_pybind.Message.ArraySubscriptNotInRange,Y,数组越界消息
+Public API,"QString KeywordAmbiguous(const QString &key)",isis_pybind.Message.KeywordAmbiguous,Y,关键字歧义消息
+Public API,"QString KeywordUnrecognized(const QString &key)",isis_pybind.Message.KeywordUnrecognized,Y,关键字未识别消息
+Public API,"QString KeywordDuplicated(const QString &key)",isis_pybind.Message.KeywordDuplicated,Y,关键字重复消息
+Public API,"QString KeywordNotArray(const QString &key)",isis_pybind.Message.KeywordNotArray,Y,标量被误用为数组
+Public API,"QString KeywordNotFound(const QString &key)",isis_pybind.Message.KeywordNotFound,Y,关键字缺失消息
+Public API,"QString KeywordBlockInvalid(const QString &block)",isis_pybind.Message.KeywordBlockInvalid,Y,已弃用消息模板但仍已暴露
+Public API,"QString KeywordBlockStartMissing(const QString &block, const QString &found)",isis_pybind.Message.KeywordBlockStartMissing,Y,已弃用消息模板但仍已暴露
+Public API,"QString KeywordBlockEndMissing(const QString &block, const QString &found)",isis_pybind.Message.KeywordBlockEndMissing,Y,已弃用消息模板但仍已暴露
+Public API,"QString KeywordValueBad(const QString &key)",isis_pybind.Message.KeywordValueBad,Y,值错误消息
+Public API,"QString KeywordValueBad(const QString &key, const QString &value)",isis_pybind.Message.KeywordValueBad,Y,带值的错误消息重载
+Public API,"QString KeywordValueExpected(const QString &key)",isis_pybind.Message.KeywordValueExpected,Y,缺少值消息
+Public API,"QString KeywordValueNotInRange(const QString &key, const QString &value, const QString &range)",isis_pybind.Message.KeywordValueNotInRange,Y,范围错误消息
+Public API,"QString KeywordValueNotInList(const QString &key, const QString &value, const std::vector<QString> &list)",isis_pybind.Message.KeywordValueNotInList,Y,枚举列表错误；已适配 Python `list[str]`
+Public API,"QString MissingDelimiter(const char delimiter)",isis_pybind.Message.MissingDelimiter,Y,分隔符缺失消息
+Public API,"QString MissingDelimiter(const char delimiter, const QString &near)",isis_pybind.Message.MissingDelimiter,Y,带上下文的分隔符缺失重载
+Public API,"QString FileOpen(const QString &filename)",isis_pybind.Message.FileOpen,Y,文件打开失败消息
+Public API,"QString FileCreate(const QString &filename)",isis_pybind.Message.FileCreate,Y,文件创建失败消息
+Public API,"QString FileRead(const QString &filename)",isis_pybind.Message.FileRead,Y,文件读取失败消息
+Public API,"QString FileWrite(const QString &filename)",isis_pybind.Message.FileWrite,Y,文件写入失败消息
+Public API,QString MemoryAllocationFailed(),isis_pybind.Message.MemoryAllocationFailed,Y,内存分配失败消息

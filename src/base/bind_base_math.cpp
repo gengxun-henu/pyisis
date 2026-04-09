@@ -15,9 +15,10 @@
  *   - isis/src/base/objs/NthOrderPolynomial/NthOrderPolynomial.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
+ * Updated: 2026-04-09  Geng Xun exposed Ransac helper functions via a Python math submodule.
  * Updated: 2026-04-09  Geng Xun added SurfaceModel binding (bivariate polynomial surface fitting)
  * Purpose: Expose Calculator, Affine, BasisFunction, InfixToPostfix,
- *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, and SurfaceModel
+ *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, Ransac helpers, and SurfaceModel
  *          classes to Python via pybind11.
  */
 
@@ -36,6 +37,7 @@
 #include "PolynomialUnivariate.h"
 #include "PolynomialBivariate.h"
 #include "NthOrderPolynomial.h"
+#include "Ransac.h"
 #include "SurfaceModel.h"
 #include "Buffer.h"
 #include "helpers.h"
@@ -374,6 +376,64 @@ void bind_base_math(py::module_ &m)
          .def(py::init<>(), "Construct an InlineInfixToPostfix converter with inline-specific operators")
          .def("__repr__", [](const Isis::InlineInfixToPostfix &)
               { return "InlineInfixToPostfix()"; });
+
+     py::module_ ransac = m.def_submodule("Ransac", "ISIS RANSAC helper functions for packed symmetric matrices.");
+     ransac.def("isymp", &Isis::isymp, py::arg("row"), py::arg("col"));
+     ransac.def("binomial_coeficient", &Isis::binomial_coeficient, py::arg("n"), py::arg("k"));
+     ransac.def("indeces_from_set",
+                [](int set, int set_size, int n) {
+                  std::vector<int> indices(set_size, 0);
+                  int status = Isis::indeces_from_set(indices.data(), set, set_size, n);
+                  return py::make_tuple(status, indices);
+                },
+                py::arg("set"), py::arg("set_size"), py::arg("n"),
+                "Return (status, indices) for the requested combination set.")
+           .def("decompose",
+                [](const std::vector<double> &a, int nsize) {
+                  std::vector<double> matrix = a;
+                  int status = Isis::decompose(matrix.data(), nsize);
+                  return py::make_tuple(status, matrix);
+                },
+                py::arg("a"), py::arg("nsize"),
+                "Run in-place Cholesky decomposition on a packed symmetric matrix.")
+           .def("foresub",
+                [](const std::vector<double> &a, const std::vector<double> &b, int nsize) {
+                  std::vector<double> matrix = a;
+                  std::vector<double> values = b;
+                  int status = Isis::foresub(matrix.data(), values.data(), nsize);
+                  return py::make_tuple(status, values);
+                },
+                py::arg("a"), py::arg("b"), py::arg("nsize"),
+                "Run forward substitution using a packed lower-triangular matrix.")
+           .def("backsub",
+                [](const std::vector<double> &a, const std::vector<double> &b, int nsize) {
+                  std::vector<double> matrix = a;
+                  std::vector<double> values = b;
+                  int status = Isis::backsub(matrix.data(), values.data(), nsize);
+                  return py::make_tuple(status, values);
+                },
+                py::arg("a"), py::arg("b"), py::arg("nsize"),
+                "Run backward substitution using a packed symmetric matrix.")
+           .def("inverse",
+                [](const std::vector<double> &a, int nsize) {
+                  std::vector<double> matrix = a;
+                  int status = Isis::inverse(matrix.data(), nsize);
+                  return py::make_tuple(status, matrix);
+                },
+                py::arg("a"), py::arg("nsize"),
+                "Invert a packed symmetric matrix in-place after decomposition.")
+           .def("choleski_solve",
+                [](const std::vector<double> &a,
+                   const std::vector<double> &b,
+                   int nsize,
+                   int flag) {
+                  std::vector<double> matrix = a;
+                  std::vector<double> values = b;
+                  int status = Isis::choleski_solve(matrix.data(), values.data(), nsize, flag);
+                  return py::make_tuple(status, matrix, values);
+                },
+                py::arg("a"), py::arg("b"), py::arg("nsize"), py::arg("flag"),
+                "Solve a symmetric positive-definite linear system stored in packed form.");
 
      // Added: 2026-04-09 - bind Isis::SurfaceModel
      /**

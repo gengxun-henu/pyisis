@@ -6,22 +6,28 @@
  * @brief Pybind11 bindings for ISIS utility classes
  *
  * Source ISIS headers:
+ *   - reference/upstream_isis/src/base/objs/CollectorMap/CollectorMap.h
  *   - isis/src/base/objs/Column/Column.h
  *   - isis/src/base/objs/Environment/Environment.h
  *   - isis/src/base/objs/LineEquation/LineEquation.h
+ *   - reference/upstream_isis/src/base/objs/Message/Message.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
+ * Updated: 2026-04-09  Geng Xun exposed Message namespace helpers as a Python submodule.
+ * Updated: 2026-04-09  Geng Xun added CollectorMap binding using the stable int->QString specialization.
  * Updated: 2026-04-09  Geng Xun added Resource binding (PVL keyword container with name/value/status management)
- * Purpose: Expose Column, Environment, LineEquation, and Resource utility classes to Python via pybind11.
+ * Purpose: Expose CollectorMap, Column, Environment, LineEquation, Message helpers, and Resource utility classes to Python via pybind11.
  * Purpose: Expose Column, LineEquation, and related utility classes to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "CollectorMap.h"
 #include "Column.h"
 #include "Environment.h"
 #include "LineEquation.h"
+#include "Message.h"
 #include "helpers.h"
 #include "PvlKeyword.h"
 #include "PvlObject.h"
@@ -30,6 +36,8 @@
 namespace py = pybind11;
 
 void bind_base_utility(py::module_ &m) {
+     using CollectorMapIntString = Isis::CollectorMap<int, QString>;
+
      py::class_<Isis::Environment>(m, "Environment")
                .def_static(
                          "user_name",
@@ -60,6 +68,212 @@ void bind_base_utility(py::module_ &m) {
                          py::arg("variable"),
                          py::arg("default_value") = "",
                          "Get an environment variable with an optional default value");
+
+  // Added: 2026-04-09 - bind a stable Python-facing CollectorMap specialization.
+  py::class_<CollectorMapIntString> collector_map(m, "CollectorMap");
+
+  py::enum_<CollectorMapIntString::KeyPolicy>(collector_map, "KeyPolicy")
+      .value("UniqueKeys", CollectorMapIntString::UniqueKeys)
+      .value("DuplicateKeys", CollectorMapIntString::DuplicateKeys)
+      .export_values();
+
+  collector_map
+      .def(py::init<>(), "Construct a CollectorMap with unique-key behavior.")
+      .def(py::init<const CollectorMapIntString::KeyPolicy &>(),
+           py::arg("key_policy"),
+           "Construct a CollectorMap with the requested key policy.")
+      .def(py::init<const CollectorMapIntString &>(),
+           py::arg("other"),
+           "Copy-construct a CollectorMap.")
+      .def("size",
+           &CollectorMapIntString::size,
+           "Return the number of key/value pairs in the map.")
+      .def("count",
+           &CollectorMapIntString::count,
+           py::arg("key"),
+           "Return the number of entries stored under key.")
+      .def("add",
+           [](CollectorMapIntString &self, int key, const std::string &value) {
+             self.add(key, stdStringToQString(value));
+           },
+           py::arg("key"), py::arg("value"),
+           "Insert or replace a value, depending on the key policy.")
+      .def("exists",
+           &CollectorMapIntString::exists,
+           py::arg("key"),
+           "Return True if the key exists.")
+      .def("get",
+           [](CollectorMapIntString &self, int key) {
+             return qStringToStdString(self.get(key));
+           },
+           py::arg("key"),
+           "Return the value stored for key.")
+      .def("index",
+           &CollectorMapIntString::index,
+           py::arg("key"),
+           "Return the zero-based index of the first matching key, or -1.")
+      .def("get_nth",
+           [](CollectorMapIntString &self, int nth) {
+             return qStringToStdString(self.getNth(nth));
+           },
+           py::arg("nth"),
+           "Return the nth value in iteration order.")
+      .def("key",
+           &CollectorMapIntString::key,
+           py::arg("nth"),
+           "Return the nth key in iteration order.")
+      .def("remove",
+           &CollectorMapIntString::remove,
+           py::arg("key"),
+           "Remove all values stored under key and return the number removed.")
+      .def("items",
+           [](CollectorMapIntString &self) {
+             py::list items;
+             for (auto iter = self.begin(); iter != self.end(); ++iter) {
+               items.append(py::make_tuple(iter->first, qStringToStdString(iter->second)));
+             }
+             return items;
+           },
+           "Return the map contents as a list of (key, value) tuples.")
+      .def("__len__", &CollectorMapIntString::size)
+      .def("__contains__",
+           &CollectorMapIntString::exists,
+           py::arg("key"))
+      .def("__iter__",
+           [](CollectorMapIntString &self) {
+             py::list items;
+             for (auto iter = self.begin(); iter != self.end(); ++iter) {
+               items.append(py::make_tuple(iter->first, qStringToStdString(iter->second)));
+             }
+             return py::iter(items);
+                          })
+      .def("__repr__",
+           [](CollectorMapIntString &self) {
+             return "CollectorMap(size=" + std::to_string(self.size()) + ")";
+           });
+
+     py::module_ message = m.def_submodule("Message", "ISIS standardized message template helpers.");
+     message.def("ArraySubscriptNotInRange",
+                                   [](int index) {
+                                        return qStringToStdString(Isis::Message::ArraySubscriptNotInRange(index));
+                                   },
+                                   py::arg("index"));
+     message.def("KeywordAmbiguous",
+                                   [](const std::string &key) {
+                                        return qStringToStdString(Isis::Message::KeywordAmbiguous(stdStringToQString(key)));
+                                   },
+                                   py::arg("key"));
+     message.def("KeywordUnrecognized",
+                                   [](const std::string &key) {
+                                        return qStringToStdString(Isis::Message::KeywordUnrecognized(stdStringToQString(key)));
+                                   },
+                                   py::arg("key"));
+     message.def("KeywordDuplicated",
+                                   [](const std::string &key) {
+                                        return qStringToStdString(Isis::Message::KeywordDuplicated(stdStringToQString(key)));
+                                   },
+                                   py::arg("key"));
+     message.def("KeywordNotArray",
+                                   [](const std::string &key) {
+                                        return qStringToStdString(Isis::Message::KeywordNotArray(stdStringToQString(key)));
+                                   },
+                                   py::arg("key"));
+     message.def("KeywordNotFound",
+                                   [](const std::string &key) {
+                                        return qStringToStdString(Isis::Message::KeywordNotFound(stdStringToQString(key)));
+                                   },
+                                   py::arg("key"));
+     message.def("KeywordBlockInvalid",
+                                   [](const std::string &block) {
+                                        return qStringToStdString(Isis::Message::KeywordBlockInvalid(stdStringToQString(block)));
+                                   },
+                                   py::arg("block"));
+     message.def("KeywordBlockStartMissing",
+                                   [](const std::string &block, const std::string &found) {
+                                        return qStringToStdString(
+                                                  Isis::Message::KeywordBlockStartMissing(stdStringToQString(block),
+                                                                                                                                                      stdStringToQString(found)));
+                                   },
+                                   py::arg("block"), py::arg("found"));
+     message.def("KeywordBlockEndMissing",
+                                   [](const std::string &block, const std::string &found) {
+                                        return qStringToStdString(
+                                                  Isis::Message::KeywordBlockEndMissing(stdStringToQString(block),
+                                                                                                                                                 stdStringToQString(found)));
+                                   },
+                                   py::arg("block"), py::arg("found"));
+     message.def("KeywordValueBad",
+                                   [](const std::string &key) {
+                                        return qStringToStdString(Isis::Message::KeywordValueBad(stdStringToQString(key)));
+                                   },
+                                   py::arg("key"));
+     message.def("KeywordValueBad",
+                                   [](const std::string &key, const std::string &value) {
+                                        return qStringToStdString(Isis::Message::KeywordValueBad(stdStringToQString(key),
+                                                                                                                                                                                     stdStringToQString(value)));
+                                   },
+                                   py::arg("key"), py::arg("value"));
+     message.def("KeywordValueExpected",
+                                   [](const std::string &key) {
+                                        return qStringToStdString(Isis::Message::KeywordValueExpected(stdStringToQString(key)));
+                                   },
+                                   py::arg("key"));
+     message.def("KeywordValueNotInRange",
+                                   [](const std::string &key, const std::string &value, const std::string &range) {
+                                        return qStringToStdString(Isis::Message::KeywordValueNotInRange(stdStringToQString(key),
+                                                                                                                                                                                                        stdStringToQString(value),
+                                                                                                                                                                                                        stdStringToQString(range)));
+                                   },
+                                   py::arg("key"), py::arg("value"), py::arg("range"));
+     message.def("KeywordValueNotInList",
+                                   [](const std::string &key,
+                                         const std::string &value,
+                                         const std::vector<std::string> &list) {
+                                        std::vector<QString> qlist;
+                                        qlist.reserve(list.size());
+                                        for (const std::string &item : list) {
+                                             qlist.push_back(stdStringToQString(item));
+                                        }
+                                        return qStringToStdString(Isis::Message::KeywordValueNotInList(stdStringToQString(key),
+                                                                                                                                                                                                    stdStringToQString(value),
+                                                                                                                                                                                                    qlist));
+                                   },
+                                   py::arg("key"), py::arg("value"), py::arg("list"));
+     message.def("MissingDelimiter",
+                                   [](char delimiter) {
+                                        return qStringToStdString(Isis::Message::MissingDelimiter(delimiter));
+                                   },
+                                   py::arg("delimiter"));
+     message.def("MissingDelimiter",
+                                   [](char delimiter, const std::string &near) {
+                                        return qStringToStdString(Isis::Message::MissingDelimiter(delimiter,
+                                                                                                                                                                                     stdStringToQString(near)));
+                                   },
+                                   py::arg("delimiter"), py::arg("near"));
+     message.def("FileOpen",
+                                   [](const std::string &filename) {
+                                        return qStringToStdString(Isis::Message::FileOpen(stdStringToQString(filename)));
+                                   },
+                                   py::arg("filename"));
+     message.def("FileCreate",
+                                   [](const std::string &filename) {
+                                        return qStringToStdString(Isis::Message::FileCreate(stdStringToQString(filename)));
+                                   },
+                                   py::arg("filename"));
+     message.def("FileRead",
+                                   [](const std::string &filename) {
+                                        return qStringToStdString(Isis::Message::FileRead(stdStringToQString(filename)));
+                                   },
+                                   py::arg("filename"));
+     message.def("FileWrite",
+                                   [](const std::string &filename) {
+                                        return qStringToStdString(Isis::Message::FileWrite(stdStringToQString(filename)));
+                                   },
+                                   py::arg("filename"));
+     message.def("MemoryAllocationFailed",
+                                   []() {
+                                        return qStringToStdString(Isis::Message::MemoryAllocationFailed());
+                                   });
 
   /**
    * @brief Bindings for the Isis::Column class

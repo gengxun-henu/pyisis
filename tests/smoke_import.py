@@ -95,8 +95,14 @@ def temporary_raw_input_file(name="example.raw"):
 
 
 def test_basic_symbols_present():
+    assert hasattr(ip, "CollectorMap")
+    assert hasattr(ip, "CubeAttributeInput")
+    assert hasattr(ip, "CubeAttributeOutput")
+    assert hasattr(ip, "LabelAttachment")
+    assert hasattr(ip, "Message")
     assert hasattr(ip, "Progress")
     assert hasattr(ip, "IExceptionErrorType")
+    assert hasattr(ip, "Ransac")
     assert hasattr(ip, "SurfaceModel")
     assert hasattr(ip, "TrackingTable")
     assert hasattr(ip, "Resource")

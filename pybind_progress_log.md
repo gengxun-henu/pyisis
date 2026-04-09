@@ -2,6 +2,25 @@
 
 ## 2026-04-09
 
+- rollout 第二批 5 类队列（CollectorMap / CubeAttribute / Message / Ransac / Target）完成：
+  - 扩展 `src/base/bind_base_utility.cpp`，新增稳定的 `CollectorMap<int, QString>` Python 专用实例绑定，并以 `ip.Message` 子模块暴露 `Message` 命名空间全部标准消息模板 helper。
+  - 扩展 `src/bind_low_level_cube_io.cpp`，新增 `LabelAttachment`、`label_attachment_name(...)`、`label_attachment_enumeration(...)`、`CubeAttributeInput` 与 `CubeAttributeOutput` 绑定，补齐 cube 文件名属性解析/序列化表面。
+  - 扩展 `src/base/bind_base_math.cpp`，新增 `ip.Ransac` 子模块，完整包装 packed-symmetric-matrix 风格的 free-function helper，并将裸指针输入输出适配为 Python list/tuple。
+  - 扩展 `src/base/bind_base_target.cpp` 与 `src/bind_camera.cpp`，补齐 `Target` 的 NAIF/frame/body-rotation accessor，并新增 `Camera.target()` 以暴露 camera-derived target；显式 `Spice *` 相关 API 因当前仓库缺少独立 Python `Spice` 绑定而保留未覆盖。
+  - 扩展 `tests/unitTest/utility_unit_test.py`、`tests/unitTest/low_level_cube_io_unit_test.py`、`tests/unitTest/math_unit_test.py` 与 `tests/unitTest/target_shape_unit_test.py`，新增对应 focused 回归覆盖，并更新 `tests/smoke_import.py`。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_collector_map_methods.csv`
+    - `class_bind_methods_details/base_cube_attribute_methods.csv`
+    - `class_bind_methods_details/base_message_methods.csv`
+    - `class_bind_methods_details/base_ransac_methods.csv`
+    - `class_bind_methods_details/base_target_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake --build build -j"$(nproc)"`
+  - Passed: `PYTHONPATH="tests/unitTest:build/python" /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v utility_unit_test.CollectorMapUnitTest utility_unit_test.MessageUnitTest low_level_cube_io_unit_test.LowLevelCubeIoUnitTest math_unit_test.RansacUnitTest target_shape_unit_test.TargetAndShapeUnitTest`
+  - Passed: `env -u PYTHONPATH /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
 - rollout photometry 基类/归一化队列（ShadeAtm / TopoAtm / Hapke / PhotoModel / AtmosModel）完成：
   - 扩展 `src/base/bind_base_photometry.cpp`，新增 `Hapke`、`ShadeAtm` 与 `TopoAtm` 绑定，并为抽象基类 `PhotoModel` / `AtmosModel` 补齐一批稳定可测的公共 API（parameter getter/setter、static helpers、table generation、table accessor、`hfunc`、phase/list helpers 等）。
   - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `Hapke`、`ShadeAtm` 与 `TopoAtm`。

@@ -1,18 +1,18 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-CubeAttribute,Low Level Cube I/O,reference/upstream_isis/src/base/objs/CubeAttribute/CubeAttribute.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,模板化 cube 属性解析基类；真实使用通常通过 CubeAttributeInput/Output 具体化
+CubeAttribute,Low Level Cube I/O,reference/upstream_isis/src/base/objs/CubeAttribute/CubeAttribute.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已按 ISIS 真实使用方式暴露 `LabelAttachment`、`CubeAttributeInput` 与 `CubeAttributeOutput`；模板基类通过具体化类型完成覆盖
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,LabelAttachment,isis_pybind.LabelAttachment,N,头文件级枚举，供 CubeAttributeOutput 使用
-Construction/Enum,"enum LabelAttachment { AttachedLabel, DetachedLabel, ExternalLabel }",isis_pybind.LabelAttachment,N,标签附着方式枚举
-Public API,"QString LabelAttachmentName(LabelAttachment labelType)",isis_pybind.LabelAttachmentName,N,头文件级辅助函数
-Public API,"LabelAttachment LabelAttachmentEnumeration(const QString &labelType)",isis_pybind.LabelAttachmentEnumeration,N,字符串到枚举转换辅助函数
-Class Symbol,"CubeAttribute<ChildClass>",isis_pybind.CubeAttribute,N,模板基类符号；绑定时需按具体 ChildClass 实例化
-Construction/Enum,"CubeAttribute(QList<bool (ChildClass::*)(QString) const> testers)",isis_pybind.CubeAttribute,N,测试器列表构造
-Construction/Enum,"CubeAttribute(QList<bool (ChildClass::*)(QString) const> testers, const FileName &fileName)",isis_pybind.CubeAttribute,N,测试器加文件名构造
-Construction/Enum,virtual ~CubeAttribute(),isis_pybind.CubeAttribute,N,析构函数
-Public API,QString toString() const,isis_pybind.CubeAttribute.toString,N,属性序列化为 +att1+att2 形式
-Public API,"void addAttribute(QString attribute)",isis_pybind.CubeAttribute.addAttribute,N,添加单个属性并做合法性校验
-Public API,"void addAttributes(const FileName &fileNameWithAtts)",isis_pybind.CubeAttribute.addAttributes,N,从 FileName 追加属性
-Public API,"void addAttributes(const char *attributesString)",isis_pybind.CubeAttribute.addAttributes,N,const char* 重载
-Public API,"void addAttributes(const QString &attributesString)",isis_pybind.CubeAttribute.addAttributes,N,QString 重载
-Public API,"void setAttributes(const FileName &fileName)",isis_pybind.CubeAttribute.setAttributes,N,按文件名整体替换属性集合
+Class Symbol,LabelAttachment,isis_pybind.LabelAttachment,Y,头文件级枚举已直接暴露
+Construction/Enum,"enum LabelAttachment { AttachedLabel, DetachedLabel, ExternalLabel }",isis_pybind.LabelAttachment,Y,标签附着方式枚举
+Public API,"QString LabelAttachmentName(LabelAttachment labelType)",isis_pybind.label_attachment_name,Y,头文件级辅助函数已按 snake_case 模块函数暴露
+Public API,"LabelAttachment LabelAttachmentEnumeration(const QString &labelType)",isis_pybind.label_attachment_enumeration,Y,字符串到枚举转换辅助函数已暴露
+Class Symbol,"CubeAttribute<ChildClass>",isis_pybind.CubeAttribute,Y,模板基类通过 `CubeAttributeInput` / `CubeAttributeOutput` 具体化后完成 Python 覆盖
+Construction/Enum,"CubeAttribute(QList<bool (ChildClass::*)(QString) const> testers)",isis_pybind.CubeAttribute,Y,由具体化的 `CubeAttributeInput()` / `CubeAttributeOutput()` 默认构造覆盖
+Construction/Enum,"CubeAttribute(QList<bool (ChildClass::*)(QString) const> testers, const FileName &fileName)",isis_pybind.CubeAttribute,Y,由 `CubeAttributeInput(file_name)` / `CubeAttributeOutput(file_name)` 构造覆盖
+Construction/Enum,virtual ~CubeAttribute(),isis_pybind.CubeAttribute,Y,析构由 pybind 生命周期管理
+Public API,QString toString() const,isis_pybind.CubeAttribute.toString,Y,已在 `CubeAttributeInput` / `CubeAttributeOutput` 上暴露 `to_string` / `__str__`
+Public API,"void addAttribute(QString attribute)",isis_pybind.CubeAttribute.addAttribute,Y,已在 `CubeAttributeInput` / `CubeAttributeOutput` 上暴露
+Public API,"void addAttributes(const FileName &fileNameWithAtts)",isis_pybind.CubeAttribute.addAttributes,Y,已通过 `add_attributes(...)` / `set_attributes(...)` 覆盖 FileName 路径
+Public API,"void addAttributes(const char *attributesString)",isis_pybind.CubeAttribute.addAttributes,Y,已通过 Python `str` 重载覆盖
+Public API,"void addAttributes(const QString &attributesString)",isis_pybind.CubeAttribute.addAttributes,Y,已通过 Python `str` 重载覆盖
+Public API,"void setAttributes(const FileName &fileName)",isis_pybind.CubeAttribute.setAttributes,Y,已在 `CubeAttributeInput` / `CubeAttributeOutput` 上暴露 `set_attributes(...)`

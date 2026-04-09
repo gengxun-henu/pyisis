@@ -1,16 +1,23 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-PvlFormat,Parsing,isis/src/base/objs/PvlFormat/PvlFormat.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-08 第四阶段后端 / 桥接 / 工具类批次 inventory 预登记
+PvlFormat,Parsing,reference/upstream_isis/src/base/objs/PvlFormat/PvlFormat.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/base/bind_base_pvl.cpp 完成绑定；KeywordType enum 一并暴露
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,PvlFormat,isis_pybind.PvlFormat,N,Python class symbol not found in current binding files
-Construction/Enum,PvlFormat(),isis_pybind.PvlFormat(),N,Constructor binding not detected in current binding files
-Mutation/Configuration,void add(const QString &file),isis_pybind.PvlFormat.add,N,Method not found in current binding files
-Mutation/Configuration,void add(Pvl &keymap),isis_pybind.PvlFormat.add,N,Method not found in current binding files
-Mutation/Configuration,void setCharLimit(const unsigned int limit) { m_charLimit = limit,isis_pybind.PvlFormat.set_char_limit,N,Method not found in current binding files
-Public API,unsigned int charLimit() const { return m_charLimit,isis_pybind.PvlFormat.char_limit,N,Method not found in current binding files
-Public API,"virtual QString formatValue(const PvlKeyword &keyword, int valueIndex = 0)",isis_pybind.PvlFormat.format_value,N,Method not found in current binding files
-Public API,virtual QString formatName(const PvlKeyword &keyword),isis_pybind.PvlFormat.format_name,N,Method not found in current binding files
-Public API,"virtual QString formatEnd(const QString name, const PvlKeyword &keyword)",isis_pybind.PvlFormat.format_end,N,Method not found in current binding files
-Public API,"virtual QString formatEOL() { return ""\n""",isis_pybind.PvlFormat.format_eol,N,Method not found in current binding files
-Public API,virtual KeywordType type(const PvlKeyword &keyword),isis_pybind.PvlFormat.type,N,Method not found in current binding files
-Public API,virtual int accuracy(const PvlKeyword &keyword),isis_pybind.PvlFormat.accuracy,N,Method not found in current binding files
+Class Symbol,PvlFormat,isis_pybind.PvlFormat,Y,Exposed as py::class_<Isis::PvlFormat>
+Enum,KeywordType (namespace-level enum),isis_pybind.KeywordType,Y,8 values exposed via py::enum_
+Construction/Enum,PvlFormat(),isis_pybind.PvlFormat(),Y,Default constructor
+Construction/Enum,"PvlFormat(const QString &file)",isis_pybind.PvlFormat(file),Y,File-based constructor via lambda
+Construction/Enum,PvlFormat(Pvl &keymap),isis_pybind.PvlFormat(keymap),Y,Pvl-based constructor
+Mutation/Configuration,"void add(const QString &file)",isis_pybind.PvlFormat.add,Y,Overloaded for file path
+Mutation/Configuration,void add(Pvl &keymap),isis_pybind.PvlFormat.add,Y,Overloaded for Pvl object
+Mutation/Configuration,void setCharLimit(unsigned int),isis_pybind.PvlFormat.set_char_limit,Y,
+Public API,unsigned int charLimit() const,isis_pybind.PvlFormat.char_limit,Y,
+Public API,"virtual QString formatValue(const PvlKeyword &, int)",isis_pybind.PvlFormat.format_value,Y,Returns str
+Public API,virtual QString formatName(const PvlKeyword &),isis_pybind.PvlFormat.format_name,Y,Returns str
+Public API,"virtual QString formatEnd(const QString, const PvlKeyword &)",N,Rarely used directly; complex output
+Public API,virtual QString formatEOL(),isis_pybind.PvlFormat.format_eol,Y,Returns str
+Public API,virtual KeywordType type(const PvlKeyword &),isis_pybind.PvlFormat.type,Y,Returns KeywordType enum
+Public API,virtual int accuracy(const PvlKeyword &),isis_pybind.PvlFormat.accuracy,Y,Returns int
+Public API,virtual QString addQuotes(const QString),isis_pybind.PvlFormat.add_quotes,Y,Returns str
+Public API,bool isSingleUnit(const PvlKeyword &),isis_pybind.PvlFormat.is_single_unit,Y,Returns bool
+Protected API,void init(),N,Private initialisation; not needed in Python
+Python Protocol,__repr__,isis_pybind.PvlFormat.__repr__,Y,PvlFormat()

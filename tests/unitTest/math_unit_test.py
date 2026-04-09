@@ -1017,5 +1017,79 @@ class SurfaceModelUnitTest(unittest.TestCase):
         self.assertIn("SurfaceModel", r)
 
 
+class MaximumLikelihoodWFunctionsUnitTest(unittest.TestCase):
+    """Focused unit tests for MaximumLikelihoodWFunctions binding. Added: 2026-04-09."""
+
+    def test_construct_default(self):
+        """Default constructor works and has a model attribute."""
+        mlwf = ip.MaximumLikelihoodWFunctions()
+        self.assertIsNotNone(mlwf)
+
+    def test_construct_with_model(self):
+        """Construct with a specific model enum."""
+        mlwf = ip.MaximumLikelihoodWFunctions(ip.MaximumLikelihoodModel.Huber)
+        self.assertEqual(mlwf.model(), ip.MaximumLikelihoodModel.Huber)
+
+    def test_construct_with_model_and_tweaking_constant(self):
+        """Construct with model and explicit tweaking constant."""
+        mlwf = ip.MaximumLikelihoodWFunctions(ip.MaximumLikelihoodModel.Welsch, 2.0)
+        self.assertAlmostEqual(mlwf.tweaking_constant(), 2.0)
+
+    def test_set_model(self):
+        """set_model changes the model type."""
+        mlwf = ip.MaximumLikelihoodWFunctions()
+        mlwf.set_model(ip.MaximumLikelihoodModel.Chen)
+        self.assertEqual(mlwf.model(), ip.MaximumLikelihoodModel.Chen)
+
+    def test_set_tweaking_constant(self):
+        """set_tweaking_constant updates the constant."""
+        mlwf = ip.MaximumLikelihoodWFunctions(ip.MaximumLikelihoodModel.Huber)
+        mlwf.set_tweaking_constant(3.5)
+        self.assertAlmostEqual(mlwf.tweaking_constant(), 3.5)
+
+    def test_set_tweaking_constant_default(self):
+        """set_tweaking_constant_default restores the default."""
+        mlwf = ip.MaximumLikelihoodWFunctions(ip.MaximumLikelihoodModel.HuberModified)
+        mlwf.set_tweaking_constant(99.0)
+        mlwf.set_tweaking_constant_default()
+        self.assertGreater(mlwf.tweaking_constant(), 0.0)
+
+    def test_sqrt_weight_scaler(self):
+        """sqrt_weight_scaler returns a non-negative float."""
+        mlwf = ip.MaximumLikelihoodWFunctions(ip.MaximumLikelihoodModel.Huber)
+        val = mlwf.sqrt_weight_scaler(1.0)
+        self.assertIsInstance(val, float)
+
+    def test_tweaking_constant_quantile(self):
+        """tweaking_constant_quantile returns a float in (0, 1]."""
+        mlwf = ip.MaximumLikelihoodWFunctions(ip.MaximumLikelihoodModel.Welsch)
+        q = mlwf.tweaking_constant_quantile()
+        self.assertIsInstance(q, float)
+        self.assertGreater(q, 0.0)
+
+    def test_weighted_residual_cutoff(self):
+        """weighted_residual_cutoff returns a str."""
+        mlwf = ip.MaximumLikelihoodWFunctions(ip.MaximumLikelihoodModel.Huber)
+        cutoff = mlwf.weighted_residual_cutoff()
+        self.assertIsInstance(cutoff, str)
+
+    def test_model_to_string(self):
+        """model_to_string converts enum to str."""
+        s = ip.MaximumLikelihoodWFunctions.model_to_string(ip.MaximumLikelihoodModel.Huber)
+        self.assertIn("Huber", s)
+
+    def test_string_to_model(self):
+        """string_to_model converts str to enum."""
+        m = ip.MaximumLikelihoodWFunctions.string_to_model("Huber")
+        self.assertEqual(m, ip.MaximumLikelihoodModel.Huber)
+
+    def test_repr(self):
+        """repr includes model and tweaking_constant."""
+        mlwf = ip.MaximumLikelihoodWFunctions(ip.MaximumLikelihoodModel.Huber)
+        r = repr(mlwf)
+        self.assertIn("MaximumLikelihoodWFunctions", r)
+        self.assertIn("Huber", r)
+
+
 if __name__ == '__main__':
     unittest.main()

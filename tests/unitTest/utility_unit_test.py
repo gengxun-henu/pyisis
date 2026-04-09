@@ -1,5 +1,5 @@
 """
-Unit tests for ISIS utility classes: Column, Environment, LineEquation
+Unit tests for ISIS utility classes: Column, Environment, IString, LineEquation
 
 Author: Geng Xun
 Created: 2026-03-24
@@ -8,6 +8,7 @@ Updated: 2026-04-09  Geng Xun added Message namespace regression coverage for st
 Updated: 2026-04-09  Geng Xun added CollectorMap focused coverage for unique and duplicate key policies.
 Updated: 2026-04-09  Geng Xun added Plugin focused coverage for runtime plugin address resolution and failure paths.
 Updated: 2026-04-08  Geng Xun added Environment regression coverage alongside existing Column and LineEquation helpers.
+Updated: 2026-04-09  Geng Xun added IString and free-function helpers (to_bool/to_int/to_double/to_string) unit tests.
 """
 import os
 import tempfile
@@ -492,6 +493,264 @@ class LineEquationUnitTest(unittest.TestCase):
         self.assertIn("LineEquation", repr_str)
         self.assertIn("defined=True", repr_str)
         self.assertIn("points=2", repr_str)
+
+
+class IStringUnitTest(unittest.TestCase):
+    """Focused unit tests for IString binding and free-function helpers.
+
+    Added: 2026-04-09
+    """
+
+    # ------------------------------------------------------------------
+    # Free-function helpers
+    # ------------------------------------------------------------------
+
+    def test_to_bool_true_values(self):
+        """to_bool recognises common truthy strings (case-insensitive)."""
+        for val in ("true", "True", "TRUE", "yes", "Yes", "on", "On", "1", "t", "y"):
+            self.assertTrue(ip.to_bool(val), f"Expected True for {val!r}")
+
+    def test_to_bool_false_values(self):
+        """to_bool recognises common falsy strings (case-insensitive)."""
+        for val in ("false", "False", "no", "No", "off", "Off", "0", "f", "n"):
+            self.assertFalse(ip.to_bool(val), f"Expected False for {val!r}")
+
+    def test_to_bool_invalid_raises(self):
+        """to_bool raises on an unrecognised string."""
+        with self.assertRaises(Exception):
+            ip.to_bool("maybe")
+
+    def test_to_int_valid(self):
+        """to_int converts numeric strings correctly."""
+        self.assertEqual(ip.to_int("0"), 0)
+        self.assertEqual(ip.to_int("42"), 42)
+        self.assertEqual(ip.to_int("-7"), -7)
+
+    def test_to_int_invalid_raises(self):
+        """to_int raises on a non-integer string."""
+        with self.assertRaises(Exception):
+            ip.to_int("abc")
+
+    def test_to_big_int_valid(self):
+        """to_big_int converts large integer strings correctly."""
+        self.assertEqual(ip.to_big_int("9223372036854775807"), 9223372036854775807)
+        self.assertEqual(ip.to_big_int("-9223372036854775807"), -9223372036854775807)
+
+    def test_to_double_valid(self):
+        """to_double converts floating-point strings correctly."""
+        self.assertAlmostEqual(ip.to_double("3.14"), 3.14, places=10)
+        self.assertAlmostEqual(ip.to_double("-1e10"), -1e10)
+
+    def test_to_double_invalid_raises(self):
+        """to_double raises on a non-numeric string."""
+        with self.assertRaises(Exception):
+            ip.to_double("hello")
+
+    def test_to_string_bool(self):
+        """to_string(bool) returns 'Yes' or 'No' matching ISIS convention."""
+        self.assertIsInstance(ip.to_string(True), str)
+        self.assertIsInstance(ip.to_string(False), str)
+
+    def test_to_string_int(self):
+        """to_string(int) returns numeric string."""
+        self.assertEqual(ip.to_string(42), "42")
+        self.assertEqual(ip.to_string(-7), "-7")
+
+    def test_to_string_double(self):
+        """to_string(double) returns numeric string at default precision."""
+        result = ip.to_string(3.14)
+        self.assertIn("3.14", result)
+
+    def test_to_string_double_precision(self):
+        """to_string(double, precision) honours the precision argument."""
+        result = ip.to_string(3.141592653589793, 5)
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
+
+    # ------------------------------------------------------------------
+    # IString constructors
+    # ------------------------------------------------------------------
+
+    def test_construct_default(self):
+        """IString() constructs an empty string."""
+        s = ip.IString()
+        self.assertEqual(str(s), "")
+
+    def test_construct_from_str(self):
+        """IString(str) stores the value."""
+        s = ip.IString("hello world")
+        self.assertEqual(str(s), "hello world")
+
+    def test_construct_copy(self):
+        """IString copy constructor works."""
+        s1 = ip.IString("copy test")
+        s2 = ip.IString(s1)
+        self.assertEqual(str(s2), "copy test")
+
+    def test_construct_from_int(self):
+        """IString(int) converts the integer to its string representation."""
+        s = ip.IString(42)
+        self.assertEqual(int(s), 42)
+
+    def test_construct_from_double(self):
+        """IString(double) converts the float to its string representation."""
+        s = ip.IString(3.14)
+        self.assertAlmostEqual(float(s), 3.14, places=5)
+
+    # ------------------------------------------------------------------
+    # Instance methods
+    # ------------------------------------------------------------------
+
+    def test_trim(self):
+        """trim() removes leading/trailing characters from the given set."""
+        s = ip.IString("ABCDefghijkBCAD")
+        result = s.trim("ABCD")
+        self.assertEqual(result, "efghijk")
+
+    def test_trim_head(self):
+        """trim_head() removes only leading characters from the given set."""
+        s = ip.IString("ABCDefghijk")
+        result = s.trim_head("DCBA")
+        self.assertEqual(result, "efghijk")
+
+    def test_trim_tail(self):
+        """trim_tail() removes only trailing characters from the given set."""
+        s = ip.IString("efghijkBCAD")
+        result = s.trim_tail("DCBA")
+        self.assertEqual(result, "efghijk")
+
+    def test_up_case(self):
+        """up_case() converts the string to uppercase."""
+        s = ip.IString("hello")
+        result = s.up_case()
+        self.assertEqual(result, "HELLO")
+
+    def test_down_case(self):
+        """down_case() converts the string to lowercase."""
+        s = ip.IString("HELLO")
+        result = s.down_case()
+        self.assertEqual(result, "hello")
+
+    def test_to_integer(self):
+        """to_integer() converts numeric string to int."""
+        s = ip.IString("123")
+        self.assertEqual(s.to_integer(), 123)
+
+    def test_to_double_method(self):
+        """to_double() converts numeric string to float."""
+        s = ip.IString("9.5")
+        self.assertAlmostEqual(s.to_double(), 9.5)
+
+    def test_to_big_integer(self):
+        """to_big_integer() converts large numeric string to int."""
+        s = ip.IString("1000000000")
+        self.assertEqual(s.to_big_integer(), 1000000000)
+
+    def test_token(self):
+        """token() extracts tokens one at a time."""
+        s = ip.IString("25:255 35")
+        tok1 = s.token(": ")
+        self.assertEqual(tok1, "25")
+        tok2 = s.token(": ")
+        self.assertEqual(tok2, "255")
+
+    def test_split_static(self):
+        """split() splits a string on a separator character."""
+        tokens = ip.IString.split(' ', "This is a test")
+        self.assertEqual(tokens, ["This", "is", "a", "test"])
+
+    def test_compress(self):
+        """compress() collapses consecutive whitespace to single spaces."""
+        s = ip.IString("  AB  CD  ")
+        result = s.compress()
+        self.assertEqual(result.strip(), "AB CD")
+
+    def test_replace(self):
+        """replace() substitutes occurrences of a substring."""
+        s = ip.IString("Thirteen is bigger than fourteen")
+        result = s.replace("bigger", "smaller")
+        self.assertIn("smaller", result)
+        self.assertNotIn("bigger", result)
+
+    def test_remove(self):
+        """remove() strips all occurrences of the given characters."""
+        s = ip.IString("a 1 b 2 c 3 d 4")
+        result = s.remove("1245")
+        self.assertNotIn("1", result)
+        self.assertNotIn("2", result)
+        self.assertNotIn("4", result)
+        self.assertNotIn("5", result)
+
+    def test_convert_whitespace(self):
+        """convert_whitespace() replaces tab/newline with space."""
+        s = ip.IString("a\tb\nc")
+        result = s.convert_whitespace()
+        self.assertNotIn("\t", result)
+        self.assertNotIn("\n", result)
+
+    def test_equal(self):
+        """equal() performs case-insensitive string comparison."""
+        s = ip.IString("Hello")
+        self.assertTrue(s.equal("Hello"))
+        self.assertTrue(s.equal("hello"))
+        self.assertFalse(s.equal("World"))
+
+    # ------------------------------------------------------------------
+    # Static methods
+    # ------------------------------------------------------------------
+
+    def test_trim_static(self):
+        """trim_static() removes chars from both ends of a str."""
+        result = ip.IString.trim_static("ABCD", "ABCDefghijkBCAD")
+        self.assertEqual(result, "efghijk")
+
+    def test_up_case_static(self):
+        """up_case_static() returns uppercase copy of a str."""
+        self.assertEqual(ip.IString.up_case_static("hello"), "HELLO")
+
+    def test_down_case_static(self):
+        """down_case_static() returns lowercase copy of a str."""
+        self.assertEqual(ip.IString.down_case_static("HELLO"), "hello")
+
+    def test_to_integer_static(self):
+        """to_integer_static() converts str to int."""
+        self.assertEqual(ip.IString.to_integer_static("99"), 99)
+
+    # ------------------------------------------------------------------
+    # Python protocol methods
+    # ------------------------------------------------------------------
+
+    def test_str(self):
+        """str(IString) returns the string content."""
+        s = ip.IString("test value")
+        self.assertEqual(str(s), "test value")
+
+    def test_repr(self):
+        """repr(IString) includes IString and the string content."""
+        s = ip.IString("abc")
+        self.assertIn("IString", repr(s))
+        self.assertIn("abc", repr(s))
+
+    def test_len(self):
+        """len(IString) returns the character count."""
+        s = ip.IString("hello")
+        self.assertEqual(len(s), 5)
+
+    def test_int_conversion(self):
+        """int(IString) calls to_integer()."""
+        s = ip.IString("77")
+        self.assertEqual(int(s), 77)
+
+    def test_float_conversion(self):
+        """float(IString) calls to_double()."""
+        s = ip.IString("2.5")
+        self.assertAlmostEqual(float(s), 2.5)
+
+    def test_equality_operator(self):
+        """IString == str works correctly."""
+        s = ip.IString("hello")
+        self.assertTrue(s == "hello")
+        self.assertFalse(s == "world")
 
 
 if __name__ == '__main__':

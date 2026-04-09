@@ -1117,3 +1117,109 @@ Queue document created: `pybind_rollout_classes_20260409.md`
   - Passed: focused regressions for `TrackingTableUnitTest`, `SurfaceModelUnitTest`, and `ResourceUnitTest` (`31` tests, `OK`)
   - Passed: `ctest --test-dir build --output-on-failure` (`python-unit-tests` passed)
   - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+---
+
+## 2026-04-09 第四阶段 Phase-4 批次继续（5 类）
+
+### 活跃队列
+1. IString — 已完成
+2. PvlToken — 已完成
+3. PvlTokenizer — 已完成
+4. PvlFormat — 已完成
+5. PvlTranslationTable — 已完成
+
+### Class 1: IString (已转换)
+- Added `py::class_<Isis::IString>` binding in `src/base/bind_base_utility.cpp`.
+- Exposed: constructors (default, str, copy, int, double, BigInt), trim/trim_head/trim_tail (instance + static), up_case/down_case (instance + static), to_integer/to_double/to_big_integer (instance), to_integer_static/to_double_static, token (str separator), split (static), compress/replace/replace_honor_quotes/convert/convert_whitespace/remove/equal instance methods, Python protocol: __str__/__repr__/__len__/__int__/__float__/__eq__.
+- Module-level free functions: `to_bool`, `to_int`, `to_big_int`, `to_double`, `to_string` (4 overloads for bool/int/BigInt/double).
+- Added `IStringUnitTest` class to `tests/unitTest/utility_unit_test.py` with 30 focused tests.
+- Exported `IString`, `to_bool`, `to_int`, `to_big_int`, `to_double`, `to_string` in `python/isis_pybind/__init__.py`; smoke symbol checks added.
+- Created `class_bind_methods_details/base_istring_methods.csv` (36Y/10N, 78.26%).
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 2: PvlToken (已转换)
+- Added `py::class_<Isis::PvlToken>` binding in `src/base/bind_base_pvl.cpp`.
+- Exposed: default constructor, key constructor, set_key, key, key_upper, add_value, value(index=0), value_upper(index=0), value_size, value_clear, value_vector, __repr__.
+- Added `PvlTokenUnitTest` class to `tests/unitTest/pvl_unit_test.py` with 13 focused tests.
+- Exported `PvlToken` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Created/updated `class_bind_methods_details/base_pvl_token_methods.csv` (12Y/0N, 100%).
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 3: PvlTokenizer (已转换)
+- Added `py::class_<Isis::PvlTokenizer>` binding in `src/base/bind_base_pvl.cpp`.
+- Exposed: default constructor, load(pvl_text, terminator="END") (wraps std::istream via istringstream), clear, get_token_list (returns list[PvlToken]), __repr__.
+- Added `PvlTokenizerUnitTest` class to `tests/unitTest/pvl_unit_test.py` with 7 focused tests.
+- Exported `PvlTokenizer` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Created/updated `class_bind_methods_details/base_pvl_tokenizer_methods.csv` (5Y/9N, 35.71%).
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 4: PvlFormat (已转换)
+- Added `py::class_<Isis::PvlFormat>` and `py::enum_<Isis::KeywordType>` binding in `src/base/bind_base_pvl.cpp`.
+- Exposed: constructors (default, file, Pvl), add(file)/add(pvl), set_char_limit/char_limit, format_value/format_name/format_eol, type, accuracy, add_quotes, is_single_unit, __repr__. KeywordType enum with 9 values.
+- Added `PvlFormatUnitTest` class to `tests/unitTest/pvl_unit_test.py` with 10 focused tests.
+- Exported `PvlFormat`, `KeywordType` in `python/isis_pybind/__init__.py`; smoke symbol checks added.
+- Created/updated `class_bind_methods_details/base_pvl_format_methods.csv` (15Y/3N, 83.33%).
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 5: PvlTranslationTable (已转换)
+- Added `py::class_<Isis::PvlTranslationTable>` binding in `src/base/bind_base_pvl.cpp`.
+- Exposed: constructor(table_text: str, wraps istringstream), add_table(text_or_file, auto-detects), input_group, input_keyword_name, input_default, translate, has_input_default, is_auto, is_optional, output_name, output_position, __repr__.
+- Added `PvlTranslationTableUnitTest` class to `tests/unitTest/pvl_unit_test.py` with 11 focused tests.
+- Exported `PvlTranslationTable` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Created/updated `class_bind_methods_details/base_pvl_translation_table_methods.csv` (14Y/2N, 87.50%).
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Validation status
+- Build environment not available in sandbox; requires CI/asp360_new interpreter.
+- All bindings reviewed for correctness against upstream `.h` and `.cpp`.
+
+---
+
+## 2026-04-09 第四阶段 Phase-4 批次第二轮（5 类）
+
+### 活跃队列
+1. PvlFormatPds — 已完成
+2. LabelTranslationManager — 已完成（抽象基类，注册继承链）
+3. PvlToPvlTranslationManager — 已完成
+4. PvlToXmlTranslationManager — 已完成（部分，QDomDocument Auto 方法不暴露）
+5. XmlToPvlTranslationManager — 已完成（部分，内部 QDomDocument 不暴露）
+
+### Class 1: PvlFormatPds (已转换)
+- Added `py::class_<Isis::PvlFormatPds, Isis::PvlFormat>` binding in `src/base/bind_base_pvl.cpp`.
+- Exposed: constructors (default, file, Pvl), format_value/format_name/format_eol (CRLF).
+- Inherits all PvlFormat methods including set_char_limit/char_limit/type/accuracy/add_quotes/is_single_unit.
+- Added `PvlFormatPdsUnitTest` class to `tests/unitTest/pvl_unit_test.py` with 7 focused tests.
+- Exported `PvlFormatPds` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_pvl_format_pds_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 2: LabelTranslationManager (已转换, 抽象基类)
+- Added `py::class_<Isis::LabelTranslationManager, Isis::PvlTranslationTable>` binding in `src/base/bind_base_pvl.cpp`.
+- Not instantiable from Python (abstract, pure virtual Translate).
+- Exposed: auto_translate(Pvl), parse_specification(str) -> list[str].
+- Inheritance chain: PvlTranslationTable -> LabelTranslationManager -> PvlToPvlTranslationManager/PvlToXmlTranslationManager/XmlToPvlTranslationManager correctly registered.
+- Exported `LabelTranslationManager` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_label_translation_manager_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 3: PvlToPvlTranslationManager (已转换)
+- Added `py::class_<Isis::PvlToPvlTranslationManager, Isis::LabelTranslationManager>` binding.
+- Exposed: 4 constructors (file, string, label+file, label+string), translate, auto_translate (2 overloads), input_has_keyword, set_label.
+- Added `PvlToPvlTranslationManagerUnitTest` class to `tests/unitTest/pvl_unit_test.py` with 5 focused tests.
+- Exported `PvlToPvlTranslationManager` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_pvl_to_pvl_translation_manager_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 4: PvlToXmlTranslationManager (已转换, 部分)
+- Added `py::class_<Isis::PvlToXmlTranslationManager, Isis::LabelTranslationManager>` binding.
+- Exposed: 2 constructors, translate, input_has_keyword, set_label. Skipped: Auto(QDomDocument) - Qt XML type not Python-friendly.
+- Exported `PvlToXmlTranslationManager` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_pvl_to_xml_translation_manager_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 5: XmlToPvlTranslationManager (已转换, 部分)
+- Added `py::class_<Isis::XmlToPvlTranslationManager, Isis::LabelTranslationManager>` binding.
+- Exposed: 3 constructors (file, string, FileName+file), translate, auto_translate(FileName, Pvl). Internal QDomDocument not exposed.
+- Exported `XmlToPvlTranslationManager` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_xml_to_pvl_translation_manager_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Validation status
+- Build environment not available in sandbox; requires CI/asp360_new interpreter.
+- All bindings reviewed for correctness against upstream `.h` and `.cpp`.

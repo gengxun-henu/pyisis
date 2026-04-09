@@ -8,6 +8,7 @@
 // SPDX-License-Identifier: MIT
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #include "Camera.h"
 #include "CameraDetectorMap.h"
@@ -16,7 +17,9 @@
 #include "CameraGroundMap.h"
 #include "CameraPointInfo.h"
 #include "CameraSkyMap.h"
+#include "LightTimeCorrectionState.h"
 #include "PvlGroup.h"
+#include "Quaternion.h"
 #include "Sensor.h"
 #include "Target.h"
 #include "helpers.h"
@@ -171,4 +174,95 @@ void bind_camera(py::module_ &m) {
       .def_static("ground_azimuth", &Isis::Camera::GroundAzimuth,
                   py::arg("ground_latitude"), py::arg("ground_longitude"),
                   py::arg("target_latitude"), py::arg("target_longitude"));
+
+  // Added: 2026-04-09 - Quaternion binding
+  py::class_<Isis::Quaternion>(m, "Quaternion")
+      .def(py::init<>(),
+           "Construct a default Quaternion (identity).")
+      .def(py::init<const std::vector<double>>(),
+           py::arg("matrix"),
+           "Construct a Quaternion from a 9-element rotation matrix (row-major std::vector<double>).")
+      .def(py::init<const Isis::Quaternion &>(),
+           py::arg("other"),
+           "Copy constructor.")
+      .def("get_quaternion",
+           &Isis::Quaternion::GetQuaternion,
+           "Return the quaternion as a list of 4 doubles [w, x, y, z].")
+      .def("set",
+           &Isis::Quaternion::Set,
+           py::arg("values"),
+           "Set the quaternion from a list of 4 doubles [w, x, y, z].")
+      .def("to_matrix",
+           &Isis::Quaternion::ToMatrix,
+           "Return the equivalent 9-element rotation matrix (row-major).")
+      .def("to_angles",
+           &Isis::Quaternion::ToAngles,
+           py::arg("axis3"), py::arg("axis2"), py::arg("axis1"),
+           "Convert to Euler angles for the given rotation axis sequence.")
+      .def("conjugate",
+           &Isis::Quaternion::Conjugate,
+           "Return the conjugate (inverse rotation) of this quaternion.")
+      .def("qxv",
+           &Isis::Quaternion::Qxv,
+           py::arg("vin"),
+           "Rotate a 3-element vector by this quaternion (Q * v).")
+      .def("__mul__",
+           [](const Isis::Quaternion &a, const Isis::Quaternion &b) { return a * b; },
+           py::is_operator())
+      .def("__mul__",
+           [](const Isis::Quaternion &a, double s) { return a * s; },
+           py::is_operator())
+      .def("__repr__",
+           [](const Isis::Quaternion &self) {
+             auto q = self.GetQuaternion();
+             return "Quaternion(" +
+                    std::to_string(q[0]) + ", " + std::to_string(q[1]) + ", " +
+                    std::to_string(q[2]) + ", " + std::to_string(q[3]) + ")";
+           });
+
+  // Added: 2026-04-09 - LightTimeCorrectionState binding
+  py::class_<Isis::LightTimeCorrectionState>(m, "LightTimeCorrectionState")
+      .def(py::init<>(),
+           "Construct a LightTimeCorrectionState with default state.")
+      .def("set_aberration_correction",
+           [](Isis::LightTimeCorrectionState &self, const std::string &correction) {
+             self.setAberrationCorrection(stdStringToQString(correction));
+           },
+           py::arg("correction"),
+           "Set the NAIF aberration correction string (e.g. 'LT+S', 'NONE').")
+      .def("get_aberration_correction",
+           [](const Isis::LightTimeCorrectionState &self) {
+             return qStringToStdString(self.getAberrationCorrection());
+           },
+           "Return the current aberration correction string.")
+      .def("is_light_time_corrected",
+           &Isis::LightTimeCorrectionState::isLightTimeCorrected,
+           "Return True if light-time correction is applied.")
+      .def("is_observer_target_swapped",
+           &Isis::LightTimeCorrectionState::isObserverTargetSwapped,
+           "Return True if observer and target have been swapped for the correction.")
+      .def("set_swap_observer_target",
+           &Isis::LightTimeCorrectionState::setSwapObserverTarget,
+           "Enable the observer-target swap.")
+      .def("set_no_swap_observer_target",
+           &Isis::LightTimeCorrectionState::setNoSwapObserverTarget,
+           "Disable the observer-target swap.")
+      .def("is_light_time_to_surface_corrected",
+           &Isis::LightTimeCorrectionState::isLightTimeToSurfaceCorrected,
+           "Return True if light-time-to-surface correction is applied.")
+      .def("set_correct_light_time_to_surface",
+           &Isis::LightTimeCorrectionState::setCorrectLightTimeToSurface,
+           "Enable the light-time-to-surface correction.")
+      .def("set_no_correct_light_time_to_surface",
+           &Isis::LightTimeCorrectionState::setNoCorrectLightTimeToSurface,
+           "Disable the light-time-to-surface correction.")
+      .def("__eq__",
+           [](const Isis::LightTimeCorrectionState &a,
+              const Isis::LightTimeCorrectionState &b) { return a == b; },
+           py::is_operator())
+      .def("__repr__",
+           [](const Isis::LightTimeCorrectionState &self) {
+             return "LightTimeCorrectionState(correction='" +
+                    qStringToStdString(self.getAberrationCorrection()) + "')";
+           });
 }

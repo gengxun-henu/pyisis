@@ -3,8 +3,10 @@ Unit tests for ISIS PVL and PvlSequence bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-30
+Last Modified: 2026-04-09
 Updated: 2026-03-30  Geng Xun added PvlSequence regression coverage alongside core PVL keyword, group, object, and container tests.
+Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer focused unit tests.
+Updated: 2026-04-09  Geng Xun added PvlFormat, PvlTranslationTable, PvlFormatPds, PvlToPvlTranslationManager unit tests.
 """
 
 import unittest
@@ -170,6 +172,446 @@ class PvlUnitTest(unittest.TestCase):
         seq.clear()
         self.assertEqual(seq.size(), 0)
         self.assertEqual(len(seq), 0)
+
+
+class PvlTokenUnitTest(unittest.TestCase):
+    """Focused unit tests for PvlToken binding. Added: 2026-04-09."""
+
+    def test_construct_with_key(self):
+        """PvlToken(key) stores the keyword name."""
+        tok = ip.PvlToken("Dog")
+        self.assertEqual(tok.key(), "Dog")
+
+    def test_construct_default(self):
+        """PvlToken() constructs with an empty key."""
+        tok = ip.PvlToken()
+        self.assertEqual(tok.key(), "")
+
+    def test_set_key(self):
+        """set_key() changes the keyword name."""
+        tok = ip.PvlToken("Old")
+        tok.set_key("New")
+        self.assertEqual(tok.key(), "New")
+
+    def test_key_upper(self):
+        """key_upper() returns the keyword name in uppercase."""
+        tok = ip.PvlToken("dog")
+        self.assertEqual(tok.key_upper(), "DOG")
+
+    def test_add_value_and_size(self):
+        """add_value() appends to the value list and value_size() counts them."""
+        tok = ip.PvlToken("Cat")
+        self.assertEqual(tok.value_size(), 0)
+        tok.add_value("tabby")
+        tok.add_value("calico")
+        self.assertEqual(tok.value_size(), 2)
+
+    def test_value_default_index(self):
+        """value() with no argument returns the first value."""
+        tok = ip.PvlToken("Bird")
+        tok.add_value("parrot")
+        tok.add_value("canary")
+        self.assertEqual(tok.value(), "parrot")
+
+    def test_value_by_index(self):
+        """value(index) returns the value at the given index."""
+        tok = ip.PvlToken("Bird")
+        tok.add_value("parrot")
+        tok.add_value("canary")
+        self.assertEqual(tok.value(1), "canary")
+
+    def test_value_upper(self):
+        """value_upper() returns the value in uppercase."""
+        tok = ip.PvlToken("Animal")
+        tok.add_value("poodle")
+        self.assertEqual(tok.value_upper(), "POODLE")
+
+    def test_value_clear(self):
+        """value_clear() removes all values."""
+        tok = ip.PvlToken("Dog")
+        tok.add_value("drools")
+        tok.value_clear()
+        self.assertEqual(tok.value_size(), 0)
+
+    def test_value_vector(self):
+        """value_vector() returns all values as a list."""
+        tok = ip.PvlToken("Multi")
+        tok.add_value("a")
+        tok.add_value("b")
+        tok.add_value("c")
+        vec = tok.value_vector()
+        self.assertEqual(vec, ["a", "b", "c"])
+
+    def test_value_out_of_range_raises(self):
+        """value(-1) and value(beyond size) raise IException."""
+        tok = ip.PvlToken("Dog")
+        with self.assertRaises(Exception):
+            tok.value(-1)
+        with self.assertRaises(Exception):
+            tok.value(1)  # no values added
+
+    def test_repr(self):
+        """repr(PvlToken) includes key and value count."""
+        tok = ip.PvlToken("Key")
+        tok.add_value("val1")
+        tok.add_value("val2")
+        r = repr(tok)
+        self.assertIn("PvlToken", r)
+        self.assertIn("Key", r)
+        self.assertIn("2", r)
+
+
+class PvlTokenizerUnitTest(unittest.TestCase):
+    """Focused unit tests for PvlTokenizer binding. Added: 2026-04-09."""
+
+    def test_construct(self):
+        """PvlTokenizer() constructs with zero tokens."""
+        tizer = ip.PvlTokenizer()
+        self.assertEqual(len(tizer.get_token_list()), 0)
+
+    def test_load_simple_pvl(self):
+        """load() parses a simple PVL assignment."""
+        tizer = ip.PvlTokenizer()
+        tizer.load("DOG=POODLE ")
+        tokens = tizer.get_token_list()
+        self.assertGreater(len(tokens), 0)
+        keys = [t.key() for t in tokens]
+        self.assertIn("DOG", keys)
+
+    def test_load_quoted_value(self):
+        """load() handles quoted values."""
+        tizer = ip.PvlTokenizer()
+        tizer.load('CAT="TABBY" ')
+        tokens = tizer.get_token_list()
+        keys = [t.key() for t in tokens]
+        self.assertIn("CAT", keys)
+        cat_tok = next(t for t in tokens if t.key() == "CAT")
+        self.assertEqual(cat_tok.value(), "TABBY")
+
+    def test_load_paren_value(self):
+        """load() parses parenthesised value lists."""
+        tizer = ip.PvlTokenizer()
+        tizer.load("BIRD=(PARROT) ")
+        tokens = tizer.get_token_list()
+        bird_tok = next((t for t in tokens if t.key() == "BIRD"), None)
+        self.assertIsNotNone(bird_tok)
+        self.assertEqual(bird_tok.value(), "PARROT")
+
+    def test_load_multiple_keywords(self):
+        """load() accumulates multiple keyword assignments."""
+        tizer = ip.PvlTokenizer()
+        tizer.load("DOG=POODLE CAT=TABBY BIRD=PARROT ")
+        tokens = tizer.get_token_list()
+        keys = {t.key() for t in tokens}
+        self.assertIn("DOG", keys)
+        self.assertIn("CAT", keys)
+        self.assertIn("BIRD", keys)
+
+    def test_clear(self):
+        """clear() removes all parsed tokens."""
+        tizer = ip.PvlTokenizer()
+        tizer.load("A=1 B=2 ")
+        tizer.clear()
+        self.assertEqual(len(tizer.get_token_list()), 0)
+
+    def test_load_with_comment(self):
+        """load() skips comment lines."""
+        tizer = ip.PvlTokenizer()
+        tizer.load("A=1 # This is a comment\nB=2 ")
+        tokens = tizer.get_token_list()
+        keys = {t.key() for t in tokens}
+        self.assertIn("A", keys)
+        self.assertIn("B", keys)
+
+    def test_repr(self):
+        """repr(PvlTokenizer) includes token count."""
+        tizer = ip.PvlTokenizer()
+        tizer.load("X=1 Y=2 ")
+        r = repr(tizer)
+        self.assertIn("PvlTokenizer", r)
+
+
+class PvlFormatUnitTest(unittest.TestCase):
+    """Focused unit tests for PvlFormat and KeywordType binding. Added: 2026-04-09."""
+
+    def test_construct_default(self):
+        """PvlFormat() constructs without error."""
+        fmt = ip.PvlFormat()
+        self.assertIsNotNone(fmt)
+
+    def test_char_limit_default(self):
+        """Default char_limit is a positive integer."""
+        fmt = ip.PvlFormat()
+        self.assertIsInstance(fmt.char_limit(), int)
+        self.assertGreater(fmt.char_limit(), 0)
+
+    def test_set_char_limit(self):
+        """set_char_limit() changes the char_limit value."""
+        fmt = ip.PvlFormat()
+        fmt.set_char_limit(100)
+        self.assertEqual(fmt.char_limit(), 100)
+
+    def test_format_eol_returns_newline(self):
+        """format_eol() returns a newline by default."""
+        fmt = ip.PvlFormat()
+        self.assertIn("\n", fmt.format_eol())
+
+    def test_format_name(self):
+        """format_name() returns the keyword name as a string."""
+        fmt = ip.PvlFormat()
+        kw = ip.PvlKeyword("MyKey", "val")
+        result = fmt.format_name(kw)
+        self.assertIsInstance(result, str)
+        self.assertIn("MyKey", result)
+
+    def test_format_value(self):
+        """format_value() returns the keyword value as a string."""
+        fmt = ip.PvlFormat()
+        kw = ip.PvlKeyword("MyKey", "testval")
+        result = fmt.format_value(kw)
+        self.assertIsInstance(result, str)
+
+    def test_type_no_map_returns_no_type(self):
+        """type() returns NoTypeKeyword when no keyword map is loaded."""
+        fmt = ip.PvlFormat()
+        kw = ip.PvlKeyword("Unknown", "value")
+        result = fmt.type(kw)
+        self.assertEqual(result, ip.KeywordType.NoTypeKeyword)
+
+    def test_is_single_unit_no_units(self):
+        """is_single_unit() returns False when the keyword has no units."""
+        fmt = ip.PvlFormat()
+        kw = ip.PvlKeyword("NoUnits", "42")
+        result = fmt.is_single_unit(kw)
+        # Without units, returns False
+        self.assertFalse(result)
+
+    def test_repr(self):
+        """repr(PvlFormat) returns a non-empty string."""
+        fmt = ip.PvlFormat()
+        self.assertIn("PvlFormat", repr(fmt))
+
+    def test_keyword_type_enum_values(self):
+        """KeywordType enum has expected values."""
+        self.assertTrue(hasattr(ip.KeywordType, "NoTypeKeyword"))
+        self.assertTrue(hasattr(ip.KeywordType, "StringKeyword"))
+        self.assertTrue(hasattr(ip.KeywordType, "IntegerKeyword"))
+        self.assertTrue(hasattr(ip.KeywordType, "RealKeyword"))
+
+
+class PvlTranslationTableUnitTest(unittest.TestCase):
+    """Focused unit tests for PvlTranslationTable binding. Added: 2026-04-09."""
+
+    SIMPLE_TABLE = (
+        "Group = CoreLines\n"
+        "  InputPosition = IMAGE\n"
+        "  InputKey = LINES\n"
+        "  Translation = (*,*)\n"
+        "EndGroup\n"
+        "Group = CoreBitsPerPixel\n"
+        "  Auto = 1\n"
+        "  OutputName = BitsPerPixel\n"
+        "  InputPosition = IMAGE\n"
+        "  InputKey = SAMPLE_BITS\n"
+        "  InputDefault = 8\n"
+        "  Translation = (8,8)\n"
+        "  Translation = (16,16)\n"
+        "EndGroup\n"
+        "End\n"
+    )
+
+    def _make_table(self):
+        return ip.PvlTranslationTable(self.SIMPLE_TABLE)
+
+    def test_construct(self):
+        """PvlTranslationTable(text) constructs without error."""
+        table = self._make_table()
+        self.assertIsNotNone(table)
+
+    def test_input_keyword_name(self):
+        """input_keyword_name() returns the InputKey for the group."""
+        table = self._make_table()
+        self.assertEqual(table.input_keyword_name("CoreLines"), "LINES")
+        self.assertEqual(table.input_keyword_name("CoreBitsPerPixel"), "SAMPLE_BITS")
+
+    def test_input_default(self):
+        """input_default() returns the InputDefault value."""
+        table = self._make_table()
+        self.assertEqual(table.input_default("CoreBitsPerPixel"), "8")
+
+    def test_has_input_default_true(self):
+        """has_input_default() returns True for groups with a default."""
+        table = self._make_table()
+        self.assertTrue(table.has_input_default("CoreBitsPerPixel"))
+
+    def test_has_input_default_false(self):
+        """has_input_default() returns False for groups without a default."""
+        table = self._make_table()
+        self.assertFalse(table.has_input_default("CoreLines"))
+
+    def test_is_auto_true(self):
+        """is_auto() returns True for groups with Auto = 1."""
+        table = self._make_table()
+        self.assertTrue(table.is_auto("CoreBitsPerPixel"))
+
+    def test_is_auto_false(self):
+        """is_auto() returns False for groups without Auto."""
+        table = self._make_table()
+        self.assertFalse(table.is_auto("CoreLines"))
+
+    def test_translate_wildcard(self):
+        """translate() passes through values using (*,*) translation rule."""
+        table = self._make_table()
+        result = table.translate("CoreLines", "256")
+        self.assertEqual(result, "256")
+
+    def test_translate_mapped_value(self):
+        """translate() maps concrete input values to output values."""
+        table = self._make_table()
+        result = table.translate("CoreBitsPerPixel", "16")
+        self.assertEqual(result, "16")
+
+    def test_add_table(self):
+        """add_table() appends additional translation groups."""
+        table = self._make_table()
+        extra = (
+            "Group = ExtraKey\n"
+            "  InputKey = EXTRA\n"
+            "  Translation = (*,*)\n"
+            "EndGroup\n"
+            "End\n"
+        )
+        table.add_table(extra)
+        self.assertEqual(table.input_keyword_name("ExtraKey"), "EXTRA")
+
+    def test_repr(self):
+        """repr(PvlTranslationTable) returns a non-empty string."""
+        table = self._make_table()
+        self.assertIn("PvlTranslationTable", repr(table))
+
+
+class PvlFormatPdsUnitTest(unittest.TestCase):
+    """Focused unit tests for PvlFormatPds binding. Added: 2026-04-09."""
+
+    def test_construct_default(self):
+        """PvlFormatPds() constructs without error."""
+        fmt = ip.PvlFormatPds()
+        self.assertIsNotNone(fmt)
+
+    def test_format_eol_is_crlf(self):
+        """format_eol() returns CRLF for PDS format."""
+        fmt = ip.PvlFormatPds()
+        eol = fmt.format_eol()
+        self.assertIn("\r", eol)
+        self.assertIn("\n", eol)
+
+    def test_format_name(self):
+        """format_name() returns the keyword name."""
+        fmt = ip.PvlFormatPds()
+        kw = ip.PvlKeyword("TestKey", "val")
+        result = fmt.format_name(kw)
+        self.assertIsInstance(result, str)
+        self.assertIn("TestKey", result)
+
+    def test_format_value(self):
+        """format_value() returns a string for the keyword value."""
+        fmt = ip.PvlFormatPds()
+        kw = ip.PvlKeyword("MyKey", "testval")
+        result = fmt.format_value(kw)
+        self.assertIsInstance(result, str)
+
+    def test_char_limit_inherited(self):
+        """PvlFormatPds inherits char_limit from PvlFormat."""
+        fmt = ip.PvlFormatPds()
+        fmt.set_char_limit(80)
+        self.assertEqual(fmt.char_limit(), 80)
+
+    def test_repr(self):
+        """repr(PvlFormatPds) includes class name."""
+        fmt = ip.PvlFormatPds()
+        self.assertIn("PvlFormatPds", repr(fmt))
+
+    def test_is_instance_of_pvl_format(self):
+        """PvlFormatPds is a subtype of PvlFormat."""
+        fmt = ip.PvlFormatPds()
+        self.assertIsInstance(fmt, ip.PvlFormat)
+
+
+class PvlToPvlTranslationManagerUnitTest(unittest.TestCase):
+    """Focused unit tests for PvlToPvlTranslationManager binding. Added: 2026-04-09."""
+
+    SIMPLE_TABLE = (
+        "Group = CoreLines\n"
+        "  InputPosition = IMAGE\n"
+        "  InputKey = LINES\n"
+        "  Translation = (*,*)\n"
+        "EndGroup\n"
+        "Group = CoreBitsPerPixel\n"
+        "  Auto = 1\n"
+        "  InputPosition = IMAGE\n"
+        "  InputKey = SAMPLE_BITS\n"
+        "  InputDefault = 8\n"
+        "  Translation = (8,8)\n"
+        "  Translation = (16,16)\n"
+        "EndGroup\n"
+        "End\n"
+    )
+
+    def _make_mgr_with_label(self):
+        """Build a PvlToPvlTranslationManager with an input label attached."""
+        input_pvl_text = (
+            "Object = IMAGE\n"
+            "  LINES = 512\n"
+            "  SAMPLE_BITS = 8\n"
+            "EndObject\n"
+            "End\n"
+        )
+        input_label = ip.Pvl()
+        input_label.from_string(input_pvl_text)
+        return ip.PvlToPvlTranslationManager(input_label, self.SIMPLE_TABLE, True)
+
+    def test_construct_from_string(self):
+        """Construct from translation string (from_string=True)."""
+        mgr = ip.PvlToPvlTranslationManager(self.SIMPLE_TABLE, True)
+        self.assertIsNotNone(mgr)
+
+    def test_is_instance_of_label_translation_manager(self):
+        """PvlToPvlTranslationManager is a subtype of LabelTranslationManager."""
+        mgr = ip.PvlToPvlTranslationManager(self.SIMPLE_TABLE, True)
+        self.assertIsInstance(mgr, ip.LabelTranslationManager)
+
+    def test_translate_with_label(self):
+        """translate() returns the translated value from the input label."""
+        input_pvl_text = (
+            "Object = IMAGE\n"
+            "  LINES = 512\n"
+            "  SAMPLE_BITS = 8\n"
+            "EndObject\n"
+            "End\n"
+        )
+        input_label = ip.Pvl()
+        input_label.from_string(input_pvl_text)
+        mgr = ip.PvlToPvlTranslationManager(input_label, self.SIMPLE_TABLE, True)
+        result = mgr.translate("CoreLines")
+        self.assertEqual(result, "512")
+
+    def test_input_has_keyword(self):
+        """input_has_keyword() reflects the input label."""
+        input_pvl_text = (
+            "Object = IMAGE\n"
+            "  LINES = 256\n"
+            "EndObject\n"
+            "End\n"
+        )
+        input_label = ip.Pvl()
+        input_label.from_string(input_pvl_text)
+        mgr = ip.PvlToPvlTranslationManager(input_label, self.SIMPLE_TABLE, True)
+        self.assertTrue(mgr.input_has_keyword("CoreLines"))
+
+    def test_repr(self):
+        """repr includes class name."""
+        mgr = ip.PvlToPvlTranslationManager(self.SIMPLE_TABLE, True)
+        self.assertIn("PvlToPvlTranslationManager", repr(mgr))
 
 
 if __name__ == "__main__":

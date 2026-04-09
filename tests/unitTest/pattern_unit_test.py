@@ -1,10 +1,11 @@
 """
-Unit tests for ISIS pattern matching classes: Chip, AutoReg, MaximumCorrelation, and AutoRegFactory
+Unit tests for ISIS pattern matching classes: Chip, AutoReg, MaximumCorrelation, MinimumDifference, and AutoRegFactory
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-08
+Last Modified: 2026-04-09
 Updated: 2026-04-08  Geng Xun added focused regression coverage for Centroid chip selection bindings.
+Updated: 2026-04-09  Geng Xun added MinimumDifference binding unit tests.
 """
 import unittest
 
@@ -457,6 +458,51 @@ class AutoRegFactoryUnitTest(unittest.TestCase):
         # Should raise IException for unknown algorithm
         with self.assertRaises(ip.IException):
             ip.AutoRegFactory.create(pvl)
+
+
+class MinimumDifferenceUnitTest(unittest.TestCase):
+    """Focused unit tests for MinimumDifference binding. Added: 2026-04-09."""
+
+    def _make_pvl(self):
+        """Create a minimal Pvl config for MinimumDifference."""
+        pvl = ip.Pvl()
+        grp = ip.PvlGroup("AutoRegistration")
+        grp.add_keyword(ip.PvlKeyword("Algorithm", "MinimumDifference"))
+        grp.add_keyword(ip.PvlKeyword("Tolerance", "0.01"))
+        pvl.add_group(grp)
+        return pvl
+
+    def test_construct(self):
+        """MinimumDifference(pvl) constructs without error."""
+        obj = ip.MinimumDifference(self._make_pvl())
+        self.assertIsNotNone(obj)
+
+    def test_is_instance_of_auto_reg(self):
+        """MinimumDifference is a subtype of AutoReg."""
+        obj = ip.MinimumDifference(self._make_pvl())
+        self.assertIsInstance(obj, ip.AutoReg)
+
+    def test_ideal_fit(self):
+        """ideal_fit() returns 0.0 (perfect match is zero difference)."""
+        obj = ip.MinimumDifference(self._make_pvl())
+        self.assertAlmostEqual(obj.ideal_fit(), 0.0)
+
+    def test_most_lenient_tolerance(self):
+        """most_lenient_tolerance() returns a large positive float."""
+        import math
+        obj = ip.MinimumDifference(self._make_pvl())
+        tol = obj.most_lenient_tolerance()
+        self.assertTrue(math.isinf(tol) or tol > 1e100)
+
+    def test_repr(self):
+        """repr() includes MinimumDifference."""
+        obj = ip.MinimumDifference(self._make_pvl())
+        self.assertIn("MinimumDifference", repr(obj))
+
+    def test_inherited_tolerance(self):
+        """Inherited AutoReg tolerance() returns the configured tolerance."""
+        obj = ip.MinimumDifference(self._make_pvl())
+        self.assertAlmostEqual(obj.tolerance(), 0.01)
 
 
 if __name__ == '__main__':

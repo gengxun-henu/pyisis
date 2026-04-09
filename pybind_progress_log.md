@@ -1,5 +1,42 @@
 # Pybind Progress Log
 
+## 2026-04-09
+
+- rollout photometry 基类/归一化队列（ShadeAtm / TopoAtm / Hapke / PhotoModel / AtmosModel）完成：
+  - 扩展 `src/base/bind_base_photometry.cpp`，新增 `Hapke`、`ShadeAtm` 与 `TopoAtm` 绑定，并为抽象基类 `PhotoModel` / `AtmosModel` 补齐一批稳定可测的公共 API（parameter getter/setter、static helpers、table generation、table accessor、`hfunc`、phase/list helpers 等）。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出 `Hapke`、`ShadeAtm` 与 `TopoAtm`。
+  - 扩展 `tests/unitTest/atmos_model_factory_unit_test.py`：新增 `Hapke`、`ShadeAtm`、`TopoAtm` focused 覆盖，并补 `PhotoModel` / `AtmosModel` 基类 API regression；其中静态 helper 与 atmosphere table 相关断言已按本地 ISIS 9.0.0 运行时实际输出校准。
+  - 更新 `tests/smoke_import.py`，补充 `Hapke`、`ShadeAtm` 与 `TopoAtm` 顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_hapke_methods.csv`
+    - `class_bind_methods_details/base_shade_atm_methods.csv`
+    - `class_bind_methods_details/base_topo_atm_methods.csv`
+    - `class_bind_methods_details/base_photo_model_methods.csv`
+    - `class_bind_methods_details/base_atmos_model_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+
+- rollout photometry 小类队列（Anisotropic2 / HapkeAtm1 / HapkeAtm2 / Isotropic1 / Isotropic2）完成：
+  - 扩展 `src/base/bind_base_photometry.cpp`，新增 `Anisotropic2`、`HapkeAtm1`、`HapkeAtm2`、`Isotropic1` 与 `Isotropic2` 五个 concrete atmospheric model 绑定，统一暴露 `Pvl & + PhotoModel &` 构造函数与描述性 `__repr__`。
+  - 更新 `python/isis_pybind/__init__.py`，顶层重导出以上 5 个 photometry 类。
+  - 扩展 `tests/unitTest/atmos_model_factory_unit_test.py`：新增 concrete atmospheric model focused 覆盖，验证五个类的直接构造、`AtmosModelFactory.create(...)` 分派到具体子类，以及与上游行为一致的三组 `calc_atm_effect(...)` 真值输出。
+  - 更新 `tests/smoke_import.py`，补充五个类的顶层符号检查。
+  - 已同步更新：
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_anisotropic2_methods.csv`
+    - `class_bind_methods_details/base_hapke_atm1_methods.csv`
+    - `class_bind_methods_details/base_hapke_atm2_methods.csv`
+    - `class_bind_methods_details/base_isotropic1_methods.csv`
+    - `class_bind_methods_details/base_isotropic2_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake --build build -j8`
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m pytest tests/unitTest/atmos_model_factory_unit_test.py -q` (`26 passed, 25 subtests passed`)
+  - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+  - Passed: `cmake --build build -j8`
+  - Passed: `PYTHONPATH=$PWD/build/python LD_LIBRARY_PATH=... /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/atmos_model_factory_unit_test.py -v` (`18` tests, `OK`)
+  - Passed: `PYTHONPATH=$PWD/build/python LD_LIBRARY_PATH=... /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
 ## 2026-04-08
 
 - Environment 静态环境查询工具绑定完成：

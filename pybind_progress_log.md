@@ -1726,3 +1726,118 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 - `todo_pybind11.csv`: 10 个类 → 已转换
 - 各 `*_methods.csv`: 更新为 Y（部分 SparseBlockMatrix/LinearAlgebra 方法标记 N）
 - `class_bind_methods_details/methods_inventory_summary.csv`: 10 行更新
+
+---
+
+## Batch 9 — 2026-04-10
+
+**Queue (5 classes):** NumericalApproximation, SpicePosition, SpiceRotation, SpacecraftPosition, SensorUtilities::Matrix
+
+### Class 1: NumericalApproximation
+- 在 `src/base/bind_base_math.cpp` 新增 NumericalApproximation 绑定。
+- 暴露：InterpType/ExtrapType 枚举（10+3 个枚举值）、3 种构造函数、name/interpolation_type/min_points/domain_min/domain_max/contains/size、add_data（标量/向量）、evaluate（单点/多点）、数值微分（向前/向后/中心差分）、数值积分（梯形法/Simpson/Boole/Romberg）、reset/set_interp_type。
+- focused 单测：`tests/unitTest/math_unit_test.py`（NumericalApproximationUnitTest 类）。
+
+### Class 2: SpicePosition
+- 新建 `src/bind_spice_navigation.cpp`，暴露 SpicePosition。
+- 暴露：Source enum/PartialType enum、构造函数(target, observer)、set/get_time_bias、set/get_aberration_correction、get_light_time、ephemeris_time、scaled_time、has_velocity、is_cached、cache_size、get_base_time、get_time_scale。
+- 注意：getTargetCode/getObserverCode 在 protected 区，不直接暴露。
+- focused 单测：`tests/unitTest/spice_navigation_unit_test.py`。
+
+### Class 3: SpiceRotation
+- 在 `src/bind_spice_navigation.cpp` 追加 SpiceRotation 绑定。
+- 暴露：Source/PartialType/DownsizeStatus/FrameType 枚举、构造函数（单参数帧码版本）、set/get frame、set_time_bias、ephemeris_time、is_cached、cache_size、get_base_time、get_time_scale、get_source、has_angular_velocity、j2000_vector、reference_vector。
+- focused 单测：`tests/unitTest/spice_navigation_unit_test.py`。
+
+### Class 4: SpacecraftPosition
+- 在 `src/bind_spice_navigation.cpp` 追加 SpacecraftPosition（继承 SpicePosition）。
+- 暴露：2 种构造函数（2 参数/4 参数含 LightTimeCorrectionState 和 Distance）、get_radius_light_time、get_distance_light_time（静态）、get_light_time_state、set/get_aberration_correction。
+- focused 单测：`tests/unitTest/spice_navigation_unit_test.py`。
+
+### Class 5: SensorUtilities::Matrix
+- 在 `src/bind_sensor.cpp` 追加 SensorUtilities::Matrix（绑定为 SensorMatrix）。
+- 暴露：默认构造函数、Vec 三行构造函数、a/b/c 字段读写、mat_vec_product（矩阵×向量）。
+- focused 单测：`tests/unitTest/spice_navigation_unit_test.py`（SensorMatrixUnitTest 类）。
+
+### 额外更新
+- Basis1VariableFunction 和 Chip：确认已在前序批次中绑定，更新 todo_pybind11.csv 状态为 已转换。
+
+### 台账更新
+- `todo_pybind11.csv`: 7 个类 → 已转换（含 Basis1VariableFunction、Chip 补标）
+- `class_bind_methods_details/base_spice_position_methods.csv`, `base_numerical_approximation_methods.csv` 等更新
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新
+- `pybind_progress_log.md`: 本条目
+
+---
+
+## Batch 10 — 2026-04-10
+
+**Queue (5 classes):** ProcessMosaic, CsmBundleObservation, IsisBundleObservation, ImagePolygon, GSLUtility
+
+### Class 1: ProcessMosaic
+- 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessMosaic（继承已绑定的 Process）。
+- 暴露：ImageOverlay 枚举（PlaceImagesOnTop/PlaceImagesBehind/UseBandPlacementCriteria/AverageImageWithMosaic）、SetTrackFlag/GetTrackFlag、SetNullFlag/GetNullFlag、SetHighSaturationFlag/GetHighSaturationFlag、SetLowSaturationFlag/GetLowSaturationFlag、SetImageOverlay、SetBandBinMatch/SetBandNumber/SetBandUseMaxValue、SetCreateFlag/SetMatchDEM、GetInputStartLineInMosaic/Sample/Band、OverlayToString/StringToOverlay（静态）。
+- focused 单测：`tests/unitTest/batch2_unit_test.py`（ProcessMosaicUnitTest 类）。
+
+### Class 2: CsmBundleObservation
+- 在 `src/control/bind_bundle_advanced.cpp` 追加 CsmBundleObservation（继承已绑定的 BundleObservation）。
+- 暴露：默认构造函数、number_parameters、parameter_list、bundle_output_csv。
+- focused 单测：`tests/unitTest/batch2_unit_test.py`（CsmBundleObservationUnitTest 类）。
+
+### Class 3: IsisBundleObservation
+- 在 `src/control/bind_bundle_advanced.cpp` 追加 IsisBundleObservation（继承 BundleObservation）。
+- 暴露：默认构造函数、number_parameters/number_position_parameters/number_pointing_parameters、parameter_list、bundle_output_csv、spice_position（返回 SpicePosition*）、spice_rotation（返回 SpiceRotation*）。
+- SpicePosition/SpiceRotation 在 Batch 1 中已暴露，返回引用使用 reference_internal。
+- focused 单测：`tests/unitTest/batch2_unit_test.py`（IsisBundleObservationUnitTest 类）。
+
+### Class 4: ImagePolygon
+- 新建 `src/base/bind_base_image_polygon.cpp`，暴露 ImagePolygon。
+- 暴露：默认构造函数、Blob 构造函数、create_from_coords（std::vector<std::vector<double>>）、set_emission/set_incidence/set_ellipsoid_limb/set_subpixel_accuracy（setters）、poly_str（WKT）、valid_sample_dim/valid_line_dim、get_sinc/get_linc、num_vertices、to_blob。
+- focused 单测：`tests/unitTest/batch2_unit_test.py`（ImagePolygonUnitTest 类）。
+
+### Class 5: GSLUtility
+- 在 `src/base/bind_base_utility.cpp` 追加 GSLUtility（GSL::GSLUtility singleton）。
+- 暴露：get_instance（静态，返回单例引用）、success(int)、status(int)。
+- focused 单测：`tests/unitTest/batch2_unit_test.py`（GSLUtilityUnitTest 类）。
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个类 → 已转换
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新
+- `pybind_progress_log.md`: 本条目
+
+---
+
+## Batch 11 — 2026-04-10
+
+**Queue (5 classes):** ProcessMapMosaic, ProcessRubberSheet, ProcessPolygons, ProcessGroundPolygons, PolygonTools
+
+### Class 1: ProcessMapMosaic
+- 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessMapMosaic（继承已绑定的 ProcessMosaic）。
+- 暴露：默认构造函数（继承所有 ProcessMosaic 方法）。
+- focused 单测：`tests/unitTest/batch3_unit_test.py`。
+
+### Class 2: ProcessRubberSheet
+- 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessRubberSheet（继承 Process）。
+- 暴露：构造函数（start_size/end_size）、force_tile（固定 tile 位置）、set_tiling（设置 tile 大小范围）、start_process（Transform&, Interpolator&）。
+- focused 单测：`tests/unitTest/batch3_unit_test.py`。
+
+### Class 3: ProcessPolygons
+- 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessPolygons（继承 Process）。
+- 暴露：默认构造函数、set_intersect_algorithm（中心/覆盖算法选择）、rasterize（samples/lines/values 向量）、end_process、finalize。
+- focused 单测：`tests/unitTest/batch3_unit_test.py`。
+
+### Class 4: ProcessGroundPolygons
+- 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessGroundPolygons（继承 ProcessPolygons）。
+- 暴露：默认构造函数、rasterize_latlon（lat/lon/values 向量 → 覆盖 Rasterize 地面版本）。
+- focused 单测：`tests/unitTest/batch3_unit_test.py`。
+
+### Class 5: PolygonTools
+- 在 `src/base/bind_base_utility.cpp` 追加 PolygonTools 静态方法包装。
+- 暴露：Equal（浮点数近似相等）、ReducePrecision（精度缩减）、DecimalPlace（小数位检测）、GMLSchema（GML 格式字符串）。
+- 注：大多数 PolygonTools 方法返回 GEOS 几何类型，不予绑定。
+- focused 单测：`tests/unitTest/batch3_unit_test.py`。
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个类 → 已转换
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新
+- `pybind_progress_log.md`: 本条目

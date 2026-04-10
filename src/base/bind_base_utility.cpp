@@ -40,12 +40,14 @@
 #include "Column.h"
 #include "EndianSwapper.h"
 #include "Environment.h"
+#include "GSLUtility.h"
 #include "ID.h"
 #include "IString.h"
 #include "LineEquation.h"
 #include "Message.h"
 #include "Pixel.h"
 #include "Plugin.h"
+#include "PolygonTools.h"
 #include "PvlKeyword.h"
 #include "PvlObject.h"
 #include "Resource.h"
@@ -1222,4 +1224,51 @@ void bind_base_utility(py::module_ &m) {
             return "TextFile(open=" +
                    std::string(self.OpenChk() ? "True" : "False") + ")";
           });
+
+  // Added: 2026-04-10 - GSLUtility singleton wrapper
+  py::class_<Isis::GSL::GSLUtility>(m, "GSLUtility")
+      .def_static("get_instance",
+           &Isis::GSL::GSLUtility::getInstance,
+           py::return_value_policy::reference,
+           "Return the singleton GSLUtility instance, initializing GSL error handling.")
+      .def("success",
+           [](const Isis::GSL::GSLUtility &self, int gsl_status) {
+               return self.success(gsl_status);
+           },
+           py::arg("gsl_status"),
+           "Return True if gsl_status == GSL_SUCCESS (0).")
+      .def("status",
+           [](const Isis::GSL::GSLUtility &self, int gsl_errno) {
+               return qStringToStdString(self.status(gsl_errno));
+           },
+           py::arg("gsl_errno"),
+           "Return the human-readable name of the given GSL error code.")
+      .def("__repr__", [](const Isis::GSL::GSLUtility &) {
+           return std::string("GSLUtility()");
+      });
+
+  // Added: 2026-04-10 - PolygonTools static utility wrapper
+  py::class_<Isis::PolygonTools>(m, "PolygonTools")
+      .def_static("equal",
+           &Isis::PolygonTools::Equal,
+           py::arg("d1"),
+           py::arg("d2"),
+           "Return True if d1 and d2 are equal within floating-point tolerance.")
+      .def_static("reduce_precision",
+           &Isis::PolygonTools::ReducePrecision,
+           py::arg("num"),
+           py::arg("precision"),
+           "Round num to the given number of significant decimal places.")
+      .def_static("decimal_place",
+           &Isis::PolygonTools::DecimalPlace,
+           py::arg("num"),
+           "Return the position of the decimal point for the given double.")
+      .def_static("gml_schema",
+           []() { return qStringToStdString(Isis::PolygonTools::GMLSchema()); },
+           "Return the GML schema string for polygons.")
+      .def("__repr__", [](const Isis::PolygonTools &) {
+           return std::string("PolygonTools()");
+      });
 }
+
+

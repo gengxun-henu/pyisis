@@ -6,13 +6,14 @@ and SurfaceModel
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-09
+Last Modified: 2026-04-10
 Updated: 2026-03-29  Geng Xun added regression coverage for Calculator, linear algebra, polynomial, and infix/postfix bindings.
 Updated: 2026-04-09  Geng Xun added Ransac helper regression coverage for packed symmetric matrix utilities.
 Updated: 2026-04-09  Geng Xun added SurfaceModel focused unit tests.
 Updated: 2026-04-09  Geng Xun relaxed the planar SurfaceModel min_max regression to match upstream floating-point behavior.
 Updated: 2026-04-10  Geng Xun added FourierTransform unit tests.
 Updated: 2026-04-10  Geng Xun added SparseBlockMatrix unit tests for construction, block insertion, counting, and get_block.
+Updated: 2026-04-10  Geng Xun added NumericalApproximation focused unit tests.
 Updated: 2026-04-10  Geng Xun aligned FourierTransform tests with complex-valued Python API and upstream BitReverse semantics.
 """
 import unittest
@@ -1257,3 +1258,177 @@ class SparseBlockMatrixUnitTest(unittest.TestCase):
         sbm = ip.SparseBlockMatrix()
         r = repr(sbm)
         self.assertIn("SparseBlockMatrix", r)
+
+
+class NumericalApproximationUnitTest(unittest.TestCase):
+    """Focused unit tests for NumericalApproximation binding. Added: 2026-04-10."""
+
+    def _make_linear_data(self):
+        """Return x=[0,1,2,3], y=[0,2,4,6] for a linear (y=2x) data set."""
+        x = [0.0, 1.0, 2.0, 3.0]
+        y = [0.0, 2.0, 4.0, 6.0]
+        return x, y
+
+    def _make_cubic_data(self):
+        """Return x and y for f(x)=x^3+x^2+x at several points."""
+        xs = [0.0, 0.07, 0.12, 0.19, 0.22, 0.32, 0.40]
+        ys = [x**3 + x**2 + x for x in xs]
+        return xs, ys
+
+    # --- Construction ---
+
+    def test_construct_default(self):
+        """NumericalApproximation() constructs without error."""
+        na = ip.NumericalApproximation()
+        self.assertIsNotNone(na)
+
+    def test_construct_with_interp_type(self):
+        """NumericalApproximation(itype) stores the requested interpolation type."""
+        na = ip.NumericalApproximation(ip.NumericalApproximationInterpType.Linear)
+        self.assertIsNotNone(na)
+
+    def test_construct_from_vectors(self):
+        """NumericalApproximation(x, y) stores data points."""
+        x, y = self._make_linear_data()
+        na = ip.NumericalApproximation(x, y, ip.NumericalApproximationInterpType.Linear)
+        self.assertEqual(na.size(), len(x))
+
+    # --- Name and type ---
+
+    def test_name_linear(self):
+        """name() returns a non-empty string for linear interpolation."""
+        na = ip.NumericalApproximation(ip.NumericalApproximationInterpType.Linear)
+        self.assertIsInstance(na.name(), str)
+        self.assertTrue(len(na.name()) > 0)
+
+    def test_interpolation_type(self):
+        """interpolation_type() returns the type set at construction."""
+        na = ip.NumericalApproximation(ip.NumericalApproximationInterpType.Linear)
+        t = na.interpolation_type()
+        self.assertEqual(t, ip.NumericalApproximationInterpType.Linear)
+
+    # --- Domain ---
+
+    def test_domain_min_max_after_add(self):
+        """domain_minimum/maximum return data extent after add_data."""
+        x, y = self._make_linear_data()
+        na = ip.NumericalApproximation(ip.NumericalApproximationInterpType.Linear)
+        na.add_data(x, y)
+        self.assertAlmostEqual(na.domain_minimum(), 0.0)
+        self.assertAlmostEqual(na.domain_maximum(), 3.0)
+
+    def test_contains(self):
+        """contains() returns True inside domain and False outside."""
+        x, y = self._make_linear_data()
+        na = ip.NumericalApproximation(x, y, ip.NumericalApproximationInterpType.Linear)
+        self.assertTrue(na.contains(1.5))
+        self.assertFalse(na.contains(10.0))
+
+    # --- Size and data addition ---
+
+    def test_size_after_add_data_scalar(self):
+        """size() increments with each add_data(x, y) scalar call."""
+        na = ip.NumericalApproximation(ip.NumericalApproximationInterpType.Linear)
+        na.add_data(0.0, 0.0)
+        na.add_data(1.0, 1.0)
+        self.assertEqual(na.size(), 2)
+
+    def test_size_after_add_data_vector(self):
+        """size() matches vector length after add_data(x_vec, y_vec)."""
+        x, y = self._make_linear_data()
+        na = ip.NumericalApproximation(ip.NumericalApproximationInterpType.Linear)
+        na.add_data(x, y)
+        self.assertEqual(na.size(), len(x))
+
+    # --- Evaluation ---
+
+    def test_evaluate_linear_at_node(self):
+        """evaluate() returns exact node value for linear interpolation."""
+        x, y = self._make_linear_data()
+        na = ip.NumericalApproximation(x, y, ip.NumericalApproximationInterpType.Linear)
+        self.assertAlmostEqual(na.evaluate(2.0), 4.0, places=10)
+
+    def test_evaluate_linear_midpoint(self):
+        """evaluate() linearly interpolates between nodes."""
+        x, y = self._make_linear_data()
+        na = ip.NumericalApproximation(x, y, ip.NumericalApproximationInterpType.Linear)
+        self.assertAlmostEqual(na.evaluate(0.5), 1.0, places=10)
+
+    def test_evaluate_vector(self):
+        """evaluate_vector() evaluates at each point in a list."""
+        x, y = self._make_linear_data()
+        na = ip.NumericalApproximation(x, y, ip.NumericalApproximationInterpType.Linear)
+        result = na.evaluate_vector([0.0, 1.0, 2.0])
+        self.assertEqual(len(result), 3)
+        self.assertAlmostEqual(result[0], 0.0)
+        self.assertAlmostEqual(result[1], 2.0)
+        self.assertAlmostEqual(result[2], 4.0)
+
+    # --- Numerical differentiation ---
+
+    def test_center_first_difference(self):
+        """center_first_difference approximates f'(x) for f(x)=x^2 at x=1."""
+        # f(x) = x^2; f'(x) = 2x; f'(1) = 2.0
+        xs = [float(i) for i in range(-5, 6)]
+        ys = [x**2 for x in xs]
+        na = ip.NumericalApproximation(xs, ys, ip.NumericalApproximationInterpType.Linear)
+        deriv = na.center_first_difference(1.0, n=3, h=0.01)
+        self.assertAlmostEqual(deriv, 2.0, places=2)
+
+    # --- Numerical integration ---
+
+    def test_trapezoidal_rule(self):
+        """trapezoidal_rule integrates f(x)=2x over [0,3] == 9."""
+        x, y = self._make_linear_data()
+        na = ip.NumericalApproximation(x, y, ip.NumericalApproximationInterpType.Linear)
+        integral = na.trapezoidal_rule(0.0, 3.0)
+        self.assertAlmostEqual(integral, 9.0, places=8)
+
+    def test_rombergs_method(self):
+        """rombergs_method integrates f(x)=2x over [0,2] == 4."""
+        x, y = self._make_linear_data()
+        na = ip.NumericalApproximation(x, y, ip.NumericalApproximationInterpType.Linear)
+        integral = na.rombergs_method(0.0, 2.0)
+        self.assertAlmostEqual(integral, 4.0, places=6)
+
+    # --- Reset and type change ---
+
+    def test_reset_clears_data(self):
+        """reset() clears data so size() returns 0 again."""
+        x, y = self._make_linear_data()
+        na = ip.NumericalApproximation(x, y, ip.NumericalApproximationInterpType.Linear)
+        na.reset()
+        self.assertEqual(na.size(), 0)
+
+    def test_set_interp_type(self):
+        """set_interp_type() changes the interpolation type."""
+        na = ip.NumericalApproximation()
+        na.set_interp_type(ip.NumericalApproximationInterpType.Polynomial)
+        t = na.interpolation_type()
+        self.assertEqual(t, ip.NumericalApproximationInterpType.Polynomial)
+
+    # --- Enum coverage ---
+
+    def test_interp_type_enum_values(self):
+        """All NumericalApproximationInterpType enum values are accessible."""
+        t = ip.NumericalApproximationInterpType
+        self.assertIsNotNone(t.Linear)
+        self.assertIsNotNone(t.Polynomial)
+        self.assertIsNotNone(t.PolynomialNeville)
+        self.assertIsNotNone(t.CubicNatural)
+        self.assertIsNotNone(t.CubicClamped)
+        self.assertIsNotNone(t.Akima)
+
+    def test_extrap_type_enum_values(self):
+        """All NumericalApproximationExtrapType enum values are accessible."""
+        t = ip.NumericalApproximationExtrapType
+        self.assertIsNotNone(t.ThrowError)
+        self.assertIsNotNone(t.Extrapolate)
+        self.assertIsNotNone(t.NearestEndpoint)
+
+    # --- repr ---
+
+    def test_repr(self):
+        """__repr__ contains 'NumericalApproximation'."""
+        na = ip.NumericalApproximation()
+        self.assertIn("NumericalApproximation", repr(na))

@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-03-22  Geng Xun expanded Sensor bindings with intersection, angle, slant-distance, solar, and spacecraft metadata accessors
+// Updated: 2026-04-10  Geng Xun added SensorUtilities::Matrix binding (simple 3x3 row-Vec struct).
 // Purpose: pybind11 bindings for the ISIS Sensor base class and core observation geometry accessors
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -182,4 +183,44 @@ void bind_sensor(py::module_ &m) {
            [](const SensorUtilities::Intersection &) {
              return "Intersection()";
            });
+
+  // Added: 2026-04-10 - SensorUtilities::Matrix (3x3 matrix as three Vec rows)
+  py::class_<SensorUtilities::Matrix>(m, "SensorMatrix")
+      .def(py::init([]() {
+             SensorUtilities::Matrix m;
+             m.a = {0.0, 0.0, 0.0};
+             m.b = {0.0, 0.0, 0.0};
+             m.c = {0.0, 0.0, 0.0};
+             return m;
+           }),
+           "Construct a zero-initialized 3x3 matrix.")
+      .def(py::init([](SensorUtilities::Vec a,
+                       SensorUtilities::Vec b,
+                       SensorUtilities::Vec c) {
+             SensorUtilities::Matrix mat;
+             mat.a = a;
+             mat.b = b;
+             mat.c = c;
+             return mat;
+           }),
+           py::arg("a"), py::arg("b"), py::arg("c"),
+           "Construct a matrix from three row Vec objects.")
+      .def_readwrite("a", &SensorUtilities::Matrix::a)
+      .def_readwrite("b", &SensorUtilities::Matrix::b)
+      .def_readwrite("c", &SensorUtilities::Matrix::c)
+      .def("mat_vec_product",
+           [](const SensorUtilities::Matrix &self,
+              const SensorUtilities::Vec &vec) {
+               return SensorUtilities::matrixVecProduct(self, vec);
+           },
+           py::arg("vec"),
+           "Multiply this 3x3 matrix by a Vec, returning a Vec.")
+      .def("__repr__",
+           [](const SensorUtilities::Matrix &self) {
+               return std::string("SensorMatrix(a=Vec(") +
+                      std::to_string(self.a.x) + "," +
+                      std::to_string(self.a.y) + "," +
+                      std::to_string(self.a.z) + "))";
+           });
 }
+

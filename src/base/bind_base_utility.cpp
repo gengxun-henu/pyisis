@@ -1248,27 +1248,24 @@ void bind_base_utility(py::module_ &m) {
       });
 
   // Added: 2026-04-10 - PolygonTools static utility wrapper
-  py::class_<Isis::PolygonTools>(m, "PolygonTools")
-      .def_static("equal",
-           &Isis::PolygonTools::Equal,
-           py::arg("d1"),
-           py::arg("d2"),
-           "Return True if d1 and d2 are equal within floating-point tolerance.")
-      .def_static("reduce_precision",
-           &Isis::PolygonTools::ReducePrecision,
-           py::arg("num"),
-           py::arg("precision"),
-           "Round num to the given number of significant decimal places.")
-      .def_static("decimal_place",
-           &Isis::PolygonTools::DecimalPlace,
-           py::arg("num"),
-           "Return the position of the decimal point for the given double.")
-      .def_static("gml_schema",
-           []() { return qStringToStdString(Isis::PolygonTools::GMLSchema()); },
-           "Return the GML schema string for polygons.")
-      .def("__repr__", [](const Isis::PolygonTools &) {
-           return std::string("PolygonTools()");
-      });
+  // PolygonTools is a utility class with only static methods - expose as module-level functions
+  m.def("polygon_equal",
+        &Isis::PolygonTools::Equal,
+        py::arg("d1"),
+        py::arg("d2"),
+        "Return True if d1 and d2 are equal within floating-point tolerance.");
+  m.def("polygon_reduce_precision",
+        &Isis::PolygonTools::ReducePrecision,
+        py::arg("num"),
+        py::arg("precision"),
+        "Round num to the given number of significant decimal places.");
+  m.def("polygon_decimal_place",
+        &Isis::PolygonTools::DecimalPlace,
+        py::arg("num"),
+        "Return the position of the decimal point for the given double.");
+  m.def("polygon_gml_schema",
+        []() { return qStringToStdString(Isis::PolygonTools::GMLSchema()); },
+        "Return the GML schema string for polygons.");
 }
 
 

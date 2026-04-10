@@ -1,0 +1,7 @@
+# GitHub Actions / runner / automation safety
+.github/workflows/** @gengxun-henu
+.github/actions/** @gengxun-henu
+.github/runner-config.yml @gengxun-henu
+
+# Optional: docs about runner safety
+doc_development_process/self_hosted_runner_safety* @gengxun-henu

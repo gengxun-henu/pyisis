@@ -5,6 +5,7 @@
 // Updated: 2026-04-10  Geng Xun added PushFrameCameraCcdLayout and FrameletInfo struct bindings
 // Updated: 2026-04-10  Geng Xun added PushFrameCameraGroundMap, RadarSkyMap, IrregularBodyCameraGroundMap, CSMSkyMap bindings
 // Updated: 2026-04-10  Geng Xun added RadarGroundRangeMap, ReseauDistortionMap, MarciDistortionMap bindings
+// Updated: 2026-04-10  Geng Xun fixed QString-based constructor wrappers for FrameletInfo and ReseauDistortionMap.
 // Purpose: pybind11 bindings for ISIS camera map helper classes that translate between detector, focal-plane, ground, and sky coordinate systems
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -324,7 +325,20 @@ void bind_camera_maps(py::module_ &m) {
       .def(py::init<int>(),
            py::arg("frame_id"),
            "Construct a FrameletInfo with the given frame ID.")
-      .def(py::init<int, const std::string &, int, int, int, int>(),
+      .def(py::init([](int frameId,
+                       const std::string &filterName,
+                       int startSample,
+                       int startLine,
+                       int samples,
+                       int lines) {
+             return Isis::PushFrameCameraCcdLayout::FrameletInfo(
+                 frameId,
+                 QString::fromStdString(filterName),
+                 startSample,
+                 startLine,
+                 samples,
+                 lines);
+           }),
            py::arg("frame_id"),
            py::arg("filter_name"),
            py::arg("start_sample"),
@@ -540,7 +554,14 @@ void bind_camera_maps(py::module_ &m) {
   // Added: 2026-04-10
   py::class_<Isis::ReseauDistortionMap, Isis::CameraDistortionMap>(
       m, "ReseauDistortionMap")
-      .def(py::init<Isis::Camera *, Isis::Pvl &, const std::string &>(),
+       .def(py::init([](Isis::Camera *camera,
+                            Isis::Pvl &labels,
+                            const std::string &filename) {
+                return new Isis::ReseauDistortionMap(
+                     camera,
+                     labels,
+                     QString::fromStdString(filename));
+             }),
            py::arg("camera"),
            py::arg("labels"),
            py::arg("filename"),

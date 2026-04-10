@@ -16,6 +16,8 @@
 // Updated: 2026-04-09  Geng Xun added Python-friendly HiCal gain wrappers backed by local Pvl+conf construction.
 // Updated: 2026-04-09  Geng Xun replaced direct HiCal class bindings with stable local wrappers because the linked ISIS library does not export the required HiCalConf symbols.
 // Updated: 2026-04-10  Geng Xun added HiLab binding exposing HiRise cube label accessors.
+// Updated: 2026-04-10  Geng Xun replaced direct HiLab::getCcd binding with a local wrapper because the linked ISIS library does not export that symbol.
+// Updated: 2026-04-10  Geng Xun replaced the direct HiLab class binding with a local wrapper because the linked ISIS library does not export HiLab constructor symbols.
 // Purpose: Expose selected MRO HiCal gain modules with stable Python-friendly constructors and vector/history helpers.
 //          Also exposes HiLab for HiRise instrument label parsing.
 
@@ -31,7 +33,7 @@
 #include <pybind11/stl.h>
 
 #include "Cube.h"
-#include "HiLab.h"
+#include "IException.h"
 #include "Pvl.h"
 #include "helpers.h"
 
@@ -120,6 +122,66 @@ double keywordDoubleValue(const Isis::PvlContainer &container, const std::string
 
 int keywordIntValue(const Isis::PvlContainer &container, const std::string &keywordName) {
   return container.findKeyword(stdStringToQString(keywordName))[0].toInt();
+}
+
+class HiLabWrapper {
+  public:
+    explicit HiLabWrapper(Isis::Cube *cube) {
+      Isis::PvlGroup group = cube->group("Instrument");
+      m_cpmmNumber = group["CpmmNumber"];
+      m_channel = group["ChannelNumber"];
+
+      if (group.hasKeyword("Summing")) {
+        m_bin = group["Summing"];
+      }
+      else {
+        throw Isis::IException(
+            Isis::IException::Io,
+            "Cannot find required Summing keyword in label",
+            _FILEINFO_);
+      }
+
+      if (group.hasKeyword("Tdi")) {
+        m_tdi = group["Tdi"];
+      }
+      else {
+        throw Isis::IException(
+            Isis::IException::Io,
+            "Cannot find required Tdi keyword in label",
+            _FILEINFO_);
+      }
+    }
+
+    int getCpmmNumber() {
+      return m_cpmmNumber;
+    }
+
+    int getChannel() {
+      return m_channel;
+    }
+
+    int getBin() {
+      return m_bin;
+    }
+
+    int getTdi() {
+      return m_tdi;
+    }
+
+    int getCcd() {
+      static const int cpmmToCcd[] = {0, 1, 2, 3, 12, 4, 10, 11, 5, 13, 6, 7, 8, 9};
+      return cpmmToCcd[m_cpmmNumber];
+    }
+
+  private:
+    int m_cpmmNumber;
+    int m_channel;
+    int m_bin;
+    int m_tdi;
+};
+
+int hiLabCcdFromCpmmNumber(HiLabWrapper &hiLab) {
+  return hiLab.getCcd();
 }
 
 Isis::PvlObject loadHicalObject(const std::string &confPath) {
@@ -346,7 +408,7 @@ void bind_mro_hical(py::module_ &m) {
 
   // HiLab — HiRise cube label accessor for MRO instrument metadata.
   // Added: 2026-04-10
-  py::class_<Isis::HiLab>(m, "HiLab")
+    py::class_<HiLabWrapper>(m, "HiLab")
       .def(py::init<Isis::Cube *>(),
            py::arg("cube"),
            py::keep_alive<1, 2>(),
@@ -361,17 +423,17 @@ void bind_mro_hical(py::module_ &m) {
            "------\n"
            "IException\n"
            "    If required keywords (Summing, Tdi) are missing from the label.")
-      .def("get_cpmm_number", &Isis::HiLab::getCpmmNumber,
+       .def("get_cpmm_number", &HiLabWrapper::getCpmmNumber,
            "Return the CpmmNumber keyword value from the cube labels.")
-      .def("get_channel", &Isis::HiLab::getChannel,
+       .def("get_channel", &HiLabWrapper::getChannel,
            "Return the ChannelNumber keyword value from the cube labels.")
-      .def("get_bin", &Isis::HiLab::getBin,
+       .def("get_bin", &HiLabWrapper::getBin,
            "Return the Summing (bin) keyword value from the cube labels.")
-      .def("get_tdi", &Isis::HiLab::getTdi,
+       .def("get_tdi", &HiLabWrapper::getTdi,
            "Return the Tdi keyword value from the cube labels.")
-      .def("get_ccd", &Isis::HiLab::getCcd,
+       .def("get_ccd", &hiLabCcdFromCpmmNumber,
            "Return the CCD number derived from the cpmm-to-ccd lookup table.")
-      .def("__repr__", [](Isis::HiLab &h) {
+       .def("__repr__", [](HiLabWrapper &h) {
         return "<HiLab cpmm=" + std::to_string(h.getCpmmNumber())
                + " channel=" + std::to_string(h.getChannel())
                + " bin=" + std::to_string(h.getBin())

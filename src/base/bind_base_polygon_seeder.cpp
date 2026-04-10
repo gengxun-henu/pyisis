@@ -14,6 +14,7 @@
 // Created: 2026-04-10
 // Updated: 2026-04-10  Geng Xun added PolygonSeeder family bindings
 //                       (abstract base + Grid/Limit/Strip subclasses + factory).
+// Updated: 2026-04-10  Geng Xun converted PolygonSeeder.algorithm() to return Python strings instead of raw QString values.
 // Purpose: Expose PolygonSeeder abstract base, GridPolygonSeeder, LimitPolygonSeeder,
 //          StripPolygonSeeder, and PolygonSeederFactory to Python via pybind11.
 
@@ -45,7 +46,10 @@ void bind_base_polygon_seeder(py::module_ &m) {
            "Return the minimum thickness threshold for seeding a polygon.")
       .def("minimum_area", &Isis::PolygonSeeder::MinimumArea,
            "Return the minimum area threshold for seeding a polygon.")
-      .def("algorithm", &Isis::PolygonSeeder::Algorithm,
+      .def("algorithm",
+           [](const Isis::PolygonSeeder &self) {
+             return self.Algorithm().toStdString();
+           },
            "Return the name of the seeding algorithm.")
       .def("plugin_parameters",
            [](Isis::PolygonSeeder &self, const std::string &grpName) {

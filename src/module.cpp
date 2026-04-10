@@ -3,6 +3,7 @@
 // Updated: 2026-04-06  Geng Xun expanded top-level _isis_core module registration to include mission camera, statistics, and cube I/O binding groups
 // Updated: 2026-04-10  Geng Xun added bind_base_polygon_seeder for PolygonSeeder family
 // Updated: 2026-04-10  Geng Xun added bind_base_image_overlap, HiLab, PixelFOV, CameraStatistics, PushFrameCameraCcdLayout
+// Updated: 2026-04-10  Geng Xun moved statistics registration ahead of filters so GaussianStretch can inherit from Statistics without duplicate bindings.
 // Purpose: define the top-level pybind11 _isis_core module and register all binding submodules
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -68,6 +69,7 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_base_math(m);
   bind_base_utility(m);
   bind_base_pattern(m);
+  bind_statistics(m);
   bind_base_filters(m);
   bind_base_polygon_seeder(m);
   bind_base_image_overlap(m);
@@ -76,7 +78,6 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_lro_utilities(m);
   bind_mro_hical(m);
   bind_camera_factory(m);
-  bind_statistics(m);
   bind_low_level_cube_io(m);
   bind_high_level_cube_io(m);
   bind_control_core(m);

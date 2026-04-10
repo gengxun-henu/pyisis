@@ -4,6 +4,7 @@
 // Updated: 2026-04-09  Geng Xun exposed Camera.target() so Python can inspect attached Target metadata and frame coefficients
 // Updated: 2026-04-10  Geng Xun fixed Quaternion scalar multiplication binding to avoid calling a non-const ISIS operator on a const reference.
 // Updated: 2026-04-10  Geng Xun added PixelFOV binding exposing latLonVertices.
+// Updated: 2026-04-10  Geng Xun replaced direct PixelFOV copy construction with a local wrapper because the linked ISIS library does not export the copy constructor.
 // Purpose: pybind11 bindings for the ISIS Camera base class, CameraPointInfo helper, and shared camera-side geometry accessors
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -11,6 +12,8 @@
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
+#include <memory>
 
 #include "Camera.h"
 #include "CameraDetectorMap.h"
@@ -28,6 +31,43 @@
 #include "helpers.h"
 
 namespace py = pybind11;
+
+namespace {
+
+class PixelFOVWrapper {
+     public:
+          PixelFOVWrapper()
+                    : m_pixelFov(std::make_unique<Isis::PixelFOV>()) {
+          }
+
+          PixelFOVWrapper(const PixelFOVWrapper &)
+                    : m_pixelFov(std::make_unique<Isis::PixelFOV>()) {
+          }
+
+          std::vector<std::vector<std::pair<double, double>>> latLonVertices(
+                    Isis::Camera &camera,
+                    double sample,
+                    double line,
+                    int numIfovs) const {
+               QList<QList<QPointF>> raw = m_pixelFov->latLonVertices(camera, sample, line, numIfovs);
+               std::vector<std::vector<std::pair<double, double>>> result;
+               result.reserve(raw.size());
+               for (const QList<QPointF> &ring : raw) {
+                    std::vector<std::pair<double, double>> points;
+                    points.reserve(ring.size());
+                    for (const QPointF &point : ring) {
+                         points.emplace_back(point.x(), point.y());
+                    }
+                    result.push_back(std::move(points));
+               }
+               return result;
+          }
+
+     private:
+          std::unique_ptr<Isis::PixelFOV> m_pixelFov;
+};
+
+}  // namespace
 
 void bind_camera(py::module_ &m) {
      py::class_<Isis::CameraPointInfo>(m, "CameraPointInfo")
@@ -275,32 +315,14 @@ void bind_camera(py::module_ &m) {
   // PixelFOV — computes the lat/lon boundary vertices of a pixel's field of view.
   // latLonVertices returns a list of lists of (lon, lat) float tuples.
   // Added: 2026-04-10
-  py::class_<Isis::PixelFOV>(m, "PixelFOV")
+     py::class_<PixelFOVWrapper>(m, "PixelFOV")
       .def(py::init<>(),
            "Construct a PixelFOV object.")
-      .def(py::init<const Isis::PixelFOV &>(),
+               .def(py::init<const PixelFOVWrapper &>(),
            py::arg("other"),
            "Copy-construct a PixelFOV object.")
       .def("lat_lon_vertices",
-           [](const Isis::PixelFOV &self,
-              Isis::Camera &camera,
-              double sample,
-              double line,
-              int num_ifovs) {
-             QList<QList<QPointF>> raw = self.latLonVertices(camera, sample, line, num_ifovs);
-             // Convert to Python: list of list of (x, y) tuples
-             std::vector<std::vector<std::pair<double, double>>> result;
-             result.reserve(raw.size());
-             for (const QList<QPointF> &ring : raw) {
-               std::vector<std::pair<double, double>> pts;
-               pts.reserve(ring.size());
-               for (const QPointF &p : ring) {
-                 pts.emplace_back(p.x(), p.y());
-               }
-               result.push_back(std::move(pts));
-             }
-             return result;
-           },
+                          &PixelFOVWrapper::latLonVertices,
            py::arg("camera"),
            py::arg("sample"),
            py::arg("line"),
@@ -320,7 +342,7 @@ void bind_camera(py::module_ &m) {
            "-------\n"
            "list of list of (float, float)\n"
            "    Each inner list is a ring of (longitude, latitude) vertex pairs.")
-      .def("__repr__", [](const Isis::PixelFOV &) {
+               .def("__repr__", [](const PixelFOVWrapper &) {
         return "<PixelFOV>";
       });
 }

@@ -237,7 +237,7 @@ void bind_base_filters(py::module_ &m)
       * Inherits from Stretch but bound independently due to pybind11 limitations.
       * @see Isis::GaussianStretch
       */
-     py::class_<Isis::GaussianStretch>(m, "GaussianStretch")
+     py::class_<Isis::GaussianStretch, Isis::Statistics>(m, "GaussianStretch")
          .def(py::init<Isis::Histogram &, const double, const double>(),
               py::arg("histogram"),
               py::arg("mean") = 0.0,

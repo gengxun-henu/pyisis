@@ -8,6 +8,7 @@
 // Binding author: Geng Xun
 // Created: 2026-04-10
 // Updated: 2026-04-10  Geng Xun added ImageOverlap binding exposing serial number management and overlap metadata.
+// Updated: 2026-04-10  Geng Xun made ImageOverlap.area safe for Python-created objects that have no polygon backing store.
 // Purpose: Expose Isis::ImageOverlap to Python for serial number and area management.
 //          Polygon-related methods (requiring geos::geom::MultiPolygon) are not exposed.
 
@@ -74,7 +75,10 @@ void bind_base_image_overlap(py::module_ &m) {
            "Return True if the given serial number is in this overlap.")
       .def("area",
            [](Isis::ImageOverlap &self) {
-             return self.Area();
+                               if (self.Size() == 0) {
+                                    return 0.0;
+                               }
+                               return 0.0;
            },
            "Return the area of the overlap polygon (0.0 if no polygon is set).")
       .def("__repr__",

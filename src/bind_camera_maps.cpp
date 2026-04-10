@@ -7,6 +7,7 @@
 // Updated: 2026-04-10  Geng Xun added RadarGroundRangeMap, ReseauDistortionMap, MarciDistortionMap bindings
 // Updated: 2026-04-10  Geng Xun fixed QString-based constructor wrappers for FrameletInfo and ReseauDistortionMap.
 // Updated: 2026-04-10  Geng Xun added RadarGroundMap and RadarPulseMap bindings
+// Updated: 2026-04-10  Geng Xun added RadarSlantRangeMap binding
 // Purpose: pybind11 bindings for ISIS camera map helper classes that translate between detector, focal-plane, ground, and sky coordinate systems
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -40,6 +41,7 @@
 #include "RadarGroundMap.h"
 #include "RadarGroundRangeMap.h"
 #include "RadarPulseMap.h"
+#include "RadarSlantRangeMap.h"
 #include "RadarSkyMap.h"
 #include "ReseauDistortionMap.h"
 #include "RollingShutterCameraDetectorMap.h"
@@ -698,5 +700,38 @@ void bind_camera_maps(py::module_ &m) {
            "Set whether x (sample) is the time-dependent axis instead of y (line).")
       .def("__repr__", [](const Isis::RadarPulseMap &) {
         return "<RadarPulseMap>";
+      });
+
+  // RadarSlantRangeMap — maps between radar ground range and slant range
+  // using stored polynomial coefficients.
+  // Added: 2026-04-10
+  py::class_<Isis::RadarSlantRangeMap, Isis::CameraDistortionMap>(
+      m, "RadarSlantRangeMap")
+      .def(py::init<Isis::Camera *, double>(),
+           py::arg("parent"),
+           py::arg("ground_range_resolution"),
+           py::keep_alive<1, 2>(),
+           "Construct a RadarSlantRangeMap.")
+      .def("set_focal_plane",
+           &Isis::RadarSlantRangeMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map from distorted to undistorted focal-plane (ground to slant range).")
+      .def("set_undistorted_focal_plane",
+           &Isis::RadarSlantRangeMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map from undistorted to distorted focal-plane (slant to ground range).")
+      .def("set_coefficients",
+           &Isis::RadarSlantRangeMap::SetCoefficients,
+           py::arg("keyword"),
+           "Set the slant-range polynomial coefficients from a PvlKeyword.")
+      .def("set_weight_factors",
+           &Isis::RadarSlantRangeMap::SetWeightFactors,
+           py::arg("range_sigma"),
+           py::arg("doppler_sigma"),
+           "Set weight factors for range and Doppler residuals.")
+      .def("__repr__", [](const Isis::RadarSlantRangeMap &) {
+        return "<RadarSlantRangeMap>";
       });
 }

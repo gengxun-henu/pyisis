@@ -7,6 +7,7 @@ Last Modified: 2026-04-10
 Updated: 2026-04-10  Geng Xun added PushFrameCameraDetectorMap, RollingShutterCameraDetectorMap, VariableLineScanCameraDetectorMap surface and API tests.
 Updated: 2026-04-10  Geng Xun added GaussianStretch, PushFrameCameraGroundMap, RadarSkyMap, IrregularBodyCameraGroundMap, CSMSkyMap API tests.
 Updated: 2026-04-10  Geng Xun added RadarGroundRangeMap, ReseauDistortionMap, MarciDistortionMap, RadarGroundMap, RadarPulseMap API tests.
+Updated: 2026-04-10  Geng Xun added RadarSlantRangeMap API test.
 """
 
 import math

@@ -1,12 +1,12 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-PolygonSeeder,Pattern Matching,isis/src/base/objs/PolygonSeeder/PolygonSeeder.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+PolygonSeeder,Pattern Matching,reference/upstream_isis/src/base/objs/PolygonSeeder/PolygonSeeder.h,src/base/bind_base_polygon_seeder.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口；以 py::nodelete 注册为非实例化基类
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,PolygonSeeder,isis_pybind.PolygonSeeder,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
-Construction/Enum,PolygonSeeder(),isis_pybind.PolygonSeeder(),N,抽象基类/纯虚接口
-Public API,virtual std::vector<geos::geom::Point *> Seed(const geos::geom::MultiPolygon *mp) = 0,isis_pybind.PolygonSeeder.seed,N,抽象基类/纯虚接口
-Public API,double MinimumThickness(),isis_pybind.PolygonSeeder.minimum_thickness,N,抽象基类/纯虚接口
-Public API,double MinimumArea(),isis_pybind.PolygonSeeder.minimum_area,N,抽象基类/纯虚接口
-Public API,QString Algorithm() const,isis_pybind.PolygonSeeder.algorithm,N,抽象基类/纯虚接口
-Public API,virtual PvlGroup PluginParameters(QString grpName),isis_pybind.PolygonSeeder.plugin_parameters,N,抽象基类/纯虚接口
-Public API,Pvl InvalidInput(),isis_pybind.PolygonSeeder.invalid_input,N,抽象基类/纯虚接口
+Class Symbol,PolygonSeeder,isis_pybind.PolygonSeeder,Y,Registered as non-instantiable abstract base class with py::nodelete
+Construction/Enum,PolygonSeeder(),isis_pybind.PolygonSeeder(),N,抽象基类/纯虚接口；不可直接实例化
+Public API,virtual std::vector<geos::geom::Point *> Seed(const geos::geom::MultiPolygon *mp) = 0,isis_pybind.PolygonSeeder.seed,N,纯虚方法；由具体子类实现
+Public API,double MinimumThickness(),isis_pybind.PolygonSeeder.minimum_thickness,Y,2026-04-10 绑定
+Public API,double MinimumArea(),isis_pybind.PolygonSeeder.minimum_area,Y,2026-04-10 绑定
+Public API,QString Algorithm() const,isis_pybind.PolygonSeeder.algorithm,Y,2026-04-10 绑定
+Public API,virtual PvlGroup PluginParameters(QString grpName),isis_pybind.PolygonSeeder.plugin_parameters,Y,2026-04-10 绑定
+Public API,Pvl InvalidInput(),isis_pybind.PolygonSeeder.invalid_input,Y,2026-04-10 绑定

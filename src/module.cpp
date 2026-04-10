@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-04-06  Geng Xun expanded top-level _isis_core module registration to include mission camera, statistics, and cube I/O binding groups
+// Updated: 2026-04-10  Geng Xun added bind_base_polygon_seeder for PolygonSeeder family
 // Purpose: define the top-level pybind11 _isis_core module and register all binding submodules
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -34,6 +35,7 @@ void bind_base_math(py::module_ &m);
 void bind_base_utility(py::module_ &m);
 void bind_base_pattern(py::module_ &m);
 void bind_base_filters(py::module_ &m);
+void bind_base_polygon_seeder(py::module_ &m);
 void bind_mission_cameras(py::module_ &m);
 void bind_mgs_utilities(py::module_ &m);
 void bind_lro_utilities(py::module_ &m);
@@ -65,6 +67,7 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_base_utility(m);
   bind_base_pattern(m);
   bind_base_filters(m);
+  bind_base_polygon_seeder(m);
   bind_mission_cameras(m);
   bind_mgs_utilities(m);
   bind_lro_utilities(m);

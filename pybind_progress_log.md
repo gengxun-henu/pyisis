@@ -1449,3 +1449,61 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 - Galileo: SsiCamera
 - Juno: JunoCamera, JunoDistortionMap
 - Spice: PushFrameCameraDetectorMap (new), RollingShutterCameraDetectorMap (new), VariableLineScanCameraDetectorMap (new)
+
+---
+
+## 2026-04-10 第六阶段 Rollout 第1批（5 个新绑定）
+
+**本批选自 rollout-order 第三/四阶段补遗：PolygonSeeder 家族。**
+
+### 活跃队列
+1. PolygonSeeder — 已完成（抽象基类符号注册）
+2. GridPolygonSeeder — 已完成
+3. LimitPolygonSeeder — 已完成
+4. StripPolygonSeeder — 已完成
+5. PolygonSeederFactory — 已完成
+
+### Class 1: PolygonSeeder (已转换，Partial)
+- 创建新文件 `src/base/bind_base_polygon_seeder.cpp`。
+- 以 `py::nodelete` 注册抽象基类符号 `PolygonSeeder`，不可直接实例化。
+- 暴露：`algorithm()`, `minimum_thickness()`, `minimum_area()`, `plugin_parameters()`, `invalid_input()`, `__repr__`。
+- Seed() 纯虚方法不暴露（需要 geos MultiPolygon）。
+- Exported in `python/isis_pybind/__init__.py`; smoke symbol check added.
+
+### Class 2: GridPolygonSeeder (已转换，Partial)
+- 暴露：`constructor(Pvl&)`, `sub_grid()`, `plugin_parameters()`, `__repr__`，继承 PolygonSeeder 接口。
+- Seed() 未直接暴露（需要 geos MultiPolygon 参数）。
+- Exported; smoke check added.
+
+### Class 3: LimitPolygonSeeder (已转换，Partial)
+- 暴露：`constructor(Pvl&)`, `plugin_parameters()`, `__repr__`，继承 PolygonSeeder 接口。
+- Exported; smoke check added.
+
+### Class 4: StripPolygonSeeder (已转换，Partial)
+- 暴露：`constructor(Pvl&)`, `plugin_parameters()`, `__repr__`，继承 PolygonSeeder 接口。
+- Exported; smoke check added.
+
+### Class 5: PolygonSeederFactory (已转换)
+- 暴露：`create(Pvl&)` 静态工厂方法，`py::nodelete`。
+- 注：`create` 运行时需要 `ISISROOT/lib/PolygonSeeder.plugin`，测试中 skip 此项。
+- Exported; smoke check added.
+
+### 测试
+- 新增 `tests/unitTest/polygon_seeder_unit_test.py`，覆盖：
+  - GridPolygonSeeder: 构造、继承关系、algorithm()、sub_grid()、minimum_thickness/area、plugin_parameters、repr
+  - LimitPolygonSeeder: 构造、继承关系、algorithm()、minimum_thickness/area、plugin_parameters、repr
+  - StripPolygonSeeder: 构造、继承关系、algorithm()、minimum_thickness/area、plugin_parameters、repr
+  - PolygonSeederFactory: 类存在、create 方法存在（runtime skip）
+
+### 台账更新
+- `todo_pybind11.csv`: PolygonSeeder/GridPolygonSeeder/LimitPolygonSeeder/StripPolygonSeeder/PolygonSeederFactory → 已转换
+- `class_bind_methods_details/base_polygon_seeder_methods.csv`: 更新
+- `class_bind_methods_details/base_grid_polygon_seeder_methods.csv`: 更新
+- `class_bind_methods_details/base_limit_polygon_seeder_methods.csv`: 更新
+- `class_bind_methods_details/base_strip_polygon_seeder_methods.csv`: 更新
+- `class_bind_methods_details/base_polygon_seeder_factory_methods.csv`: 更新
+- `class_bind_methods_details/methods_inventory_summary.csv`: 更新
+
+### Validation status
+- Build environment not available in sandbox; requires CI/asp360_new interpreter.
+- All bindings reviewed for correctness against upstream `.h` and `.cpp`.

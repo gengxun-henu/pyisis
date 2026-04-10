@@ -16,8 +16,7 @@ namespace py = pybind11;
 
 void bind_base_photometry(py::module_ &m);
 void bind_control_core(py::module_ &m);
-// Temporarily disabled due to complex dependencies - will be re-enabled once resolved
-// void bind_bundle_advanced(py::module_ &m);
+void bind_bundle_advanced(py::module_ &m);
 void bind_interest_operator_factory(py::module_ &m);
 void bind_auto_reg_factory(py::module_ &m);
 void bind_sensor(py::module_ &m);
@@ -86,6 +85,5 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_control_core(m);
   bind_interest_operator_factory(m);
   bind_auto_reg_factory(m);
-  // Temporarily disabled due to complex dependencies - will be re-enabled once resolved
-  // bind_bundle_advanced(m);
+  bind_bundle_advanced(m);
 }

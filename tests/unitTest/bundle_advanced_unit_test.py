@@ -3,8 +3,9 @@ Unit tests for ISIS advanced bundle-adjustment bindings.
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-03-25
+Last Modified: 2026-04-10
 Updated: 2026-03-25  Geng Xun added preserved regression coverage for temporarily disabled advanced bundle-adjustment bindings.
+Updated: 2026-04-10  Geng Xun re-enabled tests after bind_bundle_advanced.cpp was re-enabled with boost ublas lambda wrappers.
 """
 
 import unittest
@@ -12,29 +13,14 @@ import unittest
 from _unit_test_support import ip, temporary_directory, workspace_test_data_path
 
 
-# ============================================================================
-# TEMPORARILY DISABLED DUE TO COMPLEX DEPENDENCIES
-# ============================================================================
-# This test file tests bindings for advanced bundle adjustment classes.
-# Due to complex dependencies that are difficult to resolve, the corresponding
-# C++ binding file (bind_bundle_advanced.cpp) is currently excluded from
-# compilation.
-#
-# The test file is preserved for future reference and will be re-enabled once
-# the dependency issues are resolved.
-#
-# To skip all tests in this file, we simply return early in setUpClass.
-# ============================================================================
-
-
 class BundleAdvancedUnitTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        """Skip all tests - bind_bundle_advanced is temporarily disabled."""
-        raise unittest.SkipTest(
-            "bind_bundle_advanced is temporarily disabled due to complex dependencies. "
-            "All tests in this file are skipped until the binding is re-enabled."
-        )
+        """Verify that bundle-advanced bindings are loaded."""
+        if not hasattr(ip, "BundleResults"):
+            raise unittest.SkipTest(
+                "BundleResults not available; bind_bundle_advanced may not be compiled."
+            )
 
     def open_cube(self, path):
         cube = ip.Cube()

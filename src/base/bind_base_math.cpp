@@ -58,6 +58,8 @@
 #include "PrincipalComponentAnalysis.h"
 #include "SparseBlockMatrix.h"
 #include "LinearAlgebra.h"
+#include "CubeCalculator.h"
+#include "Cube.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -795,4 +797,46 @@ void bind_base_math(py::module_ &m)
                       ", off_diagonal=" + std::to_string(self.numberOfOffDiagonalBlocks()) +
                       ", elements=" + std::to_string(self.numberOfElements()) + ")";
            });
+
+     // ─── CubeCalculator ─────────────────────────────────────────────────
+     // Added: 2026-04-10 - expose CubeCalculator for RPN cube math
+     // Note: CubeCalculator uses private inheritance from Calculator, so no py::class_
+     //       inheritance is declared. Methods that take QVector<Cube*>/QVector<Buffer*>
+     //       are wrapped with lambdas that accept Python lists.
+     py::class_<Isis::CubeCalculator>(m, "CubeCalculator")
+         .def(py::init<>())
+         .def("clear", &Isis::CubeCalculator::Clear,
+              "Completely reset the calculator, erasing all prepared calculations")
+         .def("prepare_calculations",
+              [](Isis::CubeCalculator &self, const std::string &equation,
+                 py::list in_cubes_py, Isis::Cube &out_cube) {
+                   QVector<Isis::Cube *> inCubes;
+                   for (auto item : in_cubes_py) {
+                        inCubes.push_back(&item.cast<Isis::Cube &>());
+                   }
+                   self.prepareCalculations(
+                       stdStringToQString(equation), inCubes, &out_cube);
+              },
+              py::arg("equation"),
+              py::arg("in_cubes"),
+              py::arg("out_cube"),
+              "Parse an equation string and prepare calculator for execution. "
+              "in_cubes is a list of input Cube objects, out_cube is the output Cube.")
+         .def("run_calculations",
+              [](Isis::CubeCalculator &self, py::list cube_data_py,
+                 int line, int band) -> std::vector<double> {
+                   QVector<Isis::Buffer *> cubeData;
+                   for (auto item : cube_data_py) {
+                        cubeData.push_back(&item.cast<Isis::Buffer &>());
+                   }
+                   QVector<double> result = self.runCalculations(cubeData, line, band);
+                   return std::vector<double>(result.begin(), result.end());
+              },
+              py::arg("cube_data"),
+              py::arg("line"),
+              py::arg("band"),
+              "Run prepared calculations on the given cube data buffers for a "
+              "specific line and band. Returns the result as a list of doubles.")
+         .def("__repr__", [](const Isis::CubeCalculator &)
+              { return "CubeCalculator()"; });
 }

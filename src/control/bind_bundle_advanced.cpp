@@ -1,32 +1,26 @@
+// Copyright (c) 2026 Geng Xun, Henan University
+// SPDX-License-Identifier: MIT
+//
+// Source ISIS headers:
+// - reference/upstream_isis/src/control/objs/BundleUtilities/BundleMeasure.h
+// - reference/upstream_isis/src/control/objs/BundleUtilities/BundleControlPoint.h
+// - reference/upstream_isis/src/control/objs/BundleUtilities/BundleObservation.h
+// - reference/upstream_isis/src/control/objs/BundleUtilities/BundleObservationVector.h
+// - reference/upstream_isis/src/control/objs/BundleUtilities/BundleLidarRangeConstraint.h
+// - reference/upstream_isis/src/control/objs/BundleUtilities/BundleLidarControlPoint.h
+// - reference/upstream_isis/src/control/objs/BundleUtilities/BundleLidarPointVector.h
+// - reference/upstream_isis/src/control/objs/BundleResults/BundleResults.h
+// - reference/upstream_isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h
+// Source classes: BundleMeasure, BundleControlPoint, BundleObservation,
+//                 BundleObservationVector, BundleLidarRangeConstraint,
+//                 BundleLidarControlPoint, BundleLidarPointVector,
+//                 BundleResults, BundleSolutionInfo
+// Source header author(s): not explicitly stated in upstream headers
 // Binding author: Geng Xun
 // Created: 2026-03-24
 // Updated: 2026-03-25  Geng Xun expanded advanced bundle-adjustment bindings and fixed Python exposure for control-point correction and sigma accessors
-// Purpose: pybind11 bindings for advanced ISIS bundle-adjustment classes, preserved for future re-enable once dependency issues are resolved
-
-// Copyright (c) 2026 Geng Xun, Henan University
-// SPDX-License-Identifier: MIT
-
-// ============================================================================
-// TEMPORARILY DISABLED DUE TO COMPLEX DEPENDENCIES
-// ============================================================================
-// This file contains bindings for advanced bundle adjustment classes.
-// Due to complex dependencies that are difficult to resolve, this file
-// is currently excluded from compilation.
-//
-// The file is preserved for future reference and will be re-enabled once
-// the dependency issues are resolved.
-//
-// Classes in this file:
-// - BundleMeasure
-// - BundleControlPoint
-// - BundleObservation
-// - BundleObservationVector
-// - BundleLidarRangeConstraint
-// - BundleLidarControlPoint
-// - BundleLidarPointVector
-// - BundleResults
-// - BundleSolutionInfo
-// ============================================================================
+// Updated: 2026-04-10  Geng Xun re-enabled file; replaced boost::ublas bounded_vector accessors with lambda wrappers returning list; skipped SparseBlockRowMatrix/LinearAlgebra heavy methods
+// Purpose: pybind11 bindings for advanced ISIS bundle-adjustment classes
 
 #include <memory>
 #include <stdexcept>
@@ -216,15 +210,23 @@ void bind_bundle_advanced(py::module_ &m)
          .def("type", &Isis::BundleControlPoint::type)
          .def("coord_type_reports", &Isis::BundleControlPoint::coordTypeReports)
          .def("coord_type_bundle", &Isis::BundleControlPoint::coordTypeBundle)
-         // 2026-03-25 12:05:28, fix a bug where corrections, apriori_sigmas, adjusted_sigmas, and weights were not properly exposed to Python
-         .def("corrections", &Isis::BundleControlPoint::corrections, py::return_value_policy::reference_internal)
-         .def("apriori_sigmas", &Isis::BundleControlPoint::aprioriSigmas, py::return_value_policy::reference_internal)
-         .def("adjusted_sigmas", &Isis::BundleControlPoint::adjustedSigmas, py::return_value_policy::reference_internal)
-         .def("weights", &Isis::BundleControlPoint::weights, py::return_value_policy::reference_internal)
-         .def("nic_vector", &Isis::BundleControlPoint::nicVector, py::return_value_policy::reference_internal)
-         .def("cholmod_q_matrix", &Isis::BundleControlPoint::cholmodQMatrix, py::return_value_policy::reference_internal)
-         // the USGS ISIS source code does not have a method to get the number of parameters for a BundleControlPoint, so we will not expose it to Python until it is added to the source code
-         //.def("number_parameters", &Isis::BundleControlPoint::numberParameters)
+         // boost::ublas bounded_vector<double,3> accessors wrapped to return Python list
+         .def("corrections", [](Isis::BundleControlPoint &self) {
+              auto &v = self.corrections();
+              return std::vector<double>(v.begin(), v.end()); })
+         .def("apriori_sigmas", [](Isis::BundleControlPoint &self) {
+              auto &v = self.aprioriSigmas();
+              return std::vector<double>(v.begin(), v.end()); })
+         .def("adjusted_sigmas", [](Isis::BundleControlPoint &self) {
+              auto &v = self.adjustedSigmas();
+              return std::vector<double>(v.begin(), v.end()); })
+         .def("weights", [](Isis::BundleControlPoint &self) {
+              auto &v = self.weights();
+              return std::vector<double>(v.begin(), v.end()); })
+         .def("nic_vector", [](Isis::BundleControlPoint &self) {
+              auto &v = self.nicVector();
+              return std::vector<double>(v.begin(), v.end()); })
+         // cholmod_q_matrix returns SparseBlockRowMatrix& which is not bound in Python; skipped
 
          .def("format_bundle_output_summary_string", [](const Isis::BundleControlPoint &self, bool error_propagation)
               { return qStringToStdString(self.formatBundleOutputSummaryString(error_propagation)); }, py::arg("error_propagation"))

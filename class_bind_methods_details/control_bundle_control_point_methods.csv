@@ -2,44 +2,44 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 BundleControlPoint,Control Networks,isis/src/control/objs/BundleUtilities/BundleControlPoint.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,BundleControlPoint,isis_pybind.BundleControlPoint,N,Python class symbol not found in current binding files
-Construction/Enum,BundleControlPoint(),isis_pybind.BundleControlPoint(),N,Constructor binding not detected in current binding files
-Public API,void copy(const BundleControlPoint &src),isis_pybind.BundleControlPoint.copy,N,Method not found in current binding files
-Mutation/Configuration,BundleMeasureQsp addMeasure(ControlMeasure *controlMeasure),isis_pybind.BundleControlPoint.add_measure,N,Method not found in current binding files
-Public API,void computeResiduals(),isis_pybind.BundleControlPoint.compute_residuals,N,Method not found in current binding files
-Mutation/Configuration,void setAdjustedSurfacePoint(SurfacePoint surfacePoint),isis_pybind.BundleControlPoint.set_adjusted_surface_point,N,Method not found in current binding files
-Mutation/Configuration,void setNumberOfRejectedMeasures(int numRejected),isis_pybind.BundleControlPoint.set_number_of_rejected_measures,N,Method not found in current binding files
-Mutation/Configuration,void setRejected(bool reject),isis_pybind.BundleControlPoint.set_rejected,N,Method not found in current binding files
-Mutation/Configuration,void setWeights(const BundleSettingsQsp settings),isis_pybind.BundleControlPoint.set_weights,N,Method not found in current binding files
-Mutation/Configuration,"void setSigmaWeightFromGlobals(double gSigma, int index)",isis_pybind.BundleControlPoint.set_sigma_weight_from_globals,N,Method not found in current binding files
-Mutation/Configuration,"void setSigmaWeightFromGlobals(double gSigma, int index, double cFactor)",isis_pybind.BundleControlPoint.set_sigma_weight_from_globals,N,Method not found in current binding files
-Public API,void zeroNumberOfRejectedMeasures(),isis_pybind.BundleControlPoint.zero_number_of_rejected_measures,N,Method not found in current binding files
-Public API,"void productAlphaAV(double alpha, SparseBlockMatrix &sparseNormals, LinearAlgebra::Vector &v1)",isis_pybind.BundleControlPoint.product_alpha_av,N,Method not found in current binding files
-Public API,"virtual void applyParameterCorrections(LinearAlgebra::Vector imageSolution, SparseBlockMatrix &sparseNormals, const BundleTargetBodyQsp target)",isis_pybind.BundleControlPoint.apply_parameter_corrections,N,Method not found in current binding files
-Public API,double vtpv(),isis_pybind.BundleControlPoint.vtpv,N,Method not found in current binding files
-Public API,double vtpvMeasures(),isis_pybind.BundleControlPoint.vtpv_measures,N,Method not found in current binding files
-Public API,ControlPoint *rawControlPoint() const,isis_pybind.BundleControlPoint.raw_control_point,N,Method not found in current binding files
-Query,bool isRejected() const,isis_pybind.BundleControlPoint.is_rejected,N,Method not found in current binding files
-Public API,int numberOfMeasures() const,isis_pybind.BundleControlPoint.number_of_measures,N,Method not found in current binding files
-Public API,int numberOfRejectedMeasures() const,isis_pybind.BundleControlPoint.number_of_rejected_measures,N,Method not found in current binding files
-Public API,double residualRms() const,isis_pybind.BundleControlPoint.residual_rms,N,Method not found in current binding files
-Public API,SurfacePoint adjustedSurfacePoint() const,isis_pybind.BundleControlPoint.adjusted_surface_point,N,Method not found in current binding files
-Public API,QString id() const,isis_pybind.BundleControlPoint.id,N,Method not found in current binding files
-Public API,ControlPoint::PointType type() const,isis_pybind.BundleControlPoint.type,N,Method not found in current binding files
-Public API,SurfacePoint::CoordinateType coordTypeReports() const,isis_pybind.BundleControlPoint.coord_type_reports,N,Method not found in current binding files
-Public API,SurfacePoint::CoordinateType coordTypeBundle() const,isis_pybind.BundleControlPoint.coord_type_bundle,N,Method not found in current binding files
-Public API,"boost::numeric::ublas::bounded_vector< double, 3 > &corrections()",isis_pybind.BundleControlPoint.corrections,N,Method not found in current binding files
-Public API,"boost::numeric::ublas::bounded_vector< double, 3 > &aprioriSigmas()",isis_pybind.BundleControlPoint.apriori_sigmas,N,Method not found in current binding files
-Public API,"boost::numeric::ublas::bounded_vector< double, 3 > &adjustedSigmas()",isis_pybind.BundleControlPoint.adjusted_sigmas,N,Method not found in current binding files
-Public API,"boost::numeric::ublas::bounded_vector< double, 3 > &weights()",isis_pybind.BundleControlPoint.weights,N,Method not found in current binding files
-Public API,"boost::numeric::ublas::bounded_vector<double, 3> &nicVector()",isis_pybind.BundleControlPoint.nic_vector,N,Method not found in current binding files
-Public API,SparseBlockRowMatrix &cholmodQMatrix(),isis_pybind.BundleControlPoint.cholmod_q_matrix,N,Method not found in current binding files
-Public API,QString formatBundleOutputSummaryString(bool errorPropagation) const,isis_pybind.BundleControlPoint.format_bundle_output_summary_string,N,Method not found in current binding files
-Public API,"QString formatBundleOutputDetailString(bool errorPropagation, bool solveRadius=false) const",isis_pybind.BundleControlPoint.format_bundle_output_detail_string,N,Method not found in current binding files
-Public API,"QString formatBundleLatitudinalOutputDetailString(bool errorPropagation, bool solveRadius=false) const",isis_pybind.BundleControlPoint.format_bundle_latitudinal_output_detail_string,N,Method not found in current binding files
-Public API,QString formatBundleRectangularOutputDetailString(bool errorPropagation) const,isis_pybind.BundleControlPoint.format_bundle_rectangular_output_detail_string,N,Method not found in current binding files
-Public API,"QString formatValue(double value, int fieldWidth, int precision) const",isis_pybind.BundleControlPoint.format_value,N,Method not found in current binding files
-Public API,"QString formatAprioriSigmaString(SurfacePoint::CoordIndex index, int fieldWidth, int precision, bool solveRadius=false) const",isis_pybind.BundleControlPoint.format_apriori_sigma_string,N,Method not found in current binding files
-Public API,"QString formatCoordAprioriSigmaString(SurfacePoint::CoordIndex index, int fieldWidth, int precision, bool solveRadius=false) const",isis_pybind.BundleControlPoint.format_coord_apriori_sigma_string,N,Method not found in current binding files
-Public API,"QString formatAdjustedSigmaString(SurfacePoint::CoordIndex, int fieldWidth, int precision, bool errorPropagation) const",isis_pybind.BundleControlPoint.format_adjusted_sigma_string,N,Method not found in current binding files
-Public API,"QString formatCoordAdjustedSigmaString(SurfacePoint::CoordIndex, int fieldWidth, int precision, bool errorPropagation) const",isis_pybind.BundleControlPoint.format_coord_adjusted_sigma_string,N,Method not found in current binding files
+Class Symbol,BundleControlPoint,isis_pybind.BundleControlPoint,Y,Python class symbol not found in current binding files
+Construction/Enum,BundleControlPoint(),isis_pybind.BundleControlPoint(),Y,Constructor binding not detected in current binding files
+Public API,void copy(const BundleControlPoint &src),isis_pybind.BundleControlPoint.copy,N,Internal deep copy; use Python copy semantics instead
+Mutation/Configuration,BundleMeasureQsp addMeasure(ControlMeasure *controlMeasure),isis_pybind.BundleControlPoint.add_measure,N,Takes ControlMeasure* raw pointer; complex ownership
+Public API,void computeResiduals(),isis_pybind.BundleControlPoint.compute_residuals,Y,Method not found in current binding files
+Mutation/Configuration,void setAdjustedSurfacePoint(SurfacePoint surfacePoint),isis_pybind.BundleControlPoint.set_adjusted_surface_point,Y,Method not found in current binding files
+Mutation/Configuration,void setNumberOfRejectedMeasures(int numRejected),isis_pybind.BundleControlPoint.set_number_of_rejected_measures,Y,Method not found in current binding files
+Mutation/Configuration,void setRejected(bool reject),isis_pybind.BundleControlPoint.set_rejected,Y,Method not found in current binding files
+Mutation/Configuration,void setWeights(const BundleSettingsQsp settings),isis_pybind.BundleControlPoint.set_weights,N,Takes BundleSettingsQsp; complex shared_ptr conversion
+Mutation/Configuration,"void setSigmaWeightFromGlobals(double gSigma, int index)",isis_pybind.BundleControlPoint.set_sigma_weight_from_globals,N,Internal bundle solver method
+Mutation/Configuration,"void setSigmaWeightFromGlobals(double gSigma, int index, double cFactor)",isis_pybind.BundleControlPoint.set_sigma_weight_from_globals,N,Internal bundle solver method
+Public API,void zeroNumberOfRejectedMeasures(),isis_pybind.BundleControlPoint.zero_number_of_rejected_measures,Y,Method not found in current binding files
+Public API,"void productAlphaAV(double alpha, SparseBlockMatrix &sparseNormals, LinearAlgebra::Vector &v1)",isis_pybind.BundleControlPoint.product_alpha_av,N,Takes SparseBlockMatrix/LinearAlgebra types not exposed
+Public API,"virtual void applyParameterCorrections(LinearAlgebra::Vector imageSolution, SparseBlockMatrix &sparseNormals, const BundleTargetBodyQsp target)",isis_pybind.BundleControlPoint.apply_parameter_corrections,N,Takes LinearAlgebra/SparseBlockMatrix types not exposed
+Public API,double vtpv(),isis_pybind.BundleControlPoint.vtpv,Y,Method not found in current binding files
+Public API,double vtpvMeasures(),isis_pybind.BundleControlPoint.vtpv_measures,Y,Method not found in current binding files
+Public API,ControlPoint *rawControlPoint() const,isis_pybind.BundleControlPoint.raw_control_point,Y,Method not found in current binding files
+Query,bool isRejected() const,isis_pybind.BundleControlPoint.is_rejected,Y,Method not found in current binding files
+Public API,int numberOfMeasures() const,isis_pybind.BundleControlPoint.number_of_measures,Y,Method not found in current binding files
+Public API,int numberOfRejectedMeasures() const,isis_pybind.BundleControlPoint.number_of_rejected_measures,Y,Method not found in current binding files
+Public API,double residualRms() const,isis_pybind.BundleControlPoint.residual_rms,Y,Method not found in current binding files
+Public API,SurfacePoint adjustedSurfacePoint() const,isis_pybind.BundleControlPoint.adjusted_surface_point,Y,Method not found in current binding files
+Public API,QString id() const,isis_pybind.BundleControlPoint.id,Y,Method not found in current binding files
+Public API,ControlPoint::PointType type() const,isis_pybind.BundleControlPoint.type,Y,Method not found in current binding files
+Public API,SurfacePoint::CoordinateType coordTypeReports() const,isis_pybind.BundleControlPoint.coord_type_reports,Y,Method not found in current binding files
+Public API,SurfacePoint::CoordinateType coordTypeBundle() const,isis_pybind.BundleControlPoint.coord_type_bundle,Y,Method not found in current binding files
+Public API,"boost::numeric::ublas::bounded_vector< double, 3 > &corrections()",isis_pybind.BundleControlPoint.corrections,Y,Method not found in current binding files
+Public API,"boost::numeric::ublas::bounded_vector< double, 3 > &aprioriSigmas()",isis_pybind.BundleControlPoint.apriori_sigmas,Y,Method not found in current binding files
+Public API,"boost::numeric::ublas::bounded_vector< double, 3 > &adjustedSigmas()",isis_pybind.BundleControlPoint.adjusted_sigmas,Y,Method not found in current binding files
+Public API,"boost::numeric::ublas::bounded_vector< double, 3 > &weights()",isis_pybind.BundleControlPoint.weights,Y,Method not found in current binding files
+Public API,"boost::numeric::ublas::bounded_vector<double, 3> &nicVector()",isis_pybind.BundleControlPoint.nic_vector,Y,Method not found in current binding files
+Public API,SparseBlockRowMatrix &cholmodQMatrix(),isis_pybind.BundleControlPoint.cholmod_q_matrix,N,Returns SparseBlockRowMatrix& not exposed to Python
+Public API,QString formatBundleOutputSummaryString(bool errorPropagation) const,isis_pybind.BundleControlPoint.format_bundle_output_summary_string,Y,Method not found in current binding files
+Public API,"QString formatBundleOutputDetailString(bool errorPropagation, bool solveRadius=false) const",isis_pybind.BundleControlPoint.format_bundle_output_detail_string,Y,Method not found in current binding files
+Public API,"QString formatBundleLatitudinalOutputDetailString(bool errorPropagation, bool solveRadius=false) const",isis_pybind.BundleControlPoint.format_bundle_latitudinal_output_detail_string,N,Specialized format; available via format_bundle_output_detail_string
+Public API,QString formatBundleRectangularOutputDetailString(bool errorPropagation) const,isis_pybind.BundleControlPoint.format_bundle_rectangular_output_detail_string,N,Specialized format; not commonly needed
+Public API,"QString formatValue(double value, int fieldWidth, int precision) const",isis_pybind.BundleControlPoint.format_value,N,Internal formatter helper
+Public API,"QString formatAprioriSigmaString(SurfacePoint::CoordIndex index, int fieldWidth, int precision, bool solveRadius=false) const",isis_pybind.BundleControlPoint.format_apriori_sigma_string,N,Internal formatter helper
+Public API,"QString formatCoordAprioriSigmaString(SurfacePoint::CoordIndex index, int fieldWidth, int precision, bool solveRadius=false) const",isis_pybind.BundleControlPoint.format_coord_apriori_sigma_string,N,Internal formatter helper
+Public API,"QString formatAdjustedSigmaString(SurfacePoint::CoordIndex, int fieldWidth, int precision, bool errorPropagation) const",isis_pybind.BundleControlPoint.format_adjusted_sigma_string,N,Internal formatter helper
+Public API,"QString formatCoordAdjustedSigmaString(SurfacePoint::CoordIndex, int fieldWidth, int precision, bool errorPropagation) const",isis_pybind.BundleControlPoint.format_coord_adjusted_sigma_string,N,Internal formatter helper

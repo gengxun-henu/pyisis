@@ -1,24 +1,26 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-CameraStatistics,"Spice, Instruments, and Cameras",isis/src/base/objs/CameraStatistics/CameraStatistics.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+CameraStatistics,"Spice, Instruments, and Cameras",reference/upstream_isis/src/base/objs/CameraStatistics/CameraStatistics.h,src/bind_statistics.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,CameraStatistics,isis_pybind.CameraStatistics,N,Python class symbol not found in current binding files
-Construction/Enum,CameraStatistics(),isis_pybind.CameraStatistics(),N,Constructor binding not detected in current binding files
-Mutation/Configuration,"void addStats(Camera *cam, int &sample, int &line)",isis_pybind.CameraStatistics.add_stats,N,Method not found in current binding files
-Public API,"PvlKeyword constructKeyword(QString keyname, double value, QString unit) const",isis_pybind.CameraStatistics.construct_keyword,N,Method not found in current binding files
-Public API,Pvl toPvl() const,isis_pybind.CameraStatistics.to_pvl,N,Method not found in current binding files
-Public API,const Statistics * getLatStat() const { return m_latStat,isis_pybind.CameraStatistics.get_lat_stat,N,Method not found in current binding files
-Public API,const Statistics * getLonStat() const { return m_lonStat,isis_pybind.CameraStatistics.get_lon_stat,N,Method not found in current binding files
-Public API,const Statistics * getResStat() const { return m_resStat,isis_pybind.CameraStatistics.get_res_stat,N,Method not found in current binding files
-Public API,const Statistics * getObliqueResStat() const { return m_obliqueResStat,isis_pybind.CameraStatistics.get_oblique_res_stat,N,Method not found in current binding files
-Public API,const Statistics * getObliqueSampleResStat() const { return m_obliqueSampleResStat,isis_pybind.CameraStatistics.get_oblique_sample_res_stat,N,Method not found in current binding files
-Public API,const Statistics * getObliqueLineResStat() const { return m_obliqueLineResStat,isis_pybind.CameraStatistics.get_oblique_line_res_stat,N,Method not found in current binding files
-Public API,const Statistics * getSampleResStat() const { return m_sampleResStat,isis_pybind.CameraStatistics.get_sample_res_stat,N,Method not found in current binding files
-Public API,const Statistics * getLineResStat() const { return m_lineResStat,isis_pybind.CameraStatistics.get_line_res_stat,N,Method not found in current binding files
-Public API,const Statistics * getAspectRatioStat() const { return m_aspectRatioStat,isis_pybind.CameraStatistics.get_aspect_ratio_stat,N,Method not found in current binding files
-Public API,const Statistics * getPhaseStat() const { return m_phaseStat,isis_pybind.CameraStatistics.get_phase_stat,N,Method not found in current binding files
-Public API,const Statistics * getEmissionStat() const { return m_emissionStat,isis_pybind.CameraStatistics.get_emission_stat,N,Method not found in current binding files
-Public API,const Statistics * getIncidenceStat() const { return m_incidenceStat,isis_pybind.CameraStatistics.get_incidence_stat,N,Method not found in current binding files
-Public API,const Statistics * getLocalSolarTimeStat() const { return m_localSolarTimeStat,isis_pybind.CameraStatistics.get_local_solar_time_stat,N,Method not found in current binding files
-Public API,const Statistics * getLocalRaduisStat() const { return m_localRaduisStat,isis_pybind.CameraStatistics.get_local_raduis_stat,N,Method not found in current binding files
-Public API,const Statistics * getNorthAzimuthStat() const { return m_northAzimuthStat,isis_pybind.CameraStatistics.get_north_azimuth_stat,N,Method not found in current binding files
+Class Symbol,CameraStatistics,isis_pybind.CameraStatistics,Y,2026-04-10 绑定
+Construction/Enum,"CameraStatistics(QString filename, int sinc, int linc)",isis_pybind.CameraStatistics(filename_sinc_linc),Y,2026-04-10 绑定
+Construction/Enum,"CameraStatistics(Camera *cam, int sinc, int linc)",isis_pybind.CameraStatistics(cam_sinc_linc),Y,2026-04-10 绑定
+Construction/Enum,"CameraStatistics(Camera *cam, int sinc, int linc, QString filename)",isis_pybind.CameraStatistics(cam_sinc_linc_filename),N,第三个重载；未绑定（前两个已覆盖主要用例）
+Mutation/Configuration,"void addStats(Camera *cam, int &sample, int &line)",isis_pybind.CameraStatistics.add_stats,N,非 const int& 参数；未绑定
+Public API,"PvlKeyword constructKeyword(QString keyname, double value, QString unit) const",isis_pybind.CameraStatistics.construct_keyword,N,PvlKeyword 返回值；未绑定
+Public API,Pvl toPvl() const,isis_pybind.CameraStatistics.to_pvl,Y,2026-04-10 绑定
+Public API,const Statistics * getLatStat() const,isis_pybind.CameraStatistics.get_lat_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getLonStat() const,isis_pybind.CameraStatistics.get_lon_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getResStat() const,isis_pybind.CameraStatistics.get_res_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getObliqueResStat() const,isis_pybind.CameraStatistics.get_oblique_res_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getObliqueSampleResStat() const,isis_pybind.CameraStatistics.get_oblique_sample_res_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getObliqueLineResStat() const,isis_pybind.CameraStatistics.get_oblique_line_res_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getSampleResStat() const,isis_pybind.CameraStatistics.get_sample_res_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getLineResStat() const,isis_pybind.CameraStatistics.get_line_res_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getAspectRatioStat() const,isis_pybind.CameraStatistics.get_aspect_ratio_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getPhaseStat() const,isis_pybind.CameraStatistics.get_phase_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getEmissionStat() const,isis_pybind.CameraStatistics.get_emission_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getIncidenceStat() const,isis_pybind.CameraStatistics.get_incidence_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getLocalSolarTimeStat() const,isis_pybind.CameraStatistics.get_local_solar_time_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getLocalRaduisStat() const,isis_pybind.CameraStatistics.get_local_radius_stat,Y,2026-04-10 绑定
+Public API,const Statistics * getNorthAzimuthStat() const,isis_pybind.CameraStatistics.get_north_azimuth_stat,Y,2026-04-10 绑定

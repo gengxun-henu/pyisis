@@ -1,15 +1,17 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ImageOverlap,Control Networks,isis/src/base/objs/ImageOverlap/ImageOverlap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+ImageOverlap,Control Networks,reference/upstream_isis/src/base/objs/ImageOverlap/ImageOverlap.h,src/base/bind_base_image_overlap.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ImageOverlap,isis_pybind.ImageOverlap,N,Python class symbol not found in current binding files
-Construction/Enum,ImageOverlap(),isis_pybind.ImageOverlap(),N,Constructor binding not detected in current binding files
-Mutation/Configuration,virtual void SetPolygon(const geos::geom::MultiPolygon &polygon),isis_pybind.ImageOverlap.set_polygon,N,Method not found in current binding files
-Mutation/Configuration,virtual void SetPolygon(const geos::geom::MultiPolygon *polygon),isis_pybind.ImageOverlap.set_polygon,N,Method not found in current binding files
-Mutation/Configuration,void Add(QString &sn),isis_pybind.ImageOverlap.add,N,Method not found in current binding files
-Query,int Size() const { return p_serialNumbers.size(),isis_pybind.ImageOverlap.size,N,Method not found in current binding files
-Public API,const geos::geom::MultiPolygon *Polygon() const { return p_polygon,isis_pybind.ImageOverlap.polygon,N,Method not found in current binding files
-Public API,virtual double Area(),isis_pybind.ImageOverlap.area,N,Method not found in current binding files
-Query,bool HasAnySameSerialNumber(ImageOverlap &other) const,isis_pybind.ImageOverlap.has_any_same_serial_number,N,Method not found in current binding files
-Query,bool HasSerialNumber(QString &sn) const,isis_pybind.ImageOverlap.has_serial_number,N,Method not found in current binding files
-Read/Write IO,void Write(std::ostream &outputStream),isis_pybind.ImageOverlap.write,N,Method not found in current binding files
+Class Symbol,ImageOverlap,isis_pybind.ImageOverlap,Y,2026-04-10 绑定
+Construction/Enum,ImageOverlap(),isis_pybind.ImageOverlap(),Y,2026-04-10 绑定默认构造函数
+Construction/Enum,"ImageOverlap(QString serialNumber, geos::geom::MultiPolygon &polygon)",isis_pybind.ImageOverlap(sn_polygon),N,需要 geos MultiPolygon；未暴露
+Construction/Enum,ImageOverlap(std::istream &inputStream),isis_pybind.ImageOverlap(istream),N,std::istream 接口；未暴露
+Mutation/Configuration,virtual void SetPolygon(const geos::geom::MultiPolygon &polygon),isis_pybind.ImageOverlap.set_polygon,N,需要 geos MultiPolygon；未暴露
+Mutation/Configuration,virtual void SetPolygon(const geos::geom::MultiPolygon *polygon),isis_pybind.ImageOverlap.set_polygon,N,需要 geos MultiPolygon；未暴露
+Mutation/Configuration,void Add(QString &sn),isis_pybind.ImageOverlap.add,Y,2026-04-10 绑定
+Query,int Size() const { return p_serialNumbers.size(),isis_pybind.ImageOverlap.size,Y,2026-04-10 绑定
+Public API,const geos::geom::MultiPolygon *Polygon() const { return p_polygon,isis_pybind.ImageOverlap.polygon,N,需要 geos MultiPolygon 返回类型；未暴露
+Public API,virtual double Area(),isis_pybind.ImageOverlap.area,Y,2026-04-10 绑定
+Query,bool HasAnySameSerialNumber(ImageOverlap &other) const,isis_pybind.ImageOverlap.has_any_same_serial_number,Y,2026-04-10 绑定
+Query,bool HasSerialNumber(QString &sn) const,isis_pybind.ImageOverlap.has_serial_number,Y,2026-04-10 绑定
+Read/Write IO,void Write(std::ostream &outputStream),isis_pybind.ImageOverlap.write,N,std::ostream 接口；未暴露

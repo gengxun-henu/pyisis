@@ -7,13 +7,17 @@
 // - reference/upstream_isis/src/mro/objs/HiCal/GainUnitConversion.h
 // - reference/upstream_isis/src/mro/objs/HiCal/Module.h
 // - reference/upstream_isis/src/mro/objs/HiCal/HiCalTypes.h
-// Source classes: Isis::GainNonLinearity, Isis::GainTemperature, Isis::GainUnitConversion
+// - reference/upstream_isis/src/mro/objs/HiLab/HiLab.h
+// Source classes: Isis::GainNonLinearity, Isis::GainTemperature, Isis::GainUnitConversion,
+//                 Isis::HiLab
 // Source header author(s): Kris Becker (gain headers); not explicitly stated in all upstream helper headers
 // Binding author: Geng Xun
 // Created: 2026-04-09
 // Updated: 2026-04-09  Geng Xun added Python-friendly HiCal gain wrappers backed by local Pvl+conf construction.
 // Updated: 2026-04-09  Geng Xun replaced direct HiCal class bindings with stable local wrappers because the linked ISIS library does not export the required HiCalConf symbols.
+// Updated: 2026-04-10  Geng Xun added HiLab binding exposing HiRise cube label accessors.
 // Purpose: Expose selected MRO HiCal gain modules with stable Python-friendly constructors and vector/history helpers.
+//          Also exposes HiLab for HiRise instrument label parsing.
 
 #include <algorithm>
 #include <cctype>
@@ -27,6 +31,7 @@
 #include <pybind11/stl.h>
 
 #include "Cube.h"
+#include "HiLab.h"
 #include "Pvl.h"
 #include "helpers.h"
 
@@ -338,4 +343,38 @@ void bind_mro_hical(py::module_ &m) {
       py::arg("units") = "DN",
       py::arg("cube") = nullptr);
   bindWrapperSurface(gainUnitConversion, "GainUnitConversion");
+
+  // HiLab — HiRise cube label accessor for MRO instrument metadata.
+  // Added: 2026-04-10
+  py::class_<Isis::HiLab>(m, "HiLab")
+      .def(py::init<Isis::Cube *>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a HiLab from an open HiRise Cube.\n\n"
+           "The cube must have an Instrument group with CpmmNumber, ChannelNumber,\n"
+           "Summing, and Tdi keywords (standard HiRise labels).\n\n"
+           "Parameters\n"
+           "----------\n"
+           "cube : Cube\n"
+           "    Open HiRise cube with valid Instrument group labels.\n\n"
+           "Raises\n"
+           "------\n"
+           "IException\n"
+           "    If required keywords (Summing, Tdi) are missing from the label.")
+      .def("get_cpmm_number", &Isis::HiLab::getCpmmNumber,
+           "Return the CpmmNumber keyword value from the cube labels.")
+      .def("get_channel", &Isis::HiLab::getChannel,
+           "Return the ChannelNumber keyword value from the cube labels.")
+      .def("get_bin", &Isis::HiLab::getBin,
+           "Return the Summing (bin) keyword value from the cube labels.")
+      .def("get_tdi", &Isis::HiLab::getTdi,
+           "Return the Tdi keyword value from the cube labels.")
+      .def("get_ccd", &Isis::HiLab::getCcd,
+           "Return the CCD number derived from the cpmm-to-ccd lookup table.")
+      .def("__repr__", [](Isis::HiLab &h) {
+        return "<HiLab cpmm=" + std::to_string(h.getCpmmNumber())
+               + " channel=" + std::to_string(h.getChannel())
+               + " bin=" + std::to_string(h.getBin())
+               + " tdi=" + std::to_string(h.getTdi()) + ">";
+      });
 }

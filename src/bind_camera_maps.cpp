@@ -2,6 +2,7 @@
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added camera detector, focal-plane, distortion, ground, sky, and line-scan map bindings
 // Updated: 2026-04-10  Geng Xun added PushFrameCameraDetectorMap, RollingShutterCameraDetectorMap, VariableLineScanCameraDetectorMap bindings
+// Updated: 2026-04-10  Geng Xun added PushFrameCameraCcdLayout and FrameletInfo struct bindings
 // Purpose: pybind11 bindings for ISIS camera map helper classes that translate between detector, focal-plane, ground, and sky coordinate systems
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -24,6 +25,7 @@
 #include "LineScanCameraGroundMap.h"
 #include "LineScanCameraSkyMap.h"
 #include "Longitude.h"
+#include "PushFrameCameraCcdLayout.h"
 #include "PushFrameCameraDetectorMap.h"
 #include "RollingShutterCameraDetectorMap.h"
 #include "SurfacePoint.h"
@@ -302,4 +304,86 @@ void bind_camera_maps(py::module_ &m) {
            "Return the exposure duration for the given detector position.")
       .def("__repr__", [](const Isis::VariableLineScanCameraDetectorMap &) {
             return "VariableLineScanCameraDetectorMap()"; });
+
+  // PushFrameCameraCcdLayout::FrameletInfo — nested struct holding framelet layout data.
+  // Added: 2026-04-10
+  py::class_<Isis::PushFrameCameraCcdLayout::FrameletInfo>(m, "FrameletInfo")
+      .def(py::init<>(),
+           "Construct an empty FrameletInfo struct.")
+      .def(py::init<int>(),
+           py::arg("frame_id"),
+           "Construct a FrameletInfo with the given frame ID.")
+      .def(py::init<int, const std::string &, int, int, int, int>(),
+           py::arg("frame_id"),
+           py::arg("filter_name"),
+           py::arg("start_sample"),
+           py::arg("start_line"),
+           py::arg("samples"),
+           py::arg("lines"),
+           "Construct a FrameletInfo with all fields.")
+      .def_readwrite("frame_id", &Isis::PushFrameCameraCcdLayout::FrameletInfo::m_frameId,
+                     "NAIF ID of the framelet.")
+      .def_property("filter_name",
+                    [](const Isis::PushFrameCameraCcdLayout::FrameletInfo &self) {
+                      return self.m_filterName.toStdString();
+                    },
+                    [](Isis::PushFrameCameraCcdLayout::FrameletInfo &self,
+                       const std::string &name) {
+                      self.m_filterName = QString::fromStdString(name);
+                    },
+                    "Name of the filter for this framelet.")
+      .def_readwrite("start_sample",
+                     &Isis::PushFrameCameraCcdLayout::FrameletInfo::m_startSample,
+                     "First sample of the framelet on the detector.")
+      .def_readwrite("start_line",
+                     &Isis::PushFrameCameraCcdLayout::FrameletInfo::m_startLine,
+                     "First line of the framelet on the detector.")
+      .def_readwrite("samples",
+                     &Isis::PushFrameCameraCcdLayout::FrameletInfo::m_samples,
+                     "Number of samples in the framelet.")
+      .def_readwrite("lines",
+                     &Isis::PushFrameCameraCcdLayout::FrameletInfo::m_lines,
+                     "Number of lines in the framelet.")
+      .def("__repr__",
+           [](const Isis::PushFrameCameraCcdLayout::FrameletInfo &fi) {
+             return "<FrameletInfo id=" + std::to_string(fi.m_frameId)
+                    + " filter='" + fi.m_filterName.toStdString() + "'"
+                    + " start=(" + std::to_string(fi.m_startSample)
+                    + "," + std::to_string(fi.m_startLine) + ")"
+                    + " size=(" + std::to_string(fi.m_samples)
+                    + "," + std::to_string(fi.m_lines) + ")>";
+           });
+
+  // PushFrameCameraCcdLayout — provides CCD layout information for push-frame cameras.
+  // ccdSamples() and ccdLines() require SPICE kernels to be loaded.
+  // Added: 2026-04-10
+  py::class_<Isis::PushFrameCameraCcdLayout>(m, "PushFrameCameraCcdLayout")
+      .def(py::init<>(),
+           "Construct a PushFrameCameraCcdLayout with no CCD ID.")
+      .def(py::init<int>(),
+           py::arg("ccd_id"),
+           "Construct a PushFrameCameraCcdLayout for the given CCD NAIF ID.")
+      .def("add_kernel",
+           [](Isis::PushFrameCameraCcdLayout &self, const std::string &kernel) {
+             return self.addKernel(QString::fromStdString(kernel));
+           },
+           py::arg("kernel"),
+           "Add a SPICE kernel file path to the kernel manager.\n\n"
+           "Returns True if the kernel was successfully added.")
+      .def("ccd_samples", &Isis::PushFrameCameraCcdLayout::ccdSamples,
+           "Return the number of samples on the CCD (requires SPICE kernels).")
+      .def("ccd_lines", &Isis::PushFrameCameraCcdLayout::ccdLines,
+           "Return the number of lines on the CCD (requires SPICE kernels).")
+      .def("get_frame_info",
+           [](const Isis::PushFrameCameraCcdLayout &self,
+              int frame_id,
+              const std::string &name) {
+             return self.getFrameInfo(frame_id, QString::fromStdString(name));
+           },
+           py::arg("frame_id"),
+           py::arg("name") = "",
+           "Return the FrameletInfo for the given frame ID and optional filter name.")
+      .def("__repr__", [](const Isis::PushFrameCameraCcdLayout &) {
+        return "<PushFrameCameraCcdLayout>";
+      });
 }

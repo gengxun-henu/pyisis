@@ -28,7 +28,7 @@ Control Networks,ControlPointV0001,已转换,2026-03-22 已在 bind_control_core
 Control Networks,ControlPointV0002,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口
 Control Networks,ControlPointV0003,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口
 Control Networks,CsmBundleObservation,未转换,
-Control Networks,ImageOverlap,未转换,
+Control Networks,ImageOverlap,已转换,2026-04-10 已在 src/base/bind_base_image_overlap.cpp 暴露默认构造/add/size/has_serial_number/has_any_same_serial_number/area；focused 单测在 image_overlap_camera_unit_test.py；smoke 已补符号
 Control Networks,InterestOperator,未转换,抽象基类/纯虚接口
 Control Networks,InterestOperatorFactory,已转换,2026-03-27 已在 bind_interest_operator_factory.cpp 暴露 create 静态工厂方法
 Control Networks,IsisBundleObservation,未转换,
@@ -147,7 +147,7 @@ Mars Reconnaissance Orbiter,HiCalConf,未转换,
 Mars Reconnaissance Orbiter,HiCalData,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,HiEqualization,未转换,
 Mars Reconnaissance Orbiter,HiHistory,未转换,抽象基类/纯虚接口
-Mars Reconnaissance Orbiter,HiLab,未转换,
+Mars Reconnaissance Orbiter,HiLab,已转换,2026-04-10 已在 src/bind_mro_hical.cpp 暴露 constructor(Cube*)/get_cpmm_number/get_channel/get_bin/get_tdi/get_ccd；focused 单测在 image_overlap_camera_unit_test.py；smoke 已补符号
 Mars Reconnaissance Orbiter,HiLineTimeEqn,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,HiriseCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Mars Reconnaissance Orbiter,LoadCSV,未转换,
@@ -253,7 +253,7 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",CameraFocalPlaneMap,已转换,第六批已补基础单测（局部几何 round-trip / 系数访问）
 "Spice, Instruments, and Cameras",CameraGroundMap,已转换,第六批已补基础单测（相机派生地面几何）
 "Spice, Instruments, and Cameras",CameraSkyMap,已转换,第六批已补基础单测（相机派生天球几何）
-"Spice, Instruments, and Cameras",CameraStatistics,未转换,
+"Spice, Instruments, and Cameras",CameraStatistics,已转换,2026-04-10 已在 src/bind_statistics.cpp 暴露双构造函数及全部 16 个 stat 访问器（filename 和 Camera 版本）；focused 单测在 image_overlap_camera_unit_test.py；smoke 已补符号
 "Spice, Instruments, and Cameras",CSMSkyMap,未转换,
 "Spice, Instruments, and Cameras",FramingCamera,已转换,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已验证层级关系
 "Spice, Instruments, and Cameras",IdealCamera,已转换,相机模型/Spice 依赖
@@ -263,9 +263,9 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",LineScanCameraDetectorMap,已转换,第七批已补基础单测（独立构造/时间参数）
 "Spice, Instruments, and Cameras",LineScanCameraGroundMap,已转换,第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测
 "Spice, Instruments, and Cameras",LineScanCameraSkyMap,已转换,第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测
-"Spice, Instruments, and Cameras",PixelFOV,未转换,
+"Spice, Instruments, and Cameras",PixelFOV,已转换,2026-04-10 已在 src/bind_camera.cpp 暴露默认构造/copy 构造/lat_lon_vertices；focused 单测在 image_overlap_camera_unit_test.py；smoke 已补符号
 "Spice, Instruments, and Cameras",PushFrameCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
-"Spice, Instruments, and Cameras",PushFrameCameraCcdLayout,未转换,
+"Spice, Instruments, and Cameras",PushFrameCameraCcdLayout,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露 FrameletInfo 结构体及 ccd_samples/ccd_lines/add_kernel/get_frame_info；focused 单测在 image_overlap_camera_unit_test.py；smoke 已补符号
 "Spice, Instruments, and Cameras",PushFrameCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造函数/set_parent/set_detector/framelet_rate/framelet_offset/framelet/set_band_first_detector_line/get_band_first_detector_line/set_start_time
 "Spice, Instruments, and Cameras",PushFrameCameraGroundMap,未转换,
 "Spice, Instruments, and Cameras",Quaternion,已转换,2026-04-09 已在 src/bind_camera.cpp 暴露构造函数/get_quaternion/set/to_matrix/to_angles/conjugate/qxv/乘法运算符；focused 单测在 sensor_utils_unit_test.py

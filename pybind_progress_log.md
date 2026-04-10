@@ -1507,3 +1507,54 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 ### Validation status
 - Build environment not available in sandbox; requires CI/asp360_new interpreter.
 - All bindings reviewed for correctness against upstream `.h` and `.cpp`.
+
+---
+
+## 2026-04-10 第六阶段 Rollout 第2批（5 个新绑定）
+
+**本批：ImageOverlap, HiLab, PixelFOV, PushFrameCameraCcdLayout, CameraStatistics。**
+
+### 活跃队列
+6. ImageOverlap — 已完成（部分，polygon 方法未暴露）
+7. HiLab — 已完成
+8. PixelFOV — 已完成
+9. PushFrameCameraCcdLayout — 已完成（含 FrameletInfo 嵌套结构体）
+10. CameraStatistics — 已完成
+
+### Class 6: ImageOverlap (已转换，Partial)
+- 新文件 `src/base/bind_base_image_overlap.cpp`。
+- 暴露：默认构造、`add(sn)`, `size()`, `__len__`, `__getitem__`, `has_serial_number()`, `has_any_same_serial_number()`, `area()`, `__repr__`。
+- SetPolygon(), Polygon(), Write() 未暴露（需要 geos 类型或 std::ostream）。
+
+### Class 7: HiLab (已转换)
+- 追加到 `src/bind_mro_hical.cpp`。
+- 暴露：`constructor(Cube*)`, `get_cpmm_number()`, `get_channel()`, `get_bin()`, `get_tdi()`, `get_ccd()`, `__repr__`。
+- 运行需要包含 Instrument group 的 HiRise Cube（单测中 skip）。
+
+### Class 8: PixelFOV (已转换)
+- 追加到 `src/bind_camera.cpp`。
+- 暴露：默认构造、copy 构造、`lat_lon_vertices(Camera&, double, double, int)` 返回 `list[list[tuple[float,float]]]`。
+- 运行需要已设置好相机几何的 Camera 对象（单测中 skip）。
+
+### Class 9: PushFrameCameraCcdLayout (已转换)
+- 追加到 `src/bind_camera_maps.cpp`。
+- 暴露 `FrameletInfo` 嵌套结构体（所有字段 read/write）及 `PushFrameCameraCcdLayout` 主类。
+- 暴露：两个构造函数、`add_kernel()`、`ccd_samples()`、`ccd_lines()`、`get_frame_info()`。
+
+### Class 10: CameraStatistics (已转换)
+- 追加到 `src/bind_statistics.cpp`。
+- 暴露：`filename` 和 `Camera*` 两个构造函数，`to_pvl()` 及全部 16 个 stat 访问器（lat/lon/res/oblique/sample_res/line_res/aspect/phase/emission/incidence/local_solar_time/local_radius/north_azimuth）。
+
+### 测试
+- 新增 `tests/unitTest/image_overlap_camera_unit_test.py`：
+  - ImageOverlap: 构造、add/size/len/getitem/has_serial_number/has_any_same_serial_number/area/repr
+  - HiLab: 类存在、方法存在（构造 skip）
+  - PixelFOV: 构造、copy 构造、方法存在、repr
+  - FrameletInfo: 默认/frame_id/全字段构造、字段读写
+  - PushFrameCameraCcdLayout: 构造、方法存在、repr
+  - CameraStatistics: 类存在、方法存在（构造 skip）
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个类 → 已转换
+- 各 `*_methods.csv`: 更新
+- `class_bind_methods_details/methods_inventory_summary.csv`: 更新

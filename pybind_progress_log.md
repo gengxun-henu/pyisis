@@ -1700,3 +1700,29 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 - `todo_pybind11.csv`: 5 个类 → 已转换
 - 各 `*_methods.csv`: 更新为 Y
 - `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新
+
+---
+
+## Batch 8b — 2026-04-10
+
+**Queue (10 classes):** Re-enable bind_bundle_advanced.cpp (9 classes) + CubeCalculator (1 new)
+
+### Class 1-9: Re-enable bind_bundle_advanced.cpp
+- 重新启用 `src/control/bind_bundle_advanced.cpp`（之前因复杂依赖被禁用）。
+- 修复 `BundleControlPoint` 中 boost::ublas `bounded_vector<double,3>` 返回类型 → 以 lambda wrapper 转为 `std::vector<double>` 返回 Python list。
+- 移除 `cholmod_q_matrix()`（返回 `SparseBlockRowMatrix&` 未暴露的类型）。
+- 在 `CMakeLists.txt`、`src/module.cpp` 中取消注释，在 `python/isis_pybind/__init__.py` 中取消注释导出。
+- 在 `tests/smoke_import.py` 中取消注释 bundle 高级类符号检查。
+- 在 `tests/unitTest/bundle_advanced_unit_test.py` 中移除 `SkipTest`，改为动态检测。
+- 覆盖 9 个类：BundleMeasure, BundleControlPoint, BundleObservation (abstract), BundleObservationVector, BundleLidarRangeConstraint, BundleLidarControlPoint, BundleLidarPointVector, BundleResults, BundleSolutionInfo。
+
+### Class 10: CubeCalculator (新增)
+- 在 `src/base/bind_base_math.cpp` 新增 CubeCalculator 绑定。
+- 由于 CubeCalculator 是 Calculator 的私有继承，不声明 py::class_ 继承。
+- `prepareCalculations` 和 `runCalculations` 通过 lambda 适配 QVector<Cube*>/QVector<Buffer*> 参数。
+- focused 单测：`tests/unitTest/cube_calculator_unit_test.py`。
+
+### 台账更新
+- `todo_pybind11.csv`: 10 个类 → 已转换
+- 各 `*_methods.csv`: 更新为 Y（部分 SparseBlockMatrix/LinearAlgebra 方法标记 N）
+- `class_bind_methods_details/methods_inventory_summary.csv`: 10 行更新

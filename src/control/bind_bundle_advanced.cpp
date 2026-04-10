@@ -226,7 +226,7 @@ void bind_bundle_advanced(py::module_ &m)
          .def("nic_vector", [](Isis::BundleControlPoint &self) {
               auto &v = self.nicVector();
               return std::vector<double>(v.begin(), v.end()); })
-         // cholmod_q_matrix returns SparseBlockRowMatrix& (not exposed to Python, N)
+         // cholmod_q_matrix returns SparseBlockRowMatrix& which is not bound in Python; skipped
 
          .def("format_bundle_output_summary_string", [](const Isis::BundleControlPoint &self, bool error_propagation)
               { return qStringToStdString(self.formatBundleOutputSummaryString(error_propagation)); }, py::arg("error_propagation"))

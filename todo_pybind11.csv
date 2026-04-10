@@ -153,7 +153,7 @@ Mars Reconnaissance Orbiter,HiriseCamera,已转换,"亦属 Spice, Instruments, a
 Mars Reconnaissance Orbiter,LoadCSV,未转换,
 Mars Reconnaissance Orbiter,LowPassFilter,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,MarciCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mars Reconnaissance Orbiter,MarciDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Reconnaissance Orbiter,MarciDistortionMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造与 focal-plane/filter 方法；已补单测与 smoke
 Mars Reconnaissance Orbiter,Module,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,NonLinearLSQ,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,SplineFill,未转换,抽象基类/纯虚接口
@@ -270,12 +270,12 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",PushFrameCameraGroundMap,已转换,"2026-04-10 已在 src/bind_camera_maps.cpp 暴露 constructor(Camera*, bool)/set_ground 两个重载；focused 单测在 camera_maps_unit_test.py；smoke 已补符号"
 "Spice, Instruments, and Cameras",Quaternion,已转换,2026-04-09 已在 src/bind_camera.cpp 暴露构造函数/get_quaternion/set/to_matrix/to_angles/conjugate/qxv/乘法运算符；focused 单测在 sensor_utils_unit_test.py
 "Spice, Instruments, and Cameras",RadarCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
-"Spice, Instruments, and Cameras",RadarGroundMap,未转换,
-"Spice, Instruments, and Cameras",RadarGroundRangeMap,未转换,
-"Spice, Instruments, and Cameras",RadarPulseMap,未转换,
+"Spice, Instruments, and Cameras",RadarGroundMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造、ground 设置及 sigma/wavelength 接口；已补单测与 smoke
+"Spice, Instruments, and Cameras",RadarGroundRangeMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造与 set_transform；已补单测与 smoke
+"Spice, Instruments, and Cameras",RadarPulseMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造及时间/频率控制方法；已补单测与 smoke
 "Spice, Instruments, and Cameras",RadarSkyMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露 constructor(Camera*)/set_focal_plane/set_sky；focused 单测在 camera_maps_unit_test.py；smoke 已补符号
 "Spice, Instruments, and Cameras",RadarSlantRangeMap,未转换,
-"Spice, Instruments, and Cameras",ReseauDistortionMap,未转换,相机模型/Spice 依赖
+"Spice, Instruments, and Cameras",ReseauDistortionMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造与 focal-plane 方法；已补单测与 smoke
 "Spice, Instruments, and Cameras",RollingShutterCamera,已转换,相机模型/Spice 依赖
 "Spice, Instruments, and Cameras",RollingShutterCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造函数/set_parent/set_detector/apply_jitter
 "Spice, Instruments, and Cameras",Sensor,已转换,抽象基类/纯虚接口；已补 get_surface_point() 以支撑 measure-level 地面点/半径提取

@@ -6,6 +6,7 @@
 // Updated: 2026-04-10  Geng Xun added PushFrameCameraGroundMap, RadarSkyMap, IrregularBodyCameraGroundMap, CSMSkyMap bindings
 // Updated: 2026-04-10  Geng Xun added RadarGroundRangeMap, ReseauDistortionMap, MarciDistortionMap bindings
 // Updated: 2026-04-10  Geng Xun fixed QString-based constructor wrappers for FrameletInfo and ReseauDistortionMap.
+// Updated: 2026-04-10  Geng Xun added RadarGroundMap and RadarPulseMap bindings
 // Purpose: pybind11 bindings for ISIS camera map helper classes that translate between detector, focal-plane, ground, and sky coordinate systems
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -36,7 +37,9 @@
 #include "PushFrameCameraCcdLayout.h"
 #include "PushFrameCameraDetectorMap.h"
 #include "PushFrameCameraGroundMap.h"
+#include "RadarGroundMap.h"
 #include "RadarGroundRangeMap.h"
+#include "RadarPulseMap.h"
 #include "RadarSkyMap.h"
 #include "ReseauDistortionMap.h"
 #include "RollingShutterCameraDetectorMap.h"
@@ -615,5 +618,85 @@ void bind_camera_maps(py::module_ &m) {
            "Set the MARCI filter index (0-based).")
       .def("__repr__", [](const Isis::MarciDistortionMap &) {
         return "<MarciDistortionMap>";
+      });
+
+  // RadarGroundMap — maps between undistorted focal-plane coordinate (slant
+  // range) and ground lat/lon for Radar instruments.
+  // Added: 2026-04-10
+  py::class_<Isis::RadarGroundMap, Isis::CameraGroundMap>(m, "RadarGroundMap")
+      .def(py::init<Isis::Camera *,
+                    Isis::Radar::LookDirection,
+                    double>(),
+           py::arg("parent"),
+           py::arg("look_direction"),
+           py::arg("wave_length"),
+           py::keep_alive<1, 2>(),
+           "Construct a RadarGroundMap.")
+      .def("set_focal_plane",
+           &Isis::RadarGroundMap::SetFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           py::arg("uz"),
+           "Compute ground lat/lon from undistorted focal-plane coordinates.")
+      .def("set_ground",
+           py::overload_cast<const Isis::Latitude &,
+                             const Isis::Longitude &>(
+               &Isis::RadarGroundMap::SetGround),
+           py::arg("lat"),
+           py::arg("lon"),
+           "Compute focal-plane coordinates from ground lat/lon.")
+      .def("set_ground",
+           py::overload_cast<const Isis::SurfacePoint &>(
+               &Isis::RadarGroundMap::SetGround),
+           py::arg("surface_point"),
+           "Compute focal-plane coordinates from a SurfacePoint.")
+      .def("set_range_sigma",
+           &Isis::RadarGroundMap::SetRangeSigma,
+           py::arg("range_sigma"),
+           "Set the range sigma.")
+      .def("range_sigma",
+           &Isis::RadarGroundMap::RangeSigma,
+           "Return the range sigma.")
+      .def("set_doppler_sigma",
+           &Isis::RadarGroundMap::SetDopplerSigma,
+           py::arg("doppler_sigma"),
+           "Set the Doppler sigma.")
+      .def("y_scale",
+           &Isis::RadarGroundMap::YScale,
+           "Return the Doppler sigma.")
+      .def("wave_length",
+           &Isis::RadarGroundMap::WaveLength,
+           "Return the radar wavelength.")
+      .def("__repr__", [](const Isis::RadarGroundMap &) {
+        return "<RadarGroundMap>";
+      });
+
+  // RadarPulseMap — detector map between alpha image coordinates and radar
+  // pulse (sample, time) coordinates for radar instruments.
+  // Added: 2026-04-10
+  py::class_<Isis::RadarPulseMap, Isis::CameraDetectorMap>(m, "RadarPulseMap")
+      .def(py::init<Isis::Camera *, double, double>(),
+           py::arg("parent"),
+           py::arg("et_start"),
+           py::arg("line_rate"),
+           py::keep_alive<1, 2>(),
+           "Construct a RadarPulseMap.")
+      .def("set_start_time",
+           &Isis::RadarPulseMap::SetStartTime,
+           py::arg("et_start"),
+           "Reset the starting ephemeris time.")
+      .def("set_line_rate",
+           &Isis::RadarPulseMap::SetLineRate,
+           py::arg("line_rate"),
+           "Reset the time between lines.")
+      .def("line_rate",
+           &Isis::RadarPulseMap::LineRate,
+           "Return the time in seconds between scan lines.")
+      .def("set_x_axis_time_dependent",
+           &Isis::RadarPulseMap::SetXAxisTimeDependent,
+           py::arg("on"),
+           "Set whether x (sample) is the time-dependent axis instead of y (line).")
+      .def("__repr__", [](const Isis::RadarPulseMap &) {
+        return "<RadarPulseMap>";
       });
 }

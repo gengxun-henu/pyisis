@@ -1605,3 +1605,53 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 - `todo_pybind11.csv`: 5 个类 → 已转换
 - 各 `*_methods.csv`: 新增/更新
 - `class_bind_methods_details/methods_inventory_summary.csv`: 更新
+
+---
+
+## 2026-04-10 第七阶段 Rollout 第1批（5 个新绑定）
+
+**本批：RadarGroundRangeMap, ReseauDistortionMap, MarciDistortionMap, RadarGroundMap, RadarPulseMap。**
+
+### 活跃队列
+1. RadarGroundRangeMap — 已完成（代码已存在，补台账与测试）
+2. ReseauDistortionMap — 已完成（代码已存在，补台账与测试）
+3. MarciDistortionMap — 已完成（代码已存在，补台账与测试）
+4. RadarGroundMap — 已完成（新增绑定）
+5. RadarPulseMap — 已完成（新增绑定）
+
+### Class 1: RadarGroundRangeMap (已转换)
+- 代码已存在于 `src/bind_camera_maps.cpp`（继承 CameraFocalPlaneMap）。
+- 同步补充 `RadarLookDirection` enum 导出。
+- 暴露：构造器（Camera*, int naifIkCode），`set_transform` 静态方法。
+
+### Class 2: ReseauDistortionMap (已转换)
+- 代码已存在于 `src/bind_camera_maps.cpp`（继承 CameraDistortionMap）。
+- 暴露：构造器（Camera*, Pvl&, str），`set_focal_plane`, `set_undistorted_focal_plane`。
+
+### Class 3: MarciDistortionMap (已转换)
+- 代码已存在于 `src/bind_camera_maps.cpp`（继承 CameraDistortionMap）。
+- 暴露：构造器（Camera*, int naifIkCode），`set_focal_plane`, `set_undistorted_focal_plane`, `set_filter`。
+
+### Class 4: RadarGroundMap (已转换，Partial)
+- 新增到 `src/bind_camera_maps.cpp`（继承 CameraGroundMap）。
+- 暴露：构造器（Camera*, RadarLookDirection, wave_length），`set_focal_plane`, `set_ground`（2 个重载），`set_range_sigma`, `range_sigma`, `set_doppler_sigma`, `y_scale`, `wave_length`。
+- GetXY/GetdXY 系列方法因 out-pointer 签名暂跳过（N）。
+
+### Class 5: RadarPulseMap (已转换，Partial)
+- 新增到 `src/bind_camera_maps.cpp`（继承 CameraDetectorMap）。
+- 暴露：构造器（Camera*, et_start, line_rate），`set_start_time`, `set_line_rate`, `line_rate`, `set_x_axis_time_dependent`。
+- `SetParent`/`SetDetector` 虚函数由基类 CameraDetectorMap 继承（N，不重复暴露）。
+
+### 测试
+- 扩展 `tests/unitTest/camera_maps_unit_test.py`：
+  - RadarLookDirection: enum 存在、Left/Right 值
+  - RadarGroundRangeMap: 类存在、继承关系、set_transform 方法存在
+  - ReseauDistortionMap: 类存在、继承关系、focal-plane 方法存在
+  - MarciDistortionMap: 类存在、继承关系、focal-plane/filter 方法存在
+  - RadarGroundMap: 类存在、继承关系、主要方法存在
+  - RadarPulseMap: 类存在、继承关系、时间/频率方法存在
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个类 → 已转换
+- 各 `*_methods.csv`: 更新
+- `class_bind_methods_details/methods_inventory_summary.csv`: 更新

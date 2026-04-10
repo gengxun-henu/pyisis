@@ -1,9 +1,9 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-MarciDistortionMap,Mars Reconnaissance Orbiter,isis/src/mro/objs/MarciCamera/MarciDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+MarciDistortionMap,Mars Reconnaissance Orbiter,reference/upstream_isis/src/mro/objs/MarciCamera/MarciDistortionMap.h,src/bind_camera_maps.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造与 focal-plane 方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,MarciDistortionMap,isis_pybind.MarciDistortionMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,MarciDistortionMap(),isis_pybind.MarciDistortionMap(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"virtual bool SetFocalPlane(const double dx, const double dy)",isis_pybind.MarciDistortionMap.set_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(const double ux, const double uy)",isis_pybind.MarciDistortionMap.set_undistorted_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,void SetFilter(int filter) { p_filter = filter,isis_pybind.MarciDistortionMap.set_filter,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,MarciDistortionMap,isis_pybind.MarciDistortionMap,Y,2026-04-10
+Construction/Enum,"MarciDistortionMap(Camera*, int naifIkCode)",isis_pybind.MarciDistortionMap(),Y,2026-04-10
+Mutation/Configuration,"virtual bool SetFocalPlane(const double dx, const double dy)",isis_pybind.MarciDistortionMap.set_focal_plane,Y,2026-04-10
+Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(const double ux, const double uy)",isis_pybind.MarciDistortionMap.set_undistorted_focal_plane,Y,2026-04-10
+Mutation/Configuration,void SetFilter(int filter),isis_pybind.MarciDistortionMap.set_filter,Y,2026-04-10

@@ -6,6 +6,7 @@ Created: 2026-03-21
 Last Modified: 2026-04-10
 Updated: 2026-04-10  Geng Xun added PushFrameCameraDetectorMap, RollingShutterCameraDetectorMap, VariableLineScanCameraDetectorMap surface and API tests.
 Updated: 2026-04-10  Geng Xun added GaussianStretch, PushFrameCameraGroundMap, RadarSkyMap, IrregularBodyCameraGroundMap, CSMSkyMap API tests.
+Updated: 2026-04-10  Geng Xun added RadarGroundRangeMap, ReseauDistortionMap, MarciDistortionMap, RadarGroundMap, RadarPulseMap API tests.
 """
 
 import math
@@ -308,6 +309,111 @@ class CSMSkyMapApiTest(unittest.TestCase):
     def test_has_set_sky(self):
         """CSMSkyMap exposes set_sky."""
         self.assertTrue(hasattr(ip.CSMSkyMap, "set_sky"))
+
+
+class RadarLookDirectionApiTest(unittest.TestCase):
+    """Tests for RadarLookDirection enum binding. Added: 2026-04-10."""
+
+    def test_enum_exists(self):
+        """RadarLookDirection enum is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "RadarLookDirection"))
+
+    def test_has_left_right(self):
+        """RadarLookDirection has Left and Right values."""
+        self.assertTrue(hasattr(ip.RadarLookDirection, "Left"))
+        self.assertTrue(hasattr(ip.RadarLookDirection, "Right"))
+
+
+class RadarGroundRangeMapApiTest(unittest.TestCase):
+    """Tests for RadarGroundRangeMap binding. Added: 2026-04-10."""
+
+    def test_class_exists(self):
+        """RadarGroundRangeMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "RadarGroundRangeMap"))
+
+    def test_inherits_camera_focal_plane_map(self):
+        """RadarGroundRangeMap is a subclass of CameraFocalPlaneMap."""
+        self.assertTrue(issubclass(ip.RadarGroundRangeMap, ip.CameraFocalPlaneMap))
+
+    def test_has_set_transform(self):
+        """RadarGroundRangeMap exposes set_transform static method."""
+        self.assertTrue(hasattr(ip.RadarGroundRangeMap, "set_transform"))
+
+
+class ReseauDistortionMapApiTest(unittest.TestCase):
+    """Tests for ReseauDistortionMap binding. Added: 2026-04-10."""
+
+    def test_class_exists(self):
+        """ReseauDistortionMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "ReseauDistortionMap"))
+
+    def test_inherits_camera_distortion_map(self):
+        """ReseauDistortionMap is a subclass of CameraDistortionMap."""
+        self.assertTrue(issubclass(ip.ReseauDistortionMap, ip.CameraDistortionMap))
+
+    def test_has_expected_methods(self):
+        """ReseauDistortionMap exposes set_focal_plane and set_undistorted_focal_plane."""
+        self.assertTrue(hasattr(ip.ReseauDistortionMap, "set_focal_plane"))
+        self.assertTrue(hasattr(ip.ReseauDistortionMap, "set_undistorted_focal_plane"))
+
+
+class MarciDistortionMapApiTest(unittest.TestCase):
+    """Tests for MarciDistortionMap binding. Added: 2026-04-10."""
+
+    def test_class_exists(self):
+        """MarciDistortionMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "MarciDistortionMap"))
+
+    def test_inherits_camera_distortion_map(self):
+        """MarciDistortionMap is a subclass of CameraDistortionMap."""
+        self.assertTrue(issubclass(ip.MarciDistortionMap, ip.CameraDistortionMap))
+
+    def test_has_expected_methods(self):
+        """MarciDistortionMap exposes set_focal_plane, set_undistorted_focal_plane, set_filter."""
+        self.assertTrue(hasattr(ip.MarciDistortionMap, "set_focal_plane"))
+        self.assertTrue(hasattr(ip.MarciDistortionMap, "set_undistorted_focal_plane"))
+        self.assertTrue(hasattr(ip.MarciDistortionMap, "set_filter"))
+
+
+class RadarGroundMapApiTest(unittest.TestCase):
+    """Tests for RadarGroundMap binding. Added: 2026-04-10."""
+
+    def test_class_exists(self):
+        """RadarGroundMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "RadarGroundMap"))
+
+    def test_inherits_camera_ground_map(self):
+        """RadarGroundMap is a subclass of CameraGroundMap."""
+        self.assertTrue(issubclass(ip.RadarGroundMap, ip.CameraGroundMap))
+
+    def test_has_expected_methods(self):
+        """RadarGroundMap exposes set_focal_plane, set_ground, sigma and wavelength methods."""
+        self.assertTrue(hasattr(ip.RadarGroundMap, "set_focal_plane"))
+        self.assertTrue(hasattr(ip.RadarGroundMap, "set_ground"))
+        self.assertTrue(hasattr(ip.RadarGroundMap, "set_range_sigma"))
+        self.assertTrue(hasattr(ip.RadarGroundMap, "range_sigma"))
+        self.assertTrue(hasattr(ip.RadarGroundMap, "set_doppler_sigma"))
+        self.assertTrue(hasattr(ip.RadarGroundMap, "y_scale"))
+        self.assertTrue(hasattr(ip.RadarGroundMap, "wave_length"))
+
+
+class RadarPulseMapApiTest(unittest.TestCase):
+    """Tests for RadarPulseMap binding. Added: 2026-04-10."""
+
+    def test_class_exists(self):
+        """RadarPulseMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "RadarPulseMap"))
+
+    def test_inherits_camera_detector_map(self):
+        """RadarPulseMap is a subclass of CameraDetectorMap."""
+        self.assertTrue(issubclass(ip.RadarPulseMap, ip.CameraDetectorMap))
+
+    def test_has_expected_methods(self):
+        """RadarPulseMap exposes start_time, line_rate, and axis-dependent methods."""
+        self.assertTrue(hasattr(ip.RadarPulseMap, "set_start_time"))
+        self.assertTrue(hasattr(ip.RadarPulseMap, "set_line_rate"))
+        self.assertTrue(hasattr(ip.RadarPulseMap, "line_rate"))
+        self.assertTrue(hasattr(ip.RadarPulseMap, "set_x_axis_time_dependent"))
 
 
 if __name__ == "__main__":

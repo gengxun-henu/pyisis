@@ -1,8 +1,8 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ReseauDistortionMap,"Spice, Instruments, and Cameras",isis/src/base/objs/ReseauDistortionMap/ReseauDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,相机模型/Spice 依赖
+ReseauDistortionMap,"Spice, Instruments, and Cameras",reference/upstream_isis/src/base/objs/ReseauDistortionMap/ReseauDistortionMap.h,src/bind_camera_maps.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造与 focal-plane 方法；相机模型/Spice 依赖
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ReseauDistortionMap,isis_pybind.ReseauDistortionMap,N,Python class symbol not found in current binding files; 相机模型/Spice 依赖
-Construction/Enum,ReseauDistortionMap(),isis_pybind.ReseauDistortionMap(),N,相机模型/Spice 依赖
-Mutation/Configuration,"virtual bool SetFocalPlane(const double dx, const double dy)",isis_pybind.ReseauDistortionMap.set_focal_plane,N,相机模型/Spice 依赖
-Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(const double ux, const double uy)",isis_pybind.ReseauDistortionMap.set_undistorted_focal_plane,N,相机模型/Spice 依赖
+Class Symbol,ReseauDistortionMap,isis_pybind.ReseauDistortionMap,Y,2026-04-10
+Construction/Enum,"ReseauDistortionMap(Camera*, Pvl&, const QString&)",isis_pybind.ReseauDistortionMap(),Y,2026-04-10; filename arg is str in Python
+Mutation/Configuration,"virtual bool SetFocalPlane(const double dx, const double dy)",isis_pybind.ReseauDistortionMap.set_focal_plane,Y,2026-04-10
+Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(const double ux, const double uy)",isis_pybind.ReseauDistortionMap.set_undistorted_focal_plane,Y,2026-04-10

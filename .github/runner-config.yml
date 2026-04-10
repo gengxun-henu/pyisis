@@ -7,7 +7,7 @@
 # - Switch back to `self-hosted-http` only when plain direct HTTPS becomes stable enough
 #   for unattended automation.
 
-active_profile: github-hosted
+active_profile: self-hosted-watt
 
 # Shared local fallback used by self-hosted runners
 fallback_conda_prefix: /home/gengxun/miniconda3/envs/asp360_new

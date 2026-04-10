@@ -9,6 +9,7 @@
  *   - isis/src/base/objs/Calculator/Calculator.h
  *   - isis/src/base/objs/Affine/Affine.h
  *   - isis/src/base/objs/BasisFunction/BasisFunction.h
+ *   - reference/upstream_isis/src/base/objs/FourierTransform/FourierTransform.h
  *   - isis/src/base/objs/InfixToPostfix/InfixToPostfix.h
  *   - isis/src/base/objs/CubeInfixToPostfix/CubeInfixToPostfix.h
  *   - isis/src/base/objs/InlineInfixToPostfix/InlineInfixToPostfix.h
@@ -18,18 +19,22 @@
  * Updated: 2026-04-09  Geng Xun exposed Ransac helper functions via a Python math submodule.
  * Updated: 2026-04-09  Geng Xun added SurfaceModel binding (bivariate polynomial surface fitting)
  * Updated: 2026-04-09  Geng Xun added MaximumLikelihoodWFunctions binding (robust estimation).
- * Purpose: Expose Calculator, Affine, BasisFunction, InfixToPostfix,
+ * Updated: 2026-04-10  Geng Xun added FourierTransform binding (FFT/IFFT on complex vectors).
+ * Purpose: Expose Calculator, Affine, BasisFunction, FourierTransform, InfixToPostfix,
  *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, Ransac helpers, SurfaceModel,
  *          and MaximumLikelihoodWFunctions classes to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+#include <pybind11/complex.h>
 #include <cmath>
+#include <complex>
 
 #include "Calculator.h"
 #include "Affine.h"
 #include "BasisFunction.h"
+#include "FourierTransform.h"
 #include "InfixToPostfix.h"
 #include "CubeInfixToPostfix.h"
 #include "InlineInfixToPostfix.h"
@@ -558,4 +563,38 @@ void bind_base_math(py::module_ &m)
                     ", tweaking_constant=" +
                     std::to_string(self.tweakingConstant()) + ")";
            });
+
+  // ── FourierTransform ───────────────────────────────────────────────────────
+  // Added: 2026-04-10 - expose Isis::FourierTransform FFT/IFFT utility.
+  py::class_<Isis::FourierTransform>(m, "FourierTransform")
+      .def(py::init<>(), "Construct a FourierTransform object.")
+      .def("transform",
+           &Isis::FourierTransform::Transform,
+           py::arg("input"),
+           "Apply the forward Fourier transform. Input and output are "
+           "lists of complex numbers (real, imag).")
+      .def("inverse",
+           &Isis::FourierTransform::Inverse,
+           py::arg("input"),
+           "Apply the inverse Fourier transform. Input and output are "
+           "lists of complex numbers (real, imag).")
+      .def("is_power_of_two",
+           &Isis::FourierTransform::IsPowerOfTwo,
+           py::arg("n"),
+           "Return True if n is a power of two.")
+      .def("lg",
+           &Isis::FourierTransform::lg,
+           py::arg("n"),
+           "Return floor(log2(n)).")
+      .def("bit_reverse",
+           &Isis::FourierTransform::BitReverse,
+           py::arg("n"), py::arg("x"),
+           "Bit-reverse x in a field of n bits.")
+      .def("next_power_of_two",
+           &Isis::FourierTransform::NextPowerOfTwo,
+           py::arg("n"),
+           "Return the smallest power of two >= n.")
+      .def("__repr__", [](const Isis::FourierTransform &) {
+            return "FourierTransform()";
+          });
 }

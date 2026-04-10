@@ -1245,3 +1245,61 @@ Queue document created: `pybind_rollout_classes_20260409.md`
 ### Validation status
 - Build environment not available in sandbox; requires CI/asp360_new interpreter.
 - All bindings reviewed for correctness against upstream `.h` and `.cpp`.
+
+---
+
+## 2026-04-10 第五阶段 Rollout 第1批（5 类）
+
+### 活跃队列
+1. Pixel — 已完成
+2. ID — 已完成
+3. EndianSwapper — 已完成（部分，ExportFloat/Uint32/LongLong 未暴露）
+4. TextFile — 已完成（部分，raw-pointer 与无返回值 GetLine 重载未暴露）
+5. FourierTransform — 已完成
+
+### 附加：台账修正（已绑定但状态标注错误）
+- QuickFilter — 已于 2026-03-26 绑定，现修正 todo_pybind11.csv 与 methods_inventory_summary.csv 状态
+- GaussianStretch — 已于 2026-03-26 绑定，现修正状态
+- Stretch — 已于 2026-03-26 绑定，现修正状态
+- Kernels — 已于 2026-03-26 绑定，现修正状态
+
+### Class 1: Pixel (已转换)
+- Added `py::class_<Isis::Pixel>` binding in `src/base/bind_base_utility.cpp`.
+- Exposed: default constructor, (sample, line, band, dn) constructor, line/sample/band/dn accessors, instance conversion methods (to_8bit, to_16bit, to_16ubit, to_32bit, to_double, to_float, to_string), instance predicates (is_special, is_valid, is_null, is_high, is_low, is_hrs, is_his, is_lis, is_lrs), static conversion helpers (to_8bit_value, to_16bit_value, to_32bit_value, to_double_from_float, to_string_value), static predicates (is_special_value, is_valid_value, is_null_value, is_high_value, is_low_value, is_hrs_value, is_his_value, is_lis_value, is_lrs_value), __repr__.
+- Added `PixelUnitTest` class to `tests/unitTest/utility_unit_test.py` with 10 focused tests.
+- Exported `Pixel` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_pixel_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 2: ID (已转换)
+- Added `py::class_<Isis::ID>` binding in `src/base/bind_base_utility.cpp`.
+- Exposed: constructor(name, basenum=1), next() -> str, __repr__.
+- Added `IDUnitTest` class to `tests/unitTest/utility_unit_test.py` with 5 focused tests.
+- Exported `ID` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_id_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 3: EndianSwapper (已转换，部分)
+- Added `py::class_<Isis::EndianSwapper>` binding in `src/base/bind_base_utility.cpp`.
+- Exposed: constructor(endian), will_swap(), swap_double/swap_float/swap_int/swap_short/swap_unsigned_short (via Python bytes interface), __repr__.
+- Not exposed: ExportFloat (returns int, not float output), Uint32_t, LongLongInt (low Python utility).
+- Added `EndianSwapperUnitTest` class to `tests/unitTest/utility_unit_test.py` with 7 focused tests.
+- Exported `EndianSwapper` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_endian_swapper_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 4: TextFile (已转换，部分)
+- Added `py::class_<Isis::TextFile>` binding in `src/base/bind_base_utility.cpp`.
+- Exposed: default constructor, constructor(filename, openmode, extension), open, open_chk, rewind, close, get_file (list-based), put_file (list-based), get_line (returns str or None), get_line_no_filter, put_line, put_line_comment, get_comment, get_new_line, set_comment, set_new_line, line_count, size, __repr__.
+- Not exposed: raw-pointer constructors, raw-pointer GetFile/PutFile overloads, stateful GetLine(bool) overloads without output parameter.
+- Added `TextFileUnitTest` class to `tests/unitTest/utility_unit_test.py` with 9 focused tests.
+- Exported `TextFile` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_text_file_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 5: FourierTransform (已转换)
+- Added `py::class_<Isis::FourierTransform>` binding in `src/base/bind_base_math.cpp`.
+- Exposed: default constructor, transform (vector<complex<double>>), inverse (vector<complex<double>>), is_power_of_two, lg, bit_reverse, next_power_of_two, __repr__.
+- Added `FourierTransformUnitTest` class to `tests/unitTest/math_unit_test.py` with 8 focused tests.
+- Exported `FourierTransform` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_fourier_transform_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Validation status
+- Build environment not available in sandbox; requires CI/asp360_new interpreter.
+- All bindings reviewed for correctness against upstream `.h` and `.cpp`.

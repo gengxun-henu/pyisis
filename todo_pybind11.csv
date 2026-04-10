@@ -285,7 +285,7 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",SpiceRotation,未转换,
 "Spice, Instruments, and Cameras",Target,已转换,2026-04-09 已在 src/base/bind_base_target.cpp 补齐 Target(Pvl&) 与 NAIF/frame/body-rotation accessor，并在 src/bind_camera.cpp 新增 Camera.target()；显式 Spice* API 仍因无 Python Spice 绑定而保留未覆盖
 "Spice, Instruments, and Cameras",VariableLineScanCameraDetectorMap,未转换,
-Statistics,FourierTransform,未转换,
+Statistics,FourierTransform,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露 FourierTransform 构造/transform/inverse/helper 方法；focused 单测在 tests/unitTest/math_unit_test.py；smoke 已补符号
 Statistics,GaussianDistribution,已转换,
 Statistics,GroupedStatistics,已转换,
 Statistics,Histogram,已转换,
@@ -293,7 +293,7 @@ Statistics,ImageHistogram,已转换,
 Statistics,MultivariateStatistics,已转换,
 Statistics,OverlapStatistics,未转换,
 Statistics,PrincipalComponentAnalysis,未转换,
-Statistics,QuickFilter,未转换,
+Statistics,QuickFilter,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露完整 QuickFilter 接口（add_line/remove_line/average/variance/count/set_min_max 等）；focused 单测在 tests/unitTest/filters_unit_test.py
 Statistics,StatCumProbDistDynCalc,未转换,Qt 类型/信号槽较多
 Statistics,Statistics,已转换,Qt 类型/信号槽较多
 Statistics,VecFilter,已转换,
@@ -330,26 +330,26 @@ Utility,CollectorMap,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 
 Utility,CubeStretch,已转换,2026-03-26 已在 bind_base_filters.cpp 暴露构造/元数据/相等比较接口并补充单测
 Utility,Displacement,已转换,
 Utility,Distance,已转换,
-Utility,EndianSwapper,未转换,
+Utility,EndianSwapper,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 EndianSwapper 构造/will_swap/swap_double/swap_float/swap_int/swap_short/swap_unsigned_short；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Utility,ExportPdsTable,未转换,
-Utility,GaussianStretch,未转换,
+Utility,GaussianStretch,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露 GaussianStretch 构造与 map 方法；focused 单测在 tests/unitTest/filters_unit_test.py
 Utility,GSLUtility,未转换,
-Utility,ID,未转换,
+Utility,ID,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 ID 构造与 next() 方法；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Utility,IException,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 补 IExceptionErrorType enum；IException 本体通过 py::register_exception 暴露为 Python 异常类
 Utility,ImportPdsTable,未转换,
-Utility,Kernels,未转换,
+Utility,Kernels,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露 Kernels 构造与核文件管理方法；focused 单测在 tests/unitTest/filters_unit_test.py
 Utility,Latitude,已转换,
 Utility,LineEquation,已转换,2026-03-30 已在 bind_base_utility.cpp 暴露默认构造/二点构造/add_point/slope/intercept/points/defined/have_slope/have_intercept 接口并补充单测
 Utility,Longitude,已转换,
 Utility,Message,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 以 `ip.Message` 子模块暴露全部标准消息模板 helper，并补 focused 单测与 smoke 覆盖
-Utility,Pixel,未转换,
+Utility,Pixel,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 Pixel 构造/accessors/转换方法/静态 special-pixel 谓词；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Utility,PolygonTools,未转换,
 Utility,Progress,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 完成 py::class_ 绑定；focused 单测在 tests/unitTest/progress_unit_test.py；smoke 已补符号
 Utility,Resource,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 完成 PVL/name 核心接口绑定（跳过 GisGeometry/QVariant asset）；focused 单测在 tests/unitTest/resource_unit_test.py；smoke 已补符号
 Utility,Selection,未转换,抽象基类/纯虚接口
 Utility,SparseBlockMatrix,未转换,
-Utility,Stretch,未转换,抽象基类/纯虚接口
-Utility,TextFile,未转换,
+Utility,Stretch,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露 Stretch 完整接口（AddPair/Map/Parse/Load/Save/特殊像素 setter）；focused 单测在 tests/unitTest/filters_unit_test.py
+Utility,TextFile,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 TextFile 构造/open/close/get_file/put_file/get_line/put_line/line_count/size 方法；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Apollo,ApolloMetricCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Apollo,ApolloMetricDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Apollo,ApolloPanoramicCamera,已转换,"2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 residual/CK/SPK 接口；intOriResidualsReport 通过 pybind wrapper 规避上游未定义符号"

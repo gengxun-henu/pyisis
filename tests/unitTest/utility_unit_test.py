@@ -9,6 +9,7 @@ Updated: 2026-04-09  Geng Xun added CollectorMap focused coverage for unique and
 Updated: 2026-04-09  Geng Xun added Plugin focused coverage for runtime plugin address resolution and failure paths.
 Updated: 2026-04-08  Geng Xun added Environment regression coverage alongside existing Column and LineEquation helpers.
 Updated: 2026-04-09  Geng Xun added IString and free-function helpers (to_bool/to_int/to_double/to_string) unit tests.
+Updated: 2026-04-10  Geng Xun added Pixel, ID, EndianSwapper, and TextFile focused unit tests.
 """
 import os
 import tempfile
@@ -751,6 +752,286 @@ class IStringUnitTest(unittest.TestCase):
         s = ip.IString("hello")
         self.assertTrue(s == "hello")
         self.assertFalse(s == "world")
+
+
+class PixelUnitTest(unittest.TestCase):
+    """Focused unit tests for the Pixel class binding. Added: 2026-04-10."""
+
+    def test_default_constructor(self):
+        """Default Pixel has zero coordinates and NULL DN."""
+        p = ip.Pixel()
+        self.assertIsInstance(p, ip.Pixel)
+        self.assertEqual(p.line(), 0)
+        self.assertEqual(p.sample(), 0)
+        self.assertEqual(p.band(), 0)
+
+    def test_explicit_constructor(self):
+        """Pixel(sample, line, band, dn) stores correct values."""
+        p = ip.Pixel(3, 7, 2, 12.5)
+        self.assertEqual(p.sample(), 3)
+        self.assertEqual(p.line(), 7)
+        self.assertEqual(p.band(), 2)
+        self.assertAlmostEqual(p.dn(), 12.5)
+
+    def test_repr(self):
+        """repr(Pixel) includes class name and coordinates."""
+        p = ip.Pixel(1, 2, 1, 5.0)
+        r = repr(p)
+        self.assertIn("Pixel", r)
+        self.assertIn("sample=1", r)
+        self.assertIn("line=2", r)
+
+    def test_is_valid_normal_dn(self):
+        """Normal DN is valid and not special."""
+        p = ip.Pixel(1, 1, 1, 100.0)
+        self.assertTrue(p.is_valid())
+        self.assertFalse(p.is_special())
+
+    def test_static_is_valid(self):
+        """Static is_valid_value / is_special_value work on raw double."""
+        self.assertTrue(ip.Pixel.is_valid_value(50.0))
+        self.assertFalse(ip.Pixel.is_special_value(50.0))
+
+    def test_default_pixel_is_null(self):
+        """Default Pixel (DN=NULL) reports is_null() and is_special()."""
+        p = ip.Pixel()
+        self.assertTrue(p.is_null())
+        self.assertTrue(p.is_special())
+        self.assertFalse(p.is_valid())
+
+    def test_to_string_instance(self):
+        """to_string() returns a non-empty string for a valid DN."""
+        p = ip.Pixel(1, 1, 1, 42.0)
+        s = p.to_string()
+        self.assertIsInstance(s, str)
+        self.assertGreater(len(s), 0)
+
+    def test_static_to_string(self):
+        """Static to_string_value() works on a raw double."""
+        s = ip.Pixel.to_string_value(42.0)
+        self.assertIsInstance(s, str)
+        self.assertGreater(len(s), 0)
+
+    def test_to_float_instance(self):
+        """to_float() on an instance returns a float."""
+        p = ip.Pixel(1, 1, 1, 7.5)
+        self.assertAlmostEqual(p.to_float(), 7.5, places=3)
+
+    def test_to_double_instance(self):
+        """to_double() on an instance returns the DN."""
+        p = ip.Pixel(1, 1, 1, 3.14)
+        self.assertAlmostEqual(p.to_double(), 3.14)
+
+
+class IDUnitTest(unittest.TestCase):
+    """Focused unit tests for the ID class binding. Added: 2026-04-10."""
+
+    def test_default_start(self):
+        """ID with '???' format starts at 1 and increments."""
+        id_gen = ip.ID("img???")
+        first = id_gen.next()
+        self.assertIn("1", first)
+
+    def test_sequential_ids(self):
+        """next() returns sequentially numbered IDs."""
+        id_gen = ip.ID("item?", 10)
+        first = id_gen.next()
+        second = id_gen.next()
+        self.assertIn("10", first)
+        self.assertIn("11", second)
+
+    def test_custom_base(self):
+        """ID starts at the specified base number."""
+        id_gen = ip.ID("obj?????", 100)
+        result = id_gen.next()
+        self.assertIn("100", result)
+
+    def test_no_placeholder_raises(self):
+        """ID constructor raises when the template has no '?' placeholder."""
+        with self.assertRaises(Exception):
+            ip.ID("noquestion")
+
+    def test_repr(self):
+        """repr(ID) includes 'ID'."""
+        id_gen = ip.ID("x?")
+        r = repr(id_gen)
+        self.assertIn("ID", r)
+
+
+class EndianSwapperUnitTest(unittest.TestCase):
+    """Focused unit tests for the EndianSwapper class binding. Added: 2026-04-10."""
+
+    def test_construction_lsb(self):
+        """EndianSwapper('LSB') constructs without error."""
+        es = ip.EndianSwapper("LSB")
+        self.assertIsInstance(es, ip.EndianSwapper)
+
+    def test_construction_msb(self):
+        """EndianSwapper('MSB') constructs without error."""
+        es = ip.EndianSwapper("MSB")
+        self.assertIsInstance(es, ip.EndianSwapper)
+
+    def test_will_swap_bool(self):
+        """will_swap() returns a boolean."""
+        es = ip.EndianSwapper("LSB")
+        self.assertIsInstance(es.will_swap(), bool)
+
+    def test_repr(self):
+        """repr(EndianSwapper) includes class name."""
+        es = ip.EndianSwapper("LSB")
+        r = repr(es)
+        self.assertIn("EndianSwapper", r)
+
+    def test_swap_double_native(self):
+        """swap_double with native-endian bytes returns the correct value."""
+        import struct
+        import sys
+        native = '<d' if sys.byteorder == 'little' else '>d'
+        value = 3.14159
+        buf = struct.pack(native, value)
+        # LSB swapper on an LSB machine: no swap should occur, value is preserved
+        es = ip.EndianSwapper("LSB")
+        result = es.swap_double(buf)
+        self.assertIsInstance(result, float)
+        if sys.byteorder == 'little':
+            # Native machine is LSB; LSB swapper should NOT swap, preserving value
+            self.assertAlmostEqual(result, value, places=5)
+
+    def test_swap_double_cross_endian(self):
+        """swap_double on a MSB swapper correctly reverses LSB-encoded bytes."""
+        import struct
+        import sys
+        if sys.byteorder != 'little':
+            self.skipTest("Cross-endian test only runs on little-endian machines")
+        value = 1.0
+        # Pack as big-endian
+        buf = struct.pack('>d', value)
+        # MSB swapper on LSB machine: should swap bytes to recover little-endian 1.0
+        es = ip.EndianSwapper("MSB")
+        result = es.swap_double(buf)
+        self.assertIsInstance(result, float)
+        self.assertAlmostEqual(result, value, places=10)
+
+    def test_swap_short_roundtrip(self):
+        """swap_short on a native 2-byte buffer returns the correct integer."""
+        import struct
+        import sys
+        native = '<h' if sys.byteorder == 'little' else '>h'
+        buf = struct.pack(native, 42)
+        es = ip.EndianSwapper("LSB")
+        result = es.swap_short(buf)
+        self.assertIsInstance(result, int)
+        if sys.byteorder == 'little':
+            # LSB swapper on LSB machine: no swap, value preserved
+            self.assertEqual(result, 42)
+
+    def test_swap_double_too_small_raises(self):
+        """swap_double with insufficient buffer raises ValueError."""
+        es = ip.EndianSwapper("LSB")
+        with self.assertRaises((ValueError, Exception)):
+            es.swap_double(b'\x00\x01')
+
+
+class TextFileUnitTest(unittest.TestCase):
+    """Focused unit tests for the TextFile class binding. Added: 2026-04-10."""
+
+    def setUp(self):
+        """Create a temporary file for tests."""
+        self.tmp = tempfile.NamedTemporaryFile(
+            mode='w', suffix='.txt', delete=False)
+        self.tmp.write("line one\nline two\n# comment\nline three\n")
+        self.tmp.close()
+        self.tmp_path = self.tmp.name
+
+    def tearDown(self):
+        """Remove temporary file."""
+        if os.path.exists(self.tmp_path):
+            os.remove(self.tmp_path)
+
+    def test_default_constructor(self):
+        """Default TextFile constructs without error."""
+        tf = ip.TextFile()
+        self.assertIsInstance(tf, ip.TextFile)
+
+    def test_open_and_close(self):
+        """TextFile can open a file and close it."""
+        tf = ip.TextFile()
+        tf.open(self.tmp_path, "input")
+        self.assertTrue(tf.open_chk())
+        tf.close()
+
+    def test_constructor_with_filename(self):
+        """Constructor with filename opens the file immediately."""
+        tf = ip.TextFile(self.tmp_path, "input")
+        self.assertTrue(tf.open_chk())
+        tf.close()
+
+    def test_get_file_all_lines(self):
+        """get_file() returns all non-comment lines."""
+        tf = ip.TextFile(self.tmp_path, "input")
+        lines = tf.get_file(skip_comments=True)
+        tf.close()
+        self.assertIsInstance(lines, list)
+        self.assertGreater(len(lines), 0)
+        for l in lines:
+            self.assertFalse(l.startswith("#"))
+
+    def test_get_file_no_skip_comments(self):
+        """get_file(skip_comments=False) includes comment lines."""
+        tf = ip.TextFile(self.tmp_path, "input")
+        lines = tf.get_file(skip_comments=False)
+        tf.close()
+        comment_lines = [l for l in lines if l.startswith("#")]
+        self.assertGreater(len(comment_lines), 0)
+
+    def test_get_line(self):
+        """get_line() returns lines one at a time, None at EOF."""
+        tf = ip.TextFile(self.tmp_path, "input")
+        first = tf.get_line(skip_comments=True)
+        self.assertIsNotNone(first)
+        self.assertIsInstance(first, str)
+        tf.close()
+
+    def test_line_count(self):
+        """line_count() returns a positive integer."""
+        tf = ip.TextFile(self.tmp_path, "input")
+        count = tf.line_count()
+        tf.close()
+        self.assertGreater(count, 0)
+
+    def test_size(self):
+        """size() returns a positive byte count."""
+        tf = ip.TextFile(self.tmp_path, "input")
+        sz = tf.size()
+        tf.close()
+        self.assertGreater(sz, 0)
+
+    def test_write_and_read_back(self):
+        """put_line / get_line round-trip through a temporary file."""
+        out_tmp = tempfile.NamedTemporaryFile(
+            suffix='.txt', delete=False)
+        out_tmp.close()
+        out_path = out_tmp.name
+        try:
+            tf_out = ip.TextFile(out_path, "output")
+            tf_out.put_line("hello world")
+            tf_out.put_line("second line")
+            tf_out.close()
+
+            tf_in = ip.TextFile(out_path, "input")
+            first = tf_in.get_line(skip_comments=True)
+            tf_in.close()
+            self.assertIsNotNone(first)
+            self.assertIn("hello world", first)
+        finally:
+            if os.path.exists(out_path):
+                os.remove(out_path)
+
+    def test_repr(self):
+        """repr(TextFile) includes class name."""
+        tf = ip.TextFile()
+        r = repr(tf)
+        self.assertIn("TextFile", r)
 
 
 if __name__ == '__main__':

@@ -3,8 +3,9 @@ Unit tests for ISIS geometry helper bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-09
+Last Modified: 2026-04-10
 Updated: 2026-04-09  Geng Xun fixed Intercept SurfacePoint regression expectations to match NAIF kilometer coordinates
+Updated: 2026-04-10  Geng Xun added Area3D binding focused unit tests
 """
 
 import math
@@ -160,6 +161,93 @@ class GeometryUnitTest(unittest.TestCase):
         self.assertAlmostEqual(separation.degrees(), 180.0, places=8)
         emission = intercept.emission()
         self.assertTrue(math.isfinite(emission.degrees()))
+
+
+class Area3DUnitTest(unittest.TestCase):
+    """Focused unit tests for Area3D binding. Added: 2026-04-10."""
+
+    def _make_area(self, x0=0.0, y0=0.0, z0=0.0, w=1.0, h=1.0, d=1.0):
+        """Helper: create an Area3D from origin + dimensions."""
+        start_x = ip.Displacement(x0, ip.Displacement.Units.meters)
+        start_y = ip.Displacement(y0, ip.Displacement.Units.meters)
+        start_z = ip.Displacement(z0, ip.Displacement.Units.meters)
+        width   = ip.Distance(w, ip.Distance.Units.meters)
+        height  = ip.Distance(h, ip.Distance.Units.meters)
+        depth   = ip.Distance(d, ip.Distance.Units.meters)
+        return ip.Area3D(start_x, start_y, start_z, width, height, depth)
+
+    def test_default_constructor_is_invalid(self):
+        """Default-constructed Area3D reports is_valid() == False."""
+        area = ip.Area3D()
+        self.assertFalse(area.is_valid())
+
+    def test_construct_with_dimensions(self):
+        """Area3D constructed with positive dimensions is valid."""
+        area = self._make_area()
+        self.assertTrue(area.is_valid())
+
+    def test_get_width(self):
+        """get_width returns the Distance passed to constructor."""
+        area = self._make_area(w=5.0)
+        self.assertAlmostEqual(area.get_width().meters(), 5.0)
+
+    def test_get_height(self):
+        """get_height returns the Distance passed to constructor."""
+        area = self._make_area(h=3.0)
+        self.assertAlmostEqual(area.get_height().meters(), 3.0)
+
+    def test_get_depth(self):
+        """get_depth returns the Distance passed to constructor."""
+        area = self._make_area(d=7.0)
+        self.assertAlmostEqual(area.get_depth().meters(), 7.0)
+
+    def test_get_start_x(self):
+        """get_start_x returns the Displacement passed to constructor."""
+        area = self._make_area(x0=2.0)
+        self.assertAlmostEqual(area.get_start_x().meters(), 2.0)
+
+    def test_set_and_get_width(self):
+        """set_width updates the width Distance."""
+        area = self._make_area(w=1.0)
+        area.set_width(ip.Distance(10.0, ip.Distance.Units.meters))
+        self.assertAlmostEqual(area.get_width().meters(), 10.0)
+
+    def test_intersect_with_overlapping_area(self):
+        """Two overlapping areas produce a non-null intersection."""
+        a = self._make_area(x0=0.0, y0=0.0, z0=0.0, w=2.0, h=2.0, d=2.0)
+        b = self._make_area(x0=1.0, y0=1.0, z0=1.0, w=2.0, h=2.0, d=2.0)
+        intersection = a.intersect(b)
+        self.assertTrue(intersection.is_valid())
+
+    def test_intersect_non_overlapping_is_invalid(self):
+        """Non-overlapping areas produce an invalid intersection."""
+        a = self._make_area(x0=0.0, y0=0.0, z0=0.0, w=1.0, h=1.0, d=1.0)
+        b = self._make_area(x0=5.0, y0=5.0, z0=5.0, w=1.0, h=1.0, d=1.0)
+        intersection = a.intersect(b)
+        self.assertFalse(intersection.is_valid())
+
+    def test_copy_constructor(self):
+        """Area3D copy constructor produces an equal independent copy."""
+        a = self._make_area(w=4.0)
+        b = ip.Area3D(a)
+        self.assertAlmostEqual(b.get_width().meters(), 4.0)
+
+    def test_end_constructor(self):
+        """Area3D constructed with end displacements is valid."""
+        start_x = ip.Displacement(0.0, ip.Displacement.Units.meters)
+        start_y = ip.Displacement(0.0, ip.Displacement.Units.meters)
+        start_z = ip.Displacement(0.0, ip.Displacement.Units.meters)
+        end_x   = ip.Displacement(2.0, ip.Displacement.Units.meters)
+        end_y   = ip.Displacement(3.0, ip.Displacement.Units.meters)
+        end_z   = ip.Displacement(4.0, ip.Displacement.Units.meters)
+        area = ip.Area3D(start_x, start_y, start_z, end_x, end_y, end_z)
+        self.assertTrue(area.is_valid())
+
+    def test_repr(self):
+        """repr of valid Area3D contains 'Area3D'."""
+        area = self._make_area()
+        r = repr(area)
+        self.assertIn("Area3D", r)
 
 
 if __name__ == "__main__":

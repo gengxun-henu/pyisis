@@ -14,7 +14,9 @@
  * Created: 2026-03-24
  * Updated: 2026-04-08  Geng Xun added Centroid selection bindings for Chip-based pattern tests.
  * Updated: 2026-04-09  Geng Xun added MinimumDifference binding.
- * Purpose: Expose Chip, AutoReg, MaximumCorrelation, MinimumDifference, and Centroid pattern matching classes to Python via pybind11.
+ * Updated: 2026-04-10  Geng Xun added Gruen and AdaptiveGruen bindings (AutoReg subclasses).
+ * Purpose: Expose Chip, AutoReg, MaximumCorrelation, MinimumDifference, Gruen, AdaptiveGruen,
+ *          and Centroid pattern matching classes to Python via pybind11.
  */
 
 #include <limits>
@@ -22,9 +24,11 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "AdaptiveGruen.h"
 #include "Chip.h"
 #include "Centroid.h"
 #include "AutoReg.h"
+#include "Gruen.h"
 #include "MaximumCorrelation.h"
 #include "MinimumDifference.h"
 #include "Cube.h"
@@ -396,4 +400,45 @@ void bind_base_pattern(py::module_ &m) {
         return "MinimumDifference(status=" + status + ", " +
                "goodness_of_fit=" + std::to_string(self.GoodnessOfFit()) + ")";
       });
+
+  // ── Gruen ──────────────────────────────────────────────────────────────────
+  // Added: 2026-04-10 - expose Isis::Gruen adaptive pattern matching algorithm.
+  // Exposes constructor, inherited AutoReg interface, and Gruen-specific
+  // constraint accessors. GruenTypes-specific return types (AffineRadio, etc.)
+  // are not exposed; their numeric scalar getters are exposed directly.
+  py::class_<Isis::Gruen, Isis::AutoReg>(m, "Gruen")
+      .def(py::init<Isis::Pvl &>(),
+           py::arg("pvl"),
+           py::keep_alive<1, 2>(),
+           "Construct a Gruen algorithm with PVL configuration.")
+      .def("ideal_fit",
+           [](const Isis::Gruen &) { return 0.0; },
+           "Return the ideal fit value (0.0 = perfect match).")
+      .def("get_spice_constraint",
+           &Isis::Gruen::getSpiceConstraint,
+           "Return the SPICE tolerance constraint from the config.")
+      .def("get_affine_constraint",
+           &Isis::Gruen::getAffineConstraint,
+           "Return the Affine tolerance constraint from the config.")
+      .def("__repr__", [](const Isis::Gruen &self) {
+            std::string status = self.Success() ? "Success" : "Failed";
+            return "Gruen(status=" + status +
+                   ", goodness_of_fit=" + std::to_string(self.GoodnessOfFit()) + ")";
+          });
+
+  // ── AdaptiveGruen ──────────────────────────────────────────────────────────
+  // Added: 2026-04-10 - expose Isis::AdaptiveGruen. Constructor delegates to Gruen.
+  py::class_<Isis::AdaptiveGruen, Isis::Gruen>(m, "AdaptiveGruen")
+      .def(py::init<Isis::Pvl &>(),
+           py::arg("pvl"),
+           py::keep_alive<1, 2>(),
+           "Construct an AdaptiveGruen algorithm with PVL configuration.")
+      .def("ideal_fit",
+           [](const Isis::AdaptiveGruen &) { return 0.0; },
+           "Return the ideal fit value (0.0 = perfect match).")
+      .def("__repr__", [](const Isis::AdaptiveGruen &self) {
+            std::string status = self.Success() ? "Success" : "Failed";
+            return "AdaptiveGruen(status=" + status +
+                   ", goodness_of_fit=" + std::to_string(self.GoodnessOfFit()) + ")";
+          });
 }

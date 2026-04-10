@@ -1245,3 +1245,186 @@ Queue document created: `pybind_rollout_classes_20260409.md`
 ### Validation status
 - Build environment not available in sandbox; requires CI/asp360_new interpreter.
 - All bindings reviewed for correctness against upstream `.h` and `.cpp`.
+
+---
+
+## 2026-04-10 第五阶段 Rollout 第1批（5 类）
+
+### 活跃队列
+1. Pixel — 已完成
+2. ID — 已完成
+3. EndianSwapper — 已完成（部分，ExportFloat/Uint32/LongLong 未暴露）
+4. TextFile — 已完成（部分，raw-pointer 与无返回值 GetLine 重载未暴露）
+5. FourierTransform — 已完成
+
+### 附加：台账修正（已绑定但状态标注错误）
+- QuickFilter — 已于 2026-03-26 绑定，现修正 todo_pybind11.csv 与 methods_inventory_summary.csv 状态
+- GaussianStretch — 已于 2026-03-26 绑定，现修正状态
+- Stretch — 已于 2026-03-26 绑定，现修正状态
+- Kernels — 已于 2026-03-26 绑定，现修正状态
+
+### Class 1: Pixel (已转换)
+- Added `py::class_<Isis::Pixel>` binding in `src/base/bind_base_utility.cpp`.
+- Exposed: default constructor, (sample, line, band, dn) constructor, line/sample/band/dn accessors, instance conversion methods (to_8bit, to_16bit, to_16ubit, to_32bit, to_double, to_float, to_string), instance predicates (is_special, is_valid, is_null, is_high, is_low, is_hrs, is_his, is_lis, is_lrs), static conversion helpers (to_8bit_value, to_16bit_value, to_32bit_value, to_double_from_float, to_string_value), static predicates (is_special_value, is_valid_value, is_null_value, is_high_value, is_low_value, is_hrs_value, is_his_value, is_lis_value, is_lrs_value), __repr__.
+- Added `PixelUnitTest` class to `tests/unitTest/utility_unit_test.py` with 10 focused tests.
+- Exported `Pixel` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_pixel_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 2: ID (已转换)
+- Added `py::class_<Isis::ID>` binding in `src/base/bind_base_utility.cpp`.
+- Exposed: constructor(name, basenum=1), next() -> str, __repr__.
+- Added `IDUnitTest` class to `tests/unitTest/utility_unit_test.py` with 5 focused tests.
+- Exported `ID` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_id_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 3: EndianSwapper (已转换，部分)
+- Added `py::class_<Isis::EndianSwapper>` binding in `src/base/bind_base_utility.cpp`.
+- Exposed: constructor(endian), will_swap(), swap_double/swap_float/swap_int/swap_short/swap_unsigned_short (via Python bytes interface), __repr__.
+- Not exposed: ExportFloat (returns int, not float output), Uint32_t, LongLongInt (low Python utility).
+- Added `EndianSwapperUnitTest` class to `tests/unitTest/utility_unit_test.py` with 7 focused tests.
+- Exported `EndianSwapper` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_endian_swapper_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 4: TextFile (已转换，部分)
+- Added `py::class_<Isis::TextFile>` binding in `src/base/bind_base_utility.cpp`.
+- Exposed: default constructor, constructor(filename, openmode, extension), open, open_chk, rewind, close, get_file (list-based), put_file (list-based), get_line (returns str or None), get_line_no_filter, put_line, put_line_comment, get_comment, get_new_line, set_comment, set_new_line, line_count, size, __repr__.
+- Not exposed: raw-pointer constructors, raw-pointer GetFile/PutFile overloads, stateful GetLine(bool) overloads without output parameter.
+- Added `TextFileUnitTest` class to `tests/unitTest/utility_unit_test.py` with 9 focused tests.
+- Exported `TextFile` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_text_file_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 5: FourierTransform (已转换)
+- Added `py::class_<Isis::FourierTransform>` binding in `src/base/bind_base_math.cpp`.
+- Exposed: default constructor, transform (vector<complex<double>>), inverse (vector<complex<double>>), is_power_of_two, lg, bit_reverse, next_power_of_two, __repr__.
+- Added `FourierTransformUnitTest` class to `tests/unitTest/math_unit_test.py` with 8 focused tests.
+- Exported `FourierTransform` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_fourier_transform_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Validation status
+- Build environment not available in sandbox; requires CI/asp360_new interpreter.
+- All bindings reviewed for correctness against upstream `.h` and `.cpp`.
+
+---
+
+## 2026-04-10 第五阶段 Rollout 第2批（5 类）
+
+### 活跃队列
+1. Area3D — 已完成
+2. PrincipalComponentAnalysis — 已完成
+3. Gruen — 已完成（部分：GruenTypes-specific 方法未暴露）
+4. AdaptiveGruen — 已完成
+5. OverlapStatistics — 已完成（部分：Cube 构造函数未暴露；用 PvlObject 构造函数路径）
+
+### Class 6: Area3D (已转换)
+- Added `py::class_<Isis::Area3D>` binding in `src/base/bind_base_geometry.cpp`.
+- Exposed: 3 constructors (default, width/height/depth, start/end corners), copy constructor, 9 get_* accessors (startX/Y/Z, width, height, depth, endX/Y/Z), 9 set_* mutators, 6 move_* methods, is_valid(), intersect(), __repr__.
+- Added `Area3DUnitTest` class to `tests/unitTest/geometry_unit_test.py` with 10 focused tests.
+- Exported `Area3D` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_area3_d_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 7: PrincipalComponentAnalysis (已转换)
+- Added `py::class_<Isis::PrincipalComponentAnalysis>` binding in `src/base/bind_base_math.cpp`.
+- Exposed: constructor(int n), constructor(2D list), add_data(), compute_transform(), transform(), inverse(), transform_matrix(), dimensions(). TNT::Array2D wrapped via 2D Python list adapters.
+- Added `PrincipalComponentAnalysisUnitTest` class to `tests/unitTest/statistics_unit_test.py` with 6 focused tests.
+- Exported `PrincipalComponentAnalysis` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_principal_component_analysis_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 8: Gruen (已转换，部分)
+- Added `py::class_<Isis::Gruen, Isis::AutoReg>` binding in `src/base/bind_base_pattern.cpp`.
+- Exposed: constructor(Pvl&), ideal_fit(), get_spice_constraint(), get_affine_constraint(), __repr__, plus inherited AutoReg interface.
+- Not exposed: GruenTypes-specific methods (AffineRadio, AffineTolerance, MatchPoint); WriteSubsearchChips (file I/O).
+- Added `GruenUnitTest` class to `tests/unitTest/pattern_unit_test.py` with 7 focused tests.
+- Exported `Gruen` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_gruen_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 9: AdaptiveGruen (已转换)
+- Added `py::class_<Isis::AdaptiveGruen, Isis::Gruen>` binding in `src/base/bind_base_pattern.cpp`.
+- Exposed: constructor(Pvl&), ideal_fit(), __repr__, plus inherited Gruen/AutoReg interface.
+- Added `AdaptiveGruenUnitTest` class to `tests/unitTest/pattern_unit_test.py` with 6 focused tests.
+- Exported `AdaptiveGruen` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_adaptive_gruen_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 10: OverlapStatistics (已转换，部分)
+- Added `py::class_<Isis::OverlapStatistics>` binding in `src/bind_statistics.cpp`.
+- Exposed: PvlObject constructor, has_overlap(band), has_any_overlap(), lines(), samples(), bands(), samp_percent(), file_name_x(), file_name_y(), get_mstats(), to_pvl(), __repr__.
+- Not exposed: Cube-based constructor (requires 2 projected Cube objects).
+- Added `OverlapStatisticsUnitTest` class to `tests/unitTest/statistics_unit_test.py` with 3 focused tests.
+- Exported `OverlapStatistics` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Validation status
+- Build environment not available in sandbox; requires CI/asp360_new interpreter.
+- All bindings reviewed for correctness against upstream `.h` and `.cpp`.
+
+---
+
+## 2026-04-10 第五阶段 Rollout 第3批（7 类）
+
+**注：本批处理了 7 个类（5 cameras + 2 distortion maps），全部来自 Dawn 和 Kaguya 任务组。**
+
+### 活跃队列
+11. DawnFcCamera — 已完成
+12. DawnFcDistortionMap — 已完成
+13. DawnVirCamera — 已完成
+14. KaguyaMiCamera — 已完成
+15. KaguyaMiCameraDistortionMap — 已完成
+16. KaguyaTcCamera — 已完成
+17. KaguyaTcCameraDistortionMap — 已完成
+
+### Class 11-13: Dawn mission cameras (已转换)
+- Expanded `DawnFcCamera` bare declaration in `src/mission/bind_mission_cameras.cpp` with ck_frame_id, ck_reference_id, spk_reference_id methods.
+- Added `DawnFcDistortionMap` binding (constructor, SetFocalPlane, SetUndistortedFocalPlane).
+- Expanded `DawnVirCamera` bare declaration with ck_frame_id, ck_reference_id, spk_reference_id.
+- Added `DawnFcDistortionMap` include to binding file.
+- Added `DawnMissionCameraUnitTest` class to `tests/unitTest/extended_mission_camera_unit_test.py`.
+- Exported `DawnFcDistortionMap` in `python/isis_pybind/__init__.py`; smoke symbol checks added.
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 14-17: Kaguya mission cameras (已转换)
+- Expanded `KaguyaMiCamera` and `KaguyaTcCamera` bare declarations with ck_frame_id, ck_reference_id, spk_reference_id.
+- Added `KaguyaMiCameraDistortionMap` binding (constructor, SetDistortion, SetFocalPlane, SetUndistortedFocalPlane).
+- Added `KaguyaTcCameraDistortionMap` binding (constructor, SetFocalPlane, SetUndistortedFocalPlane).
+- Added `KaguyaMiCameraDistortionMap.h` and `KaguyaTcCameraDistortionMap.h` includes.
+- Added `KaguyaMissionCameraUnitTest` class to `tests/unitTest/extended_mission_camera_unit_test.py`.
+- Exported new symbols in `python/isis_pybind/__init__.py`; smoke symbol checks added.
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+---
+
+## 2026-04-10 第五阶段 Rollout 第4批（3 个新绑定 + 大规模台账同步）
+
+**本批完成 3 个新绑定，并修正了 20+ 个已绑定但台账标记仍为"未转换"的类。**
+
+### 活跃队列（新绑定）
+18. PushFrameCameraDetectorMap — 已完成
+19. RollingShutterCameraDetectorMap — 已完成
+20. VariableLineScanCameraDetectorMap — 已完成（构造函数不暴露，因为需要 LineRateChange 向量引用；暴露 set_parent/set_detector/exposure_duration）
+
+### Class 18: PushFrameCameraDetectorMap (已转换)
+- Added `py::class_<Isis::PushFrameCameraDetectorMap, Isis::CameraDetectorMap>` binding in `src/bind_camera_maps.cpp`.
+- Exposed: constructor, set_parent, set_detector, framelet_rate, set_framelet_rate, framelet_offset, set_framelet_offset, framelet, set_band_first_detector_line, get_band_first_detector_line, set_start_time, __repr__.
+- Added `PushFrameCameraDetectorMapSurfaceUnitTest` class to `tests/unitTest/camera_maps_unit_test.py`.
+- Exported in `python/isis_pybind/__init__.py`; smoke check added.
+
+### Class 19: RollingShutterCameraDetectorMap (已转换)
+- Added `py::class_<Isis::RollingShutterCameraDetectorMap, Isis::CameraDetectorMap>` in `src/bind_camera_maps.cpp`.
+- Exposed: constructor(times, sample_coeffs, line_coeffs), set_parent, set_detector, apply_jitter, __repr__.
+- Added `RollingShutterCameraDetectorMapSurfaceUnitTest` class to `tests/unitTest/camera_maps_unit_test.py`.
+- Exported in `python/isis_pybind/__init__.py`; smoke check added.
+
+### Class 20: VariableLineScanCameraDetectorMap (已转换，部分)
+- Added `py::class_<Isis::VariableLineScanCameraDetectorMap, Isis::LineScanCameraDetectorMap>` in `src/bind_camera_maps.cpp`.
+- Exposed: set_parent, set_detector, exposure_duration, __repr__. (Constructor requires std::vector<LineRateChange>& reference; not exposed directly.)
+- Added `VariableLineScanCameraDetectorMapSurfaceUnitTest` class to `tests/unitTest/camera_maps_unit_test.py`.
+- Exported in `python/isis_pybind/__init__.py`; smoke check added.
+
+### 台账同步（大规模修正）
+Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly labeled 未转换:
+- Apollo: ApolloMetricCamera, ApolloMetricDistortionMap, ApolloPanoramicDetectorMap
+- Cassini: IssNACamera, IssWACamera, VimsCamera, VimsGroundMap, VimsSkyMap
+- Chandrayaan-1: Chandrayaan1M3Camera, Chandrayaan1M3DistortionMap
+- Clementine: HiresCamera, LwirCamera, NirCamera, UvvisCamera, ClementineUvvisDistortionMap
+- Clipper: ClipperNacRollingShutterCamera, ClipperPushBroomCamera, ClipperWacFcCamera
+- Galileo: SsiCamera
+- Juno: JunoCamera, JunoDistortionMap
+- Spice: PushFrameCameraDetectorMap (new), RollingShutterCameraDetectorMap (new), VariableLineScanCameraDetectorMap (new)

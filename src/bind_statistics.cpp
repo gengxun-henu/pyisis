@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added Statistics, Histogram, GroupedStatistics, MultivariateStatistics, and VecFilter bindings
+// Updated: 2026-04-10  Geng Xun added OverlapStatistics binding
 // Purpose: pybind11 bindings for ISIS statistics, histogram, grouped-statistics, multivariate-statistics, and vector-filter utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -20,6 +21,8 @@
 #include "Histogram.h"
 #include "ImageHistogram.h"
 #include "MultivariateStatistics.h"
+#include "OverlapStatistics.h"
+#include "PvlObject.h"
 #include "Statistics.h"
 #include "VecFilter.h"
 #include "helpers.h"
@@ -269,4 +272,52 @@ void bind_statistics(py::module_ &m) {
            py::arg("valid_points"),
            py::arg("max_points"),
            py::arg("mode") = "SUBTRACT");
+
+  // ── OverlapStatistics ───────────────────────────────────────────────────────
+  // Added: 2026-04-10 - expose OverlapStatistics; uses PvlObject constructor
+  // path when Cube-based live analysis is not available.
+  py::class_<Isis::OverlapStatistics>(m, "OverlapStatistics")
+      .def(py::init<const Isis::PvlObject &>(),
+           py::arg("pvl_stats"),
+           "Construct OverlapStatistics from a serialized PvlObject.")
+      .def("has_overlap",
+           py::overload_cast<int>(&Isis::OverlapStatistics::HasOverlap, py::const_),
+           py::arg("band"),
+           "Return True if the cubes overlap in the given band (1-indexed).")
+      .def("has_any_overlap",
+           py::overload_cast<>(&Isis::OverlapStatistics::HasOverlap, py::const_),
+           "Return True if any band has valid overlap.")
+      .def("lines",    &Isis::OverlapStatistics::Lines,
+           "Return the number of lines in the overlapping area.")
+      .def("samples",  &Isis::OverlapStatistics::Samples,
+           "Return the number of samples in the overlapping area.")
+      .def("bands",    &Isis::OverlapStatistics::Bands,
+           "Return the number of bands in common between the two cubes.")
+      .def("samp_percent", &Isis::OverlapStatistics::SampPercent,
+           "Return the percentage of lines sampled.")
+      .def("file_name_x",
+           [](const Isis::OverlapStatistics &self) {
+             return self.FileNameX().toString().toStdString();
+           },
+           "Return the filename of the first cube as a Python string.")
+      .def("file_name_y",
+           [](const Isis::OverlapStatistics &self) {
+             return self.FileNameY().toString().toStdString();
+           },
+           "Return the filename of the second cube as a Python string.")
+      .def("get_mstats",
+           &Isis::OverlapStatistics::GetMStats,
+           py::arg("band"),
+           "Return the MultivariateStatistics for the given band (1-indexed).")
+      .def("to_pvl",
+           [](const Isis::OverlapStatistics &self,
+              const std::string &name) {
+             return self.toPvl(QString::fromStdString(name));
+           },
+           py::arg("name") = "OverlapStatistics",
+           "Serialize overlap statistics to a PvlObject.")
+      .def("__repr__", [](const Isis::OverlapStatistics &self) {
+            return "OverlapStatistics(bands=" + std::to_string(self.Bands()) +
+                   ", has_overlap=" + (self.HasOverlap() ? "True" : "False") + ")";
+          });
 }

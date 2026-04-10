@@ -8,11 +8,15 @@
  * Source ISIS headers:
  *   - reference/upstream_isis/src/base/objs/CollectorMap/CollectorMap.h
  *   - isis/src/base/objs/Column/Column.h
+ *   - reference/upstream_isis/src/base/objs/EndianSwapper/EndianSwapper.h
  *   - isis/src/base/objs/Environment/Environment.h
+ *   - reference/upstream_isis/src/base/objs/ID/ID.h
  *   - reference/upstream_isis/src/base/objs/IString/IString.h
  *   - isis/src/base/objs/LineEquation/LineEquation.h
  *   - reference/upstream_isis/src/base/objs/Message/Message.h
+ *   - reference/upstream_isis/src/base/objs/Pixel/Pixel.h
  *   - reference/upstream_isis/src/base/objs/Plugin/Plugin.h
+ *   - reference/upstream_isis/src/base/objs/TextFile/TextFile.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
  * Updated: 2026-04-09  Geng Xun exposed Message namespace helpers as a Python submodule.
@@ -20,24 +24,32 @@
  * Updated: 2026-04-09  Geng Xun added Resource binding (PVL keyword container with name/value/status management)
  * Updated: 2026-04-09  Geng Xun added Plugin binding with opaque function-address lookup for runtime plugin resolution tests.
  * Updated: 2026-04-09  Geng Xun added IString binding and free-function helpers (to_bool/to_int/to_double/to_string).
- * Purpose: Expose CollectorMap, Column, Environment, IString, LineEquation, Message helpers, Plugin, and Resource utility classes to Python via pybind11.
+ * Updated: 2026-04-10  Geng Xun added Pixel, ID, EndianSwapper, and TextFile bindings.
+ * Purpose: Expose CollectorMap, Column, EndianSwapper, Environment, ID, IString, LineEquation, Message helpers, Pixel, Plugin, Resource, and TextFile utility classes to Python via pybind11.
  */
 
 #include <cstdint>
+#include <fstream>
+#include <vector>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
 #include "CollectorMap.h"
 #include "Column.h"
+#include "EndianSwapper.h"
 #include "Environment.h"
+#include "ID.h"
 #include "IString.h"
 #include "LineEquation.h"
 #include "Message.h"
+#include "Pixel.h"
 #include "Plugin.h"
 #include "PvlKeyword.h"
 #include "PvlObject.h"
 #include "Resource.h"
+#include "SpecialPixel.h"
+#include "TextFile.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -823,4 +835,347 @@ void bind_base_utility(py::module_ &m) {
            [](const Isis::IString &self, const std::string &other) {
              return std::string(self) == other;
            }, py::arg("other"));
+
+  // ── Pixel ──────────────────────────────────────────────────────────────────
+  // Added: 2026-04-10 - expose Isis::Pixel value type with constructors, accessors,
+  //   conversion methods, and static special-pixel predicates.
+  py::class_<Isis::Pixel>(m, "Pixel")
+      .def(py::init<>(),
+           "Construct a default Pixel (sample=0, line=0, band=0, DN=NULL).")
+      .def(py::init<int, int, int, double>(),
+           py::arg("sample"), py::arg("line"), py::arg("band"), py::arg("dn"),
+           "Construct a Pixel with sample, line, band, and DN.")
+      .def("line", &Isis::Pixel::line, "Return the line coordinate.")
+      .def("sample", &Isis::Pixel::sample, "Return the sample coordinate.")
+      .def("band", &Isis::Pixel::band, "Return the band coordinate.")
+      .def("dn", &Isis::Pixel::DN, "Return the DN (data number) value.")
+      // Instance conversion methods
+      .def("to_8bit",
+           static_cast<unsigned char (Isis::Pixel::*)()>(&Isis::Pixel::To8Bit),
+           "Convert DN to 8-bit unsigned char.")
+      .def("to_16bit",
+           static_cast<short int (Isis::Pixel::*)()>(&Isis::Pixel::To16Bit),
+           "Convert DN to 16-bit signed short.")
+      .def("to_16ubit",
+           static_cast<short unsigned int (Isis::Pixel::*)()>(&Isis::Pixel::To16Ubit),
+           "Convert DN to 16-bit unsigned short.")
+      .def("to_32bit",
+           static_cast<float (Isis::Pixel::*)()>(&Isis::Pixel::To32Bit),
+           "Convert DN to 32-bit float.")
+      .def("to_double",
+           static_cast<double (Isis::Pixel::*)()>(&Isis::Pixel::ToDouble),
+           "Convert DN to double.")
+      .def("to_float",
+           static_cast<float (Isis::Pixel::*)()>(&Isis::Pixel::ToFloat),
+           "Convert DN to float.")
+      .def("to_string",
+           static_cast<std::string (Isis::Pixel::*)()>(&Isis::Pixel::ToString),
+           "Convert DN to string representation.")
+      // Instance special-pixel predicates
+      .def("is_special",
+           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsSpecial),
+           "Return True if the pixel DN is a special value.")
+      .def("is_valid",
+           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsValid),
+           "Return True if the pixel DN is a valid (non-special) value.")
+      .def("is_null",
+           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsNull),
+           "Return True if the pixel DN is the NULL special value.")
+      .def("is_high",
+           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsHigh),
+           "Return True if the pixel DN is HRS or HIS.")
+      .def("is_low",
+           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsLow),
+           "Return True if the pixel DN is LRS or LIS.")
+      .def("is_hrs",
+           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsHrs),
+           "Return True if the pixel DN is High Representation Saturation.")
+      .def("is_his",
+           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsHis),
+           "Return True if the pixel DN is High Instrument Saturation.")
+      .def("is_lis",
+           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsLis),
+           "Return True if the pixel DN is Low Instrument Saturation.")
+      .def("is_lrs",
+           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsLrs),
+           "Return True if the pixel DN is Low Representation Saturation.")
+      // Static conversion methods (operate on a raw double/float value)
+      .def_static("to_8bit_value",
+                  static_cast<unsigned char (*)(const double)>(&Isis::Pixel::To8Bit),
+                  py::arg("d"),
+                  "Convert a double DN value to 8-bit unsigned char.")
+      .def_static("to_16bit_value",
+                  static_cast<short int (*)(const double)>(&Isis::Pixel::To16Bit),
+                  py::arg("d"),
+                  "Convert a double DN value to 16-bit signed short.")
+      .def_static("to_16ubit_value",
+                  static_cast<short unsigned int (*)(const double)>(&Isis::Pixel::To16UBit),
+                  py::arg("d"),
+                  "Convert a double DN value to 16-bit unsigned short.")
+      .def_static("to_32bit_value",
+                  static_cast<float (*)(const double)>(&Isis::Pixel::To32Bit),
+                  py::arg("d"),
+                  "Convert a double DN value to 32-bit float.")
+      .def_static("to_double_from_float",
+                  static_cast<double (*)(const float)>(&Isis::Pixel::ToDouble),
+                  py::arg("f"),
+                  "Convert a 32-bit float pixel value to double.")
+      .def_static("to_string_value",
+                  static_cast<std::string (*)(double)>(&Isis::Pixel::ToString),
+                  py::arg("d"),
+                  "Convert a double DN value to its string representation.")
+      // Static special-pixel predicates (operate on a raw double)
+      .def_static("is_special_value",
+                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsSpecial),
+                  py::arg("d"),
+                  "Return True if d is a special pixel value.")
+      .def_static("is_valid_value",
+                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsValid),
+                  py::arg("d"),
+                  "Return True if d is a valid (non-special) pixel value.")
+      .def_static("is_null_value",
+                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsNull),
+                  py::arg("d"),
+                  "Return True if d is the NULL special value.")
+      .def_static("is_high_value",
+                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsHigh),
+                  py::arg("d"),
+                  "Return True if d is HRS or HIS.")
+      .def_static("is_low_value",
+                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsLow),
+                  py::arg("d"),
+                  "Return True if d is LRS or LIS.")
+      .def_static("is_hrs_value",
+                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsHrs),
+                  py::arg("d"),
+                  "Return True if d is High Representation Saturation.")
+      .def_static("is_his_value",
+                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsHis),
+                  py::arg("d"),
+                  "Return True if d is High Instrument Saturation.")
+      .def_static("is_lis_value",
+                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsLis),
+                  py::arg("d"),
+                  "Return True if d is Low Instrument Saturation.")
+      .def_static("is_lrs_value",
+                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsLrs),
+                  py::arg("d"),
+                  "Return True if d is Low Representation Saturation.")
+      .def("__repr__", [](const Isis::Pixel &p) {
+            return "Pixel(sample=" + std::to_string(p.sample()) +
+                   ", line=" + std::to_string(p.line()) +
+                   ", band=" + std::to_string(p.band()) +
+                   ", dn=" + std::to_string(p.DN()) + ")";
+          });
+
+  // ── ID ─────────────────────────────────────────────────────────────────────
+  // Added: 2026-04-10 - expose Isis::ID sequential ID generator.
+  py::class_<Isis::ID>(m, "ID")
+      .def(py::init([](const std::string &name, int basenum) {
+             return new Isis::ID(stdStringToQString(name), basenum);
+           }),
+           py::arg("name"), py::arg("basenum") = 1,
+           "Construct an ID generator from a template string containing '?' "
+           "placeholders and an optional start number (default 1).")
+      .def("next",
+           [](Isis::ID &self) {
+             return qStringToStdString(self.Next());
+           },
+           "Return the next ID in the sequence and advance the counter.")
+      .def("__repr__", [](Isis::ID &self) {
+            return "ID(next='" + qStringToStdString(self.Next()) + "')";
+          });
+
+  // ── EndianSwapper ──────────────────────────────────────────────────────────
+  // Added: 2026-04-10 - expose Isis::EndianSwapper byte-swap utilities.
+  // The upstream methods take raw void* pointers.  We wrap each one to accept
+  // a Python bytes/bytearray object and return the swapped value.
+  py::class_<Isis::EndianSwapper>(m, "EndianSwapper")
+      .def(py::init([](const std::string &endian) {
+             return new Isis::EndianSwapper(stdStringToQString(endian));
+           }),
+           py::arg("endian"),
+           "Construct an EndianSwapper for the given endian type ('LSB' or 'MSB').")
+      .def("will_swap", &Isis::EndianSwapper::willSwap,
+           "Return True if byte-swapping is required for the current platform.")
+      .def("swap_double",
+           [](Isis::EndianSwapper &self, py::bytes buf) {
+             std::string s(buf);
+             if (s.size() < sizeof(double)) {
+               throw py::value_error("Buffer too small for double (need 8 bytes)");
+             }
+             return self.Double(static_cast<void *>(s.data()));
+           },
+           py::arg("buf"),
+           "Swap bytes in an 8-byte buffer and return as double.")
+      .def("swap_float",
+           [](Isis::EndianSwapper &self, py::bytes buf) {
+             std::string s(buf);
+             if (s.size() < sizeof(float)) {
+               throw py::value_error("Buffer too small for float (need 4 bytes)");
+             }
+             return self.Float(static_cast<void *>(s.data()));
+           },
+           py::arg("buf"),
+           "Swap bytes in a 4-byte buffer and return as float.")
+      .def("swap_int",
+           [](Isis::EndianSwapper &self, py::bytes buf) {
+             std::string s(buf);
+             if (s.size() < sizeof(int)) {
+               throw py::value_error("Buffer too small for int (need 4 bytes)");
+             }
+             return self.Int(static_cast<void *>(s.data()));
+           },
+           py::arg("buf"),
+           "Swap bytes in a 4-byte buffer and return as int.")
+      .def("swap_short",
+           [](Isis::EndianSwapper &self, py::bytes buf) {
+             std::string s(buf);
+             if (s.size() < sizeof(short int)) {
+               throw py::value_error("Buffer too small for short int (need 2 bytes)");
+             }
+             return self.ShortInt(static_cast<void *>(s.data()));
+           },
+           py::arg("buf"),
+           "Swap bytes in a 2-byte buffer and return as short int.")
+      .def("swap_unsigned_short",
+           [](Isis::EndianSwapper &self, py::bytes buf) {
+             std::string s(buf);
+             if (s.size() < sizeof(unsigned short int)) {
+               throw py::value_error("Buffer too small for unsigned short int (need 2 bytes)");
+             }
+             return self.UnsignedShortInt(static_cast<void *>(s.data()));
+           },
+           py::arg("buf"),
+           "Swap bytes in a 2-byte buffer and return as unsigned short int.")
+      .def("__repr__", [](const Isis::EndianSwapper &self) {
+            return std::string("EndianSwapper(will_swap=") +
+                   (self.willSwap() ? "True" : "False") + ")";
+          });
+
+  // ── TextFile ───────────────────────────────────────────────────────────────
+  // Added: 2026-04-10 - expose Isis::TextFile sequential ASCII file I/O.
+  py::class_<Isis::TextFile>(m, "TextFile")
+      .def(py::init<>(), "Construct an empty TextFile (not yet opened).")
+      .def(py::init([](const std::string &filename,
+                       const std::string &openmode,
+                       const std::string &extension) {
+             return new Isis::TextFile(
+                 stdStringToQString(filename), openmode.c_str(), extension.c_str());
+           }),
+           py::arg("filename"),
+           py::arg("openmode") = "input",
+           py::arg("extension") = "",
+           "Construct a TextFile and open the given file.")
+      .def("open",
+           [](Isis::TextFile &self,
+              const std::string &filename,
+              const std::string &openmode,
+              const std::string &extension) {
+             self.Open(stdStringToQString(filename), openmode.c_str(), extension.c_str());
+           },
+           py::arg("filename"),
+           py::arg("openmode") = "input",
+           py::arg("extension") = "",
+           "Open a file for reading or writing.")
+      .def("open_chk",
+           &Isis::TextFile::OpenChk,
+           py::arg("bail_if_not_open") = false,
+           "Check whether the file is currently open.")
+      .def("rewind", &Isis::TextFile::Rewind, "Seek back to the beginning of the file.")
+      .def("close", &Isis::TextFile::Close, "Close the file.")
+      .def("get_file",
+           [](Isis::TextFile &self,
+              int max_lines,
+              bool skip_comments) -> std::vector<std::string> {
+             std::vector<QString> lines;
+             self.GetFile(lines, max_lines, skip_comments);
+             std::vector<std::string> result;
+             result.reserve(lines.size());
+             for (const auto &l : lines) {
+               result.push_back(qStringToStdString(l));
+             }
+             return result;
+           },
+           py::arg("max_lines") = 0,
+           py::arg("skip_comments") = true,
+           "Read all (or up to max_lines) lines from the file and return as a list.")
+      .def("put_file",
+           [](Isis::TextFile &self, const std::vector<std::string> &lines, int max_lines) {
+             std::vector<QString> qlines;
+             qlines.reserve(lines.size());
+             for (const auto &l : lines) {
+               qlines.push_back(stdStringToQString(l));
+             }
+             self.PutFile(qlines, max_lines);
+           },
+           py::arg("lines"),
+           py::arg("max_lines") = 0,
+           "Write all (or up to max_lines) lines to the file.")
+      .def("get_line",
+           [](Isis::TextFile &self, bool skip_comments) -> py::object {
+             QString line;
+             bool ok = self.GetLine(line, skip_comments);
+             if (!ok) {
+               return py::none();
+             }
+             return py::str(qStringToStdString(line));
+           },
+           py::arg("skip_comments") = true,
+           "Read the next line; returns None at end-of-file.")
+      .def("get_line_no_filter",
+           [](Isis::TextFile &self) -> py::object {
+             QString line;
+             bool ok = self.GetLineNoFilter(line);
+             if (!ok) {
+               return py::none();
+             }
+             return py::str(qStringToStdString(line));
+           },
+           "Read the next line without comment filtering; returns None at end-of-file.")
+      .def("put_line",
+           [](Isis::TextFile &self, const std::string &line) {
+             self.PutLine(stdStringToQString(line));
+           },
+           py::arg("line") = "",
+           "Write a single line to the file.")
+      .def("put_line_comment",
+           [](Isis::TextFile &self, const std::string &line) {
+             self.PutLineComment(stdStringToQString(line));
+           },
+           py::arg("line") = "",
+           "Write a comment line to the file.")
+      .def("get_comment",
+           [](Isis::TextFile &self) {
+             return qStringToStdString(self.GetComment());
+           },
+           "Return the current comment string (default '#').")
+      .def("get_new_line",
+           [](Isis::TextFile &self) {
+             return qStringToStdString(self.GetNewLine());
+           },
+           "Return the current newline string.")
+      .def("set_comment",
+           [](Isis::TextFile &self, const std::string &comment) {
+             self.SetComment(comment.c_str());
+           },
+           py::arg("comment_string") = "#",
+           "Set the comment character/string.")
+      .def("set_new_line",
+           [](Isis::TextFile &self, const std::string &newline) {
+             self.SetNewLine(newline.c_str());
+           },
+           py::arg("new_line_string") = "\n",
+           "Set the newline string.")
+      .def("line_count",
+           &Isis::TextFile::LineCount,
+           py::arg("max_lines") = 0,
+           "Return the number of lines in the file.")
+      .def("size",
+           &Isis::TextFile::Size,
+           "Return the size of the file in bytes.")
+      .def("__repr__", [](Isis::TextFile &self) {
+            return "TextFile(open=" +
+                   std::string(self.OpenChk() ? "True" : "False") + ")";
+          });
 }

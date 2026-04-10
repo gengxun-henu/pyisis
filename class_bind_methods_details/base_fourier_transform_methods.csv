@@ -1,12 +1,12 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-FourierTransform,Statistics,isis/src/base/objs/FourierTransform/FourierTransform.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+FourierTransform,Statistics,isis/src/base/objs/FourierTransform/FourierTransform.h,src/base/bind_base_math.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-10 已在 src/base/bind_base_math.cpp 完成全部方法绑定
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,FourierTransform,isis_pybind.FourierTransform,N,Python class symbol not found in current binding files
-Construction/Enum,FourierTransform(),isis_pybind.FourierTransform(),N,Constructor binding not detected in current binding files
-Public API,std::vector< std::complex<double> > Transform(std::vector< std::complex<double> > input),isis_pybind.FourierTransform.transform,N,Method not found in current binding files
-Public API,std::vector< std::complex<double> > Inverse(std::vector< std::complex<double> > input),isis_pybind.FourierTransform.inverse,N,Method not found in current binding files
-Query,bool IsPowerOfTwo(int n),isis_pybind.FourierTransform.is_power_of_two,N,Method not found in current binding files
-Public API,int lg(int n),isis_pybind.FourierTransform.lg,N,Method not found in current binding files
-Public API,"int BitReverse(int n, int x)",isis_pybind.FourierTransform.bit_reverse,N,Method not found in current binding files
-Public API,int NextPowerOfTwo(int n),isis_pybind.FourierTransform.next_power_of_two,N,Method not found in current binding files
+Class Symbol,FourierTransform,isis_pybind.FourierTransform,Y,Exported in python/isis_pybind/__init__.py
+Construction/Enum,FourierTransform(),isis_pybind.FourierTransform(),Y,Default constructor
+Public API,std::vector< std::complex<double> > Transform(std::vector< std::complex<double> > input),isis_pybind.FourierTransform.transform,Y,Returns list of complex via pybind11/complex.h
+Public API,std::vector< std::complex<double> > Inverse(std::vector< std::complex<double> > input),isis_pybind.FourierTransform.inverse,Y,Returns list of complex via pybind11/complex.h
+Query,bool IsPowerOfTwo(int n),isis_pybind.FourierTransform.is_power_of_two,Y,
+Public API,int lg(int n),isis_pybind.FourierTransform.lg,Y,
+Public API,"int BitReverse(int n, int x)",isis_pybind.FourierTransform.bit_reverse,Y,
+Public API,int NextPowerOfTwo(int n),isis_pybind.FourierTransform.next_power_of_two,Y,

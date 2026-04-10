@@ -3,7 +3,8 @@ Unit tests for additional ISIS mission camera bindings
 
 Author: Geng Xun
 Created: 2026-04-07
-Last Modified: 2026-04-07
+Last Modified: 2026-04-10
+Updated: 2026-04-10  Geng Xun added Dawn (DawnFcCamera, DawnFcDistortionMap, DawnVirCamera) and Kaguya (KaguyaMiCamera, KaguyaTcCamera, KaguyaMiCameraDistortionMap, KaguyaTcCameraDistortionMap) unit tests.
 """
 
 import unittest
@@ -122,6 +123,61 @@ class ClipperGalileoAndJunoBindingsUnitTest(unittest.TestCase):
         self.assertTrue(hasattr(ip.JunoDistortionMap, "set_distortion"))
         self.assertTrue(hasattr(ip.JunoDistortionMap, "set_focal_plane"))
         self.assertTrue(hasattr(ip.JunoDistortionMap, "set_undistorted_focal_plane"))
+
+
+class DawnMissionCameraUnitTest(unittest.TestCase):
+    """Regression coverage for Dawn mission camera/helper bindings. Added: 2026-04-10."""
+
+    def test_dawn_fc_camera_surface(self):
+        """DawnFcCamera inherits FramingCamera with required SPICE ID methods."""
+        self.assertTrue(issubclass(ip.DawnFcCamera, ip.FramingCamera))
+        self.assertTrue(hasattr(ip.DawnFcCamera, "ck_frame_id"))
+        self.assertTrue(hasattr(ip.DawnFcCamera, "ck_reference_id"))
+        self.assertTrue(hasattr(ip.DawnFcCamera, "spk_reference_id"))
+
+    def test_dawn_fc_distortion_map_surface(self):
+        """DawnFcDistortionMap inherits CameraDistortionMap with focal-plane converters."""
+        self.assertTrue(issubclass(ip.DawnFcDistortionMap, ip.CameraDistortionMap))
+        self.assertTrue(hasattr(ip.DawnFcDistortionMap, "set_focal_plane"))
+        self.assertTrue(hasattr(ip.DawnFcDistortionMap, "set_undistorted_focal_plane"))
+
+    def test_dawn_vir_camera_surface(self):
+        """DawnVirCamera inherits LineScanCamera with required SPICE ID methods."""
+        self.assertTrue(issubclass(ip.DawnVirCamera, ip.LineScanCamera))
+        self.assertTrue(hasattr(ip.DawnVirCamera, "ck_frame_id"))
+        self.assertTrue(hasattr(ip.DawnVirCamera, "ck_reference_id"))
+        self.assertTrue(hasattr(ip.DawnVirCamera, "spk_reference_id"))
+
+
+class KaguyaMissionCameraUnitTest(unittest.TestCase):
+    """Regression coverage for Kaguya mission camera/helper bindings. Added: 2026-04-10."""
+
+    def test_kaguya_mi_camera_surface(self):
+        """KaguyaMiCamera inherits LineScanCamera with required SPICE ID methods."""
+        self.assertTrue(issubclass(ip.KaguyaMiCamera, ip.LineScanCamera))
+        self.assertTrue(hasattr(ip.KaguyaMiCamera, "ck_frame_id"))
+        self.assertTrue(hasattr(ip.KaguyaMiCamera, "ck_reference_id"))
+        self.assertTrue(hasattr(ip.KaguyaMiCamera, "spk_reference_id"))
+
+    def test_kaguya_tc_camera_surface(self):
+        """KaguyaTcCamera inherits LineScanCamera with required SPICE ID methods."""
+        self.assertTrue(issubclass(ip.KaguyaTcCamera, ip.LineScanCamera))
+        self.assertTrue(hasattr(ip.KaguyaTcCamera, "ck_frame_id"))
+        self.assertTrue(hasattr(ip.KaguyaTcCamera, "ck_reference_id"))
+        self.assertTrue(hasattr(ip.KaguyaTcCamera, "spk_reference_id"))
+
+    def test_kaguya_mi_distortion_map_surface(self):
+        """KaguyaMiCameraDistortionMap inherits CameraDistortionMap with focal-plane converters."""
+        self.assertTrue(issubclass(ip.KaguyaMiCameraDistortionMap, ip.CameraDistortionMap))
+        self.assertTrue(hasattr(ip.KaguyaMiCameraDistortionMap, "set_distortion"))
+        self.assertTrue(hasattr(ip.KaguyaMiCameraDistortionMap, "set_focal_plane"))
+        self.assertTrue(hasattr(ip.KaguyaMiCameraDistortionMap, "set_undistorted_focal_plane"))
+
+    def test_kaguya_tc_distortion_map_surface(self):
+        """KaguyaTcCameraDistortionMap inherits CameraDistortionMap with focal-plane converters."""
+        self.assertTrue(issubclass(ip.KaguyaTcCameraDistortionMap, ip.CameraDistortionMap))
+        self.assertTrue(hasattr(ip.KaguyaTcCameraDistortionMap, "set_focal_plane"))
+        self.assertTrue(hasattr(ip.KaguyaTcCameraDistortionMap, "set_undistorted_focal_plane"))
 
 
 if __name__ == "__main__":

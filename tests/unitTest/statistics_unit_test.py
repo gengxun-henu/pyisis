@@ -3,7 +3,8 @@ Unit tests for ISIS statistics, histogram, and vector-filter bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-21
+Last Modified: 2026-04-10
+Updated: 2026-04-10  Geng Xun added PrincipalComponentAnalysis and OverlapStatistics unit tests.
 """
 
 import unittest
@@ -123,6 +124,97 @@ class StatisticsUnitTest(unittest.TestCase):
 
         high_pass = vec_filter.high_pass([3.0, 4.0, 5.0], [1.0, 1.0, 1.0])
         self.assertEqual(high_pass, [2.0, 3.0, 4.0])
+
+
+class PrincipalComponentAnalysisUnitTest(unittest.TestCase):
+    """Focused unit tests for PrincipalComponentAnalysis binding. Added: 2026-04-10."""
+
+    def test_construction_with_n(self):
+        """PCA constructs with dimension count."""
+        pca = ip.PrincipalComponentAnalysis(3)
+        self.assertIsInstance(pca, ip.PrincipalComponentAnalysis)
+        self.assertEqual(pca.dimensions(), 3)
+
+    def test_repr(self):
+        """repr includes class name and dimensions."""
+        pca = ip.PrincipalComponentAnalysis(2)
+        r = repr(pca)
+        self.assertIn("PrincipalComponentAnalysis", r)
+        self.assertIn("2", r)
+
+    def test_add_data_and_compute(self):
+        """add_data + compute_transform produces a non-empty transform matrix."""
+        pca = ip.PrincipalComponentAnalysis(2)
+        # Two-dimensional data: unit circle samples
+        import math
+        for i in range(36):
+            angle = i * 10.0 * math.pi / 180.0
+            pca.add_data([math.cos(angle), math.sin(angle)])
+        pca.compute_transform()
+        mat = pca.transform_matrix()
+        self.assertIsInstance(mat, list)
+        self.assertGreater(len(mat), 0)
+        self.assertGreater(len(mat[0]), 0)
+
+    def test_transform_roundtrip(self):
+        """forward transform followed by inverse returns approximately original data."""
+        pca = ip.PrincipalComponentAnalysis(2)
+        import math
+        observations = [[math.cos(i * 0.1), math.sin(i * 0.1)] for i in range(20)]
+        for obs in observations:
+            pca.add_data(obs)
+        pca.compute_transform()
+        row = observations[0]
+        forward = pca.transform([[row[0], row[1]]])
+        recovered = pca.inverse(forward)
+        self.assertAlmostEqual(recovered[0][0], row[0], places=8)
+        self.assertAlmostEqual(recovered[0][1], row[1], places=8)
+
+    def test_construct_from_transform_matrix(self):
+        """Constructor with precomputed identity-like matrix is accepted."""
+        identity = [[1.0, 0.0], [0.0, 1.0]]
+        pca = ip.PrincipalComponentAnalysis(identity)
+        self.assertIsInstance(pca, ip.PrincipalComponentAnalysis)
+
+    def test_invalid_add_data_size_raises(self):
+        """add_data with wrong dimension count raises."""
+        pca = ip.PrincipalComponentAnalysis(3)
+        with self.assertRaises(Exception):
+            pca.add_data([1.0, 2.0])  # too few dimensions
+
+
+class OverlapStatisticsUnitTest(unittest.TestCase):
+    """Focused unit tests for OverlapStatistics binding. Added: 2026-04-10."""
+
+    def test_class_is_exported(self):
+        """OverlapStatistics is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "OverlapStatistics"))
+
+    def test_expected_api_surface(self):
+        """OverlapStatistics exposes the expected method names."""
+        self.assertTrue(hasattr(ip.OverlapStatistics, "has_overlap"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "has_any_overlap"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "lines"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "samples"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "bands"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "samp_percent"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "file_name_x"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "file_name_y"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "get_mstats"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "to_pvl"))
+
+    def test_construction_from_invalid_pvl_raises(self):
+        """Constructing OverlapStatistics from an incomplete PvlObject raises IException.
+
+        This verifies that the binding correctly forwards to upstream parsing
+        logic. An incomplete PvlObject (missing required File1/File2 groups)
+        should raise rather than silently return a corrupted object.
+        """
+        pvl = ip.PvlObject("OverlapStatistics")
+        pvl.add_keyword(ip.PvlKeyword("Width", "10"))
+        with self.assertRaises(Exception):
+            # Missing required groups (File1, File2) must raise
+            ip.OverlapStatistics(pvl)
 
 
 if __name__ == "__main__":

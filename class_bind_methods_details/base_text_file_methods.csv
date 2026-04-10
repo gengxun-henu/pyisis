@@ -1,29 +1,34 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-TextFile,Utility,isis/src/base/objs/TextFile/TextFile.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+TextFile,Utility,isis/src/base/objs/TextFile/TextFile.h,src/base/bind_base_utility.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-10 已在 src/base/bind_base_utility.cpp 完成主要方法绑定
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,TextFile,isis_pybind.TextFile,N,Python class symbol not found in current binding files
-Construction/Enum,TextFile(),isis_pybind.TextFile(),N,Constructor binding not detected in current binding files
-Read/Write IO,"void Open(const QString &filename, const char *openmode = ""input"", const char *extension = """")",isis_pybind.TextFile.open,N,Method not found in current binding files
-Read/Write IO,"void Open(const char *filename, const char *openmode = ""input"", const char *extension = """")",isis_pybind.TextFile.open,N,Method not found in current binding files
-Read/Write IO,bool OpenChk(bool bailIfNotOpen = false),isis_pybind.TextFile.open_chk,N,Method not found in current binding files
-Public API,void Rewind(),isis_pybind.TextFile.rewind,N,Method not found in current binding files
-Read/Write IO,void Close(),isis_pybind.TextFile.close,N,Method not found in current binding files
-Public API,"void GetFile(std::vector<QString> &lines, const int &maxLinesToRead = 0, const bool skipComments = true)",isis_pybind.TextFile.get_file,N,Method not found in current binding files
-Public API,"void GetFile(QString *lines, const int &maxLinesToRead, const bool skipComments = true)",isis_pybind.TextFile.get_file,N,Method not found in current binding files
-Mutation/Configuration,"void PutFile(std::vector<QString> &lines, const int &maxLinesToWrite = 0)",isis_pybind.TextFile.put_file,N,Method not found in current binding files
-Mutation/Configuration,"void PutFile(const QString *lines, const int &maxLinesToWrite)",isis_pybind.TextFile.put_file,N,Method not found in current binding files
-Public API,"bool GetLine(QString &line, const bool skipComments = true)",isis_pybind.TextFile.get_line,N,Method not found in current binding files
-Public API,bool GetLineNoFilter(QString &line),isis_pybind.TextFile.get_line_no_filter,N,Method not found in current binding files
-Public API,bool GetLine(const bool skipComments = true),isis_pybind.TextFile.get_line,N,Method not found in current binding files
-Public API,bool GetLineNoFilter(),isis_pybind.TextFile.get_line_no_filter,N,Method not found in current binding files
-Mutation/Configuration,void PutLine(const QString &line),isis_pybind.TextFile.put_line,N,Method not found in current binding files
-Mutation/Configuration,"void PutLine(const char *line = """")",isis_pybind.TextFile.put_line,N,Method not found in current binding files
-Mutation/Configuration,void PutLineComment(const QString &line),isis_pybind.TextFile.put_line_comment,N,Method not found in current binding files
-Mutation/Configuration,"void PutLineComment(const char *line = """")",isis_pybind.TextFile.put_line_comment,N,Method not found in current binding files
-Public API,QString GetComment(),isis_pybind.TextFile.get_comment,N,Method not found in current binding files
-Public API,QString GetNewLine(),isis_pybind.TextFile.get_new_line,N,Method not found in current binding files
-Mutation/Configuration,"void SetComment(const char *commentString = ""#"")",isis_pybind.TextFile.set_comment,N,Method not found in current binding files
-Mutation/Configuration,"void SetNewLine(const char *newLineString = ""\n"")",isis_pybind.TextFile.set_new_line,N,Method not found in current binding files
-Public API,int LineCount(const int &maxLinesToRead = 0),isis_pybind.TextFile.line_count,N,Method not found in current binding files
-Query,std::streamsize Size(),isis_pybind.TextFile.size,N,Method not found in current binding files
+Class Symbol,TextFile,isis_pybind.TextFile,Y,Exported in python/isis_pybind/__init__.py
+Construction/Enum,TextFile(),isis_pybind.TextFile(),Y,Default constructor
+Construction/Enum,"TextFile(const QString &filename, const char *openmode, const char *extension)",isis_pybind.TextFile(filename: str, openmode: str, extension: str),Y,Implicit open constructor
+Construction/Enum,"TextFile(const char *filename, ..., std::vector<QString> &lines, ...)",N,vector constructor not bound; use default constructor + get_file
+Construction/Enum,"TextFile(const QString &filename, ..., std::vector<QString> &lines, ...)",N,vector constructor not bound; use default constructor + get_file
+Construction/Enum,"TextFile(const char *filename, ..., QString *lines, ...)",N,raw-pointer constructors not exposed; use default constructor
+Construction/Enum,"TextFile(const QString &filename, ..., QString *lines, ...)",N,raw-pointer constructors not exposed; use default constructor
+Read/Write IO,"void Open(const QString &filename, ...)",isis_pybind.TextFile.open,Y,
+Read/Write IO,"void Open(const char *filename, ...)",N,Covered by QString overload; not separately bound
+Read/Write IO,bool OpenChk(bool bailIfNotOpen = false),isis_pybind.TextFile.open_chk,Y,
+Public API,void Rewind(),isis_pybind.TextFile.rewind,Y,
+Read/Write IO,void Close(),isis_pybind.TextFile.close,Y,
+Public API,"void GetFile(std::vector<QString> &lines, ...)",isis_pybind.TextFile.get_file,Y,Returns list[str]
+Public API,"void GetFile(QString *lines, ...)",N,Raw-pointer overload not exposed; use list-based get_file
+Mutation/Configuration,"void PutFile(std::vector<QString> &lines, ...)",isis_pybind.TextFile.put_file,Y,Accepts list[str]
+Mutation/Configuration,"void PutFile(const QString *lines, ...)",N,Raw-pointer overload not exposed
+Public API,"bool GetLine(QString &line, ...)",isis_pybind.TextFile.get_line,Y,Returns str or None at EOF
+Public API,bool GetLineNoFilter(QString &line),isis_pybind.TextFile.get_line_no_filter,Y,Returns str or None at EOF
+Public API,bool GetLine(const bool skipComments),N,No-reference overload not separately bound (loop state only)
+Public API,bool GetLineNoFilter(),N,No-reference overload not separately bound
+Mutation/Configuration,void PutLine(const QString &line),isis_pybind.TextFile.put_line,Y,
+Mutation/Configuration,"void PutLine(const char *line)",N,Covered by QString overload
+Mutation/Configuration,void PutLineComment(const QString &line),isis_pybind.TextFile.put_line_comment,Y,
+Mutation/Configuration,"void PutLineComment(const char *line)",N,Covered by QString overload
+Public API,QString GetComment(),isis_pybind.TextFile.get_comment,Y,Returns str
+Public API,QString GetNewLine(),isis_pybind.TextFile.get_new_line,Y,Returns str
+Mutation/Configuration,"void SetComment(const char *commentString)",isis_pybind.TextFile.set_comment,Y,
+Mutation/Configuration,"void SetNewLine(const char *newLineString)",isis_pybind.TextFile.set_new_line,Y,
+Public API,int LineCount(const int &maxLinesToRead),isis_pybind.TextFile.line_count,Y,
+Query,std::streamsize Size(),isis_pybind.TextFile.size,Y,

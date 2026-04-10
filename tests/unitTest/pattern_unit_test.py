@@ -1,5 +1,5 @@
 """
-Unit tests for ISIS pattern matching classes: Chip, AutoReg, MaximumCorrelation, MinimumDifference, and AutoRegFactory
+Unit tests for ISIS pattern matching classes: Chip, AutoReg, MaximumCorrelation, MinimumDifference, Gruen, AdaptiveGruen, and AutoRegFactory
 
 Author: Geng Xun
 Created: 2026-03-24
@@ -7,6 +7,7 @@ Last Modified: 2026-04-10
 Updated: 2026-04-08  Geng Xun added focused regression coverage for Centroid chip selection bindings.
 Updated: 2026-04-09  Geng Xun added MinimumDifference binding unit tests.
 Updated: 2026-04-10  Geng Xun fixed MinimumDifference regression tests to use upstream-style AutoRegistration PVL objects.
+Updated: 2026-04-10  Geng Xun added Gruen and AdaptiveGruen focused unit tests.
 """
 import unittest
 
@@ -533,6 +534,130 @@ class MinimumDifferenceUnitTest(unittest.TestCase):
         """Inherited AutoReg tolerance() returns the configured tolerance."""
         obj = ip.MinimumDifference(self._make_pvl())
         self.assertAlmostEqual(obj.tolerance(), 0.01)
+
+
+class GruenUnitTest(unittest.TestCase):
+    """Focused unit tests for Gruen AutoReg subclass binding. Added: 2026-04-10."""
+
+    def _make_gruen_pvl(self, alg_name="Gruen", tolerance=0.1):
+        """Return a (Pvl, Gruen) pair for construction tests."""
+        pvl = ip.Pvl()
+        autoreg_obj = ip.PvlObject("AutoRegistration")
+
+        alg_group = ip.PvlGroup("Algorithm")
+        alg_group.add_keyword(ip.PvlKeyword("Name", alg_name))
+        alg_group.add_keyword(ip.PvlKeyword("Tolerance", str(tolerance)))
+        alg_group.add_keyword(ip.PvlKeyword("AffineTranslationTolerance", "0.2"))
+        alg_group.add_keyword(ip.PvlKeyword("AffineScaleTolerance", "0.3"))
+        autoreg_obj.add_group(alg_group)
+
+        pattern_group = ip.PvlGroup("PatternChip")
+        pattern_group.add_keyword(ip.PvlKeyword("Samples", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("Lines", "15"))
+        autoreg_obj.add_group(pattern_group)
+
+        search_group = ip.PvlGroup("SearchChip")
+        search_group.add_keyword(ip.PvlKeyword("Samples", "35"))
+        search_group.add_keyword(ip.PvlKeyword("Lines", "35"))
+        autoreg_obj.add_group(search_group)
+
+        pvl.add_object(autoreg_obj)
+        return pvl, ip.Gruen(pvl)
+
+    def test_gruen_class_exported(self):
+        """Gruen is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "Gruen"))
+
+    def test_gruen_construction(self):
+        """Gruen constructs without error from a valid PVL."""
+        _, gruen = self._make_gruen_pvl()
+        self.assertIsInstance(gruen, ip.Gruen)
+
+    def test_gruen_inherits_autoreg(self):
+        """Gruen is an instance of AutoReg."""
+        _, gruen = self._make_gruen_pvl()
+        self.assertIsInstance(gruen, ip.AutoReg)
+
+    def test_gruen_ideal_fit(self):
+        """ideal_fit for Gruen is 0.0 (perfect affine convergence)."""
+        _, gruen = self._make_gruen_pvl()
+        self.assertAlmostEqual(gruen.ideal_fit(), 0.0)
+
+    def test_gruen_algorithm_name(self):
+        """algorithm_name for Gruen matches expected name."""
+        _, gruen = self._make_gruen_pvl()
+        name = gruen.algorithm_name()
+        self.assertIn("Gruen", name)
+
+    def test_gruen_constraint_accessors(self):
+        """get_spice_constraint and get_affine_constraint return floats."""
+        _, gruen = self._make_gruen_pvl()
+        self.assertIsInstance(gruen.get_spice_constraint(), float)
+        self.assertIsInstance(gruen.get_affine_constraint(), float)
+
+    def test_gruen_repr(self):
+        """repr(Gruen) contains 'Gruen'."""
+        _, gruen = self._make_gruen_pvl()
+        r = repr(gruen)
+        self.assertIn("Gruen", r)
+
+
+class AdaptiveGruenUnitTest(unittest.TestCase):
+    """Focused unit tests for AdaptiveGruen binding. Added: 2026-04-10."""
+
+    def _make_adaptive_gruen_pvl(self, tolerance=0.1):
+        pvl = ip.Pvl()
+        autoreg_obj = ip.PvlObject("AutoRegistration")
+
+        alg_group = ip.PvlGroup("Algorithm")
+        alg_group.add_keyword(ip.PvlKeyword("Name", "AdaptiveGruen"))
+        alg_group.add_keyword(ip.PvlKeyword("Tolerance", str(tolerance)))
+        alg_group.add_keyword(ip.PvlKeyword("AffineTranslationTolerance", "0.2"))
+        alg_group.add_keyword(ip.PvlKeyword("AffineScaleTolerance", "0.3"))
+        autoreg_obj.add_group(alg_group)
+
+        pattern_group = ip.PvlGroup("PatternChip")
+        pattern_group.add_keyword(ip.PvlKeyword("Samples", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("Lines", "15"))
+        autoreg_obj.add_group(pattern_group)
+
+        search_group = ip.PvlGroup("SearchChip")
+        search_group.add_keyword(ip.PvlKeyword("Samples", "35"))
+        search_group.add_keyword(ip.PvlKeyword("Lines", "35"))
+        autoreg_obj.add_group(search_group)
+
+        pvl.add_object(autoreg_obj)
+        return pvl, ip.AdaptiveGruen(pvl)
+
+    def test_adaptive_gruen_class_exported(self):
+        """AdaptiveGruen is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "AdaptiveGruen"))
+
+    def test_adaptive_gruen_construction(self):
+        """AdaptiveGruen constructs without error from a valid PVL."""
+        _, ag = self._make_adaptive_gruen_pvl()
+        self.assertIsInstance(ag, ip.AdaptiveGruen)
+
+    def test_adaptive_gruen_inherits_gruen(self):
+        """AdaptiveGruen is an instance of Gruen."""
+        _, ag = self._make_adaptive_gruen_pvl()
+        self.assertIsInstance(ag, ip.Gruen)
+
+    def test_adaptive_gruen_inherits_autoreg(self):
+        """AdaptiveGruen is an instance of AutoReg (transitive inheritance)."""
+        _, ag = self._make_adaptive_gruen_pvl()
+        self.assertIsInstance(ag, ip.AutoReg)
+
+    def test_adaptive_gruen_ideal_fit(self):
+        """ideal_fit for AdaptiveGruen is 0.0."""
+        _, ag = self._make_adaptive_gruen_pvl()
+        self.assertAlmostEqual(ag.ideal_fit(), 0.0)
+
+    def test_adaptive_gruen_repr(self):
+        """repr(AdaptiveGruen) contains 'AdaptiveGruen'."""
+        _, ag = self._make_adaptive_gruen_pvl()
+        r = repr(ag)
+        self.assertIn("AdaptiveGruen", r)
 
 
 if __name__ == '__main__':

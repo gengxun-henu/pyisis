@@ -11,6 +11,7 @@ Updated: 2026-03-29  Geng Xun added regression coverage for Calculator, linear a
 Updated: 2026-04-09  Geng Xun added Ransac helper regression coverage for packed symmetric matrix utilities.
 Updated: 2026-04-09  Geng Xun added SurfaceModel focused unit tests.
 Updated: 2026-04-09  Geng Xun relaxed the planar SurfaceModel min_max regression to match upstream floating-point behavior.
+Updated: 2026-04-10  Geng Xun added FourierTransform unit tests.
 """
 import unittest
 import math
@@ -1089,6 +1090,81 @@ class MaximumLikelihoodWFunctionsUnitTest(unittest.TestCase):
         r = repr(mlwf)
         self.assertIn("MaximumLikelihoodWFunctions", r)
         self.assertIn("Huber", r)
+
+
+class FourierTransformUnitTest(unittest.TestCase):
+    """Focused unit tests for the FourierTransform class binding. Added: 2026-04-10."""
+
+    def test_construction(self):
+        """FourierTransform constructs without error."""
+        ft = ip.FourierTransform()
+        self.assertIsInstance(ft, ip.FourierTransform)
+
+    def test_repr(self):
+        """repr(FourierTransform) includes class name."""
+        ft = ip.FourierTransform()
+        self.assertIn("FourierTransform", repr(ft))
+
+    def test_is_power_of_two(self):
+        """is_power_of_two() correctly identifies powers of two."""
+        ft = ip.FourierTransform()
+        self.assertTrue(ft.is_power_of_two(1))
+        self.assertTrue(ft.is_power_of_two(2))
+        self.assertTrue(ft.is_power_of_two(4))
+        self.assertTrue(ft.is_power_of_two(8))
+        self.assertTrue(ft.is_power_of_two(16))
+        self.assertFalse(ft.is_power_of_two(3))
+        self.assertFalse(ft.is_power_of_two(5))
+        self.assertFalse(ft.is_power_of_two(6))
+
+    def test_next_power_of_two(self):
+        """next_power_of_two() returns the smallest power of two >= n."""
+        ft = ip.FourierTransform()
+        self.assertEqual(ft.next_power_of_two(1), 1)
+        self.assertEqual(ft.next_power_of_two(3), 4)
+        self.assertEqual(ft.next_power_of_two(5), 8)
+        self.assertEqual(ft.next_power_of_two(8), 8)
+
+    def test_lg(self):
+        """lg(n) returns floor(log2(n))."""
+        ft = ip.FourierTransform()
+        self.assertEqual(ft.lg(1), 0)
+        self.assertEqual(ft.lg(2), 1)
+        self.assertEqual(ft.lg(4), 2)
+        self.assertEqual(ft.lg(8), 3)
+
+    def test_transform_identity(self):
+        """transform followed by inverse returns approximately the original signal."""
+        ft = ip.FourierTransform()
+        n = 8
+        # Simple real-valued signal (as list of complex)
+        signal = [(float(i), 0.0) for i in range(n)]
+        freq = ft.transform(signal)
+        self.assertEqual(len(freq), n)
+        recovered = ft.inverse(freq)
+        self.assertEqual(len(recovered), n)
+        for i in range(n):
+            orig_real = signal[i][0]
+            rec_real = recovered[i][0]
+            self.assertAlmostEqual(rec_real, orig_real, places=6,
+                                   msg=f"Mismatch at index {i}")
+
+    def test_transform_returns_complex_list(self):
+        """transform() returns a list of complex pairs."""
+        ft = ip.FourierTransform()
+        signal = [(1.0, 0.0)] * 4
+        result = ft.transform(signal)
+        self.assertEqual(len(result), 4)
+        # Each element is a complex number
+        for elem in result:
+            self.assertTrue(hasattr(elem, 'real') or isinstance(elem, (tuple, complex)))
+
+    def test_bit_reverse(self):
+        """bit_reverse(n, x) reverses bits of x in n-bit field."""
+        ft = ip.FourierTransform()
+        # For n=3: bit_reverse(3, 0b001) = 0b100 = 4
+        self.assertEqual(ft.bit_reverse(3, 1), 4)
+        self.assertEqual(ft.bit_reverse(3, 0), 0)
 
 
 if __name__ == '__main__':

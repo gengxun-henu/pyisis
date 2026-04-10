@@ -1,16 +1,16 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-LidarControlPoint,Control Networks,isis/src/control/objs/LidarControlPoint/LidarControlPoint.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+LidarControlPoint,Control Networks,isis/src/control/objs/LidarControlPoint/LidarControlPoint.h,src/control/bind_control_core.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-10 已在 src/control/bind_control_core.cpp 暴露 LidarControlPoint 构造/setRange/setSigmaRange/setTime/addSimultaneous/range/sigmaRange/time/snSimultaneous/isSimultaneous；继承 ControlPoint 全部方法；focused 单测在 control_net_unit_test.py
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,LidarControlPoint,isis_pybind.LidarControlPoint,N,Python class symbol not found in current binding files
-Construction/Enum,LidarControlPoint(),isis_pybind.LidarControlPoint(),N,Constructor binding not detected in current binding files
-Mutation/Configuration,ControlPoint::Status setRange(double range),isis_pybind.LidarControlPoint.set_range,N,Method not found in current binding files
-Mutation/Configuration,ControlPoint::Status setSigmaRange(double sigmaRange),isis_pybind.LidarControlPoint.set_sigma_range,N,Method not found in current binding files
-Mutation/Configuration,ControlPoint::Status setTime(iTime time),isis_pybind.LidarControlPoint.set_time,N,Method not found in current binding files
-Mutation/Configuration,ControlPoint::Status addSimultaneous(QString newSerial),isis_pybind.LidarControlPoint.add_simultaneous,N,Method not found in current binding files
-Public API,ControlPoint::Status ComputeResiduals(),isis_pybind.LidarControlPoint.compute_residuals,N,Method not found in current binding files
-Public API,double range(),isis_pybind.LidarControlPoint.range,N,Method not found in current binding files
-Public API,double sigmaRange(),isis_pybind.LidarControlPoint.sigma_range,N,Method not found in current binding files
-Public API,iTime time(),isis_pybind.LidarControlPoint.time,N,Method not found in current binding files
-Public API,QStringList snSimultaneous() const,isis_pybind.LidarControlPoint.sn_simultaneous,N,Method not found in current binding files
-Query,bool isSimultaneous(QString serialNumber),isis_pybind.LidarControlPoint.is_simultaneous,N,Method not found in current binding files
+Class Symbol,LidarControlPoint,isis_pybind.LidarControlPoint,Y,Bound in src/control/bind_control_core.cpp
+Construction/Enum,LidarControlPoint(),isis_pybind.LidarControlPoint(),Y,Default constructor bound
+Mutation/Configuration,ControlPoint::Status setRange(double range),isis_pybind.LidarControlPoint.set_range,Y,Bound; returns ControlPoint.Status
+Mutation/Configuration,ControlPoint::Status setSigmaRange(double sigmaRange),isis_pybind.LidarControlPoint.set_sigma_range,Y,Bound; returns ControlPoint.Status
+Mutation/Configuration,ControlPoint::Status setTime(iTime time),isis_pybind.LidarControlPoint.set_time,Y,Bound; returns ControlPoint.Status
+Mutation/Configuration,ControlPoint::Status addSimultaneous(QString newSerial),isis_pybind.LidarControlPoint.add_simultaneous,Y,Bound with str->QString conversion
+Public API,ControlPoint::Status ComputeResiduals(),isis_pybind.LidarControlPoint.compute_residuals,Y,Bound; returns ControlPoint.Status
+Public API,double range(),isis_pybind.LidarControlPoint.range,Y,Bound as range()
+Public API,double sigmaRange(),isis_pybind.LidarControlPoint.sigma_range,Y,Bound as sigma_range()
+Public API,iTime time(),isis_pybind.LidarControlPoint.time,Y,Bound; returns iTime object
+Public API,QStringList snSimultaneous() const,isis_pybind.LidarControlPoint.sn_simultaneous,Y,Bound; returns list[str]
+Query,bool isSimultaneous(QString serialNumber),isis_pybind.LidarControlPoint.is_simultaneous,Y,Bound with str->QString conversion

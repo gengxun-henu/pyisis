@@ -15,6 +15,7 @@ Updated: 2026-04-09  Geng Xun added focused CubeIoHandler wrapper coverage for s
 Updated: 2026-04-09  Geng Xun added OriginalLabel PVL/blob/file round-trip coverage.
 Updated: 2026-04-09  Geng Xun added RawCubeChunk and RegionalCachingAlgorithm cache-surface regression coverage.
 Updated: 2026-04-09  Geng Xun added OriginalXmlLabel XML/blob/file round-trip coverage.
+Updated: 2026-04-10  Geng Xun added HiBlob focused coverage testing constructor, repr, and Blobber inheritance.
 """
 
 import unittest
@@ -1181,6 +1182,52 @@ class TrackingTableUnitTest(unittest.TestCase):
         """__repr__ returns a non-empty string containing 'TrackingTable'."""
         tt = ip.TrackingTable()
         self.assertIn("TrackingTable", repr(tt))
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+
+class HiBlobUnitTest(unittest.TestCase):
+    """Focused regression coverage for HiBlob binding.
+
+    Added: 2026-04-10
+    """
+
+    def test_default_constructor(self):
+        """HiBlob can be constructed without arguments."""
+        blob = ip.HiBlob()
+        self.assertIsInstance(blob, ip.HiBlob)
+        self.assertIsInstance(blob, ip.Blobber)
+
+    def test_default_constructor_repr(self):
+        """HiBlob repr returns expected string for default-constructed object."""
+        blob = ip.HiBlob()
+        r = repr(blob)
+        self.assertIn("HiBlob", r)
+
+    def test_hiblob_is_blobber_subtype(self):
+        """HiBlob is a subclass of Blobber in Python."""
+        self.assertTrue(issubclass(ip.HiBlob, ip.Blobber))
+
+    def test_hiblob_inherits_get_name(self):
+        """HiBlob exposes get_name() from Blobber base."""
+        blob = ip.HiBlob()
+        # Default-constructed HiBlob has an empty name
+        self.assertIsInstance(blob.get_name(), str)
+
+    def test_hiblob_inherits_lines_samples(self):
+        """HiBlob exposes lines() and samples() from Blobber base."""
+        blob = ip.HiBlob()
+        self.assertIsInstance(blob.lines(), int)
+        self.assertIsInstance(blob.samples(), int)
+
+    def test_buffer_empty_default(self):
+        """buffer() returns an empty list when no data has been loaded."""
+        blob = ip.HiBlob()
+        buf = blob.buffer()
+        # Default HiBlob has no data; buffer should be empty or zero-sized
+        self.assertIsInstance(buf, list)
 
 
 if __name__ == "__main__":

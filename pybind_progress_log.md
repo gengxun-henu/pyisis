@@ -1655,3 +1655,48 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 - `todo_pybind11.csv`: 5 个类 → 已转换
 - 各 `*_methods.csv`: 更新
 - `class_bind_methods_details/methods_inventory_summary.csv`: 更新
+
+---
+
+## Batch 8a — 2026-04-10
+
+### 队列（5 个类）
+1. HiBlob（MRO）
+2. LidarControlPoint（Control Networks）
+3. ControlNetVersioner（Control Networks）
+4. ImageOverlapSet（Pattern Matching）
+5. SparseBlockMatrix（Utility）
+
+### Class 1: HiBlob (已转换)
+- 新增到 `src/bind_low_level_cube_io.cpp`（继承 Blobber）。
+- 暴露：默认构造器，Cube 构造器（cube, tblname, field, name="HiBlob"），`buffer()` 返回 `list[list[float]]`。
+- HiMatrix (TNT::Array2D<double>) 通过循环转为 list-of-lists。
+- focused 单测：`tests/unitTest/low_level_cube_io_unit_test.py` `HiBlobUnitTest` 类。
+
+### Class 2: LidarControlPoint (已转换)
+- 新增到 `src/control/bind_control_core.cpp` 末尾（继承 ControlPoint）。
+- 暴露：默认构造器，`set_range`, `set_sigma_range`, `set_time`, `add_simultaneous`, `compute_residuals`, `range`, `sigma_range`, `time`, `sn_simultaneous` (→ list[str]), `is_simultaneous`。
+- focused 单测：`tests/unitTest/control_core_unit_test.py` `LidarControlPointUnitTest` 类。
+
+### Class 3: ControlNetVersioner (已转换，Partial)
+- 新增到 `src/control/bind_control_core.cpp` 末尾。
+- 暴露：默认构造器，ControlNet* 构造器，filename 构造器（str→FileName），`net_id`, `target_name`, `creation_date`, `last_modification_date`, `description`, `user_name`, `num_points`, `write`, `to_pvl`。
+- `takeFirstPoint` 因裸指针所有权问题暂跳过（N）。
+- focused 单测：`tests/unitTest/control_core_unit_test.py` `ControlNetVersionerUnitTest` 类。
+
+### Class 4: ImageOverlapSet (已转换，Partial)
+- 扩展 `src/base/bind_base_image_overlap.cpp`。
+- 暴露：构造器（continue_on_error=False, useThread=False），`read_image_overlaps`, `write_image_overlaps`, `size`, `__len__`, `__getitem__`, `errors`（→ list[PvlGroup]）。
+- FindImageOverlaps (GEOS MultiPolygon / SerialNumberList) 因 GEOS 裸指针依赖未暴露（3 个重载均为 N）。
+- focused 单测：`tests/unitTest/image_overlap_camera_unit_test.py` `ImageOverlapSetUnitTest` 类。
+
+### Class 5: SparseBlockMatrix (已转换，Partial)
+- 扩展 `src/base/bind_base_math.cpp`（新增 SparseBlockMatrix.h 和 LinearAlgebra.h）。
+- 暴露：默认构造器，`wipe`, `set_number_of_columns`, `zero_blocks`, `insert_matrix_block`, `get_block`（→ list[list[float]] 或 None），`number_of_blocks`, `number_of_diagonal_blocks`, `number_of_off_diagonal_blocks`, `number_of_elements`, `get_leading_columns_for_block`, `get_leading_rows_for_block`。
+- `print`/`printClean`（ostream）、`write`（ofstream）、`copy` 未暴露（4 个方法为 N）。
+- focused 单测：`tests/unitTest/math_unit_test.py` `SparseBlockMatrixUnitTest` 类。
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个类 → 已转换
+- 各 `*_methods.csv`: 更新为 Y
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新

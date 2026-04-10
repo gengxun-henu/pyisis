@@ -24,9 +24,10 @@
  * Updated: 2026-04-10  Geng Xun added PrincipalComponentAnalysis binding (PCA via TNT::Array2D adapters).
  * Updated: 2026-04-10  Geng Xun fixed PCA add_data observation semantics to validate dimensions and pass single-observation count correctly.
  * Updated: 2026-04-10  Geng Xun added Basis1VariableFunction abstract base class binding (abstract; use derived classes).
+ * Updated: 2026-04-10  Geng Xun added SparseBlockMatrix binding exposing block insertion, counting, zeroing, and structure helpers.
  * Purpose: Expose Calculator, Affine, BasisFunction, FourierTransform, InfixToPostfix,
  *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, Ransac helpers, SurfaceModel,
- *          MaximumLikelihoodWFunctions, and PrincipalComponentAnalysis classes to Python via pybind11.
+ *          MaximumLikelihoodWFunctions, PrincipalComponentAnalysis, and SparseBlockMatrix to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
@@ -55,6 +56,8 @@
 #include "SurfaceModel.h"
 #include "Buffer.h"
 #include "PrincipalComponentAnalysis.h"
+#include "SparseBlockMatrix.h"
+#include "LinearAlgebra.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -716,4 +719,80 @@ void bind_base_math(py::module_ &m)
            py::arg("coef_index"),
            "Evaluate the derivative w.r.t. the coefficient at coef_index.\n\n"
            "Must be implemented by concrete subclasses.");
+
+  // SparseBlockMatrix — sparse block-structured matrix used in bundle adjustment normal equations.
+  // Added: 2026-04-10
+  py::class_<Isis::SparseBlockMatrix>(m, "SparseBlockMatrix")
+      .def(py::init<>(), "Construct an empty SparseBlockMatrix.")
+      .def("wipe",
+           &Isis::SparseBlockMatrix::wipe,
+           "Delete all block entries and free memory.")
+      .def("set_number_of_columns",
+           &Isis::SparseBlockMatrix::setNumberOfColumns,
+           py::arg("n"),
+           "Set the number of block columns. Returns True on success.")
+      .def("zero_blocks",
+           &Isis::SparseBlockMatrix::zeroBlocks,
+           "Set all block elements to zero without freeing memory.")
+      .def("insert_matrix_block",
+           &Isis::SparseBlockMatrix::insertMatrixBlock,
+           py::arg("column_block"),
+           py::arg("row_block"),
+           py::arg("rows"),
+           py::arg("cols"),
+           "Insert a new (rows x cols) matrix block at (column_block, row_block). "
+           "Returns True on success.")
+      .def("get_block",
+           [](Isis::SparseBlockMatrix &self, int col, int row) -> py::object {
+               Isis::LinearAlgebra::Matrix *blk = self.getBlock(col, row);
+               if (!blk) {
+                   return py::none();
+               }
+               // Convert boost ublas matrix to list[list[float]]
+               const std::size_t nr = blk->size1();
+               const std::size_t nc = blk->size2();
+               std::vector<std::vector<double>> result(nr);
+               for (std::size_t r = 0; r < nr; ++r) {
+                   result[r].resize(nc);
+                   for (std::size_t c = 0; c < nc; ++c) {
+                       result[r][c] = (*blk)(r, c);
+                   }
+               }
+               return py::cast(result);
+           },
+           py::arg("column"),
+           py::arg("row"),
+           "Return the matrix block at (column, row) as list[list[float]], or None if absent.")
+      .def("number_of_blocks",
+           &Isis::SparseBlockMatrix::numberOfBlocks,
+           "Return the total number of matrix blocks.")
+      .def("number_of_diagonal_blocks",
+           &Isis::SparseBlockMatrix::numberOfDiagonalBlocks,
+           "Return the number of diagonal matrix blocks.")
+      .def("number_of_off_diagonal_blocks",
+           &Isis::SparseBlockMatrix::numberOfOffDiagonalBlocks,
+           "Return the number of off-diagonal matrix blocks.")
+      .def("number_of_elements",
+           &Isis::SparseBlockMatrix::numberOfElements,
+           "Return the total number of double elements across all blocks.")
+      .def("get_leading_columns_for_block",
+           &Isis::SparseBlockMatrix::getLeadingColumnsForBlock,
+           py::arg("block_column"),
+           "Return the leading column index for the given block column.")
+      .def("get_leading_rows_for_block",
+           &Isis::SparseBlockMatrix::getLeadingRowsForBlock,
+           py::arg("block_row"),
+           "Return the leading row index for the given block row.")
+      .def("__len__",
+           [](const Isis::SparseBlockMatrix &self) {
+               return static_cast<int>(self.size());
+           },
+           "Return the number of block column entries in the matrix.")
+      .def("__repr__",
+           [](Isis::SparseBlockMatrix &self) {
+               return "SparseBlockMatrix(blocks=" + std::to_string(self.numberOfBlocks()) +
+                      ", diagonal=" + std::to_string(self.numberOfDiagonalBlocks()) +
+                      ", off_diagonal=" + std::to_string(self.numberOfOffDiagonalBlocks()) +
+                      ", elements=" + std::to_string(self.numberOfElements()) + ")";
+           });
 }

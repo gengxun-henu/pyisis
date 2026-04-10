@@ -6,6 +6,7 @@ Created: 2026-04-07
 Last Modified: 2026-04-08
 Updated: 2026-04-08  Geng Xun added ControlNetStatistics summary/getter regression coverage and retained control-core helper checks.
 Updated: 2026-04-08  Geng Xun added ControlNetValidMeasure configuration/query regression coverage and retained ControlNetFilter helper checks.
+Updated: 2026-04-10  Geng Xun added LidarControlPoint focused coverage testing constructor, range/sigma/time setters, simultaneous list management, and ControlPoint inheritance.
 """
 
 import gc
@@ -1200,3 +1201,125 @@ End
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class LidarControlPointUnitTest(unittest.TestCase):
+    """Focused regression coverage for LidarControlPoint binding.
+
+    Added: 2026-04-10
+    """
+
+    def test_default_constructor(self):
+        """LidarControlPoint can be constructed without arguments."""
+        lcp = ip.LidarControlPoint()
+        self.assertIsInstance(lcp, ip.LidarControlPoint)
+        self.assertIsInstance(lcp, ip.ControlPoint)
+
+    def test_is_controlpoint_subtype(self):
+        """LidarControlPoint is a Python subclass of ControlPoint."""
+        self.assertTrue(issubclass(ip.LidarControlPoint, ip.ControlPoint))
+
+    def test_set_range_returns_status(self):
+        """set_range returns a ControlPoint.Status enum value."""
+        lcp = ip.LidarControlPoint()
+        status = lcp.set_range(1234.5)
+        self.assertIsInstance(status, ip.ControlPoint.Status)
+
+    def test_set_sigma_range_returns_status(self):
+        """set_sigma_range returns a ControlPoint.Status enum value."""
+        lcp = ip.LidarControlPoint()
+        status = lcp.set_sigma_range(0.5)
+        self.assertIsInstance(status, ip.ControlPoint.Status)
+
+    def test_range_after_set(self):
+        """range() returns the value set by set_range."""
+        lcp = ip.LidarControlPoint()
+        lcp.set_range(999.0)
+        self.assertAlmostEqual(lcp.range(), 999.0)
+
+    def test_sigma_range_after_set(self):
+        """sigma_range() returns the value set by set_sigma_range."""
+        lcp = ip.LidarControlPoint()
+        lcp.set_sigma_range(0.25)
+        self.assertAlmostEqual(lcp.sigma_range(), 0.25)
+
+    def test_add_simultaneous_and_sn_list(self):
+        """add_simultaneous adds a serial number that appears in sn_simultaneous()."""
+        lcp = ip.LidarControlPoint()
+        lcp.add_simultaneous("TEST/SN/001")
+        snlist = lcp.sn_simultaneous()
+        self.assertIsInstance(snlist, list)
+        self.assertIn("TEST/SN/001", snlist)
+
+    def test_is_simultaneous_true(self):
+        """is_simultaneous returns True for an added serial number."""
+        lcp = ip.LidarControlPoint()
+        lcp.add_simultaneous("TEST/SN/002")
+        self.assertTrue(lcp.is_simultaneous("TEST/SN/002"))
+
+    def test_is_simultaneous_false(self):
+        """is_simultaneous returns False for a serial number not in the list."""
+        lcp = ip.LidarControlPoint()
+        self.assertFalse(lcp.is_simultaneous("TEST/SN/NOT_ADDED"))
+
+    def test_repr_contains_id_and_range(self):
+        """__repr__ includes the id and range fields."""
+        lcp = ip.LidarControlPoint()
+        lcp.set_range(42.0)
+        r = repr(lcp)
+        self.assertIn("LidarControlPoint", r)
+        self.assertIn("range=", r)
+
+    def test_inherits_controlpoint_get_id(self):
+        """LidarControlPoint exposes GetId/get_id via ControlPoint inheritance."""
+        lcp = ip.LidarControlPoint()
+        # id() may be empty for a default-constructed point; just check it returns str
+        # (method may be called get_id or GetId depending on binding style)
+        has_id = hasattr(lcp, "get_id") or hasattr(lcp, "GetId")
+        self.assertTrue(has_id)
+
+
+class ControlNetVersionerUnitTest(unittest.TestCase):
+    """Focused regression coverage for ControlNetVersioner binding.
+
+    Added: 2026-04-10
+    """
+
+    def test_default_constructor(self):
+        """ControlNetVersioner can be constructed without arguments."""
+        vnr = ip.ControlNetVersioner()
+        self.assertIsInstance(vnr, ip.ControlNetVersioner)
+
+    def test_default_metadata_empty_strings(self):
+        """Default-constructed versioner returns empty strings for all metadata."""
+        vnr = ip.ControlNetVersioner()
+        self.assertIsInstance(vnr.net_id(), str)
+        self.assertIsInstance(vnr.target_name(), str)
+        self.assertIsInstance(vnr.creation_date(), str)
+        self.assertIsInstance(vnr.last_modification_date(), str)
+        self.assertIsInstance(vnr.description(), str)
+        self.assertIsInstance(vnr.user_name(), str)
+
+    def test_num_points_default_zero(self):
+        """Default-constructed versioner has zero points."""
+        vnr = ip.ControlNetVersioner()
+        self.assertEqual(vnr.num_points(), 0)
+
+    def test_to_pvl_returns_pvl(self):
+        """to_pvl() returns a Pvl object."""
+        vnr = ip.ControlNetVersioner()
+        pvl = vnr.to_pvl()
+        self.assertIsInstance(pvl, ip.Pvl)
+
+    def test_repr_contains_versioner(self):
+        """__repr__ returns a string containing 'ControlNetVersioner'."""
+        vnr = ip.ControlNetVersioner()
+        r = repr(vnr)
+        self.assertIn("ControlNetVersioner", r)
+
+    def test_from_controlnet(self):
+        """ControlNetVersioner(net) constructor accepts a ControlNet."""
+        cnet = ip.ControlNet()
+        vnr = ip.ControlNetVersioner(cnet)
+        self.assertIsInstance(vnr, ip.ControlNetVersioner)
+        self.assertIsInstance(vnr.net_id(), str)

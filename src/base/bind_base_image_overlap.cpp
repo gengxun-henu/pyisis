@@ -3,14 +3,17 @@
 //
 // Source ISIS headers:
 // - reference/upstream_isis/src/base/objs/ImageOverlap/ImageOverlap.h
-// Source classes: Isis::ImageOverlap
+// - reference/upstream_isis/src/base/objs/ImageOverlapSet/ImageOverlapSet.h
+// Source classes: Isis::ImageOverlap, Isis::ImageOverlapSet
 // Source header author(s): not explicitly stated in upstream header
 // Binding author: Geng Xun
 // Created: 2026-04-10
 // Updated: 2026-04-10  Geng Xun added ImageOverlap binding exposing serial number management and overlap metadata.
 // Updated: 2026-04-10  Geng Xun made ImageOverlap.area safe for Python-created objects that have no polygon backing store.
-// Purpose: Expose Isis::ImageOverlap to Python for serial number and area management.
+// Updated: 2026-04-10  Geng Xun added ImageOverlapSet binding with constructor, size, read/write, errors, and indexed access.
+// Purpose: Expose Isis::ImageOverlap and Isis::ImageOverlapSet to Python.
 //          Polygon-related methods (requiring geos::geom::MultiPolygon) are not exposed.
+//          FindImageOverlaps (GEOS/SerialNumberList) is not exposed.
 
 #include <memory>
 #include <sstream>
@@ -21,6 +24,8 @@
 #include <pybind11/stl.h>
 
 #include "ImageOverlap.h"
+#include "ImageOverlapSet.h"
+#include "PvlGroup.h"
 
 #include "helpers.h"
 
@@ -84,5 +89,67 @@ void bind_base_image_overlap(py::module_ &m) {
       .def("__repr__",
            [](const Isis::ImageOverlap &self) {
              return "<ImageOverlap size=" + std::to_string(self.Size()) + ">";
+           });
+
+  // ImageOverlapSet — computes and manages polygon overlaps for a set of images.
+  // FindImageOverlaps (GEOS MultiPolygon / SerialNumberList) is not exposed to avoid
+  // bringing geos native types into the Python API.
+  // Added: 2026-04-10
+  py::class_<Isis::ImageOverlapSet>(m, "ImageOverlapSet")
+      .def(py::init([](bool continueOnError) {
+               // Always use useThread=false so Python callers don't get threading surprises.
+               return Isis::ImageOverlapSet(continueOnError, false);
+           }),
+           py::arg("continue_on_error") = false,
+           "Construct an ImageOverlapSet.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "continue_on_error : bool, optional\n"
+           "    If True, continue processing even when an error occurs (default False).")
+      .def("read_image_overlaps",
+           [](Isis::ImageOverlapSet &self, const std::string &filename) {
+               self.ReadImageOverlaps(QString::fromStdString(filename));
+           },
+           py::arg("filename"),
+           "Read image overlaps from a file produced by WriteImageOverlaps.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "filename : str\n"
+           "    Path to the input overlaps file.")
+      .def("write_image_overlaps",
+           [](Isis::ImageOverlapSet &self, const std::string &filename) {
+               self.WriteImageOverlaps(QString::fromStdString(filename));
+           },
+           py::arg("filename"),
+           "Write the current image overlaps to a file.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "filename : str\n"
+           "    Path to the output overlaps file.")
+      .def("size",
+           [](Isis::ImageOverlapSet &self) { return self.Size(); },
+           "Return the number of image overlaps in the set.")
+      .def("__len__",
+           [](Isis::ImageOverlapSet &self) { return self.Size(); })
+      .def("__getitem__",
+           [](Isis::ImageOverlapSet &self, int index) -> const Isis::ImageOverlap * {
+               if (index < 0 || index >= self.Size()) {
+                   throw py::index_error("ImageOverlapSet index out of range");
+               }
+               return self[index];
+           },
+           py::arg("index"),
+           py::return_value_policy::reference_internal,
+           "Return the ImageOverlap at the given index.")
+      .def("errors",
+           [](Isis::ImageOverlapSet &self) {
+               const std::vector<Isis::PvlGroup> &errs = self.Errors();
+               std::vector<Isis::PvlGroup> result(errs.begin(), errs.end());
+               return result;
+           },
+           "Return a list of PvlGroup objects describing any errors encountered.")
+      .def("__repr__",
+           [](Isis::ImageOverlapSet &self) {
+               return "ImageOverlapSet(size=" + std::to_string(self.Size()) + ")";
            });
 }

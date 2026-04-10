@@ -1,13 +1,13 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ImageOverlapSet,Pattern Matching,isis/src/base/objs/ImageOverlapSet/ImageOverlapSet.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+ImageOverlapSet,Pattern Matching,isis/src/base/objs/ImageOverlapSet/ImageOverlapSet.h,src/base/bind_base_image_overlap.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-10 已在 src/base/bind_base_image_overlap.cpp 暴露构造/size/read_image_overlaps/write_image_overlaps/errors/indexed access；FindImageOverlaps 因 GEOS/SerialNumberList 依赖未暴露；focused 单测在 image_overlap_camera_unit_test.py
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ImageOverlapSet,isis_pybind.ImageOverlapSet,N,Python class symbol not found in current binding files
-Construction/Enum,ImageOverlapSet(),isis_pybind.ImageOverlapSet(),N,Constructor binding not detected in current binding files
-Public API,void FindImageOverlaps(SerialNumberList &boundaries),isis_pybind.ImageOverlapSet.find_image_overlaps,N,Method not found in current binding files
-Public API,"void FindImageOverlaps(std::vector<QString> sns, std::vector<geos::geom::MultiPolygon *> polygons)",isis_pybind.ImageOverlapSet.find_image_overlaps,N,Method not found in current binding files
-Public API,"void FindImageOverlaps(SerialNumberList &boundaries, QString outputFile)",isis_pybind.ImageOverlapSet.find_image_overlaps,N,Method not found in current binding files
-Read/Write IO,void ReadImageOverlaps(const QString &filename),isis_pybind.ImageOverlapSet.read_image_overlaps,N,Method not found in current binding files
-Read/Write IO,void WriteImageOverlaps(const QString &filename),isis_pybind.ImageOverlapSet.write_image_overlaps,N,Method not found in current binding files
-Query,int Size() { return p_lonLatOverlaps.size(),isis_pybind.ImageOverlapSet.size,N,Method not found in current binding files
-Public API,const std::vector<PvlGroup> &Errors() { return p_errorLog,isis_pybind.ImageOverlapSet.errors,N,Method not found in current binding files
+Class Symbol,ImageOverlapSet,isis_pybind.ImageOverlapSet,Y,Bound in src/base/bind_base_image_overlap.cpp
+Construction/Enum,ImageOverlapSet(bool continueOnError=false),isis_pybind.ImageOverlapSet(continue_on_error=False),Y,useThread always set False for Python safety
+Public API,void FindImageOverlaps(SerialNumberList &boundaries),isis_pybind.ImageOverlapSet.find_image_overlaps,N,Not exposed; requires GEOS and SerialNumberList which are not fully Python-friendly
+Public API,"void FindImageOverlaps(std::vector<QString> sns, std::vector<geos::geom::MultiPolygon *> polygons)",isis_pybind.ImageOverlapSet.find_image_overlaps,N,Not exposed; requires raw GEOS MultiPolygon pointers
+Public API,"void FindImageOverlaps(SerialNumberList &boundaries, QString outputFile)",isis_pybind.ImageOverlapSet.find_image_overlaps,N,Not exposed; requires SerialNumberList
+Read/Write IO,void ReadImageOverlaps(const QString &filename),isis_pybind.ImageOverlapSet.read_image_overlaps,Y,Bound with str->QString conversion
+Read/Write IO,void WriteImageOverlaps(const QString &filename),isis_pybind.ImageOverlapSet.write_image_overlaps,Y,Bound with str->QString conversion
+Query,int Size(),isis_pybind.ImageOverlapSet.size,Y,Bound as size() and __len__
+Public API,const std::vector<PvlGroup> &Errors(),isis_pybind.ImageOverlapSet.errors,Y,Bound; returns list[PvlGroup] copy

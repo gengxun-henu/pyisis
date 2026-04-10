@@ -7,6 +7,7 @@
 // Updated: 2026-04-10  Geng Xun added bind_base_pds_io for ImportPdsTable and ExportPdsTable
 // Updated: 2026-04-10  Geng Xun added bind_spice_navigation for SpicePosition/SpiceRotation/SpacecraftPosition (Batch 1)
 // Updated: 2026-04-10  Geng Xun added bind_base_image_polygon for ImagePolygon (Batch 2)
+// Updated: 2026-04-10  Geng Xun added ProcessMapMosaic/RubberSheet/Polygons/GroundPolygons/PolygonTools (Batch 3)
 // Purpose: define the top-level pybind11 _isis_core module and register all binding submodules
 
 // Copyright (c) 2026 Geng Xun, Henan University

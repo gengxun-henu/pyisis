@@ -33,8 +33,14 @@
 #include "ProcessImportFits.h"
 #include "ProcessImportPds.h"
 #include "ProcessImportVicar.h"
+#include "ProcessMapMosaic.h"
 #include "ProcessMosaic.h"
+#include "ProcessGroundPolygons.h"
+#include "ProcessPolygons.h"
+#include "ProcessRubberSheet.h"
 #include "Progress.h"
+#include "Interpolator.h"
+#include "Transform.h"
 #include "SubArea.h"
 #include "helpers.h"
 
@@ -700,5 +706,99 @@ void bind_high_level_cube_io(py::module_ &m) {
            return std::string("ProcessMosaic()");
       });
 
+  // Added: 2026-04-10 - Batch 3 process classes
+
+  // ─── ProcessMapMosaic ────────────────────────────────────────────────────
+  py::class_<Isis::ProcessMapMosaic, Isis::ProcessMosaic>(m, "ProcessMapMosaic")
+      .def(py::init<>(),
+           "Construct a default ProcessMapMosaic.")
+      .def("__repr__", [](const Isis::ProcessMapMosaic &) {
+           return std::string("ProcessMapMosaic()");
+      });
+
+  // ─── ProcessRubberSheet ──────────────────────────────────────────────────
+  py::class_<Isis::ProcessRubberSheet, Isis::Process>(m, "ProcessRubberSheet")
+      .def(py::init([](int start_size, int end_size) {
+               return std::make_unique<Isis::ProcessRubberSheet>(start_size, end_size);
+           }),
+           py::arg("start_size") = 128,
+           py::arg("end_size") = 8,
+           "Construct a ProcessRubberSheet with tile start/end sizes.")
+      .def("force_tile",
+           [](Isis::ProcessRubberSheet &self, double samp, double line) {
+               self.ForceTile(samp, line);
+           },
+           py::arg("samp"),
+           py::arg("line"),
+           "Force a specific output tile sample/line position.")
+      .def("set_tiling",
+           [](Isis::ProcessRubberSheet &self, long long start, long long end) {
+               self.SetTiling(start, end);
+           },
+           py::arg("start"),
+           py::arg("end"),
+           "Override the automatic tiling start/end sizes.")
+      .def("start_process",
+           [](Isis::ProcessRubberSheet &self,
+              Isis::Transform &trans,
+              Isis::Interpolator &interp) {
+               self.StartProcess(trans, interp);
+           },
+           py::arg("transform"),
+           py::arg("interpolator"),
+           "Run the rubber-sheet transform on the current input/output cube pair.")
+      .def("__repr__", [](const Isis::ProcessRubberSheet &) {
+           return std::string("ProcessRubberSheet()");
+      });
+
+  // ─── ProcessPolygons ─────────────────────────────────────────────────────
+  py::class_<Isis::ProcessPolygons, Isis::Process>(m, "ProcessPolygons")
+      .def(py::init<>(),
+           "Construct a default ProcessPolygons.")
+      .def("set_intersect_algorithm",
+           &Isis::ProcessPolygons::SetIntersectAlgorithm,
+           py::arg("use_center"),
+           "If True, use polygon center for pixel assignment; otherwise use polygon coverage.")
+      .def("rasterize",
+           [](Isis::ProcessPolygons &self,
+              std::vector<double> samples,
+              std::vector<double> lines,
+              std::vector<double> values) {
+               self.Rasterize(samples, lines, values);
+           },
+           py::arg("samples"),
+           py::arg("lines"),
+           py::arg("values"),
+           "Rasterize a polygon given parallel sample, line, and value vectors.")
+      .def("end_process",
+           [](Isis::ProcessPolygons &self) { self.EndProcess(); },
+           "Finalize and flush polygon rasterization results.")
+      .def("finalize",
+           [](Isis::ProcessPolygons &self) { self.Finalize(); },
+           "Finalize statistics after all polygons have been rasterized.")
+      .def("__repr__", [](const Isis::ProcessPolygons &) {
+           return std::string("ProcessPolygons()");
+      });
+
+  // ─── ProcessGroundPolygons ───────────────────────────────────────────────
+  py::class_<Isis::ProcessGroundPolygons, Isis::ProcessPolygons>(m, "ProcessGroundPolygons")
+      .def(py::init<>(),
+           "Construct a default ProcessGroundPolygons.")
+      .def("rasterize_latlon",
+           [](Isis::ProcessGroundPolygons &self,
+              std::vector<double> lat,
+              std::vector<double> lon,
+              std::vector<double> values) {
+               self.Rasterize(lat, lon, values);
+           },
+           py::arg("lat"),
+           py::arg("lon"),
+           py::arg("values"),
+           "Rasterize ground polygons given lat, lon, and value vectors.")
+      .def("__repr__", [](const Isis::ProcessGroundPolygons &) {
+           return std::string("ProcessGroundPolygons()");
+      });
+
 }
+
 

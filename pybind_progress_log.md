@@ -2,6 +2,19 @@
 
 ## 2026-04-10
 
+- `MinimumDifference` AutoRegistration PVL regression fixed and full workflow returned to green:
+  - Updated `tests/unitTest/pattern_unit_test.py` so `MinimumDifference` coverage now builds a real upstream-style `PvlObject("AutoRegistration")` with nested `Algorithm`, `PatternChip`, and `SearchChip` groups instead of an invalid flat `PvlGroup("AutoRegistration")`.
+  - Added `AutoRegFactory` coverage for `MinimumDifference` to ensure both the direct constructor path and the factory path accept the same valid PVL structure.
+  - Recorded the `AutoReg` PVL shape requirement in `.github/skills/isis-pybind/SKILL.md` so future pattern-matching regressions reuse the upstream object layout instead of guessing.
+  - Synced stale ledger entries in `class_bind_methods_details/base_minimum_difference_methods.csv` and `class_bind_methods_details/methods_inventory_summary.csv` so inventory status now matches the already-updated `todo_pybind11.csv` row.
+  - Validation status:
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest -v tests/unitTest/pattern_unit_test.py` (`36` tests, `OK`)
+    - Passed: repository `full` workflow from `doc_development_process/build_commands.md`
+      - `cmake -S . -B build ...` configure OK
+      - `cmake --build build -j"$(nproc)"` build OK
+      - `ctest --test-dir build -R python-unit-tests --output-on-failure` (`100% tests passed`)
+      - `tests/smoke_import.py` (`smoke import ok`)
+
 - Build-break hotfix for `Quaternion` and PVL helper bindings completed:
   - Updated `src/bind_camera.cpp` so `Quaternion.__mul__(scalar)` no longer calls the upstream non-const `Quaternion::operator*(const double &)` on a `const Isis::Quaternion &`; the binding now multiplies through a mutable local copy instead.
   - Updated `src/base/bind_base_pvl.cpp` so `PvlFormat.add_quotes(...)`, `PvlFormat.is_single_unit(...)`, `PvlTranslationTable.has_input_default(...)`, `is_auto(...)`, `is_optional(...)`, `output_name(...)`, and `output_position(...)` no longer attempt to bind upstream protected members directly.

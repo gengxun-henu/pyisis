@@ -3,9 +3,10 @@ Unit tests for ISIS advanced bundle-adjustment bindings.
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-10
+Last Modified: 2026-04-11
 Updated: 2026-03-25  Geng Xun added preserved regression coverage for temporarily disabled advanced bundle-adjustment bindings.
 Updated: 2026-04-10  Geng Xun re-enabled tests after bind_bundle_advanced.cpp was re-enabled with boost ublas lambda wrappers.
+Updated: 2026-04-11  Geng Xun aligned BundleResults observation-count expectations with upstream semantics and covered null-safe BundleSolutionInfo filename getters.
 """
 
 import unittest
@@ -356,9 +357,10 @@ class BundleAdvancedUnitTest(unittest.TestCase):
         results = ip.BundleResults()
         results.initialize()
 
-        # Set number of observations
+        # Upstream number_observations() reports image + lidar observations.
+        # set_number_observations() stores an internal total used elsewhere,
+        # but the public accessor derives its value from the image/lidar counts.
         results.set_number_observations(50)
-        self.assertEqual(results.number_observations(), 50)
 
         # Set number of image observations
         results.set_number_image_observations(45)
@@ -367,6 +369,7 @@ class BundleAdvancedUnitTest(unittest.TestCase):
         # Set number of LIDAR image observations
         results.set_number_lidar_image_observations(5)
         self.assertEqual(results.number_lidar_image_observations(), 5)
+        self.assertEqual(results.number_observations(), 50)
 
         # Set number of rejected observations
         results.set_number_rejected_observations(3)
@@ -609,15 +612,19 @@ class BundleAdvancedUnitTest(unittest.TestCase):
         """Test BundleSolutionInfo file name accessors."""
         solution_info = ip.BundleSolutionInfo()
 
-        # Test that file name accessors exist and return strings
+        # Default-constructed BundleSolutionInfo keeps file-name pointers null in upstream;
+        # Python bindings should return empty strings instead of dereferencing null.
         input_control = solution_info.input_control_net_file_name()
         self.assertIsInstance(input_control, str)
+        self.assertEqual(input_control, "")
 
         output_control = solution_info.output_control_net_file_name()
         self.assertIsInstance(output_control, str)
+        self.assertEqual(output_control, "")
 
         input_lidar = solution_info.input_lidar_data_file_name()
         self.assertIsInstance(input_lidar, str)
+        self.assertEqual(input_lidar, "")
 
     def test_bundle_solution_info_output_methods(self):
         """Test BundleSolutionInfo output generation methods exist."""

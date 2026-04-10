@@ -20,6 +20,7 @@
 // Created: 2026-03-24
 // Updated: 2026-03-25  Geng Xun expanded advanced bundle-adjustment bindings and fixed Python exposure for control-point correction and sigma accessors
 // Updated: 2026-04-10  Geng Xun re-enabled file; replaced boost::ublas bounded_vector accessors with lambda wrappers returning list; skipped SparseBlockRowMatrix/LinearAlgebra heavy methods
+// Updated: 2026-04-11  Geng Xun fixed BundleSolutionInfo null-safe filename accessors and used the pybind-safe BundleResults transfer helper.
 // Purpose: pybind11 bindings for advanced ISIS bundle-adjustment classes
 
 #include <memory>
@@ -496,19 +497,19 @@ void bind_bundle_advanced(py::module_ &m)
          .def("set_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setName(stdStringToQString(name)); }, py::arg("name"))
          .def("set_output_statistics", [](Isis::BundleSolutionInfo &self, const Isis::BundleResults &statistics_results)
-              { self.setOutputStatistics(statistics_results); }, py::arg("statistics_results"))
+              { self.setOutputStatisticsForPyBind(statistics_results); }, py::arg("statistics_results"))
          .def("set_output_control_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setOutputControlName(stdStringToQString(name)); }, py::arg("name"))
          .def("id", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.id()); })
          .def("input_control_net_file_name", [](const Isis::BundleSolutionInfo &self)
-              { return qStringToStdString(self.inputControlNetFileName()); })
+              { return qStringToStdString(self.inputControlNetFileNameForPyBind()); })
          .def("output_control_net_file_name", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.outputControlNetFileName()); })
          .def("output_control_name", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.outputControlName()); })
          .def("input_lidar_data_file_name", [](const Isis::BundleSolutionInfo &self)
-              { return qStringToStdString(self.inputLidarDataFileName()); })
+              { return qStringToStdString(self.inputLidarDataFileNameForPyBind()); })
          .def("bundle_settings", &Isis::BundleSolutionInfo::bundleSettings)
          // NOTE: bundle_results() commented out - upstream bundleResults() returns by value
          // which invokes BundleResults copy constructor causing segfault with ISIS 9.0.0

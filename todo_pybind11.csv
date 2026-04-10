@@ -203,14 +203,14 @@ Parsing,PvlToPvlTranslationManager,已转换,2026-04-09 已在 src/base/bind_bas
 Parsing,PvlToXmlTranslationManager,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露构造函数/translate/input_has_keyword/set_label（Auto(QDomDocument) 不暴露）；smoke 已补符号
 Parsing,PvlTranslationTable,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露构造函数/add_table/input_group/input_keyword_name/input_default/translate/has_input_default/is_auto/is_optional/output_name/output_position；focused 单测在 pvl_unit_test.py；smoke 已补符号
 Parsing,XmlToPvlTranslationManager,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露构造函数/translate/auto_translate(FileName,Pvl)（内部 QDomDocument 不暴露）；smoke 已补符号
-Pattern Matching,AdaptiveGruen,未转换,
+Pattern Matching,AdaptiveGruen,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp 继承 Gruen 暴露构造函数；focused 单测在 pattern_unit_test.py
 Pattern Matching,AtmosModelFactory,已转换,2026-04-04 已在 bind_base_photometry.cpp 暴露 create 静态工厂方法并补最小工厂链单测
 Pattern Matching,AutoReg,已转换,2026-04-03 已在 bind_base_pattern.cpp 暴露全部公共方法（抽象基类，通过子类使用）
 Pattern Matching,AutoRegFactory,已转换,2026-04-03 已在 bind_auto_reg_factory.cpp 暴露 create 静态工厂方法
 Pattern Matching,Centroid,已转换,2026-04-08 已在 src/base/bind_base_pattern.cpp 暴露构造/select/set_dn_range/get_min_dn/get_max_dn，并补 Chip 连通域 focused 单测与 smoke 覆盖
 Pattern Matching,Chip,未转换,抽象基类/纯虚接口
 Pattern Matching,GridPolygonSeeder,未转换,
-Pattern Matching,Gruen,未转换,
+Pattern Matching,Gruen,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp 暴露构造函数/getSpiceConstraint/getAffineConstraint/AlgorithmName/IdealFit；focused 单测在 pattern_unit_test.py
 Pattern Matching,ImageOverlapSet,未转换,
 Pattern Matching,ImagePolygon,未转换,
 Pattern Matching,LimitPolygonSeeder,未转换,
@@ -291,8 +291,8 @@ Statistics,GroupedStatistics,已转换,
 Statistics,Histogram,已转换,
 Statistics,ImageHistogram,已转换,
 Statistics,MultivariateStatistics,已转换,
-Statistics,OverlapStatistics,未转换,
-Statistics,PrincipalComponentAnalysis,未转换,
+Statistics,OverlapStatistics,已转换,2026-04-10 已在 src/bind_statistics.cpp 暴露 PvlObject 构造函数/HasOverlap/Lines/Samples/Bands/SampPercent/FileNameX/FileNameY/GetMStats/toPvl；focused 单测在 statistics_unit_test.py
+Statistics,PrincipalComponentAnalysis,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露全部公开方法（TNT::Array2D 通过 2D list 适配）；focused 单测在 statistics_unit_test.py
 Statistics,QuickFilter,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露完整 QuickFilter 接口（add_line/remove_line/average/variance/count/set_min_max 等）；focused 单测在 tests/unitTest/filters_unit_test.py
 Statistics,StatCumProbDistDynCalc,未转换,Qt 类型/信号槽较多
 Statistics,Statistics,已转换,Qt 类型/信号槽较多
@@ -323,7 +323,7 @@ OSIRIS-REx,OsirisRexOcamsCamera,已转换,"2026-04-07 已在 bind_mission_camera
 OSIRIS-REx,OsirisRexDistortionMap,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数与失真映射方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 OSIRIS-REx,OsirisRexTagcamsCamera,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、快门时间与 SPICE ID 方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 OSIRIS-REx,OsirisRexTagcamsDistortionMap,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、温度配置与失真映射方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Utility,Area3D,未转换,
+Utility,Area3D,已转换,2026-04-10 已在 src/base/bind_base_geometry.cpp 暴露全部公开方法（构造/访问器/变换器/isValid/intersect）；focused 单测在 geometry_unit_test.py
 Utility,Angle,已转换,2026-04-08 已在 src/base/bind_base_geometry.cpp 同步完成 Angle 构造/单位/算术/比较/字符串接口，并扩展 tests/unitTest/angle_unit_test.py
 Utility,Column,已转换,2026-03-25 已在 bind_base_utility.cpp 暴露 Column/Align/Type，补充顶层导出并新增约束单测
 Utility,CollectorMap,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 以稳定的 `CollectorMap<int, QString>` 实例暴露 Python 类，并补 focused 单测与 smoke 覆盖

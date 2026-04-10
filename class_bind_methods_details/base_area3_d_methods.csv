@@ -1,35 +1,35 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Area3D,Utility,isis/src/base/objs/Area3D/Area3D.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+Area3D,Utility,isis/src/base/objs/Area3D/Area3D.h,src/base/bind_base_geometry.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-10 已在 src/base/bind_base_geometry.cpp 完成全部公开方法绑定
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Area3D,isis_pybind.Area3D,N,Python class symbol not found in current binding files
-Construction/Enum,Area3D(),isis_pybind.Area3D(),N,Constructor binding not detected in current binding files
-Public API,Displacement getStartX() const,isis_pybind.Area3D.get_start_x,N,Method not found in current binding files
-Public API,Displacement getStartY() const,isis_pybind.Area3D.get_start_y,N,Method not found in current binding files
-Public API,Displacement getStartZ() const,isis_pybind.Area3D.get_start_z,N,Method not found in current binding files
-Public API,Distance getWidth() const,isis_pybind.Area3D.get_width,N,Method not found in current binding files
-Public API,Distance getHeight() const,isis_pybind.Area3D.get_height,N,Method not found in current binding files
-Public API,Distance getDepth() const,isis_pybind.Area3D.get_depth,N,Method not found in current binding files
-Public API,Displacement getEndX() const,isis_pybind.Area3D.get_end_x,N,Method not found in current binding files
-Public API,Displacement getEndY() const,isis_pybind.Area3D.get_end_y,N,Method not found in current binding files
-Public API,Displacement getEndZ() const,isis_pybind.Area3D.get_end_z,N,Method not found in current binding files
-Mutation/Configuration,void setStartX(const Displacement &startX),isis_pybind.Area3D.set_start_x,N,Method not found in current binding files
-Mutation/Configuration,void setStartY(const Displacement &startY),isis_pybind.Area3D.set_start_y,N,Method not found in current binding files
-Mutation/Configuration,void setStartZ(const Displacement &startZ),isis_pybind.Area3D.set_start_z,N,Method not found in current binding files
-Public API,void moveStartX(const Displacement &startX),isis_pybind.Area3D.move_start_x,N,Method not found in current binding files
-Public API,void moveStartY(const Displacement &startY),isis_pybind.Area3D.move_start_y,N,Method not found in current binding files
-Public API,void moveStartZ(const Displacement &startZ),isis_pybind.Area3D.move_start_z,N,Method not found in current binding files
-Mutation/Configuration,void setWidth(const Distance &width),isis_pybind.Area3D.set_width,N,Method not found in current binding files
-Mutation/Configuration,void setHeight(const Distance &height),isis_pybind.Area3D.set_height,N,Method not found in current binding files
-Mutation/Configuration,void setDepth(const Distance &depth),isis_pybind.Area3D.set_depth,N,Method not found in current binding files
-Mutation/Configuration,void setEndX(const Displacement &endX),isis_pybind.Area3D.set_end_x,N,Method not found in current binding files
-Mutation/Configuration,void setEndY(const Displacement &endY),isis_pybind.Area3D.set_end_y,N,Method not found in current binding files
-Mutation/Configuration,void setEndZ(const Displacement &endZ),isis_pybind.Area3D.set_end_z,N,Method not found in current binding files
-Public API,void moveEndX(const Displacement &endX),isis_pybind.Area3D.move_end_x,N,Method not found in current binding files
-Public API,void moveEndY(const Displacement &endY),isis_pybind.Area3D.move_end_y,N,Method not found in current binding files
-Public API,void moveEndZ(const Displacement &endZ),isis_pybind.Area3D.move_end_z,N,Method not found in current binding files
-Mutation/Configuration,"void setXDimension(const Displacement &startX, const Distance &width)",isis_pybind.Area3D.set_x_dimension,N,Method not found in current binding files
-Mutation/Configuration,"void setYDimension(const Displacement &startY, const Distance &height)",isis_pybind.Area3D.set_y_dimension,N,Method not found in current binding files
-Mutation/Configuration,"void setZDimension(const Displacement &startZ, const Distance &depth)",isis_pybind.Area3D.set_z_dimension,N,Method not found in current binding files
-Public API,Area3D intersect(const Area3D &otherArea) const,isis_pybind.Area3D.intersect,N,Method not found in current binding files
-Query,bool isValid() const,isis_pybind.Area3D.is_valid,N,Method not found in current binding files
+Class Symbol,Area3D,isis_pybind.Area3D,Y,Exported in python/isis_pybind/__init__.py
+Construction/Enum,Area3D(),isis_pybind.Area3D(),Y,Default empty constructor
+Construction/Enum,"Area3D(Displacement startX, ..., Distance width, ...)","isis_pybind.Area3D(start_x, start_y, start_z, width, height, depth)",Y,Width/height/depth constructor
+Construction/Enum,"Area3D(Displacement startX, ..., Displacement endX, ...)","isis_pybind.Area3D(start_x, start_y, start_z, end_x, end_y, end_z)",Y,Start/end corner constructor
+Construction/Enum,Area3D(const Area3D &),isis_pybind.Area3D(other),Y,Copy constructor
+Public API,Displacement getStartX() const,isis_pybind.Area3D.get_start_x,Y,
+Public API,Displacement getStartY() const,isis_pybind.Area3D.get_start_y,Y,
+Public API,Displacement getStartZ() const,isis_pybind.Area3D.get_start_z,Y,
+Public API,Distance getWidth() const,isis_pybind.Area3D.get_width,Y,
+Public API,Distance getHeight() const,isis_pybind.Area3D.get_height,Y,
+Public API,Distance getDepth() const,isis_pybind.Area3D.get_depth,Y,
+Public API,Displacement getEndX() const,isis_pybind.Area3D.get_end_x,Y,
+Public API,Displacement getEndY() const,isis_pybind.Area3D.get_end_y,Y,
+Public API,Displacement getEndZ() const,isis_pybind.Area3D.get_end_z,Y,
+Mutation/Configuration,void setStartX(const Displacement &),isis_pybind.Area3D.set_start_x,Y,
+Mutation/Configuration,void setStartY(const Displacement &),isis_pybind.Area3D.set_start_y,Y,
+Mutation/Configuration,void setStartZ(const Displacement &),isis_pybind.Area3D.set_start_z,Y,
+Public API,void moveStartX(const Displacement &),isis_pybind.Area3D.move_start_x,Y,
+Public API,void moveStartY(const Displacement &),isis_pybind.Area3D.move_start_y,Y,
+Public API,void moveStartZ(const Displacement &),isis_pybind.Area3D.move_start_z,Y,
+Mutation/Configuration,void setWidth(const Distance &),isis_pybind.Area3D.set_width,Y,
+Mutation/Configuration,void setHeight(const Distance &),isis_pybind.Area3D.set_height,Y,
+Mutation/Configuration,void setDepth(const Distance &),isis_pybind.Area3D.set_depth,Y,
+Mutation/Configuration,void setEndX(const Displacement &),isis_pybind.Area3D.set_end_x,Y,
+Mutation/Configuration,void setEndY(const Displacement &),isis_pybind.Area3D.set_end_y,Y,
+Mutation/Configuration,void setEndZ(const Displacement &),isis_pybind.Area3D.set_end_z,Y,
+Public API,void moveEndX(const Displacement &),isis_pybind.Area3D.move_end_x,Y,
+Public API,void moveEndY(const Displacement &),isis_pybind.Area3D.move_end_y,Y,
+Public API,void moveEndZ(const Displacement &),isis_pybind.Area3D.move_end_z,Y,
+Query,bool isValid() const,isis_pybind.Area3D.is_valid,Y,
+Public API,Area3D intersect(const Area3D &) const,isis_pybind.Area3D.intersect,Y,Returns Area3D; invalid if no overlap

@@ -1303,3 +1303,55 @@ Queue document created: `pybind_rollout_classes_20260409.md`
 ### Validation status
 - Build environment not available in sandbox; requires CI/asp360_new interpreter.
 - All bindings reviewed for correctness against upstream `.h` and `.cpp`.
+
+---
+
+## 2026-04-10 第五阶段 Rollout 第2批（5 类）
+
+### 活跃队列
+1. Area3D — 已完成
+2. PrincipalComponentAnalysis — 已完成
+3. Gruen — 已完成（部分：GruenTypes-specific 方法未暴露）
+4. AdaptiveGruen — 已完成
+5. OverlapStatistics — 已完成（部分：Cube 构造函数未暴露；用 PvlObject 构造函数路径）
+
+### Class 6: Area3D (已转换)
+- Added `py::class_<Isis::Area3D>` binding in `src/base/bind_base_geometry.cpp`.
+- Exposed: 3 constructors (default, width/height/depth, start/end corners), copy constructor, 9 get_* accessors (startX/Y/Z, width, height, depth, endX/Y/Z), 9 set_* mutators, 6 move_* methods, is_valid(), intersect(), __repr__.
+- Added `Area3DUnitTest` class to `tests/unitTest/geometry_unit_test.py` with 10 focused tests.
+- Exported `Area3D` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_area3_d_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 7: PrincipalComponentAnalysis (已转换)
+- Added `py::class_<Isis::PrincipalComponentAnalysis>` binding in `src/base/bind_base_math.cpp`.
+- Exposed: constructor(int n), constructor(2D list), add_data(), compute_transform(), transform(), inverse(), transform_matrix(), dimensions(). TNT::Array2D wrapped via 2D Python list adapters.
+- Added `PrincipalComponentAnalysisUnitTest` class to `tests/unitTest/statistics_unit_test.py` with 6 focused tests.
+- Exported `PrincipalComponentAnalysis` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_principal_component_analysis_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 8: Gruen (已转换，部分)
+- Added `py::class_<Isis::Gruen, Isis::AutoReg>` binding in `src/base/bind_base_pattern.cpp`.
+- Exposed: constructor(Pvl&), ideal_fit(), get_spice_constraint(), get_affine_constraint(), __repr__, plus inherited AutoReg interface.
+- Not exposed: GruenTypes-specific methods (AffineRadio, AffineTolerance, MatchPoint); WriteSubsearchChips (file I/O).
+- Added `GruenUnitTest` class to `tests/unitTest/pattern_unit_test.py` with 7 focused tests.
+- Exported `Gruen` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_gruen_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 9: AdaptiveGruen (已转换)
+- Added `py::class_<Isis::AdaptiveGruen, Isis::Gruen>` binding in `src/base/bind_base_pattern.cpp`.
+- Exposed: constructor(Pvl&), ideal_fit(), __repr__, plus inherited Gruen/AutoReg interface.
+- Added `AdaptiveGruenUnitTest` class to `tests/unitTest/pattern_unit_test.py` with 6 focused tests.
+- Exported `AdaptiveGruen` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `class_bind_methods_details/base_adaptive_gruen_methods.csv`, `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 10: OverlapStatistics (已转换，部分)
+- Added `py::class_<Isis::OverlapStatistics>` binding in `src/bind_statistics.cpp`.
+- Exposed: PvlObject constructor, has_overlap(band), has_any_overlap(), lines(), samples(), bands(), samp_percent(), file_name_x(), file_name_y(), get_mstats(), to_pvl(), __repr__.
+- Not exposed: Cube-based constructor (requires 2 projected Cube objects).
+- Added `OverlapStatisticsUnitTest` class to `tests/unitTest/statistics_unit_test.py` with 3 focused tests.
+- Exported `OverlapStatistics` in `python/isis_pybind/__init__.py`; smoke symbol check added.
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Validation status
+- Build environment not available in sandbox; requires CI/asp360_new interpreter.
+- All bindings reviewed for correctness against upstream `.h` and `.cpp`.

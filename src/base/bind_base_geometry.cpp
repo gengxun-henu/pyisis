@@ -1,7 +1,8 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-04-08  Geng Xun refined Stereo.elevation camera-state validation and added Angle arithmetic/comparison helpers
-// Purpose: pybind11 bindings for ISIS geometry primitives and resampling helpers including Angle, Stereo, Distance, Latitude, Longitude, Transform, Interpolator, Enlarge, and Reduce
+// Updated: 2026-04-10  Geng Xun added Area3D binding for 3D volume geometry
+// Purpose: pybind11 bindings for ISIS geometry primitives and resampling helpers including Angle, Area3D, Stereo, Distance, Latitude, Longitude, Transform, Interpolator, Enlarge, and Reduce
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
@@ -12,6 +13,7 @@
 #include <string>
 
 #include "Angle.h"
+#include "Area3D.h"
 #include "Enlarge.h"
 #include "Displacement.h"
 #include "Distance.h"
@@ -500,4 +502,89 @@ void bind_base_geometry(py::module_ &m) {
            },
            py::arg("output_cube"))
       .def("__repr__", [](Isis::Reduce &) { return "Reduce()"; });
+
+  // ── Area3D ─────────────────────────────────────────────────────────────────
+  // Added: 2026-04-10 - expose Isis::Area3D 3D volume geometry.
+  py::class_<Isis::Area3D>(m, "Area3D")
+      .def(py::init<>(), "Construct an empty/invalid Area3D.")
+      .def(py::init<const Isis::Displacement &,
+                    const Isis::Displacement &,
+                    const Isis::Displacement &,
+                    const Isis::Distance &,
+                    const Isis::Distance &,
+                    const Isis::Distance &>(),
+           py::arg("start_x"), py::arg("start_y"), py::arg("start_z"),
+           py::arg("width"),   py::arg("height"),  py::arg("depth"),
+           "Construct an Area3D from a start point and width/height/depth Distances.")
+      .def(py::init<const Isis::Displacement &,
+                    const Isis::Displacement &,
+                    const Isis::Displacement &,
+                    const Isis::Displacement &,
+                    const Isis::Displacement &,
+                    const Isis::Displacement &>(),
+           py::arg("start_x"), py::arg("start_y"), py::arg("start_z"),
+           py::arg("end_x"),   py::arg("end_y"),   py::arg("end_z"),
+           "Construct an Area3D from start and end corner Displacements.")
+      .def(py::init<const Isis::Area3D &>(), py::arg("other"), "Copy constructor.")
+      // Accessors
+      .def("get_start_x", &Isis::Area3D::getStartX,
+           "Return the start X displacement.")
+      .def("get_start_y", &Isis::Area3D::getStartY,
+           "Return the start Y displacement.")
+      .def("get_start_z", &Isis::Area3D::getStartZ,
+           "Return the start Z displacement.")
+      .def("get_width",   &Isis::Area3D::getWidth,
+           "Return the width Distance.")
+      .def("get_height",  &Isis::Area3D::getHeight,
+           "Return the height Distance.")
+      .def("get_depth",   &Isis::Area3D::getDepth,
+           "Return the depth Distance.")
+      .def("get_end_x",   &Isis::Area3D::getEndX,
+           "Return the end X displacement.")
+      .def("get_end_y",   &Isis::Area3D::getEndY,
+           "Return the end Y displacement.")
+      .def("get_end_z",   &Isis::Area3D::getEndZ,
+           "Return the end Z displacement.")
+      // Mutators
+      .def("set_start_x", &Isis::Area3D::setStartX, py::arg("start_x"),
+           "Set the start X displacement.")
+      .def("set_start_y", &Isis::Area3D::setStartY, py::arg("start_y"),
+           "Set the start Y displacement.")
+      .def("set_start_z", &Isis::Area3D::setStartZ, py::arg("start_z"),
+           "Set the start Z displacement.")
+      .def("move_start_x", &Isis::Area3D::moveStartX, py::arg("start_x"),
+           "Move the start X by the given displacement.")
+      .def("move_start_y", &Isis::Area3D::moveStartY, py::arg("start_y"),
+           "Move the start Y by the given displacement.")
+      .def("move_start_z", &Isis::Area3D::moveStartZ, py::arg("start_z"),
+           "Move the start Z by the given displacement.")
+      .def("set_width",  &Isis::Area3D::setWidth,  py::arg("width"),
+           "Set the width Distance.")
+      .def("set_height", &Isis::Area3D::setHeight, py::arg("height"),
+           "Set the height Distance.")
+      .def("set_depth",  &Isis::Area3D::setDepth,  py::arg("depth"),
+           "Set the depth Distance.")
+      .def("set_end_x", &Isis::Area3D::setEndX, py::arg("end_x"),
+           "Set the end X displacement.")
+      .def("set_end_y", &Isis::Area3D::setEndY, py::arg("end_y"),
+           "Set the end Y displacement.")
+      .def("set_end_z", &Isis::Area3D::setEndZ, py::arg("end_z"),
+           "Set the end Z displacement.")
+      .def("move_end_x", &Isis::Area3D::moveEndX, py::arg("end_x"),
+           "Move the end X by the given displacement.")
+      .def("move_end_y", &Isis::Area3D::moveEndY, py::arg("end_y"),
+           "Move the end Y by the given displacement.")
+      .def("move_end_z", &Isis::Area3D::moveEndZ, py::arg("end_z"),
+           "Move the end Z by the given displacement.")
+      // Queries
+      .def("is_valid",   &Isis::Area3D::isValid,
+           "Return True if the area has non-null start and end points.")
+      .def("intersect",  &Isis::Area3D::intersect, py::arg("other"),
+           "Return the intersection Area3D of this and other.")
+      .def("__repr__", [](const Isis::Area3D &a) {
+            if (!a.isValid()) {
+              return std::string("Area3D(invalid)");
+            }
+            return "Area3D(valid)";
+          });
 }

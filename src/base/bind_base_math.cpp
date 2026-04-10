@@ -20,9 +20,10 @@
  * Updated: 2026-04-09  Geng Xun added SurfaceModel binding (bivariate polynomial surface fitting)
  * Updated: 2026-04-09  Geng Xun added MaximumLikelihoodWFunctions binding (robust estimation).
  * Updated: 2026-04-10  Geng Xun added FourierTransform binding (FFT/IFFT on complex vectors).
+ * Updated: 2026-04-10  Geng Xun added PrincipalComponentAnalysis binding (PCA via TNT::Array2D adapters).
  * Purpose: Expose Calculator, Affine, BasisFunction, FourierTransform, InfixToPostfix,
  *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, Ransac helpers, SurfaceModel,
- *          and MaximumLikelihoodWFunctions classes to Python via pybind11.
+ *          MaximumLikelihoodWFunctions, and PrincipalComponentAnalysis classes to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
@@ -30,6 +31,8 @@
 #include <pybind11/complex.h>
 #include <cmath>
 #include <complex>
+
+#include <tnt/tnt_array2d.h>
 
 #include "Calculator.h"
 #include "Affine.h"
@@ -47,6 +50,7 @@
 #include "Ransac.h"
 #include "SurfaceModel.h"
 #include "Buffer.h"
+#include "PrincipalComponentAnalysis.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -596,5 +600,86 @@ void bind_base_math(py::module_ &m)
            "Return the smallest power of two >= n.")
       .def("__repr__", [](const Isis::FourierTransform &) {
             return "FourierTransform()";
+          });
+
+  // ── PrincipalComponentAnalysis ──────────────────────────────────────────────
+  // Added: 2026-04-10 - expose PCA; TNT::Array2D adapted to 2D Python lists.
+  //
+  // Helper lambdas: Python list<list<double>> <-> TNT::Array2D<double>
+  auto py_to_tnt = [](const std::vector<std::vector<double>> &mat)
+      -> TNT::Array2D<double> {
+    if (mat.empty() || mat[0].empty()) {
+      return TNT::Array2D<double>();
+    }
+    int rows = static_cast<int>(mat.size());
+    int cols = static_cast<int>(mat[0].size());
+    TNT::Array2D<double> arr(rows, cols);
+    for (int r = 0; r < rows; ++r) {
+      for (int c = 0; c < cols; ++c) {
+        arr[r][c] = mat[r][c];
+      }
+    }
+    return arr;
+  };
+
+  auto tnt_to_py = [](const TNT::Array2D<double> &arr)
+      -> std::vector<std::vector<double>> {
+    std::vector<std::vector<double>> mat(arr.dim1(),
+                                         std::vector<double>(arr.dim2(), 0.0));
+    for (int r = 0; r < arr.dim1(); ++r) {
+      for (int c = 0; c < arr.dim2(); ++c) {
+        mat[r][c] = arr[r][c];
+      }
+    }
+    return mat;
+  };
+
+  py::class_<Isis::PrincipalComponentAnalysis>(m, "PrincipalComponentAnalysis")
+      .def(py::init<const int>(),
+           py::arg("n"),
+           "Construct a PCA object for n-dimensional data. Call "
+           "add_data() followed by compute_transform() before Transform/Inverse.")
+      .def(py::init([py_to_tnt](const std::vector<std::vector<double>> &transform_matrix) {
+             return std::make_unique<Isis::PrincipalComponentAnalysis>(
+                 py_to_tnt(transform_matrix));
+           }),
+           py::arg("transform_matrix"),
+           "Construct a PCA object from a precomputed 2D transform matrix "
+           "(list-of-lists).")
+      .def("add_data",
+           [](Isis::PrincipalComponentAnalysis &self,
+              const std::vector<double> &data) {
+             self.AddData(data.data(), static_cast<unsigned int>(data.size()));
+           },
+           py::arg("data"),
+           "Add one observation vector to the running statistics.")
+      .def("compute_transform",
+           &Isis::PrincipalComponentAnalysis::ComputeTransform,
+           "Compute the PCA transform from accumulated data.")
+      .def("transform",
+           [tnt_to_py, py_to_tnt](Isis::PrincipalComponentAnalysis &self,
+                 const std::vector<std::vector<double>> &data_matrix) {
+             return tnt_to_py(self.Transform(py_to_tnt(data_matrix)));
+           },
+           py::arg("data_matrix"),
+           "Apply the PCA forward transform. Input/output are 2D list-of-lists.")
+      .def("inverse",
+           [tnt_to_py, py_to_tnt](Isis::PrincipalComponentAnalysis &self,
+                 const std::vector<std::vector<double>> &component_matrix) {
+             return tnt_to_py(self.Inverse(py_to_tnt(component_matrix)));
+           },
+           py::arg("component_matrix"),
+           "Apply the PCA inverse transform. Input/output are 2D list-of-lists.")
+      .def("transform_matrix",
+           [tnt_to_py](Isis::PrincipalComponentAnalysis &self) {
+             return tnt_to_py(self.TransformMatrix());
+           },
+           "Return the current PCA transform matrix as a 2D list-of-lists.")
+      .def("dimensions",
+           &Isis::PrincipalComponentAnalysis::Dimensions,
+           "Return the number of dimensions (n) for this PCA object.")
+      .def("__repr__", [](Isis::PrincipalComponentAnalysis &self) {
+            return "PrincipalComponentAnalysis(dimensions=" +
+                   std::to_string(self.Dimensions()) + ")";
           });
 }

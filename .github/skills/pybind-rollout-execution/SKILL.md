@@ -134,6 +134,21 @@ Then read the upstream ISIS material in the normal repository order:
 
 Do not bind from header signatures alone when behavior depends on implementation.
 
+Before compiling the current class, explicitly audit these recurring binding hazards:
+
+- Audit member-function qualifiers before wrapping operators or arithmetic helpers.
+	- Example: `Quaternion::operator*(const double &)` is **not** `const` in upstream ISIS.
+	- Do not bind it with a lambda that takes `const Isis::Quaternion &` and then calls `a * scalar` directly.
+	- Prefer copying into a mutable local wrapper/object first, or exposing an equivalent const-safe lambda built from a mutable copy.
+- Do not bind upstream `protected` members directly with pybind lambdas.
+	- Example: `PvlFormat::addQuotes(...)`, `PvlFormat::isSingleUnit(...)`, `PvlTranslationTable::hasInputDefault(...)`, `IsAuto(...)`, `IsOptional(...)`, `OutputName(...)`, and `OutputPosition(...)` are protected helpers, not public API.
+	- If Python still needs those semantics, expose them through a local helper subclass or wrapper that safely forwards the protected call, or reimplement a stable public-facing wrapper when the behavior is simple and well verified.
+	- Before adding such wrappers, verify the behavior against `reference/upstream_isis/...` instead of assuming a declaration is callable from pybind.
+- For `AutoReg`-family constructors and factory tests, match upstream PVL shape exactly.
+	- `AutoReg(Pvl &)` first calls `pvl.findObject("AutoRegistration")`, then parses nested `Algorithm`, `PatternChip`, and `SearchChip` groups.
+	- Do **not** build a flat `PvlGroup("AutoRegistration")` and pass it as the whole config; that will fail with `Unable to find PVL object [AutoRegistration]`.
+	- Prefer copying the structure from `reference/upstream_isis/src/base/objs/MinimumDifference/unitTest.cpp` or `reference/upstream_isis/src/base/objs/AutoReg/unitTest.cpp` when adding `MaximumCorrelation`, `MinimumDifference`, `Gruen`, or factory regressions.
+
 ### 3. Complete the class closure
 
 For each class, aim for this closure sequence:
@@ -182,9 +197,9 @@ Count one attempt only after this full loop:
 
 Do not inflate retry counts with partial or trivial non-validation edits.
 
-### 3. Preferred repair patterns
+### 3. Preferred repair patterns for the current class
 
-When debugging, prefer these established patterns:
+After classifying the failure layer, prefer these established repair patterns:
 
 - if a method is declared in headers but missing in the linked implementation, avoid binding the raw member-function pointer; consider a lambda wrapper using stable getters
 - if the class is abstract or pure-virtual, expose the usable surface without forcing unsafe construction
@@ -206,6 +221,8 @@ Then do all of the following before moving on:
 6. continue with the next class in the active queue
 
 Do not let one pathological class stall the entire campaign indefinitely.
+
+Treat stop-loss as a bookkeeping and queue-protection rule, not as a substitute for failure classification. First identify the failure layer and try the standard repair patterns; only then count full repair cycles toward the stop-loss threshold.
 
 ## Ledger Maintenance Requirements
 

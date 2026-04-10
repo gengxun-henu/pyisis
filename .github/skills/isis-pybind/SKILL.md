@@ -63,7 +63,7 @@ See [binding workflow reference](./references/binding-workflow.md).
 - If the class is already exported, extend its method surface before inventing alternate wrappers.
 - Update `python/isis_pybind/__init__.py` when a symbol must be re-exported at package level.
 
-#### Common binding hazards to check before compiling
+#### Recurring binding hazards to check before compiling
 
 - Audit member-function qualifiers before wrapping operators or arithmetic helpers.
 	- Example: `Quaternion::operator*(const double &)` is **not** `const` in upstream ISIS.
@@ -73,6 +73,10 @@ See [binding workflow reference](./references/binding-workflow.md).
 	- Example: `PvlFormat::addQuotes(...)`, `PvlFormat::isSingleUnit(...)`, `PvlTranslationTable::hasInputDefault(...)`, `IsAuto(...)`, `IsOptional(...)`, `OutputName(...)`, and `OutputPosition(...)` are protected helpers, not public API.
 	- If Python still needs those semantics, expose them through a local helper subclass or wrapper that safely forwards the protected call, or reimplement a stable public-facing wrapper when the behavior is simple and well verified.
 	- Before adding such wrappers, verify the behavior against `reference/upstream_isis/...` instead of assuming a declaration is callable from pybind.
+- For `AutoReg`-family constructors and factory tests, match upstream PVL shape exactly.
+	- `AutoReg(Pvl &)` first calls `pvl.findObject("AutoRegistration")`, then parses nested `Algorithm`, `PatternChip`, and `SearchChip` groups.
+	- Do **not** build a flat `PvlGroup("AutoRegistration")` and pass it as the whole config; that will fail with `Unable to find PVL object [AutoRegistration]`.
+	- Prefer copying the structure from `reference/upstream_isis/src/base/objs/MinimumDifference/unitTest.cpp` or `reference/upstream_isis/src/base/objs/AutoReg/unitTest.cpp` when adding `MaximumCorrelation`, `MinimumDifference`, `Gruen`, or factory regressions.
 
 ### 3. Add focused validation
 
@@ -89,6 +93,25 @@ Always prefer:
 - the `asp360_new` environment's Python interpreter
 
 Treat Python ABI mismatches or missing runtime data separately from binding regressions.
+
+If validation fails, classify the failure layer before changing code:
+
+1. compile failure
+2. link failure
+3. import-time undefined symbol
+4. focused unit-test failure
+5. smoke-test failure
+6. environment/runtime-data issue
+
+For repeated failures on a single class, prefer these repair patterns before broad rewrites:
+
+- if a method is declared in headers but missing in the linked implementation, avoid binding the raw member-function pointer; prefer a wrapper built from stable APIs
+- if the class is abstract or pure-virtual, expose the usable surface without forcing unsafe construction
+- if Qt containers or ISIS-specific types are Python-hostile, adapt them to Python-friendly values
+- if lifetimes are involved, inspect `keep_alive`, return policies, and temporary object hazards
+- if runtime data is missing, treat it as environment-dependent and use stable skips or narrower smoke coverage where appropriate
+
+If the task has become a queue-based repair campaign with retry tracking or stop-loss decisions, switch to or pair with `.github/skills/pybind-rollout-execution/SKILL.md` instead of improvising ad-hoc bookkeeping.
 
 ### 5. Maintain progress records
 
@@ -107,6 +130,7 @@ Record blockers or uncertainties explicitly. See [progress maintenance reference
 - Do not let `smoke_import.py` become the main detailed behavior test suite.
 - Do not modify broad unrelated ISIS C++ source unless the user explicitly asks for changes outside the binding layer.
 - Do not skip updating `pybind_progress_log.md` when pybind work meaningfully progresses.
+- Do not turn single-class work into an untracked retry spiral; if the task becomes campaign-like, use the rollout skill's retry and stop-loss rules.
 
 ## Completion Checklist
 

@@ -1355,3 +1355,36 @@ Queue document created: `pybind_rollout_classes_20260409.md`
 ### Validation status
 - Build environment not available in sandbox; requires CI/asp360_new interpreter.
 - All bindings reviewed for correctness against upstream `.h` and `.cpp`.
+
+---
+
+## 2026-04-10 第五阶段 Rollout 第3批（7 类）
+
+**注：本批处理了 7 个类（5 cameras + 2 distortion maps），全部来自 Dawn 和 Kaguya 任务组。**
+
+### 活跃队列
+11. DawnFcCamera — 已完成
+12. DawnFcDistortionMap — 已完成
+13. DawnVirCamera — 已完成
+14. KaguyaMiCamera — 已完成
+15. KaguyaMiCameraDistortionMap — 已完成
+16. KaguyaTcCamera — 已完成
+17. KaguyaTcCameraDistortionMap — 已完成
+
+### Class 11-13: Dawn mission cameras (已转换)
+- Expanded `DawnFcCamera` bare declaration in `src/mission/bind_mission_cameras.cpp` with ck_frame_id, ck_reference_id, spk_reference_id methods.
+- Added `DawnFcDistortionMap` binding (constructor, SetFocalPlane, SetUndistortedFocalPlane).
+- Expanded `DawnVirCamera` bare declaration with ck_frame_id, ck_reference_id, spk_reference_id.
+- Added `DawnFcDistortionMap` include to binding file.
+- Added `DawnMissionCameraUnitTest` class to `tests/unitTest/extended_mission_camera_unit_test.py`.
+- Exported `DawnFcDistortionMap` in `python/isis_pybind/__init__.py`; smoke symbol checks added.
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+### Class 14-17: Kaguya mission cameras (已转换)
+- Expanded `KaguyaMiCamera` and `KaguyaTcCamera` bare declarations with ck_frame_id, ck_reference_id, spk_reference_id.
+- Added `KaguyaMiCameraDistortionMap` binding (constructor, SetDistortion, SetFocalPlane, SetUndistortedFocalPlane).
+- Added `KaguyaTcCameraDistortionMap` binding (constructor, SetFocalPlane, SetUndistortedFocalPlane).
+- Added `KaguyaMiCameraDistortionMap.h` and `KaguyaTcCameraDistortionMap.h` includes.
+- Added `KaguyaMissionCameraUnitTest` class to `tests/unitTest/extended_mission_camera_unit_test.py`.
+- Exported new symbols in `python/isis_pybind/__init__.py`; smoke symbol checks added.
+- Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.

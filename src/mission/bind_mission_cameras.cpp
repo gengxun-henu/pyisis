@@ -37,6 +37,7 @@
 #include "Cube.h"
 #include "CTXCamera.h"
 #include "DawnFcCamera.h"
+#include "DawnFcDistortionMap.h"
 #include "DawnVirCamera.h"
 #include "FramingCamera.h"
 #include "HayabusaAmicaCamera.h"
@@ -52,7 +53,9 @@
 #include "JunoCamera.h"
 #include "JunoDistortionMap.h"
 #include "KaguyaMiCamera.h"
+#include "KaguyaMiCameraDistortionMap.h"
 #include "KaguyaTcCamera.h"
+#include "KaguyaTcCameraDistortionMap.h"
 #include "Latitude.h"
 #include "LineScanCamera.h"
 #include "LoCameraFiducialMap.h"
@@ -403,8 +406,43 @@ void bind_mission_cameras(py::module_ &m) {
       .def("ck_frame_id", &Isis::ClipperWacFcCamera::CkFrameId)
       .def("ck_reference_id", &Isis::ClipperWacFcCamera::CkReferenceId)
       .def("spk_reference_id", &Isis::ClipperWacFcCamera::SpkReferenceId);
-  py::class_<Isis::DawnFcCamera, Isis::FramingCamera>(m, "DawnFcCamera");
-  py::class_<Isis::DawnVirCamera, Isis::LineScanCamera>(m, "DawnVirCamera");
+  py::class_<Isis::DawnFcCamera, Isis::FramingCamera>(m, "DawnFcCamera")
+      .def("ck_frame_id",    &Isis::DawnFcCamera::CkFrameId,
+           "Return the CK frame ID for the DawnFc camera (-203000).")
+      .def("ck_reference_id",&Isis::DawnFcCamera::CkReferenceId,
+           "Return the CK reference ID (J2000 = 1).")
+      .def("spk_reference_id",&Isis::DawnFcCamera::SpkReferenceId,
+           "Return the SPK reference ID (J2000 = 1).")
+      .def("__repr__", [](const Isis::DawnFcCamera &) {
+            return "DawnFcCamera()"; });
+  py::class_<Isis::DawnFcDistortionMap, Isis::CameraDistortionMap>(m, "DawnFcDistortionMap")
+      .def(py::init<Isis::Camera *, double, double>(),
+           py::arg("parent"),
+           py::arg("k1"),
+           py::arg("z_direction") = 1.0,
+           py::keep_alive<1, 2>(),
+           "Construct a DawnFcDistortionMap with the given k1 coefficient and z-direction.")
+      .def("set_focal_plane",
+           &Isis::DawnFcDistortionMap::SetFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Convert undistorted focal-plane coordinates to distorted.")
+      .def("set_undistorted_focal_plane",
+           &Isis::DawnFcDistortionMap::SetUndistortedFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Convert distorted focal-plane coordinates to undistorted.")
+      .def("__repr__", [](const Isis::DawnFcDistortionMap &) {
+            return "DawnFcDistortionMap()"; });
+  py::class_<Isis::DawnVirCamera, Isis::LineScanCamera>(m, "DawnVirCamera")
+      .def("ck_frame_id",    &Isis::DawnVirCamera::CkFrameId,
+           "Return the CK frame ID for the DawnVir camera.")
+      .def("ck_reference_id",&Isis::DawnVirCamera::CkReferenceId,
+           "Return the CK reference ID (J2000 = 1).")
+      .def("spk_reference_id",&Isis::DawnVirCamera::SpkReferenceId,
+           "Return the SPK reference ID (J2000 = 1).")
+      .def("__repr__", [](const Isis::DawnVirCamera &) {
+            return "DawnVirCamera()"; });
   py::class_<Isis::SsiCamera, Isis::FramingCamera>(m, "SsiCamera")
       .def(py::init<Isis::Cube &>(),
            py::arg("cube"),
@@ -527,8 +565,63 @@ void bind_mission_cameras(py::module_ &m) {
            &Isis::JunoDistortionMap::SetUndistortedFocalPlane,
            py::arg("ux"),
            py::arg("uy"));
-  py::class_<Isis::KaguyaMiCamera, Isis::LineScanCamera>(m, "KaguyaMiCamera");
-  py::class_<Isis::KaguyaTcCamera, Isis::LineScanCamera>(m, "KaguyaTcCamera");
+  py::class_<Isis::KaguyaMiCamera, Isis::LineScanCamera>(m, "KaguyaMiCamera")
+      .def("ck_frame_id",    &Isis::KaguyaMiCamera::CkFrameId,
+           "Return the CK frame ID for the KaguyaMi camera (-131000).")
+      .def("ck_reference_id",&Isis::KaguyaMiCamera::CkReferenceId,
+           "Return the CK reference ID (J2000 = 1).")
+      .def("spk_reference_id",&Isis::KaguyaMiCamera::SpkReferenceId,
+           "Return the SPK reference ID (J2000 = 1).")
+      .def("__repr__", [](const Isis::KaguyaMiCamera &) {
+            return "KaguyaMiCamera()"; });
+  py::class_<Isis::KaguyaTcCamera, Isis::LineScanCamera>(m, "KaguyaTcCamera")
+      .def("ck_frame_id",    &Isis::KaguyaTcCamera::CkFrameId,
+           "Return the CK frame ID for the KaguyaTc camera.")
+      .def("ck_reference_id",&Isis::KaguyaTcCamera::CkReferenceId,
+           "Return the CK reference ID (J2000 = 1).")
+      .def("spk_reference_id",&Isis::KaguyaTcCamera::SpkReferenceId,
+           "Return the SPK reference ID (J2000 = 1).")
+      .def("__repr__", [](const Isis::KaguyaTcCamera &) {
+            return "KaguyaTcCamera()"; });
+  py::class_<Isis::KaguyaMiCameraDistortionMap, Isis::CameraDistortionMap>(m, "KaguyaMiCameraDistortionMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("parent"),
+           py::keep_alive<1, 2>(),
+           "Construct a KaguyaMiCameraDistortionMap attached to the given parent camera.")
+      .def("set_distortion",
+           &Isis::KaguyaMiCameraDistortionMap::SetDistortion,
+           py::arg("naif_ik_code"),
+           "Load distortion coefficients from SPICE kernels using the NAIF IK code.")
+      .def("set_focal_plane",
+           &Isis::KaguyaMiCameraDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Convert distorted focal-plane coordinates to undistorted.")
+      .def("set_undistorted_focal_plane",
+           &Isis::KaguyaMiCameraDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Convert undistorted focal-plane coordinates to distorted.")
+      .def("__repr__", [](const Isis::KaguyaMiCameraDistortionMap &) {
+            return "KaguyaMiCameraDistortionMap()"; });
+  py::class_<Isis::KaguyaTcCameraDistortionMap, Isis::CameraDistortionMap>(m, "KaguyaTcCameraDistortionMap")
+      .def(py::init<Isis::Camera *, int>(),
+           py::arg("parent"),
+           py::arg("naif_ik_code"),
+           py::keep_alive<1, 2>(),
+           "Construct a KaguyaTcCameraDistortionMap; loads coefficients via naifIkCode.")
+      .def("set_focal_plane",
+           &Isis::KaguyaTcCameraDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Convert distorted focal-plane coordinates to undistorted.")
+      .def("set_undistorted_focal_plane",
+           &Isis::KaguyaTcCameraDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Convert undistorted focal-plane coordinates to distorted.")
+      .def("__repr__", [](const Isis::KaguyaTcCameraDistortionMap &) {
+            return "KaguyaTcCameraDistortionMap()"; });
   py::class_<Isis::LoCameraFiducialMap>(m, "LoCameraFiducialMap")
       .def(py::init<Isis::PvlGroup &, const int>(),
            py::arg("instrument_group"),

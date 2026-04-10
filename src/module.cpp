@@ -5,6 +5,7 @@
 // Updated: 2026-04-10  Geng Xun added bind_base_image_overlap, HiLab, PixelFOV, CameraStatistics, PushFrameCameraCcdLayout
 // Updated: 2026-04-10  Geng Xun moved statistics registration ahead of filters so GaussianStretch can inherit from Statistics without duplicate bindings.
 // Updated: 2026-04-10  Geng Xun added bind_base_pds_io for ImportPdsTable and ExportPdsTable
+// Updated: 2026-04-10  Geng Xun added bind_spice_navigation for SpicePosition/SpiceRotation/SpacecraftPosition (Batch 1)
 // Purpose: define the top-level pybind11 _isis_core module and register all binding submodules
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -44,6 +45,7 @@ void bind_mission_cameras(py::module_ &m);
 void bind_mgs_utilities(py::module_ &m);
 void bind_lro_utilities(py::module_ &m);
 void bind_mro_hical(py::module_ &m);
+void bind_spice_navigation(py::module_ &m);
 void bind_camera_factory(py::module_ &m);
 void bind_statistics(py::module_ &m);
 void bind_low_level_cube_io(py::module_ &m);
@@ -79,6 +81,7 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_mgs_utilities(m);
   bind_lro_utilities(m);
   bind_mro_hical(m);
+  bind_spice_navigation(m);
   bind_camera_factory(m);
   bind_low_level_cube_io(m);
   bind_high_level_cube_io(m);

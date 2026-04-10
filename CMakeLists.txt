@@ -210,6 +210,7 @@ pybind11_add_module(_isis_core
   src/mgs/bind_mgs_utilities.cpp
   src/lro/bind_lro_utilities.cpp
   src/bind_mro_hical.cpp
+  src/bind_spice_navigation.cpp
   src/bind_camera_factory.cpp)
 
 target_compile_definitions(_isis_core

@@ -1726,3 +1726,44 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 - `todo_pybind11.csv`: 10 个类 → 已转换
 - 各 `*_methods.csv`: 更新为 Y（部分 SparseBlockMatrix/LinearAlgebra 方法标记 N）
 - `class_bind_methods_details/methods_inventory_summary.csv`: 10 行更新
+
+---
+
+## Batch 9 — 2026-04-10
+
+**Queue (5 classes):** NumericalApproximation, SpicePosition, SpiceRotation, SpacecraftPosition, SensorUtilities::Matrix
+
+### Class 1: NumericalApproximation
+- 在 `src/base/bind_base_math.cpp` 新增 NumericalApproximation 绑定。
+- 暴露：InterpType/ExtrapType 枚举（10+3 个枚举值）、3 种构造函数、name/interpolation_type/min_points/domain_min/domain_max/contains/size、add_data（标量/向量）、evaluate（单点/多点）、数值微分（向前/向后/中心差分）、数值积分（梯形法/Simpson/Boole/Romberg）、reset/set_interp_type。
+- focused 单测：`tests/unitTest/math_unit_test.py`（NumericalApproximationUnitTest 类）。
+
+### Class 2: SpicePosition
+- 新建 `src/bind_spice_navigation.cpp`，暴露 SpicePosition。
+- 暴露：Source enum/PartialType enum、构造函数(target, observer)、set/get_time_bias、set/get_aberration_correction、get_light_time、ephemeris_time、scaled_time、has_velocity、is_cached、cache_size、get_base_time、get_time_scale。
+- 注意：getTargetCode/getObserverCode 在 protected 区，不直接暴露。
+- focused 单测：`tests/unitTest/spice_navigation_unit_test.py`。
+
+### Class 3: SpiceRotation
+- 在 `src/bind_spice_navigation.cpp` 追加 SpiceRotation 绑定。
+- 暴露：Source/PartialType/DownsizeStatus/FrameType 枚举、构造函数（单参数帧码版本）、set/get frame、set_time_bias、ephemeris_time、is_cached、cache_size、get_base_time、get_time_scale、get_source、has_angular_velocity、j2000_vector、reference_vector。
+- focused 单测：`tests/unitTest/spice_navigation_unit_test.py`。
+
+### Class 4: SpacecraftPosition
+- 在 `src/bind_spice_navigation.cpp` 追加 SpacecraftPosition（继承 SpicePosition）。
+- 暴露：2 种构造函数（2 参数/4 参数含 LightTimeCorrectionState 和 Distance）、get_radius_light_time、get_distance_light_time（静态）、get_light_time_state、set/get_aberration_correction。
+- focused 单测：`tests/unitTest/spice_navigation_unit_test.py`。
+
+### Class 5: SensorUtilities::Matrix
+- 在 `src/bind_sensor.cpp` 追加 SensorUtilities::Matrix（绑定为 SensorMatrix）。
+- 暴露：默认构造函数、Vec 三行构造函数、a/b/c 字段读写、mat_vec_product（矩阵×向量）。
+- focused 单测：`tests/unitTest/spice_navigation_unit_test.py`（SensorMatrixUnitTest 类）。
+
+### 额外更新
+- Basis1VariableFunction 和 Chip：确认已在前序批次中绑定，更新 todo_pybind11.csv 状态为 已转换。
+
+### 台账更新
+- `todo_pybind11.csv`: 7 个类 → 已转换（含 Basis1VariableFunction、Chip 补标）
+- `class_bind_methods_details/base_spice_position_methods.csv`, `base_numerical_approximation_methods.csv` 等更新
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新
+- `pybind_progress_log.md`: 本条目

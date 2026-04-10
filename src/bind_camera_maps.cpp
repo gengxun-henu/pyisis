@@ -270,9 +270,8 @@ void bind_camera_maps(py::module_ &m) {
            "Convert detector coordinates to parent image coordinates.")
       .def("apply_jitter",
            [](Isis::RollingShutterCameraDetectorMap &self,
-              double sample, double line) -> std::pair<double, double> {
-             auto result = self.applyJitter(sample, line);
-             return {result.first, result.second};
+              double sample, double line) {
+             return self.applyJitter(sample, line);
            },
            py::arg("sample"),
            py::arg("line"),

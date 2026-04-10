@@ -279,7 +279,6 @@ void bind_statistics(py::module_ &m) {
   py::class_<Isis::OverlapStatistics>(m, "OverlapStatistics")
       .def(py::init<const Isis::PvlObject &>(),
            py::arg("pvl_stats"),
-           py::keep_alive<1, 2>(),
            "Construct OverlapStatistics from a serialized PvlObject.")
       .def("has_overlap",
            py::overload_cast<int>(&Isis::OverlapStatistics::HasOverlap, py::const_),

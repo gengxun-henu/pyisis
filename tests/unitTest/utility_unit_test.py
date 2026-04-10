@@ -883,20 +883,37 @@ class EndianSwapperUnitTest(unittest.TestCase):
         self.assertIn("EndianSwapper", r)
 
     def test_swap_double_native(self):
-        """swap_double with native-endian bytes round-trips correctly."""
+        """swap_double with native-endian bytes returns the correct value."""
         import struct
         import sys
         native = '<d' if sys.byteorder == 'little' else '>d'
         value = 3.14159
         buf = struct.pack(native, value)
+        # LSB swapper on an LSB machine: no swap should occur, value is preserved
         es = ip.EndianSwapper("LSB")
         result = es.swap_double(buf)
-        # If native is LSB and we ask for LSB swapper, no swap happens
-        # Just verify a float is returned without error
         self.assertIsInstance(result, float)
+        if sys.byteorder == 'little':
+            # Native machine is LSB; LSB swapper should NOT swap, preserving value
+            self.assertAlmostEqual(result, value, places=5)
+
+    def test_swap_double_cross_endian(self):
+        """swap_double on a MSB swapper correctly reverses LSB-encoded bytes."""
+        import struct
+        import sys
+        if sys.byteorder != 'little':
+            self.skipTest("Cross-endian test only runs on little-endian machines")
+        value = 1.0
+        # Pack as big-endian
+        buf = struct.pack('>d', value)
+        # MSB swapper on LSB machine: should swap bytes to recover little-endian 1.0
+        es = ip.EndianSwapper("MSB")
+        result = es.swap_double(buf)
+        self.assertIsInstance(result, float)
+        self.assertAlmostEqual(result, value, places=10)
 
     def test_swap_short_roundtrip(self):
-        """swap_short on a 2-byte buffer returns an integer."""
+        """swap_short on a native 2-byte buffer returns the correct integer."""
         import struct
         import sys
         native = '<h' if sys.byteorder == 'little' else '>h'
@@ -904,6 +921,9 @@ class EndianSwapperUnitTest(unittest.TestCase):
         es = ip.EndianSwapper("LSB")
         result = es.swap_short(buf)
         self.assertIsInstance(result, int)
+        if sys.byteorder == 'little':
+            # LSB swapper on LSB machine: no swap, value preserved
+            self.assertEqual(result, 42)
 
     def test_swap_double_too_small_raises(self):
         """swap_double with insufficient buffer raises ValueError."""

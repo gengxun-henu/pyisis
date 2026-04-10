@@ -613,6 +613,13 @@ void bind_base_math(py::module_ &m)
     }
     int rows = static_cast<int>(mat.size());
     int cols = static_cast<int>(mat[0].size());
+    // Validate that all rows have the same number of columns.
+    for (int r = 1; r < rows; ++r) {
+      if (static_cast<int>(mat[r].size()) != cols) {
+        throw py::value_error(
+          "All rows must have the same number of columns (ragged arrays not supported)");
+      }
+    }
     TNT::Array2D<double> arr(rows, cols);
     for (int r = 0; r < rows; ++r) {
       for (int c = 0; c < cols; ++c) {

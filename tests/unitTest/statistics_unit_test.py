@@ -186,58 +186,35 @@ class PrincipalComponentAnalysisUnitTest(unittest.TestCase):
 class OverlapStatisticsUnitTest(unittest.TestCase):
     """Focused unit tests for OverlapStatistics binding. Added: 2026-04-10."""
 
-    def _make_overlap_pvl(self):
-        """Create a minimal valid OverlapStatistics PvlObject via serialization.
-
-        We piggyback on the toPvl/fromPvl round-trip by using a live
-        OverlapStatistics.  Since the Cube-based constructor requires actual
-        projected cubes, we check if the constructor is available but skip
-        the live test when cubes are unavailable.
-        """
-        # Build a minimal PvlObject that the OverlapStatistics(PvlObject&)
-        # constructor can parse by mimicking the format written by toPvl().
-        # ISIS upstream writes something like:
-        #   Object = OverlapStatistics
-        #     Band1 = MultivariateStatisticsData
-        #     ...
-        #   EndObject
-        # In practice we can only verify the binding at the symbol/construction
-        # level here without real cube data.
-        pvl = ip.PvlObject("OverlapStatistics")
-        pvl.add_keyword(ip.PvlKeyword("FileX", "cube1.cub"))
-        pvl.add_keyword(ip.PvlKeyword("FileY", "cube2.cub"))
-        pvl.add_keyword(ip.PvlKeyword("Width", "10"))
-        pvl.add_keyword(ip.PvlKeyword("Height", "10"))
-        pvl.add_keyword(ip.PvlKeyword("Bands", "1"))
-        pvl.add_keyword(ip.PvlKeyword("SampPercent", "100.0"))
-        pvl.add_keyword(ip.PvlKeyword("Samples", "10"))
-        pvl.add_keyword(ip.PvlKeyword("Lines", "10"))
-        return pvl
-
     def test_class_is_exported(self):
         """OverlapStatistics is accessible as an isis_pybind symbol."""
         self.assertTrue(hasattr(ip, "OverlapStatistics"))
 
-    def test_construction_from_pvl(self):
-        """OverlapStatistics(PvlObject) constructs without import error."""
-        pvl = self._make_overlap_pvl()
-        try:
-            os = ip.OverlapStatistics(pvl)
-            self.assertIsInstance(os, ip.OverlapStatistics)
-        except Exception:
-            # PvlObject structure may not match internal parsing exactly;
-            # importing the class and attempting construction is sufficient.
-            pass
+    def test_expected_api_surface(self):
+        """OverlapStatistics exposes the expected method names."""
+        self.assertTrue(hasattr(ip.OverlapStatistics, "has_overlap"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "has_any_overlap"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "lines"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "samples"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "bands"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "samp_percent"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "file_name_x"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "file_name_y"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "get_mstats"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "to_pvl"))
 
-    def test_repr(self):
-        """repr(OverlapStatistics) includes class name."""
-        pvl = self._make_overlap_pvl()
-        try:
-            os = ip.OverlapStatistics(pvl)
-            r = repr(os)
-            self.assertIn("OverlapStatistics", r)
-        except Exception:
-            pass
+    def test_construction_from_invalid_pvl_raises(self):
+        """Constructing OverlapStatistics from an incomplete PvlObject raises IException.
+
+        This verifies that the binding correctly forwards to upstream parsing
+        logic. An incomplete PvlObject (missing required File1/File2 groups)
+        should raise rather than silently return a corrupted object.
+        """
+        pvl = ip.PvlObject("OverlapStatistics")
+        pvl.add_keyword(ip.PvlKeyword("Width", "10"))
+        with self.assertRaises(Exception):
+            # Missing required groups (File1, File2) must raise
+            ip.OverlapStatistics(pvl)
 
 
 if __name__ == "__main__":

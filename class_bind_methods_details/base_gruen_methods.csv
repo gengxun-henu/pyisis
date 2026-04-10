@@ -17,4 +17,3 @@ Public API,BigInt CallCount() const,isis_pybind.Gruen.call_count,N,Inherited fro
 Public API,MatchPoint getLastMatch() const,N,GruenTypes::MatchPoint not exposed
 Public API,virtual QString AlgorithmName() const,isis_pybind.Gruen.algorithm_name,Y,Inherited from AutoReg
 Public API,virtual double IdealFit() const,isis_pybind.Gruen.ideal_fit,Y,Returns 0.0 via lambda
-Public API,MatchPoint getLastMatch() const { return (m_point); },isis_pybind.Gruen.get_last_match,N,Method not found in current binding files

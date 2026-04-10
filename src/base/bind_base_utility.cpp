@@ -1000,51 +1000,51 @@ void bind_base_utility(py::module_ &m) {
            "Return True if byte-swapping is required for the current platform.")
       .def("swap_double",
            [](Isis::EndianSwapper &self, py::bytes buf) {
-             const std::string s(buf);
+             std::string s(buf);
              if (s.size() < sizeof(double)) {
                throw py::value_error("Buffer too small for double (need 8 bytes)");
              }
-             return self.Double(const_cast<void *>(static_cast<const void *>(s.data())));
+             return self.Double(static_cast<void *>(s.data()));
            },
            py::arg("buf"),
            "Swap bytes in an 8-byte buffer and return as double.")
       .def("swap_float",
            [](Isis::EndianSwapper &self, py::bytes buf) {
-             const std::string s(buf);
+             std::string s(buf);
              if (s.size() < sizeof(float)) {
                throw py::value_error("Buffer too small for float (need 4 bytes)");
              }
-             return self.Float(const_cast<void *>(static_cast<const void *>(s.data())));
+             return self.Float(static_cast<void *>(s.data()));
            },
            py::arg("buf"),
            "Swap bytes in a 4-byte buffer and return as float.")
       .def("swap_int",
            [](Isis::EndianSwapper &self, py::bytes buf) {
-             const std::string s(buf);
+             std::string s(buf);
              if (s.size() < sizeof(int)) {
                throw py::value_error("Buffer too small for int (need 4 bytes)");
              }
-             return self.Int(const_cast<void *>(static_cast<const void *>(s.data())));
+             return self.Int(static_cast<void *>(s.data()));
            },
            py::arg("buf"),
            "Swap bytes in a 4-byte buffer and return as int.")
       .def("swap_short",
            [](Isis::EndianSwapper &self, py::bytes buf) {
-             const std::string s(buf);
+             std::string s(buf);
              if (s.size() < sizeof(short int)) {
                throw py::value_error("Buffer too small for short int (need 2 bytes)");
              }
-             return self.ShortInt(const_cast<void *>(static_cast<const void *>(s.data())));
+             return self.ShortInt(static_cast<void *>(s.data()));
            },
            py::arg("buf"),
            "Swap bytes in a 2-byte buffer and return as short int.")
       .def("swap_unsigned_short",
            [](Isis::EndianSwapper &self, py::bytes buf) {
-             const std::string s(buf);
+             std::string s(buf);
              if (s.size() < sizeof(unsigned short int)) {
                throw py::value_error("Buffer too small for unsigned short int (need 2 bytes)");
              }
-             return self.UnsignedShortInt(const_cast<void *>(static_cast<const void *>(s.data())));
+             return self.UnsignedShortInt(static_cast<void *>(s.data()));
            },
            py::arg("buf"),
            "Swap bytes in a 2-byte buffer and return as unsigned short int.")

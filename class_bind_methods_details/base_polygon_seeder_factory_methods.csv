@@ -1,6 +1,6 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-PolygonSeederFactory,Pattern Matching,isis/src/base/objs/PolygonSeederFactory/PolygonSeederFactory.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,工厂类，静态创建接口较多
+PolygonSeederFactory,Pattern Matching,reference/upstream_isis/src/base/objs/PolygonSeederFactory/PolygonSeederFactory.h,src/base/bind_base_polygon_seeder.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,工厂类；需要 ISISROOT/lib/PolygonSeeder.plugin
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,PolygonSeederFactory,isis_pybind.PolygonSeederFactory,N,Python class symbol not found in current binding files; 工厂类，静态创建接口较多
-Static/Factory,static PolygonSeeder *Create(Pvl &pvl),isis_pybind.PolygonSeederFactory.create,N,工厂类，静态创建接口较多
+Class Symbol,PolygonSeederFactory,isis_pybind.PolygonSeederFactory,Y,2026-04-10 绑定
+Static/Factory,static PolygonSeeder *Create(Pvl &pvl),isis_pybind.PolygonSeederFactory.create,Y,2026-04-10 绑定；运行时需要 ISISROOT/lib/PolygonSeeder.plugin

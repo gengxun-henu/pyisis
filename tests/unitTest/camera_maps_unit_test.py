@@ -5,6 +5,7 @@ Author: Geng Xun
 Created: 2026-03-21
 Last Modified: 2026-04-10
 Updated: 2026-04-10  Geng Xun added PushFrameCameraDetectorMap, RollingShutterCameraDetectorMap, VariableLineScanCameraDetectorMap surface and API tests.
+Updated: 2026-04-10  Geng Xun added GaussianStretch, PushFrameCameraGroundMap, RadarSkyMap, IrregularBodyCameraGroundMap, CSMSkyMap API tests.
 """
 
 import math
@@ -203,6 +204,110 @@ class VariableLineScanCameraDetectorMapSurfaceUnitTest(unittest.TestCase):
         self.assertTrue(hasattr(ip.VariableLineScanCameraDetectorMap, "set_parent"))
         self.assertTrue(hasattr(ip.VariableLineScanCameraDetectorMap, "set_detector"))
         self.assertTrue(hasattr(ip.VariableLineScanCameraDetectorMap, "exposure_duration"))
+
+
+class GaussianStretchApiTest(unittest.TestCase):
+    """Tests for GaussianStretch binding. Added: 2026-04-10."""
+
+    def _make_histogram(self, values):
+        hist = ip.Histogram(min(values), max(values), len(values))
+        hist.add_data(values)
+        return hist
+
+    def test_class_exists(self):
+        """GaussianStretch is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "GaussianStretch"))
+
+    def test_construction(self):
+        """GaussianStretch constructs from a Histogram."""
+        values = [float(i) for i in range(1, 11)]
+        hist = self._make_histogram(values)
+        gs = ip.GaussianStretch(hist)
+        self.assertIsInstance(gs, ip.GaussianStretch)
+
+    def test_map_returns_float(self):
+        """GaussianStretch.map() returns a numeric value."""
+        values = [float(i) for i in range(1, 101)]
+        hist = self._make_histogram(values)
+        gs = ip.GaussianStretch(hist)
+        result = gs.map(50.0)
+        self.assertIsInstance(result, float)
+
+    def test_inherits_statistics(self):
+        """GaussianStretch is a subclass of Statistics."""
+        self.assertTrue(issubclass(ip.GaussianStretch, ip.Statistics))
+
+    def test_repr(self):
+        """repr(GaussianStretch) contains 'GaussianStretch'."""
+        values = [float(i) for i in range(1, 11)]
+        hist = self._make_histogram(values)
+        gs = ip.GaussianStretch(hist)
+        self.assertIn("GaussianStretch", repr(gs))
+
+
+class PushFrameCameraGroundMapApiTest(unittest.TestCase):
+    """Tests for PushFrameCameraGroundMap binding. Added: 2026-04-10."""
+
+    def test_class_exists(self):
+        """PushFrameCameraGroundMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "PushFrameCameraGroundMap"))
+
+    def test_inherits_camera_ground_map(self):
+        """PushFrameCameraGroundMap is a subclass of CameraGroundMap."""
+        self.assertTrue(issubclass(ip.PushFrameCameraGroundMap, ip.CameraGroundMap))
+
+    def test_has_set_ground(self):
+        """PushFrameCameraGroundMap exposes set_ground method."""
+        self.assertTrue(hasattr(ip.PushFrameCameraGroundMap, "set_ground"))
+
+
+class RadarSkyMapApiTest(unittest.TestCase):
+    """Tests for RadarSkyMap binding. Added: 2026-04-10."""
+
+    def test_class_exists(self):
+        """RadarSkyMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "RadarSkyMap"))
+
+    def test_inherits_camera_sky_map(self):
+        """RadarSkyMap is a subclass of CameraSkyMap."""
+        self.assertTrue(issubclass(ip.RadarSkyMap, ip.CameraSkyMap))
+
+    def test_has_expected_methods(self):
+        """RadarSkyMap exposes set_focal_plane and set_sky."""
+        self.assertTrue(hasattr(ip.RadarSkyMap, "set_focal_plane"))
+        self.assertTrue(hasattr(ip.RadarSkyMap, "set_sky"))
+
+
+class IrregularBodyCameraGroundMapApiTest(unittest.TestCase):
+    """Tests for IrregularBodyCameraGroundMap binding. Added: 2026-04-10."""
+
+    def test_class_exists(self):
+        """IrregularBodyCameraGroundMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "IrregularBodyCameraGroundMap"))
+
+    def test_inherits_camera_ground_map(self):
+        """IrregularBodyCameraGroundMap is a subclass of CameraGroundMap."""
+        self.assertTrue(issubclass(ip.IrregularBodyCameraGroundMap, ip.CameraGroundMap))
+
+    def test_has_get_xy(self):
+        """IrregularBodyCameraGroundMap exposes get_xy."""
+        self.assertTrue(hasattr(ip.IrregularBodyCameraGroundMap, "get_xy"))
+
+
+class CSMSkyMapApiTest(unittest.TestCase):
+    """Tests for CSMSkyMap binding. Added: 2026-04-10."""
+
+    def test_class_exists(self):
+        """CSMSkyMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "CSMSkyMap"))
+
+    def test_inherits_camera_sky_map(self):
+        """CSMSkyMap is a subclass of CameraSkyMap."""
+        self.assertTrue(issubclass(ip.CSMSkyMap, ip.CameraSkyMap))
+
+    def test_has_set_sky(self):
+        """CSMSkyMap exposes set_sky."""
+        self.assertTrue(hasattr(ip.CSMSkyMap, "set_sky"))
 
 
 if __name__ == "__main__":

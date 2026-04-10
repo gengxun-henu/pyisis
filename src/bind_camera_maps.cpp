@@ -2,6 +2,9 @@
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added camera detector, focal-plane, distortion, ground, sky, and line-scan map bindings
 // Updated: 2026-04-10  Geng Xun added PushFrameCameraDetectorMap, RollingShutterCameraDetectorMap, VariableLineScanCameraDetectorMap bindings
+// Updated: 2026-04-10  Geng Xun added PushFrameCameraCcdLayout and FrameletInfo struct bindings
+// Updated: 2026-04-10  Geng Xun added PushFrameCameraGroundMap, RadarSkyMap, IrregularBodyCameraGroundMap, CSMSkyMap bindings
+// Updated: 2026-04-10  Geng Xun added RadarGroundRangeMap, ReseauDistortionMap, MarciDistortionMap bindings
 // Purpose: pybind11 bindings for ISIS camera map helper classes that translate between detector, focal-plane, ground, and sky coordinate systems
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -13,18 +16,28 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "CSMCamera.h"
+#include "CSMSkyMap.h"
 #include "CameraDetectorMap.h"
 #include "CameraDistortionMap.h"
 #include "CameraFocalPlaneMap.h"
 #include "CameraGroundMap.h"
 #include "CameraSkyMap.h"
 #include "Distance.h"
+#include "IrregularBodyCameraGroundMap.h"
 #include "Latitude.h"
 #include "LineScanCameraDetectorMap.h"
 #include "LineScanCameraGroundMap.h"
 #include "LineScanCameraSkyMap.h"
 #include "Longitude.h"
+#include "MarciDistortionMap.h"
+#include "Pvl.h"
+#include "PushFrameCameraCcdLayout.h"
 #include "PushFrameCameraDetectorMap.h"
+#include "PushFrameCameraGroundMap.h"
+#include "RadarGroundRangeMap.h"
+#include "RadarSkyMap.h"
+#include "ReseauDistortionMap.h"
 #include "RollingShutterCameraDetectorMap.h"
 #include "SurfacePoint.h"
 #include "VariableLineScanCameraDetectorMap.h"
@@ -302,4 +315,284 @@ void bind_camera_maps(py::module_ &m) {
            "Return the exposure duration for the given detector position.")
       .def("__repr__", [](const Isis::VariableLineScanCameraDetectorMap &) {
             return "VariableLineScanCameraDetectorMap()"; });
+
+  // PushFrameCameraCcdLayout::FrameletInfo — nested struct holding framelet layout data.
+  // Added: 2026-04-10
+  py::class_<Isis::PushFrameCameraCcdLayout::FrameletInfo>(m, "FrameletInfo")
+      .def(py::init<>(),
+           "Construct an empty FrameletInfo struct.")
+      .def(py::init<int>(),
+           py::arg("frame_id"),
+           "Construct a FrameletInfo with the given frame ID.")
+      .def(py::init<int, const std::string &, int, int, int, int>(),
+           py::arg("frame_id"),
+           py::arg("filter_name"),
+           py::arg("start_sample"),
+           py::arg("start_line"),
+           py::arg("samples"),
+           py::arg("lines"),
+           "Construct a FrameletInfo with all fields.")
+      .def_readwrite("frame_id", &Isis::PushFrameCameraCcdLayout::FrameletInfo::m_frameId,
+                     "NAIF ID of the framelet.")
+      .def_property("filter_name",
+                    [](const Isis::PushFrameCameraCcdLayout::FrameletInfo &self) {
+                      return self.m_filterName.toStdString();
+                    },
+                    [](Isis::PushFrameCameraCcdLayout::FrameletInfo &self,
+                       const std::string &name) {
+                      self.m_filterName = QString::fromStdString(name);
+                    },
+                    "Name of the filter for this framelet.")
+      .def_readwrite("start_sample",
+                     &Isis::PushFrameCameraCcdLayout::FrameletInfo::m_startSample,
+                     "First sample of the framelet on the detector.")
+      .def_readwrite("start_line",
+                     &Isis::PushFrameCameraCcdLayout::FrameletInfo::m_startLine,
+                     "First line of the framelet on the detector.")
+      .def_readwrite("samples",
+                     &Isis::PushFrameCameraCcdLayout::FrameletInfo::m_samples,
+                     "Number of samples in the framelet.")
+      .def_readwrite("lines",
+                     &Isis::PushFrameCameraCcdLayout::FrameletInfo::m_lines,
+                     "Number of lines in the framelet.")
+      .def("__repr__",
+           [](const Isis::PushFrameCameraCcdLayout::FrameletInfo &fi) {
+             return "<FrameletInfo id=" + std::to_string(fi.m_frameId)
+                    + " filter='" + fi.m_filterName.toStdString() + "'"
+                    + " start=(" + std::to_string(fi.m_startSample)
+                    + "," + std::to_string(fi.m_startLine) + ")"
+                    + " size=(" + std::to_string(fi.m_samples)
+                    + "," + std::to_string(fi.m_lines) + ")>";
+           });
+
+  // PushFrameCameraCcdLayout — provides CCD layout information for push-frame cameras.
+  // ccdSamples() and ccdLines() require SPICE kernels to be loaded.
+  // Added: 2026-04-10
+  py::class_<Isis::PushFrameCameraCcdLayout>(m, "PushFrameCameraCcdLayout")
+      .def(py::init<>(),
+           "Construct a PushFrameCameraCcdLayout with no CCD ID.")
+      .def(py::init<int>(),
+           py::arg("ccd_id"),
+           "Construct a PushFrameCameraCcdLayout for the given CCD NAIF ID.")
+      .def("add_kernel",
+           [](Isis::PushFrameCameraCcdLayout &self, const std::string &kernel) {
+             return self.addKernel(QString::fromStdString(kernel));
+           },
+           py::arg("kernel"),
+           "Add a SPICE kernel file path to the kernel manager.\n\n"
+           "Returns True if the kernel was successfully added.")
+      .def("ccd_samples", &Isis::PushFrameCameraCcdLayout::ccdSamples,
+           "Return the number of samples on the CCD (requires SPICE kernels).")
+      .def("ccd_lines", &Isis::PushFrameCameraCcdLayout::ccdLines,
+           "Return the number of lines on the CCD (requires SPICE kernels).")
+      .def("get_frame_info",
+           [](const Isis::PushFrameCameraCcdLayout &self,
+              int frame_id,
+              const std::string &name) {
+             return self.getFrameInfo(frame_id, QString::fromStdString(name));
+           },
+           py::arg("frame_id"),
+           py::arg("name") = "",
+           "Return the FrameletInfo for the given frame ID and optional filter name.")
+      .def("__repr__", [](const Isis::PushFrameCameraCcdLayout &) {
+        return "<PushFrameCameraCcdLayout>";
+      });
+
+  // PushFrameCameraGroundMap — converts between undistorted focal plane and ground
+  // coordinates for push-frame cameras, handling even/odd framelet switching.
+  // Added: 2026-04-10
+  py::class_<Isis::PushFrameCameraGroundMap, Isis::CameraGroundMap>(
+      m, "PushFrameCameraGroundMap")
+      .def(py::init<Isis::Camera *, bool>(),
+           py::arg("camera"),
+           py::arg("even_framelets"),
+           py::keep_alive<1, 2>(),
+           "Construct a PushFrameCameraGroundMap.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "camera : Camera\n"
+           "    Parent camera.\n"
+           "even_framelets : bool\n"
+           "    True if the image contains even framelets.")
+      .def("set_ground",
+           py::overload_cast<const Isis::Latitude &, const Isis::Longitude &>(
+               &Isis::PushFrameCameraGroundMap::SetGround),
+           py::arg("lat"),
+           py::arg("lon"),
+           "Set ground position from latitude and longitude.")
+      .def("set_ground",
+           py::overload_cast<const Isis::SurfacePoint &>(
+               &Isis::PushFrameCameraGroundMap::SetGround),
+           py::arg("surface_point"),
+           "Set ground position from a SurfacePoint.")
+      .def("__repr__", [](const Isis::PushFrameCameraGroundMap &) {
+        return "<PushFrameCameraGroundMap>";
+      });
+
+  // RadarSkyMap — sky map for Radar cameras. SetSky always returns false
+  // because radar cannot paint a star.
+  // Added: 2026-04-10
+  py::class_<Isis::RadarSkyMap, Isis::CameraSkyMap>(m, "RadarSkyMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("camera"),
+           py::keep_alive<1, 2>(),
+           "Construct a RadarSkyMap for the given Camera.")
+      .def("set_focal_plane",
+           &Isis::RadarSkyMap::SetFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           py::arg("uz"),
+           "Set the focal-plane position from unit direction vector.")
+      .def("set_sky",
+           &Isis::RadarSkyMap::SetSky,
+           py::arg("ra"),
+           py::arg("dec"),
+           "Set sky coordinates from RA/Dec. Always returns False for Radar.")
+      .def("__repr__", [](const Isis::RadarSkyMap &) {
+        return "<RadarSkyMap>";
+      });
+
+  // IrregularBodyCameraGroundMap — ground map for irregular bodies that skips
+  // the emission-angle back-of-planet test.
+  // Added: 2026-04-10
+  py::class_<Isis::IrregularBodyCameraGroundMap, Isis::CameraGroundMap>(
+      m, "IrregularBodyCameraGroundMap")
+      .def(py::init<Isis::Camera *, bool>(),
+           py::arg("camera"),
+           py::arg("clip_emission_angles") = false,
+           py::keep_alive<1, 2>(),
+           "Construct an IrregularBodyCameraGroundMap.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "camera : Camera\n"
+           "    Parent camera.\n"
+           "clip_emission_angles : bool, optional\n"
+           "    Whether to apply emission-angle clipping (default: False).")
+      .def("get_xy",
+           [](Isis::IrregularBodyCameraGroundMap &self,
+              const Isis::SurfacePoint &sp) {
+             double cudx = 0.0, cudy = 0.0;
+             bool ok = self.GetXY(sp, &cudx, &cudy);
+             return py::make_tuple(ok, cudx, cudy);
+           },
+           py::arg("surface_point"),
+           "Get the undistorted focal-plane (x, y) position for a SurfacePoint.\n\n"
+           "Returns\n"
+           "-------\n"
+           "tuple of (bool, float, float)\n"
+           "    (success, x_mm, y_mm)")
+      .def("__repr__", [](const Isis::IrregularBodyCameraGroundMap &) {
+        return "<IrregularBodyCameraGroundMap>";
+      });
+
+  // CSMSkyMap — sky map for Community Sensor Model cameras.
+  // SetSky computes the sky position using the CSM model.
+  // Added: 2026-04-10
+  py::class_<Isis::CSMSkyMap, Isis::CameraSkyMap>(m, "CSMSkyMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("camera"),
+           py::keep_alive<1, 2>(),
+           "Construct a CSMSkyMap for the given Camera.")
+      .def("set_sky",
+           &Isis::CSMSkyMap::SetSky,
+           py::arg("ra"),
+           py::arg("dec"),
+           "Set sky coordinates from RA/Dec using the CSM model.")
+      .def("__repr__", [](const Isis::CSMSkyMap &) {
+        return "<CSMSkyMap>";
+      });
+
+  // Radar::LookDirection enum — used by RadarGroundRangeMap::setTransform.
+  // Added: 2026-04-10
+  py::enum_<Isis::Radar::LookDirection>(m, "RadarLookDirection")
+      .value("Left",  Isis::Radar::Left)
+      .value("Right", Isis::Radar::Right)
+      .export_values();
+
+  // RadarGroundRangeMap — maps between image sample and Radar ground range using
+  // NAIF IK-stored constants.
+  // Added: 2026-04-10
+  py::class_<Isis::RadarGroundRangeMap, Isis::CameraFocalPlaneMap>(
+      m, "RadarGroundRangeMap")
+      .def(py::init<Isis::Camera *, int>(),
+           py::arg("camera"),
+           py::arg("naif_ik_code"),
+           py::keep_alive<1, 2>(),
+           "Construct a RadarGroundRangeMap for the given Camera and NAIF IK code.")
+      .def_static("set_transform",
+                  [](int naif_ik_code,
+                     double ground_range_resolution,
+                     int samples,
+                     Isis::Radar::LookDirection ldir) {
+                    Isis::RadarGroundRangeMap::setTransform(
+                        naif_ik_code, ground_range_resolution, samples, ldir);
+                  },
+                  py::arg("naif_ik_code"),
+                  py::arg("ground_range_resolution"),
+                  py::arg("samples"),
+                  py::arg("look_direction"),
+                  "Store the ground-range transform constants in the NAIF kernel pool.")
+      .def("__repr__", [](const Isis::RadarGroundRangeMap &) {
+        return "<RadarGroundRangeMap>";
+      });
+
+  // ReseauDistortionMap — distortion map using reseau mark positions.
+  // Added: 2026-04-10
+  py::class_<Isis::ReseauDistortionMap, Isis::CameraDistortionMap>(
+      m, "ReseauDistortionMap")
+      .def(py::init<Isis::Camera *, Isis::Pvl &, const std::string &>(),
+           py::arg("camera"),
+           py::arg("labels"),
+           py::arg("filename"),
+           py::keep_alive<1, 2>(),
+           py::keep_alive<1, 3>(),
+           "Construct a ReseauDistortionMap.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "camera : Camera\n"
+           "    Parent camera.\n"
+           "labels : Pvl\n"
+           "    Cube labels containing reseau mark data.\n"
+           "filename : str\n"
+           "    Path to the reseau correction file.")
+      .def("set_focal_plane",
+           &Isis::ReseauDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map from distorted to undistorted focal-plane coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::ReseauDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map from undistorted to distorted focal-plane coordinates.")
+      .def("__repr__", [](const Isis::ReseauDistortionMap &) {
+        return "<ReseauDistortionMap>";
+      });
+
+  // MarciDistortionMap — distortion map for MARCI camera on MRO.
+  // Added: 2026-04-10
+  py::class_<Isis::MarciDistortionMap, Isis::CameraDistortionMap>(
+      m, "MarciDistortionMap")
+      .def(py::init<Isis::Camera *, int>(),
+           py::arg("camera"),
+           py::arg("naif_ik_code"),
+           py::keep_alive<1, 2>(),
+           "Construct a MarciDistortionMap for the given Camera and NAIF IK code.")
+      .def("set_focal_plane",
+           &Isis::MarciDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map from distorted to undistorted focal-plane coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::MarciDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map from undistorted to distorted focal-plane coordinates.")
+      .def("set_filter",
+           &Isis::MarciDistortionMap::SetFilter,
+           py::arg("filter"),
+           "Set the MARCI filter index (0-based).")
+      .def("__repr__", [](const Isis::MarciDistortionMap &) {
+        return "<MarciDistortionMap>";
+      });
 }

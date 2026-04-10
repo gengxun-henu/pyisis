@@ -14,6 +14,7 @@
  *   - isis/src/base/objs/CubeInfixToPostfix/CubeInfixToPostfix.h
  *   - isis/src/base/objs/InlineInfixToPostfix/InlineInfixToPostfix.h
  *   - isis/src/base/objs/NthOrderPolynomial/NthOrderPolynomial.h
+ *   - reference/upstream_isis/src/base/objs/Basis1VariableFunction/Basis1VariableFunction.h
  * Binding author: Geng Xun
  * Created: 2026-03-24
  * Updated: 2026-04-09  Geng Xun exposed Ransac helper functions via a Python math submodule.
@@ -22,6 +23,7 @@
  * Updated: 2026-04-10  Geng Xun added FourierTransform binding (FFT/IFFT on complex vectors).
  * Updated: 2026-04-10  Geng Xun added PrincipalComponentAnalysis binding (PCA via TNT::Array2D adapters).
  * Updated: 2026-04-10  Geng Xun fixed PCA add_data observation semantics to validate dimensions and pass single-observation count correctly.
+ * Updated: 2026-04-10  Geng Xun added Basis1VariableFunction abstract base class binding (abstract; use derived classes).
  * Purpose: Expose Calculator, Affine, BasisFunction, FourierTransform, InfixToPostfix,
  *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, Ransac helpers, SurfaceModel,
  *          MaximumLikelihoodWFunctions, and PrincipalComponentAnalysis classes to Python via pybind11.
@@ -48,6 +50,7 @@
 #include "PolynomialUnivariate.h"
 #include "PolynomialBivariate.h"
 #include "NthOrderPolynomial.h"
+#include "Basis1VariableFunction.h"
 #include "Ransac.h"
 #include "SurfaceModel.h"
 #include "Buffer.h"
@@ -694,4 +697,23 @@ void bind_base_math(py::module_ &m)
             return "PrincipalComponentAnalysis(dimensions=" +
                    std::to_string(self.Dimensions()) + ")";
           });
+
+  // Basis1VariableFunction — abstract base for single-variable basis functions.
+  // Inherits BasisFunction. Cannot be instantiated directly.
+  // Subclasses must implement DerivativeVar() and DerivativeCoef().
+  // Added: 2026-04-10
+  py::class_<Isis::Basis1VariableFunction, Isis::BasisFunction>(
+      m, "Basis1VariableFunction")
+      // No py::init<> — class is abstract (pure-virtual methods)
+      .def("derivative_var",
+           &Isis::Basis1VariableFunction::DerivativeVar,
+           py::arg("value"),
+           "Evaluate the derivative of the basis function w.r.t. the variable.\n\n"
+           "Must be implemented by concrete subclasses.")
+      .def("derivative_coef",
+           &Isis::Basis1VariableFunction::DerivativeCoef,
+           py::arg("value"),
+           py::arg("coef_index"),
+           "Evaluate the derivative w.r.t. the coefficient at coef_index.\n\n"
+           "Must be implemented by concrete subclasses.");
 }

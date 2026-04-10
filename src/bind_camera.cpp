@@ -3,6 +3,7 @@
 // Updated: 2026-04-08  Geng Xun added CameraPointInfo bindings alongside core Camera geometry accessors
 // Updated: 2026-04-09  Geng Xun exposed Camera.target() so Python can inspect attached Target metadata and frame coefficients
 // Updated: 2026-04-10  Geng Xun fixed Quaternion scalar multiplication binding to avoid calling a non-const ISIS operator on a const reference.
+// Updated: 2026-04-10  Geng Xun added PixelFOV binding exposing latLonVertices.
 // Purpose: pybind11 bindings for the ISIS Camera base class, CameraPointInfo helper, and shared camera-side geometry accessors
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -19,6 +20,7 @@
 #include "CameraPointInfo.h"
 #include "CameraSkyMap.h"
 #include "LightTimeCorrectionState.h"
+#include "PixelFOV.h"
 #include "PvlGroup.h"
 #include "Quaternion.h"
 #include "Sensor.h"
@@ -269,4 +271,56 @@ void bind_camera(py::module_ &m) {
              return "LightTimeCorrectionState(correction='" +
                     qStringToStdString(self.getAberrationCorrection()) + "')";
            });
+
+  // PixelFOV — computes the lat/lon boundary vertices of a pixel's field of view.
+  // latLonVertices returns a list of lists of (lon, lat) float tuples.
+  // Added: 2026-04-10
+  py::class_<Isis::PixelFOV>(m, "PixelFOV")
+      .def(py::init<>(),
+           "Construct a PixelFOV object.")
+      .def(py::init<const Isis::PixelFOV &>(),
+           py::arg("other"),
+           "Copy-construct a PixelFOV object.")
+      .def("lat_lon_vertices",
+           [](const Isis::PixelFOV &self,
+              Isis::Camera &camera,
+              double sample,
+              double line,
+              int num_ifovs) {
+             QList<QList<QPointF>> raw = self.latLonVertices(camera, sample, line, num_ifovs);
+             // Convert to Python: list of list of (x, y) tuples
+             std::vector<std::vector<std::pair<double, double>>> result;
+             result.reserve(raw.size());
+             for (const QList<QPointF> &ring : raw) {
+               std::vector<std::pair<double, double>> pts;
+               pts.reserve(ring.size());
+               for (const QPointF &p : ring) {
+                 pts.emplace_back(p.x(), p.y());
+               }
+               result.push_back(std::move(pts));
+             }
+             return result;
+           },
+           py::arg("camera"),
+           py::arg("sample"),
+           py::arg("line"),
+           py::arg("num_ifovs") = 1,
+           "Compute lat/lon boundary vertices of the pixel's field of view.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "camera : Camera\n"
+           "    Camera model positioned at the desired geometry.\n"
+           "sample : float\n"
+           "    Sample coordinate.\n"
+           "line : float\n"
+           "    Line coordinate.\n"
+           "num_ifovs : int, optional\n"
+           "    Number of instantaneous FOVs to include (default: 1).\n\n"
+           "Returns\n"
+           "-------\n"
+           "list of list of (float, float)\n"
+           "    Each inner list is a ring of (longitude, latitude) vertex pairs.")
+      .def("__repr__", [](const Isis::PixelFOV &) {
+        return "<PixelFOV>";
+      });
 }

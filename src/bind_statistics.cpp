@@ -2,6 +2,8 @@
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added Statistics, Histogram, GroupedStatistics, MultivariateStatistics, and VecFilter bindings
 // Updated: 2026-04-10  Geng Xun added OverlapStatistics binding
+// Updated: 2026-04-10  Geng Xun added CameraStatistics binding
+// Updated: 2026-04-10  Geng Xun added GaussianStretch binding
 // Purpose: pybind11 bindings for ISIS statistics, histogram, grouped-statistics, multivariate-statistics, and vector-filter utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -16,7 +18,10 @@
 #include <pybind11/stl.h>
 
 #include "Cube.h"
+#include "Camera.h"
+#include "CameraStatistics.h"
 #include "GaussianDistribution.h"
+#include "GaussianStretch.h"
 #include "GroupedStatistics.h"
 #include "Histogram.h"
 #include "ImageHistogram.h"
@@ -320,4 +325,143 @@ void bind_statistics(py::module_ &m) {
             return "OverlapStatistics(bands=" + std::to_string(self.Bands()) +
                    ", has_overlap=" + (self.HasOverlap() ? "True" : "False") + ")";
           });
+
+  // CameraStatistics — computes a comprehensive set of pixel-by-pixel camera statistics.
+  // Added: 2026-04-10
+  py::class_<Isis::CameraStatistics>(m, "CameraStatistics")
+      .def(py::init([](const std::string &filename, int sinc, int linc) {
+             return std::make_unique<Isis::CameraStatistics>(
+                 QString::fromStdString(filename), sinc, linc);
+           }),
+           py::arg("filename"),
+           py::arg("sinc"),
+           py::arg("linc"),
+           "Construct CameraStatistics from a cube filename.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "filename : str\n"
+           "    Path to the ISIS cube file.\n"
+           "sinc : int\n"
+           "    Sample increment for statistics computation.\n"
+           "linc : int\n"
+           "    Line increment for statistics computation.\n\n"
+           "Raises\n"
+           "------\n"
+           "IException\n"
+           "    If the file does not exist or has no camera model.")
+      .def(py::init([](Isis::Camera *cam, int sinc, int linc) {
+             return std::make_unique<Isis::CameraStatistics>(cam, sinc, linc);
+           }),
+           py::arg("camera"),
+           py::arg("sinc"),
+           py::arg("linc"),
+           py::keep_alive<1, 2>(),
+           "Construct CameraStatistics from a Camera pointer.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "camera : Camera\n"
+           "    Open Camera instance to gather statistics from.\n"
+           "sinc : int\n"
+           "    Sample increment.\n"
+           "linc : int\n"
+           "    Line increment.")
+      .def("to_pvl", &Isis::CameraStatistics::toPvl,
+           "Serialize all statistics to a Pvl object.")
+      .def("get_lat_stat",
+           &Isis::CameraStatistics::getLatStat,
+           py::return_value_policy::reference_internal,
+           "Return the universal latitude Statistics.")
+      .def("get_lon_stat",
+           &Isis::CameraStatistics::getLonStat,
+           py::return_value_policy::reference_internal,
+           "Return the universal longitude Statistics.")
+      .def("get_res_stat",
+           &Isis::CameraStatistics::getResStat,
+           py::return_value_policy::reference_internal,
+           "Return the pixel resolution Statistics.")
+      .def("get_oblique_res_stat",
+           &Isis::CameraStatistics::getObliqueResStat,
+           py::return_value_policy::reference_internal,
+           "Return the oblique pixel resolution Statistics.")
+      .def("get_oblique_sample_res_stat",
+           &Isis::CameraStatistics::getObliqueSampleResStat,
+           py::return_value_policy::reference_internal,
+           "Return the oblique sample resolution Statistics.")
+      .def("get_oblique_line_res_stat",
+           &Isis::CameraStatistics::getObliqueLineResStat,
+           py::return_value_policy::reference_internal,
+           "Return the oblique line resolution Statistics.")
+      .def("get_sample_res_stat",
+           &Isis::CameraStatistics::getSampleResStat,
+           py::return_value_policy::reference_internal,
+           "Return the sample resolution Statistics.")
+      .def("get_line_res_stat",
+           &Isis::CameraStatistics::getLineResStat,
+           py::return_value_policy::reference_internal,
+           "Return the line resolution Statistics.")
+      .def("get_aspect_ratio_stat",
+           &Isis::CameraStatistics::getAspectRatioStat,
+           py::return_value_policy::reference_internal,
+           "Return the aspect ratio Statistics.")
+      .def("get_phase_stat",
+           &Isis::CameraStatistics::getPhaseStat,
+           py::return_value_policy::reference_internal,
+           "Return the phase angle Statistics.")
+      .def("get_emission_stat",
+           &Isis::CameraStatistics::getEmissionStat,
+           py::return_value_policy::reference_internal,
+           "Return the emission angle Statistics.")
+      .def("get_incidence_stat",
+           &Isis::CameraStatistics::getIncidenceStat,
+           py::return_value_policy::reference_internal,
+           "Return the incidence angle Statistics.")
+      .def("get_local_solar_time_stat",
+           &Isis::CameraStatistics::getLocalSolarTimeStat,
+           py::return_value_policy::reference_internal,
+           "Return the local solar time Statistics.")
+      .def("get_local_radius_stat",
+           &Isis::CameraStatistics::getLocalRaduisStat,
+           py::return_value_policy::reference_internal,
+           "Return the local radius (meters) Statistics.")
+      .def("get_north_azimuth_stat",
+           &Isis::CameraStatistics::getNorthAzimuthStat,
+           py::return_value_policy::reference_internal,
+           "Return the north azimuth Statistics.")
+      .def("__repr__", [](const Isis::CameraStatistics &) {
+        return "<CameraStatistics>";
+      });
+
+  // GaussianStretch — maps pixel values through a Gaussian distribution.
+  // Inherits Statistics (already bound).
+  // Added: 2026-04-10
+  py::class_<Isis::GaussianStretch, Isis::Statistics>(m, "GaussianStretch")
+      .def(py::init<Isis::Histogram &, double, double>(),
+           py::arg("histogram"),
+           py::arg("mean") = 0.0,
+           py::arg("standard_deviation") = 1.0,
+           py::keep_alive<1, 2>(),
+           "Construct a GaussianStretch from a Histogram.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "histogram : Histogram\n"
+           "    Histogram of the data to stretch.\n"
+           "mean : float, optional\n"
+           "    Target mean of the output Gaussian (default: 0.0).\n"
+           "standard_deviation : float, optional\n"
+           "    Target standard deviation of the output Gaussian (default: 1.0).")
+      .def("map",
+           &Isis::GaussianStretch::Map,
+           py::arg("value"),
+           "Map a pixel value through the Gaussian stretch.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "value : float\n"
+           "    Input pixel value to map.\n\n"
+           "Returns\n"
+           "-------\n"
+           "float\n"
+           "    Output value after Gaussian stretch mapping.")
+      .def("__repr__", [](const Isis::GaussianStretch &) {
+        return "<GaussianStretch>";
+      });
 }

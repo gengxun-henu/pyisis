@@ -4,6 +4,7 @@
 // Updated: 2026-04-10  Geng Xun added PushFrameCameraDetectorMap, RollingShutterCameraDetectorMap, VariableLineScanCameraDetectorMap bindings
 // Updated: 2026-04-10  Geng Xun added PushFrameCameraCcdLayout and FrameletInfo struct bindings
 // Updated: 2026-04-10  Geng Xun added PushFrameCameraGroundMap, RadarSkyMap, IrregularBodyCameraGroundMap, CSMSkyMap bindings
+// Updated: 2026-04-10  Geng Xun added RadarGroundRangeMap, ReseauDistortionMap, MarciDistortionMap bindings
 // Purpose: pybind11 bindings for ISIS camera map helper classes that translate between detector, focal-plane, ground, and sky coordinate systems
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -29,10 +30,14 @@
 #include "LineScanCameraGroundMap.h"
 #include "LineScanCameraSkyMap.h"
 #include "Longitude.h"
+#include "MarciDistortionMap.h"
+#include "Pvl.h"
 #include "PushFrameCameraCcdLayout.h"
 #include "PushFrameCameraDetectorMap.h"
 #include "PushFrameCameraGroundMap.h"
+#include "RadarGroundRangeMap.h"
 #include "RadarSkyMap.h"
+#include "ReseauDistortionMap.h"
 #include "RollingShutterCameraDetectorMap.h"
 #include "SurfacePoint.h"
 #include "VariableLineScanCameraDetectorMap.h"
@@ -495,5 +500,99 @@ void bind_camera_maps(py::module_ &m) {
            "Set sky coordinates from RA/Dec using the CSM model.")
       .def("__repr__", [](const Isis::CSMSkyMap &) {
         return "<CSMSkyMap>";
+      });
+
+  // Radar::LookDirection enum — used by RadarGroundRangeMap::setTransform.
+  // Added: 2026-04-10
+  py::enum_<Isis::Radar::LookDirection>(m, "RadarLookDirection")
+      .value("Left",  Isis::Radar::Left)
+      .value("Right", Isis::Radar::Right)
+      .export_values();
+
+  // RadarGroundRangeMap — maps between image sample and Radar ground range using
+  // NAIF IK-stored constants.
+  // Added: 2026-04-10
+  py::class_<Isis::RadarGroundRangeMap, Isis::CameraFocalPlaneMap>(
+      m, "RadarGroundRangeMap")
+      .def(py::init<Isis::Camera *, int>(),
+           py::arg("camera"),
+           py::arg("naif_ik_code"),
+           py::keep_alive<1, 2>(),
+           "Construct a RadarGroundRangeMap for the given Camera and NAIF IK code.")
+      .def_static("set_transform",
+                  [](int naif_ik_code,
+                     double ground_range_resolution,
+                     int samples,
+                     Isis::Radar::LookDirection ldir) {
+                    Isis::RadarGroundRangeMap::setTransform(
+                        naif_ik_code, ground_range_resolution, samples, ldir);
+                  },
+                  py::arg("naif_ik_code"),
+                  py::arg("ground_range_resolution"),
+                  py::arg("samples"),
+                  py::arg("look_direction"),
+                  "Store the ground-range transform constants in the NAIF kernel pool.")
+      .def("__repr__", [](const Isis::RadarGroundRangeMap &) {
+        return "<RadarGroundRangeMap>";
+      });
+
+  // ReseauDistortionMap — distortion map using reseau mark positions.
+  // Added: 2026-04-10
+  py::class_<Isis::ReseauDistortionMap, Isis::CameraDistortionMap>(
+      m, "ReseauDistortionMap")
+      .def(py::init<Isis::Camera *, Isis::Pvl &, const std::string &>(),
+           py::arg("camera"),
+           py::arg("labels"),
+           py::arg("filename"),
+           py::keep_alive<1, 2>(),
+           py::keep_alive<1, 3>(),
+           "Construct a ReseauDistortionMap.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "camera : Camera\n"
+           "    Parent camera.\n"
+           "labels : Pvl\n"
+           "    Cube labels containing reseau mark data.\n"
+           "filename : str\n"
+           "    Path to the reseau correction file.")
+      .def("set_focal_plane",
+           &Isis::ReseauDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map from distorted to undistorted focal-plane coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::ReseauDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map from undistorted to distorted focal-plane coordinates.")
+      .def("__repr__", [](const Isis::ReseauDistortionMap &) {
+        return "<ReseauDistortionMap>";
+      });
+
+  // MarciDistortionMap — distortion map for MARCI camera on MRO.
+  // Added: 2026-04-10
+  py::class_<Isis::MarciDistortionMap, Isis::CameraDistortionMap>(
+      m, "MarciDistortionMap")
+      .def(py::init<Isis::Camera *, int>(),
+           py::arg("camera"),
+           py::arg("naif_ik_code"),
+           py::keep_alive<1, 2>(),
+           "Construct a MarciDistortionMap for the given Camera and NAIF IK code.")
+      .def("set_focal_plane",
+           &Isis::MarciDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"),
+           "Map from distorted to undistorted focal-plane coordinates.")
+      .def("set_undistorted_focal_plane",
+           &Isis::MarciDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           "Map from undistorted to distorted focal-plane coordinates.")
+      .def("set_filter",
+           &Isis::MarciDistortionMap::SetFilter,
+           py::arg("filter"),
+           "Set the MARCI filter index (0-based).")
+      .def("__repr__", [](const Isis::MarciDistortionMap &) {
+        return "<MarciDistortionMap>";
       });
 }

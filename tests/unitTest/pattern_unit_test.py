@@ -3,9 +3,10 @@ Unit tests for ISIS pattern matching classes: Chip, AutoReg, MaximumCorrelation,
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-09
+Last Modified: 2026-04-10
 Updated: 2026-04-08  Geng Xun added focused regression coverage for Centroid chip selection bindings.
 Updated: 2026-04-09  Geng Xun added MinimumDifference binding unit tests.
+Updated: 2026-04-10  Geng Xun fixed MinimumDifference regression tests to use upstream-style AutoRegistration PVL objects.
 """
 import unittest
 
@@ -459,17 +460,46 @@ class AutoRegFactoryUnitTest(unittest.TestCase):
         with self.assertRaises(ip.IException):
             ip.AutoRegFactory.create(pvl)
 
+    def test_auto_reg_factory_create_minimum_difference(self):
+        """Test creating MinimumDifference instance via factory with valid AutoRegistration PVL."""
+        pvl = MinimumDifferenceUnitTest._make_pvl()
+
+        autoreg = ip.AutoRegFactory.create(pvl)
+
+        self.assertIsNotNone(autoreg)
+        self.assertIsInstance(autoreg, ip.AutoReg)
+        self.assertEqual(autoreg.algorithm_name(), "MinimumDifference")
+        self.assertAlmostEqual(autoreg.tolerance(), 0.01, places=6)
+
 
 class MinimumDifferenceUnitTest(unittest.TestCase):
     """Focused unit tests for MinimumDifference binding. Added: 2026-04-09."""
 
-    def _make_pvl(self):
-        """Create a minimal Pvl config for MinimumDifference."""
+    @staticmethod
+    def _make_pvl():
+        """Create a valid upstream-style AutoRegistration Pvl config for MinimumDifference."""
         pvl = ip.Pvl()
-        grp = ip.PvlGroup("AutoRegistration")
-        grp.add_keyword(ip.PvlKeyword("Algorithm", "MinimumDifference"))
-        grp.add_keyword(ip.PvlKeyword("Tolerance", "0.01"))
-        pvl.add_group(grp)
+
+        autoreg_obj = ip.PvlObject("AutoRegistration")
+
+        algorithm_group = ip.PvlGroup("Algorithm")
+        algorithm_group.add_keyword(ip.PvlKeyword("Name", "MinimumDifference"))
+        algorithm_group.add_keyword(ip.PvlKeyword("Tolerance", "0.01"))
+        algorithm_group.add_keyword(ip.PvlKeyword("SubpixelAccuracy", "True"))
+        autoreg_obj.add_group(algorithm_group)
+
+        pattern_group = ip.PvlGroup("PatternChip")
+        pattern_group.add_keyword(ip.PvlKeyword("Samples", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("Lines", "15"))
+        pattern_group.add_keyword(ip.PvlKeyword("ValidPercent", "50"))
+        autoreg_obj.add_group(pattern_group)
+
+        search_group = ip.PvlGroup("SearchChip")
+        search_group.add_keyword(ip.PvlKeyword("Samples", "35"))
+        search_group.add_keyword(ip.PvlKeyword("Lines", "35"))
+        autoreg_obj.add_group(search_group)
+
+        pvl.add_object(autoreg_obj)
         return pvl
 
     def test_construct(self):

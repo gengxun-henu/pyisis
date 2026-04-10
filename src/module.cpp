@@ -6,6 +6,7 @@
 // Updated: 2026-04-10  Geng Xun moved statistics registration ahead of filters so GaussianStretch can inherit from Statistics without duplicate bindings.
 // Updated: 2026-04-10  Geng Xun added bind_base_pds_io for ImportPdsTable and ExportPdsTable
 // Updated: 2026-04-10  Geng Xun added bind_spice_navigation for SpicePosition/SpiceRotation/SpacecraftPosition (Batch 1)
+// Updated: 2026-04-10  Geng Xun added bind_base_image_polygon for ImagePolygon (Batch 2)
 // Purpose: define the top-level pybind11 _isis_core module and register all binding submodules
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -39,6 +40,7 @@ void bind_base_utility(py::module_ &m);
 void bind_base_pds_io(py::module_ &m);
 void bind_base_pattern(py::module_ &m);
 void bind_base_filters(py::module_ &m);
+void bind_base_image_polygon(py::module_ &m);
 void bind_base_polygon_seeder(py::module_ &m);
 void bind_base_image_overlap(py::module_ &m);
 void bind_mission_cameras(py::module_ &m);
@@ -75,6 +77,7 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_base_pattern(m);
   bind_statistics(m);
   bind_base_filters(m);
+  bind_base_image_polygon(m);
   bind_base_polygon_seeder(m);
   bind_base_image_overlap(m);
   bind_mission_cameras(m);

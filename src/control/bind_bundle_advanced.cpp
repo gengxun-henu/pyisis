@@ -11,15 +11,19 @@
 // - reference/upstream_isis/src/control/objs/BundleUtilities/BundleLidarPointVector.h
 // - reference/upstream_isis/src/control/objs/BundleResults/BundleResults.h
 // - reference/upstream_isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h
+// - reference/upstream_isis/src/control/objs/CsmBundleObservation/CsmBundleObservation.h
+// - reference/upstream_isis/src/control/objs/BundleUtilities/IsisBundleObservation.h
 // Source classes: BundleMeasure, BundleControlPoint, BundleObservation,
 //                 BundleObservationVector, BundleLidarRangeConstraint,
 //                 BundleLidarControlPoint, BundleLidarPointVector,
-//                 BundleResults, BundleSolutionInfo
+//                 BundleResults, BundleSolutionInfo,
+//                 CsmBundleObservation, IsisBundleObservation
 // Source header author(s): not explicitly stated in upstream headers
 // Binding author: Geng Xun
 // Created: 2026-03-24
 // Updated: 2026-03-25  Geng Xun expanded advanced bundle-adjustment bindings and fixed Python exposure for control-point correction and sigma accessors
 // Updated: 2026-04-10  Geng Xun re-enabled file; replaced boost::ublas bounded_vector accessors with lambda wrappers returning list; skipped SparseBlockRowMatrix/LinearAlgebra heavy methods
+// Updated: 2026-04-10  Geng Xun added CsmBundleObservation and IsisBundleObservation (Batch 2) with constructor, number_parameters, parameter_list, bundle_output_csv.
 // Purpose: pybind11 bindings for advanced ISIS bundle-adjustment classes
 
 #include <memory>
@@ -50,9 +54,13 @@
 #include "ControlMeasure.h"
 #include "ControlNet.h"
 #include "ControlPoint.h"
+#include "CsmBundleObservation.h"
 #include "Distance.h"
 #include "FileName.h"
+#include "IsisBundleObservation.h"
 #include "MaximumLikelihoodWFunctions.h"
+#include "SpicePosition.h"
+#include "SpiceRotation.h"
 #include "Statistics.h"
 #include "SurfacePoint.h"
 #include "helpers.h"
@@ -540,4 +548,73 @@ void bind_bundle_advanced(py::module_ &m)
          .def("__repr__", [](const Isis::BundleSolutionInfo &self)
               { return "BundleSolutionInfo(name='" + qStringToStdString(self.name()) +
                        "', run_time='" + qStringToStdString(self.runTime()) + "')"; });
+
+  // Added: 2026-04-10 - CsmBundleObservation and IsisBundleObservation (Batch 2)
+
+  // ─── CsmBundleObservation ────────────────────────────────────────────────
+  py::class_<Isis::CsmBundleObservation,
+             Isis::BundleObservation,
+             std::shared_ptr<Isis::CsmBundleObservation>>(m, "CsmBundleObservation")
+      .def(py::init<>(), "Construct a default CsmBundleObservation.")
+      .def("number_parameters",
+           &Isis::CsmBundleObservation::numberParameters,
+           "Return the total number of solve parameters for this observation.")
+      .def("parameter_list",
+           [](Isis::CsmBundleObservation &self) {
+               return qStringListToVector(self.parameterList());
+           },
+           "Return a list of parameter name strings.")
+      .def("bundle_output_csv",
+           [](Isis::CsmBundleObservation &self, bool error_propagation) {
+               return qStringToStdString(self.bundleOutputCSV(error_propagation));
+           },
+           py::arg("error_propagation") = false,
+           "Return a CSV string summarising the observation solve results.")
+      .def("__repr__", [](Isis::CsmBundleObservation &self) {
+           return "CsmBundleObservation(params=" +
+                  std::to_string(self.numberParameters()) + ")";
+      });
+
+  // ─── IsisBundleObservation ────────────────────────────────────────────────
+  py::class_<Isis::IsisBundleObservation,
+             Isis::BundleObservation,
+             std::shared_ptr<Isis::IsisBundleObservation>>(m, "IsisBundleObservation")
+      .def(py::init<>(), "Construct a default IsisBundleObservation.")
+      .def("number_parameters",
+           &Isis::IsisBundleObservation::numberParameters,
+           "Return the total number of solve parameters.")
+      .def("number_position_parameters",
+           &Isis::IsisBundleObservation::numberPositionParameters,
+           "Return the number of position solve parameters.")
+      .def("number_pointing_parameters",
+           &Isis::IsisBundleObservation::numberPointingParameters,
+           "Return the number of pointing solve parameters.")
+      .def("parameter_list",
+           [](Isis::IsisBundleObservation &self) {
+               return qStringListToVector(self.parameterList());
+           },
+           "Return a list of parameter name strings.")
+      .def("bundle_output_csv",
+           [](Isis::IsisBundleObservation &self, bool error_propagation) {
+               return qStringToStdString(self.bundleOutputCSV(error_propagation));
+           },
+           py::arg("error_propagation") = false,
+           "Return a CSV string summarising the observation solve results.")
+      .def("spice_position",
+           [](Isis::IsisBundleObservation &self) {
+               return self.spicePosition();
+           },
+           py::return_value_policy::reference_internal,
+           "Return the SpicePosition pointer for this observation (may be nullptr).")
+      .def("spice_rotation",
+           [](Isis::IsisBundleObservation &self) {
+               return self.spiceRotation();
+           },
+           py::return_value_policy::reference_internal,
+           "Return the SpiceRotation pointer for this observation (may be nullptr).")
+      .def("__repr__", [](Isis::IsisBundleObservation &self) {
+           return "IsisBundleObservation(params=" +
+                  std::to_string(self.numberParameters()) + ")";
+      });
 }
+

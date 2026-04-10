@@ -27,11 +27,11 @@ Control Networks,ControlPointList,已转换,2026-03-21 已在 bind_control_core.
 Control Networks,ControlPointV0001,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL 构造与 protobuf bytes/debug-string 适配接口
 Control Networks,ControlPointV0002,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口
 Control Networks,ControlPointV0003,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口
-Control Networks,CsmBundleObservation,未转换,
+Control Networks,CsmBundleObservation,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 暴露 CsmBundleObservation（继承 BundleObservation；构造函数/number_parameters/parameter_list/bundle_output_csv）；focused 单测在 tests/unitTest/batch2_unit_test.py
 Control Networks,ImageOverlap,已转换,2026-04-10 已在 src/base/bind_base_image_overlap.cpp 暴露默认构造/add/size/has_serial_number/has_any_same_serial_number/area；focused 单测在 image_overlap_camera_unit_test.py；smoke 已补符号
 Control Networks,InterestOperator,未转换,抽象基类/纯虚接口
 Control Networks,InterestOperatorFactory,已转换,2026-03-27 已在 bind_interest_operator_factory.cpp 暴露 create 静态工厂方法
-Control Networks,IsisBundleObservation,未转换,
+Control Networks,IsisBundleObservation,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 暴露 IsisBundleObservation（继承 BundleObservation；number_parameters/spice_rotation/spice_position）；focused 单测在 tests/unitTest/batch2_unit_test.py
 Control Networks,LidarControlPoint,已转换,2026-04-10 已在 src/control/bind_control_core.cpp 暴露构造/range/sigma/time/simultaneous 方法；继承 ControlPoint
 Control Networks,MeasureValidationResults,已转换,2026-03-21 已在 bind_control_core.cpp 暴露验证状态/失败消息/字符串格式化接口
 Control Networks,ObservationNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 possible_serial(...)
@@ -69,7 +69,7 @@ High Level Cube I/O,ProcessImportFits,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessImportPds,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessImportVicar,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessMapMosaic,未转换,流程/回调接口较多
-High Level Cube I/O,ProcessMosaic,未转换,流程/回调接口较多
+High Level Cube I/O,ProcessMosaic,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessMosaic（ImageOverlay 枚举/track/flag setter/getter/overlay_to_string）；focused 单测在 batch2_unit_test.py
 High Level Cube I/O,ProcessPolygons,未转换,流程/回调接口较多
 High Level Cube I/O,ProcessRubberSheet,未转换,流程/回调接口较多
 High Level Cube I/O,QtExporter,未转换,
@@ -212,7 +212,7 @@ Pattern Matching,Chip,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp
 Pattern Matching,GridPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/sub_grid/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
 Pattern Matching,Gruen,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp 暴露构造函数/getSpiceConstraint/getAffineConstraint/AlgorithmName/IdealFit；focused 单测在 pattern_unit_test.py
 Pattern Matching,ImageOverlapSet,已转换,2026-04-10 已在 src/base/bind_base_image_overlap.cpp 暴露构造/size/read_write/errors；FindImageOverlaps(GEOS) 未暴露
-Pattern Matching,ImagePolygon,未转换,
+Pattern Matching,ImagePolygon,已转换,2026-04-10 已在 src/base/bind_base_image_polygon.cpp 暴露 ImagePolygon（从坐标创建多边形/poly_str WKT/顶点数/flag setters）；focused 单测在 batch2_unit_test.py
 Pattern Matching,LimitPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
 Pattern Matching,MaximumCorrelation,已转换,2026-04-02 已在 bind_base_pattern.cpp 暴露构造函数，继承 AutoReg 全部方法
 Pattern Matching,MinimumDifference,已转换,2026-04-09 已在 src/base/bind_base_pattern.cpp 继承 AutoReg 暴露构造函数/ideal_fit/most_lenient_tolerance；focused 单测在 pattern_unit_test.py
@@ -333,7 +333,7 @@ Utility,Distance,已转换,
 Utility,EndianSwapper,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 EndianSwapper 构造/will_swap/swap_double/swap_float/swap_int/swap_short/swap_unsigned_short；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Utility,ExportPdsTable,已转换,2026-04-10 已在 src/base/bind_base_pds_io.cpp 暴露构造及 format_pds_table_name；已补单测
 Utility,GaussianStretch,已转换,2026-04-10 已在 src/bind_statistics.cpp 暴露 constructor(Histogram)/map；focused 单测在 camera_maps_unit_test.py；smoke 已补符号
-Utility,GSLUtility,未转换,
+Utility,GSLUtility,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 GSLUtility（singleton getInstance/success/status）；focused 单测在 batch2_unit_test.py
 Utility,ID,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 ID 构造与 next() 方法；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Utility,IException,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 补 IExceptionErrorType enum；IException 本体通过 py::register_exception 暴露为 Python 异常类
 Utility,ImportPdsTable,已转换,2026-04-10 已在 src/base/bind_base_pds_io.cpp 暴露构造、load、import_table 等核心方法；已补单测

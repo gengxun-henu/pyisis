@@ -204,6 +204,7 @@ pybind11_add_module(_isis_core
   src/base/bind_base_pattern.cpp
   src/base/bind_auto_reg_factory.cpp
   src/base/bind_base_filters.cpp
+  src/base/bind_base_image_polygon.cpp
   src/base/bind_base_polygon_seeder.cpp
   src/base/bind_base_image_overlap.cpp
   src/mission/bind_mission_cameras.cpp

@@ -1767,3 +1767,40 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 - `class_bind_methods_details/base_spice_position_methods.csv`, `base_numerical_approximation_methods.csv` 等更新
 - `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新
 - `pybind_progress_log.md`: 本条目
+
+---
+
+## Batch 10 — 2026-04-10
+
+**Queue (5 classes):** ProcessMosaic, CsmBundleObservation, IsisBundleObservation, ImagePolygon, GSLUtility
+
+### Class 1: ProcessMosaic
+- 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessMosaic（继承已绑定的 Process）。
+- 暴露：ImageOverlay 枚举（PlaceImagesOnTop/PlaceImagesBehind/UseBandPlacementCriteria/AverageImageWithMosaic）、SetTrackFlag/GetTrackFlag、SetNullFlag/GetNullFlag、SetHighSaturationFlag/GetHighSaturationFlag、SetLowSaturationFlag/GetLowSaturationFlag、SetImageOverlay、SetBandBinMatch/SetBandNumber/SetBandUseMaxValue、SetCreateFlag/SetMatchDEM、GetInputStartLineInMosaic/Sample/Band、OverlayToString/StringToOverlay（静态）。
+- focused 单测：`tests/unitTest/batch2_unit_test.py`（ProcessMosaicUnitTest 类）。
+
+### Class 2: CsmBundleObservation
+- 在 `src/control/bind_bundle_advanced.cpp` 追加 CsmBundleObservation（继承已绑定的 BundleObservation）。
+- 暴露：默认构造函数、number_parameters、parameter_list、bundle_output_csv。
+- focused 单测：`tests/unitTest/batch2_unit_test.py`（CsmBundleObservationUnitTest 类）。
+
+### Class 3: IsisBundleObservation
+- 在 `src/control/bind_bundle_advanced.cpp` 追加 IsisBundleObservation（继承 BundleObservation）。
+- 暴露：默认构造函数、number_parameters/number_position_parameters/number_pointing_parameters、parameter_list、bundle_output_csv、spice_position（返回 SpicePosition*）、spice_rotation（返回 SpiceRotation*）。
+- SpicePosition/SpiceRotation 在 Batch 1 中已暴露，返回引用使用 reference_internal。
+- focused 单测：`tests/unitTest/batch2_unit_test.py`（IsisBundleObservationUnitTest 类）。
+
+### Class 4: ImagePolygon
+- 新建 `src/base/bind_base_image_polygon.cpp`，暴露 ImagePolygon。
+- 暴露：默认构造函数、Blob 构造函数、create_from_coords（std::vector<std::vector<double>>）、set_emission/set_incidence/set_ellipsoid_limb/set_subpixel_accuracy（setters）、poly_str（WKT）、valid_sample_dim/valid_line_dim、get_sinc/get_linc、num_vertices、to_blob。
+- focused 单测：`tests/unitTest/batch2_unit_test.py`（ImagePolygonUnitTest 类）。
+
+### Class 5: GSLUtility
+- 在 `src/base/bind_base_utility.cpp` 追加 GSLUtility（GSL::GSLUtility singleton）。
+- 暴露：get_instance（静态，返回单例引用）、success(int)、status(int)。
+- focused 单测：`tests/unitTest/batch2_unit_test.py`（GSLUtilityUnitTest 类）。
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个类 → 已转换
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新
+- `pybind_progress_log.md`: 本条目

@@ -40,6 +40,7 @@
 #include "Column.h"
 #include "EndianSwapper.h"
 #include "Environment.h"
+#include "GSLUtility.h"
 #include "ID.h"
 #include "IString.h"
 #include "LineEquation.h"
@@ -1222,4 +1223,27 @@ void bind_base_utility(py::module_ &m) {
             return "TextFile(open=" +
                    std::string(self.OpenChk() ? "True" : "False") + ")";
           });
+
+  // Added: 2026-04-10 - GSLUtility singleton wrapper
+  py::class_<Isis::GSL::GSLUtility>(m, "GSLUtility")
+      .def_static("get_instance",
+           &Isis::GSL::GSLUtility::getInstance,
+           py::return_value_policy::reference,
+           "Return the singleton GSLUtility instance, initializing GSL error handling.")
+      .def("success",
+           [](const Isis::GSL::GSLUtility &self, int gsl_status) {
+               return self.success(gsl_status);
+           },
+           py::arg("gsl_status"),
+           "Return True if gsl_status == GSL_SUCCESS (0).")
+      .def("status",
+           [](const Isis::GSL::GSLUtility &self, int gsl_errno) {
+               return qStringToStdString(self.status(gsl_errno));
+           },
+           py::arg("gsl_errno"),
+           "Return the human-readable name of the given GSL error code.")
+      .def("__repr__", [](const Isis::GSL::GSLUtility &) {
+           return std::string("GSLUtility()");
+      });
 }
+

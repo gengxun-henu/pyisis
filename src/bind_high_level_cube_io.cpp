@@ -3,6 +3,7 @@
 // Updated: 2026-03-21  Geng Xun added high-level cube I/O process, import, export, progress, and JP2 helper bindings
 // Updated: 2026-04-09  Geng Xun removed the duplicate Progress py::class_ registration so _isis_core imports cleanly under test runners
 // Updated: 2026-04-09  Geng Xun added SubArea bindings with Cube/PvlGroup-aware label update helpers and focused tests
+// Updated: 2026-04-10  Geng Xun added ProcessMosaic (Batch 2) with ImageOverlay enum, track/overlay/saturation flag setters and getters.
 // Purpose: pybind11 bindings for ISIS high-level cube I/O workflows including Process variants, import/export helpers, and JP2 utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -32,6 +33,7 @@
 #include "ProcessImportFits.h"
 #include "ProcessImportPds.h"
 #include "ProcessImportVicar.h"
+#include "ProcessMosaic.h"
 #include "Progress.h"
 #include "SubArea.h"
 #include "helpers.h"
@@ -610,4 +612,93 @@ void bind_high_level_cube_io(py::module_ &m) {
        return "JP2Encoder()";
      });
 
+  // Added: 2026-04-10 - ProcessMosaic
+  py::enum_<Isis::ProcessMosaic::ImageOverlay>(m, "ImageOverlay")
+      .value("PlaceImagesOnTop",    Isis::ProcessMosaic::PlaceImagesOnTop)
+      .value("PlaceImagesBehind",   Isis::ProcessMosaic::PlaceImagesBehind)
+      .value("UseBandPlacementCriteria", Isis::ProcessMosaic::UseBandPlacementCriteria)
+      .value("AverageImageWithMosaic",   Isis::ProcessMosaic::AverageImageWithMosaic)
+      .value("NumImageOverlayOptions",   Isis::ProcessMosaic::NumImageOverlayOptions)
+      .export_values();
+
+  py::class_<Isis::ProcessMosaic, Isis::Process>(m, "ProcessMosaic")
+      .def(py::init<>(), "Construct a default ProcessMosaic.")
+      .def("set_band_bin_match",
+           &Isis::ProcessMosaic::SetBandBinMatch,
+           py::arg("enforce"),
+           "Set whether band-bin match is enforced.")
+      .def("set_band_number",
+           &Isis::ProcessMosaic::SetBandNumber,
+           py::arg("band_number"),
+           "Set band number for priority ordering.")
+      .def("set_band_use_max_value",
+           &Isis::ProcessMosaic::SetBandUseMaxValue,
+           py::arg("use_max"),
+           "Set whether to use maximum value for band priority.")
+      .def("set_create_flag",
+           &Isis::ProcessMosaic::SetCreateFlag,
+           py::arg("create_output_mosaic"),
+           "Set whether to create the output mosaic if it does not exist.")
+      .def("set_high_saturation_flag",
+           &Isis::ProcessMosaic::SetHighSaturationFlag,
+           py::arg("place_high_sat"),
+           "Set whether to place high-saturation pixels in the mosaic.")
+      .def("set_image_overlay",
+           &Isis::ProcessMosaic::SetImageOverlay,
+           py::arg("placement"),
+           "Set the image overlay mode.")
+      .def("set_low_saturation_flag",
+           &Isis::ProcessMosaic::SetLowSaturationFlag,
+           py::arg("place_low_sat"),
+           "Set whether to place low-saturation pixels in the mosaic.")
+      .def("set_match_dem",
+           &Isis::ProcessMosaic::SetMatchDEM,
+           py::arg("match_dem"),
+           "Set whether to require DEM match.")
+      .def("set_null_flag",
+           &Isis::ProcessMosaic::SetNullFlag,
+           py::arg("place_nulls"),
+           "Set whether to place null pixels in the mosaic.")
+      .def("set_track_flag",
+           &Isis::ProcessMosaic::SetTrackFlag,
+           py::arg("tracking_enabled"),
+           "Enable or disable tracking of pixel origins.")
+      .def("get_high_saturation_flag",
+           &Isis::ProcessMosaic::GetHighSaturationFlag,
+           "Return True if high-saturation pixels will be placed.")
+      .def("get_low_saturation_flag",
+           &Isis::ProcessMosaic::GetLowSaturationFlag,
+           "Return True if low-saturation pixels will be placed.")
+      .def("get_null_flag",
+           &Isis::ProcessMosaic::GetNullFlag,
+           "Return True if null pixels will be placed.")
+      .def("get_track_flag",
+           &Isis::ProcessMosaic::GetTrackFlag,
+           "Return True if origin tracking is enabled.")
+      .def("get_input_start_line_in_mosaic",
+           &Isis::ProcessMosaic::GetInputStartLineInMosaic,
+           "Return the line position of the input start in the mosaic.")
+      .def("get_input_start_sample_in_mosaic",
+           &Isis::ProcessMosaic::GetInputStartSampleInMosaic,
+           "Return the sample position of the input start in the mosaic.")
+      .def("get_input_start_band_in_mosaic",
+           &Isis::ProcessMosaic::GetInputStartBandInMosaic,
+           "Return the band position of the input start in the mosaic.")
+      .def_static("overlay_to_string",
+           [](Isis::ProcessMosaic::ImageOverlay overlay) {
+               return qStringToStdString(Isis::ProcessMosaic::OverlayToString(overlay));
+           },
+           py::arg("overlay"),
+           "Return the string name for the given ImageOverlay enum value.")
+      .def_static("string_to_overlay",
+           [](const std::string &s) {
+               return Isis::ProcessMosaic::StringToOverlay(stdStringToQString(s));
+           },
+           py::arg("s"),
+           "Return the ImageOverlay enum value for the given string.")
+      .def("__repr__", [](const Isis::ProcessMosaic &) {
+           return std::string("ProcessMosaic()");
+      });
+
 }
+

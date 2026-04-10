@@ -1388,3 +1388,43 @@ Queue document created: `pybind_rollout_classes_20260409.md`
 - Added `KaguyaMissionCameraUnitTest` class to `tests/unitTest/extended_mission_camera_unit_test.py`.
 - Exported new symbols in `python/isis_pybind/__init__.py`; smoke symbol checks added.
 - Tracking: `todo_pybind11.csv`, `methods_inventory_summary.csv` updated.
+
+---
+
+## 2026-04-10 第五阶段 Rollout 第4批（3 个新绑定 + 大规模台账同步）
+
+**本批完成 3 个新绑定，并修正了 20+ 个已绑定但台账标记仍为"未转换"的类。**
+
+### 活跃队列（新绑定）
+18. PushFrameCameraDetectorMap — 已完成
+19. RollingShutterCameraDetectorMap — 已完成
+20. VariableLineScanCameraDetectorMap — 已完成（构造函数不暴露，因为需要 LineRateChange 向量引用；暴露 set_parent/set_detector/exposure_duration）
+
+### Class 18: PushFrameCameraDetectorMap (已转换)
+- Added `py::class_<Isis::PushFrameCameraDetectorMap, Isis::CameraDetectorMap>` binding in `src/bind_camera_maps.cpp`.
+- Exposed: constructor, set_parent, set_detector, framelet_rate, set_framelet_rate, framelet_offset, set_framelet_offset, framelet, set_band_first_detector_line, get_band_first_detector_line, set_start_time, __repr__.
+- Added `PushFrameCameraDetectorMapSurfaceUnitTest` class to `tests/unitTest/camera_maps_unit_test.py`.
+- Exported in `python/isis_pybind/__init__.py`; smoke check added.
+
+### Class 19: RollingShutterCameraDetectorMap (已转换)
+- Added `py::class_<Isis::RollingShutterCameraDetectorMap, Isis::CameraDetectorMap>` in `src/bind_camera_maps.cpp`.
+- Exposed: constructor(times, sample_coeffs, line_coeffs), set_parent, set_detector, apply_jitter, __repr__.
+- Added `RollingShutterCameraDetectorMapSurfaceUnitTest` class to `tests/unitTest/camera_maps_unit_test.py`.
+- Exported in `python/isis_pybind/__init__.py`; smoke check added.
+
+### Class 20: VariableLineScanCameraDetectorMap (已转换，部分)
+- Added `py::class_<Isis::VariableLineScanCameraDetectorMap, Isis::LineScanCameraDetectorMap>` in `src/bind_camera_maps.cpp`.
+- Exposed: set_parent, set_detector, exposure_duration, __repr__. (Constructor requires std::vector<LineRateChange>& reference; not exposed directly.)
+- Added `VariableLineScanCameraDetectorMapSurfaceUnitTest` class to `tests/unitTest/camera_maps_unit_test.py`.
+- Exported in `python/isis_pybind/__init__.py`; smoke check added.
+
+### 台账同步（大规模修正）
+Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly labeled 未转换:
+- Apollo: ApolloMetricCamera, ApolloMetricDistortionMap, ApolloPanoramicDetectorMap
+- Cassini: IssNACamera, IssWACamera, VimsCamera, VimsGroundMap, VimsSkyMap
+- Chandrayaan-1: Chandrayaan1M3Camera, Chandrayaan1M3DistortionMap
+- Clementine: HiresCamera, LwirCamera, NirCamera, UvvisCamera, ClementineUvvisDistortionMap
+- Clipper: ClipperNacRollingShutterCamera, ClipperPushBroomCamera, ClipperWacFcCamera
+- Galileo: SsiCamera
+- Juno: JunoCamera, JunoDistortionMap
+- Spice: PushFrameCameraDetectorMap (new), RollingShutterCameraDetectorMap (new), VariableLineScanCameraDetectorMap (new)

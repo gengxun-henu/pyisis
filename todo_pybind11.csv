@@ -266,7 +266,7 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",PixelFOV,未转换,
 "Spice, Instruments, and Cameras",PushFrameCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
 "Spice, Instruments, and Cameras",PushFrameCameraCcdLayout,未转换,
-"Spice, Instruments, and Cameras",PushFrameCameraDetectorMap,未转换,
+"Spice, Instruments, and Cameras",PushFrameCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造函数/set_parent/set_detector/framelet_rate/framelet_offset/framelet/set_band_first_detector_line/get_band_first_detector_line/set_start_time
 "Spice, Instruments, and Cameras",PushFrameCameraGroundMap,未转换,
 "Spice, Instruments, and Cameras",Quaternion,已转换,2026-04-09 已在 src/bind_camera.cpp 暴露构造函数/get_quaternion/set/to_matrix/to_angles/conjugate/qxv/乘法运算符；focused 单测在 sensor_utils_unit_test.py
 "Spice, Instruments, and Cameras",RadarCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
@@ -277,14 +277,14 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",RadarSlantRangeMap,未转换,
 "Spice, Instruments, and Cameras",ReseauDistortionMap,未转换,相机模型/Spice 依赖
 "Spice, Instruments, and Cameras",RollingShutterCamera,已转换,相机模型/Spice 依赖
-"Spice, Instruments, and Cameras",RollingShutterCameraDetectorMap,未转换,
+"Spice, Instruments, and Cameras",RollingShutterCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造函数/set_parent/set_detector/apply_jitter
 "Spice, Instruments, and Cameras",Sensor,已转换,抽象基类/纯虚接口；已补 get_surface_point() 以支撑 measure-level 地面点/半径提取
 "Spice, Instruments, and Cameras",SpacecraftPosition,未转换,
 "Spice, Instruments, and Cameras",Spice,未转换,Qt 类型/信号槽较多
 "Spice, Instruments, and Cameras",SpicePosition,未转换,
 "Spice, Instruments, and Cameras",SpiceRotation,未转换,
 "Spice, Instruments, and Cameras",Target,已转换,2026-04-09 已在 src/base/bind_base_target.cpp 补齐 Target(Pvl&) 与 NAIF/frame/body-rotation accessor，并在 src/bind_camera.cpp 新增 Camera.target()；显式 Spice* API 仍因无 Python Spice 绑定而保留未覆盖
-"Spice, Instruments, and Cameras",VariableLineScanCameraDetectorMap,未转换,
+"Spice, Instruments, and Cameras",VariableLineScanCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露 set_parent/set_detector/exposure_duration
 Statistics,FourierTransform,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露 FourierTransform 构造/transform/inverse/helper 方法；focused 单测在 tests/unitTest/math_unit_test.py；smoke 已补符号
 Statistics,GaussianDistribution,已转换,
 Statistics,GroupedStatistics,已转换,
@@ -350,28 +350,28 @@ Utility,Selection,未转换,抽象基类/纯虚接口
 Utility,SparseBlockMatrix,未转换,
 Utility,Stretch,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露 Stretch 完整接口（AddPair/Map/Parse/Load/Save/特殊像素 setter）；focused 单测在 tests/unitTest/filters_unit_test.py
 Utility,TextFile,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 TextFile 构造/open/close/get_file/put_file/get_line/put_line/line_count/size 方法；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
-Apollo,ApolloMetricCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Apollo,ApolloMetricDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Apollo,ApolloMetricCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Apollo,ApolloMetricDistortionMap,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 SetFocalPlane/SetUndistortedFocalPlane
 Apollo,ApolloPanoramicCamera,已转换,"2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 residual/CK/SPK 接口；intOriResidualsReport 通过 pybind wrapper 规避上游未定义符号"
-Apollo,ApolloPanoramicDetectorMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Cassini,IssNACamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Cassini,IssWACamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Cassini,VimsCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Cassini,VimsGroundMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Cassini,VimsSkyMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Chandrayaan-1,Chandrayaan1M3Camera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Chandrayaan-1,Chandrayaan1M3DistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Clementine,HiresCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Clementine,LwirCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Clementine,NirCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Clementine,UvvisCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Clementine,ClementineUvvisDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Clipper,ClipperNacRollingShutterCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Clipper,ClipperPushBroomCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Clipper,ClipperWacFcCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Galileo,SsiCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Juno,JunoCamera,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Juno,JunoDistortionMap,未转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Apollo,ApolloPanoramicDetectorMap,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露构造函数与 SetDetector
+Cassini,IssNACamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Cassini,IssWACamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Cassini,VimsCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 CK/SPK 接口
+Cassini,VimsGroundMap,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露构造函数与 SetGround
+Cassini,VimsSkyMap,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露构造函数与 SetSky
+Chandrayaan-1,Chandrayaan1M3Camera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 CK/SPK 接口
+Chandrayaan-1,Chandrayaan1M3DistortionMap,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露构造函数与 SetFocalPlane/SetUndistortedFocalPlane
+Clementine,HiresCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Clementine,LwirCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Clementine,NirCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Clementine,UvvisCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Clementine,ClementineUvvisDistortionMap,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露构造函数与 SetFocalPlane/SetUndistortedFocalPlane
+Clipper,ClipperNacRollingShutterCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Clipper,ClipperPushBroomCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Clipper,ClipperWacFcCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Galileo,SsiCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Juno,JunoCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口
+Juno,JunoDistortionMap,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露构造函数与 SetDistortion/SetFocalPlane/SetUndistortedFocalPlane
 Lunar Orbiter,LoCameraFiducialMap,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露 PvlGroup 构造与 __repr__"
 Lunar Orbiter,LoHighCamera,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露 Cube 构造、shutter_open_close_times 与 CK/SPK 参考 ID"
 Lunar Orbiter,LoHighDistortionMap,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造、set_distortion 与焦平面正反变换"

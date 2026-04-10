@@ -3,7 +3,8 @@ Unit tests for ISIS camera map bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-21
+Last Modified: 2026-04-10
+Updated: 2026-04-10  Geng Xun added PushFrameCameraDetectorMap, RollingShutterCameraDetectorMap, VariableLineScanCameraDetectorMap surface and API tests.
 """
 
 import math
@@ -137,6 +138,71 @@ class CameraMapsUnitTest(unittest.TestCase):
         self.assertTrue(sky_map.set_sky(camera.right_ascension(), camera.declination()))
         self.assertTrue(math.isfinite(sky_map.focal_plane_x()))
         self.assertTrue(math.isfinite(sky_map.focal_plane_y()))
+
+
+class PushFrameCameraDetectorMapSurfaceUnitTest(unittest.TestCase):
+    """Surface API tests for PushFrameCameraDetectorMap binding. Added: 2026-04-10."""
+
+    def test_class_is_exported(self):
+        """PushFrameCameraDetectorMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "PushFrameCameraDetectorMap"))
+
+    def test_inherits_camera_detector_map(self):
+        """PushFrameCameraDetectorMap is a subclass of CameraDetectorMap."""
+        self.assertTrue(issubclass(ip.PushFrameCameraDetectorMap, ip.CameraDetectorMap))
+
+    def test_has_expected_methods(self):
+        """PushFrameCameraDetectorMap exposes required API methods."""
+        self.assertTrue(hasattr(ip.PushFrameCameraDetectorMap, "set_parent"))
+        self.assertTrue(hasattr(ip.PushFrameCameraDetectorMap, "set_detector"))
+        self.assertTrue(hasattr(ip.PushFrameCameraDetectorMap, "framelet_rate"))
+        self.assertTrue(hasattr(ip.PushFrameCameraDetectorMap, "set_framelet_rate"))
+        self.assertTrue(hasattr(ip.PushFrameCameraDetectorMap, "framelet_offset"))
+        self.assertTrue(hasattr(ip.PushFrameCameraDetectorMap, "set_framelet_offset"))
+        self.assertTrue(hasattr(ip.PushFrameCameraDetectorMap, "framelet"))
+        self.assertTrue(hasattr(ip.PushFrameCameraDetectorMap, "set_band_first_detector_line"))
+        self.assertTrue(hasattr(ip.PushFrameCameraDetectorMap, "get_band_first_detector_line"))
+        self.assertTrue(hasattr(ip.PushFrameCameraDetectorMap, "set_start_time"))
+
+
+class RollingShutterCameraDetectorMapSurfaceUnitTest(unittest.TestCase):
+    """Surface API tests for RollingShutterCameraDetectorMap binding. Added: 2026-04-10."""
+
+    def test_class_is_exported(self):
+        """RollingShutterCameraDetectorMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "RollingShutterCameraDetectorMap"))
+
+    def test_inherits_camera_detector_map(self):
+        """RollingShutterCameraDetectorMap is a subclass of CameraDetectorMap."""
+        self.assertTrue(issubclass(ip.RollingShutterCameraDetectorMap, ip.CameraDetectorMap))
+
+    def test_has_expected_methods(self):
+        """RollingShutterCameraDetectorMap exposes required API methods."""
+        self.assertTrue(hasattr(ip.RollingShutterCameraDetectorMap, "set_parent"))
+        self.assertTrue(hasattr(ip.RollingShutterCameraDetectorMap, "set_detector"))
+        self.assertTrue(hasattr(ip.RollingShutterCameraDetectorMap, "apply_jitter"))
+
+
+class VariableLineScanCameraDetectorMapSurfaceUnitTest(unittest.TestCase):
+    """Surface API tests for VariableLineScanCameraDetectorMap binding. Added: 2026-04-10."""
+
+    def test_class_is_exported(self):
+        """VariableLineScanCameraDetectorMap is accessible as an isis_pybind symbol."""
+        self.assertTrue(hasattr(ip, "VariableLineScanCameraDetectorMap"))
+
+    def test_inherits_line_scan_camera_detector_map(self):
+        """VariableLineScanCameraDetectorMap is a subclass of LineScanCameraDetectorMap."""
+        self.assertTrue(issubclass(ip.VariableLineScanCameraDetectorMap, ip.LineScanCameraDetectorMap))
+
+    def test_inherits_camera_detector_map(self):
+        """VariableLineScanCameraDetectorMap is a subclass of CameraDetectorMap (transitive)."""
+        self.assertTrue(issubclass(ip.VariableLineScanCameraDetectorMap, ip.CameraDetectorMap))
+
+    def test_has_expected_methods(self):
+        """VariableLineScanCameraDetectorMap exposes required API methods."""
+        self.assertTrue(hasattr(ip.VariableLineScanCameraDetectorMap, "set_parent"))
+        self.assertTrue(hasattr(ip.VariableLineScanCameraDetectorMap, "set_detector"))
+        self.assertTrue(hasattr(ip.VariableLineScanCameraDetectorMap, "exposure_duration"))
 
 
 if __name__ == "__main__":

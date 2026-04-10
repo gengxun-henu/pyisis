@@ -1,6 +1,8 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-04-08  Geng Xun added ControlNetStatistics summary/getter bindings and related control-core exposure updates
+// Updated: 2026-04-10  Geng Xun added LidarControlPoint binding (inherits ControlPoint) with range/sigma/time/simultaneous methods.
+// Updated: 2026-04-10  Geng Xun added ControlNetVersioner binding with file/ControlNet constructors and network metadata accessors.
 // Purpose: pybind11 bindings for ISIS control network core classes, filters, and bundle-control helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -28,6 +30,7 @@
 #include "BundleTargetBody.h"
 #include "ControlNetFilter.h"
 #include "ControlNetValidMeasure.h"
+#include "ControlNetVersioner.h"
 #include "ControlMeasure.h"
 #include "ControlMeasureLogData.h"
 #include "ControlNetDiff.h"
@@ -38,6 +41,8 @@
 #include "ControlPointV0001.h"
 #include "ControlPointV0002.h"
 #include "ControlPointV0003.h"
+#include "LidarControlPoint.h"
+#include "iTime.h"
 #include "FileName.h"
 #include "MaximumLikelihoodWFunctions.h"
 #include "MeasureValidationResults.h"
@@ -1716,4 +1721,144 @@ void bind_control_core(py::module_ &m)
                    return "BundleSettings(validate_network=" + std::string(self.validateNetwork() ? "True" : "False") +
                           ", solve_observation_mode=" + std::string(self.solveObservationMode() ? "True" : "False") + ")";
               });
+
+  // LidarControlPoint — extends ControlPoint for LOLA lidar measurements.
+  // Added: 2026-04-10
+  py::class_<Isis::LidarControlPoint, Isis::ControlPoint>(m, "LidarControlPoint")
+      .def(py::init<>(),
+           "Construct a default LidarControlPoint with zero range, sigma, and time.")
+      .def("set_range",
+           [](Isis::LidarControlPoint &self, double range) { return self.setRange(range); },
+           py::arg("range"),
+           "Set the lidar range (metres). Returns ControlPoint.Status.")
+      .def("set_sigma_range",
+           [](Isis::LidarControlPoint &self, double sigma_range) { return self.setSigmaRange(sigma_range); },
+           py::arg("sigma_range"),
+           "Set the lidar range sigma. Returns ControlPoint.Status.")
+      .def("set_time",
+           [](Isis::LidarControlPoint &self, Isis::iTime t) { return self.setTime(t); },
+           py::arg("time"),
+           "Set the acquisition time. Returns ControlPoint.Status.")
+      .def("add_simultaneous",
+           [](Isis::LidarControlPoint &self, const std::string &sn) {
+               return self.addSimultaneous(QString::fromStdString(sn));
+           },
+           py::arg("serial_number"),
+           "Add a serial number for a simultaneously imaged cube. Returns ControlPoint.Status.")
+      .def("compute_residuals",
+           [](Isis::LidarControlPoint &self) { return self.ComputeResiduals(); },
+           "Compute residuals for all lidar measures. Returns ControlPoint.Status.")
+      .def("range",
+           [](Isis::LidarControlPoint &self) { return self.range(); },
+           "Return the lidar range value.")
+      .def("sigma_range",
+           [](Isis::LidarControlPoint &self) { return self.sigmaRange(); },
+           "Return the lidar range sigma.")
+      .def("time",
+           [](Isis::LidarControlPoint &self) { return self.time(); },
+           "Return the acquisition iTime.")
+      .def("sn_simultaneous",
+           [](const Isis::LidarControlPoint &self) {
+               QStringList qlist = self.snSimultaneous();
+               std::vector<std::string> result;
+               result.reserve(static_cast<size_t>(qlist.size()));
+               for (const QString &s : qlist) {
+                   result.push_back(s.toStdString());
+               }
+               return result;
+           },
+           "Return the list of serial numbers for simultaneously imaged cubes.")
+      .def("is_simultaneous",
+           [](Isis::LidarControlPoint &self, const std::string &sn) {
+               return self.isSimultaneous(QString::fromStdString(sn));
+           },
+           py::arg("serial_number"),
+           "Return True if the given serial number is in the simultaneous list.")
+      .def("__repr__",
+           [](Isis::LidarControlPoint &self) {
+               return "LidarControlPoint(id='" + qStringToStdString(self.GetId()) +
+                      "', range=" + std::to_string(self.range()) +
+                      ", sigma_range=" + std::to_string(self.sigmaRange()) + ")";
+           });
+
+  // ControlNetVersioner — reads and writes all control network file format versions.
+  // Added: 2026-04-10
+  py::class_<Isis::ControlNetVersioner>(m, "ControlNetVersioner")
+      .def(py::init<>(),
+           "Construct an empty ControlNetVersioner with no network data.")
+      .def(py::init<Isis::ControlNet *>(),
+           py::arg("net"),
+           py::keep_alive<1, 2>(),
+           "Construct a ControlNetVersioner from an existing ControlNet.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "net : ControlNet\n"
+           "    The control network to serialize.")
+      .def(py::init([](const std::string &filename) {
+               Isis::FileName fn(QString::fromStdString(filename));
+               return Isis::ControlNetVersioner(fn, nullptr);
+           }),
+           py::arg("filename"),
+           "Construct a ControlNetVersioner by reading a network file.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "filename : str\n"
+           "    Path to a control network file (.net or .pvl).")
+      .def("net_id",
+           [](const Isis::ControlNetVersioner &self) {
+               return qStringToStdString(self.netId());
+           },
+           "Return the network ID string.")
+      .def("target_name",
+           [](const Isis::ControlNetVersioner &self) {
+               return qStringToStdString(self.targetName());
+           },
+           "Return the target body name (e.g. 'MARS').")
+      .def("creation_date",
+           [](const Isis::ControlNetVersioner &self) {
+               return qStringToStdString(self.creationDate());
+           },
+           "Return the creation date string.")
+      .def("last_modification_date",
+           [](const Isis::ControlNetVersioner &self) {
+               return qStringToStdString(self.lastModificationDate());
+           },
+           "Return the last modification date string.")
+      .def("description",
+           [](const Isis::ControlNetVersioner &self) {
+               return qStringToStdString(self.description());
+           },
+           "Return the network description string.")
+      .def("user_name",
+           [](const Isis::ControlNetVersioner &self) {
+               return qStringToStdString(self.userName());
+           },
+           "Return the user name string.")
+      .def("num_points",
+           [](const Isis::ControlNetVersioner &self) {
+               return self.numPoints();
+           },
+           "Return the number of control points stored in the versioner.")
+      .def("write",
+           [](Isis::ControlNetVersioner &self, const std::string &filename) {
+               Isis::FileName fn(QString::fromStdString(filename));
+               self.write(fn);
+           },
+           py::arg("filename"),
+           "Write the control network to a file in the latest format.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "filename : str\n"
+           "    Output file path.")
+      .def("to_pvl",
+           [](Isis::ControlNetVersioner &self) {
+               return self.toPvl();
+           },
+           "Convert the stored network to a Pvl object.")
+      .def("__repr__",
+           [](Isis::ControlNetVersioner &self) {
+               return "ControlNetVersioner(net_id='" + qStringToStdString(self.netId()) +
+                      "', target='" + qStringToStdString(self.targetName()) +
+                      "', num_points=" + std::to_string(self.numPoints()) + ")";
+           });
 }

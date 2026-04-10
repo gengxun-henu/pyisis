@@ -10,7 +10,8 @@
 // Updated: 2026-04-09  Geng Xun added OriginalLabel low-level blob/PVL round-trip bindings.
 // Updated: 2026-04-09  Geng Xun added RawCubeChunk and RegionalCachingAlgorithm low-level cache helpers.
 // Updated: 2026-04-09  Geng Xun added OriginalXmlLabel blob/XML round-trip bindings with Python-friendly XML string access.
-// Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, OriginalLabel, RawCubeChunk, cache helpers, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, and table structures
+// Updated: 2026-04-10  Geng Xun added HiBlob binding (inherits Blobber) with default constructor, cube constructor, and buffer accessor returning list-of-lists.
+// Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, OriginalLabel, RawCubeChunk, cache helpers, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, table structures, and HiBlob
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
@@ -30,6 +31,7 @@
 #include "Blob.h"
 #include "Blobber.h"
 #include "BoxcarManager.h"
+#include "HiBlob.h"
 #include "Brick.h"
 #include "Buffer.h"
 #include "BufferManager.h"
@@ -1119,6 +1121,61 @@ void bind_low_level_cube_io(py::module_ &m) {
                                           "', lines=" + std::to_string(self.Lines()) +
                                           ", samples=" + std::to_string(self.Samples()) + ")";
                           });
+
+  // HiBlob — BLOB extraction class for HiRISE calibration data.
+  // Inherits all Blobber methods. Added: 2026-04-10
+  py::class_<Isis::HiBlob, Isis::Blobber>(m, "HiBlob")
+      .def(py::init<>(), "Construct an empty HiBlob with no cube backing store.")
+      .def(py::init([](Isis::Cube &cube,
+                       const std::string &tblname,
+                       const std::string &field,
+                       const std::string &name) {
+                          return Isis::HiBlob(cube,
+                                              QString::fromStdString(tblname),
+                                              QString::fromStdString(field),
+                                              QString::fromStdString(name));
+                     }),
+           py::arg("cube"),
+           py::arg("tblname"),
+           py::arg("field"),
+           py::arg("name") = "HiBlob",
+           py::keep_alive<1, 2>(),
+           "Construct a HiBlob backed by an open ISIS Cube.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "cube : Cube\n"
+           "    Open ISIS Cube containing the target table.\n"
+           "tblname : str\n"
+           "    Name of the ISIS table (e.g. 'HiRISE Calibration Image').\n"
+           "field : str\n"
+           "    Name of the field inside the table to extract.\n"
+           "name : str, optional\n"
+           "    Label name for this blob (default 'HiBlob').")
+      .def("buffer",
+           [](const Isis::HiBlob &self) {
+               // Convert TNT::Array2D<double> (HiMatrix) to list[list[float]]
+               const auto &mat = self.buffer();
+               std::vector<std::vector<double>> result;
+               result.reserve(static_cast<size_t>(mat.dim1()));
+               for (int r = 0; r < mat.dim1(); ++r) {
+                   std::vector<double> row(mat.dim2());
+                   for (int c = 0; c < mat.dim2(); ++c) {
+                       row[c] = mat[r][c];
+                   }
+                   result.push_back(std::move(row));
+               }
+               return result;
+           },
+           "Return the HiRISE calibration data buffer as a list of rows (list[list[float]]).\n\n"
+           "Requires that the blob has been loaded from a valid cube first.")
+      .def("__repr__",
+           [](const Isis::HiBlob &self) {
+               return "HiBlob(name='" + qStringToStdString(self.getName()) +
+                      "', blob_name='" + qStringToStdString(self.getBlobName()) +
+                      "', field_name='" + qStringToStdString(self.getFieldName()) +
+                      "', lines=" + std::to_string(self.Lines()) +
+                      ", samples=" + std::to_string(self.Samples()) + ")";
+           });
 
   py::class_<Isis::TableField> table_field(m, "TableField");
 

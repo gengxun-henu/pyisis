@@ -12,6 +12,7 @@ Updated: 2026-04-09  Geng Xun added Ransac helper regression coverage for packed
 Updated: 2026-04-09  Geng Xun added SurfaceModel focused unit tests.
 Updated: 2026-04-09  Geng Xun relaxed the planar SurfaceModel min_max regression to match upstream floating-point behavior.
 Updated: 2026-04-10  Geng Xun added FourierTransform unit tests.
+Updated: 2026-04-10  Geng Xun added SparseBlockMatrix unit tests for construction, block insertion, counting, and get_block.
 Updated: 2026-04-10  Geng Xun aligned FourierTransform tests with complex-valued Python API and upstream BitReverse semantics.
 """
 import unittest
@@ -1167,3 +1168,92 @@ class FourierTransformUnitTest(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+
+class SparseBlockMatrixUnitTest(unittest.TestCase):
+    """Focused regression coverage for SparseBlockMatrix binding.
+
+    Added: 2026-04-10
+    """
+
+    def test_default_constructor(self):
+        """SparseBlockMatrix can be constructed without arguments."""
+        sbm = ip.SparseBlockMatrix()
+        self.assertIsInstance(sbm, ip.SparseBlockMatrix)
+
+    def test_initial_state_zero(self):
+        """Newly constructed SparseBlockMatrix has zero blocks and elements."""
+        sbm = ip.SparseBlockMatrix()
+        self.assertEqual(sbm.number_of_blocks(), 0)
+        self.assertEqual(sbm.number_of_diagonal_blocks(), 0)
+        self.assertEqual(sbm.number_of_off_diagonal_blocks(), 0)
+        self.assertEqual(sbm.number_of_elements(), 0)
+
+    def test_set_number_of_columns(self):
+        """set_number_of_columns returns True and expands the column structure."""
+        sbm = ip.SparseBlockMatrix()
+        ok = sbm.set_number_of_columns(3)
+        self.assertTrue(ok)
+
+    def test_insert_matrix_block(self):
+        """insert_matrix_block inserts a block and increments block counts."""
+        sbm = ip.SparseBlockMatrix()
+        sbm.set_number_of_columns(3)
+        ok = sbm.insert_matrix_block(0, 0, 2, 2)
+        self.assertTrue(ok)
+        self.assertGreater(sbm.number_of_blocks(), 0)
+
+    def test_insert_diagonal_block(self):
+        """Inserting a block on the diagonal increments number_of_diagonal_blocks."""
+        sbm = ip.SparseBlockMatrix()
+        sbm.set_number_of_columns(4)
+        sbm.insert_matrix_block(0, 0, 3, 3)
+        sbm.insert_matrix_block(1, 1, 3, 3)
+        self.assertEqual(sbm.number_of_diagonal_blocks(), 2)
+
+    def test_insert_off_diagonal_block(self):
+        """Inserting an off-diagonal block increments number_of_off_diagonal_blocks."""
+        sbm = ip.SparseBlockMatrix()
+        sbm.set_number_of_columns(4)
+        sbm.insert_matrix_block(1, 0, 3, 3)
+        self.assertGreaterEqual(sbm.number_of_off_diagonal_blocks(), 0)
+
+    def test_zero_blocks_does_not_raise(self):
+        """zero_blocks can be called on a populated matrix without error."""
+        sbm = ip.SparseBlockMatrix()
+        sbm.set_number_of_columns(2)
+        sbm.insert_matrix_block(0, 0, 2, 2)
+        sbm.zero_blocks()  # should not raise
+
+    def test_get_block_after_insert(self):
+        """get_block returns a 2D list after inserting a block."""
+        sbm = ip.SparseBlockMatrix()
+        sbm.set_number_of_columns(2)
+        sbm.insert_matrix_block(0, 0, 2, 3)
+        blk = sbm.get_block(0, 0)
+        # block should be a 2D list with 2 rows x 3 cols
+        self.assertIsNotNone(blk)
+        self.assertEqual(len(blk), 2)
+        self.assertEqual(len(blk[0]), 3)
+
+    def test_get_block_missing_returns_none(self):
+        """get_block returns None for a block that was not inserted."""
+        sbm = ip.SparseBlockMatrix()
+        sbm.set_number_of_columns(4)
+        result = sbm.get_block(2, 0)
+        self.assertIsNone(result)
+
+    def test_wipe_resets_counts(self):
+        """wipe() removes all blocks and resets counts."""
+        sbm = ip.SparseBlockMatrix()
+        sbm.set_number_of_columns(2)
+        sbm.insert_matrix_block(0, 0, 2, 2)
+        self.assertGreater(sbm.number_of_blocks(), 0)
+        sbm.wipe()
+        self.assertEqual(sbm.number_of_blocks(), 0)
+
+    def test_repr_contains_classname(self):
+        """__repr__ contains 'SparseBlockMatrix'."""
+        sbm = ip.SparseBlockMatrix()
+        r = repr(sbm)
+        self.assertIn("SparseBlockMatrix", r)

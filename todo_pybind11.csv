@@ -20,7 +20,7 @@ Control Networks,ControlNetDiff,已转换,2026-03-21 已在 bind_control_core.cp
 Control Networks,ControlNetFilter,已转换,2026-04-08 已在 bind_control_core.cpp 同步暴露全部公开过滤器与输出 helper，并补 focused 单测
 Control Networks,ControlNetStatistics,已转换,2026-04-08 已在 bind_control_core.cpp 暴露控制网摘要/标量 getter 簇（构造/枚举/GenerateControlNetStats/Num*/residual/shift getters）；image/point 文件输出接口后续补
 Control Networks,ControlNetValidMeasure,已转换,2026-04-08 已在 bind_control_core.cpp 暴露稳定配置/查询方法簇（构造/parse/阈值 getter/valid_* helper）；ValidStandardOptions 与 edge/camera 几何接口后续补
-Control Networks,ControlNetVersioner,未转换,
+Control Networks,ControlNetVersioner,已转换,2026-04-10 已在 src/control/bind_control_core.cpp 暴露构造/元数据 getter/write/toPvl；takeFirstPoint 因裸指针所有权问题暂跳过(N)
 Control Networks,ControlNetVitals,未转换,Qt 类型/信号槽较多
 Control Networks,ControlPoint,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
 Control Networks,ControlPointList,已转换,2026-03-21 已在 bind_control_core.cpp 暴露文件读取/索引/统计注册接口
@@ -32,7 +32,7 @@ Control Networks,ImageOverlap,已转换,2026-04-10 已在 src/base/bind_base_ima
 Control Networks,InterestOperator,未转换,抽象基类/纯虚接口
 Control Networks,InterestOperatorFactory,已转换,2026-03-27 已在 bind_interest_operator_factory.cpp 暴露 create 静态工厂方法
 Control Networks,IsisBundleObservation,未转换,
-Control Networks,LidarControlPoint,未转换,
+Control Networks,LidarControlPoint,已转换,2026-04-10 已在 src/control/bind_control_core.cpp 暴露构造/range/sigma/time/simultaneous 方法；继承 ControlPoint
 Control Networks,MeasureValidationResults,已转换,2026-03-21 已在 bind_control_core.cpp 暴露验证状态/失败消息/字符串格式化接口
 Control Networks,ObservationNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 possible_serial(...)
 Control Networks,SerialNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 compose_observation(...)
@@ -142,7 +142,7 @@ Mars Reconnaissance Orbiter,GainLineDrift,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,GainNonLinearity,已转换,Stable local wrapper completed because linked ISIS library does not export required HiCalConf symbols; focused unit test and smoke coverage added
 Mars Reconnaissance Orbiter,GainTemperature,已转换,Stable local wrapper completed because linked ISIS library does not export required HiCalConf symbols; focused unit test and smoke coverage added
 Mars Reconnaissance Orbiter,GainUnitConversion,已转换,Stable local wrapper completed for DN/DN/US because linked ISIS library does not export HiCalConf::sunDistanceAU; focused unit test and smoke coverage added
-Mars Reconnaissance Orbiter,HiBlob,未转换,
+Mars Reconnaissance Orbiter,HiBlob,已转换,2026-04-10 已在 src/bind_low_level_cube_io.cpp 暴露构造/buffer；继承 Blobber
 Mars Reconnaissance Orbiter,HiCalConf,未转换,
 Mars Reconnaissance Orbiter,HiCalData,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,HiEqualization,未转换,
@@ -211,7 +211,7 @@ Pattern Matching,Centroid,已转换,2026-04-08 已在 src/base/bind_base_pattern
 Pattern Matching,Chip,未转换,抽象基类/纯虚接口
 Pattern Matching,GridPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/sub_grid/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
 Pattern Matching,Gruen,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp 暴露构造函数/getSpiceConstraint/getAffineConstraint/AlgorithmName/IdealFit；focused 单测在 pattern_unit_test.py
-Pattern Matching,ImageOverlapSet,未转换,
+Pattern Matching,ImageOverlapSet,已转换,2026-04-10 已在 src/base/bind_base_image_overlap.cpp 暴露构造/size/read_write/errors；FindImageOverlaps(GEOS) 未暴露
 Pattern Matching,ImagePolygon,未转换,
 Pattern Matching,LimitPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
 Pattern Matching,MaximumCorrelation,已转换,2026-04-02 已在 bind_base_pattern.cpp 暴露构造函数，继承 AutoReg 全部方法
@@ -347,7 +347,7 @@ Utility,PolygonTools,未转换,
 Utility,Progress,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 完成 py::class_ 绑定；focused 单测在 tests/unitTest/progress_unit_test.py；smoke 已补符号
 Utility,Resource,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 完成 PVL/name 核心接口绑定（跳过 GisGeometry/QVariant asset）；focused 单测在 tests/unitTest/resource_unit_test.py；smoke 已补符号
 Utility,Selection,未转换,抽象基类/纯虚接口
-Utility,SparseBlockMatrix,未转换,
+Utility,SparseBlockMatrix,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露构造/insert/zero/get_block(list返回)/counts/leading_cols_rows；print/write/copy 未绑定
 Utility,Stretch,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露 Stretch 完整接口（AddPair/Map/Parse/Load/Save/特殊像素 setter）；focused 单测在 tests/unitTest/filters_unit_test.py
 Utility,TextFile,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 TextFile 构造/open/close/get_file/put_file/get_line/put_line/line_count/size 方法；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Apollo,ApolloMetricCamera,已转换,2026-04-07 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 ShutterOpenCloseTimes/CK/SPK 接口

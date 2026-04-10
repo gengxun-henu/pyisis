@@ -1,10 +1,12 @@
 """
 Unit tests for Batch 2 ISIS bindings:
 ImageOverlap, HiLab, PixelFOV, PushFrameCameraCcdLayout, CameraStatistics.
+Also covers ImageOverlapSet (added 2026-04-10).
 
 Author: Geng Xun
 Created: 2026-04-10
 Last Modified: 2026-04-10
+Updated: 2026-04-10  Geng Xun added ImageOverlapSet coverage for constructor, size, errors, and read/write round-trip.
 """
 
 import unittest
@@ -297,3 +299,61 @@ class CameraStatisticsUnitTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class ImageOverlapSetUnitTest(unittest.TestCase):
+    """Focused regression coverage for ImageOverlapSet binding.
+
+    Added: 2026-04-10
+    """
+
+    def test_default_constructor(self):
+        """ImageOverlapSet can be constructed without arguments."""
+        ios = ip.ImageOverlapSet()
+        self.assertIsInstance(ios, ip.ImageOverlapSet)
+
+    def test_constructor_with_continue_on_error_true(self):
+        """ImageOverlapSet(continue_on_error=True) constructs successfully."""
+        ios = ip.ImageOverlapSet(continue_on_error=True)
+        self.assertIsInstance(ios, ip.ImageOverlapSet)
+
+    def test_initial_size_zero(self):
+        """Freshly constructed ImageOverlapSet has size 0."""
+        ios = ip.ImageOverlapSet()
+        self.assertEqual(ios.size(), 0)
+        self.assertEqual(len(ios), 0)
+
+    def test_errors_initially_empty(self):
+        """Freshly constructed ImageOverlapSet has no errors."""
+        ios = ip.ImageOverlapSet()
+        errs = ios.errors()
+        self.assertIsInstance(errs, list)
+        self.assertEqual(len(errs), 0)
+
+    def test_repr_contains_classname(self):
+        """__repr__ contains 'ImageOverlapSet'."""
+        ios = ip.ImageOverlapSet()
+        r = repr(ios)
+        self.assertIn("ImageOverlapSet", r)
+
+    def test_getitem_out_of_range_raises(self):
+        """Indexing an empty set raises IndexError."""
+        ios = ip.ImageOverlapSet()
+        with self.assertRaises(IndexError):
+            _ = ios[0]
+
+    def test_write_and_read_round_trip(self):
+        """write_image_overlaps followed by read_image_overlaps produces a valid set."""
+        import tempfile, os
+        ios = ip.ImageOverlapSet()
+        # An empty ImageOverlapSet should write a valid (empty) file and re-read without errors.
+        with tempfile.NamedTemporaryFile(suffix=".ovr", delete=False) as tmp:
+            tmp_path = tmp.name
+        try:
+            ios.write_image_overlaps(tmp_path)
+            ios2 = ip.ImageOverlapSet()
+            ios2.read_image_overlaps(tmp_path)
+            self.assertEqual(ios2.size(), 0)
+        finally:
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)

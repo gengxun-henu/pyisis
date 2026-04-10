@@ -1,8 +1,8 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-HiBlob,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/HiBlob.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+HiBlob,Mars Reconnaissance Orbiter,isis/src/mro/objs/HiCal/HiBlob.h,src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-10 已在 src/bind_low_level_cube_io.cpp 暴露 HiBlob 构造（默认与 Cube 构造）以及 buffer() 返回 list[list[float]]；继承 Blobber 全部方法；focused 单测在 low_level_cube_io_unit_test.py
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,HiBlob,isis_pybind.HiBlob,N,Python class symbol not found in current binding files
-Construction/Enum,HiBlob(): Blobber() { },isis_pybind.HiBlob(),N,Constructor binding not detected in current binding files
-Construction/Enum,"HiBlob(Cube &cube, const QString &tblname, const QString &field, const QString &name = ""HiBlob"") : Blobber(cube, tblname, field, name) { }",isis_pybind.HiBlob(),N,Constructor binding not detected in current binding files
-Public API,const HiMatrix &buffer() const { return (ref()),isis_pybind.HiBlob.buffer,N,Method not found in current binding files
+Class Symbol,HiBlob,isis_pybind.HiBlob,Y,Bound in src/bind_low_level_cube_io.cpp as py::class_<HiBlob, Blobber>
+Construction/Enum,HiBlob(): Blobber() { },isis_pybind.HiBlob(),Y,Default constructor bound
+Construction/Enum,"HiBlob(Cube &cube, const QString &tblname, const QString &field, const QString &name = ""HiBlob"") : Blobber(cube, tblname, field, name) { }",isis_pybind.HiBlob(cube,tblname,field,name),Y,Cube constructor bound with py::keep_alive<1,2>()
+Public API,const HiMatrix &buffer() const { return (ref()),isis_pybind.HiBlob.buffer,Y,Bound as buffer() converting TNT::Array2D<double> to list[list[float]]

@@ -11,6 +11,7 @@
 // Updated: 2026-04-10  Geng Xun added ImageOverlap binding exposing serial number management and overlap metadata.
 // Updated: 2026-04-10  Geng Xun made ImageOverlap.area safe for Python-created objects that have no polygon backing store.
 // Updated: 2026-04-10  Geng Xun added ImageOverlapSet binding with constructor, size, read/write, errors, and indexed access.
+// Updated: 2026-04-10  Geng Xun fixed ImageOverlapSet to use std::unique_ptr holder (class inherits private QThread, non-copyable).
 // Purpose: Expose Isis::ImageOverlap and Isis::ImageOverlapSet to Python.
 //          Polygon-related methods (requiring geos::geom::MultiPolygon) are not exposed.
 //          FindImageOverlaps (GEOS/SerialNumberList) is not exposed.
@@ -94,11 +95,14 @@ void bind_base_image_overlap(py::module_ &m) {
   // ImageOverlapSet — computes and manages polygon overlaps for a set of images.
   // FindImageOverlaps (GEOS MultiPolygon / SerialNumberList) is not exposed to avoid
   // bringing geos native types into the Python API.
+  // NOTE: ImageOverlapSet inherits private QThread (non-copyable/non-movable),
+  //       so we must use std::unique_ptr as the holder type.
   // Added: 2026-04-10
-  py::class_<Isis::ImageOverlapSet>(m, "ImageOverlapSet")
+  py::class_<Isis::ImageOverlapSet, std::unique_ptr<Isis::ImageOverlapSet>>(m, "ImageOverlapSet")
       .def(py::init([](bool continueOnError) {
                // Always use useThread=false so Python callers don't get threading surprises.
-               return Isis::ImageOverlapSet(continueOnError, false);
+               return std::unique_ptr<Isis::ImageOverlapSet>(
+                   new Isis::ImageOverlapSet(continueOnError, false));
            }),
            py::arg("continue_on_error") = false,
            "Construct an ImageOverlapSet.\n\n"

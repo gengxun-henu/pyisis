@@ -3,6 +3,7 @@
 // Updated: 2026-04-08  Geng Xun added ControlNetStatistics summary/getter bindings and related control-core exposure updates
 // Updated: 2026-04-10  Geng Xun added LidarControlPoint binding (inherits ControlPoint) with range/sigma/time/simultaneous methods.
 // Updated: 2026-04-10  Geng Xun added ControlNetVersioner binding with file/ControlNet constructors and network metadata accessors.
+// Updated: 2026-04-10  Geng Xun removed private default constructor from ControlNetVersioner binding (upstream has it private).
 // Purpose: pybind11 bindings for ISIS control network core classes, filters, and bundle-control helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -1783,10 +1784,13 @@ void bind_control_core(py::module_ &m)
 
   // ControlNetVersioner — reads and writes all control network file format versions.
   // Added: 2026-04-10
-  py::class_<Isis::ControlNetVersioner>(m, "ControlNetVersioner")
-      .def(py::init<>(),
-           "Construct an empty ControlNetVersioner with no network data.")
-      .def(py::init<Isis::ControlNet *>(),
+  py::class_<Isis::ControlNetVersioner, std::unique_ptr<Isis::ControlNetVersioner>>(m, "ControlNetVersioner")
+      // NOTE: The default constructor and copy constructor are private in upstream ISIS,
+      //       so we use std::unique_ptr holder and only expose the two public constructors.
+      .def(py::init([](Isis::ControlNet *net) {
+               return std::unique_ptr<Isis::ControlNetVersioner>(
+                   new Isis::ControlNetVersioner(net));
+           }),
            py::arg("net"),
            py::keep_alive<1, 2>(),
            "Construct a ControlNetVersioner from an existing ControlNet.\n\n"
@@ -1796,7 +1800,8 @@ void bind_control_core(py::module_ &m)
            "    The control network to serialize.")
       .def(py::init([](const std::string &filename) {
                Isis::FileName fn(QString::fromStdString(filename));
-               return Isis::ControlNetVersioner(fn, nullptr);
+               return std::unique_ptr<Isis::ControlNetVersioner>(
+                   new Isis::ControlNetVersioner(fn, nullptr));
            }),
            py::arg("filename"),
            "Construct a ControlNetVersioner by reading a network file.\n\n"

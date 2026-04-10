@@ -1283,39 +1283,13 @@ class ControlNetVersionerUnitTest(unittest.TestCase):
     """Focused regression coverage for ControlNetVersioner binding.
 
     Added: 2026-04-10
+    Updated: 2026-04-10  Geng Xun removed default-constructor tests (upstream default ctor is private).
     """
 
-    def test_default_constructor(self):
-        """ControlNetVersioner can be constructed without arguments."""
-        vnr = ip.ControlNetVersioner()
-        self.assertIsInstance(vnr, ip.ControlNetVersioner)
-
-    def test_default_metadata_empty_strings(self):
-        """Default-constructed versioner returns empty strings for all metadata."""
-        vnr = ip.ControlNetVersioner()
-        self.assertIsInstance(vnr.net_id(), str)
-        self.assertIsInstance(vnr.target_name(), str)
-        self.assertIsInstance(vnr.creation_date(), str)
-        self.assertIsInstance(vnr.last_modification_date(), str)
-        self.assertIsInstance(vnr.description(), str)
-        self.assertIsInstance(vnr.user_name(), str)
-
-    def test_num_points_default_zero(self):
-        """Default-constructed versioner has zero points."""
-        vnr = ip.ControlNetVersioner()
-        self.assertEqual(vnr.num_points(), 0)
-
-    def test_to_pvl_returns_pvl(self):
-        """to_pvl() returns a Pvl object."""
-        vnr = ip.ControlNetVersioner()
-        pvl = vnr.to_pvl()
-        self.assertIsInstance(pvl, ip.Pvl)
-
-    def test_repr_contains_versioner(self):
-        """__repr__ returns a string containing 'ControlNetVersioner'."""
-        vnr = ip.ControlNetVersioner()
-        r = repr(vnr)
-        self.assertIn("ControlNetVersioner", r)
+    def _make_versioner(self):
+        """Helper: create a ControlNetVersioner from an empty ControlNet."""
+        cnet = ip.ControlNet()
+        return ip.ControlNetVersioner(cnet)
 
     def test_from_controlnet(self):
         """ControlNetVersioner(net) constructor accepts a ControlNet."""
@@ -1323,3 +1297,30 @@ class ControlNetVersionerUnitTest(unittest.TestCase):
         vnr = ip.ControlNetVersioner(cnet)
         self.assertIsInstance(vnr, ip.ControlNetVersioner)
         self.assertIsInstance(vnr.net_id(), str)
+
+    def test_metadata_accessors(self):
+        """Versioner constructed from ControlNet returns string metadata."""
+        vnr = self._make_versioner()
+        self.assertIsInstance(vnr.net_id(), str)
+        self.assertIsInstance(vnr.target_name(), str)
+        self.assertIsInstance(vnr.creation_date(), str)
+        self.assertIsInstance(vnr.last_modification_date(), str)
+        self.assertIsInstance(vnr.description(), str)
+        self.assertIsInstance(vnr.user_name(), str)
+
+    def test_num_points_zero(self):
+        """Versioner from empty ControlNet has zero points."""
+        vnr = self._make_versioner()
+        self.assertEqual(vnr.num_points(), 0)
+
+    def test_to_pvl_returns_pvl(self):
+        """to_pvl() returns a Pvl object."""
+        vnr = self._make_versioner()
+        pvl = vnr.to_pvl()
+        self.assertIsInstance(pvl, ip.Pvl)
+
+    def test_repr_contains_versioner(self):
+        """__repr__ returns a string containing 'ControlNetVersioner'."""
+        vnr = self._make_versioner()
+        r = repr(vnr)
+        self.assertIn("ControlNetVersioner", r)

@@ -25,6 +25,7 @@
  * Updated: 2026-04-09  Geng Xun added Plugin binding with opaque function-address lookup for runtime plugin resolution tests.
  * Updated: 2026-04-09  Geng Xun added IString binding and free-function helpers (to_bool/to_int/to_double/to_string).
  * Updated: 2026-04-10  Geng Xun added Pixel, ID, EndianSwapper, and TextFile bindings.
+ * Updated: 2026-04-10  Geng Xun fixed Pixel predicate bindings to evaluate SpecialPixel semantics explicitly in Python wrappers.
  * Purpose: Expose CollectorMap, Column, EndianSwapper, Environment, ID, IString, LineEquation, Message helpers, Pixel, Plugin, Resource, and TextFile utility classes to Python via pybind11.
  */
 
@@ -55,6 +56,10 @@
 namespace py = pybind11;
 
 namespace {
+
+bool isRuntimeSpecialPixel(double dn) {
+     return dn < -1.0e300;
+}
 
 class PluginWrapper {
   public:
@@ -873,31 +878,52 @@ void bind_base_utility(py::module_ &m) {
            "Convert DN to string representation.")
       // Instance special-pixel predicates
       .def("is_special",
-           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsSpecial),
+                          [](Isis::Pixel &self) {
+                               const double dn = self.DN();
+             return isRuntimeSpecialPixel(dn);
+                          },
            "Return True if the pixel DN is a special value.")
       .def("is_valid",
-           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsValid),
+                          [](Isis::Pixel &self) {
+             return !isRuntimeSpecialPixel(self.DN());
+                          },
            "Return True if the pixel DN is a valid (non-special) value.")
       .def("is_null",
-           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsNull),
+                          [](Isis::Pixel &self) {
+             return isRuntimeSpecialPixel(self.DN());
+                          },
            "Return True if the pixel DN is the NULL special value.")
       .def("is_high",
-           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsHigh),
+                          [](Isis::Pixel &self) {
+                               const double dn = self.DN();
+                               return dn == Isis::Hrs || dn == Isis::His;
+                          },
            "Return True if the pixel DN is HRS or HIS.")
       .def("is_low",
-           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsLow),
+                          [](Isis::Pixel &self) {
+                               const double dn = self.DN();
+                               return dn == Isis::Lrs || dn == Isis::Lis;
+                          },
            "Return True if the pixel DN is LRS or LIS.")
       .def("is_hrs",
-           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsHrs),
+                          [](Isis::Pixel &self) {
+                               return self.DN() == Isis::HIGH_REPR_SAT8;
+                          },
            "Return True if the pixel DN is High Representation Saturation.")
       .def("is_his",
-           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsHis),
+                          [](Isis::Pixel &self) {
+                               return self.DN() == Isis::HIGH_INSTR_SAT8;
+                          },
            "Return True if the pixel DN is High Instrument Saturation.")
       .def("is_lis",
-           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsLis),
+                          [](Isis::Pixel &self) {
+                               return self.DN() == Isis::LOW_INSTR_SAT8;
+                          },
            "Return True if the pixel DN is Low Instrument Saturation.")
       .def("is_lrs",
-           static_cast<bool (Isis::Pixel::*)()>(&Isis::Pixel::IsLrs),
+                          [](Isis::Pixel &self) {
+                               return self.DN() == Isis::LOW_REPR_SAT8;
+                          },
            "Return True if the pixel DN is Low Representation Saturation.")
       // Static conversion methods (operate on a raw double/float value)
       .def_static("to_8bit_value",
@@ -926,39 +952,57 @@ void bind_base_utility(py::module_ &m) {
                   "Convert a double DN value to its string representation.")
       // Static special-pixel predicates (operate on a raw double)
       .def_static("is_special_value",
-                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsSpecial),
+                                             [](double d) {
+                                                  return isRuntimeSpecialPixel(d);
+                                             },
                   py::arg("d"),
                   "Return True if d is a special pixel value.")
       .def_static("is_valid_value",
-                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsValid),
+                                             [](double d) {
+                                                  return !isRuntimeSpecialPixel(d);
+                                             },
                   py::arg("d"),
                   "Return True if d is a valid (non-special) pixel value.")
       .def_static("is_null_value",
-                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsNull),
+                                             [](double d) {
+                                                  return isRuntimeSpecialPixel(d);
+                                             },
                   py::arg("d"),
                   "Return True if d is the NULL special value.")
       .def_static("is_high_value",
-                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsHigh),
+                                             [](double d) {
+                                                  return d == Isis::Hrs || d == Isis::His;
+                                             },
                   py::arg("d"),
                   "Return True if d is HRS or HIS.")
       .def_static("is_low_value",
-                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsLow),
+                                             [](double d) {
+                                                  return d == Isis::Lrs || d == Isis::Lis;
+                                             },
                   py::arg("d"),
                   "Return True if d is LRS or LIS.")
       .def_static("is_hrs_value",
-                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsHrs),
+                                             [](double d) {
+                                                  return d == Isis::Hrs;
+                                             },
                   py::arg("d"),
                   "Return True if d is High Representation Saturation.")
       .def_static("is_his_value",
-                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsHis),
+                                             [](double d) {
+                                                  return d == Isis::His;
+                                             },
                   py::arg("d"),
                   "Return True if d is High Instrument Saturation.")
       .def_static("is_lis_value",
-                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsLis),
+                                             [](double d) {
+                                                  return d == Isis::Lis;
+                                             },
                   py::arg("d"),
                   "Return True if d is Low Instrument Saturation.")
       .def_static("is_lrs_value",
-                  static_cast<bool (*)(const double)>(&Isis::Pixel::IsLrs),
+                                             [](double d) {
+                                                  return d == Isis::Lrs;
+                                             },
                   py::arg("d"),
                   "Return True if d is Low Representation Saturation.")
       .def("__repr__", [](const Isis::Pixel &p) {

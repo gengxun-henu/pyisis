@@ -12,6 +12,7 @@ Updated: 2026-04-09  Geng Xun added Ransac helper regression coverage for packed
 Updated: 2026-04-09  Geng Xun added SurfaceModel focused unit tests.
 Updated: 2026-04-09  Geng Xun relaxed the planar SurfaceModel min_max regression to match upstream floating-point behavior.
 Updated: 2026-04-10  Geng Xun added FourierTransform unit tests.
+Updated: 2026-04-10  Geng Xun aligned FourierTransform tests with complex-valued Python API and upstream BitReverse semantics.
 """
 import unittest
 import math
@@ -1137,34 +1138,31 @@ class FourierTransformUnitTest(unittest.TestCase):
         """transform followed by inverse returns approximately the original signal."""
         ft = ip.FourierTransform()
         n = 8
-        # Simple real-valued signal (as list of complex)
-        signal = [(float(i), 0.0) for i in range(n)]
+        signal = [complex(float(i), 0.0) for i in range(n)]
         freq = ft.transform(signal)
         self.assertEqual(len(freq), n)
         recovered = ft.inverse(freq)
         self.assertEqual(len(recovered), n)
         for i in range(n):
-            orig_real = signal[i][0]
-            rec_real = recovered[i][0]
+            orig_real = signal[i].real
+            rec_real = recovered[i].real
             self.assertAlmostEqual(rec_real, orig_real, places=6,
                                    msg=f"Mismatch at index {i}")
 
     def test_transform_returns_complex_list(self):
         """transform() returns a list of complex pairs."""
         ft = ip.FourierTransform()
-        signal = [(1.0, 0.0)] * 4
+        signal = [complex(1.0, 0.0)] * 4
         result = ft.transform(signal)
         self.assertEqual(len(result), 4)
-        # Each element is a complex number
         for elem in result:
-            self.assertTrue(hasattr(elem, 'real') or isinstance(elem, (tuple, complex)))
+            self.assertIsInstance(elem, complex)
 
     def test_bit_reverse(self):
-        """bit_reverse(n, x) reverses bits of x in n-bit field."""
+        """bit_reverse(n, x) follows the upstream FFT-size semantics for n."""
         ft = ip.FourierTransform()
-        # For n=3: bit_reverse(3, 0b001) = 0b100 = 4
-        self.assertEqual(ft.bit_reverse(3, 1), 4)
-        self.assertEqual(ft.bit_reverse(3, 0), 0)
+        self.assertEqual(ft.bit_reverse(8, 1), 4)
+        self.assertEqual(ft.bit_reverse(8, 0), 0)
 
 
 if __name__ == '__main__':

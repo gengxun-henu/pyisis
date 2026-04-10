@@ -2,6 +2,7 @@
 // Created: 2026-03-21
 // Updated: 2026-04-08  Geng Xun refined Stereo.elevation camera-state validation and added Angle arithmetic/comparison helpers
 // Updated: 2026-04-10  Geng Xun added Area3D binding for 3D volume geometry
+// Updated: 2026-04-10  Geng Xun fixed Area3D __repr__ lambda return-type consistency for successful pybind builds
 // Purpose: pybind11 bindings for ISIS geometry primitives and resampling helpers including Angle, Area3D, Stereo, Distance, Latitude, Longitude, Transform, Interpolator, Enlarge, and Reduce
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -585,6 +586,6 @@ void bind_base_geometry(py::module_ &m) {
             if (!a.isValid()) {
               return std::string("Area3D(invalid)");
             }
-            return "Area3D(valid)";
+                              return std::string("Area3D(valid)");
           });
 }

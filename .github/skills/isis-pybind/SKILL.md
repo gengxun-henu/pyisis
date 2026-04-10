@@ -69,6 +69,9 @@ See [binding workflow reference](./references/binding-workflow.md).
 	- Example: `Quaternion::operator*(const double &)` is **not** `const` in upstream ISIS.
 	- Do not bind it with a lambda that takes `const Isis::Quaternion &` and then calls `a * scalar` directly.
 	- Prefer copying into a mutable local wrapper/object first, or exposing an equivalent const-safe lambda built from a mutable copy.
+- Keep explicit pybind lambda return types internally consistent across all branches.
+	- Example: an `Area3D.__repr__` lambda cannot return `std::string` in one branch and a string literal (`const char *`) in another branch, or C++ will fail to deduce a single return type.
+	- When a lambda returns strings, prefer returning `std::string(...)` from every branch, or add an explicit trailing return type when appropriate.
 - Do not bind upstream `protected` members directly with pybind lambdas.
 	- Example: `PvlFormat::addQuotes(...)`, `PvlFormat::isSingleUnit(...)`, `PvlTranslationTable::hasInputDefault(...)`, `IsAuto(...)`, `IsOptional(...)`, `OutputName(...)`, and `OutputPosition(...)` are protected helpers, not public API.
 	- If Python still needs those semantics, expose them through a local helper subclass or wrapper that safely forwards the protected call, or reimplement a stable public-facing wrapper when the behavior is simple and well verified.

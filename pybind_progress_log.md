@@ -2,6 +2,27 @@
 
 ## 2026-04-10
 
+- Python unit-test recovery after the `Area3D` build hotfix completed and the full Python validation chain is green again:
+  - Updated `python/isis_pybind/__init__.py` to actually import several symbols that were already bound and already listed in `__all__`, including `Area3D`, `PushFrameCameraDetectorMap`, `RollingShutterCameraDetectorMap`, `VariableLineScanCameraDetectorMap`, `DawnFcDistortionMap`, `KaguyaMiCameraDistortionMap`, `KaguyaTcCameraDistortionMap`, `Gruen`, `AdaptiveGruen`, `OverlapStatistics`, and `PrincipalComponentAnalysis`.
+  - Updated `CMakeLists.txt` so `build/python/isis_pybind/__init__.py` and `LICENSE` are synchronized during normal builds via `sync_python_package_files`, instead of only being copied at configure time. This fixed the stale `build/python` package problem that caused source-level Python export fixes to be invisible to `ctest` until a manual reconfigure.
+  - Updated `tests/unitTest/geometry_unit_test.py` to use the actual exported enum member names (`Meters` instead of `meters`) for `Distance` and `Displacement`.
+  - Updated `src/base/bind_base_math.cpp` so `PrincipalComponentAnalysis.add_data(...)` now treats a Python vector as exactly one observation, validates that its length matches `dimensions()`, and forwards `count=1` to upstream ISIS. This fixed both the missing dimension check and the downstream `NaN` round-trip behavior.
+  - Updated `src/base/bind_base_utility.cpp` so `Pixel` predicate wrappers no longer depend on the misbehaving special-pixel threshold helpers in this build context; the Python-facing predicates now use stable runtime-special-value detection suitable for the current linked ISIS runtime.
+  - Updated `tests/unitTest/math_unit_test.py` to match the real `FourierTransform` Python API (list of Python `complex`) and upstream `BitReverse` semantics, and updated `tests/unitTest/utility_unit_test.py` so `ID("item??", 10)` follows upstream placeholder-width rules.
+  - Validation status:
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest tests.unitTest.geometry_unit_test tests.unitTest.camera_maps_unit_test tests.unitTest.extended_mission_camera_unit_test` (`52` tests, `OK`)
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest tests.unitTest.pattern_unit_test tests.unitTest.statistics_unit_test` after export/PCA fixes (`68` tests with final state `OK` after PCA patch)
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest tests.unitTest.utility_unit_test` (`116` tests, `OK`)
+    - Passed: `ctest --test-dir build -R python-unit-tests --output-on-failure` (`100% tests passed`)
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- `Area3D` build-break hotfix completed and the lambda return-type rule was added to both pybind skills:
+  - Updated `src/base/bind_base_geometry.cpp` so `Area3D.__repr__` returns `std::string` from both branches, fixing the C++ lambda return-type deduction failure triggered by mixing `std::string` and string-literal returns.
+  - Added the matching hazard note to `.github/skills/isis-pybind/SKILL.md` and `.github/skills/pybind-rollout-execution/SKILL.md`: for pybind lambdas, keep branch return types consistent or use an explicit trailing return type.
+  - Validation status:
+    - Passed: `cmake --build build -j"$(nproc)"`
+    - `ctest --test-dir build -R python-unit-tests --output-on-failure` now advances past the original build failure and stops at later Python-unit-test failures unrelated to the lambda type-mismatch itself; `smoke_import.py` was not run because the full recipe stops at the failing test step.
+
 - `MinimumDifference` AutoRegistration PVL regression fixed and full workflow returned to green:
   - Updated `tests/unitTest/pattern_unit_test.py` so `MinimumDifference` coverage now builds a real upstream-style `PvlObject("AutoRegistration")` with nested `Algorithm`, `PatternChip`, and `SearchChip` groups instead of an invalid flat `PvlGroup("AutoRegistration")`.
   - Added `AutoRegFactory` coverage for `MinimumDifference` to ensure both the direct constructor path and the factory path accept the same valid PVL structure.

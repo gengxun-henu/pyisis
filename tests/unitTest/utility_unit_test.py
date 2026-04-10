@@ -10,6 +10,7 @@ Updated: 2026-04-09  Geng Xun added Plugin focused coverage for runtime plugin a
 Updated: 2026-04-08  Geng Xun added Environment regression coverage alongside existing Column and LineEquation helpers.
 Updated: 2026-04-09  Geng Xun added IString and free-function helpers (to_bool/to_int/to_double/to_string) unit tests.
 Updated: 2026-04-10  Geng Xun added Pixel, ID, EndianSwapper, and TextFile focused unit tests.
+Updated: 2026-04-10  Geng Xun aligned ID overflow expectations with upstream placeholder-width semantics.
 """
 import os
 import tempfile
@@ -834,7 +835,7 @@ class IDUnitTest(unittest.TestCase):
 
     def test_sequential_ids(self):
         """next() returns sequentially numbered IDs."""
-        id_gen = ip.ID("item?", 10)
+        id_gen = ip.ID("item??", 10)
         first = id_gen.next()
         second = id_gen.next()
         self.assertIn("10", first)

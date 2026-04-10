@@ -21,6 +21,7 @@
  * Updated: 2026-04-09  Geng Xun added MaximumLikelihoodWFunctions binding (robust estimation).
  * Updated: 2026-04-10  Geng Xun added FourierTransform binding (FFT/IFFT on complex vectors).
  * Updated: 2026-04-10  Geng Xun added PrincipalComponentAnalysis binding (PCA via TNT::Array2D adapters).
+ * Updated: 2026-04-10  Geng Xun fixed PCA add_data observation semantics to validate dimensions and pass single-observation count correctly.
  * Purpose: Expose Calculator, Affine, BasisFunction, FourierTransform, InfixToPostfix,
  *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, Ransac helpers, SurfaceModel,
  *          MaximumLikelihoodWFunctions, and PrincipalComponentAnalysis classes to Python via pybind11.
@@ -656,7 +657,11 @@ void bind_base_math(py::module_ &m)
       .def("add_data",
            [](Isis::PrincipalComponentAnalysis &self,
               const std::vector<double> &data) {
-             self.AddData(data.data(), static_cast<unsigned int>(data.size()));
+                               if (static_cast<int>(data.size()) != self.Dimensions()) {
+                                    throw py::value_error(
+                                              "add_data expects exactly one observation with length equal to PCA dimensions");
+                               }
+                               self.AddData(data.data(), 1);
            },
            py::arg("data"),
            "Add one observation vector to the running statistics.")

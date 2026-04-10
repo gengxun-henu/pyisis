@@ -6,6 +6,7 @@ Created: 2026-03-21
 Last Modified: 2026-04-10
 Updated: 2026-04-09  Geng Xun fixed Intercept SurfacePoint regression expectations to match NAIF kilometer coordinates
 Updated: 2026-04-10  Geng Xun added Area3D binding focused unit tests
+Updated: 2026-04-10  Geng Xun aligned Area3D unit tests with exported Distance and Displacement enum names
 """
 
 import math
@@ -168,12 +169,12 @@ class Area3DUnitTest(unittest.TestCase):
 
     def _make_area(self, x0=0.0, y0=0.0, z0=0.0, w=1.0, h=1.0, d=1.0):
         """Helper: create an Area3D from origin + dimensions."""
-        start_x = ip.Displacement(x0, ip.Displacement.Units.meters)
-        start_y = ip.Displacement(y0, ip.Displacement.Units.meters)
-        start_z = ip.Displacement(z0, ip.Displacement.Units.meters)
-        width   = ip.Distance(w, ip.Distance.Units.meters)
-        height  = ip.Distance(h, ip.Distance.Units.meters)
-        depth   = ip.Distance(d, ip.Distance.Units.meters)
+        start_x = ip.Displacement(x0, ip.Displacement.Units.Meters)
+        start_y = ip.Displacement(y0, ip.Displacement.Units.Meters)
+        start_z = ip.Displacement(z0, ip.Displacement.Units.Meters)
+        width   = ip.Distance(w, ip.Distance.Units.Meters)
+        height  = ip.Distance(h, ip.Distance.Units.Meters)
+        depth   = ip.Distance(d, ip.Distance.Units.Meters)
         return ip.Area3D(start_x, start_y, start_z, width, height, depth)
 
     def test_default_constructor_is_invalid(self):
@@ -209,7 +210,7 @@ class Area3DUnitTest(unittest.TestCase):
     def test_set_and_get_width(self):
         """set_width updates the width Distance."""
         area = self._make_area(w=1.0)
-        area.set_width(ip.Distance(10.0, ip.Distance.Units.meters))
+        area.set_width(ip.Distance(10.0, ip.Distance.Units.Meters))
         self.assertAlmostEqual(area.get_width().meters(), 10.0)
 
     def test_intersect_with_overlapping_area(self):
@@ -234,12 +235,12 @@ class Area3DUnitTest(unittest.TestCase):
 
     def test_end_constructor(self):
         """Area3D constructed with end displacements is valid."""
-        start_x = ip.Displacement(0.0, ip.Displacement.Units.meters)
-        start_y = ip.Displacement(0.0, ip.Displacement.Units.meters)
-        start_z = ip.Displacement(0.0, ip.Displacement.Units.meters)
-        end_x   = ip.Displacement(2.0, ip.Displacement.Units.meters)
-        end_y   = ip.Displacement(3.0, ip.Displacement.Units.meters)
-        end_z   = ip.Displacement(4.0, ip.Displacement.Units.meters)
+        start_x = ip.Displacement(0.0, ip.Displacement.Units.Meters)
+        start_y = ip.Displacement(0.0, ip.Displacement.Units.Meters)
+        start_z = ip.Displacement(0.0, ip.Displacement.Units.Meters)
+        end_x   = ip.Displacement(2.0, ip.Displacement.Units.Meters)
+        end_y   = ip.Displacement(3.0, ip.Displacement.Units.Meters)
+        end_z   = ip.Displacement(4.0, ip.Displacement.Units.Meters)
         area = ip.Area3D(start_x, start_y, start_z, end_x, end_y, end_z)
         self.assertTrue(area.is_valid())
 

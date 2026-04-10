@@ -349,12 +349,12 @@ void bind_bundle_advanced(py::module_ &m)
 
      bundle_results
          .def(py::init<>())
-         .def(py::init([](const Isis::BundleResults &other)
-                       {
-                            auto copy = std::make_unique<Isis::BundleResults>();
-                            copy->copyForPyBind(other);
-                            return copy; }),
-              py::arg("other"))
+         // NOTE: BundleResults copy constructor causes segfault with ISIS 9.0.0
+         // .def(py::init([](const Isis::BundleResults &other)
+         //               {
+         //                    auto copy = std::make_unique<Isis::BundleResults>(other);
+         //                    return copy; }),
+         //      py::arg("other"))
          .def("initialize", &Isis::BundleResults::initialize)
          .def("resize_sigma_statistics_vectors", &Isis::BundleResults::resizeSigmaStatisticsVectors, py::arg("number_images"))
          // ── Residual setters ──
@@ -479,12 +479,8 @@ void bind_bundle_advanced(py::module_ &m)
          // ── Observation access ──
          .def("observations", [](const Isis::BundleResults &self) -> const Isis::BundleObservationVector &
               { return self.observations(); }, py::return_value_policy::reference_internal)
-         // ── Copy and repr ──
-         .def("copy", [](const Isis::BundleResults &self)
-              {
-                  auto copy = std::make_unique<Isis::BundleResults>();
-                  copy->copyForPyBind(self);
-                  return copy; })
+         // ── Repr ──
+         // NOTE: copy method removed - BundleResults copy constructor causes segfault with ISIS 9.0.0
          .def("__repr__", [](const Isis::BundleResults &self)
               { return "BundleResults(converged=" + std::string(self.converged() ? "True" : "False") +
                        ", sigma0=" + std::to_string(self.sigma0()) +
@@ -500,22 +496,28 @@ void bind_bundle_advanced(py::module_ &m)
          .def("set_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setName(stdStringToQString(name)); }, py::arg("name"))
          .def("set_output_statistics", [](Isis::BundleSolutionInfo &self, const Isis::BundleResults &statistics_results)
-              { self.setOutputStatisticsForPyBind(statistics_results); }, py::arg("statistics_results"))
+              { self.setOutputStatistics(statistics_results); }, py::arg("statistics_results"))
          .def("set_output_control_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setOutputControlName(stdStringToQString(name)); }, py::arg("name"))
          .def("id", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.id()); })
          .def("input_control_net_file_name", [](const Isis::BundleSolutionInfo &self)
-              { return qStringToStdString(self.inputControlNetFileNameForPyBind()); })
+              { return qStringToStdString(self.inputControlNetFileName()); })
          .def("output_control_net_file_name", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.outputControlNetFileName()); })
          .def("output_control_name", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.outputControlName()); })
          .def("input_lidar_data_file_name", [](const Isis::BundleSolutionInfo &self)
-              { return qStringToStdString(self.inputLidarDataFileNameForPyBind()); })
+              { return qStringToStdString(self.inputLidarDataFileName()); })
          .def("bundle_settings", &Isis::BundleSolutionInfo::bundleSettings)
-         .def("bundle_results", [](const Isis::BundleSolutionInfo &self)
-              { return self.cloneBundleResultsForPyBind(); }, py::return_value_policy::take_ownership)
+         // NOTE: bundle_results() commented out - upstream bundleResults() returns by value
+         // which invokes BundleResults copy constructor causing segfault with ISIS 9.0.0
+         // .def("bundle_results", [](Isis::BundleSolutionInfo &self)
+         //      {
+         //          // bundleResults() returns by value, so we create a new object on the heap
+         //          auto results = std::make_unique<Isis::BundleResults>(self.bundleResults());
+         //          return results.release();
+         //      }, py::return_value_policy::take_ownership)
          .def("run_time", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.runTime()); })
          .def("name", [](const Isis::BundleSolutionInfo &self)

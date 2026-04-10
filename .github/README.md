@@ -1,7 +1,7 @@
 Welcome to the USGS ISIS Python Bindings (i.e., PyISIS)!
 This project wraps the powerful USGS ISIS (v9.0.0) photogrammetric software, enabling seamless integration with Python for planetary image processing.
 
-🛠️ Installation: You can easily install this package using Conda or Mamba. For step-by-step instructions, please see our Environment Setup Guide.
+🛠️ Installation: You can easily install this package using Conda or Mamba. For step-by-step instructions, please see the Environment Setup Guide ("https://astrogeology.usgs.gov/docs/how-to-guides/environment-setup-and-maintenance/installing-isis-via-anaconda/").
 
 📚 Learning Resources: Processing planetary images with ISIS can be complex. We strongly suggest checking out the Getting Started Guide to navigate the learning curve effectively.
 

@@ -3,6 +3,7 @@
 // Updated: 2026-03-21  Geng Xun added Statistics, Histogram, GroupedStatistics, MultivariateStatistics, and VecFilter bindings
 // Updated: 2026-04-10  Geng Xun added OverlapStatistics binding
 // Updated: 2026-04-10  Geng Xun added CameraStatistics binding
+// Updated: 2026-04-10  Geng Xun added GaussianStretch binding
 // Purpose: pybind11 bindings for ISIS statistics, histogram, grouped-statistics, multivariate-statistics, and vector-filter utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -20,6 +21,7 @@
 #include "Camera.h"
 #include "CameraStatistics.h"
 #include "GaussianDistribution.h"
+#include "GaussianStretch.h"
 #include "GroupedStatistics.h"
 #include "Histogram.h"
 #include "ImageHistogram.h"
@@ -427,5 +429,39 @@ void bind_statistics(py::module_ &m) {
            "Return the north azimuth Statistics.")
       .def("__repr__", [](const Isis::CameraStatistics &) {
         return "<CameraStatistics>";
+      });
+
+  // GaussianStretch — maps pixel values through a Gaussian distribution.
+  // Inherits Statistics (already bound).
+  // Added: 2026-04-10
+  py::class_<Isis::GaussianStretch, Isis::Statistics>(m, "GaussianStretch")
+      .def(py::init<Isis::Histogram &, double, double>(),
+           py::arg("histogram"),
+           py::arg("mean") = 0.0,
+           py::arg("standard_deviation") = 1.0,
+           py::keep_alive<1, 2>(),
+           "Construct a GaussianStretch from a Histogram.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "histogram : Histogram\n"
+           "    Histogram of the data to stretch.\n"
+           "mean : float, optional\n"
+           "    Target mean of the output Gaussian (default: 0.0).\n"
+           "standard_deviation : float, optional\n"
+           "    Target standard deviation of the output Gaussian (default: 1.0).")
+      .def("map",
+           &Isis::GaussianStretch::Map,
+           py::arg("value"),
+           "Map a pixel value through the Gaussian stretch.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "value : float\n"
+           "    Input pixel value to map.\n\n"
+           "Returns\n"
+           "-------\n"
+           "float\n"
+           "    Output value after Gaussian stretch mapping.")
+      .def("__repr__", [](const Isis::GaussianStretch &) {
+        return "<GaussianStretch>";
       });
 }

@@ -3,6 +3,7 @@
 // Updated: 2026-03-21  Geng Xun added camera detector, focal-plane, distortion, ground, sky, and line-scan map bindings
 // Updated: 2026-04-10  Geng Xun added PushFrameCameraDetectorMap, RollingShutterCameraDetectorMap, VariableLineScanCameraDetectorMap bindings
 // Updated: 2026-04-10  Geng Xun added PushFrameCameraCcdLayout and FrameletInfo struct bindings
+// Updated: 2026-04-10  Geng Xun added PushFrameCameraGroundMap, RadarSkyMap, IrregularBodyCameraGroundMap, CSMSkyMap bindings
 // Purpose: pybind11 bindings for ISIS camera map helper classes that translate between detector, focal-plane, ground, and sky coordinate systems
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -14,12 +15,15 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "CSMCamera.h"
+#include "CSMSkyMap.h"
 #include "CameraDetectorMap.h"
 #include "CameraDistortionMap.h"
 #include "CameraFocalPlaneMap.h"
 #include "CameraGroundMap.h"
 #include "CameraSkyMap.h"
 #include "Distance.h"
+#include "IrregularBodyCameraGroundMap.h"
 #include "Latitude.h"
 #include "LineScanCameraDetectorMap.h"
 #include "LineScanCameraGroundMap.h"
@@ -27,6 +31,8 @@
 #include "Longitude.h"
 #include "PushFrameCameraCcdLayout.h"
 #include "PushFrameCameraDetectorMap.h"
+#include "PushFrameCameraGroundMap.h"
+#include "RadarSkyMap.h"
 #include "RollingShutterCameraDetectorMap.h"
 #include "SurfacePoint.h"
 #include "VariableLineScanCameraDetectorMap.h"
@@ -385,5 +391,109 @@ void bind_camera_maps(py::module_ &m) {
            "Return the FrameletInfo for the given frame ID and optional filter name.")
       .def("__repr__", [](const Isis::PushFrameCameraCcdLayout &) {
         return "<PushFrameCameraCcdLayout>";
+      });
+
+  // PushFrameCameraGroundMap — converts between undistorted focal plane and ground
+  // coordinates for push-frame cameras, handling even/odd framelet switching.
+  // Added: 2026-04-10
+  py::class_<Isis::PushFrameCameraGroundMap, Isis::CameraGroundMap>(
+      m, "PushFrameCameraGroundMap")
+      .def(py::init<Isis::Camera *, bool>(),
+           py::arg("camera"),
+           py::arg("even_framelets"),
+           py::keep_alive<1, 2>(),
+           "Construct a PushFrameCameraGroundMap.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "camera : Camera\n"
+           "    Parent camera.\n"
+           "even_framelets : bool\n"
+           "    True if the image contains even framelets.")
+      .def("set_ground",
+           py::overload_cast<const Isis::Latitude &, const Isis::Longitude &>(
+               &Isis::PushFrameCameraGroundMap::SetGround),
+           py::arg("lat"),
+           py::arg("lon"),
+           "Set ground position from latitude and longitude.")
+      .def("set_ground",
+           py::overload_cast<const Isis::SurfacePoint &>(
+               &Isis::PushFrameCameraGroundMap::SetGround),
+           py::arg("surface_point"),
+           "Set ground position from a SurfacePoint.")
+      .def("__repr__", [](const Isis::PushFrameCameraGroundMap &) {
+        return "<PushFrameCameraGroundMap>";
+      });
+
+  // RadarSkyMap — sky map for Radar cameras. SetSky always returns false
+  // because radar cannot paint a star.
+  // Added: 2026-04-10
+  py::class_<Isis::RadarSkyMap, Isis::CameraSkyMap>(m, "RadarSkyMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("camera"),
+           py::keep_alive<1, 2>(),
+           "Construct a RadarSkyMap for the given Camera.")
+      .def("set_focal_plane",
+           &Isis::RadarSkyMap::SetFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"),
+           py::arg("uz"),
+           "Set the focal-plane position from unit direction vector.")
+      .def("set_sky",
+           &Isis::RadarSkyMap::SetSky,
+           py::arg("ra"),
+           py::arg("dec"),
+           "Set sky coordinates from RA/Dec. Always returns False for Radar.")
+      .def("__repr__", [](const Isis::RadarSkyMap &) {
+        return "<RadarSkyMap>";
+      });
+
+  // IrregularBodyCameraGroundMap — ground map for irregular bodies that skips
+  // the emission-angle back-of-planet test.
+  // Added: 2026-04-10
+  py::class_<Isis::IrregularBodyCameraGroundMap, Isis::CameraGroundMap>(
+      m, "IrregularBodyCameraGroundMap")
+      .def(py::init<Isis::Camera *, bool>(),
+           py::arg("camera"),
+           py::arg("clip_emission_angles") = false,
+           py::keep_alive<1, 2>(),
+           "Construct an IrregularBodyCameraGroundMap.\n\n"
+           "Parameters\n"
+           "----------\n"
+           "camera : Camera\n"
+           "    Parent camera.\n"
+           "clip_emission_angles : bool, optional\n"
+           "    Whether to apply emission-angle clipping (default: False).")
+      .def("get_xy",
+           [](Isis::IrregularBodyCameraGroundMap &self,
+              const Isis::SurfacePoint &sp) {
+             double cudx = 0.0, cudy = 0.0;
+             bool ok = self.GetXY(sp, &cudx, &cudy);
+             return py::make_tuple(ok, cudx, cudy);
+           },
+           py::arg("surface_point"),
+           "Get the undistorted focal-plane (x, y) position for a SurfacePoint.\n\n"
+           "Returns\n"
+           "-------\n"
+           "tuple of (bool, float, float)\n"
+           "    (success, x_mm, y_mm)")
+      .def("__repr__", [](const Isis::IrregularBodyCameraGroundMap &) {
+        return "<IrregularBodyCameraGroundMap>";
+      });
+
+  // CSMSkyMap — sky map for Community Sensor Model cameras.
+  // SetSky computes the sky position using the CSM model.
+  // Added: 2026-04-10
+  py::class_<Isis::CSMSkyMap, Isis::CameraSkyMap>(m, "CSMSkyMap")
+      .def(py::init<Isis::Camera *>(),
+           py::arg("camera"),
+           py::keep_alive<1, 2>(),
+           "Construct a CSMSkyMap for the given Camera.")
+      .def("set_sky",
+           &Isis::CSMSkyMap::SetSky,
+           py::arg("ra"),
+           py::arg("dec"),
+           "Set sky coordinates from RA/Dec using the CSM model.")
+      .def("__repr__", [](const Isis::CSMSkyMap &) {
+        return "<CSMSkyMap>";
       });
 }

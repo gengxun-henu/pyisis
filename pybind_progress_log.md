@@ -1558,3 +1558,50 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 - `todo_pybind11.csv`: 5 个类 → 已转换
 - 各 `*_methods.csv`: 更新
 - `class_bind_methods_details/methods_inventory_summary.csv`: 更新
+
+---
+
+## 2026-04-10 第六阶段 Rollout 第3批（5 个新绑定）
+
+**本批：GaussianStretch, PushFrameCameraGroundMap, RadarSkyMap, IrregularBodyCameraGroundMap, CSMSkyMap。**
+
+### 活跃队列
+11. GaussianStretch — 已完成（继承 Statistics）
+12. PushFrameCameraGroundMap — 已完成（继承 CameraGroundMap）
+13. RadarSkyMap — 已完成（继承 CameraSkyMap）
+14. IrregularBodyCameraGroundMap — 已完成（继承 CameraGroundMap）
+15. CSMSkyMap — 已完成（继承 CameraSkyMap）
+
+### Class 11: GaussianStretch (已转换)
+- 追加到 `src/bind_statistics.cpp`。
+- 暴露：`constructor(Histogram&, mean, stddev)`, `map(double)`, 继承 Statistics。
+
+### Class 12: PushFrameCameraGroundMap (已转换，Partial)
+- 追加到 `src/bind_camera_maps.cpp`。
+- 暴露：`constructor(Camera*, bool)`, `set_ground(lat, lon)`, `set_ground(SurfacePoint)`。
+- 私有辅助方法 FindDistance 未暴露。
+
+### Class 13: RadarSkyMap (已转换)
+- 追加到 `src/bind_camera_maps.cpp`。
+- 暴露：`constructor(Camera*)`, `set_focal_plane(ux, uy, uz)`, `set_sky(ra, dec)`。
+
+### Class 14: IrregularBodyCameraGroundMap (已转换)
+- 追加到 `src/bind_camera_maps.cpp`。
+- 暴露：`constructor(Camera*, bool)`, `get_xy(SurfacePoint)` 返回 `(ok, dx, dy)` tuple。
+
+### Class 15: CSMSkyMap (已转换)
+- 追加到 `src/bind_camera_maps.cpp`。
+- 暴露：`constructor(Camera*)`, `set_sky(ra, dec)`。
+
+### 测试
+- 扩展 `tests/unitTest/camera_maps_unit_test.py`：
+  - GaussianStretch: 类存在、构造、map、继承关系、repr
+  - PushFrameCameraGroundMap: 类存在、继承关系、set_ground 方法存在
+  - RadarSkyMap: 类存在、继承关系、set_focal_plane/set_sky 方法存在
+  - IrregularBodyCameraGroundMap: 类存在、继承关系、get_xy 方法存在
+  - CSMSkyMap: 类存在、继承关系、set_sky 方法存在
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个类 → 已转换
+- 各 `*_methods.csv`: 新增/更新
+- `class_bind_methods_details/methods_inventory_summary.csv`: 更新

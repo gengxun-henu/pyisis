@@ -1,12 +1,12 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-RadarPulseMap,"Spice, Instruments, and Cameras",isis/src/base/objs/RadarPulseMap/RadarPulseMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+RadarPulseMap,"Spice, Instruments, and Cameras",reference/upstream_isis/src/base/objs/RadarPulseMap/RadarPulseMap.h,src/bind_camera_maps.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造及时间/频率控制方法
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,RadarPulseMap,isis_pybind.RadarPulseMap,N,Python class symbol not found in current binding files
-Construction/Enum,"RadarPulseMap(Camera *parent, const double etStart, const double lineRate) : CameraDetectorMap(parent) { p_etStart = etStart",isis_pybind.RadarPulseMap(),N,Constructor binding not detected in current binding files
-Mutation/Configuration,void SetStartTime(const double etStart) { p_etStart = etStart,isis_pybind.RadarPulseMap.set_start_time,N,Method not found in current binding files
-Mutation/Configuration,void SetLineRate(const double lineRate) { p_lineRate = lineRate,isis_pybind.RadarPulseMap.set_line_rate,N,Method not found in current binding files
-Public API,double LineRate() const { return p_lineRate,isis_pybind.RadarPulseMap.line_rate,N,Method not found in current binding files
-Mutation/Configuration,"virtual bool SetParent(const double sample, const double line)",isis_pybind.RadarPulseMap.set_parent,N,Method not found in current binding files
-Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.RadarPulseMap.set_detector,N,Method not found in current binding files
-Mutation/Configuration,void SetXAxisTimeDependent(bool on) { p_xAxisTimeDependent = on,isis_pybind.RadarPulseMap.set_x_axis_time_dependent,N,Method not found in current binding files
+Class Symbol,RadarPulseMap,isis_pybind.RadarPulseMap,Y,2026-04-10
+Construction/Enum,"RadarPulseMap(Camera *parent, const double etStart, const double lineRate)",isis_pybind.RadarPulseMap(),Y,2026-04-10
+Mutation/Configuration,void SetStartTime(const double etStart),isis_pybind.RadarPulseMap.set_start_time,Y,2026-04-10
+Mutation/Configuration,void SetLineRate(const double lineRate),isis_pybind.RadarPulseMap.set_line_rate,Y,2026-04-10
+Public API,double LineRate() const,isis_pybind.RadarPulseMap.line_rate,Y,2026-04-10
+Mutation/Configuration,"virtual bool SetParent(const double sample, const double line)",isis_pybind.RadarPulseMap.set_parent,N,Inherited virtual; covered by base class CameraDetectorMap
+Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.RadarPulseMap.set_detector,N,Inherited virtual; covered by base class CameraDetectorMap
+Mutation/Configuration,void SetXAxisTimeDependent(bool on),isis_pybind.RadarPulseMap.set_x_axis_time_dependent,Y,2026-04-10

@@ -25,9 +25,11 @@
  * Updated: 2026-04-10  Geng Xun fixed PCA add_data observation semantics to validate dimensions and pass single-observation count correctly.
  * Updated: 2026-04-10  Geng Xun added Basis1VariableFunction abstract base class binding (abstract; use derived classes).
  * Updated: 2026-04-10  Geng Xun added SparseBlockMatrix binding exposing block insertion, counting, zeroing, and structure helpers.
+ * Updated: 2026-04-10  Geng Xun added NumericalApproximation binding (interpolation/integration/differentiation).
  * Purpose: Expose Calculator, Affine, BasisFunction, FourierTransform, InfixToPostfix,
  *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, Ransac helpers, SurfaceModel,
- *          MaximumLikelihoodWFunctions, PrincipalComponentAnalysis, and SparseBlockMatrix to Python via pybind11.
+ *          MaximumLikelihoodWFunctions, PrincipalComponentAnalysis, SparseBlockMatrix,
+ *          and NumericalApproximation to Python via pybind11.
  */
 
 #include <pybind11/pybind11.h>
@@ -60,6 +62,7 @@
 #include "LinearAlgebra.h"
 #include "CubeCalculator.h"
 #include "Cube.h"
+#include "NumericalApproximation.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -839,4 +842,179 @@ void bind_base_math(py::module_ &m)
               "specific line and band. Returns the result as a list of doubles.")
          .def("__repr__", [](const Isis::CubeCalculator &)
               { return "CubeCalculator()"; });
+
+  // Added: 2026-04-10 - NumericalApproximation: interpolation/integration/differentiation
+  py::enum_<Isis::NumericalApproximation::InterpType>(m, "NumericalApproximationInterpType")
+      .value("Linear",              Isis::NumericalApproximation::Linear)
+      .value("Polynomial",          Isis::NumericalApproximation::Polynomial)
+      .value("PolynomialNeville",   Isis::NumericalApproximation::PolynomialNeville)
+      .value("CubicNatural",        Isis::NumericalApproximation::CubicNatural)
+      .value("CubicClamped",        Isis::NumericalApproximation::CubicClamped)
+      .value("CubicNatPeriodic",    Isis::NumericalApproximation::CubicNatPeriodic)
+      .value("CubicNeighborhood",   Isis::NumericalApproximation::CubicNeighborhood)
+      .value("CubicHermite",        Isis::NumericalApproximation::CubicHermite)
+      .value("Akima",               Isis::NumericalApproximation::Akima)
+      .value("AkimaPeriodic",       Isis::NumericalApproximation::AkimaPeriodic)
+      .export_values();
+
+  py::enum_<Isis::NumericalApproximation::ExtrapType>(m, "NumericalApproximationExtrapType")
+      .value("ThrowError",      Isis::NumericalApproximation::ThrowError)
+      .value("Extrapolate",     Isis::NumericalApproximation::Extrapolate)
+      .value("NearestEndpoint", Isis::NumericalApproximation::NearestEndpoint)
+      .export_values();
+
+  py::class_<Isis::NumericalApproximation>(m, "NumericalApproximation")
+      // Constructors
+      .def(py::init<>(),
+           "Construct NumericalApproximation with default CubicNatural interpolation.")
+      .def(py::init<Isis::NumericalApproximation::InterpType>(),
+           py::arg("itype"),
+           "Construct NumericalApproximation with given interpolation type.")
+      .def(py::init([](const std::vector<double> &x, const std::vector<double> &y,
+                       Isis::NumericalApproximation::InterpType itype) {
+               return std::make_unique<Isis::NumericalApproximation>(x, y, itype);
+           }),
+           py::arg("x"), py::arg("y"),
+           py::arg("itype") = Isis::NumericalApproximation::CubicNatural,
+           "Construct NumericalApproximation from x/y data vectors.")
+      // Query methods
+      .def("name", &Isis::NumericalApproximation::Name,
+           "Return the name of the interpolation type.")
+      .def("interpolation_type",
+           [](Isis::NumericalApproximation &self) {
+               return self.InterpolationType();
+           },
+           "Return the current interpolation type.")
+      .def("min_points",
+           py::overload_cast<>(&Isis::NumericalApproximation::MinPoints),
+           "Return minimum number of data points needed for current interpolation type.")
+      .def("min_points_for",
+           py::overload_cast<Isis::NumericalApproximation::InterpType>(
+               &Isis::NumericalApproximation::MinPoints),
+           py::arg("itype"),
+           "Return minimum number of data points needed for given interpolation type.")
+      .def("domain_minimum", &Isis::NumericalApproximation::DomainMinimum,
+           "Return the minimum x value in the data set.")
+      .def("domain_maximum", &Isis::NumericalApproximation::DomainMaximum,
+           "Return the maximum x value in the data set.")
+      .def("contains", &Isis::NumericalApproximation::Contains,
+           py::arg("x"),
+           "Return true if x is within the domain of the data set.")
+      .def("size",
+           [](Isis::NumericalApproximation &self) {
+               return (int)self.Size();
+           },
+           "Return number of data points.")
+      // Data addition
+      .def("add_data",
+           py::overload_cast<const double, const double>(&Isis::NumericalApproximation::AddData),
+           py::arg("x"), py::arg("y"),
+           "Add a single (x, y) data point.")
+      .def("add_data",
+           py::overload_cast<const std::vector<double> &, const std::vector<double> &>(
+               &Isis::NumericalApproximation::AddData),
+           py::arg("x"), py::arg("y"),
+           "Add data from x and y vectors.")
+      .def("set_cubic_clamped_endpt_deriv",
+           &Isis::NumericalApproximation::SetCubicClampedEndptDeriv,
+           py::arg("yp1"), py::arg("ypn"),
+           "Set endpoint derivatives for CubicClamped interpolation.")
+      .def("add_cubic_hermite_deriv",
+           py::overload_cast<const std::vector<double> &>(
+               &Isis::NumericalApproximation::AddCubicHermiteDeriv),
+           py::arg("fprimeOfx"),
+           "Set first derivatives for CubicHermite interpolation.")
+      .def("add_cubic_hermite_deriv_scalar",
+           py::overload_cast<const double>(
+               &Isis::NumericalApproximation::AddCubicHermiteDeriv),
+           py::arg("fprimeOfx"),
+           "Add a single first-derivative value for CubicHermite interpolation.")
+      // Evaluation
+      .def("evaluate",
+           py::overload_cast<const double, const Isis::NumericalApproximation::ExtrapType &>(
+               &Isis::NumericalApproximation::Evaluate),
+           py::arg("a"),
+           py::arg("etype") = Isis::NumericalApproximation::ThrowError,
+           "Evaluate interpolation at x=a.")
+      .def("evaluate_vector",
+           py::overload_cast<const std::vector<double> &,
+                             const Isis::NumericalApproximation::ExtrapType &>(
+               &Isis::NumericalApproximation::Evaluate),
+           py::arg("a"),
+           py::arg("etype") = Isis::NumericalApproximation::ThrowError,
+           "Evaluate interpolation at each x value in a.")
+      // Numerical differentiation
+      .def("backward_first_difference",
+           [](Isis::NumericalApproximation &self, double a, unsigned int n, double h) {
+               return self.BackwardFirstDifference(a, n, h);
+           },
+           py::arg("a"), py::arg("n") = 3, py::arg("h") = 0.1,
+           "Compute first derivative via backward difference.")
+      .def("forward_first_difference",
+           [](Isis::NumericalApproximation &self, double a, unsigned int n, double h) {
+               return self.ForwardFirstDifference(a, n, h);
+           },
+           py::arg("a"), py::arg("n") = 3, py::arg("h") = 0.1,
+           "Compute first derivative via forward difference.")
+      .def("center_first_difference",
+           [](Isis::NumericalApproximation &self, double a, unsigned int n, double h) {
+               return self.CenterFirstDifference(a, n, h);
+           },
+           py::arg("a"), py::arg("n") = 5, py::arg("h") = 0.1,
+           "Compute first derivative via center difference.")
+      .def("backward_second_difference",
+           [](Isis::NumericalApproximation &self, double a, unsigned int n, double h) {
+               return self.BackwardSecondDifference(a, n, h);
+           },
+           py::arg("a"), py::arg("n") = 3, py::arg("h") = 0.1,
+           "Compute second derivative via backward difference.")
+      .def("forward_second_difference",
+           [](Isis::NumericalApproximation &self, double a, unsigned int n, double h) {
+               return self.ForwardSecondDifference(a, n, h);
+           },
+           py::arg("a"), py::arg("n") = 3, py::arg("h") = 0.1,
+           "Compute second derivative via forward difference.")
+      .def("center_second_difference",
+           [](Isis::NumericalApproximation &self, double a, unsigned int n, double h) {
+               return self.CenterSecondDifference(a, n, h);
+           },
+           py::arg("a"), py::arg("n") = 5, py::arg("h") = 0.1,
+           "Compute second derivative via center difference.")
+      // Numerical integration
+      .def("trapezoidal_rule",
+           &Isis::NumericalApproximation::TrapezoidalRule,
+           py::arg("a"), py::arg("b"),
+           "Estimate integral from a to b via trapezoidal rule.")
+      .def("simpsons_3_point_rule",
+           &Isis::NumericalApproximation::Simpsons3PointRule,
+           py::arg("a"), py::arg("b"),
+           "Estimate integral via Simpson's 3-point rule.")
+      .def("simpsons_4_point_rule",
+           &Isis::NumericalApproximation::Simpsons4PointRule,
+           py::arg("a"), py::arg("b"),
+           "Estimate integral via Simpson's 4-point rule.")
+      .def("booles_rule",
+           &Isis::NumericalApproximation::BoolesRule,
+           py::arg("a"), py::arg("b"),
+           "Estimate integral via Boole's rule.")
+      .def("rombergs_method",
+           &Isis::NumericalApproximation::RombergsMethod,
+           py::arg("a"), py::arg("b"),
+           "Estimate integral via Romberg's method.")
+      // Mutation
+      .def("reset",
+           py::overload_cast<>(&Isis::NumericalApproximation::Reset),
+           "Reset the object to its constructed state.")
+      .def("reset_with_type",
+           py::overload_cast<Isis::NumericalApproximation::InterpType>(
+               &Isis::NumericalApproximation::Reset),
+           py::arg("itype"),
+           "Reset with new interpolation type.")
+      .def("set_interp_type",
+           &Isis::NumericalApproximation::SetInterpType,
+           py::arg("itype"),
+           "Change the interpolation type (clears current data).")
+      .def("__repr__", [](const Isis::NumericalApproximation &) {
+           return std::string("NumericalApproximation()");
+      });
 }

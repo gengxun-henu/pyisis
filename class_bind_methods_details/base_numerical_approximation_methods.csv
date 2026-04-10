@@ -1,8 +1,8 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-NumericalApproximation,Math,isis/src/base/objs/NumericalApproximation/NumericalApproximation.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+NumericalApproximation,Math,isis/src/base/objs/NumericalApproximation/NumericalApproximation.h,src/base/bind_base_math.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,NumericalApproximation,isis_pybind.NumericalApproximation,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Class Symbol,NumericalApproximation,isis_pybind.NumericalApproximation,Y,Bound in src/base/bind_base_math.cpp; 抽象基类/纯虚接口
 Construction/Enum,"InterpType enum (Linear, Polynomial, PolynomialNeville, CubicNatural, CubicClamped, CubicNatPeriodic, CubicNeighborhood, CubicHermite, Akima, AkimaPeriodic)",isis_pybind.NumericalApproximation.InterpType,N,抽象基类/纯虚接口
 Construction/Enum,"ExtrapType enum (ThrowError, Extrapolate, NearestEndpoint)",isis_pybind.NumericalApproximation.ExtrapType,N,抽象基类/纯虚接口
 Construction/Enum,NumericalApproximation(),isis_pybind.NumericalApproximation(),N,抽象基类/纯虚接口

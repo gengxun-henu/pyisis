@@ -6,7 +6,6 @@ user-invocable: true
 ---
 
 # ISIS Pybind Workflow
-
 Use this skill for repeatable pybind11 work in this repository, especially when the request involves:
 
 - binding a new ISIS C++ class or method into Python
@@ -65,6 +64,12 @@ See [binding workflow reference](./references/binding-workflow.md).
 
 #### Recurring binding hazards to check before compiling
 
+- Audit Qt string boundaries explicitly at the Python/C++ seam.
+	- Constructors or methods that take `QString` should not be bound directly with `std::string` template signatures and assumed to convert automatically.
+	- Example: `PushFrameCameraCcdLayout::FrameletInfo(...)` and `ReseauDistortionMap(...)` compile-failed when bound as `std::string` constructors even though Python naturally passes `str`.
+	- Prefer a lambda or local wrapper that converts `std::string` to `QString` with `QString::fromStdString(...)`.
+	- Apply the same rule to return values: if an API returns `QString`, convert it to `std::string` in the binding instead of returning raw Qt types to Python.
+	- Example: `PolygonSeeder::Algorithm()` must be wrapped to return Python `str`, otherwise pybind reports `Unregistered type: QString`.
 - Audit member-function qualifiers before wrapping operators or arithmetic helpers.
 	- Example: `Quaternion::operator*(const double &)` is **not** `const` in upstream ISIS.
 	- Do not bind it with a lambda that takes `const Isis::Quaternion &` and then calls `a * scalar` directly.
@@ -76,6 +81,18 @@ See [binding workflow reference](./references/binding-workflow.md).
 	- Example: `PvlFormat::addQuotes(...)`, `PvlFormat::isSingleUnit(...)`, `PvlTranslationTable::hasInputDefault(...)`, `IsAuto(...)`, `IsOptional(...)`, `OutputName(...)`, and `OutputPosition(...)` are protected helpers, not public API.
 	- If Python still needs those semantics, expose them through a local helper subclass or wrapper that safely forwards the protected call, or reimplement a stable public-facing wrapper when the behavior is simple and well verified.
 	- Before adding such wrappers, verify the behavior against `reference/upstream_isis/...` instead of assuming a declaration is callable from pybind.
+- Audit constructors and copy constructors for linkability, not just ordinary methods.
+	- A class may look safe to bind because the header declares a constructor or helper, but the linked ISIS runtime may not export that symbol.
+	- Example: `HiLab(Cube *)`, `HiLab::getCcd()`, and `PixelFOV(const PixelFOV &)` caused import-time `undefined symbol` failures even though the headers exposed them.
+	- If the constructor or helper is missing from the linked runtime, do not bind it directly; replace it with a local wrapper class or lambda built from the exported surface.
+- Avoid duplicate type registration and respect base-before-derived registration order.
+	- If a class is registered twice with the same Python name, module import will fail with `generic_type: ... already defined`.
+	- Example: `GaussianStretch` was bound in both `src/base/bind_base_filters.cpp` and `src/bind_statistics.cpp`.
+	- Keep one canonical registration site per Python type, and if the type inherits another bound class, ensure the base binding is registered earlier in `src/module.cpp`.
+- Guard Python-facing wrappers around upstream methods that assume internal state is already initialized.
+	- Some ISIS methods are safe only after internal pointers, polygons, or runtime-owned buffers are populated.
+	- Example: `ImageOverlap::Area()` dereferences the polygon pointer and can segfault on a default-constructed Python `ImageOverlap` with no polygon.
+	- Prefer a Python-safe wrapper that returns a stable fallback or raises a clear exception rather than exposing a raw crash path.
 - For `AutoReg`-family constructors and factory tests, match upstream PVL shape exactly.
 	- `AutoReg(Pvl &)` first calls `pvl.findObject("AutoRegistration")`, then parses nested `Algorithm`, `PatternChip`, and `SearchChip` groups.
 	- Do **not** build a flat `PvlGroup("AutoRegistration")` and pass it as the whole config; that will fail with `Unable to find PVL object [AutoRegistration]`.
@@ -109,8 +126,12 @@ If validation fails, classify the failure layer before changing code:
 For repeated failures on a single class, prefer these repair patterns before broad rewrites:
 
 - if a method is declared in headers but missing in the linked implementation, avoid binding the raw member-function pointer; prefer a wrapper built from stable APIs
+- if a constructor or copy constructor is declared in headers but missing from the linked runtime, replace the direct binding with a local wrapper class instead of forcing the symbol into `_isis_core`
 - if the class is abstract or pure-virtual, expose the usable surface without forcing unsafe construction
 - if Qt containers or ISIS-specific types are Python-hostile, adapt them to Python-friendly values
+- if a method returns `QString` or accepts `QString`, convert it explicitly at the binding boundary instead of relying on implicit pybind support
+- if import fails with `generic_type: ... already defined`, search for duplicate `py::class_<...>(..., "SameName")` registrations and for registration-order issues between base and derived types
+- if a Python test segfaults on a default-constructed object, suspect an upstream method that assumes initialized internal state and add a Python-safe wrapper before exposing that path
 - if lifetimes are involved, inspect `keep_alive`, return policies, and temporary object hazards
 - if runtime data is missing, treat it as environment-dependent and use stable skips or narrower smoke coverage where appropriate
 

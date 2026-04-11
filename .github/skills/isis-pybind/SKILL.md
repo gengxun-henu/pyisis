@@ -139,11 +139,11 @@ If the task has become a queue-based repair campaign with retry tracking or stop
 
 ### 5. Maintain progress records
 
-After a binding task is completed, update the relevant progress artifacts:
+After a binding task is completed, or whenever you update class-level ledger/progress status, update the relevant progress artifacts together:
 
 - `pybind_progress_log.md`
 - `todo_pybind11.csv` when the pending binding inventory or tracked status source changes
-- the relevant method inventory CSV if the task requires status synchronization
+- the relevant method inventory CSV; when a class status changes, explicitly inspect and sync the matching `class_bind_methods_details/*_methods.csv`, not only the higher-level ledgers
 
 Record blockers or uncertainties explicitly. See [progress maintenance reference](./references/progress.md).
 
@@ -165,6 +165,7 @@ A pybind task is usually ready to report when all relevant items below are satis
 - focused test added or updated
 - smallest relevant validation run with the `asp360_new` Python interpreter
 - progress note updated in `pybind_progress_log.md` when applicable
+- matching `class_bind_methods_details/*_methods.csv` reviewed and synchronized when class-level status or coverage changed
 - blockers clearly separated from code regressions
 
 ## References

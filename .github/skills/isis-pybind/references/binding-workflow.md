@@ -70,4 +70,4 @@ When the bound API can fail, verify how the current binding surface translates e
 - separate binding additions from unrelated refactors
 - keep Python naming coherent with existing exports
 
-Common pitfalls: assuming every C++ overload should be exposed exactly as-is, forgetting package exports when needed, exposing runtime-dependent methods without a test strategy, and forgetting to sync progress records after completion.
+Common pitfalls: assuming every C++ overload should be exposed exactly as-is, forgetting package exports when needed, exposing runtime-dependent methods without a test strategy, and forgetting to sync progress records after completion, especially the matching `class_bind_methods_details/*_methods.csv` when top-level ledgers were updated for a class.

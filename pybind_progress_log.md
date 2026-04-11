@@ -2,6 +2,11 @@
 
 ## 2026-04-11
 
+- `ControlPoint` detail inventory 台账同步完成：
+  - 复核 `src/control/bind_control_core.cpp` 后，确认 `ControlPoint` 绝大多数公开入口其实早已在当前绑定中暴露；`measure` 管理的当前 Python 名称仍为 `add_measure(...)` / `delete_measure(...)`，尚未额外导出 `add(...)` / `delete(...)` 别名。
+  - 更新 `class_bind_methods_details/control_control_point_methods.csv`，将其从陈旧的“几乎全 N”状态改为与真实当前导出面一致，并按仓库约定把 converted 条目统一写成当前 Python 名称。
+  - 同步 `class_bind_methods_details/methods_inventory_summary.csv` 与 `todo_pybind11.csv` 的说明文字，避免外围台账错误声称已补 `add/delete` aliases；当前仅 `emit_measure_modified(...)` 因 `QVariant` 信号语义尚无稳定 Python 契约而继续保留未暴露。
+
 - `Distance.Meters` legacy Python compatibility and `NumericalApproximation.contains()` expectation cleanup completed:
   - Updated `src/base/bind_base_geometry.cpp` so both `Distance` and `Displacement` restore class-level unit aliases (`Meters`, `Kilometers`, `Pixels`, and `SolarRadii` for `Distance`) in addition to the nested `Units` enum. This preserves older Python call sites such as `ip.Distance.Meters` without changing the newer enum-style API.
   - Updated `tests/unitTest/math_unit_test.py` so `NumericalApproximation.contains()` follows upstream ISIS semantics instead of a Python-side reinterpretation: `Contains(x)` checks whether `x` is an explicitly stored sample point, not whether `x` merely lies inside the interpolation domain.

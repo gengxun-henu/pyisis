@@ -42,6 +42,14 @@ Update this file when:
 
 ### Methods inventory CSVs
 
+When you update pybind ledgers for a specific class, always consider the matching class detail CSV in addition to the higher-level ledgers.
+
+At minimum:
+
+- inspect the relevant `class_bind_methods_details/*_methods.csv`
+- confirm whether the class-level method status, notes, or coverage counts changed
+- sync that file in the same task whenever the class status materially changed, rather than updating only `pybind_progress_log.md`, `todo_pybind11.csv`, or `methods_inventory_summary.csv`
+
 If the task includes method coverage synchronization:
 
 - inspect the class detail CSV
@@ -57,4 +65,4 @@ Keep notes concise and operational. Future work should be able to answer:
 - what remains open
 - whether remaining issues are code gaps or environment gaps
 
-Common mistakes: finishing a binding task without updating `pybind_progress_log.md`, treating `todo_pybind11.csv` as narrative prose instead of inventory, marking CSV status complete before validating actual exposure, and omitting blockers that future work would need.
+Common mistakes: finishing a binding task without updating `pybind_progress_log.md`, treating `todo_pybind11.csv` as narrative prose instead of inventory, updating top-level ledgers while leaving the matching `*_methods.csv` stale, marking CSV status complete before validating actual exposure, and omitting blockers that future work would need.

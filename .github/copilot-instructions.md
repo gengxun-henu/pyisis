@@ -25,6 +25,13 @@ All paths below are relative to the repository root unless noted otherwise.
 - After modifying code, default to running the smallest relevant test or validation for the changed area.
 - Prefer focused unit tests over broad validation when a smaller targeted check is available.
 
+## Qt / QObject binding boundary
+
+- For QObject-derived ISIS classes, default to **not** binding Qt `signals`/`slots` into Python unless the user explicitly asks for that behavior or a Python-side Qt integration use case clearly requires it.
+- Prefer exposing stable data methods, mutators, queries, and enums over raw Qt observer/event surfaces.
+- Treat Qt signal binding as a higher-complexity integration task because it can introduce callback lifetime, `QVariant` conversion, event-loop, and GIL/threading issues.
+- If Python needs change notifications later, prefer a small Python-friendly wrapper or callback API over directly mirroring every upstream Qt signal.
+
 ## Additional instructions to follow
 
 - For shared authored metadata conventions across pybind C++ files and Python unit tests, also follow `.github/instructions/pybind-metadata-common.instructions.md`.

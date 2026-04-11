@@ -3,6 +3,8 @@
 # Copyright (c) 2026 Geng Xun, Henan University
 # SPDX-License-Identifier: MIT
 
+__version__ = "0.1.0"
+
 from ._isis_core import (
     Angle,
     AbstractPlate,

@@ -2,6 +2,7 @@ build/
 build*/
 doc_development_process/
 doc_pybind11_learning/
+dist/
 *.pyc
 *.html
 *.log

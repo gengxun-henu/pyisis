@@ -47,12 +47,12 @@ Geometry,Transform,已转换,已在 bind_base_geometry.cpp 暴露
 Geometry,UniversalGroundMap,已转换,抽象基类/纯虚接口；已导出基础符号
 High Level Cube I/O,ExportDescription,已转换,已在高层 cube io 绑定中导出
 High Level Cube I/O,ImageExporter,未转换,抽象基类/纯虚接口
-High Level Cube I/O,ImageImporter,未转换,抽象基类/纯虚接口
+High Level Cube I/O,ImageImporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露抽象基类；构造/import/特殊像素范围设置/维度访问/格式查询方法
 High Level Cube I/O,JP2Decoder,已转换,已在高层 cube io 绑定中导出
 High Level Cube I/O,JP2Encoder,已转换,已在高层 cube io 绑定中导出
 High Level Cube I/O,JP2Error,已转换,已在高层 cube io 绑定中导出
 High Level Cube I/O,JP2Exporter,未转换,
-High Level Cube I/O,JP2Importer,未转换,
+High Level Cube I/O,JP2Importer,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露；继承 ImageImporter；构造/格式查询方法
 High Level Cube I/O,Process,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessByBoxcar,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessByBrick,已转换,抽象基类/纯虚接口；流程/回调接口较多

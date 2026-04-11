@@ -5,6 +5,7 @@
 // Updated: 2026-04-09  Geng Xun added SubArea bindings with Cube/PvlGroup-aware label update helpers and focused tests
 // Updated: 2026-04-10  Geng Xun added ProcessMosaic (Batch 2) with ImageOverlay enum, track/overlay/saturation flag setters and getters.
 // Updated: 2026-04-11  Geng Xun aligned the Python ImageOverlay enum names with the ISIS 9.0.0 PlaceImagesBeneath API while preserving the existing PlaceImagesBehind alias.
+// Updated: 2026-04-11  Geng Xun added ImageImporter abstract base class and JP2Importer concrete class bindings.
 // Purpose: pybind11 bindings for ISIS high-level cube I/O workflows including Process variants, import/export helpers, and JP2 utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -19,9 +20,11 @@
 #include "CubeAttribute.h"
 #include "ExportDescription.h"
 #include "FileName.h"
+#include "ImageImporter.h"
 #include "JP2Decoder.h"
 #include "JP2Encoder.h"
 #include "JP2Error.h"
+#include "JP2Importer.h"
 #include "Process.h"
 #include "ProcessByBoxcar.h"
 #include "ProcessByBrick.h"
@@ -799,6 +802,74 @@ void bind_high_level_cube_io(py::module_ &m) {
            "Rasterize ground polygons given lat, lon, and value vectors.")
       .def("__repr__", [](const Isis::ProcessGroundPolygons &) {
            return std::string("ProcessGroundPolygons()");
+      });
+
+  // ImageImporter - Abstract base class for image importers
+  // Source: reference/upstream_isis/src/base/objs/ImageImporter/ImageImporter.h
+  // Added: 2026-04-11
+  py::class_<Isis::ImageImporter>(m, "ImageImporter")
+      .def("import",
+           py::overload_cast<Isis::FileName>(&Isis::ImageImporter::import),
+           py::arg("output_name"),
+           py::return_value_policy::reference_internal,
+           "Import with default output attributes")
+      .def("import",
+           py::overload_cast<Isis::FileName, Isis::CubeAttributeOutput&>(&Isis::ImageImporter::import),
+           py::arg("output_name"),
+           py::arg("attributes"),
+           py::return_value_policy::reference_internal,
+           "Import with specified output attributes")
+      .def("set_null_range", &Isis::ImageImporter::setNullRange,
+           py::arg("min"), py::arg("max"),
+           "Set range for Null special pixels")
+      .def("set_lrs_range", &Isis::ImageImporter::setLrsRange,
+           py::arg("min"), py::arg("max"),
+           "Set range for LRS special pixels")
+      .def("set_hrs_range", &Isis::ImageImporter::setHrsRange,
+           py::arg("min"), py::arg("max"),
+           "Set range for HRS special pixels")
+      .def("set_samples", &Isis::ImageImporter::setSamples,
+           py::arg("samples"),
+           "Set number of samples")
+      .def("set_lines", &Isis::ImageImporter::setLines,
+           py::arg("lines"),
+           "Set number of lines")
+      .def("set_bands", &Isis::ImageImporter::setBands,
+           py::arg("bands"),
+           "Set number of bands")
+      .def("samples", &Isis::ImageImporter::samples,
+           "Get number of samples")
+      .def("lines", &Isis::ImageImporter::lines,
+           "Get number of lines")
+      .def("bands", &Isis::ImageImporter::bands,
+           "Get number of bands")
+      .def("filename", &Isis::ImageImporter::filename,
+           "Get input filename")
+      .def("convert_projection", &Isis::ImageImporter::convertProjection,
+           "Convert projection information to ISIS Mapping group")
+      .def("is_grayscale", &Isis::ImageImporter::isGrayscale,
+           "Test if image is grayscale")
+      .def("is_rgb", &Isis::ImageImporter::isRgb,
+           "Test if image is RGB")
+      .def("is_argb", &Isis::ImageImporter::isArgb,
+           "Test if image is RGBA");
+
+  // JP2Importer - JPEG 2000 image importer
+  // Source: reference/upstream_isis/src/base/objs/JP2Importer/JP2Importer.h
+  // Added: 2026-04-11
+  py::class_<Isis::JP2Importer, Isis::ImageImporter>(m, "JP2Importer")
+      .def(py::init<Isis::FileName>(),
+           py::arg("input_name"),
+           "Construct JP2 importer from input filename")
+      .def("is_grayscale", &Isis::JP2Importer::isGrayscale,
+           "Test if JPEG 2000 image is grayscale (1 band)")
+      .def("is_rgb", &Isis::JP2Importer::isRgb,
+           "Test if JPEG 2000 image is RGB (3 bands)")
+      .def("is_argb", &Isis::JP2Importer::isArgb,
+           "Test if JPEG 2000 image is RGBA (4 bands)")
+      .def("__repr__", [](const Isis::JP2Importer &self) {
+           return std::string("JP2Importer(") +
+                  qStringToStdString(self.filename().expanded()) + ")";
       });
 
 }

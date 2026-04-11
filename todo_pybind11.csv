@@ -46,12 +46,12 @@ Geometry,SurfacePoint,已转换,
 Geometry,Transform,已转换,已在 bind_base_geometry.cpp 暴露
 Geometry,UniversalGroundMap,已转换,抽象基类/纯虚接口；已导出基础符号
 High Level Cube I/O,ExportDescription,已转换,已在高层 cube io 绑定中导出
-High Level Cube I/O,ImageExporter,未转换,抽象基类/纯虚接口
+High Level Cube I/O,ImageExporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露抽象基类；samples/lines/bands/input_minimum/input_maximum/set_output_pixel_range 方法
 High Level Cube I/O,ImageImporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露抽象基类；构造/import/特殊像素范围设置/维度访问/格式查询方法
 High Level Cube I/O,JP2Decoder,已转换,已在高层 cube io 绑定中导出
 High Level Cube I/O,JP2Encoder,已转换,已在高层 cube io 绑定中导出
 High Level Cube I/O,JP2Error,已转换,已在高层 cube io 绑定中导出
-High Level Cube I/O,JP2Exporter,未转换,
+High Level Cube I/O,JP2Exporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露构造函数与 write/canWriteFormat 方法；继承 StreamExporter 和 ImageExporter
 High Level Cube I/O,JP2Importer,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露；继承 ImageImporter；构造/格式查询方法
 High Level Cube I/O,Process,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessByBoxcar,已转换,流程/回调接口较多
@@ -72,12 +72,12 @@ High Level Cube I/O,ProcessMapMosaic,已转换,2026-04-10 已在 src/bind_high_l
 High Level Cube I/O,ProcessMosaic,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessMosaic（ImageOverlay 枚举/track/flag setter/getter/overlay_to_string）；focused 单测在 batch2_unit_test.py
 High Level Cube I/O,ProcessPolygons,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessPolygons（继承 Process；rasterize/set_intersect_algorithm/end_process）；focused 单测在 batch3_unit_test.py
 High Level Cube I/O,ProcessRubberSheet,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessRubberSheet（继承 Process；start_process/force_tile/set_tiling）；focused 单测在 batch3_unit_test.py
-High Level Cube I/O,QtExporter,未转换,
-High Level Cube I/O,QtImporter,未转换,
-High Level Cube I/O,StreamExporter,未转换,抽象基类/纯虚接口
+High Level Cube I/O,QtExporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露构造函数、setGrayscale/setRgb/setRgba、write、canWriteFormat 方法；继承 ImageExporter
+High Level Cube I/O,QtImporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露构造函数与格式查询方法；继承 ImageImporter
+High Level Cube I/O,StreamExporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露抽象基类；继承 ImageExporter
 High Level Cube I/O,SubArea,已转换,2026-04-09 已在 src/bind_high_level_cube_io.cpp 暴露 set_sub_area/update_label，并补 focused 单测与 smoke 覆盖
-High Level Cube I/O,TiffExporter,未转换,
-High Level Cube I/O,TiffImporter,未转换,
+High Level Cube I/O,TiffExporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露构造函数与 write/canWriteFormat 方法；继承 StreamExporter 和 ImageExporter
+High Level Cube I/O,TiffImporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露构造函数、convertProjection、格式查询方法；继承 ImageImporter
 Low Level Cube I/O,AlphaCube,已转换,
 Low Level Cube I/O,BandManager,已转换,2026-03-21 已在 bind_low_level_cube_io.cpp 暴露构造与 set_band(...)
 Low Level Cube I/O,Blob,已转换,2026-04-08 已在 src/bind_low_level_cube_io.cpp 暴露稳定文件/bytes/label 接口与 is_blob helper，并补 focused 单测；默认构造与流式 read/write 后续补

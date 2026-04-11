@@ -6,6 +6,7 @@
 // Updated: 2026-04-10  Geng Xun added ProcessMosaic (Batch 2) with ImageOverlay enum, track/overlay/saturation flag setters and getters.
 // Updated: 2026-04-11  Geng Xun aligned the Python ImageOverlay enum names with the ISIS 9.0.0 PlaceImagesBeneath API while preserving the existing PlaceImagesBehind alias.
 // Updated: 2026-04-11  Geng Xun added ImageImporter abstract base class and JP2Importer concrete class bindings.
+// Updated: 2026-04-11  Geng Xun added JP2Exporter, TiffExporter, TiffImporter, QtExporter, and QtImporter bindings for complete import/export coverage.
 // Purpose: pybind11 bindings for ISIS high-level cube I/O workflows including Process variants, import/export helpers, and JP2 utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -20,11 +21,18 @@
 #include "CubeAttribute.h"
 #include "ExportDescription.h"
 #include "FileName.h"
+#include "ImageExporter.h"
 #include "ImageImporter.h"
 #include "JP2Decoder.h"
 #include "JP2Encoder.h"
 #include "JP2Error.h"
+#include "JP2Exporter.h"
 #include "JP2Importer.h"
+#include "QtExporter.h"
+#include "QtImporter.h"
+#include "StreamExporter.h"
+#include "TiffExporter.h"
+#include "TiffImporter.h"
 #include "Process.h"
 #include "ProcessByBoxcar.h"
 #include "ProcessByBrick.h"
@@ -869,6 +877,156 @@ void bind_high_level_cube_io(py::module_ &m) {
            "Test if JPEG 2000 image is RGBA (4 bands)")
       .def("__repr__", [](const Isis::JP2Importer &self) {
            return std::string("JP2Importer(") +
+                  qStringToStdString(self.filename().expanded()) + ")";
+      });
+
+  // ImageExporter - Abstract base class for image exporters
+  // Source: reference/upstream_isis/src/base/objs/ImageExporter/ImageExporter.h
+  // Added: 2026-04-11
+  py::class_<Isis::ImageExporter>(m, "ImageExporter")
+      .def("samples", &Isis::ImageExporter::samples,
+           "Get number of samples in export image")
+      .def("lines", &Isis::ImageExporter::lines,
+           "Get number of lines in export image")
+      .def("bands", &Isis::ImageExporter::bands,
+           "Get number of bands in export image")
+      .def("input_minimum", &Isis::ImageExporter::inputMinimum,
+           py::arg("channel"),
+           "Get input minimum for a given channel")
+      .def("input_maximum", &Isis::ImageExporter::inputMaximum,
+           py::arg("channel"),
+           "Get input maximum for a given channel")
+      .def("set_output_pixel_range", &Isis::ImageExporter::setOutputPixelRange,
+           py::arg("output_pixel_minimum"), py::arg("output_pixel_maximum"),
+           "Set output pixel range");
+
+  // StreamExporter - Abstract base class for stream exporters
+  // Source: reference/upstream_isis/src/base/objs/StreamExporter/StreamExporter.h
+  // Added: 2026-04-11
+  py::class_<Isis::StreamExporter, Isis::ImageExporter>(m, "StreamExporter");
+
+  // JP2Exporter - JPEG 2000 image exporter
+  // Source: reference/upstream_isis/src/base/objs/JP2Exporter/JP2Exporter.h
+  // Added: 2026-04-11
+  py::class_<Isis::JP2Exporter, Isis::StreamExporter>(m, "JP2Exporter")
+      .def(py::init<>(),
+           "Construct JP2 exporter")
+      .def("write",
+           [](Isis::JP2Exporter &self, Isis::FileName outputName,
+              int quality, const std::string &compression) {
+             self.write(outputName, quality, stdStringToQString(compression), nullptr);
+           },
+           py::arg("output_name"),
+           py::arg("quality") = 100,
+           py::arg("compression") = "none",
+           "Write cube to JPEG 2000 format")
+      .def_static("can_write_format",
+                  [](const std::string &format) {
+                    return Isis::JP2Exporter::canWriteFormat(stdStringToQString(format));
+                  },
+                  py::arg("format"),
+                  "Check if format can be written as JPEG 2000")
+      .def("__repr__", [](const Isis::JP2Exporter &) {
+           return std::string("JP2Exporter()");
+      });
+
+  // TiffExporter - TIFF image exporter
+  // Source: reference/upstream_isis/src/base/objs/TiffExporter/TiffExporter.h
+  // Added: 2026-04-11
+  py::class_<Isis::TiffExporter, Isis::StreamExporter>(m, "TiffExporter")
+      .def(py::init<>(),
+           "Construct TIFF exporter")
+      .def("write",
+           [](Isis::TiffExporter &self, Isis::FileName outputName,
+              int quality, const std::string &compression) {
+             self.write(outputName, quality, stdStringToQString(compression), nullptr);
+           },
+           py::arg("output_name"),
+           py::arg("quality") = 100,
+           py::arg("compression") = "none",
+           "Write cube to TIFF format")
+      .def_static("can_write_format",
+                  [](const std::string &format) {
+                    return Isis::TiffExporter::canWriteFormat(stdStringToQString(format));
+                  },
+                  py::arg("format"),
+                  "Check if format can be written as TIFF")
+      .def("__repr__", [](const Isis::TiffExporter &) {
+           return std::string("TiffExporter()");
+      });
+
+  // TiffImporter - TIFF image importer
+  // Source: reference/upstream_isis/src/base/objs/TiffImporter/TiffImporter.h
+  // Added: 2026-04-11
+  py::class_<Isis::TiffImporter, Isis::ImageImporter>(m, "TiffImporter")
+      .def(py::init<Isis::FileName>(),
+           py::arg("input_name"),
+           "Construct TIFF importer from input filename")
+      .def("convert_projection", &Isis::TiffImporter::convertProjection,
+           "Convert GeoTIFF projection to ISIS Mapping group")
+      .def("is_grayscale", &Isis::TiffImporter::isGrayscale,
+           "Test if TIFF image is grayscale")
+      .def("is_rgb", &Isis::TiffImporter::isRgb,
+           "Test if TIFF image is RGB")
+      .def("is_argb", &Isis::TiffImporter::isArgb,
+           "Test if TIFF image is ARGB (with alpha)")
+      .def("__repr__", [](const Isis::TiffImporter &self) {
+           return std::string("TiffImporter(") +
+                  qStringToStdString(self.filename().expanded()) + ")";
+      });
+
+  // QtExporter - Qt-based image exporter for standard formats
+  // Source: reference/upstream_isis/src/base/objs/QtExporter/QtExporter.h
+  // Added: 2026-04-11
+  py::class_<Isis::QtExporter, Isis::ImageExporter>(m, "QtExporter")
+      .def(py::init([](const std::string &format) {
+             return new Isis::QtExporter(stdStringToQString(format));
+           }),
+           py::arg("format"),
+           "Construct Qt exporter for specified format (e.g., 'png', 'jpg')")
+      .def("set_grayscale", &Isis::QtExporter::setGrayscale,
+           py::arg("desc"),
+           "Setup for grayscale export")
+      .def("set_rgb", &Isis::QtExporter::setRgb,
+           py::arg("desc"),
+           "Setup for RGB export")
+      .def("set_rgba", &Isis::QtExporter::setRgba,
+           py::arg("desc"),
+           "Setup for RGBA export")
+      .def("write",
+           [](Isis::QtExporter &self, Isis::FileName outputName,
+              int quality, const std::string &compression) {
+             self.write(outputName, quality, stdStringToQString(compression), nullptr);
+           },
+           py::arg("output_name"),
+           py::arg("quality") = 100,
+           py::arg("compression") = "none",
+           "Write cube to Qt-supported format")
+      .def_static("can_write_format",
+                  [](const std::string &format) {
+                    return Isis::QtExporter::canWriteFormat(stdStringToQString(format));
+                  },
+                  py::arg("format"),
+                  "Check if format can be written by Qt")
+      .def("__repr__", [](const Isis::QtExporter &) {
+           return std::string("QtExporter()");
+      });
+
+  // QtImporter - Qt-based image importer for standard formats
+  // Source: reference/upstream_isis/src/base/objs/QtImporter/QtImporter.h
+  // Added: 2026-04-11
+  py::class_<Isis::QtImporter, Isis::ImageImporter>(m, "QtImporter")
+      .def(py::init<Isis::FileName>(),
+           py::arg("input_name"),
+           "Construct Qt importer from input filename")
+      .def("is_grayscale", &Isis::QtImporter::isGrayscale,
+           "Test if image is grayscale")
+      .def("is_rgb", &Isis::QtImporter::isRgb,
+           "Test if image is RGB")
+      .def("is_argb", &Isis::QtImporter::isArgb,
+           "Test if image is ARGB (with alpha)")
+      .def("__repr__", [](const Isis::QtImporter &self) {
+           return std::string("QtImporter(") +
                   qStringToStdString(self.filename().expanded()) + ")";
       });
 

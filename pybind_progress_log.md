@@ -1,5 +1,16 @@
 # Pybind Progress Log
 
+## 2026-04-11
+
+- `Distance.Meters` legacy Python compatibility and `NumericalApproximation.contains()` expectation cleanup completed:
+  - Updated `src/base/bind_base_geometry.cpp` so both `Distance` and `Displacement` restore class-level unit aliases (`Meters`, `Kilometers`, `Pixels`, and `SolarRadii` for `Distance`) in addition to the nested `Units` enum. This preserves older Python call sites such as `ip.Distance.Meters` without changing the newer enum-style API.
+  - Updated `tests/unitTest/math_unit_test.py` so `NumericalApproximation.contains()` follows upstream ISIS semantics instead of a Python-side reinterpretation: `Contains(x)` checks whether `x` is an explicitly stored sample point, not whether `x` merely lies inside the interpolation domain.
+  - Confirmed upstream behavior by reading `reference/upstream_isis/src/base/objs/NumericalApproximation/NumericalApproximation.cpp` and matching `Contains(...)` to its exact-membership `binary_search(...)` implementation.
+  - Validation status:
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest tests.unitTest.distance_unit_test tests.unitTest.math_unit_test tests.unitTest.spice_navigation_unit_test` (`180` tests, `OK`, `expected failures=1`)
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest discover -s tests/unitTest -p "*_unit_test.py"` (`1277` tests, `OK`, `skipped=10`, `expected failures=1`)
+  - Note: the VS Code CMake entry point still reported `Unable to configure the project` in this session, but the standard manual configure/build pipeline succeeded and produced a working `_isis_core` extension.
+
 ## 2026-04-10
 
 - PolygonTools smoke/unit-test blocker fixed by aligning the Python export surface with the already-implemented utility wrappers:

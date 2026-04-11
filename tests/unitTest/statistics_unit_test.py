@@ -3,8 +3,9 @@ Unit tests for ISIS statistics, histogram, and vector-filter bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-10
+Last Modified: 2026-04-11
 Updated: 2026-04-10  Geng Xun added PrincipalComponentAnalysis and OverlapStatistics unit tests.
+Updated: 2026-04-11  Geng Xun added ImageHistogram explicit add_data/remove_data/bin_range coverage.
 """
 
 import unittest
@@ -215,6 +216,60 @@ class OverlapStatisticsUnitTest(unittest.TestCase):
         with self.assertRaises(Exception):
             # Missing required groups (File1, File2) must raise
             ip.OverlapStatistics(pvl)
+
+
+class ImageHistogramUnitTest(unittest.TestCase):
+    """Focused regression coverage for ImageHistogram explicit method bindings. Added: 2026-04-11."""
+
+    def test_api_surface(self):
+        """ImageHistogram exposes add_data, remove_data, and bin_range."""
+        self.assertTrue(issubclass(ip.ImageHistogram, ip.Histogram))
+        self.assertTrue(hasattr(ip.ImageHistogram, "add_data"))
+        self.assertTrue(hasattr(ip.ImageHistogram, "remove_data"))
+        self.assertTrue(hasattr(ip.ImageHistogram, "bin_range"))
+
+    def test_construction_with_defaults(self):
+        """ImageHistogram constructor with default bins works."""
+        h = ip.ImageHistogram(0.0, 10.0)
+        self.assertEqual(h.bins(), 1024)
+
+    def test_construction_with_custom_bins(self):
+        """ImageHistogram constructor with explicit bins count works."""
+        h = ip.ImageHistogram(0.0, 100.0, 256)
+        self.assertEqual(h.bins(), 256)
+
+    def test_add_data_vector_and_scalar(self):
+        """add_data accepts both a list and a single scalar."""
+        h = ip.ImageHistogram(0.0, 10.0, 128)
+        h.add_data([1.0, 2.0, 3.0, 4.0, 5.0])
+        h.add_data(6.0)
+        self.assertEqual(h.valid_pixels(), 6)
+
+    def test_remove_data_vector(self):
+        """remove_data removes previously added values."""
+        h = ip.ImageHistogram(0.0, 10.0, 128)
+        h.add_data([1.0, 2.0, 3.0])
+        h.remove_data([1.0])
+        self.assertEqual(h.valid_pixels(), 2)
+
+    def test_bin_range_returns_tuple(self):
+        """bin_range returns a (low, high) tuple for a valid bin index."""
+        h = ip.ImageHistogram(0.0, 10.0, 10)
+        low, high = h.bin_range(0)
+        self.assertIsInstance(low, float)
+        self.assertIsInstance(high, float)
+        self.assertLess(low, high)
+
+    def test_bin_range_all_bins_partition_range(self):
+        """bin_range low/high values span the full histogram range."""
+        minimum = 0.0
+        maximum = 10.0
+        bins = 10
+        h = ip.ImageHistogram(minimum, maximum, bins)
+        first_low, _ = h.bin_range(0)
+        _, last_high = h.bin_range(bins - 1)
+        self.assertAlmostEqual(first_low, minimum, places=6)
+        self.assertAlmostEqual(last_high, maximum, places=6)
 
 
 if __name__ == "__main__":

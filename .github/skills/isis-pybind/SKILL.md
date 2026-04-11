@@ -64,6 +64,10 @@ See [binding workflow reference](./references/binding-workflow.md).
 
 #### Recurring binding hazards to check before compiling
 
+- Do not bind Qt signal emitters, signal-forwarding helpers, or observer plumbing as default Python API.
+	- Example: `emitMeasureModified(ControlMeasure *measure, ControlMeasure::ModType modType, QVariant oldValue, QVariant newValue)` should be treated as internal Qt notification flow, not as ordinary Python-facing functionality to expose.
+	- Apply the same rule to `emit*` methods, `signals`/`slots`, and helpers whose primary role is dispatching events with `QVariant` or similar Qt event payloads.
+	- If Python eventually needs notifications, prefer a small wrapper or callback-oriented facade instead of mirroring the raw Qt signal surface.
 - Audit Qt string boundaries explicitly at the Python/C++ seam.
 	- Constructors or methods that take `QString` should not be bound directly with `std::string` template signatures and assumed to convert automatically.
 	- Example: `PushFrameCameraCcdLayout::FrameletInfo(...)` and `ReseauDistortionMap(...)` compile-failed when bound as `std::string` constructors even though Python naturally passes `str`.

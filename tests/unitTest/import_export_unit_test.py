@@ -5,6 +5,7 @@ Author: Geng Xun
 Created: 2026-04-11
 Last Modified: 2026-04-11
 Updated: 2026-04-11  Geng Xun added focused regression coverage for JP2Exporter, TiffExporter, TiffImporter, QtExporter, QtImporter bindings.
+Updated: 2026-04-11  Geng Xun aligned exporter format assertions with upstream lowercase-only canWriteFormat behavior.
 """
 
 import os
@@ -37,11 +38,11 @@ class JP2ExporterTest(unittest.TestCase):
 
     def test_can_write_format_static(self):
         """Test JP2Exporter.can_write_format static method."""
-        # JP2 exporter should handle jp2 format
+        # Upstream JP2Exporter::canWriteFormat only accepts lowercase "jp2"
         self.assertTrue(ip.JP2Exporter.can_write_format("jp2"))
-        # Should be case-insensitive
-        self.assertTrue(ip.JP2Exporter.can_write_format("JP2"))
+        self.assertFalse(ip.JP2Exporter.can_write_format("JP2"))
         # Should not handle other formats
+        self.assertFalse(ip.JP2Exporter.can_write_format("j2k"))
         self.assertFalse(ip.JP2Exporter.can_write_format("tiff"))
         self.assertFalse(ip.JP2Exporter.can_write_format("png"))
 
@@ -64,12 +65,11 @@ class TiffExporterTest(unittest.TestCase):
 
     def test_can_write_format_static(self):
         """Test TiffExporter.can_write_format static method."""
-        # TIFF exporter should handle tif and tiff formats
-        self.assertTrue(ip.TiffExporter.can_write_format("tif"))
+        # Upstream TiffExporter::canWriteFormat only accepts lowercase "tiff"
         self.assertTrue(ip.TiffExporter.can_write_format("tiff"))
-        # Should be case-insensitive
-        self.assertTrue(ip.TiffExporter.can_write_format("TIF"))
-        self.assertTrue(ip.TiffExporter.can_write_format("TIFF"))
+        self.assertFalse(ip.TiffExporter.can_write_format("tif"))
+        self.assertFalse(ip.TiffExporter.can_write_format("TIF"))
+        self.assertFalse(ip.TiffExporter.can_write_format("TIFF"))
         # Should not handle other formats
         self.assertFalse(ip.TiffExporter.can_write_format("jp2"))
         self.assertFalse(ip.TiffExporter.can_write_format("png"))
@@ -107,14 +107,15 @@ class QtExporterTest(unittest.TestCase):
 
     def test_can_write_format_static(self):
         """Test QtExporter.can_write_format static method."""
-        # Qt exporter should handle common Qt-supported formats
+        # Upstream QtExporter::canWriteFormat compares against Qt's supported
+        # format list without lowercasing first, so uppercase input stays false.
         self.assertTrue(ip.QtExporter.can_write_format("png"))
         self.assertTrue(ip.QtExporter.can_write_format("jpg"))
         self.assertTrue(ip.QtExporter.can_write_format("jpeg"))
         self.assertTrue(ip.QtExporter.can_write_format("bmp"))
-        # Should be case-insensitive
-        self.assertTrue(ip.QtExporter.can_write_format("PNG"))
-        self.assertTrue(ip.QtExporter.can_write_format("JPG"))
+        self.assertFalse(ip.QtExporter.can_write_format("PNG"))
+        self.assertFalse(ip.QtExporter.can_write_format("JPG"))
+        self.assertFalse(ip.QtExporter.can_write_format("gif"))
 
     def test_repr(self):
         """Test QtExporter __repr__."""

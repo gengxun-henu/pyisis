@@ -22,7 +22,7 @@ Control Networks,ControlNetStatistics,已转换,2026-04-08 已在 bind_control_c
 Control Networks,ControlNetValidMeasure,已转换,2026-04-08 已在 bind_control_core.cpp 暴露稳定配置/查询方法簇（构造/parse/阈值 getter/valid_* helper）；ValidStandardOptions 与 edge/camera 几何接口后续补
 Control Networks,ControlNetVersioner,已转换,2026-04-10 已在 src/control/bind_control_core.cpp 暴露构造/元数据 getter/write/toPvl；takeFirstPoint 因裸指针所有权问题暂跳过(N)
 Control Networks,ControlNetVitals,未转换,Qt 类型/信号槽较多
-Control Networks,ControlPoint,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Control Networks,ControlPoint,已转换,2026-04-11 已同步 ControlPoint detail inventory 到当前导出面；measure 管理当前 Python 名称仍为 add_measure/delete_measure；除 QVariant 信号型 emit_measure_modified 外其余现有公开入口已基本反映到台账
 Control Networks,ControlPointList,已转换,2026-03-21 已在 bind_control_core.cpp 暴露文件读取/索引/统计注册接口
 Control Networks,ControlPointV0001,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL 构造与 protobuf bytes/debug-string 适配接口
 Control Networks,ControlPointV0002,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口

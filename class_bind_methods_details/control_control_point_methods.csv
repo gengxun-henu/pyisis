@@ -1,100 +1,100 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ControlPoint,Control Networks,isis/src/control/objs/ControlPoint/ControlPoint.h,isis_pybind_standalone/src/control/bind_control_core.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+ControlPoint,Control Networks,isis/src/control/objs/ControlPoint/ControlPoint.h,isis_pybind_standalone/src/control/bind_control_core.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-11 已按 bind_control_core.cpp 当前真实导出面同步；QString/QList 已在绑定边界适配
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ControlPoint,isis_pybind.ControlPoint,Y,Python class symbol is exported; Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Construction/Enum,"PointType enum (Fixed, Constrained, Free)",isis_pybind.ControlPoint.PointType,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Construction/Enum,"Status enum (Failure, Success, PointLocked)",isis_pybind.ControlPoint.Status,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Construction/Enum,"ConstraintStatus enum (Coord1Constrained, Coord2Constrained, Coord3Constrained)",isis_pybind.ControlPoint.ConstraintStatus,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Construction/Enum,"ModType enum (EditLockModified, IgnoredModified, TypeModified)",isis_pybind.ControlPoint.ModType,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Construction/Enum,ControlPoint(),isis_pybind.ControlPoint(),Y,Constructor is explicitly bound
-Public API,ControlNet *Parent() { return parentNetwork; },isis_pybind.ControlPoint.parent,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Read/Write IO,void Load(PvlObject &p),isis_pybind.ControlPoint.load,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void Add(ControlMeasure *measure),isis_pybind.ControlPoint.add,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,int Delete(ControlMeasure *measure),isis_pybind.ControlPoint.delete,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,int Delete(QString serialNumber),isis_pybind.ControlPoint.delete,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,int Delete(int index),isis_pybind.ControlPoint.delete,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,Status ResetApriori(),isis_pybind.ControlPoint.reset_apriori,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,const ControlMeasure *GetMeasure(QString serialNumber) const,isis_pybind.ControlPoint.get_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,ControlMeasure *GetMeasure(QString serialNumber),isis_pybind.ControlPoint.get_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,const ControlMeasure *GetMeasure(int index) const,isis_pybind.ControlPoint.get_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,ControlMeasure *GetMeasure(int index),isis_pybind.ControlPoint.get_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool HasRefMeasure() const,isis_pybind.ControlPoint.has_ref_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,const ControlMeasure *GetRefMeasure() const,isis_pybind.ControlPoint.get_ref_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,ControlMeasure *GetRefMeasure(),isis_pybind.ControlPoint.get_ref_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetChooserName(QString name),isis_pybind.ControlPoint.set_chooser_name,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetDateTime(QString newDateTime),isis_pybind.ControlPoint.set_date_time,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetEditLock(bool editLock),isis_pybind.ControlPoint.set_edit_lock,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetId(QString id),isis_pybind.ControlPoint.set_id,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetRefMeasure(ControlMeasure *cm),isis_pybind.ControlPoint.set_ref_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetRefMeasure(int index),isis_pybind.ControlPoint.set_ref_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetRefMeasure(QString sn),isis_pybind.ControlPoint.set_ref_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetRejected(bool rejected),isis_pybind.ControlPoint.set_rejected,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetIgnored(bool newIgnoreStatus),isis_pybind.ControlPoint.set_ignored,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetAdjustedSurfacePoint(SurfacePoint newSurfacePoint),isis_pybind.ControlPoint.set_adjusted_surface_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetType(PointType newType),isis_pybind.ControlPoint.set_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetAprioriRadiusSource(RadiusSource::Source source),isis_pybind.ControlPoint.set_apriori_radius_source,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetAprioriRadiusSourceFile(QString sourceFile),isis_pybind.ControlPoint.set_apriori_radius_source_file,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetAprioriSurfacePoint(SurfacePoint aprioriSP),isis_pybind.ControlPoint.set_apriori_surface_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetAprioriSurfacePointSource(SurfacePointSource::Source source),isis_pybind.ControlPoint.set_apriori_surface_point_source,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,Status SetAprioriSurfacePointSourceFile(QString sourceFile),isis_pybind.ControlPoint.set_apriori_surface_point_source_file,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,Status ComputeApriori(),isis_pybind.ControlPoint.compute_apriori,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,Status ComputeResiduals(),isis_pybind.ControlPoint.compute_residuals,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,Status ComputeResiduals_Millimeters(),isis_pybind.ControlPoint.compute_residuals_millimeters,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,SurfacePoint GetAdjustedSurfacePoint() const,isis_pybind.ControlPoint.get_adjusted_surface_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,SurfacePoint GetBestSurfacePoint() const,isis_pybind.ControlPoint.get_best_surface_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetChooserName() const,isis_pybind.ControlPoint.get_chooser_name,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetDateTime() const,isis_pybind.ControlPoint.get_date_time,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsEditLocked() const,isis_pybind.ControlPoint.is_edit_locked,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsRejected() const,isis_pybind.ControlPoint.is_rejected,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetId() const,isis_pybind.ControlPoint.get_id,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsIgnored() const,isis_pybind.ControlPoint.is_ignored,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsValid() const,isis_pybind.ControlPoint.is_valid,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsInvalid() const,isis_pybind.ControlPoint.is_invalid,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsFree() const,isis_pybind.ControlPoint.is_free,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsFixed() const,isis_pybind.ControlPoint.is_fixed,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool HasAprioriCoordinates(),isis_pybind.ControlPoint.has_apriori_coordinates,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsConstrained(),isis_pybind.ControlPoint.is_constrained,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsCoord1Constrained(),isis_pybind.ControlPoint.is_coord1_constrained,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsCoord2Constrained(),isis_pybind.ControlPoint.is_coord2_constrained,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsCoord3Constrained(),isis_pybind.ControlPoint.is_coord3_constrained,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int NumberOfConstrainedCoordinates(),isis_pybind.ControlPoint.number_of_constrained_coordinates,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Static/Factory,static QString PointTypeToString(PointType type),isis_pybind.ControlPoint.point_type_to_string,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Static/Factory,static PointType StringToPointType(QString pointTypeString),isis_pybind.ControlPoint.string_to_point_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetPointTypeString() const,isis_pybind.ControlPoint.get_point_type_string,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,PointType GetType() const,isis_pybind.ControlPoint.get_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Static/Factory,static QString RadiusSourceToString(RadiusSource::Source source),isis_pybind.ControlPoint.radius_source_to_string,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Static/Factory,static RadiusSource::Source StringToRadiusSource(QString str),isis_pybind.ControlPoint.string_to_radius_source,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetRadiusSourceString() const,isis_pybind.ControlPoint.get_radius_source_string,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Static/Factory,static QString SurfacePointSourceToString(SurfacePointSource::Source source),isis_pybind.ControlPoint.surface_point_source_to_string,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Static/Factory,static SurfacePointSource::Source StringToSurfacePointSource(QString str),isis_pybind.ControlPoint.string_to_surface_point_source,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetSurfacePointSourceString() const,isis_pybind.ControlPoint.get_surface_point_source_string,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,SurfacePoint GetAprioriSurfacePoint() const,isis_pybind.ControlPoint.get_apriori_surface_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,RadiusSource::Source GetAprioriRadiusSource() const,isis_pybind.ControlPoint.get_apriori_radius_source,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool HasAprioriRadiusSourceFile() const,isis_pybind.ControlPoint.has_apriori_radius_source_file,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetAprioriRadiusSourceFile() const,isis_pybind.ControlPoint.get_apriori_radius_source_file,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,SurfacePointSource::Source GetAprioriSurfacePointSource() const,isis_pybind.ControlPoint.get_apriori_surface_point_source,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool HasAprioriSurfacePointSourceFile() const,isis_pybind.ControlPoint.has_apriori_surface_point_source_file,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetAprioriSurfacePointSourceFile() const,isis_pybind.ControlPoint.get_apriori_surface_point_source_file,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumMeasures() const,isis_pybind.ControlPoint.get_num_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumValidMeasures() const,isis_pybind.ControlPoint.get_num_valid_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumLockedMeasures() const,isis_pybind.ControlPoint.get_num_locked_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool HasSerialNumber(QString serialNumber) const,isis_pybind.ControlPoint.has_serial_number,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool HasChooserName() const,isis_pybind.ControlPoint.has_chooser_name,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool HasDateTime() const,isis_pybind.ControlPoint.has_date_time,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,"int IndexOf(ControlMeasure *, bool throws = true) const",isis_pybind.ControlPoint.index_of,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,"int IndexOf(QString sn, bool throws = true) const",isis_pybind.ControlPoint.index_of,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int IndexOfRefMeasure() const,isis_pybind.ControlPoint.index_of_ref_measure,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Query,bool IsReferenceExplicit() const,isis_pybind.ControlPoint.is_reference_explicit,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetReferenceSN() const,isis_pybind.ControlPoint.get_reference_sn,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,"void emitMeasureModified(ControlMeasure *measure, ControlMeasure::ModType modType, QVariant oldValue, QVariant newValue)",isis_pybind.ControlPoint.emit_measure_modified,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,Statistics GetStatistic(long dataType) const,isis_pybind.ControlPoint.get_statistic,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QList< ControlMeasure * > getMeasures(bool excludeIgnored = false) const,isis_pybind.ControlPoint.get_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QList< QString > getCubeSerialNumbers() const,isis_pybind.ControlPoint.get_cube_serial_numbers,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,void ZeroNumberOfRejectedMeasures(),isis_pybind.ControlPoint.zero_number_of_rejected_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetNumberOfRejectedMeasures(int numRejected),isis_pybind.ControlPoint.set_number_of_rejected_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumberOfRejectedMeasures() const,isis_pybind.ControlPoint.get_number_of_rejected_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,double GetSampleResidualRms() const,isis_pybind.ControlPoint.get_sample_residual_rms,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,double GetLineResidualRms() const,isis_pybind.ControlPoint.get_line_residual_rms,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,double GetResidualRms() const,isis_pybind.ControlPoint.get_residual_rms,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void ClearJigsawRejected(),isis_pybind.ControlPoint.clear_jigsaw_rejected,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Class Symbol,ControlPoint,isis_pybind.ControlPoint,Y,Python class symbol is exported
+Construction/Enum,"PointType enum (Fixed, Constrained, Free)",isis_pybind.ControlPoint.PointType,Y,Bound as nested enum on ControlPoint
+Construction/Enum,"Status enum (Failure, Success, PointLocked)",isis_pybind.ControlPoint.Status,Y,Bound as nested enum on ControlPoint
+Construction/Enum,"ConstraintStatus enum (Coord1Constrained, Coord2Constrained, Coord3Constrained)",isis_pybind.ControlPoint.ConstraintStatus,Y,Bound as nested enum on ControlPoint
+Construction/Enum,"ModType enum (EditLockModified, IgnoredModified, TypeModified)",isis_pybind.ControlPoint.ModType,Y,Bound as nested enum on ControlPoint
+Construction/Enum,ControlPoint(),isis_pybind.ControlPoint(),Y,Default/copy/string-id constructors are exposed
+Public API,ControlNet *Parent() { return parentNetwork; },isis_pybind.ControlPoint.parent,Y,Returns parent ControlNet with reference_internal lifetime
+Read/Write IO,void Load(PvlObject &p),isis_pybind.ControlPoint.load,Y,Directly bound as load(pvl_object)
+Mutation/Configuration,void Add(ControlMeasure *measure),isis_pybind.ControlPoint.add_measure,Y,Currently exported under Python name add_measure(measure)
+Mutation/Configuration,int Delete(ControlMeasure *measure),isis_pybind.ControlPoint.delete_measure,Y,Currently exported under Python name delete_measure(measure)
+Mutation/Configuration,int Delete(QString serialNumber),isis_pybind.ControlPoint.delete_measure,Y,Currently exported under Python name delete_measure(serial_number)
+Mutation/Configuration,int Delete(int index),isis_pybind.ControlPoint.delete_measure,Y,Currently exported under Python name delete_measure(index)
+Public API,Status ResetApriori(),isis_pybind.ControlPoint.reset_apriori,Y,Directly bound as reset_apriori()
+Public API,const ControlMeasure *GetMeasure(QString serialNumber) const,isis_pybind.ControlPoint.get_measure,Y,Python get_measure(serial_number) is exposed with reference_internal lifetime
+Public API,ControlMeasure *GetMeasure(QString serialNumber),isis_pybind.ControlPoint.get_measure,Y,Python get_measure(serial_number) returns mutable reference_internal ControlMeasure
+Public API,const ControlMeasure *GetMeasure(int index) const,isis_pybind.ControlPoint.get_measure,Y,Python get_measure(index) overload is exposed
+Public API,ControlMeasure *GetMeasure(int index),isis_pybind.ControlPoint.get_measure,Y,Python get_measure(index) returns mutable reference_internal ControlMeasure
+Query,bool HasRefMeasure() const,isis_pybind.ControlPoint.has_ref_measure,Y,Bound as has_ref_measure()
+Public API,const ControlMeasure *GetRefMeasure() const,isis_pybind.ControlPoint.get_ref_measure,Y,Bound as get_ref_measure()
+Public API,ControlMeasure *GetRefMeasure(),isis_pybind.ControlPoint.get_ref_measure,Y,Returns mutable reference_internal ControlMeasure
+Mutation/Configuration,Status SetChooserName(QString name),isis_pybind.ControlPoint.set_chooser_name,Y,QString input adapted from Python str
+Mutation/Configuration,Status SetDateTime(QString newDateTime),isis_pybind.ControlPoint.set_date_time,Y,QString input adapted from Python str
+Mutation/Configuration,Status SetEditLock(bool editLock),isis_pybind.ControlPoint.set_edit_lock,Y,Direct bool setter binding
+Mutation/Configuration,Status SetId(QString id),isis_pybind.ControlPoint.set_id,Y,QString input adapted from Python str
+Mutation/Configuration,Status SetRefMeasure(ControlMeasure *cm),isis_pybind.ControlPoint.set_ref_measure,Y,Measure/int/serial-number overload cluster is exposed
+Mutation/Configuration,Status SetRefMeasure(int index),isis_pybind.ControlPoint.set_ref_measure,Y,Measure/int/serial-number overload cluster is exposed
+Mutation/Configuration,Status SetRefMeasure(QString sn),isis_pybind.ControlPoint.set_ref_measure,Y,Measure/int/serial-number overload cluster is exposed
+Mutation/Configuration,Status SetRejected(bool rejected),isis_pybind.ControlPoint.set_rejected,Y,Direct bool setter binding
+Mutation/Configuration,Status SetIgnored(bool newIgnoreStatus),isis_pybind.ControlPoint.set_ignored,Y,Direct bool setter binding
+Mutation/Configuration,Status SetAdjustedSurfacePoint(SurfacePoint newSurfacePoint),isis_pybind.ControlPoint.set_adjusted_surface_point,Y,Bound with SurfacePoint value semantics
+Mutation/Configuration,Status SetType(PointType newType),isis_pybind.ControlPoint.set_type,Y,Bound against nested PointType enum
+Mutation/Configuration,Status SetAprioriRadiusSource(RadiusSource::Source source),isis_pybind.ControlPoint.set_apriori_radius_source,Y,Bound against nested RadiusSource enum
+Mutation/Configuration,Status SetAprioriRadiusSourceFile(QString sourceFile),isis_pybind.ControlPoint.set_apriori_radius_source_file,Y,QString input adapted from Python str
+Mutation/Configuration,Status SetAprioriSurfacePoint(SurfacePoint aprioriSP),isis_pybind.ControlPoint.set_apriori_surface_point,Y,Bound with SurfacePoint value semantics
+Mutation/Configuration,Status SetAprioriSurfacePointSource(SurfacePointSource::Source source),isis_pybind.ControlPoint.set_apriori_surface_point_source,Y,Bound against nested SurfacePointSource enum
+Mutation/Configuration,Status SetAprioriSurfacePointSourceFile(QString sourceFile),isis_pybind.ControlPoint.set_apriori_surface_point_source_file,Y,QString input adapted from Python str
+Public API,Status ComputeApriori(),isis_pybind.ControlPoint.compute_apriori,Y,Directly bound as compute_apriori()
+Public API,Status ComputeResiduals(),isis_pybind.ControlPoint.compute_residuals,Y,Directly bound as compute_residuals()
+Public API,Status ComputeResiduals_Millimeters(),isis_pybind.ControlPoint.compute_residuals_millimeters,Y,Directly bound as compute_residuals_millimeters()
+Public API,SurfacePoint GetAdjustedSurfacePoint() const,isis_pybind.ControlPoint.get_adjusted_surface_point,Y,Returns SurfacePoint by value
+Public API,SurfacePoint GetBestSurfacePoint() const,isis_pybind.ControlPoint.get_best_surface_point,Y,Returns SurfacePoint by value
+Public API,QString GetChooserName() const,isis_pybind.ControlPoint.get_chooser_name,Y,QString return adapted to Python str
+Public API,QString GetDateTime() const,isis_pybind.ControlPoint.get_date_time,Y,QString return adapted to Python str
+Query,bool IsEditLocked() const,isis_pybind.ControlPoint.is_edit_locked,Y,Bound as is_edit_locked()
+Query,bool IsRejected() const,isis_pybind.ControlPoint.is_rejected,Y,Bound as is_rejected()
+Public API,QString GetId() const,isis_pybind.ControlPoint.get_id,Y,QString return adapted to Python str
+Query,bool IsIgnored() const,isis_pybind.ControlPoint.is_ignored,Y,Bound as is_ignored()
+Query,bool IsValid() const,isis_pybind.ControlPoint.is_valid,Y,Bound as is_valid()
+Query,bool IsInvalid() const,isis_pybind.ControlPoint.is_invalid,Y,Bound as is_invalid()
+Query,bool IsFree() const,isis_pybind.ControlPoint.is_free,Y,Bound as is_free()
+Query,bool IsFixed() const,isis_pybind.ControlPoint.is_fixed,Y,Bound as is_fixed()
+Query,bool HasAprioriCoordinates(),isis_pybind.ControlPoint.has_apriori_coordinates,Y,Bound as has_apriori_coordinates()
+Query,bool IsConstrained(),isis_pybind.ControlPoint.is_constrained,Y,Bound as is_constrained()
+Query,bool IsCoord1Constrained(),isis_pybind.ControlPoint.is_coord1_constrained,Y,Bound as is_coord1_constrained()
+Query,bool IsCoord2Constrained(),isis_pybind.ControlPoint.is_coord2_constrained,Y,Bound as is_coord2_constrained()
+Query,bool IsCoord3Constrained(),isis_pybind.ControlPoint.is_coord3_constrained,Y,Bound as is_coord3_constrained()
+Public API,int NumberOfConstrainedCoordinates(),isis_pybind.ControlPoint.number_of_constrained_coordinates,Y,Bound as number_of_constrained_coordinates()
+Static/Factory,static QString PointTypeToString(PointType type),isis_pybind.ControlPoint.point_type_to_string,Y,Static QString helper adapted to Python str
+Static/Factory,static PointType StringToPointType(QString pointTypeString),isis_pybind.ControlPoint.string_to_point_type,Y,Static enum parser adapted from Python str
+Public API,QString GetPointTypeString() const,isis_pybind.ControlPoint.get_point_type_string,Y,QString return adapted to Python str
+Public API,PointType GetType() const,isis_pybind.ControlPoint.get_type,Y,Returns nested PointType enum
+Static/Factory,static QString RadiusSourceToString(RadiusSource::Source source),isis_pybind.ControlPoint.radius_source_to_string,Y,Static QString helper adapted to Python str
+Static/Factory,static RadiusSource::Source StringToRadiusSource(QString str),isis_pybind.ControlPoint.string_to_radius_source,Y,Static enum parser adapted from Python str
+Public API,QString GetRadiusSourceString() const,isis_pybind.ControlPoint.get_radius_source_string,Y,QString return adapted to Python str
+Static/Factory,static QString SurfacePointSourceToString(SurfacePointSource::Source source),isis_pybind.ControlPoint.surface_point_source_to_string,Y,Static QString helper adapted to Python str
+Static/Factory,static SurfacePointSource::Source StringToSurfacePointSource(QString str),isis_pybind.ControlPoint.string_to_surface_point_source,Y,Static enum parser adapted from Python str
+Public API,QString GetSurfacePointSourceString() const,isis_pybind.ControlPoint.get_surface_point_source_string,Y,QString return adapted to Python str
+Public API,SurfacePoint GetAprioriSurfacePoint() const,isis_pybind.ControlPoint.get_apriori_surface_point,Y,Returns SurfacePoint by value
+Public API,RadiusSource::Source GetAprioriRadiusSource() const,isis_pybind.ControlPoint.get_apriori_radius_source,Y,Returns nested RadiusSource enum
+Query,bool HasAprioriRadiusSourceFile() const,isis_pybind.ControlPoint.has_apriori_radius_source_file,Y,Bound as has_apriori_radius_source_file()
+Public API,QString GetAprioriRadiusSourceFile() const,isis_pybind.ControlPoint.get_apriori_radius_source_file,Y,QString return adapted to Python str
+Public API,SurfacePointSource::Source GetAprioriSurfacePointSource() const,isis_pybind.ControlPoint.get_apriori_surface_point_source,Y,Returns nested SurfacePointSource enum
+Query,bool HasAprioriSurfacePointSourceFile() const,isis_pybind.ControlPoint.has_apriori_surface_point_source_file,Y,Bound as has_apriori_surface_point_source_file()
+Public API,QString GetAprioriSurfacePointSourceFile() const,isis_pybind.ControlPoint.get_apriori_surface_point_source_file,Y,QString return adapted to Python str
+Public API,int GetNumMeasures() const,isis_pybind.ControlPoint.get_num_measures,Y,Bound as get_num_measures()
+Public API,int GetNumValidMeasures() const,isis_pybind.ControlPoint.get_num_valid_measures,Y,Bound as get_num_valid_measures()
+Public API,int GetNumLockedMeasures() const,isis_pybind.ControlPoint.get_num_locked_measures,Y,Bound as get_num_locked_measures()
+Query,bool HasSerialNumber(QString serialNumber) const,isis_pybind.ControlPoint.has_serial_number,Y,QString input adapted from Python str
+Query,bool HasChooserName() const,isis_pybind.ControlPoint.has_chooser_name,Y,Bound as has_chooser_name()
+Query,bool HasDateTime() const,isis_pybind.ControlPoint.has_date_time,Y,Bound as has_date_time()
+Public API,"int IndexOf(ControlMeasure *, bool throws = true) const",isis_pybind.ControlPoint.index_of,Y,Measure and serial-number overloads are exposed
+Public API,"int IndexOf(QString sn, bool throws = true) const",isis_pybind.ControlPoint.index_of,Y,Measure and serial-number overloads are exposed
+Public API,int IndexOfRefMeasure() const,isis_pybind.ControlPoint.index_of_ref_measure,Y,Bound as index_of_ref_measure()
+Query,bool IsReferenceExplicit() const,isis_pybind.ControlPoint.is_reference_explicit,Y,Bound as is_reference_explicit()
+Public API,QString GetReferenceSN() const,isis_pybind.ControlPoint.get_reference_sn,Y,QString return adapted to Python str
+Public API,"void emitMeasureModified(ControlMeasure *measure, ControlMeasure::ModType modType, QVariant oldValue, QVariant newValue)",isis_pybind.ControlPoint.emit_measure_modified,N,QVariant-bearing signal helper remains intentionally unbound; no stable Python-facing contract yet
+Public API,Statistics GetStatistic(long dataType) const,isis_pybind.ControlPoint.get_statistic,Y,Bound for long dataType overload
+Public API,QList< ControlMeasure * > getMeasures(bool excludeIgnored = false) const,isis_pybind.ControlPoint.get_measures,Y,QList<ControlMeasure *> adapted to Python list with reference_internal lifetime
+Public API,QList< QString > getCubeSerialNumbers() const,isis_pybind.ControlPoint.get_cube_serial_numbers,Y,QList<QString> adapted to Python list[str]
+Public API,void ZeroNumberOfRejectedMeasures(),isis_pybind.ControlPoint.zero_number_of_rejected_measures,Y,Bound as zero_number_of_rejected_measures()
+Mutation/Configuration,void SetNumberOfRejectedMeasures(int numRejected),isis_pybind.ControlPoint.set_number_of_rejected_measures,Y,Bound as set_number_of_rejected_measures(num_rejected)
+Public API,int GetNumberOfRejectedMeasures() const,isis_pybind.ControlPoint.get_number_of_rejected_measures,Y,Bound as get_number_of_rejected_measures()
+Public API,double GetSampleResidualRms() const,isis_pybind.ControlPoint.get_sample_residual_rms,Y,Bound as get_sample_residual_rms()
+Public API,double GetLineResidualRms() const,isis_pybind.ControlPoint.get_line_residual_rms,Y,Bound as get_line_residual_rms()
+Public API,double GetResidualRms() const,isis_pybind.ControlPoint.get_residual_rms,Y,Bound as get_residual_rms()
+Mutation/Configuration,void ClearJigsawRejected(),isis_pybind.ControlPoint.clear_jigsaw_rejected,Y,Bound as clear_jigsaw_rejected()

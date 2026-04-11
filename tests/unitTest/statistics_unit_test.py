@@ -6,6 +6,7 @@ Created: 2026-03-21
 Last Modified: 2026-04-11
 Updated: 2026-04-10  Geng Xun added PrincipalComponentAnalysis and OverlapStatistics unit tests.
 Updated: 2026-04-11  Geng Xun added ImageHistogram explicit add_data/remove_data/bin_range coverage.
+Updated: 2026-04-11  Geng Xun aligned ImageHistogram bin_range edge assertions with upstream half-bin extension behavior.
 """
 
 import unittest
@@ -261,15 +262,16 @@ class ImageHistogramUnitTest(unittest.TestCase):
         self.assertLess(low, high)
 
     def test_bin_range_all_bins_partition_range(self):
-        """bin_range low/high values span the full histogram range."""
+        """ImageHistogram edge bins extend half a bin beyond the nominal range."""
         minimum = 0.0
         maximum = 10.0
         bins = 10
         h = ip.ImageHistogram(minimum, maximum, bins)
         first_low, _ = h.bin_range(0)
         _, last_high = h.bin_range(bins - 1)
-        self.assertAlmostEqual(first_low, minimum, places=6)
-        self.assertAlmostEqual(last_high, maximum, places=6)
+        expected_bin_size = (maximum - minimum) / (bins - 1)
+        self.assertAlmostEqual(first_low, minimum - expected_bin_size / 2.0, places=6)
+        self.assertAlmostEqual(last_high, maximum + expected_bin_size / 2.0, places=6)
 
 
 if __name__ == "__main__":

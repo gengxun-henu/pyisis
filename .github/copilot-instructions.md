@@ -28,8 +28,10 @@ All paths below are relative to the repository root unless noted otherwise.
 ## Qt / QObject binding boundary
 
 - For QObject-derived ISIS classes, default to **not** binding Qt `signals`/`slots` into Python unless the user explicitly asks for that behavior or a Python-side Qt integration use case clearly requires it.
+- Treat Qt signal-emitter helpers and notification plumbing as non-goals for default bindings. This includes `emit*`-style methods and signatures whose main purpose is dispatching change events, such as `emitMeasureModified(ControlMeasure *measure, ControlMeasure::ModType modType, QVariant oldValue, QVariant newValue)`.
 - Prefer exposing stable data methods, mutators, queries, and enums over raw Qt observer/event surfaces.
 - Treat Qt signal binding as a higher-complexity integration task because it can introduce callback lifetime, `QVariant` conversion, event-loop, and GIL/threading issues.
+- If a candidate API mainly exists to forward Qt notifications, carries `QVariant` payloads, or mirrors internal observer flow rather than stable business logic, do **not** bind it to Python by default.
 - If Python needs change notifications later, prefer a small Python-friendly wrapper or callback API over directly mirroring every upstream Qt signal.
 
 ## Additional instructions to follow

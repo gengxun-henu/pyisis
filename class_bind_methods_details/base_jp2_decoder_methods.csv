@@ -2,15 +2,15 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 JP2Decoder,High Level Cube I/O,isis/src/base/objs/JP2Decoder/JP2Decoder.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,JP2Decoder,isis_pybind.JP2Decoder,N,Python class symbol not found in current binding files
-Construction/Enum,JP2Decoder(),isis_pybind.JP2Decoder(),N,Constructor binding not detected in current binding files
-Public API,JP2Error *kakadu_error() const { return Kakadu_Error,isis_pybind.JP2Decoder.kakadu_error,N,Method not found in current binding files
-Read/Write IO,void OpenFile(),isis_pybind.JP2Decoder.open_file,N,Method not found in current binding files
-Public API,inline int GetSampleDimension() const { return ((int) p_numSamples),isis_pybind.JP2Decoder.get_sample_dimension,N,Method not found in current binding files
-Public API,inline int GetLineDimension() const { return ((int) p_numLines),isis_pybind.JP2Decoder.get_line_dimension,N,Method not found in current binding files
-Public API,inline int GetBandDimension() const { return ((int) p_numBands),isis_pybind.JP2Decoder.get_band_dimension,N,Method not found in current binding files
-Public API,inline int GetPixelBytes() const { return (p_pixelBytes),isis_pybind.JP2Decoder.get_pixel_bytes,N,Method not found in current binding files
-Public API,inline bool GetSignedData() const { return (p_signedData),isis_pybind.JP2Decoder.get_signed_data,N,Method not found in current binding files
+Class Symbol,JP2Decoder,isis_pybind.JP2Decoder,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Python class symbol not found in current binding files
+Construction/Enum,JP2Decoder(),isis_pybind.JP2Decoder(),Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Constructor binding not detected in current binding files
+Public API,JP2Error *kakadu_error() const { return Kakadu_Error,isis_pybind.JP2Decoder.kakadu_error,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Read/Write IO,void OpenFile(),isis_pybind.JP2Decoder.open_file,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Public API,inline int GetSampleDimension() const { return ((int) p_numSamples),isis_pybind.JP2Decoder.get_sample_dimension,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Public API,inline int GetLineDimension() const { return ((int) p_numLines),isis_pybind.JP2Decoder.get_line_dimension,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Public API,inline int GetBandDimension() const { return ((int) p_numBands),isis_pybind.JP2Decoder.get_band_dimension,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Public API,inline int GetPixelBytes() const { return (p_pixelBytes),isis_pybind.JP2Decoder.get_pixel_bytes,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Public API,inline bool GetSignedData() const { return (p_signedData),isis_pybind.JP2Decoder.get_signed_data,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
 Read/Write IO,void Read(unsigned char **inbuf),isis_pybind.JP2Decoder.read,N,Method not found in current binding files
 Read/Write IO,void Read(short int **inbuf),isis_pybind.JP2Decoder.read,N,Method not found in current binding files
-Static/Factory,static bool IsJP2(QString filename),isis_pybind.JP2Decoder.is_jp2,N,Method not found in current binding files
+Static/Factory,static bool IsJP2(QString filename),isis_pybind.JP2Decoder.is_jp2,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files

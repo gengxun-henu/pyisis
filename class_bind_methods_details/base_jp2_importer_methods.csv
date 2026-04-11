@@ -2,8 +2,8 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 JP2Importer,High Level Cube I/O,isis/src/base/objs/JP2Importer/JP2Importer.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,JP2Importer,isis_pybind.JP2Importer,N,Python class symbol not found in current binding files
-Construction/Enum,JP2Importer(),isis_pybind.JP2Importer(),N,Constructor binding not detected in current binding files
-Query,virtual bool isGrayscale() const,isis_pybind.JP2Importer.is_grayscale,N,Method not found in current binding files
-Query,virtual bool isRgb() const,isis_pybind.JP2Importer.is_rgb,N,Method not found in current binding files
-Query,virtual bool isArgb() const,isis_pybind.JP2Importer.is_argb,N,Method not found in current binding files
+Class Symbol,JP2Importer,isis_pybind.JP2Importer,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Python class symbol not found in current binding files
+Construction/Enum,JP2Importer(),isis_pybind.JP2Importer(),Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Constructor binding not detected in current binding files
+Query,virtual bool isGrayscale() const,isis_pybind.JP2Importer.is_grayscale,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Query,virtual bool isRgb() const,isis_pybind.JP2Importer.is_rgb,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Query,virtual bool isArgb() const,isis_pybind.JP2Importer.is_argb,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files

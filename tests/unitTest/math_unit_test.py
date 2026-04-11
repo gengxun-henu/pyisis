@@ -6,7 +6,7 @@ and SurfaceModel
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-10
+Last Modified: 2026-04-11
 Updated: 2026-03-29  Geng Xun added regression coverage for Calculator, linear algebra, polynomial, and infix/postfix bindings.
 Updated: 2026-04-09  Geng Xun added Ransac helper regression coverage for packed symmetric matrix utilities.
 Updated: 2026-04-09  Geng Xun added SurfaceModel focused unit tests.
@@ -15,6 +15,7 @@ Updated: 2026-04-10  Geng Xun added FourierTransform unit tests.
 Updated: 2026-04-10  Geng Xun added SparseBlockMatrix unit tests for construction, block insertion, counting, and get_block.
 Updated: 2026-04-10  Geng Xun added NumericalApproximation focused unit tests.
 Updated: 2026-04-10  Geng Xun aligned FourierTransform tests with complex-valued Python API and upstream BitReverse semantics.
+Updated: 2026-04-11  Geng Xun aligned NumericalApproximation.contains() expectations with upstream exact-x membership semantics.
 """
 import unittest
 import math
@@ -1318,10 +1319,13 @@ class NumericalApproximationUnitTest(unittest.TestCase):
         self.assertAlmostEqual(na.domain_maximum(), 3.0)
 
     def test_contains(self):
-        """contains() returns True inside domain and False outside."""
+        """contains() returns True only for x values explicitly present in the dataset."""
         x, y = self._make_linear_data()
         na = ip.NumericalApproximation(x, y, ip.NumericalApproximationInterpType.Linear)
-        self.assertTrue(na.contains(1.5))
+        self.assertGreaterEqual(1.5, na.domain_minimum())
+        self.assertLessEqual(1.5, na.domain_maximum())
+        self.assertTrue(na.contains(1.0))
+        self.assertFalse(na.contains(1.5))
         self.assertFalse(na.contains(10.0))
 
     # --- Size and data addition ---

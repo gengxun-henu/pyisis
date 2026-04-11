@@ -2,6 +2,11 @@
 
 ## 2026-04-10
 
+- PolygonTools smoke/unit-test blocker fixed by aligning the Python export surface with the already-implemented utility wrappers:
+  - Updated `src/base/bind_base_utility.cpp` so `PolygonTools` is now bound as a real Python class with `PolygonTools()`, `PolygonTools.equal(...)`, `PolygonTools.reduce_precision(...)`, `PolygonTools.decimal_place(...)`, and `PolygonTools.gml_schema()`, while preserving the older module-level aliases `polygon_equal`, `polygon_reduce_precision`, `polygon_decimal_place`, and `polygon_gml_schema` for compatibility.
+  - Updated `python/isis_pybind/__init__.py` to re-export `PolygonTools` at the package top level so `ip.PolygonTools` is present in both focused unit tests and `tests/smoke_import.py`.
+  - Synced `todo_pybind11.csv`, `class_bind_methods_details/base_polygon_tools_methods.csv`, and `class_bind_methods_details/methods_inventory_summary.csv` so the ledger now reflects the actual Python class symbol instead of only the helper functions.
+
 - Python unit-test recovery after the `Area3D` build hotfix completed and the full Python validation chain is green again:
   - Updated `python/isis_pybind/__init__.py` to actually import several symbols that were already bound and already listed in `__all__`, including `Area3D`, `PushFrameCameraDetectorMap`, `RollingShutterCameraDetectorMap`, `VariableLineScanCameraDetectorMap`, `DawnFcDistortionMap`, `KaguyaMiCameraDistortionMap`, `KaguyaTcCameraDistortionMap`, `Gruen`, `AdaptiveGruen`, `OverlapStatistics`, and `PrincipalComponentAnalysis`.
   - Updated `CMakeLists.txt` so `build/python/isis_pybind/__init__.py` and `LICENSE` are synchronized during normal builds via `sync_python_package_files`, instead of only being copied at configure time. This fixed the stale `build/python` package problem that caused source-level Python export fixes to be invisible to `ctest` until a manual reconfigure.

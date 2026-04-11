@@ -3,6 +3,7 @@
 // Updated: 2026-04-08  Geng Xun refined Stereo.elevation camera-state validation and added Angle arithmetic/comparison helpers
 // Updated: 2026-04-10  Geng Xun added Area3D binding for 3D volume geometry
 // Updated: 2026-04-10  Geng Xun fixed Area3D __repr__ lambda return-type consistency for successful pybind builds
+// Updated: 2026-04-11  Geng Xun restored legacy class-level Distance/Displacement unit aliases for older Python call sites.
 // Purpose: pybind11 bindings for ISIS geometry primitives and resampling helpers including Angle, Area3D, Stereo, Distance, Latitude, Longitude, Transform, Interpolator, Enlarge, and Reduce
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -282,6 +283,11 @@ void bind_base_geometry(py::module_ &m) {
       .value("Pixels", Isis::Distance::Pixels)
       .value("SolarRadii", Isis::Distance::SolarRadii);
 
+  distance.attr("Meters") = py::cast(Isis::Distance::Meters);
+  distance.attr("Kilometers") = py::cast(Isis::Distance::Kilometers);
+  distance.attr("Pixels") = py::cast(Isis::Distance::Pixels);
+  distance.attr("SolarRadii") = py::cast(Isis::Distance::SolarRadii);
+
   distance
       .def(py::init<>())
       .def(py::init<double, Isis::Distance::Units>(), py::arg("distance"), py::arg("unit"))
@@ -307,6 +313,10 @@ void bind_base_geometry(py::module_ &m) {
       .value("Meters", Isis::Displacement::Meters)
       .value("Kilometers", Isis::Displacement::Kilometers)
       .value("Pixels", Isis::Displacement::Pixels);
+
+  displacement.attr("Meters") = py::cast(Isis::Displacement::Meters);
+  displacement.attr("Kilometers") = py::cast(Isis::Displacement::Kilometers);
+  displacement.attr("Pixels") = py::cast(Isis::Displacement::Pixels);
 
   displacement
       .def(py::init<>())

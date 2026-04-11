@@ -343,7 +343,7 @@ Utility,LineEquation,已转换,2026-03-30 已在 bind_base_utility.cpp 暴露默
 Utility,Longitude,已转换,
 Utility,Message,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 以 `ip.Message` 子模块暴露全部标准消息模板 helper，并补 focused 单测与 smoke 覆盖
 Utility,Pixel,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 Pixel 构造/accessors/转换方法/静态 special-pixel 谓词；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
-Utility,PolygonTools,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 PolygonTools（静态：Equal/ReducePrecision/DecimalPlace/GMLSchema）；focused 单测在 batch3_unit_test.py
+Utility,PolygonTools,已转换,2026-04-11 已在 src/base/bind_base_utility.cpp 将 PolygonTools 修正为真实 Python 类符号并暴露 static：equal/reduce_precision/decimal_place/gml_schema；保留旧 module-level helper alias；focused 单测在 batch3_unit_test.py，smoke 已恢复
 Utility,Progress,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 完成 py::class_ 绑定；focused 单测在 tests/unitTest/progress_unit_test.py；smoke 已补符号
 Utility,Resource,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 完成 PVL/name 核心接口绑定（跳过 GisGeometry/QVariant asset）；focused 单测在 tests/unitTest/resource_unit_test.py；smoke 已补符号
 Utility,Selection,未转换,抽象基类/纯虚接口

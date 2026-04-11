@@ -28,6 +28,8 @@
 // Updated: 2026-04-11  Geng Xun replaced non-existent BundleSolutionInfo helper calls with safe wrappers around the actual ISIS 9.0.0 API.
 // Updated: 2026-04-11  Geng Xun added null-safe observation wrappers so default-constructed bundle observations return empty Python values instead of dereferencing uninitialized ISIS state.
 // Updated: 2026-04-11  Geng Xun fixed set_output_statistics to use setOutputStatisticsForPyBind; wrapped bundle_settings to dereference QSharedPointer; re-enabled bundle_results via cloneBundleResultsForPyBind.
+// Updated: 2026-04-11  Geng Xun aligned BundleSolutionInfo bindings with the active conda ISIS API by using setOutputStatistics(...) and value-returning bundleResults().
+// Updated: 2026-04-11  Geng Xun replaced value-returning BundleSolutionInfo.bundleResults() exposure with a Python-safe cloned BundleResults wrapper to avoid segfaults under the active conda ISIS build.
 // Purpose: pybind11 bindings for advanced ISIS bundle-adjustment classes
 
 #include <memory>
@@ -71,10 +73,13 @@
 #include "helpers.h"
 
 #include "BundleResults.h"
+#define private public
 #include "BundleSolutionInfo.h"
+#undef private
 
 namespace py = pybind11;
 
+// Updated: 2026-04-11  Geng Xun bypassed BundleSolutionInfo's QObject-hostile by-value BundleResults copy path by cloning m_statisticsResults directly inside local pybind wrappers.
 namespace
 {
      /**
@@ -166,6 +171,98 @@ namespace
      std::string bundleSolutionInfoInputLidarDataFileName(const Isis::BundleSolutionInfo &self)
      {
           return qStringToStdString(self.inputLidarDataFileName());
+     }
+
+     std::unique_ptr<Isis::BundleResults> cloneBundleResultsForPython(const Isis::BundleResults &source)
+     {
+          auto cloned = std::make_unique<Isis::BundleResults>();
+          cloned->initialize();
+
+          cloned->setRmsImageResidualLists(
+               source.rmsImageLineResiduals(),
+               source.rmsImageSampleResiduals(),
+               source.rmsImageResiduals());
+          cloned->setRmsLidarImageResidualLists(
+               source.rmsLidarImageLineResiduals(),
+               source.rmsLidarImageSampleResiduals(),
+               source.rmsLidarImageResiduals());
+
+          cloned->setRmsXYResiduals(source.rmsRx(), source.rmsRy(), source.rmsRxy());
+          cloned->setSigmaCoord1Range(
+               source.minSigmaCoord1Distance(),
+               source.maxSigmaCoord1Distance(),
+               source.minSigmaCoord1PointId(),
+               source.maxSigmaCoord1PointId());
+          cloned->setSigmaCoord2Range(
+               source.minSigmaCoord2Distance(),
+               source.maxSigmaCoord2Distance(),
+               source.minSigmaCoord2PointId(),
+               source.maxSigmaCoord2PointId());
+          cloned->setSigmaCoord3Range(
+               source.minSigmaCoord3Distance(),
+               source.maxSigmaCoord3Distance(),
+               source.minSigmaCoord3PointId(),
+               source.maxSigmaCoord3PointId());
+          cloned->setRmsFromSigmaStatistics(
+               source.sigmaCoord1StatisticsRms(),
+               source.sigmaCoord2StatisticsRms(),
+               source.sigmaCoord3StatisticsRms());
+
+          cloned->setRejectionLimit(source.rejectionLimit());
+          cloned->setNumberRejectedObservations(source.numberRejectedObservations());
+          cloned->setNumberImageObservations(source.numberImageObservations());
+          cloned->setNumberLidarImageObservations(source.numberLidarImageObservations());
+          cloned->setNumberObservations(source.numberObservations());
+          cloned->setNumberImageParameters(source.numberImageParameters());
+          cloned->setNumberConstrainedPointParameters(source.numberConstrainedPointParameters());
+          cloned->resetNumberConstrainedImageParameters();
+          cloned->incrementNumberConstrainedImageParameters(source.numberConstrainedImageParameters());
+          cloned->resetNumberConstrainedTargetParameters();
+          cloned->incrementNumberConstrainedTargetParameters(source.numberConstrainedTargetParameters());
+          cloned->setNumberLidarRangeConstraints(source.numberLidarRangeConstraintEquations());
+          cloned->setNumberUnknownParameters(source.numberUnknownParameters());
+          cloned->setDegreesOfFreedom(source.degreesOfFreedom());
+          cloned->setSigma0(source.sigma0());
+          cloned->setElapsedTime(source.elapsedTime());
+          cloned->setElapsedTimeErrorProp(source.elapsedTimeErrorProp());
+          cloned->setConverged(source.converged());
+          cloned->setIterations(source.iterations());
+          cloned->setObservations(source.observations());
+
+          for (int i = 0; i < source.numberFixedPoints(); i++)
+          {
+               cloned->incrementFixedPoints();
+          }
+          for (int i = 0; i < source.numberHeldImages(); i++)
+          {
+               cloned->incrementHeldImages();
+          }
+          for (int i = 0; i < source.numberIgnoredPoints(); i++)
+          {
+               cloned->incrementIgnoredPoints();
+          }
+
+          return cloned;
+     }
+
+     std::unique_ptr<Isis::BundleResults> bundleSolutionInfoBundleResultsForPython(Isis::BundleSolutionInfo &self)
+     {
+          if (!self.m_statisticsResults)
+          {
+               throw Isis::IException(Isis::IException::Unknown,
+                                      "Bundle results are NULL.",
+                                      _FILEINFO_);
+          }
+
+          return cloneBundleResultsForPython(*self.m_statisticsResults);
+     }
+
+     void bundleSolutionInfoSetOutputStatisticsForPython(
+          Isis::BundleSolutionInfo &self,
+          const Isis::BundleResults &statisticsResults)
+     {
+          delete self.m_statisticsResults;
+          self.m_statisticsResults = cloneBundleResultsForPython(statisticsResults).release();
      }
 
      std::vector<std::string> csmBundleObservationParameterListSafe(Isis::CsmBundleObservation &self)
@@ -608,8 +705,8 @@ void bind_bundle_advanced(py::module_ &m)
               { self.setRunTime(stdStringToQString(run_time)); }, py::arg("run_time"))
          .def("set_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setName(stdStringToQString(name)); }, py::arg("name"))
-         .def("set_output_statistics", [](Isis::BundleSolutionInfo &self, const Isis::BundleResults &statistics_results)
-              { self.setOutputStatisticsForPyBind(statistics_results); }, py::arg("statistics_results"))
+         .def("set_output_statistics", &bundleSolutionInfoSetOutputStatisticsForPython,
+              py::arg("statistics_results"))
          .def("set_output_control_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setOutputControlName(stdStringToQString(name)); }, py::arg("name"))
          .def("id", [](const Isis::BundleSolutionInfo &self)
@@ -625,15 +722,8 @@ void bind_bundle_advanced(py::module_ &m)
               if (sp) return *sp;
               return Isis::BundleSettings();
          })
-         .def("bundle_results", [](Isis::BundleSolutionInfo &self) -> Isis::BundleResults * {
-              Isis::BundleResults *results = self.cloneBundleResultsForPyBind();
-              if (!results) {
-                  throw Isis::IException(Isis::IException::Unknown,
-                                         "Bundle results are NULL.",
-                                         _FILEINFO_);
-              }
-              return results;
-         }, py::return_value_policy::take_ownership)
+         .def("bundle_results", &bundleSolutionInfoBundleResultsForPython,
+              py::return_value_policy::take_ownership)
          .def("run_time", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.runTime()); })
          .def("name", [](const Isis::BundleSolutionInfo &self)

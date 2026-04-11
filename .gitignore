@@ -7,3 +7,4 @@ doc_pybind11_learning/
 *.log
 __pycache__/
 reference/NO-USE*
+.github/README.md

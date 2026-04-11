@@ -2,5 +2,5 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 ImagePt,SensorUtilities,N/A,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,ISIS 同级 SensorUtilities 库；轻量值类型
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ImagePt,isis_pybind.ImagePt,N,Python class symbol not found in current binding files; ISIS 同级 SensorUtilities 库；轻量值类型
-Public API,Header not located,isis_pybind.ImagePt,N,Unable to locate the header automatically
+Class Symbol,ImagePt,isis_pybind.ImagePt,Y,2026-04-11 台账同步；已在 src/bind_sensor.cpp 暴露; Python class symbol not found in current binding files; ISIS 同级 SensorUtilities 库；轻量值类型
+Public API,Header not located,isis_pybind.ImagePt,Y,2026-04-11 台账同步；已在 src/bind_sensor.cpp 暴露; Unable to locate the header automatically

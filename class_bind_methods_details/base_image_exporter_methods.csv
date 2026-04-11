@@ -2,15 +2,15 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 ImageExporter,High Level Cube I/O,isis/src/base/objs/ImageExporter/ImageExporter.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ImageExporter,isis_pybind.ImageExporter,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
+Class Symbol,ImageExporter,isis_pybind.ImageExporter,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Python class symbol not found in current binding files; 抽象基类/纯虚接口
 Construction/Enum,ImageExporter(),isis_pybind.ImageExporter(),N,抽象基类/纯虚接口
 Read/Write IO,"virtual void write(FileName outputName, int quality=100, QString compression=""none"", UserInterface *ui = nullptr)",isis_pybind.ImageExporter.write,N,抽象基类/纯虚接口
-Public API,int samples() const,isis_pybind.ImageExporter.samples,N,抽象基类/纯虚接口
-Public API,int lines() const,isis_pybind.ImageExporter.lines,N,抽象基类/纯虚接口
-Public API,int bands() const,isis_pybind.ImageExporter.bands,N,抽象基类/纯虚接口
-Public API,double inputMinimum(int channel) const,isis_pybind.ImageExporter.input_minimum,N,抽象基类/纯虚接口
-Public API,double inputMaximum(int channel) const,isis_pybind.ImageExporter.input_maximum,N,抽象基类/纯虚接口
-Mutation/Configuration,"void setOutputPixelRange(double outputPixelMinimum, double outputPixelMaximum)",isis_pybind.ImageExporter.set_output_pixel_range,N,抽象基类/纯虚接口
+Public API,int samples() const,isis_pybind.ImageExporter.samples,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; 抽象基类/纯虚接口
+Public API,int lines() const,isis_pybind.ImageExporter.lines,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; 抽象基类/纯虚接口
+Public API,int bands() const,isis_pybind.ImageExporter.bands,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; 抽象基类/纯虚接口
+Public API,double inputMinimum(int channel) const,isis_pybind.ImageExporter.input_minimum,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; 抽象基类/纯虚接口
+Public API,double inputMaximum(int channel) const,isis_pybind.ImageExporter.input_maximum,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; 抽象基类/纯虚接口
+Mutation/Configuration,"void setOutputPixelRange(double outputPixelMinimum, double outputPixelMaximum)",isis_pybind.ImageExporter.set_output_pixel_range,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; 抽象基类/纯虚接口
 Mutation/Configuration,virtual void setGrayscale(ExportDescription &desc) = 0,isis_pybind.ImageExporter.set_grayscale,N,抽象基类/纯虚接口
 Mutation/Configuration,virtual void setRgb(ExportDescription &desc) = 0,isis_pybind.ImageExporter.set_rgb,N,抽象基类/纯虚接口
 Mutation/Configuration,virtual void setRgba(ExportDescription &desc) = 0,isis_pybind.ImageExporter.set_rgba,N,抽象基类/纯虚接口

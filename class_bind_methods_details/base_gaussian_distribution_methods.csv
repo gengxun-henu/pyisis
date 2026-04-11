@@ -8,4 +8,4 @@ Public API,double Probability(const double value),isis_pybind.GaussianDistributi
 Public API,double CumulativeDistribution(const double value),isis_pybind.GaussianDistribution.cumulative_distribution,Y,Current Python name
 Public API,double InverseCumulativeDistribution(const double percent),isis_pybind.GaussianDistribution.inverse_cumulative_distribution,Y,Current Python name
 Public API,inline double Mean() const { return p_mean,isis_pybind.GaussianDistribution.mean,Y,Current Python name
-Public API,inline double StandardDeviation() const { return p_stdev,isis_pybind.GaussianDistribution.standard_deviation,N,Method not found in current binding files
+Public API,inline double StandardDeviation() const { return p_stdev,isis_pybind.GaussianDistribution.distribution_standard_deviation,Y,2026-04-11 已在 bind_statistics.cpp 暴露为 distribution_standard_deviation

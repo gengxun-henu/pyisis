@@ -21,7 +21,7 @@ Public API,int DayOfYear() const,isis_pybind.iTime.day_of_year,Y,Current Python 
 Public API,QString EtString() const,isis_pybind.iTime.et_string,Y,Current Python name
 Public API,double Et() const { return p_et,isis_pybind.iTime.et,Y,Current Python name
 Public API,QString UTC(int precision=8) const,isis_pybind.iTime.utc,Y,Current Python name
-Static/Factory,static QString CurrentGMT(),isis_pybind.iTime.current_gmt,N,Method not found in current binding files
-Static/Factory,static QString CurrentLocalTime(),isis_pybind.iTime.current_local_time,N,Method not found in current binding files
+Static/Factory,static QString CurrentGMT(),isis_pybind.iTime.current_gmt,Y,2026-04-11 已在 bind_base_support.cpp 暴露为 def_static current_gmt
+Static/Factory,static QString CurrentLocalTime(),isis_pybind.iTime.current_local_time,Y,2026-04-11 已在 bind_base_support.cpp 暴露为 def_static current_local_time
 Mutation/Configuration,void setEt(double et),isis_pybind.iTime.set_et,Y,Current Python name
 Mutation/Configuration,void setUtc(QString utcString),isis_pybind.iTime.set_utc,Y,Current Python name

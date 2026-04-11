@@ -253,7 +253,12 @@ void bind_base_pvl(py::module_ &m) {
       .def("__str__", &pvlLikeToString<Isis::PvlGroup>)
       .def("__repr__", [](Isis::PvlGroup &self) {
         return "PvlGroup(" + pvlLikeToString(self) + ")";
-      });
+      })
+      // Added: 2026-04-11 - expose validateGroup
+      .def("validate_group",
+           &Isis::PvlGroup::validateGroup,
+           py::arg("pvl_group"),
+           "Validate keywords in the given PvlGroup against this template group.");
 
   py::class_<Isis::PvlObject, Isis::PvlContainer> pvl_object(m, "PvlObject");
 

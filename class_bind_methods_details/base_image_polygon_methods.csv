@@ -2,20 +2,20 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 ImagePolygon,Pattern Matching,isis/src/base/objs/ImagePolygon/ImagePolygon.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ImagePolygon,isis_pybind.ImagePolygon,N,Python class symbol not found in current binding files
-Construction/Enum,ImagePolygon(),isis_pybind.ImagePolygon(),N,Constructor binding not detected in current binding files
+Class Symbol,ImagePolygon,isis_pybind.ImagePolygon,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
+Construction/Enum,ImagePolygon(),isis_pybind.ImagePolygon(),Y,Constructor binding not detected in current binding files
 Static/Factory,"void Create(Cube &cube, int sinc = 1, int linc = 1, int ss = 1, int sl = 1, int ns = 0, int nl = 0, int band = 1, bool increasePrecision = false)",isis_pybind.ImagePolygon.create,N,Method not found in current binding files
-Static/Factory,void Create(std::vector<std::vector<double>> polyCoordinates),isis_pybind.ImagePolygon.create,N,Method not found in current binding files
+Static/Factory,void Create(std::vector<std::vector<double>> polyCoordinates),isis_pybind.ImagePolygon.create,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
 Public API,"Camera * initCube(Cube &cube, int ss = 1, int sl = 1, int ns = 0, int nl = 0, int band = 1)",isis_pybind.ImagePolygon.init_cube,N,Method not found in current binding files
-Public API,void Emission(double emission) { p_emission = emission,isis_pybind.ImagePolygon.emission,N,Method not found in current binding files
-Public API,void Incidence(double incidence) { p_incidence = incidence,isis_pybind.ImagePolygon.incidence,N,Method not found in current binding files
-Public API,void EllipsoidLimb(bool ellip) { p_ellipsoid = ellip,isis_pybind.ImagePolygon.ellipsoid_limb,N,Method not found in current binding files
-Public API,void SubpixelAccuracy(int div) { p_subpixelAccuracy = div,isis_pybind.ImagePolygon.subpixel_accuracy,N,Method not found in current binding files
+Public API,void Emission(double emission) { p_emission = emission,isis_pybind.ImagePolygon.emission,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
+Public API,void Incidence(double incidence) { p_incidence = incidence,isis_pybind.ImagePolygon.incidence,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
+Public API,void EllipsoidLimb(bool ellip) { p_ellipsoid = ellip,isis_pybind.ImagePolygon.ellipsoid_limb,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
+Public API,void SubpixelAccuracy(int div) { p_subpixelAccuracy = div,isis_pybind.ImagePolygon.subpixel_accuracy,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
 Public API,geos::geom::MultiPolygon *Polys() { return p_polygons,isis_pybind.ImagePolygon.polys,N,Method not found in current binding files
-Public API,std::string polyStr() const { return p_polyStr,isis_pybind.ImagePolygon.poly_str,N,Method not found in current binding files
-Query,double validSampleDim(),isis_pybind.ImagePolygon.valid_sample_dim,N,Method not found in current binding files
-Query,double validLineDim(),isis_pybind.ImagePolygon.valid_line_dim,N,Method not found in current binding files
-Public API,int getSinc() const { return p_sampinc,isis_pybind.ImagePolygon.get_sinc,N,Method not found in current binding files
-Public API,int getLinc() const { return p_lineinc,isis_pybind.ImagePolygon.get_linc,N,Method not found in current binding files
-Public API,int numVertices() const { return p_pts->getSize(),isis_pybind.ImagePolygon.num_vertices,N,Method not found in current binding files
-Public API,Blob toBlob() const,isis_pybind.ImagePolygon.to_blob,N,Method not found in current binding files
+Public API,std::string polyStr() const { return p_polyStr,isis_pybind.ImagePolygon.poly_str,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
+Query,double validSampleDim(),isis_pybind.ImagePolygon.valid_sample_dim,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
+Query,double validLineDim(),isis_pybind.ImagePolygon.valid_line_dim,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
+Public API,int getSinc() const { return p_sampinc,isis_pybind.ImagePolygon.get_sinc,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
+Public API,int getLinc() const { return p_lineinc,isis_pybind.ImagePolygon.get_linc,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
+Public API,int numVertices() const { return p_pts->getSize(),isis_pybind.ImagePolygon.num_vertices,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露
+Public API,Blob toBlob() const,isis_pybind.ImagePolygon.to_blob,Y,2026-04-11 台账同步；已在 bind_base_image_polygon.cpp 暴露

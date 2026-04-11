@@ -1,47 +1,47 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-NumericalApproximation,Math,isis/src/base/objs/NumericalApproximation/NumericalApproximation.h,src/base/bind_base_math.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+NumericalApproximation,Math,isis/src/base/objs/NumericalApproximation/NumericalApproximation.h,src/base/bind_base_math.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,非抽象类；已在 src/base/bind_base_math.cpp 完成核心绑定
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,NumericalApproximation,isis_pybind.NumericalApproximation,Y,Bound in src/base/bind_base_math.cpp; 抽象基类/纯虚接口
-Construction/Enum,"InterpType enum (Linear, Polynomial, PolynomialNeville, CubicNatural, CubicClamped, CubicNatPeriodic, CubicNeighborhood, CubicHermite, Akima, AkimaPeriodic)",isis_pybind.NumericalApproximation.InterpType,N,抽象基类/纯虚接口
-Construction/Enum,"ExtrapType enum (ThrowError, Extrapolate, NearestEndpoint)",isis_pybind.NumericalApproximation.ExtrapType,N,抽象基类/纯虚接口
-Construction/Enum,NumericalApproximation(),isis_pybind.NumericalApproximation(),N,抽象基类/纯虚接口
-Public API,string Name() const,isis_pybind.NumericalApproximation.name,N,抽象基类/纯虚接口
-Public API,inline InterpType InterpolationType() { return (p_itype),isis_pybind.NumericalApproximation.interpolation_type,N,抽象基类/纯虚接口
-Public API,int MinPoints(),isis_pybind.NumericalApproximation.min_points,N,抽象基类/纯虚接口
-Public API,int MinPoints(NumericalApproximation::InterpType itype),isis_pybind.NumericalApproximation.min_points,N,抽象基类/纯虚接口
-Mutation/Configuration,"void AddData(const double x, const double y)",isis_pybind.NumericalApproximation.add_data,N,抽象基类/纯虚接口
-Mutation/Configuration,"void AddData(unsigned int n, double *x, double *y)",isis_pybind.NumericalApproximation.add_data,N,抽象基类/纯虚接口
-Mutation/Configuration,"void AddData(const vector <double> &x, const vector <double> &y)",isis_pybind.NumericalApproximation.add_data,N,抽象基类/纯虚接口
-Mutation/Configuration,"void SetCubicClampedEndptDeriv(const double yp1, const double ypn)",isis_pybind.NumericalApproximation.set_cubic_clamped_endpt_deriv,N,抽象基类/纯虚接口
-Mutation/Configuration,"void AddCubicHermiteDeriv(unsigned int n, double *fprimeOfx)",isis_pybind.NumericalApproximation.add_cubic_hermite_deriv,N,抽象基类/纯虚接口
-Mutation/Configuration,void AddCubicHermiteDeriv(const vector <double> &fprimeOfx),isis_pybind.NumericalApproximation.add_cubic_hermite_deriv,N,抽象基类/纯虚接口
-Mutation/Configuration,void AddCubicHermiteDeriv(const double fprimeOfx),isis_pybind.NumericalApproximation.add_cubic_hermite_deriv,N,抽象基类/纯虚接口
-Public API,double DomainMinimum(),isis_pybind.NumericalApproximation.domain_minimum,N,抽象基类/纯虚接口
-Public API,double DomainMaximum(),isis_pybind.NumericalApproximation.domain_maximum,N,抽象基类/纯虚接口
-Public API,bool Contains(double x),isis_pybind.NumericalApproximation.contains,N,抽象基类/纯虚接口
-Query,inline unsigned int Size() { return(p_x.size()),isis_pybind.NumericalApproximation.size,N,抽象基类/纯虚接口
-Public API,"double Evaluate(const double a, const ExtrapType &etype = ThrowError)",isis_pybind.NumericalApproximation.evaluate,N,抽象基类/纯虚接口
-Public API,"vector <double> Evaluate(const vector <double> &a, const ExtrapType &etype = ThrowError)",isis_pybind.NumericalApproximation.evaluate,N,抽象基类/纯虚接口
-Public API,vector <double> PolynomialNevilleErrorEstimate(),isis_pybind.NumericalApproximation.polynomial_neville_error_estimate,N,抽象基类/纯虚接口
-Public API,vector <double> CubicClampedSecondDerivatives(),isis_pybind.NumericalApproximation.cubic_clamped_second_derivatives,N,抽象基类/纯虚接口
-Public API,double EvaluateCubicHermiteFirstDeriv(const double a),isis_pybind.NumericalApproximation.evaluate_cubic_hermite_first_deriv,N,抽象基类/纯虚接口
-Public API,double EvaluateCubicHermiteSecDeriv(const double a),isis_pybind.NumericalApproximation.evaluate_cubic_hermite_sec_deriv,N,抽象基类/纯虚接口
-Public API,double GslFirstDerivative(const double a),isis_pybind.NumericalApproximation.gsl_first_derivative,N,抽象基类/纯虚接口
-Public API,"double BackwardFirstDifference(const double a, const unsigned int n = 3, const double h = 0.1)",isis_pybind.NumericalApproximation.backward_first_difference,N,抽象基类/纯虚接口
-Public API,"double ForwardFirstDifference(const double a, const unsigned int n = 3, const double h = 0.1)",isis_pybind.NumericalApproximation.forward_first_difference,N,抽象基类/纯虚接口
-Public API,"double CenterFirstDifference(const double a, const unsigned int n = 5, const double h = 0.1)",isis_pybind.NumericalApproximation.center_first_difference,N,抽象基类/纯虚接口
-Public API,double GslSecondDerivative(const double a),isis_pybind.NumericalApproximation.gsl_second_derivative,N,抽象基类/纯虚接口
-Public API,"double BackwardSecondDifference(const double a, const unsigned int n = 3, const double h = 0.1)",isis_pybind.NumericalApproximation.backward_second_difference,N,抽象基类/纯虚接口
-Public API,"double ForwardSecondDifference(const double a, const unsigned int n = 3, const double h = 0.1)",isis_pybind.NumericalApproximation.forward_second_difference,N,抽象基类/纯虚接口
-Public API,"double CenterSecondDifference(const double a, const unsigned int n = 5, const double h = 0.1)",isis_pybind.NumericalApproximation.center_second_difference,N,抽象基类/纯虚接口
-Public API,"double GslIntegral(const double a, const double b)",isis_pybind.NumericalApproximation.gsl_integral,N,抽象基类/纯虚接口
-Public API,"double TrapezoidalRule(const double a, const double b)",isis_pybind.NumericalApproximation.trapezoidal_rule,N,抽象基类/纯虚接口
-Public API,"double Simpsons3PointRule(const double a, const double b)",isis_pybind.NumericalApproximation.simpsons3_point_rule,N,抽象基类/纯虚接口
-Public API,"double Simpsons4PointRule(const double a, const double b)",isis_pybind.NumericalApproximation.simpsons4_point_rule,N,抽象基类/纯虚接口
-Public API,"double BoolesRule(const double a, const double b)",isis_pybind.NumericalApproximation.booles_rule,N,抽象基类/纯虚接口
-Public API,"double RefineExtendedTrap(double a, double b, double s, unsigned int n)",isis_pybind.NumericalApproximation.refine_extended_trap,N,抽象基类/纯虚接口
-Public API,"double RombergsMethod(double a, double b)",isis_pybind.NumericalApproximation.rombergs_method,N,抽象基类/纯虚接口
-Public API,void Reset(),isis_pybind.NumericalApproximation.reset,N,抽象基类/纯虚接口
-Public API,void Reset(NumericalApproximation::InterpType itype),isis_pybind.NumericalApproximation.reset,N,抽象基类/纯虚接口
-Mutation/Configuration,void SetInterpType(NumericalApproximation::InterpType itype),isis_pybind.NumericalApproximation.set_interp_type,N,抽象基类/纯虚接口
+Construction/Enum,"InterpType enum (Linear, Polynomial, PolynomialNeville, CubicNatural, CubicClamped, CubicNatPeriodic, CubicNeighborhood, CubicHermite, Akima, AkimaPeriodic)",isis_pybind.NumericalApproximation.InterpType,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Construction/Enum,"ExtrapType enum (ThrowError, Extrapolate, NearestEndpoint)",isis_pybind.NumericalApproximation.ExtrapType,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Construction/Enum,NumericalApproximation(),isis_pybind.NumericalApproximation(),Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,string Name() const,isis_pybind.NumericalApproximation.name,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,inline InterpType InterpolationType() { return (p_itype),isis_pybind.NumericalApproximation.interpolation_type,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,int MinPoints(),isis_pybind.NumericalApproximation.min_points,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,int MinPoints(NumericalApproximation::InterpType itype),isis_pybind.NumericalApproximation.min_points,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Mutation/Configuration,"void AddData(const double x, const double y)",isis_pybind.NumericalApproximation.add_data,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Mutation/Configuration,"void AddData(unsigned int n, double *x, double *y)",isis_pybind.NumericalApproximation.add_data,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Mutation/Configuration,"void AddData(const vector <double> &x, const vector <double> &y)",isis_pybind.NumericalApproximation.add_data,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Mutation/Configuration,"void SetCubicClampedEndptDeriv(const double yp1, const double ypn)",isis_pybind.NumericalApproximation.set_cubic_clamped_endpt_deriv,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Mutation/Configuration,"void AddCubicHermiteDeriv(unsigned int n, double *fprimeOfx)",isis_pybind.NumericalApproximation.add_cubic_hermite_deriv,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Mutation/Configuration,void AddCubicHermiteDeriv(const vector <double> &fprimeOfx),isis_pybind.NumericalApproximation.add_cubic_hermite_deriv,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Mutation/Configuration,void AddCubicHermiteDeriv(const double fprimeOfx),isis_pybind.NumericalApproximation.add_cubic_hermite_deriv,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,double DomainMinimum(),isis_pybind.NumericalApproximation.domain_minimum,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,double DomainMaximum(),isis_pybind.NumericalApproximation.domain_maximum,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,bool Contains(double x),isis_pybind.NumericalApproximation.contains,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Query,inline unsigned int Size() { return(p_x.size()),isis_pybind.NumericalApproximation.size,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"double Evaluate(const double a, const ExtrapType &etype = ThrowError)",isis_pybind.NumericalApproximation.evaluate,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"vector <double> Evaluate(const vector <double> &a, const ExtrapType &etype = ThrowError)",isis_pybind.NumericalApproximation.evaluate,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,vector <double> PolynomialNevilleErrorEstimate(),isis_pybind.NumericalApproximation.polynomial_neville_error_estimate,N,GSL/Hermite/Neville 高级方法；未暴露
+Public API,vector <double> CubicClampedSecondDerivatives(),isis_pybind.NumericalApproximation.cubic_clamped_second_derivatives,N,GSL/Hermite/Neville 高级方法；未暴露
+Public API,double EvaluateCubicHermiteFirstDeriv(const double a),isis_pybind.NumericalApproximation.evaluate_cubic_hermite_first_deriv,N,GSL/Hermite/Neville 高级方法；未暴露
+Public API,double EvaluateCubicHermiteSecDeriv(const double a),isis_pybind.NumericalApproximation.evaluate_cubic_hermite_sec_deriv,N,GSL/Hermite/Neville 高级方法；未暴露
+Public API,double GslFirstDerivative(const double a),isis_pybind.NumericalApproximation.gsl_first_derivative,N,GSL/Hermite/Neville 高级方法；未暴露
+Public API,"double BackwardFirstDifference(const double a, const unsigned int n = 3, const double h = 0.1)",isis_pybind.NumericalApproximation.backward_first_difference,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"double ForwardFirstDifference(const double a, const unsigned int n = 3, const double h = 0.1)",isis_pybind.NumericalApproximation.forward_first_difference,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"double CenterFirstDifference(const double a, const unsigned int n = 5, const double h = 0.1)",isis_pybind.NumericalApproximation.center_first_difference,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,double GslSecondDerivative(const double a),isis_pybind.NumericalApproximation.gsl_second_derivative,N,GSL/Hermite/Neville 高级方法；未暴露
+Public API,"double BackwardSecondDifference(const double a, const unsigned int n = 3, const double h = 0.1)",isis_pybind.NumericalApproximation.backward_second_difference,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"double ForwardSecondDifference(const double a, const unsigned int n = 3, const double h = 0.1)",isis_pybind.NumericalApproximation.forward_second_difference,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"double CenterSecondDifference(const double a, const unsigned int n = 5, const double h = 0.1)",isis_pybind.NumericalApproximation.center_second_difference,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"double GslIntegral(const double a, const double b)",isis_pybind.NumericalApproximation.gsl_integral,N,GSL/Hermite/Neville 高级方法；未暴露
+Public API,"double TrapezoidalRule(const double a, const double b)",isis_pybind.NumericalApproximation.trapezoidal_rule,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"double Simpsons3PointRule(const double a, const double b)",isis_pybind.NumericalApproximation.simpsons3_point_rule,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"double Simpsons4PointRule(const double a, const double b)",isis_pybind.NumericalApproximation.simpsons4_point_rule,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"double BoolesRule(const double a, const double b)",isis_pybind.NumericalApproximation.booles_rule,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,"double RefineExtendedTrap(double a, double b, double s, unsigned int n)",isis_pybind.NumericalApproximation.refine_extended_trap,N,GSL/Hermite/Neville 高级方法；未暴露
+Public API,"double RombergsMethod(double a, double b)",isis_pybind.NumericalApproximation.rombergs_method,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,void Reset(),isis_pybind.NumericalApproximation.reset,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Public API,void Reset(NumericalApproximation::InterpType itype),isis_pybind.NumericalApproximation.reset,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露
+Mutation/Configuration,void SetInterpType(NumericalApproximation::InterpType itype),isis_pybind.NumericalApproximation.set_interp_type,Y,2026-04-11 台账同步；已在 src/base/bind_base_math.cpp 暴露

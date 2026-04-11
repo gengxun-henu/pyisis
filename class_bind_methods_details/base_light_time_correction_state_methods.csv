@@ -2,18 +2,18 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 LightTimeCorrectionState,"Spice, Instruments, and Cameras",isis/src/base/objs/Spice/LightTimeCorrectionState.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,LightTimeCorrectionState,isis_pybind.LightTimeCorrectionState,N,Python class symbol not found in current binding files
-Construction/Enum,LightTimeCorrectionState(),isis_pybind.LightTimeCorrectionState(),N,Constructor binding not detected in current binding files
+Class Symbol,LightTimeCorrectionState,isis_pybind.LightTimeCorrectionState,Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Python class symbol not found in current binding files
+Construction/Enum,LightTimeCorrectionState(),isis_pybind.LightTimeCorrectionState(),Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Constructor binding not detected in current binding files
 Public API,"bool checkAberrationCorrection(int ikCode, Spice *spice)",isis_pybind.LightTimeCorrectionState.check_aberration_correction,N,Method not found in current binding files
-Mutation/Configuration,void setAberrationCorrection(const QString &correction),isis_pybind.LightTimeCorrectionState.set_aberration_correction,N,Method not found in current binding files
-Public API,QString getAberrationCorrection() const,isis_pybind.LightTimeCorrectionState.get_aberration_correction,N,Method not found in current binding files
+Mutation/Configuration,void setAberrationCorrection(const QString &correction),isis_pybind.LightTimeCorrectionState.set_aberration_correction,Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Method not found in current binding files
+Public API,QString getAberrationCorrection() const,isis_pybind.LightTimeCorrectionState.get_aberration_correction,Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Method not found in current binding files
 Public API,bool checkSpkKernelsForAberrationCorrection(),isis_pybind.LightTimeCorrectionState.check_spk_kernels_for_aberration_correction,N,Method not found in current binding files
-Query,bool isLightTimeCorrected() const,isis_pybind.LightTimeCorrectionState.is_light_time_corrected,N,Method not found in current binding files
+Query,bool isLightTimeCorrected() const,isis_pybind.LightTimeCorrectionState.is_light_time_corrected,Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Method not found in current binding files
 Public API,"bool checkObserverTargetSwap(int ikCode, Spice *spice)",isis_pybind.LightTimeCorrectionState.check_observer_target_swap,N,Method not found in current binding files
-Query,bool isObserverTargetSwapped() const,isis_pybind.LightTimeCorrectionState.is_observer_target_swapped,N,Method not found in current binding files
-Mutation/Configuration,void setSwapObserverTarget(),isis_pybind.LightTimeCorrectionState.set_swap_observer_target,N,Method not found in current binding files
-Mutation/Configuration,void setNoSwapObserverTarget(),isis_pybind.LightTimeCorrectionState.set_no_swap_observer_target,N,Method not found in current binding files
+Query,bool isObserverTargetSwapped() const,isis_pybind.LightTimeCorrectionState.is_observer_target_swapped,Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Method not found in current binding files
+Mutation/Configuration,void setSwapObserverTarget(),isis_pybind.LightTimeCorrectionState.set_swap_observer_target,Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Method not found in current binding files
+Mutation/Configuration,void setNoSwapObserverTarget(),isis_pybind.LightTimeCorrectionState.set_no_swap_observer_target,Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Method not found in current binding files
 Public API,"bool checkLightTimeToSurfaceCorrect(int ikCode, Spice *spice)",isis_pybind.LightTimeCorrectionState.check_light_time_to_surface_correct,N,Method not found in current binding files
-Query,bool isLightTimeToSurfaceCorrected() const,isis_pybind.LightTimeCorrectionState.is_light_time_to_surface_corrected,N,Method not found in current binding files
-Mutation/Configuration,void setCorrectLightTimeToSurface(),isis_pybind.LightTimeCorrectionState.set_correct_light_time_to_surface,N,Method not found in current binding files
-Mutation/Configuration,void setNoCorrectLightTimeToSurface(),isis_pybind.LightTimeCorrectionState.set_no_correct_light_time_to_surface,N,Method not found in current binding files
+Query,bool isLightTimeToSurfaceCorrected() const,isis_pybind.LightTimeCorrectionState.is_light_time_to_surface_corrected,Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Method not found in current binding files
+Mutation/Configuration,void setCorrectLightTimeToSurface(),isis_pybind.LightTimeCorrectionState.set_correct_light_time_to_surface,Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Method not found in current binding files
+Mutation/Configuration,void setNoCorrectLightTimeToSurface(),isis_pybind.LightTimeCorrectionState.set_no_correct_light_time_to_surface,Y,2026-04-11 台账同步；已在 src/bind_camera.cpp 暴露; Method not found in current binding files

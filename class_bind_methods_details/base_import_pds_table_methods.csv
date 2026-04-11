@@ -2,19 +2,19 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 ImportPdsTable,Utility,isis/src/base/objs/ImportPdsTable/ImportPdsTable.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ImportPdsTable,isis_pybind.ImportPdsTable,N,Python class symbol not found in current binding files
-Construction/Enum,ImportPdsTable(),isis_pybind.ImportPdsTable(),N,Constructor binding not detected in current binding files
-Public API,QString name() const,isis_pybind.ImportPdsTable.name,N,Method not found in current binding files
-Mutation/Configuration,"void setName(const QString &name = ""TABLE"")",isis_pybind.ImportPdsTable.set_name,N,Method not found in current binding files
-Public API,int columns() const,isis_pybind.ImportPdsTable.columns,N,Method not found in current binding files
-Public API,int rows() const,isis_pybind.ImportPdsTable.rows,N,Method not found in current binding files
-Read/Write IO,"void load(const QString &pdsLabFile, const QString &pdsTabFile = """", const QString &pdsTableName = ""TABLE"")",isis_pybind.ImportPdsTable.load,N,Method not found in current binding files
-Query,bool hasColumn(const QString &colName) const,isis_pybind.ImportPdsTable.has_column,N,Method not found in current binding files
-Public API,"QString getColumnName(const unsigned int &index = 0, const bool &formatted = true) const",isis_pybind.ImportPdsTable.get_column_name,N,Method not found in current binding files
-Public API,QStringList getColumnNames(const bool &formatted = true) const,isis_pybind.ImportPdsTable.get_column_names,N,Method not found in current binding files
-Public API,QString getFormattedName(const QString &colname) const,isis_pybind.ImportPdsTable.get_formatted_name,N,Method not found in current binding files
-Public API,QString getType(const QString &colName) const,isis_pybind.ImportPdsTable.get_type,N,Method not found in current binding files
-Mutation/Configuration,"bool setType(const QString &colName, const QString &dataType)",isis_pybind.ImportPdsTable.set_type,N,Method not found in current binding files
-Read/Write IO,Table importTable(const QString &isisTableName),isis_pybind.ImportPdsTable.import_table,N,Method not found in current binding files
-Read/Write IO,"Table importTable(const QString &colNames, const QString &isisTableName)",isis_pybind.ImportPdsTable.import_table,N,Method not found in current binding files
-Read/Write IO,"Table importTable(const QStringList &colNames, const QString &isisTableName)",isis_pybind.ImportPdsTable.import_table,N,Method not found in current binding files
+Class Symbol,ImportPdsTable,isis_pybind.ImportPdsTable,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Construction/Enum,ImportPdsTable(),isis_pybind.ImportPdsTable(),Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Public API,QString name() const,isis_pybind.ImportPdsTable.name,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Mutation/Configuration,"void setName(const QString &name = ""TABLE"")",isis_pybind.ImportPdsTable.set_name,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Public API,int columns() const,isis_pybind.ImportPdsTable.columns,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Public API,int rows() const,isis_pybind.ImportPdsTable.rows,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Read/Write IO,"void load(const QString &pdsLabFile, const QString &pdsTabFile = """", const QString &pdsTableName = ""TABLE"")",isis_pybind.ImportPdsTable.load,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Query,bool hasColumn(const QString &colName) const,isis_pybind.ImportPdsTable.has_column,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Public API,"QString getColumnName(const unsigned int &index = 0, const bool &formatted = true) const",isis_pybind.ImportPdsTable.get_column_name,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Public API,QStringList getColumnNames(const bool &formatted = true) const,isis_pybind.ImportPdsTable.get_column_names,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Public API,QString getFormattedName(const QString &colname) const,isis_pybind.ImportPdsTable.get_formatted_name,Y,2026-04-11 已在 bind_base_pds_io.cpp 暴露
+Public API,QString getType(const QString &colName) const,isis_pybind.ImportPdsTable.get_type,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Mutation/Configuration,"bool setType(const QString &colName, const QString &dataType)",isis_pybind.ImportPdsTable.set_type,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Read/Write IO,Table importTable(const QString &isisTableName),isis_pybind.ImportPdsTable.import_table,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Read/Write IO,"Table importTable(const QString &colNames, const QString &isisTableName)",isis_pybind.ImportPdsTable.import_table,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露
+Read/Write IO,"Table importTable(const QStringList &colNames, const QString &isisTableName)",isis_pybind.ImportPdsTable.import_table,Y,2026-04-11 台账同步；已在 bind_base_pds_io.cpp 暴露

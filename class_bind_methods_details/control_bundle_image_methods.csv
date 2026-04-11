@@ -2,10 +2,10 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 BundleImage,Control Networks,isis/src/control/objs/BundleUtilities/BundleImage.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,BundleImage,isis_pybind.BundleImage,N,Python class symbol not found in current binding files; Qt 类型/信号槽较多
-Construction/Enum,BundleImage(),isis_pybind.BundleImage(),N,Qt 类型/信号槽较多
+Class Symbol,BundleImage,isis_pybind.BundleImage,Y,2026-04-11 台账同步；已在 src/control/bind_control_core.cpp 暴露; Python class symbol not found in current binding files; Qt 类型/信号槽较多
+Construction/Enum,BundleImage(),isis_pybind.BundleImage(),Y,2026-04-11 台账同步；已在 src/control/bind_control_core.cpp 暴露; Qt 类型/信号槽较多
 Mutation/Configuration,void setParentObservation(QSharedPointer<BundleObservation> parentObservation),isis_pybind.BundleImage.set_parent_observation,N,Qt 类型/信号槽较多
-Public API,Camera *camera(),isis_pybind.BundleImage.camera,N,Qt 类型/信号槽较多
+Public API,Camera *camera(),isis_pybind.BundleImage.camera,Y,2026-04-11 台账同步；已在 src/control/bind_control_core.cpp 暴露; Qt 类型/信号槽较多
 Public API,QSharedPointer<BundleObservation> parentObservation(),isis_pybind.BundleImage.parent_observation,N,Qt 类型/信号槽较多
-Public API,QString serialNumber(),isis_pybind.BundleImage.serial_number,N,Qt 类型/信号槽较多
-Public API,QString fileName(),isis_pybind.BundleImage.file_name,N,Qt 类型/信号槽较多
+Public API,QString serialNumber(),isis_pybind.BundleImage.serial_number,Y,2026-04-11 台账同步；已在 src/control/bind_control_core.cpp 暴露; Qt 类型/信号槽较多
+Public API,QString fileName(),isis_pybind.BundleImage.file_name,Y,2026-04-11 台账同步；已在 src/control/bind_control_core.cpp 暴露; Qt 类型/信号槽较多

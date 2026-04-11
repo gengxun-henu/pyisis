@@ -2,7 +2,7 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 ControlPointV0002,Control Networks,isis/src/control/objs/ControlNetVersioner/ControlPointV0002.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ControlPointV0002,isis_pybind.ControlPointV0002,N,Python class symbol not found in current binding files
-Construction/Enum,ControlPointV0002(),isis_pybind.ControlPointV0002(),N,Constructor binding not detected in current binding files
-Public API,QSharedPointer<ControlNetFileProtoV0001_PBControlPoint> pointData(),isis_pybind.ControlPointV0002.point_data,N,Method not found in current binding files
-Public API,QSharedPointer<ControlNetLogDataProtoV0001_Point> logData(),isis_pybind.ControlPointV0002.log_data,N,Method not found in current binding files
+Class Symbol,ControlPointV0002,isis_pybind.ControlPointV0002,Y,2026-04-11 台账同步；已在 src/control/bind_control_core.cpp 暴露; Python class symbol not found in current binding files
+Construction/Enum,ControlPointV0002(),isis_pybind.ControlPointV0002(),Y,2026-04-11 台账同步；已在 src/control/bind_control_core.cpp 暴露; Constructor binding not detected in current binding files
+Public API,QSharedPointer<ControlNetFileProtoV0001_PBControlPoint> pointData(),isis_pybind.ControlPointV0002.point_data,Y,2026-04-11 台账同步；已在 src/control/bind_control_core.cpp 暴露; Method not found in current binding files
+Public API,QSharedPointer<ControlNetLogDataProtoV0001_Point> logData(),isis_pybind.ControlPointV0002.log_data,Y,2026-04-11 台账同步；已在 src/control/bind_control_core.cpp 暴露; Method not found in current binding files

@@ -65,6 +65,7 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_base_geometry(m);
   bind_base_ground_map(m);
   bind_base_surface(m);
+  bind_base_math(m);
   bind_base_photometry(m);
   bind_base_pvl(m);
   bind_base_projection(m);
@@ -72,7 +73,6 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_base_shape(m);
   bind_base_target(m);
   bind_base_shape_support(m);
-  bind_base_math(m);
   bind_base_utility(m);
   bind_base_pds_io(m);
   bind_base_pattern(m);

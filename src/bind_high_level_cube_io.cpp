@@ -4,6 +4,7 @@
 // Updated: 2026-04-09  Geng Xun removed the duplicate Progress py::class_ registration so _isis_core imports cleanly under test runners
 // Updated: 2026-04-09  Geng Xun added SubArea bindings with Cube/PvlGroup-aware label update helpers and focused tests
 // Updated: 2026-04-10  Geng Xun added ProcessMosaic (Batch 2) with ImageOverlay enum, track/overlay/saturation flag setters and getters.
+// Updated: 2026-04-11  Geng Xun aligned the Python ImageOverlay enum names with the ISIS 9.0.0 PlaceImagesBeneath API while preserving the existing PlaceImagesBehind alias.
 // Purpose: pybind11 bindings for ISIS high-level cube I/O workflows including Process variants, import/export helpers, and JP2 utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -621,7 +622,8 @@ void bind_high_level_cube_io(py::module_ &m) {
   // Added: 2026-04-10 - ProcessMosaic
   py::enum_<Isis::ProcessMosaic::ImageOverlay>(m, "ImageOverlay")
       .value("PlaceImagesOnTop",    Isis::ProcessMosaic::PlaceImagesOnTop)
-      .value("PlaceImagesBehind",   Isis::ProcessMosaic::PlaceImagesBehind)
+      .value("PlaceImagesBehind",   Isis::ProcessMosaic::PlaceImagesBeneath)
+      .value("PlaceImagesBeneath",  Isis::ProcessMosaic::PlaceImagesBeneath)
       .value("UseBandPlacementCriteria", Isis::ProcessMosaic::UseBandPlacementCriteria)
       .value("AverageImageWithMosaic",   Isis::ProcessMosaic::AverageImageWithMosaic)
       .value("NumImageOverlayOptions",   Isis::ProcessMosaic::NumImageOverlayOptions)

@@ -7,6 +7,7 @@ Last Modified: 2026-04-11
 Updated: 2026-03-25  Geng Xun added preserved regression coverage for temporarily disabled advanced bundle-adjustment bindings.
 Updated: 2026-04-10  Geng Xun re-enabled tests after bind_bundle_advanced.cpp was re-enabled with boost ublas lambda wrappers.
 Updated: 2026-04-11  Geng Xun aligned BundleResults observation-count expectations with upstream semantics and covered null-safe BundleSolutionInfo filename getters.
+Updated: 2026-04-11  Geng Xun fixed segfault: set_output_statistics now uses setOutputStatisticsForPyBind; bundle_settings dereferences QSharedPointer; bundle_results re-enabled via cloneBundleResultsForPyBind.
 """
 
 import unittest
@@ -597,12 +598,11 @@ class BundleAdvancedUnitTest(unittest.TestCase):
 
         solution_info.set_output_statistics(results)
 
-        # NOTE: bundle_results() method commented out due to segfault with ISIS 9.0.0
-        # # Get bundle results
-        # retrieved_results = solution_info.bundle_results()
-        # self.assertIsNotNone(retrieved_results)
-        # self.assertTrue(retrieved_results.converged())
-        # self.assertEqual(retrieved_results.iterations(), 5)
+        # Get bundle results
+        retrieved_results = solution_info.bundle_results()
+        self.assertIsNotNone(retrieved_results)
+        self.assertTrue(retrieved_results.converged())
+        self.assertEqual(retrieved_results.iterations(), 5)
 
         # Get bundle settings
         settings = solution_info.bundle_settings()

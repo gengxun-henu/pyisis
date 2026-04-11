@@ -26,9 +26,11 @@
  * Updated: 2026-04-09  Geng Xun added IString binding and free-function helpers (to_bool/to_int/to_double/to_string).
  * Updated: 2026-04-10  Geng Xun added Pixel, ID, EndianSwapper, and TextFile bindings.
  * Updated: 2026-04-10  Geng Xun fixed Pixel predicate bindings to evaluate SpecialPixel semantics explicitly in Python wrappers.
+ * Updated: 2026-04-11  Geng Xun fixed PolygonTools/GSLUtility bindings to match the actual ISIS 9.0.0 public API and singleton lifetime rules.
  * Purpose: Expose CollectorMap, Column, EndianSwapper, Environment, ID, IString, LineEquation, Message helpers, Pixel, Plugin, Resource, and TextFile utility classes to Python via pybind11.
  */
 
+#include <cmath>
 #include <cstdint>
 #include <fstream>
 #include <vector>
@@ -61,6 +63,27 @@ namespace {
 
 bool isRuntimeSpecialPixel(double dn) {
      return dn < -1.0e300;
+}
+
+int polygonDecimalPlace(double num) {
+     if (num == 0.0) {
+          return 0;
+     }
+
+     num = std::fabs(num);
+
+     int decimalPlace = 1;
+     while (num < 1.0) {
+          num *= 10.0;
+          decimalPlace--;
+     }
+
+     while (num > 10.0) {
+          num /= 10.0;
+          decimalPlace++;
+     }
+
+     return decimalPlace;
 }
 
 class PluginWrapper {
@@ -1226,7 +1249,7 @@ void bind_base_utility(py::module_ &m) {
           });
 
   // Added: 2026-04-10 - GSLUtility singleton wrapper
-  py::class_<Isis::GSL::GSLUtility>(m, "GSLUtility")
+     py::class_<Isis::GSL::GSLUtility, std::unique_ptr<Isis::GSL::GSLUtility, py::nodelete>>(m, "GSLUtility")
       .def_static("get_instance",
            &Isis::GSL::GSLUtility::getInstance,
            py::return_value_policy::reference,
@@ -1250,17 +1273,23 @@ void bind_base_utility(py::module_ &m) {
   // Added: 2026-04-10 - PolygonTools static utility wrapper
   // PolygonTools is a utility class with only static methods - expose as module-level functions
   m.def("polygon_equal",
-        &Isis::PolygonTools::Equal,
+                    [](double d1, double d2) {
+                         return Isis::PolygonTools::Equal(d1, d2);
+                    },
         py::arg("d1"),
         py::arg("d2"),
         "Return True if d1 and d2 are equal within floating-point tolerance.");
   m.def("polygon_reduce_precision",
-        &Isis::PolygonTools::ReducePrecision,
+                    [](double num, unsigned int precision) {
+                         return Isis::PolygonTools::ReducePrecision(num, precision);
+                    },
         py::arg("num"),
         py::arg("precision"),
         "Round num to the given number of significant decimal places.");
   m.def("polygon_decimal_place",
-        &Isis::PolygonTools::DecimalPlace,
+                    [](double num) {
+                         return polygonDecimalPlace(num);
+                    },
         py::arg("num"),
         "Return the position of the decimal point for the given double.");
   m.def("polygon_gml_schema",

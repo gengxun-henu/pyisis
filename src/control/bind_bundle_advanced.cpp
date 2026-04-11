@@ -27,6 +27,7 @@
 // Updated: 2026-04-11  Geng Xun fixed BundleSolutionInfo null-safe filename accessors and used the pybind-safe BundleResults transfer helper.
 // Updated: 2026-04-11  Geng Xun replaced non-existent BundleSolutionInfo helper calls with safe wrappers around the actual ISIS 9.0.0 API.
 // Updated: 2026-04-11  Geng Xun added null-safe observation wrappers so default-constructed bundle observations return empty Python values instead of dereferencing uninitialized ISIS state.
+// Updated: 2026-04-11  Geng Xun fixed set_output_statistics to use setOutputStatisticsForPyBind; wrapped bundle_settings to dereference QSharedPointer; re-enabled bundle_results via cloneBundleResultsForPyBind.
 // Purpose: pybind11 bindings for advanced ISIS bundle-adjustment classes
 
 #include <memory>
@@ -608,7 +609,7 @@ void bind_bundle_advanced(py::module_ &m)
          .def("set_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setName(stdStringToQString(name)); }, py::arg("name"))
          .def("set_output_statistics", [](Isis::BundleSolutionInfo &self, const Isis::BundleResults &statistics_results)
-              { self.setOutputStatistics(statistics_results); }, py::arg("statistics_results"))
+              { self.setOutputStatisticsForPyBind(statistics_results); }, py::arg("statistics_results"))
          .def("set_output_control_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setOutputControlName(stdStringToQString(name)); }, py::arg("name"))
          .def("id", [](const Isis::BundleSolutionInfo &self)
@@ -619,15 +620,20 @@ void bind_bundle_advanced(py::module_ &m)
          .def("output_control_name", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.outputControlName()); })
          .def("input_lidar_data_file_name", &bundleSolutionInfoInputLidarDataFileName)
-         .def("bundle_settings", &Isis::BundleSolutionInfo::bundleSettings)
-         // NOTE: bundle_results() commented out - upstream bundleResults() returns by value
-         // which invokes BundleResults copy constructor causing segfault with ISIS 9.0.0
-         // .def("bundle_results", [](Isis::BundleSolutionInfo &self)
-         //      {
-         //          // bundleResults() returns by value, so we create a new object on the heap
-         //          auto results = std::make_unique<Isis::BundleResults>(self.bundleResults());
-         //          return results.release();
-         //      }, py::return_value_policy::take_ownership)
+         .def("bundle_settings", [](Isis::BundleSolutionInfo &self) -> Isis::BundleSettings {
+              Isis::BundleSettingsQsp sp = self.bundleSettings();
+              if (sp) return *sp;
+              return Isis::BundleSettings();
+         })
+         .def("bundle_results", [](Isis::BundleSolutionInfo &self) -> Isis::BundleResults * {
+              Isis::BundleResults *results = self.cloneBundleResultsForPyBind();
+              if (!results) {
+                  throw Isis::IException(Isis::IException::Unknown,
+                                         "Bundle results are NULL.",
+                                         _FILEINFO_);
+              }
+              return results;
+         }, py::return_value_policy::take_ownership)
          .def("run_time", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.runTime()); })
          .def("name", [](const Isis::BundleSolutionInfo &self)

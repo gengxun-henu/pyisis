@@ -2,8 +2,8 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 KaguyaTcCamera,Kaguya,isis/src/kaguya/objs/KaguyaTcCamera/KaguyaTcCamera.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,KaguyaTcCamera,isis_pybind.KaguyaTcCamera,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,KaguyaTcCamera,isis_pybind.KaguyaTcCamera,Y,2026-04-11 台账同步 "Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Construction/Enum,KaguyaTcCamera(Cube &cube),isis_pybind.KaguyaTcCamera(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkFrameId() const,isis_pybind.KaguyaTcCamera.ck_frame_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkReferenceId() const,isis_pybind.KaguyaTcCamera.ck_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int SpkReferenceId() const,isis_pybind.KaguyaTcCamera.spk_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int CkFrameId() const,isis_pybind.KaguyaTcCamera.ck_frame_id,Y,2026-04-11 台账同步 "亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int CkReferenceId() const,isis_pybind.KaguyaTcCamera.ck_reference_id,Y,2026-04-11 台账同步 "亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Public API,virtual int SpkReferenceId() const,isis_pybind.KaguyaTcCamera.spk_reference_id,Y,2026-04-11 台账同步 "亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"

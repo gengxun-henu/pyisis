@@ -18,7 +18,7 @@ Control Networks,ControlMeasureLogData,已转换,Qt 类型/信号槽较多；控
 Control Networks,ControlNet,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
 Control Networks,ControlNetDiff,已转换,2026-03-21 已在 bind_control_core.cpp 暴露 compare(...) 与 tolerances 接口
 Control Networks,ControlNetFilter,已转换,2026-04-08 已在 bind_control_core.cpp 同步暴露全部公开过滤器与输出 helper，并补 focused 单测
-Control Networks,ControlNetStatistics,已转换,2026-04-08 已在 bind_control_core.cpp 暴露控制网摘要/标量 getter 簇（构造/枚举/GenerateControlNetStats/Num*/residual/shift getters）；image/point 文件输出接口后续补
+Control Networks,ControlNetStatistics,已转换,2026-04-11 完成全部公开方法绑定；GenerateImageStats/PrintImageStats/GetImageStatsBySerialNum/GeneratePointStats 已补
 Control Networks,ControlNetValidMeasure,已转换,2026-04-08 已在 bind_control_core.cpp 暴露稳定配置/查询方法簇（构造/parse/阈值 getter/valid_* helper）；ValidStandardOptions 与 edge/camera 几何接口后续补
 Control Networks,ControlNetVersioner,已转换,2026-04-10 已在 src/control/bind_control_core.cpp 暴露构造/元数据 getter/write/toPvl；takeFirstPoint 因裸指针所有权问题暂跳过(N)
 Control Networks,ControlNetVitals,未转换,Qt 类型/信号槽较多
@@ -162,7 +162,7 @@ Mars Reconnaissance Orbiter,ZeroBufferSmooth,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,ZeroDark,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,ZeroDarkRate,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,ZeroReverse,未转换,抽象基类/纯虚接口
-Math,Affine,已转换,2026-03-25 已在 bind_base_math.cpp 暴露默认构造/求解/正反变换接口；静态矩阵工厂与矩阵访问仍待补
+Math,Affine,已转换,2026-04-11 完成全部公开方法绑定；AMatrix getIdentity/Forward/Inverse 通过嵌套列表适配
 Math,Basis1VariableFunction,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露 Basis1VariableFunction 抽象基类（DerivativeVar/DerivativeCoef 方法）；smoke 已补符号
 Math,BasisFunction,已转换,2026-03-25 已在 bind_base_math.cpp 暴露三参构造/系数/求值接口
 Math,Calculator,已转换,2026-03-25 已在 bind_base_math.cpp 暴露 RPN 计算器主接口；Minimum2/Maximum2 上游源码未实现
@@ -185,15 +185,15 @@ Near Earth Asteroid Rendezvous - Shoemaker,MsiCamera,已转换,"亦属 Spice, In
 Messenger,MdisCamera,已转换,第五批已补单测（CameraFactory/层级分派/局部前反投/失败路径）；相机模型/Spice 依赖
 Parsing,CSVReader,已转换,2026-04-09 已在 src/base/bind_base_filters.cpp 完成 CSVReader 全部 inventory helper 绑定；focused 单测在 tests/unitTest/filters_unit_test.py；smoke 已补符号
 Parsing,FileList,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 通过稳定 wrapper 暴露文件/字符串 I/O helper；focused 单测在 tests/unitTest/support_unit_test.py；smoke 已补符号
-Parsing,FileName,已转换,
+Parsing,FileName,已转换,2026-04-11 补 dir() 包装；createTempFile 之前已有；Data 内部类方法为 private 不绑定
 Parsing,IString,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 暴露 IString 类与自由函数 to_bool/to_int/to_big_int/to_double/to_string；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
-Parsing,iTime,已转换,
+Parsing,iTime,已转换,2026-04-11 全部方法已绑定（CurrentGMT/CurrentLocalTime 之前已有只是台账滞后）
 Parsing,LabelTranslationManager,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露抽象基类 auto_translate/parse_specification；Python 侧不可直接实例化；继承链 PvlTranslationTable->LabelTranslationManager 已正确注册
 Parsing,Pvl,已转换,
 Parsing,PvlContainer,已转换,
 Parsing,PvlFormat,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露构造函数/add/set_char_limit/char_limit/format_value/format_name/format_eol/type/accuracy/add_quotes/is_single_unit；KeywordType enum 一并暴露；focused 单测在 pvl_unit_test.py；smoke 已补符号
 Parsing,PvlFormatPds,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 继承 PvlFormat 暴露 PDS-specific 格式化接口；CRLF format_eol；focused 单测在 pvl_unit_test.py
-Parsing,PvlGroup,已转换,
+Parsing,PvlGroup,已转换,2026-04-11 补 validateGroup；全部公开方法已绑定
 Parsing,PvlKeyword,已转换,Qt 类型/信号槽较多
 Parsing,PvlObject,已转换,
 Parsing,PvlSequence,已转换,
@@ -286,11 +286,11 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",Target,已转换,2026-04-09 已在 src/base/bind_base_target.cpp 补齐 Target(Pvl&) 与 NAIF/frame/body-rotation accessor，并在 src/bind_camera.cpp 新增 Camera.target()；显式 Spice* API 仍因无 Python Spice 绑定而保留未覆盖
 "Spice, Instruments, and Cameras",VariableLineScanCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露 set_parent/set_detector/exposure_duration
 Statistics,FourierTransform,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露 FourierTransform 构造/transform/inverse/helper 方法；focused 单测在 tests/unitTest/math_unit_test.py；smoke 已补符号
-Statistics,GaussianDistribution,已转换,
+Statistics,GaussianDistribution,已转换,2026-04-11 全部方法已绑定（StandardDeviation 之前已有只是台账滞后）
 Statistics,GroupedStatistics,已转换,
 Statistics,Histogram,已转换,
 Statistics,ImageHistogram,已转换,2026-04-11 已在 src/bind_statistics.cpp 新增 add_data/remove_data/bin_range 显式绑定，覆盖 ImageHistogram 全部 4 个缺失方法
-Statistics,MultivariateStatistics,已转换,
+Statistics,MultivariateStatistics,已转换,2026-04-11 全部方法已绑定（X/Y 之前已有只是台账滞后）
 Statistics,OverlapStatistics,已转换,2026-04-10 已在 src/bind_statistics.cpp 暴露 PvlObject 构造函数/HasOverlap/Lines/Samples/Bands/SampPercent/FileNameX/FileNameY/GetMStats/toPvl；focused 单测在 statistics_unit_test.py
 Statistics,PrincipalComponentAnalysis,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露全部公开方法（TNT::Array2D 通过 2D list 适配）；focused 单测在 statistics_unit_test.py
 Statistics,QuickFilter,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露完整 QuickFilter 接口（add_line/remove_line/average/variance/count/set_min_max 等）；focused 单测在 tests/unitTest/filters_unit_test.py

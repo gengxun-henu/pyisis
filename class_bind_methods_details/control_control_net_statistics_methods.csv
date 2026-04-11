@@ -8,10 +8,10 @@ Construction/Enum,"ePointIntStats enum (totalPoints, validPoints, ignoredPoints,
 Construction/Enum,"ePointDoubleStats enum (avgResidual, minResidual, maxResidual, minLineResidual, maxLineResidual, minSampleResidual, maxSampleResidual, avgPixelShift, minPixelShift, maxPixelShift)",isis_pybind.ControlNetStatistics.ePointDoubleStats,Y,2026-04-08 已在 src/control/bind_control_core.cpp 暴露完整枚举（含上游全部 20 个取值）
 Construction/Enum,"ImageStats enum (imgSamples, imgLines, imgTotalPoints, imgIgnoredPoints, imgFixedPoints, imgLockedPoints, imgLocked, imgConstrainedPoints, imgFreePoints, imgConvexHullArea)",isis_pybind.ControlNetStatistics.ImageStats,Y,2026-04-08 已在 src/control/bind_control_core.cpp 暴露完整枚举
 Construction/Enum,ControlNetStatistics(),isis_pybind.ControlNetStatistics(),Y,2026-04-08 Python 侧当前暴露稳定构造为 ControlNetStatistics(control_net, progress=None)；上游无默认构造
-Public API,void GenerateImageStats(),isis_pybind.ControlNetStatistics.generate_image_stats,N,2026-04-08 本轮聚焦摘要/标量 getter 簇；image stats 生成链路后续补
-Public API,void PrintImageStats(const QString &psImageFile),isis_pybind.ControlNetStatistics.print_image_stats,N,2026-04-08 仍待补 image stats 文件输出链路
-Public API,QVector<double> GetImageStatsBySerialNum(QString psSerialNum) const,isis_pybind.ControlNetStatistics.get_image_stats_by_serial_num,N,2026-04-08 仍待补 image stats 查询链路
-Public API,void GeneratePointStats(const QString &psPointFile),isis_pybind.ControlNetStatistics.generate_point_stats,N,2026-04-08 仍待补 point stats 文件输出链路
+Public API,void GenerateImageStats(),isis_pybind.ControlNetStatistics.generate_image_stats,Y,2026-04-11 已在 bind_control_core.cpp 暴露
+Public API,void PrintImageStats(const QString &psImageFile),isis_pybind.ControlNetStatistics.print_image_stats,Y,2026-04-11 已在 bind_control_core.cpp 暴露 QString 适配
+Public API,QVector<double> GetImageStatsBySerialNum(QString psSerialNum) const,isis_pybind.ControlNetStatistics.get_image_stats_by_serial_num,Y,2026-04-11 已在 bind_control_core.cpp 暴露 QVector 转 vector
+Public API,void GeneratePointStats(const QString &psPointFile),isis_pybind.ControlNetStatistics.generate_point_stats,Y,2026-04-11 已在 bind_control_core.cpp 暴露 QString 适配
 Public API,void GenerateControlNetStats(PvlGroup &pStatsGrp),isis_pybind.ControlNetStatistics.generate_control_net_stats,Y,2026-04-08 已在 src/control/bind_control_core.cpp 暴露
 Public API,int NumValidPoints() const { return (*mPointIntStats.find(validPoints)),isis_pybind.ControlNetStatistics.num_valid_points,Y,2026-04-08 已在 src/control/bind_control_core.cpp 暴露
 Public API,int NumFixedPoints() const { return (*mPointIntStats.find(fixedPoints)),isis_pybind.ControlNetStatistics.num_fixed_points,Y,2026-04-08 已在 src/control/bind_control_core.cpp 暴露

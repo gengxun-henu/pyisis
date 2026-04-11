@@ -26,6 +26,7 @@
  * Updated: 2026-04-10  Geng Xun added Basis1VariableFunction abstract base class binding (abstract; use derived classes).
  * Updated: 2026-04-10  Geng Xun added SparseBlockMatrix binding exposing block insertion, counting, zeroing, and structure helpers.
  * Updated: 2026-04-10  Geng Xun added NumericalApproximation binding (interpolation/integration/differentiation).
+ * Updated: 2026-04-11  Geng Xun added Affine getIdentity/Forward/Inverse matrix accessors as nested lists.
  * Purpose: Expose Calculator, Affine, BasisFunction, FourierTransform, InfixToPostfix,
  *          CubeInfixToPostfix, InlineInfixToPostfix, NthOrderPolynomial, Ransac helpers, SurfaceModel,
  *          MaximumLikelihoodWFunctions, PrincipalComponentAnalysis, SparseBlockMatrix,
@@ -179,6 +180,37 @@ void bind_base_math(py::module_ &m)
          // Coefficient access
          .def("coefficients", &Isis::Affine::Coefficients, py::arg("variable"), "Get forward transformation coefficients")
          .def("inverse_coefficients", &Isis::Affine::InverseCoefficients, py::arg("variable"), "Get inverse transformation coefficients")
+         // Added: 2026-04-11 - expose AMatrix accessors as nested lists
+         .def_static("get_identity",
+              []() -> std::vector<std::vector<double>> {
+                   Isis::Affine::AMatrix id = Isis::Affine::getIdentity();
+                   std::vector<std::vector<double>> result(id.dim1(), std::vector<double>(id.dim2()));
+                   for (int i = 0; i < id.dim1(); i++)
+                        for (int j = 0; j < id.dim2(); j++)
+                             result[i][j] = id[i][j];
+                   return result;
+              },
+              "Return the 3x3 identity affine matrix as a nested list.")
+         .def("forward_matrix",
+              [](const Isis::Affine &self) -> std::vector<std::vector<double>> {
+                   Isis::Affine::AMatrix mat = self.Forward();
+                   std::vector<std::vector<double>> result(mat.dim1(), std::vector<double>(mat.dim2()));
+                   for (int i = 0; i < mat.dim1(); i++)
+                        for (int j = 0; j < mat.dim2(); j++)
+                             result[i][j] = mat[i][j];
+                   return result;
+              },
+              "Return the forward affine matrix as a nested list.")
+         .def("inverse_matrix",
+              [](const Isis::Affine &self) -> std::vector<std::vector<double>> {
+                   Isis::Affine::AMatrix mat = self.Inverse();
+                   std::vector<std::vector<double>> result(mat.dim1(), std::vector<double>(mat.dim2()));
+                   for (int i = 0; i < mat.dim1(); i++)
+                        for (int j = 0; j < mat.dim2(); j++)
+                             result[i][j] = mat[i][j];
+                   return result;
+              },
+              "Return the inverse affine matrix as a nested list.")
          .def("__repr__", [](const Isis::Affine &self)
               { return "Affine()"; });
 

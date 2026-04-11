@@ -924,7 +924,29 @@ void bind_control_core(py::module_ &m)
               {
                    return "ControlNetStatistics(valid_points=" + std::to_string(self.NumValidPoints()) +
                           ", valid_measures=" + std::to_string(self.NumValidMeasures()) + ")";
-              });
+              })
+         // Added: 2026-04-11 - expose image/point stats generation and query
+         .def("generate_image_stats", &Isis::ControlNetStatistics::GenerateImageStats,
+              "Generate per-image statistics for the control network.")
+         .def("print_image_stats",
+              [](Isis::ControlNetStatistics &self, const std::string &filename) {
+                   self.PrintImageStats(QString::fromStdString(filename));
+              },
+              py::arg("image_file"),
+              "Print image statistics to the specified output file.")
+         .def("get_image_stats_by_serial_num",
+              [](const Isis::ControlNetStatistics &self, const std::string &serialNum) -> std::vector<double> {
+                   QVector<double> qv = self.GetImageStatsBySerialNum(QString::fromStdString(serialNum));
+                   return std::vector<double>(qv.begin(), qv.end());
+              },
+              py::arg("serial_num"),
+              "Return image statistics vector for the given serial number.")
+         .def("generate_point_stats",
+              [](Isis::ControlNetStatistics &self, const std::string &filename) {
+                   self.GeneratePointStats(QString::fromStdString(filename));
+              },
+              py::arg("point_file"),
+              "Generate per-point statistics and write to the specified output file.");
 
      // Added: 2026-04-07 - expose initial ControlNetFilter constructor/output helper surface
      py::class_<Isis::ControlNetFilter> control_net_filter(m, "ControlNetFilter");

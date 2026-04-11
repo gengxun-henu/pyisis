@@ -50,10 +50,10 @@ Public API,bool solvePMAcceleration() const,isis_pybind.BundleSettings.solve_pm_
 Public API,bool solveTriaxialRadii() const,isis_pybind.BundleSettings.solve_triaxial_radii,Y,Bound in src/control/bind_control_core.cpp
 Public API,bool solveMeanRadius() const,isis_pybind.BundleSettings.solve_mean_radius,Y,Bound in src/control/bind_control_core.cpp
 Mutation/Configuration,void setOutputFilePrefix(QString outputFilePrefix),isis_pybind.BundleSettings.set_output_file_prefix,Y,Bound in src/control/bind_control_core.cpp
-Mutation/Configuration,void setSCPVLFilename(QString SCParamFilename),isis_pybind.BundleSettings.set_scpvl_filename,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setSCPVLFilename(QString SCParamFilename),isis_pybind.BundleSettings.set_scpvl_filename,N,Declared in header but upstream removed implementation (history 2016-10-17); 无法绑定
 Public API,QString outputFilePrefix() const,isis_pybind.BundleSettings.output_file_prefix,Y,Bound in src/control/bind_control_core.cpp
 Mutation/Configuration,void setCubeList(QString fileName),isis_pybind.BundleSettings.set_cube_list,Y,Bound in src/control/bind_control_core.cpp
 Public API,QString cubeList() const,isis_pybind.BundleSettings.cube_list,Y,Bound in src/control/bind_control_core.cpp
-Public API,QString SCPVLFilename() const,isis_pybind.BundleSettings.scpvl_filename,N,Skipped for now: declaration present in header inventory but implementation was not found in the linked ISIS build
+Public API,QString SCPVLFilename() const,isis_pybind.BundleSettings.scpvl_filename,N,Declared in header but upstream removed implementation (history 2016-10-17); 无法绑定
 Read/Write IO,"void save(QXmlStreamWriter &stream, const Project *project) const",isis_pybind.BundleSettings.save,N,Qt 类型/信号槽较多
 Read/Write IO,void readBundleSettings(QXmlStreamReader *xmlReader),isis_pybind.BundleSettings.read_bundle_settings,N,Qt 类型/信号槽较多

@@ -21,11 +21,11 @@ Query,bool isDateVersioned() const,isis_pybind.FileName.is_date_versioned,Y,Curr
 Public API,FileName highestVersion() const,isis_pybind.FileName.highest_version,Y,Current Python name
 Public API,FileName newVersion() const,isis_pybind.FileName.new_version,Y,Current Python name
 Public API,bool fileExists() const,isis_pybind.FileName.file_exists,Y,Current Python name
-Public API,QDir dir() const,isis_pybind.FileName.dir,N,Method not found in current binding files
-Static/Factory,"static FileName createTempFile(FileName templateFileName = ""$TEMPORARY/temp"")",isis_pybind.FileName.create_temp_file,N,Method not found in current binding files
+Public API,QDir dir() const,isis_pybind.FileName.dir,Y,2026-04-11 已在 bind_base_support.cpp 通过 lambda 包装返回 string 路径
+Static/Factory,"static FileName createTempFile(FileName templateFileName = ""$TEMPORARY/temp"")",isis_pybind.FileName.create_temp_file,Y,2026-04-11 已在 bind_base_support.cpp 暴露为 create_temp_file
 Public API,QString toString() const,isis_pybind.FileName.to_string,Y,Current Python name
-Public API,Data(),isis_pybind.FileName.data,N,Method not found in current binding files
-Public API,Data(const Data &other),isis_pybind.FileName.data,N,Method not found in current binding files
+Public API,Data(),isis_pybind.FileName.data,N,Private inner class Data; 不属于公开 API
+Public API,Data(const Data &other),isis_pybind.FileName.data,N,Private inner class Data copy ctor; 不属于公开 API
 Public API,QString original(bool includeAttributes) const,isis_pybind.FileName.original,Y,Current Python name
-Mutation/Configuration,void setOriginal(const QString &originalStr),isis_pybind.FileName.set_original,N,Method not found in current binding files
+Mutation/Configuration,void setOriginal(const QString &originalStr),isis_pybind.FileName.set_original,N,Private Data::setOriginal; 不属于公开 API
 Public API,QString expanded(bool includeAttributes) const,isis_pybind.FileName.expanded,Y,Current Python name

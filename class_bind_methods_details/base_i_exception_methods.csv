@@ -2,21 +2,21 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 IException,Utility,reference/upstream_isis/src/base/objs/IException/IException.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,ISIS 统一异常类型；后续 pybind 通常应映射到 Python 异常层级
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,IException,isis_pybind.IException,N,Python class symbol not found in current binding files
-Construction/Enum,"enum ErrorType { Unknown, User, Programmer, Io }",isis_pybind.IException.ErrorType,N,异常来源枚举
+Class Symbol,IException,isis_pybind.IException,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
+Construction/Enum,"enum ErrorType { Unknown, User, Programmer, Io }",isis_pybind.IException.ErrorType,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
 Construction/Enum,IException(),isis_pybind.IException(),N,默认构造
-Construction/Enum,"IException(ErrorType type, const char *message, const char *fileName, int lineNumber)",isis_pybind.IException,N,基础构造重载
-Construction/Enum,"IException(ErrorType type, const std::string &message, const char *fileName, int lineNumber)",isis_pybind.IException,N,std::string 消息重载
-Construction/Enum,"IException(ErrorType type, const QString &message, const char *fileName, int lineNumber)",isis_pybind.IException,N,QString 消息重载
-Construction/Enum,"IException(const IException &caughtException, ErrorType newExceptionType, const char *message, const char *fileName, int lineNumber)",isis_pybind.IException,N,带前序异常链构造
-Construction/Enum,"IException(const IException &caughtException, ErrorType newExceptionType, const std::string &message, const char *fileName, int lineNumber)",isis_pybind.IException,N,std::string 重载
-Construction/Enum,"IException(const IException &caughtException, ErrorType newExceptionType, const QString &message, const char *fileName, int lineNumber)",isis_pybind.IException,N,QString 重载
+Construction/Enum,"IException(ErrorType type, const char *message, const char *fileName, int lineNumber)",isis_pybind.IException,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
+Construction/Enum,"IException(ErrorType type, const std::string &message, const char *fileName, int lineNumber)",isis_pybind.IException,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
+Construction/Enum,"IException(ErrorType type, const QString &message, const char *fileName, int lineNumber)",isis_pybind.IException,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
+Construction/Enum,"IException(const IException &caughtException, ErrorType newExceptionType, const char *message, const char *fileName, int lineNumber)",isis_pybind.IException,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
+Construction/Enum,"IException(const IException &caughtException, ErrorType newExceptionType, const std::string &message, const char *fileName, int lineNumber)",isis_pybind.IException,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
+Construction/Enum,"IException(const IException &caughtException, ErrorType newExceptionType, const QString &message, const char *fileName, int lineNumber)",isis_pybind.IException,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
 Construction/Enum,"IException(const IException &other)",isis_pybind.IException,N,拷贝构造
 Construction/Enum,~IException() throw(),isis_pybind.IException,N,析构函数
 Public API,const char *what() const throw(),isis_pybind.IException.what,N,标准异常消息入口
 Public API,"void append(const IException &exceptionSource)",isis_pybind.IException.append,N,追加前序异常
-Public API,ErrorType errorType() const,isis_pybind.IException.errorType,N,返回异常类型
-Public API,"static QString errorTypeToString(ErrorType t)",isis_pybind.IException.errorTypeToString,N,枚举转字符串
+Public API,ErrorType errorType() const,isis_pybind.IException.errorType,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
+Public API,"static QString errorTypeToString(ErrorType t)",isis_pybind.IException.errorTypeToString,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
 Public API,void print() const,isis_pybind.IException.print,N,打印异常
 Public API,"void print(bool printFileInfo) const",isis_pybind.IException.print,N,可选文件信息
 Public API,Pvl toPvl() const,isis_pybind.IException.toPvl,N,导出为 PVL；依赖 Pvl 绑定

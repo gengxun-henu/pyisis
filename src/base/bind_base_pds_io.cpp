@@ -109,6 +109,13 @@ void bind_base_pds_io(py::module_ &m) {
            },
            py::arg("formatted") = true,
            "Return a list of all column names in the table.")
+      // Added: 2026-04-11 - expose getFormattedName
+      .def("get_formatted_name",
+           [](const Isis::ImportPdsTable &self, const std::string &col_name) {
+             return self.getFormattedName(toQ(col_name)).toStdString();
+           },
+           py::arg("col_name"),
+           "Return the formatted version of the given column name.")
       .def("get_type",
            [](const Isis::ImportPdsTable &self, const std::string &col_name) {
              return self.getType(toQ(col_name)).toStdString();

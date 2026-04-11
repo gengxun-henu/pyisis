@@ -8,8 +8,8 @@ Public API,void Reset(),isis_pybind.MultivariateStatistics.reset,Y,Current Pytho
 Mutation/Configuration,"void AddData(const double *x, const double *y, const unsigned int count)",isis_pybind.MultivariateStatistics.add_data,Y,Current Python name
 Mutation/Configuration,"void AddData(double x, double y, unsigned int count = 1)",isis_pybind.MultivariateStatistics.add_data,Y,Current Python name
 Mutation/Configuration,"void RemoveData(const double *x, const double *y, const unsigned int count)",isis_pybind.MultivariateStatistics.remove_data,Y,Current Python name
-Public API,Isis::Statistics X() const,isis_pybind.MultivariateStatistics.x,N,Method not found in current binding files
-Public API,Isis::Statistics Y() const,isis_pybind.MultivariateStatistics.y,N,Method not found in current binding files
+Public API,Isis::Statistics X() const,isis_pybind.MultivariateStatistics.x_statistics,Y,2026-04-11 已在 bind_statistics.cpp 暴露为 x_statistics
+Public API,Isis::Statistics Y() const,isis_pybind.MultivariateStatistics.y_statistics,Y,2026-04-11 已在 bind_statistics.cpp 暴露为 y_statistics
 Public API,double SumXY() const,isis_pybind.MultivariateStatistics.sum_xy,Y,Current Python name
 Public API,double Covariance() const,isis_pybind.MultivariateStatistics.covariance,Y,Current Python name
 Public API,double Correlation() const,isis_pybind.MultivariateStatistics.correlation,Y,Current Python name

@@ -2,17 +2,17 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 Column,Utility,isis/src/base/objs/Column/Column.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Column,isis_pybind.Column,N,Python class symbol not found in current binding files
-Construction/Enum,"Align enum (NoAlign, Right, Left, Decimal)",isis_pybind.Column.Align,N,Enum exposure not detected in current binding files
-Construction/Enum,"Type enum (NoType, Integer, Real, String, Pixel)",isis_pybind.Column.Type,N,Enum exposure not detected in current binding files
-Construction/Enum,Column(),isis_pybind.Column(),N,Constructor binding not detected in current binding files
-Mutation/Configuration,void SetName(QString name),isis_pybind.Column.set_name,N,Method not found in current binding files
-Mutation/Configuration,void SetWidth(unsigned int width),isis_pybind.Column.set_width,N,Method not found in current binding files
-Mutation/Configuration,void SetType(Column::Type type),isis_pybind.Column.set_type,N,Method not found in current binding files
-Mutation/Configuration,void SetAlignment(Column::Align alignment),isis_pybind.Column.set_alignment,N,Method not found in current binding files
-Mutation/Configuration,void SetPrecision(unsigned int precision),isis_pybind.Column.set_precision,N,Method not found in current binding files
-Public API,QString Name() const,isis_pybind.Column.name,N,Method not found in current binding files
-Public API,unsigned int Width() const,isis_pybind.Column.width,N,Method not found in current binding files
-Public API,Column::Type DataType() const,isis_pybind.Column.data_type,N,Method not found in current binding files
-Public API,Column::Align Alignment() const,isis_pybind.Column.alignment,N,Method not found in current binding files
-Public API,unsigned int Precision() const,isis_pybind.Column.precision,N,Method not found in current binding files
+Class Symbol,Column,isis_pybind.Column,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Python class symbol not found in current binding files
+Construction/Enum,"Align enum (NoAlign, Right, Left, Decimal)",isis_pybind.Column.Align,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Enum exposure not detected in current binding files
+Construction/Enum,"Type enum (NoType, Integer, Real, String, Pixel)",isis_pybind.Column.Type,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Enum exposure not detected in current binding files
+Construction/Enum,Column(),isis_pybind.Column(),Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Constructor binding not detected in current binding files
+Mutation/Configuration,void SetName(QString name),isis_pybind.Column.set_name,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Method not found in current binding files
+Mutation/Configuration,void SetWidth(unsigned int width),isis_pybind.Column.set_width,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Method not found in current binding files
+Mutation/Configuration,void SetType(Column::Type type),isis_pybind.Column.set_type,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Method not found in current binding files
+Mutation/Configuration,void SetAlignment(Column::Align alignment),isis_pybind.Column.set_alignment,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Method not found in current binding files
+Mutation/Configuration,void SetPrecision(unsigned int precision),isis_pybind.Column.set_precision,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Method not found in current binding files
+Public API,QString Name() const,isis_pybind.Column.name,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Method not found in current binding files
+Public API,unsigned int Width() const,isis_pybind.Column.width,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Method not found in current binding files
+Public API,Column::Type DataType() const,isis_pybind.Column.data_type,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Method not found in current binding files
+Public API,Column::Align Alignment() const,isis_pybind.Column.alignment,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Method not found in current binding files
+Public API,unsigned int Precision() const,isis_pybind.Column.precision,Y,2026-04-11 台账同步；已在 src/base/bind_base_utility.cpp 暴露; Method not found in current binding files

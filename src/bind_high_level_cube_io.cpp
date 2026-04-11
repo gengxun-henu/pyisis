@@ -715,6 +715,26 @@ void bind_high_level_cube_io(py::module_ &m) {
            },
            py::arg("s"),
            "Return the ImageOverlay enum value for the given string.")
+      // Added: 2026-04-11 - expose SetBandKeyword and imagePositions
+      .def("set_band_keyword",
+           [](Isis::ProcessMosaic &self, const std::string &key_name, const std::string &key_value) {
+               self.SetBandKeyword(stdStringToQString(key_name), stdStringToQString(key_value));
+           },
+           py::arg("band_priority_key_name"),
+           py::arg("band_priority_key_value"),
+           "Set the band keyword name and value for priority ordering.")
+      .def("image_positions",
+           &Isis::ProcessMosaic::imagePositions,
+           "Return a PvlObject describing the positions of images placed in the mosaic.")
+      .def("start_process",
+           &Isis::ProcessMosaic::StartProcess,
+           py::arg("out_sample"),
+           py::arg("out_line"),
+           py::arg("out_band"),
+           "Start the mosaicking process at the given output sample, line, and band.")
+      .def("end_process",
+           &Isis::ProcessMosaic::EndProcess,
+           "End the mosaicking process and clean up.")
       .def("__repr__", [](const Isis::ProcessMosaic &) {
            return std::string("ProcessMosaic()");
       });

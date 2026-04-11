@@ -3,15 +3,15 @@ Distance,Utility,isis/src/base/objs/Distance/Distance.h,isis_pybind_standalone/s
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Distance,isis_pybind.Distance,Y,Python class symbol is exported
-Construction/Enum,"Units enum (Meters, Kilometers, Pixels, SolarRadii)",isis_pybind.Distance.Units,N,Enum exposure not detected in current binding files
+Construction/Enum,"Units enum (Meters, Kilometers, Pixels, SolarRadii)",isis_pybind.Distance.Units,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
 Construction/Enum,Distance(),isis_pybind.Distance(),Y,Constructor is explicitly bound
-Public API,double meters() const,isis_pybind.Distance.meters,N,Method not found in current binding files
-Mutation/Configuration,void setMeters(double distanceInMeters),isis_pybind.Distance.set_meters,N,Method not found in current binding files
-Public API,double kilometers() const,isis_pybind.Distance.kilometers,N,Method not found in current binding files
-Mutation/Configuration,void setKilometers(double distanceInKilometers),isis_pybind.Distance.set_kilometers,N,Method not found in current binding files
-Public API,double pixels(double pixelsPerMeter = 1.0) const,isis_pybind.Distance.pixels,N,Method not found in current binding files
-Mutation/Configuration,"void setPixels(double distanceInPixels, double pixelsPerMeter = 1.0)",isis_pybind.Distance.set_pixels,N,Method not found in current binding files
-Public API,double solarRadii() const,isis_pybind.Distance.solar_radii,N,Method not found in current binding files
-Mutation/Configuration,void setSolarRadii(double distanceInSolarRadii),isis_pybind.Distance.set_solar_radii,N,Method not found in current binding files
-Public API,QString toString() const,isis_pybind.Distance.to_string,N,Method not found in current binding files
-Query,bool isValid() const,isis_pybind.Distance.is_valid,N,Method not found in current binding files
+Public API,double meters() const,isis_pybind.Distance.meters,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
+Mutation/Configuration,void setMeters(double distanceInMeters),isis_pybind.Distance.set_meters,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
+Public API,double kilometers() const,isis_pybind.Distance.kilometers,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
+Mutation/Configuration,void setKilometers(double distanceInKilometers),isis_pybind.Distance.set_kilometers,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
+Public API,double pixels(double pixelsPerMeter = 1.0) const,isis_pybind.Distance.pixels,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
+Mutation/Configuration,"void setPixels(double distanceInPixels, double pixelsPerMeter = 1.0)",isis_pybind.Distance.set_pixels,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
+Public API,double solarRadii() const,isis_pybind.Distance.solar_radii,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
+Mutation/Configuration,void setSolarRadii(double distanceInSolarRadii),isis_pybind.Distance.set_solar_radii,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
+Public API,QString toString() const,isis_pybind.Distance.to_string,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
+Query,bool isValid() const,isis_pybind.Distance.is_valid,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露

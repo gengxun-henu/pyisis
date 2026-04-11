@@ -5,7 +5,7 @@ Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Affine,isis_pybind.Affine,Y,Exposed via bind_base_math.cpp and re-exported from isis_pybind.__init__
 Construction/Enum,Affine(),isis_pybind.Affine(),Y,Default constructor bound in bind_base_math.cpp
 Public API,"void Solve(const double x[], const double y[], const double xp[], const double yp[], int n)",isis_pybind.Affine.solve,Y,Bound in bind_base_math.cpp
-Static/Factory,static AMatrix getIdentity(),isis_pybind.Affine.get_identity,N,Static identity-matrix helper is not currently exposed in bind_base_math.cpp
+Static/Factory,static AMatrix getIdentity(),isis_pybind.Affine.get_identity,Y,2026-04-11 已在 bind_base_math.cpp 暴露为嵌套列表
 Public API,void Identity(),isis_pybind.Affine.identity,Y,Bound in bind_base_math.cpp
 Public API,"void Translate(double tx, double ty)",isis_pybind.Affine.translate,Y,Bound in bind_base_math.cpp
 Public API,void Rotate(double rot),isis_pybind.Affine.rotate,Y,Bound in bind_base_math.cpp (upstream API expects degrees)
@@ -18,5 +18,5 @@ Public API,double x() const { return p_x,isis_pybind.Affine.x,Y,Bound in bind_ba
 Public API,double y() const { return p_y,isis_pybind.Affine.y,Y,Bound in bind_base_math.cpp
 Public API,std::vector<double> Coefficients(int var),isis_pybind.Affine.coefficients,Y,Bound in bind_base_math.cpp
 Public API,std::vector<double> InverseCoefficients(int var),isis_pybind.Affine.inverse_coefficients,Y,Bound in bind_base_math.cpp
-Public API,AMatrix Forward() const { return (p_matrix.copy()),isis_pybind.Affine.forward,N,Forward matrix accessor is not currently exposed in bind_base_math.cpp
-Public API,AMatrix Inverse() const { return (p_invmat.copy()),isis_pybind.Affine.inverse,N,Inverse matrix accessor is not currently exposed in bind_base_math.cpp
+Public API,AMatrix Forward() const { return (p_matrix.copy()),isis_pybind.Affine.forward_matrix,Y,2026-04-11 已在 bind_base_math.cpp 暴露为嵌套列表
+Public API,AMatrix Inverse() const { return (p_invmat.copy()),isis_pybind.Affine.inverse_matrix,Y,2026-04-11 已在 bind_base_math.cpp 暴露为嵌套列表

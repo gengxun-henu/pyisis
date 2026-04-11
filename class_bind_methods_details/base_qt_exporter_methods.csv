@@ -2,10 +2,10 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 QtExporter,High Level Cube I/O,isis/src/base/objs/QtExporter/QtExporter.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,QtExporter,isis_pybind.QtExporter,N,Python class symbol not found in current binding files
-Construction/Enum,QtExporter(),isis_pybind.QtExporter(),N,Constructor binding not detected in current binding files
-Mutation/Configuration,virtual void setGrayscale(ExportDescription &desc),isis_pybind.QtExporter.set_grayscale,N,Method not found in current binding files
-Mutation/Configuration,virtual void setRgb(ExportDescription &desc),isis_pybind.QtExporter.set_rgb,N,Method not found in current binding files
-Mutation/Configuration,virtual void setRgba(ExportDescription &desc),isis_pybind.QtExporter.set_rgba,N,Method not found in current binding files
-Read/Write IO,"virtual void write(FileName outputName, int quality=100, QString compression=""none"", UserInterface *ui = nullptr)",isis_pybind.QtExporter.write,N,Method not found in current binding files
-Static/Factory,static bool canWriteFormat(QString format),isis_pybind.QtExporter.can_write_format,N,Method not found in current binding files
+Class Symbol,QtExporter,isis_pybind.QtExporter,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Python class symbol not found in current binding files
+Construction/Enum,QtExporter(),isis_pybind.QtExporter(),Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Constructor binding not detected in current binding files
+Mutation/Configuration,virtual void setGrayscale(ExportDescription &desc),isis_pybind.QtExporter.set_grayscale,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Mutation/Configuration,virtual void setRgb(ExportDescription &desc),isis_pybind.QtExporter.set_rgb,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Mutation/Configuration,virtual void setRgba(ExportDescription &desc),isis_pybind.QtExporter.set_rgba,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Read/Write IO,"virtual void write(FileName outputName, int quality=100, QString compression=""none"", UserInterface *ui = nullptr)",isis_pybind.QtExporter.write,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files
+Static/Factory,static bool canWriteFormat(QString format),isis_pybind.QtExporter.can_write_format,Y,2026-04-11 台账同步；已在 src/bind_high_level_cube_io.cpp 暴露; Method not found in current binding files

@@ -2,34 +2,34 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 ProcessMosaic,High Level Cube I/O,isis/src/base/objs/ProcessMosaic/ProcessMosaic.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ProcessMosaic,isis_pybind.ProcessMosaic,N,Python class symbol not found in current binding files; 流程/回调接口较多
-Construction/Enum,"ImageOverlay enum (PlaceImagesOnTop, PlaceImagesBeneath, UseBandPlacementCriteria, AverageImageWithMosaic, NumImageOverlayOptions)",isis_pybind.ProcessMosaic.ImageOverlay,N,流程/回调接口较多
-Construction/Enum,ProcessMosaic(),isis_pybind.ProcessMosaic(),N,流程/回调接口较多
-Public API,"virtual void StartProcess(const int &piOutSample, const int &piOutLine, const int &piOutBand)",isis_pybind.ProcessMosaic.start_process,N,流程/回调接口较多
-Public API,virtual void EndProcess(),isis_pybind.ProcessMosaic.end_process,N,流程/回调接口较多
-Public API,PvlObject imagePositions(),isis_pybind.ProcessMosaic.image_positions,N,流程/回调接口较多
+Class Symbol,ProcessMosaic,isis_pybind.ProcessMosaic,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Construction/Enum,"ImageOverlay enum (PlaceImagesOnTop, PlaceImagesBeneath, UseBandPlacementCriteria, AverageImageWithMosaic, NumImageOverlayOptions)",isis_pybind.ProcessMosaic.ImageOverlay,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Construction/Enum,ProcessMosaic(),isis_pybind.ProcessMosaic(),Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Public API,"virtual virtual void StartProcess(const int &piOutSample, const int &piOutLine, const int &piOutBand),isis_pybind.ProcessMosaic.start_process,Y,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露
+Public API,virtual void EndProcess(),isis_pybind.ProcessMosaic.end_process,Y,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露
+Public API,PvlObject imagePositions(),isis_pybind.ProcessMosaic.image_positions,Y,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露
 Mutation/Configuration,"virtual Isis::Cube *SetInputCube(const QString &parameter, const int ss, const int sl, const int sb, const int ns, const int nl, const int nb)",isis_pybind.ProcessMosaic.set_input_cube,N,流程/回调接口较多
 Mutation/Configuration,"virtual Isis::Cube *SetInputCube(const QString &fname, Isis::CubeAttributeInput &att, const int ss = 1, const int sl = 1, const int sb = 1, const int ns = -1, const int nl = -1, const int nb = -1)",isis_pybind.ProcessMosaic.set_input_cube,N,流程/回调接口较多
 Mutation/Configuration,Isis::Cube *SetOutputCube(const QString &psParameter),isis_pybind.ProcessMosaic.set_output_cube,N,流程/回调接口较多
 Mutation/Configuration,"Isis::Cube *SetOutputCube(const QString &psParameter, UserInterface &ui)",isis_pybind.ProcessMosaic.set_output_cube,N,流程/回调接口较多
-Mutation/Configuration,void SetBandBinMatch(bool enforceBandBinMatch),isis_pybind.ProcessMosaic.set_band_bin_match,N,流程/回调接口较多
-Mutation/Configuration,"void SetBandKeyword(QString bandPriorityKeyName, QString bandPriorityKeyValue)",isis_pybind.ProcessMosaic.set_band_keyword,N,流程/回调接口较多
-Mutation/Configuration,void SetBandNumber(int bandPriorityBandNumber),isis_pybind.ProcessMosaic.set_band_number,N,流程/回调接口较多
-Mutation/Configuration,void SetBandUseMaxValue(bool useMax),isis_pybind.ProcessMosaic.set_band_use_max_value,N,流程/回调接口较多
-Mutation/Configuration,void SetCreateFlag(bool createOutputMosaic),isis_pybind.ProcessMosaic.set_create_flag,N,流程/回调接口较多
-Mutation/Configuration,void SetHighSaturationFlag(bool placeHighSatPixels),isis_pybind.ProcessMosaic.set_high_saturation_flag,N,流程/回调接口较多
-Mutation/Configuration,void SetImageOverlay(ImageOverlay placement),isis_pybind.ProcessMosaic.set_image_overlay,N,流程/回调接口较多
-Mutation/Configuration,void SetLowSaturationFlag(bool placeLowSatPixels),isis_pybind.ProcessMosaic.set_low_saturation_flag,N,流程/回调接口较多
-Mutation/Configuration,void SetMatchDEM(bool matchDEM),isis_pybind.ProcessMosaic.set_match_dem,N,流程/回调接口较多
-Mutation/Configuration,void SetNullFlag(bool placeNullPixels),isis_pybind.ProcessMosaic.set_null_flag,N,流程/回调接口较多
-Mutation/Configuration,void SetTrackFlag(bool trackingEnabled),isis_pybind.ProcessMosaic.set_track_flag,N,流程/回调接口较多
-Public API,bool GetHighSaturationFlag() const,isis_pybind.ProcessMosaic.get_high_saturation_flag,N,流程/回调接口较多
-Public API,ImageOverlay GetImageOverlay() const,isis_pybind.ProcessMosaic.get_image_overlay,N,流程/回调接口较多
-Public API,bool GetLowSaturationFlag() const,isis_pybind.ProcessMosaic.get_low_saturation_flag,N,流程/回调接口较多
-Public API,bool GetNullFlag() const,isis_pybind.ProcessMosaic.get_null_flag,N,流程/回调接口较多
-Public API,bool GetTrackFlag() const,isis_pybind.ProcessMosaic.get_track_flag,N,流程/回调接口较多
-Public API,int GetInputStartLineInMosaic() const,isis_pybind.ProcessMosaic.get_input_start_line_in_mosaic,N,流程/回调接口较多
-Public API,int GetInputStartSampleInMosaic() const,isis_pybind.ProcessMosaic.get_input_start_sample_in_mosaic,N,流程/回调接口较多
-Public API,int GetInputStartBandInMosaic() const,isis_pybind.ProcessMosaic.get_input_start_band_in_mosaic,N,流程/回调接口较多
-Static/Factory,static QString OverlayToString(ImageOverlay),isis_pybind.ProcessMosaic.overlay_to_string,N,流程/回调接口较多
-Static/Factory,static ImageOverlay StringToOverlay(QString),isis_pybind.ProcessMosaic.string_to_overlay,N,流程/回调接口较多
+Mutation/Configuration,void SetBandBinMatch(bool enforceBandBinMatch),isis_pybind.ProcessMosaic.set_band_bin_match,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Mutation/Configuration,"void SetBandKeyword(QString bandPriorityKeyName, QString bandPriorityKeyValue),isis_pybind.ProcessMosaic.set_band_keyword,Y,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露
+Mutation/Configuration,void SetBandNumber(int bandPriorityBandNumber),isis_pybind.ProcessMosaic.set_band_number,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Mutation/Configuration,void SetBandUseMaxValue(bool useMax),isis_pybind.ProcessMosaic.set_band_use_max_value,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Mutation/Configuration,void SetCreateFlag(bool createOutputMosaic),isis_pybind.ProcessMosaic.set_create_flag,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Mutation/Configuration,void SetHighSaturationFlag(bool placeHighSatPixels),isis_pybind.ProcessMosaic.set_high_saturation_flag,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Mutation/Configuration,void SetImageOverlay(ImageOverlay placement),isis_pybind.ProcessMosaic.set_image_overlay,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Mutation/Configuration,void SetLowSaturationFlag(bool placeLowSatPixels),isis_pybind.ProcessMosaic.set_low_saturation_flag,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Mutation/Configuration,void SetMatchDEM(bool matchDEM),isis_pybind.ProcessMosaic.set_match_dem,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Mutation/Configuration,void SetNullFlag(bool placeNullPixels),isis_pybind.ProcessMosaic.set_null_flag,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Mutation/Configuration,void SetTrackFlag(bool trackingEnabled),isis_pybind.ProcessMosaic.set_track_flag,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Public API,bool GetHighSaturationFlag() const,isis_pybind.ProcessMosaic.get_high_saturation_flag,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Public API,ImageOverlay GetImageOverlay() const,isis_pybind.ProcessMosaic.get_image_overlay,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Public API,bool GetLowSaturationFlag() const,isis_pybind.ProcessMosaic.get_low_saturation_flag,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Public API,bool GetNullFlag() const,isis_pybind.ProcessMosaic.get_null_flag,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Public API,bool GetTrackFlag() const,isis_pybind.ProcessMosaic.get_track_flag,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Public API,int GetInputStartLineInMosaic() const,isis_pybind.ProcessMosaic.get_input_start_line_in_mosaic,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Public API,int GetInputStartSampleInMosaic() const,isis_pybind.ProcessMosaic.get_input_start_sample_in_mosaic,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Public API,int GetInputStartBandInMosaic() const,isis_pybind.ProcessMosaic.get_input_start_band_in_mosaic,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Static/Factory,static QString OverlayToString(ImageOverlay),isis_pybind.ProcessMosaic.overlay_to_string,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露
+Static/Factory,static ImageOverlay StringToOverlay(QString),isis_pybind.ProcessMosaic.string_to_overlay,Y,2026-04-11 台账同步；已在 bind_high_level_cube_io.cpp 暴露

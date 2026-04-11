@@ -34,6 +34,8 @@
 #include "FileList.h"
 #include "FileName.h"
 #include "IException.h"
+
+#include <QDir>
 #include "ObservationNumber.h"
 #include "Progress.h"
 #include "Pvl.h"
@@ -220,6 +222,12 @@ void bind_base_support(py::module_ &m) {
       .def("highest_version", &Isis::FileName::highestVersion)
       .def("new_version", &Isis::FileName::newVersion)
       .def("file_exists", &Isis::FileName::fileExists)
+      // Added: 2026-04-11 - expose dir() as string path
+      .def("dir",
+           [](const Isis::FileName &self) -> std::string {
+                return self.dir().path().toStdString();
+           },
+           "Return the directory path as a string.")
       .def("to_string", [](const Isis::FileName &self) { return qStringToStdString(self.toString()); })
       .def_static("create_temp_file",
                   &Isis::FileName::createTempFile,

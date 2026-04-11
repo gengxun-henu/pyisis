@@ -1,12 +1,12 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Quaternion,"Spice, Instruments, and Cameras",isis/src/base/objs/Quaternion/Quaternion.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+Quaternion,"Spice, Instruments, and Cameras",isis/src/base/objs/Quaternion/Quaternion.h,src/bind_camera.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Quaternion,isis_pybind.Quaternion,N,Python class symbol not found in current binding files
-Construction/Enum,Quaternion(),isis_pybind.Quaternion(),N,Constructor binding not detected in current binding files
-Public API,std::vector<double> ToMatrix(),isis_pybind.Quaternion.to_matrix,N,Method not found in current binding files
-Public API,"std::vector<double> ToAngles(int axis3, int axis2, int axis1)",isis_pybind.Quaternion.to_angles,N,Method not found in current binding files
-Mutation/Configuration,void Set(std::vector<double>),isis_pybind.Quaternion.set,N,Method not found in current binding files
-Public API,std::vector<double> GetQuaternion() const { return p_quaternion,isis_pybind.Quaternion.get_quaternion,N,Method not found in current binding files
-Public API,std::vector<double> Qxv(const std::vector<double> &vin),isis_pybind.Quaternion.qxv,N,Method not found in current binding files
-Public API,Quaternion Conjugate(),isis_pybind.Quaternion.conjugate,N,Method not found in current binding files
+Class Symbol,Quaternion,isis_pybind.Quaternion,Y,2026-04-11 台账同步；已在 bind_camera.cpp 暴露
+Construction/Enum,Quaternion(),isis_pybind.Quaternion(),Y,2026-04-11 台账同步；已在 bind_camera.cpp 暴露
+Public API,std::vector<double> ToMatrix(),isis_pybind.Quaternion.to_matrix,Y,2026-04-11 台账同步；已在 bind_camera.cpp 暴露
+Public API,"std::vector<double> ToAngles(int axis3, int axis2, int axis1)",isis_pybind.Quaternion.to_angles,Y,2026-04-11 台账同步；已在 bind_camera.cpp 暴露
+Mutation/Configuration,void Set(std::vector<double>),isis_pybind.Quaternion.set,Y,2026-04-11 台账同步；已在 bind_camera.cpp 暴露
+Public API,std::vector<double> GetQuaternion() const { return p_quaternion,isis_pybind.Quaternion.get_quaternion,Y,2026-04-11 台账同步；已在 bind_camera.cpp 暴露
+Public API,std::vector<double> Qxv(const std::vector<double> &vin),isis_pybind.Quaternion.qxv,Y,2026-04-11 台账同步；已在 bind_camera.cpp 暴露
+Public API,Quaternion Conjugate(),isis_pybind.Quaternion.conjugate,Y,2026-04-11 台账同步；已在 bind_camera.cpp 暴露

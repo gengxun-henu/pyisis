@@ -10,8 +10,8 @@ agent: "agent"
 优先级规则：
 
 1. 如果用户在编辑器里选中了 shell 命令，优先把**当前选中的命令块**当作待执行流程。
-2. 如果没有选中命令，则优先读取 [build_commands](../../doc_development_process/build_commands.md) 中的纯净 recipe。
-3. 只有在 `build_commands.md` 无法覆盖需求时，才参考 [how_to_build](../../doc_development_process/how_to_build.md) 作为说明性补充。
+2. 如果没有选中命令，则优先读取 [build_commands](.github/prompts/build_commands.md) 中的纯净 recipe。
+3. 只有在 `build_commands.md` 无法覆盖需求时，才参考 [how_to_build](.github/prompts/how_to_build.md) 作为说明性补充。
 
 模式选择：
 

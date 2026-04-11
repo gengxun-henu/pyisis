@@ -8,6 +8,7 @@
 // Created: 2026-04-10
 // Updated: 2026-04-10  Geng Xun added ImagePolygon binding (Batch 2) exposing
 //          Create-from-coords, poly_str, setters, and vertex/dimension queries.
+// Updated: 2026-04-11  Geng Xun made poly_str fall back to Blob-serialized WKT when Create(coords) leaves the cached polygon string empty.
 // Purpose: Expose Isis::ImagePolygon to Python for footprint polygon construction
 //          and WKT serialization without requiring a live Cube or GEOS Python library.
 
@@ -22,6 +23,26 @@
 #include "IException.h"
 
 namespace py = pybind11;
+
+namespace
+{
+     std::string imagePolygonPolyStrSafe(Isis::ImagePolygon &self)
+     {
+          std::string wkt = self.polyStr();
+          if (!wkt.empty())
+          {
+               return wkt;
+          }
+
+          if (self.Polys() == nullptr)
+          {
+               return "";
+          }
+
+          Isis::Blob blob = self.toBlob();
+          return std::string(blob.getBuffer(), blob.Size());
+     }
+}
 
 void bind_base_image_polygon(py::module_ &m)
 {
@@ -63,7 +84,7 @@ void bind_base_image_polygon(py::module_ &m)
            py::arg("div"),
            "Set the subpixel accuracy (binary-search depth, default 50).")
       .def("poly_str",
-           &Isis::ImagePolygon::polyStr,
+           &imagePolygonPolyStrSafe,
            "Return the WKT (Well Known Text) string of the polygon.")
       .def("valid_sample_dim",
            &Isis::ImagePolygon::validSampleDim,
@@ -84,8 +105,8 @@ void bind_base_image_polygon(py::module_ &m)
            &Isis::ImagePolygon::toBlob,
            "Serialise this polygon to an ISIS Blob for cube storage.")
       .def("__repr__",
-           [](const Isis::ImagePolygon &self) {
+           [](Isis::ImagePolygon &self) {
                return std::string("ImagePolygon(poly_str=\"") +
-                      self.polyStr() + "\")";
+                           imagePolygonPolyStrSafe(self) + "\")";
            });
 }

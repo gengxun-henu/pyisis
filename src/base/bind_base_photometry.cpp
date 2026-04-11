@@ -510,18 +510,7 @@ void bind_base_photometry(py::module_ &m) {
 
   py::class_<Isis::NumericalAtmosApprox> numericalAtmosApprox(m, "NumericalAtmosApprox");
 
-  py::enum_<Isis::NumericalApproximation::InterpType>(numericalAtmosApprox, "InterpType")
-      .value("Linear", Isis::NumericalApproximation::InterpType::Linear)
-      .value("Polynomial", Isis::NumericalApproximation::InterpType::Polynomial)
-      .value("PolynomialNeville", Isis::NumericalApproximation::InterpType::PolynomialNeville)
-      .value("CubicNatural", Isis::NumericalApproximation::InterpType::CubicNatural)
-      .value("CubicClamped", Isis::NumericalApproximation::InterpType::CubicClamped)
-      .value("CubicNatPeriodic", Isis::NumericalApproximation::InterpType::CubicNatPeriodic)
-      .value("CubicNeighborhood", Isis::NumericalApproximation::InterpType::CubicNeighborhood)
-      .value("CubicHermite", Isis::NumericalApproximation::InterpType::CubicHermite)
-      .value("Akima", Isis::NumericalApproximation::InterpType::Akima)
-      .value("AkimaPeriodic", Isis::NumericalApproximation::InterpType::AkimaPeriodic)
-      .export_values();
+     numericalAtmosApprox.attr("InterpType") = m.attr("NumericalApproximationInterpType");
 
   py::enum_<Isis::NumericalAtmosApprox::IntegFunc>(numericalAtmosApprox, "IntegFunc")
       .value("OuterFunction", Isis::NumericalAtmosApprox::IntegFunc::OuterFunction)

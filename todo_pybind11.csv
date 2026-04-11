@@ -289,7 +289,7 @@ Statistics,FourierTransform,已转换,2026-04-10 已在 src/base/bind_base_math.
 Statistics,GaussianDistribution,已转换,
 Statistics,GroupedStatistics,已转换,
 Statistics,Histogram,已转换,
-Statistics,ImageHistogram,已转换,
+Statistics,ImageHistogram,已转换,2026-04-11 已在 src/bind_statistics.cpp 新增 add_data/remove_data/bin_range 显式绑定，覆盖 ImageHistogram 全部 4 个缺失方法
 Statistics,MultivariateStatistics,已转换,
 Statistics,OverlapStatistics,已转换,2026-04-10 已在 src/bind_statistics.cpp 暴露 PvlObject 构造函数/HasOverlap/Lines/Samples/Bands/SampPercent/FileNameX/FileNameY/GetMStats/toPvl；focused 单测在 statistics_unit_test.py
 Statistics,PrincipalComponentAnalysis,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露全部公开方法（TNT::Array2D 通过 2D list 适配）；focused 单测在 statistics_unit_test.py

@@ -4,7 +4,7 @@ ImageHistogram,Statistics,isis/src/base/objs/ImageHistogram/ImageHistogram.h,isi
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,ImageHistogram,isis_pybind.ImageHistogram,Y,Python class symbol is exported
 Construction/Enum,ImageHistogram(),isis_pybind.ImageHistogram(),Y,Constructor is explicitly bound
-Mutation/Configuration,"virtual void AddData(const double *data, const unsigned int count)",isis_pybind.ImageHistogram.add_data,N,Method not found in current binding files
-Mutation/Configuration,virtual void AddData(const double data),isis_pybind.ImageHistogram.add_data,N,Method not found in current binding files
-Mutation/Configuration,"virtual void RemoveData(const double *data, const unsigned int count)",isis_pybind.ImageHistogram.remove_data,N,Method not found in current binding files
-Public API,"virtual void BinRange(const int index, double &low, double &high) const",isis_pybind.ImageHistogram.bin_range,N,Method not found in current binding files
+Mutation/Configuration,"virtual void AddData(const double *data, const unsigned int count)",isis_pybind.ImageHistogram.add_data,Y,2026-04-11 已在 src/bind_statistics.cpp 完成绑定
+Mutation/Configuration,virtual void AddData(const double data),isis_pybind.ImageHistogram.add_data,Y,2026-04-11 已在 src/bind_statistics.cpp 完成绑定
+Mutation/Configuration,"virtual void RemoveData(const double *data, const unsigned int count)",isis_pybind.ImageHistogram.remove_data,Y,2026-04-11 已在 src/bind_statistics.cpp 完成绑定
+Public API,"virtual void BinRange(const int index, double &low, double &high) const",isis_pybind.ImageHistogram.bin_range,Y,2026-04-11 已在 src/bind_statistics.cpp 完成绑定

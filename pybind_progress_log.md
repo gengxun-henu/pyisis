@@ -1857,3 +1857,156 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 - `todo_pybind11.csv`: 5 个类 → 已转换
 - `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新
 - `pybind_progress_log.md`: 本条目
+
+---
+
+## Batch 12 — 2026-04-11
+
+**Queue (5 classes):** ApolloMetricCamera, ApolloMetricDistortionMap, VimsCamera, VimsGroundMap, VimsSkyMap
+
+所有 5 个类已在 Batch 5（2026-04-07）完成绑定，本 Batch 完成台账同步。
+
+### Class 1: ApolloMetricCamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、ShutterOpenCloseTimes、CkFrameId、CkReferenceId、SpkTargetId、SpkReferenceId。
+- 台账同步：`apollo_apollo_metric_camera_methods.csv` 全部 7 项 N → Y，methods_inventory_summary 行更新为 已转换/100%。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`（ApolloMissionBindingsUnitTest）。
+
+### Class 2: ApolloMetricDistortionMap
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Camera* 构造（含 8 个畸变参数）、SetFocalPlane、SetUndistortedFocalPlane。
+- 台账同步：`apollo_apollo_metric_distortion_map_methods.csv` 全部 4 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### Class 3: VimsCamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、GetCameraType、CkFrameId、CkReferenceId、SpkReferenceId、PixelIfovOffsets（返回 (x,y) tuple 列表）。
+- 台账同步：`cassini_vims_camera_methods.csv` 全部 7 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`（CassiniMissionBindingsUnitTest）。
+
+### Class 4: VimsGroundMap
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Camera*/Pvl 构造、SetFocalPlane、SetGround、Init。
+- 台账同步：`cassini_vims_ground_map_methods.csv` 全部 6 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### Class 5: VimsSkyMap
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Camera*/Pvl 构造、SetFocalPlane、SetSky、Init。
+- 台账同步：`cassini_vims_sky_map_methods.csv` 全部 5 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### 台账更新
+- `todo_pybind11.csv`: 已于 Batch 5 标记为 已转换
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新 → 已转换/Y/100%
+- `pybind_progress_log.md`: 本条目
+
+---
+
+## Batch 13 — 2026-04-11
+
+**Queue (5 classes):** IssNACamera, IssWACamera, Chandrayaan1M3Camera, Chandrayaan1M3DistortionMap, ApolloPanoramicDetectorMap
+
+所有 5 个类已在 Batch 5（2026-04-07）完成绑定，本 Batch 完成台账同步。
+
+### Class 1: IssNACamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、ShutterOpenCloseTimes、CkFrameId、CkReferenceId、SpkReferenceId。
+- 台账同步：`cassini_iss_n_a_camera_methods.csv` 全部 6 项 N → Y，修复 methods_inventory_summary 中 Todo Status 错误（100% 但显示 未転換 → 已転換）。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`（CassiniMissionBindingsUnitTest）。
+
+### Class 2: IssWACamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：同 IssNACamera 接口。
+- 台账同步：`cassini_iss_w_a_camera_methods.csv` 全部 6 项 N → Y，修复 Todo Status。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### Class 3: Chandrayaan1M3Camera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、CkFrameId、CkReferenceId、SpkReferenceId。
+- 台账同步：`chandrayaan1_chandrayaan1_m3_camera_methods.csv` 全部 5 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`（ChandrayaanAndClementineBindingsUnitTest）。
+
+### Class 4: Chandrayaan1M3DistortionMap
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Camera*/int/double 构造、SetFocalPlane、SetUndistortedFocalPlane。
+- 台账同步：`chandrayaan1_chandrayaan1_m3_distortion_map_methods.csv` 全部 4 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### Class 5: ApolloPanoramicDetectorMap
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Camera*/etMiddle/lineRate/Pvl* 构造、SetParent、SetDetector、SetLineRate、LineRate、meanResidual、maxResidual、stdevResidual。
+- 台账同步：`apollo_apollo_panoramic_detector_map_methods.csv` 全部 10 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`（ApolloMissionBindingsUnitTest）。
+
+### 台账更新
+- `todo_pybind11.csv`: 已于 Batch 5 标记为 已转换（IssNACamera/IssWACamera 修复 Todo Status）
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新
+- `pybind_progress_log.md`: 本条目
+
+---
+
+## Batch 14 — 2026-04-11
+
+**Queue (5 classes):** HiresCamera, LwirCamera, NirCamera, UvvisCamera, ClementineUvvisDistortionMap
+
+所有 5 个类已在 Batch 5（2026-04-07）完成绑定，本 Batch 完成台账同步。
+
+### Class 1: HiresCamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、ShutterOpenCloseTimes、CkFrameId、CkReferenceId、SpkReferenceId。
+- 台账同步：`clementine_hires_camera_methods.csv` 全部 6 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`（ChandrayaanAndClementineBindingsUnitTest）。
+
+### Class 2: LwirCamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、ShutterOpenCloseTimes、CkFrameId、CkReferenceId、SpkReferenceId。
+- 台账同步：`clementine_lwir_camera_methods.csv` 全部 6 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### Class 3: NirCamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、ShutterOpenCloseTimes、CkFrameId、CkReferenceId、SpkReferenceId。
+- 台账同步：`clementine_nir_camera_methods.csv` 全部 6 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### Class 4: UvvisCamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、ShutterOpenCloseTimes、CkFrameId、CkReferenceId、SpkReferenceId。
+- 台账同步：`clementine_uvvis_camera_methods.csv` 全部 6 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### Class 5: ClementineUvvisDistortionMap
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Camera*/int/double 构造、SetFocalPlane、SetUndistortedFocalPlane。
+- 台账同步：`clementine_clementine_uvvis_distortion_map_methods.csv` 全部 4 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### 台账更新
+- `todo_pybind11.csv`: 已于 Batch 5 标记为 已转换
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新
+- `pybind_progress_log.md`: 本条目
+
+---
+
+## Batch 15 — 2026-04-11
+
+**Queue (5 classes):** ClipperNacRollingShutterCamera, ClipperPushBroomCamera, ClipperWacFcCamera, SsiCamera, ImageHistogram
+
+前 4 个类已在 Batch 5（2026-04-07）完成绑定，本 Batch 完成台账同步。ImageHistogram 本 Batch 新增显式方法绑定。
+
+### Class 1: ClipperNacRollingShutterCamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、CkFrameId、CkReferenceId、SpkReferenceId（无 ShutterOpenCloseTimes，Rolling Shutter 相机）。
+- 台账同步：`clipper_clipper_nac_rolling_shutter_camera_methods.csv` 全部 5 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`（ClipperGalileoAndJunoBindingsUnitTest）。
+
+### Class 2: ClipperPushBroomCamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、CkFrameId、CkReferenceId、SpkReferenceId（Push Broom 线扫描相机）。
+- 台账同步：`clipper_clipper_push_broom_camera_methods.csv` 全部 5 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### Class 3: ClipperWacFcCamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、ShutterOpenCloseTimes、CkFrameId、CkReferenceId、SpkReferenceId。
+- 台账同步：`clipper_clipper_wac_fc_camera_methods.csv` 全部 6 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`。
+
+### Class 4: SsiCamera
+- 确认已在 `src/mission/bind_mission_cameras.cpp` 绑定：Cube 构造、ShutterOpenCloseTimes、CkFrameId、CkReferenceId、SpkReferenceId。
+- 台账同步：`galileo_ssi_camera_methods.csv` 全部 6 项 N → Y。
+- focused 单测：`tests/unitTest/extended_mission_camera_unit_test.py`（ClipperGalileoAndJunoBindingsUnitTest）。
+
+### Class 5: ImageHistogram
+- 在 `src/bind_statistics.cpp` 为 ImageHistogram 追加显式方法绑定。
+- 新增：add_data(list)、add_data(scalar)、remove_data(list)、bin_range(index) → (low, high) tuple。
+- 这些方法在 ImageHistogram 中 override 父类 Histogram 的同名虚函数；显式绑定确保 Python 侧 isinstance 检查与绑定可见性一致。
+- focused 单测：`tests/unitTest/statistics_unit_test.py`（ImageHistogramUnitTest 类，新增 6 个测试方法）。
+
+### 台账更新
+- `todo_pybind11.csv`: 4 个相机类已于 Batch 5 标记；ImageHistogram 更新为 已转换（新增绑定说明）
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新 → 已转换/Y/100%
+- `pybind_progress_log.md`: 本条目

@@ -181,8 +181,33 @@ void bind_statistics(py::module_ &m) {
            py::arg("minimum") = Isis::ValidMinimum,
            py::arg("maximum") = Isis::ValidMaximum);
 
+  // Updated: 2026-04-11  Geng Xun added explicit add_data/remove_data/bin_range overrides for ImageHistogram
   py::class_<Isis::ImageHistogram, Isis::Histogram>(m, "ImageHistogram")
-       .def(py::init<double, double, int>(), py::arg("minimum"), py::arg("maximum"), py::arg("bins") = 1024);
+      .def(py::init<double, double, int>(), py::arg("minimum"), py::arg("maximum"), py::arg("bins") = 1024)
+      .def("add_data",
+           [](Isis::ImageHistogram &self, const std::vector<double> &data) {
+             self.AddData(data.data(), static_cast<unsigned int>(data.size()));
+           },
+           py::arg("data"),
+           "Add an array of data values to the histogram.")
+      .def("add_data",
+           static_cast<void (Isis::ImageHistogram::*)(const double)>(&Isis::ImageHistogram::AddData),
+           py::arg("data"),
+           "Add a single data value to the histogram.")
+      .def("remove_data",
+           [](Isis::ImageHistogram &self, const std::vector<double> &data) {
+             self.RemoveData(data.data(), static_cast<unsigned int>(data.size()));
+           },
+           py::arg("data"),
+           "Remove an array of data values from the histogram.")
+      .def("bin_range",
+           [](const Isis::ImageHistogram &self, int index) {
+             double low = 0.0, high = 0.0;
+             self.BinRange(index, low, high);
+             return py::make_tuple(low, high);
+           },
+           py::arg("index"),
+           "Return the (low, high) value range for the given bin index.");
 
   py::class_<Isis::GaussianDistribution, Isis::Statistics>(m, "GaussianDistribution")
       .def(py::init<double, double>(), py::arg("mean") = 0.0, py::arg("standard_deviation") = 1.0)

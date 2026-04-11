@@ -1,10 +1,10 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-NirCamera,Clementine,reference/upstream_isis/src/clementine/objs/NirCamera/NirCamera.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+NirCamera,Clementine,reference/upstream_isis/src/clementine/objs/NirCamera/NirCamera.h,src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,NirCamera,isis_pybind.NirCamera,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,NirCamera(),isis_pybind.NirCamera(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,"virtual std::pair <iTime, iTime> ShutterOpenCloseTimes(double time, double exposureDuration)",isis_pybind.NirCamera.shutter_open_close_times,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkFrameId() const { return (-40000); },isis_pybind.NirCamera.ck_frame_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkReferenceId() const { return (1); },isis_pybind.NirCamera.ck_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int SpkReferenceId() const { return (1); },isis_pybind.NirCamera.spk_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,NirCamera,isis_pybind.NirCamera,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Construction/Enum,NirCamera(),isis_pybind.NirCamera(),Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Public API,"virtual std::pair <iTime, iTime> ShutterOpenCloseTimes(double time, double exposureDuration)",isis_pybind.NirCamera.shutter_open_close_times,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Public API,virtual int CkFrameId() const { return (-40000); },isis_pybind.NirCamera.ck_frame_id,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Public API,virtual int CkReferenceId() const { return (1); },isis_pybind.NirCamera.ck_reference_id,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Public API,virtual int SpkReferenceId() const { return (1); },isis_pybind.NirCamera.spk_reference_id,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定

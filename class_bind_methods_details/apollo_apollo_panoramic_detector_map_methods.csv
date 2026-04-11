@@ -1,14 +1,14 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ApolloPanoramicDetectorMap,Apollo,reference/upstream_isis/src/apollo/objs/ApolloPanoramicCamera/ApolloPanoramicDetectorMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+ApolloPanoramicDetectorMap,Apollo,reference/upstream_isis/src/apollo/objs/ApolloPanoramicCamera/ApolloPanoramicDetectorMap.h,src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ApolloPanoramicDetectorMap,isis_pybind.ApolloPanoramicDetectorMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,"ApolloPanoramicDetectorMap(Camera *parent, double etMiddle, double lineRate, Pvl *lab) : CameraDetectorMap(parent) { m_lineRate = lineRate",isis_pybind.ApolloPanoramicDetectorMap(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,this->initializeInteriorOrientation(),isis_pybind.ApolloPanoramicDetectorMap.initialize_interior_orientation,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"virtual bool SetParent(const double sample, const double line)",isis_pybind.ApolloPanoramicDetectorMap.set_parent,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.ApolloPanoramicDetectorMap.set_detector,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,void SetLineRate(const double lineRate) { m_lineRate = lineRate,isis_pybind.ApolloPanoramicDetectorMap.set_line_rate,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,double LineRate() const { return m_lineRate,isis_pybind.ApolloPanoramicDetectorMap.line_rate,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,double meanResidual() { return p_intOri.meanResiduals(); },isis_pybind.ApolloPanoramicDetectorMap.mean_residual,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,double maxResidual() { return p_intOri.maxResiduals(); },isis_pybind.ApolloPanoramicDetectorMap.max_residual,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,double stdevResidual() { return p_intOri.stdevResiduals(); },isis_pybind.ApolloPanoramicDetectorMap.stdev_residual,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,ApolloPanoramicDetectorMap,isis_pybind.ApolloPanoramicDetectorMap,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Construction/Enum,"ApolloPanoramicDetectorMap(Camera *parent, double etMiddle, double lineRate, Pvl *lab) : CameraDetectorMap(parent) { m_lineRate = lineRate",isis_pybind.ApolloPanoramicDetectorMap(),Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Public API,this->initializeInteriorOrientation(),isis_pybind.ApolloPanoramicDetectorMap.initialize_interior_orientation,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Mutation/Configuration,"virtual bool SetParent(const double sample, const double line)",isis_pybind.ApolloPanoramicDetectorMap.set_parent,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.ApolloPanoramicDetectorMap.set_detector,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Mutation/Configuration,void SetLineRate(const double lineRate) { m_lineRate = lineRate,isis_pybind.ApolloPanoramicDetectorMap.set_line_rate,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Public API,double LineRate() const { return m_lineRate,isis_pybind.ApolloPanoramicDetectorMap.line_rate,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Public API,double meanResidual() { return p_intOri.meanResiduals(); },isis_pybind.ApolloPanoramicDetectorMap.mean_residual,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Public API,double maxResidual() { return p_intOri.maxResiduals(); },isis_pybind.ApolloPanoramicDetectorMap.max_residual,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定
+Public API,double stdevResidual() { return p_intOri.stdevResiduals(); },isis_pybind.ApolloPanoramicDetectorMap.stdev_residual,Y,2026-04-11 已在 src/mission/bind_mission_cameras.cpp 完成绑定

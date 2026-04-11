@@ -2,10 +2,10 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 Kernels,Utility,isis/src/base/objs/Kernels/Kernels.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Kernels,isis_pybind.Kernels,N,Python class symbol not found in current binding files
-Construction/Enum,Kernels(),isis_pybind.Kernels(),N,Constructor binding not detected in current binding files
-Query,int size() const { return (_kernels.size()); },isis_pybind.Kernels.size,N,Method not found in current binding files
-Public API,int Missing() const,isis_pybind.Kernels.missing,N,Method not found in current binding files
+Class Symbol,Kernels,isis_pybind.Kernels,Y,2026-04-11 台账同步；已在 bind_base_filters.cpp 暴露
+Construction/Enum,Kernels(),isis_pybind.Kernels(),Y,2026-04-11 台账同步；已在 bind_base_filters.cpp 暴露
+Query,int size() const { return (_kernels.size()); },isis_pybind.Kernels.size,Y,2026-04-11 台账同步；已在 bind_base_filters.cpp 暴露
+Public API,int Missing() const,isis_pybind.Kernels.missing,Y,2026-04-11 台账同步；已在 bind_base_filters.cpp 暴露
 Public API,void Init(Pvl &pvl),isis_pybind.Kernels.init,N,Method not found in current binding files
 Mutation/Configuration,bool Add(const QString &kfile),isis_pybind.Kernels.add,N,Method not found in current binding files
 Mutation/Configuration,void Clear(),isis_pybind.Kernels.clear,N,Method not found in current binding files
@@ -23,5 +23,5 @@ Public API,int Merge(const Kernels &other),isis_pybind.Kernels.merge,N,Method no
 Public API,QStringList getKernelTypes() const,isis_pybind.Kernels.get_kernel_types,N,Method not found in current binding files
 Public API,"QStringList getKernelList(const QString &ktype = """") const",isis_pybind.Kernels.get_kernel_list,N,Method not found in current binding files
 Public API,"QStringList getLoadedList(const QString &ktypes = """") const",isis_pybind.Kernels.get_loaded_list,N,Method not found in current binding files
-Public API,QStringList getMissingList() const,isis_pybind.Kernels.get_missing_list,N,Method not found in current binding files
+Public API,QStringList getMissingList() const,isis_pybind.Kernels.get_missing_list,Y,2026-04-11 台账同步；已在 bind_base_filters.cpp 暴露
 Public API,int CameraVersion() const { return (_camVersion); },isis_pybind.Kernels.camera_version,N,Method not found in current binding files

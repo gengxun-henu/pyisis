@@ -4,6 +4,7 @@
 // Updated: 2026-04-10  Geng Xun added LidarControlPoint binding (inherits ControlPoint) with range/sigma/time/simultaneous methods.
 // Updated: 2026-04-10  Geng Xun added ControlNetVersioner binding with file/ControlNet constructors and network metadata accessors.
 // Updated: 2026-04-10  Geng Xun removed private default constructor from ControlNetVersioner binding (upstream has it private).
+// Updated: 2026-04-11  Geng Xun reused top-level Spice interpolation enums inside BundleObservationSolveSettings to avoid duplicate pybind enum registration.
 // Purpose: pybind11 bindings for ISIS control network core classes, filters, and bundle-control helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -1319,14 +1320,6 @@ void bind_control_core(py::module_ &m)
          .value("AnglesVelocityAcceleration", Isis::BundleObservationSolveSettings::AnglesVelocityAcceleration)
          .value("AllPointingCoefficients", Isis::BundleObservationSolveSettings::AllPointingCoefficients);
 
-     py::enum_<Isis::SpiceRotation::Source>(bundle_observation_solve_settings, "PointingInterpolationType")
-         .value("Spice", Isis::SpiceRotation::Spice)
-         .value("Nadir", Isis::SpiceRotation::Nadir)
-         .value("Memcache", Isis::SpiceRotation::Memcache)
-         .value("PolyFunction", Isis::SpiceRotation::PolyFunction)
-         .value("PolyFunctionOverSpice", Isis::SpiceRotation::PolyFunctionOverSpice)
-         .value("PckPolyFunction", Isis::SpiceRotation::PckPolyFunction);
-
      py::enum_<Isis::BundleObservationSolveSettings::InstrumentPositionSolveOption>(bundle_observation_solve_settings, "InstrumentPositionSolveOption")
          .value("NoPositionFactors", Isis::BundleObservationSolveSettings::NoPositionFactors)
          .value("PositionOnly", Isis::BundleObservationSolveSettings::PositionOnly)
@@ -1334,12 +1327,8 @@ void bind_control_core(py::module_ &m)
          .value("PositionVelocityAcceleration", Isis::BundleObservationSolveSettings::PositionVelocityAcceleration)
          .value("AllPositionCoefficients", Isis::BundleObservationSolveSettings::AllPositionCoefficients);
 
-     py::enum_<Isis::SpicePosition::Source>(bundle_observation_solve_settings, "PositionInterpolationType")
-         .value("Spice", Isis::SpicePosition::Spice)
-         .value("Memcache", Isis::SpicePosition::Memcache)
-         .value("HermiteCache", Isis::SpicePosition::HermiteCache)
-         .value("PolyFunction", Isis::SpicePosition::PolyFunction)
-         .value("PolyFunctionOverHermiteConstant", Isis::SpicePosition::PolyFunctionOverHermiteConstant);
+      bundle_observation_solve_settings.attr("PointingInterpolationType") = m.attr("SpiceRotationSource");
+      bundle_observation_solve_settings.attr("PositionInterpolationType") = m.attr("SpicePositionSource");
 
      bundle_observation_solve_settings
          .def(py::init<>())

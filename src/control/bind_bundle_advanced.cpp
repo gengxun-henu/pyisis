@@ -25,6 +25,8 @@
 // Updated: 2026-04-10  Geng Xun re-enabled file; replaced boost::ublas bounded_vector accessors with lambda wrappers returning list; skipped SparseBlockRowMatrix/LinearAlgebra heavy methods
 // Updated: 2026-04-10  Geng Xun added CsmBundleObservation and IsisBundleObservation (Batch 2) with constructor, number_parameters, parameter_list, bundle_output_csv.
 // Updated: 2026-04-11  Geng Xun fixed BundleSolutionInfo null-safe filename accessors and used the pybind-safe BundleResults transfer helper.
+// Updated: 2026-04-11  Geng Xun replaced non-existent BundleSolutionInfo helper calls with safe wrappers around the actual ISIS 9.0.0 API.
+// Updated: 2026-04-11  Geng Xun added null-safe observation wrappers so default-constructed bundle observations return empty Python values instead of dereferencing uninitialized ISIS state.
 // Purpose: pybind11 bindings for advanced ISIS bundle-adjustment classes
 
 #include <memory>
@@ -58,6 +60,7 @@
 #include "CsmBundleObservation.h"
 #include "Distance.h"
 #include "FileName.h"
+#include "ImageList.h"
 #include "IsisBundleObservation.h"
 #include "MaximumLikelihoodWFunctions.h"
 #include "SpicePosition.h"
@@ -137,6 +140,106 @@ namespace
                result.push_back(qStringToStdString(value));
           }
           return result;
+     }
+
+     std::unique_ptr<Isis::BundleSolutionInfo> makeDefaultBundleSolutionInfo()
+     {
+          Isis::BundleSettingsQsp defaultSettings(new Isis::BundleSettings());
+          Isis::BundleResults defaultResults;
+          QList<Isis::ImageList *> emptyImages;
+
+          return std::make_unique<Isis::BundleSolutionInfo>(
+                    defaultSettings,
+                    Isis::FileName(""),
+                    Isis::FileName(""),
+                    defaultResults,
+                    emptyImages,
+                    nullptr);
+     }
+
+     std::string bundleSolutionInfoInputControlNetFileName(const Isis::BundleSolutionInfo &self)
+     {
+          return qStringToStdString(self.inputControlNetFileName());
+     }
+
+     std::string bundleSolutionInfoInputLidarDataFileName(const Isis::BundleSolutionInfo &self)
+     {
+          return qStringToStdString(self.inputLidarDataFileName());
+     }
+
+     std::vector<std::string> csmBundleObservationParameterListSafe(Isis::CsmBundleObservation &self)
+     {
+          if (self.numberParameters() == 0)
+          {
+               return {};
+          }
+
+          return qStringListToVector(self.parameterList());
+     }
+
+     std::string csmBundleObservationBundleOutputCsvSafe(Isis::CsmBundleObservation &self, bool errorPropagation)
+     {
+          if (self.numberParameters() == 0)
+          {
+               return "";
+          }
+
+          return qStringToStdString(self.bundleOutputCSV(errorPropagation));
+     }
+
+     bool isisBundleObservationHasSolveSettings(Isis::IsisBundleObservation &self)
+     {
+          return !self.solveSettings().isNull();
+     }
+
+     int isisBundleObservationNumberPositionParametersSafe(Isis::IsisBundleObservation &self)
+     {
+          if (!isisBundleObservationHasSolveSettings(self))
+          {
+               return 0;
+          }
+
+          return self.numberPositionParameters();
+     }
+
+     int isisBundleObservationNumberPointingParametersSafe(Isis::IsisBundleObservation &self)
+     {
+          if (!isisBundleObservationHasSolveSettings(self))
+          {
+               return 0;
+          }
+
+          return self.numberPointingParameters();
+     }
+
+     int isisBundleObservationNumberParametersSafe(Isis::IsisBundleObservation &self)
+     {
+          if (!isisBundleObservationHasSolveSettings(self))
+          {
+               return 0;
+          }
+
+          return self.numberParameters();
+     }
+
+     std::vector<std::string> isisBundleObservationParameterListSafe(Isis::IsisBundleObservation &self)
+     {
+          if (!isisBundleObservationHasSolveSettings(self))
+          {
+               return {};
+          }
+
+          return qStringListToVector(self.parameterList());
+     }
+
+     std::string isisBundleObservationBundleOutputCsvSafe(Isis::IsisBundleObservation &self, bool errorPropagation)
+     {
+          if (!isisBundleObservationHasSolveSettings(self))
+          {
+               return "";
+          }
+
+          return qStringToStdString(self.bundleOutputCSV(errorPropagation));
      }
 }
 
@@ -499,25 +602,23 @@ void bind_bundle_advanced(py::module_ &m)
      py::class_<Isis::BundleSolutionInfo> bundle_solution_info(m, "BundleSolutionInfo");
 
      bundle_solution_info
-         .def(py::init<>())
+         .def(py::init(&makeDefaultBundleSolutionInfo))
          .def("set_run_time", [](Isis::BundleSolutionInfo &self, const std::string &run_time)
               { self.setRunTime(stdStringToQString(run_time)); }, py::arg("run_time"))
          .def("set_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setName(stdStringToQString(name)); }, py::arg("name"))
          .def("set_output_statistics", [](Isis::BundleSolutionInfo &self, const Isis::BundleResults &statistics_results)
-              { self.setOutputStatisticsForPyBind(statistics_results); }, py::arg("statistics_results"))
+              { self.setOutputStatistics(statistics_results); }, py::arg("statistics_results"))
          .def("set_output_control_name", [](Isis::BundleSolutionInfo &self, const std::string &name)
               { self.setOutputControlName(stdStringToQString(name)); }, py::arg("name"))
          .def("id", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.id()); })
-         .def("input_control_net_file_name", [](const Isis::BundleSolutionInfo &self)
-              { return qStringToStdString(self.inputControlNetFileNameForPyBind()); })
+         .def("input_control_net_file_name", &bundleSolutionInfoInputControlNetFileName)
          .def("output_control_net_file_name", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.outputControlNetFileName()); })
          .def("output_control_name", [](const Isis::BundleSolutionInfo &self)
               { return qStringToStdString(self.outputControlName()); })
-         .def("input_lidar_data_file_name", [](const Isis::BundleSolutionInfo &self)
-              { return qStringToStdString(self.inputLidarDataFileNameForPyBind()); })
+         .def("input_lidar_data_file_name", &bundleSolutionInfoInputLidarDataFileName)
          .def("bundle_settings", &Isis::BundleSolutionInfo::bundleSettings)
          // NOTE: bundle_results() commented out - upstream bundleResults() returns by value
          // which invokes BundleResults copy constructor causing segfault with ISIS 9.0.0
@@ -561,14 +662,10 @@ void bind_bundle_advanced(py::module_ &m)
            &Isis::CsmBundleObservation::numberParameters,
            "Return the total number of solve parameters for this observation.")
       .def("parameter_list",
-           [](Isis::CsmBundleObservation &self) {
-               return qStringListToVector(self.parameterList());
-           },
+             &csmBundleObservationParameterListSafe,
            "Return a list of parameter name strings.")
       .def("bundle_output_csv",
-           [](Isis::CsmBundleObservation &self, bool error_propagation) {
-               return qStringToStdString(self.bundleOutputCSV(error_propagation));
-           },
+             &csmBundleObservationBundleOutputCsvSafe,
            py::arg("error_propagation") = false,
            "Return a CSV string summarising the observation solve results.")
       .def("__repr__", [](Isis::CsmBundleObservation &self) {
@@ -582,23 +679,19 @@ void bind_bundle_advanced(py::module_ &m)
              std::shared_ptr<Isis::IsisBundleObservation>>(m, "IsisBundleObservation")
       .def(py::init<>(), "Construct a default IsisBundleObservation.")
       .def("number_parameters",
-           &Isis::IsisBundleObservation::numberParameters,
+           &isisBundleObservationNumberParametersSafe,
            "Return the total number of solve parameters.")
       .def("number_position_parameters",
-           &Isis::IsisBundleObservation::numberPositionParameters,
+           &isisBundleObservationNumberPositionParametersSafe,
            "Return the number of position solve parameters.")
       .def("number_pointing_parameters",
-           &Isis::IsisBundleObservation::numberPointingParameters,
+           &isisBundleObservationNumberPointingParametersSafe,
            "Return the number of pointing solve parameters.")
       .def("parameter_list",
-           [](Isis::IsisBundleObservation &self) {
-               return qStringListToVector(self.parameterList());
-           },
+           &isisBundleObservationParameterListSafe,
            "Return a list of parameter name strings.")
       .def("bundle_output_csv",
-           [](Isis::IsisBundleObservation &self, bool error_propagation) {
-               return qStringToStdString(self.bundleOutputCSV(error_propagation));
-           },
+           &isisBundleObservationBundleOutputCsvSafe,
            py::arg("error_propagation") = false,
            "Return a CSV string summarising the observation solve results.")
       .def("spice_position",
@@ -615,7 +708,7 @@ void bind_bundle_advanced(py::module_ &m)
            "Return the SpiceRotation pointer for this observation (may be nullptr).")
       .def("__repr__", [](Isis::IsisBundleObservation &self) {
            return "IsisBundleObservation(params=" +
-                  std::to_string(self.numberParameters()) + ")";
+                  std::to_string(isisBundleObservationNumberParametersSafe(self)) + ")";
       });
 }
 

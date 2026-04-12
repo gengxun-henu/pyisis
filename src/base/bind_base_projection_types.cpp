@@ -3,6 +3,7 @@
 // Updated: 2026-03-21  Geng Xun added concrete map-projection type constructors for cylindrical, azimuthal, perspective, and ring-plane projections
 // Updated: 2026-04-12  Geng Xun completed Equirectangular binding with all public methods (name/version/true_scale_latitude/is_equatorial_cylindrical/set_ground/set_coordinate/xy_range/mapping methods)
 // Updated: 2026-04-12  Geng Xun expanded all concrete projection types with full public method bindings (name/version/set_ground/set_coordinate/xy_range/mapping and class-specific methods)
+// Updated: 2026-04-12  Geng Xun fixed QString conversion for Equirectangular name() and version() using qStringToStdString helper
 // Purpose: pybind11 bindings for concrete ISIS projection types built on Projection, TProjection, and RingPlaneProjection hierarchies
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -11,6 +12,7 @@
 #include <pybind11/pybind11.h>
 
 #include "Equirectangular.h"
+#include "helpers.h"
 #include "LambertAzimuthalEqualArea.h"
 #include "LambertConformal.h"
 #include "LunarAzimuthalEqualArea.h"
@@ -96,8 +98,12 @@ void bind_base_projection_types(py::module_ &m) {
       .def(py::init<Isis::Pvl &, bool>(),
            py::arg("label"),
            py::arg("allow_defaults") = false)
-      .def("name", &Isis::Equirectangular::Name)
-      .def("version", &Isis::Equirectangular::Version)
+      .def("name", [](const Isis::Equirectangular &self) {
+        return qStringToStdString(self.Name());
+      })
+      .def("version", [](const Isis::Equirectangular &self) {
+        return qStringToStdString(self.Version());
+      })
       .def("true_scale_latitude", &Isis::Equirectangular::TrueScaleLatitude)
       .def("is_equatorial_cylindrical", &Isis::Equirectangular::IsEquatorialCylindrical)
       .def("set_ground", &Isis::Equirectangular::SetGround,

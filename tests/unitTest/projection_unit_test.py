@@ -10,6 +10,7 @@ Updated: 2026-04-12  Geng Xun added focused tests for all concrete projection ty
   PolarStereographic, TransverseMercator, UpturnedEllipsoidTransverseAzimuthal,
   Planar, LunarAzimuthalEqualArea) covering name/version/set_ground/set_coordinate/
   xy_range/mapping and class-specific methods.
+Updated: 2026-04-12  Geng Xun fixed pole validation test to use exactly 90.0 degrees (not 89.9999999) as required by ISIS DBL_EPSILON threshold
 """
 
 import unittest
@@ -112,7 +113,9 @@ class ProjectionUnitTest(unittest.TestCase):
 
     def test_equirectangular_near_pole_raises_exception(self):
         """Test that setting center latitude near pole raises exception"""
-        # Create a label with center latitude very close to 90 degrees
+        # Create a label with center latitude exactly at 90 degrees (pole)
+        # Note: ISIS only raises exception when cos(centerLat) < DBL_EPSILON,
+        # which requires centerLat to be extremely close to exactly ±90°
         lines = [
             "Group = Mapping",
             "  EquatorialRadius = 3396190.0",
@@ -122,7 +125,7 @@ class ProjectionUnitTest(unittest.TestCase):
             "  LongitudeDomain = 360",
             "  ProjectionName = Equirectangular",
             "  CenterLongitude = 0.0",
-            "  CenterLatitude = 89.9999999",  # Very close to pole
+            "  CenterLatitude = 90.0",  # Exactly at pole
             "  MinimumLatitude = -65.0",
             "  MaximumLatitude = 65.0",
             "  MinimumLongitude = -180.0",

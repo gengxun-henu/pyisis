@@ -11,7 +11,7 @@ Construction/Enum,ControlMeasure(),isis_pybind.ControlMeasure(),Y,Constructor is
 Public API,ControlPoint *Parent() { return parentPoint; },isis_pybind.ControlMeasure.parent,Y,已在 bind_control_core.cpp 绑定
 Mutation/Configuration,Status SetAprioriLine(double aprioriLine),isis_pybind.ControlMeasure.set_apriori_line,Y,已在 bind_control_core.cpp 绑定
 Mutation/Configuration,Status SetAprioriSample(double aprioriSample),isis_pybind.ControlMeasure.set_apriori_sample,Y,已在 bind_control_core.cpp 绑定
-Mutation/Configuration,Status SetCamera(Isis::Camera *camera),isis_pybind.ControlMeasure.set_camera,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,Status SetCamera(Isis::Camera *camera),isis_pybind.ControlMeasure.set_camera,Y,已在 bind_control_core.cpp 绑定
 Mutation/Configuration,Status SetChooserName(),isis_pybind.ControlMeasure.set_chooser_name,Y,已在 bind_control_core.cpp 绑定
 Mutation/Configuration,Status SetChooserName(QString name),isis_pybind.ControlMeasure.set_chooser_name,Y,已在 bind_control_core.cpp 绑定
 Mutation/Configuration,"Status SetCoordinate(double sample, double line)",isis_pybind.ControlMeasure.set_coordinate,Y,已在 bind_control_core.cpp 绑定
@@ -36,7 +36,7 @@ Mutation/Configuration,void SetLogData(ControlMeasureLogData),isis_pybind.Contro
 Public API,void UpdateLogData(ControlMeasureLogData),isis_pybind.ControlMeasure.update_log_data,Y,已在 bind_control_core.cpp 绑定
 Public API,double GetAprioriLine() const,isis_pybind.ControlMeasure.get_apriori_line,Y,已在 bind_control_core.cpp 绑定
 Public API,double GetAprioriSample() const,isis_pybind.ControlMeasure.get_apriori_sample,Y,已在 bind_control_core.cpp 绑定
-Public API,Isis::Camera *Camera() const,isis_pybind.ControlMeasure.camera,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,Isis::Camera *Camera() const,isis_pybind.ControlMeasure.camera,Y,已在 bind_control_core.cpp 绑定
 Public API,QString GetChooserName() const,isis_pybind.ControlMeasure.get_chooser_name,Y,已在 bind_control_core.cpp 绑定
 Query,bool HasChooserName() const,isis_pybind.ControlMeasure.has_chooser_name,Y,已在 bind_control_core.cpp 绑定
 Public API,QString GetCubeSerialNumber() const,isis_pybind.ControlMeasure.get_cube_serial_number,Y,已在 bind_control_core.cpp 绑定
@@ -59,7 +59,7 @@ Public API,double GetLine() const,isis_pybind.ControlMeasure.get_line,Y,已在 b
 Public API,double GetLineResidual() const,isis_pybind.ControlMeasure.get_line_residual,Y,已在 bind_control_core.cpp 绑定
 Public API,double GetLineSigma() const,isis_pybind.ControlMeasure.get_line_sigma,Y,已在 bind_control_core.cpp 绑定
 Public API,QVector<ControlMeasureLogData> GetLogDataEntries() const,isis_pybind.ControlMeasure.get_log_data_entries,Y,已在 bind_control_core.cpp 绑定
-Public API,QVector<ControlMeasureLogData> GetLastRunLogDataEntries() const,isis_pybind.ControlMeasure.get_last_run_log_data_entries,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Public API,QVector<ControlMeasureLogData> GetLastRunLogDataEntries() const,isis_pybind.ControlMeasure.get_last_run_log_data_entries,N,头文件声明但上游无实现；直接符号未绑定
 Public API,double GetResidualMagnitude() const,isis_pybind.ControlMeasure.get_residual_magnitude,Y,已在 bind_control_core.cpp 绑定
 Public API,double GetSample() const,isis_pybind.ControlMeasure.get_sample,Y,已在 bind_control_core.cpp 绑定
 Public API,double GetSampleResidual() const,isis_pybind.ControlMeasure.get_sample_residual,Y,已在 bind_control_core.cpp 绑定
@@ -71,6 +71,6 @@ Public API,double GetLineShift() const,isis_pybind.ControlMeasure.get_line_shift
 Public API,double GetPixelShift() const,isis_pybind.ControlMeasure.get_pixel_shift,Y,已在 bind_control_core.cpp 绑定
 Static/Factory,static QVector<QString> GetMeasureDataNames(),isis_pybind.ControlMeasure.get_measure_data_names,Y,已在 bind_control_core.cpp 绑定
 Public API,QList<QStringList> PrintableClassData() const,isis_pybind.ControlMeasure.printable_class_data,Y,已在 bind_control_core.cpp 绑定
-Static/Factory,static QString MeasureTypeToString(MeasureType type),isis_pybind.ControlMeasure.measure_type_to_string,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Static/Factory,static MeasureType StringToMeasureType(QString str),isis_pybind.ControlMeasure.string_to_measure_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Static/Factory,static QString MeasureTypeToString(MeasureType type),isis_pybind.ControlMeasure.measure_type_to_string,Y,已在 bind_control_core.cpp 绑定
+Static/Factory,static MeasureType StringToMeasureType(QString str),isis_pybind.ControlMeasure.string_to_measure_type,Y,已在 bind_control_core.cpp 绑定
 Public API,QString GetMeasureTypeString() const,isis_pybind.ControlMeasure.get_measure_type_string,Y,已在 bind_control_core.cpp 绑定

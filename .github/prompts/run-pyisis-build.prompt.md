@@ -1,6 +1,6 @@
 ---
-description: "执行 pyisis 构建与测试流水线。Use when: 运行 build、ctest、smoke_import、verbose unittest，执行编辑器里当前选中的构建命令，或按 full/build-only/test-only/verbose-test/clean-full 模式处理。"
-name: "Run pyisis build pipeline"
+description: "执行 pyisis 构建与测试流水线。Use when: run-pyisis, run-pyisis-build, pyisis-build, 运行 pyisis build, 运行 build、ctest、smoke_import、verbose unittest，执行编辑器里当前选中的构建命令，或按 full/build-only/test-only/verbose-test/clean-full 模式处理。"
+name: "run-pyisis-build"
 argument-hint: "可选：full | build-only | test-only | verbose-test | clean-full | selected"
 agent: "agent"
 ---

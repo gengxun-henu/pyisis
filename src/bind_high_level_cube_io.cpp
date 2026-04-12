@@ -7,6 +7,7 @@
 // Updated: 2026-04-11  Geng Xun aligned the Python ImageOverlay enum names with the ISIS 9.0.0 PlaceImagesBeneath API while preserving the existing PlaceImagesBehind alias.
 // Updated: 2026-04-11  Geng Xun added ImageImporter abstract base class and JP2Importer concrete class bindings.
 // Updated: 2026-04-11  Geng Xun added JP2Exporter, TiffExporter, TiffImporter, QtExporter, and QtImporter bindings for complete import/export coverage.
+// Updated: 2026-04-12  Geng Xun disambiguated ProcessMosaic::StartProcess binding against inherited Process overloads so high-level cube I/O compiles under asp360_new.
 // Purpose: pybind11 bindings for ISIS high-level cube I/O workflows including Process variants, import/export helpers, and JP2 utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -727,7 +728,7 @@ void bind_high_level_cube_io(py::module_ &m) {
            &Isis::ProcessMosaic::imagePositions,
            "Return a PvlObject describing the positions of images placed in the mosaic.")
       .def("start_process",
-           &Isis::ProcessMosaic::StartProcess,
+         static_cast<void (Isis::ProcessMosaic::*)(const int &, const int &, const int &)>(&Isis::ProcessMosaic::StartProcess),
            py::arg("out_sample"),
            py::arg("out_line"),
            py::arg("out_band"),

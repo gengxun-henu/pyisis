@@ -7,5 +7,6 @@
         }
     ],
     "python.defaultInterpreterPath": "/home/gengxun/miniconda3/envs/asp360_new/bin/python",
-    "python.terminal.activateEnvironment": true
+    "python.terminal.activateEnvironment": true,
+    "chat.promptFilesRecommendations": true
 }

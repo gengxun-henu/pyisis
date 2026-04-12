@@ -2,6 +2,7 @@
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added concrete map-projection type constructors for cylindrical, azimuthal, perspective, and ring-plane projections
 // Updated: 2026-04-12  Geng Xun completed Equirectangular binding with all public methods (name/version/true_scale_latitude/is_equatorial_cylindrical/set_ground/set_coordinate/xy_range/mapping methods)
+// Updated: 2026-04-12  Geng Xun fixed QString conversion for Equirectangular name() and version() using qStringToStdString helper
 // Purpose: pybind11 bindings for concrete ISIS projection types built on Projection, TProjection, and RingPlaneProjection hierarchies
 
 // Copyright (c) 2026 Geng Xun, Henan University

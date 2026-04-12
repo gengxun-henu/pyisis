@@ -3,7 +3,8 @@ Unit tests for ISIS projection and ProjectionFactory bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-21
+Last Modified: 2026-04-12
+Updated: 2026-04-12  Geng Xun fixed pole validation test to use exactly 90.0 degrees (not 89.9999999) as required by ISIS DBL_EPSILON threshold
 """
 
 import unittest

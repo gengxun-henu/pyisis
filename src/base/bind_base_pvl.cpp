@@ -5,6 +5,7 @@
 // Updated: 2026-04-09  Geng Xun added PvlFormat, PvlFormatPds, and PvlTranslationTable bindings.
 // Updated: 2026-04-09  Geng Xun added LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, XmlToPvlTranslationManager bindings.
 // Updated: 2026-04-10  Geng Xun replaced direct protected-member bindings with helper-copy wrappers for PvlFormat and PvlTranslationTable.
+// Updated: 2026-04-12  Geng Xun exposed remaining public format_end helpers for PvlFormat and PvlFormatPds.
 // Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, PvlFormatPds, PvlTranslationTable, LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, and XmlToPvlTranslationManager
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -599,6 +600,15 @@ void bind_base_pvl(py::module_ &m) {
            },
            py::arg("keyword"),
            "Format the name of a keyword.")
+               .def("format_end",
+                          [](Isis::PvlFormat &self,
+                                   const std::string &name,
+                                   const Isis::PvlKeyword &keyword) {
+                               return qStringToStdString(self.formatEnd(stdStringToQString(name), keyword));
+                          },
+                          py::arg("name"),
+                          py::arg("keyword"),
+                          "Format the end marker for a PVL container/keyword context.")
       .def("format_eol",
            [](Isis::PvlFormat &self) {
              return qStringToStdString(self.formatEOL());
@@ -749,6 +759,15 @@ void bind_base_pvl(py::module_ &m) {
            },
            py::arg("keyword"),
            "Format the name of a keyword using PDS rules.")
+               .def("format_end",
+                          [](Isis::PvlFormatPds &self,
+                                   const std::string &name,
+                                   const Isis::PvlKeyword &keyword) {
+                               return qStringToStdString(self.formatEnd(stdStringToQString(name), keyword));
+                          },
+                          py::arg("name"),
+                          py::arg("keyword"),
+                          "Format the end marker for a PDS PVL container/keyword context.")
       .def("format_eol",
            [](Isis::PvlFormatPds &self) {
              return qStringToStdString(self.formatEOL());

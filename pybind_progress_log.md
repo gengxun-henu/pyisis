@@ -1,5 +1,26 @@
 # Pybind Progress Log
 
+## 2026-04-12
+
+- rollout batch closure for `Longitude` / `Latitude` / `CubeStretch` / `PvlFormat` / `PvlFormatPds` completed:
+  - Updated `src/base/bind_base_geometry.cpp` to expose `Longitude.to360_range(...)` and the two remaining `Latitude.add(...)` overloads (`Angle + PvlGroup` and `Angle + Distance + Distance + CoordinateType`).
+  - Updated `src/base/bind_base_filters.cpp` to expose `CubeStretch.to_blob()`.
+  - Updated `src/base/bind_base_pvl.cpp` to expose `PvlFormat.format_end(...)` and `PvlFormatPds.format_end(...)`.
+  - Extended focused regressions in `tests/unitTest/geometry_unit_test.py`, `tests/unitTest/filters_unit_test.py`, and `tests/unitTest/pvl_unit_test.py` to cover wrap-around longitude splitting, both `Latitude.add(...)` overloads, `CubeStretch` Blob round-trip metadata, and both PVL `format_end(...)` helpers.
+  - While validating, corrected the new `PvlFormatPds.format_end(...)` test fixture to match upstream `nameKeyword()` semantics: the method expects a value-bearing `PvlKeyword`, not a name-only placeholder keyword.
+  - Synced ledgers:
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_longitude_methods.csv`
+    - `class_bind_methods_details/base_latitude_methods.csv`
+    - `class_bind_methods_details/base_cube_stretch_methods.csv`
+    - `class_bind_methods_details/base_pvl_format_methods.csv`
+    - `class_bind_methods_details/base_pvl_format_pds_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake --build build -j"$(nproc)"`
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest tests.unitTest.geometry_unit_test tests.unitTest.filters_unit_test tests.unitTest.pvl_unit_test` (`147` tests, `OK`)
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
 ## 2026-04-11
 
 - `ControlPoint` detail inventory 台账同步完成：

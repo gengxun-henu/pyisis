@@ -3,9 +3,10 @@ Unit tests for ISIS filter and utility class bindings.
 
 Author: Geng Xun
 Created: 2026-03-25
-Last Modified: 2026-04-09
+Last Modified: 2026-04-12
 Updated: 2026-03-26  Geng Xun added regression coverage for filter, stretch, kernel, and CSV utility bindings.
 Updated: 2026-04-09  Geng Xun completed CSVReader regression coverage for table helpers, typed conversion, and file-based construction.
+Updated: 2026-04-12  Geng Xun added focused CubeStretch blob-serialization coverage.
 """
 
 #!/usr/bin/env python3
@@ -215,6 +216,24 @@ class TestCubeStretch(unittest.TestCase):
         self.assertIn("DisplayStretch", repr_str)
         self.assertIn("Linear", repr_str)
         self.assertIn("band_number=2", repr_str)
+
+    def test_to_blob_preserves_cube_stretch_metadata(self):
+        """CubeStretch.to_blob() serializes metadata and stretch pairs into a Blob."""
+        stretch = CubeStretch("DisplayStretch", "Manual", 2)
+        stretch.add_pair(0.0, 0.0)
+        stretch.add_pair(100.0, 255.0)
+
+        blob = stretch.to_blob()
+
+        self.assertIsInstance(blob, ip.Blob)
+        self.assertEqual(blob.name(), "CubeStretch")
+        self.assertEqual(blob.type(), "Stretch")
+        self.assertGreater(blob.size(), 0)
+
+        label = blob.label()
+        self.assertEqual(label.keyword("Name")[0], "DisplayStretch")
+        self.assertEqual(label.keyword("StretchType")[0], "Manual")
+        self.assertEqual(label.keyword("BandNumber")[0], "2")
 
 
 class TestQuickFilter(unittest.TestCase):

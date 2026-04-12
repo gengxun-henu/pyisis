@@ -4,6 +4,7 @@
 // Updated: 2026-04-10  Geng Xun added Area3D binding for 3D volume geometry
 // Updated: 2026-04-10  Geng Xun fixed Area3D __repr__ lambda return-type consistency for successful pybind builds
 // Updated: 2026-04-11  Geng Xun restored legacy class-level Distance/Displacement unit aliases for older Python call sites.
+// Updated: 2026-04-12  Geng Xun completed remaining public Longitude/Latitude helper bindings for range splitting and latitude addition overloads.
 // Purpose: pybind11 bindings for ISIS geometry primitives and resampling helpers including Angle, Area3D, Stereo, Distance, Latitude, Longitude, Transform, Interpolator, Enlarge, and Reduce
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -373,6 +374,31 @@ void bind_base_geometry(py::module_ &m) {
       .def("error_checking", &Isis::Latitude::errorChecking)
       .def("set_error_checking", &Isis::Latitude::setErrorChecking, py::arg("errors"))
       .def("in_range", &Isis::Latitude::inRange, py::arg("minimum"), py::arg("maximum"))
+      .def("add",
+           [](Isis::Latitude &self,
+              const Isis::Angle &angle_to_add,
+              Isis::PvlGroup mapping) {
+             return self.add(angle_to_add, mapping);
+           },
+           py::arg("angle_to_add"),
+           py::arg("mapping"),
+           "Add an angle using latitude type and radii read from a Mapping group.")
+      .def("add",
+           [](Isis::Latitude &self,
+              const Isis::Angle &angle_to_add,
+              const Isis::Distance &equatorial_radius,
+              const Isis::Distance &polar_radius,
+              Isis::Latitude::CoordinateType coordinate_type) {
+             return self.add(angle_to_add,
+                             equatorial_radius,
+                             polar_radius,
+                             coordinate_type);
+           },
+           py::arg("angle_to_add"),
+           py::arg("equatorial_radius"),
+           py::arg("polar_radius"),
+           py::arg("coordinate_type"),
+           "Add an angle using explicit target radii and latitude coordinate type.")
       .def("__repr__", [](const Isis::Latitude &self) {
         return "Latitude(" + std::to_string(self.planetocentric(Isis::Angle::Degrees)) + " deg)";
       });
@@ -406,6 +432,21 @@ void bind_base_geometry(py::module_ &m) {
       .def("force_180_domain", &Isis::Longitude::force180Domain)
       .def("force_360_domain", &Isis::Longitude::force360Domain)
       .def("in_range", &Isis::Longitude::inRange, py::arg("minimum"), py::arg("maximum"))
+               .def_static("to360_range",
+                                             [](const Isis::Longitude &start_longitude,
+                                                   const Isis::Longitude &end_longitude) {
+                                                  QList<QPair<Isis::Longitude, Isis::Longitude>> ranges =
+                                                            Isis::Longitude::to360Range(start_longitude, end_longitude);
+                                                  std::vector<std::pair<Isis::Longitude, Isis::Longitude>> result;
+                                                  result.reserve(ranges.size());
+                                                  for (const auto &range : ranges) {
+                                                       result.emplace_back(range.first, range.second);
+                                                  }
+                                                  return result;
+                                             },
+                                             py::arg("start_longitude"),
+                                             py::arg("end_longitude"),
+                                             "Return one or two 0-360 domain longitude subranges covering the input interval.")
       .def("__repr__", [](const Isis::Longitude &self) {
         return "Longitude(" + std::to_string(self.positiveEast(Isis::Angle::Degrees)) + " deg E)";
       });

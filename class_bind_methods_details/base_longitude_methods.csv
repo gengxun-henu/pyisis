@@ -13,4 +13,4 @@ Mutation/Configuration,"void setPositiveWest(double longitude, Angle::Units unit
 Public API,Longitude force180Domain() const,isis_pybind.Longitude.force180_domain,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
 Public API,Longitude force360Domain() const,isis_pybind.Longitude.force360_domain,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
 Public API,"bool inRange(Longitude min, Longitude max) const",isis_pybind.Longitude.in_range,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
-Static/Factory,"static QList< QPair<Longitude, Longitude> > to360Range(Longitude startLon, Longitude endLon)",isis_pybind.Longitude.to360_range,N,Method not found in current binding files
+Static/Factory,"static QList< QPair<Longitude, Longitude> > to360Range(Longitude startLon, Longitude endLon)",isis_pybind.Longitude.to360_range,Y,2026-04-12 已在 bind_base_geometry.cpp 以 Python-friendly list[tuple[Longitude, Longitude]] 形式暴露；focused 单测覆盖 wrap-around split

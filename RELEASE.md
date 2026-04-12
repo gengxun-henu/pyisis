@@ -1,56 +1,74 @@
-# PyISIS v0.1.1 发布清单
+# PyISIS v1.0.0
 
-## 构建与测试状态
-- 目标提交：01792bd（添加 `__version__ = "0.1.0"` 并更新发布忽略项）
-- 本地未能运行单测，原因：缺少外部 ISIS 运行时，`isis_pybind._isis_core` 无法在当前环境加载。
-- 二进制包使用仓库中现有的 `_isis_core.cpython-312-x86_64-linux-gnu.so`，依赖 ISIS 9.0.0 及 Qt5/Camera 插件在目标机上可用。
+首个稳定 GitHub Release，面向已经具备 **USGS ISIS 9.0.0** 运行环境的 Linux 用户。
 
-## 产物路径（均已生成于 `dist/`）
-- `pyisis-v0.1.0-source.tar.gz`：`git archive` 的源码包（HEAD）。
-- `isis_pybind-v0.1.0-linux-x86_64-cp312-isis9.0.0.tar.gz`：完整 `isis_pybind/` 目录（`__init__.py`、`_isis_core.so`、`LICENSE`）。
-- `SHA256SUMS.txt`：上述文件的校验和。
+## 支持范围
 
-`SHA256SUMS.txt` 内容：
-```
-17c0de1da27db1327a57e1905147002d948567929e41e1657b5874f36c026fae  isis_pybind-v0.1.0-linux-x86_64-cp312-isis9.0.0.tar.gz
-2cdac72bd0491d224506f0e8b9d1647debfec6d2f75d6ed83de5aa31d8028aab  pyisis-v0.1.0-source.tar.gz
-```
+- 平台：Linux x86_64
+- Python：CPython 3.12
+- ISIS：USGS ISIS 9.0.0
+- 分发方式：GitHub Release + 源码构建 + Linux 二进制资产
 
-## 发布上传步骤（GitHub Release 建议）
-1. 标记版本：`git tag -a v0.1.0 01792bd -m "PyISIS v0.1.0"`.
-2. 在 GitHub Release 创建 v0.1.0，描述中写明依赖：Linux x86_64、CPython 3.12、ISIS 9.0.0（含 Qt5、Camera *.so）。
-3. 上传 `pyisis-v0.1.0-source.tar.gz`、`isis_pybind-v0.1.0-linux-x86_64-cp312-isis9.0.0.tar.gz`、`SHA256SUMS.txt`。
-4. 在 Release 描述中粘贴 `SHA256SUMS.txt` 校验输出。
+## Release 资产
 
-## 用户安装与验证（需已有 ISIS 9.0.0 环境）
-### 1) 校验下载
+GitHub 会自动附带源码压缩包：
+
+- `Source code (zip)`
+- `Source code (tar.gz)`
+
+本项目手工上传的资产建议为：
+
+- `isis_pybind-v1.0.0-linux-x86_64-cp312-isis9.0.0.tar.gz`
+- `SHA256SUMS.txt`
+
+其中二进制包应包含完整的 `isis_pybind/` 包目录，而不只是 `_isis_core*.so`。
+
+## 安装方式
+
+### 方式 1：使用 Release 二进制包
+
+解压后，将完整的 `isis_pybind/` 目录放入目标 Python 环境可见路径中，或临时设置 `PYTHONPATH`。
+
 ```bash
-sha256sum -c SHA256SUMS.txt
-```
-
-### 2) 直接使用二进制包
-```bash
-tar xzf isis_pybind-v0.1.0-linux-x86_64-cp312-isis9.0.0.tar.gz
-export PYTHONPATH="$PWD/isis_pybind-v0.1.0-linux-x86_64-cp312-isis9.0.0${PYTHONPATH:+:$PYTHONPATH}"
+tar xzf isis_pybind-v1.0.0-linux-x86_64-cp312-isis9.0.0.tar.gz
+export PYTHONPATH="$PWD/isis_pybind-v1.0.0-linux-x86_64-cp312-isis9.0.0${PYTHONPATH:+:$PYTHONPATH}"
 python -c "import isis_pybind as ip; print(ip.__version__, hasattr(ip, 'Cube'))"
-python tests/smoke_import.py  # 需要 ISIS 运行时及 Camera 库可被动态链接
+python tests/smoke_import.py
 ```
 
-### 3) 从源码构建（推荐用于可复现构建）
+### 方式 2：从源码构建并安装
+
 ```bash
-export ISIS_PREFIX="$CONDA_PREFIX"   # 已安装 ISIS 9.0.0 的环境
+export ISIS_PREFIX="$CONDA_PREFIX"
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
   -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
   -DISIS_PREFIX="$ISIS_PREFIX"
 cmake --build build -j"$(nproc)"
 cmake --install build
 ```
-安装后再次运行：
+
+安装后可验证：
+
 ```bash
 python -c "import isis_pybind as ip; print(ip.__version__, hasattr(ip, 'Cube'))"
 python tests/smoke_import.py
 ```
 
-## 备注
-- `_isis_core.so` 仍需目标机器提供 `libisis.so`、各 Camera 插件以及 Qt5 依赖，请确保相应路径在 `LD_LIBRARY_PATH`/`ISISROOT` 内。
-- 如需重新生成二进制包，请在具备 ISIS 9.0.0 + Qt5 的 Linux x86_64 环境下重复“从源码构建”步骤，再重新打包 `isis_pybind/` 目录并更新校验和。
+## 运行时依赖与限制
+
+- 目标机器仍需提供可解析的 `libisis.so`；
+- 需要 Qt 相关共享库与相机/投影插件；
+- 许多真实工作流仍需要正确配置 `ISISDATA`；
+- 当前不承诺 Windows / macOS / 通用 PyPI wheel 支持。
+
+## 校验建议
+
+下载二进制资产后可执行：
+
+```bash
+sha256sum -c SHA256SUMS.txt
+```
+
+## 说明
+
+如果你只需要该版本源码，直接使用 GitHub Release 自动生成的源码压缩包即可；通常不需要额外手工上传源码 `tar.gz`。

@@ -278,12 +278,12 @@ Include the following key information in the asset name:
 - platform: `linux-x86_64`
 - Python ABI: `cp312`
 - ISIS version: `isis9.0.0`
-- project version: for example `v0.1.0`
+- project version: for example `v1.0.0`
 
 For example:
 
 ```text
-isis_pybind-v0.1.0-linux-x86_64-cp312-isis9.0.0.tar.gz
+isis_pybind-v1.0.0-linux-x86_64-cp312-isis9.0.0.tar.gz
 SHA256SUMS.txt
 ```
 

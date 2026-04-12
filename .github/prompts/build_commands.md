@@ -12,7 +12,7 @@ export ISISROOT="$CONDA_PREFIX"
 export ISISDATA="$PWD/tests/data/isisdata/mockup"
 export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}"
 export CMAKE_PREFIX_PATH="$CONDA_PREFIX"
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" -DISIS_PREFIX="$CONDA_PREFIX"
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" -DISIS_PREFIX="$CONDA_PREFIX" -DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON
 cmake --build build -j"$(nproc)"
 ctest --test-dir build -R python-unit-tests --output-on-failure
 "$CONDA_PREFIX/bin/python" tests/smoke_import.py
@@ -28,7 +28,7 @@ export ISISROOT="$CONDA_PREFIX"
 export ISISDATA="$PWD/tests/data/isisdata/mockup"
 export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}"
 export CMAKE_PREFIX_PATH="$CONDA_PREFIX"
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" -DISIS_PREFIX="$CONDA_PREFIX"
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" -DISIS_PREFIX="$CONDA_PREFIX" -DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON
 cmake --build build -j"$(nproc)"
 ```
 
@@ -75,7 +75,7 @@ export ISISROOT="$CONDA_PREFIX"
 export ISISDATA="$PWD/tests/data/isisdata/mockup"
 export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:${LD_LIBRARY_PATH:-}"
 export CMAKE_PREFIX_PATH="$CONDA_PREFIX"
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" -DISIS_PREFIX="$CONDA_PREFIX"
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" -DISIS_PREFIX="$CONDA_PREFIX" -DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON
 cmake --build build -j"$(nproc)"
 ctest --test-dir build -R python-unit-tests --output-on-failure
 "$CONDA_PREFIX/bin/python" tests/smoke_import.py

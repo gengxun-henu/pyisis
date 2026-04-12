@@ -5,65 +5,65 @@ Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,ControlNet,isis_pybind.ControlNet,Y,Python class symbol is exported; Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
 Construction/Enum,"ModType enum (Swapped, GraphModified)",isis_pybind.ControlNet.ModType,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
 Construction/Enum,ControlNet(),isis_pybind.ControlNet(),Y,Constructor is explicitly bound
-Mutation/Configuration,void clear(),isis_pybind.ControlNet.clear,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QList< ControlPoint * > take(),isis_pybind.ControlNet.take,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Read/Write IO,"void ReadControl(const QString &filename, Progress *progress = 0)",isis_pybind.ControlNet.read_control,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Read/Write IO,"void Write(const QString &filename, bool pvl = false)",isis_pybind.ControlNet.write,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void AddPoint(ControlPoint *point),isis_pybind.ControlNet.add_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,int DeletePoint(ControlPoint *point),isis_pybind.ControlNet.delete_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,int DeletePoint(QString pointId),isis_pybind.ControlNet.delete_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,int DeletePoint(int index),isis_pybind.ControlNet.delete_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,bool ContainsPoint(QString pointId) const,isis_pybind.ControlNet.contains_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QList< QString > GetCubeSerials() const,isis_pybind.ControlNet.get_cube_serials,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GraphToString() const,isis_pybind.ControlNet.graph_to_string,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QList< QList< QString > > GetSerialConnections() const,isis_pybind.ControlNet.get_serial_connections,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int getEdgeCount() const,isis_pybind.ControlNet.get_edge_count,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QList< QString > getAdjacentImages(QString serialNumber) const,isis_pybind.ControlNet.get_adjacent_images,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QList< ControlMeasure * > GetMeasuresInCube(QString serialNumber),isis_pybind.ControlNet.get_measures_in_cube,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QList< ControlMeasure * > GetValidMeasuresInCube(QString serialNumber),isis_pybind.ControlNet.get_valid_measures_in_cube,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,void ComputeResiduals(),isis_pybind.ControlNet.compute_residuals,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,void ComputeApriori(),isis_pybind.ControlNet.compute_apriori,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,const ControlPoint *GetPoint(QString pointId) const,isis_pybind.ControlNet.get_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,ControlPoint *GetPoint(QString pointId),isis_pybind.ControlNet.get_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,const ControlPoint *GetPoint(int index) const,isis_pybind.ControlNet.get_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,ControlPoint *GetPoint(int index),isis_pybind.ControlNet.get_point,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,double AverageResidual(),isis_pybind.ControlNet.average_residual,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,Isis::Camera *Camera(int index),isis_pybind.ControlNet.camera,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,Isis::Camera *Camera(QString serialNumber),isis_pybind.ControlNet.camera,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString CreatedDate() const,isis_pybind.ControlNet.created_date,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString Description() const,isis_pybind.ControlNet.description,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,"ControlPoint *FindClosest(QString serialNumber, double sample, double line)",isis_pybind.ControlNet.find_closest,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,double GetMaximumResidual(),isis_pybind.ControlNet.get_maximum_residual,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetNetworkId() const,isis_pybind.ControlNet.get_network_id,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumEditLockMeasures(),isis_pybind.ControlNet.get_num_edit_lock_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumEditLockPoints(),isis_pybind.ControlNet.get_num_edit_lock_points,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumIgnoredMeasures(),isis_pybind.ControlNet.get_num_ignored_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumberOfValidMeasuresInImage(const QString &serialNumber),isis_pybind.ControlNet.get_number_of_valid_measures_in_image,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumberOfJigsawRejectedMeasuresInImage(const QString &serialNumber),isis_pybind.ControlNet.get_number_of_jigsaw_rejected_measures_in_image,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void ClearJigsawRejected(),isis_pybind.ControlNet.clear_jigsaw_rejected,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,void IncrementNumberOfRejectedMeasuresInImage(const QString &serialNumber),isis_pybind.ControlNet.increment_number_of_rejected_measures_in_image,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,void DecrementNumberOfRejectedMeasuresInImage(const QString &serialNumber),isis_pybind.ControlNet.decrement_number_of_rejected_measures_in_image,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumMeasures() const,isis_pybind.ControlNet.get_num_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumPoints() const,isis_pybind.ControlNet.get_num_points,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumValidMeasures(),isis_pybind.ControlNet.get_num_valid_measures,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,int GetNumValidPoints(),isis_pybind.ControlNet.get_num_valid_points,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetTarget() const,isis_pybind.ControlNet.get_target,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetUserName() const,isis_pybind.ControlNet.get_user_name,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QString GetLastModified() const,isis_pybind.ControlNet.get_last_modified,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QList< ControlPoint * > GetPoints(),isis_pybind.ControlNet.get_points,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,QList< QString > GetPointIds() const,isis_pybind.ControlNet.get_point_ids,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,SurfacePoint::CoordinateType GetCoordType(),isis_pybind.ControlNet.get_coord_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetCreatedDate(const QString &date),isis_pybind.ControlNet.set_created_date,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetDescription(const QString &newDescription),isis_pybind.ControlNet.set_description,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetImages(const QString &imageListFile),isis_pybind.ControlNet.set_images,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,"void SetImages(SerialNumberList &list, Progress *progress = 0)",isis_pybind.ControlNet.set_images,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetModifiedDate(const QString &date),isis_pybind.ControlNet.set_modified_date,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,void clear(),isis_pybind.ControlNet.clear,Y,已在 bind_control_core.cpp 绑定
+Public API,QList< ControlPoint * > take(),isis_pybind.ControlNet.take,Y,已在 bind_control_core.cpp 绑定
+Read/Write IO,"void ReadControl(const QString &filename, Progress *progress = 0)",isis_pybind.ControlNet.read_control,Y,已在 bind_control_core.cpp 绑定
+Read/Write IO,"void Write(const QString &filename, bool pvl = false)",isis_pybind.ControlNet.write,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void AddPoint(ControlPoint *point),isis_pybind.ControlNet.add_point,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,int DeletePoint(ControlPoint *point),isis_pybind.ControlNet.delete_point,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,int DeletePoint(QString pointId),isis_pybind.ControlNet.delete_point,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,int DeletePoint(int index),isis_pybind.ControlNet.delete_point,Y,已在 bind_control_core.cpp 绑定
+Public API,bool ContainsPoint(QString pointId) const,isis_pybind.ControlNet.contains_point,Y,已在 bind_control_core.cpp 绑定
+Public API,QList< QString > GetCubeSerials() const,isis_pybind.ControlNet.get_cube_serials,Y,已在 bind_control_core.cpp 绑定
+Public API,QString GraphToString() const,isis_pybind.ControlNet.graph_to_string,Y,已在 bind_control_core.cpp 绑定
+Public API,QList< QList< QString > > GetSerialConnections() const,isis_pybind.ControlNet.get_serial_connections,Y,已在 bind_control_core.cpp 绑定
+Public API,int getEdgeCount() const,isis_pybind.ControlNet.get_edge_count,Y,已在 bind_control_core.cpp 绑定
+Public API,QList< QString > getAdjacentImages(QString serialNumber) const,isis_pybind.ControlNet.get_adjacent_images,Y,已在 bind_control_core.cpp 绑定
+Public API,QList< ControlMeasure * > GetMeasuresInCube(QString serialNumber),isis_pybind.ControlNet.get_measures_in_cube,Y,已在 bind_control_core.cpp 绑定
+Public API,QList< ControlMeasure * > GetValidMeasuresInCube(QString serialNumber),isis_pybind.ControlNet.get_valid_measures_in_cube,Y,已在 bind_control_core.cpp 绑定
+Public API,void ComputeResiduals(),isis_pybind.ControlNet.compute_residuals,Y,已在 bind_control_core.cpp 绑定
+Public API,void ComputeApriori(),isis_pybind.ControlNet.compute_apriori,Y,已在 bind_control_core.cpp 绑定
+Public API,const ControlPoint *GetPoint(QString pointId) const,isis_pybind.ControlNet.get_point,Y,已在 bind_control_core.cpp 绑定
+Public API,ControlPoint *GetPoint(QString pointId),isis_pybind.ControlNet.get_point,Y,已在 bind_control_core.cpp 绑定
+Public API,const ControlPoint *GetPoint(int index) const,isis_pybind.ControlNet.get_point,Y,已在 bind_control_core.cpp 绑定
+Public API,ControlPoint *GetPoint(int index),isis_pybind.ControlNet.get_point,Y,已在 bind_control_core.cpp 绑定
+Public API,double AverageResidual(),isis_pybind.ControlNet.average_residual,Y,已在 bind_control_core.cpp 绑定
+Public API,Isis::Camera *Camera(int index),isis_pybind.ControlNet.camera,Y,已在 bind_control_core.cpp 绑定
+Public API,Isis::Camera *Camera(QString serialNumber),isis_pybind.ControlNet.camera,Y,已在 bind_control_core.cpp 绑定
+Public API,QString CreatedDate() const,isis_pybind.ControlNet.created_date,Y,已在 bind_control_core.cpp 绑定
+Public API,QString Description() const,isis_pybind.ControlNet.description,Y,已在 bind_control_core.cpp 绑定
+Public API,"ControlPoint *FindClosest(QString serialNumber, double sample, double line)",isis_pybind.ControlNet.find_closest,Y,已在 bind_control_core.cpp 绑定
+Public API,double GetMaximumResidual(),isis_pybind.ControlNet.get_maximum_residual,Y,已在 bind_control_core.cpp 绑定
+Public API,QString GetNetworkId() const,isis_pybind.ControlNet.get_network_id,Y,已在 bind_control_core.cpp 绑定
+Public API,int GetNumEditLockMeasures(),isis_pybind.ControlNet.get_num_edit_lock_measures,Y,已在 bind_control_core.cpp 绑定
+Public API,int GetNumEditLockPoints(),isis_pybind.ControlNet.get_num_edit_lock_points,Y,已在 bind_control_core.cpp 绑定
+Public API,int GetNumIgnoredMeasures(),isis_pybind.ControlNet.get_num_ignored_measures,Y,已在 bind_control_core.cpp 绑定
+Public API,int GetNumberOfValidMeasuresInImage(const QString &serialNumber),isis_pybind.ControlNet.get_number_of_valid_measures_in_image,Y,已在 bind_control_core.cpp 绑定
+Public API,int GetNumberOfJigsawRejectedMeasuresInImage(const QString &serialNumber),isis_pybind.ControlNet.get_number_of_jigsaw_rejected_measures_in_image,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void ClearJigsawRejected(),isis_pybind.ControlNet.clear_jigsaw_rejected,Y,已在 bind_control_core.cpp 绑定
+Public API,void IncrementNumberOfRejectedMeasuresInImage(const QString &serialNumber),isis_pybind.ControlNet.increment_number_of_rejected_measures_in_image,Y,已在 bind_control_core.cpp 绑定
+Public API,void DecrementNumberOfRejectedMeasuresInImage(const QString &serialNumber),isis_pybind.ControlNet.decrement_number_of_rejected_measures_in_image,Y,已在 bind_control_core.cpp 绑定
+Public API,int GetNumMeasures() const,isis_pybind.ControlNet.get_num_measures,Y,已在 bind_control_core.cpp 绑定
+Public API,int GetNumPoints() const,isis_pybind.ControlNet.get_num_points,Y,已在 bind_control_core.cpp 绑定
+Public API,int GetNumValidMeasures(),isis_pybind.ControlNet.get_num_valid_measures,Y,已在 bind_control_core.cpp 绑定
+Public API,int GetNumValidPoints(),isis_pybind.ControlNet.get_num_valid_points,Y,已在 bind_control_core.cpp 绑定
+Public API,QString GetTarget() const,isis_pybind.ControlNet.get_target,Y,已在 bind_control_core.cpp 绑定
+Public API,QString GetUserName() const,isis_pybind.ControlNet.get_user_name,Y,已在 bind_control_core.cpp 绑定
+Public API,QString GetLastModified() const,isis_pybind.ControlNet.get_last_modified,Y,已在 bind_control_core.cpp 绑定
+Public API,QList< ControlPoint * > GetPoints(),isis_pybind.ControlNet.get_points,Y,已在 bind_control_core.cpp 绑定
+Public API,QList< QString > GetPointIds() const,isis_pybind.ControlNet.get_point_ids,Y,已在 bind_control_core.cpp 绑定
+Public API,SurfacePoint::CoordinateType GetCoordType(),isis_pybind.ControlNet.get_coord_type,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void SetCreatedDate(const QString &date),isis_pybind.ControlNet.set_created_date,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void SetDescription(const QString &newDescription),isis_pybind.ControlNet.set_description,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void SetImages(const QString &imageListFile),isis_pybind.ControlNet.set_images,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,"void SetImages(SerialNumberList &list, Progress *progress = 0)",isis_pybind.ControlNet.set_images,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void SetModifiedDate(const QString &date),isis_pybind.ControlNet.set_modified_date,Y,已在 bind_control_core.cpp 绑定
 Mutation/Configuration,void SetMutex(QMutex *mutex),isis_pybind.ControlNet.set_mutex,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetNetworkId(const QString &id),isis_pybind.ControlNet.set_network_id,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetTarget(const QString &target),isis_pybind.ControlNet.set_target,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetTarget(Pvl label),isis_pybind.ControlNet.set_target,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetTarget(const ControlNet &other),isis_pybind.ControlNet.set_target,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetUserName(const QString &name),isis_pybind.ControlNet.set_user_name,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Mutation/Configuration,void SetCoordType(SurfacePoint::CoordinateType coordType),isis_pybind.ControlNet.set_coord_type,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Public API,void swap(ControlNet &other),isis_pybind.ControlNet.swap,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Mutation/Configuration,void SetNetworkId(const QString &id),isis_pybind.ControlNet.set_network_id,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void SetTarget(const QString &target),isis_pybind.ControlNet.set_target,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void SetTarget(Pvl label),isis_pybind.ControlNet.set_target,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void SetTarget(const ControlNet &other),isis_pybind.ControlNet.set_target,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void SetUserName(const QString &name),isis_pybind.ControlNet.set_user_name,Y,已在 bind_control_core.cpp 绑定
+Mutation/Configuration,void SetCoordType(SurfacePoint::CoordinateType coordType),isis_pybind.ControlNet.set_coord_type,Y,已在 bind_control_core.cpp 绑定
+Public API,void swap(ControlNet &other),isis_pybind.ControlNet.swap,Y,已在 bind_control_core.cpp 绑定
 Public API,ControlMeasureLessThanFunctor(ControlMeasureLessThanFunctor const &other) { this->m_accessor = other.m_accessor,isis_pybind.ControlNet.control_measure_less_than_functor,N,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义

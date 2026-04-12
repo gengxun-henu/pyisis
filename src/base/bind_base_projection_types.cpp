@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added concrete map-projection type constructors for cylindrical, azimuthal, perspective, and ring-plane projections
+// Updated: 2026-04-12  Geng Xun completed Equirectangular binding with all public methods (name/version/true_scale_latitude/is_equatorial_cylindrical/set_ground/set_coordinate/xy_range/mapping methods)
 // Purpose: pybind11 bindings for concrete ISIS projection types built on Projection, TProjection, and RingPlaneProjection hierarchies
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -43,7 +44,30 @@ void bindProjectionType(py::module_ &m, const char *python_name) {
 }  // namespace
 
 void bind_base_projection_types(py::module_ &m) {
-  bindProjectionType<Isis::Equirectangular, Isis::TProjection>(m, "Equirectangular");
+  py::class_<Isis::Equirectangular, Isis::TProjection>(m, "Equirectangular")
+      .def(py::init<Isis::Pvl &, bool>(),
+           py::arg("label"),
+           py::arg("allow_defaults") = false)
+      .def("name", &Isis::Equirectangular::Name)
+      .def("version", &Isis::Equirectangular::Version)
+      .def("true_scale_latitude", &Isis::Equirectangular::TrueScaleLatitude)
+      .def("is_equatorial_cylindrical", &Isis::Equirectangular::IsEquatorialCylindrical)
+      .def("set_ground", &Isis::Equirectangular::SetGround,
+           py::arg("lat"), py::arg("lon"))
+      .def("set_coordinate", &Isis::Equirectangular::SetCoordinate,
+           py::arg("x"), py::arg("y"))
+      .def("xy_range", [](Isis::Equirectangular &self) {
+        double minX, maxX, minY, maxY;
+        bool result = self.XYRange(minX, maxX, minY, maxY);
+        if (!result) {
+          throw std::runtime_error("Failed to compute XY range");
+        }
+        return py::make_tuple(minX, maxX, minY, maxY);
+      })
+      .def("mapping", &Isis::Equirectangular::Mapping)
+      .def("mapping_latitudes", &Isis::Equirectangular::MappingLatitudes)
+      .def("mapping_longitudes", &Isis::Equirectangular::MappingLongitudes);
+
   bindProjectionType<Isis::SimpleCylindrical, Isis::TProjection>(m, "SimpleCylindrical");
   bindProjectionType<Isis::Sinusoidal, Isis::TProjection>(m, "Sinusoidal");
   bindProjectionType<Isis::Mercator, Isis::TProjection>(m, "Mercator");

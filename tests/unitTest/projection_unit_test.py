@@ -10,12 +10,115 @@ import unittest
 
 from _unit_test_support import (
     ip,
+    make_equirectangular_label,
     make_ring_cylindrical_label,
     make_simple_cylindrical_label,
 )
 
 
 class ProjectionUnitTest(unittest.TestCase):
+    def test_equirectangular_requires_center_keywords_without_defaults(self):
+        """Test that Equirectangular requires CenterLongitude and CenterLatitude when defaults not allowed"""
+        label = make_equirectangular_label(include_center_longitude=False)
+
+        with self.assertRaises(Exception):
+            ip.Equirectangular(label)
+
+        label = make_equirectangular_label(include_center_latitude=False)
+
+        with self.assertRaises(Exception):
+            ip.Equirectangular(label)
+
+    def test_equirectangular_allow_defaults_matches_cpp_default_path(self):
+        """Test that Equirectangular computes default center values when allowed"""
+        label = make_equirectangular_label(
+            include_center_longitude=False,
+            include_center_latitude=False
+        )
+
+        projection = ip.Equirectangular(label, True)
+
+        self.assertEqual(projection.name(), "Equirectangular")
+        self.assertEqual(projection.version(), "1.0")
+        self.assertTrue(projection.is_equatorial_cylindrical())
+
+        # Default center latitude should be 0.0 (middle of -65 to 65)
+        # Default center longitude should be 0.0 (middle of -180 to 180)
+        self.assertAlmostEqual(projection.true_scale_latitude(), 0.0, places=8)
+
+    def test_equirectangular_ground_and_coordinate_round_trip(self):
+        """Test round-trip conversion between ground and coordinate"""
+        projection = ip.Equirectangular(make_equirectangular_label())
+
+        # Test setting ground coordinates
+        self.assertTrue(projection.set_ground(30.0, 45.0))
+        self.assertAlmostEqual(projection.latitude(), 30.0, places=10)
+        self.assertAlmostEqual(projection.longitude(), 45.0, places=10)
+
+        x = projection.x_coord()
+        y = projection.y_coord()
+
+        # Test setting coordinate from the same X/Y
+        self.assertTrue(projection.set_coordinate(x, y))
+        self.assertAlmostEqual(projection.latitude(), 30.0, places=8)
+        self.assertAlmostEqual(projection.longitude(), 45.0, places=8)
+
+    def test_equirectangular_xy_range_export(self):
+        """Test that xy_range returns valid min/max values"""
+        projection = ip.Equirectangular(make_equirectangular_label())
+
+        xy_range = projection.xy_range()
+        self.assertIsNotNone(xy_range)
+        self.assertEqual(len(xy_range), 4)
+
+        minX, maxX, minY, maxY = xy_range
+        self.assertLess(minX, maxX)
+        self.assertLess(minY, maxY)
+
+    def test_equirectangular_mapping_methods(self):
+        """Test mapping, mapping_latitudes, and mapping_longitudes methods"""
+        projection = ip.Equirectangular(make_equirectangular_label())
+
+        mapping = projection.mapping()
+        self.assertTrue(mapping.has_keyword("ProjectionName"))
+        self.assertTrue(mapping.has_keyword("CenterLongitude"))
+        self.assertTrue(mapping.has_keyword("CenterLatitude"))
+
+        mapping_latitudes = projection.mapping_latitudes()
+        self.assertTrue(mapping_latitudes.has_keyword("MinimumLatitude"))
+        self.assertTrue(mapping_latitudes.has_keyword("CenterLatitude"))
+
+        mapping_longitudes = projection.mapping_longitudes()
+        self.assertTrue(mapping_longitudes.has_keyword("MinimumLongitude"))
+        self.assertTrue(mapping_longitudes.has_keyword("CenterLongitude"))
+
+    def test_equirectangular_near_pole_raises_exception(self):
+        """Test that setting center latitude near pole raises exception"""
+        # Create a label with center latitude very close to 90 degrees
+        lines = [
+            "Group = Mapping",
+            "  EquatorialRadius = 3396190.0",
+            "  PolarRadius = 3376200.0",
+            "  LatitudeType = Planetographic",
+            "  LongitudeDirection = PositiveEast",
+            "  LongitudeDomain = 360",
+            "  ProjectionName = Equirectangular",
+            "  CenterLongitude = 0.0",
+            "  CenterLatitude = 89.9999999",  # Very close to pole
+            "  MinimumLatitude = -65.0",
+            "  MaximumLatitude = 65.0",
+            "  MinimumLongitude = -180.0",
+            "  MaximumLongitude = 180.0",
+            "EndGroup",
+            "End",
+        ]
+
+        pvl = ip.Pvl()
+        pvl.from_string("\n".join(lines) + "\n")
+
+        with self.assertRaises(Exception):
+            ip.Equirectangular(pvl)
+
     def test_simple_cylindrical_requires_center_longitude_without_defaults(self):
         label = make_simple_cylindrical_label(include_center_longitude=False)
 

@@ -10,6 +10,7 @@
 #include <pybind11/pybind11.h>
 
 #include "Equirectangular.h"
+#include "helpers.h"
 #include "LambertAzimuthalEqualArea.h"
 #include "LambertConformal.h"
 #include "LunarAzimuthalEqualArea.h"
@@ -48,8 +49,12 @@ void bind_base_projection_types(py::module_ &m) {
       .def(py::init<Isis::Pvl &, bool>(),
            py::arg("label"),
            py::arg("allow_defaults") = false)
-      .def("name", &Isis::Equirectangular::Name)
-      .def("version", &Isis::Equirectangular::Version)
+      .def("name", [](const Isis::Equirectangular &self) {
+        return qStringToStdString(self.Name());
+      })
+      .def("version", [](const Isis::Equirectangular &self) {
+        return qStringToStdString(self.Version());
+      })
       .def("true_scale_latitude", &Isis::Equirectangular::TrueScaleLatitude)
       .def("is_equatorial_cylindrical", &Isis::Equirectangular::IsEquatorialCylindrical)
       .def("set_ground", &Isis::Equirectangular::SetGround,

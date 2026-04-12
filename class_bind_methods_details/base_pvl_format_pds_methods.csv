@@ -9,7 +9,7 @@ Construction/Enum,PvlFormatPds(Pvl &keymap),isis_pybind.PvlFormatPds(keymap),Y,P
 Public API,"virtual QString formatValue(const PvlKeyword &, int)",isis_pybind.PvlFormatPds.format_value,Y,PDS-specific value formatting
 Public API,virtual QString formatName(const PvlKeyword &),isis_pybind.PvlFormatPds.format_name,Y,PDS-specific name formatting
 Public API,virtual QString formatEOL(),isis_pybind.PvlFormatPds.format_eol,Y,Returns CRLF
-Public API,"virtual QString formatEnd(const QString, const PvlKeyword &)",N,Rarely used directly
+Public API,"virtual QString formatEnd(const QString, const PvlKeyword &)",Y,2026-04-12 已在 src/base/bind_base_pvl.cpp 暴露为 format_end(name, keyword)；focused 单测覆盖 nameKeyword 风格输入
 Protected API,virtual QString addQuotes(const QString),N,Protected
 Protected API,QString formatString/Integer/Real/Enum/Binary/Hex/Bool/Unknown,N,Protected helper methods
 Private API,void init(),N,Private initialisation

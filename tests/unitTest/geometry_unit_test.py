@@ -3,10 +3,11 @@ Unit tests for ISIS geometry helper bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-10
+Last Modified: 2026-04-12
 Updated: 2026-04-09  Geng Xun fixed Intercept SurfacePoint regression expectations to match NAIF kilometer coordinates
 Updated: 2026-04-10  Geng Xun added Area3D binding focused unit tests
 Updated: 2026-04-10  Geng Xun aligned Area3D unit tests with exported Distance and Displacement enum names
+Updated: 2026-04-12  Geng Xun added focused regression coverage for Longitude.to360_range() and Latitude.add() overloads.
 """
 
 import math
@@ -249,6 +250,92 @@ class Area3DUnitTest(unittest.TestCase):
         area = self._make_area()
         r = repr(area)
         self.assertIn("Area3D", r)
+
+
+class LatitudeLongitudeUnitTest(unittest.TestCase):
+    """Focused unit tests for latitude/longitude helper overloads. Added: 2026-04-12."""
+
+    def _make_mapping_group(self, latitude_type="Planetocentric"):
+        mapping = ip.PvlGroup("Mapping")
+        mapping.add_keyword(ip.PvlKeyword("LatitudeType", latitude_type))
+        mapping.add_keyword(ip.PvlKeyword("EquatorialRadius", "3396190.0"))
+        mapping.add_keyword(ip.PvlKeyword("PolarRadius", "3376200.0"))
+        return mapping
+
+    def test_longitude_to360_range_splits_wraparound_interval(self):
+        start = ip.Longitude(
+            -10.0,
+            ip.Angle.Units.Degrees,
+            ip.Longitude.Direction.PositiveEast,
+            ip.Longitude.Domain.Domain180,
+        )
+        end = ip.Longitude(
+            10.0,
+            ip.Angle.Units.Degrees,
+            ip.Longitude.Direction.PositiveEast,
+            ip.Longitude.Domain.Domain180,
+        )
+
+        ranges = ip.Longitude.to360_range(start, end)
+
+        self.assertEqual(len(ranges), 2)
+        degrees = [
+            (
+                pair[0].positive_east(ip.Angle.Units.Degrees),
+                pair[1].positive_east(ip.Angle.Units.Degrees),
+            )
+            for pair in ranges
+        ]
+        self.assertAlmostEqual(degrees[0][0], 0.0, places=8)
+        self.assertAlmostEqual(degrees[0][1], 10.0, places=8)
+        self.assertAlmostEqual(degrees[1][0], 350.0, places=8)
+        self.assertAlmostEqual(degrees[1][1], 360.0, places=8)
+
+    def test_latitude_add_with_mapping_group_uses_mapping_lat_type(self):
+        equatorial_radius = ip.Distance(3396190.0, ip.Distance.Units.Meters)
+        polar_radius = ip.Distance(3376200.0, ip.Distance.Units.Meters)
+        latitude = ip.Latitude(
+            10.0,
+            equatorial_radius,
+            polar_radius,
+            ip.Latitude.CoordinateType.Planetocentric,
+            ip.Angle.Units.Degrees,
+        )
+        mapping = self._make_mapping_group("Planetocentric")
+
+        result = latitude.add(ip.Angle(5.0, ip.Angle.Units.Degrees), mapping)
+
+        self.assertIsInstance(result, ip.Latitude)
+        self.assertAlmostEqual(
+            result.planetocentric(ip.Angle.Units.Degrees),
+            15.0,
+            places=8,
+        )
+
+    def test_latitude_add_with_explicit_radii_supports_planetographic(self):
+        equatorial_radius = ip.Distance(3396190.0, ip.Distance.Units.Meters)
+        polar_radius = ip.Distance(3376200.0, ip.Distance.Units.Meters)
+        latitude = ip.Latitude(
+            30.0,
+            equatorial_radius,
+            polar_radius,
+            ip.Latitude.CoordinateType.Planetographic,
+            ip.Angle.Units.Degrees,
+        )
+
+        result = latitude.add(
+            ip.Angle(5.0, ip.Angle.Units.Degrees),
+            equatorial_radius,
+            polar_radius,
+            ip.Latitude.CoordinateType.Planetographic,
+        )
+
+        self.assertIsInstance(result, ip.Latitude)
+        self.assertAlmostEqual(
+            result.planetographic(ip.Angle.Units.Degrees),
+            35.0,
+            places=8,
+        )
 
 
 if __name__ == "__main__":

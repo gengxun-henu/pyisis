@@ -13,7 +13,7 @@ Mutation/Configuration,void setCharLimit(unsigned int),isis_pybind.PvlFormat.set
 Public API,unsigned int charLimit() const,isis_pybind.PvlFormat.char_limit,Y,
 Public API,"virtual QString formatValue(const PvlKeyword &, int)",isis_pybind.PvlFormat.format_value,Y,Returns str
 Public API,virtual QString formatName(const PvlKeyword &),isis_pybind.PvlFormat.format_name,Y,Returns str
-Public API,"virtual QString formatEnd(const QString, const PvlKeyword &)",N,Rarely used directly; complex output
+Public API,"virtual QString formatEnd(const QString, const PvlKeyword &)",Y,2026-04-12 已在 src/base/bind_base_pvl.cpp 暴露为 format_end(name, keyword)；focused 单测覆盖 keyword-name 路径
 Public API,virtual QString formatEOL(),isis_pybind.PvlFormat.format_eol,Y,Returns str
 Public API,virtual KeywordType type(const PvlKeyword &),isis_pybind.PvlFormat.type,Y,Returns KeywordType enum
 Public API,virtual int accuracy(const PvlKeyword &),isis_pybind.PvlFormat.accuracy,Y,Returns int

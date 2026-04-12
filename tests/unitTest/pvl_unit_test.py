@@ -3,11 +3,12 @@ Unit tests for ISIS PVL and PvlSequence bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-10
+Last Modified: 2026-04-12
 Updated: 2026-03-30  Geng Xun added PvlSequence regression coverage alongside core PVL keyword, group, object, and container tests.
 Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer focused unit tests.
 Updated: 2026-04-09  Geng Xun added PvlFormat, PvlTranslationTable, PvlFormatPds, PvlToPvlTranslationManager unit tests.
 Updated: 2026-04-10  Geng Xun added regressions for protected-helper wrapper bindings on PvlFormat and PvlTranslationTable.
+Updated: 2026-04-12  Geng Xun added focused format_end() regressions for PvlFormat and PvlFormatPds.
 Updated: 2026-04-10  Geng Xun aligned PVL helper test expectations with upstream ISIS behavior for empty units and PDS uppercase names.
 """
 
@@ -366,6 +367,12 @@ class PvlFormatUnitTest(unittest.TestCase):
         self.assertIsInstance(result, str)
         self.assertIn("MyKey", result)
 
+    def test_format_end_uses_keyword_name(self):
+        """format_end() exposes the base PvlFormat end marker helper."""
+        fmt = ip.PvlFormat()
+        kw = ip.PvlKeyword("Instrument")
+        self.assertEqual(fmt.format_end("ignored", kw), "End_Instrument")
+
     def test_format_value(self):
         """format_value() returns the keyword value as a string."""
         fmt = ip.PvlFormat()
@@ -545,6 +552,12 @@ class PvlFormatPdsUnitTest(unittest.TestCase):
         result = fmt.format_name(kw)
         self.assertIsInstance(result, str)
         self.assertIn("TESTKEY", result)
+
+    def test_format_end_uppercases_context_and_keyword(self):
+        """format_end() exposes the PDS-specific end marker helper."""
+        fmt = ip.PvlFormatPds()
+        kw = ip.PvlKeyword("Object", "Instrument")
+        self.assertEqual(fmt.format_end("end_object", kw), "END_OBJECT = INSTRUMENT")
 
     def test_format_value(self):
         """format_value() returns a string for the keyword value."""

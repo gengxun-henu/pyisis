@@ -13,5 +13,5 @@ Mutation/Configuration,"void setPlanetographic(double latitude, Angle::Units uni
 Public API,ErrorChecking errorChecking() const,isis_pybind.Latitude.error_checking,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
 Mutation/Configuration,void setErrorChecking(ErrorChecking errors),isis_pybind.Latitude.set_error_checking,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
 Public API,"bool inRange(Latitude min, Latitude max) const",isis_pybind.Latitude.in_range,Y,2026-04-11 台账同步；已在 bind_base_geometry.cpp 暴露
-Mutation/Configuration,"Latitude add(Angle angleToAdd, PvlGroup mapping)",isis_pybind.Latitude.add,N,Method not found in current binding files
-Mutation/Configuration,"Latitude add(Angle angleToAdd, Distance equatorialRadius, Distance polarRadius, CoordinateType latType)",isis_pybind.Latitude.add,N,Method not found in current binding files
+Mutation/Configuration,"Latitude add(Angle angleToAdd, PvlGroup mapping)",isis_pybind.Latitude.add,Y,2026-04-12 已在 bind_base_geometry.cpp 暴露 mapping-group 重载；focused 单测覆盖 Mapping.LatitudeType 驱动行为
+Mutation/Configuration,"Latitude add(Angle angleToAdd, Distance equatorialRadius, Distance polarRadius, CoordinateType latType)",isis_pybind.Latitude.add,Y,2026-04-12 已在 bind_base_geometry.cpp 暴露显式半径重载；focused 单测覆盖 planetographic 路径

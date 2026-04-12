@@ -16,6 +16,7 @@
  * Created: 2026-03-25
  * Updated: 2026-03-26  Geng Xun expanded filter and utility bindings with GaussianStretch, QuickFilter, Kernels, and CSVReader coverage
  * Updated: 2026-04-09  Geng Xun completed CSVReader helper coverage for table summaries, typed conversion, and file-based construction.
+ * Updated: 2026-04-12  Geng Xun added CubeStretch.to_blob() for stable blob serialization coverage.
  * Purpose: Expose Stretch, GaussianStretch, QuickFilter, Kernels, and CSVReader classes to Python via pybind11.
  *
  * Note: Many methods use lambda wrappers to convert between Qt types (QString, QVector)
@@ -218,6 +219,9 @@ void bind_base_filters(py::module_ &m)
               &Isis::CubeStretch::setBandNumber,
               py::arg("band_number"),
               "Set the associated band number")
+         .def("to_blob",
+              &Isis::CubeStretch::toBlob,
+              "Serialize this CubeStretch into an ISIS Blob.")
          .def("__eq__",
               [](Isis::CubeStretch &self, Isis::CubeStretch &other)
               { return self == other; },

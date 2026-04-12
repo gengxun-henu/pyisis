@@ -1,21 +1,21 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Buffer,Low Level Cube I/O,isis/src/base/objs/Buffer/Buffer.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,需注意内存生命周期与数据视图映射
+Buffer,Low Level Cube I/O,isis/src/base/objs/Buffer/Buffer.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-12 已补 raw_buffer bytes 拷贝接口；避免悬垂内存视图
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Buffer,isis_pybind.Portal,Y,Python class symbol is exported; 需注意内存生命周期与数据视图映射
-Construction/Enum,Buffer(),isis_pybind.Portal(),Y,Constructor is explicitly bound
-Public API,inline int SampleDimension() const { return (p_nsamps),isis_pybind.Portal.sample_dimension,Y,Current Python name
-Public API,inline int LineDimension() const { return (p_nlines),isis_pybind.Portal.line_dimension,Y,Current Python name
-Public API,inline int BandDimension() const { return (p_nbands),isis_pybind.Portal.band_dimension,Y,Current Python name
-Query,inline int size() const { return (p_npixels),isis_pybind.Portal.size,Y,Current Python name
-Public API,int Sample(const int index = 0) const,isis_pybind.Portal.sample,Y,Current Python name
-Public API,int Line(const int index = 0) const,isis_pybind.Portal.line,Y,Current Python name
-Public API,int Band(const int index = 0) const,isis_pybind.Portal.band,Y,Current Python name
-Public API,"void Position(const int index, int &i_samp, int &i_line, int &i_band) const",isis_pybind.Portal.position,Y,Current Python name
-Public API,"int Index(const int i_samp, const int i_line, const int i_band) const",isis_pybind.Portal.index,Y,Current Python name
-Public API,double at(const int index) const,isis_pybind.Portal.at,Y,Current Python name
-Public API,inline double *DoubleBuffer() const { return (p_buf),isis_pybind.Portal.double_buffer,Y,Current Python name
-Public API,"void Copy(const Buffer &in, bool includeRawBuf = true)",isis_pybind.Portal.copy,Y,Current Python name
-Public API,bool CopyOverlapFrom(const Buffer &in),isis_pybind.Portal.copy_overlap_from,Y,Current Python name
-Public API,void *RawBuffer() const { return p_rawbuf,isis_pybind.Portal.raw_buffer,N,需注意内存生命周期与数据视图映射
-Public API,Isis::PixelType PixelType() const { return p_pixelType,isis_pybind.Portal.pixel_type,Y,Current Python name
+Class Symbol,Buffer,isis_pybind.Buffer,Y,Python class symbol is exported
+Construction/Enum,Buffer(),isis_pybind.Buffer(),Y,Constructor is explicitly bound
+Public API,inline int SampleDimension() const { return (p_nsamps),isis_pybind.Buffer.sample_dimension,Y,Current Python name
+Public API,inline int LineDimension() const { return (p_nlines),isis_pybind.Buffer.line_dimension,Y,Current Python name
+Public API,inline int BandDimension() const { return (p_nbands),isis_pybind.Buffer.band_dimension,Y,Current Python name
+Query,inline int size() const { return (p_npixels),isis_pybind.Buffer.size,Y,Current Python name
+Public API,int Sample(const int index = 0) const,isis_pybind.Buffer.sample,Y,Current Python name
+Public API,int Line(const int index = 0) const,isis_pybind.Buffer.line,Y,Current Python name
+Public API,int Band(const int index = 0) const,isis_pybind.Buffer.band,Y,Current Python name
+Public API,"void Position(const int index, int &i_samp, int &i_line, int &i_band) const",isis_pybind.Buffer.position,Y,Current Python name
+Public API,"int Index(const int i_samp, const int i_line, const int i_band) const",isis_pybind.Buffer.index,Y,Current Python name
+Public API,double at(const int index) const,isis_pybind.Buffer.at,Y,Current Python name
+Public API,inline double *DoubleBuffer() const { return (p_buf),isis_pybind.Buffer.double_buffer,Y,Current Python name
+Public API,"void Copy(const Buffer &in, bool includeRawBuf = true)",isis_pybind.Buffer.copy,Y,Current Python name
+Public API,bool CopyOverlapFrom(const Buffer &in),isis_pybind.Buffer.copy_overlap_from,Y,Current Python name
+Public API,void *RawBuffer() const { return p_rawbuf,isis_pybind.Buffer.raw_buffer,Y,Exposed as a copied Python bytes object sized by PixelType and buffer length
+Public API,Isis::PixelType PixelType() const { return p_pixelType,isis_pybind.Buffer.pixel_type,Y,Current Python name

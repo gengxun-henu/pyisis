@@ -2,6 +2,85 @@
 
 ## 2026-04-12
 
+- low-risk mission-camera rollout queue opened with `DawnFcCamera` / `DawnVirCamera` / `KaguyaMiCamera` / `KaguyaTcCamera` / `LroNarrowAngleCamera`; first class `DawnFcCamera` completed:
+  - Updated `src/mission/bind_mission_cameras.cpp` to expose `DawnFcCamera(Cube &)` and `DawnFcCamera.shutter_open_close_times(...)`, bringing the Dawn framing camera surface in line with the other already-bound framing mission cameras in the same file.
+  - Extended `tests/unitTest/extended_mission_camera_unit_test.py` with a focused regression that verifies the Cube-based constructor signature is registered (no longer `No constructor defined!`) and that `shutter_open_close_times(...)` is present on the Python type.
+  - Synced ledgers:
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/dawn_dawn_fc_camera_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DPython3_EXECUTABLE=/home/gengxun/miniconda3/envs/asp360_new/bin/python -DISIS_PREFIX=/home/gengxun/miniconda3/envs/asp360_new && cmake --build build -j"$(nproc)"`
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/extended_mission_camera_unit_test.py -v` (`18` tests, `OK`)
+    - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- low-risk mission-camera rollout queue second class `DawnVirCamera` completed:
+  - Updated `src/mission/bind_mission_cameras.cpp` to expose `DawnVirCamera(Cube &)`, matching the already-bound line-scan mission camera pattern used elsewhere in the file.
+  - Extended `tests/unitTest/extended_mission_camera_unit_test.py` with a focused regression that verifies the Cube-based constructor signature is registered (no longer `No constructor defined!`).
+  - Synced ledgers:
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/dawn_dawn_vir_camera_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake --build build -j"$(nproc)"`
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/extended_mission_camera_unit_test.py -v` (`19` tests, `OK`)
+    - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- low-risk mission-camera rollout queue third class `KaguyaMiCamera` completed:
+  - Updated `src/mission/bind_mission_cameras.cpp` to expose `KaguyaMiCamera(Cube &)`, aligning the existing Kaguya line-scan binding surface with the already-exported SPICE ID helpers.
+  - Extended `tests/unitTest/extended_mission_camera_unit_test.py` with a focused regression that verifies the Cube-based constructor signature is registered (no longer `No constructor defined!`).
+  - Synced ledgers:
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/kaguya_kaguya_mi_camera_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake --build build -j"$(nproc)"`
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/extended_mission_camera_unit_test.py -v` (`20` tests, `OK`)
+    - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- low-risk mission-camera rollout queue fourth class `KaguyaTcCamera` completed:
+  - Updated `src/mission/bind_mission_cameras.cpp` to expose `KaguyaTcCamera(Cube &)`, matching the Kaguya MI constructor surface and completing the remaining low-risk Kaguya line-scan constructor gap.
+  - Extended `tests/unitTest/extended_mission_camera_unit_test.py` with a focused regression that verifies the Cube-based constructor signature is registered (no longer `No constructor defined!`).
+  - Synced ledgers:
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/kaguya_kaguya_tc_camera_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake --build build -j"$(nproc)"`
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/extended_mission_camera_unit_test.py -v` (`21` tests, `OK`)
+    - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- low-risk mission-camera rollout queue fifth class `LroNarrowAngleCamera` completed:
+  - Updated `src/mission/bind_mission_cameras.cpp` to expose `LroNarrowAngleCamera(Cube &)`, finishing the current five-class low-risk mission-camera constructor queue.
+  - Extended `tests/unitTest/extended_mission_camera_unit_test.py` with a focused regression that verifies the Cube-based constructor signature is registered (no longer `No constructor defined!`).
+  - Synced ledgers:
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/lro_lro_narrow_angle_camera_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake --build build -j"$(nproc)"`
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/unitTest/extended_mission_camera_unit_test.py -v` (`23` tests, `OK`)
+    - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
+- rollout batch closure for `PvlTranslationTable` / `XmlToPvlTranslationManager` / `ExportPdsTable` / `Buffer` / `BufferManager` completed:
+  - Updated `src/base/bind_base_pvl.cpp` to expose `PvlTranslationTable.find_translation_group(...)` and `PvlTranslationTable.valid_keywords(...)` via safe copy/value wrappers, and restored the remaining public `XmlToPvlTranslationManager(FileName &, std::istream &)` constructor as a Python `FileName + translation text` entry point.
+  - Updated `src/base/bind_base_pds_io.cpp` to expose `ExportPdsTable.export_table(...)` using a Python `bytearray` buffer while preserving upstream `char *` fill semantics and returning the generated metadata `PvlObject`.
+  - Updated `src/bind_low_level_cube_io.cpp` to expose `Buffer.raw_buffer()` as a copied `bytes` payload plus `BufferManager.setpos(...)` and `BufferManager.swap(...)` for parity with the upstream low-level traversal surface.
+  - Extended focused regressions in `tests/unitTest/pvl_unit_test.py`, `tests/unitTest/pds_io_unit_test.py`, and `tests/unitTest/low_level_cube_io_unit_test.py` to cover the new PVL safe-copy helpers, XML FileName+translation-string construction, PDS table bytearray export, Buffer raw bytes extraction, and BufferManager traversal-state swap semantics.
+  - While validating, hit the recurring `_isis_core...so: file too short` truncated-artifact problem twice after incremental links; recovered by deleting the shared object, rebuilding serially, and confirming the rebuilt module size (`7085232` bytes) before rerunning Python checks.
+  - Synced ledgers:
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_pvl_translation_table_methods.csv`
+    - `class_bind_methods_details/base_xml_to_pvl_translation_manager_methods.csv`
+    - `class_bind_methods_details/base_export_pds_table_methods.csv`
+    - `class_bind_methods_details/base_buffer_methods.csv`
+    - `class_bind_methods_details/base_buffer_manager_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: `cmake -S . -B build -DPython3_EXECUTABLE=/home/gengxun/miniconda3/envs/asp360_new/bin/python -DISIS_PREFIX=/home/gengxun/miniconda3/envs/asp360_new && cmake --build build -j"$(nproc)"`
+    - Passed: focused Python validation covering `PvlTranslationTableUnitTest`, `XmlToPvlTranslationManagerUnitTest`, `ExportPdsTableApiTest`, and the new `LowLevelCubeIoUnitTest` Buffer/BufferManager regressions (`23` tests, `OK`)
+    - Passed: smoke symbol check via `tests/smoke_import.py` (`SMOKE_OK`)
+
 - rollout batch closure for `Longitude` / `Latitude` / `CubeStretch` / `PvlFormat` / `PvlFormatPds` completed:
   - Updated `src/base/bind_base_geometry.cpp` to expose `Longitude.to360_range(...)` and the two remaining `Latitude.add(...)` overloads (`Angle + PvlGroup` and `Angle + Distance + Distance + CoordinateType`).
   - Updated `src/base/bind_base_filters.cpp` to expose `CubeStretch.to_blob()`.

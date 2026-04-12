@@ -7,6 +7,9 @@
 // Updated: 2026-04-07  Geng Xun added New Horizons mission camera and distortion helper bindings
 // Updated: 2026-04-07  Geng Xun completed Apollo, Cassini, Chandrayaan-1, Clementine, Clipper, Galileo, and Juno mission camera/helper bindings
 // Updated: 2026-04-07  Geng Xun fixed ApolloPanoramicCamera import-time undefined symbol by wrapping residual report in pybind instead of binding the missing upstream method directly
+// Updated: 2026-04-12  Geng Xun exposed DawnFcCamera construction and shutter timing helpers for the next low-risk rollout batch.
+// Updated: 2026-04-12  Geng Xun exposed KaguyaMiCamera and KaguyaTcCamera Cube constructors for the low-risk mission-camera rollout batch.
+// Updated: 2026-04-12  Geng Xun exposed the LroNarrowAngleCamera Cube constructor to finish the current low-risk mission-camera rollout queue.
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -407,6 +410,15 @@ void bind_mission_cameras(py::module_ &m) {
       .def("ck_reference_id", &Isis::ClipperWacFcCamera::CkReferenceId)
       .def("spk_reference_id", &Isis::ClipperWacFcCamera::SpkReferenceId);
   py::class_<Isis::DawnFcCamera, Isis::FramingCamera>(m, "DawnFcCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Dawn framing camera model from an opened cube.")
+      .def("shutter_open_close_times",
+           &Isis::DawnFcCamera::ShutterOpenCloseTimes,
+           py::arg("time"),
+           py::arg("exposure_duration"),
+           "Return the shutter open/close times as a pair of iTime values.")
       .def("ck_frame_id",    &Isis::DawnFcCamera::CkFrameId,
            "Return the CK frame ID for the DawnFc camera (-203000).")
       .def("ck_reference_id",&Isis::DawnFcCamera::CkReferenceId,
@@ -435,6 +447,10 @@ void bind_mission_cameras(py::module_ &m) {
       .def("__repr__", [](const Isis::DawnFcDistortionMap &) {
             return "DawnFcDistortionMap()"; });
   py::class_<Isis::DawnVirCamera, Isis::LineScanCamera>(m, "DawnVirCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Dawn VIR line-scan camera model from an opened cube.")
       .def("ck_frame_id",    &Isis::DawnVirCamera::CkFrameId,
            "Return the CK frame ID for the DawnVir camera.")
       .def("ck_reference_id",&Isis::DawnVirCamera::CkReferenceId,
@@ -566,6 +582,10 @@ void bind_mission_cameras(py::module_ &m) {
            py::arg("ux"),
            py::arg("uy"));
   py::class_<Isis::KaguyaMiCamera, Isis::LineScanCamera>(m, "KaguyaMiCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Kaguya MI line-scan camera model from an opened cube.")
       .def("ck_frame_id",    &Isis::KaguyaMiCamera::CkFrameId,
            "Return the CK frame ID for the KaguyaMi camera (-131000).")
       .def("ck_reference_id",&Isis::KaguyaMiCamera::CkReferenceId,
@@ -575,6 +595,10 @@ void bind_mission_cameras(py::module_ &m) {
       .def("__repr__", [](const Isis::KaguyaMiCamera &) {
             return "KaguyaMiCamera()"; });
   py::class_<Isis::KaguyaTcCamera, Isis::LineScanCamera>(m, "KaguyaTcCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Kaguya TC line-scan camera model from an opened cube.")
       .def("ck_frame_id",    &Isis::KaguyaTcCamera::CkFrameId,
            "Return the CK frame ID for the KaguyaTc camera.")
       .def("ck_reference_id",&Isis::KaguyaTcCamera::CkReferenceId,
@@ -719,6 +743,10 @@ void bind_mission_cameras(py::module_ &m) {
         return stream.str();
       });
   py::class_<Isis::LroNarrowAngleCamera, Isis::LineScanCamera>(m, "LroNarrowAngleCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an LRO Narrow Angle line-scan camera model from an opened cube.")
       .def("ck_frame_id", &Isis::LroNarrowAngleCamera::CkFrameId,
            "CK frame ID - Instrument Code from spacit run on CK")
       .def("ck_reference_id", &Isis::LroNarrowAngleCamera::CkReferenceId,

@@ -54,6 +54,9 @@ set(ISIS_PLUGIN_FILE "${ISIS_LIBRARY_DIR}/Camera.plugin" CACHE FILEPATH "Path to
 set(ISIS_CAMERA_LIBS ""
     CACHE STRING
     "Semicolon-separated extra ISIS camera libraries to link (empty means auto-detect a minimal set)")
+option(ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS
+  "Exclude libAsp* and libVw* camera libraries from the extra ISIS camera link set"
+  ON)
 
 foreach(required_path IN ITEMS ISIS_INCLUDE_DIR ISIS_DEP_INCLUDE_DIR ISIS_LIBRARY_DIR ISIS_CORE_LIBRARY ISIS_PLUGIN_FILE)
   if(NOT EXISTS "${${required_path}}")
@@ -68,6 +71,10 @@ else()
        "${ISIS_LIBRARY_DIR}/lib*Camera.so"
        "${ISIS_LIBRARY_DIR}/libMiniRF.so")
   list(REMOVE_DUPLICATES ISIS_EXTRA_CAMERA_LIBS)
+endif()
+
+if(ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS)
+  list(FILTER ISIS_EXTRA_CAMERA_LIBS EXCLUDE REGEX "/lib(Asp|ASP|Vw|VW)[^/]*$")
 endif()
 
 set(ISIS_PROJECTION_LIB_NAMES
@@ -300,6 +307,7 @@ message(STATUS "Using ISIS include dir: ${ISIS_INCLUDE_DIR}")
 message(STATUS "Using ISIS dependency include dir: ${ISIS_DEP_INCLUDE_DIR}")
 message(STATUS "Using ISIS core library: ${ISIS_CORE_LIBRARY}")
 message(STATUS "Using extra camera libs: ${ISIS_EXTRA_CAMERA_LIBS}")
+message(STATUS "Exclude ASP/VW camera libs: ${ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS}")
 message(STATUS "Using extra projection libs: ${ISIS_EXTRA_PROJECTION_LIBS}")
 message(STATUS "Using Bullet runtime libs: ${BULLET_RUNTIME_LIBS}")
 message(STATUS "Using PCL include dirs: ${PCL_INCLUDE_DIRS}")

@@ -6,6 +6,7 @@
 // Updated: 2026-04-09  Geng Xun added LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, XmlToPvlTranslationManager bindings.
 // Updated: 2026-04-10  Geng Xun replaced direct protected-member bindings with helper-copy wrappers for PvlFormat and PvlTranslationTable.
 // Updated: 2026-04-12  Geng Xun exposed remaining public format_end helpers for PvlFormat and PvlFormatPds.
+// Updated: 2026-04-12  Geng Xun added safe-copy helpers for remaining PvlTranslationTable APIs and restored the XmlToPvlTranslationManager FileName+stream constructor.
 // Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, PvlFormatPds, PvlTranslationTable, LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, and XmlToPvlTranslationManager
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -95,6 +96,20 @@ class PvlTranslationTableBindingAccess : public Isis::PvlTranslationTable {
 
      QString outputNamePublic(const QString &translationGroupName) {
           return OutputName(translationGroupName);
+     }
+
+     Isis::PvlGroup findTranslationGroupCopyPublic(const QString &translationGroupName) const {
+          return findTranslationGroup(translationGroupName);
+     }
+
+     std::vector<std::pair<std::string, int>> validKeywordsPublic() const {
+          std::vector<std::pair<std::string, int>> result;
+          const auto keywords = validKeywords();
+          result.reserve(keywords.size());
+          for (const auto &keyword : keywords) {
+               result.emplace_back(qStringToStdString(keyword.first), keyword.second);
+          }
+          return result;
      }
 };
 }  // namespace
@@ -728,6 +743,18 @@ void bind_base_pvl(py::module_ &m) {
            },
            py::arg("group_name"),
            "Return the PvlKeyword describing the output position for the translation group.")
+      .def("find_translation_group",
+           [](const Isis::PvlTranslationTable &self, const std::string &group_name) {
+             return PvlTranslationTableBindingAccess(self)
+                 .findTranslationGroupCopyPublic(stdStringToQString(group_name));
+           },
+           py::arg("group_name"),
+           "Return a copy of the named translation PvlGroup from the translation table.")
+      .def("valid_keywords",
+           [](const Isis::PvlTranslationTable &self) {
+             return PvlTranslationTableBindingAccess(self).validKeywordsPublic();
+           },
+           "Return the accepted translation-table keyword names and expected sizes.")
       .def("__repr__",
            [](const Isis::PvlTranslationTable &) {
              return "PvlTranslationTable()";
@@ -927,6 +954,12 @@ void bind_base_pvl(py::module_ &m) {
            }),
            py::arg("input_label"), py::arg("trans_file"),
            "Construct from an XML input-label FileName and a translation table file path.")
+      .def(py::init([](Isis::FileName &input_label, const std::string &trans_text, bool from_string) {
+             std::istringstream iss(trans_text);
+             return Isis::XmlToPvlTranslationManager(input_label, iss);
+           }),
+           py::arg("input_label"), py::arg("trans_text"), py::arg("from_string"),
+           "Construct from an XML input-label FileName and a PVL translation string (set from_string=True).")
       .def("translate",
            [](Isis::XmlToPvlTranslationManager &self, const std::string &group_name,
               int findex) {

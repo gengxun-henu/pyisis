@@ -157,6 +157,23 @@ void bind_base_pds_io(py::module_ &m) {
       .def(py::init<Isis::Table>(),
            py::arg("isis_table"),
            "Construct an ExportPdsTable from an ISIS Table object.")
+               .def("export_table",
+                          [](Isis::ExportPdsTable &self,
+                                   py::bytearray buffer,
+                                   int pds_file_record_bytes,
+                                   const std::string &pds_byte_order) {
+                               char *raw_buffer = PyByteArray_AsString(buffer.ptr());
+                               if (!raw_buffer) {
+                                    throw py::error_already_set();
+                               }
+                               return self.exportTable(raw_buffer,
+                                                                                           pds_file_record_bytes,
+                                                                                           toQ(pds_byte_order));
+                          },
+                          py::arg("buffer"),
+                          py::arg("pds_file_record_bytes"),
+                          py::arg("pds_byte_order") = "LSB",
+                          "Fill a preallocated bytearray with binary PDS table bytes and return the PDS metadata object.")
       .def("format_pds_table_name",
            [](Isis::ExportPdsTable &self) {
              return self.formatPdsTableName().toStdString();

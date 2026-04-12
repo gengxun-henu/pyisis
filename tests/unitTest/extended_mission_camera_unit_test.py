@@ -3,8 +3,11 @@ Unit tests for additional ISIS mission camera bindings
 
 Author: Geng Xun
 Created: 2026-04-07
-Last Modified: 2026-04-10
+Last Modified: 2026-04-12
 Updated: 2026-04-10  Geng Xun added Dawn (DawnFcCamera, DawnFcDistortionMap, DawnVirCamera) and Kaguya (KaguyaMiCamera, KaguyaTcCamera, KaguyaMiCameraDistortionMap, KaguyaTcCameraDistortionMap) unit tests.
+Updated: 2026-04-12  Geng Xun added Dawn and Kaguya mission-camera constructor-registration regression coverage for the next low-risk rollout batch.
+Updated: 2026-04-12  Geng Xun extended the low-risk mission-camera constructor-registration regressions to cover KaguyaTcCamera.
+Updated: 2026-04-12  Geng Xun added LroNarrowAngleCamera constructor-registration regression coverage to finish the low-risk mission-camera queue.
 """
 
 import unittest
@@ -128,9 +131,18 @@ class ClipperGalileoAndJunoBindingsUnitTest(unittest.TestCase):
 class DawnMissionCameraUnitTest(unittest.TestCase):
     """Regression coverage for Dawn mission camera/helper bindings. Added: 2026-04-10."""
 
+    def test_dawn_fc_camera_constructor_signature_is_registered(self):
+        """DawnFcCamera should advertise the Cube-based constructor instead of reporting no constructor."""
+        with self.assertRaises(TypeError) as ctx:
+            ip.DawnFcCamera()
+        message = str(ctx.exception)
+        self.assertIn("cube", message.lower())
+        self.assertNotIn("No constructor defined", message)
+
     def test_dawn_fc_camera_surface(self):
         """DawnFcCamera inherits FramingCamera with required SPICE ID methods."""
         self.assertTrue(issubclass(ip.DawnFcCamera, ip.FramingCamera))
+        self.assertTrue(hasattr(ip.DawnFcCamera, "shutter_open_close_times"))
         self.assertTrue(hasattr(ip.DawnFcCamera, "ck_frame_id"))
         self.assertTrue(hasattr(ip.DawnFcCamera, "ck_reference_id"))
         self.assertTrue(hasattr(ip.DawnFcCamera, "spk_reference_id"))
@@ -148,6 +160,14 @@ class DawnMissionCameraUnitTest(unittest.TestCase):
         self.assertTrue(hasattr(ip.DawnVirCamera, "ck_reference_id"))
         self.assertTrue(hasattr(ip.DawnVirCamera, "spk_reference_id"))
 
+    def test_dawn_vir_camera_constructor_signature_is_registered(self):
+        """DawnVirCamera should advertise the Cube-based constructor instead of reporting no constructor."""
+        with self.assertRaises(TypeError) as ctx:
+            ip.DawnVirCamera()
+        message = str(ctx.exception)
+        self.assertIn("cube", message.lower())
+        self.assertNotIn("No constructor defined", message)
+
 
 class KaguyaMissionCameraUnitTest(unittest.TestCase):
     """Regression coverage for Kaguya mission camera/helper bindings. Added: 2026-04-10."""
@@ -159,12 +179,28 @@ class KaguyaMissionCameraUnitTest(unittest.TestCase):
         self.assertTrue(hasattr(ip.KaguyaMiCamera, "ck_reference_id"))
         self.assertTrue(hasattr(ip.KaguyaMiCamera, "spk_reference_id"))
 
+    def test_kaguya_mi_camera_constructor_signature_is_registered(self):
+        """KaguyaMiCamera should advertise the Cube-based constructor instead of reporting no constructor."""
+        with self.assertRaises(TypeError) as ctx:
+            ip.KaguyaMiCamera()
+        message = str(ctx.exception)
+        self.assertIn("cube", message.lower())
+        self.assertNotIn("No constructor defined", message)
+
     def test_kaguya_tc_camera_surface(self):
         """KaguyaTcCamera inherits LineScanCamera with required SPICE ID methods."""
         self.assertTrue(issubclass(ip.KaguyaTcCamera, ip.LineScanCamera))
         self.assertTrue(hasattr(ip.KaguyaTcCamera, "ck_frame_id"))
         self.assertTrue(hasattr(ip.KaguyaTcCamera, "ck_reference_id"))
         self.assertTrue(hasattr(ip.KaguyaTcCamera, "spk_reference_id"))
+
+    def test_kaguya_tc_camera_constructor_signature_is_registered(self):
+        """KaguyaTcCamera should advertise the Cube-based constructor instead of reporting no constructor."""
+        with self.assertRaises(TypeError) as ctx:
+            ip.KaguyaTcCamera()
+        message = str(ctx.exception)
+        self.assertIn("cube", message.lower())
+        self.assertNotIn("No constructor defined", message)
 
     def test_kaguya_mi_distortion_map_surface(self):
         """KaguyaMiCameraDistortionMap inherits CameraDistortionMap with focal-plane converters."""
@@ -178,6 +214,25 @@ class KaguyaMissionCameraUnitTest(unittest.TestCase):
         self.assertTrue(issubclass(ip.KaguyaTcCameraDistortionMap, ip.CameraDistortionMap))
         self.assertTrue(hasattr(ip.KaguyaTcCameraDistortionMap, "set_focal_plane"))
         self.assertTrue(hasattr(ip.KaguyaTcCameraDistortionMap, "set_undistorted_focal_plane"))
+
+
+class LroMissionCameraUnitTest(unittest.TestCase):
+    """Regression coverage for LRO mission camera constructor rollout gaps."""
+
+    def test_lro_narrow_angle_camera_surface(self):
+        """LroNarrowAngleCamera inherits LineScanCamera with required SPICE ID methods."""
+        self.assertTrue(issubclass(ip.LroNarrowAngleCamera, ip.LineScanCamera))
+        self.assertTrue(hasattr(ip.LroNarrowAngleCamera, "ck_frame_id"))
+        self.assertTrue(hasattr(ip.LroNarrowAngleCamera, "ck_reference_id"))
+        self.assertTrue(hasattr(ip.LroNarrowAngleCamera, "spk_reference_id"))
+
+    def test_lro_narrow_angle_camera_constructor_signature_is_registered(self):
+        """LroNarrowAngleCamera should advertise the Cube-based constructor instead of reporting no constructor."""
+        with self.assertRaises(TypeError) as ctx:
+            ip.LroNarrowAngleCamera()
+        message = str(ctx.exception)
+        self.assertIn("cube", message.lower())
+        self.assertNotIn("No constructor defined", message)
 
 
 if __name__ == "__main__":

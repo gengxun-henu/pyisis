@@ -11,6 +11,7 @@
 // Updated: 2026-04-09  Geng Xun added RawCubeChunk and RegionalCachingAlgorithm low-level cache helpers.
 // Updated: 2026-04-09  Geng Xun added OriginalXmlLabel blob/XML round-trip bindings with Python-friendly XML string access.
 // Updated: 2026-04-10  Geng Xun added HiBlob binding (inherits Blobber) with default constructor, cube constructor, and buffer accessor returning list-of-lists.
+// Updated: 2026-04-12  Geng Xun exposed Buffer raw_buffer bytes plus BufferManager setpos/swap parity helpers.
 // Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, OriginalLabel, RawCubeChunk, cache helpers, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, table structures, and HiBlob
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -502,6 +503,16 @@ void bind_low_level_cube_io(py::module_ &m) {
              const double *buffer = self.DoubleBuffer();
              return std::vector<double>(buffer, buffer + self.size());
            })
+               .def("raw_buffer",
+                          [](const Isis::Buffer &self) {
+                               const void *raw_buffer = self.RawBuffer();
+                               const ssize_t raw_size = static_cast<ssize_t>(Isis::SizeOf(self.PixelType()) * self.size());
+                               if (!raw_buffer || raw_size <= 0) {
+                                    return py::bytes();
+                               }
+                               return py::bytes(static_cast<const char *>(raw_buffer), raw_size);
+                          },
+                          "Return a copy of the raw disk-format buffer bytes based on the buffer pixel type.")
       .def("copy", &Isis::Buffer::Copy, py::arg("other"), py::arg("include_raw_buffer") = true)
       .def("copy_overlap_from", &Isis::Buffer::CopyOverlapFrom, py::arg("other"))
       .def("pixel_type", &Isis::Buffer::PixelType)
@@ -527,7 +538,11 @@ void bind_low_level_cube_io(py::module_ &m) {
       .def("begin", &Isis::BufferManager::begin)
       .def("next", &Isis::BufferManager::next)
       .def("end", &Isis::BufferManager::end)
-      .def("set_position", &Isis::BufferManager::setpos, py::arg("map"));
+      .def("set_position", &Isis::BufferManager::setpos, py::arg("map"))
+      .def("setpos", &Isis::BufferManager::setpos, py::arg("map"),
+           "Alias for set_position() using the upstream ISIS method name.")
+      .def("swap", &Isis::BufferManager::swap, py::arg("other"),
+           "Swap traversal state and cube-shape metadata with another BufferManager.");
 
   py::class_<Isis::Brick, Isis::BufferManager>(m, "Brick")
       .def(py::init<int, int, int, Isis::PixelType, bool>(),

@@ -16,6 +16,7 @@ Updated: 2026-04-09  Geng Xun added OriginalLabel PVL/blob/file round-trip cover
 Updated: 2026-04-09  Geng Xun added RawCubeChunk and RegionalCachingAlgorithm cache-surface regression coverage.
 Updated: 2026-04-09  Geng Xun added OriginalXmlLabel XML/blob/file round-trip coverage.
 Updated: 2026-04-10  Geng Xun added HiBlob focused coverage testing constructor, repr, and Blobber inheritance.
+Updated: 2026-04-12  Geng Xun added focused Buffer raw_buffer and BufferManager setpos/swap regression coverage.
 """
 
 import unittest
@@ -356,6 +357,12 @@ End
         buffer.copy(other)
         self.assertEqual(buffer.double_buffer(), [9.0, 9.0, 9.0, 9.0])
 
+    def test_buffer_raw_buffer_returns_bytes_copy(self):
+        buffer = ip.Buffer(2, 2, 1, ip.PixelType.Real)
+        raw = buffer.raw_buffer()
+        self.assertIsInstance(raw, bytes)
+        self.assertEqual(len(raw), 2 * 2 * 1 * 4)
+
     def test_buffer_manager_iteration_state(self):
         manager = ip.BufferManager(4, 4, 1, 2, 2, 1, ip.PixelType.Real)
         self.assertTrue(manager.begin())
@@ -367,6 +374,30 @@ End
         self.assertEqual(manager.sample(), 3)
         self.assertEqual(manager.line(), 1)
         self.assertEqual(manager.band(), 1)
+
+    def test_buffer_manager_setpos_alias_and_swap(self):
+        first = ip.BufferManager(4, 4, 1, 2, 2, 1, ip.PixelType.Real)
+        second = ip.BufferManager(4, 4, 1, 2, 2, 1, ip.PixelType.Real)
+
+        self.assertTrue(first.begin())
+        self.assertTrue(second.setpos(1))
+        self.assertEqual(first.sample(), 1)
+        self.assertEqual(second.sample(), 3)
+
+        first.swap(second)
+        # Upstream swap() exchanges BufferManager traversal metadata, but does not
+        # immediately rewrite the Buffer base-position members surfaced by
+        # sample()/line()/band() until traversal advances again.
+        self.assertEqual(first.sample(), 1)
+        self.assertEqual(second.sample(), 3)
+
+        self.assertTrue(first.next())
+        self.assertEqual(first.sample(), 1)
+        self.assertEqual(first.line(), 3)
+
+        self.assertTrue(second.next())
+        self.assertEqual(second.sample(), 3)
+        self.assertEqual(second.line(), 1)
 
     def test_band_manager_construction_and_set_band(self):
         cube = self.make_test_cube()

@@ -56,7 +56,7 @@ set(ISIS_CAMERA_LIBS ""
     "Semicolon-separated extra ISIS camera libraries to link (empty means auto-detect a minimal set)")
 option(ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS
   "Exclude libAsp* and libVw* camera libraries from the extra ISIS camera link set"
-  OFF)
+  ON)
 
 foreach(required_path IN ITEMS ISIS_INCLUDE_DIR ISIS_DEP_INCLUDE_DIR ISIS_LIBRARY_DIR ISIS_CORE_LIBRARY ISIS_PLUGIN_FILE)
   if(NOT EXISTS "${${required_path}}")

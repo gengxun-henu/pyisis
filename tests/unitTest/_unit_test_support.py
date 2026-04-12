@@ -158,6 +158,44 @@ def make_simple_cylindrical_label(
     return pvl
 
 
+def make_equirectangular_label(
+    include_center_longitude=True,
+    include_center_latitude=True,
+    include_ground_range=True,
+):
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 3396190.0",
+        "  PolarRadius = 3376200.0",
+        "  LatitudeType = Planetographic",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 360",
+        "  ProjectionName = Equirectangular",
+    ]
+
+    if include_center_longitude:
+        lines.append("  CenterLongitude = 0.0")
+
+    if include_center_latitude:
+        lines.append("  CenterLatitude = 0.0")
+
+    if include_ground_range:
+        lines.extend(
+            [
+                "  MinimumLatitude = -65.0",
+                "  MaximumLatitude = 65.0",
+                "  MinimumLongitude = -180.0",
+                "  MaximumLongitude = 180.0",
+            ]
+        )
+
+    lines.extend(["EndGroup", "End"])
+
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
 def make_ring_cylindrical_label(
     include_center_longitude=True,
     include_center_radius=True,

@@ -11,21 +11,31 @@
 // Binding author: Geng Xun
 // Created: 2026-04-10
 // Updated: 2026-04-10  Geng Xun added SpicePosition, SpiceRotation, SpacecraftPosition bindings.
+// Updated: 2026-04-12  Geng Xun added Spice binding for cube-backed SPICE access.
+// Updated: 2026-04-12  Geng Xun kept Spice enum values scoped to avoid clashing with the Spice class binding.
 // Purpose: Expose Isis::SpicePosition, Isis::SpiceRotation, and Isis::SpacecraftPosition
 //          to Python for SPICE-based spacecraft navigation access.
 
+#include <array>
 #include <string>
 #include <vector>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 
+#include "Cube.h"
 #include "Distance.h"
 #include "IException.h"
 #include "LightTimeCorrectionState.h"
+#include "Longitude.h"
+#include "Pvl.h"
+#include "PvlObject.h"
+#include "Spice.h"
 #include "SpicePosition.h"
 #include "SpiceRotation.h"
 #include "SpacecraftPosition.h"
+#include "Target.h"
+#include "iTime.h"
 #include "helpers.h"
 
 namespace py = pybind11;
@@ -41,8 +51,7 @@ void bind_spice_navigation(py::module_ &m)
       .value("HermiteCache",                   Isis::SpicePosition::HermiteCache)
       .value("PolyFunction",                   Isis::SpicePosition::PolyFunction)
       .value("PolyFunctionOverHermiteConstant",
-             Isis::SpicePosition::PolyFunctionOverHermiteConstant)
-      .export_values();
+             Isis::SpicePosition::PolyFunctionOverHermiteConstant);
 
   py::enum_<Isis::SpicePosition::PartialType>(m, "SpicePositionPartialType")
       .value("WRT_X", Isis::SpicePosition::WRT_X)
@@ -112,8 +121,7 @@ void bind_spice_navigation(py::module_ &m)
       .value("Memcache",                  Isis::SpiceRotation::Memcache)
       .value("PolyFunction",              Isis::SpiceRotation::PolyFunction)
       .value("PolyFunctionOverSpice",     Isis::SpiceRotation::PolyFunctionOverSpice)
-      .value("PckPolyFunction",           Isis::SpiceRotation::PckPolyFunction)
-      .export_values();
+      .value("PckPolyFunction",           Isis::SpiceRotation::PckPolyFunction);
 
   py::enum_<Isis::SpiceRotation::PartialType>(m, "SpiceRotationPartialType")
       .value("WRT_RightAscension", Isis::SpiceRotation::WRT_RightAscension)
@@ -241,4 +249,179 @@ void bind_spice_navigation(py::module_ &m)
       .def("__repr__", [](const Isis::SpacecraftPosition &) {
            return std::string("SpacecraftPosition()");
       });
+
+  // -----------------------------------------------------------------------
+  // Spice (high-level SPICE accessor using cube labels/tables)
+  // -----------------------------------------------------------------------
+  py::class_<Isis::Spice>(m, "Spice")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct Spice from a cube's labels and embedded SPICE tables.")
+      .def("set_time",
+           &Isis::Spice::setTime,
+           py::arg("time"),
+           "Set the ephemeris time used for subsequent SPICE queries.")
+      .def("instrument_position_vector",
+           [](Isis::Spice &self) {
+             std::array<double, 3> position{};
+             self.instrumentPosition(position.data());
+             return position;
+           },
+           "Return the instrument position (body-fixed, km) at the current time.")
+      .def("instrument_body_fixed_position",
+           [](Isis::Spice &self) {
+             std::array<double, 3> position{};
+             self.instrumentBodyFixedPosition(position.data());
+             return position;
+           },
+           "Return the instrument body-fixed position (km) at the current time.")
+      .def("instrument_body_fixed_velocity",
+           [](Isis::Spice &self) {
+             std::array<double, 3> velocity{};
+             self.instrumentBodyFixedVelocity(velocity.data());
+             return velocity;
+           },
+           "Return the instrument body-fixed velocity (km/s) at the current time.")
+      .def("sun_position_vector",
+           [](Isis::Spice &self) {
+             std::array<double, 3> position{};
+             self.sunPosition(position.data());
+             return position;
+           },
+           "Return the sun position in the body-fixed frame (km) at the current time.")
+      .def("target_center_distance",
+           &Isis::Spice::targetCenterDistance,
+           "Distance from spacecraft to target center (km).")
+      .def("sun_to_body_distance",
+           &Isis::Spice::sunToBodyDist,
+           "Distance from the sun to the target body (km).")
+      .def("solar_longitude",
+           &Isis::Spice::solarLongitude,
+           "Solar longitude for the current time.")
+      .def("time",
+           &Isis::Spice::time,
+           "Return the currently set ephemeris time.")
+      .def("radii",
+           [](Isis::Spice &self) {
+             std::array<Isis::Distance, 3> radii{};
+             self.radii(radii.data());
+             return radii;
+           },
+           "Return the target body radii as Distance objects.")
+      .def("create_cache",
+           &Isis::Spice::createCache,
+           py::arg("start_time"),
+           py::arg("end_time"),
+           py::arg("size"),
+           py::arg("tolerance"),
+           "Cache spacecraft/sun states between start and end times.")
+      .def("cache_start_time",
+           &Isis::Spice::cacheStartTime,
+           "Return the cache start time (if available).")
+      .def("cache_end_time",
+           &Isis::Spice::cacheEndTime,
+           "Return the cache end time (if available).")
+      .def("sub_spacecraft_point",
+           [](Isis::Spice &self) {
+             double lat = 0.0;
+             double lon = 0.0;
+             self.subSpacecraftPoint(lat, lon);
+             return py::make_tuple(lat, lon);
+           },
+           "Return the sub-spacecraft point latitude/longitude (degrees).")
+      .def("sub_solar_point",
+           [](Isis::Spice &self) {
+             double lat = 0.0;
+             double lon = 0.0;
+             self.subSolarPoint(lat, lon);
+             return py::make_tuple(lat, lon);
+           },
+           "Return the sub-solar point latitude/longitude (degrees).")
+      .def("target",
+           &Isis::Spice::target,
+           py::return_value_policy::reference_internal,
+           "Return the Target associated with this Spice object.")
+      .def("target_name",
+           [](Isis::Spice &self) { return qStringToStdString(self.targetName()); },
+           "Return the target name.")
+      .def("get_clock_time",
+           [](Isis::Spice &self, const std::string &clock_value, int sclk_code, bool clock_ticks) {
+             return self.getClockTime(stdStringToQString(clock_value), sclk_code, clock_ticks);
+           },
+           py::arg("clock_value"),
+           py::arg("sclk_code") = -1,
+           py::arg("clock_ticks") = false,
+           "Convert spacecraft clock to ephemeris time.")
+      .def("get_double",
+           [](Isis::Spice &self, const std::string &key, int index) {
+             return self.getDouble(stdStringToQString(key), index);
+           },
+           py::arg("key"),
+           py::arg("index") = 0,
+           "Look up a double NAIF keyword value.")
+      .def("get_integer",
+           [](Isis::Spice &self, const std::string &key, int index) {
+             return self.getInteger(stdStringToQString(key), index);
+           },
+           py::arg("key"),
+           py::arg("index") = 0,
+           "Look up an integer NAIF keyword value.")
+      .def("get_string",
+           [](Isis::Spice &self, const std::string &key, int index) {
+             return qStringToStdString(self.getString(stdStringToQString(key), index));
+           },
+           py::arg("key"),
+           py::arg("index") = 0,
+           "Look up a string NAIF keyword value.")
+      .def("sun_position",
+           py::overload_cast<>(&Isis::Spice::sunPosition, py::const_),
+           py::return_value_policy::reference_internal,
+           "Return the cached SpicePosition for the sun.")
+      .def("instrument_position",
+           py::overload_cast<>(&Isis::Spice::instrumentPosition, py::const_),
+           py::return_value_policy::reference_internal,
+           "Return the cached instrument SpicePosition.")
+      .def("body_rotation",
+           &Isis::Spice::bodyRotation,
+           py::return_value_policy::reference_internal,
+           "Return the body rotation SpiceRotation.")
+      .def("instrument_rotation",
+           &Isis::Spice::instrumentRotation,
+           py::return_value_policy::reference_internal,
+           "Return the instrument rotation SpiceRotation.")
+      .def("is_using_ale",
+           &Isis::Spice::isUsingAle,
+           "Return True if ALE metadata was used.")
+      .def("has_kernels",
+           &Isis::Spice::hasKernels,
+           py::arg("label"),
+           "Return True if the provided label contains SPICE kernels.")
+      .def("is_time_set",
+           &Isis::Spice::isTimeSet,
+           "Return True if set_time has been called.")
+      .def("naif_body_code",
+           &Isis::Spice::naifBodyCode,
+           "Return the NAIF body code.")
+      .def("naif_spk_code",
+           &Isis::Spice::naifSpkCode,
+           "Return the NAIF SPK code.")
+      .def("naif_ck_code",
+           &Isis::Spice::naifCkCode,
+           "Return the NAIF CK code.")
+      .def("naif_ik_code",
+           &Isis::Spice::naifIkCode,
+           "Return the NAIF IK code.")
+      .def("naif_sclk_code",
+           &Isis::Spice::naifSclkCode,
+           "Return the NAIF SCLK code.")
+      .def("naif_body_frame_code",
+           &Isis::Spice::naifBodyFrameCode,
+           "Return the NAIF body frame code.")
+      .def("get_stored_naif_keywords",
+           &Isis::Spice::getStoredNaifKeywords,
+           "Return the stored NaifKeywords PVL object.")
+      .def("resolution",
+           &Isis::Spice::resolution,
+           "Return the instrument resolution (meters per pixel).");
 }

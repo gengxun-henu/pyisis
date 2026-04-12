@@ -105,26 +105,26 @@ Low Level Cube I/O,TableRecord,已转换,需注意内存生命周期与数据视
 Low Level Cube I/O,TrackingTable,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 完成全部公开方法绑定；focused 单测在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
 Low Level Cube I/O,TileManager,已转换,
 Map Projection,Equirectangular,已转换,2026-04-12 完成全部公开方法绑定（构造/name/version/true_scale_latitude/is_equatorial_cylindrical/set_ground/set_coordinate/xy_range/mapping/mapping_latitudes/mapping_longitudes）；focused 单测覆盖构造器默认值路径/坐标互转/xy_range/mapping 导出/near-pole 异常路径
-Map Projection,LambertAzimuthalEqualArea,已转换,已导出基础投影类型
-Map Projection,LambertConformal,已转换,已导出基础投影类型
-Map Projection,LunarAzimuthalEqualArea,已转换,
-Map Projection,Mercator,已转换,已导出基础投影类型
-Map Projection,Mollweide,已转换,已导出基础投影类型
-Map Projection,ObliqueCylindrical,已转换,已导出基础投影类型
-Map Projection,Orthographic,已转换,已导出基础投影类型
-Map Projection,Planar,已转换,已导出基础投影类型
-Map Projection,PointPerspective,已转换,已导出基础投影类型
-Map Projection,PolarStereographic,已转换,已导出基础投影类型
+Map Projection,LambertAzimuthalEqualArea,已转换,"2026-04-12 完成全部公开方法绑定（13/13 Y, 100%）"
+Map Projection,LambertConformal,已转换,"2026-04-12 完成全部公开方法绑定（11/11 Y, 100%）"
+Map Projection,LunarAzimuthalEqualArea,已转换,"2026-04-12 完成全部公开方法绑定（8/8 Y, 100%）"
+Map Projection,Mercator,已转换,"2026-04-12 完成全部公开方法绑定（12/12 Y, 100%）"
+Map Projection,Mollweide,已转换,"2026-04-12 完成全部公开方法绑定（11/11 Y, 100%）"
+Map Projection,ObliqueCylindrical,已转换,"2026-04-12 完成全部公开方法绑定（13/13 Y, 100%）"
+Map Projection,Orthographic,已转换,"2026-04-12 完成全部公开方法绑定（11/11 Y, 100%）"
+Map Projection,Planar,已转换,"2026-04-12 完成全部公开方法绑定（13/13 Y, 100%）"
+Map Projection,PointPerspective,已转换,"2026-04-12 完成全部公开方法绑定（11/11 Y, 100%）"
+Map Projection,PolarStereographic,已转换,"2026-04-12 完成全部公开方法绑定（11/11 Y, 100%）"
 Map Projection,Projection,已转换,抽象基类/纯虚接口；基础单测已补
 Map Projection,ProjectionFactory,已转换,工厂类，静态创建接口较多；基础单测已补
-Map Projection,RingCylindrical,已转换,第四批已补单测（构造/坐标互转/范围导出）
+Map Projection,RingCylindrical,已转换,"2026-04-12 完成全部公开方法绑定（14/14 Y, 100%）；第四批已补单测"
 Map Projection,RingPlaneProjection,已转换,抽象基类/纯虚接口
-Map Projection,Robinson,已转换,已导出基础投影类型
-Map Projection,SimpleCylindrical,已转换,第四批已补单测（构造/坐标互转/mapping 导出）
-Map Projection,Sinusoidal,已转换,已导出基础投影类型
+Map Projection,Robinson,已转换,"2026-04-12 完成全部公开方法绑定（10/10 Y, 100%）"
+Map Projection,SimpleCylindrical,已转换,"2026-04-12 完成全部公开方法绑定（11/11 Y, 100%）；第四批已补单测"
+Map Projection,Sinusoidal,已转换,"2026-04-12 完成全部公开方法绑定（10/10 Y, 100%）"
 Map Projection,TProjection,已转换,抽象基类/纯虚接口
-Map Projection,TransverseMercator,已转换,已导出基础投影类型
-Map Projection,UpturnedEllipsoidTransverseAzimuthal,已转换,已导出基础投影类型
+Map Projection,TransverseMercator,已转换,"2026-04-12 完成全部公开方法绑定（10/10 Y, 100%）"
+Map Projection,UpturnedEllipsoidTransverseAzimuthal,已转换,"2026-04-12 完成全部公开方法绑定（10/10 Y, 100%）"
 Map Projection,WorldMapper,已转换,抽象基类/纯虚接口
 Mars Express,HrscCamera,已转换,"2026-04-06 已在 bind_mission_cameras.cpp 暴露 Cube 构造与 ck_frame_id/ck_reference_id/spk_reference_id；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Mars Express,MexHrscSrcCamera,已转换,"2026-04-06 已在 bind_mission_cameras.cpp 暴露 Cube 构造、shutter_open_close_times 与 ck_frame_id/ck_reference_id/spk_reference_id；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"

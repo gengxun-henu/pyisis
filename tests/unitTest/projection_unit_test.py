@@ -11,6 +11,7 @@ Updated: 2026-04-12  Geng Xun added focused tests for all concrete projection ty
   Planar, LunarAzimuthalEqualArea) covering name/version/set_ground/set_coordinate/
   xy_range/mapping and class-specific methods.
 Updated: 2026-04-12  Geng Xun fixed pole validation test to use exactly 90.0 degrees (not 89.9999999) as required by ISIS DBL_EPSILON threshold
+Updated: 2026-04-12  Geng Xun aligned ObliqueCylindrical pole longitude assertions with upstream ISIS PositiveWest internal normalization while preserving raw Mapping keyword checks
 """
 
 import unittest
@@ -559,8 +560,14 @@ class ObliqueCylindricalUnitTest(unittest.TestCase):
     def test_oblique_cylindrical_pole_accessors(self):
         proj = ip.ObliqueCylindrical(make_oblique_cylindrical_label())
         self.assertAlmostEqual(proj.pole_latitude(), 22.858149, places=4)
-        self.assertAlmostEqual(proj.pole_longitude(), 297.158602, places=4)
+        # Upstream ISIS normalizes the stored/accessor longitude for PositiveWest
+        # projections in ObliqueCylindrical::init(), while Mapping() preserves the
+        # original PVL keyword value from the label.
+        self.assertAlmostEqual(proj.pole_longitude(), -297.158602, places=4)
         self.assertAlmostEqual(proj.pole_rotation(), 45.7832, places=4)
+
+        mapping = proj.mapping()
+        self.assertEqual(mapping.find_keyword("PoleLongitude")[0], "297.158602")
 
     def test_oblique_cylindrical_ground_coordinate_round_trip(self):
         proj = ip.ObliqueCylindrical(make_oblique_cylindrical_label())

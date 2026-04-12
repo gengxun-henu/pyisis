@@ -33,7 +33,6 @@
 #include "TProjection.h"
 #include "TransverseMercator.h"
 #include "UpturnedEllipsoidTransverseAzimuthal.h"
-#include "helpers.h"
 
 namespace py = pybind11;
 

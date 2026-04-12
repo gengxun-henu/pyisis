@@ -1,18 +1,18 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-RingCylindrical,Map Projection,isis/src/base/objs/RingCylindrical/RingCylindrical.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,第四批已补单测（构造/坐标互转/范围导出）
+RingCylindrical,Map Projection,isis/src/base/objs/RingCylindrical/RingCylindrical.h,src/base/bind_base_projection_types.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-12 完成全部公开方法绑定；第四批已补单测
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,RingCylindrical,isis_pybind.RingCylindrical,Y,Python class symbol is exported; constructor exposure may be limited; 第四批已补单测（构造/坐标互转/范围导出）
-Construction/Enum,RingCylindrical(),isis_pybind.RingCylindrical(),N,第四批已补单测（构造/坐标互转/范围导出）
-Public API,QString Name() const,isis_pybind.RingCylindrical.name,N,第四批已补单测（构造/坐标互转/范围导出）
-Public API,QString Version() const,isis_pybind.RingCylindrical.version,N,第四批已补单测（构造/坐标互转/范围导出）
-Query,bool IsEquatorialCylindrical(),isis_pybind.RingCylindrical.is_equatorial_cylindrical,N,第四批已补单测（构造/坐标互转/范围导出）
-Public API,double TrueScaleRingRadius() const,isis_pybind.RingCylindrical.true_scale_ring_radius,N,第四批已补单测（构造/坐标互转/范围导出）
-Public API,double CenterRingLongitude() const,isis_pybind.RingCylindrical.center_ring_longitude,N,第四批已补单测（构造/坐标互转/范围导出）
-Public API,double CenterRingRadius() const,isis_pybind.RingCylindrical.center_ring_radius,N,第四批已补单测（构造/坐标互转/范围导出）
-Mutation/Configuration,"bool SetGround(const double ringRadius, const double ringLongitude)",isis_pybind.RingCylindrical.set_ground,N,第四批已补单测（构造/坐标互转/范围导出）
-Mutation/Configuration,"bool SetCoordinate(const double x, const double y)",isis_pybind.RingCylindrical.set_coordinate,N,第四批已补单测（构造/坐标互转/范围导出）
-Public API,"bool XYRange(double &minX, double &maxX, double &minY, double &maxY)",isis_pybind.RingCylindrical.xy_range,N,第四批已补单测（构造/坐标互转/范围导出）
-Public API,PvlGroup Mapping(),isis_pybind.RingCylindrical.mapping,N,第四批已补单测（构造/坐标互转/范围导出）
-Public API,PvlGroup MappingRingRadii(),isis_pybind.RingCylindrical.mapping_ring_radii,N,第四批已补单测（构造/坐标互转/范围导出）
-Public API,PvlGroup MappingRingLongitudes(),isis_pybind.RingCylindrical.mapping_ring_longitudes,N,第四批已补单测（构造/坐标互转/范围导出）
+Class Symbol,RingCylindrical,isis_pybind.RingCylindrical,Y,Exposed with full method suite
+Construction/Enum,RingCylindrical(),isis_pybind.RingCylindrical(),Y,Constructor with label and allow_defaults
+Public API,QString Name() const,isis_pybind.RingCylindrical.name,Y,Returns projection name
+Public API,QString Version() const,isis_pybind.RingCylindrical.version,Y,Returns version string
+Query,bool IsEquatorialCylindrical(),isis_pybind.RingCylindrical.is_equatorial_cylindrical,Y,Returns true for ring cylindrical
+Public API,double TrueScaleRingRadius() const,isis_pybind.RingCylindrical.true_scale_ring_radius,Y,Returns center ring radius
+Public API,double CenterRingLongitude() const,isis_pybind.RingCylindrical.center_ring_longitude,Y,Returns center ring longitude in degrees
+Public API,double CenterRingRadius() const,isis_pybind.RingCylindrical.center_ring_radius,Y,Returns center ring radius
+Mutation/Configuration,"bool SetGround(const double ringRadius, const double ringLongitude)",isis_pybind.RingCylindrical.set_ground,Y,Forward projection to x/y via lambda-wrapped overrides
+Mutation/Configuration,"bool SetCoordinate(const double x, const double y)",isis_pybind.RingCylindrical.set_coordinate,Y,Inverse projection x/y to lat/lon (or ringRadius/ringLongitude)
+Public API,"bool XYRange(double &minX, double &maxX, double &minY, double &maxY)",isis_pybind.RingCylindrical.xy_range,Y,Returns tuple (minX maxX minY maxY) from lambda wrapper
+Public API,PvlGroup Mapping(),isis_pybind.RingCylindrical.mapping,Y,Returns mapping group PvlGroup
+Public API,PvlGroup MappingRingRadii(),isis_pybind.RingCylindrical.mapping_ring_radii,Y,Returns ring radii keywords PvlGroup
+Public API,PvlGroup MappingRingLongitudes(),isis_pybind.RingCylindrical.mapping_ring_longitudes,Y,Returns ring longitude keywords PvlGroup

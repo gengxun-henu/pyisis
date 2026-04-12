@@ -234,6 +234,283 @@ def make_ring_cylindrical_label(
     return pvl
 
 
+def make_sinusoidal_label(include_center_longitude=True):
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 1.0",
+        "  PolarRadius = 1.0",
+        "  LatitudeType = Planetocentric",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 180",
+        "  MinimumLatitude = -90.0",
+        "  MaximumLatitude = 90.0",
+        "  MinimumLongitude = -180.0",
+        "  MaximumLongitude = 180.0",
+        "  ProjectionName = Sinusoidal",
+    ]
+    if include_center_longitude:
+        lines.append("  CenterLongitude = -90.0")
+    lines.extend(["EndGroup", "End"])
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_mercator_label():
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 6378206.4",
+        "  PolarRadius = 6356583.8",
+        "  LatitudeType = Planetographic",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 180",
+        "  MinimumLatitude = -70.0",
+        "  MaximumLatitude = 70.0",
+        "  MinimumLongitude = -180.0",
+        "  MaximumLongitude = 180.0",
+        "  ProjectionName = Mercator",
+        "  CenterLongitude = -180.0",
+        "  CenterLatitude = 0.0",
+        "EndGroup",
+        "End",
+    ]
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_robinson_label():
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 1.0",
+        "  PolarRadius = 1.0",
+        "  LatitudeType = Planetocentric",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 180",
+        "  MinimumLatitude = -90.0",
+        "  MaximumLatitude = 90.0",
+        "  MinimumLongitude = -180.0",
+        "  MaximumLongitude = 180.0",
+        "  CenterLongitude = 0.0",
+        "  ProjectionName = Robinson",
+        "EndGroup",
+        "End",
+    ]
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_orthographic_label():
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 1.0",
+        "  PolarRadius = 1.0",
+        "  LatitudeType = Planetographic",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 180",
+        "  MinimumLatitude = -70.0",
+        "  MaximumLatitude = 70.0",
+        "  MinimumLongitude = -180.0",
+        "  MaximumLongitude = 180.0",
+        "  ProjectionName = Orthographic",
+        "  CenterLongitude = -100.0",
+        "  CenterLatitude = 40.0",
+        "EndGroup",
+        "End",
+    ]
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_mollweide_label():
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 0.7071067811865475",
+        "  PolarRadius = 0.7071067811865475",
+        "  LatitudeType = Planetocentric",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 180",
+        "  MinimumLatitude = -90.0",
+        "  MaximumLatitude = 90.0",
+        "  MinimumLongitude = -180.0",
+        "  MaximumLongitude = 180.0",
+        "  ProjectionName = Mollweide",
+        "  CenterLongitude = 0.0",
+        "EndGroup",
+        "End",
+    ]
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_lambert_conformal_label():
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 1.0",
+        "  PolarRadius = 1.0",
+        "  LatitudeType = Planetographic",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 180",
+        "  MinimumLatitude = 20.0",
+        "  MaximumLatitude = 80.0",
+        "  MinimumLongitude = -180.0",
+        "  MaximumLongitude = 180.0",
+        "  ProjectionName = LambertConformal",
+        "  CenterLongitude = -96.0",
+        "  CenterLatitude = 23.0",
+        "  FirstStandardParallel = 33",
+        "  SecondStandardParallel = 45",
+        "EndGroup",
+        "End",
+    ]
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_lambert_azimuthal_label():
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 1.0",
+        "  PolarRadius = 1.0",
+        "  LatitudeType = Planetographic",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 180",
+        "  MinimumLatitude = 20.0",
+        "  MaximumLatitude = 80.0",
+        "  MinimumLongitude = -180.0",
+        "  MaximumLongitude = 180.0",
+        "  ProjectionName = LambertAzimuthalEqualArea",
+        "  CenterLatitude = 0",
+        "  CenterLongitude = 0",
+        "EndGroup",
+        "End",
+    ]
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_oblique_cylindrical_label():
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 2575000.0",
+        "  PolarRadius = 2575000.0",
+        "  PoleLatitude = 22.858149",
+        "  PoleLongitude = 297.158602",
+        "  LatitudeType = Planetocentric",
+        "  LongitudeDirection = PositiveWest",
+        "  LongitudeDomain = 360",
+        "  ProjectionName = ObliqueCylindrical",
+        "  MinimumLatitude = -90",
+        "  MaximumLatitude = 0.92523",
+        "  MinimumLongitude = -0.8235",
+        "  MaximumLongitude = 180.5",
+        "  PoleRotation = 45.7832",
+        "EndGroup",
+        "End",
+    ]
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_point_perspective_label():
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 1.0",
+        "  PolarRadius = 1.0",
+        "  LatitudeType = Planetographic",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 180",
+        "  MinimumLatitude = 0.0",
+        "  MaximumLatitude = 80.0",
+        "  MinimumLongitude = 0.0",
+        "  MaximumLongitude = 80.0",
+        "  ProjectionName = PointPerspective",
+        "  CenterLongitude = 0.0",
+        "  CenterLatitude = 0.0",
+        "  Distance = 0.00562",
+        "EndGroup",
+        "End",
+    ]
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_polar_stereographic_label():
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 6378388.0",
+        "  PolarRadius = 6356911.9",
+        "  LatitudeType = Planetographic",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 180",
+        "  MinimumLatitude = -90.0",
+        "  MaximumLatitude = 0.0",
+        "  MinimumLongitude = -180.0",
+        "  MaximumLongitude = 180.0",
+        "  ProjectionName = PolarStereographic",
+        "  CenterLongitude = -100.0",
+        "  CenterLatitude = -71.0",
+        "EndGroup",
+        "End",
+    ]
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_transverse_mercator_label():
+    lines = [
+        "Group = Mapping",
+        "  EquatorialRadius = 1.0",
+        "  PolarRadius = 1.0",
+        "  LatitudeType = Planetographic",
+        "  LongitudeDirection = PositiveEast",
+        "  LongitudeDomain = 180",
+        "  MinimumLatitude = -70.0",
+        "  MaximumLatitude = 70.0",
+        "  MinimumLongitude = -90.0",
+        "  MaximumLongitude = -60.0",
+        "  ProjectionName = TransverseMercator",
+        "  CenterLongitude = -75.0",
+        "  CenterLatitude = 0.0",
+        "  ScaleFactor = 1.0",
+        "EndGroup",
+        "End",
+    ]
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
+def make_planar_label(include_center_longitude=True, include_center_radius=True):
+    lines = [
+        "Group = Mapping",
+        "  ProjectionName = Planar",
+        "  TargetName = Saturn",
+        "  RingLongitudeDirection = Clockwise",
+        "  RingLongitudeDomain = 180",
+        "  MinimumRingRadius = 0.0",
+        "  MaximumRingRadius = 2000000.0",
+        "  MinimumRingLongitude = -20.0",
+        "  MaximumRingLongitude = 130.0",
+    ]
+    if include_center_longitude:
+        lines.append("  CenterRingLongitude = 0.0")
+    if include_center_radius:
+        lines.append("  CenterRingRadius = 200000.0")
+    lines.extend(["EndGroup", "End"])
+    pvl = ip.Pvl()
+    pvl.from_string("\n".join(lines) + "\n")
+    return pvl
+
+
 def make_sky_target_label(shape_model=None):
     lines = [
         "Group = Instrument",

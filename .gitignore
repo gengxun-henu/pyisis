@@ -12,3 +12,4 @@ reference/NO-USE*
 pybind_plan*
 .tmp_install
 UNIT_TEST_FAILURE_ANALYSIS.md
+bundleout.txt

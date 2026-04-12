@@ -3,7 +3,8 @@ Unit tests for ISIS camera and CameraFactory bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-08
+Last Modified: 2026-04-12
+Updated: 2026-04-12  Geng Xun added Spice integration coverage using local MDIS cubes and SPICE tables.
 """
 
 import math
@@ -185,6 +186,42 @@ class CameraUnitTest(unittest.TestCase):
         csv_group = point_info.set_image(center_sample, center_line)
         self.assertEqual(csv_group.name(), "GroundPoint")
         self.assertTrue(csv_group.has_keyword("ObliqueDetectorResolution"))
+
+    def test_spice_accessors_with_mdis_cube_tables(self):
+        cube = self.open_cube(MDIS_CUBES[0])
+        spice = ip.Spice(cube)
+
+        self.assertEqual(spice.target_name(), "Mercury")
+        self.assertFalse(spice.is_time_set())
+
+        instrument = cube.label().find_group("Instrument", ip.PvlObject.FindOptions.Traverse)
+        start_time = instrument.find_keyword("StartTime")[0]
+        et = ip.iTime(start_time)
+        spice.set_time(et)
+
+        self.assertTrue(spice.is_time_set())
+        self.assertAlmostEqual(spice.time().et(), et.et(), places=6)
+
+        self.assertEqual(spice.naif_body_code(), 199)
+        self.assertEqual(spice.naif_spk_code(), -236)
+
+        radii = spice.radii()
+        self.assertEqual(len(radii), 3)
+        self.assertGreater(radii[0].kilometers(), 0.0)
+
+        instrument_position = spice.instrument_body_fixed_position()
+        self.assertEqual(len(instrument_position), 3)
+        self.assertTrue(all(math.isfinite(value) for value in instrument_position))
+
+        sun_position = spice.sun_position_vector()
+        self.assertEqual(len(sun_position), 3)
+        self.assertTrue(all(math.isfinite(value) for value in sun_position))
+
+        self.assertGreater(spice.target_center_distance(), 0.0)
+        self.assertGreater(spice.sun_to_body_distance(), 0.0)
+
+        target = spice.target()
+        self.assertEqual(target.name(), "Mercury")
 
 
 if __name__ == "__main__":

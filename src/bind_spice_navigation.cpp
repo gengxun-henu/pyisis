@@ -12,6 +12,7 @@
 // Created: 2026-04-10
 // Updated: 2026-04-10  Geng Xun added SpicePosition, SpiceRotation, SpacecraftPosition bindings.
 // Updated: 2026-04-12  Geng Xun added Spice binding for cube-backed SPICE access.
+// Updated: 2026-04-12  Geng Xun kept Spice enum values scoped to avoid clashing with the Spice class binding.
 // Purpose: Expose Isis::SpicePosition, Isis::SpiceRotation, and Isis::SpacecraftPosition
 //          to Python for SPICE-based spacecraft navigation access.
 
@@ -50,8 +51,7 @@ void bind_spice_navigation(py::module_ &m)
       .value("HermiteCache",                   Isis::SpicePosition::HermiteCache)
       .value("PolyFunction",                   Isis::SpicePosition::PolyFunction)
       .value("PolyFunctionOverHermiteConstant",
-             Isis::SpicePosition::PolyFunctionOverHermiteConstant)
-      .export_values();
+             Isis::SpicePosition::PolyFunctionOverHermiteConstant);
 
   py::enum_<Isis::SpicePosition::PartialType>(m, "SpicePositionPartialType")
       .value("WRT_X", Isis::SpicePosition::WRT_X)
@@ -121,8 +121,7 @@ void bind_spice_navigation(py::module_ &m)
       .value("Memcache",                  Isis::SpiceRotation::Memcache)
       .value("PolyFunction",              Isis::SpiceRotation::PolyFunction)
       .value("PolyFunctionOverSpice",     Isis::SpiceRotation::PolyFunctionOverSpice)
-      .value("PckPolyFunction",           Isis::SpiceRotation::PckPolyFunction)
-      .export_values();
+      .value("PckPolyFunction",           Isis::SpiceRotation::PckPolyFunction);
 
   py::enum_<Isis::SpiceRotation::PartialType>(m, "SpiceRotationPartialType")
       .value("WRT_RightAscension", Isis::SpiceRotation::WRT_RightAscension)

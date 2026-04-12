@@ -1,16 +1,16 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Equirectangular,Map Projection,isis/src/base/objs/Equirectangular/Equirectangular.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+Equirectangular,Map Projection,isis/src/base/objs/Equirectangular/Equirectangular.h,src/base/bind_base_projection_types.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Equirectangular,isis_pybind.Equirectangular,N,Python class symbol not found in current binding files
-Construction/Enum,Equirectangular(),isis_pybind.Equirectangular(),N,Constructor binding not detected in current binding files
-Public API,QString Name() const,isis_pybind.Equirectangular.name,N,Method not found in current binding files
-Public API,QString Version() const,isis_pybind.Equirectangular.version,N,Method not found in current binding files
-Public API,double TrueScaleLatitude() const,isis_pybind.Equirectangular.true_scale_latitude,N,Method not found in current binding files
-Query,bool IsEquatorialCylindrical(),isis_pybind.Equirectangular.is_equatorial_cylindrical,N,Method not found in current binding files
-Mutation/Configuration,"bool SetGround(const double lat, const double lon)",isis_pybind.Equirectangular.set_ground,N,Method not found in current binding files
-Mutation/Configuration,"bool SetCoordinate(const double x, const double y)",isis_pybind.Equirectangular.set_coordinate,N,Method not found in current binding files
-Public API,"bool XYRange(double &minX, double &maxX, double &minY, double &maxY)",isis_pybind.Equirectangular.xy_range,N,Method not found in current binding files
-Public API,virtual PvlGroup Mapping(),isis_pybind.Equirectangular.mapping,N,Method not found in current binding files
-Public API,virtual PvlGroup MappingLatitudes(),isis_pybind.Equirectangular.mapping_latitudes,N,Method not found in current binding files
-Public API,virtual PvlGroup MappingLongitudes(),isis_pybind.Equirectangular.mapping_longitudes,N,Method not found in current binding files
+Class Symbol,Equirectangular,isis_pybind.Equirectangular,Y,Exposed in src/base/bind_base_projection_types.cpp with full method suite
+Construction/Enum,Equirectangular(),isis_pybind.Equirectangular(),Y,Constructor with label and allow_defaults parameters exposed
+Public API,QString Name() const,isis_pybind.Equirectangular.name,Y,Returns "Equirectangular"
+Public API,QString Version() const,isis_pybind.Equirectangular.version,Y,Returns "1.0"
+Public API,double TrueScaleLatitude() const,isis_pybind.Equirectangular.true_scale_latitude,Y,Returns center latitude in degrees
+Query,bool IsEquatorialCylindrical(),isis_pybind.Equirectangular.is_equatorial_cylindrical,Y,Returns true
+Mutation/Configuration,"bool SetGround(const double lat, const double lon)",isis_pybind.Equirectangular.set_ground,Y,Forward projection lat/lon to x/y
+Mutation/Configuration,"bool SetCoordinate(const double x, const double y)",isis_pybind.Equirectangular.set_coordinate,Y,Inverse projection x/y to lat/lon
+Public API,"bool XYRange(double &minX, double &maxX, double &minY, double &maxY)",isis_pybind.Equirectangular.xy_range,Y,Returns tuple (minX maxX minY maxY) from lambda wrapper
+Public API,virtual PvlGroup Mapping(),isis_pybind.Equirectangular.mapping,Y,Returns mapping group with CenterLatitude and CenterLongitude
+Public API,virtual PvlGroup MappingLatitudes(),isis_pybind.Equirectangular.mapping_latitudes,Y,Returns latitude keywords including CenterLatitude
+Public API,virtual PvlGroup MappingLongitudes(),isis_pybind.Equirectangular.mapping_longitudes,Y,Returns longitude keywords including CenterLongitude

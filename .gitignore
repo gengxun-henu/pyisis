@@ -9,3 +9,6 @@ dist/
 __pycache__/
 reference/NO-USE*
 .github/README.md
+pybind_plan*
+.tmp_install
+UNIT_TEST_FAILURE_ANALYSIS.md

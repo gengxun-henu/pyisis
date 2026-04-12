@@ -108,6 +108,18 @@ cmake --build build -j"$(nproc)"
 cmake --install build
 ```
 
+If you want to exclude ASP / VW camera libraries from the link step during configuration, enable the CMake option below:
+
+```bash
+cmake -S . -B build \
+   -DCMAKE_BUILD_TYPE=Release \
+   -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
+   -DISIS_PREFIX="$ISIS_PREFIX" \
+   -DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON
+```
+
+When `-DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON` is enabled, the build will exclude `libAsp*` and `libVw*` from the extra ISIS camera library link set while keeping the default behavior unchanged when the option is omitted or set to `OFF`.
+
 After installation, `isis_pybind` will be copied into the current Python environment's `site-packages`.
 
 ### Option B: temporary use directly from the build tree

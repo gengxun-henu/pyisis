@@ -1,12 +1,12 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-XmlToPvlTranslationManager,Parsing,reference/upstream_isis/src/base/objs/XmlToPvlTranslationManager/XmlToPvlTranslationManager.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/base/bind_base_pvl.cpp 完成部分绑定；内部 QDomDocument 不暴露
+XmlToPvlTranslationManager,Parsing,reference/upstream_isis/src/base/objs/XmlToPvlTranslationManager/XmlToPvlTranslationManager.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-12 已补齐 FileName + translation stream 构造；内部 QDomDocument 不暴露
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,XmlToPvlTranslationManager,isis_pybind.XmlToPvlTranslationManager,Y,Inherits LabelTranslationManager
 Construction/Enum,XmlToPvlTranslationManager(const QString &transFile),isis_pybind.XmlToPvlTranslationManager(trans_file),Y,From file path
 Construction/Enum,XmlToPvlTranslationManager(std::istream &),isis_pybind.XmlToPvlTranslationManager(trans_text from_string=True),Y,From translation text string
 Construction/Enum,"XmlToPvlTranslationManager(FileName &, const QString &)",isis_pybind.XmlToPvlTranslationManager(input_label trans_file),Y,From ISIS FileName + trans file
-Construction/Enum,"XmlToPvlTranslationManager(FileName &, std::istream &)",N,Combination of istream+FileName complex
+Construction/Enum,"XmlToPvlTranslationManager(FileName &, std::istream &)",isis_pybind.XmlToPvlTranslationManager(input_label trans_text from_string=True),Y,Wraps std::istream with std::istringstream while keeping FileName input-label semantics
 Public API,"virtual QString Translate(QString, int findex=0)",isis_pybind.XmlToPvlTranslationManager.translate,Y,Returns translated str
 Public API,"void Auto(FileName &inputLabel, Pvl &outputLabel)",isis_pybind.XmlToPvlTranslationManager.auto_translate,Y,Takes ISIS FileName and output Pvl
 Protected API,virtual vector<pair<QString int>> validKeywords() const,N,Protected

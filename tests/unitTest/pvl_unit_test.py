@@ -9,6 +9,8 @@ Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer focused unit tests
 Updated: 2026-04-09  Geng Xun added PvlFormat, PvlTranslationTable, PvlFormatPds, PvlToPvlTranslationManager unit tests.
 Updated: 2026-04-10  Geng Xun added regressions for protected-helper wrapper bindings on PvlFormat and PvlTranslationTable.
 Updated: 2026-04-12  Geng Xun added focused format_end() regressions for PvlFormat and PvlFormatPds.
+Updated: 2026-04-12  Geng Xun added focused safe-copy regressions for remaining PvlTranslationTable helper bindings.
+Updated: 2026-04-12  Geng Xun added focused XmlToPvlTranslationManager constructor coverage for FileName plus translation-stream input.
 Updated: 2026-04-10  Geng Xun aligned PVL helper test expectations with upstream ISIS behavior for empty units and PDS uppercase names.
 """
 
@@ -499,6 +501,22 @@ class PvlTranslationTableUnitTest(unittest.TestCase):
         self.assertEqual(output_position.name(), "OutputPosition")
         self.assertEqual(output_position[0], "IMAGE")
 
+    def test_find_translation_group_returns_copy(self):
+        """find_translation_group() returns a readable copy of the backing PVL group."""
+        table = self._make_table()
+        group = table.find_translation_group("CoreBitsPerPixel")
+        self.assertIsInstance(group, ip.PvlGroup)
+        self.assertEqual(group.name(), "CoreBitsPerPixel")
+        self.assertEqual(group.find_keyword("InputKey")[0], "SAMPLE_BITS")
+
+    def test_valid_keywords_exposes_expected_pairs(self):
+        """valid_keywords() returns upstream keyword/size validation rules."""
+        table = self._make_table()
+        keywords = dict(table.valid_keywords())
+        self.assertEqual(keywords["Translation"], 2)
+        self.assertEqual(keywords["InputPosition"], -1)
+        self.assertEqual(keywords["OutputPosition"], -1)
+
     def test_translate_wildcard(self):
         """translate() passes through values using (*,*) translation rule."""
         table = self._make_table()
@@ -658,6 +676,39 @@ class PvlToPvlTranslationManagerUnitTest(unittest.TestCase):
         """repr includes class name."""
         mgr = ip.PvlToPvlTranslationManager(self.SIMPLE_TABLE, True)
         self.assertIn("PvlToPvlTranslationManager", repr(mgr))
+
+
+class XmlToPvlTranslationManagerUnitTest(unittest.TestCase):
+    """Focused unit tests for XmlToPvlTranslationManager binding."""
+
+    SIMPLE_TABLE = (
+        "Group = CoreLines\n"
+        "  InputPosition = IMAGE\n"
+        "  InputKey = LINES\n"
+        "  Translation = (*,*)\n"
+        "EndGroup\n"
+        "End\n"
+    )
+
+    SIMPLE_XML = (
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+        "<Product>\n"
+        "  <IMAGE>\n"
+        "    <LINES>256</LINES>\n"
+        "  </IMAGE>\n"
+        "</Product>\n"
+    )
+
+    def test_construct_from_filename_and_translation_string(self):
+        """Construct from FileName plus translation text stream and translate immediately."""
+        with temporary_text_file("label.xml", self.SIMPLE_XML) as xml_path:
+            manager = ip.XmlToPvlTranslationManager(
+                ip.FileName(str(xml_path)),
+                self.SIMPLE_TABLE,
+                True,
+            )
+            self.assertEqual(manager.translate("CoreLines"), "256")
+            self.assertIn("XmlToPvlTranslationManager", repr(manager))
 
 
 if __name__ == "__main__":

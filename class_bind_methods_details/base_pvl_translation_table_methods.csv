@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-PvlTranslationTable,Parsing,reference/upstream_isis/src/base/objs/PvlTranslationTable/PvlTranslationTable.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/base/bind_base_pvl.cpp 完成绑定
+PvlTranslationTable,Parsing,reference/upstream_isis/src/base/objs/PvlTranslationTable/PvlTranslationTable.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-12 已补齐安全 copy helper：find_translation_group/valid_keywords
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,PvlTranslationTable,isis_pybind.PvlTranslationTable,Y,Exposed as py::class_<Isis::PvlTranslationTable>
@@ -15,6 +15,6 @@ Public API,bool IsAuto(const QString),isis_pybind.PvlTranslationTable.is_auto,Y,
 Public API,bool IsOptional(const QString),isis_pybind.PvlTranslationTable.is_optional,Y,Returns bool
 Public API,PvlKeyword OutputPosition(const QString),isis_pybind.PvlTranslationTable.output_position,Y,Returns PvlKeyword
 Public API,QString OutputName(const QString),isis_pybind.PvlTranslationTable.output_name,Y,Returns str
-Public API,const PvlGroup &findTranslationGroup(const QString) const,N,Returns PvlGroup const ref; complex lifecycle; Python can use input_group instead
-Public API,virtual vector<pair<QString,int>> validKeywords() const,N,Returns complex pair vector; rarely needed in Python
+Public API,const PvlGroup &findTranslationGroup(const QString) const,isis_pybind.PvlTranslationTable.find_translation_group,Y,Exposed via safe copy-returning wrapper to avoid const-ref lifetime issues
+Public API,virtual vector<pair<QString,int>> validKeywords() const,isis_pybind.PvlTranslationTable.valid_keywords,Y,Exposed as list[tuple[str,int]] via safe value conversion
 Python Protocol,__repr__,isis_pybind.PvlTranslationTable.__repr__,Y,PvlTranslationTable()

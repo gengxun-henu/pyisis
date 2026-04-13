@@ -1,14 +1,14 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ProcessPolygons,High Level Cube I/O,isis/src/base/objs/ProcessPolygons/ProcessPolygons.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+ProcessPolygons,High Level Cube I/O,isis/src/base/objs/ProcessPolygons/ProcessPolygons.h,src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ProcessPolygons,isis_pybind.ProcessPolygons,N,Python class symbol not found in current binding files; 流程/回调接口较多
-Construction/Enum,ProcessPolygons(),isis_pybind.ProcessPolygons(),N,流程/回调接口较多
+Class Symbol,ProcessPolygons,isis_pybind.ProcessPolygons,Y,2026-04-13 台账同步；顶层导出已存在（src/bind_high_level_cube_io.cpp）
+Construction/Enum,ProcessPolygons(),isis_pybind.ProcessPolygons(),Y,2026-04-13 台账同步；构造入口已在当前绑定中可用（src/bind_high_level_cube_io.cpp）
 Mutation/Configuration,"void SetStatCubes(const QString &parameter, const int nsamps, const int nlines, int nbands = 1)",isis_pybind.ProcessPolygons.set_stat_cubes,N,流程/回调接口较多
 Mutation/Configuration,"void SetStatCubes(const QString &avgFileName, const QString &countFileName, Isis::CubeAttributeOutput &atts, const int nsamps, const int nlines, int nbands = 1)",isis_pybind.ProcessPolygons.set_stat_cubes,N,流程/回调接口较多
-Mutation/Configuration,void SetIntersectAlgorithm(const bool useCenter),isis_pybind.ProcessPolygons.set_intersect_algorithm,N,流程/回调接口较多
-Public API,"Isis::Cube *AppendOutputCube(const QString &avgFileName, const QString &countFileName = """")",isis_pybind.ProcessPolygons.append_output_cube,N,流程/回调接口较多
-Public API,"void Rasterize(std::vector<double> &samples, std::vector<double> &lines, std::vector<double> &values)",isis_pybind.ProcessPolygons.rasterize,N,流程/回调接口较多
-Public API,"void Rasterize(std::vector<double> &samples, std::vector<double> &lines, int &band, double &value)",isis_pybind.ProcessPolygons.rasterize,N,流程/回调接口较多
-Public API,void EndProcess(),isis_pybind.ProcessPolygons.end_process,N,流程/回调接口较多
-Public API,void Finalize(),isis_pybind.ProcessPolygons.finalize,N,流程/回调接口较多
+Mutation/Configuration,void SetIntersectAlgorithm(const bool useCenter),isis_pybind.ProcessPolygons.set_intersect_algorithm,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_high_level_cube_io.cpp）
+Public API,"Isis::Cube *AppendOutputCube(const QString &avgFileName, const QString &countFileName = \"\")",isis_pybind.ProcessPolygons.append_output_cube,N,流程/回调接口较多
+Public API,"void Rasterize(std::vector<double> &samples, std::vector<double> &lines, std::vector<double> &values)",isis_pybind.ProcessPolygons.rasterize,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_high_level_cube_io.cpp）
+Public API,"void Rasterize(std::vector<double> &samples, std::vector<double> &lines, int &band, double &value)",isis_pybind.ProcessPolygons.rasterize,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_high_level_cube_io.cpp）
+Public API,void EndProcess(),isis_pybind.ProcessPolygons.end_process,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_high_level_cube_io.cpp）
+Public API,void Finalize(),isis_pybind.ProcessPolygons.finalize,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_high_level_cube_io.cpp）

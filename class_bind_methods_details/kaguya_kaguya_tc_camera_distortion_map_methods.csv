@@ -1,8 +1,8 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-KaguyaTcCameraDistortionMap,Kaguya,isis/src/kaguya/objs/KaguyaTcCamera/KaguyaTcCameraDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+KaguyaTcCameraDistortionMap,Kaguya,isis/src/kaguya/objs/KaguyaTcCamera/KaguyaTcCameraDistortionMap.h,src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,KaguyaTcCameraDistortionMap,isis_pybind.KaguyaTcCameraDistortionMap,N,"Python class symbol not found in current binding files; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,KaguyaTcCameraDistortionMap(Camera *parent, int naifIkCode),isis_pybind.KaguyaTcCameraDistortionMap(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,virtual bool SetFocalPlane(double dx, double dy),isis_pybind.KaguyaTcCameraDistortionMap.set_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,virtual bool SetUndistortedFocalPlane(double ux, double uy),isis_pybind.KaguyaTcCameraDistortionMap.set_undistorted_focal_plane,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,KaguyaTcCameraDistortionMap,isis_pybind.KaguyaTcCameraDistortionMap,Y,2026-04-13 台账同步；顶层导出已存在（src/mission/bind_mission_cameras.cpp）
+Construction/Enum,"KaguyaTcCameraDistortionMap(Camera *parent, int naifIkCode)",isis_pybind.KaguyaTcCameraDistortionMap(),Y,2026-04-13 台账同步；构造入口已在当前绑定中可用（src/mission/bind_mission_cameras.cpp）
+Mutation/Configuration,"virtual bool SetFocalPlane(double dx, double dy)",isis_pybind.KaguyaTcCameraDistortionMap.set_focal_plane,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/mission/bind_mission_cameras.cpp）
+Mutation/Configuration,"virtual bool SetUndistortedFocalPlane(double ux, double uy)",isis_pybind.KaguyaTcCameraDistortionMap.set_undistorted_focal_plane,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/mission/bind_mission_cameras.cpp）

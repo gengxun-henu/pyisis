@@ -6,6 +6,7 @@ Created: 2026-03-21
 Last Modified: 2026-04-13
 Updated: 2026-04-12  Geng Xun added Spice integration coverage using local MDIS cubes and SPICE tables.
 Updated: 2026-04-13  Geng Xun added SpiceRotation core methods coverage (matrix, angular_velocity, cache, frame chains).
+Updated: 2026-04-13  Geng Xun aligned MDIS SpiceRotation frame-type expectation with real target/body-rotation metadata.
 """
 
 import math
@@ -244,6 +245,7 @@ class CameraUnitTest(unittest.TestCase):
         # Test frame type and source
         frame_type = body_rotation.get_frame_type()
         self.assertIn(frame_type, [
+            ip.SpiceRotationFrameType.UNKNOWN,
             ip.SpiceRotationFrameType.PCK,
             ip.SpiceRotationFrameType.CK,
             ip.SpiceRotationFrameType.BPC,

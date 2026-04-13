@@ -1,16 +1,16 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-IsisBundleObservation,Control Networks,isis/src/control/objs/BundleUtilities/IsisBundleObservation.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+IsisBundleObservation,Control Networks,isis/src/control/objs/BundleUtilities/IsisBundleObservation.h,src/control/bind_bundle_advanced.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,IsisBundleObservation,isis_pybind.IsisBundleObservation,N,Python class symbol not found in current binding files
-Construction/Enum,IsisBundleObservation(),isis_pybind.IsisBundleObservation(),N,Constructor binding not detected in current binding files
+Class Symbol,IsisBundleObservation,isis_pybind.IsisBundleObservation,Y,2026-04-13 台账同步；顶层导出已存在（src/control/bind_bundle_advanced.cpp）
+Construction/Enum,IsisBundleObservation(),isis_pybind.IsisBundleObservation(),Y,2026-04-13 台账同步；构造入口已在当前绑定中可用（src/control/bind_bundle_advanced.cpp）
 Public API,void copy(const IsisBundleObservation &src),isis_pybind.IsisBundleObservation.copy,N,Method not found in current binding files
 Mutation/Configuration,virtual bool setSolveSettings(BundleObservationSolveSettings solveSettings),isis_pybind.IsisBundleObservation.set_solve_settings,N,Method not found in current binding files
-Public API,int numberPositionParameters(),isis_pybind.IsisBundleObservation.number_position_parameters,N,Method not found in current binding files
-Public API,int numberPointingParameters(),isis_pybind.IsisBundleObservation.number_pointing_parameters,N,Method not found in current binding files
-Public API,int numberParameters(),isis_pybind.IsisBundleObservation.number_parameters,N,Method not found in current binding files
-Public API,SpiceRotation *spiceRotation(),isis_pybind.IsisBundleObservation.spice_rotation,N,Method not found in current binding files
-Public API,SpicePosition *spicePosition(),isis_pybind.IsisBundleObservation.spice_position,N,Method not found in current binding files
+Public API,int numberPositionParameters(),isis_pybind.IsisBundleObservation.number_position_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberPointingParameters(),isis_pybind.IsisBundleObservation.number_pointing_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberParameters(),isis_pybind.IsisBundleObservation.number_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,SpiceRotation *spiceRotation(),isis_pybind.IsisBundleObservation.spice_rotation,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,SpicePosition *spicePosition(),isis_pybind.IsisBundleObservation.spice_position,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,const BundleObservationSolveSettingsQsp solveSettings(),isis_pybind.IsisBundleObservation.solve_settings,N,Method not found in current binding files
 Public API,bool applyParameterCorrections(LinearAlgebra::Vector corrections),isis_pybind.IsisBundleObservation.apply_parameter_corrections,N,Method not found in current binding files
 Public API,bool initializeExteriorOrientation(),isis_pybind.IsisBundleObservation.initialize_exterior_orientation,N,Method not found in current binding files
@@ -18,8 +18,8 @@ Public API,void initializeBodyRotation(),isis_pybind.IsisBundleObservation.initi
 Public API,void updateBodyRotation(),isis_pybind.IsisBundleObservation.update_body_rotation,N,Method not found in current binding files
 Public API,"void bundleOutputFetchData(QVector<double> &finalParameterValues, int &nPositionCoefficients, int &nPointingCoefficients, bool &useDefaultPosition, bool &useDefaultPointing, bool &useDefaultTwist)",isis_pybind.IsisBundleObservation.bundle_output_fetch_data,N,Method not found in current binding files
 Public API,"void bundleOutputString(std::ostream &fpOut,bool errorPropagation)",isis_pybind.IsisBundleObservation.bundle_output_string,N,Method not found in current binding files
-Public API,QString bundleOutputCSV(bool errorPropagation),isis_pybind.IsisBundleObservation.bundle_output_csv,N,Method not found in current binding files
-Public API,virtual QStringList parameterList(),isis_pybind.IsisBundleObservation.parameter_list,N,Method not found in current binding files
+Public API,QString bundleOutputCSV(bool errorPropagation),isis_pybind.IsisBundleObservation.bundle_output_csv,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,virtual QStringList parameterList(),isis_pybind.IsisBundleObservation.parameter_list,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,"bool computeTargetPartials(LinearAlgebra::Matrix &coeffTarget, BundleMeasure &measure, BundleSettingsQsp &bundleSettings, BundleTargetBodyQsp &bundleTargetBody)",isis_pybind.IsisBundleObservation.compute_target_partials,N,Method not found in current binding files
 Public API,"bool computeImagePartials(LinearAlgebra::Matrix &coeffImage, BundleMeasure &measure)",isis_pybind.IsisBundleObservation.compute_image_partials,N,Method not found in current binding files
 Public API,"bool computePoint3DPartials(LinearAlgebra::Matrix &coeffPoint3D, BundleMeasure &measure, SurfacePoint::CoordinateType coordType)",isis_pybind.IsisBundleObservation.compute_point3_d_partials,N,Method not found in current binding files

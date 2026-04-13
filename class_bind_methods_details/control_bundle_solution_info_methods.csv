@@ -1,38 +1,38 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-BundleSolutionInfo,Control Networks,isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+BundleSolutionInfo,Control Networks,isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.h,src/control/bind_bundle_advanced.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,BundleSolutionInfo,isis_pybind.BundleSolutionInfo,N,Python class symbol not found in current binding files; Qt 类型/信号槽较多
-Construction/Enum,BundleSolutionInfo(),isis_pybind.BundleSolutionInfo(),N,Qt 类型/信号槽较多
+Class Symbol,BundleSolutionInfo,isis_pybind.BundleSolutionInfo,Y,2026-04-13 台账同步；顶层导出已存在（src/control/bind_bundle_advanced.cpp）
+Construction/Enum,BundleSolutionInfo(),isis_pybind.BundleSolutionInfo(),Y,2026-04-13 台账同步；构造入口已在当前绑定中可用（src/control/bind_bundle_advanced.cpp）
 Read/Write IO,void readBundleSolutionInfo(QXmlStreamReader *xmlReader),isis_pybind.BundleSolutionInfo.read_bundle_solution_info,N,Qt 类型/信号槽较多
-Read/Write IO,QString savedBundleOutputFilename(),isis_pybind.BundleSolutionInfo.saved_bundle_output_filename,N,Qt 类型/信号槽较多
-Read/Write IO,QString savedImagesFilename(),isis_pybind.BundleSolutionInfo.saved_images_filename,N,Qt 类型/信号槽较多
-Read/Write IO,QString savedPointsFilename(),isis_pybind.BundleSolutionInfo.saved_points_filename,N,Qt 类型/信号槽较多
-Read/Write IO,QString savedResidualsFilename(),isis_pybind.BundleSolutionInfo.saved_residuals_filename,N,Qt 类型/信号槽较多
+Read/Write IO,QString savedBundleOutputFilename(),isis_pybind.BundleSolutionInfo.saved_bundle_output_filename,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Read/Write IO,QString savedImagesFilename(),isis_pybind.BundleSolutionInfo.saved_images_filename,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Read/Write IO,QString savedPointsFilename(),isis_pybind.BundleSolutionInfo.saved_points_filename,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Read/Write IO,QString savedResidualsFilename(),isis_pybind.BundleSolutionInfo.saved_residuals_filename,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Mutation/Configuration,void addAdjustedImages(ImageList *images),isis_pybind.BundleSolutionInfo.add_adjusted_images,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setOutputStatistics(BundleResults statisticsResults),isis_pybind.BundleSolutionInfo.set_output_statistics,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setOutputStatistics(BundleResults statisticsResults),isis_pybind.BundleSolutionInfo.set_output_statistics,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Mutation/Configuration,void setOutputControl(Control *outputControl),isis_pybind.BundleSolutionInfo.set_output_control,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setOutputControlName(QString name),isis_pybind.BundleSolutionInfo.set_output_control_name,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setRunTime(QString runTime),isis_pybind.BundleSolutionInfo.set_run_time,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setName(QString name),isis_pybind.BundleSolutionInfo.set_name,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setOutputControlName(QString name),isis_pybind.BundleSolutionInfo.set_output_control_name,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setRunTime(QString runTime),isis_pybind.BundleSolutionInfo.set_run_time,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setName(QString name),isis_pybind.BundleSolutionInfo.set_name,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,QList<ImageList *> adjustedImages() const,isis_pybind.BundleSolutionInfo.adjusted_images,N,Qt 类型/信号槽较多
-Public API,QString id() const,isis_pybind.BundleSolutionInfo.id,N,Qt 类型/信号槽较多
-Public API,QString inputControlNetFileName() const,isis_pybind.BundleSolutionInfo.input_control_net_file_name,N,Qt 类型/信号槽较多
-Public API,QString outputControlNetFileName() const,isis_pybind.BundleSolutionInfo.output_control_net_file_name,N,Qt 类型/信号槽较多
+Public API,QString id() const,isis_pybind.BundleSolutionInfo.id,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString inputControlNetFileName() const,isis_pybind.BundleSolutionInfo.input_control_net_file_name,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString outputControlNetFileName() const,isis_pybind.BundleSolutionInfo.output_control_net_file_name,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,Control *control() const,isis_pybind.BundleSolutionInfo.control,N,Qt 类型/信号槽较多
-Public API,QString outputControlName() const,isis_pybind.BundleSolutionInfo.output_control_name,N,Qt 类型/信号槽较多
-Public API,QString inputLidarDataFileName() const,isis_pybind.BundleSolutionInfo.input_lidar_data_file_name,N,Qt 类型/信号槽较多
-Public API,BundleSettingsQsp bundleSettings(),isis_pybind.BundleSolutionInfo.bundle_settings,N,Qt 类型/信号槽较多
-Public API,BundleResults bundleResults(),isis_pybind.BundleSolutionInfo.bundle_results,N,Qt 类型/信号槽较多
+Public API,QString outputControlName() const,isis_pybind.BundleSolutionInfo.output_control_name,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString inputLidarDataFileName() const,isis_pybind.BundleSolutionInfo.input_lidar_data_file_name,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,BundleSettingsQsp bundleSettings(),isis_pybind.BundleSolutionInfo.bundle_settings,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,BundleResults bundleResults(),isis_pybind.BundleSolutionInfo.bundle_results,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,QList<ImageList *> imageList(),isis_pybind.BundleSolutionInfo.image_list,N,Qt 类型/信号槽较多
-Public API,QString runTime() const,isis_pybind.BundleSolutionInfo.run_time,N,Qt 类型/信号槽较多
-Public API,QString name() const,isis_pybind.BundleSolutionInfo.name,N,Qt 类型/信号槽较多
+Public API,QString runTime() const,isis_pybind.BundleSolutionInfo.run_time,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString name() const,isis_pybind.BundleSolutionInfo.name,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,"bool outputImagesCSVHeader(std::ofstream &fpOut, BundleObservationQsp observations)",isis_pybind.BundleSolutionInfo.output_images_csv_header,N,Qt 类型/信号槽较多
 Public API,bool outputHeader(std::ofstream &fpOut),isis_pybind.BundleSolutionInfo.output_header,N,Qt 类型/信号槽较多
-Public API,bool outputText(),isis_pybind.BundleSolutionInfo.output_text,N,Qt 类型/信号槽较多
-Public API,bool outputImagesCSV(),isis_pybind.BundleSolutionInfo.output_images_csv,N,Qt 类型/信号槽较多
-Public API,bool outputPointsCSV(),isis_pybind.BundleSolutionInfo.output_points_csv,N,Qt 类型/信号槽较多
-Public API,bool outputLidarCSV(),isis_pybind.BundleSolutionInfo.output_lidar_csv,N,Qt 类型/信号槽较多
-Public API,bool outputResiduals(),isis_pybind.BundleSolutionInfo.output_residuals,N,Qt 类型/信号槽较多
+Public API,bool outputText(),isis_pybind.BundleSolutionInfo.output_text,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,bool outputImagesCSV(),isis_pybind.BundleSolutionInfo.output_images_csv,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,bool outputPointsCSV(),isis_pybind.BundleSolutionInfo.output_points_csv,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,bool outputLidarCSV(),isis_pybind.BundleSolutionInfo.output_lidar_csv,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,bool outputResiduals(),isis_pybind.BundleSolutionInfo.output_residuals,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Read/Write IO,"void save(QXmlStreamWriter &stream, const Project *project, FileName newProjectRoot) const",isis_pybind.BundleSolutionInfo.save,N,Qt 类型/信号槽较多
-Public API,"QString surfacePointCoordName(SurfacePoint::CoordinateType type, SurfacePoint::CoordIndex coordInx) const",isis_pybind.BundleSolutionInfo.surface_point_coord_name,N,Qt 类型/信号槽较多
+Public API,"QString surfacePointCoordName(SurfacePoint::CoordinateType type, SurfacePoint::CoordIndex coordInx) const",isis_pybind.BundleSolutionInfo.surface_point_coord_name,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）

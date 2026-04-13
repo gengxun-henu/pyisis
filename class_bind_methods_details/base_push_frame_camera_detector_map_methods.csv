@@ -1,24 +1,24 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-PushFrameCameraDetectorMap,"Spice, Instruments, and Cameras",isis/src/base/objs/PushFrameCameraDetectorMap/PushFrameCameraDetectorMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+PushFrameCameraDetectorMap,"Spice, Instruments, and Cameras",isis/src/base/objs/PushFrameCameraDetectorMap/PushFrameCameraDetectorMap.h,src/bind_camera_maps.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,PushFrameCameraDetectorMap,isis_pybind.PushFrameCameraDetectorMap,N,Python class symbol not found in current binding files
-Construction/Enum,PushFrameCameraDetectorMap(),isis_pybind.PushFrameCameraDetectorMap(),N,Constructor binding not detected in current binding files
-Mutation/Configuration,"virtual bool SetParent(const double sample, const double line)",isis_pybind.PushFrameCameraDetectorMap.set_parent,N,Method not found in current binding files
-Mutation/Configuration,"virtual bool SetParent(const double sample, const double line, const double deltaT)",isis_pybind.PushFrameCameraDetectorMap.set_parent,N,Method not found in current binding files
-Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.PushFrameCameraDetectorMap.set_detector,N,Method not found in current binding files
-Public API,double FrameletRate() const,isis_pybind.PushFrameCameraDetectorMap.framelet_rate,N,Method not found in current binding files
-Mutation/Configuration,void SetFrameletRate(const double frameletRate),isis_pybind.PushFrameCameraDetectorMap.set_framelet_rate,N,Method not found in current binding files
-Public API,int FrameletOffset() const,isis_pybind.PushFrameCameraDetectorMap.framelet_offset,N,Method not found in current binding files
-Mutation/Configuration,void SetFrameletOffset(int frameletOffset),isis_pybind.PushFrameCameraDetectorMap.set_framelet_offset,N,Method not found in current binding files
+Class Symbol,PushFrameCameraDetectorMap,isis_pybind.PushFrameCameraDetectorMap,Y,2026-04-13 台账同步；顶层导出已存在（src/bind_camera_maps.cpp）
+Construction/Enum,PushFrameCameraDetectorMap(),isis_pybind.PushFrameCameraDetectorMap(),Y,2026-04-13 台账同步；构造入口已在当前绑定中可用（src/bind_camera_maps.cpp）
+Mutation/Configuration,"virtual bool SetParent(const double sample, const double line)",isis_pybind.PushFrameCameraDetectorMap.set_parent,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
+Mutation/Configuration,"virtual bool SetParent(const double sample, const double line, const double deltaT)",isis_pybind.PushFrameCameraDetectorMap.set_parent_with_time_offset,Y,2026-04-13 台账同步；当前 Python 名称为 isis_pybind.PushFrameCameraDetectorMap.set_parent_with_time_offset
+Mutation/Configuration,"virtual bool SetDetector(const double sample, const double line)",isis_pybind.PushFrameCameraDetectorMap.set_detector,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
+Public API,double FrameletRate() const,isis_pybind.PushFrameCameraDetectorMap.framelet_rate,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
+Mutation/Configuration,void SetFrameletRate(const double frameletRate),isis_pybind.PushFrameCameraDetectorMap.set_framelet_rate,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
+Public API,int FrameletOffset() const,isis_pybind.PushFrameCameraDetectorMap.framelet_offset,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
+Mutation/Configuration,void SetFrameletOffset(int frameletOffset),isis_pybind.PushFrameCameraDetectorMap.set_framelet_offset,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
 Mutation/Configuration,"void SetFramelet(int framelet, const double deltaT=0)",isis_pybind.PushFrameCameraDetectorMap.set_framelet,N,Method not found in current binding files
-Public API,int Framelet(),isis_pybind.PushFrameCameraDetectorMap.framelet,N,Method not found in current binding files
-Mutation/Configuration,void SetBandFirstDetectorLine(int firstLine),isis_pybind.PushFrameCameraDetectorMap.set_band_first_detector_line,N,Method not found in current binding files
-Public API,int GetBandFirstDetectorLine(),isis_pybind.PushFrameCameraDetectorMap.get_band_first_detector_line,N,Method not found in current binding files
-Mutation/Configuration,void SetStartTime(const double etStart),isis_pybind.PushFrameCameraDetectorMap.set_start_time,N,Method not found in current binding files
+Public API,int Framelet(),isis_pybind.PushFrameCameraDetectorMap.framelet,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
+Mutation/Configuration,void SetBandFirstDetectorLine(int firstLine),isis_pybind.PushFrameCameraDetectorMap.set_band_first_detector_line,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
+Public API,int GetBandFirstDetectorLine(),isis_pybind.PushFrameCameraDetectorMap.get_band_first_detector_line,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
+Mutation/Configuration,void SetStartTime(const double etStart),isis_pybind.PushFrameCameraDetectorMap.set_start_time,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
 Public API,double StartEphemerisTime() const,isis_pybind.PushFrameCameraDetectorMap.start_ephemeris_time,N,Method not found in current binding files
 Mutation/Configuration,void SetExposureDuration(double exposureDuration),isis_pybind.PushFrameCameraDetectorMap.set_exposure_duration,N,Method not found in current binding files
-Public API,"virtual double exposureDuration(const double sample, const double line, const int band) const",isis_pybind.PushFrameCameraDetectorMap.exposure_duration,N,Method not found in current binding files
+Public API,"virtual double exposureDuration(const double sample, const double line, const int band) const",isis_pybind.PushFrameCameraDetectorMap.exposure_duration,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_camera_maps.cpp）
 Mutation/Configuration,"void SetFrameletOrderReversed(bool frameletOrderReversed, int nframelets)",isis_pybind.PushFrameCameraDetectorMap.set_framelet_order_reversed,N,Method not found in current binding files
 Mutation/Configuration,void SetFrameletsGeometricallyFlipped(bool frameletsFlipped),isis_pybind.PushFrameCameraDetectorMap.set_framelets_geometrically_flipped,N,Method not found in current binding files
 Public API,int TotalFramelets() const,isis_pybind.PushFrameCameraDetectorMap.total_framelets,N,Method not found in current binding files

@@ -1,11 +1,11 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-GSLUtility,Utility,isis/src/base/objs/GSLUtility/GSLUtility.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+GSLUtility,Utility,isis/src/base/objs/GSLUtility/GSLUtility.h,src/base/bind_base_utility.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,GSLUtility,isis_pybind.GSLUtility,N,Python class symbol not found in current binding files
-Static/Factory,static GSLUtility *getInstance(),isis_pybind.GSLUtility.get_instance,N,Method not found in current binding files
-Public API,inline bool success(int status) const { return (status == GSL_SUCCESS),isis_pybind.GSLUtility.success,N,Method not found in current binding files
-Public API,inline QString status(int gsl_errno) const { return (QString(gsl_strerror(gsl_errno))),isis_pybind.GSLUtility.status,N,Method not found in current binding files
+Class Symbol,GSLUtility,isis_pybind.GSLUtility,Y,2026-04-13 台账同步；顶层导出已存在（src/base/bind_base_utility.cpp）
+Static/Factory,static GSLUtility *getInstance(),isis_pybind.GSLUtility.get_instance,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/base/bind_base_utility.cpp）
+Public API,inline bool success(int status) const { return (status == GSL_SUCCESS),isis_pybind.GSLUtility.success,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/base/bind_base_utility.cpp）
+Public API,inline QString status(int gsl_errno) const { return (QString(gsl_strerror(gsl_errno))),isis_pybind.GSLUtility.status,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/base/bind_base_utility.cpp）
 Public API,"void check(int gsl_status, const char *src = __FILE__, int line = __LINE__) const",isis_pybind.GSLUtility.check,N,Method not found in current binding files
 Public API,size_t Rows(const gsl_matrix *m) const,isis_pybind.GSLUtility.rows,N,Method not found in current binding files
 Public API,size_t Columns(const gsl_matrix *m) const,isis_pybind.GSLUtility.columns,N,Method not found in current binding files

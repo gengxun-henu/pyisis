@@ -13,6 +13,7 @@
 // Updated: 2026-04-10  Geng Xun added SpicePosition, SpiceRotation, SpacecraftPosition bindings.
 // Updated: 2026-04-12  Geng Xun added Spice binding for cube-backed SPICE access.
 // Updated: 2026-04-12  Geng Xun kept Spice enum values scoped to avoid clashing with the Spice class binding.
+// Updated: 2026-04-13  Geng Xun extended SpiceRotation with core matrix/cache/polynomial methods cluster.
 // Purpose: Expose Isis::SpicePosition, Isis::SpiceRotation, and Isis::SpacecraftPosition
 //          to Python for SPICE-based spacecraft navigation access.
 
@@ -321,6 +322,53 @@ void bind_spice_navigation(py::module_ &m)
       .def("has_angular_velocity",
            &Isis::SpiceRotation::HasAngularVelocity,
            "Return True if angular velocity is available.")
+      // Time and ephemeris methods
+      .def("set_ephemeris_time",
+           &Isis::SpiceRotation::SetEphemerisTime,
+           py::arg("et"),
+           "Set the ephemeris time and compute rotation matrices.")
+      // Matrix and rotation access methods
+      .def("matrix",
+           [](Isis::SpiceRotation &self) -> std::vector<double> {
+               return self.Matrix();
+           },
+           "Return the 3x3 rotation matrix from J2000 to reference frame.")
+      .def("angular_velocity",
+           [](Isis::SpiceRotation &self) -> std::vector<double> {
+               return self.AngularVelocity();
+           },
+           "Return the angular velocity vector [wx, wy, wz].")
+      .def("constant_rotation",
+           [](Isis::SpiceRotation &self) -> std::vector<double> {
+               return self.ConstantRotation();
+           },
+           "Return the constant part of the rotation.")
+      .def("constant_matrix",
+           [](Isis::SpiceRotation &self) -> std::vector<double> & {
+               return self.ConstantMatrix();
+           },
+           py::return_value_policy::reference_internal,
+           "Return reference to constant rotation matrix.")
+      .def("set_constant_matrix",
+           &Isis::SpiceRotation::SetConstantMatrix,
+           py::arg("constant_matrix"),
+           "Set the constant rotation matrix.")
+      .def("time_based_rotation",
+           [](Isis::SpiceRotation &self) -> std::vector<double> {
+               return self.TimeBasedRotation();
+           },
+           "Return the time-based part of the rotation.")
+      .def("time_based_matrix",
+           [](Isis::SpiceRotation &self) -> std::vector<double> & {
+               return self.TimeBasedMatrix();
+           },
+           py::return_value_policy::reference_internal,
+           "Return reference to time-based rotation matrix.")
+      .def("set_time_based_matrix",
+           &Isis::SpiceRotation::SetTimeBasedMatrix,
+           py::arg("time_based_matrix"),
+           "Set the time-based rotation matrix.")
+      // Vector rotation methods
       .def("j2000_vector",
            [](Isis::SpiceRotation &self, const std::vector<double> &rVec) {
                return self.J2000Vector(rVec);
@@ -333,6 +381,72 @@ void bind_spice_navigation(py::module_ &m)
            },
            py::arg("j_vec"),
            "Rotate a J2000 vector to the body-fixed reference frame.")
+      // Cache loading methods
+      .def("load_cache",
+           py::overload_cast<double, double, int>(&Isis::SpiceRotation::LoadCache),
+           py::arg("start_time"), py::arg("end_time"), py::arg("size"),
+           "Load rotation cache for time range [start_time, end_time] with size entries.")
+      .def("load_cache",
+           py::overload_cast<double>(&Isis::SpiceRotation::LoadCache),
+           py::arg("time"),
+           "Load rotation cache for a single time.")
+      .def("load_cache",
+           py::overload_cast<Isis::Table&>(&Isis::SpiceRotation::LoadCache),
+           py::arg("table"),
+           "Load rotation cache from an ISIS Table.")
+      .def("load_cache",
+           py::overload_cast<nlohmann::json&>(&Isis::SpiceRotation::LoadCache),
+           py::arg("isd"),
+           "Load rotation cache from a JSON ISD (Image Support Data).")
+      .def("reload_cache",
+           &Isis::SpiceRotation::ReloadCache,
+           "Reload rotation cache from current state.")
+      .def("cache",
+           [](Isis::SpiceRotation &self, const std::string &table_name) -> Isis::Table {
+               return self.Cache(stdStringToQString(table_name));
+           },
+           py::arg("table_name"),
+           "Return the current rotation cache as a Table.")
+      .def("line_cache",
+           [](Isis::SpiceRotation &self, const std::string &table_name) -> Isis::Table {
+               return self.LineCache(stdStringToQString(table_name));
+           },
+           py::arg("table_name"),
+           "Return a Table with linear rotation cache.")
+      // Frame type and chain methods
+      .def("get_frame_type",
+           &Isis::SpiceRotation::getFrameType,
+           "Return the frame type (INERTL, PCK, CK, etc.).")
+      .def("constant_frame_chain",
+           [](Isis::SpiceRotation &self) -> std::vector<int> {
+               return self.ConstantFrameChain();
+           },
+           "Return the constant frame chain.")
+      .def("time_frame_chain",
+           [](Isis::SpiceRotation &self) -> std::vector<int> {
+               return self.TimeFrameChain();
+           },
+           "Return the time-based frame chain.")
+      // Source and polynomial methods
+      .def("set_source",
+           &Isis::SpiceRotation::SetSource,
+           py::arg("source"),
+           "Set the rotation source type.")
+      .def("set_polynomial",
+           py::overload_cast<const Isis::SpiceRotation::Source>(&Isis::SpiceRotation::SetPolynomial),
+           py::arg("type") = Isis::SpiceRotation::PolyFunction,
+           "Fit polynomial to cached rotations using specified source type.")
+      .def("set_polynomial_degree",
+           &Isis::SpiceRotation::SetPolynomialDegree,
+           py::arg("degree"),
+           "Set the degree of the polynomial fit.")
+      .def("compute_base_time",
+           &Isis::SpiceRotation::ComputeBaseTime,
+           "Compute the base time from cached rotations.")
+      .def("set_override_base_time",
+           &Isis::SpiceRotation::SetOverrideBaseTime,
+           py::arg("base_time"), py::arg("time_scale"),
+           "Override the base time and time scale for polynomial fits.")
       .def("__repr__", [](Isis::SpiceRotation &self) {
            return std::string("SpiceRotation(frame=") +
                   std::to_string(self.Frame()) + ")";

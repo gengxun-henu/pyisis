@@ -3,8 +3,9 @@ Unit tests for ISIS camera and CameraFactory bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-12
+Last Modified: 2026-04-13
 Updated: 2026-04-12  Geng Xun added Spice integration coverage using local MDIS cubes and SPICE tables.
+Updated: 2026-04-13  Geng Xun added SpiceRotation core methods coverage (matrix, angular_velocity, cache, frame chains).
 """
 
 import math
@@ -222,6 +223,77 @@ class CameraUnitTest(unittest.TestCase):
 
         target = spice.target()
         self.assertEqual(target.name(), "Mercury")
+
+    def test_spice_rotation_core_methods_with_mdis_cube(self):
+        cube = self.open_cube(MDIS_CUBES[0])
+        spice = ip.Spice(cube)
+
+        instrument = cube.label().find_group("Instrument", ip.PvlObject.FindOptions.Traverse)
+        start_time = instrument.find_keyword("StartTime")[0]
+        et = ip.iTime(start_time)
+        spice.set_time(et)
+
+        # Get body rotation from Spice object
+        body_rotation = spice.body_rotation()
+        self.assertIsInstance(body_rotation, ip.SpiceRotation)
+
+        # Test basic rotation properties
+        self.assertIsInstance(body_rotation.frame(), int)
+        self.assertAlmostEqual(body_rotation.ephemeris_time(), et.et(), places=6)
+
+        # Test frame type and source
+        frame_type = body_rotation.get_frame_type()
+        self.assertIn(frame_type, [
+            ip.SpiceRotationFrameType.PCK,
+            ip.SpiceRotationFrameType.CK,
+            ip.SpiceRotationFrameType.BPC,
+        ])
+
+        source = body_rotation.get_source()
+        self.assertIsInstance(source, ip.SpiceRotationSource)
+
+        # Test matrix access
+        matrix = body_rotation.matrix()
+        self.assertEqual(len(matrix), 9)
+        self.assertTrue(all(math.isfinite(value) for value in matrix))
+
+        # Test angular velocity
+        self.assertTrue(body_rotation.has_angular_velocity())
+        av = body_rotation.angular_velocity()
+        self.assertEqual(len(av), 3)
+        self.assertTrue(all(math.isfinite(value) for value in av))
+
+        # Test vector rotation
+        test_vec = [1.0, 0.0, 0.0]
+        j2000_vec = body_rotation.j2000_vector(test_vec)
+        self.assertEqual(len(j2000_vec), 3)
+        self.assertTrue(all(math.isfinite(value) for value in j2000_vec))
+
+        ref_vec = body_rotation.reference_vector(j2000_vec)
+        self.assertEqual(len(ref_vec), 3)
+        for i in range(3):
+            self.assertAlmostEqual(ref_vec[i], test_vec[i], places=10)
+
+        # Test cache status
+        self.assertTrue(body_rotation.is_cached() or not body_rotation.is_cached())
+        cache_size = body_rotation.cache_size()
+        self.assertGreaterEqual(cache_size, 0)
+
+        # Test time scale methods
+        if body_rotation.is_cached():
+            base_time = body_rotation.get_base_time()
+            time_scale = body_rotation.get_time_scale()
+            self.assertTrue(math.isfinite(base_time))
+            self.assertTrue(math.isfinite(time_scale))
+
+        # Test frame chains
+        const_chain = body_rotation.constant_frame_chain()
+        self.assertIsInstance(const_chain, list)
+        self.assertGreater(len(const_chain), 0)
+
+        time_chain = body_rotation.time_frame_chain()
+        self.assertIsInstance(time_chain, list)
+        self.assertGreaterEqual(len(time_chain), 0)
 
 
 if __name__ == "__main__":

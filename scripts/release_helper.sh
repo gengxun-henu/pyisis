@@ -207,6 +207,18 @@ run_publish_tag() {
 }
 
 main() {
+  if [[ $# -eq 0 ]]; then
+    usage
+    exit 1
+  fi
+
+  case "${1:-}" in
+    -h|--help|help)
+      usage
+      exit 0
+      ;;
+  esac
+
   parse_release_tag "${1:-}" "${2:-}"
 
   case "$RELEASE_COMMAND" in
@@ -215,9 +227,6 @@ main() {
       ;;
     publish-tag)
       run_publish_tag
-      ;;
-    -h|--help|help)
-      usage
       ;;
     *)
       usage

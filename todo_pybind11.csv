@@ -281,7 +281,7 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",Sensor,已转换,抽象基类/纯虚接口；已补 get_surface_point() 以支撑 measure-level 地面点/半径提取
 "Spice, Instruments, and Cameras",SpacecraftPosition,已转换,2026-04-10 已在 src/bind_spice_navigation.cpp 暴露 SpacecraftPosition（继承 SpicePosition；光行时修正状态）；focused 单测在 spice_navigation_unit_test.py
 "Spice, Instruments, and Cameras",Spice,已转换,2026-04-12 已在 src/bind_spice_navigation.cpp 暴露 Cube 构造/向量 helper 与 NAIF 访问器；camera_unit_test 增补表驱动 Spice 覆盖
-"Spice, Instruments, and Cameras",SpicePosition,已转换,2026-04-10 已在 src/bind_spice_navigation.cpp 暴露 SpicePosition（时间偏置/光行时/源枚举/缓存查询）；focused 单测在 spice_navigation_unit_test.py
+"Spice, Instruments, and Cameras",SpicePosition,已转换,2026-04-13 完成全部公开方法绑定；LoadCache (4 overloads)/polynomial/coordinate/velocity/partial/hermite/cache 全部暴露；focused 单测在 spice_navigation_unit_test.py
 "Spice, Instruments, and Cameras",SpiceRotation,已转换,2026-04-10 已在 src/bind_spice_navigation.cpp 暴露 SpiceRotation（帧设置/时间偏置/旋转枚举/矢量旋转）；focused 单测在 spice_navigation_unit_test.py
 "Spice, Instruments, and Cameras",Target,已转换,2026-04-09 已在 src/base/bind_base_target.cpp 补齐 Target(Pvl&) 与 NAIF/frame/body-rotation accessor，并在 src/bind_camera.cpp 新增 Camera.target()；显式 Spice* API 仍因无 Python Spice 绑定而保留未覆盖
 "Spice, Instruments, and Cameras",VariableLineScanCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露 set_parent/set_detector/exposure_duration

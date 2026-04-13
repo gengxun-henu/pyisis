@@ -2,6 +2,17 @@
 
 ## 2026-04-13
 
+- apply-ledger-sync 收尾同步（仅台账，不修改 `src/` / `tests/`）：
+  - 继续按已确认的当前 Python 暴露面回写剩余 detail ledger，补齐 `base_spacecraft_position_methods.csv`、`base_variable_line_scan_camera_detector_map_methods.csv`、`base_process_polygons_methods.csv`、`base_process_ground_polygons_methods.csv`、`base_process_map_mosaic_methods.csv`、`control_csm_bundle_observation_methods.csv`、`base_quick_filter_methods.csv`、`base_process_rubber_sheet_methods.csv`、`base_gsl_utility_methods.csv`、`control_isis_bundle_observation_methods.csv`、`base_overlap_statistics_methods.csv`、`base_push_frame_camera_detector_map_methods.csv`、`control_bundle_observation_methods.csv`、`control_bundle_solution_info_methods.csv` 与 `control_bundle_results_methods.csv`。
+  - 同步修正 `class_bind_methods_details/methods_inventory_summary.csv` 中 21 个候选类的汇总统计，覆盖 `KaguyaTcCameraDistortionMap`、`Vec`、`KaguyaMiCameraDistortionMap`、`Transform`、`RadarSlantRangeMap`、`RollingShutterCameraDetectorMap`、`SpacecraftPosition`、`VariableLineScanCameraDetectorMap`、`ProcessPolygons`、`ProcessGroundPolygons`、`ProcessMapMosaic`、`CsmBundleObservation`、`QuickFilter`、`ProcessRubberSheet`、`GSLUtility`、`IsisBundleObservation`、`OverlapStatistics`、`PushFrameCameraDetectorMap`、`BundleObservation`、`BundleSolutionInfo` 与 `BundleResults`。
+  - 关键汇总结果包括：`QuickFilter` 18/18 (`100.00%`)、`BundleSolutionInfo` 25/34 (`73.53%`)、`BundleResults` 91/135 (`67.41%`)；本次为 ledger consistency 收尾，不新增实现或测试变更。
+
+- Dawn 模块 ledger sync（仅台账同步，不涉及新增 binding implementation）：
+  - 复核 `src/module.cpp`、`src/mission/bind_mission_cameras.cpp`、`python/isis_pybind/__init__.py`、`tests/unitTest/extended_mission_camera_unit_test.py` 与 `tests/smoke_import.py` 后，确认 `DawnFcCamera`、`DawnFcDistortionMap`、`DawnVirCamera` 当前真实绑定状态均为已导出。
+  - 修正滞后的 `class_bind_methods_details/dawn_dawn_fc_distortion_map_methods.csv`：将类符号、构造函数、`set_focal_plane`、`set_undistorted_focal_plane` 从 `N` 同步为 `Y`。
+  - 同步修正 `class_bind_methods_details/methods_inventory_summary.csv` 中 `DawnFcDistortionMap` 行：`Class Symbol Status` 从 `N` 改为 `Y`，统计从 `0/1/0 (0.00%)` 更正为 `4/0/0 (100.00%)`。
+  - `todo_pybind11.csv` 的 Dawn 行已与真实状态一致，本次无需改动。
+
 - Extended `SpicePosition` pybind coverage for `LoadCache` and remaining cache/polynomial APIs:
   - Updated `src/bind_spice_navigation.cpp` to expose:
     - `OverrideType` enum (`NoOverrides`, `ScaleOnly`, `BaseAndScale`)

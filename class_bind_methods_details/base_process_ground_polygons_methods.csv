@@ -1,17 +1,17 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ProcessGroundPolygons,High Level Cube I/O,isis/src/base/objs/ProcessGroundPolygons/ProcessGroundPolygons.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
+ProcessGroundPolygons,High Level Cube I/O,isis/src/base/objs/ProcessGroundPolygons/ProcessGroundPolygons.h,src/bind_high_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,流程/回调接口较多
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,ProcessGroundPolygons,isis_pybind.ProcessGroundPolygons,N,Python class symbol not found in current binding files; 流程/回调接口较多
-Construction/Enum,ProcessGroundPolygons(),isis_pybind.ProcessGroundPolygons(),N,流程/回调接口较多
+Class Symbol,ProcessGroundPolygons,isis_pybind.ProcessGroundPolygons,Y,2026-04-13 台账同步；顶层导出已存在（src/bind_high_level_cube_io.cpp）
+Construction/Enum,ProcessGroundPolygons(),isis_pybind.ProcessGroundPolygons(),Y,2026-04-13 台账同步；构造入口已在当前绑定中可用（src/bind_high_level_cube_io.cpp）
 Mutation/Configuration,"void SetStatCubes(const QString &parameter, QString &cube)",isis_pybind.ProcessGroundPolygons.set_stat_cubes,N,流程/回调接口较多
 Mutation/Configuration,"void SetStatCubes(const QString &parameter, Isis::Pvl &map, int bands)",isis_pybind.ProcessGroundPolygons.set_stat_cubes,N,流程/回调接口较多
 Mutation/Configuration,"void SetStatCubes(const QString &avgFileName, const QString &countFileName, Isis::CubeAttributeOutput &atts, QString &cube)",isis_pybind.ProcessGroundPolygons.set_stat_cubes,N,流程/回调接口较多
 Mutation/Configuration,"void SetStatCubes(const QString &avgFileName, const QString &countFileName, Isis::CubeAttributeOutput &atts, Isis::Pvl &map, int bands)",isis_pybind.ProcessGroundPolygons.set_stat_cubes,N,流程/回调接口较多
-Public API,"void AppendOutputCube(QString &cube, const QString &avgFileName, const QString &countFileName = """")",isis_pybind.ProcessGroundPolygons.append_output_cube,N,流程/回调接口较多
-Public API,"void Rasterize(std::vector<double> &lat, std::vector<double> &lon, std::vector<double> &values)",isis_pybind.ProcessGroundPolygons.rasterize,N,流程/回调接口较多
-Public API,"void Rasterize(std::vector<double> &lat, std::vector<double> &lon, int &band, double &value)",isis_pybind.ProcessGroundPolygons.rasterize,N,流程/回调接口较多
+Public API,"void AppendOutputCube(QString &cube, const QString &avgFileName, const QString &countFileName = \"\")",isis_pybind.ProcessGroundPolygons.append_output_cube,N,流程/回调接口较多
+Public API,"void Rasterize(std::vector<double> &lat, std::vector<double> &lon, std::vector<double> &values)",isis_pybind.ProcessGroundPolygons.rasterize_latlon,Y,2026-04-13 台账同步；当前 Python 名称为 isis_pybind.ProcessGroundPolygons.rasterize_latlon
+Public API,"void Rasterize(std::vector<double> &lat, std::vector<double> &lon, int &band, double &value)",isis_pybind.ProcessGroundPolygons.rasterize,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_high_level_cube_io.cpp）
 Public API,"geos::geom::Geometry* Vectorize (std::vector<double> &lat, std::vector<double> &lon)",isis_pybind.ProcessGroundPolygons.vectorize,N,流程/回调接口较多
-Public API,void EndProcess(),isis_pybind.ProcessGroundPolygons.end_process,N,流程/回调接口较多
-Public API,void Finalize(),isis_pybind.ProcessGroundPolygons.finalize,N,流程/回调接口较多
+Public API,void EndProcess(),isis_pybind.ProcessGroundPolygons.end_process,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_high_level_cube_io.cpp）
+Public API,void Finalize(),isis_pybind.ProcessGroundPolygons.finalize,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/bind_high_level_cube_io.cpp）
 Public API,UniversalGroundMap *GetUniversalGroundMap() { return p_groundMap,isis_pybind.ProcessGroundPolygons.get_universal_ground_map,N,流程/回调接口较多

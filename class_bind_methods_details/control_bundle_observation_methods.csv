@@ -1,28 +1,28 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-BundleObservation,Control Networks,isis/src/control/objs/BundleUtilities/BundleObservation.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+BundleObservation,Control Networks,isis/src/control/objs/BundleUtilities/BundleObservation.h,src/control/bind_bundle_advanced.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,BundleObservation,isis_pybind.BundleObservation,N,Python class symbol not found in current binding files; 抽象基类/纯虚接口
-Construction/Enum,BundleObservation(),isis_pybind.BundleObservation(),N,抽象基类/纯虚接口
+Class Symbol,BundleObservation,isis_pybind.BundleObservation,Y,2026-04-13 台账同步；顶层导出已存在（src/control/bind_bundle_advanced.cpp）
+Construction/Enum,BundleObservation(),isis_pybind.BundleObservation(),Y,2026-04-13 台账同步；构造入口已在当前绑定中可用（src/control/bind_bundle_advanced.cpp）
 Public API,void copy(const BundleObservation &src),isis_pybind.BundleObservation.copy,N,抽象基类/纯虚接口
 Mutation/Configuration,virtual bool setSolveSettings(BundleObservationSolveSettings solveSettings) = 0,isis_pybind.BundleObservation.set_solve_settings,N,抽象基类/纯虚接口
 Public API,virtual void append(const BundleImageQsp &value),isis_pybind.BundleObservation.append,N,抽象基类/纯虚接口
 Public API,BundleImageQsp imageByCubeSerialNumber(QString cubeSerialNumber),isis_pybind.BundleObservation.image_by_cube_serial_number,N,抽象基类/纯虚接口
-Mutation/Configuration,void setIndex(int n),isis_pybind.BundleObservation.set_index,N,抽象基类/纯虚接口
-Public API,int index(),isis_pybind.BundleObservation.index,N,抽象基类/纯虚接口
-Public API,QString instrumentId(),isis_pybind.BundleObservation.instrument_id,N,抽象基类/纯虚接口
-Public API,double vtpv(),isis_pybind.BundleObservation.vtpv,N,抽象基类/纯虚接口
+Mutation/Configuration,void setIndex(int n),isis_pybind.BundleObservation.set_index,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int index(),isis_pybind.BundleObservation.index,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString instrumentId(),isis_pybind.BundleObservation.instrument_id,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double vtpv(),isis_pybind.BundleObservation.vtpv,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,virtual LinearAlgebra::Vector &parameterWeights(),isis_pybind.BundleObservation.parameter_weights,N,抽象基类/纯虚接口
 Public API,virtual LinearAlgebra::Vector &parameterCorrections(),isis_pybind.BundleObservation.parameter_corrections,N,抽象基类/纯虚接口
 Public API,virtual LinearAlgebra::Vector &aprioriSigmas(),isis_pybind.BundleObservation.apriori_sigmas,N,抽象基类/纯虚接口
 Public API,virtual LinearAlgebra::Vector &adjustedSigmas(),isis_pybind.BundleObservation.adjusted_sigmas,N,抽象基类/纯虚接口
 Public API,virtual const BundleObservationSolveSettingsQsp solveSettings() = 0,isis_pybind.BundleObservation.solve_settings,N,抽象基类/纯虚接口
-Public API,virtual int numberParameters() = 0,isis_pybind.BundleObservation.number_parameters,N,抽象基类/纯虚接口
+Public API,virtual int numberParameters() = 0,isis_pybind.BundleObservation.number_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,virtual bool applyParameterCorrections(LinearAlgebra::Vector corrections) = 0,isis_pybind.BundleObservation.apply_parameter_corrections,N,抽象基类/纯虚接口
 Public API,"virtual void bundleOutputString(std::ostream &fpOut,bool errorPropagation) = 0",isis_pybind.BundleObservation.bundle_output_string,N,抽象基类/纯虚接口
 Public API,virtual QString bundleOutputCSV(bool errorPropagation) = 0,isis_pybind.BundleObservation.bundle_output_csv,N,抽象基类/纯虚接口
-Public API,virtual QStringList parameterList() = 0,isis_pybind.BundleObservation.parameter_list,N,抽象基类/纯虚接口
-Public API,virtual QStringList imageNames(),isis_pybind.BundleObservation.image_names,N,抽象基类/纯虚接口
+Public API,virtual QStringList parameterList() = 0,isis_pybind.BundleObservation.parameter_list,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,virtual QStringList imageNames(),isis_pybind.BundleObservation.image_names,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,"virtual bool computeTargetPartials(LinearAlgebra::Matrix &coeffTarget, BundleMeasure &measure, BundleSettingsQsp &bundleSettings, BundleTargetBodyQsp &bundleTargetBody) = 0",isis_pybind.BundleObservation.compute_target_partials,N,抽象基类/纯虚接口
 Public API,"virtual bool computeImagePartials(LinearAlgebra::Matrix &coeffImage, BundleMeasure &measure) = 0",isis_pybind.BundleObservation.compute_image_partials,N,抽象基类/纯虚接口
 Public API,"virtual bool computePoint3DPartials(LinearAlgebra::Matrix &coeffPoint3D, BundleMeasure &measure, SurfacePoint::CoordinateType coordType = SurfacePoint::Rectangular) = 0",isis_pybind.BundleObservation.compute_point3_d_partials,N,抽象基类/纯虚接口

@@ -1,9 +1,9 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-BundleResults,Control Networks,isis/src/control/objs/BundleResults/BundleResults.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+BundleResults,Control Networks,isis/src/control/objs/BundleResults/BundleResults.h,src/control/bind_bundle_advanced.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,BundleResults,isis_pybind.BundleResults,N,Python class symbol not found in current binding files; Qt 类型/信号槽较多
-Construction/Enum,BundleResults(),isis_pybind.BundleResults(),N,Qt 类型/信号槽较多
+Class Symbol,BundleResults,isis_pybind.BundleResults,Y,2026-04-13 台账同步；顶层导出已存在（src/control/bind_bundle_advanced.cpp）
+Construction/Enum,BundleResults(),isis_pybind.BundleResults(),Y,2026-04-13 台账同步；构造入口已在当前绑定中可用（src/control/bind_bundle_advanced.cpp）
 Read/Write IO,void readBundleResults(QXmlStreamReader *xmlReader),isis_pybind.BundleResults.read_bundle_results,N,Qt 类型/信号槽较多
 Read/Write IO,void readCorrelationMatrix(QXmlStreamReader *xmlReader),isis_pybind.BundleResults.read_correlation_matrix,N,Qt 类型/信号槽较多
 Read/Write IO,void readGenStatsValues(QXmlStreamReader *xmlReader),isis_pybind.BundleResults.read_gen_stats_values,N,Qt 类型/信号槽较多
@@ -15,15 +15,15 @@ Read/Write IO,"void readStatsToVector(QVector<Statistics> &vec, QXmlStreamReader
 Read/Write IO,void readMinMaxSigmas(QXmlStreamReader *xmlReader),isis_pybind.BundleResults.read_min_max_sigmas,N,Qt 类型/信号槽较多
 Read/Write IO,"void readSigma(Distance &dist, QString &pointId, QXmlStreamReader *xmlReader)",isis_pybind.BundleResults.read_sigma,N,Qt 类型/信号槽较多
 Read/Write IO,void readMaxLikelihoodEstimation(QXmlStreamReader *xmlReader),isis_pybind.BundleResults.read_max_likelihood_estimation,N,Qt 类型/信号槽较多
-Public API,void initialize(),isis_pybind.BundleResults.initialize,N,Qt 类型/信号槽较多
-Public API,void resizeSigmaStatisticsVectors(int numberImages),isis_pybind.BundleResults.resize_sigma_statistics_vectors,N,Qt 类型/信号槽较多
+Public API,void initialize(),isis_pybind.BundleResults.initialize,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,void resizeSigmaStatisticsVectors(int numberImages),isis_pybind.BundleResults.resize_sigma_statistics_vectors,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Mutation/Configuration,"void setRmsImageResidualLists(QList<Statistics> rmsImageLineResiduals, QList<Statistics> rmsImageSampleResiduals, QList<Statistics> rmsImageResiduals)",isis_pybind.BundleResults.set_rms_image_residual_lists,N,Qt 类型/信号槽较多
 Mutation/Configuration,"void setRmsImageResidualLists(QVector<Statistics> rmsImageLineResiduals, QVector<Statistics> rmsImageSampleResiduals, QVector<Statistics> rmsImageResiduals)",isis_pybind.BundleResults.set_rms_image_residual_lists,N,Qt 类型/信号槽较多
 Mutation/Configuration,"void setRmsLidarImageResidualLists(QList<Statistics> rmsLidarImageLineResiduals, QList<Statistics> rmsLidarImageSampleResiduals, QList<Statistics> rmsLidarImageResiduals)",isis_pybind.BundleResults.set_rms_lidar_image_residual_lists,N,Qt 类型/信号槽较多
-Mutation/Configuration,"void setSigmaCoord1Range(Distance minCoord1Dist, Distance maxCoord1Dist, QString minCoord1PointId, QString maxCoord1PointId)",isis_pybind.BundleResults.set_sigma_coord1_range,N,Qt 类型/信号槽较多
-Mutation/Configuration,"void setSigmaCoord2Range(Distance minCoord2Dist, Distance maxCoord2Dist, QString minCoord2PointId, QString maxCoord2PointId)",isis_pybind.BundleResults.set_sigma_coord2_range,N,Qt 类型/信号槽较多
-Mutation/Configuration,"void setSigmaCoord3Range(Distance minCoord3Dist, Distance maxCoord3Dist, QString minCoord3PointId, QString maxCoord3PointId)",isis_pybind.BundleResults.set_sigma_coord3_range,N,Qt 类型/信号槽较多
-Mutation/Configuration,"void setRmsFromSigmaStatistics(double rmsFromSigmaCoord1Stats, double rmsFromSigmaCoord2Stats, double rmsFromSigmaCoord3Stats)",isis_pybind.BundleResults.set_rms_from_sigma_statistics,N,Qt 类型/信号槽较多
+Mutation/Configuration,"void setSigmaCoord1Range(Distance minCoord1Dist, Distance maxCoord1Dist, QString minCoord1PointId, QString maxCoord1PointId)",isis_pybind.BundleResults.set_sigma_coord1_range,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,"void setSigmaCoord2Range(Distance minCoord2Dist, Distance maxCoord2Dist, QString minCoord2PointId, QString maxCoord2PointId)",isis_pybind.BundleResults.set_sigma_coord2_range,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,"void setSigmaCoord3Range(Distance minCoord3Dist, Distance maxCoord3Dist, QString minCoord3PointId, QString maxCoord3PointId)",isis_pybind.BundleResults.set_sigma_coord3_range,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,"void setRmsFromSigmaStatistics(double rmsFromSigmaCoord1Stats, double rmsFromSigmaCoord2Stats, double rmsFromSigmaCoord3Stats)",isis_pybind.BundleResults.set_rms_from_sigma_statistics,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,"void maximumLikelihoodSetUp( QList< QPair< MaximumLikelihoodWFunctions::Model, double > > modelsWithQuantiles)",isis_pybind.BundleResults.maximum_likelihood_set_up,N,Qt 类型/信号槽较多
 Public API,void printMaximumLikelihoodTierInformation(),isis_pybind.BundleResults.print_maximum_likelihood_tier_information,N,Qt 类型/信号槽较多
 Public API,void initializeResidualsProbabilityDistribution(unsigned int nodes = 20),isis_pybind.BundleResults.initialize_residuals_probability_distribution,N,Qt 类型/信号槽较多
@@ -31,104 +31,104 @@ Public API,void initializeProbabilityDistribution(unsigned int nodes = 20),isis_
 Mutation/Configuration,void addResidualsProbabilityDistributionObservation(double obsValue),isis_pybind.BundleResults.add_residuals_probability_distribution_observation,N,Qt 类型/信号槽较多
 Mutation/Configuration,void addProbabilityDistributionObservation(double obsValue),isis_pybind.BundleResults.add_probability_distribution_observation,N,Qt 类型/信号槽较多
 Mutation/Configuration,"void addProbabilityDistributionObservation(double obsValue, bool residuals)",isis_pybind.BundleResults.add_probability_distribution_observation,N,Qt 类型/信号槽较多
-Public API,void incrementMaximumLikelihoodModelIndex(),isis_pybind.BundleResults.increment_maximum_likelihood_model_index,N,Qt 类型/信号槽较多
-Public API,void incrementFixedPoints(),isis_pybind.BundleResults.increment_fixed_points,N,Qt 类型/信号槽较多
-Public API,int numberFixedPoints() const,isis_pybind.BundleResults.number_fixed_points,N,Qt 类型/信号槽较多
-Public API,void incrementHeldImages(),isis_pybind.BundleResults.increment_held_images,N,Qt 类型/信号槽较多
-Public API,int numberHeldImages() const,isis_pybind.BundleResults.number_held_images,N,Qt 类型/信号槽较多
-Public API,void incrementIgnoredPoints(),isis_pybind.BundleResults.increment_ignored_points,N,Qt 类型/信号槽较多
-Public API,int numberIgnoredPoints() const,isis_pybind.BundleResults.number_ignored_points,N,Qt 类型/信号槽较多
+Public API,void incrementMaximumLikelihoodModelIndex(),isis_pybind.BundleResults.increment_maximum_likelihood_model_index,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,void incrementFixedPoints(),isis_pybind.BundleResults.increment_fixed_points,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberFixedPoints() const,isis_pybind.BundleResults.number_fixed_points,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,void incrementHeldImages(),isis_pybind.BundleResults.increment_held_images,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberHeldImages() const,isis_pybind.BundleResults.number_held_images,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,void incrementIgnoredPoints(),isis_pybind.BundleResults.increment_ignored_points,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberIgnoredPoints() const,isis_pybind.BundleResults.number_ignored_points,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,"#if 0 double computeRejectionLimit(ControlNet *p_Cnet, double outlierRejectionMultiplier, int numObservations)",isis_pybind.BundleResults.compute_rejection_limit,N,Qt 类型/信号槽较多
-Mutation/Configuration,#endif void setRejectionLimit(double rejectionLimit),isis_pybind.BundleResults.set_rejection_limit,N,Qt 类型/信号槽较多
+Mutation/Configuration,#endif void setRejectionLimit(double rejectionLimit),isis_pybind.BundleResults.set_rejection_limit,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,"#if 0 double computeResiduals( ControlNet *pCnet, std::vector< boost::numeric::ublas::bounded_vector< double, 3 > > pointWeights, std::vector< boost::numeric::ublas::bounded_vector< double, 3 > > pointCorrections, LinearAlgebra::Vector image_Corrections, std::vector< double > imageParameterWeights, int numImagePartials, int rank)",isis_pybind.BundleResults.compute_residuals,N,Qt 类型/信号槽较多
-Mutation/Configuration,"#endif void setRmsXYResiduals(double rx, double ry, double rxy)",isis_pybind.BundleResults.set_rms_xy_residuals,N,Qt 类型/信号槽较多
+Mutation/Configuration,"#endif void setRmsXYResiduals(double rx, double ry, double rxy)",isis_pybind.BundleResults.set_rms_xy_residuals,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,#if 0 bool flagOutliers(ControlNet *pCnet),isis_pybind.BundleResults.flag_outliers,N,Qt 类型/信号槽较多
-Mutation/Configuration,#endif void setNumberRejectedObservations(int numberObservations),isis_pybind.BundleResults.set_number_rejected_observations,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setNumberImageObservations(int numberObservations),isis_pybind.BundleResults.set_number_image_observations,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setNumberLidarImageObservations(int numberLidarObservations),isis_pybind.BundleResults.set_number_lidar_image_observations,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setNumberObservations(int numberObservations),isis_pybind.BundleResults.set_number_observations,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setNumberImageParameters(int numberParameters),isis_pybind.BundleResults.set_number_image_parameters,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setNumberConstrainedPointParameters(int numberParameters),isis_pybind.BundleResults.set_number_constrained_point_parameters,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setNumberConstrainedLidarPointParameters(int numberParameters),isis_pybind.BundleResults.set_number_constrained_lidar_point_parameters,N,Qt 类型/信号槽较多
-Public API,void resetNumberConstrainedPointParameters(),isis_pybind.BundleResults.reset_number_constrained_point_parameters,N,Qt 类型/信号槽较多
-Public API,void incrementNumberConstrainedPointParameters(int incrementAmount),isis_pybind.BundleResults.increment_number_constrained_point_parameters,N,Qt 类型/信号槽较多
-Public API,void resetNumberConstrainedImageParameters(),isis_pybind.BundleResults.reset_number_constrained_image_parameters,N,Qt 类型/信号槽较多
-Public API,void incrementNumberConstrainedImageParameters(int incrementAmount),isis_pybind.BundleResults.increment_number_constrained_image_parameters,N,Qt 类型/信号槽较多
-Public API,void resetNumberConstrainedTargetParameters(),isis_pybind.BundleResults.reset_number_constrained_target_parameters,N,Qt 类型/信号槽较多
-Public API,void incrementNumberConstrainedTargetParameters(int incrementAmount),isis_pybind.BundleResults.increment_number_constrained_target_parameters,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setNumberLidarRangeConstraints(int numberLidarRangeConstraints),isis_pybind.BundleResults.set_number_lidar_range_constraints,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setNumberUnknownParameters(int numberParameters),isis_pybind.BundleResults.set_number_unknown_parameters,N,Qt 类型/信号槽较多
+Mutation/Configuration,#endif void setNumberRejectedObservations(int numberObservations),isis_pybind.BundleResults.set_number_rejected_observations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setNumberImageObservations(int numberObservations),isis_pybind.BundleResults.set_number_image_observations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setNumberLidarImageObservations(int numberLidarObservations),isis_pybind.BundleResults.set_number_lidar_image_observations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setNumberObservations(int numberObservations),isis_pybind.BundleResults.set_number_observations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setNumberImageParameters(int numberParameters),isis_pybind.BundleResults.set_number_image_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setNumberConstrainedPointParameters(int numberParameters),isis_pybind.BundleResults.set_number_constrained_point_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setNumberConstrainedLidarPointParameters(int numberParameters),isis_pybind.BundleResults.set_number_constrained_lidar_point_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,void resetNumberConstrainedPointParameters(),isis_pybind.BundleResults.reset_number_constrained_point_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,void incrementNumberConstrainedPointParameters(int incrementAmount),isis_pybind.BundleResults.increment_number_constrained_point_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,void resetNumberConstrainedImageParameters(),isis_pybind.BundleResults.reset_number_constrained_image_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,void incrementNumberConstrainedImageParameters(int incrementAmount),isis_pybind.BundleResults.increment_number_constrained_image_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,void resetNumberConstrainedTargetParameters(),isis_pybind.BundleResults.reset_number_constrained_target_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,void incrementNumberConstrainedTargetParameters(int incrementAmount),isis_pybind.BundleResults.increment_number_constrained_target_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setNumberLidarRangeConstraints(int numberLidarRangeConstraints),isis_pybind.BundleResults.set_number_lidar_range_constraints,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setNumberUnknownParameters(int numberParameters),isis_pybind.BundleResults.set_number_unknown_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,void computeDegreesOfFreedom(),isis_pybind.BundleResults.compute_degrees_of_freedom,N,Qt 类型/信号槽较多
 Public API,"void computeSigma0(double dvtpv, BundleSettings::ConvergenceCriteria criteria)",isis_pybind.BundleResults.compute_sigma0,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setDegreesOfFreedom(double degreesOfFreedom),isis_pybind.BundleResults.set_degrees_of_freedom,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setSigma0(double sigma0),isis_pybind.BundleResults.set_sigma0,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setElapsedTime(double time),isis_pybind.BundleResults.set_elapsed_time,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setElapsedTimeErrorProp(double time),isis_pybind.BundleResults.set_elapsed_time_error_prop,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setConverged(bool converged),isis_pybind.BundleResults.set_converged,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setDegreesOfFreedom(double degreesOfFreedom),isis_pybind.BundleResults.set_degrees_of_freedom,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setSigma0(double sigma0),isis_pybind.BundleResults.set_sigma0,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setElapsedTime(double time),isis_pybind.BundleResults.set_elapsed_time,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setElapsedTimeErrorProp(double time),isis_pybind.BundleResults.set_elapsed_time_error_prop,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setConverged(bool converged),isis_pybind.BundleResults.set_converged,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Mutation/Configuration,void setBundleControlPoints(QVector<BundleControlPointQsp> controlPoints),isis_pybind.BundleResults.set_bundle_control_points,N,Qt 类型/信号槽较多
 Mutation/Configuration,void setBundleLidarPoints(QVector<BundleLidarControlPointQsp> lidarPoints),isis_pybind.BundleResults.set_bundle_lidar_points,N,Qt 类型/信号槽较多
 Mutation/Configuration,void setOutputControlNet(ControlNetQsp outNet),isis_pybind.BundleResults.set_output_control_net,N,Qt 类型/信号槽较多
 Mutation/Configuration,void setOutputLidarData(LidarDataQsp outLidarData),isis_pybind.BundleResults.set_output_lidar_data,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setIterations(int iterations),isis_pybind.BundleResults.set_iterations,N,Qt 类型/信号槽较多
-Mutation/Configuration,void setObservations(BundleObservationVector observations),isis_pybind.BundleResults.set_observations,N,Qt 类型/信号槽较多
-Public API,QList<Statistics> rmsImageSampleResiduals() const,isis_pybind.BundleResults.rms_image_sample_residuals,N,Qt 类型/信号槽较多
-Public API,QList<Statistics> rmsImageLineResiduals() const,isis_pybind.BundleResults.rms_image_line_residuals,N,Qt 类型/信号槽较多
-Public API,QList<Statistics> rmsImageResiduals() const,isis_pybind.BundleResults.rms_image_residuals,N,Qt 类型/信号槽较多
-Public API,QList<Statistics> rmsLidarImageSampleResiduals() const,isis_pybind.BundleResults.rms_lidar_image_sample_residuals,N,Qt 类型/信号槽较多
-Public API,QList<Statistics> rmsLidarImageLineResiduals() const,isis_pybind.BundleResults.rms_lidar_image_line_residuals,N,Qt 类型/信号槽较多
-Public API,QList<Statistics> rmsLidarImageResiduals() const,isis_pybind.BundleResults.rms_lidar_image_residuals,N,Qt 类型/信号槽较多
-Public API,QVector<Statistics> rmsImageXSigmas() const,isis_pybind.BundleResults.rms_image_x_sigmas,N,Qt 类型/信号槽较多
-Public API,QVector<Statistics> rmsImageYSigmas() const,isis_pybind.BundleResults.rms_image_y_sigmas,N,Qt 类型/信号槽较多
-Public API,QVector<Statistics> rmsImageZSigmas() const,isis_pybind.BundleResults.rms_image_z_sigmas,N,Qt 类型/信号槽较多
-Public API,QVector<Statistics> rmsImageRASigmas() const,isis_pybind.BundleResults.rms_image_ra_sigmas,N,Qt 类型/信号槽较多
-Public API,QVector<Statistics> rmsImageDECSigmas() const,isis_pybind.BundleResults.rms_image_dec_sigmas,N,Qt 类型/信号槽较多
-Public API,QVector<Statistics> rmsImageTWISTSigmas() const,isis_pybind.BundleResults.rms_image_twist_sigmas,N,Qt 类型/信号槽较多
-Public API,SurfacePoint::CoordinateType coordTypeReports(),isis_pybind.BundleResults.coord_type_reports,N,Qt 类型/信号槽较多
-Public API,Distance minSigmaCoord1Distance() const,isis_pybind.BundleResults.min_sigma_coord1_distance,N,Qt 类型/信号槽较多
-Public API,Distance maxSigmaCoord1Distance() const,isis_pybind.BundleResults.max_sigma_coord1_distance,N,Qt 类型/信号槽较多
-Public API,Distance minSigmaCoord2Distance() const,isis_pybind.BundleResults.min_sigma_coord2_distance,N,Qt 类型/信号槽较多
-Public API,Distance maxSigmaCoord2Distance() const,isis_pybind.BundleResults.max_sigma_coord2_distance,N,Qt 类型/信号槽较多
-Public API,Distance minSigmaCoord3Distance() const,isis_pybind.BundleResults.min_sigma_coord3_distance,N,Qt 类型/信号槽较多
-Public API,Distance maxSigmaCoord3Distance() const,isis_pybind.BundleResults.max_sigma_coord3_distance,N,Qt 类型/信号槽较多
-Public API,QString maxSigmaCoord1PointId() const,isis_pybind.BundleResults.max_sigma_coord1_point_id,N,Qt 类型/信号槽较多
-Public API,QString minSigmaCoord1PointId() const,isis_pybind.BundleResults.min_sigma_coord1_point_id,N,Qt 类型/信号槽较多
-Public API,QString minSigmaCoord2PointId() const,isis_pybind.BundleResults.min_sigma_coord2_point_id,N,Qt 类型/信号槽较多
-Public API,QString maxSigmaCoord2PointId() const,isis_pybind.BundleResults.max_sigma_coord2_point_id,N,Qt 类型/信号槽较多
-Public API,QString minSigmaCoord3PointId() const,isis_pybind.BundleResults.min_sigma_coord3_point_id,N,Qt 类型/信号槽较多
-Public API,QString maxSigmaCoord3PointId() const,isis_pybind.BundleResults.max_sigma_coord3_point_id,N,Qt 类型/信号槽较多
-Public API,double sigmaCoord1StatisticsRms() const,isis_pybind.BundleResults.sigma_coord1_statistics_rms,N,Qt 类型/信号槽较多
-Public API,double sigmaCoord2StatisticsRms() const,isis_pybind.BundleResults.sigma_coord2_statistics_rms,N,Qt 类型/信号槽较多
-Public API,double sigmaCoord3StatisticsRms() const,isis_pybind.BundleResults.sigma_coord3_statistics_rms,N,Qt 类型/信号槽较多
-Public API,double rmsRx() const,isis_pybind.BundleResults.rms_rx,N,Qt 类型/信号槽较多
-Public API,double rmsRy() const,isis_pybind.BundleResults.rms_ry,N,Qt 类型/信号槽较多
-Public API,double rmsRxy() const,isis_pybind.BundleResults.rms_rxy,N,Qt 类型/信号槽较多
-Public API,double rejectionLimit() const,isis_pybind.BundleResults.rejection_limit,N,Qt 类型/信号槽较多
-Public API,int numberRejectedObservations() const,isis_pybind.BundleResults.number_rejected_observations,N,Qt 类型/信号槽较多
-Public API,int numberObservations() const,isis_pybind.BundleResults.number_observations,N,Qt 类型/信号槽较多
-Public API,int numberImageObservations() const,isis_pybind.BundleResults.number_image_observations,N,Qt 类型/信号槽较多
-Public API,int numberLidarImageObservations() const,isis_pybind.BundleResults.number_lidar_image_observations,N,Qt 类型/信号槽较多
-Public API,int numberImageParameters() const,isis_pybind.BundleResults.number_image_parameters,N,Qt 类型/信号槽较多
-Public API,int numberConstrainedPointParameters() const,isis_pybind.BundleResults.number_constrained_point_parameters,N,Qt 类型/信号槽较多
-Public API,int numberConstrainedImageParameters() const,isis_pybind.BundleResults.number_constrained_image_parameters,N,Qt 类型/信号槽较多
-Public API,int numberConstrainedTargetParameters() const,isis_pybind.BundleResults.number_constrained_target_parameters,N,Qt 类型/信号槽较多
-Public API,int numberLidarRangeConstraintEquations() const,isis_pybind.BundleResults.number_lidar_range_constraint_equations,N,Qt 类型/信号槽较多
-Public API,int numberUnknownParameters() const,isis_pybind.BundleResults.number_unknown_parameters,N,Qt 类型/信号槽较多
-Public API,int degreesOfFreedom() const,isis_pybind.BundleResults.degrees_of_freedom,N,Qt 类型/信号槽较多
-Public API,double sigma0() const,isis_pybind.BundleResults.sigma0,N,Qt 类型/信号槽较多
-Public API,double elapsedTime() const,isis_pybind.BundleResults.elapsed_time,N,Qt 类型/信号槽较多
-Public API,double elapsedTimeErrorProp() const,isis_pybind.BundleResults.elapsed_time_error_prop,N,Qt 类型/信号槽较多
-Public API,bool converged() const,isis_pybind.BundleResults.converged,N,Qt 类型/信号槽较多
+Mutation/Configuration,void setIterations(int iterations),isis_pybind.BundleResults.set_iterations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Mutation/Configuration,void setObservations(BundleObservationVector observations),isis_pybind.BundleResults.set_observations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QList<Statistics> rmsImageSampleResiduals() const,isis_pybind.BundleResults.rms_image_sample_residuals,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QList<Statistics> rmsImageLineResiduals() const,isis_pybind.BundleResults.rms_image_line_residuals,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QList<Statistics> rmsImageResiduals() const,isis_pybind.BundleResults.rms_image_residuals,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QList<Statistics> rmsLidarImageSampleResiduals() const,isis_pybind.BundleResults.rms_lidar_image_sample_residuals,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QList<Statistics> rmsLidarImageLineResiduals() const,isis_pybind.BundleResults.rms_lidar_image_line_residuals,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QList<Statistics> rmsLidarImageResiduals() const,isis_pybind.BundleResults.rms_lidar_image_residuals,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QVector<Statistics> rmsImageXSigmas() const,isis_pybind.BundleResults.rms_image_x_sigmas,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QVector<Statistics> rmsImageYSigmas() const,isis_pybind.BundleResults.rms_image_y_sigmas,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QVector<Statistics> rmsImageZSigmas() const,isis_pybind.BundleResults.rms_image_z_sigmas,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QVector<Statistics> rmsImageRASigmas() const,isis_pybind.BundleResults.rms_image_ra_sigmas,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QVector<Statistics> rmsImageDECSigmas() const,isis_pybind.BundleResults.rms_image_dec_sigmas,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QVector<Statistics> rmsImageTWISTSigmas() const,isis_pybind.BundleResults.rms_image_twist_sigmas,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,SurfacePoint::CoordinateType coordTypeReports(),isis_pybind.BundleResults.coord_type_reports,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,Distance minSigmaCoord1Distance() const,isis_pybind.BundleResults.min_sigma_coord1_distance,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,Distance maxSigmaCoord1Distance() const,isis_pybind.BundleResults.max_sigma_coord1_distance,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,Distance minSigmaCoord2Distance() const,isis_pybind.BundleResults.min_sigma_coord2_distance,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,Distance maxSigmaCoord2Distance() const,isis_pybind.BundleResults.max_sigma_coord2_distance,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,Distance minSigmaCoord3Distance() const,isis_pybind.BundleResults.min_sigma_coord3_distance,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,Distance maxSigmaCoord3Distance() const,isis_pybind.BundleResults.max_sigma_coord3_distance,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString maxSigmaCoord1PointId() const,isis_pybind.BundleResults.max_sigma_coord1_point_id,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString minSigmaCoord1PointId() const,isis_pybind.BundleResults.min_sigma_coord1_point_id,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString minSigmaCoord2PointId() const,isis_pybind.BundleResults.min_sigma_coord2_point_id,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString maxSigmaCoord2PointId() const,isis_pybind.BundleResults.max_sigma_coord2_point_id,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString minSigmaCoord3PointId() const,isis_pybind.BundleResults.min_sigma_coord3_point_id,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,QString maxSigmaCoord3PointId() const,isis_pybind.BundleResults.max_sigma_coord3_point_id,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double sigmaCoord1StatisticsRms() const,isis_pybind.BundleResults.sigma_coord1_statistics_rms,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double sigmaCoord2StatisticsRms() const,isis_pybind.BundleResults.sigma_coord2_statistics_rms,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double sigmaCoord3StatisticsRms() const,isis_pybind.BundleResults.sigma_coord3_statistics_rms,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double rmsRx() const,isis_pybind.BundleResults.rms_rx,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double rmsRy() const,isis_pybind.BundleResults.rms_ry,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double rmsRxy() const,isis_pybind.BundleResults.rms_rxy,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double rejectionLimit() const,isis_pybind.BundleResults.rejection_limit,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberRejectedObservations() const,isis_pybind.BundleResults.number_rejected_observations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberObservations() const,isis_pybind.BundleResults.number_observations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberImageObservations() const,isis_pybind.BundleResults.number_image_observations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberLidarImageObservations() const,isis_pybind.BundleResults.number_lidar_image_observations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberImageParameters() const,isis_pybind.BundleResults.number_image_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberConstrainedPointParameters() const,isis_pybind.BundleResults.number_constrained_point_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberConstrainedImageParameters() const,isis_pybind.BundleResults.number_constrained_image_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberConstrainedTargetParameters() const,isis_pybind.BundleResults.number_constrained_target_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberLidarRangeConstraintEquations() const,isis_pybind.BundleResults.number_lidar_range_constraint_equations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberUnknownParameters() const,isis_pybind.BundleResults.number_unknown_parameters,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int degreesOfFreedom() const,isis_pybind.BundleResults.degrees_of_freedom,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double sigma0() const,isis_pybind.BundleResults.sigma0,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double elapsedTime() const,isis_pybind.BundleResults.elapsed_time,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,double elapsedTimeErrorProp() const,isis_pybind.BundleResults.elapsed_time_error_prop,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,bool converged() const,isis_pybind.BundleResults.converged,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,QVector<BundleControlPointQsp> &bundleControlPoints(),isis_pybind.BundleResults.bundle_control_points,N,Qt 类型/信号槽较多
 Public API,QVector<BundleLidarControlPointQsp> &bundleLidarControlPoints(),isis_pybind.BundleResults.bundle_lidar_control_points,N,Qt 类型/信号槽较多
 Public API,ControlNetQsp outputControlNet() const,isis_pybind.BundleResults.output_control_net,N,Qt 类型/信号槽较多
 Public API,LidarDataQsp outputLidarData() const,isis_pybind.BundleResults.output_lidar_data,N,Qt 类型/信号槽较多
-Public API,int iterations() const,isis_pybind.BundleResults.iterations,N,Qt 类型/信号槽较多
-Public API,const BundleObservationVector &observations() const,isis_pybind.BundleResults.observations,N,Qt 类型/信号槽较多
-Public API,int numberMaximumLikelihoodModels() const,isis_pybind.BundleResults.number_maximum_likelihood_models,N,Qt 类型/信号槽较多
-Public API,int maximumLikelihoodModelIndex() const,isis_pybind.BundleResults.maximum_likelihood_model_index,N,Qt 类型/信号槽较多
+Public API,int iterations() const,isis_pybind.BundleResults.iterations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,const BundleObservationVector &observations() const,isis_pybind.BundleResults.observations,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int numberMaximumLikelihoodModels() const,isis_pybind.BundleResults.number_maximum_likelihood_models,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
+Public API,int maximumLikelihoodModelIndex() const,isis_pybind.BundleResults.maximum_likelihood_model_index,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,StatCumProbDistDynCalc cumulativeProbabilityDistribution() const,isis_pybind.BundleResults.cumulative_probability_distribution,N,Qt 类型/信号槽较多
 Public API,StatCumProbDistDynCalc residualsCumulativeProbabilityDistribution() const,isis_pybind.BundleResults.residuals_cumulative_probability_distribution,N,Qt 类型/信号槽较多
-Public API,double maximumLikelihoodMedianR2Residuals() const,isis_pybind.BundleResults.maximum_likelihood_median_r2_residuals,N,Qt 类型/信号槽较多
+Public API,double maximumLikelihoodMedianR2Residuals() const,isis_pybind.BundleResults.maximum_likelihood_median_r2_residuals,Y,2026-04-13 台账同步；当前 Python 绑定可用（src/control/bind_bundle_advanced.cpp）
 Public API,MaximumLikelihoodWFunctions maximumLikelihoodModelWFunc(int modelIndex) const,isis_pybind.BundleResults.maximum_likelihood_model_w_func,N,Qt 类型/信号槽较多
 Public API,double maximumLikelihoodModelQuantile(int modelIndex) const,isis_pybind.BundleResults.maximum_likelihood_model_quantile,N,Qt 类型/信号槽较多
 Public API,"QList< QPair< MaximumLikelihoodWFunctions, double > > maximumLikelihoodModels() const",isis_pybind.BundleResults.maximum_likelihood_models,N,Qt 类型/信号槽较多

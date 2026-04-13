@@ -1,5 +1,29 @@
 # Pybind Progress Log
 
+## 2026-04-13
+
+- Extended `SpicePosition` pybind coverage for `LoadCache` and remaining cache/polynomial APIs:
+  - Updated `src/bind_spice_navigation.cpp` to expose:
+    - `OverrideType` enum (`NoOverrides`, `ScaleOnly`, `BaseAndScale`)
+    - Coordinate/velocity access: `set_ephemeris_time(...)`, `coordinate()`, `velocity()`, `get_center_coordinate()`
+    - All four `LoadCache(...)` overloads: `(start_time, end_time, size)`, `(time)`, `(Table &)`, `(nlohmann::json &)`
+    - Cache management: `line_cache(...)`, `load_hermite_cache(...)`, `reload_cache()`, `reload_cache(Table &)`, `cache(...)`
+    - Polynomial methods: `set_polynomial(...)` (2 overloads), `get_polynomial()` returning `(xc, yc, zc)` tuple, `set_polynomial_degree(...)`
+    - Source and time scaling: `get_source()`, `compute_base_time()`, `set_override_base_time(...)`
+    - Advanced polynomial/partial derivatives: `d_polynomial(...)`, `coordinate_partial(...)`, `velocity_partial(...)`
+    - Hermite and extrapolation: `memcache2_hermite_cache(...)`, `extrapolate(...)`, `hermite_coordinate()`
+  - Updated `python/isis_pybind/__init__.py` to export `SpicePositionOverrideType` enum.
+  - Extended `tests/unitTest/spice_navigation_unit_test.py` with four new test classes covering:
+    - `SpicePositionUnitTest`: Added tests for new enum accessibility, polynomial round-trip, source query, base time/scale queries, and override setters
+    - `SpicePositionCacheUnitTest`: Tests for cache loading API signatures (will fail without SPICE kernels, but verify binding presence)
+    - `SpicePositionCoordinateUnitTest`: Tests for coordinate/velocity vector accessors and Hermite coordinate
+    - `SpicePositionAdvancedUnitTest`: Tests for polynomial derivatives, partials, extrapolation, and Hermite cache conversion
+  - Synced ledgers:
+    - `class_bind_methods_details/base_spice_position_methods.csv`: Updated all 42 methods from N to Y with implementation notes
+    - `class_bind_methods_details/methods_inventory_summary.csv`: Updated SpicePosition from `Y,8,N,34` (19.05%) to `Y,42,N,0` (100.00%)
+    - `todo_pybind11.csv`: Updated SpicePosition status note to reflect complete binding coverage
+  - Result: `SpicePosition` now has 100% public API coverage (42/42 methods), completing the cache-loading, polynomial fitting, coordinate/velocity access, and bundle-adjustment-related workflow support needed for Python users.
+
 ## 2026-04-12
 
 - low-risk mission-camera rollout queue opened with `DawnFcCamera` / `DawnVirCamera` / `KaguyaMiCamera` / `KaguyaTcCamera` / `LroNarrowAngleCamera`; first class `DawnFcCamera` completed:

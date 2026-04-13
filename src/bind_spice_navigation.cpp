@@ -59,6 +59,12 @@ void bind_spice_navigation(py::module_ &m)
       .value("WRT_Z", Isis::SpicePosition::WRT_Z)
       .export_values();
 
+  py::enum_<Isis::SpicePosition::OverrideType>(m, "SpicePositionOverrideType")
+      .value("NoOverrides", Isis::SpicePosition::NoOverrides)
+      .value("ScaleOnly", Isis::SpicePosition::ScaleOnly)
+      .value("BaseAndScale", Isis::SpicePosition::BaseAndScale)
+      .export_values();
+
   // -----------------------------------------------------------------------
   // SpicePosition
   // -----------------------------------------------------------------------
@@ -108,6 +114,133 @@ void bind_spice_navigation(py::module_ &m)
       .def("get_time_scale",
            [](Isis::SpicePosition &self) { return self.GetTimeScale(); },
            "Return the time scale used to normalize polynomial coefficients.")
+      // Coordinate and velocity access
+      .def("set_ephemeris_time",
+           [](Isis::SpicePosition &self, double et) -> std::vector<double> {
+               return self.SetEphemerisTime(et);
+           },
+           py::arg("et"),
+           "Set ephemeris time and return the J2000 position vector.")
+      .def("coordinate",
+           [](Isis::SpicePosition &self) -> std::vector<double> {
+               return self.Coordinate();
+           },
+           "Return the current J2000 position vector [x, y, z] in km.")
+      .def("velocity",
+           [](Isis::SpicePosition &self) -> std::vector<double> {
+               return self.Velocity();
+           },
+           "Return the current J2000 velocity vector [vx, vy, vz] in km/s.")
+      .def("get_center_coordinate",
+           [](Isis::SpicePosition &self) -> std::vector<double> {
+               return self.GetCenterCoordinate();
+           },
+           "Return the J2000 center coordinate.")
+      // Cache loading methods
+      .def("load_cache",
+           py::overload_cast<double, double, int>(&Isis::SpicePosition::LoadCache),
+           py::arg("start_time"), py::arg("end_time"), py::arg("size"),
+           "Load position cache for time range [start_time, end_time] with size entries.")
+      .def("load_cache",
+           py::overload_cast<double>(&Isis::SpicePosition::LoadCache),
+           py::arg("time"),
+           "Load position cache for a single time.")
+      .def("load_cache",
+           py::overload_cast<Isis::Table&>(&Isis::SpicePosition::LoadCache),
+           py::arg("table"),
+           "Load position cache from an ISIS Table.")
+      .def("load_cache",
+           py::overload_cast<nlohmann::json&>(&Isis::SpicePosition::LoadCache),
+           py::arg("isd"),
+           "Load position cache from a JSON ISD (Image Support Data).")
+      .def("line_cache",
+           [](Isis::SpicePosition &self, const std::string &table_name) -> Isis::Table {
+               return self.LineCache(stdStringToQString(table_name));
+           },
+           py::arg("table_name"),
+           "Return a Table with linear position cache.")
+      .def("load_hermite_cache",
+           [](Isis::SpicePosition &self, const std::string &table_name) -> Isis::Table {
+               return self.LoadHermiteCache(stdStringToQString(table_name));
+           },
+           py::arg("table_name"),
+           "Load and return a Hermite spline cache as a Table.")
+      .def("reload_cache",
+           py::overload_cast<>(&Isis::SpicePosition::ReloadCache),
+           "Reload position cache from current state.")
+      .def("reload_cache",
+           py::overload_cast<Isis::Table&>(&Isis::SpicePosition::ReloadCache),
+           py::arg("table"),
+           "Reload position cache from an ISIS Table.")
+      .def("cache",
+           [](Isis::SpicePosition &self, const std::string &table_name) -> Isis::Table {
+               return self.Cache(stdStringToQString(table_name));
+           },
+           py::arg("table_name"),
+           "Return the current position cache as a Table.")
+      // Polynomial methods
+      .def("set_polynomial",
+           py::overload_cast<const Isis::SpicePosition::Source>(&Isis::SpicePosition::SetPolynomial),
+           py::arg("type") = Isis::SpicePosition::PolyFunction,
+           "Fit polynomial to cached positions using specified source type.")
+      .def("set_polynomial",
+           [](Isis::SpicePosition &self,
+              const std::vector<double> &xc,
+              const std::vector<double> &yc,
+              const std::vector<double> &zc,
+              Isis::SpicePosition::Source type) {
+               self.SetPolynomial(xc, yc, zc, type);
+           },
+           py::arg("xc"), py::arg("yc"), py::arg("zc"),
+           py::arg("type") = Isis::SpicePosition::PolyFunction,
+           "Set polynomial coefficients for X, Y, Z coordinates.")
+      .def("get_polynomial",
+           [](Isis::SpicePosition &self) -> py::tuple {
+               std::vector<double> xc, yc, zc;
+               self.GetPolynomial(xc, yc, zc);
+               return py::make_tuple(xc, yc, zc);
+           },
+           "Return polynomial coefficients as (xc, yc, zc) tuple.")
+      .def("set_polynomial_degree",
+           &Isis::SpicePosition::SetPolynomialDegree,
+           py::arg("degree"),
+           "Set the degree of the polynomial fit.")
+      .def("get_source",
+           [](Isis::SpicePosition &self) { return self.GetSource(); },
+           "Return the current source type (Spice, Memcache, HermiteCache, etc.).")
+      // Base time and scaling methods
+      .def("compute_base_time",
+           &Isis::SpicePosition::ComputeBaseTime,
+           "Compute the base time from cached positions.")
+      .def("set_override_base_time",
+           &Isis::SpicePosition::SetOverrideBaseTime,
+           py::arg("base_time"), py::arg("time_scale"),
+           "Override the base time and time scale for polynomial fits.")
+      // Advanced polynomial and partial derivative methods
+      .def("d_polynomial",
+           &Isis::SpicePosition::DPolynomial,
+           py::arg("coeff_index"),
+           "Return the derivative of the polynomial at coefficient index.")
+      .def("coordinate_partial",
+           &Isis::SpicePosition::CoordinatePartial,
+           py::arg("partial_var"), py::arg("coeff_index"),
+           "Return coordinate partial derivative with respect to given variable.")
+      .def("velocity_partial",
+           &Isis::SpicePosition::VelocityPartial,
+           py::arg("partial_var"), py::arg("coeff_index"),
+           "Return velocity partial derivative with respect to given variable.")
+      // Hermite and extrapolation methods
+      .def("memcache2_hermite_cache",
+           &Isis::SpicePosition::Memcache2HermiteCache,
+           py::arg("tolerance"),
+           "Convert memory cache to Hermite cache with given tolerance.")
+      .def("extrapolate",
+           &Isis::SpicePosition::Extrapolate,
+           py::arg("time_et"),
+           "Extrapolate position to given ephemeris time.")
+      .def("hermite_coordinate",
+           &Isis::SpicePosition::HermiteCoordinate,
+           "Return Hermite interpolated coordinate.")
       .def("__repr__", [](const Isis::SpicePosition &) {
            return std::string("SpicePosition()");
       });

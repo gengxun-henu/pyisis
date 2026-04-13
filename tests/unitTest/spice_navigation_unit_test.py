@@ -9,6 +9,8 @@ Updated: 2026-04-10  Geng Xun added focused unit tests for SpicePosition, SpiceR
          and cached-state queries that do not require NAIF kernel data.
 Updated: 2026-04-13  Geng Xun extended SpicePosition tests for LoadCache, polynomial,
          coordinate/velocity, and cache query APIs newly exposed in extended pybind coverage.
+Updated: 2026-04-13  Geng Xun corrected SpicePosition lifecycle expectations so
+         polynomial/base-time and kernel-dependent assertions match upstream ISIS behavior.
 """
 import math
 import unittest
@@ -16,47 +18,65 @@ import unittest
 from _unit_test_support import ip
 
 
-class SpicePositionUnitTest(unittest.TestCase):
-    """Focused unit tests for SpicePosition binding. Added: 2026-04-10."""
+class SpicePositionTestMixin:
+    """Helpers for constructing SpicePosition instances in valid lifecycle states."""
 
-    # Earth (NAIF 399) observed from MRO (-94) is a typical test pair.
     TARGET_CODE = 399      # Earth
     OBSERVER_CODE = -94    # MRO spacecraft
 
+    def make_spice_position(self):
+        return ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+
+    def make_polynomial_spice_position(self, degree=2, base_time=1000.0, time_scale=100.0):
+        sp = self.make_spice_position()
+        sp.set_polynomial_degree(degree)
+        sp.set_override_base_time(base_time, time_scale)
+
+        coeff_count = degree + 1
+        xc = [float(i + 1) for i in range(coeff_count)]
+        yc = [float(i + 4) for i in range(coeff_count)]
+        zc = [float(i + 7) for i in range(coeff_count)]
+        sp.set_polynomial(xc, yc, zc)
+        return sp, xc, yc, zc
+
+
+class SpicePositionUnitTest(SpicePositionTestMixin, unittest.TestCase):
+    """Focused unit tests for SpicePosition binding. Added: 2026-04-10."""
+
     def test_construct(self):
         """SpicePosition(target, observer) constructs without error."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         self.assertIsNotNone(sp)
 
     def test_get_time_bias_default(self):
         """get_time_bias() returns 0.0 for a newly constructed SpicePosition."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         self.assertAlmostEqual(sp.get_time_bias(), 0.0)
 
     def test_set_get_time_bias(self):
         """set_time_bias()/get_time_bias() round-trip correctly."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         sp.set_time_bias(2.5)
         self.assertAlmostEqual(sp.get_time_bias(), 2.5)
 
     def test_is_cached_initial_false(self):
         """is_cached() returns False for a newly constructed SpicePosition."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         self.assertFalse(sp.is_cached())
 
     def test_cache_size_initial_zero(self):
         """cache_size() returns 0 for a newly constructed SpicePosition."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         self.assertEqual(sp.cache_size(), 0)
 
     def test_has_velocity_initial_false(self):
         """has_velocity() returns False before loading kernel data."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         self.assertFalse(sp.has_velocity())
 
     def test_get_aberration_correction_default(self):
         """get_aberration_correction() returns 'LT+S' by default."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         corr = sp.get_aberration_correction()
         self.assertIsInstance(corr, str)
         # The default correction is LT+S (with light time and stellar aberration)
@@ -64,7 +84,7 @@ class SpicePositionUnitTest(unittest.TestCase):
 
     def test_set_get_aberration_correction(self):
         """set_aberration_correction()/get_aberration_correction() round-trip."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         sp.set_aberration_correction("NONE")
         self.assertEqual(sp.get_aberration_correction(), "NONE")
 
@@ -84,7 +104,7 @@ class SpicePositionUnitTest(unittest.TestCase):
 
     def test_repr(self):
         """__repr__ contains 'SpicePosition'."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         self.assertIn("SpicePosition", repr(sp))
 
     def test_override_type_enum_accessible(self):
@@ -95,38 +115,45 @@ class SpicePositionUnitTest(unittest.TestCase):
 
     def test_get_source_initial(self):
         """get_source() returns Spice for newly constructed SpicePosition."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         src = sp.get_source()
         self.assertEqual(src, ip.SpicePositionSource.Spice)
 
     def test_get_base_time(self):
         """get_base_time() is callable and returns a numeric value."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         bt = sp.get_base_time()
         self.assertIsInstance(bt, (int, float))
 
     def test_get_time_scale(self):
         """get_time_scale() is callable and returns a numeric value."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         ts = sp.get_time_scale()
         self.assertIsInstance(ts, (int, float))
 
     def test_set_polynomial_degree(self):
         """set_polynomial_degree() executes without error."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         sp.set_polynomial_degree(3)  # just confirm it does not raise
 
     def test_set_override_base_time(self):
-        """set_override_base_time(base, scale) executes without error."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        """Override values are applied once polynomial/base-time state is computed."""
+        sp = self.make_spice_position()
         sp.set_override_base_time(1000.0, 100.0)
-        # Verify override took effect
+
+        # The override is stored internally but base/scale are not recomputed
+        # until a cache or polynomial path needs them.
+        self.assertAlmostEqual(sp.get_base_time(), 0.0)
+        self.assertAlmostEqual(sp.get_time_scale(), 1.0)
+
+        sp.set_polynomial_degree(2)
+        sp.set_polynomial([1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0])
         self.assertAlmostEqual(sp.get_base_time(), 1000.0)
         self.assertAlmostEqual(sp.get_time_scale(), 100.0)
 
     def test_get_polynomial_empty(self):
         """get_polynomial() returns three empty vectors before polynomial is set."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         xc, yc, zc = sp.get_polynomial()
         self.assertIsInstance(xc, list)
         self.assertIsInstance(yc, list)
@@ -137,12 +164,8 @@ class SpicePositionUnitTest(unittest.TestCase):
         self.assertEqual(len(zc), 0)
 
     def test_set_polynomial_with_coefficients(self):
-        """set_polynomial(xc, yc, zc) stores coefficients."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
-        xc = [1.0, 2.0, 3.0]
-        yc = [4.0, 5.0, 6.0]
-        zc = [7.0, 8.0, 9.0]
-        sp.set_polynomial(xc, yc, zc)
+        """set_polynomial(xc, yc, zc) stores coefficients when degree/base-time are valid."""
+        sp, xc, yc, zc = self.make_polynomial_spice_position()
         # Verify coefficients round-trip
         xc_ret, yc_ret, zc_ret = sp.get_polynomial()
         self.assertEqual(len(xc_ret), 3)
@@ -154,27 +177,18 @@ class SpicePositionUnitTest(unittest.TestCase):
             self.assertAlmostEqual(zc_ret[i], zc[i])
 
     def test_compute_base_time(self):
-        """compute_base_time() executes without error when cache exists."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
-        # Without a cache, compute_base_time may not do much, but should not crash
-        try:
+        """compute_base_time() requires cached times and raises on an empty SpicePosition."""
+        sp = self.make_spice_position()
+        with self.assertRaises(IndexError):
             sp.compute_base_time()
-        except Exception as e:
-            # It's acceptable if it throws because no cache exists
-            # Just verify it's callable
-            self.assertIn("cache", str(e).lower(),
-                         "Unexpected error from compute_base_time")
 
 
-class SpicePositionCacheUnitTest(unittest.TestCase):
+class SpicePositionCacheUnitTest(SpicePositionTestMixin, unittest.TestCase):
     """Unit tests for SpicePosition cache loading APIs. Added: 2026-04-13."""
-
-    TARGET_CODE = 399      # Earth
-    OBSERVER_CODE = -94    # MRO spacecraft
 
     def test_load_cache_three_arg_callable(self):
         """load_cache(start, end, size) is callable."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         # Note: Without loaded SPICE kernels, this will likely fail.
         # We're just testing that the binding signature is correct.
         try:
@@ -185,7 +199,7 @@ class SpicePositionCacheUnitTest(unittest.TestCase):
 
     def test_load_cache_single_time_callable(self):
         """load_cache(time) is callable."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         try:
             sp.load_cache(0.0)
         except Exception as e:
@@ -194,7 +208,7 @@ class SpicePositionCacheUnitTest(unittest.TestCase):
 
     def test_reload_cache_callable(self):
         """reload_cache() is callable."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         try:
             sp.reload_cache()
         except Exception as e:
@@ -202,37 +216,34 @@ class SpicePositionCacheUnitTest(unittest.TestCase):
             self.assertIsNotNone(e)
 
 
-class SpicePositionCoordinateUnitTest(unittest.TestCase):
+class SpicePositionCoordinateUnitTest(SpicePositionTestMixin, unittest.TestCase):
     """Unit tests for SpicePosition coordinate/velocity APIs. Added: 2026-04-13."""
-
-    TARGET_CODE = 399      # Earth
-    OBSERVER_CODE = -94    # MRO spacecraft
 
     def test_coordinate_callable(self):
         """coordinate() returns a vector."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         # Before SetEphemerisTime, coordinate should be initialized
         coord = sp.coordinate()
         self.assertIsInstance(coord, list)
         self.assertEqual(len(coord), 3)
 
     def test_velocity_callable(self):
-        """velocity() returns a vector."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
-        vel = sp.velocity()
-        self.assertIsInstance(vel, list)
-        self.assertEqual(len(vel), 3)
+        """velocity() raises until a source with velocity data has been loaded."""
+        sp = self.make_spice_position()
+        with self.assertRaises(Exception) as ctx:
+            sp.velocity()
+        self.assertIn("No velocity vector available", str(ctx.exception))
 
     def test_get_center_coordinate_callable(self):
-        """get_center_coordinate() returns a vector."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
-        center = sp.get_center_coordinate()
-        self.assertIsInstance(center, list)
-        self.assertEqual(len(center), 3)
+        """get_center_coordinate() requires SPK/cache state and fails cleanly without it."""
+        sp = self.make_spice_position()
+        with self.assertRaises(Exception) as ctx:
+            sp.get_center_coordinate()
+        self.assertIn("SPICE(NOLOADEDFILES)", str(ctx.exception))
 
     def test_hermite_coordinate_callable(self):
         """hermite_coordinate() is callable."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         try:
             herm = sp.hermite_coordinate()
             self.assertIsInstance(herm, list)
@@ -241,57 +252,39 @@ class SpicePositionCoordinateUnitTest(unittest.TestCase):
             self.assertIsNotNone(e)
 
 
-class SpicePositionAdvancedUnitTest(unittest.TestCase):
+class SpicePositionAdvancedUnitTest(SpicePositionTestMixin, unittest.TestCase):
     """Unit tests for SpicePosition advanced polynomial/partial APIs. Added: 2026-04-13."""
-
-    TARGET_CODE = 399
-    OBSERVER_CODE = -94
 
     def test_d_polynomial_callable(self):
         """d_polynomial(index) is callable."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
-        # Set polynomial first
-        sp.set_polynomial([1.0, 2.0], [3.0, 4.0], [5.0, 6.0])
-        try:
-            deriv = sp.d_polynomial(0)
-            self.assertIsInstance(deriv, (int, float))
-        except Exception as e:
-            # May fail depending on internal state
-            self.assertIsNotNone(e)
+        sp, _, _, _ = self.make_polynomial_spice_position()
+        deriv = sp.d_polynomial(0)
+        self.assertIsInstance(deriv, (int, float))
 
     def test_coordinate_partial_callable(self):
         """coordinate_partial(var, index) is callable."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
-        sp.set_polynomial([1.0, 2.0], [3.0, 4.0], [5.0, 6.0])
-        try:
-            partial = sp.coordinate_partial(ip.SpicePositionPartialType.WRT_X, 0)
-            self.assertIsInstance(partial, list)
-        except Exception as e:
-            self.assertIsNotNone(e)
+        sp, _, _, _ = self.make_polynomial_spice_position()
+        partial = sp.coordinate_partial(ip.SpicePositionPartialType.WRT_X, 0)
+        self.assertIsInstance(partial, list)
+        self.assertEqual(len(partial), 3)
 
     def test_velocity_partial_callable(self):
         """velocity_partial(var, index) is callable."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
-        sp.set_polynomial([1.0, 2.0], [3.0, 4.0], [5.0, 6.0])
-        try:
-            partial = sp.velocity_partial(ip.SpicePositionPartialType.WRT_Y, 0)
-            self.assertIsInstance(partial, list)
-        except Exception as e:
-            self.assertIsNotNone(e)
+        sp, _, _, _ = self.make_polynomial_spice_position()
+        partial = sp.velocity_partial(ip.SpicePositionPartialType.WRT_Y, 1)
+        self.assertIsInstance(partial, list)
+        self.assertEqual(len(partial), 3)
 
     def test_extrapolate_callable(self):
         """extrapolate(time) is callable."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
-        sp.set_polynomial([1.0, 2.0], [3.0, 4.0], [5.0, 6.0])
-        try:
-            extrap = sp.extrapolate(100.0)
-            self.assertIsInstance(extrap, list)
-        except Exception as e:
-            self.assertIsNotNone(e)
+        sp, _, _, _ = self.make_polynomial_spice_position()
+        extrap = sp.extrapolate(1100.0)
+        self.assertIsInstance(extrap, list)
+        self.assertEqual(len(extrap), 3)
 
     def test_memcache2_hermite_cache_callable(self):
         """memcache2_hermite_cache(tolerance) is callable."""
-        sp = ip.SpicePosition(self.TARGET_CODE, self.OBSERVER_CODE)
+        sp = self.make_spice_position()
         try:
             sp.memcache2_hermite_cache(1e-6)
         except Exception as e:

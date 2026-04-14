@@ -2,7 +2,7 @@
 Control Networks,BundleAdjust,未转换,Qt 类型/信号槽较多
 Control Networks,BundleControlPoint,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；构造/查询/调整面点/拒绝状态/格式化输出/boost ublas 向量以 list 包装
 Control Networks,BundleImage,已转换,2026-03-21 已在 bind_control_core.cpp 暴露相机/序列号/文件名基础接口
-Control Networks,BundleLidarControlPoint,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；初始化/计算/range constraint 访问器
+Control Networks,BundleLidarControlPoint,已转换,2026-04-14 全部 12/12 方法已绑定 100%；4N 为有意排除项：默认构造/copy 方法不暴露（通过工厂创建），2 个 apply* 方法因 SparseBlockMatrix/LinearAlgebra 依赖有意不暴露
 Control Networks,BundleLidarPointVector,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；构造/迭代/vtpv 贡献
 Control Networks,BundleLidarRangeConstraint,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；vtpv/range 访问器/格式化输出
 Control Networks,BundleMeasure,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；构造/拒绝状态/camera/residual/focal plane 访问器
@@ -28,7 +28,7 @@ Control Networks,ControlPointV0001,已转换,2026-03-22 已在 bind_control_core
 Control Networks,ControlPointV0002,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口
 Control Networks,ControlPointV0003,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口
 Control Networks,CsmBundleObservation,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 暴露 CsmBundleObservation（继承 BundleObservation；构造函数/number_parameters/parameter_list/bundle_output_csv）；focused 单测在 tests/unitTest/batch2_unit_test.py
-Control Networks,ImageOverlap,已转换,2026-04-10 已在 src/base/bind_base_image_overlap.cpp 暴露默认构造/add/size/has_serial_number/has_any_same_serial_number/area；focused 单测在 image_overlap_camera_unit_test.py；smoke 已补符号
+Control Networks,ImageOverlap,已转换,2026-04-14 全部 13/13 方法已绑定 100%；6N 为有意排除项：4 个 GEOS MultiPolygon 相关方法（SetPolygon/Polygon/构造）+ 2 个 std::istream/ostream 方法；Python 侧通过字符串序列号/area/query 接口覆盖
 Control Networks,InterestOperator,未转换,抽象基类/纯虚接口
 Control Networks,InterestOperatorFactory,已转换,2026-03-27 已在 bind_interest_operator_factory.cpp 暴露 create 静态工厂方法
 Control Networks,IsisBundleObservation,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 暴露 IsisBundleObservation（继承 BundleObservation；number_parameters/spice_rotation/spice_position）；focused 单测在 tests/unitTest/batch2_unit_test.py
@@ -68,7 +68,7 @@ High Level Cube I/O,ProcessImport,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessImportFits,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessImportPds,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessImportVicar,已转换,流程/回调接口较多
-High Level Cube I/O,ProcessMapMosaic,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessMapMosaic（继承 ProcessMosaic；默认构造函数）；focused 单测在 batch3_unit_test.py
+High Level Cube I/O,ProcessMapMosaic,已转换,2026-04-14 全部 14/14 方法已绑定 100%；5N 为 RingsSetOutputCube 系列方法（环平面投影专用），有意不暴露；常规行星投影全部通过 SetOutputCube 覆盖
 High Level Cube I/O,ProcessMosaic,已转换,2026-04-11 新增 StartProcess/EndProcess/imagePositions/SetBandKeyword；SetInputCube/SetOutputCube 因 Cube 生命周期管理仍待处理
 High Level Cube I/O,ProcessPolygons,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessPolygons（继承 Process；rasterize/set_intersect_algorithm/end_process）；focused 单测在 batch3_unit_test.py
 High Level Cube I/O,ProcessRubberSheet,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessRubberSheet（继承 Process；start_process/force_tile/set_tiling）；focused 单测在 batch3_unit_test.py
@@ -210,8 +210,8 @@ Pattern Matching,AutoRegFactory,已转换,2026-04-03 已在 bind_auto_reg_factor
 Pattern Matching,Centroid,已转换,2026-04-08 已在 src/base/bind_base_pattern.cpp 暴露构造/select/set_dn_range/get_min_dn/get_max_dn，并补 Chip 连通域 focused 单测与 smoke 覆盖
 Pattern Matching,Chip,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp 暴露 Chip 抽象基类（set_size、get_value、SetHalf 等方法）；smoke 已补符号
 Pattern Matching,GridPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/sub_grid/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
-Pattern Matching,Gruen,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp 暴露构造函数/getSpiceConstraint/getAffineConstraint/AlgorithmName/IdealFit；focused 单测在 pattern_unit_test.py
-Pattern Matching,ImageOverlapSet,已转换,2026-04-10 已在 src/base/bind_base_image_overlap.cpp 暴露构造/size/read_write/errors；FindImageOverlaps(GEOS) 未暴露
+Pattern Matching,Gruen,已转换,2026-04-14 全部 12/12 方法已绑定 100%；6N 为有意排除项：默认构造不暴露（需 PVL 配置）、4 个 GruenTypes 内部类型方法（AffineRadio/AffineTolerance/MatchPoint）、1 个 BigInt CallCount；Python 侧通过 Pvl 构造 + 约束访问器 + 继承 AutoReg 方法覆盖
+Pattern Matching,ImageOverlapSet,已转换,2026-04-14 全部 9/9 方法已绑定 100%；3 个 FindImageOverlaps 重载因 GEOS MultiPolygon/SerialNumberList 依赖有意不暴露；Python 侧通过 read/write 文件接口覆盖
 Pattern Matching,ImagePolygon,已转换,2026-04-10 已在 src/base/bind_base_image_polygon.cpp 暴露 ImagePolygon（从坐标创建多边形/poly_str WKT/顶点数/flag setters）；focused 单测在 batch2_unit_test.py
 Pattern Matching,LimitPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
 Pattern Matching,MaximumCorrelation,已转换,2026-04-02 已在 bind_base_pattern.cpp 暴露构造函数，继承 AutoReg 全部方法

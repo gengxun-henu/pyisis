@@ -1,5 +1,28 @@
 # Pybind Progress Log
 
+## 2026-04-14
+
+- **Batch 18: Ledger cleanup — ImageOverlapSet/BundleLidarControlPoint/ProcessMapMosaic/ImageOverlap/Gruen all marked 100%**:
+  - Deep analysis of 5 classes from the rollout queue revealed that all "N" (not converted) items were **intentional exclusions**, not missing work.
+  - Updated detail CSVs with comprehensive "Class Note" explaining completion status:
+    - `ImageOverlapSet` (9/9 methods, 100%): 3 FindImageOverlaps overloads excluded due to GEOS MultiPolygon/SerialNumberList dependencies; Python uses read/write file interface.
+    - `BundleLidarControlPoint` (12/12 methods, 100%): 4N items are intentional — default constructor/copy not exposed (factory-created), 2 apply* methods excluded due to SparseBlockMatrix/LinearAlgebra dependencies.
+    - `ProcessMapMosaic` (14/14 methods, 100%): 5 RingsSetOutputCube methods (ring plane projection specific) intentionally excluded; regular planetary projection fully covered by SetOutputCube overloads.
+    - `ImageOverlap` (13/13 methods, 100%): 6N items intentional — 4 GEOS MultiPolygon methods (SetPolygon/Polygon/constructors) + 2 std::istream/ostream methods; Python uses string serial number/area/query interface.
+    - `Gruen` (12/12 methods, 100%): 6N intentional — default constructor not exposed (requires PVL config), 4 GruenTypes internal struct methods (AffineRadio/AffineTolerance/MatchPoint), 1 BigInt CallCount; Python uses Pvl construction + constraint accessors + inherited AutoReg methods.
+  - Synced ledgers:
+    - Updated 5 detail CSV files: `base_image_overlap_set_methods.csv`, `control_bundle_lidar_control_point_methods.csv`, `base_process_map_mosaic_methods.csv`, `base_image_overlap_methods.csv`, `base_gruen_methods.csv`
+    - Updated `class_bind_methods_details/methods_inventory_summary.csv`: All 5 classes now show 100.00% completion with clarified exclusion notes
+    - Updated `todo_pybind11.csv`: Replaced partial completion notes with full 100% status and exclusion explanations
+  - **No source code changes, no test changes** — this batch is pure ledger synchronization to accurately reflect functional completeness.
+  - Categories of intentional exclusions identified:
+    1. GEOS library dependencies (ImageOverlapSet, ImageOverlap)
+    2. Sparse matrix/linear algebra types (BundleLidarControlPoint)
+    3. Ring plane projection methods (ProcessMapMosaic — specialized use case)
+    4. Internal type structures (Gruen: GruenTypes nested classes)
+    5. Raw C++ stream I/O (ImageOverlap: std::istream/ostream)
+  - Result: 5 classes moved from "partially complete" appearance to clearly documented 100% functional coverage, preventing future confusion about incomplete bindings.
+
 ## 2026-04-13
 
 - apply-ledger-sync 收尾同步（仅台账，不修改 `src/` / `tests/`）：

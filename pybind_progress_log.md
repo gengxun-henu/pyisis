@@ -2,6 +2,19 @@
 
 ## 2026-04-13
 
+- `Pvl` binding recovery completed for format-template helpers and the `validate_pvl(...)` crash path:
+  - Updated `src/base/bind_base_pvl.cpp` to expose `Pvl.set_format_template(...)`, `Pvl.set_format_template_file(...)`, and `Pvl.validate_pvl(...)`.
+  - Replaced the raw `Pvl::validatePvl(...)` Python entry point with a binding-layer safe wrapper that preserves the upstream validation flow but treats empty-valued template keywords as presence-only checks, avoiding the upstream `PvlKeyword::validateKeyword()` out-of-bounds/segfault path on `m_values[0]`.
+  - Extended `tests/unitTest/pvl_unit_test.py` with focused regressions for both format-template entry points and for `validate_pvl(...)` on an empty-valued template keyword, asserting the validated keyword is removed from the returned residual PVL while unrelated keywords remain.
+  - Synced ledgers:
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_pvl_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+  - Validation status:
+    - Passed: minimal Python repro for the previous segfault path (`template.validate_pvl(make_simple_pvl())`) now returns a stable `Pvl` result and preserves the unmatched `SpacecraftName` keyword
+    - Passed: `PYTHONPATH=$PWD/tests/unitTest:$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -X faulthandler -m unittest pvl_unit_test -v` (`78` tests, `OK`)
+    - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
 - apply-ledger-sync 收尾同步（仅台账，不修改 `src/` / `tests/`）：
   - 继续按已确认的当前 Python 暴露面回写剩余 detail ledger，补齐 `base_spacecraft_position_methods.csv`、`base_variable_line_scan_camera_detector_map_methods.csv`、`base_process_polygons_methods.csv`、`base_process_ground_polygons_methods.csv`、`base_process_map_mosaic_methods.csv`、`control_csm_bundle_observation_methods.csv`、`base_quick_filter_methods.csv`、`base_process_rubber_sheet_methods.csv`、`base_gsl_utility_methods.csv`、`control_isis_bundle_observation_methods.csv`、`base_overlap_statistics_methods.csv`、`base_push_frame_camera_detector_map_methods.csv`、`control_bundle_observation_methods.csv`、`control_bundle_solution_info_methods.csv` 与 `control_bundle_results_methods.csv`。
   - 同步修正 `class_bind_methods_details/methods_inventory_summary.csv` 中 21 个候选类的汇总统计，覆盖 `KaguyaTcCameraDistortionMap`、`Vec`、`KaguyaMiCameraDistortionMap`、`Transform`、`RadarSlantRangeMap`、`RollingShutterCameraDetectorMap`、`SpacecraftPosition`、`VariableLineScanCameraDetectorMap`、`ProcessPolygons`、`ProcessGroundPolygons`、`ProcessMapMosaic`、`CsmBundleObservation`、`QuickFilter`、`ProcessRubberSheet`、`GSLUtility`、`IsisBundleObservation`、`OverlapStatistics`、`PushFrameCameraDetectorMap`、`BundleObservation`、`BundleSolutionInfo` 与 `BundleResults`。

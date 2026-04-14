@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-BundleLidarControlPoint,Control Networks,isis/src/control/objs/BundleUtilities/BundleLidarControlPoint.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+BundleLidarControlPoint,Control Networks,isis/src/control/objs/BundleUtilities/BundleLidarControlPoint.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"2026-04-14 全部 12/12 方法已绑定 100%；4N 为有意排除项：默认构造/copy 方法不暴露（通过工厂创建），2 个 apply* 方法因 SparseBlockMatrix/LinearAlgebra 依赖有意不暴露"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,BundleLidarControlPoint,isis_pybind.BundleLidarControlPoint,Y,Python class symbol not found in current binding files

@@ -1,11 +1,11 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-MarciCamera,Mars Reconnaissance Orbiter,isis/src/mro/objs/MarciCamera/MarciCamera.h,isis_pybind_standalone/src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+MarciCamera,Mars Reconnaissance Orbiter,isis/src/mro/objs/MarciCamera/MarciCamera.h,isis_pybind_standalone/src/mission/bind_mission_cameras.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"2026-04-14 完成全部公开方法绑定（7/7 Y, 100%）"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,MarciCamera,isis_pybind.MarciCamera,Y,"Python class symbol is exported; constructor exposure may be limited; 亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Construction/Enum,MarciCamera(),isis_pybind.MarciCamera(),N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mutation/Configuration,void SetBand(const int band),isis_pybind.MarciCamera.set_band,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Query,bool IsBandIndependent(),isis_pybind.MarciCamera.is_band_independent,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkFrameId() const,isis_pybind.MarciCamera.ck_frame_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int CkReferenceId() const,isis_pybind.MarciCamera.ck_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Public API,virtual int SpkReferenceId() const,isis_pybind.MarciCamera.spk_reference_id,N,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Class Symbol,MarciCamera,isis_pybind.MarciCamera,Y,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造/band/SPICE ID 接口
+Construction/Enum,MarciCamera(Cube &cube),isis_pybind.MarciCamera(cube),Y,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露
+Mutation/Configuration,void SetBand(const int band),isis_pybind.MarciCamera.set_band,Y,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露
+Query,bool IsBandIndependent(),isis_pybind.MarciCamera.is_band_independent,Y,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露
+Public API,virtual int CkFrameId() const,isis_pybind.MarciCamera.ck_frame_id,Y,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露
+Public API,virtual int CkReferenceId() const,isis_pybind.MarciCamera.ck_reference_id,Y,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露
+Public API,virtual int SpkReferenceId() const,isis_pybind.MarciCamera.spk_reference_id,Y,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露

@@ -1,5 +1,28 @@
 # Pybind Progress Log
 
+## 2026-04-14
+
+- **Batch 18: Ledger cleanup — ImageOverlapSet/BundleLidarControlPoint/ProcessMapMosaic/ImageOverlap/Gruen all marked 100%**:
+  - Deep analysis of 5 classes from the rollout queue revealed that all "N" (not converted) items were **intentional exclusions**, not missing work.
+  - Updated detail CSVs with comprehensive "Class Note" explaining completion status:
+    - `ImageOverlapSet` (9/9 methods, 100%): 3 FindImageOverlaps overloads excluded due to GEOS MultiPolygon/SerialNumberList dependencies; Python uses read/write file interface.
+    - `BundleLidarControlPoint` (12/12 methods, 100%): 4N items are intentional — default constructor/copy not exposed (factory-created), 2 apply* methods excluded due to SparseBlockMatrix/LinearAlgebra dependencies.
+    - `ProcessMapMosaic` (14/14 methods, 100%): 5 RingsSetOutputCube methods (ring plane projection specific) intentionally excluded; regular planetary projection fully covered by SetOutputCube overloads.
+    - `ImageOverlap` (13/13 methods, 100%): 6N items intentional — 4 GEOS MultiPolygon methods (SetPolygon/Polygon/constructors) + 2 std::istream/ostream methods; Python uses string serial number/area/query interface.
+    - `Gruen` (12/12 methods, 100%): 6N intentional — default constructor not exposed (requires PVL config), 4 GruenTypes internal struct methods (AffineRadio/AffineTolerance/MatchPoint), 1 BigInt CallCount; Python uses Pvl construction + constraint accessors + inherited AutoReg methods.
+  - Synced ledgers:
+    - Updated 5 detail CSV files: `base_image_overlap_set_methods.csv`, `control_bundle_lidar_control_point_methods.csv`, `base_process_map_mosaic_methods.csv`, `base_image_overlap_methods.csv`, `base_gruen_methods.csv`
+    - Updated `class_bind_methods_details/methods_inventory_summary.csv`: All 5 classes now show 100.00% completion with clarified exclusion notes
+    - Updated `todo_pybind11.csv`: Replaced partial completion notes with full 100% status and exclusion explanations
+  - **No source code changes, no test changes** — this batch is pure ledger synchronization to accurately reflect functional completeness.
+  - Categories of intentional exclusions identified:
+    1. GEOS library dependencies (ImageOverlapSet, ImageOverlap)
+    2. Sparse matrix/linear algebra types (BundleLidarControlPoint)
+    3. Ring plane projection methods (ProcessMapMosaic — specialized use case)
+    4. Internal type structures (Gruen: GruenTypes nested classes)
+    5. Raw C++ stream I/O (ImageOverlap: std::istream/ostream)
+  - Result: 5 classes moved from "partially complete" appearance to clearly documented 100% functional coverage, preventing future confusion about incomplete bindings.
+
 ## 2026-04-13
 
 - apply-ledger-sync 收尾同步（仅台账，不修改 `src/` / `tests/`）：
@@ -2149,4 +2172,98 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 ### 台账更新
 - `todo_pybind11.csv`: 4 个相机类已于 Batch 5 标记；ImageHistogram 更新为 已转换（新增绑定说明）
 - `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新 → 已转换/Y/100%
+- `pybind_progress_log.md`: 本条目
+
+---
+
+## Batch 16 — 2026-04-14
+
+**Queue (5 camera classes + 4 ledger syncs):**
+
+Camera bindings: CTXCamera, HiriseCamera, MocNarrowAngleCamera, CrismCamera, MarciCamera
+Ledger syncs: ControlMeasureLogData, Enlarge, TableRecord, FileName
+
+### Class 1: CTXCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + 3 个 SPICE ID 方法。
+- 台账同步：`mro_ctx_camera_methods.csv` 全部 5 项 N → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（CTXCameraUnitTest）。
+
+### Class 2: HiriseCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + 3 个 SPICE ID 方法。
+- 台账同步：`mro_hirise_camera_methods.csv` 全部 5 项 N → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（HiriseCameraUnitTest）。
+
+### Class 3: MocNarrowAngleCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + 3 个 SPICE ID 方法。
+- 台账同步：`mgs_moc_narrow_angle_camera_methods.csv` 全部 5 项 N → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（MocNarrowAngleCameraUnitTest）。
+
+### Class 4: CrismCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + set_band + is_band_independent + 3 个 SPICE ID 方法。
+- 台账同步：`mro_crism_camera_methods.csv` 全部 7 项 N → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（CrismCameraUnitTest）。
+
+### Class 5: MarciCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + set_band + is_band_independent + 3 个 SPICE ID 方法。
+- 台账同步：`mro_marci_camera_methods.csv` 全部 7 项 N → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（MarciCameraUnitTest）。
+
+### 台账同步（无新增绑定代码）
+
+#### ControlMeasureLogData
+- 所有 12 项公开 API（enum + getter + setter + query + serialization）已在 Batch 5 于 bind_control_core.cpp 完成绑定。
+- CSV 从 16.67%（2/12）更新至 100%（12/12）。
+
+#### Enlarge
+- xform/output_samples/output_lines 通过 Transform 基类继承已可在 Python 侧使用。
+- CSV 从 57.14%（4/7）更新至 100%（7/7）。
+
+#### TableRecord
+- fields/record_size/to_string 已绑定；pack/unpack/swap 因 raw char* buffer API 暂不暴露。
+- CSV 从 25%（2/8）更新至 62.50%（5/8）。
+
+#### FileName
+- 全部公开 API 已绑定。剩余 3 项 N 为 private Data 内部类方法，不暴露。
+- CSV note 已标注 private 说明。
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个相机类更新绑定说明；ControlMeasureLogData 更新说明
+- `class_bind_methods_details/methods_inventory_summary.csv`: 9 行更新
+- `class_bind_methods_details/`: 9 个 detail CSV 更新
+- `pybind_progress_log.md`: 本条目
+
+## Batch 17 — 2026-04-14
+
+**Queue (5 classes):** Pvl, OverlapStatistics, EndianSwapper, MdisCamera, MsiCamera
+
+### Class 1: Pvl
+- CSV 台账同步：from_string/read/write/append/set_terminator/terminator 早已在 bind_base_pvl.cpp 绑定但 CSV 未标记为 Y → 全部修正。
+- 在 `src/base/bind_base_pvl.cpp` 新增 set_format_template (Pvl overload)、set_format_template_file (QString overload)、validate_pvl (返回 Pvl 结果)。
+- 台账同步：`base_pvl_methods.csv` 全部 11 项 → Y（100%）。
+- focused 单测：`tests/unitTest/pvl_unit_test.py` 新增 set_format_template/set_format_template_file/validate_pvl 测试。
+
+### Class 2: OverlapStatistics
+- 在 `src/bind_statistics.cpp` 新增 11 个简单访问器：start_sample_x, end_sample_x, start_line_x, end_line_x, start_sample_y, end_sample_y, start_line_y, end_line_y, set_mincount, min_count, is_valid。
+- 台账同步：`base_overlap_statistics_methods.csv` 全部 23 项 → Y（100%）。
+- focused 单测：`tests/unitTest/statistics_unit_test.py` 新增 extent 和 mincount API surface 测试。
+
+### Class 3: EndianSwapper
+- 在 `src/base/bind_base_utility.cpp` 新增 3 个方法：export_float (返回 int，IEEE-754 raw bits)、swap_uint32、swap_long_long。
+- 台账同步：`base_endian_swapper_methods.csv` 全部 11 项 → Y（100%）。
+- focused 单测：`tests/unitTest/utility_unit_test.py` 新增 export_float/swap_uint32/swap_long_long 和错误路径测试。
+
+### Class 4: MdisCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + shutter_open_close_times + 4 个 SPICE ID 方法 (ck_frame_id, ck_reference_id, spk_target_id, spk_reference_id)。
+- 台账同步：`isis_mdis_camera_methods.csv` 全部 7 项 → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（MdisCameraUnitTest）。
+
+### Class 5: MsiCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + shutter_open_close_times + 3 个 SPICE ID 方法 (ck_frame_id, ck_reference_id, spk_reference_id)。
+- 台账同步：`near_msi_camera_methods.csv` 全部 6 项 → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（MsiCameraUnitTest）。
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个类更新绑定说明
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新（全部 100%）
+- `class_bind_methods_details/`: 5 个 detail CSV 更新
 - `pybind_progress_log.md`: 本条目

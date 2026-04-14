@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-ImageOverlap,Control Networks,reference/upstream_isis/src/base/objs/ImageOverlap/ImageOverlap.h,src/base/bind_base_image_overlap.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+ImageOverlap,Control Networks,reference/upstream_isis/src/base/objs/ImageOverlap/ImageOverlap.h,src/base/bind_base_image_overlap.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"2026-04-14 全部 13/13 方法已绑定 100%；6N 为有意排除项：4 个 GEOS MultiPolygon 相关方法（SetPolygon/Polygon/构造）+ 2 个 std::istream/ostream 方法；Python 侧通过字符串序列号/area/query 接口覆盖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,ImageOverlap,isis_pybind.ImageOverlap,Y,2026-04-10 绑定

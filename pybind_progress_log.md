@@ -2208,3 +2208,39 @@ Ledger syncs: ControlMeasureLogData, Enlarge, TableRecord, FileName
 - `class_bind_methods_details/methods_inventory_summary.csv`: 9 行更新
 - `class_bind_methods_details/`: 9 个 detail CSV 更新
 - `pybind_progress_log.md`: 本条目
+
+## Batch 17 — 2026-04-14
+
+**Queue (5 classes):** Pvl, OverlapStatistics, EndianSwapper, MdisCamera, MsiCamera
+
+### Class 1: Pvl
+- CSV 台账同步：from_string/read/write/append/set_terminator/terminator 早已在 bind_base_pvl.cpp 绑定但 CSV 未标记为 Y → 全部修正。
+- 在 `src/base/bind_base_pvl.cpp` 新增 set_format_template (Pvl overload)、set_format_template_file (QString overload)、validate_pvl (返回 Pvl 结果)。
+- 台账同步：`base_pvl_methods.csv` 全部 11 项 → Y（100%）。
+- focused 单测：`tests/unitTest/pvl_unit_test.py` 新增 set_format_template/set_format_template_file/validate_pvl 测试。
+
+### Class 2: OverlapStatistics
+- 在 `src/bind_statistics.cpp` 新增 11 个简单访问器：start_sample_x, end_sample_x, start_line_x, end_line_x, start_sample_y, end_sample_y, start_line_y, end_line_y, set_mincount, min_count, is_valid。
+- 台账同步：`base_overlap_statistics_methods.csv` 全部 23 项 → Y（100%）。
+- focused 单测：`tests/unitTest/statistics_unit_test.py` 新增 extent 和 mincount API surface 测试。
+
+### Class 3: EndianSwapper
+- 在 `src/base/bind_base_utility.cpp` 新增 3 个方法：export_float (返回 int，IEEE-754 raw bits)、swap_uint32、swap_long_long。
+- 台账同步：`base_endian_swapper_methods.csv` 全部 11 项 → Y（100%）。
+- focused 单测：`tests/unitTest/utility_unit_test.py` 新增 export_float/swap_uint32/swap_long_long 和错误路径测试。
+
+### Class 4: MdisCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + shutter_open_close_times + 4 个 SPICE ID 方法 (ck_frame_id, ck_reference_id, spk_target_id, spk_reference_id)。
+- 台账同步：`isis_mdis_camera_methods.csv` 全部 7 项 → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（MdisCameraUnitTest）。
+
+### Class 5: MsiCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + shutter_open_close_times + 3 个 SPICE ID 方法 (ck_frame_id, ck_reference_id, spk_reference_id)。
+- 台账同步：`near_msi_camera_methods.csv` 全部 6 项 → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（MsiCameraUnitTest）。
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个类更新绑定说明
+- `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新（全部 100%）
+- `class_bind_methods_details/`: 5 个 detail CSV 更新
+- `pybind_progress_log.md`: 本条目

@@ -4,12 +4,12 @@ Pvl,Parsing,isis/src/base/objs/Pvl/Pvl.h,isis_pybind_standalone/src/base/bind_ba
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Pvl,isis_pybind.Pvl,Y,Python class symbol is exported
 Construction/Enum,Pvl(),isis_pybind.Pvl(),Y,Constructor is explicitly bound
-Public API,void fromString(const std::string &str),isis_pybind.Pvl.from_string,N,Method not found in current binding files
-Read/Write IO,void read(const QString &file),isis_pybind.Pvl.read,N,Method not found in current binding files
-Read/Write IO,void write(const QString &file),isis_pybind.Pvl.write,N,Method not found in current binding files
-Public API,void append(const QString &file),isis_pybind.Pvl.append,N,Method not found in current binding files
-Mutation/Configuration,void setTerminator(const QString &term) { m_terminator = term,isis_pybind.Pvl.set_terminator,N,Method not found in current binding files
-Public API,QString terminator() const { return m_terminator,isis_pybind.Pvl.terminator,N,Method not found in current binding files
-Mutation/Configuration,void setFormatTemplate(Isis::Pvl &temp),isis_pybind.Pvl.set_format_template,N,Method not found in current binding files
-Mutation/Configuration,void setFormatTemplate(const QString &filename),isis_pybind.Pvl.set_format_template,N,Method not found in current binding files
-Query,"void validatePvl(const Pvl & pPvl, Pvl & pPvlResults)",isis_pybind.Pvl.validate_pvl,N,Method not found in current binding files
+Public API,void fromString(const std::string &str),isis_pybind.Pvl.from_string,Y,2026-04-14 台账同步；已在 src/base/bind_base_pvl.cpp 绑定
+Read/Write IO,void read(const QString &file),isis_pybind.Pvl.read,Y,2026-04-14 台账同步；已在 src/base/bind_base_pvl.cpp 绑定
+Read/Write IO,void write(const QString &file),isis_pybind.Pvl.write,Y,2026-04-14 台账同步；已在 src/base/bind_base_pvl.cpp 绑定
+Public API,void append(const QString &file),isis_pybind.Pvl.append,Y,2026-04-14 台账同步；已在 src/base/bind_base_pvl.cpp 绑定
+Mutation/Configuration,void setTerminator(const QString &term) { m_terminator = term,isis_pybind.Pvl.set_terminator,Y,2026-04-14 台账同步；已在 src/base/bind_base_pvl.cpp 绑定
+Public API,QString terminator() const { return m_terminator,isis_pybind.Pvl.terminator,Y,2026-04-14 台账同步；已在 src/base/bind_base_pvl.cpp 绑定
+Mutation/Configuration,void setFormatTemplate(Isis::Pvl &temp),isis_pybind.Pvl.set_format_template,Y,2026-04-14 新增绑定
+Mutation/Configuration,void setFormatTemplate(const QString &filename),isis_pybind.Pvl.set_format_template_file,Y,2026-04-14 新增绑定
+Query,"void validatePvl(const Pvl & pPvl, Pvl & pPvlResults)",isis_pybind.Pvl.validate_pvl,Y,2026-04-14 新增绑定；返回验证结果 Pvl 而非 out-param

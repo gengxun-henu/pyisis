@@ -3,10 +3,11 @@ Unit tests for ISIS statistics, histogram, and vector-filter bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-11
+Last Modified: 2026-04-14
 Updated: 2026-04-10  Geng Xun added PrincipalComponentAnalysis and OverlapStatistics unit tests.
 Updated: 2026-04-11  Geng Xun added ImageHistogram explicit add_data/remove_data/bin_range coverage.
 Updated: 2026-04-11  Geng Xun aligned ImageHistogram bin_range edge assertions with upstream half-bin extension behavior.
+Updated: 2026-04-14  Geng Xun added OverlapStatistics extent accessor and mincount/is_valid API surface tests.
 """
 
 import unittest
@@ -204,6 +205,20 @@ class OverlapStatisticsUnitTest(unittest.TestCase):
         self.assertTrue(hasattr(ip.OverlapStatistics, "file_name_y"))
         self.assertTrue(hasattr(ip.OverlapStatistics, "get_mstats"))
         self.assertTrue(hasattr(ip.OverlapStatistics, "to_pvl"))
+
+    def test_new_extent_api_surface(self):
+        """OverlapStatistics exposes the newly bound extent and mincount methods."""
+        self.assertTrue(hasattr(ip.OverlapStatistics, "start_sample_x"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "end_sample_x"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "start_line_x"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "end_line_x"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "start_sample_y"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "end_sample_y"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "start_line_y"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "end_line_y"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "set_mincount"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "min_count"))
+        self.assertTrue(hasattr(ip.OverlapStatistics, "is_valid"))
 
     def test_construction_from_invalid_pvl_raises(self):
         """Constructing OverlapStatistics from an incomplete PvlObject raises IException.

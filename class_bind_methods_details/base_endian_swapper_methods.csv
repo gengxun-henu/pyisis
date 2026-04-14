@@ -6,10 +6,10 @@ Class Symbol,EndianSwapper,isis_pybind.EndianSwapper,Y,Exported in python/isis_p
 Construction/Enum,EndianSwapper(QString inputEndian),isis_pybind.EndianSwapper(endian: str),Y,Accepts 'LSB' or 'MSB'
 Public API,double Double(void *buf),isis_pybind.EndianSwapper.swap_double,Y,Accepts Python bytes (>=8 bytes)
 Public API,float Float(void *buf),isis_pybind.EndianSwapper.swap_float,Y,Accepts Python bytes (>=4 bytes)
-Read/Write IO,int ExportFloat(void *buf),isis_pybind.EndianSwapper.export_float,N,Not bound; ExportFloat returns int not float; low Python utility
+Read/Write IO,int ExportFloat(void *buf),isis_pybind.EndianSwapper.export_float,Y,2026-04-14 新增绑定；返回 int (IEEE-754 raw bits)
 Public API,int Int(void *buf),isis_pybind.EndianSwapper.swap_int,Y,Accepts Python bytes (>=4 bytes)
-Public API,uint32_t Uint32_t(void *buf),isis_pybind.EndianSwapper.swap_uint32,N,Not bound; uint32_t type not directly Python-friendly
-Public API,long long int LongLongInt(void *buf),isis_pybind.EndianSwapper.swap_long_long,N,Not bound; rarely needed in Python context
+Public API,uint32_t Uint32_t(void *buf),isis_pybind.EndianSwapper.swap_uint32,Y,2026-04-14 新增绑定
+Public API,long long int LongLongInt(void *buf),isis_pybind.EndianSwapper.swap_long_long,Y,2026-04-14 新增绑定
 Public API,short int ShortInt(void *buf),isis_pybind.EndianSwapper.swap_short,Y,Accepts Python bytes (>=2 bytes)
 Public API,unsigned short int UnsignedShortInt(void *buf),isis_pybind.EndianSwapper.swap_unsigned_short,Y,Accepts Python bytes (>=2 bytes)
 Public API,bool willSwap() const,isis_pybind.EndianSwapper.will_swap,Y,

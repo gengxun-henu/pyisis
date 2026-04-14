@@ -11,6 +11,7 @@
 // Updated: 2026-04-12  Geng Xun exposed KaguyaMiCamera and KaguyaTcCamera Cube constructors for the low-risk mission-camera rollout batch.
 // Updated: 2026-04-12  Geng Xun exposed the LroNarrowAngleCamera Cube constructor to finish the current low-risk mission-camera rollout queue.
 // Updated: 2026-04-14  Geng Xun completed CTXCamera, HiriseCamera, MocNarrowAngleCamera, CrismCamera, MarciCamera constructor + SPICE ID + band methods.
+// Updated: 2026-04-14  Geng Xun completed MdisCamera and MsiCamera Cube constructors + shutter_open_close_times + SPICE ID methods.
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -796,7 +797,23 @@ void bind_mission_cameras(py::module_ &m) {
            "CK Reference ID - J2000")
       .def("spk_reference_id", &Isis::Mariner10Camera::SpkReferenceId,
            "SPK Reference ID - J2000");
-  py::class_<Isis::MdisCamera, Isis::FramingCamera>(m, "MdisCamera");
+  py::class_<Isis::MdisCamera, Isis::FramingCamera>(m, "MdisCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a MESSENGER MDIS framing camera model from an opened Cube.")
+      .def("shutter_open_close_times",
+           &Isis::MdisCamera::ShutterOpenCloseTimes,
+           py::arg("time"), py::arg("exposure_duration"),
+           "Return (open, close) iTime pair for the given time and exposure duration.")
+      .def("ck_frame_id", &Isis::MdisCamera::CkFrameId,
+           "CK frame ID - MESSENGER instrument code (-236000)")
+      .def("ck_reference_id", &Isis::MdisCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_target_id", &Isis::MdisCamera::SpkTargetId,
+           "SPK Target Body ID - MESSENGER spacecraft (-236)")
+      .def("spk_reference_id", &Isis::MdisCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
   py::class_<Isis::TaylorCameraDistortionMap, Isis::CameraDistortionMap>(m, "TaylorCameraDistortionMap")
       .def(py::init<Isis::Camera *, double>(),
            py::arg("parent") = nullptr,
@@ -920,7 +937,21 @@ void bind_mission_cameras(py::module_ &m) {
            "CK Reference ID")
       .def("spk_reference_id", &Isis::MarciCamera::SpkReferenceId,
            "SPK Reference ID - J2000");
-  py::class_<Isis::MsiCamera, Isis::FramingCamera>(m, "MsiCamera");
+  py::class_<Isis::MsiCamera, Isis::FramingCamera>(m, "MsiCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a NEAR Shoemaker MSI framing camera model from an opened Cube.")
+      .def("shutter_open_close_times",
+           &Isis::MsiCamera::ShutterOpenCloseTimes,
+           py::arg("time"), py::arg("exposure_duration"),
+           "Return (open, close) iTime pair for the given time and exposure duration.")
+      .def("ck_frame_id", &Isis::MsiCamera::CkFrameId,
+           "CK frame ID")
+      .def("ck_reference_id", &Isis::MsiCamera::CkReferenceId,
+           "CK Reference ID")
+      .def("spk_reference_id", &Isis::MsiCamera::SpkReferenceId,
+           "SPK Reference ID");
   py::class_<Isis::NewHorizonsLeisaCamera, Isis::LineScanCamera>(m, "NewHorizonsLeisaCamera")
       .def(py::init<Isis::Cube &>(),
            py::arg("cube"),

@@ -5,6 +5,7 @@
 // Updated: 2026-04-10  Geng Xun added CameraStatistics binding
 // Updated: 2026-04-10  Geng Xun added GaussianStretch binding
 // Updated: 2026-04-10  Geng Xun removed the duplicate GaussianStretch registration here and kept the canonical binding in src/base/bind_base_filters.cpp.
+// Updated: 2026-04-14  Geng Xun added OverlapStatistics extent accessors, set_mincount, min_count, and is_valid.
 // Purpose: pybind11 bindings for ISIS statistics, histogram, grouped-statistics, multivariate-statistics, and vector-filter utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -347,6 +348,30 @@ void bind_statistics(py::module_ &m) {
            },
            py::arg("name") = "OverlapStatistics",
            "Serialize overlap statistics to a PvlObject.")
+      .def("start_sample_x", &Isis::OverlapStatistics::StartSampleX,
+           "Return the starting sample position of the overlap in the first cube.")
+      .def("end_sample_x", &Isis::OverlapStatistics::EndSampleX,
+           "Return the ending sample position of the overlap in the first cube.")
+      .def("start_line_x", &Isis::OverlapStatistics::StartLineX,
+           "Return the starting line position of the overlap in the first cube.")
+      .def("end_line_x", &Isis::OverlapStatistics::EndLineX,
+           "Return the ending line position of the overlap in the first cube.")
+      .def("start_sample_y", &Isis::OverlapStatistics::StartSampleY,
+           "Return the starting sample position of the overlap in the second cube.")
+      .def("end_sample_y", &Isis::OverlapStatistics::EndSampleY,
+           "Return the ending sample position of the overlap in the second cube.")
+      .def("start_line_y", &Isis::OverlapStatistics::StartLineY,
+           "Return the starting line position of the overlap in the second cube.")
+      .def("end_line_y", &Isis::OverlapStatistics::EndLineY,
+           "Return the ending line position of the overlap in the second cube.")
+      .def("set_mincount", &Isis::OverlapStatistics::SetMincount,
+           py::arg("mincnt"),
+           "Set the minimum number of valid pixels for the overlap to be considered valid.")
+      .def("min_count", &Isis::OverlapStatistics::MinCount,
+           "Return the minimum valid pixel count.")
+      .def("is_valid", &Isis::OverlapStatistics::IsValid,
+           py::arg("band"),
+           "Return True if the overlap meets the minimum valid pixel requirement for the given band.")
       .def("__repr__", [](const Isis::OverlapStatistics &self) {
             return "OverlapStatistics(bands=" + std::to_string(self.Bands()) +
                    ", has_overlap=" + (self.HasOverlap() ? "True" : "False") + ")";

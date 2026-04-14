@@ -2150,3 +2150,61 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 - `todo_pybind11.csv`: 4 个相机类已于 Batch 5 标记；ImageHistogram 更新为 已转换（新增绑定说明）
 - `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新 → 已转换/Y/100%
 - `pybind_progress_log.md`: 本条目
+
+---
+
+## Batch 16 — 2026-04-14
+
+**Queue (5 camera classes + 4 ledger syncs):**
+
+Camera bindings: CTXCamera, HiriseCamera, MocNarrowAngleCamera, CrismCamera, MarciCamera
+Ledger syncs: ControlMeasureLogData, Enlarge, TableRecord, FileName
+
+### Class 1: CTXCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + 3 个 SPICE ID 方法。
+- 台账同步：`mro_ctx_camera_methods.csv` 全部 5 项 N → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（CTXCameraUnitTest）。
+
+### Class 2: HiriseCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + 3 个 SPICE ID 方法。
+- 台账同步：`mro_hirise_camera_methods.csv` 全部 5 项 N → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（HiriseCameraUnitTest）。
+
+### Class 3: MocNarrowAngleCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + 3 个 SPICE ID 方法。
+- 台账同步：`mgs_moc_narrow_angle_camera_methods.csv` 全部 5 项 N → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（MocNarrowAngleCameraUnitTest）。
+
+### Class 4: CrismCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + set_band + is_band_independent + 3 个 SPICE ID 方法。
+- 台账同步：`mro_crism_camera_methods.csv` 全部 7 项 N → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（CrismCameraUnitTest）。
+
+### Class 5: MarciCamera
+- 在 `src/mission/bind_mission_cameras.cpp` 补充 Cube 构造函数 + set_band + is_band_independent + 3 个 SPICE ID 方法。
+- 台账同步：`mro_marci_camera_methods.csv` 全部 7 项 N → Y（100%）。
+- focused 单测：`tests/unitTest/mro_mgs_camera_unit_test.py`（MarciCameraUnitTest）。
+
+### 台账同步（无新增绑定代码）
+
+#### ControlMeasureLogData
+- 所有 12 项公开 API（enum + getter + setter + query + serialization）已在 Batch 5 于 bind_control_core.cpp 完成绑定。
+- CSV 从 16.67%（2/12）更新至 100%（12/12）。
+
+#### Enlarge
+- xform/output_samples/output_lines 通过 Transform 基类继承已可在 Python 侧使用。
+- CSV 从 57.14%（4/7）更新至 100%（7/7）。
+
+#### TableRecord
+- fields/record_size/to_string 已绑定；pack/unpack/swap 因 raw char* buffer API 暂不暴露。
+- CSV 从 25%（2/8）更新至 62.50%（5/8）。
+
+#### FileName
+- 全部公开 API 已绑定。剩余 3 项 N 为 private Data 内部类方法，不暴露。
+- CSV note 已标注 private 说明。
+
+### 台账更新
+- `todo_pybind11.csv`: 5 个相机类更新绑定说明；ControlMeasureLogData 更新说明
+- `class_bind_methods_details/methods_inventory_summary.csv`: 9 行更新
+- `class_bind_methods_details/`: 9 个 detail CSV 更新
+- `pybind_progress_log.md`: 本条目

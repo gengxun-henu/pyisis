@@ -2,11 +2,13 @@
 Unit tests for MRO and MGS mission camera binding completions.
 
 Covers CTXCamera, HiriseCamera, MocNarrowAngleCamera (constructor + SPICE IDs),
-CrismCamera (constructor + band + SPICE IDs), and MarciCamera (constructor + band + SPICE IDs).
+CrismCamera (constructor + band + SPICE IDs), MarciCamera (constructor + band + SPICE IDs),
+MdisCamera (constructor + shutter + SPICE IDs), and MsiCamera (constructor + shutter + SPICE IDs).
 
 Author: Geng Xun
 Created: 2026-04-14
 Last Modified: 2026-04-14
+Updated: 2026-04-14  Geng Xun added MdisCamera and MsiCamera constructor + SPICE ID regression coverage.
 """
 
 import unittest
@@ -92,6 +94,43 @@ class MarciCameraUnitTest(unittest.TestCase):
         attrs = dir(ip.MarciCamera)
         self.assertIn("set_band", attrs)
         self.assertIn("is_band_independent", attrs)
+
+
+class MdisCameraUnitTest(unittest.TestCase):
+    """Regression coverage for MdisCamera constructor and SPICE ID methods. Added: 2026-04-14."""
+
+    def test_class_exists_and_inheritance(self):
+        self.assertTrue(hasattr(ip, "MdisCamera"))
+        self.assertTrue(issubclass(ip.MdisCamera, ip.FramingCamera))
+
+    def test_spice_id_methods_exist(self):
+        attrs = dir(ip.MdisCamera)
+        self.assertIn("ck_frame_id", attrs)
+        self.assertIn("ck_reference_id", attrs)
+        self.assertIn("spk_target_id", attrs)
+        self.assertIn("spk_reference_id", attrs)
+
+    def test_shutter_method_exists(self):
+        attrs = dir(ip.MdisCamera)
+        self.assertIn("shutter_open_close_times", attrs)
+
+
+class MsiCameraUnitTest(unittest.TestCase):
+    """Regression coverage for MsiCamera constructor and SPICE ID methods. Added: 2026-04-14."""
+
+    def test_class_exists_and_inheritance(self):
+        self.assertTrue(hasattr(ip, "MsiCamera"))
+        self.assertTrue(issubclass(ip.MsiCamera, ip.FramingCamera))
+
+    def test_spice_id_methods_exist(self):
+        attrs = dir(ip.MsiCamera)
+        self.assertIn("ck_frame_id", attrs)
+        self.assertIn("ck_reference_id", attrs)
+        self.assertIn("spk_reference_id", attrs)
+
+    def test_shutter_method_exists(self):
+        attrs = dir(ip.MsiCamera)
+        self.assertIn("shutter_open_close_times", attrs)
 
 
 if __name__ == "__main__":

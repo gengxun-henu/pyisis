@@ -11,6 +11,7 @@ Updated: 2026-04-10  Geng Xun added regressions for protected-helper wrapper bin
 Updated: 2026-04-12  Geng Xun added focused format_end() regressions for PvlFormat and PvlFormatPds.
 Updated: 2026-04-12  Geng Xun added focused safe-copy regressions for remaining PvlTranslationTable helper bindings.
 Updated: 2026-04-12  Geng Xun added focused XmlToPvlTranslationManager constructor coverage for FileName plus translation-stream input.
+Updated: 2026-04-14  Geng Xun added focused Pvl set_format_template and validate_pvl regressions.
 Updated: 2026-04-10  Geng Xun aligned PVL helper test expectations with upstream ISIS behavior for empty units and PDS uppercase names.
 """
 
@@ -78,6 +79,30 @@ class PvlUnitTest(unittest.TestCase):
             loaded = ip.Pvl(str(file_path))
             self.assertTrue(loaded.has_group("Instrument"))
             self.assertEqual(loaded.find_group("Instrument").find_keyword("InstrumentId")[0], "HIRISE")
+
+    def test_pvl_set_format_template(self):
+        """Test set_format_template with a Pvl object."""
+        pvl = make_simple_pvl()
+        template = ip.Pvl()
+        # Should not raise
+        pvl.set_format_template(template)
+
+    def test_pvl_set_format_template_file(self):
+        """Test set_format_template_file by loading a Pvl file as template."""
+        pvl = make_simple_pvl()
+        template = ip.Pvl()
+        with temporary_text_file("template.pvl", str(template)) as file_path:
+            pvl.set_format_template_file(str(file_path))
+
+    def test_pvl_validate_pvl(self):
+        """Test validate_pvl returns a Pvl with validation results."""
+        template = ip.Pvl()
+        grp = ip.PvlGroup("Instrument")
+        grp.add_keyword(ip.PvlKeyword("InstrumentId"))
+        template.add_group(grp)
+        pvl = make_simple_pvl()
+        result = template.validate_pvl(pvl)
+        self.assertIsInstance(result, ip.Pvl)
 
     def test_pvl_object_add_and_delete_nested_object(self):
         pvl = ip.Pvl()

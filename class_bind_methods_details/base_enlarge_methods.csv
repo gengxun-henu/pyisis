@@ -1,11 +1,11 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Enlarge,Geometry,isis/src/base/objs/Enlarge/Enlarge.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+Enlarge,Geometry,isis/src/base/objs/Enlarge/Enlarge.h,src/base/bind_base_geometry.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"2026-04-14 台账同步：所有公开方法已绑定（继承 Transform 的 xform/output_samples/output_lines 通过父类暴露），CSV 同步至 100%"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Enlarge,isis_pybind.Enlarge,Y,2026-04-11 台账同步；已在 src/base/bind_base_geometry.cpp 暴露; Python class symbol not found in current binding files
-Construction/Enum,Enlarge(),isis_pybind.Enlarge(),Y,2026-04-11 台账同步；已在 src/base/bind_base_geometry.cpp 暴露; Constructor binding not detected in current binding files
-Mutation/Configuration,"void SetInputArea(double pdStartSample, double pdEndSample, double pdStartLine, double pdEndLine)",isis_pybind.Enlarge.set_input_area,Y,2026-04-11 台账同步；已在 src/base/bind_base_geometry.cpp 暴露; Method not found in current binding files
-Public API,"bool Xform(double &inSample, double &inLine, const double outSample, const double outLine)",isis_pybind.Enlarge.xform,N,Method not found in current binding files
-Public API,PvlGroup UpdateOutputLabel(Cube *pOutCube),isis_pybind.Enlarge.update_output_label,Y,2026-04-11 台账同步；已在 src/base/bind_base_geometry.cpp 暴露; Method not found in current binding files
-Public API,int OutputSamples() const { return miOutputSamples,isis_pybind.Enlarge.output_samples,N,Method not found in current binding files
-Public API,int OutputLines() const { return miOutputLines,isis_pybind.Enlarge.output_lines,N,Method not found in current binding files
+Class Symbol,Enlarge,isis_pybind.Enlarge,Y,已在 src/base/bind_base_geometry.cpp 暴露；继承自 Transform
+Construction/Enum,"Enlarge(Cube *pInCube, const double sampleScale, const double lineScale)",isis_pybind.Enlarge(input_cube; sample_scale; line_scale),Y,已在 src/base/bind_base_geometry.cpp 通过 lambda 适配 Cube 引用
+Mutation/Configuration,"void SetInputArea(double pdStartSample, double pdEndSample, double pdStartLine, double pdEndLine)",isis_pybind.Enlarge.set_input_area,Y,已在 src/base/bind_base_geometry.cpp 暴露
+Public API,"bool Xform(double &inSample, double &inLine, const double outSample, const double outLine)",isis_pybind.Enlarge.xform,Y,继承自 Transform 基类绑定；返回 (bool; inSample; inLine) 元组
+Public API,PvlGroup UpdateOutputLabel(Cube *pOutCube),isis_pybind.Enlarge.update_output_label,Y,已在 src/base/bind_base_geometry.cpp 通过 lambda 适配 Cube 引用
+Public API,int OutputSamples() const,isis_pybind.Enlarge.output_samples,Y,继承自 Transform 基类绑定
+Public API,int OutputLines() const,isis_pybind.Enlarge.output_lines,Y,继承自 Transform 基类绑定

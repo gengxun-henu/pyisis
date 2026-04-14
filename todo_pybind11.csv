@@ -14,7 +14,7 @@ Control Networks,BundleSettings,已转换,2026-03-21 已在 bind_control_core.cp
 Control Networks,BundleSolutionInfo,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；名称/时间/文件名/设置/结果/输出方法全面暴露
 Control Networks,BundleTargetBody,已转换,2026-03-21 已在 bind_control_core.cpp 暴露目标体求解配置/格式化/局部半径接口
 Control Networks,ControlMeasure,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
-Control Networks,ControlMeasureLogData,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Control Networks,ControlMeasureLogData,已转换,"2026-04-14 台账同步：所有公开方法（enum/getter/setter/query/serialization）已在 bind_control_core.cpp 绑定（12/12 100%）"
 Control Networks,ControlNet,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
 Control Networks,ControlNetDiff,已转换,2026-03-21 已在 bind_control_core.cpp 暴露 compare(...) 与 tolerances 接口
 Control Networks,ControlNetFilter,已转换,2026-04-08 已在 bind_control_core.cpp 同步暴露全部公开过滤器与输出 helper，并补 focused 单测
@@ -129,13 +129,13 @@ Map Projection,WorldMapper,已转换,抽象基类/纯虚接口
 Mars Express,HrscCamera,已转换,"2026-04-06 已在 bind_mission_cameras.cpp 暴露 Cube 构造与 ck_frame_id/ck_reference_id/spk_reference_id；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Mars Express,MexHrscSrcCamera,已转换,"2026-04-06 已在 bind_mission_cameras.cpp 暴露 Cube 构造、shutter_open_close_times 与 ck_frame_id/ck_reference_id/spk_reference_id；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Mars Global Surveyor,MocLabels,已转换,2026-04-05 已在 src/mgs/bind_mgs_utilities.cpp 暴露全部公共方法（构造函数、相机类型查询、求和模式、检测器/样本转换）
-Mars Global Surveyor,MocNarrowAngleCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Global Surveyor,MocNarrowAngleCamera,已转换,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 SPICE ID 接口（5/5 100%）
 Mars Global Surveyor,MocNarrowAngleSumming,已转换,2026-04-05 已在 src/mgs/bind_mgs_utilities.cpp 暴露全部方法（构造函数、detector、sample）
 Mars Global Surveyor,MocWideAngleCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Mars Global Surveyor,MocWideAngleDetectorMap,已转换,2026-04-05 已在 src/mgs/bind_mgs_utilities.cpp 暴露构造函数与 set_parent/set_detector 方法，继承自 LineScanCameraDetectorMap
 Mars Global Surveyor,MocWideAngleDistortionMap,已转换,2026-04-05 已在 src/mgs/bind_mgs_utilities.cpp 暴露构造函数与 set_focal_plane/set_undistorted_focal_plane 方法，继承自 CameraDistortionMap
-Mars Reconnaissance Orbiter,CrismCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-Mars Reconnaissance Orbiter,CTXCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Reconnaissance Orbiter,CrismCamera,已转换,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造/band/SPICE ID 接口（7/7 100%）
+Mars Reconnaissance Orbiter,CTXCamera,已转换,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 SPICE ID 接口（5/5 100%）
 Mars Reconnaissance Orbiter,GainChannelNormalize,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,GainFlatField,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,GainLineDrift,未转换,抽象基类/纯虚接口
@@ -149,10 +149,10 @@ Mars Reconnaissance Orbiter,HiEqualization,未转换,
 Mars Reconnaissance Orbiter,HiHistory,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,HiLab,已转换,2026-04-10 已在 src/bind_mro_hical.cpp 暴露 constructor(Cube*)/get_cpmm_number/get_channel/get_bin/get_tdi/get_ccd；focused 单测在 image_overlap_camera_unit_test.py；smoke 已补符号
 Mars Reconnaissance Orbiter,HiLineTimeEqn,未转换,抽象基类/纯虚接口
-Mars Reconnaissance Orbiter,HiriseCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Reconnaissance Orbiter,HiriseCamera,已转换,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造与 SPICE ID 接口（5/5 100%）
 Mars Reconnaissance Orbiter,LoadCSV,未转换,
 Mars Reconnaissance Orbiter,LowPassFilter,未转换,抽象基类/纯虚接口
-Mars Reconnaissance Orbiter,MarciCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+Mars Reconnaissance Orbiter,MarciCamera,已转换,2026-04-14 已在 src/mission/bind_mission_cameras.cpp 暴露 Cube 构造/band/SPICE ID 接口（7/7 100%）
 Mars Reconnaissance Orbiter,MarciDistortionMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造与 focal-plane/filter 方法；已补单测与 smoke
 Mars Reconnaissance Orbiter,Module,未转换,抽象基类/纯虚接口
 Mars Reconnaissance Orbiter,NonLinearLSQ,未转换,抽象基类/纯虚接口

@@ -7,6 +7,7 @@
 // Updated: 2026-04-10  Geng Xun replaced direct protected-member bindings with helper-copy wrappers for PvlFormat and PvlTranslationTable.
 // Updated: 2026-04-12  Geng Xun exposed remaining public format_end helpers for PvlFormat and PvlFormatPds.
 // Updated: 2026-04-12  Geng Xun added safe-copy helpers for remaining PvlTranslationTable APIs and restored the XmlToPvlTranslationManager FileName+stream constructor.
+// Updated: 2026-04-14  Geng Xun replaced the direct validate_pvl binding with an empty-template-safe wrapper to prevent PVL validation segfaults.
 // Updated: 2026-04-14  Geng Xun added Pvl set_format_template (2 overloads) and validate_pvl.
 // Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, PvlFormatPds, PvlTranslationTable, LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, and XmlToPvlTranslationManager
 
@@ -26,6 +27,7 @@
 #include <pybind11/stl.h>
 
 #include "FileName.h"
+#include "IException.h"
 #include "LabelTranslationManager.h"
 #include "Pvl.h"
 #include "PvlContainer.h"
@@ -57,6 +59,248 @@ std::string pvlLikeToString(TPvlLike &value) {
   std::ostringstream stream;
   stream << value;
   return stream.str();
+}
+
+bool isValidationOptionKeyword(const QString &keywordName) {
+     return keywordName.contains("__Required") || keywordName.contains("__Repeated") ||
+                     keywordName.contains("__Range") || keywordName.contains("__Value") ||
+                     keywordName.contains("__Type");
+}
+
+bool isRequiredValidationEntry(Isis::PvlContainer &container, const QString &entryName) {
+     const QString requiredKeywordName = entryName + "__Required";
+     if (!container.hasKeyword(requiredKeywordName)) {
+          return false;
+     }
+
+     Isis::PvlKeyword requiredKeyword = container.findKeyword(requiredKeywordName);
+     return requiredKeyword.size() > 0 && requiredKeyword[0].toLower() == "true";
+}
+
+QString validationValueType(Isis::PvlContainer &container, const QString &entryName) {
+     const QString typeKeywordName = entryName + "__Type";
+     if (!container.hasKeyword(typeKeywordName)) {
+          return "";
+     }
+
+     Isis::PvlKeyword typeKeyword = container.findKeyword(typeKeywordName);
+     if (typeKeyword.size() <= 0) {
+          return "";
+     }
+
+     return typeKeyword[0];
+}
+
+bool isRepeatedValidationEntry(Isis::PvlContainer &container, const QString &entryName) {
+     const QString repeatedKeywordName = entryName + "__Repeated";
+     if (!container.hasKeyword(repeatedKeywordName)) {
+          return false;
+     }
+
+     Isis::PvlKeyword repeatedKeyword = container.findKeyword(repeatedKeywordName);
+     return repeatedKeyword.size() > 0 && repeatedKeyword[0].toLower() == "true";
+}
+
+void validateRepeatOptionSafe(Isis::PvlContainer &templateContainer,
+                                                                           Isis::PvlKeyword &templateKeyword,
+                                                                           Isis::PvlContainer &resultContainer) {
+     const QString templateKeywordName = templateKeyword.name();
+     if (!isRepeatedValidationEntry(templateContainer, templateKeywordName)) {
+          return;
+     }
+
+     const QString valueType = validationValueType(templateContainer, templateKeywordName);
+     for (int keywordIndex = resultContainer.keywords() - 1; keywordIndex >= 0; --keywordIndex) {
+          Isis::PvlKeyword &resultKeyword = resultContainer[keywordIndex];
+          if (resultKeyword.name() != templateKeywordName) {
+               continue;
+          }
+
+          if (templateKeyword.size() > 0) {
+               templateKeyword.validateKeyword(resultKeyword, valueType);
+          }
+
+          resultContainer.deleteKeyword(keywordIndex);
+     }
+}
+
+void validateAllKeywordsSafe(Isis::PvlContainer &templateContainer,
+                                                                       Isis::PvlContainer &resultContainer) {
+     const int templateKeywordCount = templateContainer.keywords();
+     for (int keywordIndex = 0; keywordIndex < templateKeywordCount; ++keywordIndex) {
+          Isis::PvlKeyword &templateKeyword = templateContainer[keywordIndex];
+          const QString templateKeywordName = templateKeyword.name();
+
+          if (isValidationOptionKeyword(templateKeywordName)) {
+               continue;
+          }
+
+          bool keywordFound = false;
+          if (resultContainer.hasKeyword(templateKeywordName)) {
+               Isis::PvlKeyword &resultKeyword = resultContainer.findKeyword(templateKeywordName);
+
+               if (templateKeyword.size() > 0) {
+                    const QString templateKeywordRangeName = templateKeywordName + "__Range";
+                    const QString templateKeywordValueName = templateKeywordName + "__Value";
+                    const QString valueType = validationValueType(templateContainer, templateKeywordName);
+
+                    if (templateContainer.hasKeyword(templateKeywordRangeName)) {
+                         Isis::PvlKeyword rangeKeyword = templateContainer.findKeyword(templateKeywordRangeName);
+                         templateKeyword.validateKeyword(resultKeyword, valueType, &rangeKeyword);
+                    }
+                    else if (templateContainer.hasKeyword(templateKeywordValueName)) {
+                         Isis::PvlKeyword valueKeyword = templateContainer.findKeyword(templateKeywordValueName);
+                         templateKeyword.validateKeyword(resultKeyword, valueType, &valueKeyword);
+                    }
+                    else {
+                         templateKeyword.validateKeyword(resultKeyword, valueType);
+                    }
+               }
+
+               resultContainer.deleteKeyword(resultKeyword.name());
+               keywordFound = true;
+          }
+          else {
+               keywordFound = !isRequiredValidationEntry(templateContainer, templateKeywordName);
+          }
+
+          if (!keywordFound) {
+               QString errorMessage = "Keyword \"" + templateKeywordName +
+                                                                       "\" Not Found in the Template File\n";
+               throw Isis::IException(Isis::IException::User, errorMessage, _FILEINFO_);
+          }
+
+          validateRepeatOptionSafe(templateContainer, templateKeyword, resultContainer);
+     }
+}
+
+void validateGroupSafe(Isis::PvlGroup &templateGroup, Isis::PvlGroup &resultGroup) {
+     if (resultGroup.keywords() <= 0) {
+          QString errorMessage = "Group \"" + resultGroup.name() + "\" has no Keywords\n";
+          throw Isis::IException(Isis::IException::User, errorMessage, _FILEINFO_);
+     }
+
+     validateAllKeywordsSafe(static_cast<Isis::PvlContainer &>(templateGroup),
+                                                                 static_cast<Isis::PvlContainer &>(resultGroup));
+}
+
+void validateObjectSafe(Isis::PvlObject &templateObject, Isis::PvlObject &resultObject) {
+     const int templateObjectCount = templateObject.objects();
+     for (int objectIndex = 0; objectIndex < templateObjectCount; ++objectIndex) {
+          Isis::PvlObject &nestedTemplateObject = templateObject.object(objectIndex);
+          const QString objectName = nestedTemplateObject.name();
+
+          bool objectFound = false;
+          if (resultObject.hasObject(objectName)) {
+               Isis::PvlObject &nestedResultObject = resultObject.findObject(objectName);
+               validateObjectSafe(nestedTemplateObject, nestedResultObject);
+               if (nestedResultObject.objects() == 0 && nestedResultObject.groups() == 0 &&
+                         nestedResultObject.keywords() == 0) {
+                    resultObject.deleteObject(nestedResultObject.name());
+               }
+               objectFound = true;
+          }
+          else {
+               objectFound = !isRequiredValidationEntry(static_cast<Isis::PvlContainer &>(nestedTemplateObject),
+                                                                                                                    objectName);
+          }
+
+          if (!objectFound) {
+               QString errorMessage = "Object \"" + objectName +
+                                                                       "\" Not Found in the Template File\n";
+               throw Isis::IException(Isis::IException::User, errorMessage, _FILEINFO_);
+          }
+     }
+
+     const int templateGroupCount = templateObject.groups();
+     for (int groupIndex = 0; groupIndex < templateGroupCount; ++groupIndex) {
+          Isis::PvlGroup &templateGroup = templateObject.group(groupIndex);
+          const QString groupName = templateGroup.name();
+
+          bool groupFound = false;
+          if (resultObject.hasGroup(groupName)) {
+               Isis::PvlGroup &resultGroup = resultObject.findGroup(groupName);
+               validateGroupSafe(templateGroup, resultGroup);
+               if (resultGroup.keywords() == 0) {
+                    resultObject.deleteGroup(resultGroup.name());
+               }
+               groupFound = true;
+          }
+          else {
+               groupFound = !isRequiredValidationEntry(static_cast<Isis::PvlContainer &>(templateGroup),
+                                                                                                                   groupName);
+          }
+
+          if (!groupFound) {
+               QString errorMessage = "Group \"" + groupName +
+                                                                       "\" Not Found in the Template File\n";
+               throw Isis::IException(Isis::IException::User, errorMessage, _FILEINFO_);
+          }
+     }
+
+     validateAllKeywordsSafe(static_cast<Isis::PvlContainer &>(templateObject),
+                                                                 static_cast<Isis::PvlContainer &>(resultObject));
+}
+
+Isis::Pvl validatePvlSafe(Isis::Pvl &templatePvl, const Isis::Pvl &pvlToValidate) {
+     Isis::Pvl results(pvlToValidate);
+
+     const int templateObjectCount = templatePvl.objects();
+     for (int objectIndex = 0; objectIndex < templateObjectCount; ++objectIndex) {
+          Isis::PvlObject &templateObject = templatePvl.object(objectIndex);
+          const QString objectName = templateObject.name();
+
+          bool objectFound = false;
+          if (pvlToValidate.hasObject(objectName)) {
+               Isis::PvlObject &resultObject = results.findObject(objectName);
+               validateObjectSafe(templateObject, resultObject);
+               if (resultObject.objects() == 0 && resultObject.groups() == 0 &&
+                         resultObject.keywords() == 0) {
+                    results.deleteObject(objectName);
+               }
+               objectFound = true;
+          }
+          else {
+               objectFound = !isRequiredValidationEntry(static_cast<Isis::PvlContainer &>(templateObject),
+                                                                                                                    objectName);
+          }
+
+          if (!objectFound) {
+               QString errorMessage = "Object \"" + objectName +
+                                                                       "\" Not Found in the Template File\n";
+               throw Isis::IException(Isis::IException::User, errorMessage, _FILEINFO_);
+          }
+     }
+
+     const int templateGroupCount = templatePvl.groups();
+     for (int groupIndex = 0; groupIndex < templateGroupCount; ++groupIndex) {
+          Isis::PvlGroup &templateGroup = templatePvl.group(groupIndex);
+          const QString groupName = templateGroup.name();
+
+          bool groupFound = false;
+          if (pvlToValidate.hasGroup(groupName)) {
+               Isis::PvlGroup &resultGroup = results.findGroup(groupName);
+               validateGroupSafe(templateGroup, resultGroup);
+               if (resultGroup.keywords() == 0) {
+                    results.deleteGroup(groupName);
+               }
+               groupFound = true;
+          }
+          else {
+               groupFound = !isRequiredValidationEntry(static_cast<Isis::PvlContainer &>(templateGroup),
+                                                                                                                   groupName);
+          }
+
+          if (!groupFound) {
+               QString errorMessage = "Group \"" + groupName +
+                                                                       "\" Not Found in the Template File\n";
+               throw Isis::IException(Isis::IException::User, errorMessage, _FILEINFO_);
+          }
+     }
+
+     validateAllKeywordsSafe(static_cast<Isis::PvlContainer &>(templatePvl),
+                                                                 static_cast<Isis::PvlContainer &>(results));
+     return results;
 }
 
 class PvlFormatBindingAccess : public Isis::PvlFormat {
@@ -382,6 +626,7 @@ void bind_base_pvl(py::module_ &m) {
            py::arg("terminator"))
       .def("terminator", [](const Isis::Pvl &self) { return qStringToStdString(self.terminator()); })
       .def("set_format_template",
+           [](Isis::Pvl &self, Isis::Pvl &templatePvl) { self.setFormatTemplate(templatePvl); },
            [](Isis::Pvl &self, Isis::Pvl &temp) { self.setFormatTemplate(temp); },
            py::arg("template_pvl"),
            py::keep_alive<1, 2>(),

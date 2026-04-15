@@ -13,6 +13,7 @@ Updated: 2026-04-12  Geng Xun added focused safe-copy regressions for remaining 
 Updated: 2026-04-12  Geng Xun added focused XmlToPvlTranslationManager constructor coverage for FileName plus translation-stream input.
 Updated: 2026-04-14  Geng Xun added focused Pvl set_format_template and validate_pvl regressions.
 Updated: 2026-04-10  Geng Xun aligned PVL helper test expectations with upstream ISIS behavior for empty units and PDS uppercase names.
+Updated: 2026-04-14  Geng Xun added regressions for set_format_template and empty-valued validate_pvl template keywords.
 """
 
 import unittest
@@ -95,14 +96,21 @@ class PvlUnitTest(unittest.TestCase):
             pvl.set_format_template_file(str(file_path))
 
     def test_pvl_validate_pvl(self):
+        """Test validate_pvl safely handles empty-valued template keywords."""
         """Test validate_pvl returns a Pvl with validation results."""
         template = ip.Pvl()
         grp = ip.PvlGroup("Instrument")
         grp.add_keyword(ip.PvlKeyword("InstrumentId"))
         template.add_group(grp)
         pvl = make_simple_pvl()
+
         result = template.validate_pvl(pvl)
+
         self.assertIsInstance(result, ip.Pvl)
+        self.assertTrue(result.has_group("Instrument"))
+        instrument = result.find_group("Instrument")
+        self.assertFalse(instrument.has_keyword("InstrumentId"))
+        self.assertTrue(instrument.has_keyword("SpacecraftName"))
 
     def test_pvl_object_add_and_delete_nested_object(self):
         pvl = ip.Pvl()

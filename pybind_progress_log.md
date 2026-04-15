@@ -1,5 +1,16 @@
 # Pybind Progress Log
 
+## 2026-04-15
+
+- `PvlGroup.validate_group(...)` safe-wrapper follow-up completed next to the earlier `Pvl.validate_pvl(...)` recovery:
+  - Updated `src/base/bind_base_pvl.cpp` so the Python-facing `PvlGroup.validate_group(...)` binding now routes through the existing `validateGroupSafe(...)` helper instead of the raw upstream `PvlGroup::validateGroup(...)` entry point.
+  - This keeps the upstream validation flow for normal cases while avoiding the same empty-template-keyword crash path that previously required the `Pvl.validate_pvl(...)` wrapper.
+  - Extended `tests/unitTest/pvl_unit_test.py` with a focused regression that validates a group against an empty-valued template keyword and asserts the matched keyword is removed while unrelated keywords remain.
+  - Validation status:
+    - Passed: `cmake --build build` (rebuilt `src/base/bind_base_pvl.cpp` and relinked `_isis_core`)
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest tests.unitTest.pvl_unit_test` (`79` tests, `OK`)
+    - Passed: `/home/gengxun/miniconda3/envs/asp360_new/bin/python tests/smoke_import.py` (`smoke import ok`)
+
 ## 2026-04-14
 
 - **Batch 18: Ledger cleanup — ImageOverlapSet/BundleLidarControlPoint/ProcessMapMosaic/ImageOverlap/Gruen all marked 100%**:

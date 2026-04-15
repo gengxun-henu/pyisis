@@ -14,6 +14,7 @@ Updated: 2026-04-12  Geng Xun added focused XmlToPvlTranslationManager construct
 Updated: 2026-04-14  Geng Xun added focused Pvl set_format_template and validate_pvl regressions.
 Updated: 2026-04-10  Geng Xun aligned PVL helper test expectations with upstream ISIS behavior for empty units and PDS uppercase names.
 Updated: 2026-04-14  Geng Xun added regressions for set_format_template and empty-valued validate_pvl template keywords.
+Updated: 2026-04-15  Geng Xun added a regression ensuring PvlGroup.validate_group safely handles empty-valued template keywords.
 """
 
 import unittest
@@ -110,6 +111,20 @@ class PvlUnitTest(unittest.TestCase):
         instrument = result.find_group("Instrument")
         self.assertFalse(instrument.has_keyword("InstrumentId"))
         self.assertTrue(instrument.has_keyword("SpacecraftName"))
+
+    def test_pvl_group_validate_group_empty_template_keyword(self):
+        """Test validate_group safely treats empty-valued template keywords as presence-only checks."""
+        template_group = ip.PvlGroup("Instrument")
+        template_group.add_keyword(ip.PvlKeyword("InstrumentId"))
+
+        group = ip.PvlGroup("Instrument")
+        group.add_keyword(ip.PvlKeyword("InstrumentId", "HIRISE"))
+        group.add_keyword(ip.PvlKeyword("SpacecraftName", "MRO"))
+
+        template_group.validate_group(group)
+
+        self.assertFalse(group.has_keyword("InstrumentId"))
+        self.assertTrue(group.has_keyword("SpacecraftName"))
 
     def test_pvl_object_add_and_delete_nested_object(self):
         pvl = ip.Pvl()

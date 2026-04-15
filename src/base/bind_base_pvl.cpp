@@ -9,6 +9,7 @@
 // Updated: 2026-04-12  Geng Xun added safe-copy helpers for remaining PvlTranslationTable APIs and restored the XmlToPvlTranslationManager FileName+stream constructor.
 // Updated: 2026-04-14  Geng Xun replaced the direct validate_pvl binding with an empty-template-safe wrapper to prevent PVL validation segfaults.
 // Updated: 2026-04-14  Geng Xun added Pvl set_format_template (2 overloads) and validate_pvl.
+// Updated: 2026-04-15  Geng Xun routed PvlGroup.validate_group through the same empty-template-safe wrapper used by validate_pvl.
 // Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, PvlFormatPds, PvlTranslationTable, LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, and XmlToPvlTranslationManager
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -510,7 +511,9 @@ void bind_base_pvl(py::module_ &m) {
       })
       // Added: 2026-04-11 - expose validateGroup
       .def("validate_group",
-           &Isis::PvlGroup::validateGroup,
+                          [](Isis::PvlGroup &self, Isis::PvlGroup &pvlGroup) {
+                               validateGroupSafe(self, pvlGroup);
+                          },
            py::arg("pvl_group"),
            "Validate keywords in the given PvlGroup against this template group.");
 

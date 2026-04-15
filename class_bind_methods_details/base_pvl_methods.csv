@@ -1,3 +1,20 @@
+<<<<<<< HEAD
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Pvl,Parsing,isis/src/base/objs/Pvl/Pvl.h,isis_pybind_standalone/src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Pvl,isis_pybind.Pvl,Y,Python class symbol is exported
+Construction/Enum,Pvl(),isis_pybind.Pvl(),Y,Constructor is explicitly bound
+Public API,void fromString(const std::string &str),isis_pybind.Pvl.from_string,Y,Bound via direct method binding
+Read/Write IO,void read(const QString &file),isis_pybind.Pvl.read,Y,Bound via QString-to-std::string wrapper
+Read/Write IO,void write(const QString &file),isis_pybind.Pvl.write,Y,Bound via QString-to-std::string wrapper
+Public API,void append(const QString &file),isis_pybind.Pvl.append,Y,Bound via QString-to-std::string wrapper
+Mutation/Configuration,void setTerminator(const QString &term) { m_terminator = term,isis_pybind.Pvl.set_terminator,Y,Bound via QString-to-std::string wrapper
+Public API,QString terminator() const { return m_terminator,isis_pybind.Pvl.terminator,Y,Returns std::string converted from QString
+Mutation/Configuration,void setFormatTemplate(Isis::Pvl &temp),isis_pybind.Pvl.set_format_template,Y,Bound with keep_alive to preserve the external template object lifetime
+Mutation/Configuration,void setFormatTemplate(const QString &filename),isis_pybind.Pvl.set_format_template_file,Y,Bound as a Python file-path helper
+Query,"void validatePvl(const Pvl & pPvl, Pvl & pPvlResults)",isis_pybind.Pvl.validate_pvl,Y,Bound through a Python-safe wrapper that treats empty-valued template keywords as presence-only checks and avoids the upstream segfault path
+=======
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 Pvl,Parsing,isis/src/base/objs/Pvl/Pvl.h,isis_pybind_standalone/src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
 
@@ -13,3 +30,4 @@ Public API,QString terminator() const { return m_terminator,isis_pybind.Pvl.term
 Mutation/Configuration,void setFormatTemplate(Isis::Pvl &temp),isis_pybind.Pvl.set_format_template,Y,2026-04-14 新增绑定
 Mutation/Configuration,void setFormatTemplate(const QString &filename),isis_pybind.Pvl.set_format_template_file,Y,2026-04-14 新增绑定
 Query,"void validatePvl(const Pvl & pPvl, Pvl & pPvlResults)",isis_pybind.Pvl.validate_pvl,Y,2026-04-14 新增绑定；返回验证结果 Pvl 而非 out-param
+>>>>>>> origin/main

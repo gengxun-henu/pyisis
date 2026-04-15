@@ -85,7 +85,10 @@ class PvlUnitTest(unittest.TestCase):
         """Test set_format_template with a Pvl object."""
         pvl = make_simple_pvl()
         template = ip.Pvl()
+<<<<<<< HEAD
+=======
         # Should not raise
+>>>>>>> origin/main
         pvl.set_format_template(template)
 
     def test_pvl_set_format_template_file(self):
@@ -97,7 +100,6 @@ class PvlUnitTest(unittest.TestCase):
 
     def test_pvl_validate_pvl(self):
         """Test validate_pvl safely handles empty-valued template keywords."""
-        """Test validate_pvl returns a Pvl with validation results."""
         template = ip.Pvl()
         grp = ip.PvlGroup("Instrument")
         grp.add_keyword(ip.PvlKeyword("InstrumentId"))

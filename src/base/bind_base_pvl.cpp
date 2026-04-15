@@ -7,8 +7,11 @@
 // Updated: 2026-04-10  Geng Xun replaced direct protected-member bindings with helper-copy wrappers for PvlFormat and PvlTranslationTable.
 // Updated: 2026-04-12  Geng Xun exposed remaining public format_end helpers for PvlFormat and PvlFormatPds.
 // Updated: 2026-04-12  Geng Xun added safe-copy helpers for remaining PvlTranslationTable APIs and restored the XmlToPvlTranslationManager FileName+stream constructor.
+<<<<<<< HEAD
 // Updated: 2026-04-14  Geng Xun replaced the direct validate_pvl binding with an empty-template-safe wrapper to prevent PVL validation segfaults.
+=======
 // Updated: 2026-04-14  Geng Xun added Pvl set_format_template (2 overloads) and validate_pvl.
+>>>>>>> origin/main
 // Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, PvlFormatPds, PvlTranslationTable, LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, and XmlToPvlTranslationManager
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -626,8 +629,11 @@ void bind_base_pvl(py::module_ &m) {
            py::arg("terminator"))
       .def("terminator", [](const Isis::Pvl &self) { return qStringToStdString(self.terminator()); })
       .def("set_format_template",
+<<<<<<< HEAD
            [](Isis::Pvl &self, Isis::Pvl &templatePvl) { self.setFormatTemplate(templatePvl); },
+=======
            [](Isis::Pvl &self, Isis::Pvl &temp) { self.setFormatTemplate(temp); },
+>>>>>>> origin/main
            py::arg("template_pvl"),
            py::keep_alive<1, 2>(),
            "Set the format template from a Pvl object.")
@@ -638,10 +644,15 @@ void bind_base_pvl(py::module_ &m) {
            py::arg("filename"),
            "Set the format template by loading a Pvl file.")
       .def("validate_pvl",
+<<<<<<< HEAD
+           [](Isis::Pvl &self, const Isis::Pvl &pvlToValidate) {
+             return validatePvlSafe(self, pvlToValidate);
+=======
            [](Isis::Pvl &self, const Isis::Pvl &pvl_to_validate) {
              Isis::Pvl results;
              self.validatePvl(pvl_to_validate, results);
              return results;
+>>>>>>> origin/main
            },
            py::arg("pvl_to_validate"),
            "Validate a Pvl against this template Pvl, returning the validation results.")

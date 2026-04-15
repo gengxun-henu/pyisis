@@ -85,10 +85,7 @@ class PvlUnitTest(unittest.TestCase):
         """Test set_format_template with a Pvl object."""
         pvl = make_simple_pvl()
         template = ip.Pvl()
-<<<<<<< HEAD
-=======
         # Should not raise
->>>>>>> origin/main
         pvl.set_format_template(template)
 
     def test_pvl_set_format_template_file(self):

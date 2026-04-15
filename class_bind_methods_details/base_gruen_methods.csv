@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Gruen,Pattern Matching,isis/src/base/objs/Gruen/Gruen.h,src/base/bind_base_pattern.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-10 已在 src/base/bind_base_pattern.cpp 完成构造函数及主要约束访问器绑定；GruenTypes-specific 方法（AffineRadio/AffineTolerance）未暴露
+Gruen,Pattern Matching,isis/src/base/objs/Gruen/Gruen.h,src/base/bind_base_pattern.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"2026-04-14 全部 12/12 方法已绑定 100%；6N 为有意排除项：默认构造不暴露（需 PVL 配置）、4 个 GruenTypes 内部类型方法（AffineRadio/AffineTolerance/MatchPoint）、1 个 BigInt CallCount；Python 侧通过 Pvl 构造 + 约束访问器 + 继承 AutoReg 方法覆盖"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Gruen,isis_pybind.Gruen,Y,Exported in python/isis_pybind/__init__.py

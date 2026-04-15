@@ -3,7 +3,7 @@ Unit tests for ISIS utility classes: Column, Environment, IString, LineEquation
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-09
+Last Modified: 2026-04-14
 Updated: 2026-04-09  Geng Xun added Message namespace regression coverage for standardized ISIS text templates.
 Updated: 2026-04-09  Geng Xun added CollectorMap focused coverage for unique and duplicate key policies.
 Updated: 2026-04-09  Geng Xun added Plugin focused coverage for runtime plugin address resolution and failure paths.
@@ -11,6 +11,7 @@ Updated: 2026-04-08  Geng Xun added Environment regression coverage alongside ex
 Updated: 2026-04-09  Geng Xun added IString and free-function helpers (to_bool/to_int/to_double/to_string) unit tests.
 Updated: 2026-04-10  Geng Xun added Pixel, ID, EndianSwapper, and TextFile focused unit tests.
 Updated: 2026-04-10  Geng Xun aligned ID overflow expectations with upstream placeholder-width semantics.
+Updated: 2026-04-14  Geng Xun added EndianSwapper export_float, swap_uint32, swap_long_long, and error-path tests.
 """
 import os
 import tempfile
@@ -931,6 +932,42 @@ class EndianSwapperUnitTest(unittest.TestCase):
         es = ip.EndianSwapper("LSB")
         with self.assertRaises((ValueError, Exception)):
             es.swap_double(b'\x00\x01')
+
+    def test_export_float_api(self):
+        """export_float accepts 4+ bytes and returns an integer."""
+        import struct
+        buf = struct.pack('<f', 2.5)
+        es = ip.EndianSwapper("LSB")
+        result = es.export_float(buf)
+        self.assertIsInstance(result, int)
+
+    def test_swap_uint32_api(self):
+        """swap_uint32 accepts 4+ bytes and returns an integer."""
+        import struct
+        buf = struct.pack('<I', 12345)
+        es = ip.EndianSwapper("LSB")
+        result = es.swap_uint32(buf)
+        self.assertIsInstance(result, int)
+
+    def test_swap_long_long_api(self):
+        """swap_long_long accepts 8+ bytes and returns an integer."""
+        import struct
+        buf = struct.pack('<q', 9876543210)
+        es = ip.EndianSwapper("LSB")
+        result = es.swap_long_long(buf)
+        self.assertIsInstance(result, int)
+
+    def test_swap_uint32_too_small_raises(self):
+        """swap_uint32 with insufficient buffer raises ValueError."""
+        es = ip.EndianSwapper("LSB")
+        with self.assertRaises((ValueError, Exception)):
+            es.swap_uint32(b'\x00')
+
+    def test_swap_long_long_too_small_raises(self):
+        """swap_long_long with insufficient buffer raises ValueError."""
+        es = ip.EndianSwapper("LSB")
+        with self.assertRaises((ValueError, Exception)):
+            es.swap_long_long(b'\x00\x01\x02')
 
 
 class TextFileUnitTest(unittest.TestCase):

@@ -28,6 +28,7 @@
  * Updated: 2026-04-10  Geng Xun fixed Pixel predicate bindings to evaluate SpecialPixel semantics explicitly in Python wrappers.
  * Updated: 2026-04-11  Geng Xun fixed PolygonTools/GSLUtility bindings to match the actual ISIS 9.0.0 public API and singleton lifetime rules.
  * Updated: 2026-04-11  Geng Xun exported PolygonTools as a real Python utility class while preserving module-level helper aliases for backward compatibility.
+ * Updated: 2026-04-14  Geng Xun added EndianSwapper export_float, swap_uint32, and swap_long_long methods.
  * Purpose: Expose CollectorMap, Column, EndianSwapper, Environment, ID, IString, LineEquation, Message helpers, Pixel, Plugin, Resource, and TextFile utility classes to Python via pybind11.
  */
 
@@ -1123,6 +1124,36 @@ void bind_base_utility(py::module_ &m) {
            },
            py::arg("buf"),
            "Swap bytes in a 2-byte buffer and return as unsigned short int.")
+      .def("export_float",
+           [](Isis::EndianSwapper &self, py::bytes buf) {
+             std::string s(buf);
+             if (s.size() < sizeof(float)) {
+               throw py::value_error("Buffer too small for float (need 4 bytes)");
+             }
+             return self.ExportFloat(static_cast<void *>(s.data()));
+           },
+           py::arg("buf"),
+           "Export a float value with byte-swapping and return as int (raw IEEE-754 bits).")
+      .def("swap_uint32",
+           [](Isis::EndianSwapper &self, py::bytes buf) {
+             std::string s(buf);
+             if (s.size() < sizeof(uint32_t)) {
+               throw py::value_error("Buffer too small for uint32_t (need 4 bytes)");
+             }
+             return self.Uint32_t(static_cast<void *>(s.data()));
+           },
+           py::arg("buf"),
+           "Swap bytes in a 4-byte buffer and return as uint32_t.")
+      .def("swap_long_long",
+           [](Isis::EndianSwapper &self, py::bytes buf) {
+             std::string s(buf);
+             if (s.size() < sizeof(long long int)) {
+               throw py::value_error("Buffer too small for long long int (need 8 bytes)");
+             }
+             return self.LongLongInt(static_cast<void *>(s.data()));
+           },
+           py::arg("buf"),
+           "Swap bytes in an 8-byte buffer and return as long long int.")
       .def("__repr__", [](const Isis::EndianSwapper &self) {
             return std::string("EndianSwapper(will_swap=") +
                    (self.willSwap() ? "True" : "False") + ")";

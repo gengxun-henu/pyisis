@@ -1,12 +1,12 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-TableRecord,Low Level Cube I/O,isis/src/base/objs/TableRecord/TableRecord.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,需注意内存生命周期与数据视图映射
+TableRecord,Low Level Cube I/O,isis/src/base/objs/TableRecord/TableRecord.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"2026-04-14 台账同步：fields/record_size/to_string 已绑定；pack/unpack/swap 因 raw char* 暂不暴露"
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,TableRecord,isis_pybind.TableRecord,Y,Python class symbol is exported; 需注意内存生命周期与数据视图映射
-Construction/Enum,TableRecord(),isis_pybind.TableRecord(),Y,Constructor is explicitly bound
-Static/Factory,"static QString toString(TableRecord record, QString fieldDelimiter = "","", bool fieldNames = false, bool endLine = true)",isis_pybind.TableRecord.to_string,N,需注意内存生命周期与数据视图映射
-Public API,int Fields() const,isis_pybind.TableRecord.fields,N,需注意内存生命周期与数据视图映射
-Public API,int RecordSize() const,isis_pybind.TableRecord.record_size,N,需注意内存生命周期与数据视图映射
-Public API,void Pack(char *buf) const,isis_pybind.TableRecord.pack,N,需注意内存生命周期与数据视图映射
-Public API,void Unpack(const char *buf),isis_pybind.TableRecord.unpack,N,需注意内存生命周期与数据视图映射
-Public API,void Swap(char *buf) const,isis_pybind.TableRecord.swap,N,需注意内存生命周期与数据视图映射
+Class Symbol,TableRecord,isis_pybind.TableRecord,Y,已在 src/bind_low_level_cube_io.cpp 暴露
+Construction/Enum,TableRecord(),isis_pybind.TableRecord(),Y,已在 src/bind_low_level_cube_io.cpp 暴露
+Static/Factory,"static QString toString(TableRecord record, QString fieldDelimiter = "","", bool fieldNames = false, bool endLine = true)",isis_pybind.TableRecord.to_string,Y,已在 src/bind_low_level_cube_io.cpp 通过 lambda 适配 QString
+Public API,int Fields() const,isis_pybind.TableRecord.fields,Y,已在 src/bind_low_level_cube_io.cpp 暴露
+Public API,int RecordSize() const,isis_pybind.TableRecord.record_size,Y,已在 src/bind_low_level_cube_io.cpp 暴露
+Public API,void Pack(char *buf) const,isis_pybind.TableRecord.pack,N,Raw char* buffer API；Python 侧通过 Table 高阶读写操作覆盖
+Public API,void Unpack(const char *buf),isis_pybind.TableRecord.unpack,N,Raw char* buffer API；Python 侧通过 Table 高阶读写操作覆盖
+Public API,void Swap(char *buf) const,isis_pybind.TableRecord.swap,N,Raw char* buffer API；Python 侧通过 Table 高阶读写操作覆盖

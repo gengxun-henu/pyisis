@@ -10,6 +10,8 @@
 // Updated: 2026-04-12  Geng Xun exposed DawnFcCamera construction and shutter timing helpers for the next low-risk rollout batch.
 // Updated: 2026-04-12  Geng Xun exposed KaguyaMiCamera and KaguyaTcCamera Cube constructors for the low-risk mission-camera rollout batch.
 // Updated: 2026-04-12  Geng Xun exposed the LroNarrowAngleCamera Cube constructor to finish the current low-risk mission-camera rollout queue.
+// Updated: 2026-04-14  Geng Xun completed CTXCamera, HiriseCamera, MocNarrowAngleCamera, CrismCamera, MarciCamera constructor + SPICE ID + band methods.
+// Updated: 2026-04-14  Geng Xun completed MdisCamera and MsiCamera Cube constructors + shutter_open_close_times + SPICE ID methods.
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -795,7 +797,23 @@ void bind_mission_cameras(py::module_ &m) {
            "CK Reference ID - J2000")
       .def("spk_reference_id", &Isis::Mariner10Camera::SpkReferenceId,
            "SPK Reference ID - J2000");
-  py::class_<Isis::MdisCamera, Isis::FramingCamera>(m, "MdisCamera");
+  py::class_<Isis::MdisCamera, Isis::FramingCamera>(m, "MdisCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a MESSENGER MDIS framing camera model from an opened Cube.")
+      .def("shutter_open_close_times",
+           &Isis::MdisCamera::ShutterOpenCloseTimes,
+           py::arg("time"), py::arg("exposure_duration"),
+           "Return (open, close) iTime pair for the given time and exposure duration.")
+      .def("ck_frame_id", &Isis::MdisCamera::CkFrameId,
+           "CK frame ID - MESSENGER instrument code (-236000)")
+      .def("ck_reference_id", &Isis::MdisCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_target_id", &Isis::MdisCamera::SpkTargetId,
+           "SPK Target Body ID - MESSENGER spacecraft (-236)")
+      .def("spk_reference_id", &Isis::MdisCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
   py::class_<Isis::TaylorCameraDistortionMap, Isis::CameraDistortionMap>(m, "TaylorCameraDistortionMap")
       .def(py::init<Isis::Camera *, double>(),
            py::arg("parent") = nullptr,
@@ -847,7 +865,17 @@ void bind_mission_cameras(py::module_ &m) {
            "CK Reference ID - J2000")
       .def("spk_reference_id", &Isis::MexHrscSrcCamera::SpkReferenceId,
            "SPK Reference ID - J2000");
-  py::class_<Isis::MocNarrowAngleCamera, Isis::LineScanCamera>(m, "MocNarrowAngleCamera");
+  py::class_<Isis::MocNarrowAngleCamera, Isis::LineScanCamera>(m, "MocNarrowAngleCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a Mars Global Surveyor MOC Narrow Angle line-scan camera model from an opened Cube.")
+      .def("ck_frame_id", &Isis::MocNarrowAngleCamera::CkFrameId,
+           "CK frame ID - Instrument Code from spacit run on CK")
+      .def("ck_reference_id", &Isis::MocNarrowAngleCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::MocNarrowAngleCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
   py::class_<Isis::MocWideAngleCamera, Isis::LineScanCamera>(m, "MocWideAngleCamera")
       .def("ck_frame_id", &Isis::MocWideAngleCamera::CkFrameId,
            "CK frame ID - Instrument Code from spacit run on CK")
@@ -855,11 +883,75 @@ void bind_mission_cameras(py::module_ &m) {
            "CK Reference ID - J2000")
       .def("spk_reference_id", &Isis::MocWideAngleCamera::SpkReferenceId,
            "SPK Reference ID - J2000");
-  py::class_<Isis::HiriseCamera, Isis::LineScanCamera>(m, "HiriseCamera");
-  py::class_<Isis::CTXCamera, Isis::LineScanCamera>(m, "CTXCamera");
-  py::class_<Isis::CrismCamera, Isis::LineScanCamera>(m, "CrismCamera");
-  py::class_<Isis::MarciCamera, Isis::PushFrameCamera>(m, "MarciCamera");
-  py::class_<Isis::MsiCamera, Isis::FramingCamera>(m, "MsiCamera");
+  py::class_<Isis::HiriseCamera, Isis::LineScanCamera>(m, "HiriseCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an MRO HiRISE line-scan camera model from an opened Cube.")
+      .def("ck_frame_id", &Isis::HiriseCamera::CkFrameId,
+           "CK frame ID - Instrument Code from spacit run on CK")
+      .def("ck_reference_id", &Isis::HiriseCamera::CkReferenceId,
+           "CK Reference ID - MRO_MME_OF_DATE")
+      .def("spk_reference_id", &Isis::HiriseCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::CTXCamera, Isis::LineScanCamera>(m, "CTXCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an MRO CTX line-scan camera model from an opened Cube.")
+      .def("ck_frame_id", &Isis::CTXCamera::CkFrameId,
+           "CK frame ID - Instrument Code from spacit run on CK")
+      .def("ck_reference_id", &Isis::CTXCamera::CkReferenceId,
+           "CK Reference ID - MRO_MME_OF_DATE")
+      .def("spk_reference_id", &Isis::CTXCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::CrismCamera, Isis::LineScanCamera>(m, "CrismCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an MRO CRISM line-scan camera model from an opened Cube.")
+      .def("set_band", &Isis::CrismCamera::SetBand,
+           py::arg("physical_band"),
+           "Set the band to the given physical band number.")
+      .def("is_band_independent", &Isis::CrismCamera::IsBandIndependent,
+           "Check whether the camera geometry is band independent.")
+      .def("ck_frame_id", &Isis::CrismCamera::CkFrameId,
+           "CK frame ID - Instrument Code from spacit run on CK")
+      .def("ck_reference_id", &Isis::CrismCamera::CkReferenceId,
+           "CK Reference ID - J2000")
+      .def("spk_reference_id", &Isis::CrismCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::MarciCamera, Isis::PushFrameCamera>(m, "MarciCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct an MRO MARCI push-frame camera model from an opened Cube.")
+      .def("set_band", &Isis::MarciCamera::SetBand,
+           py::arg("band"),
+           "Set the band to the given band number.")
+      .def("is_band_independent", &Isis::MarciCamera::IsBandIndependent,
+           "Check whether the camera geometry is band independent.")
+      .def("ck_frame_id", &Isis::MarciCamera::CkFrameId,
+           "CK frame ID")
+      .def("ck_reference_id", &Isis::MarciCamera::CkReferenceId,
+           "CK Reference ID")
+      .def("spk_reference_id", &Isis::MarciCamera::SpkReferenceId,
+           "SPK Reference ID - J2000");
+  py::class_<Isis::MsiCamera, Isis::FramingCamera>(m, "MsiCamera")
+      .def(py::init<Isis::Cube &>(),
+           py::arg("cube"),
+           py::keep_alive<1, 2>(),
+           "Construct a NEAR Shoemaker MSI framing camera model from an opened Cube.")
+      .def("shutter_open_close_times",
+           &Isis::MsiCamera::ShutterOpenCloseTimes,
+           py::arg("time"), py::arg("exposure_duration"),
+           "Return (open, close) iTime pair for the given time and exposure duration.")
+      .def("ck_frame_id", &Isis::MsiCamera::CkFrameId,
+           "CK frame ID")
+      .def("ck_reference_id", &Isis::MsiCamera::CkReferenceId,
+           "CK Reference ID")
+      .def("spk_reference_id", &Isis::MsiCamera::SpkReferenceId,
+           "SPK Reference ID");
   py::class_<Isis::NewHorizonsLeisaCamera, Isis::LineScanCamera>(m, "NewHorizonsLeisaCamera")
       .def(py::init<Isis::Cube &>(),
            py::arg("cube"),

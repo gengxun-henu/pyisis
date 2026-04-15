@@ -176,6 +176,48 @@ isis_pybind/
 
 那么你可以把整个 `isis_pybind/` 目录复制到目标 Python 环境的 `site-packages` 目录下。
 
+对于 Linux 上的 conda 环境，目标路径通常类似于：
+
+```text
+$CONDA_PREFIX/lib/pythonX.Y/site-packages/isis_pybind/
+```
+
+例如，如果目标环境是一个使用 CPython 3.12 的 conda ISIS 环境，那么最终路径通常类似：
+
+```text
+/home/你的用户名/miniconda3/envs/你的环境名/lib/python3.12/site-packages/isis_pybind/
+```
+
+如果你是从本仓库本地构建结果中手动复制，优先复制这个完整的构建后包目录：
+
+```text
+build/python/isis_pybind/
+```
+
+而不是只复制源码侧目录：
+
+```text
+python/isis_pybind/
+```
+
+因为构建后的目录同时包含 `__init__.py` 和编译得到的扩展模块 `_isis_core*.so`。
+
+你也可以直接在目标环境里查询它自己的 `site-packages` 路径：
+
+```bash
+python -c "import sysconfig; print(sysconfig.get_path('purelib'))"
+```
+
+然后把整个构建后的 `isis_pybind/` 目录复制进去，最终应形成类似结构：
+
+```text
+<site-packages>/isis_pybind/__init__.py
+<site-packages>/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so
+<site-packages>/isis_pybind/LICENSE
+```
+
+同时请确认目标环境的 Python ABI 与构建产物匹配。例如，文件名 `_isis_core.cpython-312-x86_64-linux-gnu.so` 表示它是为 CPython 3.12 构建的，不应直接复制到 Python 3.11 或 3.13 环境中使用。
+
 > 不建议只单独复制 `_isis_core*.so`。
 
 ### 共享库加载要求

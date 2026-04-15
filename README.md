@@ -176,6 +176,48 @@ isis_pybind/
 
 then you can copy the entire `isis_pybind/` directory into the target Python environment's `site-packages` directory.
 
+For a conda environment on Linux, the destination is typically:
+
+```text
+$CONDA_PREFIX/lib/pythonX.Y/site-packages/isis_pybind/
+```
+
+For example, if your target environment is a conda ISIS environment using CPython 3.12, the final path often looks like:
+
+```text
+/home/your_user/miniconda3/envs/your_env_name/lib/python3.12/site-packages/isis_pybind/
+```
+
+If you are copying from a local build of this repository, prefer copying the fully built package directory:
+
+```text
+build/python/isis_pybind/
+```
+
+instead of copying only the source-side directory:
+
+```text
+python/isis_pybind/
+```
+
+because the built package directory includes the compiled extension module `_isis_core*.so` together with `__init__.py`.
+
+You can ask the target environment itself for the correct `site-packages` path with:
+
+```bash
+python -c "import sysconfig; print(sysconfig.get_path('purelib'))"
+```
+
+Then copy the entire built package directory into that location so that the result becomes:
+
+```text
+<site-packages>/isis_pybind/__init__.py
+<site-packages>/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so
+<site-packages>/isis_pybind/LICENSE
+```
+
+Make sure the target environment uses a compatible Python ABI. For example, a file named `_isis_core.cpython-312-x86_64-linux-gnu.so` is built for CPython 3.12 and should be installed into a Python 3.12 environment rather than copied into Python 3.11 or 3.13.
+
 > Copying only `_isis_core*.so` by itself is not recommended.
 
 ### Shared-library loading requirements

@@ -33,7 +33,6 @@ endif()
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 find_package(pybind11 CONFIG REQUIRED)
-find_package(Qt5 REQUIRED COMPONENTS Core Concurrent Xml Widgets)
 
 set(ISIS_PREFIX "$ENV{ISIS_PREFIX}" CACHE PATH "Prefix of an external ISIS installation or conda environment")
 if(NOT ISIS_PREFIX AND DEFINED ENV{CONDA_PREFIX})
@@ -45,6 +44,25 @@ endif()
 if(NOT ISIS_PREFIX)
   message(FATAL_ERROR "ISIS_PREFIX is not set. Point it to the external ISIS installation (for example the asp360_new conda environment).")
 endif()
+
+set(_qt5_cmake_root "${ISIS_PREFIX}/lib/cmake")
+set(_qt5_config_dir "${_qt5_cmake_root}/Qt5")
+if(EXISTS "${_qt5_config_dir}/Qt5Config.cmake")
+  set(Qt5_DIR "${_qt5_config_dir}" CACHE PATH
+    "Qt5 config directory preferred from the active ISIS/conda prefix" FORCE)
+  set(Qt5Core_DIR "${_qt5_cmake_root}/Qt5Core" CACHE PATH
+    "Qt5Core config directory preferred from the active ISIS/conda prefix" FORCE)
+  set(Qt5Concurrent_DIR "${_qt5_cmake_root}/Qt5Concurrent" CACHE PATH
+    "Qt5Concurrent config directory preferred from the active ISIS/conda prefix" FORCE)
+  set(Qt5Xml_DIR "${_qt5_cmake_root}/Qt5Xml" CACHE PATH
+    "Qt5Xml config directory preferred from the active ISIS/conda prefix" FORCE)
+  set(Qt5Widgets_DIR "${_qt5_cmake_root}/Qt5Widgets" CACHE PATH
+    "Qt5Widgets config directory preferred from the active ISIS/conda prefix" FORCE)
+  set(Qt5Gui_DIR "${_qt5_cmake_root}/Qt5Gui" CACHE PATH
+    "Qt5Gui config directory preferred from the active ISIS/conda prefix" FORCE)
+endif()
+
+find_package(Qt5 CONFIG REQUIRED COMPONENTS Core Concurrent Xml Widgets)
 
 set(ISIS_INCLUDE_DIR "${ISIS_PREFIX}/include/isis" CACHE PATH "Directory containing ISIS headers")
 set(ISIS_DEP_INCLUDE_DIR "${ISIS_PREFIX}/include" CACHE PATH "Directory containing external ISIS dependencies such as CSPICE and Qt headers")
@@ -312,6 +330,7 @@ message(STATUS "Using extra projection libs: ${ISIS_EXTRA_PROJECTION_LIBS}")
 message(STATUS "Using Bullet runtime libs: ${BULLET_RUNTIME_LIBS}")
 message(STATUS "Using PCL include dirs: ${PCL_INCLUDE_DIRS}")
 message(STATUS "Using Eigen include dir: ${EIGEN3_INCLUDE_DIR}")
+message(STATUS "Using Qt5 config dir: ${Qt5_DIR}")
 if(DEFINED CMAKE_CXX_COMPILER_LAUNCHER AND NOT CMAKE_CXX_COMPILER_LAUNCHER STREQUAL "")
   message(STATUS "Using C++ compiler launcher: ${CMAKE_CXX_COMPILER_LAUNCHER}")
 else()

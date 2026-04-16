@@ -19,4 +19,4 @@
 
 ## 对应产物
 
-- 代码计划与架构：`examples/controlnet_construct/plan_architecture_dom_matching_controlnet.md`
+- 代码计划与架构: `examples/controlnet_construct/plan_architecture_dom_matching_controlnet.md`

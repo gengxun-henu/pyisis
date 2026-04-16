@@ -52,8 +52,17 @@
 
 - Python 函数：
   - `construct_controlnet_with_dom_matching(left_cube, right_cube, *, candidates=None, config: dict | DomMatchConfig) -> Result`
-  - `config` 建议至少包含：`pattern_samples`、`pattern_lines`、`search_samples`、`search_lines`、`tolerance`、`use_subpixel`、`quality_threshold`。
-  - 字段约定：`pattern_samples`、`pattern_lines`、`search_samples`、`search_lines` 为必填；`tolerance`、`use_subpixel`、`quality_threshold` 可选（可提供默认值）。
+  - `config` 字段建议：
+
+| 字段 | 是否必填 | 默认值（若可选） | 说明 |
+| --- | --- | --- | --- |
+| `pattern_samples` | 是 | - | 匹配模板窗口宽 |
+| `pattern_lines` | 是 | - | 匹配模板窗口高 |
+| `search_samples` | 是 | - | 搜索窗口宽 |
+| `search_lines` | 是 | - | 搜索窗口高 |
+| `tolerance` | 否 | `0.70` | 匹配阈值 |
+| `use_subpixel` | 否 | `True` | 是否启用亚像素 |
+| `quality_threshold` | 否 | `0.80` | 入网质量阈值 |
 - CLI：
   - `python examples/controlnet_construct/...py --left ... --right ... --onet ...`
 

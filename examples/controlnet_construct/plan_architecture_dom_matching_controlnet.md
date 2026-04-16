@@ -1,4 +1,4 @@
-# DOM Matching ControlNet 代码撰写计划与架构（初稿）
+git# DOM Matching ControlNet 代码撰写计划与架构（初稿）
 
 > 说明：本稿基于 `examples/controlnet_construct/requirements_dom_matching_controlnet.md` 工作稿生成，先给出可执行的实现计划与架构，后续可按正式需求逐条收敛。
 

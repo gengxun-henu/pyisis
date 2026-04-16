@@ -1,12 +1,12 @@
 # DOM Matching ControlNet 代码撰写计划与架构
 
-> 说明：当前仓库中未找到既有同名需求文档。以下内容基于文件名 `requirements_dom_matching_controlnet` 和现有 pyisis 示例风格先给出可执行的首版开发计划与架构草案，后续可按真实业务细节细化。
+> 说明：当前仓库中未找到同名需求文档。以下内容基于文件名 `requirements_dom_matching_controlnet` 和现有 pyisis 示例风格先给出可执行的首版开发计划与架构草案，后续可按真实业务细节细化。
 
 ## 1. 代码撰写计划（先做最小可用版本）
 
 - [ ] **阶段 A：输入与参数层**
   - 新建示例入口：`examples/controlnet_construct/dom_matching_controlnet.py`
-  - 支持 CLI 参数：左/右（或多景）cube 路径、匹配窗口、阈值、输出 control net 路径
+  - 支持 CLI 参数：左/右（或多景）cube 路径、匹配窗口、阈值、输出 ControlNet 路径
   - 统一参数校验与报错（缺参、路径不存在、窗口非法）
 
 - [ ] **阶段 B：几何初始化与候选点生成**
@@ -19,7 +19,7 @@
 
 - [ ] **阶段 D：ControlNet 构建与输出**
   - 将成功匹配结果写入 `ControlNet / ControlPoint / ControlMeasure`
-  - 输出 `.net`（或等效 control network 文件）
+  - 输出 `.net`（或等效 ControlNet 文件）
   - 同时输出摘要统计（成功数、失败数、平均匹配质量）
 
 - [ ] **阶段 E：测试与验收**

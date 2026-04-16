@@ -1,6 +1,6 @@
 # DOM Matching ControlNet 代码撰写计划与架构
 
-> 说明：当前仓库中未找到既有的同名需求正文。以下内容基于文件名 `requirements_dom_matching_controlnet` 和现有 pyisis 示例风格先给出可执行的首版开发计划与架构草案，后续可按真实业务细节细化。
+> 说明：当前仓库中未找到既有的同名需求文档正文。以下内容基于文件名 `requirements_dom_matching_controlnet` 和现有 pyisis 示例风格先给出可执行的首版开发计划与架构草案，后续可按真实业务细节细化。
 
 ## 1. 代码撰写计划（先做最小可用版本）
 
@@ -79,4 +79,3 @@
 - 支持基础相关匹配
 - 生成可写出的 ControlNet
 - 提供 1 个最小可跑通单测和 1 个失败分支单测
-

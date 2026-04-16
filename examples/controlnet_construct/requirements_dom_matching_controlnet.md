@@ -5,7 +5,7 @@
 ## 1. 代码撰写计划（先做最小可用版本）
 
 - [ ] **阶段 A：输入与参数层**
-  - 新建示例入口：`examples/controlnet_construct/dom_matching_controlnet.py`
+  - 新建示例入口：`examples/controlnet_construct/dom_matching_control_net.py`
   - 支持 CLI 参数：左/右（或多景）cube 路径、匹配窗口、阈值、输出 ControlNet 路径
   - 统一参数校验与报错（缺参、路径不存在、窗口非法）
 
@@ -23,7 +23,7 @@
   - 同时输出摘要统计（成功数、失败数、平均匹配质量）
 
 - [ ] **阶段 E：测试与验收**
-  - 新增单测：`tests/unitTest/dom_matching_controlnet_unit_test.py`
+  - 新增单测：`tests/unitTest/dom_matching_control_net_unit_test.py`
   - 覆盖：参数校验、单点成功路径、失败分支、最小端到端构网流程
 
 ## 2. 架构设计（分层 + 可替换）

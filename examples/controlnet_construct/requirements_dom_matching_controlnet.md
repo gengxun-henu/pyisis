@@ -1,6 +1,6 @@
 # DOM Matching ControlNet 代码撰写计划与架构
 
-> 说明：当前仓库中未找到同名需求文档。以下内容基于文件名 `requirements_dom_matching_controlnet` 和现有 pyisis 示例风格先给出可执行的首版开发计划与架构草案，后续可按真实业务细节细化。
+> 说明：本文档先给出 `requirements_dom_matching_controlnet` 的首版可执行计划与架构草案，后续可按真实业务细节持续细化。
 
 ## 1. 代码撰写计划（先做最小可用版本）
 
@@ -23,7 +23,7 @@
   - 同时输出摘要统计（成功数、失败数、平均匹配质量）
 
 - [ ] **阶段 E：测试与验收**
-  - 新增单测：`tests/unitTest/dom_matching_controlnet_unit_test.py`
+  - 新增单测：`tests/unitTest/controlnet_dom_matching_unit_test.py`
   - 覆盖：参数校验、单点成功路径、失败分支、最小端到端构网流程
 
 ## 2. 架构设计（分层 + 可替换）

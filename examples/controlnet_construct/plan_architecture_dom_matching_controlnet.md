@@ -11,7 +11,7 @@
 
 - [ ] **阶段 B：最小可运行主链路（MVP）**
   - 读取双影像并建立相机上下文。
-  - 对候选点执行 DOM 匹配（优先复用现有 `MaximumCorrelation`/几何初值能力）。
+  - 对候选点执行 DOM 匹配（优先复用 `Isis::MaximumCorrelation` 相关匹配能力 + 相机几何初值）。
   - 将成功匹配结果写入 `ControlNet`（ControlPoint/ControlMeasure）。
   - 输出最小统计（成功率、平均 goodness_of_fit、失败原因分布）。
 
@@ -51,7 +51,8 @@
 ### 2.3 API 形态（建议）
 
 - Python 函数：
-  - `construct_controlnet_with_dom_matching(left_cube, right_cube, *, candidates=None, config=...) -> Result`
+  - `construct_controlnet_with_dom_matching(left_cube, right_cube, *, candidates=None, config: dict | DomMatchConfig) -> Result`
+  - `config` 建议至少包含：`pattern_samples`、`pattern_lines`、`search_samples`、`search_lines`、`tolerance`、`use_subpixel`、`quality_threshold`。
 - CLI：
   - `python examples/controlnet_construct/...py --left ... --right ... --onet ...`
 

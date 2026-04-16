@@ -14,7 +14,7 @@
   - 对候选点做影像边界与可投影性过滤
 
 - [ ] **阶段 C：DOM/相关匹配核心**
-  - 对每个候选执行匹配（像素级 + 可选亚像素）
+  - 对每个候选执行匹配（像素级+可选亚像素）
   - 记录匹配状态、相关性分数、失败原因
 
 - [ ] **阶段 D：ControlNet 构建与输出**
@@ -23,7 +23,7 @@
   - 同时输出摘要统计（成功数、失败数、平均匹配质量）
 
 - [ ] **阶段 E：测试与验收**
-  - 新增单测：`tests/unitTest/controlnet_dom_matching_unit_test.py`
+  - 新增单测：`tests/unitTest/dom_matching_controlnet_unit_test.py`
   - 覆盖：参数校验、单点成功路径、失败分支、最小端到端构网流程
 
 ## 2. 架构设计（分层 + 可替换）
@@ -61,7 +61,7 @@
 
 ### 2.3 关键接口草案
 
-- `build_candidate_points(left_cube, right_cube, config) -> list[SeedPoint]`
+- `build_candidate_points(cubes, config) -> list[SeedPoint]`
 - `run_dom_matching(seed_points, cubes, config) -> list[MatchResult]`
 - `build_controlnet(matches, config) -> ControlNet`
 - `save_controlnet(controlnet, output_path) -> None`

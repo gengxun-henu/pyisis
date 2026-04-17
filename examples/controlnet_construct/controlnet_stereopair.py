@@ -5,6 +5,7 @@ Created: 2026-04-16
 Updated: 2026-04-16  Geng Xun added an initial stereo-pair ControlNet builder that reads original-image tie points and writes PVL or binary `.net` files.
 Updated: 2026-04-16  Geng Xun added a DOM-key CLI wrapper that chains dom2ori conversion into ControlNet creation.
 Updated: 2026-04-16  Geng Xun inserted DOM-space tie-point merging into the from-dom pipeline so the wrapped CLI now covers merge plus dom2ori plus ControlNet creation.
+Updated: 2026-04-17  Geng Xun added optional JSON sidecar report writing so per-pair results can be aggregated into regression-friendly batch summaries.
 """
 
 from __future__ import annotations
@@ -55,6 +56,9 @@ SUPPORTED_TARGET_NAMES = {
 }
 
 
+DEFAULT_CONTROLNET_REPORT_SUFFIX = ".summary.json"
+
+
 @dataclass(frozen=True, slots=True)
 class ControlNetConfig:
     network_id: str
@@ -67,6 +71,24 @@ class ControlNetConfig:
 def _default_intermediate_key_path(output_path: str | Path, side: str, stage: str) -> Path:
     output = Path(output_path)
     return output.with_name(f"{output.stem}_{side}_{stage}.key")
+
+
+def default_controlnet_report_path(output_path: str | Path) -> Path:
+    output = Path(output_path)
+    if output.suffix:
+        return output.with_suffix(DEFAULT_CONTROLNET_REPORT_SUFFIX)
+    return output.with_name(f"{output.name}{DEFAULT_CONTROLNET_REPORT_SUFFIX}")
+
+
+def write_controlnet_result_report(
+    result: dict[str, object],
+    output_path: str | Path,
+    *,
+    report_path: str | Path | None = None,
+) -> str:
+    resolved_report_path = Path(report_path) if report_path is not None else default_controlnet_report_path(output_path)
+    resolved_report_path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return str(resolved_report_path)
 
 
 def _compose_unique_serial_number(cube_path: str | Path) -> str:
@@ -291,6 +313,7 @@ def _build_from_original_parser(subparsers) -> None:
     parser.add_argument("right_cube", help="Original cube path for image B.")
     parser.add_argument("config", help="JSON config file containing NetworkId, TargetName, and UserName.")
     parser.add_argument("output_net", help="Output ControlNet path.")
+    parser.add_argument("--report-path", default=None, help="Optional JSON path used to persist the per-pair result summary.")
     parser.add_argument("--binary", action="store_true", help="Write the ControlNet in binary format instead of PVL.")
     parser.add_argument(
         "--log-level",
@@ -313,6 +336,7 @@ def _build_from_dom_parser(subparsers) -> None:
     parser.add_argument("right_cube", help="Original cube path for image B.")
     parser.add_argument("config", help="JSON config file containing NetworkId, TargetName, and UserName.")
     parser.add_argument("output_net", help="Output ControlNet path.")
+    parser.add_argument("--report-path", default=None, help="Optional JSON path used to persist the per-pair result summary.")
     parser.add_argument("--left-merged-dom-key", default=None, help="Optional path to persist the merged DOM-space .key for image A before dom2ori.")
     parser.add_argument("--right-merged-dom-key", default=None, help="Optional path to persist the merged DOM-space .key for image B before dom2ori.")
     parser.add_argument("--left-output-key", default=None, help="Optional path to persist the converted original-image .key for image A.")
@@ -393,6 +417,13 @@ def main(argv: list[str] | None = None) -> None:
             args.output_net,
             pvl_format=not args.binary,
         )
+
+    if getattr(args, "report_path", None):
+        report_path = write_controlnet_result_report(result, args.output_net, report_path=args.report_path)
+        result = {
+            **result,
+            "report_path": report_path,
+        }
 
     print(json.dumps(result, indent=2, ensure_ascii=False))
 

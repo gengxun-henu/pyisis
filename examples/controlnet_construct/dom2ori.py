@@ -57,6 +57,8 @@ class DomToOriginalSummary:
 
 
 def _is_point_in_bounds(sample: float, line: float, width: int, height: int) -> bool:
+    # ISIS sample/line coordinates are 1-based and inclusive on both ends. This check
+    # intentionally rejects 0-based array indices such as sample=0 or line=0.
     return 1.0 <= sample <= float(width) and 1.0 <= line <= float(height)
 
 

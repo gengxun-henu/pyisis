@@ -2,10 +2,11 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-16
+Last Modified: 2026-04-17
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
+Updated: 2026-04-17  Geng Xun added focused coverage for per-pair JSON sidecar report writing alongside stereo-pair ControlNet output.
 """
 
 from __future__ import annotations
@@ -32,7 +33,9 @@ from controlnet_construct.controlnet_stereopair import (
     ControlNetConfig,
     build_controlnet_for_dom_stereo_pair,
     build_controlnet_for_stereo_pair,
+    default_controlnet_report_path,
     read_controlnet_config,
+    write_controlnet_result_report,
 )
 from controlnet_construct.dom2ori import (
     convert_dom_key_file_via_ground_functions,
@@ -161,6 +164,23 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             self.assertEqual(loaded.get_network_id(), "ctx")
             self.assertEqual(loaded.get_target(), "Mars")
             self.assertEqual(loaded.get_user_name(), "zmoratto")
+
+    def test_write_controlnet_result_report_uses_default_summary_sidecar_name(self):
+        result = {
+            "pair": f"{LEFT_CUBE_PATH},{RIGHT_CUBE_PATH}",
+            "controlnet": {"point_count": 4},
+            "merge": {"unique_count": 5},
+        }
+
+        with temporary_directory() as temp_dir:
+            output_net = temp_dir / "synthetic_pair.net"
+            expected_report_path = default_controlnet_report_path(output_net)
+            report_path = write_controlnet_result_report(result, output_net)
+            report_payload = json.loads(Path(report_path).read_text(encoding="utf-8"))
+
+        self.assertEqual(report_path, str(expected_report_path))
+        self.assertEqual(report_payload["controlnet"]["point_count"], 4)
+        self.assertTrue(report_path.endswith("synthetic_pair.summary.json"))
 
     def test_convert_points_via_ground_functions_preserves_success_order_and_failures(self):
         dom_key_file = KeypointFile(

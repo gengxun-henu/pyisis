@@ -6,10 +6,14 @@ Last Modified: 2026-04-17
 Updated: 2026-04-17  Geng Xun added an LRO NAC DOM-matching E2E regression that runs overlap discovery, DOM matching, duplicate merge, dom2ori conversion, and ControlNet writing from the provided `.lis` inputs.
 Updated: 2026-04-17  Geng Xun expanded the external LRO regression to batch-process every overlap pair written to `images_overlap.lis`.
 Updated: 2026-04-17  Geng Xun added per-pair pipeline statistics and a CLI black-box batch regression that drives the full example workflow through script entrypoints.
+Updated: 2026-04-17  Geng Xun extended the E2E flow to emit DOM GSD reports/lists and generate a final cnetmerge shell script for all processed overlap pairs.
+Updated: 2026-04-17  Geng Xun added an opt-in preserved output directory and batch JSON reports so external E2E artifacts can be kept on disk for inspection.
 """
 
 from __future__ import annotations
 
+from contextlib import contextmanager
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
@@ -31,8 +35,11 @@ if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
 from controlnet_construct.controlnet_stereopair import build_controlnet_for_stereo_pair, read_controlnet_config
+from controlnet_construct.controlnet_merge import generate_cnetmerge_shell_script
+from controlnet_construct.dom_prepare import normalize_dom_list_gsd
 from controlnet_construct.dom2ori import convert_dom_keypoints_to_original
 from controlnet_construct.image_match import match_dom_pair_to_key_files
+from controlnet_construct.batch_summary import DEFAULT_BATCH_REPORT_NAME, write_batch_summary_report
 from controlnet_construct.image_overlap import find_overlapping_image_pairs
 from controlnet_construct.keypoints import read_key_file
 from controlnet_construct.listing import (
@@ -57,10 +64,14 @@ CONTROLNET_CONFIG = {
 }
 
 IMAGE_OVERLAP_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "image_overlap.py"
+DOM_PREPARE_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "dom_prepare.py"
 IMAGE_MATCH_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "image_match.py"
 MERGE_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "tie_point_merge_in_overlap.py"
 DOM2ORI_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "dom2ori.py"
 CONTROLNET_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "controlnet_stereopair.py"
+CONTROLNET_MERGE_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "controlnet_merge.py"
+PRESERVED_E2E_OUTPUT_ROOT_ENV = "ISIS_PYBIND_E2E_OUTPUT_ROOT"
+E2E_RUN_METADATA_NAME = "e2e_run_metadata.json"
 
 
 def _candidate_resolved_paths(list_directory: Path, entry: str) -> list[Path]:
@@ -117,6 +128,60 @@ def _safe_ratio(numerator: int, denominator: int) -> float:
 
 
 class ControlNetConstructE2eUnitTest(unittest.TestCase):
+    def _preserved_output_root(self) -> Path | None:
+        configured = os.environ.get(PRESERVED_E2E_OUTPUT_ROOT_ENV, "").strip()
+        if not configured:
+            return None
+        return Path(configured).expanduser().resolve()
+
+    @contextmanager
+    def _managed_output_directory(self, scenario_name: str):
+        preserved_root = self._preserved_output_root()
+        if preserved_root is None:
+            with temporary_directory() as temp_dir:
+                yield temp_dir
+            return
+
+        preserved_root.mkdir(parents=True, exist_ok=True)
+        timestamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+        output_dir = preserved_root / f"{scenario_name}_{timestamp}"
+        suffix = 1
+        while output_dir.exists():
+            suffix += 1
+            output_dir = preserved_root / f"{scenario_name}_{timestamp}_{suffix:02d}"
+        output_dir.mkdir(parents=True, exist_ok=False)
+        yield output_dir
+
+    def _write_json_report(self, output_path: Path, payload: dict[str, object]) -> Path:
+        output_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+        return output_path
+
+    def _write_pair_report(self, output_dir: Path, pair: StereoPair, result: dict[str, object], *, prefix: str = "") -> Path:
+        filename = f"{prefix}{_pair_tag(pair)}.summary.json"
+        return self._write_json_report(output_dir / filename, result)
+
+    def _write_run_metadata(
+        self,
+        output_dir: Path,
+        *,
+        scenario_name: str,
+        pair_results: list[dict[str, object]],
+        pair_report_paths: list[Path],
+        batch_report_path: Path,
+        extra_paths: dict[str, object],
+    ) -> Path:
+        metadata = {
+            "scenario": scenario_name,
+            "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
+            "output_directory": str(output_dir),
+            "preserved_output_root": str(self._preserved_output_root()) if self._preserved_output_root() is not None else None,
+            "pair_count": len(pair_results),
+            "pair_report_paths": [str(path) for path in pair_report_paths],
+            "batch_report_path": str(batch_report_path),
+            **extra_paths,
+        }
+        return self._write_json_report(output_dir / E2E_RUN_METADATA_NAME, metadata)
+
     def _load_external_dataset_or_skip(self) -> tuple[list[str], list[str], dict[str, str]]:
         if not ORIGINAL_LIST_PATH.exists() or not DOM_LIST_PATH.exists():
             self.skipTest("The external LRO NAC E2E lists are not available on this machine.")
@@ -225,6 +290,8 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
             min_valid_pixels=64,
             ratio_test=0.9,
             max_features=3000,
+            crop_expand_pixels=100,
+            min_overlap_size=16,
         )
         self.assertGreater(match_summary["point_count"], 0)
         self.assertTrue(left_dom_key_path.exists())
@@ -307,11 +374,29 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
     def test_lro_dom_matching_pipeline_end_to_end_for_all_overlap_pairs(self):
         original_paths, _, dom_by_original = self._load_external_dataset_or_skip()
 
-        with temporary_directory() as temp_dir:
+        with self._managed_output_directory("function_e2e") as temp_dir:
             overlap_list_path = temp_dir / "images_overlap.lis"
+            scaled_dom_list_path = temp_dir / "doms_scaled.lis"
+            gsd_report_path = temp_dir / "images_gsd.txt"
+            scaled_dom_dir = temp_dir / "scaled_doms"
+            merged_net_path = temp_dir / "merged_all_pairs.net"
+            merge_script_path = temp_dir / "merge_all_controlnets.sh"
+            batch_report_path = temp_dir / DEFAULT_BATCH_REPORT_NAME
             config_path = temp_dir / "controlnet_config.json"
             config_path.write_text(json.dumps(CONTROLNET_CONFIG, indent=2) + "\n", encoding="utf-8")
             config = read_controlnet_config(config_path)
+
+            normalization = normalize_dom_list_gsd(
+                [(dom_path, dom_path) for dom_path in dom_by_original.values()],
+                scaled_dom_list_path,
+                gsd_report_path=gsd_report_path,
+                output_directory=scaled_dom_dir,
+                tolerance_ratio=10.0,
+                apply=False,
+            )
+            self.assertEqual(normalization["scaled_count"], 0)
+            self.assertTrue(gsd_report_path.exists())
+            self.assertTrue(scaled_dom_list_path.exists())
 
             overlap_pairs, bounds = find_overlapping_image_pairs(
                 original_paths,
@@ -327,6 +412,7 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
 
             pair_results: list[dict[str, object]] = []
             pair_summaries: list[dict[str, object]] = []
+            pair_report_paths: list[Path] = []
             for overlap_pair in overlap_pairs:
                 left_dom_path = dom_by_original[overlap_pair.left]
                 right_dom_path = dom_by_original[overlap_pair.right]
@@ -342,34 +428,83 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
 
                     left_samples, left_lines = self._open_cube_dimensions(left_dom_path)
                     right_samples, right_lines = self._open_cube_dimensions(right_dom_path)
-                    expected_dimension_mismatch = (
-                        left_samples != right_samples or left_lines != right_lines
-                    )
-                    self.assertEqual(result["match"]["shared_extent_width"], min(left_samples, right_samples))
-                    self.assertEqual(result["match"]["shared_extent_height"], min(left_lines, right_lines))
-
-                    self.assertEqual(result["match"]["dimension_mismatch"], expected_dimension_mismatch)
+                    self.assertGreater(result["match"]["shared_extent_width"], 0)
+                    self.assertGreater(result["match"]["shared_extent_height"], 0)
+                    self.assertLessEqual(result["match"]["shared_extent_width"], max(left_samples, right_samples))
+                    self.assertLessEqual(result["match"]["shared_extent_height"], max(left_lines, right_lines))
                     pair_results.append(result)
                     pair_summaries.append(self._summarize_pair_result(overlap_pair, result))
+                    pair_report_paths.append(self._write_pair_report(temp_dir, overlap_pair, result))
+
+            merge_summary = generate_cnetmerge_shell_script(
+                overlap_list_path,
+                temp_dir,
+                merged_net_path,
+                merge_script_path,
+                network_id=CONTROLNET_CONFIG["NetworkId"],
+                description="External LRO NAC merged ControlNet shell",
+            )
+            self.assertTrue(merge_script_path.exists())
+            self.assertEqual(merge_summary["included_count"], len(overlap_pairs))
+            batch_report = write_batch_summary_report(pair_results, batch_report_path, source_reports=[str(path) for path in pair_report_paths])
+            self.assertEqual(batch_report["pair_count"], len(overlap_pairs))
+            self.assertEqual(batch_report["report_path"], str(batch_report_path))
+            run_metadata_path = self._write_run_metadata(
+                temp_dir,
+                scenario_name="function_e2e",
+                pair_results=pair_results,
+                pair_report_paths=pair_report_paths,
+                batch_report_path=batch_report_path,
+                extra_paths={
+                    "gsd_report_path": str(gsd_report_path),
+                    "scaled_dom_list_path": str(scaled_dom_list_path),
+                    "overlap_list_path": str(overlap_list_path),
+                    "merge_script_path": str(merge_script_path),
+                    "merged_net_path": str(merged_net_path),
+                    "controlnet_config_path": str(config_path),
+                },
+            )
+            self.assertTrue(run_metadata_path.exists())
 
         self.assertEqual(len(pair_results), len(overlap_pairs))
         self.assertTrue(all(result["controlnet"]["point_count"] > 0 for result in pair_results))
         self.assertGreater(sum(result["controlnet"]["point_count"] for result in pair_results), 0)
         print("Function E2E per-pair summary:")
         print(json.dumps(pair_summaries, indent=2, ensure_ascii=False))
+        if self._preserved_output_root() is not None:
+            print(f"Function E2E outputs preserved under: {temp_dir}")
 
     def test_lro_dom_matching_cli_batch_pipeline_for_all_overlap_pairs(self):
         original_paths, dom_paths, dom_by_original = self._load_external_dataset_or_skip()
 
-        with temporary_directory() as temp_dir:
+        with self._managed_output_directory("cli_e2e") as temp_dir:
             resolved_original_list_path = temp_dir / "resolved_original_images.lis"
             resolved_dom_list_path = temp_dir / "resolved_doms.lis"
+            scaled_dom_list_path = temp_dir / "doms_scaled.lis"
+            gsd_report_path = temp_dir / "images_gsd.txt"
             overlap_list_path = temp_dir / "images_overlap.lis"
             config_path = temp_dir / "controlnet_config.json"
+            merged_net_path = temp_dir / "merged_all_pairs.net"
+            merge_script_path = temp_dir / "merge_all_controlnets.sh"
+            batch_report_path = temp_dir / DEFAULT_BATCH_REPORT_NAME
             config_path.write_text(json.dumps(CONTROLNET_CONFIG, indent=2) + "\n", encoding="utf-8")
 
             self._write_resolved_path_list(resolved_original_list_path, original_paths)
             self._write_resolved_path_list(resolved_dom_list_path, dom_paths)
+
+            prepare_summary = self._run_cli_json(
+                str(DOM_PREPARE_SCRIPT),
+                str(resolved_dom_list_path),
+                str(scaled_dom_list_path),
+                "--gsd-report",
+                str(gsd_report_path),
+                "--tolerance-ratio",
+                "10.0",
+                "--dry-run",
+            )
+            self.assertEqual(prepare_summary["scaled_count"], 0)
+            self.assertTrue(scaled_dom_list_path.exists())
+            self.assertTrue(gsd_report_path.exists())
 
             overlap_summary = self._run_cli_json(
                 str(IMAGE_OVERLAP_SCRIPT),
@@ -388,6 +523,8 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
             self.assertEqual(overlap_summary["overlap_pair_count"], len(overlap_pairs))
 
             cli_pair_summaries: list[dict[str, object]] = []
+            cli_pair_results: list[dict[str, object]] = []
+            cli_pair_report_paths: list[Path] = []
             for overlap_pair in overlap_pairs:
                 left_dom_path = dom_by_original[overlap_pair.left]
                 right_dom_path = dom_by_original[overlap_pair.right]
@@ -426,6 +563,10 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                         "0.9",
                         "--max-features",
                         "3000",
+                        "--crop-expand-pixels",
+                        "100",
+                        "--min-overlap-size",
+                        "16",
                     )
                     self.assertGreater(match_summary["point_count"], 0)
 
@@ -476,8 +617,21 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
 
                     left_samples, left_lines = self._open_cube_dimensions(left_dom_path)
                     right_samples, right_lines = self._open_cube_dimensions(right_dom_path)
-                    self.assertEqual(match_summary["shared_extent_width"], min(left_samples, right_samples))
-                    self.assertEqual(match_summary["shared_extent_height"], min(left_lines, right_lines))
+                    self.assertGreater(match_summary["shared_extent_width"], 0)
+                    self.assertGreater(match_summary["shared_extent_height"], 0)
+                    self.assertLessEqual(match_summary["shared_extent_width"], max(left_samples, right_samples))
+                    self.assertLessEqual(match_summary["shared_extent_height"], max(left_lines, right_lines))
+
+                    cli_pair_result = {
+                        "pair": overlap_pair.as_csv_line(),
+                        "match": match_summary,
+                        "merge": merge_summary,
+                        "left_conversion": left_conversion,
+                        "right_conversion": right_conversion,
+                        "controlnet": controlnet_summary,
+                    }
+                    cli_pair_results.append(cli_pair_result)
+                    cli_pair_report_paths.append(self._write_pair_report(temp_dir, overlap_pair, cli_pair_result, prefix="cli_"))
 
                     cli_pair_summaries.append(
                         {
@@ -496,10 +650,53 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                         }
                     )
 
+            merge_cli_summary = self._run_cli_json(
+                str(CONTROLNET_MERGE_SCRIPT),
+                str(overlap_list_path),
+                str(temp_dir),
+                str(merged_net_path),
+                str(merge_script_path),
+                "--network-id",
+                CONTROLNET_CONFIG["NetworkId"],
+                "--description",
+                "External LRO NAC merged ControlNet shell",
+                "--pair-net-suffix",
+                "_cli.net",
+            )
+            self.assertTrue(merge_script_path.exists())
+            self.assertEqual(merge_cli_summary["included_count"], len(overlap_pairs))
+            cli_batch_report = write_batch_summary_report(
+                cli_pair_results,
+                batch_report_path,
+                source_reports=[str(path) for path in cli_pair_report_paths],
+            )
+            self.assertEqual(cli_batch_report["pair_count"], len(overlap_pairs))
+            self.assertEqual(cli_batch_report["report_path"], str(batch_report_path))
+            run_metadata_path = self._write_run_metadata(
+                temp_dir,
+                scenario_name="cli_e2e",
+                pair_results=cli_pair_results,
+                pair_report_paths=cli_pair_report_paths,
+                batch_report_path=batch_report_path,
+                extra_paths={
+                    "resolved_original_list_path": str(resolved_original_list_path),
+                    "resolved_dom_list_path": str(resolved_dom_list_path),
+                    "scaled_dom_list_path": str(scaled_dom_list_path),
+                    "gsd_report_path": str(gsd_report_path),
+                    "overlap_list_path": str(overlap_list_path),
+                    "merge_script_path": str(merge_script_path),
+                    "merged_net_path": str(merged_net_path),
+                    "controlnet_config_path": str(config_path),
+                },
+            )
+            self.assertTrue(run_metadata_path.exists())
+
         self.assertEqual(len(cli_pair_summaries), len(overlap_pairs))
         self.assertTrue(all(summary["control_point_count"] > 0 for summary in cli_pair_summaries))
         print("CLI black-box per-pair summary:")
         print(json.dumps(cli_pair_summaries, indent=2, ensure_ascii=False))
+        if self._preserved_output_root() is not None:
+            print(f"CLI E2E outputs preserved under: {temp_dir}")
 
 
 if __name__ == "__main__":

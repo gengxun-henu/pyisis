@@ -2,16 +2,19 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-16
+Last Modified: 2026-04-17
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
+Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
 """
 
 from __future__ import annotations
 
+import importlib
 import sys
 from pathlib import Path
 import unittest
+from unittest import mock
 
 import cv2
 import numpy as np
@@ -29,7 +32,9 @@ EXAMPLES_DIR = PROJECT_ROOT / "examples"
 if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
-from controlnet_construct.image_match import match_dom_pair
+image_match = importlib.import_module("controlnet_construct.image_match")
+build_argument_parser = image_match.build_argument_parser
+match_dom_pair = image_match.match_dom_pair
 
 
 REAL_DOM_LEFT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_1m_o_forPDS_cropped.cub")
@@ -59,6 +64,55 @@ def _build_textured_test_image(width: int, height: int) -> np.ndarray:
 
 
 class ControlNetConstructMatchingUnitTest(unittest.TestCase):
+    def test_build_argument_parser_accepts_custom_sift_parameters(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--max-features",
+                "4096",
+                "--sift-octave-layers",
+                "5",
+                "--sift-contrast-threshold",
+                "0.02",
+                "--sift-edge-threshold",
+                "15.5",
+                "--sift-sigma",
+                "1.2",
+            ]
+        )
+
+        self.assertEqual(args.max_features, 4096)
+        self.assertEqual(args.sift_octave_layers, 5)
+        self.assertAlmostEqual(args.sift_contrast_threshold, 0.02)
+        self.assertAlmostEqual(args.sift_edge_threshold, 15.5)
+        self.assertAlmostEqual(args.sift_sigma, 1.2)
+
+    def test_build_sift_detector_forwards_custom_parameters_to_opencv(self):
+        fake_detector = object()
+
+        with mock.patch.object(image_match.cv2, "SIFT_create", return_value=fake_detector) as sift_create:
+            detector = image_match._build_sift_detector(
+                max_features=2048,
+                octave_layers=5,
+                contrast_threshold=0.03,
+                edge_threshold=12.0,
+                sigma=1.8,
+            )
+
+        self.assertIs(detector, fake_detector)
+        sift_create.assert_called_once_with(
+            nfeatures=2048,
+            nOctaveLayers=5,
+            contrastThreshold=0.03,
+            edgeThreshold=12.0,
+            sigma=1.8,
+        )
+
     def test_match_dom_pair_uses_shared_extent_for_unequal_dom_sizes(self):
         left_width = 128
         right_width = 120

@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-04-16
 Updated: 2026-04-16  Geng Xun added the initial DOM-space SIFT matching CLI with block matching, grayscale stretch, invalid-value masking, and `.key` export.
+Updated: 2026-04-17  Geng Xun allowed tiled DOM matching to operate on the shared raster extent when paired DOM cubes differ slightly in size.
 """
 
 from __future__ import annotations
@@ -66,17 +67,20 @@ def _paired_windows(
     overlap_x: int,
     overlap_y: int,
 ) -> list[TileWindow]:
-    if not (requires_tiling(left_width, left_height, max_dimension=max_image_dimension) or requires_tiling(right_width, right_height, max_dimension=max_image_dimension)):
-        return [_full_image_window(left_width, left_height)]
+    common_width = min(left_width, right_width)
+    common_height = min(left_height, right_height)
+    if common_width <= 0 or common_height <= 0:
+        raise ValueError("The shared DOM raster extent must be positive for matching.")
 
-    if left_width != right_width or left_height != right_height:
-        raise ValueError(
-            "Block matching currently requires the two DOM cubes to have identical dimensions when tiling is enabled."
-        )
+    if not (
+        requires_tiling(left_width, left_height, max_dimension=max_image_dimension)
+        or requires_tiling(right_width, right_height, max_dimension=max_image_dimension)
+    ):
+        return [_full_image_window(common_width, common_height)]
 
     return generate_tiles(
-        left_width,
-        left_height,
+        common_width,
+        common_height,
         block_width=block_width,
         block_height=block_height,
         overlap_x=overlap_x,
@@ -336,6 +340,9 @@ def match_dom_pair(
             "right_dom": str(right_dom_path),
             "band": band,
             "tiling_used": len(windows) > 1,
+            "shared_extent_width": min(left_width, right_width),
+            "shared_extent_height": min(left_height, right_height),
+            "dimension_mismatch": left_width != right_width or left_height != right_height,
             "tile_count": len(windows),
             "matched_tile_count": sum(1 for tile in tile_summaries if tile.status == "matched"),
             "skipped_tile_count": sum(1 for tile in tile_summaries if tile.status != "matched"),

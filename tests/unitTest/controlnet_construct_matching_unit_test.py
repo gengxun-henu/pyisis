@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-04-16
 Last Modified: 2026-04-16
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
+Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 """
 
 from __future__ import annotations
@@ -58,6 +59,44 @@ def _build_textured_test_image(width: int, height: int) -> np.ndarray:
 
 
 class ControlNetConstructMatchingUnitTest(unittest.TestCase):
+    def test_match_dom_pair_uses_shared_extent_for_unequal_dom_sizes(self):
+        left_width = 128
+        right_width = 120
+        height = 128
+        left_image = _build_textured_test_image(left_width, height)
+        right_image = left_image[:, :right_width]
+
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_test_cube(temp_dir, name="left_shared_extent_dom.cub", samples=left_width, lines=height, bands=1)
+            right_cube, right_path = make_test_cube(temp_dir, name="right_shared_extent_dom.cub", samples=right_width, lines=height, bands=1)
+            try:
+                _write_array_to_cube(left_cube, left_image)
+                _write_array_to_cube(right_cube, right_image)
+            finally:
+                left_cube.close()
+                right_cube.close()
+
+            left_key_file, right_key_file, summary = match_dom_pair(
+                left_path,
+                right_path,
+                max_image_dimension=64,
+                block_width=64,
+                block_height=64,
+                overlap_x=16,
+                overlap_y=16,
+                min_valid_pixels=32,
+                ratio_test=0.8,
+            )
+
+        self.assertTrue(summary["tiling_used"])
+        self.assertTrue(summary["dimension_mismatch"])
+        self.assertEqual(summary["shared_extent_width"], right_width)
+        self.assertEqual(summary["shared_extent_height"], height)
+        self.assertGreater(summary["point_count"], 0)
+        self.assertEqual(len(left_key_file.points), len(right_key_file.points))
+        self.assertTrue(all(1.0 <= point.sample <= left_width for point in left_key_file.points))
+        self.assertTrue(all(1.0 <= point.sample <= right_width for point in right_key_file.points))
+
     def test_match_dom_pair_reassembles_global_coordinates_after_tiling(self):
         width = 128
         height = 128

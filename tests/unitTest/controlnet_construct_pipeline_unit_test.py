@@ -7,14 +7,18 @@ Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap e
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
 Updated: 2026-04-17  Geng Xun added focused coverage for per-pair JSON sidecar report writing alongside stereo-pair ControlNet output.
+Updated: 2026-04-17  Geng Xun added coordinate-basis JSON checks and a no-drift semi-integration chain from image_match through dom2ori into ControlNet measures.
 """
 
 from __future__ import annotations
 
 import json
+import io
 import sys
 from pathlib import Path
 import unittest
+from unittest.mock import patch
+from contextlib import redirect_stdout
 
 
 UNIT_TEST_DIR = Path(__file__).resolve().parent
@@ -38,8 +42,10 @@ from controlnet_construct.controlnet_stereopair import (
     write_controlnet_result_report,
 )
 from controlnet_construct.dom2ori import (
+    main as dom2ori_main,
     convert_dom_key_file_via_ground_functions,
     convert_dom_keypoints_to_original,
+    convert_paired_dom_key_files_via_ground_functions,
     convert_points_via_ground_functions,
 )
 from controlnet_construct.image_match import match_dom_pair_to_key_files
@@ -181,6 +187,12 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(report_path, str(expected_report_path))
         self.assertEqual(report_payload["controlnet"]["point_count"], 4)
         self.assertTrue(report_path.endswith("synthetic_pair.summary.json"))
+        self.assertIn("coordinate_conventions", report_payload)
+        self.assertEqual(report_payload["coordinate_conventions"]["context"], "controlnet_pair_result")
+        self.assertIn(
+            "1-based",
+            report_payload["coordinate_conventions"]["field_bases"]["left_conversion.failures[].sample"],
+        )
 
     def test_convert_points_via_ground_functions_preserves_success_order_and_failures(self):
         dom_key_file = KeypointFile(
@@ -267,6 +279,10 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(converted.points, (Keypoint(5.0, 5.0),))
         self.assertEqual(logged["failure_categories"]["input_validation"], 1)
         self.assertEqual(logged["failure_categories"]["dom_lookup"], 1)
+        self.assertIn("coordinate_conventions", logged)
+        self.assertEqual(logged["coordinate_conventions"]["context"], "dom2ori_failure_log")
+        self.assertIn("1-based", logged["coordinate_conventions"]["field_bases"]["failures[].sample"])
+        self.assertIn("1-based", logged["coordinate_conventions"]["field_bases"]["failures[].projected_sample"])
 
     def test_convert_dom_keypoints_to_original_supports_projection_self_roundtrip(self):
         dom_key_file = KeypointFile(
@@ -301,6 +317,218 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         for expected, actual in zip(dom_key_file.points, converted.points, strict=True):
             self.assertAlmostEqual(actual.sample, expected.sample, places=3)
             self.assertAlmostEqual(actual.line, expected.line, places=3)
+
+    def test_convert_paired_dom_key_files_via_ground_functions_drops_unpaired_successes(self):
+        input_key_file = KeypointFile(
+            20,
+            20,
+            (
+                Keypoint(5.0, 5.0),
+                Keypoint(7.0, 7.0),
+            ),
+        )
+
+        def ground_lookup(sample, line):
+            return sample + 100.0, line + 200.0
+
+        def left_project(latitude, longitude):
+            return latitude - 100.0, longitude - 200.0
+
+        def right_project(latitude, longitude):
+            sample = latitude - 100.0
+            line = longitude - 200.0
+            if sample == 5.0:
+                return None
+            return sample, line
+
+        with temporary_directory() as temp_dir:
+            left_input_key_path = temp_dir / "left_dom.key"
+            right_input_key_path = temp_dir / "right_dom.key"
+            left_output_key_path = temp_dir / "left_ori.key"
+            right_output_key_path = temp_dir / "right_ori.key"
+            write_key_file(left_input_key_path, input_key_file)
+            write_key_file(right_input_key_path, input_key_file)
+
+            result = convert_paired_dom_key_files_via_ground_functions(
+                left_input_key_path,
+                right_input_key_path,
+                left_output_key_path,
+                right_output_key_path,
+                left_ground_lookup=ground_lookup,
+                left_image_project=left_project,
+                right_ground_lookup=ground_lookup,
+                right_image_project=right_project,
+                left_output_width=20,
+                left_output_height=20,
+                right_output_width=20,
+                right_output_height=20,
+            )
+            left_converted = read_key_file(left_output_key_path)
+            right_converted = read_key_file(right_output_key_path)
+
+        self.assertEqual(result["retained_pair_count"], 1)
+        self.assertEqual(result["left_conversion"]["output_count"], 1)
+        self.assertEqual(result["right_conversion"]["output_count"], 1)
+        self.assertEqual(left_converted.points, (Keypoint(7.0, 7.0),))
+        self.assertEqual(right_converted.points, (Keypoint(7.0, 7.0),))
+        self.assertEqual(result["left_conversion"]["failure_reasons"]["paired_point_dropped"], 1)
+        self.assertEqual(result["right_conversion"]["failure_reasons"]["original_projection_failed"], 1)
+
+    def test_build_controlnet_for_dom_stereo_pair_uses_paired_dom2ori_conversion(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_patch",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="paired dom2ori wrapper test",
+            point_id_prefix="DPT",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_dom.key"
+            right_dom_key = temp_dir / "right_dom.key"
+            output_net = temp_dir / "paired_wrapper.net"
+            write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+
+            fake_pair_result = {
+                "left_conversion": {"output_count": 1, "failure_count": 0},
+                "right_conversion": {"output_count": 1, "failure_count": 0},
+                "retained_pair_count": 1,
+            }
+            fake_controlnet_result = {
+                "output_path": str(output_net),
+                "network_id": config.network_id,
+                "target_name": config.target_name,
+                "user_name": config.user_name,
+                "point_count": 1,
+                "measure_count": 2,
+                "left_serial_number": "left-serial",
+                "right_serial_number": "right-serial",
+                "pvl_format": True,
+            }
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.convert_paired_dom_keypoints_to_original",
+                    return_value=fake_pair_result,
+                ) as paired_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                    return_value=fake_controlnet_result,
+                ) as controlnet_mock,
+            ):
+                result = build_controlnet_for_dom_stereo_pair(
+                    left_dom_key,
+                    right_dom_key,
+                    REAL_DOM_LEFT,
+                    REAL_DOM_RIGHT,
+                    LEFT_CUBE_PATH,
+                    RIGHT_CUBE_PATH,
+                    config,
+                    output_net,
+                    skip_merge=True,
+                )
+
+        paired_mock.assert_called_once()
+        controlnet_mock.assert_called_once()
+        self.assertEqual(result["left_conversion"]["output_count"], 1)
+        self.assertEqual(result["right_conversion"]["output_count"], 1)
+        self.assertEqual(result["controlnet"]["point_count"], 1)
+
+    def test_dom2ori_cli_paired_mode_dispatches_to_paired_conversion(self):
+        fake_result = {
+            "left_conversion": {"output_count": 2, "failure_count": 0},
+            "right_conversion": {"output_count": 2, "failure_count": 0},
+            "retained_pair_count": 2,
+        }
+
+        stdout = io.StringIO()
+        with (
+            patch(
+                "controlnet_construct.dom2ori.convert_paired_dom_keypoints_to_original",
+                return_value=fake_result,
+            ) as paired_mock,
+            redirect_stdout(stdout),
+        ):
+            dom2ori_main(
+                [
+                    "paired",
+                    "left_dom.key",
+                    "right_dom.key",
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left_original.cub",
+                    "right_original.cub",
+                    "left_ori.key",
+                    "right_ori.key",
+                    "--dom-band",
+                    "2",
+                    "--left-original-band",
+                    "3",
+                    "--right-original-band",
+                    "4",
+                    "--left-failure-log",
+                    "left_failures.json",
+                    "--right-failure-log",
+                    "right_failures.json",
+                ]
+            )
+
+        paired_mock.assert_called_once_with(
+            "left_dom.key",
+            "right_dom.key",
+            "left_dom.cub",
+            "right_dom.cub",
+            "left_original.cub",
+            "right_original.cub",
+            "left_ori.key",
+            "right_ori.key",
+            dom_band=2,
+            left_original_band=3,
+            right_original_band=4,
+            left_failure_log_path="left_failures.json",
+            right_failure_log_path="right_failures.json",
+            logger=paired_mock.call_args.kwargs["logger"],
+        )
+        self.assertEqual(json.loads(stdout.getvalue()), fake_result)
+
+    def test_dom2ori_cli_legacy_single_mode_stays_backward_compatible(self):
+        fake_result = {"output_count": 1, "failure_count": 0}
+
+        stdout = io.StringIO()
+        with (
+            patch(
+                "controlnet_construct.dom2ori.convert_dom_keypoints_to_original",
+                return_value=fake_result,
+            ) as single_mock,
+            redirect_stdout(stdout),
+        ):
+            dom2ori_main(
+                [
+                    "dom.key",
+                    "dom.cub",
+                    "original.cub",
+                    "ori.key",
+                    "--dom-band",
+                    "2",
+                    "--original-band",
+                    "5",
+                    "--failure-log",
+                    "failures.json",
+                ]
+            )
+
+        single_mock.assert_called_once_with(
+            "dom.key",
+            "dom.cub",
+            "original.cub",
+            "ori.key",
+            dom_band=2,
+            original_band=5,
+            failure_log_path="failures.json",
+            logger=single_mock.call_args.kwargs["logger"],
+        )
+        self.assertEqual(json.loads(stdout.getvalue()), fake_result)
 
     def test_build_controlnet_for_dom_stereo_pair_wraps_dom2ori_outputs(self):
         config = ControlNetConfig(
@@ -354,6 +582,102 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertTrue(left_output_exists)
         self.assertTrue(right_output_exists)
         self.assertEqual(loaded.get_num_points(), result["controlnet"]["point_count"])
+
+    def test_image_match_to_dom2ori_to_controlnet_chain_preserves_measure_coordinates_without_drift(self):
+        config = ControlNetConfig(
+            network_id="ctx_chain",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="coordinate drift guard",
+            point_id_prefix="DRF",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_dom.key"
+            right_dom_key = temp_dir / "right_dom.key"
+            metadata_output = temp_dir / "pair_preparation.json"
+            left_ori_key = temp_dir / "left_ori.key"
+            right_ori_key = temp_dir / "right_ori.key"
+            left_failure_log = temp_dir / "left_failures.json"
+            right_failure_log = temp_dir / "right_failures.json"
+            output_net = temp_dir / "chain.net"
+
+            match_summary = match_dom_pair_to_key_files(
+                REAL_DOM_LEFT,
+                REAL_DOM_RIGHT,
+                left_dom_key,
+                right_dom_key,
+                metadata_output=metadata_output,
+                min_valid_pixels=16,
+                ratio_test=0.85,
+            )
+            self.assertGreater(match_summary["point_count"], 0)
+
+            metadata_payload = json.loads(metadata_output.read_text(encoding="utf-8"))
+            self.assertIn("coordinate_conventions", metadata_payload)
+            self.assertIn("0-based", metadata_payload["coordinate_conventions"]["field_bases"]["left.offset_sample"])
+            self.assertIn("1-based", metadata_payload["coordinate_conventions"]["field_bases"]["left.start_sample"])
+
+            left_dom_points = read_key_file(left_dom_key)
+            right_dom_points = read_key_file(right_dom_key)
+
+            left_conversion = convert_dom_keypoints_to_original(
+                left_dom_key,
+                REAL_DOM_LEFT,
+                REAL_DOM_LEFT,
+                left_ori_key,
+                failure_log_path=left_failure_log,
+            )
+            right_conversion = convert_dom_keypoints_to_original(
+                right_dom_key,
+                REAL_DOM_RIGHT,
+                REAL_DOM_RIGHT,
+                right_ori_key,
+                failure_log_path=right_failure_log,
+            )
+
+            self.assertEqual(left_conversion["failure_count"], 0)
+            self.assertEqual(right_conversion["failure_count"], 0)
+            self.assertEqual(left_conversion["output_count"], match_summary["point_count"])
+            self.assertEqual(right_conversion["output_count"], match_summary["point_count"])
+
+            left_ori_points = read_key_file(left_ori_key)
+            right_ori_points = read_key_file(right_ori_key)
+            self.assertEqual(len(left_dom_points.points), len(left_ori_points.points))
+            self.assertEqual(len(right_dom_points.points), len(right_ori_points.points))
+
+            for expected, actual in zip(left_dom_points.points, left_ori_points.points, strict=True):
+                self.assertAlmostEqual(actual.sample, expected.sample, places=3)
+                self.assertAlmostEqual(actual.line, expected.line, places=3)
+            for expected, actual in zip(right_dom_points.points, right_ori_points.points, strict=True):
+                self.assertAlmostEqual(actual.sample, expected.sample, places=3)
+                self.assertAlmostEqual(actual.line, expected.line, places=3)
+
+            controlnet_summary = build_controlnet_for_stereo_pair(
+                left_ori_key,
+                right_ori_key,
+                REAL_DOM_LEFT,
+                REAL_DOM_RIGHT,
+                config,
+                output_net,
+                pvl_format=True,
+            )
+
+            loaded = ip.ControlNet(str(output_net))
+            self.assertEqual(loaded.get_num_points(), len(left_ori_points.points))
+            self.assertEqual(controlnet_summary["point_count"], len(left_ori_points.points))
+
+            for index, (left_expected, right_expected) in enumerate(
+                zip(left_ori_points.points, right_ori_points.points, strict=True)
+            ):
+                point = loaded.get_point(index)
+                self.assertEqual(point.get_num_measures(), 2)
+                left_measure = point.get_measure(0)
+                right_measure = point.get_measure(1)
+                self.assertAlmostEqual(left_measure.get_sample(), left_expected.sample, places=3)
+                self.assertAlmostEqual(left_measure.get_line(), left_expected.line, places=3)
+                self.assertAlmostEqual(right_measure.get_sample(), right_expected.sample, places=3)
+                self.assertAlmostEqual(right_measure.get_line(), right_expected.line, places=3)
 
     def test_build_controlnet_for_dom_stereo_pair_merges_duplicate_dom_points_before_dom2ori(self):
         config = ControlNetConfig(

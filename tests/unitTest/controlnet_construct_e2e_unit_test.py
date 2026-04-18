@@ -8,18 +8,23 @@ Updated: 2026-04-17  Geng Xun expanded the external LRO regression to batch-proc
 Updated: 2026-04-17  Geng Xun added per-pair pipeline statistics and a CLI black-box batch regression that drives the full example workflow through script entrypoints.
 Updated: 2026-04-17  Geng Xun extended the E2E flow to emit DOM GSD reports/lists and generate a final cnetmerge shell script for all processed overlap pairs.
 Updated: 2026-04-17  Geng Xun added an opt-in preserved output directory and batch JSON reports so external E2E artifacts can be kept on disk for inspection.
+Updated: 2026-04-18  Geng Xun added an opt-in E2E artifact switch for saving stereo-pair DOM match line plots alongside preserved outputs.
 """
 
 from __future__ import annotations
 
 from contextlib import contextmanager
 from datetime import datetime, timezone
+import cv2
 import json
+import math
 import os
 from pathlib import Path
 import subprocess
 import sys
 import unittest
+
+import numpy as np
 
 
 UNIT_TEST_DIR = Path(__file__).resolve().parent
@@ -71,6 +76,7 @@ DOM2ORI_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "dom2ori.py"
 CONTROLNET_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "controlnet_stereopair.py"
 CONTROLNET_MERGE_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "controlnet_merge.py"
 PRESERVED_E2E_OUTPUT_ROOT_ENV = "ISIS_PYBIND_E2E_OUTPUT_ROOT"
+GENERATE_MATCH_LINE_PLOTS_ENV = "ISIS_PYBIND_E2E_GENERATE_MATCH_LINE_PLOTS"
 E2E_RUN_METADATA_NAME = "e2e_run_metadata.json"
 
 
@@ -133,6 +139,10 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         if not configured:
             return None
         return Path(configured).expanduser().resolve()
+
+    def _should_generate_match_line_plots(self) -> bool:
+        configured = os.environ.get(GENERATE_MATCH_LINE_PLOTS_ENV, "").strip().lower()
+        return configured in {"1", "true", "yes", "on"}
 
     @contextmanager
     def _managed_output_directory(self, scenario_name: str):
@@ -210,6 +220,133 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
             return cube.sample_count(), cube.line_count()
         finally:
             cube.close()
+
+    def _write_match_line_plot(
+        self,
+        left_key_path: Path,
+        right_key_path: Path,
+        output_path: Path,
+        *,
+        title: str,
+        max_panel_width: int = 900,
+        max_panel_height: int = 900,
+        max_render_matches: int = 500,
+    ) -> Path:
+        left_key_file = read_key_file(left_key_path)
+        right_key_file = read_key_file(right_key_path)
+
+        point_count = min(len(left_key_file.points), len(right_key_file.points))
+        if point_count <= 0:
+            raise ValueError("Cannot render a stereo-pair match line plot without matched points.")
+
+        left_width = max(1, int(left_key_file.image_width))
+        left_height = max(1, int(left_key_file.image_height))
+        right_width = max(1, int(right_key_file.image_width))
+        right_height = max(1, int(right_key_file.image_height))
+
+        scale = min(
+            1.0,
+            float(max_panel_width) / float(max(left_width, right_width)),
+            float(max_panel_height) / float(max(left_height, right_height)),
+        )
+        scaled_left_width = max(1, int(round(left_width * scale)))
+        scaled_left_height = max(1, int(round(left_height * scale)))
+        scaled_right_width = max(1, int(round(right_width * scale)))
+        scaled_right_height = max(1, int(round(right_height * scale)))
+
+        margin_x = 40
+        top_margin = 90
+        bottom_margin = 40
+        panel_gap = 100
+
+        canvas_width = margin_x * 2 + scaled_left_width + panel_gap + scaled_right_width
+        canvas_height = top_margin + max(scaled_left_height, scaled_right_height) + bottom_margin
+        canvas = np.full((canvas_height, canvas_width, 3), 255, dtype=np.uint8)
+
+        left_origin_x = margin_x
+        left_origin_y = top_margin
+        right_origin_x = margin_x + scaled_left_width + panel_gap
+        right_origin_y = top_margin
+
+        cv2.rectangle(
+            canvas,
+            (left_origin_x - 1, left_origin_y - 1),
+            (left_origin_x + scaled_left_width, left_origin_y + scaled_left_height),
+            (180, 180, 180),
+            1,
+        )
+        cv2.rectangle(
+            canvas,
+            (right_origin_x - 1, right_origin_y - 1),
+            (right_origin_x + scaled_right_width, right_origin_y + scaled_right_height),
+            (180, 180, 180),
+            1,
+        )
+
+        cv2.putText(canvas, title, (margin_x, 28), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (40, 40, 40), 2, cv2.LINE_AA)
+        cv2.putText(
+            canvas,
+            f"Rendered matches: {min(point_count, max_render_matches)} / {point_count}",
+            (margin_x, 58),
+            cv2.FONT_HERSHEY_SIMPLEX,
+            0.55,
+            (70, 70, 70),
+            1,
+            cv2.LINE_AA,
+        )
+        cv2.putText(canvas, "Left DOM", (left_origin_x, top_margin - 18), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (50, 50, 50), 1, cv2.LINE_AA)
+        cv2.putText(canvas, "Right DOM", (right_origin_x, top_margin - 18), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (50, 50, 50), 1, cv2.LINE_AA)
+
+        if point_count > max_render_matches:
+            step = float(point_count - 1) / float(max_render_matches - 1)
+            point_indices = [int(round(step * index)) for index in range(max_render_matches)]
+        else:
+            point_indices = list(range(point_count))
+
+        for index in point_indices:
+            left_point = left_key_file.points[index]
+            right_point = right_key_file.points[index]
+
+            left_x = left_origin_x + int(round((left_point.sample - 1.0) * scale))
+            left_y = left_origin_y + int(round((left_point.line - 1.0) * scale))
+            right_x = right_origin_x + int(round((right_point.sample - 1.0) * scale))
+            right_y = right_origin_y + int(round((right_point.line - 1.0) * scale))
+
+            left_x = max(left_origin_x, min(left_x, left_origin_x + scaled_left_width - 1))
+            left_y = max(left_origin_y, min(left_y, left_origin_y + scaled_left_height - 1))
+            right_x = max(right_origin_x, min(right_x, right_origin_x + scaled_right_width - 1))
+            right_y = max(right_origin_y, min(right_y, right_origin_y + scaled_right_height - 1))
+
+            hue = int(round(179.0 * float(index % max(1, point_count)) / float(max(1, point_count))))
+            color_pixel = np.uint8([[[hue, 220, 245]]])
+            bgr = tuple(int(channel) for channel in cv2.cvtColor(color_pixel, cv2.COLOR_HSV2BGR)[0, 0])
+
+            cv2.line(canvas, (left_x, left_y), (right_x, right_y), bgr, 1, cv2.LINE_AA)
+            cv2.circle(canvas, (left_x, left_y), 2, (255, 80, 80), -1, cv2.LINE_AA)
+            cv2.circle(canvas, (right_x, right_y), 2, (80, 140, 255), -1, cv2.LINE_AA)
+
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        if not cv2.imwrite(str(output_path), canvas):
+            raise IOError(f"Failed to write stereo-pair match line plot: {output_path}")
+        return output_path
+
+    def _maybe_write_match_line_plot(
+        self,
+        output_dir: Path,
+        pair: StereoPair,
+        left_key_path: Path,
+        right_key_path: Path,
+        *,
+        prefix: str = "",
+        title_prefix: str = "",
+    ) -> str | None:
+        if not self._should_generate_match_line_plots():
+            return None
+
+        pair_tag = _pair_tag(pair)
+        output_path = output_dir / f"{prefix}{pair_tag}_match_lines.png"
+        title = f"{title_prefix}{pair_tag}" if title_prefix else pair_tag
+        return str(self._write_match_line_plot(left_key_path, right_key_path, output_path, title=title))
 
     def _summarize_pair_result(self, pair: StereoPair, result: dict[str, object]) -> dict[str, object]:
         merged_count = int(result["merge"]["unique_count"])
@@ -297,6 +434,14 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         self.assertTrue(left_dom_key_path.exists())
         self.assertTrue(right_dom_key_path.exists())
 
+        match_line_plot_path = self._maybe_write_match_line_plot(
+            temp_dir,
+            pair,
+            left_dom_key_path,
+            right_dom_key_path,
+            title_prefix="function_e2e DOM matches: ",
+        )
+
         merge_summary = merge_stereo_pair_key_files(
             str(left_dom_key_path),
             str(right_dom_key_path),
@@ -369,10 +514,15 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
             "left_conversion": left_conversion,
             "right_conversion": right_conversion,
             "controlnet": controlnet_summary,
+            **({"match_line_plot_path": match_line_plot_path} if match_line_plot_path is not None else {}),
         }
 
     def test_lro_dom_matching_pipeline_end_to_end_for_all_overlap_pairs(self):
         original_paths, _, dom_by_original = self._load_external_dataset_or_skip()
+        """This test runs the full DOM-matching ControlNet pipeline end-to-end for every overlapping stereo pair discovered 
+        from the provided original image list. The test directly calls the core functions for each step instead of using the CLI scripts, 
+        and verifies the expected outputs at each stage.
+        """
 
         with self._managed_output_directory("function_e2e") as temp_dir:
             overlap_list_path = temp_dir / "images_overlap.lis"
@@ -474,8 +624,14 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         if self._preserved_output_root() is not None:
             print(f"Function E2E outputs preserved under: {temp_dir}")
 
+   
     def test_lro_dom_matching_cli_batch_pipeline_for_all_overlap_pairs(self):
         original_paths, dom_paths, dom_by_original = self._load_external_dataset_or_skip()
+        
+        """This test runs the full DOM-matching ControlNet pipeline end-to-end for every overlapping stereo pair discovered
+        from the provided original image list, using the CLI scripts as black boxes. 
+        The test verifies the expected outputs at each stage, and generates JSON reports for each pair as well as a batch summary report for the entire run.        
+        """ 
 
         with self._managed_output_directory("cli_e2e") as temp_dir:
             resolved_original_list_path = temp_dir / "resolved_original_images.lis"
@@ -570,6 +726,15 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                     )
                     self.assertGreater(match_summary["point_count"], 0)
 
+                    cli_match_line_plot_path = self._maybe_write_match_line_plot(
+                        temp_dir,
+                        overlap_pair,
+                        left_dom_key_path,
+                        right_dom_key_path,
+                        prefix="cli_",
+                        title_prefix="cli_e2e DOM matches: ",
+                    )
+
                     merge_summary = self._run_cli_json(
                         str(MERGE_SCRIPT),
                         str(left_dom_key_path),
@@ -629,6 +794,7 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                         "left_conversion": left_conversion,
                         "right_conversion": right_conversion,
                         "controlnet": controlnet_summary,
+                        **({"match_line_plot_path": cli_match_line_plot_path} if cli_match_line_plot_path is not None else {}),
                     }
                     cli_pair_results.append(cli_pair_result)
                     cli_pair_report_paths.append(self._write_pair_report(temp_dir, overlap_pair, cli_pair_result, prefix="cli_"))

@@ -6,6 +6,8 @@ Updated: 2026-04-16  Geng Xun added an initial stereo-pair ControlNet builder th
 Updated: 2026-04-16  Geng Xun added a DOM-key CLI wrapper that chains dom2ori conversion into ControlNet creation.
 Updated: 2026-04-16  Geng Xun inserted DOM-space tie-point merging into the from-dom pipeline so the wrapped CLI now covers merge plus dom2ori plus ControlNet creation.
 Updated: 2026-04-17  Geng Xun added optional JSON sidecar report writing so per-pair results can be aggregated into regression-friendly batch summaries.
+Updated: 2026-04-17  Geng Xun annotated per-pair JSON sidecars with explicit coordinate-basis metadata for nested DOM and original-image sample/line fields.
+Updated: 2026-04-17  Geng Xun switched the DOM wrapper to pair-synchronized dom2ori conversion so left/right correspondences stay aligned.
 """
 
 from __future__ import annotations
@@ -21,12 +23,14 @@ import sys
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from controlnet_construct.dom2ori import convert_dom_keypoints_to_original
+    from controlnet_construct.coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
+    from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
     from controlnet_construct.keypoints import read_key_file
     from controlnet_construct.tie_point_merge_in_overlap import merge_stereo_pair_key_files
     from controlnet_construct.runtime import bootstrap_runtime_environment
 else:
-    from .dom2ori import convert_dom_keypoints_to_original
+    from .coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
+    from .dom2ori import convert_paired_dom_keypoints_to_original
     from .keypoints import read_key_file
     from .runtime import bootstrap_runtime_environment
     from .tie_point_merge_in_overlap import merge_stereo_pair_key_files
@@ -87,7 +91,12 @@ def write_controlnet_result_report(
     report_path: str | Path | None = None,
 ) -> str:
     resolved_report_path = Path(report_path) if report_path is not None else default_controlnet_report_path(output_path)
-    resolved_report_path.write_text(json.dumps(result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    annotated_result = annotate_coordinate_payload(
+        result,
+        context="controlnet_pair_result",
+        field_bases=CONTROLNET_RESULT_COORDINATE_FIELD_BASES,
+    )
+    resolved_report_path.write_text(json.dumps(annotated_result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return str(resolved_report_path)
 
 
@@ -263,26 +272,24 @@ def build_controlnet_for_dom_stereo_pair(
                 merge_stats["duplicate_count"],
             )
 
-    left_conversion = convert_dom_keypoints_to_original(
+    paired_conversion = convert_paired_dom_keypoints_to_original(
         left_dom_key_for_conversion,
-        left_dom_cube_path,
-        left_cube_path,
-        left_output_key,
-        dom_band=dom_band,
-        original_band=left_original_band,
-        failure_log_path=left_failure_log_path,
-        logger=logger,
-    )
-    right_conversion = convert_dom_keypoints_to_original(
         right_dom_key_for_conversion,
+        left_dom_cube_path,
         right_dom_cube_path,
+        left_cube_path,
         right_cube_path,
+        left_output_key,
         right_output_key,
         dom_band=dom_band,
-        original_band=right_original_band,
-        failure_log_path=right_failure_log_path,
+        left_original_band=left_original_band,
+        right_original_band=right_original_band,
+        left_failure_log_path=left_failure_log_path,
+        right_failure_log_path=right_failure_log_path,
         logger=logger,
     )
+    left_conversion = paired_conversion["left_conversion"]
+    right_conversion = paired_conversion["right_conversion"]
 
     controlnet_result = build_controlnet_for_stereo_pair(
         left_output_key,

@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-04-17
 Updated: 2026-04-17  Geng Xun added GSD inventory/normalization helpers plus projected-overlap crop metadata for DOM matching.
+Updated: 2026-04-17  Geng Xun annotated projected-overlap JSON sidecars with explicit 0-based offset versus 1-based sample/line field bases.
 """
 
 from __future__ import annotations
@@ -20,9 +21,14 @@ import sys
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from controlnet_construct.coordinate_metadata import (
+        PAIR_PREPARATION_COORDINATE_FIELD_BASES,
+        annotate_coordinate_payload,
+    )
     from controlnet_construct.listing import read_path_list
     from controlnet_construct.runtime import bootstrap_runtime_environment
 else:
+    from .coordinate_metadata import PAIR_PREPARATION_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from .listing import read_path_list
     from .runtime import bootstrap_runtime_environment
 
@@ -446,8 +452,13 @@ def prepare_dom_pair_for_matching(
     )
 
 
-def write_pair_preparation_metadata(metadata_path: str | Path, metadata: PairPreparationMetadata) -> None:
-    Path(metadata_path).write_text(json.dumps(asdict(metadata), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+def write_pair_preparation_metadata(metadata_path: str | Path, metadata: PairPreparationMetadata | dict[str, object]) -> None:
+    payload = annotate_coordinate_payload(
+        asdict(metadata) if isinstance(metadata, PairPreparationMetadata) else dict(metadata),
+        context="dom_pair_preparation_metadata",
+        field_bases=PAIR_PREPARATION_COORDINATE_FIELD_BASES,
+    )
+    Path(metadata_path).write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def build_argument_parser() -> argparse.ArgumentParser:

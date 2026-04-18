@@ -23,13 +23,13 @@ import numpy as np
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-    from controlnet_construct.dom_prepare import prepare_dom_pair_for_matching
+    from controlnet_construct.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from controlnet_construct.keypoints import Keypoint, KeypointFile, write_key_file
     from controlnet_construct.preprocess import StretchStats, build_invalid_mask, stretch_to_byte
     from controlnet_construct.runtime import bootstrap_runtime_environment
     from controlnet_construct.tiling import TileWindow, generate_tiles, requires_tiling
 else:
-    from .dom_prepare import prepare_dom_pair_for_matching
+    from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from .keypoints import Keypoint, KeypointFile, write_key_file
     from .preprocess import StretchStats, build_invalid_mask, stretch_to_byte
     from .runtime import bootstrap_runtime_environment
@@ -484,9 +484,9 @@ def match_dom_pair_to_key_files(
     write_key_file(left_output_key, left_key_file)
     write_key_file(right_output_key, right_key_file)
     if metadata_output is not None:
-        Path(metadata_output).write_text(
-            json.dumps(summary["preparation"], indent=2, ensure_ascii=False) + "\n",
-            encoding="utf-8",
+        write_pair_preparation_metadata(
+            metadata_output,
+            summary["preparation"],
         )
     return {
         **summary,

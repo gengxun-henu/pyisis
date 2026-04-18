@@ -5,6 +5,7 @@ Created: 2026-04-17
 Last Modified: 2026-04-17
 Updated: 2026-04-17  Geng Xun added regression coverage for DOM GSD inventory/normalization, projected-overlap crop metadata, and cnetmerge shell generation.
 Updated: 2026-04-17  Geng Xun added regression coverage for pairwise JSON report aggregation into a fixed-name batch summary report.
+Updated: 2026-04-17  Geng Xun added coordinate-basis checks for projected-overlap metadata sidecars so offset versus sample/line semantics stay explicit.
 """
 
 from __future__ import annotations
@@ -36,7 +37,12 @@ from controlnet_construct.batch_summary import (
     write_batch_summary_report,
 )
 from controlnet_construct.controlnet_merge import generate_cnetmerge_shell_script, pair_controlnet_filename
-from controlnet_construct.dom_prepare import normalize_dom_list_gsd, prepare_dom_pair_for_matching, read_dom_projection_info
+from controlnet_construct.dom_prepare import (
+    normalize_dom_list_gsd,
+    prepare_dom_pair_for_matching,
+    read_dom_projection_info,
+    write_pair_preparation_metadata,
+)
 from controlnet_construct.listing import StereoPair, write_stereo_pair_list
 
 
@@ -69,6 +75,25 @@ class ControlNetConstructPrepareUnitTest(unittest.TestCase):
         self.assertGreaterEqual(metadata.left.offset_line, 0)
         self.assertGreaterEqual(metadata.right.offset_sample, 0)
         self.assertGreaterEqual(metadata.right.offset_line, 0)
+
+    def test_write_pair_preparation_metadata_declares_coordinate_bases(self):
+        metadata = prepare_dom_pair_for_matching(
+            REAL_DOM_LEFT,
+            REAL_DOM_RIGHT,
+            expand_pixels=16,
+            min_overlap_size=16,
+        )
+
+        with temporary_directory() as temp_dir:
+            metadata_path = temp_dir / "pair_preparation.json"
+            write_pair_preparation_metadata(metadata_path, metadata)
+            payload = json.loads(metadata_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(payload["left"]["offset_sample"], metadata.left.offset_sample)
+        self.assertIn("coordinate_conventions", payload)
+        self.assertEqual(payload["coordinate_conventions"]["context"], "dom_pair_preparation_metadata")
+        self.assertIn("0-based", payload["coordinate_conventions"]["field_bases"]["left.offset_sample"])
+        self.assertIn("1-based", payload["coordinate_conventions"]["field_bases"]["left.start_sample"])
 
     def test_normalize_dom_list_gsd_writes_report_list_and_commands(self):
         entries = [

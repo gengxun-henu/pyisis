@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-/home/gengxun/miniconda3/envs/asp360_new/bin/python}"
 OUTPUT_ROOT="${ISIS_PYBIND_E2E_OUTPUT_ROOT:-${REPO_ROOT}/build/test_artifacts/controlnet_e2e}"
-GENERATE_MATCH_LINE_PLOTS=0
+GENERATE_MATCH_LINE_PLOTS=1
 
 usage() {
 	cat <<'EOF'

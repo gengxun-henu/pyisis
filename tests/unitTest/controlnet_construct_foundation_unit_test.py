@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-16
+Last Modified: 2026-04-18
 Updated: 2026-04-16  Geng Xun added initial regression coverage for list parsing, .key IO, duplicate tie-point merging, tiling, and grayscale stretch helpers.
+Updated: 2026-04-18  Geng Xun added regression coverage for rounded-coordinate merge metadata and merge-decimal validation.
 """
 
 from __future__ import annotations
@@ -38,6 +39,7 @@ from controlnet_construct.listing import (
 )
 from controlnet_construct.merge import merge_duplicate_keypoints
 from controlnet_construct.preprocess import stretch_to_byte
+from controlnet_construct.tie_point_merge_in_overlap import merge_stereo_pair_key_files, validate_merge_decimals
 from controlnet_construct.tiling import generate_tiles, requires_tiling
 
 
@@ -129,6 +131,39 @@ class ControlNetConstructFoundationUnitTest(unittest.TestCase):
         self.assertEqual(summary.input_count, 3)
         self.assertEqual(summary.unique_count, 2)
         self.assertEqual(summary.duplicate_count, 1)
+
+    def test_validate_merge_decimals_rejects_out_of_range_values(self):
+        with self.assertRaisesRegex(ValueError, "between 0 and 6"):
+            validate_merge_decimals(-1)
+
+        with self.assertRaisesRegex(ValueError, "between 0 and 6"):
+            validate_merge_decimals(7)
+
+        self.assertEqual(validate_merge_decimals(3), 3)
+
+    def test_merge_stereo_pair_key_files_reports_hash_strategy_metadata(self):
+        with temporary_directory() as temp_dir:
+            left_input = temp_dir / "left_input.key"
+            right_input = temp_dir / "right_input.key"
+            left_output = temp_dir / "left_output.key"
+            right_output = temp_dir / "right_output.key"
+
+            write_key_file(
+                left_input,
+                KeypointFile(100, 100, (Keypoint(10.0004, 20.0004), Keypoint(10.00049, 20.00049))),
+            )
+            write_key_file(
+                right_input,
+                KeypointFile(100, 100, (Keypoint(30.0004, 40.0004), Keypoint(30.00049, 40.00049))),
+            )
+
+            result = merge_stereo_pair_key_files(left_input, right_input, left_output, right_output, decimals=3)
+
+            self.assertEqual(result["duplicate_count"], 1)
+            self.assertEqual(result["hash_strategy"], "rounded_stereo_pair_coordinate_hash")
+            self.assertEqual(result["hash_coordinate_fields"], "left.sample,left.line,right.sample,right.line")
+            self.assertEqual(result["hash_rounding_decimals"], 3)
+            self.assertIn("fixed decimal precision", result["hash_description"])
 
     def test_generate_tiles_covers_large_image(self):
         tiles = generate_tiles(2500, 2100, block_width=1024, block_height=1024, overlap_x=128, overlap_y=128)

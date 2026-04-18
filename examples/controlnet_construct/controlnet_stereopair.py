@@ -9,6 +9,8 @@ Updated: 2026-04-17  Geng Xun added optional JSON sidecar report writing so per-
 Updated: 2026-04-17  Geng Xun annotated per-pair JSON sidecars with explicit coordinate-basis metadata for nested DOM and original-image sample/line fields.
 Updated: 2026-04-17  Geng Xun switched the DOM wrapper to pair-synchronized dom2ori conversion so left/right correspondences stay aligned.
 Updated: 2026-04-18  Geng Xun added merge-stage RANSAC filtering and optional drawMatches visualization for DOM-space tie points before dom2ori.
+Updated: 2026-04-18  Geng Xun aligned drawMatches preview defaults so the CLI now documents and uses one-third-size visualization output by default.
+Updated: 2026-04-18  Geng Xun clarified that DOM duplicate merging uses a rounded stereo-pair coordinate hash and surfaces the hash precision in logs and result metadata.
 """
 
 from __future__ import annotations
@@ -28,7 +30,13 @@ if __package__ in {None, ""}:
     from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
     from controlnet_construct.image_match import filter_stereo_pair_key_files_with_ransac, write_stereo_pair_match_visualization_from_key_files
     from controlnet_construct.keypoints import read_key_file
-    from controlnet_construct.tie_point_merge_in_overlap import merge_stereo_pair_key_files
+    from controlnet_construct.tie_point_merge_in_overlap import (
+        MERGE_HASH_DESCRIPTION,
+        MERGE_HASH_COORDINATE_FIELDS,
+        MERGE_HASH_STRATEGY,
+        merge_stereo_pair_key_files,
+        validate_merge_decimals,
+    )
     from controlnet_construct.runtime import bootstrap_runtime_environment
 else:
     from .coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
@@ -36,7 +44,13 @@ else:
     from .image_match import filter_stereo_pair_key_files_with_ransac, write_stereo_pair_match_visualization_from_key_files
     from .keypoints import read_key_file
     from .runtime import bootstrap_runtime_environment
-    from .tie_point_merge_in_overlap import merge_stereo_pair_key_files
+    from .tie_point_merge_in_overlap import (
+        MERGE_HASH_DESCRIPTION,
+        MERGE_HASH_COORDINATE_FIELDS,
+        MERGE_HASH_STRATEGY,
+        merge_stereo_pair_key_files,
+        validate_merge_decimals,
+    )
 
 
 bootstrap_runtime_environment()
@@ -230,7 +244,7 @@ def build_controlnet_for_dom_stereo_pair(
     ransac_mode: str = "loose",
     loose_ransac_keep_threshold: float = 1.0,
     write_match_visualization: bool = False,
-    match_visualization_scale: float = 3.0,
+    match_visualization_scale: float = 1.0 / 3.0,
     match_visualization_output_dir: str | Path | None = None,
     dom_band: int = 1,
     left_original_band: int = 1,
@@ -240,6 +254,7 @@ def build_controlnet_for_dom_stereo_pair(
     pvl_format: bool = True,
     logger: logging.Logger | None = None,
 ) -> dict[str, object]:
+    validated_merge_decimals = validate_merge_decimals(merge_decimals)
     left_output_key = Path(left_output_key_path) if left_output_key_path is not None else _default_intermediate_key_path(output_path, "left", "ori")
     right_output_key = Path(right_output_key_path) if right_output_key_path is not None else _default_intermediate_key_path(output_path, "right", "ori")
     left_merged_dom_key = Path(left_merged_dom_key_path) if left_merged_dom_key_path is not None else _default_intermediate_key_path(output_path, "left", "dom_merged")
@@ -261,17 +276,28 @@ def build_controlnet_for_dom_stereo_pair(
             "right_input": str(right_dom_key_path),
             "left_output": str(left_dom_key_path),
             "right_output": str(right_dom_key_path),
-            "decimals": merge_decimals,
+            "decimals": validated_merge_decimals,
+            "hash_rounding_decimals": validated_merge_decimals,
+            "hash_strategy": MERGE_HASH_STRATEGY,
+            "hash_coordinate_fields": MERGE_HASH_COORDINATE_FIELDS,
+            "hash_description": MERGE_HASH_DESCRIPTION,
         }
         left_dom_key_for_conversion = Path(left_dom_key_path)
         right_dom_key_for_conversion = Path(right_dom_key_path)
+        if logger is not None:
+            logger.info(
+                "controlnet_stereopair skipped DOM duplicate merge: hash_strategy=%s hash_coordinate_fields=%s hash_rounding_decimals=%s",
+                MERGE_HASH_STRATEGY,
+                MERGE_HASH_COORDINATE_FIELDS,
+                validated_merge_decimals,
+            )
     else:
         merge_stats = merge_stereo_pair_key_files(
             str(left_dom_key_path),
             str(right_dom_key_path),
             str(left_merged_dom_key),
             str(right_merged_dom_key),
-            decimals=merge_decimals,
+            decimals=validated_merge_decimals,
         )
         merge_result = {
             "applied": True,
@@ -281,7 +307,10 @@ def build_controlnet_for_dom_stereo_pair(
         right_dom_key_for_conversion = right_merged_dom_key
         if logger is not None:
             logger.info(
-                "controlnet_stereopair merged DOM tie points: input_count=%s unique_count=%s duplicate_count=%s",
+                "controlnet_stereopair merged DOM tie points: hash_strategy=%s hash_coordinate_fields=%s hash_rounding_decimals=%s input_count=%s unique_count=%s duplicate_count=%s",
+                merge_stats["hash_strategy"],
+                merge_stats["hash_coordinate_fields"],
+                merge_stats["hash_rounding_decimals"],
                 merge_stats["input_count"],
                 merge_stats["unique_count"],
                 merge_stats["duplicate_count"],
@@ -403,15 +432,23 @@ def _build_from_dom_parser(subparsers) -> None:
     parser.add_argument("--right-ransac-dom-key", default=None, help="Optional path to persist the RANSAC-filtered DOM-space .key for image B before dom2ori.")
     parser.add_argument("--left-output-key", default=None, help="Optional path to persist the converted original-image .key for image A.")
     parser.add_argument("--right-output-key", default=None, help="Optional path to persist the converted original-image .key for image B.")
-    parser.add_argument("--merge-decimals", type=int, default=3, help="Number of decimal places used when merging duplicate DOM tie points.")
+    parser.add_argument(
+        "--merge-decimals",
+        type=validate_merge_decimals,
+        default=3,
+        help=(
+            "Decimal precision used by the rounded left/right sample-line coordinate hash when"
+            " merging duplicate DOM tie points. Valid range: 0-6."
+        ),
+    )
     parser.add_argument("--skip-merge", action="store_true", help="Skip DOM-space duplicate merge and pass the input DOM .key files straight to dom2ori.")
     parser.add_argument("--ransac-reproj-threshold", type=float, default=3.0, help="Reprojection threshold passed to OpenCV homography RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-confidence", type=float, default=0.995, help="Confidence passed to OpenCV homography RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-max-iters", type=int, default=5000, help="Maximum iteration count passed to OpenCV homography RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="Strict mode drops every OpenCV RANSAC outlier; loose mode re-checks outliers against the fitted homography and keeps those within the loose threshold.")
     parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep OpenCV RANSAC outliers whose homography reprojection error stays within this limit.")
-    parser.add_argument("--write-match-visualization", action="store_true", help="Write a drawMatches PNG after merge-stage RANSAC filtering using the default A__B__timestamp naming rule.")
-    parser.add_argument("--match-visualization-scale", type=float, default=3.0, help="Image scale factor used when writing the drawMatches visualization PNG.")
+    parser.add_argument("--write-match-visualization", action="store_true", help="Write a drawMatches PNG after merge-stage RANSAC filtering using the default A__B__timestamp naming rule. The default preview uses one-third of the original image width and height.")
+    parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the drawMatches visualization PNG. Defaults to 1/3, producing a one-third-size preview in each dimension.")
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used for the auto-named drawMatches visualization PNG.")
     parser.add_argument("--dom-band", type=int, default=1, help="Band index used when reading the DOM cubes.")
     parser.add_argument("--left-original-band", type=int, default=1, help="Band index used when projecting into the left original cube.")

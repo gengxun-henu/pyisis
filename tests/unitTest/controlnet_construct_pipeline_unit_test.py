@@ -2,19 +2,21 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-17
+Last Modified: 2026-04-18
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
 Updated: 2026-04-17  Geng Xun added focused coverage for per-pair JSON sidecar report writing alongside stereo-pair ControlNet output.
 Updated: 2026-04-17  Geng Xun added coordinate-basis JSON checks and a no-drift semi-integration chain from image_match through dom2ori into ControlNet measures.
 Updated: 2026-04-18  Geng Xun added focused wrapper coverage for merge-stage RANSAC filtering and auto-named drawMatches visualization output before dom2ori.
+Updated: 2026-04-18  Geng Xun added optional configurable real LRO DOM pipeline coverage while preserving repository fixture regressions.
 """
 
 from __future__ import annotations
 
 import json
 import io
+import os
 import sys
 from pathlib import Path
 import unittest
@@ -64,6 +66,16 @@ LEFT_CUBE_PATH = workspace_test_data_path("mosrange", "EN0108828322M_iof.cub")
 RIGHT_CUBE_PATH = workspace_test_data_path("mosrange", "EN0108828327M_iof.cub")
 REAL_DOM_LEFT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_1m_o_forPDS_cropped.cub")
 REAL_DOM_RIGHT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_25cm_o_forPDS_cropped.cub")
+REAL_LRO_DOM_LEFT_ENV = "ISIS_PYBIND_PIPELINE_REAL_DOM_LEFT_CUBE"
+REAL_LRO_DOM_RIGHT_ENV = "ISIS_PYBIND_PIPELINE_REAL_DOM_RIGHT_CUBE"
+DEFAULT_REAL_LRO_DOM_LEFT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871LE.cub")
+DEFAULT_REAL_LRO_DOM_RIGHT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871RE.cub")
+
+
+def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
+    left_dom = Path(os.environ.get(REAL_LRO_DOM_LEFT_ENV, str(DEFAULT_REAL_LRO_DOM_LEFT))).expanduser()
+    right_dom = Path(os.environ.get(REAL_LRO_DOM_RIGHT_ENV, str(DEFAULT_REAL_LRO_DOM_RIGHT))).expanduser()
+    return left_dom, right_dom
 
 
 class ControlNetConstructPipelineUnitTest(unittest.TestCase):
@@ -670,6 +682,66 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(result["left_conversion"]["failure_count"], 0)
         self.assertEqual(result["right_conversion"]["failure_count"], 0)
         self.assertGreater(result["controlnet"]["point_count"], 0)
+        self.assertTrue(left_output_exists)
+        self.assertTrue(right_output_exists)
+        self.assertEqual(loaded.get_num_points(), result["controlnet"]["point_count"])
+
+    def test_build_controlnet_for_dom_stereo_pair_supports_configurable_real_lro_pair_when_available(self):
+        real_left_dom, real_right_dom = _configured_real_lro_dom_pair()
+        if not real_left_dom.exists() or not real_right_dom.exists():
+            self.skipTest(
+                "Real LRO DOM pair is unavailable. "
+                f"Configure {REAL_LRO_DOM_LEFT_ENV} and {REAL_LRO_DOM_RIGHT_ENV} if needed."
+            )
+
+        config = ControlNetConfig(
+            network_id="ctx_dom_real_lro",
+            target_name="Moon",
+            user_name="copilot",
+            description="configurable real LRO DOM wrapper test",
+            point_id_prefix="LRD",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_real_dom.key"
+            right_dom_key = temp_dir / "right_real_dom.key"
+            output_net = temp_dir / "real_lro_wrapped.net"
+            left_output_key = temp_dir / "left_real_ori.key"
+            right_output_key = temp_dir / "right_real_ori.key"
+
+            match_summary = match_dom_pair_to_key_files(
+                real_left_dom,
+                real_right_dom,
+                left_dom_key,
+                right_dom_key,
+                min_valid_pixels=16,
+                ratio_test=0.85,
+            )
+            self.assertGreater(match_summary["point_count"], 0)
+
+            result = build_controlnet_for_dom_stereo_pair(
+                left_dom_key,
+                right_dom_key,
+                real_left_dom,
+                real_right_dom,
+                real_left_dom,
+                real_right_dom,
+                config,
+                output_net,
+                left_output_key_path=left_output_key,
+                right_output_key_path=right_output_key,
+                pvl_format=True,
+            )
+
+            loaded = ip.ControlNet(str(output_net))
+            left_output_exists = left_output_key.exists()
+            right_output_exists = right_output_key.exists()
+
+        self.assertEqual(result["mode"], "from-dom")
+        self.assertTrue(result["merge"]["applied"])
+        self.assertGreater(result["controlnet"]["point_count"], 0)
+        self.assertEqual(result["left_conversion"]["failure_count"], 0)
+        self.assertEqual(result["right_conversion"]["failure_count"], 0)
         self.assertTrue(left_output_exists)
         self.assertTrue(right_output_exists)
         self.assertEqual(loaded.get_num_points(), result["controlnet"]["point_count"])

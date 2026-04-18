@@ -7,6 +7,7 @@ Updated: 2026-04-17  Geng Xun allowed tiled DOM matching to operate on the share
 Updated: 2026-04-17  Geng Xun upgraded DOM matching to use projected-overlap crop metadata with configurable expansion and small-overlap skipping.
 Updated: 2026-04-17  Geng Xun exposed additional OpenCV SIFT detector parameters through the matching API and CLI.
 Updated: 2026-04-18  Geng Xun added merge-stage homography RANSAC helpers and default `cv2.drawMatches` visualization output for preserved DOM matching diagnostics.
+Updated: 2026-04-18  Geng Xun changed match-visualization default scaling to one-third size and now use area interpolation when downsampling previews.
 """
 
 from __future__ import annotations
@@ -256,6 +257,11 @@ def _isis_keypoint_to_draw_matches_keypoint(point: Keypoint, *, scale_factor: fl
     )
 
 
+def _resize_visualization_image(image: np.ndarray, *, scale_factor: float) -> np.ndarray:
+    interpolation = cv2.INTER_AREA if scale_factor < 1.0 else cv2.INTER_LINEAR
+    return cv2.resize(image, dsize=None, fx=scale_factor, fy=scale_factor, interpolation=interpolation)
+
+
 def _read_cube_as_stretched_byte(
     cube_path: str | Path,
     *,
@@ -469,7 +475,7 @@ def write_stereo_pair_match_visualization(
     output_path: str | Path | None = None,
     output_directory: str | Path | None = None,
     timestamp: datetime | None = None,
-    scale_factor: float = 3.0,
+    scale_factor: float = 1.0 / 3.0,
     band: int = 1,
     minimum_value: float | None = None,
     maximum_value: float | None = None,
@@ -511,8 +517,8 @@ def write_stereo_pair_match_visualization(
         special_pixel_abs_threshold=special_pixel_abs_threshold,
     )
 
-    scaled_left = cv2.resize(left_image, dsize=None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_LINEAR)
-    scaled_right = cv2.resize(right_image, dsize=None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_LINEAR)
+    scaled_left = _resize_visualization_image(left_image, scale_factor=scale_factor)
+    scaled_right = _resize_visualization_image(right_image, scale_factor=scale_factor)
     left_keypoints = [_isis_keypoint_to_draw_matches_keypoint(point, scale_factor=scale_factor) for point in left_key_file.points]
     right_keypoints = [_isis_keypoint_to_draw_matches_keypoint(point, scale_factor=scale_factor) for point in right_key_file.points]
     matches = [cv2.DMatch(_queryIdx=index, _trainIdx=index, _distance=0.0) for index in range(len(left_keypoints))]

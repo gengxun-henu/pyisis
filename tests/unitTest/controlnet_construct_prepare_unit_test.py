@@ -1,16 +1,29 @@
 """Focused unit tests for DOM preparation and ControlNet merge-shell helpers.
 
+This module validates the DOM-side preparation utilities that run before image matching
+and ControlNet assembly. The coverage focuses on projected DOM metadata inspection,
+pairwise overlap preparation, coordinate-basis JSON sidecars, GSD normalization command
+generation, cnetmerge shell creation, and batch-summary aggregation from per-pair
+reports.
+
+The tests intentionally mix repository fixtures with optional real LRO DOM inputs. This
+keeps the default regression suite fast and reproducible while still allowing local
+real-data verification when the relevant environment variables are configured.
+
 Author: Geng Xun
 Created: 2026-04-17
-Last Modified: 2026-04-17
+Last Modified: 2026-04-18
 Updated: 2026-04-17  Geng Xun added regression coverage for DOM GSD inventory/normalization, projected-overlap crop metadata, and cnetmerge shell generation.
 Updated: 2026-04-17  Geng Xun added regression coverage for pairwise JSON report aggregation into a fixed-name batch summary report.
 Updated: 2026-04-17  Geng Xun added coordinate-basis checks for projected-overlap metadata sidecars so offset versus sample/line semantics stay explicit.
+Updated: 2026-04-18  Geng Xun added optional real LRO DOM prepare coverage while preserving the existing repository fixture regressions.
+Updated: 2026-04-18  Geng Xun expanded the module docstring to clarify file scope, fixture-versus-real-data coverage, and preparation-stage responsibilities.
 """
 
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -46,14 +59,43 @@ from controlnet_construct.dom_prepare import (
 from controlnet_construct.listing import StereoPair, write_stereo_pair_list
 
 
-REAL_DOM_LEFT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_1m_o_forPDS_cropped.cub")
-REAL_DOM_RIGHT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_25cm_o_forPDS_cropped.cub")
+FIXTURE_DOM_LEFT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_1m_o_forPDS_cropped.cub")
+FIXTURE_DOM_RIGHT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_25cm_o_forPDS_cropped.cub")
+
+REAL_LRO_DOM_LEFT_ENV = "ISIS_PYBIND_PREPARE_REAL_DOM_LEFT_CUBE"
+REAL_LRO_DOM_RIGHT_ENV = "ISIS_PYBIND_PREPARE_REAL_DOM_RIGHT_CUBE"
+
+DEFAULT_REAL_LRO_DOM_LEFT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871LE.cub")
+DEFAULT_REAL_LRO_DOM_RIGHT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871RE.cub")
+
+
+def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
+    left_dom = Path(os.environ.get(REAL_LRO_DOM_LEFT_ENV, str(DEFAULT_REAL_LRO_DOM_LEFT))).expanduser()
+    right_dom = Path(os.environ.get(REAL_LRO_DOM_RIGHT_ENV, str(DEFAULT_REAL_LRO_DOM_RIGHT))).expanduser()
+    return left_dom, right_dom
 
 
 class ControlNetConstructPrepareUnitTest(unittest.TestCase):
     def test_read_dom_projection_info_reports_resolution_and_bounds(self):
-        info = read_dom_projection_info(REAL_DOM_LEFT)
+        info = read_dom_projection_info(FIXTURE_DOM_LEFT)
 
+        self.assertGreater(info.resolution, 0.0)
+        self.assertGreater(info.image_width, 0)
+        self.assertGreater(info.image_height, 0)
+        self.assertLess(info.min_x, info.max_x)
+        self.assertLess(info.min_y, info.max_y)
+
+    def test_read_dom_projection_info_supports_configurable_real_lro_cube_when_available(self):
+        real_left_dom, _ = _configured_real_lro_dom_pair()
+        if not real_left_dom.exists():
+            self.skipTest(
+                "Real LRO DOM cube is unavailable. "
+                f"Configure {REAL_LRO_DOM_LEFT_ENV} if you want to run the real-data prepare regression."
+            )
+
+        info = read_dom_projection_info(real_left_dom)
+
+        self.assertEqual(info.path, str(real_left_dom))
         self.assertGreater(info.resolution, 0.0)
         self.assertGreater(info.image_width, 0)
         self.assertGreater(info.image_height, 0)
@@ -62,8 +104,8 @@ class ControlNetConstructPrepareUnitTest(unittest.TestCase):
 
     def test_prepare_dom_pair_for_matching_returns_crop_offsets_for_real_overlap(self):
         metadata = prepare_dom_pair_for_matching(
-            REAL_DOM_LEFT,
-            REAL_DOM_RIGHT,
+            FIXTURE_DOM_LEFT,
+            FIXTURE_DOM_RIGHT,
             expand_pixels=32,
             min_overlap_size=16,
         )
@@ -76,10 +118,35 @@ class ControlNetConstructPrepareUnitTest(unittest.TestCase):
         self.assertGreaterEqual(metadata.right.offset_sample, 0)
         self.assertGreaterEqual(metadata.right.offset_line, 0)
 
+    def test_prepare_dom_pair_for_matching_supports_configurable_real_lro_pair_when_available(self):
+        real_left_dom, real_right_dom = _configured_real_lro_dom_pair()
+        if not real_left_dom.exists() or not real_right_dom.exists():
+            self.skipTest(
+                "Real LRO DOM pair is unavailable. "
+                f"Configure {REAL_LRO_DOM_LEFT_ENV} and {REAL_LRO_DOM_RIGHT_ENV} if needed."
+            )
+
+        metadata = prepare_dom_pair_for_matching(
+            real_left_dom,
+            real_right_dom,
+            expand_pixels=32,
+            min_overlap_size=16,
+        )
+
+        self.assertEqual(metadata.status, "ready")
+        self.assertEqual(metadata.left.path, str(real_left_dom))
+        self.assertEqual(metadata.right.path, str(real_right_dom))
+        self.assertGreater(metadata.shared_width, 0)
+        self.assertGreater(metadata.shared_height, 0)
+        self.assertGreaterEqual(metadata.left.offset_sample, 0)
+        self.assertGreaterEqual(metadata.left.offset_line, 0)
+        self.assertGreaterEqual(metadata.right.offset_sample, 0)
+        self.assertGreaterEqual(metadata.right.offset_line, 0)
+
     def test_write_pair_preparation_metadata_declares_coordinate_bases(self):
         metadata = prepare_dom_pair_for_matching(
-            REAL_DOM_LEFT,
-            REAL_DOM_RIGHT,
+            FIXTURE_DOM_LEFT,
+            FIXTURE_DOM_RIGHT,
             expand_pixels=16,
             min_overlap_size=16,
         )
@@ -97,8 +164,8 @@ class ControlNetConstructPrepareUnitTest(unittest.TestCase):
 
     def test_normalize_dom_list_gsd_writes_report_list_and_commands(self):
         entries = [
-            ("left.cub", str(REAL_DOM_LEFT)),
-            ("right.cub", str(REAL_DOM_RIGHT)),
+            ("left.cub", str(FIXTURE_DOM_LEFT)),
+            ("right.cub", str(FIXTURE_DOM_RIGHT)),
         ]
 
         with temporary_directory() as temp_dir:

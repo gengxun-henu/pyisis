@@ -2,17 +2,19 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-17
+Last Modified: 2026-04-18
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
 Updated: 2026-04-18  Geng Xun added focused regression coverage for merge-stage RANSAC filtering and default drawMatches visualization output naming.
+Updated: 2026-04-18  Geng Xun added optional configurable real LRO DOM matching coverage while preserving repository fixture regressions.
 """
 
 from __future__ import annotations
 
 import importlib
 from datetime import datetime
+import os
 import sys
 from pathlib import Path
 import unittest
@@ -47,9 +49,19 @@ KeypointFile = keypoints_module.KeypointFile
 write_key_file = keypoints_module.write_key_file
 
 
-REAL_DOM_LEFT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_1m_o_forPDS_cropped.cub")
-REAL_DOM_RIGHT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_25cm_o_forPDS_cropped.cub")
+FIXTURE_DOM_LEFT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_1m_o_forPDS_cropped.cub")
+FIXTURE_DOM_RIGHT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_25cm_o_forPDS_cropped.cub")
+REAL_LRO_DOM_LEFT_ENV = "ISIS_PYBIND_MATCHING_REAL_DOM_LEFT_CUBE"
+REAL_LRO_DOM_RIGHT_ENV = "ISIS_PYBIND_MATCHING_REAL_DOM_RIGHT_CUBE"
+DEFAULT_REAL_LRO_DOM_LEFT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871LE.cub")
+DEFAULT_REAL_LRO_DOM_RIGHT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871RE.cub")
 SPECIAL_PIXEL = -1.797693134862315e308
+
+
+def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
+    left_dom = Path(os.environ.get(REAL_LRO_DOM_LEFT_ENV, str(DEFAULT_REAL_LRO_DOM_LEFT))).expanduser()
+    right_dom = Path(os.environ.get(REAL_LRO_DOM_RIGHT_ENV, str(DEFAULT_REAL_LRO_DOM_RIGHT))).expanduser()
+    return left_dom, right_dom
 
 
 def _write_array_to_cube(cube: ip.Cube, values: np.ndarray) -> None:
@@ -336,8 +348,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
     def test_match_dom_pair_on_real_dom_cubes_returns_in_bounds_keypoints(self):
         left_key_file, right_key_file, summary = match_dom_pair(
-            REAL_DOM_LEFT,
-            REAL_DOM_RIGHT,
+            FIXTURE_DOM_LEFT,
+            FIXTURE_DOM_RIGHT,
             min_valid_pixels=16,
             ratio_test=0.85,
         )
@@ -352,6 +364,32 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(all(1.0 <= point.line <= 50.0 for point in left_key_file.points))
         self.assertTrue(all(1.0 <= point.sample <= 50.0 for point in right_key_file.points))
         self.assertTrue(all(1.0 <= point.line <= 50.0 for point in right_key_file.points))
+
+    def test_match_dom_pair_supports_configurable_real_lro_dom_pair_when_available(self):
+        real_left_dom, real_right_dom = _configured_real_lro_dom_pair()
+        if not real_left_dom.exists() or not real_right_dom.exists():
+            self.skipTest(
+                "Real LRO DOM pair is unavailable. "
+                f"Configure {REAL_LRO_DOM_LEFT_ENV} and {REAL_LRO_DOM_RIGHT_ENV} if needed."
+            )
+
+        left_key_file, right_key_file, summary = match_dom_pair(
+            real_left_dom,
+            real_right_dom,
+            min_valid_pixels=16,
+            ratio_test=0.85,
+        )
+
+        self.assertEqual(len(left_key_file.points), len(right_key_file.points))
+        self.assertGreater(summary["point_count"], 0)
+        self.assertGreater(left_key_file.image_width, 0)
+        self.assertGreater(left_key_file.image_height, 0)
+        self.assertGreater(right_key_file.image_width, 0)
+        self.assertGreater(right_key_file.image_height, 0)
+        self.assertTrue(all(1.0 <= point.sample <= left_key_file.image_width for point in left_key_file.points))
+        self.assertTrue(all(1.0 <= point.line <= left_key_file.image_height for point in left_key_file.points))
+        self.assertTrue(all(1.0 <= point.sample <= right_key_file.image_width for point in right_key_file.points))
+        self.assertTrue(all(1.0 <= point.line <= right_key_file.image_height for point in right_key_file.points))
 
     def test_write_stereo_pair_match_visualization_from_key_files_writes_default_png(self):
         width = 24

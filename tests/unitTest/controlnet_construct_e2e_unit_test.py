@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-17
-Last Modified: 2026-04-17
+Last Modified: 2026-04-18
 Updated: 2026-04-17  Geng Xun added an LRO NAC DOM-matching E2E regression that runs overlap discovery, DOM matching, duplicate merge, dom2ori conversion, and ControlNet writing from the provided `.lis` inputs.
 Updated: 2026-04-17  Geng Xun expanded the external LRO regression to batch-process every overlap pair written to `images_overlap.lis`.
 Updated: 2026-04-17  Geng Xun added per-pair pipeline statistics and a CLI black-box batch regression that drives the full example workflow through script entrypoints.
@@ -10,6 +10,7 @@ Updated: 2026-04-17  Geng Xun extended the E2E flow to emit DOM GSD reports/list
 Updated: 2026-04-17  Geng Xun added an opt-in preserved output directory and batch JSON reports so external E2E artifacts can be kept on disk for inspection.
 Updated: 2026-04-18  Geng Xun added an opt-in E2E artifact switch for saving stereo-pair DOM match line plots alongside preserved outputs.
 Updated: 2026-04-18  Geng Xun switched the function and CLI E2E flows to the shared drawMatches visualization emitted by the from-dom ControlNet wrapper.
+Updated: 2026-04-18  Geng Xun added a configurable external LRO E2E data root while preserving the previous default path.
 """
 
 from __future__ import annotations
@@ -51,9 +52,8 @@ from controlnet_construct.listing import (
 )
 
 
-EXTERNAL_DATA_ROOT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python")
-ORIGINAL_LIST_PATH = EXTERNAL_DATA_ROOT / "ori_images.lis"
-DOM_LIST_PATH = EXTERNAL_DATA_ROOT / "doms.lis"
+EXTERNAL_DATA_ROOT_ENV = "ISIS_PYBIND_CONTROLNET_E2E_DATA_ROOT"
+DEFAULT_EXTERNAL_DATA_ROOT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python")
 CONTROLNET_CONFIG = {
     "NetworkId": "lro_dom_matching_e2e",
     "TargetName": "Moon",
@@ -72,6 +72,15 @@ CONTROLNET_MERGE_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "controlnet_me
 PRESERVED_E2E_OUTPUT_ROOT_ENV = "ISIS_PYBIND_E2E_OUTPUT_ROOT"
 GENERATE_MATCH_LINE_PLOTS_ENV = "ISIS_PYBIND_E2E_GENERATE_MATCH_LINE_PLOTS"
 E2E_RUN_METADATA_NAME = "e2e_run_metadata.json"
+
+
+def _configured_external_data_root() -> Path:
+    return Path(os.environ.get(EXTERNAL_DATA_ROOT_ENV, str(DEFAULT_EXTERNAL_DATA_ROOT))).expanduser().resolve()
+
+
+def _configured_external_list_paths() -> tuple[Path, Path]:
+    data_root = _configured_external_data_root()
+    return data_root / "ori_images.lis", data_root / "doms.lis"
 
 
 def _candidate_resolved_paths(list_directory: Path, entry: str) -> list[Path]:
@@ -187,12 +196,16 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         return self._write_json_report(output_dir / E2E_RUN_METADATA_NAME, metadata)
 
     def _load_external_dataset_or_skip(self) -> tuple[list[str], list[str], dict[str, str]]:
-        if not ORIGINAL_LIST_PATH.exists() or not DOM_LIST_PATH.exists():
-            self.skipTest("The external LRO NAC E2E lists are not available on this machine.")
+        original_list_path, dom_list_path = _configured_external_list_paths()
+        if not original_list_path.exists() or not dom_list_path.exists():
+            self.skipTest(
+                "The external LRO NAC E2E lists are not available on this machine. "
+                f"Configure {EXTERNAL_DATA_ROOT_ENV} if needed."
+            )
 
         try:
-            original_paths = _resolve_list_entries(ORIGINAL_LIST_PATH)
-            dom_paths = _resolve_list_entries(DOM_LIST_PATH)
+            original_paths = _resolve_list_entries(original_list_path)
+            dom_paths = _resolve_list_entries(dom_list_path)
         except FileNotFoundError as error:
             self.skipTest(str(error))
 

@@ -8,6 +8,7 @@ Updated: 2026-04-16  Geng Xun inserted DOM-space tie-point merging into the from
 Updated: 2026-04-17  Geng Xun added optional JSON sidecar report writing so per-pair results can be aggregated into regression-friendly batch summaries.
 Updated: 2026-04-17  Geng Xun annotated per-pair JSON sidecars with explicit coordinate-basis metadata for nested DOM and original-image sample/line fields.
 Updated: 2026-04-17  Geng Xun switched the DOM wrapper to pair-synchronized dom2ori conversion so left/right correspondences stay aligned.
+Updated: 2026-04-18  Geng Xun added merge-stage RANSAC filtering and optional drawMatches visualization for DOM-space tie points before dom2ori.
 """
 
 from __future__ import annotations
@@ -25,12 +26,14 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from controlnet_construct.coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
+    from controlnet_construct.image_match import filter_stereo_pair_key_files_with_ransac, write_stereo_pair_match_visualization_from_key_files
     from controlnet_construct.keypoints import read_key_file
     from controlnet_construct.tie_point_merge_in_overlap import merge_stereo_pair_key_files
     from controlnet_construct.runtime import bootstrap_runtime_environment
 else:
     from .coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from .dom2ori import convert_paired_dom_keypoints_to_original
+    from .image_match import filter_stereo_pair_key_files_with_ransac, write_stereo_pair_match_visualization_from_key_files
     from .keypoints import read_key_file
     from .runtime import bootstrap_runtime_environment
     from .tie_point_merge_in_overlap import merge_stereo_pair_key_files
@@ -215,10 +218,20 @@ def build_controlnet_for_dom_stereo_pair(
     *,
     left_merged_dom_key_path: str | Path | None = None,
     right_merged_dom_key_path: str | Path | None = None,
+    left_ransac_dom_key_path: str | Path | None = None,
+    right_ransac_dom_key_path: str | Path | None = None,
     left_output_key_path: str | Path | None = None,
     right_output_key_path: str | Path | None = None,
     merge_decimals: int = 3,
     skip_merge: bool = False,
+    ransac_reproj_threshold: float = 3.0,
+    ransac_confidence: float = 0.995,
+    ransac_max_iters: int = 5000,
+    ransac_mode: str = "loose",
+    loose_ransac_keep_threshold: float = 1.0,
+    write_match_visualization: bool = False,
+    match_visualization_scale: float = 3.0,
+    match_visualization_output_dir: str | Path | None = None,
     dom_band: int = 1,
     left_original_band: int = 1,
     right_original_band: int = 1,
@@ -231,6 +244,8 @@ def build_controlnet_for_dom_stereo_pair(
     right_output_key = Path(right_output_key_path) if right_output_key_path is not None else _default_intermediate_key_path(output_path, "right", "ori")
     left_merged_dom_key = Path(left_merged_dom_key_path) if left_merged_dom_key_path is not None else _default_intermediate_key_path(output_path, "left", "dom_merged")
     right_merged_dom_key = Path(right_merged_dom_key_path) if right_merged_dom_key_path is not None else _default_intermediate_key_path(output_path, "right", "dom_merged")
+    left_ransac_dom_key = Path(left_ransac_dom_key_path) if left_ransac_dom_key_path is not None else _default_intermediate_key_path(output_path, "left", "dom_ransac")
+    right_ransac_dom_key = Path(right_ransac_dom_key_path) if right_ransac_dom_key_path is not None else _default_intermediate_key_path(output_path, "right", "dom_ransac")
 
     if logger is not None:
         logger.info(
@@ -272,6 +287,42 @@ def build_controlnet_for_dom_stereo_pair(
                 merge_stats["duplicate_count"],
             )
 
+    ransac_result = filter_stereo_pair_key_files_with_ransac(
+        str(left_dom_key_for_conversion),
+        str(right_dom_key_for_conversion),
+        str(left_ransac_dom_key),
+        str(right_ransac_dom_key),
+        ransac_reproj_threshold=ransac_reproj_threshold,
+        ransac_confidence=ransac_confidence,
+        ransac_max_iters=ransac_max_iters,
+        ransac_mode=ransac_mode,
+        loose_keep_pixel_threshold=loose_ransac_keep_threshold,
+    )
+    left_dom_key_for_conversion = left_ransac_dom_key
+    right_dom_key_for_conversion = right_ransac_dom_key
+    if logger is not None:
+        logger.info(
+            "controlnet_stereopair applied RANSAC filtering: status=%s retained_count=%s dropped_count=%s mode=%s",
+            ransac_result["status"],
+            ransac_result["retained_count"],
+            ransac_result["dropped_count"],
+            ransac_result["mode"],
+        )
+
+    match_visualization_result: dict[str, object] | None = None
+    if write_match_visualization:
+        visualization_directory = Path(match_visualization_output_dir) if match_visualization_output_dir is not None else Path(output_path).parent
+        match_visualization_result = write_stereo_pair_match_visualization_from_key_files(
+            left_dom_cube_path,
+            right_dom_cube_path,
+            left_dom_key_for_conversion,
+            right_dom_key_for_conversion,
+            output_directory=visualization_directory,
+            scale_factor=match_visualization_scale,
+            band=dom_band,
+            highlight_match_indices=ransac_result["retained_soft_outlier_positions"],
+        )
+
     paired_conversion = convert_paired_dom_keypoints_to_original(
         left_dom_key_for_conversion,
         right_dom_key_for_conversion,
@@ -303,9 +354,11 @@ def build_controlnet_for_dom_stereo_pair(
     return {
         "mode": "from-dom",
         "merge": merge_result,
+        "ransac": ransac_result,
         "left_conversion": left_conversion,
         "right_conversion": right_conversion,
         "controlnet": controlnet_result,
+        **({"match_visualization": match_visualization_result} if match_visualization_result is not None else {}),
     }
 
 
@@ -346,10 +399,20 @@ def _build_from_dom_parser(subparsers) -> None:
     parser.add_argument("--report-path", default=None, help="Optional JSON path used to persist the per-pair result summary.")
     parser.add_argument("--left-merged-dom-key", default=None, help="Optional path to persist the merged DOM-space .key for image A before dom2ori.")
     parser.add_argument("--right-merged-dom-key", default=None, help="Optional path to persist the merged DOM-space .key for image B before dom2ori.")
+    parser.add_argument("--left-ransac-dom-key", default=None, help="Optional path to persist the RANSAC-filtered DOM-space .key for image A before dom2ori.")
+    parser.add_argument("--right-ransac-dom-key", default=None, help="Optional path to persist the RANSAC-filtered DOM-space .key for image B before dom2ori.")
     parser.add_argument("--left-output-key", default=None, help="Optional path to persist the converted original-image .key for image A.")
     parser.add_argument("--right-output-key", default=None, help="Optional path to persist the converted original-image .key for image B.")
     parser.add_argument("--merge-decimals", type=int, default=3, help="Number of decimal places used when merging duplicate DOM tie points.")
     parser.add_argument("--skip-merge", action="store_true", help="Skip DOM-space duplicate merge and pass the input DOM .key files straight to dom2ori.")
+    parser.add_argument("--ransac-reproj-threshold", type=float, default=3.0, help="Reprojection threshold passed to OpenCV homography RANSAC on merged DOM tie points.")
+    parser.add_argument("--ransac-confidence", type=float, default=0.995, help="Confidence passed to OpenCV homography RANSAC on merged DOM tie points.")
+    parser.add_argument("--ransac-max-iters", type=int, default=5000, help="Maximum iteration count passed to OpenCV homography RANSAC on merged DOM tie points.")
+    parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="Strict mode drops every OpenCV RANSAC outlier; loose mode re-checks outliers against the fitted homography and keeps those within the loose threshold.")
+    parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep OpenCV RANSAC outliers whose homography reprojection error stays within this limit.")
+    parser.add_argument("--write-match-visualization", action="store_true", help="Write a drawMatches PNG after merge-stage RANSAC filtering using the default A__B__timestamp naming rule.")
+    parser.add_argument("--match-visualization-scale", type=float, default=3.0, help="Image scale factor used when writing the drawMatches visualization PNG.")
+    parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used for the auto-named drawMatches visualization PNG.")
     parser.add_argument("--dom-band", type=int, default=1, help="Band index used when reading the DOM cubes.")
     parser.add_argument("--left-original-band", type=int, default=1, help="Band index used when projecting into the left original cube.")
     parser.add_argument("--right-original-band", type=int, default=1, help="Band index used when projecting into the right original cube.")
@@ -401,10 +464,20 @@ def main(argv: list[str] | None = None) -> None:
             args.output_net,
             left_merged_dom_key_path=args.left_merged_dom_key,
             right_merged_dom_key_path=args.right_merged_dom_key,
+            left_ransac_dom_key_path=args.left_ransac_dom_key,
+            right_ransac_dom_key_path=args.right_ransac_dom_key,
             left_output_key_path=args.left_output_key,
             right_output_key_path=args.right_output_key,
             merge_decimals=args.merge_decimals,
             skip_merge=args.skip_merge,
+            ransac_reproj_threshold=args.ransac_reproj_threshold,
+            ransac_confidence=args.ransac_confidence,
+            ransac_max_iters=args.ransac_max_iters,
+            ransac_mode=args.ransac_mode,
+            loose_ransac_keep_threshold=args.loose_ransac_keep_threshold,
+            write_match_visualization=args.write_match_visualization,
+            match_visualization_scale=args.match_visualization_scale,
+            match_visualization_output_dir=args.match_visualization_output_dir,
             dom_band=args.dom_band,
             left_original_band=args.left_original_band,
             right_original_band=args.right_original_band,

@@ -6,6 +6,7 @@ Updated: 2026-04-16  Geng Xun added the initial DOM-space SIFT matching CLI with
 Updated: 2026-04-17  Geng Xun allowed tiled DOM matching to operate on the shared raster extent when paired DOM cubes differ slightly in size.
 Updated: 2026-04-17  Geng Xun upgraded DOM matching to use projected-overlap crop metadata with configurable expansion and small-overlap skipping.
 Updated: 2026-04-17  Geng Xun exposed additional OpenCV SIFT detector parameters through the matching API and CLI.
+Updated: 2026-04-18  Geng Xun added merge-stage homography RANSAC helpers and default `cv2.drawMatches` visualization output for preserved DOM matching diagnostics.
 """
 
 from __future__ import annotations
@@ -13,6 +14,7 @@ from __future__ import annotations
 import argparse
 from dataclasses import asdict
 from dataclasses import dataclass
+from datetime import datetime
 import json
 from pathlib import Path
 import sys
@@ -24,13 +26,13 @@ import numpy as np
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from controlnet_construct.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
-    from controlnet_construct.keypoints import Keypoint, KeypointFile, write_key_file
+    from controlnet_construct.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
     from controlnet_construct.preprocess import StretchStats, build_invalid_mask, stretch_to_byte
     from controlnet_construct.runtime import bootstrap_runtime_environment
     from controlnet_construct.tiling import TileWindow, generate_tiles, requires_tiling
 else:
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
-    from .keypoints import Keypoint, KeypointFile, write_key_file
+    from .keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
     from .preprocess import StretchStats, build_invalid_mask, stretch_to_byte
     from .runtime import bootstrap_runtime_environment
     from .tiling import TileWindow, generate_tiles, requires_tiling
@@ -64,6 +66,13 @@ class PairedTileWindow:
     local_window: TileWindow
     left_window: TileWindow
     right_window: TileWindow
+
+
+def _normalize_ransac_mode(mode: str) -> str:
+    normalized = mode.strip().lower()
+    if normalized not in {"strict", "loose"}:
+        raise ValueError(f"Unsupported RANSAC mode {mode!r}. Expected 'strict' or 'loose'.")
+    return normalized
 
 
 def _full_image_window(image_width: int, image_height: int) -> TileWindow:
@@ -237,6 +246,336 @@ def _keypoint_to_isis_coordinates(keypoint: cv2.KeyPoint, window: TileWindow) ->
         sample=window.start_x + float(keypoint.pt[0]) + 1.0,
         line=window.start_y + float(keypoint.pt[1]) + 1.0,
     )
+
+
+def _isis_keypoint_to_draw_matches_keypoint(point: Keypoint, *, scale_factor: float) -> cv2.KeyPoint:
+    return cv2.KeyPoint(
+        float((point.sample - 1.0) * scale_factor),
+        float((point.line - 1.0) * scale_factor),
+        6.0,
+    )
+
+
+def _read_cube_as_stretched_byte(
+    cube_path: str | Path,
+    *,
+    band: int = 1,
+    minimum_value: float | None = None,
+    maximum_value: float | None = None,
+    lower_percent: float = 0.5,
+    upper_percent: float = 99.5,
+    invalid_values: tuple[float, ...] = (),
+    special_pixel_abs_threshold: float = 1.0e300,
+) -> np.ndarray:
+    cube = ip.Cube()
+    cube.open(str(cube_path), "r")
+    try:
+        full_window = _full_image_window(cube.sample_count(), cube.line_count())
+        values = _read_cube_window(cube, full_window, band=band)
+    finally:
+        if cube.is_open():
+            cube.close()
+
+    stretched, _, _ = _prepare_image_for_sift(
+        values,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+    )
+    return stretched
+
+
+def default_match_visualization_path(
+    left_image_path: str | Path,
+    right_image_path: str | Path,
+    output_directory: str | Path | None = None,
+    *,
+    timestamp: datetime | None = None,
+) -> Path:
+    resolved_timestamp = timestamp or datetime.now()
+    filename = f"{Path(left_image_path).stem}__{Path(right_image_path).stem}__{resolved_timestamp.strftime('%Y%m%dT%H%M%S')}.png"
+    if output_directory is None:
+        return Path(filename)
+    return Path(output_directory) / filename
+
+
+def filter_stereo_pair_keypoints_with_ransac(
+    left_key_file: KeypointFile,
+    right_key_file: KeypointFile,
+    *,
+    ransac_reproj_threshold: float = 3.0,
+    ransac_confidence: float = 0.995,
+    ransac_max_iters: int = 5000,
+    ransac_mode: str = "loose",
+    loose_keep_pixel_threshold: float = 1.0,
+) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
+    if len(left_key_file.points) != len(right_key_file.points):
+        raise ValueError("Left and right keypoint files must contain the same number of points.")
+
+    normalized_mode = _normalize_ransac_mode(ransac_mode)
+    input_count = len(left_key_file.points)
+
+    if input_count < 4:
+        summary = {
+            "applied": False,
+            "status": "skipped_insufficient_points",
+            "mode": normalized_mode,
+            "input_count": input_count,
+            "retained_count": input_count,
+            "dropped_count": 0,
+            "opencv_inlier_count": input_count,
+            "opencv_outlier_count": 0,
+            "retained_soft_outlier_count": 0,
+            "soft_outlier_original_indices": [],
+            "retained_soft_outlier_positions": [],
+            "reproj_threshold": float(ransac_reproj_threshold),
+            "confidence": float(ransac_confidence),
+            "max_iters": int(ransac_max_iters),
+            "loose_keep_pixel_threshold": float(loose_keep_pixel_threshold),
+            "homography_matrix": None,
+        }
+        return left_key_file, right_key_file, summary
+
+    left_points = np.asarray([(point.sample, point.line) for point in left_key_file.points], dtype=np.float32).reshape(-1, 1, 2)
+    right_points = np.asarray([(point.sample, point.line) for point in right_key_file.points], dtype=np.float32).reshape(-1, 1, 2)
+    homography, mask = cv2.findHomography(
+        left_points,
+        right_points,
+        cv2.RANSAC,
+        ransacReprojThreshold=float(ransac_reproj_threshold),
+        confidence=float(ransac_confidence),
+        maxIters=int(ransac_max_iters),
+    )
+
+    if homography is None or mask is None:
+        summary = {
+            "applied": False,
+            "status": "skipped_homography_failed",
+            "mode": normalized_mode,
+            "input_count": input_count,
+            "retained_count": input_count,
+            "dropped_count": 0,
+            "opencv_inlier_count": 0,
+            "opencv_outlier_count": 0,
+            "retained_soft_outlier_count": 0,
+            "soft_outlier_original_indices": [],
+            "retained_soft_outlier_positions": [],
+            "reproj_threshold": float(ransac_reproj_threshold),
+            "confidence": float(ransac_confidence),
+            "max_iters": int(ransac_max_iters),
+            "loose_keep_pixel_threshold": float(loose_keep_pixel_threshold),
+            "homography_matrix": None,
+        }
+        return left_key_file, right_key_file, summary
+
+    opencv_inlier_mask = mask.reshape(-1).astype(bool)
+    retained_mask = opencv_inlier_mask.copy()
+    soft_outlier_original_indices: list[int] = []
+
+    if normalized_mode == "loose":
+        projected_right = cv2.perspectiveTransform(left_points, homography).reshape(-1, 2)
+        right_coordinates = right_points.reshape(-1, 2)
+        for index, (is_inlier, projected, actual) in enumerate(zip(opencv_inlier_mask, projected_right, right_coordinates, strict=True)):
+            if is_inlier:
+                continue
+            reprojection_error = float(np.linalg.norm(projected - actual))
+            if reprojection_error <= float(loose_keep_pixel_threshold):
+                retained_mask[index] = True
+                soft_outlier_original_indices.append(index)
+
+    filtered_left_points: list[Keypoint] = []
+    filtered_right_points: list[Keypoint] = []
+    retained_soft_outlier_positions: list[int] = []
+    retained_position = 0
+    for index, (left_point, right_point, keep_point) in enumerate(
+        zip(left_key_file.points, right_key_file.points, retained_mask, strict=True)
+    ):
+        if not keep_point:
+            continue
+        filtered_left_points.append(left_point)
+        filtered_right_points.append(right_point)
+        if index in soft_outlier_original_indices:
+            retained_soft_outlier_positions.append(retained_position)
+        retained_position += 1
+
+    summary = {
+        "applied": True,
+        "status": "filtered",
+        "mode": normalized_mode,
+        "input_count": input_count,
+        "retained_count": len(filtered_left_points),
+        "dropped_count": input_count - len(filtered_left_points),
+        "opencv_inlier_count": int(opencv_inlier_mask.sum()),
+        "opencv_outlier_count": int((~opencv_inlier_mask).sum()),
+        "retained_soft_outlier_count": len(soft_outlier_original_indices),
+        "soft_outlier_original_indices": soft_outlier_original_indices,
+        "retained_soft_outlier_positions": retained_soft_outlier_positions,
+        "reproj_threshold": float(ransac_reproj_threshold),
+        "confidence": float(ransac_confidence),
+        "max_iters": int(ransac_max_iters),
+        "loose_keep_pixel_threshold": float(loose_keep_pixel_threshold),
+        "homography_matrix": homography.tolist(),
+    }
+    return (
+        KeypointFile(left_key_file.image_width, left_key_file.image_height, tuple(filtered_left_points)),
+        KeypointFile(right_key_file.image_width, right_key_file.image_height, tuple(filtered_right_points)),
+        summary,
+    )
+
+
+def filter_stereo_pair_key_files_with_ransac(
+    left_input: str | Path,
+    right_input: str | Path,
+    left_output: str | Path,
+    right_output: str | Path,
+    *,
+    ransac_reproj_threshold: float = 3.0,
+    ransac_confidence: float = 0.995,
+    ransac_max_iters: int = 5000,
+    ransac_mode: str = "loose",
+    loose_keep_pixel_threshold: float = 1.0,
+) -> dict[str, object]:
+    left_key_file = read_key_file(left_input)
+    right_key_file = read_key_file(right_input)
+    filtered_left, filtered_right, summary = filter_stereo_pair_keypoints_with_ransac(
+        left_key_file,
+        right_key_file,
+        ransac_reproj_threshold=ransac_reproj_threshold,
+        ransac_confidence=ransac_confidence,
+        ransac_max_iters=ransac_max_iters,
+        ransac_mode=ransac_mode,
+        loose_keep_pixel_threshold=loose_keep_pixel_threshold,
+    )
+    write_key_file(left_output, filtered_left)
+    write_key_file(right_output, filtered_right)
+    return {
+        **summary,
+        "left_input": str(left_input),
+        "right_input": str(right_input),
+        "left_output": str(left_output),
+        "right_output": str(right_output),
+    }
+
+
+def write_stereo_pair_match_visualization(
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    left_key_file: KeypointFile,
+    right_key_file: KeypointFile,
+    *,
+    output_path: str | Path | None = None,
+    output_directory: str | Path | None = None,
+    timestamp: datetime | None = None,
+    scale_factor: float = 3.0,
+    band: int = 1,
+    minimum_value: float | None = None,
+    maximum_value: float | None = None,
+    lower_percent: float = 0.5,
+    upper_percent: float = 99.5,
+    invalid_values: tuple[float, ...] = (),
+    special_pixel_abs_threshold: float = 1.0e300,
+    highlight_match_indices: list[int] | None = None,
+) -> dict[str, object]:
+    if len(left_key_file.points) != len(right_key_file.points):
+        raise ValueError("Left and right keypoint files must contain the same number of points for visualization.")
+    if scale_factor <= 0.0:
+        raise ValueError("scale_factor must be positive.")
+
+    resolved_output_path = (
+        Path(output_path)
+        if output_path is not None
+        else default_match_visualization_path(left_dom_path, right_dom_path, output_directory, timestamp=timestamp)
+    )
+
+    left_image = _read_cube_as_stretched_byte(
+        left_dom_path,
+        band=band,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+    )
+    right_image = _read_cube_as_stretched_byte(
+        right_dom_path,
+        band=band,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+    )
+
+    scaled_left = cv2.resize(left_image, dsize=None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_LINEAR)
+    scaled_right = cv2.resize(right_image, dsize=None, fx=scale_factor, fy=scale_factor, interpolation=cv2.INTER_LINEAR)
+    left_keypoints = [_isis_keypoint_to_draw_matches_keypoint(point, scale_factor=scale_factor) for point in left_key_file.points]
+    right_keypoints = [_isis_keypoint_to_draw_matches_keypoint(point, scale_factor=scale_factor) for point in right_key_file.points]
+    matches = [cv2.DMatch(_queryIdx=index, _trainIdx=index, _distance=0.0) for index in range(len(left_keypoints))]
+
+    rendered = cv2.drawMatches(
+        scaled_left,
+        left_keypoints,
+        scaled_right,
+        right_keypoints,
+        matches,
+        None,
+        matchColor=(0, 220, 0),
+        singlePointColor=(255, 80, 80),
+        flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS,
+    )
+
+    if highlight_match_indices:
+        left_panel_width = scaled_left.shape[1]
+        for match_index in highlight_match_indices:
+            if match_index < 0 or match_index >= len(left_keypoints):
+                continue
+            left_point = left_keypoints[match_index].pt
+            right_point = right_keypoints[match_index].pt
+            left_center = (int(round(left_point[0])), int(round(left_point[1])))
+            right_center = (left_panel_width + int(round(right_point[0])), int(round(right_point[1])))
+            cv2.circle(rendered, left_center, 8, (0, 165, 255), 2, cv2.LINE_AA)
+            cv2.circle(rendered, right_center, 8, (0, 165, 255), 2, cv2.LINE_AA)
+
+    resolved_output_path.parent.mkdir(parents=True, exist_ok=True)
+    if not cv2.imwrite(str(resolved_output_path), rendered):
+        raise IOError(f"Failed to write stereo-pair match visualization: {resolved_output_path}")
+
+    return {
+        "output_path": str(resolved_output_path),
+        "point_count": len(left_keypoints),
+        "scale_factor": float(scale_factor),
+        "highlighted_match_count": 0 if highlight_match_indices is None else len(highlight_match_indices),
+        "left_dom": str(left_dom_path),
+        "right_dom": str(right_dom_path),
+    }
+
+
+def write_stereo_pair_match_visualization_from_key_files(
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    left_key_path: str | Path,
+    right_key_path: str | Path,
+    **kwargs,
+) -> dict[str, object]:
+    left_key_file = read_key_file(left_key_path)
+    right_key_file = read_key_file(right_key_path)
+    result = write_stereo_pair_match_visualization(
+        left_dom_path,
+        right_dom_path,
+        left_key_file,
+        right_key_file,
+        **kwargs,
+    )
+    return {
+        **result,
+        "left_key_path": str(left_key_path),
+        "right_key_path": str(right_key_path),
+    }
 
 
 def match_dom_pair(

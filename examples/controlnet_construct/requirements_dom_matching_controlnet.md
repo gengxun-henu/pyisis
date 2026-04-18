@@ -274,6 +274,39 @@
 	- 因正常纹理不足导致匹配失败；
 	- 因匹配过滤后无有效点导致失败。
 
+#### 3.6 merge 后 RANSAC 粗差剔除
+
+1. DOM 分块匹配结果在进入 `dom2ori.py` 之前，必须先经过 `tie_point_merge_in_overlap.py` 去重，再对 merge 后的 paired keypoints 支持基于 Homography 的 RANSAC 粗差剔除；
+2. RANSAC 的常用参数必须提供默认值，同时允许用户通过命令行覆盖；推荐默认值至少包括：
+	- `ransac_reproj_threshold = 3.0`
+	- `ransac_confidence = 0.995`
+	- `ransac_max_iters = 5000`
+3. RANSAC 模式至少支持：
+	- `strict`
+	- `loose`
+4. `strict` 模式下，被 OpenCV `findHomography(..., RANSAC, ...)` 判定为 outlier 的点必须直接剔除；
+5. `loose` 模式下，被 OpenCV 判定为 outlier 的点不能立即丢弃，而应先使用拟合得到的 Homography 矩阵重新投影，并计算预测点与真实匹配点之间的像素误差；
+6. 若该误差不超过 `loose_ransac_keep_threshold`，则该点即使被 OpenCV 标为 outlier，也应保留；推荐默认阈值为 `1.0` 像素；
+7. RANSAC 输出的 JSON / 日志 / sidecar 至少应能区分：
+	- OpenCV 原始 inlier / outlier 数量；
+	- 最终 retained / dropped 数量；
+	- `loose` 模式下被“软保留”的 outlier 数量；
+	- 实际使用的模式、阈值与 Homography 参数状态。
+
+#### 3.7 匹配结果连线图可视化
+
+1. 匹配结果可视化应基于 **merge 后、RANSAC 后** 的 paired keypoints 绘制，而不是直接对未去重、未过滤的分块原始匹配点绘图；
+2. 绘图实现必须放在 `image_match.py` 的共享能力中，并采用 `cv2.drawMatches` 作为核心绘制方式；
+3. 默认应对左右影像先做统一缩放，再按缩放后的坐标构造并绘制匹配点；默认缩放倍数为 `3.0`，并允许用户通过参数覆盖；
+4. 匹配连线图文件名不要求用户手工指定，默认应自动按如下格式生成：
+	- `A__B__YYYYMMDDTHHMMSS.png`
+5. 其中：
+	- `A` 为左影像文件名主干；
+	- `B` 为右影像文件名主干；
+	- 时间戳必须使用实际处理时刻；
+6. 是否生成该连线图必须由参数控制，而不是默认强制输出；
+7. 若采用 `loose` RANSAC 并保留了被 OpenCV 视为 outlier 的点，则这些点在可视化中应做额外标记，以便区分普通 inlier 与“软保留”点。
+
 ### 4. `tie_point_merge_in_overlap.py`
 
 职责：在单个立体像对内部，对分块匹配并回拼后的同名点进行去重合并。
@@ -377,11 +410,14 @@
 	- `pair`：立体像对标识，推荐格式 `A,B`；
 	- `match.point_count` 或等价字段：DOM 匹配点数；
 	- `merge.unique_count` 或等价字段：DOM 去重点数；
+	- `ransac.retained_count` 或等价字段：merge 后经 RANSAC 保留的点数；
+	- `ransac.dropped_count` 或等价字段：merge 后经 RANSAC 剔除的点数；
 	- `left_conversion.output_count`：左像 dom2ori 保留点数；
 	- `right_conversion.output_count`：右像 dom2ori 保留点数；
 	- `controlnet.point_count`：最终 control point 数；
 	- `dom2ori_retention_rate`：若直接写出该字段，应明确定义为保留点数相对于 merge 点数的比值；
 	- `report_path`：若运行时自动落盘，应返回实际写出的报告路径。
+	- `match_visualization.output_path`：若启用了匹配连线图输出，应返回实际写出的 PNG 路径。
 
 ### 8. `controlnet_merge.py`
 

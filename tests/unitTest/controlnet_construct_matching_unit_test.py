@@ -6,11 +6,13 @@ Last Modified: 2026-04-17
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
+Updated: 2026-04-18  Geng Xun added focused regression coverage for merge-stage RANSAC filtering and default drawMatches visualization output naming.
 """
 
 from __future__ import annotations
 
 import importlib
+from datetime import datetime
 import sys
 from pathlib import Path
 import unittest
@@ -24,7 +26,7 @@ UNIT_TEST_DIR = Path(__file__).resolve().parent
 if str(UNIT_TEST_DIR) not in sys.path:
     sys.path.insert(0, str(UNIT_TEST_DIR))
 
-from _unit_test_support import ip, make_test_cube, temporary_directory, workspace_test_data_path
+from _unit_test_support import attach_dom_like_projection_mapping, ip, make_test_cube, temporary_directory, workspace_test_data_path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -34,7 +36,15 @@ if str(EXAMPLES_DIR) not in sys.path:
 
 image_match = importlib.import_module("controlnet_construct.image_match")
 build_argument_parser = image_match.build_argument_parser
+default_match_visualization_path = image_match.default_match_visualization_path
+filter_stereo_pair_keypoints_with_ransac = image_match.filter_stereo_pair_keypoints_with_ransac
 match_dom_pair = image_match.match_dom_pair
+write_stereo_pair_match_visualization_from_key_files = image_match.write_stereo_pair_match_visualization_from_key_files
+
+keypoints_module = importlib.import_module("controlnet_construct.keypoints")
+Keypoint = keypoints_module.Keypoint
+KeypointFile = keypoints_module.KeypointFile
+write_key_file = keypoints_module.write_key_file
 
 
 REAL_DOM_LEFT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_1m_o_forPDS_cropped.cub")
@@ -64,6 +74,103 @@ def _build_textured_test_image(width: int, height: int) -> np.ndarray:
 
 
 class ControlNetConstructMatchingUnitTest(unittest.TestCase):
+    def test_default_match_visualization_path_uses_auto_timestamped_name(self):
+        timestamp = datetime(2026, 4, 18, 18, 44, 32)
+
+        output_path = default_match_visualization_path(
+            "left/A.cub",
+            "right/B.cub",
+            output_directory="/tmp/rendered",
+            timestamp=timestamp,
+        )
+
+        self.assertEqual(str(output_path), "/tmp/rendered/A__B__20260418T184432.png")
+
+    def test_filter_stereo_pair_keypoints_with_ransac_strict_drops_marked_outlier(self):
+        left_key_file = KeypointFile(
+            100,
+            100,
+            (
+                Keypoint(1.0, 1.0),
+                Keypoint(11.0, 1.0),
+                Keypoint(1.0, 11.0),
+                Keypoint(11.0, 11.0),
+                Keypoint(6.0, 6.0),
+            ),
+        )
+        right_key_file = KeypointFile(
+            100,
+            100,
+            (
+                Keypoint(3.0, 4.0),
+                Keypoint(13.0, 4.0),
+                Keypoint(3.0, 14.0),
+                Keypoint(13.0, 14.0),
+                Keypoint(30.0, 30.0),
+            ),
+        )
+        homography = np.array([[1.0, 0.0, 2.0], [0.0, 1.0, 3.0], [0.0, 0.0, 1.0]], dtype=np.float64)
+        mask = np.array([[1], [1], [1], [1], [0]], dtype=np.uint8)
+
+        with mock.patch.object(image_match.cv2, "findHomography", return_value=(homography, mask)):
+            filtered_left, filtered_right, summary = filter_stereo_pair_keypoints_with_ransac(
+                left_key_file,
+                right_key_file,
+                ransac_mode="strict",
+            )
+
+        self.assertEqual(summary["mode"], "strict")
+        self.assertEqual(summary["retained_count"], 4)
+        self.assertEqual(summary["dropped_count"], 1)
+        self.assertEqual(summary["opencv_outlier_count"], 1)
+        self.assertEqual(summary["retained_soft_outlier_count"], 0)
+        self.assertEqual(len(filtered_left.points), 4)
+        self.assertEqual(len(filtered_right.points), 4)
+
+    def test_filter_stereo_pair_keypoints_with_ransac_loose_keeps_small_reprojection_soft_outlier(self):
+        left_key_file = KeypointFile(
+            100,
+            100,
+            (
+                Keypoint(1.0, 1.0),
+                Keypoint(11.0, 1.0),
+                Keypoint(1.0, 11.0),
+                Keypoint(11.0, 11.0),
+                Keypoint(6.0, 6.0),
+            ),
+        )
+        right_key_file = KeypointFile(
+            100,
+            100,
+            (
+                Keypoint(3.0, 4.0),
+                Keypoint(13.0, 4.0),
+                Keypoint(3.0, 14.0),
+                Keypoint(13.0, 14.0),
+                Keypoint(8.6, 9.4),
+            ),
+        )
+        homography = np.array([[1.0, 0.0, 2.0], [0.0, 1.0, 3.0], [0.0, 0.0, 1.0]], dtype=np.float64)
+        mask = np.array([[1], [1], [1], [1], [0]], dtype=np.uint8)
+
+        with mock.patch.object(image_match.cv2, "findHomography", return_value=(homography, mask)):
+            filtered_left, filtered_right, summary = filter_stereo_pair_keypoints_with_ransac(
+                left_key_file,
+                right_key_file,
+                ransac_mode="loose",
+                loose_keep_pixel_threshold=1.0,
+            )
+
+        self.assertEqual(summary["mode"], "loose")
+        self.assertEqual(summary["retained_count"], 5)
+        self.assertEqual(summary["dropped_count"], 0)
+        self.assertEqual(summary["opencv_outlier_count"], 1)
+        self.assertEqual(summary["retained_soft_outlier_count"], 1)
+        self.assertEqual(summary["soft_outlier_original_indices"], [4])
+        self.assertEqual(summary["retained_soft_outlier_positions"], [4])
+        self.assertEqual(len(filtered_left.points), 5)
+        self.assertEqual(len(filtered_right.points), 5)
+
     def test_build_argument_parser_accepts_custom_sift_parameters(self):
         parser = build_argument_parser()
 
@@ -126,6 +233,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             try:
                 _write_array_to_cube(left_cube, left_image)
                 _write_array_to_cube(right_cube, right_image)
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
             finally:
                 left_cube.close()
                 right_cube.close()
@@ -162,6 +271,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             try:
                 _write_array_to_cube(left_cube, image)
                 _write_array_to_cube(right_cube, image)
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
             finally:
                 left_cube.close()
                 right_cube.close()
@@ -198,6 +309,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             try:
                 _write_array_to_cube(left_cube, image)
                 _write_array_to_cube(right_cube, image)
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
             finally:
                 left_cube.close()
                 right_cube.close()
@@ -239,6 +352,43 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(all(1.0 <= point.line <= 50.0 for point in left_key_file.points))
         self.assertTrue(all(1.0 <= point.sample <= 50.0 for point in right_key_file.points))
         self.assertTrue(all(1.0 <= point.line <= 50.0 for point in right_key_file.points))
+
+    def test_write_stereo_pair_match_visualization_from_key_files_writes_default_png(self):
+        width = 24
+        height = 24
+        image = _build_textured_test_image(width, height)
+
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_test_cube(temp_dir, name="A.cub", samples=width, lines=height, bands=1)
+            right_cube, right_path = make_test_cube(temp_dir, name="B.cub", samples=width, lines=height, bands=1)
+            try:
+                _write_array_to_cube(left_cube, image)
+                _write_array_to_cube(right_cube, image)
+            finally:
+                left_cube.close()
+                right_cube.close()
+
+            left_key_path = temp_dir / "left.key"
+            right_key_path = temp_dir / "right.key"
+            write_key_file(left_key_path, KeypointFile(width, height, (Keypoint(5.0, 5.0), Keypoint(10.0, 12.0))))
+            write_key_file(right_key_path, KeypointFile(width, height, (Keypoint(6.0, 6.0), Keypoint(11.0, 13.0))))
+
+            result = write_stereo_pair_match_visualization_from_key_files(
+                left_path,
+                right_path,
+                left_key_path,
+                right_key_path,
+                output_directory=temp_dir,
+                timestamp=datetime(2026, 4, 18, 18, 44, 32),
+                scale_factor=3.0,
+                highlight_match_indices=[1],
+            )
+            output_exists = Path(result["output_path"]).exists()
+
+        self.assertTrue(result["output_path"].endswith("A__B__20260418T184432.png"))
+        self.assertEqual(result["point_count"], 2)
+        self.assertEqual(result["highlighted_match_count"], 1)
+        self.assertTrue(output_exists)
 
 
 if __name__ == "__main__":

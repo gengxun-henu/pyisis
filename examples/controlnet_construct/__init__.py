@@ -26,7 +26,15 @@ from .merge import MergeSummary, merge_duplicate_keypoints
 from .preprocess import StretchStats, build_invalid_mask, stretch_to_byte
 from .tiling import TileWindow, generate_tiles, requires_tiling
 from .image_overlap import GeoBounds, extract_camera_ground_bounds, find_overlapping_image_pairs
-from .image_match import match_dom_pair, match_dom_pair_to_key_files
+from .image_match import (
+    default_match_visualization_path,
+    filter_stereo_pair_key_files_with_ransac,
+    filter_stereo_pair_keypoints_with_ransac,
+    match_dom_pair,
+    match_dom_pair_to_key_files,
+    write_stereo_pair_match_visualization,
+    write_stereo_pair_match_visualization_from_key_files,
+)
 from .tie_point_merge_in_overlap import merge_stereo_pair_key_files
 from .controlnet_stereopair import (
     ControlNetConfig,
@@ -69,6 +77,8 @@ __all__ = [
     "convert_dom_keypoints_to_original",
     "extract_camera_ground_bounds",
     "find_overlapping_image_pairs",
+    "filter_stereo_pair_key_files_with_ransac",
+    "filter_stereo_pair_keypoints_with_ransac",
     "generate_tiles",
     "match_dom_pair",
     "match_dom_pair_to_key_files",
@@ -86,9 +96,12 @@ __all__ = [
     "requires_tiling",
     "summarize_pair_result",
     "stretch_to_byte",
+    "default_match_visualization_path",
     "write_batch_summary_report",
     "write_controlnet_result_report",
     "write_pair_preparation_metadata",
+    "write_stereo_pair_match_visualization",
+    "write_stereo_pair_match_visualization_from_key_files",
     "write_key_file",
     "write_stereo_pair_list",
 ]

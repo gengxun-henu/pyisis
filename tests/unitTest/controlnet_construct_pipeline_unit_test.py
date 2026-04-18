@@ -8,6 +8,7 @@ Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failur
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
 Updated: 2026-04-17  Geng Xun added focused coverage for per-pair JSON sidecar report writing alongside stereo-pair ControlNet output.
 Updated: 2026-04-17  Geng Xun added coordinate-basis JSON checks and a no-drift semi-integration chain from image_match through dom2ori into ControlNet measures.
+Updated: 2026-04-18  Geng Xun added focused wrapper coverage for merge-stage RANSAC filtering and auto-named drawMatches visualization output before dom2ori.
 """
 
 from __future__ import annotations
@@ -433,6 +434,96 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         controlnet_mock.assert_called_once()
         self.assertEqual(result["left_conversion"]["output_count"], 1)
         self.assertEqual(result["right_conversion"]["output_count"], 1)
+        self.assertEqual(result["controlnet"]["point_count"], 1)
+
+    def test_build_controlnet_for_dom_stereo_pair_applies_ransac_and_optional_visualization_after_merge(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_ransac",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="dom ransac wrapper test",
+            point_id_prefix="RSC",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_dom.key"
+            right_dom_key = temp_dir / "right_dom.key"
+            output_net = temp_dir / "ransac_wrapper.net"
+            write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+
+            fake_pair_result = {
+                "left_conversion": {"output_count": 1, "failure_count": 0},
+                "right_conversion": {"output_count": 1, "failure_count": 0},
+                "retained_pair_count": 1,
+            }
+            fake_controlnet_result = {
+                "output_path": str(output_net),
+                "network_id": config.network_id,
+                "target_name": config.target_name,
+                "user_name": config.user_name,
+                "point_count": 1,
+                "measure_count": 2,
+                "left_serial_number": "left-serial",
+                "right_serial_number": "right-serial",
+                "pvl_format": True,
+            }
+            fake_ransac_result = {
+                "applied": True,
+                "status": "filtered",
+                "mode": "loose",
+                "input_count": 2,
+                "retained_count": 1,
+                "dropped_count": 1,
+                "retained_soft_outlier_positions": [0],
+            }
+            fake_visualization = {
+                "output_path": str(temp_dir / "left__right__20260418T184432.png"),
+                "point_count": 1,
+                "scale_factor": 3.0,
+                "highlighted_match_count": 1,
+            }
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_stereo_pair_key_files_with_ransac",
+                    return_value=fake_ransac_result,
+                ) as ransac_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.write_stereo_pair_match_visualization_from_key_files",
+                    return_value=fake_visualization,
+                ) as visualization_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.convert_paired_dom_keypoints_to_original",
+                    return_value=fake_pair_result,
+                ) as paired_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                    return_value=fake_controlnet_result,
+                ) as controlnet_mock,
+            ):
+                result = build_controlnet_for_dom_stereo_pair(
+                    left_dom_key,
+                    right_dom_key,
+                    REAL_DOM_LEFT,
+                    REAL_DOM_RIGHT,
+                    LEFT_CUBE_PATH,
+                    RIGHT_CUBE_PATH,
+                    config,
+                    output_net,
+                    skip_merge=True,
+                    write_match_visualization=True,
+                    match_visualization_scale=3.0,
+                    ransac_mode="loose",
+                    loose_ransac_keep_threshold=1.0,
+                )
+
+        ransac_mock.assert_called_once()
+        visualization_mock.assert_called_once()
+        paired_mock.assert_called_once()
+        controlnet_mock.assert_called_once()
+        self.assertEqual(result["ransac"]["retained_count"], 1)
+        self.assertEqual(result["match_visualization"]["highlighted_match_count"], 1)
         self.assertEqual(result["controlnet"]["point_count"], 1)
 
     def test_dom2ori_cli_paired_mode_dispatches_to_paired_conversion(self):

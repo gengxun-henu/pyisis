@@ -9,22 +9,19 @@ Updated: 2026-04-17  Geng Xun added per-pair pipeline statistics and a CLI black
 Updated: 2026-04-17  Geng Xun extended the E2E flow to emit DOM GSD reports/lists and generate a final cnetmerge shell script for all processed overlap pairs.
 Updated: 2026-04-17  Geng Xun added an opt-in preserved output directory and batch JSON reports so external E2E artifacts can be kept on disk for inspection.
 Updated: 2026-04-18  Geng Xun added an opt-in E2E artifact switch for saving stereo-pair DOM match line plots alongside preserved outputs.
+Updated: 2026-04-18  Geng Xun switched the function and CLI E2E flows to the shared drawMatches visualization emitted by the from-dom ControlNet wrapper.
 """
 
 from __future__ import annotations
 
 from contextlib import contextmanager
 from datetime import datetime, timezone
-import cv2
 import json
-import math
 import os
 from pathlib import Path
 import subprocess
 import sys
 import unittest
-
-import numpy as np
 
 
 UNIT_TEST_DIR = Path(__file__).resolve().parent
@@ -39,14 +36,12 @@ EXAMPLES_DIR = PROJECT_ROOT / "examples"
 if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
-from controlnet_construct.controlnet_stereopair import build_controlnet_for_stereo_pair, read_controlnet_config
+from controlnet_construct.controlnet_stereopair import build_controlnet_for_dom_stereo_pair, read_controlnet_config
 from controlnet_construct.controlnet_merge import generate_cnetmerge_shell_script
 from controlnet_construct.dom_prepare import normalize_dom_list_gsd
-from controlnet_construct.dom2ori import convert_dom_keypoints_to_original
 from controlnet_construct.image_match import match_dom_pair_to_key_files
 from controlnet_construct.batch_summary import DEFAULT_BATCH_REPORT_NAME, write_batch_summary_report
 from controlnet_construct.image_overlap import find_overlapping_image_pairs
-from controlnet_construct.keypoints import read_key_file
 from controlnet_construct.listing import (
     StereoPair,
     read_path_list,
@@ -54,7 +49,6 @@ from controlnet_construct.listing import (
     validate_paired_path_lists,
     write_stereo_pair_list,
 )
-from controlnet_construct.tie_point_merge_in_overlap import merge_stereo_pair_key_files
 
 
 EXTERNAL_DATA_ROOT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python")
@@ -221,133 +215,6 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         finally:
             cube.close()
 
-    def _write_match_line_plot(
-        self,
-        left_key_path: Path,
-        right_key_path: Path,
-        output_path: Path,
-        *,
-        title: str,
-        max_panel_width: int = 900,
-        max_panel_height: int = 900,
-        max_render_matches: int = 500,
-    ) -> Path:
-        left_key_file = read_key_file(left_key_path)
-        right_key_file = read_key_file(right_key_path)
-
-        point_count = min(len(left_key_file.points), len(right_key_file.points))
-        if point_count <= 0:
-            raise ValueError("Cannot render a stereo-pair match line plot without matched points.")
-
-        left_width = max(1, int(left_key_file.image_width))
-        left_height = max(1, int(left_key_file.image_height))
-        right_width = max(1, int(right_key_file.image_width))
-        right_height = max(1, int(right_key_file.image_height))
-
-        scale = min(
-            1.0,
-            float(max_panel_width) / float(max(left_width, right_width)),
-            float(max_panel_height) / float(max(left_height, right_height)),
-        )
-        scaled_left_width = max(1, int(round(left_width * scale)))
-        scaled_left_height = max(1, int(round(left_height * scale)))
-        scaled_right_width = max(1, int(round(right_width * scale)))
-        scaled_right_height = max(1, int(round(right_height * scale)))
-
-        margin_x = 40
-        top_margin = 90
-        bottom_margin = 40
-        panel_gap = 100
-
-        canvas_width = margin_x * 2 + scaled_left_width + panel_gap + scaled_right_width
-        canvas_height = top_margin + max(scaled_left_height, scaled_right_height) + bottom_margin
-        canvas = np.full((canvas_height, canvas_width, 3), 255, dtype=np.uint8)
-
-        left_origin_x = margin_x
-        left_origin_y = top_margin
-        right_origin_x = margin_x + scaled_left_width + panel_gap
-        right_origin_y = top_margin
-
-        cv2.rectangle(
-            canvas,
-            (left_origin_x - 1, left_origin_y - 1),
-            (left_origin_x + scaled_left_width, left_origin_y + scaled_left_height),
-            (180, 180, 180),
-            1,
-        )
-        cv2.rectangle(
-            canvas,
-            (right_origin_x - 1, right_origin_y - 1),
-            (right_origin_x + scaled_right_width, right_origin_y + scaled_right_height),
-            (180, 180, 180),
-            1,
-        )
-
-        cv2.putText(canvas, title, (margin_x, 28), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (40, 40, 40), 2, cv2.LINE_AA)
-        cv2.putText(
-            canvas,
-            f"Rendered matches: {min(point_count, max_render_matches)} / {point_count}",
-            (margin_x, 58),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.55,
-            (70, 70, 70),
-            1,
-            cv2.LINE_AA,
-        )
-        cv2.putText(canvas, "Left DOM", (left_origin_x, top_margin - 18), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (50, 50, 50), 1, cv2.LINE_AA)
-        cv2.putText(canvas, "Right DOM", (right_origin_x, top_margin - 18), cv2.FONT_HERSHEY_SIMPLEX, 0.55, (50, 50, 50), 1, cv2.LINE_AA)
-
-        if point_count > max_render_matches:
-            step = float(point_count - 1) / float(max_render_matches - 1)
-            point_indices = [int(round(step * index)) for index in range(max_render_matches)]
-        else:
-            point_indices = list(range(point_count))
-
-        for index in point_indices:
-            left_point = left_key_file.points[index]
-            right_point = right_key_file.points[index]
-
-            left_x = left_origin_x + int(round((left_point.sample - 1.0) * scale))
-            left_y = left_origin_y + int(round((left_point.line - 1.0) * scale))
-            right_x = right_origin_x + int(round((right_point.sample - 1.0) * scale))
-            right_y = right_origin_y + int(round((right_point.line - 1.0) * scale))
-
-            left_x = max(left_origin_x, min(left_x, left_origin_x + scaled_left_width - 1))
-            left_y = max(left_origin_y, min(left_y, left_origin_y + scaled_left_height - 1))
-            right_x = max(right_origin_x, min(right_x, right_origin_x + scaled_right_width - 1))
-            right_y = max(right_origin_y, min(right_y, right_origin_y + scaled_right_height - 1))
-
-            hue = int(round(179.0 * float(index % max(1, point_count)) / float(max(1, point_count))))
-            color_pixel = np.uint8([[[hue, 220, 245]]])
-            bgr = tuple(int(channel) for channel in cv2.cvtColor(color_pixel, cv2.COLOR_HSV2BGR)[0, 0])
-
-            cv2.line(canvas, (left_x, left_y), (right_x, right_y), bgr, 1, cv2.LINE_AA)
-            cv2.circle(canvas, (left_x, left_y), 2, (255, 80, 80), -1, cv2.LINE_AA)
-            cv2.circle(canvas, (right_x, right_y), 2, (80, 140, 255), -1, cv2.LINE_AA)
-
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        if not cv2.imwrite(str(output_path), canvas):
-            raise IOError(f"Failed to write stereo-pair match line plot: {output_path}")
-        return output_path
-
-    def _maybe_write_match_line_plot(
-        self,
-        output_dir: Path,
-        pair: StereoPair,
-        left_key_path: Path,
-        right_key_path: Path,
-        *,
-        prefix: str = "",
-        title_prefix: str = "",
-    ) -> str | None:
-        if not self._should_generate_match_line_plots():
-            return None
-
-        pair_tag = _pair_tag(pair)
-        output_path = output_dir / f"{prefix}{pair_tag}_match_lines.png"
-        title = f"{title_prefix}{pair_tag}" if title_prefix else pair_tag
-        return str(self._write_match_line_plot(left_key_path, right_key_path, output_path, title=title))
-
     def _summarize_pair_result(self, pair: StereoPair, result: dict[str, object]) -> dict[str, object]:
         merged_count = int(result["merge"]["unique_count"])
         retained_count = int(result["left_conversion"]["output_count"])
@@ -408,6 +275,8 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         right_dom_key_path = temp_dir / f"{pair_tag}_right_dom.key"
         merged_left_dom_key_path = temp_dir / f"{pair_tag}_left_dom_merged.key"
         merged_right_dom_key_path = temp_dir / f"{pair_tag}_right_dom_merged.key"
+        ransac_left_dom_key_path = temp_dir / f"{pair_tag}_left_dom_ransac.key"
+        ransac_right_dom_key_path = temp_dir / f"{pair_tag}_right_dom_ransac.key"
         left_original_key_path = temp_dir / f"{pair_tag}_left_ori.key"
         right_original_key_path = temp_dir / f"{pair_tag}_right_ori.key"
         left_failure_log_path = temp_dir / f"{pair_tag}_left_dom2ori_failures.json"
@@ -434,40 +303,40 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         self.assertTrue(left_dom_key_path.exists())
         self.assertTrue(right_dom_key_path.exists())
 
-        match_line_plot_path = self._maybe_write_match_line_plot(
-            temp_dir,
-            pair,
+        pipeline_summary = build_controlnet_for_dom_stereo_pair(
             left_dom_key_path,
             right_dom_key_path,
-            title_prefix="function_e2e DOM matches: ",
+            left_dom_path,
+            right_dom_path,
+            pair.left,
+            pair.right,
+            config,
+            output_net_path,
+            left_merged_dom_key_path=merged_left_dom_key_path,
+            right_merged_dom_key_path=merged_right_dom_key_path,
+            left_ransac_dom_key_path=ransac_left_dom_key_path,
+            right_ransac_dom_key_path=ransac_right_dom_key_path,
+            left_output_key_path=left_original_key_path,
+            right_output_key_path=right_original_key_path,
+            left_failure_log_path=left_failure_log_path,
+            right_failure_log_path=right_failure_log_path,
+            write_match_visualization=self._should_generate_match_line_plots(),
+            match_visualization_output_dir=temp_dir,
+            match_visualization_scale=3.0,
+            pvl_format=True,
         )
 
-        merge_summary = merge_stereo_pair_key_files(
-            str(left_dom_key_path),
-            str(right_dom_key_path),
-            str(merged_left_dom_key_path),
-            str(merged_right_dom_key_path),
-            decimals=3,
-        )
+        merge_summary = pipeline_summary["merge"]
+        left_conversion = pipeline_summary["left_conversion"]
+        right_conversion = pipeline_summary["right_conversion"]
+        controlnet_summary = pipeline_summary["controlnet"]
+
         self.assertGreater(merge_summary["unique_count"], 0)
         self.assertLessEqual(merge_summary["unique_count"], merge_summary["input_count"])
         self.assertTrue(merged_left_dom_key_path.exists())
         self.assertTrue(merged_right_dom_key_path.exists())
-
-        left_conversion = convert_dom_keypoints_to_original(
-            merged_left_dom_key_path,
-            left_dom_path,
-            pair.left,
-            left_original_key_path,
-            failure_log_path=left_failure_log_path,
-        )
-        right_conversion = convert_dom_keypoints_to_original(
-            merged_right_dom_key_path,
-            right_dom_path,
-            pair.right,
-            right_original_key_path,
-            failure_log_path=right_failure_log_path,
-        )
+        self.assertTrue(ransac_left_dom_key_path.exists())
+        self.assertTrue(ransac_right_dom_key_path.exists())
         self.assertGreater(left_conversion["output_count"], 0)
         self.assertGreater(right_conversion["output_count"], 0)
         self.assertEqual(left_conversion["output_count"], right_conversion["output_count"])
@@ -475,22 +344,6 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         self.assertTrue(right_original_key_path.exists())
         self.assertTrue(left_failure_log_path.exists())
         self.assertTrue(right_failure_log_path.exists())
-
-        left_original_keypoints = read_key_file(left_original_key_path)
-        right_original_keypoints = read_key_file(right_original_key_path)
-        self.assertEqual(len(left_original_keypoints.points), left_conversion["output_count"])
-        self.assertEqual(len(right_original_keypoints.points), right_conversion["output_count"])
-        self.assertEqual(len(left_original_keypoints.points), len(right_original_keypoints.points))
-
-        controlnet_summary = build_controlnet_for_stereo_pair(
-            left_original_key_path,
-            right_original_key_path,
-            pair.left,
-            pair.right,
-            config,
-            output_net_path,
-            pvl_format=True,
-        )
         self.assertTrue(output_net_path.exists())
         self.assertGreater(controlnet_summary["point_count"], 0)
         self.assertEqual(controlnet_summary["measure_count"], controlnet_summary["point_count"] * 2)
@@ -510,11 +363,7 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         return {
             "pair": pair.as_csv_line(),
             "match": match_summary,
-            "merge": merge_summary,
-            "left_conversion": left_conversion,
-            "right_conversion": right_conversion,
-            "controlnet": controlnet_summary,
-            **({"match_line_plot_path": match_line_plot_path} if match_line_plot_path is not None else {}),
+            **pipeline_summary,
         }
 
     def test_lro_dom_matching_pipeline_end_to_end_for_all_overlap_pairs(self):
@@ -690,6 +539,8 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                 right_dom_key_path = temp_dir / f"{pair_tag}_cli_right_dom.key"
                 merged_left_dom_key_path = temp_dir / f"{pair_tag}_cli_left_dom_merged.key"
                 merged_right_dom_key_path = temp_dir / f"{pair_tag}_cli_right_dom_merged.key"
+                ransac_left_dom_key_path = temp_dir / f"{pair_tag}_cli_left_dom_ransac.key"
+                ransac_right_dom_key_path = temp_dir / f"{pair_tag}_cli_right_dom_ransac.key"
                 left_original_key_path = temp_dir / f"{pair_tag}_cli_left_ori.key"
                 right_original_key_path = temp_dir / f"{pair_tag}_cli_right_ori.key"
                 left_failure_log_path = temp_dir / f"{pair_tag}_cli_left_dom2ori_failures.json"
@@ -726,59 +577,53 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                     )
                     self.assertGreater(match_summary["point_count"], 0)
 
-                    cli_match_line_plot_path = self._maybe_write_match_line_plot(
-                        temp_dir,
-                        overlap_pair,
-                        left_dom_key_path,
-                        right_dom_key_path,
-                        prefix="cli_",
-                        title_prefix="cli_e2e DOM matches: ",
-                    )
-
-                    merge_summary = self._run_cli_json(
-                        str(MERGE_SCRIPT),
-                        str(left_dom_key_path),
-                        str(right_dom_key_path),
-                        str(merged_left_dom_key_path),
-                        str(merged_right_dom_key_path),
-                        "--decimals",
-                        "3",
-                    )
-                    self.assertGreater(merge_summary["unique_count"], 0)
-
-                    left_conversion = self._run_cli_json(
-                        str(DOM2ORI_SCRIPT),
-                        str(merged_left_dom_key_path),
-                        str(left_dom_path),
-                        str(overlap_pair.left),
-                        str(left_original_key_path),
-                        "--failure-log",
-                        str(left_failure_log_path),
-                    )
-                    right_conversion = self._run_cli_json(
-                        str(DOM2ORI_SCRIPT),
-                        str(merged_right_dom_key_path),
-                        str(right_dom_path),
-                        str(overlap_pair.right),
-                        str(right_original_key_path),
-                        "--failure-log",
-                        str(right_failure_log_path),
-                    )
-                    self.assertEqual(left_conversion["output_count"], right_conversion["output_count"])
-                    self.assertGreater(left_conversion["output_count"], 0)
-
                     controlnet_summary = self._run_cli_json(
                         str(CONTROLNET_SCRIPT),
-                        "from-ori",
-                        str(left_original_key_path),
-                        str(right_original_key_path),
+                        "from-dom",
+                        str(left_dom_key_path),
+                        str(right_dom_key_path),
+                        str(left_dom_path),
+                        str(right_dom_path),
                         str(overlap_pair.left),
                         str(overlap_pair.right),
                         str(config_path),
                         str(output_net_path),
+                        "--left-merged-dom-key",
+                        str(merged_left_dom_key_path),
+                        "--right-merged-dom-key",
+                        str(merged_right_dom_key_path),
+                        "--left-ransac-dom-key",
+                        str(ransac_left_dom_key_path),
+                        "--right-ransac-dom-key",
+                        str(ransac_right_dom_key_path),
+                        "--left-output-key",
+                        str(left_original_key_path),
+                        "--right-output-key",
+                        str(right_original_key_path),
+                        "--left-failure-log",
+                        str(left_failure_log_path),
+                        "--right-failure-log",
+                        str(right_failure_log_path),
+                        *( ["--write-match-visualization", "--match-visualization-output-dir", str(temp_dir), "--match-visualization-scale", "3.0"] if self._should_generate_match_line_plots() else [] ),
                     )
-                    self.assertGreater(controlnet_summary["point_count"], 0)
-                    self.assertEqual(controlnet_summary["measure_count"], controlnet_summary["point_count"] * 2)
+                    self.assertGreater(controlnet_summary["controlnet"]["point_count"], 0)
+                    self.assertEqual(
+                        controlnet_summary["controlnet"]["measure_count"],
+                        controlnet_summary["controlnet"]["point_count"] * 2,
+                    )
+                    self.assertTrue(merged_left_dom_key_path.exists())
+                    self.assertTrue(merged_right_dom_key_path.exists())
+                    self.assertTrue(ransac_left_dom_key_path.exists())
+                    self.assertTrue(ransac_right_dom_key_path.exists())
+                    self.assertTrue(left_original_key_path.exists())
+                    self.assertTrue(right_original_key_path.exists())
+                    self.assertTrue(left_failure_log_path.exists())
+                    self.assertTrue(right_failure_log_path.exists())
+                    self.assertEqual(
+                        controlnet_summary["left_conversion"]["output_count"],
+                        controlnet_summary["right_conversion"]["output_count"],
+                    )
+                    self.assertGreater(controlnet_summary["left_conversion"]["output_count"], 0)
 
                     left_samples, left_lines = self._open_cube_dimensions(left_dom_path)
                     right_samples, right_lines = self._open_cube_dimensions(right_dom_path)
@@ -790,11 +635,7 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                     cli_pair_result = {
                         "pair": overlap_pair.as_csv_line(),
                         "match": match_summary,
-                        "merge": merge_summary,
-                        "left_conversion": left_conversion,
-                        "right_conversion": right_conversion,
-                        "controlnet": controlnet_summary,
-                        **({"match_line_plot_path": cli_match_line_plot_path} if cli_match_line_plot_path is not None else {}),
+                        **controlnet_summary,
                     }
                     cli_pair_results.append(cli_pair_result)
                     cli_pair_report_paths.append(self._write_pair_report(temp_dir, overlap_pair, cli_pair_result, prefix="cli_"))
@@ -803,13 +644,16 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                         {
                             "pair": overlap_pair.as_csv_line(),
                             "match_point_count": int(match_summary["point_count"]),
-                            "merged_point_count": int(merge_summary["unique_count"]),
-                            "dom2ori_retained_count": int(left_conversion["output_count"]),
+                            "merged_point_count": int(controlnet_summary["merge"]["unique_count"]),
+                            "dom2ori_retained_count": int(controlnet_summary["left_conversion"]["output_count"]),
                             "dom2ori_retention_rate": round(
-                                _safe_ratio(int(left_conversion["output_count"]), int(merge_summary["unique_count"])),
+                                _safe_ratio(
+                                    int(controlnet_summary["left_conversion"]["output_count"]),
+                                    int(controlnet_summary["merge"]["unique_count"]),
+                                ),
                                 6,
                             ),
-                            "control_point_count": int(controlnet_summary["point_count"]),
+                            "control_point_count": int(controlnet_summary["controlnet"]["point_count"]),
                             "dimension_mismatch": bool(match_summary["dimension_mismatch"]),
                             "shared_extent_width": int(match_summary["shared_extent_width"]),
                             "shared_extent_height": int(match_summary["shared_extent_height"]),

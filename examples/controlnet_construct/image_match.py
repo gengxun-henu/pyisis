@@ -8,6 +8,7 @@ Updated: 2026-04-17  Geng Xun upgraded DOM matching to use projected-overlap cro
 Updated: 2026-04-17  Geng Xun exposed additional OpenCV SIFT detector parameters through the matching API and CLI.
 Updated: 2026-04-18  Geng Xun added merge-stage homography RANSAC helpers and default `cv2.drawMatches` visualization output for preserved DOM matching diagnostics.
 Updated: 2026-04-18  Geng Xun changed match-visualization default scaling to one-third size and now use area interpolation when downsampling previews.
+Updated: 2026-04-19  Geng Xun moved default match-visualization output into the image-match stage so users get PNG diagnostics by default while still being able to disable them explicitly.
 """
 
 from __future__ import annotations
@@ -823,6 +824,10 @@ def match_dom_pair_to_key_files(
     left_output_key: str | Path,
     right_output_key: str | Path,
     metadata_output: str | Path | None = None,
+    write_match_visualization: bool = True,
+    match_visualization_output_path: str | Path | None = None,
+    match_visualization_output_dir: str | Path | None = None,
+    match_visualization_scale: float = 1.0 / 3.0,
     **kwargs,
 ) -> dict[str, object]:
     left_key_file, right_key_file, summary = match_dom_pair(left_dom_path, right_dom_path, **kwargs)
@@ -833,11 +838,35 @@ def match_dom_pair_to_key_files(
             metadata_output,
             summary["preparation"],
         )
+    match_visualization_result: dict[str, object] | None = None
+    if write_match_visualization:
+        visualization_output_directory = (
+            Path(match_visualization_output_dir)
+            if match_visualization_output_dir is not None
+            else (None if match_visualization_output_path is not None else Path(left_output_key).parent)
+        )
+        match_visualization_result = write_stereo_pair_match_visualization(
+            left_dom_path,
+            right_dom_path,
+            left_key_file,
+            right_key_file,
+            output_path=match_visualization_output_path,
+            output_directory=visualization_output_directory,
+            scale_factor=match_visualization_scale,
+            band=int(kwargs.get("band", 1)),
+            minimum_value=kwargs.get("minimum_value"),
+            maximum_value=kwargs.get("maximum_value"),
+            lower_percent=float(kwargs.get("lower_percent", 0.5)),
+            upper_percent=float(kwargs.get("upper_percent", 99.5)),
+            invalid_values=tuple(kwargs.get("invalid_values", ())),
+            special_pixel_abs_threshold=float(kwargs.get("special_pixel_abs_threshold", 1.0e300)),
+        )
     return {
         **summary,
         "left_output_key": str(left_output_key),
         "right_output_key": str(right_output_key),
         **({"metadata_output": str(metadata_output)} if metadata_output is not None else {}),
+        **({"match_visualization": match_visualization_result} if match_visualization_result is not None else {}),
     }
 
 
@@ -869,6 +898,11 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--sift-sigma", type=float, default=1.6, help="Gaussian sigma used by the OpenCV SIFT detector.")
     parser.add_argument("--crop-expand-pixels", type=int, default=100, help="Extra projected-overlap margin, expressed in pixels, added before matching.")
     parser.add_argument("--min-overlap-size", type=int, default=16, help="Skip matching when the expanded projected-overlap window is smaller than this many pixels in either direction.")
+    parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default drawMatches PNG output written for the matched DOM pair.")
+    parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the drawMatches PNG written by the image-match stage.")
+    parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the drawMatches PNG written by the image-match stage.")
+    parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the drawMatches PNG. Defaults to 1/3 for a smaller preview.")
+    parser.set_defaults(write_match_visualization=True)
     return parser
 
 
@@ -902,6 +936,10 @@ def main() -> None:
         sift_sigma=args.sift_sigma,
         crop_expand_pixels=args.crop_expand_pixels,
         min_overlap_size=args.min_overlap_size,
+        write_match_visualization=args.write_match_visualization,
+        match_visualization_output_path=args.match_visualization_output_path,
+        match_visualization_output_dir=args.match_visualization_output_dir,
+        match_visualization_scale=args.match_visualization_scale,
     )
     print(json.dumps(result, indent=2, ensure_ascii=False))
 

@@ -1,4 +1,7 @@
-"""Gray-value preprocessing helpers for DOM matching."""
+"""用于 DOM 匹配的灰度值预处理辅助函数。
+
+Gray-value preprocessing helpers for DOM matching.
+"""
 
 from __future__ import annotations
 
@@ -21,7 +24,10 @@ def build_invalid_mask(
     invalid_values: tuple[float, ...] = (),
     special_pixel_abs_threshold: float = 1.0e300,
 ) -> np.ndarray:
-    """Build a mask for non-finite pixels, extreme special pixels, and caller-provided sentinels."""
+    """构建无效像素掩膜，覆盖非有限值、极端特殊像素和调用方指定的哨兵值。
+
+    Build a mask for non-finite pixels, extreme special pixels, and caller-provided sentinels.
+    """
     array = np.asarray(values)
     float_array = array.astype(np.float64, copy=False)
     mask = ~np.isfinite(float_array)
@@ -75,7 +81,10 @@ def stretch_to_byte(
     invalid_values: tuple[float, ...] = (),
     special_pixel_abs_threshold: float = 1.0e300,
 ) -> tuple[np.ndarray, np.ndarray, StretchStats]:
-    """Stretch numeric values to uint8 while preserving an invalid-pixel mask."""
+    """将数值数组拉伸到 uint8 灰度范围，同时保留无效像素掩膜。
+
+    Stretch numeric values to uint8 while preserving an invalid-pixel mask.
+    """
     array = np.asarray(values, dtype=np.float64)
     invalid_mask = build_invalid_mask(
         array,

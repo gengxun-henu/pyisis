@@ -15,5 +15,6 @@ UNIT_TEST_FAILURE_ANALYSIS.md
 bundleout.txt
 examples/controlnet_construct/requirements*
 examples/controlnet_construct/plan*
+examples/controlnet_construct/*.md
 UNIT_TEST_FAILURE_ANALYSIS.md
 learning/

@@ -8,6 +8,7 @@ Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching w
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
 Updated: 2026-04-18  Geng Xun added focused regression coverage for merge-stage RANSAC filtering and default drawMatches visualization output naming.
 Updated: 2026-04-18  Geng Xun added optional configurable real LRO DOM matching coverage while preserving repository fixture regressions.
+Updated: 2026-04-19  Geng Xun added regression coverage for default image-match visualization output and the explicit no-write CLI switch.
 """
 
 from __future__ import annotations
@@ -41,6 +42,7 @@ build_argument_parser = image_match.build_argument_parser
 default_match_visualization_path = image_match.default_match_visualization_path
 filter_stereo_pair_keypoints_with_ransac = image_match.filter_stereo_pair_keypoints_with_ransac
 match_dom_pair = image_match.match_dom_pair
+match_dom_pair_to_key_files = image_match.match_dom_pair_to_key_files
 write_stereo_pair_match_visualization_from_key_files = image_match.write_stereo_pair_match_visualization_from_key_files
 
 keypoints_module = importlib.import_module("controlnet_construct.keypoints")
@@ -53,7 +55,7 @@ FIXTURE_DOM_LEFT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_151
 FIXTURE_DOM_RIGHT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_25cm_o_forPDS_cropped.cub")
 REAL_LRO_DOM_LEFT_ENV = "ISIS_PYBIND_MATCHING_REAL_DOM_LEFT_CUBE"
 REAL_LRO_DOM_RIGHT_ENV = "ISIS_PYBIND_MATCHING_REAL_DOM_RIGHT_CUBE"
-DEFAULT_REAL_LRO_DOM_LEFT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871LE.cub")
+DEFAULT_REAL_LRO_DOM_LEFT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104311715LE.cub")
 DEFAULT_REAL_LRO_DOM_RIGHT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871RE.cub")
 SPECIAL_PIXEL = -1.797693134862315e308
 
@@ -210,6 +212,23 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertAlmostEqual(args.sift_contrast_threshold, 0.02)
         self.assertAlmostEqual(args.sift_edge_threshold, 15.5)
         self.assertAlmostEqual(args.sift_sigma, 1.2)
+
+    def test_build_argument_parser_defaults_to_writing_match_visualization_and_allows_disabling_it(self):
+        parser = build_argument_parser()
+
+        default_args = parser.parse_args(["left.cub", "right.cub", "left.key", "right.key"])
+        disabled_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--no-write-match-visualization",
+            ]
+        )
+
+        self.assertTrue(default_args.write_match_visualization)
+        self.assertFalse(disabled_args.write_match_visualization)
 
     def test_build_sift_detector_forwards_custom_parameters_to_opencv(self):
         fake_detector = object()
@@ -427,6 +446,47 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(result["point_count"], 2)
         self.assertEqual(result["highlighted_match_count"], 1)
         self.assertTrue(output_exists)
+
+    def test_match_dom_pair_to_key_files_writes_default_match_visualization_next_to_key_outputs(self):
+        width = 96
+        height = 96
+        image = _build_textured_test_image(width, height)
+
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_test_cube(temp_dir, name="left_stage.cub", samples=width, lines=height, bands=1)
+            right_cube, right_path = make_test_cube(temp_dir, name="right_stage.cub", samples=width, lines=height, bands=1)
+            try:
+                _write_array_to_cube(left_cube, image)
+                _write_array_to_cube(right_cube, image)
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
+            finally:
+                left_cube.close()
+                right_cube.close()
+
+            left_key_path = temp_dir / "left_stage.key"
+            right_key_path = temp_dir / "right_stage.key"
+            result = match_dom_pair_to_key_files(
+                left_path,
+                right_path,
+                left_key_path,
+                right_key_path,
+                max_image_dimension=64,
+                block_width=64,
+                block_height=64,
+                overlap_x=16,
+                overlap_y=16,
+                min_valid_pixels=32,
+                ratio_test=0.8,
+            )
+            visualization_output_path = Path(result["match_visualization"]["output_path"])
+            visualization_output_exists = visualization_output_path.exists()
+            visualization_output_parent = visualization_output_path.parent
+
+        self.assertGreater(result["point_count"], 0)
+        self.assertIn("match_visualization", result)
+        self.assertTrue(visualization_output_exists)
+        self.assertEqual(visualization_output_parent, Path(left_key_path).parent)
 
 
 if __name__ == "__main__":

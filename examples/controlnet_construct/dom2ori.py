@@ -1,4 +1,20 @@
-"""Convert DOM-space tie points into original-image pixel coordinates.
+"""将 DOM 空间 tie points 转换为原始影像像素坐标。
+Convert DOM-space tie points into original-image pixel coordinates.
+
+该模块面向 ControlNet / `.key` tie-point 工作流，负责把 DOM CUBE 上的
+sample/line 点先解析为地面坐标，再投影回原始 CUBE 的像素坐标。
+This module targets the ControlNet / `.key` tie-point workflow and converts
+sample/line positions measured on a DOM cube into ground coordinates first,
+then projects them back into pixel coordinates of the original cube.
+
+默认单景流程会用 `ProjectionFirst` 从 DOM CUBE 查询地理位置，再用
+`CameraFirst` 将 latitude/longitude 投到原始 CUBE；双目流程还会保持左右
+点对同步，避免单侧投影失败后破坏 stereo correspondence。
+By default, the single-image workflow uses `ProjectionFirst` to query ground
+location from the DOM cube, then uses `CameraFirst` to project
+latitude/longitude into the original cube; the stereo workflow additionally
+keeps left/right pairs synchronized so one-sided failures do not break stereo
+correspondence.
 
 Author: Geng Xun
 Created: 2026-04-16
@@ -6,6 +22,7 @@ Updated: 2026-04-16  Geng Xun added an initial DOM-to-original coordinate conver
 Updated: 2026-04-16  Geng Xun strengthened failure classification, structured failure logs, and file-based semi-integration helpers for DOM-to-original conversion.
 Updated: 2026-04-17  Geng Xun annotated dom2ori JSON sidecars with explicit 1-based sample/line field bases for failure payloads.
 Updated: 2026-04-17  Geng Xun added pair-synchronized DOM-to-original conversion helpers so stereo correspondences stay aligned when one side fails projection.
+Updated: 2026-04-19  Geng Xun polished existing comments into concise Chinese-first bilingual documentation and clarified the DOM CUBE to original CUBE projection flow.
 """
 
 from __future__ import annotations
@@ -61,8 +78,10 @@ class DomToOriginalSummary:
 
 
 def _is_point_in_bounds(sample: float, line: float, width: int, height: int) -> bool:
-    # ISIS sample/line coordinates are 1-based and inclusive on both ends. This check
-    # intentionally rejects 0-based array indices such as sample=0 or line=0.
+    # ISIS 的 sample/line 坐标以 1 为起点，且两端都按闭区间处理。
+    # ISIS sample/line coordinates are 1-based and inclusive on both ends.
+    # 这里故意拒绝 sample=0 或 line=0 这类 0-based 数组下标值。
+    # This intentionally rejects 0-based array-style indices such as sample=0 or line=0.
     return 1.0 <= sample <= float(width) and 1.0 <= line <= float(height)
 
 
@@ -146,6 +165,34 @@ def _convert_point_via_ground_functions(
     validate_input_bounds: bool = True,
     require_output_in_bounds: bool = True,
 ) -> tuple[Keypoint | None, DomToOriginalFailure | None]:
+    """将单个 DOM 点通过地面坐标桥接到原始影像坐标。
+
+    Convert one DOM-space point into original-image coordinates through a
+    ground-coordinate bridge.
+
+    该函数是整个 DOM→ORI 几何转换链的最小执行单元：
+    1. 先把 DOM `sample/line` 交给 `ground_lookup`，解算出对应的
+       `latitude/longitude`；
+    2. 再把该地面点交给 `image_project`，投影回原始 CUBE 的
+       `sample/line`；
+    3. 任一阶段失败时，不抛出流程级异常，而是返回结构化失败对象，便于上层批量统计、
+       记录 failure log，并在 paired 模式下保持左右点对同步处理。
+
+    This function is the smallest executable unit of the DOM→ORI geometry
+    pipeline:
+    1. It first sends DOM `sample/line` to `ground_lookup` to resolve
+       `latitude/longitude`;
+    2. It then sends that ground point to `image_project` to map it back to the
+       original cube's `sample/line`;
+    3. If any stage fails, it returns a structured failure object instead of
+       raising a pipeline-level exception, so callers can batch statistics,
+       persist failure logs, and preserve pair synchronization in paired mode.
+    """
+    # 输入边界检查是第一道“快速失败”门槛：如果 DOM 点本身已经超出声明的影像尺寸，
+    # 后续 ground lookup 的失败就不再具有几何诊断意义。
+    # Input validation is the first fast-fail gate: once the DOM point is already
+    # outside declared image bounds, later lookup failures are no longer useful
+    # for geometric diagnosis.
     if validate_input_bounds and not _is_point_in_bounds(
         point.sample,
         point.line,
@@ -161,9 +208,14 @@ def _convert_point_via_ground_functions(
             detail=f"DOM keypoint lies outside declared image bounds {input_width}x{input_height}.",
         )
 
+    # 第一阶段：DOM 像素 -> 地面坐标。这里把真实 ISIS / camera / projection 细节
+    # 抽象到 ground_lookup 中，因此这个函数既能接真实 CUBE，也能接测试 stub。
+    # Stage 1: DOM pixel -> ground coordinates. The concrete ISIS / camera /
+    # projection logic is abstracted behind ground_lookup, so this function works
+    # with both real cubes and lightweight test stubs.
     try:
         ground = ground_lookup(point.sample, point.line)
-    except Exception as exc:  # pragma: no cover - defensive path, covered via unit test with stub exceptions
+    except Exception as exc:  # pragma: no cover - 防御性分支，使用 stub 异常由单元测试覆盖。 / Defensive branch covered by unit tests with stub exceptions.
         return None, _build_failure(
             index,
             point.sample,
@@ -183,6 +235,10 @@ def _convert_point_via_ground_functions(
             detail="DOM cube could not resolve a valid ground location for this image coordinate.",
         )
 
+    # 这里显式校验返回载荷形态，避免调用方误把其他对象、残缺 tuple 或 None-like
+    # 结果混入几何流程，导致后续错误信息变得模糊。
+    # We validate the returned payload shape explicitly so accidental non-tuple or
+    # malformed values from the caller do not leak downstream as vague errors.
     try:
         latitude, longitude = ground
     except Exception as exc:
@@ -195,6 +251,11 @@ def _convert_point_via_ground_functions(
             detail=f"Unable to unpack ground tuple: {type(exc).__name__}: {exc}",
         )
 
+    # 有限值检查能尽早拦截 NaN / inf。对坐标转换链来说，这类数值一旦流入后续投影，
+    # 往往只会产生更难定位的连锁异常。
+    # Finite-value checks stop NaN / inf early. In coordinate-conversion code,
+    # letting them flow into the next projection stage usually causes noisier and
+    # harder-to-diagnose downstream failures.
     if not (math.isfinite(latitude) and math.isfinite(longitude)):
         return None, _build_failure(
             index,
@@ -207,9 +268,14 @@ def _convert_point_via_ground_functions(
             longitude=longitude,
         )
 
+    # 第二阶段：地面坐标 -> 原始影像像素。这里的 image_project 通常对应
+    # `set_universal_ground(latitude, longitude)` 之后读取 sample/line。
+    # Stage 2: ground coordinates -> original-image pixel coordinates.
+    # image_project usually corresponds to calling
+    # `set_universal_ground(latitude, longitude)` and then reading sample/line.
     try:
         projected = image_project(latitude, longitude)
-    except Exception as exc:  # pragma: no cover - defensive path, covered via unit test with stub exceptions
+    except Exception as exc:  # pragma: no cover - 防御性分支，使用 stub 异常由单元测试覆盖。 / Defensive branch covered by unit tests with stub exceptions.
         return None, _build_failure(
             index,
             point.sample,
@@ -233,6 +299,11 @@ def _convert_point_via_ground_functions(
             longitude=longitude,
         )
 
+    # 和 ground_lookup 一样，这里也要把“调用失败”和“返回格式不合法”区分开，
+    # 这样 failure category / reason 才能在日志与统计中保持可解释性。
+    # As with ground_lookup, we distinguish projection failure from malformed
+    # returned payloads so failure category / reason stay meaningful in logs and
+    # summaries.
     try:
         projected_sample, projected_line = projected
     except Exception as exc:
@@ -247,6 +318,11 @@ def _convert_point_via_ground_functions(
             longitude=longitude,
         )
 
+    # 这里检查输出像素是否为有限值；即便投影 API 没有显式报错，数值异常仍说明该点
+    # 不能作为可靠的原图像素坐标继续参与后续匹配或 ControlNet 构建。
+    # This checks whether the projected pixel is finite; even without an explicit
+    # API failure, abnormal numeric output means the point is not reliable enough
+    # for downstream matching or ControlNet construction.
     if not (math.isfinite(projected_sample) and math.isfinite(projected_line)):
         return None, _build_failure(
             index,
@@ -261,6 +337,12 @@ def _convert_point_via_ground_functions(
             projected_line=projected_line,
         )
 
+    # 输出边界检查默认开启，用来保证返回的点既“可算出”，也“可落在有效原图范围内”。
+    # 在某些调试场景下可以关闭该检查，以便观察越界投影的原始数值分布。
+    # Output-bound validation is enabled by default so returned points are not
+    # only computable but also usable inside the valid original-image extent. It
+    # can be disabled in debugging scenarios when out-of-bounds projections are
+    # still diagnostically valuable.
     if require_output_in_bounds and not _is_point_in_bounds(
         projected_sample,
         projected_line,
@@ -280,6 +362,10 @@ def _convert_point_via_ground_functions(
             projected_line=projected_line,
         )
 
+    # 成功路径只返回转换后的 Keypoint，不在这里附带额外状态；失败细节统一走
+    # DomToOriginalFailure，能让上层循环保持简洁稳定。
+    # The success path returns only the converted Keypoint. All failure detail is
+    # centralized in DomToOriginalFailure so caller loops stay simple and stable.
     return Keypoint(projected_sample, projected_line), None
 
 
@@ -317,7 +403,18 @@ def convert_points_via_ground_functions(
     validate_input_bounds: bool = True,
     require_output_in_bounds: bool = True,
 ) -> tuple[KeypointFile, list[DomToOriginalFailure], DomToOriginalSummary]:
-    """Convert points using injected ground-lookup and image-projection callables."""
+    """使用注入的地面定位与影像投影回调转换点集。
+
+    Convert points with injected ground-lookup and image-projection callables.
+
+    该函数不直接依赖具体 CUBE 对象，而是把 DOM 端的 `sample/line -> latitude/longitude`
+    和原图端的 `latitude/longitude -> sample/line` 过程抽象成可替换回调，便于单元测试、
+    半集成验证以及不同几何后端的复用。
+    This function does not depend on concrete cube objects directly. Instead, it
+    abstracts the DOM-side `sample/line -> latitude/longitude` step and the
+    original-image-side `latitude/longitude -> sample/line` step into replaceable
+    callables for unit tests, semi-integration validation, and backend reuse.
+    """
     output_points: list[Keypoint] = []
     failures: list[DomToOriginalFailure] = []
 
@@ -369,7 +466,18 @@ def convert_point_pairs_via_ground_functions(
     DomToOriginalSummary,
     DomToOriginalSummary,
 ]:
-    """Convert stereo DOM tie points while preserving left/right pair alignment."""
+    """在保持左右点对同步的前提下转换双目 DOM tie points。
+
+    Convert stereo DOM tie points while preserving left/right pair alignment.
+
+    对双目匹配来说，左右 `.key` 文件中的第 `n` 个点必须继续表示同一对 correspondence。
+    因此只要任一侧在 DOM 查询、地面坐标解算或原图投影阶段失败，两侧该点都会一起丢弃，
+    以避免生成长度不一致或语义错位的输出点集。
+    For stereo matching, point `n` in the left and right `.key` files must keep
+    representing the same correspondence. Therefore, if either side fails during
+    DOM lookup, ground resolution, or original-image projection, the pair is
+    dropped on both sides so the outputs do not drift out of sync.
+    """
     if len(left_dom_key_file.points) != len(right_dom_key_file.points):
         raise ValueError("Left and right DOM key files must contain the same number of points.")
 
@@ -451,10 +559,14 @@ def convert_dom_key_file_via_ground_functions(
     validate_input_bounds: bool = True,
     require_output_in_bounds: bool = True,
 ) -> dict[str, object]:
-    """Convert a `.key` file through injected geometry functions and persist structured results.
+    """通过注入的几何函数转换单个 `.key` 文件，并持久化结构化结果。
 
-    This helper is intended for semi-integration tests and fallback wiring when a fully paired
-    DOM/original dataset is not yet available.
+    Convert a `.key` file through injected geometry functions and persist structured results.
+
+    当完整的 DOM / original 成对数据尚未就绪时，这个辅助函数适合做半集成测试、
+    失败日志落盘以及备用接线验证。
+    This helper is intended for semi-integration tests, persisted failure logs,
+    and fallback wiring when a fully paired DOM/original dataset is not yet available.
     """
     dom_key_file = read_key_file(dom_key_path)
     output_key_file, failures, summary = convert_points_via_ground_functions(
@@ -506,7 +618,17 @@ def convert_paired_dom_key_files_via_ground_functions(
     validate_input_bounds: bool = True,
     require_output_in_bounds: bool = True,
 ) -> dict[str, object]:
-    """Convert paired DOM-space `.key` files while keeping stereo correspondences aligned."""
+    """转换成对的 DOM 空间 `.key` 文件，并保持 stereo correspondences 对齐。
+
+    Convert paired DOM-space `.key` files while keeping stereo correspondences aligned.
+
+    该封装负责读取左右输入、分别执行几何转换、写回左右输出，并在需要时把两侧失败信息
+    写入独立 JSON 日志，方便后续分析哪一步导致对应点被同步丢弃。
+    This wrapper reads the left/right inputs, runs the geometric conversion for
+    each side, writes paired outputs, and optionally records separate JSON failure
+    logs so later analysis can pinpoint which stage caused a correspondence pair
+    to be dropped in sync.
+    """
     left_dom_key_file = read_key_file(left_dom_key_path)
     right_dom_key_file = read_key_file(right_dom_key_path)
     (
@@ -580,7 +702,26 @@ def convert_dom_keypoints_to_original(
     logger: logging.Logger | None = None,
     require_output_in_bounds: bool = True,
 ) -> dict[str, object]:
-    """Convert DOM-space keypoints to original-image coordinates using UniversalGroundMap."""
+    """使用 `UniversalGroundMap` 将 DOM 空间 keypoints 转成原始影像坐标。
+
+    Convert DOM-space keypoints to original-image coordinates with `UniversalGroundMap`.
+
+    这里的 CUBE 图像处理链分为三步：
+    1. 在 DOM CUBE 上用 `ProjectionFirst` 和 `set_image(sample, line)` 把 DOM 像素点
+       解析为稳定的地面坐标；
+    2. 在原始 CUBE 上用 `CameraFirst` 和 `set_universal_ground(latitude, longitude)`
+       把同一地面点重新投影到传感器原图像素坐标；
+    3. 对投影结果做边界检查，并把成功点写回 `.key` 文件，把失败点写入结构化日志。
+
+    The CUBE image-processing chain here has three stages:
+    1. Use `ProjectionFirst` plus `set_image(sample, line)` on the DOM cube to
+       resolve each DOM pixel into a stable ground location;
+    2. Use `CameraFirst` plus `set_universal_ground(latitude, longitude)` on the
+       original cube to project that same ground point back into sensor-image
+       pixel coordinates;
+    3. Validate projected bounds, write successful points to the output `.key`
+       file, and record failures in a structured log.
+    """
     dom_cube = ip.Cube()
     original_cube = ip.Cube()
     if logger is not None:
@@ -667,7 +808,19 @@ def convert_paired_dom_keypoints_to_original(
     logger: logging.Logger | None = None,
     require_output_in_bounds: bool = True,
 ) -> dict[str, object]:
-    """Convert stereo DOM tie-point files to original-image coordinates without breaking pair alignment."""
+    """将双目 DOM tie-point 文件转换到原始影像坐标，同时不破坏点对对齐。
+
+    Convert stereo DOM tie-point files to original-image coordinates without breaking pair alignment.
+
+    左右 DOM CUBE 会各自完成 `DOM 像素 -> 地面坐标 -> 原始 CUBE 像素` 的投影链，
+    但输出阶段仍以“点对”为最小保留单元：只要任一侧失败，整对 correspondence 都会被同步
+    丢弃，从而保证后续 ControlNet / matching 处理仍能按索引一一对应。
+    The left and right DOM cubes each run their own `DOM pixel -> ground
+    coordinate -> original-cube pixel` projection chain, but the output stage
+    still treats a correspondence pair as the minimum retained unit: if either
+    side fails, the whole pair is removed so downstream ControlNet / matching
+    steps can continue to rely on index-wise alignment.
+    """
     left_dom_cube = ip.Cube()
     right_dom_cube = ip.Cube()
     left_original_cube = ip.Cube()

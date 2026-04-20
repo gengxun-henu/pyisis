@@ -11,6 +11,7 @@ Updated: 2026-04-17  Geng Xun switched the DOM wrapper to pair-synchronized dom2
 Updated: 2026-04-18  Geng Xun added merge-stage RANSAC filtering and optional drawMatches visualization for DOM-space tie points before dom2ori.
 Updated: 2026-04-18  Geng Xun aligned drawMatches preview defaults so the CLI now documents and uses one-third-size visualization output by default.
 Updated: 2026-04-18  Geng Xun clarified that DOM duplicate merging uses a rounded stereo-pair coordinate hash and surfaces the hash precision in logs and result metadata.
+Updated: 2026-04-19  Geng Xun change 'point = ip.ControlPoint(f"{config.point_id_prefix}{index:08d}")' from 6-digit to 8-digit zero padding for better future-proofing against large point counts.
 """
 
 from __future__ import annotations
@@ -188,7 +189,7 @@ def build_controlnet_for_stereo_pair(
         zip(left_key_file.points, right_key_file.points, strict=True),
         start=1,
     ):
-        point = ip.ControlPoint(f"{config.point_id_prefix}{index:06d}")
+        point = ip.ControlPoint(f"{config.point_id_prefix}{index:08d}")
         point.set_type(ip.ControlPoint.PointType.Free)
 
         left_measure = ip.ControlMeasure()
@@ -447,8 +448,8 @@ def _build_from_dom_parser(subparsers) -> None:
     parser.add_argument("--ransac-max-iters", type=int, default=5000, help="Maximum iteration count passed to OpenCV homography RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="Strict mode drops every OpenCV RANSAC outlier; loose mode re-checks outliers against the fitted homography and keeps those within the loose threshold.")
     parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep OpenCV RANSAC outliers whose homography reprojection error stays within this limit.")
-    parser.add_argument("--write-match-visualization", action="store_true", help="Write a drawMatches PNG after merge-stage RANSAC filtering using the default A__B__timestamp naming rule. The default preview uses one-third of the original image width and height.")
-    parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the drawMatches visualization PNG. Defaults to 1/3, producing a one-third-size preview in each dimension.")
+    parser.add_argument("--write-match-visualization", action="store_true", help="Write a drawMatches PNG after merge-stage RANSAC filtering using the default A__B__timestamp naming rule. The default preview uses one-fourth of the original image width and height.")
+    parser.add_argument("--match-visualization-scale", type=float, default=0.25, help="Image scale factor used when writing the drawMatches visualization PNG. Defaults to 1/4, producing a one-fourth-size preview in each dimension.")
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used for the auto-named drawMatches visualization PNG.")
     parser.add_argument("--dom-band", type=int, default=1, help="Band index used when reading the DOM cubes.")
     parser.add_argument("--left-original-band", type=int, default=1, help="Band index used when projecting into the left original cube.")

@@ -2,15 +2,20 @@
 
 Author: Geng Xun
 Created: 2026-04-17
-Last Modified: 2026-04-18
+Last Modified: 2026-04-19
 Updated: 2026-04-17  Geng Xun added an LRO NAC DOM-matching E2E regression that runs overlap discovery, DOM matching, duplicate merge, dom2ori conversion, and ControlNet writing from the provided `.lis` inputs.
 Updated: 2026-04-17  Geng Xun expanded the external LRO regression to batch-process every overlap pair written to `images_overlap.lis`.
 Updated: 2026-04-17  Geng Xun added per-pair pipeline statistics and a CLI black-box batch regression that drives the full example workflow through script entrypoints.
 Updated: 2026-04-17  Geng Xun extended the E2E flow to emit DOM GSD reports/lists and generate a final cnetmerge shell script for all processed overlap pairs.
 Updated: 2026-04-17  Geng Xun added an opt-in preserved output directory and batch JSON reports so external E2E artifacts can be kept on disk for inspection.
-Updated: 2026-04-18  Geng Xun added an opt-in E2E artifact switch for saving stereo-pair DOM match line plots alongside preserved outputs.
-Updated: 2026-04-18  Geng Xun switched the function and CLI E2E flows to the shared drawMatches visualization emitted by the from-dom ControlNet wrapper.
+Updated: 2026-04-18  Geng Xun initially added an opt-in E2E artifact switch for saving stereo-pair DOM match line plots alongside preserved outputs before the later image_match.py default-output cleanup.
+Updated: 2026-04-18  Geng Xun temporarily routed the function and CLI E2E flows through the then-current shared drawMatches visualization emitted by the from-dom ControlNet wrapper.
 Updated: 2026-04-18  Geng Xun added a configurable external LRO E2E data root while preserving the previous default path.
+Updated: 2026-04-19  Geng Xun added an opt-in environment switch for the function-level all-overlap-pairs E2E regression.
+Updated: 2026-04-19  Geng Xun moved default E2E match-plot generation into image_match.py and made the environment variable an explicit opt-out switch.
+Updated: 2026-04-19  Geng Xun removed the obsolete E2E match-plot environment toggle because image_match.py now writes PNG diagnostics by default.
+Updated: 2026-04-19  Geng Xun clarified these header notes so the earlier opt-in match-plot history is explicitly marked as superseded by the current image_match.py default behavior.
+Updated: 2026-04-19  Geng Xun fixed the function-level all-overlap-pairs E2E gate to read the intended environment variable name instead of the literal string "1".
 """
 
 from __future__ import annotations
@@ -52,8 +57,18 @@ from controlnet_construct.listing import (
 )
 
 
+# original LRO NAC E2E dataset from Geng Xun's external test runs, with paths that may need to be resolved on different machines
 EXTERNAL_DATA_ROOT_ENV = "ISIS_PYBIND_CONTROLNET_E2E_DATA_ROOT"
 DEFAULT_EXTERNAL_DATA_ROOT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python")
+
+# set e2e output root to a preserved location for inspection instead of a temporary directory if the environment variable is set
+PRESERVED_E2E_OUTPUT_ROOT_ENV = "ISIS_PYBIND_E2E_OUTPUT_ROOT"
+
+# use this default path for preserved E2E outputs if the environment variable is not set, to allow preserving outputs without needing to configure the environment variable, but still allow overriding the root path via the environment variable if needed
+DEFAULT_PRESERVED_E2E_OUTPUT_ROOT_ENV = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/e2e_outputs")
+# comment above, and use the following NULL string will output to a temporary directory even if the environment variable is set, allowing easy opt-in to preserved outputs without needing to configure the environment variable, while still allowing the environment variable to specify a custom root path if needed
+#DEFAULT_PRESERVED_E2E_OUTPUT_ROOT_ENV=""
+
 CONTROLNET_CONFIG = {
     "NetworkId": "lro_dom_matching_e2e",
     "TargetName": "Moon",
@@ -69,8 +84,7 @@ MERGE_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "tie_point_merge_in_overl
 DOM2ORI_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "dom2ori.py"
 CONTROLNET_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "controlnet_stereopair.py"
 CONTROLNET_MERGE_SCRIPT = EXAMPLES_DIR / "controlnet_construct" / "controlnet_merge.py"
-PRESERVED_E2E_OUTPUT_ROOT_ENV = "ISIS_PYBIND_E2E_OUTPUT_ROOT"
-GENERATE_MATCH_LINE_PLOTS_ENV = "ISIS_PYBIND_E2E_GENERATE_MATCH_LINE_PLOTS"
+ENABLE_FUNCTION_E2E_ALL_OVERLAP_PAIRS_TEST_ENV = "ISIS_PYBIND_ENABLE_FUNCTION_E2E_ALL_OVERLAP_PAIRS_TEST"
 E2E_RUN_METADATA_NAME = "e2e_run_metadata.json"
 
 
@@ -136,16 +150,20 @@ def _safe_ratio(numerator: int, denominator: int) -> float:
     return float(numerator) / float(denominator)
 
 
+def _is_truthy_env_var(env_var_name: str) -> bool:
+    configured = os.environ.get(env_var_name, "").strip().lower()
+    return configured in {"1", "true", "yes", "on"}
+
+
 class ControlNetConstructE2eUnitTest(unittest.TestCase):
+    def _should_run_function_e2e_all_overlap_pairs_test(self) -> bool:
+        return _is_truthy_env_var(ENABLE_FUNCTION_E2E_ALL_OVERLAP_PAIRS_TEST_ENV)
+
     def _preserved_output_root(self) -> Path | None:
-        configured = os.environ.get(PRESERVED_E2E_OUTPUT_ROOT_ENV, "").strip()
+        configured = os.environ.get(PRESERVED_E2E_OUTPUT_ROOT_ENV, str(DEFAULT_PRESERVED_E2E_OUTPUT_ROOT_ENV)).strip()
         if not configured:
             return None
         return Path(configured).expanduser().resolve()
-
-    def _should_generate_match_line_plots(self) -> bool:
-        configured = os.environ.get(GENERATE_MATCH_LINE_PLOTS_ENV, "").strip().lower()
-        return configured in {"1", "true", "yes", "on"}
 
     @contextmanager
     def _managed_output_directory(self, scenario_name: str):
@@ -307,14 +325,18 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
             overlap_x=128,
             overlap_y=128,
             min_valid_pixels=64,
-            ratio_test=0.9,
+            ratio_test=0.75,
             max_features=3000,
             crop_expand_pixels=100,
             min_overlap_size=16,
+            match_visualization_output_dir=temp_dir,
+            match_visualization_scale=0.25,
         )
         self.assertGreater(match_summary["point_count"], 0)
         self.assertTrue(left_dom_key_path.exists())
         self.assertTrue(right_dom_key_path.exists())
+        self.assertIn("match_visualization", match_summary)
+        self.assertTrue(Path(match_summary["match_visualization"]["output_path"]).exists())
 
         pipeline_summary = build_controlnet_for_dom_stereo_pair(
             left_dom_key_path,
@@ -333,9 +355,6 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
             right_output_key_path=right_original_key_path,
             left_failure_log_path=left_failure_log_path,
             right_failure_log_path=right_failure_log_path,
-            write_match_visualization=self._should_generate_match_line_plots(),
-            match_visualization_output_dir=temp_dir,
-            match_visualization_scale=3.0,
             pvl_format=True,
         )
 
@@ -380,6 +399,12 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         }
 
     def test_lro_dom_matching_pipeline_end_to_end_for_all_overlap_pairs(self):
+        if not self._should_run_function_e2e_all_overlap_pairs_test():
+            self.skipTest(
+                "Function-level all-overlap-pairs E2E test is disabled by default. "
+                f"Set {ENABLE_FUNCTION_E2E_ALL_OVERLAP_PAIRS_TEST_ENV}=1 to enable it."
+            )
+
         original_paths, _, dom_by_original = self._load_external_dataset_or_skip()
         """This test runs the full DOM-matching ControlNet pipeline end-to-end for every overlapping stereo pair discovered 
         from the provided original image list. The test directly calls the core functions for each step instead of using the CLI scripts, 
@@ -580,15 +605,22 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                         "--min-valid-pixels",
                         "64",
                         "--ratio-test",
-                        "0.9",
+                        "0.75",
                         "--max-features",
                         "3000",
                         "--crop-expand-pixels",
                         "100",
                         "--min-overlap-size",
                         "16",
+                        "--match-visualization-output-dir",
+                        str(temp_dir),
+                        "--match-visualization-scale",
+                        "0.25",
                     )
+            
                     self.assertGreater(match_summary["point_count"], 0)
+                    self.assertIn("match_visualization", match_summary)
+                    self.assertTrue(Path(match_summary["match_visualization"]["output_path"]).exists())
 
                     controlnet_summary = self._run_cli_json(
                         str(CONTROLNET_SCRIPT),
@@ -617,7 +649,6 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                         str(left_failure_log_path),
                         "--right-failure-log",
                         str(right_failure_log_path),
-                        *( ["--write-match-visualization", "--match-visualization-output-dir", str(temp_dir), "--match-visualization-scale", "3.0"] if self._should_generate_match_line_plots() else [] ),
                     )
                     self.assertGreater(controlnet_summary["controlnet"]["point_count"], 0)
                     self.assertEqual(

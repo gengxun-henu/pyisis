@@ -18,6 +18,14 @@
 7. 为 per-pair 与 batch 统计结果提供稳定 JSON 报告输出，便于回归比较；
 8. 全流程以可拆分、可测试、可逐步实现的方式组织。
 
+### ControlPoint 命名空间与批处理约束
+
+1. 单个立体像对输出的 `ControlPoint` ID 默认仍可采用 `PointIdPrefix + 8 位序号` 的兼容格式；
+2. 当多个立体像对的 pairwise `.net` 需要再通过 `cnetmerge` 合并时，必须为不同立体像对提供彼此独立的 point-id 命名空间，避免不同 pair 上的 `P00000001` 被误视为同一个控制点；
+3. `controlnet_stereopair.py` 的配置应支持可选 `PairId`（或等价字段）用于单 pair 场景，例如生成 `P_S1_00000001`；
+4. 当采用 batch 入口批量处理 `images_overlap.lis` 时，应由程序自动为每个立体像对分配 `S1`、`S2`、`S3` 这类短 ID，而不要求用户手工逐对传入 `--pair-id`；
+5. 自动分配的 pair ID 必须写入 per-pair JSON sidecar 或等价输出摘要，以便后续排查 `cnetmerge` 输入来源。
+
 ## 前提与约束
 
 ### DOM 与原始影像的一致性约束
@@ -415,9 +423,13 @@
 	- `left_conversion.output_count`：左像 dom2ori 保留点数；
 	- `right_conversion.output_count`：右像 dom2ori 保留点数；
 	- `controlnet.point_count`：最终 control point 数；
+		- `controlnet.point_id_prefix`：基础 point-id 前缀；
+		- `controlnet.pair_id`：单 pair 配置或 batch 自动分配得到的 pair ID；
+		- `controlnet.point_id_namespace`：最终使用的 point-id 命名空间前缀；
 	- `dom2ori_retention_rate`：若直接写出该字段，应明确定义为保留点数相对于 merge 点数的比值；
 	- `report_path`：若运行时自动落盘，应返回实际写出的报告路径。
 	- `match_visualization.output_path`：若启用了匹配连线图输出，应返回实际写出的 PNG 路径。
+	10. 除单 pair CLI 外，建议提供 batch 入口（例如 `from-dom-batch`），从 `images_overlap.lis`、`original_images.lis`、`doms.lis` 和 per-pair DOM `.key` 目录中自动构建所有 pairwise `.net`，并在内部自动分配 `S1/S2/S3...` 这类 pair ID。
 
 ### 8. `controlnet_merge.py`
 

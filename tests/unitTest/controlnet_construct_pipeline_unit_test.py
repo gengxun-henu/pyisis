@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-18
+Last Modified: 2026-04-20
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -10,6 +10,8 @@ Updated: 2026-04-17  Geng Xun added focused coverage for per-pair JSON sidecar r
 Updated: 2026-04-17  Geng Xun added coordinate-basis JSON checks and a no-drift semi-integration chain from image_match through dom2ori into ControlNet measures.
 Updated: 2026-04-18  Geng Xun added focused wrapper coverage for merge-stage RANSAC filtering and auto-named drawMatches visualization output before dom2ori.
 Updated: 2026-04-18  Geng Xun added optional configurable real LRO DOM pipeline coverage while preserving repository fixture regressions.
+Updated: 2026-04-20  Geng Xun added focused coverage for stereo-pair point-id namespacing, batch auto-assigned pair IDs, backward-compatible defaults, and CLI pair-id override behavior.
+Updated: 2026-04-20  Geng Xun added regression coverage for explicitly routed post-RANSAC drawMatches output paths in the from-dom wrapper.
 """
 
 from __future__ import annotations
@@ -38,9 +40,11 @@ if str(EXAMPLES_DIR) not in sys.path:
 
 from controlnet_construct.controlnet_stereopair import (
     ControlNetConfig,
+    build_controlnets_for_dom_overlap_list,
     build_controlnet_for_dom_stereo_pair,
     build_controlnet_for_stereo_pair,
     default_controlnet_report_path,
+    main as controlnet_stereopair_main,
     read_controlnet_config,
     write_controlnet_result_report,
 )
@@ -133,6 +137,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "UserName": "zmoratto",
                         "Description": "demo",
                         "PointIdPrefix": "CTX",
+                        "PairId": "S12",
                     }
                 ),
                 encoding="utf-8",
@@ -144,6 +149,27 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             self.assertEqual(config.target_name, "Mars")
             self.assertEqual(config.user_name, "zmoratto")
             self.assertEqual(config.point_id_prefix, "CTX")
+            self.assertEqual(config.pair_id, "S12")
+
+    def test_read_controlnet_config_normalizes_blank_pair_id_to_none(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config_blank_pair_id.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "ctx",
+                        "TargetName": "Mars",
+                        "UserName": "zmoratto",
+                        "PointIdPrefix": "CTX",
+                        "PairId": "   ",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            config = read_controlnet_config(config_path)
+
+            self.assertIsNone(config.pair_id)
 
     def test_build_controlnet_for_stereo_pair_writes_valid_network(self):
         left_key_file = KeypointFile(1024, 1024, (Keypoint(10.0, 20.0), Keypoint(30.0, 40.0)))
@@ -183,6 +209,278 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             self.assertEqual(loaded.get_network_id(), "ctx")
             self.assertEqual(loaded.get_target(), "Mars")
             self.assertEqual(loaded.get_user_name(), "zmoratto")
+            self.assertEqual(loaded.get_point(0).get_id(), "CTX00000001")
+            self.assertEqual(result["point_id_namespace"], "CTX")
+            self.assertEqual(result["point_id_example"], "CTX00000001")
+
+    def test_build_controlnet_for_stereo_pair_includes_pair_id_namespace(self):
+        left_key_file = KeypointFile(128, 128, (Keypoint(10.0, 20.0),))
+        right_key_file = KeypointFile(128, 128, (Keypoint(12.0, 22.0),))
+        config = ControlNetConfig(
+            network_id="ctx_pair",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="pair-id namespace test",
+            point_id_prefix="CTX",
+            pair_id="S2",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_key_path = temp_dir / "ori_A.key"
+            right_key_path = temp_dir / "ori_B.key"
+            output_net = temp_dir / "stereo_pair_namespaced.net"
+
+            write_key_file(left_key_path, left_key_file)
+            write_key_file(right_key_path, right_key_file)
+
+            result = build_controlnet_for_stereo_pair(
+                left_key_path,
+                right_key_path,
+                LEFT_CUBE_PATH,
+                RIGHT_CUBE_PATH,
+                config,
+                output_net,
+                pvl_format=True,
+            )
+
+            loaded = ip.ControlNet(str(output_net))
+
+        self.assertEqual(loaded.get_point(0).get_id(), "CTX_S2_00000001")
+        self.assertEqual(result["pair_id"], "S2")
+        self.assertEqual(result["point_id_namespace"], "CTX_S2_")
+        self.assertEqual(result["point_id_example"], "CTX_S2_00000001")
+
+    def test_build_controlnet_for_stereo_pair_different_pair_ids_avoid_collisions(self):
+        left_key_file = KeypointFile(64, 64, (Keypoint(10.0, 20.0),))
+        right_key_file = KeypointFile(64, 64, (Keypoint(12.0, 22.0),))
+        config_s1 = ControlNetConfig(
+            network_id="ctx_pair_s1",
+            target_name="Mars",
+            user_name="zmoratto",
+            point_id_prefix="CTX",
+            pair_id="S1",
+        )
+        config_s2 = ControlNetConfig(
+            network_id="ctx_pair_s2",
+            target_name="Mars",
+            user_name="zmoratto",
+            point_id_prefix="CTX",
+            pair_id="S2",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_key_path = temp_dir / "ori_A.key"
+            right_key_path = temp_dir / "ori_B.key"
+            output_net_s1 = temp_dir / "pair_s1.net"
+            output_net_s2 = temp_dir / "pair_s2.net"
+
+            write_key_file(left_key_path, left_key_file)
+            write_key_file(right_key_path, right_key_file)
+
+            build_controlnet_for_stereo_pair(
+                left_key_path,
+                right_key_path,
+                LEFT_CUBE_PATH,
+                RIGHT_CUBE_PATH,
+                config_s1,
+                output_net_s1,
+                pvl_format=True,
+            )
+            build_controlnet_for_stereo_pair(
+                left_key_path,
+                right_key_path,
+                LEFT_CUBE_PATH,
+                RIGHT_CUBE_PATH,
+                config_s2,
+                output_net_s2,
+                pvl_format=True,
+            )
+
+            point_id_s1 = ip.ControlNet(str(output_net_s1)).get_point(0).get_id()
+            point_id_s2 = ip.ControlNet(str(output_net_s2)).get_point(0).get_id()
+
+        self.assertNotEqual(point_id_s1, point_id_s2)
+        self.assertEqual(point_id_s1, "CTX_S1_00000001")
+        self.assertEqual(point_id_s2, "CTX_S2_00000001")
+
+    def test_controlnet_stereopair_cli_pair_id_overrides_config_value(self):
+        fake_result = {
+            "output_path": "synthetic.net",
+            "point_count": 1,
+            "measure_count": 2,
+            "point_id_example": "CTX_CLI_00000001",
+        }
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "ctx",
+                        "TargetName": "Mars",
+                        "UserName": "zmoratto",
+                        "PointIdPrefix": "CTX",
+                        "PairId": "CFG",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            stdout = io.StringIO()
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                    return_value=fake_result,
+                ) as build_mock,
+                redirect_stdout(stdout),
+            ):
+                controlnet_stereopair_main(
+                    [
+                        "from-ori",
+                        "left.key",
+                        "right.key",
+                        str(LEFT_CUBE_PATH),
+                        str(RIGHT_CUBE_PATH),
+                        str(config_path),
+                        "synthetic.net",
+                        "--pair-id",
+                        "CLI",
+                    ]
+                )
+
+        called_config = build_mock.call_args.args[4]
+        self.assertEqual(called_config.point_id_prefix, "CTX")
+        self.assertEqual(called_config.pair_id, "CLI")
+        self.assertEqual(json.loads(stdout.getvalue()), fake_result)
+
+    def test_build_controlnets_for_dom_overlap_list_auto_assigns_batch_pair_ids(self):
+        config = ControlNetConfig(
+            network_id="ctx_batch",
+            target_name="Mars",
+            user_name="zmoratto",
+            point_id_prefix="CTX",
+            pair_id="CFG_SINGLE",
+        )
+        fake_pair_result = {
+            "mode": "from-dom",
+            "merge": {"unique_count": 5, "applied": True},
+            "ransac": {"retained_count": 5, "dropped_count": 0},
+            "left_conversion": {"output_count": 5},
+            "right_conversion": {"output_count": 5},
+            "controlnet": {"point_count": 5, "measure_count": 10},
+        }
+
+        with temporary_directory() as temp_dir:
+            overlap_list_path = temp_dir / "images_overlap.lis"
+            overlap_list_path.write_text(
+                "left1.cub,right1.cub\nleft2.cub,right2.cub\n",
+                encoding="utf-8",
+            )
+            original_list_path = temp_dir / "original_images.lis"
+            original_list_path.write_text(
+                "left1.cub\nright1.cub\nleft2.cub\nright2.cub\n",
+                encoding="utf-8",
+            )
+            dom_list_path = temp_dir / "doms.lis"
+            dom_list_path.write_text(
+                "left1_dom.cub\nright1_dom.cub\nleft2_dom.cub\nright2_dom.cub\n",
+                encoding="utf-8",
+            )
+            dom_key_dir = temp_dir / "dom_keys"
+            dom_key_dir.mkdir()
+            output_dir = temp_dir / "pair_nets"
+            report_dir = temp_dir / "reports"
+            for filename in (
+                "left1__right1_A.key",
+                "left1__right1_B.key",
+                "left2__right2_A.key",
+                "left2__right2_B.key",
+            ):
+                (dom_key_dir / filename).write_text("synthetic\n", encoding="utf-8")
+
+            with patch(
+                "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_stereo_pair",
+                return_value=fake_pair_result,
+            ) as build_mock:
+                summary = build_controlnets_for_dom_overlap_list(
+                    overlap_list_path,
+                    original_list_path,
+                    dom_list_path,
+                    dom_key_dir,
+                    output_dir,
+                    config,
+                    report_directory=report_dir,
+                    pair_id_prefix="S",
+                    pair_id_start=1,
+                )
+
+                self.assertEqual(build_mock.call_count, 2)
+                first_config = build_mock.call_args_list[0].args[6]
+                second_config = build_mock.call_args_list[1].args[6]
+                self.assertEqual(first_config.pair_id, "S1")
+                self.assertEqual(second_config.pair_id, "S2")
+                self.assertEqual(first_config.point_id_prefix, "CTX")
+                self.assertEqual(summary["pair_count"], 2)
+                self.assertEqual(summary["pairs"][0]["pair_id"], "S1")
+                self.assertEqual(summary["pairs"][1]["pair_id"], "S2")
+                self.assertTrue(Path(summary["batch_report_path"]).exists())
+                self.assertTrue(Path(summary["pairs"][0]["report_path"]).exists())
+                self.assertTrue(Path(summary["pairs"][1]["report_path"]).exists())
+
+    def test_controlnet_stereopair_cli_from_dom_batch_dispatches(self):
+        fake_summary = {
+            "mode": "from-dom-batch",
+            "pair_count": 2,
+            "pairs": [{"pair": "left1.cub,right1.cub", "pair_id": "S3"}],
+            "batch_report_path": "reports/controlnet_batch_summary.json",
+        }
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "ctx",
+                        "TargetName": "Mars",
+                        "UserName": "zmoratto",
+                        "PointIdPrefix": "CTX",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            stdout = io.StringIO()
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnets_for_dom_overlap_list",
+                    return_value=fake_summary,
+                ) as batch_mock,
+                redirect_stdout(stdout),
+            ):
+                controlnet_stereopair_main(
+                    [
+                        "from-dom-batch",
+                        "images_overlap.lis",
+                        "original_images.lis",
+                        "doms.lis",
+                        "dom_keys",
+                        str(config_path),
+                        "pair_nets",
+                        "--pair-id-prefix",
+                        "S",
+                        "--pair-id-start",
+                        "3",
+                        "--report-dir",
+                        "reports",
+                    ]
+                )
+
+        called_config = batch_mock.call_args.args[5]
+        self.assertEqual(called_config.point_id_prefix, "CTX")
+        self.assertEqual(batch_mock.call_args.kwargs["pair_id_prefix"], "S")
+        self.assertEqual(batch_mock.call_args.kwargs["pair_id_start"], 3)
+        self.assertEqual(batch_mock.call_args.kwargs["report_directory"], "reports")
+        self.assertEqual(json.loads(stdout.getvalue()), fake_summary)
 
     def test_write_controlnet_result_report_uses_default_summary_sidecar_name(self):
         result = {
@@ -461,6 +759,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             left_dom_key = temp_dir / "left_dom.key"
             right_dom_key = temp_dir / "right_dom.key"
             output_net = temp_dir / "ransac_wrapper.net"
+            visualization_output_path = temp_dir / "post_ransac_match.png"
             write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
             write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
 
@@ -525,6 +824,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     output_net,
                     skip_merge=True,
                     write_match_visualization=True,
+                    match_visualization_output_path=visualization_output_path,
                     match_visualization_scale=3.0,
                     ransac_mode="loose",
                     loose_ransac_keep_threshold=1.0,
@@ -532,6 +832,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         ransac_mock.assert_called_once()
         visualization_mock.assert_called_once()
+        self.assertEqual(visualization_mock.call_args.kwargs["output_path"], visualization_output_path)
         paired_mock.assert_called_once()
         controlnet_mock.assert_called_once()
         self.assertEqual(result["ransac"]["retained_count"], 1)

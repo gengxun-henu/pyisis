@@ -38,6 +38,7 @@ from .image_match import (
 from .tie_point_merge_in_overlap import merge_stereo_pair_key_files
 from .controlnet_stereopair import (
     ControlNetConfig,
+    build_controlnets_for_dom_overlap_list,
     build_controlnet_for_dom_stereo_pair,
     build_controlnet_for_stereo_pair,
     default_controlnet_report_path,
@@ -63,6 +64,7 @@ __all__ = [
     "GsdNormalizationRecord",
     "PairPreparationMetadata",
     "ControlNetConfig",
+    "build_controlnets_for_dom_overlap_list",
     "DomToOriginalFailure",
     "DomToOriginalSummary",
     "DEFAULT_BATCH_REPORT_NAME",

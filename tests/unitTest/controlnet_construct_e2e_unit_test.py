@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-17
-Last Modified: 2026-04-19
+Last Modified: 2026-04-20
 Updated: 2026-04-17  Geng Xun added an LRO NAC DOM-matching E2E regression that runs overlap discovery, DOM matching, duplicate merge, dom2ori conversion, and ControlNet writing from the provided `.lis` inputs.
 Updated: 2026-04-17  Geng Xun expanded the external LRO regression to batch-process every overlap pair written to `images_overlap.lis`.
 Updated: 2026-04-17  Geng Xun added per-pair pipeline statistics and a CLI black-box batch regression that drives the full example workflow through script entrypoints.
@@ -16,6 +16,7 @@ Updated: 2026-04-19  Geng Xun moved default E2E match-plot generation into image
 Updated: 2026-04-19  Geng Xun removed the obsolete E2E match-plot environment toggle because image_match.py now writes PNG diagnostics by default.
 Updated: 2026-04-19  Geng Xun clarified these header notes so the earlier opt-in match-plot history is explicitly marked as superseded by the current image_match.py default behavior.
 Updated: 2026-04-19  Geng Xun fixed the function-level all-overlap-pairs E2E gate to read the intended environment variable name instead of the literal string "1".
+Updated: 2026-04-20  Geng Xun updated the function and CLI E2E flows to preserve deterministic pre-RANSAC and post-RANSAC match PNGs for each stereo pair.
 """
 
 from __future__ import annotations
@@ -313,6 +314,8 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         left_failure_log_path = temp_dir / f"{pair_tag}_left_dom2ori_failures.json"
         right_failure_log_path = temp_dir / f"{pair_tag}_right_dom2ori_failures.json"
         output_net_path = temp_dir / f"{pair_tag}.net"
+        pre_ransac_match_path = temp_dir / f"{pair_tag}_pre_ransac_match.png"
+        post_ransac_match_path = temp_dir / f"{pair_tag}_post_ransac_match.png"
 
         match_summary = match_dom_pair_to_key_files(
             left_dom_path,
@@ -329,14 +332,15 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
             max_features=3000,
             crop_expand_pixels=100,
             min_overlap_size=16,
-            match_visualization_output_dir=temp_dir,
+            match_visualization_output_path=pre_ransac_match_path,
             match_visualization_scale=0.25,
         )
         self.assertGreater(match_summary["point_count"], 0)
         self.assertTrue(left_dom_key_path.exists())
         self.assertTrue(right_dom_key_path.exists())
         self.assertIn("match_visualization", match_summary)
-        self.assertTrue(Path(match_summary["match_visualization"]["output_path"]).exists())
+        self.assertEqual(Path(match_summary["match_visualization"]["output_path"]), pre_ransac_match_path)
+        self.assertTrue(pre_ransac_match_path.exists())
 
         pipeline_summary = build_controlnet_for_dom_stereo_pair(
             left_dom_key_path,
@@ -355,6 +359,9 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
             right_output_key_path=right_original_key_path,
             left_failure_log_path=left_failure_log_path,
             right_failure_log_path=right_failure_log_path,
+            write_match_visualization=True,
+            match_visualization_output_path=post_ransac_match_path,
+            match_visualization_scale=0.25,
             pvl_format=True,
         )
 
@@ -369,6 +376,9 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         self.assertTrue(merged_right_dom_key_path.exists())
         self.assertTrue(ransac_left_dom_key_path.exists())
         self.assertTrue(ransac_right_dom_key_path.exists())
+        self.assertIn("match_visualization", pipeline_summary)
+        self.assertEqual(Path(pipeline_summary["match_visualization"]["output_path"]), post_ransac_match_path)
+        self.assertTrue(post_ransac_match_path.exists())
         self.assertGreater(left_conversion["output_count"], 0)
         self.assertGreater(right_conversion["output_count"], 0)
         self.assertEqual(left_conversion["output_count"], right_conversion["output_count"])
@@ -395,6 +405,8 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
         return {
             "pair": pair.as_csv_line(),
             "match": match_summary,
+            "pre_ransac_match_visualization": {"output_path": str(pre_ransac_match_path)},
+            "post_ransac_match_visualization": pipeline_summary["match_visualization"],
             **pipeline_summary,
         }
 
@@ -584,6 +596,8 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                 left_failure_log_path = temp_dir / f"{pair_tag}_cli_left_dom2ori_failures.json"
                 right_failure_log_path = temp_dir / f"{pair_tag}_cli_right_dom2ori_failures.json"
                 output_net_path = temp_dir / f"{pair_tag}_cli.net"
+                pre_ransac_match_path = temp_dir / f"{pair_tag}_cli_pre_ransac_match.png"
+                post_ransac_match_path = temp_dir / f"{pair_tag}_cli_post_ransac_match.png"
 
                 with self.subTest(cli_pair=overlap_pair.as_csv_line()):
                     match_summary = self._run_cli_json(
@@ -612,15 +626,16 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                         "100",
                         "--min-overlap-size",
                         "16",
-                        "--match-visualization-output-dir",
-                        str(temp_dir),
+                        "--match-visualization-output-path",
+                        str(pre_ransac_match_path),
                         "--match-visualization-scale",
                         "0.25",
                     )
             
                     self.assertGreater(match_summary["point_count"], 0)
                     self.assertIn("match_visualization", match_summary)
-                    self.assertTrue(Path(match_summary["match_visualization"]["output_path"]).exists())
+                    self.assertEqual(Path(match_summary["match_visualization"]["output_path"]), pre_ransac_match_path)
+                    self.assertTrue(pre_ransac_match_path.exists())
 
                     controlnet_summary = self._run_cli_json(
                         str(CONTROLNET_SCRIPT),
@@ -649,6 +664,11 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                         str(left_failure_log_path),
                         "--right-failure-log",
                         str(right_failure_log_path),
+                        "--write-match-visualization",
+                        "--match-visualization-output-path",
+                        str(post_ransac_match_path),
+                        "--match-visualization-scale",
+                        "0.25",
                     )
                     self.assertGreater(controlnet_summary["controlnet"]["point_count"], 0)
                     self.assertEqual(
@@ -659,6 +679,9 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                     self.assertTrue(merged_right_dom_key_path.exists())
                     self.assertTrue(ransac_left_dom_key_path.exists())
                     self.assertTrue(ransac_right_dom_key_path.exists())
+                    self.assertIn("match_visualization", controlnet_summary)
+                    self.assertEqual(Path(controlnet_summary["match_visualization"]["output_path"]), post_ransac_match_path)
+                    self.assertTrue(post_ransac_match_path.exists())
                     self.assertTrue(left_original_key_path.exists())
                     self.assertTrue(right_original_key_path.exists())
                     self.assertTrue(left_failure_log_path.exists())
@@ -679,6 +702,8 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
                     cli_pair_result = {
                         "pair": overlap_pair.as_csv_line(),
                         "match": match_summary,
+                        "pre_ransac_match_visualization": {"output_path": str(pre_ransac_match_path)},
+                        "post_ransac_match_visualization": controlnet_summary["match_visualization"],
                         **controlnet_summary,
                     }
                     cli_pair_results.append(cli_pair_result)

@@ -302,6 +302,19 @@ python examples/forward_intersection.py \
 
 如果你想按“`image_overlap.py` → `image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`”的顺序一步一步跑完整流水线，优先查看：`examples/controlnet_construct/usage.md`。
 
+对于 DOM 匹配阶段，建议把 `valid_pixel_percent_threshold` 明确设出来，而不是完全依赖默认值。一个常用起步值是 `0.05`，表示某个 tile 的有效像素比例低于 $5\%$ 时直接跳过匹配。仓库示例配置 `examples/controlnet_construct/controlnet_config.example.json` 已经给出这个推荐值（`ImageMatch.valid_pixel_percent_threshold`），而 `examples/controlnet_construct/run_pipeline_example.sh` 会自动读取它；如果你手工调用 `image_match.py`，可以直接传 `--valid-pixel-percent-threshold 0.05`。
+
+如果你希望直接复制一段能跑的批处理模板，不想自己拼参数，`examples/controlnet_construct/usage.md` 现在新增了更显眼的“推荐参数模板”小节，包含：
+
+- 示例流水线脚本模板
+- 手工批量 `image_match.py` 模板
+- `0.05 / 0.03 / 0.1` 的简短调参建议
+
+如果你更希望要一个独立、短小、可复用的 snippet 入口，现在还可以直接使用：
+
+- `examples/controlnet_construct/recommended_batch_templates.md`
+- `examples/controlnet_construct/run_image_match_batch_example.sh`
+
 ### 单个立体像对
 
 如果你已经为某个立体像对准备好了 DOM 空间 `.key` 文件，可以这样生成单对控制网：

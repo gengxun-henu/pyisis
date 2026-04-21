@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-20
+Last Modified: 2026-04-21
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -12,6 +12,8 @@ Updated: 2026-04-18  Geng Xun added focused wrapper coverage for merge-stage RAN
 Updated: 2026-04-18  Geng Xun added optional configurable real LRO DOM pipeline coverage while preserving repository fixture regressions.
 Updated: 2026-04-20  Geng Xun added focused coverage for stereo-pair point-id namespacing, batch auto-assigned pair IDs, backward-compatible defaults, and CLI pair-id override behavior.
 Updated: 2026-04-20  Geng Xun added regression coverage for explicitly routed post-RANSAC drawMatches output paths in the from-dom wrapper.
+Updated: 2026-04-21  Geng Xun added focused regression coverage for pipeline step timing logs and JSON timing summaries.
+Updated: 2026-04-21  Geng Xun added regression coverage for forwarding the example config valid-pixel threshold into the batch image-match stage.
 """
 
 from __future__ import annotations
@@ -19,7 +21,9 @@ from __future__ import annotations
 import json
 import io
 import os
+import subprocess
 import sys
+import textwrap
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -74,6 +78,7 @@ REAL_LRO_DOM_LEFT_ENV = "ISIS_PYBIND_PIPELINE_REAL_DOM_LEFT_CUBE"
 REAL_LRO_DOM_RIGHT_ENV = "ISIS_PYBIND_PIPELINE_REAL_DOM_RIGHT_CUBE"
 DEFAULT_REAL_LRO_DOM_LEFT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871LE.cub")
 DEFAULT_REAL_LRO_DOM_RIGHT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871RE.cub")
+RUN_PIPELINE_EXAMPLE_PATH = PROJECT_ROOT / "examples" / "controlnet_construct" / "run_pipeline_example.sh"
 
 
 def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
@@ -83,6 +88,268 @@ def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
 
 
 class ControlNetConstructPipelineUnitTest(unittest.TestCase):
+    def test_run_pipeline_example_writes_timing_json_and_logs_step_durations(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            reports_dir = work_dir / "reports"
+            work_dir.mkdir()
+            reports_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            timing_json_path = temp_dir / "pipeline_timing.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "timing-net",
+                        "TargetName": "Mars",
+                        "UserName": "copilot",
+                        "PointIdPrefix": "TMP",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import os
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+
+                        if script_name == "image_overlap.py":
+                            Path(args[1]).write_text("left.cub,right.cub\\n", encoding="utf-8")
+                            return 0
+
+                        if script_name == "image_match.py":
+                            Path(args[2]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[3]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            if "--metadata-output" in args:
+                                metadata_path = Path(args[args.index("--metadata-output") + 1])
+                                metadata_path.parent.mkdir(parents=True, exist_ok=True)
+                                metadata_path.write_text(json.dumps({{"status": "matched"}}), encoding="utf-8")
+                            if "--match-visualization-output-dir" in args:
+                                viz_dir = Path(args[args.index("--match-visualization-output-dir") + 1])
+                                viz_dir.mkdir(parents=True, exist_ok=True)
+                                (viz_dir / "synthetic.png").write_text("png", encoding="utf-8")
+                            print(json.dumps({{"status": "matched", "point_count": 1}}))
+                            return 0
+
+                        if script_name == "controlnet_stereopair.py":
+                            output_dir = Path(args[6])
+                            output_dir.mkdir(parents=True, exist_ok=True)
+                            (output_dir / "synthetic_pair.net").write_text("net", encoding="utf-8")
+                            if "--report-dir" in args:
+                                report_dir = Path(args[args.index("--report-dir") + 1])
+                                report_dir.mkdir(parents=True, exist_ok=True)
+                                (report_dir / "synthetic_pair.summary.json").write_text(json.dumps({{"point_count": 1}}), encoding="utf-8")
+                            print(json.dumps({{"pair_count": 1}}))
+                            return 0
+
+                        if script_name == "controlnet_merge.py":
+                            merge_script_path = Path(args[3])
+                            merge_script_path.parent.mkdir(parents=True, exist_ok=True)
+                            merge_script_path.write_text("#!/usr/bin/env bash\\nexit 0\\n", encoding="utf-8")
+                            os.chmod(merge_script_path, 0o755)
+                            print(json.dumps({{"merge_script": str(merge_script_path)}}))
+                            return 0
+
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ).strip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).strip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                    "--skip-final-merge",
+                    "--timing-json",
+                    str(timing_json_path),
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            timing_payload = json.loads(timing_json_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("START image_overlap", completed.stdout)
+        self.assertIn("END image_overlap status=success duration=", completed.stdout)
+        self.assertEqual(timing_payload["pipeline"]["status"], "success")
+        self.assertEqual(
+            [entry["name"] for entry in timing_payload["steps"]],
+            ["image_overlap", "image_match_batch", "pairwise_controlnets", "merge"],
+        )
+        self.assertEqual(timing_payload["pair_matches"][0]["name"], "image_match:left__right")
+        self.assertTrue(all(entry["duration_seconds"] >= 0 for entry in timing_payload["steps"]))
+
+    def test_run_pipeline_example_forwards_valid_pixel_threshold_from_config_to_image_match(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "timing-net",
+                        "TargetName": "Mars",
+                        "UserName": "copilot",
+                        "PointIdPrefix": "TMP",
+                        "ImageMatch": {
+                            "valid_pixel_percent_threshold": 0.05,
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import os
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+
+                        if script_name == "image_overlap.py":
+                            Path(args[1]).write_text("left.cub,right.cub\\n", encoding="utf-8")
+                            return 0
+
+                        if script_name == "image_match.py":
+                            if "--valid-pixel-percent-threshold" not in args:
+                                raise SystemExit("missing valid pixel threshold")
+                            threshold = args[args.index("--valid-pixel-percent-threshold") + 1]
+                            if threshold != "0.05":
+                                raise SystemExit(f"unexpected threshold: {{threshold}}")
+                            Path(args[2]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[3]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            return 0
+
+                        if script_name == "controlnet_stereopair.py":
+                            output_dir = Path(args[6])
+                            output_dir.mkdir(parents=True, exist_ok=True)
+                            (output_dir / "synthetic_pair.net").write_text("net", encoding="utf-8")
+                            return 0
+
+                        if script_name == "controlnet_merge.py":
+                            merge_script_path = Path(args[3])
+                            merge_script_path.parent.mkdir(parents=True, exist_ok=True)
+                            merge_script_path.write_text("#!/usr/bin/env bash\\nexit 0\\n", encoding="utf-8")
+                            os.chmod(merge_script_path, 0o755)
+                            return 0
+
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ).strip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).strip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                    "--skip-final-merge",
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Valid pixel percent threshold: 0.05", completed.stdout)
+
     def test_minimal_longitude_interval_detects_wraparound_cluster(self):
         start, end, wraps = _minimal_longitude_interval([359.0, 1.0, 2.0])
 

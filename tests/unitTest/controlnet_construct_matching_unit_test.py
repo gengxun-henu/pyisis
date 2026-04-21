@@ -2,13 +2,14 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-18
+Last Modified: 2026-04-21
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
 Updated: 2026-04-18  Geng Xun added focused regression coverage for merge-stage RANSAC filtering and default drawMatches visualization output naming.
 Updated: 2026-04-18  Geng Xun added optional configurable real LRO DOM matching coverage while preserving repository fixture regressions.
 Updated: 2026-04-19  Geng Xun added regression coverage for default image-match visualization output and the explicit no-write CLI switch.
+Updated: 2026-04-21  Geng Xun added focused regression coverage for tile valid-pixel ratio filtering, 8-bit zero masking, and the new CLI threshold option.
 """
 
 from __future__ import annotations
@@ -85,6 +86,47 @@ def _build_textured_test_image(width: int, height: int) -> np.ndarray:
     cv2.line(image, (0, height - 1), (width - 1, 0), 255, thickness=2)
     cv2.putText(image, "ISIS", (width // 3, height // 2), cv2.FONT_HERSHEY_SIMPLEX, 0.8, 200, 2)
     return image.astype(np.float64)
+
+
+def _write_projected_dom_pair(
+    temp_dir: Path,
+    left_values: np.ndarray,
+    right_values: np.ndarray | None = None,
+    *,
+    pixel_type=ip.PixelType.Real,
+    left_name: str = "left_dom.cub",
+    right_name: str = "right_dom.cub",
+) -> tuple[Path, Path]:
+    left_array = np.asarray(left_values, dtype=np.float64)
+    right_array = left_array if right_values is None else np.asarray(right_values, dtype=np.float64)
+    height, width = left_array.shape
+
+    left_cube, left_path = make_test_cube(
+        temp_dir,
+        name=left_name,
+        samples=width,
+        lines=height,
+        bands=1,
+        pixel_type=pixel_type,
+    )
+    right_cube, right_path = make_test_cube(
+        temp_dir,
+        name=right_name,
+        samples=right_array.shape[1],
+        lines=right_array.shape[0],
+        bands=1,
+        pixel_type=pixel_type,
+    )
+    try:
+        _write_array_to_cube(left_cube, left_array)
+        _write_array_to_cube(right_cube, right_array)
+        attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
+        attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(right_array.shape[0]))
+    finally:
+        left_cube.close()
+        right_cube.close()
+
+    return left_path, right_path
 
 
 class ControlNetConstructMatchingUnitTest(unittest.TestCase):
@@ -230,6 +272,37 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(default_args.write_match_visualization)
         self.assertFalse(disabled_args.write_match_visualization)
 
+    def test_build_argument_parser_accepts_valid_pixel_percent_threshold(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--valid-pixel-percent-threshold",
+                "0.35",
+            ]
+        )
+
+        self.assertAlmostEqual(args.valid_pixel_percent_threshold, 0.35)
+
+    def test_build_argument_parser_rejects_out_of_range_valid_pixel_percent_threshold(self):
+        parser = build_argument_parser()
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--valid-pixel-percent-threshold",
+                    "1.5",
+                ]
+            )
+
     def test_build_sift_detector_forwards_custom_parameters_to_opencv(self):
         fake_detector = object()
 
@@ -364,6 +437,95 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             "skipped_insufficient_valid_pixels",
             {tile["status"] for tile in summary["tiles"]},
         )
+
+    def test_match_dom_pair_skips_tile_when_valid_ratio_is_below_threshold(self):
+        image = np.zeros((48, 48), dtype=np.float64)
+        image[12:36, 12:36] = 100.0
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_ratio_skip.cub",
+                right_name="right_ratio_skip.cub",
+            )
+
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                min_valid_pixels=32,
+                valid_pixel_percent_threshold=0.3,
+            )
+
+        self.assertEqual(summary["point_count"], 0)
+        self.assertEqual(summary["valid_pixel_percent_threshold"], 0.3)
+        self.assertEqual(summary["tile_count"], 1)
+        self.assertEqual(summary["tiles"][0]["status"], "skipped_valid_pixel_ratio_below_threshold")
+        self.assertAlmostEqual(summary["tiles"][0]["left_valid_pixel_ratio"], 0.25, places=6)
+        self.assertAlmostEqual(summary["tiles"][0]["right_valid_pixel_ratio"], 0.25, places=6)
+
+    def test_match_dom_pair_reports_valid_pixel_ratio_fields_in_summary(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_ratio_summary.cub",
+                right_name="right_ratio_summary.cub",
+            )
+
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                min_valid_pixels=16,
+                valid_pixel_percent_threshold=0.0,
+            )
+
+        self.assertIn("valid_pixel_percent_threshold", summary)
+        self.assertIn("min_valid_pixels", summary)
+        self.assertIn("left_valid_pixel_ratio", summary["tiles"][0])
+        self.assertIn("right_valid_pixel_ratio", summary["tiles"][0])
+        self.assertGreaterEqual(summary["tiles"][0]["left_valid_pixel_ratio"], 0.0)
+        self.assertLessEqual(summary["tiles"][0]["left_valid_pixel_ratio"], 1.0)
+
+    def test_match_dom_pair_treats_zero_as_invalid_for_8bit_images(self):
+        image = np.zeros((48, 48), dtype=np.float64)
+        image[8:40, 8:40] = np.tile(np.arange(1.0, 33.0, dtype=np.float64), (32, 1))
+
+        with temporary_directory() as temp_dir:
+            byte_left_path, byte_right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_byte_zero_invalid.cub",
+                right_name="right_byte_zero_invalid.cub",
+            )
+            real_left_path, real_right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.Real,
+                left_name="left_real_zero_valid.cub",
+                right_name="right_real_zero_valid.cub",
+            )
+
+            _, _, byte_summary = match_dom_pair(
+                byte_left_path,
+                byte_right_path,
+                min_valid_pixels=16,
+                valid_pixel_percent_threshold=0.0,
+            )
+            _, _, real_summary = match_dom_pair(
+                real_left_path,
+                real_right_path,
+                min_valid_pixels=16,
+                valid_pixel_percent_threshold=0.0,
+            )
+
+        self.assertLess(byte_summary["tiles"][0]["left_valid_pixel_ratio"], 1.0)
+        self.assertAlmostEqual(real_summary["tiles"][0]["left_valid_pixel_ratio"], 1.0, places=6)
 
     def test_match_dom_pair_on_real_dom_cubes_returns_in_bounds_keypoints(self):
         left_key_file, right_key_file, summary = match_dom_pair(

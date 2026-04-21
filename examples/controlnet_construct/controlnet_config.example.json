@@ -4,5 +4,8 @@
   "UserName": "gengxun",
   "Description": "Example config for DOM matching ControlNet generation.",
   "PointIdPrefix": "P",
-  "PairId": "S1"
+  "PairId": "S1",
+  "ImageMatch": {
+    "valid_pixel_percent_threshold": 0.05
+  }
 }

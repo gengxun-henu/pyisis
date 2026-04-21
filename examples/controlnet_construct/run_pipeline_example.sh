@@ -8,6 +8,7 @@ DEFAULT_CONFIG_RELATIVE="examples/controlnet_construct/controlnet_config.example
 DEFAULT_WORK_DIR_RELATIVE="work"
 DEFAULT_PAIR_ID_PREFIX="S"
 DEFAULT_PAIR_ID_START="1"
+DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD=""
 
 log() {
   printf '[controlnet-pipeline] %s\n' "$*"
@@ -42,10 +43,15 @@ Options:
   --python PATH                   Python interpreter to use. Default: $PYTHON_EXECUTABLE or python
   --pair-id-prefix PREFIX         Batch pair-id prefix. Default: S
   --pair-id-start N               Batch pair-id starting index. Default: 1
+  --valid-pixel-percent-threshold VALUE
+                                 Forwarded to image_match.py. If omitted, this script
+                                 falls back to config JSON field ImageMatch.valid_pixel_percent_threshold
+                                 when present; otherwise image_match.py keeps its own default (0.0).
   --merged-net PATH               Final merged ControlNet output path. Default: <work-dir>/merge/dom_matching_merged.net
   --merge-script PATH             Generated merge shell path. Default: <work-dir>/merge/merge_all_controlnets.sh
   --merge-log PATH                cnetmerge log path. Default: <work-dir>/merge/cnetmerge.log
   --pair-list PATH                Optional explicit cnetmerge input list path. Default: auto-named by controlnet_merge.py
+  --timing-json PATH              Structured JSON timing output. Default: <work-dir>/reports/pipeline_timing.json
   --network-id VALUE              NETWORKID passed to controlnet_merge.py. Default: read from config JSON
   --description TEXT              Description passed to controlnet_merge.py. Default: Merged DOM matching ControlNet
   --cnetmerge PATH                cnetmerge executable path written into the generated merge shell. Default: $CNETMERGE_EXECUTABLE or cnetmerge
@@ -65,6 +71,137 @@ require_file() {
 
 require_command() {
   command -v "$1" >/dev/null 2>&1 || die "required command not found: $1"
+}
+
+timestamp_utc() {
+  date -u +"%Y-%m-%dT%H:%M:%SZ"
+}
+
+initialize_timing_json() {
+  "$PYTHON_EXECUTABLE" - "$TIMING_JSON_PATH" "$REPO_ROOT" "$WORK_DIR" "$PYTHON_EXECUTABLE" "$(timestamp_utc)" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+timing_path = Path(sys.argv[1])
+payload = {
+    "pipeline": {
+        "repo_root": sys.argv[2],
+        "work_dir": sys.argv[3],
+        "python_executable": sys.argv[4],
+        "started_at": sys.argv[5],
+        "status": "running",
+    },
+    "steps": [],
+    "pair_matches": [],
+}
+timing_path.parent.mkdir(parents=True, exist_ok=True)
+timing_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+}
+
+append_timing_json_entry() {
+  "$PYTHON_EXECUTABLE" - "$TIMING_JSON_PATH" "$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+timing_path = Path(sys.argv[1])
+section = sys.argv[2]
+name = sys.argv[3]
+status = sys.argv[4]
+start_epoch = int(sys.argv[5])
+end_epoch = int(sys.argv[6])
+start_iso = sys.argv[7]
+end_iso = sys.argv[8]
+exit_code = int(sys.argv[9])
+
+if timing_path.exists():
+    payload = json.loads(timing_path.read_text(encoding="utf-8"))
+else:
+    payload = {"pipeline": {"status": "running"}, "steps": [], "pair_matches": []}
+
+payload.setdefault(section, []).append(
+    {
+        "name": name,
+        "status": status,
+        "started_at": start_iso,
+        "finished_at": end_iso,
+        "duration_seconds": max(0, end_epoch - start_epoch),
+        "start_epoch": start_epoch,
+        "end_epoch": end_epoch,
+        "exit_code": exit_code,
+    }
+)
+timing_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+}
+
+finalize_timing_json() {
+  "$PYTHON_EXECUTABLE" - "$TIMING_JSON_PATH" "$1" "$(timestamp_utc)" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+timing_path = Path(sys.argv[1])
+status = sys.argv[2]
+finished_at = sys.argv[3]
+
+if not timing_path.exists():
+    raise SystemExit(0)
+
+payload = json.loads(timing_path.read_text(encoding="utf-8"))
+payload.setdefault("pipeline", {})["status"] = status
+payload["pipeline"]["finished_at"] = finished_at
+timing_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+}
+
+run_timed_command() {
+  local section=$1
+  local name=$2
+  shift 2
+
+  local start_epoch
+  local end_epoch
+  local start_iso
+  local end_iso
+  local status
+  local exit_code
+  local duration
+
+  start_epoch=$(date +%s)
+  start_iso=$(timestamp_utc)
+  log "START ${name}"
+
+  if "$@"; then
+    status="success"
+    exit_code=0
+  else
+    exit_code=$?
+    status="failed"
+  fi
+
+  end_epoch=$(date +%s)
+  end_iso=$(timestamp_utc)
+  duration=$((end_epoch - start_epoch))
+  log "END ${name} status=${status} duration=${duration}s"
+  append_timing_json_entry "$section" "$name" "$status" "$start_epoch" "$end_epoch" "$start_iso" "$end_iso" "$exit_code"
+  return "$exit_code"
+}
+
+run_required_timed_step() {
+  local section=$1
+  local name=$2
+  shift 2
+
+  run_timed_command "$section" "$name" "$@"
+  local exit_code=$?
+  if [[ "$exit_code" -ne 0 ]]; then
+    finalize_timing_json "failed"
+    return "$exit_code"
+  fi
+  return 0
 }
 
 resolve_default_dom_list() {
@@ -93,6 +230,41 @@ value = config.get('NetworkId') or config.get('network_id')
 if not value:
     raise SystemExit('missing NetworkId in config JSON')
 print(value)
+PY
+}
+
+extract_valid_pixel_percent_threshold_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+
+candidate_containers = [
+  payload,
+  payload.get('ImageMatch') or {},
+  payload.get('image_match') or {},
+  payload.get('imageMatch') or {},
+]
+candidate_keys = (
+  'valid_pixel_percent_threshold',
+  'validPixelPercentThreshold',
+  'ValidPixelPercentThreshold',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
 PY
 }
 
@@ -133,13 +305,25 @@ run_step_2_image_match_batch() {
     pair_tag="${left_stem}__${right_stem}"
 
     log "  matching pair ${pair_tag}"
-    "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py" \
-      "${dom_by_original[$left]}" \
-      "${dom_by_original[$right]}" \
-      "$DOM_KEYS_DIR/${pair_tag}_A.key" \
-      "$DOM_KEYS_DIR/${pair_tag}_B.key" \
-      --metadata-output "$MATCH_METADATA_DIR/${pair_tag}.json" \
+    local match_args=(
+      "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py"
+      "${dom_by_original[$left]}"
+      "${dom_by_original[$right]}"
+      "$DOM_KEYS_DIR/${pair_tag}_A.key"
+      "$DOM_KEYS_DIR/${pair_tag}_B.key"
+      --metadata-output "$MATCH_METADATA_DIR/${pair_tag}.json"
       --match-visualization-output-dir "$MATCH_VIZ_DIR"
+    )
+
+    if [[ -n "$VALID_PIXEL_PERCENT_THRESHOLD" ]]; then
+      match_args+=(--valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD")
+    fi
+
+    run_timed_command "pair_matches" "image_match:${pair_tag}" "${match_args[@]}"
+    local match_status=$?
+    if [[ "$match_status" -ne 0 ]]; then
+      return "$match_status"
+    fi
 
     pair_count=$((pair_count + 1))
   done < "$IMAGES_OVERLAP_LIST"
@@ -203,11 +387,13 @@ main() {
   local merge_script_input=""
   local merge_log_input=""
   local pair_list_input=""
+  local timing_json_input=""
 
   PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
   CNETMERGE_PATH="${CNETMERGE_EXECUTABLE:-cnetmerge}"
   PAIR_ID_PREFIX="$DEFAULT_PAIR_ID_PREFIX"
   PAIR_ID_START="$DEFAULT_PAIR_ID_START"
+  VALID_PIXEL_PERCENT_THRESHOLD="$DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD"
   NETWORK_ID=""
   MERGE_DESCRIPTION="Merged DOM matching ControlNet"
   SKIP_FINAL_MERGE="0"
@@ -249,6 +435,11 @@ main() {
         PAIR_ID_START=$2
         shift 2
         ;;
+      --valid-pixel-percent-threshold)
+        [[ $# -ge 2 ]] || die "missing value for --valid-pixel-percent-threshold"
+        VALID_PIXEL_PERCENT_THRESHOLD=$2
+        shift 2
+        ;;
       --merged-net)
         [[ $# -ge 2 ]] || die "missing value for --merged-net"
         merged_net_input=$2
@@ -267,6 +458,11 @@ main() {
       --pair-list)
         [[ $# -ge 2 ]] || die "missing value for --pair-list"
         pair_list_input=$2
+        shift 2
+        ;;
+      --timing-json)
+        [[ $# -ge 2 ]] || die "missing value for --timing-json"
+        timing_json_input=$2
         shift 2
         ;;
       --network-id)
@@ -322,6 +518,7 @@ main() {
   MERGE_SCRIPT_PATH="${merge_script_input:-$MERGE_DIR/merge_all_controlnets.sh}"
   MERGE_LOG_PATH="${merge_log_input:-$MERGE_DIR/cnetmerge.log}"
   PAIR_LIST_PATH="$pair_list_input"
+  TIMING_JSON_PATH="${timing_json_input:-$REPORTS_DIR/pipeline_timing.json}"
 
   require_file "$ORIGINAL_LIST"
   require_file "$DOM_LIST"
@@ -332,6 +529,11 @@ main() {
   if [[ -z "$NETWORK_ID" ]]; then
     NETWORK_ID=$(extract_network_id_from_config "$CONFIG_PATH")
   fi
+  if [[ -z "$VALID_PIXEL_PERCENT_THRESHOLD" ]]; then
+    VALID_PIXEL_PERCENT_THRESHOLD=$(extract_valid_pixel_percent_threshold_from_config "$CONFIG_PATH")
+  fi
+
+  initialize_timing_json
 
   log "Repository root: $REPO_ROOT"
   log "Work directory: $WORK_DIR"
@@ -340,12 +542,20 @@ main() {
   log "DOM list: $DOM_LIST"
   log "Config: $CONFIG_PATH"
   log "Network ID: $NETWORK_ID"
+  if [[ -n "$VALID_PIXEL_PERCENT_THRESHOLD" ]]; then
+    log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
+  else
+    log "Valid pixel percent threshold: image_match.py default"
+  fi
   log "cnetmerge executable: $CNETMERGE_PATH"
+  log "Timing JSON: $TIMING_JSON_PATH"
 
-  run_step_1_image_overlap
-  run_step_2_image_match_batch
-  run_step_3_pairwise_controlnets
-  run_step_4_merge
+  run_required_timed_step "steps" "image_overlap" run_step_1_image_overlap
+  run_required_timed_step "steps" "image_match_batch" run_step_2_image_match_batch
+  run_required_timed_step "steps" "pairwise_controlnets" run_step_3_pairwise_controlnets
+  run_required_timed_step "steps" "merge" run_step_4_merge
+
+  finalize_timing_json "success"
 
   log "Pipeline completed"
   log "Key outputs:"
@@ -355,6 +565,7 @@ main() {
   log "  reports: $REPORTS_DIR"
   log "  merge script: $MERGE_SCRIPT_PATH"
   log "  merged net: $MERGED_NET_PATH"
+  log "  timing json: $TIMING_JSON_PATH"
 }
 
 main "$@"

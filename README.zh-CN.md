@@ -284,6 +284,75 @@ python examples/forward_intersection.py \
 
 如果你想直接从构建目录运行该示例，请确保 Python 能看到 `build/python` 下的包，或者先通过 `cmake --install build` 完成安装。
 
+## 示例：DOM matching ControlNet 工作流
+
+仓库中也提供了一套从 DOM 匹配点生成 ISIS 控制网的示例流程，位于：
+
+- `examples/controlnet_construct/`
+- 端到端使用说明：`examples/controlnet_construct/usage.md`
+- 详细需求 / 工作流说明：`examples/controlnet_construct/requirements_dom_matching_controlnet.md`
+- 示例配置：`examples/controlnet_construct/controlnet_config.example.json`
+
+这套流程面向下面这种常见摄影测量链路：
+
+1. 在正射 DOM 上提取并匹配同名点；
+2. 把 DOM 空间 `.key` 回投到原始影像坐标；
+3. 输出单个立体像对的 ISIS `ControlNet`；
+4. 最后再把多个 pairwise `.net` 用 `cnetmerge` 汇总成整体控制网。
+
+如果你想按“`image_overlap.py` → `image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`”的顺序一步一步跑完整流水线，优先查看：`examples/controlnet_construct/usage.md`。
+
+### 单个立体像对
+
+如果你已经为某个立体像对准备好了 DOM 空间 `.key` 文件，可以这样生成单对控制网：
+
+```bash
+python examples/controlnet_construct/controlnet_stereopair.py from-dom \
+	left_pair_A.key \
+	left_pair_B.key \
+	left_dom.cub \
+	right_dom.cub \
+	left_original.cub \
+	right_original.cub \
+	examples/controlnet_construct/controlnet_config.example.json \
+	pair_outputs/left__right.net \
+	--pair-id S1 \
+	--report-path pair_outputs/left__right.summary.json
+```
+
+说明：
+
+- `PointIdPrefix` 来自配置 JSON；
+- `--pair-id S1` 会把控制点 ID 命名空间扩展成类似 `P_S1_00000001`，这样后续多个 pairwise `.net` 再用 `cnetmerge` 合并时，不同立体像对里的 `PointId` 不会意外撞名；
+- 如果不传 `--pair-id`，脚本会回退到配置中的可选 `PairId`；如果两者都没有，则保持兼容旧行为，继续生成 `P00000001` 这种格式。
+
+### 基于 `images_overlap.lis` 的批处理
+
+如果你已经为 `images_overlap.lis` 中的每个立体像对都生成了 DOM 空间 `.key` 文件，那么可以直接批量构建全部 pairwise ControlNet，并自动分配立体像对 ID：
+
+```bash
+python examples/controlnet_construct/controlnet_stereopair.py from-dom-batch \
+	work/images_overlap.lis \
+	work/original_images.lis \
+	work/doms_scaled.lis \
+	work/dom_keys \
+	examples/controlnet_construct/controlnet_config.example.json \
+	work/pair_nets \
+	--report-dir work/reports \
+	--pair-id-prefix S \
+	--pair-id-start 1
+```
+
+在这个 batch 模式下：
+
+- 脚本会按 `images_overlap.lis` 的顺序逐对处理；
+- 它会在 `work/dom_keys/` 中寻找对应的 DOM `.key` 文件，命名约定为 `A__B_A.key` 和 `A__B_B.key`；
+- 它会自动给每个立体像对分配 `S1`、`S2`、`S3`……，因此用户不需要为每一对手工传 `--pair-id`；
+- pairwise `.net` 会写入 `work/pair_nets/`；
+- per-pair JSON sidecar 与 batch summary JSON 会写入 `work/reports/`。
+
+生成的 per-pair 报告中会记录 `pair_id`、`point_id_namespace` 以及示例控制点 ID，后续如果需要排查 `cnetmerge` 输入来源，会比“盯着一堆 `P00000001` 发呆”轻松很多。
+
 ## 单元测试：也是实用的 API 参考
 
 本仓库中的测试不仅用于回归校验，也可作为实际 API 使用方式的参考。

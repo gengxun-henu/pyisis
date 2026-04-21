@@ -284,6 +284,75 @@ python examples/forward_intersection.py \
 
 If you want to run the example directly from the build tree, make sure Python can see the package under `build/python`, or install it first with `cmake --install build`.
 
+## Example: DOM matching ControlNet workflow
+
+The repository also contains a DOM-to-ControlNet example workflow under:
+
+- `examples/controlnet_construct/`
+- end-to-end usage walkthrough: `examples/controlnet_construct/usage.md`
+- detailed requirements / workflow notes: `examples/controlnet_construct/requirements_dom_matching_controlnet.md`
+- example config: `examples/controlnet_construct/controlnet_config.example.json`
+
+This workflow is intended for the common planetary-photogrammetry pattern:
+
+1. match tie points on orthorectified DOMs,
+2. convert DOM-space keypoints back into original-image coordinates,
+3. write a pairwise ISIS `ControlNet`,
+4. later merge many pairwise `.net` files with `cnetmerge`.
+
+If you want to run the full pipeline step by step as `image_overlap.py` → `image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`, start with `examples/controlnet_construct/usage.md`.
+
+### Single stereo pair
+
+If you already have DOM-space `.key` files for one stereo pair, you can build a pairwise ControlNet like this:
+
+```bash
+python examples/controlnet_construct/controlnet_stereopair.py from-dom \
+   left_pair_A.key \
+   left_pair_B.key \
+   left_dom.cub \
+   right_dom.cub \
+   left_original.cub \
+   right_original.cub \
+   examples/controlnet_construct/controlnet_config.example.json \
+   pair_outputs/left__right.net \
+   --pair-id S1 \
+   --report-path pair_outputs/left__right.summary.json
+```
+
+Notes:
+
+- `PointIdPrefix` comes from the config JSON.
+- `--pair-id S1` adds a pair-specific namespace such as `P_S1_00000001`, which helps avoid accidental `PointId` collisions when multiple pairwise nets are later merged with `cnetmerge`.
+- If you omit `--pair-id`, the script falls back to the config's optional `PairId`; if neither is set, it keeps the backward-compatible `P00000001`-style behavior.
+
+### Batch mode across `images_overlap.lis`
+
+If you already produced DOM-space key files for every overlap pair listed in `images_overlap.lis`, you can batch-build all pairwise ControlNets with automatic stereo-pair IDs:
+
+```bash
+python examples/controlnet_construct/controlnet_stereopair.py from-dom-batch \
+   work/images_overlap.lis \
+   work/original_images.lis \
+   work/doms_scaled.lis \
+   work/dom_keys \
+   examples/controlnet_construct/controlnet_config.example.json \
+   work/pair_nets \
+   --report-dir work/reports \
+   --pair-id-prefix S \
+   --pair-id-start 1
+```
+
+In this mode:
+
+- the script reads `images_overlap.lis` and processes every stereo pair in order;
+- it expects per-pair DOM key files inside `work/dom_keys/` using names like `A__B_A.key` and `A__B_B.key`;
+- it automatically assigns `S1`, `S2`, `S3`, ... to successive pairs, so users do not need to pass `--pair-id` manually for each pair;
+- pairwise `.net` files are written into `work/pair_nets/`;
+- per-pair JSON sidecars and the batch summary JSON are written into `work/reports/`.
+
+The resulting per-pair reports record the generated `pair_id`, `point_id_namespace`, and a sample point ID so downstream `cnetmerge` debugging is less of a treasure hunt.
+
 ## Unit tests: also useful as usage references
 
 The tests in this repository are both regression checks and practical API usage references.

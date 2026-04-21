@@ -158,6 +158,39 @@ def make_simple_cylindrical_label(
     return pvl
 
 
+def attach_dom_like_projection_mapping(
+    cube,
+    *,
+    pixel_resolution=1.0,
+    upper_left_x=0.0,
+    upper_left_y=None,
+):
+    """Attach a minimal writable DOM-like Mapping group to a synthetic cube.
+
+    This is intentionally lightweight for unit tests that need `cube.projection()` to
+    work without depending on external projected DOM fixtures.
+    """
+    if upper_left_y is None:
+        upper_left_y = float(cube.line_count()) * float(pixel_resolution)
+
+    mapping = ip.PvlGroup("Mapping")
+    mapping.add_keyword(ip.PvlKeyword("EquatorialRadius", "3396190.0"))
+    mapping.add_keyword(ip.PvlKeyword("PolarRadius", "3376200.0"))
+    mapping.add_keyword(ip.PvlKeyword("LatitudeType", "Planetocentric"))
+    mapping.add_keyword(ip.PvlKeyword("LongitudeDirection", "PositiveEast"))
+    mapping.add_keyword(ip.PvlKeyword("LongitudeDomain", "360"))
+    mapping.add_keyword(ip.PvlKeyword("ProjectionName", "SimpleCylindrical"))
+    mapping.add_keyword(ip.PvlKeyword("CenterLongitude", "0.0"))
+    mapping.add_keyword(ip.PvlKeyword("MinimumLatitude", "-90.0"))
+    mapping.add_keyword(ip.PvlKeyword("MaximumLatitude", "90.0"))
+    mapping.add_keyword(ip.PvlKeyword("MinimumLongitude", "0.0"))
+    mapping.add_keyword(ip.PvlKeyword("MaximumLongitude", "360.0"))
+    mapping.add_keyword(ip.PvlKeyword("PixelResolution", str(float(pixel_resolution))))
+    mapping.add_keyword(ip.PvlKeyword("UpperLeftCornerX", str(float(upper_left_x))))
+    mapping.add_keyword(ip.PvlKeyword("UpperLeftCornerY", str(float(upper_left_y))))
+    cube.put_group(mapping)
+
+
 def make_equirectangular_label(
     include_center_longitude=True,
     include_center_latitude=True,

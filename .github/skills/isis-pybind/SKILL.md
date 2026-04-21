@@ -108,6 +108,7 @@ See [binding workflow reference](./references/binding-workflow.md).
 - Prefer focused `unittest` coverage in `tests/unitTest/`.
 - Keep `tests/smoke_import.py` fast and broad; only add minimum symbol or integration checks there.
 - Reuse `tests/unitTest/_unit_test_support.py` rather than duplicating fixtures.
+- When a unit test imports `_unit_test_support.py`, follow `../../instructions/pybind-testing.instructions.md` so the test also works from repo-root `python -m unittest tests.unitTest...` execution.
 - See [testing and validation reference](./references/testing.md) for detailed validation sequencing and reporting expectations.
 
 ### 4. Validate with the correct environment

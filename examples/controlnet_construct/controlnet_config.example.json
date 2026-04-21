@@ -1,0 +1,8 @@
+{
+  "NetworkId": "dom_matching_example",
+  "TargetName": "Moon",
+  "UserName": "gengxun",
+  "Description": "Example config for DOM matching ControlNet generation.",
+  "PointIdPrefix": "P",
+  "PairId": "S1"
+}

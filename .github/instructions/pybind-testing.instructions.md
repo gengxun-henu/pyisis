@@ -21,7 +21,19 @@ All paths below are relative to the repository root.
 - Keep broad module-import and cross-module sanity coverage in `tests/smoke_import.py`.
 - Put detailed behavior checks in small focused `unittest` files under `tests/unitTest/`.
 - Prefer extending `_unit_test_support.py` for shared helpers, constants, temporary files, and common label builders instead of duplicating setup logic across tests.
+- When a `tests/unitTest/*.py` file imports `_unit_test_support.py`, make that import work for both direct file execution and repo-root module execution such as `python -m unittest tests.unitTest.some_test -v`.
+- Because `tests/` and `tests/unitTest/` are not currently package directories with `__init__.py`, do not assume a bare sibling import of `_unit_test_support` will succeed from the repository root.
+- Prefer a lightweight caller-side fallback: compute `Path(__file__).resolve().parent`, insert that directory into `sys.path` if needed, and then import `_unit_test_support`.
 - When adding tests for a new binding, follow the existing `distance_unit_test.py` style where practical: constructor coverage, accessors, mutators, enums, exceptions, and copy or conversion semantics.
+
+### Importing `_unit_test_support.py`
+
+- Use this compatibility pattern when a unit test needs `_unit_test_support.py` and should support both launch modes:
+  - direct execution of the test file
+  - execution from the repo root with `python -m unittest tests.unitTest.some_test -v`
+- A small `try`/`except ModuleNotFoundError` fallback is preferred when the file would otherwise import `_unit_test_support` directly.
+- Keep this bootstrap local to the test file; do not broaden it into unrelated global path hacks.
+- Existing `controlnet_construct_*_unit_test.py` files that insert `Path(__file__).resolve().parent` into `sys.path` are valid reference patterns.
 
 For most value-like and utility bindings, prioritize constructor coverage, core accessors or mutators, exception translation, and Python-facing helpers such as `__repr__`, `to_string`, or static helpers. If the exposed Python API differs from the original C++ intuition, test the actual Python signature instead of assuming a copy constructor or overload exists.
 

@@ -302,6 +302,19 @@ This workflow is intended for the common planetary-photogrammetry pattern:
 
 If you want to run the full pipeline step by step as `image_overlap.py` → `image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`, start with `examples/controlnet_construct/usage.md`.
 
+For the DOM matching stage, it is usually better to set `valid_pixel_percent_threshold` explicitly instead of relying on the raw default. A practical starting point is `0.05`, which skips any tile whose valid-pixel ratio is below $5\%$. The sample config at `examples/controlnet_construct/controlnet_config.example.json` now includes that recommendation under `ImageMatch.valid_pixel_percent_threshold`, and `examples/controlnet_construct/run_pipeline_example.sh` will read it automatically. If you call `image_match.py` yourself, pass `--valid-pixel-percent-threshold 0.05` directly.
+
+If you want a copy-ready batch template instead of assembling the parameters yourself, `examples/controlnet_construct/usage.md` now includes a more visible “recommended parameter template” section with:
+
+- a ready-to-run `run_pipeline_example.sh` template,
+- a manual batch `image_match.py` template,
+- quick tuning guidance for `0.05`, `0.03`, and `0.1`.
+
+If you prefer a shorter standalone entry point, you can now also jump directly to:
+
+- `examples/controlnet_construct/recommended_batch_templates.md`
+- `examples/controlnet_construct/run_image_match_batch_example.sh`
+
 ### Single stereo pair
 
 If you already have DOM-space `.key` files for one stereo pair, you can build a pairwise ControlNet like this:

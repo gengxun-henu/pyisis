@@ -29,13 +29,13 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from controlnet_construct.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from controlnet_construct.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
-    from controlnet_construct.preprocess import StretchStats, build_invalid_mask, stretch_to_byte
+    from controlnet_construct.preprocess import StretchStats, summarize_valid_pixels, stretch_to_byte
     from controlnet_construct.runtime import bootstrap_runtime_environment
     from controlnet_construct.tiling import TileWindow, generate_tiles, requires_tiling
 else:
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from .keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
-    from .preprocess import StretchStats, build_invalid_mask, stretch_to_byte
+    from .preprocess import StretchStats, summarize_valid_pixels, stretch_to_byte
     from .runtime import bootstrap_runtime_environment
     from .tiling import TileWindow, generate_tiles, requires_tiling
 
@@ -57,6 +57,8 @@ class TileMatchStats:
     right_start_y: int
     left_valid_pixel_count: int
     right_valid_pixel_count: int
+    left_valid_pixel_ratio: float
+    right_valid_pixel_ratio: float
     left_feature_count: int
     right_feature_count: int
     match_count: int
@@ -75,6 +77,21 @@ def _normalize_ransac_mode(mode: str) -> str:
     if normalized not in {"strict", "loose"}:
         raise ValueError(f"Unsupported RANSAC mode {mode!r}. Expected 'strict' or 'loose'.")
     return normalized
+
+
+def _validate_valid_pixel_percent_threshold(threshold: float) -> float:
+    if not (0.0 <= float(threshold) <= 1.0):
+        raise ValueError(
+            "valid_pixel_percent_threshold must be within [0.0, 1.0]."
+        )
+    return float(threshold)
+
+
+def _parse_valid_pixel_percent_threshold(value: str) -> float:
+    try:
+        return _validate_valid_pixel_percent_threshold(float(value))
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
 def _full_image_window(image_width: int, image_height: int) -> TileWindow:
@@ -149,24 +166,26 @@ def _prepare_image_for_sift(
     upper_percent: float,
     invalid_values: tuple[float, ...],
     special_pixel_abs_threshold: float,
+    invalid_mask: np.ndarray | None = None,
 ) -> tuple[np.ndarray, np.ndarray, StretchStats]:
-    invalid_mask = build_invalid_mask(
+    resolved_invalid_mask, valid_pixel_stats = summarize_valid_pixels(
         values,
         invalid_values=invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
+        invalid_mask=invalid_mask,
     )
-    if invalid_mask.all():
+    if resolved_invalid_mask.all():
         stretched = np.zeros(values.shape, dtype=np.uint8)
         stretch_stats = StretchStats(
             minimum_value=0.0,
             maximum_value=0.0,
-            valid_pixel_count=0,
-            invalid_pixel_count=int(invalid_mask.size),
+            valid_pixel_count=valid_pixel_stats.valid_pixel_count,
+            invalid_pixel_count=valid_pixel_stats.invalid_pixel_count,
         )
         sift_mask = np.zeros(values.shape, dtype=np.uint8)
         return stretched, sift_mask, stretch_stats
 
-    stretched, invalid_mask, stretch_stats = stretch_to_byte(
+    stretched, resolved_invalid_mask, stretch_stats = stretch_to_byte(
         values,
         minimum_value=minimum_value,
         maximum_value=maximum_value,
@@ -174,8 +193,9 @@ def _prepare_image_for_sift(
         upper_percent=upper_percent,
         invalid_values=invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
+        invalid_mask=resolved_invalid_mask,
     )
-    sift_mask = np.where(invalid_mask, 0, 255).astype(np.uint8)
+    sift_mask = np.where(resolved_invalid_mask, 0, 255).astype(np.uint8)
     return stretched, sift_mask, stretch_stats
 
 
@@ -277,6 +297,7 @@ def _read_cube_as_stretched_byte(
     cube = ip.Cube()
     cube.open(str(cube_path), "r")
     try:
+        resolved_invalid_values = _resolved_invalid_values_for_cube(cube, invalid_values)
         full_window = _full_image_window(cube.sample_count(), cube.line_count())
         values = _read_cube_window(cube, full_window, band=band)
     finally:
@@ -289,10 +310,21 @@ def _read_cube_as_stretched_byte(
         maximum_value=maximum_value,
         lower_percent=lower_percent,
         upper_percent=upper_percent,
-        invalid_values=invalid_values,
+        invalid_values=resolved_invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
     )
     return stretched
+
+
+def _resolved_invalid_values_for_cube(cube: ip.Cube, invalid_values: tuple[float, ...]) -> tuple[float, ...]:
+    resolved_invalid_values = list(invalid_values)
+    zero_invalid_pixel_types = {
+        getattr(ip.PixelType, "UnsignedByte", None),
+        getattr(ip.PixelType, "SignedByte", None),
+    }
+    if cube.pixel_type() in zero_invalid_pixel_types and 0.0 not in resolved_invalid_values:
+        resolved_invalid_values.append(0.0)
+    return tuple(resolved_invalid_values)
 
 
 def default_match_visualization_path(
@@ -602,6 +634,7 @@ def match_dom_pair(
     invalid_values: tuple[float, ...] = (),
     special_pixel_abs_threshold: float = 1.0e300,
     min_valid_pixels: int = 64,
+    valid_pixel_percent_threshold: float = 0.0,
     ratio_test: float = 0.75,
     max_features: int | None = None,
     sift_octave_layers: int = 3,
@@ -617,10 +650,13 @@ def match_dom_pair(
     right_cube.open(str(right_dom_path), "r")
 
     try:
+        resolved_valid_pixel_percent_threshold = _validate_valid_pixel_percent_threshold(valid_pixel_percent_threshold)
         left_width = left_cube.sample_count()
         left_height = left_cube.line_count()
         right_width = right_cube.sample_count()
         right_height = right_cube.line_count()
+        left_invalid_values = _resolved_invalid_values_for_cube(left_cube, invalid_values)
+        right_invalid_values = _resolved_invalid_values_for_cube(right_cube, invalid_values)
 
         if band <= 0 or band > min(left_cube.band_count(), right_cube.band_count()):
             raise ValueError(f"Band {band} is out of range for the requested DOM cubes.")
@@ -659,14 +695,52 @@ def match_dom_pair(
                 left_values = _read_cube_window(left_cube, left_window, band=band)
                 right_values = _read_cube_window(right_cube, right_window, band=band)
 
+                left_invalid_mask, left_valid_pixel_stats = summarize_valid_pixels(
+                    left_values,
+                    invalid_values=left_invalid_values,
+                    special_pixel_abs_threshold=special_pixel_abs_threshold,
+                )
+                right_invalid_mask, right_valid_pixel_stats = summarize_valid_pixels(
+                    right_values,
+                    invalid_values=right_invalid_values,
+                    special_pixel_abs_threshold=special_pixel_abs_threshold,
+                )
+
+                if (
+                    left_valid_pixel_stats.valid_pixel_ratio < resolved_valid_pixel_percent_threshold
+                    or right_valid_pixel_stats.valid_pixel_ratio < resolved_valid_pixel_percent_threshold
+                ):
+                    tile_summaries.append(
+                        TileMatchStats(
+                            local_start_x=local_window.start_x,
+                            local_start_y=local_window.start_y,
+                            width=local_window.width,
+                            height=local_window.height,
+                            left_start_x=left_window.start_x,
+                            left_start_y=left_window.start_y,
+                            right_start_x=right_window.start_x,
+                            right_start_y=right_window.start_y,
+                            left_valid_pixel_count=left_valid_pixel_stats.valid_pixel_count,
+                            right_valid_pixel_count=right_valid_pixel_stats.valid_pixel_count,
+                            left_valid_pixel_ratio=left_valid_pixel_stats.valid_pixel_ratio,
+                            right_valid_pixel_ratio=right_valid_pixel_stats.valid_pixel_ratio,
+                            left_feature_count=0,
+                            right_feature_count=0,
+                            match_count=0,
+                            status="skipped_valid_pixel_ratio_below_threshold",
+                        )
+                    )
+                    continue
+
                 left_image, left_mask, left_stats = _prepare_image_for_sift(
                     left_values,
                     minimum_value=minimum_value,
                     maximum_value=maximum_value,
                     lower_percent=lower_percent,
                     upper_percent=upper_percent,
-                    invalid_values=invalid_values,
+                    invalid_values=left_invalid_values,
                     special_pixel_abs_threshold=special_pixel_abs_threshold,
+                    invalid_mask=left_invalid_mask,
                 )
                 right_image, right_mask, right_stats = _prepare_image_for_sift(
                     right_values,
@@ -674,8 +748,9 @@ def match_dom_pair(
                     maximum_value=maximum_value,
                     lower_percent=lower_percent,
                     upper_percent=upper_percent,
-                    invalid_values=invalid_values,
+                    invalid_values=right_invalid_values,
                     special_pixel_abs_threshold=special_pixel_abs_threshold,
+                    invalid_mask=right_invalid_mask,
                 )
 
                 if left_stats.valid_pixel_count < min_valid_pixels or right_stats.valid_pixel_count < min_valid_pixels:
@@ -691,6 +766,8 @@ def match_dom_pair(
                             right_start_y=right_window.start_y,
                             left_valid_pixel_count=left_stats.valid_pixel_count,
                             right_valid_pixel_count=right_stats.valid_pixel_count,
+                            left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+                            right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
                             left_feature_count=0,
                             right_feature_count=0,
                             match_count=0,
@@ -725,6 +802,8 @@ def match_dom_pair(
                             right_start_y=right_window.start_y,
                             left_valid_pixel_count=left_stats.valid_pixel_count,
                             right_valid_pixel_count=right_stats.valid_pixel_count,
+                            left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+                            right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
                             left_feature_count=len(left_keypoints),
                             right_feature_count=len(right_keypoints),
                             match_count=0,
@@ -746,6 +825,8 @@ def match_dom_pair(
                             right_start_y=right_window.start_y,
                             left_valid_pixel_count=left_stats.valid_pixel_count,
                             right_valid_pixel_count=right_stats.valid_pixel_count,
+                            left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+                            right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
                             left_feature_count=len(left_keypoints),
                             right_feature_count=len(right_keypoints),
                             match_count=0,
@@ -770,6 +851,8 @@ def match_dom_pair(
                         right_start_y=right_window.start_y,
                         left_valid_pixel_count=left_stats.valid_pixel_count,
                         right_valid_pixel_count=right_stats.valid_pixel_count,
+                        left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+                        right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
                         left_feature_count=len(left_keypoints),
                         right_feature_count=len(right_keypoints),
                         match_count=len(filtered_matches),
@@ -785,6 +868,8 @@ def match_dom_pair(
             "left_dom": str(left_dom_path),
             "right_dom": str(right_dom_path),
             "band": band,
+            "min_valid_pixels": min_valid_pixels,
+            "valid_pixel_percent_threshold": resolved_valid_pixel_percent_threshold,
             "ratio_test": ratio_test,
             "status": preparation.status if preparation.status != "ready" else ("matched" if left_points else "matched_no_points"),
             "reason": preparation.reason,
@@ -890,6 +975,7 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--invalid-value", action="append", default=[], type=float, help="Additional invalid pixel sentinel. Repeat for multiple values.")
     parser.add_argument("--special-pixel-abs-threshold", type=float, default=1.0e300, help="Absolute-value threshold used to treat extreme ISIS special pixels as invalid.")
     parser.add_argument("--min-valid-pixels", type=int, default=64, help="Minimum number of valid pixels required before attempting SIFT on a tile.")
+    parser.add_argument("--valid-pixel-percent-threshold", type=_parse_valid_pixel_percent_threshold, default=0.0, help="Minimum valid-pixel ratio required before attempting SIFT on a tile. Must be within [0.0, 1.0].")
     parser.add_argument("--ratio-test", type=float, default=0.75, help="Lowe ratio-test threshold used for descriptor filtering.")
     parser.add_argument("--max-features", type=int, default=None, help="Optional maximum number of SIFT features per tile.")
     parser.add_argument("--sift-octave-layers", type=int, default=3, help="Number of octave layers used by the OpenCV SIFT detector.")
@@ -928,6 +1014,7 @@ def main() -> None:
         invalid_values=tuple(args.invalid_value),
         special_pixel_abs_threshold=args.special_pixel_abs_threshold,
         min_valid_pixels=args.min_valid_pixels,
+        valid_pixel_percent_threshold=args.valid_pixel_percent_threshold,
         ratio_test=args.ratio_test,
         max_features=args.max_features,
         sift_octave_layers=args.sift_octave_layers,

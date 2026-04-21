@@ -34,3 +34,39 @@ Object = cnetmerge
 End_Object
 
 
+Object = cnetmerge
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2012-04-17
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-21T19:55:08
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Merges multiple Control Networks into one"
+
+  Group = UserParameters
+    INPUTTYPE          = list
+    CLIST              = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/merge/merge_all_controlnets.lis
+    BASE               = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/pair_nets/REDUCED_M104311715LE.echo.c-
+                         al__REDUCED_M104311715RE.echo.cal.net
+    ONET               = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/merge/dom_matching_merged.net
+    NETWORKID          = dom_matching_example
+    DESCRIPTION        = "Merged DOM matching ControlNet"
+    LOG                = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2//merge/cnetmerge.log
+    DUPLICATEPOINTS    = merge
+    OVERWRITEPOINTS    = False
+    OVERWRITEMEASURES  = False
+    OVERWRITEREFERENCE = False
+    OVERWRITEMISSING   = False
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:47.3
+    CpuTime     = 00:00:47.2
+  End_Group
+End_Object
+
+

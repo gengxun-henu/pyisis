@@ -1,0 +1,52 @@
+{
+  "test_module": "/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/tests/unitTest/controlnet_construct_dom2ori_unit_test.py",
+  "generated_at": "2026-04-21T18:42:23",
+  "report_path": "/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/tests/unitTest/controlnet_construct_dom2ori_unit_test_20260421T184223.json",
+  "environment": {
+    "ISIS_PYBIND_DOM2ORI_REAL_DOM_CUBE": null,
+    "ISIS_PYBIND_DOM2ORI_REAL_ORIGINAL_CUBE": null,
+    "ISIS_PYBIND_DOM2ORI_REAL_DOM_SAMPLE": null,
+    "ISIS_PYBIND_DOM2ORI_REAL_DOM_LINE": null,
+    "ISIS_PYBIND_DOM2ORI_UNIT_TEST_REPORT_JSON": null
+  },
+  "tests": {
+    "test_camera_ground_to_dom_projection_and_back_with_shape_radius": {
+      "status": "passed",
+      "recorded_at": "2026-04-21T18:42:23",
+      "camera_cube": "/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/tests/data/mosrange/EN0108828322M_iof.cub",
+      "original_image": {
+        "sample": 512.0,
+        "line": 512.0
+      },
+      "ground": {
+        "latitude": -15.260663718130933,
+        "longitude": 140.41008503563984
+      },
+      "dom_projection": {
+        "map_x": 5979508.6199802095,
+        "map_y": -649891.1401273002,
+        "sample": 20.5,
+        "line": 30.5
+      },
+      "radius_meters": 2440000.0,
+      "reprojected_camera": {
+        "sample": 511.9999999999854,
+        "line": 511.9999999999965
+      }
+    },
+    "test_real_lro_dom2ori_core_function_with_temporary_key_file": {
+      "status": "skipped",
+      "recorded_at": "2026-04-21T18:42:23",
+      "reason": "Real LRO DOM/original cube test data are unavailable. Configure ISIS_PYBIND_DOM2ORI_REAL_DOM_CUBE and ISIS_PYBIND_DOM2ORI_REAL_ORIGINAL_CUBE if needed.",
+      "dom_cube": "/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871RE.cub",
+      "original_cube": "/media/gengxun/Elements/data/lro/test_controlnet_python/REDUCED_M104318871RE.echo.cal.cub"
+    },
+    "test_real_lro_dom_and_original_cube_round_trip_with_configurable_paths": {
+      "status": "skipped",
+      "recorded_at": "2026-04-21T18:42:23",
+      "reason": "Real LRO DOM/original cube test data are unavailable. Configure ISIS_PYBIND_DOM2ORI_REAL_DOM_CUBE and ISIS_PYBIND_DOM2ORI_REAL_ORIGINAL_CUBE if needed.",
+      "dom_cube": "/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871RE.cub",
+      "original_cube": "/media/gengxun/Elements/data/lro/test_controlnet_python/REDUCED_M104318871RE.echo.cal.cub"
+    }
+  }
+}

@@ -11,11 +11,29 @@ import numpy as np
 
 
 @dataclass(frozen=True, slots=True)
+class ValidPixelStats:
+    valid_pixel_count: int
+    invalid_pixel_count: int
+    total_pixel_count: int
+    valid_pixel_ratio: float
+
+
+@dataclass(frozen=True, slots=True)
 class StretchStats:
     minimum_value: float
     maximum_value: float
     valid_pixel_count: int
     invalid_pixel_count: int
+
+    @property
+    def total_pixel_count(self) -> int:
+        return self.valid_pixel_count + self.invalid_pixel_count
+
+    @property
+    def valid_pixel_ratio(self) -> float:
+        if self.total_pixel_count <= 0:
+            return 0.0
+        return float(self.valid_pixel_count) / float(self.total_pixel_count)
 
 
 def build_invalid_mask(
@@ -39,6 +57,36 @@ def build_invalid_mask(
         mask |= array == invalid_value
 
     return mask
+
+
+def summarize_valid_pixels(
+    values,
+    *,
+    invalid_values: tuple[float, ...] = (),
+    special_pixel_abs_threshold: float = 1.0e300,
+    invalid_mask: np.ndarray | None = None,
+) -> tuple[np.ndarray, ValidPixelStats]:
+    """Return the invalid-pixel mask plus valid/invalid count and ratio summary."""
+    array = np.asarray(values)
+    resolved_invalid_mask = (
+        build_invalid_mask(
+            array,
+            invalid_values=invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+        )
+        if invalid_mask is None
+        else np.asarray(invalid_mask, dtype=bool)
+    )
+    total_pixel_count = int(resolved_invalid_mask.size)
+    invalid_pixel_count = int(resolved_invalid_mask.sum())
+    valid_pixel_count = total_pixel_count - invalid_pixel_count
+    valid_pixel_ratio = 0.0 if total_pixel_count <= 0 else float(valid_pixel_count) / float(total_pixel_count)
+    return resolved_invalid_mask, ValidPixelStats(
+        valid_pixel_count=valid_pixel_count,
+        invalid_pixel_count=invalid_pixel_count,
+        total_pixel_count=total_pixel_count,
+        valid_pixel_ratio=valid_pixel_ratio,
+    )
 
 
 def _resolve_stretch_bounds(
@@ -80,20 +128,23 @@ def stretch_to_byte(
     upper_percent: float = 99.5,
     invalid_values: tuple[float, ...] = (),
     special_pixel_abs_threshold: float = 1.0e300,
+    invalid_mask: np.ndarray | None = None,
 ) -> tuple[np.ndarray, np.ndarray, StretchStats]:
     """将数值数组拉伸到 uint8 灰度范围，同时保留无效像素掩膜。
 
     Stretch numeric values to uint8 while preserving an invalid-pixel mask.
     """
     array = np.asarray(values, dtype=np.float64)
-    invalid_mask = build_invalid_mask(
+    resolved_invalid_mask = build_invalid_mask(
         array,
         invalid_values=invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
     )
+    if invalid_mask is not None:
+        resolved_invalid_mask = np.asarray(invalid_mask, dtype=bool)
     min_value, max_value = _resolve_stretch_bounds(
         array,
-        invalid_mask=invalid_mask,
+        invalid_mask=resolved_invalid_mask,
         minimum_value=minimum_value,
         maximum_value=maximum_value,
         lower_percent=lower_percent,
@@ -102,13 +153,13 @@ def stretch_to_byte(
 
     clipped = np.clip(array, min_value, max_value)
     scaled = (clipped - min_value) / (max_value - min_value) * 255.0
-    scaled = np.where(invalid_mask, 0.0, scaled)
+    scaled = np.where(resolved_invalid_mask, 0.0, scaled)
     stretched = np.rint(scaled).astype(np.uint8)
 
     stats = StretchStats(
         minimum_value=min_value,
         maximum_value=max_value,
-        valid_pixel_count=int((~invalid_mask).sum()),
-        invalid_pixel_count=int(invalid_mask.sum()),
+        valid_pixel_count=int((~resolved_invalid_mask).sum()),
+        invalid_pixel_count=int(resolved_invalid_mask.sum()),
     )
-    return stretched, invalid_mask, stats
+    return stretched, resolved_invalid_mask, stats

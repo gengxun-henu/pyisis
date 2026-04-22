@@ -45,6 +45,8 @@ Options:
   --metadata-dir PATH             Metadata JSON output directory. Default: <work-dir>/match_metadata
   --match-viz-dir PATH            Match visualization PNG directory. Default: <work-dir>/match_viz
   --python PATH                   Python interpreter to use. Default: $PYTHON_EXECUTABLE or python
+  --use_parallel_cpu              Forward explicit CPU tile parallelism enable flag to image_match.py (default behavior)
+  --no-parallel-cpu               Disable CPU tile parallelism in image_match.py and force serial tile matching
   --valid-pixel-percent-threshold VALUE
                                  Minimum valid-pixel ratio forwarded to image_match.py.
                                  Default: 0.05 unless omitted and resolved from --config.
@@ -136,6 +138,7 @@ main() {
   local metadata_dir_input=""
   local match_viz_dir_input=""
   local skip_existing="0"
+  local use_parallel_cpu="1"
   local explicit_threshold=""
   local config_threshold=""
   local forwarded_args=()
@@ -188,6 +191,14 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --python"
         PYTHON_EXECUTABLE=$2
         shift 2
+        ;;
+      --use_parallel_cpu|--use-parallel-cpu)
+        use_parallel_cpu="1"
+        shift
+        ;;
+      --no-parallel-cpu|--no_parallel_cpu)
+        use_parallel_cpu="0"
+        shift
         ;;
       --valid-pixel-percent-threshold)
         [[ $# -ge 2 ]] || die "missing value for --valid-pixel-percent-threshold"
@@ -260,6 +271,11 @@ main() {
   log "Metadata dir: $METADATA_DIR"
   log "Match viz dir: $MATCH_VIZ_DIR"
   log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
+  if [[ "$use_parallel_cpu" == "1" ]]; then
+    log "CPU parallel tile matching: enabled"
+  else
+    log "CPU parallel tile matching: disabled"
+  fi
   if [[ ${#forwarded_args[@]} -gt 0 ]]; then
     log "Forwarding extra image_match.py args: ${forwarded_args[*]}"
   fi
@@ -311,6 +327,11 @@ main() {
       --match-visualization-output-dir "$MATCH_VIZ_DIR"
       --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
     )
+    if [[ "$use_parallel_cpu" == "1" ]]; then
+      match_args+=(--use_parallel_cpu)
+    else
+      match_args+=(--no-parallel-cpu)
+    fi
     if [[ ${#forwarded_args[@]} -gt 0 ]]; then
       match_args+=("${forwarded_args[@]}")
     fi

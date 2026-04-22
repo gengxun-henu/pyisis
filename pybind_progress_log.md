@@ -1,5 +1,22 @@
 # Pybind Progress Log
 
+## 2026-04-22
+
+- `Pvl` 台账一致性复核完成：
+  - 复核 `class_bind_methods_details/methods_inventory_summary.csv` 与 `class_bind_methods_details/base_pvl_methods.csv` 后，确认两者在 `Pvl` 的统计数字上已完全一致：`Y=11 / N=0 / Partial=0 / Open Items=0 / Completion=100.00%`。
+  - 进一步比对备注语义后，确认 summary 与 detail 已同时反映三项新增/补齐入口：`set_format_template(...)`、`set_format_template_file(...)`、`validate_pvl(...)`，并保留 `validate_pvl(...)` 的 Python-safe wrapper / 空模板关键字安全语义说明。
+  - 本轮未发现 `methods_inventory_summary.csv` 与 `base_pvl_methods.csv` 之间需要继续同步的统计或备注冲突；仅顺手同步了 `todo_pybind11.csv` 中滞后的 `Pvl` 备注，使外围台账也补上 `set_format_template_file(...)` 与 `validate_pvl(...)` 安全 wrapper 说明。
+
+- 近期 ledger sync 热区二次扫尾完成（`PvlFormat*` / TranslationManager / `ProcessMapMosaic` / 近期 `Bundle*`）：
+  - 复核 `todo_pybind11.csv`、`class_bind_methods_details/methods_inventory_summary.csv` 与对应 detail CSV 后，确认 `PvlFormat`、`PvlFormatPds`、`LabelTranslationManager`、`PvlToPvlTranslationManager`、`PvlToXmlTranslationManager`、`ProcessMapMosaic` 以及本轮抽查的 `BundleSolutionInfo` / `BundleResults` / `BundleLidarControlPoint` 外围备注均已与 summary 保持一致。
+  - 本轮仅发现 `XmlToPvlTranslationManager` 仍有一处轻微滞后：summary/detail 已明确记录 focused 单测覆盖“XML 文件 + 翻译文本输入”场景，而 `todo_pybind11.csv` 仍是较泛的“focused 单测与 smoke 已通过”。
+  - 已将 `todo_pybind11.csv` 中 `XmlToPvlTranslationManager` 的备注同步为更具体的测试覆盖说明；未发现其他同类 `todo` 滞后项。
+
+- 第二批近期类扫尾完成（`QuickFilter` / `OverlapStatistics` / `ProcessPolygons` / `ProcessGroundPolygons` / `GSLUtility`）：
+  - 复核 `todo_pybind11.csv`、`class_bind_methods_details/methods_inventory_summary.csv` 与 5 份 detail CSV 后，确认 `QuickFilter`、`ProcessPolygons`、`ProcessGroundPolygons`、`GSLUtility` 的外围备注已与 summary/detail 保持一致。
+  - 本轮仅发现 `OverlapStatistics` 有一处轻微滞后：summary/detail 已将 2026-04-14 新增绑定明确到 `Start/EndSampleX/Y`、`Start/EndLineX/Y`、`SetMincount/MinCount/IsValid`，而 `todo_pybind11.csv` 仍仅写成“extent 访问器和 mincount/is_valid”。
+  - 已将 `todo_pybind11.csv` 中 `OverlapStatistics` 的备注同步为更具体的方法级说明；未发现该批其他同类 `todo` 滞后项。
+
 ## 2026-04-15
 
 - `PvlGroup.validate_group(...)` safe-wrapper follow-up completed next to the earlier `Pvl.validate_pvl(...)` recovery:

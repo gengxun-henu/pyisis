@@ -9,15 +9,19 @@ Updated: 2026-04-17  Geng Xun exposed additional OpenCV SIFT detector parameters
 Updated: 2026-04-18  Geng Xun added merge-stage homography RANSAC helpers and default `cv2.drawMatches` visualization output for preserved DOM matching diagnostics.
 Updated: 2026-04-18  Geng Xun changed match-visualization default scaling to one-third size and now use area interpolation when downsampling previews.
 Updated: 2026-04-19  Geng Xun moved default match-visualization output into the image-match stage so users get PNG diagnostics by default while still being able to disable them explicitly.
+Updated: 2026-04-22  Geng Xun added default CPU process-pool tile matching with opt-out CLI flags while preserving the existing serial code path and summary diagnostics.
 """
 
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import ProcessPoolExecutor
 from dataclasses import asdict
 from dataclasses import dataclass
 from datetime import datetime
 import json
+import multiprocessing as mp
+import os
 from pathlib import Path
 import sys
 
@@ -70,6 +74,35 @@ class PairedTileWindow:
     local_window: TileWindow
     left_window: TileWindow
     right_window: TileWindow
+
+
+@dataclass(frozen=True, slots=True)
+class TileMatchTask:
+    left_dom_path: str
+    right_dom_path: str
+    band: int
+    paired_window: PairedTileWindow
+    minimum_value: float | None
+    maximum_value: float | None
+    lower_percent: float
+    upper_percent: float
+    invalid_values: tuple[float, ...]
+    special_pixel_abs_threshold: float
+    min_valid_pixels: int
+    valid_pixel_percent_threshold: float
+    ratio_test: float
+    max_features: int | None
+    sift_octave_layers: int
+    sift_contrast_threshold: float
+    sift_edge_threshold: float
+    sift_sigma: float
+
+
+@dataclass(frozen=True, slots=True)
+class TileMatchResult:
+    stats: TileMatchStats
+    left_points: tuple[Keypoint, ...]
+    right_points: tuple[Keypoint, ...]
 
 
 def _normalize_ransac_mode(mode: str) -> str:
@@ -258,6 +291,356 @@ def _match_tile(
             filtered_matches.append(best)
 
     return left_keypoints, right_keypoints, filtered_matches
+
+
+def _match_tile_from_window_values(
+    *,
+    left_values: np.ndarray,
+    right_values: np.ndarray,
+    local_window: TileWindow,
+    left_window: TileWindow,
+    right_window: TileWindow,
+    minimum_value: float | None,
+    maximum_value: float | None,
+    lower_percent: float,
+    upper_percent: float,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    ratio_test: float,
+    max_features: int | None,
+    sift_octave_layers: int,
+    sift_contrast_threshold: float,
+    sift_edge_threshold: float,
+    sift_sigma: float,
+) -> TileMatchResult:
+    left_invalid_mask, left_valid_pixel_stats = summarize_valid_pixels(
+        left_values,
+        invalid_values=left_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+    )
+    right_invalid_mask, right_valid_pixel_stats = summarize_valid_pixels(
+        right_values,
+        invalid_values=right_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+    )
+
+    if (
+        left_valid_pixel_stats.valid_pixel_ratio < valid_pixel_percent_threshold
+        or right_valid_pixel_stats.valid_pixel_ratio < valid_pixel_percent_threshold
+    ):
+        return TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=local_window.start_x,
+                local_start_y=local_window.start_y,
+                width=local_window.width,
+                height=local_window.height,
+                left_start_x=left_window.start_x,
+                left_start_y=left_window.start_y,
+                right_start_x=right_window.start_x,
+                right_start_y=right_window.start_y,
+                left_valid_pixel_count=left_valid_pixel_stats.valid_pixel_count,
+                right_valid_pixel_count=right_valid_pixel_stats.valid_pixel_count,
+                left_valid_pixel_ratio=left_valid_pixel_stats.valid_pixel_ratio,
+                right_valid_pixel_ratio=right_valid_pixel_stats.valid_pixel_ratio,
+                left_feature_count=0,
+                right_feature_count=0,
+                match_count=0,
+                status="skipped_valid_pixel_ratio_below_threshold",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+
+    left_image, left_mask, left_stats = _prepare_image_for_sift(
+        left_values,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=left_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+        invalid_mask=left_invalid_mask,
+    )
+    right_image, right_mask, right_stats = _prepare_image_for_sift(
+        right_values,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=right_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+        invalid_mask=right_invalid_mask,
+    )
+
+    if left_stats.valid_pixel_count < min_valid_pixels or right_stats.valid_pixel_count < min_valid_pixels:
+        return TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=local_window.start_x,
+                local_start_y=local_window.start_y,
+                width=local_window.width,
+                height=local_window.height,
+                left_start_x=left_window.start_x,
+                left_start_y=left_window.start_y,
+                right_start_x=right_window.start_x,
+                right_start_y=right_window.start_y,
+                left_valid_pixel_count=left_stats.valid_pixel_count,
+                right_valid_pixel_count=right_stats.valid_pixel_count,
+                left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+                right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
+                left_feature_count=0,
+                right_feature_count=0,
+                match_count=0,
+                status="skipped_insufficient_valid_pixels",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+
+    left_keypoints, right_keypoints, filtered_matches = _match_tile(
+        left_image,
+        right_image,
+        left_mask=left_mask,
+        right_mask=right_mask,
+        ratio_test=ratio_test,
+        max_features=max_features,
+        sift_octave_layers=sift_octave_layers,
+        sift_contrast_threshold=sift_contrast_threshold,
+        sift_edge_threshold=sift_edge_threshold,
+        sift_sigma=sift_sigma,
+    )
+
+    if not left_keypoints or not right_keypoints:
+        return TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=local_window.start_x,
+                local_start_y=local_window.start_y,
+                width=local_window.width,
+                height=local_window.height,
+                left_start_x=left_window.start_x,
+                left_start_y=left_window.start_y,
+                right_start_x=right_window.start_x,
+                right_start_y=right_window.start_y,
+                left_valid_pixel_count=left_stats.valid_pixel_count,
+                right_valid_pixel_count=right_stats.valid_pixel_count,
+                left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+                right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
+                left_feature_count=len(left_keypoints),
+                right_feature_count=len(right_keypoints),
+                match_count=0,
+                status="skipped_no_features",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+
+    if not filtered_matches:
+        return TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=local_window.start_x,
+                local_start_y=local_window.start_y,
+                width=local_window.width,
+                height=local_window.height,
+                left_start_x=left_window.start_x,
+                left_start_y=left_window.start_y,
+                right_start_x=right_window.start_x,
+                right_start_y=right_window.start_y,
+                left_valid_pixel_count=left_stats.valid_pixel_count,
+                right_valid_pixel_count=right_stats.valid_pixel_count,
+                left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+                right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
+                left_feature_count=len(left_keypoints),
+                right_feature_count=len(right_keypoints),
+                match_count=0,
+                status="skipped_no_matches",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+
+    matched_left_points = tuple(
+        _keypoint_to_isis_coordinates(left_keypoints[match.queryIdx], left_window)
+        for match in filtered_matches
+    )
+    matched_right_points = tuple(
+        _keypoint_to_isis_coordinates(right_keypoints[match.trainIdx], right_window)
+        for match in filtered_matches
+    )
+    return TileMatchResult(
+        stats=TileMatchStats(
+            local_start_x=local_window.start_x,
+            local_start_y=local_window.start_y,
+            width=local_window.width,
+            height=local_window.height,
+            left_start_x=left_window.start_x,
+            left_start_y=left_window.start_y,
+            right_start_x=right_window.start_x,
+            right_start_y=right_window.start_y,
+            left_valid_pixel_count=left_stats.valid_pixel_count,
+            right_valid_pixel_count=right_stats.valid_pixel_count,
+            left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+            right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
+            left_feature_count=len(left_keypoints),
+            right_feature_count=len(right_keypoints),
+            match_count=len(filtered_matches),
+            status="matched",
+        ),
+        left_points=matched_left_points,
+        right_points=matched_right_points,
+    )
+
+
+def _build_tile_match_tasks(
+    windows: list[PairedTileWindow],
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    band: int,
+    minimum_value: float | None,
+    maximum_value: float | None,
+    lower_percent: float,
+    upper_percent: float,
+    invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    ratio_test: float,
+    max_features: int | None,
+    sift_octave_layers: int,
+    sift_contrast_threshold: float,
+    sift_edge_threshold: float,
+    sift_sigma: float,
+) -> list[TileMatchTask]:
+    return [
+        TileMatchTask(
+            left_dom_path=str(left_dom_path),
+            right_dom_path=str(right_dom_path),
+            band=band,
+            paired_window=paired_window,
+            minimum_value=minimum_value,
+            maximum_value=maximum_value,
+            lower_percent=lower_percent,
+            upper_percent=upper_percent,
+            invalid_values=invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+            min_valid_pixels=min_valid_pixels,
+            valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+            ratio_test=ratio_test,
+            max_features=max_features,
+            sift_octave_layers=sift_octave_layers,
+            sift_contrast_threshold=sift_contrast_threshold,
+            sift_edge_threshold=sift_edge_threshold,
+            sift_sigma=sift_sigma,
+        )
+        for paired_window in windows
+    ]
+
+
+def _match_single_paired_window_worker(task: TileMatchTask) -> TileMatchResult:
+    left_cube = ip.Cube()
+    right_cube = ip.Cube()
+    left_cube.open(task.left_dom_path, "r")
+    right_cube.open(task.right_dom_path, "r")
+    try:
+        left_invalid_values = _resolved_invalid_values_for_cube(left_cube, task.invalid_values)
+        right_invalid_values = _resolved_invalid_values_for_cube(right_cube, task.invalid_values)
+        left_values = _read_cube_window(left_cube, task.paired_window.left_window, band=task.band)
+        right_values = _read_cube_window(right_cube, task.paired_window.right_window, band=task.band)
+    finally:
+        if left_cube.is_open():
+            left_cube.close()
+        if right_cube.is_open():
+            right_cube.close()
+
+    return _match_tile_from_window_values(
+        left_values=left_values,
+        right_values=right_values,
+        local_window=task.paired_window.local_window,
+        left_window=task.paired_window.left_window,
+        right_window=task.paired_window.right_window,
+        minimum_value=task.minimum_value,
+        maximum_value=task.maximum_value,
+        lower_percent=task.lower_percent,
+        upper_percent=task.upper_percent,
+        left_invalid_values=left_invalid_values,
+        right_invalid_values=right_invalid_values,
+        special_pixel_abs_threshold=task.special_pixel_abs_threshold,
+        min_valid_pixels=task.min_valid_pixels,
+        valid_pixel_percent_threshold=task.valid_pixel_percent_threshold,
+        ratio_test=task.ratio_test,
+        max_features=task.max_features,
+        sift_octave_layers=task.sift_octave_layers,
+        sift_contrast_threshold=task.sift_contrast_threshold,
+        sift_edge_threshold=task.sift_edge_threshold,
+        sift_sigma=task.sift_sigma,
+    )
+
+
+def _tile_match_process_pool_context() -> mp.context.BaseContext:
+    preferred_context = "fork" if os.name == "posix" else "spawn"
+    return mp.get_context(preferred_context)
+
+
+def _run_parallel_tile_match_tasks(tasks: list[TileMatchTask], *, max_workers: int) -> list[TileMatchResult]:
+    if not tasks:
+        return []
+    with ProcessPoolExecutor(max_workers=max_workers, mp_context=_tile_match_process_pool_context()) as executor:
+        return list(executor.map(_match_single_paired_window_worker, tasks))
+
+
+def _run_serial_tile_match_tasks(
+    windows: list[PairedTileWindow],
+    *,
+    left_cube: ip.Cube,
+    right_cube: ip.Cube,
+    band: int,
+    minimum_value: float | None,
+    maximum_value: float | None,
+    lower_percent: float,
+    upper_percent: float,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    ratio_test: float,
+    max_features: int | None,
+    sift_octave_layers: int,
+    sift_contrast_threshold: float,
+    sift_edge_threshold: float,
+    sift_sigma: float,
+) -> list[TileMatchResult]:
+    tile_results: list[TileMatchResult] = []
+    for paired_window in windows:
+        left_values = _read_cube_window(left_cube, paired_window.left_window, band=band)
+        right_values = _read_cube_window(right_cube, paired_window.right_window, band=band)
+        tile_results.append(
+            _match_tile_from_window_values(
+                left_values=left_values,
+                right_values=right_values,
+                local_window=paired_window.local_window,
+                left_window=paired_window.left_window,
+                right_window=paired_window.right_window,
+                minimum_value=minimum_value,
+                maximum_value=maximum_value,
+                lower_percent=lower_percent,
+                upper_percent=upper_percent,
+                left_invalid_values=left_invalid_values,
+                right_invalid_values=right_invalid_values,
+                special_pixel_abs_threshold=special_pixel_abs_threshold,
+                min_valid_pixels=min_valid_pixels,
+                valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+                ratio_test=ratio_test,
+                max_features=max_features,
+                sift_octave_layers=sift_octave_layers,
+                sift_contrast_threshold=sift_contrast_threshold,
+                sift_edge_threshold=sift_edge_threshold,
+                sift_sigma=sift_sigma,
+            )
+        )
+    return tile_results
 
 
 def _keypoint_to_isis_coordinates(keypoint: cv2.KeyPoint, window: TileWindow) -> Keypoint:
@@ -643,6 +1026,7 @@ def match_dom_pair(
     sift_sigma: float = 1.6,
     crop_expand_pixels: int = 100,
     min_overlap_size: int = 16,
+    use_parallel_cpu: bool = True,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
@@ -671,6 +1055,10 @@ def match_dom_pair(
         left_points: list[Keypoint] = []
         right_points: list[Keypoint] = []
         tile_summaries: list[TileMatchStats] = []
+        parallel_cpu_requested = bool(use_parallel_cpu)
+        parallel_cpu_used = False
+        parallel_cpu_backend = "serial"
+        parallel_cpu_worker_count = 0
 
         if preparation.status == "ready":
             windows = _paired_windows(
@@ -687,178 +1075,87 @@ def match_dom_pair(
                 overlap_y=overlap_y,
             )
 
-            for paired_window in windows:
-                local_window = paired_window.local_window
-                left_window = paired_window.left_window
-                right_window = paired_window.right_window
-
-                left_values = _read_cube_window(left_cube, left_window, band=band)
-                right_values = _read_cube_window(right_cube, right_window, band=band)
-
-                left_invalid_mask, left_valid_pixel_stats = summarize_valid_pixels(
-                    left_values,
-                    invalid_values=left_invalid_values,
-                    special_pixel_abs_threshold=special_pixel_abs_threshold,
-                )
-                right_invalid_mask, right_valid_pixel_stats = summarize_valid_pixels(
-                    right_values,
-                    invalid_values=right_invalid_values,
-                    special_pixel_abs_threshold=special_pixel_abs_threshold,
-                )
-
-                if (
-                    left_valid_pixel_stats.valid_pixel_ratio < resolved_valid_pixel_percent_threshold
-                    or right_valid_pixel_stats.valid_pixel_ratio < resolved_valid_pixel_percent_threshold
-                ):
-                    tile_summaries.append(
-                        TileMatchStats(
-                            local_start_x=local_window.start_x,
-                            local_start_y=local_window.start_y,
-                            width=local_window.width,
-                            height=local_window.height,
-                            left_start_x=left_window.start_x,
-                            left_start_y=left_window.start_y,
-                            right_start_x=right_window.start_x,
-                            right_start_y=right_window.start_y,
-                            left_valid_pixel_count=left_valid_pixel_stats.valid_pixel_count,
-                            right_valid_pixel_count=right_valid_pixel_stats.valid_pixel_count,
-                            left_valid_pixel_ratio=left_valid_pixel_stats.valid_pixel_ratio,
-                            right_valid_pixel_ratio=right_valid_pixel_stats.valid_pixel_ratio,
-                            left_feature_count=0,
-                            right_feature_count=0,
-                            match_count=0,
-                            status="skipped_valid_pixel_ratio_below_threshold",
+            if windows:
+                if parallel_cpu_requested and len(windows) > 1:
+                    candidate_worker_count = min(len(windows), max(1, os.cpu_count() or 1))
+                    if candidate_worker_count > 1:
+                        tile_results = _run_parallel_tile_match_tasks(
+                            _build_tile_match_tasks(
+                                windows,
+                                left_dom_path=left_dom_path,
+                                right_dom_path=right_dom_path,
+                                band=band,
+                                minimum_value=minimum_value,
+                                maximum_value=maximum_value,
+                                lower_percent=lower_percent,
+                                upper_percent=upper_percent,
+                                invalid_values=invalid_values,
+                                special_pixel_abs_threshold=special_pixel_abs_threshold,
+                                min_valid_pixels=min_valid_pixels,
+                                valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                                ratio_test=ratio_test,
+                                max_features=max_features,
+                                sift_octave_layers=sift_octave_layers,
+                                sift_contrast_threshold=sift_contrast_threshold,
+                                sift_edge_threshold=sift_edge_threshold,
+                                sift_sigma=sift_sigma,
+                            ),
+                            max_workers=candidate_worker_count,
                         )
-                    )
-                    continue
-
-                left_image, left_mask, left_stats = _prepare_image_for_sift(
-                    left_values,
-                    minimum_value=minimum_value,
-                    maximum_value=maximum_value,
-                    lower_percent=lower_percent,
-                    upper_percent=upper_percent,
-                    invalid_values=left_invalid_values,
-                    special_pixel_abs_threshold=special_pixel_abs_threshold,
-                    invalid_mask=left_invalid_mask,
-                )
-                right_image, right_mask, right_stats = _prepare_image_for_sift(
-                    right_values,
-                    minimum_value=minimum_value,
-                    maximum_value=maximum_value,
-                    lower_percent=lower_percent,
-                    upper_percent=upper_percent,
-                    invalid_values=right_invalid_values,
-                    special_pixel_abs_threshold=special_pixel_abs_threshold,
-                    invalid_mask=right_invalid_mask,
-                )
-
-                if left_stats.valid_pixel_count < min_valid_pixels or right_stats.valid_pixel_count < min_valid_pixels:
-                    tile_summaries.append(
-                        TileMatchStats(
-                            local_start_x=local_window.start_x,
-                            local_start_y=local_window.start_y,
-                            width=local_window.width,
-                            height=local_window.height,
-                            left_start_x=left_window.start_x,
-                            left_start_y=left_window.start_y,
-                            right_start_x=right_window.start_x,
-                            right_start_y=right_window.start_y,
-                            left_valid_pixel_count=left_stats.valid_pixel_count,
-                            right_valid_pixel_count=right_stats.valid_pixel_count,
-                            left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
-                            right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
-                            left_feature_count=0,
-                            right_feature_count=0,
-                            match_count=0,
-                            status="skipped_insufficient_valid_pixels",
+                        parallel_cpu_used = True
+                        parallel_cpu_backend = "process_pool"
+                        parallel_cpu_worker_count = candidate_worker_count
+                    else:
+                        tile_results = _run_serial_tile_match_tasks(
+                            windows,
+                            left_cube=left_cube,
+                            right_cube=right_cube,
+                            band=band,
+                            minimum_value=minimum_value,
+                            maximum_value=maximum_value,
+                            lower_percent=lower_percent,
+                            upper_percent=upper_percent,
+                            left_invalid_values=left_invalid_values,
+                            right_invalid_values=right_invalid_values,
+                            special_pixel_abs_threshold=special_pixel_abs_threshold,
+                            min_valid_pixels=min_valid_pixels,
+                            valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                            ratio_test=ratio_test,
+                            max_features=max_features,
+                            sift_octave_layers=sift_octave_layers,
+                            sift_contrast_threshold=sift_contrast_threshold,
+                            sift_edge_threshold=sift_edge_threshold,
+                            sift_sigma=sift_sigma,
                         )
+                        parallel_cpu_worker_count = 1
+                else:
+                    tile_results = _run_serial_tile_match_tasks(
+                        windows,
+                        left_cube=left_cube,
+                        right_cube=right_cube,
+                        band=band,
+                        minimum_value=minimum_value,
+                        maximum_value=maximum_value,
+                        lower_percent=lower_percent,
+                        upper_percent=upper_percent,
+                        left_invalid_values=left_invalid_values,
+                        right_invalid_values=right_invalid_values,
+                        special_pixel_abs_threshold=special_pixel_abs_threshold,
+                        min_valid_pixels=min_valid_pixels,
+                        valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                        ratio_test=ratio_test,
+                        max_features=max_features,
+                        sift_octave_layers=sift_octave_layers,
+                        sift_contrast_threshold=sift_contrast_threshold,
+                        sift_edge_threshold=sift_edge_threshold,
+                        sift_sigma=sift_sigma,
                     )
-                    continue
+                    parallel_cpu_worker_count = 1
 
-                left_keypoints, right_keypoints, filtered_matches = _match_tile(
-                    left_image,
-                    right_image,
-                    left_mask=left_mask,
-                    right_mask=right_mask,
-                    ratio_test=ratio_test,
-                    max_features=max_features,
-                    sift_octave_layers=sift_octave_layers,
-                    sift_contrast_threshold=sift_contrast_threshold,
-                    sift_edge_threshold=sift_edge_threshold,
-                    sift_sigma=sift_sigma,
-                )
-
-                if not left_keypoints or not right_keypoints:
-                    tile_summaries.append(
-                        TileMatchStats(
-                            local_start_x=local_window.start_x,
-                            local_start_y=local_window.start_y,
-                            width=local_window.width,
-                            height=local_window.height,
-                            left_start_x=left_window.start_x,
-                            left_start_y=left_window.start_y,
-                            right_start_x=right_window.start_x,
-                            right_start_y=right_window.start_y,
-                            left_valid_pixel_count=left_stats.valid_pixel_count,
-                            right_valid_pixel_count=right_stats.valid_pixel_count,
-                            left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
-                            right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
-                            left_feature_count=len(left_keypoints),
-                            right_feature_count=len(right_keypoints),
-                            match_count=0,
-                            status="skipped_no_features",
-                        )
-                    )
-                    continue
-
-                if not filtered_matches:
-                    tile_summaries.append(
-                        TileMatchStats(
-                            local_start_x=local_window.start_x,
-                            local_start_y=local_window.start_y,
-                            width=local_window.width,
-                            height=local_window.height,
-                            left_start_x=left_window.start_x,
-                            left_start_y=left_window.start_y,
-                            right_start_x=right_window.start_x,
-                            right_start_y=right_window.start_y,
-                            left_valid_pixel_count=left_stats.valid_pixel_count,
-                            right_valid_pixel_count=right_stats.valid_pixel_count,
-                            left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
-                            right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
-                            left_feature_count=len(left_keypoints),
-                            right_feature_count=len(right_keypoints),
-                            match_count=0,
-                            status="skipped_no_matches",
-                        )
-                    )
-                    continue
-
-                for match in filtered_matches:
-                    left_points.append(_keypoint_to_isis_coordinates(left_keypoints[match.queryIdx], left_window))
-                    right_points.append(_keypoint_to_isis_coordinates(right_keypoints[match.trainIdx], right_window))
-
-                tile_summaries.append(
-                    TileMatchStats(
-                        local_start_x=local_window.start_x,
-                        local_start_y=local_window.start_y,
-                        width=local_window.width,
-                        height=local_window.height,
-                        left_start_x=left_window.start_x,
-                        left_start_y=left_window.start_y,
-                        right_start_x=right_window.start_x,
-                        right_start_y=right_window.start_y,
-                        left_valid_pixel_count=left_stats.valid_pixel_count,
-                        right_valid_pixel_count=right_stats.valid_pixel_count,
-                        left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
-                        right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
-                        left_feature_count=len(left_keypoints),
-                        right_feature_count=len(right_keypoints),
-                        match_count=len(filtered_matches),
-                        status="matched",
-                    )
-                )
+                for tile_result in tile_results:
+                    tile_summaries.append(tile_result.stats)
+                    left_points.extend(tile_result.left_points)
+                    right_points.extend(tile_result.right_points)
         else:
             windows = []
 
@@ -881,6 +1178,10 @@ def match_dom_pair(
             "matched_tile_count": sum(1 for tile in tile_summaries if tile.status == "matched"),
             "skipped_tile_count": sum(1 for tile in tile_summaries if tile.status != "matched"),
             "point_count": len(left_points),
+            "parallel_cpu_requested": parallel_cpu_requested,
+            "parallel_cpu_used": parallel_cpu_used,
+            "parallel_cpu_backend": parallel_cpu_backend,
+            "parallel_cpu_worker_count": parallel_cpu_worker_count,
             "left_image_width": left_width,
             "left_image_height": left_height,
             "right_image_width": right_width,
@@ -984,11 +1285,13 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--sift-sigma", type=float, default=1.6, help="Gaussian sigma used by the OpenCV SIFT detector.")
     parser.add_argument("--crop-expand-pixels", type=int, default=100, help="Extra projected-overlap margin, expressed in pixels, added before matching.")
     parser.add_argument("--min-overlap-size", type=int, default=16, help="Skip matching when the expanded projected-overlap window is smaller than this many pixels in either direction.")
+    parser.add_argument("--use_parallel_cpu", "--use-parallel-cpu", dest="use_parallel_cpu", action="store_true", help="Enable CPU process-pool parallelism for tiled matching. Enabled by default.")
+    parser.add_argument("--no_parallel_cpu", "--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
     parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default drawMatches PNG output written for the matched DOM pair.")
     parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the drawMatches PNG. Defaults to 1/3 for a smaller preview.")
-    parser.set_defaults(write_match_visualization=True)
+    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True)
     return parser
 
 
@@ -1023,6 +1326,7 @@ def main() -> None:
         sift_sigma=args.sift_sigma,
         crop_expand_pixels=args.crop_expand_pixels,
         min_overlap_size=args.min_overlap_size,
+        use_parallel_cpu=args.use_parallel_cpu,
         write_match_visualization=args.write_match_visualization,
         match_visualization_output_path=args.match_visualization_output_path,
         match_visualization_output_dir=args.match_visualization_output_dir,

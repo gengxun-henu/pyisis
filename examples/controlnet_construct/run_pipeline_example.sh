@@ -34,6 +34,7 @@ Run the DOM matching ControlNet example pipeline end to end:
   3. controlnet_stereopair.py from-dom-batch
   4. controlnet_merge.py
   5. execute the generated merge_all_controlnets.sh by default
+  6. optionally run merge_control_measure.py as a post-processing step
 
 Options:
   --work-dir PATH                 Root working directory. Default: work
@@ -41,6 +42,8 @@ Options:
   --dom-list PATH                 DOM list path. Default: <work-dir>/doms_scaled.lis if present, else <work-dir>/doms.lis
   --config PATH                   ControlNet config JSON. Default: examples/controlnet_construct/controlnet_config.example.json
   --python PATH                   Python interpreter to use. Default: $PYTHON_EXECUTABLE or python
+  --use_parallel_cpu              Forward explicit CPU tile parallelism enable flag to image_match.py (default behavior)
+  --no-parallel-cpu               Disable CPU tile parallelism in image_match.py and force serial tile matching
   --pair-id-prefix PREFIX         Batch pair-id prefix. Default: S
   --pair-id-start N               Batch pair-id starting index. Default: 1
   --valid-pixel-percent-threshold VALUE
@@ -56,6 +59,9 @@ Options:
   --description TEXT              Description passed to controlnet_merge.py. Default: Merged DOM matching ControlNet
   --cnetmerge PATH                cnetmerge executable path written into the generated merge shell. Default: $CNETMERGE_EXECUTABLE or cnetmerge
   --skip-final-merge              Generate merge shell but do not execute it
+  --post-merge-control-measure    After final cnetmerge, run merge_control_measure.py on the merged network
+  --post-merge-output PATH        Output path for the post-processed merged ControlNet. Default: auto-named by merge_control_measure.py
+  --post-merge-decimals N         Rounded hash decimals for merge_control_measure.py. Default: 1
   -h, --help                      Show this help message
 
 Environment overrides:
@@ -312,11 +318,16 @@ run_step_2_image_match_batch() {
       "$DOM_KEYS_DIR/${pair_tag}_A.key"
       "$DOM_KEYS_DIR/${pair_tag}_B.key"
       --metadata-output "$MATCH_METADATA_DIR/${pair_tag}.json"
-      --match-visualization-output-dir "$MATCH_VIZ_DIR"
+      --match-visualization-output-dir "$PRE_RANSAC_MATCH_VIZ_DIR"
     )
 
     if [[ -n "$VALID_PIXEL_PERCENT_THRESHOLD" ]]; then
       match_args+=(--valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD")
+    fi
+    if [[ "$USE_PARALLEL_CPU" == "1" ]]; then
+      match_args+=(--use_parallel_cpu)
+    else
+      match_args+=(--no-parallel-cpu)
     fi
 
     run_timed_command "pair_matches" "image_match:${pair_tag}" "${match_args[@]}"
@@ -344,7 +355,9 @@ run_step_3_pairwise_controlnets() {
     "$PAIR_NETS_DIR" \
     --report-dir "$REPORTS_DIR" \
     --pair-id-prefix "$PAIR_ID_PREFIX" \
-    --pair-id-start "$PAIR_ID_START"
+    --pair-id-start "$PAIR_ID_START" \
+    --write-match-visualization \
+    --match-visualization-output-dir "$POST_RANSAC_MATCH_VIZ_DIR"
 }
 
 run_step_4_merge() {
@@ -378,6 +391,30 @@ run_step_4_merge() {
   bash "$MERGE_SCRIPT_PATH"
 }
 
+run_step_5_post_merge_control_measure() {
+  [[ "$POST_MERGE_CONTROL_MEASURE" == "1" ]] || return 0
+
+  if [[ "$SKIP_FINAL_MERGE" == "1" ]]; then
+    die "--post-merge-control-measure cannot be used together with --skip-final-merge"
+  fi
+
+  log "Step 5/5: post-processing merged ControlNet -> ${POST_MERGE_OUTPUT_PATH:-auto-named by merge_control_measure.py}"
+
+  local post_merge_args=(
+    "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/merge_control_measure.py"
+    "$ORIGINAL_LIST"
+    "$MERGED_NET_PATH"
+  )
+
+  if [[ -n "$POST_MERGE_OUTPUT_PATH" ]]; then
+    post_merge_args+=("$POST_MERGE_OUTPUT_PATH")
+  fi
+
+  post_merge_args+=(--decimals "$POST_MERGE_DECIMALS")
+
+  "${post_merge_args[@]}"
+}
+
 main() {
   local work_dir_input="$DEFAULT_WORK_DIR_RELATIVE"
   local original_list_input=""
@@ -388,15 +425,19 @@ main() {
   local merge_log_input=""
   local pair_list_input=""
   local timing_json_input=""
+  local post_merge_output_input=""
 
   PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
   CNETMERGE_PATH="${CNETMERGE_EXECUTABLE:-cnetmerge}"
   PAIR_ID_PREFIX="$DEFAULT_PAIR_ID_PREFIX"
   PAIR_ID_START="$DEFAULT_PAIR_ID_START"
   VALID_PIXEL_PERCENT_THRESHOLD="$DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD"
+  USE_PARALLEL_CPU="1"
   NETWORK_ID=""
   MERGE_DESCRIPTION="Merged DOM matching ControlNet"
   SKIP_FINAL_MERGE="0"
+  POST_MERGE_CONTROL_MEASURE="0"
+  POST_MERGE_DECIMALS="1"
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -424,6 +465,14 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --python"
         PYTHON_EXECUTABLE=$2
         shift 2
+        ;;
+      --use_parallel_cpu|--use-parallel-cpu)
+        USE_PARALLEL_CPU="1"
+        shift
+        ;;
+      --no-parallel-cpu|--no_parallel_cpu)
+        USE_PARALLEL_CPU="0"
+        shift
         ;;
       --pair-id-prefix)
         [[ $# -ge 2 ]] || die "missing value for --pair-id-prefix"
@@ -484,6 +533,20 @@ main() {
         SKIP_FINAL_MERGE="1"
         shift
         ;;
+      --post-merge-control-measure)
+        POST_MERGE_CONTROL_MEASURE="1"
+        shift
+        ;;
+      --post-merge-output)
+        [[ $# -ge 2 ]] || die "missing value for --post-merge-output"
+        post_merge_output_input=$2
+        shift 2
+        ;;
+      --post-merge-decimals)
+        [[ $# -ge 2 ]] || die "missing value for --post-merge-decimals"
+        POST_MERGE_DECIMALS=$2
+        shift 2
+        ;;
       -h|--help)
         usage
         exit 0
@@ -510,7 +573,8 @@ main() {
   IMAGES_OVERLAP_LIST="$WORK_DIR/images_overlap.lis"
   DOM_KEYS_DIR="$WORK_DIR/dom_keys"
   MATCH_METADATA_DIR="$WORK_DIR/match_metadata"
-  MATCH_VIZ_DIR="$WORK_DIR/match_viz"
+  PRE_RANSAC_MATCH_VIZ_DIR="$WORK_DIR/match_viz"
+  POST_RANSAC_MATCH_VIZ_DIR="$WORK_DIR/match_viz_post_ransac"
   PAIR_NETS_DIR="$WORK_DIR/pair_nets"
   REPORTS_DIR="$WORK_DIR/reports"
   MERGE_DIR="$WORK_DIR/merge"
@@ -519,12 +583,17 @@ main() {
   MERGE_LOG_PATH="${merge_log_input:-$MERGE_DIR/cnetmerge.log}"
   PAIR_LIST_PATH="$pair_list_input"
   TIMING_JSON_PATH="${timing_json_input:-$REPORTS_DIR/pipeline_timing.json}"
+  POST_MERGE_OUTPUT_PATH="$post_merge_output_input"
 
   require_file "$ORIGINAL_LIST"
   require_file "$DOM_LIST"
   require_file "$CONFIG_PATH"
 
-  mkdir -p "$DOM_KEYS_DIR" "$MATCH_METADATA_DIR" "$MATCH_VIZ_DIR" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_DIR"
+  if [[ "$POST_MERGE_CONTROL_MEASURE" == "1" && "$SKIP_FINAL_MERGE" == "1" ]]; then
+    die "--post-merge-control-measure cannot be used together with --skip-final-merge"
+  fi
+
+  mkdir -p "$DOM_KEYS_DIR" "$MATCH_METADATA_DIR" "$PRE_RANSAC_MATCH_VIZ_DIR" "$POST_RANSAC_MATCH_VIZ_DIR" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_DIR"
 
   if [[ -z "$NETWORK_ID" ]]; then
     NETWORK_ID=$(extract_network_id_from_config "$CONFIG_PATH")
@@ -542,6 +611,11 @@ main() {
   log "DOM list: $DOM_LIST"
   log "Config: $CONFIG_PATH"
   log "Network ID: $NETWORK_ID"
+  if [[ "$USE_PARALLEL_CPU" == "1" ]]; then
+    log "CPU parallel tile matching: enabled"
+  else
+    log "CPU parallel tile matching: disabled"
+  fi
   if [[ -n "$VALID_PIXEL_PERCENT_THRESHOLD" ]]; then
     log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
   else
@@ -549,11 +623,25 @@ main() {
   fi
   log "cnetmerge executable: $CNETMERGE_PATH"
   log "Timing JSON: $TIMING_JSON_PATH"
+  if [[ "$POST_MERGE_CONTROL_MEASURE" == "1" ]]; then
+    log "Post-merge ControlNet deduplication: enabled"
+    log "Post-merge decimals: $POST_MERGE_DECIMALS"
+    if [[ -n "$POST_MERGE_OUTPUT_PATH" ]]; then
+      log "Post-merge output: $POST_MERGE_OUTPUT_PATH"
+    else
+      log "Post-merge output: auto-named by merge_control_measure.py"
+    fi
+  else
+    log "Post-merge ControlNet deduplication: disabled"
+  fi
 
   run_required_timed_step "steps" "image_overlap" run_step_1_image_overlap
   run_required_timed_step "steps" "image_match_batch" run_step_2_image_match_batch
   run_required_timed_step "steps" "pairwise_controlnets" run_step_3_pairwise_controlnets
   run_required_timed_step "steps" "merge" run_step_4_merge
+  if [[ "$POST_MERGE_CONTROL_MEASURE" == "1" ]]; then
+    run_required_timed_step "steps" "merge_control_measure" run_step_5_post_merge_control_measure
+  fi
 
   finalize_timing_json "success"
 
@@ -561,10 +649,19 @@ main() {
   log "Key outputs:"
   log "  overlap list: $IMAGES_OVERLAP_LIST"
   log "  DOM keys: $DOM_KEYS_DIR"
+  log "  pre-RANSAC match viz: $PRE_RANSAC_MATCH_VIZ_DIR"
+  log "  post-RANSAC match viz: $POST_RANSAC_MATCH_VIZ_DIR"
   log "  pairwise nets: $PAIR_NETS_DIR"
   log "  reports: $REPORTS_DIR"
   log "  merge script: $MERGE_SCRIPT_PATH"
   log "  merged net: $MERGED_NET_PATH"
+  if [[ "$POST_MERGE_CONTROL_MEASURE" == "1" ]]; then
+    if [[ -n "$POST_MERGE_OUTPUT_PATH" ]]; then
+      log "  post-merged net: $POST_MERGE_OUTPUT_PATH"
+    else
+      log "  post-merged net: auto-named beside $MERGED_NET_PATH"
+    fi
+  fi
   log "  timing json: $TIMING_JSON_PATH"
 }
 

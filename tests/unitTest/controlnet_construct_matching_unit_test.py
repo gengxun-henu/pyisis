@@ -10,6 +10,7 @@ Updated: 2026-04-18  Geng Xun added focused regression coverage for merge-stage 
 Updated: 2026-04-18  Geng Xun added optional configurable real LRO DOM matching coverage while preserving repository fixture regressions.
 Updated: 2026-04-19  Geng Xun added regression coverage for default image-match visualization output and the explicit no-write CLI switch.
 Updated: 2026-04-21  Geng Xun added focused regression coverage for tile valid-pixel ratio filtering, 8-bit zero masking, and the new CLI threshold option.
+Updated: 2026-04-22  Geng Xun added focused regression coverage for the default CPU process-pool tile-matching path and the new parallel opt-out CLI flags.
 """
 
 from __future__ import annotations
@@ -272,6 +273,33 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(default_args.write_match_visualization)
         self.assertFalse(disabled_args.write_match_visualization)
 
+    def test_build_argument_parser_defaults_to_parallel_cpu_and_allows_disabling_it(self):
+        parser = build_argument_parser()
+
+        default_args = parser.parse_args(["left.cub", "right.cub", "left.key", "right.key"])
+        disabled_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--no-parallel-cpu",
+            ]
+        )
+        explicit_enabled_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--use_parallel_cpu",
+            ]
+        )
+
+        self.assertTrue(default_args.use_parallel_cpu)
+        self.assertFalse(disabled_args.use_parallel_cpu)
+        self.assertTrue(explicit_enabled_args.use_parallel_cpu)
+
     def test_build_argument_parser_accepts_valid_pixel_percent_threshold(self):
         parser = build_argument_parser()
 
@@ -400,6 +428,116 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(any(point.sample > 64.0 or point.line > 64.0 for point in left_key_file.points))
         self.assertTrue(all(1.0 <= point.sample <= width for point in left_key_file.points))
         self.assertTrue(all(1.0 <= point.line <= height for point in left_key_file.points))
+
+    def test_match_dom_pair_uses_parallel_helper_for_multi_tile_runs_by_default(self):
+        width = 128
+        height = 128
+        image = _build_textured_test_image(width, height)
+
+        synthetic_tile_results = [
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=5,
+                    right_feature_count=5,
+                    match_count=1,
+                    status="matched",
+                ),
+                left_points=(Keypoint(10.0, 10.0),),
+                right_points=(Keypoint(10.5, 10.5),),
+            ),
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=64,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=64,
+                    left_start_y=0,
+                    right_start_x=64,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=5,
+                    right_feature_count=5,
+                    match_count=1,
+                    status="matched",
+                ),
+                left_points=(Keypoint(80.0, 20.0),),
+                right_points=(Keypoint(80.5, 20.5),),
+            ),
+        ]
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_parallel_default.cub",
+                right_name="right_parallel_default.cub",
+            )
+
+            with mock.patch.object(
+                image_match,
+                "_run_parallel_tile_match_tasks",
+                return_value=synthetic_tile_results,
+            ) as parallel_mock:
+                left_key_file, right_key_file, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                )
+
+        parallel_mock.assert_called_once()
+        self.assertTrue(summary["parallel_cpu_requested"])
+        self.assertTrue(summary["parallel_cpu_used"])
+        self.assertEqual(summary["parallel_cpu_backend"], "process_pool")
+        self.assertGreaterEqual(summary["parallel_cpu_worker_count"], 2)
+        self.assertEqual(summary["point_count"], 2)
+        self.assertEqual(len(left_key_file.points), 2)
+        self.assertEqual(len(right_key_file.points), 2)
+
+    def test_match_dom_pair_reports_serial_backend_when_parallel_cpu_is_disabled(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_parallel_disabled.cub",
+                right_name="right_parallel_disabled.cub",
+            )
+
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                min_valid_pixels=16,
+                use_parallel_cpu=False,
+            )
+
+        self.assertFalse(summary["parallel_cpu_requested"])
+        self.assertFalse(summary["parallel_cpu_used"])
+        self.assertEqual(summary["parallel_cpu_backend"], "serial")
+        self.assertEqual(summary["parallel_cpu_worker_count"], 1)
 
     def test_match_dom_pair_skips_invalid_only_tiles_but_keeps_valid_tile(self):
         width = 96

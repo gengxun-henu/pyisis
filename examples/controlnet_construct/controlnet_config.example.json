@@ -6,6 +6,31 @@
   "PointIdPrefix": "P",
   "PairId": "S1",
   "ImageMatch": {
-    "valid_pixel_percent_threshold": 0.05
+    "band": 1,
+    "max_image_dimension": 3000,
+    "sub_block_size_x": 1024,
+    "sub_block_size_y": 1024,
+    "overlap_size_x": 128,
+    "overlap_size_y": 128,
+    "minimum_value": null,
+    "maximum_value": null,
+    "lower_percent": 0.5,
+    "upper_percent": 99.5,
+    "invalid_values": [],
+    "special_pixel_abs_threshold": 1e300,
+    "min_valid_pixels": 64,
+    "valid_pixel_percent_threshold": 0.05,
+    "ratio_test": 0.75,
+    "max_features": null,
+    "sift_octave_layers": 3,
+    "sift_contrast_threshold": 0.04,
+    "sift_edge_threshold": 10.0,
+    "sift_sigma": 1.6,
+    "crop_expand_pixels": 100,
+    "min_overlap_size": 16,
+    "use_parallel_cpu": true,
+    "num_worker_parallel_cpu": 8,
+    "write_match_visualization": true,
+    "match_visualization_scale": 0.3333333333333333
   }
 }

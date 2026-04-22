@@ -302,7 +302,55 @@ This workflow is intended for the common planetary-photogrammetry pattern:
 
 If you want to run the full pipeline step by step as `image_overlap.py` → `image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`, start with `examples/controlnet_construct/usage.md`.
 
-For the DOM matching stage, it is usually better to set `valid_pixel_percent_threshold` explicitly instead of relying on the raw default. A practical starting point is `0.05`, which skips any tile whose valid-pixel ratio is below $5\%$. The sample config at `examples/controlnet_construct/controlnet_config.example.json` now includes that recommendation under `ImageMatch.valid_pixel_percent_threshold`, and `examples/controlnet_construct/run_pipeline_example.sh` will read it automatically. If you call `image_match.py` yourself, pass `--valid-pixel-percent-threshold 0.05` directly.
+For the DOM matching stage, it is usually better to set the main `ImageMatch` options explicitly instead of relying on the raw defaults. A practical starting point is:
+
+```json
+"ImageMatch": {
+   "band": 1,
+   "max_image_dimension": 3000,
+   "sub_block_size_x": 1024,
+   "sub_block_size_y": 1024,
+   "overlap_size_x": 128,
+   "overlap_size_y": 128,
+   "minimum_value": null,
+   "maximum_value": null,
+   "lower_percent": 0.5,
+   "upper_percent": 99.5,
+   "invalid_values": [],
+   "special_pixel_abs_threshold": 1e300,
+   "min_valid_pixels": 64,
+   "valid_pixel_percent_threshold": 0.05,
+   "ratio_test": 0.75,
+   "max_features": null,
+   "sift_octave_layers": 3,
+   "sift_contrast_threshold": 0.04,
+   "sift_edge_threshold": 10.0,
+   "sift_sigma": 1.6,
+   "crop_expand_pixels": 100,
+   "min_overlap_size": 16,
+   "use_parallel_cpu": true,
+   "num_worker_parallel_cpu": 8,
+   "write_match_visualization": true,
+   "match_visualization_scale": 0.3333333333333333
+}
+```
+
+Here:
+
+- `valid_pixel_percent_threshold = 0.05` skips any tile whose valid-pixel ratio is below $5\%$;
+- `num_worker_parallel_cpu = 8` starts the CPU process-pool worker cap at a conservative but practical value, while the actual runtime worker count still contracts automatically to the tile count when needed.
+
+The sample config at `examples/controlnet_construct/controlnet_config.example.json` now includes those recommendations, and both `examples/controlnet_construct/run_pipeline_example.sh` and `examples/controlnet_construct/run_image_match_batch_example.sh` will forward the `ImageMatch` section into `image_match.py` as default matching parameters. `image_match.py` itself also supports `--config`, so if you call it directly you can use the same config file instead of spelling every parameter out on the command line.
+
+For example:
+
+```bash
+python examples/controlnet_construct/image_match.py \
+  --config examples/controlnet_construct/controlnet_config.example.json \
+  left_dom.cub right_dom.cub left.key right.key
+```
+
+If you also pass an explicit CLI option such as `--ratio-test 0.8` or `--num-worker-parallel-cpu 4`, the CLI value still overrides the config default.
 
 If you want a copy-ready batch template instead of assembling the parameters yourself, `examples/controlnet_construct/usage.md` now includes a more visible “recommended parameter template” section with:
 
@@ -314,6 +362,16 @@ If you prefer a shorter standalone entry point, you can now also jump directly t
 
 - `examples/controlnet_construct/recommended_batch_templates.md`
 - `examples/controlnet_construct/run_image_match_batch_example.sh`
+
+From the current workflow revision onward, the example wrapper scripts also document and use these defaults more explicitly:
+
+- CPU tiled matching is enabled by default unless you pass `--no-parallel-cpu`;
+- `run_image_match_batch_example.sh` writes **pre-RANSAC** match previews into `work/match_viz/` by default;
+- `run_pipeline_example.sh` writes both:
+   - **pre-RANSAC** previews into `work/match_viz/`, and
+   - **post-RANSAC** previews into `work/match_viz_post_ransac/`.
+
+If you want to disable the pre-RANSAC previews when calling the batch image-match wrapper, forward `-- --no-write-match-visualization` to `image_match.py`.
 
 ### Single stereo pair
 
@@ -420,12 +478,12 @@ Include the following key information in the asset name:
 - platform: `linux-x86_64`
 - Python ABI: `cp312`
 - ISIS version: `isis9.0.0`
-- project version: for example `v1.1.0`
+- project version: for example `v1.2.0`
 
 For example:
 
 ```text
-isis_pybind-v1.1.0-linux-x86_64-cp312-isis9.0.0.tar.gz
+isis_pybind-v1.2.0-linux-x86_64-cp312-isis9.0.0.tar.gz
 SHA256SUMS.txt
 ```
 

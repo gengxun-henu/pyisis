@@ -45,6 +45,7 @@ All paths below are relative to the repository root unless noted otherwise.
 - For newly created or substantially rewritten binding C++ files, also follow `.github/instructions/pybind-file-header.instructions.md`.
 - For Python unit-test metadata conventions, also follow `.github/instructions/pybind-python-test-metadata.instructions.md`.
 - For C++ naming consistency, follow `.github/instructions/isis-cpp-naming.instructions.md` when editing relevant C++ files.
+- For Python and Bash example CLI flag naming consistency, also follow `.github/instructions/python-example-cli-naming.instructions.md`.
 - When binding, add '#include <pybind11/pybind11.h>,#include <pybind11/stl.h>' when necessary.
 
 ## Pybind workflow routing

@@ -302,7 +302,55 @@ python examples/forward_intersection.py \
 
 如果你想按“`image_overlap.py` → `image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`”的顺序一步一步跑完整流水线，优先查看：`examples/controlnet_construct/usage.md`。
 
-对于 DOM 匹配阶段，建议把 `valid_pixel_percent_threshold` 明确设出来，而不是完全依赖默认值。一个常用起步值是 `0.05`，表示某个 tile 的有效像素比例低于 $5\%$ 时直接跳过匹配。仓库示例配置 `examples/controlnet_construct/controlnet_config.example.json` 已经给出这个推荐值（`ImageMatch.valid_pixel_percent_threshold`），而 `examples/controlnet_construct/run_pipeline_example.sh` 会自动读取它；如果你手工调用 `image_match.py`，可以直接传 `--valid-pixel-percent-threshold 0.05`。
+对于 DOM 匹配阶段，建议把 `ImageMatch` 里的主要参数明确设出来，而不是完全依赖原始默认值。一个常用起步组合是：
+
+```json
+"ImageMatch": {
+	"band": 1,
+	"max_image_dimension": 3000,
+	"sub_block_size_x": 1024,
+	"sub_block_size_y": 1024,
+	"overlap_size_x": 128,
+	"overlap_size_y": 128,
+	"minimum_value": null,
+	"maximum_value": null,
+	"lower_percent": 0.5,
+	"upper_percent": 99.5,
+	"invalid_values": [],
+	"special_pixel_abs_threshold": 1e300,
+	"min_valid_pixels": 64,
+	"valid_pixel_percent_threshold": 0.05,
+	"ratio_test": 0.75,
+	"max_features": null,
+	"sift_octave_layers": 3,
+	"sift_contrast_threshold": 0.04,
+	"sift_edge_threshold": 10.0,
+	"sift_sigma": 1.6,
+	"crop_expand_pixels": 100,
+	"min_overlap_size": 16,
+	"use_parallel_cpu": true,
+	"num_worker_parallel_cpu": 8,
+	"write_match_visualization": true,
+	"match_visualization_scale": 0.3333333333333333
+}
+```
+
+其中：
+
+- `valid_pixel_percent_threshold = 0.05` 表示某个 tile 的有效像素比例低于 $5\%$ 时直接跳过匹配；
+- `num_worker_parallel_cpu = 8` 表示 CPU 进程池 worker 上限从一个保守但实用的值起步，实际运行时仍会按 tile 数自动收敛。
+
+仓库示例配置 `examples/controlnet_construct/controlnet_config.example.json` 已经给出这组推荐值，而 `examples/controlnet_construct/run_pipeline_example.sh` 与 `examples/controlnet_construct/run_image_match_batch_example.sh` 会把其中的 `ImageMatch` 段作为默认匹配参数继续转发给 `image_match.py`。`image_match.py` 本身现在也支持 `--config`，所以如果你手工调用它，也可以直接复用同一份配置文件，而不是把所有参数都重写一遍。
+
+例如：
+
+```bash
+python examples/controlnet_construct/image_match.py \
+	--config examples/controlnet_construct/controlnet_config.example.json \
+	left_dom.cub right_dom.cub left.key right.key
+```
+
+如果你同时又显式传了某个 CLI 参数，例如 `--ratio-test 0.8` 或 `--num-worker-parallel-cpu 4`，那么命令行参数仍然会覆盖配置文件中的默认值。
 
 如果你希望直接复制一段能跑的批处理模板，不想自己拼参数，`examples/controlnet_construct/usage.md` 现在新增了更显眼的“推荐参数模板”小节，包含：
 
@@ -314,6 +362,16 @@ python examples/forward_intersection.py \
 
 - `examples/controlnet_construct/recommended_batch_templates.md`
 - `examples/controlnet_construct/run_image_match_batch_example.sh`
+
+从当前这一版工作流开始，示例封装脚本对下面这些默认行为也已经明确固定下来：
+
+- CPU 分块并行匹配默认开启；如果你想回退到串行 tile 匹配，可显式传 `--no-parallel-cpu`；
+- `run_image_match_batch_example.sh` 默认把 **pre-RANSAC** 匹配连线图写到 `work/match_viz/`；
+- `run_pipeline_example.sh` 默认同时写两套图：
+	- `work/match_viz/`：**pre-RANSAC**；
+	- `work/match_viz_post_ransac/`：**post-RANSAC**。
+
+如果你在使用批量匹配封装脚本时想关闭 pre-RANSAC 连线图，可通过 `-- --no-write-match-visualization` 把参数继续转发给 `image_match.py`。
 
 ### 单个立体像对
 
@@ -420,7 +478,7 @@ ctest --output-on-failure -R python-unit-tests
 - 平台：`linux-x86_64`
 - Python ABI：`cp312`
 - ISIS 版本：`isis9.0.0`
-- 项目版本：例如 `v1.0.0`
+- 项目版本：例如 `v1.2.0`
 
 例如：
 

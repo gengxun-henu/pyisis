@@ -1,4 +1,4 @@
-# PyISIS v1.1.0
+# PyISIS v1.2.0
 
 This is the first stable GitHub release of PyISIS, intended for Linux users who already have a working **USGS ISIS 9.0.0** environment.
 

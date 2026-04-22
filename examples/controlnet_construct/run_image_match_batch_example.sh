@@ -33,25 +33,35 @@ Defaults assume a work directory layout like:
   work/images_overlap.lis
   work/dom_keys/
   work/match_metadata/
-  work/match_viz/
+  work/match_viz/            # pre-RANSAC drawMatches PNGs from image_match.py
 
 Options:
   --work-dir PATH                 Root working directory. Default: work
   --original-list PATH            original_images.lis path. Default: <work-dir>/original_images.lis
   --dom-list PATH                 DOM list path. Default: <work-dir>/doms_scaled.lis if present, else <work-dir>/doms.lis
   --pair-list PATH                Overlap pair list path. Default: <work-dir>/images_overlap.lis
-  --config PATH                   Optional config JSON used to read ImageMatch.valid_pixel_percent_threshold
+  --config PATH                   Optional config JSON. Its ImageMatch section is forwarded to image_match.py
+                                  as default matching parameters, and this wrapper also reads selected fields for overrides.
   --output-key-dir PATH           Output .key directory. Default: <work-dir>/dom_keys
   --metadata-dir PATH             Metadata JSON output directory. Default: <work-dir>/match_metadata
-  --match-viz-dir PATH            Match visualization PNG directory. Default: <work-dir>/match_viz
+  --match-viz-dir PATH            Pre-RANSAC match visualization PNG directory.
+                                  Default: <work-dir>/match_viz
   --python PATH                   Python interpreter to use. Default: $PYTHON_EXECUTABLE or python
-  --use_parallel_cpu              Forward explicit CPU tile parallelism enable flag to image_match.py (default behavior)
+  --use-parallel-cpu              Forward explicit CPU tile parallelism enable flag to image_match.py (default behavior)
   --no-parallel-cpu               Disable CPU tile parallelism in image_match.py and force serial tile matching
+  --num-worker-parallel-cpu N     Maximum worker-process count forwarded to image_match.py when CPU parallelism is enabled.
+                                  Default: 8. If omitted, this script falls back to config JSON field
+                                  ImageMatch.num_worker_parallel_cpu when present. Valid range: 1~4096.
   --valid-pixel-percent-threshold VALUE
                                  Minimum valid-pixel ratio forwarded to image_match.py.
                                  Default: 0.05 unless omitted and resolved from --config.
   --skip-existing                 Skip pairs whose left/right key files already exist
   -h, --help                      Show this help message
+
+Default behavior:
+  - CPU tile parallelism is enabled unless --no-parallel-cpu is provided.
+  - image_match.py writes pre-RANSAC match visualization PNGs by default.
+  - To disable those PNGs, forward: -- --no-write-match-visualization
 
 Anything after -- is forwarded directly to image_match.py.
 
@@ -67,6 +77,13 @@ Examples:
     --ratio-test 0.8 \
     --sub-block-size-x 1536 \
     --sub-block-size-y 1536
+
+  bash examples/controlnet_construct/run_image_match_batch_example.sh \
+    --work-dir work \
+    --num-worker-parallel-cpu 4 \
+    --no-parallel-cpu \
+    -- \
+    --no-write-match-visualization
 EOF
 }
 
@@ -128,6 +145,85 @@ raise SystemExit(0)
 PY
 }
 
+extract_num_worker_parallel_cpu_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+
+candidate_containers = [
+  payload,
+  payload.get('ImageMatch') or {},
+  payload.get('image_match') or {},
+  payload.get('imageMatch') or {},
+]
+candidate_keys = (
+  'num_worker_parallel_cpu',
+  'numWorkerParallelCpu',
+  'NumWorkerParallelCpu',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
+extract_use_parallel_cpu_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+
+candidate_containers = [
+  payload.get('ImageMatch') or {},
+  payload.get('image_match') or {},
+  payload.get('imageMatch') or {},
+  payload,
+]
+candidate_keys = (
+  'use_parallel_cpu',
+  'useParallelCpu',
+  'UseParallelCpu',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    if isinstance(value, bool):
+      print('1' if value else '0')
+      raise SystemExit(0)
+    normalized = str(value).strip().lower()
+    if normalized in {'1', 'true', 'yes', 'on'}:
+      print('1')
+      raise SystemExit(0)
+    if normalized in {'0', 'false', 'no', 'off'}:
+      print('0')
+      raise SystemExit(0)
+    raise SystemExit(f'invalid ImageMatch.use_parallel_cpu value: {value!r}')
+
+raise SystemExit(0)
+PY
+}
+
 main() {
   local work_dir_input="$DEFAULT_WORK_DIR_RELATIVE"
   local original_list_input=""
@@ -139,6 +235,9 @@ main() {
   local match_viz_dir_input=""
   local skip_existing="0"
   local use_parallel_cpu="1"
+  local explicit_use_parallel_cpu=""
+  local num_worker_parallel_cpu="8"
+  local explicit_num_worker_parallel_cpu=""
   local explicit_threshold=""
   local config_threshold=""
   local forwarded_args=()
@@ -192,13 +291,21 @@ main() {
         PYTHON_EXECUTABLE=$2
         shift 2
         ;;
-      --use_parallel_cpu|--use-parallel-cpu)
+      --use-parallel-cpu)
         use_parallel_cpu="1"
+        explicit_use_parallel_cpu="1"
         shift
         ;;
-      --no-parallel-cpu|--no_parallel_cpu)
+      --no-parallel-cpu)
         use_parallel_cpu="0"
+        explicit_use_parallel_cpu="0"
         shift
+        ;;
+      --num-worker-parallel-cpu)
+        [[ $# -ge 2 ]] || die "missing value for --num-worker-parallel-cpu"
+        num_worker_parallel_cpu=$2
+        explicit_num_worker_parallel_cpu=$2
+        shift 2
         ;;
       --valid-pixel-percent-threshold)
         [[ $# -ge 2 ]] || die "missing value for --valid-pixel-percent-threshold"
@@ -257,6 +364,20 @@ main() {
     if [[ -n "$config_threshold" ]]; then
       VALID_PIXEL_PERCENT_THRESHOLD="$config_threshold"
     fi
+    if [[ -z "$explicit_use_parallel_cpu" ]]; then
+      local config_use_parallel_cpu
+      config_use_parallel_cpu=$(extract_use_parallel_cpu_from_config "$CONFIG_PATH")
+      if [[ -n "$config_use_parallel_cpu" ]]; then
+        use_parallel_cpu="$config_use_parallel_cpu"
+      fi
+    fi
+    if [[ -z "$explicit_num_worker_parallel_cpu" ]]; then
+      local config_num_worker_parallel_cpu
+      config_num_worker_parallel_cpu=$(extract_num_worker_parallel_cpu_from_config "$CONFIG_PATH")
+      if [[ -n "$config_num_worker_parallel_cpu" ]]; then
+        num_worker_parallel_cpu="$config_num_worker_parallel_cpu"
+      fi
+    fi
   fi
   if [[ -n "$explicit_threshold" ]]; then
     VALID_PIXEL_PERCENT_THRESHOLD="$explicit_threshold"
@@ -273,8 +394,10 @@ main() {
   log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
   if [[ "$use_parallel_cpu" == "1" ]]; then
     log "CPU parallel tile matching: enabled"
+    log "CPU parallel worker limit: $num_worker_parallel_cpu"
   else
     log "CPU parallel tile matching: disabled"
+    log "CPU parallel worker limit (forwarded default): $num_worker_parallel_cpu"
   fi
   if [[ ${#forwarded_args[@]} -gt 0 ]]; then
     log "Forwarding extra image_match.py args: ${forwarded_args[*]}"
@@ -327,11 +450,25 @@ main() {
       --match-visualization-output-dir "$MATCH_VIZ_DIR"
       --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
     )
+    if [[ -n "$CONFIG_PATH" ]]; then
+      match_args=(
+        "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py"
+        --config "$CONFIG_PATH"
+        "${dom_by_original[$left]}"
+        "${dom_by_original[$right]}"
+        "$left_key"
+        "$right_key"
+        --metadata-output "$METADATA_DIR/${pair_tag}.json"
+        --match-visualization-output-dir "$MATCH_VIZ_DIR"
+        --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
+      )
+    fi
     if [[ "$use_parallel_cpu" == "1" ]]; then
-      match_args+=(--use_parallel_cpu)
+      match_args+=(--use-parallel-cpu)
     else
       match_args+=(--no-parallel-cpu)
     fi
+    match_args+=(--num-worker-parallel-cpu "$num_worker_parallel_cpu")
     if [[ ${#forwarded_args[@]} -gt 0 ]]; then
       match_args+=("${forwarded_args[@]}")
     fi

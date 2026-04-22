@@ -10,6 +10,10 @@ Updated: 2026-04-18  Geng Xun added merge-stage homography RANSAC helpers and de
 Updated: 2026-04-18  Geng Xun changed match-visualization default scaling to one-third size and now use area interpolation when downsampling previews.
 Updated: 2026-04-19  Geng Xun moved default match-visualization output into the image-match stage so users get PNG diagnostics by default while still being able to disable them explicitly.
 Updated: 2026-04-22  Geng Xun added default CPU process-pool tile matching with opt-out CLI flags while preserving the existing serial code path and summary diagnostics.
+Updated: 2026-04-22  Geng Xun extended match_metadata JSON sidecars to persist image-match execution diagnostics including whether CPU parallelism was actually used and how many workers were selected.
+Updated: 2026-04-22  Geng Xun added a configurable --num-worker-parallel-cpu worker cap for process-pool tile matching and persisted the requested worker setting alongside actual runtime diagnostics.
+Updated: 2026-04-22  Geng Xun standardized the public image-match CLI on kebab-case flags and removed legacy underscore spellings.
+Updated: 2026-04-22  Geng Xun added optional --config JSON loading so image_match.py and the example batch wrappers can share ImageMatch defaults from the same configuration file.
 """
 
 from __future__ import annotations
@@ -47,6 +51,10 @@ else:
 bootstrap_runtime_environment()
 
 import isis_pybind as ip
+
+
+DEFAULT_NUM_WORKER_PARALLEL_CPU = 8
+MAX_NUM_WORKER_PARALLEL_CPU = 4096
 
 
 @dataclass(frozen=True, slots=True)
@@ -125,6 +133,155 @@ def _parse_valid_pixel_percent_threshold(value: str) -> float:
         return _validate_valid_pixel_percent_threshold(float(value))
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _validate_num_worker_parallel_cpu(value: int) -> int:
+    resolved_value = int(value)
+    if not (1 <= resolved_value <= MAX_NUM_WORKER_PARALLEL_CPU):
+        raise ValueError(
+            f"num_worker_parallel_cpu must be within [1, {MAX_NUM_WORKER_PARALLEL_CPU}]."
+        )
+    return resolved_value
+
+
+def _parse_num_worker_parallel_cpu(value: str) -> int:
+    try:
+        return _validate_num_worker_parallel_cpu(int(value))
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _image_match_config_containers(payload: object) -> list[dict[str, object]]:
+    if not isinstance(payload, dict):
+        raise ValueError("image_match config JSON must decode to an object at the top level.")
+
+    containers: list[dict[str, object]] = []
+    for key in ("ImageMatch", "image_match", "imageMatch"):
+        value = payload.get(key)
+        if isinstance(value, dict):
+            containers.append(value)
+    containers.append(payload)
+    return containers
+
+
+def _first_present_config_value(
+    containers: list[dict[str, object]],
+    candidate_keys: tuple[str, ...],
+) -> object | None:
+    for container in containers:
+        for key in candidate_keys:
+            if key not in container:
+                continue
+            value = container[key]
+            if value is None:
+                continue
+            if isinstance(value, str) and value == "":
+                continue
+            return value
+    return None
+
+
+def _coerce_config_bool(value: object, *, field_name: str) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, int) and value in {0, 1}:
+        return bool(value)
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"1", "true", "yes", "on"}:
+            return True
+        if normalized in {"0", "false", "no", "off"}:
+            return False
+    raise ValueError(f"{field_name} in config JSON must be a boolean-compatible value.")
+
+
+def _coerce_invalid_value_list(value: object) -> list[float]:
+    if isinstance(value, (list, tuple)):
+        return [float(item) for item in value]
+    return [float(value)]
+
+
+def load_image_match_defaults_from_config(config_path: str | Path) -> dict[str, object]:
+    resolved_path = Path(config_path)
+    try:
+        payload = json.loads(resolved_path.read_text(encoding="utf-8"))
+    except FileNotFoundError as exc:
+        raise ValueError(f"Config JSON not found: {resolved_path}") from exc
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"Failed to parse config JSON {resolved_path}: {exc}") from exc
+
+    containers = _image_match_config_containers(payload)
+    defaults: dict[str, object] = {}
+    field_specs: tuple[tuple[str, tuple[str, ...], object], ...] = (
+        ("band", ("band", "Band"), lambda value: int(value)),
+        ("max_image_dimension", ("max_image_dimension", "maxImageDimension", "MaxImageDimension"), lambda value: int(value)),
+        ("sub_block_size_x", ("sub_block_size_x", "subBlockSizeX", "SubBlockSizeX"), lambda value: int(value)),
+        ("sub_block_size_y", ("sub_block_size_y", "subBlockSizeY", "SubBlockSizeY"), lambda value: int(value)),
+        ("overlap_size_x", ("overlap_size_x", "overlapSizeX", "OverlapSizeX"), lambda value: int(value)),
+        ("overlap_size_y", ("overlap_size_y", "overlapSizeY", "OverlapSizeY"), lambda value: int(value)),
+        ("minimum_value", ("minimum_value", "minimumValue", "MinimumValue"), lambda value: float(value)),
+        ("maximum_value", ("maximum_value", "maximumValue", "MaximumValue"), lambda value: float(value)),
+        ("lower_percent", ("lower_percent", "lowerPercent", "LowerPercent"), lambda value: float(value)),
+        ("upper_percent", ("upper_percent", "upperPercent", "UpperPercent"), lambda value: float(value)),
+        ("invalid_value", ("invalid_values", "invalid_value", "invalidValues", "invalidValue", "InvalidValues", "InvalidValue"), _coerce_invalid_value_list),
+        ("special_pixel_abs_threshold", ("special_pixel_abs_threshold", "specialPixelAbsThreshold", "SpecialPixelAbsThreshold"), lambda value: float(value)),
+        ("min_valid_pixels", ("min_valid_pixels", "minValidPixels", "MinValidPixels"), lambda value: int(value)),
+        (
+            "valid_pixel_percent_threshold",
+            ("valid_pixel_percent_threshold", "validPixelPercentThreshold", "ValidPixelPercentThreshold"),
+            lambda value: _validate_valid_pixel_percent_threshold(float(value)),
+        ),
+        ("ratio_test", ("ratio_test", "ratioTest", "RatioTest"), lambda value: float(value)),
+        ("max_features", ("max_features", "maxFeatures", "MaxFeatures"), lambda value: int(value)),
+        ("sift_octave_layers", ("sift_octave_layers", "siftOctaveLayers", "SiftOctaveLayers"), lambda value: int(value)),
+        ("sift_contrast_threshold", ("sift_contrast_threshold", "siftContrastThreshold", "SiftContrastThreshold"), lambda value: float(value)),
+        ("sift_edge_threshold", ("sift_edge_threshold", "siftEdgeThreshold", "SiftEdgeThreshold"), lambda value: float(value)),
+        ("sift_sigma", ("sift_sigma", "siftSigma", "SiftSigma"), lambda value: float(value)),
+        ("crop_expand_pixels", ("crop_expand_pixels", "cropExpandPixels", "CropExpandPixels"), lambda value: int(value)),
+        ("min_overlap_size", ("min_overlap_size", "minOverlapSize", "MinOverlapSize"), lambda value: int(value)),
+        (
+            "use_parallel_cpu",
+            ("use_parallel_cpu", "useParallelCpu", "UseParallelCpu"),
+            lambda value: _coerce_config_bool(value, field_name="use_parallel_cpu"),
+        ),
+        (
+            "num_worker_parallel_cpu",
+            ("num_worker_parallel_cpu", "numWorkerParallelCpu", "NumWorkerParallelCpu"),
+            lambda value: _validate_num_worker_parallel_cpu(int(value)),
+        ),
+        (
+            "write_match_visualization",
+            ("write_match_visualization", "writeMatchVisualization", "WriteMatchVisualization"),
+            lambda value: _coerce_config_bool(value, field_name="write_match_visualization"),
+        ),
+        (
+            "match_visualization_output_path",
+            ("match_visualization_output_path", "matchVisualizationOutputPath", "MatchVisualizationOutputPath"),
+            lambda value: str(value),
+        ),
+        (
+            "match_visualization_output_dir",
+            ("match_visualization_output_dir", "matchVisualizationOutputDir", "MatchVisualizationOutputDir"),
+            lambda value: str(value),
+        ),
+        (
+            "match_visualization_scale",
+            ("match_visualization_scale", "matchVisualizationScale", "MatchVisualizationScale"),
+            lambda value: float(value),
+        ),
+    )
+
+    for destination, candidate_keys, coercer in field_specs:
+        value = _first_present_config_value(containers, candidate_keys)
+        if value is None:
+            continue
+        try:
+            defaults[destination] = coercer(value)
+        except (TypeError, ValueError) as exc:
+            raise ValueError(
+                f"Invalid ImageMatch config value for {destination!r}: {value!r}"
+            ) from exc
+    return defaults
 
 
 def _full_image_window(image_width: int, image_height: int) -> TileWindow:
@@ -1027,6 +1184,7 @@ def match_dom_pair(
     crop_expand_pixels: int = 100,
     min_overlap_size: int = 16,
     use_parallel_cpu: bool = True,
+    num_worker_parallel_cpu: int = DEFAULT_NUM_WORKER_PARALLEL_CPU,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
@@ -1035,6 +1193,7 @@ def match_dom_pair(
 
     try:
         resolved_valid_pixel_percent_threshold = _validate_valid_pixel_percent_threshold(valid_pixel_percent_threshold)
+        resolved_num_worker_parallel_cpu = _validate_num_worker_parallel_cpu(num_worker_parallel_cpu)
         left_width = left_cube.sample_count()
         left_height = left_cube.line_count()
         right_width = right_cube.sample_count()
@@ -1077,7 +1236,7 @@ def match_dom_pair(
 
             if windows:
                 if parallel_cpu_requested and len(windows) > 1:
-                    candidate_worker_count = min(len(windows), max(1, os.cpu_count() or 1))
+                    candidate_worker_count = min(len(windows), resolved_num_worker_parallel_cpu)
                     if candidate_worker_count > 1:
                         tile_results = _run_parallel_tile_match_tasks(
                             _build_tile_match_tasks(
@@ -1179,6 +1338,7 @@ def match_dom_pair(
             "skipped_tile_count": sum(1 for tile in tile_summaries if tile.status != "matched"),
             "point_count": len(left_points),
             "parallel_cpu_requested": parallel_cpu_requested,
+            "num_worker_parallel_cpu": resolved_num_worker_parallel_cpu,
             "parallel_cpu_used": parallel_cpu_used,
             "parallel_cpu_backend": parallel_cpu_backend,
             "parallel_cpu_worker_count": parallel_cpu_worker_count,
@@ -1220,9 +1380,25 @@ def match_dom_pair_to_key_files(
     write_key_file(left_output_key, left_key_file)
     write_key_file(right_output_key, right_key_file)
     if metadata_output is not None:
+        metadata_payload = dict(summary["preparation"])
+        metadata_payload["image_match"] = {
+            "status": summary["status"],
+            "reason": summary["reason"],
+            "point_count": summary["point_count"],
+            "tile_count": summary["tile_count"],
+            "matched_tile_count": summary["matched_tile_count"],
+            "skipped_tile_count": summary["skipped_tile_count"],
+            "tiling_used": summary["tiling_used"],
+            "valid_pixel_percent_threshold": summary["valid_pixel_percent_threshold"],
+            "parallel_cpu_requested": summary["parallel_cpu_requested"],
+            "num_worker_parallel_cpu": summary["num_worker_parallel_cpu"],
+            "parallel_cpu_used": summary["parallel_cpu_used"],
+            "parallel_cpu_backend": summary["parallel_cpu_backend"],
+            "parallel_cpu_worker_count": summary["parallel_cpu_worker_count"],
+        }
         write_pair_preparation_metadata(
             metadata_output,
-            summary["preparation"],
+            metadata_payload,
         )
     match_visualization_result: dict[str, object] | None = None
     if write_match_visualization:
@@ -1256,8 +1432,9 @@ def match_dom_pair_to_key_files(
     }
 
 
-def build_argument_parser() -> argparse.ArgumentParser:
+def build_argument_parser(config_defaults: dict[str, object] | None = None) -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Match two DOM cubes with OpenCV SIFT and write DOM-space `.key` files.")
+    parser.add_argument("--config", default=None, help="Optional config JSON path. When provided, the ImageMatch section supplies default values for this CLI; explicit CLI flags still win.")
     parser.add_argument("left_dom", help="Left DOM cube path.")
     parser.add_argument("right_dom", help="Right DOM cube path.")
     parser.add_argument("left_output_key", help="Output `.key` file for the left DOM image.")
@@ -1285,19 +1462,33 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--sift-sigma", type=float, default=1.6, help="Gaussian sigma used by the OpenCV SIFT detector.")
     parser.add_argument("--crop-expand-pixels", type=int, default=100, help="Extra projected-overlap margin, expressed in pixels, added before matching.")
     parser.add_argument("--min-overlap-size", type=int, default=16, help="Skip matching when the expanded projected-overlap window is smaller than this many pixels in either direction.")
-    parser.add_argument("--use_parallel_cpu", "--use-parallel-cpu", dest="use_parallel_cpu", action="store_true", help="Enable CPU process-pool parallelism for tiled matching. Enabled by default.")
-    parser.add_argument("--no_parallel_cpu", "--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
-    parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default drawMatches PNG output written for the matched DOM pair.")
-    parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the drawMatches PNG written by the image-match stage.")
-    parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the drawMatches PNG written by the image-match stage.")
-    parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the drawMatches PNG. Defaults to 1/3 for a smaller preview.")
+    parser.add_argument("--num-worker-parallel-cpu", type=_parse_num_worker_parallel_cpu, default=DEFAULT_NUM_WORKER_PARALLEL_CPU, help=f"Maximum worker-process count used when CPU tile parallelism is enabled. Must be within [1, {MAX_NUM_WORKER_PARALLEL_CPU}]. Default: {DEFAULT_NUM_WORKER_PARALLEL_CPU}.")
+    parser.add_argument("--use-parallel-cpu", dest="use_parallel_cpu", action="store_true", help="Enable CPU process-pool parallelism for tiled matching. Enabled by default.")
+    parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
+    parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default pre-RANSAC drawMatches PNG output written for the matched DOM pair.")
+    parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the pre-RANSAC drawMatches PNG written by the image-match stage.")
+    parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the pre-RANSAC drawMatches PNG written by the image-match stage.")
+    parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the pre-RANSAC drawMatches PNG. Defaults to 1/3 for a smaller preview.")
     parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True)
+    if config_defaults:
+        parser.set_defaults(**config_defaults)
     return parser
 
 
-def main() -> None:
-    parser = build_argument_parser()
-    args = parser.parse_args()
+def main(argv: list[str] | None = None) -> None:
+    config_probe_parser = argparse.ArgumentParser(add_help=False)
+    config_probe_parser.add_argument("--config", default=None)
+    config_probe_args, _ = config_probe_parser.parse_known_args(argv)
+
+    config_defaults: dict[str, object] = {}
+    if config_probe_args.config is not None:
+        try:
+            config_defaults = load_image_match_defaults_from_config(config_probe_args.config)
+        except ValueError as exc:
+            config_probe_parser.error(str(exc))
+
+    parser = build_argument_parser(config_defaults=config_defaults)
+    args = parser.parse_args(argv)
     result = match_dom_pair_to_key_files(
         args.left_dom,
         args.right_dom,
@@ -1327,6 +1518,7 @@ def main() -> None:
         crop_expand_pixels=args.crop_expand_pixels,
         min_overlap_size=args.min_overlap_size,
         use_parallel_cpu=args.use_parallel_cpu,
+        num_worker_parallel_cpu=args.num_worker_parallel_cpu,
         write_match_visualization=args.write_match_visualization,
         match_visualization_output_path=args.match_visualization_output_path,
         match_visualization_output_dir=args.match_visualization_output_dir,

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-21
+Last Modified: 2026-04-22
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -11,6 +11,7 @@ Updated: 2026-04-18  Geng Xun added optional configurable real LRO DOM matching 
 Updated: 2026-04-19  Geng Xun added regression coverage for default image-match visualization output and the explicit no-write CLI switch.
 Updated: 2026-04-21  Geng Xun added focused regression coverage for tile valid-pixel ratio filtering, 8-bit zero masking, and the new CLI threshold option.
 Updated: 2026-04-22  Geng Xun added focused regression coverage for the default CPU process-pool tile-matching path and the new parallel opt-out CLI flags.
+Updated: 2026-04-22  Geng Xun added focused regression coverage for configurable CPU process-pool worker limits in image_match.py.
 """
 
 from __future__ import annotations
@@ -297,8 +298,52 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         )
 
         self.assertTrue(default_args.use_parallel_cpu)
+        self.assertEqual(default_args.num_worker_parallel_cpu, 8)
         self.assertFalse(disabled_args.use_parallel_cpu)
         self.assertTrue(explicit_enabled_args.use_parallel_cpu)
+
+    def test_build_argument_parser_accepts_custom_parallel_worker_limit(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--num-worker-parallel-cpu",
+                "32",
+            ]
+        )
+
+        self.assertEqual(args.num_worker_parallel_cpu, 32)
+
+    def test_build_argument_parser_rejects_out_of_range_parallel_worker_limit(self):
+        parser = build_argument_parser()
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--num-worker-parallel-cpu",
+                    "0",
+                ]
+            )
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--num-worker-parallel-cpu",
+                    "4097",
+                ]
+            )
 
     def test_build_argument_parser_accepts_valid_pixel_percent_threshold(self):
         parser = build_argument_parser()
@@ -507,13 +552,77 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 )
 
         parallel_mock.assert_called_once()
+        self.assertEqual(parallel_mock.call_args.kwargs["max_workers"], 4)
         self.assertTrue(summary["parallel_cpu_requested"])
+        self.assertEqual(summary["num_worker_parallel_cpu"], 8)
         self.assertTrue(summary["parallel_cpu_used"])
         self.assertEqual(summary["parallel_cpu_backend"], "process_pool")
-        self.assertGreaterEqual(summary["parallel_cpu_worker_count"], 2)
+        self.assertEqual(summary["parallel_cpu_worker_count"], 4)
         self.assertEqual(summary["point_count"], 2)
         self.assertEqual(len(left_key_file.points), 2)
         self.assertEqual(len(right_key_file.points), 2)
+
+    def test_match_dom_pair_respects_requested_parallel_worker_limit(self):
+        width = 128
+        height = 128
+        image = _build_textured_test_image(width, height)
+
+        synthetic_tile_results = [
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=5,
+                    right_feature_count=5,
+                    match_count=1,
+                    status="matched",
+                ),
+                left_points=(Keypoint(10.0, 10.0),),
+                right_points=(Keypoint(10.5, 10.5),),
+            ),
+        ]
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_parallel_cap.cub",
+                right_name="right_parallel_cap.cub",
+            )
+
+            with mock.patch.object(
+                image_match,
+                "_run_parallel_tile_match_tasks",
+                return_value=synthetic_tile_results,
+            ) as parallel_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                    num_worker_parallel_cpu=2,
+                )
+
+        parallel_mock.assert_called_once()
+        self.assertEqual(parallel_mock.call_args.kwargs["max_workers"], 2)
+        self.assertEqual(summary["num_worker_parallel_cpu"], 2)
+        self.assertTrue(summary["parallel_cpu_used"])
+        self.assertEqual(summary["parallel_cpu_worker_count"], 2)
 
     def test_match_dom_pair_reports_serial_backend_when_parallel_cpu_is_disabled(self):
         image = _build_textured_test_image(64, 64)
@@ -535,6 +644,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             )
 
         self.assertFalse(summary["parallel_cpu_requested"])
+        self.assertEqual(summary["num_worker_parallel_cpu"], 8)
         self.assertFalse(summary["parallel_cpu_used"])
         self.assertEqual(summary["parallel_cpu_backend"], "serial")
         self.assertEqual(summary["parallel_cpu_worker_count"], 1)

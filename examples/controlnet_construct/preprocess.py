@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+import cv2
 import numpy as np
 
 
@@ -34,6 +35,13 @@ class StretchStats:
         if self.total_pixel_count <= 0:
             return 0.0
         return float(self.valid_pixel_count) / float(self.total_pixel_count)
+
+
+def validate_invalid_pixel_radius(radius: int) -> int:
+    resolved_radius = int(radius)
+    if not (0 <= resolved_radius <= 100):
+        raise ValueError("invalid_pixel_radius must be within [0, 100].")
+    return resolved_radius
 
 
 def build_invalid_mask(
@@ -87,6 +95,36 @@ def summarize_valid_pixels(
         total_pixel_count=total_pixel_count,
         valid_pixel_ratio=valid_pixel_ratio,
     )
+
+
+def expand_invalid_mask_for_radius(
+    invalid_mask,
+    *,
+    invalid_pixel_radius: int = 0,
+) -> np.ndarray:
+    """Expand invalid regions so nearby pixels also become non-detectable.
+
+    This implements the repository's `invalid-pixel-radius` semantics: if a
+    candidate pixel lies within a square Chebyshev neighborhood of any invalid
+    pixel, or is too close to the image border, it is treated as invalid for
+    feature detection.
+    """
+    resolved_radius = validate_invalid_pixel_radius(invalid_pixel_radius)
+    resolved_invalid_mask = np.asarray(invalid_mask, dtype=bool)
+    if resolved_radius == 0 or resolved_invalid_mask.size == 0:
+        return resolved_invalid_mask.copy()
+
+    valid_mask = np.where(~resolved_invalid_mask, 255, 0).astype(np.uint8)
+    kernel_size = 2 * resolved_radius + 1
+    kernel = np.ones((kernel_size, kernel_size), dtype=np.uint8)
+    eroded_valid_mask = cv2.erode(
+        valid_mask,
+        kernel,
+        iterations=1,
+        borderType=cv2.BORDER_CONSTANT,
+        borderValue=0,
+    )
+    return eroded_valid_mask == 0
 
 
 def _resolve_stretch_bounds(

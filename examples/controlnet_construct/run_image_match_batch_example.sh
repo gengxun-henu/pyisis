@@ -6,6 +6,7 @@ SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(cd -- "${SCRIPT_DIR}/../.." && pwd)
 DEFAULT_WORK_DIR_RELATIVE="work"
 DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD="0.05"
+DEFAULT_INVALID_PIXEL_RADIUS="1"
 
 log() {
   printf '[image-match-batch] %s\n' "$*"
@@ -55,6 +56,13 @@ Options:
   --valid-pixel-percent-threshold VALUE
                                  Minimum valid-pixel ratio forwarded to image_match.py.
                                  Default: 0.05 unless omitted and resolved from --config.
+  --invalid-pixel-radius N        Suppress feature detection near invalid pixels or image borders.
+                                  Default: 1 unless omitted and resolved from --config.
+  --enable-low-resolution-offset-estimation
+                                  Enable low-resolution DOM matching to estimate projected offset before
+                                  the full-resolution overlap crop is prepared.
+  --low-resolution-level N        Low-resolution pyramid level for projected-offset estimation.
+                                  Default: 3 unless omitted and resolved from --config.
   --skip-existing                 Skip pairs whose left/right key files already exist
   -h, --help                      Show this help message
 
@@ -180,6 +188,91 @@ raise SystemExit(0)
 PY
 }
 
+extract_invalid_pixel_radius_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
+candidate_keys = ('invalid_pixel_radius', 'invalidPixelRadius', 'InvalidPixelRadius')
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
+extract_enable_low_resolution_offset_estimation_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
+candidate_keys = (
+  'enable_low_resolution_offset_estimation',
+  'enableLowResolutionOffsetEstimation',
+  'EnableLowResolutionOffsetEstimation',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    normalized = str(value).strip().lower()
+    if normalized in {'1', 'true', 'yes', 'on'}:
+      print('1')
+      raise SystemExit(0)
+    if normalized in {'0', 'false', 'no', 'off'}:
+      print('0')
+      raise SystemExit(0)
+    raise SystemExit(f'invalid enable_low_resolution_offset_estimation value: {value!r}')
+
+raise SystemExit(0)
+PY
+}
+
+extract_low_resolution_level_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
+candidate_keys = ('low_resolution_level', 'lowResolutionLevel', 'LowResolutionLevel')
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
 extract_use_parallel_cpu_from_config() {
   local config_path=$1
   "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
@@ -239,6 +332,12 @@ main() {
   local num_worker_parallel_cpu="8"
   local explicit_num_worker_parallel_cpu=""
   local explicit_threshold=""
+  local invalid_pixel_radius="$DEFAULT_INVALID_PIXEL_RADIUS"
+  local explicit_invalid_pixel_radius=""
+  local enable_low_resolution_offset_estimation="0"
+  local explicit_enable_low_resolution_offset_estimation=""
+  local low_resolution_level="3"
+  local explicit_low_resolution_level=""
   local config_threshold=""
   local forwarded_args=()
 
@@ -312,6 +411,23 @@ main() {
         explicit_threshold=$2
         shift 2
         ;;
+      --invalid-pixel-radius)
+        [[ $# -ge 2 ]] || die "missing value for --invalid-pixel-radius"
+        invalid_pixel_radius=$2
+        explicit_invalid_pixel_radius=$2
+        shift 2
+        ;;
+      --enable-low-resolution-offset-estimation)
+        enable_low_resolution_offset_estimation="1"
+        explicit_enable_low_resolution_offset_estimation="1"
+        shift
+        ;;
+      --low-resolution-level)
+        [[ $# -ge 2 ]] || die "missing value for --low-resolution-level"
+        low_resolution_level=$2
+        explicit_low_resolution_level=$2
+        shift 2
+        ;;
       --skip-existing)
         skip_existing="1"
         shift
@@ -378,6 +494,27 @@ main() {
         num_worker_parallel_cpu="$config_num_worker_parallel_cpu"
       fi
     fi
+    if [[ -z "$explicit_invalid_pixel_radius" ]]; then
+      local config_invalid_pixel_radius
+      config_invalid_pixel_radius=$(extract_invalid_pixel_radius_from_config "$CONFIG_PATH")
+      if [[ -n "$config_invalid_pixel_radius" ]]; then
+        invalid_pixel_radius="$config_invalid_pixel_radius"
+      fi
+    fi
+    if [[ -z "$explicit_enable_low_resolution_offset_estimation" ]]; then
+      local config_enable_low_resolution_offset_estimation
+      config_enable_low_resolution_offset_estimation=$(extract_enable_low_resolution_offset_estimation_from_config "$CONFIG_PATH")
+      if [[ -n "$config_enable_low_resolution_offset_estimation" ]]; then
+        enable_low_resolution_offset_estimation="$config_enable_low_resolution_offset_estimation"
+      fi
+    fi
+    if [[ -z "$explicit_low_resolution_level" ]]; then
+      local config_low_resolution_level
+      config_low_resolution_level=$(extract_low_resolution_level_from_config "$CONFIG_PATH")
+      if [[ -n "$config_low_resolution_level" ]]; then
+        low_resolution_level="$config_low_resolution_level"
+      fi
+    fi
   fi
   if [[ -n "$explicit_threshold" ]]; then
     VALID_PIXEL_PERCENT_THRESHOLD="$explicit_threshold"
@@ -392,12 +529,19 @@ main() {
   log "Metadata dir: $METADATA_DIR"
   log "Match viz dir: $MATCH_VIZ_DIR"
   log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
+  log "Invalid pixel radius: $invalid_pixel_radius"
   if [[ "$use_parallel_cpu" == "1" ]]; then
     log "CPU parallel tile matching: enabled"
     log "CPU parallel worker limit: $num_worker_parallel_cpu"
   else
     log "CPU parallel tile matching: disabled"
     log "CPU parallel worker limit (forwarded default): $num_worker_parallel_cpu"
+  fi
+  if [[ "$enable_low_resolution_offset_estimation" == "1" ]]; then
+    log "Low-resolution offset estimation: enabled"
+    log "Low-resolution level: $low_resolution_level"
+  else
+    log "Low-resolution offset estimation: disabled"
   fi
   if [[ ${#forwarded_args[@]} -gt 0 ]]; then
     log "Forwarding extra image_match.py args: ${forwarded_args[*]}"
@@ -449,6 +593,7 @@ main() {
       --metadata-output "$METADATA_DIR/${pair_tag}.json"
       --match-visualization-output-dir "$MATCH_VIZ_DIR"
       --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
+      --invalid-pixel-radius "$invalid_pixel_radius"
     )
     if [[ -n "$CONFIG_PATH" ]]; then
       match_args=(
@@ -461,6 +606,7 @@ main() {
         --metadata-output "$METADATA_DIR/${pair_tag}.json"
         --match-visualization-output-dir "$MATCH_VIZ_DIR"
         --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
+        --invalid-pixel-radius "$invalid_pixel_radius"
       )
     fi
     if [[ "$use_parallel_cpu" == "1" ]]; then
@@ -469,6 +615,9 @@ main() {
       match_args+=(--no-parallel-cpu)
     fi
     match_args+=(--num-worker-parallel-cpu "$num_worker_parallel_cpu")
+    if [[ "$enable_low_resolution_offset_estimation" == "1" ]]; then
+      match_args+=(--enable-low-resolution-offset-estimation --low-resolution-level "$low_resolution_level")
+    fi
     if [[ ${#forwarded_args[@]} -gt 0 ]]; then
       match_args+=("${forwarded_args[@]}")
     fi

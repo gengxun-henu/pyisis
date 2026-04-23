@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-22
+Last Modified: 2026-04-23
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -12,6 +12,8 @@ Updated: 2026-04-19  Geng Xun added regression coverage for default image-match 
 Updated: 2026-04-21  Geng Xun added focused regression coverage for tile valid-pixel ratio filtering, 8-bit zero masking, and the new CLI threshold option.
 Updated: 2026-04-22  Geng Xun added focused regression coverage for the default CPU process-pool tile-matching path and the new parallel opt-out CLI flags.
 Updated: 2026-04-22  Geng Xun added focused regression coverage for configurable CPU process-pool worker limits in image_match.py.
+Updated: 2026-04-23  Geng Xun added regression coverage for invalid-pixel-radius parsing and default low-resolution offset summary fields.
+Updated: 2026-04-23  Geng Xun added focused regression coverage for batched projected keypoint conversion so low-resolution offset estimation no longer reopens the same cube for every retained point.
 """
 
 from __future__ import annotations
@@ -132,6 +134,101 @@ def _write_projected_dom_pair(
 
 
 class ControlNetConstructMatchingUnitTest(unittest.TestCase):
+    def test_projected_xy_from_keypoints_opens_cube_once_and_preserves_input_order(self):
+        class FakeProjection:
+            def __init__(self):
+                self.calls: list[tuple[float, float]] = []
+                self._sample = 0.0
+                self._line = 0.0
+
+            def set_world(self, sample: float, line: float) -> bool:
+                self.calls.append((sample, line))
+                self._sample = sample
+                self._line = line
+                return True
+
+            def x_coord(self) -> float:
+                return self._sample + 1000.0
+
+            def y_coord(self) -> float:
+                return self._line + 2000.0
+
+        class FakeCube:
+            def __init__(self):
+                self.open_calls: list[tuple[str, str]] = []
+                self.close_call_count = 0
+                self._is_open = False
+                self._projection = FakeProjection()
+
+            def open(self, path: str, mode: str) -> None:
+                self.open_calls.append((path, mode))
+                self._is_open = True
+
+            def projection(self) -> FakeProjection:
+                return self._projection
+
+            def is_open(self) -> bool:
+                return self._is_open
+
+            def close(self) -> None:
+                self.close_call_count += 1
+                self._is_open = False
+
+        fake_cube = FakeCube()
+        points = (
+            Keypoint(10.5, 20.5),
+            Keypoint(30.25, 40.75),
+            Keypoint(5.0, 6.0),
+        )
+
+        with mock.patch.object(image_match.ip, "Cube", return_value=fake_cube):
+            projected_points = image_match._projected_xy_from_keypoints("fake_lowres.cub", points)
+
+        self.assertEqual(fake_cube.open_calls, [("fake_lowres.cub", "r")])
+        self.assertEqual(fake_cube.close_call_count, 1)
+        self.assertEqual(fake_cube._projection.calls, [(10.5, 20.5), (30.25, 40.75), (5.0, 6.0)])
+        self.assertEqual(
+            projected_points,
+            (
+                (1010.5, 2020.5),
+                (1030.25, 2040.75),
+                (1005.0, 2006.0),
+            ),
+        )
+
+    def test_projected_xy_from_keypoints_in_open_cube_raises_with_failed_point_context(self):
+        class FakeProjection:
+            def set_world(self, sample: float, line: float) -> bool:
+                return (sample, line) != (8.0, 9.0)
+
+            def x_coord(self) -> float:
+                return 0.0
+
+            def y_coord(self) -> float:
+                return 0.0
+
+        class FakeCube:
+            def __init__(self):
+                self.projection_call_count = 0
+
+            def projection(self) -> FakeProjection:
+                self.projection_call_count += 1
+                return FakeProjection()
+
+        fake_cube = FakeCube()
+
+        with self.assertRaisesRegex(
+            RuntimeError,
+            r"Failed to convert keypoint sample/line to projected coordinates for failing_lowres\.cub: \(8\.0, 9\.0\)",
+        ):
+            image_match._projected_xy_from_keypoints_in_open_cube(
+                fake_cube,
+                "failing_lowres.cub",
+                (Keypoint(1.0, 2.0), Keypoint(8.0, 9.0)),
+            )
+
+        self.assertEqual(fake_cube.projection_call_count, 1)
+
     def test_default_match_visualization_path_uses_auto_timestamped_name(self):
         timestamp = datetime(2026, 4, 18, 18, 44, 32)
 
@@ -293,7 +390,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 "right.cub",
                 "left.key",
                 "right.key",
-                "--use_parallel_cpu",
+                "--use-parallel-cpu",
             ]
         )
 
@@ -360,6 +457,69 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         )
 
         self.assertAlmostEqual(args.valid_pixel_percent_threshold, 0.35)
+
+    def test_build_argument_parser_accepts_invalid_pixel_radius_and_low_resolution_options(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--invalid-pixel-radius",
+                "2",
+                "--enable-low-resolution-offset-estimation",
+                "--low-resolution-level",
+                "4",
+            ]
+        )
+
+        self.assertEqual(args.invalid_pixel_radius, 2)
+        self.assertTrue(args.enable_low_resolution_offset_estimation)
+        self.assertEqual(args.low_resolution_level, 4)
+
+    def test_build_argument_parser_rejects_out_of_range_invalid_pixel_radius(self):
+        parser = build_argument_parser()
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--invalid-pixel-radius",
+                    "-1",
+                ]
+            )
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--invalid-pixel-radius",
+                    "101",
+                ]
+            )
+
+    def test_build_argument_parser_rejects_out_of_range_low_resolution_level(self):
+        parser = build_argument_parser()
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--low-resolution-level",
+                    "-1",
+                ]
+            )
 
     def test_build_argument_parser_rejects_out_of_range_valid_pixel_percent_threshold(self):
         parser = build_argument_parser()
@@ -704,6 +864,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 right_path,
                 min_valid_pixels=32,
                 valid_pixel_percent_threshold=0.3,
+                invalid_pixel_radius=0,
             )
 
         self.assertEqual(summary["point_count"], 0)
@@ -739,6 +900,32 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertGreaterEqual(summary["tiles"][0]["left_valid_pixel_ratio"], 0.0)
         self.assertLessEqual(summary["tiles"][0]["left_valid_pixel_ratio"], 1.0)
 
+    def test_match_dom_pair_reports_disabled_low_resolution_offset_summary_by_default(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_lowres_default.cub",
+                right_name="right_lowres_default.cub",
+            )
+
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                min_valid_pixels=16,
+            )
+
+        low_resolution_summary = summary["low_resolution_offset"]
+        self.assertFalse(low_resolution_summary["enabled"])
+        self.assertEqual(low_resolution_summary["status"], "disabled")
+        self.assertFalse(low_resolution_summary["fallback_offset_zero"])
+        self.assertEqual(low_resolution_summary["delta_x_projected"], 0.0)
+        self.assertEqual(low_resolution_summary["delta_y_projected"], 0.0)
+        self.assertEqual(low_resolution_summary["retained_match_count"], 0)
+
     def test_match_dom_pair_treats_zero_as_invalid_for_8bit_images(self):
         image = np.zeros((48, 48), dtype=np.float64)
         image[8:40, 8:40] = np.tile(np.arange(1.0, 33.0, dtype=np.float64), (32, 1))
@@ -764,12 +951,14 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 byte_right_path,
                 min_valid_pixels=16,
                 valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
             )
             _, _, real_summary = match_dom_pair(
                 real_left_path,
                 real_right_path,
                 min_valid_pixels=16,
                 valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
             )
 
         self.assertLess(byte_summary["tiles"][0]["left_valid_pixel_ratio"], 1.0)
@@ -781,6 +970,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             FIXTURE_DOM_RIGHT,
             min_valid_pixels=16,
             ratio_test=0.85,
+            invalid_pixel_radius=0,
         )
 
         self.assertEqual(left_key_file.image_width, 50)

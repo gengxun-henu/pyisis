@@ -2,9 +2,10 @@
 
 Author: Geng Xun
 Created: 2026-04-19
-Last Modified: 2026-04-19
+Last Modified: 2026-04-23
 Updated: 2026-04-19  Geng Xun added per-function normal, boundary, and exception coverage for dom_prepare.py helpers, metadata writing, and CLI dispatch.
 Updated: 2026-04-19  Geng Xun added configurable real LRO DOM test-path overrides to match the optional user-specified input pattern used by the matching tests.
+Updated: 2026-04-23  Geng Xun synchronized PairPreparationMetadata test builders with projected delta fields and kept mocked DOM-overlap tests compatible with projection checks.
 """
 
 from __future__ import annotations
@@ -141,6 +142,8 @@ class DomPrepareUnitTest(unittest.TestCase):
             expanded_max_x=20.0,
             expanded_min_y=30.0,
             expanded_max_y=40.0,
+            projected_delta_x=0.0,
+            projected_delta_y=0.0,
             expand_pixels=16,
             min_overlap_size=8,
             shared_width=10,

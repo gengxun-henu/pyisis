@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-17
-Updated: 2026-04-17  Geng Xun added reusable coordinate-basis metadata blocks so JSON sidecars can declare 0-based offsets versus 1-based ISIS sample/line fields consistently.
+Updated: 2026-04-17  Geng Xun added reusable coordinate-basis metadata blocks, so JSON sidecars can declare 0-based offsets versus 1-based ISIS sample/line fields consistently.
 """
 
 from __future__ import annotations

@@ -14,7 +14,7 @@ Updated: 2026-04-22  Geng Xun extended match_metadata JSON sidecars to persist i
 Updated: 2026-04-22  Geng Xun added a configurable --num-worker-parallel-cpu worker cap for process-pool tile matching and persisted the requested worker setting alongside actual runtime diagnostics.
 Updated: 2026-04-22  Geng Xun standardized the public image-match CLI on kebab-case flags and removed legacy underscore spellings.
 Updated: 2026-04-22  Geng Xun added optional --config JSON loading so image_match.py and the example batch wrappers can share ImageMatch defaults from the same configuration file.
-Updated: 2026-04-23  Geng Xun batched low-resolution projected keypoint conversion so repeated offset estimation reuses opened cubes and projection objects instead of reopening the same DOM for every point.
+Updated: 2026-04-23  Geng Xun batched low-resolution projected keypoints conversion so repeated offset estimation reuses opened cubes and projection objects instead of reopening the same DOM for every point.
 """
 
 from __future__ import annotations

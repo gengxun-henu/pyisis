@@ -33,6 +33,11 @@
 2. 默认的 CPU 进程池 worker 上限是 `8`；你可以通过 `--num-worker-parallel-cpu` 改成 `1~4096` 之间的值。
 3. 默认输出匹配连线可视化 PNG，而不是必须手工额外开开关。
 
+同时，`image_match.py` 以及两个示例脚本现在还支持两组与需求 5 / 6 对应的新能力：
+
+4. 可选启用**低分辨率 DOM 粗配准**，先在低分辨率层估计一组全局投影偏移，再进入全分辨率 overlap crop；
+5. 可配置 `invalid-pixel-radius`，在无效像素和图像边界附近抑制 SIFT 特征点检测。
+
 其中两个示例脚本的可视化目录约定不同：
 
 - `run_image_match_batch_example.sh`：默认只产出 **image_match 阶段（pre-RANSAC）** 的连线图，目录是 `work/match_viz/`；
@@ -78,7 +83,7 @@ python -c "import isis_pybind as ip; print(ip.__file__)"
    - `PointIdPrefix` 可选；
    - `PairId` 在 batch 模式下会被自动分配的 `S1`、`S2`、`S3`... 覆盖，不需要手工逐对填写。
   - 从当前版本开始，`image_match.py` 本身支持 `--config`，会读取配置文件里的 `ImageMatch` 段作为匹配默认值；`run_pipeline_example.sh` 和 `run_image_match_batch_example.sh` 也会把这段配置一起转发给 `image_match.py`。
-  - 因此除了 `valid_pixel_percent_threshold` 与 `num_worker_parallel_cpu` 之外，你也可以把 tile 尺寸、overlap、灰度拉伸、SIFT 参数、crop/range 参数、并行开关、预览图开关等 DOM 匹配参数统一写进 `ImageMatch`。
+  - 因此除了 `valid_pixel_percent_threshold` 与 `num_worker_parallel_cpu` 之外，你也可以把 tile 尺寸、overlap、灰度拉伸、SIFT 参数、crop/range 参数、并行开关、预览图开关，以及新增的 `invalid_pixel_radius` / `enable_low_resolution_offset_estimation` / `low_resolution_level` 等 DOM 匹配参数统一写进 `ImageMatch`。
 
 仓库自带的示例配置位于：
 
@@ -103,6 +108,9 @@ python -c "import isis_pybind as ip; print(ip.__file__)"
   "min_overlap_size": 16,
   "use_parallel_cpu": true,
   "num_worker_parallel_cpu": 8,
+  "invalid_pixel_radius": 1,
+  "enable_low_resolution_offset_estimation": false,
+  "low_resolution_level": 3,
   "write_match_visualization": true,
   "match_visualization_scale": 0.3333333333333333
 }
@@ -130,6 +138,7 @@ work/
   dom_keys/
   match_metadata/
   match_viz/
+  low_resolution/
   match_viz_post_ransac/
   pair_nets/
   reports/
@@ -139,12 +148,13 @@ work/
 先创建这些目录：
 
 ```bash
-mkdir -p work/dom_keys work/match_metadata work/match_viz work/match_viz_post_ransac work/pair_nets work/reports work/merge
+mkdir -p work/dom_keys work/match_metadata work/match_viz work/low_resolution work/match_viz_post_ransac work/pair_nets work/reports work/merge
 ```
 
 其中：
 
 - `work/match_viz/`：保存 `image_match.py` 输出的 **pre-RANSAC** 连线图；
+- `work/low_resolution/`：按 pair 保存低分辨率 DOM、低分辨率 key 文件、RANSAC 后 key 文件以及低分辨率阶段的可视化与诊断产物；
 - `work/match_viz_post_ransac/`：保存 `run_pipeline_example.sh` / `controlnet_stereopair.py from-dom-batch` 输出的 **post-RANSAC** 连线图。
 
 ### 0.4 推荐参数模板（先抄这个版本）
@@ -185,6 +195,9 @@ mkdir -p work/dom_keys work/match_metadata work/match_viz work/match_viz_post_ra
     "min_overlap_size": 16,
     "use_parallel_cpu": true,
     "num_worker_parallel_cpu": 8,
+    "invalid_pixel_radius": 1,
+    "enable_low_resolution_offset_estimation": false,
+    "low_resolution_level": 3,
     "write_match_visualization": true,
     "match_visualization_scale": 0.3333333333333333
   }
@@ -238,6 +251,21 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
 
 如果你已经把 `ImageMatch.num_worker_parallel_cpu` 写进配置文件，`run_pipeline_example.sh` 会自动读取；如果你想临时覆盖配置里的值，就继续显式传 `--num-worker-parallel-cpu` 即可。
 
+如果你想进一步减少边界或无效区附近的伪特征，可以显式加上：
+
+```bash
+  --invalid-pixel-radius 2
+```
+
+如果你的两景 DOM 存在较明显的整体投影平移，也可以先启用低分辨率粗配准：
+
+```bash
+  --enable-low-resolution-offset-estimation \
+  --low-resolution-level 3
+```
+
+这一步失败时不会中断整条流水线，而是自动回退为零偏移继续执行；对应状态会写进每个 pair 的 metadata JSON 里。
+
 #### 模板 B：手工批量跑 `image_match.py`
 
 如果你当前只想调 DOM 匹配这一段，而不想整条流水线一起跑，推荐从下面这套批处理模板起步：
@@ -262,13 +290,14 @@ while IFS=, read -r left right; do
     "work/dom_keys/${pair_tag}_B.key" \
     --metadata-output "work/match_metadata/${pair_tag}.json" \
     --match-visualization-output-dir work/match_viz \
+    --invalid-pixel-radius 1 \
     --num-worker-parallel-cpu 8 \
     --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
 
 done < work/images_overlap.lis
 ```
 
-如果你改用 `run_image_match_batch_example.sh`，它会默认做和上面模板一致的事情，并把 pre-RANSAC 连线图统一写到 `work/match_viz/`。若要关闭 CPU 并行，可传 `--no-parallel-cpu`；若要关闭这套默认连线图，可把 `--no-write-match-visualization` 通过 `--` 转发给 `image_match.py`。
+如果你改用 `run_image_match_batch_example.sh`，它会默认做和上面模板一致的事情，并把 pre-RANSAC 连线图统一写到 `work/match_viz/`。若要关闭 CPU 并行，可传 `--no-parallel-cpu`；若要关闭这套默认连线图，可把 `--no-write-match-visualization` 通过 `--` 转发给 `image_match.py`。如果需要批量启用低分辨率粗配准，可直接给这个脚本加 `--enable-low-resolution-offset-estimation --low-resolution-level 3`；如果需要更严格地抑制无效区边缘特征，可加 `--invalid-pixel-radius 2`。
 
 #### 什么时候把它从 `0.05` 调大或调小？
 
@@ -345,6 +374,7 @@ while IFS=, read -r left right; do
     "work/dom_keys/${pair_tag}_B.key" \
     --metadata-output "work/match_metadata/${pair_tag}.json" \
     --match-visualization-output-dir work/match_viz \
+    --invalid-pixel-radius 1 \
     --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
 
 done < work/images_overlap.lis
@@ -360,11 +390,13 @@ done < work/images_overlap.lis
 - `work/dom_keys/A__B_B.key`
 - `work/match_metadata/A__B.json`
 - `work/match_viz/*.png`
+- `work/low_resolution/<pair_tag>/*`（当启用低分辨率粗配准时）
 
 其中：
 
 - `.key` 文件保存的是 **DOM 整图坐标系下**的 tie points；
 - `match_metadata/*.json` 保存投影公共范围裁剪等 sidecar 信息，并额外记录 `image_match.num_worker_parallel_cpu`、`image_match.parallel_cpu_used`、`image_match.parallel_cpu_worker_count` 等并行诊断字段；其中 `num_worker_parallel_cpu` 是请求上限，`parallel_cpu_worker_count` 是该次运行实际采用的 worker 数；
+- 如果启用了低分辨率粗配准，`match_metadata/*.json` 中还会记录 `image_match.low_resolution_offset`，至少包括 `enabled`、`status`、`fallback_offset_zero`、`reason`、`delta_x_projected`、`delta_y_projected` 和 `retained_match_count`；
 - `match_viz/*.png` 是 `cv2.drawMatches` 预览图，表示 **RANSAC 之前**、也就是 `image_match.py` 直接输出的匹配结果，便于快速人工检查匹配质量。
 
 当前版本里，`image_match.py` 默认会开启这套 pre-RANSAC 可视化；如果你不想写 PNG，可以显式传 `--no-write-match-visualization`。
@@ -392,6 +424,9 @@ done < work/images_overlap.lis
 - `--crop-expand-pixels 100`
 - `--min-overlap-size 16`
 - `--ratio-test 0.75`
+- `--invalid-pixel-radius 1`
+- `--enable-low-resolution-offset-estimation`
+- `--low-resolution-level 3`
 - `--max-features ...`
 - `--sift-contrast-threshold ...`
 - `--no-write-match-visualization`

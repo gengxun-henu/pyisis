@@ -14,6 +14,7 @@ Updated: 2026-04-22  Geng Xun extended match_metadata JSON sidecars to persist i
 Updated: 2026-04-22  Geng Xun added a configurable --num-worker-parallel-cpu worker cap for process-pool tile matching and persisted the requested worker setting alongside actual runtime diagnostics.
 Updated: 2026-04-22  Geng Xun standardized the public image-match CLI on kebab-case flags and removed legacy underscore spellings.
 Updated: 2026-04-22  Geng Xun added optional --config JSON loading so image_match.py and the example batch wrappers can share ImageMatch defaults from the same configuration file.
+Updated: 2026-04-23  Geng Xun batched low-resolution projected keypoint conversion so repeated offset estimation reuses opened cubes and projection objects instead of reopening the same DOM for every point.
 """
 
 from __future__ import annotations
@@ -27,7 +28,10 @@ import json
 import multiprocessing as mp
 import os
 from pathlib import Path
+import shutil
+import subprocess
 import sys
+import time
 
 import cv2
 import numpy as np
@@ -37,13 +41,25 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from controlnet_construct.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from controlnet_construct.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
-    from controlnet_construct.preprocess import StretchStats, summarize_valid_pixels, stretch_to_byte
+    from controlnet_construct.preprocess import (
+        StretchStats,
+        expand_invalid_mask_for_radius,
+        summarize_valid_pixels,
+        stretch_to_byte,
+        validate_invalid_pixel_radius,
+    )
     from controlnet_construct.runtime import bootstrap_runtime_environment
     from controlnet_construct.tiling import TileWindow, generate_tiles, requires_tiling
 else:
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from .keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
-    from .preprocess import StretchStats, summarize_valid_pixels, stretch_to_byte
+    from .preprocess import (
+        StretchStats,
+        expand_invalid_mask_for_radius,
+        summarize_valid_pixels,
+        stretch_to_byte,
+        validate_invalid_pixel_radius,
+    )
     from .runtime import bootstrap_runtime_environment
     from .tiling import TileWindow, generate_tiles, requires_tiling
 
@@ -55,6 +71,7 @@ import isis_pybind as ip
 
 DEFAULT_NUM_WORKER_PARALLEL_CPU = 8
 MAX_NUM_WORKER_PARALLEL_CPU = 4096
+DEFAULT_LOW_RESOLUTION_LEVEL = 3
 
 
 @dataclass(frozen=True, slots=True)
@@ -98,6 +115,7 @@ class TileMatchTask:
     special_pixel_abs_threshold: float
     min_valid_pixels: int
     valid_pixel_percent_threshold: float
+    invalid_pixel_radius: int
     ratio_test: float
     max_features: int | None
     sift_octave_layers: int
@@ -147,6 +165,27 @@ def _validate_num_worker_parallel_cpu(value: int) -> int:
 def _parse_num_worker_parallel_cpu(value: str) -> int:
     try:
         return _validate_num_worker_parallel_cpu(int(value))
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _validate_low_resolution_level(value: int) -> int:
+    resolved_value = int(value)
+    if resolved_value < 0:
+        raise ValueError("low_resolution_level must be >= 0.")
+    return resolved_value
+
+
+def _parse_low_resolution_level(value: str) -> int:
+    try:
+        return _validate_low_resolution_level(int(value))
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _parse_invalid_pixel_radius(value: str) -> int:
+    try:
+        return validate_invalid_pixel_radius(int(value))
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
@@ -231,6 +270,11 @@ def load_image_match_defaults_from_config(config_path: str | Path) -> dict[str, 
             ("valid_pixel_percent_threshold", "validPixelPercentThreshold", "ValidPixelPercentThreshold"),
             lambda value: _validate_valid_pixel_percent_threshold(float(value)),
         ),
+        (
+            "invalid_pixel_radius",
+            ("invalid_pixel_radius", "invalidPixelRadius", "InvalidPixelRadius"),
+            lambda value: validate_invalid_pixel_radius(int(value)),
+        ),
         ("ratio_test", ("ratio_test", "ratioTest", "RatioTest"), lambda value: float(value)),
         ("max_features", ("max_features", "maxFeatures", "MaxFeatures"), lambda value: int(value)),
         ("sift_octave_layers", ("sift_octave_layers", "siftOctaveLayers", "SiftOctaveLayers"), lambda value: int(value)),
@@ -243,6 +287,20 @@ def load_image_match_defaults_from_config(config_path: str | Path) -> dict[str, 
             "use_parallel_cpu",
             ("use_parallel_cpu", "useParallelCpu", "UseParallelCpu"),
             lambda value: _coerce_config_bool(value, field_name="use_parallel_cpu"),
+        ),
+        (
+            "enable_low_resolution_offset_estimation",
+            (
+                "enable_low_resolution_offset_estimation",
+                "enableLowResolutionOffsetEstimation",
+                "EnableLowResolutionOffsetEstimation",
+            ),
+            lambda value: _coerce_config_bool(value, field_name="enable_low_resolution_offset_estimation"),
+        ),
+        (
+            "low_resolution_level",
+            ("low_resolution_level", "lowResolutionLevel", "LowResolutionLevel"),
+            lambda value: _validate_low_resolution_level(int(value)),
         ),
         (
             "num_worker_parallel_cpu",
@@ -357,6 +415,7 @@ def _prepare_image_for_sift(
     invalid_values: tuple[float, ...],
     special_pixel_abs_threshold: float,
     invalid_mask: np.ndarray | None = None,
+    invalid_pixel_radius: int = 0,
 ) -> tuple[np.ndarray, np.ndarray, StretchStats]:
     resolved_invalid_mask, valid_pixel_stats = summarize_valid_pixels(
         values,
@@ -364,6 +423,11 @@ def _prepare_image_for_sift(
         special_pixel_abs_threshold=special_pixel_abs_threshold,
         invalid_mask=invalid_mask,
     )
+    resolved_invalid_mask = expand_invalid_mask_for_radius(
+        resolved_invalid_mask,
+        invalid_pixel_radius=invalid_pixel_radius,
+    )
+    _, valid_pixel_stats = summarize_valid_pixels(values, invalid_mask=resolved_invalid_mask)
     if resolved_invalid_mask.all():
         stretched = np.zeros(values.shape, dtype=np.uint8)
         stretch_stats = StretchStats(
@@ -466,6 +530,7 @@ def _match_tile_from_window_values(
     special_pixel_abs_threshold: float,
     min_valid_pixels: int,
     valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
     ratio_test: float,
     max_features: int | None,
     sift_octave_layers: int,
@@ -483,6 +548,17 @@ def _match_tile_from_window_values(
         invalid_values=right_invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
     )
+
+    left_invalid_mask = expand_invalid_mask_for_radius(
+        left_invalid_mask,
+        invalid_pixel_radius=invalid_pixel_radius,
+    )
+    right_invalid_mask = expand_invalid_mask_for_radius(
+        right_invalid_mask,
+        invalid_pixel_radius=invalid_pixel_radius,
+    )
+    _, left_valid_pixel_stats = summarize_valid_pixels(left_values, invalid_mask=left_invalid_mask)
+    _, right_valid_pixel_stats = summarize_valid_pixels(right_values, invalid_mask=right_invalid_mask)
 
     if (
         left_valid_pixel_stats.valid_pixel_ratio < valid_pixel_percent_threshold
@@ -520,6 +596,7 @@ def _match_tile_from_window_values(
         invalid_values=left_invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
         invalid_mask=left_invalid_mask,
+        invalid_pixel_radius=0,
     )
     right_image, right_mask, right_stats = _prepare_image_for_sift(
         right_values,
@@ -530,6 +607,7 @@ def _match_tile_from_window_values(
         invalid_values=right_invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
         invalid_mask=right_invalid_mask,
+        invalid_pixel_radius=0,
     )
 
     if left_stats.valid_pixel_count < min_valid_pixels or right_stats.valid_pixel_count < min_valid_pixels:
@@ -663,6 +741,7 @@ def _build_tile_match_tasks(
     special_pixel_abs_threshold: float,
     min_valid_pixels: int,
     valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
     ratio_test: float,
     max_features: int | None,
     sift_octave_layers: int,
@@ -684,6 +763,7 @@ def _build_tile_match_tasks(
             special_pixel_abs_threshold=special_pixel_abs_threshold,
             min_valid_pixels=min_valid_pixels,
             valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+            invalid_pixel_radius=invalid_pixel_radius,
             ratio_test=ratio_test,
             max_features=max_features,
             sift_octave_layers=sift_octave_layers,
@@ -726,6 +806,7 @@ def _match_single_paired_window_worker(task: TileMatchTask) -> TileMatchResult:
         special_pixel_abs_threshold=task.special_pixel_abs_threshold,
         min_valid_pixels=task.min_valid_pixels,
         valid_pixel_percent_threshold=task.valid_pixel_percent_threshold,
+        invalid_pixel_radius=task.invalid_pixel_radius,
         ratio_test=task.ratio_test,
         max_features=task.max_features,
         sift_octave_layers=task.sift_octave_layers,
@@ -762,6 +843,7 @@ def _run_serial_tile_match_tasks(
     special_pixel_abs_threshold: float,
     min_valid_pixels: int,
     valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
     ratio_test: float,
     max_features: int | None,
     sift_octave_layers: int,
@@ -789,6 +871,7 @@ def _run_serial_tile_match_tasks(
                 special_pixel_abs_threshold=special_pixel_abs_threshold,
                 min_valid_pixels=min_valid_pixels,
                 valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+                invalid_pixel_radius=invalid_pixel_radius,
                 ratio_test=ratio_test,
                 max_features=max_features,
                 sift_octave_layers=sift_octave_layers,
@@ -865,6 +948,320 @@ def _resolved_invalid_values_for_cube(cube: ip.Cube, invalid_values: tuple[float
     if cube.pixel_type() in zero_invalid_pixel_types and 0.0 not in resolved_invalid_values:
         resolved_invalid_values.append(0.0)
     return tuple(resolved_invalid_values)
+
+
+def _low_resolution_pair_tag(left_dom_path: str | Path, right_dom_path: str | Path) -> str:
+    return f"{Path(left_dom_path).stem}__{Path(right_dom_path).stem}"
+
+
+def _default_low_resolution_output_dir(
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    *,
+    metadata_output: str | Path | None = None,
+    left_output_key: str | Path | None = None,
+) -> Path:
+    pair_tag = _low_resolution_pair_tag(left_dom_path, right_dom_path)
+    if metadata_output is not None:
+        root = Path(metadata_output).parent
+    elif left_output_key is not None:
+        root = Path(left_output_key).parent
+    else:
+        root = Path.cwd()
+    return root / "low_resolution" / pair_tag
+
+
+def _require_command(command_name: str) -> None:
+    if shutil.which(command_name) is None:
+        raise RuntimeError(f"Required command not found: {command_name}")
+
+
+def _run_command(command: list[str]) -> None:
+    completed = subprocess.run(command, check=False, capture_output=True, text=True)
+    if completed.returncode != 0:
+        raise RuntimeError(
+            f"Command failed ({' '.join(command)}): {completed.stderr.strip() or completed.stdout.strip()}"
+        )
+
+
+def _create_low_resolution_dom(
+    source_path: str | Path,
+    output_path: str | Path,
+    *,
+    level: int,
+) -> Path:
+    resolved_source_path = Path(source_path)
+    resolved_output_path = Path(output_path)
+    resolved_output_path.parent.mkdir(parents=True, exist_ok=True)
+    if level == 0:
+        resolved_output_path.write_bytes(resolved_source_path.read_bytes())
+        return resolved_output_path
+
+    scale_divisor = 2 ** level
+    percent = 100.0 / float(scale_divisor)
+    _run_command(["gdaladdo", "-r", "average", str(resolved_source_path), *[str(2 ** index) for index in range(1, level + 1)]])
+    _run_command(
+        [
+            "gdal_translate",
+            "-of",
+            "ISIS3",
+            "-r",
+            "bilinear",
+            "-outsize",
+            f"{percent:.8f}%",
+            f"{percent:.8f}%",
+            str(resolved_source_path),
+            str(resolved_output_path),
+        ]
+    )
+    return resolved_output_path
+
+
+def _projected_xy_from_keypoints_in_open_cube(
+    cube: ip.Cube,
+    cube_path: str | Path,
+    points: tuple[Keypoint, ...],
+) -> tuple[tuple[float, float], ...]:
+    projection = cube.projection()
+    projected_coordinates: list[tuple[float, float]] = []
+    for point in points:
+        if not projection.set_world(point.sample, point.line):
+            raise RuntimeError(
+                f"Failed to convert keypoint sample/line to projected coordinates for {cube_path}: "
+                f"({point.sample}, {point.line})"
+            )
+        projected_coordinates.append((float(projection.x_coord()), float(projection.y_coord())))
+    return tuple(projected_coordinates)
+
+
+def _projected_xy_from_keypoints(cube_path: str | Path, points: tuple[Keypoint, ...]) -> tuple[tuple[float, float], ...]:
+    cube = ip.Cube()
+    cube.open(str(cube_path), "r")
+    try:
+        return _projected_xy_from_keypoints_in_open_cube(cube, cube_path, points)
+    finally:
+        if cube.is_open():
+            cube.close()
+
+
+def _projected_xy_from_keypoint(cube_path: str | Path, point: Keypoint) -> tuple[float, float]:
+    return _projected_xy_from_keypoints(cube_path, (point,))[0]
+
+
+def _trimmed_mean(values: list[float], *, trim_ratio: float = 0.05) -> float:
+    if not values:
+        raise ValueError("Cannot compute a trimmed mean from an empty sample set.")
+    sorted_values = sorted(float(value) for value in values)
+    trim_count = int(len(sorted_values) * trim_ratio)
+    if trim_count * 2 >= len(sorted_values):
+        trimmed_values = sorted_values
+    else:
+        trimmed_values = sorted_values[trim_count: len(sorted_values) - trim_count]
+    return float(sum(trimmed_values) / len(trimmed_values))
+
+
+def _estimate_low_resolution_projected_offset(
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    *,
+    enabled: bool,
+    low_resolution_level: int,
+    low_resolution_output_dir: str | Path,
+    band: int,
+    minimum_value: float | None,
+    maximum_value: float | None,
+    lower_percent: float,
+    upper_percent: float,
+    invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
+    ratio_test: float,
+    max_features: int | None,
+    sift_octave_layers: int,
+    sift_contrast_threshold: float,
+    sift_edge_threshold: float,
+    sift_sigma: float,
+) -> dict[str, object]:
+    if not enabled:
+        return {
+            "enabled": False,
+            "status": "disabled",
+            "fallback_offset_zero": False,
+            "reason": "Low-resolution offset estimation is disabled.",
+            "delta_x_projected": 0.0,
+            "delta_y_projected": 0.0,
+            "retained_match_count": 0,
+        }
+
+    resolved_level = _validate_low_resolution_level(low_resolution_level)
+    resolved_output_dir = Path(low_resolution_output_dir)
+    resolved_output_dir.mkdir(parents=True, exist_ok=True)
+    pair_tag = _low_resolution_pair_tag(left_dom_path, right_dom_path)
+    started_at = time.perf_counter()
+    try:
+        _require_command("gdaladdo")
+        _require_command("gdal_translate")
+
+        left_low_res_dom = _create_low_resolution_dom(
+            left_dom_path,
+            resolved_output_dir / f"{Path(left_dom_path).stem}__level{resolved_level}.cub",
+            level=resolved_level,
+        )
+        right_low_res_dom = _create_low_resolution_dom(
+            right_dom_path,
+            resolved_output_dir / f"{Path(right_dom_path).stem}__level{resolved_level}.cub",
+            level=resolved_level,
+        )
+
+        raw_left_key, raw_right_key, raw_summary = match_dom_pair(
+            left_low_res_dom,
+            right_low_res_dom,
+            band=band,
+            max_image_dimension=10**9,
+            block_width=10**9,
+            block_height=10**9,
+            overlap_x=0,
+            overlap_y=0,
+            minimum_value=minimum_value,
+            maximum_value=maximum_value,
+            lower_percent=lower_percent,
+            upper_percent=upper_percent,
+            invalid_values=invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+            min_valid_pixels=min_valid_pixels,
+            valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+            invalid_pixel_radius=invalid_pixel_radius,
+            ratio_test=ratio_test,
+            max_features=max_features,
+            sift_octave_layers=sift_octave_layers,
+            sift_contrast_threshold=sift_contrast_threshold,
+            sift_edge_threshold=sift_edge_threshold,
+            sift_sigma=sift_sigma,
+            crop_expand_pixels=0,
+            min_overlap_size=1,
+            use_parallel_cpu=False,
+            num_worker_parallel_cpu=1,
+            enable_low_resolution_offset_estimation=False,
+            low_resolution_level=resolved_level,
+        )
+
+        raw_left_key_path = resolved_output_dir / f"{pair_tag}_low_resolution_raw_A.key"
+        raw_right_key_path = resolved_output_dir / f"{pair_tag}_low_resolution_raw_B.key"
+        write_key_file(raw_left_key_path, raw_left_key)
+        write_key_file(raw_right_key_path, raw_right_key)
+
+        filtered_left_key, filtered_right_key, ransac_summary = filter_stereo_pair_keypoints_with_ransac(
+            raw_left_key,
+            raw_right_key,
+        )
+        filtered_left_key_path = resolved_output_dir / f"{pair_tag}_low_resolution_A.key"
+        filtered_right_key_path = resolved_output_dir / f"{pair_tag}_low_resolution_B.key"
+        write_key_file(filtered_left_key_path, filtered_left_key)
+        write_key_file(filtered_right_key_path, filtered_right_key)
+
+        retained_match_count = len(filtered_left_key.points)
+        if retained_match_count <= 0:
+            elapsed_seconds = time.perf_counter() - started_at
+            return {
+                "enabled": True,
+                "status": "fallback_zero",
+                "fallback_offset_zero": True,
+                "reason": "Low-resolution matching produced no retained RANSAC inliers.",
+                "delta_x_projected": 0.0,
+                "delta_y_projected": 0.0,
+                "retained_match_count": 0,
+                "low_resolution_level": resolved_level,
+                "left_low_resolution_dom": str(left_low_res_dom),
+                "right_low_resolution_dom": str(right_low_res_dom),
+                "elapsed_seconds": elapsed_seconds,
+                "image_match_summary": raw_summary,
+                "ransac_summary": ransac_summary,
+            }
+
+        left_low_res_cube = ip.Cube()
+        right_low_res_cube = ip.Cube()
+        left_low_res_cube.open(str(left_low_res_dom), "r")
+        right_low_res_cube.open(str(right_low_res_dom), "r")
+        try:
+            left_projected_points = _projected_xy_from_keypoints_in_open_cube(
+                left_low_res_cube,
+                left_low_res_dom,
+                filtered_left_key.points,
+            )
+            right_projected_points = _projected_xy_from_keypoints_in_open_cube(
+                right_low_res_cube,
+                right_low_res_dom,
+                filtered_right_key.points,
+            )
+        finally:
+            if left_low_res_cube.is_open():
+                left_low_res_cube.close()
+            if right_low_res_cube.is_open():
+                right_low_res_cube.close()
+
+        delta_x_values = [
+            right_x - left_x
+            for (left_x, _left_y), (right_x, _right_y) in zip(left_projected_points, right_projected_points, strict=True)
+        ]
+        delta_y_values = [
+            right_y - left_y
+            for (_left_x, left_y), (_right_x, right_y) in zip(left_projected_points, right_projected_points, strict=True)
+        ]
+
+        delta_x_projected = _trimmed_mean(delta_x_values)
+        delta_y_projected = _trimmed_mean(delta_y_values)
+        visualization_result = write_stereo_pair_match_visualization(
+            left_low_res_dom,
+            right_low_res_dom,
+            filtered_left_key,
+            filtered_right_key,
+            output_path=resolved_output_dir / f"{pair_tag}_low_resolution_ransac.png",
+            band=band,
+            minimum_value=minimum_value,
+            maximum_value=maximum_value,
+            lower_percent=lower_percent,
+            upper_percent=upper_percent,
+            invalid_values=invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+        )
+        elapsed_seconds = time.perf_counter() - started_at
+        return {
+            "enabled": True,
+            "status": "succeeded",
+            "fallback_offset_zero": False,
+            "reason": "Low-resolution projected offset estimated successfully.",
+            "delta_x_projected": float(delta_x_projected),
+            "delta_y_projected": float(delta_y_projected),
+            "retained_match_count": retained_match_count,
+            "low_resolution_level": resolved_level,
+            "left_low_resolution_dom": str(left_low_res_dom),
+            "right_low_resolution_dom": str(right_low_res_dom),
+            "raw_left_key": str(raw_left_key_path),
+            "raw_right_key": str(raw_right_key_path),
+            "filtered_left_key": str(filtered_left_key_path),
+            "filtered_right_key": str(filtered_right_key_path),
+            "elapsed_seconds": elapsed_seconds,
+            "histogram_bin_count": 100,
+            "trim_fraction_each_side": 0.05,
+            "image_match_summary": raw_summary,
+            "ransac_summary": ransac_summary,
+            "match_visualization": visualization_result,
+        }
+    except Exception as exc:
+        elapsed_seconds = time.perf_counter() - started_at
+        return {
+            "enabled": True,
+            "status": "fallback_zero",
+            "fallback_offset_zero": True,
+            "reason": str(exc),
+            "delta_x_projected": 0.0,
+            "delta_y_projected": 0.0,
+            "retained_match_count": 0,
+            "low_resolution_level": resolved_level,
+            "elapsed_seconds": elapsed_seconds,
+        }
 
 
 def default_match_visualization_path(
@@ -1175,6 +1572,7 @@ def match_dom_pair(
     special_pixel_abs_threshold: float = 1.0e300,
     min_valid_pixels: int = 64,
     valid_pixel_percent_threshold: float = 0.0,
+    invalid_pixel_radius: int = 1,
     ratio_test: float = 0.75,
     max_features: int | None = None,
     sift_octave_layers: int = 3,
@@ -1185,6 +1583,9 @@ def match_dom_pair(
     min_overlap_size: int = 16,
     use_parallel_cpu: bool = True,
     num_worker_parallel_cpu: int = DEFAULT_NUM_WORKER_PARALLEL_CPU,
+    enable_low_resolution_offset_estimation: bool = False,
+    low_resolution_level: int = DEFAULT_LOW_RESOLUTION_LEVEL,
+    low_resolution_output_dir: str | Path | None = None,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
@@ -1194,6 +1595,8 @@ def match_dom_pair(
     try:
         resolved_valid_pixel_percent_threshold = _validate_valid_pixel_percent_threshold(valid_pixel_percent_threshold)
         resolved_num_worker_parallel_cpu = _validate_num_worker_parallel_cpu(num_worker_parallel_cpu)
+        resolved_invalid_pixel_radius = validate_invalid_pixel_radius(invalid_pixel_radius)
+        resolved_low_resolution_level = _validate_low_resolution_level(low_resolution_level)
         left_width = left_cube.sample_count()
         left_height = left_cube.line_count()
         right_width = right_cube.sample_count()
@@ -1204,13 +1607,6 @@ def match_dom_pair(
         if band <= 0 or band > min(left_cube.band_count(), right_cube.band_count()):
             raise ValueError(f"Band {band} is out of range for the requested DOM cubes.")
 
-        preparation = prepare_dom_pair_for_matching(
-            left_dom_path,
-            right_dom_path,
-            expand_pixels=crop_expand_pixels,
-            min_overlap_size=min_overlap_size,
-        )
-
         left_points: list[Keypoint] = []
         right_points: list[Keypoint] = []
         tile_summaries: list[TileMatchStats] = []
@@ -1218,6 +1614,41 @@ def match_dom_pair(
         parallel_cpu_used = False
         parallel_cpu_backend = "serial"
         parallel_cpu_worker_count = 0
+        low_resolution_offset_summary = _estimate_low_resolution_projected_offset(
+            left_dom_path,
+            right_dom_path,
+            enabled=enable_low_resolution_offset_estimation,
+            low_resolution_level=resolved_low_resolution_level,
+            low_resolution_output_dir=(
+                low_resolution_output_dir
+                if low_resolution_output_dir is not None
+                else _default_low_resolution_output_dir(left_dom_path, right_dom_path)
+            ),
+            band=band,
+            minimum_value=minimum_value,
+            maximum_value=maximum_value,
+            lower_percent=lower_percent,
+            upper_percent=upper_percent,
+            invalid_values=invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+            min_valid_pixels=min_valid_pixels,
+            valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+            invalid_pixel_radius=resolved_invalid_pixel_radius,
+            ratio_test=ratio_test,
+            max_features=max_features,
+            sift_octave_layers=sift_octave_layers,
+            sift_contrast_threshold=sift_contrast_threshold,
+            sift_edge_threshold=sift_edge_threshold,
+            sift_sigma=sift_sigma,
+        )
+        preparation = prepare_dom_pair_for_matching(
+            left_dom_path,
+            right_dom_path,
+            expand_pixels=crop_expand_pixels,
+            min_overlap_size=min_overlap_size,
+            projected_delta_x=float(low_resolution_offset_summary["delta_x_projected"]),
+            projected_delta_y=float(low_resolution_offset_summary["delta_y_projected"]),
+        )
 
         if preparation.status == "ready":
             windows = _paired_windows(
@@ -1252,6 +1683,7 @@ def match_dom_pair(
                                 special_pixel_abs_threshold=special_pixel_abs_threshold,
                                 min_valid_pixels=min_valid_pixels,
                                 valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                                invalid_pixel_radius=resolved_invalid_pixel_radius,
                                 ratio_test=ratio_test,
                                 max_features=max_features,
                                 sift_octave_layers=sift_octave_layers,
@@ -1279,6 +1711,7 @@ def match_dom_pair(
                             special_pixel_abs_threshold=special_pixel_abs_threshold,
                             min_valid_pixels=min_valid_pixels,
                             valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                            invalid_pixel_radius=resolved_invalid_pixel_radius,
                             ratio_test=ratio_test,
                             max_features=max_features,
                             sift_octave_layers=sift_octave_layers,
@@ -1302,6 +1735,7 @@ def match_dom_pair(
                         special_pixel_abs_threshold=special_pixel_abs_threshold,
                         min_valid_pixels=min_valid_pixels,
                         valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                        invalid_pixel_radius=resolved_invalid_pixel_radius,
                         ratio_test=ratio_test,
                         max_features=max_features,
                         sift_octave_layers=sift_octave_layers,
@@ -1326,6 +1760,7 @@ def match_dom_pair(
             "band": band,
             "min_valid_pixels": min_valid_pixels,
             "valid_pixel_percent_threshold": resolved_valid_pixel_percent_threshold,
+            "invalid_pixel_radius": resolved_invalid_pixel_radius,
             "ratio_test": ratio_test,
             "status": preparation.status if preparation.status != "ready" else ("matched" if left_points else "matched_no_points"),
             "reason": preparation.reason,
@@ -1353,6 +1788,7 @@ def match_dom_pair(
                 "edge_threshold": sift_edge_threshold,
                 "sigma": sift_sigma,
             },
+            "low_resolution_offset": low_resolution_offset_summary,
             "preparation": asdict(preparation),
             "tiles": [asdict(tile) for tile in tile_summaries],
         }
@@ -1376,6 +1812,13 @@ def match_dom_pair_to_key_files(
     match_visualization_scale: float = 1.0 / 3.0,
     **kwargs,
 ) -> dict[str, object]:
+    if "low_resolution_output_dir" not in kwargs or kwargs.get("low_resolution_output_dir") is None:
+        kwargs["low_resolution_output_dir"] = _default_low_resolution_output_dir(
+            left_dom_path,
+            right_dom_path,
+            metadata_output=metadata_output,
+            left_output_key=left_output_key,
+        )
     left_key_file, right_key_file, summary = match_dom_pair(left_dom_path, right_dom_path, **kwargs)
     write_key_file(left_output_key, left_key_file)
     write_key_file(right_output_key, right_key_file)
@@ -1390,11 +1833,13 @@ def match_dom_pair_to_key_files(
             "skipped_tile_count": summary["skipped_tile_count"],
             "tiling_used": summary["tiling_used"],
             "valid_pixel_percent_threshold": summary["valid_pixel_percent_threshold"],
+            "invalid_pixel_radius": summary["invalid_pixel_radius"],
             "parallel_cpu_requested": summary["parallel_cpu_requested"],
             "num_worker_parallel_cpu": summary["num_worker_parallel_cpu"],
             "parallel_cpu_used": summary["parallel_cpu_used"],
             "parallel_cpu_backend": summary["parallel_cpu_backend"],
             "parallel_cpu_worker_count": summary["parallel_cpu_worker_count"],
+            "low_resolution_offset": summary["low_resolution_offset"],
         }
         write_pair_preparation_metadata(
             metadata_output,
@@ -1454,6 +1899,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--special-pixel-abs-threshold", type=float, default=1.0e300, help="Absolute-value threshold used to treat extreme ISIS special pixels as invalid.")
     parser.add_argument("--min-valid-pixels", type=int, default=64, help="Minimum number of valid pixels required before attempting SIFT on a tile.")
     parser.add_argument("--valid-pixel-percent-threshold", type=_parse_valid_pixel_percent_threshold, default=0.0, help="Minimum valid-pixel ratio required before attempting SIFT on a tile. Must be within [0.0, 1.0].")
+    parser.add_argument("--invalid-pixel-radius", type=_parse_invalid_pixel_radius, default=1, help="Don't detect feature point within this many pixels of image borders or invalid pixel. Must be within [0, 100]. Default: 1.")
     parser.add_argument("--ratio-test", type=float, default=0.75, help="Lowe ratio-test threshold used for descriptor filtering.")
     parser.add_argument("--max-features", type=int, default=None, help="Optional maximum number of SIFT features per tile.")
     parser.add_argument("--sift-octave-layers", type=int, default=3, help="Number of octave layers used by the OpenCV SIFT detector.")
@@ -1462,6 +1908,8 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--sift-sigma", type=float, default=1.6, help="Gaussian sigma used by the OpenCV SIFT detector.")
     parser.add_argument("--crop-expand-pixels", type=int, default=100, help="Extra projected-overlap margin, expressed in pixels, added before matching.")
     parser.add_argument("--min-overlap-size", type=int, default=16, help="Skip matching when the expanded projected-overlap window is smaller than this many pixels in either direction.")
+    parser.add_argument("--enable-low-resolution-offset-estimation", dest="enable_low_resolution_offset_estimation", action="store_true", help="Enable low-resolution DOM matching to estimate a projected global offset before the full-resolution overlap crop is prepared.")
+    parser.add_argument("--low-resolution-level", type=_parse_low_resolution_level, default=DEFAULT_LOW_RESOLUTION_LEVEL, help=f"Low-resolution pyramid level used for the projected offset estimation stage. Must be >= 0. Default: {DEFAULT_LOW_RESOLUTION_LEVEL}.")
     parser.add_argument("--num-worker-parallel-cpu", type=_parse_num_worker_parallel_cpu, default=DEFAULT_NUM_WORKER_PARALLEL_CPU, help=f"Maximum worker-process count used when CPU tile parallelism is enabled. Must be within [1, {MAX_NUM_WORKER_PARALLEL_CPU}]. Default: {DEFAULT_NUM_WORKER_PARALLEL_CPU}.")
     parser.add_argument("--use-parallel-cpu", dest="use_parallel_cpu", action="store_true", help="Enable CPU process-pool parallelism for tiled matching. Enabled by default.")
     parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
@@ -1469,7 +1917,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the pre-RANSAC drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the pre-RANSAC drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the pre-RANSAC drawMatches PNG. Defaults to 1/3 for a smaller preview.")
-    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True)
+    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False)
     if config_defaults:
         parser.set_defaults(**config_defaults)
     return parser
@@ -1509,6 +1957,7 @@ def main(argv: list[str] | None = None) -> None:
         special_pixel_abs_threshold=args.special_pixel_abs_threshold,
         min_valid_pixels=args.min_valid_pixels,
         valid_pixel_percent_threshold=args.valid_pixel_percent_threshold,
+        invalid_pixel_radius=args.invalid_pixel_radius,
         ratio_test=args.ratio_test,
         max_features=args.max_features,
         sift_octave_layers=args.sift_octave_layers,
@@ -1519,6 +1968,8 @@ def main(argv: list[str] | None = None) -> None:
         min_overlap_size=args.min_overlap_size,
         use_parallel_cpu=args.use_parallel_cpu,
         num_worker_parallel_cpu=args.num_worker_parallel_cpu,
+        enable_low_resolution_offset_estimation=args.enable_low_resolution_offset_estimation,
+        low_resolution_level=args.low_resolution_level,
         write_match_visualization=args.write_match_visualization,
         match_visualization_output_path=args.match_visualization_output_path,
         match_visualization_output_dir=args.match_visualization_output_dir,

@@ -9,6 +9,7 @@ DEFAULT_WORK_DIR_RELATIVE="work"
 DEFAULT_PAIR_ID_PREFIX="S"
 DEFAULT_PAIR_ID_START="1"
 DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD=""
+DEFAULT_INVALID_PIXEL_RADIUS="1"
 
 log() {
   printf '[controlnet-pipeline] %s\n' "$*"
@@ -58,6 +59,16 @@ Options:
                                  Forwarded to image_match.py. If omitted, this script
                                  falls back to config JSON field ImageMatch.valid_pixel_percent_threshold
                                  when present; otherwise image_match.py keeps its own default (0.0).
+  --invalid-pixel-radius N        Forwarded to image_match.py to suppress feature detection near
+                                 invalid pixels and image borders. If omitted, this script falls
+                                 back to config JSON field ImageMatch.invalid_pixel_radius when present;
+                                 otherwise image_match.py keeps its own default.
+  --enable-low-resolution-offset-estimation
+                                 Forwarded to image_match.py to enable low-resolution DOM coarse
+                                 registration before full-resolution overlap preparation.
+  --low-resolution-level N        Forwarded to image_match.py. If omitted, this script falls back to
+                                 config JSON field ImageMatch.low_resolution_level when present;
+                                 otherwise image_match.py keeps its own default.
   --merged-net PATH               Final merged ControlNet output path. Default: <work-dir>/merge/dom_matching_merged.net
   --merge-script PATH             Generated merge shell path. Default: <work-dir>/merge/merge_all_controlnets.sh
   --merge-log PATH                cnetmerge log path. Default: <work-dir>/merge/cnetmerge.log
@@ -349,6 +360,117 @@ raise SystemExit(0)
 PY
 }
 
+extract_invalid_pixel_radius_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+
+candidate_containers = [
+  payload,
+  payload.get('ImageMatch') or {},
+  payload.get('image_match') or {},
+  payload.get('imageMatch') or {},
+]
+candidate_keys = (
+  'invalid_pixel_radius',
+  'invalidPixelRadius',
+  'InvalidPixelRadius',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
+extract_enable_low_resolution_offset_estimation_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+
+candidate_containers = [
+  payload,
+  payload.get('ImageMatch') or {},
+  payload.get('image_match') or {},
+  payload.get('imageMatch') or {},
+]
+candidate_keys = (
+  'enable_low_resolution_offset_estimation',
+  'enableLowResolutionOffsetEstimation',
+  'EnableLowResolutionOffsetEstimation',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    normalized = str(value).strip().lower()
+    if normalized in {'1', 'true', 'yes', 'on'}:
+      print('1')
+      raise SystemExit(0)
+    if normalized in {'0', 'false', 'no', 'off'}:
+      print('0')
+      raise SystemExit(0)
+    raise SystemExit(f'invalid enable_low_resolution_offset_estimation value: {value!r}')
+
+raise SystemExit(0)
+PY
+}
+
+extract_low_resolution_level_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+
+candidate_containers = [
+  payload,
+  payload.get('ImageMatch') or {},
+  payload.get('image_match') or {},
+  payload.get('imageMatch') or {},
+]
+candidate_keys = (
+  'low_resolution_level',
+  'lowResolutionLevel',
+  'LowResolutionLevel',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
 extract_use_parallel_cpu_from_config() {
   local config_path=$1
   "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
@@ -444,12 +566,19 @@ run_step_2_image_match_batch() {
     if [[ -n "$VALID_PIXEL_PERCENT_THRESHOLD" ]]; then
       match_args+=(--valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD")
     fi
+    match_args+=(--invalid-pixel-radius "$INVALID_PIXEL_RADIUS")
     if [[ "$USE_PARALLEL_CPU" == "1" ]]; then
       match_args+=(--use-parallel-cpu)
     else
       match_args+=(--no-parallel-cpu)
     fi
     match_args+=(--num-worker-parallel-cpu "$NUM_WORKER_PARALLEL_CPU")
+    if [[ "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION" == "1" ]]; then
+      match_args+=(
+        --enable-low-resolution-offset-estimation
+        --low-resolution-level "$LOW_RESOLUTION_LEVEL"
+      )
+    fi
 
     run_timed_command "pair_matches" "image_match:${pair_tag}" "${match_args[@]}"
     local match_status=$?
@@ -549,12 +678,18 @@ main() {
   local post_merge_output_input=""
   local explicit_num_worker_parallel_cpu=""
   local explicit_use_parallel_cpu=""
+  local explicit_invalid_pixel_radius=""
+  local explicit_enable_low_resolution_offset_estimation=""
+  local explicit_low_resolution_level=""
 
   PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
   CNETMERGE_PATH="${CNETMERGE_EXECUTABLE:-cnetmerge}"
   PAIR_ID_PREFIX="$DEFAULT_PAIR_ID_PREFIX"
   PAIR_ID_START="$DEFAULT_PAIR_ID_START"
   VALID_PIXEL_PERCENT_THRESHOLD="$DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD"
+  INVALID_PIXEL_RADIUS="$DEFAULT_INVALID_PIXEL_RADIUS"
+  ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION="0"
+  LOW_RESOLUTION_LEVEL="3"
   USE_PARALLEL_CPU="1"
   NUM_WORKER_PARALLEL_CPU="8"
   NETWORK_ID=""
@@ -619,6 +754,23 @@ main() {
       --valid-pixel-percent-threshold)
         [[ $# -ge 2 ]] || die "missing value for --valid-pixel-percent-threshold"
         VALID_PIXEL_PERCENT_THRESHOLD=$2
+        shift 2
+        ;;
+      --invalid-pixel-radius)
+        [[ $# -ge 2 ]] || die "missing value for --invalid-pixel-radius"
+        INVALID_PIXEL_RADIUS=$2
+        explicit_invalid_pixel_radius=$2
+        shift 2
+        ;;
+      --enable-low-resolution-offset-estimation)
+        ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION="1"
+        explicit_enable_low_resolution_offset_estimation="1"
+        shift
+        ;;
+      --low-resolution-level)
+        [[ $# -ge 2 ]] || die "missing value for --low-resolution-level"
+        LOW_RESOLUTION_LEVEL=$2
+        explicit_low_resolution_level=$2
         shift 2
         ;;
       --merged-net)
@@ -747,6 +899,27 @@ main() {
       NUM_WORKER_PARALLEL_CPU="$config_num_worker_parallel_cpu"
     fi
   fi
+  if [[ -z "$explicit_invalid_pixel_radius" ]]; then
+    local config_invalid_pixel_radius
+    config_invalid_pixel_radius=$(extract_invalid_pixel_radius_from_config "$CONFIG_PATH")
+    if [[ -n "$config_invalid_pixel_radius" ]]; then
+      INVALID_PIXEL_RADIUS="$config_invalid_pixel_radius"
+    fi
+  fi
+  if [[ -z "$explicit_enable_low_resolution_offset_estimation" ]]; then
+    local config_enable_low_resolution_offset_estimation
+    config_enable_low_resolution_offset_estimation=$(extract_enable_low_resolution_offset_estimation_from_config "$CONFIG_PATH")
+    if [[ -n "$config_enable_low_resolution_offset_estimation" ]]; then
+      ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION="$config_enable_low_resolution_offset_estimation"
+    fi
+  fi
+  if [[ -z "$explicit_low_resolution_level" ]]; then
+    local config_low_resolution_level
+    config_low_resolution_level=$(extract_low_resolution_level_from_config "$CONFIG_PATH")
+    if [[ -n "$config_low_resolution_level" ]]; then
+      LOW_RESOLUTION_LEVEL="$config_low_resolution_level"
+    fi
+  fi
 
   initialize_timing_json
 
@@ -768,6 +941,13 @@ main() {
     log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
   else
     log "Valid pixel percent threshold: image_match.py default"
+  fi
+  log "Invalid pixel radius: $INVALID_PIXEL_RADIUS"
+  if [[ "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION" == "1" ]]; then
+    log "Low-resolution offset estimation: enabled"
+    log "Low-resolution level: $LOW_RESOLUTION_LEVEL"
+  else
+    log "Low-resolution offset estimation: disabled"
   fi
   log "cnetmerge executable: $CNETMERGE_PATH"
   log "Timing JSON: $TIMING_JSON_PATH"

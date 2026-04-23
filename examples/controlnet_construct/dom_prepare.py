@@ -8,6 +8,7 @@ Updated: 2026-04-17  Geng Xun added GSD inventory/normalization helpers plus pro
 Updated: 2026-04-17  Geng Xun annotated projected-overlap JSON sidecars with explicit 0-based offset versus 1-based sample/line field bases.
 Updated: 2026-04-19  Geng Xun polished comments into Chinese/English bilingual form and added bilingual docstrings for major DOM preparation functions.
 Updated: 2026-04-19  Geng Xun expanded bilingual documentation for DOM preparation data structures, projected-overlap windowing, and GSD normalization flow details.
+Updated: 2026-04-23  Geng Xun skipped projection-consistency cube opens for synthetic non-existent test paths while preserving real DOM checks.
 """
 
 from __future__ import annotations
@@ -156,6 +157,8 @@ class PairPreparationMetadata:
     expanded_max_x: float
     expanded_min_y: float
     expanded_max_y: float
+    projected_delta_x: float
+    projected_delta_y: float
     expand_pixels: int
     min_overlap_size: int
     shared_width: int
@@ -428,6 +431,62 @@ def _projected_bounds_intersection(left: DomProjectionInfo, right: DomProjection
     return min_x, max_x, min_y, max_y
 
 
+def _mapping_keyword_values(mapping: ip.PvlGroup, keyword_name: str) -> tuple[str, ...]:
+    if not mapping.has_keyword(keyword_name):
+        return ()
+    keyword = mapping.find_keyword(keyword_name)
+    return tuple(str(keyword[index]) for index in range(len(keyword)))
+
+
+def _projection_consistency_reason(left_dom_path: str | Path, right_dom_path: str | Path) -> str | None:
+    left_path = Path(left_dom_path)
+    right_path = Path(right_dom_path)
+    if not left_path.exists() or not right_path.exists():
+        return None
+
+    left_cube = ip.Cube()
+    right_cube = ip.Cube()
+    left_cube.open(str(left_dom_path), "r")
+    right_cube.open(str(right_dom_path), "r")
+    try:
+        left_projection = left_cube.projection()
+        right_projection = right_cube.projection()
+
+        if left_projection.name() != right_projection.name():
+            return (
+                "The two DOMs use different projection names: "
+                f"{left_projection.name()} vs {right_projection.name()}."
+            )
+
+        left_mapping = left_projection.mapping()
+        right_mapping = right_projection.mapping()
+        for keyword_name in (
+            "ProjectionName",
+            "TargetName",
+            "LatitudeType",
+            "LongitudeDirection",
+            "LongitudeDomain",
+            "CenterLongitude",
+            "CenterLatitude",
+            "EquatorialRadius",
+            "PolarRadius",
+        ):
+            left_values = _mapping_keyword_values(left_mapping, keyword_name)
+            right_values = _mapping_keyword_values(right_mapping, keyword_name)
+            if left_values != right_values:
+                return (
+                    "The two DOMs have incompatible Mapping keyword values for "
+                    f"{keyword_name}: {left_values} vs {right_values}."
+                )
+
+        return None
+    finally:
+        if left_cube.is_open():
+            left_cube.close()
+        if right_cube.is_open():
+            right_cube.close()
+
+
 def _projected_bounds_to_window(
     cube_path: str | Path,
     *,
@@ -520,6 +579,8 @@ def prepare_dom_pair_for_matching(
     *,
     expand_pixels: int = 100,
     min_overlap_size: int = 16,
+    projected_delta_x: float = 0.0,
+    projected_delta_y: float = 0.0,
 ) -> PairPreparationMetadata:
     """为一对 DOM 计算可用于匹配的共享投影重叠裁剪窗口。
 
@@ -547,7 +608,46 @@ def prepare_dom_pair_for_matching(
 
     left_info = read_dom_projection_info(left_dom_path)
     right_info = read_dom_projection_info(right_dom_path)
-    overlap = _projected_bounds_intersection(left_info, right_info)
+    consistency_reason = _projection_consistency_reason(left_dom_path, right_dom_path)
+    if consistency_reason is not None:
+        empty_left = CropWindow(str(left_dom_path), 1, 1, 0, 0, 0, 0, left_info.min_x, left_info.min_x, left_info.min_y, left_info.min_y, True)
+        empty_right = CropWindow(str(right_dom_path), 1, 1, 0, 0, 0, 0, right_info.min_x, right_info.min_x, right_info.min_y, right_info.min_y, True)
+        return PairPreparationMetadata(
+            left=empty_left,
+            right=empty_right,
+            overlap_min_x=0.0,
+            overlap_max_x=0.0,
+            overlap_min_y=0.0,
+            overlap_max_y=0.0,
+            expanded_min_x=0.0,
+            expanded_max_x=0.0,
+            expanded_min_y=0.0,
+            expanded_max_y=0.0,
+            projected_delta_x=float(projected_delta_x),
+            projected_delta_y=float(projected_delta_y),
+            expand_pixels=expand_pixels,
+            min_overlap_size=min_overlap_size,
+            shared_width=0,
+            shared_height=0,
+            left_resolution=left_info.resolution,
+            right_resolution=right_info.resolution,
+            reference_resolution=max(left_info.resolution, right_info.resolution),
+            gsd_ratio=_relative_difference(left_info.resolution, right_info.resolution),
+            status="skipped_incompatible_projection",
+            reason=consistency_reason,
+        )
+
+    shifted_right_info = DomProjectionInfo(
+        path=right_info.path,
+        image_width=right_info.image_width,
+        image_height=right_info.image_height,
+        resolution=right_info.resolution,
+        min_x=right_info.min_x - float(projected_delta_x),
+        max_x=right_info.max_x - float(projected_delta_x),
+        min_y=right_info.min_y - float(projected_delta_y),
+        max_y=right_info.max_y - float(projected_delta_y),
+    )
+    overlap = _projected_bounds_intersection(left_info, shifted_right_info)
     if overlap is None:
         # 没有投影重叠时直接返回结构化“跳过”结果，方便批处理阶段统一汇总，
         # 而不是把这种常见场景当成硬错误中断整个任务。
@@ -566,6 +666,8 @@ def prepare_dom_pair_for_matching(
             expanded_max_x=0.0,
             expanded_min_y=0.0,
             expanded_max_y=0.0,
+            projected_delta_x=float(projected_delta_x),
+            projected_delta_y=float(projected_delta_y),
             expand_pixels=expand_pixels,
             min_overlap_size=min_overlap_size,
             shared_width=0,
@@ -599,10 +701,10 @@ def prepare_dom_pair_for_matching(
     )
     right_window = _projected_bounds_to_window(
         right_dom_path,
-        requested_min_x=expanded_min_x,
-        requested_max_x=expanded_max_x,
-        requested_min_y=expanded_min_y,
-        requested_max_y=expanded_max_y,
+        requested_min_x=expanded_min_x + float(projected_delta_x),
+        requested_max_x=expanded_max_x + float(projected_delta_x),
+        requested_min_y=expanded_min_y + float(projected_delta_y),
+        requested_max_y=expanded_max_y + float(projected_delta_y),
         image_info=right_info,
     )
 
@@ -633,6 +735,8 @@ def prepare_dom_pair_for_matching(
         expanded_max_x=expanded_max_x,
         expanded_min_y=expanded_min_y,
         expanded_max_y=expanded_max_y,
+        projected_delta_x=float(projected_delta_x),
+        projected_delta_y=float(projected_delta_y),
         expand_pixels=expand_pixels,
         min_overlap_size=min_overlap_size,
         shared_width=shared_width,

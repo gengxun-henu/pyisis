@@ -39,6 +39,7 @@ All paths below are relative to the repository root unless noted otherwise.
 - For shared authored metadata conventions across pybind C++ files and Python unit tests, also follow `.github/instructions/pybind-metadata-common.instructions.md`.
 - For pybind11 binding and test work, also follow `.github/instructions/pybind-testing.instructions.md`.
 - For upstream ISIS API reading, lifecycle analysis, and behavior-driven test design, also follow `.github/instructions/pybind-upstream-source-reading.instructions.md`.
+- For repeated ISIS Cube-backed coordinate conversion, projection reuse, and open-once batch-style geometry/raster operations, also follow `.github/instructions/isis-cube-batch-operations.instructions.md`.
 - For conda-versus-mirror API precedence during pybind binding and compile debugging, also follow `.github/instructions/pybind-conda-api-precedence.instructions.md`.
 - For deciding what belongs in `reference/` versus `tests/data/`, also follow `.github/instructions/reference-data-layout.instructions.md`.
 - For pybind source and helper header metadata conventions, also follow `.github/instructions/pybind-cpp-metadata.instructions.md`.

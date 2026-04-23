@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-22
+Last Modified: 2026-04-23
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -19,6 +19,7 @@ Updated: 2026-04-22  Geng Xun added regression coverage for default post-RANSAC 
 Updated: 2026-04-22  Geng Xun added regression coverage for forwarding configurable CPU process-pool worker limits through the example batch and pipeline wrappers.
 Updated: 2026-04-22  Geng Xun added regression coverage for reading ImageMatch.num_worker_parallel_cpu from config JSON while preserving CLI override precedence.
 Updated: 2026-04-22  Geng Xun updated example pipeline regressions to assert kebab-case CLI forwarding after removing legacy underscore spellings.
+Updated: 2026-04-23  Geng Xun added regression coverage for forwarding invalid-pixel-radius and low-resolution coarse-registration options through the example wrappers.
 """
 
 from __future__ import annotations
@@ -191,7 +192,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
                     raise SystemExit(main())
                     """
-                ).strip()
+                ).lstrip()
                 + "\n",
                 encoding="utf-8",
             )
@@ -201,7 +202,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     #!/usr/bin/env bash
                     exec {sys.executable} "{fake_python_dispatcher}" "$@"
                     """
-                ).strip()
+                ).lstrip()
                 + "\n",
                 encoding="utf-8",
             )
@@ -334,7 +335,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
                     raise SystemExit(main())
                     """
-                ).strip()
+                ).lstrip()
                 + "\n",
                 encoding="utf-8",
             )
@@ -344,7 +345,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     #!/usr/bin/env bash
                     exec {sys.executable} "{fake_python_dispatcher}" "$@"
                     """
-                ).strip()
+                ).lstrip()
                 + "\n",
                 encoding="utf-8",
             )
@@ -427,7 +428,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
                     raise SystemExit(main())
                     """
-                ).strip()
+                ).lstrip()
                 + "\n",
                 encoding="utf-8",
             )
@@ -437,7 +438,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     #!/usr/bin/env bash
                     exec {sys.executable} \"{fake_python_dispatcher}\" "$@"
                     """
-                ).strip()
+                ).lstrip()
                 + "\n",
                 encoding="utf-8",
             )
@@ -529,7 +530,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
                     raise SystemExit(main())
                     """
-                ).strip()
+                ).lstrip()
                 + "\n",
                 encoding="utf-8",
             )
@@ -564,6 +565,106 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
         self.assertIn("CPU parallel worker limit: 6", completed.stdout)
+
+    def test_run_image_match_batch_example_reads_new_matching_options_from_config(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "timing-net",
+                        "TargetName": "Mars",
+                        "UserName": "copilot",
+                        "PointIdPrefix": "TMP",
+                        "ImageMatch": {
+                            "invalid_pixel_radius": 2,
+                            "enable_low_resolution_offset_estimation": True,
+                            "low_resolution_level": 4,
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                (
+                    f"#!{sys.executable}\n"
+                    "import sys\n"
+                    "from pathlib import Path\n"
+                    "\n"
+                    "def _run_stdin_python() -> int:\n"
+                    "    code = sys.stdin.read()\n"
+                    "    globals_dict = {'__name__': '__main__', '__file__': '<stdin>'}\n"
+                    "    sys.argv = ['-'] + sys.argv[2:]\n"
+                    "    exec(compile(code, '<stdin>', 'exec'), globals_dict)\n"
+                    "\n"
+                    "def main() -> int:\n"
+                    "    if len(sys.argv) < 2:\n"
+                    "        return 0\n"
+                    "    if sys.argv[1] == '-':\n"
+                    "        return _run_stdin_python()\n"
+                    "\n"
+                    "    script_name = Path(sys.argv[1]).name\n"
+                    "    args = sys.argv[2:]\n"
+                    "\n"
+                    "    if script_name == 'image_match.py':\n"
+                    "        if '--invalid-pixel-radius' not in args:\n"
+                    "            raise SystemExit('missing --invalid-pixel-radius forwarding')\n"
+                    "        radius = args[args.index('--invalid-pixel-radius') + 1]\n"
+                    "        if radius != '2':\n"
+                    "            raise SystemExit(f'unexpected invalid pixel radius: {radius}')\n"
+                    "        if '--enable-low-resolution-offset-estimation' not in args:\n"
+                    "            raise SystemExit('missing low-resolution enable flag')\n"
+                    "        if '--low-resolution-level' not in args:\n"
+                    "            raise SystemExit('missing --low-resolution-level')\n"
+                    "        level = args[args.index('--low-resolution-level') + 1]\n"
+                    "        if level != '4':\n"
+                    "            raise SystemExit(f'unexpected low-resolution level: {level}')\n"
+                    "        Path(args[2]).write_text('synthetic-left-key\\n', encoding='utf-8')\n"
+                    "        Path(args[3]).write_text('synthetic-right-key\\n', encoding='utf-8')\n"
+                    "        return 0\n"
+                    "\n"
+                    "    raise SystemExit(f'Unhandled fake python script: {script_name}')\n"
+                    "\n"
+                    "raise SystemExit(main())\n"
+                ),
+                encoding="utf-8",
+            )
+            fake_python_dispatcher.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python_dispatcher),
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Invalid pixel radius: 2", completed.stdout)
+        self.assertIn("Low-resolution offset estimation: enabled", completed.stdout)
+        self.assertIn("Low-resolution level: 4", completed.stdout)
 
     def test_run_pipeline_example_reads_parallel_worker_limit_from_config(self):
         with temporary_directory() as temp_dir:
@@ -651,7 +752,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
                     raise SystemExit(main())
                     """
-                ).strip()
+                ).lstrip()
                 + "\n",
                 encoding="utf-8",
             )
@@ -659,9 +760,9 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 textwrap.dedent(
                     f"""
                     #!/usr/bin/env bash
-                    exec {sys.executable} \"{fake_python_dispatcher}\" "$@"
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
                     """
-                ).strip()
+                ).lstrip()
                 + "\n",
                 encoding="utf-8",
             )
@@ -687,6 +788,129 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
         self.assertIn("CPU parallel worker limit: 5", completed.stdout)
+
+    def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "timing-net",
+                        "TargetName": "Mars",
+                        "UserName": "copilot",
+                        "PointIdPrefix": "TMP",
+                        "ImageMatch": {
+                            "invalid_pixel_radius": 3,
+                            "enable_low_resolution_offset_estimation": True,
+                            "low_resolution_level": 5,
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                "\n".join(
+                    [
+                        f"#!{sys.executable}",
+                        "import os",
+                        "import sys",
+                        "from pathlib import Path",
+                        "",
+                        "def _run_stdin_python() -> int:",
+                        "    code = sys.stdin.read()",
+                        "    globals_dict = {'__name__': '__main__', '__file__': '<stdin>'}",
+                        "    sys.argv = ['-'] + sys.argv[2:]",
+                        "    exec(compile(code, '<stdin>', 'exec'), globals_dict)",
+                        "",
+                        "def main() -> int:",
+                        "    if len(sys.argv) < 2:",
+                        "        return 0",
+                        "    if sys.argv[1] == '-':",
+                        "        return _run_stdin_python()",
+                        "",
+                        "    script_name = Path(sys.argv[1]).name",
+                        "    args = sys.argv[2:]",
+                        "",
+                        "    if script_name == 'image_overlap.py':",
+                        "        Path(args[1]).write_text('left.cub,right.cub\\n', encoding='utf-8')",
+                        "        return 0",
+                        "",
+                        "    if script_name == 'image_match.py':",
+                        "        if '--invalid-pixel-radius' not in args:",
+                        "            raise SystemExit('missing --invalid-pixel-radius forwarding')",
+                        "        radius = args[args.index('--invalid-pixel-radius') + 1]",
+                        "        if radius != '3':",
+                        "            raise SystemExit(f'unexpected invalid pixel radius: {radius}')",
+                        "        if '--enable-low-resolution-offset-estimation' not in args:",
+                        "            raise SystemExit('missing low-resolution enable flag')",
+                        "        if '--low-resolution-level' not in args:",
+                        "            raise SystemExit('missing --low-resolution-level')",
+                        "        level = args[args.index('--low-resolution-level') + 1]",
+                        "        if level != '5':",
+                        "            raise SystemExit(f'unexpected low-resolution level: {level}')",
+                        "        Path(args[2]).write_text('synthetic-left-key\\n', encoding='utf-8')",
+                        "        Path(args[3]).write_text('synthetic-right-key\\n', encoding='utf-8')",
+                        "        return 0",
+                        "",
+                        "    if script_name == 'controlnet_stereopair.py':",
+                        "        if '--write-match-visualization' not in args:",
+                        "            raise SystemExit('missing --write-match-visualization for controlnet_stereopair.py')",
+                        "        if '--match-visualization-output-dir' not in args:",
+                        "            raise SystemExit('missing --match-visualization-output-dir for controlnet_stereopair.py')",
+                        "        output_dir = Path(args[6])",
+                        "        output_dir.mkdir(parents=True, exist_ok=True)",
+                        "        (output_dir / 'synthetic_pair.net').write_text('net', encoding='utf-8')",
+                        "        return 0",
+                        "",
+                        "    if script_name == 'controlnet_merge.py':",
+                        "        merge_script_path = Path(args[3])",
+                        "        merge_script_path.parent.mkdir(parents=True, exist_ok=True)",
+                        "        merge_script_path.write_text('#!/usr/bin/env bash\\nexit 0\\n', encoding='utf-8')",
+                        "        os.chmod(merge_script_path, 0o755)",
+                        "        return 0",
+                        "",
+                        "    raise SystemExit(f'Unhandled fake python script: {script_name}')",
+                        "",
+                        "raise SystemExit(main())",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python_dispatcher.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python_dispatcher),
+                    "--skip-final-merge",
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Invalid pixel radius: 3", completed.stdout)
+        self.assertIn("Low-resolution offset estimation: enabled", completed.stdout)
+        self.assertIn("Low-resolution level: 5", completed.stdout)
 
     def test_run_pipeline_example_forwards_custom_parallel_worker_limit_to_image_match(self):
         with temporary_directory() as temp_dir:
@@ -1848,6 +2072,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 right_dom_key,
                 min_valid_pixels=16,
                 ratio_test=0.85,
+                invalid_pixel_radius=0,
             )
             self.assertGreater(match_summary["point_count"], 0)
 
@@ -1965,6 +2190,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 metadata_output=metadata_output,
                 min_valid_pixels=16,
                 ratio_test=0.85,
+                invalid_pixel_radius=0,
             )
             self.assertGreater(match_summary["point_count"], 0)
 

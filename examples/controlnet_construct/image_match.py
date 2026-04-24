@@ -15,6 +15,8 @@ Updated: 2026-04-22  Geng Xun added a configurable --num-worker-parallel-cpu wor
 Updated: 2026-04-22  Geng Xun standardized the public image-match CLI on kebab-case flags and removed legacy underscore spellings.
 Updated: 2026-04-22  Geng Xun added optional --config JSON loading so image_match.py and the example batch wrappers can share ImageMatch defaults from the same configuration file.
 Updated: 2026-04-23  Geng Xun batched low-resolution projected keypoints conversion so repeated offset estimation reuses opened cubes and projection objects instead of reopening the same DOM for every point.
+Updated: 2026-04-23  Geng Xun replaced GDAL-based low-resolution DOM generation with ISIS reduce so coarse-offset cubes preserve projection-ready Mapping labels.
+Updated: 2026-04-24  Geng Xun extracted reusable stereo-pair RANSAC filtering helpers into a dedicated module so image_match.py stays smaller while preserving the existing public API.
 """
 
 from __future__ import annotations
@@ -49,6 +51,7 @@ if __package__ in {None, ""}:
         validate_invalid_pixel_radius,
     )
     from controlnet_construct.runtime import bootstrap_runtime_environment
+    import controlnet_construct.stereo_ransac as _stereo_ransac
     from controlnet_construct.tiling import TileWindow, generate_tiles, requires_tiling
 else:
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
@@ -61,6 +64,7 @@ else:
         validate_invalid_pixel_radius,
     )
     from .runtime import bootstrap_runtime_environment
+    from . import stereo_ransac as _stereo_ransac
     from .tiling import TileWindow, generate_tiles, requires_tiling
 
 
@@ -984,36 +988,57 @@ def _run_command(command: list[str]) -> None:
         )
 
 
+def _validate_projection_ready_cube(cube_path: str | Path) -> float:
+    cube = ip.Cube()
+    cube.open(str(cube_path), "r")
+    try:
+        projection = cube.projection()
+        resolution = float(projection.resolution())
+        if not np.isfinite(resolution) or resolution <= 0.0:
+            raise RuntimeError(
+                f"Projection resolution must be positive and finite for {cube_path}; got {resolution!r}."
+            )
+        return resolution
+    except Exception as exc:
+        raise RuntimeError(
+            f"Low-resolution ISIS cube is not projection-ready: {cube_path}: {exc}"
+        ) from exc
+    finally:
+        if cube.is_open():
+            cube.close()
+
+
 def _create_low_resolution_dom(
     source_path: str | Path,
     output_path: str | Path,
     *,
     level: int,
 ) -> Path:
+    resolved_level = _validate_low_resolution_level(level)
     resolved_source_path = Path(source_path)
     resolved_output_path = Path(output_path)
     resolved_output_path.parent.mkdir(parents=True, exist_ok=True)
-    if level == 0:
-        resolved_output_path.write_bytes(resolved_source_path.read_bytes())
+    if resolved_output_path.exists():
+        resolved_output_path.unlink()
+
+    if resolved_level == 0:
+        shutil.copyfile(resolved_source_path, resolved_output_path)
+        _validate_projection_ready_cube(resolved_output_path)
         return resolved_output_path
 
-    scale_divisor = 2 ** level
-    percent = 100.0 / float(scale_divisor)
-    _run_command(["gdaladdo", "-r", "average", str(resolved_source_path), *[str(2 ** index) for index in range(1, level + 1)]])
+    scale_divisor = 2 ** resolved_level
     _run_command(
         [
-            "gdal_translate",
-            "-of",
-            "ISIS3",
-            "-r",
-            "bilinear",
-            "-outsize",
-            f"{percent:.8f}%",
-            f"{percent:.8f}%",
-            str(resolved_source_path),
-            str(resolved_output_path),
+            "reduce",
+            f"from={resolved_source_path}",
+            f"to={resolved_output_path}",
+            "mode=scale",
+            f"sscale={scale_divisor}",
+            f"lscale={scale_divisor}",
+            "algorithm=AVERAGE",
         ]
     )
+    _validate_projection_ready_cube(resolved_output_path)
     return resolved_output_path
 
 
@@ -1101,8 +1126,7 @@ def _estimate_low_resolution_projected_offset(
     pair_tag = _low_resolution_pair_tag(left_dom_path, right_dom_path)
     started_at = time.perf_counter()
     try:
-        _require_command("gdaladdo")
-        _require_command("gdal_translate")
+        _require_command("reduce")
 
         left_low_res_dom = _create_low_resolution_dom(
             left_dom_path,
@@ -1288,118 +1312,23 @@ def filter_stereo_pair_keypoints_with_ransac(
     ransac_mode: str = "loose",
     loose_keep_pixel_threshold: float = 1.0,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
-    if len(left_key_file.points) != len(right_key_file.points):
-        raise ValueError("Left and right keypoint files must contain the same number of points.")
-
-    normalized_mode = _normalize_ransac_mode(ransac_mode)
-    input_count = len(left_key_file.points)
-
-    if input_count < 4:
-        summary = {
-            "applied": False,
-            "status": "skipped_insufficient_points",
-            "mode": normalized_mode,
-            "input_count": input_count,
-            "retained_count": input_count,
-            "dropped_count": 0,
-            "opencv_inlier_count": input_count,
-            "opencv_outlier_count": 0,
-            "retained_soft_outlier_count": 0,
-            "soft_outlier_original_indices": [],
-            "retained_soft_outlier_positions": [],
-            "reproj_threshold": float(ransac_reproj_threshold),
-            "confidence": float(ransac_confidence),
-            "max_iters": int(ransac_max_iters),
-            "loose_keep_pixel_threshold": float(loose_keep_pixel_threshold),
-            "homography_matrix": None,
-        }
-        return left_key_file, right_key_file, summary
-
-    left_points = np.asarray([(point.sample, point.line) for point in left_key_file.points], dtype=np.float32).reshape(-1, 1, 2)
-    right_points = np.asarray([(point.sample, point.line) for point in right_key_file.points], dtype=np.float32).reshape(-1, 1, 2)
-    homography, mask = cv2.findHomography(
-        left_points,
-        right_points,
-        cv2.RANSAC,
-        ransacReprojThreshold=float(ransac_reproj_threshold),
-        confidence=float(ransac_confidence),
-        maxIters=int(ransac_max_iters),
-    )
-
-    if homography is None or mask is None:
-        summary = {
-            "applied": False,
-            "status": "skipped_homography_failed",
-            "mode": normalized_mode,
-            "input_count": input_count,
-            "retained_count": input_count,
-            "dropped_count": 0,
-            "opencv_inlier_count": 0,
-            "opencv_outlier_count": 0,
-            "retained_soft_outlier_count": 0,
-            "soft_outlier_original_indices": [],
-            "retained_soft_outlier_positions": [],
-            "reproj_threshold": float(ransac_reproj_threshold),
-            "confidence": float(ransac_confidence),
-            "max_iters": int(ransac_max_iters),
-            "loose_keep_pixel_threshold": float(loose_keep_pixel_threshold),
-            "homography_matrix": None,
-        }
-        return left_key_file, right_key_file, summary
-
-    opencv_inlier_mask = mask.reshape(-1).astype(bool)
-    retained_mask = opencv_inlier_mask.copy()
-    soft_outlier_original_indices: list[int] = []
-
-    if normalized_mode == "loose":
-        projected_right = cv2.perspectiveTransform(left_points, homography).reshape(-1, 2)
-        right_coordinates = right_points.reshape(-1, 2)
-        for index, (is_inlier, projected, actual) in enumerate(zip(opencv_inlier_mask, projected_right, right_coordinates, strict=True)):
-            if is_inlier:
-                continue
-            reprojection_error = float(np.linalg.norm(projected - actual))
-            if reprojection_error <= float(loose_keep_pixel_threshold):
-                retained_mask[index] = True
-                soft_outlier_original_indices.append(index)
-
-    filtered_left_points: list[Keypoint] = []
-    filtered_right_points: list[Keypoint] = []
-    retained_soft_outlier_positions: list[int] = []
-    retained_position = 0
-    for index, (left_point, right_point, keep_point) in enumerate(
-        zip(left_key_file.points, right_key_file.points, retained_mask, strict=True)
-    ):
-        if not keep_point:
-            continue
-        filtered_left_points.append(left_point)
-        filtered_right_points.append(right_point)
-        if index in soft_outlier_original_indices:
-            retained_soft_outlier_positions.append(retained_position)
-        retained_position += 1
-
-    summary = {
-        "applied": True,
-        "status": "filtered",
-        "mode": normalized_mode,
-        "input_count": input_count,
-        "retained_count": len(filtered_left_points),
-        "dropped_count": input_count - len(filtered_left_points),
-        "opencv_inlier_count": int(opencv_inlier_mask.sum()),
-        "opencv_outlier_count": int((~opencv_inlier_mask).sum()),
-        "retained_soft_outlier_count": len(soft_outlier_original_indices),
-        "soft_outlier_original_indices": soft_outlier_original_indices,
-        "retained_soft_outlier_positions": retained_soft_outlier_positions,
-        "reproj_threshold": float(ransac_reproj_threshold),
-        "confidence": float(ransac_confidence),
-        "max_iters": int(ransac_max_iters),
-        "loose_keep_pixel_threshold": float(loose_keep_pixel_threshold),
-        "homography_matrix": homography.tolist(),
-    }
-    return (
-        KeypointFile(left_key_file.image_width, left_key_file.image_height, tuple(filtered_left_points)),
-        KeypointFile(right_key_file.image_width, right_key_file.image_height, tuple(filtered_right_points)),
-        summary,
-    )
+    original_find_homography = _stereo_ransac.cv2.findHomography
+    original_perspective_transform = _stereo_ransac.cv2.perspectiveTransform
+    try:
+        _stereo_ransac.cv2.findHomography = cv2.findHomography
+        _stereo_ransac.cv2.perspectiveTransform = cv2.perspectiveTransform
+        return _stereo_ransac.filter_stereo_pair_keypoints_with_ransac(
+            left_key_file,
+            right_key_file,
+            ransac_reproj_threshold=ransac_reproj_threshold,
+            ransac_confidence=ransac_confidence,
+            ransac_max_iters=ransac_max_iters,
+            ransac_mode=ransac_mode,
+            loose_keep_pixel_threshold=loose_keep_pixel_threshold,
+        )
+    finally:
+        _stereo_ransac.cv2.findHomography = original_find_homography
+        _stereo_ransac.cv2.perspectiveTransform = original_perspective_transform
 
 
 def filter_stereo_pair_key_files_with_ransac(
@@ -1414,26 +1343,17 @@ def filter_stereo_pair_key_files_with_ransac(
     ransac_mode: str = "loose",
     loose_keep_pixel_threshold: float = 1.0,
 ) -> dict[str, object]:
-    left_key_file = read_key_file(left_input)
-    right_key_file = read_key_file(right_input)
-    filtered_left, filtered_right, summary = filter_stereo_pair_keypoints_with_ransac(
-        left_key_file,
-        right_key_file,
+    return _stereo_ransac.filter_stereo_pair_key_files_with_ransac(
+        left_input,
+        right_input,
+        left_output,
+        right_output,
         ransac_reproj_threshold=ransac_reproj_threshold,
         ransac_confidence=ransac_confidence,
         ransac_max_iters=ransac_max_iters,
         ransac_mode=ransac_mode,
         loose_keep_pixel_threshold=loose_keep_pixel_threshold,
     )
-    write_key_file(left_output, filtered_left)
-    write_key_file(right_output, filtered_right)
-    return {
-        **summary,
-        "left_input": str(left_input),
-        "right_input": str(right_input),
-        "left_output": str(left_output),
-        "right_output": str(right_output),
-    }
 
 
 def write_stereo_pair_match_visualization(

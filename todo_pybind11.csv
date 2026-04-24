@@ -40,7 +40,9 @@ Control Networks,SerialNumberList,已转换,2026-03-21 已在 bind_base_support.
 Geometry,Enlarge,已转换,已在 bind_base_geometry.cpp 暴露
 Geometry,Intercept,已转换,2026-04-08 完成 Intercept 绑定 ctor 克隆路径与单元测试补充
 Geometry,Interpolator,已转换,已在 bind_base_geometry.cpp 暴露
+Geometry,Nearest,未转换,2026-04-23 inventory sync：与 Reduce 同头文件定义；近邻降采样 functor 当前未单独绑定；若要直接在 Python 中做低分辨率处理，还需补 __call__ 暴露与 ProcessByLine/ProcessByBrick 回调式 start_process/helper
 Geometry,Reduce,已转换,已在 bind_base_geometry.cpp 暴露
+Geometry,Average,未转换,2026-04-23 inventory sync：与 Reduce 同头文件定义；均值降采样 functor 当前未单独绑定；若要直接在 Python 中做低分辨率处理，还需补 __call__ 暴露与 ProcessByLine/ProcessByBrick 回调式 start_process/helper
 Geometry,Stereo,已转换,2026-04-08 已在 src/base/bind_base_geometry.cpp 暴露 Stereo 构造与 elevation/spherical/rectangular 静态接口；新增 tests/unitTest/stereo_unit_test.py 与 smoke 覆盖
 Geometry,SurfacePoint,已转换,
 Geometry,Transform,已转换,已在 bind_base_geometry.cpp 暴露

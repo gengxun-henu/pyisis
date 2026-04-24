@@ -22,7 +22,7 @@
     "valid_pixel_percent_threshold": 0.05,
     "invalid_pixel_radius": 1,
     "ratio_test": 0.75,
-    "max_features": null,
+    "max_features": 1000,
     "sift_octave_layers": 3,
     "sift_contrast_threshold": 0.04,
     "sift_edge_threshold": 10.0,
@@ -34,6 +34,6 @@
     "use_parallel_cpu": true,
     "num_worker_parallel_cpu": 8,
     "write_match_visualization": true,
-    "match_visualization_scale": 0.3333333333333333
+    "match_visualization_scale": 0.25
   }
 }

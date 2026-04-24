@@ -14,6 +14,7 @@ Updated: 2026-04-22  Geng Xun added focused regression coverage for the default 
 Updated: 2026-04-22  Geng Xun added focused regression coverage for configurable CPU process-pool worker limits in image_match.py.
 Updated: 2026-04-23  Geng Xun added regression coverage for invalid-pixel-radius parsing and default low-resolution offset summary fields.
 Updated: 2026-04-23  Geng Xun added focused regression coverage for batched projected keypoint conversion so low-resolution offset estimation no longer reopens the same cube for every retained point.
+Updated: 2026-04-23  Geng Xun added regression coverage for ISIS reduce-based low-resolution DOM generation and fallback summary propagation.
 """
 
 from __future__ import annotations
@@ -134,6 +135,92 @@ def _write_projected_dom_pair(
 
 
 class ControlNetConstructMatchingUnitTest(unittest.TestCase):
+    def test_create_low_resolution_dom_uses_isis_reduce_scale_mode(self):
+        with temporary_directory() as temp_dir:
+            source_path = temp_dir / "source_input.cub"
+            output_path = temp_dir / "reduced_output.cub"
+            source_path.write_bytes(b"fake cube bytes")
+
+            with mock.patch.object(image_match, "_run_command") as run_command_mock, mock.patch.object(
+                image_match,
+                "_validate_projection_ready_cube",
+                return_value=10.0,
+            ) as validate_mock:
+                result = image_match._create_low_resolution_dom(source_path, output_path, level=3)
+
+        self.assertEqual(result, output_path)
+        run_command_mock.assert_called_once_with(
+            [
+                "reduce",
+                f"from={source_path}",
+                f"to={output_path}",
+                "mode=scale",
+                "sscale=8",
+                "lscale=8",
+                "algorithm=AVERAGE",
+            ]
+        )
+        validate_mock.assert_called_once_with(output_path)
+
+    def test_create_low_resolution_dom_level_zero_copies_source_without_reduce(self):
+        with temporary_directory() as temp_dir:
+            source_path = temp_dir / "source_level_zero.cub"
+            output_path = temp_dir / "copied_level_zero.cub"
+            source_path.write_bytes(b"level-zero-copy")
+
+            with mock.patch.object(image_match, "_run_command") as run_command_mock, mock.patch.object(
+                image_match,
+                "_validate_projection_ready_cube",
+                return_value=10.0,
+            ) as validate_mock:
+                result = image_match._create_low_resolution_dom(source_path, output_path, level=0)
+
+            self.assertEqual(result, output_path)
+            self.assertEqual(output_path.read_bytes(), b"level-zero-copy")
+
+        run_command_mock.assert_not_called()
+        validate_mock.assert_called_once_with(output_path)
+
+    def test_estimate_low_resolution_projected_offset_reports_reduce_generation_failure(self):
+        with temporary_directory() as temp_dir:
+            with mock.patch.object(image_match, "_require_command") as require_command_mock, mock.patch.object(
+                image_match,
+                "_create_low_resolution_dom",
+                side_effect=RuntimeError("reduce failed for synthetic test"),
+            ):
+                summary = image_match._estimate_low_resolution_projected_offset(
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    enabled=True,
+                    low_resolution_level=3,
+                    low_resolution_output_dir=temp_dir,
+                    band=1,
+                    minimum_value=None,
+                    maximum_value=None,
+                    lower_percent=0.5,
+                    upper_percent=99.5,
+                    invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    min_valid_pixels=64,
+                    valid_pixel_percent_threshold=0.0,
+                    invalid_pixel_radius=1,
+                    ratio_test=0.75,
+                    max_features=None,
+                    sift_octave_layers=3,
+                    sift_contrast_threshold=0.04,
+                    sift_edge_threshold=10.0,
+                    sift_sigma=1.6,
+                )
+
+        require_command_mock.assert_called_once_with("reduce")
+        self.assertTrue(summary["enabled"])
+        self.assertEqual(summary["status"], "fallback_zero")
+        self.assertTrue(summary["fallback_offset_zero"])
+        self.assertIn("reduce failed for synthetic test", summary["reason"])
+        self.assertEqual(summary["delta_x_projected"], 0.0)
+        self.assertEqual(summary["delta_y_projected"], 0.0)
+        self.assertEqual(summary["retained_match_count"], 0)
+
     def test_projected_xy_from_keypoints_opens_cube_once_and_preserves_input_order(self):
         class FakeProjection:
             def __init__(self):

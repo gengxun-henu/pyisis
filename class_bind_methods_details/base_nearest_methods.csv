@@ -1,0 +1,7 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Nearest,Geometry,reference/upstream_isis/src/base/objs/Reduce/Reduce.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-23 inventory sync：`Reduce.h` 同文件定义的近邻降采样 functor；继承 `Reduce`，当前未在 `src/base/bind_base_geometry.cpp` 单独暴露
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Nearest,isis_pybind.Nearest,N,当前未绑定；可作为 `Reduce` 子类单独暴露
+Construction/Enum,"Nearest(Isis::Cube *pInCube, double pdSampleScale, double pdLineScale) : Reduce(pInCube, pdSampleScale, pdLineScale)",isis_pybind.Nearest(input_cube: Cube, sample_scale: float, line_scale: float),N,当前未绑定；建议沿用 `Reduce` 的 `keep_alive<1, 2>` 生命周期策略
+Public API,"void operator()(Isis::Buffer &out) const",isis_pybind.Nearest.__call__(out: Buffer),N,当前未绑定；若要直接在 Python 侧完成降采样流程，还需补 `ProcessByLine/ProcessByBrick` 回调式 `start_process(...)` 或更高层 convenience helper

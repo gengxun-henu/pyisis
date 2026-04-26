@@ -15,6 +15,7 @@ Updated: 2026-04-19  Geng Xun change 'point = ip.ControlPoint(f"{config.point_id
 Updated: 2026-04-20  Geng Xun added optional stereo-pair point-ID namespacing with CLI override support so multi-pair cnetmerge workflows avoid accidental PointId collisions.
 Updated: 2026-04-20  Geng Xun added a from-dom batch wrapper that auto-assigns S1/S2/S3-style pair IDs across images_overlap.lis processing.
 Updated: 2026-04-20  Geng Xun added an explicit post-RANSAC visualization output path so E2E runs can preserve deterministic pre/post drawMatches PNGs.
+Updated: 2026-04-24  Geng Xun switched the post-RANSAC visualization import to the dedicated match_visualization module so controlnet_stereopair no longer depends on image_match.py for that helper.
 """
 
 from __future__ import annotations
@@ -34,9 +35,9 @@ if __package__ in {None, ""}:
     from controlnet_construct.controlnet_merge import pair_controlnet_filename
     from controlnet_construct.coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
-    from controlnet_construct.image_match import write_stereo_pair_match_visualization_from_key_files
     from controlnet_construct.keypoints import read_key_file
     from controlnet_construct.listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
+    from controlnet_construct.match_visualization import write_stereo_pair_match_visualization_from_key_files
     from controlnet_construct.runtime import bootstrap_runtime_environment
     from controlnet_construct.stereo_ransac import filter_stereo_pair_key_files_with_ransac
     from controlnet_construct.tie_point_merge_in_overlap import (
@@ -51,9 +52,9 @@ else:
     from .controlnet_merge import pair_controlnet_filename
     from .coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from .dom2ori import convert_paired_dom_keypoints_to_original
-    from .image_match import write_stereo_pair_match_visualization_from_key_files
     from .keypoints import read_key_file
     from .listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
+    from .match_visualization import write_stereo_pair_match_visualization_from_key_files
     from .runtime import bootstrap_runtime_environment
     from .stereo_ransac import filter_stereo_pair_key_files_with_ransac
     from .tie_point_merge_in_overlap import (

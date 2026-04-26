@@ -52,6 +52,64 @@
 - `examples/controlnet_construct/run_image_match_batch_example.sh`
 - `examples/controlnet_construct/recommended_batch_templates.md`
 
+## 模块结构（维护者速览）
+
+从当前版本开始，`image_match.py` 已经不再承载所有内部实现细节，而是缩成了一个**兼容层 + 编排层**：
+
+- 对外仍保留原来的 CLI 和主入口，例如：
+  - `match_dom_pair(...)`
+  - `match_dom_pair_to_key_files(...)`
+  - `write_stereo_pair_match_visualization(...)`
+- 对内则把原本耦合在一个文件里的几块职责拆到了更明确的模块中。
+
+建议把这几份文件理解成下面这张“职责地图”：
+
+- `image_match.py`
+  - 角色：**公开入口 / 配置解析 / 流程编排 / 兼容 façade**
+  - 负责：
+    - CLI 参数与 `--config` 默认值装配
+    - 调用 projected-overlap crop 准备逻辑
+    - 组织低分辨率粗配准、tile 匹配、结果汇总与 sidecar 输出
+    - 为现有脚本和单测继续保留历史函数名与导出面
+- `lowres_offset.py`
+  - 角色：**低分辨率粗配准模块**
+  - 负责：
+    - 生成低分辨率 DOM（当前通过 ISIS `reduce`）
+    - 低分辨率 keypoint 的投影坐标转换
+    - 估计 projected global offset，并在失败时回退到零偏移
+- `match_visualization.py`
+  - 角色：**匹配连线可视化模块**
+  - 负责：
+    - `cv2.drawMatches` 预览图输出
+    - 默认 PNG 命名规则
+    - 从 `.key` 文件直接生成可视化
+- `tile_matching.py`
+  - 角色：**SIFT / tile / 并行匹配核心模块**
+  - 负责：
+    - tile 切分与 shared extent window 组织
+    - 灰度拉伸后图像准备与 mask 处理
+    - SIFT 检测、ratio-test 过滤
+    - 串行 / CPU 进程池 tile 匹配执行
+    - tile 级统计数据结构（如 `TileMatchStats`、`TileMatchResult`）
+- `stereo_ransac.py`
+  - 角色：**立体像对 RANSAC 过滤模块**
+  - 负责：
+    - 对左右 `.key` 做 homography RANSAC 过滤
+    - strict / loose 两种保留策略
+    - 输出 retained / dropped / soft-outlier 等诊断摘要
+
+如果你只是**使用**这条流水线，那么仍然可以把 `image_match.py` 当成第 2 步的唯一 CLI 入口。
+
+如果你是在**维护**代码，推荐遵循下面这个判断规则：
+
+- 改匹配参数、CLI 行为、sidecar 汇总字段、流程顺序：优先看 `image_match.py`
+- 改低分辨率粗配准：优先看 `lowres_offset.py`
+- 改 pre-RANSAC / post-RANSAC 连线图输出：优先看 `match_visualization.py`
+- 改 tile/SIFT/并行执行细节：优先看 `tile_matching.py`
+- 改 RANSAC 内点/软外点策略：优先看 `stereo_ransac.py`
+
+当前仍保留 `image_match.py` 里的若干兼容 wrapper / alias，主要是为了让历史脚本、下游导入和 focused unit tests 不需要在同一次重构里整体迁移。换句话说：**模块已经拆开了，但门牌号暂时还保留着旧地址**。
+
 ## 0. 前提准备
 
 ### 0.1 运行环境
@@ -103,6 +161,7 @@ python -c "import isis_pybind as ip; print(ip.__file__)"
   "upper_percent": 99.5,
   "min_valid_pixels": 64,
   "valid_pixel_percent_threshold": 0.05,
+  "matcher_method": "bf",
   "ratio_test": 0.75,
   "crop_expand_pixels": 100,
   "min_overlap_size": 16,
@@ -111,6 +170,7 @@ python -c "import isis_pybind as ip; print(ip.__file__)"
   "invalid_pixel_radius": 1,
   "enable_low_resolution_offset_estimation": false,
   "low_resolution_level": 3,
+  "low_resolution_max_mean_reprojection_error_pixels": 3.0,
   "write_match_visualization": true,
   "match_visualization_scale": 0.3333333333333333
 }
@@ -124,7 +184,7 @@ python examples/controlnet_construct/image_match.py \
   left_dom.cub right_dom.cub left.key right.key
 ```
 
-如果你又在命令行里显式传了某个匹配参数，例如 `--ratio-test 0.8` 或 `--num-worker-parallel-cpu 4`，则命令行值会覆盖配置文件中的默认值。
+如果你又在命令行里显式传了某个匹配参数，例如 `--ratio-test 0.8`、`--matcher-method flann` 或 `--num-worker-parallel-cpu 4`，则命令行值会覆盖配置文件中的默认值。
 
 ### 0.3 推荐工作目录
 
@@ -257,11 +317,23 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
   --invalid-pixel-radius 2
 ```
 
+如果你想把 SIFT 描述子匹配后端切到 FLANN，可以显式加上：
+
+```bash
+  --matcher-method flann
+```
+
 如果你的两景 DOM 存在较明显的整体投影平移，也可以先启用低分辨率粗配准：
 
 ```bash
   --enable-low-resolution-offset-estimation \
   --low-resolution-level 3
+```
+
+如果你已经启用了低分辨率粗配准，并希望更严格地拒绝几何不稳定的粗配准结果，还可以补一个重投影误差门槛：
+
+```bash
+  --low-resolution-max-mean-reprojection-error-pixels 2.5
 ```
 
 这一步失败时不会中断整条流水线，而是自动回退为零偏移继续执行；对应状态会写进每个 pair 的 metadata JSON 里。

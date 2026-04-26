@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-23
+Last Modified: 2026-04-26
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -15,12 +15,15 @@ Updated: 2026-04-22  Geng Xun added focused regression coverage for configurable
 Updated: 2026-04-23  Geng Xun added regression coverage for invalid-pixel-radius parsing and default low-resolution offset summary fields.
 Updated: 2026-04-23  Geng Xun added focused regression coverage for batched projected keypoint conversion so low-resolution offset estimation no longer reopens the same cube for every retained point.
 Updated: 2026-04-23  Geng Xun added regression coverage for ISIS reduce-based low-resolution DOM generation and fallback summary propagation.
+Updated: 2026-04-24  Geng Xun added regression coverage for configurable low-resolution trimmed-mean fractions through the Python API, CLI, and config defaults.
+Updated: 2026-04-26  Geng Xun added regression coverage for BF/FLANN matcher selection and low-resolution reprojection-error gating.
 """
 
 from __future__ import annotations
 
 import importlib
 from datetime import datetime
+import json
 import os
 import sys
 from pathlib import Path
@@ -50,6 +53,8 @@ filter_stereo_pair_keypoints_with_ransac = image_match.filter_stereo_pair_keypoi
 match_dom_pair = image_match.match_dom_pair
 match_dom_pair_to_key_files = image_match.match_dom_pair_to_key_files
 write_stereo_pair_match_visualization_from_key_files = image_match.write_stereo_pair_match_visualization_from_key_files
+
+tile_matching_module = importlib.import_module("controlnet_construct.tile_matching")
 
 keypoints_module = importlib.import_module("controlnet_construct.keypoints")
 Keypoint = keypoints_module.Keypoint
@@ -204,12 +209,14 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     min_valid_pixels=64,
                     valid_pixel_percent_threshold=0.0,
                     invalid_pixel_radius=1,
+                    matcher_method="bf",
                     ratio_test=0.75,
                     max_features=None,
                     sift_octave_layers=3,
                     sift_contrast_threshold=0.04,
                     sift_edge_threshold=10.0,
                     sift_sigma=1.6,
+                    low_resolution_trim_fraction_each_side=0.05,
                 )
 
         require_command_mock.assert_called_once_with("reduce")
@@ -220,6 +227,16 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["delta_x_projected"], 0.0)
         self.assertEqual(summary["delta_y_projected"], 0.0)
         self.assertEqual(summary["retained_match_count"], 0)
+        self.assertEqual(summary["trim_fraction_each_side"], 0.05)
+
+    def test_trimmed_mean_allows_custom_fraction_and_rejects_invalid_values(self):
+        self.assertAlmostEqual(
+            image_match._trimmed_mean([1.0, 2.0, 3.0, 100.0], trim_ratio=0.25),
+            2.5,
+        )
+
+        with self.assertRaisesRegex(ValueError, r"trim_fraction_each_side must be within \[0\.0, 0\.5\)"):
+            image_match._trimmed_mean([1.0, 2.0, 3.0], trim_ratio=0.5)
 
     def test_projected_xy_from_keypoints_opens_cube_once_and_preserves_input_order(self):
         class FakeProjection:
@@ -556,15 +573,24 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 "right.key",
                 "--invalid-pixel-radius",
                 "2",
+                "--matcher-method",
+                "flann",
                 "--enable-low-resolution-offset-estimation",
                 "--low-resolution-level",
                 "4",
+                "--low-resolution-trim-fraction-each-side",
+                "0.1",
+                "--low-resolution-max-mean-reprojection-error-pixels",
+                "2.5",
             ]
         )
 
         self.assertEqual(args.invalid_pixel_radius, 2)
+        self.assertEqual(args.matcher_method, "flann")
         self.assertTrue(args.enable_low_resolution_offset_estimation)
         self.assertEqual(args.low_resolution_level, 4)
+        self.assertAlmostEqual(args.low_resolution_trim_fraction_each_side, 0.1)
+        self.assertAlmostEqual(args.low_resolution_max_mean_reprojection_error_pixels, 2.5)
 
     def test_build_argument_parser_rejects_out_of_range_invalid_pixel_radius(self):
         parser = build_argument_parser()
@@ -607,6 +633,313 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     "-1",
                 ]
             )
+
+    def test_build_argument_parser_rejects_out_of_range_low_resolution_trim_fraction_each_side(self):
+        parser = build_argument_parser()
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--low-resolution-trim-fraction-each-side",
+                    "-0.01",
+                ]
+            )
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--low-resolution-trim-fraction-each-side",
+                    "0.5",
+                ]
+            )
+
+    def test_load_image_match_defaults_from_config_accepts_low_resolution_trim_fraction(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "image_match_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "lowResolutionTrimFractionEachSide": 0.12,
+                            "matcherMethod": "flann",
+                            "lowResolutionMaxMeanReprojectionErrorPixels": 2.25,
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            defaults = image_match.load_image_match_defaults_from_config(config_path)
+
+        self.assertAlmostEqual(defaults["low_resolution_trim_fraction_each_side"], 0.12)
+        self.assertEqual(defaults["matcher_method"], "flann")
+        self.assertAlmostEqual(defaults["low_resolution_max_mean_reprojection_error_pixels"], 2.25)
+
+    def test_create_descriptor_matcher_supports_bf_and_flann(self):
+        fake_bf_matcher = object()
+        fake_flann_matcher = object()
+
+        with mock.patch.object(tile_matching_module.cv2, "BFMatcher", return_value=fake_bf_matcher) as bf_mock, mock.patch.object(
+            tile_matching_module.cv2,
+            "FlannBasedMatcher",
+            return_value=fake_flann_matcher,
+        ) as flann_mock:
+            self.assertIs(tile_matching_module._create_descriptor_matcher("bf"), fake_bf_matcher)
+            self.assertIs(tile_matching_module._create_descriptor_matcher("flann"), fake_flann_matcher)
+
+        bf_mock.assert_called_once_with(tile_matching_module.cv2.NORM_L2, crossCheck=False)
+        flann_mock.assert_called_once_with(
+            {"algorithm": 1, "trees": tile_matching_module.DEFAULT_FLANN_TREES},
+            {"checks": tile_matching_module.DEFAULT_FLANN_CHECKS},
+        )
+
+    def test_match_dom_pair_passes_matcher_method_into_parallel_tile_tasks(self):
+        width = 128
+        height = 128
+        image = _build_textured_test_image(width, height)
+
+        synthetic_tile_results = [
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=5,
+                    right_feature_count=5,
+                    match_count=1,
+                    status="matched",
+                ),
+                left_points=(Keypoint(10.0, 10.0),),
+                right_points=(Keypoint(10.5, 10.5),),
+            ),
+        ]
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_matcher_method.cub",
+                right_name="right_matcher_method.cub",
+            )
+
+            with mock.patch.object(
+                image_match,
+                "_run_parallel_tile_match_tasks",
+                return_value=synthetic_tile_results,
+            ) as parallel_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                    matcher_method="flann",
+                )
+
+        submitted_tasks = parallel_mock.call_args.args[0]
+        self.assertTrue(submitted_tasks)
+        self.assertTrue(all(task.matcher_method == "flann" for task in submitted_tasks))
+        self.assertEqual(summary["matcher"]["matcher_method_requested"], "flann")
+        self.assertEqual(summary["matcher"]["matcher_method_used"], "flann")
+        self.assertEqual(summary["matcher"]["flann_index_params"]["algorithm"], "KDTree")
+
+    def test_match_dom_pair_forwards_custom_low_resolution_trim_fraction(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_lowres_trim_forward.cub",
+                right_name="right_lowres_trim_forward.cub",
+            )
+
+            with mock.patch.object(
+                image_match,
+                "_estimate_low_resolution_projected_offset",
+                return_value={
+                    "enabled": True,
+                    "status": "succeeded",
+                    "fallback_offset_zero": False,
+                    "reason": "ok",
+                    "delta_x_projected": 0.0,
+                    "delta_y_projected": 0.0,
+                    "retained_match_count": 0,
+                    "trim_fraction_each_side": 0.12,
+                },
+            ) as estimate_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    min_valid_pixels=16,
+                    enable_low_resolution_offset_estimation=True,
+                    low_resolution_trim_fraction_each_side=0.12,
+                )
+
+        self.assertAlmostEqual(summary["low_resolution_trim_fraction_each_side"], 0.12)
+        self.assertAlmostEqual(summary["low_resolution_offset"]["trim_fraction_each_side"], 0.12)
+        self.assertAlmostEqual(
+            estimate_mock.call_args.kwargs["low_resolution_trim_fraction_each_side"],
+            0.12,
+        )
+
+    def test_estimate_low_resolution_projected_offset_rejects_large_reprojection_error(self):
+        with temporary_directory() as temp_dir:
+            left_low_res_dom, right_low_res_dom = _write_projected_dom_pair(
+                temp_dir,
+                _build_textured_test_image(32, 32),
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_low_res_reproj.cub",
+                right_name="right_low_res_reproj.cub",
+            )
+
+            filtered_left = KeypointFile(
+                32,
+                32,
+                (
+                    Keypoint(5.0, 5.0),
+                    Keypoint(10.0, 5.0),
+                    Keypoint(5.0, 10.0),
+                    Keypoint(10.0, 10.0),
+                ),
+            )
+            filtered_right = KeypointFile(
+                32,
+                32,
+                (
+                    Keypoint(25.0, 25.0),
+                    Keypoint(30.0, 25.0),
+                    Keypoint(25.0, 30.0),
+                    Keypoint(30.0, 30.0),
+                ),
+            )
+
+            summary = image_match._estimate_low_resolution_projected_offset(
+                left_low_res_dom,
+                right_low_res_dom,
+                enabled=True,
+                low_resolution_level=3,
+                low_resolution_output_dir=temp_dir,
+                band=1,
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=64,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=1,
+                matcher_method="bf",
+                ratio_test=0.75,
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                low_resolution_trim_fraction_each_side=0.0,
+                low_resolution_max_mean_reprojection_error_pixels=3.0,
+                match_dom_pair_func=mock.Mock(return_value=(filtered_left, filtered_right, {"status": "matched"})),
+                filter_stereo_pair_keypoints_with_ransac_func=mock.Mock(
+                    return_value=(
+                        filtered_left,
+                        filtered_right,
+                        {
+                            "applied": True,
+                            "status": "filtered",
+                            "homography_matrix": [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
+                        },
+                    )
+                ),
+                write_stereo_pair_match_visualization_func=mock.Mock(return_value={"output_path": "ignored.png"}),
+                require_command_func=mock.Mock(),
+                create_low_resolution_dom_func=mock.Mock(side_effect=[left_low_res_dom, right_low_res_dom]),
+            )
+
+        self.assertEqual(summary["status"], "fallback_zero")
+        self.assertTrue(summary["fallback_offset_zero"])
+        self.assertEqual(summary["failure_reason_code"], "reprojection_error_above_threshold")
+        self.assertGreater(summary["trimmed_mean_reprojection_error_pixels"], 3.0)
+        self.assertEqual(summary["delta_x_projected"], 0.0)
+        self.assertEqual(summary["delta_y_projected"], 0.0)
+
+    def test_estimate_low_resolution_projected_offset_rejects_insufficient_points_for_homography(self):
+        with temporary_directory() as temp_dir:
+            fake_left_dom = temp_dir / "left_insufficient.cub"
+            fake_right_dom = temp_dir / "right_insufficient.cub"
+            fake_left_dom.write_bytes(b"left")
+            fake_right_dom.write_bytes(b"right")
+            filtered_left = KeypointFile(32, 32, (Keypoint(1.0, 1.0), Keypoint(2.0, 2.0), Keypoint(3.0, 3.0)))
+            filtered_right = KeypointFile(32, 32, (Keypoint(1.5, 1.5), Keypoint(2.5, 2.5), Keypoint(3.5, 3.5)))
+
+            summary = image_match._estimate_low_resolution_projected_offset(
+                fake_left_dom,
+                fake_right_dom,
+                enabled=True,
+                low_resolution_level=3,
+                low_resolution_output_dir=temp_dir,
+                band=1,
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=64,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=1,
+                matcher_method="bf",
+                ratio_test=0.75,
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                low_resolution_trim_fraction_each_side=0.05,
+                low_resolution_max_mean_reprojection_error_pixels=3.0,
+                match_dom_pair_func=mock.Mock(return_value=(filtered_left, filtered_right, {"status": "matched"})),
+                filter_stereo_pair_keypoints_with_ransac_func=mock.Mock(
+                    return_value=(
+                        filtered_left,
+                        filtered_right,
+                        {
+                            "applied": False,
+                            "status": "skipped_insufficient_points",
+                            "homography_matrix": None,
+                        },
+                    )
+                ),
+                write_stereo_pair_match_visualization_func=mock.Mock(return_value={"output_path": "ignored.png"}),
+                require_command_func=mock.Mock(),
+                create_low_resolution_dom_func=mock.Mock(side_effect=[fake_left_dom, fake_right_dom]),
+            )
+
+        self.assertEqual(summary["status"], "fallback_zero")
+        self.assertTrue(summary["fallback_offset_zero"])
+        self.assertEqual(summary["failure_reason_code"], "insufficient_points_for_homography")
+        self.assertIsNone(summary["trimmed_mean_reprojection_error_pixels"])
 
     def test_build_argument_parser_rejects_out_of_range_valid_pixel_percent_threshold(self):
         parser = build_argument_parser()

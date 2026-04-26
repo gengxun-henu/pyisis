@@ -25,6 +25,25 @@
 - 影像四角或边界有大量 0 / 无效背景
 - 想减少“几乎全空 tile”带来的无效匹配开销
 
+## 维护者补充：`image_match.py` 现在只是 façade
+
+如果你是来复制命令的，这一节可以直接跳过。
+
+如果你是来维护 `examples/controlnet_construct/` 的，这里给一个短版结构图：
+
+- `image_match.py`
+  - 公开 CLI / 参数解析 / 编排层 / 兼容入口
+- `lowres_offset.py`
+  - 低分辨率粗配准、`reduce` 生成低分辨率 DOM、投影偏移估计
+- `match_visualization.py`
+  - `cv2.drawMatches` 可视化、默认 PNG 命名、从 `.key` 文件直接画图
+- `tile_matching.py`
+  - tile 切分、SIFT、ratio-test、串行/并行匹配、tile 统计结构
+- `stereo_ransac.py`
+  - 左右 `.key` 的 homography RANSAC 过滤与摘要输出
+
+也就是说，当前用户仍然通过 `image_match.py` 跑第 2 步，但内部实现已经按职责拆分。想改哪一层，就优先改对应模块，而不是下意识继续把所有逻辑往 `image_match.py` 里塞回去。
+
 ## 模板 1：整条流水线直接跑
 
 如果你已经准备好了：
@@ -73,6 +92,7 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
     "special_pixel_abs_threshold": 1e300,
     "min_valid_pixels": 64,
     "valid_pixel_percent_threshold": 0.05,
+    "matcher_method": "bf",
     "ratio_test": 0.75,
     "max_features": null,
     "sift_octave_layers": 3,
@@ -83,6 +103,7 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
     "min_overlap_size": 16,
     "use_parallel_cpu": true,
     "num_worker_parallel_cpu": 8,
+    "low_resolution_max_mean_reprojection_error_pixels": 3.0,
     "write_match_visualization": true,
     "match_visualization_scale": 0.3333333333333333
   }
@@ -118,6 +139,15 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
   --skip-final-merge
 ```
 
+如果你想把 SIFT 描述子匹配切换为 FLANN，可以直接：
+
+```bash
+bash examples/controlnet_construct/run_pipeline_example.sh \
+  --work-dir work \
+  --matcher-method flann \
+  --skip-final-merge
+```
+
 ## 模板 2：只跑第 2 步批量 DOM 匹配
 
 如果你当前只想专注在 `image_match.py` 这一段，而不想整条流水线都执行，推荐用单独的批处理脚本：
@@ -150,6 +180,24 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
   - `work/dom_keys/`
   - `work/match_metadata/`
   - `work/match_viz/`
+
+如果你想在批量匹配阶段显式切换 SIFT 描述子匹配后端，也可以直接传：
+
+```bash
+bash examples/controlnet_construct/run_image_match_batch_example.sh \
+  --work-dir work \
+  --matcher-method flann
+```
+
+如果你已经启用了低分辨率粗配准，还可以继续限制其可接受的 trimmed-mean 重投影误差：
+
+```bash
+bash examples/controlnet_construct/run_image_match_batch_example.sh \
+  --work-dir work \
+  --enable-low-resolution-offset-estimation \
+  --low-resolution-level 3 \
+  --low-resolution-max-mean-reprojection-error-pixels 2.5
+```
 
 如果你想显式开启默认 CPU 并行标志：
 

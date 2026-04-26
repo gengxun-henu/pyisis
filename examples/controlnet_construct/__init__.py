@@ -31,9 +31,11 @@ from .stereo_ransac import (
 from .tiling import TileWindow, generate_tiles, requires_tiling
 from .image_overlap import GeoBounds, extract_camera_ground_bounds, find_overlapping_image_pairs
 from .image_match import (
-    default_match_visualization_path,
     match_dom_pair,
     match_dom_pair_to_key_files,
+)
+from .match_visualization import (
+    default_match_visualization_path,
     write_stereo_pair_match_visualization,
     write_stereo_pair_match_visualization_from_key_files,
 )

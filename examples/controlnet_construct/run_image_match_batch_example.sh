@@ -58,11 +58,17 @@ Options:
                                  Default: 0.05 unless omitted and resolved from --config.
   --invalid-pixel-radius N        Suppress feature detection near invalid pixels or image borders.
                                   Default: 1 unless omitted and resolved from --config.
+  --matcher-method NAME           Descriptor matcher backend forwarded to image_match.py.
+                                  Supported values: bf, flann. Default: bf unless omitted and resolved from --config.
   --enable-low-resolution-offset-estimation
                                   Enable low-resolution DOM matching to estimate projected offset before
                                   the full-resolution overlap crop is prepared.
   --low-resolution-level N        Low-resolution pyramid level for projected-offset estimation.
                                   Default: 3 unless omitted and resolved from --config.
+  --low-resolution-max-mean-reprojection-error-pixels VALUE
+                                  Maximum trimmed-mean low-resolution homography reprojection error allowed
+                                  before coarse projected offset falls back to zero. Default: 3.0 unless omitted
+                                  and resolved from --config.
   --skip-existing                 Skip pairs whose left/right key files already exist
   -h, --help                      Show this help message
 
@@ -213,6 +219,31 @@ raise SystemExit(0)
 PY
 }
 
+extract_matcher_method_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
+candidate_keys = ('matcher_method', 'matcherMethod', 'MatcherMethod')
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
 extract_enable_low_resolution_offset_estimation_from_config() {
   local config_path=$1
   "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
@@ -258,6 +289,35 @@ from pathlib import Path
 payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
 candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
 candidate_keys = ('low_resolution_level', 'lowResolutionLevel', 'LowResolutionLevel')
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
+extract_low_resolution_max_mean_reprojection_error_pixels_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
+candidate_keys = (
+  'low_resolution_max_mean_reprojection_error_pixels',
+  'lowResolutionMaxMeanReprojectionErrorPixels',
+  'LowResolutionMaxMeanReprojectionErrorPixels',
+)
 
 for container in candidate_containers:
   if not isinstance(container, dict):
@@ -334,10 +394,14 @@ main() {
   local explicit_threshold=""
   local invalid_pixel_radius="$DEFAULT_INVALID_PIXEL_RADIUS"
   local explicit_invalid_pixel_radius=""
+  local matcher_method="bf"
+  local explicit_matcher_method=""
   local enable_low_resolution_offset_estimation="0"
   local explicit_enable_low_resolution_offset_estimation=""
   local low_resolution_level="3"
   local explicit_low_resolution_level=""
+  local low_resolution_max_mean_reprojection_error_pixels="3.0"
+  local explicit_low_resolution_max_mean_reprojection_error_pixels=""
   local config_threshold=""
   local forwarded_args=()
 
@@ -417,6 +481,12 @@ main() {
         explicit_invalid_pixel_radius=$2
         shift 2
         ;;
+      --matcher-method)
+        [[ $# -ge 2 ]] || die "missing value for --matcher-method"
+        matcher_method=$2
+        explicit_matcher_method=$2
+        shift 2
+        ;;
       --enable-low-resolution-offset-estimation)
         enable_low_resolution_offset_estimation="1"
         explicit_enable_low_resolution_offset_estimation="1"
@@ -426,6 +496,12 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --low-resolution-level"
         low_resolution_level=$2
         explicit_low_resolution_level=$2
+        shift 2
+        ;;
+      --low-resolution-max-mean-reprojection-error-pixels)
+        [[ $# -ge 2 ]] || die "missing value for --low-resolution-max-mean-reprojection-error-pixels"
+        low_resolution_max_mean_reprojection_error_pixels=$2
+        explicit_low_resolution_max_mean_reprojection_error_pixels=$2
         shift 2
         ;;
       --skip-existing)
@@ -501,6 +577,13 @@ main() {
         invalid_pixel_radius="$config_invalid_pixel_radius"
       fi
     fi
+    if [[ -z "$explicit_matcher_method" ]]; then
+      local config_matcher_method
+      config_matcher_method=$(extract_matcher_method_from_config "$CONFIG_PATH")
+      if [[ -n "$config_matcher_method" ]]; then
+        matcher_method="$config_matcher_method"
+      fi
+    fi
     if [[ -z "$explicit_enable_low_resolution_offset_estimation" ]]; then
       local config_enable_low_resolution_offset_estimation
       config_enable_low_resolution_offset_estimation=$(extract_enable_low_resolution_offset_estimation_from_config "$CONFIG_PATH")
@@ -513,6 +596,13 @@ main() {
       config_low_resolution_level=$(extract_low_resolution_level_from_config "$CONFIG_PATH")
       if [[ -n "$config_low_resolution_level" ]]; then
         low_resolution_level="$config_low_resolution_level"
+      fi
+    fi
+    if [[ -z "$explicit_low_resolution_max_mean_reprojection_error_pixels" ]]; then
+      local config_low_resolution_max_mean_reprojection_error_pixels
+      config_low_resolution_max_mean_reprojection_error_pixels=$(extract_low_resolution_max_mean_reprojection_error_pixels_from_config "$CONFIG_PATH")
+      if [[ -n "$config_low_resolution_max_mean_reprojection_error_pixels" ]]; then
+        low_resolution_max_mean_reprojection_error_pixels="$config_low_resolution_max_mean_reprojection_error_pixels"
       fi
     fi
   fi
@@ -530,6 +620,7 @@ main() {
   log "Match viz dir: $MATCH_VIZ_DIR"
   log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
   log "Invalid pixel radius: $invalid_pixel_radius"
+  log "Matcher method: $matcher_method"
   if [[ "$use_parallel_cpu" == "1" ]]; then
     log "CPU parallel tile matching: enabled"
     log "CPU parallel worker limit: $num_worker_parallel_cpu"
@@ -540,6 +631,7 @@ main() {
   if [[ "$enable_low_resolution_offset_estimation" == "1" ]]; then
     log "Low-resolution offset estimation: enabled"
     log "Low-resolution level: $low_resolution_level"
+    log "Low-resolution max mean reprojection error (pixels): $low_resolution_max_mean_reprojection_error_pixels"
   else
     log "Low-resolution offset estimation: disabled"
   fi
@@ -594,6 +686,7 @@ main() {
       --match-visualization-output-dir "$MATCH_VIZ_DIR"
       --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
       --invalid-pixel-radius "$invalid_pixel_radius"
+      --matcher-method "$matcher_method"
     )
     if [[ -n "$CONFIG_PATH" ]]; then
       match_args=(
@@ -607,6 +700,7 @@ main() {
         --match-visualization-output-dir "$MATCH_VIZ_DIR"
         --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
         --invalid-pixel-radius "$invalid_pixel_radius"
+        --matcher-method "$matcher_method"
       )
     fi
     if [[ "$use_parallel_cpu" == "1" ]]; then
@@ -616,7 +710,11 @@ main() {
     fi
     match_args+=(--num-worker-parallel-cpu "$num_worker_parallel_cpu")
     if [[ "$enable_low_resolution_offset_estimation" == "1" ]]; then
-      match_args+=(--enable-low-resolution-offset-estimation --low-resolution-level "$low_resolution_level")
+      match_args+=(
+        --enable-low-resolution-offset-estimation
+        --low-resolution-level "$low_resolution_level"
+        --low-resolution-max-mean-reprojection-error-pixels "$low_resolution_max_mean_reprojection_error_pixels"
+      )
     fi
     if [[ ${#forwarded_args[@]} -gt 0 ]]; then
       match_args+=("${forwarded_args[@]}")

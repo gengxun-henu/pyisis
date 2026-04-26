@@ -265,6 +265,69 @@
 6. 首版合并时，**暂不要求解决不同重叠块之间重复连接点的问题**，该问题由后续 `tie_point_merge_in_overlap.py` 处理；
 7. 输出 `.key` 时坐标必须保持原始 DOM 整图坐标，而不是裁剪图局部坐标。
 
+#### 3.2 低分辨率粗配准结果可信度判定
+
+1. 当启用低分辨率粗配准时，`image_match.py` 必须先在低分辨率 DOM 上完成一次独立匹配，并基于该阶段保留的匹配点估计 projected offset，再进入全分辨率公共范围裁剪与分块匹配；
+2. 低分辨率粗配准默认仍应保持**关闭**，只有用户显式启用后才执行；该设计要求与当前 façade/CLI 的最小侵入式原则保持一致，不能改变现有全分辨率主路径的默认行为；
+3. 低分辨率阶段的中间产物必须写入独立目录，推荐继续使用 `low_resolution/` 目录命名，而不是与全分辨率 `.key`、metadata 或可视化产物混写；
+4. 低分辨率阶段完成初始匹配后，必须先经过该阶段自己的 RANSAC 过滤，再使用 **RANSAC 最终保留的匹配点** 重新评估该阶段结果是否可信；
+5. 可信度评估必须基于 Homography 重投影误差，而不是仅以“是否存在少量匹配点”作为成功标准；
+6. 设计上应新增一个用户可控阈值参数，推荐命名为 `--low-resolution-max-mean-reprojection-error-pixels`，默认值为 `3.0` 像素；配置文件中应支持等价字段 `ImageMatch.low_resolution_max_mean_reprojection_error_pixels`；
+7. 可信度评估时，对每个保留匹配点计算 Homography 预测位置与实际匹配位置之间的像素误差；若可用于统计的匹配点数不足以支撑稳定均值估计，则必须判定该低分辨率结果不可信，并回退为零偏移；
+8. 为降低残余粗差对判别的影响，像素误差统计必须支持“按误差排序后去掉两端样本”的 trimmed-mean 方案；默认应去掉最小 `5%` 与最大 `5%` 样本，仅使用中间部分估计均值；
+9. 该 trimmed-mean 策略应优先复用现有 low-resolution offset 统计阶段已经引入的“each side trim fraction”设计，而不是再引入一套风格不一致的新裁剪口径；若后续实现需要独立参数，命名也必须保持 kebab-case 并同步到配置文件；
+10. 当 trimmed mean 或等价中间样本均值 **大于** `low_resolution_max_mean_reprojection_error_pixels` 时，必须判定该低分辨率粗配准结果不可信；此时：
+	- 不得把该低分辨率 projected offset 用于全分辨率 overlap crop；
+	- 必须把 `delta_x_projected`、`delta_y_projected` 回退为 `0.0`；
+	- 必须继续执行后续全分辨率匹配，而不是直接报错终止；
+	- 必须在日志 / JSON 摘要中明确记录“低分辨率存在匹配，但因重投影误差超阈值而被拒绝”。
+11. 若低分辨率阶段本身没有得到任何有效匹配点、RANSAC 无法估计 Homography、或可信度判定失败，则主流程都必须优雅回退到“零偏移 + 原始全分辨率裁剪”路径，不能影响后续常规匹配；
+12. 低分辨率阶段的 JSON / sidecar / 终端摘要至少应包含：
+	- `enabled`；
+	- `status`；
+	- `reason`；
+	- `fallback_offset_zero`；
+	- `retained_match_count`；
+	- `trim_fraction_each_side`；
+	- `max_mean_reprojection_error_pixels`；
+	- `mean_reprojection_error_pixels` 或 `trimmed_mean_reprojection_error_pixels`；
+	- `delta_x_projected`；
+	- `delta_y_projected`；
+	- 低分辨率阶段实际使用的 RANSAC 参数摘要。
+13. 为便于回归与人工审查，低分辨率阶段的可信度失败原因至少应区分：
+	- `no_matches`；
+	- `insufficient_points_for_homography`；
+	- `homography_failed`；
+	- `reprojection_error_above_threshold`；
+	- `other_runtime_failure`。
+
+#### 3.3 SIFT 描述子匹配后端选择
+
+1. `image_match.py` 的 SIFT 描述子匹配阶段必须支持至少两种后端：
+	- `bf`（Brute Force）
+	- `flann`
+2. 为尽量减少对现有代码路径的扰动，默认后端应保持与当前实现一致，即默认使用 `bf`，只有当用户显式选择时才切换到 `flann`；
+3. 对外 CLI 建议新增 `--matcher-method` 参数，取值限定为 `bf` 与 `flann`；配置文件中建议新增 `ImageMatch.matcher_method` 字段；
+4. 所有公开参数命名必须保持 kebab-case；不得长期并存 `--matcher_method` 这类下划线形式的公共别名；
+5. 两种后端都必须继续使用与当前主流程一致的 KNN + Lowe ratio test 过滤口径，以减少因更换匹配器而引入的非必要行为漂移；
+6. 对于 SIFT 的浮点描述子：
+	- `bf` 模式应继续使用 `cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)`；
+	- `flann` 模式应采用适用于浮点 SIFT 描述子的 KD-Tree 方案，而不是面向二进制描述子的 LSH 路径；
+7. `flann` 模式的核心索引与检索参数必须具备可追踪性；即使首版先使用固定默认值，也应在摘要中明确写出实际采用的配置，例如 `algorithm=KDTree`、`trees`、`checks`；
+8. 为保持最小改动原则，匹配后端切换应尽量局限在 tile/SIFT 核心模块内部，不应迫使 `image_match.py` façade、大批量脚本或下游 `.key` / ControlNet 逻辑发生结构性改变；
+9. 不论使用 `bf` 还是 `flann`，输出的匹配点坐标、RANSAC 入口、可视化、metadata sidecar 与 batch 流程契约都必须保持一致；
+10. JSON / sidecar / 终端摘要至少应记录：
+	- `matcher_method_requested`；
+	- `matcher_method_used`；
+	- 若为 `flann`，则记录 `flann_index_params` 与 `flann_search_params` 或等价摘要字段；
+	- 该匹配后端对应的 ratio-test 阈值。
+11. 若用户请求的匹配后端无法初始化，应给出明确错误，而不是静默回退到另一个后端；只有在需求文档后续显式批准兼容性回退策略时，才允许自动回退；
+12. 针对 `flann` 与 `bf` 的差异化设计，测试与回归重点至少应覆盖：
+	- CLI / config 默认值与显式覆盖；
+	- 两种后端都能在相同输入下完成 `knnMatch + ratio-test` 主流程；
+	- sidecar / summary 中能稳定区分实际后端；
+	- 保持现有默认 `bf` 路径的行为不回归。
+
 #### 3.4 灰度映射与非 BYTE 数据处理
 
 1. 如果输入 CUBE 像素类型不是 BYTE，而是 float、int 或其他非 BYTE 类型，则在匹配前必须自动转换到 `0–255` 灰度范围；

@@ -77,6 +77,14 @@ Options:
                                  Forwarded to image_match.py. If omitted, this script falls back to
                                  config JSON field ImageMatch.low_resolution_max_mean_reprojection_error_pixels
                                  when present; otherwise image_match.py keeps its own default.
+  --low-resolution-min-retained-match-count N
+                                 Forwarded to image_match.py. If omitted, this script falls back to
+                                 config JSON field ImageMatch.low_resolution_min_retained_match_count
+                                 when present; otherwise image_match.py keeps its own default.
+  --low-resolution-max-mean-projected-offset-meters VALUE
+                                 Forwarded to image_match.py. Unit: meters. If omitted, this script falls back to
+                                 config JSON field ImageMatch.low_resolution_max_mean_projected_offset_meters
+                                 when present; otherwise image_match.py keeps its own default.
   --merged-net PATH               Final merged ControlNet output path. Default: <work-dir>/merge/dom_matching_merged.net
   --merge-script PATH             Generated merge shell path. Default: <work-dir>/merge/merge_all_controlnets.sh
   --merge-log PATH                cnetmerge log path. Default: <work-dir>/merge/cnetmerge.log
@@ -549,6 +557,76 @@ raise SystemExit(0)
 PY
 }
 
+extract_low_resolution_min_retained_match_count_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+
+candidate_containers = [
+  payload,
+  payload.get('ImageMatch') or {},
+  payload.get('image_match') or {},
+  payload.get('imageMatch') or {},
+]
+candidate_keys = (
+  'low_resolution_min_retained_match_count',
+  'lowResolutionMinRetainedMatchCount',
+  'LowResolutionMinRetainedMatchCount',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
+extract_low_resolution_max_mean_projected_offset_meters_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+
+candidate_containers = [
+  payload,
+  payload.get('ImageMatch') or {},
+  payload.get('image_match') or {},
+  payload.get('imageMatch') or {},
+]
+candidate_keys = (
+  'low_resolution_max_mean_projected_offset_meters',
+  'lowResolutionMaxMeanProjectedOffsetMeters',
+  'LowResolutionMaxMeanProjectedOffsetMeters',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
 extract_use_parallel_cpu_from_config() {
   local config_path=$1
   "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
@@ -657,6 +735,8 @@ run_step_2_image_match_batch() {
         --enable-low-resolution-offset-estimation
         --low-resolution-level "$LOW_RESOLUTION_LEVEL"
         --low-resolution-max-mean-reprojection-error-pixels "$LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS"
+        --low-resolution-min-retained-match-count "$LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT"
+        --low-resolution-max-mean-projected-offset-meters "$LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS"
       )
     fi
 
@@ -763,6 +843,8 @@ main() {
   local explicit_enable_low_resolution_offset_estimation=""
   local explicit_low_resolution_level=""
   local explicit_low_resolution_max_mean_reprojection_error_pixels=""
+  local explicit_low_resolution_min_retained_match_count=""
+  local explicit_low_resolution_max_mean_projected_offset_meters=""
 
   PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
   CNETMERGE_PATH="${CNETMERGE_EXECUTABLE:-cnetmerge}"
@@ -774,6 +856,8 @@ main() {
   ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION="0"
   LOW_RESOLUTION_LEVEL="3"
   LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS="3.0"
+  LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT="5"
+  LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS="0.0"
   USE_PARALLEL_CPU="1"
   NUM_WORKER_PARALLEL_CPU="8"
   NETWORK_ID=""
@@ -867,6 +951,18 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --low-resolution-max-mean-reprojection-error-pixels"
         LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS=$2
         explicit_low_resolution_max_mean_reprojection_error_pixels=$2
+        shift 2
+        ;;
+      --low-resolution-min-retained-match-count)
+        [[ $# -ge 2 ]] || die "missing value for --low-resolution-min-retained-match-count"
+        LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT=$2
+        explicit_low_resolution_min_retained_match_count=$2
+        shift 2
+        ;;
+      --low-resolution-max-mean-projected-offset-meters)
+        [[ $# -ge 2 ]] || die "missing value for --low-resolution-max-mean-projected-offset-meters"
+        LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS=$2
+        explicit_low_resolution_max_mean_projected_offset_meters=$2
         shift 2
         ;;
       --merged-net)
@@ -1030,6 +1126,20 @@ main() {
       LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS="$config_low_resolution_max_mean_reprojection_error_pixels"
     fi
   fi
+  if [[ -z "$explicit_low_resolution_min_retained_match_count" ]]; then
+    local config_low_resolution_min_retained_match_count
+    config_low_resolution_min_retained_match_count=$(extract_low_resolution_min_retained_match_count_from_config "$CONFIG_PATH")
+    if [[ -n "$config_low_resolution_min_retained_match_count" ]]; then
+      LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT="$config_low_resolution_min_retained_match_count"
+    fi
+  fi
+  if [[ -z "$explicit_low_resolution_max_mean_projected_offset_meters" ]]; then
+    local config_low_resolution_max_mean_projected_offset_meters
+    config_low_resolution_max_mean_projected_offset_meters=$(extract_low_resolution_max_mean_projected_offset_meters_from_config "$CONFIG_PATH")
+    if [[ -n "$config_low_resolution_max_mean_projected_offset_meters" ]]; then
+      LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS="$config_low_resolution_max_mean_projected_offset_meters"
+    fi
+  fi
 
   initialize_timing_json
 
@@ -1058,6 +1168,8 @@ main() {
     log "Low-resolution offset estimation: enabled"
     log "Low-resolution level: $LOW_RESOLUTION_LEVEL"
     log "Low-resolution max mean reprojection error (pixels): $LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS"
+    log "Low-resolution minimum retained matches: $LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT"
+    log "Low-resolution max mean projected offset (meters): $LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS"
   else
     log "Low-resolution offset estimation: disabled"
   fi

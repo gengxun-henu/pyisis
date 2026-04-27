@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-04-24
 Updated: 2026-04-24  Geng Xun made low-resolution projected-offset trimmed-mean fraction configurable while preserving the previous 5% default.
 Updated: 2026-04-26  Geng Xun added low-resolution homography reprojection-error gating so coarse offsets fall back to zero when the retained match geometry is not trustworthy.
+Updated: 2026-04-27  Geng Xun added minimum retained-match and projected-offset magnitude gates so weak or implausible low-resolution estimates fall back to zero.
 """
 
 from __future__ import annotations
@@ -27,6 +28,8 @@ import isis_pybind as ip
 
 
 DEFAULT_TRIM_FRACTION_EACH_SIDE = 0.05
+DEFAULT_MIN_RETAINED_MATCH_COUNT = 5
+DEFAULT_MAX_MEAN_PROJECTED_OFFSET_METERS = 0.0
 
 
 def _low_resolution_pair_tag(left_dom_path: str | Path, right_dom_path: str | Path) -> str:
@@ -160,6 +163,20 @@ def _validate_trim_fraction_each_side(trim_fraction_each_side: float) -> float:
     return resolved_value
 
 
+def _validate_min_retained_match_count(min_retained_match_count: int) -> int:
+    resolved_value = int(min_retained_match_count)
+    if resolved_value < 1:
+        raise ValueError("low_resolution_min_retained_match_count must be >= 1.")
+    return resolved_value
+
+
+def _validate_max_mean_projected_offset_meters(max_mean_projected_offset_meters: float) -> float:
+    resolved_value = float(max_mean_projected_offset_meters)
+    if resolved_value < 0.0:
+        raise ValueError("low_resolution_max_mean_projected_offset_meters must be >= 0.0.")
+    return resolved_value
+
+
 def _trimmed_mean(
     values: list[float],
     *,
@@ -232,6 +249,8 @@ def estimate_low_resolution_projected_offset(
     sift_sigma: float,
     trim_fraction_each_side: float = DEFAULT_TRIM_FRACTION_EACH_SIDE,
     low_resolution_max_mean_reprojection_error_pixels: float = 3.0,
+    low_resolution_min_retained_match_count: int = DEFAULT_MIN_RETAINED_MATCH_COUNT,
+    low_resolution_max_mean_projected_offset_meters: float = DEFAULT_MAX_MEAN_PROJECTED_OFFSET_METERS,
     match_dom_pair_func: Callable[..., tuple[KeypointFile, KeypointFile, dict[str, object]]],
     filter_stereo_pair_keypoints_with_ransac_func: Callable[..., tuple[KeypointFile, KeypointFile, dict[str, object]]],
     write_stereo_pair_match_visualization_func: Callable[..., dict[str, object]],
@@ -242,6 +261,16 @@ def estimate_low_resolution_projected_offset(
     resolved_max_mean_reprojection_error_pixels = float(low_resolution_max_mean_reprojection_error_pixels)
     if resolved_max_mean_reprojection_error_pixels < 0.0:
         raise ValueError("low_resolution_max_mean_reprojection_error_pixels must be >= 0.0.")
+    resolved_min_retained_match_count = _validate_min_retained_match_count(low_resolution_min_retained_match_count)
+    resolved_max_mean_projected_offset_meters = _validate_max_mean_projected_offset_meters(
+        low_resolution_max_mean_projected_offset_meters
+    )
+    summary_thresholds = {
+        "trim_fraction_each_side": resolved_trim_fraction_each_side,
+        "max_mean_reprojection_error_pixels": resolved_max_mean_reprojection_error_pixels,
+        "min_retained_match_count": resolved_min_retained_match_count,
+        "max_mean_projected_offset_meters": resolved_max_mean_projected_offset_meters,
+    }
     if not enabled:
         return {
             "enabled": False,
@@ -252,9 +281,9 @@ def estimate_low_resolution_projected_offset(
             "delta_x_projected": 0.0,
             "delta_y_projected": 0.0,
             "retained_match_count": 0,
-            "trim_fraction_each_side": resolved_trim_fraction_each_side,
-            "max_mean_reprojection_error_pixels": resolved_max_mean_reprojection_error_pixels,
+            **summary_thresholds,
             "trimmed_mean_reprojection_error_pixels": None,
+            "mean_projected_offset_meters": None,
             "reprojection_error_pixel_samples": [],
         }
 
@@ -339,13 +368,43 @@ def estimate_low_resolution_projected_offset(
                 "delta_x_projected": 0.0,
                 "delta_y_projected": 0.0,
                 "retained_match_count": 0,
-                "trim_fraction_each_side": resolved_trim_fraction_each_side,
-                "max_mean_reprojection_error_pixels": resolved_max_mean_reprojection_error_pixels,
+                **summary_thresholds,
                 "trimmed_mean_reprojection_error_pixels": None,
+                "mean_projected_offset_meters": None,
                 "reprojection_error_pixel_samples": [],
                 "low_resolution_level": resolved_level,
                 "left_low_resolution_dom": str(left_low_res_dom),
                 "right_low_resolution_dom": str(right_low_res_dom),
+                "elapsed_seconds": elapsed_seconds,
+                "image_match_summary": raw_summary,
+                "ransac_summary": ransac_summary,
+            }
+
+        if retained_match_count < resolved_min_retained_match_count:
+            elapsed_seconds = time.perf_counter() - started_at
+            return {
+                "enabled": True,
+                "status": "fallback_zero",
+                "fallback_offset_zero": True,
+                "reason": (
+                    "Low-resolution retained match count is below the configured minimum; "
+                    "ignoring coarse offset statistics and falling back to zero."
+                ),
+                "failure_reason_code": "retained_match_count_below_threshold",
+                "delta_x_projected": 0.0,
+                "delta_y_projected": 0.0,
+                "retained_match_count": retained_match_count,
+                **summary_thresholds,
+                "trimmed_mean_reprojection_error_pixels": None,
+                "mean_projected_offset_meters": None,
+                "reprojection_error_pixel_samples": [],
+                "low_resolution_level": resolved_level,
+                "left_low_resolution_dom": str(left_low_res_dom),
+                "right_low_resolution_dom": str(right_low_res_dom),
+                "raw_left_key": str(raw_left_key_path),
+                "raw_right_key": str(raw_right_key_path),
+                "filtered_left_key": str(filtered_left_key_path),
+                "filtered_right_key": str(filtered_right_key_path),
                 "elapsed_seconds": elapsed_seconds,
                 "image_match_summary": raw_summary,
                 "ransac_summary": ransac_summary,
@@ -365,9 +424,9 @@ def estimate_low_resolution_projected_offset(
                 "delta_x_projected": 0.0,
                 "delta_y_projected": 0.0,
                 "retained_match_count": retained_match_count,
-                "trim_fraction_each_side": resolved_trim_fraction_each_side,
-                "max_mean_reprojection_error_pixels": resolved_max_mean_reprojection_error_pixels,
+                **summary_thresholds,
                 "trimmed_mean_reprojection_error_pixels": None,
+                "mean_projected_offset_meters": None,
                 "reprojection_error_pixel_samples": [],
                 "low_resolution_level": resolved_level,
                 "left_low_resolution_dom": str(left_low_res_dom),
@@ -393,9 +452,9 @@ def estimate_low_resolution_projected_offset(
                 "delta_x_projected": 0.0,
                 "delta_y_projected": 0.0,
                 "retained_match_count": retained_match_count,
-                "trim_fraction_each_side": resolved_trim_fraction_each_side,
-                "max_mean_reprojection_error_pixels": resolved_max_mean_reprojection_error_pixels,
+                **summary_thresholds,
                 "trimmed_mean_reprojection_error_pixels": None,
+                "mean_projected_offset_meters": None,
                 "reprojection_error_pixel_samples": [],
                 "low_resolution_level": resolved_level,
                 "left_low_resolution_dom": str(left_low_res_dom),
@@ -432,9 +491,9 @@ def estimate_low_resolution_projected_offset(
                 "delta_x_projected": 0.0,
                 "delta_y_projected": 0.0,
                 "retained_match_count": retained_match_count,
-                "trim_fraction_each_side": resolved_trim_fraction_each_side,
-                "max_mean_reprojection_error_pixels": resolved_max_mean_reprojection_error_pixels,
+                **summary_thresholds,
                 "trimmed_mean_reprojection_error_pixels": trimmed_mean_reprojection_error_pixels,
+                "mean_projected_offset_meters": None,
                 "reprojection_error_pixel_samples": reprojection_error_pixel_samples,
                 "low_resolution_level": resolved_level,
                 "left_low_resolution_dom": str(left_low_res_dom),
@@ -486,6 +545,39 @@ def estimate_low_resolution_projected_offset(
             delta_y_values,
             trim_ratio=resolved_trim_fraction_each_side,
         )
+        mean_projected_offset_meters = float(np.hypot(delta_x_projected, delta_y_projected))
+        if (
+            resolved_max_mean_projected_offset_meters > 0.0
+            and mean_projected_offset_meters > resolved_max_mean_projected_offset_meters
+        ):
+            elapsed_seconds = time.perf_counter() - started_at
+            return {
+                "enabled": True,
+                "status": "fallback_zero",
+                "fallback_offset_zero": True,
+                "reason": (
+                    "Low-resolution mean projected offset exceeded the configured threshold in meters; "
+                    "ignoring coarse projected offset and falling back to zero."
+                ),
+                "failure_reason_code": "mean_projected_offset_above_threshold",
+                "delta_x_projected": 0.0,
+                "delta_y_projected": 0.0,
+                "retained_match_count": retained_match_count,
+                **summary_thresholds,
+                "trimmed_mean_reprojection_error_pixels": trimmed_mean_reprojection_error_pixels,
+                "mean_projected_offset_meters": mean_projected_offset_meters,
+                "reprojection_error_pixel_samples": reprojection_error_pixel_samples,
+                "low_resolution_level": resolved_level,
+                "left_low_resolution_dom": str(left_low_res_dom),
+                "right_low_resolution_dom": str(right_low_res_dom),
+                "raw_left_key": str(raw_left_key_path),
+                "raw_right_key": str(raw_right_key_path),
+                "filtered_left_key": str(filtered_left_key_path),
+                "filtered_right_key": str(filtered_right_key_path),
+                "elapsed_seconds": elapsed_seconds,
+                "image_match_summary": raw_summary,
+                "ransac_summary": ransac_summary,
+            }
         visualization_result = write_stereo_pair_match_visualization_func(
             left_low_res_dom,
             right_low_res_dom,
@@ -519,9 +611,9 @@ def estimate_low_resolution_projected_offset(
             "filtered_right_key": str(filtered_right_key_path),
             "elapsed_seconds": elapsed_seconds,
             "histogram_bin_count": 100,
-            "trim_fraction_each_side": resolved_trim_fraction_each_side,
-            "max_mean_reprojection_error_pixels": resolved_max_mean_reprojection_error_pixels,
+            **summary_thresholds,
             "trimmed_mean_reprojection_error_pixels": trimmed_mean_reprojection_error_pixels,
+            "mean_projected_offset_meters": mean_projected_offset_meters,
             "reprojection_error_pixel_samples": reprojection_error_pixel_samples,
             "image_match_summary": raw_summary,
             "ransac_summary": ransac_summary,
@@ -538,9 +630,9 @@ def estimate_low_resolution_projected_offset(
             "delta_x_projected": 0.0,
             "delta_y_projected": 0.0,
             "retained_match_count": 0,
-            "trim_fraction_each_side": resolved_trim_fraction_each_side,
-            "max_mean_reprojection_error_pixels": resolved_max_mean_reprojection_error_pixels,
+            **summary_thresholds,
             "trimmed_mean_reprojection_error_pixels": None,
+            "mean_projected_offset_meters": None,
             "reprojection_error_pixel_samples": [],
             "low_resolution_level": resolved_level,
             "elapsed_seconds": elapsed_seconds,
@@ -557,8 +649,12 @@ __all__ = [
     "_require_command",
     "_run_command",
     "_trimmed_mean",
+    "_validate_max_mean_projected_offset_meters",
+    "_validate_min_retained_match_count",
     "_validate_trim_fraction_each_side",
     "_validate_projection_ready_cube",
+    "DEFAULT_MAX_MEAN_PROJECTED_OFFSET_METERS",
+    "DEFAULT_MIN_RETAINED_MATCH_COUNT",
     "DEFAULT_TRIM_FRACTION_EACH_SIDE",
     "create_low_resolution_dom",
     "estimate_low_resolution_projected_offset",

@@ -2,56 +2,41 @@
 
 This repository provides standalone pybind11 bindings and tests for exposing selected USGS ISIS functionality to Python.
 
-Core working directories include:
+Keep this file intentionally short to reduce Copilot context usage. Put detailed or low-frequency guidance in scoped files under `.github/instructions/`, workflow procedures under `.github/skills/`, and project notes under `reference/notes/`.
 
-- `src/`
-- `tests/`
-- `python/`
-- `class_bind_methods_details/`
-
-All paths below are relative to the repository root unless noted otherwise.
-
-## Working style
+## Working defaults
 
 - Default to acting without asking for confirmation for low-risk, reversible changes.
-- Only ask for confirmation before high-risk actions such as destructive operations, secrets handling, or irreversible changes.
+- Only ask before high-risk actions such as destructive operations, secrets handling, or irreversible changes.
 - Prefer replying in Chinese unless the user clearly requests another language.
-- Execute first and then report results concisely instead of repeatedly asking whether to continue.
-- When information is incomplete but the next step is low-risk and reversible, proceed with the most reasonable assumption and state that assumption in the report.
+- Execute first, then report results concisely.
+- Prefer repository-relative paths in notes, plans, reviews, and CI-facing guidance.
 
 ## Environment and validation
 
-- Prefer using the Python interpreter from the `asp360_new` environment for Python build, test, and validation tasks in this repository.
-- After modifying code, default to running the smallest relevant test or validation for the changed area.
+- Prefer the Python interpreter from the `asp360_new` environment for build, test, and validation work.
+- After modifying code, run the smallest relevant validation first.
 - Prefer focused unit tests over broad validation when a smaller targeted check is available.
 
-## Qt / QObject binding boundary
+## Pybind defaults
 
-- For QObject-derived ISIS classes, default to **not** binding Qt `signals`/`slots` into Python unless the user explicitly asks for that behavior or a Python-side Qt integration use case clearly requires it.
-- Treat Qt signal-emitter helpers and notification plumbing as non-goals for default bindings. This includes `emit*`-style methods and signatures whose main purpose is dispatching change events, such as `emitMeasureModified(ControlMeasure *measure, ControlMeasure::ModType modType, QVariant oldValue, QVariant newValue)`.
-- Prefer exposing stable data methods, mutators, queries, and enums over raw Qt observer/event surfaces.
-- Treat Qt signal binding as a higher-complexity integration task because it can introduce callback lifetime, `QVariant` conversion, event-loop, and GIL/threading issues.
-- If a candidate API mainly exists to forward Qt notifications, carries `QVariant` payloads, or mirrors internal observer flow rather than stable business logic, do **not** bind it to Python by default.
-- If Python needs change notifications later, prefer a small Python-friendly wrapper or callback API over directly mirroring every upstream Qt signal.
+- For binding signatures and compile decisions, treat the active conda ISIS headers and libraries as the source of truth; use `reference/upstream_isis/` mainly for implementation and behavior reading.
+- For QObject-derived ISIS classes, default to **not** binding Qt `signals`/`slots` into Python unless the user explicitly asks for that behavior.
+- Prefer exposing stable data methods, mutators, queries, and enums over Qt observer/event plumbing.
+- When binding, add `#include <pybind11/pybind11.h>` and `#include <pybind11/stl.h>` when necessary.
 
-## Additional instructions to follow
+## Scoped instruction map
 
-- For shared authored metadata conventions across pybind C++ files and Python unit tests, also follow `.github/instructions/pybind-metadata-common.instructions.md`.
-- For pybind11 binding and test work, also follow `.github/instructions/pybind-testing.instructions.md`.
-- For upstream ISIS API reading, lifecycle analysis, and behavior-driven test design, also follow `.github/instructions/pybind-upstream-source-reading.instructions.md`.
-- For repeated ISIS Cube-backed coordinate conversion, projection reuse, and open-once batch-style geometry/raster operations, also follow `.github/instructions/isis-cube-batch-operations.instructions.md`.
-- For conda-versus-mirror API precedence during pybind binding and compile debugging, also follow `.github/instructions/pybind-conda-api-precedence.instructions.md`.
-- For deciding what belongs in `reference/` versus `tests/data/`, also follow `.github/instructions/reference-data-layout.instructions.md`.
-- For pybind source and helper header metadata conventions, also follow `.github/instructions/pybind-cpp-metadata.instructions.md`.
-- For newly created or substantially rewritten binding C++ files, also follow `.github/instructions/pybind-file-header.instructions.md`.
-- For Python unit-test metadata conventions, also follow `.github/instructions/pybind-python-test-metadata.instructions.md`.
-- For C++ naming consistency, follow `.github/instructions/isis-cpp-naming.instructions.md` when editing relevant C++ files.
-- For Python and Bash example CLI flag naming consistency, also follow `.github/instructions/python-example-cli-naming.instructions.md`.
-- When binding, add '#include <pybind11/pybind11.h>,#include <pybind11/stl.h>' when necessary.
+- `src/**/*.{cpp,h}`: `pybind-cpp-metadata.instructions.md`, `pybind-file-header.instructions.md`, `isis-cpp-naming.instructions.md`
+- `tests/unitTest/**/*.py`: `pybind-python-test-metadata.instructions.md`, `pybind-metadata-common.instructions.md`
+- `examples/**` and `scripts/**`: `python-example-cli-naming.instructions.md`
+- pybind work in `src/`, `python/`, `tests/unitTest/`, or `tests/smoke_import.py`: `pybind-testing.instructions.md`, `pybind-upstream-source-reading.instructions.md`, `pybind-conda-api-precedence.instructions.md`
+- repeated cube/camera batch-style operations: `isis-cube-batch-operations.instructions.md`
+- reference/test-data placement: `reference-data-layout.instructions.md`
 
-## Pybind workflow routing
+## Workflow routing
 
 - For workflow-oriented pybind tasks, use `.github/skills/isis-pybind/SKILL.md` as the main task procedure.
-- For queue-based continuous rollout work across unfinished classes (for example 5/10-class batches, one-class-at-a-time closure, retry limits, and blocker bookkeeping), use `.github/skills/pybind-rollout-execution/SKILL.md` as the companion rollout procedure.
-- Use repository-relative paths such as `reference/upstream_isis/...` when referring to mirrored upstream ISIS source in notes, reviews, or CI-facing guidance.
+- For queue-based continuous rollout work across unfinished classes, use `.github/skills/pybind-rollout-execution/SKILL.md` as the companion rollout procedure.
+- Keep low-frequency project memory in `reference/notes/copilot_project_memory.md` instead of expanding this file.
 

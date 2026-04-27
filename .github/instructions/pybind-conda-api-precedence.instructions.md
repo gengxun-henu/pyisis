@@ -1,6 +1,6 @@
 ---
 description: "Use when binding, testing, or debugging ISIS pybind code against the asp360_new conda environment. Treat the active conda ISIS headers/libs as the compile-time API source of truth, and use reference/upstream_isis mainly for implementation and behavior reading. Keywords: conda API, asp360_new, ISIS_PREFIX, reference mismatch, upstream mirror drift, BundleSolutionInfo."
-applyTo: "**/*.{py,cpp,h}"
+applyTo: "{src/**/*.{cpp,h},python/**/*.py,tests/unitTest/**/*.py,tests/smoke_import.py}"
 ---
 
 # ISIS Conda API Precedence

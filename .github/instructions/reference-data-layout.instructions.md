@@ -1,6 +1,6 @@
 ---
 description: "Use when organizing, adding, or referencing upstream ISIS source mirrors, reference materials, test assets, fixture data, mock data, or repository samples. Explains what belongs in reference/ versus tests/data/ and what should not be committed. Keywords: reference, tests/data, fixture, upstream_isis, mock data, sample data, test asset, repository layout."
-applyTo: "**/*"
+applyTo: "{reference/**,tests/data/**,tests/**/*.py,.github/**/*.md,README.md,README.zh-CN.md}"
 ---
 
 # Reference vs Data Layout Rules

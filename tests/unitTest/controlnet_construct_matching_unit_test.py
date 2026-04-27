@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-26
+Last Modified: 2026-04-27
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -17,6 +17,7 @@ Updated: 2026-04-23  Geng Xun added focused regression coverage for batched proj
 Updated: 2026-04-23  Geng Xun added regression coverage for ISIS reduce-based low-resolution DOM generation and fallback summary propagation.
 Updated: 2026-04-24  Geng Xun added regression coverage for configurable low-resolution trimmed-mean fractions through the Python API, CLI, and config defaults.
 Updated: 2026-04-26  Geng Xun added regression coverage for BF/FLANN matcher selection and low-resolution reprojection-error gating.
+Updated: 2026-04-27  Geng Xun added regression coverage for minimum retained low-resolution matches and projected-offset magnitude gating.
 """
 
 from __future__ import annotations
@@ -582,6 +583,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 "0.1",
                 "--low-resolution-max-mean-reprojection-error-pixels",
                 "2.5",
+                "--low-resolution-min-retained-match-count",
+                "5",
+                "--low-resolution-max-mean-projected-offset-meters",
+                "2000",
             ]
         )
 
@@ -591,6 +596,35 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(args.low_resolution_level, 4)
         self.assertAlmostEqual(args.low_resolution_trim_fraction_each_side, 0.1)
         self.assertAlmostEqual(args.low_resolution_max_mean_reprojection_error_pixels, 2.5)
+        self.assertEqual(args.low_resolution_min_retained_match_count, 5)
+        self.assertAlmostEqual(args.low_resolution_max_mean_projected_offset_meters, 2000.0)
+
+    def test_build_argument_parser_rejects_invalid_low_resolution_match_count_and_offset_threshold(self):
+        parser = build_argument_parser()
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--low-resolution-min-retained-match-count",
+                    "0",
+                ]
+            )
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--low-resolution-max-mean-projected-offset-meters",
+                    "-1",
+                ]
+            )
 
     def test_build_argument_parser_rejects_out_of_range_invalid_pixel_radius(self):
         parser = build_argument_parser()
@@ -671,6 +705,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                             "lowResolutionTrimFractionEachSide": 0.12,
                             "matcherMethod": "flann",
                             "lowResolutionMaxMeanReprojectionErrorPixels": 2.25,
+                            "lowResolutionMinRetainedMatchCount": 6,
+                            "lowResolutionMaxMeanProjectedOffsetMeters": 2000.0,
                         }
                     }
                 ),
@@ -682,6 +718,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertAlmostEqual(defaults["low_resolution_trim_fraction_each_side"], 0.12)
         self.assertEqual(defaults["matcher_method"], "flann")
         self.assertAlmostEqual(defaults["low_resolution_max_mean_reprojection_error_pixels"], 2.25)
+        self.assertEqual(defaults["low_resolution_min_retained_match_count"], 6)
+        self.assertAlmostEqual(defaults["low_resolution_max_mean_projected_offset_meters"], 2000.0)
 
     def test_create_descriptor_matcher_supports_bf_and_flann(self):
         fake_bf_matcher = object()
@@ -788,6 +826,9 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     "delta_y_projected": 0.0,
                     "retained_match_count": 0,
                     "trim_fraction_each_side": 0.12,
+                    "min_retained_match_count": 5,
+                    "max_mean_projected_offset_meters": 2000.0,
+                    "mean_projected_offset_meters": 0.0,
                 },
             ) as estimate_mock:
                 _, _, summary = match_dom_pair(
@@ -803,6 +844,55 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertAlmostEqual(
             estimate_mock.call_args.kwargs["low_resolution_trim_fraction_each_side"],
             0.12,
+        )
+
+    def test_match_dom_pair_forwards_low_resolution_min_match_count_and_offset_threshold(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_lowres_threshold_forward.cub",
+                right_name="right_lowres_threshold_forward.cub",
+            )
+
+            with mock.patch.object(
+                image_match,
+                "_estimate_low_resolution_projected_offset",
+                return_value={
+                    "enabled": True,
+                    "status": "fallback_zero",
+                    "fallback_offset_zero": True,
+                    "reason": "thresholded",
+                    "delta_x_projected": 0.0,
+                    "delta_y_projected": 0.0,
+                    "retained_match_count": 4,
+                    "trim_fraction_each_side": 0.05,
+                    "min_retained_match_count": 5,
+                    "max_mean_projected_offset_meters": 2000.0,
+                    "mean_projected_offset_meters": None,
+                },
+            ) as estimate_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    min_valid_pixels=16,
+                    enable_low_resolution_offset_estimation=True,
+                    low_resolution_min_retained_match_count=5,
+                    low_resolution_max_mean_projected_offset_meters=2000.0,
+                )
+
+        self.assertEqual(summary["low_resolution_offset"]["min_retained_match_count"], 5)
+        self.assertAlmostEqual(summary["low_resolution_offset"]["max_mean_projected_offset_meters"], 2000.0)
+        self.assertEqual(
+            estimate_mock.call_args.kwargs["low_resolution_min_retained_match_count"],
+            5,
+        )
+        self.assertAlmostEqual(
+            estimate_mock.call_args.kwargs["low_resolution_max_mean_projected_offset_meters"],
+            2000.0,
         )
 
     def test_estimate_low_resolution_projected_offset_rejects_large_reprojection_error(self):
@@ -861,6 +951,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 sift_sigma=1.6,
                 low_resolution_trim_fraction_each_side=0.0,
                 low_resolution_max_mean_reprojection_error_pixels=3.0,
+                low_resolution_min_retained_match_count=4,
+                low_resolution_max_mean_projected_offset_meters=0.0,
                 match_dom_pair_func=mock.Mock(return_value=(filtered_left, filtered_right, {"status": "matched"})),
                 filter_stereo_pair_keypoints_with_ransac_func=mock.Mock(
                     return_value=(
@@ -882,6 +974,186 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(summary["fallback_offset_zero"])
         self.assertEqual(summary["failure_reason_code"], "reprojection_error_above_threshold")
         self.assertGreater(summary["trimmed_mean_reprojection_error_pixels"], 3.0)
+        self.assertEqual(summary["delta_x_projected"], 0.0)
+        self.assertEqual(summary["delta_y_projected"], 0.0)
+
+    def test_estimate_low_resolution_projected_offset_rejects_retained_match_count_below_threshold(self):
+        with temporary_directory() as temp_dir:
+            fake_left_dom = temp_dir / "left_min_matches.cub"
+            fake_right_dom = temp_dir / "right_min_matches.cub"
+            fake_left_dom.write_bytes(b"left")
+            fake_right_dom.write_bytes(b"right")
+            filtered_left = KeypointFile(
+                32,
+                32,
+                (
+                    Keypoint(5.0, 5.0),
+                    Keypoint(10.0, 5.0),
+                    Keypoint(5.0, 10.0),
+                    Keypoint(10.0, 10.0),
+                ),
+            )
+            filtered_right = KeypointFile(
+                32,
+                32,
+                (
+                    Keypoint(15.0, 15.0),
+                    Keypoint(20.0, 15.0),
+                    Keypoint(15.0, 20.0),
+                    Keypoint(20.0, 20.0),
+                ),
+            )
+
+            summary = image_match._estimate_low_resolution_projected_offset(
+                fake_left_dom,
+                fake_right_dom,
+                enabled=True,
+                low_resolution_level=3,
+                low_resolution_output_dir=temp_dir,
+                band=1,
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=64,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=1,
+                matcher_method="bf",
+                ratio_test=0.75,
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                low_resolution_trim_fraction_each_side=0.05,
+                low_resolution_max_mean_reprojection_error_pixels=3.0,
+                low_resolution_min_retained_match_count=5,
+                low_resolution_max_mean_projected_offset_meters=0.0,
+                match_dom_pair_func=mock.Mock(return_value=(filtered_left, filtered_right, {"status": "matched"})),
+                filter_stereo_pair_keypoints_with_ransac_func=mock.Mock(
+                    return_value=(
+                        filtered_left,
+                        filtered_right,
+                        {
+                            "applied": True,
+                            "status": "filtered",
+                            "homography_matrix": [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
+                        },
+                    )
+                ),
+                write_stereo_pair_match_visualization_func=mock.Mock(return_value={"output_path": "ignored.png"}),
+                require_command_func=mock.Mock(),
+                create_low_resolution_dom_func=mock.Mock(side_effect=[fake_left_dom, fake_right_dom]),
+            )
+
+        self.assertEqual(summary["status"], "fallback_zero")
+        self.assertTrue(summary["fallback_offset_zero"])
+        self.assertEqual(summary["failure_reason_code"], "retained_match_count_below_threshold")
+        self.assertEqual(summary["retained_match_count"], 4)
+        self.assertEqual(summary["min_retained_match_count"], 5)
+        self.assertIsNone(summary["trimmed_mean_reprojection_error_pixels"])
+        self.assertIsNone(summary["mean_projected_offset_meters"])
+
+    def test_estimate_low_resolution_projected_offset_rejects_large_mean_projected_offset(self):
+        with temporary_directory() as temp_dir:
+            left_cube, left_low_res_dom = make_test_cube(
+                temp_dir,
+                name="left_low_res_offset_threshold.cub",
+                samples=32,
+                lines=32,
+                bands=1,
+                pixel_type=ip.PixelType.UnsignedByte,
+            )
+            right_cube, right_low_res_dom = make_test_cube(
+                temp_dir,
+                name="right_low_res_offset_threshold.cub",
+                samples=32,
+                lines=32,
+                bands=1,
+                pixel_type=ip.PixelType.UnsignedByte,
+            )
+            try:
+                _write_array_to_cube(left_cube, _build_textured_test_image(32, 32))
+                _write_array_to_cube(right_cube, _build_textured_test_image(32, 32))
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=32.0)
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=5000.0, upper_left_y=32.0)
+            finally:
+                left_cube.close()
+                right_cube.close()
+
+            filtered_left = KeypointFile(
+                32,
+                32,
+                (
+                    Keypoint(5.0, 5.0),
+                    Keypoint(10.0, 5.0),
+                    Keypoint(5.0, 10.0),
+                    Keypoint(10.0, 10.0),
+                    Keypoint(12.0, 12.0),
+                ),
+            )
+            filtered_right = KeypointFile(
+                32,
+                32,
+                (
+                    Keypoint(5.0, 5.0),
+                    Keypoint(10.0, 5.0),
+                    Keypoint(5.0, 10.0),
+                    Keypoint(10.0, 10.0),
+                    Keypoint(12.0, 12.0),
+                ),
+            )
+
+            summary = image_match._estimate_low_resolution_projected_offset(
+                left_low_res_dom,
+                right_low_res_dom,
+                enabled=True,
+                low_resolution_level=3,
+                low_resolution_output_dir=temp_dir,
+                band=1,
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=64,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=1,
+                matcher_method="bf",
+                ratio_test=0.75,
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                low_resolution_trim_fraction_each_side=0.0,
+                low_resolution_max_mean_reprojection_error_pixels=3.0,
+                low_resolution_min_retained_match_count=5,
+                low_resolution_max_mean_projected_offset_meters=2000.0,
+                match_dom_pair_func=mock.Mock(return_value=(filtered_left, filtered_right, {"status": "matched"})),
+                filter_stereo_pair_keypoints_with_ransac_func=mock.Mock(
+                    return_value=(
+                        filtered_left,
+                        filtered_right,
+                        {
+                            "applied": True,
+                            "status": "filtered",
+                            "homography_matrix": [[1.0, 0.0, 0.0], [0.0, 1.0, 0.0], [0.0, 0.0, 1.0]],
+                        },
+                    )
+                ),
+                write_stereo_pair_match_visualization_func=mock.Mock(return_value={"output_path": "ignored.png"}),
+                require_command_func=mock.Mock(),
+                create_low_resolution_dom_func=mock.Mock(side_effect=[left_low_res_dom, right_low_res_dom]),
+            )
+
+        self.assertEqual(summary["status"], "fallback_zero")
+        self.assertTrue(summary["fallback_offset_zero"])
+        self.assertEqual(summary["failure_reason_code"], "mean_projected_offset_above_threshold")
+        self.assertGreater(summary["mean_projected_offset_meters"], 2000.0)
         self.assertEqual(summary["delta_x_projected"], 0.0)
         self.assertEqual(summary["delta_y_projected"], 0.0)
 
@@ -919,6 +1191,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 sift_sigma=1.6,
                 low_resolution_trim_fraction_each_side=0.05,
                 low_resolution_max_mean_reprojection_error_pixels=3.0,
+                low_resolution_min_retained_match_count=3,
+                low_resolution_max_mean_projected_offset_meters=0.0,
                 match_dom_pair_func=mock.Mock(return_value=(filtered_left, filtered_right, {"status": "matched"})),
                 filter_stereo_pair_keypoints_with_ransac_func=mock.Mock(
                     return_value=(

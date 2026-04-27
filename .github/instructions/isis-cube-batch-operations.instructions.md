@@ -1,6 +1,6 @@
 ---
 description: "Use when editing Python/C++ code that repeatedly opens ISIS Cube files, performs projection/camera/world-coordinate conversion, reads many windows from the same cube, or loops over many sample/line or ground-coordinate pairs. Keywords: Cube open reuse, projection batching, set_world, projected XY, sample line, coordinate conversion, bulk coordinate transform, camera lifecycle, Brick reuse, LineManager batching."
-applyTo: "**/*.{py,cpp,h}"
+applyTo: "{src/**/*.{cpp,h},python/**/*.py,examples/**/*.py,tests/unitTest/**/*.py}"
 ---
 
 # ISIS Cube Batch Operation Rules

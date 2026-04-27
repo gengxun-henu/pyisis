@@ -1235,3 +1235,1107 @@ Object = cnetmerge
 End_Object
 
 
+Object = cnetmerge
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2012-04-17
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-26T22:06:40
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Merges multiple Control Networks into one"
+
+  Group = UserParameters
+    INPUTTYPE          = list
+    CLIST              = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/merge/merge_all_controlnets.lis
+    BASE               = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/pair_nets/REDUCED_M104311715LE.echo.c-
+                         al__REDUCED_M104311715RE.echo.cal.net
+    ONET               = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/merge/dom_matching_merged.net
+    NETWORKID          = dom_matching_example
+    DESCRIPTION        = "Merged DOM matching ControlNet"
+    LOG                = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/merge/cnetmerge.log
+    DUPLICATEPOINTS    = merge
+    OVERWRITEPOINTS    = False
+    OVERWRITEMEASURES  = False
+    OVERWRITEREFERENCE = False
+    OVERWRITEMISSING   = False
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:09.2
+    CpuTime     = 00:00:09.2
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:14:02
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104311715RE/dom_M104311715LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8367
+    InputSamples    = 2549
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8367
+    EndingSample    = 2549
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1046
+    OutputSamples   = 319
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.9
+    CpuTime     = 00:00:00.9
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:14:03
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104311715RE/dom_M104311715RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8390
+    InputSamples    = 2501
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8390
+    EndingSample    = 2501
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1049
+    OutputSamples   = 313
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:01.0
+    CpuTime     = 00:00:01.0
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:14:15
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104318871LE/dom_M104311715LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8367
+    InputSamples    = 2549
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8367
+    EndingSample    = 2549
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1046
+    OutputSamples   = 319
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.9
+    CpuTime     = 00:00:00.9
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:14:16
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104318871LE/dom_M104318871LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8376
+    InputSamples    = 2370
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8376
+    EndingSample    = 2370
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1047
+    OutputSamples   = 296
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.9
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:14:31
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104318871RE/dom_M104311715LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8367
+    InputSamples    = 2549
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8367
+    EndingSample    = 2549
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1046
+    OutputSamples   = 319
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:01.1
+    CpuTime     = 00:00:01.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:14:32
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104318871RE/dom_M104318871RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8400
+    InputSamples    = 2362
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8400
+    EndingSample    = 2362
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1050
+    OutputSamples   = 295
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:01.1
+    CpuTime     = 00:00:01.0
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:14:46
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715RE__d-
+                   om_M104318871LE/dom_M104311715RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8390
+    InputSamples    = 2501
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8390
+    EndingSample    = 2501
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1049
+    OutputSamples   = 313
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:01.0
+    CpuTime     = 00:00:01.0
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:14:47
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715RE__d-
+                   om_M104318871LE/dom_M104318871LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8376
+    InputSamples    = 2370
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8376
+    EndingSample    = 2370
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1047
+    OutputSamples   = 296
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.9
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:15:01
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715RE__d-
+                   om_M104318871RE/dom_M104311715RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8390
+    InputSamples    = 2501
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8390
+    EndingSample    = 2501
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1049
+    OutputSamples   = 313
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:01.1
+    CpuTime     = 00:00:01.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:15:02
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715RE__d-
+                   om_M104318871RE/dom_M104318871RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8400
+    InputSamples    = 2362
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8400
+    EndingSample    = 2362
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1050
+    OutputSamples   = 295
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:01.1
+    CpuTime     = 00:00:01.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:15:32
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104318871LE__d-
+                   om_M104318871RE/dom_M104318871LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8376
+    InputSamples    = 2370
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8376
+    EndingSample    = 2370
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1047
+    OutputSamples   = 296
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:01.4
+    CpuTime     = 00:00:01.3
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T00:15:33
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104318871LE__d-
+                   om_M104318871RE/dom_M104318871RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8400
+    InputSamples    = 2362
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8400
+    EndingSample    = 2362
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1050
+    OutputSamples   = 295
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:01.3
+    CpuTime     = 00:00:01.3
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:04:48
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104311715RE/dom_M104311715LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8367
+    InputSamples    = 2549
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8367
+    EndingSample    = 2549
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1046
+    OutputSamples   = 319
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.9
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:04:49
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104311715RE/dom_M104311715RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8390
+    InputSamples    = 2501
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8390
+    EndingSample    = 2501
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1049
+    OutputSamples   = 313
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:04:58
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104318871LE/dom_M104311715LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8367
+    InputSamples    = 2549
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8367
+    EndingSample    = 2549
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1046
+    OutputSamples   = 319
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:04:59
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104318871LE/dom_M104318871LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8376
+    InputSamples    = 2370
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8376
+    EndingSample    = 2370
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1047
+    OutputSamples   = 296
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.7
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:05:10
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104318871RE/dom_M104311715LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8367
+    InputSamples    = 2549
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8367
+    EndingSample    = 2549
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1046
+    OutputSamples   = 319
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:05:11
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715LE__d-
+                   om_M104318871RE/dom_M104318871RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8400
+    InputSamples    = 2362
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8400
+    EndingSample    = 2362
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1050
+    OutputSamples   = 295
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:05:21
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715RE__d-
+                   om_M104318871LE/dom_M104311715RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8390
+    InputSamples    = 2501
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8390
+    EndingSample    = 2501
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1049
+    OutputSamples   = 313
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:05:22
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715RE__d-
+                   om_M104318871LE/dom_M104318871LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8376
+    InputSamples    = 2370
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8376
+    EndingSample    = 2370
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1047
+    OutputSamples   = 296
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:05:32
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104311715RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715RE__d-
+                   om_M104318871RE/dom_M104311715RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8390
+    InputSamples    = 2501
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8390
+    EndingSample    = 2501
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1049
+    OutputSamples   = 313
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:05:33
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104311715RE__d-
+                   om_M104318871RE/dom_M104318871RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8400
+    InputSamples    = 2362
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8400
+    EndingSample    = 2362
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1050
+    OutputSamples   = 295
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:05:44
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871LE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104318871LE__d-
+                   om_M104318871RE/dom_M104318871LE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8376
+    InputSamples    = 2370
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8376
+    EndingSample    = 2370
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1047
+    OutputSamples   = 296
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:05:45
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test/dom_M104318871RE.cub
+    TO           = /media/gengxun/Elements/data/lro/test_controlnet_python/pi-
+                   pe_test2/match_metadata/low_resolution/dom_M104318871LE__d-
+                   om_M104318871RE/dom_M104318871RE__level3.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 8
+    LSCALE       = 8
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8400
+    InputSamples    = 2362
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8400
+    EndingSample    = 2362
+    LineIncrement   = 8.0
+    SampleIncrement = 8.0
+    OutputLines     = 1050
+    OutputSamples   = 295
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:00.8
+    CpuTime     = 00:00:00.8
+  End_Group
+End_Object
+
+
+Object = cnetmerge
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2012-04-17
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-04-27T08:06:22
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Merges multiple Control Networks into one"
+
+  Group = UserParameters
+    INPUTTYPE          = list
+    CLIST              = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/merge/merge_all_controlnets.lis
+    BASE               = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/pair_nets/REDUCED_M104311715LE.echo.c-
+                         al__REDUCED_M104311715RE.echo.cal.net
+    ONET               = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/merge/dom_matching_merged.net
+    NETWORKID          = dom_matching_example
+    DESCRIPTION        = "Merged DOM matching ControlNet"
+    LOG                = /media/gengxun/Elements/data/lro/test_controlnet_pyt-
+                         hon/pipe_test2/merge/cnetmerge.log
+    DUPLICATEPOINTS    = merge
+    OVERWRITEPOINTS    = False
+    OVERWRITEMEASURES  = False
+    OVERWRITEREFERENCE = False
+    OVERWRITEMISSING   = False
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:07.9
+    CpuTime     = 00:00:07.8
+  End_Group
+End_Object
+
+

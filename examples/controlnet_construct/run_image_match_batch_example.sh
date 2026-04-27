@@ -69,6 +69,14 @@ Options:
                                   Maximum trimmed-mean low-resolution homography reprojection error allowed
                                   before coarse projected offset falls back to zero. Default: 3.0 unless omitted
                                   and resolved from --config.
+  --low-resolution-min-retained-match-count N
+                                  Minimum retained low-resolution RANSAC match count required before
+                                  projected-offset statistics are trusted. Default: 5 unless omitted and
+                                  resolved from --config.
+  --low-resolution-max-mean-projected-offset-meters VALUE
+                                  Maximum allowed magnitude of the mean low-resolution projected offset.
+                                  Unit: meters. Default: image_match.py default unless omitted and resolved
+                                  from --config.
   --skip-existing                 Skip pairs whose left/right key files already exist
   -h, --help                      Show this help message
 
@@ -333,6 +341,64 @@ raise SystemExit(0)
 PY
 }
 
+extract_low_resolution_min_retained_match_count_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
+candidate_keys = (
+  'low_resolution_min_retained_match_count',
+  'lowResolutionMinRetainedMatchCount',
+  'LowResolutionMinRetainedMatchCount',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
+extract_low_resolution_max_mean_projected_offset_meters_from_config() {
+  local config_path=$1
+  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
+candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
+candidate_keys = (
+  'low_resolution_max_mean_projected_offset_meters',
+  'lowResolutionMaxMeanProjectedOffsetMeters',
+  'LowResolutionMaxMeanProjectedOffsetMeters',
+)
+
+for container in candidate_containers:
+  if not isinstance(container, dict):
+    continue
+  for key in candidate_keys:
+    value = container.get(key)
+    if value in (None, ''):
+      continue
+    print(value)
+    raise SystemExit(0)
+
+raise SystemExit(0)
+PY
+}
+
 extract_use_parallel_cpu_from_config() {
   local config_path=$1
   "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
@@ -402,6 +468,10 @@ main() {
   local explicit_low_resolution_level=""
   local low_resolution_max_mean_reprojection_error_pixels="3.0"
   local explicit_low_resolution_max_mean_reprojection_error_pixels=""
+  local low_resolution_min_retained_match_count="5"
+  local explicit_low_resolution_min_retained_match_count=""
+  local low_resolution_max_mean_projected_offset_meters="0.0"
+  local explicit_low_resolution_max_mean_projected_offset_meters=""
   local config_threshold=""
   local forwarded_args=()
 
@@ -502,6 +572,18 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --low-resolution-max-mean-reprojection-error-pixels"
         low_resolution_max_mean_reprojection_error_pixels=$2
         explicit_low_resolution_max_mean_reprojection_error_pixels=$2
+        shift 2
+        ;;
+      --low-resolution-min-retained-match-count)
+        [[ $# -ge 2 ]] || die "missing value for --low-resolution-min-retained-match-count"
+        low_resolution_min_retained_match_count=$2
+        explicit_low_resolution_min_retained_match_count=$2
+        shift 2
+        ;;
+      --low-resolution-max-mean-projected-offset-meters)
+        [[ $# -ge 2 ]] || die "missing value for --low-resolution-max-mean-projected-offset-meters"
+        low_resolution_max_mean_projected_offset_meters=$2
+        explicit_low_resolution_max_mean_projected_offset_meters=$2
         shift 2
         ;;
       --skip-existing)
@@ -605,6 +687,20 @@ main() {
         low_resolution_max_mean_reprojection_error_pixels="$config_low_resolution_max_mean_reprojection_error_pixels"
       fi
     fi
+    if [[ -z "$explicit_low_resolution_min_retained_match_count" ]]; then
+      local config_low_resolution_min_retained_match_count
+      config_low_resolution_min_retained_match_count=$(extract_low_resolution_min_retained_match_count_from_config "$CONFIG_PATH")
+      if [[ -n "$config_low_resolution_min_retained_match_count" ]]; then
+        low_resolution_min_retained_match_count="$config_low_resolution_min_retained_match_count"
+      fi
+    fi
+    if [[ -z "$explicit_low_resolution_max_mean_projected_offset_meters" ]]; then
+      local config_low_resolution_max_mean_projected_offset_meters
+      config_low_resolution_max_mean_projected_offset_meters=$(extract_low_resolution_max_mean_projected_offset_meters_from_config "$CONFIG_PATH")
+      if [[ -n "$config_low_resolution_max_mean_projected_offset_meters" ]]; then
+        low_resolution_max_mean_projected_offset_meters="$config_low_resolution_max_mean_projected_offset_meters"
+      fi
+    fi
   fi
   if [[ -n "$explicit_threshold" ]]; then
     VALID_PIXEL_PERCENT_THRESHOLD="$explicit_threshold"
@@ -632,6 +728,8 @@ main() {
     log "Low-resolution offset estimation: enabled"
     log "Low-resolution level: $low_resolution_level"
     log "Low-resolution max mean reprojection error (pixels): $low_resolution_max_mean_reprojection_error_pixels"
+    log "Low-resolution minimum retained matches: $low_resolution_min_retained_match_count"
+    log "Low-resolution max mean projected offset (meters): $low_resolution_max_mean_projected_offset_meters"
   else
     log "Low-resolution offset estimation: disabled"
   fi
@@ -714,6 +812,8 @@ main() {
         --enable-low-resolution-offset-estimation
         --low-resolution-level "$low_resolution_level"
         --low-resolution-max-mean-reprojection-error-pixels "$low_resolution_max_mean_reprojection_error_pixels"
+        --low-resolution-min-retained-match-count "$low_resolution_min_retained_match_count"
+        --low-resolution-max-mean-projected-offset-meters "$low_resolution_max_mean_projected_offset_meters"
       )
     fi
     if [[ ${#forwarded_args[@]} -gt 0 ]]; then

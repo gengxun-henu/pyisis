@@ -592,6 +592,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             "invalid_pixel_radius": 2,
                             "enable_low_resolution_offset_estimation": True,
                             "low_resolution_level": 4,
+                            "low_resolution_min_retained_match_count": 6,
+                            "low_resolution_max_mean_projected_offset_meters": 2000.0,
                         },
                     }
                 ),
@@ -632,6 +634,16 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     "        level = args[args.index('--low-resolution-level') + 1]\n"
                     "        if level != '4':\n"
                     "            raise SystemExit(f'unexpected low-resolution level: {level}')\n"
+                    "        if '--low-resolution-min-retained-match-count' not in args:\n"
+                    "            raise SystemExit('missing --low-resolution-min-retained-match-count')\n"
+                    "        min_count = args[args.index('--low-resolution-min-retained-match-count') + 1]\n"
+                    "        if min_count != '6':\n"
+                    "            raise SystemExit(f'unexpected low-resolution min retained match count: {min_count}')\n"
+                    "        if '--low-resolution-max-mean-projected-offset-meters' not in args:\n"
+                    "            raise SystemExit('missing --low-resolution-max-mean-projected-offset-meters')\n"
+                    "        max_offset = args[args.index('--low-resolution-max-mean-projected-offset-meters') + 1]\n"
+                    "        if max_offset != '2000.0':\n"
+                    "            raise SystemExit(f'unexpected low-resolution max mean projected offset meters: {max_offset}')\n"
                     "        Path(args[2]).write_text('synthetic-left-key\\n', encoding='utf-8')\n"
                     "        Path(args[3]).write_text('synthetic-right-key\\n', encoding='utf-8')\n"
                     "        return 0\n"
@@ -665,6 +677,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("Invalid pixel radius: 2", completed.stdout)
         self.assertIn("Low-resolution offset estimation: enabled", completed.stdout)
         self.assertIn("Low-resolution level: 4", completed.stdout)
+        self.assertIn("Low-resolution minimum retained matches: 6", completed.stdout)
+        self.assertIn("Low-resolution max mean projected offset (meters): 2000.0", completed.stdout)
 
     def test_run_pipeline_example_reads_parallel_worker_limit_from_config(self):
         with temporary_directory() as temp_dir:
@@ -812,6 +826,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             "invalid_pixel_radius": 3,
                             "enable_low_resolution_offset_estimation": True,
                             "low_resolution_level": 5,
+                            "low_resolution_min_retained_match_count": 6,
+                            "low_resolution_max_mean_projected_offset_meters": 2000.0,
                         },
                     }
                 ),
@@ -858,6 +874,16 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "        level = args[args.index('--low-resolution-level') + 1]",
                         "        if level != '5':",
                         "            raise SystemExit(f'unexpected low-resolution level: {level}')",
+                        "        if '--low-resolution-min-retained-match-count' not in args:",
+                        "            raise SystemExit('missing --low-resolution-min-retained-match-count')",
+                        "        min_count = args[args.index('--low-resolution-min-retained-match-count') + 1]",
+                        "        if min_count != '6':",
+                        "            raise SystemExit(f'unexpected low-resolution min retained match count: {min_count}')",
+                        "        if '--low-resolution-max-mean-projected-offset-meters' not in args:",
+                        "            raise SystemExit('missing --low-resolution-max-mean-projected-offset-meters')",
+                        "        max_offset = args[args.index('--low-resolution-max-mean-projected-offset-meters') + 1]",
+                        "        if max_offset != '2000.0':",
+                        "            raise SystemExit(f'unexpected low-resolution max mean projected offset meters: {max_offset}')",
                         "        Path(args[2]).write_text('synthetic-left-key\\n', encoding='utf-8')",
                         "        Path(args[3]).write_text('synthetic-right-key\\n', encoding='utf-8')",
                         "        return 0",

@@ -1,6 +1,6 @@
 ---
 description: "Use when editing or validating pybind11 bindings and tests in this repository. Covers the correct Python interpreter, extension-module compatibility, smoke-vs-unit-test scope, and environment-dependent test behavior."
-applyTo: "**/*.{py,cpp,h}"
+applyTo: "{src/**/*.{cpp,h},python/**/*.py,tests/unitTest/**/*.py,tests/smoke_import.py}"
 ---
 
 # ISIS Pybind11 Testing Conventions

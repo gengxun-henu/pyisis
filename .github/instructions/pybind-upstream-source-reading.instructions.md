@@ -1,6 +1,6 @@
 ---
 description: "Use when doing USGS ISIS pybind binding, pybind11 unit tests, binding bug fixes, Cube/Camera lifecycle debugging, or upstream API reading. Read local inventory first, then upstream .h, then upstream .cpp, then upstream usage, so tests follow real ISIS behavior instead of signatures alone. Keywords: pybind, unit test, upstream .cpp, lifecycle, create/open order, IException, return policy."
-applyTo: "**/*.{py,cpp,h}"
+applyTo: "{src/**/*.{cpp,h},python/**/*.py,tests/unitTest/**/*.py,tests/smoke_import.py}"
 ---
 
 # ISIS Upstream Reading Order

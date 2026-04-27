@@ -20,6 +20,7 @@ Updated: 2026-04-24  Geng Xun extracted reusable stereo-pair RANSAC filtering he
 Updated: 2026-04-24  Geng Xun extracted low-resolution offset, match visualization, and tile-matching helpers into dedicated modules so image_match.py now focuses on configuration, orchestration, and CLI compatibility.
 Updated: 2026-04-24  Geng Xun exposed the low-resolution projected-offset trimmed-mean fraction through the Python API, CLI, and config JSON while preserving the previous 5% default.
 Updated: 2026-04-26  Geng Xun added selectable BF/FLANN SIFT descriptor matching plus low-resolution reprojection-error gating for coarse offset estimation.
+Updated: 2026-04-27  Geng Xun added low-resolution retained-match and projected-offset magnitude gates so implausible coarse offsets fall back to zero.
 """
 
 from __future__ import annotations
@@ -93,6 +94,8 @@ DEFAULT_NUM_WORKER_PARALLEL_CPU = 8
 MAX_NUM_WORKER_PARALLEL_CPU = 4096
 DEFAULT_LOW_RESOLUTION_LEVEL = 3
 DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE = _lowres_offset.DEFAULT_TRIM_FRACTION_EACH_SIDE
+DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT = _lowres_offset.DEFAULT_MIN_RETAINED_MATCH_COUNT
+DEFAULT_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS = _lowres_offset.DEFAULT_MAX_MEAN_PROJECTED_OFFSET_METERS
 
 
 _run_command = _lowres_offset._run_command
@@ -190,6 +193,28 @@ def _validate_low_resolution_trim_fraction_each_side(value: float) -> float:
 def _parse_low_resolution_trim_fraction_each_side(value: str) -> float:
     try:
         return _validate_low_resolution_trim_fraction_each_side(float(value))
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _validate_low_resolution_min_retained_match_count(value: int) -> int:
+    return _lowres_offset._validate_min_retained_match_count(value)
+
+
+def _parse_low_resolution_min_retained_match_count(value: str) -> int:
+    try:
+        return _validate_low_resolution_min_retained_match_count(int(value))
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _validate_low_resolution_max_mean_projected_offset_meters(value: float) -> float:
+    return _lowres_offset._validate_max_mean_projected_offset_meters(value)
+
+
+def _parse_low_resolution_max_mean_projected_offset_meters(value: str) -> float:
+    try:
+        return _validate_low_resolution_max_mean_projected_offset_meters(float(value))
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
@@ -330,6 +355,24 @@ def load_image_match_defaults_from_config(config_path: str | Path) -> dict[str, 
             lambda value: _validate_low_resolution_max_mean_reprojection_error_pixels(float(value)),
         ),
         (
+            "low_resolution_min_retained_match_count",
+            (
+                "low_resolution_min_retained_match_count",
+                "lowResolutionMinRetainedMatchCount",
+                "LowResolutionMinRetainedMatchCount",
+            ),
+            lambda value: _validate_low_resolution_min_retained_match_count(int(value)),
+        ),
+        (
+            "low_resolution_max_mean_projected_offset_meters",
+            (
+                "low_resolution_max_mean_projected_offset_meters",
+                "lowResolutionMaxMeanProjectedOffsetMeters",
+                "LowResolutionMaxMeanProjectedOffsetMeters",
+            ),
+            lambda value: _validate_low_resolution_max_mean_projected_offset_meters(float(value)),
+        ),
+        (
             "num_worker_parallel_cpu",
             ("num_worker_parallel_cpu", "numWorkerParallelCpu", "NumWorkerParallelCpu"),
             lambda value: _validate_num_worker_parallel_cpu(int(value)),
@@ -464,6 +507,8 @@ def _estimate_low_resolution_projected_offset(
     sift_sigma: float,
     low_resolution_trim_fraction_each_side: float,
     low_resolution_max_mean_reprojection_error_pixels: float = 3.0,
+    low_resolution_min_retained_match_count: int = DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT,
+    low_resolution_max_mean_projected_offset_meters: float = DEFAULT_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS,
     match_dom_pair_func=None,
     filter_stereo_pair_keypoints_with_ransac_func=None,
     write_stereo_pair_match_visualization_func=None,
@@ -506,6 +551,8 @@ def _estimate_low_resolution_projected_offset(
         sift_sigma=sift_sigma,
         trim_fraction_each_side=low_resolution_trim_fraction_each_side,
         low_resolution_max_mean_reprojection_error_pixels=low_resolution_max_mean_reprojection_error_pixels,
+        low_resolution_min_retained_match_count=low_resolution_min_retained_match_count,
+        low_resolution_max_mean_projected_offset_meters=low_resolution_max_mean_projected_offset_meters,
         match_dom_pair_func=match_dom_pair_func,
         filter_stereo_pair_keypoints_with_ransac_func=filter_stereo_pair_keypoints_with_ransac_func,
         write_stereo_pair_match_visualization_func=write_stereo_pair_match_visualization_func,
@@ -548,6 +595,8 @@ def match_dom_pair(
     low_resolution_level: int = DEFAULT_LOW_RESOLUTION_LEVEL,
     low_resolution_trim_fraction_each_side: float = DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE,
     low_resolution_max_mean_reprojection_error_pixels: float = 3.0,
+    low_resolution_min_retained_match_count: int = DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT,
+    low_resolution_max_mean_projected_offset_meters: float = DEFAULT_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS,
     low_resolution_output_dir: str | Path | None = None,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     left_cube = ip.Cube()
@@ -566,6 +615,12 @@ def match_dom_pair(
         )
         resolved_low_resolution_max_mean_reprojection_error_pixels = _validate_low_resolution_max_mean_reprojection_error_pixels(
             low_resolution_max_mean_reprojection_error_pixels
+        )
+        resolved_low_resolution_min_retained_match_count = _validate_low_resolution_min_retained_match_count(
+            low_resolution_min_retained_match_count
+        )
+        resolved_low_resolution_max_mean_projected_offset_meters = _validate_low_resolution_max_mean_projected_offset_meters(
+            low_resolution_max_mean_projected_offset_meters
         )
         left_width = left_cube.sample_count()
         left_height = left_cube.line_count()
@@ -613,6 +668,8 @@ def match_dom_pair(
             sift_sigma=sift_sigma,
             low_resolution_trim_fraction_each_side=resolved_low_resolution_trim_fraction_each_side,
             low_resolution_max_mean_reprojection_error_pixels=resolved_low_resolution_max_mean_reprojection_error_pixels,
+            low_resolution_min_retained_match_count=resolved_low_resolution_min_retained_match_count,
+            low_resolution_max_mean_projected_offset_meters=resolved_low_resolution_max_mean_projected_offset_meters,
         )
         preparation = prepare_dom_pair_for_matching(
             left_dom_path,
@@ -756,6 +813,8 @@ def match_dom_pair(
             "parallel_cpu_worker_count": parallel_cpu_worker_count,
             "low_resolution_trim_fraction_each_side": resolved_low_resolution_trim_fraction_each_side,
             "low_resolution_max_mean_reprojection_error_pixels": resolved_low_resolution_max_mean_reprojection_error_pixels,
+            "low_resolution_min_retained_match_count": resolved_low_resolution_min_retained_match_count,
+            "low_resolution_max_mean_projected_offset_meters": resolved_low_resolution_max_mean_projected_offset_meters,
             "left_image_width": left_width,
             "left_image_height": left_height,
             "right_image_width": right_width,
@@ -898,6 +957,8 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--low-resolution-level", type=_parse_low_resolution_level, default=DEFAULT_LOW_RESOLUTION_LEVEL, help=f"Low-resolution pyramid level used for the projected offset estimation stage. Must be >= 0. Default: {DEFAULT_LOW_RESOLUTION_LEVEL}.")
     parser.add_argument("--low-resolution-trim-fraction-each-side", type=_parse_low_resolution_trim_fraction_each_side, default=DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE, help=f"Fraction of low-resolution projected offset samples trimmed from each tail before averaging. Must be within [0.0, 0.5). Default: {DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE}.")
     parser.add_argument("--low-resolution-max-mean-reprojection-error-pixels", type=_parse_low_resolution_max_mean_reprojection_error_pixels, default=3.0, help="Maximum allowed trimmed-mean low-resolution homography reprojection error, in pixels. Values above this threshold force low-resolution offset fallback to zero. Default: 3.0.")
+    parser.add_argument("--low-resolution-min-retained-match-count", type=_parse_low_resolution_min_retained_match_count, default=DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT, help=f"Minimum retained low-resolution RANSAC match count required before projected-offset statistics are trusted. Values below this threshold skip low-resolution statistics and force fallback to zero. Default: {DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT}.")
+    parser.add_argument("--low-resolution-max-mean-projected-offset-meters", type=_parse_low_resolution_max_mean_projected_offset_meters, default=DEFAULT_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS, help="Maximum allowed magnitude of the mean low-resolution projected offset, in meters. Values above this threshold force fallback to zero. Set to 0 to disable this gate. Default: 0.0.")
     parser.add_argument("--num-worker-parallel-cpu", type=_parse_num_worker_parallel_cpu, default=DEFAULT_NUM_WORKER_PARALLEL_CPU, help=f"Maximum worker-process count used when CPU tile parallelism is enabled. Must be within [1, {MAX_NUM_WORKER_PARALLEL_CPU}]. Default: {DEFAULT_NUM_WORKER_PARALLEL_CPU}.")
     parser.add_argument("--use-parallel-cpu", dest="use_parallel_cpu", action="store_true", help="Enable CPU process-pool parallelism for tiled matching. Enabled by default.")
     parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
@@ -961,6 +1022,8 @@ def main(argv: list[str] | None = None) -> None:
         low_resolution_level=args.low_resolution_level,
         low_resolution_trim_fraction_each_side=args.low_resolution_trim_fraction_each_side,
         low_resolution_max_mean_reprojection_error_pixels=args.low_resolution_max_mean_reprojection_error_pixels,
+        low_resolution_min_retained_match_count=args.low_resolution_min_retained_match_count,
+        low_resolution_max_mean_projected_offset_meters=args.low_resolution_max_mean_projected_offset_meters,
         write_match_visualization=args.write_match_visualization,
         match_visualization_output_path=args.match_visualization_output_path,
         match_visualization_output_dir=args.match_visualization_output_dir,

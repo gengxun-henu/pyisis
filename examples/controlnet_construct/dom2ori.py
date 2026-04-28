@@ -516,17 +516,21 @@ def convert_point_pairs_via_ground_functions(
         )
 
         if left_failure is None and right_failure is None:
-            assert left_converted is not None
-            assert right_converted is not None
+            if left_converted is None or right_converted is None:
+                raise RuntimeError(
+                    f"Internal invariant violated: no failure recorded but converted point is None at index {index}."
+                )
             left_output_points.append(left_converted)
             right_output_points.append(right_converted)
             continue
 
         if left_failure is None:
-            assert right_failure is not None
+            if right_failure is None:
+                raise RuntimeError(f"Internal invariant violated: expected right_failure at index {index}.")
             left_failure = _build_pair_drop_failure(index, left_point, other_side="right", other_failure=right_failure)
         if right_failure is None:
-            assert left_failure is not None
+            if left_failure is None:
+                raise RuntimeError(f"Internal invariant violated: expected left_failure at index {index}.")
             right_failure = _build_pair_drop_failure(index, right_point, other_side="left", other_failure=left_failure)
 
         _append_failure(left_failures, left_failure, logger=logger)

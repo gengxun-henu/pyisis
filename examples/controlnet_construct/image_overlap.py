@@ -139,7 +139,7 @@ def _linspace_positions(max_value: int, count: int) -> list[float]:
     if max_value <= 0:
         raise ValueError("Image dimensions must be positive.")
     if count == 1:
-        return [float(max_value) / 2.0]
+        return [(1.0 + float(max_value)) / 2.0]
     step = (float(max_value) - 1.0) / float(count - 1)
     return [1.0 + index * step for index in range(count)]
 

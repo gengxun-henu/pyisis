@@ -185,13 +185,69 @@ def _trimmed_mean(
     if not values:
         raise ValueError("Cannot compute a trimmed mean from an empty sample set.")
     resolved_trim_ratio = _validate_trim_fraction_each_side(trim_ratio)
-    sorted_values = sorted(float(value) for value in values)
-    trim_count = int(len(sorted_values) * resolved_trim_ratio)
-    if trim_count * 2 >= len(sorted_values):
-        trimmed_values = sorted_values
-    else:
-        trimmed_values = sorted_values[trim_count: len(sorted_values) - trim_count]
-    return float(sum(trimmed_values) / len(trimmed_values))
+    arr = np.sort(np.asarray(values, dtype=np.float64))
+    trim_count = int(len(arr) * resolved_trim_ratio)
+    if trim_count * 2 >= len(arr):
+        return float(arr.mean())
+    return float(arr[trim_count: len(arr) - trim_count].mean())
+
+
+def _fallback_result(
+    *,
+    reason: str,
+    failure_reason_code: str,
+    elapsed_seconds: float,
+    summary_thresholds: dict[str, object],
+    retained_match_count: int = 0,
+    trimmed_mean_reprojection_error_pixels: float | None = None,
+    mean_projected_offset_meters: float | None = None,
+    reprojection_error_pixel_samples: list[float] | None = None,
+    low_resolution_level: int | None = None,
+    left_low_resolution_dom: str | None = None,
+    right_low_resolution_dom: str | None = None,
+    raw_left_key: str | None = None,
+    raw_right_key: str | None = None,
+    filtered_left_key: str | None = None,
+    filtered_right_key: str | None = None,
+    image_match_summary: object = None,
+    ransac_summary: object = None,
+    **extra: object,
+) -> dict[str, object]:
+    result: dict[str, object] = {
+        "enabled": True,
+        "status": "fallback_zero",
+        "fallback_offset_zero": True,
+        "reason": reason,
+        "failure_reason_code": failure_reason_code,
+        "delta_x_projected": 0.0,
+        "delta_y_projected": 0.0,
+        "retained_match_count": retained_match_count,
+        **summary_thresholds,
+        "trimmed_mean_reprojection_error_pixels": trimmed_mean_reprojection_error_pixels,
+        "mean_projected_offset_meters": mean_projected_offset_meters,
+        "reprojection_error_pixel_samples": reprojection_error_pixel_samples or [],
+    }
+    if low_resolution_level is not None:
+        result["low_resolution_level"] = low_resolution_level
+    if left_low_resolution_dom is not None:
+        result["left_low_resolution_dom"] = left_low_resolution_dom
+    if right_low_resolution_dom is not None:
+        result["right_low_resolution_dom"] = right_low_resolution_dom
+    if raw_left_key is not None:
+        result["raw_left_key"] = raw_left_key
+    if raw_right_key is not None:
+        result["raw_right_key"] = raw_right_key
+    if filtered_left_key is not None:
+        result["filtered_left_key"] = filtered_left_key
+    if filtered_right_key is not None:
+        result["filtered_right_key"] = filtered_right_key
+    result["elapsed_seconds"] = elapsed_seconds
+    if image_match_summary is not None:
+        result["image_match_summary"] = image_match_summary
+    if ransac_summary is not None:
+        result["ransac_summary"] = ransac_summary
+    result.update(extra)
+    return result
 
 
 def _compute_reprojection_errors(
@@ -251,6 +307,7 @@ def estimate_low_resolution_projected_offset(
     low_resolution_max_mean_reprojection_error_pixels: float = 3.0,
     low_resolution_min_retained_match_count: int = DEFAULT_MIN_RETAINED_MATCH_COUNT,
     low_resolution_max_mean_projected_offset_meters: float = DEFAULT_MAX_MEAN_PROJECTED_OFFSET_METERS,
+    write_intermediate_keys: bool = False,
     match_dom_pair_func: Callable[..., tuple[KeypointFile, KeypointFile, dict[str, object]]],
     filter_stereo_pair_keypoints_with_ransac_func: Callable[..., tuple[KeypointFile, KeypointFile, dict[str, object]]],
     write_stereo_pair_match_visualization_func: Callable[..., dict[str, object]],
@@ -344,8 +401,9 @@ def estimate_low_resolution_projected_offset(
 
         raw_left_key_path = resolved_output_dir / f"{pair_tag}_low_resolution_raw_A.key"
         raw_right_key_path = resolved_output_dir / f"{pair_tag}_low_resolution_raw_B.key"
-        write_key_file(raw_left_key_path, raw_left_key)
-        write_key_file(raw_right_key_path, raw_right_key)
+        if write_intermediate_keys:
+            write_key_file(raw_left_key_path, raw_left_key)
+            write_key_file(raw_right_key_path, raw_right_key)
 
         filtered_left_key, filtered_right_key, ransac_summary = filter_stereo_pair_keypoints_with_ransac_func(
             raw_left_key,
@@ -353,120 +411,88 @@ def estimate_low_resolution_projected_offset(
         )
         filtered_left_key_path = resolved_output_dir / f"{pair_tag}_low_resolution_A.key"
         filtered_right_key_path = resolved_output_dir / f"{pair_tag}_low_resolution_B.key"
-        write_key_file(filtered_left_key_path, filtered_left_key)
-        write_key_file(filtered_right_key_path, filtered_right_key)
+        if write_intermediate_keys:
+            write_key_file(filtered_left_key_path, filtered_left_key)
+            write_key_file(filtered_right_key_path, filtered_right_key)
 
         retained_match_count = len(filtered_left_key.points)
         if retained_match_count <= 0:
             elapsed_seconds = time.perf_counter() - started_at
-            return {
-                "enabled": True,
-                "status": "fallback_zero",
-                "fallback_offset_zero": True,
-                "reason": "Low-resolution matching produced no retained RANSAC inliers.",
-                "failure_reason_code": "no_matches",
-                "delta_x_projected": 0.0,
-                "delta_y_projected": 0.0,
-                "retained_match_count": 0,
-                **summary_thresholds,
-                "trimmed_mean_reprojection_error_pixels": None,
-                "mean_projected_offset_meters": None,
-                "reprojection_error_pixel_samples": [],
-                "low_resolution_level": resolved_level,
-                "left_low_resolution_dom": str(left_low_res_dom),
-                "right_low_resolution_dom": str(right_low_res_dom),
-                "elapsed_seconds": elapsed_seconds,
-                "image_match_summary": raw_summary,
-                "ransac_summary": ransac_summary,
-            }
+            return _fallback_result(
+                reason="Low-resolution matching produced no retained RANSAC inliers.",
+                failure_reason_code="no_matches",
+                elapsed_seconds=elapsed_seconds,
+                summary_thresholds=summary_thresholds,
+                low_resolution_level=resolved_level,
+                left_low_resolution_dom=str(left_low_res_dom),
+                right_low_resolution_dom=str(right_low_res_dom),
+                image_match_summary=raw_summary,
+                ransac_summary=ransac_summary,
+            )
 
         if retained_match_count < resolved_min_retained_match_count:
             elapsed_seconds = time.perf_counter() - started_at
-            return {
-                "enabled": True,
-                "status": "fallback_zero",
-                "fallback_offset_zero": True,
-                "reason": (
+            return _fallback_result(
+                reason=(
                     "Low-resolution retained match count is below the configured minimum; "
                     "ignoring coarse offset statistics and falling back to zero."
                 ),
-                "failure_reason_code": "retained_match_count_below_threshold",
-                "delta_x_projected": 0.0,
-                "delta_y_projected": 0.0,
-                "retained_match_count": retained_match_count,
-                **summary_thresholds,
-                "trimmed_mean_reprojection_error_pixels": None,
-                "mean_projected_offset_meters": None,
-                "reprojection_error_pixel_samples": [],
-                "low_resolution_level": resolved_level,
-                "left_low_resolution_dom": str(left_low_res_dom),
-                "right_low_resolution_dom": str(right_low_res_dom),
-                "raw_left_key": str(raw_left_key_path),
-                "raw_right_key": str(raw_right_key_path),
-                "filtered_left_key": str(filtered_left_key_path),
-                "filtered_right_key": str(filtered_right_key_path),
-                "elapsed_seconds": elapsed_seconds,
-                "image_match_summary": raw_summary,
-                "ransac_summary": ransac_summary,
-            }
+                failure_reason_code="retained_match_count_below_threshold",
+                elapsed_seconds=elapsed_seconds,
+                summary_thresholds=summary_thresholds,
+                retained_match_count=retained_match_count,
+                low_resolution_level=resolved_level,
+                left_low_resolution_dom=str(left_low_res_dom),
+                right_low_resolution_dom=str(right_low_res_dom),
+                raw_left_key=str(raw_left_key_path),
+                raw_right_key=str(raw_right_key_path),
+                filtered_left_key=str(filtered_left_key_path),
+                filtered_right_key=str(filtered_right_key_path),
+                image_match_summary=raw_summary,
+                ransac_summary=ransac_summary,
+            )
 
         if not ransac_summary.get("applied", False):
             failure_reason_code = "homography_failed"
             if ransac_summary.get("status") == "skipped_insufficient_points":
                 failure_reason_code = "insufficient_points_for_homography"
             elapsed_seconds = time.perf_counter() - started_at
-            return {
-                "enabled": True,
-                "status": "fallback_zero",
-                "fallback_offset_zero": True,
-                "reason": "Low-resolution matching retained points, but homography-based reliability gating could not be applied.",
-                "failure_reason_code": failure_reason_code,
-                "delta_x_projected": 0.0,
-                "delta_y_projected": 0.0,
-                "retained_match_count": retained_match_count,
-                **summary_thresholds,
-                "trimmed_mean_reprojection_error_pixels": None,
-                "mean_projected_offset_meters": None,
-                "reprojection_error_pixel_samples": [],
-                "low_resolution_level": resolved_level,
-                "left_low_resolution_dom": str(left_low_res_dom),
-                "right_low_resolution_dom": str(right_low_res_dom),
-                "raw_left_key": str(raw_left_key_path),
-                "raw_right_key": str(raw_right_key_path),
-                "filtered_left_key": str(filtered_left_key_path),
-                "filtered_right_key": str(filtered_right_key_path),
-                "elapsed_seconds": elapsed_seconds,
-                "image_match_summary": raw_summary,
-                "ransac_summary": ransac_summary,
-            }
+            return _fallback_result(
+                reason="Low-resolution matching retained points, but homography-based reliability gating could not be applied.",
+                failure_reason_code=failure_reason_code,
+                elapsed_seconds=elapsed_seconds,
+                summary_thresholds=summary_thresholds,
+                retained_match_count=retained_match_count,
+                low_resolution_level=resolved_level,
+                left_low_resolution_dom=str(left_low_res_dom),
+                right_low_resolution_dom=str(right_low_res_dom),
+                raw_left_key=str(raw_left_key_path),
+                raw_right_key=str(raw_right_key_path),
+                filtered_left_key=str(filtered_left_key_path),
+                filtered_right_key=str(filtered_right_key_path),
+                image_match_summary=raw_summary,
+                ransac_summary=ransac_summary,
+            )
 
         homography_matrix = ransac_summary.get("homography_matrix")
         if homography_matrix is None:
             elapsed_seconds = time.perf_counter() - started_at
-            return {
-                "enabled": True,
-                "status": "fallback_zero",
-                "fallback_offset_zero": True,
-                "reason": "Low-resolution homography matrix is unavailable after RANSAC filtering.",
-                "failure_reason_code": "homography_failed",
-                "delta_x_projected": 0.0,
-                "delta_y_projected": 0.0,
-                "retained_match_count": retained_match_count,
-                **summary_thresholds,
-                "trimmed_mean_reprojection_error_pixels": None,
-                "mean_projected_offset_meters": None,
-                "reprojection_error_pixel_samples": [],
-                "low_resolution_level": resolved_level,
-                "left_low_resolution_dom": str(left_low_res_dom),
-                "right_low_resolution_dom": str(right_low_res_dom),
-                "raw_left_key": str(raw_left_key_path),
-                "raw_right_key": str(raw_right_key_path),
-                "filtered_left_key": str(filtered_left_key_path),
-                "filtered_right_key": str(filtered_right_key_path),
-                "elapsed_seconds": elapsed_seconds,
-                "image_match_summary": raw_summary,
-                "ransac_summary": ransac_summary,
-            }
+            return _fallback_result(
+                reason="Low-resolution homography matrix is unavailable after RANSAC filtering.",
+                failure_reason_code="homography_failed",
+                elapsed_seconds=elapsed_seconds,
+                summary_thresholds=summary_thresholds,
+                retained_match_count=retained_match_count,
+                low_resolution_level=resolved_level,
+                left_low_resolution_dom=str(left_low_res_dom),
+                right_low_resolution_dom=str(right_low_res_dom),
+                raw_left_key=str(raw_left_key_path),
+                raw_right_key=str(raw_right_key_path),
+                filtered_left_key=str(filtered_left_key_path),
+                filtered_right_key=str(filtered_right_key_path),
+                image_match_summary=raw_summary,
+                ransac_summary=ransac_summary,
+            )
 
         reprojection_error_pixel_samples = _compute_reprojection_errors(
             filtered_left_key.points,
@@ -479,33 +505,27 @@ def estimate_low_resolution_projected_offset(
         )
         if trimmed_mean_reprojection_error_pixels > resolved_max_mean_reprojection_error_pixels:
             elapsed_seconds = time.perf_counter() - started_at
-            return {
-                "enabled": True,
-                "status": "fallback_zero",
-                "fallback_offset_zero": True,
-                "reason": (
+            return _fallback_result(
+                reason=(
                     "Low-resolution reprojection error exceeded the configured threshold; "
                     "ignoring coarse projected offset and falling back to zero."
                 ),
-                "failure_reason_code": "reprojection_error_above_threshold",
-                "delta_x_projected": 0.0,
-                "delta_y_projected": 0.0,
-                "retained_match_count": retained_match_count,
-                **summary_thresholds,
-                "trimmed_mean_reprojection_error_pixels": trimmed_mean_reprojection_error_pixels,
-                "mean_projected_offset_meters": None,
-                "reprojection_error_pixel_samples": reprojection_error_pixel_samples,
-                "low_resolution_level": resolved_level,
-                "left_low_resolution_dom": str(left_low_res_dom),
-                "right_low_resolution_dom": str(right_low_res_dom),
-                "raw_left_key": str(raw_left_key_path),
-                "raw_right_key": str(raw_right_key_path),
-                "filtered_left_key": str(filtered_left_key_path),
-                "filtered_right_key": str(filtered_right_key_path),
-                "elapsed_seconds": elapsed_seconds,
-                "image_match_summary": raw_summary,
-                "ransac_summary": ransac_summary,
-            }
+                failure_reason_code="reprojection_error_above_threshold",
+                elapsed_seconds=elapsed_seconds,
+                summary_thresholds=summary_thresholds,
+                retained_match_count=retained_match_count,
+                trimmed_mean_reprojection_error_pixels=trimmed_mean_reprojection_error_pixels,
+                reprojection_error_pixel_samples=reprojection_error_pixel_samples,
+                low_resolution_level=resolved_level,
+                left_low_resolution_dom=str(left_low_res_dom),
+                right_low_resolution_dom=str(right_low_res_dom),
+                raw_left_key=str(raw_left_key_path),
+                raw_right_key=str(raw_right_key_path),
+                filtered_left_key=str(filtered_left_key_path),
+                filtered_right_key=str(filtered_right_key_path),
+                image_match_summary=raw_summary,
+                ransac_summary=ransac_summary,
+            )
 
         left_low_res_cube = ip.Cube()
         right_low_res_cube = ip.Cube()
@@ -551,33 +571,28 @@ def estimate_low_resolution_projected_offset(
             and mean_projected_offset_meters > resolved_max_mean_projected_offset_meters
         ):
             elapsed_seconds = time.perf_counter() - started_at
-            return {
-                "enabled": True,
-                "status": "fallback_zero",
-                "fallback_offset_zero": True,
-                "reason": (
+            return _fallback_result(
+                reason=(
                     "Low-resolution mean projected offset exceeded the configured threshold in meters; "
                     "ignoring coarse projected offset and falling back to zero."
                 ),
-                "failure_reason_code": "mean_projected_offset_above_threshold",
-                "delta_x_projected": 0.0,
-                "delta_y_projected": 0.0,
-                "retained_match_count": retained_match_count,
-                **summary_thresholds,
-                "trimmed_mean_reprojection_error_pixels": trimmed_mean_reprojection_error_pixels,
-                "mean_projected_offset_meters": mean_projected_offset_meters,
-                "reprojection_error_pixel_samples": reprojection_error_pixel_samples,
-                "low_resolution_level": resolved_level,
-                "left_low_resolution_dom": str(left_low_res_dom),
-                "right_low_resolution_dom": str(right_low_res_dom),
-                "raw_left_key": str(raw_left_key_path),
-                "raw_right_key": str(raw_right_key_path),
-                "filtered_left_key": str(filtered_left_key_path),
-                "filtered_right_key": str(filtered_right_key_path),
-                "elapsed_seconds": elapsed_seconds,
-                "image_match_summary": raw_summary,
-                "ransac_summary": ransac_summary,
-            }
+                failure_reason_code="mean_projected_offset_above_threshold",
+                elapsed_seconds=elapsed_seconds,
+                summary_thresholds=summary_thresholds,
+                retained_match_count=retained_match_count,
+                trimmed_mean_reprojection_error_pixels=trimmed_mean_reprojection_error_pixels,
+                mean_projected_offset_meters=mean_projected_offset_meters,
+                reprojection_error_pixel_samples=reprojection_error_pixel_samples,
+                low_resolution_level=resolved_level,
+                left_low_resolution_dom=str(left_low_res_dom),
+                right_low_resolution_dom=str(right_low_res_dom),
+                raw_left_key=str(raw_left_key_path),
+                raw_right_key=str(raw_right_key_path),
+                filtered_left_key=str(filtered_left_key_path),
+                filtered_right_key=str(filtered_right_key_path),
+                image_match_summary=raw_summary,
+                ransac_summary=ransac_summary,
+            )
         visualization_result = write_stereo_pair_match_visualization_func(
             left_low_res_dom,
             right_low_res_dom,
@@ -621,22 +636,13 @@ def estimate_low_resolution_projected_offset(
         }
     except Exception as exc:
         elapsed_seconds = time.perf_counter() - started_at
-        return {
-            "enabled": True,
-            "status": "fallback_zero",
-            "fallback_offset_zero": True,
-            "reason": str(exc),
-            "failure_reason_code": "other_runtime_failure",
-            "delta_x_projected": 0.0,
-            "delta_y_projected": 0.0,
-            "retained_match_count": 0,
-            **summary_thresholds,
-            "trimmed_mean_reprojection_error_pixels": None,
-            "mean_projected_offset_meters": None,
-            "reprojection_error_pixel_samples": [],
-            "low_resolution_level": resolved_level,
-            "elapsed_seconds": elapsed_seconds,
-        }
+        return _fallback_result(
+            reason=str(exc),
+            failure_reason_code="other_runtime_failure",
+            elapsed_seconds=elapsed_seconds,
+            summary_thresholds=summary_thresholds,
+            low_resolution_level=resolved_level,
+        )
 
 
 __all__ = [

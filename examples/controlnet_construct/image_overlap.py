@@ -80,6 +80,7 @@ import argparse
 from dataclasses import asdict, dataclass
 import itertools
 import json
+import logging
 import math
 from pathlib import Path
 import sys
@@ -458,6 +459,14 @@ def find_overlapping_image_pairs(
         )
         for path in image_paths
     }
+
+    invalid_paths = [p for p, b in bounds_by_path.items() if b is None]
+    if invalid_paths:
+        for p in invalid_paths:
+            logging.warning(
+                "Image %s has no valid camera ground bounds and will be excluded from overlap detection.",
+                p,
+            )
 
     overlapping_pairs: list[StereoPair] = []
     for left_path, right_path in itertools.combinations(image_paths, 2):

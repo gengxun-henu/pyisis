@@ -14,14 +14,12 @@ class MergeSummary:
     duplicate_count: int
 
 
-def _rounded_keypoint_string(point: Keypoint, decimals: int) -> str:
-    return f"{point.sample:.{decimals}f}|{point.line:.{decimals}f}"
-
-
-def _pair_hash(left_point: Keypoint, right_point: Keypoint, decimals: int) -> str:
+def _pair_hash_key(left_point: Keypoint, right_point: Keypoint, decimals: int) -> tuple[float, float, float, float]:
     return (
-        f"L:{_rounded_keypoint_string(left_point, decimals)}"
-        f"__R:{_rounded_keypoint_string(right_point, decimals)}"
+        round(left_point.sample, decimals),
+        round(left_point.line, decimals),
+        round(right_point.sample, decimals),
+        round(right_point.line, decimals),
     )
 
 
@@ -37,10 +35,10 @@ def merge_duplicate_keypoints(
 
     unique_left: list[Keypoint] = []
     unique_right: list[Keypoint] = []
-    seen: set[str] = set()
+    seen: set[tuple[float, float, float, float]] = set()
 
     for left_point, right_point in zip(left_keypoints.points, right_keypoints.points, strict=True):
-        pair_hash = _pair_hash(left_point, right_point, decimals)
+        pair_hash = _pair_hash_key(left_point, right_point, decimals)
         if pair_hash in seen:
             continue
         seen.add(pair_hash)

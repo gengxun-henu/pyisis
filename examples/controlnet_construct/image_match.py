@@ -437,23 +437,15 @@ def filter_stereo_pair_keypoints_with_ransac(
     ransac_mode: str = "loose",
     loose_keep_pixel_threshold: float = 1.0,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
-    original_find_homography = _stereo_ransac.cv2.findHomography
-    original_perspective_transform = _stereo_ransac.cv2.perspectiveTransform
-    try:
-        _stereo_ransac.cv2.findHomography = cv2.findHomography
-        _stereo_ransac.cv2.perspectiveTransform = cv2.perspectiveTransform
-        return _stereo_ransac.filter_stereo_pair_keypoints_with_ransac(
-            left_key_file,
-            right_key_file,
-            ransac_reproj_threshold=ransac_reproj_threshold,
-            ransac_confidence=ransac_confidence,
-            ransac_max_iters=ransac_max_iters,
-            ransac_mode=ransac_mode,
-            loose_keep_pixel_threshold=loose_keep_pixel_threshold,
-        )
-    finally:
-        _stereo_ransac.cv2.findHomography = original_find_homography
-        _stereo_ransac.cv2.perspectiveTransform = original_perspective_transform
+    return _stereo_ransac.filter_stereo_pair_keypoints_with_ransac(
+        left_key_file,
+        right_key_file,
+        ransac_reproj_threshold=ransac_reproj_threshold,
+        ransac_confidence=ransac_confidence,
+        ransac_max_iters=ransac_max_iters,
+        ransac_mode=ransac_mode,
+        loose_keep_pixel_threshold=loose_keep_pixel_threshold,
+    )
 
 
 def filter_stereo_pair_key_files_with_ransac(

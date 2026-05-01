@@ -19,6 +19,7 @@ Updated: 2026-04-24  Geng Xun added regression coverage for configurable low-res
 Updated: 2026-04-26  Geng Xun added regression coverage for BF/FLANN matcher selection and low-resolution reprojection-error gating.
 Updated: 2026-04-27  Geng Xun added regression coverage for minimum retained low-resolution matches and projected-offset magnitude gating.
 Updated: 2026-05-01  Geng Xun added regression coverage for shell formatting helpers and config default lookup aliases.
+Updated: 2026-05-01  Geng Xun added regression coverage for the CLI print-config-default helper path.
 """
 
 from __future__ import annotations
@@ -278,6 +279,26 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             config_path.write_text(json.dumps({"ImageMatch": {}}), encoding="utf-8")
 
             self.assertEqual(image_match.print_image_match_config_default(config_path, "low_resolution_level"), "")
+
+    def test_image_match_cli_print_config_default_exits_before_positional_args(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps({"ImageMatch": {"enableLowResolutionOffsetEstimation": True}}),
+                encoding="utf-8",
+            )
+
+            with mock.patch("sys.stdout") as stdout_mock:
+                image_match.main(
+                    [
+                        "--config",
+                        str(config_path),
+                        "--print-config-default",
+                        "enable_low_resolution_offset_estimation",
+                    ]
+                )
+
+        stdout_mock.write.assert_any_call("1")
 
     def test_projected_xy_from_keypoints_opens_cube_once_and_preserves_input_order(self):
         class FakeProjection:

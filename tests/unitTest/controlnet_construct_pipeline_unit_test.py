@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-23
+Last Modified: 2026-05-01
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -20,6 +20,7 @@ Updated: 2026-04-22  Geng Xun added regression coverage for forwarding configura
 Updated: 2026-04-22  Geng Xun added regression coverage for reading ImageMatch.num_worker_parallel_cpu from config JSON while preserving CLI override precedence.
 Updated: 2026-04-22  Geng Xun updated example pipeline regressions to assert kebab-case CLI forwarding after removing legacy underscore spellings.
 Updated: 2026-04-23  Geng Xun added regression coverage for forwarding invalid-pixel-radius and low-resolution coarse-registration options through the example wrappers.
+Updated: 2026-05-01  Geng Xun updated batch-wrapper fake dispatchers to serve config-default helper lookups through image_match.py.
 """
 
 from __future__ import annotations
@@ -411,6 +412,25 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         args = sys.argv[2:]
 
                         if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "valid_pixel_percent_threshold": image_match_config.get("valid_pixel_percent_threshold", ""),
+                                    "num_worker_parallel_cpu": image_match_config.get("num_worker_parallel_cpu", ""),
+                                    "invalid_pixel_radius": image_match_config.get("invalid_pixel_radius", ""),
+                                    "matcher_method": image_match_config.get("matcher_method", ""),
+                                    "enable_low_resolution_offset_estimation": "1" if image_match_config.get("enable_low_resolution_offset_estimation") else "",
+                                    "low_resolution_level": image_match_config.get("low_resolution_level", ""),
+                                    "low_resolution_max_mean_reprojection_error_pixels": image_match_config.get("low_resolution_max_mean_reprojection_error_pixels", ""),
+                                    "low_resolution_min_retained_match_count": image_match_config.get("low_resolution_min_retained_match_count", ""),
+                                    "low_resolution_max_mean_projected_offset_meters": image_match_config.get("low_resolution_max_mean_projected_offset_meters", ""),
+                                    "use_parallel_cpu": "1" if image_match_config.get("use_parallel_cpu") is True else ("0" if image_match_config.get("use_parallel_cpu") is False else ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
                             if "--use-parallel-cpu" not in args:
                                 raise SystemExit("missing --use-parallel-cpu forwarding")
                             if "--num-worker-parallel-cpu" not in args:
@@ -498,6 +518,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 textwrap.dedent(
                     f"""
                     #!{sys.executable}
+                    import json
                     import sys
                     from pathlib import Path
 
@@ -517,6 +538,25 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         args = sys.argv[2:]
 
                         if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "valid_pixel_percent_threshold": image_match_config.get("valid_pixel_percent_threshold", ""),
+                                    "num_worker_parallel_cpu": image_match_config.get("num_worker_parallel_cpu", ""),
+                                    "invalid_pixel_radius": image_match_config.get("invalid_pixel_radius", ""),
+                                    "matcher_method": image_match_config.get("matcher_method", ""),
+                                    "enable_low_resolution_offset_estimation": "1" if image_match_config.get("enable_low_resolution_offset_estimation") else "",
+                                    "low_resolution_level": image_match_config.get("low_resolution_level", ""),
+                                    "low_resolution_max_mean_reprojection_error_pixels": image_match_config.get("low_resolution_max_mean_reprojection_error_pixels", ""),
+                                    "low_resolution_min_retained_match_count": image_match_config.get("low_resolution_min_retained_match_count", ""),
+                                    "low_resolution_max_mean_projected_offset_meters": image_match_config.get("low_resolution_max_mean_projected_offset_meters", ""),
+                                    "use_parallel_cpu": "1" if image_match_config.get("use_parallel_cpu") is True else ("0" if image_match_config.get("use_parallel_cpu") is False else ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
                             if "--num-worker-parallel-cpu" not in args:
                                 raise SystemExit("missing --num-worker-parallel-cpu forwarding")
                             worker_limit = args[args.index("--num-worker-parallel-cpu") + 1]
@@ -603,6 +643,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher.write_text(
                 (
                     f"#!{sys.executable}\n"
+                    "import json\n"
                     "import sys\n"
                     "from pathlib import Path\n"
                     "\n"
@@ -622,6 +663,25 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     "    args = sys.argv[2:]\n"
                     "\n"
                     "    if script_name == 'image_match.py':\n"
+                    "        if '--print-config-default' in args:\n"
+                    "            config_path = Path(args[args.index('--config') + 1])\n"
+                    "            field_name = args[args.index('--print-config-default') + 1]\n"
+                    "            payload = json.loads(config_path.read_text(encoding='utf-8'))\n"
+                    "            image_match_config = payload.get('ImageMatch') or {}\n"
+                    "            mapping = {\n"
+                    "                'valid_pixel_percent_threshold': image_match_config.get('valid_pixel_percent_threshold', ''),\n"
+                    "                'num_worker_parallel_cpu': image_match_config.get('num_worker_parallel_cpu', ''),\n"
+                    "                'invalid_pixel_radius': image_match_config.get('invalid_pixel_radius', ''),\n"
+                    "                'matcher_method': image_match_config.get('matcher_method', ''),\n"
+                    "                'enable_low_resolution_offset_estimation': '1' if image_match_config.get('enable_low_resolution_offset_estimation') else '',\n"
+                    "                'low_resolution_level': image_match_config.get('low_resolution_level', ''),\n"
+                    "                'low_resolution_max_mean_reprojection_error_pixels': image_match_config.get('low_resolution_max_mean_reprojection_error_pixels', ''),\n"
+                    "                'low_resolution_min_retained_match_count': image_match_config.get('low_resolution_min_retained_match_count', ''),\n"
+                    "                'low_resolution_max_mean_projected_offset_meters': image_match_config.get('low_resolution_max_mean_projected_offset_meters', ''),\n"
+                    "                'use_parallel_cpu': '1' if image_match_config.get('use_parallel_cpu') is True else ('0' if image_match_config.get('use_parallel_cpu') is False else ''),\n"
+                    "            }\n"
+                    "            print(mapping.get(field_name, ''))\n"
+                    "            return 0\n"
                     "        if '--invalid-pixel-radius' not in args:\n"
                     "            raise SystemExit('missing --invalid-pixel-radius forwarding')\n"
                     "        radius = args[args.index('--invalid-pixel-radius') + 1]\n"

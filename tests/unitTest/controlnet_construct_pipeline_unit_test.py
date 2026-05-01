@@ -22,6 +22,7 @@ Updated: 2026-04-22  Geng Xun updated example pipeline regressions to assert keb
 Updated: 2026-04-23  Geng Xun added regression coverage for forwarding invalid-pixel-radius and low-resolution coarse-registration options through the example wrappers.
 Updated: 2026-05-01  Geng Xun updated batch-wrapper fake dispatchers to serve config-default helper lookups through image_match.py.
 Updated: 2026-05-01  Geng Xun added batch-wrapper regression coverage for legacy top-level config precedence while preserving explicit CLI overrides.
+Updated: 2026-05-01  Geng Xun refactored pipeline-wrapper helper-mode regressions to preserve legacy config precedence while reusing image_match.py config-default probes.
 """
 
 from __future__ import annotations
@@ -154,6 +155,25 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             return 0
 
                         if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "valid_pixel_percent_threshold": image_match_config.get("valid_pixel_percent_threshold", ""),
+                                    "num_worker_parallel_cpu": image_match_config.get("num_worker_parallel_cpu", ""),
+                                    "invalid_pixel_radius": image_match_config.get("invalid_pixel_radius", ""),
+                                    "matcher_method": image_match_config.get("matcher_method", ""),
+                                    "enable_low_resolution_offset_estimation": "1" if image_match_config.get("enable_low_resolution_offset_estimation") else "",
+                                    "low_resolution_level": image_match_config.get("low_resolution_level", ""),
+                                    "low_resolution_max_mean_reprojection_error_pixels": image_match_config.get("low_resolution_max_mean_reprojection_error_pixels", ""),
+                                    "low_resolution_min_retained_match_count": image_match_config.get("low_resolution_min_retained_match_count", ""),
+                                    "low_resolution_max_mean_projected_offset_meters": image_match_config.get("low_resolution_max_mean_projected_offset_meters", ""),
+                                    "use_parallel_cpu": "1" if image_match_config.get("use_parallel_cpu") is True else ("0" if image_match_config.get("use_parallel_cpu") is False else ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
                             Path(args[2]).write_text("synthetic-left-key\\n", encoding="utf-8")
                             Path(args[3]).write_text("synthetic-right-key\\n", encoding="utf-8")
                             if "--metadata-output" in args:
@@ -302,6 +322,25 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             return 0
 
                         if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "valid_pixel_percent_threshold": image_match_config.get("valid_pixel_percent_threshold", ""),
+                                    "num_worker_parallel_cpu": image_match_config.get("num_worker_parallel_cpu", ""),
+                                    "invalid_pixel_radius": image_match_config.get("invalid_pixel_radius", ""),
+                                    "matcher_method": image_match_config.get("matcher_method", ""),
+                                    "enable_low_resolution_offset_estimation": "1" if image_match_config.get("enable_low_resolution_offset_estimation") else "",
+                                    "low_resolution_level": image_match_config.get("low_resolution_level", ""),
+                                    "low_resolution_max_mean_reprojection_error_pixels": image_match_config.get("low_resolution_max_mean_reprojection_error_pixels", ""),
+                                    "low_resolution_min_retained_match_count": image_match_config.get("low_resolution_min_retained_match_count", ""),
+                                    "low_resolution_max_mean_projected_offset_meters": image_match_config.get("low_resolution_max_mean_projected_offset_meters", ""),
+                                    "use_parallel_cpu": "1" if image_match_config.get("use_parallel_cpu") is True else ("0" if image_match_config.get("use_parallel_cpu") is False else ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
                             if "--valid-pixel-percent-threshold" not in args:
                                 raise SystemExit("missing valid pixel threshold")
                             threshold = args[args.index("--valid-pixel-percent-threshold") + 1]
@@ -1001,6 +1040,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 textwrap.dedent(
                     f"""
                     #!{sys.executable}
+                    import json
                     import os
                     import sys
                     from pathlib import Path
@@ -1025,6 +1065,25 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             return 0
 
                         if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "valid_pixel_percent_threshold": image_match_config.get("valid_pixel_percent_threshold", ""),
+                                    "num_worker_parallel_cpu": image_match_config.get("num_worker_parallel_cpu", ""),
+                                    "invalid_pixel_radius": image_match_config.get("invalid_pixel_radius", ""),
+                                    "matcher_method": image_match_config.get("matcher_method", ""),
+                                    "enable_low_resolution_offset_estimation": "1" if image_match_config.get("enable_low_resolution_offset_estimation") else "",
+                                    "low_resolution_level": image_match_config.get("low_resolution_level", ""),
+                                    "low_resolution_max_mean_reprojection_error_pixels": image_match_config.get("low_resolution_max_mean_reprojection_error_pixels", ""),
+                                    "low_resolution_min_retained_match_count": image_match_config.get("low_resolution_min_retained_match_count", ""),
+                                    "low_resolution_max_mean_projected_offset_meters": image_match_config.get("low_resolution_max_mean_projected_offset_meters", ""),
+                                    "use_parallel_cpu": "1" if image_match_config.get("use_parallel_cpu") is True else ("0" if image_match_config.get("use_parallel_cpu") is False else ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
                             if "--num-worker-parallel-cpu" not in args:
                                 raise SystemExit("missing worker limit")
                             worker_limit = args[args.index("--num-worker-parallel-cpu") + 1]
@@ -1092,6 +1151,255 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
         self.assertIn("CPU parallel worker limit: 5", completed.stdout)
 
+    def test_run_pipeline_example_preserves_legacy_top_level_precedence_for_duplicate_config_keys(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "timing-net",
+                        "TargetName": "Mars",
+                        "UserName": "copilot",
+                        "PointIdPrefix": "TMP",
+                        "valid_pixel_percent_threshold": 0.11,
+                        "num_worker_parallel_cpu": 9,
+                        "invalid_pixel_radius": 7,
+                        "matcher_method": "flann",
+                        "use_parallel_cpu": False,
+                        "ImageMatch": {
+                            "valid_pixel_percent_threshold": 0.02,
+                            "num_worker_parallel_cpu": 4,
+                            "invalid_pixel_radius": 2,
+                            "matcher_method": "bf",
+                            "use_parallel_cpu": True,
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import os
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+
+                    def _config_containers(payload: dict[str, object], order: str) -> list[dict[str, object]]:
+                        image_match_containers = []
+                        for key in ("ImageMatch", "image_match", "imageMatch"):
+                            value = payload.get(key)
+                            if isinstance(value, dict):
+                                image_match_containers.append(value)
+                        if order == "top-level-first":
+                            return [payload, *image_match_containers]
+                        return [*image_match_containers, payload]
+
+                    def _lookup_config_default(payload: dict[str, object], field_name: str, order: str) -> str:
+                        candidate_keys = {{
+                            "valid_pixel_percent_threshold": (
+                                "valid_pixel_percent_threshold",
+                                "validPixelPercentThreshold",
+                                "ValidPixelPercentThreshold",
+                            ),
+                            "num_worker_parallel_cpu": (
+                                "num_worker_parallel_cpu",
+                                "numWorkerParallelCpu",
+                                "NumWorkerParallelCpu",
+                            ),
+                            "invalid_pixel_radius": (
+                                "invalid_pixel_radius",
+                                "invalidPixelRadius",
+                                "InvalidPixelRadius",
+                            ),
+                            "matcher_method": (
+                                "matcher_method",
+                                "matcherMethod",
+                                "MatcherMethod",
+                            ),
+                            "enable_low_resolution_offset_estimation": (
+                                "enable_low_resolution_offset_estimation",
+                                "enableLowResolutionOffsetEstimation",
+                                "EnableLowResolutionOffsetEstimation",
+                            ),
+                            "low_resolution_level": (
+                                "low_resolution_level",
+                                "lowResolutionLevel",
+                                "LowResolutionLevel",
+                            ),
+                            "low_resolution_max_mean_reprojection_error_pixels": (
+                                "low_resolution_max_mean_reprojection_error_pixels",
+                                "lowResolutionMaxMeanReprojectionErrorPixels",
+                                "LowResolutionMaxMeanReprojectionErrorPixels",
+                            ),
+                            "low_resolution_min_retained_match_count": (
+                                "low_resolution_min_retained_match_count",
+                                "lowResolutionMinRetainedMatchCount",
+                                "LowResolutionMinRetainedMatchCount",
+                            ),
+                            "low_resolution_max_mean_projected_offset_meters": (
+                                "low_resolution_max_mean_projected_offset_meters",
+                                "lowResolutionMaxMeanProjectedOffsetMeters",
+                                "LowResolutionMaxMeanProjectedOffsetMeters",
+                            ),
+                            "use_parallel_cpu": (
+                                "use_parallel_cpu",
+                                "useParallelCpu",
+                                "UseParallelCpu",
+                            ),
+                        }}
+                        for container in _config_containers(payload, order):
+                            for key in candidate_keys[field_name]:
+                                if key not in container:
+                                    continue
+                                value = container[key]
+                                if value is None or value == "":
+                                    continue
+                                if field_name == "use_parallel_cpu":
+                                    if isinstance(value, bool):
+                                        return "1" if value else "0"
+                                    normalized = str(value).strip().lower()
+                                    if normalized in {{"1", "true", "yes", "on"}}:
+                                        return "1"
+                                    if normalized in {{"0", "false", "no", "off"}}:
+                                        return "0"
+                                    raise SystemExit(f"invalid use_parallel_cpu value: {{value!r}}")
+                                return str(value)
+                        return ""
+
+                    def _write_fake_key_outputs(args: list[str]) -> None:
+                        key_index = 4 if args and args[0] == "--config" else 2
+                        Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                        Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+
+                        if script_name == "image_overlap.py":
+                            Path(args[1]).write_text("left.cub,right.cub\\n", encoding="utf-8")
+                            return 0
+
+                        if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                order = args[args.index("--print-config-default-container-order") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                print(_lookup_config_default(payload, field_name, order))
+                                return 0
+                            if "--valid-pixel-percent-threshold" not in args:
+                                raise SystemExit("missing --valid-pixel-percent-threshold forwarding")
+                            threshold = args[args.index("--valid-pixel-percent-threshold") + 1]
+                            if threshold != "0.11":
+                                raise SystemExit(f"unexpected threshold: {{threshold}}")
+                            if "--invalid-pixel-radius" not in args:
+                                raise SystemExit("missing --invalid-pixel-radius forwarding")
+                            radius = args[args.index("--invalid-pixel-radius") + 1]
+                            if radius != "7":
+                                raise SystemExit(f"unexpected invalid pixel radius: {{radius}}")
+                            if "--matcher-method" not in args:
+                                raise SystemExit("missing --matcher-method forwarding")
+                            matcher_method = args[args.index("--matcher-method") + 1]
+                            if matcher_method != "flann":
+                                raise SystemExit(f"unexpected matcher method: {{matcher_method}}")
+                            if "--use-parallel-cpu" not in args:
+                                raise SystemExit("missing --use-parallel-cpu forwarding")
+                            if "--num-worker-parallel-cpu" not in args:
+                                raise SystemExit("missing --num-worker-parallel-cpu forwarding")
+                            worker_limit = args[args.index("--num-worker-parallel-cpu") + 1]
+                            if worker_limit != "3":
+                                raise SystemExit(f"unexpected worker limit: {{worker_limit}}")
+                            _write_fake_key_outputs(args)
+                            return 0
+
+                        if script_name == "controlnet_stereopair.py":
+                            if "--write-match-visualization" not in args:
+                                raise SystemExit("missing --write-match-visualization for controlnet_stereopair.py")
+                            if "--match-visualization-output-dir" not in args:
+                                raise SystemExit("missing --match-visualization-output-dir for controlnet_stereopair.py")
+                            output_dir = Path(args[6])
+                            output_dir.mkdir(parents=True, exist_ok=True)
+                            (output_dir / "synthetic_pair.net").write_text("net", encoding="utf-8")
+                            return 0
+
+                        if script_name == "controlnet_merge.py":
+                            merge_script_path = Path(args[3])
+                            merge_script_path.parent.mkdir(parents=True, exist_ok=True)
+                            merge_script_path.write_text("#!/usr/bin/env bash\\nexit 0\\n", encoding="utf-8")
+                            os.chmod(merge_script_path, 0o755)
+                            return 0
+
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                    "--num-worker-parallel-cpu",
+                    "3",
+                    "--skip-final-merge",
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Valid pixel percent threshold: 0.11", completed.stdout)
+        self.assertIn("Invalid pixel radius: 7", completed.stdout)
+        self.assertIn("Matcher method: flann", completed.stdout)
+        self.assertIn("CPU parallel tile matching: enabled", completed.stdout)
+        self.assertIn("CPU parallel worker limit: 3", completed.stdout)
+
     def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
@@ -1127,6 +1435,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 "\n".join(
                     [
                         f"#!{sys.executable}",
+                        "import json",
                         "import os",
                         "import sys",
                         "from pathlib import Path",
@@ -1151,6 +1460,25 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "        return 0",
                         "",
                         "    if script_name == 'image_match.py':",
+                        "        if '--print-config-default' in args:",
+                        "            config_path = Path(args[args.index('--config') + 1])",
+                        "            field_name = args[args.index('--print-config-default') + 1]",
+                        "            payload = json.loads(config_path.read_text(encoding='utf-8'))",
+                        "            image_match_config = payload.get('ImageMatch') or {}",
+                        "            mapping = {",
+                        "                'valid_pixel_percent_threshold': image_match_config.get('valid_pixel_percent_threshold', ''),",
+                        "                'num_worker_parallel_cpu': image_match_config.get('num_worker_parallel_cpu', ''),",
+                        "                'invalid_pixel_radius': image_match_config.get('invalid_pixel_radius', ''),",
+                        "                'matcher_method': image_match_config.get('matcher_method', ''),",
+                        "                'enable_low_resolution_offset_estimation': '1' if image_match_config.get('enable_low_resolution_offset_estimation') else '',",
+                        "                'low_resolution_level': image_match_config.get('low_resolution_level', ''),",
+                        "                'low_resolution_max_mean_reprojection_error_pixels': image_match_config.get('low_resolution_max_mean_reprojection_error_pixels', ''),",
+                        "                'low_resolution_min_retained_match_count': image_match_config.get('low_resolution_min_retained_match_count', ''),",
+                        "                'low_resolution_max_mean_projected_offset_meters': image_match_config.get('low_resolution_max_mean_projected_offset_meters', ''),",
+                        "                'use_parallel_cpu': '1' if image_match_config.get('use_parallel_cpu') is True else ('0' if image_match_config.get('use_parallel_cpu') is False else ''),",
+                        "            }",
+                        "            print(mapping.get(field_name, ''))",
+                        "            return 0",
                         "        if '--invalid-pixel-radius' not in args:",
                         "            raise SystemExit('missing --invalid-pixel-radius forwarding')",
                         "        radius = args[args.index('--invalid-pixel-radius') + 1]",
@@ -1256,6 +1584,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 textwrap.dedent(
                     f"""
                     #!{sys.executable}
+                    import json
                     import os
                     import sys
                     from pathlib import Path
@@ -1280,6 +1609,25 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             return 0
 
                         if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "valid_pixel_percent_threshold": image_match_config.get("valid_pixel_percent_threshold", ""),
+                                    "num_worker_parallel_cpu": image_match_config.get("num_worker_parallel_cpu", ""),
+                                    "invalid_pixel_radius": image_match_config.get("invalid_pixel_radius", ""),
+                                    "matcher_method": image_match_config.get("matcher_method", ""),
+                                    "enable_low_resolution_offset_estimation": "1" if image_match_config.get("enable_low_resolution_offset_estimation") else "",
+                                    "low_resolution_level": image_match_config.get("low_resolution_level", ""),
+                                    "low_resolution_max_mean_reprojection_error_pixels": image_match_config.get("low_resolution_max_mean_reprojection_error_pixels", ""),
+                                    "low_resolution_min_retained_match_count": image_match_config.get("low_resolution_min_retained_match_count", ""),
+                                    "low_resolution_max_mean_projected_offset_meters": image_match_config.get("low_resolution_max_mean_projected_offset_meters", ""),
+                                    "use_parallel_cpu": "1" if image_match_config.get("use_parallel_cpu") is True else ("0" if image_match_config.get("use_parallel_cpu") is False else ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
                             if "--num-worker-parallel-cpu" not in args:
                                 raise SystemExit("missing worker limit")
                             worker_limit = args[args.index("--num-worker-parallel-cpu") + 1]
@@ -1407,6 +1755,25 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             return 0
 
                         if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "valid_pixel_percent_threshold": image_match_config.get("valid_pixel_percent_threshold", ""),
+                                    "num_worker_parallel_cpu": image_match_config.get("num_worker_parallel_cpu", ""),
+                                    "invalid_pixel_radius": image_match_config.get("invalid_pixel_radius", ""),
+                                    "matcher_method": image_match_config.get("matcher_method", ""),
+                                    "enable_low_resolution_offset_estimation": "1" if image_match_config.get("enable_low_resolution_offset_estimation") else "",
+                                    "low_resolution_level": image_match_config.get("low_resolution_level", ""),
+                                    "low_resolution_max_mean_reprojection_error_pixels": image_match_config.get("low_resolution_max_mean_reprojection_error_pixels", ""),
+                                    "low_resolution_min_retained_match_count": image_match_config.get("low_resolution_min_retained_match_count", ""),
+                                    "low_resolution_max_mean_projected_offset_meters": image_match_config.get("low_resolution_max_mean_projected_offset_meters", ""),
+                                    "use_parallel_cpu": "1" if image_match_config.get("use_parallel_cpu") is True else ("0" if image_match_config.get("use_parallel_cpu") is False else ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
                             Path(args[2]).write_text("synthetic-left-key\\n", encoding="utf-8")
                             Path(args[3]).write_text("synthetic-right-key\\n", encoding="utf-8")
                             return 0

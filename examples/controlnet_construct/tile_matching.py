@@ -18,6 +18,7 @@ import numpy as np
 from .keypoints import Keypoint
 from .preprocess import (
     StretchStats,
+    ValidPixelStats,
     expand_invalid_mask_for_radius,
     summarize_valid_pixels,
     stretch_to_byte,
@@ -198,6 +199,18 @@ def _read_cube_window(cube: ip.Cube, window: TileWindow, *, band: int) -> np.nda
     return np.asarray(brick.double_buffer(), dtype=np.float64).reshape((window.height, window.width))
 
 
+def _stats_from_mask(mask: np.ndarray) -> ValidPixelStats:
+    invalid_count = int(mask.sum())
+    total = int(mask.size)
+    valid_count = total - invalid_count
+    return ValidPixelStats(
+        valid_pixel_count=valid_count,
+        invalid_pixel_count=invalid_count,
+        total_pixel_count=total,
+        valid_pixel_ratio=0.0 if total <= 0 else valid_count / total,
+    )
+
+
 def _prepare_image_for_sift(
     values: np.ndarray,
     *,
@@ -210,17 +223,19 @@ def _prepare_image_for_sift(
     invalid_mask: np.ndarray | None = None,
     invalid_pixel_radius: int = 0,
 ) -> tuple[np.ndarray, np.ndarray, StretchStats]:
-    resolved_invalid_mask, valid_pixel_stats = summarize_valid_pixels(
-        values,
-        invalid_values=invalid_values,
-        special_pixel_abs_threshold=special_pixel_abs_threshold,
-        invalid_mask=invalid_mask,
-    )
+    if invalid_mask is not None:
+        resolved_invalid_mask = np.asarray(invalid_mask, dtype=bool)
+    else:
+        resolved_invalid_mask, _ = summarize_valid_pixels(
+            values,
+            invalid_values=invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+        )
     resolved_invalid_mask = expand_invalid_mask_for_radius(
         resolved_invalid_mask,
         invalid_pixel_radius=invalid_pixel_radius,
     )
-    _, valid_pixel_stats = summarize_valid_pixels(values, invalid_mask=resolved_invalid_mask)
+    valid_pixel_stats = _stats_from_mask(resolved_invalid_mask)
     if resolved_invalid_mask.all():
         stretched = np.zeros(values.shape, dtype=np.uint8)
         stretch_stats = StretchStats(
@@ -352,8 +367,8 @@ def _match_tile_from_window_values(
         right_invalid_mask,
         invalid_pixel_radius=invalid_pixel_radius,
     )
-    _, left_valid_pixel_stats = summarize_valid_pixels(left_values, invalid_mask=left_invalid_mask)
-    _, right_valid_pixel_stats = summarize_valid_pixels(right_values, invalid_mask=right_invalid_mask)
+    left_valid_pixel_stats = _stats_from_mask(left_invalid_mask)
+    right_valid_pixel_stats = _stats_from_mask(right_invalid_mask)
 
     if (
         left_valid_pixel_stats.valid_pixel_ratio < valid_pixel_percent_threshold

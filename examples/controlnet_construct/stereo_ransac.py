@@ -142,15 +142,11 @@ def filter_stereo_pair_keypoints_with_ransac(
     if normalized_mode == "loose":
         projected_right = cv2.perspectiveTransform(left_points, homography).reshape(-1, 2)
         right_coordinates = right_points.reshape(-1, 2)
-        for index, (is_inlier, projected, actual) in enumerate(
-            zip(opencv_inlier_mask, projected_right, right_coordinates, strict=True)
-        ):
-            if is_inlier:
-                continue
-            reprojection_error = float(np.linalg.norm(projected - actual))
-            if reprojection_error <= float(loose_keep_pixel_threshold):
-                retained_mask[index] = True
-                soft_outlier_original_indices.append(index)
+        errors = np.linalg.norm(projected_right - right_coordinates, axis=1)
+        outlier_mask = ~opencv_inlier_mask
+        soft_outlier_mask = (errors <= float(loose_keep_pixel_threshold)) & outlier_mask
+        retained_mask = opencv_inlier_mask | soft_outlier_mask
+        soft_outlier_original_indices = np.where(soft_outlier_mask)[0].tolist()
 
     filtered_left_points: list[Keypoint] = []
     filtered_right_points: list[Keypoint] = []

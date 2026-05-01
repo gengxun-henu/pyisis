@@ -173,13 +173,14 @@ def stretch_to_byte(
     Stretch numeric values to uint8 while preserving an invalid-pixel mask.
     """
     array = np.asarray(values, dtype=np.float64)
-    resolved_invalid_mask = build_invalid_mask(
-        array,
-        invalid_values=invalid_values,
-        special_pixel_abs_threshold=special_pixel_abs_threshold,
-    )
     if invalid_mask is not None:
         resolved_invalid_mask = np.asarray(invalid_mask, dtype=bool)
+    else:
+        resolved_invalid_mask = build_invalid_mask(
+            array,
+            invalid_values=invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+        )
     min_value, max_value = _resolve_stretch_bounds(
         array,
         invalid_mask=resolved_invalid_mask,

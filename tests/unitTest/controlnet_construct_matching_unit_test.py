@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-04-27
+Last Modified: 2026-05-01
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -18,6 +18,8 @@ Updated: 2026-04-23  Geng Xun added regression coverage for ISIS reduce-based lo
 Updated: 2026-04-24  Geng Xun added regression coverage for configurable low-resolution trimmed-mean fractions through the Python API, CLI, and config defaults.
 Updated: 2026-04-26  Geng Xun added regression coverage for BF/FLANN matcher selection and low-resolution reprojection-error gating.
 Updated: 2026-04-27  Geng Xun added regression coverage for minimum retained low-resolution matches and projected-offset magnitude gating.
+Updated: 2026-05-01  Geng Xun added regression coverage for shell formatting helpers and config default lookup aliases.
+Updated: 2026-05-01  Geng Xun added regression coverage for the CLI print-config-default helper path.
 """
 
 from __future__ import annotations
@@ -238,6 +240,65 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, r"trim_fraction_each_side must be within \[0\.0, 0\.5\)"):
             image_match._trimmed_mean([1.0, 2.0, 3.0], trim_ratio=0.5)
+
+    def test_format_image_match_default_for_shell_normalizes_scalars(self):
+        self.assertEqual(image_match.format_image_match_default_for_shell(True), "1")
+        self.assertEqual(image_match.format_image_match_default_for_shell(False), "0")
+        self.assertEqual(image_match.format_image_match_default_for_shell(6), "6")
+        self.assertEqual(image_match.format_image_match_default_for_shell(0.05), "0.05")
+        self.assertEqual(image_match.format_image_match_default_for_shell("bf"), "bf")
+
+    def test_print_image_match_config_default_reads_existing_parser_aliases(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "validPixelPercentThreshold": 0.07,
+                            "useParallelCpu": False,
+                            "numWorkerParallelCpu": 4,
+                            "matcherMethod": "flann",
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(
+                image_match.print_image_match_config_default(config_path, "valid_pixel_percent_threshold"),
+                "0.07",
+            )
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "use_parallel_cpu"), "0")
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "num_worker_parallel_cpu"), "4")
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "matcher_method"), "flann")
+
+    def test_print_image_match_config_default_returns_empty_string_for_missing_field(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(json.dumps({"ImageMatch": {}}), encoding="utf-8")
+
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "low_resolution_level"), "")
+
+    def test_image_match_cli_print_config_default_exits_before_positional_args(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps({"ImageMatch": {"enableLowResolutionOffsetEstimation": True}}),
+                encoding="utf-8",
+            )
+
+            with mock.patch("sys.stdout") as stdout_mock:
+                image_match.main(
+                    [
+                        "--config",
+                        str(config_path),
+                        "--print-config-default",
+                        "enable_low_resolution_offset_estimation",
+                    ]
+                )
+
+        stdout_mock.write.assert_any_call("1")
 
     def test_projected_xy_from_keypoints_opens_cube_once_and_preserves_input_order(self):
         class FakeProjection:

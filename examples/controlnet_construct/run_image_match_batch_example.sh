@@ -135,9 +135,11 @@ resolve_default_dom_list() {
 extract_image_match_config_value() {
   local config_path=$1
   local field_name=$2
+  local container_order=${3:-top-level-first}
   "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py" \
     --config "$config_path" \
-    --print-config-default "$field_name"
+    --print-config-default "$field_name" \
+    --print-config-default-container-order "$container_order"
 }
 
 main() {
@@ -337,7 +339,7 @@ main() {
     fi
     if [[ -z "$explicit_use_parallel_cpu" ]]; then
       local config_use_parallel_cpu
-      config_use_parallel_cpu=$(extract_image_match_config_value "$config_input" "use_parallel_cpu")
+      config_use_parallel_cpu=$(extract_image_match_config_value "$config_input" "use_parallel_cpu" "image-match-first")
       if [[ -n "$config_use_parallel_cpu" ]]; then
         use_parallel_cpu="$config_use_parallel_cpu"
       fi

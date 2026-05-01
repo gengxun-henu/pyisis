@@ -21,6 +21,8 @@ Updated: 2026-04-24  Geng Xun extracted low-resolution offset, match visualizati
 Updated: 2026-04-24  Geng Xun exposed the low-resolution projected-offset trimmed-mean fraction through the Python API, CLI, and config JSON while preserving the previous 5% default.
 Updated: 2026-04-26  Geng Xun added selectable BF/FLANN SIFT descriptor matching plus low-resolution reprojection-error gating for coarse offset estimation.
 Updated: 2026-04-27  Geng Xun added low-resolution retained-match and projected-offset magnitude gates so implausible coarse offsets fall back to zero.
+Updated: 2026-05-01  Geng Xun added shell-print helpers and an early --print-config-default CLI probe for ImageMatch config defaults.
+Updated: 2026-05-01  Geng Xun added configurable helper lookup order so shell wrappers can preserve legacy top-level config precedence where required.
 """
 
 from __future__ import annotations
@@ -30,6 +32,7 @@ from dataclasses import asdict
 import json
 from pathlib import Path
 import sys
+from typing import Literal
 
 import cv2
 
@@ -219,17 +222,28 @@ def _parse_low_resolution_max_mean_projected_offset_meters(value: str) -> float:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
-def _image_match_config_containers(payload: object) -> list[dict[str, object]]:
+ConfigContainerOrder = Literal["image-match-first", "top-level-first"]
+
+
+def _image_match_config_containers(
+    payload: object,
+    *,
+    container_order: ConfigContainerOrder = "image-match-first",
+) -> list[dict[str, object]]:
     if not isinstance(payload, dict):
         raise ValueError("image_match config JSON must decode to an object at the top level.")
 
-    containers: list[dict[str, object]] = []
+    image_match_containers: list[dict[str, object]] = []
     for key in ("ImageMatch", "image_match", "imageMatch"):
         value = payload.get(key)
         if isinstance(value, dict):
-            containers.append(value)
-    containers.append(payload)
-    return containers
+            image_match_containers.append(value)
+
+    if container_order == "top-level-first":
+        return [payload, *image_match_containers]
+    if container_order == "image-match-first":
+        return [*image_match_containers, payload]
+    raise ValueError(f"Unsupported ImageMatch config container order: {container_order}")
 
 
 def _first_present_config_value(
@@ -269,7 +283,11 @@ def _coerce_invalid_value_list(value: object) -> list[float]:
     return [float(value)]
 
 
-def load_image_match_defaults_from_config(config_path: str | Path) -> dict[str, object]:
+def load_image_match_defaults_from_config(
+    config_path: str | Path,
+    *,
+    config_container_order: ConfigContainerOrder = "image-match-first",
+) -> dict[str, object]:
     resolved_path = Path(config_path)
     try:
         payload = json.loads(resolved_path.read_text(encoding="utf-8"))
@@ -278,7 +296,7 @@ def load_image_match_defaults_from_config(config_path: str | Path) -> dict[str, 
     except json.JSONDecodeError as exc:
         raise ValueError(f"Failed to parse config JSON {resolved_path}: {exc}") from exc
 
-    containers = _image_match_config_containers(payload)
+    containers = _image_match_config_containers(payload, container_order=config_container_order)
     defaults: dict[str, object] = {}
     field_specs: tuple[tuple[str, tuple[str, ...], object], ...] = (
         ("band", ("band", "Band"), lambda value: int(value)),
@@ -410,6 +428,31 @@ def load_image_match_defaults_from_config(config_path: str | Path) -> dict[str, 
                 f"Invalid ImageMatch config value for {destination!r}: {value!r}"
             ) from exc
     return defaults
+
+
+def format_image_match_default_for_shell(value: object) -> str:
+    if isinstance(value, bool):
+        return "1" if value else "0"
+    if value is None:
+        return ""
+    if isinstance(value, (list, tuple)):
+        raise ValueError("List-valued ImageMatch defaults cannot be printed as a single shell scalar.")
+    return str(value)
+
+
+def print_image_match_config_default(
+    config_path: str | Path,
+    field_name: str,
+    *,
+    config_container_order: ConfigContainerOrder = "image-match-first",
+) -> str:
+    defaults = load_image_match_defaults_from_config(
+        config_path,
+        config_container_order=config_container_order,
+    )
+    if field_name not in defaults:
+        return ""
+    return format_image_match_default_for_shell(defaults[field_name])
 
 
 def _create_low_resolution_dom(
@@ -965,9 +1008,31 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
 
 
 def main(argv: list[str] | None = None) -> None:
+    resolved_argv = sys.argv[1:] if argv is None else list(argv)
     config_probe_parser = argparse.ArgumentParser(add_help=False)
     config_probe_parser.add_argument("--config", default=None)
-    config_probe_args, _ = config_probe_parser.parse_known_args(argv)
+    config_probe_parser.add_argument("--print-config-default", default=None)
+    config_probe_parser.add_argument(
+        "--print-config-default-container-order",
+        choices=("image-match-first", "top-level-first"),
+        default="image-match-first",
+    )
+    config_probe_args, _ = config_probe_parser.parse_known_args(resolved_argv)
+
+    if config_probe_args.print_config_default is not None:
+        if config_probe_args.config is None:
+            config_probe_parser.error("--print-config-default requires --config")
+        try:
+            print(
+                print_image_match_config_default(
+                    config_probe_args.config,
+                    config_probe_args.print_config_default,
+                    config_container_order=config_probe_args.print_config_default_container_order,
+                )
+            )
+        except ValueError as exc:
+            config_probe_parser.error(str(exc))
+        return
 
     config_defaults: dict[str, object] = {}
     if config_probe_args.config is not None:
@@ -977,7 +1042,7 @@ def main(argv: list[str] | None = None) -> None:
             config_probe_parser.error(str(exc))
 
     parser = build_argument_parser(config_defaults=config_defaults)
-    args = parser.parse_args(argv)
+    args = parser.parse_args(resolved_argv)
     result = match_dom_pair_to_key_files(
         args.left_dom,
         args.right_dom,

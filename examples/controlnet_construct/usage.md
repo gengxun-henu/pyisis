@@ -186,6 +186,8 @@ python examples/controlnet_construct/image_match.py \
 
 如果你又在命令行里显式传了某个匹配参数，例如 `--ratio-test 0.8`、`--matcher-method flann` 或 `--num-worker-parallel-cpu 4`，则命令行值会覆盖配置文件中的默认值。
 
+维护者提示：`image_match.py --config CONFIG --print-config-default FIELD` 是给示例 shell wrapper 使用的轻量 helper，用于从同一套 Python 配置解析逻辑中读取单个 `ImageMatch` 默认值；普通用户仍应优先通过 `--config` 和显式 CLI 参数运行匹配。
+
 ### 0.3 推荐工作目录
 
 下面命令统一假设你在仓库根目录下执行，并把中间产物写到 `work/`：

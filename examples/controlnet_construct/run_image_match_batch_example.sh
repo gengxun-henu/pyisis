@@ -132,315 +132,14 @@ resolve_default_dom_list() {
   die "could not find a DOM list; checked: $scaled_list and $raw_list"
 }
 
-extract_valid_pixel_percent_threshold_from_config() {
+extract_image_match_config_value() {
   local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-
-candidate_containers = [
-    payload,
-    payload.get('ImageMatch') or {},
-    payload.get('image_match') or {},
-    payload.get('imageMatch') or {},
-]
-candidate_keys = (
-    'valid_pixel_percent_threshold',
-    'validPixelPercentThreshold',
-    'ValidPixelPercentThreshold',
-)
-
-for container in candidate_containers:
-    if not isinstance(container, dict):
-        continue
-    for key in candidate_keys:
-        value = container.get(key)
-        if value in (None, ''):
-            continue
-        print(value)
-        raise SystemExit(0)
-
-raise SystemExit(0)
-PY
-}
-
-extract_num_worker_parallel_cpu_from_config() {
-  local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-
-candidate_containers = [
-  payload,
-  payload.get('ImageMatch') or {},
-  payload.get('image_match') or {},
-  payload.get('imageMatch') or {},
-]
-candidate_keys = (
-  'num_worker_parallel_cpu',
-  'numWorkerParallelCpu',
-  'NumWorkerParallelCpu',
-)
-
-for container in candidate_containers:
-  if not isinstance(container, dict):
-    continue
-  for key in candidate_keys:
-    value = container.get(key)
-    if value in (None, ''):
-      continue
-    print(value)
-    raise SystemExit(0)
-
-raise SystemExit(0)
-PY
-}
-
-extract_invalid_pixel_radius_from_config() {
-  local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
-candidate_keys = ('invalid_pixel_radius', 'invalidPixelRadius', 'InvalidPixelRadius')
-
-for container in candidate_containers:
-  if not isinstance(container, dict):
-    continue
-  for key in candidate_keys:
-    value = container.get(key)
-    if value in (None, ''):
-      continue
-    print(value)
-    raise SystemExit(0)
-
-raise SystemExit(0)
-PY
-}
-
-extract_matcher_method_from_config() {
-  local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
-candidate_keys = ('matcher_method', 'matcherMethod', 'MatcherMethod')
-
-for container in candidate_containers:
-  if not isinstance(container, dict):
-    continue
-  for key in candidate_keys:
-    value = container.get(key)
-    if value in (None, ''):
-      continue
-    print(value)
-    raise SystemExit(0)
-
-raise SystemExit(0)
-PY
-}
-
-extract_enable_low_resolution_offset_estimation_from_config() {
-  local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
-candidate_keys = (
-  'enable_low_resolution_offset_estimation',
-  'enableLowResolutionOffsetEstimation',
-  'EnableLowResolutionOffsetEstimation',
-)
-
-for container in candidate_containers:
-  if not isinstance(container, dict):
-    continue
-  for key in candidate_keys:
-    value = container.get(key)
-    if value in (None, ''):
-      continue
-    normalized = str(value).strip().lower()
-    if normalized in {'1', 'true', 'yes', 'on'}:
-      print('1')
-      raise SystemExit(0)
-    if normalized in {'0', 'false', 'no', 'off'}:
-      print('0')
-      raise SystemExit(0)
-    raise SystemExit(f'invalid enable_low_resolution_offset_estimation value: {value!r}')
-
-raise SystemExit(0)
-PY
-}
-
-extract_low_resolution_level_from_config() {
-  local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
-candidate_keys = ('low_resolution_level', 'lowResolutionLevel', 'LowResolutionLevel')
-
-for container in candidate_containers:
-  if not isinstance(container, dict):
-    continue
-  for key in candidate_keys:
-    value = container.get(key)
-    if value in (None, ''):
-      continue
-    print(value)
-    raise SystemExit(0)
-
-raise SystemExit(0)
-PY
-}
-
-extract_low_resolution_max_mean_reprojection_error_pixels_from_config() {
-  local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
-candidate_keys = (
-  'low_resolution_max_mean_reprojection_error_pixels',
-  'lowResolutionMaxMeanReprojectionErrorPixels',
-  'LowResolutionMaxMeanReprojectionErrorPixels',
-)
-
-for container in candidate_containers:
-  if not isinstance(container, dict):
-    continue
-  for key in candidate_keys:
-    value = container.get(key)
-    if value in (None, ''):
-      continue
-    print(value)
-    raise SystemExit(0)
-
-raise SystemExit(0)
-PY
-}
-
-extract_low_resolution_min_retained_match_count_from_config() {
-  local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
-candidate_keys = (
-  'low_resolution_min_retained_match_count',
-  'lowResolutionMinRetainedMatchCount',
-  'LowResolutionMinRetainedMatchCount',
-)
-
-for container in candidate_containers:
-  if not isinstance(container, dict):
-    continue
-  for key in candidate_keys:
-    value = container.get(key)
-    if value in (None, ''):
-      continue
-    print(value)
-    raise SystemExit(0)
-
-raise SystemExit(0)
-PY
-}
-
-extract_low_resolution_max_mean_projected_offset_meters_from_config() {
-  local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-candidate_containers = [payload, payload.get('ImageMatch') or {}, payload.get('image_match') or {}, payload.get('imageMatch') or {}]
-candidate_keys = (
-  'low_resolution_max_mean_projected_offset_meters',
-  'lowResolutionMaxMeanProjectedOffsetMeters',
-  'LowResolutionMaxMeanProjectedOffsetMeters',
-)
-
-for container in candidate_containers:
-  if not isinstance(container, dict):
-    continue
-  for key in candidate_keys:
-    value = container.get(key)
-    if value in (None, ''):
-      continue
-    print(value)
-    raise SystemExit(0)
-
-raise SystemExit(0)
-PY
-}
-
-extract_use_parallel_cpu_from_config() {
-  local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-payload = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-
-candidate_containers = [
-  payload.get('ImageMatch') or {},
-  payload.get('image_match') or {},
-  payload.get('imageMatch') or {},
-  payload,
-]
-candidate_keys = (
-  'use_parallel_cpu',
-  'useParallelCpu',
-  'UseParallelCpu',
-)
-
-for container in candidate_containers:
-  if not isinstance(container, dict):
-    continue
-  for key in candidate_keys:
-    value = container.get(key)
-    if value in (None, ''):
-      continue
-    if isinstance(value, bool):
-      print('1' if value else '0')
-      raise SystemExit(0)
-    normalized = str(value).strip().lower()
-    if normalized in {'1', 'true', 'yes', 'on'}:
-      print('1')
-      raise SystemExit(0)
-    if normalized in {'0', 'false', 'no', 'off'}:
-      print('0')
-      raise SystemExit(0)
-    raise SystemExit(f'invalid ImageMatch.use_parallel_cpu value: {value!r}')
-
-raise SystemExit(0)
-PY
+  local field_name=$2
+  local container_order=${3:-top-level-first}
+  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py" \
+    --config "$config_path" \
+    --print-config-default "$field_name" \
+    --print-config-default-container-order "$container_order"
 }
 
 main() {
@@ -634,69 +333,69 @@ main() {
   mkdir -p "$OUTPUT_KEY_DIR" "$METADATA_DIR" "$MATCH_VIZ_DIR"
 
   if [[ -n "$CONFIG_PATH" ]]; then
-    config_threshold=$(extract_valid_pixel_percent_threshold_from_config "$CONFIG_PATH")
+    config_threshold=$(extract_image_match_config_value "$config_input" "valid_pixel_percent_threshold")
     if [[ -n "$config_threshold" ]]; then
       VALID_PIXEL_PERCENT_THRESHOLD="$config_threshold"
     fi
     if [[ -z "$explicit_use_parallel_cpu" ]]; then
       local config_use_parallel_cpu
-      config_use_parallel_cpu=$(extract_use_parallel_cpu_from_config "$CONFIG_PATH")
+      config_use_parallel_cpu=$(extract_image_match_config_value "$config_input" "use_parallel_cpu" "image-match-first")
       if [[ -n "$config_use_parallel_cpu" ]]; then
         use_parallel_cpu="$config_use_parallel_cpu"
       fi
     fi
     if [[ -z "$explicit_num_worker_parallel_cpu" ]]; then
       local config_num_worker_parallel_cpu
-      config_num_worker_parallel_cpu=$(extract_num_worker_parallel_cpu_from_config "$CONFIG_PATH")
+      config_num_worker_parallel_cpu=$(extract_image_match_config_value "$config_input" "num_worker_parallel_cpu")
       if [[ -n "$config_num_worker_parallel_cpu" ]]; then
         num_worker_parallel_cpu="$config_num_worker_parallel_cpu"
       fi
     fi
     if [[ -z "$explicit_invalid_pixel_radius" ]]; then
       local config_invalid_pixel_radius
-      config_invalid_pixel_radius=$(extract_invalid_pixel_radius_from_config "$CONFIG_PATH")
+      config_invalid_pixel_radius=$(extract_image_match_config_value "$config_input" "invalid_pixel_radius")
       if [[ -n "$config_invalid_pixel_radius" ]]; then
         invalid_pixel_radius="$config_invalid_pixel_radius"
       fi
     fi
     if [[ -z "$explicit_matcher_method" ]]; then
       local config_matcher_method
-      config_matcher_method=$(extract_matcher_method_from_config "$CONFIG_PATH")
+      config_matcher_method=$(extract_image_match_config_value "$config_input" "matcher_method")
       if [[ -n "$config_matcher_method" ]]; then
         matcher_method="$config_matcher_method"
       fi
     fi
     if [[ -z "$explicit_enable_low_resolution_offset_estimation" ]]; then
       local config_enable_low_resolution_offset_estimation
-      config_enable_low_resolution_offset_estimation=$(extract_enable_low_resolution_offset_estimation_from_config "$CONFIG_PATH")
+      config_enable_low_resolution_offset_estimation=$(extract_image_match_config_value "$config_input" "enable_low_resolution_offset_estimation")
       if [[ -n "$config_enable_low_resolution_offset_estimation" ]]; then
         enable_low_resolution_offset_estimation="$config_enable_low_resolution_offset_estimation"
       fi
     fi
     if [[ -z "$explicit_low_resolution_level" ]]; then
       local config_low_resolution_level
-      config_low_resolution_level=$(extract_low_resolution_level_from_config "$CONFIG_PATH")
+      config_low_resolution_level=$(extract_image_match_config_value "$config_input" "low_resolution_level")
       if [[ -n "$config_low_resolution_level" ]]; then
         low_resolution_level="$config_low_resolution_level"
       fi
     fi
     if [[ -z "$explicit_low_resolution_max_mean_reprojection_error_pixels" ]]; then
       local config_low_resolution_max_mean_reprojection_error_pixels
-      config_low_resolution_max_mean_reprojection_error_pixels=$(extract_low_resolution_max_mean_reprojection_error_pixels_from_config "$CONFIG_PATH")
+      config_low_resolution_max_mean_reprojection_error_pixels=$(extract_image_match_config_value "$config_input" "low_resolution_max_mean_reprojection_error_pixels")
       if [[ -n "$config_low_resolution_max_mean_reprojection_error_pixels" ]]; then
         low_resolution_max_mean_reprojection_error_pixels="$config_low_resolution_max_mean_reprojection_error_pixels"
       fi
     fi
     if [[ -z "$explicit_low_resolution_min_retained_match_count" ]]; then
       local config_low_resolution_min_retained_match_count
-      config_low_resolution_min_retained_match_count=$(extract_low_resolution_min_retained_match_count_from_config "$CONFIG_PATH")
+      config_low_resolution_min_retained_match_count=$(extract_image_match_config_value "$config_input" "low_resolution_min_retained_match_count")
       if [[ -n "$config_low_resolution_min_retained_match_count" ]]; then
         low_resolution_min_retained_match_count="$config_low_resolution_min_retained_match_count"
       fi
     fi
     if [[ -z "$explicit_low_resolution_max_mean_projected_offset_meters" ]]; then
       local config_low_resolution_max_mean_projected_offset_meters
-      config_low_resolution_max_mean_projected_offset_meters=$(extract_low_resolution_max_mean_projected_offset_meters_from_config "$CONFIG_PATH")
+      config_low_resolution_max_mean_projected_offset_meters=$(extract_image_match_config_value "$config_input" "low_resolution_max_mean_projected_offset_meters")
       if [[ -n "$config_low_resolution_max_mean_projected_offset_meters" ]]; then
         low_resolution_max_mean_projected_offset_meters="$config_low_resolution_max_mean_projected_offset_meters"
       fi

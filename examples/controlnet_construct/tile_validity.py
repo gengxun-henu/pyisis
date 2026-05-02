@@ -8,12 +8,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 import numpy as np
 
 from .tiling import TileWindow
-from .tile_matching import PairedTileWindow
+if TYPE_CHECKING:
+    from .tile_matching import PairedTileWindow
 
 
 CACHE_FORMAT_VERSION = 1
@@ -60,6 +61,7 @@ def validate_tile_validity_cell_size(value: int, *, field_name: str) -> int:
 
 
 def _covered_cell_range(start: int, length: int, cell_size: int, grid_size: int) -> range:
+    """Return the inclusive cell index range covered by a span, or empty if none."""
     if length <= 0 or cell_size <= 0 or grid_size <= 0:
         return range(0, 0)
 
@@ -78,6 +80,7 @@ def _covered_cell_range(start: int, length: int, cell_size: int, grid_size: int)
 
 
 def window_valid_upper_bound(index: TileValidityIndex, window: TileWindow) -> TileValidityUpperBound:
+    """Compute a conservative upper bound for valid pixels in a window."""
     x_range = _covered_cell_range(window.start_x, window.width, index.cell_width, index.grid_width)
     y_range = _covered_cell_range(window.start_y, window.height, index.cell_height, index.grid_height)
 
@@ -93,7 +96,7 @@ def window_valid_upper_bound(index: TileValidityIndex, window: TileWindow) -> Ti
     if window_pixel_count <= 0:
         valid_ratio_upper_bound = 0.0
     else:
-        valid_ratio_upper_bound = valid_pixel_upper_bound / float(window_pixel_count)
+        valid_ratio_upper_bound = min(valid_pixel_upper_bound / float(window_pixel_count), 1.0)
 
     return TileValidityUpperBound(
         valid_pixel_upper_bound=valid_pixel_upper_bound,
@@ -123,6 +126,9 @@ def prefilter_paired_windows_by_validity(
     right_index: TileValidityIndex,
     valid_pixel_percent_threshold: float,
 ) -> TileValidityPrefilterResult:
+    """Conservatively skip only when upper bounds cannot meet the [0, 1] ratio threshold."""
+    if valid_pixel_percent_threshold < 0.0 or valid_pixel_percent_threshold > 1.0:
+        raise ValueError("valid_pixel_percent_threshold must be within [0.0, 1.0].")
     if valid_pixel_percent_threshold <= 0:
         return TileValidityPrefilterResult(
             kept_windows=list(windows),

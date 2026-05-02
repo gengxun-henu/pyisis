@@ -10,6 +10,7 @@ Updated: 2026-05-02  Geng Xun added import isolation and threshold validation co
 Updated: 2026-05-02  Geng Xun decoupled tile-validity tests from tile-matching imports.
 Updated: 2026-05-02  Geng Xun added a namespace shim so helper imports skip package init.
 Updated: 2026-05-02  Geng Xun added cache roundtrip expectations for validity-index persistence.
+Updated: 2026-05-02  Geng Xun ensured cache-file existence checks occur before temp cleanup.
 """
 
 from __future__ import annotations
@@ -326,6 +327,9 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
                     cell_width=16,
                     cell_height=16,
                 )
+                self.assertEqual(first_diagnostics["cache_key"], second_diagnostics["cache_key"])
+                self.assertTrue(Path(first_diagnostics["manifest_path"]).exists())
+                self.assertTrue(Path(first_diagnostics["data_path"]).exists())
             finally:
                 cube.close()
 
@@ -335,8 +339,6 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
         self.assertEqual(first_index.grid_height, 1)
         self.assertEqual(first_index.valid_counts.tolist(), [[256, 0]])
         self.assertEqual(second_index.valid_counts.tolist(), [[256, 0]])
-        self.assertTrue(Path(first_diagnostics["manifest_path"]).exists())
-        self.assertTrue(Path(first_diagnostics["data_path"]).exists())
 
     def test_ensure_dom_validity_index_rebuilds_when_parameters_change(self):
         tile_validity = _import_tile_validity()

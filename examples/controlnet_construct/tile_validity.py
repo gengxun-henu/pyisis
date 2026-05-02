@@ -7,14 +7,25 @@ Created: 2026-05-02
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
+import json
+import math
 from pathlib import Path
 from typing import Any, TYPE_CHECKING
 
 import numpy as np
 
+from .preprocess import expand_invalid_mask_for_radius, summarize_valid_pixels
+from .runtime import bootstrap_runtime_environment
 from .tiling import TileWindow
+
 if TYPE_CHECKING:
     from .tile_matching import PairedTileWindow
+
+
+bootstrap_runtime_environment()
+
+import isis_pybind as ip
 
 
 CACHE_FORMAT_VERSION = 1
@@ -181,3 +192,294 @@ def default_tile_validity_cache_dir(
     if left_output_key is not None:
         return Path(left_output_key).parent.parent / "tile_validity_cache"
     return Path.cwd() / "tile_validity_cache"
+
+
+def _read_cube_window_for_validity(cube: ip.Cube, window: TileWindow, *, band: int) -> np.ndarray:
+    brick = ip.Brick(cube, window.width, window.height, 1)
+    brick.set_base_position(window.start_x + 1, window.start_y + 1, band)
+    cube.read(brick)
+    return np.asarray(brick.double_buffer(), dtype=np.float64).reshape((window.height, window.width))
+
+
+def _dom_file_fingerprint(dom_path: str | Path) -> dict[str, object]:
+    resolved_path = Path(dom_path)
+    stat = resolved_path.stat()
+    return {
+        "path": str(resolved_path.resolve()),
+        "size": int(stat.st_size),
+        "mtime_ns": int(stat.st_mtime_ns),
+    }
+
+
+def _index_manifest(
+    *,
+    dom_path: str | Path,
+    image_width: int,
+    image_height: int,
+    band: int,
+    invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    invalid_pixel_radius: int,
+    cell_width: int,
+    cell_height: int,
+    format_version: int = CACHE_FORMAT_VERSION,
+) -> dict[str, object]:
+    grid_width = int(math.ceil(int(image_width) / int(cell_width)))
+    grid_height = int(math.ceil(int(image_height) / int(cell_height)))
+
+    return {
+        "format_version": int(format_version),
+        "dom": _dom_file_fingerprint(dom_path),
+        "image_width": int(image_width),
+        "image_height": int(image_height),
+        "band": int(band),
+        "invalid_values": [float(value) for value in invalid_values],
+        "special_pixel_abs_threshold": float(special_pixel_abs_threshold),
+        "invalid_pixel_radius": int(invalid_pixel_radius),
+        "cell_width": int(cell_width),
+        "cell_height": int(cell_height),
+        "grid_width": grid_width,
+        "grid_height": grid_height,
+    }
+
+
+def _cache_key_for_manifest(manifest: dict[str, object]) -> str:
+    payload = json.dumps(manifest, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _cache_paths(cache_dir: str | Path, cache_key: str) -> tuple[Path, Path]:
+    resolved_dir = Path(cache_dir)
+    return resolved_dir / f"{cache_key}.json", resolved_dir / f"{cache_key}.npz"
+
+
+def _load_index_from_cache(manifest_path: str | Path, data_path: str | Path) -> TileValidityIndex:
+    resolved_manifest_path = Path(manifest_path)
+    resolved_data_path = Path(data_path)
+
+    manifest = json.loads(resolved_manifest_path.read_text(encoding="utf-8"))
+    if not isinstance(manifest, dict):
+        raise ValueError("Cache manifest must decode to an object.")
+    if int(manifest.get("format_version", -1)) != CACHE_FORMAT_VERSION:
+        raise ValueError("Unsupported cache manifest format version.")
+
+    required_keys = (
+        "dom",
+        "image_width",
+        "image_height",
+        "cell_width",
+        "cell_height",
+        "grid_width",
+        "grid_height",
+    )
+    for key in required_keys:
+        if key not in manifest:
+            raise ValueError(f"Cache manifest missing required key {key!r}.")
+
+    with np.load(resolved_data_path, allow_pickle=False) as npz:
+        try:
+            valid_counts = np.asarray(npz["valid_counts"], dtype=np.int64)
+            total_counts = np.asarray(npz["total_counts"], dtype=np.int64)
+            uncertain = np.asarray(npz["uncertain"], dtype=bool)
+        except KeyError as exc:
+            raise ValueError(f"Cache data missing required array {exc.args[0]!r}.") from exc
+
+    expected_shape = (int(manifest["grid_height"]), int(manifest["grid_width"]))
+    if valid_counts.shape != expected_shape or total_counts.shape != expected_shape or uncertain.shape != expected_shape:
+        raise ValueError("Cache arrays do not match manifest grid dimensions.")
+
+    dom_fingerprint = manifest.get("dom")
+    dom_path = None
+    if isinstance(dom_fingerprint, dict):
+        dom_path = dom_fingerprint.get("path")
+
+    return TileValidityIndex(
+        dom_path=str(dom_path) if dom_path else "",
+        image_width=int(manifest["image_width"]),
+        image_height=int(manifest["image_height"]),
+        cell_width=int(manifest["cell_width"]),
+        cell_height=int(manifest["cell_height"]),
+        grid_width=int(manifest["grid_width"]),
+        grid_height=int(manifest["grid_height"]),
+        valid_counts=valid_counts,
+        total_counts=total_counts,
+        uncertain=uncertain,
+        manifest=manifest,  # type: ignore[arg-type]
+    )
+
+
+def _save_index_to_cache(index: TileValidityIndex, manifest_path: str | Path, data_path: str | Path) -> None:
+    resolved_manifest_path = Path(manifest_path)
+    resolved_data_path = Path(data_path)
+    resolved_manifest_path.parent.mkdir(parents=True, exist_ok=True)
+
+    resolved_manifest_path.write_text(
+        json.dumps(index.manifest, sort_keys=True, indent=2) + "\n",
+        encoding="utf-8",
+    )
+
+    np.savez_compressed(
+        resolved_data_path,
+        valid_counts=np.asarray(index.valid_counts, dtype=np.int64),
+        total_counts=np.asarray(index.total_counts, dtype=np.int64),
+        uncertain=np.asarray(index.uncertain, dtype=bool),
+    )
+
+
+def _cell_window_with_halo(
+    *,
+    cell_x: int,
+    cell_y: int,
+    image_width: int,
+    image_height: int,
+    cell_width: int,
+    cell_height: int,
+    invalid_pixel_radius: int,
+) -> tuple[TileWindow, slice, slice, int, int]:
+    start_x = int(cell_x) * int(cell_width)
+    start_y = int(cell_y) * int(cell_height)
+
+    actual_cell_width = max(0, min(int(cell_width), int(image_width) - start_x))
+    actual_cell_height = max(0, min(int(cell_height), int(image_height) - start_y))
+
+    halo = max(0, int(invalid_pixel_radius))
+    read_start_x = max(0, start_x - halo)
+    read_start_y = max(0, start_y - halo)
+    read_end_x = min(int(image_width), start_x + actual_cell_width + halo)
+    read_end_y = min(int(image_height), start_y + actual_cell_height + halo)
+
+    read_window = TileWindow(
+        start_x=read_start_x,
+        start_y=read_start_y,
+        width=read_end_x - read_start_x,
+        height=read_end_y - read_start_y,
+    )
+
+    inner_x = slice(start_x - read_start_x, start_x - read_start_x + actual_cell_width)
+    inner_y = slice(start_y - read_start_y, start_y - read_start_y + actual_cell_height)
+
+    return read_window, inner_y, inner_x, actual_cell_width, actual_cell_height
+
+
+def _build_index_from_open_cube(
+    *,
+    cube: ip.Cube,
+    dom_path: str | Path,
+    manifest: dict[str, object],
+) -> TileValidityIndex:
+    image_width = int(manifest["image_width"])
+    image_height = int(manifest["image_height"])
+    band = int(manifest["band"])
+    invalid_values = tuple(float(value) for value in manifest.get("invalid_values", []))
+    special_pixel_abs_threshold = float(manifest["special_pixel_abs_threshold"])
+    invalid_pixel_radius = int(manifest["invalid_pixel_radius"])
+    cell_width = int(manifest["cell_width"])
+    cell_height = int(manifest["cell_height"])
+    grid_width = int(manifest["grid_width"])
+    grid_height = int(manifest["grid_height"])
+
+    if image_width != int(cube.sample_count()) or image_height != int(cube.line_count()):
+        raise ValueError("Cube dimensions do not match the cache manifest.")
+
+    valid_counts = np.zeros((grid_height, grid_width), dtype=np.int64)
+    total_counts = np.zeros((grid_height, grid_width), dtype=np.int64)
+    uncertain = np.zeros((grid_height, grid_width), dtype=bool)
+
+    for cell_y in range(grid_height):
+        for cell_x in range(grid_width):
+            read_window, inner_y, inner_x, actual_width, actual_height = _cell_window_with_halo(
+                cell_x=cell_x,
+                cell_y=cell_y,
+                image_width=image_width,
+                image_height=image_height,
+                cell_width=cell_width,
+                cell_height=cell_height,
+                invalid_pixel_radius=invalid_pixel_radius,
+            )
+
+            if actual_width <= 0 or actual_height <= 0:
+                continue
+
+            values = _read_cube_window_for_validity(cube, read_window, band=band)
+            invalid_mask, _stats = summarize_valid_pixels(
+                values,
+                invalid_values=invalid_values,
+                special_pixel_abs_threshold=special_pixel_abs_threshold,
+            )
+            expanded_mask = expand_invalid_mask_for_radius(
+                invalid_mask,
+                invalid_pixel_radius=invalid_pixel_radius,
+            )
+
+            inner_mask = expanded_mask[inner_y, inner_x]
+            total = int(actual_width * actual_height)
+            invalid = int(inner_mask.sum())
+            valid_counts[cell_y, cell_x] = total - invalid
+            total_counts[cell_y, cell_x] = total
+
+    return TileValidityIndex(
+        dom_path=str(dom_path),
+        image_width=image_width,
+        image_height=image_height,
+        cell_width=cell_width,
+        cell_height=cell_height,
+        grid_width=grid_width,
+        grid_height=grid_height,
+        valid_counts=valid_counts,
+        total_counts=total_counts,
+        uncertain=uncertain,
+        manifest={str(k): v for k, v in manifest.items()},
+    )
+
+
+def ensure_dom_validity_index(
+    *,
+    cache_dir: str | Path,
+    dom_path: str | Path,
+    cube: ip.Cube,
+    band: int,
+    invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    invalid_pixel_radius: int,
+    cell_width: int,
+    cell_height: int,
+) -> tuple[TileValidityIndex, dict[str, object]]:
+    resolved_cell_width = validate_tile_validity_cell_size(cell_width, field_name="tile_validity_cell_width")
+    resolved_cell_height = validate_tile_validity_cell_size(cell_height, field_name="tile_validity_cell_height")
+
+    manifest = _index_manifest(
+        dom_path=dom_path,
+        image_width=int(cube.sample_count()),
+        image_height=int(cube.line_count()),
+        band=int(band),
+        invalid_values=tuple(float(value) for value in invalid_values),
+        special_pixel_abs_threshold=float(special_pixel_abs_threshold),
+        invalid_pixel_radius=int(invalid_pixel_radius),
+        cell_width=resolved_cell_width,
+        cell_height=resolved_cell_height,
+    )
+    cache_key = _cache_key_for_manifest(manifest)
+    manifest_path, data_path = _cache_paths(cache_dir, cache_key)
+
+    diagnostics: dict[str, object] = {
+        "status": "unknown",
+        "cache_key": cache_key,
+        "manifest_path": str(manifest_path),
+        "data_path": str(data_path),
+        "cell_width": resolved_cell_width,
+        "cell_height": resolved_cell_height,
+    }
+
+    if manifest_path.exists() and data_path.exists():
+        try:
+            index = _load_index_from_cache(manifest_path, data_path)
+        except Exception as exc:  # noqa: BLE001
+            diagnostics["cache_error"] = f"{type(exc).__name__}: {exc}"
+        else:
+            diagnostics["status"] = "hit"
+            return index, diagnostics
+
+    index = _build_index_from_open_cube(cube=cube, dom_path=dom_path, manifest=manifest)
+    _save_index_to_cache(index, manifest_path, data_path)
+    diagnostics["status"] = "rebuilt"
+    return index, diagnostics

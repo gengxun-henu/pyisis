@@ -11,6 +11,7 @@ Updated: 2026-05-02  Geng Xun decoupled tile-validity tests from tile-matching i
 Updated: 2026-05-02  Geng Xun added a namespace shim so helper imports skip package init.
 Updated: 2026-05-02  Geng Xun added cache roundtrip expectations for validity-index persistence.
 Updated: 2026-05-02  Geng Xun ensured cache-file existence checks occur before temp cleanup.
+Updated: 2026-05-02  Geng Xun cleaned up controlnet_construct shim teardown for isolation.
 """
 
 from __future__ import annotations
@@ -37,9 +38,15 @@ if str(EXAMPLES_DIR) not in sys.path:
 
 from _unit_test_support import ip, make_test_cube, temporary_directory
 
+CONTROLNET_CONSTRUCT_DIR = EXAMPLES_DIR / "controlnet_construct"
+CONTROLNET_CONSTRUCT_PATH = str(CONTROLNET_CONSTRUCT_DIR)
+_CREATED_CONTROLNET_CONSTRUCT_SHIM = False
+_CONTROLNET_CONSTRUCT_SHIM: types.ModuleType | None = None
+
 if "controlnet_construct" not in sys.modules:
+    _CREATED_CONTROLNET_CONSTRUCT_SHIM = True
     package = types.ModuleType("controlnet_construct")
-    package.__path__ = [str(EXAMPLES_DIR / "controlnet_construct")]
+    package.__path__ = [CONTROLNET_CONSTRUCT_PATH]
     package.__package__ = "controlnet_construct"
     package.__spec__ = importlib.machinery.ModuleSpec(
         "controlnet_construct",
@@ -47,6 +54,7 @@ if "controlnet_construct" not in sys.modules:
         is_package=True,
     )
     sys.modules["controlnet_construct"] = package
+    _CONTROLNET_CONSTRUCT_SHIM = package
 
 tiling = importlib.import_module("controlnet_construct.tiling")
 
@@ -76,15 +84,60 @@ def _write_array_to_cube(cube: ip.Cube, values: np.ndarray) -> None:
         manager.next()
 
 
+def _module_is_controlnet_construct_shim(module: types.ModuleType | None) -> bool:
+    if module is None:
+        return False
+    if _CONTROLNET_CONSTRUCT_SHIM is not None and module is _CONTROLNET_CONSTRUCT_SHIM:
+        return True
+    candidates: list[str] = []
+    module_path = getattr(module, "__path__", None)
+    if module_path:
+        candidates.extend([str(path) for path in module_path])
+    module_file = getattr(module, "__file__", None)
+    if module_file:
+        candidates.append(str(module_file))
+    module_spec = getattr(module, "__spec__", None)
+    if module_spec and module_spec.origin:
+        candidates.append(str(module_spec.origin))
+    for candidate in candidates:
+        if Path(candidate).resolve().is_relative_to(CONTROLNET_CONSTRUCT_DIR):
+            return True
+    return False
+
+
+def tearDownModule() -> None:
+    if not _CREATED_CONTROLNET_CONSTRUCT_SHIM:
+        return
+    for module_name in ("controlnet_construct.tile_validity", "controlnet_construct.tiling"):
+        module = sys.modules.get(module_name)
+        if _module_is_controlnet_construct_shim(module):
+            sys.modules.pop(module_name, None)
+    package_module = sys.modules.get("controlnet_construct")
+    if _module_is_controlnet_construct_shim(package_module):
+        sys.modules.pop("controlnet_construct", None)
+
+
 class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
     def test_tile_validity_import_does_not_pull_tile_matching(self):
-        sys.modules.pop("controlnet_construct.tile_validity", None)
-        sys.modules.pop("controlnet_construct.tile_matching", None)
+        prior_tile_validity = sys.modules.get("controlnet_construct.tile_validity")
+        prior_tile_matching = sys.modules.get("controlnet_construct.tile_matching")
+        try:
+            sys.modules.pop("controlnet_construct.tile_validity", None)
+            sys.modules.pop("controlnet_construct.tile_matching", None)
 
-        module = importlib.import_module("controlnet_construct.tile_validity")
+            module = importlib.import_module("controlnet_construct.tile_validity")
 
-        self.assertIs(module, sys.modules["controlnet_construct.tile_validity"])
-        self.assertNotIn("controlnet_construct.tile_matching", sys.modules)
+            self.assertIs(module, sys.modules["controlnet_construct.tile_validity"])
+            self.assertNotIn("controlnet_construct.tile_matching", sys.modules)
+        finally:
+            if prior_tile_validity is None:
+                sys.modules.pop("controlnet_construct.tile_validity", None)
+            else:
+                sys.modules["controlnet_construct.tile_validity"] = prior_tile_validity
+            if prior_tile_matching is None:
+                sys.modules.pop("controlnet_construct.tile_matching", None)
+            else:
+                sys.modules["controlnet_construct.tile_matching"] = prior_tile_matching
 
     def test_validate_tile_validity_cell_size_rejects_non_positive_values(self):
         tile_validity = _import_tile_validity()

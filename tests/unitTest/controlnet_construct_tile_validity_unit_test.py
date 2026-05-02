@@ -8,14 +8,17 @@ Updated: 2026-05-02  Geng Xun covered prefilter retention when the upper bound m
 Updated: 2026-05-02  Geng Xun kept tile-validity fixtures realistic for prefilter skip decisions.
 Updated: 2026-05-02  Geng Xun added import isolation and threshold validation coverage.
 Updated: 2026-05-02  Geng Xun decoupled tile-validity tests from tile-matching imports.
+Updated: 2026-05-02  Geng Xun added a namespace shim so helper imports skip package init.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
 import importlib
+import importlib.machinery
 import sys
 from pathlib import Path
+import types
 import unittest
 
 import numpy as np
@@ -29,6 +32,17 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 EXAMPLES_DIR = PROJECT_ROOT / "examples"
 if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
+
+if "controlnet_construct" not in sys.modules:
+    package = types.ModuleType("controlnet_construct")
+    package.__path__ = [str(EXAMPLES_DIR / "controlnet_construct")]
+    package.__package__ = "controlnet_construct"
+    package.__spec__ = importlib.machinery.ModuleSpec(
+        "controlnet_construct",
+        loader=None,
+        is_package=True,
+    )
+    sys.modules["controlnet_construct"] = package
 
 tiling = importlib.import_module("controlnet_construct.tiling")
 

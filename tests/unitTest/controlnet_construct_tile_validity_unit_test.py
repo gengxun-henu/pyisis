@@ -12,11 +12,13 @@ Updated: 2026-05-02  Geng Xun added a namespace shim so helper imports skip pack
 Updated: 2026-05-02  Geng Xun added cache roundtrip expectations for validity-index persistence.
 Updated: 2026-05-02  Geng Xun ensured cache-file existence checks occur before temp cleanup.
 Updated: 2026-05-02  Geng Xun cleaned up controlnet_construct shim teardown for isolation.
+Updated: 2026-05-02  Geng Xun added cache-error rebuild diagnostics coverage.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
 import importlib
 import importlib.machinery
 import sys
@@ -437,6 +439,55 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
         self.assertEqual(first_diagnostics["status"], "rebuilt")
         self.assertEqual(second_diagnostics["status"], "rebuilt")
         self.assertNotEqual(first_diagnostics["cache_key"], second_diagnostics["cache_key"])
+
+    def test_ensure_dom_validity_index_rebuilds_after_cache_error(self):
+        tile_validity = _import_tile_validity()
+        values = np.ones((8, 8), dtype=np.float64)
+
+        with temporary_directory() as temp_dir:
+            cube, cube_path = make_test_cube(
+                temp_dir,
+                name="validity_cache_error.cub",
+                samples=8,
+                lines=8,
+                bands=1,
+                pixel_type=ip.PixelType.Real,
+            )
+            try:
+                _write_array_to_cube(cube, values)
+                cache_dir = temp_dir / "tile_validity_cache"
+                _, first_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=8,
+                    cell_height=8,
+                )
+                manifest_path = Path(first_diagnostics["manifest_path"])
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                manifest["dom"] = "corrupted"
+                manifest_path.write_text(json.dumps(manifest, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+
+                _, second_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=8,
+                    cell_height=8,
+                )
+            finally:
+                cube.close()
+
+        self.assertEqual(second_diagnostics["status"], "rebuilt_after_error")
+        self.assertIn("cache_error", second_diagnostics)
 
 
 if __name__ == "__main__":

@@ -10,7 +10,9 @@ from dataclasses import dataclass
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
+import tempfile
 from typing import Any, TYPE_CHECKING
 
 import numpy as np
@@ -253,6 +255,88 @@ def _cache_paths(cache_dir: str | Path, cache_key: str) -> tuple[Path, Path]:
     return resolved_dir / f"{cache_key}.json", resolved_dir / f"{cache_key}.npz"
 
 
+def _require_manifest_int(manifest: dict[str, object], key: str) -> int:
+    value = manifest.get(key)
+    if isinstance(value, bool) or not isinstance(value, int):
+        raise ValueError(f"Cache manifest {key!r} must be an integer.")
+    return int(value)
+
+
+def _require_manifest_number(manifest: dict[str, object], key: str) -> float:
+    value = manifest.get(key)
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        raise ValueError(f"Cache manifest {key!r} must be a number.")
+    return float(value)
+
+
+def _require_dom_fingerprint(manifest: dict[str, object]) -> dict[str, object]:
+    dom_fingerprint = manifest.get("dom")
+    if not isinstance(dom_fingerprint, dict):
+        raise ValueError("Cache manifest dom must be an object.")
+    dom_path = dom_fingerprint.get("path")
+    dom_size = dom_fingerprint.get("size")
+    dom_mtime_ns = dom_fingerprint.get("mtime_ns")
+    if not isinstance(dom_path, str) or not dom_path:
+        raise ValueError("Cache manifest dom.path must be a non-empty string.")
+    if isinstance(dom_size, bool) or not isinstance(dom_size, int):
+        raise ValueError("Cache manifest dom.size must be an integer.")
+    if isinstance(dom_mtime_ns, bool) or not isinstance(dom_mtime_ns, int):
+        raise ValueError("Cache manifest dom.mtime_ns must be an integer.")
+    return {"path": dom_path, "size": int(dom_size), "mtime_ns": int(dom_mtime_ns)}
+
+
+def _atomic_write_text(path: Path, payload: str) -> None:
+    temp_handle = tempfile.NamedTemporaryFile(
+        mode="w",
+        encoding="utf-8",
+        delete=False,
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+    )
+    try:
+        temp_handle.write(payload)
+        temp_handle.flush()
+        os.fsync(temp_handle.fileno())
+        temp_name = temp_handle.name
+    except Exception:  # noqa: BLE001
+        temp_name = temp_handle.name
+        temp_handle.close()
+        Path(temp_name).unlink(missing_ok=True)
+        raise
+    else:
+        temp_handle.close()
+        os.replace(temp_name, path)
+
+
+def _atomic_write_npz(path: Path, *, valid_counts: np.ndarray, total_counts: np.ndarray, uncertain: np.ndarray) -> None:
+    temp_handle = tempfile.NamedTemporaryFile(
+        mode="wb",
+        delete=False,
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+    )
+    try:
+        np.savez_compressed(
+            temp_handle,
+            valid_counts=valid_counts,
+            total_counts=total_counts,
+            uncertain=uncertain,
+        )
+        temp_handle.flush()
+        os.fsync(temp_handle.fileno())
+        temp_name = temp_handle.name
+    except Exception:  # noqa: BLE001
+        temp_name = temp_handle.name
+        temp_handle.close()
+        Path(temp_name).unlink(missing_ok=True)
+        raise
+    else:
+        temp_handle.close()
+        os.replace(temp_name, path)
+
+
 def _load_index_from_cache(manifest_path: str | Path, data_path: str | Path) -> TileValidityIndex:
     resolved_manifest_path = Path(manifest_path)
     resolved_data_path = Path(data_path)
@@ -267,6 +351,10 @@ def _load_index_from_cache(manifest_path: str | Path, data_path: str | Path) -> 
         "dom",
         "image_width",
         "image_height",
+        "band",
+        "invalid_values",
+        "special_pixel_abs_threshold",
+        "invalid_pixel_radius",
         "cell_width",
         "cell_height",
         "grid_width",
@@ -276,6 +364,24 @@ def _load_index_from_cache(manifest_path: str | Path, data_path: str | Path) -> 
         if key not in manifest:
             raise ValueError(f"Cache manifest missing required key {key!r}.")
 
+    dom_fingerprint = _require_dom_fingerprint(manifest)
+    invalid_values = manifest.get("invalid_values")
+    if not isinstance(invalid_values, list):
+        raise ValueError("Cache manifest invalid_values must be an array.")
+    for value in invalid_values:
+        if isinstance(value, bool) or not isinstance(value, (int, float)):
+            raise ValueError("Cache manifest invalid_values must contain numbers.")
+
+    image_width = _require_manifest_int(manifest, "image_width")
+    image_height = _require_manifest_int(manifest, "image_height")
+    _require_manifest_int(manifest, "band")
+    _require_manifest_number(manifest, "special_pixel_abs_threshold")
+    _require_manifest_int(manifest, "invalid_pixel_radius")
+    cell_width = _require_manifest_int(manifest, "cell_width")
+    cell_height = _require_manifest_int(manifest, "cell_height")
+    grid_width = _require_manifest_int(manifest, "grid_width")
+    grid_height = _require_manifest_int(manifest, "grid_height")
+
     with np.load(resolved_data_path, allow_pickle=False) as npz:
         try:
             valid_counts = np.asarray(npz["valid_counts"], dtype=np.int64)
@@ -284,23 +390,18 @@ def _load_index_from_cache(manifest_path: str | Path, data_path: str | Path) -> 
         except KeyError as exc:
             raise ValueError(f"Cache data missing required array {exc.args[0]!r}.") from exc
 
-    expected_shape = (int(manifest["grid_height"]), int(manifest["grid_width"]))
+    expected_shape = (grid_height, grid_width)
     if valid_counts.shape != expected_shape or total_counts.shape != expected_shape or uncertain.shape != expected_shape:
         raise ValueError("Cache arrays do not match manifest grid dimensions.")
 
-    dom_fingerprint = manifest.get("dom")
-    dom_path = None
-    if isinstance(dom_fingerprint, dict):
-        dom_path = dom_fingerprint.get("path")
-
     return TileValidityIndex(
-        dom_path=str(dom_path) if dom_path else "",
-        image_width=int(manifest["image_width"]),
-        image_height=int(manifest["image_height"]),
-        cell_width=int(manifest["cell_width"]),
-        cell_height=int(manifest["cell_height"]),
-        grid_width=int(manifest["grid_width"]),
-        grid_height=int(manifest["grid_height"]),
+        dom_path=str(dom_fingerprint["path"]),
+        image_width=image_width,
+        image_height=image_height,
+        cell_width=cell_width,
+        cell_height=cell_height,
+        grid_width=grid_width,
+        grid_height=grid_height,
         valid_counts=valid_counts,
         total_counts=total_counts,
         uncertain=uncertain,
@@ -313,12 +414,9 @@ def _save_index_to_cache(index: TileValidityIndex, manifest_path: str | Path, da
     resolved_data_path = Path(data_path)
     resolved_manifest_path.parent.mkdir(parents=True, exist_ok=True)
 
-    resolved_manifest_path.write_text(
-        json.dumps(index.manifest, sort_keys=True, indent=2) + "\n",
-        encoding="utf-8",
-    )
-
-    np.savez_compressed(
+    manifest_payload = json.dumps(index.manifest, sort_keys=True, indent=2) + "\n"
+    _atomic_write_text(resolved_manifest_path, manifest_payload)
+    _atomic_write_npz(
         resolved_data_path,
         valid_counts=np.asarray(index.valid_counts, dtype=np.int64),
         total_counts=np.asarray(index.total_counts, dtype=np.int64),
@@ -444,6 +542,7 @@ def ensure_dom_validity_index(
     cell_width: int,
     cell_height: int,
 ) -> tuple[TileValidityIndex, dict[str, object]]:
+    """Ensure a cached DOM validity index; cube must be open, not closed here, and cache_dir writable."""
     resolved_cell_width = validate_tile_validity_cell_size(cell_width, field_name="tile_validity_cell_width")
     resolved_cell_height = validate_tile_validity_cell_size(cell_height, field_name="tile_validity_cell_height")
 
@@ -473,6 +572,9 @@ def ensure_dom_validity_index(
     if manifest_path.exists() and data_path.exists():
         try:
             index = _load_index_from_cache(manifest_path, data_path)
+            loaded_cache_key = _cache_key_for_manifest(index.manifest)
+            if loaded_cache_key != manifest_path.stem:
+                raise ValueError("Cache manifest key does not match cache path.")
         except Exception as exc:  # noqa: BLE001
             diagnostics["cache_error"] = f"{type(exc).__name__}: {exc}"
         else:
@@ -481,5 +583,5 @@ def ensure_dom_validity_index(
 
     index = _build_index_from_open_cube(cube=cube, dom_path=dom_path, manifest=manifest)
     _save_index_to_cache(index, manifest_path, data_path)
-    diagnostics["status"] = "rebuilt"
+    diagnostics["status"] = "rebuilt_after_error" if "cache_error" in diagnostics else "rebuilt"
     return index, diagnostics

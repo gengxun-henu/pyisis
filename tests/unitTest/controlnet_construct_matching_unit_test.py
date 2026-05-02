@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-01
+Last Modified: 2026-05-02
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -20,10 +20,13 @@ Updated: 2026-04-26  Geng Xun added regression coverage for BF/FLANN matcher sel
 Updated: 2026-04-27  Geng Xun added regression coverage for minimum retained low-resolution matches and projected-offset magnitude gating.
 Updated: 2026-05-01  Geng Xun added regression coverage for shell formatting helpers and config default lookup aliases.
 Updated: 2026-05-01  Geng Xun added regression coverage for the CLI print-config-default helper path.
+Updated: 2026-05-02  Geng Xun added regression coverage for precomputed low-resolution DOM reuse without repeated reduce calls.
+Updated: 2026-05-02  Geng Xun added regression coverage for full-resolution image-match tile progress reporting.
 """
 
 from __future__ import annotations
 
+import io
 import importlib
 from datetime import datetime
 import json
@@ -188,6 +191,70 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         run_command_mock.assert_not_called()
         validate_mock.assert_called_once_with(output_path)
+
+    def test_estimate_low_resolution_projected_offset_reuses_precomputed_doms_without_reduce(self):
+        with temporary_directory() as temp_dir:
+            left_precomputed = temp_dir / "left_cached_low.cub"
+            right_precomputed = temp_dir / "right_cached_low.cub"
+            left_pair_local = temp_dir / "left_pair_low.cub"
+            right_pair_local = temp_dir / "right_pair_low.cub"
+            left_precomputed.write_bytes(b"left-low")
+            right_precomputed.write_bytes(b"right-low")
+
+            create_mock = mock.Mock(side_effect=AssertionError("reduce should not run for precomputed DOMs"))
+            copy_mock = mock.Mock(side_effect=[left_pair_local, right_pair_local])
+
+            summary = image_match._estimate_low_resolution_projected_offset(
+                "left_dom.cub",
+                "right_dom.cub",
+                enabled=True,
+                low_resolution_level=3,
+                low_resolution_output_dir=temp_dir,
+                band=1,
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=64,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=1,
+                matcher_method="bf",
+                ratio_test=0.75,
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                low_resolution_trim_fraction_each_side=0.05,
+                left_low_resolution_dom=left_precomputed,
+                right_low_resolution_dom=right_precomputed,
+                match_dom_pair_func=mock.Mock(
+                    return_value=(KeypointFile(10, 10, ()), KeypointFile(10, 10, ()), {"status": "matched_no_points"})
+                ),
+                filter_stereo_pair_keypoints_with_ransac_func=mock.Mock(
+                    return_value=(KeypointFile(10, 10, ()), KeypointFile(10, 10, ()), {"applied": False})
+                ),
+                write_stereo_pair_match_visualization_func=mock.Mock(),
+                require_command_func=mock.Mock(),
+                create_low_resolution_dom_func=create_mock,
+                copy_precomputed_low_resolution_dom_func=copy_mock,
+            )
+
+        create_mock.assert_not_called()
+        copy_mock.assert_has_calls(
+            [
+                mock.call(left_precomputed, temp_dir / "left_dom__level3.cub"),
+                mock.call(right_precomputed, temp_dir / "right_dom__level3.cub"),
+            ]
+        )
+        self.assertEqual(summary["status"], "fallback_zero")
+        self.assertEqual(summary["failure_reason_code"], "no_matches")
+        self.assertEqual(summary["left_low_resolution_dom"], str(left_pair_local))
+        self.assertEqual(summary["right_low_resolution_dom"], str(right_pair_local))
+        self.assertEqual(summary["low_resolution_dom_sources"]["left"]["mode"], "precomputed_copy")
+        self.assertEqual(summary["low_resolution_dom_sources"]["left"]["cache_dom"], str(left_precomputed))
 
     def test_estimate_low_resolution_projected_offset_reports_reduce_generation_failure(self):
         with temporary_directory() as temp_dir:
@@ -648,6 +715,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 "5",
                 "--low-resolution-max-mean-projected-offset-meters",
                 "2000",
+                "--left-low-resolution-dom",
+                "left_low.cub",
+                "--right-low-resolution-dom",
+                "right_low.cub",
             ]
         )
 
@@ -659,6 +730,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertAlmostEqual(args.low_resolution_max_mean_reprojection_error_pixels, 2.5)
         self.assertEqual(args.low_resolution_min_retained_match_count, 5)
         self.assertAlmostEqual(args.low_resolution_max_mean_projected_offset_meters, 2000.0)
+        self.assertEqual(args.left_low_resolution_dom, "left_low.cub")
+        self.assertEqual(args.right_low_resolution_dom, "right_low.cub")
 
     def test_build_argument_parser_rejects_invalid_low_resolution_match_count_and_offset_threshold(self):
         parser = build_argument_parser()
@@ -1563,6 +1636,75 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertFalse(summary["parallel_cpu_used"])
         self.assertEqual(summary["parallel_cpu_backend"], "serial")
         self.assertEqual(summary["parallel_cpu_worker_count"], 1)
+
+    def test_match_dom_pair_progress_reports_full_resolution_tile_count_and_completion(self):
+        image = _build_textured_test_image(128, 128)
+
+        def fake_serial_tile_match_tasks(windows, **kwargs):
+            progress_callback = kwargs.get("progress_callback")
+            tile_results = []
+            for paired_window in windows:
+                if progress_callback is not None:
+                    progress_callback()
+                tile_results.append(
+                    image_match.TileMatchResult(
+                        stats=image_match.TileMatchStats(
+                            local_start_x=paired_window.local_window.start_x,
+                            local_start_y=paired_window.local_window.start_y,
+                            width=paired_window.local_window.width,
+                            height=paired_window.local_window.height,
+                            left_start_x=paired_window.left_window.start_x,
+                            left_start_y=paired_window.left_window.start_y,
+                            right_start_x=paired_window.right_window.start_x,
+                            right_start_y=paired_window.right_window.start_y,
+                            left_valid_pixel_count=paired_window.local_window.width * paired_window.local_window.height,
+                            right_valid_pixel_count=paired_window.local_window.width * paired_window.local_window.height,
+                            left_valid_pixel_ratio=1.0,
+                            right_valid_pixel_ratio=1.0,
+                            left_feature_count=0,
+                            right_feature_count=0,
+                            match_count=0,
+                            status="skipped_no_matches",
+                        ),
+                        left_points=(),
+                        right_points=(),
+                    )
+                )
+            return tile_results
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_progress.cub",
+                right_name="right_progress.cub",
+            )
+            stderr = io.StringIO()
+
+            with mock.patch.object(image_match.sys, "stderr", stderr), mock.patch.object(
+                image_match,
+                "_run_serial_tile_match_tasks",
+                side_effect=fake_serial_tile_match_tasks,
+            ) as serial_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                    use_parallel_cpu=False,
+                    show_progress=True,
+                )
+
+        progress_output = stderr.getvalue()
+        self.assertEqual(summary["tile_count"], 4)
+        self.assertIn("4 TILE(s) to process at full resolution", progress_output)
+        self.assertIn("4/4 TILE(s) done", progress_output)
+        self.assertIsNotNone(serial_mock.call_args.kwargs["progress_callback"])
 
     def test_match_dom_pair_skips_invalid_only_tiles_but_keeps_valid_tile(self):
         width = 96

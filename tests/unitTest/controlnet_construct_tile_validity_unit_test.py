@@ -9,6 +9,7 @@ Updated: 2026-05-02  Geng Xun kept tile-validity fixtures realistic for prefilte
 Updated: 2026-05-02  Geng Xun added import isolation and threshold validation coverage.
 Updated: 2026-05-02  Geng Xun decoupled tile-validity tests from tile-matching imports.
 Updated: 2026-05-02  Geng Xun added a namespace shim so helper imports skip package init.
+Updated: 2026-05-02  Geng Xun added cache roundtrip expectations for validity-index persistence.
 """
 
 from __future__ import annotations
@@ -32,6 +33,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 EXAMPLES_DIR = PROJECT_ROOT / "examples"
 if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
+
+from _unit_test_support import ip, make_test_cube, temporary_directory
 
 if "controlnet_construct" not in sys.modules:
     package = types.ModuleType("controlnet_construct")
@@ -59,6 +62,17 @@ class PairedTileWindowForTest:
 
 def _import_tile_validity():
     return importlib.import_module("controlnet_construct.tile_validity")
+
+
+def _write_array_to_cube(cube: ip.Cube, values: np.ndarray) -> None:
+    manager = ip.LineManager(cube)
+    manager.begin()
+    while not manager.end():
+        line_index = manager.line() - 1
+        for index in range(len(manager)):
+            manager[index] = float(values[line_index, index])
+        cube.write(manager)
+        manager.next()
 
 
 class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
@@ -271,6 +285,103 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
                 right_index=index,
                 valid_pixel_percent_threshold=1.1,
             )
+
+    def test_ensure_dom_validity_index_rebuilds_then_hits_cache(self):
+        tile_validity = _import_tile_validity()
+        values = np.ones((16, 32), dtype=np.float64)
+        values[:, 16:32] = 0.0
+
+        with temporary_directory() as temp_dir:
+            cube, cube_path = make_test_cube(
+                temp_dir,
+                name="validity_source.cub",
+                samples=32,
+                lines=16,
+                bands=1,
+                pixel_type=ip.PixelType.Real,
+            )
+            try:
+                _write_array_to_cube(cube, values)
+                cache_dir = temp_dir / "tile_validity_cache"
+
+                first_index, first_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(0.0,),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=16,
+                    cell_height=16,
+                )
+                second_index, second_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(0.0,),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=16,
+                    cell_height=16,
+                )
+            finally:
+                cube.close()
+
+        self.assertEqual(first_diagnostics["status"], "rebuilt")
+        self.assertEqual(second_diagnostics["status"], "hit")
+        self.assertEqual(first_index.grid_width, 2)
+        self.assertEqual(first_index.grid_height, 1)
+        self.assertEqual(first_index.valid_counts.tolist(), [[256, 0]])
+        self.assertEqual(second_index.valid_counts.tolist(), [[256, 0]])
+        self.assertTrue(Path(first_diagnostics["manifest_path"]).exists())
+        self.assertTrue(Path(first_diagnostics["data_path"]).exists())
+
+    def test_ensure_dom_validity_index_rebuilds_when_parameters_change(self):
+        tile_validity = _import_tile_validity()
+        values = np.ones((8, 8), dtype=np.float64)
+
+        with temporary_directory() as temp_dir:
+            cube, cube_path = make_test_cube(
+                temp_dir,
+                name="validity_parameter_change.cub",
+                samples=8,
+                lines=8,
+                bands=1,
+                pixel_type=ip.PixelType.Real,
+            )
+            try:
+                _write_array_to_cube(cube, values)
+                cache_dir = temp_dir / "tile_validity_cache"
+                _, first_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=8,
+                    cell_height=8,
+                )
+                _, second_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(0.0,),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=8,
+                    cell_height=8,
+                )
+            finally:
+                cube.close()
+
+        self.assertEqual(first_diagnostics["status"], "rebuilt")
+        self.assertEqual(second_diagnostics["status"], "rebuilt")
+        self.assertNotEqual(first_diagnostics["cache_key"], second_diagnostics["cache_key"])
 
 
 if __name__ == "__main__":

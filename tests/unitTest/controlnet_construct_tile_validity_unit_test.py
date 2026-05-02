@@ -5,6 +5,7 @@ Created: 2026-05-02
 Last Modified: 2026-05-02
 Updated: 2026-05-02  Geng Xun added regression coverage for conservative tile-validity prefilter decisions.
 Updated: 2026-05-02  Geng Xun covered prefilter retention when the upper bound meets a positive threshold.
+Updated: 2026-05-02  Geng Xun kept tile-validity fixtures realistic for prefilter skip decisions.
 """
 
 from __future__ import annotations
@@ -90,7 +91,7 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
             cell_height=32,
             grid_width=2,
             grid_height=1,
-            valid_counts=np.array([[2048, 2048]], dtype=np.int64),
+            valid_counts=np.array([[1024, 1024]], dtype=np.int64),
             total_counts=np.array([[1024, 1024]], dtype=np.int64),
             uncertain=np.array([[False, False]], dtype=bool),
             manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
@@ -194,9 +195,13 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
         )
 
         self.assertEqual(zero_threshold_result.kept_windows, [window])
+        self.assertEqual(zero_threshold_result.skipped_windows, [])
         self.assertEqual(zero_threshold_result.preindexed_skipped_tile_count, 0)
+        self.assertEqual(zero_threshold_result.skip_reasons, {})
         self.assertEqual(uncertain_result.kept_windows, [window])
+        self.assertEqual(uncertain_result.skipped_windows, [])
         self.assertEqual(uncertain_result.preindexed_skipped_tile_count, 0)
+        self.assertEqual(uncertain_result.skip_reasons, {})
 
 
 if __name__ == "__main__":

@@ -23,6 +23,7 @@ Updated: 2026-05-01  Geng Xun added regression coverage for the CLI print-config
 Updated: 2026-05-02  Geng Xun added regression coverage for precomputed low-resolution DOM reuse without repeated reduce calls.
 Updated: 2026-05-02  Geng Xun added regression coverage for full-resolution image-match tile progress reporting.
 Updated: 2026-05-02  Geng Xun added regression coverage for tile-validity prefilter config defaults and summary reporting.
+Updated: 2026-05-02  Geng Xun adjusted tile-validity default config keys and prefilter default coverage.
 """
 
 from __future__ import annotations
@@ -348,8 +349,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 json.dumps(
                     {
                         "ImageMatch": {
-                            "enable_tile_validity_prefilter": True,
-                            "tile_validity_cell_width": 256,
+                            "enableTileValidityPrefilter": True,
+                            "tileValidityCellWidth": 256,
                         }
                     }
                 ),
@@ -1140,7 +1141,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertIn(summary["right_tile_validity_index"]["status"], {"rebuilt", "hit"})
 
     def test_match_dom_pair_keeps_prefilter_disabled_by_default(self):
-        values = np.ones((32, 64), dtype=np.float64) * 100.0
+        values = _build_textured_test_image(64, 64)
 
         with temporary_directory() as temp_dir:
             left_path, right_path = _write_projected_dom_pair(

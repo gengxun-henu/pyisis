@@ -17,17 +17,19 @@ from typing import Any, TYPE_CHECKING
 
 import numpy as np
 
-from .preprocess import expand_invalid_mask_for_radius, summarize_valid_pixels
-from .runtime import bootstrap_runtime_environment
 from .tiling import TileWindow
 
 if TYPE_CHECKING:
     from .tile_matching import PairedTileWindow
 
 
-bootstrap_runtime_environment()
+def _isis_pybind() -> Any:
+    from .runtime import bootstrap_runtime_environment
 
-import isis_pybind as ip
+    bootstrap_runtime_environment()
+    import isis_pybind as ip
+
+    return ip
 
 
 CACHE_FORMAT_VERSION = 1
@@ -196,7 +198,8 @@ def default_tile_validity_cache_dir(
     return Path.cwd() / "tile_validity_cache"
 
 
-def _read_cube_window_for_validity(cube: ip.Cube, window: TileWindow, *, band: int) -> np.ndarray:
+def _read_cube_window_for_validity(cube: Any, window: TileWindow, *, band: int) -> np.ndarray:
+    ip = _isis_pybind()
     brick = ip.Brick(cube, window.width, window.height, 1)
     brick.set_base_position(window.start_x + 1, window.start_y + 1, band)
     cube.read(brick)
@@ -246,7 +249,7 @@ def _index_manifest(
 
 
 def _cache_key_for_manifest(manifest: dict[str, object]) -> str:
-    payload = json.dumps(manifest, sort_keys=True, separators=(",", ":"))
+    payload = json.dumps(manifest, sort_keys=True, separators=(",", ":"), allow_nan=False)
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
@@ -306,7 +309,11 @@ def _atomic_write_text(path: Path, payload: str) -> None:
         raise
     else:
         temp_handle.close()
-        os.replace(temp_name, path)
+        try:
+            os.replace(temp_name, path)
+        except Exception:  # noqa: BLE001
+            Path(temp_name).unlink(missing_ok=True)
+            raise
 
 
 def _atomic_write_npz(path: Path, *, valid_counts: np.ndarray, total_counts: np.ndarray, uncertain: np.ndarray) -> None:
@@ -334,7 +341,11 @@ def _atomic_write_npz(path: Path, *, valid_counts: np.ndarray, total_counts: np.
         raise
     else:
         temp_handle.close()
-        os.replace(temp_name, path)
+        try:
+            os.replace(temp_name, path)
+        except Exception:  # noqa: BLE001
+            Path(temp_name).unlink(missing_ok=True)
+            raise
 
 
 def _load_index_from_cache(manifest_path: str | Path, data_path: str | Path) -> TileValidityIndex:
@@ -414,7 +425,7 @@ def _save_index_to_cache(index: TileValidityIndex, manifest_path: str | Path, da
     resolved_data_path = Path(data_path)
     resolved_manifest_path.parent.mkdir(parents=True, exist_ok=True)
 
-    manifest_payload = json.dumps(index.manifest, sort_keys=True, indent=2) + "\n"
+    manifest_payload = json.dumps(index.manifest, sort_keys=True, indent=2, allow_nan=False) + "\n"
     _atomic_write_text(resolved_manifest_path, manifest_payload)
     _atomic_write_npz(
         resolved_data_path,
@@ -461,10 +472,12 @@ def _cell_window_with_halo(
 
 def _build_index_from_open_cube(
     *,
-    cube: ip.Cube,
+    cube: Any,
     dom_path: str | Path,
     manifest: dict[str, object],
 ) -> TileValidityIndex:
+    from .preprocess import expand_invalid_mask_for_radius, summarize_valid_pixels
+
     image_width = int(manifest["image_width"])
     image_height = int(manifest["image_height"])
     band = int(manifest["band"])
@@ -534,7 +547,7 @@ def ensure_dom_validity_index(
     *,
     cache_dir: str | Path,
     dom_path: str | Path,
-    cube: ip.Cube,
+    cube: Any,
     band: int,
     invalid_values: tuple[float, ...],
     special_pixel_abs_threshold: float,

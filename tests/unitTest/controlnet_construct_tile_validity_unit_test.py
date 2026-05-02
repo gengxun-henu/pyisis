@@ -13,6 +13,7 @@ Updated: 2026-05-02  Geng Xun added cache roundtrip expectations for validity-in
 Updated: 2026-05-02  Geng Xun ensured cache-file existence checks occur before temp cleanup.
 Updated: 2026-05-02  Geng Xun cleaned up controlnet_construct shim teardown for isolation.
 Updated: 2026-05-02  Geng Xun added cache-error rebuild diagnostics coverage.
+Updated: 2026-05-02  Geng Xun ensured tile-validity import isolation does not pull heavy runtime deps.
 """
 
 from __future__ import annotations
@@ -38,7 +39,12 @@ EXAMPLES_DIR = PROJECT_ROOT / "examples"
 if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
-from _unit_test_support import ip, make_test_cube, temporary_directory
+try:
+    from _unit_test_support import ip, make_test_cube, temporary_directory
+except Exception:  # noqa: BLE001
+    ip = None
+    make_test_cube = None
+    temporary_directory = None
 
 CONTROLNET_CONSTRUCT_DIR = EXAMPLES_DIR / "controlnet_construct"
 CONTROLNET_CONSTRUCT_PATH = str(CONTROLNET_CONSTRUCT_DIR)
@@ -107,6 +113,11 @@ def _module_is_controlnet_construct_shim(module: types.ModuleType | None) -> boo
     return False
 
 
+def _require_isis_pybind(test_case: unittest.TestCase) -> None:
+    if ip is None:
+        test_case.skipTest("isis_pybind not available")
+
+
 def tearDownModule() -> None:
     if not _CREATED_CONTROLNET_CONSTRUCT_SHIM:
         return
@@ -140,6 +151,34 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
                 sys.modules.pop("controlnet_construct.tile_matching", None)
             else:
                 sys.modules["controlnet_construct.tile_matching"] = prior_tile_matching
+
+    def test_tile_validity_import_does_not_pull_isis_pybind_or_cv2(self):
+        prior_tile_validity = sys.modules.get("controlnet_construct.tile_validity")
+        prior_isis_pybind = sys.modules.get("isis_pybind")
+        prior_cv2 = sys.modules.get("cv2")
+        try:
+            sys.modules.pop("controlnet_construct.tile_validity", None)
+            sys.modules.pop("isis_pybind", None)
+            sys.modules.pop("cv2", None)
+
+            module = importlib.import_module("controlnet_construct.tile_validity")
+
+            self.assertIs(module, sys.modules["controlnet_construct.tile_validity"])
+            self.assertNotIn("isis_pybind", sys.modules)
+            self.assertNotIn("cv2", sys.modules)
+        finally:
+            if prior_tile_validity is None:
+                sys.modules.pop("controlnet_construct.tile_validity", None)
+            else:
+                sys.modules["controlnet_construct.tile_validity"] = prior_tile_validity
+            if prior_isis_pybind is None:
+                sys.modules.pop("isis_pybind", None)
+            else:
+                sys.modules["isis_pybind"] = prior_isis_pybind
+            if prior_cv2 is None:
+                sys.modules.pop("cv2", None)
+            else:
+                sys.modules["cv2"] = prior_cv2
 
     def test_validate_tile_validity_cell_size_rejects_non_positive_values(self):
         tile_validity = _import_tile_validity()
@@ -343,6 +382,7 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
             )
 
     def test_ensure_dom_validity_index_rebuilds_then_hits_cache(self):
+        _require_isis_pybind(self)
         tile_validity = _import_tile_validity()
         values = np.ones((16, 32), dtype=np.float64)
         values[:, 16:32] = 0.0
@@ -396,6 +436,7 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
         self.assertEqual(second_index.valid_counts.tolist(), [[256, 0]])
 
     def test_ensure_dom_validity_index_rebuilds_when_parameters_change(self):
+        _require_isis_pybind(self)
         tile_validity = _import_tile_validity()
         values = np.ones((8, 8), dtype=np.float64)
 
@@ -441,6 +482,7 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
         self.assertNotEqual(first_diagnostics["cache_key"], second_diagnostics["cache_key"])
 
     def test_ensure_dom_validity_index_rebuilds_after_cache_error(self):
+        _require_isis_pybind(self)
         tile_validity = _import_tile_validity()
         values = np.ones((8, 8), dtype=np.float64)
 

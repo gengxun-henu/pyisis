@@ -24,6 +24,7 @@ Updated: 2026-05-02  Geng Xun added regression coverage for precomputed low-reso
 Updated: 2026-05-02  Geng Xun added regression coverage for full-resolution image-match tile progress reporting.
 Updated: 2026-05-02  Geng Xun added regression coverage for tile-validity prefilter config defaults and summary reporting.
 Updated: 2026-05-02  Geng Xun adjusted tile-validity default config keys and prefilter default coverage.
+Updated: 2026-05-02  Geng Xun refined tile-validity prefilter fixture to avoid degenerate valid tiles.
 """
 
 from __future__ import annotations
@@ -1099,8 +1100,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         )
 
     def test_match_dom_pair_prefilters_invalid_tiles_and_reports_summary(self):
-        values = np.ones((32, 64), dtype=np.float64) * 100.0
-        values[:, 32:64] = 0.0
+        values = np.zeros((32, 64), dtype=np.float64)
+        values[:, :32] = _build_textured_test_image(32, 32)
 
         with temporary_directory() as temp_dir:
             left_path, right_path = _write_projected_dom_pair(
@@ -1136,7 +1137,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["tile_count_after_preindex_filter"], 1)
         self.assertEqual(summary["preindexed_skipped_tile_count"], 1)
         self.assertEqual(summary["tile_validity_cache_dir"], str(cache_dir))
-        self.assertEqual(summary["full_resolution_skipped_tile_count"], summary["skipped_tile_count"] - 1)
+        self.assertEqual(
+            summary["full_resolution_skipped_tile_count"],
+            summary["skipped_tile_count"] - summary["preindexed_skipped_tile_count"],
+        )
         self.assertIn(summary["left_tile_validity_index"]["status"], {"rebuilt", "hit"})
         self.assertIn(summary["right_tile_validity_index"]["status"], {"rebuilt", "hit"})
 

@@ -7,10 +7,12 @@ Updated: 2026-05-02  Geng Xun added regression coverage for conservative tile-va
 Updated: 2026-05-02  Geng Xun covered prefilter retention when the upper bound meets a positive threshold.
 Updated: 2026-05-02  Geng Xun kept tile-validity fixtures realistic for prefilter skip decisions.
 Updated: 2026-05-02  Geng Xun added import isolation and threshold validation coverage.
+Updated: 2026-05-02  Geng Xun decoupled tile-validity tests from tile-matching imports.
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 import importlib
 import sys
 from pathlib import Path
@@ -34,12 +36,15 @@ tiling = importlib.import_module("controlnet_construct.tiling")
 TileWindow = tiling.TileWindow
 
 
+@dataclass(frozen=True, slots=True)
+class PairedTileWindowForTest:
+    local_window: TileWindow
+    left_window: TileWindow
+    right_window: TileWindow
+
+
 def _import_tile_validity():
     return importlib.import_module("controlnet_construct.tile_validity")
-
-
-def _import_tile_matching():
-    return importlib.import_module("controlnet_construct.tile_matching")
 
 
 class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
@@ -90,8 +95,6 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
 
     def test_prefilter_skips_only_when_upper_bound_cannot_meet_threshold(self):
         tile_validity = _import_tile_validity()
-        tile_matching = _import_tile_matching()
-        PairedTileWindow = tile_matching.PairedTileWindow
 
         left_index = tile_validity.TileValidityIndex(
             dom_path="left.cub",
@@ -120,7 +123,7 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
             manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
         )
         windows = [
-            PairedTileWindow(
+            PairedTileWindowForTest(
                 local_window=TileWindow(0, 0, 64, 32),
                 left_window=TileWindow(0, 0, 64, 32),
                 right_window=TileWindow(0, 0, 64, 32),
@@ -141,8 +144,6 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
 
     def test_prefilter_keeps_when_upper_bound_can_meet_positive_threshold(self):
         tile_validity = _import_tile_validity()
-        tile_matching = _import_tile_matching()
-        PairedTileWindow = tile_matching.PairedTileWindow
 
         left_index = tile_validity.TileValidityIndex(
             dom_path="left.cub",
@@ -170,7 +171,7 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
             uncertain=np.array([[False, False]], dtype=bool),
             manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
         )
-        window = PairedTileWindow(
+        window = PairedTileWindowForTest(
             local_window=TileWindow(0, 0, 64, 32),
             left_window=TileWindow(0, 0, 64, 32),
             right_window=TileWindow(0, 0, 64, 32),
@@ -190,8 +191,6 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
 
     def test_prefilter_keeps_threshold_zero_and_uncertain_cells(self):
         tile_validity = _import_tile_validity()
-        tile_matching = _import_tile_matching()
-        PairedTileWindow = tile_matching.PairedTileWindow
 
         index = tile_validity.TileValidityIndex(
             dom_path="left.cub",
@@ -206,7 +205,7 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
             uncertain=np.array([[True]], dtype=bool),
             manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
         )
-        window = PairedTileWindow(
+        window = PairedTileWindowForTest(
             local_window=TileWindow(0, 0, 32, 32),
             left_window=TileWindow(0, 0, 32, 32),
             right_window=TileWindow(0, 0, 32, 32),

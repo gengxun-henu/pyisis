@@ -24,6 +24,51 @@ die() {
   exit 1
 }
 
+
+# -----------------------------------------------------------------------------
+# One-click parameter presets for run_pipeline_example.sh (copy & paste)
+#
+# Conservative (stability first):
+# bash examples/controlnet_construct/run_pipeline_example.sh \
+#   --work-dir work \
+#   --valid-pixel-percent-threshold 0.08 \
+#   --invalid-pixel-radius 2 \
+#   --matcher-method flann \
+#   --enable-low-resolution-offset-estimation \
+#   --low-resolution-level 3 \
+#   --low-resolution-max-mean-reprojection-error-pixels 2.5 \
+#   --low-resolution-min-retained-match-count 8 \
+#   --low-resolution-max-mean-projected-offset-meters 1200 \
+#   --num-worker-parallel-cpu 8
+#
+# Balanced (recommended default):
+# bash examples/controlnet_construct/run_pipeline_example.sh \
+#   --work-dir work \
+#   --valid-pixel-percent-threshold 0.05 \
+#   --invalid-pixel-radius 1 \
+#   --matcher-method flann \
+#   --enable-low-resolution-offset-estimation \
+#   --low-resolution-level 3 \
+#   --low-resolution-max-mean-reprojection-error-pixels 3.0 \
+#   --low-resolution-min-retained-match-count 5 \
+#   --low-resolution-max-mean-projected-offset-meters 2000 \
+#   --num-worker-parallel-cpu 8
+#
+# Aggressive (recall first):
+# bash examples/controlnet_construct/run_pipeline_example.sh \
+#   --work-dir work \
+#   --valid-pixel-percent-threshold 0.02 \
+#   --invalid-pixel-radius 1 \
+#   --matcher-method bf \
+#   --enable-low-resolution-offset-estimation \
+#   --low-resolution-level 4 \
+#   --low-resolution-max-mean-reprojection-error-pixels 4.0 \
+#   --low-resolution-min-retained-match-count 4 \
+#   --low-resolution-max-mean-projected-offset-meters 3500 \
+#   --num-worker-parallel-cpu 12
+# -----------------------------------------------------------------------------
+
+
 usage() {
   cat <<'EOF'
 Usage:
@@ -326,12 +371,31 @@ run_step_1_image_overlap() {
 run_step_2_image_match_batch() {
   log "$(pipeline_step_label 2): matching DOM pairs listed in ${IMAGES_OVERLAP_LIST}"
 
+  if [[ "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION" == "1" ]]; then
+    log "  preparing reusable low-resolution DOM list -> ${LOW_RESOLUTION_DOM_LIST}"
+    "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/prepare_low_resolution_doms.py" \
+      "$DOM_LIST" \
+      "$LOW_RESOLUTION_DOM_LIST" \
+      --level "$LOW_RESOLUTION_LEVEL" \
+      --output-dir "$LOW_RESOLUTION_DOM_DIR" \
+      --report-json "$LOW_RESOLUTION_DOM_REPORT"
+  fi
+
   declare -A dom_by_original=()
   while IFS=$'\t' read -r original dom; do
     [[ -n "$original" ]] || continue
     [[ -n "$dom" ]] || die "DOM list alignment failed while reading paired original/DOM lists"
     dom_by_original["$original"]="$dom"
   done < <(paste "$ORIGINAL_LIST" "$DOM_LIST")
+
+  declare -A low_resolution_dom_by_original=()
+  if [[ "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION" == "1" ]]; then
+    while IFS=$'\t' read -r original low_resolution_dom; do
+      [[ -n "$original" ]] || continue
+      [[ -n "$low_resolution_dom" ]] || die "low-resolution DOM list alignment failed while reading paired original/low-resolution DOM lists"
+      low_resolution_dom_by_original["$original"]="$low_resolution_dom"
+    done < <(paste "$ORIGINAL_LIST" "$LOW_RESOLUTION_DOM_LIST")
+  fi
 
   local pair_count=0
   while IFS=, read -r left right; do
@@ -376,12 +440,20 @@ run_step_2_image_match_batch() {
     fi
     match_args+=(--num-worker-parallel-cpu "$NUM_WORKER_PARALLEL_CPU")
     if [[ "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION" == "1" ]]; then
+      if [[ -z "${low_resolution_dom_by_original[$left]+x}" ]]; then
+        die "no low-resolution DOM path found for left original image: $left"
+      fi
+      if [[ -z "${low_resolution_dom_by_original[$right]+x}" ]]; then
+        die "no low-resolution DOM path found for right original image: $right"
+      fi
       match_args+=(
         --enable-low-resolution-offset-estimation
         --low-resolution-level "$LOW_RESOLUTION_LEVEL"
         --low-resolution-max-mean-reprojection-error-pixels "$LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS"
         --low-resolution-min-retained-match-count "$LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT"
         --low-resolution-max-mean-projected-offset-meters "$LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS"
+        --left-low-resolution-dom "${low_resolution_dom_by_original[$left]}"
+        --right-low-resolution-dom "${low_resolution_dom_by_original[$right]}"
       )
     fi
 
@@ -786,6 +858,10 @@ main() {
     fi
   fi
 
+  LOW_RESOLUTION_DOM_LIST="$WORK_DIR/doms_low_resolution_level${LOW_RESOLUTION_LEVEL}.lis"
+  LOW_RESOLUTION_DOM_DIR="$WORK_DIR/low_resolution_doms/level${LOW_RESOLUTION_LEVEL}"
+  LOW_RESOLUTION_DOM_REPORT="$REPORTS_DIR/low_resolution_doms_level${LOW_RESOLUTION_LEVEL}.json"
+
   initialize_timing_json
 
   log "Repository root: $REPO_ROOT"
@@ -815,6 +891,8 @@ main() {
     log "Low-resolution max mean reprojection error (pixels): $LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS"
     log "Low-resolution minimum retained matches: $LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT"
     log "Low-resolution max mean projected offset (meters): $LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS"
+    log "Low-resolution DOM list: $LOW_RESOLUTION_DOM_LIST"
+    log "Low-resolution DOM cache dir: $LOW_RESOLUTION_DOM_DIR"
   else
     log "Low-resolution offset estimation: disabled"
   fi

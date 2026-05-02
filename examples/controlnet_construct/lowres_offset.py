@@ -5,6 +5,7 @@ Created: 2026-04-24
 Updated: 2026-04-24  Geng Xun made low-resolution projected-offset trimmed-mean fraction configurable while preserving the previous 5% default.
 Updated: 2026-04-26  Geng Xun added low-resolution homography reprojection-error gating so coarse offsets fall back to zero when the retained match geometry is not trustworthy.
 Updated: 2026-04-27  Geng Xun added minimum retained-match and projected-offset magnitude gates so weak or implausible low-resolution estimates fall back to zero.
+Updated: 2026-05-02  Geng Xun added precomputed low-resolution DOM reuse so batch matching can avoid repeated ISIS reduce calls for the same DOM.
 """
 
 from __future__ import annotations
@@ -123,6 +124,58 @@ def create_low_resolution_dom(
     )
     validate_projection_ready_cube_func(resolved_output_path)
     return resolved_output_path
+
+
+def copy_precomputed_low_resolution_dom(
+    source_path: str | Path,
+    output_path: str | Path,
+    *,
+    validate_projection_ready_cube_func: Callable[[str | Path], float] = _validate_projection_ready_cube,
+) -> Path:
+    """Copy an already reduced DOM into a pair-local diagnostics directory."""
+    resolved_source_path = Path(source_path)
+    resolved_output_path = Path(output_path)
+    resolved_output_path.parent.mkdir(parents=True, exist_ok=True)
+    if resolved_source_path.resolve() != resolved_output_path.resolve():
+        if resolved_output_path.exists():
+            resolved_output_path.unlink()
+        shutil.copy2(resolved_source_path, resolved_output_path)
+    validate_projection_ready_cube_func(resolved_output_path)
+    return resolved_output_path
+
+
+def _prepare_low_resolution_dom_for_pair(
+    source_path: str | Path,
+    output_path: str | Path,
+    *,
+    level: int,
+    precomputed_path: str | Path | None,
+    create_low_resolution_dom_func: Callable[..., Path],
+    copy_precomputed_low_resolution_dom_func: Callable[..., Path] = copy_precomputed_low_resolution_dom,
+) -> tuple[Path, dict[str, object]]:
+    if precomputed_path is None:
+        output = create_low_resolution_dom_func(
+            source_path,
+            output_path,
+            level=level,
+        )
+        return output, {
+            "mode": "generated",
+            "source_dom": str(source_path),
+            "cache_dom": None,
+            "pair_local_dom": str(output),
+        }
+
+    output = copy_precomputed_low_resolution_dom_func(
+        precomputed_path,
+        output_path,
+    )
+    return output, {
+        "mode": "precomputed_copy",
+        "source_dom": str(source_path),
+        "cache_dom": str(precomputed_path),
+        "pair_local_dom": str(output),
+    }
 
 
 def _projected_xy_from_keypoints_in_open_cube(
@@ -308,11 +361,14 @@ def estimate_low_resolution_projected_offset(
     low_resolution_min_retained_match_count: int = DEFAULT_MIN_RETAINED_MATCH_COUNT,
     low_resolution_max_mean_projected_offset_meters: float = DEFAULT_MAX_MEAN_PROJECTED_OFFSET_METERS,
     write_intermediate_keys: bool = False,
+    left_precomputed_low_resolution_dom: str | Path | None = None,
+    right_precomputed_low_resolution_dom: str | Path | None = None,
     match_dom_pair_func: Callable[..., tuple[KeypointFile, KeypointFile, dict[str, object]]],
     filter_stereo_pair_keypoints_with_ransac_func: Callable[..., tuple[KeypointFile, KeypointFile, dict[str, object]]],
     write_stereo_pair_match_visualization_func: Callable[..., dict[str, object]],
     require_command_func: Callable[[str], None] = _require_command,
     create_low_resolution_dom_func: Callable[..., Path] = create_low_resolution_dom,
+    copy_precomputed_low_resolution_dom_func: Callable[..., Path] = copy_precomputed_low_resolution_dom,
 ) -> dict[str, object]:
     resolved_trim_fraction_each_side = _validate_trim_fraction_each_side(trim_fraction_each_side)
     resolved_max_mean_reprojection_error_pixels = float(low_resolution_max_mean_reprojection_error_pixels)
@@ -347,24 +403,38 @@ def estimate_low_resolution_projected_offset(
     resolved_level = int(low_resolution_level)
     if resolved_level < 0:
         raise ValueError("low_resolution_level must be >= 0.")
+    if (left_precomputed_low_resolution_dom is None) != (right_precomputed_low_resolution_dom is None):
+        raise ValueError("left_precomputed_low_resolution_dom and right_precomputed_low_resolution_dom must be provided together.")
 
     resolved_output_dir = Path(low_resolution_output_dir)
     resolved_output_dir.mkdir(parents=True, exist_ok=True)
     pair_tag = _low_resolution_pair_tag(left_dom_path, right_dom_path)
     started_at = time.perf_counter()
     try:
-        require_command_func("reduce")
+        using_precomputed_doms = left_precomputed_low_resolution_dom is not None
+        if not using_precomputed_doms:
+            require_command_func("reduce")
 
-        left_low_res_dom = create_low_resolution_dom_func(
+        left_low_res_dom, left_low_res_source = _prepare_low_resolution_dom_for_pair(
             left_dom_path,
             resolved_output_dir / f"{Path(left_dom_path).stem}__level{resolved_level}.cub",
             level=resolved_level,
+            precomputed_path=left_precomputed_low_resolution_dom,
+            create_low_resolution_dom_func=create_low_resolution_dom_func,
+            copy_precomputed_low_resolution_dom_func=copy_precomputed_low_resolution_dom_func,
         )
-        right_low_res_dom = create_low_resolution_dom_func(
+        right_low_res_dom, right_low_res_source = _prepare_low_resolution_dom_for_pair(
             right_dom_path,
             resolved_output_dir / f"{Path(right_dom_path).stem}__level{resolved_level}.cub",
             level=resolved_level,
+            precomputed_path=right_precomputed_low_resolution_dom,
+            create_low_resolution_dom_func=create_low_resolution_dom_func,
+            copy_precomputed_low_resolution_dom_func=copy_precomputed_low_resolution_dom_func,
         )
+        low_resolution_dom_sources = {
+            "left": left_low_res_source,
+            "right": right_low_res_source,
+        }
 
         raw_left_key, raw_right_key, raw_summary = match_dom_pair_func(
             left_low_res_dom,
@@ -426,6 +496,7 @@ def estimate_low_resolution_projected_offset(
                 low_resolution_level=resolved_level,
                 left_low_resolution_dom=str(left_low_res_dom),
                 right_low_resolution_dom=str(right_low_res_dom),
+                low_resolution_dom_sources=low_resolution_dom_sources,
                 image_match_summary=raw_summary,
                 ransac_summary=ransac_summary,
             )
@@ -444,6 +515,7 @@ def estimate_low_resolution_projected_offset(
                 low_resolution_level=resolved_level,
                 left_low_resolution_dom=str(left_low_res_dom),
                 right_low_resolution_dom=str(right_low_res_dom),
+                low_resolution_dom_sources=low_resolution_dom_sources,
                 raw_left_key=str(raw_left_key_path),
                 raw_right_key=str(raw_right_key_path),
                 filtered_left_key=str(filtered_left_key_path),
@@ -466,6 +538,7 @@ def estimate_low_resolution_projected_offset(
                 low_resolution_level=resolved_level,
                 left_low_resolution_dom=str(left_low_res_dom),
                 right_low_resolution_dom=str(right_low_res_dom),
+                low_resolution_dom_sources=low_resolution_dom_sources,
                 raw_left_key=str(raw_left_key_path),
                 raw_right_key=str(raw_right_key_path),
                 filtered_left_key=str(filtered_left_key_path),
@@ -486,6 +559,7 @@ def estimate_low_resolution_projected_offset(
                 low_resolution_level=resolved_level,
                 left_low_resolution_dom=str(left_low_res_dom),
                 right_low_resolution_dom=str(right_low_res_dom),
+                low_resolution_dom_sources=low_resolution_dom_sources,
                 raw_left_key=str(raw_left_key_path),
                 raw_right_key=str(raw_right_key_path),
                 filtered_left_key=str(filtered_left_key_path),
@@ -519,6 +593,7 @@ def estimate_low_resolution_projected_offset(
                 low_resolution_level=resolved_level,
                 left_low_resolution_dom=str(left_low_res_dom),
                 right_low_resolution_dom=str(right_low_res_dom),
+                low_resolution_dom_sources=low_resolution_dom_sources,
                 raw_left_key=str(raw_left_key_path),
                 raw_right_key=str(raw_right_key_path),
                 filtered_left_key=str(filtered_left_key_path),
@@ -586,6 +661,7 @@ def estimate_low_resolution_projected_offset(
                 low_resolution_level=resolved_level,
                 left_low_resolution_dom=str(left_low_res_dom),
                 right_low_resolution_dom=str(right_low_res_dom),
+                low_resolution_dom_sources=low_resolution_dom_sources,
                 raw_left_key=str(raw_left_key_path),
                 raw_right_key=str(raw_right_key_path),
                 filtered_left_key=str(filtered_left_key_path),
@@ -620,6 +696,7 @@ def estimate_low_resolution_projected_offset(
             "low_resolution_level": resolved_level,
             "left_low_resolution_dom": str(left_low_res_dom),
             "right_low_resolution_dom": str(right_low_res_dom),
+            "low_resolution_dom_sources": low_resolution_dom_sources,
             "raw_left_key": str(raw_left_key_path),
             "raw_right_key": str(raw_right_key_path),
             "filtered_left_key": str(filtered_left_key_path),
@@ -655,6 +732,7 @@ __all__ = [
     "_require_command",
     "_run_command",
     "_trimmed_mean",
+    "copy_precomputed_low_resolution_dom",
     "_validate_max_mean_projected_offset_meters",
     "_validate_min_retained_match_count",
     "_validate_trim_fraction_each_side",

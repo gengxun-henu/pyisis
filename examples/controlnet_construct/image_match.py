@@ -23,6 +23,8 @@ Updated: 2026-04-26  Geng Xun added selectable BF/FLANN SIFT descriptor matching
 Updated: 2026-04-27  Geng Xun added low-resolution retained-match and projected-offset magnitude gates so implausible coarse offsets fall back to zero.
 Updated: 2026-05-01  Geng Xun added shell-print helpers and an early --print-config-default CLI probe for ImageMatch config defaults.
 Updated: 2026-05-01  Geng Xun added configurable helper lookup order so shell wrappers can preserve legacy top-level config precedence where required.
+Updated: 2026-05-02  Geng Xun added precomputed low-resolution DOM inputs so batch wrappers can reuse one reduced cube per DOM.
+Updated: 2026-05-02  Geng Xun added CLI progress reporting for full-resolution tile matching without changing JSON stdout.
 """
 
 from __future__ import annotations
@@ -32,7 +34,7 @@ from dataclasses import asdict
 import json
 from pathlib import Path
 import sys
-from typing import Literal
+from typing import TextIO, Literal
 
 import cv2
 
@@ -104,6 +106,7 @@ DEFAULT_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS = _lowres_offset.DEFAULT
 _run_command = _lowres_offset._run_command
 _require_command = _lowres_offset._require_command
 _validate_projection_ready_cube = _lowres_offset._validate_projection_ready_cube
+_copy_precomputed_low_resolution_dom = _lowres_offset.copy_precomputed_low_resolution_dom
 _low_resolution_pair_tag = _lowres_offset._low_resolution_pair_tag
 _default_low_resolution_output_dir = _lowres_offset._default_low_resolution_output_dir
 _projected_xy_from_keypoints_in_open_cube = _lowres_offset._projected_xy_from_keypoints_in_open_cube
@@ -114,6 +117,66 @@ _trimmed_mean = _lowres_offset._trimmed_mean
 default_match_visualization_path = _match_visualization.default_match_visualization_path
 write_stereo_pair_match_visualization = _match_visualization.write_stereo_pair_match_visualization
 write_stereo_pair_match_visualization_from_key_files = _match_visualization.write_stereo_pair_match_visualization_from_key_files
+
+
+class _TileProgressBar:
+    def __init__(
+        self,
+        *,
+        left_dom_path: str | Path,
+        right_dom_path: str | Path,
+        total_tiles: int,
+        stream: TextIO | None = None,
+        width: int = 30,
+    ) -> None:
+        self._left_dom_path = Path(left_dom_path)
+        self._right_dom_path = Path(right_dom_path)
+        self._total_tiles = max(0, int(total_tiles))
+        self._stream = sys.stderr if stream is None else stream
+        self._width = max(10, int(width))
+        self._completed_tiles = 0
+        self._started = False
+
+    def start(self) -> None:
+        if self._started:
+            return
+        self._started = True
+        print(
+            "[image-match] "
+            f"{self._left_dom_path.name} ↔ {self._right_dom_path.name}: "
+            f"{self._total_tiles} TILE(s) to process at full resolution.",
+            file=self._stream,
+            flush=True,
+        )
+        self._render()
+
+    def update(self) -> None:
+        if not self._started:
+            self.start()
+        self._completed_tiles = min(self._completed_tiles + 1, self._total_tiles)
+        self._render()
+
+    def finish(self) -> None:
+        if not self._started:
+            return
+        print(file=self._stream, flush=True)
+
+    def _render(self) -> None:
+        if self._total_tiles <= 0:
+            bar = "-" * self._width
+            percent = 100.0
+        else:
+            percent = 100.0 * self._completed_tiles / self._total_tiles
+            filled_width = int(round(self._width * self._completed_tiles / self._total_tiles))
+            bar = "#" * filled_width + "-" * (self._width - filled_width)
+        print(
+            "\r[image-match] "
+            f"[{bar}] {self._completed_tiles}/{self._total_tiles} TILE(s) "
+            f"done ({percent:5.1f}%)",
+            end="",
+            file=self._stream,
+            flush=True,
+        )
 
 
 def _validate_valid_pixel_percent_threshold(threshold: float) -> float:
@@ -470,6 +533,15 @@ def _create_low_resolution_dom(
     )
 
 
+def _validate_low_resolution_dom_pair_args(
+    left_low_resolution_dom: str | Path | None,
+    right_low_resolution_dom: str | Path | None,
+) -> tuple[str | Path | None, str | Path | None]:
+    if (left_low_resolution_dom is None) != (right_low_resolution_dom is None):
+        raise ValueError("left_low_resolution_dom and right_low_resolution_dom must be provided together.")
+    return left_low_resolution_dom, right_low_resolution_dom
+
+
 def filter_stereo_pair_keypoints_with_ransac(
     left_key_file: KeypointFile,
     right_key_file: KeypointFile,
@@ -544,11 +616,14 @@ def _estimate_low_resolution_projected_offset(
     low_resolution_max_mean_reprojection_error_pixels: float = 3.0,
     low_resolution_min_retained_match_count: int = DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT,
     low_resolution_max_mean_projected_offset_meters: float = DEFAULT_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS,
+    left_low_resolution_dom: str | Path | None = None,
+    right_low_resolution_dom: str | Path | None = None,
     match_dom_pair_func=None,
     filter_stereo_pair_keypoints_with_ransac_func=None,
     write_stereo_pair_match_visualization_func=None,
     require_command_func=None,
     create_low_resolution_dom_func=None,
+    copy_precomputed_low_resolution_dom_func=None,
 ) -> dict[str, object]:
     if match_dom_pair_func is None:
         match_dom_pair_func = match_dom_pair
@@ -560,6 +635,8 @@ def _estimate_low_resolution_projected_offset(
         require_command_func = _require_command
     if create_low_resolution_dom_func is None:
         create_low_resolution_dom_func = _create_low_resolution_dom
+    if copy_precomputed_low_resolution_dom_func is None:
+        copy_precomputed_low_resolution_dom_func = _copy_precomputed_low_resolution_dom
 
     return _lowres_offset.estimate_low_resolution_projected_offset(
         left_dom_path,
@@ -588,11 +665,14 @@ def _estimate_low_resolution_projected_offset(
         low_resolution_max_mean_reprojection_error_pixels=low_resolution_max_mean_reprojection_error_pixels,
         low_resolution_min_retained_match_count=low_resolution_min_retained_match_count,
         low_resolution_max_mean_projected_offset_meters=low_resolution_max_mean_projected_offset_meters,
+        left_precomputed_low_resolution_dom=left_low_resolution_dom,
+        right_precomputed_low_resolution_dom=right_low_resolution_dom,
         match_dom_pair_func=match_dom_pair_func,
         filter_stereo_pair_keypoints_with_ransac_func=filter_stereo_pair_keypoints_with_ransac_func,
         write_stereo_pair_match_visualization_func=write_stereo_pair_match_visualization_func,
         require_command_func=require_command_func,
         create_low_resolution_dom_func=create_low_resolution_dom_func,
+        copy_precomputed_low_resolution_dom_func=copy_precomputed_low_resolution_dom_func,
     )
 
 
@@ -633,6 +713,9 @@ def match_dom_pair(
     low_resolution_min_retained_match_count: int = DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT,
     low_resolution_max_mean_projected_offset_meters: float = DEFAULT_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS,
     low_resolution_output_dir: str | Path | None = None,
+    left_low_resolution_dom: str | Path | None = None,
+    right_low_resolution_dom: str | Path | None = None,
+    show_progress: bool = False,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
@@ -656,6 +739,10 @@ def match_dom_pair(
         )
         resolved_low_resolution_max_mean_projected_offset_meters = _validate_low_resolution_max_mean_projected_offset_meters(
             low_resolution_max_mean_projected_offset_meters
+        )
+        resolved_left_low_resolution_dom, resolved_right_low_resolution_dom = _validate_low_resolution_dom_pair_args(
+            left_low_resolution_dom,
+            right_low_resolution_dom,
         )
         left_width = left_cube.sample_count()
         left_height = left_cube.line_count()
@@ -705,6 +792,8 @@ def match_dom_pair(
             low_resolution_max_mean_reprojection_error_pixels=resolved_low_resolution_max_mean_reprojection_error_pixels,
             low_resolution_min_retained_match_count=resolved_low_resolution_min_retained_match_count,
             low_resolution_max_mean_projected_offset_meters=resolved_low_resolution_max_mean_projected_offset_meters,
+            left_low_resolution_dom=resolved_left_low_resolution_dom,
+            right_low_resolution_dom=resolved_right_low_resolution_dom,
         )
         preparation = prepare_dom_pair_for_matching(
             left_dom_path,
@@ -731,20 +820,66 @@ def match_dom_pair(
             )
 
             if windows:
+                progress_bar = (
+                    _TileProgressBar(
+                        left_dom_path=left_dom_path,
+                        right_dom_path=right_dom_path,
+                        total_tiles=len(windows),
+                    )
+                    if show_progress
+                    else None
+                )
+                if progress_bar is not None:
+                    progress_bar.start()
                 if parallel_cpu_requested and len(windows) > 1:
                     candidate_worker_count = min(len(windows), resolved_num_worker_parallel_cpu)
                     if candidate_worker_count > 1:
-                        tile_results = _run_parallel_tile_match_tasks(
-                            _build_tile_match_tasks(
+                        try:
+                            tile_results = _run_parallel_tile_match_tasks(
+                                _build_tile_match_tasks(
+                                    windows,
+                                    left_dom_path=left_dom_path,
+                                    right_dom_path=right_dom_path,
+                                    band=band,
+                                    minimum_value=minimum_value,
+                                    maximum_value=maximum_value,
+                                    lower_percent=lower_percent,
+                                    upper_percent=upper_percent,
+                                    invalid_values=invalid_values,
+                                    special_pixel_abs_threshold=special_pixel_abs_threshold,
+                                    min_valid_pixels=min_valid_pixels,
+                                    valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                                    invalid_pixel_radius=resolved_invalid_pixel_radius,
+                                    matcher_method=resolved_matcher_method,
+                                    ratio_test=ratio_test,
+                                    max_features=max_features,
+                                    sift_octave_layers=sift_octave_layers,
+                                    sift_contrast_threshold=sift_contrast_threshold,
+                                    sift_edge_threshold=sift_edge_threshold,
+                                    sift_sigma=sift_sigma,
+                                ),
+                                max_workers=candidate_worker_count,
+                                progress_callback=progress_bar.update if progress_bar is not None else None,
+                            )
+                        finally:
+                            if progress_bar is not None:
+                                progress_bar.finish()
+                        parallel_cpu_used = True
+                        parallel_cpu_backend = "process_pool"
+                        parallel_cpu_worker_count = candidate_worker_count
+                    else:
+                        try:
+                            tile_results = _run_serial_tile_match_tasks(
                                 windows,
-                                left_dom_path=left_dom_path,
-                                right_dom_path=right_dom_path,
+                                left_cube=left_cube,
+                                right_cube=right_cube,
                                 band=band,
                                 minimum_value=minimum_value,
                                 maximum_value=maximum_value,
                                 lower_percent=lower_percent,
                                 upper_percent=upper_percent,
-                                invalid_values=invalid_values,
+                                left_invalid_values=left_invalid_values,
+                                right_invalid_values=right_invalid_values,
                                 special_pixel_abs_threshold=special_pixel_abs_threshold,
                                 min_valid_pixels=min_valid_pixels,
                                 valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
@@ -756,13 +891,14 @@ def match_dom_pair(
                                 sift_contrast_threshold=sift_contrast_threshold,
                                 sift_edge_threshold=sift_edge_threshold,
                                 sift_sigma=sift_sigma,
-                            ),
-                            max_workers=candidate_worker_count,
-                        )
-                        parallel_cpu_used = True
-                        parallel_cpu_backend = "process_pool"
-                        parallel_cpu_worker_count = candidate_worker_count
-                    else:
+                                progress_callback=progress_bar.update if progress_bar is not None else None,
+                            )
+                        finally:
+                            if progress_bar is not None:
+                                progress_bar.finish()
+                        parallel_cpu_worker_count = 1
+                else:
+                    try:
                         tile_results = _run_serial_tile_match_tasks(
                             windows,
                             left_cube=left_cube,
@@ -785,32 +921,11 @@ def match_dom_pair(
                             sift_contrast_threshold=sift_contrast_threshold,
                             sift_edge_threshold=sift_edge_threshold,
                             sift_sigma=sift_sigma,
+                            progress_callback=progress_bar.update if progress_bar is not None else None,
                         )
-                        parallel_cpu_worker_count = 1
-                else:
-                    tile_results = _run_serial_tile_match_tasks(
-                        windows,
-                        left_cube=left_cube,
-                        right_cube=right_cube,
-                        band=band,
-                        minimum_value=minimum_value,
-                        maximum_value=maximum_value,
-                        lower_percent=lower_percent,
-                        upper_percent=upper_percent,
-                        left_invalid_values=left_invalid_values,
-                        right_invalid_values=right_invalid_values,
-                        special_pixel_abs_threshold=special_pixel_abs_threshold,
-                        min_valid_pixels=min_valid_pixels,
-                        valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
-                        invalid_pixel_radius=resolved_invalid_pixel_radius,
-                        matcher_method=resolved_matcher_method,
-                        ratio_test=ratio_test,
-                        max_features=max_features,
-                        sift_octave_layers=sift_octave_layers,
-                        sift_contrast_threshold=sift_contrast_threshold,
-                        sift_edge_threshold=sift_edge_threshold,
-                        sift_sigma=sift_sigma,
-                    )
+                    finally:
+                        if progress_bar is not None:
+                            progress_bar.finish()
                     parallel_cpu_worker_count = 1
 
                 for tile_result in tile_results:
@@ -850,6 +965,8 @@ def match_dom_pair(
             "low_resolution_max_mean_reprojection_error_pixels": resolved_low_resolution_max_mean_reprojection_error_pixels,
             "low_resolution_min_retained_match_count": resolved_low_resolution_min_retained_match_count,
             "low_resolution_max_mean_projected_offset_meters": resolved_low_resolution_max_mean_projected_offset_meters,
+            "left_precomputed_low_resolution_dom": str(resolved_left_low_resolution_dom) if resolved_left_low_resolution_dom is not None else None,
+            "right_precomputed_low_resolution_dom": str(resolved_right_low_resolution_dom) if resolved_right_low_resolution_dom is not None else None,
             "left_image_width": left_width,
             "left_image_height": left_height,
             "right_image_width": right_width,
@@ -888,6 +1005,7 @@ def match_dom_pair_to_key_files(
     match_visualization_output_path: str | Path | None = None,
     match_visualization_output_dir: str | Path | None = None,
     match_visualization_scale: float = 1.0 / 3.0,
+    show_progress: bool = False,
     **kwargs,
 ) -> dict[str, object]:
     if "low_resolution_output_dir" not in kwargs or kwargs.get("low_resolution_output_dir") is None:
@@ -897,7 +1015,7 @@ def match_dom_pair_to_key_files(
             metadata_output=metadata_output,
             left_output_key=left_output_key,
         )
-    left_key_file, right_key_file, summary = match_dom_pair(left_dom_path, right_dom_path, **kwargs)
+    left_key_file, right_key_file, summary = match_dom_pair(left_dom_path, right_dom_path, show_progress=show_progress, **kwargs)
     write_key_file(left_output_key, left_key_file)
     write_key_file(right_output_key, right_key_file)
     if metadata_output is not None:
@@ -994,14 +1112,17 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--low-resolution-max-mean-reprojection-error-pixels", type=_parse_low_resolution_max_mean_reprojection_error_pixels, default=3.0, help="Maximum allowed trimmed-mean low-resolution homography reprojection error, in pixels. Values above this threshold force low-resolution offset fallback to zero. Default: 3.0.")
     parser.add_argument("--low-resolution-min-retained-match-count", type=_parse_low_resolution_min_retained_match_count, default=DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT, help=f"Minimum retained low-resolution RANSAC match count required before projected-offset statistics are trusted. Values below this threshold skip low-resolution statistics and force fallback to zero. Default: {DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT}.")
     parser.add_argument("--low-resolution-max-mean-projected-offset-meters", type=_parse_low_resolution_max_mean_projected_offset_meters, default=DEFAULT_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS, help="Maximum allowed magnitude of the mean low-resolution projected offset, in meters. Values above this threshold force fallback to zero. Set to 0 to disable this gate. Default: 0.0.")
+    parser.add_argument("--left-low-resolution-dom", default=None, help="Optional precomputed low-resolution DOM cube for the left input. Must be provided together with --right-low-resolution-dom.")
+    parser.add_argument("--right-low-resolution-dom", default=None, help="Optional precomputed low-resolution DOM cube for the right input. Must be provided together with --left-low-resolution-dom.")
     parser.add_argument("--num-worker-parallel-cpu", type=_parse_num_worker_parallel_cpu, default=DEFAULT_NUM_WORKER_PARALLEL_CPU, help=f"Maximum worker-process count used when CPU tile parallelism is enabled. Must be within [1, {MAX_NUM_WORKER_PARALLEL_CPU}]. Default: {DEFAULT_NUM_WORKER_PARALLEL_CPU}.")
     parser.add_argument("--use-parallel-cpu", dest="use_parallel_cpu", action="store_true", help="Enable CPU process-pool parallelism for tiled matching. Enabled by default.")
     parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
     parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default pre-RANSAC drawMatches PNG output written for the matched DOM pair.")
+    parser.add_argument("--no-progress", dest="show_progress", action="store_false", help="Disable full-resolution tile progress output on stderr.")
     parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the pre-RANSAC drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the pre-RANSAC drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the pre-RANSAC drawMatches PNG. Defaults to 1/3 for a smaller preview.")
-    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False)
+    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, show_progress=True)
     if config_defaults:
         parser.set_defaults(**config_defaults)
     return parser
@@ -1043,6 +1164,10 @@ def main(argv: list[str] | None = None) -> None:
 
     parser = build_argument_parser(config_defaults=config_defaults)
     args = parser.parse_args(resolved_argv)
+    try:
+        _validate_low_resolution_dom_pair_args(args.left_low_resolution_dom, args.right_low_resolution_dom)
+    except ValueError as exc:
+        parser.error(str(exc))
     result = match_dom_pair_to_key_files(
         args.left_dom,
         args.right_dom,
@@ -1081,7 +1206,10 @@ def main(argv: list[str] | None = None) -> None:
         low_resolution_max_mean_reprojection_error_pixels=args.low_resolution_max_mean_reprojection_error_pixels,
         low_resolution_min_retained_match_count=args.low_resolution_min_retained_match_count,
         low_resolution_max_mean_projected_offset_meters=args.low_resolution_max_mean_projected_offset_meters,
+        left_low_resolution_dom=args.left_low_resolution_dom,
+        right_low_resolution_dom=args.right_low_resolution_dom,
         write_match_visualization=args.write_match_visualization,
+        show_progress=args.show_progress,
         match_visualization_output_path=args.match_visualization_output_path,
         match_visualization_output_dir=args.match_visualization_output_dir,
         match_visualization_scale=args.match_visualization_scale,

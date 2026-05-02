@@ -34,7 +34,7 @@
 - `image_match.py`
   - 公开 CLI / 参数解析 / 编排层 / 兼容入口
 - `lowres_offset.py`
-  - 低分辨率粗配准、`reduce` 生成低分辨率 DOM、投影偏移估计
+  - 低分辨率粗配准、通过 ISIS `reduce` 生成/复用低分辨率 DOM、投影偏移估计
 - `match_visualization.py`
   - `cv2.drawMatches` 可视化、默认 PNG 命名、从 `.key` 文件直接画图
 - `tile_matching.py`
@@ -66,6 +66,8 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
 - 默认把 CPU 进程池 worker 上限设为 `8`；
 - 把 pre-RANSAC 连线图写到 `work/match_viz/`；
 - 把 post-RANSAC 连线图写到 `work/match_viz_post_ransac/`。
+
+如果配置或命令行启用了低分辨率粗配准，脚本会先把当前 DOM 列表一次性降采样到 `work/low_resolution_doms/level<N>/`，并写出对齐列表 `work/doms_low_resolution_level<N>.lis`。后续同一景 DOM 参与多个 pair 时直接复用这个缓存，再复制到各自 pair 的诊断目录，不会反复调用 `reduce`。这条链路使用 ISIS `reduce`；`dom_prepare.py` 的 GSD 归一化仍然使用 `gdal_translate -tr`。
 
 如果你希望把推荐参数直接固化进配置文件，可以这样写：
 

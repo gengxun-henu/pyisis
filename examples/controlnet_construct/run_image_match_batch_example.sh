@@ -405,6 +405,10 @@ main() {
     VALID_PIXEL_PERCENT_THRESHOLD="$explicit_threshold"
   fi
 
+  LOW_RESOLUTION_DOM_LIST="$WORK_DIR/doms_low_resolution_level${low_resolution_level}.lis"
+  LOW_RESOLUTION_DOM_DIR="$WORK_DIR/low_resolution_doms/level${low_resolution_level}"
+  LOW_RESOLUTION_DOM_REPORT="$METADATA_DIR/low_resolution_doms_level${low_resolution_level}.json"
+
   log "Repository root: $REPO_ROOT"
   log "Work directory: $WORK_DIR"
   log "Original list: $ORIGINAL_LIST"
@@ -429,6 +433,8 @@ main() {
     log "Low-resolution max mean reprojection error (pixels): $low_resolution_max_mean_reprojection_error_pixels"
     log "Low-resolution minimum retained matches: $low_resolution_min_retained_match_count"
     log "Low-resolution max mean projected offset (meters): $low_resolution_max_mean_projected_offset_meters"
+    log "Low-resolution DOM list: $LOW_RESOLUTION_DOM_LIST"
+    log "Low-resolution DOM cache dir: $LOW_RESOLUTION_DOM_DIR"
   else
     log "Low-resolution offset estimation: disabled"
   fi
@@ -442,6 +448,23 @@ main() {
     [[ -n "$dom" ]] || die "DOM list alignment failed while reading paired original/DOM lists"
     dom_by_original["$original"]="$dom"
   done < <(paste "$ORIGINAL_LIST" "$DOM_LIST")
+
+  declare -A low_resolution_dom_by_original=()
+  if [[ "$enable_low_resolution_offset_estimation" == "1" ]]; then
+    log "Preparing reusable low-resolution DOM list -> $LOW_RESOLUTION_DOM_LIST"
+    "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/prepare_low_resolution_doms.py" \
+      "$DOM_LIST" \
+      "$LOW_RESOLUTION_DOM_LIST" \
+      --level "$low_resolution_level" \
+      --output-dir "$LOW_RESOLUTION_DOM_DIR" \
+      --report-json "$LOW_RESOLUTION_DOM_REPORT"
+
+    while IFS=$'\t' read -r original low_resolution_dom; do
+      [[ -n "$original" ]] || continue
+      [[ -n "$low_resolution_dom" ]] || die "low-resolution DOM list alignment failed while reading paired original/low-resolution DOM lists"
+      low_resolution_dom_by_original["$original"]="$low_resolution_dom"
+    done < <(paste "$ORIGINAL_LIST" "$LOW_RESOLUTION_DOM_LIST")
+  fi
 
   local pair_count=0
   while IFS=, read -r left right; do
@@ -507,12 +530,20 @@ main() {
     fi
     match_args+=(--num-worker-parallel-cpu "$num_worker_parallel_cpu")
     if [[ "$enable_low_resolution_offset_estimation" == "1" ]]; then
+      if [[ -z "${low_resolution_dom_by_original[$left]+x}" ]]; then
+        die "no low-resolution DOM path found for left original image: $left"
+      fi
+      if [[ -z "${low_resolution_dom_by_original[$right]+x}" ]]; then
+        die "no low-resolution DOM path found for right original image: $right"
+      fi
       match_args+=(
         --enable-low-resolution-offset-estimation
         --low-resolution-level "$low_resolution_level"
         --low-resolution-max-mean-reprojection-error-pixels "$low_resolution_max_mean_reprojection_error_pixels"
         --low-resolution-min-retained-match-count "$low_resolution_min_retained_match_count"
         --low-resolution-max-mean-projected-offset-meters "$low_resolution_max_mean_projected_offset_meters"
+        --left-low-resolution-dom "${low_resolution_dom_by_original[$left]}"
+        --right-low-resolution-dom "${low_resolution_dom_by_original[$right]}"
       )
     fi
     if [[ ${#forwarded_args[@]} -gt 0 ]]; then

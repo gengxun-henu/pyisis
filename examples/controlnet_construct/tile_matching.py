@@ -6,7 +6,8 @@ Created: 2026-04-24
 
 from __future__ import annotations
 
-from concurrent.futures import ProcessPoolExecutor
+from collections.abc import Callable
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
 import multiprocessing as mp
 import os
@@ -635,11 +636,25 @@ def _tile_match_process_pool_context() -> mp.context.BaseContext:
     return mp.get_context(preferred_context)
 
 
-def _run_parallel_tile_match_tasks(tasks: list[TileMatchTask], *, max_workers: int) -> list[TileMatchResult]:
+def _run_parallel_tile_match_tasks(
+    tasks: list[TileMatchTask],
+    *,
+    max_workers: int,
+    progress_callback: Callable[[], None] | None = None,
+) -> list[TileMatchResult]:
     if not tasks:
         return []
     with ProcessPoolExecutor(max_workers=max_workers, mp_context=_tile_match_process_pool_context()) as executor:
-        return list(executor.map(_match_single_paired_window_worker, tasks))
+        futures = {
+            executor.submit(_match_single_paired_window_worker, task): index
+            for index, task in enumerate(tasks)
+        }
+        ordered_results: list[TileMatchResult | None] = [None] * len(tasks)
+        for future in as_completed(futures):
+            ordered_results[futures[future]] = future.result()
+            if progress_callback is not None:
+                progress_callback()
+        return [result for result in ordered_results if result is not None]
 
 
 def _run_serial_tile_match_tasks(
@@ -665,6 +680,7 @@ def _run_serial_tile_match_tasks(
     sift_contrast_threshold: float,
     sift_edge_threshold: float,
     sift_sigma: float,
+    progress_callback: Callable[[], None] | None = None,
 ) -> list[TileMatchResult]:
     tile_results: list[TileMatchResult] = []
     for paired_window in windows:
@@ -696,6 +712,8 @@ def _run_serial_tile_match_tasks(
                 sift_sigma=sift_sigma,
             )
         )
+        if progress_callback is not None:
+            progress_callback()
     return tile_results
 
 

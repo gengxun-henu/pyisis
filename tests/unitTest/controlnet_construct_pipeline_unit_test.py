@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-01
+Last Modified: 2026-05-02
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -23,6 +23,7 @@ Updated: 2026-04-23  Geng Xun added regression coverage for forwarding invalid-p
 Updated: 2026-05-01  Geng Xun updated batch-wrapper fake dispatchers to serve config-default helper lookups through image_match.py.
 Updated: 2026-05-01  Geng Xun added batch-wrapper regression coverage for legacy top-level config precedence while preserving explicit CLI overrides.
 Updated: 2026-05-01  Geng Xun refactored pipeline-wrapper helper-mode regressions to preserve legacy config precedence while reusing image_match.py config-default probes.
+Updated: 2026-05-02  Geng Xun added regression coverage for reusable low-resolution DOM list preparation and forwarding.
 """
 
 from __future__ import annotations
@@ -930,6 +931,17 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     "    script_name = Path(sys.argv[1]).name\n"
                     "    args = sys.argv[2:]\n"
                     "\n"
+                    "    if script_name == 'prepare_low_resolution_doms.py':\n"
+                    "        if '--level' not in args:\n"
+                    "            raise SystemExit('missing low-resolution prepare --level')\n"
+                    "        level = args[args.index('--level') + 1]\n"
+                    "        if level != '4':\n"
+                    "            raise SystemExit(f'unexpected prepare level: {level}')\n"
+                    "        output_list = Path(args[1])\n"
+                    "        output_list.parent.mkdir(parents=True, exist_ok=True)\n"
+                    "        output_list.write_text('left_low_level4.cub\\nright_low_level4.cub\\n', encoding='utf-8')\n"
+                    "        return 0\n"
+                    "\n"
                     "    if script_name == 'image_match.py':\n"
                     "        if '--print-config-default' in args:\n"
                     "            config_path = Path(args[args.index('--config') + 1])\n"
@@ -972,6 +984,16 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     "        max_offset = args[args.index('--low-resolution-max-mean-projected-offset-meters') + 1]\n"
                     "        if max_offset != '2000.0':\n"
                     "            raise SystemExit(f'unexpected low-resolution max mean projected offset meters: {max_offset}')\n"
+                    "        if '--left-low-resolution-dom' not in args:\n"
+                    "            raise SystemExit('missing --left-low-resolution-dom')\n"
+                    "        if '--right-low-resolution-dom' not in args:\n"
+                    "            raise SystemExit('missing --right-low-resolution-dom')\n"
+                    "        left_low = args[args.index('--left-low-resolution-dom') + 1]\n"
+                    "        right_low = args[args.index('--right-low-resolution-dom') + 1]\n"
+                    "        if left_low != 'left_low_level4.cub':\n"
+                    "            raise SystemExit(f'unexpected left low-resolution DOM: {left_low}')\n"
+                    "        if right_low != 'right_low_level4.cub':\n"
+                    "            raise SystemExit(f'unexpected right low-resolution DOM: {right_low}')\n"
                     "        Path(args[2]).write_text('synthetic-left-key\\n', encoding='utf-8')\n"
                     "        Path(args[3]).write_text('synthetic-right-key\\n', encoding='utf-8')\n"
                     "        return 0\n"
@@ -1455,6 +1477,17 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "    script_name = Path(sys.argv[1]).name",
                         "    args = sys.argv[2:]",
                         "",
+                        "    if script_name == 'prepare_low_resolution_doms.py':",
+                        "        if '--level' not in args:",
+                        "            raise SystemExit('missing low-resolution prepare --level')",
+                        "        level = args[args.index('--level') + 1]",
+                        "        if level != '5':",
+                        "            raise SystemExit(f'unexpected prepare level: {level}')",
+                        "        output_list = Path(args[1])",
+                        "        output_list.parent.mkdir(parents=True, exist_ok=True)",
+                        "        output_list.write_text('left_low_level5.cub\\nright_low_level5.cub\\n', encoding='utf-8')",
+                        "        return 0",
+                        "",
                         "    if script_name == 'image_overlap.py':",
                         "        Path(args[1]).write_text('left.cub,right.cub\\n', encoding='utf-8')",
                         "        return 0",
@@ -1501,6 +1534,16 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "        max_offset = args[args.index('--low-resolution-max-mean-projected-offset-meters') + 1]",
                         "        if max_offset != '2000.0':",
                         "            raise SystemExit(f'unexpected low-resolution max mean projected offset meters: {max_offset}')",
+                        "        if '--left-low-resolution-dom' not in args:",
+                        "            raise SystemExit('missing --left-low-resolution-dom')",
+                        "        if '--right-low-resolution-dom' not in args:",
+                        "            raise SystemExit('missing --right-low-resolution-dom')",
+                        "        left_low = args[args.index('--left-low-resolution-dom') + 1]",
+                        "        right_low = args[args.index('--right-low-resolution-dom') + 1]",
+                        "        if left_low != 'left_low_level5.cub':",
+                        "            raise SystemExit(f'unexpected left low-resolution DOM: {left_low}')",
+                        "        if right_low != 'right_low_level5.cub':",
+                        "            raise SystemExit(f'unexpected right low-resolution DOM: {right_low}')",
                         "        Path(args[2]).write_text('synthetic-left-key\\n', encoding='utf-8')",
                         "        Path(args[3]).write_text('synthetic-right-key\\n', encoding='utf-8')",
                         "        return 0",

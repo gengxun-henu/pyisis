@@ -216,7 +216,8 @@ mkdir -p work/dom_keys work/match_metadata work/match_viz work/low_resolution wo
 其中：
 
 - `work/match_viz/`：保存 `image_match.py` 输出的 **pre-RANSAC** 连线图；
-- `work/low_resolution/`：按 pair 保存通过 ISIS `reduce` 生成的低分辨率 DOM、低分辨率 key 文件、RANSAC 后 key 文件以及低分辨率阶段的可视化与诊断产物；
+- `work/low_resolution_doms/level<N>/`：当启用低分辨率粗配准时，按当前 DOM 列表一次性缓存通过 ISIS `reduce` 生成的低分辨率 DOM；对应列表写到 `work/doms_low_resolution_level<N>.lis`，后续多个 pair 复用同一景 DOM 的低分辨率结果；
+- `work/low_resolution/`：按 pair 保存从上述缓存复制来的低分辨率 DOM、低分辨率 key 文件、RANSAC 后 key 文件以及低分辨率阶段的可视化与诊断产物；
 - `work/match_viz_post_ransac/`：保存 `run_pipeline_example.sh` / `controlnet_stereopair.py from-dom-batch` 输出的 **post-RANSAC** 连线图。
 
 ### 0.4 推荐参数模板（先抄这个版本）
@@ -340,7 +341,9 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
 
 这一步失败时不会中断整条流水线，而是自动回退为零偏移继续执行；对应状态会写进每个 pair 的 metadata JSON 里。
 
-当前版本的低分辨率粗配准不再依赖 GDAL，而是直接调用 ISIS 原生命令 `reduce` 生成可保留 Mapping 标签的低分辨率 `.cub`，这样后续 `cube.projection()` 能稳定读取 `PixelResolution` 等投影关键字。
+当前版本的低分辨率粗配准不再依赖 GDAL，而是直接调用 ISIS 原生命令 `reduce` 生成可保留 Mapping 标签的低分辨率 `.cub`，这样后续 `cube.projection()` 能稳定读取 `PixelResolution` 等投影关键字。为了避免同一景 DOM 在多个 overlap pair 中反复降采样，两个批处理 wrapper 会先生成一次 `work/doms_low_resolution_level<N>.lis` 和 `work/low_resolution_doms/level<N>/` 缓存；每个 pair 只把缓存里的低分辨率 DOM 复制到自己的诊断目录继续处理。
+
+注意这和 `dom_prepare.py` 的 GSD 归一化不是同一件事：`dom_prepare.py` 仍然使用 `gdal_translate -of ISIS3 -tr target target` 把不同 DOM 调整到统一 GSD；低分辨率粗配准阶段才使用 ISIS `reduce`。
 
 #### 模板 B：手工批量跑 `image_match.py`
 

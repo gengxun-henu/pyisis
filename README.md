@@ -95,6 +95,12 @@ If those three items are missing, this project cannot be configured and linked s
 
 This is the **recommended** and most reliable installation method at the moment.
 
+If you want the shortest repo-native entrypoint for the standard build + test + smoke flow, prefer:
+
+```bash
+scripts/build_test_smoke.sh full
+```
+
 1. Activate the ISIS conda environment you have already prepared.
 2. Use that environment as both:
    - the Python interpreter source
@@ -233,6 +239,12 @@ Therefore, **prebuilt binary artifacts are currently intended only for Linux use
 ## How to verify the installation
 
 At minimum, perform these three checks.
+
+For repository-local validation after code changes, you can also start with:
+
+```bash
+scripts/build_test_smoke.sh full
+```
 
 ### 1. Verify that Python can import the package
 

@@ -95,6 +95,12 @@
 
 这是目前**最推荐**、也最可靠的安装方式。
 
+如果你想用仓库里最短、最直接的标准 build + test + smoke 入口，优先使用：
+
+```bash
+scripts/build_test_smoke.sh full
+```
+
 1. 激活你已经准备好的 ISIS conda 环境。
 2. 将该环境同时作为：
 	- Python 解释器来源
@@ -233,6 +239,12 @@ python -c "import sysconfig; print(sysconfig.get_path('purelib'))"
 ## 如何验证安装是否成功
 
 至少建议执行以下三项检查。
+
+如果你是在仓库内做代码修改后的本地回归，也可以直接先跑：
+
+```bash
+scripts/build_test_smoke.sh full
+```
 
 ### 1. 验证 Python 能导入该包
 

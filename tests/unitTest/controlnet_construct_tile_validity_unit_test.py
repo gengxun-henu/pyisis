@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-05-02
 Last Modified: 2026-05-02
 Updated: 2026-05-02  Geng Xun added regression coverage for conservative tile-validity prefilter decisions.
+Updated: 2026-05-02  Geng Xun covered prefilter retention when the upper bound meets a positive threshold.
 """
 
 from __future__ import annotations
@@ -113,6 +114,51 @@ class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
         self.assertEqual(result.skipped_windows, windows)
         self.assertEqual(result.preindexed_skipped_tile_count, 1)
         self.assertEqual(result.skip_reasons["left_valid_upper_bound_below_threshold"], 1)
+
+    def test_prefilter_keeps_when_upper_bound_can_meet_positive_threshold(self):
+        left_index = tile_validity.TileValidityIndex(
+            dom_path="left.cub",
+            image_width=64,
+            image_height=32,
+            cell_width=32,
+            cell_height=32,
+            grid_width=2,
+            grid_height=1,
+            valid_counts=np.array([[128, 0]], dtype=np.int64),
+            total_counts=np.array([[1024, 1024]], dtype=np.int64),
+            uncertain=np.array([[False, False]], dtype=bool),
+            manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
+        )
+        right_index = tile_validity.TileValidityIndex(
+            dom_path="right.cub",
+            image_width=64,
+            image_height=32,
+            cell_width=32,
+            cell_height=32,
+            grid_width=2,
+            grid_height=1,
+            valid_counts=np.array([[256, 256]], dtype=np.int64),
+            total_counts=np.array([[1024, 1024]], dtype=np.int64),
+            uncertain=np.array([[False, False]], dtype=bool),
+            manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
+        )
+        window = PairedTileWindow(
+            local_window=TileWindow(0, 0, 64, 32),
+            left_window=TileWindow(0, 0, 64, 32),
+            right_window=TileWindow(0, 0, 64, 32),
+        )
+
+        result = tile_validity.prefilter_paired_windows_by_validity(
+            [window],
+            left_index=left_index,
+            right_index=right_index,
+            valid_pixel_percent_threshold=0.05,
+        )
+
+        self.assertEqual(result.kept_windows, [window])
+        self.assertEqual(result.skipped_windows, [])
+        self.assertEqual(result.preindexed_skipped_tile_count, 0)
+        self.assertEqual(result.skip_reasons, {})
 
     def test_prefilter_keeps_threshold_zero_and_uncertain_cells(self):
         index = tile_validity.TileValidityIndex(

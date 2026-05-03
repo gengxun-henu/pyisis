@@ -33,10 +33,11 @@
 2. 默认的 CPU 进程池 worker 上限是 `8`；你可以通过 `--num-worker-parallel-cpu` 改成 `1~4096` 之间的值。
 3. 默认输出匹配连线可视化 PNG，而不是必须手工额外开开关。
 
-同时，`image_match.py` 以及两个示例脚本现在还支持两组与需求 5 / 6 对应的新能力：
+同时，`image_match.py` 以及两个示例脚本现在还支持三组与性能和稳定性相关的新能力：
 
 4. 可选启用**低分辨率 DOM 粗配准**，先在低分辨率层估计一组全局投影偏移，再进入全分辨率 overlap crop；
 5. 可配置 `invalid-pixel-radius`，在无效像素和图像边界附近抑制 SIFT 特征点检测。
+6. 可显式启用 **tile-validity prefilter**，在全分辨率 tile 读取前用 DOM 有效像素索引保守跳过明显无效的 tile。
 
 其中两个示例脚本的可视化目录约定不同：
 
@@ -46,6 +47,12 @@
   - `work/match_viz_post_ransac/`：`controlnet_stereopair.py from-dom-batch` 在 merge + RANSAC 之后输出的 **post-RANSAC** 连线图。
 
 如果你想显式开启默认 CPU 并行标志，可以传 `--use-parallel-cpu`；如果你想关闭默认 CPU 并行，可以传 `--no-parallel-cpu`；如果你想把进程池 worker 上限改成别的值，可以传 `--num-worker-parallel-cpu 4` 之类；如果你想关闭 pre-RANSAC 连线图，可以在 `run_image_match_batch_example.sh` 后面通过 `-- --no-write-match-visualization` 把参数继续转发给 `image_match.py`。
+
+与全分辨率 tile 读取优化相关的 `image_match.py` 参数包括：
+
+- `--enable-tile-validity-prefilter`：显式启用 workflow 级 DOM validity-index cache，在全分辨率 tile 读取前做保守预过滤。默认关闭，方便保留现有运行作为 A/B baseline。
+- `--tile-validity-cache-dir PATH`：存放可复用的 per-DOM validity index 文件。如果省略，image-match 会根据输出上下文推导 workflow 级 `tile_validity_cache` 目录。
+- `--tile-validity-cell-width N` 与 `--tile-validity-cell-height N`：控制 coarse validity grid 的 cell 尺寸，默认均为 `1024`。
 
 如果你只想专注在第 2 步批量 DOM 匹配，而不想整条流水线一起跑，那么优先看：
 
@@ -161,6 +168,9 @@ python -c "import isis_pybind as ip; print(ip.__file__)"
   "upper_percent": 99.5,
   "min_valid_pixels": 64,
   "valid_pixel_percent_threshold": 0.05,
+  "enable_tile_validity_prefilter": false,
+  "tile_validity_cell_width": 1024,
+  "tile_validity_cell_height": 1024,
   "matcher_method": "bf",
   "ratio_test": 0.75,
   "crop_expand_pixels": 100,
@@ -200,6 +210,7 @@ work/
   dom_keys/
   match_metadata/
   match_viz/
+  tile_validity_cache/
   low_resolution/
   match_viz_post_ransac/
   pair_nets/

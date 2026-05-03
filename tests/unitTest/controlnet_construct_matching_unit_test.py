@@ -29,6 +29,7 @@ Updated: 2026-05-03  Geng Xun added regression coverage for batched parallel til
 Updated: 2026-05-03  Geng Xun added regression coverage for tile-validity metadata sidecar output.
 Updated: 2026-05-03  Geng Xun added regression coverage for visualization option resolution and target-long-edge reduce levels.
 Updated: 2026-05-04  Geng Xun added boundary regression coverage for integer-safe reduce-level calculation.
+Updated: 2026-05-04  Geng Xun added regression coverage for crop-window visualization bounds and empty-point validation.
 """
 
 from __future__ import annotations
@@ -2400,6 +2401,27 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ),
             3,
         )
+
+    def test_visualization_crop_window_uses_keypoint_bounds_and_margin(self):
+        points = (Keypoint(20.0, 30.0), Keypoint(80.0, 90.0))
+
+        window = match_visualization_module.crop_window_for_keypoints(
+            points,
+            image_width=100,
+            image_height=120,
+            margin_pixels=10,
+        )
+
+        self.assertEqual((window.start_x, window.start_y, window.width, window.height), (9, 19, 82, 82))
+
+    def test_visualization_crop_window_rejects_empty_points(self):
+        with self.assertRaisesRegex(ValueError, "At least one keypoint"):
+            match_visualization_module.crop_window_for_keypoints(
+                (),
+                image_width=100,
+                image_height=100,
+                margin_pixels=10,
+            )
 
 
 if __name__ == "__main__":

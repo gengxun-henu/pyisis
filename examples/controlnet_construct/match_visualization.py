@@ -21,6 +21,7 @@ from .tile_matching import (
     _read_cube_window,
     _resolved_invalid_values_for_cube,
 )
+from .tiling import TileWindow
 
 
 bootstrap_runtime_environment()
@@ -127,6 +128,32 @@ def resolve_visualization_options(
         preview_cache_source=resolved_cache_source,
         preview_force_regenerate=bool(preview_force_regenerate),
         preview_level=resolved_preview_level,
+    )
+
+
+def crop_window_for_keypoints(
+    points: tuple[Keypoint, ...],
+    *,
+    image_width: int,
+    image_height: int,
+    margin_pixels: int,
+) -> TileWindow:
+    if not points:
+        raise ValueError("At least one keypoint is required for cropped visualization.")
+    margin = _non_negative_int(margin_pixels, field_name="preview_crop_margin_pixels")
+    min_sample = min(point.sample for point in points)
+    max_sample = max(point.sample for point in points)
+    min_line = min(point.line for point in points)
+    max_line = max(point.line for point in points)
+    start_x = max(0, int(np.floor(min_sample - 1.0)) - margin)
+    start_y = max(0, int(np.floor(min_line - 1.0)) - margin)
+    end_x = min(int(image_width), int(np.ceil(max_sample)) + margin + 1)
+    end_y = min(int(image_height), int(np.ceil(max_line)) + margin + 1)
+    return TileWindow(
+        start_x=start_x,
+        start_y=start_y,
+        width=max(1, end_x - start_x),
+        height=max(1, end_y - start_y),
     )
 
 
@@ -309,6 +336,7 @@ def write_stereo_pair_match_visualization_from_key_files(
 
 
 __all__ = [
+    "crop_window_for_keypoints",
     "default_match_visualization_path",
     "write_stereo_pair_match_visualization",
     "write_stereo_pair_match_visualization_from_key_files",

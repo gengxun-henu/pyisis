@@ -224,7 +224,9 @@ def _ensure_preview_cube(
             except Exception:
                 validation_reason = "metadata_corrupt"
             else:
-                if (
+                if not isinstance(metadata_payload, dict):
+                    validation_reason = "metadata_corrupt"
+                elif (
                     metadata_payload.get("source_hash_key") != source_hash_key
                     or metadata_payload.get("level") != resolved_level
                 ):

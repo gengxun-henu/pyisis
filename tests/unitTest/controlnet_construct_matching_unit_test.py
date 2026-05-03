@@ -46,6 +46,7 @@ Updated: 2026-05-12  Geng Xun added regression coverage for corrupt preview cach
 Updated: 2026-05-14  Geng Xun added preview cache metadata validation coverage and regeneration diagnostics.
 Updated: 2026-05-15  Geng Xun added reduced preview cache validation-failure regeneration tests.
 Updated: 2026-05-16  Geng Xun added preview cache fingerprint and metadata corruption validation coverage.
+Updated: 2026-05-16  Geng Xun added coverage for non-object preview cache metadata regeneration.
 """
 
 from __future__ import annotations
@@ -2580,6 +2581,66 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 preview_path.write_text("cached", encoding="utf-8")
                 metadata_path = match_visualization_module._preview_cache_metadata_path(preview_path)
                 metadata_path.write_text("not-json", encoding="utf-8")
+
+            with mock.patch.object(
+                match_visualization_module,
+                "_cube_dimensions",
+                return_value=(4096, 4096),
+            ), mock.patch.object(
+                match_visualization_module,
+                "create_low_resolution_dom",
+                side_effect=fake_create,
+            ), mock.patch.object(
+                match_visualization_module,
+                "_read_cube_as_stretched_byte",
+                return_value=np.full((64, 64), 128, dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "drawMatches",
+                return_value=np.zeros((10, 10, 3), dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "imwrite",
+                return_value=True,
+            ):
+                result = match_visualization_module.write_stereo_pair_match_visualization(
+                    "left.cub",
+                    "right.cub",
+                    left_key_file,
+                    right_key_file,
+                    output_path=temp_dir / "viz.png",
+                    visualization_mode="reduced",
+                    preview_cache_dir=preview_root,
+                    preview_level=2,
+                    visualization_target_long_edge=1024,
+                )
+
+        self.assertFalse(result["preview_cache_hit"])
+        self.assertFalse(result["preview_cache_hit_left"])
+        self.assertFalse(result["preview_cache_hit_right"])
+        self.assertEqual(result["preview_cache_validation_left"], "metadata_corrupt")
+        self.assertEqual(result["preview_cache_validation_right"], "metadata_corrupt")
+        self.assertEqual(len(generated), 2)
+
+    def test_write_match_visualization_reduced_mode_regenerates_non_object_metadata_cache(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+        generated: list[Path] = []
+
+        def fake_create(source, output, *, level, **kwargs):
+            generated.append(Path(output))
+            Path(output).parent.mkdir(parents=True, exist_ok=True)
+            Path(output).write_text("preview", encoding="utf-8")
+            return Path(output)
+
+        with temporary_directory() as temp_dir:
+            preview_root = temp_dir / "preview_cache"
+            for name in ("left.cub", "right.cub"):
+                preview_path = match_visualization_module._preview_cache_path(preview_root, name, level=2)
+                preview_path.parent.mkdir(parents=True, exist_ok=True)
+                preview_path.write_text("cached", encoding="utf-8")
+                metadata_path = match_visualization_module._preview_cache_metadata_path(preview_path)
+                metadata_path.write_text("[]", encoding="utf-8")
 
             with mock.patch.object(
                 match_visualization_module,

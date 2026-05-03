@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-02
+Last Modified: 2026-05-03
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -22,8 +22,11 @@ Updated: 2026-05-01  Geng Xun added regression coverage for shell formatting hel
 Updated: 2026-05-01  Geng Xun added regression coverage for the CLI print-config-default helper path.
 Updated: 2026-05-02  Geng Xun added regression coverage for precomputed low-resolution DOM reuse without repeated reduce calls.
 Updated: 2026-05-02  Geng Xun added regression coverage for full-resolution image-match tile progress reporting.
-Updated: 2026-05-02  Geng Xun added regression coverage for batched parallel tile matching cube lifecycles.
-Updated: 2026-05-02  Geng Xun added regression coverage for optional validity preindex filtering summary diagnostics.
+Updated: 2026-05-02  Geng Xun added regression coverage for tile-validity prefilter config defaults and summary reporting.
+Updated: 2026-05-02  Geng Xun adjusted tile-validity default config keys and prefilter default coverage.
+Updated: 2026-05-02  Geng Xun refined tile-validity prefilter fixture to avoid degenerate valid tiles.
+Updated: 2026-05-03  Geng Xun added regression coverage for batched parallel tile matching diagnostics.
+Updated: 2026-05-03  Geng Xun added regression coverage for tile-validity metadata sidecar output.
 """
 
 from __future__ import annotations
@@ -63,7 +66,6 @@ match_dom_pair_to_key_files = image_match.match_dom_pair_to_key_files
 write_stereo_pair_match_visualization_from_key_files = image_match.write_stereo_pair_match_visualization_from_key_files
 
 tile_matching_module = importlib.import_module("controlnet_construct.tile_matching")
-tile_validity_module = importlib.import_module("controlnet_construct.tile_validity")
 
 keypoints_module = importlib.import_module("controlnet_construct.keypoints")
 Keypoint = keypoints_module.Keypoint
@@ -342,6 +344,26 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             self.assertEqual(image_match.print_image_match_config_default(config_path, "use_parallel_cpu"), "0")
             self.assertEqual(image_match.print_image_match_config_default(config_path, "num_worker_parallel_cpu"), "4")
             self.assertEqual(image_match.print_image_match_config_default(config_path, "matcher_method"), "flann")
+
+    def test_print_image_match_config_default_reads_tile_validity_fields(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "enableTileValidityPrefilter": True,
+                            "tileValidityCellWidth": 256,
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            enabled = image_match.print_image_match_config_default(config_path, "enable_tile_validity_prefilter")
+            cell_width = image_match.print_image_match_config_default(config_path, "tile_validity_cell_width")
+
+        self.assertEqual(enabled, "1")
+        self.assertEqual(cell_width, "256")
 
     def test_print_image_match_config_default_returns_empty_string_for_missing_field(self):
         with temporary_directory() as temp_dir:
@@ -635,27 +657,6 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertFalse(disabled_args.use_parallel_cpu)
         self.assertTrue(explicit_enabled_args.use_parallel_cpu)
 
-    def test_build_argument_parser_defaults_preindex_filter_off_and_allows_enabling_it(self):
-        parser = build_argument_parser()
-
-        default_args = parser.parse_args(["left.cub", "right.cub", "left.key", "right.key"])
-        enabled_args = parser.parse_args(
-            [
-                "left.cub",
-                "right.cub",
-                "left.key",
-                "right.key",
-                "--enable-validity-preindex-filter",
-                "--validity-preindex-coarse-cell-size",
-                "64",
-            ]
-        )
-
-        self.assertFalse(default_args.enable_validity_preindex_filter)
-        self.assertIsNone(default_args.validity_preindex_coarse_cell_size)
-        self.assertTrue(enabled_args.enable_validity_preindex_filter)
-        self.assertEqual(enabled_args.validity_preindex_coarse_cell_size, 64)
-
     def test_build_argument_parser_accepts_custom_parallel_worker_limit(self):
         parser = build_argument_parser()
 
@@ -714,6 +715,30 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         )
 
         self.assertAlmostEqual(args.valid_pixel_percent_threshold, 0.35)
+
+    def test_build_argument_parser_accepts_tile_validity_prefilter_options(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--enable-tile-validity-prefilter",
+                "--tile-validity-cache-dir",
+                "work/tile_validity_cache",
+                "--tile-validity-cell-width",
+                "512",
+                "--tile-validity-cell-height",
+                "256",
+            ]
+        )
+
+        self.assertTrue(args.enable_tile_validity_prefilter)
+        self.assertEqual(args.tile_validity_cache_dir, "work/tile_validity_cache")
+        self.assertEqual(args.tile_validity_cell_width, 512)
+        self.assertEqual(args.tile_validity_cell_height, 256)
 
     def test_build_argument_parser_accepts_invalid_pixel_radius_and_low_resolution_options(self):
         parser = build_argument_parser()
@@ -879,25 +904,28 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(defaults["low_resolution_min_retained_match_count"], 6)
         self.assertAlmostEqual(defaults["low_resolution_max_mean_projected_offset_meters"], 2000.0)
 
-    def test_load_image_match_defaults_from_config_accepts_validity_preindex_filter(self):
+    def test_load_image_match_defaults_from_config_reads_tile_validity_fields(self):
         with temporary_directory() as temp_dir:
-            config_path = temp_dir / "image_match_config.json"
+            config_path = temp_dir / "controlnet_config.json"
             config_path.write_text(
                 json.dumps(
                     {
                         "ImageMatch": {
-                            "enableValidityPreindexFilter": True,
-                            "validityPreindexCoarseCellSize": 128,
+                            "enableTileValidityPrefilter": True,
+                            "tileValidityCacheDir": "work/tile_validity_cache",
+                            "tileValidityCellWidth": 512,
+                            "tileValidityCellHeight": 256,
                         }
                     }
                 ),
                 encoding="utf-8",
             )
-
             defaults = image_match.load_image_match_defaults_from_config(config_path)
 
-        self.assertTrue(defaults["enable_validity_preindex_filter"])
-        self.assertEqual(defaults["validity_preindex_coarse_cell_size"], 128)
+        self.assertTrue(defaults["enable_tile_validity_prefilter"])
+        self.assertEqual(defaults["tile_validity_cache_dir"], "work/tile_validity_cache")
+        self.assertEqual(defaults["tile_validity_cell_width"], 512)
+        self.assertEqual(defaults["tile_validity_cell_height"], 256)
 
     def test_create_descriptor_matcher_supports_bf_and_flann(self):
         fake_bf_matcher = object()
@@ -979,153 +1007,6 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["matcher"]["matcher_method_requested"], "flann")
         self.assertEqual(summary["matcher"]["matcher_method_used"], "flann")
         self.assertEqual(summary["matcher"]["flann_index_params"]["algorithm"], "KDTree")
-
-    def test_run_parallel_tile_match_tasks_batches_cube_open_lifecycle_and_preserves_ordered_progress(self):
-        task_count = 5
-        tasks = []
-        for index in range(task_count):
-            window = tile_matching_module.TileWindow(start_x=index, start_y=0, width=8, height=8)
-            paired_window = tile_matching_module.PairedTileWindow(
-                local_window=window,
-                left_window=window,
-                right_window=window,
-            )
-            tasks.append(
-                tile_matching_module.TileMatchTask(
-                    left_dom_path="left_batch.cub",
-                    right_dom_path="right_batch.cub",
-                    band=1,
-                    paired_window=paired_window,
-                    minimum_value=None,
-                    maximum_value=None,
-                    lower_percent=0.5,
-                    upper_percent=99.5,
-                    invalid_values=(),
-                    special_pixel_abs_threshold=1.0e300,
-                    min_valid_pixels=1,
-                    valid_pixel_percent_threshold=0.0,
-                    invalid_pixel_radius=0,
-                    ratio_test=0.75,
-                    matcher_method="bf",
-                    max_features=None,
-                    sift_octave_layers=3,
-                    sift_contrast_threshold=0.04,
-                    sift_edge_threshold=10.0,
-                    sift_sigma=1.6,
-                )
-            )
-
-        class FakeFuture:
-            def __init__(self, result):
-                self._result = result
-
-            def result(self):
-                return self._result
-
-        class ImmediateExecutor:
-            submitted_batch_sizes: list[int] = []
-
-            def __init__(self, *args, **kwargs):
-                pass
-
-            def __enter__(self):
-                return self
-
-            def __exit__(self, exc_type, exc, traceback):
-                return False
-
-            def submit(self, func, submitted_tasks):
-                if isinstance(submitted_tasks, tile_matching_module.TileMatchTask):
-                    submitted = submitted_tasks
-                    self.submitted_batch_sizes.append(1)
-                else:
-                    submitted = tuple(submitted_tasks)
-                    self.submitted_batch_sizes.append(len(submitted))
-                return FakeFuture(func(submitted))
-
-        class FakeCube:
-            open_paths: list[str] = []
-            close_count = 0
-
-            def __init__(self):
-                self._is_open = False
-                self.path = None
-
-            def open(self, path, mode):
-                self.path = str(path)
-                self._is_open = True
-                self.open_paths.append(self.path)
-
-            def is_open(self):
-                return self._is_open
-
-            def close(self):
-                self._is_open = False
-                type(self).close_count += 1
-
-            def pixel_type(self):
-                return object()
-
-        read_calls: list[tuple[str, int]] = []
-        progress_calls: list[object] = []
-
-        def fake_read_cube_window(cube, window, *, band):
-            read_calls.append((cube.path, window.start_x))
-            return np.full((window.height, window.width), window.start_x, dtype=np.float64)
-
-        def fake_match_tile_from_window_values(**kwargs):
-            local_window = kwargs["local_window"]
-            return tile_matching_module.TileMatchResult(
-                stats=tile_matching_module.TileMatchStats(
-                    local_start_x=local_window.start_x,
-                    local_start_y=local_window.start_y,
-                    width=local_window.width,
-                    height=local_window.height,
-                    left_start_x=kwargs["left_window"].start_x,
-                    left_start_y=kwargs["left_window"].start_y,
-                    right_start_x=kwargs["right_window"].start_x,
-                    right_start_y=kwargs["right_window"].start_y,
-                    left_valid_pixel_count=64,
-                    right_valid_pixel_count=64,
-                    left_valid_pixel_ratio=1.0,
-                    right_valid_pixel_ratio=1.0,
-                    left_feature_count=1,
-                    right_feature_count=1,
-                    match_count=1,
-                    status=f"matched_{local_window.start_x}",
-                ),
-                left_points=(Keypoint(float(local_window.start_x + 1), 1.0),),
-                right_points=(Keypoint(float(local_window.start_x + 2), 1.0),),
-            )
-
-        with mock.patch.object(tile_matching_module.ip, "Cube", FakeCube), mock.patch.object(
-            tile_matching_module,
-            "ProcessPoolExecutor",
-            ImmediateExecutor,
-        ), mock.patch.object(tile_matching_module, "as_completed", side_effect=lambda futures: list(futures)), mock.patch.object(
-            tile_matching_module,
-            "_read_cube_window",
-            side_effect=fake_read_cube_window,
-        ), mock.patch.object(
-            tile_matching_module,
-            "_match_tile_from_window_values",
-            side_effect=fake_match_tile_from_window_values,
-        ):
-            results = tile_matching_module._run_parallel_tile_match_tasks(
-                tasks,
-                max_workers=2,
-                progress_callback=lambda: progress_calls.append(object()),
-            )
-
-        self.assertEqual(ImmediateExecutor.submitted_batch_sizes, [3, 2])
-        self.assertEqual(FakeCube.open_paths.count("left_batch.cub"), 2)
-        self.assertEqual(FakeCube.open_paths.count("right_batch.cub"), 2)
-        self.assertEqual(FakeCube.close_count, 4)
-        self.assertEqual([result.stats.local_start_x for result in results], list(range(task_count)))
-        self.assertEqual([result.stats.status for result in results], [f"matched_{index}" for index in range(task_count)])
-        self.assertEqual(len(progress_calls), task_count)
-        self.assertEqual([call[1] for call in read_calls if call[0] == "left_batch.cub"], list(range(task_count)))
-        self.assertEqual([call[1] for call in read_calls if call[0] == "right_batch.cub"], list(range(task_count)))
 
     def test_match_dom_pair_forwards_custom_low_resolution_trim_fraction(self):
         image = _build_textured_test_image(64, 64)
@@ -1219,6 +1100,81 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             estimate_mock.call_args.kwargs["low_resolution_max_mean_projected_offset_meters"],
             2000.0,
         )
+
+    def test_match_dom_pair_prefilters_invalid_tiles_and_reports_summary(self):
+        values = np.zeros((32, 64), dtype=np.float64)
+        values[:, :32] = _build_textured_test_image(32, 32)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                values,
+                pixel_type=ip.PixelType.Real,
+                left_name="left_prefilter.cub",
+                right_name="right_prefilter.cub",
+            )
+            cache_dir = temp_dir / "tile_validity_cache"
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                max_image_dimension=32,
+                block_width=32,
+                block_height=32,
+                overlap_x=0,
+                overlap_y=0,
+                invalid_values=(0.0,),
+                invalid_pixel_radius=0,
+                valid_pixel_percent_threshold=0.2,
+                min_valid_pixels=16,
+                use_parallel_cpu=False,
+                enable_tile_validity_prefilter=True,
+                tile_validity_cache_dir=cache_dir,
+                tile_validity_cell_width=32,
+                tile_validity_cell_height=32,
+            )
+
+        self.assertTrue(summary["tile_validity_prefilter_enabled"])
+        self.assertEqual(summary["tile_count"], 2)
+        self.assertEqual(summary["tile_count_before_preindex_filter"], 2)
+        self.assertEqual(summary["tile_count_after_preindex_filter"], 1)
+        self.assertEqual(summary["preindexed_skipped_tile_count"], 1)
+        self.assertEqual(summary["tile_validity_cache_dir"], str(cache_dir))
+        self.assertEqual(
+            summary["full_resolution_skipped_tile_count"],
+            summary["skipped_tile_count"] - summary["preindexed_skipped_tile_count"],
+        )
+        self.assertIn(summary["left_tile_validity_index"]["status"], {"rebuilt", "hit"})
+        self.assertIn(summary["right_tile_validity_index"]["status"], {"rebuilt", "hit"})
+
+    def test_match_dom_pair_keeps_prefilter_disabled_by_default(self):
+        values = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                values,
+                pixel_type=ip.PixelType.Real,
+                left_name="left_prefilter_default.cub",
+                right_name="right_prefilter_default.cub",
+            )
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                max_image_dimension=32,
+                block_width=32,
+                block_height=32,
+                overlap_x=0,
+                overlap_y=0,
+                valid_pixel_percent_threshold=0.2,
+                invalid_pixel_radius=0,
+                use_parallel_cpu=False,
+            )
+
+        self.assertFalse(summary["tile_validity_prefilter_enabled"])
+        self.assertEqual(summary["tile_count_before_preindex_filter"], summary["tile_count"])
+        self.assertEqual(summary["tile_count_after_preindex_filter"], summary["tile_count"])
+        self.assertEqual(summary["preindexed_skipped_tile_count"], 0)
+        self.assertIsNone(summary["tile_validity_cache_dir"])
 
     def test_estimate_low_resolution_projected_offset_rejects_large_reprojection_error(self):
         with temporary_directory() as temp_dir:
@@ -1735,134 +1691,11 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(summary["parallel_cpu_requested"])
         self.assertEqual(summary["num_worker_parallel_cpu"], 8)
         self.assertTrue(summary["parallel_cpu_used"])
-        self.assertEqual(summary["parallel_cpu_backend"], "process_pool")
+        self.assertEqual(summary["parallel_cpu_backend"], "process_pool_batched_cube_reuse")
         self.assertEqual(summary["parallel_cpu_worker_count"], 4)
         self.assertEqual(summary["point_count"], 2)
         self.assertEqual(len(left_key_file.points), 2)
         self.assertEqual(len(right_key_file.points), 2)
-
-    def test_match_dom_pair_default_disables_validity_preindex_summary_without_grid_build(self):
-        image = _build_textured_test_image(64, 64)
-
-        with temporary_directory() as temp_dir:
-            left_path, right_path = _write_projected_dom_pair(
-                temp_dir,
-                image,
-                pixel_type=ip.PixelType.UnsignedByte,
-                left_name="left_preindex_default.cub",
-                right_name="right_preindex_default.cub",
-            )
-
-            with mock.patch.object(
-                image_match,
-                "_build_dom_validity_grid_from_cube",
-                create=True,
-                side_effect=AssertionError("validity grid should not be built by default"),
-            ):
-                _, _, summary = match_dom_pair(
-                    left_path,
-                    right_path,
-                    min_valid_pixels=16,
-                    use_parallel_cpu=False,
-                )
-
-        self.assertFalse(summary["validity_preindex_filter_enabled"])
-        self.assertEqual(summary["preindexed_skipped_tile_count"], 0)
-        self.assertEqual(summary["tile_count_after_preindex_filter"], summary["tile_count"])
-
-    def test_match_dom_pair_validity_preindex_filters_windows_before_tile_matching(self):
-        image = _build_textured_test_image(128, 128)
-        full_cell_count = 64 * 64
-        left_grid = tile_validity_module.DomValidityGrid.from_valid_counts(
-            image_width=128,
-            image_height=128,
-            coarse_cell_size=64,
-            valid_counts=((0, full_cell_count), (full_cell_count, full_cell_count)),
-        )
-        right_grid = tile_validity_module.DomValidityGrid.from_valid_counts(
-            image_width=128,
-            image_height=128,
-            coarse_cell_size=64,
-            valid_counts=((full_cell_count, full_cell_count), (full_cell_count, full_cell_count)),
-        )
-
-        def fake_parallel_tile_match_tasks(tasks, **kwargs):
-            results = []
-            for task in tasks:
-                paired_window = task.paired_window
-                results.append(
-                    image_match.TileMatchResult(
-                        stats=image_match.TileMatchStats(
-                            local_start_x=paired_window.local_window.start_x,
-                            local_start_y=paired_window.local_window.start_y,
-                            width=paired_window.local_window.width,
-                            height=paired_window.local_window.height,
-                            left_start_x=paired_window.left_window.start_x,
-                            left_start_y=paired_window.left_window.start_y,
-                            right_start_x=paired_window.right_window.start_x,
-                            right_start_y=paired_window.right_window.start_y,
-                            left_valid_pixel_count=full_cell_count,
-                            right_valid_pixel_count=full_cell_count,
-                            left_valid_pixel_ratio=1.0,
-                            right_valid_pixel_ratio=1.0,
-                            left_feature_count=1,
-                            right_feature_count=1,
-                            match_count=1,
-                            status="matched",
-                        ),
-                        left_points=(Keypoint(float(paired_window.local_window.start_x + 1), 1.0),),
-                        right_points=(Keypoint(float(paired_window.local_window.start_x + 1.5), 1.5),),
-                    )
-                )
-            return results
-
-        with temporary_directory() as temp_dir:
-            left_path, right_path = _write_projected_dom_pair(
-                temp_dir,
-                image,
-                pixel_type=ip.PixelType.UnsignedByte,
-                left_name="left_preindex_enabled.cub",
-                right_name="right_preindex_enabled.cub",
-            )
-
-            with mock.patch.object(
-                image_match,
-                "_build_dom_validity_grid_from_cube",
-                create=True,
-                side_effect=[left_grid, right_grid],
-            ) as build_grid_mock, mock.patch.object(
-                image_match,
-                "_run_parallel_tile_match_tasks",
-                side_effect=fake_parallel_tile_match_tasks,
-            ) as parallel_mock:
-                _, _, summary = match_dom_pair(
-                    left_path,
-                    right_path,
-                    max_image_dimension=64,
-                    block_width=64,
-                    block_height=64,
-                    overlap_x=0,
-                    overlap_y=0,
-                    min_valid_pixels=1,
-                    valid_pixel_percent_threshold=0.1,
-                    enable_validity_preindex_filter=True,
-                    validity_preindex_coarse_cell_size=64,
-                )
-
-        submitted_tasks = parallel_mock.call_args.args[0]
-        submitted_local_starts = [
-            (task.paired_window.local_window.start_x, task.paired_window.local_window.start_y)
-            for task in submitted_tasks
-        ]
-        self.assertEqual(submitted_local_starts, [(64, 0), (0, 64), (64, 64)])
-        self.assertEqual(build_grid_mock.call_count, 2)
-        self.assertTrue(summary["validity_preindex_filter_enabled"])
-        self.assertEqual(summary["tile_count"], 4)
-        self.assertEqual(summary["preindexed_skipped_tile_count"], 1)
-        self.assertEqual(summary["tile_count_after_preindex_filter"], 3)
-        self.assertEqual(summary["matched_tile_count"], 3)
-        self.assertEqual(summary["full_resolution_skipped_tile_count"], 0)
-        self.assertEqual(summary["skipped_tile_count"], 1)
 
     def test_match_dom_pair_respects_requested_parallel_worker_limit(self):
         width = 128
@@ -2298,6 +2131,231 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertIn("match_visualization", result)
         self.assertTrue(visualization_output_exists)
         self.assertEqual(visualization_output_parent, Path(left_key_path).parent)
+
+    def test_parallel_tile_batch_worker_reuses_open_cubes_for_task_shard(self):
+        open_paths: list[str] = []
+        close_count = 0
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, path, mode):
+                open_paths.append(str(path))
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                nonlocal close_count
+                close_count += 1
+                self._open = False
+
+        tasks = [
+            tile_matching_module.IndexedTileMatchTask(
+                index=0,
+                task=tile_matching_module.TileMatchTask(
+                    left_dom_path="left.cub",
+                    right_dom_path="right.cub",
+                    band=1,
+                    paired_window=tile_matching_module.PairedTileWindow(
+                        local_window=tile_matching_module.TileWindow(0, 0, 8, 8),
+                        left_window=tile_matching_module.TileWindow(0, 0, 8, 8),
+                        right_window=tile_matching_module.TileWindow(0, 0, 8, 8),
+                    ),
+                    minimum_value=None,
+                    maximum_value=None,
+                    lower_percent=0.5,
+                    upper_percent=99.5,
+                    invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    min_valid_pixels=1,
+                    valid_pixel_percent_threshold=0.0,
+                    invalid_pixel_radius=0,
+                    ratio_test=0.75,
+                    matcher_method="bf",
+                    max_features=None,
+                    sift_octave_layers=3,
+                    sift_contrast_threshold=0.04,
+                    sift_edge_threshold=10.0,
+                    sift_sigma=1.6,
+                ),
+            ),
+            tile_matching_module.IndexedTileMatchTask(
+                index=1,
+                task=tile_matching_module.TileMatchTask(
+                    left_dom_path="left.cub",
+                    right_dom_path="right.cub",
+                    band=1,
+                    paired_window=tile_matching_module.PairedTileWindow(
+                        local_window=tile_matching_module.TileWindow(8, 0, 8, 8),
+                        left_window=tile_matching_module.TileWindow(8, 0, 8, 8),
+                        right_window=tile_matching_module.TileWindow(8, 0, 8, 8),
+                    ),
+                    minimum_value=None,
+                    maximum_value=None,
+                    lower_percent=0.5,
+                    upper_percent=99.5,
+                    invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    min_valid_pixels=1,
+                    valid_pixel_percent_threshold=0.0,
+                    invalid_pixel_radius=0,
+                    ratio_test=0.75,
+                    matcher_method="bf",
+                    max_features=None,
+                    sift_octave_layers=3,
+                    sift_contrast_threshold=0.04,
+                    sift_edge_threshold=10.0,
+                    sift_sigma=1.6,
+                ),
+            ),
+        ]
+
+        def fake_match_task_with_open_cubes(task, **kwargs):
+            return tile_matching_module.TileMatchResult(
+                stats=tile_matching_module.TileMatchStats(
+                    local_start_x=task.paired_window.local_window.start_x,
+                    local_start_y=task.paired_window.local_window.start_y,
+                    width=task.paired_window.local_window.width,
+                    height=task.paired_window.local_window.height,
+                    left_start_x=task.paired_window.left_window.start_x,
+                    left_start_y=task.paired_window.left_window.start_y,
+                    right_start_x=task.paired_window.right_window.start_x,
+                    right_start_y=task.paired_window.right_window.start_y,
+                    left_valid_pixel_count=64,
+                    right_valid_pixel_count=64,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=0,
+                    right_feature_count=0,
+                    match_count=0,
+                    status="skipped_insufficient_matches",
+                ),
+                left_points=(),
+                right_points=(),
+            )
+
+        with mock.patch.object(tile_matching_module.ip, "Cube", FakeCube), mock.patch.object(
+            tile_matching_module,
+            "_resolved_invalid_values_for_cube",
+            return_value=(),
+        ), mock.patch.object(
+            tile_matching_module,
+            "_match_tile_task_with_open_cubes",
+            side_effect=fake_match_task_with_open_cubes,
+        ):
+            results = tile_matching_module._match_tile_task_batch_worker(tuple(tasks))
+
+        self.assertEqual(open_paths, ["left.cub", "right.cub"])
+        self.assertEqual(close_count, 2)
+        self.assertEqual([index for index, _ in results], [0, 1])
+
+    def test_match_dom_pair_reports_batched_parallel_backend(self):
+        image = _build_textured_test_image(128, 128)
+        synthetic_tile_results = [
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=5,
+                    right_feature_count=5,
+                    match_count=1,
+                    status="matched",
+                ),
+                left_points=(Keypoint(10.0, 10.0),),
+                right_points=(Keypoint(10.5, 10.5),),
+            )
+        ]
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_batched_parallel.cub",
+                right_name="right_batched_parallel.cub",
+            )
+            with mock.patch.object(
+                image_match,
+                "_run_parallel_tile_match_tasks",
+                return_value=synthetic_tile_results,
+            ):
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                    num_worker_parallel_cpu=2,
+                )
+
+        self.assertTrue(summary["parallel_cpu_used"])
+        self.assertEqual(summary["parallel_cpu_backend"], "process_pool_batched_cube_reuse")
+        self.assertEqual(summary["parallel_cpu_worker_count"], 2)
+
+    def test_match_dom_pair_to_key_files_writes_tile_validity_metadata(self):
+        values = np.zeros((32, 64), dtype=np.float64)
+        values[:, :32] = _build_textured_test_image(32, 32)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                values,
+                pixel_type=ip.PixelType.Real,
+                left_name="left_prefilter_metadata.cub",
+                right_name="right_prefilter_metadata.cub",
+            )
+            left_key = temp_dir / "dom_keys" / "left.key"
+            right_key = temp_dir / "dom_keys" / "right.key"
+            metadata_output = temp_dir / "match_metadata" / "pair.json"
+            left_key.parent.mkdir(parents=True)
+            metadata_output.parent.mkdir(parents=True)
+
+            match_dom_pair_to_key_files(
+                left_path,
+                right_path,
+                left_key,
+                right_key,
+                metadata_output=metadata_output,
+                write_match_visualization=False,
+                max_image_dimension=32,
+                block_width=32,
+                block_height=32,
+                overlap_x=0,
+                overlap_y=0,
+                invalid_values=(0.0,),
+                invalid_pixel_radius=0,
+                valid_pixel_percent_threshold=0.2,
+                min_valid_pixels=16,
+                use_parallel_cpu=False,
+                enable_tile_validity_prefilter=True,
+                tile_validity_cell_width=32,
+                tile_validity_cell_height=32,
+            )
+
+            payload = json.loads(metadata_output.read_text(encoding="utf-8"))
+
+        image_match_payload = payload["image_match"]
+        self.assertTrue(image_match_payload["tile_validity_prefilter_enabled"])
+        self.assertEqual(image_match_payload["preindexed_skipped_tile_count"], 1)
+        self.assertEqual(image_match_payload["tile_count_before_preindex_filter"], 2)
+        self.assertEqual(image_match_payload["tile_count_after_preindex_filter"], 1)
+        self.assertTrue(str(image_match_payload["tile_validity_cache_dir"]).endswith("tile_validity_cache"))
 
 
 if __name__ == "__main__":

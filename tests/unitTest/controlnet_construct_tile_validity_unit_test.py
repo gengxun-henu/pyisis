@@ -1,213 +1,535 @@
-"""Focused unit tests for DOM tile-validity cache helpers.
+"""Focused unit tests for DOM tile-validity cache and prefilter helpers.
 
 Author: Geng Xun
 Created: 2026-05-02
 Last Modified: 2026-05-02
-Updated: 2026-05-02  Geng Xun added core validity-grid cache and conservative prefilter coverage.
+Updated: 2026-05-02  Geng Xun added regression coverage for conservative tile-validity prefilter decisions.
+Updated: 2026-05-02  Geng Xun covered prefilter retention when the upper bound meets a positive threshold.
+Updated: 2026-05-02  Geng Xun kept tile-validity fixtures realistic for prefilter skip decisions.
+Updated: 2026-05-02  Geng Xun added import isolation and threshold validation coverage.
+Updated: 2026-05-02  Geng Xun decoupled tile-validity tests from tile-matching imports.
+Updated: 2026-05-02  Geng Xun added a namespace shim so helper imports skip package init.
+Updated: 2026-05-02  Geng Xun added cache roundtrip expectations for validity-index persistence.
+Updated: 2026-05-02  Geng Xun ensured cache-file existence checks occur before temp cleanup.
+Updated: 2026-05-02  Geng Xun cleaned up controlnet_construct shim teardown for isolation.
+Updated: 2026-05-02  Geng Xun added cache-error rebuild diagnostics coverage.
+Updated: 2026-05-02  Geng Xun ensured tile-validity import isolation does not pull heavy runtime deps.
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass
+import json
+import importlib
+import importlib.machinery
 import sys
 from pathlib import Path
+import types
 import unittest
 
+import numpy as np
+
+
+UNIT_TEST_DIR = Path(__file__).resolve().parent
+if str(UNIT_TEST_DIR) not in sys.path:
+    sys.path.insert(0, str(UNIT_TEST_DIR))
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 EXAMPLES_DIR = PROJECT_ROOT / "examples"
 if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
-from controlnet_construct.tile_validity import (  # noqa: E402
-    DomPathMetadata,
-    DomValidityCache,
-    DomValidityGrid,
-    TileValidityFilterSummary,
-    build_dom_validity_cache_key,
-    filter_windows_by_validity,
-)
-from controlnet_construct.tiling import TileWindow  # noqa: E402
+try:
+    from _unit_test_support import ip, make_test_cube, temporary_directory
+except Exception:  # noqa: BLE001
+    ip = None
+    make_test_cube = None
+    temporary_directory = None
+
+CONTROLNET_CONSTRUCT_DIR = EXAMPLES_DIR / "controlnet_construct"
+CONTROLNET_CONSTRUCT_PATH = str(CONTROLNET_CONSTRUCT_DIR)
+_CREATED_CONTROLNET_CONSTRUCT_SHIM = False
+_CONTROLNET_CONSTRUCT_SHIM: types.ModuleType | None = None
+
+if "controlnet_construct" not in sys.modules:
+    _CREATED_CONTROLNET_CONSTRUCT_SHIM = True
+    package = types.ModuleType("controlnet_construct")
+    package.__path__ = [CONTROLNET_CONSTRUCT_PATH]
+    package.__package__ = "controlnet_construct"
+    package.__spec__ = importlib.machinery.ModuleSpec(
+        "controlnet_construct",
+        loader=None,
+        is_package=True,
+    )
+    sys.modules["controlnet_construct"] = package
+    _CONTROLNET_CONSTRUCT_SHIM = package
+
+tiling = importlib.import_module("controlnet_construct.tiling")
+
+
+TileWindow = tiling.TileWindow
+
+
+@dataclass(frozen=True, slots=True)
+class PairedTileWindowForTest:
+    local_window: TileWindow
+    left_window: TileWindow
+    right_window: TileWindow
+
+
+def _import_tile_validity():
+    return importlib.import_module("controlnet_construct.tile_validity")
+
+
+def _write_array_to_cube(cube: ip.Cube, values: np.ndarray) -> None:
+    manager = ip.LineManager(cube)
+    manager.begin()
+    while not manager.end():
+        line_index = manager.line() - 1
+        for index in range(len(manager)):
+            manager[index] = float(values[line_index, index])
+        cube.write(manager)
+        manager.next()
+
+
+def _module_is_controlnet_construct_shim(module: types.ModuleType | None) -> bool:
+    if module is None:
+        return False
+    if _CONTROLNET_CONSTRUCT_SHIM is not None and module is _CONTROLNET_CONSTRUCT_SHIM:
+        return True
+    candidates: list[str] = []
+    module_path = getattr(module, "__path__", None)
+    if module_path:
+        candidates.extend([str(path) for path in module_path])
+    module_file = getattr(module, "__file__", None)
+    if module_file:
+        candidates.append(str(module_file))
+    module_spec = getattr(module, "__spec__", None)
+    if module_spec and module_spec.origin:
+        candidates.append(str(module_spec.origin))
+    for candidate in candidates:
+        if Path(candidate).resolve().is_relative_to(CONTROLNET_CONSTRUCT_DIR):
+            return True
+    return False
+
+
+def _require_isis_pybind(test_case: unittest.TestCase) -> None:
+    if ip is None:
+        test_case.skipTest("isis_pybind not available")
+
+
+def tearDownModule() -> None:
+    if not _CREATED_CONTROLNET_CONSTRUCT_SHIM:
+        return
+    for module_name in ("controlnet_construct.tile_validity", "controlnet_construct.tiling"):
+        module = sys.modules.get(module_name)
+        if _module_is_controlnet_construct_shim(module):
+            sys.modules.pop(module_name, None)
+    package_module = sys.modules.get("controlnet_construct")
+    if _module_is_controlnet_construct_shim(package_module):
+        sys.modules.pop("controlnet_construct", None)
 
 
 class ControlNetConstructTileValidityUnitTest(unittest.TestCase):
-    """Regression coverage for conservative DOM validity prefilter behavior."""
+    def test_tile_validity_import_does_not_pull_tile_matching(self):
+        prior_tile_validity = sys.modules.get("controlnet_construct.tile_validity")
+        prior_tile_matching = sys.modules.get("controlnet_construct.tile_matching")
+        try:
+            sys.modules.pop("controlnet_construct.tile_validity", None)
+            sys.modules.pop("controlnet_construct.tile_matching", None)
 
-    def test_skips_window_when_all_fully_covered_cells_are_below_threshold(self):
-        grid = DomValidityGrid.from_valid_counts(
-            image_width=8,
-            image_height=8,
-            coarse_cell_size=4,
-            valid_counts=((0, 1), (2, 3)),
+            module = importlib.import_module("controlnet_construct.tile_validity")
+
+            self.assertIs(module, sys.modules["controlnet_construct.tile_validity"])
+            self.assertNotIn("controlnet_construct.tile_matching", sys.modules)
+        finally:
+            if prior_tile_validity is None:
+                sys.modules.pop("controlnet_construct.tile_validity", None)
+            else:
+                sys.modules["controlnet_construct.tile_validity"] = prior_tile_validity
+            if prior_tile_matching is None:
+                sys.modules.pop("controlnet_construct.tile_matching", None)
+            else:
+                sys.modules["controlnet_construct.tile_matching"] = prior_tile_matching
+
+    def test_tile_validity_import_does_not_pull_isis_pybind_or_cv2(self):
+        prior_tile_validity = sys.modules.get("controlnet_construct.tile_validity")
+        prior_isis_pybind = sys.modules.get("isis_pybind")
+        prior_cv2 = sys.modules.get("cv2")
+        try:
+            sys.modules.pop("controlnet_construct.tile_validity", None)
+            sys.modules.pop("isis_pybind", None)
+            sys.modules.pop("cv2", None)
+
+            module = importlib.import_module("controlnet_construct.tile_validity")
+
+            self.assertIs(module, sys.modules["controlnet_construct.tile_validity"])
+            self.assertNotIn("isis_pybind", sys.modules)
+            self.assertNotIn("cv2", sys.modules)
+        finally:
+            if prior_tile_validity is None:
+                sys.modules.pop("controlnet_construct.tile_validity", None)
+            else:
+                sys.modules["controlnet_construct.tile_validity"] = prior_tile_validity
+            if prior_isis_pybind is None:
+                sys.modules.pop("isis_pybind", None)
+            else:
+                sys.modules["isis_pybind"] = prior_isis_pybind
+            if prior_cv2 is None:
+                sys.modules.pop("cv2", None)
+            else:
+                sys.modules["cv2"] = prior_cv2
+
+    def test_validate_tile_validity_cell_size_rejects_non_positive_values(self):
+        tile_validity = _import_tile_validity()
+
+        self.assertEqual(tile_validity.validate_tile_validity_cell_size(32, field_name="tile_validity_cell_width"), 32)
+        with self.assertRaisesRegex(ValueError, "tile_validity_cell_width must be positive"):
+            tile_validity.validate_tile_validity_cell_size(0, field_name="tile_validity_cell_width")
+        with self.assertRaisesRegex(ValueError, "tile_validity_cell_height must be positive"):
+            tile_validity.validate_tile_validity_cell_size(-1, field_name="tile_validity_cell_height")
+
+    def test_window_upper_bound_uses_covered_cell_valid_counts(self):
+        tile_validity = _import_tile_validity()
+
+        index = tile_validity.TileValidityIndex(
+            dom_path="left.cub",
+            image_width=64,
+            image_height=32,
+            cell_width=32,
+            cell_height=32,
+            grid_width=2,
+            grid_height=1,
+            valid_counts=np.array([[32, 0]], dtype=np.int64),
+            total_counts=np.array([[1024, 1024]], dtype=np.int64),
+            uncertain=np.array([[False, False]], dtype=bool),
+            manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
         )
 
-        decision = grid.decide_window(
-            TileWindow(start_x=0, start_y=0, width=8, height=8),
-            min_valid_pixels=4,
-            valid_pixel_percent_threshold=0.25,
+        upper_bound = tile_validity.window_valid_upper_bound(
+            index,
+            TileWindow(start_x=0, start_y=0, width=64, height=32),
         )
 
-        self.assertTrue(decision.should_skip)
-        self.assertEqual(decision.reason, "all_confident_cells_below_threshold")
-        self.assertEqual(decision.covered_cell_count, 4)
-        self.assertEqual(decision.uncertain_cell_count, 0)
+        self.assertEqual(upper_bound.valid_pixel_upper_bound, 32)
+        self.assertEqual(upper_bound.window_pixel_count, 2048)
+        self.assertAlmostEqual(upper_bound.valid_ratio_upper_bound, 32.0 / 2048.0)
+        self.assertFalse(upper_bound.has_uncertain_cells)
 
-    def test_keeps_window_when_any_fully_covered_cell_meets_threshold(self):
-        grid = DomValidityGrid.from_valid_counts(
-            image_width=8,
-            image_height=8,
-            coarse_cell_size=4,
-            valid_counts=((0, 6), (1, 2)),
+    def test_prefilter_skips_only_when_upper_bound_cannot_meet_threshold(self):
+        tile_validity = _import_tile_validity()
+
+        left_index = tile_validity.TileValidityIndex(
+            dom_path="left.cub",
+            image_width=64,
+            image_height=32,
+            cell_width=32,
+            cell_height=32,
+            grid_width=2,
+            grid_height=1,
+            valid_counts=np.array([[16, 0]], dtype=np.int64),
+            total_counts=np.array([[1024, 1024]], dtype=np.int64),
+            uncertain=np.array([[False, False]], dtype=bool),
+            manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
+        )
+        right_index = tile_validity.TileValidityIndex(
+            dom_path="right.cub",
+            image_width=64,
+            image_height=32,
+            cell_width=32,
+            cell_height=32,
+            grid_width=2,
+            grid_height=1,
+            valid_counts=np.array([[1024, 1024]], dtype=np.int64),
+            total_counts=np.array([[1024, 1024]], dtype=np.int64),
+            uncertain=np.array([[False, False]], dtype=bool),
+            manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
+        )
+        windows = [
+            PairedTileWindowForTest(
+                local_window=TileWindow(0, 0, 64, 32),
+                left_window=TileWindow(0, 0, 64, 32),
+                right_window=TileWindow(0, 0, 64, 32),
+            )
+        ]
+
+        result = tile_validity.prefilter_paired_windows_by_validity(
+            windows,
+            left_index=left_index,
+            right_index=right_index,
+            valid_pixel_percent_threshold=0.05,
         )
 
-        decision = grid.decide_window(
-            TileWindow(start_x=0, start_y=0, width=8, height=8),
-            min_valid_pixels=4,
-            valid_pixel_percent_threshold=0.25,
+        self.assertEqual(result.kept_windows, [])
+        self.assertEqual(result.skipped_windows, windows)
+        self.assertEqual(result.preindexed_skipped_tile_count, 1)
+        self.assertEqual(result.skip_reasons["left_valid_upper_bound_below_threshold"], 1)
+
+    def test_prefilter_keeps_when_upper_bound_can_meet_positive_threshold(self):
+        tile_validity = _import_tile_validity()
+
+        left_index = tile_validity.TileValidityIndex(
+            dom_path="left.cub",
+            image_width=64,
+            image_height=32,
+            cell_width=32,
+            cell_height=32,
+            grid_width=2,
+            grid_height=1,
+            valid_counts=np.array([[128, 0]], dtype=np.int64),
+            total_counts=np.array([[1024, 1024]], dtype=np.int64),
+            uncertain=np.array([[False, False]], dtype=bool),
+            manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
+        )
+        right_index = tile_validity.TileValidityIndex(
+            dom_path="right.cub",
+            image_width=64,
+            image_height=32,
+            cell_width=32,
+            cell_height=32,
+            grid_width=2,
+            grid_height=1,
+            valid_counts=np.array([[256, 256]], dtype=np.int64),
+            total_counts=np.array([[1024, 1024]], dtype=np.int64),
+            uncertain=np.array([[False, False]], dtype=bool),
+            manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
+        )
+        window = PairedTileWindowForTest(
+            local_window=TileWindow(0, 0, 64, 32),
+            left_window=TileWindow(0, 0, 64, 32),
+            right_window=TileWindow(0, 0, 64, 32),
         )
 
-        self.assertFalse(decision.should_skip)
-        self.assertEqual(decision.reason, "contains_cell_at_or_above_threshold")
-        self.assertEqual(decision.below_threshold_cell_count, 3)
-
-    def test_keeps_boundary_window_when_coarse_cell_is_only_partially_covered(self):
-        grid = DomValidityGrid.from_valid_counts(
-            image_width=8,
-            image_height=8,
-            coarse_cell_size=4,
-            valid_counts=((0, 0), (0, 0)),
+        result = tile_validity.prefilter_paired_windows_by_validity(
+            [window],
+            left_index=left_index,
+            right_index=right_index,
+            valid_pixel_percent_threshold=0.05,
         )
 
-        decision = grid.decide_window(
-            TileWindow(start_x=1, start_y=0, width=3, height=4),
-            min_valid_pixels=1,
-            valid_pixel_percent_threshold=0.01,
+        self.assertEqual(result.kept_windows, [window])
+        self.assertEqual(result.skipped_windows, [])
+        self.assertEqual(result.preindexed_skipped_tile_count, 0)
+        self.assertEqual(result.skip_reasons, {})
+
+    def test_prefilter_keeps_threshold_zero_and_uncertain_cells(self):
+        tile_validity = _import_tile_validity()
+
+        index = tile_validity.TileValidityIndex(
+            dom_path="left.cub",
+            image_width=32,
+            image_height=32,
+            cell_width=32,
+            cell_height=32,
+            grid_width=1,
+            grid_height=1,
+            valid_counts=np.array([[0]], dtype=np.int64),
+            total_counts=np.array([[1024]], dtype=np.int64),
+            uncertain=np.array([[True]], dtype=bool),
+            manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
+        )
+        window = PairedTileWindowForTest(
+            local_window=TileWindow(0, 0, 32, 32),
+            left_window=TileWindow(0, 0, 32, 32),
+            right_window=TileWindow(0, 0, 32, 32),
         )
 
-        self.assertFalse(decision.should_skip)
-        self.assertEqual(decision.reason, "uncertain_partial_cell_overlap")
-        self.assertEqual(decision.uncertain_cell_count, 1)
-
-    def test_cache_key_is_stable_for_same_metadata_and_changes_for_size_or_mtime(self):
-        metadata = DomPathMetadata(path="dom.cub", size_bytes=1024, mtime_ns=100)
-        key = build_dom_validity_cache_key(
-            "dom.cub",
-            metadata=metadata,
-            band=1,
-            coarse_cell_size=256,
-            invalid_values=(-9999.0,),
-            special_pixel_abs_threshold=1.0e300,
-            invalid_pixel_radius=2,
-            min_valid_pixels=64,
-            valid_pixel_percent_threshold=0.35,
+        zero_threshold_result = tile_validity.prefilter_paired_windows_by_validity(
+            [window],
+            left_index=index,
+            right_index=index,
+            valid_pixel_percent_threshold=0.0,
         )
-        same_key = build_dom_validity_cache_key(
-            "dom.cub",
-            metadata=metadata,
-            band=1,
-            coarse_cell_size=256,
-            invalid_values=(-9999.0,),
-            special_pixel_abs_threshold=1.0e300,
-            invalid_pixel_radius=2,
-            min_valid_pixels=64,
-            valid_pixel_percent_threshold=0.35,
-        )
-        changed_size = build_dom_validity_cache_key(
-            "dom.cub",
-            metadata=DomPathMetadata(path="dom.cub", size_bytes=2048, mtime_ns=100),
-            band=1,
-            coarse_cell_size=256,
-            invalid_values=(-9999.0,),
-            special_pixel_abs_threshold=1.0e300,
-            invalid_pixel_radius=2,
-            min_valid_pixels=64,
-            valid_pixel_percent_threshold=0.35,
-        )
-        changed_mtime = build_dom_validity_cache_key(
-            "dom.cub",
-            metadata=DomPathMetadata(path="dom.cub", size_bytes=1024, mtime_ns=200),
-            band=1,
-            coarse_cell_size=256,
-            invalid_values=(-9999.0,),
-            special_pixel_abs_threshold=1.0e300,
-            invalid_pixel_radius=2,
-            min_valid_pixels=64,
-            valid_pixel_percent_threshold=0.35,
+        uncertain_result = tile_validity.prefilter_paired_windows_by_validity(
+            [window],
+            left_index=index,
+            right_index=index,
+            valid_pixel_percent_threshold=0.2,
         )
 
-        self.assertEqual(key, same_key)
-        self.assertNotEqual(key, changed_size)
-        self.assertNotEqual(key, changed_mtime)
+        self.assertEqual(zero_threshold_result.kept_windows, [window])
+        self.assertEqual(zero_threshold_result.skipped_windows, [])
+        self.assertEqual(zero_threshold_result.preindexed_skipped_tile_count, 0)
+        self.assertEqual(zero_threshold_result.skip_reasons, {})
+        self.assertEqual(uncertain_result.kept_windows, [window])
+        self.assertEqual(uncertain_result.skipped_windows, [])
+        self.assertEqual(uncertain_result.preindexed_skipped_tile_count, 0)
+        self.assertEqual(uncertain_result.skip_reasons, {})
 
+    def test_prefilter_rejects_invalid_threshold(self):
+        tile_validity = _import_tile_validity()
 
-    def test_cache_reuses_grid_for_same_key_and_rebuilds_after_metadata_change(self):
-        cache = DomValidityCache()
-        calls: list[str] = []
-        first_key = build_dom_validity_cache_key(
-            "dom.cub",
-            metadata=DomPathMetadata(path="dom.cub", size_bytes=1024, mtime_ns=100),
-            band=1,
-            coarse_cell_size=4,
-            invalid_values=(),
-            special_pixel_abs_threshold=1.0e300,
-            invalid_pixel_radius=0,
-            min_valid_pixels=1,
-            valid_pixel_percent_threshold=0.1,
-        )
-        second_key = build_dom_validity_cache_key(
-            "dom.cub",
-            metadata=DomPathMetadata(path="dom.cub", size_bytes=1024, mtime_ns=200),
-            band=1,
-            coarse_cell_size=4,
-            invalid_values=(),
-            special_pixel_abs_threshold=1.0e300,
-            invalid_pixel_radius=0,
-            min_valid_pixels=1,
-            valid_pixel_percent_threshold=0.1,
+        index = tile_validity.TileValidityIndex(
+            dom_path="left.cub",
+            image_width=32,
+            image_height=32,
+            cell_width=32,
+            cell_height=32,
+            grid_width=1,
+            grid_height=1,
+            valid_counts=np.array([[0]], dtype=np.int64),
+            total_counts=np.array([[1024]], dtype=np.int64),
+            uncertain=np.array([[False]], dtype=bool),
+            manifest={"format_version": tile_validity.CACHE_FORMAT_VERSION},
         )
 
-        def builder():
-            calls.append("built")
-            return DomValidityGrid.from_valid_counts(
-                image_width=4,
-                image_height=4,
-                coarse_cell_size=4,
-                valid_counts=((16,),),
+        with self.assertRaisesRegex(ValueError, r"valid_pixel_percent_threshold must be within \[0.0, 1.0\]"):
+            tile_validity.prefilter_paired_windows_by_validity(
+                [],
+                left_index=index,
+                right_index=index,
+                valid_pixel_percent_threshold=1.1,
             )
 
-        first_grid = cache.get_or_build(first_key, builder)
-        reused_grid = cache.get_or_build(first_key, builder)
-        rebuilt_grid = cache.get_or_build(second_key, builder)
+    def test_ensure_dom_validity_index_rebuilds_then_hits_cache(self):
+        _require_isis_pybind(self)
+        tile_validity = _import_tile_validity()
+        values = np.ones((16, 32), dtype=np.float64)
+        values[:, 16:32] = 0.0
 
-        self.assertIs(first_grid, reused_grid)
-        self.assertIsNot(first_grid, rebuilt_grid)
-        self.assertEqual(calls, ["built", "built"])
+        with temporary_directory() as temp_dir:
+            cube, cube_path = make_test_cube(
+                temp_dir,
+                name="validity_source.cub",
+                samples=32,
+                lines=16,
+                bands=1,
+                pixel_type=ip.PixelType.Real,
+            )
+            try:
+                _write_array_to_cube(cube, values)
+                cache_dir = temp_dir / "tile_validity_cache"
 
-    def test_batch_filter_summary_counts_kept_skipped_and_uncertain_windows(self):
-        grid = DomValidityGrid.from_valid_counts(
-            image_width=8,
-            image_height=8,
-            coarse_cell_size=4,
-            valid_counts=((0, 6), (0, 0)),
-        )
-        windows = (
-            TileWindow(start_x=0, start_y=0, width=4, height=4),
-            TileWindow(start_x=4, start_y=0, width=4, height=4),
-            TileWindow(start_x=1, start_y=4, width=3, height=4),
-        )
+                first_index, first_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(0.0,),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=16,
+                    cell_height=16,
+                )
+                second_index, second_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(0.0,),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=16,
+                    cell_height=16,
+                )
+                self.assertEqual(first_diagnostics["cache_key"], second_diagnostics["cache_key"])
+                self.assertTrue(Path(first_diagnostics["manifest_path"]).exists())
+                self.assertTrue(Path(first_diagnostics["data_path"]).exists())
+            finally:
+                cube.close()
 
-        kept_windows, summary = filter_windows_by_validity(
-            grid,
-            windows,
-            min_valid_pixels=4,
-            valid_pixel_percent_threshold=0.25,
-        )
+        self.assertEqual(first_diagnostics["status"], "rebuilt")
+        self.assertEqual(second_diagnostics["status"], "hit")
+        self.assertEqual(first_index.grid_width, 2)
+        self.assertEqual(first_index.grid_height, 1)
+        self.assertEqual(first_index.valid_counts.tolist(), [[256, 0]])
+        self.assertEqual(second_index.valid_counts.tolist(), [[256, 0]])
 
-        self.assertEqual(kept_windows, (windows[1], windows[2]))
-        self.assertIsInstance(summary, TileValidityFilterSummary)
-        self.assertEqual(summary.total_window_count, 3)
-        self.assertEqual(summary.skipped_window_count, 1)
-        self.assertEqual(summary.kept_window_count, 2)
-        self.assertEqual(summary.uncertain_window_count, 1)
+    def test_ensure_dom_validity_index_rebuilds_when_parameters_change(self):
+        _require_isis_pybind(self)
+        tile_validity = _import_tile_validity()
+        values = np.ones((8, 8), dtype=np.float64)
+
+        with temporary_directory() as temp_dir:
+            cube, cube_path = make_test_cube(
+                temp_dir,
+                name="validity_parameter_change.cub",
+                samples=8,
+                lines=8,
+                bands=1,
+                pixel_type=ip.PixelType.Real,
+            )
+            try:
+                _write_array_to_cube(cube, values)
+                cache_dir = temp_dir / "tile_validity_cache"
+                _, first_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=8,
+                    cell_height=8,
+                )
+                _, second_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(0.0,),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=8,
+                    cell_height=8,
+                )
+            finally:
+                cube.close()
+
+        self.assertEqual(first_diagnostics["status"], "rebuilt")
+        self.assertEqual(second_diagnostics["status"], "rebuilt")
+        self.assertNotEqual(first_diagnostics["cache_key"], second_diagnostics["cache_key"])
+
+    def test_ensure_dom_validity_index_rebuilds_after_cache_error(self):
+        _require_isis_pybind(self)
+        tile_validity = _import_tile_validity()
+        values = np.ones((8, 8), dtype=np.float64)
+
+        with temporary_directory() as temp_dir:
+            cube, cube_path = make_test_cube(
+                temp_dir,
+                name="validity_cache_error.cub",
+                samples=8,
+                lines=8,
+                bands=1,
+                pixel_type=ip.PixelType.Real,
+            )
+            try:
+                _write_array_to_cube(cube, values)
+                cache_dir = temp_dir / "tile_validity_cache"
+                _, first_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=8,
+                    cell_height=8,
+                )
+                manifest_path = Path(first_diagnostics["manifest_path"])
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                manifest["dom"] = "corrupted"
+                manifest_path.write_text(json.dumps(manifest, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+
+                _, second_diagnostics = tile_validity.ensure_dom_validity_index(
+                    cache_dir=cache_dir,
+                    dom_path=cube_path,
+                    cube=cube,
+                    band=1,
+                    invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    invalid_pixel_radius=0,
+                    cell_width=8,
+                    cell_height=8,
+                )
+            finally:
+                cube.close()
+
+        self.assertEqual(second_diagnostics["status"], "rebuilt_after_error")
+        self.assertIn("cache_error", second_diagnostics)
 
 
 if __name__ == "__main__":

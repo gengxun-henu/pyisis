@@ -2,6 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-24
+Updated: 2026-05-03  Geng Xun batched process-pool tile tasks so each worker shard reuses opened DOM cubes.
 """
 
 from __future__ import annotations
@@ -12,6 +13,7 @@ from dataclasses import dataclass
 import multiprocessing as mp
 import os
 from pathlib import Path
+from typing import Any
 
 import cv2
 import numpy as np
@@ -88,6 +90,12 @@ class TileMatchTask:
     sift_contrast_threshold: float
     sift_edge_threshold: float
     sift_sigma: float
+
+
+@dataclass(frozen=True, slots=True)
+class IndexedTileMatchTask:
+    index: int
+    task: TileMatchTask
 
 
 @dataclass(frozen=True, slots=True)
@@ -589,7 +597,7 @@ def _build_tile_match_tasks(
     ]
 
 
-def _match_tile_task_in_open_cubes(
+def _match_tile_task_with_open_cubes(
     task: TileMatchTask,
     *,
     left_cube: ip.Cube,
@@ -599,7 +607,6 @@ def _match_tile_task_in_open_cubes(
 ) -> TileMatchResult:
     left_values = _read_cube_window(left_cube, task.paired_window.left_window, band=task.band)
     right_values = _read_cube_window(right_cube, task.paired_window.right_window, band=task.band)
-
     return _match_tile_from_window_values(
         left_values=left_values,
         right_values=right_values,
@@ -626,27 +633,20 @@ def _match_tile_task_in_open_cubes(
     )
 
 
-def _match_paired_window_batch_worker(tasks: tuple[TileMatchTask, ...]) -> tuple[TileMatchResult, ...]:
-    if not tasks:
-        return ()
-
-    first_task = tasks[0]
+def _match_single_paired_window_worker(task: TileMatchTask) -> TileMatchResult:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
-    left_cube.open(first_task.left_dom_path, "r")
-    right_cube.open(first_task.right_dom_path, "r")
+    left_cube.open(task.left_dom_path, "r")
+    right_cube.open(task.right_dom_path, "r")
     try:
-        left_invalid_values = _resolved_invalid_values_for_cube(left_cube, first_task.invalid_values)
-        right_invalid_values = _resolved_invalid_values_for_cube(right_cube, first_task.invalid_values)
-        return tuple(
-            _match_tile_task_in_open_cubes(
-                task,
-                left_cube=left_cube,
-                right_cube=right_cube,
-                left_invalid_values=left_invalid_values,
-                right_invalid_values=right_invalid_values,
-            )
-            for task in tasks
+        left_invalid_values = _resolved_invalid_values_for_cube(left_cube, task.invalid_values)
+        right_invalid_values = _resolved_invalid_values_for_cube(right_cube, task.invalid_values)
+        return _match_tile_task_with_open_cubes(
+            task,
+            left_cube=left_cube,
+            right_cube=right_cube,
+            left_invalid_values=left_invalid_values,
+            right_invalid_values=right_invalid_values,
         )
     finally:
         if left_cube.is_open():
@@ -655,24 +655,157 @@ def _match_paired_window_batch_worker(tasks: tuple[TileMatchTask, ...]) -> tuple
             right_cube.close()
 
 
-def _match_single_paired_window_worker(task: TileMatchTask) -> TileMatchResult:
-    return _match_paired_window_batch_worker((task,))[0]
-
-
-def _chunk_tile_match_tasks(tasks: list[TileMatchTask], max_workers: int) -> list[tuple[int, tuple[TileMatchTask, ...]]]:
-    if not tasks:
-        return []
-    effective_workers = max(1, min(max_workers, len(tasks)))
-    chunk_size = (len(tasks) + effective_workers - 1) // effective_workers
-    return [
-        (start_index, tuple(tasks[start_index : start_index + chunk_size]))
-        for start_index in range(0, len(tasks), chunk_size)
-    ]
-
-
 def _tile_match_process_pool_context() -> mp.context.BaseContext:
     preferred_context = "fork" if os.name == "posix" else "spawn"
     return mp.get_context(preferred_context)
+
+
+def _chunk_indexed_tile_match_tasks(
+    tasks: list[TileMatchTask],
+    *,
+    max_workers: int,
+) -> list[tuple[IndexedTileMatchTask, ...]]:
+    if not tasks:
+        return []
+    worker_count = max(1, min(max_workers, len(tasks)))
+    chunks: list[list[IndexedTileMatchTask]] = [[] for _ in range(worker_count)]
+    for index, task in enumerate(tasks):
+        chunks[index % worker_count].append(IndexedTileMatchTask(index=index, task=task))
+    return [tuple(chunk) for chunk in chunks if chunk]
+
+
+def _tile_window_to_payload(window: TileWindow) -> tuple[int, int, int, int]:
+    return (window.start_x, window.start_y, window.width, window.height)
+
+
+def _paired_window_to_payload(window: PairedTileWindow) -> tuple[tuple[int, int, int, int], tuple[int, int, int, int], tuple[int, int, int, int]]:
+    return (
+        _tile_window_to_payload(window.local_window),
+        _tile_window_to_payload(window.left_window),
+        _tile_window_to_payload(window.right_window),
+    )
+
+
+def _tile_window_from_payload(payload: tuple[int, int, int, int]) -> TileWindow:
+    return TileWindow(start_x=payload[0], start_y=payload[1], width=payload[2], height=payload[3])
+
+
+def _paired_window_from_payload(
+    payload: tuple[tuple[int, int, int, int], tuple[int, int, int, int], tuple[int, int, int, int]],
+) -> PairedTileWindow:
+    return PairedTileWindow(
+        local_window=_tile_window_from_payload(payload[0]),
+        left_window=_tile_window_from_payload(payload[1]),
+        right_window=_tile_window_from_payload(payload[2]),
+    )
+
+
+def _tile_task_to_payload(task: TileMatchTask) -> dict[str, Any]:
+    return {
+        "left_dom_path": task.left_dom_path,
+        "right_dom_path": task.right_dom_path,
+        "band": task.band,
+        "paired_window": _paired_window_to_payload(task.paired_window),
+        "minimum_value": task.minimum_value,
+        "maximum_value": task.maximum_value,
+        "lower_percent": task.lower_percent,
+        "upper_percent": task.upper_percent,
+        "invalid_values": task.invalid_values,
+        "special_pixel_abs_threshold": task.special_pixel_abs_threshold,
+        "min_valid_pixels": task.min_valid_pixels,
+        "valid_pixel_percent_threshold": task.valid_pixel_percent_threshold,
+        "invalid_pixel_radius": task.invalid_pixel_radius,
+        "ratio_test": task.ratio_test,
+        "matcher_method": task.matcher_method,
+        "max_features": task.max_features,
+        "sift_octave_layers": task.sift_octave_layers,
+        "sift_contrast_threshold": task.sift_contrast_threshold,
+        "sift_edge_threshold": task.sift_edge_threshold,
+        "sift_sigma": task.sift_sigma,
+    }
+
+
+def _tile_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
+    return TileMatchTask(
+        left_dom_path=str(payload["left_dom_path"]),
+        right_dom_path=str(payload["right_dom_path"]),
+        band=int(payload["band"]),
+        paired_window=_paired_window_from_payload(payload["paired_window"]),
+        minimum_value=payload["minimum_value"],
+        maximum_value=payload["maximum_value"],
+        lower_percent=float(payload["lower_percent"]),
+        upper_percent=float(payload["upper_percent"]),
+        invalid_values=tuple(float(value) for value in payload["invalid_values"]),
+        special_pixel_abs_threshold=float(payload["special_pixel_abs_threshold"]),
+        min_valid_pixels=int(payload["min_valid_pixels"]),
+        valid_pixel_percent_threshold=float(payload["valid_pixel_percent_threshold"]),
+        invalid_pixel_radius=int(payload["invalid_pixel_radius"]),
+        ratio_test=float(payload["ratio_test"]),
+        matcher_method=str(payload["matcher_method"]),
+        max_features=None if payload["max_features"] is None else int(payload["max_features"]),
+        sift_octave_layers=int(payload["sift_octave_layers"]),
+        sift_contrast_threshold=float(payload["sift_contrast_threshold"]),
+        sift_edge_threshold=float(payload["sift_edge_threshold"]),
+        sift_sigma=float(payload["sift_sigma"]),
+    )
+
+
+def _indexed_tile_match_task_to_payload(indexed_task: IndexedTileMatchTask) -> tuple[int, dict[str, Any]]:
+    return (indexed_task.index, _tile_task_to_payload(indexed_task.task))
+
+
+def _indexed_tile_match_task_from_payload(indexed_task: IndexedTileMatchTask | tuple[int, dict[str, Any]]) -> IndexedTileMatchTask:
+    if isinstance(indexed_task, IndexedTileMatchTask):
+        return indexed_task
+    index, payload = indexed_task
+    return IndexedTileMatchTask(index=index, task=_tile_task_from_payload(payload))
+
+
+def _chunk_tile_match_task_payloads(
+    tasks: list[TileMatchTask],
+    *,
+    max_workers: int,
+) -> list[tuple[tuple[int, dict[str, Any]], ...]]:
+    return [
+        tuple(_indexed_tile_match_task_to_payload(indexed_task) for indexed_task in chunk)
+        for chunk in _chunk_indexed_tile_match_tasks(tasks, max_workers=max_workers)
+    ]
+
+
+def _match_tile_task_batch_worker(
+    indexed_tasks: tuple[IndexedTileMatchTask | tuple[int, dict[str, Any]], ...],
+) -> tuple[tuple[int, TileMatchResult], ...]:
+    if not indexed_tasks:
+        return ()
+    resolved_indexed_tasks = tuple(_indexed_tile_match_task_from_payload(indexed_task) for indexed_task in indexed_tasks)
+    first_task = resolved_indexed_tasks[0].task
+    left_cube = ip.Cube()
+    right_cube = ip.Cube()
+    left_cube.open(first_task.left_dom_path, "r")
+    right_cube.open(first_task.right_dom_path, "r")
+    try:
+        left_invalid_values = _resolved_invalid_values_for_cube(left_cube, first_task.invalid_values)
+        right_invalid_values = _resolved_invalid_values_for_cube(right_cube, first_task.invalid_values)
+        results: list[tuple[int, TileMatchResult]] = []
+        for indexed_task in resolved_indexed_tasks:
+            results.append(
+                (
+                    indexed_task.index,
+                    _match_tile_task_with_open_cubes(
+                        indexed_task.task,
+                        left_cube=left_cube,
+                        right_cube=right_cube,
+                        left_invalid_values=left_invalid_values,
+                        right_invalid_values=right_invalid_values,
+                    ),
+                )
+            )
+        return tuple(results)
+    finally:
+        if left_cube.is_open():
+            left_cube.close()
+        if right_cube.is_open():
+            right_cube.close()
 
 
 def _run_parallel_tile_match_tasks(
@@ -683,17 +816,14 @@ def _run_parallel_tile_match_tasks(
 ) -> list[TileMatchResult]:
     if not tasks:
         return []
-    task_chunks = _chunk_tile_match_tasks(tasks, max_workers=max_workers)
-    with ProcessPoolExecutor(max_workers=max_workers, mp_context=_tile_match_process_pool_context()) as executor:
-        futures = {
-            executor.submit(_match_paired_window_batch_worker, task_chunk): start_index
-            for start_index, task_chunk in task_chunks
-        }
+    chunks = _chunk_tile_match_task_payloads(tasks, max_workers=max_workers)
+    with ProcessPoolExecutor(max_workers=min(max_workers, len(chunks)), mp_context=_tile_match_process_pool_context()) as executor:
+        futures = {executor.submit(_match_tile_task_batch_worker, chunk): chunk for chunk in chunks}
         ordered_results: list[TileMatchResult | None] = [None] * len(tasks)
         for future in as_completed(futures):
-            start_index = futures[future]
-            for offset, result in enumerate(future.result()):
-                ordered_results[start_index + offset] = result
+            indexed_results = future.result()
+            for index, result in indexed_results:
+                ordered_results[index] = result
                 if progress_callback is not None:
                     progress_callback()
         return [result for result in ordered_results if result is not None]
@@ -784,6 +914,7 @@ __all__ = [
     "DEFAULT_FLANN_CHECKS",
     "DEFAULT_FLANN_TREES",
     "DEFAULT_MATCHER_METHOD",
+    "IndexedTileMatchTask",
     "PairedTileWindow",
     "SUPPORTED_MATCHER_METHODS",
     "TileMatchResult",
@@ -791,12 +922,15 @@ __all__ = [
     "TileMatchTask",
     "_build_sift_detector",
     "_build_tile_match_tasks",
+    "_chunk_indexed_tile_match_tasks",
     "_create_descriptor_matcher",
     "_full_image_window",
     "_keypoint_to_isis_coordinates",
     "_matcher_diagnostics_for_method",
     "_match_tile",
     "_match_tile_from_window_values",
+    "_match_tile_task_batch_worker",
+    "_match_tile_task_with_open_cubes",
     "_normalize_matcher_method",
     "_paired_windows",
     "_prepare_image_for_sift",

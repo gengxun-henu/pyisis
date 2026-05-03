@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-08
+Last Modified: 2026-05-09
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -36,6 +36,7 @@ Updated: 2026-05-06  Geng Xun updated crop-window negative-margin validation lab
 Updated: 2026-05-06  Geng Xun added auto full vs cropped visualization rendering coverage.
 Updated: 2026-05-07  Geng Xun added visualization default-mode diagnostics and cropped offset assertions.
 Updated: 2026-05-08  Geng Xun stabilized visualization reduced-mode guards and default full-mode mocks.
+Updated: 2026-05-09  Geng Xun ensured full-mode visualization skips dimension probes and added explicit-full coverage.
 """
 
 from __future__ import annotations
@@ -2129,7 +2130,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             match_visualization_module,
             "_cube_dimensions",
             return_value=(4000, 3000),
-        ), mock.patch.object(
+        ) as cube_dimensions_mock, mock.patch.object(
             match_visualization_module,
             "_read_cube_as_stretched_byte",
             side_effect=fake_read,
@@ -2170,6 +2171,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(result["preview_dimensions"]["left"], [41, 41])
         self.assertEqual(result["preview_dimensions"]["right"], [41, 41])
         self.assertEqual(result["crop_window"], expected_crop_window)
+        self.assertEqual(cube_dimensions_mock.call_count, 2)
         self.assertEqual(read_windows, [(89, 89, 41, 41), (94, 94, 41, 41)])
         for actual, expected in zip(captured_keypoints["left"], expected_keypoint_pts):
             self.assertAlmostEqual(actual[0], expected[0], places=4)
@@ -2194,7 +2196,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             match_visualization_module,
             "_cube_dimensions",
             return_value=(4000, 3000),
-        ), mock.patch.object(
+        ) as cube_dimensions_mock, mock.patch.object(
             match_visualization_module,
             "_read_cube_as_stretched_byte",
             side_effect=fake_read,
@@ -2217,6 +2219,50 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         self.assertEqual(result["visualization_mode_requested"], "full")
         self.assertEqual(result["visualization_mode_used"], "full")
+        cube_dimensions_mock.assert_not_called()
+        self.assertEqual(read_windows, [None, None])
+
+    def test_write_match_visualization_explicit_full_mode_skips_dimension_probe(self):
+        left_key_file = KeypointFile(4000, 3000, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4000, 3000, (Keypoint(105.0, 105.0),))
+        read_windows: list[object | None] = []
+
+        def fake_read(cube_path, *, window=None, **kwargs):
+            read_windows.append(window)
+            return np.full((32, 32), 128, dtype=np.uint8)
+
+        def fake_draw_matches(*args, **kwargs):
+            return np.zeros((10, 10, 3), dtype=np.uint8)
+
+        with temporary_directory() as temp_dir, mock.patch.object(
+            match_visualization_module,
+            "_cube_dimensions",
+            return_value=(4000, 3000),
+        ) as cube_dimensions_mock, mock.patch.object(
+            match_visualization_module,
+            "_read_cube_as_stretched_byte",
+            side_effect=fake_read,
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "drawMatches",
+            side_effect=fake_draw_matches,
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "imwrite",
+            return_value=True,
+        ):
+            result = match_visualization_module.write_stereo_pair_match_visualization(
+                "left.cub",
+                "right.cub",
+                left_key_file,
+                right_key_file,
+                output_path=temp_dir / "viz.png",
+                visualization_mode="full",
+            )
+
+        self.assertEqual(result["visualization_mode_requested"], "full")
+        self.assertEqual(result["visualization_mode_used"], "full")
+        cube_dimensions_mock.assert_not_called()
         self.assertEqual(read_windows, [None, None])
 
     def test_write_match_visualization_reduced_mode_not_implemented(self):
@@ -2254,7 +2300,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             match_visualization_module,
             "_cube_dimensions",
             return_value=(32, 32),
-        ), mock.patch.object(
+        ) as cube_dimensions_mock, mock.patch.object(
             match_visualization_module,
             "_read_cube_as_stretched_byte",
             side_effect=fake_read,
@@ -2270,6 +2316,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             )
 
         self.assertEqual(result["visualization_mode_used"], "full")
+        self.assertEqual(cube_dimensions_mock.call_count, 2)
         self.assertEqual(read_windows, [None, None])
 
     def test_match_dom_pair_to_key_files_writes_default_match_visualization_next_to_key_outputs(self):

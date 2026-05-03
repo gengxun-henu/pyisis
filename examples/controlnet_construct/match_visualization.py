@@ -313,6 +313,7 @@ def write_stereo_pair_match_visualization(
         else default_match_visualization_path(left_dom_path, right_dom_path, output_directory, timestamp=timestamp)
     )
 
+    # Default to "full" to preserve legacy callers; "auto" must be explicit to probe dimensions.
     options = resolve_visualization_options(
         visualization_mode=visualization_mode,
         memory_profile=memory_profile,
@@ -324,59 +325,61 @@ def write_stereo_pair_match_visualization(
         preview_force_regenerate=preview_force_regenerate,
         preview_level=preview_level,
     )
-    if options.visualization_mode in {"reduced", "reduced_cropped"}:
+    mode_requested = options.visualization_mode
+    if mode_requested in {"reduced", "reduced_cropped"}:
         raise NotImplementedError(
-            f"Visualization mode '{options.visualization_mode}' requires reduced previews (Task 5)."
+            f"Visualization mode '{mode_requested}' requires reduced previews (Task 5)."
         )
-    left_width, left_height = _cube_dimensions(left_dom_path)
-    right_width, right_height = _cube_dimensions(right_dom_path)
-    mode_used = options.visualization_mode
-    if mode_used == "auto":
-        mode_used = _auto_visualization_mode(
-            image_width=max(left_width, right_width),
-            image_height=max(left_height, right_height),
-            options=options,
-            has_keypoints=bool(left_key_file.points),
-        )
-        if mode_used in {"reduced", "reduced_cropped"}:
-            raise NotImplementedError(
-                f"Visualization mode '{mode_used}' requires reduced previews (Task 5)."
-            )
-
+    mode_used = mode_requested
     left_window: TileWindow | None = None
     right_window: TileWindow | None = None
     left_render_key_file = left_key_file
     right_render_key_file = right_key_file
-    if mode_used == "cropped":
-        if left_key_file.points and right_key_file.points:
-            left_window = crop_window_for_keypoints(
-                left_key_file.points,
-                image_width=left_width,
-                image_height=left_height,
-                margin_pixels=options.preview_crop_margin_pixels,
+    if mode_requested in {"auto", "cropped"}:
+        left_width, left_height = _cube_dimensions(left_dom_path)
+        right_width, right_height = _cube_dimensions(right_dom_path)
+        if mode_requested == "auto":
+            mode_used = _auto_visualization_mode(
+                image_width=max(left_width, right_width),
+                image_height=max(left_height, right_height),
+                options=options,
+                has_keypoints=bool(left_key_file.points),
             )
-            right_window = crop_window_for_keypoints(
-                right_key_file.points,
-                image_width=right_width,
-                image_height=right_height,
-                margin_pixels=options.preview_crop_margin_pixels,
-            )
-            left_render_key_file = _offset_keypoint_file(
-                left_key_file,
-                start_x=left_window.start_x,
-                start_y=left_window.start_y,
-                width=left_window.width,
-                height=left_window.height,
-            )
-            right_render_key_file = _offset_keypoint_file(
-                right_key_file,
-                start_x=right_window.start_x,
-                start_y=right_window.start_y,
-                width=right_window.width,
-                height=right_window.height,
-            )
-        else:
-            mode_used = "full"
+            if mode_used in {"reduced", "reduced_cropped"}:
+                raise NotImplementedError(
+                    f"Visualization mode '{mode_used}' requires reduced previews (Task 5)."
+                )
+
+        if mode_used == "cropped":
+            if left_key_file.points and right_key_file.points:
+                left_window = crop_window_for_keypoints(
+                    left_key_file.points,
+                    image_width=left_width,
+                    image_height=left_height,
+                    margin_pixels=options.preview_crop_margin_pixels,
+                )
+                right_window = crop_window_for_keypoints(
+                    right_key_file.points,
+                    image_width=right_width,
+                    image_height=right_height,
+                    margin_pixels=options.preview_crop_margin_pixels,
+                )
+                left_render_key_file = _offset_keypoint_file(
+                    left_key_file,
+                    start_x=left_window.start_x,
+                    start_y=left_window.start_y,
+                    width=left_window.width,
+                    height=left_window.height,
+                )
+                right_render_key_file = _offset_keypoint_file(
+                    right_key_file,
+                    start_x=right_window.start_x,
+                    start_y=right_window.start_y,
+                    width=right_window.width,
+                    height=right_window.height,
+                )
+            else:
+                mode_used = "full"
 
     left_image = _read_cube_as_stretched_byte(
         left_dom_path,

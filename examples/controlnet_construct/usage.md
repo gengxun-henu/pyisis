@@ -200,14 +200,16 @@ python examples/controlnet_construct/image_match.py \
 
 #### 可视化预览模式与缩放优先级
 
-DOM 匹配连线图的预览可以自动降采样或裁剪，以避免超大 DOM 直接全分辨率可视化导致的内存压力。相关字段在 JSON 里是 snake_case，CLI 里对应 kebab-case：
+DOM 匹配连线图的预览可以裁剪，或在显式 reduced 模式下使用降采样预览 cube，以避免超大 DOM 直接全分辨率可视化导致的内存压力。相关字段在 JSON 里是 snake_case，CLI 里对应 kebab-case：
 
-- `visualization_mode` / `--visualization-mode`：`full`、`reduced`、`cropped`、`reduced_cropped`、`auto`。`auto` 会根据目标长边与内存档位自动选择是否降采样/裁剪。
-- `memory_profile` / `--memory-profile`：`balanced`、`low-memory`。仅在未显式设置 `visualization_target_long_edge` 时决定默认目标长边。
+- `visualization_mode` / `--visualization-mode`：`full`、`cropped`、`auto`、`reduced`、`reduced_cropped`。`auto` 只在全图与裁剪之间自动选择；如需使用降采样预览 cube，需显式选择 `reduced` 或 `reduced_cropped`。
+- `memory_profile` / `--memory-profile`：`high-memory`、`balanced`、`low-memory`。仅在未显式设置 `visualization_target_long_edge` 时决定默认目标长边。
 - `visualization_target_long_edge` / `--visualization-target-long-edge`：预览目标长边像素，显式指定时优先级最高。
 - `low_resolution_matching_target_long_edge` / `--low-resolution-matching-target-long-edge`：仅在未显式设置 `low_resolution_level` / `--low-resolution-level` 时用于推导低分辨率粗配准的 reduce 等级。
 - `preview_crop_margin_pixels` / `--preview-crop-margin-pixels`：裁剪模式下在关键点外扩的像素边距。
 - `preview_cache_source` / `--preview-cache-source`：预览图复用来源，常用 `auto` 即可。
+
+示例配置为了保持可复现实验结果仍显式设置了 `low_resolution_level`；此时 `low_resolution_matching_target_long_edge` 不会改变粗配准等级。若希望按目标长边自动推导低分辨率等级，请移除配置中的 `low_resolution_level` 或不要在 CLI 里传 `--low-resolution-level`。
 
 ### 0.3 推荐工作目录
 

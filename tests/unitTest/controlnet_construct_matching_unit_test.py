@@ -26,6 +26,7 @@ Updated: 2026-05-02  Geng Xun added regression coverage for tile-validity prefil
 Updated: 2026-05-02  Geng Xun adjusted tile-validity default config keys and prefilter default coverage.
 Updated: 2026-05-02  Geng Xun refined tile-validity prefilter fixture to avoid degenerate valid tiles.
 Updated: 2026-05-03  Geng Xun added regression coverage for batched parallel tile matching diagnostics.
+Updated: 2026-05-03  Geng Xun added regression coverage for tile-validity metadata sidecar output.
 """
 
 from __future__ import annotations
@@ -2306,6 +2307,55 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(summary["parallel_cpu_used"])
         self.assertEqual(summary["parallel_cpu_backend"], "process_pool_batched_cube_reuse")
         self.assertEqual(summary["parallel_cpu_worker_count"], 2)
+
+    def test_match_dom_pair_to_key_files_writes_tile_validity_metadata(self):
+        values = np.zeros((32, 64), dtype=np.float64)
+        values[:, :32] = _build_textured_test_image(32, 32)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                values,
+                pixel_type=ip.PixelType.Real,
+                left_name="left_prefilter_metadata.cub",
+                right_name="right_prefilter_metadata.cub",
+            )
+            left_key = temp_dir / "dom_keys" / "left.key"
+            right_key = temp_dir / "dom_keys" / "right.key"
+            metadata_output = temp_dir / "match_metadata" / "pair.json"
+            left_key.parent.mkdir(parents=True)
+            metadata_output.parent.mkdir(parents=True)
+
+            match_dom_pair_to_key_files(
+                left_path,
+                right_path,
+                left_key,
+                right_key,
+                metadata_output=metadata_output,
+                write_match_visualization=False,
+                max_image_dimension=32,
+                block_width=32,
+                block_height=32,
+                overlap_x=0,
+                overlap_y=0,
+                invalid_values=(0.0,),
+                invalid_pixel_radius=0,
+                valid_pixel_percent_threshold=0.2,
+                min_valid_pixels=16,
+                use_parallel_cpu=False,
+                enable_tile_validity_prefilter=True,
+                tile_validity_cell_width=32,
+                tile_validity_cell_height=32,
+            )
+
+            payload = json.loads(metadata_output.read_text(encoding="utf-8"))
+
+        image_match_payload = payload["image_match"]
+        self.assertTrue(image_match_payload["tile_validity_prefilter_enabled"])
+        self.assertEqual(image_match_payload["preindexed_skipped_tile_count"], 1)
+        self.assertEqual(image_match_payload["tile_count_before_preindex_filter"], 2)
+        self.assertEqual(image_match_payload["tile_count_after_preindex_filter"], 1)
+        self.assertTrue(str(image_match_payload["tile_validity_cache_dir"]).endswith("tile_validity_cache"))
 
 
 if __name__ == "__main__":

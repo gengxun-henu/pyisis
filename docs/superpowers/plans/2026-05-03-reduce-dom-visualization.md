@@ -319,8 +319,9 @@ def crop_window_for_keypoints(
     max_line = max(point.line for point in points)
     start_x = max(0, int(np.floor(min_sample - 1.0)) - margin)
     start_y = max(0, int(np.floor(min_line - 1.0)) - margin)
-    end_x = min(int(image_width), int(np.ceil(max_sample)) + margin)
-    end_y = min(int(image_height), int(np.ceil(max_line)) + margin)
+    # TileWindow uses 0-based start plus exclusive end; ISIS keypoint sample/line values are 1-based.
+    end_x = min(int(image_width), int(np.ceil(max_sample)) + margin + 1)
+    end_y = min(int(image_height), int(np.ceil(max_line)) + margin + 1)
     return TileWindow(start_x=start_x, start_y=start_y, width=max(1, end_x - start_x), height=max(1, end_y - start_y))
 ```
 

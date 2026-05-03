@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-14
+Last Modified: 2026-05-15
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -44,6 +44,7 @@ Updated: 2026-05-12  Geng Xun added regression coverage for preview cache hash-k
 Updated: 2026-05-12  Geng Xun added cache-hit validation assertions for reduced preview cache reuse.
 Updated: 2026-05-12  Geng Xun added regression coverage for corrupt preview cache regeneration.
 Updated: 2026-05-14  Geng Xun added preview cache metadata validation coverage and regeneration diagnostics.
+Updated: 2026-05-15  Geng Xun added reduced preview cache validation-failure regeneration tests.
 """
 
 from __future__ import annotations
@@ -2547,6 +2548,142 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(result["preview_cache_validation_left"], "metadata_missing")
         self.assertEqual(result["preview_cache_validation_right"], "metadata_missing")
         self.assertEqual(len(generated), 2)
+
+    def test_write_match_visualization_reduced_mode_regenerates_cache_on_cube_validation_failure(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+        generated: list[Path] = []
+
+        def fake_create(source, output, *, level, **kwargs):
+            generated.append(Path(output))
+            Path(output).parent.mkdir(parents=True, exist_ok=True)
+            Path(output).write_text("preview", encoding="utf-8")
+            return Path(output)
+
+        with temporary_directory() as temp_dir:
+            preview_root = temp_dir / "preview_cache"
+            left_preview = match_visualization_module._preview_cache_path(preview_root, "left.cub", level=2)
+            right_preview = match_visualization_module._preview_cache_path(preview_root, "right.cub", level=2)
+            left_preview.parent.mkdir(parents=True, exist_ok=True)
+            right_preview.parent.mkdir(parents=True, exist_ok=True)
+            left_preview.write_text("cached", encoding="utf-8")
+            right_preview.write_text("cached", encoding="utf-8")
+            _write_preview_cache_metadata(
+                left_preview,
+                source_hash_key=match_visualization_module._preview_cache_hash_key("left.cub"),
+                level=2,
+                source_path="left.cub",
+            )
+            _write_preview_cache_metadata(
+                right_preview,
+                source_hash_key=match_visualization_module._preview_cache_hash_key("right.cub"),
+                level=2,
+                source_path="right.cub",
+            )
+
+            def fake_dimensions(path):
+                if Path(path) in {left_preview, right_preview}:
+                    raise RuntimeError("preview validation failed")
+                return (4096, 4096)
+
+            with mock.patch.object(
+                match_visualization_module,
+                "_cube_dimensions",
+                side_effect=fake_dimensions,
+            ), mock.patch.object(
+                match_visualization_module,
+                "create_low_resolution_dom",
+                side_effect=fake_create,
+            ), mock.patch.object(
+                match_visualization_module,
+                "_read_cube_as_stretched_byte",
+                return_value=np.full((64, 64), 128, dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "drawMatches",
+                return_value=np.zeros((10, 10, 3), dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "imwrite",
+                return_value=True,
+            ):
+                result = match_visualization_module.write_stereo_pair_match_visualization(
+                    "left.cub",
+                    "right.cub",
+                    left_key_file,
+                    right_key_file,
+                    output_path=temp_dir / "viz.png",
+                    visualization_mode="reduced",
+                    preview_cache_dir=preview_root,
+                    preview_level=2,
+                    visualization_target_long_edge=1024,
+                )
+
+        self.assertFalse(result["preview_cache_hit"])
+        self.assertFalse(result["preview_cache_hit_left"])
+        self.assertFalse(result["preview_cache_hit_right"])
+        self.assertEqual(result["preview_cache_validation_left"], "cube_validation_failed")
+        self.assertEqual(result["preview_cache_validation_right"], "cube_validation_failed")
+        self.assertEqual(result["preview_cache_source"], "visualization_cache")
+        self.assertEqual(len(generated), 2)
+
+    def test_write_match_visualization_reduced_mode_reports_regeneration_failure_after_cache_validation_failure(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+        regeneration_error = RuntimeError("reduce failed")
+
+        with temporary_directory() as temp_dir:
+            preview_root = temp_dir / "preview_cache"
+            left_preview = match_visualization_module._preview_cache_path(preview_root, "left.cub", level=2)
+            right_preview = match_visualization_module._preview_cache_path(preview_root, "right.cub", level=2)
+            left_preview.parent.mkdir(parents=True, exist_ok=True)
+            right_preview.parent.mkdir(parents=True, exist_ok=True)
+            left_preview.write_text("cached", encoding="utf-8")
+            right_preview.write_text("cached", encoding="utf-8")
+            _write_preview_cache_metadata(
+                left_preview,
+                source_hash_key=match_visualization_module._preview_cache_hash_key("left.cub"),
+                level=2,
+                source_path="left.cub",
+            )
+            _write_preview_cache_metadata(
+                right_preview,
+                source_hash_key=match_visualization_module._preview_cache_hash_key("right.cub"),
+                level=2,
+                source_path="right.cub",
+            )
+
+            def fake_dimensions(path):
+                if Path(path) in {left_preview, right_preview}:
+                    raise RuntimeError("preview validation failed")
+                return (4096, 4096)
+
+            with mock.patch.object(
+                match_visualization_module,
+                "_cube_dimensions",
+                side_effect=fake_dimensions,
+            ), mock.patch.object(
+                match_visualization_module,
+                "create_low_resolution_dom",
+                side_effect=regeneration_error,
+            ):
+                with self.assertRaises(RuntimeError) as context:
+                    match_visualization_module.write_stereo_pair_match_visualization(
+                        "left.cub",
+                        "right.cub",
+                        left_key_file,
+                        right_key_file,
+                        output_path=temp_dir / "viz.png",
+                        visualization_mode="reduced",
+                        preview_cache_dir=preview_root,
+                        preview_level=2,
+                        visualization_target_long_edge=1024,
+                    )
+
+        message = str(context.exception)
+        self.assertIn("cube_validation_failed", message)
+        self.assertIn("regeneration failed", message)
+        self.assertIs(context.exception.__cause__, regeneration_error)
 
     def test_write_match_visualization_reduced_mode_regenerates_mismatched_metadata(self):
         left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))

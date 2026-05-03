@@ -393,7 +393,7 @@ Append:
             )
 
         self.assertEqual(result["visualization_mode_used"], "cropped")
-        self.assertEqual(read_windows, [(89, 89, 42, 42), (94, 94, 42, 42)])
+        self.assertEqual(read_windows, [(89, 89, 41, 41), (94, 94, 41, 41)])
 
     def test_write_match_visualization_preserves_full_mode_for_small_images(self):
         left_key_file = KeypointFile(32, 32, (Keypoint(10.0, 10.0),))

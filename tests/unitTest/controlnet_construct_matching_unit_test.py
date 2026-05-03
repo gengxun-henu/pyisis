@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-10
+Last Modified: 2026-05-11
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -38,6 +38,7 @@ Updated: 2026-05-07  Geng Xun added visualization default-mode diagnostics and c
 Updated: 2026-05-08  Geng Xun stabilized visualization reduced-mode guards and default full-mode mocks.
 Updated: 2026-05-09  Geng Xun ensured full-mode visualization skips dimension probes and added explicit-full coverage.
 Updated: 2026-05-10  Geng Xun added fail-fast coverage for reduced-cropped visualization mode.
+Updated: 2026-05-11  Geng Xun added reduced-preview cache coverage for visualization rendering.
 """
 
 from __future__ import annotations
@@ -2266,57 +2267,167 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         cube_dimensions_mock.assert_not_called()
         self.assertEqual(read_windows, [None, None])
 
-    def test_write_match_visualization_reduced_mode_not_implemented(self):
-        left_key_file = KeypointFile(32, 32, (Keypoint(10.0, 10.0),))
-        right_key_file = KeypointFile(32, 32, (Keypoint(11.0, 11.0),))
+    def test_write_match_visualization_reduced_mode_generates_preview_cache(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+        generated: list[tuple[str, str, int]] = []
+
+        def fake_create(source, output, *, level, **kwargs):
+            generated.append((str(source), str(output), level))
+            Path(output).parent.mkdir(parents=True, exist_ok=True)
+            Path(output).write_text("preview", encoding="utf-8")
+            return Path(output)
+
+        def fake_draw_matches(*args, **kwargs):
+            return np.zeros((10, 10, 3), dtype=np.uint8)
 
         with temporary_directory() as temp_dir, mock.patch.object(
             match_visualization_module,
             "_cube_dimensions",
-            return_value=(32, 32),
-        ) as cube_dimensions_mock, mock.patch.object(
+            return_value=(4096, 4096),
+        ), mock.patch.object(
+            match_visualization_module,
+            "create_low_resolution_dom",
+            side_effect=fake_create,
+        ), mock.patch.object(
             match_visualization_module,
             "_read_cube_as_stretched_byte",
-        ) as read_cube_mock:
-            with self.assertRaises(NotImplementedError) as context:
-                match_visualization_module.write_stereo_pair_match_visualization(
+            return_value=np.full((64, 64), 128, dtype=np.uint8),
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "drawMatches",
+            side_effect=fake_draw_matches,
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "imwrite",
+            return_value=True,
+        ):
+            result = match_visualization_module.write_stereo_pair_match_visualization(
+                "left.cub",
+                "right.cub",
+                left_key_file,
+                right_key_file,
+                output_path=temp_dir / "viz.png",
+                visualization_mode="reduced",
+                preview_cache_dir=temp_dir / "preview_cache",
+                visualization_target_long_edge=1024,
+            )
+
+        self.assertEqual(result["visualization_mode_used"], "reduced")
+        self.assertEqual(result["preview_level"], 2)
+        self.assertFalse(result["preview_cache_hit"])
+        self.assertEqual(len(generated), 2)
+
+    def test_write_match_visualization_reduced_mode_reuses_preview_cache(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+        read_windows: list[object | None] = []
+
+        def fake_read(cube_path, *, window=None, **kwargs):
+            read_windows.append(window)
+            return np.full((64, 64), 128, dtype=np.uint8)
+
+        with temporary_directory() as temp_dir:
+            preview_root = temp_dir / "preview_cache"
+            left_preview = preview_root / "level2" / "left.cub"
+            right_preview = preview_root / "level2" / "right.cub"
+            left_preview.parent.mkdir(parents=True, exist_ok=True)
+            right_preview.parent.mkdir(parents=True, exist_ok=True)
+            left_preview.write_text("cached", encoding="utf-8")
+            right_preview.write_text("cached", encoding="utf-8")
+
+            with mock.patch.object(
+                match_visualization_module,
+                "_cube_dimensions",
+                return_value=(4096, 4096),
+            ), mock.patch.object(
+                match_visualization_module,
+                "create_low_resolution_dom",
+            ) as create_mock, mock.patch.object(
+                match_visualization_module,
+                "_read_cube_as_stretched_byte",
+                side_effect=fake_read,
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "drawMatches",
+                return_value=np.zeros((10, 10, 3), dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "imwrite",
+                return_value=True,
+            ):
+                result = match_visualization_module.write_stereo_pair_match_visualization(
                     "left.cub",
                     "right.cub",
                     left_key_file,
                     right_key_file,
                     output_path=temp_dir / "viz.png",
                     visualization_mode="reduced",
+                    preview_cache_dir=preview_root,
+                    preview_force_regenerate=False,
+                    visualization_target_long_edge=1024,
                 )
 
-        cube_dimensions_mock.assert_not_called()
-        read_cube_mock.assert_not_called()
-        self.assertIn("reduced previews", str(context.exception))
+        create_mock.assert_not_called()
+        self.assertTrue(result["preview_cache_hit"])
+        self.assertEqual(read_windows, [None, None])
 
-    def test_write_match_visualization_reduced_cropped_mode_not_implemented(self):
-        left_key_file = KeypointFile(32, 32, (Keypoint(10.0, 10.0),))
-        right_key_file = KeypointFile(32, 32, (Keypoint(11.0, 11.0),))
+    def test_write_match_visualization_reduced_cropped_mode_reads_preview_window(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0), Keypoint(120.0, 120.0)))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(110.0, 110.0), Keypoint(130.0, 130.0)))
+        read_windows: list[TileWindow | None] = []
+
+        def fake_dimensions(path):
+            if "preview_cache" in str(path):
+                return (1024, 1024)
+            return (4096, 4096)
+
+        def fake_read(cube_path, *, window=None, **kwargs):
+            read_windows.append(window)
+            return np.full((64, 64), 128, dtype=np.uint8)
+
+        def fake_create(source, output, *, level, **kwargs):
+            Path(output).parent.mkdir(parents=True, exist_ok=True)
+            Path(output).write_text("preview", encoding="utf-8")
+            return Path(output)
 
         with temporary_directory() as temp_dir, mock.patch.object(
             match_visualization_module,
             "_cube_dimensions",
-            return_value=(32, 32),
-        ) as cube_dimensions_mock, mock.patch.object(
+            side_effect=fake_dimensions,
+        ), mock.patch.object(
+            match_visualization_module,
+            "create_low_resolution_dom",
+            side_effect=fake_create,
+        ), mock.patch.object(
             match_visualization_module,
             "_read_cube_as_stretched_byte",
-        ) as read_cube_mock:
-            with self.assertRaises(NotImplementedError) as context:
-                match_visualization_module.write_stereo_pair_match_visualization(
-                    "left.cub",
-                    "right.cub",
-                    left_key_file,
-                    right_key_file,
-                    output_path=temp_dir / "viz.png",
-                    visualization_mode="reduced_cropped",
-                )
+            side_effect=fake_read,
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "drawMatches",
+            return_value=np.zeros((10, 10, 3), dtype=np.uint8),
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "imwrite",
+            return_value=True,
+        ):
+            result = match_visualization_module.write_stereo_pair_match_visualization(
+                "left.cub",
+                "right.cub",
+                left_key_file,
+                right_key_file,
+                output_path=temp_dir / "viz.png",
+                visualization_mode="reduced_cropped",
+                preview_cache_dir=temp_dir / "preview_cache",
+                visualization_target_long_edge=1024,
+            )
 
-        cube_dimensions_mock.assert_not_called()
-        read_cube_mock.assert_not_called()
-        self.assertIn("reduced previews", str(context.exception))
+        self.assertEqual(result["visualization_mode_used"], "reduced_cropped")
+        self.assertIsNotNone(result["crop_window"])
+        self.assertEqual(result["source_scale_factor"], 0.25)
+        self.assertEqual(len(read_windows), 2)
+        self.assertTrue(all(window is not None for window in read_windows))
 
     def test_write_match_visualization_preserves_full_mode_for_small_images(self):
         left_key_file = KeypointFile(32, 32, (Keypoint(10.0, 10.0),))

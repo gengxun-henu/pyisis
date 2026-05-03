@@ -1262,6 +1262,8 @@ def match_dom_pair_to_key_files(
     match_visualization_output_path: str | Path | None = None,
     match_visualization_output_dir: str | Path | None = None,
     match_visualization_scale: float = 1.0 / 3.0,
+    show_progress: bool = False,
+    *,
     visualization_mode: str = DEFAULT_MATCH_VISUALIZATION_MODE,
     memory_profile: str = DEFAULT_MEMORY_PROFILE,
     visualization_target_long_edge: int | None = None,
@@ -1271,7 +1273,6 @@ def match_dom_pair_to_key_files(
     preview_cache_source: str = DEFAULT_PREVIEW_CACHE_SOURCE,
     preview_force_regenerate: bool = False,
     preview_level: int | None = None,
-    show_progress: bool = False,
     **kwargs,
 ) -> dict[str, object]:
     if kwargs.get("enable_tile_validity_prefilter") and kwargs.get("tile_validity_cache_dir") is None:
@@ -1289,6 +1290,7 @@ def match_dom_pair_to_key_files(
     left_key_file, right_key_file, summary = match_dom_pair(left_dom_path, right_dom_path, show_progress=show_progress, **kwargs)
     write_key_file(left_output_key, left_key_file)
     write_key_file(right_output_key, right_key_file)
+    metadata_payload = None
     if metadata_output is not None:
         metadata_payload = dict(summary["preparation"])
         metadata_payload["image_match"] = {
@@ -1322,10 +1324,6 @@ def match_dom_pair_to_key_files(
             "low_resolution_matching_target_long_edge": summary["low_resolution_matching_target_long_edge"],
             "resolved_low_resolution_level": summary["resolved_low_resolution_level"],
         }
-        write_pair_preparation_metadata(
-            metadata_output,
-            metadata_payload,
-        )
     match_visualization_result: dict[str, object] | None = None
     if write_match_visualization:
         visualization_output_directory = (
@@ -1357,6 +1355,13 @@ def match_dom_pair_to_key_files(
             upper_percent=float(kwargs.get("upper_percent", 99.5)),
             invalid_values=tuple(kwargs.get("invalid_values", ())),
             special_pixel_abs_threshold=float(kwargs.get("special_pixel_abs_threshold", 1.0e300)),
+        )
+    if metadata_output is not None and metadata_payload is not None:
+        if match_visualization_result is not None:
+            metadata_payload["match_visualization"] = match_visualization_result
+        write_pair_preparation_metadata(
+            metadata_output,
+            metadata_payload,
         )
     return {
         **summary,

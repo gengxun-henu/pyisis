@@ -33,6 +33,7 @@ Updated: 2026-05-04  Geng Xun added regression coverage for crop-window visualiz
 Updated: 2026-05-04  Geng Xun corrected crop-window clamping expectations for 0-based bounds.
 Updated: 2026-05-05  Geng Xun added fractional crop-window coverage plus negative margin and out-of-bounds clamp tests.
 Updated: 2026-05-06  Geng Xun updated crop-window negative-margin validation label expectations.
+Updated: 2026-05-06  Geng Xun added auto full vs cropped visualization rendering coverage.
 """
 
 from __future__ import annotations
@@ -2098,6 +2099,69 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(result["point_count"], 2)
         self.assertEqual(result["highlighted_match_count"], 1)
         self.assertTrue(output_exists)
+
+    def test_write_match_visualization_auto_uses_cropped_mode_for_large_images(self):
+        left_key_file = KeypointFile(4000, 3000, (Keypoint(100.0, 100.0), Keypoint(120.0, 120.0)))
+        right_key_file = KeypointFile(4000, 3000, (Keypoint(105.0, 105.0), Keypoint(125.0, 125.0)))
+        read_windows: list[tuple[int, int, int, int]] = []
+
+        def fake_read(cube_path, *, window=None, **kwargs):
+            read_windows.append((window.start_x, window.start_y, window.width, window.height))
+            return np.full((window.height, window.width), 128, dtype=np.uint8)
+
+        with temporary_directory() as temp_dir, mock.patch.object(
+            match_visualization_module,
+            "_cube_dimensions",
+            return_value=(4000, 3000),
+        ), mock.patch.object(
+            match_visualization_module,
+            "_read_cube_as_stretched_byte",
+            side_effect=fake_read,
+        ):
+            result = match_visualization_module.write_stereo_pair_match_visualization(
+                "left.cub",
+                "right.cub",
+                left_key_file,
+                right_key_file,
+                output_path=temp_dir / "viz.png",
+                visualization_mode="auto",
+                max_preview_pixels=10_000,
+                preview_crop_margin_pixels=10,
+            )
+
+        self.assertEqual(result["visualization_mode_used"], "cropped")
+        self.assertEqual(read_windows, [(89, 89, 41, 41), (94, 94, 41, 41)])
+
+    def test_write_match_visualization_preserves_full_mode_for_small_images(self):
+        left_key_file = KeypointFile(32, 32, (Keypoint(10.0, 10.0),))
+        right_key_file = KeypointFile(32, 32, (Keypoint(11.0, 11.0),))
+        read_windows: list[object | None] = []
+
+        def fake_read(cube_path, *, window=None, **kwargs):
+            read_windows.append(window)
+            return np.full((32, 32), 128, dtype=np.uint8)
+
+        with temporary_directory() as temp_dir, mock.patch.object(
+            match_visualization_module,
+            "_cube_dimensions",
+            return_value=(32, 32),
+        ), mock.patch.object(
+            match_visualization_module,
+            "_read_cube_as_stretched_byte",
+            side_effect=fake_read,
+        ):
+            result = match_visualization_module.write_stereo_pair_match_visualization(
+                "left.cub",
+                "right.cub",
+                left_key_file,
+                right_key_file,
+                output_path=temp_dir / "viz.png",
+                visualization_mode="auto",
+                max_preview_pixels=4096,
+            )
+
+        self.assertEqual(result["visualization_mode_used"], "full")
+        self.assertEqual(read_windows, [None, None])
 
     def test_match_dom_pair_to_key_files_writes_default_match_visualization_next_to_key_outputs(self):
         width = 96

@@ -131,6 +131,31 @@ def resolve_visualization_options(
     )
 
 
+def _cube_dimensions(cube_path: str | Path) -> tuple[int, int]:
+    cube = ip.Cube()
+    cube.open(str(cube_path), "r")
+    try:
+        return int(cube.sample_count()), int(cube.line_count())
+    finally:
+        if cube.is_open():
+            cube.close()
+
+
+def _auto_visualization_mode(
+    *,
+    image_width: int,
+    image_height: int,
+    options: VisualizationOptions,
+    has_keypoints: bool,
+) -> str:
+    pixel_count = int(image_width) * int(image_height)
+    if options.max_preview_pixels is not None and pixel_count > options.max_preview_pixels and has_keypoints:
+        return "cropped"
+    if max(image_width, image_height) > options.visualization_target_long_edge and has_keypoints:
+        return "cropped"
+    return "full"
+
+
 def crop_window_for_keypoints(
     points: tuple[Keypoint, ...],
     *,
@@ -173,6 +198,21 @@ def crop_window_for_keypoints(
     )
 
 
+def _offset_keypoint_file(
+    key_file: KeypointFile,
+    *,
+    start_x: int,
+    start_y: int,
+    width: int,
+    height: int,
+) -> KeypointFile:
+    return KeypointFile(
+        width,
+        height,
+        tuple(Keypoint(point.sample - start_x, point.line - start_y) for point in key_file.points),
+    )
+
+
 def default_match_visualization_path(
     left_image_path: str | Path,
     right_image_path: str | Path,
@@ -203,6 +243,7 @@ def _resize_visualization_image(image: np.ndarray, *, scale_factor: float) -> np
 def _read_cube_as_stretched_byte(
     cube_path: str | Path,
     *,
+    window: TileWindow | None = None,
     band: int = 1,
     minimum_value: float | None = None,
     maximum_value: float | None = None,
@@ -215,8 +256,8 @@ def _read_cube_as_stretched_byte(
     cube.open(str(cube_path), "r")
     try:
         resolved_invalid_values = _resolved_invalid_values_for_cube(cube, invalid_values)
-        full_window = _full_image_window(cube.sample_count(), cube.line_count())
-        values = _read_cube_window(cube, full_window, band=band)
+        read_window = window if window is not None else _full_image_window(cube.sample_count(), cube.line_count())
+        values = _read_cube_window(cube, read_window, band=band)
     finally:
         if cube.is_open():
             cube.close()
@@ -251,6 +292,15 @@ def write_stereo_pair_match_visualization(
     invalid_values: tuple[float, ...] = (),
     special_pixel_abs_threshold: float = 1.0e300,
     highlight_match_indices: list[int] | None = None,
+    visualization_mode: str = DEFAULT_VISUALIZATION_MODE,
+    memory_profile: str = DEFAULT_MEMORY_PROFILE,
+    visualization_target_long_edge: int | None = None,
+    max_preview_pixels: int | None = None,
+    preview_crop_margin_pixels: int = DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+    preview_cache_dir: str | Path | None = None,
+    preview_cache_source: str = DEFAULT_PREVIEW_CACHE_SOURCE,
+    preview_force_regenerate: bool = False,
+    preview_level: int | None = None,
 ) -> dict[str, object]:
     if len(left_key_file.points) != len(right_key_file.points):
         raise ValueError("Left and right keypoint files must contain the same number of points for visualization.")
@@ -263,8 +313,70 @@ def write_stereo_pair_match_visualization(
         else default_match_visualization_path(left_dom_path, right_dom_path, output_directory, timestamp=timestamp)
     )
 
+    options = resolve_visualization_options(
+        visualization_mode=visualization_mode,
+        memory_profile=memory_profile,
+        visualization_target_long_edge=visualization_target_long_edge,
+        max_preview_pixels=max_preview_pixels,
+        preview_crop_margin_pixels=preview_crop_margin_pixels,
+        preview_cache_dir=preview_cache_dir,
+        preview_cache_source=preview_cache_source,
+        preview_force_regenerate=preview_force_regenerate,
+        preview_level=preview_level,
+    )
+    left_width, left_height = _cube_dimensions(left_dom_path)
+    right_width, right_height = _cube_dimensions(right_dom_path)
+    mode_used = options.visualization_mode
+    if mode_used == "auto":
+        mode_used = _auto_visualization_mode(
+            image_width=max(left_width, right_width),
+            image_height=max(left_height, right_height),
+            options=options,
+            has_keypoints=bool(left_key_file.points),
+        )
+    if mode_used in {"reduced", "reduced_cropped"}:
+        raise NotImplementedError(
+            f"Visualization mode '{mode_used}' requires reduced previews (Task 5)."
+        )
+
+    left_window: TileWindow | None = None
+    right_window: TileWindow | None = None
+    left_render_key_file = left_key_file
+    right_render_key_file = right_key_file
+    if mode_used == "cropped":
+        if left_key_file.points and right_key_file.points:
+            left_window = crop_window_for_keypoints(
+                left_key_file.points,
+                image_width=left_width,
+                image_height=left_height,
+                margin_pixels=options.preview_crop_margin_pixels,
+            )
+            right_window = crop_window_for_keypoints(
+                right_key_file.points,
+                image_width=right_width,
+                image_height=right_height,
+                margin_pixels=options.preview_crop_margin_pixels,
+            )
+            left_render_key_file = _offset_keypoint_file(
+                left_key_file,
+                start_x=left_window.start_x,
+                start_y=left_window.start_y,
+                width=left_window.width,
+                height=left_window.height,
+            )
+            right_render_key_file = _offset_keypoint_file(
+                right_key_file,
+                start_x=right_window.start_x,
+                start_y=right_window.start_y,
+                width=right_window.width,
+                height=right_window.height,
+            )
+        else:
+            mode_used = "full"
+
     left_image = _read_cube_as_stretched_byte(
         left_dom_path,
+        window=left_window,
         band=band,
         minimum_value=minimum_value,
         maximum_value=maximum_value,
@@ -275,6 +387,7 @@ def write_stereo_pair_match_visualization(
     )
     right_image = _read_cube_as_stretched_byte(
         right_dom_path,
+        window=right_window,
         band=band,
         minimum_value=minimum_value,
         maximum_value=maximum_value,
@@ -286,8 +399,12 @@ def write_stereo_pair_match_visualization(
 
     scaled_left = _resize_visualization_image(left_image, scale_factor=scale_factor)
     scaled_right = _resize_visualization_image(right_image, scale_factor=scale_factor)
-    left_keypoints = [_isis_keypoint_to_draw_matches_keypoint(point, scale_factor=scale_factor) for point in left_key_file.points]
-    right_keypoints = [_isis_keypoint_to_draw_matches_keypoint(point, scale_factor=scale_factor) for point in right_key_file.points]
+    left_keypoints = [
+        _isis_keypoint_to_draw_matches_keypoint(point, scale_factor=scale_factor) for point in left_render_key_file.points
+    ]
+    right_keypoints = [
+        _isis_keypoint_to_draw_matches_keypoint(point, scale_factor=scale_factor) for point in right_render_key_file.points
+    ]
     matches = [cv2.DMatch(_queryIdx=index, _trainIdx=index, _distance=0.0) for index in range(len(left_keypoints))]
 
     rendered = cv2.drawMatches(
@@ -318,6 +435,24 @@ def write_stereo_pair_match_visualization(
     if not cv2.imwrite(str(resolved_output_path), rendered):
         raise IOError(f"Failed to write stereo-pair match visualization: {resolved_output_path}")
 
+    preview_cache_source = "disabled" if mode_used in {"full", "cropped"} else options.preview_cache_source
+    crop_window_payload = None
+    if mode_used != "full":
+        crop_window_payload = {
+            "left": {
+                "start_x": left_window.start_x,
+                "start_y": left_window.start_y,
+                "width": left_window.width,
+                "height": left_window.height,
+            },
+            "right": {
+                "start_x": right_window.start_x,
+                "start_y": right_window.start_y,
+                "width": right_window.width,
+                "height": right_window.height,
+            },
+        }
+
     return {
         "output_path": str(resolved_output_path),
         "point_count": len(left_keypoints),
@@ -325,6 +460,18 @@ def write_stereo_pair_match_visualization(
         "highlighted_match_count": 0 if highlight_match_indices is None else len(highlight_match_indices),
         "left_dom": str(left_dom_path),
         "right_dom": str(right_dom_path),
+        "visualization_mode_requested": options.visualization_mode,
+        "visualization_mode_used": mode_used,
+        "memory_profile": options.memory_profile,
+        "preview_level": options.preview_level,
+        "preview_cache_hit": False,
+        "preview_cache_source": preview_cache_source,
+        "preview_dimensions": {
+            "left": [left_image.shape[1], left_image.shape[0]],
+            "right": [right_image.shape[1], right_image.shape[0]],
+        },
+        "crop_window": crop_window_payload,
+        "source_scale_factor": 1.0,
     }
 
 

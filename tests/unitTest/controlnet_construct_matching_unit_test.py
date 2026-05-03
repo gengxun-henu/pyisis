@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-16
+Last Modified: 2026-05-17
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -47,6 +47,7 @@ Updated: 2026-05-14  Geng Xun added preview cache metadata validation coverage a
 Updated: 2026-05-15  Geng Xun added reduced preview cache validation-failure regeneration tests.
 Updated: 2026-05-16  Geng Xun added preview cache fingerprint and metadata corruption validation coverage.
 Updated: 2026-05-16  Geng Xun added coverage for non-object preview cache metadata regeneration.
+Updated: 2026-05-17  Geng Xun added parser/config coverage for visualization options and low-resolution target-long-edge matching.
 """
 
 from __future__ import annotations
@@ -830,6 +831,48 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(args.left_low_resolution_dom, "left_low.cub")
         self.assertEqual(args.right_low_resolution_dom, "right_low.cub")
 
+    def test_build_argument_parser_accepts_visualization_preview_options(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--visualization-mode",
+                "reduced",
+                "--memory-profile",
+                "low-memory",
+                "--visualization-target-long-edge",
+                "1024",
+                "--max-preview-pixels",
+                "1000000",
+                "--preview-crop-margin-pixels",
+                "128",
+                "--preview-cache-dir",
+                "work/preview_cache",
+                "--preview-cache-source",
+                "visualization-cache",
+                "--preview-force-regenerate",
+                "--preview-level",
+                "3",
+                "--low-resolution-matching-target-long-edge",
+                "1024",
+            ]
+        )
+
+        self.assertEqual(args.visualization_mode, "reduced")
+        self.assertEqual(args.memory_profile, "low-memory")
+        self.assertEqual(args.visualization_target_long_edge, 1024)
+        self.assertEqual(args.max_preview_pixels, 1000000)
+        self.assertEqual(args.preview_crop_margin_pixels, 128)
+        self.assertEqual(args.preview_cache_dir, "work/preview_cache")
+        self.assertEqual(args.preview_cache_source, "visualization_cache")
+        self.assertTrue(args.preview_force_regenerate)
+        self.assertEqual(args.preview_level, 3)
+        self.assertEqual(args.low_resolution_matching_target_long_edge, 1024)
+
     def test_build_argument_parser_rejects_invalid_low_resolution_match_count_and_offset_threshold(self):
         parser = build_argument_parser()
 
@@ -974,6 +1017,41 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(defaults["tile_validity_cache_dir"], "work/tile_validity_cache")
         self.assertEqual(defaults["tile_validity_cell_width"], 512)
         self.assertEqual(defaults["tile_validity_cell_height"], 256)
+
+    def test_load_image_match_defaults_from_config_reads_visualization_fields(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "visualizationMode": "reduced",
+                            "memoryProfile": "low-memory",
+                            "visualizationTargetLongEdge": 1024,
+                            "maxPreviewPixels": 1000000,
+                            "previewCropMarginPixels": 128,
+                            "previewCacheDir": "work/preview_cache",
+                            "previewCacheSource": "visualization-cache",
+                            "previewForceRegenerate": True,
+                            "previewLevel": 3,
+                            "lowResolutionMatchingTargetLongEdge": 1024,
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            defaults = image_match.load_image_match_defaults_from_config(config_path)
+
+        self.assertEqual(defaults["visualization_mode"], "reduced")
+        self.assertEqual(defaults["memory_profile"], "low-memory")
+        self.assertEqual(defaults["visualization_target_long_edge"], 1024)
+        self.assertEqual(defaults["max_preview_pixels"], 1000000)
+        self.assertEqual(defaults["preview_crop_margin_pixels"], 128)
+        self.assertEqual(defaults["preview_cache_dir"], "work/preview_cache")
+        self.assertEqual(defaults["preview_cache_source"], "visualization_cache")
+        self.assertTrue(defaults["preview_force_regenerate"])
+        self.assertEqual(defaults["preview_level"], 3)
+        self.assertEqual(defaults["low_resolution_matching_target_long_edge"], 1024)
 
     def test_create_descriptor_matcher_supports_bf_and_flann(self):
         fake_bf_matcher = object()
@@ -1148,6 +1226,94 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             estimate_mock.call_args.kwargs["low_resolution_max_mean_projected_offset_meters"],
             2000.0,
         )
+
+    def test_match_dom_pair_derives_low_resolution_level_from_target_long_edge(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_lowres_target.cub",
+                right_name="right_lowres_target.cub",
+            )
+            expected_level = lowres_offset_module.reduce_level_for_pair_target_long_edge(
+                left_width=64,
+                left_height=64,
+                right_width=64,
+                right_height=64,
+                target_long_edge=32,
+            )
+            with mock.patch.object(
+                image_match,
+                "_estimate_low_resolution_projected_offset",
+                return_value={
+                    "enabled": True,
+                    "status": "succeeded",
+                    "fallback_offset_zero": False,
+                    "reason": "ok",
+                    "delta_x_projected": 0.0,
+                    "delta_y_projected": 0.0,
+                    "retained_match_count": 0,
+                    "trim_fraction_each_side": 0.05,
+                    "min_retained_match_count": 5,
+                    "max_mean_projected_offset_meters": 0.0,
+                    "mean_projected_offset_meters": 0.0,
+                },
+            ) as estimate_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    min_valid_pixels=16,
+                    enable_low_resolution_offset_estimation=True,
+                    low_resolution_matching_target_long_edge=32,
+                )
+
+        self.assertEqual(summary["low_resolution_matching_target_long_edge"], 32)
+        self.assertEqual(summary["resolved_low_resolution_level"], expected_level)
+        self.assertEqual(estimate_mock.call_args.kwargs["low_resolution_level"], expected_level)
+
+    def test_match_dom_pair_explicit_low_resolution_level_overrides_target_long_edge(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_lowres_override.cub",
+                right_name="right_lowres_override.cub",
+            )
+            with mock.patch.object(
+                image_match,
+                "_estimate_low_resolution_projected_offset",
+                return_value={
+                    "enabled": True,
+                    "status": "succeeded",
+                    "fallback_offset_zero": False,
+                    "reason": "ok",
+                    "delta_x_projected": 0.0,
+                    "delta_y_projected": 0.0,
+                    "retained_match_count": 0,
+                    "trim_fraction_each_side": 0.05,
+                    "min_retained_match_count": 5,
+                    "max_mean_projected_offset_meters": 0.0,
+                    "mean_projected_offset_meters": 0.0,
+                },
+            ) as estimate_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    min_valid_pixels=16,
+                    enable_low_resolution_offset_estimation=True,
+                    low_resolution_level=2,
+                    low_resolution_matching_target_long_edge=32,
+                )
+
+        self.assertEqual(summary["low_resolution_matching_target_long_edge"], 32)
+        self.assertEqual(summary["resolved_low_resolution_level"], 2)
+        self.assertEqual(estimate_mock.call_args.kwargs["low_resolution_level"], 2)
 
     def test_match_dom_pair_prefilters_invalid_tiles_and_reports_summary(self):
         values = np.zeros((32, 64), dtype=np.float64)

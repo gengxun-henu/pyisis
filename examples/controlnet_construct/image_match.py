@@ -33,6 +33,7 @@ from __future__ import annotations
 
 import argparse
 from dataclasses import asdict
+from datetime import datetime
 import json
 from pathlib import Path
 import sys
@@ -1331,31 +1332,58 @@ def match_dom_pair_to_key_files(
             if match_visualization_output_dir is not None
             else (None if match_visualization_output_path is not None else Path(left_output_key).parent)
         )
-        match_visualization_result = write_stereo_pair_match_visualization(
-            left_dom_path,
-            right_dom_path,
-            left_key_file,
-            right_key_file,
-            output_path=match_visualization_output_path,
-            output_directory=visualization_output_directory,
-            scale_factor=match_visualization_scale,
-            visualization_mode=visualization_mode,
-            memory_profile=memory_profile,
-            visualization_target_long_edge=visualization_target_long_edge,
-            max_preview_pixels=max_preview_pixels,
-            preview_crop_margin_pixels=preview_crop_margin_pixels,
-            preview_cache_dir=preview_cache_dir,
-            preview_cache_source=preview_cache_source,
-            preview_force_regenerate=preview_force_regenerate,
-            preview_level=preview_level,
-            band=int(kwargs.get("band", 1)),
-            minimum_value=kwargs.get("minimum_value"),
-            maximum_value=kwargs.get("maximum_value"),
-            lower_percent=float(kwargs.get("lower_percent", 0.5)),
-            upper_percent=float(kwargs.get("upper_percent", 99.5)),
-            invalid_values=tuple(kwargs.get("invalid_values", ())),
-            special_pixel_abs_threshold=float(kwargs.get("special_pixel_abs_threshold", 1.0e300)),
-        )
+        visualization_timestamp = None if match_visualization_output_path is not None else datetime.now()
+        try:
+            match_visualization_result = write_stereo_pair_match_visualization(
+                left_dom_path,
+                right_dom_path,
+                left_key_file,
+                right_key_file,
+                output_path=match_visualization_output_path,
+                output_directory=visualization_output_directory,
+                timestamp=visualization_timestamp,
+                scale_factor=match_visualization_scale,
+                visualization_mode=visualization_mode,
+                memory_profile=memory_profile,
+                visualization_target_long_edge=visualization_target_long_edge,
+                max_preview_pixels=max_preview_pixels,
+                preview_crop_margin_pixels=preview_crop_margin_pixels,
+                preview_cache_dir=preview_cache_dir,
+                preview_cache_source=preview_cache_source,
+                preview_force_regenerate=preview_force_regenerate,
+                preview_level=preview_level,
+                band=int(kwargs.get("band", 1)),
+                minimum_value=kwargs.get("minimum_value"),
+                maximum_value=kwargs.get("maximum_value"),
+                lower_percent=float(kwargs.get("lower_percent", 0.5)),
+                upper_percent=float(kwargs.get("upper_percent", 99.5)),
+                invalid_values=tuple(kwargs.get("invalid_values", ())),
+                special_pixel_abs_threshold=float(kwargs.get("special_pixel_abs_threshold", 1.0e300)),
+            )
+        except Exception as exc:
+            if metadata_output is not None and metadata_payload is not None:
+                match_visualization_result = {
+                    "status": "failed",
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                }
+                if match_visualization_output_path is not None:
+                    match_visualization_result["output_path"] = str(match_visualization_output_path)
+                else:
+                    match_visualization_result["output_path"] = str(
+                        default_match_visualization_path(
+                            left_dom_path,
+                            right_dom_path,
+                            visualization_output_directory,
+                            timestamp=visualization_timestamp,
+                        )
+                    )
+                metadata_payload["match_visualization"] = match_visualization_result
+                write_pair_preparation_metadata(
+                    metadata_output,
+                    metadata_payload,
+                )
+            raise
     if metadata_output is not None and metadata_payload is not None:
         if match_visualization_result is not None:
             metadata_payload["match_visualization"] = match_visualization_result

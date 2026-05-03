@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-18
+Last Modified: 2026-05-19
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -49,6 +49,7 @@ Updated: 2026-05-16  Geng Xun added preview cache fingerprint and metadata corru
 Updated: 2026-05-16  Geng Xun added coverage for non-object preview cache metadata regeneration.
 Updated: 2026-05-17  Geng Xun added parser/config coverage for visualization options and low-resolution target-long-edge matching.
 Updated: 2026-05-18  Geng Xun added regression coverage for legacy positional API compatibility and visualization metadata sidecar output.
+Updated: 2026-05-19  Geng Xun added regression coverage for visualization failure metadata sidecar output.
 """
 
 from __future__ import annotations
@@ -3561,6 +3562,56 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         visualization_payload = payload["match_visualization"]
         self.assertIn("visualization_mode_used", visualization_payload)
         self.assertEqual(visualization_payload["output_path"], result["match_visualization"]["output_path"])
+
+    def test_match_dom_pair_to_key_files_metadata_records_visualization_failure(self):
+        width = 96
+        height = 96
+        image = _build_textured_test_image(width, height)
+        sentinel_error = RuntimeError("sentinel visualization failure")
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_metadata_viz_failure.cub",
+                right_name="right_metadata_viz_failure.cub",
+            )
+            left_key = temp_dir / "left_metadata_viz_failure.key"
+            right_key = temp_dir / "right_metadata_viz_failure.key"
+            metadata_output = temp_dir / "match_metadata" / "pair.json"
+            metadata_output.parent.mkdir(parents=True)
+
+            with mock.patch.object(
+                image_match,
+                "write_stereo_pair_match_visualization",
+                side_effect=sentinel_error,
+            ):
+                with self.assertRaises(RuntimeError) as raised:
+                    match_dom_pair_to_key_files(
+                        left_path,
+                        right_path,
+                        left_key,
+                        right_key,
+                        metadata_output=metadata_output,
+                        max_image_dimension=64,
+                        block_width=64,
+                        block_height=64,
+                        overlap_x=16,
+                        overlap_y=16,
+                        min_valid_pixels=32,
+                        ratio_test=0.8,
+                    )
+
+            self.assertIs(raised.exception, sentinel_error)
+            payload = json.loads(metadata_output.read_text(encoding="utf-8"))
+
+        match_visualization_payload = payload["match_visualization"]
+        self.assertEqual(match_visualization_payload["status"], "failed")
+        self.assertEqual(match_visualization_payload["error_type"], "RuntimeError")
+        self.assertIn("sentinel visualization failure", match_visualization_payload["error"])
+        self.assertIn("point_count", payload["image_match"])
+        self.assertIn("tile_count", payload["image_match"])
 
     def test_parallel_tile_batch_worker_reuses_open_cubes_for_task_shard(self):
         open_paths: list[str] = []

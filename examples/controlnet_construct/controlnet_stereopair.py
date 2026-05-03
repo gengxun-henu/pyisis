@@ -151,6 +151,24 @@ def write_controlnet_result_report(
     return str(resolved_report_path)
 
 
+def _match_visualization_failure_payload(
+    exc: Exception,
+    *,
+    output_path: str | Path | None = None,
+    output_directory: str | Path | None = None,
+) -> dict[str, object]:
+    payload: dict[str, object] = {
+        "status": "failed",
+        "error_type": type(exc).__name__,
+        "error": str(exc),
+    }
+    if output_path is not None:
+        payload["output_path"] = str(output_path)
+    elif output_directory is not None:
+        payload["output_directory"] = str(output_directory)
+    return payload
+
+
 def _compose_unique_serial_number(cube_path: str | Path) -> str:
     serial_number = ip.SerialNumber.compose(str(cube_path))
     if serial_number and serial_number != "Unknown":
@@ -361,6 +379,7 @@ def build_controlnets_for_dom_overlap_list(
             left_original_band=left_original_band,
             right_original_band=right_original_band,
             pvl_format=pvl_format,
+            report_path=pair_report_path,
             logger=logger,
         )
         pair_result = {
@@ -547,6 +566,7 @@ def build_controlnet_for_dom_stereo_pair(
     left_failure_log_path: str | Path | None = None,
     right_failure_log_path: str | Path | None = None,
     pvl_format: bool = True,
+    report_path: str | Path | None = None,
     logger: logging.Logger | None = None,
 ) -> dict[str, object]:
     validated_merge_decimals = validate_merge_decimals(merge_decimals)
@@ -636,26 +656,45 @@ def build_controlnet_for_dom_stereo_pair(
     match_visualization_result: dict[str, object] | None = None
     if write_match_visualization:
         visualization_directory = Path(match_visualization_output_dir) if match_visualization_output_dir is not None else Path(output_path).parent
-        match_visualization_result = write_stereo_pair_match_visualization_from_key_files(
-            left_dom_cube_path,
-            right_dom_cube_path,
-            left_dom_key_for_conversion,
-            right_dom_key_for_conversion,
-            output_path=match_visualization_output_path,
-            output_directory=visualization_directory,
-            scale_factor=match_visualization_scale,
-            band=dom_band,
-            highlight_match_indices=ransac_result["retained_soft_outlier_positions"],
-            visualization_mode=visualization_mode,
-            memory_profile=memory_profile,
-            visualization_target_long_edge=visualization_target_long_edge,
-            max_preview_pixels=max_preview_pixels,
-            preview_crop_margin_pixels=preview_crop_margin_pixels,
-            preview_cache_dir=preview_cache_dir,
-            preview_cache_source=preview_cache_source,
-            preview_force_regenerate=preview_force_regenerate,
-            preview_level=preview_level,
-        )
+        try:
+            match_visualization_result = write_stereo_pair_match_visualization_from_key_files(
+                left_dom_cube_path,
+                right_dom_cube_path,
+                left_dom_key_for_conversion,
+                right_dom_key_for_conversion,
+                output_path=match_visualization_output_path,
+                output_directory=visualization_directory,
+                scale_factor=match_visualization_scale,
+                band=dom_band,
+                highlight_match_indices=ransac_result["retained_soft_outlier_positions"],
+                visualization_mode=visualization_mode,
+                memory_profile=memory_profile,
+                visualization_target_long_edge=visualization_target_long_edge,
+                max_preview_pixels=max_preview_pixels,
+                preview_crop_margin_pixels=preview_crop_margin_pixels,
+                preview_cache_dir=preview_cache_dir,
+                preview_cache_source=preview_cache_source,
+                preview_force_regenerate=preview_force_regenerate,
+                preview_level=preview_level,
+            )
+        except Exception as exc:
+            match_visualization_result = _match_visualization_failure_payload(
+                exc,
+                output_path=match_visualization_output_path,
+                output_directory=visualization_directory,
+            )
+            if report_path is not None:
+                write_controlnet_result_report(
+                    {
+                        "mode": "from-dom",
+                        "merge": merge_result,
+                        "ransac": ransac_result,
+                        "match_visualization": match_visualization_result,
+                    },
+                    output_path,
+                    report_path=report_path,
+                )
+            raise
 
     paired_conversion = convert_paired_dom_keypoints_to_original(
         left_dom_key_for_conversion,
@@ -1017,6 +1056,7 @@ def main(argv: list[str] | None = None) -> None:
             left_failure_log_path=args.left_failure_log,
             right_failure_log_path=args.right_failure_log,
             pvl_format=not args.binary,
+            report_path=args.report_path,
             logger=logger,
         )
     elif args.command == "from-dom-batch":

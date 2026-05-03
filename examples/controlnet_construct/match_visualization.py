@@ -34,7 +34,7 @@ import isis_pybind as ip
 
 SUPPORTED_VISUALIZATION_MODES = ("auto", "full", "reduced", "cropped", "reduced_cropped")
 SUPPORTED_MEMORY_PROFILES = ("high-memory", "balanced", "low-memory")
-SUPPORTED_PREVIEW_CACHE_SOURCES = ("auto", "matching_cache", "visualization_cache", "disabled")
+SUPPORTED_PREVIEW_CACHE_SOURCES = ("auto", "visualization_cache", "disabled")
 MEMORY_PROFILE_TARGET_LONG_EDGES = {
     "high-memory": 4096,
     "balanced": 2048,
@@ -271,12 +271,11 @@ def _auto_visualization_mode(
     image_width: int,
     image_height: int,
     options: VisualizationOptions,
-    has_keypoints: bool,
 ) -> str:
     pixel_count = int(image_width) * int(image_height)
-    if options.max_preview_pixels is not None and pixel_count > options.max_preview_pixels and has_keypoints:
+    if options.max_preview_pixels is not None and pixel_count > options.max_preview_pixels:
         return "cropped"
-    if max(image_width, image_height) > options.visualization_target_long_edge and has_keypoints:
+    if max(image_width, image_height) > options.visualization_target_long_edge:
         return "cropped"
     return "full"
 
@@ -482,11 +481,10 @@ def write_stereo_pair_match_visualization(
     right_preview_path: Path | None = None
     preview_level = options.preview_level
     source_scale_factor = 1.0
+    has_paired_keypoints = bool(left_key_file.points and right_key_file.points)
     if mode_requested in {"reduced", "reduced_cropped"}:
         if options.preview_cache_source == "disabled":
             raise ValueError("Reduced visualization requires a preview cache; preview_cache_source cannot be disabled.")
-        if options.preview_cache_source == "matching_cache":
-            raise NotImplementedError("Matching-cache reuse for visualization previews is not implemented.")
         preview_cache_source = "visualization_cache"
         if options.preview_level is None:
             left_width, left_height = _cube_dimensions(left_dom_path)
@@ -525,7 +523,7 @@ def write_stereo_pair_match_visualization(
         left_render_key_file = _scale_keypoint_file(left_key_file, scale_factor=source_scale_factor)
         right_render_key_file = _scale_keypoint_file(right_key_file, scale_factor=source_scale_factor)
         if mode_requested == "reduced_cropped":
-            if left_key_file.points and right_key_file.points:
+            if has_paired_keypoints:
                 left_preview_width, left_preview_height = _cube_dimensions(left_preview_path)
                 right_preview_width, right_preview_height = _cube_dimensions(right_preview_path)
                 left_window = crop_window_for_keypoints(
@@ -560,6 +558,8 @@ def write_stereo_pair_match_visualization(
         else:
             mode_used = "reduced"
     elif mode_requested in {"auto", "cropped"}:
+        if mode_requested == "cropped" and not has_paired_keypoints:
+            raise ValueError("Cropped visualization requires at least one keypoint in each input key file.")
         left_width, left_height = _cube_dimensions(left_dom_path)
         right_width, right_height = _cube_dimensions(right_dom_path)
         if mode_requested == "auto":
@@ -567,7 +567,6 @@ def write_stereo_pair_match_visualization(
                 image_width=max(left_width, right_width),
                 image_height=max(left_height, right_height),
                 options=options,
-                has_keypoints=bool(left_key_file.points),
             )
             if mode_used in {"reduced", "reduced_cropped"}:
                 raise NotImplementedError(
@@ -575,7 +574,7 @@ def write_stereo_pair_match_visualization(
                 )
 
         if mode_used == "cropped":
-            if left_key_file.points and right_key_file.points:
+            if has_paired_keypoints:
                 left_window = crop_window_for_keypoints(
                     left_key_file.points,
                     image_width=left_width,
@@ -603,7 +602,7 @@ def write_stereo_pair_match_visualization(
                     height=right_window.height,
                 )
             else:
-                mode_used = "full"
+                raise ValueError("Cannot render oversized auto visualization without keypoints; use full or reduced mode explicitly.")
 
     left_image = _read_cube_as_stretched_byte(
         left_read_path,

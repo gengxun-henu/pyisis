@@ -875,6 +875,21 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(args.preview_level, 3)
         self.assertEqual(args.low_resolution_matching_target_long_edge, 1024)
 
+    def test_build_argument_parser_rejects_matching_cache_preview_source(self):
+        parser = build_argument_parser()
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left.cub",
+                    "right.cub",
+                    "left.key",
+                    "right.key",
+                    "--preview-cache-source",
+                    "matching-cache",
+                ]
+            )
+
     def test_build_argument_parser_rejects_invalid_low_resolution_match_count_and_offset_threshold(self):
         parser = build_argument_parser()
 
@@ -2384,6 +2399,52 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             self.assertAlmostEqual(actual[0], expected[0], places=4)
             self.assertAlmostEqual(actual[1], expected[1], places=4)
 
+    def test_write_match_visualization_cropped_requires_keypoints(self):
+        empty_left = KeypointFile(4000, 3000, ())
+        empty_right = KeypointFile(4000, 3000, ())
+
+        with temporary_directory() as temp_dir, mock.patch.object(
+            match_visualization_module,
+            "_read_cube_as_stretched_byte",
+        ) as read_mock:
+            with self.assertRaisesRegex(ValueError, "requires at least one keypoint"):
+                match_visualization_module.write_stereo_pair_match_visualization(
+                    "left.cub",
+                    "right.cub",
+                    empty_left,
+                    empty_right,
+                    output_path=temp_dir / "viz.png",
+                    visualization_mode="cropped",
+                )
+
+        read_mock.assert_not_called()
+
+    def test_write_match_visualization_auto_large_empty_keypoints_raises_without_full_read(self):
+        empty_left = KeypointFile(4000, 3000, ())
+        empty_right = KeypointFile(4000, 3000, ())
+
+        with temporary_directory() as temp_dir, mock.patch.object(
+            match_visualization_module,
+            "_cube_dimensions",
+            return_value=(4000, 3000),
+        ) as cube_dimensions_mock, mock.patch.object(
+            match_visualization_module,
+            "_read_cube_as_stretched_byte",
+        ) as read_mock:
+            with self.assertRaisesRegex(ValueError, "Cannot render oversized auto visualization without keypoints"):
+                match_visualization_module.write_stereo_pair_match_visualization(
+                    "left.cub",
+                    "right.cub",
+                    empty_left,
+                    empty_right,
+                    output_path=temp_dir / "viz.png",
+                    visualization_mode="auto",
+                    max_preview_pixels=10_000,
+                )
+
+        self.assertEqual(cube_dimensions_mock.call_count, 2)
+        read_mock.assert_not_called()
+
     def test_write_match_visualization_defaults_to_full_mode_for_large_images(self):
         left_key_file = KeypointFile(4000, 3000, (Keypoint(100.0, 100.0),))
         right_key_file = KeypointFile(4000, 3000, (Keypoint(105.0, 105.0),))
@@ -2509,11 +2570,11 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 preview_cache_source="disabled",
             )
 
-    def test_write_match_visualization_reduced_mode_rejects_matching_cache_source(self):
+    def test_write_match_visualization_rejects_matching_cache_source(self):
         left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
         right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
 
-        with temporary_directory() as temp_dir, self.assertRaises(NotImplementedError):
+        with temporary_directory() as temp_dir, self.assertRaises(ValueError):
             match_visualization_module.write_stereo_pair_match_visualization(
                 "left.cub",
                 "right.cub",

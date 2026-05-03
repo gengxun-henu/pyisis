@@ -3073,6 +3073,76 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertTrue(call_kwargs["preview_force_regenerate"])
         self.assertEqual(call_kwargs["preview_level"], 3)
 
+    def test_build_controlnet_for_dom_stereo_pair_records_visualization_failure_report(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_viz_failure",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="dom visualization failure report test",
+            point_id_prefix="VZF",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_dom.key"
+            right_dom_key = temp_dir / "right_dom.key"
+            output_net = temp_dir / "visualization_failure.net"
+            report_path = temp_dir / "visualization_failure.summary.json"
+            visualization_output_path = temp_dir / "post_ransac_match.png"
+            write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+
+            fake_ransac_result = {
+                "applied": True,
+                "status": "filtered",
+                "mode": "loose",
+                "input_count": 2,
+                "retained_count": 1,
+                "dropped_count": 1,
+                "retained_soft_outlier_positions": [0],
+            }
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_stereo_pair_key_files_with_ransac",
+                    return_value=fake_ransac_result,
+                ),
+                patch(
+                    "controlnet_construct.controlnet_stereopair.write_stereo_pair_match_visualization_from_key_files",
+                    side_effect=RuntimeError("visualization exploded"),
+                ),
+                patch(
+                    "controlnet_construct.controlnet_stereopair.convert_paired_dom_keypoints_to_original",
+                ) as paired_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                ) as controlnet_mock,
+            ):
+                with self.assertRaisesRegex(RuntimeError, "visualization exploded"):
+                    build_controlnet_for_dom_stereo_pair(
+                        left_dom_key,
+                        right_dom_key,
+                        REAL_DOM_LEFT,
+                        REAL_DOM_RIGHT,
+                        LEFT_CUBE_PATH,
+                        RIGHT_CUBE_PATH,
+                        config,
+                        output_net,
+                        skip_merge=True,
+                        write_match_visualization=True,
+                        match_visualization_output_path=visualization_output_path,
+                        report_path=report_path,
+                    )
+
+            paired_mock.assert_not_called()
+            controlnet_mock.assert_not_called()
+            failure_report = json.loads(report_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(failure_report["match_visualization"]["status"], "failed")
+        self.assertEqual(failure_report["match_visualization"]["error_type"], "RuntimeError")
+        self.assertEqual(failure_report["match_visualization"]["error"], "visualization exploded")
+        self.assertEqual(failure_report["match_visualization"]["output_path"], str(visualization_output_path))
+        self.assertEqual(failure_report["ransac"]["retained_count"], 1)
+
     def test_dom2ori_cli_paired_mode_dispatches_to_paired_conversion(self):
         fake_result = {
             "left_conversion": {"output_count": 2, "failure_count": 0},

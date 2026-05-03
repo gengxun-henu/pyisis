@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-05
+Last Modified: 2026-05-06
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -32,6 +32,7 @@ Updated: 2026-05-04  Geng Xun added boundary regression coverage for integer-saf
 Updated: 2026-05-04  Geng Xun added regression coverage for crop-window visualization bounds and empty-point validation.
 Updated: 2026-05-04  Geng Xun corrected crop-window clamping expectations for 0-based bounds.
 Updated: 2026-05-05  Geng Xun added fractional crop-window coverage plus negative margin and out-of-bounds clamp tests.
+Updated: 2026-05-06  Geng Xun updated crop-window negative-margin validation label expectations.
 """
 
 from __future__ import annotations
@@ -2502,7 +2503,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
     def test_visualization_crop_window_rejects_negative_margin(self):
         points = (Keypoint(1.0, 1.0),)
 
-        with self.assertRaisesRegex(ValueError, "preview_crop_margin_pixels"):
+        with self.assertRaisesRegex(ValueError, r"^margin_pixels must be >= 0\.$"):
             match_visualization_module.crop_window_for_keypoints(
                 points,
                 image_width=100,

@@ -142,7 +142,7 @@ def crop_window_for_keypoints(
         raise ValueError("At least one keypoint is required for cropped visualization.")
     resolved_width = _positive_int(image_width, field_name="image_width")
     resolved_height = _positive_int(image_height, field_name="image_height")
-    margin = _non_negative_int(margin_pixels, field_name="preview_crop_margin_pixels")
+    margin = _non_negative_int(margin_pixels, field_name="margin_pixels")
     min_sample = min(point.sample - 1.0 for point in points)
     max_sample = max(point.sample - 1.0 for point in points)
     min_line = min(point.line - 1.0 for point in points)

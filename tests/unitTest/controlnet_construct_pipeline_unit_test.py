@@ -25,6 +25,7 @@ Updated: 2026-05-01  Geng Xun added batch-wrapper regression coverage for legacy
 Updated: 2026-05-01  Geng Xun refactored pipeline-wrapper helper-mode regressions to preserve legacy config precedence while reusing image_match.py config-default probes.
 Updated: 2026-05-02  Geng Xun added regression coverage for reusable low-resolution DOM list preparation and forwarding.
 Updated: 2026-05-03  Geng Xun added regression coverage for forwarding post-RANSAC visualization preview options into match visualization.
+Updated: 2026-05-03  Geng Xun added regression coverage for forwarding post-RANSAC visualization preview defaults from the pipeline wrapper.
 Updated: 2026-05-04  Geng Xun added pipeline and CLI forwarding coverage for reduced visualization preview options and aligned CLI default preview scale expectations.
 Updated: 2026-05-04  Geng Xun added CLI coverage for the remaining reduced visualization preview flags.
 """
@@ -760,6 +761,31 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 "lowResolutionMaxMeanProjectedOffsetMeters",
                                 "LowResolutionMaxMeanProjectedOffsetMeters",
                             ),
+                            "visualization_mode": (
+                                "visualization_mode",
+                                "visualizationMode",
+                                "VisualizationMode",
+                            ),
+                            "memory_profile": (
+                                "memory_profile",
+                                "memoryProfile",
+                                "MemoryProfile",
+                            ),
+                            "visualization_target_long_edge": (
+                                "visualization_target_long_edge",
+                                "visualizationTargetLongEdge",
+                                "VisualizationTargetLongEdge",
+                            ),
+                            "preview_crop_margin_pixels": (
+                                "preview_crop_margin_pixels",
+                                "previewCropMarginPixels",
+                                "PreviewCropMarginPixels",
+                            ),
+                            "preview_cache_source": (
+                                "preview_cache_source",
+                                "previewCacheSource",
+                                "PreviewCacheSource",
+                            ),
                             "use_parallel_cpu": (
                                 "use_parallel_cpu",
                                 "useParallelCpu",
@@ -1285,6 +1311,31 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 "lowResolutionMaxMeanProjectedOffsetMeters",
                                 "LowResolutionMaxMeanProjectedOffsetMeters",
                             ),
+                            "visualization_mode": (
+                                "visualization_mode",
+                                "visualizationMode",
+                                "VisualizationMode",
+                            ),
+                            "memory_profile": (
+                                "memory_profile",
+                                "memoryProfile",
+                                "MemoryProfile",
+                            ),
+                            "visualization_target_long_edge": (
+                                "visualization_target_long_edge",
+                                "visualizationTargetLongEdge",
+                                "VisualizationTargetLongEdge",
+                            ),
+                            "preview_crop_margin_pixels": (
+                                "preview_crop_margin_pixels",
+                                "previewCropMarginPixels",
+                                "PreviewCropMarginPixels",
+                            ),
+                            "preview_cache_source": (
+                                "preview_cache_source",
+                                "previewCacheSource",
+                                "PreviewCacheSource",
+                            ),
                             "use_parallel_cpu": (
                                 "use_parallel_cpu",
                                 "useParallelCpu",
@@ -1450,6 +1501,11 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             "low_resolution_level": 5,
                             "low_resolution_min_retained_match_count": 6,
                             "low_resolution_max_mean_projected_offset_meters": 2000.0,
+                            "visualization_mode": "auto",
+                            "memory_profile": "low-memory",
+                            "visualization_target_long_edge": 1024,
+                            "preview_crop_margin_pixels": 128,
+                            "preview_cache_source": "auto",
                         },
                     }
                 ),
@@ -1511,6 +1567,11 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "                'low_resolution_max_mean_reprojection_error_pixels': image_match_config.get('low_resolution_max_mean_reprojection_error_pixels', ''),",
                         "                'low_resolution_min_retained_match_count': image_match_config.get('low_resolution_min_retained_match_count', ''),",
                         "                'low_resolution_max_mean_projected_offset_meters': image_match_config.get('low_resolution_max_mean_projected_offset_meters', ''),",
+                        "                'visualization_mode': image_match_config.get('visualization_mode', ''),",
+                        "                'memory_profile': image_match_config.get('memory_profile', ''),",
+                        "                'visualization_target_long_edge': image_match_config.get('visualization_target_long_edge', ''),",
+                        "                'preview_crop_margin_pixels': image_match_config.get('preview_crop_margin_pixels', ''),",
+                        "                'preview_cache_source': image_match_config.get('preview_cache_source', ''),",
                         "                'use_parallel_cpu': '1' if image_match_config.get('use_parallel_cpu') is True else ('0' if image_match_config.get('use_parallel_cpu') is False else ''),",
                         "            }",
                         "            print(mapping.get(field_name, ''))",
@@ -1556,6 +1617,31 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "            raise SystemExit('missing --write-match-visualization for controlnet_stereopair.py')",
                         "        if '--match-visualization-output-dir' not in args:",
                         "            raise SystemExit('missing --match-visualization-output-dir for controlnet_stereopair.py')",
+                        "        if '--visualization-mode' not in args:",
+                        "            raise SystemExit('missing --visualization-mode for controlnet_stereopair.py')",
+                        "        visualization_mode = args[args.index('--visualization-mode') + 1]",
+                        "        if visualization_mode != 'auto':",
+                        "            raise SystemExit(f'unexpected visualization mode: {visualization_mode}')",
+                        "        if '--memory-profile' not in args:",
+                        "            raise SystemExit('missing --memory-profile for controlnet_stereopair.py')",
+                        "        memory_profile = args[args.index('--memory-profile') + 1]",
+                        "        if memory_profile != 'low-memory':",
+                        "            raise SystemExit(f'unexpected memory profile: {memory_profile}')",
+                        "        if '--visualization-target-long-edge' not in args:",
+                        "            raise SystemExit('missing --visualization-target-long-edge for controlnet_stereopair.py')",
+                        "        target_long_edge = args[args.index('--visualization-target-long-edge') + 1]",
+                        "        if target_long_edge != '1024':",
+                        "            raise SystemExit(f'unexpected visualization target long edge: {target_long_edge}')",
+                        "        if '--preview-crop-margin-pixels' not in args:",
+                        "            raise SystemExit('missing --preview-crop-margin-pixels for controlnet_stereopair.py')",
+                        "        crop_margin = args[args.index('--preview-crop-margin-pixels') + 1]",
+                        "        if crop_margin != '128':",
+                        "            raise SystemExit(f'unexpected preview crop margin pixels: {crop_margin}')",
+                        "        if '--preview-cache-source' not in args:",
+                        "            raise SystemExit('missing --preview-cache-source for controlnet_stereopair.py')",
+                        "        cache_source = args[args.index('--preview-cache-source') + 1]",
+                        "        if cache_source != 'auto':",
+                        "            raise SystemExit(f'unexpected preview cache source: {cache_source}')",
                         "        output_dir = Path(args[6])",
                         "        output_dir.mkdir(parents=True, exist_ok=True)",
                         "        (output_dir / 'synthetic_pair.net').write_text('net', encoding='utf-8')",

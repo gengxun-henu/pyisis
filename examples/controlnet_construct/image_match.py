@@ -25,6 +25,7 @@ Updated: 2026-05-01  Geng Xun added shell-print helpers and an early --print-con
 Updated: 2026-05-01  Geng Xun added configurable helper lookup order so shell wrappers can preserve legacy top-level config precedence where required.
 Updated: 2026-05-02  Geng Xun added precomputed low-resolution DOM inputs so batch wrappers can reuse one reduced cube per DOM.
 Updated: 2026-05-02  Geng Xun added CLI progress reporting for full-resolution tile matching without changing JSON stdout.
+Updated: 2026-05-02  Geng Xun added optional validity preindex filtering and summary diagnostics.
 """
 
 from __future__ import annotations
@@ -48,6 +49,16 @@ if __package__ in {None, ""}:
     from controlnet_construct.preprocess import validate_invalid_pixel_radius
     from controlnet_construct.runtime import bootstrap_runtime_environment
     import controlnet_construct.stereo_ransac as _stereo_ransac
+    from controlnet_construct.tile_validity import (
+        DEFAULT_TILE_VALIDITY_CELL_HEIGHT,
+        DEFAULT_TILE_VALIDITY_CELL_WIDTH,
+        build_dom_validity_grid_from_cube as _build_dom_validity_grid_from_cube,
+        default_tile_validity_cache_dir,
+        ensure_dom_validity_index,
+        filter_windows_by_validity as _filter_windows_by_validity,
+        prefilter_paired_windows_by_validity,
+        validate_tile_validity_cell_size,
+    )
     from controlnet_construct.tile_matching import (
         PairedTileWindow,
         DEFAULT_MATCHER_METHOD,
@@ -72,6 +83,16 @@ else:
     from .preprocess import validate_invalid_pixel_radius
     from .runtime import bootstrap_runtime_environment
     from . import stereo_ransac as _stereo_ransac
+    from .tile_validity import (
+        DEFAULT_TILE_VALIDITY_CELL_HEIGHT,
+        DEFAULT_TILE_VALIDITY_CELL_WIDTH,
+        build_dom_validity_grid_from_cube as _build_dom_validity_grid_from_cube,
+        default_tile_validity_cache_dir,
+        ensure_dom_validity_index,
+        filter_windows_by_validity as _filter_windows_by_validity,
+        prefilter_paired_windows_by_validity,
+        validate_tile_validity_cell_size,
+    )
     from .tile_matching import (
         PairedTileWindow,
         DEFAULT_MATCHER_METHOD,
@@ -231,6 +252,13 @@ def _parse_invalid_pixel_radius(value: str) -> int:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
+def _parse_tile_validity_cell_size(value: str, *, field_name: str) -> int:
+    try:
+        return validate_tile_validity_cell_size(int(value), field_name=field_name)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
 def _parse_matcher_method(value: str) -> str:
     try:
         return _normalize_matcher_method(value)
@@ -384,6 +412,36 @@ def load_image_match_defaults_from_config(
             "invalid_pixel_radius",
             ("invalid_pixel_radius", "invalidPixelRadius", "InvalidPixelRadius"),
             lambda value: validate_invalid_pixel_radius(int(value)),
+        ),
+        (
+            "enable_tile_validity_prefilter",
+            ("enable_tile_validity_prefilter", "enableTileValidityPrefilter", "EnableTileValidityPrefilter"),
+            lambda value: _coerce_config_bool(value, field_name="enable_tile_validity_prefilter"),
+        ),
+        (
+            "tile_validity_cache_dir",
+            ("tile_validity_cache_dir", "tileValidityCacheDir", "TileValidityCacheDir"),
+            lambda value: str(value),
+        ),
+        (
+            "tile_validity_cell_width",
+            ("tile_validity_cell_width", "tileValidityCellWidth", "TileValidityCellWidth"),
+            lambda value: validate_tile_validity_cell_size(int(value), field_name="tile_validity_cell_width"),
+        ),
+        (
+            "tile_validity_cell_height",
+            ("tile_validity_cell_height", "tileValidityCellHeight", "TileValidityCellHeight"),
+            lambda value: validate_tile_validity_cell_size(int(value), field_name="tile_validity_cell_height"),
+        ),
+        (
+            "enable_validity_preindex_filter",
+            ("enable_validity_preindex_filter", "enableValidityPreindexFilter", "EnableValidityPreindexFilter"),
+            lambda value: _coerce_config_bool(value, field_name="enable_validity_preindex_filter"),
+        ),
+        (
+            "validity_preindex_coarse_cell_size",
+            ("validity_preindex_coarse_cell_size", "validityPreindexCoarseCellSize", "ValidityPreindexCoarseCellSize"),
+            lambda value: validate_tile_validity_cell_size(int(value), field_name="validity_preindex_coarse_cell_size"),
         ),
         (
             "matcher_method",
@@ -695,6 +753,12 @@ def match_dom_pair(
     min_valid_pixels: int = 64,
     valid_pixel_percent_threshold: float = 0.0,
     invalid_pixel_radius: int = 1,
+    enable_tile_validity_prefilter: bool = False,
+    tile_validity_cache_dir: str | Path | None = None,
+    tile_validity_cell_width: int = DEFAULT_TILE_VALIDITY_CELL_WIDTH,
+    tile_validity_cell_height: int = DEFAULT_TILE_VALIDITY_CELL_HEIGHT,
+    enable_validity_preindex_filter: bool = False,
+    validity_preindex_coarse_cell_size: int | None = None,
     matcher_method: str = DEFAULT_MATCHER_METHOD,
     ratio_test: float = 0.75,
     max_features: int | None = None,
@@ -726,6 +790,22 @@ def match_dom_pair(
         resolved_valid_pixel_percent_threshold = _validate_valid_pixel_percent_threshold(valid_pixel_percent_threshold)
         resolved_num_worker_parallel_cpu = _validate_num_worker_parallel_cpu(num_worker_parallel_cpu)
         resolved_invalid_pixel_radius = validate_invalid_pixel_radius(invalid_pixel_radius)
+        resolved_tile_validity_cell_width = validate_tile_validity_cell_size(
+            tile_validity_cell_width,
+            field_name="tile_validity_cell_width",
+        )
+        resolved_tile_validity_cell_height = validate_tile_validity_cell_size(
+            tile_validity_cell_height,
+            field_name="tile_validity_cell_height",
+        )
+        if validity_preindex_coarse_cell_size is not None:
+            resolved_tile_validity_cell_width = validate_tile_validity_cell_size(
+                validity_preindex_coarse_cell_size,
+                field_name="validity_preindex_coarse_cell_size",
+            )
+            resolved_tile_validity_cell_height = resolved_tile_validity_cell_width
+        resolved_tile_validity_cache_dir = Path(tile_validity_cache_dir) if tile_validity_cache_dir is not None else default_tile_validity_cache_dir()
+        resolved_tile_validity_prefilter_enabled = bool(enable_tile_validity_prefilter or enable_validity_preindex_filter)
         resolved_matcher_method = _normalize_matcher_method(matcher_method)
         resolved_low_resolution_level = _validate_low_resolution_level(low_resolution_level)
         resolved_low_resolution_trim_fraction_each_side = _validate_low_resolution_trim_fraction_each_side(
@@ -818,26 +898,108 @@ def match_dom_pair(
                 overlap_x=overlap_x,
                 overlap_y=overlap_y,
             )
+            tile_count_before_preindex_filter = len(windows)
+            candidate_windows = windows
+            preindexed_skipped_tile_count = 0
+            tile_validity_skip_reasons: dict[str, int] = {}
+            left_tile_validity_index_summary: dict[str, object] | None = None
+            right_tile_validity_index_summary: dict[str, object] | None = None
 
-            if windows:
+            if resolved_tile_validity_prefilter_enabled and windows:
+                if enable_validity_preindex_filter and not enable_tile_validity_prefilter:
+                    left_grid = _build_dom_validity_grid_from_cube(
+                        left_dom_path,
+                        band=band,
+                        coarse_cell_size=resolved_tile_validity_cell_width,
+                        invalid_values=left_invalid_values,
+                        special_pixel_abs_threshold=special_pixel_abs_threshold,
+                        invalid_pixel_radius=resolved_invalid_pixel_radius,
+                    )
+                    right_grid = _build_dom_validity_grid_from_cube(
+                        right_dom_path,
+                        band=band,
+                        coarse_cell_size=resolved_tile_validity_cell_width,
+                        invalid_values=right_invalid_values,
+                        special_pixel_abs_threshold=special_pixel_abs_threshold,
+                        invalid_pixel_radius=resolved_invalid_pixel_radius,
+                    )
+                    left_kept, left_filter_summary = _filter_windows_by_validity(
+                        left_grid,
+                        [paired_window.left_window for paired_window in windows],
+                        min_valid_pixels=min_valid_pixels,
+                        valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                    )
+                    right_kept, right_filter_summary = _filter_windows_by_validity(
+                        right_grid,
+                        [paired_window.right_window for paired_window in windows],
+                        min_valid_pixels=min_valid_pixels,
+                        valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                    )
+                    left_kept_ids = {id(window) for window in left_kept}
+                    right_kept_ids = {id(window) for window in right_kept}
+                    candidate_windows = [
+                        paired_window
+                        for paired_window in windows
+                        if id(paired_window.left_window) in left_kept_ids and id(paired_window.right_window) in right_kept_ids
+                    ]
+                    preindexed_skipped_tile_count = len(windows) - len(candidate_windows)
+                    tile_validity_skip_reasons = {
+                        "validity_preindex_skipped": preindexed_skipped_tile_count,
+                        "left_uncertain_windows": left_filter_summary.uncertain_window_count,
+                        "right_uncertain_windows": right_filter_summary.uncertain_window_count,
+                    }
+                else:
+                    left_tile_validity_index, left_tile_validity_index_summary = ensure_dom_validity_index(
+                        cache_dir=resolved_tile_validity_cache_dir,
+                        dom_path=left_dom_path,
+                        cube=left_cube,
+                        band=band,
+                        invalid_values=left_invalid_values,
+                        special_pixel_abs_threshold=special_pixel_abs_threshold,
+                        invalid_pixel_radius=resolved_invalid_pixel_radius,
+                        cell_width=resolved_tile_validity_cell_width,
+                        cell_height=resolved_tile_validity_cell_height,
+                    )
+                    right_tile_validity_index, right_tile_validity_index_summary = ensure_dom_validity_index(
+                        cache_dir=resolved_tile_validity_cache_dir,
+                        dom_path=right_dom_path,
+                        cube=right_cube,
+                        band=band,
+                        invalid_values=right_invalid_values,
+                        special_pixel_abs_threshold=special_pixel_abs_threshold,
+                        invalid_pixel_radius=resolved_invalid_pixel_radius,
+                        cell_width=resolved_tile_validity_cell_width,
+                        cell_height=resolved_tile_validity_cell_height,
+                    )
+                    prefilter_result = prefilter_paired_windows_by_validity(
+                        windows,
+                        left_index=left_tile_validity_index,
+                        right_index=right_tile_validity_index,
+                        valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                    )
+                    candidate_windows = prefilter_result.kept_windows
+                    preindexed_skipped_tile_count = prefilter_result.preindexed_skipped_tile_count
+                    tile_validity_skip_reasons = prefilter_result.skip_reasons
+
+            if candidate_windows:
                 progress_bar = (
                     _TileProgressBar(
                         left_dom_path=left_dom_path,
                         right_dom_path=right_dom_path,
-                        total_tiles=len(windows),
+                        total_tiles=len(candidate_windows),
                     )
                     if show_progress
                     else None
                 )
                 if progress_bar is not None:
                     progress_bar.start()
-                if parallel_cpu_requested and len(windows) > 1:
-                    candidate_worker_count = min(len(windows), resolved_num_worker_parallel_cpu)
+                if parallel_cpu_requested and len(candidate_windows) > 1:
+                    candidate_worker_count = min(len(candidate_windows), resolved_num_worker_parallel_cpu)
                     if candidate_worker_count > 1:
                         try:
                             tile_results = _run_parallel_tile_match_tasks(
                                 _build_tile_match_tasks(
-                                    windows,
+                                    candidate_windows,
                                     left_dom_path=left_dom_path,
                                     right_dom_path=right_dom_path,
                                     band=band,
@@ -870,7 +1032,7 @@ def match_dom_pair(
                     else:
                         try:
                             tile_results = _run_serial_tile_match_tasks(
-                                windows,
+                                candidate_windows,
                                 left_cube=left_cube,
                                 right_cube=right_cube,
                                 band=band,
@@ -900,7 +1062,7 @@ def match_dom_pair(
                 else:
                     try:
                         tile_results = _run_serial_tile_match_tasks(
-                            windows,
+                            candidate_windows,
                             left_cube=left_cube,
                             right_cube=right_cube,
                             band=band,
@@ -934,9 +1096,16 @@ def match_dom_pair(
                     right_points.extend(tile_result.right_points)
         else:
             windows = []
+            candidate_windows = []
+            tile_count_before_preindex_filter = 0
+            preindexed_skipped_tile_count = 0
+            tile_validity_skip_reasons = {}
+            left_tile_validity_index_summary = None
+            right_tile_validity_index_summary = None
 
         left_key_file = KeypointFile(left_width, left_height, tuple(left_points))
         right_key_file = KeypointFile(right_width, right_height, tuple(right_points))
+        full_resolution_skipped_tile_count = sum(1 for tile in tile_summaries if tile.status != "matched")
         summary = {
             "left_dom": str(left_dom_path),
             "right_dom": str(right_dom_path),
@@ -953,8 +1122,21 @@ def match_dom_pair(
             "shared_extent_height": preparation.shared_height,
             "dimension_mismatch": left_width != right_width or left_height != right_height,
             "tile_count": len(windows),
+            "tile_count_before_preindex_filter": tile_count_before_preindex_filter,
+            "tile_count_after_preindex_filter": len(candidate_windows),
+            "preindexed_skipped_tile_count": preindexed_skipped_tile_count,
+            "full_resolution_skipped_tile_count": full_resolution_skipped_tile_count,
             "matched_tile_count": sum(1 for tile in tile_summaries if tile.status == "matched"),
-            "skipped_tile_count": sum(1 for tile in tile_summaries if tile.status != "matched"),
+            "skipped_tile_count": preindexed_skipped_tile_count + full_resolution_skipped_tile_count,
+            "tile_validity_prefilter_enabled": resolved_tile_validity_prefilter_enabled,
+            "validity_preindex_filter_enabled": resolved_tile_validity_prefilter_enabled,
+            "tile_validity_cache_dir": str(resolved_tile_validity_cache_dir) if resolved_tile_validity_prefilter_enabled else None,
+            "tile_validity_cell_width": resolved_tile_validity_cell_width,
+            "tile_validity_cell_height": resolved_tile_validity_cell_height,
+            "validity_preindex_coarse_cell_size": resolved_tile_validity_cell_width if resolved_tile_validity_prefilter_enabled else None,
+            "tile_validity_skip_reasons": tile_validity_skip_reasons,
+            "left_tile_validity_index": left_tile_validity_index_summary,
+            "right_tile_validity_index": right_tile_validity_index_summary,
             "point_count": len(left_points),
             "parallel_cpu_requested": parallel_cpu_requested,
             "num_worker_parallel_cpu": resolved_num_worker_parallel_cpu,
@@ -1015,6 +1197,13 @@ def match_dom_pair_to_key_files(
             metadata_output=metadata_output,
             left_output_key=left_output_key,
         )
+    if (
+        kwargs.get("enable_tile_validity_prefilter") or kwargs.get("enable_validity_preindex_filter")
+    ) and kwargs.get("tile_validity_cache_dir") is None:
+        kwargs["tile_validity_cache_dir"] = default_tile_validity_cache_dir(
+            metadata_output=metadata_output,
+            left_output_key=left_output_key,
+        )
     left_key_file, right_key_file, summary = match_dom_pair(left_dom_path, right_dom_path, show_progress=show_progress, **kwargs)
     write_key_file(left_output_key, left_key_file)
     write_key_file(right_output_key, right_key_file)
@@ -1025,8 +1214,21 @@ def match_dom_pair_to_key_files(
             "reason": summary["reason"],
             "point_count": summary["point_count"],
             "tile_count": summary["tile_count"],
+            "tile_count_before_preindex_filter": summary["tile_count_before_preindex_filter"],
+            "tile_count_after_preindex_filter": summary["tile_count_after_preindex_filter"],
+            "preindexed_skipped_tile_count": summary["preindexed_skipped_tile_count"],
+            "full_resolution_skipped_tile_count": summary["full_resolution_skipped_tile_count"],
             "matched_tile_count": summary["matched_tile_count"],
             "skipped_tile_count": summary["skipped_tile_count"],
+            "tile_validity_prefilter_enabled": summary["tile_validity_prefilter_enabled"],
+            "validity_preindex_filter_enabled": summary["validity_preindex_filter_enabled"],
+            "tile_validity_cache_dir": summary["tile_validity_cache_dir"],
+            "tile_validity_cell_width": summary["tile_validity_cell_width"],
+            "tile_validity_cell_height": summary["tile_validity_cell_height"],
+            "validity_preindex_coarse_cell_size": summary["validity_preindex_coarse_cell_size"],
+            "tile_validity_skip_reasons": summary["tile_validity_skip_reasons"],
+            "left_tile_validity_index": summary["left_tile_validity_index"],
+            "right_tile_validity_index": summary["right_tile_validity_index"],
             "tiling_used": summary["tiling_used"],
             "valid_pixel_percent_threshold": summary["valid_pixel_percent_threshold"],
             "invalid_pixel_radius": summary["invalid_pixel_radius"],
@@ -1097,6 +1299,12 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--min-valid-pixels", type=int, default=64, help="Minimum number of valid pixels required before attempting SIFT on a tile.")
     parser.add_argument("--valid-pixel-percent-threshold", type=_parse_valid_pixel_percent_threshold, default=0.0, help="Minimum valid-pixel ratio required before attempting SIFT on a tile. Must be within [0.0, 1.0].")
     parser.add_argument("--invalid-pixel-radius", type=_parse_invalid_pixel_radius, default=1, help="Don't detect feature point within this many pixels of image borders or invalid pixel. Must be within [0, 100]. Default: 1.")
+    parser.add_argument("--enable-tile-validity-prefilter", dest="enable_tile_validity_prefilter", action="store_true", help="Enable workflow-level DOM validity index prefiltering before full-resolution tile reads.")
+    parser.add_argument("--tile-validity-cache-dir", default=None, help="Directory for reusable per-DOM tile-validity index cache files.")
+    parser.add_argument("--tile-validity-cell-width", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_width"), default=DEFAULT_TILE_VALIDITY_CELL_WIDTH, help=f"Coarse validity-index cell width. Default: {DEFAULT_TILE_VALIDITY_CELL_WIDTH}.")
+    parser.add_argument("--tile-validity-cell-height", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_height"), default=DEFAULT_TILE_VALIDITY_CELL_HEIGHT, help=f"Coarse validity-index cell height. Default: {DEFAULT_TILE_VALIDITY_CELL_HEIGHT}.")
+    parser.add_argument("--enable-validity-preindex-filter", dest="enable_validity_preindex_filter", action="store_true", help=argparse.SUPPRESS)
+    parser.add_argument("--validity-preindex-coarse-cell-size", type=lambda value: _parse_tile_validity_cell_size(value, field_name="validity_preindex_coarse_cell_size"), default=None, help=argparse.SUPPRESS)
     parser.add_argument("--matcher-method", type=_parse_matcher_method, default=DEFAULT_MATCHER_METHOD, help="Descriptor matcher backend used after SIFT feature extraction. Supported values: bf, flann. Default: bf.")
     parser.add_argument("--ratio-test", type=float, default=0.75, help="Lowe ratio-test threshold used for descriptor filtering.")
     parser.add_argument("--max-features", type=int, default=None, help="Optional maximum number of SIFT features per tile.")
@@ -1122,7 +1330,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the pre-RANSAC drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the pre-RANSAC drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the pre-RANSAC drawMatches PNG. Defaults to 1/3 for a smaller preview.")
-    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, show_progress=True)
+    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, enable_validity_preindex_filter=False, show_progress=True)
     if config_defaults:
         parser.set_defaults(**config_defaults)
     return parser
@@ -1189,6 +1397,12 @@ def main(argv: list[str] | None = None) -> None:
         min_valid_pixels=args.min_valid_pixels,
         valid_pixel_percent_threshold=args.valid_pixel_percent_threshold,
         invalid_pixel_radius=args.invalid_pixel_radius,
+        enable_tile_validity_prefilter=args.enable_tile_validity_prefilter,
+        tile_validity_cache_dir=args.tile_validity_cache_dir,
+        tile_validity_cell_width=args.tile_validity_cell_width,
+        tile_validity_cell_height=args.tile_validity_cell_height,
+        enable_validity_preindex_filter=args.enable_validity_preindex_filter,
+        validity_preindex_coarse_cell_size=args.validity_preindex_coarse_cell_size,
         matcher_method=args.matcher_method,
         ratio_test=args.ratio_test,
         max_features=args.max_features,

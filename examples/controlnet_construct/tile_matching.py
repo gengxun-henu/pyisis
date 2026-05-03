@@ -589,21 +589,16 @@ def _build_tile_match_tasks(
     ]
 
 
-def _match_single_paired_window_worker(task: TileMatchTask) -> TileMatchResult:
-    left_cube = ip.Cube()
-    right_cube = ip.Cube()
-    left_cube.open(task.left_dom_path, "r")
-    right_cube.open(task.right_dom_path, "r")
-    try:
-        left_invalid_values = _resolved_invalid_values_for_cube(left_cube, task.invalid_values)
-        right_invalid_values = _resolved_invalid_values_for_cube(right_cube, task.invalid_values)
-        left_values = _read_cube_window(left_cube, task.paired_window.left_window, band=task.band)
-        right_values = _read_cube_window(right_cube, task.paired_window.right_window, band=task.band)
-    finally:
-        if left_cube.is_open():
-            left_cube.close()
-        if right_cube.is_open():
-            right_cube.close()
+def _match_tile_task_in_open_cubes(
+    task: TileMatchTask,
+    *,
+    left_cube: ip.Cube,
+    right_cube: ip.Cube,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+) -> TileMatchResult:
+    left_values = _read_cube_window(left_cube, task.paired_window.left_window, band=task.band)
+    right_values = _read_cube_window(right_cube, task.paired_window.right_window, band=task.band)
 
     return _match_tile_from_window_values(
         left_values=left_values,
@@ -631,6 +626,50 @@ def _match_single_paired_window_worker(task: TileMatchTask) -> TileMatchResult:
     )
 
 
+def _match_paired_window_batch_worker(tasks: tuple[TileMatchTask, ...]) -> tuple[TileMatchResult, ...]:
+    if not tasks:
+        return ()
+
+    first_task = tasks[0]
+    left_cube = ip.Cube()
+    right_cube = ip.Cube()
+    left_cube.open(first_task.left_dom_path, "r")
+    right_cube.open(first_task.right_dom_path, "r")
+    try:
+        left_invalid_values = _resolved_invalid_values_for_cube(left_cube, first_task.invalid_values)
+        right_invalid_values = _resolved_invalid_values_for_cube(right_cube, first_task.invalid_values)
+        return tuple(
+            _match_tile_task_in_open_cubes(
+                task,
+                left_cube=left_cube,
+                right_cube=right_cube,
+                left_invalid_values=left_invalid_values,
+                right_invalid_values=right_invalid_values,
+            )
+            for task in tasks
+        )
+    finally:
+        if left_cube.is_open():
+            left_cube.close()
+        if right_cube.is_open():
+            right_cube.close()
+
+
+def _match_single_paired_window_worker(task: TileMatchTask) -> TileMatchResult:
+    return _match_paired_window_batch_worker((task,))[0]
+
+
+def _chunk_tile_match_tasks(tasks: list[TileMatchTask], max_workers: int) -> list[tuple[int, tuple[TileMatchTask, ...]]]:
+    if not tasks:
+        return []
+    effective_workers = max(1, min(max_workers, len(tasks)))
+    chunk_size = (len(tasks) + effective_workers - 1) // effective_workers
+    return [
+        (start_index, tuple(tasks[start_index : start_index + chunk_size]))
+        for start_index in range(0, len(tasks), chunk_size)
+    ]
+
+
 def _tile_match_process_pool_context() -> mp.context.BaseContext:
     preferred_context = "fork" if os.name == "posix" else "spawn"
     return mp.get_context(preferred_context)
@@ -644,16 +683,19 @@ def _run_parallel_tile_match_tasks(
 ) -> list[TileMatchResult]:
     if not tasks:
         return []
+    task_chunks = _chunk_tile_match_tasks(tasks, max_workers=max_workers)
     with ProcessPoolExecutor(max_workers=max_workers, mp_context=_tile_match_process_pool_context()) as executor:
         futures = {
-            executor.submit(_match_single_paired_window_worker, task): index
-            for index, task in enumerate(tasks)
+            executor.submit(_match_paired_window_batch_worker, task_chunk): start_index
+            for start_index, task_chunk in task_chunks
         }
         ordered_results: list[TileMatchResult | None] = [None] * len(tasks)
         for future in as_completed(futures):
-            ordered_results[futures[future]] = future.result()
-            if progress_callback is not None:
-                progress_callback()
+            start_index = futures[future]
+            for offset, result in enumerate(future.result()):
+                ordered_results[start_index + offset] = result
+                if progress_callback is not None:
+                    progress_callback()
         return [result for result in ordered_results if result is not None]
 
 

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-02
+Last Modified: 2026-05-03
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -24,6 +24,7 @@ Updated: 2026-05-01  Geng Xun updated batch-wrapper fake dispatchers to serve co
 Updated: 2026-05-01  Geng Xun added batch-wrapper regression coverage for legacy top-level config precedence while preserving explicit CLI overrides.
 Updated: 2026-05-01  Geng Xun refactored pipeline-wrapper helper-mode regressions to preserve legacy config precedence while reusing image_match.py config-default probes.
 Updated: 2026-05-02  Geng Xun added regression coverage for reusable low-resolution DOM list preparation and forwarding.
+Updated: 2026-05-03  Geng Xun added regression coverage for forwarding post-RANSAC visualization preview options into match visualization.
 """
 
 from __future__ import annotations
@@ -2678,6 +2679,110 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(result["ransac"]["retained_count"], 1)
         self.assertEqual(result["match_visualization"]["highlighted_match_count"], 1)
         self.assertEqual(result["controlnet"]["point_count"], 1)
+
+    def test_build_controlnet_for_dom_stereo_pair_forwards_visualization_preview_options(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_preview",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="dom preview wrapper test",
+            point_id_prefix="PRV",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_dom.key"
+            right_dom_key = temp_dir / "right_dom.key"
+            output_net = temp_dir / "preview_wrapper.net"
+            preview_cache_dir = temp_dir / "preview_cache"
+            write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+
+            fake_pair_result = {
+                "left_conversion": {"output_count": 1, "failure_count": 0},
+                "right_conversion": {"output_count": 1, "failure_count": 0},
+                "retained_pair_count": 1,
+            }
+            fake_controlnet_result = {
+                "output_path": str(output_net),
+                "network_id": config.network_id,
+                "target_name": config.target_name,
+                "user_name": config.user_name,
+                "point_count": 1,
+                "measure_count": 2,
+                "left_serial_number": "left-serial",
+                "right_serial_number": "right-serial",
+                "pvl_format": True,
+            }
+            fake_ransac_result = {
+                "applied": True,
+                "status": "filtered",
+                "mode": "loose",
+                "input_count": 2,
+                "retained_count": 1,
+                "dropped_count": 1,
+                "retained_soft_outlier_positions": [0],
+            }
+            fake_visualization = {
+                "status": "ok",
+                "visualization_mode_used": "reduced_cropped",
+                "memory_profile": "low-memory",
+            }
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_stereo_pair_key_files_with_ransac",
+                    return_value=fake_ransac_result,
+                ) as ransac_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.write_stereo_pair_match_visualization_from_key_files",
+                    return_value=fake_visualization,
+                ) as visualization_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.convert_paired_dom_keypoints_to_original",
+                    return_value=fake_pair_result,
+                ) as paired_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                    return_value=fake_controlnet_result,
+                ) as controlnet_mock,
+            ):
+                result = build_controlnet_for_dom_stereo_pair(
+                    left_dom_key,
+                    right_dom_key,
+                    REAL_DOM_LEFT,
+                    REAL_DOM_RIGHT,
+                    LEFT_CUBE_PATH,
+                    RIGHT_CUBE_PATH,
+                    config,
+                    output_net,
+                    skip_merge=True,
+                    write_match_visualization=True,
+                    visualization_mode="reduced_cropped",
+                    memory_profile="low-memory",
+                    visualization_target_long_edge=1024,
+                    max_preview_pixels=1_000_000,
+                    preview_crop_margin_pixels=128,
+                    preview_cache_dir=preview_cache_dir,
+                    preview_cache_source="visualization_cache",
+                    preview_force_regenerate=True,
+                    preview_level=3,
+                )
+
+        ransac_mock.assert_called_once()
+        visualization_mock.assert_called_once()
+        paired_mock.assert_called_once()
+        controlnet_mock.assert_called_once()
+        self.assertEqual(result["match_visualization"], fake_visualization)
+        call_kwargs = visualization_mock.call_args.kwargs
+        self.assertEqual(call_kwargs["visualization_mode"], "reduced_cropped")
+        self.assertEqual(call_kwargs["memory_profile"], "low-memory")
+        self.assertEqual(call_kwargs["visualization_target_long_edge"], 1024)
+        self.assertEqual(call_kwargs["max_preview_pixels"], 1_000_000)
+        self.assertEqual(call_kwargs["preview_crop_margin_pixels"], 128)
+        self.assertEqual(call_kwargs["preview_cache_dir"], preview_cache_dir)
+        self.assertEqual(call_kwargs["preview_cache_source"], "visualization_cache")
+        self.assertTrue(call_kwargs["preview_force_regenerate"])
+        self.assertEqual(call_kwargs["preview_level"], 3)
 
     def test_dom2ori_cli_paired_mode_dispatches_to_paired_conversion(self):
         fake_result = {

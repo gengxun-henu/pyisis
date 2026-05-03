@@ -16,6 +16,7 @@ Updated: 2026-04-20  Geng Xun added optional stereo-pair point-ID namespacing wi
 Updated: 2026-04-20  Geng Xun added a from-dom batch wrapper that auto-assigns S1/S2/S3-style pair IDs across images_overlap.lis processing.
 Updated: 2026-04-20  Geng Xun added an explicit post-RANSAC visualization output path so E2E runs can preserve deterministic pre/post drawMatches PNGs.
 Updated: 2026-04-24  Geng Xun switched the post-RANSAC visualization import to the dedicated match_visualization module so controlnet_stereopair no longer depends on image_match.py for that helper.
+Updated: 2026-05-03  Geng Xun forwarded post-RANSAC visualization preview options through the DOM ControlNet wrapper and CLI.
 """
 
 from __future__ import annotations
@@ -37,7 +38,15 @@ if __package__ in {None, ""}:
     from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
     from controlnet_construct.keypoints import read_key_file
     from controlnet_construct.listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
-    from controlnet_construct.match_visualization import write_stereo_pair_match_visualization_from_key_files
+    from controlnet_construct.match_visualization import (
+        DEFAULT_MEMORY_PROFILE,
+        DEFAULT_PREVIEW_CACHE_SOURCE,
+        DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+        SUPPORTED_MEMORY_PROFILES,
+        SUPPORTED_PREVIEW_CACHE_SOURCES,
+        SUPPORTED_VISUALIZATION_MODES,
+        write_stereo_pair_match_visualization_from_key_files,
+    )
     from controlnet_construct.runtime import bootstrap_runtime_environment
     from controlnet_construct.stereo_ransac import filter_stereo_pair_key_files_with_ransac
     from controlnet_construct.tie_point_merge_in_overlap import (
@@ -54,7 +63,15 @@ else:
     from .dom2ori import convert_paired_dom_keypoints_to_original
     from .keypoints import read_key_file
     from .listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
-    from .match_visualization import write_stereo_pair_match_visualization_from_key_files
+    from .match_visualization import (
+        DEFAULT_MEMORY_PROFILE,
+        DEFAULT_PREVIEW_CACHE_SOURCE,
+        DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+        SUPPORTED_MEMORY_PROFILES,
+        SUPPORTED_PREVIEW_CACHE_SOURCES,
+        SUPPORTED_VISUALIZATION_MODES,
+        write_stereo_pair_match_visualization_from_key_files,
+    )
     from .runtime import bootstrap_runtime_environment
     from .stereo_ransac import filter_stereo_pair_key_files_with_ransac
     from .tie_point_merge_in_overlap import (
@@ -215,6 +232,15 @@ def build_controlnets_for_dom_overlap_list(
     write_match_visualization: bool = False,
     match_visualization_scale: float = 1.0 / 3.0,
     match_visualization_output_dir: str | Path | None = None,
+    visualization_mode: str = "full",
+    memory_profile: str = DEFAULT_MEMORY_PROFILE,
+    visualization_target_long_edge: int | None = None,
+    max_preview_pixels: int | None = None,
+    preview_crop_margin_pixels: int = DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+    preview_cache_dir: str | Path | None = None,
+    preview_cache_source: str = DEFAULT_PREVIEW_CACHE_SOURCE,
+    preview_force_regenerate: bool = False,
+    preview_level: int | None = None,
     dom_band: int = 1,
     left_original_band: int = 1,
     right_original_band: int = 1,
@@ -286,6 +312,15 @@ def build_controlnets_for_dom_overlap_list(
             write_match_visualization=write_match_visualization,
             match_visualization_scale=match_visualization_scale,
             match_visualization_output_dir=match_visualization_dir,
+            visualization_mode=visualization_mode,
+            memory_profile=memory_profile,
+            visualization_target_long_edge=visualization_target_long_edge,
+            max_preview_pixels=max_preview_pixels,
+            preview_crop_margin_pixels=preview_crop_margin_pixels,
+            preview_cache_dir=preview_cache_dir,
+            preview_cache_source=preview_cache_source,
+            preview_force_regenerate=preview_force_regenerate,
+            preview_level=preview_level,
             dom_band=dom_band,
             left_original_band=left_original_band,
             right_original_band=right_original_band,
@@ -461,6 +496,15 @@ def build_controlnet_for_dom_stereo_pair(
     match_visualization_output_path: str | Path | None = None,
     match_visualization_scale: float = 1.0 / 3.0,
     match_visualization_output_dir: str | Path | None = None,
+    visualization_mode: str = "full",
+    memory_profile: str = DEFAULT_MEMORY_PROFILE,
+    visualization_target_long_edge: int | None = None,
+    max_preview_pixels: int | None = None,
+    preview_crop_margin_pixels: int = DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+    preview_cache_dir: str | Path | None = None,
+    preview_cache_source: str = DEFAULT_PREVIEW_CACHE_SOURCE,
+    preview_force_regenerate: bool = False,
+    preview_level: int | None = None,
     dom_band: int = 1,
     left_original_band: int = 1,
     right_original_band: int = 1,
@@ -566,6 +610,15 @@ def build_controlnet_for_dom_stereo_pair(
             scale_factor=match_visualization_scale,
             band=dom_band,
             highlight_match_indices=ransac_result["retained_soft_outlier_positions"],
+            visualization_mode=visualization_mode,
+            memory_profile=memory_profile,
+            visualization_target_long_edge=visualization_target_long_edge,
+            max_preview_pixels=max_preview_pixels,
+            preview_crop_margin_pixels=preview_crop_margin_pixels,
+            preview_cache_dir=preview_cache_dir,
+            preview_cache_source=preview_cache_source,
+            preview_force_regenerate=preview_force_regenerate,
+            preview_level=preview_level,
         )
 
     paired_conversion = convert_paired_dom_keypoints_to_original(
@@ -677,6 +730,54 @@ def _build_from_dom_parser(subparsers) -> None:
     parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the post-RANSAC drawMatches PNG written by the from-dom wrapper.")
     parser.add_argument("--match-visualization-scale", type=float, default=0.25, help="Image scale factor used when writing the post-RANSAC drawMatches visualization PNG. Defaults to 1/4, producing a one-fourth-size preview in each dimension.")
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used for the auto-named post-RANSAC drawMatches PNG.")
+    parser.add_argument(
+        "--visualization-mode",
+        default="full",
+        choices=SUPPORTED_VISUALIZATION_MODES,
+        help="Post-RANSAC preview visualization mode. Defaults to full.",
+    )
+    parser.add_argument(
+        "--memory-profile",
+        default=DEFAULT_MEMORY_PROFILE,
+        choices=SUPPORTED_MEMORY_PROFILES,
+        help="Memory profile used by reduced visualization previews. Defaults to balanced.",
+    )
+    parser.add_argument(
+        "--visualization-target-long-edge",
+        type=int,
+        default=None,
+        help="Target long-edge pixel size used when auto-selecting reduced visualization preview levels.",
+    )
+    parser.add_argument(
+        "--max-preview-pixels",
+        type=int,
+        default=None,
+        help="Optional maximum pixel count for reduced visualization previews.",
+    )
+    parser.add_argument(
+        "--preview-crop-margin-pixels",
+        type=int,
+        default=DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+        help="Crop margin (pixels) used when generating reduced visualization previews.",
+    )
+    parser.add_argument("--preview-cache-dir", default=None, help="Optional directory used for reduced visualization preview cache cubes.")
+    parser.add_argument(
+        "--preview-cache-source",
+        default=DEFAULT_PREVIEW_CACHE_SOURCE,
+        choices=SUPPORTED_PREVIEW_CACHE_SOURCES,
+        help="Preview cache source selection for reduced visualization previews.",
+    )
+    parser.add_argument(
+        "--preview-force-regenerate",
+        action="store_true",
+        help="Force regeneration of reduced visualization preview cache cubes.",
+    )
+    parser.add_argument(
+        "--preview-level",
+        type=int,
+        default=None,
+        help="Explicit preview level for reduced visualization previews.",
+    )
     parser.add_argument("--dom-band", type=int, default=1, help="Band index used when reading the DOM cubes.")
     parser.add_argument("--left-original-band", type=int, default=1, help="Band index used when projecting into the left original cube.")
     parser.add_argument("--right-original-band", type=int, default=1, help="Band index used when projecting into the right original cube.")
@@ -726,6 +827,54 @@ def _build_from_dom_batch_parser(subparsers) -> None:
     parser.add_argument("--write-match-visualization", action="store_true", help="Write a post-RANSAC drawMatches PNG after merge-stage RANSAC filtering for each pair in the batch.")
     parser.add_argument("--match-visualization-scale", type=float, default=0.25, help="Image scale factor used when writing batch post-RANSAC drawMatches visualization PNG files. Defaults to 1/4.")
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used for batch post-RANSAC drawMatches visualization PNG files.")
+    parser.add_argument(
+        "--visualization-mode",
+        default="full",
+        choices=SUPPORTED_VISUALIZATION_MODES,
+        help="Post-RANSAC preview visualization mode. Defaults to full.",
+    )
+    parser.add_argument(
+        "--memory-profile",
+        default=DEFAULT_MEMORY_PROFILE,
+        choices=SUPPORTED_MEMORY_PROFILES,
+        help="Memory profile used by reduced visualization previews. Defaults to balanced.",
+    )
+    parser.add_argument(
+        "--visualization-target-long-edge",
+        type=int,
+        default=None,
+        help="Target long-edge pixel size used when auto-selecting reduced visualization preview levels.",
+    )
+    parser.add_argument(
+        "--max-preview-pixels",
+        type=int,
+        default=None,
+        help="Optional maximum pixel count for reduced visualization previews.",
+    )
+    parser.add_argument(
+        "--preview-crop-margin-pixels",
+        type=int,
+        default=DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+        help="Crop margin (pixels) used when generating reduced visualization previews.",
+    )
+    parser.add_argument("--preview-cache-dir", default=None, help="Optional directory used for reduced visualization preview cache cubes.")
+    parser.add_argument(
+        "--preview-cache-source",
+        default=DEFAULT_PREVIEW_CACHE_SOURCE,
+        choices=SUPPORTED_PREVIEW_CACHE_SOURCES,
+        help="Preview cache source selection for reduced visualization previews.",
+    )
+    parser.add_argument(
+        "--preview-force-regenerate",
+        action="store_true",
+        help="Force regeneration of reduced visualization preview cache cubes.",
+    )
+    parser.add_argument(
+        "--preview-level",
+        type=int,
+        default=None,
+        help="Explicit preview level for reduced visualization previews.",
+    )
     parser.add_argument("--dom-band", type=int, default=1, help="Band index used when reading the DOM cubes.")
     parser.add_argument("--left-original-band", type=int, default=1, help="Band index used when projecting into the left original cube.")
     parser.add_argument("--right-original-band", type=int, default=1, help="Band index used when projecting into the right original cube.")
@@ -791,6 +940,15 @@ def main(argv: list[str] | None = None) -> None:
             match_visualization_output_path=args.match_visualization_output_path,
             match_visualization_scale=args.match_visualization_scale,
             match_visualization_output_dir=args.match_visualization_output_dir,
+            visualization_mode=args.visualization_mode,
+            memory_profile=args.memory_profile,
+            visualization_target_long_edge=args.visualization_target_long_edge,
+            max_preview_pixels=args.max_preview_pixels,
+            preview_crop_margin_pixels=args.preview_crop_margin_pixels,
+            preview_cache_dir=args.preview_cache_dir,
+            preview_cache_source=args.preview_cache_source,
+            preview_force_regenerate=args.preview_force_regenerate,
+            preview_level=args.preview_level,
             dom_band=args.dom_band,
             left_original_band=args.left_original_band,
             right_original_band=args.right_original_band,
@@ -824,6 +982,15 @@ def main(argv: list[str] | None = None) -> None:
             write_match_visualization=args.write_match_visualization,
             match_visualization_scale=args.match_visualization_scale,
             match_visualization_output_dir=args.match_visualization_output_dir,
+            visualization_mode=args.visualization_mode,
+            memory_profile=args.memory_profile,
+            visualization_target_long_edge=args.visualization_target_long_edge,
+            max_preview_pixels=args.max_preview_pixels,
+            preview_crop_margin_pixels=args.preview_crop_margin_pixels,
+            preview_cache_dir=args.preview_cache_dir,
+            preview_cache_source=args.preview_cache_source,
+            preview_force_regenerate=args.preview_force_regenerate,
+            preview_level=args.preview_level,
             dom_band=args.dom_band,
             left_original_band=args.left_original_band,
             right_original_band=args.right_original_band,

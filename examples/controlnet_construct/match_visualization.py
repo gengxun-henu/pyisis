@@ -292,7 +292,7 @@ def write_stereo_pair_match_visualization(
     invalid_values: tuple[float, ...] = (),
     special_pixel_abs_threshold: float = 1.0e300,
     highlight_match_indices: list[int] | None = None,
-    visualization_mode: str = DEFAULT_VISUALIZATION_MODE,
+    visualization_mode: str = "full",
     memory_profile: str = DEFAULT_MEMORY_PROFILE,
     visualization_target_long_edge: int | None = None,
     max_preview_pixels: int | None = None,
@@ -437,7 +437,7 @@ def write_stereo_pair_match_visualization(
 
     preview_cache_source = "disabled" if mode_used in {"full", "cropped"} else options.preview_cache_source
     crop_window_payload = None
-    if mode_used != "full":
+    if left_window is not None and right_window is not None:
         crop_window_payload = {
             "left": {
                 "start_x": left_window.start_x,

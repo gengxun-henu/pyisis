@@ -6,6 +6,7 @@ Created: 2026-04-24
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 
@@ -25,6 +26,108 @@ from .tile_matching import (
 bootstrap_runtime_environment()
 
 import isis_pybind as ip
+
+SUPPORTED_VISUALIZATION_MODES = ("auto", "full", "reduced", "cropped", "reduced_cropped")
+SUPPORTED_MEMORY_PROFILES = ("high-memory", "balanced", "low-memory")
+SUPPORTED_PREVIEW_CACHE_SOURCES = ("auto", "matching_cache", "visualization_cache", "disabled")
+MEMORY_PROFILE_TARGET_LONG_EDGES = {
+    "high-memory": 4096,
+    "balanced": 2048,
+    "low-memory": 1024,
+}
+DEFAULT_VISUALIZATION_MODE = "auto"
+DEFAULT_MEMORY_PROFILE = "balanced"
+DEFAULT_PREVIEW_CROP_MARGIN_PIXELS = 256
+DEFAULT_PREVIEW_CACHE_SOURCE = "auto"
+
+
+@dataclass(frozen=True, slots=True)
+class VisualizationOptions:
+    visualization_mode: str = DEFAULT_VISUALIZATION_MODE
+    memory_profile: str = DEFAULT_MEMORY_PROFILE
+    visualization_target_long_edge: int = MEMORY_PROFILE_TARGET_LONG_EDGES[DEFAULT_MEMORY_PROFILE]
+    max_preview_pixels: int | None = None
+    preview_crop_margin_pixels: int = DEFAULT_PREVIEW_CROP_MARGIN_PIXELS
+    preview_cache_dir: Path | None = None
+    preview_cache_source: str = DEFAULT_PREVIEW_CACHE_SOURCE
+    preview_force_regenerate: bool = False
+    preview_level: int | None = None
+
+
+def _normalize_choice(value: str, *, field_name: str, supported: tuple[str, ...]) -> str:
+    normalized = str(value).strip().lower().replace("_", "-")
+    supported_lookup = {option.replace("_", "-"): option for option in supported}
+    if normalized not in supported_lookup:
+        raise ValueError(f"{field_name} must be one of {supported}; got {value!r}.")
+    return supported_lookup[normalized]
+
+
+def _positive_int(value: int, *, field_name: str) -> int:
+    resolved = int(value)
+    if resolved <= 0:
+        raise ValueError(f"{field_name} must be positive.")
+    return resolved
+
+
+def _non_negative_int(value: int, *, field_name: str) -> int:
+    resolved = int(value)
+    if resolved < 0:
+        raise ValueError(f"{field_name} must be >= 0.")
+    return resolved
+
+
+def resolve_visualization_options(
+    *,
+    visualization_mode: str = DEFAULT_VISUALIZATION_MODE,
+    memory_profile: str = DEFAULT_MEMORY_PROFILE,
+    visualization_target_long_edge: int | None = None,
+    max_preview_pixels: int | None = None,
+    preview_crop_margin_pixels: int = DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+    preview_cache_dir: str | Path | None = None,
+    preview_cache_source: str = DEFAULT_PREVIEW_CACHE_SOURCE,
+    preview_force_regenerate: bool = False,
+    preview_level: int | None = None,
+) -> VisualizationOptions:
+    resolved_profile = _normalize_choice(
+        memory_profile,
+        field_name="memory_profile",
+        supported=SUPPORTED_MEMORY_PROFILES,
+    )
+    resolved_mode = _normalize_choice(
+        visualization_mode,
+        field_name="visualization_mode",
+        supported=SUPPORTED_VISUALIZATION_MODES,
+    )
+    resolved_cache_source = _normalize_choice(
+        preview_cache_source,
+        field_name="preview_cache_source",
+        supported=SUPPORTED_PREVIEW_CACHE_SOURCES,
+    )
+    resolved_target = (
+        _positive_int(visualization_target_long_edge, field_name="visualization_target_long_edge")
+        if visualization_target_long_edge is not None
+        else MEMORY_PROFILE_TARGET_LONG_EDGES[resolved_profile]
+    )
+    resolved_max_pixels = (
+        None if max_preview_pixels is None else _positive_int(max_preview_pixels, field_name="max_preview_pixels")
+    )
+    resolved_preview_level = (
+        None if preview_level is None else _non_negative_int(preview_level, field_name="preview_level")
+    )
+    return VisualizationOptions(
+        visualization_mode=resolved_mode,
+        memory_profile=resolved_profile,
+        visualization_target_long_edge=resolved_target,
+        max_preview_pixels=resolved_max_pixels,
+        preview_crop_margin_pixels=_non_negative_int(
+            preview_crop_margin_pixels,
+            field_name="preview_crop_margin_pixels",
+        ),
+        preview_cache_dir=None if preview_cache_dir is None else Path(preview_cache_dir),
+        preview_cache_source=resolved_cache_source,
+        preview_force_regenerate=bool(preview_force_regenerate),
+        preview_level=resolved_preview_level,
+    )
 
 
 def default_match_visualization_path(

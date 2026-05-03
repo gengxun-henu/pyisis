@@ -10,6 +10,7 @@ Updated: 2026-05-02  Geng Xun added precomputed low-resolution DOM reuse so batc
 
 from __future__ import annotations
 
+import math
 from pathlib import Path
 import shutil
 import subprocess
@@ -31,6 +32,28 @@ import isis_pybind as ip
 DEFAULT_TRIM_FRACTION_EACH_SIDE = 0.05
 DEFAULT_MIN_RETAINED_MATCH_COUNT = 5
 DEFAULT_MAX_MEAN_PROJECTED_OFFSET_METERS = 0.0
+
+
+def reduce_level_for_target_long_edge(long_edge: int, target_long_edge: int) -> int:
+    resolved_long_edge = int(long_edge)
+    resolved_target = int(target_long_edge)
+    if resolved_long_edge <= 0:
+        raise ValueError("long_edge must be positive.")
+    if resolved_target <= 0:
+        raise ValueError("target_long_edge must be positive.")
+    return max(0, int(math.ceil(math.log2(resolved_long_edge / resolved_target))))
+
+
+def reduce_level_for_pair_target_long_edge(
+    *,
+    left_width: int,
+    left_height: int,
+    right_width: int,
+    right_height: int,
+    target_long_edge: int,
+) -> int:
+    pair_long_edge = max(int(left_width), int(left_height), int(right_width), int(right_height))
+    return reduce_level_for_target_long_edge(pair_long_edge, target_long_edge)
 
 
 def _low_resolution_pair_tag(left_dom_path: str | Path, right_dom_path: str | Path) -> str:

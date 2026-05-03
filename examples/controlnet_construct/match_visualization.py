@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+import hashlib
 from pathlib import Path
 
 import cv2
@@ -143,7 +144,10 @@ def _cube_dimensions(cube_path: str | Path) -> tuple[int, int]:
 
 
 def _preview_cache_path(cache_dir: str | Path, source_path: str | Path, *, level: int) -> Path:
-    return Path(cache_dir) / f"level{int(level)}" / f"{Path(source_path).stem}.cub"
+    resolved_path = Path(source_path).expanduser().resolve(strict=False)
+    digest = hashlib.sha1(str(resolved_path).encode("utf-8")).hexdigest()[:10]
+    filename = f"{Path(source_path).stem}__{digest}.cub"
+    return Path(cache_dir) / f"level{int(level)}" / filename
 
 
 def _ensure_preview_cube(
@@ -367,10 +371,19 @@ def write_stereo_pair_match_visualization(
     left_read_path = left_dom_path
     right_read_path = right_dom_path
     preview_cache_hit = False
+    preview_cache_hit_left = False
+    preview_cache_hit_right = False
     preview_cache_source = "disabled"
+    left_preview_path: Path | None = None
+    right_preview_path: Path | None = None
     preview_level = options.preview_level
     source_scale_factor = 1.0
     if mode_requested in {"reduced", "reduced_cropped"}:
+        if options.preview_cache_source == "disabled":
+            raise ValueError("Reduced visualization requires a preview cache; preview_cache_source cannot be disabled.")
+        if options.preview_cache_source == "matching_cache":
+            raise NotImplementedError("Matching-cache reuse for visualization previews is not implemented.")
+        preview_cache_source = "visualization_cache"
         if options.preview_level is None:
             left_width, left_height = _cube_dimensions(left_dom_path)
             right_width, right_height = _cube_dimensions(right_dom_path)
@@ -396,8 +409,9 @@ def write_stereo_pair_match_visualization(
             level=resolved_level,
             force_regenerate=options.preview_force_regenerate,
         )
+        preview_cache_hit_left = left_cache_hit
+        preview_cache_hit_right = right_cache_hit
         preview_cache_hit = left_cache_hit and right_cache_hit
-        preview_cache_source = options.preview_cache_source
         preview_level = resolved_level
         source_scale_factor = 1.0 / float(2 ** resolved_level)
         left_read_path = left_preview_path
@@ -575,7 +589,11 @@ def write_stereo_pair_match_visualization(
         "memory_profile": options.memory_profile,
         "preview_level": preview_level,
         "preview_cache_hit": preview_cache_hit,
+        "preview_cache_hit_left": preview_cache_hit_left,
+        "preview_cache_hit_right": preview_cache_hit_right,
         "preview_cache_source": preview_cache_source,
+        "left_preview_path": None if left_preview_path is None else str(left_preview_path),
+        "right_preview_path": None if right_preview_path is None else str(right_preview_path),
         "preview_dimensions": {
             "left": [left_image.shape[1], left_image.shape[0]],
             "right": [right_image.shape[1], right_image.shape[0]],

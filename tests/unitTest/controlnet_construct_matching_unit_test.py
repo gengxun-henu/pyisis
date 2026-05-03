@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-11
+Last Modified: 2026-05-12
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -39,6 +39,7 @@ Updated: 2026-05-08  Geng Xun stabilized visualization reduced-mode guards and d
 Updated: 2026-05-09  Geng Xun ensured full-mode visualization skips dimension probes and added explicit-full coverage.
 Updated: 2026-05-10  Geng Xun added fail-fast coverage for reduced-cropped visualization mode.
 Updated: 2026-05-11  Geng Xun added reduced-preview cache coverage for visualization rendering.
+Updated: 2026-05-12  Geng Xun hardened reduced preview cache diagnostics and reduced-cropped window assertions.
 """
 
 from __future__ import annotations
@@ -2267,6 +2268,48 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         cube_dimensions_mock.assert_not_called()
         self.assertEqual(read_windows, [None, None])
 
+    def test_preview_cache_path_includes_source_hash(self):
+        cache_dir = Path("preview_cache")
+        left_path = "/a/left.cub"
+        right_path = "/b/left.cub"
+
+        left_cache = match_visualization_module._preview_cache_path(cache_dir, left_path, level=2)
+        right_cache = match_visualization_module._preview_cache_path(cache_dir, right_path, level=2)
+
+        self.assertNotEqual(left_cache, right_cache)
+        self.assertTrue(left_cache.name.startswith("left__"))
+        self.assertTrue(right_cache.name.startswith("left__"))
+
+    def test_write_match_visualization_reduced_mode_rejects_preview_cache_disabled(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+
+        with temporary_directory() as temp_dir, self.assertRaises(ValueError):
+            match_visualization_module.write_stereo_pair_match_visualization(
+                "left.cub",
+                "right.cub",
+                left_key_file,
+                right_key_file,
+                output_path=temp_dir / "viz.png",
+                visualization_mode="reduced",
+                preview_cache_source="disabled",
+            )
+
+    def test_write_match_visualization_reduced_mode_rejects_matching_cache_source(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+
+        with temporary_directory() as temp_dir, self.assertRaises(NotImplementedError):
+            match_visualization_module.write_stereo_pair_match_visualization(
+                "left.cub",
+                "right.cub",
+                left_key_file,
+                right_key_file,
+                output_path=temp_dir / "viz.png",
+                visualization_mode="reduced",
+                preview_cache_source="matching_cache",
+            )
+
     def test_write_match_visualization_reduced_mode_generates_preview_cache(self):
         left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
         right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
@@ -2316,6 +2359,9 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(result["visualization_mode_used"], "reduced")
         self.assertEqual(result["preview_level"], 2)
         self.assertFalse(result["preview_cache_hit"])
+        self.assertFalse(result["preview_cache_hit_left"])
+        self.assertFalse(result["preview_cache_hit_right"])
+        self.assertEqual(result["preview_cache_source"], "visualization_cache")
         self.assertEqual(len(generated), 2)
 
     def test_write_match_visualization_reduced_mode_reuses_preview_cache(self):
@@ -2329,8 +2375,16 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         with temporary_directory() as temp_dir:
             preview_root = temp_dir / "preview_cache"
-            left_preview = preview_root / "level2" / "left.cub"
-            right_preview = preview_root / "level2" / "right.cub"
+            left_preview = match_visualization_module._preview_cache_path(
+                preview_root,
+                "left.cub",
+                level=2,
+            )
+            right_preview = match_visualization_module._preview_cache_path(
+                preview_root,
+                "right.cub",
+                level=2,
+            )
             left_preview.parent.mkdir(parents=True, exist_ok=True)
             right_preview.parent.mkdir(parents=True, exist_ok=True)
             left_preview.write_text("cached", encoding="utf-8")
@@ -2370,12 +2424,122 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         create_mock.assert_not_called()
         self.assertTrue(result["preview_cache_hit"])
+        self.assertTrue(result["preview_cache_hit_left"])
+        self.assertTrue(result["preview_cache_hit_right"])
+        self.assertEqual(result["preview_cache_source"], "visualization_cache")
+        self.assertEqual(result["left_preview_path"], str(left_preview))
+        self.assertEqual(result["right_preview_path"], str(right_preview))
         self.assertEqual(read_windows, [None, None])
+
+    def test_write_match_visualization_reduced_mode_partial_cache_hit(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+
+        with temporary_directory() as temp_dir:
+            preview_root = temp_dir / "preview_cache"
+            left_preview = match_visualization_module._preview_cache_path(
+                preview_root,
+                "left.cub",
+                level=2,
+            )
+            left_preview.parent.mkdir(parents=True, exist_ok=True)
+            left_preview.write_text("cached", encoding="utf-8")
+
+            with mock.patch.object(
+                match_visualization_module,
+                "_cube_dimensions",
+                return_value=(4096, 4096),
+            ), mock.patch.object(
+                match_visualization_module,
+                "create_low_resolution_dom",
+            ) as create_mock, mock.patch.object(
+                match_visualization_module,
+                "_read_cube_as_stretched_byte",
+                return_value=np.full((64, 64), 128, dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "drawMatches",
+                return_value=np.zeros((10, 10, 3), dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "imwrite",
+                return_value=True,
+            ):
+                result = match_visualization_module.write_stereo_pair_match_visualization(
+                    "left.cub",
+                    "right.cub",
+                    left_key_file,
+                    right_key_file,
+                    output_path=temp_dir / "viz.png",
+                    visualization_mode="reduced",
+                    preview_cache_dir=preview_root,
+                    visualization_target_long_edge=1024,
+                )
+
+        self.assertFalse(result["preview_cache_hit"])
+        self.assertTrue(result["preview_cache_hit_left"])
+        self.assertFalse(result["preview_cache_hit_right"])
+        self.assertEqual(result["preview_cache_source"], "visualization_cache")
+        create_mock.assert_called_once()
+
+    def test_write_match_visualization_reduced_mode_force_regenerate_marks_cache_miss(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+
+        with temporary_directory() as temp_dir:
+            preview_root = temp_dir / "preview_cache"
+            for source_name in ("left.cub", "right.cub"):
+                preview_path = match_visualization_module._preview_cache_path(
+                    preview_root,
+                    source_name,
+                    level=2,
+                )
+                preview_path.parent.mkdir(parents=True, exist_ok=True)
+                preview_path.write_text("cached", encoding="utf-8")
+
+            with mock.patch.object(
+                match_visualization_module,
+                "_cube_dimensions",
+                return_value=(4096, 4096),
+            ), mock.patch.object(
+                match_visualization_module,
+                "create_low_resolution_dom",
+            ) as create_mock, mock.patch.object(
+                match_visualization_module,
+                "_read_cube_as_stretched_byte",
+                return_value=np.full((64, 64), 128, dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "drawMatches",
+                return_value=np.zeros((10, 10, 3), dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "imwrite",
+                return_value=True,
+            ):
+                result = match_visualization_module.write_stereo_pair_match_visualization(
+                    "left.cub",
+                    "right.cub",
+                    left_key_file,
+                    right_key_file,
+                    output_path=temp_dir / "viz.png",
+                    visualization_mode="reduced",
+                    preview_cache_dir=preview_root,
+                    preview_force_regenerate=True,
+                    visualization_target_long_edge=1024,
+                )
+
+        self.assertFalse(result["preview_cache_hit"])
+        self.assertFalse(result["preview_cache_hit_left"])
+        self.assertFalse(result["preview_cache_hit_right"])
+        self.assertEqual(result["preview_cache_source"], "visualization_cache")
+        self.assertEqual(create_mock.call_count, 2)
 
     def test_write_match_visualization_reduced_cropped_mode_reads_preview_window(self):
         left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0), Keypoint(120.0, 120.0)))
         right_key_file = KeypointFile(4096, 4096, (Keypoint(110.0, 110.0), Keypoint(130.0, 130.0)))
-        read_windows: list[TileWindow | None] = []
+        read_windows: list[tuple[int, int, int, int]] = []
+        captured_keypoints: dict[str, list[tuple[float, float]]] = {}
 
         def fake_dimensions(path):
             if "preview_cache" in str(path):
@@ -2383,13 +2547,26 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             return (4096, 4096)
 
         def fake_read(cube_path, *, window=None, **kwargs):
-            read_windows.append(window)
-            return np.full((64, 64), 128, dtype=np.uint8)
+            read_windows.append((window.start_x, window.start_y, window.width, window.height))
+            return np.full((window.height, window.width), 128, dtype=np.uint8)
 
         def fake_create(source, output, *, level, **kwargs):
             Path(output).parent.mkdir(parents=True, exist_ok=True)
             Path(output).write_text("preview", encoding="utf-8")
             return Path(output)
+
+        def fake_draw_matches(
+            left_image,
+            left_keypoints,
+            right_image,
+            right_keypoints,
+            matches,
+            out_image,
+            **kwargs,
+        ):
+            captured_keypoints["left"] = [keypoint.pt for keypoint in left_keypoints]
+            captured_keypoints["right"] = [keypoint.pt for keypoint in right_keypoints]
+            return np.zeros((10, 10, 3), dtype=np.uint8)
 
         with temporary_directory() as temp_dir, mock.patch.object(
             match_visualization_module,
@@ -2406,7 +2583,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         ), mock.patch.object(
             match_visualization_module.cv2,
             "drawMatches",
-            return_value=np.zeros((10, 10, 3), dtype=np.uint8),
+            side_effect=fake_draw_matches,
         ), mock.patch.object(
             match_visualization_module.cv2,
             "imwrite",
@@ -2423,11 +2600,83 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 visualization_target_long_edge=1024,
             )
 
+        source_scale = 1.0 / 4.0
+        scaled_left_points = tuple(
+            Keypoint((point.sample - 1.0) * source_scale + 1.0, (point.line - 1.0) * source_scale + 1.0)
+            for point in left_key_file.points
+        )
+        scaled_right_points = tuple(
+            Keypoint((point.sample - 1.0) * source_scale + 1.0, (point.line - 1.0) * source_scale + 1.0)
+            for point in right_key_file.points
+        )
+        expected_left_window = match_visualization_module.crop_window_for_keypoints(
+            scaled_left_points,
+            image_width=1024,
+            image_height=1024,
+            margin_pixels=match_visualization_module.DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+        )
+        expected_right_window = match_visualization_module.crop_window_for_keypoints(
+            scaled_right_points,
+            image_width=1024,
+            image_height=1024,
+            margin_pixels=match_visualization_module.DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+        )
+        expected_crop_window = {
+            "left": {
+                "start_x": expected_left_window.start_x,
+                "start_y": expected_left_window.start_y,
+                "width": expected_left_window.width,
+                "height": expected_left_window.height,
+            },
+            "right": {
+                "start_x": expected_right_window.start_x,
+                "start_y": expected_right_window.start_y,
+                "width": expected_right_window.width,
+                "height": expected_right_window.height,
+            },
+        }
+        expected_left_pts = [
+            (
+                (point.sample - expected_left_window.start_x - 1.0) / 3.0,
+                (point.line - expected_left_window.start_y - 1.0) / 3.0,
+            )
+            for point in scaled_left_points
+        ]
+        expected_right_pts = [
+            (
+                (point.sample - expected_right_window.start_x - 1.0) / 3.0,
+                (point.line - expected_right_window.start_y - 1.0) / 3.0,
+            )
+            for point in scaled_right_points
+        ]
+
         self.assertEqual(result["visualization_mode_used"], "reduced_cropped")
-        self.assertIsNotNone(result["crop_window"])
-        self.assertEqual(result["source_scale_factor"], 0.25)
-        self.assertEqual(len(read_windows), 2)
-        self.assertTrue(all(window is not None for window in read_windows))
+        self.assertEqual(result["preview_cache_source"], "visualization_cache")
+        self.assertEqual(result["crop_window"], expected_crop_window)
+        self.assertEqual(result["source_scale_factor"], source_scale)
+        self.assertEqual(
+            read_windows,
+            [
+                (
+                    expected_left_window.start_x,
+                    expected_left_window.start_y,
+                    expected_left_window.width,
+                    expected_left_window.height,
+                ),
+                (
+                    expected_right_window.start_x,
+                    expected_right_window.start_y,
+                    expected_right_window.width,
+                    expected_right_window.height,
+                ),
+            ],
+        )
+        for actual, expected in zip(captured_keypoints["left"], expected_left_pts):
+            self.assertAlmostEqual(actual[0], expected[0], places=4)
+            self.assertAlmostEqual(actual[1], expected[1], places=4)
+        for actual, expected in zip(captured_keypoints["right"], expected_right_pts):
+            self.assertAlmostEqual(actual[0], expected[0], places=4)
+            self.assertAlmostEqual(actual[1], expected[1], places=4)
 
     def test_write_match_visualization_preserves_full_mode_for_small_images(self):
         left_key_file = KeypointFile(32, 32, (Keypoint(10.0, 10.0),))

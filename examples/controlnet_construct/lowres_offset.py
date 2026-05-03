@@ -33,6 +33,31 @@ DEFAULT_MIN_RETAINED_MATCH_COUNT = 5
 DEFAULT_MAX_MEAN_PROJECTED_OFFSET_METERS = 0.0
 
 
+def reduce_level_for_target_long_edge(long_edge: int, target_long_edge: int) -> int:
+    resolved_long_edge = int(long_edge)
+    resolved_target = int(target_long_edge)
+    if resolved_long_edge <= 0:
+        raise ValueError("long_edge must be positive.")
+    if resolved_target <= 0:
+        raise ValueError("target_long_edge must be positive.")
+    if resolved_long_edge <= resolved_target:
+        return 0
+    ratio = (resolved_long_edge + resolved_target - 1) // resolved_target
+    return (ratio - 1).bit_length()
+
+
+def reduce_level_for_pair_target_long_edge(
+    *,
+    left_width: int,
+    left_height: int,
+    right_width: int,
+    right_height: int,
+    target_long_edge: int,
+) -> int:
+    pair_long_edge = max(int(left_width), int(left_height), int(right_width), int(right_height))
+    return reduce_level_for_target_long_edge(pair_long_edge, target_long_edge)
+
+
 def _low_resolution_pair_tag(left_dom_path: str | Path, right_dom_path: str | Path) -> str:
     return f"{Path(left_dom_path).stem}__{Path(right_dom_path).stem}"
 

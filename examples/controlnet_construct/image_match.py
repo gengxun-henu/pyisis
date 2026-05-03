@@ -26,12 +26,14 @@ Updated: 2026-05-01  Geng Xun added configurable helper lookup order so shell wr
 Updated: 2026-05-02  Geng Xun added precomputed low-resolution DOM inputs so batch wrappers can reuse one reduced cube per DOM.
 Updated: 2026-05-02  Geng Xun added CLI progress reporting for full-resolution tile matching without changing JSON stdout.
 Updated: 2026-05-03  Geng Xun added optional tile-validity prefilter configuration, summaries, and metadata output.
+Updated: 2026-05-17  Geng Xun wired image-match visualization preview options and low-resolution target-long-edge defaults.
 """
 
 from __future__ import annotations
 
 import argparse
 from dataclasses import asdict
+from datetime import datetime
 import json
 from pathlib import Path
 import sys
@@ -124,6 +126,7 @@ _run_command = _lowres_offset._run_command
 _require_command = _lowres_offset._require_command
 _validate_projection_ready_cube = _lowres_offset._validate_projection_ready_cube
 _copy_precomputed_low_resolution_dom = _lowres_offset.copy_precomputed_low_resolution_dom
+_reduce_level_for_pair_target_long_edge = _lowres_offset.reduce_level_for_pair_target_long_edge
 _low_resolution_pair_tag = _lowres_offset._low_resolution_pair_tag
 _default_low_resolution_output_dir = _lowres_offset._default_low_resolution_output_dir
 _projected_xy_from_keypoints_in_open_cube = _lowres_offset._projected_xy_from_keypoints_in_open_cube
@@ -134,6 +137,13 @@ _trimmed_mean = _lowres_offset._trimmed_mean
 default_match_visualization_path = _match_visualization.default_match_visualization_path
 write_stereo_pair_match_visualization = _match_visualization.write_stereo_pair_match_visualization
 write_stereo_pair_match_visualization_from_key_files = _match_visualization.write_stereo_pair_match_visualization_from_key_files
+DEFAULT_MATCH_VISUALIZATION_MODE = "full"  # Preserve legacy behavior unless explicitly overridden.
+DEFAULT_MEMORY_PROFILE = _match_visualization.DEFAULT_MEMORY_PROFILE
+DEFAULT_PREVIEW_CROP_MARGIN_PIXELS = _match_visualization.DEFAULT_PREVIEW_CROP_MARGIN_PIXELS
+DEFAULT_PREVIEW_CACHE_SOURCE = _match_visualization.DEFAULT_PREVIEW_CACHE_SOURCE
+SUPPORTED_VISUALIZATION_MODES = _match_visualization.SUPPORTED_VISUALIZATION_MODES
+SUPPORTED_MEMORY_PROFILES = _match_visualization.SUPPORTED_MEMORY_PROFILES
+SUPPORTED_PREVIEW_CACHE_SOURCES = _match_visualization.SUPPORTED_PREVIEW_CACHE_SOURCES
 
 
 class _TileProgressBar:
@@ -237,6 +247,57 @@ def _validate_low_resolution_level(value: int) -> int:
 def _parse_low_resolution_level(value: str) -> int:
     try:
         return _validate_low_resolution_level(int(value))
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _format_supported_values(values: tuple[str, ...]) -> str:
+    return ", ".join(value.replace("_", "-") for value in values)
+
+
+def _normalize_visualization_mode(value: object) -> str:
+    return _match_visualization.resolve_visualization_options(visualization_mode=str(value)).visualization_mode
+
+
+def _normalize_memory_profile(value: object) -> str:
+    return _match_visualization.resolve_visualization_options(memory_profile=str(value)).memory_profile
+
+
+def _normalize_preview_cache_source(value: object) -> str:
+    return _match_visualization.resolve_visualization_options(preview_cache_source=str(value)).preview_cache_source
+
+
+def _parse_visualization_mode(value: str) -> str:
+    try:
+        return _normalize_visualization_mode(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _parse_memory_profile(value: str) -> str:
+    try:
+        return _normalize_memory_profile(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _parse_preview_cache_source(value: str) -> str:
+    try:
+        return _normalize_preview_cache_source(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _validate_low_resolution_matching_target_long_edge(value: int) -> int:
+    resolved_value = int(value)
+    if resolved_value <= 0:
+        raise ValueError("low_resolution_matching_target_long_edge must be positive.")
+    return resolved_value
+
+
+def _parse_low_resolution_matching_target_long_edge(value: str) -> int:
+    try:
+        return _validate_low_resolution_matching_target_long_edge(int(value))
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
@@ -462,6 +523,15 @@ def load_image_match_defaults_from_config(
             lambda value: _validate_low_resolution_level(int(value)),
         ),
         (
+            "low_resolution_matching_target_long_edge",
+            (
+                "low_resolution_matching_target_long_edge",
+                "lowResolutionMatchingTargetLongEdge",
+                "LowResolutionMatchingTargetLongEdge",
+            ),
+            lambda value: _validate_low_resolution_matching_target_long_edge(int(value)),
+        ),
+        (
             "low_resolution_trim_fraction_each_side",
             (
                 "low_resolution_trim_fraction_each_side",
@@ -521,6 +591,57 @@ def load_image_match_defaults_from_config(
             "match_visualization_scale",
             ("match_visualization_scale", "matchVisualizationScale", "MatchVisualizationScale"),
             lambda value: float(value),
+        ),
+        (
+            "visualization_mode",
+            ("visualization_mode", "visualizationMode", "VisualizationMode"),
+            lambda value: _normalize_visualization_mode(value),
+        ),
+        (
+            "memory_profile",
+            ("memory_profile", "memoryProfile", "MemoryProfile"),
+            lambda value: _normalize_memory_profile(value),
+        ),
+        (
+            "visualization_target_long_edge",
+            ("visualization_target_long_edge", "visualizationTargetLongEdge", "VisualizationTargetLongEdge"),
+            lambda value: _match_visualization.resolve_visualization_options(
+                visualization_target_long_edge=int(value)
+            ).visualization_target_long_edge,
+        ),
+        (
+            "max_preview_pixels",
+            ("max_preview_pixels", "maxPreviewPixels", "MaxPreviewPixels"),
+            lambda value: _match_visualization.resolve_visualization_options(
+                max_preview_pixels=int(value)
+            ).max_preview_pixels,
+        ),
+        (
+            "preview_crop_margin_pixels",
+            ("preview_crop_margin_pixels", "previewCropMarginPixels", "PreviewCropMarginPixels"),
+            lambda value: _match_visualization.resolve_visualization_options(
+                preview_crop_margin_pixels=int(value)
+            ).preview_crop_margin_pixels,
+        ),
+        (
+            "preview_cache_dir",
+            ("preview_cache_dir", "previewCacheDir", "PreviewCacheDir"),
+            lambda value: str(value),
+        ),
+        (
+            "preview_cache_source",
+            ("preview_cache_source", "previewCacheSource", "PreviewCacheSource"),
+            lambda value: _normalize_preview_cache_source(value),
+        ),
+        (
+            "preview_force_regenerate",
+            ("preview_force_regenerate", "previewForceRegenerate", "PreviewForceRegenerate"),
+            lambda value: _coerce_config_bool(value, field_name="preview_force_regenerate"),
+        ),
+        (
+            "preview_level",
+            ("preview_level", "previewLevel", "PreviewLevel"),
+            lambda value: _match_visualization.resolve_visualization_options(preview_level=int(value)).preview_level,
         ),
     )
 
@@ -755,7 +876,8 @@ def match_dom_pair(
     use_parallel_cpu: bool = True,
     num_worker_parallel_cpu: int = DEFAULT_NUM_WORKER_PARALLEL_CPU,
     enable_low_resolution_offset_estimation: bool = False,
-    low_resolution_level: int = DEFAULT_LOW_RESOLUTION_LEVEL,
+    low_resolution_level: int | None = None,
+    low_resolution_matching_target_long_edge: int | None = None,
     low_resolution_trim_fraction_each_side: float = DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE,
     low_resolution_max_mean_reprojection_error_pixels: float = 3.0,
     low_resolution_min_retained_match_count: int = DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT,
@@ -788,7 +910,6 @@ def match_dom_pair(
             else default_tile_validity_cache_dir()
         )
         resolved_matcher_method = _normalize_matcher_method(matcher_method)
-        resolved_low_resolution_level = _validate_low_resolution_level(low_resolution_level)
         resolved_low_resolution_trim_fraction_each_side = _validate_low_resolution_trim_fraction_each_side(
             low_resolution_trim_fraction_each_side
         )
@@ -809,6 +930,23 @@ def match_dom_pair(
         left_height = left_cube.line_count()
         right_width = right_cube.sample_count()
         right_height = right_cube.line_count()
+        resolved_low_resolution_matching_target_long_edge = (
+            _validate_low_resolution_matching_target_long_edge(low_resolution_matching_target_long_edge)
+            if low_resolution_matching_target_long_edge is not None
+            else None
+        )
+        if low_resolution_level is not None:
+            resolved_low_resolution_level = _validate_low_resolution_level(low_resolution_level)
+        elif enable_low_resolution_offset_estimation and resolved_low_resolution_matching_target_long_edge is not None:
+            resolved_low_resolution_level = _reduce_level_for_pair_target_long_edge(
+                left_width=left_width,
+                left_height=left_height,
+                right_width=right_width,
+                right_height=right_height,
+                target_long_edge=resolved_low_resolution_matching_target_long_edge,
+            )
+        else:
+            resolved_low_resolution_level = DEFAULT_LOW_RESOLUTION_LEVEL
         left_invalid_values = _resolved_invalid_values_for_cube(left_cube, invalid_values)
         right_invalid_values = _resolved_invalid_values_for_cube(right_cube, invalid_values)
 
@@ -1083,6 +1221,8 @@ def match_dom_pair(
             "low_resolution_max_mean_reprojection_error_pixels": resolved_low_resolution_max_mean_reprojection_error_pixels,
             "low_resolution_min_retained_match_count": resolved_low_resolution_min_retained_match_count,
             "low_resolution_max_mean_projected_offset_meters": resolved_low_resolution_max_mean_projected_offset_meters,
+            "low_resolution_matching_target_long_edge": resolved_low_resolution_matching_target_long_edge,
+            "resolved_low_resolution_level": resolved_low_resolution_level,
             "left_precomputed_low_resolution_dom": str(resolved_left_low_resolution_dom) if resolved_left_low_resolution_dom is not None else None,
             "right_precomputed_low_resolution_dom": str(resolved_right_low_resolution_dom) if resolved_right_low_resolution_dom is not None else None,
             "left_image_width": left_width,
@@ -1124,6 +1264,16 @@ def match_dom_pair_to_key_files(
     match_visualization_output_dir: str | Path | None = None,
     match_visualization_scale: float = 1.0 / 3.0,
     show_progress: bool = False,
+    *,
+    visualization_mode: str = DEFAULT_MATCH_VISUALIZATION_MODE,
+    memory_profile: str = DEFAULT_MEMORY_PROFILE,
+    visualization_target_long_edge: int | None = None,
+    max_preview_pixels: int | None = None,
+    preview_crop_margin_pixels: int = DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+    preview_cache_dir: str | Path | None = None,
+    preview_cache_source: str = DEFAULT_PREVIEW_CACHE_SOURCE,
+    preview_force_regenerate: bool = False,
+    preview_level: int | None = None,
     **kwargs,
 ) -> dict[str, object]:
     if kwargs.get("enable_tile_validity_prefilter") and kwargs.get("tile_validity_cache_dir") is None:
@@ -1141,6 +1291,7 @@ def match_dom_pair_to_key_files(
     left_key_file, right_key_file, summary = match_dom_pair(left_dom_path, right_dom_path, show_progress=show_progress, **kwargs)
     write_key_file(left_output_key, left_key_file)
     write_key_file(right_output_key, right_key_file)
+    metadata_payload = None
     if metadata_output is not None:
         metadata_payload = dict(summary["preparation"])
         metadata_payload["image_match"] = {
@@ -1171,11 +1322,9 @@ def match_dom_pair_to_key_files(
             "parallel_cpu_backend": summary["parallel_cpu_backend"],
             "parallel_cpu_worker_count": summary["parallel_cpu_worker_count"],
             "low_resolution_offset": summary["low_resolution_offset"],
+            "low_resolution_matching_target_long_edge": summary["low_resolution_matching_target_long_edge"],
+            "resolved_low_resolution_level": summary["resolved_low_resolution_level"],
         }
-        write_pair_preparation_metadata(
-            metadata_output,
-            metadata_payload,
-        )
     match_visualization_result: dict[str, object] | None = None
     if write_match_visualization:
         visualization_output_directory = (
@@ -1183,21 +1332,64 @@ def match_dom_pair_to_key_files(
             if match_visualization_output_dir is not None
             else (None if match_visualization_output_path is not None else Path(left_output_key).parent)
         )
-        match_visualization_result = write_stereo_pair_match_visualization(
-            left_dom_path,
-            right_dom_path,
-            left_key_file,
-            right_key_file,
-            output_path=match_visualization_output_path,
-            output_directory=visualization_output_directory,
-            scale_factor=match_visualization_scale,
-            band=int(kwargs.get("band", 1)),
-            minimum_value=kwargs.get("minimum_value"),
-            maximum_value=kwargs.get("maximum_value"),
-            lower_percent=float(kwargs.get("lower_percent", 0.5)),
-            upper_percent=float(kwargs.get("upper_percent", 99.5)),
-            invalid_values=tuple(kwargs.get("invalid_values", ())),
-            special_pixel_abs_threshold=float(kwargs.get("special_pixel_abs_threshold", 1.0e300)),
+        visualization_timestamp = None if match_visualization_output_path is not None else datetime.now()
+        try:
+            match_visualization_result = write_stereo_pair_match_visualization(
+                left_dom_path,
+                right_dom_path,
+                left_key_file,
+                right_key_file,
+                output_path=match_visualization_output_path,
+                output_directory=visualization_output_directory,
+                timestamp=visualization_timestamp,
+                scale_factor=match_visualization_scale,
+                visualization_mode=visualization_mode,
+                memory_profile=memory_profile,
+                visualization_target_long_edge=visualization_target_long_edge,
+                max_preview_pixels=max_preview_pixels,
+                preview_crop_margin_pixels=preview_crop_margin_pixels,
+                preview_cache_dir=preview_cache_dir,
+                preview_cache_source=preview_cache_source,
+                preview_force_regenerate=preview_force_regenerate,
+                preview_level=preview_level,
+                band=int(kwargs.get("band", 1)),
+                minimum_value=kwargs.get("minimum_value"),
+                maximum_value=kwargs.get("maximum_value"),
+                lower_percent=float(kwargs.get("lower_percent", 0.5)),
+                upper_percent=float(kwargs.get("upper_percent", 99.5)),
+                invalid_values=tuple(kwargs.get("invalid_values", ())),
+                special_pixel_abs_threshold=float(kwargs.get("special_pixel_abs_threshold", 1.0e300)),
+            )
+        except Exception as exc:
+            if metadata_output is not None and metadata_payload is not None:
+                match_visualization_result = {
+                    "status": "failed",
+                    "error_type": type(exc).__name__,
+                    "error": str(exc),
+                }
+                if match_visualization_output_path is not None:
+                    match_visualization_result["output_path"] = str(match_visualization_output_path)
+                else:
+                    match_visualization_result["output_path"] = str(
+                        default_match_visualization_path(
+                            left_dom_path,
+                            right_dom_path,
+                            visualization_output_directory,
+                            timestamp=visualization_timestamp,
+                        )
+                    )
+                metadata_payload["match_visualization"] = match_visualization_result
+                write_pair_preparation_metadata(
+                    metadata_output,
+                    metadata_payload,
+                )
+            raise
+    if metadata_output is not None and metadata_payload is not None:
+        if match_visualization_result is not None:
+            metadata_payload["match_visualization"] = match_visualization_result
+        write_pair_preparation_metadata(
+            metadata_output,
+            metadata_payload,
         )
     return {
         **summary,
@@ -1245,7 +1437,21 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--crop-expand-pixels", type=int, default=100, help="Extra projected-overlap margin, expressed in pixels, added before matching.")
     parser.add_argument("--min-overlap-size", type=int, default=16, help="Skip matching when the expanded projected-overlap window is smaller than this many pixels in either direction.")
     parser.add_argument("--enable-low-resolution-offset-estimation", dest="enable_low_resolution_offset_estimation", action="store_true", help="Enable low-resolution DOM matching to estimate a projected global offset before the full-resolution overlap crop is prepared.")
-    parser.add_argument("--low-resolution-level", type=_parse_low_resolution_level, default=DEFAULT_LOW_RESOLUTION_LEVEL, help=f"Low-resolution pyramid level used for the projected offset estimation stage. Must be >= 0. Default: {DEFAULT_LOW_RESOLUTION_LEVEL}.")
+    parser.add_argument(
+        "--low-resolution-level",
+        type=_parse_low_resolution_level,
+        default=None,
+        help=(
+            "Low-resolution pyramid level used for the projected offset estimation stage. Must be >= 0. "
+            f"Overrides --low-resolution-matching-target-long-edge. Default: {DEFAULT_LOW_RESOLUTION_LEVEL}."
+        ),
+    )
+    parser.add_argument(
+        "--low-resolution-matching-target-long-edge",
+        type=_parse_low_resolution_matching_target_long_edge,
+        default=None,
+        help="Target long-edge size used to derive a low-resolution match level when --low-resolution-level is not set.",
+    )
     parser.add_argument("--low-resolution-trim-fraction-each-side", type=_parse_low_resolution_trim_fraction_each_side, default=DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE, help=f"Fraction of low-resolution projected offset samples trimmed from each tail before averaging. Must be within [0.0, 0.5). Default: {DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE}.")
     parser.add_argument("--low-resolution-max-mean-reprojection-error-pixels", type=_parse_low_resolution_max_mean_reprojection_error_pixels, default=3.0, help="Maximum allowed trimmed-mean low-resolution homography reprojection error, in pixels. Values above this threshold force low-resolution offset fallback to zero. Default: 3.0.")
     parser.add_argument("--low-resolution-min-retained-match-count", type=_parse_low_resolution_min_retained_match_count, default=DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT, help=f"Minimum retained low-resolution RANSAC match count required before projected-offset statistics are trusted. Values below this threshold skip low-resolution statistics and force fallback to zero. Default: {DEFAULT_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT}.")
@@ -1260,6 +1466,70 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the pre-RANSAC drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the pre-RANSAC drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the pre-RANSAC drawMatches PNG. Defaults to 1/3 for a smaller preview.")
+    parser.add_argument(
+        "--visualization-mode",
+        type=_parse_visualization_mode,
+        default=DEFAULT_MATCH_VISUALIZATION_MODE,
+        help=(
+            "Visualization mode used for the pre-RANSAC match preview. "
+            f"Supported values: {_format_supported_values(SUPPORTED_VISUALIZATION_MODES)}. "
+            f"Default: {DEFAULT_MATCH_VISUALIZATION_MODE}."
+        ),
+    )
+    parser.add_argument(
+        "--memory-profile",
+        type=_parse_memory_profile,
+        default=DEFAULT_MEMORY_PROFILE,
+        help=(
+            "Memory profile used to select visualization defaults. "
+            f"Supported values: {_format_supported_values(SUPPORTED_MEMORY_PROFILES)}. "
+            f"Default: {DEFAULT_MEMORY_PROFILE}."
+        ),
+    )
+    parser.add_argument(
+        "--visualization-target-long-edge",
+        type=int,
+        default=None,
+        help="Override the visualization long-edge target size when reduced previews are enabled.",
+    )
+    parser.add_argument(
+        "--max-preview-pixels",
+        type=int,
+        default=None,
+        help="Maximum pixel count allowed for visualization previews before additional reductions apply.",
+    )
+    parser.add_argument(
+        "--preview-crop-margin-pixels",
+        type=int,
+        default=DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
+        help=f"Extra margin added to cropped visualization windows. Default: {DEFAULT_PREVIEW_CROP_MARGIN_PIXELS}.",
+    )
+    parser.add_argument(
+        "--preview-cache-dir",
+        default=None,
+        help="Directory for reduced-visualization preview cache cubes.",
+    )
+    parser.add_argument(
+        "--preview-cache-source",
+        type=_parse_preview_cache_source,
+        default=DEFAULT_PREVIEW_CACHE_SOURCE,
+        help=(
+            "Preview cache selection mode used for reduced visualizations. "
+            f"Supported values: {_format_supported_values(SUPPORTED_PREVIEW_CACHE_SOURCES)}. "
+            f"Default: {DEFAULT_PREVIEW_CACHE_SOURCE.replace('_', '-')}."
+        ),
+    )
+    parser.add_argument(
+        "--preview-force-regenerate",
+        action="store_true",
+        help="Force regeneration of reduced preview cache cubes even when a cached preview exists.",
+    )
+    parser.add_argument(
+        "--preview-level",
+        type=int,
+        default=None,
+        help="Explicit pyramid level used for reduced visualization previews.",
+    )
     parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, show_progress=True)
     if config_defaults:
         parser.set_defaults(**config_defaults)
@@ -1344,6 +1614,7 @@ def main(argv: list[str] | None = None) -> None:
         num_worker_parallel_cpu=args.num_worker_parallel_cpu,
         enable_low_resolution_offset_estimation=args.enable_low_resolution_offset_estimation,
         low_resolution_level=args.low_resolution_level,
+        low_resolution_matching_target_long_edge=args.low_resolution_matching_target_long_edge,
         low_resolution_trim_fraction_each_side=args.low_resolution_trim_fraction_each_side,
         low_resolution_max_mean_reprojection_error_pixels=args.low_resolution_max_mean_reprojection_error_pixels,
         low_resolution_min_retained_match_count=args.low_resolution_min_retained_match_count,
@@ -1355,6 +1626,15 @@ def main(argv: list[str] | None = None) -> None:
         match_visualization_output_path=args.match_visualization_output_path,
         match_visualization_output_dir=args.match_visualization_output_dir,
         match_visualization_scale=args.match_visualization_scale,
+        visualization_mode=args.visualization_mode,
+        memory_profile=args.memory_profile,
+        visualization_target_long_edge=args.visualization_target_long_edge,
+        max_preview_pixels=args.max_preview_pixels,
+        preview_crop_margin_pixels=args.preview_crop_margin_pixels,
+        preview_cache_dir=args.preview_cache_dir,
+        preview_cache_source=args.preview_cache_source,
+        preview_force_regenerate=args.preview_force_regenerate,
+        preview_level=args.preview_level,
     )
     print(json.dumps(result, indent=2, ensure_ascii=False))
 

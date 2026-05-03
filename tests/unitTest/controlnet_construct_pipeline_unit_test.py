@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-02
+Last Modified: 2026-05-04
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -24,6 +24,10 @@ Updated: 2026-05-01  Geng Xun updated batch-wrapper fake dispatchers to serve co
 Updated: 2026-05-01  Geng Xun added batch-wrapper regression coverage for legacy top-level config precedence while preserving explicit CLI overrides.
 Updated: 2026-05-01  Geng Xun refactored pipeline-wrapper helper-mode regressions to preserve legacy config precedence while reusing image_match.py config-default probes.
 Updated: 2026-05-02  Geng Xun added regression coverage for reusable low-resolution DOM list preparation and forwarding.
+Updated: 2026-05-03  Geng Xun added regression coverage for forwarding post-RANSAC visualization preview options into match visualization.
+Updated: 2026-05-03  Geng Xun added regression coverage for forwarding post-RANSAC visualization preview defaults from the pipeline wrapper.
+Updated: 2026-05-04  Geng Xun added pipeline and CLI forwarding coverage for reduced visualization preview options and aligned CLI default preview scale expectations.
+Updated: 2026-05-04  Geng Xun added CLI coverage for the remaining reduced visualization preview flags.
 """
 
 from __future__ import annotations
@@ -757,6 +761,31 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 "lowResolutionMaxMeanProjectedOffsetMeters",
                                 "LowResolutionMaxMeanProjectedOffsetMeters",
                             ),
+                            "visualization_mode": (
+                                "visualization_mode",
+                                "visualizationMode",
+                                "VisualizationMode",
+                            ),
+                            "memory_profile": (
+                                "memory_profile",
+                                "memoryProfile",
+                                "MemoryProfile",
+                            ),
+                            "visualization_target_long_edge": (
+                                "visualization_target_long_edge",
+                                "visualizationTargetLongEdge",
+                                "VisualizationTargetLongEdge",
+                            ),
+                            "preview_crop_margin_pixels": (
+                                "preview_crop_margin_pixels",
+                                "previewCropMarginPixels",
+                                "PreviewCropMarginPixels",
+                            ),
+                            "preview_cache_source": (
+                                "preview_cache_source",
+                                "previewCacheSource",
+                                "PreviewCacheSource",
+                            ),
                             "use_parallel_cpu": (
                                 "use_parallel_cpu",
                                 "useParallelCpu",
@@ -1282,6 +1311,31 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 "lowResolutionMaxMeanProjectedOffsetMeters",
                                 "LowResolutionMaxMeanProjectedOffsetMeters",
                             ),
+                            "visualization_mode": (
+                                "visualization_mode",
+                                "visualizationMode",
+                                "VisualizationMode",
+                            ),
+                            "memory_profile": (
+                                "memory_profile",
+                                "memoryProfile",
+                                "MemoryProfile",
+                            ),
+                            "visualization_target_long_edge": (
+                                "visualization_target_long_edge",
+                                "visualizationTargetLongEdge",
+                                "VisualizationTargetLongEdge",
+                            ),
+                            "preview_crop_margin_pixels": (
+                                "preview_crop_margin_pixels",
+                                "previewCropMarginPixels",
+                                "PreviewCropMarginPixels",
+                            ),
+                            "preview_cache_source": (
+                                "preview_cache_source",
+                                "previewCacheSource",
+                                "PreviewCacheSource",
+                            ),
                             "use_parallel_cpu": (
                                 "use_parallel_cpu",
                                 "useParallelCpu",
@@ -1447,6 +1501,11 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             "low_resolution_level": 5,
                             "low_resolution_min_retained_match_count": 6,
                             "low_resolution_max_mean_projected_offset_meters": 2000.0,
+                            "visualization_mode": "auto",
+                            "memory_profile": "low-memory",
+                            "visualization_target_long_edge": 1024,
+                            "preview_crop_margin_pixels": 128,
+                            "preview_cache_source": "auto",
                         },
                     }
                 ),
@@ -1508,6 +1567,11 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "                'low_resolution_max_mean_reprojection_error_pixels': image_match_config.get('low_resolution_max_mean_reprojection_error_pixels', ''),",
                         "                'low_resolution_min_retained_match_count': image_match_config.get('low_resolution_min_retained_match_count', ''),",
                         "                'low_resolution_max_mean_projected_offset_meters': image_match_config.get('low_resolution_max_mean_projected_offset_meters', ''),",
+                        "                'visualization_mode': image_match_config.get('visualization_mode', ''),",
+                        "                'memory_profile': image_match_config.get('memory_profile', ''),",
+                        "                'visualization_target_long_edge': image_match_config.get('visualization_target_long_edge', ''),",
+                        "                'preview_crop_margin_pixels': image_match_config.get('preview_crop_margin_pixels', ''),",
+                        "                'preview_cache_source': image_match_config.get('preview_cache_source', ''),",
                         "                'use_parallel_cpu': '1' if image_match_config.get('use_parallel_cpu') is True else ('0' if image_match_config.get('use_parallel_cpu') is False else ''),",
                         "            }",
                         "            print(mapping.get(field_name, ''))",
@@ -1553,6 +1617,31 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "            raise SystemExit('missing --write-match-visualization for controlnet_stereopair.py')",
                         "        if '--match-visualization-output-dir' not in args:",
                         "            raise SystemExit('missing --match-visualization-output-dir for controlnet_stereopair.py')",
+                        "        if '--visualization-mode' not in args:",
+                        "            raise SystemExit('missing --visualization-mode for controlnet_stereopair.py')",
+                        "        visualization_mode = args[args.index('--visualization-mode') + 1]",
+                        "        if visualization_mode != 'auto':",
+                        "            raise SystemExit(f'unexpected visualization mode: {visualization_mode}')",
+                        "        if '--memory-profile' not in args:",
+                        "            raise SystemExit('missing --memory-profile for controlnet_stereopair.py')",
+                        "        memory_profile = args[args.index('--memory-profile') + 1]",
+                        "        if memory_profile != 'low-memory':",
+                        "            raise SystemExit(f'unexpected memory profile: {memory_profile}')",
+                        "        if '--visualization-target-long-edge' not in args:",
+                        "            raise SystemExit('missing --visualization-target-long-edge for controlnet_stereopair.py')",
+                        "        target_long_edge = args[args.index('--visualization-target-long-edge') + 1]",
+                        "        if target_long_edge != '1024':",
+                        "            raise SystemExit(f'unexpected visualization target long edge: {target_long_edge}')",
+                        "        if '--preview-crop-margin-pixels' not in args:",
+                        "            raise SystemExit('missing --preview-crop-margin-pixels for controlnet_stereopair.py')",
+                        "        crop_margin = args[args.index('--preview-crop-margin-pixels') + 1]",
+                        "        if crop_margin != '128':",
+                        "            raise SystemExit(f'unexpected preview crop margin pixels: {crop_margin}')",
+                        "        if '--preview-cache-source' not in args:",
+                        "            raise SystemExit('missing --preview-cache-source for controlnet_stereopair.py')",
+                        "        cache_source = args[args.index('--preview-cache-source') + 1]",
+                        "        if cache_source != 'auto':",
+                        "            raise SystemExit(f'unexpected preview cache source: {cache_source}')",
                         "        output_dir = Path(args[6])",
                         "        output_dir.mkdir(parents=True, exist_ok=True)",
                         "        (output_dir / 'synthetic_pair.net').write_text('net', encoding='utf-8')",
@@ -2193,6 +2282,88 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(called_config.pair_id, "CLI")
         self.assertEqual(json.loads(stdout.getvalue()), fake_result)
 
+    def test_controlnet_stereopair_cli_from_dom_forwards_visualization_preview_options(self):
+        fake_result = {
+            "mode": "from-dom",
+            "merge": {"unique_count": 1, "applied": True},
+            "ransac": {"retained_count": 1, "dropped_count": 0},
+            "left_conversion": {"output_count": 1},
+            "right_conversion": {"output_count": 1},
+            "controlnet": {"point_count": 1, "measure_count": 2},
+        }
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "ctx",
+                        "TargetName": "Mars",
+                        "UserName": "zmoratto",
+                        "PointIdPrefix": "CTX",
+                    }
+                ),
+                encoding="utf-8",
+            )
+            preview_cache_dir = temp_dir / "preview_cache"
+
+            stdout = io.StringIO()
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_stereo_pair",
+                    return_value=fake_result,
+                ) as build_mock,
+                redirect_stdout(stdout),
+            ):
+                try:
+                    controlnet_stereopair_main(
+                        [
+                            "from-dom",
+                            "left_dom.key",
+                            "right_dom.key",
+                            "left_dom.cub",
+                            "right_dom.cub",
+                            "left.cub",
+                            "right.cub",
+                            str(config_path),
+                            "output.net",
+                            "--write-match-visualization",
+                            "--visualization-mode",
+                            "reduced",
+                            "--memory-profile",
+                            "low-memory",
+                            "--visualization-target-long-edge",
+                            "640",
+                            "--max-preview-pixels",
+                            "180000",
+                            "--preview-crop-margin-pixels",
+                            "32",
+                            "--preview-cache-dir",
+                            str(preview_cache_dir),
+                            "--preview-cache-source",
+                            "visualization-cache",
+                            "--preview-level",
+                            "3",
+                            "--preview-force-regenerate",
+                        ]
+                    )
+                except SystemExit as exc:
+                    self.fail(f"CLI rejected visualization preview options: {exc}")
+
+        call_kwargs = build_mock.call_args.kwargs
+        self.assertTrue(call_kwargs["write_match_visualization"])
+        self.assertAlmostEqual(call_kwargs["match_visualization_scale"], 1.0 / 3.0)
+        self.assertEqual(call_kwargs["visualization_mode"], "reduced")
+        self.assertEqual(call_kwargs["memory_profile"], "low-memory")
+        self.assertEqual(call_kwargs["visualization_target_long_edge"], 640)
+        self.assertEqual(call_kwargs["max_preview_pixels"], 180000)
+        self.assertEqual(call_kwargs["preview_crop_margin_pixels"], 32)
+        self.assertEqual(call_kwargs["preview_cache_dir"], str(preview_cache_dir))
+        self.assertEqual(call_kwargs["preview_cache_source"], "visualization_cache")
+        self.assertEqual(call_kwargs["preview_level"], 3)
+        self.assertTrue(call_kwargs["preview_force_regenerate"])
+        self.assertEqual(json.loads(stdout.getvalue()), fake_result)
+
     def test_build_controlnets_for_dom_overlap_list_auto_assigns_batch_pair_ids(self):
         config = ControlNetConfig(
             network_id="ctx_batch",
@@ -2267,6 +2438,94 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 self.assertTrue(Path(summary["pairs"][0]["report_path"]).exists())
                 self.assertTrue(Path(summary["pairs"][1]["report_path"]).exists())
 
+    def test_build_controlnets_for_dom_overlap_list_forwards_visualization_preview_options(self):
+        config = ControlNetConfig(
+            network_id="ctx_batch_preview",
+            target_name="Mars",
+            user_name="zmoratto",
+            point_id_prefix="CTX",
+        )
+        fake_pair_result = {
+            "mode": "from-dom",
+            "merge": {"unique_count": 5, "applied": True},
+            "ransac": {"retained_count": 5, "dropped_count": 0},
+            "left_conversion": {"output_count": 5},
+            "right_conversion": {"output_count": 5},
+            "controlnet": {"point_count": 5, "measure_count": 10},
+        }
+
+        with temporary_directory() as temp_dir:
+            overlap_list_path = temp_dir / "images_overlap.lis"
+            overlap_list_path.write_text(
+                "left1.cub,right1.cub\nleft2.cub,right2.cub\n",
+                encoding="utf-8",
+            )
+            original_list_path = temp_dir / "original_images.lis"
+            original_list_path.write_text(
+                "left1.cub\nright1.cub\nleft2.cub\nright2.cub\n",
+                encoding="utf-8",
+            )
+            dom_list_path = temp_dir / "doms.lis"
+            dom_list_path.write_text(
+                "left1_dom.cub\nright1_dom.cub\nleft2_dom.cub\nright2_dom.cub\n",
+                encoding="utf-8",
+            )
+            dom_key_dir = temp_dir / "dom_keys"
+            dom_key_dir.mkdir()
+            output_dir = temp_dir / "pair_nets"
+            report_dir = temp_dir / "reports"
+            visualization_dir = temp_dir / "visualizations"
+            preview_cache_dir = temp_dir / "preview_cache"
+            for filename in (
+                "left1__right1_A.key",
+                "left1__right1_B.key",
+                "left2__right2_A.key",
+                "left2__right2_B.key",
+            ):
+                (dom_key_dir / filename).write_text("synthetic\n", encoding="utf-8")
+
+            with patch(
+                "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_stereo_pair",
+                return_value=fake_pair_result,
+            ) as build_mock:
+                build_controlnets_for_dom_overlap_list(
+                    overlap_list_path,
+                    original_list_path,
+                    dom_list_path,
+                    dom_key_dir,
+                    output_dir,
+                    config,
+                    report_directory=report_dir,
+                    write_match_visualization=True,
+                    match_visualization_scale=0.5,
+                    match_visualization_output_dir=visualization_dir,
+                    visualization_mode="reduced",
+                    memory_profile="low-memory",
+                    visualization_target_long_edge=640,
+                    max_preview_pixels=180000,
+                    preview_crop_margin_pixels=32,
+                    preview_cache_dir=preview_cache_dir,
+                    preview_cache_source="visualization_cache",
+                    preview_force_regenerate=True,
+                    preview_level=3,
+                )
+
+                self.assertEqual(build_mock.call_count, 2)
+                for call in build_mock.call_args_list:
+                    call_kwargs = call.kwargs
+                    self.assertTrue(call_kwargs["write_match_visualization"])
+                    self.assertEqual(call_kwargs["match_visualization_scale"], 0.5)
+                    self.assertEqual(call_kwargs["match_visualization_output_dir"], Path(visualization_dir))
+                    self.assertEqual(call_kwargs["visualization_mode"], "reduced")
+                    self.assertEqual(call_kwargs["memory_profile"], "low-memory")
+                    self.assertEqual(call_kwargs["visualization_target_long_edge"], 640)
+                    self.assertEqual(call_kwargs["max_preview_pixels"], 180000)
+                    self.assertEqual(call_kwargs["preview_crop_margin_pixels"], 32)
+                    self.assertEqual(call_kwargs["preview_cache_dir"], Path(preview_cache_dir))
+                    self.assertEqual(call_kwargs["preview_cache_source"], "visualization_cache")
+                    self.assertTrue(call_kwargs["preview_force_regenerate"])
+                    self.assertEqual(call_kwargs["preview_level"], 3)
+
     def test_controlnet_stereopair_cli_from_dom_batch_dispatches(self):
         fake_summary = {
             "mode": "from-dom-batch",
@@ -2288,6 +2547,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
+            preview_cache_dir = temp_dir / "preview_cache"
 
             stdout = io.StringIO()
             with (
@@ -2312,14 +2572,44 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "3",
                         "--report-dir",
                         "reports",
+                        "--write-match-visualization",
+                        "--visualization-mode",
+                        "reduced",
+                        "--memory-profile",
+                        "low-memory",
+                        "--visualization-target-long-edge",
+                        "640",
+                        "--max-preview-pixels",
+                        "180000",
+                        "--preview-crop-margin-pixels",
+                        "32",
+                        "--preview-cache-dir",
+                        str(preview_cache_dir),
+                        "--preview-cache-source",
+                        "visualization-cache",
+                        "--preview-level",
+                        "3",
+                        "--preview-force-regenerate",
                     ]
                 )
 
         called_config = batch_mock.call_args.args[5]
+        call_kwargs = batch_mock.call_args.kwargs
         self.assertEqual(called_config.point_id_prefix, "CTX")
         self.assertEqual(batch_mock.call_args.kwargs["pair_id_prefix"], "S")
         self.assertEqual(batch_mock.call_args.kwargs["pair_id_start"], 3)
         self.assertEqual(batch_mock.call_args.kwargs["report_directory"], "reports")
+        self.assertTrue(call_kwargs["write_match_visualization"])
+        self.assertAlmostEqual(call_kwargs["match_visualization_scale"], 1.0 / 3.0)
+        self.assertEqual(call_kwargs["visualization_mode"], "reduced")
+        self.assertEqual(call_kwargs["memory_profile"], "low-memory")
+        self.assertEqual(call_kwargs["visualization_target_long_edge"], 640)
+        self.assertEqual(call_kwargs["max_preview_pixels"], 180000)
+        self.assertEqual(call_kwargs["preview_crop_margin_pixels"], 32)
+        self.assertEqual(call_kwargs["preview_cache_dir"], str(preview_cache_dir))
+        self.assertEqual(call_kwargs["preview_cache_source"], "visualization_cache")
+        self.assertEqual(call_kwargs["preview_level"], 3)
+        self.assertTrue(call_kwargs["preview_force_regenerate"])
         self.assertEqual(json.loads(stdout.getvalue()), fake_summary)
 
     def test_write_controlnet_result_report_uses_default_summary_sidecar_name(self):
@@ -2678,6 +2968,180 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(result["ransac"]["retained_count"], 1)
         self.assertEqual(result["match_visualization"]["highlighted_match_count"], 1)
         self.assertEqual(result["controlnet"]["point_count"], 1)
+
+    def test_build_controlnet_for_dom_stereo_pair_forwards_visualization_preview_options(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_preview",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="dom preview wrapper test",
+            point_id_prefix="PRV",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_dom.key"
+            right_dom_key = temp_dir / "right_dom.key"
+            output_net = temp_dir / "preview_wrapper.net"
+            preview_cache_dir = temp_dir / "preview_cache"
+            write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+
+            fake_pair_result = {
+                "left_conversion": {"output_count": 1, "failure_count": 0},
+                "right_conversion": {"output_count": 1, "failure_count": 0},
+                "retained_pair_count": 1,
+            }
+            fake_controlnet_result = {
+                "output_path": str(output_net),
+                "network_id": config.network_id,
+                "target_name": config.target_name,
+                "user_name": config.user_name,
+                "point_count": 1,
+                "measure_count": 2,
+                "left_serial_number": "left-serial",
+                "right_serial_number": "right-serial",
+                "pvl_format": True,
+            }
+            fake_ransac_result = {
+                "applied": True,
+                "status": "filtered",
+                "mode": "loose",
+                "input_count": 2,
+                "retained_count": 1,
+                "dropped_count": 1,
+                "retained_soft_outlier_positions": [0],
+            }
+            fake_visualization = {
+                "status": "ok",
+                "visualization_mode_used": "reduced_cropped",
+                "memory_profile": "low-memory",
+            }
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_stereo_pair_key_files_with_ransac",
+                    return_value=fake_ransac_result,
+                ) as ransac_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.write_stereo_pair_match_visualization_from_key_files",
+                    return_value=fake_visualization,
+                ) as visualization_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.convert_paired_dom_keypoints_to_original",
+                    return_value=fake_pair_result,
+                ) as paired_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                    return_value=fake_controlnet_result,
+                ) as controlnet_mock,
+            ):
+                result = build_controlnet_for_dom_stereo_pair(
+                    left_dom_key,
+                    right_dom_key,
+                    REAL_DOM_LEFT,
+                    REAL_DOM_RIGHT,
+                    LEFT_CUBE_PATH,
+                    RIGHT_CUBE_PATH,
+                    config,
+                    output_net,
+                    skip_merge=True,
+                    write_match_visualization=True,
+                    visualization_mode="reduced_cropped",
+                    memory_profile="low-memory",
+                    visualization_target_long_edge=1024,
+                    max_preview_pixels=1_000_000,
+                    preview_crop_margin_pixels=128,
+                    preview_cache_dir=preview_cache_dir,
+                    preview_cache_source="visualization_cache",
+                    preview_force_regenerate=True,
+                    preview_level=3,
+                )
+
+        ransac_mock.assert_called_once()
+        visualization_mock.assert_called_once()
+        paired_mock.assert_called_once()
+        controlnet_mock.assert_called_once()
+        self.assertEqual(result["match_visualization"], fake_visualization)
+        call_kwargs = visualization_mock.call_args.kwargs
+        self.assertEqual(call_kwargs["visualization_mode"], "reduced_cropped")
+        self.assertEqual(call_kwargs["memory_profile"], "low-memory")
+        self.assertEqual(call_kwargs["visualization_target_long_edge"], 1024)
+        self.assertEqual(call_kwargs["max_preview_pixels"], 1_000_000)
+        self.assertEqual(call_kwargs["preview_crop_margin_pixels"], 128)
+        self.assertEqual(call_kwargs["preview_cache_dir"], preview_cache_dir)
+        self.assertEqual(call_kwargs["preview_cache_source"], "visualization_cache")
+        self.assertTrue(call_kwargs["preview_force_regenerate"])
+        self.assertEqual(call_kwargs["preview_level"], 3)
+
+    def test_build_controlnet_for_dom_stereo_pair_records_visualization_failure_report(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_viz_failure",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="dom visualization failure report test",
+            point_id_prefix="VZF",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_dom.key"
+            right_dom_key = temp_dir / "right_dom.key"
+            output_net = temp_dir / "visualization_failure.net"
+            report_path = temp_dir / "visualization_failure.summary.json"
+            visualization_output_path = temp_dir / "post_ransac_match.png"
+            write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+
+            fake_ransac_result = {
+                "applied": True,
+                "status": "filtered",
+                "mode": "loose",
+                "input_count": 2,
+                "retained_count": 1,
+                "dropped_count": 1,
+                "retained_soft_outlier_positions": [0],
+            }
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_stereo_pair_key_files_with_ransac",
+                    return_value=fake_ransac_result,
+                ),
+                patch(
+                    "controlnet_construct.controlnet_stereopair.write_stereo_pair_match_visualization_from_key_files",
+                    side_effect=RuntimeError("visualization exploded"),
+                ),
+                patch(
+                    "controlnet_construct.controlnet_stereopair.convert_paired_dom_keypoints_to_original",
+                ) as paired_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                ) as controlnet_mock,
+            ):
+                with self.assertRaisesRegex(RuntimeError, "visualization exploded"):
+                    build_controlnet_for_dom_stereo_pair(
+                        left_dom_key,
+                        right_dom_key,
+                        REAL_DOM_LEFT,
+                        REAL_DOM_RIGHT,
+                        LEFT_CUBE_PATH,
+                        RIGHT_CUBE_PATH,
+                        config,
+                        output_net,
+                        skip_merge=True,
+                        write_match_visualization=True,
+                        match_visualization_output_path=visualization_output_path,
+                        report_path=report_path,
+                    )
+
+            paired_mock.assert_not_called()
+            controlnet_mock.assert_not_called()
+            failure_report = json.loads(report_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(failure_report["match_visualization"]["status"], "failed")
+        self.assertEqual(failure_report["match_visualization"]["error_type"], "RuntimeError")
+        self.assertEqual(failure_report["match_visualization"]["error"], "visualization exploded")
+        self.assertEqual(failure_report["match_visualization"]["output_path"], str(visualization_output_path))
+        self.assertEqual(failure_report["ransac"]["retained_count"], 1)
 
     def test_dom2ori_cli_paired_mode_dispatches_to_paired_conversion(self):
         fake_result = {

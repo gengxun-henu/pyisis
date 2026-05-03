@@ -127,9 +127,24 @@ Options:
                                  config JSON field ImageMatch.low_resolution_min_retained_match_count
                                  when present; otherwise image_match.py keeps its own default.
   --low-resolution-max-mean-projected-offset-meters VALUE
-                                 Forwarded to image_match.py. Unit: meters. If omitted, this script falls back to
-                                 config JSON field ImageMatch.low_resolution_max_mean_projected_offset_meters
-                                 when present; otherwise image_match.py keeps its own default.
+                                  Forwarded to image_match.py. Unit: meters. If omitted, this script falls back to
+                                  config JSON field ImageMatch.low_resolution_max_mean_projected_offset_meters
+                                  when present; otherwise image_match.py keeps its own default.
+  --visualization-mode VALUE      Forwarded to controlnet_stereopair.py from-dom-batch for post-RANSAC previews.
+                                  If omitted, this script falls back to config JSON field ImageMatch.visualization_mode
+                                  when present; otherwise defaults to full.
+  --memory-profile VALUE          Forwarded to controlnet_stereopair.py from-dom-batch. If omitted, this script falls
+                                  back to config JSON field ImageMatch.memory_profile when present; otherwise defaults
+                                  to balanced.
+  --visualization-target-long-edge N
+                                  Forwarded to controlnet_stereopair.py from-dom-batch when set. If omitted, this script
+                                  falls back to config JSON field ImageMatch.visualization_target_long_edge when present.
+  --preview-crop-margin-pixels N  Forwarded to controlnet_stereopair.py from-dom-batch. If omitted, this script falls
+                                  back to config JSON field ImageMatch.preview_crop_margin_pixels when present; otherwise
+                                  defaults to 128.
+  --preview-cache-source VALUE    Forwarded to controlnet_stereopair.py from-dom-batch. If omitted, this script falls
+                                  back to config JSON field ImageMatch.preview_cache_source when present; otherwise
+                                  defaults to auto.
   --merged-net PATH               Final merged ControlNet output path. Default: <work-dir>/merge/dom_matching_merged.net
   --merge-script PATH             Generated merge shell path. Default: <work-dir>/merge/merge_all_controlnets.sh
   --merge-log PATH                cnetmerge log path. Default: <work-dir>/merge/cnetmerge.log
@@ -473,18 +488,28 @@ run_step_2_image_match_batch() {
 
 run_step_3_pairwise_controlnets() {
   log "$(pipeline_step_label 3): building pairwise ControlNets -> ${PAIR_NETS_DIR}"
-  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/controlnet_stereopair.py" from-dom-batch \
-    "$IMAGES_OVERLAP_LIST" \
-    "$ORIGINAL_LIST" \
-    "$DOM_LIST" \
-    "$DOM_KEYS_DIR" \
-    "$CONFIG_PATH" \
-    "$PAIR_NETS_DIR" \
-    --report-dir "$REPORTS_DIR" \
-    --pair-id-prefix "$PAIR_ID_PREFIX" \
-    --pair-id-start "$PAIR_ID_START" \
-    --write-match-visualization \
+  local controlnet_args=(
+    "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/controlnet_stereopair.py" from-dom-batch
+    "$IMAGES_OVERLAP_LIST"
+    "$ORIGINAL_LIST"
+    "$DOM_LIST"
+    "$DOM_KEYS_DIR"
+    "$CONFIG_PATH"
+    "$PAIR_NETS_DIR"
+    --report-dir "$REPORTS_DIR"
+    --pair-id-prefix "$PAIR_ID_PREFIX"
+    --pair-id-start "$PAIR_ID_START"
+    --write-match-visualization
     --match-visualization-output-dir "$POST_RANSAC_MATCH_VIZ_DIR"
+    --visualization-mode "$VISUALIZATION_MODE"
+    --memory-profile "$MEMORY_PROFILE"
+    --preview-crop-margin-pixels "$PREVIEW_CROP_MARGIN_PIXELS"
+    --preview-cache-source "$PREVIEW_CACHE_SOURCE"
+  )
+  if [[ -n "$VISUALIZATION_TARGET_LONG_EDGE" ]]; then
+    controlnet_args+=(--visualization-target-long-edge "$VISUALIZATION_TARGET_LONG_EDGE")
+  fi
+  "${controlnet_args[@]}"
 }
 
 run_step_4_merge() {
@@ -562,6 +587,11 @@ main() {
   local explicit_low_resolution_max_mean_reprojection_error_pixels=""
   local explicit_low_resolution_min_retained_match_count=""
   local explicit_low_resolution_max_mean_projected_offset_meters=""
+  local explicit_visualization_mode=""
+  local explicit_memory_profile=""
+  local explicit_visualization_target_long_edge=""
+  local explicit_preview_crop_margin_pixels=""
+  local explicit_preview_cache_source=""
 
   PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
   CNETMERGE_PATH="${CNETMERGE_EXECUTABLE:-cnetmerge}"
@@ -575,6 +605,11 @@ main() {
   LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS="3.0"
   LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT="5"
   LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS="0.0"
+  VISUALIZATION_MODE="full"
+  MEMORY_PROFILE="balanced"
+  VISUALIZATION_TARGET_LONG_EDGE=""
+  PREVIEW_CROP_MARGIN_PIXELS="128"
+  PREVIEW_CACHE_SOURCE="auto"
   USE_PARALLEL_CPU="1"
   NUM_WORKER_PARALLEL_CPU="8"
   NETWORK_ID=""
@@ -680,6 +715,36 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --low-resolution-max-mean-projected-offset-meters"
         LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS=$2
         explicit_low_resolution_max_mean_projected_offset_meters=$2
+        shift 2
+        ;;
+      --visualization-mode)
+        [[ $# -ge 2 ]] || die "missing value for --visualization-mode"
+        VISUALIZATION_MODE=$2
+        explicit_visualization_mode=$2
+        shift 2
+        ;;
+      --memory-profile)
+        [[ $# -ge 2 ]] || die "missing value for --memory-profile"
+        MEMORY_PROFILE=$2
+        explicit_memory_profile=$2
+        shift 2
+        ;;
+      --visualization-target-long-edge)
+        [[ $# -ge 2 ]] || die "missing value for --visualization-target-long-edge"
+        VISUALIZATION_TARGET_LONG_EDGE=$2
+        explicit_visualization_target_long_edge=$2
+        shift 2
+        ;;
+      --preview-crop-margin-pixels)
+        [[ $# -ge 2 ]] || die "missing value for --preview-crop-margin-pixels"
+        PREVIEW_CROP_MARGIN_PIXELS=$2
+        explicit_preview_crop_margin_pixels=$2
+        shift 2
+        ;;
+      --preview-cache-source)
+        [[ $# -ge 2 ]] || die "missing value for --preview-cache-source"
+        PREVIEW_CACHE_SOURCE=$2
+        explicit_preview_cache_source=$2
         shift 2
         ;;
       --merged-net)
@@ -857,6 +922,41 @@ main() {
       LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS="$config_low_resolution_max_mean_projected_offset_meters"
     fi
   fi
+  if [[ -z "$explicit_visualization_mode" ]]; then
+    local config_visualization_mode
+    config_visualization_mode=$(extract_image_match_config_value "$CONFIG_PATH" "visualization_mode")
+    if [[ -n "$config_visualization_mode" ]]; then
+      VISUALIZATION_MODE="$config_visualization_mode"
+    fi
+  fi
+  if [[ -z "$explicit_memory_profile" ]]; then
+    local config_memory_profile
+    config_memory_profile=$(extract_image_match_config_value "$CONFIG_PATH" "memory_profile")
+    if [[ -n "$config_memory_profile" ]]; then
+      MEMORY_PROFILE="$config_memory_profile"
+    fi
+  fi
+  if [[ -z "$explicit_visualization_target_long_edge" ]]; then
+    local config_visualization_target_long_edge
+    config_visualization_target_long_edge=$(extract_image_match_config_value "$CONFIG_PATH" "visualization_target_long_edge")
+    if [[ -n "$config_visualization_target_long_edge" ]]; then
+      VISUALIZATION_TARGET_LONG_EDGE="$config_visualization_target_long_edge"
+    fi
+  fi
+  if [[ -z "$explicit_preview_crop_margin_pixels" ]]; then
+    local config_preview_crop_margin_pixels
+    config_preview_crop_margin_pixels=$(extract_image_match_config_value "$CONFIG_PATH" "preview_crop_margin_pixels")
+    if [[ -n "$config_preview_crop_margin_pixels" ]]; then
+      PREVIEW_CROP_MARGIN_PIXELS="$config_preview_crop_margin_pixels"
+    fi
+  fi
+  if [[ -z "$explicit_preview_cache_source" ]]; then
+    local config_preview_cache_source
+    config_preview_cache_source=$(extract_image_match_config_value "$CONFIG_PATH" "preview_cache_source")
+    if [[ -n "$config_preview_cache_source" ]]; then
+      PREVIEW_CACHE_SOURCE="$config_preview_cache_source"
+    fi
+  fi
 
   LOW_RESOLUTION_DOM_LIST="$WORK_DIR/doms_low_resolution_level${LOW_RESOLUTION_LEVEL}.lis"
   LOW_RESOLUTION_DOM_DIR="$WORK_DIR/low_resolution_doms/level${LOW_RESOLUTION_LEVEL}"
@@ -896,6 +996,15 @@ main() {
   else
     log "Low-resolution offset estimation: disabled"
   fi
+  log "Post-RANSAC visualization mode: $VISUALIZATION_MODE"
+  log "Post-RANSAC memory profile: $MEMORY_PROFILE"
+  if [[ -n "$VISUALIZATION_TARGET_LONG_EDGE" ]]; then
+    log "Post-RANSAC visualization target long edge: $VISUALIZATION_TARGET_LONG_EDGE"
+  else
+    log "Post-RANSAC visualization target long edge: default"
+  fi
+  log "Post-RANSAC preview crop margin (pixels): $PREVIEW_CROP_MARGIN_PIXELS"
+  log "Post-RANSAC preview cache source: $PREVIEW_CACHE_SOURCE"
   log "cnetmerge executable: $CNETMERGE_PATH"
   log "Timing JSON: $TIMING_JSON_PATH"
   if [[ "$POST_MERGE_CONTROL_MEASURE" == "1" ]]; then

@@ -337,7 +337,7 @@ Utility,ExportPdsTable,已转换,2026-04-12 已在 src/base/bind_base_pds_io.cpp
 Utility,GaussianStretch,已转换,2026-04-10 已在 src/bind_statistics.cpp 暴露 constructor(Histogram)/map；focused 单测在 camera_maps_unit_test.py；smoke 已补符号
 Utility,GSLUtility,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 GSLUtility（singleton getInstance/success/status）；focused 单测在 batch2_unit_test.py
 Utility,ID,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 ID 构造与 next() 方法；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
-Utility,IException,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 补 IExceptionErrorType enum；IException 本体通过 py::register_exception 暴露为 Python 异常类
+Utility,IException,已转换,2026-05-03 已在 src/base/bind_base_support.cpp 补 `IException.error_type_to_string(...)` 静态 helper 与 focused 单测；IException 本体仍通过 py::register_exception 暴露为 Python 异常类
 Utility,ImportPdsTable,已转换,2026-04-11 全部方法已绑定（新增 getFormattedName）
 Utility,Kernels,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露 Kernels 构造与核文件管理方法；focused 单测在 tests/unitTest/filters_unit_test.py
 Utility,Latitude,已转换,2026-04-12 已补两个 add(...) 重载（mapping-group 与 explicit-radii）；focused 单测已覆盖

@@ -2,6 +2,7 @@
 // Created: 2026-03-21
 // Updated: 2026-04-09  Geng Xun added Progress py::class_ binding and IException::ErrorType enum
 // Updated: 2026-04-09  Geng Xun added stable FileList wrapper bindings with file and string I/O helpers.
+// Updated: 2026-05-03  Geng Xun exposed IException::errorTypeToString as a static helper.
 // Purpose: pybind11 bindings for core ISIS support utilities including FileName, iTime, SerialNumber, SerialNumberList, ObservationNumber, Progress, and IException
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -124,7 +125,12 @@ class FileListWrapper {
 
 void bind_base_support(py::module_ &m) {
   // Register IException as a catchable Python exception (derived from Exception)
-  py::register_exception<Isis::IException>(m, "IException");
+  py::exception<Isis::IException> iexception = py::register_exception<Isis::IException>(m, "IException");
+  iexception.attr("error_type_to_string") = py::staticmethod(py::cpp_function(
+      [](Isis::IException::ErrorType errorType) {
+        return qStringToStdString(Isis::IException::errorTypeToString(errorType));
+      },
+      py::arg("error_type")));
 
   // Expose the ErrorType enum so Python code can reference
   // ip.IExceptionErrorType.Unknown, .User, .Programmer, .Io

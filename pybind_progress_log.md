@@ -1,5 +1,20 @@
 # Pybind Progress Log
 
+## 2026-05-03
+
+- `IException` static helper follow-up completed:
+  - Extended `src/base/bind_base_support.cpp` so the Python exception type registered via `py::register_exception<Isis::IException>` now exposes `IException.error_type_to_string(...)`.
+  - Added focused coverage in `tests/unitTest/support_unit_test.py` for the upstream `Unknown/User/Programmer/Io` message strings and fixed the test module's repo-root `_unit_test_support.py` import fallback.
+  - Reconfigured the existing build tree to use the conda C++ compiler with the `asp360_new` Python/ISIS prefix after the old cache mixed system g++ with conda sysroot headers.
+  - Synced ledgers:
+    - `todo_pybind11.csv`
+    - `class_bind_methods_details/base_i_exception_methods.csv`
+    - `class_bind_methods_details/methods_inventory_summary.csv`
+- Validation status:
+  - Passed: `cmake --build build -j2`
+  - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m unittest tests.unitTest.support_unit_test -v` (`10` tests, `OK`)
+  - Passed: `PYTHONPATH=$PWD/build/python /home/gengxun/miniconda3/envs/asp360_new/bin/python -m pytest tests/smoke_import.py -q` (`8` passed)
+
 ## 2026-04-22
 
 - `Pvl` 台账一致性复核完成：

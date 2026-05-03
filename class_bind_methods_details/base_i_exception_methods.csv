@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-IException,Utility,reference/upstream_isis/src/base/objs/IException/IException.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,ISIS 统一异常类型；后续 pybind 通常应映射到 Python 异常层级
+IException,Utility,reference/upstream_isis/src/base/objs/IException/IException.h,src/base/bind_base_support.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-05-03 已在 py::register_exception 暴露的 Python 异常类型上补 `error_type_to_string(...)` 静态 helper；剩余 C++ 实例方法需避免破坏异常翻译语义
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,IException,isis_pybind.IException,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
@@ -16,7 +16,7 @@ Construction/Enum,~IException() throw(),isis_pybind.IException,N,析构函数
 Public API,const char *what() const throw(),isis_pybind.IException.what,N,标准异常消息入口
 Public API,"void append(const IException &exceptionSource)",isis_pybind.IException.append,N,追加前序异常
 Public API,ErrorType errorType() const,isis_pybind.IException.errorType,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
-Public API,"static QString errorTypeToString(ErrorType t)",isis_pybind.IException.errorTypeToString,Y,2026-04-11 台账同步；已在 bind_base_support.cpp 暴露
+Public API,"static QString errorTypeToString(ErrorType t)",isis_pybind.IException.error_type_to_string,Y,2026-05-03 已在 bind_base_support.cpp 作为 Python 异常类型静态 helper 暴露并补 focused 单测
 Public API,void print() const,isis_pybind.IException.print,N,打印异常
 Public API,"void print(bool printFileInfo) const",isis_pybind.IException.print,N,可选文件信息
 Public API,Pvl toPvl() const,isis_pybind.IException.toPvl,N,导出为 PVL；依赖 Pvl 绑定

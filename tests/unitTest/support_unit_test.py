@@ -3,13 +3,21 @@ Unit tests for ISIS support utility bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-09
+Last Modified: 2026-05-03
 Updated: 2026-04-09  Geng Xun added focused FileList regression coverage for file and string based list parsing.
+Updated: 2026-05-03  Geng Xun added IException static helper coverage.
 """
 
 import unittest
+from pathlib import Path
+import sys
 
-from _unit_test_support import temporary_directory, temporary_text_file, ip
+try:
+    from _unit_test_support import temporary_directory, temporary_text_file, ip
+except ModuleNotFoundError:
+    unit_test_dir = Path(__file__).resolve().parent
+    sys.path.insert(0, str(unit_test_dir))
+    from _unit_test_support import temporary_directory, temporary_text_file, ip
 
 
 class FileNameAndITimeUnitTest(unittest.TestCase):
@@ -124,6 +132,17 @@ beta.cub,ignored_attribute
         with self.assertRaises(ip.IException) as missing_error:
             file_list.read("/definitely/not/present/filelist.lis")
         self.assertIn("Unable to open", str(missing_error.exception))
+
+
+class IExceptionUnitTest(unittest.TestCase):
+    def test_error_type_to_string_returns_upstream_messages(self):
+        self.assertEqual(ip.IException.error_type_to_string(ip.IExceptionErrorType.Unknown), "ERROR")
+        self.assertEqual(ip.IException.error_type_to_string(ip.IExceptionErrorType.User), "USER ERROR")
+        self.assertEqual(
+            ip.IException.error_type_to_string(ip.IExceptionErrorType.Programmer),
+            "PROGRAMMER ERROR",
+        )
+        self.assertEqual(ip.IException.error_type_to_string(ip.IExceptionErrorType.Io), "I/O ERROR")
 
 
 if __name__ == "__main__":

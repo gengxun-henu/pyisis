@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-09
+Last Modified: 2026-05-10
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -37,6 +37,7 @@ Updated: 2026-05-06  Geng Xun added auto full vs cropped visualization rendering
 Updated: 2026-05-07  Geng Xun added visualization default-mode diagnostics and cropped offset assertions.
 Updated: 2026-05-08  Geng Xun stabilized visualization reduced-mode guards and default full-mode mocks.
 Updated: 2026-05-09  Geng Xun ensured full-mode visualization skips dimension probes and added explicit-full coverage.
+Updated: 2026-05-10  Geng Xun added fail-fast coverage for reduced-cropped visualization mode.
 """
 
 from __future__ import annotations
@@ -2273,7 +2274,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             match_visualization_module,
             "_cube_dimensions",
             return_value=(32, 32),
-        ) as cube_dimensions_mock:
+        ) as cube_dimensions_mock, mock.patch.object(
+            match_visualization_module,
+            "_read_cube_as_stretched_byte",
+        ) as read_cube_mock:
             with self.assertRaises(NotImplementedError) as context:
                 match_visualization_module.write_stereo_pair_match_visualization(
                     "left.cub",
@@ -2285,6 +2289,33 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 )
 
         cube_dimensions_mock.assert_not_called()
+        read_cube_mock.assert_not_called()
+        self.assertIn("reduced previews", str(context.exception))
+
+    def test_write_match_visualization_reduced_cropped_mode_not_implemented(self):
+        left_key_file = KeypointFile(32, 32, (Keypoint(10.0, 10.0),))
+        right_key_file = KeypointFile(32, 32, (Keypoint(11.0, 11.0),))
+
+        with temporary_directory() as temp_dir, mock.patch.object(
+            match_visualization_module,
+            "_cube_dimensions",
+            return_value=(32, 32),
+        ) as cube_dimensions_mock, mock.patch.object(
+            match_visualization_module,
+            "_read_cube_as_stretched_byte",
+        ) as read_cube_mock:
+            with self.assertRaises(NotImplementedError) as context:
+                match_visualization_module.write_stereo_pair_match_visualization(
+                    "left.cub",
+                    "right.cub",
+                    left_key_file,
+                    right_key_file,
+                    output_path=temp_dir / "viz.png",
+                    visualization_mode="reduced_cropped",
+                )
+
+        cube_dimensions_mock.assert_not_called()
+        read_cube_mock.assert_not_called()
         self.assertIn("reduced previews", str(context.exception))
 
     def test_write_match_visualization_preserves_full_mode_for_small_images(self):

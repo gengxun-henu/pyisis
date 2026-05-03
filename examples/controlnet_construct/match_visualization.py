@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 import hashlib
+import os
 from pathlib import Path
 
 import cv2
@@ -143,9 +144,17 @@ def _cube_dimensions(cube_path: str | Path) -> tuple[int, int]:
             cube.close()
 
 
-def _preview_cache_path(cache_dir: str | Path, source_path: str | Path, *, level: int) -> Path:
+def _preview_cache_hash_key(source_path: str | Path) -> str:
     resolved_path = Path(source_path).expanduser().resolve(strict=False)
-    digest = hashlib.sha1(str(resolved_path).encode("utf-8")).hexdigest()[:10]
+    normalized = resolved_path.as_posix()
+    if os.name == "nt":
+        normalized = normalized.casefold()
+    return normalized
+
+
+def _preview_cache_path(cache_dir: str | Path, source_path: str | Path, *, level: int) -> Path:
+    hash_key = _preview_cache_hash_key(source_path)
+    digest = hashlib.sha1(hash_key.encode("utf-8")).hexdigest()[:10]
     filename = f"{Path(source_path).stem}__{digest}.cub"
     return Path(cache_dir) / f"level{int(level)}" / filename
 
@@ -159,6 +168,11 @@ def _ensure_preview_cube(
 ) -> tuple[Path, bool]:
     output_path = _preview_cache_path(cache_dir, source_path, level=level)
     if output_path.exists() and not force_regenerate:
+        try:
+            _cube_dimensions(output_path)
+        except Exception:
+            output = create_low_resolution_dom(source_path, output_path, level=level)
+            return output, False
         return output_path, True
     output = create_low_resolution_dom(source_path, output_path, level=level)
     return output, False

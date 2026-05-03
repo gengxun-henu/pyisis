@@ -40,6 +40,9 @@ Updated: 2026-05-09  Geng Xun ensured full-mode visualization skips dimension pr
 Updated: 2026-05-10  Geng Xun added fail-fast coverage for reduced-cropped visualization mode.
 Updated: 2026-05-11  Geng Xun added reduced-preview cache coverage for visualization rendering.
 Updated: 2026-05-12  Geng Xun hardened reduced preview cache diagnostics and reduced-cropped window assertions.
+Updated: 2026-05-12  Geng Xun added regression coverage for preview cache hash-key path normalization.
+Updated: 2026-05-12  Geng Xun added cache-hit validation assertions for reduced preview cache reuse.
+Updated: 2026-05-12  Geng Xun added regression coverage for corrupt preview cache regeneration.
 """
 
 from __future__ import annotations
@@ -2280,6 +2283,16 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(left_cache.name.startswith("left__"))
         self.assertTrue(right_cache.name.startswith("left__"))
 
+    def test_preview_cache_hash_key_normalizes_paths(self):
+        source_path = Path("preview/../left.cub")
+        expected = Path(source_path).expanduser().resolve(strict=False).as_posix()
+        if os.name == "nt":
+            expected = expected.casefold()
+
+        actual = match_visualization_module._preview_cache_hash_key(source_path)
+
+        self.assertEqual(actual, expected)
+
     def test_write_match_visualization_reduced_mode_rejects_preview_cache_disabled(self):
         left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
         right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
@@ -2394,7 +2407,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 match_visualization_module,
                 "_cube_dimensions",
                 return_value=(4096, 4096),
-            ), mock.patch.object(
+            ) as cube_dimensions_mock, mock.patch.object(
                 match_visualization_module,
                 "create_low_resolution_dom",
             ) as create_mock, mock.patch.object(
@@ -2423,6 +2436,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 )
 
         create_mock.assert_not_called()
+        cube_dimensions_mock.assert_any_call(left_preview)
+        cube_dimensions_mock.assert_any_call(right_preview)
         self.assertTrue(result["preview_cache_hit"])
         self.assertTrue(result["preview_cache_hit_left"])
         self.assertTrue(result["preview_cache_hit_right"])
@@ -2430,6 +2445,67 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(result["left_preview_path"], str(left_preview))
         self.assertEqual(result["right_preview_path"], str(right_preview))
         self.assertEqual(read_windows, [None, None])
+
+    def test_write_match_visualization_reduced_mode_regenerates_invalid_cache(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+        generated: list[Path] = []
+
+        def fake_dimensions(path):
+            if "preview_cache" in str(path):
+                raise RuntimeError("corrupt preview")
+            return (4096, 4096)
+
+        def fake_create(source, output, *, level, **kwargs):
+            generated.append(Path(output))
+            Path(output).parent.mkdir(parents=True, exist_ok=True)
+            Path(output).write_text("preview", encoding="utf-8")
+            return Path(output)
+
+        with temporary_directory() as temp_dir:
+            preview_root = temp_dir / "preview_cache"
+            for name in ("left.cub", "right.cub"):
+                preview_path = match_visualization_module._preview_cache_path(preview_root, name, level=2)
+                preview_path.parent.mkdir(parents=True, exist_ok=True)
+                preview_path.write_text("cached", encoding="utf-8")
+
+            with mock.patch.object(
+                match_visualization_module,
+                "_cube_dimensions",
+                side_effect=fake_dimensions,
+            ), mock.patch.object(
+                match_visualization_module,
+                "create_low_resolution_dom",
+                side_effect=fake_create,
+            ), mock.patch.object(
+                match_visualization_module,
+                "_read_cube_as_stretched_byte",
+                return_value=np.full((64, 64), 128, dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "drawMatches",
+                return_value=np.zeros((10, 10, 3), dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "imwrite",
+                return_value=True,
+            ):
+                result = match_visualization_module.write_stereo_pair_match_visualization(
+                    "left.cub",
+                    "right.cub",
+                    left_key_file,
+                    right_key_file,
+                    output_path=temp_dir / "viz.png",
+                    visualization_mode="reduced",
+                    preview_cache_dir=preview_root,
+                    preview_level=2,
+                    visualization_target_long_edge=1024,
+                )
+
+        self.assertFalse(result["preview_cache_hit"])
+        self.assertFalse(result["preview_cache_hit_left"])
+        self.assertFalse(result["preview_cache_hit_right"])
+        self.assertEqual(len(generated), 2)
 
     def test_write_match_visualization_reduced_mode_partial_cache_hit(self):
         left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))

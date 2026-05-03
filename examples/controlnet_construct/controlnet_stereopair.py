@@ -17,6 +17,7 @@ Updated: 2026-04-20  Geng Xun added a from-dom batch wrapper that auto-assigns S
 Updated: 2026-04-20  Geng Xun added an explicit post-RANSAC visualization output path so E2E runs can preserve deterministic pre/post drawMatches PNGs.
 Updated: 2026-04-24  Geng Xun switched the post-RANSAC visualization import to the dedicated match_visualization module so controlnet_stereopair no longer depends on image_match.py for that helper.
 Updated: 2026-05-03  Geng Xun forwarded post-RANSAC visualization preview options through the DOM ControlNet wrapper and CLI.
+Updated: 2026-05-04  Geng Xun aligned CLI visualization defaults with the API scale and normalized preview option parsing.
 """
 
 from __future__ import annotations
@@ -45,6 +46,7 @@ if __package__ in {None, ""}:
         SUPPORTED_MEMORY_PROFILES,
         SUPPORTED_PREVIEW_CACHE_SOURCES,
         SUPPORTED_VISUALIZATION_MODES,
+        resolve_visualization_options,
         write_stereo_pair_match_visualization_from_key_files,
     )
     from controlnet_construct.runtime import bootstrap_runtime_environment
@@ -70,6 +72,7 @@ else:
         SUPPORTED_MEMORY_PROFILES,
         SUPPORTED_PREVIEW_CACHE_SOURCES,
         SUPPORTED_VISUALIZATION_MODES,
+        resolve_visualization_options,
         write_stereo_pair_match_visualization_from_key_files,
     )
     from .runtime import bootstrap_runtime_environment
@@ -167,6 +170,39 @@ def _normalize_optional_identifier(value: object | None) -> str | None:
         return None
     normalized = str(value).strip()
     return normalized or None
+
+
+def _normalize_visualization_mode(value: object) -> str:
+    return resolve_visualization_options(visualization_mode=str(value)).visualization_mode
+
+
+def _normalize_memory_profile(value: object) -> str:
+    return resolve_visualization_options(memory_profile=str(value)).memory_profile
+
+
+def _normalize_preview_cache_source(value: object) -> str:
+    return resolve_visualization_options(preview_cache_source=str(value)).preview_cache_source
+
+
+def _parse_visualization_mode(value: str) -> str:
+    try:
+        return _normalize_visualization_mode(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _parse_memory_profile(value: str) -> str:
+    try:
+        return _normalize_memory_profile(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _parse_preview_cache_source(value: str) -> str:
+    try:
+        return _normalize_preview_cache_source(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
 def _compose_point_id_namespace(config: ControlNetConfig) -> str:
@@ -726,18 +762,35 @@ def _build_from_dom_parser(subparsers) -> None:
     parser.add_argument("--ransac-max-iters", type=int, default=5000, help="Maximum iteration count passed to OpenCV homography RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="Strict mode drops every OpenCV RANSAC outlier; loose mode re-checks outliers against the fitted homography and keeps those within the loose threshold.")
     parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep OpenCV RANSAC outliers whose homography reprojection error stays within this limit.")
-    parser.add_argument("--write-match-visualization", action="store_true", help="Write a post-RANSAC drawMatches PNG after merge-stage RANSAC filtering using the default A__B__timestamp naming rule. The default preview uses one-fourth of the original image width and height.")
+    parser.add_argument(
+        "--write-match-visualization",
+        action="store_true",
+        help=(
+            "Write a post-RANSAC drawMatches PNG after merge-stage RANSAC filtering using the default A__B__timestamp naming rule. "
+            "The default preview uses one-third of the original image width and height."
+        ),
+    )
     parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the post-RANSAC drawMatches PNG written by the from-dom wrapper.")
-    parser.add_argument("--match-visualization-scale", type=float, default=0.25, help="Image scale factor used when writing the post-RANSAC drawMatches visualization PNG. Defaults to 1/4, producing a one-fourth-size preview in each dimension.")
+    parser.add_argument(
+        "--match-visualization-scale",
+        type=float,
+        default=1.0 / 3.0,
+        help=(
+            "Image scale factor used when writing the post-RANSAC drawMatches visualization PNG. "
+            "Defaults to 1/3, producing a one-third-size preview in each dimension."
+        ),
+    )
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used for the auto-named post-RANSAC drawMatches PNG.")
     parser.add_argument(
         "--visualization-mode",
+        type=_parse_visualization_mode,
         default="full",
         choices=SUPPORTED_VISUALIZATION_MODES,
         help="Post-RANSAC preview visualization mode. Defaults to full.",
     )
     parser.add_argument(
         "--memory-profile",
+        type=_parse_memory_profile,
         default=DEFAULT_MEMORY_PROFILE,
         choices=SUPPORTED_MEMORY_PROFILES,
         help="Memory profile used by reduced visualization previews. Defaults to balanced.",
@@ -763,6 +816,7 @@ def _build_from_dom_parser(subparsers) -> None:
     parser.add_argument("--preview-cache-dir", default=None, help="Optional directory used for reduced visualization preview cache cubes.")
     parser.add_argument(
         "--preview-cache-source",
+        type=_parse_preview_cache_source,
         default=DEFAULT_PREVIEW_CACHE_SOURCE,
         choices=SUPPORTED_PREVIEW_CACHE_SOURCES,
         help="Preview cache source selection for reduced visualization previews.",
@@ -825,16 +879,23 @@ def _build_from_dom_batch_parser(subparsers) -> None:
     parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="Strict mode drops every OpenCV RANSAC outlier; loose mode re-checks outliers against the fitted homography and keeps those within the loose threshold.")
     parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep OpenCV RANSAC outliers whose homography reprojection error stays within this limit.")
     parser.add_argument("--write-match-visualization", action="store_true", help="Write a post-RANSAC drawMatches PNG after merge-stage RANSAC filtering for each pair in the batch.")
-    parser.add_argument("--match-visualization-scale", type=float, default=0.25, help="Image scale factor used when writing batch post-RANSAC drawMatches visualization PNG files. Defaults to 1/4.")
+    parser.add_argument(
+        "--match-visualization-scale",
+        type=float,
+        default=1.0 / 3.0,
+        help="Image scale factor used when writing batch post-RANSAC drawMatches visualization PNG files. Defaults to 1/3.",
+    )
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used for batch post-RANSAC drawMatches visualization PNG files.")
     parser.add_argument(
         "--visualization-mode",
+        type=_parse_visualization_mode,
         default="full",
         choices=SUPPORTED_VISUALIZATION_MODES,
         help="Post-RANSAC preview visualization mode. Defaults to full.",
     )
     parser.add_argument(
         "--memory-profile",
+        type=_parse_memory_profile,
         default=DEFAULT_MEMORY_PROFILE,
         choices=SUPPORTED_MEMORY_PROFILES,
         help="Memory profile used by reduced visualization previews. Defaults to balanced.",
@@ -860,6 +921,7 @@ def _build_from_dom_batch_parser(subparsers) -> None:
     parser.add_argument("--preview-cache-dir", default=None, help="Optional directory used for reduced visualization preview cache cubes.")
     parser.add_argument(
         "--preview-cache-source",
+        type=_parse_preview_cache_source,
         default=DEFAULT_PREVIEW_CACHE_SOURCE,
         choices=SUPPORTED_PREVIEW_CACHE_SOURCES,
         help="Preview cache source selection for reduced visualization previews.",

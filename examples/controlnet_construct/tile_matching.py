@@ -13,6 +13,7 @@ from dataclasses import dataclass
 import multiprocessing as mp
 import os
 from pathlib import Path
+from typing import Any
 
 import cv2
 import numpy as np
@@ -673,12 +674,111 @@ def _chunk_indexed_tile_match_tasks(
     return [tuple(chunk) for chunk in chunks if chunk]
 
 
+def _tile_window_to_payload(window: TileWindow) -> tuple[int, int, int, int]:
+    return (window.start_x, window.start_y, window.width, window.height)
+
+
+def _paired_window_to_payload(window: PairedTileWindow) -> tuple[tuple[int, int, int, int], tuple[int, int, int, int], tuple[int, int, int, int]]:
+    return (
+        _tile_window_to_payload(window.local_window),
+        _tile_window_to_payload(window.left_window),
+        _tile_window_to_payload(window.right_window),
+    )
+
+
+def _tile_window_from_payload(payload: tuple[int, int, int, int]) -> TileWindow:
+    return TileWindow(start_x=payload[0], start_y=payload[1], width=payload[2], height=payload[3])
+
+
+def _paired_window_from_payload(
+    payload: tuple[tuple[int, int, int, int], tuple[int, int, int, int], tuple[int, int, int, int]],
+) -> PairedTileWindow:
+    return PairedTileWindow(
+        local_window=_tile_window_from_payload(payload[0]),
+        left_window=_tile_window_from_payload(payload[1]),
+        right_window=_tile_window_from_payload(payload[2]),
+    )
+
+
+def _tile_task_to_payload(task: TileMatchTask) -> dict[str, Any]:
+    return {
+        "left_dom_path": task.left_dom_path,
+        "right_dom_path": task.right_dom_path,
+        "band": task.band,
+        "paired_window": _paired_window_to_payload(task.paired_window),
+        "minimum_value": task.minimum_value,
+        "maximum_value": task.maximum_value,
+        "lower_percent": task.lower_percent,
+        "upper_percent": task.upper_percent,
+        "invalid_values": task.invalid_values,
+        "special_pixel_abs_threshold": task.special_pixel_abs_threshold,
+        "min_valid_pixels": task.min_valid_pixels,
+        "valid_pixel_percent_threshold": task.valid_pixel_percent_threshold,
+        "invalid_pixel_radius": task.invalid_pixel_radius,
+        "ratio_test": task.ratio_test,
+        "matcher_method": task.matcher_method,
+        "max_features": task.max_features,
+        "sift_octave_layers": task.sift_octave_layers,
+        "sift_contrast_threshold": task.sift_contrast_threshold,
+        "sift_edge_threshold": task.sift_edge_threshold,
+        "sift_sigma": task.sift_sigma,
+    }
+
+
+def _tile_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
+    return TileMatchTask(
+        left_dom_path=str(payload["left_dom_path"]),
+        right_dom_path=str(payload["right_dom_path"]),
+        band=int(payload["band"]),
+        paired_window=_paired_window_from_payload(payload["paired_window"]),
+        minimum_value=payload["minimum_value"],
+        maximum_value=payload["maximum_value"],
+        lower_percent=float(payload["lower_percent"]),
+        upper_percent=float(payload["upper_percent"]),
+        invalid_values=tuple(float(value) for value in payload["invalid_values"]),
+        special_pixel_abs_threshold=float(payload["special_pixel_abs_threshold"]),
+        min_valid_pixels=int(payload["min_valid_pixels"]),
+        valid_pixel_percent_threshold=float(payload["valid_pixel_percent_threshold"]),
+        invalid_pixel_radius=int(payload["invalid_pixel_radius"]),
+        ratio_test=float(payload["ratio_test"]),
+        matcher_method=str(payload["matcher_method"]),
+        max_features=None if payload["max_features"] is None else int(payload["max_features"]),
+        sift_octave_layers=int(payload["sift_octave_layers"]),
+        sift_contrast_threshold=float(payload["sift_contrast_threshold"]),
+        sift_edge_threshold=float(payload["sift_edge_threshold"]),
+        sift_sigma=float(payload["sift_sigma"]),
+    )
+
+
+def _indexed_tile_match_task_to_payload(indexed_task: IndexedTileMatchTask) -> tuple[int, dict[str, Any]]:
+    return (indexed_task.index, _tile_task_to_payload(indexed_task.task))
+
+
+def _indexed_tile_match_task_from_payload(indexed_task: IndexedTileMatchTask | tuple[int, dict[str, Any]]) -> IndexedTileMatchTask:
+    if isinstance(indexed_task, IndexedTileMatchTask):
+        return indexed_task
+    index, payload = indexed_task
+    return IndexedTileMatchTask(index=index, task=_tile_task_from_payload(payload))
+
+
+def _chunk_tile_match_task_payloads(
+    tasks: list[TileMatchTask],
+    *,
+    max_workers: int,
+) -> list[tuple[tuple[int, dict[str, Any]], ...]]:
+    return [
+        tuple(_indexed_tile_match_task_to_payload(indexed_task) for indexed_task in chunk)
+        for chunk in _chunk_indexed_tile_match_tasks(tasks, max_workers=max_workers)
+    ]
+
+
 def _match_tile_task_batch_worker(
-    indexed_tasks: tuple[IndexedTileMatchTask, ...],
+    indexed_tasks: tuple[IndexedTileMatchTask | tuple[int, dict[str, Any]], ...],
 ) -> tuple[tuple[int, TileMatchResult], ...]:
     if not indexed_tasks:
         return ()
-    first_task = indexed_tasks[0].task
+    resolved_indexed_tasks = tuple(_indexed_tile_match_task_from_payload(indexed_task) for indexed_task in indexed_tasks)
+    first_task = resolved_indexed_tasks[0].task
     left_cube = ip.Cube()
     right_cube = ip.Cube()
     left_cube.open(first_task.left_dom_path, "r")
@@ -687,7 +787,7 @@ def _match_tile_task_batch_worker(
         left_invalid_values = _resolved_invalid_values_for_cube(left_cube, first_task.invalid_values)
         right_invalid_values = _resolved_invalid_values_for_cube(right_cube, first_task.invalid_values)
         results: list[tuple[int, TileMatchResult]] = []
-        for indexed_task in indexed_tasks:
+        for indexed_task in resolved_indexed_tasks:
             results.append(
                 (
                     indexed_task.index,
@@ -716,7 +816,7 @@ def _run_parallel_tile_match_tasks(
 ) -> list[TileMatchResult]:
     if not tasks:
         return []
-    chunks = _chunk_indexed_tile_match_tasks(tasks, max_workers=max_workers)
+    chunks = _chunk_tile_match_task_payloads(tasks, max_workers=max_workers)
     with ProcessPoolExecutor(max_workers=min(max_workers, len(chunks)), mp_context=_tile_match_process_pool_context()) as executor:
         futures = {executor.submit(_match_tile_task_batch_worker, chunk): chunk for chunk in chunks}
         ordered_results: list[TileMatchResult | None] = [None] * len(tasks)

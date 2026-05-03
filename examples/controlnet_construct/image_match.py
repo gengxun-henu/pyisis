@@ -965,7 +965,7 @@ def match_dom_pair(
                             if progress_bar is not None:
                                 progress_bar.finish()
                         parallel_cpu_used = True
-                        parallel_cpu_backend = "process_pool"
+                        parallel_cpu_backend = "process_pool_batched_cube_reuse"
                         parallel_cpu_worker_count = candidate_worker_count
                     else:
                         try:

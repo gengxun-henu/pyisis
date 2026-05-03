@@ -1690,7 +1690,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(summary["parallel_cpu_requested"])
         self.assertEqual(summary["num_worker_parallel_cpu"], 8)
         self.assertTrue(summary["parallel_cpu_used"])
-        self.assertEqual(summary["parallel_cpu_backend"], "process_pool")
+        self.assertEqual(summary["parallel_cpu_backend"], "process_pool_batched_cube_reuse")
         self.assertEqual(summary["parallel_cpu_worker_count"], 4)
         self.assertEqual(summary["point_count"], 2)
         self.assertEqual(len(left_key_file.points), 2)

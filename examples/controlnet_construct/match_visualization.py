@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 import hashlib
+import json
 import os
 from pathlib import Path
 
@@ -154,9 +155,33 @@ def _preview_cache_hash_key(source_path: str | Path) -> str:
 
 def _preview_cache_path(cache_dir: str | Path, source_path: str | Path, *, level: int) -> Path:
     hash_key = _preview_cache_hash_key(source_path)
-    digest = hashlib.sha1(hash_key.encode("utf-8")).hexdigest()[:10]
+    digest = hashlib.sha256(hash_key.encode("utf-8")).hexdigest()
     filename = f"{Path(source_path).stem}__{digest}.cub"
     return Path(cache_dir) / f"level{int(level)}" / filename
+
+
+def _preview_cache_metadata_path(preview_path: str | Path) -> Path:
+    resolved_path = Path(preview_path)
+    return resolved_path.with_suffix(resolved_path.suffix + ".json")
+
+
+def _write_preview_cache_metadata(
+    preview_path: str | Path,
+    *,
+    source_hash_key: str,
+    level: int,
+    source_path: str | Path,
+) -> Path:
+    metadata = {
+        "source_hash_key": source_hash_key,
+        "level": int(level),
+        "source_path": str(source_path),
+        "preview_path": str(preview_path),
+    }
+    metadata_path = _preview_cache_metadata_path(preview_path)
+    metadata_path.parent.mkdir(parents=True, exist_ok=True)
+    metadata_path.write_text(json.dumps(metadata, sort_keys=True, indent=2), encoding="utf-8")
+    return metadata_path
 
 
 def _ensure_preview_cube(
@@ -165,17 +190,54 @@ def _ensure_preview_cube(
     cache_dir: str | Path,
     level: int,
     force_regenerate: bool,
-) -> tuple[Path, bool]:
+) -> tuple[Path, bool, str | None]:
     output_path = _preview_cache_path(cache_dir, source_path, level=level)
+    metadata_path = _preview_cache_metadata_path(output_path)
+    source_hash_key = _preview_cache_hash_key(source_path)
+    resolved_level = int(level)
     if output_path.exists() and not force_regenerate:
+        validation_reason = None
+        if not metadata_path.exists():
+            validation_reason = "metadata_missing"
+        else:
+            try:
+                metadata_payload = json.loads(metadata_path.read_text(encoding="utf-8"))
+            except Exception:
+                validation_reason = "metadata_mismatch"
+            else:
+                if (
+                    metadata_payload.get("source_hash_key") != source_hash_key
+                    or metadata_payload.get("level") != resolved_level
+                ):
+                    validation_reason = "metadata_mismatch"
+        if validation_reason is None:
+            try:
+                _cube_dimensions(output_path)
+            except Exception:
+                validation_reason = "cube_validation_failed"
+        if validation_reason is None:
+            return output_path, True, None
         try:
-            _cube_dimensions(output_path)
-        except Exception:
-            output = create_low_resolution_dom(source_path, output_path, level=level)
-            return output, False
-        return output_path, True
-    output = create_low_resolution_dom(source_path, output_path, level=level)
-    return output, False
+            output = create_low_resolution_dom(source_path, output_path, level=resolved_level)
+        except Exception as exc:
+            raise RuntimeError(
+                f"Preview cache validation failed ({validation_reason}); regeneration failed for {output_path}"
+            ) from exc
+        _write_preview_cache_metadata(
+            output,
+            source_hash_key=source_hash_key,
+            level=resolved_level,
+            source_path=source_path,
+        )
+        return output, False, validation_reason
+    output = create_low_resolution_dom(source_path, output_path, level=resolved_level)
+    _write_preview_cache_metadata(
+        output,
+        source_hash_key=source_hash_key,
+        level=resolved_level,
+        source_path=source_path,
+    )
+    return output, False, None
 
 
 def _auto_visualization_mode(
@@ -387,6 +449,8 @@ def write_stereo_pair_match_visualization(
     preview_cache_hit = False
     preview_cache_hit_left = False
     preview_cache_hit_right = False
+    preview_cache_validation_left = None
+    preview_cache_validation_right = None
     preview_cache_source = "disabled"
     left_preview_path: Path | None = None
     right_preview_path: Path | None = None
@@ -411,13 +475,13 @@ def write_stereo_pair_match_visualization(
         else:
             resolved_level = options.preview_level
         preview_cache_dir = options.preview_cache_dir or resolved_output_path.parent / "preview_cache"
-        left_preview_path, left_cache_hit = _ensure_preview_cube(
+        left_preview_path, left_cache_hit, left_cache_validation = _ensure_preview_cube(
             left_dom_path,
             cache_dir=preview_cache_dir,
             level=resolved_level,
             force_regenerate=options.preview_force_regenerate,
         )
-        right_preview_path, right_cache_hit = _ensure_preview_cube(
+        right_preview_path, right_cache_hit, right_cache_validation = _ensure_preview_cube(
             right_dom_path,
             cache_dir=preview_cache_dir,
             level=resolved_level,
@@ -425,6 +489,8 @@ def write_stereo_pair_match_visualization(
         )
         preview_cache_hit_left = left_cache_hit
         preview_cache_hit_right = right_cache_hit
+        preview_cache_validation_left = left_cache_validation
+        preview_cache_validation_right = right_cache_validation
         preview_cache_hit = left_cache_hit and right_cache_hit
         preview_level = resolved_level
         source_scale_factor = 1.0 / float(2 ** resolved_level)
@@ -605,6 +671,8 @@ def write_stereo_pair_match_visualization(
         "preview_cache_hit": preview_cache_hit,
         "preview_cache_hit_left": preview_cache_hit_left,
         "preview_cache_hit_right": preview_cache_hit_right,
+        "preview_cache_validation_left": preview_cache_validation_left,
+        "preview_cache_validation_right": preview_cache_validation_right,
         "preview_cache_source": preview_cache_source,
         "left_preview_path": None if left_preview_path is None else str(left_preview_path),
         "right_preview_path": None if right_preview_path is None else str(right_preview_path),

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-12
+Last Modified: 2026-05-14
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -43,10 +43,12 @@ Updated: 2026-05-12  Geng Xun hardened reduced preview cache diagnostics and red
 Updated: 2026-05-12  Geng Xun added regression coverage for preview cache hash-key path normalization.
 Updated: 2026-05-12  Geng Xun added cache-hit validation assertions for reduced preview cache reuse.
 Updated: 2026-05-12  Geng Xun added regression coverage for corrupt preview cache regeneration.
+Updated: 2026-05-14  Geng Xun added preview cache metadata validation coverage and regeneration diagnostics.
 """
 
 from __future__ import annotations
 
+import hashlib
 import io
 import importlib
 from datetime import datetime
@@ -125,6 +127,24 @@ def _build_textured_test_image(width: int, height: int) -> np.ndarray:
     cv2.line(image, (0, height - 1), (width - 1, 0), 255, thickness=2)
     cv2.putText(image, "ISIS", (width // 3, height // 2), cv2.FONT_HERSHEY_SIMPLEX, 0.8, 200, 2)
     return image.astype(np.float64)
+
+
+def _write_preview_cache_metadata(
+    preview_path: Path,
+    *,
+    source_hash_key: str,
+    level: int,
+    source_path: str | Path,
+) -> Path:
+    metadata = {
+        "source_hash_key": source_hash_key,
+        "level": int(level),
+        "source_path": str(source_path),
+        "preview_path": str(preview_path),
+    }
+    metadata_path = match_visualization_module._preview_cache_metadata_path(preview_path)
+    metadata_path.write_text(json.dumps(metadata, sort_keys=True, indent=2), encoding="utf-8")
+    return metadata_path
 
 
 def _write_projected_dom_pair(
@@ -2279,9 +2299,12 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         left_cache = match_visualization_module._preview_cache_path(cache_dir, left_path, level=2)
         right_cache = match_visualization_module._preview_cache_path(cache_dir, right_path, level=2)
 
+        left_digest = hashlib.sha256(match_visualization_module._preview_cache_hash_key(left_path).encode("utf-8")).hexdigest()
+        right_digest = hashlib.sha256(match_visualization_module._preview_cache_hash_key(right_path).encode("utf-8")).hexdigest()
+
         self.assertNotEqual(left_cache, right_cache)
-        self.assertTrue(left_cache.name.startswith("left__"))
-        self.assertTrue(right_cache.name.startswith("left__"))
+        self.assertEqual(left_cache.name, f"left__{left_digest}.cub")
+        self.assertEqual(right_cache.name, f"left__{right_digest}.cub")
 
     def test_preview_cache_hash_key_normalizes_paths(self):
         source_path = Path("preview/../left.cub")
@@ -2368,12 +2391,19 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 preview_cache_dir=temp_dir / "preview_cache",
                 visualization_target_long_edge=1024,
             )
+            for source, output, level in generated:
+                metadata_path = match_visualization_module._preview_cache_metadata_path(output)
+                metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+                self.assertEqual(metadata["source_hash_key"], match_visualization_module._preview_cache_hash_key(source))
+                self.assertEqual(metadata["level"], level)
 
         self.assertEqual(result["visualization_mode_used"], "reduced")
         self.assertEqual(result["preview_level"], 2)
         self.assertFalse(result["preview_cache_hit"])
         self.assertFalse(result["preview_cache_hit_left"])
         self.assertFalse(result["preview_cache_hit_right"])
+        self.assertIsNone(result["preview_cache_validation_left"])
+        self.assertIsNone(result["preview_cache_validation_right"])
         self.assertEqual(result["preview_cache_source"], "visualization_cache")
         self.assertEqual(len(generated), 2)
 
@@ -2402,6 +2432,18 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             right_preview.parent.mkdir(parents=True, exist_ok=True)
             left_preview.write_text("cached", encoding="utf-8")
             right_preview.write_text("cached", encoding="utf-8")
+            _write_preview_cache_metadata(
+                left_preview,
+                source_hash_key=match_visualization_module._preview_cache_hash_key("left.cub"),
+                level=2,
+                source_path="left.cub",
+            )
+            _write_preview_cache_metadata(
+                right_preview,
+                source_hash_key=match_visualization_module._preview_cache_hash_key("right.cub"),
+                level=2,
+                source_path="right.cub",
+            )
 
             with mock.patch.object(
                 match_visualization_module,
@@ -2441,6 +2483,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(result["preview_cache_hit"])
         self.assertTrue(result["preview_cache_hit_left"])
         self.assertTrue(result["preview_cache_hit_right"])
+        self.assertIsNone(result["preview_cache_validation_left"])
+        self.assertIsNone(result["preview_cache_validation_right"])
         self.assertEqual(result["preview_cache_source"], "visualization_cache")
         self.assertEqual(result["left_preview_path"], str(left_preview))
         self.assertEqual(result["right_preview_path"], str(right_preview))
@@ -2450,11 +2494,6 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
         right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
         generated: list[Path] = []
-
-        def fake_dimensions(path):
-            if "preview_cache" in str(path):
-                raise RuntimeError("corrupt preview")
-            return (4096, 4096)
 
         def fake_create(source, output, *, level, **kwargs):
             generated.append(Path(output))
@@ -2472,7 +2511,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             with mock.patch.object(
                 match_visualization_module,
                 "_cube_dimensions",
-                side_effect=fake_dimensions,
+                return_value=(4096, 4096),
             ), mock.patch.object(
                 match_visualization_module,
                 "create_low_resolution_dom",
@@ -2505,6 +2544,70 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertFalse(result["preview_cache_hit"])
         self.assertFalse(result["preview_cache_hit_left"])
         self.assertFalse(result["preview_cache_hit_right"])
+        self.assertEqual(result["preview_cache_validation_left"], "metadata_missing")
+        self.assertEqual(result["preview_cache_validation_right"], "metadata_missing")
+        self.assertEqual(len(generated), 2)
+
+    def test_write_match_visualization_reduced_mode_regenerates_mismatched_metadata(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+        generated: list[Path] = []
+
+        def fake_create(source, output, *, level, **kwargs):
+            generated.append(Path(output))
+            Path(output).parent.mkdir(parents=True, exist_ok=True)
+            Path(output).write_text("preview", encoding="utf-8")
+            return Path(output)
+
+        with temporary_directory() as temp_dir:
+            preview_root = temp_dir / "preview_cache"
+            for name in ("left.cub", "right.cub"):
+                preview_path = match_visualization_module._preview_cache_path(preview_root, name, level=2)
+                preview_path.parent.mkdir(parents=True, exist_ok=True)
+                preview_path.write_text("cached", encoding="utf-8")
+                _write_preview_cache_metadata(
+                    preview_path,
+                    source_hash_key="invalid-hash",
+                    level=1,
+                    source_path="other.cub",
+                )
+
+            with mock.patch.object(
+                match_visualization_module,
+                "_cube_dimensions",
+                return_value=(4096, 4096),
+            ), mock.patch.object(
+                match_visualization_module,
+                "create_low_resolution_dom",
+                side_effect=fake_create,
+            ), mock.patch.object(
+                match_visualization_module,
+                "_read_cube_as_stretched_byte",
+                return_value=np.full((64, 64), 128, dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "drawMatches",
+                return_value=np.zeros((10, 10, 3), dtype=np.uint8),
+            ), mock.patch.object(
+                match_visualization_module.cv2,
+                "imwrite",
+                return_value=True,
+            ):
+                result = match_visualization_module.write_stereo_pair_match_visualization(
+                    "left.cub",
+                    "right.cub",
+                    left_key_file,
+                    right_key_file,
+                    output_path=temp_dir / "viz.png",
+                    visualization_mode="reduced",
+                    preview_cache_dir=preview_root,
+                    preview_level=2,
+                    visualization_target_long_edge=1024,
+                )
+
+        self.assertFalse(result["preview_cache_hit"])
+        self.assertEqual(result["preview_cache_validation_left"], "metadata_mismatch")
+        self.assertEqual(result["preview_cache_validation_right"], "metadata_mismatch")
         self.assertEqual(len(generated), 2)
 
     def test_write_match_visualization_reduced_mode_partial_cache_hit(self):
@@ -2520,6 +2623,19 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             )
             left_preview.parent.mkdir(parents=True, exist_ok=True)
             left_preview.write_text("cached", encoding="utf-8")
+            _write_preview_cache_metadata(
+                left_preview,
+                source_hash_key=match_visualization_module._preview_cache_hash_key("left.cub"),
+                level=2,
+                source_path="left.cub",
+            )
+            right_preview = match_visualization_module._preview_cache_path(
+                preview_root,
+                "right.cub",
+                level=2,
+            )
+            right_preview.parent.mkdir(parents=True, exist_ok=True)
+            right_preview.write_text("cached", encoding="utf-8")
 
             with mock.patch.object(
                 match_visualization_module,
@@ -2555,6 +2671,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertFalse(result["preview_cache_hit"])
         self.assertTrue(result["preview_cache_hit_left"])
         self.assertFalse(result["preview_cache_hit_right"])
+        self.assertIsNone(result["preview_cache_validation_left"])
+        self.assertEqual(result["preview_cache_validation_right"], "metadata_missing")
         self.assertEqual(result["preview_cache_source"], "visualization_cache")
         create_mock.assert_called_once()
 
@@ -2608,6 +2726,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertFalse(result["preview_cache_hit"])
         self.assertFalse(result["preview_cache_hit_left"])
         self.assertFalse(result["preview_cache_hit_right"])
+        self.assertIsNone(result["preview_cache_validation_left"])
+        self.assertIsNone(result["preview_cache_validation_right"])
         self.assertEqual(result["preview_cache_source"], "visualization_cache")
         self.assertEqual(create_mock.call_count, 2)
 

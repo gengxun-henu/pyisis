@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-04
+Last Modified: 2026-05-05
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -31,6 +31,7 @@ Updated: 2026-05-03  Geng Xun added regression coverage for visualization option
 Updated: 2026-05-04  Geng Xun added boundary regression coverage for integer-safe reduce-level calculation.
 Updated: 2026-05-04  Geng Xun added regression coverage for crop-window visualization bounds and empty-point validation.
 Updated: 2026-05-04  Geng Xun corrected crop-window clamping expectations for 0-based bounds.
+Updated: 2026-05-05  Geng Xun added fractional crop-window coverage plus negative margin and out-of-bounds clamp tests.
 """
 
 from __future__ import annotations
@@ -2415,6 +2416,18 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         self.assertEqual((window.start_x, window.start_y, window.width, window.height), (9, 19, 81, 81))
 
+    def test_visualization_crop_window_fractional_keypoints(self):
+        points = (Keypoint(20.2, 30.7), Keypoint(80.9, 90.1))
+
+        window = match_visualization_module.crop_window_for_keypoints(
+            points,
+            image_width=100,
+            image_height=120,
+            margin_pixels=10,
+        )
+
+        self.assertEqual((window.start_x, window.start_y, window.width, window.height), (9, 19, 82, 82))
+
     def test_visualization_crop_window_clips_to_image_start(self):
         points = (Keypoint(1.0, 1.0),)
 
@@ -2454,6 +2467,20 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual((window.start_x, window.start_y), (99, 99))
         self.assertEqual((window.width, window.height), (1, 1))
 
+    def test_visualization_crop_window_clips_out_of_bounds_negative_point(self):
+        points = (Keypoint(-100.0, -100.0),)
+
+        window = match_visualization_module.crop_window_for_keypoints(
+            points,
+            image_width=100,
+            image_height=100,
+            margin_pixels=0,
+        )
+
+        self.assertEqual((window.start_x, window.start_y), (0, 0))
+        self.assertEqual((window.width, window.height), (1, 1))
+        self.assertEqual((window.start_x + window.width, window.start_y + window.height), (1, 1))
+
     def test_visualization_crop_window_rejects_invalid_dimensions(self):
         points = (Keypoint(1.0, 1.0),)
 
@@ -2470,6 +2497,17 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 image_width=100,
                 image_height=0,
                 margin_pixels=0,
+            )
+
+    def test_visualization_crop_window_rejects_negative_margin(self):
+        points = (Keypoint(1.0, 1.0),)
+
+        with self.assertRaisesRegex(ValueError, "preview_crop_margin_pixels"):
+            match_visualization_module.crop_window_for_keypoints(
+                points,
+                image_width=100,
+                image_height=100,
+                margin_pixels=-1,
             )
 
     def test_visualization_crop_window_rejects_empty_points(self):

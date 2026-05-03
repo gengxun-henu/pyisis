@@ -153,6 +153,17 @@ def _preview_cache_hash_key(source_path: str | Path) -> str:
     return normalized
 
 
+def _preview_cache_source_fingerprint(source_path: str | Path) -> dict[str, int] | None:
+    try:
+        stat_result = Path(source_path).expanduser().stat()
+    except OSError:
+        return None
+    return {
+        "size_bytes": int(stat_result.st_size),
+        "mtime_ns": int(stat_result.st_mtime_ns),
+    }
+
+
 def _preview_cache_path(cache_dir: str | Path, source_path: str | Path, *, level: int) -> Path:
     hash_key = _preview_cache_hash_key(source_path)
     digest = hashlib.sha256(hash_key.encode("utf-8")).hexdigest()
@@ -171,11 +182,18 @@ def _write_preview_cache_metadata(
     source_hash_key: str,
     level: int,
     source_path: str | Path,
+    source_fingerprint: dict[str, int] | None = None,
 ) -> Path:
+    resolved_fingerprint = (
+        source_fingerprint
+        if source_fingerprint is not None
+        else _preview_cache_source_fingerprint(source_path)
+    )
     metadata = {
         "source_hash_key": source_hash_key,
         "level": int(level),
         "source_path": str(source_path),
+        "source_fingerprint": resolved_fingerprint,
         "preview_path": str(preview_path),
     }
     metadata_path = _preview_cache_metadata_path(preview_path)
@@ -194,6 +212,7 @@ def _ensure_preview_cube(
     output_path = _preview_cache_path(cache_dir, source_path, level=level)
     metadata_path = _preview_cache_metadata_path(output_path)
     source_hash_key = _preview_cache_hash_key(source_path)
+    source_fingerprint = _preview_cache_source_fingerprint(source_path)
     resolved_level = int(level)
     if output_path.exists() and not force_regenerate:
         validation_reason = None
@@ -203,13 +222,15 @@ def _ensure_preview_cube(
             try:
                 metadata_payload = json.loads(metadata_path.read_text(encoding="utf-8"))
             except Exception:
-                validation_reason = "metadata_mismatch"
+                validation_reason = "metadata_corrupt"
             else:
                 if (
                     metadata_payload.get("source_hash_key") != source_hash_key
                     or metadata_payload.get("level") != resolved_level
                 ):
                     validation_reason = "metadata_mismatch"
+                elif metadata_payload.get("source_fingerprint") != source_fingerprint:
+                    validation_reason = "source_changed"
         if validation_reason is None:
             try:
                 _cube_dimensions(output_path)
@@ -221,13 +242,15 @@ def _ensure_preview_cube(
             output = create_low_resolution_dom(source_path, output_path, level=resolved_level)
         except Exception as exc:
             raise RuntimeError(
-                f"Preview cache validation failed ({validation_reason}); regeneration failed for {output_path}"
+                f"Preview cache validation failed ({validation_reason}) for {source_path} at level {resolved_level}; "
+                f"regeneration failed for {output_path}"
             ) from exc
         _write_preview_cache_metadata(
             output,
             source_hash_key=source_hash_key,
             level=resolved_level,
             source_path=source_path,
+            source_fingerprint=source_fingerprint,
         )
         return output, False, validation_reason
     output = create_low_resolution_dom(source_path, output_path, level=resolved_level)
@@ -236,6 +259,7 @@ def _ensure_preview_cube(
         source_hash_key=source_hash_key,
         level=resolved_level,
         source_path=source_path,
+        source_fingerprint=source_fingerprint,
     )
     return output, False, None
 

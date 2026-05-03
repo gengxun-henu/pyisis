@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-07
+Last Modified: 2026-05-08
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -35,6 +35,7 @@ Updated: 2026-05-05  Geng Xun added fractional crop-window coverage plus negativ
 Updated: 2026-05-06  Geng Xun updated crop-window negative-margin validation label expectations.
 Updated: 2026-05-06  Geng Xun added auto full vs cropped visualization rendering coverage.
 Updated: 2026-05-07  Geng Xun added visualization default-mode diagnostics and cropped offset assertions.
+Updated: 2026-05-08  Geng Xun stabilized visualization reduced-mode guards and default full-mode mocks.
 """
 
 from __future__ import annotations
@@ -2186,6 +2187,9 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             read_windows.append(window)
             return np.full((32, 32), 128, dtype=np.uint8)
 
+        def fake_draw_matches(*args, **kwargs):
+            return np.zeros((10, 10, 3), dtype=np.uint8)
+
         with temporary_directory() as temp_dir, mock.patch.object(
             match_visualization_module,
             "_cube_dimensions",
@@ -2194,6 +2198,14 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             match_visualization_module,
             "_read_cube_as_stretched_byte",
             side_effect=fake_read,
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "drawMatches",
+            side_effect=fake_draw_matches,
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "imwrite",
+            return_value=True,
         ):
             result = match_visualization_module.write_stereo_pair_match_visualization(
                 "left.cub",
@@ -2215,7 +2227,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             match_visualization_module,
             "_cube_dimensions",
             return_value=(32, 32),
-        ):
+        ) as cube_dimensions_mock:
             with self.assertRaises(NotImplementedError) as context:
                 match_visualization_module.write_stereo_pair_match_visualization(
                     "left.cub",
@@ -2226,7 +2238,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     visualization_mode="reduced",
                 )
 
-        self.assertIn("reduced", str(context.exception))
+        cube_dimensions_mock.assert_not_called()
+        self.assertIn("reduced previews", str(context.exception))
 
     def test_write_match_visualization_preserves_full_mode_for_small_images(self):
         left_key_file = KeypointFile(32, 32, (Keypoint(10.0, 10.0),))

@@ -324,6 +324,10 @@ def write_stereo_pair_match_visualization(
         preview_force_regenerate=preview_force_regenerate,
         preview_level=preview_level,
     )
+    if options.visualization_mode in {"reduced", "reduced_cropped"}:
+        raise NotImplementedError(
+            f"Visualization mode '{options.visualization_mode}' requires reduced previews (Task 5)."
+        )
     left_width, left_height = _cube_dimensions(left_dom_path)
     right_width, right_height = _cube_dimensions(right_dom_path)
     mode_used = options.visualization_mode
@@ -334,10 +338,10 @@ def write_stereo_pair_match_visualization(
             options=options,
             has_keypoints=bool(left_key_file.points),
         )
-    if mode_used in {"reduced", "reduced_cropped"}:
-        raise NotImplementedError(
-            f"Visualization mode '{mode_used}' requires reduced previews (Task 5)."
-        )
+        if mode_used in {"reduced", "reduced_cropped"}:
+            raise NotImplementedError(
+                f"Visualization mode '{mode_used}' requires reduced previews (Task 5)."
+            )
 
     left_window: TileWindow | None = None
     right_window: TileWindow | None = None

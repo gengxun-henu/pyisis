@@ -10,7 +10,6 @@ Updated: 2026-05-02  Geng Xun added precomputed low-resolution DOM reuse so batc
 
 from __future__ import annotations
 
-import math
 from pathlib import Path
 import shutil
 import subprocess
@@ -41,7 +40,10 @@ def reduce_level_for_target_long_edge(long_edge: int, target_long_edge: int) -> 
         raise ValueError("long_edge must be positive.")
     if resolved_target <= 0:
         raise ValueError("target_long_edge must be positive.")
-    return max(0, int(math.ceil(math.log2(resolved_long_edge / resolved_target))))
+    if resolved_long_edge <= resolved_target:
+        return 0
+    ratio = (resolved_long_edge + resolved_target - 1) // resolved_target
+    return (ratio - 1).bit_length()
 
 
 def reduce_level_for_pair_target_long_edge(

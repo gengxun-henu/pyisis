@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-03
+Last Modified: 2026-05-04
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -28,6 +28,7 @@ Updated: 2026-05-02  Geng Xun refined tile-validity prefilter fixture to avoid d
 Updated: 2026-05-03  Geng Xun added regression coverage for batched parallel tile matching diagnostics.
 Updated: 2026-05-03  Geng Xun added regression coverage for tile-validity metadata sidecar output.
 Updated: 2026-05-03  Geng Xun added regression coverage for visualization option resolution and target-long-edge reduce levels.
+Updated: 2026-05-04  Geng Xun added boundary regression coverage for integer-safe reduce-level calculation.
 """
 
 from __future__ import annotations
@@ -2385,6 +2386,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(lowres_offset_module.reduce_level_for_target_long_edge(8192, 4096), 1)
         self.assertEqual(lowres_offset_module.reduce_level_for_target_long_edge(8192, 2048), 2)
         self.assertEqual(lowres_offset_module.reduce_level_for_target_long_edge(1000, 2048), 0)
+        self.assertEqual(lowres_offset_module.reduce_level_for_target_long_edge(4096, 4096), 0)
+        self.assertEqual(lowres_offset_module.reduce_level_for_target_long_edge(4097, 4096), 1)
+        self.assertEqual(lowres_offset_module.reduce_level_for_target_long_edge(4097, 2048), 2)
+        self.assertEqual(lowres_offset_module.reduce_level_for_target_long_edge(2049, 2048), 1)
         self.assertEqual(
             lowres_offset_module.reduce_level_for_pair_target_long_edge(
                 left_width=2048,

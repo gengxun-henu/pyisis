@@ -27,6 +27,7 @@ Updated: 2026-05-02  Geng Xun adjusted tile-validity default config keys and pre
 Updated: 2026-05-02  Geng Xun refined tile-validity prefilter fixture to avoid degenerate valid tiles.
 Updated: 2026-05-03  Geng Xun added regression coverage for batched parallel tile matching diagnostics.
 Updated: 2026-05-03  Geng Xun added regression coverage for tile-validity metadata sidecar output.
+Updated: 2026-05-03  Geng Xun added regression coverage for visualization option resolution and target-long-edge reduce levels.
 """
 
 from __future__ import annotations
@@ -58,6 +59,8 @@ if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
 image_match = importlib.import_module("controlnet_construct.image_match")
+match_visualization_module = importlib.import_module("controlnet_construct.match_visualization")
+lowres_offset_module = importlib.import_module("controlnet_construct.lowres_offset")
 build_argument_parser = image_match.build_argument_parser
 default_match_visualization_path = image_match.default_match_visualization_path
 filter_stereo_pair_keypoints_with_ransac = image_match.filter_stereo_pair_keypoints_with_ransac
@@ -2356,6 +2359,42 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(image_match_payload["tile_count_before_preindex_filter"], 2)
         self.assertEqual(image_match_payload["tile_count_after_preindex_filter"], 1)
         self.assertTrue(str(image_match_payload["tile_validity_cache_dir"]).endswith("tile_validity_cache"))
+
+    def test_visualization_memory_profile_resolves_target_long_edges(self):
+        high = match_visualization_module.resolve_visualization_options(memory_profile="high-memory")
+        balanced = match_visualization_module.resolve_visualization_options(memory_profile="balanced")
+        low = match_visualization_module.resolve_visualization_options(memory_profile="low-memory")
+
+        self.assertEqual(high.visualization_target_long_edge, 4096)
+        self.assertEqual(balanced.visualization_target_long_edge, 2048)
+        self.assertEqual(low.visualization_target_long_edge, 1024)
+        self.assertEqual(balanced.visualization_mode, "auto")
+        self.assertEqual(balanced.preview_cache_source, "auto")
+
+    def test_visualization_option_validation_rejects_invalid_values(self):
+        with self.assertRaisesRegex(ValueError, "visualization_mode"):
+            match_visualization_module.resolve_visualization_options(visualization_mode="huge")
+        with self.assertRaisesRegex(ValueError, "memory_profile"):
+            match_visualization_module.resolve_visualization_options(memory_profile="tiny")
+        with self.assertRaisesRegex(ValueError, "visualization_target_long_edge must be positive"):
+            match_visualization_module.resolve_visualization_options(visualization_target_long_edge=0)
+        with self.assertRaisesRegex(ValueError, "preview_crop_margin_pixels must be >= 0"):
+            match_visualization_module.resolve_visualization_options(preview_crop_margin_pixels=-1)
+
+    def test_reduce_level_from_target_long_edge_uses_pair_common_longest_edge(self):
+        self.assertEqual(lowres_offset_module.reduce_level_for_target_long_edge(8192, 4096), 1)
+        self.assertEqual(lowres_offset_module.reduce_level_for_target_long_edge(8192, 2048), 2)
+        self.assertEqual(lowres_offset_module.reduce_level_for_target_long_edge(1000, 2048), 0)
+        self.assertEqual(
+            lowres_offset_module.reduce_level_for_pair_target_long_edge(
+                left_width=2048,
+                left_height=1024,
+                right_width=16384,
+                right_height=512,
+                target_long_edge=2048,
+            ),
+            3,
+        )
 
 
 if __name__ == "__main__":

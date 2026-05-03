@@ -140,20 +140,36 @@ def crop_window_for_keypoints(
 ) -> TileWindow:
     if not points:
         raise ValueError("At least one keypoint is required for cropped visualization.")
+    resolved_width = _positive_int(image_width, field_name="image_width")
+    resolved_height = _positive_int(image_height, field_name="image_height")
     margin = _non_negative_int(margin_pixels, field_name="preview_crop_margin_pixels")
-    min_sample = min(point.sample for point in points)
-    max_sample = max(point.sample for point in points)
-    min_line = min(point.line for point in points)
-    max_line = max(point.line for point in points)
-    start_x = max(0, int(np.floor(min_sample - 1.0)) - margin)
-    start_y = max(0, int(np.floor(min_line - 1.0)) - margin)
-    end_x = min(int(image_width), int(np.ceil(max_sample)) + margin + 1)
-    end_y = min(int(image_height), int(np.ceil(max_line)) + margin + 1)
+    min_sample = min(point.sample - 1.0 for point in points)
+    max_sample = max(point.sample - 1.0 for point in points)
+    min_line = min(point.line - 1.0 for point in points)
+    max_line = max(point.line - 1.0 for point in points)
+    start_x = int(np.floor(min_sample)) - margin
+    start_y = int(np.floor(min_line)) - margin
+    end_x = int(np.ceil(max_sample)) + margin + 1
+    end_y = int(np.ceil(max_line)) + margin + 1
+
+    def clamp_window(start: int, end: int, limit: int) -> tuple[int, int]:
+        if end <= 0:
+            return 0, 1
+        if start >= limit:
+            return limit - 1, limit
+        clamped_start = max(0, start)
+        clamped_end = min(limit, end)
+        if clamped_end <= clamped_start:
+            clamped_end = min(limit, clamped_start + 1)
+        return clamped_start, clamped_end
+
+    start_x, end_x = clamp_window(start_x, end_x, resolved_width)
+    start_y, end_y = clamp_window(start_y, end_y, resolved_height)
     return TileWindow(
         start_x=start_x,
         start_y=start_y,
-        width=max(1, end_x - start_x),
-        height=max(1, end_y - start_y),
+        width=end_x - start_x,
+        height=end_y - start_y,
     )
 
 

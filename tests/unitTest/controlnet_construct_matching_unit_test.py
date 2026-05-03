@@ -30,6 +30,7 @@ Updated: 2026-05-03  Geng Xun added regression coverage for tile-validity metada
 Updated: 2026-05-03  Geng Xun added regression coverage for visualization option resolution and target-long-edge reduce levels.
 Updated: 2026-05-04  Geng Xun added boundary regression coverage for integer-safe reduce-level calculation.
 Updated: 2026-05-04  Geng Xun added regression coverage for crop-window visualization bounds and empty-point validation.
+Updated: 2026-05-04  Geng Xun corrected crop-window clamping expectations for 0-based bounds.
 """
 
 from __future__ import annotations
@@ -2412,7 +2413,64 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             margin_pixels=10,
         )
 
-        self.assertEqual((window.start_x, window.start_y, window.width, window.height), (9, 19, 82, 82))
+        self.assertEqual((window.start_x, window.start_y, window.width, window.height), (9, 19, 81, 81))
+
+    def test_visualization_crop_window_clips_to_image_start(self):
+        points = (Keypoint(1.0, 1.0),)
+
+        window = match_visualization_module.crop_window_for_keypoints(
+            points,
+            image_width=100,
+            image_height=100,
+            margin_pixels=10,
+        )
+
+        self.assertEqual((window.start_x, window.start_y), (0, 0))
+        self.assertEqual((window.width, window.height), (11, 11))
+
+    def test_visualization_crop_window_clips_to_image_end(self):
+        points = (Keypoint(100.0, 100.0),)
+
+        window = match_visualization_module.crop_window_for_keypoints(
+            points,
+            image_width=100,
+            image_height=100,
+            margin_pixels=10,
+        )
+
+        self.assertEqual((window.start_x, window.start_y), (89, 89))
+        self.assertEqual((window.start_x + window.width, window.start_y + window.height), (100, 100))
+
+    def test_visualization_crop_window_clips_out_of_bounds_point(self):
+        points = (Keypoint(1000.0, 1000.0),)
+
+        window = match_visualization_module.crop_window_for_keypoints(
+            points,
+            image_width=100,
+            image_height=100,
+            margin_pixels=10,
+        )
+
+        self.assertEqual((window.start_x, window.start_y), (99, 99))
+        self.assertEqual((window.width, window.height), (1, 1))
+
+    def test_visualization_crop_window_rejects_invalid_dimensions(self):
+        points = (Keypoint(1.0, 1.0),)
+
+        with self.assertRaisesRegex(ValueError, "image_width"):
+            match_visualization_module.crop_window_for_keypoints(
+                points,
+                image_width=0,
+                image_height=100,
+                margin_pixels=0,
+            )
+        with self.assertRaisesRegex(ValueError, "image_height"):
+            match_visualization_module.crop_window_for_keypoints(
+                points,
+                image_width=100,
+                image_height=0,
+                margin_pixels=0,
+            )
 
     def test_visualization_crop_window_rejects_empty_points(self):
         with self.assertRaisesRegex(ValueError, "At least one keypoint"):

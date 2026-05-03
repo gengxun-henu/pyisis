@@ -273,7 +273,7 @@ Append:
             margin_pixels=10,
         )
 
-        self.assertEqual((window.start_x, window.start_y, window.width, window.height), (9, 19, 82, 82))
+        self.assertEqual((window.start_x, window.start_y, window.width, window.height), (9, 19, 81, 81))
 
     def test_visualization_crop_window_rejects_empty_points(self):
         with self.assertRaisesRegex(ValueError, "At least one keypoint"):
@@ -313,13 +313,13 @@ def crop_window_for_keypoints(
     if not points:
         raise ValueError("At least one keypoint is required for cropped visualization.")
     margin = _non_negative_int(margin_pixels, field_name="preview_crop_margin_pixels")
-    min_sample = min(point.sample for point in points)
-    max_sample = max(point.sample for point in points)
-    min_line = min(point.line for point in points)
-    max_line = max(point.line for point in points)
-    start_x = max(0, int(np.floor(min_sample - 1.0)) - margin)
-    start_y = max(0, int(np.floor(min_line - 1.0)) - margin)
-    # TileWindow uses 0-based start plus exclusive end; ISIS keypoint sample/line values are 1-based.
+    min_sample = min(point.sample - 1.0 for point in points)
+    max_sample = max(point.sample - 1.0 for point in points)
+    min_line = min(point.line - 1.0 for point in points)
+    max_line = max(point.line - 1.0 for point in points)
+    start_x = max(0, int(np.floor(min_sample)) - margin)
+    start_y = max(0, int(np.floor(min_line)) - margin)
+    # TileWindow uses 0-based start plus exclusive end; convert keypoints to 0-based before bounds.
     end_x = min(int(image_width), int(np.ceil(max_sample)) + margin + 1)
     end_y = min(int(image_height), int(np.ceil(max_line)) + margin + 1)
     return TileWindow(start_x=start_x, start_y=start_y, width=max(1, end_x - start_x), height=max(1, end_y - start_y))

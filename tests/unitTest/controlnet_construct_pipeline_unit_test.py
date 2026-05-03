@@ -26,6 +26,7 @@ Updated: 2026-05-01  Geng Xun refactored pipeline-wrapper helper-mode regression
 Updated: 2026-05-02  Geng Xun added regression coverage for reusable low-resolution DOM list preparation and forwarding.
 Updated: 2026-05-03  Geng Xun added regression coverage for forwarding post-RANSAC visualization preview options into match visualization.
 Updated: 2026-05-04  Geng Xun added pipeline and CLI forwarding coverage for reduced visualization preview options and aligned CLI default preview scale expectations.
+Updated: 2026-05-04  Geng Xun added CLI coverage for the remaining reduced visualization preview flags.
 """
 
 from __future__ import annotations
@@ -2218,6 +2219,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
+            preview_cache_dir = temp_dir / "preview_cache"
 
             stdout = io.StringIO()
             with (
@@ -2244,6 +2246,14 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             "reduced",
                             "--memory-profile",
                             "low-memory",
+                            "--visualization-target-long-edge",
+                            "640",
+                            "--max-preview-pixels",
+                            "180000",
+                            "--preview-crop-margin-pixels",
+                            "32",
+                            "--preview-cache-dir",
+                            str(preview_cache_dir),
                             "--preview-cache-source",
                             "visualization-cache",
                             "--preview-level",
@@ -2259,6 +2269,10 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertAlmostEqual(call_kwargs["match_visualization_scale"], 1.0 / 3.0)
         self.assertEqual(call_kwargs["visualization_mode"], "reduced")
         self.assertEqual(call_kwargs["memory_profile"], "low-memory")
+        self.assertEqual(call_kwargs["visualization_target_long_edge"], 640)
+        self.assertEqual(call_kwargs["max_preview_pixels"], 180000)
+        self.assertEqual(call_kwargs["preview_crop_margin_pixels"], 32)
+        self.assertEqual(call_kwargs["preview_cache_dir"], str(preview_cache_dir))
         self.assertEqual(call_kwargs["preview_cache_source"], "visualization_cache")
         self.assertEqual(call_kwargs["preview_level"], 3)
         self.assertTrue(call_kwargs["preview_force_regenerate"])
@@ -2447,6 +2461,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 ),
                 encoding="utf-8",
             )
+            preview_cache_dir = temp_dir / "preview_cache"
 
             stdout = io.StringIO()
             with (
@@ -2476,6 +2491,14 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "reduced",
                         "--memory-profile",
                         "low-memory",
+                        "--visualization-target-long-edge",
+                        "640",
+                        "--max-preview-pixels",
+                        "180000",
+                        "--preview-crop-margin-pixels",
+                        "32",
+                        "--preview-cache-dir",
+                        str(preview_cache_dir),
                         "--preview-cache-source",
                         "visualization-cache",
                         "--preview-level",
@@ -2494,6 +2517,10 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertAlmostEqual(call_kwargs["match_visualization_scale"], 1.0 / 3.0)
         self.assertEqual(call_kwargs["visualization_mode"], "reduced")
         self.assertEqual(call_kwargs["memory_profile"], "low-memory")
+        self.assertEqual(call_kwargs["visualization_target_long_edge"], 640)
+        self.assertEqual(call_kwargs["max_preview_pixels"], 180000)
+        self.assertEqual(call_kwargs["preview_crop_margin_pixels"], 32)
+        self.assertEqual(call_kwargs["preview_cache_dir"], str(preview_cache_dir))
         self.assertEqual(call_kwargs["preview_cache_source"], "visualization_cache")
         self.assertEqual(call_kwargs["preview_level"], 3)
         self.assertTrue(call_kwargs["preview_force_regenerate"])

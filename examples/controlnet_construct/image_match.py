@@ -137,7 +137,7 @@ _trimmed_mean = _lowres_offset._trimmed_mean
 default_match_visualization_path = _match_visualization.default_match_visualization_path
 write_stereo_pair_match_visualization = _match_visualization.write_stereo_pair_match_visualization
 write_stereo_pair_match_visualization_from_key_files = _match_visualization.write_stereo_pair_match_visualization_from_key_files
-DEFAULT_MATCH_VISUALIZATION_MODE = "full"  # Preserve legacy behavior unless explicitly overridden.
+DEFAULT_MATCH_VISUALIZATION_MODE = _match_visualization.DEFAULT_VISUALIZATION_MODE
 DEFAULT_MEMORY_PROFILE = _match_visualization.DEFAULT_MEMORY_PROFILE
 DEFAULT_PREVIEW_CROP_MARGIN_PIXELS = _match_visualization.DEFAULT_PREVIEW_CROP_MARGIN_PIXELS
 DEFAULT_PREVIEW_CACHE_SOURCE = _match_visualization.DEFAULT_PREVIEW_CACHE_SOURCE
@@ -643,6 +643,31 @@ def load_image_match_defaults_from_config(
             ("preview_level", "previewLevel", "PreviewLevel"),
             lambda value: _match_visualization.resolve_visualization_options(preview_level=int(value)).preview_level,
         ),
+        (
+            "use_tile_cache",
+            ("use_tile_cache", "useTileCache", "UseTileCache"),
+            lambda value: _coerce_config_bool(value, field_name="use_tile_cache"),
+        ),
+        (
+            "tile_cache_max_mb",
+            ("tile_cache_max_mb", "tileCacheMaxMb", "TileCacheMaxMb"),
+            lambda value: int(value),
+        ),
+        (
+            "adaptive_warmup_count",
+            ("adaptive_warmup_count", "adaptiveWarmupCount", "AdaptiveWarmupCount"),
+            lambda value: int(value),
+        ),
+        (
+            "adaptive_throughput_threshold_mbps",
+            ("adaptive_throughput_threshold_mbps", "adaptiveThroughputThresholdMbps", "AdaptiveThroughputThresholdMbps"),
+            lambda value: float(value),
+        ),
+        (
+            "adaptive_recheck_every",
+            ("adaptive_recheck_every", "adaptiveRecheckEvery", "AdaptiveRecheckEvery"),
+            lambda value: int(value),
+        ),
     )
 
     for destination, candidate_keys, coercer in field_specs:
@@ -886,6 +911,11 @@ def match_dom_pair(
     left_low_resolution_dom: str | Path | None = None,
     right_low_resolution_dom: str | Path | None = None,
     show_progress: bool = False,
+    use_tile_cache: bool = False,
+    tile_cache_max_mb: int = 100,
+    adaptive_warmup_count: int = 10,
+    adaptive_throughput_threshold_mbps: float = 200.0,
+    adaptive_recheck_every: int = 0,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
@@ -1035,6 +1065,11 @@ def match_dom_pair(
                     invalid_pixel_radius=resolved_invalid_pixel_radius,
                     cell_width=resolved_tile_validity_cell_width,
                     cell_height=resolved_tile_validity_cell_height,
+                    use_tile_cache=use_tile_cache,
+                    cache_max_mb=tile_cache_max_mb,
+                    adaptive_warmup_count=adaptive_warmup_count,
+                    adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+                    adaptive_recheck_every=adaptive_recheck_every,
                 )
                 right_tile_validity_index, right_tile_validity_index_summary = ensure_dom_validity_index(
                     cache_dir=resolved_tile_validity_cache_dir,
@@ -1046,6 +1081,11 @@ def match_dom_pair(
                     invalid_pixel_radius=resolved_invalid_pixel_radius,
                     cell_width=resolved_tile_validity_cell_width,
                     cell_height=resolved_tile_validity_cell_height,
+                    use_tile_cache=use_tile_cache,
+                    cache_max_mb=tile_cache_max_mb,
+                    adaptive_warmup_count=adaptive_warmup_count,
+                    adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+                    adaptive_recheck_every=adaptive_recheck_every,
                 )
                 prefilter_result = prefilter_paired_windows_by_validity(
                     windows,
@@ -1098,6 +1138,11 @@ def match_dom_pair(
                                 ),
                                 max_workers=candidate_worker_count,
                                 progress_callback=progress_bar.update if progress_bar is not None else None,
+                                use_tile_cache=use_tile_cache,
+                                cache_max_mb=tile_cache_max_mb,
+                                adaptive_warmup_count=adaptive_warmup_count,
+                                adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+                                adaptive_recheck_every=adaptive_recheck_every,
                             )
                         finally:
                             if progress_bar is not None:
@@ -1130,6 +1175,11 @@ def match_dom_pair(
                                 sift_edge_threshold=sift_edge_threshold,
                                 sift_sigma=sift_sigma,
                                 progress_callback=progress_bar.update if progress_bar is not None else None,
+                                use_tile_cache=use_tile_cache,
+                                cache_max_mb=tile_cache_max_mb,
+                                adaptive_warmup_count=adaptive_warmup_count,
+                                adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+                                adaptive_recheck_every=adaptive_recheck_every,
                             )
                         finally:
                             if progress_bar is not None:
@@ -1160,6 +1210,11 @@ def match_dom_pair(
                             sift_edge_threshold=sift_edge_threshold,
                             sift_sigma=sift_sigma,
                             progress_callback=progress_bar.update if progress_bar is not None else None,
+                            use_tile_cache=use_tile_cache,
+                            cache_max_mb=tile_cache_max_mb,
+                            adaptive_warmup_count=adaptive_warmup_count,
+                            adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+                            adaptive_recheck_every=adaptive_recheck_every,
                         )
                     finally:
                         if progress_bar is not None:
@@ -1333,6 +1388,7 @@ def match_dom_pair_to_key_files(
             else (None if match_visualization_output_path is not None else Path(left_output_key).parent)
         )
         visualization_timestamp = None if match_visualization_output_path is not None else datetime.now()
+        low_resolution_visualization_preview = summary.get("low_resolution_offset", {})
         try:
             match_visualization_result = write_stereo_pair_match_visualization(
                 left_dom_path,
@@ -1352,6 +1408,9 @@ def match_dom_pair_to_key_files(
                 preview_cache_source=preview_cache_source,
                 preview_force_regenerate=preview_force_regenerate,
                 preview_level=preview_level,
+                left_matching_preview_dom=low_resolution_visualization_preview.get("left_low_resolution_dom"),
+                right_matching_preview_dom=low_resolution_visualization_preview.get("right_low_resolution_dom"),
+                matching_preview_level=low_resolution_visualization_preview.get("low_resolution_level"),
                 band=int(kwargs.get("band", 1)),
                 minimum_value=kwargs.get("minimum_value"),
                 maximum_value=kwargs.get("maximum_value"),
@@ -1530,6 +1589,36 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
         default=None,
         help="Explicit pyramid level used for reduced visualization previews.",
     )
+    parser.add_argument(
+        "--use-tile-cache",
+        action="store_true",
+        default=False,
+        help="Enable tile-aware I/O caching for DOM image reads",
+    )
+    parser.add_argument(
+        "--tile-cache-max-mb",
+        type=int,
+        default=100,
+        help="Maximum tile cache memory in MB (default: 100)",
+    )
+    parser.add_argument(
+        "--adaptive-warmup-count",
+        type=int,
+        default=10,
+        help="Number of reads to measure before deciding cache vs bypass",
+    )
+    parser.add_argument(
+        "--adaptive-throughput-threshold-mbps",
+        type=float,
+        default=200.0,
+        help="Throughput threshold (MB/s) for bypass decision",
+    )
+    parser.add_argument(
+        "--adaptive-recheck-every",
+        type=int,
+        default=0,
+        help="Re-evaluate bypass decision every N reads (0=never)",
+    )
     parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, show_progress=True)
     if config_defaults:
         parser.set_defaults(**config_defaults)
@@ -1635,6 +1724,11 @@ def main(argv: list[str] | None = None) -> None:
         preview_cache_source=args.preview_cache_source,
         preview_force_regenerate=args.preview_force_regenerate,
         preview_level=args.preview_level,
+        use_tile_cache=args.use_tile_cache,
+        tile_cache_max_mb=args.tile_cache_max_mb,
+        adaptive_warmup_count=args.adaptive_warmup_count,
+        adaptive_throughput_threshold_mbps=args.adaptive_throughput_threshold_mbps,
+        adaptive_recheck_every=args.adaptive_recheck_every,
     )
     print(json.dumps(result, indent=2, ensure_ascii=False))
 

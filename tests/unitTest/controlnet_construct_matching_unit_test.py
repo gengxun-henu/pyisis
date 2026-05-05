@@ -875,20 +875,21 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(args.preview_level, 3)
         self.assertEqual(args.low_resolution_matching_target_long_edge, 1024)
 
-    def test_build_argument_parser_rejects_matching_cache_preview_source(self):
+    def test_build_argument_parser_accepts_matching_cache_preview_source(self):
         parser = build_argument_parser()
 
-        with self.assertRaises(SystemExit):
-            parser.parse_args(
-                [
-                    "left.cub",
-                    "right.cub",
-                    "left.key",
-                    "right.key",
-                    "--preview-cache-source",
-                    "matching-cache",
-                ]
-            )
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--preview-cache-source",
+                "matching-cache",
+            ]
+        )
+
+        self.assertEqual(args.preview_cache_source, "matching_cache")
 
     def test_build_argument_parser_rejects_invalid_low_resolution_match_count_and_offset_threshold(self):
         parser = build_argument_parser()
@@ -2322,15 +2323,22 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(result["highlighted_match_count"], 1)
         self.assertTrue(output_exists)
 
-    def test_write_match_visualization_auto_uses_cropped_mode_for_large_images(self):
+    def test_write_match_visualization_auto_uses_reduced_mode_for_large_images(self):
         left_key_file = KeypointFile(4000, 3000, (Keypoint(100.0, 100.0), Keypoint(120.0, 120.0)))
         right_key_file = KeypointFile(4000, 3000, (Keypoint(105.0, 105.0), Keypoint(125.0, 125.0)))
-        read_windows: list[tuple[int, int, int, int]] = []
+        read_windows: list[object | None] = []
         captured_keypoints: dict[str, list[tuple[float, float]]] = {}
+        reduced_paths: list[str] = []
 
         def fake_read(cube_path, *, window=None, **kwargs):
-            read_windows.append((window.start_x, window.start_y, window.width, window.height))
-            return np.full((window.height, window.width), 128, dtype=np.uint8)
+            read_windows.append(window)
+            reduced_paths.append(str(cube_path))
+            return np.full((64, 64), 128, dtype=np.uint8)
+
+        def fake_create(source, output, *, level, **kwargs):
+            Path(output).parent.mkdir(parents=True, exist_ok=True)
+            Path(output).write_text("preview", encoding="utf-8")
+            return Path(output)
 
         def fake_draw_matches(
             left_image,
@@ -2351,6 +2359,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             return_value=(4000, 3000),
         ) as cube_dimensions_mock, mock.patch.object(
             match_visualization_module,
+            "create_low_resolution_dom",
+            side_effect=fake_create,
+        ), mock.patch.object(
+            match_visualization_module,
             "_read_cube_as_stretched_byte",
             side_effect=fake_read,
         ), mock.patch.object(
@@ -2367,37 +2379,21 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 visualization_mode="auto",
                 max_preview_pixels=10_000,
                 preview_crop_margin_pixels=10,
+                visualization_target_long_edge=1024,
+                preview_cache_dir=temp_dir / "preview_cache",
             )
 
-        expected_crop_window = {
-            "left": {
-                "start_x": 89,
-                "start_y": 89,
-                "width": 41,
-                "height": 41,
-            },
-            "right": {
-                "start_x": 94,
-                "start_y": 94,
-                "width": 41,
-                "height": 41,
-            },
-        }
-        expected_keypoint_pts = [(10.0 / 3.0, 10.0 / 3.0), (30.0 / 3.0, 30.0 / 3.0)]
-
         self.assertEqual(result["visualization_mode_requested"], "auto")
-        self.assertEqual(result["visualization_mode_used"], "cropped")
-        self.assertEqual(result["preview_dimensions"]["left"], [41, 41])
-        self.assertEqual(result["preview_dimensions"]["right"], [41, 41])
-        self.assertEqual(result["crop_window"], expected_crop_window)
+        self.assertEqual(result["visualization_mode_used"], "reduced")
+        self.assertEqual(result["preview_level"], 2)
+        self.assertIsNone(result["crop_window"])
         self.assertEqual(cube_dimensions_mock.call_count, 2)
-        self.assertEqual(read_windows, [(89, 89, 41, 41), (94, 94, 41, 41)])
-        for actual, expected in zip(captured_keypoints["left"], expected_keypoint_pts):
-            self.assertAlmostEqual(actual[0], expected[0], places=4)
-            self.assertAlmostEqual(actual[1], expected[1], places=4)
-        for actual, expected in zip(captured_keypoints["right"], expected_keypoint_pts):
-            self.assertAlmostEqual(actual[0], expected[0], places=4)
-            self.assertAlmostEqual(actual[1], expected[1], places=4)
+        self.assertEqual(read_windows, [None, None])
+        self.assertTrue(all("preview_cache" in path for path in reduced_paths))
+        self.assertAlmostEqual(captured_keypoints["left"][0][0], (24.75) / 3.0, places=4)
+        self.assertAlmostEqual(captured_keypoints["left"][0][1], (24.75) / 3.0, places=4)
+        self.assertAlmostEqual(captured_keypoints["right"][0][0], (26.0) / 3.0, places=4)
+        self.assertAlmostEqual(captured_keypoints["right"][0][1], (26.0) / 3.0, places=4)
 
     def test_write_match_visualization_cropped_requires_keypoints(self):
         empty_left = KeypointFile(4000, 3000, ())
@@ -2419,36 +2415,15 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         read_mock.assert_not_called()
 
-    def test_write_match_visualization_auto_large_empty_keypoints_raises_without_full_read(self):
+    def test_write_match_visualization_auto_large_empty_keypoints_uses_reduced_without_full_read(self):
         empty_left = KeypointFile(4000, 3000, ())
         empty_right = KeypointFile(4000, 3000, ())
-
-        with temporary_directory() as temp_dir, mock.patch.object(
-            match_visualization_module,
-            "_cube_dimensions",
-            return_value=(4000, 3000),
-        ) as cube_dimensions_mock, mock.patch.object(
-            match_visualization_module,
-            "_read_cube_as_stretched_byte",
-        ) as read_mock:
-            with self.assertRaisesRegex(ValueError, "Cannot render oversized auto visualization without keypoints"):
-                match_visualization_module.write_stereo_pair_match_visualization(
-                    "left.cub",
-                    "right.cub",
-                    empty_left,
-                    empty_right,
-                    output_path=temp_dir / "viz.png",
-                    visualization_mode="auto",
-                    max_preview_pixels=10_000,
-                )
-
-        self.assertEqual(cube_dimensions_mock.call_count, 2)
-        read_mock.assert_not_called()
-
-    def test_write_match_visualization_defaults_to_full_mode_for_large_images(self):
-        left_key_file = KeypointFile(4000, 3000, (Keypoint(100.0, 100.0),))
-        right_key_file = KeypointFile(4000, 3000, (Keypoint(105.0, 105.0),))
         read_windows: list[object | None] = []
+
+        def fake_create(source, output, *, level, **kwargs):
+            Path(output).parent.mkdir(parents=True, exist_ok=True)
+            Path(output).write_text("preview", encoding="utf-8")
+            return Path(output)
 
         def fake_read(cube_path, *, window=None, **kwargs):
             read_windows.append(window)
@@ -2462,6 +2437,65 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             "_cube_dimensions",
             return_value=(4000, 3000),
         ) as cube_dimensions_mock, mock.patch.object(
+            match_visualization_module,
+            "create_low_resolution_dom",
+            side_effect=fake_create,
+        ), mock.patch.object(
+            match_visualization_module,
+            "_read_cube_as_stretched_byte",
+            side_effect=fake_read,
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "drawMatches",
+            side_effect=fake_draw_matches,
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "imwrite",
+            return_value=True,
+        ):
+            result = match_visualization_module.write_stereo_pair_match_visualization(
+                "left.cub",
+                "right.cub",
+                empty_left,
+                empty_right,
+                output_path=temp_dir / "viz.png",
+                visualization_mode="auto",
+                max_preview_pixels=10_000,
+                visualization_target_long_edge=1024,
+                preview_cache_dir=temp_dir / "preview_cache",
+            )
+
+        self.assertEqual(cube_dimensions_mock.call_count, 2)
+        self.assertEqual(result["visualization_mode_used"], "reduced")
+        self.assertEqual(result["point_count"], 0)
+        self.assertEqual(read_windows, [None, None])
+
+    def test_write_match_visualization_defaults_to_auto_mode_for_large_images(self):
+        left_key_file = KeypointFile(4000, 3000, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4000, 3000, (Keypoint(105.0, 105.0),))
+        read_windows: list[object | None] = []
+
+        def fake_read(cube_path, *, window=None, **kwargs):
+            read_windows.append(window)
+            return np.full((32, 32), 128, dtype=np.uint8)
+
+        def fake_create(source, output, *, level, **kwargs):
+            Path(output).parent.mkdir(parents=True, exist_ok=True)
+            Path(output).write_text("preview", encoding="utf-8")
+            return Path(output)
+
+        def fake_draw_matches(*args, **kwargs):
+            return np.zeros((10, 10, 3), dtype=np.uint8)
+
+        with temporary_directory() as temp_dir, mock.patch.object(
+            match_visualization_module,
+            "_cube_dimensions",
+            return_value=(4000, 3000),
+        ) as cube_dimensions_mock, mock.patch.object(
+            match_visualization_module,
+            "create_low_resolution_dom",
+            side_effect=fake_create,
+        ), mock.patch.object(
             match_visualization_module,
             "_read_cube_as_stretched_byte",
             side_effect=fake_read,
@@ -2482,9 +2516,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 output_path=temp_dir / "viz.png",
             )
 
-        self.assertEqual(result["visualization_mode_requested"], "full")
-        self.assertEqual(result["visualization_mode_used"], "full")
-        cube_dimensions_mock.assert_not_called()
+        self.assertEqual(result["visualization_mode_requested"], "auto")
+        self.assertEqual(result["visualization_mode_used"], "reduced")
+        self.assertEqual(result["preview_level"], 1)
+        self.assertEqual(cube_dimensions_mock.call_count, 2)
         self.assertEqual(read_windows, [None, None])
 
     def test_write_match_visualization_explicit_full_mode_skips_dimension_probe(self):
@@ -2570,7 +2605,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 preview_cache_source="disabled",
             )
 
-    def test_write_match_visualization_rejects_matching_cache_source(self):
+    def test_write_match_visualization_matching_cache_requires_matching_preview_pair(self):
         left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
         right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
 
@@ -2584,6 +2619,54 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 visualization_mode="reduced",
                 preview_cache_source="matching_cache",
             )
+
+    def test_write_match_visualization_reduced_mode_reuses_matching_cache(self):
+        left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
+        right_key_file = KeypointFile(4096, 4096, (Keypoint(120.0, 120.0),))
+        read_paths: list[str] = []
+
+        def fake_read(cube_path, *, window=None, **kwargs):
+            read_paths.append(str(cube_path))
+            return np.full((64, 64), 128, dtype=np.uint8)
+
+        def fake_draw_matches(*args, **kwargs):
+            return np.zeros((10, 10, 3), dtype=np.uint8)
+
+        with temporary_directory() as temp_dir, mock.patch.object(
+            match_visualization_module,
+            "_cube_dimensions",
+            return_value=(1024, 1024),
+        ), mock.patch.object(
+            match_visualization_module,
+            "_read_cube_as_stretched_byte",
+            side_effect=fake_read,
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "drawMatches",
+            side_effect=fake_draw_matches,
+        ), mock.patch.object(
+            match_visualization_module.cv2,
+            "imwrite",
+            return_value=True,
+        ):
+            result = match_visualization_module.write_stereo_pair_match_visualization(
+                "left.cub",
+                "right.cub",
+                left_key_file,
+                right_key_file,
+                output_path=temp_dir / "viz.png",
+                visualization_mode="reduced",
+                preview_cache_source="matching_cache",
+                left_matching_preview_dom=temp_dir / "matching_left_level2.cub",
+                right_matching_preview_dom=temp_dir / "matching_right_level2.cub",
+                matching_preview_level=2,
+                preview_level=2,
+            )
+
+        self.assertEqual(result["visualization_mode_used"], "reduced")
+        self.assertEqual(result["preview_cache_source"], "matching_cache")
+        self.assertTrue(result["preview_cache_hit"])
+        self.assertEqual(read_paths, [str(temp_dir / "matching_left_level2.cub"), str(temp_dir / "matching_right_level2.cub")])
 
     def test_write_match_visualization_reduced_mode_generates_preview_cache(self):
         left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0),))
@@ -3677,6 +3760,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
     def test_parallel_tile_batch_worker_reuses_open_cubes_for_task_shard(self):
         open_paths: list[str] = []
         close_count = 0
+        progress_events: list[int] = []
 
         class FakeCube:
             def __init__(self):
@@ -3788,11 +3872,153 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             "_match_tile_task_with_open_cubes",
             side_effect=fake_match_task_with_open_cubes,
         ):
-            results = tile_matching_module._match_tile_task_batch_worker(tuple(tasks))
+            class RecordingQueue:
+                def put(self, value):
+                    progress_events.append(int(value))
+
+            results = tile_matching_module._match_tile_task_batch_worker(
+                tuple(tasks),
+                progress_queue=RecordingQueue(),
+            )
 
         self.assertEqual(open_paths, ["left.cub", "right.cub"])
         self.assertEqual(close_count, 2)
         self.assertEqual([index for index, _ in results], [0, 1])
+        self.assertEqual(progress_events, [1, 1])
+
+    def test_run_parallel_tile_match_tasks_drains_progress_queue_before_future_completion(self):
+        progress_call_order: list[str] = []
+
+        def build_result(local_start_x: int):
+            return tile_matching_module.TileMatchResult(
+                stats=tile_matching_module.TileMatchStats(
+                    local_start_x=local_start_x,
+                    local_start_y=0,
+                    width=8,
+                    height=8,
+                    left_start_x=local_start_x,
+                    left_start_y=0,
+                    right_start_x=local_start_x,
+                    right_start_y=0,
+                    left_valid_pixel_count=64,
+                    right_valid_pixel_count=64,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=0,
+                    right_feature_count=0,
+                    match_count=0,
+                    status="skipped_insufficient_matches",
+                ),
+                left_points=(),
+                right_points=(),
+            )
+
+        result_zero = build_result(0)
+        result_one = build_result(8)
+
+        class FakeQueue:
+            def __init__(self):
+                self._items: list[int] = []
+
+            def put(self, value):
+                self._items.append(int(value))
+
+            def get_nowait(self):
+                if not self._items:
+                    raise tile_matching_module.queue.Empty()
+                return self._items.pop(0)
+
+        class FakeManager:
+            def __init__(self, queue_instance):
+                self._queue_instance = queue_instance
+                self.shutdown_called = False
+
+            def Queue(self):
+                return self._queue_instance
+
+            def shutdown(self):
+                self.shutdown_called = True
+
+        class FakeFuture:
+            def __init__(self, label: str, indexed_results):
+                self._label = label
+                self._indexed_results = indexed_results
+
+            def result(self):
+                progress_call_order.append(f"result:{self._label}")
+                return self._indexed_results
+
+        fake_queue = FakeQueue()
+        fake_manager = FakeManager(fake_queue)
+        future_a = FakeFuture("a", ((0, result_zero),))
+        future_b = FakeFuture("b", ((1, result_one),))
+        submitted_queues: list[object] = []
+        wait_call_count = 0
+
+        class FakeExecutor:
+            def __init__(self, *args, **kwargs):
+                pass
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, exc_type, exc, tb):
+                return False
+
+            def submit(self, fn, chunk, progress_queue):
+                submitted_queues.append(progress_queue)
+                if chunk == ((0, {"chunk": "a"}),):
+                    return future_a
+                return future_b
+
+        def fake_wait(pending_futures, timeout, return_when):
+            nonlocal wait_call_count
+            wait_call_count += 1
+            if wait_call_count == 1:
+                fake_queue.put(1)
+                return set(), set(pending_futures)
+            if wait_call_count == 2:
+                fake_queue.put(1)
+                return {future_a}, set(pending_futures) - {future_a}
+            return {future_b}, set()
+
+        def progress_callback():
+            progress_call_order.append(f"progress:{len([item for item in progress_call_order if item.startswith('progress:')]) + 1}")
+
+        with mock.patch.object(
+            tile_matching_module,
+            "_chunk_tile_match_task_payloads",
+            return_value=[((0, {"chunk": "a"}),), ((1, {"chunk": "b"}),)],
+        ), mock.patch.object(
+            tile_matching_module,
+            "ProcessPoolExecutor",
+            FakeExecutor,
+        ), mock.patch.object(
+            tile_matching_module,
+            "wait",
+            side_effect=fake_wait,
+        ), mock.patch.object(
+            tile_matching_module.mp,
+            "Manager",
+            return_value=fake_manager,
+        ):
+            results = tile_matching_module._run_parallel_tile_match_tasks(
+                [object(), object()],
+                max_workers=2,
+                progress_callback=progress_callback,
+            )
+
+        self.assertEqual(results, [result_zero, result_one])
+        self.assertEqual(submitted_queues, [fake_queue, fake_queue])
+        self.assertTrue(fake_manager.shutdown_called)
+        self.assertEqual(
+            [entry for entry in progress_call_order if entry.startswith("progress:")],
+            ["progress:1", "progress:2"],
+        )
+        self.assertLess(
+            progress_call_order.index("progress:1"),
+            progress_call_order.index("result:a"),
+        )
 
     def test_match_dom_pair_reports_batched_parallel_backend(self):
         image = _build_textured_test_image(128, 128)

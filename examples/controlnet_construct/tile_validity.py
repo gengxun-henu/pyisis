@@ -17,6 +17,7 @@ from typing import Any, TYPE_CHECKING
 
 import numpy as np
 
+from .tile_cache import make_read_fn, TileCache
 from .tiling import TileWindow
 
 if TYPE_CHECKING:
@@ -475,6 +476,11 @@ def _build_index_from_open_cube(
     cube: Any,
     dom_path: str | Path,
     manifest: dict[str, object],
+    use_tile_cache: bool = False,
+    cache_max_mb: int = 100,
+    adaptive_warmup_count: int = 10,
+    adaptive_throughput_threshold_mbps: float = 200.0,
+    adaptive_recheck_every: int = 0,
 ) -> TileValidityIndex:
     from .preprocess import expand_invalid_mask_for_radius, summarize_valid_pixels
 
@@ -496,37 +502,58 @@ def _build_index_from_open_cube(
     total_counts = np.zeros((grid_height, grid_width), dtype=np.int64)
     uncertain = np.zeros((grid_height, grid_width), dtype=bool)
 
-    for cell_y in range(grid_height):
-        for cell_x in range(grid_width):
-            read_window, inner_y, inner_x, actual_width, actual_height = _cell_window_with_halo(
-                cell_x=cell_x,
-                cell_y=cell_y,
-                image_width=image_width,
-                image_height=image_height,
-                cell_width=cell_width,
-                cell_height=cell_height,
-                invalid_pixel_radius=invalid_pixel_radius,
-            )
+    cache: TileCache | None = None
+    if use_tile_cache:
+        _, cache = make_read_fn(
+            cube,
+            use_cache=True,
+            cache_max_mb=cache_max_mb,
+            adaptive_warmup_count=adaptive_warmup_count,
+            adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+            adaptive_recheck_every=adaptive_recheck_every,
+        )
 
-            if actual_width <= 0 or actual_height <= 0:
-                continue
+    try:
+        for cell_y in range(grid_height):
+            for cell_x in range(grid_width):
+                read_window, inner_y, inner_x, actual_width, actual_height = _cell_window_with_halo(
+                    cell_x=cell_x,
+                    cell_y=cell_y,
+                    image_width=image_width,
+                    image_height=image_height,
+                    cell_width=cell_width,
+                    cell_height=cell_height,
+                    invalid_pixel_radius=invalid_pixel_radius,
+                )
 
-            values = _read_cube_window_for_validity(cube, read_window, band=band)
-            invalid_mask, _stats = summarize_valid_pixels(
-                values,
-                invalid_values=invalid_values,
-                special_pixel_abs_threshold=special_pixel_abs_threshold,
-            )
-            expanded_mask = expand_invalid_mask_for_radius(
-                invalid_mask,
-                invalid_pixel_radius=invalid_pixel_radius,
-            )
+                if actual_width <= 0 or actual_height <= 0:
+                    continue
 
-            inner_mask = expanded_mask[inner_y, inner_x]
-            total = int(actual_width * actual_height)
-            invalid = int(inner_mask.sum())
-            valid_counts[cell_y, cell_x] = total - invalid
-            total_counts[cell_y, cell_x] = total
+                if cache is not None:
+                    values = cache.read_region(
+                        read_window.start_x, read_window.start_y,
+                        read_window.width, read_window.height, band=band,
+                    )
+                else:
+                    values = _read_cube_window_for_validity(cube, read_window, band=band)
+                invalid_mask, _stats = summarize_valid_pixels(
+                    values,
+                    invalid_values=invalid_values,
+                    special_pixel_abs_threshold=special_pixel_abs_threshold,
+                )
+                expanded_mask = expand_invalid_mask_for_radius(
+                    invalid_mask,
+                    invalid_pixel_radius=invalid_pixel_radius,
+                )
+
+                inner_mask = expanded_mask[inner_y, inner_x]
+                total = int(actual_width * actual_height)
+                invalid = int(inner_mask.sum())
+                valid_counts[cell_y, cell_x] = total - invalid
+                total_counts[cell_y, cell_x] = total
+    finally:
+        if cache is not None:
+            cache.close()
 
     return TileValidityIndex(
         dom_path=str(dom_path),
@@ -554,6 +581,11 @@ def ensure_dom_validity_index(
     invalid_pixel_radius: int,
     cell_width: int,
     cell_height: int,
+    use_tile_cache: bool = False,
+    cache_max_mb: int = 100,
+    adaptive_warmup_count: int = 10,
+    adaptive_throughput_threshold_mbps: float = 200.0,
+    adaptive_recheck_every: int = 0,
 ) -> tuple[TileValidityIndex, dict[str, object]]:
     """Ensure a cached DOM validity index; cube must be open, not closed here, and cache_dir writable."""
     resolved_cell_width = validate_tile_validity_cell_size(cell_width, field_name="tile_validity_cell_width")
@@ -594,7 +626,14 @@ def ensure_dom_validity_index(
             diagnostics["status"] = "hit"
             return index, diagnostics
 
-    index = _build_index_from_open_cube(cube=cube, dom_path=dom_path, manifest=manifest)
+    index = _build_index_from_open_cube(
+        cube=cube, dom_path=dom_path, manifest=manifest,
+        use_tile_cache=use_tile_cache,
+        cache_max_mb=cache_max_mb,
+        adaptive_warmup_count=adaptive_warmup_count,
+        adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+        adaptive_recheck_every=adaptive_recheck_every,
+    )
     _save_index_to_cache(index, manifest_path, data_path)
     diagnostics["status"] = "rebuilt_after_error" if "cache_error" in diagnostics else "rebuilt"
     return index, diagnostics

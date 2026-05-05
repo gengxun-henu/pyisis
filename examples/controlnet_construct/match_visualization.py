@@ -34,7 +34,7 @@ import isis_pybind as ip
 
 SUPPORTED_VISUALIZATION_MODES = ("auto", "full", "reduced", "cropped", "reduced_cropped")
 SUPPORTED_MEMORY_PROFILES = ("high-memory", "balanced", "low-memory")
-SUPPORTED_PREVIEW_CACHE_SOURCES = ("auto", "visualization_cache", "disabled")
+SUPPORTED_PREVIEW_CACHE_SOURCES = ("auto", "matching_cache", "visualization_cache", "disabled")
 MEMORY_PROFILE_TARGET_LONG_EDGES = {
     "high-memory": 4096,
     "balanced": 2048,
@@ -143,6 +143,13 @@ def _cube_dimensions(cube_path: str | Path) -> tuple[int, int]:
     finally:
         if cube.is_open():
             cube.close()
+
+
+def _scaled_dimensions_for_level(*, image_width: int, image_height: int, level: int) -> tuple[int, int]:
+    scale_divisor = max(1, 2 ** int(level))
+    scaled_width = max(1, (int(image_width) + scale_divisor - 1) // scale_divisor)
+    scaled_height = max(1, (int(image_height) + scale_divisor - 1) // scale_divisor)
+    return scaled_width, scaled_height
 
 
 def _preview_cache_hash_key(source_path: str | Path) -> str:
@@ -271,13 +278,60 @@ def _auto_visualization_mode(
     image_width: int,
     image_height: int,
     options: VisualizationOptions,
+    has_paired_keypoints: bool,
 ) -> str:
-    pixel_count = int(image_width) * int(image_height)
-    if options.max_preview_pixels is not None and pixel_count > options.max_preview_pixels:
-        return "cropped"
-    if max(image_width, image_height) > options.visualization_target_long_edge:
+    resolved_width = int(image_width)
+    resolved_height = int(image_height)
+    pixel_count = resolved_width * resolved_height
+    oversized_by_long_edge = max(resolved_width, resolved_height) > options.visualization_target_long_edge
+    oversized_by_pixels = options.max_preview_pixels is not None and pixel_count > options.max_preview_pixels
+
+    if not oversized_by_long_edge and not oversized_by_pixels:
+        return "full"
+
+    if options.preview_cache_source != "disabled":
+        resolved_level = (
+            options.preview_level
+            if options.preview_level is not None
+            else reduce_level_for_pair_target_long_edge(
+                left_width=resolved_width,
+                left_height=resolved_height,
+                right_width=resolved_width,
+                right_height=resolved_height,
+                target_long_edge=options.visualization_target_long_edge,
+            )
+        )
+        reduced_width, reduced_height = _scaled_dimensions_for_level(
+            image_width=resolved_width,
+            image_height=resolved_height,
+            level=resolved_level,
+        )
+        reduced_pixel_count = reduced_width * reduced_height
+        if options.max_preview_pixels is not None and reduced_pixel_count > options.max_preview_pixels and has_paired_keypoints:
+            return "reduced_cropped"
+        return "reduced"
+
+    if has_paired_keypoints:
         return "cropped"
     return "full"
+
+
+def _resolve_matching_preview_pair(
+    *,
+    left_matching_preview_dom: str | Path | None,
+    right_matching_preview_dom: str | Path | None,
+    matching_preview_level: int | None,
+    resolved_level: int,
+) -> tuple[Path, Path] | None:
+    if left_matching_preview_dom is None or right_matching_preview_dom is None:
+        return None
+    if matching_preview_level is None or int(matching_preview_level) != int(resolved_level):
+        return None
+    left_preview_path = Path(left_matching_preview_dom)
+    right_preview_path = Path(right_matching_preview_dom)
+    _cube_dimensions(left_preview_path)
+    _cube_dimensions(right_preview_path)
+    return left_preview_path, right_preview_path
 
 
 def crop_window_for_keypoints(
@@ -430,7 +484,7 @@ def write_stereo_pair_match_visualization(
     invalid_values: tuple[float, ...] = (),
     special_pixel_abs_threshold: float = 1.0e300,
     highlight_match_indices: list[int] | None = None,
-    visualization_mode: str = "full",
+    visualization_mode: str = DEFAULT_VISUALIZATION_MODE,
     memory_profile: str = DEFAULT_MEMORY_PROFILE,
     visualization_target_long_edge: int | None = None,
     max_preview_pixels: int | None = None,
@@ -439,6 +493,9 @@ def write_stereo_pair_match_visualization(
     preview_cache_source: str = DEFAULT_PREVIEW_CACHE_SOURCE,
     preview_force_regenerate: bool = False,
     preview_level: int | None = None,
+    left_matching_preview_dom: str | Path | None = None,
+    right_matching_preview_dom: str | Path | None = None,
+    matching_preview_level: int | None = None,
 ) -> dict[str, object]:
     if len(left_key_file.points) != len(right_key_file.points):
         raise ValueError("Left and right keypoint files must contain the same number of points for visualization.")
@@ -451,7 +508,6 @@ def write_stereo_pair_match_visualization(
         else default_match_visualization_path(left_dom_path, right_dom_path, output_directory, timestamp=timestamp)
     )
 
-    # Default to "full" to preserve legacy callers; "auto" must be explicit to probe dimensions.
     options = resolve_visualization_options(
         visualization_mode=visualization_mode,
         memory_profile=memory_profile,
@@ -482,40 +538,91 @@ def write_stereo_pair_match_visualization(
     preview_level = options.preview_level
     source_scale_factor = 1.0
     has_paired_keypoints = bool(left_key_file.points and right_key_file.points)
-    if mode_requested in {"reduced", "reduced_cropped"}:
+    left_width: int | None = None
+    left_height: int | None = None
+    right_width: int | None = None
+    right_height: int | None = None
+    if mode_requested == "auto":
+        left_width, left_height = _cube_dimensions(left_dom_path)
+        right_width, right_height = _cube_dimensions(right_dom_path)
+        mode_used = _auto_visualization_mode(
+            image_width=max(left_width, right_width),
+            image_height=max(left_height, right_height),
+            options=options,
+            has_paired_keypoints=has_paired_keypoints,
+        )
+    if mode_used in {"reduced", "reduced_cropped"}:
         if options.preview_cache_source == "disabled":
             raise ValueError("Reduced visualization requires a preview cache; preview_cache_source cannot be disabled.")
-        preview_cache_source = "visualization_cache"
-        if options.preview_level is None:
-            left_width, left_height = _cube_dimensions(left_dom_path)
-            right_width, right_height = _cube_dimensions(right_dom_path)
-            resolved_level = reduce_level_for_pair_target_long_edge(
-                left_width=left_width,
-                left_height=left_height,
-                right_width=right_width,
-                right_height=right_height,
-                target_long_edge=options.visualization_target_long_edge,
+        if options.preview_cache_source == "matching_cache" and (
+            left_matching_preview_dom is None
+            or right_matching_preview_dom is None
+            or (options.preview_level is None and matching_preview_level is None)
+        ):
+            raise ValueError(
+                "matching_cache preview source requires left/right matching preview DOMs and a matching preview level."
             )
+        if options.preview_level is None:
+            if options.preview_cache_source == "matching_cache" and matching_preview_level is not None:
+                resolved_level = _non_negative_int(matching_preview_level, field_name="matching_preview_level")
+            else:
+                if left_width is None or left_height is None or right_width is None or right_height is None:
+                    left_width, left_height = _cube_dimensions(left_dom_path)
+                    right_width, right_height = _cube_dimensions(right_dom_path)
+                resolved_level = reduce_level_for_pair_target_long_edge(
+                    left_width=left_width,
+                    left_height=left_height,
+                    right_width=right_width,
+                    right_height=right_height,
+                    target_long_edge=options.visualization_target_long_edge,
+                )
         else:
             resolved_level = options.preview_level
-        preview_cache_dir = options.preview_cache_dir or resolved_output_path.parent / "preview_cache"
-        left_preview_path, left_cache_hit, left_cache_validation = _ensure_preview_cube(
-            left_dom_path,
-            cache_dir=preview_cache_dir,
-            level=resolved_level,
-            force_regenerate=options.preview_force_regenerate,
-        )
-        right_preview_path, right_cache_hit, right_cache_validation = _ensure_preview_cube(
-            right_dom_path,
-            cache_dir=preview_cache_dir,
-            level=resolved_level,
-            force_regenerate=options.preview_force_regenerate,
-        )
-        preview_cache_hit_left = left_cache_hit
-        preview_cache_hit_right = right_cache_hit
-        preview_cache_validation_left = left_cache_validation
-        preview_cache_validation_right = right_cache_validation
-        preview_cache_hit = left_cache_hit and right_cache_hit
+        matching_preview_error: str | None = None
+        matching_preview_pair: tuple[Path, Path] | None = None
+        if options.preview_cache_source in {"auto", "matching_cache"}:
+            try:
+                matching_preview_pair = _resolve_matching_preview_pair(
+                    left_matching_preview_dom=left_matching_preview_dom,
+                    right_matching_preview_dom=right_matching_preview_dom,
+                    matching_preview_level=matching_preview_level,
+                    resolved_level=resolved_level,
+                )
+            except Exception as exc:
+                matching_preview_error = f"matching_cache_validation_failed:{type(exc).__name__}"
+        if matching_preview_pair is not None:
+            left_preview_path, right_preview_path = matching_preview_pair
+            preview_cache_source = "matching_cache"
+            preview_cache_hit_left = True
+            preview_cache_hit_right = True
+            preview_cache_hit = True
+        else:
+            if options.preview_cache_source == "matching_cache":
+                raise ValueError(
+                    "matching_cache preview source requires left/right matching preview DOMs at the resolved preview level."
+                )
+            preview_cache_source = "visualization_cache"
+            preview_cache_dir = options.preview_cache_dir or resolved_output_path.parent / "preview_cache"
+            left_preview_path, left_cache_hit, left_cache_validation = _ensure_preview_cube(
+                left_dom_path,
+                cache_dir=preview_cache_dir,
+                level=resolved_level,
+                force_regenerate=options.preview_force_regenerate,
+            )
+            right_preview_path, right_cache_hit, right_cache_validation = _ensure_preview_cube(
+                right_dom_path,
+                cache_dir=preview_cache_dir,
+                level=resolved_level,
+                force_regenerate=options.preview_force_regenerate,
+            )
+            preview_cache_hit_left = left_cache_hit
+            preview_cache_hit_right = right_cache_hit
+            preview_cache_validation_left = left_cache_validation
+            preview_cache_validation_right = right_cache_validation
+            preview_cache_hit = left_cache_hit and right_cache_hit
+            if matching_preview_error is not None:
+                preview_cache_validation_left = preview_cache_validation_left or matching_preview_error
+                preview_cache_validation_right = preview_cache_validation_right or matching_preview_error
         preview_level = resolved_level
         source_scale_factor = 1.0 / float(2 ** resolved_level)
         left_read_path = left_preview_path
@@ -557,52 +664,40 @@ def write_stereo_pair_match_visualization(
                 mode_used = "reduced"
         else:
             mode_used = "reduced"
-    elif mode_requested in {"auto", "cropped"}:
+    elif mode_used == "cropped":
         if mode_requested == "cropped" and not has_paired_keypoints:
             raise ValueError("Cropped visualization requires at least one keypoint in each input key file.")
         left_width, left_height = _cube_dimensions(left_dom_path)
         right_width, right_height = _cube_dimensions(right_dom_path)
-        if mode_requested == "auto":
-            mode_used = _auto_visualization_mode(
-                image_width=max(left_width, right_width),
-                image_height=max(left_height, right_height),
-                options=options,
+        if has_paired_keypoints:
+            left_window = crop_window_for_keypoints(
+                left_key_file.points,
+                image_width=left_width,
+                image_height=left_height,
+                margin_pixels=options.preview_crop_margin_pixels,
             )
-            if mode_used in {"reduced", "reduced_cropped"}:
-                raise NotImplementedError(
-                    f"Visualization mode '{mode_used}' requires reduced previews (Task 5)."
-                )
-
-        if mode_used == "cropped":
-            if has_paired_keypoints:
-                left_window = crop_window_for_keypoints(
-                    left_key_file.points,
-                    image_width=left_width,
-                    image_height=left_height,
-                    margin_pixels=options.preview_crop_margin_pixels,
-                )
-                right_window = crop_window_for_keypoints(
-                    right_key_file.points,
-                    image_width=right_width,
-                    image_height=right_height,
-                    margin_pixels=options.preview_crop_margin_pixels,
-                )
-                left_render_key_file = _offset_keypoint_file(
-                    left_key_file,
-                    start_x=left_window.start_x,
-                    start_y=left_window.start_y,
-                    width=left_window.width,
-                    height=left_window.height,
-                )
-                right_render_key_file = _offset_keypoint_file(
-                    right_key_file,
-                    start_x=right_window.start_x,
-                    start_y=right_window.start_y,
-                    width=right_window.width,
-                    height=right_window.height,
-                )
-            else:
-                raise ValueError("Cannot render oversized auto visualization without keypoints; use full or reduced mode explicitly.")
+            right_window = crop_window_for_keypoints(
+                right_key_file.points,
+                image_width=right_width,
+                image_height=right_height,
+                margin_pixels=options.preview_crop_margin_pixels,
+            )
+            left_render_key_file = _offset_keypoint_file(
+                left_key_file,
+                start_x=left_window.start_x,
+                start_y=left_window.start_y,
+                width=left_window.width,
+                height=left_window.height,
+            )
+            right_render_key_file = _offset_keypoint_file(
+                right_key_file,
+                start_x=right_window.start_x,
+                start_y=right_window.start_y,
+                width=right_window.width,
+                height=right_window.height,
+            )
+        else:
+            raise ValueError("Cannot render oversized auto visualization without keypoints; use reduced mode or provide matching keypoints.")
 
     left_image = _read_cube_as_stretched_byte(
         left_read_path,

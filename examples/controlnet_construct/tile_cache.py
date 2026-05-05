@@ -74,6 +74,9 @@ class TileCache:
         self._throughput_threshold = adaptive_throughput_threshold_mbps
         self._recheck_every = adaptive_recheck_every
         self._reads_since_recheck: int = 0
+        # Rolling accumulators for recheck (reset after each evaluation).
+        self._recheck_bytes: int = 0
+        self._recheck_seconds: float = 0.0
 
     def read_region(
         self,
@@ -96,11 +99,13 @@ class TileCache:
         start_row = y // self._tile_h
         end_row = (y + h - 1) // self._tile_h
 
-        # Ensure all tiles are cached.
+        # Ensure all tiles are cached (and promote accessed tiles in LRU order).
         for row in range(start_row, end_row + 1):
             for col in range(start_col, end_col + 1):
                 key = TileCoord(col, row, band)
-                if key not in self._cache:
+                if key in self._cache:
+                    self._cache.move_to_end(key)
+                else:
                     self._load_tile(ip, col, row, band)
 
         # Assemble output from cached tiles.
@@ -145,14 +150,18 @@ class TileCache:
                 self._decide_state()
 
         # Recheck tracking in ACTIVE state.
+        self._recheck_bytes += tile_data.nbytes
+        self._recheck_seconds += elapsed
         if self._state == CacheState.ACTIVE and self._recheck_every > 0:
             self._reads_since_recheck += 1
             if self._reads_since_recheck >= self._recheck_every:
                 self._reads_since_recheck = 0
-                if self._total_warmup_seconds > 0:
-                    avg_mbps = self._total_warmup_bytes / self._total_warmup_seconds / 1_048_576
+                if self._recheck_seconds > 0:
+                    avg_mbps = self._recheck_bytes / self._recheck_seconds / 1_048_576
                     if avg_mbps >= self._throughput_threshold:
                         self._state = CacheState.BYPASSED
+                self._recheck_bytes = 0
+                self._recheck_seconds = 0.0
 
     def _decide_state(self) -> None:
         """Evaluate warmup data and decide cache state."""

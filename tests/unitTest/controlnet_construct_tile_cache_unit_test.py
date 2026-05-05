@@ -139,6 +139,32 @@ class TestTileCacheLRU(unittest.TestCase):
                 if cube.is_open():
                     cube.close()
 
+    def test_lru_promotes_hot_tile(self):
+        """Re-accessing a cached tile should promote it in LRU order."""
+        data = np.arange(64, dtype=np.float64).reshape((8, 8))
+        with temporary_directory() as tmp:
+            cube, _ = make_tile_test_cube(tmp, data, tile_samples=4, tile_lines=4)
+            try:
+                cache = TileCache(cube, cache_max_mb=1)
+                cache._cache_max_bytes = 384  # 3 tiles capacity
+
+                # Load 3 tiles.
+                cache.read_region(0, 0, 4, 4)   # tile (0,0) -- oldest
+                cache.read_region(4, 0, 4, 4)   # tile (1,0)
+                cache.read_region(0, 4, 4, 4)   # tile (0,1) -- newest
+
+                # Re-access tile (0,0) to promote it.
+                cache.read_region(0, 0, 4, 4)   # tile (0,0) -- now newest
+
+                # Read 4th tile -- should evict (1,0) which is now oldest.
+                cache.read_region(4, 4, 4, 4)   # tile (1,1)
+                self.assertEqual(len(cache._cache), 3)
+                self.assertIn(TileCoord(0, 0, 1), cache._cache)
+                self.assertNotIn(TileCoord(1, 0, 1), cache._cache)
+            finally:
+                if cube.is_open():
+                    cube.close()
+
 
 class TestTileCacheAdaptiveBypass(unittest.TestCase):
     """Test adaptive warmup -> bypass decision."""
@@ -177,6 +203,35 @@ class TestTileCacheAdaptiveBypass(unittest.TestCase):
                 for i in range(3):
                     cache.read_region(i * 4, 0, 4, 4)
                 self.assertEqual(cache._state, CacheState.ACTIVE)
+            finally:
+                if cube.is_open():
+                    cube.close()
+
+    def test_recheck_triggers_bypass_after_warmup(self):
+        """Recheck with fresh data should flip ACTIVE to BYPASSED."""
+        data = np.zeros((16, 16), dtype=np.float64)
+        with temporary_directory() as tmp:
+            cube, _ = make_tile_test_cube(tmp, data, tile_samples=4, tile_lines=4)
+            try:
+                # Warmup uses impossibly high threshold -> ACTIVE.
+                cache = TileCache(
+                    cube,
+                    cache_max_mb=10,
+                    adaptive_warmup_count=2,
+                    adaptive_throughput_threshold_mbps=1e15,
+                    adaptive_recheck_every=2,  # Recheck every 2 reads after warmup.
+                )
+                # 2 warmup reads -> ACTIVE (threshold too high).
+                cache.read_region(0, 0, 4, 4)
+                cache.read_region(4, 0, 4, 4)
+                self.assertEqual(cache._state, CacheState.ACTIVE)
+
+                # After 2 more ACTIVE reads, recheck should use fresh data.
+                # Use a very low threshold so the fresh reads will bypass.
+                cache._throughput_threshold = 0.0001
+                cache.read_region(0, 4, 4, 4)
+                cache.read_region(4, 4, 4, 4)
+                self.assertEqual(cache._state, CacheState.BYPASSED)
             finally:
                 if cube.is_open():
                     cube.close()

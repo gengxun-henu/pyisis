@@ -8,11 +8,13 @@ Updated: 2026-05-03  Geng Xun batched process-pool tile tasks so each worker sha
 from __future__ import annotations
 
 from collections.abc import Callable
-from concurrent.futures import ProcessPoolExecutor, as_completed
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from dataclasses import dataclass
+import functools
 import multiprocessing as mp
 import os
 from pathlib import Path
+import queue
 from typing import Any
 
 import cv2
@@ -27,6 +29,7 @@ from .preprocess import (
     stretch_to_byte,
 )
 from .runtime import bootstrap_runtime_environment
+from .tile_cache import make_read_fn, TileCache
 from .tiling import TileWindow, generate_tiles, requires_tiling
 
 
@@ -597,6 +600,37 @@ def _build_tile_match_tasks(
     ]
 
 
+def _make_tile_read_fn(
+    cube: ip.Cube,
+    *,
+    use_tile_cache: bool,
+    cache_max_mb: int,
+    adaptive_warmup_count: int,
+    adaptive_throughput_threshold_mbps: float,
+    adaptive_recheck_every: int,
+) -> tuple[Callable[[Any, TileWindow, int], np.ndarray], TileCache | None]:
+    """Create a read function compatible with _match_tile_task_with_open_cubes."""
+    read_fn_or_method, cache = make_read_fn(
+        cube,
+        use_cache=use_tile_cache,
+        cache_max_mb=cache_max_mb,
+        adaptive_warmup_count=adaptive_warmup_count,
+        adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+        adaptive_recheck_every=adaptive_recheck_every,
+    )
+
+    if use_tile_cache and cache is not None:
+        # TileCache.read_region takes (x, y, w, h, band).
+        # We need a wrapper that takes (cube, window, band).
+        def cached_read(cube: Any, window: TileWindow, band: int) -> np.ndarray:
+            return read_fn_or_method(
+                window.start_x, window.start_y, window.width, window.height, band,
+            )
+        return cached_read, cache
+    else:
+        return _read_cube_window, None
+
+
 def _match_tile_task_with_open_cubes(
     task: TileMatchTask,
     *,
@@ -604,9 +638,11 @@ def _match_tile_task_with_open_cubes(
     right_cube: ip.Cube,
     left_invalid_values: tuple[float, ...],
     right_invalid_values: tuple[float, ...],
+    read_fn: Callable[[Any, TileWindow, int], np.ndarray] | None = None,
 ) -> TileMatchResult:
-    left_values = _read_cube_window(left_cube, task.paired_window.left_window, band=task.band)
-    right_values = _read_cube_window(right_cube, task.paired_window.right_window, band=task.band)
+    _read = read_fn if read_fn is not None else _read_cube_window
+    left_values = _read(left_cube, task.paired_window.left_window, band=task.band)
+    right_values = _read(right_cube, task.paired_window.right_window, band=task.band)
     return _match_tile_from_window_values(
         left_values=left_values,
         right_values=right_values,
@@ -633,26 +669,62 @@ def _match_tile_task_with_open_cubes(
     )
 
 
-def _match_single_paired_window_worker(task: TileMatchTask) -> TileMatchResult:
+def _match_single_paired_window_worker(
+    task: TileMatchTask,
+    *,
+    use_tile_cache: bool = False,
+    cache_max_mb: int = 100,
+    adaptive_warmup_count: int = 10,
+    adaptive_throughput_threshold_mbps: float = 200.0,
+    adaptive_recheck_every: int = 0,
+) -> TileMatchResult:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
     left_cube.open(task.left_dom_path, "r")
     right_cube.open(task.right_dom_path, "r")
+    left_cache: TileCache | None = None
+    right_cache: TileCache | None = None
     try:
         left_invalid_values = _resolved_invalid_values_for_cube(left_cube, task.invalid_values)
         right_invalid_values = _resolved_invalid_values_for_cube(right_cube, task.invalid_values)
+        left_read_fn, left_cache = _make_tile_read_fn(
+            left_cube,
+            use_tile_cache=use_tile_cache,
+            cache_max_mb=cache_max_mb,
+            adaptive_warmup_count=adaptive_warmup_count,
+            adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+            adaptive_recheck_every=adaptive_recheck_every,
+        )
+        right_read_fn, right_cache = _make_tile_read_fn(
+            right_cube,
+            use_tile_cache=use_tile_cache,
+            cache_max_mb=cache_max_mb,
+            adaptive_warmup_count=adaptive_warmup_count,
+            adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+            adaptive_recheck_every=adaptive_recheck_every,
+        )
+        def combined_read(cube: Any, window: TileWindow, band: int) -> np.ndarray:
+            if cube is left_cube:
+                return left_read_fn(cube, window, band)
+            return right_read_fn(cube, window, band)
+
         return _match_tile_task_with_open_cubes(
             task,
             left_cube=left_cube,
             right_cube=right_cube,
             left_invalid_values=left_invalid_values,
             right_invalid_values=right_invalid_values,
+            read_fn=combined_read if use_tile_cache else None,
         )
     finally:
         if left_cube.is_open():
             left_cube.close()
         if right_cube.is_open():
             right_cube.close()
+        if left_cache is not None:
+            left_cache.close()
+        if right_cache is not None:
+            right_cache.close()
 
 
 def _tile_match_process_pool_context() -> mp.context.BaseContext:
@@ -774,6 +846,13 @@ def _chunk_tile_match_task_payloads(
 
 def _match_tile_task_batch_worker(
     indexed_tasks: tuple[IndexedTileMatchTask | tuple[int, dict[str, Any]], ...],
+    progress_queue: Any | None = None,
+    *,
+    use_tile_cache: bool = False,
+    cache_max_mb: int = 100,
+    adaptive_warmup_count: int = 10,
+    adaptive_throughput_threshold_mbps: float = 200.0,
+    adaptive_recheck_every: int = 0,
 ) -> tuple[tuple[int, TileMatchResult], ...]:
     if not indexed_tasks:
         return ()
@@ -783,9 +862,33 @@ def _match_tile_task_batch_worker(
     right_cube = ip.Cube()
     left_cube.open(first_task.left_dom_path, "r")
     right_cube.open(first_task.right_dom_path, "r")
+    left_cache: TileCache | None = None
+    right_cache: TileCache | None = None
     try:
         left_invalid_values = _resolved_invalid_values_for_cube(left_cube, first_task.invalid_values)
         right_invalid_values = _resolved_invalid_values_for_cube(right_cube, first_task.invalid_values)
+        left_read_fn, left_cache = _make_tile_read_fn(
+            left_cube,
+            use_tile_cache=use_tile_cache,
+            cache_max_mb=cache_max_mb,
+            adaptive_warmup_count=adaptive_warmup_count,
+            adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+            adaptive_recheck_every=adaptive_recheck_every,
+        )
+        right_read_fn, right_cache = _make_tile_read_fn(
+            right_cube,
+            use_tile_cache=use_tile_cache,
+            cache_max_mb=cache_max_mb,
+            adaptive_warmup_count=adaptive_warmup_count,
+            adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+            adaptive_recheck_every=adaptive_recheck_every,
+        )
+        def combined_read(cube: Any, window: TileWindow, band: int) -> np.ndarray:
+            if cube is left_cube:
+                return left_read_fn(cube, window, band)
+            return right_read_fn(cube, window, band)
+
+        read_fn = combined_read if use_tile_cache else None
         results: list[tuple[int, TileMatchResult]] = []
         for indexed_task in resolved_indexed_tasks:
             results.append(
@@ -797,15 +900,22 @@ def _match_tile_task_batch_worker(
                         right_cube=right_cube,
                         left_invalid_values=left_invalid_values,
                         right_invalid_values=right_invalid_values,
+                        read_fn=read_fn,
                     ),
                 )
             )
+            if progress_queue is not None:
+                progress_queue.put(1)
         return tuple(results)
     finally:
         if left_cube.is_open():
             left_cube.close()
         if right_cube.is_open():
             right_cube.close()
+        if left_cache is not None:
+            left_cache.close()
+        if right_cache is not None:
+            right_cache.close()
 
 
 def _run_parallel_tile_match_tasks(
@@ -813,20 +923,74 @@ def _run_parallel_tile_match_tasks(
     *,
     max_workers: int,
     progress_callback: Callable[[], None] | None = None,
+    use_tile_cache: bool = False,
+    cache_max_mb: int = 100,
+    adaptive_warmup_count: int = 10,
+    adaptive_throughput_threshold_mbps: float = 200.0,
+    adaptive_recheck_every: int = 0,
 ) -> list[TileMatchResult]:
     if not tasks:
         return []
     chunks = _chunk_tile_match_task_payloads(tasks, max_workers=max_workers)
-    with ProcessPoolExecutor(max_workers=min(max_workers, len(chunks)), mp_context=_tile_match_process_pool_context()) as executor:
-        futures = {executor.submit(_match_tile_task_batch_worker, chunk): chunk for chunk in chunks}
-        ordered_results: list[TileMatchResult | None] = [None] * len(tasks)
-        for future in as_completed(futures):
-            indexed_results = future.result()
-            for index, result in indexed_results:
-                ordered_results[index] = result
-                if progress_callback is not None:
+    manager = None
+    progress_queue = None
+    progress_event_count = 0
+    try:
+        if progress_callback is not None:
+            manager = mp.Manager()
+            progress_queue = manager.Queue()
+
+        def drain_progress_events() -> int:
+            drained_count = 0
+            if progress_queue is None:
+                return drained_count
+            while True:
+                try:
+                    progress_queue.get_nowait()
+                except queue.Empty:
+                    break
+                else:
+                    drained_count += 1
+                    if progress_callback is not None:
+                        progress_callback()
+            return drained_count
+
+        worker_fn = functools.partial(
+            _match_tile_task_batch_worker,
+            use_tile_cache=use_tile_cache,
+            cache_max_mb=cache_max_mb,
+            adaptive_warmup_count=adaptive_warmup_count,
+            adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+            adaptive_recheck_every=adaptive_recheck_every,
+        )
+
+        with ProcessPoolExecutor(max_workers=min(max_workers, len(chunks)), mp_context=_tile_match_process_pool_context()) as executor:
+            futures = {
+                executor.submit(worker_fn, chunk, progress_queue): chunk
+                for chunk in chunks
+            }
+            ordered_results: list[TileMatchResult | None] = [None] * len(tasks)
+            pending_futures = set(futures)
+            while pending_futures:
+                done_futures, pending_futures = wait(
+                    pending_futures,
+                    timeout=0.1,
+                    return_when=FIRST_COMPLETED,
+                )
+                progress_event_count += drain_progress_events()
+                for future in done_futures:
+                    indexed_results = future.result()
+                    for index, result in indexed_results:
+                        ordered_results[index] = result
+
+            progress_event_count += drain_progress_events()
+            if progress_callback is not None and progress_event_count < len(tasks):
+                for _ in range(len(tasks) - progress_event_count):
                     progress_callback()
-        return [result for result in ordered_results if result is not None]
+            return [result for result in ordered_results if result is not None]
+    finally:
+        if manager is not None:
+            manager.shutdown()
 
 
 def _run_serial_tile_match_tasks(
@@ -853,40 +1017,80 @@ def _run_serial_tile_match_tasks(
     sift_edge_threshold: float,
     sift_sigma: float,
     progress_callback: Callable[[], None] | None = None,
+    use_tile_cache: bool = False,
+    cache_max_mb: int = 100,
+    adaptive_warmup_count: int = 10,
+    adaptive_throughput_threshold_mbps: float = 200.0,
+    adaptive_recheck_every: int = 0,
 ) -> list[TileMatchResult]:
-    tile_results: list[TileMatchResult] = []
-    for paired_window in windows:
-        left_values = _read_cube_window(left_cube, paired_window.left_window, band=band)
-        right_values = _read_cube_window(right_cube, paired_window.right_window, band=band)
-        tile_results.append(
-            _match_tile_from_window_values(
-                left_values=left_values,
-                right_values=right_values,
-                local_window=paired_window.local_window,
-                left_window=paired_window.left_window,
-                right_window=paired_window.right_window,
-                minimum_value=minimum_value,
-                maximum_value=maximum_value,
-                lower_percent=lower_percent,
-                upper_percent=upper_percent,
-                left_invalid_values=left_invalid_values,
-                right_invalid_values=right_invalid_values,
-                special_pixel_abs_threshold=special_pixel_abs_threshold,
-                min_valid_pixels=min_valid_pixels,
-                valid_pixel_percent_threshold=valid_pixel_percent_threshold,
-                invalid_pixel_radius=invalid_pixel_radius,
-                ratio_test=ratio_test,
-                matcher_method=matcher_method,
-                max_features=max_features,
-                sift_octave_layers=sift_octave_layers,
-                sift_contrast_threshold=sift_contrast_threshold,
-                sift_edge_threshold=sift_edge_threshold,
-                sift_sigma=sift_sigma,
-            )
+    left_cache: TileCache | None = None
+    right_cache: TileCache | None = None
+    if use_tile_cache:
+        left_read_fn, left_cache = _make_tile_read_fn(
+            left_cube,
+            use_tile_cache=True,
+            cache_max_mb=cache_max_mb,
+            adaptive_warmup_count=adaptive_warmup_count,
+            adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+            adaptive_recheck_every=adaptive_recheck_every,
         )
-        if progress_callback is not None:
-            progress_callback()
-    return tile_results
+        right_read_fn, right_cache = _make_tile_read_fn(
+            right_cube,
+            use_tile_cache=True,
+            cache_max_mb=cache_max_mb,
+            adaptive_warmup_count=adaptive_warmup_count,
+            adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
+            adaptive_recheck_every=adaptive_recheck_every,
+        )
+        def combined_read(cube: Any, window: TileWindow, band: int) -> np.ndarray:
+            if cube is left_cube:
+                return left_read_fn(cube, window, band)
+            return right_read_fn(cube, window, band)
+    else:
+        combined_read = None
+    tile_results: list[TileMatchResult] = []
+    try:
+        for paired_window in windows:
+            if combined_read is not None:
+                left_values = combined_read(left_cube, paired_window.left_window, band)
+                right_values = combined_read(right_cube, paired_window.right_window, band)
+            else:
+                left_values = _read_cube_window(left_cube, paired_window.left_window, band=band)
+                right_values = _read_cube_window(right_cube, paired_window.right_window, band=band)
+            tile_results.append(
+                _match_tile_from_window_values(
+                    left_values=left_values,
+                    right_values=right_values,
+                    local_window=paired_window.local_window,
+                    left_window=paired_window.left_window,
+                    right_window=paired_window.right_window,
+                    minimum_value=minimum_value,
+                    maximum_value=maximum_value,
+                    lower_percent=lower_percent,
+                    upper_percent=upper_percent,
+                    left_invalid_values=left_invalid_values,
+                    right_invalid_values=right_invalid_values,
+                    special_pixel_abs_threshold=special_pixel_abs_threshold,
+                    min_valid_pixels=min_valid_pixels,
+                    valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+                    invalid_pixel_radius=invalid_pixel_radius,
+                    ratio_test=ratio_test,
+                    matcher_method=matcher_method,
+                    max_features=max_features,
+                    sift_octave_layers=sift_octave_layers,
+                    sift_contrast_threshold=sift_contrast_threshold,
+                    sift_edge_threshold=sift_edge_threshold,
+                    sift_sigma=sift_sigma,
+                )
+            )
+            if progress_callback is not None:
+                progress_callback()
+        return tile_results
+    finally:
+        if left_cache is not None:
+            left_cache.close()
+        if right_cache is not None:
+            right_cache.close()
 
 
 def _keypoint_to_isis_coordinates(keypoint: cv2.KeyPoint, window: TileWindow) -> Keypoint:

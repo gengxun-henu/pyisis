@@ -59,6 +59,40 @@
 - `examples/controlnet_construct/run_image_match_batch_example.sh`
 - `examples/controlnet_construct/recommended_batch_templates.md`
 
+如果你当前正在调 `enable_tile_validity_prefilter`，并且想拿真实数据比较不同 coarse cell 组合的收益，而不是靠感觉拍参数，那么还可以直接跑：
+
+- `examples/controlnet_construct/tile_validity_benchmark.py`
+
+例如：
+
+```bash
+python examples/controlnet_construct/tile_validity_benchmark.py \
+  left_dom.cub right_dom.cub \
+  --config examples/controlnet_construct/controlnet_config.example.json \
+  --cell-size 1024x1024 \
+  --cell-size 1024x1071 \
+  --cell-size 2048x1428 \
+  --output work/reports/tile_validity_benchmark.json
+```
+
+这份 JSON 会同时记录：
+
+- 左右 DOM validity index 的 cold / warm build 时间；
+- 每组 `cell_width / cell_height` 对应的 coarse grid 大小；
+- `pair_preparation` 成功后可参与 prefilter 的 tile 数；
+- 每组参数的 prefilter 保留比例与 skip reasons。
+
+如果你更想扫一组宽高网格，而不是手工一条条写 `--cell-size`，可以改用：
+
+```bash
+python examples/controlnet_construct/tile_validity_benchmark.py \
+  left_dom.cub right_dom.cub \
+  --cell-width 1024 --cell-width 2048 \
+  --cell-height 1024 --cell-height 1071 --cell-height 1428
+```
+
+它会自动做 width × height 的组合笛卡尔积，并去重输出。对于 tiled ISIS cube，建议优先把 `cell_height` 试到内部 `TileLines` 的整数倍附近，而不是只改一个 strip 思路然后祈祷性能自己变好。
+
 ## 模块结构（维护者速览）
 
 从当前版本开始，`image_match.py` 已经不再承载所有内部实现细节，而是缩成了一个**兼容层 + 编排层**：

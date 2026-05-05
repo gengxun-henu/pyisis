@@ -13,6 +13,8 @@ import sys
 import tempfile
 from contextlib import contextmanager
 
+import numpy as np
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BUILD_PYTHON_DIR = Path(
@@ -643,3 +645,53 @@ def make_filled_cube(temp_dir, value=5.0, **kwargs):
     fill_cube_with_constant(cube, value)
     cube.close()
     return cube_path
+
+
+def make_tile_test_cube(
+    temp_dir,
+    data: np.ndarray,
+    tile_samples: int,
+    tile_lines: int,
+    name: str = "test.cub",
+) -> tuple[ip.Cube, Path]:
+    """Create a tile-format ISIS cube with known data.
+
+    Args:
+        temp_dir: temporary directory (Path)
+        data: 2D numpy array (lines x samples) of float64 values
+        tile_samples: tile width in samples
+        tile_lines: tile height in lines
+        name: output filename
+
+    Returns:
+        (cube, cube_path) — the cube is open and ready for reading.
+    """
+    lines, samples = data.shape
+    bands = 1
+
+    cube_path = temp_dir / name
+    cube = ip.Cube()
+    cube.set_dimensions(samples, lines, bands)
+    cube.set_pixel_type(ip.PixelType.Real)
+    cube.set_format(ip.Cube.Format.Tile)
+    cube.create(str(cube_path))
+
+    # Write tile dimension keywords into the Core group.
+    core = ip.PvlGroup("Core")
+    core.add_keyword(ip.PvlKeyword("StartByte", str(cube.label_size(actual=True))))
+    core.add_keyword(ip.PvlKeyword("Format", "Tile"))
+    core.add_keyword(ip.PvlKeyword("TileSamples", str(tile_samples)))
+    core.add_keyword(ip.PvlKeyword("TileLines", str(tile_lines)))
+    cube.put_group(core)
+
+    # Fill data line by line.
+    manager = ip.LineManager(cube)
+    manager.begin()
+    while not manager.end():
+        line_index = manager.line() - 1
+        for index in range(len(manager)):
+            manager[index] = float(data[line_index, index])
+        cube.write(manager)
+        manager.next()
+
+    return cube, cube_path

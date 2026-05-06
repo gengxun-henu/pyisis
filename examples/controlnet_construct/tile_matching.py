@@ -20,6 +20,7 @@ from typing import Any
 import cv2
 import numpy as np
 
+from .gpu_sift import GpuSiftBatch, HAS_GPU_SIFT
 from .keypoints import Keypoint
 from .preprocess import (
     StretchStats,
@@ -93,6 +94,8 @@ class TileMatchTask:
     sift_contrast_threshold: float
     sift_edge_threshold: float
     sift_sigma: float
+    use_gpu: bool = False
+    gpu_batch_size: int = 32
 
 
 @dataclass(frozen=True, slots=True)
@@ -335,6 +338,60 @@ def _match_tile(
     return left_keypoints, right_keypoints, filtered_matches
 
 
+def _match_tile_gpu(
+    left_image: np.ndarray,
+    right_image: np.ndarray,
+    *,
+    left_mask: np.ndarray,
+    right_mask: np.ndarray,
+    ratio_test: float,
+    matcher_method: str,
+    max_features: int | None,
+    sift_octave_layers: int,
+    sift_contrast_threshold: float,
+    sift_edge_threshold: float,
+    sift_sigma: float,
+) -> tuple[list[cv2.KeyPoint], list[cv2.KeyPoint], list[cv2.DMatch]]:
+    """GPU-accelerated SIFT matching for a single tile pair.
+
+    Uses GpuSiftBatch internally for a single pair (batch_size=2).
+    Returns the same format as _match_tile().
+    """
+    nfeatures = max_features if max_features is not None else 0
+    batch = GpuSiftBatch(
+        batch_size=2,
+        nfeatures=nfeatures,
+        nOctaveLayers=sift_octave_layers,
+        contrastThreshold=sift_contrast_threshold,
+        edgeThreshold=sift_edge_threshold,
+        sigma=sift_sigma,
+    )
+    batch.add(left_image, left_mask)
+    batch.add(right_image, right_mask)
+    results = batch.execute()
+
+    left_keypoints, left_descriptors = results[0]
+    right_keypoints, right_descriptors = results[1]
+
+    if not left_keypoints or left_descriptors is None:
+        return [], [], []
+    if not right_keypoints or right_descriptors is None:
+        return left_keypoints, [], []
+
+    matcher = _create_descriptor_matcher(matcher_method)
+    raw_matches = matcher.knnMatch(left_descriptors, right_descriptors, k=2)
+
+    filtered_matches: list[cv2.DMatch] = []
+    for candidates in raw_matches:
+        if len(candidates) < 2:
+            continue
+        best, alternate = candidates
+        if best.distance < ratio_test * alternate.distance:
+            filtered_matches.append(best)
+
+    return left_keypoints, right_keypoints, filtered_matches
+
+
 def _match_tile_from_window_values(
     *,
     left_values: np.ndarray,
@@ -359,6 +416,7 @@ def _match_tile_from_window_values(
     sift_contrast_threshold: float,
     sift_edge_threshold: float,
     sift_sigma: float,
+    use_gpu: bool = False,
 ) -> TileMatchResult:
     left_invalid_mask, left_valid_pixel_stats = summarize_valid_pixels(
         left_values,
@@ -456,19 +514,34 @@ def _match_tile_from_window_values(
             right_points=(),
         )
 
-    left_keypoints, right_keypoints, filtered_matches = _match_tile(
-        left_image,
-        right_image,
-        left_mask=left_mask,
-        right_mask=right_mask,
-        ratio_test=ratio_test,
-        matcher_method=matcher_method,
-        max_features=max_features,
-        sift_octave_layers=sift_octave_layers,
-        sift_contrast_threshold=sift_contrast_threshold,
-        sift_edge_threshold=sift_edge_threshold,
-        sift_sigma=sift_sigma,
-    )
+    if use_gpu and HAS_GPU_SIFT:
+        left_keypoints, right_keypoints, filtered_matches = _match_tile_gpu(
+            left_image,
+            right_image,
+            left_mask=left_mask,
+            right_mask=right_mask,
+            ratio_test=ratio_test,
+            matcher_method=matcher_method,
+            max_features=max_features,
+            sift_octave_layers=sift_octave_layers,
+            sift_contrast_threshold=sift_contrast_threshold,
+            sift_edge_threshold=sift_edge_threshold,
+            sift_sigma=sift_sigma,
+        )
+    else:
+        left_keypoints, right_keypoints, filtered_matches = _match_tile(
+            left_image,
+            right_image,
+            left_mask=left_mask,
+            right_mask=right_mask,
+            ratio_test=ratio_test,
+            matcher_method=matcher_method,
+            max_features=max_features,
+            sift_octave_layers=sift_octave_layers,
+            sift_contrast_threshold=sift_contrast_threshold,
+            sift_edge_threshold=sift_edge_threshold,
+            sift_sigma=sift_sigma,
+        )
 
     if not left_keypoints or not right_keypoints:
         return TileMatchResult(
@@ -572,6 +645,8 @@ def _build_tile_match_tasks(
     sift_contrast_threshold: float,
     sift_edge_threshold: float,
     sift_sigma: float,
+    use_gpu: bool = False,
+    gpu_batch_size: int = 32,
 ) -> list[TileMatchTask]:
     return [
         TileMatchTask(
@@ -595,6 +670,8 @@ def _build_tile_match_tasks(
             sift_contrast_threshold=sift_contrast_threshold,
             sift_edge_threshold=sift_edge_threshold,
             sift_sigma=sift_sigma,
+            use_gpu=use_gpu,
+            gpu_batch_size=gpu_batch_size,
         )
         for paired_window in windows
     ]
@@ -666,6 +743,7 @@ def _match_tile_task_with_open_cubes(
         sift_contrast_threshold=task.sift_contrast_threshold,
         sift_edge_threshold=task.sift_edge_threshold,
         sift_sigma=task.sift_sigma,
+        use_gpu=task.use_gpu,
     )
 
 
@@ -1016,6 +1094,7 @@ def _run_serial_tile_match_tasks(
     sift_contrast_threshold: float,
     sift_edge_threshold: float,
     sift_sigma: float,
+    use_gpu: bool = False,
     progress_callback: Callable[[], None] | None = None,
     use_tile_cache: bool = False,
     cache_max_mb: int = 100,
@@ -1081,6 +1160,7 @@ def _run_serial_tile_match_tasks(
                     sift_contrast_threshold=sift_contrast_threshold,
                     sift_edge_threshold=sift_edge_threshold,
                     sift_sigma=sift_sigma,
+                    use_gpu=use_gpu,
                 )
             )
             if progress_callback is not None:
@@ -1118,6 +1198,7 @@ __all__ = [
     "DEFAULT_FLANN_CHECKS",
     "DEFAULT_FLANN_TREES",
     "DEFAULT_MATCHER_METHOD",
+    "HAS_GPU_SIFT",
     "IndexedTileMatchTask",
     "PairedTileWindow",
     "SUPPORTED_MATCHER_METHODS",
@@ -1133,6 +1214,7 @@ __all__ = [
     "_matcher_diagnostics_for_method",
     "_match_tile",
     "_match_tile_from_window_values",
+    "_match_tile_gpu",
     "_match_tile_task_batch_worker",
     "_match_tile_task_with_open_cubes",
     "_normalize_matcher_method",

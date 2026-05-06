@@ -467,7 +467,9 @@ python examples/controlnet_construct/image_overlap.py \
 运行后你会得到：
 
 - `work/images_overlap.lis`：每行一个 `A,B` 形式的无向立体像对；
-- 终端 JSON 摘要：包含总 pair 数以及每景影像的采样 bounds。
+- 终端 JSON 摘要：默认只包含总 pair 数、影像数和 bounds 统计；
+- 如需完整 per-image bounds JSON，可额外传 `--report-json work/reports/image_overlap_summary.json`；
+- 如需把 per-image bounds 也直接打到终端，可显式加 `--include-bounds`。
 
 ### 这一阶段的作用
 
@@ -717,6 +719,11 @@ python examples/controlnet_construct/merge_control_measure.py \
 - 新增到保留点中的 measure 数量
 - 由于目标点中已存在相同 serial 而被跳过的 measure 数量
 
+默认 stdout 不再打印完整 `merged_point_ids` 列表；如果你需要：
+
+- 把完整 post-merge 摘要落文件：加 `--report-json work/reports/merge_control_measure_summary.json`
+- 把 `merged_point_ids` 一并打印到终端：加 `--include-detail-records`
+
 > 这个脚本默认假设 `original_images.lis` 中的原始 cube 已经完成 `spiceinit`，且 `ISISDATA` 可用于 `SerialNumber.compose()`。如果 serial 号无法构成，脚本会直接报错，而不会悄悄继续。
 
 ## 6. 一次跑完整条流水线时，应该检查哪些产物
@@ -876,3 +883,44 @@ bash work/merge/merge_all_controlnets.sh
 - `examples/controlnet_construct/coordinate_conventions.md`
 
 这样，你就可以从“我有一组原图和 DOM 列表”一路走到“我拿到了 merged ControlNet”，中间每一步产物都能对得上号。流水线终于不再是散装零件了。
+
+## 9. 终端摘要 vs 文件详情
+
+从当前版本开始，`examples/controlnet_construct/` 里的这几个入口会尽量遵循同一条输出约定：
+
+- **终端只打印简要摘要**，方便盯进度；
+- **详细 JSON 落文件**，方便后处理、回归和排障。
+
+对应关系大致如下：
+
+- `image_match.py`
+  - 终端：可用 `--omit-tile-details` 输出瘦身摘要；
+  - 文件：`--result-output PATH` 保存完整结果 JSON。
+- `image_overlap.py`
+  - 终端：默认隐藏 per-image `bounds` 大字段；
+  - 文件：`--report-json PATH` 保存完整 overlap 摘要；如需恢复详细 stdout，可用 `--include-bounds`。
+- `controlnet_stereopair.py`
+  - 终端：默认隐藏 `failures` / `batch_summary` 这类大字段；
+  - 文件：`--report-path` 或 `--report-dir` 保存完整 sidecar / batch report。
+- `controlnet_merge.py`
+  - 终端：默认只保留计数和关键路径；
+  - 文件：`--report-json PATH` 保存完整 merge-shell 摘要。
+- `merge_control_measure.py`
+  - 终端：默认隐藏 `merged_point_ids` 等 detail-heavy 字段；
+  - 文件：`--report-json PATH` 保存完整 post-merge 摘要；如需恢复详细 stdout，可用 `--include-detail-records`。
+- `run_pipeline_example.sh`
+  - 终端：只打印每一步的 START/END 和一句摘要；
+  - 文件：把各阶段 JSON 汇总到 `work/reports/` 与 `work/match_results/`。
+- `run_image_match_batch_example.sh`
+  - 终端：默认只看批处理进度和 pair 级简短提示，不在 wrapper 层额外展开大块 JSON；
+  - 文件：每对详细诊断默认写到 `work/match_metadata/`，若你直接调用 `image_match.py` 或通过 `--` 继续转发，也可配合 `--result-output` 单独落完整 JSON。
+
+默认情况下，`run_pipeline_example.sh` 现在会额外产出这些 JSON：
+
+- `work/reports/image_overlap_summary.json`
+- `work/match_results/<pair_tag>.json`
+- `work/reports/controlnet_batch_summary.json`
+- `work/reports/controlnet_merge_summary.json`
+- `work/reports/merge_control_measure_summary.json`（仅当启用 post-merge 时）
+
+如果你只是想看“这轮跑得怎么样”，盯终端就够；如果你要查某一对为什么被跳过、某一轮 merge 纳入了哪些 `.net`、或要把结果喂给后续脚本，优先直接读这些 JSON 文件。

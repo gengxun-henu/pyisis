@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-04
+Last Modified: 2026-05-05
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -28,6 +28,9 @@ Updated: 2026-05-03  Geng Xun added regression coverage for forwarding post-RANS
 Updated: 2026-05-03  Geng Xun added regression coverage for forwarding post-RANSAC visualization preview defaults from the pipeline wrapper.
 Updated: 2026-05-04  Geng Xun added pipeline and CLI forwarding coverage for reduced visualization preview options and aligned CLI default preview scale expectations.
 Updated: 2026-05-04  Geng Xun added CLI coverage for the remaining reduced visualization preview flags.
+Updated: 2026-05-05  Geng Xun added regression coverage for compact default stdout summaries and explicit full-detail stdout opt-in in controlnet_stereopair.py.
+Updated: 2026-05-05  Geng Xun added regression coverage for routing pipeline step JSON outputs into files while keeping terminal output summary-only.
+Updated: 2026-05-05  Geng Xun aligned pipeline-wrapper regressions with explicit report-json forwarding for overlap and post-merge summary CLIs.
 """
 
 from __future__ import annotations
@@ -103,6 +106,172 @@ def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
 
 
 class ControlNetConstructPipelineUnitTest(unittest.TestCase):
+    def test_run_pipeline_example_routes_step_json_outputs_to_files_and_keeps_stdout_compact(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "timing-net",
+                        "TargetName": "Mars",
+                        "UserName": "copilot",
+                        "PointIdPrefix": "TMP",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import os
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+
+                        if script_name == "image_overlap.py":
+                            if "--report-json" not in args:
+                                raise SystemExit("missing --report-json forwarding for image_overlap.py")
+                            report_json_path = Path(args[args.index("--report-json") + 1])
+                            report_json_path.parent.mkdir(parents=True, exist_ok=True)
+                            report_json_path.write_text(
+                                json.dumps({{"pair_count": 1, "image_count": 2, "sentinel": "IMAGE_OVERLAP_REPORT_ONLY"}}),
+                                encoding="utf-8",
+                            )
+                            Path(args[1]).write_text("left.cub,right.cub\\n", encoding="utf-8")
+                            print(json.dumps({{"pair_count": 1, "image_count": 2, "sentinel": "SHOULD_NOT_LEAK_IMAGE_OVERLAP_JSON"}}))
+                            return 0
+
+                        if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                print("")
+                                return 0
+                            if "--result-output" not in args:
+                                raise SystemExit("missing --result-output forwarding")
+                            result_output_path = Path(args[args.index("--result-output") + 1])
+                            result_output_path.parent.mkdir(parents=True, exist_ok=True)
+                            result_output_path.write_text(
+                                json.dumps({{"point_count": 7, "matched_tile_count": 1, "skipped_tile_count": 0, "tile_count": 1}}),
+                                encoding="utf-8",
+                            )
+                            Path(args[4]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[5]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            metadata_path = Path(args[args.index("--metadata-output") + 1])
+                            metadata_path.parent.mkdir(parents=True, exist_ok=True)
+                            metadata_path.write_text(json.dumps({{"status": "matched"}}), encoding="utf-8")
+                            print(json.dumps({{"sentinel": "SHOULD_NOT_LEAK_IMAGE_MATCH_JSON"}}))
+                            return 0
+
+                        if script_name == "controlnet_stereopair.py":
+                            report_dir = Path(args[args.index("--report-dir") + 1])
+                            report_dir.mkdir(parents=True, exist_ok=True)
+                            (report_dir / "controlnet_batch_summary.json").write_text(
+                                json.dumps({{"pair_count": 1, "total_final_control_point_count": 7, "total_dom2ori_retained_count": 7}}),
+                                encoding="utf-8",
+                            )
+                            output_dir = Path(args[6])
+                            output_dir.mkdir(parents=True, exist_ok=True)
+                            (output_dir / "synthetic_pair.net").write_text("net", encoding="utf-8")
+                            print(json.dumps({{"sentinel": "SHOULD_NOT_LEAK_CONTROLNET_JSON"}}))
+                            return 0
+
+                        if script_name == "controlnet_merge.py":
+                            if "--report-json" not in args:
+                                raise SystemExit("missing --report-json forwarding")
+                            report_json_path = Path(args[args.index("--report-json") + 1])
+                            report_json_path.parent.mkdir(parents=True, exist_ok=True)
+                            merge_script_path = Path(args[3])
+                            merge_script_path.parent.mkdir(parents=True, exist_ok=True)
+                            merge_script_path.write_text("#!/usr/bin/env bash\\nexit 0\\n", encoding="utf-8")
+                            os.chmod(merge_script_path, 0o755)
+                            report_json_path.write_text(
+                                json.dumps({{"included_count": 1, "skipped_missing_count": 0, "script_path": str(merge_script_path)}}),
+                                encoding="utf-8",
+                            )
+                            print(json.dumps({{"sentinel": "SHOULD_NOT_LEAK_MERGE_JSON"}}))
+                            return 0
+
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                    "--skip-final-merge",
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            image_overlap_summary_exists = (work_dir / "reports" / "image_overlap_summary.json").exists()
+            image_match_result_exists = (work_dir / "match_results" / "left__right.json").exists()
+            controlnet_batch_report_exists = (work_dir / "reports" / "controlnet_batch_summary.json").exists()
+            controlnet_merge_report_exists = (work_dir / "reports" / "controlnet_merge_summary.json").exists()
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertNotIn("SHOULD_NOT_LEAK_IMAGE_OVERLAP_JSON", completed.stdout)
+        self.assertNotIn("SHOULD_NOT_LEAK_IMAGE_MATCH_JSON", completed.stdout)
+        self.assertNotIn("SHOULD_NOT_LEAK_CONTROLNET_JSON", completed.stdout)
+        self.assertNotIn("SHOULD_NOT_LEAK_MERGE_JSON", completed.stdout)
+        self.assertIn("image-match result json:", completed.stdout)
+        self.assertIn("merge summary json:", completed.stdout)
+        self.assertTrue(image_overlap_summary_exists)
+        self.assertTrue(image_match_result_exists)
+        self.assertTrue(controlnet_batch_report_exists)
+        self.assertTrue(controlnet_merge_report_exists)
+
     def test_run_pipeline_example_writes_timing_json_and_logs_step_durations(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
@@ -156,6 +325,13 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         args = sys.argv[2:]
 
                         if script_name == "image_overlap.py":
+                            if "--report-json" in args:
+                                report_json_path = Path(args[args.index("--report-json") + 1])
+                                report_json_path.parent.mkdir(parents=True, exist_ok=True)
+                                report_json_path.write_text(
+                                    json.dumps({{"pair_count": 1, "image_count": 2}}),
+                                    encoding="utf-8",
+                                )
                             Path(args[1]).write_text("left.cub,right.cub\\n", encoding="utf-8")
                             return 0
 
@@ -323,6 +499,13 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         args = sys.argv[2:]
 
                         if script_name == "image_overlap.py":
+                            if "--report-json" in args:
+                                report_json_path = Path(args[args.index("--report-json") + 1])
+                                report_json_path.parent.mkdir(parents=True, exist_ok=True)
+                                report_json_path.write_text(
+                                    json.dumps({{"pair_count": 1, "image_count": 2}}),
+                                    encoding="utf-8",
+                                )
                             Path(args[1]).write_text("left.cub,right.cub\\n", encoding="utf-8")
                             return 0
 
@@ -1112,6 +1295,13 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         args = sys.argv[2:]
 
                         if script_name == "image_overlap.py":
+                            if "--report-json" in args:
+                                report_json_path = Path(args[args.index("--report-json") + 1])
+                                report_json_path.parent.mkdir(parents=True, exist_ok=True)
+                                report_json_path.write_text(
+                                    json.dumps({{"pair_count": 1, "image_count": 2}}),
+                                    encoding="utf-8",
+                                )
                             Path(args[1]).write_text("left.cub,right.cub\\n", encoding="utf-8")
                             return 0
 
@@ -1941,15 +2131,23 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 raise SystemExit(f"unexpected merged input: {{args[1]}}")
                             if args[2] != {str(post_merge_output)!r}:
                                 raise SystemExit(f"unexpected post-merge output: {{args[2]}}")
+                            if "--report-json" not in args:
+                                raise SystemExit("missing --report-json for merge_control_measure.py")
                             if "--decimals" not in args:
                                 raise SystemExit("missing --decimals for merge_control_measure.py")
                             decimals = args[args.index("--decimals") + 1]
                             if decimals != "2":
                                 raise SystemExit(f"unexpected post-merge decimals: {{decimals}}")
                             output_path = Path(args[2])
+                            report_json_path = Path(args[args.index("--report-json") + 1])
+                            report_json_path.parent.mkdir(parents=True, exist_ok=True)
+                            report_json_path.write_text(
+                                json.dumps({{"output_control_net": str(output_path), "point_count_after": 1}}),
+                                encoding="utf-8",
+                            )
                             output_path.parent.mkdir(parents=True, exist_ok=True)
                             output_path.write_text("post-merged-net\\n", encoding="utf-8")
-                            print(json.dumps({{"output_control_net": str(output_path), "point_count_after": 1}}))
+                            print(json.dumps({{"sentinel": "SHOULD_NOT_LEAK_POST_MERGE_JSON"}}))
                             return 0
 
                         raise SystemExit(f"Unhandled fake python script: {{script_name}}")
@@ -2002,11 +2200,15 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             )
 
             timing_payload = json.loads(timing_json_path.read_text(encoding="utf-8"))
+            post_merge_report_path = work_dir / "reports" / "merge_control_measure_summary.json"
+            post_merge_report_exists = post_merge_report_path.exists()
 
             self.assertEqual(completed.returncode, 0, msg=completed.stderr)
             self.assertIn("Post-merge ControlNet deduplication: enabled", completed.stdout)
             self.assertIn("START merge_control_measure", completed.stdout)
+            self.assertNotIn("SHOULD_NOT_LEAK_POST_MERGE_JSON", completed.stdout)
             self.assertTrue(post_merge_output.exists())
+            self.assertTrue(post_merge_report_exists)
             self.assertEqual(
                 [entry["name"] for entry in timing_payload["steps"]],
                 ["image_overlap", "image_match_batch", "pairwise_controlnets", "merge", "merge_control_measure"],
@@ -2280,6 +2482,125 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         called_config = build_mock.call_args.args[4]
         self.assertEqual(called_config.point_id_prefix, "CTX")
         self.assertEqual(called_config.pair_id, "CLI")
+        self.assertEqual(json.loads(stdout.getvalue()), fake_result)
+
+    def test_controlnet_stereopair_cli_from_dom_omits_failure_details_from_stdout_by_default(self):
+        fake_result = {
+            "mode": "from-dom",
+            "left_conversion": {
+                "output_count": 1,
+                "failure_count": 2,
+                "failures": [
+                    {"reason": "dom_lookup_failed", "sample": 1.0},
+                    {"reason": "original_projection_failed", "sample": 2.0},
+                ],
+            },
+            "right_conversion": {
+                "output_count": 1,
+                "failure_count": 1,
+                "failures": [
+                    {"reason": "paired_point_dropped", "sample": 3.0},
+                ],
+            },
+            "controlnet": {"point_count": 1, "measure_count": 2},
+        }
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "ctx",
+                        "TargetName": "Mars",
+                        "UserName": "zmoratto",
+                        "PointIdPrefix": "CTX",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            stdout = io.StringIO()
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_stereo_pair",
+                    return_value=fake_result,
+                ),
+                redirect_stdout(stdout),
+            ):
+                controlnet_stereopair_main(
+                    [
+                        "from-dom",
+                        "left_dom.key",
+                        "right_dom.key",
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        "left.cub",
+                        "right.cub",
+                        str(config_path),
+                        "output.net",
+                    ]
+                )
+
+        stdout_payload = json.loads(stdout.getvalue())
+        self.assertNotIn("failures", stdout_payload["left_conversion"])
+        self.assertNotIn("failures", stdout_payload["right_conversion"])
+        self.assertEqual(stdout_payload["left_conversion"]["failure_detail_count"], 2)
+        self.assertEqual(stdout_payload["right_conversion"]["failure_detail_count"], 1)
+        self.assertEqual(stdout_payload["controlnet"], fake_result["controlnet"])
+
+    def test_controlnet_stereopair_cli_from_dom_can_include_failure_details_in_stdout(self):
+        fake_result = {
+            "mode": "from-dom",
+            "left_conversion": {
+                "output_count": 1,
+                "failure_count": 1,
+                "failures": [{"reason": "dom_lookup_failed", "sample": 1.0}],
+            },
+            "right_conversion": {
+                "output_count": 1,
+                "failure_count": 0,
+                "failures": [],
+            },
+            "controlnet": {"point_count": 1, "measure_count": 2},
+        }
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "ctx",
+                        "TargetName": "Mars",
+                        "UserName": "zmoratto",
+                        "PointIdPrefix": "CTX",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            stdout = io.StringIO()
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_stereo_pair",
+                    return_value=fake_result,
+                ),
+                redirect_stdout(stdout),
+            ):
+                controlnet_stereopair_main(
+                    [
+                        "from-dom",
+                        "left_dom.key",
+                        "right_dom.key",
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        "left.cub",
+                        "right.cub",
+                        str(config_path),
+                        "output.net",
+                        "--include-detail-records",
+                    ]
+                )
+
         self.assertEqual(json.loads(stdout.getvalue()), fake_result)
 
     def test_controlnet_stereopair_cli_from_dom_forwards_visualization_preview_options(self):
@@ -2610,6 +2931,55 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(call_kwargs["preview_cache_source"], "visualization_cache")
         self.assertEqual(call_kwargs["preview_level"], 3)
         self.assertTrue(call_kwargs["preview_force_regenerate"])
+        stdout_payload = json.loads(stdout.getvalue())
+        self.assertNotIn("batch_summary", stdout_payload)
+        self.assertEqual(stdout_payload["pairs"], fake_summary["pairs"])
+        self.assertEqual(stdout_payload["batch_report_path"], fake_summary["batch_report_path"])
+
+    def test_controlnet_stereopair_cli_from_dom_batch_can_include_batch_summary_in_stdout(self):
+        fake_summary = {
+            "mode": "from-dom-batch",
+            "pair_count": 2,
+            "pairs": [{"pair": "left1.cub,right1.cub", "pair_id": "S3"}],
+            "batch_report_path": "reports/controlnet_batch_summary.json",
+            "batch_summary": {"point_count_total": 12},
+        }
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "ctx",
+                        "TargetName": "Mars",
+                        "UserName": "zmoratto",
+                        "PointIdPrefix": "CTX",
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            stdout = io.StringIO()
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnets_for_dom_overlap_list",
+                    return_value=fake_summary,
+                ),
+                redirect_stdout(stdout),
+            ):
+                controlnet_stereopair_main(
+                    [
+                        "from-dom-batch",
+                        "images_overlap.lis",
+                        "original_images.lis",
+                        "doms.lis",
+                        "dom_keys",
+                        str(config_path),
+                        "pair_nets",
+                        "--include-detail-records",
+                    ]
+                )
+
         self.assertEqual(json.loads(stdout.getvalue()), fake_summary)
 
     def test_write_controlnet_result_report_uses_default_summary_sidecar_name(self):

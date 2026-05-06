@@ -416,6 +416,24 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(enabled, "1")
         self.assertEqual(cell_width, "256")
 
+    def test_print_image_match_config_default_reads_omit_tile_details_flag(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "omitTileDetails": True,
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            omit_tile_details = image_match.print_image_match_config_default(config_path, "omit_tile_details")
+
+        self.assertEqual(omit_tile_details, "1")
+
     def test_print_image_match_config_default_returns_empty_string_for_missing_field(self):
         with temporary_directory() as temp_dir:
             config_path = temp_dir / "controlnet_config.json"
@@ -791,6 +809,36 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(args.tile_validity_cell_width, 512)
         self.assertEqual(args.tile_validity_cell_height, 256)
 
+    def test_build_argument_parser_accepts_result_output_and_tile_detail_stdout_controls(self):
+        parser = build_argument_parser(config_defaults={"omit_tile_details": True})
+
+        default_args = parser.parse_args(["left.cub", "right.cub", "left.key", "right.key"])
+        included_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--include-tile-details",
+                "--result-output",
+                "work/full_result.json",
+            ]
+        )
+        omitted_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--omit-tile-details",
+            ]
+        )
+
+        self.assertTrue(default_args.omit_tile_details)
+        self.assertFalse(included_args.omit_tile_details)
+        self.assertEqual(included_args.result_output, "work/full_result.json")
+        self.assertTrue(omitted_args.omit_tile_details)
+
     def test_build_argument_parser_accepts_invalid_pixel_radius_and_low_resolution_options(self):
         parser = build_argument_parser()
 
@@ -1035,6 +1083,23 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(defaults["tile_validity_cache_dir"], "work/tile_validity_cache")
         self.assertEqual(defaults["tile_validity_cell_width"], 512)
         self.assertEqual(defaults["tile_validity_cell_height"], 256)
+
+    def test_load_image_match_defaults_from_config_reads_omit_tile_details_field(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "omitTileDetails": True,
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            defaults = image_match.load_image_match_defaults_from_config(config_path)
+
+        self.assertTrue(defaults["omit_tile_details"])
 
     def test_load_image_match_defaults_from_config_reads_visualization_fields(self):
         with temporary_directory() as temp_dir:
@@ -2084,6 +2149,47 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertIn("4 TILE(s) to process at full resolution", progress_output)
         self.assertIn("4/4 TILE(s) done", progress_output)
         self.assertIsNotNone(serial_mock.call_args.kwargs["progress_callback"])
+
+    def test_image_match_main_omits_tile_details_from_stdout_and_writes_full_result_output(self):
+        fake_result = {
+            "status": "matched",
+            "point_count": 12,
+            "tile_count": 2,
+            "matched_tile_count": 1,
+            "skipped_tile_count": 1,
+            "tiles": [
+                {
+                    "local_start_x": 0,
+                    "status": "matched",
+                }
+            ],
+        }
+
+        with temporary_directory() as temp_dir:
+            result_output_path = temp_dir / "result" / "image_match_full.json"
+            stdout = io.StringIO()
+
+            with mock.patch.object(image_match, "match_dom_pair_to_key_files", return_value=fake_result):
+                with mock.patch.object(sys, "stdout", stdout):
+                    image_match.main(
+                        [
+                            "left.cub",
+                            "right.cub",
+                            "left.key",
+                            "right.key",
+                            "--omit-tile-details",
+                            "--result-output",
+                            str(result_output_path),
+                        ]
+                    )
+
+            stdout_payload = json.loads(stdout.getvalue())
+            full_result_payload = json.loads(result_output_path.read_text(encoding="utf-8"))
+
+        self.assertNotIn("tiles", stdout_payload)
+        self.assertEqual(stdout_payload["result_output"], str(result_output_path))
+        self.assertEqual(full_result_payload["tiles"], fake_result["tiles"])
+        self.assertEqual(full_result_payload["status"], "matched")
 
     def test_match_dom_pair_skips_invalid_only_tiles_but_keeps_valid_tile(self):
         width = 96

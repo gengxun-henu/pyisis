@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-04-17
 Updated: 2026-04-17  Geng Xun added pairwise `.net` list generation plus a reproducible cnetmerge shell wrapper for the DOM matching workflow.
+Updated: 2026-05-05  Geng Xun added compact stdout summaries plus optional full-detail JSON report output for quieter merge-shell CLI runs.
 
 
 """
@@ -36,6 +37,36 @@ class MergeScriptSummary:
     included_pairs: tuple[str, ...]
     skipped_pairs: tuple[str, ...]
     included_nets: tuple[str, ...]
+
+
+def _stdout_result_payload(result: dict[str, object], *, omit_detail_records: bool) -> dict[str, object]:
+    payload = dict(result)
+    if not omit_detail_records:
+        return payload
+
+    included_pairs = payload.get("included_pairs")
+    if isinstance(included_pairs, (list, tuple)):
+        payload["included_pair_detail_count"] = len(included_pairs)
+        payload.pop("included_pairs", None)
+
+    skipped_pairs = payload.get("skipped_pairs")
+    if isinstance(skipped_pairs, (list, tuple)):
+        payload["skipped_pair_detail_count"] = len(skipped_pairs)
+        payload.pop("skipped_pairs", None)
+
+    included_nets = payload.get("included_nets")
+    if isinstance(included_nets, (list, tuple)):
+        payload["included_net_detail_count"] = len(included_nets)
+        payload.pop("included_nets", None)
+
+    return payload
+
+
+def _write_json_output(output_path: str | Path, payload: object) -> str:
+    resolved_output_path = Path(output_path)
+    resolved_output_path.parent.mkdir(parents=True, exist_ok=True)
+    resolved_output_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return str(resolved_output_path)
 
 
 def pair_controlnet_filename(pair: StereoPair, *, suffix: str = ".net") -> str:
@@ -141,13 +172,17 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--pair-list", default=None, help="Optional path for the generated cnetmerge input list.")
     parser.add_argument("--pair-net-suffix", default=".net", help="Filename suffix used for pairwise ControlNet files.")
     parser.add_argument("--cnetmerge", default="cnetmerge", help="Path to the cnetmerge executable.")
+    parser.add_argument("--report-json", default=None, help="Optional JSON path used to persist the full merge-script summary before any stdout trimming is applied.")
+    parser.add_argument("--omit-detail-records", dest="omit_detail_records", action="store_true", help="Omit included/skipped pair detail arrays from stdout while keeping aggregate counters and output paths.")
+    parser.add_argument("--include-detail-records", dest="omit_detail_records", action="store_false", help="Keep full included/skipped pair detail arrays in stdout.")
     parser.add_argument("--strict", action="store_true", help="Fail if any overlap pair is missing a pairwise .net file.")
+    parser.set_defaults(omit_detail_records=True)
     return parser
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     parser = build_argument_parser()
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     result = generate_cnetmerge_shell_script(
         args.overlap_list,
         args.pair_net_directory,
@@ -161,7 +196,17 @@ def main() -> None:
         cnetmerge_executable=args.cnetmerge,
         skip_missing=not args.strict,
     )
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    report_json_path = None
+    if args.report_json is not None:
+        report_json_path = _write_json_output(args.report_json, result)
+
+    stdout_result = _stdout_result_payload(result, omit_detail_records=args.omit_detail_records)
+    if report_json_path is not None:
+        stdout_result = {
+            **stdout_result,
+            "report_json": report_json_path,
+        }
+    print(json.dumps(stdout_result, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

@@ -18,6 +18,7 @@ Updated: 2026-04-20  Geng Xun added an explicit post-RANSAC visualization output
 Updated: 2026-04-24  Geng Xun switched the post-RANSAC visualization import to the dedicated match_visualization module so controlnet_stereopair no longer depends on image_match.py for that helper.
 Updated: 2026-05-03  Geng Xun forwarded post-RANSAC visualization preview options through the DOM ControlNet wrapper and CLI.
 Updated: 2026-05-04  Geng Xun aligned CLI visualization defaults with the API scale and normalized preview option parsing.
+Updated: 2026-05-05  Geng Xun added compact stdout summaries by default so detailed conversion failures and batch report payloads stay in JSON sidecars instead of flooding the terminal.
 """
 
 from __future__ import annotations
@@ -149,6 +150,52 @@ def write_controlnet_result_report(
     )
     resolved_report_path.write_text(json.dumps(annotated_result, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return str(resolved_report_path)
+
+
+def _stdout_result_payload(result: dict[str, object], *, omit_detail_records: bool) -> dict[str, object]:
+    payload = dict(result)
+    if not omit_detail_records:
+        return payload
+
+    left_conversion = payload.get("left_conversion")
+    if isinstance(left_conversion, dict) and "failures" in left_conversion:
+        payload["left_conversion"] = {
+            **left_conversion,
+            **({"failure_detail_count": len(left_conversion["failures"])} if isinstance(left_conversion["failures"], list) else {}),
+        }
+        payload["left_conversion"].pop("failures", None)
+
+    right_conversion = payload.get("right_conversion")
+    if isinstance(right_conversion, dict) and "failures" in right_conversion:
+        payload["right_conversion"] = {
+            **right_conversion,
+            **({"failure_detail_count": len(right_conversion["failures"])} if isinstance(right_conversion["failures"], list) else {}),
+        }
+        payload["right_conversion"].pop("failures", None)
+
+    payload.pop("batch_summary", None)
+    return payload
+
+
+def _add_stdout_detail_control_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.set_defaults(omit_detail_records=True)
+    parser.add_argument(
+        "--omit-detail-records",
+        dest="omit_detail_records",
+        action="store_true",
+        help=(
+            "Omit verbose failure-record arrays and batch-summary payloads from stdout while preserving top-level"
+            " counters and report file paths."
+        ),
+    )
+    parser.add_argument(
+        "--include-detail-records",
+        dest="omit_detail_records",
+        action="store_false",
+        help=(
+            "Keep full detail records in stdout, including per-point conversion failures and batch summary payloads."
+        ),
+    )
 
 
 def _match_visualization_failure_payload(
@@ -759,6 +806,7 @@ def _build_from_original_parser(subparsers) -> None:
         choices=("DEBUG", "INFO", "WARNING", "ERROR"),
         help="Logging verbosity for runtime diagnostics.",
     )
+    _add_stdout_detail_control_arguments(parser)
 
 
 def _build_from_dom_parser(subparsers) -> None:
@@ -883,6 +931,7 @@ def _build_from_dom_parser(subparsers) -> None:
         choices=("DEBUG", "INFO", "WARNING", "ERROR"),
         help="Logging verbosity for runtime diagnostics.",
     )
+    _add_stdout_detail_control_arguments(parser)
 
 
 def _build_from_dom_batch_parser(subparsers) -> None:
@@ -986,6 +1035,7 @@ def _build_from_dom_batch_parser(subparsers) -> None:
         choices=("DEBUG", "INFO", "WARNING", "ERROR"),
         help="Logging verbosity for runtime diagnostics.",
     )
+    _add_stdout_detail_control_arguments(parser)
 
 
 def _normalize_cli_argv(argv: list[str]) -> list[str]:
@@ -1118,7 +1168,7 @@ def main(argv: list[str] | None = None) -> None:
             "report_path": report_path,
         }
 
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    print(json.dumps(_stdout_result_payload(result, omit_detail_records=args.omit_detail_records), indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

@@ -300,3 +300,35 @@ python examples/controlnet_construct/image_match.py \
 - 批量 DOM 匹配脚本：`examples/controlnet_construct/run_image_match_batch_example.sh`
 
 如果你对两套可视化目录还想看更完整的解释，优先查看 `examples/controlnet_construct/usage.md` 中关于 `work/match_viz/` 和 `work/match_viz_post_ransac/` 的说明。
+
+## 输出风格小抄
+
+这几个入口现在都尽量按“**终端摘要、文件存详情**”来组织输出：
+
+- `run_pipeline_example.sh`
+  - 终端：只看步骤进度和一句摘要；
+  - 文件：细节 JSON 在 `work/reports/` 与 `work/match_results/`。
+- `run_image_match_batch_example.sh`
+  - 终端：默认只看批处理进度和 pair 级简短提示，不在 wrapper 层额外展开大块 JSON；
+  - 文件：每对详细诊断默认写到 `work/match_metadata/`，若你直接调用 `image_match.py` 或通过 `--` 继续转发，也可配合 `--result-output` 单独落完整 JSON。
+
+如果你单独直接调用别的入口，也有同样的显式开关：
+
+- `image_overlap.py`
+  - 默认 stdout 只给计数和 bounds 统计；
+  - `--report-json PATH` 落完整 overlap JSON；
+  - `--include-bounds` 可把 per-image bounds 重新打回终端。
+- `merge_control_measure.py`
+  - 默认 stdout 不打印完整 `merged_point_ids`；
+  - `--report-json PATH` 落完整 post-merge JSON；
+  - `--include-detail-records` 可把 detail records 重新打回终端。
+
+如果你是批量调参，建议把终端当“仪表盘”，把这些文件当“黑匣子”：
+
+- `work/reports/image_overlap_summary.json`
+- `work/match_results/<pair_tag>.json`
+- `work/reports/controlnet_batch_summary.json`
+- `work/reports/controlnet_merge_summary.json`
+- `work/reports/merge_control_measure_summary.json`（启用 post-merge 时）
+
+这样一来，跑批时不会被一屏一屏 JSON 淹没，但真要复盘时也不会丢细节。

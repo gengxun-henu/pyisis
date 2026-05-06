@@ -12,12 +12,13 @@ real-data verification when the relevant environment variables are configured.
 
 Author: Geng Xun
 Created: 2026-04-17
-Last Modified: 2026-04-18
+Last Modified: 2026-05-05
 Updated: 2026-04-17  Geng Xun added regression coverage for DOM GSD inventory/normalization, projected-overlap crop metadata, and cnetmerge shell generation.
 Updated: 2026-04-17  Geng Xun added regression coverage for pairwise JSON report aggregation into a fixed-name batch summary report.
 Updated: 2026-04-17  Geng Xun added coordinate-basis checks for projected-overlap metadata sidecars so offset versus sample/line semantics stay explicit.
 Updated: 2026-04-18  Geng Xun added optional real LRO DOM prepare coverage while preserving the existing repository fixture regressions.
 Updated: 2026-04-18  Geng Xun expanded the module docstring to clarify file scope, fixture-versus-real-data coverage, and preparation-stage responsibilities.
+Updated: 2026-05-05  Geng Xun added controlnet_merge CLI regression coverage for compact default stdout summaries and full-detail report JSON output.
 """
 
 from __future__ import annotations
@@ -29,6 +30,8 @@ import subprocess
 import sys
 import unittest
 from unittest import mock
+import io
+from contextlib import redirect_stdout
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -49,7 +52,7 @@ from controlnet_construct.batch_summary import (
     pair_report_filename,
     write_batch_summary_report,
 )
-from controlnet_construct.controlnet_merge import generate_cnetmerge_shell_script, pair_controlnet_filename
+from controlnet_construct.controlnet_merge import generate_cnetmerge_shell_script, main as controlnet_merge_main, pair_controlnet_filename
 from controlnet_construct.dom_prepare import (
     normalize_dom_list_gsd,
     prepare_dom_pair_for_matching,
@@ -236,6 +239,84 @@ class ControlNetConstructPrepareUnitTest(unittest.TestCase):
         self.assertIn(str(output_net), script_text)
         self.assertEqual(len(pair_list_text.splitlines()), 2)
         self.assertIn(str(pair_net_dir / pair_controlnet_filename(existing_pairs[0])), pair_list_text)
+
+    def test_controlnet_merge_cli_omits_detail_records_from_stdout_and_writes_report_json(self):
+        pairs = [
+            StereoPair("left1.cub", "right1.cub"),
+            StereoPair("left2.cub", "right2.cub"),
+        ]
+
+        with temporary_directory() as temp_dir:
+            overlap_list = temp_dir / "images_overlap.lis"
+            write_stereo_pair_list(overlap_list, pairs)
+            pair_net_dir = temp_dir / "pair_nets"
+            pair_net_dir.mkdir()
+            for pair in pairs:
+                (pair_net_dir / pair_controlnet_filename(pair)).write_text("fake net\n", encoding="utf-8")
+
+            output_net = temp_dir / "merged.net"
+            script_path = temp_dir / "merge_all_controlnets.sh"
+            report_json_path = temp_dir / "merge_summary.json"
+            stdout = io.StringIO()
+
+            with redirect_stdout(stdout):
+                controlnet_merge_main(
+                    [
+                        str(overlap_list),
+                        str(pair_net_dir),
+                        str(output_net),
+                        str(script_path),
+                        "--network-id",
+                        "dom_global_net",
+                        "--report-json",
+                        str(report_json_path),
+                    ]
+                )
+
+            stdout_payload = json.loads(stdout.getvalue())
+            report_payload = json.loads(report_json_path.read_text(encoding="utf-8"))
+
+        self.assertNotIn("included_pairs", stdout_payload)
+        self.assertNotIn("skipped_pairs", stdout_payload)
+        self.assertNotIn("included_nets", stdout_payload)
+        self.assertEqual(stdout_payload["included_pair_detail_count"], 2)
+        self.assertEqual(stdout_payload["included_net_detail_count"], 2)
+        self.assertEqual(stdout_payload["report_json"], str(report_json_path))
+        self.assertEqual(report_payload["included_pairs"], [pair.as_csv_line() for pair in pairs])
+        self.assertEqual(len(report_payload["included_nets"]), 2)
+
+    def test_controlnet_merge_cli_can_include_detail_records_in_stdout(self):
+        pairs = [StereoPair("left1.cub", "right1.cub")]
+
+        with temporary_directory() as temp_dir:
+            overlap_list = temp_dir / "images_overlap.lis"
+            write_stereo_pair_list(overlap_list, pairs)
+            pair_net_dir = temp_dir / "pair_nets"
+            pair_net_dir.mkdir()
+            (pair_net_dir / pair_controlnet_filename(pairs[0])).write_text("fake net\n", encoding="utf-8")
+
+            output_net = temp_dir / "merged.net"
+            script_path = temp_dir / "merge_all_controlnets.sh"
+            stdout = io.StringIO()
+
+            with redirect_stdout(stdout):
+                controlnet_merge_main(
+                    [
+                        str(overlap_list),
+                        str(pair_net_dir),
+                        str(output_net),
+                        str(script_path),
+                        "--network-id",
+                        "dom_global_net",
+                        "--include-detail-records",
+                    ]
+                )
+
+            stdout_payload = json.loads(stdout.getvalue())
+
+        self.assertIn("included_pairs", stdout_payload)
+        self.assertIn("included_nets", stdout_payload)
+        self.assertEqual(stdout_payload["included_pairs"], [pairs[0].as_csv_line()])
 
     def test_build_batch_summary_aggregates_per_pair_reports(self):
         pairs = [

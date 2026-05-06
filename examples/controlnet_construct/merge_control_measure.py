@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-04-21
 Updated: 2026-04-21  Geng Xun added a post-cnetmerge ControlNet deduplication CLI that collapses duplicate points by rounded per-image measure hashes while preserving the first point's point-level metadata.
+Updated: 2026-05-05  Geng Xun added compact default stdout summaries plus optional full-detail stdout and report-json output for post-merge deduplication.
 """
 
 from __future__ import annotations
@@ -376,6 +377,22 @@ def merge_control_measure_file(
     return asdict(typed_summary)
 
 
+def _stdout_result_payload(result: dict[str, object], omit_detail_records: bool) -> dict[str, object]:
+    payload = dict(result)
+    if omit_detail_records:
+        merged_point_ids = payload.pop("merged_point_ids", ())
+        if isinstance(merged_point_ids, (list, tuple)):
+            payload["merged_point_id_detail_count"] = len(merged_point_ids)
+    return payload
+
+
+def _write_json_output(output_path: str | Path, payload: dict[str, object]) -> None:
+    Path(output_path).write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+
 def build_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
@@ -402,6 +419,24 @@ def build_argument_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Write the output ControlNet in PVL format instead of the default binary format.",
     )
+    parser.add_argument(
+        "--report-json",
+        default=None,
+        help="Optional path to write the full post-merge JSON summary, including merged point IDs.",
+    )
+    parser.add_argument(
+        "--omit-detail-records",
+        dest="omit_detail_records",
+        action="store_true",
+        help="Omit detail-heavy records such as merged_point_ids from stdout (default behavior).",
+    )
+    parser.add_argument(
+        "--include-detail-records",
+        dest="omit_detail_records",
+        action="store_false",
+        help="Include detail-heavy records such as merged_point_ids in stdout JSON output.",
+    )
+    parser.set_defaults(omit_detail_records=True)
     return parser
 
 
@@ -415,7 +450,14 @@ def main(argv: list[str] | None = None) -> dict[str, object]:
         decimals=args.decimals,
         pvl_format=args.pvl_format,
     )
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    if args.report_json:
+        _write_json_output(args.report_json, result)
+
+    stdout_payload = _stdout_result_payload(result, args.omit_detail_records)
+    if args.report_json:
+        stdout_payload["report_json"] = args.report_json
+
+    print(json.dumps(stdout_payload, indent=2, ensure_ascii=False))
     return result
 
 

@@ -378,12 +378,19 @@ python examples/controlnet_construct/image_match.py \
 从当前这一版工作流开始，示例封装脚本对下面这些默认行为也已经明确固定下来：
 
 - CPU 分块并行匹配默认开启；如果你想回退到串行 tile 匹配，可显式传 `--no-parallel-cpu`；
+- `run_image_match_batch_example.sh` 默认保持紧凑 stdout，并把 `work/match_metadata/` 作为每对影像的主要诊断落盘位置；
 - `run_image_match_batch_example.sh` 默认把 **pre-RANSAC** 匹配连线图写到 `work/match_viz/`；
 - `run_pipeline_example.sh` 默认同时写两套图：
 	- `work/match_viz/`：**pre-RANSAC**；
 	- `work/match_viz_post_ransac/`：**post-RANSAC**。
 
 如果你在使用批量匹配封装脚本时想关闭 pre-RANSAC 连线图，可通过 `-- --no-write-match-visualization` 把参数继续转发给 `image_match.py`。
+
+现在这些示例 wrapper 的输出风格也尽量统一成同一条约定：**终端只看紧凑摘要，详细诊断优先落 JSON 文件**。具体来说：
+
+- `run_image_match_batch_example.sh` 的 stdout 主要用于看批处理进度，而每对影像的详细诊断默认写到 `work/match_metadata/`；
+- `run_pipeline_example.sh` 的 stdout 主要用于看步骤摘要，而各阶段 JSON 汇总默认写到 `work/reports/` 与 `work/match_results/`；
+- 如果你确实需要 `image_match.py` 的完整结果 JSON 本体，可以直接调用它，或通过 wrapper 继续转发它自己的 `--result-output` 选项。
 
 ### 单个立体像对
 

@@ -10,6 +10,7 @@ from .batch_summary import (
     write_batch_summary_report,
 )
 from .controlnet_merge import generate_cnetmerge_shell_script, pair_controlnet_filename
+from . import gpu_sift
 from .dom_prepare import (
     CropWindow,
     DomProjectionInfo,
@@ -75,6 +76,7 @@ __all__ = [
     "DEFAULT_PAIR_REPORT_SUFFIX",
     "build_batch_summary",
     "build_invalid_mask",
+    "gpu_sift",
     "build_controlnet_for_dom_stereo_pair",
     "build_controlnet_for_stereo_pair",
     "default_controlnet_report_path",

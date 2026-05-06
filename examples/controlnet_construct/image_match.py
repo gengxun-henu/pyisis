@@ -1645,7 +1645,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
         default=0,
         help="Re-evaluate bypass decision every N reads (0=never)",
     )
-    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, show_progress=True, omit_tile_details=False)
+    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, show_progress=True)
     if config_defaults:
         parser.set_defaults(**config_defaults)
     return parser

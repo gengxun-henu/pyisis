@@ -27,6 +27,7 @@ Updated: 2026-05-02  Geng Xun added precomputed low-resolution DOM inputs so bat
 Updated: 2026-05-02  Geng Xun added CLI progress reporting for full-resolution tile matching without changing JSON stdout.
 Updated: 2026-05-03  Geng Xun added optional tile-validity prefilter configuration, summaries, and metadata output.
 Updated: 2026-05-17  Geng Xun wired image-match visualization preview options and low-resolution target-long-edge defaults.
+Updated: 2026-05-05  Geng Xun added stdout tile-detail trimming plus optional full-result JSON output for quieter CLI runs.
 """
 
 from __future__ import annotations
@@ -649,6 +650,11 @@ def load_image_match_defaults_from_config(
             lambda value: _coerce_config_bool(value, field_name="use_tile_cache"),
         ),
         (
+            "omit_tile_details",
+            ("omit_tile_details", "omitTileDetails", "OmitTileDetails"),
+            lambda value: _coerce_config_bool(value, field_name="omit_tile_details"),
+        ),
+        (
             "tile_cache_max_mb",
             ("tile_cache_max_mb", "tileCacheMaxMb", "TileCacheMaxMb"),
             lambda value: int(value),
@@ -706,6 +712,23 @@ def print_image_match_config_default(
     if field_name not in defaults:
         return ""
     return format_image_match_default_for_shell(defaults[field_name])
+
+
+def _stdout_result_payload(result: dict[str, object], *, omit_tile_details: bool) -> dict[str, object]:
+    payload = dict(result)
+    if omit_tile_details:
+        payload.pop("tiles", None)
+    return payload
+
+
+def _write_json_output(output_path: str | Path, payload: object) -> str:
+    resolved_output_path = Path(output_path)
+    resolved_output_path.parent.mkdir(parents=True, exist_ok=True)
+    resolved_output_path.write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+    return str(resolved_output_path)
 
 
 def _create_low_resolution_dom(
@@ -1522,6 +1545,9 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
     parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default pre-RANSAC drawMatches PNG output written for the matched DOM pair.")
     parser.add_argument("--no-progress", dest="show_progress", action="store_false", help="Disable full-resolution tile progress output on stderr.")
+    parser.add_argument("--omit-tile-details", dest="omit_tile_details", action="store_true", help="Omit per-tile detail records from the JSON printed to stdout while keeping top-level tile counters and summary diagnostics.")
+    parser.add_argument("--include-tile-details", dest="omit_tile_details", action="store_false", help="Force per-tile detail records to remain in the JSON printed to stdout, even if config defaults requested omission.")
+    parser.add_argument("--result-output", default=None, help="Optional JSON path used to persist the full image-match result, including per-tile details, before any stdout trimming is applied.")
     parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the pre-RANSAC drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the pre-RANSAC drawMatches PNG written by the image-match stage.")
     parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the pre-RANSAC drawMatches PNG. Defaults to 1/3 for a smaller preview.")
@@ -1619,7 +1645,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
         default=0,
         help="Re-evaluate bypass decision every N reads (0=never)",
     )
-    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, show_progress=True)
+    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, show_progress=True, omit_tile_details=False)
     if config_defaults:
         parser.set_defaults(**config_defaults)
     return parser
@@ -1730,7 +1756,17 @@ def main(argv: list[str] | None = None) -> None:
         adaptive_throughput_threshold_mbps=args.adaptive_throughput_threshold_mbps,
         adaptive_recheck_every=args.adaptive_recheck_every,
     )
-    print(json.dumps(result, indent=2, ensure_ascii=False))
+    result_output_path = None
+    if args.result_output is not None:
+        result_output_path = _write_json_output(args.result_output, result)
+
+    stdout_result = _stdout_result_payload(result, omit_tile_details=args.omit_tile_details)
+    if result_output_path is not None:
+        stdout_result = {
+            **stdout_result,
+            "result_output": result_output_path,
+        }
+    print(json.dumps(stdout_result, indent=2, ensure_ascii=False))
 
 
 if __name__ == "__main__":

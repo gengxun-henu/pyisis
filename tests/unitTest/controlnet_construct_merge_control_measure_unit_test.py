@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-04-21
-Last Modified: 2026-04-21
+Last Modified: 2026-05-05
 Updated: 2026-04-21  Geng Xun added unit and lightweight integration coverage for rounded per-image ControlNet measure deduplication after cnetmerge-style network assembly.
+Updated: 2026-05-05  Geng Xun added CLI coverage for compact post-merge stdout summaries plus optional report-json output.
 """
 
 from __future__ import annotations
@@ -270,11 +271,118 @@ class ControlNetConstructMergeControlMeasureUnitTest(unittest.TestCase):
             self.assertEqual(payload["output_control_net"], result["output_control_net"])
             self.assertEqual(payload["point_count_after"], result["point_count_after"])
             self.assertEqual(payload["measure_count_after"], result["measure_count_after"])
-            self.assertEqual(payload["merged_point_ids"], ["P2"])
+            self.assertNotIn("merged_point_ids", payload)
+            self.assertEqual(payload["merged_point_id_detail_count"], 1)
             self.assertEqual(result["merged_point_ids"], ("P2",))
             self.assertEqual(payload["output_control_net"], str(_default_output_path(input_net_path)))
             self.assertEqual(payload["point_count_after"], 1)
             self.assertEqual(payload["measure_count_after"], 3)
+
+    def test_cli_main_omits_detail_records_from_stdout_and_writes_report_json(self):
+        serial_left = ip.SerialNumber.compose(str(LEFT_CUBE_PATH))
+        serial_middle = ip.SerialNumber.compose(str(MIDDLE_CUBE_PATH))
+        serial_right = ip.SerialNumber.compose(str(RIGHT_CUBE_PATH))
+
+        with temporary_directory() as temp_dir:
+            original_images = temp_dir / "original_images.lis"
+            original_images.write_text(
+                "\n".join([str(LEFT_CUBE_PATH), str(MIDDLE_CUBE_PATH), str(RIGHT_CUBE_PATH)]) + "\n",
+                encoding="utf-8",
+            )
+
+            input_net_path = temp_dir / "control.net"
+            report_json_path = temp_dir / "merge_control_measure_report.json"
+            input_net = ip.ControlNet()
+            input_net.add_point(
+                _make_point(
+                    "P1",
+                    [
+                        _make_measure(serial_left, 10.04, 20.04),
+                        _make_measure(serial_middle, 30.00, 40.00),
+                    ],
+                )
+            )
+            input_net.add_point(
+                _make_point(
+                    "P2",
+                    [
+                        _make_measure(serial_left, 10.03, 20.02),
+                        _make_measure(serial_right, 50.04, 60.04),
+                    ],
+                )
+            )
+            input_net.write(str(input_net_path))
+
+            stdout = io.StringIO()
+            with redirect_stdout(stdout):
+                result = merge_control_measure_main(
+                    [
+                        str(original_images),
+                        str(input_net_path),
+                        "--decimals",
+                        "1",
+                        "--report-json",
+                        str(report_json_path),
+                    ]
+                )
+
+            payload = json.loads(stdout.getvalue())
+            report_payload = json.loads(report_json_path.read_text(encoding="utf-8"))
+
+            self.assertNotIn("merged_point_ids", payload)
+            self.assertEqual(payload["merged_point_id_detail_count"], 1)
+            self.assertEqual(payload["report_json"], str(report_json_path))
+            self.assertEqual(result["merged_point_ids"], ("P2",))
+            self.assertEqual(report_payload["merged_point_ids"], ["P2"])
+
+    def test_cli_main_can_include_detail_records_in_stdout(self):
+        serial_left = ip.SerialNumber.compose(str(LEFT_CUBE_PATH))
+        serial_middle = ip.SerialNumber.compose(str(MIDDLE_CUBE_PATH))
+        serial_right = ip.SerialNumber.compose(str(RIGHT_CUBE_PATH))
+
+        with temporary_directory() as temp_dir:
+            original_images = temp_dir / "original_images.lis"
+            original_images.write_text(
+                "\n".join([str(LEFT_CUBE_PATH), str(MIDDLE_CUBE_PATH), str(RIGHT_CUBE_PATH)]) + "\n",
+                encoding="utf-8",
+            )
+
+            input_net_path = temp_dir / "control.net"
+            input_net = ip.ControlNet()
+            input_net.add_point(
+                _make_point(
+                    "P1",
+                    [
+                        _make_measure(serial_left, 10.04, 20.04),
+                        _make_measure(serial_middle, 30.00, 40.00),
+                    ],
+                )
+            )
+            input_net.add_point(
+                _make_point(
+                    "P2",
+                    [
+                        _make_measure(serial_left, 10.03, 20.02),
+                        _make_measure(serial_right, 50.04, 60.04),
+                    ],
+                )
+            )
+            input_net.write(str(input_net_path))
+
+            stdout = io.StringIO()
+            with redirect_stdout(stdout):
+                merge_control_measure_main(
+                    [
+                        str(original_images),
+                        str(input_net_path),
+                        "--decimals",
+                        "1",
+                        "--include-detail-records",
+                    ]
+                )
+
+            payload = json.loads(stdout.getvalue())
+            self.assertEqual(payload["merged_point_ids"], ["P2"])
 
 
 if __name__ == "__main__":

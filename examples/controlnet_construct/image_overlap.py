@@ -5,6 +5,7 @@ Created: 2026-04-16
 Updated: 2026-04-16  Geng Xun added a non-ISIS overlap workflow that samples original-image camera geometry and writes canonical stereo-pair lists.
 Updated: 2026-04-18  Geng Xun tightened overlap semantics to require positive-area intersections, raised the default sampling density to 11x11, and added a Polar Stereographic fallback for high-latitude imagery.
 Updated: 2026-04-19  Geng Xun expanded the module-level documentation with a clearer processing flow, runtime assumptions, and overlap-decision constraints.
+Updated: 2026-05-05  Geng Xun added compact default stdout summaries plus optional full-bounds stdout and report-json output for overlap diagnostics.
 
 Overview:
     This utility estimates candidate stereo pairs directly from original ISIS cubes by
@@ -490,12 +491,63 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--grid-lines", type=int, default=DEFAULT_GRID_LINES, help="Number of line positions to evaluate per image axis.")
     parser.add_argument("--min-valid-points", type=int, default=4, help="Minimum valid camera intersections required to accept an image footprint.")
     parser.add_argument("--tolerance", type=float, default=0.0, help="Latitude/longitude overlap tolerance in degrees for the geographic fallback path. Boundary-only contact is excluded when tolerance is zero.")
+    parser.add_argument("--report-json", default=None, help="Optional path to write the full overlap JSON summary, including per-image bounds.")
+    parser.add_argument(
+        "--omit-bounds",
+        dest="omit_bounds",
+        action="store_true",
+        help="Omit per-image bounds from stdout and print only a compact summary (default behavior).",
+    )
+    parser.add_argument(
+        "--include-bounds",
+        dest="omit_bounds",
+        action="store_false",
+        help="Include per-image bounds in stdout JSON output.",
+    )
+    parser.set_defaults(omit_bounds=True)
     return parser
 
 
-def main() -> None:
+def _full_result_payload(
+    image_paths: list[str],
+    overlapping_pairs: list[StereoPair],
+    bounds_by_path: dict[str, GeoBounds | None],
+    output_list: str,
+) -> dict[str, object]:
+    return {
+        "input_count": len(image_paths),
+        "image_count": len(image_paths),
+        "overlap_pair_count": len(overlapping_pairs),
+        "pair_count": len(overlapping_pairs),
+        "output_list": output_list,
+        "bounds": {
+            path: (None if bounds is None else asdict(bounds))
+            for path, bounds in bounds_by_path.items()
+        },
+    }
+
+
+def _stdout_result_payload(result: dict[str, object], omit_bounds: bool) -> dict[str, object]:
+    payload = dict(result)
+    if omit_bounds:
+        bounds_by_path = payload.pop("bounds", {})
+        if isinstance(bounds_by_path, dict):
+            payload["bounds_detail_count"] = len(bounds_by_path)
+            payload["valid_bounds_count"] = sum(1 for bounds in bounds_by_path.values() if bounds is not None)
+            payload["invalid_bounds_count"] = sum(1 for bounds in bounds_by_path.values() if bounds is None)
+    return payload
+
+
+def _write_json_output(output_path: str | Path, payload: dict[str, object]) -> None:
+    Path(output_path).write_text(
+        json.dumps(payload, indent=2, ensure_ascii=False) + "\n",
+        encoding="utf-8",
+    )
+
+
+def main(argv: list[str] | None = None) -> dict[str, object]:
     parser = build_argument_parser()
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     image_paths = read_path_list(args.input_list)
     overlapping_pairs, bounds_by_path = find_overlapping_image_pairs(
@@ -507,21 +559,16 @@ def main() -> None:
     )
     write_stereo_pair_list(args.output_list, overlapping_pairs)
 
-    print(
-        json.dumps(
-            {
-                "input_count": len(image_paths),
-                "overlap_pair_count": len(overlapping_pairs),
-                "output_list": args.output_list,
-                "bounds": {
-                    path: (None if bounds is None else asdict(bounds))
-                    for path, bounds in bounds_by_path.items()
-                },
-            },
-            indent=2,
-            ensure_ascii=False,
-        )
-    )
+    result = _full_result_payload(image_paths, overlapping_pairs, bounds_by_path, args.output_list)
+    if args.report_json:
+        _write_json_output(args.report_json, result)
+
+    stdout_payload = _stdout_result_payload(result, args.omit_bounds)
+    if args.report_json:
+        stdout_payload["report_json"] = args.report_json
+
+    print(json.dumps(stdout_payload, indent=2, ensure_ascii=False))
+    return result
 
 
 if __name__ == "__main__":

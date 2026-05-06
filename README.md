@@ -378,12 +378,19 @@ If you prefer a shorter standalone entry point, you can now also jump directly t
 From the current workflow revision onward, the example wrapper scripts also document and use these defaults more explicitly:
 
 - CPU tiled matching is enabled by default unless you pass `--no-parallel-cpu`;
+- `run_image_match_batch_example.sh` keeps stdout compact by default and treats `work/match_metadata/` as the primary per-pair diagnostics sink;
 - `run_image_match_batch_example.sh` writes **pre-RANSAC** match previews into `work/match_viz/` by default;
 - `run_pipeline_example.sh` writes both:
    - **pre-RANSAC** previews into `work/match_viz/`, and
    - **post-RANSAC** previews into `work/match_viz_post_ransac/`.
 
 If you want to disable the pre-RANSAC previews when calling the batch image-match wrapper, forward `-- --no-write-match-visualization` to `image_match.py`.
+
+The output-style convention is now intentionally consistent across the example wrappers: keep terminal output compact, and prefer JSON files for detailed diagnostics. In practice that means:
+
+- `run_image_match_batch_example.sh` mainly prints batch progress on stdout, while per-pair diagnostics live in `work/match_metadata/`;
+- `run_pipeline_example.sh` prints step summaries on stdout, while stage JSON summaries live in `work/reports/` and `work/match_results/`;
+- if you need the full `image_match.py` result payload itself, call it directly or forward its own `--result-output` option through the wrapper.
 
 ### Single stereo pair
 

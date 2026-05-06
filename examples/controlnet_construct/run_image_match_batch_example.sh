@@ -81,6 +81,10 @@ Options:
   -h, --help                      Show this help message
 
 Default behavior:
+  - Terminal output stays compact: this wrapper mainly prints batch progress and pair-level progress lines.
+    Detailed per-pair diagnostics continue to live in <metadata-dir>/ as JSON sidecars.
+  - If you need the full image_match.py result payload in a separate JSON file, forward
+    image_match.py's own option after --, for example: -- --result-output <path>
   - CPU tile parallelism is enabled unless --no-parallel-cpu is provided.
   - image_match.py writes pre-RANSAC match visualization PNGs by default.
   - To disable those PNGs, forward: -- --no-write-match-visualization

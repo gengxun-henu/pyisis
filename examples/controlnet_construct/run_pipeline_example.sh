@@ -24,6 +24,170 @@ die() {
   exit 1
 }
 
+summarize_image_overlap_report() {
+  local report_path=$1
+  [[ -s "$report_path" ]] || {
+    log "  image-overlap summary json: $report_path"
+    return 0
+  }
+  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+try:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+except Exception:
+    print(f"image-overlap summary json: {path}")
+    raise SystemExit(0)
+
+pair_count = payload.get("pair_count")
+image_count = payload.get("image_count")
+if pair_count is None:
+  pair_count = payload.get("overlap_pair_count")
+if image_count is None:
+  image_count = payload.get("input_count")
+parts = []
+if pair_count is not None:
+    parts.append(f"pairs={pair_count}")
+if image_count is not None:
+    parts.append(f"images={image_count}")
+parts.append(f"summary_json={path}")
+print("image-overlap summary: " + " ".join(parts))
+PY
+}
+
+summarize_image_match_result() {
+  local pair_tag=$1
+  local report_path=$2
+  [[ -s "$report_path" ]] || {
+    log "    image-match result json: $report_path"
+    return 0
+  }
+  "$PYTHON_EXECUTABLE" - "$pair_tag" "$report_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+pair_tag = sys.argv[1]
+path = Path(sys.argv[2])
+try:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+except Exception:
+    print(f"image-match {pair_tag}: result_json={path}")
+    raise SystemExit(0)
+
+parts = [f"pair={pair_tag}"]
+for key, label in (
+    ("point_count", "points"),
+    ("matched_tile_count", "matched_tiles"),
+    ("skipped_tile_count", "skipped_tiles"),
+    ("tile_count", "tiles"),
+):
+    value = payload.get(key)
+    if value is not None:
+        parts.append(f"{label}={value}")
+parts.append(f"result_json={path}")
+print("image-match summary: " + " ".join(parts))
+PY
+}
+
+summarize_controlnet_batch_report() {
+  local report_path=$1
+  [[ -s "$report_path" ]] || {
+    log "  pairwise ControlNet batch report: $report_path"
+    return 0
+  }
+  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+try:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+except Exception:
+    print(f"pairwise ControlNet batch report: {path}")
+    raise SystemExit(0)
+
+parts = []
+for key, label in (
+    ("pair_count", "pairs"),
+    ("total_final_control_point_count", "final_control_points"),
+    ("total_dom2ori_retained_count", "dom2ori_retained"),
+):
+    value = payload.get(key)
+    if value is not None:
+        parts.append(f"{label}={value}")
+parts.append(f"report_json={path}")
+print("pairwise ControlNet batch summary: " + " ".join(parts))
+PY
+}
+
+summarize_controlnet_merge_report() {
+  local report_path=$1
+  [[ -s "$report_path" ]] || {
+    log "  merge summary json: $report_path"
+    return 0
+  }
+  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+try:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+except Exception:
+    print(f"merge summary json: {path}")
+    raise SystemExit(0)
+
+parts = []
+for key, label in (
+    ("included_count", "included_nets"),
+    ("skipped_missing_count", "skipped_pairs"),
+):
+    value = payload.get(key)
+    if value is not None:
+        parts.append(f"{label}={value}")
+parts.append(f"script={payload.get('script_path', '')}")
+parts.append(f"report_json={path}")
+print("merge shell summary: " + " ".join(part for part in parts if not part.endswith('=')))
+PY
+}
+
+summarize_post_merge_report() {
+  local report_path=$1
+  [[ -s "$report_path" ]] || {
+    log "  post-merge summary json: $report_path"
+    return 0
+  }
+  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+path = Path(sys.argv[1])
+try:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+except Exception:
+    print(f"post-merge summary json: {path}")
+    raise SystemExit(0)
+
+parts = []
+for key, label in (
+    ("output_control_net", "output"),
+    ("point_count_after", "point_count_after"),
+):
+    value = payload.get(key)
+    if value is not None:
+        parts.append(f"{label}={value}")
+parts.append(f"report_json={path}")
+print("post-merge summary: " + " ".join(parts))
+PY
+}
+
 
 # -----------------------------------------------------------------------------
 # One-click parameter presets for run_pipeline_example.sh (copy & paste)
@@ -82,6 +246,7 @@ Run the DOM matching ControlNet example pipeline end to end:
   5. optionally run merge_control_measure.py as a post-processing step
 
 Default behavior:
+  - Terminal output stays compact: per-step JSON summaries are written to files under <work-dir>/reports or <work-dir>/match_results instead of being printed inline.
   - CPU tile parallelism is enabled unless --no-parallel-cpu is provided.
   - image_match.py writes pre-RANSAC match visualizations to <work-dir>/match_viz.
   - from-dom-batch writes post-RANSAC match visualizations to <work-dir>/match_viz_post_ransac.
@@ -378,9 +543,13 @@ extract_image_match_config_value() {
 
 run_step_1_image_overlap() {
   log "$(pipeline_step_label 1): computing overlap pairs -> ${IMAGES_OVERLAP_LIST}"
-  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_overlap.py" \
+  bash -lc '"$@" >/dev/null' bash \
+    "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_overlap.py" \
     "$ORIGINAL_LIST" \
-    "$IMAGES_OVERLAP_LIST"
+    "$IMAGES_OVERLAP_LIST" \
+    --report-json "$IMAGE_OVERLAP_REPORT_JSON_PATH"
+  log "  image overlap summary json: $IMAGE_OVERLAP_REPORT_JSON_PATH"
+  log "  $(summarize_image_overlap_report "$IMAGE_OVERLAP_REPORT_JSON_PATH")"
 }
 
 run_step_2_image_match_batch() {
@@ -432,14 +601,17 @@ run_step_2_image_match_batch() {
     pair_tag="${left_stem}__${right_stem}"
 
     log "  matching pair ${pair_tag}"
+    local match_result_path="$MATCH_RESULTS_DIR/${pair_tag}.json"
     local match_args=(
       "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py"
       --config "$CONFIG_PATH"
+      --omit-tile-details
       "${dom_by_original[$left]}"
       "${dom_by_original[$right]}"
       "$DOM_KEYS_DIR/${pair_tag}_A.key"
       "$DOM_KEYS_DIR/${pair_tag}_B.key"
       --metadata-output "$MATCH_METADATA_DIR/${pair_tag}.json"
+      --result-output "$match_result_path"
       --match-visualization-output-dir "$PRE_RANSAC_MATCH_VIZ_DIR"
     )
 
@@ -472,11 +644,13 @@ run_step_2_image_match_batch() {
       )
     fi
 
-    run_timed_command "pair_matches" "image_match:${pair_tag}" "${match_args[@]}"
+    run_timed_command "pair_matches" "image_match:${pair_tag}" bash -lc '"$@" >/dev/null' bash "${match_args[@]}"
     local match_status=$?
     if [[ "$match_status" -ne 0 ]]; then
       return "$match_status"
     fi
+    log "    image-match result json: $match_result_path"
+    log "    $(summarize_image_match_result "$pair_tag" "$match_result_path")"
 
     pair_count=$((pair_count + 1))
   done < "$IMAGES_OVERLAP_LIST"
@@ -509,7 +683,9 @@ run_step_3_pairwise_controlnets() {
   if [[ -n "$VISUALIZATION_TARGET_LONG_EDGE" ]]; then
     controlnet_args+=(--visualization-target-long-edge "$VISUALIZATION_TARGET_LONG_EDGE")
   fi
-  "${controlnet_args[@]}"
+  bash -lc '"$@" >/dev/null' bash "${controlnet_args[@]}"
+  log "  pairwise ControlNet batch report: $CONTROLNET_BATCH_REPORT_PATH"
+  log "  $(summarize_controlnet_batch_report "$CONTROLNET_BATCH_REPORT_PATH")"
 }
 
 run_step_4_merge() {
@@ -524,6 +700,7 @@ run_step_4_merge() {
     --network-id "$NETWORK_ID"
     --description "$MERGE_DESCRIPTION"
     --log "$MERGE_LOG_PATH"
+    --report-json "$MERGE_REPORT_JSON_PATH"
     --cnetmerge "$CNETMERGE_PATH"
   )
 
@@ -531,7 +708,9 @@ run_step_4_merge() {
     merge_args+=(--pair-list "$PAIR_LIST_PATH")
   fi
 
-  "${merge_args[@]}"
+  bash -lc '"$@" >/dev/null' bash "${merge_args[@]}"
+  log "  merge summary json: $MERGE_REPORT_JSON_PATH"
+  log "  $(summarize_controlnet_merge_report "$MERGE_REPORT_JSON_PATH")"
 
   if [[ "$SKIP_FINAL_MERGE" == "1" ]]; then
     log "Skipping final cnetmerge execution by request (--skip-final-merge)"
@@ -562,9 +741,11 @@ run_step_5_post_merge_control_measure() {
     post_merge_args+=("$POST_MERGE_OUTPUT_PATH")
   fi
 
-  post_merge_args+=(--decimals "$POST_MERGE_DECIMALS")
+  post_merge_args+=(--decimals "$POST_MERGE_DECIMALS" --report-json "$POST_MERGE_REPORT_JSON_PATH")
 
-  "${post_merge_args[@]}"
+  bash -lc '"$@" >/dev/null' bash "${post_merge_args[@]}"
+  log "  post-merge summary json: $POST_MERGE_REPORT_JSON_PATH"
+  log "  $(summarize_post_merge_report "$POST_MERGE_REPORT_JSON_PATH")"
 }
 
 main() {
@@ -831,6 +1012,7 @@ main() {
   IMAGES_OVERLAP_LIST="$WORK_DIR/images_overlap.lis"
   DOM_KEYS_DIR="$WORK_DIR/dom_keys"
   MATCH_METADATA_DIR="$WORK_DIR/match_metadata"
+  MATCH_RESULTS_DIR="$WORK_DIR/match_results"
   PRE_RANSAC_MATCH_VIZ_DIR="$WORK_DIR/match_viz"
   POST_RANSAC_MATCH_VIZ_DIR="$WORK_DIR/match_viz_post_ransac"
   PAIR_NETS_DIR="$WORK_DIR/pair_nets"
@@ -842,6 +1024,10 @@ main() {
   PAIR_LIST_PATH="$pair_list_input"
   TIMING_JSON_PATH="${timing_json_input:-$REPORTS_DIR/pipeline_timing.json}"
   POST_MERGE_OUTPUT_PATH="$post_merge_output_input"
+  IMAGE_OVERLAP_REPORT_JSON_PATH="$REPORTS_DIR/image_overlap_summary.json"
+  CONTROLNET_BATCH_REPORT_PATH="$REPORTS_DIR/controlnet_batch_summary.json"
+  MERGE_REPORT_JSON_PATH="$REPORTS_DIR/controlnet_merge_summary.json"
+  POST_MERGE_REPORT_JSON_PATH="$REPORTS_DIR/merge_control_measure_summary.json"
 
   require_file "$ORIGINAL_LIST"
   require_file "$DOM_LIST"
@@ -851,7 +1037,7 @@ main() {
     die "--post-merge-control-measure cannot be used together with --skip-final-merge"
   fi
 
-  mkdir -p "$DOM_KEYS_DIR" "$MATCH_METADATA_DIR" "$PRE_RANSAC_MATCH_VIZ_DIR" "$POST_RANSAC_MATCH_VIZ_DIR" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_DIR"
+  mkdir -p "$DOM_KEYS_DIR" "$MATCH_METADATA_DIR" "$MATCH_RESULTS_DIR" "$PRE_RANSAC_MATCH_VIZ_DIR" "$POST_RANSAC_MATCH_VIZ_DIR" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_DIR"
 
   if [[ -z "$NETWORK_ID" ]]; then
     NETWORK_ID=$(extract_network_id_from_config "$CONFIG_PATH")
@@ -1033,10 +1219,13 @@ main() {
   log "Key outputs:"
   log "  overlap list: $IMAGES_OVERLAP_LIST"
   log "  DOM keys: $DOM_KEYS_DIR"
+  log "  image-match result json: $MATCH_RESULTS_DIR"
   log "  pre-RANSAC match viz: $PRE_RANSAC_MATCH_VIZ_DIR"
   log "  post-RANSAC match viz: $POST_RANSAC_MATCH_VIZ_DIR"
   log "  pairwise nets: $PAIR_NETS_DIR"
   log "  reports: $REPORTS_DIR"
+  log "  image overlap summary json: $IMAGE_OVERLAP_REPORT_JSON_PATH"
+  log "  merge summary json: $MERGE_REPORT_JSON_PATH"
   log "  merge script: $MERGE_SCRIPT_PATH"
   log "  merged net: $MERGED_NET_PATH"
   if [[ "$POST_MERGE_CONTROL_MEASURE" == "1" ]]; then
@@ -1045,6 +1234,7 @@ main() {
     else
       log "  post-merged net: auto-named beside $MERGED_NET_PATH"
     fi
+    log "  post-merge summary json: $POST_MERGE_REPORT_JSON_PATH"
   fi
   log "  timing json: $TIMING_JSON_PATH"
 }

@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** 在 `tile_matching.py` 中新增 GPU SIFT 路径，通过 PopSift 批量在 GPU 上提取特征，保持现有 CPU 路径不变。
+**Goal:** 在 `tile_matching.py` 中新增 GPU SIFT 路径，通过 `cv2.cuda.SIFT` 批量在 GPU 上提取特征，保持现有 CPU 路径不变。
 
-**Architecture:** 新增 `gpu_sift.py` 模块封装 PopSift，`tile_matching.py` 中新增 `_match_tile_gpu()` 和 GPU 版 worker `_match_tile_task_batch_worker_gpu()`，通过 `use_gpu` 参数在 `match_dom_pair()` 入口控制。
+**Architecture:** 新增 `gpu_sift.py` 模块封装 `cv2.cuda.SIFT_create()`，`tile_matching.py` 中新增 `_match_tile_gpu()` 和 GPU 版 worker `_match_tile_task_batch_worker_gpu()`，通过 `use_gpu` 参数在 `match_dom_pair()` 入口控制。
 
-**Tech Stack:** Python, PopSift (pypopsift), OpenCV, NumPy
+**Tech Stack:** Python, OpenCV CUDA (`cv2.cuda`), NumPy
 
 ---
 
@@ -14,7 +14,7 @@
 
 | 动作 | 文件 | 职责 |
 |------|------|------|
-| 新增 | `examples/controlnet_construct/gpu_sift.py` | GPU SIFT 封装: 检测可用性、参数映射、批量提取 |
+| 新增 | `examples/controlnet_construct/gpu_sift.py` | GPU SIFT 封装: 检测可用性、批量提取、CPU fallback |
 | 新增 | `tests/unitTest/gpu_sift_unit_test.py` | `gpu_sift.py` 的 fallback 和参数映射测试 |
 | 修改 | `examples/controlnet_construct/tile_matching.py` | 新增 `_match_tile_gpu()`、`_match_tile_task_batch_worker_gpu()`、参数传递 |
 | 修改 | `examples/controlnet_construct/image_match.py` | `match_dom_pair()` 增加 `use_gpu` 参数及 CLI 选项 |
@@ -39,7 +39,6 @@ import pytest
 from examples.controlnet_construct.gpu_sift import (
     HAS_GPU_SIFT,
     GpuSiftBatch,
-    map_opencv_to_popsift_params,
 )
 
 
@@ -48,32 +47,8 @@ class TestHasGpuSift:
         assert isinstance(HAS_GPU_SIFT, bool)
 
 
-class TestMapParams:
-    def test_map_all_params(self):
-        params = map_opencv_to_popsift_params(
-            max_features=500,
-            octave_layers=3,
-            contrast_threshold=0.04,
-            edge_threshold=10.0,
-            sigma=1.6,
-        )
-        assert "peakThreshold" in params
-        assert "edgeThreshold" in params
-        assert "firstOctave" in params
-
-    def test_map_no_max_features(self):
-        params = map_opencv_to_popsift_params(
-            max_features=None,
-            octave_layers=3,
-            contrast_threshold=0.04,
-            edge_threshold=10.0,
-            sigma=1.6,
-        )
-        assert "peakThreshold" not in params
-
-
 class TestGpuSiftBatchFallback:
-    """When HAS_GPU_SIFT is False, execute() should return empty or fallback."""
+    """When HAS_GPU_SIFT is False, execute() should fallback to CPU SIFT."""
 
     @pytest.mark.skipif(HAS_GPU_SIFT, reason="requires no GPU SIFT")
     def test_execute_returns_empty_when_unavailable(self):
@@ -85,6 +60,36 @@ class TestGpuSiftBatchFallback:
         # Should fallback to CPU SIFT when GPU unavailable
         assert len(results) == 1
         assert isinstance(results[0], tuple)
+
+    def test_execute_cpu_produces_results(self):
+        """CPU fallback should produce (keypoints, descriptors) tuples."""
+        batch = GpuSiftBatch(batch_size=4)
+        img = np.random.randint(0, 255, (128, 128), dtype=np.uint8)
+        mask = np.ones((128, 128), dtype=np.uint8) * 255
+        batch.add(img, mask)
+        batch.add(img, mask)
+        results = batch.execute()
+        assert len(results) == 2
+        for kp, desc in results:
+            assert isinstance(kp, list)
+            if desc is not None:
+                assert desc.shape[1] == 128
+
+
+class TestGpuSiftBatchParams:
+    """Verify SIFT parameters are passed through correctly."""
+
+    def test_custom_params(self):
+        batch = GpuSiftBatch(
+            batch_size=4,
+            nfeatures=200,
+            contrastThreshold=0.05,
+            edgeThreshold=12.0,
+            sigma=1.8,
+        )
+        assert batch._batch_size == 4
+        assert batch._sift_kwargs["nfeatures"] == 200
+        assert batch._sift_kwargs["contrastThreshold"] == 0.05
 ```
 
 - [ ] **Step 2: 运行测试确认失败**
@@ -98,10 +103,10 @@ Expected: FAIL with "ModuleNotFoundError: No module named 'examples.controlnet_c
 - [ ] **Step 3: 实现 gpu_sift.py**
 
 ```python
-"""GPU-accelerated SIFT feature extraction via PopSift.
+"""GPU-accelerated SIFT feature extraction via OpenCV CUDA.
 
-Wraps pypopsift for batch GPU SIFT extraction.
-Falls back to CPU cv2.SIFT when pypopsift is unavailable.
+Wraps cv2.cuda.SIFT for batch GPU SIFT extraction.
+Falls back to CPU cv2.SIFT when CUDA is unavailable.
 
 Author: Geng Xun
 Created: 2026-05-06
@@ -122,43 +127,12 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 try:
-    import pypopsift
-
-    HAS_GPU_SIFT = True
-except ImportError:
-    pypopsift = None  # type: ignore[assignment]
+    _cuda_device_count = cv2.cuda.getCudaEnabledDeviceCount()
+    # Verify cuda.SIFT_create exists (opencv-contrib-python with CUDA)
+    _ = cv2.cuda.SIFT_create
+    HAS_GPU_SIFT = _cuda_device_count > 0
+except Exception:
     HAS_GPU_SIFT = False
-
-
-# ---------------------------------------------------------------------------
-# Parameter mapping: OpenCV SIFT → PopSift
-# ---------------------------------------------------------------------------
-
-def map_opencv_to_popsift_params(
-    *,
-    max_features: int | None,
-    octave_layers: int,
-    contrast_threshold: float,
-    edge_threshold: float,
-    sigma: float,
-) -> dict[str, Any]:
-    """Map OpenCV SIFT constructor parameters to PopSift equivalents.
-
-    PopSift uses different parameter names and ranges:
-      - contrastThreshold → peakThreshold (PopSift default ~0.04)
-      - edgeThreshold → edgeThreshold (same name, default ~10.0)
-      - sigma → firstOctave (controls initial scale)
-      - nfeatures → not directly supported; PopSift extracts all above threshold
-    """
-    params: dict[str, Any] = {}
-    if max_features is not None:
-        params["nfeatures"] = max_features
-    params["peakThreshold"] = contrast_threshold
-    params["edgeThreshold"] = edge_threshold
-    # PopSift firstOctave: -1 means image is doubled before processing
-    # (equivalent to OpenCV's default sigma=1.6 pipeline)
-    params["firstOctave"] = -1
-    return params
 
 
 # ---------------------------------------------------------------------------
@@ -170,16 +144,18 @@ class GpuSiftBatch:
 
     When GPU is unavailable, automatically falls back to CPU cv2.SIFT
     with the same parameters, so callers do not need to branch.
+
+    Uses cv2.cuda.SIFT_create() — parameters are identical to CPU SIFT.
     """
 
     def __init__(
         self,
         batch_size: int = 32,
         *,
-        max_features: int | None = None,
-        octave_layers: int = 3,
-        contrast_threshold: float = 0.04,
-        edge_threshold: float = 10.0,
+        nfeatures: int = 0,
+        nOctaveLayers: int = 3,
+        contrastThreshold: float = 0.04,
+        edgeThreshold: float = 10.0,
         sigma: float = 1.6,
     ) -> None:
         self._batch_size = batch_size
@@ -187,13 +163,12 @@ class GpuSiftBatch:
         self._masks: list[np.ndarray] = []
         self._use_gpu = HAS_GPU_SIFT
         self._sift_kwargs = {
-            "nOctaveLayers": octave_layers,
-            "contrastThreshold": contrast_threshold,
-            "edgeThreshold": edge_threshold,
+            "nfeatures": nfeatures,
+            "nOctaveLayers": nOctaveLayers,
+            "contrastThreshold": contrastThreshold,
+            "edgeThreshold": edgeThreshold,
             "sigma": sigma,
         }
-        if max_features is not None:
-            self._sift_kwargs["nfeatures"] = max_features
 
     def add(self, image: np.ndarray, mask: np.ndarray) -> int:
         """Add a uint8 image + mask to the batch. Returns batch index."""
@@ -212,7 +187,7 @@ class GpuSiftBatch:
         """Run SIFT on all accumulated images.
 
         Returns list of (keypoints, descriptors) tuples, one per image.
-        When GPU is available, uses pypopsift; otherwise falls back to CPU.
+        When GPU is available, uses cv2.cuda.SIFT; otherwise falls back to CPU.
         Clears the internal buffer after execution.
         """
         if not self._images:
@@ -230,17 +205,33 @@ class GpuSiftBatch:
     # -- GPU path ----------------------------------------------------------
 
     def _execute_gpu(self) -> list[tuple[list[cv2.KeyPoint], np.ndarray | None]]:
-        """Extract SIFT features via pypopsift for all batched images."""
+        """Extract SIFT features via cv2.cuda.SIFT for all batched images."""
         results: list[tuple[list[cv2.KeyPoint], np.ndarray | None]] = []
+        sift = cv2.cuda.SIFT_create(**self._sift_kwargs)
 
-        # pypopsift.process_images expects a list of images.
-        # We call it per image because PopSift's Python API processes
-        # one image at a time (GPU parallelism is internal).
-        # For true batch processing, stack images if the API supports it.
         for image, mask in zip(self._images, self._masks):
             try:
-                kp_des = _popsift_extract(image, mask, self._sift_kwargs)
-                results.append(kp_des)
+                # Upload to GPU
+                gpu_image = cv2.cuda_GpuMat()
+                gpu_image.upload(image)
+
+                if mask is not None:
+                    gpu_mask = cv2.cuda_GpuMat()
+                    gpu_mask.upload(mask)
+                else:
+                    gpu_mask = None
+
+                # GPU SIFT
+                keypoints, descriptors = sift.detectAndCompute(
+                    gpu_image, gpu_mask
+                )
+
+                # Download descriptors to CPU
+                desc_cpu = None
+                if descriptors is not None:
+                    desc_cpu = descriptors.download()
+
+                results.append((keypoints, desc_cpu))
             except Exception:
                 logger.warning(
                     "GPU SIFT failed for image %dx%d, falling back to CPU",
@@ -274,53 +265,6 @@ class GpuSiftBatch:
         sift: cv2.SIFT,
     ) -> tuple[list[cv2.KeyPoint], np.ndarray | None]:
         return sift.detectAndCompute(image, mask)
-
-
-# ---------------------------------------------------------------------------
-# PopSift extraction helper
-# ---------------------------------------------------------------------------
-
-def _popsift_extract(
-    image: np.ndarray,
-    mask: np.ndarray,
-    sift_kwargs: dict[str, Any],
-) -> tuple[list[cv2.KeyPoint], np.ndarray | None]:
-    """Run pypopsift SIFT on a single uint8 image.
-
-    PopSift expects float32 images in [0, 255] range or uint8.
-    Returns (keypoints, descriptors) in OpenCV-compatible format.
-    """
-    h, w = image.shape[:2]
-
-    # Check if image fits in GPU texture memory
-    if not pypopsift.fits_texture(w, h):
-        raise MemoryError(
-            f"Image {w}x{h} exceeds GPU texture memory limits"
-        )
-
-    # pypopsift.process_image returns (keypoints, descriptors)
-    # keypoints: Nx4 array [x, y, scale, orientation]
-    # descriptors: Nx128 array
-    keypoints_array, descriptors = pypopsift.process_image(
-        image,
-        peakThreshold=sift_kwargs.get("contrastThreshold", 0.04),
-        edgeThreshold=sift_kwargs.get("edgeThreshold", 10.0),
-        firstOctave=sift_kwargs.get("nOctaveLayers", 3),
-        nfeatures=sift_kwargs.get("nfeatures", 0),
-    )
-
-    # Convert numpy keypoints to cv2.KeyPoint objects
-    keypoints = []
-    for row in keypoints_array:
-        kp = cv2.KeyPoint(
-            x=float(row[0]),
-            y=float(row[1]),
-            size=float(row[2]),
-            angle=float(row[3]),
-        )
-        keypoints.append(kp)
-
-    return keypoints, descriptors
 ```
 
 - [ ] **Step 4: 运行测试确认通过**
@@ -329,7 +273,7 @@ def _popsift_extract(
 PYTHONPATH=/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone \
     python -m pytest tests/unitTest/gpu_sift_unit_test.py -v
 ```
-Expected: PASS (all tests use CPU fallback since no pypopsift installed)
+Expected: PASS (all tests use CPU fallback since no CUDA available on dev machine)
 
 - [ ] **Step 5: 提交**
 
@@ -384,12 +328,13 @@ def _match_tile_gpu(
     Uses GpuSiftBatch internally for a single pair (batch_size=2).
     Returns the same format as _match_tile().
     """
+    nfeatures = max_features if max_features is not None else 0
     batch = GpuSiftBatch(
         batch_size=2,
-        max_features=max_features,
-        octave_layers=sift_octave_layers,
-        contrast_threshold=sift_contrast_threshold,
-        edge_threshold=sift_edge_threshold,
+        nfeatures=nfeatures,
+        nOctaveLayers=sift_octave_layers,
+        contrastThreshold=sift_contrast_threshold,
+        edgeThreshold=sift_edge_threshold,
         sigma=sift_sigma,
     )
     batch.add(left_image, left_mask)
@@ -501,7 +446,7 @@ parser.add_argument(
     "--use-gpu",
     action="store_true",
     default=False,
-    help="Use GPU-accelerated SIFT via PopSift (requires pypopsift installed)",
+    help="Use GPU-accelerated SIFT via OpenCV CUDA (requires opencv-contrib-python with CUDA support)",
 )
 parser.add_argument(
     "--gpu-batch-size",
@@ -621,7 +566,7 @@ git commit -m "test: add GPU SIFT integration and fallback tests"
 |-----------|-----------|
 | 新增 gpu_sift.py 模块 | Task 1 |
 | GpuSiftBatch 类 (add/execute) | Task 1 |
-| PopSift 参数映射 | Task 1 |
+| OpenCV CUDA SIFT 参数直接透传（无映射） | Task 1 |
 | 运行时检测 HAS_GPU_SIFT | Task 1 |
 | GPU 不可用时 fallback 到 CPU | Task 1, 5 |
 | _match_tile_gpu() 函数 | Task 2 |
@@ -635,5 +580,5 @@ git commit -m "test: add GPU SIFT integration and fallback tests"
 ## 占位符扫描
 
 - 无 TBD/TODO
-- pypopsift 的 Python API (`pypopsift.process_image`) 函数名和参数名可能与实际版本有差异，需要在 GPU 机器上验证后调整 `gpu_sift.py` 中的 `_popsift_extract()` 函数。当前代码基于 OpenDroneMap 文档中的 API 推断。
-- 所有测试代码均为实际可执行代码，非 "add tests for the above" 类型占位符。
+- 开发机无 CUDA，所有测试走 CPU fallback 路径
+- 目标 GPU 机器需从源码编译带 CUDA 的 OpenCV（见 spec 文档的"依赖与安装"章节），`cv2.cuda.SIFT_create` 的行为应与 CPU 版一致

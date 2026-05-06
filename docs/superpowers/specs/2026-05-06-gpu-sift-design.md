@@ -6,10 +6,10 @@
 
 ## 选型
 
-- **GPU SIFT 库**: PopSift (https://github.com/alicevision/popsift)
-  - 忠实于 Lowe 原始 SIFT 算法，关键点质量高
-  - 有 Python 绑定 (pypopsift)
-  - AliceVision 生态维护
+- **GPU SIFT 库**: OpenCV CUDA (`cv2.cuda.SIFT`)，来自 `opencv-contrib-python` 模块
+  - OpenCV 官方维护，与 CPU SIFT API 高度一致
+  - 无需额外第三方库，仅需 `opencv-contrib-python`（需带 CUDA 编译）
+  - 参数与 CPU 版完全兼容（`nfeatures`、`contrastThreshold`、`edgeThreshold`、`sigma`）
 - **传输策略**: 批量 16-32 个 tile 一次传入 GPU，而非逐 tile 传输
   - 逐 tile 传输时 H2D/D2H + kernel launch 开销占计算时间 10-20%，收益有限
   - 批量传输摊薄 overhead，GPU 可并行处理多张图像
@@ -21,10 +21,10 @@
 **`examples/controlnet_construct/gpu_sift.py`** — GPU SIFT 封装模块
 
 职责：
-- 封装 PopSift 初始化和批量 SIFT 检测
+- 封装 `cv2.cuda.SIFT` 初始化和批量 SIFT 检测
 - 提供与当前 `_build_sift_detector()` 语义一致的接口
-- 处理 CPU/GPU 数据传输（numpy ↔ GPU array）
-- 当 GPU 不可用或 PopSift 未安装时 fallback 到 CPU
+- 处理 CPU/GPU 数据传输（numpy ↔ `cv2.cuda_GpuMat`）
+- 当 GPU 不可用或 `opencv-contrib-python` 未安装时 fallback 到 CPU
 
 核心接口：
 ```python
@@ -32,7 +32,8 @@ class GpuSiftBatch:
     """累积 tile 并批量执行 GPU SIFT。"""
 
     def __init__(self, batch_size: int = 32, **sift_params):
-        # PopSift 参数映射: maxKeypoints, threshold, firstGuessSigma 等
+        # OpenCV CUDA SIFT 参数与 CPU 版完全一致
+        sift_params: nfeatures, contrastThreshold, edgeThreshold, sigma 等
         ...
 
     def add(self, image: np.ndarray, mask: np.ndarray) -> int:
@@ -97,63 +98,95 @@ tile 读取 (CPU)
   → stretch_to_byte (CPU, 现有逻辑不变)
   → mask 生成 (CPU, 现有逻辑不变)
   → 累积 batch_size 个 tile
-  → 批量 H2D 传输
-  → PopSift detectAndCompute (GPU)
-  → 批量 D2H 传输 (keypoints + descriptors)
+  → 批量 H2D 传输 (cv2.cuda_GpuMat.upload)
+  → cv2.cuda.SIFT.detectAndCompute (GPU)
+  → 批量 D2H 传输 (cv2.cuda_GpuMat.download)
   → 描述子匹配 (CPU, BFMatcher/FLANN, 现有逻辑不变)
 ```
 
 **为什么描述子匹配留在 CPU？**
-- PopSift 只负责特征提取（detect + compute）
+- `cv2.cuda.SIFT` 只负责特征提取（detect + compute）
 - 描述子匹配涉及左右图跨 tile 的关系，批量模式复杂
 - BFMatcher/FLANN 在 CPU 上对少量描述子（通常 <500/tile）足够快
 - 这保持了最小改动原则：匹配逻辑完全不变
 
-## PopSift 参数映射
+## OpenCV CUDA SIFT 参数映射
 
-PopSift 的参数与 OpenCV SIFT 不完全一致。需要在 `gpu_sift.py` 中做参数映射：
+OpenCV CUDA SIFT (`cv2.cuda.SIFT_create()`) 与 CPU SIFT 参数完全一致，无需特殊映射：
 
-| OpenCV SIFT | PopSift 等效 | 说明 |
-|---|---|---|
-| `nfeatures` | `maxKeypoints` | 最大关键点数量 |
-| `contrastThreshold` | `threshold` | DoG 对比度阈值 |
-| `edgeThreshold` | (无直接等效) | PopSift 有自己的 edge 过滤逻辑 |
-| `nOctaveLayers` | `siftMode` (sift/full) | Octave 层数控制 |
-| `sigma` | `firstGuessSigma` | 初始 sigma |
+| 参数 | 类型 | 默认值 | 说明 |
+|---|---|---|---|
+| `nfeatures` | int | 0 | 保留的最佳特征数量（0 表示不限制） |
+| `nOctaveLayers` | int | 3 | 每组 octave 的层数 |
+| `contrastThreshold` | float | 0.04 | 对比度阈值，用于过滤弱关键点 |
+| `edgeThreshold` | float | 10.0 | 边缘阈值，用于过滤边缘响应 |
+| `sigma` | float | 1.6 | 高斯模糊 sigma |
 
-需要在安装 PopSift 后验证参数等效性。
+直接透传即可：
+```python
+# CPU 版
+detector = cv2.SIFT_create(nfeatures=500, contrastThreshold=0.04, edgeThreshold=10.0, sigma=1.6)
+
+# GPU 版 — 参数完全相同
+detector = cv2.cuda.SIFT_create(nfeatures=500, contrastThreshold=0.04, edgeThreshold=10.0, sigma=1.6)
+```
 
 ## 依赖与安装
 
-PopSift 需要在目标 GPU 机器上编译安装：
+> **注意**: pip 预编译的 `opencv-contrib-python` wheel **不包含 CUDA 模块**（`cv2.cuda` 不可用）。
+> 要在 GPU 机器上使用 `cv2.cuda.SIFT_create()`，必须从源码编译带 CUDA 支持的 OpenCV。
+
+### 开发环境（无 GPU）
+
+开发机只需安装普通版本，用于编写代码和测试 CPU fallback 路径：
 
 ```bash
-# 依赖: CUDA >= 8.0, Boost >= 1.55, CMake >= 3.1
-git clone https://github.com/alicevision/popsift.git
-cd popsift && mkdir build && cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release
+pip install opencv-contrib-python
+```
+
+### 运行环境（有 GPU + CUDA）
+
+需要在目标 GPU 机器上从源码编译：
+
+```bash
+# 1. 安装 CUDA toolkit >= 11.0
+# 2. 下载 opencv + opencv_contrib 源码（版本需一致）
+git clone --branch 4.x https://github.com/opencv/opencv.git
+git clone --branch 4.x https://github.com/opencv/opencv_contrib.git
+cd opencv && mkdir build && cd build
+
+# 3. 编译时启用 OPENCV_ENABLE_NONFREE 和 CUDA 支持
+cmake -DOPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
+      -DOPENCV_ENABLE_NONFREE=ON \
+      -DWITH_CUDA=ON \
+      -DENABLE_CXX11=ON \
+      -DCMAKE_BUILD_TYPE=Release \
+      ..
 make -j$(nproc)
 make install
 
-# Python 绑定
-pip install pypopsift  # 或从源码编译
+# 4. 安装 Python 绑定
+cd python_loader && pip install .
 ```
 
-当前代码不直接引入 PopSift 导入，而是在运行时检测：
+当前代码不直接引入 GPU SIFT 导入，而是在运行时检测：
 
 ```python
 try:
-    import pypopsift
-    HAS_GPU_SIFT = True
-except ImportError:
+    # 检查是否有 CUDA 支持
+    if cv2.cuda.getCudaEnabledDeviceCount() > 0:
+        HAS_GPU_SIFT = True
+    else:
+        HAS_GPU_SIFT = False
+except Exception:
     HAS_GPU_SIFT = False
 ```
 
 ## 错误处理
 
-- GPU 不可用 / PopSift 未安装 → 自动 fallback 到 CPU SIFT，输出 warning
+- GPU 不可用 / `opencv-contrib-python` 未安装 CUDA 版本 → 自动 fallback 到 CPU SIFT，输出 warning
 - GPU OOM → 自动回退到更小的 batch size，重试；仍失败则 fallback 到 CPU
-- PopSift 对某些特殊图像（全黑、全无效值）行为需测试，fallback 到 CPU
+- OpenCV CUDA SIFT 对某些特殊图像（全黑、全无效值）行为需测试，fallback 到 CPU
 
 ## 测试
 

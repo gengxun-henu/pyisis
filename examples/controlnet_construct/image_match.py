@@ -674,6 +674,16 @@ def load_image_match_defaults_from_config(
             ("adaptive_recheck_every", "adaptiveRecheckEvery", "AdaptiveRecheckEvery"),
             lambda value: int(value),
         ),
+        (
+            "use_gpu",
+            ("use_gpu", "useGpu", "UseGpu"),
+            lambda value: _coerce_config_bool(value, field_name="use_gpu"),
+        ),
+        (
+            "gpu_batch_size",
+            ("gpu_batch_size", "gpuBatchSize", "GpuBatchSize"),
+            lambda value: int(value),
+        ),
     )
 
     for destination, candidate_keys, coercer in field_specs:
@@ -939,6 +949,8 @@ def match_dom_pair(
     adaptive_warmup_count: int = 10,
     adaptive_throughput_threshold_mbps: float = 200.0,
     adaptive_recheck_every: int = 0,
+    use_gpu: bool = False,
+    gpu_batch_size: int = 32,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
@@ -1158,6 +1170,8 @@ def match_dom_pair(
                                     sift_contrast_threshold=sift_contrast_threshold,
                                     sift_edge_threshold=sift_edge_threshold,
                                     sift_sigma=sift_sigma,
+                                    use_gpu=use_gpu,
+                                    gpu_batch_size=gpu_batch_size,
                                 ),
                                 max_workers=candidate_worker_count,
                                 progress_callback=progress_bar.update if progress_bar is not None else None,
@@ -1197,6 +1211,7 @@ def match_dom_pair(
                                 sift_contrast_threshold=sift_contrast_threshold,
                                 sift_edge_threshold=sift_edge_threshold,
                                 sift_sigma=sift_sigma,
+                                use_gpu=use_gpu,
                                 progress_callback=progress_bar.update if progress_bar is not None else None,
                                 use_tile_cache=use_tile_cache,
                                 cache_max_mb=tile_cache_max_mb,
@@ -1232,6 +1247,7 @@ def match_dom_pair(
                             sift_contrast_threshold=sift_contrast_threshold,
                             sift_edge_threshold=sift_edge_threshold,
                             sift_sigma=sift_sigma,
+                            use_gpu=use_gpu,
                             progress_callback=progress_bar.update if progress_bar is not None else None,
                             use_tile_cache=use_tile_cache,
                             cache_max_mb=tile_cache_max_mb,
@@ -1645,6 +1661,18 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
         default=0,
         help="Re-evaluate bypass decision every N reads (0=never)",
     )
+    parser.add_argument(
+        "--use-gpu",
+        action="store_true",
+        default=False,
+        help="Use GPU-accelerated SIFT via OpenCV CUDA (requires opencv-contrib-python with CUDA support)",
+    )
+    parser.add_argument(
+        "--gpu-batch-size",
+        type=int,
+        default=32,
+        help="Number of tiles to batch for GPU SIFT processing (default: 32)",
+    )
     parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, show_progress=True)
     if config_defaults:
         parser.set_defaults(**config_defaults)
@@ -1750,6 +1778,8 @@ def main(argv: list[str] | None = None) -> None:
         preview_cache_source=args.preview_cache_source,
         preview_force_regenerate=args.preview_force_regenerate,
         preview_level=args.preview_level,
+        use_gpu=args.use_gpu,
+        gpu_batch_size=args.gpu_batch_size,
         use_tile_cache=args.use_tile_cache,
         tile_cache_max_mb=args.tile_cache_max_mb,
         adaptive_warmup_count=args.adaptive_warmup_count,

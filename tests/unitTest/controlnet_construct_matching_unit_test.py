@@ -55,6 +55,7 @@ Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile matching de
 Updated: 2026-05-20  Geng Xun added GPU tile no-feature contract regression coverage.
 Updated: 2026-05-20  Geng Xun added config parser coverage for dynamic GPU batch defaults.
 Updated: 2026-05-20  Geng Xun added CLI regression coverage for disabling dynamic GPU tile batching.
+Updated: 2026-05-20  Geng Xun added prepared GPU tile payload prefilter coverage.
 """
 
 from __future__ import annotations
@@ -98,6 +99,7 @@ write_stereo_pair_match_visualization_from_key_files = image_match.write_stereo_
 
 tile_matching_module = importlib.import_module("controlnet_construct.tile_matching")
 tile_matching = tile_matching_module
+TileWindow = tile_matching_module.TileWindow
 
 keypoints_module = importlib.import_module("controlnet_construct.keypoints")
 Keypoint = keypoints_module.Keypoint
@@ -4572,6 +4574,38 @@ class TestGpuTileMatchingPath(unittest.TestCase):
         self.assertEqual(left_keypoints, [fake_left_keypoint])
         self.assertEqual(right_keypoints, [])
         self.assertEqual(matches, [])
+
+
+class TestGpuPreparedTilePayload(unittest.TestCase):
+    def test_prepare_tile_payload_skips_invalid_window_before_gpu(self):
+        window = tile_matching.PairedTileWindow(
+            local_window=TileWindow(0, 0, 16, 16),
+            left_window=TileWindow(0, 0, 16, 16),
+            right_window=TileWindow(0, 0, 16, 16),
+        )
+        left_values = np.zeros((16, 16), dtype=np.float64)
+        right_values = np.zeros((16, 16), dtype=np.float64)
+
+        payload_or_result = tile_matching._prepare_gpu_tile_payload_from_values(
+            left_values=left_values,
+            right_values=right_values,
+            local_window=window.local_window,
+            left_window=window.left_window,
+            right_window=window.right_window,
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            left_invalid_values=(0.0,),
+            right_invalid_values=(0.0,),
+            special_pixel_abs_threshold=1.0e300,
+            min_valid_pixels=64,
+            valid_pixel_percent_threshold=0.05,
+            invalid_pixel_radius=1,
+        )
+
+        self.assertIsInstance(payload_or_result, tile_matching.TileMatchResult)
+        self.assertEqual(payload_or_result.stats.status, "skipped_valid_pixel_ratio_below_threshold")
 
 
 if __name__ == "__main__":

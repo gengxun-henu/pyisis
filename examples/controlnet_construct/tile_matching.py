@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-04-24
 Updated: 2026-05-03  Geng Xun batched process-pool tile tasks so each worker shard reuses opened DOM cubes.
+Updated: 2026-05-20  Geng Xun added prepared GPU tile payload construction for future batching.
 """
 
 from __future__ import annotations
@@ -109,6 +110,21 @@ class TileMatchResult:
     stats: TileMatchStats
     left_points: tuple[Keypoint, ...]
     right_points: tuple[Keypoint, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class PreparedGpuTilePayload:
+    local_window: TileWindow
+    left_window: TileWindow
+    right_window: TileWindow
+    left_image: np.ndarray
+    right_image: np.ndarray
+    left_mask: np.ndarray
+    right_mask: np.ndarray
+    left_valid_pixel_count: int
+    right_valid_pixel_count: int
+    left_valid_pixel_ratio: float
+    right_valid_pixel_ratio: float
 
 
 def _normalize_matcher_method(matcher_method: str) -> str:
@@ -379,6 +395,124 @@ def _match_tile_gpu(
     if not result.right_keypoints:
         return result.left_keypoints, [], []
     return result.left_keypoints, result.right_keypoints, result.matches
+
+
+def _prepare_gpu_tile_payload_from_values(
+    *,
+    left_values: np.ndarray,
+    right_values: np.ndarray,
+    local_window: TileWindow,
+    left_window: TileWindow,
+    right_window: TileWindow,
+    minimum_value: float | None,
+    maximum_value: float | None,
+    lower_percent: float,
+    upper_percent: float,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
+) -> PreparedGpuTilePayload | TileMatchResult:
+    left_invalid_mask, _ = summarize_valid_pixels(
+        left_values,
+        invalid_values=left_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+    )
+    right_invalid_mask, _ = summarize_valid_pixels(
+        right_values,
+        invalid_values=right_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+    )
+    left_invalid_mask = expand_invalid_mask_for_radius(left_invalid_mask, invalid_pixel_radius=invalid_pixel_radius)
+    right_invalid_mask = expand_invalid_mask_for_radius(right_invalid_mask, invalid_pixel_radius=invalid_pixel_radius)
+    left_valid_pixel_stats = _stats_from_mask(left_invalid_mask)
+    right_valid_pixel_stats = _stats_from_mask(right_invalid_mask)
+    if (
+        left_valid_pixel_stats.valid_pixel_ratio < valid_pixel_percent_threshold
+        or right_valid_pixel_stats.valid_pixel_ratio < valid_pixel_percent_threshold
+    ):
+        return TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=local_window.start_x,
+                local_start_y=local_window.start_y,
+                width=local_window.width,
+                height=local_window.height,
+                left_start_x=left_window.start_x,
+                left_start_y=left_window.start_y,
+                right_start_x=right_window.start_x,
+                right_start_y=right_window.start_y,
+                left_valid_pixel_count=left_valid_pixel_stats.valid_pixel_count,
+                right_valid_pixel_count=right_valid_pixel_stats.valid_pixel_count,
+                left_valid_pixel_ratio=left_valid_pixel_stats.valid_pixel_ratio,
+                right_valid_pixel_ratio=right_valid_pixel_stats.valid_pixel_ratio,
+                left_feature_count=0,
+                right_feature_count=0,
+                match_count=0,
+                status="skipped_valid_pixel_ratio_below_threshold",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+    left_image, left_mask, left_stats = _prepare_image_for_sift(
+        left_values,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=left_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+        invalid_mask=left_invalid_mask,
+        invalid_pixel_radius=0,
+    )
+    right_image, right_mask, right_stats = _prepare_image_for_sift(
+        right_values,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=right_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+        invalid_mask=right_invalid_mask,
+        invalid_pixel_radius=0,
+    )
+    if left_stats.valid_pixel_count < min_valid_pixels or right_stats.valid_pixel_count < min_valid_pixels:
+        return TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=local_window.start_x,
+                local_start_y=local_window.start_y,
+                width=local_window.width,
+                height=local_window.height,
+                left_start_x=left_window.start_x,
+                left_start_y=left_window.start_y,
+                right_start_x=right_window.start_x,
+                right_start_y=right_window.start_y,
+                left_valid_pixel_count=left_stats.valid_pixel_count,
+                right_valid_pixel_count=right_stats.valid_pixel_count,
+                left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+                right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
+                left_feature_count=0,
+                right_feature_count=0,
+                match_count=0,
+                status="skipped_insufficient_valid_pixels",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+    return PreparedGpuTilePayload(
+        local_window=local_window,
+        left_window=left_window,
+        right_window=right_window,
+        left_image=left_image,
+        right_image=right_image,
+        left_mask=left_mask,
+        right_mask=right_mask,
+        left_valid_pixel_count=left_stats.valid_pixel_count,
+        right_valid_pixel_count=right_stats.valid_pixel_count,
+        left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+        right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
+    )
 
 
 def _match_tile_from_window_values(

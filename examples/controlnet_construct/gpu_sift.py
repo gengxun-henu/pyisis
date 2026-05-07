@@ -17,6 +17,20 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
+_SUPPORTED_MATCHER_METHODS = {"bf", "flann"}
+
+
+def _normalize_matcher_method(matcher_method: str) -> str:
+    if not isinstance(matcher_method, str):
+        raise ValueError("unsupported matcher_method: expected one of bf, flann")
+    normalized = matcher_method.strip().lower()
+    if normalized not in _SUPPORTED_MATCHER_METHODS:
+        raise ValueError(
+            f"unsupported matcher_method {matcher_method!r}: expected one of bf, flann"
+        )
+    return normalized
+
+
 from dataclasses import dataclass, field
 
 
@@ -262,6 +276,7 @@ def _cpu_match_sift_pair(
     sift_kwargs: dict[str, int | float],
     failure_reason: str | None,
 ) -> GpuSiftMatchResult:
+    matcher_method = _normalize_matcher_method(matcher_method)
     sift = cv2.SIFT_create(**sift_kwargs)
     left_keypoints_raw, left_descriptors = sift.detectAndCompute(left_image, left_mask)
     right_keypoints_raw, right_descriptors = sift.detectAndCompute(right_image, right_mask)
@@ -302,6 +317,7 @@ def match_sift_pair(
     sift_kwargs: dict[str, int | float],
     use_gpu: bool = True,
 ) -> GpuSiftMatchResult:
+    matcher_method = _normalize_matcher_method(matcher_method)
     if not use_gpu or not HAS_GPU_SIFT:
         return _cpu_match_sift_pair(
             left_image,
@@ -312,6 +328,18 @@ def match_sift_pair(
             matcher_method=matcher_method,
             sift_kwargs=sift_kwargs,
             failure_reason=None if use_gpu else "gpu_disabled",
+        )
+
+    if matcher_method == "flann":
+        return _cpu_match_sift_pair(
+            left_image,
+            right_image,
+            left_mask=left_mask,
+            right_mask=right_mask,
+            ratio_test=ratio_test,
+            matcher_method=matcher_method,
+            sift_kwargs=sift_kwargs,
+            failure_reason="gpu_flann_unsupported",
         )
 
     try:

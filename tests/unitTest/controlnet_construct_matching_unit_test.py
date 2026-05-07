@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-19
+Last Modified: 2026-05-20
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -51,6 +51,7 @@ Updated: 2026-05-17  Geng Xun added parser/config coverage for visualization opt
 Updated: 2026-05-18  Geng Xun added regression coverage for legacy positional API compatibility and visualization metadata sidecar output.
 Updated: 2026-05-19  Geng Xun added regression coverage for visualization failure metadata sidecar output.
 Updated: 2026-05-20  Geng Xun added GPU SIFT integration smoke coverage for tile_matching CPU/GPU shared API and GpuSiftBatch fallback.
+Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile matching delegation through the shared matcher.
 """
 
 from __future__ import annotations
@@ -93,6 +94,7 @@ match_dom_pair_to_key_files = image_match.match_dom_pair_to_key_files
 write_stereo_pair_match_visualization_from_key_files = image_match.write_stereo_pair_match_visualization_from_key_files
 
 tile_matching_module = importlib.import_module("controlnet_construct.tile_matching")
+tile_matching = tile_matching_module
 
 keypoints_module = importlib.import_module("controlnet_construct.keypoints")
 Keypoint = keypoints_module.Keypoint
@@ -4433,6 +4435,42 @@ class GpuSiftIntegrationUnitTest(unittest.TestCase):
             # desc can be None if no keypoints found
             if desc is not None:
                 self.assertEqual(desc.shape[1], 128)
+
+
+class TestGpuTileMatchingPath(unittest.TestCase):
+    def test_match_tile_gpu_reuses_shared_gpu_sift_pair_matcher(self):
+        left = np.zeros((64, 64), dtype=np.uint8)
+        right = np.zeros((64, 64), dtype=np.uint8)
+        mask = np.ones((64, 64), dtype=np.uint8) * 255
+        fake_result = tile_matching.GpuSiftMatchResult(
+            left_keypoints=[],
+            right_keypoints=[],
+            matches=[],
+            used_gpu=True,
+            used_cpu_fallback=False,
+            failure_reason=None,
+        )
+
+        with mock.patch.object(tile_matching, "match_sift_pair", return_value=fake_result) as match_mock:
+            left_keypoints, right_keypoints, matches = tile_matching._match_tile_gpu(
+                left,
+                right,
+                left_mask=mask,
+                right_mask=mask,
+                ratio_test=0.75,
+                matcher_method="bf",
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+            )
+
+        self.assertEqual(left_keypoints, [])
+        self.assertEqual(right_keypoints, [])
+        self.assertEqual(matches, [])
+        match_mock.assert_called_once()
+        self.assertEqual(match_mock.call_args.kwargs["sift_kwargs"]["nfeatures"], 100)
 
 
 if __name__ == "__main__":

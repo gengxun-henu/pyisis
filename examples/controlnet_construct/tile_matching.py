@@ -20,7 +20,7 @@ from typing import Any
 import cv2
 import numpy as np
 
-from .gpu_sift import GpuSiftBatch, HAS_GPU_SIFT
+from .gpu_sift import GpuSiftMatchResult, HAS_GPU_SIFT, match_sift_pair
 from .keypoints import Keypoint
 from .preprocess import (
     StretchStats,
@@ -354,42 +354,27 @@ def _match_tile_gpu(
 ) -> tuple[list[cv2.KeyPoint], list[cv2.KeyPoint], list[cv2.DMatch]]:
     """GPU-accelerated SIFT matching for a single tile pair.
 
-    Uses GpuSiftBatch internally for a single pair (batch_size=2).
+    Delegates to the shared GPU SIFT pair matcher.
     Returns the same format as _match_tile().
     """
     nfeatures = max_features if max_features is not None else 0
-    batch = GpuSiftBatch(
-        batch_size=2,
-        nfeatures=nfeatures,
-        nOctaveLayers=sift_octave_layers,
-        contrastThreshold=sift_contrast_threshold,
-        edgeThreshold=sift_edge_threshold,
-        sigma=sift_sigma,
+    result = match_sift_pair(
+        left_image,
+        right_image,
+        left_mask=left_mask,
+        right_mask=right_mask,
+        ratio_test=ratio_test,
+        matcher_method=matcher_method,
+        sift_kwargs={
+            "nfeatures": nfeatures,
+            "nOctaveLayers": sift_octave_layers,
+            "contrastThreshold": sift_contrast_threshold,
+            "edgeThreshold": sift_edge_threshold,
+            "sigma": sift_sigma,
+        },
+        use_gpu=True,
     )
-    batch.add(left_image, left_mask)
-    batch.add(right_image, right_mask)
-    results = batch.execute()
-
-    left_keypoints, left_descriptors = results[0]
-    right_keypoints, right_descriptors = results[1]
-
-    if not left_keypoints or left_descriptors is None:
-        return [], [], []
-    if not right_keypoints or right_descriptors is None:
-        return left_keypoints, [], []
-
-    matcher = _create_descriptor_matcher(matcher_method)
-    raw_matches = matcher.knnMatch(left_descriptors, right_descriptors, k=2)
-
-    filtered_matches: list[cv2.DMatch] = []
-    for candidates in raw_matches:
-        if len(candidates) < 2:
-            continue
-        best, alternate = candidates
-        if best.distance < ratio_test * alternate.distance:
-            filtered_matches.append(best)
-
-    return left_keypoints, right_keypoints, filtered_matches
+    return result.left_keypoints, result.right_keypoints, result.matches
 
 
 def _match_tile_from_window_values(

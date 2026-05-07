@@ -238,3 +238,122 @@ class GpuSiftBatch:
     ) -> tuple[list[cv2.KeyPoint], np.ndarray | None]:
         kp, desc = sift.detectAndCompute(image, mask)
         return list(kp) if kp else [], desc
+
+
+def _filter_ratio_matches(raw_matches: list[object], ratio_test: float) -> list[cv2.DMatch]:
+    filtered_matches: list[cv2.DMatch] = []
+    for candidates in raw_matches:
+        if len(candidates) < 2:
+            continue
+        best, alternate = candidates
+        if best.distance < ratio_test * alternate.distance:
+            filtered_matches.append(best)
+    return filtered_matches
+
+
+def _cpu_match_sift_pair(
+    left_image: np.ndarray,
+    right_image: np.ndarray,
+    *,
+    left_mask: np.ndarray,
+    right_mask: np.ndarray,
+    ratio_test: float,
+    matcher_method: str,
+    sift_kwargs: dict[str, int | float],
+    failure_reason: str | None,
+) -> GpuSiftMatchResult:
+    sift = cv2.SIFT_create(**sift_kwargs)
+    left_keypoints_raw, left_descriptors = sift.detectAndCompute(left_image, left_mask)
+    right_keypoints_raw, right_descriptors = sift.detectAndCompute(right_image, right_mask)
+    left_keypoints = list(left_keypoints_raw) if left_keypoints_raw else []
+    right_keypoints = list(right_keypoints_raw) if right_keypoints_raw else []
+    if not left_keypoints or left_descriptors is None or not right_keypoints or right_descriptors is None:
+        return GpuSiftMatchResult(
+            left_keypoints=left_keypoints,
+            right_keypoints=right_keypoints,
+            matches=[],
+            used_gpu=False,
+            used_cpu_fallback=True,
+            failure_reason=failure_reason,
+        )
+    matcher = cv2.BFMatcher() if matcher_method == "bf" else cv2.FlannBasedMatcher(
+        {"algorithm": 1, "trees": 5},
+        {"checks": 50},
+    )
+    raw_matches = matcher.knnMatch(left_descriptors, right_descriptors, k=2)
+    return GpuSiftMatchResult(
+        left_keypoints=left_keypoints,
+        right_keypoints=right_keypoints,
+        matches=_filter_ratio_matches(raw_matches, ratio_test),
+        used_gpu=False,
+        used_cpu_fallback=True,
+        failure_reason=failure_reason,
+    )
+
+
+def match_sift_pair(
+    left_image: np.ndarray,
+    right_image: np.ndarray,
+    *,
+    left_mask: np.ndarray,
+    right_mask: np.ndarray,
+    ratio_test: float,
+    matcher_method: str,
+    sift_kwargs: dict[str, int | float],
+    use_gpu: bool = True,
+) -> GpuSiftMatchResult:
+    if not use_gpu or not HAS_GPU_SIFT:
+        return _cpu_match_sift_pair(
+            left_image,
+            right_image,
+            left_mask=left_mask,
+            right_mask=right_mask,
+            ratio_test=ratio_test,
+            matcher_method=matcher_method,
+            sift_kwargs=sift_kwargs,
+            failure_reason=None if use_gpu else "gpu_disabled",
+        )
+
+    try:
+        sift = cv2.cuda.SIFT_create(**sift_kwargs)
+        gpu_left = cv2.cuda_GpuMat()
+        gpu_right = cv2.cuda_GpuMat()
+        gpu_left_mask = cv2.cuda_GpuMat()
+        gpu_right_mask = cv2.cuda_GpuMat()
+        gpu_left.upload(left_image)
+        gpu_right.upload(right_image)
+        gpu_left_mask.upload(left_mask)
+        gpu_right_mask.upload(right_mask)
+        left_keypoints, left_descriptors = sift.detectAndCompute(gpu_left, gpu_left_mask)
+        right_keypoints, right_descriptors = sift.detectAndCompute(gpu_right, gpu_right_mask)
+        if left_descriptors is None or right_descriptors is None:
+            return GpuSiftMatchResult(
+                left_keypoints=list(left_keypoints) if left_keypoints else [],
+                right_keypoints=list(right_keypoints) if right_keypoints else [],
+                matches=[],
+                used_gpu=True,
+                used_cpu_fallback=False,
+                failure_reason=None,
+            )
+        matcher = cv2.cuda.DescriptorMatcher_createBFMatcher(cv2.NORM_L2)
+        raw_gpu_matches = matcher.knnMatch(left_descriptors, right_descriptors, k=2)
+        return GpuSiftMatchResult(
+            left_keypoints=list(left_keypoints) if left_keypoints else [],
+            right_keypoints=list(right_keypoints) if right_keypoints else [],
+            matches=_filter_ratio_matches(raw_gpu_matches, ratio_test),
+            used_gpu=True,
+            used_cpu_fallback=False,
+            failure_reason=None,
+        )
+    except cv2.error as exc:
+        logger.warning("GPU SIFT pair matching failed, falling back to CPU", exc_info=True)
+        return _cpu_match_sift_pair(
+            left_image,
+            right_image,
+            left_mask=left_mask,
+            right_mask=right_mask,
+            ratio_test=ratio_test,
+            matcher_method=matcher_method,
+            sift_kwargs=sift_kwargs,
+            failure_reason=str(exc),
+        )

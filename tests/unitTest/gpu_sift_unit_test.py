@@ -5,6 +5,7 @@ Created: 2026-05-07
 Last Modified: 2026-05-07
 Updated: 2026-05-07  Geng Xun added GPU SIFT match stats and dynamic batch policy coverage.
 Updated: 2026-05-07  Geng Xun registered direct gpu_sift imports for dataclass decorators.
+Updated: 2026-05-07  Geng Xun added pair matcher CPU fallback coverage.
 """
 
 import importlib.util
@@ -175,3 +176,33 @@ class TestDynamicBatchController:
         controller.record_batch(success=True, memory_pressure=False, elapsed_seconds=0.5)
 
         assert controller.current_batch_size == 8
+
+
+class TestGpuSiftPairMatcher:
+    def test_match_pair_returns_cpu_fallback_when_gpu_disabled(self):
+        matcher = GpuSiftBatch(
+            batch_size=2,
+            nfeatures=50,
+        )
+        matcher._use_gpu = False
+        left = np.zeros((96, 96), dtype=np.uint8)
+        right = left.copy()
+        mask = np.ones((96, 96), dtype=np.uint8) * 255
+
+        result = _gpu_sift_module.match_sift_pair(
+            left,
+            right,
+            left_mask=mask,
+            right_mask=mask,
+            ratio_test=0.75,
+            matcher_method="bf",
+            sift_kwargs=matcher._sift_kwargs,
+            use_gpu=False,
+        )
+
+        assert isinstance(result, _gpu_sift_module.GpuSiftMatchResult)
+        assert result.used_gpu is False
+        assert result.used_cpu_fallback is True
+        assert isinstance(result.left_keypoints, list)
+        assert isinstance(result.right_keypoints, list)
+        assert isinstance(result.matches, list)

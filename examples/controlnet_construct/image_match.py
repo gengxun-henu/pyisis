@@ -28,6 +28,7 @@ Updated: 2026-05-02  Geng Xun added CLI progress reporting for full-resolution t
 Updated: 2026-05-03  Geng Xun added optional tile-validity prefilter configuration, summaries, and metadata output.
 Updated: 2026-05-17  Geng Xun wired image-match visualization preview options and low-resolution target-long-edge defaults.
 Updated: 2026-05-05  Geng Xun added stdout tile-detail trimming plus optional full-result JSON output for quieter CLI runs.
+Updated: 2026-05-20  Geng Xun added dynamic GPU batch config defaults and CLI options.
 """
 
 from __future__ import annotations
@@ -682,6 +683,21 @@ def load_image_match_defaults_from_config(
         (
             "gpu_batch_size",
             ("gpu_batch_size", "gpuBatchSize", "GpuBatchSize"),
+            lambda value: int(value),
+        ),
+        (
+            "gpu_dynamic_batch",
+            ("gpu_dynamic_batch", "gpuDynamicBatch", "GpuDynamicBatch"),
+            lambda value: _coerce_config_bool(value, field_name="gpu_dynamic_batch"),
+        ),
+        (
+            "gpu_min_batch_size",
+            ("gpu_min_batch_size", "gpuMinBatchSize", "GpuMinBatchSize"),
+            lambda value: int(value),
+        ),
+        (
+            "gpu_max_batch_size",
+            ("gpu_max_batch_size", "gpuMaxBatchSize", "GpuMaxBatchSize"),
             lambda value: int(value),
         ),
     )
@@ -1672,6 +1688,24 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
         type=int,
         default=32,
         help="Number of tiles to batch for GPU SIFT processing (default: 32)",
+    )
+    parser.add_argument(
+        "--gpu-dynamic-batch",
+        action="store_true",
+        default=True,
+        help="Dynamically adjust GPU tile batch size during matching (default: enabled)",
+    )
+    parser.add_argument(
+        "--gpu-min-batch-size",
+        type=int,
+        default=2,
+        help="Minimum dynamic GPU batch size (default: 2)",
+    )
+    parser.add_argument(
+        "--gpu-max-batch-size",
+        type=int,
+        default=16,
+        help="Maximum dynamic GPU batch size for 8GB-class GPUs (default: 16)",
     )
     parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, show_progress=True)
     if config_defaults:

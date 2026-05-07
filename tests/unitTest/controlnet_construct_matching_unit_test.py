@@ -53,6 +53,7 @@ Updated: 2026-05-19  Geng Xun added regression coverage for visualization failur
 Updated: 2026-05-20  Geng Xun added GPU SIFT integration smoke coverage for tile_matching CPU/GPU shared API and GpuSiftBatch fallback.
 Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile matching delegation through the shared matcher.
 Updated: 2026-05-20  Geng Xun added GPU tile no-feature contract regression coverage.
+Updated: 2026-05-20  Geng Xun added config parser coverage for dynamic GPU batch defaults.
 """
 
 from __future__ import annotations
@@ -419,6 +420,30 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         self.assertEqual(enabled, "1")
         self.assertEqual(cell_width, "256")
+
+    def test_print_image_match_config_default_reads_gpu_dynamic_batch_fields(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "useGpu": True,
+                            "gpuBatchSize": 8,
+                            "gpuDynamicBatch": True,
+                            "gpuMinBatchSize": 2,
+                            "gpuMaxBatchSize": 16,
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "use_gpu"), "1")
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "gpu_batch_size"), "8")
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "gpu_dynamic_batch"), "1")
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "gpu_min_batch_size"), "2")
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "gpu_max_batch_size"), "16")
 
     def test_print_image_match_config_default_reads_omit_tile_details_flag(self):
         with temporary_directory() as temp_dir:

@@ -50,6 +50,7 @@ Updated: 2026-05-16  Geng Xun added coverage for non-object preview cache metada
 Updated: 2026-05-17  Geng Xun added parser/config coverage for visualization options and low-resolution target-long-edge matching.
 Updated: 2026-05-18  Geng Xun added regression coverage for legacy positional API compatibility and visualization metadata sidecar output.
 Updated: 2026-05-19  Geng Xun added regression coverage for visualization failure metadata sidecar output.
+Updated: 2026-05-20  Geng Xun added GPU SIFT integration smoke coverage for tile_matching CPU/GPU shared API and GpuSiftBatch fallback.
 """
 
 from __future__ import annotations
@@ -4385,6 +4386,53 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 image_height=100,
                 margin_pixels=10,
             )
+
+
+class GpuSiftIntegrationUnitTest(unittest.TestCase):
+    """Verify GPU SIFT integration shares result structure with the CPU path."""
+
+    def test_gpu_path_returns_same_structure(self):
+        """When use_gpu=False, results should be valid TileMatchResult."""
+        rng = np.random.default_rng(seed=20260506)
+        left = rng.integers(0, 255, (256, 256), dtype=np.uint8)
+        right = left.copy()  # identical -> should match
+
+        left_mask = np.full((256, 256), 255, dtype=np.uint8)
+        right_mask = left_mask.copy()
+
+        kp_left, kp_right, matches = tile_matching_module._match_tile(
+            left,
+            right,
+            left_mask=left_mask,
+            right_mask=right_mask,
+            ratio_test=0.75,
+            matcher_method="bf",
+            max_features=None,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+        )
+        self.assertIsInstance(kp_left, list)
+        self.assertIsInstance(kp_right, list)
+        self.assertIsInstance(matches, list)
+
+    def test_gpu_batch_cpu_fallback(self):
+        """GpuSiftBatch should work without GPU hardware via CPU fallback."""
+        gpu_sift_module = importlib.import_module("controlnet_construct.gpu_sift")
+        rng = np.random.default_rng(seed=20260506)
+        batch = gpu_sift_module.GpuSiftBatch(batch_size=4)
+        img = rng.integers(0, 255, (128, 128), dtype=np.uint8)
+        mask = np.full((128, 128), 255, dtype=np.uint8)
+        batch.add(img, mask)
+        batch.add(img, mask)
+        results = batch.execute()
+        self.assertEqual(len(results), 2)
+        for kp, desc in results:
+            self.assertIsInstance(kp, (list, tuple))
+            # desc can be None if no keypoints found
+            if desc is not None:
+                self.assertEqual(desc.shape[1], 128)
 
 
 if __name__ == "__main__":

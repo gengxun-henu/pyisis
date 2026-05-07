@@ -17,6 +17,86 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
+from dataclasses import dataclass, field
+
+
+@dataclass(slots=True)
+class GpuSiftMatchResult:
+    left_keypoints: list[cv2.KeyPoint]
+    right_keypoints: list[cv2.KeyPoint]
+    matches: list[cv2.DMatch]
+    used_gpu: bool
+    used_cpu_fallback: bool
+    failure_reason: str | None = None
+
+
+@dataclass(slots=True)
+class GpuSiftStats:
+    gpu_batch_count: int = 0
+    gpu_pair_count: int = 0
+    cpu_fallback_pair_count: int = 0
+    gpu_failure_count: int = 0
+    batch_size_histogram: dict[int, int] = field(default_factory=dict)
+
+    def record_batch(self, *, batch_size: int, used_gpu: bool) -> None:
+        if used_gpu:
+            self.gpu_batch_count += 1
+            self.batch_size_histogram[batch_size] = self.batch_size_histogram.get(batch_size, 0) + 1
+
+    def record_pair_result(self, *, used_cpu_fallback: bool) -> None:
+        self.gpu_pair_count += 1
+        if used_cpu_fallback:
+            self.cpu_fallback_pair_count += 1
+
+    def record_gpu_failure(self) -> None:
+        self.gpu_failure_count += 1
+
+
+class DynamicGpuBatchController:
+    def __init__(
+        self,
+        *,
+        initial_batch_size: int = 4,
+        min_batch_size: int = 2,
+        max_batch_size: int = 16,
+        stable_successes_to_grow: int = 3,
+    ) -> None:
+        if min_batch_size < 1:
+            raise ValueError("min_batch_size must be positive")
+        if max_batch_size < min_batch_size:
+            raise ValueError("max_batch_size must be >= min_batch_size")
+        if initial_batch_size < min_batch_size or initial_batch_size > max_batch_size:
+            raise ValueError("initial_batch_size must be within [min_batch_size, max_batch_size]")
+        if stable_successes_to_grow < 1:
+            raise ValueError("stable_successes_to_grow must be positive")
+
+        self._current_batch_size = initial_batch_size
+        self._min_batch_size = min_batch_size
+        self._max_batch_size = max_batch_size
+        self._stable_successes_to_grow = stable_successes_to_grow
+        self._stable_success_count = 0
+
+    @property
+    def current_batch_size(self) -> int:
+        return self._current_batch_size
+
+    def record_batch(
+        self,
+        *,
+        success: bool,
+        memory_pressure: bool,
+        elapsed_seconds: float,
+    ) -> None:
+        if not success or memory_pressure:
+            self._current_batch_size = max(self._min_batch_size, self._current_batch_size // 2)
+            self._stable_success_count = 0
+            return
+
+        self._stable_success_count += 1
+        if self._stable_success_count >= self._stable_successes_to_grow:
+            self._current_batch_size = min(self._max_batch_size, self._current_batch_size * 2)
+            self._stable_success_count = 0
+
 # ---------------------------------------------------------------------------
 # Availability check
 # ---------------------------------------------------------------------------

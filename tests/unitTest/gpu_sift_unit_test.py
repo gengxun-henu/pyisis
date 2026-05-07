@@ -4,9 +4,11 @@ Author: Geng Xun
 Created: 2026-05-07
 Last Modified: 2026-05-07
 Updated: 2026-05-07  Geng Xun added GPU SIFT match stats and dynamic batch policy coverage.
+Updated: 2026-05-07  Geng Xun registered direct gpu_sift imports for dataclass decorators.
 """
 
 import importlib.util
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -17,6 +19,7 @@ import pytest
 _GPU_SIFT_PATH = Path(__file__).resolve().parents[2] / "examples" / "controlnet_construct" / "gpu_sift.py"
 _spec = importlib.util.spec_from_file_location("gpu_sift", _GPU_SIFT_PATH)
 _gpu_sift_module = importlib.util.module_from_spec(_spec)
+sys.modules[_spec.name] = _gpu_sift_module
 _spec.loader.exec_module(_gpu_sift_module)
 
 HAS_GPU_SIFT = _gpu_sift_module.HAS_GPU_SIFT

@@ -1,4 +1,10 @@
-"""Tests for gpu_sift.py — fallback and parameter mapping."""
+"""Tests for gpu_sift.py — fallback and parameter mapping.
+
+Author: Geng Xun
+Created: 2026-05-07
+Last Modified: 2026-05-07
+Updated: 2026-05-07  Geng Xun added GPU SIFT match stats and dynamic batch policy coverage.
+"""
 
 import importlib.util
 from pathlib import Path
@@ -104,3 +110,65 @@ class TestGpuSiftBatchHelpers:
     def test_empty_execute(self):
         batch = GpuSiftBatch(batch_size=4)
         assert batch.execute() == []
+
+
+class TestGpuSiftMatchResult:
+    def test_match_result_tracks_cpu_fallback_flag(self):
+        result = _gpu_sift_module.GpuSiftMatchResult(
+            left_keypoints=[],
+            right_keypoints=[],
+            matches=[],
+            used_gpu=True,
+            used_cpu_fallback=False,
+            failure_reason=None,
+        )
+
+        assert result.used_gpu is True
+        assert result.used_cpu_fallback is False
+        assert result.failure_reason is None
+
+    def test_match_stats_counts_fallbacks_and_batches(self):
+        stats = _gpu_sift_module.GpuSiftStats()
+        stats.record_batch(batch_size=4, used_gpu=True)
+        stats.record_pair_result(used_cpu_fallback=False)
+        stats.record_pair_result(used_cpu_fallback=True)
+
+        assert stats.gpu_batch_count == 1
+        assert stats.gpu_pair_count == 2
+        assert stats.cpu_fallback_pair_count == 1
+        assert stats.batch_size_histogram == {4: 1}
+
+
+class TestDynamicBatchController:
+    def test_starts_at_initial_batch_and_clamps_to_limits(self):
+        controller = _gpu_sift_module.DynamicGpuBatchController(
+            initial_batch_size=4,
+            min_batch_size=2,
+            max_batch_size=16,
+        )
+
+        assert controller.current_batch_size == 4
+
+    def test_reduces_batch_after_pressure_signal(self):
+        controller = _gpu_sift_module.DynamicGpuBatchController(
+            initial_batch_size=8,
+            min_batch_size=2,
+            max_batch_size=16,
+        )
+
+        controller.record_batch(success=True, memory_pressure=True, elapsed_seconds=0.5)
+
+        assert controller.current_batch_size == 4
+
+    def test_increases_batch_after_stable_successes(self):
+        controller = _gpu_sift_module.DynamicGpuBatchController(
+            initial_batch_size=4,
+            min_batch_size=2,
+            max_batch_size=16,
+            stable_successes_to_grow=2,
+        )
+
+        controller.record_batch(success=True, memory_pressure=False, elapsed_seconds=0.5)
+        controller.record_batch(success=True, memory_pressure=False, elapsed_seconds=0.5)
+
+        assert controller.current_batch_size == 8

@@ -54,6 +54,7 @@ Updated: 2026-05-20  Geng Xun added GPU SIFT integration smoke coverage for tile
 Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile matching delegation through the shared matcher.
 Updated: 2026-05-20  Geng Xun added GPU tile no-feature contract regression coverage.
 Updated: 2026-05-20  Geng Xun added config parser coverage for dynamic GPU batch defaults.
+Updated: 2026-05-20  Geng Xun added CLI regression coverage for disabling dynamic GPU tile batching.
 """
 
 from __future__ import annotations
@@ -867,6 +868,23 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertFalse(included_args.omit_tile_details)
         self.assertEqual(included_args.result_output, "work/full_result.json")
         self.assertTrue(omitted_args.omit_tile_details)
+
+    def test_build_argument_parser_defaults_to_gpu_dynamic_batch_and_allows_disabling_it(self):
+        parser = build_argument_parser()
+
+        default_args = parser.parse_args(["left.cub", "right.cub", "left.key", "right.key"])
+        disabled_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--no-gpu-dynamic-batch",
+            ]
+        )
+
+        self.assertTrue(default_args.gpu_dynamic_batch)
+        self.assertFalse(disabled_args.gpu_dynamic_batch)
 
     def test_build_argument_parser_accepts_invalid_pixel_radius_and_low_resolution_options(self):
         parser = build_argument_parser()

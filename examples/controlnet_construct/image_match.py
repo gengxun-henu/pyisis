@@ -29,6 +29,7 @@ Updated: 2026-05-03  Geng Xun added optional tile-validity prefilter configurati
 Updated: 2026-05-17  Geng Xun wired image-match visualization preview options and low-resolution target-long-edge defaults.
 Updated: 2026-05-05  Geng Xun added stdout tile-detail trimming plus optional full-result JSON output for quieter CLI runs.
 Updated: 2026-05-20  Geng Xun added dynamic GPU batch config defaults and CLI options.
+Updated: 2026-05-20  Geng Xun added a --no-gpu-dynamic-batch CLI opt-out.
 """
 
 from __future__ import annotations
@@ -1691,9 +1692,15 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     )
     parser.add_argument(
         "--gpu-dynamic-batch",
+        dest="gpu_dynamic_batch",
         action="store_true",
-        default=True,
         help="Dynamically adjust GPU tile batch size during matching (default: enabled)",
+    )
+    parser.add_argument(
+        "--no-gpu-dynamic-batch",
+        dest="gpu_dynamic_batch",
+        action="store_false",
+        help="Disable dynamic GPU tile batch sizing",
     )
     parser.add_argument(
         "--gpu-min-batch-size",
@@ -1707,7 +1714,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
         default=16,
         help="Maximum dynamic GPU batch size for 8GB-class GPUs (default: 16)",
     )
-    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, show_progress=True)
+    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_tile_validity_prefilter=False, show_progress=True, gpu_dynamic_batch=True)
     if config_defaults:
         parser.set_defaults(**config_defaults)
     return parser

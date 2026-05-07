@@ -52,6 +52,7 @@ Updated: 2026-05-18  Geng Xun added regression coverage for legacy positional AP
 Updated: 2026-05-19  Geng Xun added regression coverage for visualization failure metadata sidecar output.
 Updated: 2026-05-20  Geng Xun added GPU SIFT integration smoke coverage for tile_matching CPU/GPU shared API and GpuSiftBatch fallback.
 Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile matching delegation through the shared matcher.
+Updated: 2026-05-20  Geng Xun added GPU tile no-feature contract regression coverage.
 """
 
 from __future__ import annotations
@@ -4438,6 +4439,21 @@ class GpuSiftIntegrationUnitTest(unittest.TestCase):
 
 
 class TestGpuTileMatchingPath(unittest.TestCase):
+    def _call_match_tile_gpu(self, left: np.ndarray, right: np.ndarray, mask: np.ndarray):
+        return tile_matching._match_tile_gpu(
+            left,
+            right,
+            left_mask=mask,
+            right_mask=mask,
+            ratio_test=0.75,
+            matcher_method="bf",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+        )
+
     def test_match_tile_gpu_reuses_shared_gpu_sift_pair_matcher(self):
         left = np.zeros((64, 64), dtype=np.uint8)
         right = np.zeros((64, 64), dtype=np.uint8)
@@ -4471,6 +4487,48 @@ class TestGpuTileMatchingPath(unittest.TestCase):
         self.assertEqual(matches, [])
         match_mock.assert_called_once()
         self.assertEqual(match_mock.call_args.kwargs["sift_kwargs"]["nfeatures"], 100)
+
+    def test_match_tile_gpu_returns_empty_triplet_when_left_has_no_features(self):
+        left = np.zeros((64, 64), dtype=np.uint8)
+        right = np.zeros((64, 64), dtype=np.uint8)
+        mask = np.ones((64, 64), dtype=np.uint8) * 255
+        fake_right_keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+        fake_result = tile_matching.GpuSiftMatchResult(
+            left_keypoints=[],
+            right_keypoints=[fake_right_keypoint],
+            matches=[],
+            used_gpu=True,
+            used_cpu_fallback=False,
+            failure_reason=None,
+        )
+
+        with mock.patch.object(tile_matching, "match_sift_pair", return_value=fake_result):
+            left_keypoints, right_keypoints, matches = self._call_match_tile_gpu(left, right, mask)
+
+        self.assertEqual(left_keypoints, [])
+        self.assertEqual(right_keypoints, [])
+        self.assertEqual(matches, [])
+
+    def test_match_tile_gpu_preserves_left_features_when_right_has_no_features(self):
+        left = np.zeros((64, 64), dtype=np.uint8)
+        right = np.zeros((64, 64), dtype=np.uint8)
+        mask = np.ones((64, 64), dtype=np.uint8) * 255
+        fake_left_keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+        fake_result = tile_matching.GpuSiftMatchResult(
+            left_keypoints=[fake_left_keypoint],
+            right_keypoints=[],
+            matches=[],
+            used_gpu=True,
+            used_cpu_fallback=False,
+            failure_reason=None,
+        )
+
+        with mock.patch.object(tile_matching, "match_sift_pair", return_value=fake_result):
+            left_keypoints, right_keypoints, matches = self._call_match_tile_gpu(left, right, mask)
+
+        self.assertEqual(left_keypoints, [fake_left_keypoint])
+        self.assertEqual(right_keypoints, [])
+        self.assertEqual(matches, [])
 
 
 if __name__ == "__main__":

@@ -374,6 +374,10 @@ def _match_tile_gpu(
         },
         use_gpu=True,
     )
+    if not result.left_keypoints:
+        return [], [], []
+    if not result.right_keypoints:
+        return result.left_keypoints, [], []
     return result.left_keypoints, result.right_keypoints, result.matches
 
 

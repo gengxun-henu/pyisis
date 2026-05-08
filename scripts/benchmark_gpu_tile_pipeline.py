@@ -14,6 +14,27 @@ if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
 
+def _summarize_benchmark_case(
+    summary: dict[str, object],
+    elapsed_seconds: float,
+    use_gpu: bool,
+) -> dict[str, object]:
+    result = {
+        "use_gpu": use_gpu,
+        "elapsed_seconds": elapsed_seconds,
+        "matched_tile_count": summary.get("matched_tile_count"),
+        "point_count": summary.get("point_count"),
+        "total_match_count": summary.get("point_count"),
+        "gpu": summary.get("gpu"),
+    }
+    tiles = summary.get("tiles")
+    if isinstance(tiles, list):
+        result["tile_match_count_total"] = sum(
+            tile.get("match_count", 0) for tile in tiles if isinstance(tile, dict)
+        )
+    return result
+
+
 def _run_case(args: argparse.Namespace, *, use_gpu: bool) -> dict[str, object]:
     from examples.controlnet_construct.image_match import match_dom_pair
 
@@ -35,13 +56,7 @@ def _run_case(args: argparse.Namespace, *, use_gpu: bool) -> dict[str, object]:
         max_features=args.max_features,
     )
     elapsed = time.perf_counter() - start
-    return {
-        "use_gpu": use_gpu,
-        "elapsed_seconds": elapsed,
-        "matched_tile_count": summary.get("matched_tile_count"),
-        "total_match_count": summary.get("total_match_count"),
-        "gpu": summary.get("gpu"),
-    }
+    return _summarize_benchmark_case(summary, elapsed, use_gpu)
 
 
 def main() -> None:

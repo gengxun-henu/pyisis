@@ -3,13 +3,23 @@
 Author: Geng Xun
 Created: 2026-04-24
 Updated: 2026-05-03  Geng Xun batched process-pool tile tasks so each worker shard reuses opened DOM cubes.
+Updated: 2026-05-20  Geng Xun added prepared GPU tile payload construction for future batching.
+Updated: 2026-05-20  Geng Xun routed all-GPU tile task batches through a dedicated pipeline hook.
+Updated: 2026-05-20  Geng Xun preserved progress callbacks on the dedicated GPU tile route.
+Updated: 2026-05-20  Geng Xun batched dedicated GPU tile matching through prepared payloads.
+Updated: 2026-05-20  Geng Xun clamped dynamic GPU batch initialization to configured limits.
+Updated: 2026-05-20  Geng Xun wired dynamic GPU batch options through parallel tile routing.
+Updated: 2026-05-20  Geng Xun made dedicated GPU tile cube cleanup cover open failures.
+Updated: 2026-05-20  Geng Xun enforced conservative GPU batch defaults and effective GPU route gating.
+Updated: 2026-05-20  Geng Xun propagated GPU fallback statistics into dynamic batch execution.
+Updated: 2026-05-20  Geng Xun dispatched homogeneous GPU tile payloads through the batched pair matcher.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 import functools
 import multiprocessing as mp
 import os
@@ -20,7 +30,7 @@ from typing import Any
 import cv2
 import numpy as np
 
-from .gpu_sift import GpuSiftBatch, HAS_GPU_SIFT
+from .gpu_sift import DynamicGpuBatchController, GpuSiftMatchResult, GpuSiftStats, HAS_GPU_SIFT, match_sift_pair, match_sift_pairs
 from .keypoints import Keypoint
 from .preprocess import (
     StretchStats,
@@ -43,6 +53,7 @@ DEFAULT_MATCHER_METHOD = "bf"
 SUPPORTED_MATCHER_METHODS = ("bf", "flann")
 DEFAULT_FLANN_TREES = 5
 DEFAULT_FLANN_CHECKS = 50
+DEFAULT_GPU_BATCH_SIZE = 4
 
 
 @dataclass(frozen=True, slots=True)
@@ -95,7 +106,7 @@ class TileMatchTask:
     sift_edge_threshold: float
     sift_sigma: float
     use_gpu: bool = False
-    gpu_batch_size: int = 32
+    gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE
 
 
 @dataclass(frozen=True, slots=True)
@@ -109,6 +120,21 @@ class TileMatchResult:
     stats: TileMatchStats
     left_points: tuple[Keypoint, ...]
     right_points: tuple[Keypoint, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class PreparedGpuTilePayload:
+    local_window: TileWindow
+    left_window: TileWindow
+    right_window: TileWindow
+    left_image: np.ndarray
+    right_image: np.ndarray
+    left_mask: np.ndarray
+    right_mask: np.ndarray
+    left_valid_pixel_count: int
+    right_valid_pixel_count: int
+    left_valid_pixel_ratio: float
+    right_valid_pixel_ratio: float
 
 
 def _normalize_matcher_method(matcher_method: str) -> str:
@@ -316,8 +342,10 @@ def _match_tile(
         edge_threshold=sift_edge_threshold,
         sigma=sift_sigma,
     )
-    left_keypoints, left_descriptors = sift.detectAndCompute(left_image, left_mask)
-    right_keypoints, right_descriptors = sift.detectAndCompute(right_image, right_mask)
+    left_keypoints_raw, left_descriptors = sift.detectAndCompute(left_image, left_mask)
+    right_keypoints_raw, right_descriptors = sift.detectAndCompute(right_image, right_mask)
+    left_keypoints = list(left_keypoints_raw) if left_keypoints_raw else []
+    right_keypoints = list(right_keypoints_raw) if right_keypoints_raw else []
 
     if not left_keypoints or left_descriptors is None:
         return [], [], []
@@ -354,42 +382,242 @@ def _match_tile_gpu(
 ) -> tuple[list[cv2.KeyPoint], list[cv2.KeyPoint], list[cv2.DMatch]]:
     """GPU-accelerated SIFT matching for a single tile pair.
 
-    Uses GpuSiftBatch internally for a single pair (batch_size=2).
+    Delegates to the shared GPU SIFT pair matcher.
     Returns the same format as _match_tile().
     """
-    nfeatures = max_features if max_features is not None else 0
-    batch = GpuSiftBatch(
-        batch_size=2,
-        nfeatures=nfeatures,
-        nOctaveLayers=sift_octave_layers,
-        contrastThreshold=sift_contrast_threshold,
-        edgeThreshold=sift_edge_threshold,
-        sigma=sift_sigma,
+    result = _match_tile_gpu_result(
+        left_image,
+        right_image,
+        left_mask=left_mask,
+        right_mask=right_mask,
+        ratio_test=ratio_test,
+        matcher_method=matcher_method,
+        max_features=max_features,
+        sift_octave_layers=sift_octave_layers,
+        sift_contrast_threshold=sift_contrast_threshold,
+        sift_edge_threshold=sift_edge_threshold,
+        sift_sigma=sift_sigma,
     )
-    batch.add(left_image, left_mask)
-    batch.add(right_image, right_mask)
-    results = batch.execute()
+    return result.left_keypoints, result.right_keypoints, result.matches
 
-    left_keypoints, left_descriptors = results[0]
-    right_keypoints, right_descriptors = results[1]
 
-    if not left_keypoints or left_descriptors is None:
-        return [], [], []
-    if not right_keypoints or right_descriptors is None:
-        return left_keypoints, [], []
+def _match_tile_gpu_result(
+    left_image: np.ndarray,
+    right_image: np.ndarray,
+    *,
+    left_mask: np.ndarray,
+    right_mask: np.ndarray,
+    ratio_test: float,
+    matcher_method: str,
+    max_features: int | None,
+    sift_octave_layers: int,
+    sift_contrast_threshold: float,
+    sift_edge_threshold: float,
+    sift_sigma: float,
+) -> GpuSiftMatchResult:
+    nfeatures = max_features if max_features is not None else 0
+    result = match_sift_pair(
+        left_image,
+        right_image,
+        left_mask=left_mask,
+        right_mask=right_mask,
+        ratio_test=ratio_test,
+        matcher_method=matcher_method,
+        sift_kwargs={
+            "nfeatures": nfeatures,
+            "nOctaveLayers": sift_octave_layers,
+            "contrastThreshold": sift_contrast_threshold,
+            "edgeThreshold": sift_edge_threshold,
+            "sigma": sift_sigma,
+        },
+        use_gpu=True,
+    )
+    return _normalize_gpu_tile_match_result(result)
 
-    matcher = _create_descriptor_matcher(matcher_method)
-    raw_matches = matcher.knnMatch(left_descriptors, right_descriptors, k=2)
 
-    filtered_matches: list[cv2.DMatch] = []
-    for candidates in raw_matches:
-        if len(candidates) < 2:
-            continue
-        best, alternate = candidates
-        if best.distance < ratio_test * alternate.distance:
-            filtered_matches.append(best)
+def _normalize_gpu_tile_match_result(result: GpuSiftMatchResult) -> GpuSiftMatchResult:
+    if not result.left_keypoints:
+        return GpuSiftMatchResult(
+            left_keypoints=[],
+            right_keypoints=[],
+            matches=[],
+            used_gpu=result.used_gpu,
+            used_cpu_fallback=result.used_cpu_fallback,
+            failure_reason=result.failure_reason,
+        )
+    if not result.right_keypoints:
+        return GpuSiftMatchResult(
+            left_keypoints=result.left_keypoints,
+            right_keypoints=[],
+            matches=[],
+            used_gpu=result.used_gpu,
+            used_cpu_fallback=result.used_cpu_fallback,
+            failure_reason=result.failure_reason,
+        )
+    return result
 
-    return left_keypoints, right_keypoints, filtered_matches
+
+def _prepare_gpu_tile_payload_from_values(
+    *,
+    left_values: np.ndarray,
+    right_values: np.ndarray,
+    local_window: TileWindow,
+    left_window: TileWindow,
+    right_window: TileWindow,
+    minimum_value: float | None,
+    maximum_value: float | None,
+    lower_percent: float,
+    upper_percent: float,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
+) -> PreparedGpuTilePayload | TileMatchResult:
+    left_invalid_mask, _ = summarize_valid_pixels(
+        left_values,
+        invalid_values=left_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+    )
+    right_invalid_mask, _ = summarize_valid_pixels(
+        right_values,
+        invalid_values=right_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+    )
+    left_invalid_mask = expand_invalid_mask_for_radius(left_invalid_mask, invalid_pixel_radius=invalid_pixel_radius)
+    right_invalid_mask = expand_invalid_mask_for_radius(right_invalid_mask, invalid_pixel_radius=invalid_pixel_radius)
+    left_valid_pixel_stats = _stats_from_mask(left_invalid_mask)
+    right_valid_pixel_stats = _stats_from_mask(right_invalid_mask)
+    if (
+        left_valid_pixel_stats.valid_pixel_ratio < valid_pixel_percent_threshold
+        or right_valid_pixel_stats.valid_pixel_ratio < valid_pixel_percent_threshold
+    ):
+        return TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=local_window.start_x,
+                local_start_y=local_window.start_y,
+                width=local_window.width,
+                height=local_window.height,
+                left_start_x=left_window.start_x,
+                left_start_y=left_window.start_y,
+                right_start_x=right_window.start_x,
+                right_start_y=right_window.start_y,
+                left_valid_pixel_count=left_valid_pixel_stats.valid_pixel_count,
+                right_valid_pixel_count=right_valid_pixel_stats.valid_pixel_count,
+                left_valid_pixel_ratio=left_valid_pixel_stats.valid_pixel_ratio,
+                right_valid_pixel_ratio=right_valid_pixel_stats.valid_pixel_ratio,
+                left_feature_count=0,
+                right_feature_count=0,
+                match_count=0,
+                status="skipped_valid_pixel_ratio_below_threshold",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+    left_image, left_mask, left_stats = _prepare_image_for_sift(
+        left_values,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=left_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+        invalid_mask=left_invalid_mask,
+        invalid_pixel_radius=0,
+    )
+    right_image, right_mask, right_stats = _prepare_image_for_sift(
+        right_values,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=right_invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+        invalid_mask=right_invalid_mask,
+        invalid_pixel_radius=0,
+    )
+    if left_stats.valid_pixel_count < min_valid_pixels or right_stats.valid_pixel_count < min_valid_pixels:
+        return TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=local_window.start_x,
+                local_start_y=local_window.start_y,
+                width=local_window.width,
+                height=local_window.height,
+                left_start_x=left_window.start_x,
+                left_start_y=left_window.start_y,
+                right_start_x=right_window.start_x,
+                right_start_y=right_window.start_y,
+                left_valid_pixel_count=left_stats.valid_pixel_count,
+                right_valid_pixel_count=right_stats.valid_pixel_count,
+                left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+                right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
+                left_feature_count=0,
+                right_feature_count=0,
+                match_count=0,
+                status="skipped_insufficient_valid_pixels",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+    return PreparedGpuTilePayload(
+        local_window=local_window,
+        left_window=left_window,
+        right_window=right_window,
+        left_image=left_image,
+        right_image=right_image,
+        left_mask=left_mask,
+        right_mask=right_mask,
+        left_valid_pixel_count=left_stats.valid_pixel_count,
+        right_valid_pixel_count=right_stats.valid_pixel_count,
+        left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
+        right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
+    )
+
+
+def _tile_result_from_matches(
+    *,
+    payload: PreparedGpuTilePayload,
+    left_keypoints: list[cv2.KeyPoint],
+    right_keypoints: list[cv2.KeyPoint],
+    filtered_matches: list[cv2.DMatch],
+) -> TileMatchResult:
+    if not left_keypoints or not right_keypoints:
+        status = "skipped_no_features"
+    elif not filtered_matches:
+        status = "skipped_no_matches"
+    else:
+        status = "matched"
+    matched_left_points = tuple(
+        _keypoint_to_isis_coordinates(left_keypoints[match.queryIdx], payload.left_window)
+        for match in filtered_matches
+    )
+    matched_right_points = tuple(
+        _keypoint_to_isis_coordinates(right_keypoints[match.trainIdx], payload.right_window)
+        for match in filtered_matches
+    )
+    return TileMatchResult(
+        stats=TileMatchStats(
+            local_start_x=payload.local_window.start_x,
+            local_start_y=payload.local_window.start_y,
+            width=payload.local_window.width,
+            height=payload.local_window.height,
+            left_start_x=payload.left_window.start_x,
+            left_start_y=payload.left_window.start_y,
+            right_start_x=payload.right_window.start_x,
+            right_start_y=payload.right_window.start_y,
+            left_valid_pixel_count=payload.left_valid_pixel_count,
+            right_valid_pixel_count=payload.right_valid_pixel_count,
+            left_valid_pixel_ratio=payload.left_valid_pixel_ratio,
+            right_valid_pixel_ratio=payload.right_valid_pixel_ratio,
+            left_feature_count=len(left_keypoints),
+            right_feature_count=len(right_keypoints),
+            match_count=len(filtered_matches),
+            status=status,
+        ),
+        left_points=matched_left_points,
+        right_points=matched_right_points,
+    )
 
 
 def _match_tile_from_window_values(
@@ -646,7 +874,7 @@ def _build_tile_match_tasks(
     sift_edge_threshold: float,
     sift_sigma: float,
     use_gpu: bool = False,
-    gpu_batch_size: int = 32,
+    gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE,
 ) -> list[TileMatchTask]:
     return [
         TileMatchTask(
@@ -996,11 +1224,197 @@ def _match_tile_task_batch_worker(
             right_cache.close()
 
 
+def _run_gpu_tile_match_tasks(
+    tasks: list[TileMatchTask],
+    *,
+    show_progress: bool = True,
+    progress_callback: Callable[[], None] | None = None,
+    gpu_dynamic_batch: bool = True,
+    gpu_min_batch_size: int = 2,
+    gpu_max_batch_size: int = 16,
+    gpu_stats: GpuSiftStats | None = None,
+) -> list[TileMatchResult]:
+    if not tasks:
+        return []
+    initial_batch_size = min(max(tasks[0].gpu_batch_size, gpu_min_batch_size), gpu_max_batch_size)
+    controller = (
+        DynamicGpuBatchController(
+            initial_batch_size=initial_batch_size,
+            min_batch_size=gpu_min_batch_size,
+            max_batch_size=gpu_max_batch_size,
+        )
+        if gpu_dynamic_batch
+        else None
+    )
+    indexed_results: list[tuple[int, TileMatchResult]] = []
+    pending_payloads: list[tuple[int, TileMatchTask, PreparedGpuTilePayload]] = []
+
+    def task_match_settings(task: TileMatchTask) -> tuple[object, ...]:
+        return (
+            task.ratio_test,
+            _normalize_matcher_method(task.matcher_method),
+            task.max_features,
+            task.sift_octave_layers,
+            task.sift_contrast_threshold,
+            task.sift_edge_threshold,
+            task.sift_sigma,
+        )
+
+    def match_pending_payloads() -> list[tuple[int, PreparedGpuTilePayload, GpuSiftMatchResult]]:
+        if len({task_match_settings(task) for _, task, _ in pending_payloads}) == 1:
+            first_task = pending_payloads[0][1]
+            nfeatures = first_task.max_features if first_task.max_features is not None else 0
+            batch_results = match_sift_pairs(
+                [
+                    (payload.left_image, payload.right_image, payload.left_mask, payload.right_mask)
+                    for _, _, payload in pending_payloads
+                ],
+                ratio_test=first_task.ratio_test,
+                matcher_method=first_task.matcher_method,
+                sift_kwargs={
+                    "nfeatures": nfeatures,
+                    "nOctaveLayers": first_task.sift_octave_layers,
+                    "contrastThreshold": first_task.sift_contrast_threshold,
+                    "edgeThreshold": first_task.sift_edge_threshold,
+                    "sigma": first_task.sift_sigma,
+                },
+                use_gpu=True,
+            )
+            return [
+                (index, payload, _normalize_gpu_tile_match_result(match_result))
+                for (index, _, payload), match_result in zip(pending_payloads, batch_results, strict=True)
+            ]
+        return [
+            (
+                index,
+                payload,
+                _match_tile_gpu_result(
+                    payload.left_image,
+                    payload.right_image,
+                    left_mask=payload.left_mask,
+                    right_mask=payload.right_mask,
+                    ratio_test=task.ratio_test,
+                    matcher_method=task.matcher_method,
+                    max_features=task.max_features,
+                    sift_octave_layers=task.sift_octave_layers,
+                    sift_contrast_threshold=task.sift_contrast_threshold,
+                    sift_edge_threshold=task.sift_edge_threshold,
+                    sift_sigma=task.sift_sigma,
+                ),
+            )
+            for index, task, payload in pending_payloads
+        ]
+
+    def flush_pending() -> None:
+        nonlocal pending_payloads
+        if not pending_payloads:
+            return
+        batch_had_fallback = False
+        batch_had_failure = False
+        batch_had_memory_pressure = False
+        batch_used_gpu = False
+        for index, payload, match_result in match_pending_payloads():
+            batch_used_gpu = batch_used_gpu or match_result.used_gpu
+            batch_had_fallback = batch_had_fallback or match_result.used_cpu_fallback
+            batch_had_failure = batch_had_failure or match_result.failure_reason is not None
+            if match_result.failure_reason is not None:
+                lowered_reason = match_result.failure_reason.lower()
+                batch_had_memory_pressure = batch_had_memory_pressure or "memory" in lowered_reason or "alloc" in lowered_reason
+            if gpu_stats is not None:
+                gpu_stats.record_pair_result(used_cpu_fallback=match_result.used_cpu_fallback)
+                if match_result.failure_reason is not None:
+                    gpu_stats.record_gpu_failure()
+            indexed_results.append(
+                (
+                    index,
+                    _tile_result_from_matches(
+                        payload=payload,
+                        left_keypoints=match_result.left_keypoints,
+                        right_keypoints=match_result.right_keypoints,
+                        filtered_matches=match_result.matches,
+                    ),
+                )
+            )
+            if progress_callback is not None:
+                progress_callback()
+        if gpu_stats is not None:
+            gpu_stats.record_batch(batch_size=len(pending_payloads), used_gpu=batch_used_gpu)
+        if controller is not None:
+            controller.record_batch(
+                success=not batch_had_fallback and not batch_had_failure,
+                memory_pressure=batch_had_memory_pressure,
+                elapsed_seconds=0.0,
+            )
+        pending_payloads = []
+
+    for index, task in enumerate(tasks):
+        left_cube = ip.Cube()
+        right_cube = ip.Cube()
+        try:
+            left_cube.open(task.left_dom_path, "r")
+            right_cube.open(task.right_dom_path, "r")
+            left_values = _read_cube_window(left_cube, task.paired_window.left_window, band=task.band)
+            right_values = _read_cube_window(right_cube, task.paired_window.right_window, band=task.band)
+            prepared = _prepare_gpu_tile_payload_from_values(
+                left_values=left_values,
+                right_values=right_values,
+                local_window=task.paired_window.local_window,
+                left_window=task.paired_window.left_window,
+                right_window=task.paired_window.right_window,
+                minimum_value=task.minimum_value,
+                maximum_value=task.maximum_value,
+                lower_percent=task.lower_percent,
+                upper_percent=task.upper_percent,
+                left_invalid_values=_resolved_invalid_values_for_cube(left_cube, task.invalid_values),
+                right_invalid_values=_resolved_invalid_values_for_cube(right_cube, task.invalid_values),
+                special_pixel_abs_threshold=task.special_pixel_abs_threshold,
+                min_valid_pixels=task.min_valid_pixels,
+                valid_pixel_percent_threshold=task.valid_pixel_percent_threshold,
+                invalid_pixel_radius=task.invalid_pixel_radius,
+            )
+        finally:
+            if left_cube.is_open():
+                left_cube.close()
+            if right_cube.is_open():
+                right_cube.close()
+        if isinstance(prepared, TileMatchResult):
+            indexed_results.append((index, prepared))
+            if progress_callback is not None:
+                progress_callback()
+            continue
+        pending_payloads.append((index, task, prepared))
+        batch_limit = controller.current_batch_size if controller is not None else task.gpu_batch_size
+        if len(pending_payloads) >= batch_limit:
+            flush_pending()
+    flush_pending()
+    return _order_indexed_tile_results(indexed_results)
+
+
+def _can_use_dedicated_gpu_tile_route(tasks: list[TileMatchTask]) -> bool:
+    if not tasks:
+        return False
+    requested_gpu_flags = {bool(getattr(task, "use_gpu", False)) for task in tasks}
+    if len(requested_gpu_flags) > 1:
+        raise ValueError("mixed CPU/GPU tile task lists are not supported")
+    if not requested_gpu_flags.pop():
+        return False
+    return bool(HAS_GPU_SIFT) and all(_normalize_matcher_method(task.matcher_method) == "bf" for task in tasks)
+
+
+def _order_indexed_tile_results(indexed_results: list[tuple[int, TileMatchResult]]) -> list[TileMatchResult]:
+    return [result for _, result in sorted(indexed_results, key=lambda item: item[0])]
+
+
 def _run_parallel_tile_match_tasks(
     tasks: list[TileMatchTask],
     *,
     max_workers: int,
     progress_callback: Callable[[], None] | None = None,
+    show_progress: bool = True,
+    gpu_dynamic_batch: bool = True,
+    gpu_min_batch_size: int = 2,
+    gpu_max_batch_size: int = 16,
+    gpu_stats: GpuSiftStats | None = None,
     use_tile_cache: bool = False,
     cache_max_mb: int = 100,
     adaptive_warmup_count: int = 10,
@@ -1009,6 +1423,18 @@ def _run_parallel_tile_match_tasks(
 ) -> list[TileMatchResult]:
     if not tasks:
         return []
+    if _can_use_dedicated_gpu_tile_route(tasks):
+        return _run_gpu_tile_match_tasks(
+            tasks,
+            show_progress=show_progress,
+            progress_callback=progress_callback,
+            gpu_dynamic_batch=gpu_dynamic_batch,
+            gpu_min_batch_size=gpu_min_batch_size,
+            gpu_max_batch_size=gpu_max_batch_size,
+            gpu_stats=gpu_stats,
+        )
+    if all(getattr(task, "use_gpu", False) for task in tasks):
+        tasks = [replace(task, use_gpu=False) for task in tasks]
     chunks = _chunk_tile_match_task_payloads(tasks, max_workers=max_workers)
     manager = None
     progress_queue = None
@@ -1197,7 +1623,10 @@ def _resolved_invalid_values_for_cube(cube: ip.Cube, invalid_values: tuple[float
 __all__ = [
     "DEFAULT_FLANN_CHECKS",
     "DEFAULT_FLANN_TREES",
+    "DEFAULT_GPU_BATCH_SIZE",
     "DEFAULT_MATCHER_METHOD",
+    "GpuSiftMatchResult",
+    "GpuSiftStats",
     "HAS_GPU_SIFT",
     "IndexedTileMatchTask",
     "PairedTileWindow",
@@ -1205,8 +1634,10 @@ __all__ = [
     "TileMatchResult",
     "TileMatchStats",
     "TileMatchTask",
+    "match_sift_pairs",
     "_build_sift_detector",
     "_build_tile_match_tasks",
+    "_can_use_dedicated_gpu_tile_route",
     "_chunk_indexed_tile_match_tasks",
     "_create_descriptor_matcher",
     "_full_image_window",
@@ -1215,6 +1646,7 @@ __all__ = [
     "_match_tile",
     "_match_tile_from_window_values",
     "_match_tile_gpu",
+    "_match_tile_gpu_result",
     "_match_tile_task_batch_worker",
     "_match_tile_task_with_open_cubes",
     "_normalize_matcher_method",

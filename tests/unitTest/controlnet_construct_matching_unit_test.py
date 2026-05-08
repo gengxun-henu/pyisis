@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-19
+Last Modified: 2026-05-20
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -51,6 +51,24 @@ Updated: 2026-05-17  Geng Xun added parser/config coverage for visualization opt
 Updated: 2026-05-18  Geng Xun added regression coverage for legacy positional API compatibility and visualization metadata sidecar output.
 Updated: 2026-05-19  Geng Xun added regression coverage for visualization failure metadata sidecar output.
 Updated: 2026-05-20  Geng Xun added GPU SIFT integration smoke coverage for tile_matching CPU/GPU shared API and GpuSiftBatch fallback.
+Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile matching delegation through the shared matcher.
+Updated: 2026-05-20  Geng Xun added GPU tile no-feature contract regression coverage.
+Updated: 2026-05-20  Geng Xun added config parser coverage for dynamic GPU batch defaults.
+Updated: 2026-05-20  Geng Xun added CLI regression coverage for disabling dynamic GPU tile batching.
+Updated: 2026-05-20  Geng Xun added prepared GPU tile payload prefilter coverage.
+Updated: 2026-05-20  Geng Xun added GPU-only tile task routing coverage for the dedicated pipeline hook.
+Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile progress callbacks.
+Updated: 2026-05-20  Geng Xun added stable GPU tile result ordering coverage.
+Updated: 2026-05-20  Geng Xun added regression coverage for clamped dynamic GPU batch defaults.
+Updated: 2026-05-20  Geng Xun added GPU tile status contract regression coverage.
+Updated: 2026-05-20  Geng Xun added regression coverage for dynamic GPU batch option wiring.
+Updated: 2026-05-20  Geng Xun added regression coverage for GPU backend summary diagnostics and cube cleanup on open failure.
+Updated: 2026-05-20  Geng Xun added regression coverage for GPU summary configuration fields.
+Updated: 2026-05-20  Geng Xun added regression coverage for conservative GPU batch defaults and effective GPU route gating.
+Updated: 2026-05-20  Geng Xun added GPU fallback statistics regression coverage for dynamic batch feedback.
+Updated: 2026-05-20  Geng Xun added regression coverage for batched GPU pair matcher dispatch.
+Updated: 2026-05-20  Geng Xun added review regression coverage for effective GPU summaries and benchmark counts.
+Updated: 2026-05-20  Geng Xun added runtime fallback coverage for effective GPU summary reporting.
 """
 
 from __future__ import annotations
@@ -93,6 +111,8 @@ match_dom_pair_to_key_files = image_match.match_dom_pair_to_key_files
 write_stereo_pair_match_visualization_from_key_files = image_match.write_stereo_pair_match_visualization_from_key_files
 
 tile_matching_module = importlib.import_module("controlnet_construct.tile_matching")
+tile_matching = tile_matching_module
+TileWindow = tile_matching_module.TileWindow
 
 keypoints_module = importlib.import_module("controlnet_construct.keypoints")
 Keypoint = keypoints_module.Keypoint
@@ -416,6 +436,30 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         self.assertEqual(enabled, "1")
         self.assertEqual(cell_width, "256")
+
+    def test_print_image_match_config_default_reads_gpu_dynamic_batch_fields(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "useGpu": True,
+                            "gpuBatchSize": 8,
+                            "gpuDynamicBatch": True,
+                            "gpuMinBatchSize": 2,
+                            "gpuMaxBatchSize": 16,
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "use_gpu"), "1")
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "gpu_batch_size"), "8")
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "gpu_dynamic_batch"), "1")
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "gpu_min_batch_size"), "2")
+            self.assertEqual(image_match.print_image_match_config_default(config_path, "gpu_max_batch_size"), "16")
 
     def test_print_image_match_config_default_reads_omit_tile_details_flag(self):
         with temporary_directory() as temp_dir:
@@ -839,6 +883,24 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertFalse(included_args.omit_tile_details)
         self.assertEqual(included_args.result_output, "work/full_result.json")
         self.assertTrue(omitted_args.omit_tile_details)
+
+    def test_build_argument_parser_defaults_to_gpu_dynamic_batch_and_allows_disabling_it(self):
+        parser = build_argument_parser()
+
+        default_args = parser.parse_args(["left.cub", "right.cub", "left.key", "right.key"])
+        disabled_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--no-gpu-dynamic-batch",
+            ]
+        )
+
+        self.assertTrue(default_args.gpu_dynamic_batch)
+        self.assertFalse(disabled_args.gpu_dynamic_batch)
+        self.assertEqual(default_args.gpu_batch_size, 4)
 
     def test_build_argument_parser_accepts_invalid_pixel_radius_and_low_resolution_options(self):
         parser = build_argument_parser()
@@ -1990,6 +2052,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["num_worker_parallel_cpu"], 8)
         self.assertTrue(summary["parallel_cpu_used"])
         self.assertEqual(summary["parallel_cpu_backend"], "process_pool_batched_cube_reuse")
+        self.assertEqual(summary["tile_match_backend"], "process_pool_batched_cube_reuse")
         self.assertEqual(summary["parallel_cpu_worker_count"], 4)
         self.assertEqual(summary["point_count"], 2)
         self.assertEqual(len(left_key_file.points), 2)
@@ -2055,6 +2118,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(parallel_mock.call_args.kwargs["max_workers"], 2)
         self.assertEqual(summary["num_worker_parallel_cpu"], 2)
         self.assertTrue(summary["parallel_cpu_used"])
+        self.assertEqual(summary["tile_match_backend"], "process_pool_batched_cube_reuse")
         self.assertEqual(summary["parallel_cpu_worker_count"], 2)
 
     def test_match_dom_pair_reports_serial_backend_when_parallel_cpu_is_disabled(self):
@@ -2080,6 +2144,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["num_worker_parallel_cpu"], 8)
         self.assertFalse(summary["parallel_cpu_used"])
         self.assertEqual(summary["parallel_cpu_backend"], "serial")
+        self.assertEqual(summary["tile_match_backend"], "serial")
         self.assertEqual(summary["parallel_cpu_worker_count"], 1)
 
     def test_match_dom_pair_progress_reports_full_resolution_tile_count_and_completion(self):
@@ -4181,7 +4246,145 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         self.assertTrue(summary["parallel_cpu_used"])
         self.assertEqual(summary["parallel_cpu_backend"], "process_pool_batched_cube_reuse")
+        self.assertEqual(summary["tile_match_backend"], "process_pool_batched_cube_reuse")
         self.assertEqual(summary["parallel_cpu_worker_count"], 2)
+
+    def test_match_dom_pair_forwards_dynamic_gpu_batch_options_to_parallel_tasks(self):
+        image = _build_textured_test_image(128, 128)
+        synthetic_tile_results = [
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=0,
+                    right_feature_count=0,
+                    match_count=0,
+                    status="skipped_no_features",
+                ),
+                left_points=(),
+                right_points=(),
+            )
+        ]
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_gpu_batch_options.cub",
+                right_name="right_gpu_batch_options.cub",
+            )
+            with mock.patch.object(
+                image_match,
+                "_run_parallel_tile_match_tasks",
+                return_value=synthetic_tile_results,
+            ) as parallel_mock, mock.patch.object(
+                image_match,
+                "_can_use_dedicated_gpu_tile_route",
+                return_value=True,
+            ):
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                    num_worker_parallel_cpu=2,
+                    use_gpu=True,
+                    gpu_dynamic_batch=False,
+                    gpu_min_batch_size=3,
+                    gpu_max_batch_size=7,
+                )
+
+        self.assertFalse(parallel_mock.call_args.kwargs["gpu_dynamic_batch"])
+        self.assertEqual(parallel_mock.call_args.kwargs["gpu_min_batch_size"], 3)
+        self.assertEqual(parallel_mock.call_args.kwargs["gpu_max_batch_size"], 7)
+        self.assertFalse(summary["parallel_cpu_used"])
+        self.assertEqual(summary["parallel_cpu_backend"], "gpu_tile_pipeline")
+        self.assertEqual(summary["tile_match_backend"], "gpu_tile_pipeline")
+        self.assertEqual(summary["parallel_cpu_worker_count"], 0)
+
+    def test_match_dom_pair_reports_gpu_disabled_when_runtime_falls_back_to_cpu(self):
+        image = _build_textured_test_image(128, 128)
+        synthetic_tile_results = [
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=0,
+                    right_feature_count=0,
+                    match_count=0,
+                    status="skipped_no_features",
+                ),
+                left_points=(),
+                right_points=(),
+            )
+        ]
+
+        def cpu_fallback_parallel_tasks(*_args, **kwargs):
+            stats = kwargs["gpu_stats"]
+            stats.record_pair_result(used_cpu_fallback=True)
+            stats.record_gpu_failure()
+            return synthetic_tile_results
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_gpu_runtime_fallback.cub",
+                right_name="right_gpu_runtime_fallback.cub",
+            )
+            with mock.patch.object(
+                image_match,
+                "_run_parallel_tile_match_tasks",
+                side_effect=cpu_fallback_parallel_tasks,
+            ), mock.patch.object(
+                image_match,
+                "_can_use_dedicated_gpu_tile_route",
+                return_value=True,
+            ):
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                    num_worker_parallel_cpu=2,
+                    use_gpu=True,
+                )
+
+        self.assertEqual(summary["tile_match_backend"], "gpu_tile_pipeline")
+        self.assertTrue(summary["gpu"]["requested"])
+        self.assertFalse(summary["gpu"]["enabled"])
+        self.assertEqual(summary["gpu"]["runtime"]["gpu_batch_count"], 0)
+        self.assertEqual(summary["gpu"]["runtime"]["cpu_fallback_pair_count"], 1)
 
     def test_match_dom_pair_to_key_files_writes_tile_validity_metadata(self):
         values = np.zeros((32, 64), dtype=np.float64)
@@ -4433,6 +4636,849 @@ class GpuSiftIntegrationUnitTest(unittest.TestCase):
             # desc can be None if no keypoints found
             if desc is not None:
                 self.assertEqual(desc.shape[1], 128)
+
+
+class TestGpuTileMatchingPath(unittest.TestCase):
+    def _call_match_tile_gpu(self, left: np.ndarray, right: np.ndarray, mask: np.ndarray):
+        return tile_matching._match_tile_gpu(
+            left,
+            right,
+            left_mask=mask,
+            right_mask=mask,
+            ratio_test=0.75,
+            matcher_method="bf",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+        )
+
+    def test_match_tile_gpu_reuses_shared_gpu_sift_pair_matcher(self):
+        left = np.zeros((64, 64), dtype=np.uint8)
+        right = np.zeros((64, 64), dtype=np.uint8)
+        mask = np.ones((64, 64), dtype=np.uint8) * 255
+        fake_result = tile_matching.GpuSiftMatchResult(
+            left_keypoints=[],
+            right_keypoints=[],
+            matches=[],
+            used_gpu=True,
+            used_cpu_fallback=False,
+            failure_reason=None,
+        )
+
+        with mock.patch.object(tile_matching, "match_sift_pair", return_value=fake_result) as match_mock:
+            left_keypoints, right_keypoints, matches = tile_matching._match_tile_gpu(
+                left,
+                right,
+                left_mask=mask,
+                right_mask=mask,
+                ratio_test=0.75,
+                matcher_method="bf",
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+            )
+
+        self.assertEqual(left_keypoints, [])
+        self.assertEqual(right_keypoints, [])
+        self.assertEqual(matches, [])
+        match_mock.assert_called_once()
+        self.assertEqual(match_mock.call_args.kwargs["sift_kwargs"]["nfeatures"], 100)
+
+    def test_match_tile_gpu_returns_empty_triplet_when_left_has_no_features(self):
+        left = np.zeros((64, 64), dtype=np.uint8)
+        right = np.zeros((64, 64), dtype=np.uint8)
+        mask = np.ones((64, 64), dtype=np.uint8) * 255
+        fake_right_keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+        fake_result = tile_matching.GpuSiftMatchResult(
+            left_keypoints=[],
+            right_keypoints=[fake_right_keypoint],
+            matches=[],
+            used_gpu=True,
+            used_cpu_fallback=False,
+            failure_reason=None,
+        )
+
+        with mock.patch.object(tile_matching, "match_sift_pair", return_value=fake_result):
+            left_keypoints, right_keypoints, matches = self._call_match_tile_gpu(left, right, mask)
+
+        self.assertEqual(left_keypoints, [])
+        self.assertEqual(right_keypoints, [])
+        self.assertEqual(matches, [])
+
+    def test_match_tile_gpu_preserves_left_features_when_right_has_no_features(self):
+        left = np.zeros((64, 64), dtype=np.uint8)
+        right = np.zeros((64, 64), dtype=np.uint8)
+        mask = np.ones((64, 64), dtype=np.uint8) * 255
+        fake_left_keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+        fake_result = tile_matching.GpuSiftMatchResult(
+            left_keypoints=[fake_left_keypoint],
+            right_keypoints=[],
+            matches=[],
+            used_gpu=True,
+            used_cpu_fallback=False,
+            failure_reason=None,
+        )
+
+        with mock.patch.object(tile_matching, "match_sift_pair", return_value=fake_result):
+            left_keypoints, right_keypoints, matches = self._call_match_tile_gpu(left, right, mask)
+
+        self.assertEqual(left_keypoints, [fake_left_keypoint])
+        self.assertEqual(right_keypoints, [])
+        self.assertEqual(matches, [])
+
+
+class TestGpuPreparedTilePayload(unittest.TestCase):
+    def test_prepare_tile_payload_skips_invalid_window_before_gpu(self):
+        window = tile_matching.PairedTileWindow(
+            local_window=TileWindow(0, 0, 16, 16),
+            left_window=TileWindow(0, 0, 16, 16),
+            right_window=TileWindow(0, 0, 16, 16),
+        )
+        left_values = np.zeros((16, 16), dtype=np.float64)
+        right_values = np.zeros((16, 16), dtype=np.float64)
+
+        payload_or_result = tile_matching._prepare_gpu_tile_payload_from_values(
+            left_values=left_values,
+            right_values=right_values,
+            local_window=window.local_window,
+            left_window=window.left_window,
+            right_window=window.right_window,
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            left_invalid_values=(0.0,),
+            right_invalid_values=(0.0,),
+            special_pixel_abs_threshold=1.0e300,
+            min_valid_pixels=64,
+            valid_pixel_percent_threshold=0.05,
+            invalid_pixel_radius=1,
+        )
+
+        self.assertIsInstance(payload_or_result, tile_matching.TileMatchResult)
+        self.assertEqual(payload_or_result.stats.status, "skipped_valid_pixel_ratio_below_threshold")
+
+
+class TestGpuTileResultFromMatches(unittest.TestCase):
+    def _payload(self) -> tile_matching.PreparedGpuTilePayload:
+        window = TileWindow(0, 0, 16, 16)
+        return tile_matching.PreparedGpuTilePayload(
+            local_window=window,
+            left_window=window,
+            right_window=window,
+            left_image=np.zeros((16, 16), dtype=np.uint8),
+            right_image=np.zeros((16, 16), dtype=np.uint8),
+            left_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+            right_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+            left_valid_pixel_count=256,
+            right_valid_pixel_count=256,
+            left_valid_pixel_ratio=1.0,
+            right_valid_pixel_ratio=1.0,
+        )
+
+    def test_no_keypoints_preserves_skipped_no_features_status(self):
+        result = tile_matching._tile_result_from_matches(
+            payload=self._payload(),
+            left_keypoints=[],
+            right_keypoints=[],
+            filtered_matches=[],
+        )
+
+        self.assertEqual(result.stats.status, "skipped_no_features")
+
+    def test_no_filtered_matches_preserves_skipped_no_matches_status(self):
+        keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+
+        result = tile_matching._tile_result_from_matches(
+            payload=self._payload(),
+            left_keypoints=[keypoint],
+            right_keypoints=[keypoint],
+            filtered_matches=[],
+        )
+
+        self.assertEqual(result.stats.status, "skipped_no_matches")
+
+
+class TestGpuPipelineOrdering(unittest.TestCase):
+    def test_order_gpu_results_restores_input_order(self):
+        first = tile_matching.TileMatchResult(
+            stats=tile_matching.TileMatchStats(0, 0, 16, 16, 0, 0, 0, 0, 16, 16, 1.0, 1.0, 0, 0, 0, "no_features"),
+            left_points=(),
+            right_points=(),
+        )
+        second = tile_matching.TileMatchResult(
+            stats=tile_matching.TileMatchStats(16, 0, 16, 16, 16, 0, 16, 0, 16, 16, 1.0, 1.0, 0, 0, 0, "no_features"),
+            left_points=(),
+            right_points=(),
+        )
+
+        ordered = tile_matching._order_indexed_tile_results([(1, second), (0, first)])
+
+        self.assertEqual(ordered, [first, second])
+
+
+class TestGpuPipelineRouting(unittest.TestCase):
+    def _make_gpu_task(self) -> tile_matching.TileMatchTask:
+        return tile_matching.TileMatchTask(
+            left_dom_path="left.cub",
+            right_dom_path="right.cub",
+            band=1,
+            paired_window=tile_matching.PairedTileWindow(
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+            ),
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            invalid_values=(),
+            special_pixel_abs_threshold=1.0e300,
+            min_valid_pixels=64,
+            valid_pixel_percent_threshold=0.05,
+            invalid_pixel_radius=1,
+            ratio_test=0.75,
+            matcher_method="bf",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+            use_gpu=True,
+            gpu_batch_size=4,
+        )
+
+    def test_gpu_parallel_route_reports_gpu_backend_summary(self):
+        summary = image_match._tile_execution_backend_summary(
+            use_parallel_cpu=True,
+            use_gpu=True,
+            candidate_window_count=2,
+            resolved_num_worker_parallel_cpu=8,
+        )
+
+        self.assertFalse(summary["parallel_cpu_used"])
+        self.assertEqual(summary["parallel_cpu_backend"], "gpu_tile_pipeline")
+        self.assertEqual(summary["tile_match_backend"], "gpu_tile_pipeline")
+        self.assertEqual(summary["parallel_cpu_worker_count"], 0)
+
+    def test_default_gpu_batch_size_is_conservative(self):
+        self.assertEqual(tile_matching.TileMatchTask.__dataclass_fields__["gpu_batch_size"].default, 4)
+
+        task = self._make_gpu_task()
+        task_with_default = tile_matching.TileMatchTask(
+            **{field: getattr(task, field) for field in task.__dataclass_fields__ if field != "gpu_batch_size"}
+        )
+
+        self.assertEqual(task_with_default.gpu_batch_size, 4)
+
+    def test_effective_gpu_route_requires_cuda_bf_and_homogeneous_gpu_tasks(self):
+        gpu_task = self._make_gpu_task()
+        cpu_task = tile_matching.TileMatchTask(
+            **{
+                field: (False if field == "use_gpu" else getattr(gpu_task, field))
+                for field in gpu_task.__dataclass_fields__
+            }
+        )
+        flann_task = tile_matching.TileMatchTask(
+            **{
+                field: ("flann" if field == "matcher_method" else getattr(gpu_task, field))
+                for field in gpu_task.__dataclass_fields__
+            }
+        )
+
+        with mock.patch.object(tile_matching, "HAS_GPU_SIFT", True):
+            self.assertTrue(tile_matching._can_use_dedicated_gpu_tile_route([gpu_task]))
+            self.assertFalse(tile_matching._can_use_dedicated_gpu_tile_route([flann_task]))
+            with self.assertRaisesRegex(ValueError, "mixed CPU/GPU"):
+                tile_matching._can_use_dedicated_gpu_tile_route([gpu_task, cpu_task])
+
+        with mock.patch.object(tile_matching, "HAS_GPU_SIFT", False):
+            self.assertFalse(tile_matching._can_use_dedicated_gpu_tile_route([gpu_task]))
+
+    def test_run_gpu_tile_match_tasks_closes_left_cube_when_right_open_fails(self):
+        task = self._make_gpu_task()
+
+        class FakeCube:
+            def __init__(self, *, fail_open: bool = False):
+                self.fail_open = fail_open
+                self.open_called = False
+                self.close_called = False
+                self._open = False
+
+            def open(self, *_args):
+                self.open_called = True
+                if self.fail_open:
+                    raise RuntimeError("right open failed")
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self.close_called = True
+                self._open = False
+
+        left_cube = FakeCube()
+        right_cube = FakeCube(fail_open=True)
+
+        with mock.patch.object(tile_matching.ip, "Cube", side_effect=[left_cube, right_cube]):
+            with self.assertRaisesRegex(RuntimeError, "right open failed"):
+                tile_matching._run_gpu_tile_match_tasks([task], show_progress=False)
+
+        self.assertTrue(left_cube.open_called)
+        self.assertTrue(right_cube.open_called)
+        self.assertTrue(left_cube.close_called)
+        self.assertFalse(right_cube.close_called)
+
+    def test_match_dom_pair_closes_left_cube_when_right_open_fails(self):
+        class FakeCube:
+            def __init__(self, *, fail_open: bool = False):
+                self.fail_open = fail_open
+                self.open_called = False
+                self.close_called = False
+                self._open = False
+
+            def open(self, *_args):
+                self.open_called = True
+                if self.fail_open:
+                    raise RuntimeError("right open failed")
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self.close_called = True
+                self._open = False
+
+        left_cube = FakeCube()
+        right_cube = FakeCube(fail_open=True)
+
+        with mock.patch.object(image_match.ip, "Cube", side_effect=[left_cube, right_cube]):
+            with self.assertRaisesRegex(RuntimeError, "right open failed"):
+                image_match.match_dom_pair("left.cub", "right.cub")
+
+        self.assertTrue(left_cube.open_called)
+        self.assertTrue(right_cube.open_called)
+        self.assertTrue(left_cube.close_called)
+        self.assertFalse(right_cube.close_called)
+
+    def test_dynamic_gpu_batch_clamps_default_task_batch_to_maximum(self):
+        task = tile_matching.TileMatchTask(
+            left_dom_path="left.cub",
+            right_dom_path="right.cub",
+            band=1,
+            paired_window=tile_matching.PairedTileWindow(
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+            ),
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            invalid_values=(),
+            special_pixel_abs_threshold=1.0e300,
+            min_valid_pixels=64,
+            valid_pixel_percent_threshold=0.05,
+            invalid_pixel_radius=1,
+            ratio_test=0.75,
+            matcher_method="bf",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+            use_gpu=True,
+            gpu_batch_size=32,
+        )
+        payload = tile_matching.PreparedGpuTilePayload(
+            local_window=task.paired_window.local_window,
+            left_window=task.paired_window.left_window,
+            right_window=task.paired_window.right_window,
+            left_image=np.zeros((16, 16), dtype=np.uint8),
+            right_image=np.zeros((16, 16), dtype=np.uint8),
+            left_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+            right_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+            left_valid_pixel_count=256,
+            right_valid_pixel_count=256,
+            left_valid_pixel_ratio=1.0,
+            right_valid_pixel_ratio=1.0,
+        )
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        with mock.patch.object(tile_matching.ip, "Cube", side_effect=[FakeCube(), FakeCube()]), mock.patch.object(
+            tile_matching,
+            "_read_cube_window",
+            return_value=np.zeros((16, 16), dtype=np.float64),
+        ), mock.patch.object(
+            tile_matching,
+            "_resolved_invalid_values_for_cube",
+            return_value=(),
+        ), mock.patch.object(
+            tile_matching,
+            "_prepare_gpu_tile_payload_from_values",
+            return_value=payload,
+        ), mock.patch.object(
+            tile_matching,
+            "_match_tile_gpu",
+            return_value=([], [], []),
+        ):
+            results = tile_matching._run_gpu_tile_match_tasks(
+                [task],
+                show_progress=False,
+                gpu_dynamic_batch=True,
+                gpu_min_batch_size=2,
+                gpu_max_batch_size=16,
+            )
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].stats.status, "skipped_no_features")
+
+    def test_run_gpu_tile_match_tasks_records_fallback_stats(self):
+        task = self._make_gpu_task()
+        payload = tile_matching.PreparedGpuTilePayload(
+            local_window=task.paired_window.local_window,
+            left_window=task.paired_window.left_window,
+            right_window=task.paired_window.right_window,
+            left_image=np.zeros((16, 16), dtype=np.uint8),
+            right_image=np.zeros((16, 16), dtype=np.uint8),
+            left_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+            right_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+            left_valid_pixel_count=256,
+            right_valid_pixel_count=256,
+            left_valid_pixel_ratio=1.0,
+            right_valid_pixel_ratio=1.0,
+        )
+        stats = tile_matching.GpuSiftStats()
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        fallback_result = tile_matching.GpuSiftMatchResult(
+            left_keypoints=[],
+            right_keypoints=[],
+            matches=[],
+            used_gpu=False,
+            used_cpu_fallback=True,
+            failure_reason="CUDA out of memory",
+        )
+
+        with mock.patch.object(tile_matching.ip, "Cube", side_effect=[FakeCube(), FakeCube()]), mock.patch.object(
+            tile_matching,
+            "_read_cube_window",
+            return_value=np.zeros((16, 16), dtype=np.float64),
+        ), mock.patch.object(
+            tile_matching,
+            "_resolved_invalid_values_for_cube",
+            return_value=(),
+        ), mock.patch.object(
+            tile_matching,
+            "_prepare_gpu_tile_payload_from_values",
+            return_value=payload,
+        ), mock.patch.object(
+            tile_matching,
+            "match_sift_pairs",
+            return_value=[fallback_result],
+        ):
+            tile_matching._run_gpu_tile_match_tasks(
+                [task],
+                show_progress=False,
+                gpu_dynamic_batch=True,
+                gpu_min_batch_size=2,
+                gpu_max_batch_size=16,
+                gpu_stats=stats,
+            )
+
+        self.assertEqual(stats.gpu_pair_count, 1)
+        self.assertEqual(stats.cpu_fallback_pair_count, 1)
+        self.assertEqual(stats.gpu_failure_count, 1)
+
+    def test_run_gpu_tile_match_tasks_dispatches_homogeneous_payloads_as_batch(self):
+        tasks = [self._make_gpu_task(), self._make_gpu_task()]
+        payloads = [
+            tile_matching.PreparedGpuTilePayload(
+                local_window=task.paired_window.local_window,
+                left_window=task.paired_window.left_window,
+                right_window=task.paired_window.right_window,
+                left_image=np.zeros((16, 16), dtype=np.uint8),
+                right_image=np.zeros((16, 16), dtype=np.uint8),
+                left_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+                right_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+                left_valid_pixel_count=256,
+                right_valid_pixel_count=256,
+                left_valid_pixel_ratio=1.0,
+                right_valid_pixel_ratio=1.0,
+            )
+            for task in tasks
+        ]
+        batch_results = [
+            tile_matching.GpuSiftMatchResult([], [], [], used_gpu=True, used_cpu_fallback=False),
+            tile_matching.GpuSiftMatchResult([], [], [], used_gpu=True, used_cpu_fallback=False),
+        ]
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        with mock.patch.object(
+            tile_matching.ip,
+            "Cube",
+            side_effect=[FakeCube(), FakeCube(), FakeCube(), FakeCube()],
+        ), mock.patch.object(
+            tile_matching,
+            "_read_cube_window",
+            return_value=np.zeros((16, 16), dtype=np.float64),
+        ), mock.patch.object(
+            tile_matching,
+            "_resolved_invalid_values_for_cube",
+            return_value=(),
+        ), mock.patch.object(
+            tile_matching,
+            "_prepare_gpu_tile_payload_from_values",
+            side_effect=payloads,
+        ), mock.patch.object(
+            tile_matching,
+            "match_sift_pairs",
+            return_value=batch_results,
+        ) as batch_matcher:
+            results = tile_matching._run_gpu_tile_match_tasks(
+                tasks,
+                show_progress=False,
+                gpu_dynamic_batch=False,
+            )
+
+        self.assertEqual(len(results), 2)
+        batch_matcher.assert_called_once()
+        self.assertEqual(len(batch_matcher.call_args.args[0]), 2)
+
+    def test_run_parallel_tasks_invokes_progress_callback_for_each_gpu_task(self):
+        def make_gpu_task(start_x: int) -> tile_matching.TileMatchTask:
+            return tile_matching.TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=tile_matching.PairedTileWindow(
+                    local_window=TileWindow(start_x, 0, 16, 16),
+                    left_window=TileWindow(start_x, 0, 16, 16),
+                    right_window=TileWindow(start_x, 0, 16, 16),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=64,
+                valid_pixel_percent_threshold=0.05,
+                invalid_pixel_radius=1,
+                ratio_test=0.75,
+                matcher_method="bf",
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                use_gpu=True,
+                gpu_batch_size=4,
+            )
+
+        def make_result(start_x: int) -> tile_matching.TileMatchResult:
+            return tile_matching.TileMatchResult(
+                stats=tile_matching.TileMatchStats(
+                    local_start_x=start_x,
+                    local_start_y=0,
+                    width=16,
+                    height=16,
+                    left_start_x=start_x,
+                    left_start_y=0,
+                    right_start_x=start_x,
+                    right_start_y=0,
+                    left_valid_pixel_count=256,
+                    right_valid_pixel_count=256,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=0,
+                    right_feature_count=0,
+                    match_count=0,
+                    status="skipped_valid_pixel_ratio_below_threshold",
+                ),
+                left_points=(),
+                right_points=(),
+            )
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        callback = mock.Mock()
+
+        with mock.patch.object(tile_matching, "HAS_GPU_SIFT", True), mock.patch.object(
+            tile_matching.ip, "Cube", side_effect=[FakeCube(), FakeCube(), FakeCube(), FakeCube()]
+        ), mock.patch.object(
+            tile_matching,
+            "_read_cube_window",
+            return_value=np.zeros((16, 16), dtype=np.float64),
+        ), mock.patch.object(
+            tile_matching,
+            "_resolved_invalid_values_for_cube",
+            return_value=(),
+        ), mock.patch.object(
+            tile_matching,
+            "_prepare_gpu_tile_payload_from_values",
+            side_effect=[make_result(0), make_result(16)],
+        ):
+            tile_matching._run_parallel_tile_match_tasks(
+                [make_gpu_task(0), make_gpu_task(16)],
+                max_workers=2,
+                show_progress=False,
+                progress_callback=callback,
+            )
+
+        self.assertEqual(callback.call_count, 2)
+
+    def test_run_parallel_tasks_uses_gpu_pipeline_when_requested(self):
+        tasks = [
+            tile_matching.TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=tile_matching.PairedTileWindow(
+                    local_window=TileWindow(0, 0, 16, 16),
+                    left_window=TileWindow(0, 0, 16, 16),
+                    right_window=TileWindow(0, 0, 16, 16),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=64,
+                valid_pixel_percent_threshold=0.05,
+                invalid_pixel_radius=1,
+                ratio_test=0.75,
+                matcher_method="bf",
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                use_gpu=True,
+                gpu_batch_size=4,
+            )
+        ]
+        expected = []
+
+        with mock.patch.object(tile_matching, "HAS_GPU_SIFT", True), mock.patch.object(
+            tile_matching, "_run_gpu_tile_match_tasks", return_value=expected
+        ) as gpu_mock:
+            result = tile_matching._run_parallel_tile_match_tasks(
+                tasks,
+                max_workers=2,
+                show_progress=False,
+            )
+
+        self.assertIs(result, expected)
+        gpu_mock.assert_called_once()
+
+    def test_run_parallel_tasks_forwards_dynamic_gpu_batch_options(self):
+        tasks = [
+            tile_matching.TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=tile_matching.PairedTileWindow(
+                    local_window=TileWindow(0, 0, 16, 16),
+                    left_window=TileWindow(0, 0, 16, 16),
+                    right_window=TileWindow(0, 0, 16, 16),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=64,
+                valid_pixel_percent_threshold=0.05,
+                invalid_pixel_radius=1,
+                ratio_test=0.75,
+                matcher_method="bf",
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                use_gpu=True,
+                gpu_batch_size=4,
+            )
+        ]
+        expected = []
+
+        with mock.patch.object(tile_matching, "HAS_GPU_SIFT", True), mock.patch.object(
+            tile_matching, "_run_gpu_tile_match_tasks", return_value=expected
+        ) as gpu_mock:
+            result = tile_matching._run_parallel_tile_match_tasks(
+                tasks,
+                max_workers=2,
+                show_progress=False,
+                gpu_dynamic_batch=False,
+                gpu_min_batch_size=3,
+                gpu_max_batch_size=7,
+            )
+
+        self.assertIs(result, expected)
+        gpu_mock.assert_called_once_with(
+            tasks,
+            show_progress=False,
+            progress_callback=None,
+            gpu_dynamic_batch=False,
+            gpu_min_batch_size=3,
+            gpu_max_batch_size=7,
+            gpu_stats=None,
+        )
+
+    def test_run_parallel_tasks_rejects_mixed_cpu_gpu_tasks(self):
+        gpu_task = self._make_gpu_task()
+        cpu_task = tile_matching.TileMatchTask(
+            **{
+                field: (False if field == "use_gpu" else getattr(gpu_task, field))
+                for field in gpu_task.__dataclass_fields__
+            }
+        )
+
+        with self.assertRaisesRegex(ValueError, "mixed CPU/GPU"):
+            tile_matching._run_parallel_tile_match_tasks(
+                [gpu_task, cpu_task],
+                max_workers=2,
+                show_progress=False,
+            )
+
+
+class TestGpuSummaryFields(unittest.TestCase):
+    def test_gpu_summary_defaults_when_gpu_disabled(self):
+        summary = image_match._gpu_execution_summary(
+            use_gpu=False,
+            gpu_batch_size=4,
+            gpu_dynamic_batch=True,
+            gpu_min_batch_size=2,
+            gpu_max_batch_size=16,
+        )
+
+        self.assertEqual(summary["enabled"], False)
+        self.assertEqual(summary["batch_size"], 4)
+        self.assertEqual(summary["dynamic_batch"], True)
+        self.assertEqual(summary["min_batch_size"], 2)
+        self.assertEqual(summary["max_batch_size"], 16)
+
+    def test_gpu_summary_includes_runtime_stats_when_available(self):
+        stats = tile_matching.GpuSiftStats()
+        stats.record_batch(batch_size=4, used_gpu=True)
+        stats.record_pair_result(used_cpu_fallback=False)
+        stats.record_pair_result(used_cpu_fallback=True)
+        stats.record_gpu_failure()
+
+        summary = image_match._gpu_execution_summary(
+            use_gpu=True,
+            gpu_batch_size=4,
+            gpu_dynamic_batch=True,
+            gpu_min_batch_size=2,
+            gpu_max_batch_size=16,
+            gpu_stats=stats,
+        )
+
+        self.assertEqual(summary["runtime"]["gpu_batch_count"], 1)
+        self.assertEqual(summary["runtime"]["gpu_pair_count"], 2)
+        self.assertEqual(summary["runtime"]["cpu_fallback_pair_count"], 1)
+        self.assertEqual(summary["runtime"]["gpu_failure_count"], 1)
+        self.assertEqual(summary["runtime"]["batch_size_histogram"], {4: 1})
+
+    def test_gpu_summary_distinguishes_requested_from_effective_execution(self):
+        summary = image_match._gpu_execution_summary(
+            use_gpu=True,
+            gpu_effective=False,
+            gpu_batch_size=4,
+            gpu_dynamic_batch=True,
+            gpu_min_batch_size=2,
+            gpu_max_batch_size=16,
+        )
+
+        self.assertTrue(summary["requested"])
+        self.assertFalse(summary["enabled"])
+
+
+class TestGpuBenchmarkScript(unittest.TestCase):
+    def test_benchmark_summary_reports_point_and_tile_match_counts_separately(self):
+        spec = importlib.util.spec_from_file_location(
+            "benchmark_gpu_tile_pipeline",
+            PROJECT_ROOT / "scripts" / "benchmark_gpu_tile_pipeline.py",
+        )
+        benchmark_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(benchmark_module)
+
+        summary = {
+            "point_count": 3,
+            "matched_tile_count": 2,
+            "gpu": {"enabled": True},
+            "tiles": [
+                {"match_count": 5},
+                {"match_count": 7},
+            ],
+        }
+
+        result = benchmark_module._summarize_benchmark_case(
+            summary,
+            elapsed_seconds=1.25,
+            use_gpu=True,
+        )
+
+        self.assertEqual(result["point_count"], 3)
+        self.assertEqual(result["tile_match_count_total"], 12)
+        self.assertNotIn("total_match_count", result)
 
 
 if __name__ == "__main__":

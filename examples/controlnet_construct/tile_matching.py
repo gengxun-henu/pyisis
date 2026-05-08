@@ -50,7 +50,7 @@ import isis_pybind as ip
 
 
 DEFAULT_MATCHER_METHOD = "bf"
-SUPPORTED_MATCHER_METHODS = ("bf", "flann")
+SUPPORTED_MATCHER_METHODS = ("bf", "flann", "superglue", "lightglue", "loftr")
 DEFAULT_FLANN_TREES = 5
 DEFAULT_FLANN_CHECKS = 50
 DEFAULT_GPU_BATCH_SIZE = 4

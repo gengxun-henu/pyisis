@@ -1217,6 +1217,16 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             {"checks": tile_matching_module.DEFAULT_FLANN_CHECKS},
         )
 
+
+    def test_normalize_matcher_method_accepts_deep_methods(self):
+        self.assertEqual(tile_matching_module._normalize_matcher_method("superglue"), "superglue")
+        self.assertEqual(tile_matching_module._normalize_matcher_method("  LIGHTGLUE  "), "lightglue")
+        self.assertEqual(tile_matching_module._normalize_matcher_method("LOFTR"), "loftr")
+
+    def test_normalize_matcher_method_rejects_unknown_method(self):
+        with self.assertRaisesRegex(ValueError, "Unsupported matcher_method"):
+            tile_matching_module._normalize_matcher_method("unknown-matcher")
+
     def test_match_dom_pair_passes_matcher_method_into_parallel_tile_tasks(self):
         width = 128
         height = 128

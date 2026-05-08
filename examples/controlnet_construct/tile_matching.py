@@ -527,9 +527,9 @@ def _tile_result_from_matches(
     filtered_matches: list[cv2.DMatch],
 ) -> TileMatchResult:
     if not left_keypoints or not right_keypoints:
-        status = "no_features"
+        status = "skipped_no_features"
     elif not filtered_matches:
-        status = "no_matches"
+        status = "skipped_no_matches"
     else:
         status = "matched"
     matched_left_points = tuple(

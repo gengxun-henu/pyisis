@@ -60,6 +60,7 @@ Updated: 2026-05-20  Geng Xun added GPU-only tile task routing coverage for the 
 Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile progress callbacks.
 Updated: 2026-05-20  Geng Xun added stable GPU tile result ordering coverage.
 Updated: 2026-05-20  Geng Xun added regression coverage for clamped dynamic GPU batch defaults.
+Updated: 2026-05-20  Geng Xun added GPU tile status contract regression coverage.
 """
 
 from __future__ import annotations
@@ -4612,6 +4613,46 @@ class TestGpuPreparedTilePayload(unittest.TestCase):
         self.assertEqual(payload_or_result.stats.status, "skipped_valid_pixel_ratio_below_threshold")
 
 
+class TestGpuTileResultFromMatches(unittest.TestCase):
+    def _payload(self) -> tile_matching.PreparedGpuTilePayload:
+        window = TileWindow(0, 0, 16, 16)
+        return tile_matching.PreparedGpuTilePayload(
+            local_window=window,
+            left_window=window,
+            right_window=window,
+            left_image=np.zeros((16, 16), dtype=np.uint8),
+            right_image=np.zeros((16, 16), dtype=np.uint8),
+            left_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+            right_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+            left_valid_pixel_count=256,
+            right_valid_pixel_count=256,
+            left_valid_pixel_ratio=1.0,
+            right_valid_pixel_ratio=1.0,
+        )
+
+    def test_no_keypoints_preserves_skipped_no_features_status(self):
+        result = tile_matching._tile_result_from_matches(
+            payload=self._payload(),
+            left_keypoints=[],
+            right_keypoints=[],
+            filtered_matches=[],
+        )
+
+        self.assertEqual(result.stats.status, "skipped_no_features")
+
+    def test_no_filtered_matches_preserves_skipped_no_matches_status(self):
+        keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+
+        result = tile_matching._tile_result_from_matches(
+            payload=self._payload(),
+            left_keypoints=[keypoint],
+            right_keypoints=[keypoint],
+            filtered_matches=[],
+        )
+
+        self.assertEqual(result.stats.status, "skipped_no_matches")
+
+
 class TestGpuPipelineOrdering(unittest.TestCase):
     def test_order_gpu_results_restores_input_order(self):
         first = tile_matching.TileMatchResult(
@@ -4713,7 +4754,7 @@ class TestGpuPipelineRouting(unittest.TestCase):
             )
 
         self.assertEqual(len(results), 1)
-        self.assertEqual(results[0].stats.status, "no_features")
+        self.assertEqual(results[0].stats.status, "skipped_no_features")
 
     def test_run_parallel_tasks_invokes_progress_callback_for_each_gpu_task(self):
         def make_gpu_task(start_x: int) -> tile_matching.TileMatchTask:

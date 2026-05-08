@@ -7,6 +7,7 @@ Updated: 2026-05-20  Geng Xun added prepared GPU tile payload construction for f
 Updated: 2026-05-20  Geng Xun routed all-GPU tile task batches through a dedicated pipeline hook.
 Updated: 2026-05-20  Geng Xun preserved progress callbacks on the dedicated GPU tile route.
 Updated: 2026-05-20  Geng Xun batched dedicated GPU tile matching through prepared payloads.
+Updated: 2026-05-20  Geng Xun clamped dynamic GPU batch initialization to configured limits.
 """
 
 from __future__ import annotations
@@ -1178,9 +1179,10 @@ def _run_gpu_tile_match_tasks(
 ) -> list[TileMatchResult]:
     if not tasks:
         return []
+    initial_batch_size = min(max(tasks[0].gpu_batch_size, gpu_min_batch_size), gpu_max_batch_size)
     controller = (
         DynamicGpuBatchController(
-            initial_batch_size=tasks[0].gpu_batch_size,
+            initial_batch_size=initial_batch_size,
             min_batch_size=gpu_min_batch_size,
             max_batch_size=gpu_max_batch_size,
         )

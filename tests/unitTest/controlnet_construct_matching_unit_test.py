@@ -59,6 +59,7 @@ Updated: 2026-05-20  Geng Xun added prepared GPU tile payload prefilter coverage
 Updated: 2026-05-20  Geng Xun added GPU-only tile task routing coverage for the dedicated pipeline hook.
 Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile progress callbacks.
 Updated: 2026-05-20  Geng Xun added stable GPU tile result ordering coverage.
+Updated: 2026-05-20  Geng Xun added regression coverage for clamped dynamic GPU batch defaults.
 """
 
 from __future__ import annotations
@@ -4630,6 +4631,90 @@ class TestGpuPipelineOrdering(unittest.TestCase):
 
 
 class TestGpuPipelineRouting(unittest.TestCase):
+    def test_dynamic_gpu_batch_clamps_default_task_batch_to_maximum(self):
+        task = tile_matching.TileMatchTask(
+            left_dom_path="left.cub",
+            right_dom_path="right.cub",
+            band=1,
+            paired_window=tile_matching.PairedTileWindow(
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+            ),
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            invalid_values=(),
+            special_pixel_abs_threshold=1.0e300,
+            min_valid_pixels=64,
+            valid_pixel_percent_threshold=0.05,
+            invalid_pixel_radius=1,
+            ratio_test=0.75,
+            matcher_method="bf",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+            use_gpu=True,
+            gpu_batch_size=32,
+        )
+        payload = tile_matching.PreparedGpuTilePayload(
+            local_window=task.paired_window.local_window,
+            left_window=task.paired_window.left_window,
+            right_window=task.paired_window.right_window,
+            left_image=np.zeros((16, 16), dtype=np.uint8),
+            right_image=np.zeros((16, 16), dtype=np.uint8),
+            left_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+            right_mask=np.ones((16, 16), dtype=np.uint8) * 255,
+            left_valid_pixel_count=256,
+            right_valid_pixel_count=256,
+            left_valid_pixel_ratio=1.0,
+            right_valid_pixel_ratio=1.0,
+        )
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        with mock.patch.object(tile_matching.ip, "Cube", side_effect=[FakeCube(), FakeCube()]), mock.patch.object(
+            tile_matching,
+            "_read_cube_window",
+            return_value=np.zeros((16, 16), dtype=np.float64),
+        ), mock.patch.object(
+            tile_matching,
+            "_resolved_invalid_values_for_cube",
+            return_value=(),
+        ), mock.patch.object(
+            tile_matching,
+            "_prepare_gpu_tile_payload_from_values",
+            return_value=payload,
+        ), mock.patch.object(
+            tile_matching,
+            "_match_tile_gpu",
+            return_value=([], [], []),
+        ):
+            results = tile_matching._run_gpu_tile_match_tasks(
+                [task],
+                show_progress=False,
+                gpu_dynamic_batch=True,
+                gpu_min_batch_size=2,
+                gpu_max_batch_size=16,
+            )
+
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].stats.status, "no_features")
+
     def test_run_parallel_tasks_invokes_progress_callback_for_each_gpu_task(self):
         def make_gpu_task(start_x: int) -> tile_matching.TileMatchTask:
             return tile_matching.TileMatchTask(

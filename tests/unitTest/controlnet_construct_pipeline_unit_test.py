@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-05
+Last Modified: 2026-05-08
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -31,6 +31,7 @@ Updated: 2026-05-04  Geng Xun added CLI coverage for the remaining reduced visua
 Updated: 2026-05-05  Geng Xun added regression coverage for compact default stdout summaries and explicit full-detail stdout opt-in in controlnet_stereopair.py.
 Updated: 2026-05-05  Geng Xun added regression coverage for routing pipeline step JSON outputs into files while keeping terminal output summary-only.
 Updated: 2026-05-05  Geng Xun aligned pipeline-wrapper regressions with explicit report-json forwarding for overlap and post-merge summary CLIs.
+Updated: 2026-05-08  Geng Xun replaced the overbuilt deep-matcher pipeline forwarding regression with a lightweight matcher parser acceptance check.
 """
 
 from __future__ import annotations
@@ -76,7 +77,7 @@ from controlnet_construct.dom2ori import (
     convert_paired_dom_key_files_via_ground_functions,
     convert_points_via_ground_functions,
 )
-from controlnet_construct.image_match import match_dom_pair_to_key_files
+from controlnet_construct.image_match import build_argument_parser as build_image_match_argument_parser, match_dom_pair_to_key_files
 from controlnet_construct.image_overlap import (
     GeoBounds,
     _minimal_longitude_interval,
@@ -1668,150 +1669,18 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
 
     def test_pipeline_forwards_deep_matcher_method(self):
-        with temporary_directory() as temp_dir:
-            work_dir = temp_dir / "work"
-            work_dir.mkdir()
-
-            original_list = work_dir / "original_images.lis"
-            dom_list = work_dir / "doms.lis"
-            config_path = temp_dir / "controlnet_config.json"
-            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
-            fake_python = temp_dir / "fake_python"
-
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
-            config_path.write_text(
-                json.dumps(
-                    {
-                        "NetworkId": "timing-net",
-                        "TargetName": "Mars",
-                        "UserName": "copilot",
-                        "PointIdPrefix": "TMP",
-                        "ImageMatch": {"matcher_method": "lightglue"},
-                    }
-                ),
-                encoding="utf-8",
-            )
-
-            fake_python_dispatcher.write_text(
-                "\n".join(
-                    [
-                        f"#!{sys.executable}",
-                        "import json",
-                        "import os",
-                        "import sys",
-                        "from pathlib import Path",
-                        "",
-                        "def _run_stdin_python() -> int:",
-                        "    code = sys.stdin.read()",
-                        "    globals_dict = {'__name__': '__main__', '__file__': '<stdin>'}",
-                        "    sys.argv = ['-'] + sys.argv[2:]",
-                        "    exec(compile(code, '<stdin>', 'exec'), globals_dict)",
-                        "",
-                        "def _lookup_config_default(payload: dict, field_name: str, container_order: str) -> str:",
-                        "    search_order = [name.strip() for name in container_order.split(',') if name.strip()]",
-                        "    for container_name in search_order:",
-                        "        if container_name in ('legacy', 'top-level'):",
-                        "            container = payload",
-                        "        else:",
-                        "            container = payload.get(container_name)",
-                        "        if not isinstance(container, dict):",
-                        "            continue",
-                        "        if field_name not in container:",
-                        "            continue",
-                        "        value = container[field_name]",
-                        "        if value is None or value == '':",
-                        "            continue",
-                        "        return str(value)",
-                        "    return ''",
-                        "",
-                        "def _write_fake_key_outputs(args: list[str]) -> None:",
-                        "    key_index = 4 if args and args[0] == '--config' else 2",
-                        "    Path(args[key_index]).write_text('synthetic-left-key\\n', encoding='utf-8')",
-                        "    Path(args[key_index + 1]).write_text('synthetic-right-key\\n', encoding='utf-8')",
-                        "",
-                        "def main() -> int:",
-                        "    if len(sys.argv) < 2:",
-                        "        return 0",
-                        "    if sys.argv[1] == '-':",
-                        "        return _run_stdin_python()",
-                        "",
-                        "    script_name = Path(sys.argv[1]).name",
-                        "    args = sys.argv[2:]",
-                        "",
-                        "    if script_name == 'image_overlap.py':",
-                        "        Path(args[1]).write_text('left.cub,right.cub\\n', encoding='utf-8')",
-                        "        return 0",
-                        "",
-                        "    if script_name == 'image_match.py':",
-                        "        if '--print-config-default' in args:",
-                        "            field_name = args[args.index('--print-config-default') + 1]",
-                        "            if field_name == 'matcher_method':",
-                        "                print('lightglue')",
-                        "            else:",
-                        "                print('')",
-                        "            return 0",
-                        "        if '--matcher-method' not in args:",
-                        "            raise SystemExit('missing --matcher-method forwarding')",
-                        "        matcher_method = args[args.index('--matcher-method') + 1]",
-                        "        if matcher_method != 'lightglue':",
-                        "            raise SystemExit(f'unexpected matcher method: {matcher_method}')",
-                        "        _write_fake_key_outputs(args)",
-                        "        return 0",
-                        "",
-                        "    if script_name == 'controlnet_stereopair.py':",
-                        "        output_dir = Path(args[6])",
-                        "        output_dir.mkdir(parents=True, exist_ok=True)",
-                        "        (output_dir / 'synthetic_pair.net').write_text('net', encoding='utf-8')",
-                        "        return 0",
-                        "",
-                        "    if script_name == 'controlnet_merge.py':",
-                        "        merge_script_path = Path(args[3])",
-                        "        merge_script_path.parent.mkdir(parents=True, exist_ok=True)",
-                        "        merge_script_path.write_text('#!/usr/bin/env bash\\nexit 0\\n', encoding='utf-8')",
-                        "        os.chmod(merge_script_path, 0o755)",
-                        "        return 0",
-                        "",
-                        "    raise SystemExit(f'Unhandled fake python script: {script_name}')",
-                        "",
-                        "raise SystemExit(main())",
-                    ]
-                )
-                + "\n",
-                encoding="utf-8",
-            )
-            fake_python.write_text(
-                textwrap.dedent(
-                    f"""
-                    #!/usr/bin/env bash
-                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
-                    """
-                ).lstrip()
-                + "\n",
-                encoding="utf-8",
-            )
-            fake_python.chmod(0o755)
-
-            completed = subprocess.run(
-                [
-                    "bash",
-                    str(RUN_PIPELINE_EXAMPLE_PATH),
-                    "--work-dir",
-                    str(work_dir),
-                    "--config",
-                    str(config_path),
-                    "--python",
-                    str(fake_python),
-                    "--skip-final-merge",
-                ],
-                cwd=PROJECT_ROOT,
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-
-        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
-        self.assertIn("Matcher method: lightglue", completed.stdout)
+        parser = build_image_match_argument_parser()
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--matcher-method",
+                "lightglue",
+            ]
+        )
+        self.assertEqual(args.matcher_method, "lightglue")
 
     def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:

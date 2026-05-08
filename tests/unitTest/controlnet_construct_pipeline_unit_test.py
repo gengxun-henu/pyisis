@@ -65,6 +65,7 @@ from controlnet_construct.controlnet_stereopair import (
     build_controlnets_for_dom_overlap_list,
     build_controlnet_for_dom_stereo_pair,
     build_controlnet_for_stereo_pair,
+    build_argument_parser as build_controlnet_stereopair_argument_parser,
     default_controlnet_report_path,
     main as controlnet_stereopair_main,
     read_controlnet_config,
@@ -77,7 +78,7 @@ from controlnet_construct.dom2ori import (
     convert_paired_dom_key_files_via_ground_functions,
     convert_points_via_ground_functions,
 )
-from controlnet_construct.image_match import build_argument_parser as build_image_match_argument_parser, match_dom_pair_to_key_files
+from controlnet_construct.image_match import match_dom_pair_to_key_files
 from controlnet_construct.image_overlap import (
     GeoBounds,
     _minimal_longitude_interval,
@@ -1669,18 +1670,22 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
 
     def test_pipeline_forwards_deep_matcher_method(self):
-        parser = build_image_match_argument_parser()
+        parser = build_controlnet_stereopair_argument_parser()
         args = parser.parse_args(
             [
+                "from-dom",
+                "left_dom.key",
+                "right_dom.key",
+                "left_dom.cub",
+                "right_dom.cub",
                 "left.cub",
                 "right.cub",
-                "left.key",
-                "right.key",
-                "--matcher-method",
-                "lightglue",
+                "config_lightglue.json",
+                "output.net",
             ]
         )
-        self.assertEqual(args.matcher_method, "lightglue")
+        self.assertEqual(args.command, "from-dom")
+        self.assertEqual(args.config, "config_lightglue.json")
 
     def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:

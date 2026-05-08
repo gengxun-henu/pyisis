@@ -32,6 +32,7 @@ Updated: 2026-05-05  Geng Xun added regression coverage for compact default stdo
 Updated: 2026-05-05  Geng Xun added regression coverage for routing pipeline step JSON outputs into files while keeping terminal output summary-only.
 Updated: 2026-05-05  Geng Xun aligned pipeline-wrapper regressions with explicit report-json forwarding for overlap and post-merge summary CLIs.
 Updated: 2026-05-08  Geng Xun replaced the overbuilt deep-matcher pipeline forwarding regression with a lightweight matcher parser acceptance check.
+Updated: 2026-05-08  Geng Xun split deep-matcher parser acceptance from a lightweight pipeline forwarding assertion that checks matcher-method passthrough.
 """
 
 from __future__ import annotations
@@ -80,6 +81,7 @@ from controlnet_construct.dom2ori import (
 )
 from controlnet_construct.image_match import (
     build_argument_parser as build_controlnet_stereopair_argument_parser,
+    main as image_match_main,
     match_dom_pair_to_key_files,
 )
 from controlnet_construct.image_overlap import (
@@ -1672,7 +1674,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("CPU parallel worker limit: 3", completed.stdout)
 
 
-    def test_pipeline_forwards_deep_matcher_method(self):
+    def test_image_match_parser_accepts_deep_matcher_method(self):
         parser = build_controlnet_stereopair_argument_parser()
         parsed = parser.parse_args(
             [
@@ -1685,6 +1687,27 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             ]
         )
         self.assertEqual(parsed.matcher_method, "lightglue")
+
+    def test_pipeline_forwards_deep_matcher_method(self):
+        fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
+        stdout = io.StringIO()
+
+        with (
+            patch("controlnet_construct.image_match.match_dom_pair_to_key_files", return_value=fake_result) as match_mock,
+            patch.object(sys, "stdout", stdout),
+        ):
+            image_match_main(
+                [
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left.key",
+                    "right.key",
+                    "--matcher-method",
+                    "lightglue",
+                ]
+            )
+
+        self.assertEqual(match_mock.call_args.kwargs["matcher_method"], "lightglue")
 
     def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:

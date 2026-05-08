@@ -166,6 +166,11 @@ def _create_descriptor_matcher(matcher_method: str):
     resolved_matcher_method = _normalize_matcher_method(matcher_method)
     if resolved_matcher_method == "bf":
         return cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
+    if resolved_matcher_method in ("superglue", "lightglue", "loftr"):
+        raise ValueError(
+            "Deep matcher methods ('superglue', 'lightglue', 'loftr') are not handled by the descriptor matcher path; "
+            "route through the deep-matcher execution path instead."
+        )
 
     flann_index_params = {
         "algorithm": 1,

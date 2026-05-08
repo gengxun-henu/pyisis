@@ -1217,6 +1217,11 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             {"checks": tile_matching_module.DEFAULT_FLANN_CHECKS},
         )
 
+    def test_create_descriptor_matcher_rejects_deep_methods(self):
+        for matcher_method in ("superglue", "lightglue", "loftr"):
+            with self.assertRaisesRegex(ValueError, "descriptor matcher path"):
+                tile_matching_module._create_descriptor_matcher(matcher_method)
+
 
     def test_normalize_matcher_method_accepts_deep_methods(self):
         self.assertEqual(tile_matching_module._normalize_matcher_method("superglue"), "superglue")

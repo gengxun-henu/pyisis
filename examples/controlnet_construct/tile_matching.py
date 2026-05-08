@@ -338,8 +338,10 @@ def _match_tile(
         edge_threshold=sift_edge_threshold,
         sigma=sift_sigma,
     )
-    left_keypoints, left_descriptors = sift.detectAndCompute(left_image, left_mask)
-    right_keypoints, right_descriptors = sift.detectAndCompute(right_image, right_mask)
+    left_keypoints_raw, left_descriptors = sift.detectAndCompute(left_image, left_mask)
+    right_keypoints_raw, right_descriptors = sift.detectAndCompute(right_image, right_mask)
+    left_keypoints = list(left_keypoints_raw) if left_keypoints_raw else []
+    right_keypoints = list(right_keypoints_raw) if right_keypoints_raw else []
 
     if not left_keypoints or left_descriptors is None:
         return [], [], []

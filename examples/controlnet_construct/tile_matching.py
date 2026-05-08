@@ -8,6 +8,7 @@ Updated: 2026-05-20  Geng Xun routed all-GPU tile task batches through a dedicat
 Updated: 2026-05-20  Geng Xun preserved progress callbacks on the dedicated GPU tile route.
 Updated: 2026-05-20  Geng Xun batched dedicated GPU tile matching through prepared payloads.
 Updated: 2026-05-20  Geng Xun clamped dynamic GPU batch initialization to configured limits.
+Updated: 2026-05-20  Geng Xun wired dynamic GPU batch options through parallel tile routing.
 """
 
 from __future__ import annotations
@@ -1280,6 +1281,9 @@ def _run_parallel_tile_match_tasks(
     max_workers: int,
     progress_callback: Callable[[], None] | None = None,
     show_progress: bool = True,
+    gpu_dynamic_batch: bool = True,
+    gpu_min_batch_size: int = 2,
+    gpu_max_batch_size: int = 16,
     use_tile_cache: bool = False,
     cache_max_mb: int = 100,
     adaptive_warmup_count: int = 10,
@@ -1293,6 +1297,9 @@ def _run_parallel_tile_match_tasks(
             tasks,
             show_progress=show_progress,
             progress_callback=progress_callback,
+            gpu_dynamic_batch=gpu_dynamic_batch,
+            gpu_min_batch_size=gpu_min_batch_size,
+            gpu_max_batch_size=gpu_max_batch_size,
         )
     chunks = _chunk_tile_match_task_payloads(tasks, max_workers=max_workers)
     manager = None

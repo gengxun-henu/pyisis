@@ -30,6 +30,7 @@ Updated: 2026-05-17  Geng Xun wired image-match visualization preview options an
 Updated: 2026-05-05  Geng Xun added stdout tile-detail trimming plus optional full-result JSON output for quieter CLI runs.
 Updated: 2026-05-20  Geng Xun added dynamic GPU batch config defaults and CLI options.
 Updated: 2026-05-20  Geng Xun added a --no-gpu-dynamic-batch CLI opt-out.
+Updated: 2026-05-20  Geng Xun wired dynamic GPU batch options into image-match execution.
 """
 
 from __future__ import annotations
@@ -968,6 +969,9 @@ def match_dom_pair(
     adaptive_recheck_every: int = 0,
     use_gpu: bool = False,
     gpu_batch_size: int = 32,
+    gpu_dynamic_batch: bool = True,
+    gpu_min_batch_size: int = 2,
+    gpu_max_batch_size: int = 16,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
@@ -1192,6 +1196,9 @@ def match_dom_pair(
                                 ),
                                 max_workers=candidate_worker_count,
                                 progress_callback=progress_bar.update if progress_bar is not None else None,
+                                gpu_dynamic_batch=gpu_dynamic_batch,
+                                gpu_min_batch_size=gpu_min_batch_size,
+                                gpu_max_batch_size=gpu_max_batch_size,
                                 use_tile_cache=use_tile_cache,
                                 cache_max_mb=tile_cache_max_mb,
                                 adaptive_warmup_count=adaptive_warmup_count,
@@ -1328,6 +1335,11 @@ def match_dom_pair(
             "parallel_cpu_used": parallel_cpu_used,
             "parallel_cpu_backend": parallel_cpu_backend,
             "parallel_cpu_worker_count": parallel_cpu_worker_count,
+            "use_gpu": bool(use_gpu),
+            "gpu_batch_size": gpu_batch_size,
+            "gpu_dynamic_batch": bool(gpu_dynamic_batch),
+            "gpu_min_batch_size": gpu_min_batch_size,
+            "gpu_max_batch_size": gpu_max_batch_size,
             "low_resolution_trim_fraction_each_side": resolved_low_resolution_trim_fraction_each_side,
             "low_resolution_max_mean_reprojection_error_pixels": resolved_low_resolution_max_mean_reprojection_error_pixels,
             "low_resolution_min_retained_match_count": resolved_low_resolution_min_retained_match_count,
@@ -1385,6 +1397,9 @@ def match_dom_pair_to_key_files(
     preview_cache_source: str = DEFAULT_PREVIEW_CACHE_SOURCE,
     preview_force_regenerate: bool = False,
     preview_level: int | None = None,
+    gpu_dynamic_batch: bool = True,
+    gpu_min_batch_size: int = 2,
+    gpu_max_batch_size: int = 16,
     **kwargs,
 ) -> dict[str, object]:
     if kwargs.get("enable_tile_validity_prefilter") and kwargs.get("tile_validity_cache_dir") is None:
@@ -1399,7 +1414,15 @@ def match_dom_pair_to_key_files(
             metadata_output=metadata_output,
             left_output_key=left_output_key,
         )
-    left_key_file, right_key_file, summary = match_dom_pair(left_dom_path, right_dom_path, show_progress=show_progress, **kwargs)
+    left_key_file, right_key_file, summary = match_dom_pair(
+        left_dom_path,
+        right_dom_path,
+        show_progress=show_progress,
+        gpu_dynamic_batch=gpu_dynamic_batch,
+        gpu_min_batch_size=gpu_min_batch_size,
+        gpu_max_batch_size=gpu_max_batch_size,
+        **kwargs,
+    )
     write_key_file(left_output_key, left_key_file)
     write_key_file(right_output_key, right_key_file)
     metadata_payload = None
@@ -1821,6 +1844,9 @@ def main(argv: list[str] | None = None) -> None:
         preview_level=args.preview_level,
         use_gpu=args.use_gpu,
         gpu_batch_size=args.gpu_batch_size,
+        gpu_dynamic_batch=args.gpu_dynamic_batch,
+        gpu_min_batch_size=args.gpu_min_batch_size,
+        gpu_max_batch_size=args.gpu_max_batch_size,
         use_tile_cache=args.use_tile_cache,
         tile_cache_max_mb=args.tile_cache_max_mb,
         adaptive_warmup_count=args.adaptive_warmup_count,

@@ -61,6 +61,7 @@ Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile progress ca
 Updated: 2026-05-20  Geng Xun added stable GPU tile result ordering coverage.
 Updated: 2026-05-20  Geng Xun added regression coverage for clamped dynamic GPU batch defaults.
 Updated: 2026-05-20  Geng Xun added GPU tile status contract regression coverage.
+Updated: 2026-05-20  Geng Xun added regression coverage for dynamic GPU batch option wiring.
 """
 
 from __future__ import annotations
@@ -4236,6 +4237,66 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["parallel_cpu_backend"], "process_pool_batched_cube_reuse")
         self.assertEqual(summary["parallel_cpu_worker_count"], 2)
 
+    def test_match_dom_pair_forwards_dynamic_gpu_batch_options_to_parallel_tasks(self):
+        image = _build_textured_test_image(128, 128)
+        synthetic_tile_results = [
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=0,
+                    right_feature_count=0,
+                    match_count=0,
+                    status="skipped_no_features",
+                ),
+                left_points=(),
+                right_points=(),
+            )
+        ]
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_gpu_batch_options.cub",
+                right_name="right_gpu_batch_options.cub",
+            )
+            with mock.patch.object(
+                image_match,
+                "_run_parallel_tile_match_tasks",
+                return_value=synthetic_tile_results,
+            ) as parallel_mock:
+                match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                    num_worker_parallel_cpu=2,
+                    use_gpu=True,
+                    gpu_dynamic_batch=False,
+                    gpu_min_batch_size=3,
+                    gpu_max_batch_size=7,
+                )
+
+        self.assertFalse(parallel_mock.call_args.kwargs["gpu_dynamic_batch"])
+        self.assertEqual(parallel_mock.call_args.kwargs["gpu_min_batch_size"], 3)
+        self.assertEqual(parallel_mock.call_args.kwargs["gpu_max_batch_size"], 7)
+
     def test_match_dom_pair_to_key_files_writes_tile_validity_metadata(self):
         values = np.zeros((32, 64), dtype=np.float64)
         values[:, :32] = _build_textured_test_image(32, 32)
@@ -4890,6 +4951,59 @@ class TestGpuPipelineRouting(unittest.TestCase):
 
         self.assertIs(result, expected)
         gpu_mock.assert_called_once()
+
+    def test_run_parallel_tasks_forwards_dynamic_gpu_batch_options(self):
+        tasks = [
+            tile_matching.TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=tile_matching.PairedTileWindow(
+                    local_window=TileWindow(0, 0, 16, 16),
+                    left_window=TileWindow(0, 0, 16, 16),
+                    right_window=TileWindow(0, 0, 16, 16),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=64,
+                valid_pixel_percent_threshold=0.05,
+                invalid_pixel_radius=1,
+                ratio_test=0.75,
+                matcher_method="bf",
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                use_gpu=True,
+                gpu_batch_size=4,
+            )
+        ]
+        expected = []
+
+        with mock.patch.object(tile_matching, "_run_gpu_tile_match_tasks", return_value=expected) as gpu_mock:
+            result = tile_matching._run_parallel_tile_match_tasks(
+                tasks,
+                max_workers=2,
+                show_progress=False,
+                gpu_dynamic_batch=False,
+                gpu_min_batch_size=3,
+                gpu_max_batch_size=7,
+            )
+
+        self.assertIs(result, expected)
+        gpu_mock.assert_called_once_with(
+            tasks,
+            show_progress=False,
+            progress_callback=None,
+            gpu_dynamic_batch=False,
+            gpu_min_batch_size=3,
+            gpu_max_batch_size=7,
+        )
 
 
 if __name__ == "__main__":

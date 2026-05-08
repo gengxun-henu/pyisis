@@ -2,11 +2,12 @@
 
 Author: Geng Xun
 Created: 2026-05-07
-Last Modified: 2026-05-07
+Last Modified: 2026-05-20
 Updated: 2026-05-07  Geng Xun added GPU SIFT match stats and dynamic batch policy coverage.
 Updated: 2026-05-07  Geng Xun registered direct gpu_sift imports for dataclass decorators.
 Updated: 2026-05-07  Geng Xun added pair matcher CPU fallback coverage.
 Updated: 2026-05-07  Geng Xun added matcher method validation regression coverage.
+Updated: 2026-05-20  Geng Xun aligned GPU SIFT batch default coverage with conservative tile defaults.
 """
 
 import importlib.util
@@ -80,7 +81,7 @@ class TestGpuSiftBatchParams:
 
     def test_default_params(self):
         batch = GpuSiftBatch()
-        assert batch._batch_size == 32
+        assert batch._batch_size == 4
         assert batch._sift_kwargs["nfeatures"] == 0
         assert batch._sift_kwargs["nOctaveLayers"] == 3
         assert batch._sift_kwargs["contrastThreshold"] == 0.04

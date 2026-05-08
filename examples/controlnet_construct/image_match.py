@@ -33,6 +33,7 @@ Updated: 2026-05-20  Geng Xun added a --no-gpu-dynamic-batch CLI opt-out.
 Updated: 2026-05-20  Geng Xun wired dynamic GPU batch options into image-match execution.
 Updated: 2026-05-20  Geng Xun corrected GPU tile-route backend diagnostics.
 Updated: 2026-05-20  Geng Xun added GPU execution configuration summary fields.
+Updated: 2026-05-20  Geng Xun aligned GPU batch defaults and backend reporting with effective GPU route support.
 """
 
 from __future__ import annotations
@@ -67,12 +68,15 @@ if __package__ in {None, ""}:
     )
     from controlnet_construct.tile_matching import (
         PairedTileWindow,
+        DEFAULT_GPU_BATCH_SIZE,
         DEFAULT_MATCHER_METHOD,
+        GpuSiftStats,
         TileMatchResult,
         TileMatchStats,
         TileMatchTask,
         _build_sift_detector,
         _build_tile_match_tasks,
+        _can_use_dedicated_gpu_tile_route,
         _keypoint_to_isis_coordinates,
         _matcher_diagnostics_for_method,
         _normalize_matcher_method,
@@ -99,12 +103,15 @@ else:
     )
     from .tile_matching import (
         PairedTileWindow,
+        DEFAULT_GPU_BATCH_SIZE,
         DEFAULT_MATCHER_METHOD,
+        GpuSiftStats,
         TileMatchResult,
         TileMatchStats,
         TileMatchTask,
         _build_sift_detector,
         _build_tile_match_tasks,
+        _can_use_dedicated_gpu_tile_route,
         _keypoint_to_isis_coordinates,
         _matcher_diagnostics_for_method,
         _normalize_matcher_method,
@@ -835,10 +842,12 @@ def _tile_execution_backend_summary(
     *,
     use_parallel_cpu: bool,
     use_gpu: bool,
+    effective_gpu_tile_route: bool | None = None,
     candidate_window_count: int,
     resolved_num_worker_parallel_cpu: int,
 ) -> dict[str, object]:
     parallel_cpu_requested = bool(use_parallel_cpu)
+    gpu_tile_route_used = bool(use_gpu) if effective_gpu_tile_route is None else bool(effective_gpu_tile_route)
     if candidate_window_count <= 0:
         return {
             "parallel_cpu_requested": parallel_cpu_requested,
@@ -852,7 +861,7 @@ def _tile_execution_backend_summary(
     if parallel_cpu_requested and candidate_window_count > 1:
         candidate_worker_count = min(candidate_window_count, resolved_num_worker_parallel_cpu)
         if candidate_worker_count > 1:
-            if use_gpu:
+            if gpu_tile_route_used:
                 return {
                     "parallel_cpu_requested": parallel_cpu_requested,
                     "num_worker_parallel_cpu": resolved_num_worker_parallel_cpu,
@@ -887,14 +896,24 @@ def _gpu_execution_summary(
     gpu_dynamic_batch: bool,
     gpu_min_batch_size: int,
     gpu_max_batch_size: int,
+    gpu_stats: GpuSiftStats | None = None,
 ) -> dict[str, object]:
-    return {
+    summary: dict[str, object] = {
         "enabled": bool(use_gpu),
         "batch_size": int(gpu_batch_size),
         "dynamic_batch": bool(gpu_dynamic_batch),
         "min_batch_size": int(gpu_min_batch_size),
         "max_batch_size": int(gpu_max_batch_size),
     }
+    if gpu_stats is not None:
+        summary["runtime"] = {
+            "gpu_batch_count": gpu_stats.gpu_batch_count,
+            "gpu_pair_count": gpu_stats.gpu_pair_count,
+            "cpu_fallback_pair_count": gpu_stats.cpu_fallback_pair_count,
+            "gpu_failure_count": gpu_stats.gpu_failure_count,
+            "batch_size_histogram": dict(gpu_stats.batch_size_histogram),
+        }
+    return summary
 
 
 def _estimate_low_resolution_projected_offset(
@@ -1036,17 +1055,17 @@ def match_dom_pair(
     adaptive_throughput_threshold_mbps: float = 200.0,
     adaptive_recheck_every: int = 0,
     use_gpu: bool = False,
-    gpu_batch_size: int = 32,
+    gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE,
     gpu_dynamic_batch: bool = True,
     gpu_min_batch_size: int = 2,
     gpu_max_batch_size: int = 16,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
-    left_cube.open(str(left_dom_path), "r")
-    right_cube.open(str(right_dom_path), "r")
 
     try:
+        left_cube.open(str(left_dom_path), "r")
+        right_cube.open(str(right_dom_path), "r")
         resolved_valid_pixel_percent_threshold = _validate_valid_pixel_percent_threshold(valid_pixel_percent_threshold)
         resolved_num_worker_parallel_cpu = _validate_num_worker_parallel_cpu(num_worker_parallel_cpu)
         resolved_invalid_pixel_radius = validate_invalid_pixel_radius(invalid_pixel_radius)
@@ -1115,6 +1134,7 @@ def match_dom_pair(
         parallel_cpu_backend = "serial"
         parallel_cpu_worker_count = 0
         tile_match_backend = "serial"
+        gpu_stats = GpuSiftStats() if use_gpu else None
         low_resolution_offset_summary = _estimate_low_resolution_projected_offset(
             left_dom_path,
             right_dom_path,
@@ -1237,37 +1257,39 @@ def match_dom_pair(
                 if parallel_cpu_requested and len(candidate_windows) > 1:
                     candidate_worker_count = min(len(candidate_windows), resolved_num_worker_parallel_cpu)
                     if candidate_worker_count > 1:
+                        tile_tasks = _build_tile_match_tasks(
+                            candidate_windows,
+                            left_dom_path=left_dom_path,
+                            right_dom_path=right_dom_path,
+                            band=band,
+                            minimum_value=minimum_value,
+                            maximum_value=maximum_value,
+                            lower_percent=lower_percent,
+                            upper_percent=upper_percent,
+                            invalid_values=invalid_values,
+                            special_pixel_abs_threshold=special_pixel_abs_threshold,
+                            min_valid_pixels=min_valid_pixels,
+                            valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                            invalid_pixel_radius=resolved_invalid_pixel_radius,
+                            matcher_method=resolved_matcher_method,
+                            ratio_test=ratio_test,
+                            max_features=max_features,
+                            sift_octave_layers=sift_octave_layers,
+                            sift_contrast_threshold=sift_contrast_threshold,
+                            sift_edge_threshold=sift_edge_threshold,
+                            sift_sigma=sift_sigma,
+                            use_gpu=use_gpu,
+                            gpu_batch_size=gpu_batch_size,
+                        )
                         try:
                             tile_results = _run_parallel_tile_match_tasks(
-                                _build_tile_match_tasks(
-                                    candidate_windows,
-                                    left_dom_path=left_dom_path,
-                                    right_dom_path=right_dom_path,
-                                    band=band,
-                                    minimum_value=minimum_value,
-                                    maximum_value=maximum_value,
-                                    lower_percent=lower_percent,
-                                    upper_percent=upper_percent,
-                                    invalid_values=invalid_values,
-                                    special_pixel_abs_threshold=special_pixel_abs_threshold,
-                                    min_valid_pixels=min_valid_pixels,
-                                    valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
-                                    invalid_pixel_radius=resolved_invalid_pixel_radius,
-                                    matcher_method=resolved_matcher_method,
-                                    ratio_test=ratio_test,
-                                    max_features=max_features,
-                                    sift_octave_layers=sift_octave_layers,
-                                    sift_contrast_threshold=sift_contrast_threshold,
-                                    sift_edge_threshold=sift_edge_threshold,
-                                    sift_sigma=sift_sigma,
-                                    use_gpu=use_gpu,
-                                    gpu_batch_size=gpu_batch_size,
-                                ),
+                                tile_tasks,
                                 max_workers=candidate_worker_count,
                                 progress_callback=progress_bar.update if progress_bar is not None else None,
                                 gpu_dynamic_batch=gpu_dynamic_batch,
                                 gpu_min_batch_size=gpu_min_batch_size,
                                 gpu_max_batch_size=gpu_max_batch_size,
+                                gpu_stats=gpu_stats,
                                 use_tile_cache=use_tile_cache,
                                 cache_max_mb=tile_cache_max_mb,
                                 adaptive_warmup_count=adaptive_warmup_count,
@@ -1280,6 +1302,7 @@ def match_dom_pair(
                         backend_summary = _tile_execution_backend_summary(
                             use_parallel_cpu=parallel_cpu_requested,
                             use_gpu=use_gpu,
+                            effective_gpu_tile_route=_can_use_dedicated_gpu_tile_route(tile_tasks),
                             candidate_window_count=len(candidate_windows),
                             resolved_num_worker_parallel_cpu=resolved_num_worker_parallel_cpu,
                         )
@@ -1420,6 +1443,7 @@ def match_dom_pair(
                 gpu_dynamic_batch=gpu_dynamic_batch,
                 gpu_min_batch_size=gpu_min_batch_size,
                 gpu_max_batch_size=gpu_max_batch_size,
+                gpu_stats=gpu_stats,
             ),
             "use_gpu": bool(use_gpu),
             "gpu_batch_size": gpu_batch_size,
@@ -1797,8 +1821,8 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument(
         "--gpu-batch-size",
         type=int,
-        default=32,
-        help="Number of tiles to batch for GPU SIFT processing (default: 32)",
+        default=DEFAULT_GPU_BATCH_SIZE,
+        help=f"Number of tiles to batch for GPU SIFT processing (default: {DEFAULT_GPU_BATCH_SIZE})",
     )
     parser.add_argument(
         "--gpu-dynamic-batch",

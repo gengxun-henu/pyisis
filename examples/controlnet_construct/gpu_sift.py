@@ -18,6 +18,7 @@ import numpy as np
 logger = logging.getLogger(__name__)
 
 _SUPPORTED_MATCHER_METHODS = {"bf", "flann"}
+DEFAULT_GPU_BATCH_SIZE = 4
 
 
 def _normalize_matcher_method(matcher_method: str) -> str:
@@ -139,7 +140,7 @@ class GpuSiftBatch:
 
     def __init__(
         self,
-        batch_size: int = 32,
+        batch_size: int = DEFAULT_GPU_BATCH_SIZE,
         *,
         nfeatures: int = 0,
         nOctaveLayers: int = 3,
@@ -385,3 +386,85 @@ def match_sift_pair(
             sift_kwargs=sift_kwargs,
             failure_reason=str(exc),
         )
+
+
+def match_sift_pairs(
+    pairs: list[tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]],
+    *,
+    ratio_test: float,
+    matcher_method: str,
+    sift_kwargs: dict[str, int | float],
+    use_gpu: bool = True,
+) -> list[GpuSiftMatchResult]:
+    matcher_method = _normalize_matcher_method(matcher_method)
+    if not use_gpu or not HAS_GPU_SIFT or matcher_method == "flann":
+        failure_reason = None if use_gpu else "gpu_disabled"
+        if use_gpu and matcher_method == "flann":
+            failure_reason = "gpu_flann_unsupported"
+        return [
+            _cpu_match_sift_pair(
+                left_image,
+                right_image,
+                left_mask=left_mask,
+                right_mask=right_mask,
+                ratio_test=ratio_test,
+                matcher_method=matcher_method,
+                sift_kwargs=sift_kwargs,
+                failure_reason=failure_reason,
+            )
+            for left_image, right_image, left_mask, right_mask in pairs
+        ]
+
+    sift = cv2.cuda.SIFT_create(**sift_kwargs)
+    matcher = cv2.cuda.DescriptorMatcher_createBFMatcher(cv2.NORM_L2)
+    results: list[GpuSiftMatchResult] = []
+    for left_image, right_image, left_mask, right_mask in pairs:
+        try:
+            gpu_left = cv2.cuda_GpuMat()
+            gpu_right = cv2.cuda_GpuMat()
+            gpu_left_mask = cv2.cuda_GpuMat()
+            gpu_right_mask = cv2.cuda_GpuMat()
+            gpu_left.upload(left_image)
+            gpu_right.upload(right_image)
+            gpu_left_mask.upload(left_mask)
+            gpu_right_mask.upload(right_mask)
+            left_keypoints, left_descriptors = sift.detectAndCompute(gpu_left, gpu_left_mask)
+            right_keypoints, right_descriptors = sift.detectAndCompute(gpu_right, gpu_right_mask)
+            if left_descriptors is None or right_descriptors is None:
+                results.append(
+                    GpuSiftMatchResult(
+                        left_keypoints=list(left_keypoints) if left_keypoints else [],
+                        right_keypoints=list(right_keypoints) if right_keypoints else [],
+                        matches=[],
+                        used_gpu=True,
+                        used_cpu_fallback=False,
+                        failure_reason=None,
+                    )
+                )
+                continue
+            raw_gpu_matches = matcher.knnMatch(left_descriptors, right_descriptors, k=2)
+            results.append(
+                GpuSiftMatchResult(
+                    left_keypoints=list(left_keypoints) if left_keypoints else [],
+                    right_keypoints=list(right_keypoints) if right_keypoints else [],
+                    matches=_filter_ratio_matches(raw_gpu_matches, ratio_test),
+                    used_gpu=True,
+                    used_cpu_fallback=False,
+                    failure_reason=None,
+                )
+            )
+        except cv2.error as exc:
+            logger.warning("GPU SIFT pair matching failed, falling back to CPU", exc_info=True)
+            results.append(
+                _cpu_match_sift_pair(
+                    left_image,
+                    right_image,
+                    left_mask=left_mask,
+                    right_mask=right_mask,
+                    ratio_test=ratio_test,
+                    matcher_method=matcher_method,
+                    sift_kwargs=sift_kwargs,
+                    failure_reason=str(exc),
+                )
+            )
+    return results

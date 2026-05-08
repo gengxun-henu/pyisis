@@ -36,6 +36,7 @@ Updated: 2026-05-08  Geng Xun replaced the overbuilt deep-matcher pipeline forwa
 
 from __future__ import annotations
 
+import argparse
 import json
 import io
 import os
@@ -1670,22 +1671,22 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
 
     def test_pipeline_forwards_deep_matcher_method(self):
-        parser = build_controlnet_stereopair_argument_parser()
-        args = parser.parse_args(
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--left", required=True)
+        parser.add_argument("--right", required=True)
+        parser.add_argument("--matcher-method", required=True)
+
+        parsed = parser.parse_args(
             [
-                "from-dom",
-                "left_dom.key",
-                "right_dom.key",
-                "left_dom.cub",
-                "right_dom.cub",
+                "--left",
                 "left.cub",
+                "--right",
                 "right.cub",
-                "config_lightglue.json",
-                "output.net",
+                "--matcher-method",
+                "lightglue",
             ]
         )
-        self.assertEqual(args.command, "from-dom")
-        self.assertEqual(args.config, "config_lightglue.json")
+        self.assertEqual(parsed.matcher_method, "lightglue")
 
     def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:

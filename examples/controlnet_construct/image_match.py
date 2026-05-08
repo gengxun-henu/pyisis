@@ -32,6 +32,7 @@ Updated: 2026-05-20  Geng Xun added dynamic GPU batch config defaults and CLI op
 Updated: 2026-05-20  Geng Xun added a --no-gpu-dynamic-batch CLI opt-out.
 Updated: 2026-05-20  Geng Xun wired dynamic GPU batch options into image-match execution.
 Updated: 2026-05-20  Geng Xun corrected GPU tile-route backend diagnostics.
+Updated: 2026-05-20  Geng Xun added GPU execution configuration summary fields.
 """
 
 from __future__ import annotations
@@ -879,6 +880,23 @@ def _tile_execution_backend_summary(
     }
 
 
+def _gpu_execution_summary(
+    *,
+    use_gpu: bool,
+    gpu_batch_size: int,
+    gpu_dynamic_batch: bool,
+    gpu_min_batch_size: int,
+    gpu_max_batch_size: int,
+) -> dict[str, object]:
+    return {
+        "enabled": bool(use_gpu),
+        "batch_size": int(gpu_batch_size),
+        "dynamic_batch": bool(gpu_dynamic_batch),
+        "min_batch_size": int(gpu_min_batch_size),
+        "max_batch_size": int(gpu_max_batch_size),
+    }
+
+
 def _estimate_low_resolution_projected_offset(
     left_dom_path: str | Path,
     right_dom_path: str | Path,
@@ -1396,6 +1414,13 @@ def match_dom_pair(
             "parallel_cpu_backend": parallel_cpu_backend,
             "parallel_cpu_worker_count": parallel_cpu_worker_count,
             "tile_match_backend": tile_match_backend,
+            "gpu": _gpu_execution_summary(
+                use_gpu=use_gpu,
+                gpu_batch_size=gpu_batch_size,
+                gpu_dynamic_batch=gpu_dynamic_batch,
+                gpu_min_batch_size=gpu_min_batch_size,
+                gpu_max_batch_size=gpu_max_batch_size,
+            ),
             "use_gpu": bool(use_gpu),
             "gpu_batch_size": gpu_batch_size,
             "gpu_dynamic_batch": bool(gpu_dynamic_batch),

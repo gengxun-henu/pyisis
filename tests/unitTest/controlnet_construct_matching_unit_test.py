@@ -63,6 +63,7 @@ Updated: 2026-05-20  Geng Xun added regression coverage for clamped dynamic GPU 
 Updated: 2026-05-20  Geng Xun added GPU tile status contract regression coverage.
 Updated: 2026-05-20  Geng Xun added regression coverage for dynamic GPU batch option wiring.
 Updated: 2026-05-20  Geng Xun added regression coverage for GPU backend summary diagnostics and cube cleanup on open failure.
+Updated: 2026-05-20  Geng Xun added regression coverage for GPU summary configuration fields.
 """
 
 from __future__ import annotations
@@ -5091,6 +5092,23 @@ class TestGpuPipelineRouting(unittest.TestCase):
             gpu_min_batch_size=3,
             gpu_max_batch_size=7,
         )
+
+
+class TestGpuSummaryFields(unittest.TestCase):
+    def test_gpu_summary_defaults_when_gpu_disabled(self):
+        summary = image_match._gpu_execution_summary(
+            use_gpu=False,
+            gpu_batch_size=4,
+            gpu_dynamic_batch=True,
+            gpu_min_batch_size=2,
+            gpu_max_batch_size=16,
+        )
+
+        self.assertEqual(summary["enabled"], False)
+        self.assertEqual(summary["batch_size"], 4)
+        self.assertEqual(summary["dynamic_batch"], True)
+        self.assertEqual(summary["min_batch_size"], 2)
+        self.assertEqual(summary["max_batch_size"], 16)
 
 
 if __name__ == "__main__":

@@ -6,6 +6,7 @@ Updated: 2026-05-03  Geng Xun batched process-pool tile tasks so each worker sha
 Updated: 2026-05-20  Geng Xun added prepared GPU tile payload construction for future batching.
 Updated: 2026-05-20  Geng Xun routed all-GPU tile task batches through a dedicated pipeline hook.
 Updated: 2026-05-20  Geng Xun preserved progress callbacks on the dedicated GPU tile route.
+Updated: 2026-05-20  Geng Xun batched dedicated GPU tile matching through prepared payloads.
 """
 
 from __future__ import annotations
@@ -23,7 +24,7 @@ from typing import Any
 import cv2
 import numpy as np
 
-from .gpu_sift import GpuSiftMatchResult, HAS_GPU_SIFT, match_sift_pair
+from .gpu_sift import DynamicGpuBatchController, GpuSiftMatchResult, HAS_GPU_SIFT, match_sift_pair
 from .keypoints import Keypoint
 from .preprocess import (
     StretchStats,
@@ -514,6 +515,51 @@ def _prepare_gpu_tile_payload_from_values(
         right_valid_pixel_count=right_stats.valid_pixel_count,
         left_valid_pixel_ratio=left_stats.valid_pixel_ratio,
         right_valid_pixel_ratio=right_stats.valid_pixel_ratio,
+    )
+
+
+def _tile_result_from_matches(
+    *,
+    payload: PreparedGpuTilePayload,
+    left_keypoints: list[cv2.KeyPoint],
+    right_keypoints: list[cv2.KeyPoint],
+    filtered_matches: list[cv2.DMatch],
+) -> TileMatchResult:
+    if not left_keypoints or not right_keypoints:
+        status = "no_features"
+    elif not filtered_matches:
+        status = "no_matches"
+    else:
+        status = "matched"
+    matched_left_points = tuple(
+        _keypoint_to_isis_coordinates(left_keypoints[match.queryIdx], payload.left_window)
+        for match in filtered_matches
+    )
+    matched_right_points = tuple(
+        _keypoint_to_isis_coordinates(right_keypoints[match.trainIdx], payload.right_window)
+        for match in filtered_matches
+    )
+    return TileMatchResult(
+        stats=TileMatchStats(
+            local_start_x=payload.local_window.start_x,
+            local_start_y=payload.local_window.start_y,
+            width=payload.local_window.width,
+            height=payload.local_window.height,
+            left_start_x=payload.left_window.start_x,
+            left_start_y=payload.left_window.start_y,
+            right_start_x=payload.right_window.start_x,
+            right_start_y=payload.right_window.start_y,
+            left_valid_pixel_count=payload.left_valid_pixel_count,
+            right_valid_pixel_count=payload.right_valid_pixel_count,
+            left_valid_pixel_ratio=payload.left_valid_pixel_ratio,
+            right_valid_pixel_ratio=payload.right_valid_pixel_ratio,
+            left_feature_count=len(left_keypoints),
+            right_feature_count=len(right_keypoints),
+            match_count=len(filtered_matches),
+            status=status,
+        ),
+        left_points=matched_left_points,
+        right_points=matched_right_points,
     )
 
 
@@ -1132,12 +1178,98 @@ def _run_gpu_tile_match_tasks(
 ) -> list[TileMatchResult]:
     if not tasks:
         return []
-    results: list[TileMatchResult] = []
-    for task in tasks:
-        results.append(_match_single_paired_window_worker(task))
-        if progress_callback is not None:
-            progress_callback()
-    return results
+    controller = (
+        DynamicGpuBatchController(
+            initial_batch_size=tasks[0].gpu_batch_size,
+            min_batch_size=gpu_min_batch_size,
+            max_batch_size=gpu_max_batch_size,
+        )
+        if gpu_dynamic_batch
+        else None
+    )
+    indexed_results: list[tuple[int, TileMatchResult]] = []
+    pending_payloads: list[tuple[int, TileMatchTask, PreparedGpuTilePayload]] = []
+
+    def flush_pending() -> None:
+        nonlocal pending_payloads
+        if not pending_payloads:
+            return
+        for index, task, payload in pending_payloads:
+            left_keypoints, right_keypoints, filtered_matches = _match_tile_gpu(
+                payload.left_image,
+                payload.right_image,
+                left_mask=payload.left_mask,
+                right_mask=payload.right_mask,
+                ratio_test=task.ratio_test,
+                matcher_method=task.matcher_method,
+                max_features=task.max_features,
+                sift_octave_layers=task.sift_octave_layers,
+                sift_contrast_threshold=task.sift_contrast_threshold,
+                sift_edge_threshold=task.sift_edge_threshold,
+                sift_sigma=task.sift_sigma,
+            )
+            indexed_results.append(
+                (
+                    index,
+                    _tile_result_from_matches(
+                        payload=payload,
+                        left_keypoints=left_keypoints,
+                        right_keypoints=right_keypoints,
+                        filtered_matches=filtered_matches,
+                    ),
+                )
+            )
+            if progress_callback is not None:
+                progress_callback()
+        if controller is not None:
+            controller.record_batch(success=True, memory_pressure=False, elapsed_seconds=0.0)
+        pending_payloads = []
+
+    for index, task in enumerate(tasks):
+        left_cube = ip.Cube()
+        right_cube = ip.Cube()
+        left_cube.open(task.left_dom_path, "r")
+        right_cube.open(task.right_dom_path, "r")
+        try:
+            left_values = _read_cube_window(left_cube, task.paired_window.left_window, band=task.band)
+            right_values = _read_cube_window(right_cube, task.paired_window.right_window, band=task.band)
+            prepared = _prepare_gpu_tile_payload_from_values(
+                left_values=left_values,
+                right_values=right_values,
+                local_window=task.paired_window.local_window,
+                left_window=task.paired_window.left_window,
+                right_window=task.paired_window.right_window,
+                minimum_value=task.minimum_value,
+                maximum_value=task.maximum_value,
+                lower_percent=task.lower_percent,
+                upper_percent=task.upper_percent,
+                left_invalid_values=_resolved_invalid_values_for_cube(left_cube, task.invalid_values),
+                right_invalid_values=_resolved_invalid_values_for_cube(right_cube, task.invalid_values),
+                special_pixel_abs_threshold=task.special_pixel_abs_threshold,
+                min_valid_pixels=task.min_valid_pixels,
+                valid_pixel_percent_threshold=task.valid_pixel_percent_threshold,
+                invalid_pixel_radius=task.invalid_pixel_radius,
+            )
+        finally:
+            if left_cube.is_open():
+                left_cube.close()
+            if right_cube.is_open():
+                right_cube.close()
+        if isinstance(prepared, TileMatchResult):
+            indexed_results.append((index, prepared))
+            if progress_callback is not None:
+                progress_callback()
+            continue
+        pending_payloads.append((index, task, prepared))
+        batch_limit = controller.current_batch_size if controller is not None else task.gpu_batch_size
+        if len(pending_payloads) >= batch_limit:
+            flush_pending()
+    flush_pending()
+    return _order_indexed_tile_results(indexed_results)
+
+
+def _order_indexed_tile_results(indexed_results: list[tuple[int, TileMatchResult]]) -> list[TileMatchResult]:
+    return [result for _, result in sorted(indexed_results, key=lambda item: item[0])]
 
 
 def _run_parallel_tile_match_tasks(

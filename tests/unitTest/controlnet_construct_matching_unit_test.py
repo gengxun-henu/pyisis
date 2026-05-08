@@ -58,6 +58,7 @@ Updated: 2026-05-20  Geng Xun added CLI regression coverage for disabling dynami
 Updated: 2026-05-20  Geng Xun added prepared GPU tile payload prefilter coverage.
 Updated: 2026-05-20  Geng Xun added GPU-only tile task routing coverage for the dedicated pipeline hook.
 Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile progress callbacks.
+Updated: 2026-05-20  Geng Xun added stable GPU tile result ordering coverage.
 """
 
 from __future__ import annotations
@@ -4610,6 +4611,24 @@ class TestGpuPreparedTilePayload(unittest.TestCase):
         self.assertEqual(payload_or_result.stats.status, "skipped_valid_pixel_ratio_below_threshold")
 
 
+class TestGpuPipelineOrdering(unittest.TestCase):
+    def test_order_gpu_results_restores_input_order(self):
+        first = tile_matching.TileMatchResult(
+            stats=tile_matching.TileMatchStats(0, 0, 16, 16, 0, 0, 0, 0, 16, 16, 1.0, 1.0, 0, 0, 0, "no_features"),
+            left_points=(),
+            right_points=(),
+        )
+        second = tile_matching.TileMatchResult(
+            stats=tile_matching.TileMatchStats(16, 0, 16, 16, 16, 0, 16, 0, 16, 16, 1.0, 1.0, 0, 0, 0, "no_features"),
+            left_points=(),
+            right_points=(),
+        )
+
+        ordered = tile_matching._order_indexed_tile_results([(1, second), (0, first)])
+
+        self.assertEqual(ordered, [first, second])
+
+
 class TestGpuPipelineRouting(unittest.TestCase):
     def test_run_parallel_tasks_invokes_progress_callback_for_each_gpu_task(self):
         def make_gpu_task(start_x: int) -> tile_matching.TileMatchTask:
@@ -4642,34 +4661,57 @@ class TestGpuPipelineRouting(unittest.TestCase):
                 gpu_batch_size=4,
             )
 
-        worker_result = tile_matching.TileMatchResult(
-            stats=tile_matching.TileMatchStats(
-                local_start_x=0,
-                local_start_y=0,
-                width=16,
-                height=16,
-                left_start_x=0,
-                left_start_y=0,
-                right_start_x=0,
-                right_start_y=0,
-                left_valid_pixel_count=256,
-                right_valid_pixel_count=256,
-                left_valid_pixel_ratio=1.0,
-                right_valid_pixel_ratio=1.0,
-                left_feature_count=0,
-                right_feature_count=0,
-                match_count=0,
-                status="ok",
-            ),
-            left_points=(),
-            right_points=(),
-        )
+        def make_result(start_x: int) -> tile_matching.TileMatchResult:
+            return tile_matching.TileMatchResult(
+                stats=tile_matching.TileMatchStats(
+                    local_start_x=start_x,
+                    local_start_y=0,
+                    width=16,
+                    height=16,
+                    left_start_x=start_x,
+                    left_start_y=0,
+                    right_start_x=start_x,
+                    right_start_y=0,
+                    left_valid_pixel_count=256,
+                    right_valid_pixel_count=256,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=0,
+                    right_feature_count=0,
+                    match_count=0,
+                    status="skipped_valid_pixel_ratio_below_threshold",
+                ),
+                left_points=(),
+                right_points=(),
+            )
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
         callback = mock.Mock()
 
-        with mock.patch.object(
+        with mock.patch.object(tile_matching.ip, "Cube", side_effect=[FakeCube(), FakeCube(), FakeCube(), FakeCube()]), mock.patch.object(
             tile_matching,
-            "_match_single_paired_window_worker",
-            return_value=worker_result,
+            "_read_cube_window",
+            return_value=np.zeros((16, 16), dtype=np.float64),
+        ), mock.patch.object(
+            tile_matching,
+            "_resolved_invalid_values_for_cube",
+            return_value=(),
+        ), mock.patch.object(
+            tile_matching,
+            "_prepare_gpu_tile_payload_from_values",
+            side_effect=[make_result(0), make_result(16)],
         ):
             tile_matching._run_parallel_tile_match_tasks(
                 [make_gpu_task(0), make_gpu_task(16)],

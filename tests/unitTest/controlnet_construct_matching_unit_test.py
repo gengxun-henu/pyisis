@@ -67,6 +67,7 @@ Updated: 2026-05-20  Geng Xun added regression coverage for GPU summary configur
 Updated: 2026-05-20  Geng Xun added regression coverage for conservative GPU batch defaults and effective GPU route gating.
 Updated: 2026-05-20  Geng Xun added GPU fallback statistics regression coverage for dynamic batch feedback.
 Updated: 2026-05-20  Geng Xun added regression coverage for batched GPU pair matcher dispatch.
+Updated: 2026-05-20  Geng Xun added review regression coverage for effective GPU summaries and benchmark counts.
 """
 
 from __future__ import annotations
@@ -5365,6 +5366,49 @@ class TestGpuSummaryFields(unittest.TestCase):
         self.assertEqual(summary["runtime"]["cpu_fallback_pair_count"], 1)
         self.assertEqual(summary["runtime"]["gpu_failure_count"], 1)
         self.assertEqual(summary["runtime"]["batch_size_histogram"], {4: 1})
+
+    def test_gpu_summary_distinguishes_requested_from_effective_execution(self):
+        summary = image_match._gpu_execution_summary(
+            use_gpu=True,
+            gpu_effective=False,
+            gpu_batch_size=4,
+            gpu_dynamic_batch=True,
+            gpu_min_batch_size=2,
+            gpu_max_batch_size=16,
+        )
+
+        self.assertTrue(summary["requested"])
+        self.assertFalse(summary["enabled"])
+
+
+class TestGpuBenchmarkScript(unittest.TestCase):
+    def test_benchmark_summary_reports_point_and_tile_match_counts_separately(self):
+        spec = importlib.util.spec_from_file_location(
+            "benchmark_gpu_tile_pipeline",
+            PROJECT_ROOT / "scripts" / "benchmark_gpu_tile_pipeline.py",
+        )
+        benchmark_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(benchmark_module)
+
+        summary = {
+            "point_count": 3,
+            "matched_tile_count": 2,
+            "gpu": {"enabled": True},
+            "tiles": [
+                {"match_count": 5},
+                {"match_count": 7},
+            ],
+        }
+
+        result = benchmark_module._summarize_benchmark_case(
+            summary,
+            elapsed_seconds=1.25,
+            use_gpu=True,
+        )
+
+        self.assertEqual(result["point_count"], 3)
+        self.assertEqual(result["tile_match_count_total"], 12)
+        self.assertNotIn("total_match_count", result)
 
 
 if __name__ == "__main__":

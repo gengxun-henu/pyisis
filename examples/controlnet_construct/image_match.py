@@ -892,14 +892,17 @@ def _tile_execution_backend_summary(
 def _gpu_execution_summary(
     *,
     use_gpu: bool,
+    gpu_effective: bool | None = None,
     gpu_batch_size: int,
     gpu_dynamic_batch: bool,
     gpu_min_batch_size: int,
     gpu_max_batch_size: int,
     gpu_stats: GpuSiftStats | None = None,
 ) -> dict[str, object]:
+    effective_gpu = bool(use_gpu) if gpu_effective is None else bool(gpu_effective)
     summary: dict[str, object] = {
-        "enabled": bool(use_gpu),
+        "requested": bool(use_gpu),
+        "enabled": effective_gpu,
         "batch_size": int(gpu_batch_size),
         "dynamic_batch": bool(gpu_dynamic_batch),
         "min_batch_size": int(gpu_min_batch_size),
@@ -1439,6 +1442,7 @@ def match_dom_pair(
             "tile_match_backend": tile_match_backend,
             "gpu": _gpu_execution_summary(
                 use_gpu=use_gpu,
+                gpu_effective=tile_match_backend == "gpu_tile_pipeline",
                 gpu_batch_size=gpu_batch_size,
                 gpu_dynamic_batch=gpu_dynamic_batch,
                 gpu_min_batch_size=gpu_min_batch_size,

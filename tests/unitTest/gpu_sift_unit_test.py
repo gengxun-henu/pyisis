@@ -8,6 +8,7 @@ Updated: 2026-05-07  Geng Xun registered direct gpu_sift imports for dataclass d
 Updated: 2026-05-07  Geng Xun added pair matcher CPU fallback coverage.
 Updated: 2026-05-07  Geng Xun added matcher method validation regression coverage.
 Updated: 2026-05-20  Geng Xun aligned GPU SIFT batch default coverage with conservative tile defaults.
+Updated: 2026-05-20  Geng Xun added batched GPU factory fallback regression coverage.
 """
 
 import importlib.util
@@ -285,3 +286,41 @@ class TestGpuSiftPairMatcher:
         cpu_match.assert_called_once()
         assert cpu_match.call_args.kwargs["matcher_method"] == "flann"
         assert cpu_match.call_args.kwargs["failure_reason"] == "gpu_flann_unsupported"
+
+    def test_match_pairs_falls_back_to_cpu_when_cuda_factory_fails(self, monkeypatch):
+        left = np.zeros((32, 32), dtype=np.uint8)
+        right = left.copy()
+        mask = np.ones((32, 32), dtype=np.uint8) * 255
+        expected = _gpu_sift_module.GpuSiftMatchResult(
+            left_keypoints=[],
+            right_keypoints=[],
+            matches=[],
+            used_gpu=False,
+            used_cpu_fallback=True,
+            failure_reason="factory failed",
+        )
+        cpu_match = Mock(return_value=expected)
+
+        monkeypatch.setattr(_gpu_sift_module, "HAS_GPU_SIFT", True)
+        monkeypatch.setattr(_gpu_sift_module, "_cpu_match_sift_pair", cpu_match)
+        monkeypatch.setattr(
+            _gpu_sift_module.cv2.cuda,
+            "SIFT_create",
+            Mock(side_effect=_gpu_sift_module.cv2.error("factory failed")),
+            raising=False,
+        )
+
+        results = _gpu_sift_module.match_sift_pairs(
+            [(left, right, mask, mask), (left, right, mask, mask)],
+            ratio_test=0.75,
+            matcher_method="bf",
+            sift_kwargs={"nfeatures": 50},
+            use_gpu=True,
+        )
+
+        assert results == [expected, expected]
+        assert cpu_match.call_count == 2
+        assert all(
+            call.kwargs["failure_reason"] == "factory failed"
+            for call in cpu_match.call_args_list
+        )

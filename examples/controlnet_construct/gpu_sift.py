@@ -415,8 +415,25 @@ def match_sift_pairs(
             for left_image, right_image, left_mask, right_mask in pairs
         ]
 
-    sift = cv2.cuda.SIFT_create(**sift_kwargs)
-    matcher = cv2.cuda.DescriptorMatcher_createBFMatcher(cv2.NORM_L2)
+    try:
+        sift = cv2.cuda.SIFT_create(**sift_kwargs)
+        matcher = cv2.cuda.DescriptorMatcher_createBFMatcher(cv2.NORM_L2)
+    except cv2.error as exc:
+        logger.warning("GPU SIFT batch setup failed, falling back to CPU", exc_info=True)
+        return [
+            _cpu_match_sift_pair(
+                left_image,
+                right_image,
+                left_mask=left_mask,
+                right_mask=right_mask,
+                ratio_test=ratio_test,
+                matcher_method=matcher_method,
+                sift_kwargs=sift_kwargs,
+                failure_reason=str(exc),
+            )
+            for left_image, right_image, left_mask, right_mask in pairs
+        ]
+
     results: list[GpuSiftMatchResult] = []
     for left_image, right_image, left_mask, right_mask in pairs:
         try:

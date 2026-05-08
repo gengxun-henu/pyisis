@@ -24,7 +24,6 @@ def _summarize_benchmark_case(
         "elapsed_seconds": elapsed_seconds,
         "matched_tile_count": summary.get("matched_tile_count"),
         "point_count": summary.get("point_count"),
-        "total_match_count": summary.get("point_count"),
         "gpu": summary.get("gpu"),
     }
     tiles = summary.get("tiles")

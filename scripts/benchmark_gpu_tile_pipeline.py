@@ -6,12 +6,17 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
 import time
 
-from examples.controlnet_construct.image_match import match_dom_pair
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 
 def _run_case(args: argparse.Namespace, *, use_gpu: bool) -> dict[str, object]:
+    from examples.controlnet_construct.image_match import match_dom_pair
+
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     start = time.perf_counter()

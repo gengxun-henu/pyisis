@@ -56,6 +56,7 @@ Updated: 2026-05-20  Geng Xun added GPU tile no-feature contract regression cove
 Updated: 2026-05-20  Geng Xun added config parser coverage for dynamic GPU batch defaults.
 Updated: 2026-05-20  Geng Xun added CLI regression coverage for disabling dynamic GPU tile batching.
 Updated: 2026-05-20  Geng Xun added prepared GPU tile payload prefilter coverage.
+Updated: 2026-05-20  Geng Xun added GPU-only tile task routing coverage for the dedicated pipeline hook.
 """
 
 from __future__ import annotations
@@ -4606,6 +4607,51 @@ class TestGpuPreparedTilePayload(unittest.TestCase):
 
         self.assertIsInstance(payload_or_result, tile_matching.TileMatchResult)
         self.assertEqual(payload_or_result.stats.status, "skipped_valid_pixel_ratio_below_threshold")
+
+
+class TestGpuPipelineRouting(unittest.TestCase):
+    def test_run_parallel_tasks_uses_gpu_pipeline_when_requested(self):
+        tasks = [
+            tile_matching.TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=tile_matching.PairedTileWindow(
+                    local_window=TileWindow(0, 0, 16, 16),
+                    left_window=TileWindow(0, 0, 16, 16),
+                    right_window=TileWindow(0, 0, 16, 16),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=64,
+                valid_pixel_percent_threshold=0.05,
+                invalid_pixel_radius=1,
+                ratio_test=0.75,
+                matcher_method="bf",
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                use_gpu=True,
+                gpu_batch_size=4,
+            )
+        ]
+        expected = []
+
+        with mock.patch.object(tile_matching, "_run_gpu_tile_match_tasks", return_value=expected) as gpu_mock:
+            result = tile_matching._run_parallel_tile_match_tasks(
+                tasks,
+                max_workers=2,
+                show_progress=False,
+            )
+
+        self.assertIs(result, expected)
+        gpu_mock.assert_called_once()
 
 
 if __name__ == "__main__":

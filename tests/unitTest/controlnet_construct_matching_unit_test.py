@@ -68,6 +68,7 @@ Updated: 2026-05-20  Geng Xun added regression coverage for conservative GPU bat
 Updated: 2026-05-20  Geng Xun added GPU fallback statistics regression coverage for dynamic batch feedback.
 Updated: 2026-05-20  Geng Xun added regression coverage for batched GPU pair matcher dispatch.
 Updated: 2026-05-20  Geng Xun added review regression coverage for effective GPU summaries and benchmark counts.
+Updated: 2026-05-20  Geng Xun added runtime fallback coverage for effective GPU summary reporting.
 """
 
 from __future__ import annotations
@@ -4315,6 +4316,75 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["parallel_cpu_backend"], "gpu_tile_pipeline")
         self.assertEqual(summary["tile_match_backend"], "gpu_tile_pipeline")
         self.assertEqual(summary["parallel_cpu_worker_count"], 0)
+
+    def test_match_dom_pair_reports_gpu_disabled_when_runtime_falls_back_to_cpu(self):
+        image = _build_textured_test_image(128, 128)
+        synthetic_tile_results = [
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=0,
+                    right_feature_count=0,
+                    match_count=0,
+                    status="skipped_no_features",
+                ),
+                left_points=(),
+                right_points=(),
+            )
+        ]
+
+        def cpu_fallback_parallel_tasks(*_args, **kwargs):
+            stats = kwargs["gpu_stats"]
+            stats.record_pair_result(used_cpu_fallback=True)
+            stats.record_gpu_failure()
+            return synthetic_tile_results
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_gpu_runtime_fallback.cub",
+                right_name="right_gpu_runtime_fallback.cub",
+            )
+            with mock.patch.object(
+                image_match,
+                "_run_parallel_tile_match_tasks",
+                side_effect=cpu_fallback_parallel_tasks,
+            ), mock.patch.object(
+                image_match,
+                "_can_use_dedicated_gpu_tile_route",
+                return_value=True,
+            ):
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                    num_worker_parallel_cpu=2,
+                    use_gpu=True,
+                )
+
+        self.assertEqual(summary["tile_match_backend"], "gpu_tile_pipeline")
+        self.assertTrue(summary["gpu"]["requested"])
+        self.assertFalse(summary["gpu"]["enabled"])
+        self.assertEqual(summary["gpu"]["runtime"]["gpu_batch_count"], 0)
+        self.assertEqual(summary["gpu"]["runtime"]["cpu_fallback_pair_count"], 1)
 
     def test_match_dom_pair_to_key_files_writes_tile_validity_metadata(self):
         values = np.zeros((32, 64), dtype=np.float64)

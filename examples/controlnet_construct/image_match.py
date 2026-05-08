@@ -900,6 +900,8 @@ def _gpu_execution_summary(
     gpu_stats: GpuSiftStats | None = None,
 ) -> dict[str, object]:
     effective_gpu = bool(use_gpu) if gpu_effective is None else bool(gpu_effective)
+    if gpu_stats is not None:
+        effective_gpu = effective_gpu and gpu_stats.gpu_batch_count > 0
     summary: dict[str, object] = {
         "requested": bool(use_gpu),
         "enabled": effective_gpu,

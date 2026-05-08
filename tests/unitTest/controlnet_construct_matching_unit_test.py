@@ -69,6 +69,7 @@ Updated: 2026-05-20  Geng Xun added GPU fallback statistics regression coverage 
 Updated: 2026-05-20  Geng Xun added regression coverage for batched GPU pair matcher dispatch.
 Updated: 2026-05-20  Geng Xun added review regression coverage for effective GPU summaries and benchmark counts.
 Updated: 2026-05-20  Geng Xun added runtime fallback coverage for effective GPU summary reporting.
+Updated: 2026-05-20  Geng Xun added deep-adapter scaffolding regression coverage for cross-method fallback rejection and explicit dependency errors.
 """
 
 from __future__ import annotations
@@ -1231,6 +1232,31 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
     def test_normalize_matcher_method_rejects_unknown_method(self):
         with self.assertRaisesRegex(ValueError, "Unsupported matcher_method"):
             tile_matching_module._normalize_matcher_method("unknown-matcher")
+
+    def test_deep_adapter_rejects_cross_method_fallback(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+        adapter = deep_adapter_module.DeepMatcherAdapter()
+
+        with self.assertRaisesRegex(
+            ValueError,
+            "Cross-method fallback is not allowed",
+        ):
+            adapter.resolve_fallback_method(requested_method="lightglue", fallback_method="bf")
+
+    def test_deep_adapter_missing_dependency_error_is_explicit(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+        adapter = deep_adapter_module.DeepMatcherAdapter()
+
+        with self.assertRaisesRegex(
+            deep_adapter_module.DeepDependencyError,
+            "Missing dependency 'kornia' for deep matcher method 'lightglue'",
+        ):
+            adapter.require_dependency(
+                requested_method="lightglue",
+                dependency_name="kornia",
+                available=False,
+                install_hint="Install with: pip install kornia",
+            )
 
     def test_match_dom_pair_passes_matcher_method_into_parallel_tile_tasks(self):
         width = 128

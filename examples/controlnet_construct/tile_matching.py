@@ -9,6 +9,7 @@ Updated: 2026-05-20  Geng Xun preserved progress callbacks on the dedicated GPU 
 Updated: 2026-05-20  Geng Xun batched dedicated GPU tile matching through prepared payloads.
 Updated: 2026-05-20  Geng Xun clamped dynamic GPU batch initialization to configured limits.
 Updated: 2026-05-20  Geng Xun wired dynamic GPU batch options through parallel tile routing.
+Updated: 2026-05-20  Geng Xun made dedicated GPU tile cube cleanup cover open failures.
 """
 
 from __future__ import annotations
@@ -1231,9 +1232,9 @@ def _run_gpu_tile_match_tasks(
     for index, task in enumerate(tasks):
         left_cube = ip.Cube()
         right_cube = ip.Cube()
-        left_cube.open(task.left_dom_path, "r")
-        right_cube.open(task.right_dom_path, "r")
         try:
+            left_cube.open(task.left_dom_path, "r")
+            right_cube.open(task.right_dom_path, "r")
             left_values = _read_cube_window(left_cube, task.paired_window.left_window, band=task.band)
             right_values = _read_cube_window(right_cube, task.paired_window.right_window, band=task.band)
             prepared = _prepare_gpu_tile_payload_from_values(

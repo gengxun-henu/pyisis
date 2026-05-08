@@ -31,6 +31,7 @@ Updated: 2026-05-05  Geng Xun added stdout tile-detail trimming plus optional fu
 Updated: 2026-05-20  Geng Xun added dynamic GPU batch config defaults and CLI options.
 Updated: 2026-05-20  Geng Xun added a --no-gpu-dynamic-batch CLI opt-out.
 Updated: 2026-05-20  Geng Xun wired dynamic GPU batch options into image-match execution.
+Updated: 2026-05-20  Geng Xun corrected GPU tile-route backend diagnostics.
 """
 
 from __future__ import annotations
@@ -829,6 +830,55 @@ def filter_stereo_pair_key_files_with_ransac(
     )
 
 
+def _tile_execution_backend_summary(
+    *,
+    use_parallel_cpu: bool,
+    use_gpu: bool,
+    candidate_window_count: int,
+    resolved_num_worker_parallel_cpu: int,
+) -> dict[str, object]:
+    parallel_cpu_requested = bool(use_parallel_cpu)
+    if candidate_window_count <= 0:
+        return {
+            "parallel_cpu_requested": parallel_cpu_requested,
+            "num_worker_parallel_cpu": resolved_num_worker_parallel_cpu,
+            "parallel_cpu_used": False,
+            "parallel_cpu_backend": "serial",
+            "parallel_cpu_worker_count": 0,
+            "tile_match_backend": "serial",
+        }
+
+    if parallel_cpu_requested and candidate_window_count > 1:
+        candidate_worker_count = min(candidate_window_count, resolved_num_worker_parallel_cpu)
+        if candidate_worker_count > 1:
+            if use_gpu:
+                return {
+                    "parallel_cpu_requested": parallel_cpu_requested,
+                    "num_worker_parallel_cpu": resolved_num_worker_parallel_cpu,
+                    "parallel_cpu_used": False,
+                    "parallel_cpu_backend": "gpu_tile_pipeline",
+                    "parallel_cpu_worker_count": 0,
+                    "tile_match_backend": "gpu_tile_pipeline",
+                }
+            return {
+                "parallel_cpu_requested": parallel_cpu_requested,
+                "num_worker_parallel_cpu": resolved_num_worker_parallel_cpu,
+                "parallel_cpu_used": True,
+                "parallel_cpu_backend": "process_pool_batched_cube_reuse",
+                "parallel_cpu_worker_count": candidate_worker_count,
+                "tile_match_backend": "process_pool_batched_cube_reuse",
+            }
+
+    return {
+        "parallel_cpu_requested": parallel_cpu_requested,
+        "num_worker_parallel_cpu": resolved_num_worker_parallel_cpu,
+        "parallel_cpu_used": False,
+        "parallel_cpu_backend": "serial",
+        "parallel_cpu_worker_count": 1,
+        "tile_match_backend": "serial",
+    }
+
+
 def _estimate_low_resolution_projected_offset(
     left_dom_path: str | Path,
     right_dom_path: str | Path,
@@ -1046,6 +1096,7 @@ def match_dom_pair(
         parallel_cpu_used = False
         parallel_cpu_backend = "serial"
         parallel_cpu_worker_count = 0
+        tile_match_backend = "serial"
         low_resolution_offset_summary = _estimate_low_resolution_projected_offset(
             left_dom_path,
             right_dom_path,
@@ -1208,9 +1259,16 @@ def match_dom_pair(
                         finally:
                             if progress_bar is not None:
                                 progress_bar.finish()
-                        parallel_cpu_used = True
-                        parallel_cpu_backend = "process_pool_batched_cube_reuse"
-                        parallel_cpu_worker_count = candidate_worker_count
+                        backend_summary = _tile_execution_backend_summary(
+                            use_parallel_cpu=parallel_cpu_requested,
+                            use_gpu=use_gpu,
+                            candidate_window_count=len(candidate_windows),
+                            resolved_num_worker_parallel_cpu=resolved_num_worker_parallel_cpu,
+                        )
+                        parallel_cpu_used = bool(backend_summary["parallel_cpu_used"])
+                        parallel_cpu_backend = str(backend_summary["parallel_cpu_backend"])
+                        parallel_cpu_worker_count = int(backend_summary["parallel_cpu_worker_count"])
+                        tile_match_backend = str(backend_summary["tile_match_backend"])
                     else:
                         try:
                             tile_results = _run_serial_tile_match_tasks(
@@ -1247,6 +1305,7 @@ def match_dom_pair(
                             if progress_bar is not None:
                                 progress_bar.finish()
                         parallel_cpu_worker_count = 1
+                        tile_match_backend = "serial"
                 else:
                     try:
                         tile_results = _run_serial_tile_match_tasks(
@@ -1283,6 +1342,7 @@ def match_dom_pair(
                         if progress_bar is not None:
                             progress_bar.finish()
                     parallel_cpu_worker_count = 1
+                    tile_match_backend = "serial"
 
                 for tile_result in tile_results:
                     tile_summaries.append(tile_result.stats)
@@ -1335,6 +1395,7 @@ def match_dom_pair(
             "parallel_cpu_used": parallel_cpu_used,
             "parallel_cpu_backend": parallel_cpu_backend,
             "parallel_cpu_worker_count": parallel_cpu_worker_count,
+            "tile_match_backend": tile_match_backend,
             "use_gpu": bool(use_gpu),
             "gpu_batch_size": gpu_batch_size,
             "gpu_dynamic_batch": bool(gpu_dynamic_batch),
@@ -1455,6 +1516,7 @@ def match_dom_pair_to_key_files(
             "parallel_cpu_used": summary["parallel_cpu_used"],
             "parallel_cpu_backend": summary["parallel_cpu_backend"],
             "parallel_cpu_worker_count": summary["parallel_cpu_worker_count"],
+            "tile_match_backend": summary["tile_match_backend"],
             "low_resolution_offset": summary["low_resolution_offset"],
             "low_resolution_matching_target_long_edge": summary["low_resolution_matching_target_long_edge"],
             "resolved_low_resolution_level": summary["resolved_low_resolution_level"],

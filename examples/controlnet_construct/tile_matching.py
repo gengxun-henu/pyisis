@@ -5,6 +5,7 @@ Created: 2026-04-24
 Updated: 2026-05-03  Geng Xun batched process-pool tile tasks so each worker shard reuses opened DOM cubes.
 Updated: 2026-05-20  Geng Xun added prepared GPU tile payload construction for future batching.
 Updated: 2026-05-20  Geng Xun routed all-GPU tile task batches through a dedicated pipeline hook.
+Updated: 2026-05-20  Geng Xun preserved progress callbacks on the dedicated GPU tile route.
 """
 
 from __future__ import annotations
@@ -1124,6 +1125,7 @@ def _run_gpu_tile_match_tasks(
     tasks: list[TileMatchTask],
     *,
     show_progress: bool = True,
+    progress_callback: Callable[[], None] | None = None,
     gpu_dynamic_batch: bool = True,
     gpu_min_batch_size: int = 2,
     gpu_max_batch_size: int = 16,
@@ -1133,6 +1135,8 @@ def _run_gpu_tile_match_tasks(
     results: list[TileMatchResult] = []
     for task in tasks:
         results.append(_match_single_paired_window_worker(task))
+        if progress_callback is not None:
+            progress_callback()
     return results
 
 
@@ -1151,7 +1155,11 @@ def _run_parallel_tile_match_tasks(
     if not tasks:
         return []
     if all(getattr(task, "use_gpu", False) for task in tasks):
-        return _run_gpu_tile_match_tasks(tasks, show_progress=show_progress)
+        return _run_gpu_tile_match_tasks(
+            tasks,
+            show_progress=show_progress,
+            progress_callback=progress_callback,
+        )
     chunks = _chunk_tile_match_task_payloads(tasks, max_workers=max_workers)
     manager = None
     progress_queue = None

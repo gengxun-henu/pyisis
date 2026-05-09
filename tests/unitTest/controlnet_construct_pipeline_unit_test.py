@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-05
+Last Modified: 2026-05-09
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -31,10 +31,14 @@ Updated: 2026-05-04  Geng Xun added CLI coverage for the remaining reduced visua
 Updated: 2026-05-05  Geng Xun added regression coverage for compact default stdout summaries and explicit full-detail stdout opt-in in controlnet_stereopair.py.
 Updated: 2026-05-05  Geng Xun added regression coverage for routing pipeline step JSON outputs into files while keeping terminal output summary-only.
 Updated: 2026-05-05  Geng Xun aligned pipeline-wrapper regressions with explicit report-json forwarding for overlap and post-merge summary CLIs.
+Updated: 2026-05-08  Geng Xun replaced the overbuilt deep-matcher pipeline forwarding regression with a lightweight matcher parser acceptance check.
+Updated: 2026-05-08  Geng Xun split deep-matcher parser acceptance from a lightweight pipeline forwarding assertion that checks matcher-method passthrough.
+Updated: 2026-05-09  Geng Xun added wrapper-help regression coverage requiring superglue/lightglue/loftr method strings.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import io
 import os
@@ -76,7 +80,11 @@ from controlnet_construct.dom2ori import (
     convert_paired_dom_key_files_via_ground_functions,
     convert_points_via_ground_functions,
 )
-from controlnet_construct.image_match import match_dom_pair_to_key_files
+from controlnet_construct.image_match import (
+    build_argument_parser as build_controlnet_stereopair_argument_parser,
+    main as image_match_main,
+    match_dom_pair_to_key_files,
+)
 from controlnet_construct.image_overlap import (
     GeoBounds,
     _minimal_longitude_interval,
@@ -1665,6 +1673,48 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("Matcher method: flann", completed.stdout)
         self.assertIn("CPU parallel tile matching: enabled", completed.stdout)
         self.assertIn("CPU parallel worker limit: 3", completed.stdout)
+
+
+    def test_image_match_parser_accepts_deep_matcher_method(self):
+        parser = build_controlnet_stereopair_argument_parser()
+        parsed = parser.parse_args(
+            [
+                "left_dom.cub",
+                "right_dom.cub",
+                "left.key",
+                "right.key",
+                "--matcher-method",
+                "lightglue",
+            ]
+        )
+        self.assertEqual(parsed.matcher_method, "lightglue")
+
+    def test_pipeline_forwards_deep_matcher_method(self):
+        fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
+        stdout = io.StringIO()
+
+        with (
+            patch("controlnet_construct.image_match.match_dom_pair_to_key_files", return_value=fake_result) as match_mock,
+            patch.object(sys, "stdout", stdout),
+        ):
+            image_match_main(
+                [
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left.key",
+                    "right.key",
+                    "--matcher-method",
+                    "lightglue",
+                ]
+            )
+
+        self.assertEqual(match_mock.call_args.kwargs["matcher_method"], "lightglue")
+
+    def test_batch_wrapper_accepts_lightglue_in_help_text(self):
+        content = Path("examples/controlnet_construct/run_image_match_batch_example.sh").read_text(encoding="utf-8")
+        self.assertIn("lightglue", content)
+        self.assertIn("superglue", content)
+        self.assertIn("loftr", content)
 
     def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:

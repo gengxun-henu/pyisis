@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-21
+Last Modified: 2026-05-22
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -74,6 +74,7 @@ Updated: 2026-05-20  Geng Xun added deep matcher dispatch regression coverage fo
 Updated: 2026-05-20  Geng Xun added deep adapter normalization coverage for canonical keypoint/match triplet outputs.
 Updated: 2026-05-20  Geng Xun added regression coverage ensuring lightweight deep fallback frontends and matchers emit deterministic non-empty correspondences for non-empty inputs.
 Updated: 2026-05-21  Geng Xun replaced synthetic deep correspondences assertions with explicit missing-dependency error coverage.
+Updated: 2026-05-22  Geng Xun added deep dependency normalization and deep adapter reuse regression coverage for tile dispatch.
 """
 
 from __future__ import annotations
@@ -1299,6 +1300,36 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 prefer_gpu=False,
             )
 
+    def test_deep_adapter_wraps_matcher_dependency_error_as_deep_dependency_error(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+        image = np.arange(64, dtype=np.float32).reshape(8, 8)
+
+        class _RaisingMatcher:
+            def match(self, **_kwargs):
+                raise deep_adapter_module.DeepMatcherError(
+                    "Deep matcher 'lightglue' dependency unavailable: missing 'lightglue'. "
+                    "Install with `pip install lightglue`."
+                )
+
+        adapter = deep_adapter_module.DeepMatcherAdapter(prefer_gpu=False)
+        with mock.patch.object(
+            deep_adapter_module,
+            "build_deep_matcher",
+            return_value=_RaisingMatcher(),
+        ), mock.patch.object(
+            adapter._superpoint,
+            "extract",
+            return_value={"keypoints": np.array([[1.0, 2.0]], dtype=np.float32), "descriptors": np.zeros((1, 256), dtype=np.float32)},
+        ):
+            with self.assertRaises(deep_adapter_module.DeepDependencyError) as raised:
+                adapter.match_pair(
+                    matcher_method="lightglue",
+                    left_image=image,
+                    right_image=image,
+                )
+        self.assertEqual(raised.exception.method, "lightglue")
+        self.assertIn("missing", raised.exception.reason.lower())
+
     def test_match_tile_dispatches_to_deep_adapter_for_lightglue(self):
         calls = []
         keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
@@ -1396,6 +1427,58 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             )
         self.assertEqual(stub.calls[0][0], "loftr")
         self.assertTrue(stub.calls[0][1])
+
+    def test_match_tile_reuses_deep_adapter_instance_for_repeated_dispatch(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        gradient = np.arange(256, dtype=np.float64).reshape(16, 16)
+        constructor_calls = 0
+
+        class _StubAdapter:
+            def match_pair_with_fallback(self, **_kwargs):
+                keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+                return deep_matchers_module.DeepMatchResult(
+                    left_keypoints=(keypoint,),
+                    right_keypoints=(keypoint,),
+                    matches=(),
+                )
+
+        def _build_stub_adapter(*_args, **_kwargs):
+            nonlocal constructor_calls
+            constructor_calls += 1
+            return _StubAdapter()
+
+        with mock.patch.object(tile_matching_module, "_DEEP_MATCHER_ADAPTER_CACHE", {}, create=True), mock.patch(
+            "controlnet_construct.tile_matching.DeepMatcherAdapter",
+            side_effect=_build_stub_adapter,
+            create=True,
+        ):
+            for _ in range(2):
+                tile_matching_module._match_tile_from_window_values(
+                    left_values=gradient,
+                    right_values=gradient + 1.0,
+                    local_window=TileWindow(0, 0, 16, 16),
+                    left_window=TileWindow(0, 0, 16, 16),
+                    right_window=TileWindow(0, 0, 16, 16),
+                    minimum_value=None,
+                    maximum_value=None,
+                    lower_percent=0.5,
+                    upper_percent=99.5,
+                    left_invalid_values=(),
+                    right_invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    min_valid_pixels=1,
+                    valid_pixel_percent_threshold=0.0,
+                    invalid_pixel_radius=0,
+                    ratio_test=0.75,
+                    matcher_method="lightglue",
+                    max_features=None,
+                    sift_octave_layers=3,
+                    sift_contrast_threshold=0.04,
+                    sift_edge_threshold=10.0,
+                    sift_sigma=1.6,
+                    use_gpu=True,
+                )
+        self.assertEqual(constructor_calls, 1)
 
     def test_match_dom_pair_passes_matcher_method_into_parallel_tile_tasks(self):
         width = 128

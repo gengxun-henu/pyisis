@@ -13,6 +13,7 @@ Updated: 2026-05-20  Geng Xun made dedicated GPU tile cube cleanup cover open fa
 Updated: 2026-05-20  Geng Xun enforced conservative GPU batch defaults and effective GPU route gating.
 Updated: 2026-05-20  Geng Xun propagated GPU fallback statistics into dynamic batch execution.
 Updated: 2026-05-20  Geng Xun dispatched homogeneous GPU tile payloads through the batched pair matcher.
+Updated: 2026-05-22  Geng Xun reused deep matcher adapters across tile dispatch calls.
 """
 
 from __future__ import annotations
@@ -56,6 +57,7 @@ DEEP_MATCHER_METHODS = ("superglue", "lightglue", "loftr")
 DEFAULT_FLANN_TREES = 5
 DEFAULT_FLANN_CHECKS = 50
 DEFAULT_GPU_BATCH_SIZE = 4
+_DEEP_MATCHER_ADAPTER_CACHE: dict[bool, DeepMatcherAdapter] = {}
 
 
 @dataclass(frozen=True, slots=True)
@@ -146,6 +148,15 @@ def _normalize_matcher_method(matcher_method: str) -> str:
             f"Unsupported matcher_method {matcher_method!r}. Expected one of {SUPPORTED_MATCHER_METHODS}."
         )
     return resolved_matcher_method
+
+
+def _get_deep_matcher_adapter(*, prefer_gpu: bool) -> DeepMatcherAdapter:
+    cache_key = bool(prefer_gpu)
+    adapter = _DEEP_MATCHER_ADAPTER_CACHE.get(cache_key)
+    if adapter is None:
+        adapter = DeepMatcherAdapter(prefer_gpu=cache_key)
+        _DEEP_MATCHER_ADAPTER_CACHE[cache_key] = adapter
+    return adapter
 
 
 def _matcher_diagnostics_for_method(matcher_method: str) -> dict[str, object]:
@@ -752,7 +763,7 @@ def _match_tile_from_window_values(
 
     resolved_matcher_method = _normalize_matcher_method(matcher_method)
     if resolved_matcher_method in DEEP_MATCHER_METHODS:
-        adapter = DeepMatcherAdapter()
+        adapter = _get_deep_matcher_adapter(prefer_gpu=use_gpu)
         deep_match_result = adapter.match_pair_with_fallback(
             matcher_method=resolved_matcher_method,
             left_image=left_image,

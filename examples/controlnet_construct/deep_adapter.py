@@ -16,6 +16,7 @@ class DeepMatcherAdapter:
         self._device = resolve_torch_device(prefer_gpu)
         self._superpoint = SuperPointFrontend()
         self._loftr_frontend = LoFTRFrontend()
+        self._matcher_cache: dict[tuple[str, str], Any] = {}
 
     def _raise_cross_method_fallback_error(self, requested: str, fallback_to: str) -> None:
         raise RuntimeError(
@@ -39,24 +40,34 @@ class DeepMatcherAdapter:
         device: str,
     ) -> DeepMatchResult:
         method = normalize_deep_method(matcher_method)
-
-        if method in ("superglue", "lightglue"):
-            features_left = self._superpoint.extract(left_image, device=device)
-            features_right = self._superpoint.extract(right_image, device=device)
-            matcher = build_deep_matcher(method, device=device)
-            left_points, right_points, scores = matcher.match(
-                features_left=features_left,
-                features_right=features_right,
-                device=device,
-            )
-        else:
-            prepared = self._loftr_frontend.prepare(left_image, right_image, device=device)
-            matcher = build_deep_matcher(method, device=device)
-            left_points, right_points, scores = matcher.match(
-                left_image=prepared["left"],
-                right_image=prepared["right"],
-                device=device,
-            )
+        try:
+            if method in ("superglue", "lightglue"):
+                features_left = self._superpoint.extract(left_image, device=device)
+                features_right = self._superpoint.extract(right_image, device=device)
+                matcher = self._get_cached_matcher(method=method, device=device)
+                left_points, right_points, scores = matcher.match(
+                    features_left=features_left,
+                    features_right=features_right,
+                    device=device,
+                )
+            else:
+                prepared = self._loftr_frontend.prepare(left_image, right_image, device=device)
+                matcher = self._get_cached_matcher(method=method, device=device)
+                left_points, right_points, scores = matcher.match(
+                    left_image=prepared["left"],
+                    right_image=prepared["right"],
+                    device=device,
+                )
+        except DeepDependencyError as error:
+            raise DeepDependencyError(method, error.reason) from error
+        except DeepMatcherError as error:
+            dependency_error = self._normalize_dependency_error(method=method, error=error)
+            if dependency_error is not None:
+                raise dependency_error from error
+            raise
+        except (ModuleNotFoundError, ImportError) as error:
+            missing = getattr(error, "name", "") or str(error)
+            raise DeepDependencyError(method, f"missing optional dependency '{missing}'.") from error
 
         left_kps, right_kps, matches = self._normalize_matches(
             left_points=left_points,
@@ -68,6 +79,21 @@ class DeepMatcherAdapter:
             right_keypoints=tuple(right_kps),
             matches=tuple(matches),
         )
+
+    def _get_cached_matcher(self, *, method: str, device: str) -> Any:
+        cache_key = (method, device)
+        matcher = self._matcher_cache.get(cache_key)
+        if matcher is None:
+            matcher = build_deep_matcher(method, device=device)
+            self._matcher_cache[cache_key] = matcher
+        return matcher
+
+    def _normalize_dependency_error(self, *, method: str, error: DeepMatcherError) -> DeepDependencyError | None:
+        reason = str(error).strip()
+        lowered_reason = reason.lower()
+        if "dependency unavailable" in lowered_reason or "missing optional dependency" in lowered_reason:
+            return DeepDependencyError(method, reason)
+        return None
 
     def match_pair(self, *, matcher_method: str, left_image: Any, right_image: Any) -> DeepMatchResult:
         return self._match_pair_on_device(

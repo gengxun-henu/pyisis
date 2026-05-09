@@ -30,6 +30,7 @@ from typing import Any
 import cv2
 import numpy as np
 
+from .deep_adapter import DeepMatcherAdapter
 from .gpu_sift import DynamicGpuBatchController, GpuSiftMatchResult, GpuSiftStats, HAS_GPU_SIFT, match_sift_pair, match_sift_pairs
 from .keypoints import Keypoint
 from .preprocess import (
@@ -51,6 +52,7 @@ import isis_pybind as ip
 
 DEFAULT_MATCHER_METHOD = "bf"
 SUPPORTED_MATCHER_METHODS = ("bf", "flann", "superglue", "lightglue", "loftr")
+DEEP_MATCHER_METHODS = ("superglue", "lightglue", "loftr")
 DEFAULT_FLANN_TREES = 5
 DEFAULT_FLANN_CHECKS = 50
 DEFAULT_GPU_BATCH_SIZE = 4
@@ -340,6 +342,7 @@ def _match_tile(
     sift_edge_threshold: float,
     sift_sigma: float,
 ) -> tuple[list[cv2.KeyPoint], list[cv2.KeyPoint], list[cv2.DMatch]]:
+    resolved_matcher_method = _normalize_matcher_method(matcher_method)
     sift = _build_sift_detector(
         max_features=max_features,
         octave_layers=sift_octave_layers,
@@ -357,7 +360,7 @@ def _match_tile(
     if not right_keypoints or right_descriptors is None:
         return left_keypoints, [], []
 
-    matcher = _create_descriptor_matcher(matcher_method)
+    matcher = _create_descriptor_matcher(resolved_matcher_method)
     raw_matches = matcher.knnMatch(left_descriptors, right_descriptors, k=2)
 
     filtered_matches: list[cv2.DMatch] = []
@@ -747,14 +750,23 @@ def _match_tile_from_window_values(
             right_points=(),
         )
 
-    if use_gpu and HAS_GPU_SIFT:
+    resolved_matcher_method = _normalize_matcher_method(matcher_method)
+    if resolved_matcher_method in DEEP_MATCHER_METHODS:
+        adapter = DeepMatcherAdapter()
+        left_keypoints, right_keypoints, filtered_matches = adapter.match_pair_with_fallback(
+            matcher_method=resolved_matcher_method,
+            left_image=left_image,
+            right_image=right_image,
+            prefer_gpu=use_gpu,
+        )
+    elif use_gpu and HAS_GPU_SIFT:
         left_keypoints, right_keypoints, filtered_matches = _match_tile_gpu(
             left_image,
             right_image,
             left_mask=left_mask,
             right_mask=right_mask,
             ratio_test=ratio_test,
-            matcher_method=matcher_method,
+            matcher_method=resolved_matcher_method,
             max_features=max_features,
             sift_octave_layers=sift_octave_layers,
             sift_contrast_threshold=sift_contrast_threshold,
@@ -768,7 +780,7 @@ def _match_tile_from_window_values(
             left_mask=left_mask,
             right_mask=right_mask,
             ratio_test=ratio_test,
-            matcher_method=matcher_method,
+            matcher_method=resolved_matcher_method,
             max_features=max_features,
             sift_octave_layers=sift_octave_layers,
             sift_contrast_threshold=sift_contrast_threshold,

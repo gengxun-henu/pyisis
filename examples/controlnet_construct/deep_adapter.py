@@ -38,3 +38,23 @@ class DeepMatcherAdapter:
         method = normalize_deep_method(matcher_method)
         matcher = build_deep_matcher(method, device=self._device)
         return matcher.match(left_image, right_image)
+
+    def match_pair_with_fallback(
+        self,
+        *,
+        matcher_method: str,
+        left_image: Any,
+        right_image: Any,
+        prefer_gpu: bool,
+    ) -> DeepMatchResult:
+        method = normalize_deep_method(matcher_method)
+        primary_device = resolve_torch_device(prefer_gpu)
+        try:
+            primary_matcher = build_deep_matcher(method, device=primary_device)
+            return primary_matcher.match(left_image, right_image)
+        except Exception:
+            if not prefer_gpu:
+                raise
+            fallback_method = self.resolve_fallback_method(requested_method=method, fallback_method=method)
+            fallback_matcher = build_deep_matcher(fallback_method, device=resolve_torch_device(False))
+            return fallback_matcher.match(left_image, right_image)

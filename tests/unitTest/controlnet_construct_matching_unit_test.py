@@ -70,6 +70,7 @@ Updated: 2026-05-20  Geng Xun added regression coverage for batched GPU pair mat
 Updated: 2026-05-20  Geng Xun added review regression coverage for effective GPU summaries and benchmark counts.
 Updated: 2026-05-20  Geng Xun added runtime fallback coverage for effective GPU summary reporting.
 Updated: 2026-05-20  Geng Xun added deep-adapter scaffolding regression coverage for cross-method fallback rejection and explicit dependency errors.
+Updated: 2026-05-20  Geng Xun added deep matcher dispatch regression coverage for lightglue routing and loftr GPU-preferred fallback calls.
 """
 
 from __future__ import annotations
@@ -1245,6 +1246,94 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         error = deep_adapter_module.DeepDependencyError("lightglue", "torch not installed")
         self.assertIn("lightglue", str(error))
         self.assertIn("torch not installed", str(error))
+
+    def test_match_tile_dispatches_to_deep_adapter_for_lightglue(self):
+        calls = []
+        keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+        gradient = np.arange(256, dtype=np.float64).reshape(16, 16)
+
+        class _StubAdapter:
+            def match_pair_with_fallback(self, **kwargs):
+                calls.append(kwargs["matcher_method"])
+                return [keypoint], [keypoint], []
+
+        with mock.patch(
+            "controlnet_construct.tile_matching.DeepMatcherAdapter",
+            return_value=_StubAdapter(),
+            create=True,
+        ):
+            tile_matching_module._match_tile_from_window_values(
+                left_values=gradient,
+                right_values=gradient + 1.0,
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                left_invalid_values=(),
+                right_invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=1,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                ratio_test=0.75,
+                matcher_method="lightglue",
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                use_gpu=True,
+            )
+        self.assertEqual(calls, ["lightglue"])
+
+    def test_match_tile_deep_gpu_failure_falls_back_to_cpu_same_method(self):
+        keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+        gradient = np.arange(256, dtype=np.float64).reshape(16, 16)
+
+        class _StubAdapter:
+            def __init__(self):
+                self.calls = []
+
+            def match_pair_with_fallback(self, **kwargs):
+                self.calls.append((kwargs["matcher_method"], kwargs["prefer_gpu"]))
+                return [keypoint], [keypoint], []
+
+        stub = _StubAdapter()
+        with mock.patch(
+            "controlnet_construct.tile_matching.DeepMatcherAdapter",
+            return_value=stub,
+            create=True,
+        ):
+            tile_matching_module._match_tile_from_window_values(
+                left_values=gradient,
+                right_values=gradient + 1.0,
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                left_invalid_values=(),
+                right_invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=1,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                ratio_test=0.75,
+                matcher_method="loftr",
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                use_gpu=True,
+            )
+        self.assertEqual(stub.calls[0][0], "loftr")
+        self.assertTrue(stub.calls[0][1])
 
     def test_match_dom_pair_passes_matcher_method_into_parallel_tile_tasks(self):
         width = 128

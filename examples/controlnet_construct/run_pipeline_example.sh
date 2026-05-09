@@ -273,8 +273,9 @@ Options:
                                  invalid pixels and image borders. If omitted, this script falls
                                  back to config JSON field ImageMatch.invalid_pixel_radius when present;
                                  otherwise image_match.py keeps its own default.
---matcher-method NAME           Forwarded to image_match.py to select SIFT descriptor matcher backend.
-                                 Supported values: bf, flann. If omitted, this script falls back to
+--matcher-method NAME           Forwarded to image_match.py to select matcher backend.
+                                 Supported values: bf, flann, superglue, lightglue, loftr.
+                                 If omitted, this script falls back to
                                  config JSON field ImageMatch.matcher_method when present; otherwise
                                  image_match.py keeps its own default.
   --enable-low-resolution-offset-estimation

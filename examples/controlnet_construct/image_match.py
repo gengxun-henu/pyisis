@@ -1682,7 +1682,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--tile-validity-cache-dir", default=None, help="Directory for reusable per-DOM tile-validity index cache files.")
     parser.add_argument("--tile-validity-cell-width", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_width"), default=DEFAULT_TILE_VALIDITY_CELL_WIDTH, help=f"Coarse validity-index cell width. Default: {DEFAULT_TILE_VALIDITY_CELL_WIDTH}.")
     parser.add_argument("--tile-validity-cell-height", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_height"), default=DEFAULT_TILE_VALIDITY_CELL_HEIGHT, help=f"Coarse validity-index cell height. Default: {DEFAULT_TILE_VALIDITY_CELL_HEIGHT}.")
-    parser.add_argument("--matcher-method", type=_parse_matcher_method, default=DEFAULT_MATCHER_METHOD, help="Descriptor matcher backend used after SIFT feature extraction. Supported values: bf, flann, superglue, lightglue, loftr. Default: bf.")
+    parser.add_argument("--matcher-method", type=_parse_matcher_method, default=DEFAULT_MATCHER_METHOD, help="Matcher method: bf, flann, superglue, lightglue, loftr (default: bf).")
     parser.add_argument("--ratio-test", type=float, default=0.75, help="Lowe ratio-test threshold used for descriptor filtering.")
     parser.add_argument("--max-features", type=int, default=None, help="Optional maximum number of SIFT features per tile.")
     parser.add_argument("--sift-octave-layers", type=int, default=3, help="Number of octave layers used by the OpenCV SIFT detector.")

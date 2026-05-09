@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-08
+Last Modified: 2026-05-09
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -33,6 +33,7 @@ Updated: 2026-05-05  Geng Xun added regression coverage for routing pipeline ste
 Updated: 2026-05-05  Geng Xun aligned pipeline-wrapper regressions with explicit report-json forwarding for overlap and post-merge summary CLIs.
 Updated: 2026-05-08  Geng Xun replaced the overbuilt deep-matcher pipeline forwarding regression with a lightweight matcher parser acceptance check.
 Updated: 2026-05-08  Geng Xun split deep-matcher parser acceptance from a lightweight pipeline forwarding assertion that checks matcher-method passthrough.
+Updated: 2026-05-09  Geng Xun added wrapper-help regression coverage requiring superglue/lightglue/loftr method strings.
 """
 
 from __future__ import annotations
@@ -1708,6 +1709,12 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             )
 
         self.assertEqual(match_mock.call_args.kwargs["matcher_method"], "lightglue")
+
+    def test_batch_wrapper_accepts_lightglue_in_help_text(self):
+        content = Path("examples/controlnet_construct/run_image_match_batch_example.sh").read_text(encoding="utf-8")
+        self.assertIn("lightglue", content)
+        self.assertIn("superglue", content)
+        self.assertIn("loftr", content)
 
     def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:

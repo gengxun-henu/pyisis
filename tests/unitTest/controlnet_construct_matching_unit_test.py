@@ -1345,7 +1345,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     matches=(),
                 )
 
-        with mock.patch(
+        with mock.patch.object(tile_matching_module, "_DEEP_MATCHER_ADAPTER_CACHE", {}, create=True), mock.patch(
             "controlnet_construct.tile_matching.DeepMatcherAdapter",
             return_value=_StubAdapter(),
             create=True,
@@ -1395,7 +1395,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 )
 
         stub = _StubAdapter()
-        with mock.patch(
+        with mock.patch.object(tile_matching_module, "_DEEP_MATCHER_ADAPTER_CACHE", {}, create=True), mock.patch(
             "controlnet_construct.tile_matching.DeepMatcherAdapter",
             return_value=stub,
             create=True,

@@ -1,4 +1,4 @@
-"""Scaffolding matcher interfaces for deep matcher methods."""
+"""Minimal matcher scaffolding for deep matcher methods."""
 
 from __future__ import annotations
 
@@ -8,6 +8,10 @@ from typing import Any
 from .deep_frontends import normalize_deep_method
 
 
+class DeepMatcherError(RuntimeError):
+    """Raised for unsupported deep matcher operations."""
+
+
 @dataclass(frozen=True, slots=True)
 class DeepMatchResult:
     left_keypoints: tuple[Any, ...] = ()
@@ -15,31 +19,37 @@ class DeepMatchResult:
     matches: tuple[Any, ...] = ()
 
 
-@dataclass(frozen=True, slots=True)
-class _BaseDeepMatcher:
-    method_name: str
-    device: str = "cpu"
+class SuperGlueMatcher:
+    method = "superglue"
+
+    def __init__(self, *, device: str = "cpu") -> None:
+        self.device = device
 
     def match(self, _left_image: Any, _right_image: Any) -> DeepMatchResult:
-        raise NotImplementedError(f"{self.method_name} scaffolding is not implemented yet.")
+        raise DeepMatcherError(f"{self.method} scaffolding is not implemented yet.")
 
 
-class SuperGlueMatcher(_BaseDeepMatcher):
+class LightGlueMatcher:
+    method = "lightglue"
+
     def __init__(self, *, device: str = "cpu") -> None:
-        super().__init__(method_name="superglue", device=device)
+        self.device = device
+
+    def match(self, _left_image: Any, _right_image: Any) -> DeepMatchResult:
+        raise DeepMatcherError(f"{self.method} scaffolding is not implemented yet.")
 
 
-class LightGlueMatcher(_BaseDeepMatcher):
+class LoFTRMatcher:
+    method = "loftr"
+
     def __init__(self, *, device: str = "cpu") -> None:
-        super().__init__(method_name="lightglue", device=device)
+        self.device = device
+
+    def match(self, _left_image: Any, _right_image: Any) -> DeepMatchResult:
+        raise DeepMatcherError(f"{self.method} scaffolding is not implemented yet.")
 
 
-class LoFTRMatcher(_BaseDeepMatcher):
-    def __init__(self, *, device: str = "cpu") -> None:
-        super().__init__(method_name="loftr", device=device)
-
-
-def build_deep_matcher(method: str, *, device: str = "cpu") -> _BaseDeepMatcher:
+def build_deep_matcher(method: str, *, device: str = "cpu") -> SuperGlueMatcher | LightGlueMatcher | LoFTRMatcher:
     normalized = normalize_deep_method(method)
     if normalized == "superglue":
         return SuperGlueMatcher(device=device)
@@ -47,4 +57,4 @@ def build_deep_matcher(method: str, *, device: str = "cpu") -> _BaseDeepMatcher:
         return LightGlueMatcher(device=device)
     if normalized == "loftr":
         return LoFTRMatcher(device=device)
-    raise ValueError(f"Unsupported deep matcher method {method!r}.")
+    raise DeepMatcherError(f"Unsupported deep matcher method {method!r}.")

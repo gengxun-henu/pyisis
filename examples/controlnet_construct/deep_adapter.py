@@ -4,55 +4,35 @@ from __future__ import annotations
 
 from typing import Any
 
-from .deep_frontends import normalize_deep_method, resolve_inference_device
+from .deep_frontends import normalize_deep_method, resolve_torch_device
 from .deep_matchers import DeepMatchResult, build_deep_matcher
 
 
 class DeepDependencyError(RuntimeError):
     """Raised when a deep matcher dependency is unavailable."""
 
+    def __init__(self, method: str, reason: str) -> None:
+        self.method = str(method).strip().lower()
+        self.reason = str(reason).strip()
+        super().__init__(f"Deep matcher dependency unavailable for '{self.method}': {self.reason}")
+
 
 class DeepMatcherAdapter:
-    def __init__(self, *, prefer_gpu: bool = True, gpu_available: bool = False) -> None:
-        self._device = resolve_inference_device(prefer_gpu=prefer_gpu, gpu_available=gpu_available)
+    def __init__(self, *, prefer_gpu: bool = True) -> None:
+        self._device = resolve_torch_device(prefer_gpu)
+
+    def _raise_cross_method_fallback_error(self, requested: str, fallback_to: str) -> None:
+        raise RuntimeError(
+            "Deep matcher fallback must use the same method: "
+            f"requested={requested!r}, fallback_to={fallback_to!r}."
+        )
 
     def resolve_fallback_method(self, *, requested_method: str, fallback_method: str) -> str:
         requested = normalize_deep_method(requested_method)
         fallback = str(fallback_method).strip().lower()
         if fallback != requested:
-            raise ValueError(
-                "Cross-method fallback is not allowed for deep matchers: "
-                f"requested={requested!r}, fallback={fallback!r}."
-            )
+            self._raise_cross_method_fallback_error(requested, fallback)
         return fallback
-
-    def missing_dependency_error(
-        self,
-        *,
-        requested_method: str,
-        dependency_name: str,
-        install_hint: str | None = None,
-    ) -> DeepDependencyError:
-        method = normalize_deep_method(requested_method)
-        detail = f"Missing dependency '{dependency_name}' for deep matcher method '{method}'."
-        if install_hint:
-            detail = f"{detail} {install_hint}".strip()
-        return DeepDependencyError(detail)
-
-    def require_dependency(
-        self,
-        *,
-        requested_method: str,
-        dependency_name: str,
-        available: bool,
-        install_hint: str | None = None,
-    ) -> None:
-        if not available:
-            raise self.missing_dependency_error(
-                requested_method=requested_method,
-                dependency_name=dependency_name,
-                install_hint=install_hint,
-            )
 
     def match_pair(self, *, matcher_method: str, left_image: Any, right_image: Any) -> DeepMatchResult:
         method = normalize_deep_method(matcher_method)

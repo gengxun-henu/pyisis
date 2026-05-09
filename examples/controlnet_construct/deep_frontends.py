@@ -18,9 +18,23 @@ class SuperPointFrontend:
         image_array = np.asarray(image)
         if image_array.size == 0:
             keypoints = np.zeros((0, 2), dtype=np.float32)
+            descriptors = np.zeros((0, 256), dtype=np.float32)
         else:
-            keypoints = np.zeros((0, 2), dtype=np.float32)
-        descriptors = np.zeros((keypoints.shape[0], 256), dtype=np.float32)
+            if image_array.ndim == 0:
+                feature_plane = image_array.reshape(1, 1)
+            elif image_array.ndim == 1:
+                feature_plane = image_array.reshape(1, -1)
+            elif image_array.ndim == 2:
+                feature_plane = image_array
+            else:
+                feature_plane = np.mean(image_array, axis=-1)
+            feature_plane = np.asarray(feature_plane, dtype=np.float32)
+            height, width = feature_plane.shape[:2]
+            center_y = (height - 1) / 2.0
+            center_x = (width - 1) / 2.0
+            keypoints = np.array([[center_x, center_y]], dtype=np.float32)
+            center_value = float(feature_plane[int(round(center_y)), int(round(center_x))])
+            descriptors = np.full((1, 256), center_value, dtype=np.float32)
         return {"keypoints": keypoints, "descriptors": descriptors}
 
 

@@ -1,4 +1,4 @@
-"""Minimal frontend helpers for deep matcher scaffolding."""
+"""Frontend helpers for model-backed deep matcher pipelines."""
 
 from __future__ import annotations
 
@@ -12,39 +12,112 @@ class DeepFrontendError(RuntimeError):
     """Raised when deep frontend setup fails."""
 
 
+class DeepDependencyError(RuntimeError):
+    """Raised when deep matcher dependencies are unavailable."""
+
+    def __init__(self, method: str, reason: str) -> None:
+        self.method = str(method).strip().lower()
+        self.reason = str(reason).strip()
+        super().__init__(f"Deep matcher dependency unavailable for '{self.method}': {self.reason}")
+
+
+def _raise_missing_dependency(*, method: str, missing: str, install_hint: str) -> None:
+    raise DeepDependencyError(
+        method,
+        f"missing optional dependency '{missing}'. Install with `{install_hint}`.",
+    )
+
+
 class SuperPointFrontend:
+    def __init__(self) -> None:
+        self._extractor = None
+
     def extract(self, image, device: str):
-        _ = device
-        image_array = np.asarray(image)
-        if image_array.size == 0:
-            keypoints = np.zeros((0, 2), dtype=np.float32)
-            descriptors = np.zeros((0, 256), dtype=np.float32)
+        try:
+            import torch
+        except Exception:
+            _raise_missing_dependency(
+                method="superglue/lightglue",
+                missing="torch",
+                install_hint="pip install torch kornia",
+            )
+
+        try:
+            import kornia.feature as kf
+        except Exception:
+            _raise_missing_dependency(
+                method="superglue/lightglue",
+                missing="kornia",
+                install_hint="pip install kornia",
+            )
+
+        image_array = np.asarray(image, dtype=np.float32)
+        if image_array.size <= 0:
+            return {"keypoints": np.zeros((0, 2), dtype=np.float32), "descriptors": np.zeros((0, 256), dtype=np.float32)}
+
+        if image_array.ndim == 0:
+            image_plane = image_array.reshape(1, 1)
+        elif image_array.ndim == 1:
+            image_plane = image_array.reshape(1, -1)
+        elif image_array.ndim == 2:
+            image_plane = image_array
         else:
-            if image_array.ndim == 0:
-                feature_plane = image_array.reshape(1, 1)
-            elif image_array.ndim == 1:
-                feature_plane = image_array.reshape(1, -1)
-            elif image_array.ndim == 2:
-                feature_plane = image_array
-            else:
-                feature_plane = np.mean(image_array, axis=-1)
-            feature_plane = np.asarray(feature_plane, dtype=np.float32)
-            height, width = feature_plane.shape[:2]
-            center_y = (height - 1) / 2.0
-            center_x = (width - 1) / 2.0
-            keypoints = np.array([[center_x, center_y]], dtype=np.float32)
-            center_value = float(feature_plane[int(round(center_y)), int(round(center_x))])
-            descriptors = np.full((1, 256), center_value, dtype=np.float32)
-        return {"keypoints": keypoints, "descriptors": descriptors}
+            image_plane = np.mean(image_array, axis=-1)
+
+        image_plane = np.nan_to_num(image_plane, nan=0.0, posinf=0.0, neginf=0.0).astype(np.float32, copy=False)
+        scale = float(np.max(np.abs(image_plane))) if image_plane.size > 0 else 0.0
+        if scale > 0.0:
+            image_plane = image_plane / scale
+        image_tensor = torch.from_numpy(image_plane).to(dtype=torch.float32)[None, None, :, :].to(device)
+
+        if self._extractor is None:
+            self._extractor = kf.SuperPoint(pretrained="superpoint_v1")
+        self._extractor = self._extractor.to(device).eval()
+
+        with torch.no_grad():
+            scores, keypoints, descriptors = self._extractor(image_tensor)
+        keypoint_array = keypoints[0].detach().cpu().numpy().astype(np.float32, copy=False)
+        descriptor_array = descriptors[0].detach().cpu().numpy().T.astype(np.float32, copy=False)
+        _ = scores
+        return {"keypoints": keypoint_array, "descriptors": descriptor_array}
 
 
 class LoFTRFrontend:
+    def __init__(self) -> None:
+        self._torch = None
+
     def prepare(self, left_image, right_image, device: str):
-        _ = device
+        try:
+            import torch
+        except Exception:
+            _raise_missing_dependency(
+                method="loftr",
+                missing="torch",
+                install_hint="pip install torch kornia",
+            )
+
+        self._torch = torch
         return {
-            "left": np.asarray(left_image),
-            "right": np.asarray(right_image),
+            "left": self._as_tensor(left_image, device=device),
+            "right": self._as_tensor(right_image, device=device),
         }
+
+    def _as_tensor(self, image, *, device: str):
+        image_array = np.asarray(image, dtype=np.float32)
+        if image_array.ndim == 0:
+            image_plane = image_array.reshape(1, 1)
+        elif image_array.ndim == 1:
+            image_plane = image_array.reshape(1, -1)
+        elif image_array.ndim == 2:
+            image_plane = image_array
+        else:
+            image_plane = np.mean(image_array, axis=-1)
+
+        image_plane = np.nan_to_num(image_plane, nan=0.0, posinf=0.0, neginf=0.0).astype(np.float32, copy=False)
+        scale = float(np.max(np.abs(image_plane))) if image_plane.size > 0 else 0.0
+        if scale > 0.0:
+            image_plane = image_plane / scale
+        return self._torch.from_numpy(image_plane).to(dtype=self._torch.float32)[None, None, :, :].to(device)
 
 
 def normalize_deep_method(method: str) -> str:

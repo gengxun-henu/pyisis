@@ -1,4 +1,4 @@
-"""Minimal matcher scaffolding for deep matcher methods."""
+"""Model-backed matcher wrappers for deep matcher methods."""
 
 from __future__ import annotations
 
@@ -14,6 +14,12 @@ class DeepMatcherError(RuntimeError):
     """Raised for unsupported deep matcher operations."""
 
 
+def _missing_dependency_error(*, method: str, missing: str, install_hint: str) -> DeepMatcherError:
+    return DeepMatcherError(
+        f"Deep matcher '{method}' dependency unavailable: missing '{missing}'. Install with `{install_hint}`."
+    )
+
+
 @dataclass(frozen=True, slots=True)
 class DeepMatchResult:
     left_keypoints: tuple[Any, ...] = ()
@@ -26,16 +32,78 @@ class SuperGlueMatcher:
 
     def __init__(self, *, device: str = "cpu") -> None:
         self.device = device
+        self._model = None
+
+    def _load_model(self):
+        try:
+            import torch
+        except Exception:
+            raise _missing_dependency_error(
+                method=self.method,
+                missing="torch",
+                install_hint="pip install torch superglue-pretrained-network",
+            )
+
+        try:
+            from models.matching import Matching  # type: ignore[import-not-found]
+        except Exception:
+            raise _missing_dependency_error(
+                method=self.method,
+                missing="superglue-pretrained-network",
+                install_hint="pip install superglue-pretrained-network",
+            )
+
+        if self._model is None:
+            self._model = Matching(
+                {
+                    "superpoint": {"nms_radius": 4, "keypoint_threshold": 0.005, "max_keypoints": 2048},
+                    "superglue": {"weights": "outdoor", "sinkhorn_iterations": 20, "match_threshold": 0.2},
+                }
+            ).eval().to(self.device)
+        return torch, self._model
 
     def match(self, *, features_left: Any, features_right: Any, device: str = "cpu"):
+        torch, model = self._load_model()
         _ = device
-        left_points = np.asarray((features_left or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
-        right_points = np.asarray((features_right or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
-        pair_count = int(min(left_points.shape[0], right_points.shape[0]))
-        if pair_count <= 0:
+        left_keypoints = np.asarray((features_left or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
+        right_keypoints = np.asarray((features_right or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
+        left_descriptors = np.asarray(
+            (features_left or {}).get("descriptors", np.zeros((0, 256), dtype=np.float32)),
+            dtype=np.float32,
+        )
+        right_descriptors = np.asarray(
+            (features_right or {}).get("descriptors", np.zeros((0, 256), dtype=np.float32)),
+            dtype=np.float32,
+        )
+
+        if left_keypoints.shape[0] <= 0 or right_keypoints.shape[0] <= 0:
             return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
-        scores = np.ones((pair_count,), dtype=np.float32)
-        return left_points[:pair_count], right_points[:pair_count], scores
+
+        left_scores = np.ones((left_keypoints.shape[0],), dtype=np.float32)
+        right_scores = np.ones((right_keypoints.shape[0],), dtype=np.float32)
+        match_input = {
+            "keypoints0": torch.from_numpy(left_keypoints)[None, :, :].to(self.device),
+            "keypoints1": torch.from_numpy(right_keypoints)[None, :, :].to(self.device),
+            "descriptors0": torch.from_numpy(left_descriptors.T)[None, :, :].to(self.device),
+            "descriptors1": torch.from_numpy(right_descriptors.T)[None, :, :].to(self.device),
+            "scores0": torch.from_numpy(left_scores)[None, :].to(self.device),
+            "scores1": torch.from_numpy(right_scores)[None, :].to(self.device),
+        }
+
+        with torch.no_grad():
+            prediction = model(match_input)
+
+        matches0 = prediction["matches0"][0].detach().cpu().numpy()
+        scores0 = prediction["matching_scores0"][0].detach().cpu().numpy()
+        valid_indices = np.where(matches0 >= 0)[0]
+        if valid_indices.size <= 0:
+            return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
+        right_indices = matches0[valid_indices].astype(np.int64, copy=False)
+        return (
+            left_keypoints[valid_indices].astype(np.float32, copy=False),
+            right_keypoints[right_indices].astype(np.float32, copy=False),
+            scores0[valid_indices].astype(np.float32, copy=False),
+        )
 
 
 class LightGlueMatcher:
@@ -43,16 +111,88 @@ class LightGlueMatcher:
 
     def __init__(self, *, device: str = "cpu") -> None:
         self.device = device
+        self._matcher = None
+
+    def _load_matcher(self):
+        try:
+            import torch
+        except Exception:
+            raise _missing_dependency_error(
+                method=self.method,
+                missing="torch",
+                install_hint="pip install torch lightglue",
+            )
+
+        try:
+            from lightglue import LightGlue  # type: ignore[import-not-found]
+        except Exception:
+            raise _missing_dependency_error(
+                method=self.method,
+                missing="lightglue",
+                install_hint="pip install lightglue",
+            )
+
+        if self._matcher is None:
+            self._matcher = LightGlue(features="superpoint").eval().to(self.device)
+        return torch, self._matcher
 
     def match(self, *, features_left: Any, features_right: Any, device: str = "cpu"):
+        torch, matcher = self._load_matcher()
         _ = device
-        left_points = np.asarray((features_left or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
-        right_points = np.asarray((features_right or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
-        pair_count = int(min(left_points.shape[0], right_points.shape[0]))
-        if pair_count <= 0:
+        left_keypoints = np.asarray((features_left or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
+        right_keypoints = np.asarray((features_right or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
+        left_descriptors = np.asarray(
+            (features_left or {}).get("descriptors", np.zeros((0, 256), dtype=np.float32)),
+            dtype=np.float32,
+        )
+        right_descriptors = np.asarray(
+            (features_right or {}).get("descriptors", np.zeros((0, 256), dtype=np.float32)),
+            dtype=np.float32,
+        )
+        if left_keypoints.shape[0] <= 0 or right_keypoints.shape[0] <= 0:
             return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
-        scores = np.ones((pair_count,), dtype=np.float32)
-        return left_points[:pair_count], right_points[:pair_count], scores
+
+        inputs = {
+            "image0": {
+                "keypoints": torch.from_numpy(left_keypoints)[None, :, :].to(self.device),
+                "descriptors": torch.from_numpy(left_descriptors)[None, :, :].to(self.device),
+            },
+            "image1": {
+                "keypoints": torch.from_numpy(right_keypoints)[None, :, :].to(self.device),
+                "descriptors": torch.from_numpy(right_descriptors)[None, :, :].to(self.device),
+            },
+        }
+        with torch.no_grad():
+            prediction = matcher(inputs)
+
+        if "matches0" in prediction and "matching_scores0" in prediction:
+            matches0 = prediction["matches0"][0].detach().cpu().numpy()
+            scores0 = prediction["matching_scores0"][0].detach().cpu().numpy()
+            valid_indices = np.where(matches0 >= 0)[0]
+            if valid_indices.size <= 0:
+                return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
+            right_indices = matches0[valid_indices].astype(np.int64, copy=False)
+            return (
+                left_keypoints[valid_indices].astype(np.float32, copy=False),
+                right_keypoints[right_indices].astype(np.float32, copy=False),
+                scores0[valid_indices].astype(np.float32, copy=False),
+            )
+
+        if "matches" in prediction:
+            matches = prediction["matches"][0].detach().cpu().numpy().astype(np.int64, copy=False)
+            scores = prediction.get("scores")
+            if scores is None:
+                score_array = np.ones((matches.shape[0],), dtype=np.float32)
+            else:
+                score_array = scores[0].detach().cpu().numpy().astype(np.float32, copy=False)
+            if matches.size <= 0:
+                return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
+            return (
+                left_keypoints[matches[:, 0]].astype(np.float32, copy=False),
+                right_keypoints[matches[:, 1]].astype(np.float32, copy=False),
+                score_array,
+            )
+        raise DeepMatcherError("LightGlue prediction did not include expected match tensors.")
 
 
 class LoFTRMatcher:
@@ -60,44 +200,39 @@ class LoFTRMatcher:
 
     def __init__(self, *, device: str = "cpu") -> None:
         self.device = device
+        self._matcher = None
+
+    def _load_matcher(self):
+        try:
+            import torch
+        except Exception:
+            raise _missing_dependency_error(
+                method=self.method,
+                missing="torch",
+                install_hint="pip install torch kornia",
+            )
+        try:
+            import kornia.feature as kf
+        except Exception:
+            raise _missing_dependency_error(
+                method=self.method,
+                missing="kornia",
+                install_hint="pip install kornia",
+            )
+        if self._matcher is None:
+            self._matcher = kf.LoFTR(pretrained="outdoor").eval().to(self.device)
+        return torch, self._matcher
 
     def match(self, *, left_image: Any, right_image: Any, device: str = "cpu"):
+        torch, matcher = self._load_matcher()
         _ = device
-        left_array = np.asarray(left_image)
-        right_array = np.asarray(right_image)
-        if left_array.size == 0 or right_array.size == 0:
+        if left_image is None or right_image is None:
             return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
-
-        if left_array.ndim == 0:
-            left_plane = left_array.reshape(1, 1)
-        elif left_array.ndim == 1:
-            left_plane = left_array.reshape(1, -1)
-        elif left_array.ndim == 2:
-            left_plane = left_array
-        else:
-            left_plane = np.mean(left_array, axis=-1)
-
-        if right_array.ndim == 0:
-            right_plane = right_array.reshape(1, 1)
-        elif right_array.ndim == 1:
-            right_plane = right_array.reshape(1, -1)
-        elif right_array.ndim == 2:
-            right_plane = right_array
-        else:
-            right_plane = np.mean(right_array, axis=-1)
-
-        left_plane = np.asarray(left_plane, dtype=np.float32)
-        right_plane = np.asarray(right_plane, dtype=np.float32)
-        overlap_height = int(min(left_plane.shape[0], right_plane.shape[0]))
-        overlap_width = int(min(left_plane.shape[1], right_plane.shape[1]))
-        if overlap_height <= 0 or overlap_width <= 0:
-            return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
-
-        center_y = (overlap_height - 1) / 2.0
-        center_x = (overlap_width - 1) / 2.0
-        left_points = np.array([[center_x, center_y]], dtype=np.float32)
-        right_points = np.array([[center_x, center_y]], dtype=np.float32)
-        scores = np.ones((1,), dtype=np.float32)
+        with torch.no_grad():
+            output = matcher({"image0": left_image.to(self.device), "image1": right_image.to(self.device)})
+        left_points = output["keypoints0"].detach().cpu().numpy().astype(np.float32, copy=False)
+        right_points = output["keypoints1"].detach().cpu().numpy().astype(np.float32, copy=False)
+        scores = output["confidence"].detach().cpu().numpy().astype(np.float32, copy=False)
         return left_points, right_points, scores
 
 

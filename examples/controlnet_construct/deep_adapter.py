@@ -7,17 +7,8 @@ from typing import Any
 import cv2
 import numpy as np
 
-from .deep_frontends import LoFTRFrontend, SuperPointFrontend, normalize_deep_method, resolve_torch_device
-from .deep_matchers import DeepMatchResult, build_deep_matcher
-
-
-class DeepDependencyError(RuntimeError):
-    """Raised when a deep matcher dependency is unavailable."""
-
-    def __init__(self, method: str, reason: str) -> None:
-        self.method = str(method).strip().lower()
-        self.reason = str(reason).strip()
-        super().__init__(f"Deep matcher dependency unavailable for '{self.method}': {self.reason}")
+from .deep_frontends import DeepDependencyError, LoFTRFrontend, SuperPointFrontend, normalize_deep_method, resolve_torch_device
+from .deep_matchers import DeepMatchResult, DeepMatcherError, build_deep_matcher
 
 
 class DeepMatcherAdapter:
@@ -103,6 +94,8 @@ class DeepMatcherAdapter:
                 right_image=right_image,
                 device=primary_device,
             )
+        except (DeepDependencyError, DeepMatcherError):
+            raise
         except Exception:
             if not prefer_gpu:
                 raise

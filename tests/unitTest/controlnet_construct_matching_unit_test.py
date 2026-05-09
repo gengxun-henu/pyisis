@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-20
+Last Modified: 2026-05-21
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -73,6 +73,7 @@ Updated: 2026-05-20  Geng Xun added deep-adapter scaffolding regression coverage
 Updated: 2026-05-20  Geng Xun added deep matcher dispatch regression coverage for lightglue routing and loftr GPU-preferred fallback calls.
 Updated: 2026-05-20  Geng Xun added deep adapter normalization coverage for canonical keypoint/match triplet outputs.
 Updated: 2026-05-20  Geng Xun added regression coverage ensuring lightweight deep fallback frontends and matchers emit deterministic non-empty correspondences for non-empty inputs.
+Updated: 2026-05-21  Geng Xun replaced synthetic deep correspondences assertions with explicit missing-dependency error coverage.
 """
 
 from __future__ import annotations
@@ -1262,50 +1263,41 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(len(right_kps), 1)
         self.assertEqual(len(matches), 1)
 
-    def test_superpoint_frontend_extract_non_empty_image_returns_deterministic_feature(self):
+    def test_superpoint_frontend_extract_raises_dependency_error_without_torch(self):
         deep_frontends_module = importlib.import_module("controlnet_construct.deep_frontends")
         frontend = deep_frontends_module.SuperPointFrontend()
         image = np.arange(25, dtype=np.float32).reshape(5, 5)
 
-        features = frontend.extract(image, device="cpu")
+        with self.assertRaisesRegex(RuntimeError, "superglue|lightglue|dependency|torch"):
+            frontend.extract(image, device="cpu")
 
-        self.assertEqual(features["keypoints"].shape, (1, 2))
-        self.assertEqual(features["descriptors"].shape, (1, 256))
-        self.assertTrue(np.allclose(features["keypoints"][0], np.array([2.0, 2.0], dtype=np.float32)))
-        self.assertAlmostEqual(float(features["descriptors"][0, 0]), 12.0, places=5)
-        self.assertAlmostEqual(float(features["descriptors"][0, -1]), 12.0, places=5)
-
-    def test_deep_adapter_superglue_and_lightglue_emit_non_empty_matches_for_non_empty_inputs(self):
+    def test_deep_adapter_superglue_and_lightglue_raise_dependency_error_without_optional_deps(self):
         deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
         image = np.arange(64, dtype=np.float32).reshape(8, 8)
 
         adapter = deep_adapter_module.DeepMatcherAdapter(prefer_gpu=False)
         for method in ("superglue", "lightglue"):
             with self.subTest(method=method):
-                result = adapter.match_pair_with_fallback(
-                    matcher_method=method,
-                    left_image=image,
-                    right_image=image + 1.0,
-                    prefer_gpu=False,
-                )
-                self.assertGreater(len(result.left_keypoints), 0)
-                self.assertGreater(len(result.right_keypoints), 0)
-                self.assertGreater(len(result.matches), 0)
+                with self.assertRaises(deep_adapter_module.DeepDependencyError):
+                    adapter.match_pair_with_fallback(
+                        matcher_method=method,
+                        left_image=image,
+                        right_image=image + 1.0,
+                        prefer_gpu=False,
+                    )
 
-    def test_deep_adapter_loftr_emits_non_empty_matches_for_non_empty_inputs(self):
+    def test_deep_adapter_loftr_raises_dependency_error_without_optional_deps(self):
         deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
         image = np.arange(100, dtype=np.float32).reshape(10, 10)
 
         adapter = deep_adapter_module.DeepMatcherAdapter(prefer_gpu=False)
-        result = adapter.match_pair_with_fallback(
-            matcher_method="loftr",
-            left_image=image,
-            right_image=image,
-            prefer_gpu=False,
-        )
-        self.assertGreater(len(result.left_keypoints), 0)
-        self.assertGreater(len(result.right_keypoints), 0)
-        self.assertGreater(len(result.matches), 0)
+        with self.assertRaises(deep_adapter_module.DeepDependencyError):
+            adapter.match_pair_with_fallback(
+                matcher_method="loftr",
+                left_image=image,
+                right_image=image,
+                prefer_gpu=False,
+            )
 
     def test_match_tile_dispatches_to_deep_adapter_for_lightglue(self):
         calls = []

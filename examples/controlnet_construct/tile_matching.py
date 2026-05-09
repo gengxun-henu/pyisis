@@ -753,12 +753,15 @@ def _match_tile_from_window_values(
     resolved_matcher_method = _normalize_matcher_method(matcher_method)
     if resolved_matcher_method in DEEP_MATCHER_METHODS:
         adapter = DeepMatcherAdapter()
-        left_keypoints, right_keypoints, filtered_matches = adapter.match_pair_with_fallback(
+        deep_match_result = adapter.match_pair_with_fallback(
             matcher_method=resolved_matcher_method,
             left_image=left_image,
             right_image=right_image,
             prefer_gpu=use_gpu,
         )
+        left_keypoints = deep_match_result.left_keypoints
+        right_keypoints = deep_match_result.right_keypoints
+        filtered_matches = deep_match_result.matches
     elif use_gpu and HAS_GPU_SIFT:
         left_keypoints, right_keypoints, filtered_matches = _match_tile_gpu(
             left_image,

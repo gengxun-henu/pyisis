@@ -1251,11 +1251,16 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         calls = []
         keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
         gradient = np.arange(256, dtype=np.float64).reshape(16, 16)
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
 
         class _StubAdapter:
             def match_pair_with_fallback(self, **kwargs):
                 calls.append(kwargs["matcher_method"])
-                return [keypoint], [keypoint], []
+                return deep_matchers_module.DeepMatchResult(
+                    left_keypoints=(keypoint,),
+                    right_keypoints=(keypoint,),
+                    matches=(),
+                )
 
         with mock.patch(
             "controlnet_construct.tile_matching.DeepMatcherAdapter",
@@ -1292,6 +1297,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
     def test_match_tile_deep_gpu_failure_falls_back_to_cpu_same_method(self):
         keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
         gradient = np.arange(256, dtype=np.float64).reshape(16, 16)
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
 
         class _StubAdapter:
             def __init__(self):
@@ -1299,7 +1305,11 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
             def match_pair_with_fallback(self, **kwargs):
                 self.calls.append((kwargs["matcher_method"], kwargs["prefer_gpu"]))
-                return [keypoint], [keypoint], []
+                return deep_matchers_module.DeepMatchResult(
+                    left_keypoints=(keypoint,),
+                    right_keypoints=(keypoint,),
+                    matches=(),
+                )
 
         stub = _StubAdapter()
         with mock.patch(

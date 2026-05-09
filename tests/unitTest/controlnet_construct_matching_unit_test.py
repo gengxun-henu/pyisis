@@ -71,6 +71,7 @@ Updated: 2026-05-20  Geng Xun added review regression coverage for effective GPU
 Updated: 2026-05-20  Geng Xun added runtime fallback coverage for effective GPU summary reporting.
 Updated: 2026-05-20  Geng Xun added deep-adapter scaffolding regression coverage for cross-method fallback rejection and explicit dependency errors.
 Updated: 2026-05-20  Geng Xun added deep matcher dispatch regression coverage for lightglue routing and loftr GPU-preferred fallback calls.
+Updated: 2026-05-20  Geng Xun added deep adapter normalization coverage for canonical keypoint/match triplet outputs.
 """
 
 from __future__ import annotations
@@ -1246,6 +1247,19 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         error = deep_adapter_module.DeepDependencyError("lightglue", "torch not installed")
         self.assertIn("lightglue", str(error))
         self.assertIn("torch not installed", str(error))
+
+    def test_deep_adapter_normalizes_outputs_to_match_triplet(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+
+        adapter = deep_adapter_module.DeepMatcherAdapter()
+        left_kps, right_kps, matches = adapter._normalize_matches(
+            left_points=np.array([[1.0, 2.0]], dtype=np.float32),
+            right_points=np.array([[3.0, 4.0]], dtype=np.float32),
+            scores=np.array([0.9], dtype=np.float32),
+        )
+        self.assertEqual(len(left_kps), 1)
+        self.assertEqual(len(right_kps), 1)
+        self.assertEqual(len(matches), 1)
 
     def test_match_tile_dispatches_to_deep_adapter_for_lightglue(self):
         calls = []

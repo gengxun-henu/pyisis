@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-20
+Last Modified: 2026-05-22
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -69,6 +69,12 @@ Updated: 2026-05-20  Geng Xun added GPU fallback statistics regression coverage 
 Updated: 2026-05-20  Geng Xun added regression coverage for batched GPU pair matcher dispatch.
 Updated: 2026-05-20  Geng Xun added review regression coverage for effective GPU summaries and benchmark counts.
 Updated: 2026-05-20  Geng Xun added runtime fallback coverage for effective GPU summary reporting.
+Updated: 2026-05-20  Geng Xun added deep-adapter scaffolding regression coverage for cross-method fallback rejection and explicit dependency errors.
+Updated: 2026-05-20  Geng Xun added deep matcher dispatch regression coverage for lightglue routing and loftr GPU-preferred fallback calls.
+Updated: 2026-05-20  Geng Xun added deep adapter normalization coverage for canonical keypoint/match triplet outputs.
+Updated: 2026-05-20  Geng Xun added regression coverage ensuring lightweight deep fallback frontends and matchers emit deterministic non-empty correspondences for non-empty inputs.
+Updated: 2026-05-21  Geng Xun replaced synthetic deep correspondences assertions with explicit missing-dependency error coverage.
+Updated: 2026-05-22  Geng Xun added deep dependency normalization and deep adapter reuse regression coverage for tile dispatch.
 """
 
 from __future__ import annotations
@@ -1216,6 +1222,263 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             {"algorithm": 1, "trees": tile_matching_module.DEFAULT_FLANN_TREES},
             {"checks": tile_matching_module.DEFAULT_FLANN_CHECKS},
         )
+
+    def test_create_descriptor_matcher_rejects_deep_methods(self):
+        for matcher_method in ("superglue", "lightglue", "loftr"):
+            with self.assertRaisesRegex(ValueError, "descriptor matcher path"):
+                tile_matching_module._create_descriptor_matcher(matcher_method)
+
+
+    def test_normalize_matcher_method_accepts_deep_methods(self):
+        self.assertEqual(tile_matching_module._normalize_matcher_method("superglue"), "superglue")
+        self.assertEqual(tile_matching_module._normalize_matcher_method("  LIGHTGLUE  "), "lightglue")
+        self.assertEqual(tile_matching_module._normalize_matcher_method("LOFTR"), "loftr")
+
+    def test_normalize_matcher_method_rejects_unknown_method(self):
+        with self.assertRaisesRegex(ValueError, "Unsupported matcher_method"):
+            tile_matching_module._normalize_matcher_method("unknown-matcher")
+
+    def test_deep_adapter_rejects_cross_method_fallback(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+        adapter = deep_adapter_module.DeepMatcherAdapter()
+
+        with self.assertRaisesRegex(RuntimeError, "same method"):
+            adapter._raise_cross_method_fallback_error("loftr", "bf")
+
+    def test_deep_adapter_missing_dependency_error_is_explicit(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+        error = deep_adapter_module.DeepDependencyError("lightglue", "torch not installed")
+        self.assertIn("lightglue", str(error))
+        self.assertIn("torch not installed", str(error))
+
+    def test_deep_adapter_normalizes_outputs_to_match_triplet(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+
+        adapter = deep_adapter_module.DeepMatcherAdapter()
+        left_kps, right_kps, matches = adapter._normalize_matches(
+            left_points=np.array([[1.0, 2.0]], dtype=np.float32),
+            right_points=np.array([[3.0, 4.0]], dtype=np.float32),
+            scores=np.array([0.9], dtype=np.float32),
+        )
+        self.assertEqual(len(left_kps), 1)
+        self.assertEqual(len(right_kps), 1)
+        self.assertEqual(len(matches), 1)
+
+    def test_superpoint_frontend_extract_raises_dependency_error_without_torch(self):
+        deep_frontends_module = importlib.import_module("controlnet_construct.deep_frontends")
+        frontend = deep_frontends_module.SuperPointFrontend()
+        image = np.arange(25, dtype=np.float32).reshape(5, 5)
+
+        with self.assertRaisesRegex(RuntimeError, "superglue|lightglue|dependency|torch"):
+            frontend.extract(image, device="cpu")
+
+    def test_deep_adapter_superglue_and_lightglue_raise_dependency_error_without_optional_deps(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+        image = np.arange(64, dtype=np.float32).reshape(8, 8)
+
+        adapter = deep_adapter_module.DeepMatcherAdapter(prefer_gpu=False)
+        for method in ("superglue", "lightglue"):
+            with self.subTest(method=method):
+                with self.assertRaises(deep_adapter_module.DeepDependencyError):
+                    adapter.match_pair_with_fallback(
+                        matcher_method=method,
+                        left_image=image,
+                        right_image=image + 1.0,
+                        prefer_gpu=False,
+                    )
+
+    def test_deep_adapter_loftr_raises_dependency_error_without_optional_deps(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+        image = np.arange(100, dtype=np.float32).reshape(10, 10)
+
+        adapter = deep_adapter_module.DeepMatcherAdapter(prefer_gpu=False)
+        with self.assertRaises(deep_adapter_module.DeepDependencyError):
+            adapter.match_pair_with_fallback(
+                matcher_method="loftr",
+                left_image=image,
+                right_image=image,
+                prefer_gpu=False,
+            )
+
+    def test_deep_adapter_wraps_matcher_dependency_error_as_deep_dependency_error(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+        image = np.arange(64, dtype=np.float32).reshape(8, 8)
+
+        class _RaisingMatcher:
+            def match(self, **_kwargs):
+                raise deep_adapter_module.DeepMatcherError(
+                    "Deep matcher 'lightglue' dependency unavailable: missing 'lightglue'. "
+                    "Install with `pip install lightglue`."
+                )
+
+        adapter = deep_adapter_module.DeepMatcherAdapter(prefer_gpu=False)
+        with mock.patch.object(
+            deep_adapter_module,
+            "build_deep_matcher",
+            return_value=_RaisingMatcher(),
+        ), mock.patch.object(
+            adapter._superpoint,
+            "extract",
+            return_value={"keypoints": np.array([[1.0, 2.0]], dtype=np.float32), "descriptors": np.zeros((1, 256), dtype=np.float32)},
+        ):
+            with self.assertRaises(deep_adapter_module.DeepDependencyError) as raised:
+                adapter.match_pair(
+                    matcher_method="lightglue",
+                    left_image=image,
+                    right_image=image,
+                )
+        self.assertEqual(raised.exception.method, "lightglue")
+        self.assertIn("missing", raised.exception.reason.lower())
+
+    def test_match_tile_dispatches_to_deep_adapter_for_lightglue(self):
+        calls = []
+        keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+        gradient = np.arange(256, dtype=np.float64).reshape(16, 16)
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+
+        class _StubAdapter:
+            def match_pair_with_fallback(self, **kwargs):
+                calls.append(kwargs["matcher_method"])
+                return deep_matchers_module.DeepMatchResult(
+                    left_keypoints=(keypoint,),
+                    right_keypoints=(keypoint,),
+                    matches=(),
+                )
+
+        with mock.patch.object(tile_matching_module, "_DEEP_MATCHER_ADAPTER_CACHE", {}, create=True), mock.patch(
+            "controlnet_construct.tile_matching.DeepMatcherAdapter",
+            return_value=_StubAdapter(),
+            create=True,
+        ):
+            tile_matching_module._match_tile_from_window_values(
+                left_values=gradient,
+                right_values=gradient + 1.0,
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                left_invalid_values=(),
+                right_invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=1,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                ratio_test=0.75,
+                matcher_method="lightglue",
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                use_gpu=True,
+            )
+        self.assertEqual(calls, ["lightglue"])
+
+    def test_match_tile_deep_gpu_failure_falls_back_to_cpu_same_method(self):
+        keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+        gradient = np.arange(256, dtype=np.float64).reshape(16, 16)
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+
+        class _StubAdapter:
+            def __init__(self):
+                self.calls = []
+
+            def match_pair_with_fallback(self, **kwargs):
+                self.calls.append((kwargs["matcher_method"], kwargs["prefer_gpu"]))
+                return deep_matchers_module.DeepMatchResult(
+                    left_keypoints=(keypoint,),
+                    right_keypoints=(keypoint,),
+                    matches=(),
+                )
+
+        stub = _StubAdapter()
+        with mock.patch.object(tile_matching_module, "_DEEP_MATCHER_ADAPTER_CACHE", {}, create=True), mock.patch(
+            "controlnet_construct.tile_matching.DeepMatcherAdapter",
+            return_value=stub,
+            create=True,
+        ):
+            tile_matching_module._match_tile_from_window_values(
+                left_values=gradient,
+                right_values=gradient + 1.0,
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                left_invalid_values=(),
+                right_invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=1,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                ratio_test=0.75,
+                matcher_method="loftr",
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                use_gpu=True,
+            )
+        self.assertEqual(stub.calls[0][0], "loftr")
+        self.assertTrue(stub.calls[0][1])
+
+    def test_match_tile_reuses_deep_adapter_instance_for_repeated_dispatch(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        gradient = np.arange(256, dtype=np.float64).reshape(16, 16)
+        constructor_calls = 0
+
+        class _StubAdapter:
+            def match_pair_with_fallback(self, **_kwargs):
+                keypoint = cv2.KeyPoint(1.0, 1.0, 1.0)
+                return deep_matchers_module.DeepMatchResult(
+                    left_keypoints=(keypoint,),
+                    right_keypoints=(keypoint,),
+                    matches=(),
+                )
+
+        def _build_stub_adapter(*_args, **_kwargs):
+            nonlocal constructor_calls
+            constructor_calls += 1
+            return _StubAdapter()
+
+        with mock.patch.object(tile_matching_module, "_DEEP_MATCHER_ADAPTER_CACHE", {}, create=True), mock.patch(
+            "controlnet_construct.tile_matching.DeepMatcherAdapter",
+            side_effect=_build_stub_adapter,
+            create=True,
+        ):
+            for _ in range(2):
+                tile_matching_module._match_tile_from_window_values(
+                    left_values=gradient,
+                    right_values=gradient + 1.0,
+                    local_window=TileWindow(0, 0, 16, 16),
+                    left_window=TileWindow(0, 0, 16, 16),
+                    right_window=TileWindow(0, 0, 16, 16),
+                    minimum_value=None,
+                    maximum_value=None,
+                    lower_percent=0.5,
+                    upper_percent=99.5,
+                    left_invalid_values=(),
+                    right_invalid_values=(),
+                    special_pixel_abs_threshold=1.0e300,
+                    min_valid_pixels=1,
+                    valid_pixel_percent_threshold=0.0,
+                    invalid_pixel_radius=0,
+                    ratio_test=0.75,
+                    matcher_method="lightglue",
+                    max_features=None,
+                    sift_octave_layers=3,
+                    sift_contrast_threshold=0.04,
+                    sift_edge_threshold=10.0,
+                    sift_sigma=1.6,
+                    use_gpu=True,
+                )
+        self.assertEqual(constructor_calls, 1)
 
     def test_match_dom_pair_passes_matcher_method_into_parallel_tile_tasks(self):
         width = 128

@@ -58,8 +58,9 @@ Options:
                                  Default: 0.05 unless omitted and resolved from --config.
   --invalid-pixel-radius N        Suppress feature detection near invalid pixels or image borders.
                                   Default: 1 unless omitted and resolved from --config.
-  --matcher-method NAME           Descriptor matcher backend forwarded to image_match.py.
-                                  Supported values: bf, flann. Default: bf unless omitted and resolved from --config.
+  --matcher-method NAME           Matcher backend forwarded to image_match.py.
+                                  Supported values: bf, flann, superglue, lightglue, loftr.
+                                  Default: bf unless omitted and resolved from --config.
   --enable-low-resolution-offset-estimation
                                   Enable low-resolution DOM matching to estimate projected offset before
                                   the full-resolution overlap crop is prepared.

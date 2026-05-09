@@ -13,6 +13,7 @@ Updated: 2026-05-20  Geng Xun made dedicated GPU tile cube cleanup cover open fa
 Updated: 2026-05-20  Geng Xun enforced conservative GPU batch defaults and effective GPU route gating.
 Updated: 2026-05-20  Geng Xun propagated GPU fallback statistics into dynamic batch execution.
 Updated: 2026-05-20  Geng Xun dispatched homogeneous GPU tile payloads through the batched pair matcher.
+Updated: 2026-05-22  Geng Xun reused deep matcher adapters across tile dispatch calls.
 """
 
 from __future__ import annotations
@@ -30,6 +31,7 @@ from typing import Any
 import cv2
 import numpy as np
 
+from .deep_adapter import DeepMatcherAdapter
 from .gpu_sift import DynamicGpuBatchController, GpuSiftMatchResult, GpuSiftStats, HAS_GPU_SIFT, match_sift_pair, match_sift_pairs
 from .keypoints import Keypoint
 from .preprocess import (
@@ -50,10 +52,12 @@ import isis_pybind as ip
 
 
 DEFAULT_MATCHER_METHOD = "bf"
-SUPPORTED_MATCHER_METHODS = ("bf", "flann")
+SUPPORTED_MATCHER_METHODS = ("bf", "flann", "superglue", "lightglue", "loftr")
+DEEP_MATCHER_METHODS = ("superglue", "lightglue", "loftr")
 DEFAULT_FLANN_TREES = 5
 DEFAULT_FLANN_CHECKS = 50
 DEFAULT_GPU_BATCH_SIZE = 4
+_DEEP_MATCHER_ADAPTER_CACHE: dict[bool, DeepMatcherAdapter] = {}
 
 
 @dataclass(frozen=True, slots=True)
@@ -146,6 +150,15 @@ def _normalize_matcher_method(matcher_method: str) -> str:
     return resolved_matcher_method
 
 
+def _get_deep_matcher_adapter(*, prefer_gpu: bool) -> DeepMatcherAdapter:
+    cache_key = bool(prefer_gpu)
+    adapter = _DEEP_MATCHER_ADAPTER_CACHE.get(cache_key)
+    if adapter is None:
+        adapter = DeepMatcherAdapter(prefer_gpu=cache_key)
+        _DEEP_MATCHER_ADAPTER_CACHE[cache_key] = adapter
+    return adapter
+
+
 def _matcher_diagnostics_for_method(matcher_method: str) -> dict[str, object]:
     resolved_matcher_method = _normalize_matcher_method(matcher_method)
     diagnostics: dict[str, object] = {
@@ -166,6 +179,11 @@ def _create_descriptor_matcher(matcher_method: str):
     resolved_matcher_method = _normalize_matcher_method(matcher_method)
     if resolved_matcher_method == "bf":
         return cv2.BFMatcher(cv2.NORM_L2, crossCheck=False)
+    if resolved_matcher_method in ("superglue", "lightglue", "loftr"):
+        raise ValueError(
+            "Deep matcher methods ('superglue', 'lightglue', 'loftr') are not handled by the descriptor matcher path; "
+            "route through the deep-matcher execution path instead."
+        )
 
     flann_index_params = {
         "algorithm": 1,
@@ -335,6 +353,7 @@ def _match_tile(
     sift_edge_threshold: float,
     sift_sigma: float,
 ) -> tuple[list[cv2.KeyPoint], list[cv2.KeyPoint], list[cv2.DMatch]]:
+    resolved_matcher_method = _normalize_matcher_method(matcher_method)
     sift = _build_sift_detector(
         max_features=max_features,
         octave_layers=sift_octave_layers,
@@ -352,7 +371,7 @@ def _match_tile(
     if not right_keypoints or right_descriptors is None:
         return left_keypoints, [], []
 
-    matcher = _create_descriptor_matcher(matcher_method)
+    matcher = _create_descriptor_matcher(resolved_matcher_method)
     raw_matches = matcher.knnMatch(left_descriptors, right_descriptors, k=2)
 
     filtered_matches: list[cv2.DMatch] = []
@@ -742,14 +761,26 @@ def _match_tile_from_window_values(
             right_points=(),
         )
 
-    if use_gpu and HAS_GPU_SIFT:
+    resolved_matcher_method = _normalize_matcher_method(matcher_method)
+    if resolved_matcher_method in DEEP_MATCHER_METHODS:
+        adapter = _get_deep_matcher_adapter(prefer_gpu=use_gpu)
+        deep_match_result = adapter.match_pair_with_fallback(
+            matcher_method=resolved_matcher_method,
+            left_image=left_image,
+            right_image=right_image,
+            prefer_gpu=use_gpu,
+        )
+        left_keypoints = deep_match_result.left_keypoints
+        right_keypoints = deep_match_result.right_keypoints
+        filtered_matches = deep_match_result.matches
+    elif use_gpu and HAS_GPU_SIFT:
         left_keypoints, right_keypoints, filtered_matches = _match_tile_gpu(
             left_image,
             right_image,
             left_mask=left_mask,
             right_mask=right_mask,
             ratio_test=ratio_test,
-            matcher_method=matcher_method,
+            matcher_method=resolved_matcher_method,
             max_features=max_features,
             sift_octave_layers=sift_octave_layers,
             sift_contrast_threshold=sift_contrast_threshold,
@@ -763,7 +794,7 @@ def _match_tile_from_window_values(
             left_mask=left_mask,
             right_mask=right_mask,
             ratio_test=ratio_test,
-            matcher_method=matcher_method,
+            matcher_method=resolved_matcher_method,
             max_features=max_features,
             sift_octave_layers=sift_octave_layers,
             sift_contrast_threshold=sift_contrast_threshold,

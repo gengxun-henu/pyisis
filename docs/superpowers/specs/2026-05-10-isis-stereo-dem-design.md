@@ -386,8 +386,9 @@ PYTHONPATH=examples/forward_intersection conda run -n asp360_new python -m unitt
 Before implementing Cube DEM writing, verify the active conda binding supports
 all required write operations: `Cube.set_dimensions`, `Cube.create`,
 `Cube.put_group`, `LineManager`, and `Cube.write(LineManager)`. If Mapping label
-copying or special-pixel Null is not exposed, the implementation plan must add a
-minimal pybind helper or explicitly use a documented numeric nodata fallback.
+copying is not exposed, the `examples/dem_extract` implementation must stop and
+revise the design instead of adding binding code. If special-pixel Null is not
+exposed, explicitly use a documented numeric nodata fallback.
 
 ### 7.4 人工验收
 
@@ -415,7 +416,7 @@ minimal pybind helper or explicitly use a documented numeric nodata fallback.
    **缓解：** 使用 `intersection_error_m`、`sepang_deg`、可选匹配分数过滤，并输出质量 cube/sidecar。
 
 6. **风险：ISIS Cube 写出 API 在 pybind 中能力不足。**  
-   **缓解：** 实现阶段优先验证当前 `isis_pybind` Cube/Brick/ProcessExport 写能力；若 Python 绑定不足，新增最小 C++ pybind helper 或采用 ISIS CLI 中间流程，但仍保持最终 DEM 为 ISIS Cube。
+   **缓解：** 实现阶段优先验证当前 `isis_pybind` Cube/Brick/ProcessExport 写能力；若 Python 侧现有绑定不足以在 `examples/dem_extract` 内安全写出 DEM，则停止实现并更新设计，不在本 DEM 示例任务中新增 C++ 绑定代码。
 
 ## 9. 与 TIFF 转换的边界
 

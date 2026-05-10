@@ -1210,7 +1210,7 @@ def write_radius_cube(ip, template_cube, output_path: str | Path, raster: Raster
             close()
 ```
 
-If the real `LineManager` binding does not expose item assignment during integration, add the smallest pybind support for buffer indexing before using the writer in production and keep `preflight_cube_writer_bindings` checking that capability with `hasattr(line_manager, "__setitem__")` on an instantiated manager. If `template_cube.group("Mapping")` fails on a projected template cube, add the smallest Mapping-label access helper before enabling CLI writes.
+If the real `LineManager` binding does not expose item assignment during integration, stop this implementation plan and revise the design instead of adding binding code. If `template_cube.group("Mapping")` fails on a projected template cube, stop and revise the design before enabling CLI writes.
 
 - [ ] **Step 4: Export cube writer functions**
 
@@ -1224,7 +1224,7 @@ Run:
 conda run -n asp360_new python -m unittest discover -s tests/unitTest -p 'dem_extract_unit_test.py' -v
 ```
 
-Expected: PASS for cube writer tests. If the fake assignment test passes but a real binding smoke check fails, the next implementation commit must add the minimal buffer indexing binding or use the currently exposed buffer mutation API verified by `dir(ip.LineManager(ip.Cube()))` in the active conda environment.
+Expected: PASS for cube writer tests. If the fake assignment test passes but a real binding smoke check fails, stop and revise the design or use an already exposed buffer mutation API verified by `dir(ip.LineManager(ip.Cube()))`; do not add binding code in this `examples/dem_extract` implementation plan.
 
 - [ ] **Step 6: Run real binding preflight check**
 

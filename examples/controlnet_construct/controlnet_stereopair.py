@@ -22,6 +22,7 @@ Updated: 2026-05-05  Geng Xun added compact stdout summaries by default so detai
 Updated: 2026-05-22  Geng Xun added a baseline from-ori-match parser skeleton for direct ori-space matching follow-up work.
 Updated: 2026-05-10  Geng Xun made the Task-1 from-ori-match CLI fail safely with a clear not-yet-implemented error instead of crashing on missing parser attrs.
 Updated: 2026-05-10  Geng Xun switched the Task-1 from-ori-match rejection to a clean argparse CLI error without a traceback.
+Updated: 2026-05-10  Geng Xun implemented from-ori-match execution to run original-image matching and build ControlNet in one command.
 """
 
 from __future__ import annotations
@@ -41,6 +42,7 @@ if __package__ in {None, ""}:
     from controlnet_construct.controlnet_merge import pair_controlnet_filename
     from controlnet_construct.coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
+    from controlnet_construct.image_match import match_ori_pair_to_key_files
     from controlnet_construct.keypoints import read_key_file
     from controlnet_construct.listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
     from controlnet_construct.match_visualization import (
@@ -67,6 +69,7 @@ else:
     from .controlnet_merge import pair_controlnet_filename
     from .coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from .dom2ori import convert_paired_dom_keypoints_to_original
+    from .image_match import match_ori_pair_to_key_files
     from .keypoints import read_key_file
     from .listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
     from .match_visualization import (
@@ -821,6 +824,29 @@ def _build_from_original_match_parser(subparsers) -> None:
     parser.add_argument("right_cube", help="Original cube path for image B.")
     parser.add_argument("config", help="JSON config file containing NetworkId, TargetName, and UserName.")
     parser.add_argument("output_net", help="Output ControlNet path.")
+    parser.add_argument("--report-path", default=None, help="Optional JSON path used to persist the per-pair result summary.")
+    parser.add_argument(
+        "--pair-id",
+        default=None,
+        help="Optional stereo-pair ID appended to the point-id namespace so different pairwise ControlNets avoid PointId collisions during later cnetmerge steps.",
+    )
+    parser.add_argument("--left-output-key", default=None, help="Optional path to persist the matched original-image .key for image A.")
+    parser.add_argument("--right-output-key", default=None, help="Optional path to persist the matched original-image .key for image B.")
+    parser.add_argument("--matcher-method", default="sift", help="Matcher method forwarded to image_match.")
+    parser.add_argument("--band", type=int, default=1, help="Band index used for original-image matching.")
+    parser.add_argument("--ratio-test", type=float, default=0.75, help="Ratio test threshold forwarded to image_match.")
+    parser.add_argument("--max-features", type=int, default=None, help="Optional SIFT max_features forwarded to image_match.")
+    parser.add_argument("--show-progress", action="store_true", help="Show tile matching progress output.")
+    parser.add_argument("--use-gpu", action="store_true", help="Enable GPU matching route when supported.")
+    parser.add_argument("--gpu-batch-size", type=int, default=4, help="GPU batch size for matching.")
+    parser.add_argument("--gpu-dynamic-batch", action="store_true", default=True, help="Enable dynamic GPU batch sizing.")
+    parser.add_argument("--no-gpu-dynamic-batch", dest="gpu_dynamic_batch", action="store_false", help="Disable dynamic GPU batch sizing.")
+    parser.add_argument("--gpu-min-batch-size", type=int, default=2, help="Minimum dynamic GPU batch size.")
+    parser.add_argument("--gpu-max-batch-size", type=int, default=16, help="Maximum dynamic GPU batch size.")
+    parser.add_argument("--num-worker-parallel-cpu", type=int, default=8, help="CPU worker count for parallel matching.")
+    parser.add_argument("--use-parallel-cpu", action="store_true", default=True, help="Enable parallel CPU matching.")
+    parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable parallel CPU matching.")
+    parser.add_argument("--binary", action="store_true", help="Write the ControlNet in binary format instead of PVL.")
     parser.add_argument(
         "--log-level",
         default="INFO",
@@ -1082,15 +1108,54 @@ def main(argv: list[str] | None = None) -> None:
         parser.print_help()
         return
     args = parser.parse_args(normalized_argv)
-    if args.command == "from-ori-match":
-        parser.error(
-            "from-ori-match is temporarily unavailable in Task 1; "
-            "direct original-image matching will be implemented in Task 4."
-        )
     logging.basicConfig(level=getattr(logging, getattr(args, "log_level", "INFO")), format="%(levelname)s %(message)s")
     logger = logging.getLogger("controlnet_construct.controlnet_stereopair")
 
-    if args.command == "from-dom":
+    if args.command == "from-ori-match":
+        config = _apply_cli_pair_id_override(read_controlnet_config(args.config), args.pair_id)
+        left_output_key = (
+            Path(args.left_output_key)
+            if args.left_output_key is not None
+            else _default_intermediate_key_path(args.output_net, "left", "ori_match")
+        )
+        right_output_key = (
+            Path(args.right_output_key)
+            if args.right_output_key is not None
+            else _default_intermediate_key_path(args.output_net, "right", "ori_match")
+        )
+        match_result = match_ori_pair_to_key_files(
+            args.left_cube,
+            args.right_cube,
+            left_output_key,
+            right_output_key,
+            matcher_method=args.matcher_method,
+            band=args.band,
+            ratio_test=args.ratio_test,
+            max_features=args.max_features,
+            show_progress=args.show_progress,
+            use_gpu=args.use_gpu,
+            gpu_batch_size=args.gpu_batch_size,
+            gpu_dynamic_batch=args.gpu_dynamic_batch,
+            gpu_min_batch_size=args.gpu_min_batch_size,
+            gpu_max_batch_size=args.gpu_max_batch_size,
+            num_worker_parallel_cpu=args.num_worker_parallel_cpu,
+            use_parallel_cpu=args.use_parallel_cpu,
+        )
+        controlnet_result = build_controlnet_for_stereo_pair(
+            left_output_key,
+            right_output_key,
+            args.left_cube,
+            args.right_cube,
+            config,
+            args.output_net,
+            pvl_format=not args.binary,
+        )
+        result = {
+            "mode": "from-ori-match",
+            "match": match_result,
+            "controlnet": controlnet_result,
+        }
+    elif args.command == "from-dom":
         config = _apply_cli_pair_id_override(read_controlnet_config(args.config), args.pair_id)
         result = build_controlnet_for_dom_stereo_pair(
             args.left_dom_key,

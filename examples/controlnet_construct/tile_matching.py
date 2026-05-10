@@ -1476,7 +1476,7 @@ def _run_parallel_tile_match_tasks(
     backend = build_image_backend(image_space)
     if not tasks:
         return []
-    if any(task.image_space != backend.space for task in tasks):
+    if any(getattr(task, "image_space", backend.space) != backend.space for task in tasks):
         raise ValueError(
             f"Mismatched image_space for tile tasks. Expected {backend.space!r}."
         )

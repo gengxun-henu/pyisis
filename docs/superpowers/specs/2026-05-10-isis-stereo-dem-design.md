@@ -82,7 +82,7 @@ DEM 生产拆成四层：
 
 ### 3.3 与现有 ORI ControlNet 计划的关系
 
-现有 `docs/superpowers/plans/2026-05-10-ori-space-direct-controlnet.md` 负责：
+现有 `docs/superpowers/specs/2026-05-10-ori-space-direct-controlnet-design.md` 负责：
 
 ```text
 ORI match -> left_ori.key / right_ori.key -> ControlNet .net

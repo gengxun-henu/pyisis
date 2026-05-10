@@ -56,6 +56,42 @@ examples/dem_extract/
 
 `examples/dem_extract` 不得反向依赖 ControlNet `.net` 构建逻辑；ControlNet 构建模块也不需要了解 DEM 输出。两条链路共享 `.key` 点对文件，但各自产生不同产品。
 
+### 3.1.1 模块职责与 API 边界
+
+`key_pairs.py` is responsible for reading left/right `.key` files, verifying
+matching point counts, validating image dimensions against opened cubes, and
+yielding immutable paired point records. It should reuse
+`examples.controlnet_construct.keypoints.read_key_file` instead of duplicating
+the parser.
+
+`triangulation.py` opens left/right cubes once per run, fetches each camera once,
+and iterates over point pairs. For every accepted pair it calls:
+
+```python
+left_camera.set_image(left_sample, left_line)
+right_camera.set_image(right_sample, right_line)
+success, radius_m, latitude_deg, longitude_deg, sepang_deg, error_m = (
+    ip.Stereo.elevation(left_camera, right_camera)
+)
+x_km, y_km, z_km = ip.Stereo.spherical(latitude_deg, longitude_deg, radius_m)
+```
+
+It records failures with the point index and operation name instead of aborting
+the whole run on the first bad point.
+
+`grid.py` owns projection/grid conversion. For the first implementation, prefer
+an existing projected ISIS cube template so the code can call
+`template_cube.projection()` and reuse `Projection.set_universal_ground(...)`,
+`Projection.world_x()`, and `Projection.world_y()` to map latitude/longitude to
+DEM grid cells. Pure PVL-to-projection construction is a follow-up unless the
+active conda ISIS pybind surface already exposes a reliable factory.
+
+`cube_writer.py` creates the output cube with explicit dimensions, pixel type,
+and Mapping label copied from the template. It writes one line at a time with
+`ip.LineManager` and `Cube.write(...)`, using ISIS Null/nodata for empty cells
+when the binding exposes a stable special-pixel value; otherwise the design must
+require a documented numeric nodata value in summary metadata.
+
 ### 3.2 全 ISIS 几何 + ISIS Cube 输出分层
 
 DEM 生产拆成四层：

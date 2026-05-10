@@ -75,6 +75,10 @@ Updated: 2026-05-20  Geng Xun added deep adapter normalization coverage for cano
 Updated: 2026-05-20  Geng Xun added regression coverage ensuring lightweight deep fallback frontends and matchers emit deterministic non-empty correspondences for non-empty inputs.
 Updated: 2026-05-21  Geng Xun replaced synthetic deep correspondences assertions with explicit missing-dependency error coverage.
 Updated: 2026-05-22  Geng Xun added deep dependency normalization and deep adapter reuse regression coverage for tile dispatch.
+Updated: 2026-05-22  Geng Xun added ori-space entrypoint regression coverage for superpoint routing and fail-fast dependency errors.
+Updated: 2026-05-22  Geng Xun added regression coverage for dom/ori image-space backend construction helpers.
+Updated: 2026-05-22  Geng Xun added ORI key export regression coverage for pair-level `.key` output summaries.
+Updated: 2026-05-22  Geng Xun tightened ORI delegation and `.key` file readability regression coverage for Task 3 review fixes.
 """
 
 from __future__ import annotations
@@ -124,6 +128,7 @@ keypoints_module = importlib.import_module("controlnet_construct.keypoints")
 Keypoint = keypoints_module.Keypoint
 KeypointFile = keypoints_module.KeypointFile
 write_key_file = keypoints_module.write_key_file
+read_key_file = keypoints_module.read_key_file
 
 
 FIXTURE_DOM_LEFT = workspace_test_data_path("hidtmgen", "ortho", "PSP_002118_1510_1m_o_forPDS_cropped.cub")
@@ -1230,9 +1235,94 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
 
     def test_normalize_matcher_method_accepts_deep_methods(self):
+        self.assertEqual(tile_matching_module._normalize_matcher_method("superpoint"), "superpoint")
         self.assertEqual(tile_matching_module._normalize_matcher_method("superglue"), "superglue")
         self.assertEqual(tile_matching_module._normalize_matcher_method("  LIGHTGLUE  "), "lightglue")
         self.assertEqual(tile_matching_module._normalize_matcher_method("LOFTR"), "loftr")
+
+    def test_match_ori_pair_routes_through_match_pair_generic_with_ori_space(self):
+        expected = ("left-key", "right-key", {"status": "matched"})
+
+        with mock.patch.object(image_match, "_match_pair_generic", return_value=expected) as match_pair_generic_mock:
+            result = image_match.match_ori_pair(
+                "left.cub",
+                "right.cub",
+                matcher_method="bf",
+                max_features=64,
+            )
+
+        self.assertEqual(result, expected)
+        match_pair_generic_mock.assert_called_once_with(
+            "left.cub",
+            "right.cub",
+            image_space="ori",
+            matcher_method="bf",
+            max_features=64,
+        )
+
+    def test_match_ori_pair_deep_dependency_missing_fails_fast(self):
+        deep_frontends_module = importlib.import_module("controlnet_construct.deep_frontends")
+
+        with mock.patch.object(
+            deep_frontends_module.SuperPointFrontend,
+            "extract",
+            side_effect=deep_frontends_module.DeepDependencyError("superpoint", "missing optional dependency 'torch'."),
+        ), mock.patch.object(
+            image_match,
+            "match_dom_pair",
+            side_effect=AssertionError("match_dom_pair should not run when deep dependencies are unavailable"),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "superpoint|dependency|torch"):
+                image_match.match_ori_pair(
+                    "left.cub",
+                    "right.cub",
+                    matcher_method="superpoint",
+                )
+
+    def test_match_ori_pair_to_key_files_writes_ori_keys(self):
+        with temporary_directory() as temp_dir:
+            left_key = temp_dir / "left_ori.key"
+            right_key = temp_dir / "right_ori.key"
+            expected_left_key_file = KeypointFile(32, 32, (Keypoint(1.5, 2.5), Keypoint(3.5, 4.5)))
+            expected_right_key_file = KeypointFile(32, 32, (Keypoint(5.5, 6.5), Keypoint(7.5, 8.5)))
+
+            with mock.patch.object(
+                image_match,
+                "match_ori_pair",
+                return_value=(
+                    expected_left_key_file,
+                    expected_right_key_file,
+                    {
+                        "status": "matched_no_points",
+                        "matcher": {"matcher_method_requested": "sift"},
+                    },
+                ),
+            ):
+                result = image_match.match_ori_pair_to_key_files(
+                    "left.cub",
+                    "right.cub",
+                    left_key,
+                    right_key,
+                )
+
+            self.assertEqual(result["left_output_key"], str(left_key))
+            self.assertEqual(result["right_output_key"], str(right_key))
+            self.assertTrue(left_key.is_file())
+            self.assertTrue(right_key.is_file())
+            self.assertEqual(read_key_file(left_key), expected_left_key_file)
+            self.assertEqual(read_key_file(right_key), expected_right_key_file)
+
+    def test_build_image_backend_accepts_ori_space(self):
+        backend = tile_matching.build_image_backend("ori")
+        self.assertEqual(backend.space, "ori")
+
+    def test_build_image_backend_accepts_dom_space(self):
+        backend = tile_matching.build_image_backend("dom")
+        self.assertEqual(backend.space, "dom")
+
+    def test_build_image_backend_rejects_invalid_image_space(self):
+        with self.assertRaisesRegex(ValueError, "Unsupported image_space"):
+            tile_matching.build_image_backend("map")
 
     def test_normalize_matcher_method_rejects_unknown_method(self):
         with self.assertRaisesRegex(ValueError, "Unsupported matcher_method"):
@@ -5657,6 +5747,23 @@ class TestGpuPipelineRouting(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "mixed CPU/GPU"):
             tile_matching._run_parallel_tile_match_tasks(
                 [gpu_task, cpu_task],
+                max_workers=2,
+                show_progress=False,
+            )
+
+    def test_run_parallel_tasks_rejects_image_space_mismatch(self):
+        base_task = self._make_gpu_task()
+        task = tile_matching.TileMatchTask(
+            **{
+                field: ("ori" if field == "image_space" else getattr(base_task, field))
+                for field in base_task.__dataclass_fields__
+            }
+        )
+
+        with self.assertRaisesRegex(ValueError, "Mismatched image_space"):
+            tile_matching._run_parallel_tile_match_tasks(
+                [task],
+                image_space="dom",
                 max_workers=2,
                 show_progress=False,
             )

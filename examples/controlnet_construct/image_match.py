@@ -34,6 +34,9 @@ Updated: 2026-05-20  Geng Xun wired dynamic GPU batch options into image-match e
 Updated: 2026-05-20  Geng Xun corrected GPU tile-route backend diagnostics.
 Updated: 2026-05-20  Geng Xun added GPU execution configuration summary fields.
 Updated: 2026-05-20  Geng Xun aligned GPU batch defaults and backend reporting with effective GPU route support.
+Updated: 2026-05-22  Geng Xun added a baseline ori-space matching entrypoint with superpoint dependency fail-fast checks.
+Updated: 2026-05-22  Geng Xun threaded a minimal dom/ori image-space backend selector through tile-matching entrypoints.
+Updated: 2026-05-22  Geng Xun added ORI pair-level `.key` export helpers and accepted the `superpoint` selector in CLI matcher choices.
 """
 
 from __future__ import annotations
@@ -75,6 +78,7 @@ if __package__ in {None, ""}:
         TileMatchStats,
         TileMatchTask,
         _build_sift_detector,
+        build_image_backend,
         _build_tile_match_tasks,
         _can_use_dedicated_gpu_tile_route,
         _keypoint_to_isis_coordinates,
@@ -110,6 +114,7 @@ else:
         TileMatchStats,
         TileMatchTask,
         _build_sift_detector,
+        build_image_backend,
         _build_tile_match_tasks,
         _can_use_dedicated_gpu_tile_route,
         _keypoint_to_isis_coordinates,
@@ -1009,10 +1014,80 @@ def _estimate_low_resolution_projected_offset(
     )
 
 
+def _match_pair_generic(
+    left_path: str | Path,
+    right_path: str | Path,
+    *,
+    image_space: str,
+    matcher_method: str = DEFAULT_MATCHER_METHOD,
+    **kwargs,
+):
+    backend = build_image_backend(image_space)
+    resolved_image_space = backend.space
+
+    resolved_matcher_method = str(matcher_method).strip().lower()
+    if resolved_image_space == "ori" and resolved_matcher_method == "superpoint":
+        if __package__ in {None, ""}:
+            from controlnet_construct.deep_frontends import DeepDependencyError, SuperPointFrontend
+        else:
+            from .deep_frontends import DeepDependencyError, SuperPointFrontend
+
+        try:
+            SuperPointFrontend().extract([[0.0]], device="cpu")
+        except DeepDependencyError as exc:
+            raise RuntimeError(str(exc)) from exc
+
+    return match_dom_pair(
+        left_path,
+        right_path,
+        image_space=resolved_image_space,
+        matcher_method=matcher_method,
+        **kwargs,
+    )
+
+
+def match_ori_pair(
+    left_cube_path: str | Path,
+    right_cube_path: str | Path,
+    *,
+    matcher_method: str = DEFAULT_MATCHER_METHOD,
+    **kwargs,
+):
+    return _match_pair_generic(
+        left_cube_path,
+        right_cube_path,
+        image_space="ori",
+        matcher_method=matcher_method,
+        **kwargs,
+    )
+
+
+def match_ori_pair_to_key_files(
+    left_cube_path: str | Path,
+    right_cube_path: str | Path,
+    left_output_key: str | Path,
+    right_output_key: str | Path,
+    **kwargs,
+) -> dict[str, object]:
+    left_key_file, right_key_file, summary = match_ori_pair(
+        left_cube_path,
+        right_cube_path,
+        **kwargs,
+    )
+    write_key_file(left_output_key, left_key_file)
+    write_key_file(right_output_key, right_key_file)
+    return {
+        **summary,
+        "left_output_key": str(left_output_key),
+        "right_output_key": str(right_output_key),
+    }
+
+
 def match_dom_pair(
     left_dom_path: str | Path,
     right_dom_path: str | Path,
     *,
+    image_space: str = "dom",
     band: int = 1,
     max_image_dimension: int = 3000,
     block_width: int = 1024,
@@ -1069,6 +1144,7 @@ def match_dom_pair(
     right_cube = ip.Cube()
 
     try:
+        image_backend = build_image_backend(image_space)
         left_cube.open(str(left_dom_path), "r")
         right_cube.open(str(right_dom_path), "r")
         resolved_valid_pixel_percent_threshold = _validate_valid_pixel_percent_threshold(valid_pixel_percent_threshold)
@@ -1266,6 +1342,7 @@ def match_dom_pair(
                             candidate_windows,
                             left_dom_path=left_dom_path,
                             right_dom_path=right_dom_path,
+                            image_space=image_backend.space,
                             band=band,
                             minimum_value=minimum_value,
                             maximum_value=maximum_value,
@@ -1289,6 +1366,7 @@ def match_dom_pair(
                         try:
                             tile_results = _run_parallel_tile_match_tasks(
                                 tile_tasks,
+                                image_space=image_backend.space,
                                 max_workers=candidate_worker_count,
                                 progress_callback=progress_bar.update if progress_bar is not None else None,
                                 gpu_dynamic_batch=gpu_dynamic_batch,
@@ -1319,6 +1397,7 @@ def match_dom_pair(
                         try:
                             tile_results = _run_serial_tile_match_tasks(
                                 candidate_windows,
+                                image_space=image_backend.space,
                                 left_cube=left_cube,
                                 right_cube=right_cube,
                                 band=band,
@@ -1356,6 +1435,7 @@ def match_dom_pair(
                     try:
                         tile_results = _run_serial_tile_match_tasks(
                             candidate_windows,
+                            image_space=image_backend.space,
                             left_cube=left_cube,
                             right_cube=right_cube,
                             band=band,
@@ -1409,6 +1489,7 @@ def match_dom_pair(
         summary = {
             "left_dom": str(left_dom_path),
             "right_dom": str(right_dom_path),
+            "image_space": image_backend.space,
             "band": band,
             "min_valid_pixels": min_valid_pixels,
             "valid_pixel_percent_threshold": resolved_valid_pixel_percent_threshold,
@@ -1682,7 +1763,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--tile-validity-cache-dir", default=None, help="Directory for reusable per-DOM tile-validity index cache files.")
     parser.add_argument("--tile-validity-cell-width", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_width"), default=DEFAULT_TILE_VALIDITY_CELL_WIDTH, help=f"Coarse validity-index cell width. Default: {DEFAULT_TILE_VALIDITY_CELL_WIDTH}.")
     parser.add_argument("--tile-validity-cell-height", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_height"), default=DEFAULT_TILE_VALIDITY_CELL_HEIGHT, help=f"Coarse validity-index cell height. Default: {DEFAULT_TILE_VALIDITY_CELL_HEIGHT}.")
-    parser.add_argument("--matcher-method", type=_parse_matcher_method, default=DEFAULT_MATCHER_METHOD, help="Matcher method: bf, flann, superglue, lightglue, loftr (default: bf).")
+    parser.add_argument("--matcher-method", type=_parse_matcher_method, default=DEFAULT_MATCHER_METHOD, help="Matcher method: bf, flann, superpoint, superglue, lightglue, loftr (default: bf).")
     parser.add_argument("--ratio-test", type=float, default=0.75, help="Lowe ratio-test threshold used for descriptor filtering.")
     parser.add_argument("--max-features", type=int, default=None, help="Optional maximum number of SIFT features per tile.")
     parser.add_argument("--sift-octave-layers", type=int, default=3, help="Number of octave layers used by the OpenCV SIFT detector.")

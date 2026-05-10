@@ -1256,16 +1256,19 @@ Run this live-instance smoke check before committing the cube writer slice:
 ```bash
 conda run -n asp360_new python - <<'PY'
 from pathlib import Path
-from tempfile import TemporaryDirectory
+import shutil
 import isis_pybind as ip
 from examples.dem_extract.cube_writer import preflight_cube_writer_bindings
 
-with TemporaryDirectory() as temp_dir:
-    temp_dir = Path(temp_dir)
+scratch_dir = Path("build/dem_extract_writer_preflight_smoke")
+if scratch_dir.exists():
+    shutil.rmtree(scratch_dir)
+scratch_dir.mkdir(parents=True)
+try:
     template_cube = ip.Cube()
     template_cube.set_dimensions(1, 1, 1)
     template_cube.set_pixel_type(ip.PixelType.Real)
-    template_cube.create(str(temp_dir / "template.cub"))
+    template_cube.create(str(scratch_dir / "template.cub"))
     mapping = ip.PvlGroup("Mapping")
     mapping.add_keyword(ip.PvlKeyword("ProjectionName", "Equirectangular"))
     template_cube.put_group(mapping)
@@ -1273,7 +1276,7 @@ with TemporaryDirectory() as temp_dir:
     output_cube = ip.Cube()
     output_cube.set_dimensions(1, 1, 1)
     output_cube.set_pixel_type(ip.PixelType.Real)
-    output_cube.create(str(temp_dir / "output.cub"))
+    output_cube.create(str(scratch_dir / "output.cub"))
 
     missing = preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)
     print({"missing": missing})
@@ -1281,6 +1284,8 @@ with TemporaryDirectory() as temp_dir:
         raise SystemExit(1)
     template_cube.close()
     output_cube.close()
+finally:
+    shutil.rmtree(scratch_dir, ignore_errors=True)
 PY
 ```
 
@@ -1567,16 +1572,19 @@ Run:
 ```bash
 conda run -n asp360_new python - <<'PY'
 from pathlib import Path
-from tempfile import TemporaryDirectory
+import shutil
 import isis_pybind as ip
 from examples.dem_extract.cube_writer import preflight_cube_writer_bindings
 
-with TemporaryDirectory() as temp_dir:
-    temp_dir = Path(temp_dir)
+scratch_dir = Path("build/dem_extract_writer_preflight_smoke")
+if scratch_dir.exists():
+    shutil.rmtree(scratch_dir)
+scratch_dir.mkdir(parents=True)
+try:
     template_cube = ip.Cube()
     template_cube.set_dimensions(1, 1, 1)
     template_cube.set_pixel_type(ip.PixelType.Real)
-    template_cube.create(str(temp_dir / "template.cub"))
+    template_cube.create(str(scratch_dir / "template.cub"))
     mapping = ip.PvlGroup("Mapping")
     mapping.add_keyword(ip.PvlKeyword("ProjectionName", "Equirectangular"))
     template_cube.put_group(mapping)
@@ -1584,7 +1592,7 @@ with TemporaryDirectory() as temp_dir:
     output_cube = ip.Cube()
     output_cube.set_dimensions(1, 1, 1)
     output_cube.set_pixel_type(ip.PixelType.Real)
-    output_cube.create(str(temp_dir / "output.cub"))
+    output_cube.create(str(scratch_dir / "output.cub"))
 
     missing = preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)
     print({"missing": missing})
@@ -1592,6 +1600,8 @@ with TemporaryDirectory() as temp_dir:
         raise SystemExit(1)
     template_cube.close()
     output_cube.close()
+finally:
+    shutil.rmtree(scratch_dir, ignore_errors=True)
 PY
 ```
 

@@ -24,7 +24,6 @@ nouse/
 docs/paper_pyisis_module_architecture.md
 docs/paper_appendix_pybind_camera_model.md
 tests/unitTest/controlnet_construct_dom2ori_unit_test*
-docs/superpowers/*
 left_dom.cub
 right_dom.cub
 tests/unitTest/generated_reports/*

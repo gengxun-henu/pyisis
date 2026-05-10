@@ -20,6 +20,7 @@ Updated: 2026-05-03  Geng Xun forwarded post-RANSAC visualization preview option
 Updated: 2026-05-04  Geng Xun aligned CLI visualization defaults with the API scale and normalized preview option parsing.
 Updated: 2026-05-05  Geng Xun added compact stdout summaries by default so detailed conversion failures and batch report payloads stay in JSON sidecars instead of flooding the terminal.
 Updated: 2026-05-22  Geng Xun added a baseline from-ori-match parser skeleton for direct ori-space matching follow-up work.
+Updated: 2026-05-10  Geng Xun made the Task-1 from-ori-match CLI fail safely with a clear not-yet-implemented error instead of crashing on missing parser attrs.
 """
 
 from __future__ import annotations
@@ -819,6 +820,13 @@ def _build_from_original_match_parser(subparsers) -> None:
     parser.add_argument("right_cube", help="Original cube path for image B.")
     parser.add_argument("config", help="JSON config file containing NetworkId, TargetName, and UserName.")
     parser.add_argument("output_net", help="Output ControlNet path.")
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=("DEBUG", "INFO", "WARNING", "ERROR"),
+        help="Logging verbosity for runtime diagnostics.",
+    )
+    _add_stdout_detail_control_arguments(parser)
 
 
 def _build_from_dom_parser(subparsers) -> None:
@@ -1073,7 +1081,12 @@ def main(argv: list[str] | None = None) -> None:
         parser.print_help()
         return
     args = parser.parse_args(normalized_argv)
-    logging.basicConfig(level=getattr(logging, args.log_level), format="%(levelname)s %(message)s")
+    if args.command == "from-ori-match":
+        raise NotImplementedError(
+            "from-ori-match is intentionally limited to parser/dispatch coverage in Task 1; "
+            "the direct original-image matching pipeline will be implemented in Task 4."
+        )
+    logging.basicConfig(level=getattr(logging, getattr(args, "log_level", "INFO")), format="%(levelname)s %(message)s")
     logger = logging.getLogger("controlnet_construct.controlnet_stereopair")
 
     if args.command == "from-dom":

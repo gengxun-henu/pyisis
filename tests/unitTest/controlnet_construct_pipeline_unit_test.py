@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-09
+Last Modified: 2026-05-10
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -34,11 +34,16 @@ Updated: 2026-05-05  Geng Xun aligned pipeline-wrapper regressions with explicit
 Updated: 2026-05-08  Geng Xun replaced the overbuilt deep-matcher pipeline forwarding regression with a lightweight matcher parser acceptance check.
 Updated: 2026-05-08  Geng Xun split deep-matcher parser acceptance from a lightweight pipeline forwarding assertion that checks matcher-method passthrough.
 Updated: 2026-05-09  Geng Xun added wrapper-help regression coverage requiring superglue/lightglue/loftr method strings.
+Updated: 2026-05-22  Geng Xun added baseline parser coverage for the new from-ori-match controlnet subcommand.
+Updated: 2026-05-10  Geng Xun added CLI execution-path coverage so from-ori-match fails in a controlled Task-1-safe way instead of crashing on missing parser attrs.
+Updated: 2026-05-10  Geng Xun updated from-ori-match coverage to require a clean argparse-style CLI rejection without a traceback.
+Updated: 2026-05-10  Geng Xun updated from-ori-match coverage for full CLI dispatch into ori matching and direct ControlNet build.
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
 import io
 import os
@@ -1715,6 +1720,101 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("lightglue", content)
         self.assertIn("superglue", content)
         self.assertIn("loftr", content)
+
+    def test_controlnet_stereopair_parser_recognizes_from_ori_match_command(self):
+        parser = importlib.import_module("controlnet_construct.controlnet_stereopair").build_argument_parser()
+        parsed = parser.parse_args(
+            [
+                "from-ori-match",
+                "left.cub",
+                "right.cub",
+                "config.json",
+                "output.net",
+            ]
+        )
+
+        self.assertEqual(parsed.command, "from-ori-match")
+        self.assertEqual(parsed.left_cube, "left.cub")
+        self.assertEqual(parsed.right_cube, "right.cub")
+        self.assertEqual(parsed.config, "config.json")
+        self.assertEqual(parsed.output_net, "output.net")
+
+    def test_controlnet_stereopair_parser_accepts_from_ori_match_matcher_and_gpu_flags(self):
+        parser = importlib.import_module("controlnet_construct.controlnet_stereopair").build_argument_parser()
+        parsed = parser.parse_args(
+            [
+                "from-ori-match",
+                "left.cub",
+                "right.cub",
+                "config.json",
+                "output.net",
+                "--matcher-method",
+                "loftr",
+                "--use-gpu",
+                "--gpu-batch-size",
+                "8",
+            ]
+        )
+        self.assertEqual(parsed.command, "from-ori-match")
+        self.assertEqual(parsed.matcher_method, "loftr")
+        self.assertTrue(parsed.use_gpu)
+        self.assertEqual(parsed.gpu_batch_size, 8)
+
+    def test_controlnet_stereopair_main_from_ori_match_dispatches_matching_and_controlnet(self):
+        fake_config = ControlNetConfig(network_id="N", target_name="Mars", user_name="tester")
+        fake_match_result = {
+            "left_output_key": "left_out.key",
+            "right_output_key": "right_out.key",
+            "status": "matched",
+        }
+        fake_controlnet_result = {"point_count": 3, "measure_count": 6}
+        stdout = io.StringIO()
+
+        with (
+            patch(
+                "controlnet_construct.controlnet_stereopair.read_controlnet_config",
+                return_value=fake_config,
+            ),
+            patch(
+                "controlnet_construct.controlnet_stereopair.match_ori_pair_to_key_files",
+                return_value=fake_match_result,
+            ) as match_mock,
+            patch(
+                "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                return_value=fake_controlnet_result,
+            ) as controlnet_mock,
+            patch.object(sys, "stdout", stdout),
+        ):
+            controlnet_stereopair_main(
+                [
+                    "from-ori-match",
+                    "left.cub",
+                    "right.cub",
+                    "config.json",
+                    "output.net",
+                    "--left-output-key",
+                    "left_out.key",
+                    "--right-output-key",
+                    "right_out.key",
+                    "--matcher-method",
+                    "loftr",
+                    "--use-gpu",
+                ]
+            )
+
+        self.assertEqual(match_mock.call_args.args[0:4], ("left.cub", "right.cub", Path("left_out.key"), Path("right_out.key")))
+        self.assertEqual(match_mock.call_args.kwargs["matcher_method"], "loftr")
+        self.assertTrue(match_mock.call_args.kwargs["use_gpu"])
+        self.assertEqual(
+            controlnet_mock.call_args.args[0:6],
+            (Path("left_out.key"), Path("right_out.key"), "left.cub", "right.cub", fake_config, "output.net"),
+        )
+        self.assertTrue(controlnet_mock.call_args.kwargs["pvl_format"])
+
+        payload = json.loads(stdout.getvalue())
+        self.assertEqual(payload["mode"], "from-ori-match")
+        self.assertEqual(payload["match"], fake_match_result)
+        self.assertEqual(payload["controlnet"], fake_controlnet_result)
 
     def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:

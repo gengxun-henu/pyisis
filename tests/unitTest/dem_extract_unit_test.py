@@ -5,6 +5,8 @@ Author: Geng Xun
 Created: 2026-05-10
 Last Modified: 2026-05-10
 Updated: 2026-05-10  Geng Xun added focused coverage for the dem_extract from-key pipeline.
+Updated: 2026-05-10  Geng Xun added focused coverage for the DEM image-matching pipeline wrapper.
+Updated: 2026-05-10  Geng Xun added focused coverage for `.key` refinement stages in the DEM flow.
 """
 
 from __future__ import annotations
@@ -194,6 +196,16 @@ class DemExtractTriangulationUnitTest(unittest.TestCase):
         self.assertEqual(counters["filtered_radius_count"], 1)
         self.assertEqual(counters["success_count"], 1)
 
+    def test_apply_datum_radius_populates_height_m(self):
+        from dem_extract.triangulation import TriangulatedPoint, apply_datum_radius
+
+        records = [TriangulatedPoint(0, 1, 1, 1, 1, "success", "", radius_m=1737412.5)]
+
+        adjusted = apply_datum_radius(records, 1737400.0)
+
+        self.assertEqual(adjusted[0].datum_radius_m, 1737400.0)
+        self.assertAlmostEqual(adjusted[0].height_m, 12.5, places=6)
+
 
 class DemExtractRuntimeOutputUnitTest(unittest.TestCase):
     def setUp(self):
@@ -219,6 +231,7 @@ class DemExtractRuntimeOutputUnitTest(unittest.TestCase):
         row = json.loads(path.read_text(encoding="utf-8").strip())
         self.assertEqual(row["index"], 0)
         self.assertEqual(row["radius_m"], 7.0)
+        self.assertIsNone(row["height_m"])
         self.assertEqual(row["intersection_error_m"], 9.0)
 
     def test_build_summary_contains_required_counters_and_value_type(self):
@@ -242,13 +255,18 @@ class DemExtractRuntimeOutputUnitTest(unittest.TestCase):
             },
             rasterized_point_count=1,
             filled_cell_count=1,
+            value_type="height_m",
+            datum_radius_m=1737400.0,
+            refinement={"applied": True, "stage_count": 1},
             max_error_m=10.0,
             min_sepang_deg=0.5,
             nodata_value=-32768.0,
             aggregation="median",
         )
 
-        self.assertEqual(summary["value_type"], "radius_m")
+        self.assertEqual(summary["value_type"], "height_m")
+        self.assertEqual(summary["datum_radius_m"], 1737400.0)
+        self.assertEqual(summary["refinement"]["stage_count"], 1)
         self.assertEqual(summary["input_point_count"], 4)
         self.assertEqual(summary["failed_set_image_count"], 1)
         self.assertEqual(summary["nodata_value"], -32768.0)
@@ -286,6 +304,20 @@ class DemExtractGridUnitTest(unittest.TestCase):
         self.assertEqual(aggregate_cell_values(records, "median"), 20.0)
         self.assertEqual(aggregate_cell_values(records, "mean"), 20.0)
         self.assertEqual(aggregate_cell_values(records, "min-error"), 30.0)
+
+    def test_aggregation_supports_height_field(self):
+        from dem_extract.grid import aggregate_cell_values
+        from dem_extract.triangulation import TriangulatedPoint
+
+        records = [
+            TriangulatedPoint(0, 1, 1, 1, 1, "success", "", radius_m=10.0, height_m=1.0, intersection_error_m=5.0),
+            TriangulatedPoint(1, 1, 1, 1, 1, "success", "", radius_m=30.0, height_m=3.0, intersection_error_m=1.0),
+            TriangulatedPoint(2, 1, 1, 1, 1, "success", "", radius_m=20.0, height_m=2.0, intersection_error_m=3.0),
+        ]
+
+        self.assertEqual(aggregate_cell_values(records, "median", value_field="height_m"), 2.0)
+        self.assertEqual(aggregate_cell_values(records, "mean", value_field="height_m"), 2.0)
+        self.assertEqual(aggregate_cell_values(records, "min-error", value_field="height_m"), 3.0)
 
     def test_rasterize_points_uses_template_projection_and_fills_nodata(self):
         from dem_extract.grid import GridSpec, rasterize_points
@@ -490,13 +522,15 @@ class DemExtractCliUnitTest(unittest.TestCase):
             Cube = FakeCube
 
         original_import = isis_stereo_dem.import_isis_pybind
-        original_load = isis_stereo_dem.load_key_point_pairs
+        original_read_key = isis_stereo_dem.read_key_file
+        original_load = isis_stereo_dem.load_key_point_pairs_from_key_files
         original_triangulate = isis_stereo_dem.triangulate_pairs
         original_rasterize = isis_stereo_dem.rasterize_points
         original_write_cube = isis_stereo_dem.write_radius_cube
         try:
             isis_stereo_dem.import_isis_pybind = lambda: FakeIp
-            isis_stereo_dem.load_key_point_pairs = lambda *args, **kwargs: [object()]
+            isis_stereo_dem.read_key_file = lambda *args, **kwargs: type("KeyFile", (), {"points": (object(),), "image_width": 2, "image_height": 1})()
+            isis_stereo_dem.load_key_point_pairs_from_key_files = lambda *args, **kwargs: [object()]
             isis_stereo_dem.triangulate_pairs = lambda *args, **kwargs: (
                 [TriangulatedPoint(0, 1, 1, 1, 1, "success", "", radius_m=1.0)],
                 {"success_count": 1},
@@ -510,7 +544,8 @@ class DemExtractCliUnitTest(unittest.TestCase):
             isis_stereo_dem.run_from_key(args)
         finally:
             isis_stereo_dem.import_isis_pybind = original_import
-            isis_stereo_dem.load_key_point_pairs = original_load
+            isis_stereo_dem.read_key_file = original_read_key
+            isis_stereo_dem.load_key_point_pairs_from_key_files = original_load
             isis_stereo_dem.triangulate_pairs = original_triangulate
             isis_stereo_dem.rasterize_points = original_rasterize
             isis_stereo_dem.write_radius_cube = original_write_cube
@@ -553,14 +588,218 @@ class DemExtractCliUnitTest(unittest.TestCase):
             "--min-radius-m", "1000",
             "--max-radius-m", "4000000",
             "--aggregation", "min-error",
+            "--value-type", "height_m",
+            "--datum-radius-m", "1737400",
+            "--refine-stage", "maximum-correlation",
+            "--refine-stage", "gruen",
+            "--refined-left-key-output", "left_refined.key",
+            "--refined-right-key-output", "right_refined.key",
+            "--refinement-summary-output", "refinement_summary.json",
             "--nodata-value", "-9999",
             "--log-level", "DEBUG",
         ])
 
         self.assertEqual(args.command, "from-key")
         self.assertEqual(args.aggregation, "min-error")
+        self.assertEqual(args.value_type, "height_m")
+        self.assertEqual(args.datum_radius_m, 1737400.0)
+        self.assertEqual(args.refine_stage, ["maximum-correlation", "gruen"])
         self.assertEqual(args.point_cloud_output, "points.jsonl")
         self.assertEqual(args.quality_prefix, "quality")
+
+
+class DemExtractRefinementUnitTest(unittest.TestCase):
+    def test_refinement_chain_updates_right_keypoints_and_reuses_stage_output_as_next_seed(self):
+        from controlnet_construct.keypoints import Keypoint, KeypointFile
+        from dem_extract.refinement import KeyRefinementOptions, refine_keypoint_file_pair
+
+        class FakeCube:
+            def sample_count(self):
+                return 100
+
+            def line_count(self):
+                return 100
+
+        class FakeChip:
+            def __init__(self):
+                self.tack_calls = []
+
+            def tack_cube(self, sample, line):
+                self.tack_calls.append((sample, line))
+
+            def load(self, cube):
+                pass
+
+        class FakeMatcher:
+            def __init__(self, scripted_results):
+                self.scripted_results = list(scripted_results)
+                self._pattern_chip = FakeChip()
+                self._search_chip = FakeChip()
+                self._current = None
+
+            def pattern_chip(self):
+                return self._pattern_chip
+
+            def search_chip(self):
+                return self._search_chip
+
+            def register(self):
+                self._current = self.scripted_results.pop(0)
+                return self._current["status"]
+
+            def success(self):
+                return self._current["status"] in {1, 2}
+
+            def cube_sample(self):
+                return self._current["sample"]
+
+            def cube_line(self):
+                return self._current["line"]
+
+            def goodness_of_fit(self):
+                return self._current.get("goodness", 1.0)
+
+        class FakeIp:
+            class AutoReg:
+                class RegisterStatus:
+                    SuccessPixel = 1
+                    SuccessSubPixel = 2
+                    FitChipToleranceNotMet = 3
+
+        left_key_file = KeypointFile(100, 100, (Keypoint(10.0, 20.0),))
+        right_key_file = KeypointFile(100, 100, (Keypoint(30.0, 40.0),))
+
+        maxcorr_matcher = FakeMatcher([
+            {"status": FakeIp.AutoReg.RegisterStatus.SuccessSubPixel, "sample": 31.5, "line": 41.5}
+        ])
+        gruen_matcher = FakeMatcher([
+            {"status": FakeIp.AutoReg.RegisterStatus.SuccessSubPixel, "sample": 31.75, "line": 41.25}
+        ])
+
+        import dem_extract.refinement as refinement
+
+        original_factory = refinement._create_stage_matcher
+        try:
+            def fake_factory(ip, stage_name, options):
+                if stage_name == "maximum_correlation":
+                    return maxcorr_matcher
+                if stage_name == "gruen":
+                    return gruen_matcher
+                raise AssertionError(stage_name)
+
+            refinement._create_stage_matcher = fake_factory
+
+            refined_left, refined_right, summary = refine_keypoint_file_pair(
+                left_cube=FakeCube(),
+                right_cube=FakeCube(),
+                left_key_file=left_key_file,
+                right_key_file=right_key_file,
+                ip=FakeIp,
+                options=KeyRefinementOptions(stages=("maximum_correlation", "gruen")),
+            )
+        finally:
+            refinement._create_stage_matcher = original_factory
+
+        self.assertEqual(refined_left.points[0], Keypoint(10.0, 20.0))
+        self.assertEqual(refined_right.points[0], Keypoint(31.75, 41.25))
+        self.assertTrue(summary["applied"])
+        self.assertEqual(summary["stage_count"], 2)
+        self.assertEqual(gruen_matcher.search_chip().tack_calls[0], (31.5, 41.5))
+
+    def test_refinement_failure_retains_original_seed_and_reports_failure(self):
+        from controlnet_construct.keypoints import Keypoint, KeypointFile
+        from dem_extract.refinement import KeyRefinementOptions, refine_keypoint_file_pair
+
+        class FakeCube:
+            def sample_count(self):
+                return 100
+
+            def line_count(self):
+                return 100
+
+        class FakeChip:
+            def tack_cube(self, sample, line):
+                pass
+
+            def load(self, cube):
+                pass
+
+        class FakeMatcher:
+            def __init__(self, status):
+                self.status = status
+                self._pattern_chip = FakeChip()
+                self._search_chip = FakeChip()
+
+            def pattern_chip(self):
+                return self._pattern_chip
+
+            def search_chip(self):
+                return self._search_chip
+
+            def register(self):
+                return self.status
+
+            def success(self):
+                return False
+
+            def cube_sample(self):
+                return 0.0
+
+            def cube_line(self):
+                return 0.0
+
+            def goodness_of_fit(self):
+                return 0.0
+
+        class FakeIp:
+            class AutoReg:
+                class RegisterStatus:
+                    SuccessPixel = 1
+                    SuccessSubPixel = 2
+                    FitChipToleranceNotMet = 3
+
+        left_key_file = KeypointFile(100, 100, (Keypoint(10.0, 20.0),))
+        right_key_file = KeypointFile(100, 100, (Keypoint(30.0, 40.0),))
+
+        import dem_extract.refinement as refinement
+
+        original_factory = refinement._create_stage_matcher
+        try:
+            refinement._create_stage_matcher = lambda *args, **kwargs: FakeMatcher(FakeIp.AutoReg.RegisterStatus.FitChipToleranceNotMet)
+            _, refined_right, summary = refine_keypoint_file_pair(
+                left_cube=FakeCube(),
+                right_cube=FakeCube(),
+                left_key_file=left_key_file,
+                right_key_file=right_key_file,
+                ip=FakeIp,
+                options=KeyRefinementOptions(stages=("maximum_correlation",)),
+            )
+        finally:
+            refinement._create_stage_matcher = original_factory
+
+        self.assertEqual(refined_right.points[0], Keypoint(30.0, 40.0))
+        self.assertEqual(summary["stages"][0]["failed_count"], 1)
+        self.assertEqual(summary["stages"][0]["updated_count"], 0)
+
+    def test_run_from_key_requires_datum_radius_for_height_mode(self):
+        from dem_extract import isis_stereo_dem
+
+        args = isis_stereo_dem.build_argument_parser().parse_args(
+            [
+                "from-key",
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "template.cub",
+                "dem.cub",
+                "--value-type",
+                "height_m",
+            ]
+        )
+
+        with self.assertRaisesRegex(ValueError, "datum-radius-m"):
+            isis_stereo_dem.run_from_key(args)
 
     def test_compact_stdout_payload_omits_point_records(self):
         from dem_extract.isis_stereo_dem import compact_stdout_payload
@@ -576,6 +815,221 @@ class DemExtractCliUnitTest(unittest.TestCase):
         self.assertEqual(payload["output_dem_cube"], "dem.cub")
         self.assertNotIn("records", payload)
         self.assertEqual(payload["success_count"], 2)
+
+
+class DemExtractPipelineUnitTest(unittest.TestCase):
+    def setUp(self):
+        self.workspace = PROJECT_ROOT / "build" / "dem_extract_pipeline_tests"
+        self.workspace.mkdir(parents=True, exist_ok=True)
+
+    def tearDown(self):
+        for path in sorted(self.workspace.rglob("*"), reverse=True):
+            if path.is_file():
+                path.unlink()
+            elif path.is_dir():
+                path.rmdir()
+        if self.workspace.exists():
+            self.workspace.rmdir()
+
+    def write_config(self, payload: dict) -> Path:
+        path = self.workspace / "dem_config.json"
+        path.write_text(json.dumps(payload), encoding="utf-8")
+        return path
+
+    def test_image_match_options_merge_common_and_route_overrides(self):
+        from dem_extract import dem_pipeline
+
+        config_path = self.write_config(
+            {
+                "ImageMatch": {
+                    "sub_block_size_x": 512,
+                    "sub_block_size_y": 256,
+                    "overlap_size_x": 32,
+                    "overlap_size_y": 16,
+                    "valid_pixel_percent_threshold": 0.05,
+                    "matcher_method": "bf",
+                },
+                "OriginalImageMatch": {
+                    "matcher_method": "flann",
+                    "valid_pixel_percent_threshold": 0.0,
+                },
+            }
+        )
+
+        options = dem_pipeline.image_match_options_for_route(config_path, "ori")
+
+        self.assertEqual(options["block_width"], 512)
+        self.assertEqual(options["block_height"], 256)
+        self.assertEqual(options["overlap_x"], 32)
+        self.assertEqual(options["overlap_y"], 16)
+        self.assertEqual(options["matcher_method"], "flann")
+        self.assertEqual(options["valid_pixel_percent_threshold"], 0.0)
+
+    def test_run_from_ori_match_dispatches_matching_then_dem(self):
+        from dem_extract import dem_pipeline
+
+        config_path = self.write_config(
+            {
+                "DemExtract": {"aggregation": "mean", "nodata_value": -1.0},
+                "ImageMatch": {"matcher_method": "bf", "sub_block_size_x": 128},
+                "KeyRefinement": {"enabled": True, "stages": ["maximum_correlation", "gruen"]},
+            }
+        )
+        args = dem_pipeline.build_argument_parser().parse_args(
+            [
+                "--work-dir",
+                str(self.workspace / "work"),
+                "--config",
+                str(config_path),
+                "from-ori-match-dem",
+                "--left-cube",
+                "left.cub",
+                "--right-cube",
+                "right.cub",
+                "--map-template-cube",
+                "template.cub",
+            ]
+        )
+        calls = []
+        original_match = dem_pipeline.match_ori_pair_to_key_files
+        original_dem = dem_pipeline.isis_stereo_dem.run_from_key
+        try:
+            def fake_match(left_cube, right_cube, left_output_key, right_output_key, **kwargs):
+                calls.append(("match", left_cube, right_cube, str(left_output_key), str(right_output_key), kwargs))
+                return {"matched_point_count": 2}
+
+            def fake_dem(dem_args):
+                calls.append(
+                    (
+                        "dem",
+                        dem_args.left_key,
+                        dem_args.right_key,
+                        dem_args.aggregation,
+                        dem_args.nodata_value,
+                        tuple(dem_args.refine_stage),
+                        dem_args.refined_left_key_output,
+                        dem_args.refined_right_key_output,
+                    )
+                )
+                return {"success_count": 2, "filled_cell_count": 1}
+
+            dem_pipeline.match_ori_pair_to_key_files = fake_match
+            dem_pipeline.isis_stereo_dem.run_from_key = fake_dem
+
+            result = dem_pipeline.run_pipeline(args)
+        finally:
+            dem_pipeline.match_ori_pair_to_key_files = original_match
+            dem_pipeline.isis_stereo_dem.run_from_key = original_dem
+
+        self.assertEqual(result["mode"], "from-ori-match-dem")
+        self.assertEqual(calls[0][0], "match")
+        self.assertEqual(calls[0][5]["block_width"], 128)
+        self.assertEqual(calls[1][0], "dem")
+        self.assertEqual(calls[1][3], "mean")
+        self.assertEqual(calls[1][4], -1.0)
+        self.assertEqual(calls[1][5], ("maximum_correlation", "gruen"))
+        self.assertIn("keys_refined", calls[1][6])
+        self.assertIn("keys_refined", calls[1][7])
+        self.assertTrue((self.workspace / "work" / "reports" / "pipeline_summary.json").exists())
+
+    def test_parser_exposes_from_ori_match_dem_alias(self):
+        from dem_extract import dem_pipeline
+
+        parser = dem_pipeline.build_argument_parser()
+        args = parser.parse_args(
+            [
+                "from-ori-match-dem",
+                "--left-cube",
+                "left.cub",
+                "--right-cube",
+                "right.cub",
+                "--map-template-cube",
+                "template.cub",
+            ]
+        )
+
+        self.assertEqual(args.command, "from-ori-match-dem")
+        self.assertEqual(args.left_cube, "left.cub")
+        self.assertEqual(args.right_cube, "right.cub")
+        self.assertEqual(args.map_template_cube, "template.cub")
+
+    def test_run_from_dom_match_dispatches_dom_filters_then_dem(self):
+        from dem_extract import dem_pipeline
+
+        config_path = self.write_config(
+            {
+                "DemExtract": {"aggregation": "median"},
+                "ImageMatch": {"matcher_method": "bf", "write_match_visualization": True},
+                "DomImageMatch": {"valid_pixel_percent_threshold": 0.05},
+                "DomToOriginal": {"merge_decimals": 2, "ransac_mode": "strict"},
+            }
+        )
+        args = dem_pipeline.build_argument_parser().parse_args(
+            [
+                "--work-dir",
+                str(self.workspace / "dom_work"),
+                "--config",
+                str(config_path),
+                "from-dom-match",
+                "--left-dom",
+                "left_dom.cub",
+                "--right-dom",
+                "right_dom.cub",
+                "--left-cube",
+                "left.cub",
+                "--right-cube",
+                "right.cub",
+                "--map-template-cube",
+                "template.cub",
+            ]
+        )
+        calls = []
+        original_dom_match = dem_pipeline.match_dom_pair_to_key_files
+        original_merge = dem_pipeline.merge_stereo_pair_key_files
+        original_ransac = dem_pipeline.filter_stereo_pair_key_files_with_ransac
+        original_dom2ori = dem_pipeline.convert_paired_dom_keypoints_to_original
+        original_dem = dem_pipeline.isis_stereo_dem.run_from_key
+        try:
+            def fake_dom_match(left_dom, right_dom, left_key, right_key, metadata_output=None, **kwargs):
+                calls.append(("dom_match", left_dom, right_dom, str(left_key), str(right_key), str(metadata_output), kwargs))
+                return {"point_count": 3}
+
+            def fake_merge(left_key, right_key, left_output, right_output, decimals=3):
+                calls.append(("merge", str(left_key), str(right_key), str(left_output), str(right_output), decimals))
+                return {"input_count": 3, "unique_count": 2}
+
+            def fake_ransac(left_key, right_key, left_output, right_output, **kwargs):
+                calls.append(("ransac", str(left_key), str(right_key), str(left_output), str(right_output), kwargs))
+                return {"status": "ok", "retained_count": 2}
+
+            def fake_dom2ori(left_key, right_key, left_dom, right_dom, left_cube, right_cube, left_output, right_output):
+                calls.append(("dom2ori", str(left_key), str(right_key), str(left_output), str(right_output)))
+                return {"left_conversion": {"success_count": 2}, "right_conversion": {"success_count": 2}}
+
+            def fake_dem(dem_args):
+                calls.append(("dem", dem_args.left_key, dem_args.right_key))
+                return {"success_count": 2, "filled_cell_count": 1}
+
+            dem_pipeline.match_dom_pair_to_key_files = fake_dom_match
+            dem_pipeline.merge_stereo_pair_key_files = fake_merge
+            dem_pipeline.filter_stereo_pair_key_files_with_ransac = fake_ransac
+            dem_pipeline.convert_paired_dom_keypoints_to_original = fake_dom2ori
+            dem_pipeline.isis_stereo_dem.run_from_key = fake_dem
+
+            result = dem_pipeline.run_pipeline(args)
+        finally:
+            dem_pipeline.match_dom_pair_to_key_files = original_dom_match
+            dem_pipeline.merge_stereo_pair_key_files = original_merge
+            dem_pipeline.filter_stereo_pair_key_files_with_ransac = original_ransac
+            dem_pipeline.convert_paired_dom_keypoints_to_original = original_dom2ori
+            dem_pipeline.isis_stereo_dem.run_from_key = original_dem
+
+        self.assertEqual(result["mode"], "from-dom-match")
+        self.assertEqual([call[0] for call in calls], ["dom_match", "merge", "ransac", "dom2ori", "dem"])
+        self.assertEqual(calls[1][-1], 2)
+        self.assertEqual(calls[2][-1]["ransac_mode"], "strict")
+        self.assertIn("keys_ori", calls[-1][1])
+        self.assertTrue((self.workspace / "dom_work" / "reports" / "dom2ori_summary.json").exists())
 
 
 if __name__ == "__main__":

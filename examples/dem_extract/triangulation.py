@@ -1,8 +1,14 @@
-"""Triangulate synchronized key-point pairs with ISIS Stereo."""
+"""Triangulate synchronized key-point pairs with ISIS Stereo.
+
+Author: Geng Xun
+Created: 2026-05-10
+Last Modified: 2026-05-10
+Updated: 2026-05-10  Geng Xun added ISIS Stereo triangulation and quality filtering helpers.
+"""
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from typing import Iterable
 
 from .key_pairs import KeyPointPair
@@ -33,9 +39,19 @@ class TriangulatedPoint:
     x_km: float | None = None
     y_km: float | None = None
     z_km: float | None = None
+    height_m: float | None = None
+    datum_radius_m: float | None = None
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
+
+
+def apply_datum_radius(records: Iterable[TriangulatedPoint], datum_radius_m: float) -> list[TriangulatedPoint]:
+    adjusted_records: list[TriangulatedPoint] = []
+    for record in records:
+        height_m = None if record.radius_m is None else float(record.radius_m - datum_radius_m)
+        adjusted_records.append(replace(record, height_m=height_m, datum_radius_m=float(datum_radius_m)))
+    return adjusted_records
 
 
 def _base_record(pair: KeyPointPair, status: str, reason: str, **geometry: float | None) -> TriangulatedPoint:

@@ -1,4 +1,10 @@
-"""Load and validate synchronized left/right `.key` point pairs."""
+"""Load and validate synchronized left/right `.key` point pairs.
+
+Author: Geng Xun
+Created: 2026-05-10
+Last Modified: 2026-05-10
+Updated: 2026-05-10  Geng Xun added `.key` pair loading and bounds validation for DEM extraction.
+"""
 
 from __future__ import annotations
 
@@ -8,7 +14,7 @@ from pathlib import Path
 import sys
 
 
-def _load_read_key_file():
+def _load_keypoint_helpers():
     keypoints_path = Path(__file__).resolve().parents[1] / "controlnet_construct" / "keypoints.py"
     spec = importlib.util.spec_from_file_location("_dem_extract_controlnet_keypoints", keypoints_path)
     if spec is None or spec.loader is None:
@@ -16,10 +22,10 @@ def _load_read_key_file():
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
-    return module.read_key_file
+    return module.KeypointFile, module.read_key_file
 
 
-read_key_file = _load_read_key_file()
+KeypointFile, read_key_file = _load_keypoint_helpers()
 
 
 @dataclass(frozen=True, slots=True)
@@ -45,15 +51,13 @@ def _validate_point(label: str, index: int, sample: float, line: float, samples:
         )
 
 
-def load_key_point_pairs(
-    left_key_path: str | Path,
-    right_key_path: str | Path,
+def load_key_point_pairs_from_key_files(
+    left_file: KeypointFile,
+    right_file: KeypointFile,
     *,
     left_cube,
     right_cube,
 ) -> list[KeyPointPair]:
-    left_file = read_key_file(left_key_path)
-    right_file = read_key_file(right_key_path)
     if len(left_file.points) != len(right_file.points):
         raise ValueError("Left and right .key files must contain the same number of points.")
 
@@ -65,3 +69,15 @@ def load_key_point_pairs(
         _validate_point("right", index, right.sample, right.line, right_samples, right_lines)
         pairs.append(KeyPointPair(index, left.sample, left.line, right.sample, right.line))
     return pairs
+
+
+def load_key_point_pairs(
+    left_key_path: str | Path,
+    right_key_path: str | Path,
+    *,
+    left_cube,
+    right_cube,
+) -> list[KeyPointPair]:
+    left_file = read_key_file(left_key_path)
+    right_file = read_key_file(right_key_path)
+    return load_key_point_pairs_from_key_files(left_file, right_file, left_cube=left_cube, right_cube=right_cube)

@@ -1175,6 +1175,9 @@ def preflight_cube_writer_bindings(ip, template_cube=None, output_cube=None) -> 
             line_manager = ip.LineManager(output_cube)
             if not hasattr(line_manager, "__setitem__"):
                 missing.append("LineManager.__setitem__")
+            else:
+                line_manager.set_line(1, 1)
+                line_manager[0] = 0.0
         except Exception as exc:
             missing.append(f"LineManager(output_cube): {exc}")
     return missing
@@ -1281,7 +1284,7 @@ with TemporaryDirectory() as temp_dir:
 PY
 ```
 
-Expected: prints `{'missing': []}`. This verifies live `template_cube.group("Mapping")`, `LineManager(output_cube)`, and `LineManager.__setitem__` availability, not only static class attributes.
+Expected: prints `{'missing': []}`. This verifies live `template_cube.group("Mapping")`, `LineManager(output_cube)`, and actual line-buffer mutation with `line_manager[0] = 0.0`, not only static class attributes.
 
 - [ ] **Step 7: Commit cube writer slice**
 

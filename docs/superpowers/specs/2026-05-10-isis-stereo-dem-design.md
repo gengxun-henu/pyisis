@@ -350,32 +350,44 @@ stdout.
 
 ## 7. 测试与验收
 
-### 7.1 单测建议
+### 7.1 实现阶段单测目标
 
 新增：
 
 ```text
-tests/unitTest/dem_extract_isis_dem_unit_test.py
+tests/unitTest/dem_extract_unit_test.py
 ```
 
-覆盖：
+该测试文件应覆盖：
 
-1. 左右 `.key` 点数不一致时报错。
-2. `.key` sample/line 直接作为 1-based ISIS 坐标，不额外 `+1`。
-3. `Stereo.elevation` 结果记录结构字段完整。
-4. `max_error_m` / `min_sepang_deg` 过滤逻辑。
-5. 同一 DEM cell 内多点 `median` 聚合。
-6. 空 cell 写 Null/nodata。
-7. CLI 解析必须要求 `map_template_cube` 与 `output_dem_cube`。
+1. mismatched left/right `.key` point counts raise `ValueError`;
+2. `.key` sample/line are passed directly to a fake camera without `+1`;
+3. triangulation keeps cubes and cameras outside the per-point loop;
+4. `max_error_m`, `min_sepang_deg`, and radius filters produce stable counters;
+5. same-cell aggregation supports `median`, `mean`, and `min-error`;
+6. empty cells become the configured nodata value or ISIS Null;
+7. CLI `from-key` requires all positional inputs and exposes kebab-case options;
+8. compact stdout omits per-point detail records when sidecar paths are used.
 
-### 7.2 回归测试
+### 7.2 聚焦验证命令
 
-1. 运行 `tests/unitTest/stereo_unit_test.py`，确认 `Stereo` 绑定不回归。
-2. 运行 `examples/controlnet_construct` 现有 `.key/.net` 相关测试，确认新增 DEM 模块不改变 ControlNet 行为。
-3. 使用一个小型 `.key` fixture 验证 `.key -> point cloud -> summary` 成功。
-4. 使用用户指定的已有投影 ISIS cube 模板验证可生成 `.cub` DEM；纯 PVL map-template 验证留到后续能力实现。
+实现阶段优先运行以下聚焦验证，均使用 `asp360_new` conda 环境：
 
-### 7.3 人工验收
+```bash
+conda run -n asp360_new python -m unittest tests.unitTest.dem_extract_unit_test -v
+conda run -n asp360_new python -m unittest tests.unitTest.stereo_unit_test -v
+conda run -n asp360_new python -m unittest tests.unitTest.forward_intersection_example_test -v
+```
+
+### 7.3 绑定风险检查点
+
+Before implementing Cube DEM writing, verify the active conda binding supports
+all required write operations: `Cube.set_dimensions`, `Cube.create`,
+`Cube.put_group`, `LineManager`, and `Cube.write(LineManager)`. If Mapping label
+copying or special-pixel Null is not exposed, the implementation plan must add a
+minimal pybind helper or explicitly use a documented numeric nodata fallback.
+
+### 7.4 人工验收
 
 1. 抽查若干 `.key` 点，确认其 sample/line 直接进入 `camera.set_image(...)`。
 2. 检查点云中的 `radius_m` 是否处于目标体合理半径范围。

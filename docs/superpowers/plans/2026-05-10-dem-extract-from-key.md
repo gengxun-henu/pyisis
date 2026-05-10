@@ -71,6 +71,7 @@ class RasterResult:
     values: list[list[float]]
     rasterized_point_count: int
     filled_cell_count: int
+    nodata_value: float = -9999.0
 ```
 
 Summary JSON counters must include these exact keys: `input_left_cube`, `input_right_cube`, `input_left_key`, `input_right_key`, `map_template`, `output_dem_cube`, `input_point_count`, `success_count`, `failed_set_image_count`, `failed_elevation_count`, `filtered_error_count`, `filtered_sepang_count`, `filtered_radius_count`, `rasterized_point_count`, `filled_cell_count`, `max_error_m`, `min_sepang_deg`, `aggregation`, and `value_type`.
@@ -720,6 +721,20 @@ class DemExtractRuntimeOutputUnitTest(unittest.TestCase):
         self.assertEqual(summary["value_type"], "radius_m")
         self.assertEqual(summary["input_point_count"], 4)
         self.assertEqual(summary["failed_set_image_count"], 1)
+
+    def test_write_quality_summary_json_records_quality_prefix_payload(self):
+        from dem_extract.grid import RasterResult
+        from dem_extract.runtime import write_quality_summary_json
+
+        path = self.workspace / "quality.summary.json"
+        raster = RasterResult(values=[[1.0, -9999.0]], rasterized_point_count=1, filled_cell_count=1)
+
+        write_quality_summary_json(path, raster)
+
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(payload["rasterized_point_count"], 1)
+        self.assertEqual(payload["filled_cell_count"], 1)
+        self.assertEqual(payload["quality_product_type"], "summary")
 ```
 
 - [ ] **Step 2: Run test to verify it fails**
@@ -730,7 +745,7 @@ Run:
 conda run -n asp360_new python -m unittest discover -s tests/unitTest -p 'dem_extract_unit_test.py' -v
 ```
 
-Expected: FAIL with missing `write_point_cloud_jsonl` and `build_summary` imports.
+Expected: FAIL with missing `write_point_cloud_jsonl`, `write_quality_summary_json`, and `build_summary` imports.
 
 - [ ] **Step 3: Add output helpers**
 
@@ -771,6 +786,16 @@ def write_point_cloud_csvish(output_path: str | Path, records: Iterable[object])
         writer = csv.DictWriter(stream, fieldnames=fieldnames, extrasaction="ignore")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def write_quality_summary_json(output_path: str | Path, raster) -> None:
+    payload = {
+        "quality_product_type": "summary",
+        "rasterized_point_count": raster.rasterized_point_count,
+        "filled_cell_count": raster.filled_cell_count,
+        "empty_cell_count": sum(1 for row in raster.values for value in row if value == raster.nodata_value),
+    }
+    write_summary_json(output_path, payload)
 
 
 def build_summary(
@@ -821,7 +846,7 @@ Run:
 conda run -n asp360_new python -m unittest discover -s tests/unitTest -p 'dem_extract_unit_test.py' -v
 ```
 
-Expected: PASS for runtime output tests.
+Expected: PASS for runtime output and quality-summary tests.
 
 - [ ] **Step 5: Commit sidecar slice**
 
@@ -932,6 +957,7 @@ class RasterResult:
     values: list[list[float]]
     rasterized_point_count: int
     filled_cell_count: int
+    nodata_value: float = -9999.0
 
 
 def aggregate_cell_values(records: list[TriangulatedPoint], aggregation: str) -> float:
@@ -984,7 +1010,7 @@ def rasterize_points(
     values = [[grid_spec.nodata_value for _sample in range(grid_spec.samples)] for _line in range(grid_spec.lines)]
     for (line_index, sample_index), cell_records in cells.items():
         values[line_index][sample_index] = aggregate_cell_values(cell_records, aggregation)
-    return RasterResult(values, rasterized_point_count, len(cells))
+    return RasterResult(values, rasterized_point_count, len(cells), grid_spec.nodata_value)
 ```
 
 - [ ] **Step 4: Export grid types**
@@ -1064,6 +1090,8 @@ class DemExtractCubeWriterUnitTest(unittest.TestCase):
                 FakeCube.created = self
             def set_dimensions(self, samples, lines, bands):
                 self.dimensions = (samples, lines, bands)
+            def set_pixel_type(self, pixel_type):
+                self.pixel_type = pixel_type
             def create(self, path):
                 self.path = path
             def put_group(self, group):
@@ -1075,6 +1103,8 @@ class DemExtractCubeWriterUnitTest(unittest.TestCase):
         class FakeIp:
             Cube = FakeCube
             LineManager = FakeLineManager
+            class PixelType:
+                Real = "Real"
 
         result = RasterResult(values=[[1.0, 2.0], [3.0, 4.0]], rasterized_point_count=4, filled_cell_count=4)
 
@@ -1082,6 +1112,7 @@ class DemExtractCubeWriterUnitTest(unittest.TestCase):
 
         cube = FakeCube.created
         self.assertEqual(cube.dimensions, (2, 2, 1))
+        self.assertEqual(cube.pixel_type, "Real")
         self.assertEqual(cube.path, "out.cub")
         self.assertEqual(len(cube.groups), 1)
         self.assertEqual([line for line, values in cube.writes], [1, 2])
@@ -1111,7 +1142,7 @@ from pathlib import Path
 from .grid import RasterResult
 
 
-REQUIRED_CUBE_METHODS = ("set_dimensions", "create", "group", "put_group", "write")
+REQUIRED_CUBE_METHODS = ("set_dimensions", "set_pixel_type", "create", "group", "put_group", "write")
 
 
 def preflight_cube_writer_bindings(ip, template_cube=None, output_cube=None) -> list[str]:
@@ -1125,6 +1156,8 @@ def preflight_cube_writer_bindings(ip, template_cube=None, output_cube=None) -> 
                 missing.append(f"Cube.{method_name}")
     if not hasattr(ip, "LineManager"):
         missing.append("LineManager")
+    if not hasattr(ip, "PixelType") or not hasattr(ip.PixelType, "Real"):
+        missing.append("PixelType.Real")
     if template_cube is not None:
         try:
             template_cube.group("Mapping")
@@ -1149,6 +1182,7 @@ def write_radius_cube(ip, template_cube, output_path: str | Path, raster: Raster
         lines = len(raster.values)
         samples = len(raster.values[0]) if lines else 0
         output_cube.set_dimensions(samples, lines, 1)
+        output_cube.set_pixel_type(ip.PixelType.Real)
         output_cube.create(str(output_path))
         missing = preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)
         if missing:
@@ -1191,11 +1225,13 @@ conda run -n asp360_new python - <<'PY'
 import isis_pybind as ip
 required = {
     "Cube.set_dimensions": hasattr(ip.Cube, "set_dimensions"),
+    "Cube.set_pixel_type": hasattr(ip.Cube, "set_pixel_type"),
     "Cube.create": hasattr(ip.Cube, "create"),
     "Cube.group": hasattr(ip.Cube, "group"),
     "Cube.put_group": hasattr(ip.Cube, "put_group"),
     "Cube.write": hasattr(ip.Cube, "write"),
     "LineManager": hasattr(ip, "LineManager"),
+    "PixelType.Real": hasattr(ip, "PixelType") and hasattr(ip.PixelType, "Real"),
 }
 print(required)
 if not all(required.values()):
@@ -1203,7 +1239,7 @@ if not all(required.values()):
 PY
 ```
 
-Expected: prints all six capabilities as `True`. If a capability is `False`, bind or route around that exact missing operation before enabling CLI writes. After creating a real output cube in the writer tests, also call `preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)` so Mapping label access and line-buffer mutation are verified against live cube instances.
+Expected: prints all eight capabilities as `True`. If a capability is `False`, bind or route around that exact missing operation before enabling CLI writes. After creating a real output cube in the writer tests, also call `preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)` so Mapping label access, explicit Real pixel type, and line-buffer mutation are verified against live cube instances.
 
 - [ ] **Step 7: Commit cube writer slice**
 
@@ -1254,6 +1290,7 @@ class DemExtractCliUnitTest(unittest.TestCase):
         self.assertEqual(args.command, "from-key")
         self.assertEqual(args.aggregation, "min-error")
         self.assertEqual(args.point_cloud_output, "points.jsonl")
+        self.assertEqual(args.quality_prefix, "quality")
 
     def test_compact_stdout_payload_omits_point_records(self):
         from dem_extract.isis_stereo_dem import compact_stdout_payload
@@ -1306,13 +1343,13 @@ if __package__ in (None, ""):
     from dem_extract.cube_writer import write_radius_cube
     from dem_extract.grid import GridSpec, rasterize_points
     from dem_extract.key_pairs import load_key_point_pairs
-    from dem_extract.runtime import build_summary, import_isis_pybind, write_point_cloud_csvish, write_point_cloud_jsonl, write_summary_json
+    from dem_extract.runtime import build_summary, import_isis_pybind, write_point_cloud_csvish, write_point_cloud_jsonl, write_quality_summary_json, write_summary_json
     from dem_extract.triangulation import FilterOptions, triangulate_pairs
 else:
     from .cube_writer import write_radius_cube
     from .grid import GridSpec, rasterize_points
     from .key_pairs import load_key_point_pairs
-    from .runtime import build_summary, import_isis_pybind, write_point_cloud_csvish, write_point_cloud_jsonl, write_summary_json
+    from .runtime import build_summary, import_isis_pybind, write_point_cloud_csvish, write_point_cloud_jsonl, write_quality_summary_json, write_summary_json
     from .triangulation import FilterOptions, triangulate_pairs
 
 
@@ -1400,6 +1437,8 @@ def run_from_key(args: argparse.Namespace) -> dict[str, Any]:
                 write_point_cloud_csvish(args.point_cloud_output, records)
         if args.summary_output:
             write_summary_json(args.summary_output, summary)
+        if args.quality_prefix:
+            write_quality_summary_json(f"{args.quality_prefix}.summary.json", raster)
         return compact_stdout_payload(
             output_dem_cube=args.output_dem_cube,
             point_cloud_output=args.point_cloud_output,

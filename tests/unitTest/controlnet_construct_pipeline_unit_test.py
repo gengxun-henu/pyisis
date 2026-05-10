@@ -36,6 +36,7 @@ Updated: 2026-05-08  Geng Xun split deep-matcher parser acceptance from a lightw
 Updated: 2026-05-09  Geng Xun added wrapper-help regression coverage requiring superglue/lightglue/loftr method strings.
 Updated: 2026-05-22  Geng Xun added baseline parser coverage for the new from-ori-match controlnet subcommand.
 Updated: 2026-05-10  Geng Xun added CLI execution-path coverage so from-ori-match fails in a controlled Task-1-safe way instead of crashing on missing parser attrs.
+Updated: 2026-05-10  Geng Xun updated from-ori-match coverage to require a clean argparse-style CLI rejection without a traceback.
 """
 
 from __future__ import annotations
@@ -51,7 +52,7 @@ import textwrap
 from pathlib import Path
 import unittest
 from unittest.mock import patch
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 
 
 UNIT_TEST_DIR = Path(__file__).resolve().parent
@@ -1737,17 +1738,27 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(parsed.config, "config.json")
         self.assertEqual(parsed.output_net, "output.net")
 
-    def test_controlnet_stereopair_main_rejects_from_ori_match_with_controlled_error(self):
-        with self.assertRaisesRegex(NotImplementedError, "from-ori-match.*Task 4"):
-            controlnet_stereopair_main(
-                [
-                    "from-ori-match",
-                    "left.cub",
-                    "right.cub",
-                    "config.json",
-                    "output.net",
-                ]
-            )
+    def test_controlnet_stereopair_main_rejects_from_ori_match_with_cli_facing_parser_error(self):
+        stderr = io.StringIO()
+        with redirect_stderr(stderr):
+            with self.assertRaises(SystemExit) as exc:
+                controlnet_stereopair_main(
+                    [
+                        "from-ori-match",
+                        "left.cub",
+                        "right.cub",
+                        "config.json",
+                        "output.net",
+                    ]
+                )
+
+        self.assertEqual(exc.exception.code, 2)
+        self.assertIn("usage:", stderr.getvalue())
+        self.assertIn(
+            "error: from-ori-match is temporarily unavailable in Task 1; direct original-image matching will be implemented in Task 4.",
+            stderr.getvalue(),
+        )
+        self.assertNotIn("Traceback", stderr.getvalue())
 
     def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:

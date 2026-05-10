@@ -21,6 +21,7 @@ Updated: 2026-05-04  Geng Xun aligned CLI visualization defaults with the API sc
 Updated: 2026-05-05  Geng Xun added compact stdout summaries by default so detailed conversion failures and batch report payloads stay in JSON sidecars instead of flooding the terminal.
 Updated: 2026-05-22  Geng Xun added a baseline from-ori-match parser skeleton for direct ori-space matching follow-up work.
 Updated: 2026-05-10  Geng Xun made the Task-1 from-ori-match CLI fail safely with a clear not-yet-implemented error instead of crashing on missing parser attrs.
+Updated: 2026-05-10  Geng Xun switched the Task-1 from-ori-match rejection to a clean argparse CLI error without a traceback.
 """
 
 from __future__ import annotations
@@ -1082,9 +1083,9 @@ def main(argv: list[str] | None = None) -> None:
         return
     args = parser.parse_args(normalized_argv)
     if args.command == "from-ori-match":
-        raise NotImplementedError(
-            "from-ori-match is intentionally limited to parser/dispatch coverage in Task 1; "
-            "the direct original-image matching pipeline will be implemented in Task 4."
+        parser.error(
+            "from-ori-match is temporarily unavailable in Task 1; "
+            "direct original-image matching will be implemented in Task 4."
         )
     logging.basicConfig(level=getattr(logging, getattr(args, "log_level", "INFO")), format="%(levelname)s %(message)s")
     logger = logging.getLogger("controlnet_construct.controlnet_stereopair")

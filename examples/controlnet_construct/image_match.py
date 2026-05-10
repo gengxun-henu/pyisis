@@ -36,6 +36,7 @@ Updated: 2026-05-20  Geng Xun added GPU execution configuration summary fields.
 Updated: 2026-05-20  Geng Xun aligned GPU batch defaults and backend reporting with effective GPU route support.
 Updated: 2026-05-22  Geng Xun added a baseline ori-space matching entrypoint with superpoint dependency fail-fast checks.
 Updated: 2026-05-22  Geng Xun threaded a minimal dom/ori image-space backend selector through tile-matching entrypoints.
+Updated: 2026-05-22  Geng Xun added ORI pair-level `.key` export helpers and accepted the `superpoint` selector in CLI matcher choices.
 """
 
 from __future__ import annotations
@@ -1061,6 +1062,27 @@ def match_ori_pair(
     )
 
 
+def match_ori_pair_to_key_files(
+    left_cube_path: str | Path,
+    right_cube_path: str | Path,
+    left_output_key: str | Path,
+    right_output_key: str | Path,
+    **kwargs,
+) -> dict[str, object]:
+    left_key_file, right_key_file, summary = match_ori_pair(
+        left_cube_path,
+        right_cube_path,
+        **kwargs,
+    )
+    write_key_file(left_output_key, left_key_file)
+    write_key_file(right_output_key, right_key_file)
+    return {
+        **summary,
+        "left_output_key": str(left_output_key),
+        "right_output_key": str(right_output_key),
+    }
+
+
 def match_dom_pair(
     left_dom_path: str | Path,
     right_dom_path: str | Path,
@@ -1741,7 +1763,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--tile-validity-cache-dir", default=None, help="Directory for reusable per-DOM tile-validity index cache files.")
     parser.add_argument("--tile-validity-cell-width", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_width"), default=DEFAULT_TILE_VALIDITY_CELL_WIDTH, help=f"Coarse validity-index cell width. Default: {DEFAULT_TILE_VALIDITY_CELL_WIDTH}.")
     parser.add_argument("--tile-validity-cell-height", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_height"), default=DEFAULT_TILE_VALIDITY_CELL_HEIGHT, help=f"Coarse validity-index cell height. Default: {DEFAULT_TILE_VALIDITY_CELL_HEIGHT}.")
-    parser.add_argument("--matcher-method", type=_parse_matcher_method, default=DEFAULT_MATCHER_METHOD, help="Matcher method: bf, flann, superglue, lightglue, loftr (default: bf).")
+    parser.add_argument("--matcher-method", type=_parse_matcher_method, default=DEFAULT_MATCHER_METHOD, help="Matcher method: bf, flann, superpoint, superglue, lightglue, loftr (default: bf).")
     parser.add_argument("--ratio-test", type=float, default=0.75, help="Lowe ratio-test threshold used for descriptor filtering.")
     parser.add_argument("--max-features", type=int, default=None, help="Optional maximum number of SIFT features per tile.")
     parser.add_argument("--sift-octave-layers", type=int, default=3, help="Number of octave layers used by the OpenCV SIFT detector.")

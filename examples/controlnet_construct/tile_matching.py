@@ -15,6 +15,7 @@ Updated: 2026-05-20  Geng Xun propagated GPU fallback statistics into dynamic ba
 Updated: 2026-05-20  Geng Xun dispatched homogeneous GPU tile payloads through the batched pair matcher.
 Updated: 2026-05-22  Geng Xun reused deep matcher adapters across tile dispatch calls.
 Updated: 2026-05-22  Geng Xun added a minimal dom/ori image-space backend abstraction for future tile-reading reuse.
+Updated: 2026-05-22  Geng Xun accepted the ORI-facing `superpoint` matcher selector in shared matcher normalization.
 """
 
 from __future__ import annotations
@@ -53,7 +54,7 @@ import isis_pybind as ip
 
 
 DEFAULT_MATCHER_METHOD = "bf"
-SUPPORTED_MATCHER_METHODS = ("bf", "flann", "superglue", "lightglue", "loftr")
+SUPPORTED_MATCHER_METHODS = ("bf", "flann", "superpoint", "superglue", "lightglue", "loftr")
 DEEP_MATCHER_METHODS = ("superglue", "lightglue", "loftr")
 DEFAULT_FLANN_TREES = 5
 DEFAULT_FLANN_CHECKS = 50

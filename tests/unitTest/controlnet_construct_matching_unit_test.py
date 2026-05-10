@@ -77,6 +77,7 @@ Updated: 2026-05-21  Geng Xun replaced synthetic deep correspondences assertions
 Updated: 2026-05-22  Geng Xun added deep dependency normalization and deep adapter reuse regression coverage for tile dispatch.
 Updated: 2026-05-22  Geng Xun added ori-space entrypoint regression coverage for superpoint routing and fail-fast dependency errors.
 Updated: 2026-05-22  Geng Xun added regression coverage for dom/ori image-space backend construction helpers.
+Updated: 2026-05-22  Geng Xun added ORI key export regression coverage for pair-level `.key` output summaries.
 """
 
 from __future__ import annotations
@@ -1232,6 +1233,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
 
     def test_normalize_matcher_method_accepts_deep_methods(self):
+        self.assertEqual(tile_matching_module._normalize_matcher_method("superpoint"), "superpoint")
         self.assertEqual(tile_matching_module._normalize_matcher_method("superglue"), "superglue")
         self.assertEqual(tile_matching_module._normalize_matcher_method("  LIGHTGLUE  "), "lightglue")
         self.assertEqual(tile_matching_module._normalize_matcher_method("LOFTR"), "loftr")
@@ -1274,6 +1276,33 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     "right.cub",
                     matcher_method="superpoint",
                 )
+
+    def test_match_ori_pair_to_key_files_writes_ori_keys(self):
+        with temporary_directory() as temp_dir:
+            left_key = temp_dir / "left_ori.key"
+            right_key = temp_dir / "right_ori.key"
+
+            with mock.patch.object(
+                image_match,
+                "match_ori_pair",
+                return_value=(
+                    KeypointFile(32, 32, ()),
+                    KeypointFile(32, 32, ()),
+                    {
+                        "status": "matched_no_points",
+                        "matcher": {"matcher_method_requested": "sift"},
+                    },
+                ),
+            ):
+                result = image_match.match_ori_pair_to_key_files(
+                    "left.cub",
+                    "right.cub",
+                    left_key,
+                    right_key,
+                )
+
+        self.assertEqual(result["left_output_key"], str(left_key))
+        self.assertEqual(result["right_output_key"], str(right_key))
 
     def test_build_image_backend_accepts_ori_space(self):
         backend = tile_matching.build_image_backend("ori")

@@ -7,6 +7,7 @@ Last Modified: 2026-05-10
 Updated: 2026-05-10  Geng Xun added focused coverage for the dem_extract from-key pipeline.
 Updated: 2026-05-10  Geng Xun added focused coverage for the DEM image-matching pipeline wrapper.
 Updated: 2026-05-10  Geng Xun added focused coverage for `.key` refinement stages in the DEM flow.
+Updated: 2026-05-10  Geng Xun added coverage for dense NCC disparity DEM modules and CLI.
 """
 
 from __future__ import annotations
@@ -18,6 +19,8 @@ from contextlib import redirect_stderr
 from io import StringIO
 from pathlib import Path
 import unittest
+
+import numpy as np
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -607,6 +610,21 @@ class DemExtractCliUnitTest(unittest.TestCase):
         self.assertEqual(args.point_cloud_output, "points.jsonl")
         self.assertEqual(args.quality_prefix, "quality")
 
+    def test_compact_stdout_payload_omits_point_records(self):
+        from dem_extract.isis_stereo_dem import compact_stdout_payload
+
+        payload = compact_stdout_payload(
+            output_dem_cube="dem.cub",
+            point_cloud_output="points.jsonl",
+            summary_output="summary.json",
+            summary={"success_count": 2, "filled_cell_count": 1, "records": [{"index": 0}]},
+        )
+
+        self.assertEqual(payload["status"], "ok")
+        self.assertEqual(payload["output_dem_cube"], "dem.cub")
+        self.assertNotIn("records", payload)
+        self.assertEqual(payload["success_count"], 2)
+
 
 class DemExtractRefinementUnitTest(unittest.TestCase):
     def test_refinement_chain_updates_right_keypoints_and_reuses_stage_output_as_next_seed(self):
@@ -801,20 +819,532 @@ class DemExtractRefinementUnitTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "datum-radius-m"):
             isis_stereo_dem.run_from_key(args)
 
-    def test_compact_stdout_payload_omits_point_records(self):
-        from dem_extract.isis_stereo_dem import compact_stdout_payload
 
-        payload = compact_stdout_payload(
-            output_dem_cube="dem.cub",
-            point_cloud_output="points.jsonl",
-            summary_output="summary.json",
-            summary={"success_count": 2, "filled_cell_count": 1, "records": [{"index": 0}]},
+class DemExtractDisparityModelUnitTest(unittest.TestCase):
+    def test_fit_disparity_model_returns_valid_model_with_r_squared(self):
+        from dem_extract.disparity_model import fit_disparity_model
+        from dem_extract.key_pairs import KeyPointPair
+
+        pairs = [
+            KeyPointPair(
+                i,
+                float(s),
+                float(l),
+                float(s) + float(s) * 0.1,
+                float(l) + float(l) * 0.05,
+            )
+            for i, (s, l) in enumerate(
+                [(10, 10), (20, 20), (30, 30), (40, 40), (50, 50)]
+            )
+        ]
+
+        model = fit_disparity_model(pairs, order=2, min_points=3)
+
+        self.assertEqual(model.order, 2)
+        self.assertGreater(model.dx_r_squared, 0.99)
+        self.assertGreater(model.dy_r_squared, 0.99)
+        dx = model.eval_dx(20.0, 20.0)
+        dy = model.eval_dy(20.0, 20.0)
+        self.assertAlmostEqual(dx, 2.0, places=1)
+        self.assertAlmostEqual(dy, 1.0, places=1)
+
+    def test_fit_disparity_model_fallback_to_mean_when_insufficient_points(self):
+        from dem_extract.disparity_model import fit_disparity_model
+        from dem_extract.key_pairs import KeyPointPair
+
+        pairs = [
+            KeyPointPair(0, 10.0, 10.0, 15.0, 12.0),
+            KeyPointPair(1, 20.0, 20.0, 25.0, 22.0),
+        ]
+
+        model = fit_disparity_model(pairs, order=2, min_points=5)
+
+        self.assertEqual(model.prior_fallback, "mean_disparity")
+        self.assertAlmostEqual(model.eval_dx(30.0, 30.0), 5.0, places=6)
+        self.assertAlmostEqual(model.eval_dy(30.0, 30.0), 2.0, places=6)
+
+    def test_disparity_model_eval_at_image_corners(self):
+        from dem_extract.disparity_model import fit_disparity_model
+        from dem_extract.key_pairs import KeyPointPair
+
+        pairs = [
+            KeyPointPair(
+                i,
+                100.0 + i * 100,
+                100.0 + i * 50,
+                100.0 + i * 100 + 5.0,
+                100.0 + i * 50 + 2.0,
+            )
+            for i in range(20)
+        ]
+
+        model = fit_disparity_model(pairs, order=1)
+
+        self.assertIsInstance(model.eval_dx(1.0, 1.0), float)
+        self.assertIsInstance(model.eval_dx(1000.0, 1000.0), float)
+
+
+class DemExtractDenseNCCUnitTest(unittest.TestCase):
+    @staticmethod
+    def _make_fake_cube(width: int, height: int, data: np.ndarray):
+        class FakeCube:
+            def __init__(self):
+                self._data = data
+
+            def sample_count(self):
+                return width
+
+            def line_count(self):
+                return height
+
+            def read(self, band=1):
+                return self._data
+
+        return FakeCube()
+
+    @staticmethod
+    def _make_model(dx: float = 5.0, dy: float = 3.0):
+        from dem_extract.disparity_model import DisparityModel
+
+        return DisparityModel(
+            dx_coeffs=np.array([dx, 0.0, 0.0, 0.0, 0.0, 0.0]),
+            dy_coeffs=np.array([dy, 0.0, 0.0, 0.0, 0.0, 0.0]),
+            order=2,
+            dx_r_squared=1.0,
+            dy_r_squared=1.0,
         )
 
-        self.assertEqual(payload["status"], "ok")
-        self.assertEqual(payload["output_dem_cube"], "dem.cub")
-        self.assertNotIn("records", payload)
-        self.assertEqual(payload["success_count"], 2)
+    def test_integer_pixel_match_succeeds_with_known_disparity(self):
+        from dem_extract.dense_ncc import NCCMatchOptions, dense_ncc_match
+
+        left = np.zeros((50, 50), dtype=np.float64)
+        left[15:35, 15:35] = 1.0
+        right = np.zeros((50, 50), dtype=np.float64)
+        right[18:38, 20:40] = 1.0
+
+        left_cube = self._make_fake_cube(50, 50, left)
+        right_cube = self._make_fake_cube(50, 50, right)
+        model = self._make_model(dx=5.0, dy=3.0)
+
+        disp_x, disp_y, ncc = dense_ncc_match(
+            left_cube,
+            right_cube,
+            model,
+            NCCMatchOptions(
+                window_size=11,
+                search_range=3,
+                ncc_threshold=0.7,
+                enable_subpixel=False,
+            ),
+        )
+
+        center_ncc = ncc[15, 15]
+        center_dx = disp_x[15, 15]
+        center_dy = disp_y[15, 15]
+
+        self.assertGreater(center_ncc, 0.7)
+        self.assertAlmostEqual(center_dx, 5.0, delta=1.0)
+        self.assertAlmostEqual(center_dy, 3.0, delta=1.0)
+
+    def test_nodata_for_unmatchable_region(self):
+        from dem_extract.dense_ncc import NCCMatchOptions, dense_ncc_match
+
+        left = np.zeros((30, 30), dtype=np.float64)
+        right = np.ones((30, 30), dtype=np.float64) * 0.5
+
+        left_cube = self._make_fake_cube(30, 30, left)
+        right_cube = self._make_fake_cube(30, 30, right)
+        model = self._make_model(dx=0.0, dy=0.0)
+
+        _, _, ncc = dense_ncc_match(
+            left_cube,
+            right_cube,
+            model,
+            NCCMatchOptions(
+                window_size=7,
+                search_range=2,
+                ncc_threshold=0.7,
+                enable_subpixel=False,
+            ),
+        )
+
+        self.assertTrue(np.all((ncc == -9999.0) | (ncc < 0.7)))
+
+    def test_subpixel_match_succeeds_on_shifted_pattern(self):
+        from dem_extract.dense_ncc import NCCMatchOptions, dense_ncc_match
+
+        left = np.zeros((40, 40), dtype=np.float64)
+        left[15:25, 15:25] = 1.0
+        right = np.zeros((40, 40), dtype=np.float64)
+        right[18:28, 20:30] = 1.0
+
+        left_cube = self._make_fake_cube(40, 40, left)
+        right_cube = self._make_fake_cube(40, 40, right)
+        model = self._make_model(dx=5.0, dy=3.0)
+
+        _, _, ncc = dense_ncc_match(
+            left_cube,
+            right_cube,
+            model,
+            NCCMatchOptions(
+                window_size=11,
+                search_range=3,
+                ncc_threshold=0.7,
+                enable_subpixel=True,
+            ),
+        )
+
+        self.assertGreater(ncc[15, 15], 0.7)
+
+    def test_count_disparity_stats_returns_correct_counts(self):
+        from dem_extract.dense_ncc import count_disparity_stats
+
+        disp_x = np.array([[1.0, -9999.0], [2.0, 3.0]], dtype=np.float32)
+        disp_y = np.array([[1.0, -9999.0], [2.0, 3.0]], dtype=np.float32)
+        ncc = np.array([[0.9, -9999.0], [0.5, 0.95]], dtype=np.float32)
+
+        stats = count_disparity_stats(
+            disp_x, disp_y, ncc, ncc_threshold=0.7, nodata_value=-9999.0
+        )
+
+        self.assertEqual(stats["total_pixels"], 4)
+        self.assertEqual(stats["matched_count"], 2)
+        self.assertEqual(stats["failed_match_count"], 2)
+
+
+class DemExtractDenseTriangulationUnitTest(unittest.TestCase):
+    def test_dense_triangulate_yields_triangulated_points(self):
+        from dem_extract.dense_triangulation import dense_triangulate_from_disparity
+        from dem_extract.triangulation import FilterOptions, TriangulatedPoint
+
+        class FakeCamera:
+            def set_image(self, sample, line):
+                return True
+
+        class FakeCube:
+            def camera(self):
+                return FakeCamera()
+
+            def sample_count(self):
+                return 3
+
+            def line_count(self):
+                return 2
+
+        class FakeStereo:
+            values = [
+                (True, 3396190.0, 12.0, 34.0, 5.0, 2.5),
+                (True, 3396190.0, 12.5, 34.5, 5.5, 1.5),
+                (True, 3396190.0, 12.6, 34.6, 5.6, 1.6),
+                (True, 3396190.0, 12.7, 34.7, 5.7, 1.7),
+            ]
+
+            @classmethod
+            def elevation(cls, left_camera, right_camera):
+                return cls.values.pop(0)
+
+            @staticmethod
+            def spherical(lat, lon, radius):
+                return (1.0, 2.0, 3.0)
+
+        class FakeIp:
+            Stereo = FakeStereo
+
+        disp_x = np.array([[5.0, -9999.0, 6.0], [7.0, 8.0, -9999.0]], dtype=np.float32)
+        disp_y = np.array([[3.0, -9999.0, 4.0], [2.0, 1.0, -9999.0]], dtype=np.float32)
+        ncc = np.array([[0.9, -9999.0, 0.8], [0.85, 0.95, -9999.0]], dtype=np.float32)
+
+        points = list(
+            dense_triangulate_from_disparity(
+                FakeCube(),
+                FakeCube(),
+                disp_x,
+                disp_y,
+                ncc,
+                filters=FilterOptions(),
+                ip=FakeIp,
+            )
+        )
+
+        self.assertEqual(len(points), 4)
+        self.assertTrue(all(isinstance(p, TriangulatedPoint) for p in points))
+
+    def test_dense_triangulate_filters_by_ncc_threshold(self):
+        from dem_extract.dense_triangulation import dense_triangulate_from_disparity
+        from dem_extract.triangulation import FilterOptions
+
+        class FakeCamera:
+            def set_image(self, sample, line):
+                return True
+
+        class FakeCube:
+            def camera(self):
+                return FakeCamera()
+
+            def sample_count(self):
+                return 2
+
+            def line_count(self):
+                return 1
+
+        class FakeStereo:
+            @staticmethod
+            def elevation(*args):
+                return (True, 3396190.0, 12.0, 34.0, 5.0, 2.5)
+
+            @staticmethod
+            def spherical(lat, lon, radius):
+                return (1.0, 2.0, 3.0)
+
+        class FakeIp:
+            Stereo = FakeStereo
+
+        disp_x = np.array([[5.0, 5.0]], dtype=np.float32)
+        disp_y = np.array([[3.0, 3.0]], dtype=np.float32)
+        ncc = np.array([[0.9, 0.5]], dtype=np.float32)
+
+        points = list(
+            dense_triangulate_from_disparity(
+                FakeCube(),
+                FakeCube(),
+                disp_x,
+                disp_y,
+                ncc,
+                filters=FilterOptions(),
+                ip=FakeIp,
+                ncc_threshold=0.7,
+            )
+        )
+
+        self.assertEqual(len(points), 1)
+        self.assertEqual(points[0].index, 0)
+
+    def test_dense_triangulate_applies_filter_options(self):
+        from dem_extract.dense_triangulation import dense_triangulate_from_disparity
+        from dem_extract.triangulation import FilterOptions
+
+        class FakeCamera:
+            def set_image(self, sample, line):
+                return True
+
+        class FakeCube:
+            def camera(self):
+                return FakeCamera()
+
+            def sample_count(self):
+                return 1
+
+            def line_count(self):
+                return 1
+
+        class FakeStereo:
+            @staticmethod
+            def elevation(*args):
+                return (True, 3396190.0, 12.0, 34.0, 5.0, 99.0)
+
+            @staticmethod
+            def spherical(lat, lon, radius):
+                return (1.0, 2.0, 3.0)
+
+        class FakeIp:
+            Stereo = FakeStereo
+
+        disp_x = np.array([[5.0]], dtype=np.float32)
+        disp_y = np.array([[3.0]], dtype=np.float32)
+        ncc = np.array([[0.9]], dtype=np.float32)
+
+        points = list(
+            dense_triangulate_from_disparity(
+                FakeCube(),
+                FakeCube(),
+                disp_x,
+                disp_y,
+                ncc,
+                filters=FilterOptions(max_error_m=10.0),
+                ip=FakeIp,
+            )
+        )
+
+        self.assertEqual(len(points), 0)
+
+
+class DemExtractDenseNCCSummaryUnitTest(unittest.TestCase):
+    def test_build_dense_ncc_summary_includes_all_required_keys(self):
+        from dem_extract.runtime import build_dense_ncc_summary
+
+        summary = build_dense_ncc_summary(
+            input_left_cube="left.cub",
+            input_right_cube="right.cub",
+            input_left_key="left.key",
+            input_right_key="right.key",
+            output_dem_cube="dem.cub",
+            total_pixels=100,
+            matched_count=80,
+            failed_match_count=20,
+            rasterized_point_count=70,
+            filled_cell_count=65,
+            value_type="radius_m",
+            datum_radius_m=None,
+            ncc_threshold=0.7,
+            polynomial_order=2,
+            dx_r_squared=0.95,
+            dy_r_squared=0.93,
+            key_points_used_for_prior=42,
+            prior_fallback=None,
+            nodata_value=-9999.0,
+            aggregation="median",
+            max_error_m=10.0,
+            min_sepang_deg=0.5,
+            triangulation_counters={
+                "success_count": 70,
+                "failed_elevation_count": 5,
+            },
+        )
+
+        self.assertEqual(summary["pipeline"], "from-dense-ncc")
+        self.assertEqual(summary["total_pixels"], 100)
+        self.assertEqual(summary["matched_count"], 80)
+        self.assertEqual(summary["dx_r_squared"], 0.95)
+        self.assertEqual(summary["key_points_used_for_prior"], 42)
+        self.assertEqual(summary["success_count"], 70)
+        self.assertEqual(summary["failed_elevation_count"], 5)
+        for key in (
+            "input_left_cube",
+            "input_right_cube",
+            "input_left_key",
+            "input_right_key",
+            "output_dem_cube",
+            "value_type",
+            "ncc_threshold",
+            "polynomial_order",
+            "dy_r_squared",
+            "prior_fallback",
+            "nodata_value",
+            "aggregation",
+            "max_error_m",
+            "min_sepang_deg",
+            "rasterized_point_count",
+            "filled_cell_count",
+        ):
+            self.assertIn(key, summary)
+
+
+class DemExtractDenseNCCCliUnitTest(unittest.TestCase):
+    def test_from_dense_ncc_requires_projection_choice(self):
+        from dem_extract.isis_stereo_dem import build_argument_parser
+
+        parser = build_argument_parser()
+        with self.assertRaises(SystemExit):
+            with redirect_stderr(StringIO()):
+                parser.parse_args(
+                    [
+                        "from-dense-ncc",
+                        "left.cub",
+                        "right.cub",
+                        "left.key",
+                        "right.key",
+                        "dem.cub",
+                    ]
+                )
+
+    def test_from_dense_ncc_parses_all_options(self):
+        from dem_extract.isis_stereo_dem import build_argument_parser
+
+        parser = build_argument_parser()
+        args = parser.parse_args(
+            [
+                "from-dense-ncc",
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "dem.cub",
+                "--use-left-projection",
+                "--ncc-window",
+                "15",
+                "--ncc-search-range",
+                "3",
+                "--ncc-threshold",
+                "0.75",
+                "--no-subpixel",
+                "--save-disparity",
+                "disparity.cub",
+                "--value-type",
+                "height_m",
+                "--datum-radius-m",
+                "3396190",
+                "--aggregation",
+                "mean",
+                "--nodata-value",
+                "-9999",
+                "--polynomial-order",
+                "1",
+                "--min-key-points",
+                "10",
+                "--chunk-size-lines",
+                "50",
+            ]
+        )
+
+        self.assertEqual(args.command, "from-dense-ncc")
+        self.assertEqual(args.ncc_window, 15)
+        self.assertEqual(args.ncc_search_range, 3)
+        self.assertEqual(args.ncc_threshold, 0.75)
+        self.assertTrue(args.no_subpixel)
+        self.assertEqual(args.save_disparity, "disparity.cub")
+        self.assertEqual(args.value_type, "height_m")
+        self.assertEqual(args.datum_radius_m, 3396190.0)
+        self.assertEqual(args.aggregation, "mean")
+        self.assertEqual(args.polynomial_order, 1)
+        self.assertEqual(args.min_key_points, 10)
+        self.assertEqual(args.chunk_size_lines, 50)
+        self.assertTrue(args.use_left_projection)
+
+    def test_cli_script_help_shows_from_dense_ncc(self):
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(PROJECT_ROOT / "examples" / "dem_extract" / "isis_stereo_dem.py"),
+                "--help",
+            ],
+            cwd=PROJECT_ROOT,
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("from-dense-ncc", result.stdout)
+
+
+class DemExtractDenseNCCPackageExportsUnitTest(unittest.TestCase):
+    def test_package_exposes_dense_ncc_helpers(self):
+        from dem_extract import (
+            DisparityModel,
+            NCCMatchOptions,
+            count_disparity_stats,
+            dense_ncc_match,
+            dense_triangulate_from_disparity,
+            fit_disparity_model,
+            write_disparity_cube,
+        )
+
+        self.assertTrue(callable(dense_ncc_match))
+        self.assertTrue(callable(dense_triangulate_from_disparity))
+        self.assertTrue(callable(fit_disparity_model))
+        self.assertTrue(callable(count_disparity_stats))
+        self.assertTrue(callable(write_disparity_cube))
+        self.assertEqual(NCCMatchOptions().window_size, 21)
+        self.assertEqual(
+            DisparityModel(
+                dx_coeffs=np.array([0.0]),
+                dy_coeffs=np.array([0.0]),
+                order=0,
+                dx_r_squared=0.0,
+                dy_r_squared=0.0,
+            ).order,
+            0,
+        )
 
 
 class DemExtractPipelineUnitTest(unittest.TestCase):

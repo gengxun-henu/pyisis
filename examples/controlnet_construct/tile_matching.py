@@ -14,6 +14,7 @@ Updated: 2026-05-20  Geng Xun enforced conservative GPU batch defaults and effec
 Updated: 2026-05-20  Geng Xun propagated GPU fallback statistics into dynamic batch execution.
 Updated: 2026-05-20  Geng Xun dispatched homogeneous GPU tile payloads through the batched pair matcher.
 Updated: 2026-05-22  Geng Xun reused deep matcher adapters across tile dispatch calls.
+Updated: 2026-05-22  Geng Xun added a minimal dom/ori image-space backend abstraction for future tile-reading reuse.
 """
 
 from __future__ import annotations
@@ -58,6 +59,18 @@ DEFAULT_FLANN_TREES = 5
 DEFAULT_FLANN_CHECKS = 50
 DEFAULT_GPU_BATCH_SIZE = 4
 _DEEP_MATCHER_ADAPTER_CACHE: dict[bool, DeepMatcherAdapter] = {}
+
+
+@dataclass(frozen=True, slots=True)
+class ImageSpaceBackend:
+    space: str
+
+
+def build_image_backend(image_space: str) -> ImageSpaceBackend:
+    normalized = str(image_space).strip().lower()
+    if normalized not in {"dom", "ori"}:
+        raise ValueError(f"Unsupported image_space {image_space!r}.")
+    return ImageSpaceBackend(space=normalized)
 
 
 @dataclass(frozen=True, slots=True)
@@ -109,6 +122,7 @@ class TileMatchTask:
     sift_contrast_threshold: float
     sift_edge_threshold: float
     sift_sigma: float
+    image_space: str = "dom"
     use_gpu: bool = False
     gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE
 
@@ -887,6 +901,7 @@ def _build_tile_match_tasks(
     *,
     left_dom_path: str | Path,
     right_dom_path: str | Path,
+    image_space: str = "dom",
     band: int,
     minimum_value: float | None,
     maximum_value: float | None,
@@ -907,10 +922,12 @@ def _build_tile_match_tasks(
     use_gpu: bool = False,
     gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE,
 ) -> list[TileMatchTask]:
+    backend = build_image_backend(image_space)
     return [
         TileMatchTask(
             left_dom_path=str(left_dom_path),
             right_dom_path=str(right_dom_path),
+            image_space=backend.space,
             band=band,
             paired_window=paired_window,
             minimum_value=minimum_value,
@@ -1113,6 +1130,7 @@ def _tile_task_to_payload(task: TileMatchTask) -> dict[str, Any]:
     return {
         "left_dom_path": task.left_dom_path,
         "right_dom_path": task.right_dom_path,
+        "image_space": task.image_space,
         "band": task.band,
         "paired_window": _paired_window_to_payload(task.paired_window),
         "minimum_value": task.minimum_value,
@@ -1138,6 +1156,7 @@ def _tile_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
     return TileMatchTask(
         left_dom_path=str(payload["left_dom_path"]),
         right_dom_path=str(payload["right_dom_path"]),
+        image_space=str(payload.get("image_space", "dom")),
         band=int(payload["band"]),
         paired_window=_paired_window_from_payload(payload["paired_window"]),
         minimum_value=payload["minimum_value"],
@@ -1439,6 +1458,7 @@ def _order_indexed_tile_results(indexed_results: list[tuple[int, TileMatchResult
 def _run_parallel_tile_match_tasks(
     tasks: list[TileMatchTask],
     *,
+    image_space: str = "dom",
     max_workers: int,
     progress_callback: Callable[[], None] | None = None,
     show_progress: bool = True,
@@ -1452,8 +1472,13 @@ def _run_parallel_tile_match_tasks(
     adaptive_throughput_threshold_mbps: float = 200.0,
     adaptive_recheck_every: int = 0,
 ) -> list[TileMatchResult]:
+    backend = build_image_backend(image_space)
     if not tasks:
         return []
+    if any(task.image_space != backend.space for task in tasks):
+        raise ValueError(
+            f"Mismatched image_space for tile tasks. Expected {backend.space!r}."
+        )
     if _can_use_dedicated_gpu_tile_route(tasks):
         return _run_gpu_tile_match_tasks(
             tasks,
@@ -1531,6 +1556,7 @@ def _run_parallel_tile_match_tasks(
 def _run_serial_tile_match_tasks(
     windows: list[PairedTileWindow],
     *,
+    image_space: str = "dom",
     left_cube: ip.Cube,
     right_cube: ip.Cube,
     band: int,
@@ -1559,6 +1585,7 @@ def _run_serial_tile_match_tasks(
     adaptive_throughput_threshold_mbps: float = 200.0,
     adaptive_recheck_every: int = 0,
 ) -> list[TileMatchResult]:
+    build_image_backend(image_space)
     left_cache: TileCache | None = None
     right_cache: TileCache | None = None
     if use_tile_cache:

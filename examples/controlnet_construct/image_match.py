@@ -35,6 +35,7 @@ Updated: 2026-05-20  Geng Xun corrected GPU tile-route backend diagnostics.
 Updated: 2026-05-20  Geng Xun added GPU execution configuration summary fields.
 Updated: 2026-05-20  Geng Xun aligned GPU batch defaults and backend reporting with effective GPU route support.
 Updated: 2026-05-22  Geng Xun added a baseline ori-space matching entrypoint with superpoint dependency fail-fast checks.
+Updated: 2026-05-22  Geng Xun threaded a minimal dom/ori image-space backend selector through tile-matching entrypoints.
 """
 
 from __future__ import annotations
@@ -76,6 +77,7 @@ if __package__ in {None, ""}:
         TileMatchStats,
         TileMatchTask,
         _build_sift_detector,
+        build_image_backend,
         _build_tile_match_tasks,
         _can_use_dedicated_gpu_tile_route,
         _keypoint_to_isis_coordinates,
@@ -111,6 +113,7 @@ else:
         TileMatchStats,
         TileMatchTask,
         _build_sift_detector,
+        build_image_backend,
         _build_tile_match_tasks,
         _can_use_dedicated_gpu_tile_route,
         _keypoint_to_isis_coordinates,
@@ -1018,9 +1021,8 @@ def _match_pair_generic(
     matcher_method: str = DEFAULT_MATCHER_METHOD,
     **kwargs,
 ):
-    resolved_image_space = str(image_space).strip().lower()
-    if resolved_image_space not in {"dom", "ori"}:
-        raise ValueError("image_space must be 'dom' or 'ori'.")
+    backend = build_image_backend(image_space)
+    resolved_image_space = backend.space
 
     resolved_matcher_method = str(matcher_method).strip().lower()
     if resolved_image_space == "ori" and resolved_matcher_method == "superpoint":
@@ -1037,6 +1039,7 @@ def _match_pair_generic(
     return match_dom_pair(
         left_path,
         right_path,
+        image_space=resolved_image_space,
         matcher_method=matcher_method,
         **kwargs,
     )
@@ -1062,6 +1065,7 @@ def match_dom_pair(
     left_dom_path: str | Path,
     right_dom_path: str | Path,
     *,
+    image_space: str = "dom",
     band: int = 1,
     max_image_dimension: int = 3000,
     block_width: int = 1024,
@@ -1118,6 +1122,7 @@ def match_dom_pair(
     right_cube = ip.Cube()
 
     try:
+        image_backend = build_image_backend(image_space)
         left_cube.open(str(left_dom_path), "r")
         right_cube.open(str(right_dom_path), "r")
         resolved_valid_pixel_percent_threshold = _validate_valid_pixel_percent_threshold(valid_pixel_percent_threshold)
@@ -1315,6 +1320,7 @@ def match_dom_pair(
                             candidate_windows,
                             left_dom_path=left_dom_path,
                             right_dom_path=right_dom_path,
+                            image_space=image_backend.space,
                             band=band,
                             minimum_value=minimum_value,
                             maximum_value=maximum_value,
@@ -1338,6 +1344,7 @@ def match_dom_pair(
                         try:
                             tile_results = _run_parallel_tile_match_tasks(
                                 tile_tasks,
+                                image_space=image_backend.space,
                                 max_workers=candidate_worker_count,
                                 progress_callback=progress_bar.update if progress_bar is not None else None,
                                 gpu_dynamic_batch=gpu_dynamic_batch,
@@ -1368,6 +1375,7 @@ def match_dom_pair(
                         try:
                             tile_results = _run_serial_tile_match_tasks(
                                 candidate_windows,
+                                image_space=image_backend.space,
                                 left_cube=left_cube,
                                 right_cube=right_cube,
                                 band=band,
@@ -1405,6 +1413,7 @@ def match_dom_pair(
                     try:
                         tile_results = _run_serial_tile_match_tasks(
                             candidate_windows,
+                            image_space=image_backend.space,
                             left_cube=left_cube,
                             right_cube=right_cube,
                             band=band,
@@ -1458,6 +1467,7 @@ def match_dom_pair(
         summary = {
             "left_dom": str(left_dom_path),
             "right_dom": str(right_dom_path),
+            "image_space": image_backend.space,
             "band": band,
             "min_valid_pixels": min_valid_pixels,
             "valid_pixel_percent_threshold": resolved_valid_pixel_percent_threshold,

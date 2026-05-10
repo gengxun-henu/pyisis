@@ -76,6 +76,7 @@ Updated: 2026-05-20  Geng Xun added regression coverage ensuring lightweight dee
 Updated: 2026-05-21  Geng Xun replaced synthetic deep correspondences assertions with explicit missing-dependency error coverage.
 Updated: 2026-05-22  Geng Xun added deep dependency normalization and deep adapter reuse regression coverage for tile dispatch.
 Updated: 2026-05-22  Geng Xun added ori-space entrypoint regression coverage for superpoint routing and fail-fast dependency errors.
+Updated: 2026-05-22  Geng Xun added regression coverage for dom/ori image-space backend construction helpers.
 """
 
 from __future__ import annotations
@@ -1273,6 +1274,14 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     "right.cub",
                     matcher_method="superpoint",
                 )
+
+    def test_match_pair_generic_uses_ori_backend(self):
+        backend = tile_matching.build_image_backend("ori")
+        self.assertEqual(backend.space, "ori")
+
+    def test_match_pair_generic_uses_dom_backend(self):
+        backend = tile_matching.build_image_backend("dom")
+        self.assertEqual(backend.space, "dom")
 
     def test_normalize_matcher_method_rejects_unknown_method(self):
         with self.assertRaisesRegex(ValueError, "Unsupported matcher_method"):

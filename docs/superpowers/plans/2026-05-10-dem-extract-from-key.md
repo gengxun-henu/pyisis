@@ -723,13 +723,17 @@ class DemExtractRuntimeOutputUnitTest(unittest.TestCase):
         self.assertEqual(summary["failed_set_image_count"], 1)
 
     def test_write_quality_summary_json_records_quality_prefix_payload(self):
-        from dem_extract.grid import RasterResult
         from dem_extract.runtime import write_quality_summary_json
 
-        path = self.workspace / "quality.summary.json"
-        raster = RasterResult(values=[[1.0, -9999.0]], rasterized_point_count=1, filled_cell_count=1)
+        class FakeRaster:
+            values = [[1.0, -9999.0]]
+            rasterized_point_count = 1
+            filled_cell_count = 1
+            nodata_value = -9999.0
 
-        write_quality_summary_json(path, raster)
+        path = self.workspace / "quality.summary.json"
+
+        write_quality_summary_json(path, FakeRaster())
 
         payload = json.loads(path.read_text(encoding="utf-8"))
         self.assertEqual(payload["rasterized_point_count"], 1)
@@ -1092,6 +1096,9 @@ class DemExtractCubeWriterUnitTest(unittest.TestCase):
                 self.dimensions = (samples, lines, bands)
             def set_pixel_type(self, pixel_type):
                 self.pixel_type = pixel_type
+            def group(self, name):
+                self.requested_group = name
+                return FakeGroup()
             def create(self, path):
                 self.path = path
             def put_group(self, group):
@@ -1240,6 +1247,41 @@ PY
 ```
 
 Expected: prints all eight capabilities as `True`. If a capability is `False`, bind or route around that exact missing operation before enabling CLI writes. After creating a real output cube in the writer tests, also call `preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)` so Mapping label access, explicit Real pixel type, and line-buffer mutation are verified against live cube instances.
+
+Run this live-instance smoke check before committing the cube writer slice:
+
+```bash
+conda run -n asp360_new python - <<'PY'
+from pathlib import Path
+from tempfile import TemporaryDirectory
+import isis_pybind as ip
+from examples.dem_extract.cube_writer import preflight_cube_writer_bindings
+
+with TemporaryDirectory() as temp_dir:
+    temp_dir = Path(temp_dir)
+    template_cube = ip.Cube()
+    template_cube.set_dimensions(1, 1, 1)
+    template_cube.set_pixel_type(ip.PixelType.Real)
+    template_cube.create(str(temp_dir / "template.cub"))
+    mapping = ip.PvlGroup("Mapping")
+    mapping.add_keyword(ip.PvlKeyword("ProjectionName", "Equirectangular"))
+    template_cube.put_group(mapping)
+
+    output_cube = ip.Cube()
+    output_cube.set_dimensions(1, 1, 1)
+    output_cube.set_pixel_type(ip.PixelType.Real)
+    output_cube.create(str(temp_dir / "output.cub"))
+
+    missing = preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)
+    print({"missing": missing})
+    if missing:
+        raise SystemExit(1)
+    template_cube.close()
+    output_cube.close()
+PY
+```
+
+Expected: prints `{'missing': []}`. This verifies live `template_cube.group("Mapping")`, `LineManager(output_cube)`, and `LineManager.__setitem__` availability, not only static class attributes.
 
 - [ ] **Step 7: Commit cube writer slice**
 
@@ -1521,12 +1563,32 @@ Run:
 
 ```bash
 conda run -n asp360_new python - <<'PY'
+from pathlib import Path
+from tempfile import TemporaryDirectory
 import isis_pybind as ip
 from examples.dem_extract.cube_writer import preflight_cube_writer_bindings
-missing = preflight_cube_writer_bindings(ip)
-print({"missing": missing})
-if missing:
-    raise SystemExit(1)
+
+with TemporaryDirectory() as temp_dir:
+    temp_dir = Path(temp_dir)
+    template_cube = ip.Cube()
+    template_cube.set_dimensions(1, 1, 1)
+    template_cube.set_pixel_type(ip.PixelType.Real)
+    template_cube.create(str(temp_dir / "template.cub"))
+    mapping = ip.PvlGroup("Mapping")
+    mapping.add_keyword(ip.PvlKeyword("ProjectionName", "Equirectangular"))
+    template_cube.put_group(mapping)
+
+    output_cube = ip.Cube()
+    output_cube.set_dimensions(1, 1, 1)
+    output_cube.set_pixel_type(ip.PixelType.Real)
+    output_cube.create(str(temp_dir / "output.cub"))
+
+    missing = preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)
+    print({"missing": missing})
+    if missing:
+        raise SystemExit(1)
+    template_cube.close()
+    output_cube.close()
 PY
 ```
 

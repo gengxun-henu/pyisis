@@ -144,3 +144,59 @@ def build_summary(
     ):
         summary[key] = int(triangulation_counters.get(key, 0))
     return summary
+
+
+def build_dense_ncc_summary(
+    *,
+    input_left_cube: str,
+    input_right_cube: str,
+    input_left_key: str,
+    input_right_key: str,
+    output_dem_cube: str,
+    total_pixels: int,
+    matched_count: int,
+    failed_match_count: int,
+    rasterized_point_count: int,
+    filled_cell_count: int,
+    value_type: str,
+    datum_radius_m: float | None,
+    ncc_threshold: float,
+    polynomial_order: int,
+    dx_r_squared: float,
+    dy_r_squared: float,
+    key_points_used_for_prior: int,
+    prior_fallback: str | None,
+    nodata_value: float,
+    aggregation: str,
+    max_error_m: float | None,
+    min_sepang_deg: float | None,
+    triangulation_counters: dict[str, int],
+) -> dict[str, object]:
+    summary: dict[str, object] = {
+        "pipeline": "from-dense-ncc",
+        "input_left_cube": input_left_cube,
+        "input_right_cube": input_right_cube,
+        "input_left_key": input_left_key,
+        "input_right_key": input_right_key,
+        "output_dem_cube": output_dem_cube,
+        "total_pixels": total_pixels,
+        "matched_count": matched_count,
+        "failed_match_count": failed_match_count,
+        "rasterized_point_count": rasterized_point_count,
+        "filled_cell_count": filled_cell_count,
+        "value_type": value_type,
+        "datum_radius_m": datum_radius_m,
+        "nodata_value": nodata_value,
+        "aggregation": aggregation,
+        "ncc_threshold": ncc_threshold,
+        "polynomial_order": polynomial_order,
+        "dx_r_squared": dx_r_squared,
+        "dy_r_squared": dy_r_squared,
+        "key_points_used_for_prior": key_points_used_for_prior,
+        "prior_fallback": prior_fallback,
+        "max_error_m": max_error_m,
+        "min_sepang_deg": min_sepang_deg,
+    }
+    for key in ("success_count", "failed_elevation_count"):
+        summary[key] = int(triangulation_counters.get(key, 0))
+    return summary

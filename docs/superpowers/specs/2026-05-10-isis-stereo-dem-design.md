@@ -98,6 +98,18 @@ DEM 生产是 ControlNet 构建的平行分支，不插入 `examples/controlnet_
 
 ## 4. 数据流与算法流程
 
+### `.key` pair contract
+
+- Left and right `.key` files use the existing `KeypointFile` format from
+  `examples/controlnet_construct/keypoints.py`.
+- Point rows are index-synchronized: row `i` in the left file corresponds to row
+  `i` in the right file.
+- `sample,line` are 1-based ISIS image coordinates and are passed directly to
+  `Camera.set_image(sample, line)`.
+- The DEM stage never adds or subtracts 1 from `.key` sample/line values.
+- A point pair is rejected if either coordinate is outside `1..sample_count` or
+  `1..line_count` for its cube.
+
 ### 4.1 首版 `.key -> ISIS Cube DEM` 主链路
 
 1. 读取输入：
@@ -184,7 +196,7 @@ value = height_m = radius_m - datum_radius_m
 
 ### 5.2 点云 sidecar
 
-推荐输出 CSV 或 JSONL，字段至少包含：
+推荐输出 CSV 或 JSONL。每条 triangulated point record 使用以下字段：
 
 ```text
 index
@@ -192,14 +204,19 @@ left_sample
 left_line
 right_sample
 right_line
+status
+reason
 latitude_deg
 longitude_deg
 radius_m
 sepang_deg
 intersection_error_m
-status
-reason
+x_km
+y_km
+z_km
 ```
+
+失败或被过滤的记录仍保留输入字段、`status` 和 `reason`。CSV 输出可保留空值；JSONL 输出中数值几何字段可以省略或写为 `null`。
 
 如果上游匹配阶段提供分数，可追加：
 
@@ -223,8 +240,13 @@ map_template
 output_dem_cube
 input_point_count
 success_count
-filtered_count
-failure_counts
+failed_set_image_count
+failed_elevation_count
+filtered_error_count
+filtered_sepang_count
+filtered_radius_count
+rasterized_point_count
+filled_cell_count
 max_error_m
 min_sepang_deg
 aggregation

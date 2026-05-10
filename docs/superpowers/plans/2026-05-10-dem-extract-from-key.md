@@ -288,7 +288,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
 
-from examples.controlnet_construct.keypoints import read_key_file
+try:
+    from examples.controlnet_construct.keypoints import read_key_file
+except ModuleNotFoundError:
+    from controlnet_construct.keypoints import read_key_file
 
 
 @dataclass(frozen=True, slots=True)
@@ -1108,10 +1111,10 @@ from pathlib import Path
 from .grid import RasterResult
 
 
-REQUIRED_CUBE_METHODS = ("set_dimensions", "create", "put_group", "write")
+REQUIRED_CUBE_METHODS = ("set_dimensions", "create", "group", "put_group", "write")
 
 
-def preflight_cube_writer_bindings(ip) -> list[str]:
+def preflight_cube_writer_bindings(ip, template_cube=None, output_cube=None) -> list[str]:
     missing: list[str] = []
     cube_type = getattr(ip, "Cube", None)
     if cube_type is None:
@@ -1122,11 +1125,23 @@ def preflight_cube_writer_bindings(ip) -> list[str]:
                 missing.append(f"Cube.{method_name}")
     if not hasattr(ip, "LineManager"):
         missing.append("LineManager")
+    if template_cube is not None:
+        try:
+            template_cube.group("Mapping")
+        except Exception as exc:
+            missing.append(f"template_cube.group('Mapping'): {exc}")
+    if output_cube is not None and hasattr(ip, "LineManager"):
+        try:
+            line_manager = ip.LineManager(output_cube)
+            if not hasattr(line_manager, "__setitem__"):
+                missing.append("LineManager.__setitem__")
+        except Exception as exc:
+            missing.append(f"LineManager(output_cube): {exc}")
     return missing
 
 
 def write_radius_cube(ip, template_cube, output_path: str | Path, raster: RasterResult) -> None:
-    missing = preflight_cube_writer_bindings(ip)
+    missing = preflight_cube_writer_bindings(ip, template_cube=template_cube)
     if missing:
         raise RuntimeError("Missing ISIS cube writer bindings: " + ", ".join(missing))
     output_cube = ip.Cube()
@@ -1135,6 +1150,9 @@ def write_radius_cube(ip, template_cube, output_path: str | Path, raster: Raster
         samples = len(raster.values[0]) if lines else 0
         output_cube.set_dimensions(samples, lines, 1)
         output_cube.create(str(output_path))
+        missing = preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)
+        if missing:
+            raise RuntimeError("Missing ISIS cube writer bindings: " + ", ".join(missing))
         output_cube.put_group(template_cube.group("Mapping"))
         for line_number, row in enumerate(raster.values, start=1):
             line_manager = ip.LineManager(output_cube)
@@ -1148,7 +1166,7 @@ def write_radius_cube(ip, template_cube, output_path: str | Path, raster: Raster
             close()
 ```
 
-If the real `LineManager` binding does not expose item assignment during integration, add the smallest pybind support for buffer indexing before using the writer in production and keep `preflight_cube_writer_bindings` checking that capability with `hasattr(line_manager, "__setitem__")` on an instantiated manager.
+If the real `LineManager` binding does not expose item assignment during integration, add the smallest pybind support for buffer indexing before using the writer in production and keep `preflight_cube_writer_bindings` checking that capability with `hasattr(line_manager, "__setitem__")` on an instantiated manager. If `template_cube.group("Mapping")` fails on a projected template cube, add the smallest Mapping-label access helper before enabling CLI writes.
 
 - [ ] **Step 4: Export cube writer functions**
 
@@ -1174,6 +1192,7 @@ import isis_pybind as ip
 required = {
     "Cube.set_dimensions": hasattr(ip.Cube, "set_dimensions"),
     "Cube.create": hasattr(ip.Cube, "create"),
+    "Cube.group": hasattr(ip.Cube, "group"),
     "Cube.put_group": hasattr(ip.Cube, "put_group"),
     "Cube.write": hasattr(ip.Cube, "write"),
     "LineManager": hasattr(ip, "LineManager"),
@@ -1184,7 +1203,7 @@ if not all(required.values()):
 PY
 ```
 
-Expected: prints all five capabilities as `True`. If a capability is `False`, bind or route around that exact missing operation before enabling CLI writes.
+Expected: prints all six capabilities as `True`. If a capability is `False`, bind or route around that exact missing operation before enabling CLI writes. After creating a real output cube in the writer tests, also call `preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)` so Mapping label access and line-buffer mutation are verified against live cube instances.
 
 - [ ] **Step 7: Commit cube writer slice**
 
@@ -1279,6 +1298,9 @@ from typing import Any
 
 if __package__ in (None, ""):
     EXAMPLES_DIR = Path(__file__).resolve().parents[1]
+    PROJECT_ROOT = EXAMPLES_DIR.parent
+    if str(PROJECT_ROOT) not in sys.path:
+        sys.path.insert(0, str(PROJECT_ROOT))
     if str(EXAMPLES_DIR) not in sys.path:
         sys.path.insert(0, str(EXAMPLES_DIR))
     from dem_extract.cube_writer import write_radius_cube

@@ -374,9 +374,9 @@ tests/unitTest/dem_extract_unit_test.py
 实现阶段优先运行以下聚焦验证，均使用 `asp360_new` conda 环境：
 
 ```bash
-conda run -n asp360_new python -m unittest tests.unitTest.dem_extract_unit_test -v
-conda run -n asp360_new python -m unittest tests.unitTest.stereo_unit_test -v
-conda run -n asp360_new python -m unittest tests.unitTest.forward_intersection_example_test -v
+conda run -n asp360_new python -m unittest discover -s tests/unitTest -p 'dem_extract_unit_test.py' -v
+conda run -n asp360_new python -m unittest discover -s tests/unitTest -p 'stereo_unit_test.py' -v
+conda run -n asp360_new python -m unittest discover -s tests/unitTest -p 'forward_intersection_example_test.py' -v
 ```
 
 ### 7.3 绑定风险检查点

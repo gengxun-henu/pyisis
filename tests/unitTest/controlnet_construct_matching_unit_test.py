@@ -1236,23 +1236,23 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(tile_matching_module._normalize_matcher_method("  LIGHTGLUE  "), "lightglue")
         self.assertEqual(tile_matching_module._normalize_matcher_method("LOFTR"), "loftr")
 
-    def test_match_ori_pair_accepts_superpoint(self):
+    def test_match_ori_pair_routes_to_match_dom_pair_with_ori_space(self):
         expected = ("left-key", "right-key", {"status": "matched"})
 
-        with mock.patch.object(image_match, "_match_pair_generic", return_value=expected) as generic_mock:
+        with mock.patch.object(image_match, "match_dom_pair", return_value=expected) as match_dom_pair_mock:
             result = image_match.match_ori_pair(
                 "left.cub",
                 "right.cub",
-                matcher_method="superpoint",
+                matcher_method="bf",
                 max_features=64,
             )
 
         self.assertEqual(result, expected)
-        generic_mock.assert_called_once_with(
+        match_dom_pair_mock.assert_called_once_with(
             "left.cub",
             "right.cub",
             image_space="ori",
-            matcher_method="superpoint",
+            matcher_method="bf",
             max_features=64,
         )
 
@@ -1275,13 +1275,17 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     matcher_method="superpoint",
                 )
 
-    def test_match_pair_generic_uses_ori_backend(self):
+    def test_build_image_backend_accepts_ori_space(self):
         backend = tile_matching.build_image_backend("ori")
         self.assertEqual(backend.space, "ori")
 
-    def test_match_pair_generic_uses_dom_backend(self):
+    def test_build_image_backend_accepts_dom_space(self):
         backend = tile_matching.build_image_backend("dom")
         self.assertEqual(backend.space, "dom")
+
+    def test_build_image_backend_rejects_invalid_image_space(self):
+        with self.assertRaisesRegex(ValueError, "Unsupported image_space"):
+            tile_matching.build_image_backend("map")
 
     def test_normalize_matcher_method_rejects_unknown_method(self):
         with self.assertRaisesRegex(ValueError, "Unsupported matcher_method"):
@@ -5706,6 +5710,23 @@ class TestGpuPipelineRouting(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "mixed CPU/GPU"):
             tile_matching._run_parallel_tile_match_tasks(
                 [gpu_task, cpu_task],
+                max_workers=2,
+                show_progress=False,
+            )
+
+    def test_run_parallel_tasks_rejects_image_space_mismatch(self):
+        base_task = self._make_gpu_task()
+        task = tile_matching.TileMatchTask(
+            **{
+                field: ("ori" if field == "image_space" else getattr(base_task, field))
+                for field in base_task.__dataclass_fields__
+            }
+        )
+
+        with self.assertRaisesRegex(ValueError, "Mismatched image_space"):
+            tile_matching._run_parallel_tile_match_tasks(
+                [task],
+                image_space="dom",
                 max_workers=2,
                 show_progress=False,
             )

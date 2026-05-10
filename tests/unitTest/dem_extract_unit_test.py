@@ -730,7 +730,7 @@ class DemExtractDenseNCCUnitTest(unittest.TestCase):
         )
 
         # All pixels should fall below the NCC threshold (or be nodata).
-        self.assertTrue(bool(np.all((ncc == -9999.0) | (ncc < 0.7))))
+        self.assertTrue(np.all((ncc == -9999.0) | (ncc < 0.7)))
 
     def test_subpixel_match_succeeds_on_shifted_pattern(self):
         from dem_extract.dense_ncc import NCCMatchOptions, dense_ncc_match

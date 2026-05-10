@@ -207,8 +207,9 @@ def _match_pixel(
     sub_oy, sub_ox, refined_ncc = _subpixel_refine(pattern, search_region, int_oy, int_ox)
     final_s = search_s_start + center_ox + sub_ox + half_w
     final_l = search_l_start + center_oy + sub_oy + half_w
-    final_s = max(1.0, min(float(samples - 1), final_s))
-    final_l = max(1.0, min(float(lines - 1), final_l))
+    # Clamp the absolute right-image coordinate to valid 0-based pixel bounds.
+    final_s = max(0.0, min(float(samples - 1), final_s))
+    final_l = max(0.0, min(float(lines - 1), final_l))
     return final_s - s, final_l - l, refined_ncc
 
 

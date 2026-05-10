@@ -1,0 +1,46 @@
+%%{init: {'themeVariables': {
+    'fontFamily': 'Times New Roman',
+    'primaryColor': '#ffffff',
+    'primaryTextColor': '#000000',
+    'primaryBorderColor': '#333333',
+    'lineColor': '#333333',
+    'secondaryColor': '#f0f0f0',
+    'tertiaryColor': '#ffffff',
+    'noteBkgColor': '#fff5ad',
+    'noteTextColor': '#000000',
+    'fontSize': '14px'
+}}}%%
+
+graph TD
+    %% 定义 IEEE 风格样式
+    %% 基础样式：白底黑字，黑色边框，线宽 2px (Mermaid中单位不同，导出SVG后需调整)
+    classDef default fill:#fff,stroke:#333,stroke-width:2px,color:#000,font-family:'Times New Roman',font-size:14px;
+    
+    %% 输入/输出节点：浅灰填充
+    classDef io fill:#e0e0e0,stroke:#333,stroke-width:2px;
+    
+    %% 判定节点：菱形，白底
+    classDef decision fill:#fff,stroke:#333,stroke-width:2px;
+
+    %% 流程内容
+    Start([开始: 数据读取]) :::io
+    Pre[预处理: 辐射定标]
+    Mask{云层检测?} :::decision
+    Cloud[云掩膜处理]
+    Clear[保留晴空像元]
+    Process[反演算法执行]
+    Output([输出: 产品数据]) :::io
+
+    %% 连接关系
+    Start --> Pre
+    Pre --> Mask
+    Mask -- 是 --> Cloud
+    Mask -- 否 --> Clear
+    Cloud --> Clear
+    Clear --> Process
+    Process --> Output
+
+    %% 布局调整 (可选)
+    linkStyle default stroke:#333,stroke-width:1.5px;
+
+

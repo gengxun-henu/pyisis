@@ -67,10 +67,16 @@ activate_env() {
   require_command cmake
   require_command ctest
 
+  # Conda activation may run package-provided activate/deactivate hooks. Some
+  # conda-forge hooks, such as PDAL's deactivate script, reference optional
+  # variables without ${var:-} guards, which is incompatible with `set -u`.
+  # Keep `errexit` active, but temporarily disable nounset around conda itself.
+  set +u
   # shellcheck disable=SC1090
   source "$CONDA_SH"
   require_command conda
   conda activate "$ENV_NAME"
+  set -u
 
   [[ -n "${CONDA_PREFIX:-}" ]] || die "conda environment '$ENV_NAME' did not activate correctly"
 
@@ -83,6 +89,7 @@ activate_env() {
   [[ -x "$PYTHON_BIN" ]] || die "python executable not found: $PYTHON_BIN"
 
   cd "$REPO_ROOT"
+  export PYTHONPATH="${REPO_ROOT}/tests/unitTest${PYTHONPATH:+:$PYTHONPATH}"
 
   log "repo root: $REPO_ROOT"
   log "conda env: $ENV_NAME"

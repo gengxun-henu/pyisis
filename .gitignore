@@ -27,3 +27,4 @@ tests/unitTest/controlnet_construct_dom2ori_unit_test*
 docs/superpowers/*
 left_dom.cub
 right_dom.cub
+tests/unitTest/generated_reports/*

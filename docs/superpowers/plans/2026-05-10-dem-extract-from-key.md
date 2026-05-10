@@ -1249,7 +1249,7 @@ if not all(required.values()):
 PY
 ```
 
-Expected: prints all eight capabilities as `True`. If a capability is `False`, bind or route around that exact missing operation before enabling CLI writes. After creating a real output cube in the writer tests, also call `preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)` so Mapping label access, explicit Real pixel type, and line-buffer mutation are verified against live cube instances.
+Expected: prints all eight capabilities as `True`. If a capability is `False`, stop and revise the DEM design or route around it using an already-exposed Python/ISIS API before enabling CLI writes. After creating a real output cube in the writer tests, also call `preflight_cube_writer_bindings(ip, template_cube=template_cube, output_cube=output_cube)` so Mapping label access, explicit Real pixel type, and line-buffer mutation are verified against live cube instances.
 
 Run this live-instance smoke check before committing the cube writer slice:
 

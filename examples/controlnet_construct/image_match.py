@@ -34,6 +34,7 @@ Updated: 2026-05-20  Geng Xun wired dynamic GPU batch options into image-match e
 Updated: 2026-05-20  Geng Xun corrected GPU tile-route backend diagnostics.
 Updated: 2026-05-20  Geng Xun added GPU execution configuration summary fields.
 Updated: 2026-05-20  Geng Xun aligned GPU batch defaults and backend reporting with effective GPU route support.
+Updated: 2026-05-22  Geng Xun added a baseline ori-space matching entrypoint with superpoint dependency fail-fast checks.
 """
 
 from __future__ import annotations
@@ -1006,6 +1007,54 @@ def _estimate_low_resolution_projected_offset(
         require_command_func=require_command_func,
         create_low_resolution_dom_func=create_low_resolution_dom_func,
         copy_precomputed_low_resolution_dom_func=copy_precomputed_low_resolution_dom_func,
+    )
+
+
+def _match_pair_generic(
+    left_path: str | Path,
+    right_path: str | Path,
+    *,
+    image_space: str,
+    matcher_method: str = DEFAULT_MATCHER_METHOD,
+    **kwargs,
+):
+    resolved_image_space = str(image_space).strip().lower()
+    if resolved_image_space not in {"dom", "ori"}:
+        raise ValueError("image_space must be 'dom' or 'ori'.")
+
+    resolved_matcher_method = str(matcher_method).strip().lower()
+    if resolved_image_space == "ori" and resolved_matcher_method == "superpoint":
+        if __package__ in {None, ""}:
+            from controlnet_construct.deep_frontends import DeepDependencyError, SuperPointFrontend
+        else:
+            from .deep_frontends import DeepDependencyError, SuperPointFrontend
+
+        try:
+            SuperPointFrontend().extract([[0.0]], device="cpu")
+        except DeepDependencyError as exc:
+            raise RuntimeError(str(exc)) from exc
+
+    return match_dom_pair(
+        left_path,
+        right_path,
+        matcher_method=matcher_method,
+        **kwargs,
+    )
+
+
+def match_ori_pair(
+    left_cube_path: str | Path,
+    right_cube_path: str | Path,
+    *,
+    matcher_method: str = DEFAULT_MATCHER_METHOD,
+    **kwargs,
+):
+    return _match_pair_generic(
+        left_cube_path,
+        right_cube_path,
+        image_space="ori",
+        matcher_method=matcher_method,
+        **kwargs,
     )
 
 

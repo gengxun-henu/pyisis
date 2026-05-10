@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-09
+Last Modified: 2026-05-22
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -34,11 +34,13 @@ Updated: 2026-05-05  Geng Xun aligned pipeline-wrapper regressions with explicit
 Updated: 2026-05-08  Geng Xun replaced the overbuilt deep-matcher pipeline forwarding regression with a lightweight matcher parser acceptance check.
 Updated: 2026-05-08  Geng Xun split deep-matcher parser acceptance from a lightweight pipeline forwarding assertion that checks matcher-method passthrough.
 Updated: 2026-05-09  Geng Xun added wrapper-help regression coverage requiring superglue/lightglue/loftr method strings.
+Updated: 2026-05-22  Geng Xun added baseline parser coverage for the new from-ori-match controlnet subcommand.
 """
 
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
 import io
 import os
@@ -1715,6 +1717,24 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("lightglue", content)
         self.assertIn("superglue", content)
         self.assertIn("loftr", content)
+
+    def test_controlnet_stereopair_parser_recognizes_from_ori_match_command(self):
+        parser = importlib.import_module("controlnet_construct.controlnet_stereopair").build_argument_parser()
+        parsed = parser.parse_args(
+            [
+                "from-ori-match",
+                "left.cub",
+                "right.cub",
+                "config.json",
+                "output.net",
+            ]
+        )
+
+        self.assertEqual(parsed.command, "from-ori-match")
+        self.assertEqual(parsed.left_cube, "left.cub")
+        self.assertEqual(parsed.right_cube, "right.cub")
+        self.assertEqual(parsed.config, "config.json")
+        self.assertEqual(parsed.output_net, "output.net")
 
     def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:

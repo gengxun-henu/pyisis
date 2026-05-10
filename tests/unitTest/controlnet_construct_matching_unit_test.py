@@ -75,6 +75,7 @@ Updated: 2026-05-20  Geng Xun added deep adapter normalization coverage for cano
 Updated: 2026-05-20  Geng Xun added regression coverage ensuring lightweight deep fallback frontends and matchers emit deterministic non-empty correspondences for non-empty inputs.
 Updated: 2026-05-21  Geng Xun replaced synthetic deep correspondences assertions with explicit missing-dependency error coverage.
 Updated: 2026-05-22  Geng Xun added deep dependency normalization and deep adapter reuse regression coverage for tile dispatch.
+Updated: 2026-05-22  Geng Xun added ori-space entrypoint regression coverage for superpoint routing and fail-fast dependency errors.
 """
 
 from __future__ import annotations
@@ -1233,6 +1234,45 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(tile_matching_module._normalize_matcher_method("superglue"), "superglue")
         self.assertEqual(tile_matching_module._normalize_matcher_method("  LIGHTGLUE  "), "lightglue")
         self.assertEqual(tile_matching_module._normalize_matcher_method("LOFTR"), "loftr")
+
+    def test_match_ori_pair_accepts_superpoint(self):
+        expected = ("left-key", "right-key", {"status": "matched"})
+
+        with mock.patch.object(image_match, "_match_pair_generic", return_value=expected) as generic_mock:
+            result = image_match.match_ori_pair(
+                "left.cub",
+                "right.cub",
+                matcher_method="superpoint",
+                max_features=64,
+            )
+
+        self.assertEqual(result, expected)
+        generic_mock.assert_called_once_with(
+            "left.cub",
+            "right.cub",
+            image_space="ori",
+            matcher_method="superpoint",
+            max_features=64,
+        )
+
+    def test_match_ori_pair_deep_dependency_missing_fails_fast(self):
+        deep_frontends_module = importlib.import_module("controlnet_construct.deep_frontends")
+
+        with mock.patch.object(
+            deep_frontends_module.SuperPointFrontend,
+            "extract",
+            side_effect=deep_frontends_module.DeepDependencyError("superpoint", "missing optional dependency 'torch'."),
+        ), mock.patch.object(
+            image_match,
+            "match_dom_pair",
+            side_effect=AssertionError("match_dom_pair should not run when deep dependencies are unavailable"),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "superpoint|dependency|torch"):
+                image_match.match_ori_pair(
+                    "left.cub",
+                    "right.cub",
+                    matcher_method="superpoint",
+                )
 
     def test_normalize_matcher_method_rejects_unknown_method(self):
         with self.assertRaisesRegex(ValueError, "Unsupported matcher_method"):

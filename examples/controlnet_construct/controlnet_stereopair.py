@@ -19,6 +19,7 @@ Updated: 2026-04-24  Geng Xun switched the post-RANSAC visualization import to t
 Updated: 2026-05-03  Geng Xun forwarded post-RANSAC visualization preview options through the DOM ControlNet wrapper and CLI.
 Updated: 2026-05-04  Geng Xun aligned CLI visualization defaults with the API scale and normalized preview option parsing.
 Updated: 2026-05-05  Geng Xun added compact stdout summaries by default so detailed conversion failures and batch report payloads stay in JSON sidecars instead of flooding the terminal.
+Updated: 2026-05-22  Geng Xun added a baseline from-ori-match parser skeleton for direct ori-space matching follow-up work.
 """
 
 from __future__ import annotations
@@ -809,6 +810,17 @@ def _build_from_original_parser(subparsers) -> None:
     _add_stdout_detail_control_arguments(parser)
 
 
+def _build_from_original_match_parser(subparsers) -> None:
+    parser = subparsers.add_parser(
+        "from-ori-match",
+        help="Match original-image cubes directly and then build a ControlNet.",
+    )
+    parser.add_argument("left_cube", help="Original cube path for image A.")
+    parser.add_argument("right_cube", help="Original cube path for image B.")
+    parser.add_argument("config", help="JSON config file containing NetworkId, TargetName, and UserName.")
+    parser.add_argument("output_net", help="Output ControlNet path.")
+
+
 def _build_from_dom_parser(subparsers) -> None:
     parser = subparsers.add_parser(
         "from-dom",
@@ -1039,7 +1051,7 @@ def _build_from_dom_batch_parser(subparsers) -> None:
 
 
 def _normalize_cli_argv(argv: list[str]) -> list[str]:
-    if argv and argv[0] not in {"from-ori", "from-dom", "from-dom-batch", "-h", "--help"}:
+    if argv and argv[0] not in {"from-ori", "from-ori-match", "from-dom", "from-dom-batch", "-h", "--help"}:
         return ["from-ori", *argv]
     return argv
 
@@ -1048,6 +1060,7 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Build a single stereo-pair ISIS ControlNet from original-image or DOM-space `.key` files.")
     subparsers = parser.add_subparsers(dest="command")
     _build_from_original_parser(subparsers)
+    _build_from_original_match_parser(subparsers)
     _build_from_dom_parser(subparsers)
     _build_from_dom_batch_parser(subparsers)
     return parser

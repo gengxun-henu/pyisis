@@ -376,7 +376,7 @@ tests/unitTest/dem_extract_unit_test.py
 ```bash
 conda run -n asp360_new python -m unittest discover -s tests/unitTest -p 'dem_extract_unit_test.py' -v
 conda run -n asp360_new python -m unittest discover -s tests/unitTest -p 'stereo_unit_test.py' -v
-conda run -n asp360_new python -m unittest discover -s tests/unitTest -p 'forward_intersection_example_test.py' -v
+PYTHONPATH=examples/forward_intersection conda run -n asp360_new python -m unittest discover -s tests/unitTest -p 'forward_intersection_example_test.py' -v
 ```
 
 ### 7.3 绑定风险检查点

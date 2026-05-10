@@ -301,21 +301,16 @@ examples/dem_extract/isis_stereo_dem.py
 
 ### 6.2 建议子命令
 
-首版新增 `from-key`：
+首版 CLI surface 只定义 `from-key` 命令，位置参数顺序固定为：
 
 ```text
-python examples/dem_extract/isis_stereo_dem.py from-key \
-  left.cub \
-  right.cub \
-  left_ori.key \
-  right_ori.key \
-  map_template.cub \
-  output_dem.cub \
-  --point-cloud-output output_points.jsonl \
-  --summary-output output_summary.json \
-  --max-error-m 10 \
-  --min-sepang-deg 1 \
-  --aggregation median
+from-key \
+  left_cube \
+  right_cube \
+  left_key \
+  right_key \
+  map_template_cube \
+  output_dem_cube
 ```
 
 ### 6.3 必需参数
@@ -324,7 +319,7 @@ python examples/dem_extract/isis_stereo_dem.py from-key \
 2. `right_cube`
 3. `left_key`
 4. `right_key`
-5. `map_template`
+5. `map_template_cube`
 6. `output_dem_cube`
 
 ### 6.4 可选参数
@@ -334,10 +329,24 @@ python examples/dem_extract/isis_stereo_dem.py from-key \
 3. `--quality-prefix`
 4. `--max-error-m`
 5. `--min-sepang-deg`
-6. `--min-radius-m` / `--max-radius-m`
-7. `--aggregation {median,mean,min-error}`
-8. `--value-type {radius-m,height-m}`，首版可只支持 `radius-m`
-9. `--datum-radius-m`，仅当后续启用 `height-m` 时使用
+6. `--min-radius-m`
+7. `--max-radius-m`
+8. `--aggregation {median,mean,min-error}`
+9. `--nodata-value`
+10. `--log-level {DEBUG,INFO,WARNING,ERROR}`
+
+### 6.5 退出行为
+
+The CLI exits non-zero for invalid inputs, unreadable cubes, mismatched `.key`
+files, unsupported template projection, or output write failure. Per-point
+geometry failures are recorded in point-cloud/summary outputs and do not fail the
+whole run unless every point fails before rasterization.
+
+### 6.6 stdout 行为
+
+CLI stdout should print a compact JSON object with status, output paths, and top
+level counters. Verbose per-point records belong in `--point-cloud-output`, not
+stdout.
 
 ## 7. 测试与验收
 
@@ -357,7 +366,7 @@ tests/unitTest/dem_extract_isis_dem_unit_test.py
 4. `max_error_m` / `min_sepang_deg` 过滤逻辑。
 5. 同一 DEM cell 内多点 `median` 聚合。
 6. 空 cell 写 Null/nodata。
-7. CLI 解析必须要求 `map_template` 与 `output_dem_cube`。
+7. CLI 解析必须要求 `map_template_cube` 与 `output_dem_cube`。
 
 ### 7.2 回归测试
 

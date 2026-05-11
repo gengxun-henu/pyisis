@@ -1,4 +1,11 @@
-"""Runtime and sidecar helpers for the DEM extraction example."""
+"""Runtime and sidecar helpers for the DEM extraction example.
+
+Author: Geng Xun
+Created: 2026-05-10
+Last Modified: 2026-05-10
+Updated: 2026-05-10  Geng Xun added runtime bootstrap and sidecar writers for sparse DEM extraction.
+Updated: 2026-05-10  Geng Xun added dense NCC summary helpers for DEM extraction.
+"""
 
 from __future__ import annotations
 
@@ -76,6 +83,8 @@ def write_point_cloud_csvish(output_path: str | Path, records: Iterable[object])
         "latitude_deg",
         "longitude_deg",
         "radius_m",
+        "height_m",
+        "datum_radius_m",
         "sepang_deg",
         "intersection_error_m",
         "x_km",
@@ -113,6 +122,9 @@ def build_summary(
     triangulation_counters: dict[str, int],
     rasterized_point_count: int,
     filled_cell_count: int,
+    value_type: str,
+    datum_radius_m: float | None,
+    refinement: dict[str, object] | None,
     max_error_m: float | None,
     min_sepang_deg: float | None,
     nodata_value: float,
@@ -128,12 +140,15 @@ def build_summary(
         "input_point_count": input_point_count,
         "rasterized_point_count": rasterized_point_count,
         "filled_cell_count": filled_cell_count,
-        "value_type": "radius_m",
+        "value_type": value_type,
+        "datum_radius_m": datum_radius_m,
         "nodata_value": nodata_value,
         "max_error_m": max_error_m,
         "min_sepang_deg": min_sepang_deg,
         "aggregation": aggregation,
     }
+    if refinement is not None:
+        summary["refinement"] = refinement
     for key in (
         "success_count",
         "failed_set_image_count",

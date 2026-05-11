@@ -1,0 +1,84 @@
+{
+  "Metadata": {
+    "Author": "Geng Xun",
+    "Created": "2026-05-10",
+    "LastModified": "2026-05-10",
+    "Updated": "2026-05-10  Geng Xun added example configuration for sparse stereo DEM extraction from original-image and DOM matching routes."
+  },
+  "Description": "Example config for sparse stereo DEM extraction from image matching.",
+  "DemExtract": {
+    "aggregation": "median",
+    "value_type": "radius_m",
+    "datum_radius_m": null,
+    "nodata_value": -9999.0,
+    "max_error_m": 250.0,
+    "min_sepang_deg": 0.1,
+    "min_radius_m": null,
+    "max_radius_m": null
+  },
+  "KeyRefinement": {
+    "enabled": true,
+    "stages": []
+  },
+  "ImageMatch": {
+    "band": 1,
+    "max_image_dimension": 3000,
+    "sub_block_size_x": 2048,
+    "sub_block_size_y": 2048,
+    "overlap_size_x": 128,
+    "overlap_size_y": 128,
+    "minimum_value": null,
+    "maximum_value": null,
+    "lower_percent": 0.5,
+    "upper_percent": 99.5,
+    "invalid_values": [],
+    "special_pixel_abs_threshold": 1e300,
+    "min_valid_pixels": 64,
+    "valid_pixel_percent_threshold": 0.05,
+    "invalid_pixel_radius": 1,
+    "matcher_method": "flann",
+    "ratio_test": 0.75,
+    "max_features": 1000,
+    "sift_octave_layers": 3,
+    "sift_contrast_threshold": 0.04,
+    "sift_edge_threshold": 10.0,
+    "sift_sigma": 1.6,
+    "crop_expand_pixels": 100,
+    "min_overlap_size": 16,
+    "use_gpu": false,
+    "use_parallel_cpu": true,
+    "num_worker_parallel_cpu": 4,
+    "write_match_visualization": true,
+    "match_visualization_scale": 0.3333333333333333,
+    "visualization_mode": "auto",
+    "memory_profile": "balanced",
+    "preview_crop_margin_pixels": 256,
+    "preview_cache_source": "auto"
+  },
+  "OriginalImageMatch": {
+    "matcher_method": "bf",
+    "valid_pixel_percent_threshold": 0.0,
+    "enable_low_resolution_offset_estimation": false
+  },
+  "DomImageMatch": {
+    "matcher_method": "flann",
+    "enable_tile_validity_prefilter": true,
+    "tile_validity_cell_width": 1024,
+    "tile_validity_cell_height": 1024,
+    "enable_low_resolution_offset_estimation": true,
+    "low_resolution_level": 5,
+    "low_resolution_max_mean_reprojection_error_pixels": 3.0,
+    "low_resolution_min_retained_match_count": 5,
+    "low_resolution_max_mean_projected_offset_meters": 2000.0,
+    "visualization_target_long_edge": 2048
+  },
+  "DomToOriginal": {
+    "merge_decimals": 3,
+    "skip_merge": false,
+    "ransac_reproj_threshold": 3.0,
+    "ransac_confidence": 0.995,
+    "ransac_max_iters": 5000,
+    "ransac_mode": "loose",
+    "loose_ransac_keep_threshold": 1.0
+  }
+}

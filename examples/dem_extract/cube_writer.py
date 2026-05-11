@@ -1,4 +1,10 @@
-"""ISIS Cube writer helpers for DEM rasters."""
+"""ISIS Cube writer helpers for DEM rasters.
+
+Author: Geng Xun
+Created: 2026-05-10
+Last Modified: 2026-05-10
+Updated: 2026-05-10  Geng Xun added ISIS Cube writing helpers for sparse DEM raster outputs.
+"""
 
 from __future__ import annotations
 

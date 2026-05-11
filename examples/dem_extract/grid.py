@@ -1,4 +1,10 @@
-"""DEM grid aggregation helpers."""
+"""DEM grid aggregation helpers.
+
+Author: Geng Xun
+Created: 2026-05-10
+Last Modified: 2026-05-10
+Updated: 2026-05-10  Geng Xun added raster aggregation helpers for sparse DEM point grids.
+"""
 
 from __future__ import annotations
 
@@ -24,20 +30,25 @@ class RasterResult:
     nodata_value: float = -9999.0
 
 
-def aggregate_cell_values(records: Iterable[TriangulatedPoint], aggregation: str) -> float:
+def _record_value(record: TriangulatedPoint, value_field: str) -> float | None:
+    return getattr(record, value_field)
+
+
+def aggregate_cell_values(records: Iterable[TriangulatedPoint], aggregation: str, *, value_field: str = "radius_m") -> float:
     record_list = list(records)
     if not record_list:
         raise ValueError("Cannot aggregate an empty cell.")
     if aggregation == "median":
-        return float(median(record.radius_m for record in record_list if record.radius_m is not None))
+        return float(median(value for record in record_list if (value := _record_value(record, value_field)) is not None))
     if aggregation == "mean":
-        values = [record.radius_m for record in record_list if record.radius_m is not None]
+        values = [value for record in record_list if (value := _record_value(record, value_field)) is not None]
         return float(sum(values) / len(values))
     if aggregation == "min-error":
         best = min(record_list, key=lambda record: float("inf") if record.intersection_error_m is None else record.intersection_error_m)
-        if best.radius_m is None:
-            raise ValueError("Best min-error record has no radius_m value.")
-        return float(best.radius_m)
+        best_value = _record_value(best, value_field)
+        if best_value is None:
+            raise ValueError(f"Best min-error record has no {value_field} value.")
+        return float(best_value)
     raise ValueError(f"Unsupported aggregation: {aggregation}")
 
 
@@ -55,12 +66,15 @@ def rasterize_points(
     spec: GridSpec,
     *,
     aggregation: str,
+    value_field: str = "radius_m",
 ) -> RasterResult:
     projection = template_cube.projection()
     cells: dict[tuple[int, int], list[TriangulatedPoint]] = {}
     rasterized_count = 0
     for record in records:
-        if record.status != "success" or record.latitude_deg is None or record.longitude_deg is None or record.radius_m is None:
+        if record.status != "success" or record.latitude_deg is None or record.longitude_deg is None:
+            continue
+        if _record_value(record, value_field) is None:
             continue
         if not projection.set_universal_ground(record.latitude_deg, record.longitude_deg):
             continue
@@ -72,5 +86,5 @@ def rasterize_points(
 
     values = [[spec.nodata_value for _ in range(spec.samples)] for _ in range(spec.lines)]
     for (line, sample), cell_records in cells.items():
-        values[line][sample] = aggregate_cell_values(cell_records, aggregation)
+        values[line][sample] = aggregate_cell_values(cell_records, aggregation, value_field=value_field)
     return RasterResult(values, rasterized_count, len(cells), spec.nodata_value)

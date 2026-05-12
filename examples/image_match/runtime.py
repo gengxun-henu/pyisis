@@ -1,9 +1,4 @@
-"""Runtime bootstrap helpers for standalone example scripts.
-
-Author: Geng Xun
-Created: 2026-05-11
-Updated: 2026-05-11  Geng Xun added top-of-file metadata so example helper modules follow the repository's example-file header convention.
-"""
+"""Runtime bootstrap helpers for standalone example scripts."""
 
 from __future__ import annotations
 

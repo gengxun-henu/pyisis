@@ -11,7 +11,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from controlnet_construct.keypoints import Keypoint, KeypointFile
+from image_match.keypoints import Keypoint, KeypointFile
 
 from .key_pairs import load_key_point_pairs_from_key_files
 

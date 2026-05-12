@@ -2,7 +2,6 @@
 
 Author: Geng Xun
 Created: 2026-04-24
-Updated: 2026-05-11  Geng Xun added top-of-file metadata history so example stereo RANSAC helpers stay consistent with other example modules.
 """
 
 from __future__ import annotations

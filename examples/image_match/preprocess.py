@@ -1,10 +1,4 @@
-"""Preprocessing helpers for DOM matching grayscale stretching and invalid-pixel masking.
-
-Author: Geng Xun
-Created: 2026-05-11
-Updated: 2026-05-11  Geng Xun added top-of-file metadata so example helper modules follow the repository's example-file header convention.
-
-用于 DOM 匹配的灰度值预处理辅助函数。
+"""用于 DOM 匹配的灰度值预处理辅助函数。
 
 Gray-value preprocessing helpers for DOM matching.
 """

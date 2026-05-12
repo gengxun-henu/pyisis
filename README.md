@@ -312,7 +312,7 @@ This workflow is intended for the common planetary-photogrammetry pattern:
 3. write a pairwise ISIS `ControlNet`,
 4. later merge many pairwise `.net` files with `cnetmerge`.
 
-If you want to run the full pipeline step by step as `image_overlap.py` → `image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`, start with `examples/controlnet_construct/usage.md`.
+If you want to run the full pipeline step by step as `image_overlap.py` → `examples/image_match/image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`, start with `examples/controlnet_construct/usage.md`.
 
 For the DOM matching stage, it is usually better to set the main `ImageMatch` options explicitly instead of relying on the raw defaults. A practical starting point is:
 
@@ -352,12 +352,12 @@ Here:
 - `valid_pixel_percent_threshold = 0.05` skips any tile whose valid-pixel ratio is below $5\%$;
 - `num_worker_parallel_cpu = 8` starts the CPU process-pool worker cap at a conservative but practical value, while the actual runtime worker count still contracts automatically to the tile count when needed.
 
-The sample config at `examples/controlnet_construct/controlnet_config.example.json` now includes those recommendations, and both `examples/controlnet_construct/run_pipeline_example.sh` and `examples/controlnet_construct/run_image_match_batch_example.sh` will forward the `ImageMatch` section into `image_match.py` as default matching parameters. `image_match.py` itself also supports `--config`, so if you call it directly you can use the same config file instead of spelling every parameter out on the command line.
+The sample config at `examples/controlnet_construct/controlnet_config.example.json` now includes those recommendations, and both `examples/controlnet_construct/run_pipeline_example.sh` and `examples/controlnet_construct/run_image_match_batch_example.sh` will forward the `ImageMatch` section into `examples/image_match/image_match.py` as default matching parameters. The shared `image_match.py` entrypoint itself also supports `--config`, so if you call it directly you can use the same config file instead of spelling every parameter out on the command line.
 
 For example:
 
 ```bash
-python examples/controlnet_construct/image_match.py \
+python examples/image_match/image_match.py \
   --config examples/controlnet_construct/controlnet_config.example.json \
   left_dom.cub right_dom.cub left.key right.key
 ```
@@ -367,7 +367,7 @@ If you also pass an explicit CLI option such as `--ratio-test 0.8` or `--num-wor
 If you want a copy-ready batch template instead of assembling the parameters yourself, `examples/controlnet_construct/usage.md` now includes a more visible “recommended parameter template” section with:
 
 - a ready-to-run `run_pipeline_example.sh` template,
-- a manual batch `image_match.py` template,
+- a manual batch `examples/image_match/image_match.py` template,
 - quick tuning guidance for `0.05`, `0.03`, and `0.1`.
 
 If you prefer a shorter standalone entry point, you can now also jump directly to:
@@ -384,13 +384,15 @@ From the current workflow revision onward, the example wrapper scripts also docu
    - **pre-RANSAC** previews into `work/match_viz/`, and
    - **post-RANSAC** previews into `work/match_viz_post_ransac/`.
 
-If you want to disable the pre-RANSAC previews when calling the batch image-match wrapper, forward `-- --no-write-match-visualization` to `image_match.py`.
+If you want to disable the pre-RANSAC previews when calling the batch image-match wrapper, forward `-- --no-write-match-visualization` to `examples/image_match/image_match.py`.
 
 The output-style convention is now intentionally consistent across the example wrappers: keep terminal output compact, and prefer JSON files for detailed diagnostics. In practice that means:
 
 - `run_image_match_batch_example.sh` mainly prints batch progress on stdout, while per-pair diagnostics live in `work/match_metadata/`;
 - `run_pipeline_example.sh` prints step summaries on stdout, while stage JSON summaries live in `work/reports/` and `work/match_results/`;
-- if you need the full `image_match.py` result payload itself, call it directly or forward its own `--result-output` option through the wrapper.
+- if you need the full `examples/image_match/image_match.py` result payload itself, call it directly or forward its own `--result-output` option through the wrapper.
+
+The current implementation split is now real rather than wrapper-only: `examples/image_match/` is the shared source-of-truth for DOM matching and DOM-preparation logic, while `examples/controlnet_construct/image_match.py` and `examples/controlnet_construct/dom_prepare.py` remain as compatibility wrappers for older scripts and imports.
 
 ### Single stereo pair
 

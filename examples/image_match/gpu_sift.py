@@ -5,7 +5,6 @@ Falls back to CPU cv2.SIFT when CUDA is unavailable.
 
 Author: Geng Xun
 Created: 2026-05-06
-Updated: 2026-05-11  Geng Xun added top-of-file metadata history so example GPU matcher helpers stay consistent with other example modules.
 """
 
 from __future__ import annotations
@@ -113,31 +112,16 @@ class DynamicGpuBatchController:
             self._current_batch_size = min(self._max_batch_size, self._current_batch_size * 2)
             self._stable_success_count = 0
 
-# ---------------------------------------------------------------------------
-# Availability check
-# ---------------------------------------------------------------------------
-
 try:
     _cuda_device_count = cv2.cuda.getCudaEnabledDeviceCount()
-    # Verify cuda.SIFT_create exists (opencv-contrib-python with CUDA)
     _ = cv2.cuda.SIFT_create
     HAS_GPU_SIFT = _cuda_device_count > 0
 except Exception:
     HAS_GPU_SIFT = False
 
 
-# ---------------------------------------------------------------------------
-# GpuSiftBatch
-# ---------------------------------------------------------------------------
-
 class GpuSiftBatch:
-    """Accumulate images and execute batch GPU SIFT extraction.
-
-    When GPU is unavailable, automatically falls back to CPU cv2.SIFT
-    with the same parameters, so callers do not need to branch.
-
-    Uses cv2.cuda.SIFT_create() — parameters are identical to CPU SIFT.
-    """
+    """Accumulate images and execute batch GPU SIFT extraction."""
 
     def __init__(
         self,
@@ -162,7 +146,6 @@ class GpuSiftBatch:
         }
 
     def add(self, image: np.ndarray, mask: np.ndarray) -> int:
-        """Add a uint8 image + mask to the batch. Returns batch index."""
         idx = len(self._images)
         self._images.append(image)
         self._masks.append(mask)
@@ -175,12 +158,6 @@ class GpuSiftBatch:
         return len(self._images)
 
     def execute(self) -> list[tuple[list[cv2.KeyPoint], np.ndarray | None]]:
-        """Run SIFT on all accumulated images.
-
-        Returns list of (keypoints, descriptors) tuples, one per image.
-        When GPU is available, uses cv2.cuda.SIFT; otherwise falls back to CPU.
-        Clears the internal buffer after execution.
-        """
         if not self._images:
             return []
 
@@ -193,10 +170,7 @@ class GpuSiftBatch:
         self._masks.clear()
         return results
 
-    # -- GPU path ----------------------------------------------------------
-
     def _execute_gpu(self) -> list[tuple[list[cv2.KeyPoint], np.ndarray | None]]:
-        """Extract SIFT features via cv2.cuda.SIFT for all batched images."""
         results: list[tuple[list[cv2.KeyPoint], np.ndarray | None]] = []
         sift = cv2.cuda.SIFT_create(**self._sift_kwargs)
 
@@ -230,10 +204,7 @@ class GpuSiftBatch:
 
         return results
 
-    # -- CPU fallback ------------------------------------------------------
-
     def _execute_cpu(self) -> list[tuple[list[cv2.KeyPoint], np.ndarray | None]]:
-        """Fallback: run cv2.SIFT on each image."""
         sift = cv2.SIFT_create(**self._sift_kwargs)
         results: list[tuple[list[cv2.KeyPoint], np.ndarray | None]] = []
         for image, mask in zip(self._images, self._masks):

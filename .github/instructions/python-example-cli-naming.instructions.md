@@ -7,6 +7,8 @@ applyTo: "{examples,scripts}/**/*.{py,sh,md}"
 
 Use these rules when editing Python/Bash example programs, wrapper scripts, or their user-facing documentation in this repository.
 
+Top-of-file metadata for runnable example code is governed by `example-file-metadata.instructions.md`; keep both rules aligned when you add or substantially edit example entrypoints.
+
 ## Core rule
 
 - Public command-line option names must use `--kebab-case`.
@@ -26,6 +28,7 @@ When you change a public CLI flag in an example program or wrapper script, also 
 - Markdown usage guides such as `usage.md`
 - command templates and snippets
 - focused unit tests that assert CLI forwarding or help output
+- top-of-file example metadata when the file is newly created or meaningfully expanded
 
 Do not leave code, help text, and docs using different spellings for the same public option.
 

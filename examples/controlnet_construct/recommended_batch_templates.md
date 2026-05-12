@@ -255,7 +255,7 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
 如果你不想通过批处理脚本中转，也可以直接把同一份配置 JSON 传给 `image_match.py`：
 
 ```bash
-python examples/controlnet_construct/image_match.py \
+python examples/image_match/image_match.py \
   --config examples/controlnet_construct/controlnet_config.example.json \
   left_dom.cub right_dom.cub left.key right.key
 ```

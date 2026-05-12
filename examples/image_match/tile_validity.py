@@ -2,7 +2,6 @@
 
 Author: Geng Xun
 Created: 2026-05-02
-Updated: 2026-05-11  Geng Xun added top-of-file metadata history so example tile-validity helpers stay consistent with other example modules.
 """
 
 from __future__ import annotations
@@ -304,7 +303,7 @@ def _atomic_write_text(path: Path, payload: str) -> None:
         temp_handle.flush()
         os.fsync(temp_handle.fileno())
         temp_name = temp_handle.name
-    except Exception:  # noqa: BLE001
+    except Exception:
         temp_name = temp_handle.name
         temp_handle.close()
         Path(temp_name).unlink(missing_ok=True)
@@ -313,7 +312,7 @@ def _atomic_write_text(path: Path, payload: str) -> None:
         temp_handle.close()
         try:
             os.replace(temp_name, path)
-        except Exception:  # noqa: BLE001
+        except Exception:
             Path(temp_name).unlink(missing_ok=True)
             raise
 
@@ -336,7 +335,7 @@ def _atomic_write_npz(path: Path, *, valid_counts: np.ndarray, total_counts: np.
         temp_handle.flush()
         os.fsync(temp_handle.fileno())
         temp_name = temp_handle.name
-    except Exception:  # noqa: BLE001
+    except Exception:
         temp_name = temp_handle.name
         temp_handle.close()
         Path(temp_name).unlink(missing_ok=True)
@@ -345,7 +344,7 @@ def _atomic_write_npz(path: Path, *, valid_counts: np.ndarray, total_counts: np.
         temp_handle.close()
         try:
             os.replace(temp_name, path)
-        except Exception:  # noqa: BLE001
+        except Exception:
             Path(temp_name).unlink(missing_ok=True)
             raise
 
@@ -418,7 +417,7 @@ def _load_index_from_cache(manifest_path: str | Path, data_path: str | Path) -> 
         valid_counts=valid_counts,
         total_counts=total_counts,
         uncertain=uncertain,
-        manifest=manifest,  # type: ignore[arg-type]
+        manifest=manifest,
     )
 
 
@@ -621,7 +620,7 @@ def ensure_dom_validity_index(
             loaded_cache_key = _cache_key_for_manifest(index.manifest)
             if loaded_cache_key != manifest_path.stem:
                 raise ValueError("Cache manifest key does not match cache path.")
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             diagnostics["cache_error"] = f"{type(exc).__name__}: {exc}"
         else:
             diagnostics["status"] = "hit"

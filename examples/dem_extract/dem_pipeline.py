@@ -26,23 +26,23 @@ if __package__ in (None, ""):
     from dem_extract import isis_stereo_dem
     from dem_extract.runtime import write_summary_json
     from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
-    from controlnet_construct.image_match import (
+    from image_match.image_match import (
         load_image_match_defaults_from_config,
         match_dom_pair_to_key_files,
         match_ori_pair_to_key_files,
     )
-    from controlnet_construct.stereo_ransac import filter_stereo_pair_key_files_with_ransac
+    from image_match.stereo_ransac import filter_stereo_pair_key_files_with_ransac
     from controlnet_construct.tie_point_merge_in_overlap import merge_stereo_pair_key_files
 else:
     from . import isis_stereo_dem
     from .runtime import write_summary_json
     from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
-    from controlnet_construct.image_match import (
+    from image_match.image_match import (
         load_image_match_defaults_from_config,
         match_dom_pair_to_key_files,
         match_ori_pair_to_key_files,
     )
-    from controlnet_construct.stereo_ransac import filter_stereo_pair_key_files_with_ransac
+    from image_match.stereo_ransac import filter_stereo_pair_key_files_with_ransac
     from controlnet_construct.tie_point_merge_in_overlap import merge_stereo_pair_key_files
 
 

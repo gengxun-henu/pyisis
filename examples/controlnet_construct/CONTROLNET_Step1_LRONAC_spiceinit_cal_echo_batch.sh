@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 # Generate per-step LRO NAC preprocessing tasks for external parallel execution.
-# This script ONLY prints tasks and does not execute them.
+# This script only prints tasks and does not execute them.
+#
+# Author: Geng Xun
+# Created: 2026-05-11
+# Updated: 2026-05-11  Geng Xun added top-of-file metadata so example shell entrypoints follow the repository's example-file header convention.
 
 set -euo pipefail
 

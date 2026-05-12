@@ -18,7 +18,7 @@ import sys
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from controlnet_construct.keypoints import read_key_file, write_key_file
+from image_match.keypoints import read_key_file, write_key_file
 from dem_extract.cube_writer import write_radius_cube
 from dem_extract.dense_ncc import (
     NCCMatchOptions,

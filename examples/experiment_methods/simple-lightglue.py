@@ -27,25 +27,38 @@ DEFAULT_RIGHT_IMAGE = TESTDIR + "/REDUCED_scale4_M104318871RE.echo.cal.tif"
 DEFAULT_FEATURES = "superpoint"
 SUPPORTED_FEATURES = ("superpoint", "disk", "aliked", "sift", "doghardnet")
 
-DEFAULT_METHOD = "lightglue"
-SUPPORTED_METHODS = ("lightglue", "sift")
+DEFAULT_MATCH_METHOD = "lightglue"
+SUPPORTED_MATCH_METHODS = ("lightglue", "sift")
 
 
 def parse_args() -> argparse.Namespace:
 	help_examples = """Examples:
+  # LightGlue matcher + SuperPoint features (default)
   python examples/experiment_methods/simple-lightglue.py
+
+  # Custom images
   python examples/experiment_methods/simple-lightglue.py --left-image /path/to/left.tif --right-image /path/to/right.tif
-  python examples/experiment_methods/simple-lightglue.py --features disk --device auto
-  python examples/experiment_methods/simple-lightglue.py --features sift --max-visualized-matches 500 --output-match-image /tmp/lro-matches.png
-  python examples/experiment_methods/simple-lightglue.py --method sift --max-features 2048
-  python examples/experiment_methods/simple-lightglue.py --method sift --max-features 4096 --ratio-threshold 0.75
-  python examples/experiment_methods/simple-lightglue.py --method lightglue --features superpoint --max-features 2048
+
+  # DISK features on auto device
+  python examples/experiment_methods/simple-lightglue.py --feature-method disk --device auto
+
+  # SIFT features, limit visualization to 500 matches
+  python examples/experiment_methods/simple-lightglue.py --feature-method sift --max-visualized-matches 500 --output-match-image /tmp/lro-matches.png
+
+  # Classic SIFT matching (no neural network)
+  python examples/experiment_methods/simple-lightglue.py --match-method sift --max-features 2048
+
+  # Classic SIFT with stricter ratio test
+  python examples/experiment_methods/simple-lightglue.py --match-method sift --max-features 4096 --sift-ratio-threshold 0.75
+
+  # LightGlue matcher + SuperPoint features + explicit keypoint count
+  python examples/experiment_methods/simple-lightglue.py --match-method lightglue --feature-method superpoint --max-features 2048
 """
 	parser = argparse.ArgumentParser(
 		formatter_class=argparse.RawDescriptionHelpFormatter,
 		description=(
-			"Run matching with LightGlue or classic OpenCV SIFT. Use --method to "
-			"switch between matching backends for performance comparison."
+			"Run feature extraction and image matching. Supports LightGlue neural "
+			"matching and classic OpenCV SIFT for performance comparison."
 		),
 		epilog=help_examples,
 	)
@@ -69,22 +82,69 @@ def parse_args() -> argparse.Namespace:
 		),
 	)
 	parser.add_argument(
-		"--method",
-		choices=SUPPORTED_METHODS,
-		default=DEFAULT_METHOD,
-		help=(
-			"Matching method. 'lightglue' uses the LightGlue neural matcher, "
-			"'sift' uses classic OpenCV SIFT with ratio test."
-		),
-	)
-	parser.add_argument(
-		"--features",
+		"--feature-method",
 		choices=SUPPORTED_FEATURES,
 		default=DEFAULT_FEATURES,
 		help=(
-			"Feature frontend to pair with LightGlue (only used when --method "
-			"is 'lightglue'). Supported values: "
-			+ ", ".join(SUPPORTED_FEATURES)
+			"Feature extraction method. Used by both LightGlue and SIFT matching "
+			"paths. Supported: " + ", ".join(SUPPORTED_FEATURES)
+		),
+	)
+	parser.add_argument(
+		"--match-method",
+		choices=SUPPORTED_MATCH_METHODS,
+		default=DEFAULT_MATCH_METHOD,
+		help=(
+			"Matching method. 'lightglue' uses the neural LightGlue matcher paired "
+			"with --feature-method; 'sift' uses classic OpenCV SIFT + ratio test "
+			"(ignores --feature-method). Supported: " + ", ".join(SUPPORTED_MATCH_METHODS)
+		),
+	)
+	# LightGlue-specific parameters
+	parser.add_argument(
+		"--lightglue-filter-threshold",
+		type=float,
+		default=0.05,
+		help=(
+			"LightGlue: match filtering threshold. Lower values allow more edge "
+			"matches through. 0.0 = aggressive (more matches), 0.1+ = conservative. "
+			"Default: 0.05."
+		),
+	)
+	parser.add_argument(
+		"--lightglue-depth-confidence",
+		type=int,
+		default=-1,
+		help=(
+			"LightGlue: depth confidence for early stopping. -1 disables early "
+			"stopping, forcing full-depth analysis. Default: -1."
+		),
+	)
+	parser.add_argument(
+		"--lightglue-width-confidence",
+		type=int,
+		default=-1,
+		help=(
+			"LightGlue: width confidence for token pruning. -1 disables pruning, "
+			"ensuring all keypoint pairs are considered. Default: -1."
+		),
+	)
+	parser.add_argument(
+		"--lightglue-flash",
+		type=lambda x: str(x).lower() in ("true", "1", "yes"),
+		default=True,
+		help=(
+			"LightGlue: enable flash attention for faster inference. "
+			"Default: true."
+		),
+	)
+	parser.add_argument(
+		"--lightglue-mp",
+		type=lambda x: str(x).lower() in ("true", "1", "yes"),
+		default=True,
+		help=(
+			"LightGlue: enable mixed precision (fp16). Requires CUDA device. "
+			"Default: true."
 		),
 	)
 	parser.add_argument(
@@ -92,12 +152,12 @@ def parse_args() -> argparse.Namespace:
 		type=int,
 		default=2048,
 		help=(
-			"Maximum number of keypoints to detect. Applies to both SIFT "
-			"(nfeatures) and LightGlue frontends. Default: 2048."
+			"Maximum number of keypoints to detect. Applies to all feature "
+			"extractors and classic SIFT. Default: 2048."
 		),
 	)
 	parser.add_argument(
-		"--ratio-threshold",
+		"--sift-ratio-threshold",
 		type=float,
 		default=0.8,
 		help=(
@@ -107,7 +167,7 @@ def parse_args() -> argparse.Namespace:
 		),
 	)
 	parser.add_argument(
-		"--match-threshold",
+		"--sift-match-threshold",
 		type=float,
 		default=None,
 		help=(
@@ -119,8 +179,8 @@ def parse_args() -> argparse.Namespace:
 		"--output-match-image",
 		default=None,
 		help=(
-			"Path to write the OpenCV match-line visualization image. If omitted, "
-			"a default name is generated from the left/right image names and the selected method."
+			"Path to write the match visualization image. If omitted, "
+			"auto-generated from input filenames and methods."
 		),
 	)
 	parser.add_argument(
@@ -128,7 +188,7 @@ def parse_args() -> argparse.Namespace:
 		type=int,
 		default=None,
 		help=(
-			"Maximum number of match lines to draw into the output visualization. "
+			"Maximum number of match lines to draw. "
 			"By default, all matches are drawn."
 		),
 	)
@@ -180,21 +240,21 @@ def tensor_image_to_bgr_uint8(image: torch.Tensor) -> np.ndarray:
 
 def build_output_match_image_path(
 	output_match_image: str | None,
-	method: str,
-	features: str | None,
+	feature_method: str,
+	match_method: str,
 	left_image: str,
 	right_image: str,
 ) -> str:
-	label = f"{method}-{features}" if features else method
+	label = f"{feature_method}_{match_method}"
 	if output_match_image is None:
 		left_path = Path(left_image)
 		right_path = Path(right_image)
-		output_path = left_path.parent / f"{left_path.stem}__{right_path.stem}-matches.png"
+		output_path = left_path.parent / f"{label}__{left_path.stem}__{right_path.stem}-matches.png"
 	else:
 		output_path = Path(output_match_image)
 	if output_path.suffix:
-		return str(output_path.with_name(f"{output_path.stem}-{label}{output_path.suffix}"))
-	return str(output_path.with_name(f"{output_path.name}-{label}"))
+		return str(output_path.with_name(f"{label}-{output_path.stem}{output_path.suffix}"))
+	return str(output_path.with_name(f"{label}-{output_path.name}"))
 
 
 def match_classic_sift(
@@ -271,31 +331,31 @@ def main() -> None:
 	args = parse_args()
 	left_image = args.left_image
 	right_image = args.right_image
-	method = args.method
+	match_method = args.match_method
 
 	output_match_image = build_output_match_image_path(
 		args.output_match_image,
-		method,
-		args.features if method == "lightglue" else None,
+		args.feature_method,
+		match_method,
 		left_image,
 		right_image,
 	)
 
-	if method == "sift":
-		print(f"Using method: classic SIFT")
-		print(f"Max features: {args.max_features}")
-		print(f"Ratio threshold: {args.ratio_threshold}")
-		if args.match_threshold is not None:
-			print(f"Match distance threshold: {args.match_threshold}")
-		print(f"Left image: {left_image}")
-		print(f"Right image: {right_image}")
+	if match_method == "sift":
+		print("=== Classic SIFT Matching ===")
+		print(f"  Max features: {args.max_features}")
+		print(f"  SIFT ratio threshold: {args.sift_ratio_threshold}")
+		if args.sift_match_threshold is not None:
+			print(f"  SIFT match distance threshold: {args.sift_match_threshold}")
+		print(f"  Left image: {left_image}")
+		print(f"  Right image: {right_image}")
 
 		points0_np, points1_np, match_count = match_classic_sift(
 			left_image,
 			right_image,
 			max_features=args.max_features,
-			ratio_threshold=args.ratio_threshold,
-			match_threshold=args.match_threshold,
+			ratio_threshold=args.sift_ratio_threshold,
+			match_threshold=args.sift_match_threshold,
 		)
 
 		img0_bgr = cv2.cvtColor(
@@ -313,8 +373,8 @@ def main() -> None:
 			args.max_visualized_matches,
 		)
 
-		print(f"Matched points: {match_count}")
-		print(f"Match visualization written to: {output_match_image}")
+		print(f"  Matched points: {match_count}")
+		print(f"  Output: {output_match_image}")
 		return
 
 	# LightGlue path
@@ -322,16 +382,28 @@ def main() -> None:
 	from lightglue.utils import load_image, rbd
 
 	device = resolve_device(args.device)
-	selected_features = args.features
-	print(f"Using device: {device}")
-	print(f"Using method: LightGlue")
-	print(f"Using features frontend: {selected_features}")
-	print(f"Max features: {args.max_features}")
-	print(f"Left image: {left_image}")
-	print(f"Right image: {right_image}")
+	feature_method = args.feature_method
+	print("=== LightGlue Matching ===")
+	print(f"  Device: {device}")
+	print(f"  Feature method: {feature_method}")
+	print(f"  Max features: {args.max_features}")
+	print(f"  Filter threshold: {args.lightglue_filter_threshold}")
+	print(f"  Depth confidence: {args.lightglue_depth_confidence}")
+	print(f"  Width confidence: {args.lightglue_width_confidence}")
+	print(f"  Flash attention: {args.lightglue_flash}")
+	print(f"  Mixed precision: {args.lightglue_mp}")
+	print(f"  Left image: {left_image}")
+	print(f"  Right image: {right_image}")
 
-	extractor = build_extractor(selected_features, device, max_features=args.max_features)
-	matcher = LightGlue(features=selected_features).eval().to(device)
+	extractor = build_extractor(feature_method, device, max_features=args.max_features)
+	matcher = LightGlue(
+		features=feature_method,
+		filter_threshold=args.lightglue_filter_threshold,
+		depth_confidence=args.lightglue_depth_confidence,
+		width_confidence=args.lightglue_width_confidence,
+		flash=args.lightglue_flash,
+		mp=args.lightglue_mp,
+	).eval().to(device)
 
 	image0 = load_image(left_image).to(device)
 	image1 = load_image(right_image).to(device)
@@ -358,10 +430,8 @@ def main() -> None:
 		args.max_visualized_matches,
 	)
 
-	print(f"Matched points: {len(matches)}")
-	print(f"points0 shape: {tuple(points0.shape)}")
-	print(f"points1 shape: {tuple(points1.shape)}")
-	print(f"Match visualization written to: {output_match_image}")
+	print(f"  Matched points: {len(matches)}")
+	print(f"  Output: {output_match_image}")
 
 
 if __name__ == "__main__":

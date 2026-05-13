@@ -3715,3 +3715,696 @@ Object = reduce
 End_Object
 
 
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:33:58
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpalj16q8g/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:33:59
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpsm7xevtr/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:33:59
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpmik931v6/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:33:59
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpz60dtedo/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:33:59
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmptfvb292n/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:33:59
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /tmp/tmpmg72rynt/left.cub
+    TO           = /tmp/tmpmg72rynt/preview_cache/level2/left__ed8975a495bc0d-
+                   09bf895b4f3bf9bbdc0d058b849276dfd257b5c0395dea3f38.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [/tmp/tmpmg72rynt/left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:33:59
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpwl0qojc8/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:35:33
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpof3gijqk/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:35:33
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpc1hr4c7r/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:35:34
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmp4xnl7wv_/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:35:34
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpl6n57_93/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:35:34
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpy8nlh9nv/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:35:34
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /tmp/tmpg5o5c9ny/left.cub
+    TO           = /tmp/tmpg5o5c9ny/preview_cache/level2/left__3976b0e5912038-
+                   7305a74571cb6a1d134cca87cfb9f5cb5b4a6da1bffc55778c.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [/tmp/tmpg5o5c9ny/left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-13T22:35:34
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmp8jsmikh6/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-14T00:18:51
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpp9whcgb8/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-14T00:18:51
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmp64z1kjo_/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-14T00:18:51
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpjhmsz7sq/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-14T00:18:51
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpxto9yrye/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-14T00:18:51
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmplpayk28x/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-14T00:18:51
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = /tmp/tmpvwk2xfpl/left.cub
+    TO           = /tmp/tmpvwk2xfpl/preview_cache/level2/left__e5dc4c64359ad3-
+                   aa90aa1649f11a55f34a4266dd59c862669406e89be44dcb0c.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [/tmp/tmpvwk2xfpl/left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-14T00:18:51
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = left.cub
+    TO           = /tmp/tmpl8oedxdi/preview_cache/level2/left__b12f73879dca58-
+                   d1ebf83e1013f772da72f9ec963edeb655b7cbe6765edfd5dc.cub
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 4
+    LSCALE       = 4
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Error
+    Program = reduce
+    Class   = "I/O ERROR"
+    Code    = 4
+    Message = "Unable to open [left.cub]"
+    File    = Cube.cpp
+    Line    = 2443
+    Program = reduce
+  End_Group
+End_Object
+
+

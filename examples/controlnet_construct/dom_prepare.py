@@ -15,13 +15,8 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 _IMAGE_MATCH_MODULE = import_module("image_match.dom_prepare")
-main = _IMAGE_MATCH_MODULE.main
-
-_EXPORTED_NAMES = [name for name in dir(_IMAGE_MATCH_MODULE) if not name.startswith("_")]
-
-globals().update({name: getattr(_IMAGE_MATCH_MODULE, name) for name in _EXPORTED_NAMES})
-__all__ = list(_EXPORTED_NAMES)
+sys.modules[__name__] = _IMAGE_MATCH_MODULE
 
 
 if __name__ == "__main__":
-    main()
+    _IMAGE_MATCH_MODULE.main()

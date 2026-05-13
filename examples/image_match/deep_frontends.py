@@ -28,6 +28,25 @@ def _raise_missing_dependency(*, method: str, missing: str, install_hint: str) -
     )
 
 
+def _require_kornia_feature(*, method: str, feature_name: str, install_hint: str):
+    try:
+        import kornia.feature as kf
+    except Exception:
+        _raise_missing_dependency(
+            method=method,
+            missing="kornia",
+            install_hint=install_hint,
+        )
+
+    if not hasattr(kf, feature_name):
+        _raise_missing_dependency(
+            method=method,
+            missing=f"kornia.feature.{feature_name}",
+            install_hint=install_hint,
+        )
+    return kf
+
+
 class SuperPointFrontend:
     def __init__(self) -> None:
         self._extractor = None
@@ -42,14 +61,11 @@ class SuperPointFrontend:
                 install_hint="pip install torch kornia",
             )
 
-        try:
-            import kornia.feature as kf
-        except Exception:
-            _raise_missing_dependency(
-                method="superglue/lightglue",
-                missing="kornia",
-                install_hint="pip install kornia",
-            )
+        kf = _require_kornia_feature(
+            method="superglue/lightglue",
+            feature_name="SuperPoint",
+            install_hint="pip install kornia",
+        )
 
         image_array = np.asarray(image, dtype=np.float32)
         if image_array.size <= 0:
@@ -95,6 +111,12 @@ class LoFTRFrontend:
                 missing="torch",
                 install_hint="pip install torch kornia",
             )
+
+        _require_kornia_feature(
+            method="loftr",
+            feature_name="SuperPoint",
+            install_hint="pip install \"kornia[loftr]\"",
+        )
 
         self._torch = torch
         return {

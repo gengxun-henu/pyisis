@@ -15,7 +15,4 @@ if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 _SHARED_MODULE = import_module("image_match.tile_matching")
-_EXPORTED_NAMES = [name for name in dir(_SHARED_MODULE) if not name.startswith("__")]
-
-globals().update({name: getattr(_SHARED_MODULE, name) for name in _EXPORTED_NAMES})
-__all__ = list(_EXPORTED_NAMES)
+sys.modules[__name__] = _SHARED_MODULE

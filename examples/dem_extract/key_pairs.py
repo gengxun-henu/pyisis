@@ -9,19 +9,20 @@ Updated: 2026-05-10  Geng Xun added `.key` pair loading and bounds validation fo
 from __future__ import annotations
 
 from dataclasses import dataclass
-import importlib.util
+from importlib import import_module
 from pathlib import Path
 import sys
 
 
 def _load_keypoint_helpers():
-    keypoints_path = Path(__file__).resolve().parents[1] / "controlnet_construct" / "keypoints.py"
-    spec = importlib.util.spec_from_file_location("_dem_extract_controlnet_keypoints", keypoints_path)
-    if spec is None or spec.loader is None:
-        raise ImportError(f"Unable to load controlnet keypoints helper from {keypoints_path}")
-    module = importlib.util.module_from_spec(spec)
-    sys.modules[spec.name] = module
-    spec.loader.exec_module(module)
+    examples_root = Path(__file__).resolve().parents[1]
+    root_str = str(examples_root)
+    if root_str not in sys.path:
+        sys.path.insert(0, root_str)
+    try:
+        module = import_module("controlnet_construct.keypoints")
+    except ImportError:
+        module = import_module("image_match.keypoints")
     return module.KeypointFile, module.read_key_file
 
 

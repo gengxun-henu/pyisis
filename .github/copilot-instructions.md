@@ -15,6 +15,7 @@ Keep this file intentionally short to reduce Copilot context usage. Put detailed
 ## Environment and validation
 
 - Prefer the Python interpreter from the `asp360_new` environment for build, test, and validation work.
+- For deep-learning experiment scripts under `examples/experiment_methods/` that depend on LightGlue, LoFTR, SuperGlue, or similar ML matcher stacks, prefer the Python interpreter from the `deep-learning` conda environment and switch to it before validation when `asp360_new` lacks the required packages.
 - After modifying code, run the smallest relevant validation first.
 - Prefer focused unit tests over broad validation when a smaller targeted check is available.
 

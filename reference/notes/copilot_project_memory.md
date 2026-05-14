@@ -6,6 +6,7 @@ It should be referenced on demand instead of expanding always-on instructions.
 ## Stable repo facts
 
 - Use the `asp360_new` Python interpreter for build, import, and test validation.
+- For deep-learning experiment scripts in `examples/experiment_methods/` that exercise LightGlue / LoFTR / SuperGlue-style matchers, use the `deep-learning` conda environment instead of `asp360_new`; if validation fails due to missing ML packages, switch environments before treating it as a code issue.
 - For binding signatures and compile decisions, conda-installed ISIS headers/libs are the source of truth.
 - Use `reference/upstream_isis/` mainly for implementation reading, lifecycle analysis, and upstream usage study.
 - Prefer repository-relative paths in notes, plans, and reviews.

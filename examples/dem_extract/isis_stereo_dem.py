@@ -2,10 +2,11 @@
 
 Author: Geng Xun
 Created: 2026-05-10
-Last Modified: 2026-05-10
+Last Modified: 2026-05-14
 Updated: 2026-05-10  Geng Xun added the from-key sparse stereo DEM extraction command.
 Updated: 2026-05-10  Geng Xun added optional `.key` refinement stages before DEM triangulation.
 Updated: 2026-05-10  Geng Xun added the from-dense-ncc dense disparity DEM command.
+Updated: 2026-05-14  Geng Xun resolved merge conflicts by preferring shared image_match keypoint helpers with compatibility fallback.
 """
 
 from __future__ import annotations
@@ -18,7 +19,11 @@ import sys
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from image_match.keypoints import read_key_file, write_key_file
+try:
+    from image_match.keypoints import read_key_file, write_key_file
+except ImportError:
+    from controlnet_construct.keypoints import read_key_file, write_key_file
+
 from dem_extract.cube_writer import write_radius_cube
 from dem_extract.dense_ncc import (
     NCCMatchOptions,

@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-05-10
-Last Modified: 2026-05-10
+Last Modified: 2026-05-14
 Updated: 2026-05-10  Geng Xun added `.key` pair loading and bounds validation for DEM extraction.
+Updated: 2026-05-14  Geng Xun resolved merge conflicts by preferring shared image_match keypoint helpers with compatibility fallback.
 """
 
 from __future__ import annotations
@@ -20,9 +21,9 @@ def _load_keypoint_helpers():
     if root_str not in sys.path:
         sys.path.insert(0, root_str)
     try:
-        module = import_module("controlnet_construct.keypoints")
-    except ImportError:
         module = import_module("image_match.keypoints")
+    except ImportError:
+        module = import_module("controlnet_construct.keypoints")
     return module.KeypointFile, module.read_key_file
 
 

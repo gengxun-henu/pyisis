@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-05-10
-Last Modified: 2026-05-10
+Last Modified: 2026-05-14
 Updated: 2026-05-10  Geng Xun added staged MaximumCorrelation/Gruen refinement for synchronized DEM `.key` pairs.
+Updated: 2026-05-14  Geng Xun resolved merge conflicts by preferring shared image_match keypoint helpers with compatibility fallback.
 """
 
 from __future__ import annotations
@@ -11,7 +12,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from image_match.keypoints import Keypoint, KeypointFile
+try:
+    from image_match.keypoints import Keypoint, KeypointFile
+except ImportError:
+    from controlnet_construct.keypoints import Keypoint, KeypointFile
 
 from .key_pairs import load_key_point_pairs_from_key_files
 

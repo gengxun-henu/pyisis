@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-05-14
 Last Modified: 2026-05-14
 Updated: 2026-05-14  Geng Xun added first-node regression coverage for texture probes, SPICE-constrained elevation candidates, and matcher routing sidecars.
+Updated: 2026-05-14  Geng Xun added focused coverage for match-quality gating and fixed cascade decisions.
 """
 
 from __future__ import annotations
@@ -22,11 +23,15 @@ if str(EXAMPLES_DIR) not in sys.path:
 
 from image_match.adaptive_routing import (
     ImageTextureProbe,
+    MatchQualityReport,
     RenderProbe,
     SpiceLightingConstraints,
     build_pair_probe_sidecar,
+    build_cascade_plan,
     build_spice_constrained_elevation_candidates,
     compute_real_image_texture_probe,
+    decide_post_match_action,
+    evaluate_match_quality,
     route_matcher_for_pair,
 )
 
@@ -150,6 +155,93 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(payload["pair_route"]["initial_matcher"], "lightglue")
         self.assertEqual(payload["match_quality"]["inlier_count"], 42)
         self.assertTrue(payload["final_decision"]["accepted"])
+
+    def test_evaluate_match_quality_accepts_balanced_low_residual_result(self):
+        report = evaluate_match_quality(
+            inlier_count=48,
+            total_match_count=60,
+            coverage=0.62,
+            residuals=(0.3, 0.6, 0.8, 1.0, 1.2),
+        )
+
+        self.assertTrue(report.accepted)
+        self.assertAlmostEqual(report.inlier_ratio, 0.8)
+        self.assertEqual(report.rejection_reasons, ())
+        self.assertAlmostEqual(report.residual_summary["p95"], 1.2)
+        self.assertGreater(report.quality_score, 0.7)
+
+    def test_evaluate_match_quality_rejects_sparse_high_residual_result(self):
+        report = evaluate_match_quality(
+            inlier_count=12,
+            total_match_count=50,
+            coverage=0.08,
+            residuals=(1.0, 3.0, 4.5, 5.0, 6.5),
+        )
+
+        self.assertFalse(report.accepted)
+        self.assertIn("insufficient_inlier_count", report.rejection_reasons)
+        self.assertIn("insufficient_inlier_ratio", report.rejection_reasons)
+        self.assertIn("insufficient_coverage", report.rejection_reasons)
+        self.assertIn("mean_residual_too_large", report.rejection_reasons)
+        self.assertIn("p95_residual_too_large", report.rejection_reasons)
+
+    def test_build_cascade_plan_preserves_fixed_matcher_order(self):
+        plan = build_cascade_plan(
+            initial_matcher="bf",
+            fallback_chain=("loftr", "lightglue"),
+        )
+
+        self.assertEqual(plan, ("bf", "lightglue", "loftr"))
+        self.assertEqual(build_cascade_plan(initial_matcher="lightglue"), ("lightglue", "loftr"))
+        self.assertEqual(build_cascade_plan(initial_matcher="loftr"), ("loftr",))
+
+    def test_decide_post_match_action_requests_next_matcher_after_failed_gate(self):
+        plan = build_cascade_plan(initial_matcher="bf")
+        report = MatchQualityReport(
+            inlier_count=10,
+            total_match_count=40,
+            inlier_ratio=0.25,
+            coverage=0.12,
+            residual_summary={"count": 4, "mean": 3.2, "median": 3.0, "p95": 4.8, "max": 5.0},
+            quality_score=0.29,
+            accepted=False,
+            rejection_reasons=("insufficient_inlier_count", "insufficient_coverage"),
+        )
+
+        action = decide_post_match_action(
+            current_matcher="bf",
+            quality_report=report,
+            cascade_plan=plan,
+        )
+
+        self.assertFalse(action["accepted"])
+        self.assertFalse(action["fallback_used"])
+        self.assertEqual(action["next_matcher"], "lightglue")
+        self.assertEqual(action["stop_reason"], "quality_insufficient_try_fallback")
+
+    def test_decide_post_match_action_accepts_successful_fallback(self):
+        accepted_report = MatchQualityReport(
+            inlier_count=36,
+            total_match_count=44,
+            inlier_ratio=36 / 44,
+            coverage=0.41,
+            residual_summary={"count": 6, "mean": 0.8, "median": 0.75, "p95": 1.3, "max": 1.3},
+            quality_score=0.76,
+            accepted=True,
+            rejection_reasons=(),
+        )
+
+        action = decide_post_match_action(
+            current_matcher="lightglue",
+            quality_report=accepted_report,
+            cascade_plan=("bf", "lightglue", "loftr"),
+        )
+
+        self.assertTrue(action["accepted"])
+        self.assertTrue(action["fallback_used"])
+        self.assertIsNone(action["next_matcher"])
+        self.assertEqual(action["selected_matcher"], "lightglue")
+        self.assertEqual(action["stop_reason"], "quality_accepted")
 
 
 if __name__ == "__main__":

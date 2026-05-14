@@ -3,12 +3,14 @@
 Author: Geng Xun
 Created: 2026-05-14
 Updated: 2026-05-14  Geng Xun added first-node texture probe, SPICE-constrained elevation candidates, pair routing, and JSON sidecar helpers.
+Updated: 2026-05-14  Geng Xun added pure match-quality gating and fixed cascade planning helpers.
 """
 
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 import math
+import statistics
 from typing import Any, Iterable
 
 import cv2
@@ -88,6 +90,20 @@ class PairRoutingDecision:
     render_inferred_elevation_gap: float | None
     render_peak_sharpness: float | None
     estimated_match_difficulty: float
+
+
+@dataclass(frozen=True, slots=True)
+class MatchQualityReport:
+    """Summary of post-match quality gating signals for one matcher result."""
+
+    inlier_count: int
+    total_match_count: int | None
+    inlier_ratio: float
+    coverage: float
+    residual_summary: dict[str, float | int | None]
+    quality_score: float
+    accepted: bool
+    rejection_reasons: tuple[str, ...]
 
 
 def build_spice_constrained_elevation_candidates(
@@ -254,6 +270,196 @@ def _absolute_gap(left: float | None, right: float | None) -> float | None:
     return abs(left_value - right_value)
 
 
+def _summarize_residuals(
+    residuals: Iterable[float] | None = None,
+    residual_summary: dict[str, float | int | None] | None = None,
+) -> dict[str, float | int | None]:
+    if residual_summary is not None:
+        summary = dict(residual_summary)
+        return {
+            "count": int(summary.get("count", 0) or 0),
+            "mean": _finite_float(summary.get("mean")),
+            "median": _finite_float(summary.get("median")),
+            "p95": _finite_float(summary.get("p95")),
+            "max": _finite_float(summary.get("max")),
+        }
+
+    if residuals is None:
+        return {
+            "count": 0,
+            "mean": None,
+            "median": None,
+            "p95": None,
+            "max": None,
+        }
+
+    values = sorted(
+        abs(float(value))
+        for value in residuals
+        if value is not None and math.isfinite(float(value))
+    )
+    if not values:
+        return {
+            "count": 0,
+            "mean": None,
+            "median": None,
+            "p95": None,
+            "max": None,
+        }
+
+    p95_index = max(0, min(len(values) - 1, math.ceil(0.95 * len(values)) - 1))
+    return {
+        "count": len(values),
+        "mean": float(sum(values) / len(values)),
+        "median": float(statistics.median(values)),
+        "p95": float(values[p95_index]),
+        "max": float(values[-1]),
+    }
+
+
+def evaluate_match_quality(
+    *,
+    inlier_count: int,
+    coverage: float,
+    total_match_count: int | None = None,
+    inlier_ratio: float | None = None,
+    residuals: Iterable[float] | None = None,
+    residual_summary: dict[str, float | int | None] | None = None,
+    min_inlier_count: int = 24,
+    min_inlier_ratio: float = 0.35,
+    min_coverage: float = 0.20,
+    max_mean_residual: float = 2.5,
+    max_p95_residual: float = 4.0,
+) -> MatchQualityReport:
+    """Evaluate whether one matcher result clears the post-match quality gate."""
+
+    resolved_inlier_count = max(0, int(inlier_count))
+    resolved_total_match_count = None if total_match_count is None else max(0, int(total_match_count))
+    if inlier_ratio is None:
+        if resolved_total_match_count in (None, 0):
+            resolved_inlier_ratio = 0.0
+        else:
+            resolved_inlier_ratio = resolved_inlier_count / resolved_total_match_count
+    else:
+        resolved_inlier_ratio = _clamp(float(inlier_ratio))
+
+    resolved_coverage = _clamp(float(coverage))
+    resolved_residual_summary = _summarize_residuals(
+        residuals=residuals,
+        residual_summary=residual_summary,
+    )
+
+    rejection_reasons: list[str] = []
+    if resolved_inlier_count < int(min_inlier_count):
+        rejection_reasons.append("insufficient_inlier_count")
+    if resolved_inlier_ratio < float(min_inlier_ratio):
+        rejection_reasons.append("insufficient_inlier_ratio")
+    if resolved_coverage < float(min_coverage):
+        rejection_reasons.append("insufficient_coverage")
+
+    residual_mean = _finite_float(resolved_residual_summary.get("mean"))
+    residual_p95 = _finite_float(resolved_residual_summary.get("p95"))
+    if residual_mean is None or residual_p95 is None:
+        rejection_reasons.append("missing_residual_quality")
+    else:
+        if residual_mean > float(max_mean_residual):
+            rejection_reasons.append("mean_residual_too_large")
+        if residual_p95 > float(max_p95_residual):
+            rejection_reasons.append("p95_residual_too_large")
+
+    count_component = _clamp(
+        resolved_inlier_count / max(float(max(int(min_inlier_count) * 2, 1)), 1.0)
+    )
+    ratio_component = _clamp(resolved_inlier_ratio)
+    coverage_component = _clamp(resolved_coverage)
+    if residual_mean is None:
+        residual_component = 0.0
+    else:
+        residual_component = 1.0 - _clamp(residual_mean / max(float(max_mean_residual), 1e-6))
+
+    quality_score = _clamp(
+        0.30 * count_component
+        + 0.30 * ratio_component
+        + 0.25 * coverage_component
+        + 0.15 * residual_component
+    )
+
+    return MatchQualityReport(
+        inlier_count=resolved_inlier_count,
+        total_match_count=resolved_total_match_count,
+        inlier_ratio=resolved_inlier_ratio,
+        coverage=resolved_coverage,
+        residual_summary=resolved_residual_summary,
+        quality_score=quality_score,
+        accepted=not rejection_reasons,
+        rejection_reasons=tuple(rejection_reasons),
+    )
+
+
+def build_cascade_plan(
+    *,
+    initial_matcher: str,
+    fallback_chain: Iterable[str] = (),
+    canonical_order: Iterable[str] = DEFAULT_ROUTER_FALLBACK_CHAIN,
+) -> tuple[str, ...]:
+    """Build a fixed-order matcher cascade starting from the routed matcher."""
+
+    ordered_matchers = tuple(canonical_order)
+    if initial_matcher not in ordered_matchers:
+        raise ValueError(f"Unsupported initial_matcher: {initial_matcher!r}")
+
+    start_index = ordered_matchers.index(initial_matcher)
+    default_tail = ordered_matchers[start_index + 1 :]
+    requested_fallbacks = tuple(fallback_chain)
+    if requested_fallbacks:
+        requested_set = set(requested_fallbacks)
+        tail = tuple(matcher for matcher in default_tail if matcher in requested_set)
+    else:
+        tail = default_tail
+    return (initial_matcher, *tail)
+
+
+def decide_post_match_action(
+    *,
+    current_matcher: str,
+    quality_report: MatchQualityReport,
+    cascade_plan: Iterable[str],
+) -> dict[str, Any]:
+    """Choose accept versus fallback after evaluating one matcher result."""
+
+    plan = tuple(cascade_plan)
+    if not plan:
+        raise ValueError("cascade_plan must contain at least one matcher.")
+    if current_matcher not in plan:
+        raise ValueError("current_matcher must be present in cascade_plan.")
+
+    current_index = plan.index(current_matcher)
+    fallback_used = current_index > 0
+    if quality_report.accepted:
+        return {
+            "selected_matcher": current_matcher,
+            "accepted": True,
+            "fallback_used": fallback_used,
+            "next_matcher": None,
+            "stop_reason": "quality_accepted",
+            "rejection_reasons": (),
+        }
+
+    next_matcher = plan[current_index + 1] if current_index + 1 < len(plan) else None
+    return {
+        "selected_matcher": current_matcher,
+        "accepted": False,
+        "fallback_used": fallback_used,
+        "next_matcher": next_matcher,
+        "stop_reason": (
+            "quality_insufficient_try_fallback"
+            if next_matcher is not None
+            else "quality_insufficient_no_fallback"
+        ),
+        "rejection_reasons": quality_report.rejection_reasons,
+    }
+
+
 def route_matcher_for_pair(
     *,
     left_texture_probe: ImageTextureProbe,
@@ -361,12 +567,16 @@ __all__ = [
     "ImageTextureProbe",
     "LOFTR_MATCHER_METHOD",
     "LIGHTGLUE_MATCHER_METHOD",
+    "MatchQualityReport",
     "PairRoutingDecision",
     "RenderProbe",
     "SIFT_ROUTED_MATCHER_METHOD",
     "SpiceLightingConstraints",
     "build_pair_probe_sidecar",
+    "build_cascade_plan",
     "build_spice_constrained_elevation_candidates",
     "compute_real_image_texture_probe",
+    "decide_post_match_action",
+    "evaluate_match_quality",
     "route_matcher_for_pair",
 ]

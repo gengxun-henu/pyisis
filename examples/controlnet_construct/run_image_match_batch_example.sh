@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# Batch image-match example runner for images_overlap.lis stereo pairs.
+#
+# Author: Geng Xun
+# Created: 2026-05-11
+# Updated: 2026-05-11  Geng Xun added top-of-file metadata so example shell entrypoints follow the repository's example-file header convention.
+
 set -euo pipefail
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
@@ -26,7 +32,7 @@ usage() {
 Usage:
   examples/controlnet_construct/run_image_match_batch_example.sh [options] [-- image_match_extra_args...]
 
-Batch-run image_match.py for all pairs listed in images_overlap.lis.
+Batch-run examples/image_match/image_match.py for all pairs listed in images_overlap.lis.
 
 Defaults assume a work directory layout like:
   work/original_images.lis
@@ -34,31 +40,31 @@ Defaults assume a work directory layout like:
   work/images_overlap.lis
   work/dom_keys/
   work/match_metadata/
-  work/match_viz/            # pre-RANSAC drawMatches PNGs from image_match.py
+  work/match_viz/            # pre-RANSAC drawMatches PNGs from examples/image_match/image_match.py
 
 Options:
   --work-dir PATH                 Root working directory. Default: work
   --original-list PATH            original_images.lis path. Default: <work-dir>/original_images.lis
   --dom-list PATH                 DOM list path. Default: <work-dir>/doms_scaled.lis if present, else <work-dir>/doms.lis
   --pair-list PATH                Overlap pair list path. Default: <work-dir>/images_overlap.lis
-  --config PATH                   Optional config JSON. Its ImageMatch section is forwarded to image_match.py
+  --config PATH                   Optional config JSON. Its ImageMatch section is forwarded to examples/image_match/image_match.py
                                   as default matching parameters, and this wrapper also reads selected fields for overrides.
   --output-key-dir PATH           Output .key directory. Default: <work-dir>/dom_keys
   --metadata-dir PATH             Metadata JSON output directory. Default: <work-dir>/match_metadata
   --match-viz-dir PATH            Pre-RANSAC match visualization PNG directory.
                                   Default: <work-dir>/match_viz
   --python PATH                   Python interpreter to use. Default: $PYTHON_EXECUTABLE or python
-  --use-parallel-cpu              Forward explicit CPU tile parallelism enable flag to image_match.py (default behavior)
-  --no-parallel-cpu               Disable CPU tile parallelism in image_match.py and force serial tile matching
-  --num-worker-parallel-cpu N     Maximum worker-process count forwarded to image_match.py when CPU parallelism is enabled.
+  --use-parallel-cpu              Forward explicit CPU tile parallelism enable flag to examples/image_match/image_match.py (default behavior)
+  --no-parallel-cpu               Disable CPU tile parallelism in examples/image_match/image_match.py and force serial tile matching
+  --num-worker-parallel-cpu N     Maximum worker-process count forwarded to examples/image_match/image_match.py when CPU parallelism is enabled.
                                   Default: 8. If omitted, this script falls back to config JSON field
                                   ImageMatch.num_worker_parallel_cpu when present. Valid range: 1~4096.
   --valid-pixel-percent-threshold VALUE
-                                 Minimum valid-pixel ratio forwarded to image_match.py.
+                                 Minimum valid-pixel ratio forwarded to examples/image_match/image_match.py.
                                  Default: 0.05 unless omitted and resolved from --config.
   --invalid-pixel-radius N        Suppress feature detection near invalid pixels or image borders.
                                   Default: 1 unless omitted and resolved from --config.
-  --matcher-method NAME           Matcher backend forwarded to image_match.py.
+  --matcher-method NAME           Matcher backend forwarded to examples/image_match/image_match.py.
                                   Supported values: bf, flann, superglue, lightglue, loftr.
                                   Default: bf unless omitted and resolved from --config.
   --enable-low-resolution-offset-estimation
@@ -76,7 +82,7 @@ Options:
                                   resolved from --config.
   --low-resolution-max-mean-projected-offset-meters VALUE
                                   Maximum allowed magnitude of the mean low-resolution projected offset.
-                                  Unit: meters. Default: image_match.py default unless omitted and resolved
+                                  Unit: meters. Default: examples/image_match/image_match.py default unless omitted and resolved
                                   from --config.
   --skip-existing                 Skip pairs whose left/right key files already exist
   -h, --help                      Show this help message
@@ -84,13 +90,13 @@ Options:
 Default behavior:
   - Terminal output stays compact: this wrapper mainly prints batch progress and pair-level progress lines.
     Detailed per-pair diagnostics continue to live in <metadata-dir>/ as JSON sidecars.
-  - If you need the full image_match.py result payload in a separate JSON file, forward
-    image_match.py's own option after --, for example: -- --result-output <path>
+  - If you need the full match result payload in a separate JSON file, forward
+    examples/image_match/image_match.py's own option after --, for example: -- --result-output <path>
   - CPU tile parallelism is enabled unless --no-parallel-cpu is provided.
-  - image_match.py writes pre-RANSAC match visualization PNGs by default.
+  - examples/image_match/image_match.py writes pre-RANSAC match visualization PNGs by default.
   - To disable those PNGs, forward: -- --no-write-match-visualization
 
-Anything after -- is forwarded directly to image_match.py.
+Anything after -- is forwarded directly to examples/image_match/image_match.py.
 
 Examples:
   bash examples/controlnet_construct/run_image_match_batch_example.sh \
@@ -141,7 +147,7 @@ extract_image_match_config_value() {
   local config_path=$1
   local field_name=$2
   local container_order=${3:-top-level-first}
-  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py" \
+  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/image_match/image_match.py" \
     --config "$config_path" \
     --print-config-default "$field_name" \
     --print-config-default-container-order "$container_order"
@@ -444,7 +450,7 @@ main() {
     log "Low-resolution offset estimation: disabled"
   fi
   if [[ ${#forwarded_args[@]} -gt 0 ]]; then
-    log "Forwarding extra image_match.py args: ${forwarded_args[*]}"
+    log "Forwarding extra examples/image_match/image_match.py args: ${forwarded_args[*]}"
   fi
 
   declare -A dom_by_original=()
@@ -502,7 +508,7 @@ main() {
 
     log "Matching pair ${pair_tag}"
     match_args=(
-      "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py"
+      "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/image_match/image_match.py"
       "${dom_by_original[$left]}"
       "${dom_by_original[$right]}"
       "$left_key"
@@ -515,7 +521,7 @@ main() {
     )
     if [[ -n "$CONFIG_PATH" ]]; then
       match_args=(
-        "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py"
+        "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/image_match/image_match.py"
         --config "$CONFIG_PATH"
         "${dom_by_original[$left]}"
         "${dom_by_original[$right]}"

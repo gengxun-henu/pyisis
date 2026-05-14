@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 
+# End-to-end DOM matching ControlNet pipeline example runner.
+#
+# Author: Geng Xun
+# Created: 2026-05-11
+# Updated: 2026-05-11  Geng Xun added top-of-file metadata so example shell entrypoints follow the repository's example-file header convention.
+
 set -euo pipefail
 
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
@@ -240,7 +246,7 @@ Usage:
 
 Run the DOM matching ControlNet example pipeline end to end:
   1. image_overlap.py
-  2. image_match.py (for every pair in images_overlap.lis)
+  2. examples/image_match/image_match.py (for every pair in images_overlap.lis)
   3. controlnet_stereopair.py from-dom-batch
   4. controlnet_merge.py + execute the generated merge_all_controlnets.sh by default
   5. optionally run merge_control_measure.py as a post-processing step
@@ -248,7 +254,7 @@ Run the DOM matching ControlNet example pipeline end to end:
 Default behavior:
   - Terminal output stays compact: per-step JSON summaries are written to files under <work-dir>/reports or <work-dir>/match_results instead of being printed inline.
   - CPU tile parallelism is enabled unless --no-parallel-cpu is provided.
-  - image_match.py writes pre-RANSAC match visualizations to <work-dir>/match_viz.
+  - examples/image_match/image_match.py writes pre-RANSAC match visualizations to <work-dir>/match_viz.
   - from-dom-batch writes post-RANSAC match visualizations to <work-dir>/match_viz_post_ransac.
 
 Options:
@@ -256,46 +262,46 @@ Options:
   --original-list PATH            original_images.lis path. Default: <work-dir>/original_images.lis
   --dom-list PATH                 DOM list path. Default: <work-dir>/doms_scaled.lis if present, else <work-dir>/doms.lis
   --config PATH                   ControlNet config JSON. Default: examples/controlnet_construct/controlnet_config.example.json
-                                  Its ImageMatch section is forwarded to image_match.py as default matching parameters.
+                                  Its ImageMatch section is forwarded to examples/image_match/image_match.py as default matching parameters.
   --python PATH                   Python interpreter to use. Default: $PYTHON_EXECUTABLE or python
-  --use-parallel-cpu              Forward explicit CPU tile parallelism enable flag to image_match.py (default behavior)
-  --no-parallel-cpu               Disable CPU tile parallelism in image_match.py and force serial tile matching
-  --num-worker-parallel-cpu N     Maximum worker-process count forwarded to image_match.py when CPU parallelism is enabled.
+  --use-parallel-cpu              Forward explicit CPU tile parallelism enable flag to examples/image_match/image_match.py (default behavior)
+  --no-parallel-cpu               Disable CPU tile parallelism in examples/image_match/image_match.py and force serial tile matching
+  --num-worker-parallel-cpu N     Maximum worker-process count forwarded to examples/image_match/image_match.py when CPU parallelism is enabled.
                                   Default: 8. If omitted, this script falls back to config JSON field
                                   ImageMatch.num_worker_parallel_cpu when present. Valid range: 1~4096.
   --pair-id-prefix PREFIX         Batch pair-id prefix. Default: S
   --pair-id-start N               Batch pair-id starting index. Default: 1
   --valid-pixel-percent-threshold VALUE
-                                 Forwarded to image_match.py. If omitted, this script
+                                 Forwarded to examples/image_match/image_match.py. If omitted, this script
                                  falls back to config JSON field ImageMatch.valid_pixel_percent_threshold
-                                 when present; otherwise image_match.py keeps its own default (0.0).
-  --invalid-pixel-radius N        Forwarded to image_match.py to suppress feature detection near
+                                 when present; otherwise examples/image_match/image_match.py keeps its own default (0.0).
+  --invalid-pixel-radius N        Forwarded to examples/image_match/image_match.py to suppress feature detection near
                                  invalid pixels and image borders. If omitted, this script falls
                                  back to config JSON field ImageMatch.invalid_pixel_radius when present;
-                                 otherwise image_match.py keeps its own default.
---matcher-method NAME           Forwarded to image_match.py to select matcher backend.
+                                 otherwise examples/image_match/image_match.py keeps its own default.
+--matcher-method NAME           Forwarded to examples/image_match/image_match.py to select matcher backend.
                                  Supported values: bf, flann, superglue, lightglue, loftr.
                                  If omitted, this script falls back to
                                  config JSON field ImageMatch.matcher_method when present; otherwise
-                                 image_match.py keeps its own default.
+                                 examples/image_match/image_match.py keeps its own default.
   --enable-low-resolution-offset-estimation
-                                 Forwarded to image_match.py to enable low-resolution DOM coarse
+                                 Forwarded to examples/image_match/image_match.py to enable low-resolution DOM coarse
                                  registration before full-resolution overlap preparation.
-  --low-resolution-level N        Forwarded to image_match.py. If omitted, this script falls back to
+  --low-resolution-level N        Forwarded to examples/image_match/image_match.py. If omitted, this script falls back to
                                  config JSON field ImageMatch.low_resolution_level when present;
-                                 otherwise image_match.py keeps its own default.
+                                 otherwise examples/image_match/image_match.py keeps its own default.
   --low-resolution-max-mean-reprojection-error-pixels VALUE
-                                 Forwarded to image_match.py. If omitted, this script falls back to
+                                 Forwarded to examples/image_match/image_match.py. If omitted, this script falls back to
                                  config JSON field ImageMatch.low_resolution_max_mean_reprojection_error_pixels
-                                 when present; otherwise image_match.py keeps its own default.
+                                 when present; otherwise examples/image_match/image_match.py keeps its own default.
   --low-resolution-min-retained-match-count N
-                                 Forwarded to image_match.py. If omitted, this script falls back to
+                                 Forwarded to examples/image_match/image_match.py. If omitted, this script falls back to
                                  config JSON field ImageMatch.low_resolution_min_retained_match_count
-                                 when present; otherwise image_match.py keeps its own default.
+                                 when present; otherwise examples/image_match/image_match.py keeps its own default.
   --low-resolution-max-mean-projected-offset-meters VALUE
-                                  Forwarded to image_match.py. Unit: meters. If omitted, this script falls back to
+                                  Forwarded to examples/image_match/image_match.py. Unit: meters. If omitted, this script falls back to
                                   config JSON field ImageMatch.low_resolution_max_mean_projected_offset_meters
-                                  when present; otherwise image_match.py keeps its own default.
+                                  when present; otherwise examples/image_match/image_match.py keeps its own default.
   --visualization-mode VALUE      Forwarded to controlnet_stereopair.py from-dom-batch for post-RANSAC previews.
                                   If omitted, this script falls back to config JSON field ImageMatch.visualization_mode
                                   when present; otherwise defaults to full.
@@ -536,7 +542,7 @@ extract_image_match_config_value() {
   local config_path=$1
   local field_name=$2
   local container_order=${3:-top-level-first}
-  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py" \
+  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/image_match/image_match.py" \
     --config "$config_path" \
     --print-config-default "$field_name" \
     --print-config-default-container-order "$container_order"
@@ -604,7 +610,7 @@ run_step_2_image_match_batch() {
     log "  matching pair ${pair_tag}"
     local match_result_path="$MATCH_RESULTS_DIR/${pair_tag}.json"
     local match_args=(
-      "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_match.py"
+      "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/image_match/image_match.py"
       --config "$CONFIG_PATH"
       --omit-tile-details
       "${dom_by_original[$left]}"
@@ -1168,7 +1174,7 @@ main() {
   if [[ -n "$VALID_PIXEL_PERCENT_THRESHOLD" ]]; then
     log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
   else
-    log "Valid pixel percent threshold: image_match.py default"
+    log "Valid pixel percent threshold: examples/image_match/image_match.py default"
   fi
   log "Invalid pixel radius: $INVALID_PIXEL_RADIUS"
   log "Matcher method: $MATCHER_METHOD"

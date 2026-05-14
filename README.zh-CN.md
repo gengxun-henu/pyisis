@@ -312,7 +312,7 @@ python examples/forward_intersection.py \
 3. 输出单个立体像对的 ISIS `ControlNet`；
 4. 最后再把多个 pairwise `.net` 用 `cnetmerge` 汇总成整体控制网。
 
-如果你想按“`image_overlap.py` → `image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`”的顺序一步一步跑完整流水线，优先查看：`examples/controlnet_construct/usage.md`。
+如果你想按“`image_overlap.py` → `examples/image_match/image_match.py` → `controlnet_stereopair.py from-dom-batch` → `controlnet_merge.py`”的顺序一步一步跑完整流水线，优先查看：`examples/controlnet_construct/usage.md`。
 
 对于 DOM 匹配阶段，建议把 `ImageMatch` 里的主要参数明确设出来，而不是完全依赖原始默认值。一个常用起步组合是：
 
@@ -352,12 +352,12 @@ python examples/forward_intersection.py \
 - `valid_pixel_percent_threshold = 0.05` 表示某个 tile 的有效像素比例低于 $5\%$ 时直接跳过匹配；
 - `num_worker_parallel_cpu = 8` 表示 CPU 进程池 worker 上限从一个保守但实用的值起步，实际运行时仍会按 tile 数自动收敛。
 
-仓库示例配置 `examples/controlnet_construct/controlnet_config.example.json` 已经给出这组推荐值，而 `examples/controlnet_construct/run_pipeline_example.sh` 与 `examples/controlnet_construct/run_image_match_batch_example.sh` 会把其中的 `ImageMatch` 段作为默认匹配参数继续转发给 `image_match.py`。`image_match.py` 本身现在也支持 `--config`，所以如果你手工调用它，也可以直接复用同一份配置文件，而不是把所有参数都重写一遍。
+仓库示例配置 `examples/controlnet_construct/controlnet_config.example.json` 已经给出这组推荐值，而 `examples/controlnet_construct/run_pipeline_example.sh` 与 `examples/controlnet_construct/run_image_match_batch_example.sh` 会把其中的 `ImageMatch` 段作为默认匹配参数继续转发给 `examples/image_match/image_match.py`。共享入口 `image_match.py` 本身现在也支持 `--config`，所以如果你手工调用它，也可以直接复用同一份配置文件，而不是把所有参数都重写一遍。
 
 例如：
 
 ```bash
-python examples/controlnet_construct/image_match.py \
+python examples/image_match/image_match.py \
 	--config examples/controlnet_construct/controlnet_config.example.json \
 	left_dom.cub right_dom.cub left.key right.key
 ```
@@ -367,7 +367,7 @@ python examples/controlnet_construct/image_match.py \
 如果你希望直接复制一段能跑的批处理模板，不想自己拼参数，`examples/controlnet_construct/usage.md` 现在新增了更显眼的“推荐参数模板”小节，包含：
 
 - 示例流水线脚本模板
-- 手工批量 `image_match.py` 模板
+- 手工批量 `examples/image_match/image_match.py` 模板
 - `0.05 / 0.03 / 0.1` 的简短调参建议
 
 如果你更希望要一个独立、短小、可复用的 snippet 入口，现在还可以直接使用：
@@ -384,13 +384,15 @@ python examples/controlnet_construct/image_match.py \
 	- `work/match_viz/`：**pre-RANSAC**；
 	- `work/match_viz_post_ransac/`：**post-RANSAC**。
 
-如果你在使用批量匹配封装脚本时想关闭 pre-RANSAC 连线图，可通过 `-- --no-write-match-visualization` 把参数继续转发给 `image_match.py`。
+如果你在使用批量匹配封装脚本时想关闭 pre-RANSAC 连线图，可通过 `-- --no-write-match-visualization` 把参数继续转发给 `examples/image_match/image_match.py`。
 
 现在这些示例 wrapper 的输出风格也尽量统一成同一条约定：**终端只看紧凑摘要，详细诊断优先落 JSON 文件**。具体来说：
 
 - `run_image_match_batch_example.sh` 的 stdout 主要用于看批处理进度，而每对影像的详细诊断默认写到 `work/match_metadata/`；
 - `run_pipeline_example.sh` 的 stdout 主要用于看步骤摘要，而各阶段 JSON 汇总默认写到 `work/reports/` 与 `work/match_results/`；
-- 如果你确实需要 `image_match.py` 的完整结果 JSON 本体，可以直接调用它，或通过 wrapper 继续转发它自己的 `--result-output` 选项。
+- 如果你确实需要 `examples/image_match/image_match.py` 的完整结果 JSON 本体，可以直接调用它，或通过 wrapper 继续转发它自己的 `--result-output` 选项。
+
+当前这轮拆分已经不只是 wrapper 式复用：`examples/image_match/` 现在是 DOM 匹配与 DOM 前处理的共享实现主目录；`examples/controlnet_construct/image_match.py` 与 `examples/controlnet_construct/dom_prepare.py` 仅保留为兼容历史脚本/导入的薄封装层。
 
 ### 单个立体像对
 

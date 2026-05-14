@@ -3,7 +3,7 @@
 这份文档把 `examples/controlnet_construct/` 里的关键脚本串成一条可以顺着执行的流水线：
 
 1. `image_overlap.py`
-2. `image_match.py`
+2. `examples/image_match/image_match.py`
 3. `controlnet_stereopair.py from-dom-batch`
 4. `controlnet_merge.py`
 5. （可选）`merge_control_measure.py`
@@ -17,7 +17,7 @@
 - `cnetmerge` shell 脚本
 - 最终 merged ControlNet
 
-> 这份说明默认你已经完成 DOM 准备阶段，即已经有与 `original_images.lis` 对齐的 `doms_scaled.lis`（或至少有 `doms.lis`）。如果你的 DOM GSD 还没有统一，建议先跑 `dom_prepare.py`。
+> 这份说明默认你已经完成 DOM 准备阶段，即已经有与 `original_images.lis` 对齐的 `doms_scaled.lis`（或至少有 `doms.lis`）。如果你的 DOM GSD 还没有统一，建议先跑 `examples/image_match/dom_prepare.py`（旧路径 `examples/controlnet_construct/dom_prepare.py` 仍可用，但现在只是兼容 wrapper）。
 
 如果你不想手工逐段执行，仓库中还提供了把这四段主流程直接串起来的示例脚本：
 
@@ -33,7 +33,7 @@
 2. 默认的 CPU 进程池 worker 上限是 `8`；你可以通过 `--num-worker-parallel-cpu` 改成 `1~4096` 之间的值。
 3. 默认输出匹配连线可视化 PNG，而不是必须手工额外开开关。
 
-同时，`image_match.py` 以及两个示例脚本现在还支持三组与性能和稳定性相关的新能力：
+同时，`examples/image_match/image_match.py` 以及两个示例脚本现在还支持三组与性能和稳定性相关的新能力：
 
 4. 可选启用**低分辨率 DOM 粗配准**，先在低分辨率层估计一组全局投影偏移，再进入全分辨率 overlap crop；
 5. 可配置 `invalid-pixel-radius`，在无效像素和图像边界附近抑制 SIFT 特征点检测。
@@ -43,12 +43,12 @@
 
 - `run_image_match_batch_example.sh`：默认只产出 **image_match 阶段（pre-RANSAC）** 的连线图，目录是 `work/match_viz/`；
 - `run_pipeline_example.sh`：默认同时产出两套连线图：
-  - `work/match_viz/`：`image_match.py` 直接输出的 **pre-RANSAC** 连线图；
+  - `work/match_viz/`：`examples/image_match/image_match.py` 直接输出的 **pre-RANSAC** 连线图；
   - `work/match_viz_post_ransac/`：`controlnet_stereopair.py from-dom-batch` 在 merge + RANSAC 之后输出的 **post-RANSAC** 连线图。
 
-如果你想显式开启默认 CPU 并行标志，可以传 `--use-parallel-cpu`；如果你想关闭默认 CPU 并行，可以传 `--no-parallel-cpu`；如果你想把进程池 worker 上限改成别的值，可以传 `--num-worker-parallel-cpu 4` 之类；如果你想关闭 pre-RANSAC 连线图，可以在 `run_image_match_batch_example.sh` 后面通过 `-- --no-write-match-visualization` 把参数继续转发给 `image_match.py`。
+如果你想显式开启默认 CPU 并行标志，可以传 `--use-parallel-cpu`；如果你想关闭默认 CPU 并行，可以传 `--no-parallel-cpu`；如果你想把进程池 worker 上限改成别的值，可以传 `--num-worker-parallel-cpu 4` 之类；如果你想关闭 pre-RANSAC 连线图，可以在 `run_image_match_batch_example.sh` 后面通过 `-- --no-write-match-visualization` 把参数继续转发给 `examples/image_match/image_match.py`。
 
-与全分辨率 tile 读取优化相关的 `image_match.py` 参数包括：
+与全分辨率 tile 读取优化相关的 `examples/image_match/image_match.py` 参数包括：
 
 - `--enable-tile-validity-prefilter`：显式启用 workflow 级 DOM validity-index cache，在全分辨率 tile 读取前做保守预过滤。默认关闭，方便保留现有运行作为 A/B baseline。
 - `--tile-validity-cache-dir PATH`：存放可复用的 per-DOM validity index 文件。如果省略，image-match 会根据输出上下文推导 workflow 级 `tile_validity_cache` 目录。
@@ -95,36 +95,36 @@ python examples/controlnet_construct/tile_validity_benchmark.py \
 
 ## 模块结构（维护者速览）
 
-从当前版本开始，`image_match.py` 已经不再承载所有内部实现细节，而是缩成了一个**兼容层 + 编排层**：
+从当前版本开始，DOM matching 的真实共享实现已经迁到 `examples/image_match/`；`examples/controlnet_construct/image_match.py` 只保留兼容入口角色。
 
 - 对外仍保留原来的 CLI 和主入口，例如：
   - `match_dom_pair(...)`
   - `match_dom_pair_to_key_files(...)`
   - `write_stereo_pair_match_visualization(...)`
-- 对内则把原本耦合在一个文件里的几块职责拆到了更明确的模块中。
+- 对内则把原本耦合在一个文件里的几块职责拆到了更明确的模块中，并统一放在 `examples/image_match/`。
 
 建议把这几份文件理解成下面这张“职责地图”：
 
-- `image_match.py`
+- `examples/image_match/image_match.py`
   - 角色：**公开入口 / 配置解析 / 流程编排 / 兼容 façade**
   - 负责：
     - CLI 参数与 `--config` 默认值装配
     - 调用 projected-overlap crop 准备逻辑
     - 组织低分辨率粗配准、tile 匹配、结果汇总与 sidecar 输出
     - 为现有脚本和单测继续保留历史函数名与导出面
-- `lowres_offset.py`
+- `examples/image_match/lowres_offset.py`
   - 角色：**低分辨率粗配准模块**
   - 负责：
     - 生成低分辨率 DOM（当前通过 ISIS `reduce`）
     - 低分辨率 keypoint 的投影坐标转换
     - 估计 projected global offset，并在失败时回退到零偏移
-- `match_visualization.py`
+- `examples/image_match/match_visualization.py`
   - 角色：**匹配连线可视化模块**
   - 负责：
     - `cv2.drawMatches` 预览图输出
     - 默认 PNG 命名规则
     - 从 `.key` 文件直接生成可视化
-- `tile_matching.py`
+- `examples/image_match/tile_matching.py`
   - 角色：**SIFT / tile / 并行匹配核心模块**
   - 负责：
     - tile 切分与 shared extent window 组织
@@ -132,24 +132,24 @@ python examples/controlnet_construct/tile_validity_benchmark.py \
     - SIFT 检测、ratio-test 过滤
     - 串行 / CPU 进程池 tile 匹配执行
     - tile 级统计数据结构（如 `TileMatchStats`、`TileMatchResult`）
-- `stereo_ransac.py`
+- `examples/image_match/stereo_ransac.py`
   - 角色：**立体像对 RANSAC 过滤模块**
   - 负责：
     - 对左右 `.key` 做 homography RANSAC 过滤
     - strict / loose 两种保留策略
     - 输出 retained / dropped / soft-outlier 等诊断摘要
 
-如果你只是**使用**这条流水线，那么仍然可以把 `image_match.py` 当成第 2 步的唯一 CLI 入口。
+如果你只是**使用**这条流水线，那么仍然可以把 `examples/image_match/image_match.py` 当成第 2 步的唯一 CLI 入口；如果历史脚本还在调用 `examples/controlnet_construct/image_match.py`，它也会继续工作，但底层实现已经切到新位置。
 
 如果你是在**维护**代码，推荐遵循下面这个判断规则：
 
-- 改匹配参数、CLI 行为、sidecar 汇总字段、流程顺序：优先看 `image_match.py`
-- 改低分辨率粗配准：优先看 `lowres_offset.py`
-- 改 pre-RANSAC / post-RANSAC 连线图输出：优先看 `match_visualization.py`
-- 改 tile/SIFT/并行执行细节：优先看 `tile_matching.py`
-- 改 RANSAC 内点/软外点策略：优先看 `stereo_ransac.py`
+- 改匹配参数、CLI 行为、sidecar 汇总字段、流程顺序：优先看 `examples/image_match/image_match.py`
+- 改低分辨率粗配准：优先看 `examples/image_match/lowres_offset.py`
+- 改 pre-RANSAC / post-RANSAC 连线图输出：优先看 `examples/image_match/match_visualization.py`
+- 改 tile/SIFT/并行执行细节：优先看 `examples/image_match/tile_matching.py`
+- 改 RANSAC 内点/软外点策略：优先看 `examples/image_match/stereo_ransac.py`
 
-当前仍保留 `image_match.py` 里的若干兼容 wrapper / alias，主要是为了让历史脚本、下游导入和 focused unit tests 不需要在同一次重构里整体迁移。换句话说：**模块已经拆开了，但门牌号暂时还保留着旧地址**。
+当前仍保留 `examples/controlnet_construct/image_match.py` 与 `examples/controlnet_construct/dom_prepare.py` 这两个兼容 wrapper，主要是为了让历史脚本、下游导入和 focused unit tests 不需要在同一次重构里整体迁移。换句话说：**真实实现已经搬到 `examples/image_match/`，旧地址只剩门牌转发**。
 
 ## 0. 前提准备
 
@@ -181,7 +181,7 @@ python -c "import isis_pybind as ip; print(ip.__file__)"
    - 至少包含 `NetworkId`、`TargetName`、`UserName`；
    - `PointIdPrefix` 可选；
    - `PairId` 在 batch 模式下会被自动分配的 `S1`、`S2`、`S3`... 覆盖，不需要手工逐对填写。
-  - 从当前版本开始，`image_match.py` 本身支持 `--config`，会读取配置文件里的 `ImageMatch` 段作为匹配默认值；`run_pipeline_example.sh` 和 `run_image_match_batch_example.sh` 也会把这段配置一起转发给 `image_match.py`。
+  - 从当前版本开始，`examples/image_match/image_match.py` 本身支持 `--config`，会读取配置文件里的 `ImageMatch` 段作为匹配默认值；`run_pipeline_example.sh` 和 `run_image_match_batch_example.sh` 也会把这段配置一起转发给它。
   - 因此除了 `valid_pixel_percent_threshold` 与 `num_worker_parallel_cpu` 之外，你也可以把 tile 尺寸、overlap、灰度拉伸、SIFT 参数、crop/range 参数、并行开关、预览图开关，以及新增的 `invalid_pixel_radius` / `enable_low_resolution_offset_estimation` / `low_resolution_level` 等 DOM 匹配参数统一写进 `ImageMatch`。
 
 仓库自带的示例配置位于：
@@ -220,10 +220,10 @@ python -c "import isis_pybind as ip; print(ip.__file__)"
 }
 ```
 
-`run_pipeline_example.sh` 会把这段配置转发给第 2 步的 `image_match.py`；如果你是手工直接调用 `image_match.py`，也可以直接传：
+`run_pipeline_example.sh` 会把这段配置转发给第 2 步的 `examples/image_match/image_match.py`；如果你是手工直接调用它，也可以直接传：
 
 ```bash
-python examples/controlnet_construct/image_match.py \
+python examples/image_match/image_match.py \
   --config examples/controlnet_construct/controlnet_config.example.json \
   left_dom.cub right_dom.cub left.key right.key
 ```
@@ -420,7 +420,7 @@ while IFS=, read -r left right; do
   right_stem=$(basename "${right%.*}")
   pair_tag="${left_stem}__${right_stem}"
 
-  python examples/controlnet_construct/image_match.py \
+  python examples/image_match/image_match.py \
     "${DOM_BY_ORIGINAL[$left]}" \
     "${DOM_BY_ORIGINAL[$right]}" \
     "work/dom_keys/${pair_tag}_A.key" \
@@ -434,7 +434,7 @@ while IFS=, read -r left right; do
 done < work/images_overlap.lis
 ```
 
-如果你改用 `run_image_match_batch_example.sh`，它会默认做和上面模板一致的事情，并把 pre-RANSAC 连线图统一写到 `work/match_viz/`。若要关闭 CPU 并行，可传 `--no-parallel-cpu`；若要关闭这套默认连线图，可把 `--no-write-match-visualization` 通过 `--` 转发给 `image_match.py`。如果需要批量启用低分辨率粗配准，可直接给这个脚本加 `--enable-low-resolution-offset-estimation --low-resolution-level 3`；如果需要更严格地抑制无效区边缘特征，可加 `--invalid-pixel-radius 2`。
+如果你改用 `run_image_match_batch_example.sh`，它会默认做和上面模板一致的事情，并把 pre-RANSAC 连线图统一写到 `work/match_viz/`。若要关闭 CPU 并行，可传 `--no-parallel-cpu`；若要关闭这套默认连线图，可把 `--no-write-match-visualization` 通过 `--` 转发给 `examples/image_match/image_match.py`。如果需要批量启用低分辨率粗配准，可直接给这个脚本加 `--enable-low-resolution-offset-estimation --low-resolution-level 3`；如果需要更严格地抑制无效区边缘特征，可加 `--invalid-pixel-radius 2`。
 
 #### 什么时候把它从 `0.05` 调大或调小？
 
@@ -475,12 +475,12 @@ python examples/controlnet_construct/image_overlap.py \
 
 这一步是整条流水线的“筛对子”阶段：先把明显不重叠的组合剔掉，后面的 DOM 匹配和 ControlNet 构建就不用对所有组合硬跑一遍了。
 
-## 2. 对每个重叠 pair 运行 DOM 匹配：`image_match.py`
+## 2. 对每个重叠 pair 运行 DOM 匹配：`examples/image_match/image_match.py`
 
-`image_match.py` 目前是**单个立体像对 CLI**，所以批处理最直接的办法是：
+`examples/image_match/image_match.py` 目前是**单个立体像对 CLI**，所以批处理最直接的办法是：
 
 1. 先读入 `original_images.lis` 和 `doms_scaled.lis` 的一一对应关系；
-2. 再按 `images_overlap.lis` 逐对调用 `image_match.py`；
+2. 再按 `images_overlap.lis` 逐对调用 `examples/image_match/image_match.py`；
 3. 把输出统一写成 `A__B_A.key`、`A__B_B.key` 这种命名，供下一步 `from-dom-batch` 直接读取。
 
 下面这段 Bash 会完成整个批量 DOM 匹配：
@@ -506,7 +506,7 @@ while IFS=, read -r left right; do
   right_stem=$(basename "${right%.*}")
   pair_tag="${left_stem}__${right_stem}"
 
-  python examples/controlnet_construct/image_match.py \
+  python examples/image_match/image_match.py \
     "${DOM_BY_ORIGINAL[$left]}" \
     "${DOM_BY_ORIGINAL[$right]}" \
     "work/dom_keys/${pair_tag}_A.key" \
@@ -536,9 +536,9 @@ done < work/images_overlap.lis
 - `.key` 文件保存的是 **DOM 整图坐标系下**的 tie points；
 - `match_metadata/*.json` 保存投影公共范围裁剪等 sidecar 信息，并额外记录 `image_match.num_worker_parallel_cpu`、`image_match.parallel_cpu_used`、`image_match.parallel_cpu_worker_count` 等并行诊断字段；其中 `num_worker_parallel_cpu` 是请求上限，`parallel_cpu_worker_count` 是该次运行实际采用的 worker 数；
 - 如果启用了低分辨率粗配准，`match_metadata/*.json` 中还会记录 `image_match.low_resolution_offset`，至少包括 `enabled`、`status`、`fallback_offset_zero`、`reason`、`delta_x_projected`、`delta_y_projected` 和 `retained_match_count`；
-- `match_viz/*.png` 是 `cv2.drawMatches` 预览图，表示 **RANSAC 之前**、也就是 `image_match.py` 直接输出的匹配结果，便于快速人工检查匹配质量。
+- `match_viz/*.png` 是 `cv2.drawMatches` 预览图，表示 **RANSAC 之前**、也就是 `examples/image_match/image_match.py` 直接输出的匹配结果，便于快速人工检查匹配质量。
 
-当前版本里，`image_match.py` 默认会开启这套 pre-RANSAC 可视化；如果你不想写 PNG，可以显式传 `--no-write-match-visualization`。
+当前版本里，`examples/image_match/image_match.py` 默认会开启这套 pre-RANSAC 可视化；如果你不想写 PNG，可以显式传 `--no-write-match-visualization`。
 
 ### 命名约定为什么重要
 
@@ -551,7 +551,7 @@ done < work/images_overlap.lis
 
 ### 常用可调参数
 
-如果默认匹配参数不适合你的数据，可以在循环里的 `image_match.py` 命令后继续追加这些参数：
+如果默认匹配参数不适合你的数据，可以在循环里的 `examples/image_match/image_match.py` 命令后继续追加这些参数：
 
 - `--band 1`
 - `--valid-pixel-percent-threshold 0.05`
@@ -832,7 +832,7 @@ while IFS=, read -r left right; do
   right_stem=$(basename "${right%.*}")
   pair_tag="${left_stem}__${right_stem}"
 
-  python examples/controlnet_construct/image_match.py \
+  python examples/image_match/image_match.py \
     "${DOM_BY_ORIGINAL[$left]}" \
     "${DOM_BY_ORIGINAL[$right]}" \
     "work/dom_keys/${pair_tag}_A.key" \

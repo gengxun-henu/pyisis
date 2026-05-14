@@ -5,6 +5,7 @@ Falls back to CPU cv2.SIFT when CUDA is unavailable.
 
 Author: Geng Xun
 Created: 2026-05-06
+Updated: 2026-05-11  Geng Xun added top-of-file metadata history so example GPU matcher helpers stay consistent with other example modules.
 """
 
 from __future__ import annotations

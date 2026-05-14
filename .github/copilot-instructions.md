@@ -29,7 +29,7 @@ Keep this file intentionally short to reduce Copilot context usage. Put detailed
 
 - `src/**/*.{cpp,h}`: `pybind-cpp-metadata.instructions.md`, `pybind-file-header.instructions.md`, `isis-cpp-naming.instructions.md`
 - `tests/unitTest/**/*.py`: `pybind-python-test-metadata.instructions.md`, `pybind-metadata-common.instructions.md`
-- `examples/**` and `scripts/**`: `python-example-cli-naming.instructions.md`
+- `examples/**` and `scripts/**`: `python-example-cli-naming.instructions.md`, `example-file-metadata.instructions.md`
 - pybind work in `src/`, `python/`, `tests/unitTest/`, or `tests/smoke_import.py`: `pybind-testing.instructions.md`, `pybind-upstream-source-reading.instructions.md`, `pybind-conda-api-precedence.instructions.md`
 - repeated cube/camera batch-style operations: `isis-cube-batch-operations.instructions.md`
 - reference/test-data placement: `reference-data-layout.instructions.md`

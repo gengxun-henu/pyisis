@@ -19,7 +19,7 @@ Updated: 2026-04-24  Geng Xun switched the post-RANSAC visualization import to t
 Updated: 2026-05-03  Geng Xun forwarded post-RANSAC visualization preview options through the DOM ControlNet wrapper and CLI.
 Updated: 2026-05-04  Geng Xun aligned CLI visualization defaults with the API scale and normalized preview option parsing.
 Updated: 2026-05-05  Geng Xun added compact stdout summaries by default so detailed conversion failures and batch report payloads stay in JSON sidecars instead of flooding the terminal.
-Updated: 2026-05-22  Geng Xun added a baseline from-ori-match parser skeleton for direct ori-space matching follow-up work.
+Updated: 2026-05-10  Geng Xun added a baseline from-ori-match parser skeleton for direct ori-space matching follow-up work.
 Updated: 2026-05-10  Geng Xun made the Task-1 from-ori-match CLI fail safely with a clear not-yet-implemented error instead of crashing on missing parser attrs.
 Updated: 2026-05-10  Geng Xun switched the Task-1 from-ori-match rejection to a clean argparse CLI error without a traceback.
 Updated: 2026-05-10  Geng Xun implemented from-ori-match execution to run original-image matching and build ControlNet in one command.
@@ -42,10 +42,10 @@ if __package__ in {None, ""}:
     from controlnet_construct.controlnet_merge import pair_controlnet_filename
     from controlnet_construct.coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
-    from controlnet_construct.image_match import match_ori_pair_to_key_files
-    from controlnet_construct.keypoints import read_key_file
+    from image_match.image_match import match_ori_pair_to_key_files
+    from image_match.keypoints import read_key_file
     from controlnet_construct.listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
-    from controlnet_construct.match_visualization import (
+    from image_match.match_visualization import (
         DEFAULT_MEMORY_PROFILE,
         DEFAULT_PREVIEW_CACHE_SOURCE,
         DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
@@ -56,7 +56,7 @@ if __package__ in {None, ""}:
         write_stereo_pair_match_visualization_from_key_files,
     )
     from controlnet_construct.runtime import bootstrap_runtime_environment
-    from controlnet_construct.stereo_ransac import filter_stereo_pair_key_files_with_ransac
+    from image_match.stereo_ransac import filter_stereo_pair_key_files_with_ransac
     from controlnet_construct.tie_point_merge_in_overlap import (
         MERGE_HASH_DESCRIPTION,
         MERGE_HASH_COORDINATE_FIELDS,
@@ -69,10 +69,10 @@ else:
     from .controlnet_merge import pair_controlnet_filename
     from .coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from .dom2ori import convert_paired_dom_keypoints_to_original
-    from .image_match import match_ori_pair_to_key_files
-    from .keypoints import read_key_file
+    from image_match.image_match import match_ori_pair_to_key_files
+    from image_match.keypoints import read_key_file
     from .listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
-    from .match_visualization import (
+    from image_match.match_visualization import (
         DEFAULT_MEMORY_PROFILE,
         DEFAULT_PREVIEW_CACHE_SOURCE,
         DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
@@ -83,7 +83,7 @@ else:
         write_stereo_pair_match_visualization_from_key_files,
     )
     from .runtime import bootstrap_runtime_environment
-    from .stereo_ransac import filter_stereo_pair_key_files_with_ransac
+    from image_match.stereo_ransac import filter_stereo_pair_key_files_with_ransac
     from .tie_point_merge_in_overlap import (
         MERGE_HASH_DESCRIPTION,
         MERGE_HASH_COORDINATE_FIELDS,

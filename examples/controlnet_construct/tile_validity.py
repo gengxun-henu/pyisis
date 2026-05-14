@@ -2,6 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-05-02
+Updated: 2026-05-11  Geng Xun added top-of-file metadata history so example tile-validity helpers stay consistent with other example modules.
 """
 
 from __future__ import annotations

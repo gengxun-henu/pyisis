@@ -4,11 +4,12 @@ Author: Geng Xun
 Created: 2026-05-14
 Updated: 2026-05-14  Geng Xun added first-node texture probe, SPICE-constrained elevation candidates, pair routing, and JSON sidecar helpers.
 Updated: 2026-05-14  Geng Xun added pure match-quality gating and fixed cascade planning helpers.
+Updated: 2026-05-14  Geng Xun allowed adaptive sidecars to serialize quality reports and final decisions directly.
 """
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, is_dataclass
 import math
 import statistics
 from typing import Any, Iterable
@@ -480,6 +481,16 @@ def decide_post_match_action(
     }
 
 
+def _json_ready(value: Any) -> Any:
+    if is_dataclass(value) and not isinstance(value, type):
+        return _json_ready(asdict(value))
+    if isinstance(value, dict):
+        return {str(key): _json_ready(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_json_ready(item) for item in value]
+    return value
+
+
 def route_matcher_for_pair(
     *,
     left_texture_probe: ImageTextureProbe,
@@ -558,7 +569,7 @@ def build_pair_probe_sidecar(
     left_render_probe: RenderProbe | None = None,
     right_render_probe: RenderProbe | None = None,
     spice_constraints: SpiceLightingConstraints | None = None,
-    match_quality: dict[str, Any] | None = None,
+    match_quality: MatchQualityReport | dict[str, Any] | None = None,
     final_decision: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build a JSON-serializable adaptive-route sidecar payload."""
@@ -566,7 +577,7 @@ def build_pair_probe_sidecar(
     left_render_probe = left_render_probe or RenderProbe()
     right_render_probe = right_render_probe or RenderProbe()
     spice_constraints = spice_constraints or SpiceLightingConstraints()
-    return {
+    return _json_ready({
         "left_image_probe": {
             **asdict(left_texture_probe),
             **asdict(left_render_probe),
@@ -577,9 +588,9 @@ def build_pair_probe_sidecar(
         },
         "spice_constraints": asdict(spice_constraints),
         "pair_route": asdict(route_decision),
-        "match_quality": dict(match_quality or {}),
-        "final_decision": dict(final_decision or {}),
-    }
+        "match_quality": match_quality or {},
+        "final_decision": final_decision or {},
+    })
 
 
 __all__ = [

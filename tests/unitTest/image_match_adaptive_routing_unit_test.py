@@ -5,10 +5,12 @@ Created: 2026-05-14
 Last Modified: 2026-05-14
 Updated: 2026-05-14  Geng Xun added first-node regression coverage for texture probes, SPICE-constrained elevation candidates, and matcher routing sidecars.
 Updated: 2026-05-14  Geng Xun added focused coverage for match-quality gating and fixed cascade decisions.
+Updated: 2026-05-14  Geng Xun added sidecar serialization coverage for quality reports and final decisions.
 """
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 import unittest
@@ -155,6 +157,52 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(payload["pair_route"]["initial_matcher"], "lightglue")
         self.assertEqual(payload["match_quality"]["inlier_count"], 42)
         self.assertTrue(payload["final_decision"]["accepted"])
+
+    def test_pair_probe_sidecar_accepts_quality_report_and_final_action(self):
+        texture = ImageTextureProbe(
+            keypoint_count=18,
+            valid_pixel_count=100,
+            total_pixel_count=100,
+            keypoint_density=0.18,
+            mean_gradient=12.0,
+            laplacian_variance=90.0,
+            entropy=2.2,
+            valid_pixel_ratio=1.0,
+            real_texture_score=0.45,
+        )
+        decision = route_matcher_for_pair(
+            left_texture_probe=texture,
+            right_texture_probe=texture,
+        )
+        quality = evaluate_match_quality(
+            inlier_count=32,
+            total_match_count=40,
+            coverage=0.42,
+            residuals=(0.4, 0.7, 0.9, 1.1),
+        )
+        action = decide_post_match_action(
+            current_matcher=decision.initial_matcher,
+            quality_report=quality,
+            cascade_plan=build_cascade_plan(
+                initial_matcher=decision.initial_matcher,
+                fallback_chain=decision.fallback_chain,
+            ),
+        )
+
+        payload = build_pair_probe_sidecar(
+            left_texture_probe=texture,
+            right_texture_probe=texture,
+            route_decision=decision,
+            match_quality=quality,
+            final_decision=action,
+        )
+
+        json.dumps(payload)
+        self.assertEqual(payload["pair_route"]["fallback_chain"], ["loftr"])
+        self.assertEqual(payload["match_quality"]["inlier_count"], 32)
+        self.assertEqual(payload["match_quality"]["rejection_reasons"], [])
+        self.assertTrue(payload["final_decision"]["accepted"])
+        self.assertIsNone(payload["final_decision"]["next_matcher"])
 
     def test_evaluate_match_quality_accepts_balanced_low_residual_result(self):
         report = evaluate_match_quality(

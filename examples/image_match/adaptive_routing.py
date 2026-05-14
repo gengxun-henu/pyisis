@@ -271,6 +271,8 @@ def _absolute_gap(left: float | None, right: float | None) -> float | None:
 
 
 def _interpolated_percentile(values: list[float], rank: float) -> float:
+    if not values:
+        raise ValueError("values must not be empty.")
     if len(values) == 1:
         return float(values[0])
     clamped_rank = _clamp(rank)

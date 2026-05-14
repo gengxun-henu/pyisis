@@ -185,6 +185,18 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertIn("mean_residual_too_large", report.rejection_reasons)
         self.assertIn("p95_residual_too_large", report.rejection_reasons)
 
+    def test_evaluate_match_quality_uses_interpolated_p95_residual(self):
+        report = evaluate_match_quality(
+            inlier_count=30,
+            total_match_count=36,
+            coverage=0.35,
+            residuals=(1.0, 2.0, 4.0, 8.0),
+            max_p95_residual=8.0,
+        )
+
+        self.assertAlmostEqual(report.residual_summary["p95"], 7.4)
+        self.assertTrue(report.accepted)
+
     def test_build_cascade_plan_preserves_fixed_matcher_order(self):
         plan = build_cascade_plan(
             initial_matcher="bf",

@@ -270,12 +270,12 @@ def _absolute_gap(left: float | None, right: float | None) -> float | None:
     return abs(left_value - right_value)
 
 
-def _interpolated_percentile(values: list[float], rank: float) -> float:
+def _interpolated_percentile(values: list[float], percentile_rank: float) -> float:
     if not values:
         raise ValueError("values must not be empty.")
     if len(values) == 1:
         return float(values[0])
-    clamped_rank = _clamp(rank)
+    clamped_rank = _clamp(percentile_rank)
     position = clamped_rank * (len(values) - 1)
     lower_index = int(math.floor(position))
     upper_index = int(math.ceil(position))
@@ -308,11 +308,15 @@ def _summarize_residuals(
             "max": None,
         }
 
-    values = sorted(
-        abs(float(value))
-        for value in residuals
-        if value is not None and math.isfinite(float(value))
-    )
+    values: list[float] = []
+    for value in residuals:
+        if value is None:
+            continue
+        resolved = float(value)
+        if not math.isfinite(resolved):
+            continue
+        values.append(abs(resolved))
+    values.sort()
     if not values:
         return {
             "count": 0,

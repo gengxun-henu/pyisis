@@ -49,7 +49,10 @@ from pathlib import Path
 import sys
 from typing import TextIO, Literal
 
-import cv2
+try:
+    import cv2
+except ImportError:
+    cv2 = None  # type: ignore[assignment]
 
 
 if __package__ in {None, ""}:

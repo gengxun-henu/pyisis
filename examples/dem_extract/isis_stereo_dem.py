@@ -167,11 +167,11 @@ def _template_grid_spec(template_cube, nodata_value: float) -> GridSpec:
 
 
 def run_from_key(args: argparse.Namespace) -> dict[str, object]:
+    if args.value_type == "height_m" and args.datum_radius_m is None:
+        raise ValueError("--datum-radius-m is required when --value-type height_m is selected.")
     ip = import_isis_pybind()
     left_cube = right_cube = template_cube = None
     try:
-        if args.value_type == "height_m" and args.datum_radius_m is None:
-            raise ValueError("--datum-radius-m is required when --value-type height_m is selected.")
         left_cube = _open_cube(ip, args.left_cube)
         right_cube = _open_cube(ip, args.right_cube)
         template_cube = _open_cube(ip, args.map_template_cube)

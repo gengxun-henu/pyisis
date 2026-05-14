@@ -19,29 +19,11 @@ from .batch_summary import (
     write_batch_summary_report,
 )
 from .controlnet_merge import generate_cnetmerge_shell_script, pair_controlnet_filename
-from . import gpu_sift
 from .keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
 from .listing import StereoPair, read_path_list, read_stereo_pair_list, write_stereo_pair_list
 from .merge import MergeSummary, merge_duplicate_keypoints
-from .preprocess import StretchStats, build_invalid_mask, stretch_to_byte
-from .stereo_ransac import (
-    filter_stereo_pair_key_files_with_ransac,
-    filter_stereo_pair_keypoints_with_ransac,
-)
 from .tiling import TileWindow, generate_tiles, requires_tiling
-from .image_overlap import GeoBounds, extract_camera_ground_bounds, find_overlapping_image_pairs
-from .match_visualization import (
-    default_match_visualization_path,
-    write_stereo_pair_match_visualization,
-    write_stereo_pair_match_visualization_from_key_files,
-)
 from .tie_point_merge_in_overlap import merge_stereo_pair_key_files
-from .dom2ori import (
-    DomToOriginalFailure,
-    DomToOriginalSummary,
-    convert_dom_key_file_via_ground_functions,
-    convert_dom_keypoints_to_original,
-)
 
 _LAZY_CONTROLNET_STEREOPAIR_EXPORTS = {
     "ControlNetConfig",
@@ -68,6 +50,36 @@ _LAZY_IMAGE_MATCH_EXPORTS = {
     "match_dom_pair_to_key_files",
 }
 
+_LAZY_PREPROCESS_EXPORTS = {
+    "StretchStats",
+    "build_invalid_mask",
+    "stretch_to_byte",
+}
+
+_LAZY_STEREO_RANSAC_EXPORTS = {
+    "filter_stereo_pair_key_files_with_ransac",
+    "filter_stereo_pair_keypoints_with_ransac",
+}
+
+_LAZY_IMAGE_OVERLAP_EXPORTS = {
+    "GeoBounds",
+    "extract_camera_ground_bounds",
+    "find_overlapping_image_pairs",
+}
+
+_LAZY_DOM2ORI_EXPORTS = {
+    "DomToOriginalFailure",
+    "DomToOriginalSummary",
+    "convert_dom_key_file_via_ground_functions",
+    "convert_dom_keypoints_to_original",
+}
+
+_LAZY_MATCH_VIS_EXPORTS = {
+    "default_match_visualization_path",
+    "write_stereo_pair_match_visualization",
+    "write_stereo_pair_match_visualization_from_key_files",
+}
+
 
 def __getattr__(name: str):
     if name in _LAZY_CONTROLNET_STEREOPAIR_EXPORTS:
@@ -85,6 +97,35 @@ def __getattr__(name: str):
         value = getattr(module, name)
         globals()[name] = value
         return value
+    if name in _LAZY_PREPROCESS_EXPORTS:
+        module = import_module(".preprocess", __name__)
+        value = getattr(module, name)
+        globals()[name] = value
+        return value
+    if name in _LAZY_STEREO_RANSAC_EXPORTS:
+        module = import_module(".stereo_ransac", __name__)
+        value = getattr(module, name)
+        globals()[name] = value
+        return value
+    if name in _LAZY_IMAGE_OVERLAP_EXPORTS:
+        module = import_module(".image_overlap", __name__)
+        value = getattr(module, name)
+        globals()[name] = value
+        return value
+    if name in _LAZY_DOM2ORI_EXPORTS:
+        module = import_module(".dom2ori", __name__)
+        value = getattr(module, name)
+        globals()[name] = value
+        return value
+    if name in _LAZY_MATCH_VIS_EXPORTS:
+        module = import_module(".match_visualization", __name__)
+        value = getattr(module, name)
+        globals()[name] = value
+        return value
+    if name == "gpu_sift":
+        module = import_module(".gpu_sift", __name__)
+        globals()["gpu_sift"] = module
+        return module
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 __all__ = [

@@ -307,12 +307,23 @@ def _summarize_residuals(
             "max": None,
         }
 
-    p95_index = max(0, min(len(values) - 1, math.ceil(0.95 * len(values)) - 1))
+    def percentile(rank: float) -> float:
+        if len(values) == 1:
+            return float(values[0])
+        clamped_rank = _clamp(rank)
+        position = clamped_rank * (len(values) - 1)
+        lower_index = int(math.floor(position))
+        upper_index = int(math.ceil(position))
+        if lower_index == upper_index:
+            return float(values[lower_index])
+        fraction = position - lower_index
+        return float(values[lower_index] + (values[upper_index] - values[lower_index]) * fraction)
+
     return {
         "count": len(values),
         "mean": float(sum(values) / len(values)),
         "median": float(statistics.median(values)),
-        "p95": float(values[p95_index]),
+        "p95": percentile(0.95),
         "max": float(values[-1]),
     }
 
@@ -367,9 +378,8 @@ def evaluate_match_quality(
         if residual_p95 > float(max_p95_residual):
             rejection_reasons.append("p95_residual_too_large")
 
-    count_component = _clamp(
-        resolved_inlier_count / max(float(max(int(min_inlier_count) * 2, 1)), 1.0)
-    )
+    target_inlier_count = max(int(min_inlier_count) * 2, 1)
+    count_component = _clamp(resolved_inlier_count / float(target_inlier_count))
     ratio_component = _clamp(resolved_inlier_ratio)
     coverage_component = _clamp(resolved_coverage)
     if residual_mean is None:

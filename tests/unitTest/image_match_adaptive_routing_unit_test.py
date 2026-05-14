@@ -167,7 +167,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertTrue(report.accepted)
         self.assertAlmostEqual(report.inlier_ratio, 0.8)
         self.assertEqual(report.rejection_reasons, ())
-        self.assertAlmostEqual(report.residual_summary["p95"], 1.2)
+        self.assertAlmostEqual(report.residual_summary["p95"], 1.16)
         self.assertGreater(report.quality_score, 0.7)
 
     def test_evaluate_match_quality_rejects_sparse_high_residual_result(self):

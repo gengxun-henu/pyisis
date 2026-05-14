@@ -8,7 +8,7 @@ disable-model-invocation: false
 
 # Push Branch and Open PR
 
-Use this skill when the user wants a **single workflow** that:
+Use this skill when the user wants a **single workflow** that publishes work from the **entire current repository**, not just a few named directories, and:
 
 1. checks the current branch state
 2. ensures the intended changes are committed
@@ -27,6 +27,7 @@ Use this skill instead of a shell script when the workflow needs judgment about:
 - whether the branch is already pushed
 - whether a draft PR is more appropriate
 - how to describe the PR accurately for this repository
+- whether the intended publish scope is the whole repository working tree or only a subset
 
 ## When to Use
 
@@ -50,6 +51,7 @@ By default it should:
 - create a PR against the repo default branch unless the user specifies another base
 - prefer creating a normal PR unless the user clearly wants a draft or the work is obviously not review-ready
 - avoid publishing unreviewed working-tree noise by checking commit state before push
+- treat any path under the current repository root as potentially in scope when the user asks to publish the current repository's work
 
 It should **not** silently push uncommitted local edits by inventing a commit. If the working tree is dirty, it should first determine whether:
 
@@ -57,9 +59,17 @@ It should **not** silently push uncommitted local edits by inventing a commit. I
 - the branch is already in a suitable state to open a PR without them
 - the `clean-commit` workflow should be applied first
 
+Examples of explicit user intent that should widen scope to the full repository include:
+
+- `把当前仓库所有改动都推上去`
+- `publish everything in this repo`
+- `把当前仓库全部文件一起提交并开 PR`
+
+When the user explicitly asks to publish **all current repository files/changes**, do not bias toward only previously mentioned directories. Review the full repository working tree, then include all in-scope files across the repo root.
+
 ## Workspace-Specific Expectations for `pyisis`
 
-In this repository, PR creation should reflect real repo structure and validation language. Prefer repository-accurate wording such as:
+In this repository, PR creation should reflect real repo structure and validation language. The following paths are **illustrative examples**, not an exclusive allowlist or a directory restriction. Any file under this repository root may be in scope if it belongs to the requested publish unit. Prefer repository-accurate wording such as:
 
 - `examples/controlnet_construct/`
 - `examples/image_match/`
@@ -76,6 +86,8 @@ Also watch for mixed working trees that may contain:
 - sweep outputs or temporary CSVs
 
 If the branch is dirty and the user wants to include current edits, prefer using the `clean-commit` skill logic rather than bluntly staging everything.
+
+If the user explicitly asks for the **entire current repository** to be published, inspect the full working tree instead of concentrating only on these example directories.
 
 ## What to Inspect First
 
@@ -123,6 +135,8 @@ Instead:
 - determine whether the dirty files are intended for this PR
 - if yes, use the same review-first logic as `clean-commit`
 - if no, leave them out and push only the already-committed branch state
+
+If the user explicitly says to include **all current repository changes**, treat the full repo working tree as the candidate scope, then review and stage across all changed paths under the repo root rather than narrowing attention to a few common directories.
 
 If the branch has no new commits to push and the dirty changes are the only intended work, create a clean local commit first before pushing.
 
@@ -193,6 +207,10 @@ If the skill had to exclude dirty files from publication, say so explicitly.
 
 ## Recommended Decision Rules
 
+### User explicitly wants the whole repository published
+
+Inspect `git status --short` for the entire repo, review the repo-wide diff, and treat all changed paths under the current repository root as candidate in-scope files. Do not restrict consideration to common pybind/example/test directories just because they are mentioned elsewhere in this skill.
+
 ### Dirty working tree + user wants everything published
 
 Use review-first local commit handling before push.
@@ -225,6 +243,7 @@ Do not create a duplicate PR if the active tooling reveals an existing one for t
 
 Avoid these mistakes:
 
+- behaving as if example paths in this skill are the only publishable directories
 - pushing a dirty branch without reviewing what should be published
 - staging all changes automatically just to make push succeed
 - creating a PR with a generic title/body when repo-aware wording is available

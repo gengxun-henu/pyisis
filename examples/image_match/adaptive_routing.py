@@ -270,6 +270,19 @@ def _absolute_gap(left: float | None, right: float | None) -> float | None:
     return abs(left_value - right_value)
 
 
+def _interpolated_percentile(values: list[float], rank: float) -> float:
+    if len(values) == 1:
+        return float(values[0])
+    clamped_rank = _clamp(rank)
+    position = clamped_rank * (len(values) - 1)
+    lower_index = int(math.floor(position))
+    upper_index = int(math.ceil(position))
+    if lower_index == upper_index:
+        return float(values[lower_index])
+    fraction = position - lower_index
+    return float(values[lower_index] + (values[upper_index] - values[lower_index]) * fraction)
+
+
 def _summarize_residuals(
     residuals: Iterable[float] | None = None,
     residual_summary: dict[str, float | int | None] | None = None,
@@ -307,23 +320,11 @@ def _summarize_residuals(
             "max": None,
         }
 
-    def percentile(rank: float) -> float:
-        if len(values) == 1:
-            return float(values[0])
-        clamped_rank = _clamp(rank)
-        position = clamped_rank * (len(values) - 1)
-        lower_index = int(math.floor(position))
-        upper_index = int(math.ceil(position))
-        if lower_index == upper_index:
-            return float(values[lower_index])
-        fraction = position - lower_index
-        return float(values[lower_index] + (values[upper_index] - values[lower_index]) * fraction)
-
     return {
         "count": len(values),
         "mean": float(sum(values) / len(values)),
         "median": float(statistics.median(values)),
-        "p95": percentile(0.95),
+        "p95": _interpolated_percentile(values, 0.95),
         "max": float(values[-1]),
     }
 
@@ -385,7 +386,10 @@ def evaluate_match_quality(
     if residual_mean is None:
         residual_component = 0.0
     else:
-        residual_component = 1.0 - _clamp(residual_mean / max(float(max_mean_residual), 1e-6))
+        residual_component = max(
+            0.0,
+            1.0 - (residual_mean / max(float(max_mean_residual), 1e-6)),
+        )
 
     quality_score = _clamp(
         0.30 * count_component

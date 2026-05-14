@@ -35,12 +35,28 @@ if __package__ in (None, ""):
         )
         from image_match.stereo_ransac import filter_stereo_pair_key_files_with_ransac
     except ImportError:
-        from controlnet_construct.image_match import (
-            load_image_match_defaults_from_config,
-            match_dom_pair_to_key_files,
-            match_ori_pair_to_key_files,
-        )
-        from controlnet_construct.stereo_ransac import filter_stereo_pair_key_files_with_ransac
+        try:
+            from controlnet_construct.image_match import (
+                load_image_match_defaults_from_config,
+                match_dom_pair_to_key_files,
+                match_ori_pair_to_key_files,
+            )
+            from controlnet_construct.stereo_ransac import filter_stereo_pair_key_files_with_ransac
+        except ImportError:
+            def load_image_match_defaults_from_config(config_path, **_ignored):  # type: ignore[misc]
+                try:
+                    payload = json.loads(Path(config_path).read_text(encoding="utf-8"))
+                except FileNotFoundError as _exc:
+                    raise ValueError(f"Config JSON not found: {config_path}") from _exc
+                except json.JSONDecodeError as _exc:
+                    raise ValueError(f"Failed to parse config JSON {config_path}: {_exc}") from _exc
+                return _first_section(payload, "ImageMatch", "image_match", "Image_Match")
+            def match_dom_pair_to_key_files(*_a, **_kw):  # type: ignore[misc]
+                raise ImportError("opencv-python (cv2) is required for image matching")
+            def match_ori_pair_to_key_files(*_a, **_kw):  # type: ignore[misc]
+                raise ImportError("opencv-python (cv2) is required for image matching")
+            def filter_stereo_pair_key_files_with_ransac(*_a, **_kw):  # type: ignore[misc]
+                raise ImportError("opencv-python (cv2) is required for RANSAC filtering")
     from controlnet_construct.tie_point_merge_in_overlap import merge_stereo_pair_key_files
 else:
     from . import isis_stereo_dem
@@ -54,12 +70,28 @@ else:
         )
         from image_match.stereo_ransac import filter_stereo_pair_key_files_with_ransac
     except ImportError:
-        from controlnet_construct.image_match import (
-            load_image_match_defaults_from_config,
-            match_dom_pair_to_key_files,
-            match_ori_pair_to_key_files,
-        )
-        from controlnet_construct.stereo_ransac import filter_stereo_pair_key_files_with_ransac
+        try:
+            from controlnet_construct.image_match import (
+                load_image_match_defaults_from_config,
+                match_dom_pair_to_key_files,
+                match_ori_pair_to_key_files,
+            )
+            from controlnet_construct.stereo_ransac import filter_stereo_pair_key_files_with_ransac
+        except ImportError:
+            def load_image_match_defaults_from_config(config_path, **_ignored):  # type: ignore[misc]
+                try:
+                    payload = json.loads(Path(config_path).read_text(encoding="utf-8"))
+                except FileNotFoundError as _exc:
+                    raise ValueError(f"Config JSON not found: {config_path}") from _exc
+                except json.JSONDecodeError as _exc:
+                    raise ValueError(f"Failed to parse config JSON {config_path}: {_exc}") from _exc
+                return _first_section(payload, "ImageMatch", "image_match", "Image_Match")
+            def match_dom_pair_to_key_files(*_a, **_kw):  # type: ignore[misc]
+                raise ImportError("opencv-python (cv2) is required for image matching")
+            def match_ori_pair_to_key_files(*_a, **_kw):  # type: ignore[misc]
+                raise ImportError("opencv-python (cv2) is required for image matching")
+            def filter_stereo_pair_key_files_with_ransac(*_a, **_kw):  # type: ignore[misc]
+                raise ImportError("opencv-python (cv2) is required for RANSAC filtering")
     from controlnet_construct.tie_point_merge_in_overlap import merge_stereo_pair_key_files
 
 

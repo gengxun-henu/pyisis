@@ -49,11 +49,6 @@ else:
     from .runtime import bootstrap_runtime_environment
 
 
-bootstrap_runtime_environment()
-
-import isis_pybind as ip
-
-
 @dataclass(frozen=True, slots=True)
 class DomToOriginalFailure:
     index: int
@@ -726,6 +721,8 @@ def convert_dom_keypoints_to_original(
     3. Validate projected bounds, write successful points to the output `.key`
        file, and record failures in a structured log.
     """
+    bootstrap_runtime_environment()
+    import isis_pybind as ip
     dom_cube = ip.Cube()
     original_cube = ip.Cube()
     if logger is not None:
@@ -825,6 +822,8 @@ def convert_paired_dom_keypoints_to_original(
     side fails, the whole pair is removed so downstream ControlNet / matching
     steps can continue to rely on index-wise alignment.
     """
+    bootstrap_runtime_environment()
+    import isis_pybind as ip
     left_dom_cube = ip.Cube()
     right_dom_cube = ip.Cube()
     left_original_cube = ip.Cube()

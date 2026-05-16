@@ -79,6 +79,8 @@ Updated: 2026-05-22  Geng Xun added ori-space entrypoint regression coverage for
 Updated: 2026-05-22  Geng Xun added regression coverage for dom/ori image-space backend construction helpers.
 Updated: 2026-05-22  Geng Xun added ORI key export regression coverage for pair-level `.key` output summaries.
 Updated: 2026-05-22  Geng Xun tightened ORI delegation and `.key` file readability regression coverage for Task 3 review fixes.
+Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
+Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
 """
 
 from __future__ import annotations
@@ -782,6 +784,34 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertFalse(disabled_args.use_parallel_cpu)
         self.assertTrue(explicit_enabled_args.use_parallel_cpu)
 
+    def test_build_argument_parser_defaults_to_adaptive_routing_off_and_allows_switching_it(self):
+        parser = build_argument_parser()
+
+        default_args = parser.parse_args(["left.cub", "right.cub", "left.key", "right.key"])
+        enabled_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--adaptive-routing",
+            ]
+        )
+        disabled_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--adaptive-routing",
+                "--no-adaptive-routing",
+            ]
+        )
+
+        self.assertFalse(default_args.enable_adaptive_routing)
+        self.assertTrue(enabled_args.enable_adaptive_routing)
+        self.assertFalse(disabled_args.enable_adaptive_routing)
+
     def test_build_argument_parser_accepts_custom_parallel_worker_limit(self):
         parser = build_argument_parser()
 
@@ -1209,6 +1239,23 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertTrue(defaults["preview_force_regenerate"])
         self.assertEqual(defaults["preview_level"], 3)
         self.assertEqual(defaults["low_resolution_matching_target_long_edge"], 1024)
+
+    def test_load_image_match_defaults_from_config_reads_adaptive_routing_flag(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "enableAdaptiveRouting": True,
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            defaults = image_match.load_image_match_defaults_from_config(config_path)
+
+        self.assertTrue(defaults["enable_adaptive_routing"])
 
     def test_create_descriptor_matcher_supports_bf_and_flann(self):
         fake_bf_matcher = object()
@@ -4193,6 +4240,197 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertIn("match_visualization", result)
         self.assertTrue(visualization_output_exists)
 
+    def test_match_dom_pair_uses_adaptive_routed_matcher_when_enabled(self):
+        image = _build_textured_test_image(96, 96)
+        fake_tile_result = tile_matching_module.TileMatchResult(
+            stats=tile_matching_module.TileMatchStats(
+                0,
+                0,
+                96,
+                96,
+                0,
+                0,
+                0,
+                0,
+                96 * 96,
+                96 * 96,
+                1.0,
+                1.0,
+                0,
+                0,
+                0,
+                "skipped_no_matches",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_adaptive_route.cub",
+                right_name="right_adaptive_route.cub",
+            )
+
+            with mock.patch.object(
+                image_match,
+                "_estimate_low_resolution_projected_offset",
+                return_value={
+                    "enabled": False,
+                    "status": "disabled",
+                    "delta_x_projected": 0.0,
+                    "delta_y_projected": 0.0,
+                },
+            ), mock.patch.object(
+                image_match,
+                "_resolve_adaptive_route_for_pair",
+                return_value=(
+                    "lightglue",
+                    {
+                        "enabled": True,
+                        "status": "routed",
+                        "requested_matcher": "bf",
+                        "selected_initial_matcher": "lightglue",
+                        "reason": "synthetic route for focused regression",
+                    },
+                ),
+            ), mock.patch.object(
+                image_match,
+                "_run_serial_tile_match_tasks",
+                return_value=[fake_tile_result],
+            ) as serial_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    matcher_method="bf",
+                    enable_adaptive_routing=True,
+                    use_parallel_cpu=False,
+                    max_image_dimension=512,
+                    min_valid_pixels=32,
+                )
+
+        self.assertEqual(serial_mock.call_args.kwargs["matcher_method"], "lightglue")
+        self.assertEqual(summary["matcher_method_requested"], "bf")
+        self.assertEqual(summary["matcher_method_effective"], "lightglue")
+        self.assertEqual(summary["matcher"]["matcher_method_requested"], "bf")
+        self.assertEqual(summary["matcher"]["matcher_method_effective"], "lightglue")
+        self.assertEqual(summary["adaptive_routing"]["selected_initial_matcher"], "lightglue")
+
+    def test_match_dom_pair_falls_back_through_adaptive_cascade_after_failed_quality_gate(self):
+        image = _build_textured_test_image(96, 96)
+        accepted_points = tuple(Keypoint(float(index), float(index)) for index in range(32))
+        weak_tile_result = tile_matching_module.TileMatchResult(
+            stats=tile_matching_module.TileMatchStats(
+                0,
+                0,
+                96,
+                96,
+                0,
+                0,
+                0,
+                0,
+                96 * 96,
+                96 * 96,
+                1.0,
+                1.0,
+                0,
+                0,
+                0,
+                "skipped_no_matches",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+        accepted_tile_result = tile_matching_module.TileMatchResult(
+            stats=tile_matching_module.TileMatchStats(
+                0,
+                0,
+                96,
+                96,
+                0,
+                0,
+                0,
+                0,
+                96 * 96,
+                96 * 96,
+                1.0,
+                1.0,
+                40,
+                40,
+                40,
+                "matched",
+            ),
+            left_points=accepted_points,
+            right_points=accepted_points,
+        )
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_adaptive_cascade.cub",
+                right_name="right_adaptive_cascade.cub",
+            )
+
+            with mock.patch.object(
+                image_match,
+                "_estimate_low_resolution_projected_offset",
+                return_value={
+                    "enabled": False,
+                    "status": "disabled",
+                    "delta_x_projected": 0.0,
+                    "delta_y_projected": 0.0,
+                },
+            ), mock.patch.object(
+                image_match,
+                "_resolve_adaptive_route_for_pair",
+                return_value=(
+                    "lightglue",
+                    {
+                        "enabled": True,
+                        "status": "routed",
+                        "requested_matcher": "bf",
+                        "selected_initial_matcher": "lightglue",
+                        "reason": "synthetic cascade route for focused regression",
+                        "sidecar": {
+                            "pair_route": {
+                                "initial_matcher": "lightglue",
+                                "fallback_chain": ["loftr"],
+                            }
+                        },
+                    },
+                ),
+            ), mock.patch.object(
+                image_match,
+                "_run_serial_tile_match_tasks",
+                side_effect=[[weak_tile_result], [accepted_tile_result]],
+            ) as serial_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    matcher_method="bf",
+                    enable_adaptive_routing=True,
+                    use_parallel_cpu=False,
+                    max_image_dimension=512,
+                    min_valid_pixels=32,
+                )
+
+        called_matchers = [call.kwargs["matcher_method"] for call in serial_mock.call_args_list]
+        self.assertEqual(called_matchers, ["lightglue", "loftr"])
+        self.assertEqual(summary["point_count"], len(accepted_points))
+        self.assertEqual(summary["matcher_method_effective"], "loftr")
+        self.assertEqual(summary["matcher"]["matcher_method_effective"], "loftr")
+        adaptive_summary = summary["adaptive_routing"]
+        self.assertEqual(adaptive_summary["cascade_plan"], ["lightglue", "loftr"])
+        self.assertEqual(adaptive_summary["selected_final_matcher"], "loftr")
+        self.assertEqual(len(adaptive_summary["cascade_attempts"]), 2)
+        self.assertEqual(adaptive_summary["cascade_attempts"][0]["decision"]["next_matcher"], "loftr")
+        self.assertTrue(adaptive_summary["final_decision"]["accepted"])
+        self.assertTrue(adaptive_summary["final_decision"]["fallback_used"])
+
     def test_match_dom_pair_to_key_files_metadata_includes_visualization(self):
         width = 96
         height = 96
@@ -4231,6 +4469,86 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         visualization_payload = payload["match_visualization"]
         self.assertIn("visualization_mode_used", visualization_payload)
         self.assertEqual(visualization_payload["output_path"], result["match_visualization"]["output_path"])
+
+    def test_match_dom_pair_to_key_files_metadata_includes_adaptive_routing(self):
+        summary = {
+            "status": "matched_no_points",
+            "reason": "synthetic focused metadata regression",
+            "point_count": 0,
+            "tile_count": 1,
+            "tile_count_before_preindex_filter": 1,
+            "tile_count_after_preindex_filter": 1,
+            "preindexed_skipped_tile_count": 0,
+            "full_resolution_skipped_tile_count": 1,
+            "matched_tile_count": 0,
+            "skipped_tile_count": 1,
+            "tile_validity_prefilter_enabled": False,
+            "tile_validity_cache_dir": None,
+            "tile_validity_cell_width": 256,
+            "tile_validity_cell_height": 256,
+            "tile_validity_skip_reasons": {},
+            "left_tile_validity_index": None,
+            "right_tile_validity_index": None,
+            "tiling_used": False,
+            "valid_pixel_percent_threshold": 0.0,
+            "invalid_pixel_radius": 1,
+            "matcher": {
+                "matcher_method_requested": "bf",
+                "matcher_method_effective": "lightglue",
+                "matcher_method_used": "lightglue",
+                "ratio_test": 0.75,
+            },
+            "parallel_cpu_requested": False,
+            "num_worker_parallel_cpu": 1,
+            "parallel_cpu_used": False,
+            "parallel_cpu_backend": "serial",
+            "parallel_cpu_worker_count": 1,
+            "tile_match_backend": "serial",
+            "low_resolution_offset": {
+                "enabled": False,
+                "status": "disabled",
+                "delta_x_projected": 0.0,
+                "delta_y_projected": 0.0,
+            },
+            "low_resolution_matching_target_long_edge": None,
+            "resolved_low_resolution_level": 3,
+            "adaptive_routing": {
+                "enabled": True,
+                "status": "routed",
+                "requested_matcher": "bf",
+                "selected_initial_matcher": "lightglue",
+                "reason": "synthetic route for metadata regression",
+            },
+            "preparation": {
+                "status": "ready",
+                "reason": "ready",
+            },
+        }
+
+        with temporary_directory() as temp_dir:
+            left_key = temp_dir / "left_adaptive_metadata.key"
+            right_key = temp_dir / "right_adaptive_metadata.key"
+            metadata_output = temp_dir / "match_metadata" / "pair.json"
+            metadata_output.parent.mkdir(parents=True)
+
+            with mock.patch.object(
+                image_match,
+                "match_dom_pair",
+                return_value=(KeypointFile(10, 10, ()), KeypointFile(10, 10, ()), summary),
+            ):
+                match_dom_pair_to_key_files(
+                    "left.cub",
+                    "right.cub",
+                    left_key,
+                    right_key,
+                    metadata_output=metadata_output,
+                    write_match_visualization=False,
+                )
+
+            payload = json.loads(metadata_output.read_text(encoding="utf-8"))
+
+        self.assertIn("adaptive_routing", payload["image_match"])
+        self.assertEqual(payload["image_match"]["adaptive_routing"]["selected_initial_matcher"], "lightglue")
 
     def test_match_dom_pair_to_key_files_metadata_records_visualization_failure(self):
         width = 96

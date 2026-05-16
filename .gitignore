@@ -27,4 +27,5 @@ tests/unitTest/controlnet_construct_dom2ori_unit_test*
 left_dom.cub
 right_dom.cub
 tests/unitTest/generated_reports/*
-print.prt   
+print.prt
+examples/learning_methods/sweep_results/

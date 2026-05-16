@@ -5,6 +5,7 @@ Created: 2026-05-14
 Updated: 2026-05-14  Geng Xun added first-node texture probe, SPICE-constrained elevation candidates, pair routing, and JSON sidecar helpers.
 Updated: 2026-05-14  Geng Xun added pure match-quality gating and fixed cascade planning helpers.
 Updated: 2026-05-14  Geng Xun allowed adaptive sidecars to serialize quality reports and final decisions directly.
+Updated: 2026-05-16  Geng Xun added named adaptive-routing quality profiles for user-facing route tuning.
 """
 
 from __future__ import annotations
@@ -25,6 +26,13 @@ DEFAULT_ROUTER_FALLBACK_CHAIN = (
     SIFT_ROUTED_MATCHER_METHOD,
     LIGHTGLUE_MATCHER_METHOD,
     LOFTR_MATCHER_METHOD,
+)
+DEFAULT_ADAPTIVE_ROUTING_PROFILE = "balanced"
+SUPPORTED_ADAPTIVE_ROUTING_PROFILES = (
+    "balanced",
+    "strict",
+    "relaxed",
+    "fast",
 )
 
 
@@ -105,6 +113,70 @@ class MatchQualityReport:
     quality_score: float
     accepted: bool
     rejection_reasons: tuple[str, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class AdaptiveRoutingQualityProfile:
+    """Named post-match quality-gate thresholds for adaptive routing."""
+
+    profile: str
+    min_inlier_count: int
+    min_inlier_ratio: float
+    min_coverage: float
+    max_mean_residual: float
+    max_p95_residual: float
+
+
+_ADAPTIVE_ROUTING_QUALITY_PROFILES: dict[str, AdaptiveRoutingQualityProfile] = {
+    "balanced": AdaptiveRoutingQualityProfile(
+        profile="balanced",
+        min_inlier_count=24,
+        min_inlier_ratio=0.35,
+        min_coverage=0.20,
+        max_mean_residual=2.5,
+        max_p95_residual=4.0,
+    ),
+    "strict": AdaptiveRoutingQualityProfile(
+        profile="strict",
+        min_inlier_count=36,
+        min_inlier_ratio=0.45,
+        min_coverage=0.30,
+        max_mean_residual=1.8,
+        max_p95_residual=3.0,
+    ),
+    "relaxed": AdaptiveRoutingQualityProfile(
+        profile="relaxed",
+        min_inlier_count=12,
+        min_inlier_ratio=0.25,
+        min_coverage=0.10,
+        max_mean_residual=4.0,
+        max_p95_residual=7.0,
+    ),
+    "fast": AdaptiveRoutingQualityProfile(
+        profile="fast",
+        min_inlier_count=12,
+        min_inlier_ratio=0.20,
+        min_coverage=0.08,
+        max_mean_residual=5.0,
+        max_p95_residual=8.0,
+    ),
+}
+
+
+def normalize_adaptive_routing_profile(value: object) -> str:
+    """Normalize a user-facing adaptive-routing profile name."""
+
+    normalized = str(value).strip().lower().replace("_", "-")
+    if normalized not in _ADAPTIVE_ROUTING_QUALITY_PROFILES:
+        supported = ", ".join(SUPPORTED_ADAPTIVE_ROUTING_PROFILES)
+        raise ValueError(f"Unsupported adaptive_routing_profile: {value!r}. Supported values: {supported}.")
+    return normalized
+
+
+def resolve_adaptive_routing_quality_profile(value: object = DEFAULT_ADAPTIVE_ROUTING_PROFILE) -> AdaptiveRoutingQualityProfile:
+    """Return the expanded quality-gate thresholds for a named profile."""
+
+    return _ADAPTIVE_ROUTING_QUALITY_PROFILES[normalize_adaptive_routing_profile(value)]
 
 
 def build_spice_constrained_elevation_candidates(
@@ -594,6 +666,8 @@ def build_pair_probe_sidecar(
 
 
 __all__ = [
+    "AdaptiveRoutingQualityProfile",
+    "DEFAULT_ADAPTIVE_ROUTING_PROFILE",
     "DEFAULT_ROUTER_FALLBACK_CHAIN",
     "ImageTextureProbe",
     "LOFTR_MATCHER_METHOD",
@@ -603,11 +677,14 @@ __all__ = [
     "RenderProbe",
     "SIFT_ROUTED_MATCHER_METHOD",
     "SpiceLightingConstraints",
+    "SUPPORTED_ADAPTIVE_ROUTING_PROFILES",
     "build_pair_probe_sidecar",
     "build_cascade_plan",
     "build_spice_constrained_elevation_candidates",
     "compute_real_image_texture_probe",
     "decide_post_match_action",
     "evaluate_match_quality",
+    "normalize_adaptive_routing_profile",
+    "resolve_adaptive_routing_quality_profile",
     "route_matcher_for_pair",
 ]

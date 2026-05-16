@@ -81,6 +81,7 @@ Updated: 2026-05-22  Geng Xun added ORI key export regression coverage for pair-
 Updated: 2026-05-22  Geng Xun tightened ORI delegation and `.key` file readability regression coverage for Task 3 review fixes.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
+Updated: 2026-05-16  Geng Xun added regression coverage for adaptive-routing profile CLI/config defaults and expanded metadata.
 """
 
 from __future__ import annotations
@@ -811,6 +812,23 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertFalse(default_args.enable_adaptive_routing)
         self.assertTrue(enabled_args.enable_adaptive_routing)
         self.assertFalse(disabled_args.enable_adaptive_routing)
+        self.assertEqual(default_args.adaptive_routing_profile, "balanced")
+
+    def test_build_argument_parser_accepts_adaptive_routing_profile(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--adaptive-routing-profile",
+                "strict",
+            ]
+        )
+
+        self.assertEqual(args.adaptive_routing_profile, "strict")
 
     def test_build_argument_parser_accepts_custom_parallel_worker_limit(self):
         parser = build_argument_parser()
@@ -1256,6 +1274,23 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             defaults = image_match.load_image_match_defaults_from_config(config_path)
 
         self.assertTrue(defaults["enable_adaptive_routing"])
+
+    def test_load_image_match_defaults_from_config_reads_adaptive_routing_profile(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "adaptiveRoutingProfile": "relaxed",
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            defaults = image_match.load_image_match_defaults_from_config(config_path)
+
+        self.assertEqual(defaults["adaptive_routing_profile"], "relaxed")
 
     def test_create_descriptor_matcher_supports_bf_and_flann(self):
         fake_bf_matcher = object()
@@ -4306,6 +4341,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     right_path,
                     matcher_method="bf",
                     enable_adaptive_routing=True,
+                    adaptive_routing_profile="strict",
                     use_parallel_cpu=False,
                     max_image_dimension=512,
                     min_valid_pixels=32,
@@ -4320,7 +4356,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
     def test_match_dom_pair_falls_back_through_adaptive_cascade_after_failed_quality_gate(self):
         image = _build_textured_test_image(96, 96)
-        accepted_points = tuple(Keypoint(float(index), float(index)) for index in range(32))
+        accepted_points = tuple(Keypoint(float(index), float(index)) for index in range(40))
         weak_tile_result = tile_matching_module.TileMatchResult(
             stats=tile_matching_module.TileMatchStats(
                 0,
@@ -4413,6 +4449,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     right_path,
                     matcher_method="bf",
                     enable_adaptive_routing=True,
+                    adaptive_routing_profile="strict",
                     use_parallel_cpu=False,
                     max_image_dimension=512,
                     min_valid_pixels=32,
@@ -4424,6 +4461,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["matcher_method_effective"], "loftr")
         self.assertEqual(summary["matcher"]["matcher_method_effective"], "loftr")
         adaptive_summary = summary["adaptive_routing"]
+        self.assertEqual(summary["adaptive_routing_profile"], "strict")
+        self.assertEqual(summary["adaptive_routing_quality_gate"]["min_inlier_count"], 36)
+        self.assertEqual(adaptive_summary["profile"], "strict")
+        self.assertEqual(adaptive_summary["quality_gate"]["max_p95_residual"], 3.0)
         self.assertEqual(adaptive_summary["cascade_plan"], ["lightglue", "loftr"])
         self.assertEqual(adaptive_summary["selected_final_matcher"], "loftr")
         self.assertEqual(len(adaptive_summary["cascade_attempts"]), 2)

@@ -7,6 +7,7 @@ Updated: 2026-05-14  Geng Xun added first-node regression coverage for texture p
 Updated: 2026-05-14  Geng Xun added focused coverage for match-quality gating and fixed cascade decisions.
 Updated: 2026-05-14  Geng Xun added sidecar serialization coverage for quality reports and final decisions.
 Updated: 2026-05-14  Geng Xun clarified the interpolated p95 quality-gate regression so the expected accepted case also passes the mean-residual gate.
+Updated: 2026-05-16  Geng Xun added coverage for named adaptive-routing quality profiles.
 """
 
 from __future__ import annotations
@@ -35,11 +36,34 @@ from image_match.adaptive_routing import (
     compute_real_image_texture_probe,
     decide_post_match_action,
     evaluate_match_quality,
+    normalize_adaptive_routing_profile,
+    resolve_adaptive_routing_quality_profile,
     route_matcher_for_pair,
 )
 
 
 class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
+    def test_resolve_adaptive_routing_quality_profiles_expand_expected_thresholds(self):
+        balanced = resolve_adaptive_routing_quality_profile("balanced")
+        strict = resolve_adaptive_routing_quality_profile("strict")
+        relaxed = resolve_adaptive_routing_quality_profile("relaxed")
+        fast = resolve_adaptive_routing_quality_profile("fast")
+
+        self.assertEqual(balanced.min_inlier_count, 24)
+        self.assertGreater(strict.min_inlier_count, balanced.min_inlier_count)
+        self.assertGreater(strict.min_coverage, balanced.min_coverage)
+        self.assertLess(strict.max_mean_residual, balanced.max_mean_residual)
+        self.assertLess(relaxed.min_inlier_ratio, balanced.min_inlier_ratio)
+        self.assertGreater(relaxed.max_p95_residual, balanced.max_p95_residual)
+        self.assertLessEqual(fast.min_inlier_count, balanced.min_inlier_count)
+        self.assertGreater(fast.max_mean_residual, balanced.max_mean_residual)
+
+    def test_normalize_adaptive_routing_profile_rejects_unknown_value(self):
+        self.assertEqual(normalize_adaptive_routing_profile("STRICT"), "strict")
+
+        with self.assertRaises(ValueError):
+            normalize_adaptive_routing_profile("unsafe")
+
     def test_spice_constrained_elevation_candidates_stay_near_real_value_and_inside_bounds(self):
         candidates = build_spice_constrained_elevation_candidates(
             real_solar_elevation=32.0,

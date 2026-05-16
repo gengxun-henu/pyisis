@@ -40,6 +40,7 @@ Updated: 2026-05-10  Geng Xun added ORI pair-level `.key` export helpers and acc
 Updated: 2026-05-14  Geng Xun added an optional adaptive-routing prepass that can select a pair-level initial matcher from low-resolution previews and record routing metadata.
 Updated: 2026-05-14  Geng Xun wired adaptive fallback cascade execution through post-match quality gating and persisted cascade diagnostics.
 Updated: 2026-05-16  Geng Xun added deep-match result import mode to convert manifest NPZ outputs back into `.key` files.
+Updated: 2026-05-16  Geng Xun added named adaptive-routing profiles that expand to quality-gate thresholds in metadata.
 """
 
 from __future__ import annotations
@@ -63,11 +64,15 @@ except ImportError:
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
     from image_match.adaptive_routing import (
+        DEFAULT_ADAPTIVE_ROUTING_PROFILE,
+        SUPPORTED_ADAPTIVE_ROUTING_PROFILES,
         build_pair_probe_sidecar,
         build_cascade_plan,
         compute_real_image_texture_probe,
         decide_post_match_action,
         evaluate_match_quality,
+        normalize_adaptive_routing_profile,
+        resolve_adaptive_routing_quality_profile,
         route_matcher_for_pair,
     )
     from image_match.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
@@ -121,11 +126,15 @@ if __package__ in {None, ""}:
     import image_match.tile_matching as tile_matching_module
 else:
     from .adaptive_routing import (
+        DEFAULT_ADAPTIVE_ROUTING_PROFILE,
+        SUPPORTED_ADAPTIVE_ROUTING_PROFILES,
         build_pair_probe_sidecar,
         build_cascade_plan,
         compute_real_image_texture_probe,
         decide_post_match_action,
         evaluate_match_quality,
+        normalize_adaptive_routing_profile,
+        resolve_adaptive_routing_quality_profile,
         route_matcher_for_pair,
     )
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
@@ -357,6 +366,13 @@ def _parse_memory_profile(value: str) -> str:
 def _parse_preview_cache_source(value: str) -> str:
     try:
         return _normalize_preview_cache_source(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _parse_adaptive_routing_profile(value: str) -> str:
+    try:
+        return normalize_adaptive_routing_profile(value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
@@ -610,6 +626,11 @@ def load_image_match_defaults_from_config(
             "enable_adaptive_routing",
             ("enable_adaptive_routing", "enableAdaptiveRouting", "EnableAdaptiveRouting"),
             lambda value: _coerce_config_bool(value, field_name="enable_adaptive_routing"),
+        ),
+        (
+            "adaptive_routing_profile",
+            ("adaptive_routing_profile", "adaptiveRoutingProfile", "AdaptiveRoutingProfile"),
+            lambda value: normalize_adaptive_routing_profile(value),
         ),
         (
             "deep_match_mode",
@@ -1217,6 +1238,7 @@ def _quality_report_for_tile_results(
     tile_results: list[TileMatchResult],
     *,
     candidate_window_count: int,
+    quality_gate: dict[str, object],
 ):
     total_match_count = sum(int(result.stats.match_count) for result in tile_results)
     inlier_count = sum(len(result.left_points) for result in tile_results)
@@ -1234,6 +1256,11 @@ def _quality_report_for_tile_results(
         total_match_count=total_match_count,
         coverage=coverage,
         residual_summary=residual_summary,
+        min_inlier_count=int(quality_gate["min_inlier_count"]),
+        min_inlier_ratio=float(quality_gate["min_inlier_ratio"]),
+        min_coverage=float(quality_gate["min_coverage"]),
+        max_mean_residual=float(quality_gate["max_mean_residual"]),
+        max_p95_residual=float(quality_gate["max_p95_residual"]),
     )
 
 
@@ -1720,6 +1747,7 @@ def match_dom_pair(
     num_worker_parallel_cpu: int = DEFAULT_NUM_WORKER_PARALLEL_CPU,
     enable_low_resolution_offset_estimation: bool = False,
     enable_adaptive_routing: bool = DEFAULT_ENABLE_ADAPTIVE_ROUTING,
+    adaptive_routing_profile: str = DEFAULT_ADAPTIVE_ROUTING_PROFILE,
     low_resolution_level: int | None = None,
     low_resolution_matching_target_long_edge: int | None = None,
     low_resolution_trim_fraction_each_side: float = DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE,
@@ -1769,6 +1797,8 @@ def match_dom_pair(
         resolved_requested_matcher_method = _normalize_matcher_method(matcher_method)
         resolved_matcher_method = resolved_requested_matcher_method
         resolved_deep_match_mode = _normalize_deep_match_mode(deep_match_mode)
+        resolved_adaptive_routing_quality_profile = resolve_adaptive_routing_quality_profile(adaptive_routing_profile)
+        adaptive_routing_quality_gate = asdict(resolved_adaptive_routing_quality_profile)
         resolved_low_resolution_trim_fraction_each_side = _validate_low_resolution_trim_fraction_each_side(
             low_resolution_trim_fraction_each_side
         )
@@ -1867,6 +1897,9 @@ def match_dom_pair(
             left_low_resolution_dom=resolved_left_low_resolution_dom,
             right_low_resolution_dom=resolved_right_low_resolution_dom,
         )
+        if adaptive_routing_summary is not None:
+            adaptive_routing_summary["profile"] = resolved_adaptive_routing_quality_profile.profile
+            adaptive_routing_summary["quality_gate"] = dict(adaptive_routing_quality_gate)
         preparation = prepare_dom_pair_for_matching(
             left_dom_path,
             right_dom_path,
@@ -2109,6 +2142,7 @@ def match_dom_pair(
                         quality_report = _quality_report_for_tile_results(
                             selected_tile_results,
                             candidate_window_count=len(candidate_windows),
+                            quality_gate=adaptive_routing_quality_gate,
                         )
                         final_quality_report = quality_report
                         final_decision = decide_post_match_action(
@@ -2128,6 +2162,8 @@ def match_dom_pair(
                             break
 
                     if adaptive_routing_summary is not None:
+                        adaptive_routing_summary["profile"] = resolved_adaptive_routing_quality_profile.profile
+                        adaptive_routing_summary["quality_gate"] = dict(adaptive_routing_quality_gate)
                         adaptive_routing_summary["cascade_plan"] = list(cascade_plan)
                         adaptive_routing_summary["cascade_attempts"] = cascade_attempts
                         adaptive_routing_summary["selected_final_matcher"] = resolved_matcher_method
@@ -2173,6 +2209,8 @@ def match_dom_pair(
             "invalid_pixel_radius": resolved_invalid_pixel_radius,
             "matcher_method_requested": resolved_requested_matcher_method,
             "matcher_method_effective": resolved_matcher_method,
+            "adaptive_routing_profile": resolved_adaptive_routing_quality_profile.profile,
+            "adaptive_routing_quality_gate": adaptive_routing_quality_gate,
             "ratio_test": ratio_test,
             "status": resolved_status,
             "reason": resolved_reason,
@@ -2417,6 +2455,11 @@ def match_dom_pair_to_key_files(
             "low_resolution_offset": summary["low_resolution_offset"],
             "low_resolution_matching_target_long_edge": summary["low_resolution_matching_target_long_edge"],
             "resolved_low_resolution_level": summary["resolved_low_resolution_level"],
+            "adaptive_routing_profile": summary.get("adaptive_routing_profile", DEFAULT_ADAPTIVE_ROUTING_PROFILE),
+            "adaptive_routing_quality_gate": summary.get(
+                "adaptive_routing_quality_gate",
+                asdict(resolve_adaptive_routing_quality_profile(DEFAULT_ADAPTIVE_ROUTING_PROFILE)),
+            ),
             "adaptive_routing": summary["adaptive_routing"],
             "deep_match_mode": summary.get("deep_match_mode", DEFAULT_DEEP_MATCH_MODE),
             "deep_match_export": summary.get("deep_match_export"),
@@ -2542,6 +2585,16 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--min-overlap-size", type=int, default=16, help="Skip matching when the expanded projected-overlap window is smaller than this many pixels in either direction.")
     parser.add_argument("--adaptive-routing", dest="enable_adaptive_routing", action="store_true", help="Enable a low-resolution texture-probe prepass that can select a pair-level initial matcher before full-resolution matching.")
     parser.add_argument("--no-adaptive-routing", dest="enable_adaptive_routing", action="store_false", help="Disable the adaptive routing prepass and use the requested matcher directly.")
+    parser.add_argument(
+        "--adaptive-routing-profile",
+        type=_parse_adaptive_routing_profile,
+        default=DEFAULT_ADAPTIVE_ROUTING_PROFILE,
+        help=(
+            "Named adaptive-routing quality profile used to expand post-match fallback thresholds. "
+            f"Supported values: {_format_supported_values(SUPPORTED_ADAPTIVE_ROUTING_PROFILES)}. "
+            f"Default: {DEFAULT_ADAPTIVE_ROUTING_PROFILE}."
+        ),
+    )
     parser.add_argument("--enable-low-resolution-offset-estimation", dest="enable_low_resolution_offset_estimation", action="store_true", help="Enable low-resolution DOM matching to estimate a projected global offset before the full-resolution overlap crop is prepared.")
     parser.add_argument(
         "--low-resolution-level",
@@ -2792,6 +2845,7 @@ def main(argv: list[str] | None = None) -> None:
         num_worker_parallel_cpu=args.num_worker_parallel_cpu,
         enable_low_resolution_offset_estimation=args.enable_low_resolution_offset_estimation,
         enable_adaptive_routing=args.enable_adaptive_routing,
+        adaptive_routing_profile=args.adaptive_routing_profile,
         low_resolution_level=args.low_resolution_level,
         low_resolution_matching_target_long_edge=args.low_resolution_matching_target_long_edge,
         low_resolution_trim_fraction_each_side=args.low_resolution_trim_fraction_each_side,

@@ -71,7 +71,7 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
 
 如果你希望把推荐参数直接固化进配置文件，可以这样写：
 
-从当前版本开始，`image_match.py` 本身也支持 `--config`，会把配置里的 `ImageMatch` 段当作默认匹配参数；两个推荐批处理脚本也会把这段配置继续转发进去。因此你现在可以把常用的 tile、overlap、灰度拉伸、SIFT、crop、并行和可视化参数统一写在这里，而不只是写阈值和 worker 数。
+从当前版本开始，`image_match.py` 本身也支持 `--config`，会把配置里的 `ImageMatch` 段当作默认匹配参数；两个推荐批处理脚本也会把这段配置继续转发进去。因此你现在可以把常用的 tile、overlap、灰度拉伸、SIFT、crop、并行和可视化参数统一写在这里，而不只是写阈值和 worker 数。若启用 adaptive routing，可用 `adaptive_routing_profile` 在 `balanced`、`strict`、`relaxed`、`fast` 之间切换质量门控策略；运行 metadata 会记录 profile 展开后的阈值，方便复查。
 
 ```json
 {
@@ -103,6 +103,8 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
     "sift_sigma": 1.6,
     "crop_expand_pixels": 100,
     "min_overlap_size": 16,
+    "enable_adaptive_routing": false,
+    "adaptive_routing_profile": "balanced",
     "use_parallel_cpu": true,
     "num_worker_parallel_cpu": 8,
     "low_resolution_max_mean_reprojection_error_pixels": 3.0,

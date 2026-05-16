@@ -6,6 +6,7 @@ Last Modified: 2026-05-16
 Updated: 2026-05-16  Geng Xun added focused regression coverage for deep-match workspace resolution, task payload serialization, and manifest round-tripping.
 Updated: 2026-05-16  Geng Xun added export-mode regression coverage for the image_match CLI/parser and workspace handoff flow.
 Updated: 2026-05-16  Geng Xun added import-mode regression coverage for manifest NPZ result conversion back into `.key` files.
+Updated: 2026-05-16  Geng Xun added import edge-case coverage for missing, failed, empty, multi-task, and score-length-mismatch results.
 """
 
 from __future__ import annotations
@@ -68,15 +69,22 @@ def _write_array_to_cube(cube: ip.Cube, array: np.ndarray) -> None:
         cube.write(line_manager)
 
 
-def _make_tile_task(*, matcher_method: str = "lightglue") -> TileMatchTask:
+def _make_tile_task(
+    *,
+    matcher_method: str = "lightglue",
+    left_start_x: int = 10,
+    left_start_y: int = 20,
+    right_start_x: int = 30,
+    right_start_y: int = 40,
+) -> TileMatchTask:
     return TileMatchTask(
         left_dom_path="left_dom.cub",
         right_dom_path="right_dom.cub",
         band=1,
         paired_window=PairedTileWindow(
             local_window=TileWindow(start_x=0, start_y=0, width=64, height=64),
-            left_window=TileWindow(start_x=10, start_y=20, width=64, height=64),
-            right_window=TileWindow(start_x=30, start_y=40, width=64, height=64),
+            left_window=TileWindow(start_x=left_start_x, start_y=left_start_y, width=64, height=64),
+            right_window=TileWindow(start_x=right_start_x, start_y=right_start_y, width=64, height=64),
         ),
         minimum_value=None,
         maximum_value=None,
@@ -390,6 +398,160 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
             self.assertAlmostEqual(left_key.points[0].line, 23.5)
             self.assertAlmostEqual(right_key.points[0].sample, 36.0)
             self.assertAlmostEqual(right_key.points[0].line, 47.0)
+
+    def test_import_mode_merges_usable_tasks_and_reports_missing_failed_and_empty_results(self):
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_test_cube(temp_dir, name="left_import_edges.cub", samples=256, lines=256, bands=1)
+            right_cube, right_path = make_test_cube(temp_dir, name="right_import_edges.cub", samples=256, lines=256, bands=1)
+            left_cube.close()
+            right_cube.close()
+
+            tasks = [
+                _make_tile_task(left_start_x=0, left_start_y=0, right_start_x=10, right_start_y=10),
+                _make_tile_task(left_start_x=20, left_start_y=30, right_start_x=40, right_start_y=50),
+                _make_tile_task(left_start_x=60, left_start_y=70, right_start_x=80, right_start_y=90),
+                _make_tile_task(left_start_x=100, left_start_y=110, right_start_x=120, right_start_y=130),
+            ]
+            tasks = [
+                tile_match_task_from_payload(
+                    {
+                        **tile_match_task_to_payload(task),
+                        "left_dom_path": str(left_path),
+                        "right_dom_path": str(right_path),
+                    }
+                )
+                for task in tasks
+            ]
+            manifest = build_deep_match_pair_manifest(
+                tasks=tasks,
+                left_dom_path=left_path,
+                right_dom_path=right_path,
+                matcher_method="lightglue",
+                band=1,
+                image_space="dom",
+                temp_root_dir=temp_dir / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                requested_device="cpu",
+                created_at_utc="2026-05-16T00:00:00Z",
+            )
+            failed_record = manifest.tasks[1]
+            empty_record = manifest.tasks[2]
+            valid_record = manifest.tasks[3]
+            write_deep_match_task_result(
+                failed_record,
+                left_points=np.array([[1.0, 2.0]], dtype=np.float32),
+                right_points=np.array([[3.0, 4.0]], dtype=np.float32),
+                scores=np.array([0.1], dtype=np.float32),
+                status="failed",
+                metadata={"error": "synthetic matcher failure"},
+            )
+            write_deep_match_task_result(
+                empty_record,
+                left_points=np.empty((0, 2), dtype=np.float32),
+                right_points=np.empty((0, 2), dtype=np.float32),
+                scores=np.empty((0,), dtype=np.float32),
+                status="matched_no_points",
+            )
+            write_deep_match_task_result(
+                valid_record,
+                left_points=np.array([[0.0, 0.0], [4.5, 5.5]], dtype=np.float32),
+                right_points=np.array([[1.0, 2.0], [6.0, 7.0]], dtype=np.float32),
+                scores=np.array([0.95], dtype=np.float32),
+                status="matched",
+                metadata={"note": "scores intentionally shorter than point arrays"},
+            )
+            manifest_path = write_deep_match_pair_manifest(manifest)
+            left_key_path = temp_dir / "left_edges.key"
+            right_key_path = temp_dir / "right_edges.key"
+
+            result = match_dom_pair_to_key_files(
+                left_path,
+                right_path,
+                left_key_path,
+                right_key_path,
+                deep_match_mode="import",
+                deep_match_manifest=manifest_path,
+                write_match_visualization=False,
+            )
+            left_key = read_key_file(left_key_path)
+            right_key = read_key_file(right_key_path)
+
+        self.assertEqual(result["status"], "imported_with_missing_or_failed_tasks")
+        self.assertEqual(result["point_count"], 2)
+        import_summary = result["deep_match_import"]
+        self.assertEqual(import_summary["task_count"], 4)
+        self.assertEqual(import_summary["imported_task_count"], 1)
+        self.assertEqual(import_summary["missing_result_count"], 1)
+        self.assertEqual(import_summary["failed_task_count"], 1)
+        self.assertEqual(import_summary["skipped_empty_task_count"], 1)
+        self.assertEqual([task["status"] for task in import_summary["tasks"]], ["missing_result", "failed", "matched_no_points", "imported"])
+        self.assertEqual(left_key.image_width, 256)
+        self.assertEqual(right_key.image_height, 256)
+        self.assertAlmostEqual(left_key.points[0].sample, 101.0)
+        self.assertAlmostEqual(left_key.points[0].line, 111.0)
+        self.assertAlmostEqual(right_key.points[1].sample, 127.0)
+        self.assertAlmostEqual(right_key.points[1].line, 138.0)
+
+    def test_import_mode_reports_no_usable_results_when_all_tasks_missing_or_failed(self):
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_test_cube(temp_dir, name="left_import_no_usable.cub", samples=128, lines=128, bands=1)
+            right_cube, right_path = make_test_cube(temp_dir, name="right_import_no_usable.cub", samples=128, lines=128, bands=1)
+            left_cube.close()
+            right_cube.close()
+
+            tasks = [
+                _make_tile_task(left_start_x=0, left_start_y=0, right_start_x=0, right_start_y=0),
+                _make_tile_task(left_start_x=20, left_start_y=20, right_start_x=30, right_start_y=30),
+            ]
+            tasks = [
+                tile_match_task_from_payload(
+                    {
+                        **tile_match_task_to_payload(task),
+                        "left_dom_path": str(left_path),
+                        "right_dom_path": str(right_path),
+                    }
+                )
+                for task in tasks
+            ]
+            manifest = build_deep_match_pair_manifest(
+                tasks=tasks,
+                left_dom_path=left_path,
+                right_dom_path=right_path,
+                matcher_method="lightglue",
+                band=1,
+                image_space="dom",
+                temp_root_dir=temp_dir / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                requested_device="cpu",
+            )
+            write_deep_match_task_result(
+                manifest.tasks[1],
+                left_points=np.array([[1.0, 1.0]], dtype=np.float32),
+                right_points=np.array([[2.0, 2.0]], dtype=np.float32),
+                scores=np.array([0.2], dtype=np.float32),
+                status="failed",
+            )
+            manifest_path = write_deep_match_pair_manifest(manifest)
+            left_key_path = temp_dir / "left_no_usable.key"
+            right_key_path = temp_dir / "right_no_usable.key"
+
+            result = match_dom_pair_to_key_files(
+                left_path,
+                right_path,
+                left_key_path,
+                right_key_path,
+                deep_match_mode="import",
+                deep_match_manifest=manifest_path,
+                write_match_visualization=False,
+            )
+            left_key = read_key_file(left_key_path)
+            right_key = read_key_file(right_key_path)
+
+        self.assertEqual(result["status"], "import_failed_no_usable_results")
+        self.assertEqual(result["point_count"], 0)
+        self.assertEqual(result["deep_match_import"]["missing_result_count"], 1)
+        self.assertEqual(result["deep_match_import"]["failed_task_count"], 1)
+        self.assertEqual(result["deep_match_import"]["imported_task_count"], 0)
+        self.assertEqual(len(left_key.points), 0)
+        self.assertEqual(len(right_key.points), 0)
 
 
 if __name__ == "__main__":

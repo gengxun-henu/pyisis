@@ -38,6 +38,7 @@ Updated: 2026-05-22  Geng Xun added baseline parser coverage for the new from-or
 Updated: 2026-05-10  Geng Xun added CLI execution-path coverage so from-ori-match fails in a controlled Task-1-safe way instead of crashing on missing parser attrs.
 Updated: 2026-05-10  Geng Xun updated from-ori-match coverage to require a clean argparse-style CLI rejection without a traceback.
 Updated: 2026-05-10  Geng Xun updated from-ori-match coverage for full CLI dispatch into ori matching and direct ControlNet build.
+Updated: 2026-05-16  Geng Xun added wrapper coverage for deep-match manifest export handoff summaries.
 """
 
 from __future__ import annotations
@@ -110,6 +111,12 @@ DEFAULT_REAL_LRO_DOM_LEFT = Path("/media/gengxun/Elements/data/lro/test_controln
 DEFAULT_REAL_LRO_DOM_RIGHT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871RE.cub")
 RUN_PIPELINE_EXAMPLE_PATH = PROJECT_ROOT / "examples" / "controlnet_construct" / "run_pipeline_example.sh"
 RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH = PROJECT_ROOT / "examples" / "controlnet_construct" / "run_image_match_batch_example.sh"
+
+
+def _embedded_python_script(source: str) -> str:
+    lines = source.splitlines()
+    normalized = [line[20:] if line.startswith(" " * 20) else line for line in lines]
+    return "\n".join(normalized).lstrip() + "\n"
 
 
 def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
@@ -1720,6 +1727,244 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("lightglue", content)
         self.assertIn("superglue", content)
         self.assertIn("loftr", content)
+
+    def test_run_image_match_batch_example_forwards_deep_match_export_and_writes_manifest_summary(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+                        if script_name == "image_match.py":
+                            if "--deep-match-mode" not in args:
+                                raise SystemExit("missing --deep-match-mode forwarding")
+                            mode = args[args.index("--deep-match-mode") + 1]
+                            if mode != "export":
+                                raise SystemExit(f"unexpected deep-match mode: {{mode}}")
+                            if "--deep-match-temp-root-dir" not in args:
+                                raise SystemExit("missing --deep-match-temp-root-dir forwarding")
+                            metadata_path = Path(args[args.index("--metadata-output") + 1])
+                            metadata_path.parent.mkdir(parents=True, exist_ok=True)
+                            metadata_path.write_text(
+                                json.dumps(
+                                    {{
+                                        "status": "exported_for_deep_learning",
+                                        "point_count": 0,
+                                        "deep_match_export": {{
+                                            "manifest_path": "work/deep_match_workspaces/left__right/tasks.json",
+                                            "workspace_root": "work/deep_match_workspaces/left__right",
+                                            "pair_id": "left__right",
+                                            "exported_task_count": 1,
+                                        }},
+                                    }}
+                                ),
+                                encoding="utf-8",
+                            )
+                            Path(args[2]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[3]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            return 0
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--python",
+                    str(fake_python),
+                    "--matcher-method",
+                    "lightglue",
+                    "--deep-match-mode",
+                    "export",
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+            summary_path = work_dir / "deep_match_manifests.json"
+            summary = json.loads(summary_path.read_text(encoding="utf-8"))
+
+        self.assertIn("Deep-match mode: export", completed.stdout)
+        self.assertEqual(summary["deep_match_mode"], "export")
+        self.assertEqual(summary["pairs"][0]["pair_tag"], "left__right")
+        self.assertEqual(summary["pairs"][0]["manifest_path"], "work/deep_match_workspaces/left__right/tasks.json")
+
+    def test_run_pipeline_example_export_mode_stops_after_manifest_export(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "deep-match-export-net",
+                        "TargetName": "Mars",
+                        "UserName": "copilot",
+                        "PointIdPrefix": "TMP",
+                        "ImageMatch": {"matcher_method": "lightglue"},
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+
+                        if script_name == "image_overlap.py":
+                            Path(args[1]).write_text("left.cub,right.cub\\n", encoding="utf-8")
+                            if "--report-json" in args:
+                                report_path = Path(args[args.index("--report-json") + 1])
+                                report_path.parent.mkdir(parents=True, exist_ok=True)
+                                report_path.write_text(json.dumps({{"pair_count": 1, "image_count": 2}}), encoding="utf-8")
+                            return 0
+
+                        if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                print(image_match_config.get(field_name, ""))
+                                return 0
+                            if "--deep-match-mode" not in args:
+                                raise SystemExit("missing --deep-match-mode forwarding")
+                            if args[args.index("--deep-match-mode") + 1] != "export":
+                                raise SystemExit("pipeline did not forward export mode")
+                            result_path = Path(args[args.index("--result-output") + 1])
+                            result_path.parent.mkdir(parents=True, exist_ok=True)
+                            result_path.write_text(
+                                json.dumps(
+                                    {{
+                                        "status": "exported_for_deep_learning",
+                                        "point_count": 0,
+                                        "deep_match_export": {{
+                                            "manifest_path": "work/deep_match_workspaces/left__right/tasks.json",
+                                            "workspace_root": "work/deep_match_workspaces/left__right",
+                                            "pair_id": "left__right",
+                                            "exported_task_count": 1,
+                                        }},
+                                    }}
+                                ),
+                                encoding="utf-8",
+                            )
+                            return 0
+
+                        if script_name == "controlnet_stereopair.py":
+                            raise SystemExit("export mode should stop before controlnet_stereopair.py")
+
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python_dispatcher.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python_dispatcher),
+                    "--deep-match-mode",
+                    "export",
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+            summary_path = work_dir / "reports" / "deep_match_manifests.json"
+            summary = json.loads(summary_path.read_text(encoding="utf-8"))
+
+        self.assertIn("Pipeline stopped after image_match_batch", completed.stdout)
+        self.assertEqual(summary["deep_match_mode"], "export")
+        self.assertEqual(summary["pairs"][0]["manifest_path"], "work/deep_match_workspaces/left__right/tasks.json")
 
     def test_controlnet_stereopair_parser_recognizes_from_ori_match_command(self):
         parser = importlib.import_module("controlnet_construct.controlnet_stereopair").build_argument_parser()

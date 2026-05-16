@@ -262,6 +262,66 @@ python examples/image_match/image_match.py \
 
 同理，如果你希望在只跑批量匹配时顺手关闭默认 PNG 输出，也可以在这个透传区里附加 `--no-write-match-visualization`。
 
+## 模板 3A：跨 conda deep-match handoff
+
+如果你想在 `controlnet_construct` 批量流程中使用 LightGlue / LoFTR / SuperGlue，但这些深度学习依赖只安装在 `deep-learning` conda 环境中，推荐使用三段式 handoff：
+
+1. 在 `asp360_new` 中导出 manifest workspace。
+2. 切换到 `deep-learning`，执行 `examples/learning_methods/run_deep_match_manifest.py`。
+3. 回到 `asp360_new`，用 import 模式生成 `.key`，再继续 ControlNet。
+
+只跑第 2 步批量 DOM 匹配时，可以这样导出：
+
+```bash
+bash examples/controlnet_construct/run_image_match_batch_example.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --deep-match-mode export \
+  --deep-match-temp-root-dir work/deep_match_workspaces \
+  --deep-match-manifest-summary work/deep_match_manifests.json \
+  -- \
+  --no-write-match-visualization
+```
+
+导出完成后，`work/deep_match_manifests.json` 会汇总每个 pair 的 `manifest_path`，方便你在 `deep-learning` 环境中逐个运行：
+
+```bash
+python examples/learning_methods/run_deep_match_manifest.py \
+  work/deep_match_workspaces/<pair-id>/tasks.json \
+  --device auto
+```
+
+深度学习结果写回 `results/*.npz` 后，回到 `asp360_new` 导入：
+
+```bash
+bash examples/controlnet_construct/run_image_match_batch_example.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --deep-match-mode import \
+  --deep-match-manifest-dir work/deep_match_workspaces
+```
+
+端到端脚本也支持同样选项。注意：`--deep-match-mode export` 会在完成 `image_match_batch` 后停止，因为 export 模式只写 manifest，不生成后续 `controlnet_stereopair.py` 需要的最终 `.key` 文件：
+
+```bash
+bash examples/controlnet_construct/run_pipeline_example.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --deep-match-mode export
+```
+
+完成 deep-learning 阶段后再继续完整流水线：
+
+```bash
+bash examples/controlnet_construct/run_pipeline_example.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --deep-match-mode import \
+  --deep-match-manifest-dir work/deep_match_workspaces
+```
+
+更底层的 manifest schema、`.npz` 字段和坐标约定见 `examples/learning_methods/README.md`。
+
 ## 快速调参建议
 
 ### 从 `0.05` 调大

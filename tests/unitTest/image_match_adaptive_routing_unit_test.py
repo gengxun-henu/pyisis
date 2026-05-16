@@ -6,6 +6,7 @@ Last Modified: 2026-05-14
 Updated: 2026-05-14  Geng Xun added first-node regression coverage for texture probes, SPICE-constrained elevation candidates, and matcher routing sidecars.
 Updated: 2026-05-14  Geng Xun added focused coverage for match-quality gating and fixed cascade decisions.
 Updated: 2026-05-14  Geng Xun added sidecar serialization coverage for quality reports and final decisions.
+Updated: 2026-05-14  Geng Xun clarified the interpolated p95 quality-gate regression so the expected accepted case also passes the mean-residual gate.
 """
 
 from __future__ import annotations
@@ -239,6 +240,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             total_match_count=36,
             coverage=0.35,
             residuals=(1.0, 2.0, 4.0, 8.0),
+            max_mean_residual=4.0,
             max_p95_residual=8.0,
         )
 

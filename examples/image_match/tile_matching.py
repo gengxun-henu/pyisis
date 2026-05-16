@@ -1150,7 +1150,15 @@ def _tile_task_to_payload(task: TileMatchTask) -> dict[str, Any]:
         "sift_contrast_threshold": task.sift_contrast_threshold,
         "sift_edge_threshold": task.sift_edge_threshold,
         "sift_sigma": task.sift_sigma,
+        "use_gpu": task.use_gpu,
+        "gpu_batch_size": task.gpu_batch_size,
     }
+
+
+def tile_match_task_to_payload(task: TileMatchTask) -> dict[str, Any]:
+    """Serialize a tile task using a stable JSON-friendly payload shape."""
+
+    return _tile_task_to_payload(task)
 
 
 def _tile_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
@@ -1176,7 +1184,15 @@ def _tile_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
         sift_contrast_threshold=float(payload["sift_contrast_threshold"]),
         sift_edge_threshold=float(payload["sift_edge_threshold"]),
         sift_sigma=float(payload["sift_sigma"]),
+        use_gpu=bool(payload.get("use_gpu", False)),
+        gpu_batch_size=int(payload.get("gpu_batch_size", DEFAULT_GPU_BATCH_SIZE)),
     )
+
+
+def tile_match_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
+    """Deserialize a tile task from a payload produced by tile_match_task_to_payload."""
+
+    return _tile_task_from_payload(payload)
 
 
 def _indexed_tile_match_task_to_payload(indexed_task: IndexedTileMatchTask) -> tuple[int, dict[str, Any]]:
@@ -1694,6 +1710,8 @@ __all__ = [
     "TileMatchStats",
     "TileMatchTask",
     "match_sift_pairs",
+    "tile_match_task_from_payload",
+    "tile_match_task_to_payload",
     "_build_sift_detector",
     "_build_tile_match_tasks",
     "_can_use_dedicated_gpu_tile_route",

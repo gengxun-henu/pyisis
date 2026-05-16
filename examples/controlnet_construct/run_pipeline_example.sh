@@ -5,6 +5,7 @@
 # Author: Geng Xun
 # Created: 2026-05-11
 # Updated: 2026-05-11  Geng Xun added top-of-file metadata so example shell entrypoints follow the repository's example-file header convention.
+# Updated: 2026-05-16  Geng Xun added deep-match export/import handoff forwarding and export-mode pipeline stop behavior.
 
 set -euo pipefail
 
@@ -230,6 +231,7 @@ PY
 #   --valid-pixel-percent-threshold 0.02 \
 #   --invalid-pixel-radius 1 \
 #   --matcher-method bf \
+#   --deep-match-mode export \
 #   --enable-low-resolution-offset-estimation \
 #   --low-resolution-level 4 \
 #   --low-resolution-max-mean-reprojection-error-pixels 4.0 \
@@ -284,6 +286,15 @@ Options:
                                  If omitted, this script falls back to
                                  config JSON field ImageMatch.matcher_method when present; otherwise
                                  examples/image_match/image_match.py keeps its own default.
+  --deep-match-mode MODE          Deep-match execution mode forwarded to image_match.py: direct, export, or import.
+                                  Default: direct. Export mode stops after Step 2 and writes manifest workspaces;
+                                  import mode consumes completed per-pair manifests before continuing ControlNet steps.
+  --deep-match-temp-root-dir PATH Root directory for exported deep-match workspaces.
+                                  Default: <work-dir>/deep_match_workspaces when --deep-match-mode export.
+  --deep-match-manifest-dir PATH  Directory containing per-pair manifest workspaces for import mode.
+                                  Each pair expects <PATH>/<pair_tag>/tasks.json.
+  --deep-match-manifest-summary PATH
+                                  JSON summary of per-pair manifest paths. Default: <work-dir>/reports/deep_match_manifests.json
   --enable-low-resolution-offset-estimation
                                  Forwarded to examples/image_match/image_match.py to enable low-resolution DOM coarse
                                  registration before full-resolution overlap preparation.
@@ -559,6 +570,58 @@ run_step_1_image_overlap() {
   log "  $(summarize_image_overlap_report "$IMAGE_OVERLAP_REPORT_JSON_PATH")"
 }
 
+initialize_deep_match_manifest_summary() {
+  local summary_path=$1
+  "$PYTHON_EXECUTABLE" - "$summary_path" "$DEEP_MATCH_MODE" "$DEEP_MATCH_TEMP_ROOT_DIR" "$DEEP_MATCH_MANIFEST_DIR" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+summary_path = Path(sys.argv[1])
+payload = {
+    "deep_match_mode": sys.argv[2],
+    "deep_match_temp_root_dir": sys.argv[3] or None,
+    "deep_match_manifest_dir": sys.argv[4] or None,
+    "pairs": [],
+}
+summary_path.parent.mkdir(parents=True, exist_ok=True)
+summary_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+}
+
+append_deep_match_manifest_summary() {
+  local summary_path=$1
+  local pair_tag=$2
+  local result_path=$3
+  "$PYTHON_EXECUTABLE" - "$summary_path" "$pair_tag" "$result_path" "$DEEP_MATCH_MODE" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+summary_path = Path(sys.argv[1])
+pair_tag = sys.argv[2]
+result_path = Path(sys.argv[3])
+mode = sys.argv[4]
+
+payload = json.loads(summary_path.read_text(encoding="utf-8")) if summary_path.exists() else {"pairs": []}
+entry = {"pair_tag": pair_tag, "result_path": str(result_path), "deep_match_mode": mode}
+if result_path.exists():
+    result = json.loads(result_path.read_text(encoding="utf-8"))
+    section = result.get("deep_match_export") if mode == "export" else result.get("deep_match_import")
+    entry["status"] = result.get("status")
+    entry["point_count"] = result.get("point_count")
+    if isinstance(section, dict):
+        for key in ("manifest_path", "workspace_root", "results_dir", "logs_dir", "pair_id", "exported_task_count", "imported_task_count", "missing_result_count", "failed_task_count"):
+            if key in section:
+                entry[key] = section[key]
+else:
+    entry["status"] = "result_missing"
+
+payload.setdefault("pairs", []).append(entry)
+summary_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+}
+
 run_step_2_image_match_batch() {
   log "$(pipeline_step_label 2): matching DOM pairs listed in ${IMAGES_OVERLAP_LIST}"
 
@@ -650,6 +713,14 @@ run_step_2_image_match_batch() {
         --right-low-resolution-dom "${low_resolution_dom_by_original[$right]}"
       )
     fi
+    if [[ "$DEEP_MATCH_MODE" != "direct" ]]; then
+      match_args+=(--deep-match-mode "$DEEP_MATCH_MODE")
+      if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
+        match_args+=(--deep-match-temp-root-dir "$DEEP_MATCH_TEMP_ROOT_DIR")
+      elif [[ "$DEEP_MATCH_MODE" == "import" ]]; then
+        match_args+=(--deep-match-manifest "$DEEP_MATCH_MANIFEST_DIR/${pair_tag}/tasks.json")
+      fi
+    fi
 
     run_timed_command "pair_matches" "image_match:${pair_tag}" bash -lc '"$@" >/dev/null' bash "${match_args[@]}"
     local match_status=$?
@@ -658,6 +729,9 @@ run_step_2_image_match_batch() {
     fi
     log "    image-match result json: $match_result_path"
     log "    $(summarize_image_match_result "$pair_tag" "$match_result_path")"
+    if [[ "$DEEP_MATCH_MODE" != "direct" ]]; then
+      append_deep_match_manifest_summary "$DEEP_MATCH_MANIFEST_SUMMARY" "$pair_tag" "$match_result_path"
+    fi
 
     pair_count=$((pair_count + 1))
   done < "$IMAGES_OVERLAP_LIST"
@@ -780,6 +854,9 @@ main() {
   local explicit_visualization_target_long_edge=""
   local explicit_preview_crop_margin_pixels=""
   local explicit_preview_cache_source=""
+  local deep_match_temp_root_dir_input=""
+  local deep_match_manifest_dir_input=""
+  local deep_match_manifest_summary_input=""
 
   PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
   CNETMERGE_PATH="${CNETMERGE_EXECUTABLE:-cnetmerge}"
@@ -788,6 +865,7 @@ main() {
   VALID_PIXEL_PERCENT_THRESHOLD="$DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD"
   INVALID_PIXEL_RADIUS="$DEFAULT_INVALID_PIXEL_RADIUS"
   MATCHER_METHOD="bf"
+  DEEP_MATCH_MODE="direct"
   ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION="0"
   LOW_RESOLUTION_LEVEL="3"
   LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS="3.0"
@@ -874,6 +952,26 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --matcher-method"
         MATCHER_METHOD=$2
         explicit_matcher_method=$2
+        shift 2
+        ;;
+      --deep-match-mode)
+        [[ $# -ge 2 ]] || die "missing value for --deep-match-mode"
+        DEEP_MATCH_MODE=$2
+        shift 2
+        ;;
+      --deep-match-temp-root-dir)
+        [[ $# -ge 2 ]] || die "missing value for --deep-match-temp-root-dir"
+        deep_match_temp_root_dir_input=$2
+        shift 2
+        ;;
+      --deep-match-manifest-dir)
+        [[ $# -ge 2 ]] || die "missing value for --deep-match-manifest-dir"
+        deep_match_manifest_dir_input=$2
+        shift 2
+        ;;
+      --deep-match-manifest-summary)
+        [[ $# -ge 2 ]] || die "missing value for --deep-match-manifest-summary"
+        deep_match_manifest_summary_input=$2
         shift 2
         ;;
       --enable-low-resolution-offset-estimation)
@@ -1035,6 +1133,17 @@ main() {
   CONTROLNET_BATCH_REPORT_PATH="$REPORTS_DIR/controlnet_batch_summary.json"
   MERGE_REPORT_JSON_PATH="$REPORTS_DIR/controlnet_merge_summary.json"
   POST_MERGE_REPORT_JSON_PATH="$REPORTS_DIR/merge_control_measure_summary.json"
+  DEEP_MATCH_TEMP_ROOT_DIR="${deep_match_temp_root_dir_input:-$WORK_DIR/deep_match_workspaces}"
+  DEEP_MATCH_MANIFEST_DIR="$deep_match_manifest_dir_input"
+  DEEP_MATCH_MANIFEST_SUMMARY="${deep_match_manifest_summary_input:-$REPORTS_DIR/deep_match_manifests.json}"
+
+  case "$DEEP_MATCH_MODE" in
+    direct|export|import) ;;
+    *) die "unsupported --deep-match-mode: $DEEP_MATCH_MODE" ;;
+  esac
+  if [[ "$DEEP_MATCH_MODE" == "import" && -z "$DEEP_MATCH_MANIFEST_DIR" ]]; then
+    die "--deep-match-mode import requires --deep-match-manifest-dir"
+  fi
 
   require_file "$ORIGINAL_LIST"
   require_file "$DOM_LIST"
@@ -1045,6 +1154,12 @@ main() {
   fi
 
   mkdir -p "$DOM_KEYS_DIR" "$MATCH_METADATA_DIR" "$MATCH_RESULTS_DIR" "$PRE_RANSAC_MATCH_VIZ_DIR" "$POST_RANSAC_MATCH_VIZ_DIR" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_DIR"
+  if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
+    mkdir -p "$DEEP_MATCH_TEMP_ROOT_DIR"
+  fi
+  if [[ "$DEEP_MATCH_MODE" != "direct" ]]; then
+    initialize_deep_match_manifest_summary "$DEEP_MATCH_MANIFEST_SUMMARY"
+  fi
 
   if [[ -z "$NETWORK_ID" ]]; then
     NETWORK_ID=$(extract_network_id_from_config "$CONFIG_PATH")
@@ -1178,6 +1293,14 @@ main() {
   fi
   log "Invalid pixel radius: $INVALID_PIXEL_RADIUS"
   log "Matcher method: $MATCHER_METHOD"
+  log "Deep-match mode: $DEEP_MATCH_MODE"
+  if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
+    log "Deep-match temp root dir: $DEEP_MATCH_TEMP_ROOT_DIR"
+    log "Deep-match manifest summary: $DEEP_MATCH_MANIFEST_SUMMARY"
+  elif [[ "$DEEP_MATCH_MODE" == "import" ]]; then
+    log "Deep-match manifest dir: $DEEP_MATCH_MANIFEST_DIR"
+    log "Deep-match manifest summary: $DEEP_MATCH_MANIFEST_SUMMARY"
+  fi
   if [[ "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION" == "1" ]]; then
     log "Low-resolution offset estimation: enabled"
     log "Low-resolution level: $LOW_RESOLUTION_LEVEL"
@@ -1214,6 +1337,13 @@ main() {
 
   run_required_timed_step "steps" "image_overlap" run_step_1_image_overlap
   run_required_timed_step "steps" "image_match_batch" run_step_2_image_match_batch
+  if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
+    finalize_timing_json "success"
+    log "Pipeline stopped after image_match_batch because --deep-match-mode export does not create final .key files."
+    log "Deep-match manifest summary: $DEEP_MATCH_MANIFEST_SUMMARY"
+    log "Run examples/learning_methods/run_deep_match_manifest.py in deep-learning for each manifest, then rerun this pipeline with --deep-match-mode import."
+    return 0
+  fi
   run_required_timed_step "steps" "pairwise_controlnets" run_step_3_pairwise_controlnets
   run_required_timed_step "steps" "merge" run_step_4_merge
   if [[ "$POST_MERGE_CONTROL_MEASURE" == "1" ]]; then
@@ -1227,6 +1357,9 @@ main() {
   log "  overlap list: $IMAGES_OVERLAP_LIST"
   log "  DOM keys: $DOM_KEYS_DIR"
   log "  image-match result json: $MATCH_RESULTS_DIR"
+  if [[ "$DEEP_MATCH_MODE" != "direct" ]]; then
+    log "  deep-match manifest summary: $DEEP_MATCH_MANIFEST_SUMMARY"
+  fi
   log "  pre-RANSAC match viz: $PRE_RANSAC_MATCH_VIZ_DIR"
   log "  post-RANSAC match viz: $POST_RANSAC_MATCH_VIZ_DIR"
   log "  pairwise nets: $PAIR_NETS_DIR"

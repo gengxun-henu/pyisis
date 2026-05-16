@@ -5,6 +5,7 @@
 # Author: Geng Xun
 # Created: 2026-05-11
 # Updated: 2026-05-11  Geng Xun added top-of-file metadata so example shell entrypoints follow the repository's example-file header convention.
+# Updated: 2026-05-16  Geng Xun added deep-match export/import forwarding and manifest summary output for cross-conda handoff workflows.
 
 set -euo pipefail
 
@@ -41,6 +42,7 @@ Defaults assume a work directory layout like:
   work/dom_keys/
   work/match_metadata/
   work/match_viz/            # pre-RANSAC drawMatches PNGs from examples/image_match/image_match.py
+  work/deep_match_manifests.json
 
 Options:
   --work-dir PATH                 Root working directory. Default: work
@@ -67,6 +69,15 @@ Options:
   --matcher-method NAME           Matcher backend forwarded to examples/image_match/image_match.py.
                                   Supported values: bf, flann, superglue, lightglue, loftr.
                                   Default: bf unless omitted and resolved from --config.
+  --deep-match-mode MODE          Deep-match execution mode forwarded to image_match.py: direct, export, or import.
+                                  Default: direct. Use export in asp360_new to write manifest workspaces;
+                                  use import after deep-learning results have been written.
+  --deep-match-temp-root-dir PATH Root directory for exported deep-match workspaces.
+                                  Default: <work-dir>/deep_match_workspaces when --deep-match-mode export.
+  --deep-match-manifest-dir PATH  Directory containing per-pair manifest workspaces for import mode.
+                                  Each pair expects <PATH>/<pair_tag>/tasks.json.
+  --deep-match-manifest-summary PATH
+                                  JSON summary of per-pair manifest paths. Default: <work-dir>/deep_match_manifests.json
   --enable-low-resolution-offset-estimation
                                   Enable low-resolution DOM matching to estimate projected offset before
                                   the full-resolution overlap crop is prepared.
@@ -117,6 +128,11 @@ Examples:
     --no-parallel-cpu \
     -- \
     --no-write-match-visualization
+
+  bash examples/controlnet_construct/run_image_match_batch_example.sh \
+    --work-dir work \
+    --matcher-method lightglue \
+    --deep-match-mode export
 EOF
 }
 
@@ -153,6 +169,58 @@ extract_image_match_config_value() {
     --print-config-default-container-order "$container_order"
 }
 
+initialize_deep_match_manifest_summary() {
+  local summary_path=$1
+  "$PYTHON_EXECUTABLE" - "$summary_path" "$deep_match_mode" "$DEEP_MATCH_TEMP_ROOT_DIR" "$DEEP_MATCH_MANIFEST_DIR" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+summary_path = Path(sys.argv[1])
+payload = {
+    "deep_match_mode": sys.argv[2],
+    "deep_match_temp_root_dir": sys.argv[3] or None,
+    "deep_match_manifest_dir": sys.argv[4] or None,
+    "pairs": [],
+}
+summary_path.parent.mkdir(parents=True, exist_ok=True)
+summary_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+}
+
+append_deep_match_manifest_summary() {
+  local summary_path=$1
+  local pair_tag=$2
+  local metadata_path=$3
+  "$PYTHON_EXECUTABLE" - "$summary_path" "$pair_tag" "$metadata_path" "$deep_match_mode" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+summary_path = Path(sys.argv[1])
+pair_tag = sys.argv[2]
+metadata_path = Path(sys.argv[3])
+mode = sys.argv[4]
+
+payload = json.loads(summary_path.read_text(encoding="utf-8")) if summary_path.exists() else {"pairs": []}
+entry = {"pair_tag": pair_tag, "metadata_path": str(metadata_path), "deep_match_mode": mode}
+if metadata_path.exists():
+    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
+    section = metadata.get("deep_match_export") if mode == "export" else metadata.get("deep_match_import")
+    entry["status"] = metadata.get("status")
+    entry["point_count"] = metadata.get("point_count")
+    if isinstance(section, dict):
+        for key in ("manifest_path", "workspace_root", "results_dir", "logs_dir", "pair_id", "exported_task_count", "imported_task_count", "missing_result_count", "failed_task_count"):
+            if key in section:
+                entry[key] = section[key]
+else:
+    entry["status"] = "metadata_missing"
+
+payload.setdefault("pairs", []).append(entry)
+summary_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+}
+
 main() {
   local work_dir_input="$DEFAULT_WORK_DIR_RELATIVE"
   local original_list_input=""
@@ -172,6 +240,10 @@ main() {
   local explicit_invalid_pixel_radius=""
   local matcher_method="bf"
   local explicit_matcher_method=""
+  local deep_match_mode="direct"
+  local deep_match_temp_root_dir_input=""
+  local deep_match_manifest_dir_input=""
+  local deep_match_manifest_summary_input=""
   local enable_low_resolution_offset_estimation="0"
   local explicit_enable_low_resolution_offset_estimation=""
   local low_resolution_level="3"
@@ -267,6 +339,26 @@ main() {
         explicit_matcher_method=$2
         shift 2
         ;;
+      --deep-match-mode)
+        [[ $# -ge 2 ]] || die "missing value for --deep-match-mode"
+        deep_match_mode=$2
+        shift 2
+        ;;
+      --deep-match-temp-root-dir)
+        [[ $# -ge 2 ]] || die "missing value for --deep-match-temp-root-dir"
+        deep_match_temp_root_dir_input=$2
+        shift 2
+        ;;
+      --deep-match-manifest-dir)
+        [[ $# -ge 2 ]] || die "missing value for --deep-match-manifest-dir"
+        deep_match_manifest_dir_input=$2
+        shift 2
+        ;;
+      --deep-match-manifest-summary)
+        [[ $# -ge 2 ]] || die "missing value for --deep-match-manifest-summary"
+        deep_match_manifest_summary_input=$2
+        shift 2
+        ;;
       --enable-low-resolution-offset-estimation)
         enable_low_resolution_offset_estimation="1"
         explicit_enable_low_resolution_offset_estimation="1"
@@ -333,6 +425,17 @@ main() {
   MATCH_VIZ_DIR="${match_viz_dir_input:-$WORK_DIR/match_viz}"
   CONFIG_PATH="$config_input"
   VALID_PIXEL_PERCENT_THRESHOLD="$DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD"
+  DEEP_MATCH_TEMP_ROOT_DIR="${deep_match_temp_root_dir_input:-$WORK_DIR/deep_match_workspaces}"
+  DEEP_MATCH_MANIFEST_DIR="$deep_match_manifest_dir_input"
+  DEEP_MATCH_MANIFEST_SUMMARY="${deep_match_manifest_summary_input:-$WORK_DIR/deep_match_manifests.json}"
+
+  case "$deep_match_mode" in
+    direct|export|import) ;;
+    *) die "unsupported --deep-match-mode: $deep_match_mode" ;;
+  esac
+  if [[ "$deep_match_mode" == "import" && -z "$DEEP_MATCH_MANIFEST_DIR" ]]; then
+    die "--deep-match-mode import requires --deep-match-manifest-dir"
+  fi
 
   require_file "$ORIGINAL_LIST"
   require_file "$DOM_LIST"
@@ -342,6 +445,12 @@ main() {
   fi
 
   mkdir -p "$OUTPUT_KEY_DIR" "$METADATA_DIR" "$MATCH_VIZ_DIR"
+  if [[ "$deep_match_mode" == "export" ]]; then
+    mkdir -p "$DEEP_MATCH_TEMP_ROOT_DIR"
+  fi
+  if [[ "$deep_match_mode" != "direct" ]]; then
+    initialize_deep_match_manifest_summary "$DEEP_MATCH_MANIFEST_SUMMARY"
+  fi
 
   if [[ -n "$CONFIG_PATH" ]]; then
     config_threshold=$(extract_image_match_config_value "$config_input" "valid_pixel_percent_threshold")
@@ -431,6 +540,14 @@ main() {
   log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
   log "Invalid pixel radius: $invalid_pixel_radius"
   log "Matcher method: $matcher_method"
+  log "Deep-match mode: $deep_match_mode"
+  if [[ "$deep_match_mode" == "export" ]]; then
+    log "Deep-match temp root dir: $DEEP_MATCH_TEMP_ROOT_DIR"
+    log "Deep-match manifest summary: $DEEP_MATCH_MANIFEST_SUMMARY"
+  elif [[ "$deep_match_mode" == "import" ]]; then
+    log "Deep-match manifest dir: $DEEP_MATCH_MANIFEST_DIR"
+    log "Deep-match manifest summary: $DEEP_MATCH_MANIFEST_SUMMARY"
+  fi
   if [[ "$use_parallel_cpu" == "1" ]]; then
     log "CPU parallel tile matching: enabled"
     log "CPU parallel worker limit: $num_worker_parallel_cpu"
@@ -557,10 +674,21 @@ main() {
         --right-low-resolution-dom "${low_resolution_dom_by_original[$right]}"
       )
     fi
+    if [[ "$deep_match_mode" != "direct" ]]; then
+      match_args+=(--deep-match-mode "$deep_match_mode")
+      if [[ "$deep_match_mode" == "export" ]]; then
+        match_args+=(--deep-match-temp-root-dir "$DEEP_MATCH_TEMP_ROOT_DIR")
+      elif [[ "$deep_match_mode" == "import" ]]; then
+        match_args+=(--deep-match-manifest "$DEEP_MATCH_MANIFEST_DIR/${pair_tag}/tasks.json")
+      fi
+    fi
     if [[ ${#forwarded_args[@]} -gt 0 ]]; then
       match_args+=("${forwarded_args[@]}")
     fi
     "${match_args[@]}"
+    if [[ "$deep_match_mode" != "direct" ]]; then
+      append_deep_match_manifest_summary "$DEEP_MATCH_MANIFEST_SUMMARY" "$pair_tag" "$METADATA_DIR/${pair_tag}.json"
+    fi
 
     pair_count=$((pair_count + 1))
   done < "$PAIR_LIST"
@@ -569,6 +697,9 @@ main() {
     warn "no pairs were processed; check images_overlap.lis or use --skip-existing carefully"
   else
     log "Completed DOM matching for ${pair_count} pair(s)"
+  fi
+  if [[ "$deep_match_mode" != "direct" ]]; then
+    log "Deep-match manifest summary: $DEEP_MATCH_MANIFEST_SUMMARY"
   fi
 }
 

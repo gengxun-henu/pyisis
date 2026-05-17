@@ -39,6 +39,7 @@ Updated: 2026-05-10  Geng Xun added CLI execution-path coverage so from-ori-matc
 Updated: 2026-05-10  Geng Xun updated from-ori-match coverage to require a clean argparse-style CLI rejection without a traceback.
 Updated: 2026-05-10  Geng Xun updated from-ori-match coverage for full CLI dispatch into ori matching and direct ControlNet build.
 Updated: 2026-05-16  Geng Xun added wrapper coverage for deep-match manifest export handoff summaries.
+Updated: 2026-05-16  Geng Xun added pipeline wrapper coverage for adaptive-routing profile forwarding.
 """
 
 from __future__ import annotations
@@ -939,6 +940,16 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 "matcherMethod",
                                 "MatcherMethod",
                             ),
+                            "enable_adaptive_routing": (
+                                "enable_adaptive_routing",
+                                "enableAdaptiveRouting",
+                                "EnableAdaptiveRouting",
+                            ),
+                            "adaptive_routing_profile": (
+                                "adaptive_routing_profile",
+                                "adaptiveRoutingProfile",
+                                "AdaptiveRoutingProfile",
+                            ),
                             "enable_low_resolution_offset_estimation": (
                                 "enable_low_resolution_offset_estimation",
                                 "enableLowResolutionOffsetEstimation",
@@ -1002,7 +1013,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 value = container[key]
                                 if value is None or value == "":
                                     continue
-                                if field_name == "use_parallel_cpu":
+                                if field_name in {"use_parallel_cpu", "enable_adaptive_routing"}:
                                     if isinstance(value, bool):
                                         return "1" if value else "0"
                                     normalized = str(value).strip().lower()
@@ -1010,7 +1021,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                         return "1"
                                     if normalized in {{"0", "false", "no", "off"}}:
                                         return "0"
-                                    raise SystemExit(f"invalid use_parallel_cpu value: {{value!r}}")
+                                    raise SystemExit(f"invalid {{field_name}} value: {{value!r}}")
                                 return str(value)
                         return ""
 
@@ -1496,6 +1507,16 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 "matcherMethod",
                                 "MatcherMethod",
                             ),
+                            "enable_adaptive_routing": (
+                                "enable_adaptive_routing",
+                                "enableAdaptiveRouting",
+                                "EnableAdaptiveRouting",
+                            ),
+                            "adaptive_routing_profile": (
+                                "adaptive_routing_profile",
+                                "adaptiveRoutingProfile",
+                                "AdaptiveRoutingProfile",
+                            ),
                             "enable_low_resolution_offset_estimation": (
                                 "enable_low_resolution_offset_estimation",
                                 "enableLowResolutionOffsetEstimation",
@@ -1559,7 +1580,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 value = container[key]
                                 if value is None or value == "":
                                     continue
-                                if field_name == "use_parallel_cpu":
+                                if field_name in {"use_parallel_cpu", "enable_adaptive_routing"}:
                                     if isinstance(value, bool):
                                         return "1" if value else "0"
                                     normalized = str(value).strip().lower()
@@ -1567,7 +1588,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                         return "1"
                                     if normalized in {{"0", "false", "no", "off"}}:
                                         return "0"
-                                    raise SystemExit(f"invalid use_parallel_cpu value: {{value!r}}")
+                                    raise SystemExit(f"invalid {{field_name}} value: {{value!r}}")
                                 return str(value)
                         return ""
 
@@ -2082,6 +2103,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "PointIdPrefix": "TMP",
                         "ImageMatch": {
                             "invalid_pixel_radius": 3,
+                            "enable_adaptive_routing": True,
+                            "adaptive_routing_profile": "strict",
                             "enable_low_resolution_offset_estimation": True,
                             "low_resolution_level": 5,
                             "low_resolution_min_retained_match_count": 6,
@@ -2147,6 +2170,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "                'num_worker_parallel_cpu': image_match_config.get('num_worker_parallel_cpu', ''),",
                         "                'invalid_pixel_radius': image_match_config.get('invalid_pixel_radius', ''),",
                         "                'matcher_method': image_match_config.get('matcher_method', ''),",
+                        "                'enable_adaptive_routing': '1' if image_match_config.get('enable_adaptive_routing') else ('0' if image_match_config.get('enable_adaptive_routing') is False else ''),",
+                        "                'adaptive_routing_profile': image_match_config.get('adaptive_routing_profile', ''),",
                         "                'enable_low_resolution_offset_estimation': '1' if image_match_config.get('enable_low_resolution_offset_estimation') else '',",
                         "                'low_resolution_level': image_match_config.get('low_resolution_level', ''),",
                         "                'low_resolution_max_mean_reprojection_error_pixels': image_match_config.get('low_resolution_max_mean_reprojection_error_pixels', ''),",
@@ -2166,6 +2191,13 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "        radius = args[args.index('--invalid-pixel-radius') + 1]",
                         "        if radius != '3':",
                         "            raise SystemExit(f'unexpected invalid pixel radius: {radius}')",
+                        "        if '--adaptive-routing' not in args:",
+                        "            raise SystemExit('missing --adaptive-routing forwarding')",
+                        "        if '--adaptive-routing-profile' not in args:",
+                        "            raise SystemExit('missing --adaptive-routing-profile forwarding')",
+                        "        routing_profile = args[args.index('--adaptive-routing-profile') + 1]",
+                        "        if routing_profile != 'strict':",
+                        "            raise SystemExit(f'unexpected adaptive routing profile: {routing_profile}')",
                         "        if '--enable-low-resolution-offset-estimation' not in args:",
                         "            raise SystemExit('missing low-resolution enable flag')",
                         "        if '--low-resolution-level' not in args:",
@@ -2269,6 +2301,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
         self.assertIn("Invalid pixel radius: 3", completed.stdout)
+        self.assertIn("Adaptive routing: enabled", completed.stdout)
+        self.assertIn("Adaptive routing profile: strict", completed.stdout)
         self.assertIn("Low-resolution offset estimation: enabled", completed.stdout)
         self.assertIn("Low-resolution level: 5", completed.stdout)
 

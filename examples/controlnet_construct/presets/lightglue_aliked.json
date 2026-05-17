@@ -1,0 +1,22 @@
+{
+  "feature_extractor": {
+    "method": "aliked",
+    "max_keypoints": 4096,
+    "keypoint_threshold": 0.0005,
+    "remove_borders": 4
+  },
+  "matcher": {
+    "method": "lightglue",
+    "weights_path": null,
+    "flash": true,
+    "prune_threshold": 4
+  },
+  "device": {
+    "prefer_gpu": true,
+    "dtype": "float32",
+    "batch_inference": true
+  },
+  "fallback": {
+    "on_error": "sift_flann"
+  }
+}

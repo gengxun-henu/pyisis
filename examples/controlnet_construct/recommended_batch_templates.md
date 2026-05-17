@@ -266,13 +266,52 @@ python examples/image_match/image_match.py \
 
 ## 模板 3A：跨 conda deep-match handoff
 
-如果你想在 `controlnet_construct` 批量流程中使用 LightGlue / LoFTR / SuperGlue，但这些深度学习依赖只安装在 `deep-learning` conda 环境中，推荐使用三段式 handoff：
+如果你想在 `controlnet_construct` 批量流程中使用 LightGlue / LoFTR / SuperGlue，但这些深度学习依赖只安装在 `deep-learning` conda 环境中，**推荐使用一键包装脚本**，它会自动完成三段式 handoff（export → deep-learning → import），不需要你手动切 conda 环境。
 
-1. 在 `asp360_new` 中导出 manifest workspace。
-2. 切换到 `deep-learning`，执行 `examples/learning_methods/run_deep_match_manifest.py`。
-3. 回到 `asp360_new`，用 import 模式生成 `.key`，再继续 ControlNet。
+### 推荐方式：一键包装脚本
 
-只跑第 2 步批量 DOM 匹配时，可以这样导出：
+完整流水线（export → deep-learning 批量匹配 → import → ControlNet）：
+
+```bash
+bash examples/controlnet_construct/run_deep_match_pipeline.sh \
+  --work-dir work \
+  --matcher-method lightglue
+```
+
+仅 deep-match 段（不跑 ControlNet 后续步骤）：
+
+```bash
+bash examples/controlnet_construct/run_deep_match_pipeline.sh \
+  --mode deep-match-only \
+  --work-dir work \
+  --matcher-method loftr
+```
+
+恢复中断的流程（例如 deep-learning 已跑完，直接从 import 继续）：
+
+```bash
+bash examples/controlnet_construct/run_deep_match_pipeline.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --resume-from import
+```
+
+容错模式（某个像对失败后继续 import 已成功的结果）：
+
+```bash
+bash examples/controlnet_construct/run_deep_match_pipeline.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --continue-on-deep-failure
+```
+
+包装脚本通过 `conda run -n <env>` 切换环境，支持自定义环境名（`--asp360-env` / `--deep-learning-env`）、设备选择（`--device`）、跳过已有结果（`--skip-existing`）等。完整选项见 `--help`。
+
+### 手工三段式（fallback）
+
+如果你想手动控制每一步，三段式 handoff 仍然是：
+
+1. 在 `asp360_new` 中导出 manifest workspace：
 
 ```bash
 bash examples/controlnet_construct/run_image_match_batch_example.sh \
@@ -285,7 +324,7 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
   --no-write-match-visualization
 ```
 
-导出完成后，`work/deep_match_manifests.json` 会汇总每个 pair 的 `manifest_path`，方便你在 `deep-learning` 环境中逐个运行：
+2. 切换到 `deep-learning`，执行 `examples/learning_methods/run_deep_match_manifest.py`：
 
 ```bash
 python examples/learning_methods/run_deep_match_manifest.py \
@@ -293,7 +332,7 @@ python examples/learning_methods/run_deep_match_manifest.py \
   --device auto
 ```
 
-深度学习结果写回 `results/*.npz` 后，回到 `asp360_new` 导入：
+3. 回到 `asp360_new`，用 import 模式生成 `.key`，再继续 ControlNet：
 
 ```bash
 bash examples/controlnet_construct/run_image_match_batch_example.sh \

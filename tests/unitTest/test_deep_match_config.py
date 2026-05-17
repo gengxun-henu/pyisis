@@ -165,3 +165,45 @@ class TestDeepMatchConfigHelpers:
         sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
         from deep_match_config import require_deep_config
         require_deep_config("flann", None)
+
+
+class TestPresetFiles:
+    """Verify all preset files are valid JSON and pass validation."""
+
+    def _get_preset_files(self):
+        presets_dir = DEEP_MATCH_CONFIG_PATH.parent / "presets"
+        return sorted(presets_dir.glob("*.json"))
+
+    def test_all_presets_load_successfully(self):
+        """All preset files should load without errors."""
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import load_deep_match_config
+        for preset_path in self._get_preset_files():
+            config = load_deep_match_config(str(preset_path))
+            assert "feature_extractor" in config
+            assert "matcher" in config
+            assert config["matcher"]["method"] in ("superglue", "lightglue", "loftr")
+
+    def test_all_presets_have_fallback(self):
+        """All preset files should have a fallback configured."""
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import load_deep_match_config
+        for preset_path in self._get_preset_files():
+            config = load_deep_match_config(str(preset_path))
+            fallback = config.get("fallback")
+            assert fallback is not None, f"{preset_path.name} missing fallback config"
+            assert fallback.get("on_error") in ("sift_bf", "sift_flann"), \
+                f"{preset_path.name} has invalid fallback: {fallback.get('on_error')}"
+
+    def test_loftr_presets_use_loftr_extractor(self):
+        """LoFTR presets should have method=loftr for feature_extractor."""
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import load_deep_match_config
+        loftr_presets = [p for p in self._get_preset_files() if "loftr" in p.name]
+        for preset_path in loftr_presets:
+            config = load_deep_match_config(str(preset_path))
+            assert config["feature_extractor"]["method"] == "loftr"
+            assert config["matcher"]["method"] == "loftr"

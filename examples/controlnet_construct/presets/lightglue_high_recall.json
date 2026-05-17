@@ -1,0 +1,23 @@
+{
+  "feature_extractor": {
+    "method": "superpoint",
+    "max_keypoints": 8192,
+    "keypoint_threshold": 0.0001,
+    "remove_borders": 2,
+    "detect_keypoints": true
+  },
+  "matcher": {
+    "method": "lightglue",
+    "weights_path": null,
+    "flash": true,
+    "prune_threshold": 2
+  },
+  "device": {
+    "prefer_gpu": true,
+    "dtype": "float32",
+    "batch_inference": true
+  },
+  "fallback": {
+    "on_error": "sift_flann"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "feature_extractor": {
+    "method": "loftr"
+  },
+  "matcher": {
+    "method": "loftr",
+    "weights_path": null
+  },
+  "device": {
+    "prefer_gpu": true,
+    "dtype": "float32",
+    "batch_inference": false
+  },
+  "fallback": {
+    "on_error": "sift_flann"
+  }
+}

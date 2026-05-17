@@ -6,6 +6,7 @@
 # Created: 2026-05-11
 # Updated: 2026-05-11  Geng Xun added top-of-file metadata so example shell entrypoints follow the repository's example-file header convention.
 # Updated: 2026-05-16  Geng Xun added deep-match export/import handoff forwarding and export-mode pipeline stop behavior.
+# Updated: 2026-05-16  Geng Xun added adaptive-routing flag/profile forwarding for the latest image-match routing profiles.
 
 set -euo pipefail
 
@@ -286,6 +287,15 @@ Options:
                                  If omitted, this script falls back to
                                  config JSON field ImageMatch.matcher_method when present; otherwise
                                  examples/image_match/image_match.py keeps its own default.
+  --deep-match-config-path PATH   Path to deep matcher preset JSON config.
+                                  Required when --matcher-method is superglue, lightglue, or loftr.
+                                  Default: (read from config JSON)
+  --adaptive-routing              Enable image_match.py adaptive routing. If omitted, this script falls back to
+                                  config JSON field ImageMatch.enable_adaptive_routing when present; otherwise disabled.
+  --no-adaptive-routing           Disable image_match.py adaptive routing even if config enables it.
+  --adaptive-routing-profile NAME Forwarded to image_match.py as the named adaptive-routing quality profile.
+                                  Supported values: balanced, strict, relaxed, fast. If omitted, this script falls back
+                                  to config JSON field ImageMatch.adaptive_routing_profile when present; otherwise balanced.
   --deep-match-mode MODE          Deep-match execution mode forwarded to image_match.py: direct, export, or import.
                                   Default: direct. Export mode stops after Step 2 and writes manifest workspaces;
                                   import mode consumes completed per-pair manifests before continuing ControlNet steps.
@@ -690,6 +700,15 @@ run_step_2_image_match_batch() {
     fi
     match_args+=(--invalid-pixel-radius "$INVALID_PIXEL_RADIUS")
     match_args+=(--matcher-method "$MATCHER_METHOD")
+    if [[ -n "$DEEP_MATCHER_CONFIG_PATH" ]]; then
+      match_args+=(--deep-match-config-path "$DEEP_MATCHER_CONFIG_PATH")
+    fi
+    if [[ "$ADAPTIVE_ROUTING" == "1" ]]; then
+      match_args+=(--adaptive-routing)
+    else
+      match_args+=(--no-adaptive-routing)
+    fi
+    match_args+=(--adaptive-routing-profile "$ADAPTIVE_ROUTING_PROFILE")
     if [[ "$USE_PARALLEL_CPU" == "1" ]]; then
       match_args+=(--use-parallel-cpu)
     else
@@ -844,6 +863,8 @@ main() {
   local explicit_use_parallel_cpu=""
   local explicit_invalid_pixel_radius=""
   local explicit_matcher_method=""
+  local explicit_adaptive_routing=""
+  local explicit_adaptive_routing_profile=""
   local explicit_enable_low_resolution_offset_estimation=""
   local explicit_low_resolution_level=""
   local explicit_low_resolution_max_mean_reprojection_error_pixels=""
@@ -865,7 +886,10 @@ main() {
   VALID_PIXEL_PERCENT_THRESHOLD="$DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD"
   INVALID_PIXEL_RADIUS="$DEFAULT_INVALID_PIXEL_RADIUS"
   MATCHER_METHOD="bf"
+  ADAPTIVE_ROUTING="0"
+  ADAPTIVE_ROUTING_PROFILE="balanced"
   DEEP_MATCH_MODE="direct"
+  DEEP_MATCHER_CONFIG_PATH=""
   ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION="0"
   LOW_RESOLUTION_LEVEL="3"
   LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS="3.0"
@@ -954,9 +978,30 @@ main() {
         explicit_matcher_method=$2
         shift 2
         ;;
+      --adaptive-routing)
+        ADAPTIVE_ROUTING="1"
+        explicit_adaptive_routing="1"
+        shift
+        ;;
+      --no-adaptive-routing)
+        ADAPTIVE_ROUTING="0"
+        explicit_adaptive_routing="0"
+        shift
+        ;;
+      --adaptive-routing-profile)
+        [[ $# -ge 2 ]] || die "missing value for --adaptive-routing-profile"
+        ADAPTIVE_ROUTING_PROFILE=$2
+        explicit_adaptive_routing_profile=$2
+        shift 2
+        ;;
       --deep-match-mode)
         [[ $# -ge 2 ]] || die "missing value for --deep-match-mode"
         DEEP_MATCH_MODE=$2
+        shift 2
+        ;;
+      --deep-match-config-path)
+        [[ $# -ge 2 ]] || die "missing value for --deep-match-config-path"
+        DEEP_MATCHER_CONFIG_PATH=$2
         shift 2
         ;;
       --deep-match-temp-root-dir)
@@ -1195,6 +1240,54 @@ main() {
       MATCHER_METHOD="$config_matcher_method"
     fi
   fi
+  if [[ -z "$explicit_adaptive_routing" ]]; then
+    local config_enable_adaptive_routing
+    config_enable_adaptive_routing=$(extract_image_match_config_value "$CONFIG_PATH" "enable_adaptive_routing")
+    if [[ -n "$config_enable_adaptive_routing" ]]; then
+      ADAPTIVE_ROUTING="$config_enable_adaptive_routing"
+    fi
+  fi
+  if [[ -z "$explicit_adaptive_routing_profile" ]]; then
+    local config_adaptive_routing_profile
+    config_adaptive_routing_profile=$(extract_image_match_config_value "$CONFIG_PATH" "adaptive_routing_profile")
+    if [[ -n "$config_adaptive_routing_profile" ]]; then
+      ADAPTIVE_ROUTING_PROFILE="$config_adaptive_routing_profile"
+    fi
+  fi
+  if [[ -z "$DEEP_MATCHER_CONFIG_PATH" ]]; then
+    local config_deep_matcher_config_path
+    config_deep_matcher_config_path=$(extract_image_match_config_value "$CONFIG_PATH" "deep_matcher_config_path")
+    if [[ -n "$config_deep_matcher_config_path" && "$config_deep_matcher_config_path" != "null" ]]; then
+      DEEP_MATCHER_CONFIG_PATH="$config_deep_matcher_config_path"
+    fi
+  fi
+
+  # Validate: deep matchers require a config file
+  case "$MATCHER_METHOD" in
+    superglue|lightglue|loftr)
+      if [[ -z "$DEEP_MATCHER_CONFIG_PATH" ]]; then
+        die "matcher_method '$MATCHER_METHOD' is a deep matcher. You must specify deep_matcher_config_path in the config JSON or use --deep-match-config-path."
+      fi
+      if [[ ! -f "$DEEP_MATCHER_CONFIG_PATH" ]]; then
+        die "deep matcher config file not found: $DEEP_MATCHER_CONFIG_PATH"
+      fi
+      "$PYTHON_EXECUTABLE" - "$DEEP_MATCHER_CONFIG_PATH" "$REPO_ROOT" <<'PY'
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(sys.argv[2]) / "examples" / "controlnet_construct"))
+from deep_match_config import load_deep_match_config
+try:
+    load_deep_match_config(sys.argv[1])
+except ValueError as e:
+    print(f"ERROR: Invalid deep match config: {e}", file=sys.stderr)
+    sys.exit(1)
+PY
+      if [[ $? -ne 0 ]]; then
+        die "Deep match config validation failed for: $DEEP_MATCHER_CONFIG_PATH"
+      fi
+      ;;
+  esac
+
   if [[ -z "$explicit_enable_low_resolution_offset_estimation" ]]; then
     local config_enable_low_resolution_offset_estimation
     config_enable_low_resolution_offset_estimation=$(extract_image_match_config_value "$CONFIG_PATH" "enable_low_resolution_offset_estimation")
@@ -1293,6 +1386,15 @@ main() {
   fi
   log "Invalid pixel radius: $INVALID_PIXEL_RADIUS"
   log "Matcher method: $MATCHER_METHOD"
+  if [[ -n "$DEEP_MATCHER_CONFIG_PATH" ]]; then
+    log "Deep match config: $DEEP_MATCHER_CONFIG_PATH"
+  fi
+  if [[ "$ADAPTIVE_ROUTING" == "1" ]]; then
+    log "Adaptive routing: enabled"
+  else
+    log "Adaptive routing: disabled"
+  fi
+  log "Adaptive routing profile: $ADAPTIVE_ROUTING_PROFILE"
   log "Deep-match mode: $DEEP_MATCH_MODE"
   if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
     log "Deep-match temp root dir: $DEEP_MATCH_TEMP_ROOT_DIR"

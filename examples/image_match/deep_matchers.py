@@ -79,8 +79,12 @@ class SuperGlueMatcher:
         if left_keypoints.shape[0] <= 0 or right_keypoints.shape[0] <= 0:
             return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
 
-        left_scores = np.ones((left_keypoints.shape[0],), dtype=np.float32)
-        right_scores = np.ones((right_keypoints.shape[0],), dtype=np.float32)
+        left_scores = np.asarray((features_left or {}).get("scores", np.ones((left_keypoints.shape[0],), dtype=np.float32)), dtype=np.float32).reshape(-1)
+        right_scores = np.asarray((features_right or {}).get("scores", np.ones((right_keypoints.shape[0],), dtype=np.float32)), dtype=np.float32).reshape(-1)
+        if left_scores.shape[0] != left_keypoints.shape[0]:
+            left_scores = np.ones((left_keypoints.shape[0],), dtype=np.float32)
+        if right_scores.shape[0] != right_keypoints.shape[0]:
+            right_scores = np.ones((right_keypoints.shape[0],), dtype=np.float32)
         match_input = {
             "keypoints0": torch.from_numpy(left_keypoints)[None, :, :].to(self.device),
             "keypoints1": torch.from_numpy(right_keypoints)[None, :, :].to(self.device),
@@ -223,13 +227,26 @@ class LoFTRMatcher:
             self._matcher = kf.LoFTR(pretrained="outdoor").eval().to(self.device)
         return torch, self._matcher
 
-    def match(self, *, left_image: Any, right_image: Any, device: str = "cpu"):
+    def match(
+        self,
+        *,
+        left_image: Any,
+        right_image: Any,
+        left_mask: Any = None,
+        right_mask: Any = None,
+        device: str = "cpu",
+    ):
         torch, matcher = self._load_matcher()
         _ = device
         if left_image is None or right_image is None:
             return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
+        matcher_inputs = {"image0": left_image.to(self.device), "image1": right_image.to(self.device)}
+        if left_mask is not None:
+            matcher_inputs["mask0"] = left_mask.to(self.device)
+        if right_mask is not None:
+            matcher_inputs["mask1"] = right_mask.to(self.device)
         with torch.no_grad():
-            output = matcher({"image0": left_image.to(self.device), "image1": right_image.to(self.device)})
+            output = matcher(matcher_inputs)
         left_points = output["keypoints0"].detach().cpu().numpy().astype(np.float32, copy=False)
         right_points = output["keypoints1"].detach().cpu().numpy().astype(np.float32, copy=False)
         scores = output["confidence"].detach().cpu().numpy().astype(np.float32, copy=False)

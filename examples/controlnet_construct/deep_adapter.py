@@ -16,6 +16,39 @@ from .deep_frontends import DeepDependencyError, LoFTRFrontend, SuperPointFronte
 from .deep_matchers import DeepMatchResult, DeepMatcherError, build_deep_matcher
 
 
+def _valid_mask_keep(points: np.ndarray, invalid_mask: np.ndarray | None) -> np.ndarray:
+    if points.size <= 0:
+        return np.zeros((0,), dtype=bool)
+    if invalid_mask is None:
+        return np.ones((points.shape[0],), dtype=bool)
+    mask = np.asarray(invalid_mask, dtype=bool)
+    height, width = mask.shape[:2]
+    rounded_x = np.rint(points[:, 0]).astype(np.int64, copy=False)
+    rounded_y = np.rint(points[:, 1]).astype(np.int64, copy=False)
+    inside = (rounded_x >= 0) & (rounded_x < width) & (rounded_y >= 0) & (rounded_y < height)
+    keep = np.zeros((points.shape[0],), dtype=bool)
+    keep[inside] = ~mask[rounded_y[inside], rounded_x[inside]]
+    return keep
+
+
+def _filter_feature_dict_by_invalid_mask(features: Any, invalid_mask: np.ndarray | None) -> dict[str, Any]:
+    feature_map = dict(features or {})
+    keypoints = np.asarray(feature_map.get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32).reshape(-1, 2)
+    keep = _valid_mask_keep(keypoints, invalid_mask)
+    filtered: dict[str, Any] = {}
+    for key, value in feature_map.items():
+        if key == "keypoints":
+            filtered[key] = keypoints[keep].astype(np.float32, copy=False)
+            continue
+        array = np.asarray(value)
+        if array.ndim > 0 and array.shape[0] == keypoints.shape[0]:
+            filtered[key] = array[keep]
+            continue
+        filtered[key] = value
+    filtered.setdefault("keypoints", keypoints[keep].astype(np.float32, copy=False))
+    return filtered
+
+
 class DeepMatcherAdapter:
     def __init__(self, *, prefer_gpu: bool = True) -> None:
         self._device = resolve_torch_device(prefer_gpu)
@@ -42,6 +75,8 @@ class DeepMatcherAdapter:
         matcher_method: str,
         left_image: Any,
         right_image: Any,
+        left_mask: np.ndarray | None = None,
+        right_mask: np.ndarray | None = None,
         device: str,
     ) -> DeepMatchResult:
         method = normalize_deep_method(matcher_method)
@@ -49,6 +84,8 @@ class DeepMatcherAdapter:
             if method in ("superglue", "lightglue"):
                 features_left = self._superpoint.extract(left_image, device=device)
                 features_right = self._superpoint.extract(right_image, device=device)
+                features_left = _filter_feature_dict_by_invalid_mask(features_left, left_mask)
+                features_right = _filter_feature_dict_by_invalid_mask(features_right, right_mask)
                 matcher = self._get_cached_matcher(method=method, device=device)
                 left_points, right_points, scores = matcher.match(
                     features_left=features_left,
@@ -56,11 +93,19 @@ class DeepMatcherAdapter:
                     device=device,
                 )
             else:
-                prepared = self._loftr_frontend.prepare(left_image, right_image, device=device)
+                prepared = self._loftr_frontend.prepare(
+                    left_image,
+                    right_image,
+                    device=device,
+                    left_mask=left_mask,
+                    right_mask=right_mask,
+                )
                 matcher = self._get_cached_matcher(method=method, device=device)
                 left_points, right_points, scores = matcher.match(
                     left_image=prepared["left"],
                     right_image=prepared["right"],
+                    left_mask=prepared.get("left_mask"),
+                    right_mask=prepared.get("right_mask"),
                     device=device,
                 )
         except DeepDependencyError as error:
@@ -100,11 +145,21 @@ class DeepMatcherAdapter:
             return DeepDependencyError(method, reason)
         return None
 
-    def match_pair(self, *, matcher_method: str, left_image: Any, right_image: Any) -> DeepMatchResult:
+    def match_pair(
+        self,
+        *,
+        matcher_method: str,
+        left_image: Any,
+        right_image: Any,
+        left_mask: np.ndarray | None = None,
+        right_mask: np.ndarray | None = None,
+    ) -> DeepMatchResult:
         return self._match_pair_on_device(
             matcher_method=matcher_method,
             left_image=left_image,
             right_image=right_image,
+            left_mask=left_mask,
+            right_mask=right_mask,
             device=self._device,
         )
 
@@ -114,6 +169,8 @@ class DeepMatcherAdapter:
         matcher_method: str,
         left_image: Any,
         right_image: Any,
+        left_mask: np.ndarray | None = None,
+        right_mask: np.ndarray | None = None,
         prefer_gpu: bool,
     ) -> DeepMatchResult:
         method = normalize_deep_method(matcher_method)
@@ -123,6 +180,8 @@ class DeepMatcherAdapter:
                 matcher_method=method,
                 left_image=left_image,
                 right_image=right_image,
+                left_mask=left_mask,
+                right_mask=right_mask,
                 device=primary_device,
             )
         except (DeepDependencyError, DeepMatcherError):
@@ -135,6 +194,8 @@ class DeepMatcherAdapter:
                 matcher_method=fallback_method,
                 left_image=left_image,
                 right_image=right_image,
+                left_mask=left_mask,
+                right_mask=right_mask,
                 device=resolve_torch_device(False),
             )
 

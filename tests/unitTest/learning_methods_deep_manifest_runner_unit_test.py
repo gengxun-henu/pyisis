@@ -78,10 +78,12 @@ class FakeDeepMatcherAdapter:
         self.prefer_gpu = prefer_gpu
         self._device = "cuda" if prefer_gpu else "cpu"
 
-    def match_pair(self, *, matcher_method: str, left_image, right_image):
+    def match_pair(self, *, matcher_method: str, left_image, right_image, left_mask=None, right_mask=None):
         self.matcher_method = matcher_method
         self.left_shape = tuple(left_image.shape)
         self.right_shape = tuple(right_image.shape)
+        self.left_mask_shape = None if left_mask is None else tuple(left_mask.shape)
+        self.right_mask_shape = None if right_mask is None else tuple(right_mask.shape)
         return SimpleNamespace(
             left_keypoints=(np.array([1.0, 1.0]), np.array([4.0, 4.0]), np.array([7.0, 7.0])),
             right_keypoints=(np.array([2.0, 2.0]), np.array([5.0, 5.0]), np.array([7.0, 7.0])),
@@ -160,6 +162,49 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
             np.testing.assert_allclose(result["right_points"], np.array([[2.0, 2.0], [7.0, 7.0]], dtype=np.float32))
             np.testing.assert_allclose(result["scores"], np.array([0.9, 0.7], dtype=np.float32), rtol=1e-6)
             self.assertTrue(Path(record.log_path).exists())
+
+    def test_run_manifest_passes_invalid_masks_into_adapter(self):
+        with temporary_directory() as temp_dir:
+            manifest = build_deep_match_pair_manifest(
+                tasks=[_make_tile_task()],
+                left_dom_path="left_dom.cub",
+                right_dom_path="right_dom.cub",
+                matcher_method="lightglue",
+                band=1,
+                image_space="dom",
+                temp_root_dir=Path(temp_dir) / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                requested_device="cpu",
+                created_at_utc="2026-05-16T00:00:00Z",
+            )
+            record = manifest.tasks[0]
+            left_mask = np.zeros((8, 8), dtype=bool)
+            right_mask = np.zeros((8, 8), dtype=bool)
+            left_mask[2, 2] = True
+            right_mask[6, 6] = True
+            write_deep_match_task_arrays(
+                record,
+                left_image=np.arange(64, dtype=np.uint8).reshape(8, 8),
+                right_image=np.arange(64, dtype=np.uint8).reshape(8, 8),
+                left_mask=left_mask,
+                right_mask=right_mask,
+            )
+            manifest_path = write_deep_match_pair_manifest(manifest)
+            created_adapters: list[FakeDeepMatcherAdapter] = []
+
+            def _adapter_factory(*, prefer_gpu: bool):
+                adapter = FakeDeepMatcherAdapter(prefer_gpu=prefer_gpu)
+                created_adapters.append(adapter)
+                return adapter
+
+            run_manifest(
+                manifest_path,
+                device="cpu",
+                adapter_factory=_adapter_factory,
+            )
+
+            self.assertEqual(len(created_adapters), 1)
+            self.assertEqual(created_adapters[0].left_mask_shape, (8, 8))
+            self.assertEqual(created_adapters[0].right_mask_shape, (8, 8))
 
 
 if __name__ == "__main__":

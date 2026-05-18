@@ -8,6 +8,7 @@ Updated: 2026-05-14  Geng Xun added focused coverage for match-quality gating an
 Updated: 2026-05-14  Geng Xun added sidecar serialization coverage for quality reports and final decisions.
 Updated: 2026-05-14  Geng Xun clarified the interpolated p95 quality-gate regression so the expected accepted case also passes the mean-residual gate.
 Updated: 2026-05-16  Geng Xun added coverage for named adaptive-routing quality profiles.
+Updated: 2026-05-18  Geng Xun added focused coverage for the sparseness/lighting-aware conservative router and the sidecar diagnostics augmenter.
 """
 
 from __future__ import annotations
@@ -328,6 +329,108 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertIsNone(action["next_matcher"])
         self.assertEqual(action["selected_matcher"], "lightglue")
         self.assertEqual(action["stop_reason"], "quality_accepted")
+
+
+class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
+    def test_route_matcher_for_pair_with_sparseness_picks_bf_for_low_signals(self):
+        from image_match.adaptive_routing import (
+            SIFT_ROUTED_MATCHER_METHOD,
+            route_matcher_for_pair_with_sparseness,
+        )
+
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.15,
+            lighting_difference_score=0.10,
+        )
+
+        self.assertEqual(decision.initial_matcher, SIFT_ROUTED_MATCHER_METHOD)
+        self.assertIn("rich texture", decision.route_reason)
+        self.assertEqual(decision.fallback_chain, ("lightglue", "loftr"))
+
+    def test_route_matcher_for_pair_with_sparseness_picks_loftr_for_high_sparseness(self):
+        from image_match.adaptive_routing import (
+            LOFTR_MATCHER_METHOD,
+            route_matcher_for_pair_with_sparseness,
+        )
+
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.80,
+            lighting_difference_score=0.10,
+        )
+
+        self.assertEqual(decision.initial_matcher, LOFTR_MATCHER_METHOD)
+        self.assertEqual(decision.fallback_chain, ())
+
+    def test_route_matcher_for_pair_with_sparseness_picks_loftr_for_high_lighting(self):
+        from image_match.adaptive_routing import (
+            LOFTR_MATCHER_METHOD,
+            route_matcher_for_pair_with_sparseness,
+        )
+
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.15,
+            lighting_difference_score=0.70,
+        )
+
+        self.assertEqual(decision.initial_matcher, LOFTR_MATCHER_METHOD)
+
+    def test_route_matcher_for_pair_with_sparseness_picks_lightglue_in_middle(self):
+        from image_match.adaptive_routing import (
+            LIGHTGLUE_MATCHER_METHOD,
+            route_matcher_for_pair_with_sparseness,
+        )
+
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.50,
+            lighting_difference_score=0.30,
+        )
+
+        self.assertEqual(decision.initial_matcher, LIGHTGLUE_MATCHER_METHOD)
+        self.assertEqual(decision.fallback_chain, ("loftr",))
+
+    def test_route_matcher_for_pair_with_sparseness_falls_back_when_both_missing(self):
+        from image_match.adaptive_routing import (
+            LIGHTGLUE_MATCHER_METHOD,
+            route_matcher_for_pair_with_sparseness,
+        )
+
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=None,
+            lighting_difference_score=None,
+        )
+
+        self.assertEqual(decision.initial_matcher, LIGHTGLUE_MATCHER_METHOD)
+        self.assertIn("unavailable", decision.route_reason)
+
+    def test_augment_pair_probe_sidecar_keeps_schema_shape(self):
+        from image_match.adaptive_routing import (
+            augment_pair_probe_sidecar_with_sparseness_lighting,
+        )
+
+        base_sidecar = {"pair_route": {"initial_matcher": "loftr"}}
+        augmented = augment_pair_probe_sidecar_with_sparseness_lighting(
+            base_sidecar,
+            pair_sparseness_summary={"pair_texture_sparseness": 0.42, "weaker_side": "left"},
+            lighting_difference_summary={"lighting_difference_score": 0.18, "reason": "test"},
+            routing_thresholds={"sparseness_low": 0.35, "sparseness_high": 0.65},
+        )
+
+        self.assertEqual(augmented["pair_route"], {"initial_matcher": "loftr"})
+        self.assertEqual(augmented["texture_sparseness"]["pair_texture_sparseness"], 0.42)
+        self.assertEqual(augmented["lighting_difference"]["lighting_difference_score"], 0.18)
+        self.assertEqual(augmented["routing_thresholds"]["sparseness_low"], 0.35)
+        # Original sidecar must not be mutated in place.
+        self.assertNotIn("texture_sparseness", base_sidecar)
+
+    def test_augment_pair_probe_sidecar_defaults_to_empty_diagnostics(self):
+        from image_match.adaptive_routing import (
+            augment_pair_probe_sidecar_with_sparseness_lighting,
+        )
+
+        augmented = augment_pair_probe_sidecar_with_sparseness_lighting({"a": 1})
+
+        self.assertEqual(augmented["texture_sparseness"], {})
+        self.assertEqual(augmented["lighting_difference"], {})
 
 
 if __name__ == "__main__":

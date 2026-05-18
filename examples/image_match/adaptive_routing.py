@@ -7,6 +7,8 @@ Updated: 2026-05-14  Geng Xun added pure match-quality gating and fixed cascade 
 Updated: 2026-05-14  Geng Xun allowed adaptive sidecars to serialize quality reports and final decisions directly.
 Updated: 2026-05-16  Geng Xun added named adaptive-routing quality profiles for user-facing route tuning.
 Updated: 2026-05-18  Geng Xun added a conservative pair router that combines pair-level texture sparseness with lighting-difference scores plus a sidecar augmentation helper.
+Updated: 2026-05-19  Geng Xun added optional nested tile diagnostics to the
+    sparseness/lighting sidecar augmenter.
 """
 
 from __future__ import annotations
@@ -747,6 +749,7 @@ def augment_pair_probe_sidecar_with_sparseness_lighting(
     *,
     pair_sparseness_summary: dict[str, Any] | None = None,
     lighting_difference_summary: dict[str, Any] | None = None,
+    tile_diagnostics_summary: dict[str, Any] | None = None,
     routing_thresholds: dict[str, float] | None = None,
 ) -> dict[str, Any]:
     """Add texture-sparseness and lighting-difference diagnostics to a sidecar.
@@ -758,6 +761,8 @@ def augment_pair_probe_sidecar_with_sparseness_lighting(
     augmented = dict(sidecar)
     augmented["texture_sparseness"] = _json_ready(pair_sparseness_summary or {})
     augmented["lighting_difference"] = _json_ready(lighting_difference_summary or {})
+    if tile_diagnostics_summary is not None:
+        augmented["tile_diagnostics"] = _json_ready(tile_diagnostics_summary)
     if routing_thresholds:
         augmented["routing_thresholds"] = _json_ready(routing_thresholds)
     return augmented

@@ -5,6 +5,8 @@ Created: 2026-05-18
 Updated: 2026-05-18  Geng Xun added tile-level texture sparseness, image-level P90
     aggregation, and pair weak-side aggregation with a lightweight 16-level GLCM
     implementation, SIFT density, and gradient-magnitude sub-scores.
+Updated: 2026-05-19  Geng Xun added reader-based tile texture sparseness
+    diagnostics so callers can avoid full-band cube reads.
 
 The semantic convention is "0 = texture-rich, 1 = texture-sparse" so a higher
 sparseness score means a harder image for descriptor-based matching. This is
@@ -15,6 +17,7 @@ that mix the two should keep them clearly named.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
@@ -347,6 +350,42 @@ def _interpolated_quantile(values: list[float], quantile: float) -> float:
     return float(sorted_values[lower_index] + (sorted_values[upper_index] - sorted_values[lower_index]) * fraction)
 
 
+def _build_image_sparseness_summary(
+    *,
+    tile_total_count: int,
+    tile_metrics: list[TileSparsenessMetrics],
+    tile_size: int,
+    tile_step: int,
+    min_valid_pixel_ratio: float,
+    aggregation_quantile: float,
+    keep_tile_metrics: bool,
+) -> ImageSparsenessSummary:
+    if tile_metrics:
+        sparseness_values = [metric.texture_sparseness for metric in tile_metrics]
+        image_sparseness = _interpolated_quantile(sparseness_values, aggregation_quantile)
+        sparseness_quantiles = {
+            "p10": _interpolated_quantile(sparseness_values, 0.10),
+            "p50": _interpolated_quantile(sparseness_values, 0.50),
+            "p90": _interpolated_quantile(sparseness_values, 0.90),
+            "max": max(sparseness_values),
+        }
+    else:
+        image_sparseness = None
+        sparseness_quantiles = {"p10": None, "p50": None, "p90": None, "max": None}
+
+    return ImageSparsenessSummary(
+        tile_total_count=tile_total_count,
+        tile_valid_count=len(tile_metrics),
+        tile_size=int(tile_size),
+        tile_step=int(tile_step),
+        min_valid_pixel_ratio=float(min_valid_pixel_ratio),
+        aggregation_quantile=float(aggregation_quantile),
+        image_texture_sparseness=image_sparseness,
+        sparseness_quantiles=sparseness_quantiles,
+        tile_metrics=tuple(tile_metrics) if keep_tile_metrics else (),
+    )
+
+
 def compute_image_texture_sparseness(
     image_values: Any,
     *,
@@ -396,29 +435,107 @@ def compute_image_texture_sparseness(
         if metrics is not None:
             tile_metrics.append(metrics)
 
-    if tile_metrics:
-        sparseness_values = [metric.texture_sparseness for metric in tile_metrics]
-        image_sparseness = _interpolated_quantile(sparseness_values, aggregation_quantile)
-        sparseness_quantiles = {
-            "p10": _interpolated_quantile(sparseness_values, 0.10),
-            "p50": _interpolated_quantile(sparseness_values, 0.50),
-            "p90": _interpolated_quantile(sparseness_values, 0.90),
-            "max": max(sparseness_values),
-        }
-    else:
-        image_sparseness = None
-        sparseness_quantiles = {"p10": None, "p50": None, "p90": None, "max": None}
-
-    return ImageSparsenessSummary(
+    return _build_image_sparseness_summary(
         tile_total_count=len(windows),
-        tile_valid_count=len(tile_metrics),
-        tile_size=int(tile_size),
-        tile_step=int(tile_step),
-        min_valid_pixel_ratio=float(min_valid_pixel_ratio),
-        aggregation_quantile=float(aggregation_quantile),
-        image_texture_sparseness=image_sparseness,
-        sparseness_quantiles=sparseness_quantiles,
-        tile_metrics=tuple(tile_metrics) if keep_tile_metrics else (),
+        tile_metrics=tile_metrics,
+        tile_size=tile_size,
+        tile_step=tile_step,
+        min_valid_pixel_ratio=min_valid_pixel_ratio,
+        aggregation_quantile=aggregation_quantile,
+        keep_tile_metrics=keep_tile_metrics,
+    )
+
+
+def compute_image_texture_sparseness_from_reader(
+    *,
+    image_width: int,
+    image_height: int,
+    read_window: Callable[[int, int, int, int], Any],
+    invalid_mask_reader: Callable[[int, int, int, int], Any] | None = None,
+    tile_size: int = DEFAULT_TILE_SIZE,
+    tile_step: int = DEFAULT_TILE_STEP,
+    min_valid_pixel_ratio: float = DEFAULT_MIN_VALID_PIXEL_RATIO,
+    aggregation_quantile: float = DEFAULT_IMAGE_AGGREGATION_QUANTILE,
+    glcm_levels: int = DEFAULT_GLCM_LEVELS,
+    glcm_distance: int = DEFAULT_GLCM_DISTANCE,
+    glcm_angle_radians: float = DEFAULT_GLCM_ANGLE_RADIANS,
+    sift_max_features: int | None = 500,
+    sift_contrast_threshold: float = 0.04,
+    keep_tile_metrics: bool = True,
+) -> ImageSparsenessSummary:
+    """Compute image texture sparseness by reading one analysis tile at a time."""
+
+    windows = generate_tile_windows(
+        int(image_height),
+        int(image_width),
+        tile_size=tile_size,
+        tile_step=tile_step,
+    )
+
+    sift_kwargs: dict[str, int | float] = {"contrastThreshold": float(sift_contrast_threshold)}
+    if sift_max_features is not None:
+        sift_kwargs["nfeatures"] = int(sift_max_features)
+    sift_detector = cv2.SIFT_create(**sift_kwargs)
+
+    tile_metrics: list[TileSparsenessMetrics] = []
+    for start_y, start_x, height, width in windows:
+        tile_values = np.asarray(
+            read_window(start_x, start_y, width, height),
+            dtype=np.float32,
+        )
+        if tile_values.shape != (height, width):
+            raise ValueError("read_window must return an array matching the requested tile shape.")
+        invalid_mask = None
+        if invalid_mask_reader is not None:
+            invalid_mask = np.asarray(
+                invalid_mask_reader(start_x, start_y, width, height),
+                dtype=bool,
+            )
+            if invalid_mask.shape != tile_values.shape:
+                raise ValueError("invalid_mask_reader must return an array matching the requested tile shape.")
+        normalized, valid_mask = _normalize_image_to_uint8(tile_values, invalid_mask=invalid_mask)
+        metrics = _compute_tile_metrics(
+            normalized,
+            valid_mask,
+            sift_detector=sift_detector,
+            start_y=0,
+            start_x=0,
+            height=height,
+            width=width,
+            min_valid_pixel_ratio=min_valid_pixel_ratio,
+            glcm_levels=glcm_levels,
+            glcm_distance=glcm_distance,
+            glcm_angle_radians=glcm_angle_radians,
+        )
+        if metrics is not None:
+            tile_metrics.append(
+                TileSparsenessMetrics(
+                    start_x=int(start_x),
+                    start_y=int(start_y),
+                    width=metrics.width,
+                    height=metrics.height,
+                    valid_pixel_count=metrics.valid_pixel_count,
+                    valid_pixel_ratio=metrics.valid_pixel_ratio,
+                    sift_keypoint_count=metrics.sift_keypoint_count,
+                    sift_keypoint_density=metrics.sift_keypoint_density,
+                    mean_gradient=metrics.mean_gradient,
+                    glcm_contrast=metrics.glcm_contrast,
+                    glcm_energy=metrics.glcm_energy,
+                    sift_sparseness_subscore=metrics.sift_sparseness_subscore,
+                    gradient_sparseness_subscore=metrics.gradient_sparseness_subscore,
+                    glcm_sparseness_subscore=metrics.glcm_sparseness_subscore,
+                    texture_sparseness=metrics.texture_sparseness,
+                )
+            )
+
+    return _build_image_sparseness_summary(
+        tile_total_count=len(windows),
+        tile_metrics=tile_metrics,
+        tile_size=tile_size,
+        tile_step=tile_step,
+        min_valid_pixel_ratio=min_valid_pixel_ratio,
+        aggregation_quantile=aggregation_quantile,
+        keep_tile_metrics=keep_tile_metrics,
     )
 
 
@@ -489,6 +606,7 @@ __all__ = [
     "TileSparsenessMetrics",
     "aggregate_pair_texture_sparseness",
     "compute_image_texture_sparseness",
+    "compute_image_texture_sparseness_from_reader",
     "compute_lightweight_glcm",
     "generate_tile_windows",
     "image_summary_to_diagnostic_dict",

@@ -783,6 +783,8 @@ def _match_tile_from_window_values(
             matcher_method=resolved_matcher_method,
             left_image=left_image,
             right_image=right_image,
+            left_mask=left_mask,
+            right_mask=right_mask,
             prefer_gpu=use_gpu,
         )
         left_keypoints = deep_match_result.left_keypoints

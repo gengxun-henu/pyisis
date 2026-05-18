@@ -41,6 +41,8 @@ Updated: 2026-05-14  Geng Xun added an optional adaptive-routing prepass that ca
 Updated: 2026-05-14  Geng Xun wired adaptive fallback cascade execution through post-match quality gating and persisted cascade diagnostics.
 Updated: 2026-05-16  Geng Xun added deep-match result import mode to convert manifest NPZ outputs back into `.key` files.
 Updated: 2026-05-16  Geng Xun added named adaptive-routing profiles that expand to quality-gate thresholds in metadata.
+Updated: 2026-05-19  Geng Xun routed adaptive texture-sparseness diagnostics through
+    tile-window readers instead of full-band cube reads.
 """
 
 from __future__ import annotations
@@ -84,9 +86,10 @@ if __package__ in {None, ""}:
     )
     from image_match.texture_sparseness import (
         aggregate_pair_texture_sparseness,
-        compute_image_texture_sparseness,
+        compute_image_texture_sparseness_from_reader,
         pair_summary_to_diagnostic_dict,
     )
+    from image_match.tiling import TileWindow
     from image_match.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from image_match.deep_match_manifest import (
         DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
@@ -158,9 +161,10 @@ else:
     )
     from .texture_sparseness import (
         aggregate_pair_texture_sparseness,
-        compute_image_texture_sparseness,
+        compute_image_texture_sparseness_from_reader,
         pair_summary_to_diagnostic_dict,
     )
+    from .tiling import TileWindow
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from .deep_match_manifest import (
         DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
@@ -1199,16 +1203,37 @@ def _compute_texture_sparseness_and_geometry_from_cube_path(
     cube = ip.Cube()
     cube.open(str(cube_path), "r")
     try:
-        values = _read_full_cube_band(cube, band=band)
         resolved_invalid_values = _resolved_invalid_values_for_cube(cube, invalid_values)
-        invalid_mask, _ = summarize_valid_pixels(
-            values,
-            invalid_values=resolved_invalid_values,
-            special_pixel_abs_threshold=special_pixel_abs_threshold,
-        )
-        sparseness_summary = compute_image_texture_sparseness(
-            values,
-            invalid_mask=invalid_mask,
+
+        window_value_cache: dict[tuple[int, int, int, int], np.ndarray] = {}
+
+        def read_window(start_x: int, start_y: int, width: int, height: int) -> np.ndarray:
+            key = (int(start_x), int(start_y), int(width), int(height))
+            values = _read_cube_window(
+                cube,
+                TileWindow(start_x=key[0], start_y=key[1], width=key[2], height=key[3]),
+                band=band,
+            )
+            window_value_cache[key] = values
+            return values
+
+        def read_invalid_mask(start_x: int, start_y: int, width: int, height: int) -> np.ndarray:
+            key = (int(start_x), int(start_y), int(width), int(height))
+            values = window_value_cache.get(key)
+            if values is None:
+                values = read_window(*key)
+            invalid_mask, _ = summarize_valid_pixels(
+                values,
+                invalid_values=resolved_invalid_values,
+                special_pixel_abs_threshold=special_pixel_abs_threshold,
+            )
+            return invalid_mask
+
+        sparseness_summary = compute_image_texture_sparseness_from_reader(
+            image_width=cube.sample_count(),
+            image_height=cube.line_count(),
+            read_window=read_window,
+            invalid_mask_reader=read_invalid_mask,
         )
         solar_geometry = None
         solar_error: str | None = None
@@ -1324,6 +1349,12 @@ def _resolve_adaptive_route_for_pair(
         )
         sparseness_diagnostic_for_sidecar = sparseness_lighting_diagnostics.get("texture_sparseness")
         lighting_diagnostic_for_sidecar = sparseness_lighting_diagnostics.get("lighting_difference")
+        tile_diagnostics_for_sidecar = None
+        if isinstance(sparseness_diagnostic_for_sidecar, dict):
+            tile_diagnostics_for_sidecar = {
+                "texture_sparseness": sparseness_diagnostic_for_sidecar,
+                "lighting": {},
+            }
         sidecar_payload = augment_pair_probe_sidecar_with_sparseness_lighting(
             sidecar_payload,
             pair_sparseness_summary=(
@@ -1336,6 +1367,7 @@ def _resolve_adaptive_route_for_pair(
                 if isinstance(lighting_diagnostic_for_sidecar, dict)
                 else None
             ),
+            tile_diagnostics_summary=tile_diagnostics_for_sidecar,
         )
         return route_decision.initial_matcher, {
             "enabled": True,

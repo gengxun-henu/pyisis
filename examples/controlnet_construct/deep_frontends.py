@@ -107,7 +107,14 @@ class LoFTRFrontend:
     def __init__(self) -> None:
         self._torch = None
 
-    def prepare(self, left_image, right_image, device: str):
+    def prepare(
+        self,
+        left_image,
+        right_image,
+        device: str,
+        left_mask: np.ndarray | None = None,
+        right_mask: np.ndarray | None = None,
+    ):
         try:
             import torch
         except Exception:
@@ -127,6 +134,8 @@ class LoFTRFrontend:
         return {
             "left": self._as_tensor(left_image, device=device),
             "right": self._as_tensor(right_image, device=device),
+            "left_mask": self._as_mask_tensor(left_mask, device=device),
+            "right_mask": self._as_mask_tensor(right_mask, device=device),
         }
 
     def _as_tensor(self, image, *, device: str):
@@ -145,6 +154,12 @@ class LoFTRFrontend:
         if scale > 0.0:
             image_plane = image_plane / scale
         return self._torch.from_numpy(image_plane).to(dtype=self._torch.float32)[None, None, :, :].to(device)
+
+    def _as_mask_tensor(self, invalid_mask, *, device: str):
+        if invalid_mask is None:
+            return None
+        mask_array = ~np.asarray(invalid_mask, dtype=bool)
+        return self._torch.from_numpy(mask_array)[None, :, :].to(device)
 
 
 def normalize_deep_method(method: str) -> str:

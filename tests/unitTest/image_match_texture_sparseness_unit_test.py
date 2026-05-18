@@ -2,10 +2,11 @@
 
 Author: Geng Xun
 Created: 2026-05-18
-Last Modified: 2026-05-18
+Last Modified: 2026-05-19
 Updated: 2026-05-18  Geng Xun added focused coverage for tile-window generation,
     lightweight GLCM contrast/energy, invalid-tile filtering, image-level P90
     aggregation, and pair-level weak-side aggregation.
+Updated: 2026-05-19  Geng Xun added reader-based texture sparseness coverage.
 """
 
 from __future__ import annotations
@@ -27,6 +28,7 @@ from image_match.texture_sparseness import (  # noqa: E402  (sys.path manipulate
     PairSparsenessSummary,
     aggregate_pair_texture_sparseness,
     compute_image_texture_sparseness,
+    compute_image_texture_sparseness_from_reader,
     compute_lightweight_glcm,
     generate_tile_windows,
 )
@@ -125,6 +127,60 @@ class ImageMatchTextureSparsenessUnitTest(unittest.TestCase):
 
         self.assertIsNone(summary.image_texture_sparseness)
         self.assertEqual(summary.tile_valid_count, 0)
+
+    def test_compute_image_texture_sparseness_from_reader_uses_tile_windows(self):
+        source = _random_image(384, 384)
+        calls = []
+
+        def read_window(start_x: int, start_y: int, width: int, height: int) -> np.ndarray:
+            calls.append((start_x, start_y, width, height))
+            return source[start_y : start_y + height, start_x : start_x + width]
+
+        summary = compute_image_texture_sparseness_from_reader(
+            image_width=384,
+            image_height=384,
+            read_window=read_window,
+            tile_size=128,
+            tile_step=128,
+        )
+
+        self.assertIsNotNone(summary.image_texture_sparseness)
+        self.assertEqual(summary.tile_total_count, 9)
+        self.assertEqual(len(calls), 9)
+        self.assertIn((0, 0, 128, 128), calls)
+        self.assertIn((256, 256, 128, 128), calls)
+
+    def test_compute_image_texture_sparseness_from_reader_matches_full_image_for_single_tile(self):
+        source = _striped_image(192, 160, period=6)
+
+        def read_window(start_x: int, start_y: int, width: int, height: int) -> np.ndarray:
+            return source[start_y : start_y + height, start_x : start_x + width]
+
+        full_summary = compute_image_texture_sparseness(
+            source,
+            tile_size=256,
+            tile_step=256,
+        )
+        reader_summary = compute_image_texture_sparseness_from_reader(
+            image_width=192,
+            image_height=160,
+            read_window=read_window,
+            tile_size=256,
+            tile_step=256,
+        )
+
+        self.assertEqual(reader_summary.tile_total_count, full_summary.tile_total_count)
+        self.assertEqual(reader_summary.tile_valid_count, full_summary.tile_valid_count)
+        self.assertAlmostEqual(
+            float(reader_summary.image_texture_sparseness),
+            float(full_summary.image_texture_sparseness),
+            places=6,
+        )
+        self.assertAlmostEqual(
+            reader_summary.tile_metrics[0].texture_sparseness,
+            full_summary.tile_metrics[0].texture_sparseness,
+            places=6,
+        )
 
     def test_flat_image_is_more_sparse_than_random_image(self):
         flat_image = _flat_image(384, 384, fill=128.0)

@@ -186,6 +186,8 @@ def run_manifest(
                 matcher_method=manifest.matcher_method,
                 left_image=arrays["left_image"],
                 right_image=arrays["right_image"],
+                left_mask=arrays["left_mask"],
+                right_mask=arrays["right_mask"],
             )
             left_points, right_points, scores = _deep_match_result_to_arrays(match_result)
             raw_match_count = int(min(left_points.shape[0], right_points.shape[0], scores.shape[0]))

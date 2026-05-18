@@ -1000,6 +1000,11 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 "previewCacheSource",
                                 "PreviewCacheSource",
                             ),
+                            "deep_matcher_config_path": (
+                                "deep_matcher_config_path",
+                                "deepMatcherConfigPath",
+                                "DeepMatcherConfigPath",
+                            ),
                             "use_parallel_cpu": (
                                 "use_parallel_cpu",
                                 "useParallelCpu",
@@ -1007,7 +1012,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             ),
                         }}
                         for container in _config_containers(payload, order):
-                            for key in candidate_keys[field_name]:
+                            for key in candidate_keys.get(field_name, ()):
                                 if key not in container:
                                     continue
                                 value = container[key]
@@ -1567,6 +1572,11 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 "previewCacheSource",
                                 "PreviewCacheSource",
                             ),
+                            "deep_matcher_config_path": (
+                                "deep_matcher_config_path",
+                                "deepMatcherConfigPath",
+                                "DeepMatcherConfigPath",
+                            ),
                             "use_parallel_cpu": (
                                 "use_parallel_cpu",
                                 "useParallelCpu",
@@ -1574,7 +1584,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             ),
                         }}
                         for container in _config_containers(payload, order):
-                            for key in candidate_keys[field_name]:
+                            for key in candidate_keys.get(field_name, ()):
                                 if key not in container:
                                     continue
                                 value = container[key]
@@ -1880,7 +1890,10 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "TargetName": "Mars",
                         "UserName": "copilot",
                         "PointIdPrefix": "TMP",
-                        "ImageMatch": {"matcher_method": "lightglue"},
+                        "ImageMatch": {
+                            "matcher_method": "lightglue",
+                            "deep_matcher_config_path": "examples/controlnet_construct/presets/lightglue_default.json",
+                        },
                     }
                 ),
                 encoding="utf-8",

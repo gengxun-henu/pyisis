@@ -2,13 +2,14 @@
 
 Author: Geng Xun
 Created: 2026-05-14
-Last Modified: 2026-05-14
+Last Modified: 2026-05-19
 Updated: 2026-05-14  Geng Xun added first-node regression coverage for texture probes, SPICE-constrained elevation candidates, and matcher routing sidecars.
 Updated: 2026-05-14  Geng Xun added focused coverage for match-quality gating and fixed cascade decisions.
 Updated: 2026-05-14  Geng Xun added sidecar serialization coverage for quality reports and final decisions.
 Updated: 2026-05-14  Geng Xun clarified the interpolated p95 quality-gate regression so the expected accepted case also passes the mean-residual gate.
 Updated: 2026-05-16  Geng Xun added coverage for named adaptive-routing quality profiles.
 Updated: 2026-05-18  Geng Xun added focused coverage for the sparseness/lighting-aware conservative router and the sidecar diagnostics augmenter.
+Updated: 2026-05-19  Geng Xun added coverage for optional nested tile diagnostics in adaptive sidecars.
 """
 
 from __future__ import annotations
@@ -431,6 +432,28 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
 
         self.assertEqual(augmented["texture_sparseness"], {})
         self.assertEqual(augmented["lighting_difference"], {})
+
+    def test_augment_pair_probe_sidecar_adds_nested_tile_diagnostics(self):
+        from image_match.adaptive_routing import (
+            augment_pair_probe_sidecar_with_sparseness_lighting,
+        )
+
+        base_sidecar = {"pair_route": {"initial_matcher": "lightglue"}}
+        augmented = augment_pair_probe_sidecar_with_sparseness_lighting(
+            base_sidecar,
+            pair_sparseness_summary={"pair_texture_sparseness": 0.41},
+            lighting_difference_summary={"lighting_difference_score": 0.22},
+            tile_diagnostics_summary={
+                "texture_sparseness": {"tile_valid_count": 7},
+                "lighting": {"tile_valid_count": 5},
+            },
+        )
+
+        self.assertEqual(augmented["texture_sparseness"]["pair_texture_sparseness"], 0.41)
+        self.assertEqual(augmented["lighting_difference"]["lighting_difference_score"], 0.22)
+        self.assertEqual(augmented["tile_diagnostics"]["texture_sparseness"]["tile_valid_count"], 7)
+        self.assertEqual(augmented["tile_diagnostics"]["lighting"]["tile_valid_count"], 5)
+        self.assertNotIn("tile_diagnostics", base_sidecar)
 
 
 if __name__ == "__main__":

@@ -2,10 +2,11 @@
 
 Author: Geng Xun
 Created: 2026-05-18
-Last Modified: 2026-05-18
+Last Modified: 2026-05-19
 Updated: 2026-05-18  Geng Xun added focused coverage for azimuth-wrap difference,
     elevation/azimuth-only fallback weighting, missing-field error handling, and
     cube-label keyword resolution with mission fallbacks.
+Updated: 2026-05-19  Geng Xun added sampler-driven tile lighting summary coverage.
 """
 
 from __future__ import annotations
@@ -23,9 +24,12 @@ if str(EXAMPLES_DIR) not in sys.path:
 from image_match.lighting_difference import (  # noqa: E402  (sys.path manipulated above)
     SolarGeometry,
     SolarGeometryFieldMissing,
+    TileLightingSample,
     azimuth_difference_degrees,
     compute_lighting_difference,
+    compute_tile_lighting_summary,
     read_solar_geometry_from_cube,
+    sample_lighting_at_tile_center,
 )
 
 
@@ -120,6 +124,81 @@ class ImageMatchLightingDifferenceUnitTest(unittest.TestCase):
 
         self.assertIsNone(summary.lighting_difference_score)
         self.assertIn("unavailable", summary.reason)
+
+    def test_compute_tile_lighting_summary_samples_tile_centers(self):
+        windows = [
+            (0, 0, 100, 50),
+            (100, 0, 100, 50),
+        ]
+        sampled_points = []
+
+        def sampler(sample: float, line: float):
+            sampled_points.append((sample, line))
+            return TileLightingSample(
+                sample=sample,
+                line=line,
+                incidence_degrees=30.0 + sample / 100.0,
+                emission_degrees=5.0,
+                phase_degrees=40.0,
+                solar_azimuth_degrees=120.0,
+                solar_elevation_degrees=35.0,
+                valid=True,
+                reason="ok",
+            )
+
+        summary = compute_tile_lighting_summary(
+            tile_windows=windows,
+            sample_lighting=sample_lighting_at_tile_center(sampler),
+        )
+
+        self.assertEqual(sampled_points, [(50.0, 25.0), (150.0, 25.0)])
+        self.assertEqual(summary.tile_total_count, 2)
+        self.assertEqual(summary.tile_valid_count, 2)
+        self.assertAlmostEqual(summary.incidence_quantiles["p50"], 31.0)
+
+    def test_compute_tile_lighting_summary_excludes_invalid_samples_from_quantiles(self):
+        windows = [
+            (0, 0, 100, 50),
+            (100, 0, 100, 50),
+        ]
+
+        def sampler(sample: float, line: float):
+            if sample < 100.0:
+                return TileLightingSample(
+                    sample=sample,
+                    line=line,
+                    incidence_degrees=None,
+                    emission_degrees=None,
+                    phase_degrees=None,
+                    solar_azimuth_degrees=None,
+                    solar_elevation_degrees=None,
+                    valid=False,
+                    reason="outside camera model",
+                )
+            return TileLightingSample(
+                sample=sample,
+                line=line,
+                incidence_degrees=42.0,
+                emission_degrees=8.0,
+                phase_degrees=55.0,
+                solar_azimuth_degrees=130.0,
+                solar_elevation_degrees=28.0,
+                valid=True,
+                reason="ok",
+            )
+
+        summary = compute_tile_lighting_summary(
+            tile_windows=windows,
+            sample_lighting=sample_lighting_at_tile_center(sampler),
+        )
+
+        self.assertEqual(summary.tile_total_count, 2)
+        self.assertEqual(summary.tile_valid_count, 1)
+        self.assertEqual(len(summary.samples), 2)
+        self.assertFalse(summary.samples[0].valid)
+        self.assertAlmostEqual(summary.incidence_quantiles["p50"], 42.0)
+        self.assertAlmostEqual(summary.emission_quantiles["p50"], 8.0)
+        self.assertAlmostEqual(summary.phase_quantiles["p50"], 55.0)
 
     def test_read_solar_geometry_resolves_first_matching_keyword(self):
         cube = _FakeCube(

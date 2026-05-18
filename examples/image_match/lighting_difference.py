@@ -5,6 +5,8 @@ Created: 2026-05-18
 Updated: 2026-05-18  Geng Xun added cube-label solar geometry parsing with
     mission-aware keyword fallbacks, azimuth-wrap difference, and the initial
     normalized weighted-sum lighting-difference score.
+Updated: 2026-05-19  Geng Xun added sampler-driven tile lighting summaries for
+    tile-aligned diagnostics without requiring SPICE-heavy unit fixtures.
 
 This first release intentionally limits itself to solar elevation and solar
 azimuth read from the cube ``Instrument`` group; ``incidence``, ``emission``,
@@ -14,6 +16,7 @@ public API.
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from dataclasses import asdict, dataclass
 from typing import Any, Iterable
 
@@ -70,6 +73,33 @@ class LightingDifferenceSummary:
     elevation_weight: float
     azimuth_weight: float
     reason: str
+
+
+@dataclass(frozen=True, slots=True)
+class TileLightingSample:
+    """Lighting geometry sample associated with one tile diagnostic point."""
+
+    sample: float
+    line: float
+    incidence_degrees: float | None
+    emission_degrees: float | None
+    phase_degrees: float | None
+    solar_azimuth_degrees: float | None
+    solar_elevation_degrees: float | None
+    valid: bool
+    reason: str
+
+
+@dataclass(frozen=True, slots=True)
+class TileLightingSummary:
+    """Aggregate tile-level lighting diagnostics."""
+
+    tile_total_count: int
+    tile_valid_count: int
+    incidence_quantiles: dict[str, float | None]
+    emission_quantiles: dict[str, float | None]
+    phase_quantiles: dict[str, float | None]
+    samples: tuple[TileLightingSample, ...]
 
 
 def _clamp(value: float, minimum: float = 0.0, maximum: float = 1.0) -> float:
@@ -281,6 +311,90 @@ def compute_lighting_difference(
     )
 
 
+def _interpolated_quantile(values: list[float], quantile: float) -> float:
+    if not values:
+        raise ValueError("values must not be empty.")
+    if len(values) == 1:
+        return float(values[0])
+    sorted_values = sorted(values)
+    clamped = _clamp(quantile)
+    position = clamped * (len(sorted_values) - 1)
+    lower_index = int(math.floor(position))
+    upper_index = int(math.ceil(position))
+    if lower_index == upper_index:
+        return float(sorted_values[lower_index])
+    fraction = position - lower_index
+    return float(sorted_values[lower_index] + (sorted_values[upper_index] - sorted_values[lower_index]) * fraction)
+
+
+def _quantile_dict(values: list[float]) -> dict[str, float | None]:
+    if not values:
+        return {"p10": None, "p50": None, "p90": None, "max": None}
+    return {
+        "p10": _interpolated_quantile(values, 0.10),
+        "p50": _interpolated_quantile(values, 0.50),
+        "p90": _interpolated_quantile(values, 0.90),
+        "max": max(values),
+    }
+
+
+def _tile_window_bounds(tile_window: Any) -> tuple[float, float, float, float]:
+    if hasattr(tile_window, "start_x") and hasattr(tile_window, "start_y"):
+        return (
+            float(tile_window.start_x),
+            float(tile_window.start_y),
+            float(tile_window.width),
+            float(tile_window.height),
+        )
+    try:
+        start_x, start_y, width, height = tile_window
+    except (TypeError, ValueError) as exc:
+        raise ValueError(
+            "tile windows must be TileWindow-like objects or (start_x, start_y, width, height) tuples."
+        ) from exc
+    return float(start_x), float(start_y), float(width), float(height)
+
+
+def sample_lighting_at_tile_center(
+    point_sampler: Callable[[float, float], TileLightingSample],
+) -> Callable[[Any], TileLightingSample]:
+    """Adapt a point lighting sampler to sample each tile at its center."""
+
+    def sample_tile(tile_window: Any) -> TileLightingSample:
+        start_x, start_y, width, height = _tile_window_bounds(tile_window)
+        return point_sampler(start_x + width / 2.0, start_y + height / 2.0)
+
+    return sample_tile
+
+
+def compute_tile_lighting_summary(
+    *,
+    tile_windows: Iterable[Any],
+    sample_lighting: Callable[[Any], TileLightingSample],
+) -> TileLightingSummary:
+    """Sample lighting for tile windows and aggregate valid angle quantiles."""
+
+    samples = tuple(sample_lighting(tile_window) for tile_window in tile_windows)
+    valid_samples = [sample for sample in samples if sample.valid]
+
+    def collect(field_name: str) -> list[float]:
+        values: list[float] = []
+        for sample in valid_samples:
+            value = _finite_float(getattr(sample, field_name))
+            if value is not None:
+                values.append(value)
+        return values
+
+    return TileLightingSummary(
+        tile_total_count=len(samples),
+        tile_valid_count=len(valid_samples),
+        incidence_quantiles=_quantile_dict(collect("incidence_degrees")),
+        emission_quantiles=_quantile_dict(collect("emission_degrees")),
+        phase_quantiles=_quantile_dict(collect("phase_degrees")),
+        samples=samples,
+    )
+
+
 def lighting_summary_to_diagnostic_dict(summary: LightingDifferenceSummary) -> dict[str, Any]:
     """Return a JSON-serializable diagnostic view of a lighting-difference summary."""
 
@@ -298,8 +412,12 @@ __all__ = [
     "LightingDifferenceSummary",
     "SolarGeometry",
     "SolarGeometryFieldMissing",
+    "TileLightingSample",
+    "TileLightingSummary",
     "azimuth_difference_degrees",
     "compute_lighting_difference",
+    "compute_tile_lighting_summary",
     "lighting_summary_to_diagnostic_dict",
     "read_solar_geometry_from_cube",
+    "sample_lighting_at_tile_center",
 ]

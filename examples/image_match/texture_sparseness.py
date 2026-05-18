@@ -235,8 +235,10 @@ def compute_lightweight_glcm(
         return 0.0, 1.0
 
     source = quantized[src_y_start:src_y_end, src_x_start:src_x_end]
-    target = quantized[src_y_start + delta_y : src_y_end + delta_y,
-                       src_x_start + delta_x : src_x_end + delta_x]
+    target = quantized[
+        src_y_start + delta_y : src_y_end + delta_y,
+        src_x_start + delta_x : src_x_end + delta_x,
+    ]
 
     pair_mask = (source >= 0) & (target >= 0)
     if not pair_mask.any():

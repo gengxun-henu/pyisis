@@ -6,6 +6,7 @@ Updated: 2026-05-14  Geng Xun added first-node texture probe, SPICE-constrained 
 Updated: 2026-05-14  Geng Xun added pure match-quality gating and fixed cascade planning helpers.
 Updated: 2026-05-14  Geng Xun allowed adaptive sidecars to serialize quality reports and final decisions directly.
 Updated: 2026-05-16  Geng Xun added named adaptive-routing quality profiles for user-facing route tuning.
+Updated: 2026-05-18  Geng Xun added a conservative pair router that combines pair-level texture sparseness with lighting-difference scores plus a sidecar augmentation helper.
 """
 
 from __future__ import annotations
@@ -665,6 +666,103 @@ def build_pair_probe_sidecar(
     })
 
 
+def route_matcher_for_pair_with_sparseness(
+    *,
+    pair_texture_sparseness: float | None,
+    lighting_difference_score: float | None,
+    sparseness_low_threshold: float = 0.35,
+    sparseness_high_threshold: float = 0.65,
+    lighting_low_threshold: float = 0.20,
+    lighting_high_threshold: float = 0.55,
+) -> PairRoutingDecision:
+    """Conservative Phase-7 router using pair texture sparseness and lighting difference.
+
+    Semantics:
+        - ``pair_texture_sparseness``: ``0 = rich, 1 = sparse``
+        - ``lighting_difference_score``: ``0 = identical lighting, 1 = opposite``
+
+    Rules (intentionally conservative for the initial release):
+        - low sparseness and low lighting difference -> SIFT/BF
+        - high sparseness or high lighting difference -> LoFTR
+        - otherwise -> LightGlue
+    """
+
+    resolved_sparseness = _finite_float(pair_texture_sparseness)
+    resolved_lighting = _finite_float(lighting_difference_score)
+
+    if resolved_sparseness is None and resolved_lighting is None:
+        initial_matcher = LIGHTGLUE_MATCHER_METHOD
+        reason = (
+            "pair-level texture sparseness and lighting difference are both unavailable; "
+            "fall back to SuperPoint + LightGlue"
+        )
+    else:
+        is_sparse_low = resolved_sparseness is not None and resolved_sparseness <= float(sparseness_low_threshold)
+        is_sparse_high = resolved_sparseness is not None and resolved_sparseness >= float(sparseness_high_threshold)
+        is_lighting_low = resolved_lighting is not None and resolved_lighting <= float(lighting_low_threshold)
+        is_lighting_high = resolved_lighting is not None and resolved_lighting >= float(lighting_high_threshold)
+
+        if is_sparse_high or is_lighting_high:
+            initial_matcher = LOFTR_MATCHER_METHOD
+            reason = "high texture sparseness or large lighting difference; route to LoFTR first"
+        elif is_sparse_low and (resolved_lighting is None or is_lighting_low):
+            initial_matcher = SIFT_ROUTED_MATCHER_METHOD
+            reason = "rich texture and small lighting difference; route to SIFT descriptor matching first"
+        else:
+            initial_matcher = LIGHTGLUE_MATCHER_METHOD
+            reason = "moderate texture sparseness or moderate lighting difference; route to SuperPoint + LightGlue"
+
+    if initial_matcher == SIFT_ROUTED_MATCHER_METHOD:
+        fallback_chain = (LIGHTGLUE_MATCHER_METHOD, LOFTR_MATCHER_METHOD)
+    elif initial_matcher == LIGHTGLUE_MATCHER_METHOD:
+        fallback_chain = (LOFTR_MATCHER_METHOD,)
+    else:
+        fallback_chain = ()
+
+    # Use the pair sparseness (0..1) as a proxy "1 - mean_real_texture_score" for
+    # legacy sidecar compatibility, so downstream consumers that only look at the
+    # mean texture score still see a meaningful value.
+    mean_real_texture_score = (
+        0.5 if resolved_sparseness is None else _clamp(1.0 - resolved_sparseness)
+    )
+    estimated_difficulty = _clamp(
+        (0.0 if resolved_sparseness is None else resolved_sparseness)
+        + 0.5 * (0.0 if resolved_lighting is None else resolved_lighting)
+    )
+
+    return PairRoutingDecision(
+        initial_matcher=initial_matcher,
+        fallback_chain=fallback_chain,
+        route_reason=reason,
+        mean_real_texture_score=mean_real_texture_score,
+        mean_terrain_explainability_score=None,
+        render_inferred_elevation_gap=None,
+        render_peak_sharpness=None,
+        estimated_match_difficulty=estimated_difficulty,
+    )
+
+
+def augment_pair_probe_sidecar_with_sparseness_lighting(
+    sidecar: dict[str, Any],
+    *,
+    pair_sparseness_summary: dict[str, Any] | None = None,
+    lighting_difference_summary: dict[str, Any] | None = None,
+    routing_thresholds: dict[str, float] | None = None,
+) -> dict[str, Any]:
+    """Add texture-sparseness and lighting-difference diagnostics to a sidecar.
+
+    Backwards-compatible: missing inputs are stored as empty mappings instead
+    of removed keys so downstream consumers can rely on the schema shape.
+    """
+
+    augmented = dict(sidecar)
+    augmented["texture_sparseness"] = _json_ready(pair_sparseness_summary or {})
+    augmented["lighting_difference"] = _json_ready(lighting_difference_summary or {})
+    if routing_thresholds:
+        augmented["routing_thresholds"] = _json_ready(routing_thresholds)
+    return augmented
+
+
 __all__ = [
     "AdaptiveRoutingQualityProfile",
     "DEFAULT_ADAPTIVE_ROUTING_PROFILE",
@@ -678,6 +776,7 @@ __all__ = [
     "SIFT_ROUTED_MATCHER_METHOD",
     "SpiceLightingConstraints",
     "SUPPORTED_ADAPTIVE_ROUTING_PROFILES",
+    "augment_pair_probe_sidecar_with_sparseness_lighting",
     "build_pair_probe_sidecar",
     "build_cascade_plan",
     "build_spice_constrained_elevation_candidates",
@@ -687,4 +786,5 @@ __all__ = [
     "normalize_adaptive_routing_profile",
     "resolve_adaptive_routing_quality_profile",
     "route_matcher_for_pair",
+    "route_matcher_for_pair_with_sparseness",
 ]

@@ -66,6 +66,7 @@ if __package__ in {None, ""}:
     from image_match.adaptive_routing import (
         DEFAULT_ADAPTIVE_ROUTING_PROFILE,
         SUPPORTED_ADAPTIVE_ROUTING_PROFILES,
+        augment_pair_probe_sidecar_with_sparseness_lighting,
         build_pair_probe_sidecar,
         build_cascade_plan,
         compute_real_image_texture_probe,
@@ -74,6 +75,17 @@ if __package__ in {None, ""}:
         normalize_adaptive_routing_profile,
         resolve_adaptive_routing_quality_profile,
         route_matcher_for_pair,
+    )
+    from image_match.lighting_difference import (
+        SolarGeometryFieldMissing,
+        compute_lighting_difference,
+        lighting_summary_to_diagnostic_dict,
+        read_solar_geometry_from_cube,
+    )
+    from image_match.texture_sparseness import (
+        aggregate_pair_texture_sparseness,
+        compute_image_texture_sparseness,
+        pair_summary_to_diagnostic_dict,
     )
     from image_match.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from image_match.deep_match_manifest import (
@@ -128,6 +140,7 @@ else:
     from .adaptive_routing import (
         DEFAULT_ADAPTIVE_ROUTING_PROFILE,
         SUPPORTED_ADAPTIVE_ROUTING_PROFILES,
+        augment_pair_probe_sidecar_with_sparseness_lighting,
         build_pair_probe_sidecar,
         build_cascade_plan,
         compute_real_image_texture_probe,
@@ -136,6 +149,17 @@ else:
         normalize_adaptive_routing_profile,
         resolve_adaptive_routing_quality_profile,
         route_matcher_for_pair,
+    )
+    from .lighting_difference import (
+        SolarGeometryFieldMissing,
+        compute_lighting_difference,
+        lighting_summary_to_diagnostic_dict,
+        read_solar_geometry_from_cube,
+    )
+    from .texture_sparseness import (
+        aggregate_pair_texture_sparseness,
+        compute_image_texture_sparseness,
+        pair_summary_to_diagnostic_dict,
     )
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from .deep_match_manifest import (
@@ -1157,6 +1181,49 @@ def _compute_texture_probe_from_cube_path(
             cube.close()
 
 
+def _compute_texture_sparseness_and_geometry_from_cube_path(
+    cube_path: str | Path,
+    *,
+    band: int,
+    invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+):
+    """Compute the texture-sparseness summary and best-effort solar geometry.
+
+    Returns ``(ImageSparsenessSummary, SolarGeometry | None, error_reason | None)``.
+    The solar geometry read is best-effort: a missing-field error is captured in
+    ``error_reason`` and the geometry value is ``None``, so adaptive routing can
+    still surface the sparseness diagnostics by themselves.
+    """
+
+    cube = ip.Cube()
+    cube.open(str(cube_path), "r")
+    try:
+        values = _read_full_cube_band(cube, band=band)
+        resolved_invalid_values = _resolved_invalid_values_for_cube(cube, invalid_values)
+        invalid_mask, _ = summarize_valid_pixels(
+            values,
+            invalid_values=resolved_invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+        )
+        sparseness_summary = compute_image_texture_sparseness(
+            values,
+            invalid_mask=invalid_mask,
+        )
+        solar_geometry = None
+        solar_error: str | None = None
+        try:
+            solar_geometry = read_solar_geometry_from_cube(cube)
+        except SolarGeometryFieldMissing as exc:
+            solar_error = str(exc)
+        except Exception as exc:  # noqa: BLE001 - keep best-effort diagnostics
+            solar_error = f"unexpected error reading solar geometry: {exc}"
+        return sparseness_summary, solar_geometry, solar_error
+    finally:
+        if cube.is_open():
+            cube.close()
+
+
 def _resolve_adaptive_route_for_pair(
     *,
     enable_adaptive_routing: bool,
@@ -1204,6 +1271,72 @@ def _resolve_adaptive_route_for_pair(
             left_texture_probe=left_texture_probe,
             right_texture_probe=right_texture_probe,
         )
+
+        # Additive diagnostics: tile-level texture sparseness + solar
+        # lighting-difference are computed best-effort and attached to the
+        # sidecar without changing the legacy routing decision shape.
+        sparseness_lighting_diagnostics: dict[str, object] = {}
+        try:
+            left_sparseness, left_solar_geometry, left_solar_error = (
+                _compute_texture_sparseness_and_geometry_from_cube_path(
+                    resolved_left_preview,
+                    band=band,
+                    invalid_values=invalid_values,
+                    special_pixel_abs_threshold=special_pixel_abs_threshold,
+                )
+            )
+            right_sparseness, right_solar_geometry, right_solar_error = (
+                _compute_texture_sparseness_and_geometry_from_cube_path(
+                    resolved_right_preview,
+                    band=band,
+                    invalid_values=invalid_values,
+                    special_pixel_abs_threshold=special_pixel_abs_threshold,
+                )
+            )
+            pair_sparseness = aggregate_pair_texture_sparseness(left_sparseness, right_sparseness)
+            sparseness_diagnostic = pair_summary_to_diagnostic_dict(pair_sparseness)
+
+            lighting_diagnostic: dict[str, object] | None = None
+            if left_solar_geometry is not None and right_solar_geometry is not None:
+                lighting_summary = compute_lighting_difference(left_solar_geometry, right_solar_geometry)
+                lighting_diagnostic = lighting_summary_to_diagnostic_dict(lighting_summary)
+            else:
+                lighting_diagnostic = {
+                    "lighting_difference_score": None,
+                    "reason": "solar geometry missing for at least one image",
+                    "left_solar_geometry_error": left_solar_error,
+                    "right_solar_geometry_error": right_solar_error,
+                }
+
+            sparseness_lighting_diagnostics = {
+                "texture_sparseness": sparseness_diagnostic,
+                "lighting_difference": lighting_diagnostic,
+            }
+        except Exception as diag_exc:  # noqa: BLE001 - keep diagnostics best-effort
+            sparseness_lighting_diagnostics = {
+                "diagnostics_error": str(diag_exc),
+            }
+
+        sidecar_payload = build_pair_probe_sidecar(
+            left_texture_probe=left_texture_probe,
+            right_texture_probe=right_texture_probe,
+            route_decision=route_decision,
+        )
+        sparseness_diagnostic_for_sidecar = sparseness_lighting_diagnostics.get("texture_sparseness")
+        lighting_diagnostic_for_sidecar = sparseness_lighting_diagnostics.get("lighting_difference")
+        sidecar_payload = augment_pair_probe_sidecar_with_sparseness_lighting(
+            sidecar_payload,
+            pair_sparseness_summary=(
+                sparseness_diagnostic_for_sidecar
+                if isinstance(sparseness_diagnostic_for_sidecar, dict)
+                else None
+            ),
+            lighting_difference_summary=(
+                lighting_diagnostic_for_sidecar
+                if isinstance(lighting_diagnostic_for_sidecar, dict)
+                else None
+            ),
+        )
         return route_decision.initial_matcher, {
             "enabled": True,
             "status": "routed",
@@ -1214,11 +1347,7 @@ def _resolve_adaptive_route_for_pair(
                 "left": resolved_left_preview,
                 "right": resolved_right_preview,
             },
-            "sidecar": build_pair_probe_sidecar(
-                left_texture_probe=left_texture_probe,
-                right_texture_probe=right_texture_probe,
-                route_decision=route_decision,
-            ),
+            "sidecar": sidecar_payload,
         }
     except Exception as exc:
         return requested_matcher_method, {

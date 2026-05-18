@@ -2,10 +2,11 @@
 
 Author: Geng Xun
 Created: 2026-05-10
-Last Modified: 2026-05-14
+Last Modified: 2026-05-18
 Updated: 2026-05-10  Geng Xun added sparse stereo DEM orchestration from original-image and DOM matching routes.
 Updated: 2026-05-10  Geng Xun added optional `.key` refinement stages between matching and DEM triangulation.
 Updated: 2026-05-14  Geng Xun resolved merge conflicts by preferring shared image_match imports with compatibility fallbacks.
+Updated: 2026-05-18  Geng Xun normalized route override option keys so camelCase and snake_case config spellings stay compatible.
 
 This module bridges the existing ``controlnet_construct`` matching helpers with
 ``dem_extract.isis_stereo_dem`` so a stereo DEM can be generated from either
@@ -19,6 +20,7 @@ import argparse
 from dataclasses import dataclass
 import json
 from pathlib import Path
+import re
 import sys
 from typing import Any, Mapping
 
@@ -262,13 +264,20 @@ def _coerce_bool(value: Any) -> bool:
 
 
 def _clean_options(options: Mapping[str, Any]) -> dict[str, Any]:
+    def normalize_option_key(key: str) -> str:
+        mapped = MATCH_OPTION_ALIASES.get(key)
+        if mapped is not None:
+            return mapped
+        snake = re.sub(r"(?<!^)(?=[A-Z])", "_", key).lower()
+        return MATCH_OPTION_ALIASES.get(snake, snake)
+
     cleaned: dict[str, Any] = {}
     for key, value in options.items():
         if value is None:
             continue
         if isinstance(value, str) and value == "":
             continue
-        cleaned[MATCH_OPTION_ALIASES.get(key, key)] = value
+        cleaned[normalize_option_key(key)] = value
     if "invalid_values" in cleaned and not isinstance(cleaned["invalid_values"], tuple):
         value = cleaned["invalid_values"]
         if isinstance(value, list):

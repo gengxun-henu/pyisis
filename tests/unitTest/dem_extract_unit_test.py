@@ -3,11 +3,12 @@ Unit tests for the DEM extract example package.
 
 Author: Geng Xun
 Created: 2026-05-10
-Last Modified: 2026-05-10
+Last Modified: 2026-05-18
 Updated: 2026-05-10  Geng Xun added focused coverage for the dem_extract from-key pipeline.
 Updated: 2026-05-10  Geng Xun added focused coverage for the DEM image-matching pipeline wrapper.
 Updated: 2026-05-10  Geng Xun added focused coverage for `.key` refinement stages in the DEM flow.
 Updated: 2026-05-10  Geng Xun added coverage for dense NCC disparity DEM modules and CLI.
+Updated: 2026-05-18  Geng Xun added config-key compatibility coverage for camelCase route overrides in dem_pipeline.
 """
 
 from __future__ import annotations
@@ -1394,6 +1395,39 @@ class DemExtractPipelineUnitTest(unittest.TestCase):
         self.assertEqual(options["overlap_y"], 16)
         self.assertEqual(options["matcher_method"], "flann")
         self.assertEqual(options["valid_pixel_percent_threshold"], 0.0)
+
+    def test_image_match_options_accept_camel_case_route_overrides(self):
+        from dem_extract import dem_pipeline
+
+        config_path = self.write_config(
+            {
+                "ImageMatch": {
+                    "sub_block_size_x": 512,
+                    "matcher_method": "bf",
+                },
+                "OriginalImageMatch": {
+                    "subBlockSizeX": 640,
+                    "matcherMethod": "flann",
+                    "validPixelPercentThreshold": 0.25,
+                },
+                "DomImageMatch": {
+                    "writeMatchVisualization": True,
+                    "previewCacheSource": "manual",
+                    "visualizationTargetLongEdge": 1024,
+                },
+            }
+        )
+
+        ori_options = dem_pipeline.image_match_options_for_route(config_path, "ori")
+        dom_options = dem_pipeline.image_match_options_for_route(config_path, "dom")
+
+        self.assertEqual(ori_options["block_width"], 640)
+        self.assertEqual(ori_options["matcher_method"], "flann")
+        self.assertEqual(ori_options["valid_pixel_percent_threshold"], 0.25)
+        self.assertEqual(dom_options["block_width"], 512)
+        self.assertTrue(dom_options["write_match_visualization"])
+        self.assertEqual(dom_options["preview_cache_source"], "manual")
+        self.assertEqual(dom_options["visualization_target_long_edge"], 1024)
 
     def test_run_from_ori_match_dispatches_matching_then_dem(self):
         from dem_extract import dem_pipeline

@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-05-19
 Updated: 2026-05-19  Geng Xun added focused coverage for pre-match feature filtering and LoFTR mask passthrough.
 Updated: 2026-05-19  Geng Xun added runtime config storage coverage for deep matcher adapters.
+Updated: 2026-05-19  Geng Xun added feature extractor runtime config coverage for SuperPoint and explicit unsupported extractor errors.
 """
 
 from __future__ import annotations
@@ -23,6 +24,7 @@ for import_path in (PROJECT_ROOT, EXAMPLES_DIR):
         sys.path.insert(0, str(import_path))
 
 from image_match.deep_adapter import DeepMatcherAdapter
+from image_match.deep_frontends import DeepFrontendError, SuperPointFrontend
 from controlnet_construct.deep_match_config import DeepMatchRuntimeConfig
 
 
@@ -58,6 +60,47 @@ class _CapturingLoFTRMatcher:
 
 
 class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
+    def test_superpoint_frontend_reads_runtime_config_parameters(self):
+        runtime = DeepMatchRuntimeConfig(
+            matcher_method="lightglue",
+            feature_extractor_method="superpoint",
+            prefer_gpu=False,
+            device_dtype="float32",
+            fallback_on_error="sift_flann",
+            raw_config={
+                "feature_extractor": {
+                    "method": "superpoint",
+                    "max_keypoints": 4096,
+                    "keypoint_threshold": 0.0005,
+                    "nms_radius": 4,
+                    "remove_borders": 4,
+                }
+            },
+        )
+
+        frontend = SuperPointFrontend(runtime_config=runtime)
+
+        self.assertEqual(frontend.requested_parameters["max_keypoints"], 4096)
+        self.assertAlmostEqual(frontend.requested_parameters["keypoint_threshold"], 0.0005)
+        self.assertEqual(frontend.requested_parameters["nms_radius"], 4)
+        self.assertIn("remove_borders", frontend.ignored_parameters)
+
+    def test_deep_matcher_adapter_passes_runtime_config_to_superpoint_frontend(self):
+        runtime = DeepMatchRuntimeConfig(
+            matcher_method="lightglue",
+            feature_extractor_method="superpoint",
+            prefer_gpu=False,
+            device_dtype="float32",
+            fallback_on_error="sift_flann",
+            raw_config={"feature_extractor": {"method": "superpoint", "max_keypoints": 4096}},
+        )
+
+        with mock.patch("image_match.deep_adapter.SuperPointFrontend") as frontend_constructor:
+            adapter = DeepMatcherAdapter(prefer_gpu=True, runtime_config=runtime)
+
+        frontend_constructor.assert_called_once_with(runtime_config=runtime)
+        self.assertIs(adapter._runtime_config, runtime)
+
     def test_deep_matcher_adapter_stores_runtime_config(self):
         runtime = DeepMatchRuntimeConfig(
             matcher_method="lightglue",
@@ -72,6 +115,32 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
 
         self.assertIs(adapter._runtime_config, runtime)
         self.assertEqual(adapter._device, "cpu")
+
+    def test_lightglue_aliked_disk_doghardnet_reject_unimplemented_extractors(self):
+        config_module = __import__("controlnet_construct.deep_match_config", fromlist=["resolve_deep_match_runtime_config"])
+
+        for preset_name, extractor_method in (
+            ("lightglue_aliked.json", "aliked"),
+            ("lightglue_disk.json", "disk"),
+            ("lightglue_doghardnet.json", "doghardnet"),
+        ):
+            with self.subTest(preset=preset_name):
+                runtime = config_module.resolve_deep_match_runtime_config(
+                    PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / preset_name
+                )
+                self.assertEqual(runtime.feature_extractor_method, extractor_method)
+                adapter = DeepMatcherAdapter(prefer_gpu=False, runtime_config=runtime)
+
+                with self.assertRaisesRegex(
+                    DeepFrontendError,
+                    f"feature_extractor.method='{extractor_method}'.*not yet implemented.*'lightglue'",
+                ):
+                    adapter._match_pair_on_device(
+                        matcher_method="lightglue",
+                        left_image=np.zeros((8, 8), dtype=np.float32),
+                        right_image=np.zeros((8, 8), dtype=np.float32),
+                        device="cpu",
+                    )
 
     def test_match_pair_filters_superpoint_features_before_matching(self):
         adapter = DeepMatcherAdapter(prefer_gpu=False)

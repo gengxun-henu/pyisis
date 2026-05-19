@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-05-11
 Updated: 2026-05-11  Geng Xun added top-of-file metadata so example helper modules follow the repository's example-file header convention.
+Updated: 2026-05-19  Geng Xun made feature extractor runtime config explicit for LightGlue and SuperGlue routing.
 """
 
 from __future__ import annotations
@@ -12,7 +13,7 @@ from typing import Any
 import cv2
 import numpy as np
 
-from .deep_frontends import DeepDependencyError, LoFTRFrontend, SuperPointFrontend, normalize_deep_method, resolve_torch_device
+from .deep_frontends import DeepDependencyError, DeepFrontendError, LoFTRFrontend, SuperPointFrontend, normalize_deep_method, resolve_torch_device
 from .deep_matchers import DeepMatchResult, DeepMatcherError, build_deep_matcher
 
 
@@ -50,9 +51,16 @@ def _filter_feature_dict_by_invalid_mask(features: Any, invalid_mask: np.ndarray
 
 
 class DeepMatcherAdapter:
-    def __init__(self, *, prefer_gpu: bool = True) -> None:
-        self._device = resolve_torch_device(prefer_gpu)
-        self._superpoint = SuperPointFrontend()
+    def __init__(self, *, prefer_gpu: bool = True, runtime_config: Any | None = None) -> None:
+        self._runtime_config = runtime_config
+        resolved_prefer_gpu = (
+            bool(getattr(runtime_config, "prefer_gpu"))
+            if runtime_config is not None and hasattr(runtime_config, "prefer_gpu")
+            else bool(prefer_gpu)
+        )
+        self._prefer_gpu = resolved_prefer_gpu
+        self._device = resolve_torch_device(resolved_prefer_gpu)
+        self._superpoint = SuperPointFrontend(runtime_config=runtime_config)
         self._loftr_frontend = LoFTRFrontend()
         self._matcher_cache: dict[tuple[str, str], Any] = {}
 
@@ -82,6 +90,13 @@ class DeepMatcherAdapter:
         method = normalize_deep_method(matcher_method)
         try:
             if method in ("superglue", "lightglue"):
+                extractor_method = str(
+                    getattr(self._runtime_config, "feature_extractor_method", "superpoint") or "superpoint"
+                ).strip().lower()
+                if extractor_method != "superpoint":
+                    raise DeepFrontendError(
+                        f"feature_extractor.method={extractor_method!r} is validated but not yet implemented for {method!r}."
+                    )
                 features_left = self._superpoint.extract(left_image, device=device)
                 features_right = self._superpoint.extract(right_image, device=device)
                 features_left = _filter_feature_dict_by_invalid_mask(features_left, left_mask)
@@ -174,7 +189,8 @@ class DeepMatcherAdapter:
         prefer_gpu: bool,
     ) -> DeepMatchResult:
         method = normalize_deep_method(matcher_method)
-        primary_device = resolve_torch_device(prefer_gpu)
+        resolved_prefer_gpu = self._prefer_gpu if self._runtime_config is not None else bool(prefer_gpu)
+        primary_device = resolve_torch_device(resolved_prefer_gpu)
         try:
             return self._match_pair_on_device(
                 matcher_method=method,
@@ -187,7 +203,7 @@ class DeepMatcherAdapter:
         except (DeepDependencyError, DeepMatcherError):
             raise
         except Exception:
-            if not prefer_gpu:
+            if not resolved_prefer_gpu:
                 raise
             fallback_method = self.resolve_fallback_method(requested_method=method, fallback_method=method)
             return self._match_pair_on_device(

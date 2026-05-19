@@ -152,17 +152,25 @@ SPECIAL_PIXEL = -1.797693134862315e308
 class _EvalToDeviceModule:
     def __init__(self) -> None:
         self.device: str | None = None
+        self.dtype = None
 
     def eval(self):
         return self
 
-    def to(self, device: str):
-        self.device = device
+    def to(self, device: str | None = None, *, dtype=None):
+        if device is not None:
+            self.device = device
+        if dtype is not None:
+            self.dtype = dtype
         return self
 
 
 def _stub_module(name: str, **attributes):
     module = ModuleType(name)
+    if name == "torch":
+        attributes.setdefault("float32", "torch.float32")
+        attributes.setdefault("float16", "torch.float16")
+        attributes.setdefault("bfloat16", "torch.bfloat16")
     for key, value in attributes.items():
         setattr(module, key, value)
     return module
@@ -1408,6 +1416,62 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         with self.assertRaisesRegex(deep_matchers_module.DeepMatcherError, "checkpoint_path"):
             matcher._load_matcher()
+
+    def test_deep_matchers_apply_dtype_and_surface_ignored_device_options(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+
+        for method, feature_extractor_method, matcher_options, modules, loader_name in (
+            (
+                "lightglue",
+                "superpoint",
+                {"weights": "superpoint_lightglue"},
+                {"lightglue": _stub_module("lightglue", LightGlue=mock.Mock(return_value=_EvalToDeviceModule()))},
+                "_load_matcher",
+            ),
+            (
+                "superglue",
+                "superpoint",
+                {"weights": "outdoor"},
+                {
+                    "models.matching": _stub_module("models.matching", Matching=mock.Mock(return_value=_EvalToDeviceModule())),
+                    "models": None,
+                },
+                "_load_model",
+            ),
+            (
+                "loftr",
+                "loftr",
+                {"pretrained": "outdoor"},
+                {
+                    "kornia.feature": _stub_module("kornia.feature", LoFTR=mock.Mock(return_value=_EvalToDeviceModule())),
+                    "kornia": None,
+                },
+                "_load_matcher",
+            ),
+        ):
+            with self.subTest(method=method):
+                torch_module = _stub_module("torch", float16="torch.float16")
+                patched_modules = {"torch": torch_module}
+                patched_modules.update(modules)
+                if "models.matching" in patched_modules:
+                    patched_modules["models"] = _stub_module("models", matching=patched_modules["models.matching"])
+                if "kornia.feature" in patched_modules:
+                    patched_modules["kornia"] = _stub_module("kornia", feature=patched_modules["kornia.feature"])
+
+                with mock.patch.dict(sys.modules, patched_modules, clear=False):
+                    matcher = deep_matchers_module.build_deep_matcher(
+                        method,
+                        device="cpu",
+                        feature_extractor_method=feature_extractor_method,
+                        matcher_options=matcher_options,
+                        device_options={"dtype": "float16", "batch_inference": True},
+                    )
+                    getattr(matcher, loader_name)()
+
+                backend = getattr(matcher, "_matcher", None) or getattr(matcher, "_model", None)
+                self.assertEqual(backend.device, "cpu")
+                self.assertEqual(backend.dtype, "torch.float16")
+                self.assertIn("device.batch_inference", matcher.ignored_parameters)
 
     def test_match_dom_pair_rejects_deep_config_matcher_conflict_before_opening_cubes(self):
         config_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json"

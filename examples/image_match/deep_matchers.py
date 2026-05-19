@@ -30,6 +30,11 @@ def _copy_options(options: dict[str, Any] | None) -> dict[str, Any]:
     return dict(options or {})
 
 
+def _append_ignored_parameter(ignored_parameters: list[str], option_name: str) -> None:
+    if option_name not in ignored_parameters:
+        ignored_parameters.append(option_name)
+
+
 def _raise_unsupported_option(*, method: str, option_name: str, option_value: Any) -> None:
     raise DeepMatcherError(
         f"Deep matcher '{method}' does not support critical matcher option "
@@ -59,6 +64,28 @@ def _reject_unknown_options(*, method: str, options: dict[str, Any], allowed: se
             _raise_unsupported_option(method=method, option_name=option_name, option_value=option_value)
 
 
+def _resolve_device_dtype(*, method: str, device_options: dict[str, Any] | None, ignored_parameters: list[str]) -> str:
+    options = _copy_options(device_options)
+    dtype_value = options.pop("dtype", "float32")
+    device_dtype = str(dtype_value or "float32").strip().lower()
+    if device_dtype not in {"float32", "float16", "bfloat16"}:
+        _raise_unsupported_option(method=method, option_name="dtype", option_value=dtype_value)
+    options.pop("prefer_gpu", None)
+    options.pop("type", None)
+    for option_name in options:
+        _append_ignored_parameter(ignored_parameters, f"device.{option_name}")
+    return device_dtype
+
+
+def _resolve_torch_dtype(*, torch: Any, method: str, device_dtype: str) -> Any:
+    torch_dtype = getattr(torch, device_dtype, None)
+    if torch_dtype is None:
+        raise DeepMatcherError(
+            f"Deep matcher '{method}' requested unsupported torch dtype {device_dtype!r}."
+        )
+    return torch_dtype
+
+
 @dataclass(frozen=True, slots=True)
 class DeepMatchResult:
     left_keypoints: tuple[Any, ...] = ()
@@ -84,6 +111,11 @@ class SuperGlueMatcher:
         self.feature_options = _copy_options(feature_options)
         self.device_options = _copy_options(device_options)
         self.ignored_parameters: list[str] = []
+        self.device_dtype = _resolve_device_dtype(
+            method=self.method,
+            device_options=self.device_options,
+            ignored_parameters=self.ignored_parameters,
+        )
         self._model = None
 
     def _superpoint_config(self) -> dict[str, Any]:
@@ -134,18 +166,20 @@ class SuperGlueMatcher:
                 install_hint="pip install superglue-pretrained-network",
             )
 
+        torch_dtype = _resolve_torch_dtype(torch=torch, method=self.method, device_dtype=self.device_dtype)
         if self._model is None:
             self._model = Matching(
                 {
                     "superpoint": self._superpoint_config(),
                     "superglue": self._superglue_config(),
                 }
-            ).eval().to(self.device)
+            ).eval().to(device=self.device, dtype=torch_dtype)
         return torch, self._model
 
     def match(self, *, features_left: Any, features_right: Any, device: str = "cpu"):
         torch, model = self._load_model()
         _ = device
+        torch_dtype = _resolve_torch_dtype(torch=torch, method=self.method, device_dtype=self.device_dtype)
         left_keypoints = np.asarray((features_left or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
         right_keypoints = np.asarray((features_right or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
         left_descriptors = np.asarray(
@@ -167,12 +201,12 @@ class SuperGlueMatcher:
         if right_scores.shape[0] != right_keypoints.shape[0]:
             right_scores = np.ones((right_keypoints.shape[0],), dtype=np.float32)
         match_input = {
-            "keypoints0": torch.from_numpy(left_keypoints)[None, :, :].to(self.device),
-            "keypoints1": torch.from_numpy(right_keypoints)[None, :, :].to(self.device),
-            "descriptors0": torch.from_numpy(left_descriptors.T)[None, :, :].to(self.device),
-            "descriptors1": torch.from_numpy(right_descriptors.T)[None, :, :].to(self.device),
-            "scores0": torch.from_numpy(left_scores)[None, :].to(self.device),
-            "scores1": torch.from_numpy(right_scores)[None, :].to(self.device),
+            "keypoints0": torch.from_numpy(left_keypoints)[None, :, :].to(device=self.device, dtype=torch_dtype),
+            "keypoints1": torch.from_numpy(right_keypoints)[None, :, :].to(device=self.device, dtype=torch_dtype),
+            "descriptors0": torch.from_numpy(left_descriptors.T)[None, :, :].to(device=self.device, dtype=torch_dtype),
+            "descriptors1": torch.from_numpy(right_descriptors.T)[None, :, :].to(device=self.device, dtype=torch_dtype),
+            "scores0": torch.from_numpy(left_scores)[None, :].to(device=self.device, dtype=torch_dtype),
+            "scores1": torch.from_numpy(right_scores)[None, :].to(device=self.device, dtype=torch_dtype),
         }
 
         with torch.no_grad():
@@ -209,6 +243,11 @@ class LightGlueMatcher:
         self.feature_options = _copy_options(feature_options)
         self.device_options = _copy_options(device_options)
         self.ignored_parameters: list[str] = []
+        self.device_dtype = _resolve_device_dtype(
+            method=self.method,
+            device_options=self.device_options,
+            ignored_parameters=self.ignored_parameters,
+        )
         self._matcher = None
 
     def _lightglue_options(self) -> dict[str, Any]:
@@ -250,16 +289,18 @@ class LightGlueMatcher:
                 install_hint="pip install lightglue",
             )
 
+        torch_dtype = _resolve_torch_dtype(torch=torch, method=self.method, device_dtype=self.device_dtype)
         if self._matcher is None:
             self._matcher = LightGlue(
                 features=self.feature_extractor_method,
                 **self._lightglue_options(),
-            ).eval().to(self.device)
+            ).eval().to(device=self.device, dtype=torch_dtype)
         return torch, self._matcher
 
     def match(self, *, features_left: Any, features_right: Any, device: str = "cpu"):
         torch, matcher = self._load_matcher()
         _ = device
+        torch_dtype = _resolve_torch_dtype(torch=torch, method=self.method, device_dtype=self.device_dtype)
         left_keypoints = np.asarray((features_left or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
         right_keypoints = np.asarray((features_right or {}).get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
         left_descriptors = np.asarray(
@@ -275,12 +316,12 @@ class LightGlueMatcher:
 
         inputs = {
             "image0": {
-                "keypoints": torch.from_numpy(left_keypoints)[None, :, :].to(self.device),
-                "descriptors": torch.from_numpy(left_descriptors)[None, :, :].to(self.device),
+                "keypoints": torch.from_numpy(left_keypoints)[None, :, :].to(device=self.device, dtype=torch_dtype),
+                "descriptors": torch.from_numpy(left_descriptors)[None, :, :].to(device=self.device, dtype=torch_dtype),
             },
             "image1": {
-                "keypoints": torch.from_numpy(right_keypoints)[None, :, :].to(self.device),
-                "descriptors": torch.from_numpy(right_descriptors)[None, :, :].to(self.device),
+                "keypoints": torch.from_numpy(right_keypoints)[None, :, :].to(device=self.device, dtype=torch_dtype),
+                "descriptors": torch.from_numpy(right_descriptors)[None, :, :].to(device=self.device, dtype=torch_dtype),
             },
         }
         with torch.no_grad():
@@ -334,6 +375,11 @@ class LoFTRMatcher:
         self.feature_options = _copy_options(feature_options)
         self.device_options = _copy_options(device_options)
         self.ignored_parameters: list[str] = []
+        self.device_dtype = _resolve_device_dtype(
+            method=self.method,
+            device_options=self.device_options,
+            ignored_parameters=self.ignored_parameters,
+        )
         self._matcher = None
 
     def _loftr_pretrained(self) -> str:
@@ -377,8 +423,9 @@ class LoFTRMatcher:
                 missing="kornia",
                 install_hint="pip install kornia",
             )
+        torch_dtype = _resolve_torch_dtype(torch=torch, method=self.method, device_dtype=self.device_dtype)
         if self._matcher is None:
-            self._matcher = kf.LoFTR(pretrained=self._loftr_pretrained()).eval().to(self.device)
+            self._matcher = kf.LoFTR(pretrained=self._loftr_pretrained()).eval().to(device=self.device, dtype=torch_dtype)
         return torch, self._matcher
 
     def match(
@@ -392,9 +439,13 @@ class LoFTRMatcher:
     ):
         torch, matcher = self._load_matcher()
         _ = device
+        torch_dtype = _resolve_torch_dtype(torch=torch, method=self.method, device_dtype=self.device_dtype)
         if left_image is None or right_image is None:
             return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
-        matcher_inputs = {"image0": left_image.to(self.device), "image1": right_image.to(self.device)}
+        matcher_inputs = {
+            "image0": left_image.to(device=self.device, dtype=torch_dtype),
+            "image1": right_image.to(device=self.device, dtype=torch_dtype),
+        }
         if left_mask is not None:
             matcher_inputs["mask0"] = left_mask.to(self.device)
         if right_mask is not None:

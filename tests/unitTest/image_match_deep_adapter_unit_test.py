@@ -7,6 +7,7 @@ Updated: 2026-05-19  Geng Xun added focused coverage for pre-match feature filte
 Updated: 2026-05-19  Geng Xun added runtime config storage coverage for deep matcher adapters.
 Updated: 2026-05-19  Geng Xun added feature extractor runtime config coverage for SuperPoint and explicit unsupported extractor errors.
 Updated: 2026-05-19  Geng Xun added matcher runtime option forwarding coverage for LightGlue/LoFTR/SuperGlue adapters.
+Updated: 2026-05-19  Geng Xun added regression coverage for deep matcher device dtype application and surfaced ignored device options.
 """
 
 from __future__ import annotations
@@ -60,6 +61,24 @@ class _CapturingLoFTRMatcher:
             np.zeros((0, 2), dtype=np.float32),
             np.zeros((0,), dtype=np.float32),
         )
+
+
+class _DTypeTrackingModule:
+    def __init__(self) -> None:
+        self.device: object | None = None
+        self.dtype: object | None = None
+
+    def eval(self):
+        return self
+
+    def to(self, *args, **kwargs):
+        if args:
+            self.device = args[0]
+        if "device" in kwargs:
+            self.device = kwargs["device"]
+        if "dtype" in kwargs:
+            self.dtype = kwargs["dtype"]
+        return self
 
 
 class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
@@ -151,6 +170,27 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
             feature_options={"max_keypoints": 4096, "keypoint_threshold": 0.0005},
             device_options={"prefer_gpu": False, "dtype": "float32", "batch_inference": True},
         )
+
+    def test_image_match_lightglue_applies_dtype_and_surfaces_ignored_device_options(self):
+        deep_matchers_module = __import__("image_match.deep_matchers", fromlist=["build_deep_matcher"])
+        lightglue_backend = _DTypeTrackingModule()
+        lightglue_constructor = mock.Mock(return_value=lightglue_backend)
+        torch_module = SimpleNamespace(float32="torch.float32")
+        lightglue_module = SimpleNamespace(LightGlue=lightglue_constructor)
+
+        with mock.patch.dict(sys.modules, {"torch": torch_module, "lightglue": lightglue_module}, clear=False):
+            matcher = deep_matchers_module.build_deep_matcher(
+                "lightglue",
+                device="cpu",
+                feature_extractor_method="superpoint",
+                matcher_options={"weights": "superpoint_lightglue"},
+                device_options={"dtype": "float32", "batch_inference": True},
+            )
+            matcher._load_matcher()
+
+        self.assertEqual(lightglue_backend.device, "cpu")
+        self.assertEqual(lightglue_backend.dtype, "torch.float32")
+        self.assertIn("device.batch_inference", matcher.ignored_parameters)
 
     def test_lightglue_aliked_disk_doghardnet_reject_unimplemented_extractors(self):
         config_module = __import__("controlnet_construct.deep_match_config", fromlist=["resolve_deep_match_runtime_config"])

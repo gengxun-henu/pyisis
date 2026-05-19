@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-10
+Last Modified: 2026-05-19
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -40,6 +40,7 @@ Updated: 2026-05-10  Geng Xun updated from-ori-match coverage to require a clean
 Updated: 2026-05-10  Geng Xun updated from-ori-match coverage for full CLI dispatch into ori matching and direct ControlNet build.
 Updated: 2026-05-16  Geng Xun added wrapper coverage for deep-match manifest export handoff summaries.
 Updated: 2026-05-16  Geng Xun added pipeline wrapper coverage for adaptive-routing profile forwarding.
+Updated: 2026-05-19  Geng Xun added regression coverage for deep matcher config path wrapper forwarding.
 """
 
 from __future__ import annotations
@@ -376,8 +377,9 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 }}
                                 print(mapping.get(field_name, ""))
                                 return 0
-                            Path(args[2]).write_text("synthetic-left-key\\n", encoding="utf-8")
-                            Path(args[3]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
                             if "--metadata-output" in args:
                                 metadata_path = Path(args[args.index("--metadata-output") + 1])
                                 metadata_path.parent.mkdir(parents=True, exist_ok=True)
@@ -560,8 +562,9 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             worker_limit = args[args.index("--num-worker-parallel-cpu") + 1]
                             if worker_limit != "8":
                                 raise SystemExit(f"unexpected worker limit: {{worker_limit}}")
-                            Path(args[2]).write_text("synthetic-left-key\\n", encoding="utf-8")
-                            Path(args[3]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
                             return 0
 
                         if script_name == "controlnet_stereopair.py":
@@ -689,8 +692,9 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 raise SystemExit(f"unexpected worker limit: {{worker_limit}}")
                             if "--match-visualization-output-dir" not in args:
                                 raise SystemExit("missing --match-visualization-output-dir")
-                            Path(args[2]).write_text("synthetic-left-key\\n", encoding="utf-8")
-                            Path(args[3]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
                             return 0
 
                         raise SystemExit(f"Unhandled fake python script: {{script_name}}")
@@ -811,8 +815,9 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             worker_limit = args[args.index("--num-worker-parallel-cpu") + 1]
                             if worker_limit != "6":
                                 raise SystemExit(f"unexpected worker limit: {{worker_limit}}")
-                            Path(args[2]).write_text("synthetic-left-key\\n", encoding="utf-8")
-                            Path(args[3]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
                             return 0
 
                         raise SystemExit(f"Unhandled fake python script: {{script_name}}")
@@ -1870,6 +1875,232 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(summary["deep_match_mode"], "export")
         self.assertEqual(summary["pairs"][0]["pair_tag"], "left__right")
         self.assertEqual(summary["pairs"][0]["manifest_path"], "work/deep_match_workspaces/left__right/tasks.json")
+
+    def test_run_image_match_batch_example_forwards_deep_match_config_path_from_config(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "matcher_method": "lightglue",
+                            "deep_matcher_config_path": "examples/controlnet_construct/presets/lightglue_default.json",
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+                        if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "matcher_method": image_match_config.get("matcher_method", ""),
+                                    "deep_matcher_config_path": image_match_config.get("deep_matcher_config_path", ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
+                            if "--matcher-method" not in args:
+                                raise SystemExit("missing --matcher-method")
+                            if args[args.index("--matcher-method") + 1] != "lightglue":
+                                raise SystemExit("unexpected matcher method")
+                            if "--deep-match-config-path" not in args:
+                                raise SystemExit("missing --deep-match-config-path")
+                            config_value = args[args.index("--deep-match-config-path") + 1]
+                            if config_value != "examples/controlnet_construct/presets/lightglue_default.json":
+                                raise SystemExit(f"unexpected deep config: {{config_value}}")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            return 0
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Deep-match config path: examples/controlnet_construct/presets/lightglue_default.json", completed.stdout)
+
+    def test_run_image_match_batch_example_cli_deep_match_config_path_overrides_config(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "matcher_method": "lightglue",
+                            "deep_matcher_config_path": "examples/controlnet_construct/presets/lightglue_default.json",
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+                        if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "matcher_method": image_match_config.get("matcher_method", ""),
+                                    "deep_matcher_config_path": image_match_config.get("deep_matcher_config_path", ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
+                            if "--deep-match-config-path" not in args:
+                                raise SystemExit("missing --deep-match-config-path")
+                            config_value = args[args.index("--deep-match-config-path") + 1]
+                            if config_value != "examples/controlnet_construct/presets/loftr_default.json":
+                                raise SystemExit(f"unexpected deep config: {{config_value}}")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            return 0
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                    "--deep-match-config-path",
+                    "examples/controlnet_construct/presets/loftr_default.json",
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Deep-match config path: examples/controlnet_construct/presets/loftr_default.json", completed.stdout)
 
     def test_run_pipeline_example_export_mode_stops_after_manifest_export(self):
         with temporary_directory() as temp_dir:

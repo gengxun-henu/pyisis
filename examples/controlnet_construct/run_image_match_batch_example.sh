@@ -6,6 +6,7 @@
 # Created: 2026-05-11
 # Updated: 2026-05-11  Geng Xun added top-of-file metadata so example shell entrypoints follow the repository's example-file header convention.
 # Updated: 2026-05-16  Geng Xun added deep-match export/import forwarding and manifest summary output for cross-conda handoff workflows.
+# Updated: 2026-05-19  Geng Xun added deep matcher config path CLI/config forwarding for batch matching.
 
 set -euo pipefail
 
@@ -69,6 +70,9 @@ Options:
   --matcher-method NAME           Matcher backend forwarded to examples/image_match/image_match.py.
                                   Supported values: bf, flann, superglue, lightglue, loftr.
                                   Default: bf unless omitted and resolved from --config.
+  --deep-match-config-path PATH   Path to deep matcher preset JSON config.
+                                  If omitted, this script falls back to config JSON field
+                                  ImageMatch.deep_matcher_config_path when present.
   --deep-match-mode MODE          Deep-match execution mode forwarded to image_match.py: direct, export, or import.
                                   Default: direct. Use export in asp360_new to write manifest workspaces;
                                   use import after deep-learning results have been written.
@@ -240,6 +244,8 @@ main() {
   local explicit_invalid_pixel_radius=""
   local matcher_method="bf"
   local explicit_matcher_method=""
+  local deep_match_config_path=""
+  local explicit_deep_match_config_path=""
   local deep_match_mode="direct"
   local deep_match_temp_root_dir_input=""
   local deep_match_manifest_dir_input=""
@@ -337,6 +343,12 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --matcher-method"
         matcher_method=$2
         explicit_matcher_method=$2
+        shift 2
+        ;;
+      --deep-match-config-path)
+        [[ $# -ge 2 ]] || die "missing value for --deep-match-config-path"
+        deep_match_config_path=$2
+        explicit_deep_match_config_path=$2
         shift 2
         ;;
       --deep-match-mode)
@@ -485,6 +497,13 @@ main() {
         matcher_method="$config_matcher_method"
       fi
     fi
+    if [[ -z "$explicit_deep_match_config_path" ]]; then
+      local config_deep_matcher_config_path
+      config_deep_matcher_config_path=$(extract_image_match_config_value "$config_input" "deep_matcher_config_path")
+      if [[ -n "$config_deep_matcher_config_path" && "$config_deep_matcher_config_path" != "null" ]]; then
+        deep_match_config_path="$config_deep_matcher_config_path"
+      fi
+    fi
     if [[ -z "$explicit_enable_low_resolution_offset_estimation" ]]; then
       local config_enable_low_resolution_offset_estimation
       config_enable_low_resolution_offset_estimation=$(extract_image_match_config_value "$config_input" "enable_low_resolution_offset_estimation")
@@ -540,6 +559,9 @@ main() {
   log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
   log "Invalid pixel radius: $invalid_pixel_radius"
   log "Matcher method: $matcher_method"
+  if [[ -n "$deep_match_config_path" ]]; then
+    log "Deep-match config path: $deep_match_config_path"
+  fi
   log "Deep-match mode: $deep_match_mode"
   if [[ "$deep_match_mode" == "export" ]]; then
     log "Deep-match temp root dir: $DEEP_MATCH_TEMP_ROOT_DIR"
@@ -655,6 +677,9 @@ main() {
       match_args+=(--use-parallel-cpu)
     else
       match_args+=(--no-parallel-cpu)
+    fi
+    if [[ -n "$deep_match_config_path" ]]; then
+      match_args+=(--deep-match-config-path "$deep_match_config_path")
     fi
     match_args+=(--num-worker-parallel-cpu "$num_worker_parallel_cpu")
     if [[ "$enable_low_resolution_offset_estimation" == "1" ]]; then

@@ -7,6 +7,7 @@
 # Updated: 2026-05-11  Geng Xun added top-of-file metadata so example shell entrypoints follow the repository's example-file header convention.
 # Updated: 2026-05-16  Geng Xun added deep-match export/import forwarding and manifest summary output for cross-conda handoff workflows.
 # Updated: 2026-05-19  Geng Xun added deep matcher config path CLI/config forwarding for batch matching.
+# Updated: 2026-05-19  Geng Xun aligned batch wrapper config precedence, adaptive routing flags, and resolved deep matcher config path logging with the main pipeline wrapper.
 
 set -euo pipefail
 
@@ -72,7 +73,14 @@ Options:
                                   Default: bf unless omitted and resolved from --config.
   --deep-match-config-path PATH   Path to deep matcher preset JSON config.
                                   If omitted, this script falls back to config JSON field
-                                  ImageMatch.deep_matcher_config_path when present.
+                                  ImageMatch.deep_matcher_config_path when present. Relative config values
+                                  are resolved first against the config file directory, then against the repo root.
+  --adaptive-routing              Enable image_match.py adaptive routing. If omitted, this script falls back to
+                                  config JSON field ImageMatch.enable_adaptive_routing when present; otherwise disabled.
+  --no-adaptive-routing           Disable image_match.py adaptive routing even if config enables it.
+  --adaptive-routing-profile NAME Forwarded to image_match.py as the named adaptive-routing quality profile.
+                                  Supported values: balanced, strict, relaxed, fast. If omitted, this script falls back
+                                  to config JSON field ImageMatch.adaptive_routing_profile when present; otherwise balanced.
   --deep-match-mode MODE          Deep-match execution mode forwarded to image_match.py: direct, export, or import.
                                   Default: direct. Use export in asp360_new to write manifest workspaces;
                                   use import after deep-learning results have been written.
@@ -166,11 +174,40 @@ resolve_default_dom_list() {
 extract_image_match_config_value() {
   local config_path=$1
   local field_name=$2
-  local container_order=${3:-top-level-first}
+  local container_order=${3:-image-match-first}
   "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/image_match/image_match.py" \
     --config "$config_path" \
     --print-config-default "$field_name" \
     --print-config-default-container-order "$container_order"
+}
+
+resolve_config_relative_path() {
+  local raw_path=$1
+  local config_path=$2
+
+  [[ -n "$raw_path" ]] || return 0
+  if [[ "$raw_path" = /* ]]; then
+    printf '%s\n' "$raw_path"
+    return 0
+  fi
+
+  if [[ -n "$config_path" ]]; then
+    local config_dir
+    config_dir=$(cd -- "$(dirname -- "$config_path")" && pwd)
+    local config_relative_candidate="$config_dir/$raw_path"
+    if [[ -f "$config_relative_candidate" ]]; then
+      printf '%s\n' "$(cd -- "$(dirname -- "$config_relative_candidate")" && pwd)/$(basename -- "$config_relative_candidate")"
+      return 0
+    fi
+  fi
+
+  local repo_relative_candidate="$REPO_ROOT/$raw_path"
+  if [[ -f "$repo_relative_candidate" ]]; then
+    printf '%s\n' "$(cd -- "$(dirname -- "$repo_relative_candidate")" && pwd)/$(basename -- "$repo_relative_candidate")"
+    return 0
+  fi
+
+  printf '%s\n' "$REPO_ROOT/$raw_path"
 }
 
 initialize_deep_match_manifest_summary() {
@@ -246,6 +283,10 @@ main() {
   local explicit_matcher_method=""
   local deep_match_config_path=""
   local explicit_deep_match_config_path=""
+  local adaptive_routing="0"
+  local explicit_adaptive_routing=""
+  local adaptive_routing_profile="balanced"
+  local explicit_adaptive_routing_profile=""
   local deep_match_mode="direct"
   local deep_match_temp_root_dir_input=""
   local deep_match_manifest_dir_input=""
@@ -349,6 +390,22 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --deep-match-config-path"
         deep_match_config_path=$2
         explicit_deep_match_config_path=$2
+        shift 2
+        ;;
+      --adaptive-routing)
+        adaptive_routing="1"
+        explicit_adaptive_routing="1"
+        shift
+        ;;
+      --no-adaptive-routing)
+        adaptive_routing="0"
+        explicit_adaptive_routing="0"
+        shift
+        ;;
+      --adaptive-routing-profile)
+        [[ $# -ge 2 ]] || die "missing value for --adaptive-routing-profile"
+        adaptive_routing_profile=$2
+        explicit_adaptive_routing_profile=$2
         shift 2
         ;;
       --deep-match-mode)
@@ -501,7 +558,21 @@ main() {
       local config_deep_matcher_config_path
       config_deep_matcher_config_path=$(extract_image_match_config_value "$config_input" "deep_matcher_config_path")
       if [[ -n "$config_deep_matcher_config_path" && "$config_deep_matcher_config_path" != "null" ]]; then
-        deep_match_config_path="$config_deep_matcher_config_path"
+        deep_match_config_path=$(resolve_config_relative_path "$config_deep_matcher_config_path" "$CONFIG_PATH")
+      fi
+    fi
+    if [[ -z "$explicit_adaptive_routing" ]]; then
+      local config_enable_adaptive_routing
+      config_enable_adaptive_routing=$(extract_image_match_config_value "$config_input" "enable_adaptive_routing")
+      if [[ -n "$config_enable_adaptive_routing" ]]; then
+        adaptive_routing="$config_enable_adaptive_routing"
+      fi
+    fi
+    if [[ -z "$explicit_adaptive_routing_profile" ]]; then
+      local config_adaptive_routing_profile
+      config_adaptive_routing_profile=$(extract_image_match_config_value "$config_input" "adaptive_routing_profile")
+      if [[ -n "$config_adaptive_routing_profile" ]]; then
+        adaptive_routing_profile="$config_adaptive_routing_profile"
       fi
     fi
     if [[ -z "$explicit_enable_low_resolution_offset_estimation" ]]; then
@@ -562,6 +633,12 @@ main() {
   if [[ -n "$deep_match_config_path" ]]; then
     log "Deep-match config path: $deep_match_config_path"
   fi
+  if [[ "$adaptive_routing" == "1" ]]; then
+    log "Adaptive routing: enabled"
+  else
+    log "Adaptive routing: disabled"
+  fi
+  log "Adaptive routing profile: $adaptive_routing_profile"
   log "Deep-match mode: $deep_match_mode"
   if [[ "$deep_match_mode" == "export" ]]; then
     log "Deep-match temp root dir: $DEEP_MATCH_TEMP_ROOT_DIR"
@@ -678,6 +755,12 @@ main() {
     else
       match_args+=(--no-parallel-cpu)
     fi
+    if [[ "$adaptive_routing" == "1" ]]; then
+      match_args+=(--adaptive-routing)
+    else
+      match_args+=(--no-adaptive-routing)
+    fi
+    match_args+=(--adaptive-routing-profile "$adaptive_routing_profile")
     if [[ -n "$deep_match_config_path" ]]; then
       match_args+=(--deep-match-config-path "$deep_match_config_path")
     fi

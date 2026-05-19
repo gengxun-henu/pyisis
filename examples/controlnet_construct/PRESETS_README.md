@@ -82,7 +82,7 @@ This document describes the preset configuration files in `presets/` and the app
 
 ## Usage
 
-Specify the preset path in `controlnet_config.json`:
+Specify the preset path in the `ImageMatch` section of `controlnet_config.json`:
 
 ```json
 {
@@ -92,6 +92,16 @@ Specify the preset path in `controlnet_config.json`:
   }
 }
 ```
+
+Both wrapper entrypoints (`run_pipeline_example.sh` and `run_image_match_batch_example.sh`) use the same precedence for matching options:
+
+1. explicit CLI flags such as `--matcher-method`, `--deep-match-config-path`, `--adaptive-routing`, or `--adaptive-routing-profile`
+2. fields under config JSON `ImageMatch`
+3. script defaults
+
+When `ImageMatch.deep_matcher_config_path` is relative, the wrappers resolve it relative to the config file directory first. If that file does not exist, they fall back to resolving it relative to the repository root. The resolved path is printed in the wrapper log before it is forwarded to `examples/image_match/image_match.py`.
+
+For example, if `examples/controlnet_construct/controlnet_config.example.json` contains `"deep_matcher_config_path": "presets/lightglue_default.json"`, it resolves to `examples/controlnet_construct/presets/lightglue_default.json`. If a custom config outside the repository uses the same relative value and has its own adjacent `presets/` directory, that adjacent preset wins.
 
 ## Custom Presets
 

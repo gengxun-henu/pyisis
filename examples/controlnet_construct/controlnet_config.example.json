@@ -26,6 +26,8 @@
     "tile_validity_cell_height": 1024,
     "matcher_method": "flann",
     "deep_matcher_config_path": null,
+    "enable_adaptive_routing": false,
+    "adaptive_routing_profile": "balanced",
     "ratio_test": 0.75,
     "max_features": 1000,
     "sift_octave_layers": 3,

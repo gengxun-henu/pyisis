@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-05-19
 Updated: 2026-05-19  Geng Xun added runtime config storage for deep matcher execution.
+Updated: 2026-05-19  Geng Xun made feature extractor runtime config explicit for LightGlue and SuperGlue routing.
 """
 
 from __future__ import annotations
@@ -12,7 +13,7 @@ from typing import Any
 import cv2
 import numpy as np
 
-from .deep_frontends import DeepDependencyError, LoFTRFrontend, SuperPointFrontend, normalize_deep_method, resolve_torch_device
+from .deep_frontends import DeepDependencyError, DeepFrontendError, LoFTRFrontend, SuperPointFrontend, normalize_deep_method, resolve_torch_device
 from .deep_matchers import DeepMatchResult, DeepMatcherError, build_deep_matcher
 
 
@@ -59,7 +60,7 @@ class DeepMatcherAdapter:
         )
         self._prefer_gpu = resolved_prefer_gpu
         self._device = resolve_torch_device(resolved_prefer_gpu)
-        self._superpoint = SuperPointFrontend()
+        self._superpoint = SuperPointFrontend(runtime_config=runtime_config)
         self._loftr_frontend = LoFTRFrontend()
         self._matcher_cache: dict[tuple[str, str], Any] = {}
 
@@ -89,6 +90,13 @@ class DeepMatcherAdapter:
         method = normalize_deep_method(matcher_method)
         try:
             if method in ("superglue", "lightglue"):
+                extractor_method = str(
+                    getattr(self._runtime_config, "feature_extractor_method", "superpoint") or "superpoint"
+                ).strip().lower()
+                if extractor_method != "superpoint":
+                    raise DeepFrontendError(
+                        f"feature_extractor.method={extractor_method!r} is validated but not yet implemented for {method!r}."
+                    )
                 features_left = self._superpoint.extract(left_image, device=device)
                 features_right = self._superpoint.extract(right_image, device=device)
                 features_left = _filter_feature_dict_by_invalid_mask(features_left, left_mask)

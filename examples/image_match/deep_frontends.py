@@ -1,6 +1,14 @@
-"""Frontend helpers for model-backed deep matcher pipelines."""
+"""Frontend helpers for model-backed deep matcher pipelines.
+
+Author: Geng Xun
+Created: 2026-05-11
+Updated: 2026-05-19  Geng Xun added runtime-configured SuperPoint frontend options and explicit ignored-parameter tracking.
+"""
 
 from __future__ import annotations
+
+import inspect
+from typing import Any
 
 import numpy as np
 
@@ -47,9 +55,99 @@ def _require_kornia_feature(*, method: str, feature_name: str, install_hint: str
     return kf
 
 
+def _callable_accepts_var_keyword(callable_object: Any) -> bool:
+    try:
+        signature = inspect.signature(callable_object)
+    except (TypeError, ValueError):
+        return False
+    return any(parameter.kind == inspect.Parameter.VAR_KEYWORD for parameter in signature.parameters.values())
+
+
+def _callable_parameter_names(callable_object: Any) -> set[str]:
+    try:
+        signature = inspect.signature(callable_object)
+    except (TypeError, ValueError):
+        return set()
+    return {
+        name
+        for name, parameter in signature.parameters.items()
+        if parameter.kind in (inspect.Parameter.POSITIONAL_OR_KEYWORD, inspect.Parameter.KEYWORD_ONLY)
+    }
+
+
 class SuperPointFrontend:
-    def __init__(self) -> None:
+    _SUPPORTED_PARAMETER_ALIASES = {
+        "max_keypoints": ("max_keypoints", "max_num_keypoints", "num_keypoints"),
+        "keypoint_threshold": ("keypoint_threshold",),
+        "nms_radius": ("nms_radius",),
+    }
+
+    def __init__(self, *, runtime_config: Any | None = None, feature_options: dict[str, Any] | None = None) -> None:
+        self._runtime_config = runtime_config
+        self.requested_parameters = self._resolve_requested_parameters(runtime_config, feature_options)
+        self.ignored_parameters = self._initial_ignored_parameters(runtime_config, feature_options)
         self._extractor = None
+
+    def _resolve_requested_parameters(
+        self,
+        runtime_config: Any | None,
+        feature_options: dict[str, Any] | None,
+    ) -> dict[str, Any]:
+        raw_options: dict[str, Any] = {}
+        if runtime_config is not None:
+            raw_config = getattr(runtime_config, "raw_config", {}) or {}
+            extractor_config = raw_config.get("feature_extractor", {}) if isinstance(raw_config, dict) else {}
+            if isinstance(extractor_config, dict):
+                raw_options.update(extractor_config)
+        if feature_options:
+            raw_options.update(feature_options)
+
+        return {
+            key: raw_options[key]
+            for key in self._SUPPORTED_PARAMETER_ALIASES
+            if key in raw_options
+        }
+
+    def _initial_ignored_parameters(
+        self,
+        runtime_config: Any | None,
+        feature_options: dict[str, Any] | None,
+    ) -> dict[str, str]:
+        raw_options: dict[str, Any] = {}
+        if runtime_config is not None:
+            raw_config = getattr(runtime_config, "raw_config", {}) or {}
+            extractor_config = raw_config.get("feature_extractor", {}) if isinstance(raw_config, dict) else {}
+            if isinstance(extractor_config, dict):
+                raw_options.update(extractor_config)
+        if feature_options:
+            raw_options.update(feature_options)
+
+        return {
+            key: "not supported by the Stage 3 SuperPoint frontend"
+            for key in raw_options
+            if key not in self._SUPPORTED_PARAMETER_ALIASES and key != "method"
+        }
+
+    def _build_superpoint_kwargs(self, superpoint_constructor: Any) -> dict[str, Any]:
+        accepts_var_keyword = _callable_accepts_var_keyword(superpoint_constructor)
+        parameter_names = _callable_parameter_names(superpoint_constructor)
+        constructor_kwargs: dict[str, Any] = {}
+
+        if accepts_var_keyword or "pretrained" in parameter_names:
+            constructor_kwargs["pretrained"] = "superpoint_v1"
+
+        for canonical_name, value in self.requested_parameters.items():
+            aliases = self._SUPPORTED_PARAMETER_ALIASES[canonical_name]
+            selected_name = None
+            if accepts_var_keyword:
+                selected_name = aliases[0]
+            else:
+                selected_name = next((alias for alias in aliases if alias in parameter_names), None)
+            if selected_name is None:
+                self.ignored_parameters[canonical_name] = "not accepted by kornia.feature.SuperPoint in this environment"
+                continue
+            constructor_kwargs[selected_name] = value
+        return constructor_kwargs
 
     def extract(self, image, device: str):
         try:
@@ -87,7 +185,7 @@ class SuperPointFrontend:
         image_tensor = torch.from_numpy(image_plane).to(dtype=torch.float32)[None, None, :, :].to(device)
 
         if self._extractor is None:
-            self._extractor = kf.SuperPoint(pretrained="superpoint_v1")
+            self._extractor = kf.SuperPoint(**self._build_superpoint_kwargs(kf.SuperPoint))
         self._extractor = self._extractor.to(device).eval()
 
         with torch.no_grad():

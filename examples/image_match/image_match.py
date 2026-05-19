@@ -43,6 +43,7 @@ Updated: 2026-05-16  Geng Xun added deep-match result import mode to convert man
 Updated: 2026-05-16  Geng Xun added named adaptive-routing profiles that expand to quality-gate thresholds in metadata.
 Updated: 2026-05-19  Geng Xun routed adaptive texture-sparseness diagnostics through
     tile-window readers instead of full-band cube reads.
+Updated: 2026-05-19  Geng Xun added shared deep matcher config path parsing, validation, and metadata recording.
 """
 
 from __future__ import annotations
@@ -456,6 +457,12 @@ def _parse_deep_match_mode(value: str) -> str:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
+def _load_deep_match_config(config_path: str | Path) -> dict[str, object]:
+    from controlnet_construct.deep_match_config import load_deep_match_config
+
+    return load_deep_match_config(config_path)
+
+
 def _validate_low_resolution_max_mean_reprojection_error_pixels(value: float) -> float:
     resolved_value = float(value)
     if resolved_value < 0.0:
@@ -676,6 +683,18 @@ def load_image_match_defaults_from_config(
             lambda value: str(value),
         ),
         (
+            "deep_match_config_path",
+            (
+                "deep_match_config_path",
+                "deepMatchConfigPath",
+                "DeepMatchConfigPath",
+                "deep_matcher_config_path",
+                "deepMatcherConfigPath",
+                "DeepMatcherConfigPath",
+            ),
+            lambda value: str(value),
+        ),
+        (
             "low_resolution_level",
             ("low_resolution_level", "lowResolutionLevel", "LowResolutionLevel"),
             lambda value: _validate_low_resolution_level(int(value)),
@@ -892,6 +911,8 @@ def print_image_match_config_default(
         config_container_order=config_container_order,
     )
     if field_name not in defaults:
+        if field_name == "deep_matcher_config_path" and "deep_match_config_path" in defaults:
+            return format_image_match_default_for_shell(defaults["deep_match_config_path"])
         return ""
     return format_image_match_default_for_shell(defaults[field_name])
 
@@ -1931,11 +1952,18 @@ def match_dom_pair(
     gpu_max_batch_size: int = 16,
     deep_match_mode: str = DEFAULT_DEEP_MATCH_MODE,
     deep_match_temp_root_dir: str | Path | None = None,
+    deep_match_config_path: str | Path | None = None,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     left_cube = ip.Cube()
     right_cube = ip.Cube()
 
     try:
+        resolved_deep_match_config = None
+        resolved_deep_match_config_path = None
+        if deep_match_config_path is not None:
+            resolved_deep_match_config_path = Path(deep_match_config_path)
+            resolved_deep_match_config = _load_deep_match_config(resolved_deep_match_config_path)
+
         image_backend = build_image_backend(image_space)
         left_cube.open(str(left_dom_path), "r")
         right_cube.open(str(right_dom_path), "r")
@@ -2441,6 +2469,8 @@ def match_dom_pair(
             },
             "adaptive_routing": adaptive_routing_summary,
             "deep_match_mode": resolved_deep_match_mode,
+            "deep_match_config_path": str(resolved_deep_match_config_path) if resolved_deep_match_config_path is not None else None,
+            "deep_match_config": resolved_deep_match_config,
             "deep_match_export": deep_match_export_summary,
             "low_resolution_offset": low_resolution_offset_summary,
             "preparation": asdict(preparation),
@@ -2481,6 +2511,7 @@ def match_dom_pair_to_key_files(
     deep_match_mode: str = DEFAULT_DEEP_MATCH_MODE,
     deep_match_temp_root_dir: str | Path | None = None,
     deep_match_manifest: str | Path | None = None,
+    deep_match_config_path: str | Path | None = None,
     **kwargs,
 ) -> dict[str, object]:
     resolved_deep_match_mode = _normalize_deep_match_mode(deep_match_mode)
@@ -2576,6 +2607,7 @@ def match_dom_pair_to_key_files(
         gpu_max_batch_size=gpu_max_batch_size,
         deep_match_mode=resolved_deep_match_mode,
         deep_match_temp_root_dir=deep_match_temp_root_dir,
+        deep_match_config_path=deep_match_config_path,
         **kwargs,
     )
     export_only = summary.get("deep_match_mode") == "export"
@@ -2623,6 +2655,8 @@ def match_dom_pair_to_key_files(
             ),
             "adaptive_routing": summary["adaptive_routing"],
             "deep_match_mode": summary.get("deep_match_mode", DEFAULT_DEEP_MATCH_MODE),
+            "deep_match_config_path": summary.get("deep_match_config_path"),
+            "deep_match_config": summary.get("deep_match_config"),
             "deep_match_export": summary.get("deep_match_export"),
         }
     match_visualization_result: dict[str, object] | None = None
@@ -2733,6 +2767,15 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--tile-validity-cell-width", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_width"), default=DEFAULT_TILE_VALIDITY_CELL_WIDTH, help=f"Coarse validity-index cell width. Default: {DEFAULT_TILE_VALIDITY_CELL_WIDTH}.")
     parser.add_argument("--tile-validity-cell-height", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_height"), default=DEFAULT_TILE_VALIDITY_CELL_HEIGHT, help=f"Coarse validity-index cell height. Default: {DEFAULT_TILE_VALIDITY_CELL_HEIGHT}.")
     parser.add_argument("--matcher-method", type=_parse_matcher_method, default=DEFAULT_MATCHER_METHOD, help="Matcher method: bf, flann, superpoint, superglue, lightglue, loftr (default: bf).")
+    parser.add_argument(
+        "--deep-match-config-path",
+        type=Path,
+        default=None,
+        help=(
+            "Path to a deep matcher preset JSON. The file is validated before "
+            "running deep matcher methods and its resolved values are recorded in metadata."
+        ),
+    )
     parser.add_argument("--deep-match-mode", type=_parse_deep_match_mode, default=DEFAULT_DEEP_MATCH_MODE, help="Deep-match execution mode: direct, export, or import. 'export' writes a manifest plus tile arrays; 'import' reads completed manifest NPZ results and writes `.key` files.")
     parser.add_argument("--deep-match-temp-root-dir", default=None, help="Root directory used for exported deep-match workspaces when --deep-match-mode export is selected.")
     parser.add_argument("--deep-match-manifest", default=None, help="Path to an exported deep-match tasks.json manifest when --deep-match-mode import is selected.")
@@ -3034,6 +3077,7 @@ def main(argv: list[str] | None = None) -> None:
         gpu_dynamic_batch=args.gpu_dynamic_batch,
         gpu_min_batch_size=args.gpu_min_batch_size,
         gpu_max_batch_size=args.gpu_max_batch_size,
+        deep_match_config_path=args.deep_match_config_path,
         deep_match_mode=args.deep_match_mode,
         deep_match_temp_root_dir=(
             args.deep_match_temp_root_dir

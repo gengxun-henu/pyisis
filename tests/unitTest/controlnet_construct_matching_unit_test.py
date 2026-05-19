@@ -50,6 +50,7 @@ Updated: 2026-05-16  Geng Xun added coverage for non-object preview cache metada
 Updated: 2026-05-17  Geng Xun added parser/config coverage for visualization options and low-resolution target-long-edge matching.
 Updated: 2026-05-18  Geng Xun added regression coverage for legacy positional API compatibility and visualization metadata sidecar output.
 Updated: 2026-05-19  Geng Xun added regression coverage for visualization failure metadata sidecar output.
+Updated: 2026-05-19  Geng Xun added regression coverage for shared deep matcher config path parsing and forwarding.
 Updated: 2026-05-20  Geng Xun added GPU SIFT integration smoke coverage for tile_matching CPU/GPU shared API and GpuSiftBatch fallback.
 Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile matching delegation through the shared matcher.
 Updated: 2026-05-20  Geng Xun added GPU tile no-feature contract regression coverage.
@@ -830,6 +831,25 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         self.assertEqual(args.adaptive_routing_profile, "strict")
 
+    def test_build_argument_parser_accepts_deep_match_config_path(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "--deep-match-config-path",
+                "examples/controlnet_construct/presets/lightglue_default.json",
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+            ]
+        )
+
+        self.assertEqual(
+            str(args.deep_match_config_path),
+            "examples/controlnet_construct/presets/lightglue_default.json",
+        )
+
     def test_build_argument_parser_accepts_custom_parallel_worker_limit(self):
         parser = build_argument_parser()
 
@@ -1182,6 +1202,66 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertAlmostEqual(defaults["low_resolution_max_mean_reprojection_error_pixels"], 2.25)
         self.assertEqual(defaults["low_resolution_min_retained_match_count"], 6)
         self.assertAlmostEqual(defaults["low_resolution_max_mean_projected_offset_meters"], 2000.0)
+
+    def test_load_image_match_defaults_from_config_accepts_deep_matcher_config_path(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "image_match_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "deep_matcher_config_path": "examples/controlnet_construct/presets/lightglue_default.json",
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            defaults = image_match.load_image_match_defaults_from_config(config_path)
+
+        self.assertEqual(
+            defaults["deep_match_config_path"],
+            "examples/controlnet_construct/presets/lightglue_default.json",
+        )
+
+    def test_image_match_main_forwards_deep_match_config_path_to_key_file_runner(self):
+        stdout = io.StringIO()
+
+        with (
+            mock.patch("controlnet_construct.image_match.match_dom_pair_to_key_files", return_value={"status": "matched"}) as match_mock,
+            mock.patch.object(sys, "stdout", stdout),
+        ):
+            image_match.main(
+                [
+                    "--deep-match-config-path",
+                    "examples/controlnet_construct/presets/lightglue_default.json",
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left.key",
+                    "right.key",
+                    "--no-write-match-visualization",
+                ]
+            )
+
+        self.assertEqual(
+            match_mock.call_args.kwargs["deep_match_config_path"],
+            Path("examples/controlnet_construct/presets/lightglue_default.json"),
+        )
+
+    def test_match_dom_pair_validates_deep_match_config_path_before_opening_cubes(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "invalid_deep_match.json"
+            config_path.write_text(json.dumps({}), encoding="utf-8")
+
+            with mock.patch.object(image_match.ip, "Cube") as cube_mock:
+                with self.assertRaisesRegex(ValueError, "feature_extractor"):
+                    image_match.match_dom_pair(
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        deep_match_config_path=config_path,
+                    )
+
+        cube_mock.return_value.open.assert_not_called()
 
     def test_load_image_match_defaults_from_config_reads_tile_validity_fields(self):
         with temporary_directory() as temp_dir:

@@ -1,4 +1,9 @@
-"""Scaffolding adapter for deep matcher method routing."""
+"""Scaffolding adapter for deep matcher method routing.
+
+Author: Geng Xun
+Created: 2026-05-19
+Updated: 2026-05-19  Geng Xun added runtime config storage for deep matcher execution.
+"""
 
 from __future__ import annotations
 
@@ -45,8 +50,15 @@ def _filter_feature_dict_by_invalid_mask(features: Any, invalid_mask: np.ndarray
 
 
 class DeepMatcherAdapter:
-    def __init__(self, *, prefer_gpu: bool = True) -> None:
-        self._device = resolve_torch_device(prefer_gpu)
+    def __init__(self, *, prefer_gpu: bool = True, runtime_config: Any | None = None) -> None:
+        self._runtime_config = runtime_config
+        resolved_prefer_gpu = (
+            bool(getattr(runtime_config, "prefer_gpu"))
+            if runtime_config is not None and hasattr(runtime_config, "prefer_gpu")
+            else bool(prefer_gpu)
+        )
+        self._prefer_gpu = resolved_prefer_gpu
+        self._device = resolve_torch_device(resolved_prefer_gpu)
         self._superpoint = SuperPointFrontend()
         self._loftr_frontend = LoFTRFrontend()
         self._matcher_cache: dict[tuple[str, str], Any] = {}
@@ -169,7 +181,8 @@ class DeepMatcherAdapter:
         prefer_gpu: bool,
     ) -> DeepMatchResult:
         method = normalize_deep_method(matcher_method)
-        primary_device = resolve_torch_device(prefer_gpu)
+        resolved_prefer_gpu = self._prefer_gpu if self._runtime_config is not None else bool(prefer_gpu)
+        primary_device = resolve_torch_device(resolved_prefer_gpu)
         try:
             return self._match_pair_on_device(
                 matcher_method=method,
@@ -182,7 +195,7 @@ class DeepMatcherAdapter:
         except (DeepDependencyError, DeepMatcherError):
             raise
         except Exception:
-            if not prefer_gpu:
+            if not resolved_prefer_gpu:
                 raise
             fallback_method = self.resolve_fallback_method(requested_method=method, fallback_method=method)
             return self._match_pair_on_device(

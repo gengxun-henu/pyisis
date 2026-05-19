@@ -1,10 +1,13 @@
-"""深度学习匹配配置加载与校验模块。
+"""Deep-learning matcher preset loading, validation, and runtime resolution.
 
-加载预设 JSON 配置文件，验证必填字段，提供工具函数。
+Author: Geng Xun
+Created: 2026-05-16
+Updated: 2026-05-19  Geng Xun added runtime config resolution for matcher execution layers.
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 import json
 from pathlib import Path
 from typing import Any
@@ -14,6 +17,18 @@ DEEP_MATCHER_METHODS = ("superglue", "lightglue", "loftr")
 
 # 支持的特征提取器（loftr 使用内置特征提取，不需要独立提取器）
 SUPPORTED_EXTRACTOR_METHODS = ("superpoint", "disk", "aliked", "doghardnet", "loftr")
+
+
+@dataclass(frozen=True, slots=True)
+class DeepMatchRuntimeConfig:
+    """Resolved deep matcher preset values consumed by execution layers."""
+
+    matcher_method: str
+    feature_extractor_method: str
+    prefer_gpu: bool
+    device_dtype: str
+    fallback_on_error: str | None
+    raw_config: dict[str, Any]
 
 
 def load_deep_match_config(config_path: str | Path) -> dict[str, Any]:
@@ -39,6 +54,28 @@ def load_deep_match_config(config_path: str | Path) -> dict[str, Any]:
 
     validate_deep_match_config(config)
     return config
+
+
+def resolve_deep_match_runtime_config(config_path: str | Path) -> DeepMatchRuntimeConfig:
+    """Resolve a validated deep matcher preset into execution-facing values."""
+    config = load_deep_match_config(config_path)
+    extractor = config["feature_extractor"]
+    matcher = config["matcher"]
+    device = config.get("device", {})
+    fallback = config.get("fallback", {})
+
+    prefer_gpu_value = device.get("prefer_gpu")
+    device_type = str(device.get("type", "auto")).strip().lower()
+    prefer_gpu = bool(prefer_gpu_value) if prefer_gpu_value is not None else device_type != "cpu"
+
+    return DeepMatchRuntimeConfig(
+        matcher_method=str(matcher["method"]).strip().lower(),
+        feature_extractor_method=str(extractor["method"]).strip().lower(),
+        prefer_gpu=prefer_gpu,
+        device_dtype=str(device.get("dtype", "float32")).strip().lower(),
+        fallback_on_error=fallback.get("on_error"),
+        raw_config=config,
+    )
 
 
 def validate_deep_match_config(config: dict[str, Any]) -> None:

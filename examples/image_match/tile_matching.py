@@ -16,13 +16,14 @@ Updated: 2026-05-08  Geng Xun dispatched homogeneous GPU tile payloads through t
 Updated: 2026-05-09  Geng Xun reused deep matcher adapters across tile dispatch calls.
 Updated: 2026-05-10  Geng Xun added a minimal dom/ori image-space backend abstraction for future tile-reading reuse.
 Updated: 2026-05-10  Geng Xun accepted the ORI-facing `superpoint` matcher selector in shared matcher normalization.
+Updated: 2026-05-19  Geng Xun threaded resolved deep matcher runtime config through tile tasks and adapters.
 """
 
 from __future__ import annotations
 
 from collections.abc import Callable
 from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
-from dataclasses import dataclass, replace
+from dataclasses import asdict, dataclass, replace
 import functools
 import multiprocessing as mp
 import os
@@ -126,6 +127,7 @@ class TileMatchTask:
     image_space: str = "dom"
     use_gpu: bool = False
     gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE
+    deep_match_runtime_config: Any | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -165,7 +167,9 @@ def _normalize_matcher_method(matcher_method: str) -> str:
     return resolved_matcher_method
 
 
-def _get_deep_matcher_adapter(*, prefer_gpu: bool) -> DeepMatcherAdapter:
+def _get_deep_matcher_adapter(*, prefer_gpu: bool, deep_match_runtime_config: Any | None = None) -> DeepMatcherAdapter:
+    if deep_match_runtime_config is not None:
+        return DeepMatcherAdapter(prefer_gpu=prefer_gpu, runtime_config=deep_match_runtime_config)
     cache_key = bool(prefer_gpu)
     adapter = _DEEP_MATCHER_ADAPTER_CACHE.get(cache_key)
     if adapter is None:
@@ -679,6 +683,7 @@ def _match_tile_from_window_values(
     sift_edge_threshold: float,
     sift_sigma: float,
     use_gpu: bool = False,
+    deep_match_runtime_config: Any | None = None,
 ) -> TileMatchResult:
     left_invalid_mask, left_valid_pixel_stats = summarize_valid_pixels(
         left_values,
@@ -778,7 +783,10 @@ def _match_tile_from_window_values(
 
     resolved_matcher_method = _normalize_matcher_method(matcher_method)
     if resolved_matcher_method in DEEP_MATCHER_METHODS:
-        adapter = _get_deep_matcher_adapter(prefer_gpu=use_gpu)
+        adapter = _get_deep_matcher_adapter(
+            prefer_gpu=use_gpu,
+            deep_match_runtime_config=deep_match_runtime_config,
+        )
         deep_match_result = adapter.match_pair_with_fallback(
             matcher_method=resolved_matcher_method,
             left_image=left_image,
@@ -924,6 +932,7 @@ def _build_tile_match_tasks(
     sift_sigma: float,
     use_gpu: bool = False,
     gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE,
+    deep_match_runtime_config: Any | None = None,
 ) -> list[TileMatchTask]:
     backend = build_image_backend(image_space)
     return [
@@ -951,9 +960,44 @@ def _build_tile_match_tasks(
             sift_sigma=sift_sigma,
             use_gpu=use_gpu,
             gpu_batch_size=gpu_batch_size,
+            deep_match_runtime_config=deep_match_runtime_config,
         )
         for paired_window in windows
     ]
+
+
+def _runtime_config_to_payload(runtime_config: Any | None) -> dict[str, Any] | None:
+    if runtime_config is None:
+        return None
+    if hasattr(runtime_config, "__dataclass_fields__"):
+        return asdict(runtime_config)
+    if isinstance(runtime_config, dict):
+        return dict(runtime_config)
+    return {
+        "matcher_method": getattr(runtime_config, "matcher_method"),
+        "feature_extractor_method": getattr(runtime_config, "feature_extractor_method"),
+        "prefer_gpu": getattr(runtime_config, "prefer_gpu"),
+        "device_dtype": getattr(runtime_config, "device_dtype"),
+        "fallback_on_error": getattr(runtime_config, "fallback_on_error"),
+        "raw_config": getattr(runtime_config, "raw_config"),
+    }
+
+
+def _runtime_config_from_payload(payload: dict[str, Any] | None) -> Any | None:
+    if payload is None:
+        return None
+    try:
+        from controlnet_construct.deep_match_config import DeepMatchRuntimeConfig
+    except ImportError:
+        return dict(payload)
+    return DeepMatchRuntimeConfig(
+        matcher_method=str(payload["matcher_method"]),
+        feature_extractor_method=str(payload["feature_extractor_method"]),
+        prefer_gpu=bool(payload["prefer_gpu"]),
+        device_dtype=str(payload["device_dtype"]),
+        fallback_on_error=payload.get("fallback_on_error"),
+        raw_config=dict(payload.get("raw_config", {})),
+    )
 
 
 def _make_tile_read_fn(
@@ -1023,6 +1067,7 @@ def _match_tile_task_with_open_cubes(
         sift_edge_threshold=task.sift_edge_threshold,
         sift_sigma=task.sift_sigma,
         use_gpu=task.use_gpu,
+        deep_match_runtime_config=task.deep_match_runtime_config,
     )
 
 
@@ -1154,6 +1199,7 @@ def _tile_task_to_payload(task: TileMatchTask) -> dict[str, Any]:
         "sift_sigma": task.sift_sigma,
         "use_gpu": task.use_gpu,
         "gpu_batch_size": task.gpu_batch_size,
+        "deep_match_runtime_config": _runtime_config_to_payload(task.deep_match_runtime_config),
     }
 
 
@@ -1188,6 +1234,7 @@ def _tile_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
         sift_sigma=float(payload["sift_sigma"]),
         use_gpu=bool(payload.get("use_gpu", False)),
         gpu_batch_size=int(payload.get("gpu_batch_size", DEFAULT_GPU_BATCH_SIZE)),
+        deep_match_runtime_config=_runtime_config_from_payload(payload.get("deep_match_runtime_config")),
     )
 
 
@@ -1490,6 +1537,7 @@ def _run_parallel_tile_match_tasks(
     adaptive_warmup_count: int = 10,
     adaptive_throughput_threshold_mbps: float = 200.0,
     adaptive_recheck_every: int = 0,
+    deep_match_runtime_config: Any | None = None,
 ) -> list[TileMatchResult]:
     backend = build_image_backend(image_space)
     if not tasks:
@@ -1603,6 +1651,7 @@ def _run_serial_tile_match_tasks(
     adaptive_warmup_count: int = 10,
     adaptive_throughput_threshold_mbps: float = 200.0,
     adaptive_recheck_every: int = 0,
+    deep_match_runtime_config: Any | None = None,
 ) -> list[TileMatchResult]:
     build_image_backend(image_space)
     left_cache: TileCache | None = None
@@ -1664,6 +1713,7 @@ def _run_serial_tile_match_tasks(
                     sift_edge_threshold=sift_edge_threshold,
                     sift_sigma=sift_sigma,
                     use_gpu=use_gpu,
+                    deep_match_runtime_config=deep_match_runtime_config,
                 )
             )
             if progress_callback is not None:

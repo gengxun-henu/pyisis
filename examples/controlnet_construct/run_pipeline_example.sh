@@ -7,6 +7,7 @@
 # Updated: 2026-05-11  Geng Xun added top-of-file metadata so example shell entrypoints follow the repository's example-file header convention.
 # Updated: 2026-05-16  Geng Xun added deep-match export/import handoff forwarding and export-mode pipeline stop behavior.
 # Updated: 2026-05-16  Geng Xun added adaptive-routing flag/profile forwarding for the latest image-match routing profiles.
+# Updated: 2026-05-19  Geng Xun aligned ImageMatch config precedence and resolved config-relative deep matcher preset paths before forwarding.
 
 set -euo pipefail
 
@@ -16,7 +17,7 @@ DEFAULT_CONFIG_RELATIVE="examples/controlnet_construct/controlnet_config.example
 DEFAULT_WORK_DIR_RELATIVE="work"
 DEFAULT_PAIR_ID_PREFIX="S"
 DEFAULT_PAIR_ID_START="1"
-DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD=""
+DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD="0.05"
 DEFAULT_INVALID_PIXEL_RADIUS="1"
 
 log() {
@@ -277,19 +278,20 @@ Options:
   --valid-pixel-percent-threshold VALUE
                                  Forwarded to examples/image_match/image_match.py. If omitted, this script
                                  falls back to config JSON field ImageMatch.valid_pixel_percent_threshold
-                                 when present; otherwise examples/image_match/image_match.py keeps its own default (0.0).
+                                 when present; otherwise defaults to 0.05.
   --invalid-pixel-radius N        Forwarded to examples/image_match/image_match.py to suppress feature detection near
                                  invalid pixels and image borders. If omitted, this script falls
                                  back to config JSON field ImageMatch.invalid_pixel_radius when present;
                                  otherwise examples/image_match/image_match.py keeps its own default.
---matcher-method NAME           Forwarded to examples/image_match/image_match.py to select matcher backend.
+  --matcher-method NAME           Forwarded to examples/image_match/image_match.py to select matcher backend.
                                  Supported values: bf, flann, superglue, lightglue, loftr.
                                  If omitted, this script falls back to
                                  config JSON field ImageMatch.matcher_method when present; otherwise
                                  examples/image_match/image_match.py keeps its own default.
   --deep-match-config-path PATH   Path to deep matcher preset JSON config.
                                   Required when --matcher-method is superglue, lightglue, or loftr.
-                                  Default: (read from config JSON)
+                                  Default: (read from config JSON). Relative config values are resolved first
+                                  against the config file directory, then against the repo root.
   --adaptive-routing              Enable image_match.py adaptive routing. If omitted, this script falls back to
                                   config JSON field ImageMatch.enable_adaptive_routing when present; otherwise disabled.
   --no-adaptive-routing           Disable image_match.py adaptive routing even if config enables it.
@@ -562,11 +564,40 @@ PY
 extract_image_match_config_value() {
   local config_path=$1
   local field_name=$2
-  local container_order=${3:-top-level-first}
+  local container_order=${3:-image-match-first}
   "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/image_match/image_match.py" \
     --config "$config_path" \
     --print-config-default "$field_name" \
     --print-config-default-container-order "$container_order"
+}
+
+resolve_config_relative_path() {
+  local raw_path=$1
+  local config_path=$2
+
+  [[ -n "$raw_path" ]] || return 0
+  if [[ "$raw_path" = /* ]]; then
+    printf '%s\n' "$raw_path"
+    return 0
+  fi
+
+  if [[ -n "$config_path" ]]; then
+    local config_dir
+    config_dir=$(cd -- "$(dirname -- "$config_path")" && pwd)
+    local config_relative_candidate="$config_dir/$raw_path"
+    if [[ -f "$config_relative_candidate" ]]; then
+      printf '%s\n' "$(cd -- "$(dirname -- "$config_relative_candidate")" && pwd)/$(basename -- "$config_relative_candidate")"
+      return 0
+    fi
+  fi
+
+  local repo_relative_candidate="$REPO_ROOT/$raw_path"
+  if [[ -f "$repo_relative_candidate" ]]; then
+    printf '%s\n' "$(cd -- "$(dirname -- "$repo_relative_candidate")" && pwd)/$(basename -- "$repo_relative_candidate")"
+    return 0
+  fi
+
+  printf '%s\n' "$REPO_ROOT/$raw_path"
 }
 
 run_step_1_image_overlap() {
@@ -859,6 +890,7 @@ main() {
   local pair_list_input=""
   local timing_json_input=""
   local post_merge_output_input=""
+  local explicit_valid_pixel_percent_threshold=""
   local explicit_num_worker_parallel_cpu=""
   local explicit_use_parallel_cpu=""
   local explicit_invalid_pixel_radius=""
@@ -883,7 +915,7 @@ main() {
   CNETMERGE_PATH="${CNETMERGE_EXECUTABLE:-cnetmerge}"
   PAIR_ID_PREFIX="$DEFAULT_PAIR_ID_PREFIX"
   PAIR_ID_START="$DEFAULT_PAIR_ID_START"
-  VALID_PIXEL_PERCENT_THRESHOLD="$DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD"
+  VALID_PIXEL_PERCENT_THRESHOLD=""
   INVALID_PIXEL_RADIUS="$DEFAULT_INVALID_PIXEL_RADIUS"
   MATCHER_METHOD="bf"
   ADAPTIVE_ROUTING="0"
@@ -964,6 +996,7 @@ main() {
       --valid-pixel-percent-threshold)
         [[ $# -ge 2 ]] || die "missing value for --valid-pixel-percent-threshold"
         VALID_PIXEL_PERCENT_THRESHOLD=$2
+        explicit_valid_pixel_percent_threshold=$2
         shift 2
         ;;
       --invalid-pixel-radius)
@@ -1209,8 +1242,15 @@ main() {
   if [[ -z "$NETWORK_ID" ]]; then
     NETWORK_ID=$(extract_network_id_from_config "$CONFIG_PATH")
   fi
+  if [[ -z "$explicit_valid_pixel_percent_threshold" ]]; then
+    local config_valid_pixel_percent_threshold
+    config_valid_pixel_percent_threshold=$(extract_image_match_config_value "$CONFIG_PATH" "valid_pixel_percent_threshold")
+    if [[ -n "$config_valid_pixel_percent_threshold" ]]; then
+      VALID_PIXEL_PERCENT_THRESHOLD="$config_valid_pixel_percent_threshold"
+    fi
+  fi
   if [[ -z "$VALID_PIXEL_PERCENT_THRESHOLD" ]]; then
-    VALID_PIXEL_PERCENT_THRESHOLD=$(extract_image_match_config_value "$CONFIG_PATH" "valid_pixel_percent_threshold")
+    VALID_PIXEL_PERCENT_THRESHOLD="$DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD"
   fi
   if [[ -z "$explicit_use_parallel_cpu" ]]; then
     local config_use_parallel_cpu
@@ -1258,7 +1298,7 @@ main() {
     local config_deep_matcher_config_path
     config_deep_matcher_config_path=$(extract_image_match_config_value "$CONFIG_PATH" "deep_matcher_config_path")
     if [[ -n "$config_deep_matcher_config_path" && "$config_deep_matcher_config_path" != "null" ]]; then
-      DEEP_MATCHER_CONFIG_PATH="$config_deep_matcher_config_path"
+      DEEP_MATCHER_CONFIG_PATH=$(resolve_config_relative_path "$config_deep_matcher_config_path" "$CONFIG_PATH")
     fi
   fi
 

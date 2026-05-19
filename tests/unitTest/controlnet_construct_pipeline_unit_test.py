@@ -41,6 +41,7 @@ Updated: 2026-05-10  Geng Xun updated from-ori-match coverage for full CLI dispa
 Updated: 2026-05-16  Geng Xun added wrapper coverage for deep-match manifest export handoff summaries.
 Updated: 2026-05-16  Geng Xun added pipeline wrapper coverage for adaptive-routing profile forwarding.
 Updated: 2026-05-19  Geng Xun added regression coverage for deep matcher config path wrapper forwarding.
+Updated: 2026-05-19  Geng Xun aligned wrapper regression coverage for ImageMatch-only defaults, adaptive routing, and resolved deep matcher config paths.
 """
 
 from __future__ import annotations
@@ -860,7 +861,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
         self.assertIn("CPU parallel worker limit: 6", completed.stdout)
 
-    def test_run_image_match_batch_example_preserves_legacy_top_level_precedence_for_duplicate_config_keys(self):
+    def test_run_image_match_batch_example_prefers_image_match_section_over_legacy_top_level_config_keys(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
             work_dir.mkdir()
@@ -1060,17 +1061,17 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             if "--valid-pixel-percent-threshold" not in args:
                                 raise SystemExit("missing --valid-pixel-percent-threshold forwarding")
                             threshold = args[args.index("--valid-pixel-percent-threshold") + 1]
-                            if threshold != "0.11":
+                            if threshold != "0.02":
                                 raise SystemExit(f"unexpected threshold: {{threshold}}")
                             if "--invalid-pixel-radius" not in args:
                                 raise SystemExit("missing --invalid-pixel-radius forwarding")
                             radius = args[args.index("--invalid-pixel-radius") + 1]
-                            if radius != "7":
+                            if radius != "2":
                                 raise SystemExit(f"unexpected invalid pixel radius: {{radius}}")
                             if "--matcher-method" not in args:
                                 raise SystemExit("missing --matcher-method forwarding")
                             matcher_method = args[args.index("--matcher-method") + 1]
-                            if matcher_method != "flann":
+                            if matcher_method != "bf":
                                 raise SystemExit(f"unexpected matcher method: {{matcher_method}}")
                             if "--use-parallel-cpu" not in args:
                                 raise SystemExit("missing --use-parallel-cpu forwarding")
@@ -1122,9 +1123,9 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             )
 
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
-        self.assertIn("Valid pixel percent threshold: 0.11", completed.stdout)
-        self.assertIn("Invalid pixel radius: 7", completed.stdout)
-        self.assertIn("Matcher method: flann", completed.stdout)
+        self.assertIn("Valid pixel percent threshold: 0.02", completed.stdout)
+        self.assertIn("Invalid pixel radius: 2", completed.stdout)
+        self.assertIn("Matcher method: bf", completed.stdout)
         self.assertIn("CPU parallel tile matching: enabled", completed.stdout)
         self.assertIn("CPU parallel worker limit: 3", completed.stdout)
 
@@ -1433,7 +1434,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
         self.assertIn("CPU parallel worker limit: 5", completed.stdout)
 
-    def test_run_pipeline_example_preserves_legacy_top_level_precedence_for_duplicate_config_keys(self):
+    def test_run_pipeline_example_prefers_image_match_section_over_legacy_top_level_config_keys(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
             work_dir.mkdir()
@@ -1636,17 +1637,17 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             if "--valid-pixel-percent-threshold" not in args:
                                 raise SystemExit("missing --valid-pixel-percent-threshold forwarding")
                             threshold = args[args.index("--valid-pixel-percent-threshold") + 1]
-                            if threshold != "0.11":
+                            if threshold != "0.02":
                                 raise SystemExit(f"unexpected threshold: {{threshold}}")
                             if "--invalid-pixel-radius" not in args:
                                 raise SystemExit("missing --invalid-pixel-radius forwarding")
                             radius = args[args.index("--invalid-pixel-radius") + 1]
-                            if radius != "7":
+                            if radius != "2":
                                 raise SystemExit(f"unexpected invalid pixel radius: {{radius}}")
                             if "--matcher-method" not in args:
                                 raise SystemExit("missing --matcher-method forwarding")
                             matcher_method = args[args.index("--matcher-method") + 1]
-                            if matcher_method != "flann":
+                            if matcher_method != "bf":
                                 raise SystemExit(f"unexpected matcher method: {{matcher_method}}")
                             if "--use-parallel-cpu" not in args:
                                 raise SystemExit("missing --use-parallel-cpu forwarding")
@@ -1716,9 +1717,9 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             )
 
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
-        self.assertIn("Valid pixel percent threshold: 0.11", completed.stdout)
-        self.assertIn("Invalid pixel radius: 7", completed.stdout)
-        self.assertIn("Matcher method: flann", completed.stdout)
+        self.assertIn("Valid pixel percent threshold: 0.02", completed.stdout)
+        self.assertIn("Invalid pixel radius: 2", completed.stdout)
+        self.assertIn("Matcher method: bf", completed.stdout)
         self.assertIn("CPU parallel tile matching: enabled", completed.stdout)
         self.assertIn("CPU parallel worker limit: 3", completed.stdout)
 
@@ -1887,6 +1888,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             config_path = temp_dir / "controlnet_config.json"
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
+            expected_resolved_config = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json"
 
             original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
             dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
@@ -1945,7 +1947,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             if "--deep-match-config-path" not in args:
                                 raise SystemExit("missing --deep-match-config-path")
                             config_value = args[args.index("--deep-match-config-path") + 1]
-                            if config_value != "examples/controlnet_construct/presets/lightglue_default.json":
+                            if config_value != {str(expected_resolved_config)!r}:
                                 raise SystemExit(f"unexpected deep config: {{config_value}}")
                             key_index = 4 if args and args[0] == "--config" else 2
                             Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
@@ -1988,7 +1990,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             )
 
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
-        self.assertIn("Deep-match config path: examples/controlnet_construct/presets/lightglue_default.json", completed.stdout)
+        self.assertIn(f"Deep-match config path: {expected_resolved_config}", completed.stdout)
 
     def test_run_image_match_batch_example_cli_deep_match_config_path_overrides_config(self):
         with temporary_directory() as temp_dir:
@@ -2102,7 +2104,240 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
         self.assertIn("Deep-match config path: examples/controlnet_construct/presets/loftr_default.json", completed.stdout)
 
-    def test_run_pipeline_example_export_mode_stops_after_manifest_export(self):
+    def test_run_image_match_batch_example_resolves_config_relative_deep_match_config_path(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            config_dir = temp_dir / "configs"
+            preset_dir = config_dir / "presets"
+            work_dir.mkdir()
+            preset_dir.mkdir(parents=True)
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            config_path = config_dir / "controlnet_config.json"
+            expected_resolved_config = preset_dir / "lightglue_default.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+            expected_resolved_config.write_text(
+                (PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "matcher_method": "lightglue",
+                            "deep_matcher_config_path": "presets/lightglue_default.json",
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import sys
+                    from pathlib import Path
+
+                    EXPECTED_CONFIG = {str(expected_resolved_config)!r}
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+                        if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "matcher_method": image_match_config.get("matcher_method", ""),
+                                    "deep_matcher_config_path": image_match_config.get("deep_matcher_config_path", ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
+                            if "--deep-match-config-path" not in args:
+                                raise SystemExit("missing --deep-match-config-path")
+                            config_value = args[args.index("--deep-match-config-path") + 1]
+                            if config_value != EXPECTED_CONFIG:
+                                raise SystemExit(f"unexpected resolved deep config: {{config_value}}")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            return 0
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn(f"Deep-match config path: {expected_resolved_config}", completed.stdout)
+
+    def test_run_image_match_batch_example_forwards_adaptive_routing_from_config(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "enable_adaptive_routing": True,
+                            "adaptive_routing_profile": "relaxed",
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+                        if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                mapping = {{
+                                    "enable_adaptive_routing": "1" if image_match_config.get("enable_adaptive_routing") is True else ("0" if image_match_config.get("enable_adaptive_routing") is False else ""),
+                                    "adaptive_routing_profile": image_match_config.get("adaptive_routing_profile", ""),
+                                }}
+                                print(mapping.get(field_name, ""))
+                                return 0
+                            if "--adaptive-routing" not in args:
+                                raise SystemExit("missing --adaptive-routing forwarding")
+                            if "--adaptive-routing-profile" not in args:
+                                raise SystemExit("missing --adaptive-routing-profile forwarding")
+                            profile = args[args.index("--adaptive-routing-profile") + 1]
+                            if profile != "relaxed":
+                                raise SystemExit(f"unexpected adaptive routing profile: {{profile}}")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            return 0
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Adaptive routing: enabled", completed.stdout)
+        self.assertIn("Adaptive routing profile: relaxed", completed.stdout)
+
+    def test_run_pipeline_example_resolves_deep_match_config_path_and_export_mode_stops_after_manifest_export(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
             work_dir.mkdir()
@@ -2170,6 +2405,12 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 image_match_config = payload.get("ImageMatch") or {{}}
                                 print(image_match_config.get(field_name, ""))
                                 return 0
+                            if "--deep-match-config-path" not in args:
+                                raise SystemExit("missing --deep-match-config-path forwarding")
+                            deep_config = args[args.index("--deep-match-config-path") + 1]
+                            expected_deep_config = str({str(PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json")!r})
+                            if deep_config != expected_deep_config:
+                                raise SystemExit(f"unexpected resolved deep config: {{deep_config}}")
                             if "--deep-match-mode" not in args:
                                 raise SystemExit("missing --deep-match-mode forwarding")
                             if args[args.index("--deep-match-mode") + 1] != "export":
@@ -2326,7 +2567,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(payload["match"], fake_match_result)
         self.assertEqual(payload["controlnet"], fake_controlnet_result)
 
-    def test_run_pipeline_example_forwards_new_matching_options_from_config(self):
+    def test_run_pipeline_example_forwards_adaptive_routing_and_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
             work_dir.mkdir()

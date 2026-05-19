@@ -17,6 +17,7 @@ Updated: 2026-05-09  Geng Xun reused deep matcher adapters across tile dispatch 
 Updated: 2026-05-10  Geng Xun added a minimal dom/ori image-space backend abstraction for future tile-reading reuse.
 Updated: 2026-05-10  Geng Xun accepted the ORI-facing `superpoint` matcher selector in shared matcher normalization.
 Updated: 2026-05-19  Geng Xun threaded resolved deep matcher runtime config through tile tasks and adapters.
+Updated: 2026-05-19  Geng Xun preserved matcher/feature/device option dictionaries when serializing deep matcher runtime config.
 """
 
 from __future__ import annotations
@@ -979,6 +980,9 @@ def _runtime_config_to_payload(runtime_config: Any | None) -> dict[str, Any] | N
         "prefer_gpu": getattr(runtime_config, "prefer_gpu"),
         "device_dtype": getattr(runtime_config, "device_dtype"),
         "fallback_on_error": getattr(runtime_config, "fallback_on_error"),
+        "matcher_options": dict(getattr(runtime_config, "matcher_options", {}) or {}),
+        "feature_options": dict(getattr(runtime_config, "feature_options", {}) or {}),
+        "device_options": dict(getattr(runtime_config, "device_options", {}) or {}),
         "raw_config": getattr(runtime_config, "raw_config"),
     }
 
@@ -996,6 +1000,9 @@ def _runtime_config_from_payload(payload: dict[str, Any] | None) -> Any | None:
         prefer_gpu=bool(payload["prefer_gpu"]),
         device_dtype=str(payload["device_dtype"]),
         fallback_on_error=payload.get("fallback_on_error"),
+        matcher_options=dict(payload.get("matcher_options", {})),
+        feature_options=dict(payload.get("feature_options", {})),
+        device_options=dict(payload.get("device_options", {})),
         raw_config=dict(payload.get("raw_config", {})),
     )
 

@@ -4,6 +4,7 @@
   },
   "matcher": {
     "method": "loftr",
+    "pretrained": "outdoor",
     "weights_path": null
   },
   "device": {

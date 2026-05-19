@@ -3,11 +3,12 @@
 Author: Geng Xun
 Created: 2026-05-16
 Updated: 2026-05-19  Geng Xun added runtime config resolution for matcher execution layers.
+Updated: 2026-05-19  Geng Xun added matcher/feature/device option dictionaries for reproducible deep matcher construction.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import json
 from pathlib import Path
 from typing import Any
@@ -29,6 +30,15 @@ class DeepMatchRuntimeConfig:
     device_dtype: str
     fallback_on_error: str | None
     raw_config: dict[str, Any]
+    matcher_options: dict[str, Any] = field(default_factory=dict)
+    feature_options: dict[str, Any] = field(default_factory=dict)
+    device_options: dict[str, Any] = field(default_factory=dict)
+
+
+def _section_options(section: dict[str, Any] | None) -> dict[str, Any]:
+    section_dict = dict(section or {})
+    section_dict.pop("method", None)
+    return section_dict
 
 
 def load_deep_match_config(config_path: str | Path) -> dict[str, Any]:
@@ -74,6 +84,9 @@ def resolve_deep_match_runtime_config(config_path: str | Path) -> DeepMatchRunti
         prefer_gpu=prefer_gpu,
         device_dtype=str(device.get("dtype", "float32")).strip().lower(),
         fallback_on_error=fallback.get("on_error"),
+        matcher_options=_section_options(matcher),
+        feature_options=_section_options(extractor),
+        device_options=dict(device),
         raw_config=config,
     )
 

@@ -81,6 +81,7 @@ Updated: 2026-05-22  Geng Xun added ori-space entrypoint regression coverage for
 Updated: 2026-05-22  Geng Xun added regression coverage for dom/ori image-space backend construction helpers.
 Updated: 2026-05-22  Geng Xun added ORI key export regression coverage for pair-level `.key` output summaries.
 Updated: 2026-05-22  Geng Xun tightened ORI delegation and `.key` file readability regression coverage for Task 3 review fixes.
+Updated: 2026-05-22  Geng Xun added matcher preset option resolution and constructor-forwarding regression coverage.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
 Updated: 2026-05-16  Geng Xun added regression coverage for adaptive-routing profile CLI/config defaults and expanded metadata.
@@ -97,6 +98,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from types import ModuleType
 import unittest
 from unittest import mock
 
@@ -145,6 +147,25 @@ REAL_LRO_DOM_RIGHT_ENV = "ISIS_PYBIND_MATCHING_REAL_DOM_RIGHT_CUBE"
 DEFAULT_REAL_LRO_DOM_LEFT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104311715LE.cub")
 DEFAULT_REAL_LRO_DOM_RIGHT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871RE.cub")
 SPECIAL_PIXEL = -1.797693134862315e308
+
+
+class _EvalToDeviceModule:
+    def __init__(self) -> None:
+        self.device: str | None = None
+
+    def eval(self):
+        return self
+
+    def to(self, device: str):
+        self.device = device
+        return self
+
+
+def _stub_module(name: str, **attributes):
+    module = ModuleType(name)
+    for key, value in attributes.items():
+        setattr(module, key, value)
+    return module
 
 
 def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
@@ -1277,6 +1298,116 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(runtime.device_dtype, "float32")
         self.assertEqual(runtime.fallback_on_error, "sift_flann")
         self.assertEqual(runtime.raw_config["matcher"]["method"], "lightglue")
+        self.assertEqual(getattr(runtime, "feature_options", None), {"max_keypoints": 4096, "keypoint_threshold": 0.0005, "remove_borders": 4, "detect_keypoints": True})
+        self.assertEqual(
+            getattr(runtime, "matcher_options", None),
+            {"weights": "superpoint_lightglue", "weights_path": None, "flash": True, "prune_threshold": 4},
+        )
+        self.assertEqual(getattr(runtime, "device_options", None), {"prefer_gpu": True, "dtype": "float32", "batch_inference": True})
+
+    def test_resolve_deep_match_runtime_config_reads_loftr_pretrained_default(self):
+        runtime = deep_match_config_module.resolve_deep_match_runtime_config(
+            PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "loftr_default.json"
+        )
+
+        self.assertEqual(runtime.matcher_method, "loftr")
+        self.assertEqual(getattr(runtime, "matcher_options", {}).get("pretrained"), "outdoor")
+
+    def test_lightglue_matcher_uses_preset_feature_and_matcher_options(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        runtime = deep_match_config_module.resolve_deep_match_runtime_config(
+            PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json"
+        )
+        lightglue_constructor = mock.Mock(return_value=_EvalToDeviceModule())
+        torch_module = _stub_module("torch")
+        lightglue_module = _stub_module("lightglue", LightGlue=lightglue_constructor)
+
+        with mock.patch.dict(sys.modules, {"torch": torch_module, "lightglue": lightglue_module}, clear=False):
+            matcher = deep_matchers_module.build_deep_matcher(
+                runtime.matcher_method,
+                device="cpu",
+                feature_extractor_method=runtime.feature_extractor_method,
+                matcher_options=getattr(runtime, "matcher_options", {}),
+                feature_options=getattr(runtime, "feature_options", {}),
+                device_options=getattr(runtime, "device_options", {}),
+            )
+            matcher._load_matcher()
+
+        lightglue_constructor.assert_called_once_with(
+            features="superpoint",
+            weights="superpoint_lightglue",
+            flash=True,
+            prune_threshold=4,
+        )
+
+    def test_superglue_matcher_uses_preset_matcher_options(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        runtime = deep_match_config_module.resolve_deep_match_runtime_config(
+            PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "superglue_default.json"
+        )
+        matching_constructor = mock.Mock(return_value=_EvalToDeviceModule())
+        torch_module = _stub_module("torch")
+        matching_module = _stub_module("models.matching", Matching=matching_constructor)
+        models_module = _stub_module("models", matching=matching_module)
+
+        with mock.patch.dict(
+            sys.modules,
+            {"torch": torch_module, "models": models_module, "models.matching": matching_module},
+            clear=False,
+        ):
+            matcher = deep_matchers_module.build_deep_matcher(
+                runtime.matcher_method,
+                device="cpu",
+                feature_extractor_method=runtime.feature_extractor_method,
+                matcher_options=getattr(runtime, "matcher_options", {}),
+                feature_options=getattr(runtime, "feature_options", {}),
+                device_options=getattr(runtime, "device_options", {}),
+            )
+            matcher._load_model()
+
+        config = matching_constructor.call_args.args[0]
+        self.assertEqual(config["superglue"]["weights"], "outdoor")
+        self.assertEqual(config["superglue"]["sinkhorn_iterations"], 20)
+        self.assertAlmostEqual(config["superglue"]["match_threshold"], 0.2)
+
+    def test_loftr_matcher_uses_preset_pretrained_option(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        runtime = deep_match_config_module.resolve_deep_match_runtime_config(
+            PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "loftr_default.json"
+        )
+        loftr_constructor = mock.Mock(return_value=_EvalToDeviceModule())
+        torch_module = _stub_module("torch")
+        kornia_feature_module = _stub_module("kornia.feature", LoFTR=loftr_constructor)
+        kornia_module = _stub_module("kornia", feature=kornia_feature_module)
+
+        with mock.patch.dict(
+            sys.modules,
+            {"torch": torch_module, "kornia": kornia_module, "kornia.feature": kornia_feature_module},
+            clear=False,
+        ):
+            matcher = deep_matchers_module.build_deep_matcher(
+                runtime.matcher_method,
+                device="cpu",
+                feature_extractor_method=runtime.feature_extractor_method,
+                matcher_options=getattr(runtime, "matcher_options", {}),
+                feature_options=getattr(runtime, "feature_options", {}),
+                device_options=getattr(runtime, "device_options", {}),
+            )
+            matcher._load_matcher()
+
+        loftr_constructor.assert_called_once_with(pretrained="outdoor")
+
+    def test_loftr_matcher_options_reject_non_null_checkpoint_path(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        matcher = deep_matchers_module.build_deep_matcher(
+            "loftr",
+            device="cpu",
+            feature_extractor_method="loftr",
+            matcher_options={"checkpoint_path": "custom_loftr.ckpt"},
+        )
+
+        with self.assertRaisesRegex(deep_matchers_module.DeepMatcherError, "checkpoint_path"):
+            matcher._load_matcher()
 
     def test_match_dom_pair_rejects_deep_config_matcher_conflict_before_opening_cubes(self):
         config_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json"

@@ -2,14 +2,17 @@
 
 Author: Geng Xun
 Created: 2026-05-19
+Last Modified: 2026-05-19
 Updated: 2026-05-19  Geng Xun added focused coverage for pre-match feature filtering and LoFTR mask passthrough.
 Updated: 2026-05-19  Geng Xun added runtime config storage coverage for deep matcher adapters.
 Updated: 2026-05-19  Geng Xun added feature extractor runtime config coverage for SuperPoint and explicit unsupported extractor errors.
+Updated: 2026-05-19  Geng Xun added matcher runtime option forwarding coverage for LightGlue/LoFTR/SuperGlue adapters.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
+from types import SimpleNamespace
 from unittest import mock
 import sys
 import unittest
@@ -115,6 +118,39 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
 
         self.assertIs(adapter._runtime_config, runtime)
         self.assertEqual(adapter._device, "cpu")
+
+    def test_deep_matcher_adapter_passes_matcher_options_to_matcher_builder(self):
+        runtime = SimpleNamespace(
+            prefer_gpu=False,
+            matcher_method="lightglue",
+            feature_extractor_method="superpoint",
+            matcher_options={"weights": "superpoint_lightglue", "flash": False, "prune_threshold": 2},
+            feature_options={"max_keypoints": 4096, "keypoint_threshold": 0.0005},
+            device_options={"prefer_gpu": False, "dtype": "float32", "batch_inference": True},
+        )
+        adapter = DeepMatcherAdapter(prefer_gpu=True, runtime_config=runtime)
+        matcher = _CapturingFeatureMatcher()
+        left_features = {"keypoints": np.array([[1.0, 1.0]], dtype=np.float32)}
+        right_features = {"keypoints": np.array([[2.0, 2.0]], dtype=np.float32)}
+
+        with mock.patch.object(adapter._superpoint, "extract", side_effect=[left_features, right_features]), mock.patch(
+            "image_match.deep_adapter.build_deep_matcher",
+            return_value=matcher,
+        ) as build_matcher_mock:
+            adapter.match_pair(
+                matcher_method="lightglue",
+                left_image=np.zeros((8, 8), dtype=np.float32),
+                right_image=np.zeros((8, 8), dtype=np.float32),
+            )
+
+        build_matcher_mock.assert_called_once_with(
+            "lightglue",
+            device="cpu",
+            feature_extractor_method="superpoint",
+            matcher_options={"weights": "superpoint_lightglue", "flash": False, "prune_threshold": 2},
+            feature_options={"max_keypoints": 4096, "keypoint_threshold": 0.0005},
+            device_options={"prefer_gpu": False, "dtype": "float32", "batch_inference": True},
+        )
 
     def test_lightglue_aliked_disk_doghardnet_reject_unimplemented_extractors(self):
         config_module = __import__("controlnet_construct.deep_match_config", fromlist=["resolve_deep_match_runtime_config"])

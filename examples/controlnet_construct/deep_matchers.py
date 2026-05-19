@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-05-11
 Updated: 2026-05-11  Geng Xun added top-of-file metadata so example helper modules follow the repository's example-file header convention.
+Updated: 2026-05-19  Geng Xun applied preset matcher parameters for LightGlue, SuperGlue, and LoFTR model construction.
 """
 
 from __future__ import annotations
@@ -25,6 +26,39 @@ def _missing_dependency_error(*, method: str, missing: str, install_hint: str) -
     )
 
 
+def _copy_options(options: dict[str, Any] | None) -> dict[str, Any]:
+    return dict(options or {})
+
+
+def _raise_unsupported_option(*, method: str, option_name: str, option_value: Any) -> None:
+    raise DeepMatcherError(
+        f"Deep matcher '{method}' does not support critical matcher option "
+        f"'{option_name}'={option_value!r}; refusing to ignore it silently."
+    )
+
+
+def _consume_matcher_placeholder(
+    options: dict[str, Any],
+    *,
+    method: str,
+    option_name: str,
+    ignored_parameters: list[str],
+) -> None:
+    if option_name not in options:
+        return
+    option_value = options.pop(option_name)
+    if option_value in (None, ""):
+        ignored_parameters.append(option_name)
+        return
+    _raise_unsupported_option(method=method, option_name=option_name, option_value=option_value)
+
+
+def _reject_unknown_options(*, method: str, options: dict[str, Any], allowed: set[str]) -> None:
+    for option_name, option_value in options.items():
+        if option_name not in allowed:
+            _raise_unsupported_option(method=method, option_name=option_name, option_value=option_value)
+
+
 @dataclass(frozen=True, slots=True)
 class DeepMatchResult:
     left_keypoints: tuple[Any, ...] = ()
@@ -35,11 +69,53 @@ class DeepMatchResult:
 class SuperGlueMatcher:
     method = "superglue"
 
-    def __init__(self, *, device: str = "cpu") -> None:
+    def __init__(
+        self,
+        *,
+        device: str = "cpu",
+        feature_extractor_method: str = "superpoint",
+        matcher_options: dict[str, Any] | None = None,
+        feature_options: dict[str, Any] | None = None,
+        device_options: dict[str, Any] | None = None,
+    ) -> None:
         self.device = device
+        self.feature_extractor_method = str(feature_extractor_method or "superpoint").strip().lower()
+        self.matcher_options = _copy_options(matcher_options)
+        self.feature_options = _copy_options(feature_options)
+        self.device_options = _copy_options(device_options)
+        self.ignored_parameters: list[str] = []
         self._model = None
 
+    def _superpoint_config(self) -> dict[str, Any]:
+        config = {"nms_radius": 4, "keypoint_threshold": 0.005, "max_keypoints": 2048}
+        for option_name in ("nms_radius", "keypoint_threshold", "max_keypoints"):
+            if option_name in self.feature_options:
+                config[option_name] = self.feature_options[option_name]
+        return config
+
+    def _superglue_config(self) -> dict[str, Any]:
+        options = _copy_options(self.matcher_options)
+        _consume_matcher_placeholder(
+            options,
+            method=self.method,
+            option_name="weights_path",
+            ignored_parameters=self.ignored_parameters,
+        )
+        _reject_unknown_options(
+            method=self.method,
+            options=options,
+            allowed={"weights", "sinkhorn_iterations", "match_threshold"},
+        )
+        config = {"weights": "outdoor", "sinkhorn_iterations": 20, "match_threshold": 0.2}
+        config.update(options)
+        return config
+
     def _load_model(self):
+        if self.feature_extractor_method != "superpoint":
+            raise DeepMatcherError(
+                f"Deep matcher '{self.method}' currently only supports feature_extractor_method='superpoint', "
+                f"got {self.feature_extractor_method!r}."
+            )
         try:
             import torch
         except Exception:
@@ -61,8 +137,8 @@ class SuperGlueMatcher:
         if self._model is None:
             self._model = Matching(
                 {
-                    "superpoint": {"nms_radius": 4, "keypoint_threshold": 0.005, "max_keypoints": 2048},
-                    "superglue": {"weights": "outdoor", "sinkhorn_iterations": 20, "match_threshold": 0.2},
+                    "superpoint": self._superpoint_config(),
+                    "superglue": self._superglue_config(),
                 }
             ).eval().to(self.device)
         return torch, self._model
@@ -118,11 +194,44 @@ class SuperGlueMatcher:
 class LightGlueMatcher:
     method = "lightglue"
 
-    def __init__(self, *, device: str = "cpu") -> None:
+    def __init__(
+        self,
+        *,
+        device: str = "cpu",
+        feature_extractor_method: str = "superpoint",
+        matcher_options: dict[str, Any] | None = None,
+        feature_options: dict[str, Any] | None = None,
+        device_options: dict[str, Any] | None = None,
+    ) -> None:
         self.device = device
+        self.feature_extractor_method = str(feature_extractor_method or "superpoint").strip().lower()
+        self.matcher_options = _copy_options(matcher_options)
+        self.feature_options = _copy_options(feature_options)
+        self.device_options = _copy_options(device_options)
+        self.ignored_parameters: list[str] = []
         self._matcher = None
 
+    def _lightglue_options(self) -> dict[str, Any]:
+        options = _copy_options(self.matcher_options)
+        _consume_matcher_placeholder(
+            options,
+            method=self.method,
+            option_name="weights_path",
+            ignored_parameters=self.ignored_parameters,
+        )
+        _reject_unknown_options(
+            method=self.method,
+            options=options,
+            allowed={"weights", "flash", "prune_threshold", "filter_threshold", "depth_confidence", "width_confidence"},
+        )
+        return options
+
     def _load_matcher(self):
+        if self.feature_extractor_method != "superpoint":
+            raise DeepMatcherError(
+                f"Deep matcher '{self.method}' currently only supports feature_extractor_method='superpoint', "
+                f"got {self.feature_extractor_method!r}."
+            )
         try:
             import torch
         except Exception:
@@ -142,7 +251,10 @@ class LightGlueMatcher:
             )
 
         if self._matcher is None:
-            self._matcher = LightGlue(features="superpoint").eval().to(self.device)
+            self._matcher = LightGlue(
+                features=self.feature_extractor_method,
+                **self._lightglue_options(),
+            ).eval().to(self.device)
         return torch, self._matcher
 
     def match(self, *, features_left: Any, features_right: Any, device: str = "cpu"):
@@ -207,9 +319,46 @@ class LightGlueMatcher:
 class LoFTRMatcher:
     method = "loftr"
 
-    def __init__(self, *, device: str = "cpu") -> None:
+    def __init__(
+        self,
+        *,
+        device: str = "cpu",
+        feature_extractor_method: str = "loftr",
+        matcher_options: dict[str, Any] | None = None,
+        feature_options: dict[str, Any] | None = None,
+        device_options: dict[str, Any] | None = None,
+    ) -> None:
         self.device = device
+        self.feature_extractor_method = str(feature_extractor_method or "loftr").strip().lower()
+        self.matcher_options = _copy_options(matcher_options)
+        self.feature_options = _copy_options(feature_options)
+        self.device_options = _copy_options(device_options)
+        self.ignored_parameters: list[str] = []
         self._matcher = None
+
+    def _loftr_pretrained(self) -> str:
+        options = _copy_options(self.matcher_options)
+        _consume_matcher_placeholder(
+            options,
+            method=self.method,
+            option_name="weights_path",
+            ignored_parameters=self.ignored_parameters,
+        )
+        _consume_matcher_placeholder(
+            options,
+            method=self.method,
+            option_name="checkpoint_path",
+            ignored_parameters=self.ignored_parameters,
+        )
+        _consume_matcher_placeholder(
+            options,
+            method=self.method,
+            option_name="checkpoint",
+            ignored_parameters=self.ignored_parameters,
+        )
+        pretrained = str(options.pop("pretrained", "outdoor") or "outdoor").strip()
+        _reject_unknown_options(method=self.method, options=options, allowed=set())
+        return pretrained or "outdoor"
 
     def _load_matcher(self):
         try:
@@ -229,7 +378,7 @@ class LoFTRMatcher:
                 install_hint="pip install kornia",
             )
         if self._matcher is None:
-            self._matcher = kf.LoFTR(pretrained="outdoor").eval().to(self.device)
+            self._matcher = kf.LoFTR(pretrained=self._loftr_pretrained()).eval().to(self.device)
         return torch, self._matcher
 
     def match(
@@ -258,12 +407,27 @@ class LoFTRMatcher:
         return left_points, right_points, scores
 
 
-def build_deep_matcher(method: str, *, device: str = "cpu") -> SuperGlueMatcher | LightGlueMatcher | LoFTRMatcher:
+def build_deep_matcher(
+    method: str,
+    *,
+    device: str = "cpu",
+    feature_extractor_method: str = "superpoint",
+    matcher_options: dict[str, Any] | None = None,
+    feature_options: dict[str, Any] | None = None,
+    device_options: dict[str, Any] | None = None,
+) -> SuperGlueMatcher | LightGlueMatcher | LoFTRMatcher:
     normalized = normalize_deep_method(method)
+    constructor_kwargs = {
+        "device": device,
+        "feature_extractor_method": feature_extractor_method,
+        "matcher_options": matcher_options,
+        "feature_options": feature_options,
+        "device_options": device_options,
+    }
     if normalized == "superglue":
-        return SuperGlueMatcher(device=device)
+        return SuperGlueMatcher(**constructor_kwargs)
     if normalized == "lightglue":
-        return LightGlueMatcher(device=device)
+        return LightGlueMatcher(**constructor_kwargs)
     if normalized == "loftr":
-        return LoFTRMatcher(device=device)
+        return LoFTRMatcher(**constructor_kwargs)
     raise DeepMatcherError(f"Unsupported deep matcher method {method!r}.")

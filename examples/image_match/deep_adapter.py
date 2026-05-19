@@ -4,10 +4,12 @@ Author: Geng Xun
 Created: 2026-05-19
 Updated: 2026-05-19  Geng Xun added runtime config storage for deep matcher execution.
 Updated: 2026-05-19  Geng Xun made feature extractor runtime config explicit for LightGlue and SuperGlue routing.
+Updated: 2026-05-19  Geng Xun forwarded matcher/feature/device runtime options into deep matcher construction.
 """
 
 from __future__ import annotations
 
+import json
 from typing import Any
 
 import cv2
@@ -63,6 +65,20 @@ class DeepMatcherAdapter:
         self._superpoint = SuperPointFrontend(runtime_config=runtime_config)
         self._loftr_frontend = LoFTRFrontend()
         self._matcher_cache: dict[tuple[str, str], Any] = {}
+
+    def _matcher_build_kwargs(self) -> dict[str, Any]:
+        runtime_config = self._runtime_config
+        return {
+            "feature_extractor_method": str(
+                getattr(runtime_config, "feature_extractor_method", "superpoint") or "superpoint"
+            ).strip().lower(),
+            "matcher_options": dict(getattr(runtime_config, "matcher_options", {}) or {}),
+            "feature_options": dict(getattr(runtime_config, "feature_options", {}) or {}),
+            "device_options": dict(getattr(runtime_config, "device_options", {}) or {}),
+        }
+
+    def _cacheable_options(self, options: dict[str, Any]) -> str:
+        return json.dumps(options, sort_keys=True, ensure_ascii=True, default=str)
 
     def _raise_cross_method_fallback_error(self, requested: str, fallback_to: str) -> None:
         raise RuntimeError(
@@ -146,10 +162,18 @@ class DeepMatcherAdapter:
         )
 
     def _get_cached_matcher(self, *, method: str, device: str) -> Any:
-        cache_key = (method, device)
+        build_kwargs = self._matcher_build_kwargs()
+        cache_key = (
+            method,
+            device,
+            build_kwargs["feature_extractor_method"],
+            self._cacheable_options(build_kwargs["matcher_options"]),
+            self._cacheable_options(build_kwargs["feature_options"]),
+            self._cacheable_options(build_kwargs["device_options"]),
+        )
         matcher = self._matcher_cache.get(cache_key)
         if matcher is None:
-            matcher = build_deep_matcher(method, device=device)
+            matcher = build_deep_matcher(method, device=device, **build_kwargs)
             self._matcher_cache[cache_key] = matcher
         return matcher
 

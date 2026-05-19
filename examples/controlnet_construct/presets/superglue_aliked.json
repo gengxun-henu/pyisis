@@ -7,8 +7,10 @@
   },
   "matcher": {
     "method": "superglue",
+    "weights": "outdoor",
     "weights_path": null,
-    "sinkhorn_iterations": 20
+    "sinkhorn_iterations": 20,
+    "match_threshold": 0.2
   },
   "device": {
     "prefer_gpu": true,

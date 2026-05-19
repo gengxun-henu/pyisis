@@ -51,6 +51,7 @@ Updated: 2026-05-17  Geng Xun added parser/config coverage for visualization opt
 Updated: 2026-05-18  Geng Xun added regression coverage for legacy positional API compatibility and visualization metadata sidecar output.
 Updated: 2026-05-19  Geng Xun added regression coverage for visualization failure metadata sidecar output.
 Updated: 2026-05-19  Geng Xun added regression coverage for shared deep matcher config path parsing and forwarding.
+Updated: 2026-05-19  Geng Xun added runtime deep matcher config parsing and conflict detection coverage.
 Updated: 2026-05-20  Geng Xun added GPU SIFT integration smoke coverage for tile_matching CPU/GPU shared API and GpuSiftBatch fallback.
 Updated: 2026-05-20  Geng Xun added regression coverage for GPU tile matching delegation through the shared matcher.
 Updated: 2026-05-20  Geng Xun added GPU tile no-feature contract regression coverage.
@@ -88,6 +89,7 @@ Updated: 2026-05-16  Geng Xun added regression coverage for adaptive-routing pro
 from __future__ import annotations
 
 import hashlib
+import inspect
 import io
 import importlib
 from datetime import datetime
@@ -115,6 +117,7 @@ if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
 image_match = importlib.import_module("controlnet_construct.image_match")
+deep_match_config_module = importlib.import_module("controlnet_construct.deep_match_config")
 match_visualization_module = importlib.import_module("controlnet_construct.match_visualization")
 lowres_offset_module = importlib.import_module("controlnet_construct.lowres_offset")
 build_argument_parser = image_match.build_argument_parser
@@ -1262,6 +1265,79 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     )
 
         cube_mock.return_value.open.assert_not_called()
+
+    def test_resolve_deep_match_runtime_config_reads_lightglue_default(self):
+        runtime = deep_match_config_module.resolve_deep_match_runtime_config(
+            PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json"
+        )
+
+        self.assertEqual(runtime.matcher_method, "lightglue")
+        self.assertEqual(runtime.feature_extractor_method, "superpoint")
+        self.assertTrue(runtime.prefer_gpu)
+        self.assertEqual(runtime.device_dtype, "float32")
+        self.assertEqual(runtime.fallback_on_error, "sift_flann")
+        self.assertEqual(runtime.raw_config["matcher"]["method"], "lightglue")
+
+    def test_match_dom_pair_rejects_deep_config_matcher_conflict_before_opening_cubes(self):
+        config_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json"
+
+        with mock.patch.object(image_match.ip, "Cube") as cube_mock:
+            with self.assertRaisesRegex(
+                ValueError,
+                "matcher_method 'loftr' conflicts with deep_match_config matcher.method 'lightglue'",
+            ):
+                image_match.match_dom_pair(
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    matcher_method="loftr",
+                    deep_match_config_path=config_path,
+                )
+
+        cube_mock.return_value.open.assert_not_called()
+
+    def test_build_tile_match_tasks_carries_deep_match_runtime_config(self):
+        runtime = deep_match_config_module.resolve_deep_match_runtime_config(
+            PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json"
+        )
+        windows = [
+            image_match.tile_matching_module.PairedTileWindow(
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(1, 1, 16, 16),
+            )
+        ]
+
+        tasks = image_match.tile_matching_module._build_tile_match_tasks(
+            windows,
+            left_dom_path="left.cub",
+            right_dom_path="right.cub",
+            image_space="dom",
+            band=1,
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            invalid_values=(),
+            special_pixel_abs_threshold=1.0e300,
+            min_valid_pixels=1,
+            valid_pixel_percent_threshold=0.0,
+            invalid_pixel_radius=0,
+            ratio_test=0.75,
+            matcher_method="lightglue",
+            max_features=None,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+            deep_match_runtime_config=runtime,
+        )
+
+        self.assertIs(tasks[0].deep_match_runtime_config, runtime)
+
+    def test_serial_tile_match_tasks_accepts_deep_match_runtime_config(self):
+        signature = inspect.signature(image_match.tile_matching_module._run_serial_tile_match_tasks)
+
+        self.assertIn("deep_match_runtime_config", signature.parameters)
 
     def test_load_image_match_defaults_from_config_reads_tile_validity_fields(self):
         with temporary_directory() as temp_dir:

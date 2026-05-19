@@ -44,6 +44,7 @@ Updated: 2026-05-16  Geng Xun added named adaptive-routing profiles that expand 
 Updated: 2026-05-19  Geng Xun routed adaptive texture-sparseness diagnostics through
     tile-window readers instead of full-band cube reads.
 Updated: 2026-05-19  Geng Xun added shared deep matcher config path parsing, validation, and metadata recording.
+Updated: 2026-05-19  Geng Xun resolved deep matcher runtime config and added matcher conflict checks.
 """
 
 from __future__ import annotations
@@ -461,6 +462,42 @@ def _load_deep_match_config(config_path: str | Path) -> dict[str, object]:
     from controlnet_construct.deep_match_config import load_deep_match_config
 
     return load_deep_match_config(config_path)
+
+
+def _resolve_deep_match_runtime_config(config_path: str | Path):
+    from controlnet_construct.deep_match_config import resolve_deep_match_runtime_config
+
+    return resolve_deep_match_runtime_config(config_path)
+
+
+def _runtime_config_to_metadata(runtime_config: object | None) -> dict[str, object] | None:
+    if runtime_config is None:
+        return None
+    return asdict(runtime_config)
+
+
+def _resolve_matcher_method_with_deep_config(
+    *,
+    requested_matcher_method: str,
+    deep_match_runtime_config: object | None,
+) -> str:
+    if deep_match_runtime_config is None:
+        return requested_matcher_method
+
+    config_matcher_method = _normalize_matcher_method(getattr(deep_match_runtime_config, "matcher_method"))
+    if (
+        requested_matcher_method in DEEP_MATCHER_METHODS
+        and config_matcher_method in DEEP_MATCHER_METHODS
+        and requested_matcher_method != config_matcher_method
+    ):
+        raise ValueError(
+            f"matcher_method '{requested_matcher_method}' conflicts with "
+            f"deep_match_config matcher.method '{config_matcher_method}'. "
+            "Use matching values or remove one override."
+        )
+    if requested_matcher_method == DEFAULT_MATCHER_METHOD and config_matcher_method in DEEP_MATCHER_METHODS:
+        return config_matcher_method
+    return requested_matcher_method
 
 
 def _validate_low_resolution_max_mean_reprojection_error_pixels(value: float) -> float:
@@ -1512,6 +1549,7 @@ def _export_deep_match_pair_tasks(
     use_gpu: bool,
     gpu_batch_size: int,
     deep_match_temp_root_dir: str | Path,
+    deep_match_runtime_config: object | None = None,
 ) -> tuple[list[TileMatchStats], dict[str, object]]:
     image_backend = build_image_backend(image_space)
     tile_tasks = _build_tile_match_tasks(
@@ -1538,6 +1576,7 @@ def _export_deep_match_pair_tasks(
         sift_sigma=sift_sigma,
         use_gpu=use_gpu,
         gpu_batch_size=gpu_batch_size,
+        deep_match_runtime_config=deep_match_runtime_config,
     )
     manifest = build_deep_match_pair_manifest(
         tasks=tile_tasks,
@@ -1551,6 +1590,7 @@ def _export_deep_match_pair_tasks(
         metadata={
             "export_source": "image_match.match_dom_pair",
             "candidate_tile_count": len(candidate_windows),
+            "deep_match_runtime_config": _runtime_config_to_metadata(deep_match_runtime_config),
         },
     )
     workspace = resolve_deep_match_workspace(
@@ -1959,10 +1999,19 @@ def match_dom_pair(
 
     try:
         resolved_deep_match_config = None
+        resolved_deep_match_runtime_config = None
         resolved_deep_match_config_path = None
         if deep_match_config_path is not None:
             resolved_deep_match_config_path = Path(deep_match_config_path)
-            resolved_deep_match_config = _load_deep_match_config(resolved_deep_match_config_path)
+            resolved_deep_match_runtime_config = _resolve_deep_match_runtime_config(resolved_deep_match_config_path)
+            resolved_deep_match_config = resolved_deep_match_runtime_config.raw_config
+
+        resolved_requested_matcher_method = _normalize_matcher_method(matcher_method)
+        resolved_matcher_method = _resolve_matcher_method_with_deep_config(
+            requested_matcher_method=resolved_requested_matcher_method,
+            deep_match_runtime_config=resolved_deep_match_runtime_config,
+        )
+        resolved_requested_matcher_method = resolved_matcher_method
 
         image_backend = build_image_backend(image_space)
         left_cube.open(str(left_dom_path), "r")
@@ -1983,8 +2032,6 @@ def match_dom_pair(
             if tile_validity_cache_dir is not None
             else default_tile_validity_cache_dir()
         )
-        resolved_requested_matcher_method = _normalize_matcher_method(matcher_method)
-        resolved_matcher_method = resolved_requested_matcher_method
         resolved_deep_match_mode = _normalize_deep_match_mode(deep_match_mode)
         resolved_adaptive_routing_quality_profile = resolve_adaptive_routing_quality_profile(adaptive_routing_profile)
         adaptive_routing_quality_gate = asdict(resolved_adaptive_routing_quality_profile)
@@ -2202,6 +2249,7 @@ def match_dom_pair(
                             if deep_match_temp_root_dir is not None
                             else Path.cwd() / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME
                         ),
+                        deep_match_runtime_config=resolved_deep_match_runtime_config,
                     )
                 else:
                     def run_tile_matching_pass(candidate_matcher_method: str) -> list[TileMatchResult]:
@@ -2245,6 +2293,7 @@ def match_dom_pair(
                                     sift_sigma=sift_sigma,
                                     use_gpu=use_gpu,
                                     gpu_batch_size=gpu_batch_size,
+                                    deep_match_runtime_config=resolved_deep_match_runtime_config,
                                 )
                                 try:
                                     pass_results = _run_parallel_tile_match_tasks(
@@ -2303,6 +2352,7 @@ def match_dom_pair(
                                 sift_edge_threshold=sift_edge_threshold,
                                 sift_sigma=sift_sigma,
                                 use_gpu=use_gpu,
+                                deep_match_runtime_config=resolved_deep_match_runtime_config,
                                 progress_callback=progress_bar.update if progress_bar is not None else None,
                                 use_tile_cache=use_tile_cache,
                                 cache_max_mb=tile_cache_max_mb,
@@ -2471,6 +2521,7 @@ def match_dom_pair(
             "deep_match_mode": resolved_deep_match_mode,
             "deep_match_config_path": str(resolved_deep_match_config_path) if resolved_deep_match_config_path is not None else None,
             "deep_match_config": resolved_deep_match_config,
+            "deep_match_runtime_config": _runtime_config_to_metadata(resolved_deep_match_runtime_config),
             "deep_match_export": deep_match_export_summary,
             "low_resolution_offset": low_resolution_offset_summary,
             "preparation": asdict(preparation),
@@ -2657,6 +2708,7 @@ def match_dom_pair_to_key_files(
             "deep_match_mode": summary.get("deep_match_mode", DEFAULT_DEEP_MATCH_MODE),
             "deep_match_config_path": summary.get("deep_match_config_path"),
             "deep_match_config": summary.get("deep_match_config"),
+            "deep_match_runtime_config": summary.get("deep_match_runtime_config"),
             "deep_match_export": summary.get("deep_match_export"),
         }
     match_visualization_result: dict[str, object] | None = None

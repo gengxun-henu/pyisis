@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-05-19
 Updated: 2026-05-19  Geng Xun added focused coverage for pre-match feature filtering and LoFTR mask passthrough.
+Updated: 2026-05-19  Geng Xun added runtime config storage coverage for deep matcher adapters.
 """
 
 from __future__ import annotations
@@ -22,6 +23,7 @@ for import_path in (PROJECT_ROOT, EXAMPLES_DIR):
         sys.path.insert(0, str(import_path))
 
 from image_match.deep_adapter import DeepMatcherAdapter
+from controlnet_construct.deep_match_config import DeepMatchRuntimeConfig
 
 
 class _CapturingFeatureMatcher:
@@ -56,6 +58,21 @@ class _CapturingLoFTRMatcher:
 
 
 class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
+    def test_deep_matcher_adapter_stores_runtime_config(self):
+        runtime = DeepMatchRuntimeConfig(
+            matcher_method="lightglue",
+            feature_extractor_method="superpoint",
+            prefer_gpu=False,
+            device_dtype="float32",
+            fallback_on_error="sift_flann",
+            raw_config={"matcher": {"method": "lightglue"}},
+        )
+
+        adapter = DeepMatcherAdapter(prefer_gpu=True, runtime_config=runtime)
+
+        self.assertIs(adapter._runtime_config, runtime)
+        self.assertEqual(adapter._device, "cpu")
+
     def test_match_pair_filters_superpoint_features_before_matching(self):
         adapter = DeepMatcherAdapter(prefer_gpu=False)
         left_features = {

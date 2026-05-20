@@ -46,6 +46,8 @@ Updated: 2026-05-20  Geng Xun added preset-aware adaptive-routing forwarding cov
 Updated: 2026-05-20  Geng Xun added stage-6 manifest provenance roundtrip coverage for deep-match runtime config export metadata.
 Updated: 2026-05-23  Geng Xun added raw image ControlNet wrapper dry-run and execution coverage.
 Updated: 2026-05-23  Geng Xun added raw image deep matcher and adaptive-routing forwarding coverage.
+Updated: 2026-05-20  Geng Xun added config-relative adaptive-routing preset-map regression coverage.
+Updated: 2026-05-20  Geng Xun added repo-root fallback coverage for adaptive-routing deep preset maps loaded from config.
 """
 
 from __future__ import annotations
@@ -4435,6 +4437,9 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             config_dir.mkdir()
             preset_dir.mkdir()
             config_path = config_dir / "controlnet_config.json"
+            (preset_dir / "lightglue_default.json").write_text("{}", encoding="utf-8")
+            (preset_dir / "lightglue_high_recall.json").write_text("{}", encoding="utf-8")
+            (preset_dir / "loftr_default.json").write_text("{}", encoding="utf-8")
             expected_preset_map = {
                 "lightglue": str(preset_dir / "lightglue_default.json"),
                 "lightglue_high_recall": str(preset_dir / "lightglue_high_recall.json"),
@@ -4448,6 +4453,53 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 "lightglue": "presets/lightglue_default.json",
                                 "lightglue_high_recall": "presets/lightglue_high_recall.json",
                                 "loftr": "presets/loftr_default.json",
+                            }
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with (
+                patch("controlnet_construct.image_match.match_dom_pair_to_key_files", return_value=fake_result) as match_mock,
+                patch.object(sys, "stdout", stdout),
+            ):
+                image_match_main(
+                    [
+                        "--config",
+                        str(config_path),
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        "left.key",
+                        "right.key",
+                    ]
+                )
+
+        self.assertEqual(
+            match_mock.call_args.kwargs["adaptive_routing_deep_presets"],
+            expected_preset_map,
+        )
+
+    def test_pipeline_forwards_repo_relative_adaptive_routing_deep_presets_from_config(self):
+        fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
+        stdout = io.StringIO()
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            expected_preset_map = {
+                "lightglue": str(PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json"),
+                "lightglue_high_recall": str(PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_high_recall.json"),
+                "loftr": str(PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "loftr_default.json"),
+            }
+
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "adaptive_routing_deep_presets": {
+                                "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
+                                "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
+                                "loftr": "examples/controlnet_construct/presets/loftr_default.json",
                             }
                         }
                     }

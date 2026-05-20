@@ -47,6 +47,8 @@ Updated: 2026-05-19  Geng Xun added shared deep matcher config path parsing, val
 Updated: 2026-05-19  Geng Xun resolved deep matcher runtime config and added matcher conflict checks.
 Updated: 2026-05-20  Geng Xun added preset-aware adaptive routing config loading, route metadata, and deep preset cascade execution.
 Updated: 2026-05-20  Geng Xun enriched export-mode deep-match manifests with per-task runtime-config provenance and environment metadata.
+Updated: 2026-05-20  Geng Xun normalized config-relative adaptive-routing deep preset paths during config loading.
+Updated: 2026-05-20  Geng Xun restored repo-root fallback when resolving adaptive-routing deep preset maps from config JSON.
 """
 
 from __future__ import annotations
@@ -698,11 +700,19 @@ def _coerce_string_mapping(value: object, *, field_name: str) -> dict[str, str]:
 
 def _resolve_config_relative_string_mapping(mapping: dict[str, str], *, config_path: str | Path) -> dict[str, str]:
     config_dir = Path(config_path).parent
+    repo_root = Path(__file__).resolve().parents[2]
     resolved_mapping: dict[str, str] = {}
     for key, value in mapping.items():
         resolved_value = Path(value).expanduser()
-        if not resolved_value.is_absolute():
-            resolved_value = config_dir / resolved_value
+        if resolved_value.is_absolute():
+            resolved_mapping[key] = str(resolved_value)
+            continue
+
+        config_relative_candidate = config_dir / resolved_value
+        if config_relative_candidate.exists():
+            resolved_value = config_relative_candidate
+        else:
+            resolved_value = repo_root / resolved_value
         resolved_mapping[key] = str(resolved_value)
     return resolved_mapping
 

@@ -11,6 +11,7 @@ Updated: 2026-05-16  Geng Xun added coverage for named adaptive-routing quality 
 Updated: 2026-05-18  Geng Xun added focused coverage for the sparseness/lighting-aware conservative router and the sidecar diagnostics augmenter.
 Updated: 2026-05-19  Geng Xun added coverage for optional nested tile diagnostics in adaptive sidecars.
 Updated: 2026-05-20  Geng Xun added preset-aware adaptive-routing coverage for deep preset selection and sidecar serialization.
+Updated: 2026-05-20  Geng Xun added regression coverage for flann cascade planning in the public adaptive-routing flow.
 """
 
 from __future__ import annotations
@@ -321,6 +322,14 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(plan, ("bf", "lightglue", "loftr"))
         self.assertEqual(build_cascade_plan(initial_matcher="lightglue"), ("lightglue", "loftr"))
         self.assertEqual(build_cascade_plan(initial_matcher="loftr"), ("loftr",))
+
+    def test_build_cascade_plan_accepts_flann_in_public_adaptive_flow(self):
+        plan = build_cascade_plan(
+            initial_matcher="flann",
+            fallback_chain=("loftr", "lightglue"),
+        )
+
+        self.assertEqual(plan, ("flann", "lightglue", "loftr"))
 
     def test_decide_post_match_action_requests_next_matcher_after_failed_gate(self):
         plan = build_cascade_plan(initial_matcher="bf")

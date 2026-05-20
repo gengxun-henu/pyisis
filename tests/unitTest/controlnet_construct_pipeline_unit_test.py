@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-19
+Last Modified: 2026-05-20
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -42,6 +42,7 @@ Updated: 2026-05-16  Geng Xun added wrapper coverage for deep-match manifest exp
 Updated: 2026-05-16  Geng Xun added pipeline wrapper coverage for adaptive-routing profile forwarding.
 Updated: 2026-05-19  Geng Xun added regression coverage for deep matcher config path wrapper forwarding.
 Updated: 2026-05-19  Geng Xun aligned wrapper regression coverage for ImageMatch-only defaults, adaptive routing, and resolved deep matcher config paths.
+Updated: 2026-05-20  Geng Xun added stage-6 manifest provenance roundtrip coverage for deep-match runtime config export metadata.
 """
 
 from __future__ import annotations
@@ -89,6 +90,7 @@ from controlnet_construct.dom2ori import (
     convert_paired_dom_key_files_via_ground_functions,
     convert_points_via_ground_functions,
 )
+from controlnet_construct.deep_match_config import DeepMatchRuntimeConfig
 from controlnet_construct.image_match import (
     build_argument_parser as build_controlnet_stereopair_argument_parser,
     main as image_match_main,
@@ -102,6 +104,8 @@ from controlnet_construct.image_overlap import (
     geographic_bounds_overlap,
 )
 from controlnet_construct.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
+from image_match.deep_match_manifest import build_deep_match_pair_manifest, read_deep_match_pair_manifest, write_deep_match_pair_manifest
+from image_match.tile_matching import PairedTileWindow, TileMatchTask, TileWindow
 
 
 LEFT_CUBE_PATH = workspace_test_data_path("mosrange", "EN0108828322M_iof.cub")
@@ -129,6 +133,75 @@ def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
 
 
 class ControlNetConstructPipelineUnitTest(unittest.TestCase):
+    def test_deep_match_manifest_roundtrip_preserves_runtime_config_provenance_fields(self):
+        runtime_config = DeepMatchRuntimeConfig(
+            matcher_method="lightglue",
+            feature_extractor_method="superpoint",
+            prefer_gpu=True,
+            device_dtype="float16",
+            fallback_on_error=None,
+            raw_config={"matcher": {"method": "lightglue"}},
+        )
+        task = TileMatchTask(
+            left_dom_path="left_dom.cub",
+            right_dom_path="right_dom.cub",
+            band=1,
+            paired_window=PairedTileWindow(
+                local_window=TileWindow(start_x=0, start_y=0, width=32, height=32),
+                left_window=TileWindow(start_x=10, start_y=20, width=32, height=32),
+                right_window=TileWindow(start_x=12, start_y=24, width=32, height=32),
+            ),
+            minimum_value=0.0,
+            maximum_value=255.0,
+            lower_percent=1.0,
+            upper_percent=99.0,
+            invalid_values=(0.0, -32768.0),
+            special_pixel_abs_threshold=1.0e300,
+            min_valid_pixels=32,
+            valid_pixel_percent_threshold=0.25,
+            invalid_pixel_radius=2,
+            ratio_test=0.75,
+            matcher_method="lightglue",
+            max_features=2048,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+            image_space="dom",
+            use_gpu=True,
+            gpu_batch_size=4,
+            deep_match_runtime_config=runtime_config,
+        )
+
+        with temporary_directory() as temp_dir:
+            manifest = build_deep_match_pair_manifest(
+                tasks=[task],
+                left_dom_path="left_dom.cub",
+                right_dom_path="right_dom.cub",
+                matcher_method="lightglue",
+                band=1,
+                image_space="dom",
+                temp_root_dir=temp_dir / "deep_match_workspace",
+                requested_device="cuda",
+                created_at_utc="2026-05-19T12:00:00Z",
+                deep_match_config_path="examples/controlnet_construct/presets/lightglue_default.json",
+                deep_match_runtime_config=runtime_config,
+                created_by_python="/opt/conda/envs/deep-learning/bin/python",
+            )
+            manifest_path = write_deep_match_pair_manifest(manifest)
+            reloaded = read_deep_match_pair_manifest(manifest_path)
+
+        record = reloaded.tasks[0]
+        self.assertEqual(record.deep_match_config_path, "examples/controlnet_construct/presets/lightglue_default.json")
+        self.assertEqual(record.deep_match_runtime_config["matcher_method"], "lightglue")
+        self.assertEqual(record.feature_extractor_method, "superpoint")
+        self.assertEqual(record.matcher_method, "lightglue")
+        self.assertEqual(record.tile_window["local_window"]["width"], 32)
+        self.assertEqual(record.invalid_mask_summary["invalid_pixel_radius"], 2)
+        self.assertEqual(record.normalization["upper_percent"], 99.0)
+        self.assertEqual(record.created_by_python, "/opt/conda/envs/deep-learning/bin/python")
+        self.assertEqual(record.created_at_utc, "2026-05-19T12:00:00Z")
+
     def test_run_pipeline_example_routes_step_json_outputs_to_files_and_keeps_stdout_compact(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"

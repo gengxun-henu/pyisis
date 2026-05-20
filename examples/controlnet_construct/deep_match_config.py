@@ -110,6 +110,7 @@ def deep_match_runtime_config_from_payload(
         fallback_on_error=(
             None if mapping.get("fallback_on_error") is None else str(mapping.get("fallback_on_error"))
         ),
+        raw_config=dict(raw_config),
         matcher_options=_payload_options(
             mapping,
             "matcher_options",
@@ -128,7 +129,6 @@ def deep_match_runtime_config_from_payload(
             raw_config=raw_config,
             raw_section="device",
         ),
-        raw_config=dict(raw_config),
     )
 
 

@@ -4688,6 +4688,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
     def test_match_dom_pair_uses_adaptive_routed_matcher_when_enabled(self):
         image = _build_textured_test_image(96, 96)
+        accepted_points = tuple(Keypoint(float(index), float(index)) for index in range(40))
         fake_tile_result = tile_matching_module.TileMatchResult(
             stats=tile_matching_module.TileMatchStats(
                 0,
@@ -4702,13 +4703,13 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 96 * 96,
                 1.0,
                 1.0,
-                0,
-                0,
-                0,
-                "skipped_no_matches",
+                40,
+                40,
+                40,
+                "matched",
             ),
-            left_points=(),
-            right_points=(),
+            left_points=accepted_points,
+            right_points=accepted_points,
         )
 
         with temporary_directory() as temp_dir:

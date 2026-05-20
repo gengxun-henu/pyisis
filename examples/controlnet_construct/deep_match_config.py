@@ -11,7 +11,6 @@ Updated: 2026-05-20  Geng Xun added dependency preflight checks and runtime-conf
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from dataclasses import dataclass
 import importlib
 import json
 from pathlib import Path
@@ -48,6 +47,22 @@ def _section_options(section: dict[str, Any] | None) -> dict[str, Any]:
     section_dict = dict(section or {})
     section_dict.pop("method", None)
     return section_dict
+
+
+def _payload_options(
+    mapping: dict[str, Any],
+    key: str,
+    *,
+    raw_config: dict[str, Any],
+    raw_section: str,
+) -> dict[str, Any]:
+    options = mapping.get(key)
+    if isinstance(options, dict):
+        return dict(options)
+    section = raw_config.get(raw_section)
+    if isinstance(section, dict):
+        return _section_options(section)
+    return {}
 
 
 def validate_matcher_feature_compatibility(*, matcher_method: str, feature_extractor_method: str) -> None:
@@ -96,9 +111,24 @@ def deep_match_runtime_config_from_payload(
             None if mapping.get("fallback_on_error") is None else str(mapping.get("fallback_on_error"))
         ),
         raw_config=dict(raw_config),
-        matcher_options=dict(mapping.get("matcher_options", {}) or {}),
-        feature_options=dict(mapping.get("feature_options", {}) or {}),
-        device_options=dict(mapping.get("device_options", {}) or {}),
+        matcher_options=_payload_options(
+            mapping,
+            "matcher_options",
+            raw_config=raw_config,
+            raw_section="matcher",
+        ),
+        feature_options=_payload_options(
+            mapping,
+            "feature_options",
+            raw_config=raw_config,
+            raw_section="feature_extractor",
+        ),
+        device_options=_payload_options(
+            mapping,
+            "device_options",
+            raw_config=raw_config,
+            raw_section="device",
+        ),
     )
 
 

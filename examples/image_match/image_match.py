@@ -49,6 +49,7 @@ Updated: 2026-05-20  Geng Xun added preset-aware adaptive routing config loading
 Updated: 2026-05-20  Geng Xun enriched export-mode deep-match manifests with per-task runtime-config provenance and environment metadata.
 Updated: 2026-05-20  Geng Xun normalized config-relative adaptive-routing deep preset paths during config loading.
 Updated: 2026-05-20  Geng Xun restored repo-root fallback when resolving adaptive-routing deep preset maps from config JSON.
+Updated: 2026-05-20  Geng Xun reused deep preset matcher compatibility validation for routed initial and cascade configs.
 """
 
 from __future__ import annotations
@@ -2404,6 +2405,10 @@ def match_dom_pair(
             resolved_deep_match_config_path = Path(str(routed_deep_match_config_path))
             resolved_deep_match_runtime_config = _resolve_deep_match_runtime_config(resolved_deep_match_config_path)
             resolved_deep_match_config = resolved_deep_match_runtime_config.raw_config
+            resolved_matcher_method = _resolve_matcher_method_with_deep_config(
+                requested_matcher_method=resolved_requested_matcher_method,
+                deep_match_runtime_config=resolved_deep_match_runtime_config,
+            )
         elif resolved_matcher_method not in DEEP_MATCHER_METHODS:
             resolved_deep_match_config_path = None
             resolved_deep_match_runtime_config = None
@@ -2676,6 +2681,10 @@ def match_dom_pair(
                                     candidate_deep_match_config_path
                                 )
                                 candidate_deep_match_config = candidate_deep_match_runtime_config.raw_config
+                            candidate_matcher_method = _resolve_matcher_method_with_deep_config(
+                                requested_matcher_method=candidate_matcher_method,
+                                deep_match_runtime_config=candidate_deep_match_runtime_config,
+                            )
                         selected_tile_results = run_tile_matching_pass(
                             candidate_matcher_method,
                             candidate_deep_match_runtime_config=candidate_deep_match_runtime_config,

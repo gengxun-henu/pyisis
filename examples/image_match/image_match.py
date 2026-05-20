@@ -45,6 +45,7 @@ Updated: 2026-05-19  Geng Xun routed adaptive texture-sparseness diagnostics thr
     tile-window readers instead of full-band cube reads.
 Updated: 2026-05-19  Geng Xun added shared deep matcher config path parsing, validation, and metadata recording.
 Updated: 2026-05-19  Geng Xun resolved deep matcher runtime config and added matcher conflict checks.
+Updated: 2026-05-20  Geng Xun enriched export-mode deep-match manifests with per-task runtime-config provenance and environment metadata.
 """
 
 from __future__ import annotations
@@ -1549,6 +1550,7 @@ def _export_deep_match_pair_tasks(
     use_gpu: bool,
     gpu_batch_size: int,
     deep_match_temp_root_dir: str | Path,
+    deep_match_config_path: str | Path | None = None,
     deep_match_runtime_config: object | None = None,
 ) -> tuple[list[TileMatchStats], dict[str, object]]:
     image_backend = build_image_backend(image_space)
@@ -1587,10 +1589,23 @@ def _export_deep_match_pair_tasks(
         image_space=image_backend.space,
         temp_root_dir=deep_match_temp_root_dir,
         requested_device="cuda" if use_gpu else "cpu",
+        deep_match_config_path=deep_match_config_path,
+        deep_match_runtime_config=deep_match_runtime_config,
+        created_by_python=sys.executable,
         metadata={
             "export_source": "image_match.match_dom_pair",
             "candidate_tile_count": len(candidate_windows),
+            "deep_match_config_path": (
+                None if deep_match_config_path is None else str(Path(deep_match_config_path))
+            ),
             "deep_match_runtime_config": _runtime_config_to_metadata(deep_match_runtime_config),
+            "matcher_method": matcher_method,
+            "feature_extractor_method": (
+                None
+                if deep_match_runtime_config is None
+                else getattr(deep_match_runtime_config, "feature_extractor_method", None)
+            ),
+            "created_by_python": sys.executable,
         },
     )
     workspace = resolve_deep_match_workspace(
@@ -2249,6 +2264,7 @@ def match_dom_pair(
                             if deep_match_temp_root_dir is not None
                             else Path.cwd() / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME
                         ),
+                        deep_match_config_path=resolved_deep_match_config_path,
                         deep_match_runtime_config=resolved_deep_match_runtime_config,
                     )
                 else:

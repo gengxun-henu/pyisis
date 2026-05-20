@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-05-16
 Updated: 2026-05-16  Geng Xun added a manifest executor that consumes image_match exports and writes standardized NPZ match results.
+Updated: 2026-05-20  Geng Xun added manifest runtime-config preflight checks and adapter runtime-config handoff for cross-environment deep matching.
 """
 
 from __future__ import annotations
@@ -33,6 +34,10 @@ from image_match.deep_match_manifest import (
     read_deep_match_pair_manifest,
     read_deep_match_task_arrays,
     write_deep_match_task_result,
+)
+from controlnet_construct.deep_match_config import (
+    check_deep_match_dependencies,
+    deep_match_runtime_config_from_payload,
 )
 
 SUPPORTED_DEVICES = ("auto", "cpu", "cuda")
@@ -146,6 +151,43 @@ def _write_task_log(record: DeepMatchTaskRecord, payload: dict[str, Any]) -> Pat
     return log_path
 
 
+def _runtime_config_from_manifest(manifest: Any, *, prefer_gpu: bool) -> Any | None:
+    for record in manifest.tasks:
+        if record.deep_match_runtime_config is not None:
+            return deep_match_runtime_config_from_payload(
+                record.deep_match_runtime_config,
+                matcher_method=record.matcher_method or manifest.matcher_method,
+                prefer_gpu=prefer_gpu,
+            )
+        tile_task_runtime_config = getattr(record.tile_task, "deep_match_runtime_config", None)
+        if tile_task_runtime_config is not None:
+            return deep_match_runtime_config_from_payload(
+                tile_task_runtime_config,
+                matcher_method=record.matcher_method or manifest.matcher_method,
+                prefer_gpu=prefer_gpu,
+            )
+    metadata_runtime_config = manifest.metadata.get("deep_match_runtime_config")
+    if metadata_runtime_config is None:
+        return None
+    return deep_match_runtime_config_from_payload(
+        metadata_runtime_config,
+        matcher_method=manifest.matcher_method,
+        prefer_gpu=prefer_gpu,
+    )
+
+
+def _validate_runtime_config_matcher_method(manifest: Any, runtime_config: Any | None) -> None:
+    if runtime_config is None:
+        return
+    manifest_method = str(manifest.matcher_method).strip().lower()
+    runtime_method = str(runtime_config.matcher_method).strip().lower()
+    if manifest_method != runtime_method:
+        raise ValueError(
+            f"Manifest matcher_method '{manifest_method}' conflicts with "
+            f"runtime_config.matcher_method '{runtime_method}'."
+        )
+
+
 def run_manifest(
     manifest_path: str | Path,
     *,
@@ -158,7 +200,15 @@ def run_manifest(
 
     manifest = read_deep_match_pair_manifest(manifest_path)
     prefer_gpu = _resolve_prefer_gpu(device)
-    adapter = adapter_factory(prefer_gpu=prefer_gpu)
+    runtime_config = _runtime_config_from_manifest(manifest, prefer_gpu=prefer_gpu)
+    _validate_runtime_config_matcher_method(manifest, runtime_config)
+    missing_dependencies = [] if runtime_config is None else check_deep_match_dependencies(runtime_config)
+    if missing_dependencies:
+        raise RuntimeError(
+            f"Deep matcher preflight failed for '{runtime_config.matcher_method}' using Python {sys.executable}: "
+            f"{'; '.join(missing_dependencies)}. Use the deep-learning conda environment or install the dependency."
+        )
+    adapter = adapter_factory(prefer_gpu=prefer_gpu, runtime_config=runtime_config)
     actual_device = str(getattr(adapter, "_device", "cuda" if prefer_gpu else "cpu"))
 
     task_summaries: list[dict[str, Any]] = []

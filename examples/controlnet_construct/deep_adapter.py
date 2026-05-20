@@ -4,17 +4,51 @@ Author: Geng Xun
 Created: 2026-05-11
 Updated: 2026-05-11  Geng Xun added top-of-file metadata so example helper modules follow the repository's example-file header convention.
 Updated: 2026-05-19  Geng Xun made feature extractor runtime config explicit for LightGlue and SuperGlue routing.
+Updated: 2026-05-19  Geng Xun forwarded matcher/feature/device runtime options into deep matcher construction.
+Updated: 2026-05-20  Geng Xun added early runtime-config compatibility checks for deep matcher and extractor pairs.
 """
 
 from __future__ import annotations
 
+import json
 from typing import Any
 
 import cv2
 import numpy as np
 
 from .deep_frontends import DeepDependencyError, DeepFrontendError, LoFTRFrontend, SuperPointFrontend, normalize_deep_method, resolve_torch_device
-from .deep_matchers import DeepMatchResult, DeepMatcherError, build_deep_matcher
+from .deep_matchers import DeepMatchResult, DeepMatcherError, _default_feature_extractor_for_matcher, build_deep_matcher
+
+
+def _runtime_feature_extractor_method(runtime_config: Any | None, matcher_method: str) -> str:
+    configured_method = (
+        getattr(runtime_config, "feature_extractor_method", None)
+        if runtime_config is not None
+        else None
+    )
+    if configured_method is None:
+        return _default_feature_extractor_for_matcher(matcher_method)
+    normalized_method = str(configured_method).strip().lower()
+    return normalized_method or _default_feature_extractor_for_matcher(matcher_method)
+
+
+def _validate_runtime_matcher_compatibility(runtime_config: Any | None) -> None:
+    if runtime_config is None:
+        return
+    matcher_method = str(getattr(runtime_config, "matcher_method", "") or "").strip().lower()
+    feature_extractor_method = _runtime_feature_extractor_method(runtime_config, matcher_method)
+    supported_extractors = {
+        "lightglue": ("superpoint",),
+        "superglue": ("superpoint",),
+        "loftr": ("loftr",),
+    }.get(matcher_method)
+    if supported_extractors is None or feature_extractor_method in supported_extractors:
+        return
+    supported_display = ", ".join(repr(method) for method in supported_extractors)
+    raise ValueError(
+        f"matcher.method={matcher_method!r} requires feature_extractor.method to be one of "
+        f"({supported_display}); got {feature_extractor_method!r}."
+    )
 
 
 def _valid_mask_keep(points: np.ndarray, invalid_mask: np.ndarray | None) -> np.ndarray:
@@ -52,6 +86,7 @@ def _filter_feature_dict_by_invalid_mask(features: Any, invalid_mask: np.ndarray
 
 class DeepMatcherAdapter:
     def __init__(self, *, prefer_gpu: bool = True, runtime_config: Any | None = None) -> None:
+        _validate_runtime_matcher_compatibility(runtime_config)
         self._runtime_config = runtime_config
         resolved_prefer_gpu = (
             bool(getattr(runtime_config, "prefer_gpu"))
@@ -63,6 +98,18 @@ class DeepMatcherAdapter:
         self._superpoint = SuperPointFrontend(runtime_config=runtime_config)
         self._loftr_frontend = LoFTRFrontend()
         self._matcher_cache: dict[tuple[str, str], Any] = {}
+
+    def _matcher_build_kwargs(self, *, method: str) -> dict[str, Any]:
+        runtime_config = self._runtime_config
+        return {
+            "feature_extractor_method": _runtime_feature_extractor_method(runtime_config, method),
+            "matcher_options": dict(getattr(runtime_config, "matcher_options", {}) or {}),
+            "feature_options": dict(getattr(runtime_config, "feature_options", {}) or {}),
+            "device_options": dict(getattr(runtime_config, "device_options", {}) or {}),
+        }
+
+    def _cacheable_options(self, options: dict[str, Any]) -> str:
+        return json.dumps(options, sort_keys=True, ensure_ascii=True, default=str)
 
     def _raise_cross_method_fallback_error(self, requested: str, fallback_to: str) -> None:
         raise RuntimeError(
@@ -90,9 +137,7 @@ class DeepMatcherAdapter:
         method = normalize_deep_method(matcher_method)
         try:
             if method in ("superglue", "lightglue"):
-                extractor_method = str(
-                    getattr(self._runtime_config, "feature_extractor_method", "superpoint") or "superpoint"
-                ).strip().lower()
+                extractor_method = _runtime_feature_extractor_method(self._runtime_config, method)
                 if extractor_method != "superpoint":
                     raise DeepFrontendError(
                         f"feature_extractor.method={extractor_method!r} is validated but not yet implemented for {method!r}."
@@ -146,10 +191,18 @@ class DeepMatcherAdapter:
         )
 
     def _get_cached_matcher(self, *, method: str, device: str) -> Any:
-        cache_key = (method, device)
+        build_kwargs = self._matcher_build_kwargs(method=method)
+        cache_key = (
+            method,
+            device,
+            build_kwargs["feature_extractor_method"],
+            self._cacheable_options(build_kwargs["matcher_options"]),
+            self._cacheable_options(build_kwargs["feature_options"]),
+            self._cacheable_options(build_kwargs["device_options"]),
+        )
         matcher = self._matcher_cache.get(cache_key)
         if matcher is None:
-            matcher = build_deep_matcher(method, device=device)
+            matcher = build_deep_matcher(method, device=device, **build_kwargs)
             self._matcher_cache[cache_key] = matcher
         return matcher
 

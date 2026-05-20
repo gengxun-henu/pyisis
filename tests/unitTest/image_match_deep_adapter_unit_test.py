@@ -2,14 +2,19 @@
 
 Author: Geng Xun
 Created: 2026-05-19
+Last Modified: 2026-05-19
 Updated: 2026-05-19  Geng Xun added focused coverage for pre-match feature filtering and LoFTR mask passthrough.
 Updated: 2026-05-19  Geng Xun added runtime config storage coverage for deep matcher adapters.
 Updated: 2026-05-19  Geng Xun added feature extractor runtime config coverage for SuperPoint and explicit unsupported extractor errors.
+Updated: 2026-05-19  Geng Xun added matcher runtime option forwarding coverage for LightGlue/LoFTR/SuperGlue adapters.
+Updated: 2026-05-19  Geng Xun added regression coverage for deep matcher device dtype application and surfaced ignored device options.
+Updated: 2026-05-19  Geng Xun added fail-fast compatibility coverage for invalid matcher and extractor combinations.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
+from types import SimpleNamespace
 from unittest import mock
 import sys
 import unittest
@@ -57,6 +62,24 @@ class _CapturingLoFTRMatcher:
             np.zeros((0, 2), dtype=np.float32),
             np.zeros((0,), dtype=np.float32),
         )
+
+
+class _DTypeTrackingModule:
+    def __init__(self) -> None:
+        self.device: object | None = None
+        self.dtype: object | None = None
+
+    def eval(self):
+        return self
+
+    def to(self, *args, **kwargs):
+        if args:
+            self.device = args[0]
+        if "device" in kwargs:
+            self.device = kwargs["device"]
+        if "dtype" in kwargs:
+            self.dtype = kwargs["dtype"]
+        return self
 
 
 class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
@@ -116,7 +139,103 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         self.assertIs(adapter._runtime_config, runtime)
         self.assertEqual(adapter._device, "cpu")
 
-    def test_lightglue_aliked_disk_doghardnet_reject_unimplemented_extractors(self):
+    def test_deep_matcher_adapter_passes_matcher_options_to_matcher_builder(self):
+        runtime = SimpleNamespace(
+            prefer_gpu=False,
+            matcher_method="lightglue",
+            feature_extractor_method="superpoint",
+            matcher_options={"weights": "superpoint_lightglue", "flash": False, "prune_threshold": 2},
+            feature_options={"max_keypoints": 4096, "keypoint_threshold": 0.0005},
+            device_options={"prefer_gpu": False, "dtype": "float32", "batch_inference": True},
+        )
+        adapter = DeepMatcherAdapter(prefer_gpu=True, runtime_config=runtime)
+        matcher = _CapturingFeatureMatcher()
+        left_features = {"keypoints": np.array([[1.0, 1.0]], dtype=np.float32)}
+        right_features = {"keypoints": np.array([[2.0, 2.0]], dtype=np.float32)}
+
+        with mock.patch.object(adapter._superpoint, "extract", side_effect=[left_features, right_features]), mock.patch(
+            "image_match.deep_adapter.build_deep_matcher",
+            return_value=matcher,
+        ) as build_matcher_mock:
+            adapter.match_pair(
+                matcher_method="lightglue",
+                left_image=np.zeros((8, 8), dtype=np.float32),
+                right_image=np.zeros((8, 8), dtype=np.float32),
+            )
+
+        build_matcher_mock.assert_called_once_with(
+            "lightglue",
+            device="cpu",
+            feature_extractor_method="superpoint",
+            matcher_options={"weights": "superpoint_lightglue", "flash": False, "prune_threshold": 2},
+            feature_options={"max_keypoints": 4096, "keypoint_threshold": 0.0005},
+            device_options={"prefer_gpu": False, "dtype": "float32", "batch_inference": True},
+        )
+
+    def test_image_match_lightglue_applies_dtype_and_surfaces_ignored_device_options(self):
+        deep_matchers_module = __import__("image_match.deep_matchers", fromlist=["build_deep_matcher"])
+        lightglue_backend = _DTypeTrackingModule()
+        lightglue_constructor = mock.Mock(return_value=lightglue_backend)
+        torch_module = SimpleNamespace(float32="torch.float32")
+        lightglue_module = SimpleNamespace(LightGlue=lightglue_constructor)
+
+        with mock.patch.dict(sys.modules, {"torch": torch_module, "lightglue": lightglue_module}, clear=False):
+            matcher = deep_matchers_module.build_deep_matcher(
+                "lightglue",
+                device="cpu",
+                feature_extractor_method="superpoint",
+                matcher_options={"weights": "superpoint_lightglue"},
+                device_options={"dtype": "float32", "batch_inference": True},
+            )
+            matcher._load_matcher()
+
+        self.assertEqual(lightglue_backend.device, "cpu")
+        self.assertEqual(lightglue_backend.dtype, "torch.float32")
+        self.assertIn("device.batch_inference", matcher.ignored_parameters)
+
+    def test_build_deep_matcher_rejects_incompatible_extractor_combinations(self):
+        deep_matchers_module = __import__("image_match.deep_matchers", fromlist=["build_deep_matcher"])
+
+        for matcher_method, extractor_method, supported in (
+            ("lightglue", "disk", "superpoint"),
+            ("superglue", "aliked", "superpoint"),
+            ("loftr", "superpoint", "loftr"),
+        ):
+            with self.subTest(matcher=matcher_method, extractor=extractor_method):
+                with self.assertRaisesRegex(
+                    deep_matchers_module.DeepMatcherError,
+                    rf"matcher\.method='{matcher_method}'.*feature_extractor\.method.*'{supported}'.*'{extractor_method}'",
+                ):
+                    deep_matchers_module.build_deep_matcher(
+                        matcher_method,
+                        device="cpu",
+                        feature_extractor_method=extractor_method,
+                    )
+
+    def test_build_deep_matcher_defaults_loftr_extractor_for_loftr(self):
+        deep_matchers_module = __import__("image_match.deep_matchers", fromlist=["build_deep_matcher"])
+
+        matcher = deep_matchers_module.build_deep_matcher("loftr", device="cpu")
+
+        self.assertEqual(matcher.feature_extractor_method, "loftr")
+
+    def test_deep_matcher_adapter_rejects_invalid_runtime_config_early(self):
+        runtime = SimpleNamespace(
+            prefer_gpu=False,
+            matcher_method="loftr",
+            feature_extractor_method="superpoint",
+            matcher_options={"pretrained": "outdoor"},
+            feature_options={"max_keypoints": 2048},
+            device_options={"prefer_gpu": False, "dtype": "float32"},
+        )
+
+        with self.assertRaisesRegex(
+            ValueError,
+            r"matcher\.method='loftr'.*feature_extractor\.method.*'loftr'.*'superpoint'",
+        ):
+            DeepMatcherAdapter(prefer_gpu=False, runtime_config=runtime)
+
+    def test_lightglue_non_superpoint_presets_fail_during_config_resolution(self):
         config_module = __import__("controlnet_construct.deep_match_config", fromlist=["resolve_deep_match_runtime_config"])
 
         for preset_name, extractor_method in (
@@ -125,21 +244,12 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
             ("lightglue_doghardnet.json", "doghardnet"),
         ):
             with self.subTest(preset=preset_name):
-                runtime = config_module.resolve_deep_match_runtime_config(
-                    PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / preset_name
-                )
-                self.assertEqual(runtime.feature_extractor_method, extractor_method)
-                adapter = DeepMatcherAdapter(prefer_gpu=False, runtime_config=runtime)
-
                 with self.assertRaisesRegex(
-                    DeepFrontendError,
-                    f"feature_extractor.method='{extractor_method}'.*not yet implemented.*'lightglue'",
+                    ValueError,
+                    rf"matcher\.method='lightglue'.*feature_extractor\.method.*'superpoint'.*'{extractor_method}'",
                 ):
-                    adapter._match_pair_on_device(
-                        matcher_method="lightglue",
-                        left_image=np.zeros((8, 8), dtype=np.float32),
-                        right_image=np.zeros((8, 8), dtype=np.float32),
-                        device="cpu",
+                    config_module.resolve_deep_match_runtime_config(
+                        PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / preset_name
                     )
 
     def test_match_pair_filters_superpoint_features_before_matching(self):
@@ -202,7 +312,7 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         with mock.patch.object(adapter._loftr_frontend, "prepare", return_value=prepared) as prepare_mock, mock.patch(
             "image_match.deep_adapter.build_deep_matcher",
             return_value=matcher,
-        ):
+        ) as build_matcher_mock:
             adapter.match_pair(
                 matcher_method="loftr",
                 left_image=np.ones((6, 6), dtype=np.float32),
@@ -212,6 +322,14 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
             )
 
         prepare_mock.assert_called_once()
+        build_matcher_mock.assert_called_once_with(
+            "loftr",
+            device="cpu",
+            feature_extractor_method="loftr",
+            matcher_options={},
+            feature_options={},
+            device_options={},
+        )
         self.assertIs(prepare_mock.call_args.kwargs["left_mask"], left_mask)
         self.assertIs(prepare_mock.call_args.kwargs["right_mask"], right_mask)
         self.assertEqual(len(matcher.calls), 1)

@@ -8,6 +8,7 @@
   },
   "matcher": {
     "method": "lightglue",
+    "weights": "superpoint_lightglue",
     "weights_path": null,
     "flash": true,
     "prune_threshold": 2

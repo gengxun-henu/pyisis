@@ -62,6 +62,19 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
 
 `run_pipeline_example.sh` forwards the same deep-match mode flags and uses `work/reports/deep_match_manifests.json` by default.
 
+## Preset Catalog
+
+| Preset File | Feature Extractor | Matcher | Use Case |
+|-------------|-------------------|---------|----------|
+| `superglue_default.json` | SuperPoint | SuperGlue | High-accuracy standard scenarios. Best match quality but slower. |
+| `lightglue_default.json` | SuperPoint | LightGlue | Speed-accuracy balance, recommended default. Adaptive feature cropping. |
+| `loftr_default.json` | LoFTR (built-in) | LoFTR (end-to-end) | Weak-texture areas, large viewpoint changes. No independent keypoints needed. |
+| `lightglue_high_recall.json` | SuperPoint | LightGlue | High-recall needs, extracts 8192 keypoints with lower detection threshold. |
+| `lightglue_disk.json` | DISK | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
+| `lightglue_aliked.json` | ALIKED | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
+| `lightglue_doghardnet.json` | DoGHardNet | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
+| `superglue_aliked.json` | ALIKED | SuperGlue | Compatibility reference preset only. Current runtime rejects it because SuperGlue execution is limited to SuperPoint-backed extraction. |
+
 ## Real Support Status by Preset
 
 | Preset file | Matcher | Extractor | Runtime support | Required environment | Known limitations |
@@ -70,10 +83,88 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
 | `lightglue_high_recall.json` | LightGlue | SuperPoint | Supported in `direct`, `export`, and `import` workflows | Same as `lightglue_default.json` | Higher keypoint count raises runtime and memory cost. |
 | `superglue_default.json` | SuperGlue | SuperPoint | Supported in `direct`, `export`, and `import` workflows | `direct`: environment with ISIS + `torch` + `kornia` + `superglue-pretrained-network`; `export`/`import`: `asp360_new`, plus a deep-learning env for `run_deep_match_manifest.py` | Slower than LightGlue and usually the heaviest sparse preset. |
 | `loftr_default.json` | LoFTR | LoFTR (built-in) | Supported in `direct`, `export`, and `import` workflows | `direct`: environment with ISIS + `torch` + `kornia`; `export`/`import`: `asp360_new`, plus a deep-learning env for `run_deep_match_manifest.py` | Dense end-to-end matcher; CPU works for smoke validation, but GPU is strongly recommended for real runs. |
-| `lightglue_disk.json` | LightGlue | DISK | Config validates, but runtime is not implemented on this branch | No supported runtime path yet | `feature_extractor.method="disk"` is accepted by config validation, but the current adapter only executes SuperPoint for LightGlue/SuperGlue. |
-| `lightglue_aliked.json` | LightGlue | ALIKED | Config validates, but runtime is not implemented on this branch | No supported runtime path yet | `feature_extractor.method="aliked"` currently raises a frontend/runtime error before matching starts. |
-| `lightglue_doghardnet.json` | LightGlue | DoGHardNet | Config validates, but runtime is not implemented on this branch | No supported runtime path yet | Traditional-extractor preset file exists, but the current deep adapter does not execute DoGHardNet extraction yet. |
-| `superglue_aliked.json` | SuperGlue | ALIKED | Config validates, but runtime is not implemented on this branch | No supported runtime path yet | Same extractor limitation as above; SuperGlue execution currently depends on SuperPoint-only extraction support. |
+| `lightglue_disk.json` | LightGlue | DISK | Rejected during config validation on this branch | No supported runtime path yet | Strict compatibility validation requires `feature_extractor.method="superpoint"` for LightGlue. |
+| `lightglue_aliked.json` | LightGlue | ALIKED | Rejected during config validation on this branch | No supported runtime path yet | Strict compatibility validation requires `feature_extractor.method="superpoint"` for LightGlue. |
+| `lightglue_doghardnet.json` | LightGlue | DoGHardNet | Rejected during config validation on this branch | No supported runtime path yet | Strict compatibility validation requires `feature_extractor.method="superpoint"` for LightGlue. |
+| `superglue_aliked.json` | SuperGlue | ALIKED | Rejected during config validation on this branch | No supported runtime path yet | Strict compatibility validation requires `feature_extractor.method="superpoint"` for SuperGlue. |
+
+## Feature Extractors
+
+### SuperPoint
+
+- **Type:** Deep learning keypoint detector + descriptor network
+- **Use case:** General-purpose deep feature detection, good endpoint quality. Suitable for most planetary sparse-texture scenes.
+- **Pairs with:** LightGlue, SuperGlue
+- **Pros:** High detection quality, accurate endpoint descriptors
+- **Cons:** Slower than traditional methods, GPU recommended
+
+### DISK
+
+- **Type:** U-Net-based detection-description network
+- **Use case:** Fast inference, low-texture but structurally distinct scenes.
+- **Pairs with:** Planned LightGlue integration; current runtime validation rejects this pairing.
+- **Pros:** Fast inference, lower memory than SuperPoint
+- **Cons:** Average results on extremely weak-texture scenes
+
+### ALIKED
+
+- **Type:** Lightweight efficient feature detector
+- **Use case:** High-resolution images, planetary/remote sensing optimized. Low memory, suitable for large image processing.
+- **Pairs with:** Planned LightGlue/SuperGlue integration; current runtime validation rejects these pairings.
+- **Pros:** Lightweight, optimized for high resolution
+- **Cons:** May underperform SuperPoint on low-resolution images
+
+### DoGHardNet
+
+- **Type:** DoG (Difference of Gaussian) detector + HardNet descriptor
+- **Use case:** Traditional detector with deep learning descriptor, strong resistance to illumination and seasonal changes.
+- **Pairs with:** Planned LightGlue integration; current runtime validation rejects this pairing.
+- **Pros:** Strong illumination invariance, no trained model needed
+- **Cons:** Detection quality lower than pure deep learning methods
+
+### LoFTR (built-in)
+
+- **Type:** End-to-end dense matching network (no independent extractor)
+- **Use case:** Weak-texture areas and large viewpoint changes. Feature extraction is done internally by the LoFTR network.
+- **Pairs with:** Itself (end-to-end)
+- **Pros:** No independent keypoints needed, good for weak texture
+- **Cons:** Slow, high memory usage
+
+## Matchers
+
+### SuperGlue
+
+- **Type:** Graph neural network-based high-precision matcher
+- **Use case:** Precision-critical, time-insensitive scenarios.
+- **Pros:** Highest match quality
+- **Cons:** Slower, computationally intensive
+
+### LightGlue
+
+- **Type:** Lightweight accelerated version of SuperGlue
+- **Use case:** Speed-accuracy balance, recommended as default deep learning matcher.
+- **Pros:** Adaptive feature cropping, fast
+- **Cons:** Slightly lower peak precision than SuperGlue
+
+### LoFTR (end-to-end)
+
+- **Type:** Transformer-based keypoint-free dense matcher
+- **Use case:** Weak-texture and large-baseline matching.
+- **Pros:** No feature extraction needed, direct end-to-end matching
+- **Cons:** Slow, requires GPU
+
+## Usage
+
+Specify the preset path in the `ImageMatch` section of `controlnet_config.json`:
+
+```json
+{
+  "ImageMatch": {
+    "matcher_method": "lightglue",
+    "deep_matcher_config_path": "presets/lightglue_default.json"
+  }
+}
+```
 
 ## Wrapper Option Precedence
 
@@ -84,6 +175,14 @@ Both wrapper entrypoints (`run_pipeline_example.sh` and `run_image_match_batch_e
 3. script defaults
 
 When `ImageMatch.deep_matcher_config_path` is relative, the wrappers resolve it relative to the config file directory first. If that file does not exist, they fall back to resolving it relative to the repository root. The resolved path is printed in the wrapper log before it is forwarded to `examples/image_match/image_match.py`.
+
+Current compatibility validation is strict:
+
+- `lightglue` requires `feature_extractor.method: superpoint`
+- `superglue` requires `feature_extractor.method: superpoint`
+- `loftr` requires `feature_extractor.method: loftr`
+
+Presets that violate those combinations are kept as reference examples for future extractor rollouts, but they now fail during config validation instead of being ignored at runtime.
 
 For example, if `examples/controlnet_construct/controlnet_config.example.json` contains `"deep_matcher_config_path": "presets/lightglue_default.json"`, it resolves to `examples/controlnet_construct/presets/lightglue_default.json`. If a custom config outside the repository uses the same relative value and has its own adjacent `presets/` directory, that adjacent preset wins.
 

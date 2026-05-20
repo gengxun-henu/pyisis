@@ -3,11 +3,14 @@
 Author: Geng Xun
 Created: 2026-05-16
 Updated: 2026-05-19  Geng Xun added runtime config resolution for matcher execution layers.
+Updated: 2026-05-19  Geng Xun added matcher/feature/device option dictionaries for reproducible deep matcher construction.
+Updated: 2026-05-20  Geng Xun added fail-fast matcher and feature-extractor compatibility validation for deep presets.
 Updated: 2026-05-20  Geng Xun added dependency preflight checks and runtime-config rehydration helpers for exported deep-match manifests.
 """
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 from dataclasses import dataclass
 import importlib
 import json
@@ -19,6 +22,11 @@ DEEP_MATCHER_METHODS = ("superglue", "lightglue", "loftr")
 
 # 支持的特征提取器（loftr 使用内置特征提取，不需要独立提取器）
 SUPPORTED_EXTRACTOR_METHODS = ("superpoint", "disk", "aliked", "doghardnet", "loftr")
+MATCHER_EXTRACTOR_REQUIREMENTS: dict[str, tuple[str, ...]] = {
+    "lightglue": ("superpoint",),
+    "superglue": ("superpoint",),
+    "loftr": ("loftr",),
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -31,6 +39,29 @@ class DeepMatchRuntimeConfig:
     device_dtype: str
     fallback_on_error: str | None
     raw_config: dict[str, Any]
+    matcher_options: dict[str, Any] = field(default_factory=dict)
+    feature_options: dict[str, Any] = field(default_factory=dict)
+    device_options: dict[str, Any] = field(default_factory=dict)
+
+
+def _section_options(section: dict[str, Any] | None) -> dict[str, Any]:
+    section_dict = dict(section or {})
+    section_dict.pop("method", None)
+    return section_dict
+
+
+def validate_matcher_feature_compatibility(*, matcher_method: str, feature_extractor_method: str) -> None:
+    """Reject matcher/extractor combinations that the runtime cannot execute."""
+    normalized_matcher = str(matcher_method or "").strip().lower()
+    normalized_extractor = str(feature_extractor_method or "").strip().lower()
+    supported_extractors = MATCHER_EXTRACTOR_REQUIREMENTS.get(normalized_matcher)
+    if supported_extractors is None or normalized_extractor in supported_extractors:
+        return
+    supported_display = ", ".join(repr(method) for method in supported_extractors)
+    raise ValueError(
+        f"matcher.method={normalized_matcher!r} requires feature_extractor.method to be one of "
+        f"({supported_display}); got {normalized_extractor!r}."
+    )
 
 
 def deep_match_runtime_config_from_payload(
@@ -65,6 +96,9 @@ def deep_match_runtime_config_from_payload(
             None if mapping.get("fallback_on_error") is None else str(mapping.get("fallback_on_error"))
         ),
         raw_config=dict(raw_config),
+        matcher_options=dict(mapping.get("matcher_options", {}) or {}),
+        feature_options=dict(mapping.get("feature_options", {}) or {}),
+        device_options=dict(mapping.get("device_options", {}) or {}),
     )
 
 
@@ -111,6 +145,9 @@ def resolve_deep_match_runtime_config(config_path: str | Path) -> DeepMatchRunti
         prefer_gpu=prefer_gpu,
         device_dtype=str(device.get("dtype", "float32")).strip().lower(),
         fallback_on_error=fallback.get("on_error"),
+        matcher_options=_section_options(matcher),
+        feature_options=_section_options(extractor),
+        device_options=dict(device),
         raw_config=config,
     )
 
@@ -202,6 +239,10 @@ def validate_deep_match_config(config: dict[str, Any]) -> None:
             f"不支持的匹配器方法 '{matcher_method}'。"
             f"支持的匹配器: {', '.join(DEEP_MATCHER_METHODS)}"
         )
+    validate_matcher_feature_compatibility(
+        matcher_method=matcher_method,
+        feature_extractor_method=extractor_method,
+    )
 
     # 可选校验 device 和 fallback（如果提供了但值不合法）
     device = config.get("device")

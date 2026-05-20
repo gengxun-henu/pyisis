@@ -75,10 +75,10 @@ matcher_method 判断 →
 | `lightglue_default.json` | SuperPoint | LightGlue | 速度与精度平衡，推荐默认 |
 | `loftr_default.json` | LoFTR(内置) | LoFTR(端到端) | 弱纹理区域、大视角变化 |
 | `lightglue_high_recall.json` | SuperPoint | LightGlue | 更多特征点（8192 keypoints），高召回需求 |
-| `lightglue_disk.json` | DISK | LightGlue | 快速推理、低纹理但结构明显场景 |
-| `lightglue_aliked.json` | ALIKED | LightGlue | 高分辨率图像、行星/遥感影像优化 |
-| `lightglue_doghardnet.json` | DoGHardNet | LightGlue | 传统DoG检测+HardNet描述子，抗光照变化强 |
-| `superglue_aliked.json` | ALIKED | SuperGlue | 高精度需求的高分辨率图像匹配 |
+| `lightglue_disk.json` | DISK | LightGlue | 兼容性参考 preset；当前运行时因 LightGlue 仅支持 SuperPoint 而会在配置校验阶段拒绝 |
+| `lightglue_aliked.json` | ALIKED | LightGlue | 兼容性参考 preset；当前运行时因 LightGlue 仅支持 SuperPoint 而会在配置校验阶段拒绝 |
+| `lightglue_doghardnet.json` | DoGHardNet | LightGlue | 兼容性参考 preset；当前运行时因 LightGlue 仅支持 SuperPoint 而会在配置校验阶段拒绝 |
+| `superglue_aliked.json` | ALIKED | SuperGlue | 兼容性参考 preset；当前运行时因 SuperGlue 仅支持 SuperPoint 而会在配置校验阶段拒绝 |
 
 ## 特征提取器适用场景
 

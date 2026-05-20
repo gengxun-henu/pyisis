@@ -5,6 +5,7 @@ Created: 2026-05-19
 Updated: 2026-05-19  Geng Xun added runtime config storage for deep matcher execution.
 Updated: 2026-05-19  Geng Xun made feature extractor runtime config explicit for LightGlue and SuperGlue routing.
 Updated: 2026-05-19  Geng Xun forwarded matcher/feature/device runtime options into deep matcher construction.
+Updated: 2026-05-20  Geng Xun added early runtime-config compatibility checks for deep matcher and extractor pairs.
 """
 
 from __future__ import annotations
@@ -17,6 +18,25 @@ import numpy as np
 
 from .deep_frontends import DeepDependencyError, DeepFrontendError, LoFTRFrontend, SuperPointFrontend, normalize_deep_method, resolve_torch_device
 from .deep_matchers import DeepMatchResult, DeepMatcherError, build_deep_matcher
+
+
+def _validate_runtime_matcher_compatibility(runtime_config: Any | None) -> None:
+    if runtime_config is None:
+        return
+    matcher_method = str(getattr(runtime_config, "matcher_method", "") or "").strip().lower()
+    feature_extractor_method = str(getattr(runtime_config, "feature_extractor_method", "") or "").strip().lower()
+    supported_extractors = {
+        "lightglue": ("superpoint",),
+        "superglue": ("superpoint",),
+        "loftr": ("loftr",),
+    }.get(matcher_method)
+    if supported_extractors is None or feature_extractor_method in supported_extractors:
+        return
+    supported_display = ", ".join(repr(method) for method in supported_extractors)
+    raise ValueError(
+        f"matcher.method={matcher_method!r} requires feature_extractor.method to be one of "
+        f"({supported_display}); got {feature_extractor_method!r}."
+    )
 
 
 def _valid_mask_keep(points: np.ndarray, invalid_mask: np.ndarray | None) -> np.ndarray:
@@ -54,6 +74,7 @@ def _filter_feature_dict_by_invalid_mask(features: Any, invalid_mask: np.ndarray
 
 class DeepMatcherAdapter:
     def __init__(self, *, prefer_gpu: bool = True, runtime_config: Any | None = None) -> None:
+        _validate_runtime_matcher_compatibility(runtime_config)
         self._runtime_config = runtime_config
         resolved_prefer_gpu = (
             bool(getattr(runtime_config, "prefer_gpu"))

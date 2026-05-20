@@ -10,10 +10,10 @@ This document describes the preset configuration files in `presets/` and the app
 | `lightglue_default.json` | SuperPoint | LightGlue | Speed-accuracy balance, recommended default. Adaptive feature cropping. |
 | `loftr_default.json` | LoFTR (built-in) | LoFTR (end-to-end) | Weak-texture areas, large viewpoint changes. No independent keypoints needed. |
 | `lightglue_high_recall.json` | SuperPoint | LightGlue | High-recall needs, extracts 8192 keypoints with lower detection threshold. |
-| `lightglue_disk.json` | DISK | LightGlue | Fast inference, low-texture but structurally distinct scenes. Low memory footprint. |
-| `lightglue_aliked.json` | ALIKED | LightGlue | High-resolution images, planetary/remote sensing optimized. Lightweight and efficient. |
-| `lightglue_doghardnet.json` | DoGHardNet | LightGlue | Traditional DoG detector + HardNet descriptor, strong resistance to illumination and seasonal changes. |
-| `superglue_aliked.json` | ALIKED | SuperGlue | High-accuracy matching for high-resolution images. |
+| `lightglue_disk.json` | DISK | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
+| `lightglue_aliked.json` | ALIKED | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
+| `lightglue_doghardnet.json` | DoGHardNet | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
+| `superglue_aliked.json` | ALIKED | SuperGlue | Compatibility reference preset only. Current runtime rejects it because SuperGlue execution is limited to SuperPoint-backed extraction. |
 
 ## Feature Extractors
 
@@ -29,7 +29,7 @@ This document describes the preset configuration files in `presets/` and the app
 
 - **Type:** U-Net-based detection-description network
 - **Use case:** Fast inference, low-texture but structurally distinct scenes.
-- **Pairs with:** LightGlue
+- **Pairs with:** Planned LightGlue integration; current runtime validation rejects this pairing.
 - **Pros:** Fast inference, lower memory than SuperPoint
 - **Cons:** Average results on extremely weak-texture scenes
 
@@ -37,7 +37,7 @@ This document describes the preset configuration files in `presets/` and the app
 
 - **Type:** Lightweight efficient feature detector
 - **Use case:** High-resolution images, planetary/remote sensing optimized. Low memory, suitable for large image processing.
-- **Pairs with:** LightGlue, SuperGlue
+- **Pairs with:** Planned LightGlue/SuperGlue integration; current runtime validation rejects these pairings.
 - **Pros:** Lightweight, optimized for high resolution
 - **Cons:** May underperform SuperPoint on low-resolution images
 
@@ -45,7 +45,7 @@ This document describes the preset configuration files in `presets/` and the app
 
 - **Type:** DoG (Difference of Gaussian) detector + HardNet descriptor
 - **Use case:** Traditional detector with deep learning descriptor, strong resistance to illumination and seasonal changes.
-- **Pairs with:** LightGlue
+- **Pairs with:** Planned LightGlue integration; current runtime validation rejects this pairing.
 - **Pros:** Strong illumination invariance, no trained model needed
 - **Cons:** Detection quality lower than pure deep learning methods
 
@@ -100,6 +100,14 @@ Both wrapper entrypoints (`run_pipeline_example.sh` and `run_image_match_batch_e
 3. script defaults
 
 When `ImageMatch.deep_matcher_config_path` is relative, the wrappers resolve it relative to the config file directory first. If that file does not exist, they fall back to resolving it relative to the repository root. The resolved path is printed in the wrapper log before it is forwarded to `examples/image_match/image_match.py`.
+
+Current compatibility validation is strict:
+
+- `lightglue` requires `feature_extractor.method: superpoint`
+- `superglue` requires `feature_extractor.method: superpoint`
+- `loftr` requires `feature_extractor.method: loftr`
+
+Presets that violate those combinations are kept as reference examples for future extractor rollouts, but they now fail during config validation instead of being ignored at runtime.
 
 For example, if `examples/controlnet_construct/controlnet_config.example.json` contains `"deep_matcher_config_path": "presets/lightglue_default.json"`, it resolves to `examples/controlnet_construct/presets/lightglue_default.json`. If a custom config outside the repository uses the same relative value and has its own adjacent `presets/` directory, that adjacent preset wins.
 

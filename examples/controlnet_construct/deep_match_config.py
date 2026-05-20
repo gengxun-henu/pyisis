@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-05-16
 Updated: 2026-05-19  Geng Xun added runtime config resolution for matcher execution layers.
 Updated: 2026-05-19  Geng Xun added matcher/feature/device option dictionaries for reproducible deep matcher construction.
+Updated: 2026-05-20  Geng Xun added fail-fast matcher and feature-extractor compatibility validation for deep presets.
 """
 
 from __future__ import annotations
@@ -18,6 +19,11 @@ DEEP_MATCHER_METHODS = ("superglue", "lightglue", "loftr")
 
 # 支持的特征提取器（loftr 使用内置特征提取，不需要独立提取器）
 SUPPORTED_EXTRACTOR_METHODS = ("superpoint", "disk", "aliked", "doghardnet", "loftr")
+MATCHER_EXTRACTOR_REQUIREMENTS: dict[str, tuple[str, ...]] = {
+    "lightglue": ("superpoint",),
+    "superglue": ("superpoint",),
+    "loftr": ("loftr",),
+}
 
 
 @dataclass(frozen=True, slots=True)
@@ -39,6 +45,20 @@ def _section_options(section: dict[str, Any] | None) -> dict[str, Any]:
     section_dict = dict(section or {})
     section_dict.pop("method", None)
     return section_dict
+
+
+def validate_matcher_feature_compatibility(*, matcher_method: str, feature_extractor_method: str) -> None:
+    """Reject matcher/extractor combinations that the runtime cannot execute."""
+    normalized_matcher = str(matcher_method or "").strip().lower()
+    normalized_extractor = str(feature_extractor_method or "").strip().lower()
+    supported_extractors = MATCHER_EXTRACTOR_REQUIREMENTS.get(normalized_matcher)
+    if supported_extractors is None or normalized_extractor in supported_extractors:
+        return
+    supported_display = ", ".join(repr(method) for method in supported_extractors)
+    raise ValueError(
+        f"matcher.method={normalized_matcher!r} requires feature_extractor.method to be one of "
+        f"({supported_display}); got {normalized_extractor!r}."
+    )
 
 
 def load_deep_match_config(config_path: str | Path) -> dict[str, Any]:
@@ -125,6 +145,10 @@ def validate_deep_match_config(config: dict[str, Any]) -> None:
             f"不支持的匹配器方法 '{matcher_method}'。"
             f"支持的匹配器: {', '.join(DEEP_MATCHER_METHODS)}"
         )
+    validate_matcher_feature_compatibility(
+        matcher_method=matcher_method,
+        feature_extractor_method=extractor_method,
+    )
 
     # 可选校验 device 和 fallback（如果提供了但值不合法）
     device = config.get("device")

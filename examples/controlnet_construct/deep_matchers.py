@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-05-11
 Updated: 2026-05-11  Geng Xun added top-of-file metadata so example helper modules follow the repository's example-file header convention.
 Updated: 2026-05-19  Geng Xun applied preset matcher parameters for LightGlue, SuperGlue, and LoFTR model construction.
+Updated: 2026-05-20  Geng Xun added fail-fast matcher and feature-extractor compatibility checks before model construction.
 """
 
 from __future__ import annotations
@@ -84,6 +85,23 @@ def _resolve_torch_dtype(*, torch: Any, method: str, device_dtype: str) -> Any:
             f"Deep matcher '{method}' requested unsupported torch dtype {device_dtype!r}."
         )
     return torch_dtype
+
+
+def _validate_feature_extractor_compatibility(*, matcher_method: str, feature_extractor_method: str) -> str:
+    normalized_extractor = str(feature_extractor_method or "").strip().lower()
+    normalized_matcher = str(matcher_method or "").strip().lower()
+    supported_extractors = {
+        "lightglue": ("superpoint",),
+        "superglue": ("superpoint",),
+        "loftr": ("loftr",),
+    }.get(normalized_matcher)
+    if supported_extractors is None or normalized_extractor in supported_extractors:
+        return normalized_extractor
+    supported_display = ", ".join(repr(method) for method in supported_extractors)
+    raise DeepMatcherError(
+        f"matcher.method={normalized_matcher!r} requires feature_extractor.method to be one of "
+        f"({supported_display}); got {normalized_extractor!r}."
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -468,9 +486,13 @@ def build_deep_matcher(
     device_options: dict[str, Any] | None = None,
 ) -> SuperGlueMatcher | LightGlueMatcher | LoFTRMatcher:
     normalized = normalize_deep_method(method)
+    resolved_extractor = _validate_feature_extractor_compatibility(
+        matcher_method=normalized,
+        feature_extractor_method=feature_extractor_method,
+    )
     constructor_kwargs = {
         "device": device,
-        "feature_extractor_method": feature_extractor_method,
+        "feature_extractor_method": resolved_extractor,
         "matcher_options": matcher_options,
         "feature_options": feature_options,
         "device_options": device_options,

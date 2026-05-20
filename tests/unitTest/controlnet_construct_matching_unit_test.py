@@ -82,6 +82,7 @@ Updated: 2026-05-22  Geng Xun added regression coverage for dom/ori image-space 
 Updated: 2026-05-22  Geng Xun added ORI key export regression coverage for pair-level `.key` output summaries.
 Updated: 2026-05-22  Geng Xun tightened ORI delegation and `.key` file readability regression coverage for Task 3 review fixes.
 Updated: 2026-05-22  Geng Xun added matcher preset option resolution and constructor-forwarding regression coverage.
+Updated: 2026-05-22  Geng Xun added fail-fast matcher and extractor compatibility regression coverage for deep presets.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
 Updated: 2026-05-16  Geng Xun added regression coverage for adaptive-routing profile CLI/config defaults and expanded metadata.
@@ -1320,6 +1321,24 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         self.assertEqual(runtime.matcher_method, "loftr")
         self.assertEqual(getattr(runtime, "matcher_options", {}).get("pretrained"), "outdoor")
+
+    def test_validate_deep_match_config_rejects_incompatible_matcher_extractor_pairs(self):
+        for matcher_method, extractor_method, supported_method in (
+            ("lightglue", "disk", "superpoint"),
+            ("superglue", "aliked", "superpoint"),
+            ("loftr", "superpoint", "loftr"),
+        ):
+            with self.subTest(matcher=matcher_method, extractor=extractor_method):
+                with self.assertRaisesRegex(
+                    ValueError,
+                    rf"matcher\.method='{matcher_method}'.*feature_extractor\.method.*'{supported_method}'.*'{extractor_method}'",
+                ):
+                    deep_match_config_module.validate_deep_match_config(
+                        {
+                            "feature_extractor": {"method": extractor_method},
+                            "matcher": {"method": matcher_method},
+                        }
+                    )
 
     def test_lightglue_matcher_uses_preset_feature_and_matcher_options(self):
         deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")

@@ -8,6 +8,7 @@ Updated: 2026-05-19  Geng Xun added runtime config storage coverage for deep mat
 Updated: 2026-05-19  Geng Xun added feature extractor runtime config coverage for SuperPoint and explicit unsupported extractor errors.
 Updated: 2026-05-19  Geng Xun added matcher runtime option forwarding coverage for LightGlue/LoFTR/SuperGlue adapters.
 Updated: 2026-05-19  Geng Xun added regression coverage for deep matcher device dtype application and surfaced ignored device options.
+Updated: 2026-05-19  Geng Xun added fail-fast compatibility coverage for invalid matcher and extractor combinations.
 """
 
 from __future__ import annotations
@@ -192,7 +193,42 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         self.assertEqual(lightglue_backend.dtype, "torch.float32")
         self.assertIn("device.batch_inference", matcher.ignored_parameters)
 
-    def test_lightglue_aliked_disk_doghardnet_reject_unimplemented_extractors(self):
+    def test_build_deep_matcher_rejects_incompatible_extractor_combinations(self):
+        deep_matchers_module = __import__("image_match.deep_matchers", fromlist=["build_deep_matcher"])
+
+        for matcher_method, extractor_method, supported in (
+            ("lightglue", "disk", "superpoint"),
+            ("superglue", "aliked", "superpoint"),
+            ("loftr", "superpoint", "loftr"),
+        ):
+            with self.subTest(matcher=matcher_method, extractor=extractor_method):
+                with self.assertRaisesRegex(
+                    deep_matchers_module.DeepMatcherError,
+                    rf"matcher\.method='{matcher_method}'.*feature_extractor\.method.*'{supported}'.*'{extractor_method}'",
+                ):
+                    deep_matchers_module.build_deep_matcher(
+                        matcher_method,
+                        device="cpu",
+                        feature_extractor_method=extractor_method,
+                    )
+
+    def test_deep_matcher_adapter_rejects_invalid_runtime_config_early(self):
+        runtime = SimpleNamespace(
+            prefer_gpu=False,
+            matcher_method="loftr",
+            feature_extractor_method="superpoint",
+            matcher_options={"pretrained": "outdoor"},
+            feature_options={"max_keypoints": 2048},
+            device_options={"prefer_gpu": False, "dtype": "float32"},
+        )
+
+        with self.assertRaisesRegex(
+            ValueError,
+            r"matcher\.method='loftr'.*feature_extractor\.method.*'loftr'.*'superpoint'",
+        ):
+            DeepMatcherAdapter(prefer_gpu=False, runtime_config=runtime)
+
+    def test_lightglue_non_superpoint_presets_fail_during_config_resolution(self):
         config_module = __import__("controlnet_construct.deep_match_config", fromlist=["resolve_deep_match_runtime_config"])
 
         for preset_name, extractor_method in (
@@ -201,21 +237,12 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
             ("lightglue_doghardnet.json", "doghardnet"),
         ):
             with self.subTest(preset=preset_name):
-                runtime = config_module.resolve_deep_match_runtime_config(
-                    PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / preset_name
-                )
-                self.assertEqual(runtime.feature_extractor_method, extractor_method)
-                adapter = DeepMatcherAdapter(prefer_gpu=False, runtime_config=runtime)
-
                 with self.assertRaisesRegex(
-                    DeepFrontendError,
-                    f"feature_extractor.method='{extractor_method}'.*not yet implemented.*'lightglue'",
+                    ValueError,
+                    rf"matcher\.method='lightglue'.*feature_extractor\.method.*'superpoint'.*'{extractor_method}'",
                 ):
-                    adapter._match_pair_on_device(
-                        matcher_method="lightglue",
-                        left_image=np.zeros((8, 8), dtype=np.float32),
-                        right_image=np.zeros((8, 8), dtype=np.float32),
-                        device="cpu",
+                    config_module.resolve_deep_match_runtime_config(
+                        PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / preset_name
                     )
 
     def test_match_pair_filters_superpoint_features_before_matching(self):

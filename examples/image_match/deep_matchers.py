@@ -87,14 +87,30 @@ def _resolve_torch_dtype(*, torch: Any, method: str, device_dtype: str) -> Any:
     return torch_dtype
 
 
-def _validate_feature_extractor_compatibility(*, matcher_method: str, feature_extractor_method: str) -> str:
-    normalized_extractor = str(feature_extractor_method or "").strip().lower()
+_MATCHER_FEATURE_EXTRACTOR_REQUIREMENTS: dict[str, tuple[str, ...]] = {
+    "lightglue": ("superpoint",),
+    "superglue": ("superpoint",),
+    "loftr": ("loftr",),
+}
+
+
+def _default_feature_extractor_for_matcher(matcher_method: str) -> str:
     normalized_matcher = str(matcher_method or "").strip().lower()
-    supported_extractors = {
-        "lightglue": ("superpoint",),
-        "superglue": ("superpoint",),
-        "loftr": ("loftr",),
-    }.get(normalized_matcher)
+    supported_extractors = _MATCHER_FEATURE_EXTRACTOR_REQUIREMENTS.get(normalized_matcher)
+    if supported_extractors is None:
+        return "superpoint"
+    return supported_extractors[0]
+
+
+def _validate_feature_extractor_compatibility(
+    *, matcher_method: str, feature_extractor_method: str | None
+) -> str:
+    normalized_matcher = str(matcher_method or "").strip().lower()
+    if feature_extractor_method is None:
+        normalized_extractor = _default_feature_extractor_for_matcher(normalized_matcher)
+    else:
+        normalized_extractor = str(feature_extractor_method).strip().lower()
+    supported_extractors = _MATCHER_FEATURE_EXTRACTOR_REQUIREMENTS.get(normalized_matcher)
     if supported_extractors is None or normalized_extractor in supported_extractors:
         return normalized_extractor
     supported_display = ", ".join(repr(method) for method in supported_extractors)
@@ -480,7 +496,7 @@ def build_deep_matcher(
     method: str,
     *,
     device: str = "cpu",
-    feature_extractor_method: str = "superpoint",
+    feature_extractor_method: str | None = None,
     matcher_options: dict[str, Any] | None = None,
     feature_options: dict[str, Any] | None = None,
     device_options: dict[str, Any] | None = None,

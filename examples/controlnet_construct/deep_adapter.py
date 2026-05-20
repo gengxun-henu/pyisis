@@ -17,14 +17,26 @@ import cv2
 import numpy as np
 
 from .deep_frontends import DeepDependencyError, DeepFrontendError, LoFTRFrontend, SuperPointFrontend, normalize_deep_method, resolve_torch_device
-from .deep_matchers import DeepMatchResult, DeepMatcherError, build_deep_matcher
+from .deep_matchers import DeepMatchResult, DeepMatcherError, _default_feature_extractor_for_matcher, build_deep_matcher
+
+
+def _runtime_feature_extractor_method(runtime_config: Any | None, matcher_method: str) -> str:
+    configured_method = (
+        getattr(runtime_config, "feature_extractor_method", None)
+        if runtime_config is not None
+        else None
+    )
+    if configured_method is None:
+        return _default_feature_extractor_for_matcher(matcher_method)
+    normalized_method = str(configured_method).strip().lower()
+    return normalized_method or _default_feature_extractor_for_matcher(matcher_method)
 
 
 def _validate_runtime_matcher_compatibility(runtime_config: Any | None) -> None:
     if runtime_config is None:
         return
     matcher_method = str(getattr(runtime_config, "matcher_method", "") or "").strip().lower()
-    feature_extractor_method = str(getattr(runtime_config, "feature_extractor_method", "") or "").strip().lower()
+    feature_extractor_method = _runtime_feature_extractor_method(runtime_config, matcher_method)
     supported_extractors = {
         "lightglue": ("superpoint",),
         "superglue": ("superpoint",),
@@ -87,12 +99,10 @@ class DeepMatcherAdapter:
         self._loftr_frontend = LoFTRFrontend()
         self._matcher_cache: dict[tuple[str, str], Any] = {}
 
-    def _matcher_build_kwargs(self) -> dict[str, Any]:
+    def _matcher_build_kwargs(self, *, method: str) -> dict[str, Any]:
         runtime_config = self._runtime_config
         return {
-            "feature_extractor_method": str(
-                getattr(runtime_config, "feature_extractor_method", "superpoint") or "superpoint"
-            ).strip().lower(),
+            "feature_extractor_method": _runtime_feature_extractor_method(runtime_config, method),
             "matcher_options": dict(getattr(runtime_config, "matcher_options", {}) or {}),
             "feature_options": dict(getattr(runtime_config, "feature_options", {}) or {}),
             "device_options": dict(getattr(runtime_config, "device_options", {}) or {}),
@@ -127,9 +137,7 @@ class DeepMatcherAdapter:
         method = normalize_deep_method(matcher_method)
         try:
             if method in ("superglue", "lightglue"):
-                extractor_method = str(
-                    getattr(self._runtime_config, "feature_extractor_method", "superpoint") or "superpoint"
-                ).strip().lower()
+                extractor_method = _runtime_feature_extractor_method(self._runtime_config, method)
                 if extractor_method != "superpoint":
                     raise DeepFrontendError(
                         f"feature_extractor.method={extractor_method!r} is validated but not yet implemented for {method!r}."
@@ -183,7 +191,7 @@ class DeepMatcherAdapter:
         )
 
     def _get_cached_matcher(self, *, method: str, device: str) -> Any:
-        build_kwargs = self._matcher_build_kwargs()
+        build_kwargs = self._matcher_build_kwargs(method=method)
         cache_key = (
             method,
             device,

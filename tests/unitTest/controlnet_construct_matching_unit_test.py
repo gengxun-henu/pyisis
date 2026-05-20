@@ -1424,6 +1424,13 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         loftr_constructor.assert_called_once_with(pretrained="outdoor")
 
+    def test_build_deep_matcher_defaults_loftr_extractor_for_loftr(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+
+        matcher = deep_matchers_module.build_deep_matcher("loftr", device="cpu")
+
+        self.assertEqual(matcher.feature_extractor_method, "loftr")
+
     def test_loftr_matcher_options_reject_non_null_checkpoint_path(self):
         deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
         matcher = deep_matchers_module.build_deep_matcher(
@@ -1841,6 +1848,40 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 right_image=image,
                 prefer_gpu=False,
             )
+
+    def test_deep_adapter_defaults_loftr_extractor_without_runtime_config(self):
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+        image = np.arange(100, dtype=np.float32).reshape(10, 10)
+        prepared = {"left": object(), "right": object()}
+
+        class _CapturingLoFTRMatcher:
+            def match(self, **_kwargs):
+                return (
+                    np.zeros((0, 2), dtype=np.float32),
+                    np.zeros((0, 2), dtype=np.float32),
+                    np.zeros((0,), dtype=np.float32),
+                )
+
+        adapter = deep_adapter_module.DeepMatcherAdapter(prefer_gpu=False)
+        with mock.patch.object(adapter._loftr_frontend, "prepare", return_value=prepared), mock.patch.object(
+            deep_adapter_module,
+            "build_deep_matcher",
+            return_value=_CapturingLoFTRMatcher(),
+        ) as build_matcher_mock:
+            adapter.match_pair(
+                matcher_method="loftr",
+                left_image=image,
+                right_image=image,
+            )
+
+        build_matcher_mock.assert_called_once_with(
+            "loftr",
+            device="cpu",
+            feature_extractor_method="loftr",
+            matcher_options={},
+            feature_options={},
+            device_options={},
+        )
 
     def test_deep_adapter_wraps_matcher_dependency_error_as_deep_dependency_error(self):
         deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")

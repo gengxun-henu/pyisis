@@ -212,6 +212,13 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
                         feature_extractor_method=extractor_method,
                     )
 
+    def test_build_deep_matcher_defaults_loftr_extractor_for_loftr(self):
+        deep_matchers_module = __import__("image_match.deep_matchers", fromlist=["build_deep_matcher"])
+
+        matcher = deep_matchers_module.build_deep_matcher("loftr", device="cpu")
+
+        self.assertEqual(matcher.feature_extractor_method, "loftr")
+
     def test_deep_matcher_adapter_rejects_invalid_runtime_config_early(self):
         runtime = SimpleNamespace(
             prefer_gpu=False,
@@ -305,7 +312,7 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         with mock.patch.object(adapter._loftr_frontend, "prepare", return_value=prepared) as prepare_mock, mock.patch(
             "image_match.deep_adapter.build_deep_matcher",
             return_value=matcher,
-        ):
+        ) as build_matcher_mock:
             adapter.match_pair(
                 matcher_method="loftr",
                 left_image=np.ones((6, 6), dtype=np.float32),
@@ -315,6 +322,14 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
             )
 
         prepare_mock.assert_called_once()
+        build_matcher_mock.assert_called_once_with(
+            "loftr",
+            device="cpu",
+            feature_extractor_method="loftr",
+            matcher_options={},
+            feature_options={},
+            device_options={},
+        )
         self.assertIs(prepare_mock.call_args.kwargs["left_mask"], left_mask)
         self.assertIs(prepare_mock.call_args.kwargs["right_mask"], right_mask)
         self.assertEqual(len(matcher.calls), 1)

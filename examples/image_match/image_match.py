@@ -2406,7 +2406,7 @@ def match_dom_pair(
             resolved_deep_match_runtime_config = _resolve_deep_match_runtime_config(resolved_deep_match_config_path)
             resolved_deep_match_config = resolved_deep_match_runtime_config.raw_config
             resolved_matcher_method = _resolve_matcher_method_with_deep_config(
-                requested_matcher_method=resolved_requested_matcher_method,
+                requested_matcher_method=resolved_matcher_method,
                 deep_match_runtime_config=resolved_deep_match_runtime_config,
             )
         elif resolved_matcher_method not in DEEP_MATCHER_METHODS:

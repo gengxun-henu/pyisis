@@ -49,6 +49,7 @@ Updated: 2026-05-23  Geng Xun added raw image deep matcher and adaptive-routing 
 Updated: 2026-05-20  Geng Xun added config-relative adaptive-routing preset-map regression coverage.
 Updated: 2026-05-20  Geng Xun added repo-root fallback coverage for adaptive-routing deep preset maps loaded from config.
 Updated: 2026-05-20  Geng Xun added routed deep-preset compatibility regressions for initial and cascade adaptive routing.
+Updated: 2026-05-20  Geng Xun added an export-path regression ensuring initial routed flann adopts the selected deep preset matcher.
 """
 
 from __future__ import annotations
@@ -4630,6 +4631,103 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     "right.cub",
                     matcher_method="loftr",
                     enable_adaptive_routing=True,
+                )
+
+    def test_match_dom_pair_initial_routed_flann_export_uses_selected_deep_preset_matcher(self):
+        image_match_module = importlib.import_module("controlnet_construct.image_match")
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def sample_count(self):
+                return 64
+
+            def line_count(self):
+                return 64
+
+            def band_count(self):
+                return 1
+
+            def pixel_type(self):
+                return None
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        low_resolution_summary = {
+            "left_low_resolution_dom": "left_preview.cub",
+            "right_low_resolution_dom": "right_preview.cub",
+            "delta_x_projected": 0.0,
+            "delta_y_projected": 0.0,
+        }
+        routed_summary = {
+            "enabled": True,
+            "status": "routed",
+            "selected_initial_matcher": "lightglue",
+            "selected_deep_match_config_path": "preset_lightglue.json",
+        }
+        routed_runtime_config = SimpleNamespace(
+            matcher_method="lightglue",
+            raw_config={"matcher": {"method": "lightglue"}},
+        )
+        ready_preparation = SimpleNamespace(
+            status="ready",
+            reason="",
+            left=SimpleNamespace(offset_sample=0, offset_line=0),
+            right=SimpleNamespace(offset_sample=0, offset_line=0),
+            shared_width=32,
+            shared_height=32,
+        )
+
+        def fake_export_deep_match_pair_tasks(*_args, **kwargs):
+            self.assertEqual(kwargs["matcher_method"], "lightglue")
+            self.assertIs(kwargs["deep_match_runtime_config"], routed_runtime_config)
+            raise RuntimeError("stop after initial routed export assertion")
+
+        with (
+            patch.object(image_match_module, "build_image_backend", return_value=SimpleNamespace(space="dom")),
+            patch.object(image_match_module.ip, "Cube", side_effect=[FakeCube(), FakeCube()]),
+            patch.object(
+                image_match_module,
+                "_estimate_low_resolution_projected_offset",
+                return_value=low_resolution_summary,
+            ),
+            patch.object(
+                image_match_module,
+                "_resolve_adaptive_route_for_pair",
+                return_value=("lightglue", routed_summary),
+            ),
+            patch.object(
+                image_match_module,
+                "_resolve_deep_match_runtime_config",
+                return_value=routed_runtime_config,
+            ),
+            patch.object(
+                image_match_module,
+                "prepare_dom_pair_for_matching",
+                return_value=ready_preparation,
+            ),
+            patch.object(image_match_module, "_paired_windows", return_value=[object()]),
+            patch.object(
+                image_match_module,
+                "_export_deep_match_pair_tasks",
+                side_effect=fake_export_deep_match_pair_tasks,
+            ),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "stop after initial routed export assertion"):
+                image_match_module.match_dom_pair(
+                    "left.cub",
+                    "right.cub",
+                    matcher_method="flann",
+                    enable_adaptive_routing=True,
+                    deep_match_mode="export",
                 )
 
     def test_match_dom_pair_rejects_cascade_routed_deep_preset_matcher_conflict(self):

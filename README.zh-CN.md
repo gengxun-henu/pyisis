@@ -392,6 +392,36 @@ python examples/image_match/image_match.py \
 - `run_pipeline_example.sh` 的 stdout 主要用于看步骤摘要，而各阶段 JSON 汇总默认写到 `work/reports/` 与 `work/match_results/`；
 - 如果你确实需要 `examples/image_match/image_match.py` 的完整结果 JSON 本体，可以直接调用它，或通过 wrapper 继续转发它自己的 `--result-output` 选项。
 
+如果你准备启用深度学习匹配器，当前阶段请把工作流显式理解为三种模式：`direct / export / import`。
+
+- `direct`：在**同一个**已经具备 ISIS 运行时和深度学习依赖（如 `torch` / `kornia` / `lightglue` 或 `superglue-pretrained-network`）的环境里直接运行 wrapper。
+- `export`：在 `asp360_new` 中只负责 overlap / tile 准备与 manifest 导出，不在该环境里真正执行深度模型。
+- `import`：先在深度学习环境里运行 `examples/learning_methods/run_deep_match_manifest.py` 写出结果，再回到 `asp360_new` 用 wrapper 导入结果继续 ControlNet 流程。
+
+推荐命令可直接参考：
+
+```bash
+bash examples/controlnet_construct/run_image_match_batch_example.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --deep-match-mode export \
+  --deep-match-config-path examples/controlnet_construct/presets/lightglue_default.json
+
+python examples/learning_methods/run_deep_match_manifest.py \
+  work/deep_match_workspaces/left__right/tasks.json \
+  --device cpu \
+  --summary-output work/deep_match_workspaces/left__right/manifest_run_summary.json
+
+bash examples/controlnet_construct/run_image_match_batch_example.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --deep-match-mode import \
+  --deep-match-manifest-dir work/deep_match_workspaces \
+  --deep-match-manifest-summary work/deep_match_manifests.json
+```
+
+其中 `work/deep_match_manifests.json` 是 wrapper 维护的轻量汇总入口，方便 smoke 回归时只检查 manifest 路径、pair 状态和导入/导出计数，而不用打开真实 ISIS cube。各个 preset 的真实支持状态、依赖环境和已知限制请直接看：`examples/controlnet_construct/PRESETS_README.md`。
+
 当前这轮拆分已经不只是 wrapper 式复用：`examples/image_match/` 现在是 DOM 匹配与 DOM 前处理的共享实现主目录；`examples/controlnet_construct/image_match.py` 与 `examples/controlnet_construct/dom_prepare.py` 仅保留为兼容历史脚本/导入的薄封装层。
 
 ### 单个立体像对

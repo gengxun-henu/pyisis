@@ -153,6 +153,35 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
             self.assertEqual(captured_kwargs["runtime_config"], runtime_config)
             self.assertEqual(captured_kwargs["runtime_config"].matcher_method, "lightglue")
 
+    def test_deep_match_runtime_config_payload_rehydration_preserves_options(self):
+        runtime_config = deep_match_config_module.deep_match_runtime_config_from_payload(
+            {
+                "matcher_method": "lightglue",
+                "feature_extractor_method": "superpoint",
+                "prefer_gpu": False,
+                "device_dtype": "float32",
+                "fallback_on_error": "sift_flann",
+                "matcher_options": {"weights": "superpoint_lightglue", "flash": False},
+                "feature_options": {"max_keypoints": 4096, "keypoint_threshold": 0.0005},
+                "device_options": {"prefer_gpu": False, "dtype": "float32", "batch_inference": True},
+                "raw_config": {"matcher": {"method": "lightglue"}},
+            }
+        )
+
+        self.assertIsNotNone(runtime_config)
+        self.assertEqual(
+            runtime_config.matcher_options,
+            {"weights": "superpoint_lightglue", "flash": False},
+        )
+        self.assertEqual(
+            runtime_config.feature_options,
+            {"max_keypoints": 4096, "keypoint_threshold": 0.0005},
+        )
+        self.assertEqual(
+            runtime_config.device_options,
+            {"prefer_gpu": False, "dtype": "float32", "batch_inference": True},
+        )
+
     def test_preflight_check_deep_match_dependencies_reports_human_readable_missing_modules(self):
         runtime_config = _make_runtime_config()
 

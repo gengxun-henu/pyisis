@@ -76,7 +76,13 @@ def _configured_real_dom_seed(default_sample, default_line):
 
 def _default_json_report_path():
 	timestamp = datetime.now().strftime("%Y%m%dT%H%M%S")
-	return PROJECT_ROOT / "tests" / "unitTest" / f"controlnet_construct_dom2ori_unit_test_{timestamp}.json"
+	return (
+		PROJECT_ROOT
+		/ "tests"
+		/ "unitTest"
+		/ "generated_reports"
+		/ f"controlnet_construct_dom2ori_unit_test_{timestamp}.json"
+	)
 
 
 def _configured_json_report_path():
@@ -126,6 +132,20 @@ End
 """
 	)
 	return label
+
+
+class DomToOriginalJsonReportPathUnitTest(unittest.TestCase):
+	def test_default_json_report_path_uses_generated_reports_directory(self):
+		report_path = _default_json_report_path()
+
+		self.assertEqual(
+			report_path.parent,
+			PROJECT_ROOT / "tests" / "unitTest" / "generated_reports",
+		)
+		self.assertRegex(
+			report_path.name,
+			r"^controlnet_construct_dom2ori_unit_test_\d{8}T\d{6}\.json$",
+		)
 
 
 def _projection_from_dom_cube_mapping(cube):

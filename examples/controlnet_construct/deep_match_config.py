@@ -3,11 +3,13 @@
 Author: Geng Xun
 Created: 2026-05-16
 Updated: 2026-05-19  Geng Xun added runtime config resolution for matcher execution layers.
+Updated: 2026-05-20  Geng Xun added dependency preflight checks and runtime-config rehydration helpers for exported deep-match manifests.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
+import importlib
 import json
 from pathlib import Path
 from typing import Any
@@ -29,6 +31,41 @@ class DeepMatchRuntimeConfig:
     device_dtype: str
     fallback_on_error: str | None
     raw_config: dict[str, Any]
+
+
+def deep_match_runtime_config_from_payload(
+    payload: DeepMatchRuntimeConfig | dict[str, Any] | None,
+    *,
+    matcher_method: str | None = None,
+    prefer_gpu: bool | None = None,
+) -> DeepMatchRuntimeConfig | None:
+    """Rehydrate a runtime config from serialized manifest payload data."""
+
+    if isinstance(payload, DeepMatchRuntimeConfig):
+        return payload
+
+    mapping = dict(payload or {})
+    resolved_matcher_method = str(mapping.get("matcher_method") or matcher_method or "").strip().lower()
+    if not resolved_matcher_method:
+        return None
+
+    default_extractor = "loftr" if resolved_matcher_method == "loftr" else "superpoint"
+    prefer_gpu_value = mapping.get("prefer_gpu")
+    resolved_prefer_gpu = bool(prefer_gpu_value) if prefer_gpu_value is not None else bool(prefer_gpu)
+    raw_config = mapping.get("raw_config")
+    if not isinstance(raw_config, dict):
+        raw_config = {}
+
+    return DeepMatchRuntimeConfig(
+        matcher_method=resolved_matcher_method,
+        feature_extractor_method=str(mapping.get("feature_extractor_method") or default_extractor).strip().lower(),
+        prefer_gpu=resolved_prefer_gpu,
+        device_dtype=str(mapping.get("device_dtype", "float32")).strip().lower(),
+        fallback_on_error=(
+            None if mapping.get("fallback_on_error") is None else str(mapping.get("fallback_on_error"))
+        ),
+        raw_config=dict(raw_config),
+    )
 
 
 def load_deep_match_config(config_path: str | Path) -> dict[str, Any]:
@@ -76,6 +113,59 @@ def resolve_deep_match_runtime_config(config_path: str | Path) -> DeepMatchRunti
         fallback_on_error=fallback.get("on_error"),
         raw_config=config,
     )
+
+
+def _missing_dependency_message(name: str) -> str:
+    return f"missing {name}"
+
+
+def _check_import(module_name: str, *, attribute_name: str | None = None, missing_name: str | None = None) -> str | None:
+    try:
+        module = importlib.import_module(module_name)
+    except (ImportError, ModuleNotFoundError):
+        return _missing_dependency_message(missing_name or module_name)
+
+    if attribute_name is None:
+        return None
+    if hasattr(module, attribute_name):
+        return None
+    return _missing_dependency_message(missing_name or f"{module_name}.{attribute_name}")
+
+
+def check_deep_match_dependencies(runtime_config: DeepMatchRuntimeConfig) -> list[str]:
+    """Return human-readable missing dependency messages for the selected matcher."""
+
+    method = str(runtime_config.matcher_method).strip().lower()
+    missing_messages: list[str] = []
+    if method == "lightglue":
+        for message in (
+            _check_import("torch"),
+            _check_import("lightglue"),
+            _check_import("kornia"),
+        ):
+            if message is not None:
+                missing_messages.append(message)
+        return missing_messages
+
+    if method == "loftr":
+        for message in (
+            _check_import("torch"),
+            _check_import("kornia.feature", attribute_name="LoFTR", missing_name="kornia.feature.LoFTR"),
+        ):
+            if message is not None:
+                missing_messages.append(message)
+        return missing_messages
+
+    if method == "superglue":
+        for message in (
+            _check_import("torch"),
+            _check_import("models.matching"),
+        ):
+            if message is not None:
+                missing_messages.append(message)
+        return missing_messages
+
+    return missing_messages
 
 
 def validate_deep_match_config(config: dict[str, Any]) -> None:

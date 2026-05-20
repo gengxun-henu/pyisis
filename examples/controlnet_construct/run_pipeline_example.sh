@@ -8,6 +8,7 @@
 # Updated: 2026-05-16  Geng Xun added deep-match export/import handoff forwarding and export-mode pipeline stop behavior.
 # Updated: 2026-05-16  Geng Xun added adaptive-routing flag/profile forwarding for the latest image-match routing profiles.
 # Updated: 2026-05-19  Geng Xun aligned ImageMatch config precedence and resolved config-relative deep matcher preset paths before forwarding.
+# Updated: 2026-05-20  Geng Xun documented preset-aware adaptive-routing config support for deep matcher preset selection.
 
 set -euo pipefail
 
@@ -296,8 +297,10 @@ Options:
                                   config JSON field ImageMatch.enable_adaptive_routing when present; otherwise disabled.
   --no-adaptive-routing           Disable image_match.py adaptive routing even if config enables it.
   --adaptive-routing-profile NAME Forwarded to image_match.py as the named adaptive-routing quality profile.
-                                  Supported values: balanced, strict, relaxed, fast. If omitted, this script falls back
-                                  to config JSON field ImageMatch.adaptive_routing_profile when present; otherwise balanced.
+                                   Supported values: balanced, strict, relaxed, fast. If omitted, this script falls back
+                                   to config JSON field ImageMatch.adaptive_routing_profile when present; otherwise balanced.
+                                   Preset-aware adaptive routing can additionally read ImageMatch.adaptive_routing_deep_presets
+                                   from the config JSON so routed LightGlue/LoFTR passes select concrete preset files.
   --deep-match-mode MODE          Deep-match execution mode forwarded to image_match.py: direct, export, or import.
                                   Default: direct. Export mode stops after Step 2 and writes manifest workspaces;
                                   import mode consumes completed per-pair manifests before continuing ControlNet steps.

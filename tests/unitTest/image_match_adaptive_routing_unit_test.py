@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-05-14
-Last Modified: 2026-05-19
+Last Modified: 2026-05-20
 Updated: 2026-05-14  Geng Xun added first-node regression coverage for texture probes, SPICE-constrained elevation candidates, and matcher routing sidecars.
 Updated: 2026-05-14  Geng Xun added focused coverage for match-quality gating and fixed cascade decisions.
 Updated: 2026-05-14  Geng Xun added sidecar serialization coverage for quality reports and final decisions.
@@ -10,6 +10,7 @@ Updated: 2026-05-14  Geng Xun clarified the interpolated p95 quality-gate regres
 Updated: 2026-05-16  Geng Xun added coverage for named adaptive-routing quality profiles.
 Updated: 2026-05-18  Geng Xun added focused coverage for the sparseness/lighting-aware conservative router and the sidecar diagnostics augmenter.
 Updated: 2026-05-19  Geng Xun added coverage for optional nested tile diagnostics in adaptive sidecars.
+Updated: 2026-05-20  Geng Xun added preset-aware adaptive-routing coverage for deep preset selection and sidecar serialization.
 """
 
 from __future__ import annotations
@@ -30,6 +31,7 @@ if str(EXAMPLES_DIR) not in sys.path:
 from image_match.adaptive_routing import (
     ImageTextureProbe,
     MatchQualityReport,
+    PairRoutingDecision,
     RenderProbe,
     SpiceLightingConstraints,
     build_pair_probe_sidecar,
@@ -231,6 +233,43 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertTrue(payload["final_decision"]["accepted"])
         self.assertIsNone(payload["final_decision"]["next_matcher"])
 
+    def test_pair_probe_sidecar_serializes_preset_aware_route_fields(self):
+        texture = ImageTextureProbe(
+            keypoint_count=10,
+            valid_pixel_count=100,
+            total_pixel_count=100,
+            keypoint_density=0.1,
+            mean_gradient=10.0,
+            laplacian_variance=100.0,
+            entropy=2.0,
+            valid_pixel_ratio=1.0,
+            real_texture_score=0.4,
+        )
+        decision = PairRoutingDecision(
+            initial_matcher="lightglue",
+            fallback_chain=("loftr",),
+            route_reason="moderate texture and moderate lighting gap",
+            mean_real_texture_score=0.4,
+            mean_terrain_explainability_score=None,
+            render_inferred_elevation_gap=None,
+            render_peak_sharpness=None,
+            estimated_match_difficulty=0.55,
+            deep_match_config_path="examples/controlnet_construct/presets/lightglue_default.json",
+            route_confidence=0.82,
+        )
+
+        payload = build_pair_probe_sidecar(
+            left_texture_probe=texture,
+            right_texture_probe=texture,
+            route_decision=decision,
+        )
+
+        self.assertEqual(
+            payload["pair_route"]["deep_match_config_path"],
+            "examples/controlnet_construct/presets/lightglue_default.json",
+        )
+        self.assertAlmostEqual(payload["pair_route"]["route_confidence"], 0.82)
+
     def test_evaluate_match_quality_accepts_balanced_low_residual_result(self):
         report = evaluate_match_quality(
             inlier_count=48,
@@ -348,6 +387,24 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         self.assertIn("rich texture", decision.route_reason)
         self.assertEqual(decision.fallback_chain, ("lightglue", "loftr"))
 
+    def test_adaptive_routing_deep_presets_keep_requested_flann_without_deep_preset(self):
+        from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
+
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.15,
+            lighting_difference_score=0.10,
+            traditional_matcher="flann",
+            adaptive_routing_deep_presets={
+                "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
+                "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
+                "loftr": "examples/controlnet_construct/presets/loftr_default.json",
+            },
+        )
+
+        self.assertEqual(decision.initial_matcher, "flann")
+        self.assertIsNone(decision.deep_match_config_path)
+        self.assertGreater(decision.route_confidence, 0.7)
+
     def test_route_matcher_for_pair_with_sparseness_picks_loftr_for_high_sparseness(self):
         from image_match.adaptive_routing import (
             LOFTR_MATCHER_METHOD,
@@ -362,6 +419,24 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         self.assertEqual(decision.initial_matcher, LOFTR_MATCHER_METHOD)
         self.assertEqual(decision.fallback_chain, ())
 
+    def test_adaptive_routing_deep_presets_route_medium_pair_to_lightglue_default(self):
+        from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
+
+        preset_map = {
+            "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
+            "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
+            "loftr": "examples/controlnet_construct/presets/loftr_default.json",
+        }
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.45,
+            lighting_difference_score=0.30,
+            adaptive_routing_deep_presets=preset_map,
+        )
+
+        self.assertEqual(decision.initial_matcher, "lightglue")
+        self.assertEqual(decision.deep_match_config_path, preset_map["lightglue"])
+        self.assertGreater(decision.route_confidence, 0.5)
+
     def test_route_matcher_for_pair_with_sparseness_picks_loftr_for_high_lighting(self):
         from image_match.adaptive_routing import (
             LOFTR_MATCHER_METHOD,
@@ -374,6 +449,24 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         )
 
         self.assertEqual(decision.initial_matcher, LOFTR_MATCHER_METHOD)
+
+    def test_adaptive_routing_deep_presets_route_sparse_pair_to_loftr_default(self):
+        from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
+
+        preset_map = {
+            "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
+            "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
+            "loftr": "examples/controlnet_construct/presets/loftr_default.json",
+        }
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.78,
+            lighting_difference_score=0.20,
+            adaptive_routing_deep_presets=preset_map,
+        )
+
+        self.assertEqual(decision.initial_matcher, "loftr")
+        self.assertEqual(decision.deep_match_config_path, preset_map["loftr"])
+        self.assertGreater(decision.route_confidence, 0.7)
 
     def test_route_matcher_for_pair_with_sparseness_picks_lightglue_in_middle(self):
         from image_match.adaptive_routing import (

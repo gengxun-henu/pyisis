@@ -4,16 +4,18 @@ Author: Geng Xun
 Created: 2026-05-16
 Updated: 2026-05-16  Geng Xun added pair-manifest helpers for exporting deep-matching tile tasks, workspace layouts, and result file conventions.
 Updated: 2026-05-16  Geng Xun added standardized NPZ result helpers for deep-learning manifest executors and later import stages.
+Updated: 2026-05-20  Geng Xun added stage-6 provenance fields so exported task manifests preserve runtime config, config path, and execution-environment hints.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, is_dataclass
 from datetime import datetime, timezone
 import hashlib
 import json
 import numpy as np
 from pathlib import Path
+import sys
 from typing import Any
 
 from .tile_matching import TileMatchTask, tile_match_task_from_payload, tile_match_task_to_payload
@@ -47,6 +49,15 @@ class DeepMatchTaskRecord:
     result_path: str
     log_path: str
     tile_task: TileMatchTask
+    deep_match_config_path: str | None = None
+    deep_match_runtime_config: dict[str, Any] | None = None
+    matcher_method: str | None = None
+    feature_extractor_method: str | None = None
+    tile_window: dict[str, Any] | None = None
+    invalid_mask_summary: dict[str, Any] | None = None
+    normalization: dict[str, Any] | None = None
+    created_by_python: str | None = None
+    created_at_utc: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -124,9 +135,16 @@ def build_deep_match_task_record(
     task_index: int,
     tile_task: TileMatchTask,
     workspace: DeepMatchWorkspacePaths,
+    deep_match_config_path: str | Path | None = None,
+    deep_match_runtime_config: Any | None = None,
+    created_by_python: str | None = None,
+    created_at_utc: str | None = None,
 ) -> DeepMatchTaskRecord:
     """Create one task record with deterministic artifact paths."""
 
+    runtime_config_payload = _runtime_config_to_payload(
+        tile_task.deep_match_runtime_config if tile_task.deep_match_runtime_config is not None else deep_match_runtime_config
+    )
     stem = f"task_{int(task_index):05d}"
     return DeepMatchTaskRecord(
         task_index=int(task_index),
@@ -137,6 +155,30 @@ def build_deep_match_task_record(
         result_path=str(workspace.results_dir / f"{stem}_matches.npz"),
         log_path=str(workspace.logs_dir / f"{stem}.log"),
         tile_task=tile_task,
+        deep_match_config_path=(
+            None if deep_match_config_path is None else str(Path(deep_match_config_path))
+        ),
+        deep_match_runtime_config=runtime_config_payload,
+        matcher_method=str(tile_task.matcher_method).strip().lower(),
+        feature_extractor_method=(
+            None if runtime_config_payload is None else str(runtime_config_payload.get("feature_extractor_method"))
+        ),
+        tile_window=asdict(tile_task.paired_window),
+        invalid_mask_summary={
+            "invalid_values": list(tile_task.invalid_values),
+            "special_pixel_abs_threshold": float(tile_task.special_pixel_abs_threshold),
+            "min_valid_pixels": int(tile_task.min_valid_pixels),
+            "valid_pixel_percent_threshold": float(tile_task.valid_pixel_percent_threshold),
+            "invalid_pixel_radius": int(tile_task.invalid_pixel_radius),
+        },
+        normalization={
+            "minimum_value": tile_task.minimum_value,
+            "maximum_value": tile_task.maximum_value,
+            "lower_percent": float(tile_task.lower_percent),
+            "upper_percent": float(tile_task.upper_percent),
+        },
+        created_by_python=created_by_python,
+        created_at_utc=created_at_utc,
     )
 
 
@@ -153,6 +195,9 @@ def build_deep_match_pair_manifest(
     pair_id: str | None = None,
     metadata: dict[str, Any] | None = None,
     created_at_utc: str | None = None,
+    deep_match_config_path: str | Path | None = None,
+    deep_match_runtime_config: Any | None = None,
+    created_by_python: str | None = None,
 ) -> DeepMatchPairManifest:
     """Build a top-level manifest for later deep-learning execution."""
 
@@ -167,11 +212,19 @@ def build_deep_match_pair_manifest(
         temp_root_dir=temp_root_dir,
         pair_id=resolved_pair_id,
     )
+    timestamp = created_at_utc or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     task_records = tuple(
-        build_deep_match_task_record(task_index=index, tile_task=task, workspace=workspace)
+        build_deep_match_task_record(
+            task_index=index,
+            tile_task=task,
+            workspace=workspace,
+            deep_match_config_path=deep_match_config_path,
+            deep_match_runtime_config=deep_match_runtime_config,
+            created_by_python=created_by_python or sys.executable,
+            created_at_utc=timestamp,
+        )
         for index, task in enumerate(tasks)
     )
-    timestamp = created_at_utc or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     return DeepMatchPairManifest(
         format_version=DEEP_MATCH_MANIFEST_FORMAT_VERSION,
         pair_id=resolved_pair_id,
@@ -200,6 +253,15 @@ def deep_match_task_record_to_payload(record: DeepMatchTaskRecord) -> dict[str, 
         "result_path": record.result_path,
         "log_path": record.log_path,
         "tile_task": tile_match_task_to_payload(record.tile_task),
+        "deep_match_config_path": record.deep_match_config_path,
+        "deep_match_runtime_config": record.deep_match_runtime_config,
+        "matcher_method": record.matcher_method,
+        "feature_extractor_method": record.feature_extractor_method,
+        "tile_window": record.tile_window,
+        "invalid_mask_summary": record.invalid_mask_summary,
+        "normalization": record.normalization,
+        "created_by_python": record.created_by_python,
+        "created_at_utc": record.created_at_utc,
     }
 
 
@@ -215,7 +277,34 @@ def deep_match_task_record_from_payload(payload: dict[str, Any]) -> DeepMatchTas
         result_path=str(payload["result_path"]),
         log_path=str(payload["log_path"]),
         tile_task=tile_match_task_from_payload(dict(payload["tile_task"])),
+        deep_match_config_path=payload.get("deep_match_config_path"),
+        deep_match_runtime_config=dict(payload["deep_match_runtime_config"])
+        if isinstance(payload.get("deep_match_runtime_config"), dict)
+        else payload.get("deep_match_runtime_config"),
+        matcher_method=payload.get("matcher_method"),
+        feature_extractor_method=payload.get("feature_extractor_method"),
+        tile_window=dict(payload["tile_window"]) if isinstance(payload.get("tile_window"), dict) else payload.get("tile_window"),
+        invalid_mask_summary=dict(payload["invalid_mask_summary"])
+        if isinstance(payload.get("invalid_mask_summary"), dict)
+        else payload.get("invalid_mask_summary"),
+        normalization=dict(payload["normalization"])
+        if isinstance(payload.get("normalization"), dict)
+        else payload.get("normalization"),
+        created_by_python=payload.get("created_by_python"),
+        created_at_utc=payload.get("created_at_utc"),
     )
+
+
+def _runtime_config_to_payload(runtime_config: Any | None) -> dict[str, Any] | None:
+    if runtime_config is None:
+        return None
+    if isinstance(runtime_config, dict):
+        return dict(runtime_config)
+    if is_dataclass(runtime_config):
+        return asdict(runtime_config)
+    if hasattr(runtime_config, "__dict__"):
+        return dict(vars(runtime_config))
+    raise TypeError(f"Unsupported deep_match_runtime_config payload type: {type(runtime_config)!r}")
 
 
 def deep_match_pair_manifest_to_payload(manifest: DeepMatchPairManifest) -> dict[str, Any]:

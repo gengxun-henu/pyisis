@@ -45,6 +45,8 @@ Updated: 2026-05-19  Geng Xun routed adaptive texture-sparseness diagnostics thr
     tile-window readers instead of full-band cube reads.
 Updated: 2026-05-19  Geng Xun added shared deep matcher config path parsing, validation, and metadata recording.
 Updated: 2026-05-19  Geng Xun resolved deep matcher runtime config and added matcher conflict checks.
+Updated: 2026-05-20  Geng Xun added preset-aware adaptive routing config loading, route metadata, and deep preset cascade execution.
+Updated: 2026-05-20  Geng Xun enriched export-mode deep-match manifests with per-task runtime-config provenance and environment metadata.
 """
 
 from __future__ import annotations
@@ -79,6 +81,7 @@ if __package__ in {None, ""}:
         normalize_adaptive_routing_profile,
         resolve_adaptive_routing_quality_profile,
         route_matcher_for_pair,
+        route_matcher_for_pair_with_sparseness,
     )
     from image_match.lighting_difference import (
         SolarGeometryFieldMissing,
@@ -154,6 +157,7 @@ else:
         normalize_adaptive_routing_profile,
         resolve_adaptive_routing_quality_profile,
         route_matcher_for_pair,
+        route_matcher_for_pair_with_sparseness,
     )
     from .lighting_difference import (
         SolarGeometryFieldMissing,
@@ -608,6 +612,16 @@ def _coerce_invalid_value_list(value: object) -> list[float]:
     return [float(value)]
 
 
+def _coerce_string_mapping(value: object, *, field_name: str) -> dict[str, str]:
+    if not isinstance(value, dict):
+        raise ValueError(f"{field_name} in config JSON must be an object.")
+    return {
+        str(key).strip(): str(item)
+        for key, item in value.items()
+        if key not in (None, "") and item not in (None, "")
+    }
+
+
 def load_image_match_defaults_from_config(
     config_path: str | Path,
     *,
@@ -703,6 +717,11 @@ def load_image_match_defaults_from_config(
             "adaptive_routing_profile",
             ("adaptive_routing_profile", "adaptiveRoutingProfile", "AdaptiveRoutingProfile"),
             lambda value: normalize_adaptive_routing_profile(value),
+        ),
+        (
+            "adaptive_routing_deep_presets",
+            ("adaptive_routing_deep_presets", "adaptiveRoutingDeepPresets", "AdaptiveRoutingDeepPresets"),
+            lambda value: _coerce_string_mapping(value, field_name="adaptive_routing_deep_presets"),
         ),
         (
             "deep_match_mode",
@@ -1311,6 +1330,7 @@ def _resolve_adaptive_route_for_pair(
     *,
     enable_adaptive_routing: bool,
     requested_matcher_method: str,
+    adaptive_routing_deep_presets: dict[str, str] | None,
     band: int,
     invalid_values: tuple[float, ...],
     special_pixel_abs_threshold: float,
@@ -1331,6 +1351,11 @@ def _resolve_adaptive_route_for_pair(
             "status": "skipped_missing_previews",
             "requested_matcher": requested_matcher_method,
             "selected_initial_matcher": requested_matcher_method,
+            "selected_deep_match_config_path": None,
+            "route_reason": (
+                "Adaptive routing currently requires low-resolution preview DOMs from the coarse-offset stage "
+                "or explicit precomputed preview inputs."
+            ),
             "reason": (
                 "Adaptive routing currently requires low-resolution preview DOMs from the coarse-offset stage "
                 "or explicit precomputed preview inputs."
@@ -1350,15 +1375,14 @@ def _resolve_adaptive_route_for_pair(
             invalid_values=invalid_values,
             special_pixel_abs_threshold=special_pixel_abs_threshold,
         )
-        route_decision = route_matcher_for_pair(
-            left_texture_probe=left_texture_probe,
-            right_texture_probe=right_texture_probe,
-        )
-
         # Additive diagnostics: tile-level texture sparseness + solar
         # lighting-difference are computed best-effort and attached to the
         # sidecar without changing the legacy routing decision shape.
         sparseness_lighting_diagnostics: dict[str, object] = {}
+        route_decision = route_matcher_for_pair(
+            left_texture_probe=left_texture_probe,
+            right_texture_probe=right_texture_probe,
+        )
         try:
             left_sparseness, left_solar_geometry, left_solar_error = (
                 _compute_texture_sparseness_and_geometry_from_cube_path(
@@ -1395,6 +1419,12 @@ def _resolve_adaptive_route_for_pair(
                 "texture_sparseness": sparseness_diagnostic,
                 "lighting_difference": lighting_diagnostic,
             }
+            route_decision = route_matcher_for_pair_with_sparseness(
+                pair_texture_sparseness=sparseness_diagnostic.get("pair_texture_sparseness"),
+                lighting_difference_score=lighting_diagnostic.get("lighting_difference_score"),
+                traditional_matcher=requested_matcher_method,
+                adaptive_routing_deep_presets=adaptive_routing_deep_presets,
+            )
         except Exception as diag_exc:  # noqa: BLE001 - keep diagnostics best-effort
             sparseness_lighting_diagnostics = {
                 "diagnostics_error": str(diag_exc),
@@ -1432,6 +1462,9 @@ def _resolve_adaptive_route_for_pair(
             "status": "routed",
             "requested_matcher": requested_matcher_method,
             "selected_initial_matcher": route_decision.initial_matcher,
+            "selected_deep_match_config_path": route_decision.deep_match_config_path,
+            "route_confidence": route_decision.route_confidence,
+            "route_reason": route_decision.route_reason,
             "reason": route_decision.route_reason,
             "preview_sources": {
                 "left": resolved_left_preview,
@@ -1445,6 +1478,9 @@ def _resolve_adaptive_route_for_pair(
             "status": "routing_failed",
             "requested_matcher": requested_matcher_method,
             "selected_initial_matcher": requested_matcher_method,
+            "selected_deep_match_config_path": None,
+            "route_confidence": None,
+            "route_reason": str(exc),
             "reason": str(exc),
             "preview_sources": {
                 "left": resolved_left_preview,
@@ -1549,6 +1585,7 @@ def _export_deep_match_pair_tasks(
     use_gpu: bool,
     gpu_batch_size: int,
     deep_match_temp_root_dir: str | Path,
+    deep_match_config_path: str | Path | None = None,
     deep_match_runtime_config: object | None = None,
 ) -> tuple[list[TileMatchStats], dict[str, object]]:
     image_backend = build_image_backend(image_space)
@@ -1587,10 +1624,23 @@ def _export_deep_match_pair_tasks(
         image_space=image_backend.space,
         temp_root_dir=deep_match_temp_root_dir,
         requested_device="cuda" if use_gpu else "cpu",
+        deep_match_config_path=deep_match_config_path,
+        deep_match_runtime_config=deep_match_runtime_config,
+        created_by_python=sys.executable,
         metadata={
             "export_source": "image_match.match_dom_pair",
             "candidate_tile_count": len(candidate_windows),
+            "deep_match_config_path": (
+                None if deep_match_config_path is None else str(Path(deep_match_config_path))
+            ),
             "deep_match_runtime_config": _runtime_config_to_metadata(deep_match_runtime_config),
+            "matcher_method": matcher_method,
+            "feature_extractor_method": (
+                None
+                if deep_match_runtime_config is None
+                else getattr(deep_match_runtime_config, "feature_extractor_method", None)
+            ),
+            "created_by_python": sys.executable,
         },
     )
     workspace = resolve_deep_match_workspace(
@@ -1675,26 +1725,106 @@ def _export_deep_match_pair_tasks(
     }
 
 
-def _adaptive_cascade_plan_from_summary(
+def _adaptive_cascade_steps_from_summary(
     adaptive_routing_summary: dict[str, object] | None,
     *,
     initial_matcher: str,
-) -> tuple[str, ...]:
+    initial_deep_match_config_path: str | Path | None = None,
+    adaptive_routing_deep_presets: dict[str, str] | None = None,
+) -> tuple[dict[str, object], ...]:
+    normalized_initial_config_path = (
+        None if initial_deep_match_config_path is None else str(initial_deep_match_config_path)
+    )
     if not adaptive_routing_summary or adaptive_routing_summary.get("status") != "routed":
-        return (initial_matcher,)
+        return ({"matcher_method": initial_matcher, "deep_match_config_path": normalized_initial_config_path},)
 
-    sidecar = adaptive_routing_summary.get("sidecar")
-    pair_route = sidecar.get("pair_route") if isinstance(sidecar, dict) else None
-    if not isinstance(pair_route, dict) or "fallback_chain" not in pair_route:
-        return (initial_matcher,)
-    fallback_chain = pair_route.get("fallback_chain", ())
-    try:
-        return build_cascade_plan(
-            initial_matcher=initial_matcher,
-            fallback_chain=tuple(str(matcher) for matcher in fallback_chain),
+    preset_map = {
+        str(key).strip().lower(): str(value)
+        for key, value in (adaptive_routing_deep_presets or {}).items()
+        if value not in (None, "")
+    }
+    selected_matcher = str(adaptive_routing_summary.get("selected_initial_matcher", initial_matcher))
+    selected_config_path = adaptive_routing_summary.get("selected_deep_match_config_path")
+    steps: list[dict[str, object]] = [
+        {
+            "matcher_method": selected_matcher,
+            "deep_match_config_path": (
+                None if selected_config_path in (None, "") else str(selected_config_path)
+            ),
+        }
+    ]
+    if selected_matcher in {"bf", "flann"}:
+        if preset_map.get("lightglue_high_recall"):
+            steps.append(
+                {
+                    "matcher_method": "lightglue",
+                    "deep_match_config_path": preset_map["lightglue_high_recall"],
+                }
+            )
+        elif preset_map.get("lightglue"):
+            steps.append(
+                {
+                    "matcher_method": "lightglue",
+                    "deep_match_config_path": preset_map["lightglue"],
+                }
+            )
+        else:
+            steps.append(
+                {
+                    "matcher_method": "lightglue",
+                    "deep_match_config_path": None,
+                }
+            )
+        if preset_map.get("loftr"):
+            steps.append(
+                {
+                    "matcher_method": "loftr",
+                    "deep_match_config_path": preset_map["loftr"],
+                }
+            )
+        else:
+            steps.append(
+                {
+                    "matcher_method": "loftr",
+                    "deep_match_config_path": None,
+                }
+            )
+    elif selected_matcher == "lightglue":
+        high_recall_path = preset_map.get("lightglue_high_recall")
+        if high_recall_path and high_recall_path != steps[0]["deep_match_config_path"]:
+            steps.append(
+                {
+                    "matcher_method": "lightglue",
+                    "deep_match_config_path": high_recall_path,
+                }
+            )
+        if preset_map.get("loftr"):
+            steps.append(
+                {
+                    "matcher_method": "loftr",
+                    "deep_match_config_path": preset_map["loftr"],
+                }
+            )
+        else:
+            steps.append(
+                {
+                    "matcher_method": "loftr",
+                    "deep_match_config_path": None,
+                }
+            )
+
+    deduped_steps: list[dict[str, object]] = []
+    seen: set[tuple[str, str | None]] = set()
+    for step in steps:
+        dedupe_key = (
+            str(step["matcher_method"]),
+            None if step["deep_match_config_path"] in (None, "") else str(step["deep_match_config_path"]),
         )
-    except ValueError:
-        return (initial_matcher,)
+        if dedupe_key in seen:
+            continue
+        seen.add(dedupe_key)
+        deduped_steps.append(step)
+    return tuple(deduped_steps)
 
 
 def _local_points_to_keypoints(points: np.ndarray, window: object) -> tuple[Keypoint, ...]:
@@ -1970,6 +2100,7 @@ def match_dom_pair(
     enable_low_resolution_offset_estimation: bool = False,
     enable_adaptive_routing: bool = DEFAULT_ENABLE_ADAPTIVE_ROUTING,
     adaptive_routing_profile: str = DEFAULT_ADAPTIVE_ROUTING_PROFILE,
+    adaptive_routing_deep_presets: dict[str, str] | None = None,
     low_resolution_level: int | None = None,
     low_resolution_matching_target_long_edge: int | None = None,
     low_resolution_trim_fraction_each_side: float = DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE,
@@ -2001,6 +2132,11 @@ def match_dom_pair(
         resolved_deep_match_config = None
         resolved_deep_match_runtime_config = None
         resolved_deep_match_config_path = None
+        resolved_adaptive_routing_deep_presets = {
+            str(key).strip().lower(): str(value)
+            for key, value in (adaptive_routing_deep_presets or {}).items()
+            if value not in (None, "")
+        }
         if deep_match_config_path is not None:
             resolved_deep_match_config_path = Path(deep_match_config_path)
             resolved_deep_match_runtime_config = _resolve_deep_match_runtime_config(resolved_deep_match_config_path)
@@ -2126,6 +2262,7 @@ def match_dom_pair(
         resolved_matcher_method, adaptive_routing_summary = _resolve_adaptive_route_for_pair(
             enable_adaptive_routing=bool(enable_adaptive_routing),
             requested_matcher_method=resolved_requested_matcher_method,
+            adaptive_routing_deep_presets=resolved_adaptive_routing_deep_presets,
             band=band,
             invalid_values=invalid_values,
             special_pixel_abs_threshold=special_pixel_abs_threshold,
@@ -2133,6 +2270,19 @@ def match_dom_pair(
             left_low_resolution_dom=resolved_left_low_resolution_dom,
             right_low_resolution_dom=resolved_right_low_resolution_dom,
         )
+        routed_deep_match_config_path = (
+            adaptive_routing_summary.get("selected_deep_match_config_path")
+            if isinstance(adaptive_routing_summary, dict)
+            else None
+        )
+        if routed_deep_match_config_path not in (None, ""):
+            resolved_deep_match_config_path = Path(str(routed_deep_match_config_path))
+            resolved_deep_match_runtime_config = _resolve_deep_match_runtime_config(resolved_deep_match_config_path)
+            resolved_deep_match_config = resolved_deep_match_runtime_config.raw_config
+        elif resolved_matcher_method not in DEEP_MATCHER_METHODS:
+            resolved_deep_match_config_path = None
+            resolved_deep_match_runtime_config = None
+            resolved_deep_match_config = None
         if adaptive_routing_summary is not None:
             adaptive_routing_summary["profile"] = resolved_adaptive_routing_quality_profile.profile
             adaptive_routing_summary["quality_gate"] = dict(adaptive_routing_quality_gate)
@@ -2249,10 +2399,15 @@ def match_dom_pair(
                             if deep_match_temp_root_dir is not None
                             else Path.cwd() / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME
                         ),
+                        deep_match_config_path=resolved_deep_match_config_path,
                         deep_match_runtime_config=resolved_deep_match_runtime_config,
                     )
                 else:
-                    def run_tile_matching_pass(candidate_matcher_method: str) -> list[TileMatchResult]:
+                    def run_tile_matching_pass(
+                        candidate_matcher_method: str,
+                        *,
+                        candidate_deep_match_runtime_config: object | None = None,
+                    ) -> list[TileMatchResult]:
                         nonlocal parallel_cpu_used, parallel_cpu_backend, parallel_cpu_worker_count, tile_match_backend
 
                         progress_bar = (
@@ -2290,11 +2445,11 @@ def match_dom_pair(
                                     sift_octave_layers=sift_octave_layers,
                                     sift_contrast_threshold=sift_contrast_threshold,
                                     sift_edge_threshold=sift_edge_threshold,
-                                    sift_sigma=sift_sigma,
-                                    use_gpu=use_gpu,
-                                    gpu_batch_size=gpu_batch_size,
-                                    deep_match_runtime_config=resolved_deep_match_runtime_config,
-                                )
+                                     sift_sigma=sift_sigma,
+                                     use_gpu=use_gpu,
+                                     gpu_batch_size=gpu_batch_size,
+                                     deep_match_runtime_config=candidate_deep_match_runtime_config,
+                                 )
                                 try:
                                     pass_results = _run_parallel_tile_match_tasks(
                                         tile_tasks,
@@ -2352,7 +2507,7 @@ def match_dom_pair(
                                 sift_edge_threshold=sift_edge_threshold,
                                 sift_sigma=sift_sigma,
                                 use_gpu=use_gpu,
-                                deep_match_runtime_config=resolved_deep_match_runtime_config,
+                                deep_match_runtime_config=candidate_deep_match_runtime_config,
                                 progress_callback=progress_bar.update if progress_bar is not None else None,
                                 use_tile_cache=use_tile_cache,
                                 cache_max_mb=tile_cache_max_mb,
@@ -2367,17 +2522,39 @@ def match_dom_pair(
                         tile_match_backend = "serial"
                         return pass_results
 
-                    cascade_plan = _adaptive_cascade_plan_from_summary(
+                    cascade_plan = _adaptive_cascade_steps_from_summary(
                         adaptive_routing_summary,
                         initial_matcher=resolved_matcher_method,
+                        initial_deep_match_config_path=resolved_deep_match_config_path,
+                        adaptive_routing_deep_presets=resolved_adaptive_routing_deep_presets,
                     )
                     cascade_attempts: list[dict[str, object]] = []
                     selected_tile_results: list[TileMatchResult] = []
                     final_decision: dict[str, object] | None = None
                     final_quality_report = None
 
-                    for candidate_matcher_method in cascade_plan:
-                        selected_tile_results = run_tile_matching_pass(candidate_matcher_method)
+                    for cascade_index, cascade_step in enumerate(cascade_plan):
+                        candidate_matcher_method = str(cascade_step["matcher_method"])
+                        candidate_deep_match_config_path = cascade_step.get("deep_match_config_path")
+                        candidate_deep_match_runtime_config = None
+                        candidate_deep_match_config = None
+                        if candidate_deep_match_config_path not in (None, ""):
+                            candidate_deep_match_config_path = Path(str(candidate_deep_match_config_path))
+                            if (
+                                resolved_deep_match_config_path is not None
+                                and candidate_deep_match_config_path == resolved_deep_match_config_path
+                            ):
+                                candidate_deep_match_runtime_config = resolved_deep_match_runtime_config
+                                candidate_deep_match_config = resolved_deep_match_config
+                            else:
+                                candidate_deep_match_runtime_config = _resolve_deep_match_runtime_config(
+                                    candidate_deep_match_config_path
+                                )
+                                candidate_deep_match_config = candidate_deep_match_runtime_config.raw_config
+                        selected_tile_results = run_tile_matching_pass(
+                            candidate_matcher_method,
+                            candidate_deep_match_runtime_config=candidate_deep_match_runtime_config,
+                        )
                         quality_report = _quality_report_for_tile_results(
                             selected_tile_results,
                             candidate_window_count=len(candidate_windows),
@@ -2387,25 +2564,42 @@ def match_dom_pair(
                         final_decision = decide_post_match_action(
                             current_matcher=candidate_matcher_method,
                             quality_report=quality_report,
-                            cascade_plan=cascade_plan,
+                            cascade_plan=tuple(str(step["matcher_method"]) for step in cascade_plan),
+                            current_index=cascade_index,
                         )
                         cascade_attempts.append(
                             {
                                 "matcher": candidate_matcher_method,
+                                "deep_match_config_path": (
+                                    None
+                                    if candidate_deep_match_config_path in (None, "")
+                                    else str(candidate_deep_match_config_path)
+                                ),
                                 "match_quality": asdict(quality_report),
                                 "decision": final_decision,
                             }
                         )
                         if final_decision["accepted"] or final_decision["next_matcher"] is None:
                             resolved_matcher_method = candidate_matcher_method
+                            resolved_deep_match_config_path = candidate_deep_match_config_path
+                            resolved_deep_match_runtime_config = candidate_deep_match_runtime_config
+                            resolved_deep_match_config = candidate_deep_match_config
                             break
 
                     if adaptive_routing_summary is not None:
                         adaptive_routing_summary["profile"] = resolved_adaptive_routing_quality_profile.profile
                         adaptive_routing_summary["quality_gate"] = dict(adaptive_routing_quality_gate)
-                        adaptive_routing_summary["cascade_plan"] = list(cascade_plan)
+                        adaptive_routing_summary["cascade_plan"] = [
+                            str(step["matcher_method"]) for step in cascade_plan
+                        ]
+                        adaptive_routing_summary["cascade_steps"] = list(cascade_plan)
                         adaptive_routing_summary["cascade_attempts"] = cascade_attempts
                         adaptive_routing_summary["selected_final_matcher"] = resolved_matcher_method
+                        adaptive_routing_summary["selected_final_deep_match_config_path"] = (
+                            None
+                            if resolved_deep_match_config_path is None
+                            else str(resolved_deep_match_config_path)
+                        )
                         if final_quality_report is not None:
                             adaptive_routing_summary["match_quality"] = asdict(final_quality_report)
                         if final_decision is not None:
@@ -3102,6 +3296,7 @@ def main(argv: list[str] | None = None) -> None:
         enable_low_resolution_offset_estimation=args.enable_low_resolution_offset_estimation,
         enable_adaptive_routing=args.enable_adaptive_routing,
         adaptive_routing_profile=args.adaptive_routing_profile,
+        adaptive_routing_deep_presets=getattr(args, "adaptive_routing_deep_presets", None),
         low_resolution_level=args.low_resolution_level,
         low_resolution_matching_target_long_edge=args.low_resolution_matching_target_long_edge,
         low_resolution_trim_fraction_each_side=args.low_resolution_trim_fraction_each_side,

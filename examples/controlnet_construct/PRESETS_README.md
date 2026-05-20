@@ -1,6 +1,6 @@
 # Deep Match Presets
 
-This document describes the preset configuration files in `presets/` and the applicable scenarios for each feature extractor and matcher.
+This document summarizes the deep-match preset JSON files in `examples/controlnet_construct/presets/`, the real runtime support state on this branch, and the recommended `direct` / `export` / `import` workflows.
 
 ## Preset Catalog
 
@@ -15,7 +15,80 @@ This document describes the preset configuration files in `presets/` and the app
 | `lightglue_doghardnet.json` | DoGHardNet | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
 | `superglue_aliked.json` | ALIKED | SuperGlue | Compatibility reference preset only. Current runtime rejects it because SuperGlue execution is limited to SuperPoint-backed extraction. |
 
-## Feature Extractors
+## Recommended Execution Modes
+
+The wrappers support three deep-match execution modes:
+
+- `direct`: run deep matching inline in the current environment. Use this only when the current Python environment already has the required deep-learning dependencies.
+- `export`: run the normal overlap / tiling stage in `asp360_new`, but stop after writing manifest workspaces and `deep_match_manifests.json`.
+- `import`: resume in `asp360_new` after a deep-learning environment has written NPZ results for every exported manifest task.
+
+Recommended commands:
+
+### 1. Direct mode
+
+Use this when one environment already contains both ISIS runtime access and the needed deep-learning packages.
+
+```bash
+bash examples/controlnet_construct/run_image_match_batch_example.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --deep-match-mode direct \
+  --deep-match-config-path examples/controlnet_construct/presets/lightglue_default.json
+```
+
+### 2. Export mode
+
+Use this in `asp360_new` when the current environment can prepare overlap crops and manifests but should not import Torch / model packages.
+
+```bash
+bash examples/controlnet_construct/run_image_match_batch_example.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --deep-match-mode export \
+  --deep-match-config-path examples/controlnet_construct/presets/lightglue_default.json
+```
+
+This writes per-pair workspaces under `work/deep_match_workspaces/` and a compact summary file at `work/deep_match_manifests.json`.
+
+### 3. Manifest execution + import mode
+
+Run the exported manifests in a deep-learning environment first:
+
+```bash
+python examples/learning_methods/run_deep_match_manifest.py \
+  work/deep_match_workspaces/left__right/tasks.json \
+  --device cpu \
+  --summary-output work/deep_match_workspaces/left__right/manifest_run_summary.json
+```
+
+Then switch back to `asp360_new` and import the written NPZ results:
+
+```bash
+bash examples/controlnet_construct/run_image_match_batch_example.sh \
+  --work-dir work \
+  --matcher-method lightglue \
+  --deep-match-mode import \
+  --deep-match-manifest-dir work/deep_match_workspaces \
+  --deep-match-manifest-summary work/deep_match_manifests.json
+```
+
+`run_pipeline_example.sh` forwards the same deep-match mode flags and uses `work/reports/deep_match_manifests.json` by default.
+
+## Real Support Status by Preset
+
+| Preset file | Matcher | Extractor | Runtime support | Required environment | Known limitations |
+| --- | --- | --- | --- | --- | --- |
+| `lightglue_default.json` | LightGlue | SuperPoint | Supported in `direct`, `export`, and `import` workflows | `direct`: environment with ISIS + `torch` + `kornia` + `lightglue`; `export`/`import`: `asp360_new`, plus a deep-learning env for `run_deep_match_manifest.py` | Best-supported default preset on this branch; `export`/`import` is recommended when `asp360_new` lacks model deps. |
+| `lightglue_high_recall.json` | LightGlue | SuperPoint | Supported in `direct`, `export`, and `import` workflows | Same as `lightglue_default.json` | Higher keypoint count raises runtime and memory cost. |
+| `superglue_default.json` | SuperGlue | SuperPoint | Supported in `direct`, `export`, and `import` workflows | `direct`: environment with ISIS + `torch` + `kornia` + `superglue-pretrained-network`; `export`/`import`: `asp360_new`, plus a deep-learning env for `run_deep_match_manifest.py` | Slower than LightGlue and usually the heaviest sparse preset. |
+| `loftr_default.json` | LoFTR | LoFTR (built-in) | Supported in `direct`, `export`, and `import` workflows | `direct`: environment with ISIS + `torch` + `kornia`; `export`/`import`: `asp360_new`, plus a deep-learning env for `run_deep_match_manifest.py` | Dense end-to-end matcher; CPU works for smoke validation, but GPU is strongly recommended for real runs. |
+| `lightglue_disk.json` | LightGlue | DISK | Fails strict config validation on this branch | No supported runtime path yet | LightGlue execution currently requires `feature_extractor.method="superpoint"`; this file is kept as a reference preset for future extractor rollout. |
+| `lightglue_aliked.json` | LightGlue | ALIKED | Fails strict config validation on this branch | No supported runtime path yet | LightGlue execution currently requires `feature_extractor.method="superpoint"`; this file is kept as a reference preset for future extractor rollout. |
+| `lightglue_doghardnet.json` | LightGlue | DoGHardNet | Fails strict config validation on this branch | No supported runtime path yet | LightGlue execution currently requires `feature_extractor.method="superpoint"`; this file is kept as a reference preset for future extractor rollout. |
+| `superglue_aliked.json` | SuperGlue | ALIKED | Fails strict config validation on this branch | No supported runtime path yet | SuperGlue execution currently requires `feature_extractor.method="superpoint"`; this file is kept as a reference preset for future extractor rollout. |
+
+## Feature Extractor Notes
 
 ### SuperPoint
 
@@ -57,7 +130,7 @@ This document describes the preset configuration files in `presets/` and the app
 - **Pros:** No independent keypoints needed, good for weak texture
 - **Cons:** Slow, high memory usage
 
-## Matchers
+## Matcher Notes
 
 ### SuperGlue
 
@@ -80,18 +153,7 @@ This document describes the preset configuration files in `presets/` and the app
 - **Pros:** No feature extraction needed, direct end-to-end matching
 - **Cons:** Slow, requires GPU
 
-## Usage
-
-Specify the preset path in the `ImageMatch` section of `controlnet_config.json`:
-
-```json
-{
-  "ImageMatch": {
-    "matcher_method": "lightglue",
-    "deep_matcher_config_path": "presets/lightglue_default.json"
-  }
-}
-```
+## Wrapper Option Precedence
 
 Both wrapper entrypoints (`run_pipeline_example.sh` and `run_image_match_batch_example.sh`) use the same precedence for matching options:
 

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-19
+Last Modified: 2026-05-20
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -42,6 +42,7 @@ Updated: 2026-05-16  Geng Xun added wrapper coverage for deep-match manifest exp
 Updated: 2026-05-16  Geng Xun added pipeline wrapper coverage for adaptive-routing profile forwarding.
 Updated: 2026-05-19  Geng Xun added regression coverage for deep matcher config path wrapper forwarding.
 Updated: 2026-05-19  Geng Xun aligned wrapper regression coverage for ImageMatch-only defaults, adaptive routing, and resolved deep matcher config paths.
+Updated: 2026-05-20  Geng Xun added preset-aware adaptive-routing forwarding coverage for deep preset maps loaded from config.
 """
 
 from __future__ import annotations
@@ -1758,6 +1759,74 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             )
 
         self.assertEqual(match_mock.call_args.kwargs["matcher_method"], "lightglue")
+
+    def test_pipeline_forwards_adaptive_routing_deep_presets_from_config(self):
+        fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
+        stdout = io.StringIO()
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "adaptive_routing_deep_presets": {
+                                "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
+                                "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
+                                "loftr": "examples/controlnet_construct/presets/loftr_default.json",
+                            }
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with (
+                patch("controlnet_construct.image_match.match_dom_pair_to_key_files", return_value=fake_result) as match_mock,
+                patch.object(sys, "stdout", stdout),
+            ):
+                image_match_main(
+                    [
+                        "--config",
+                        str(config_path),
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        "left.key",
+                        "right.key",
+                    ]
+                )
+
+        self.assertEqual(
+            match_mock.call_args.kwargs["adaptive_routing_deep_presets"],
+            {
+                "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
+                "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
+                "loftr": "examples/controlnet_construct/presets/loftr_default.json",
+            },
+        )
+
+    def test_adaptive_cascade_steps_keep_legacy_method_only_fallback_without_presets(self):
+        from controlnet_construct.image_match import _adaptive_cascade_steps_from_summary
+
+        steps = _adaptive_cascade_steps_from_summary(
+            {
+                "status": "routed",
+                "selected_initial_matcher": "flann",
+                "selected_deep_match_config_path": None,
+            },
+            initial_matcher="flann",
+            initial_deep_match_config_path=None,
+            adaptive_routing_deep_presets=None,
+        )
+
+        self.assertEqual(
+            steps,
+            (
+                {"matcher_method": "flann", "deep_match_config_path": None},
+                {"matcher_method": "lightglue", "deep_match_config_path": None},
+                {"matcher_method": "loftr", "deep_match_config_path": None},
+            ),
+        )
 
     def test_batch_wrapper_accepts_lightglue_in_help_text(self):
         content = Path("examples/controlnet_construct/run_image_match_batch_example.sh").read_text(encoding="utf-8")

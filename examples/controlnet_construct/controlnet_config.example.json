@@ -28,6 +28,11 @@
     "deep_matcher_config_path": null,
     "enable_adaptive_routing": false,
     "adaptive_routing_profile": "balanced",
+    "adaptive_routing_deep_presets": {
+      "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
+      "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
+      "loftr": "examples/controlnet_construct/presets/loftr_default.json"
+    },
     "ratio_test": 0.75,
     "max_features": 1000,
     "sift_octave_layers": 3,

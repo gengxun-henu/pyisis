@@ -570,6 +570,22 @@ def workspace_test_data_path(*parts):
     return PROJECT_ROOT/ "tests" / "data" / Path(*parts)
 
 
+def write_synthetic_stereo_lists(original_list, dom_list, input_dir):
+    input_dir = Path(input_dir)
+    input_dir.mkdir(parents=True, exist_ok=True)
+
+    left_cube = input_dir / "left.cub"
+    right_cube = input_dir / "right.cub"
+    left_dom = input_dir / "left_dom.cub"
+    right_dom = input_dir / "right_dom.cub"
+
+    for path in (left_cube, right_cube, left_dom, right_dom):
+        path.write_text("synthetic input\n", encoding="utf-8")
+
+    Path(original_list).write_text(f"{left_cube.name}\n{right_cube.name}\n", encoding="utf-8")
+    Path(dom_list).write_text(f"{left_dom.resolve()}\n{right_dom.resolve()}\n", encoding="utf-8")
+
+
 def close_cube_quietly(cube, remove=False):
     if cube is None:
         return

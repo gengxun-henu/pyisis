@@ -66,7 +66,7 @@ UNIT_TEST_DIR = Path(__file__).resolve().parent
 if str(UNIT_TEST_DIR) not in sys.path:
     sys.path.insert(0, str(UNIT_TEST_DIR))
 
-from _unit_test_support import ip, temporary_directory, workspace_test_data_path
+from _unit_test_support import ip, temporary_directory, workspace_test_data_path, write_synthetic_stereo_lists
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -214,8 +214,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             config_path.write_text(
                 json.dumps(
                     {
@@ -383,8 +382,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             config_path.write_text(
                 json.dumps(
                     {
@@ -554,8 +552,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             config_path.write_text(
                 json.dumps(
                     {
@@ -711,8 +708,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
 
             fake_python_dispatcher.write_text(
@@ -823,8 +819,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
             config_path.write_text(
                 json.dumps(
@@ -947,8 +942,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
             config_path.write_text(
                 json.dumps(
@@ -1215,8 +1209,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
             config_path.write_text(
                 json.dumps(
@@ -1369,8 +1362,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             config_path.write_text(
                 json.dumps(
                     {
@@ -1519,8 +1511,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             config_path.write_text(
                 json.dumps(
                     {
@@ -1918,8 +1909,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
 
             fake_python_dispatcher.write_text(
@@ -2032,8 +2022,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python = temp_dir / "fake_python"
             expected_resolved_config = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
             config_path.write_text(
                 json.dumps(
@@ -2146,8 +2135,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
             config_path.write_text(
                 json.dumps(
@@ -2262,8 +2250,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
             expected_resolved_config.write_text(
                 (PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json").read_text(encoding="utf-8"),
@@ -2378,8 +2365,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
             config_path.write_text(
                 json.dumps(
@@ -2489,8 +2475,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             config_path = temp_dir / "controlnet_config.json"
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             config_path.write_text(
                 json.dumps(
                     {
@@ -2719,8 +2704,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             config_path = temp_dir / "controlnet_config.json"
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             config_path.write_text(
                 json.dumps(
                     {
@@ -2944,8 +2928,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python = temp_dir / "fake_python"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             config_path.write_text(
                 json.dumps(
                     {
@@ -3090,8 +3073,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             fake_python = temp_dir / "fake_python"
             post_merge_output = work_dir / "merge" / "dom_matching_merged_dedup.net"
 
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            dom_list.write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
             config_path.write_text(
                 json.dumps(
                     {

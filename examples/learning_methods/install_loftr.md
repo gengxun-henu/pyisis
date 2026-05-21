@@ -13,10 +13,10 @@ copilot-instructions.md
 README.md
 README.zh-CN.md
 
-而你当前 loftr_simple.py 需要的核心依赖就是：
+而你当前 `test-loftr.py` 需要的核心依赖就是：
 
 torch
-from kornia.feature import LoFTR, default_cfg
+from kornia.feature import LoFTR
 直接照着执行
 1) 激活目标环境
 conda activate asp360_new
@@ -31,10 +31,10 @@ python -m pip install "kornia[loftr]"
 4) 验证安装结果
 python -c "import torch; print('torch ok:', torch.__version__)"
 python -c "import kornia; print('kornia ok:', kornia.__version__)"
-python -c "from kornia.feature import LoFTR, default_cfg; print('LoFTR ok')"
+python -c "from kornia.feature import LoFTR; print('LoFTR ok')"
 
 5) 再跑你的脚本
-python /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/examples/experiment_methods/loftr_simple.py
+python /home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/examples/learning_methods/test-loftr.py
 
 
 最推荐的安装思路
@@ -122,7 +122,7 @@ Relevant files
 deep_frontends.py — 现有 SuperPointFrontend、LoFTRFrontend 与可选 torch 依赖处理。
 deep_matchers.py — 现有 LoFTRMatcher / LightGlueMatcher / SuperGlueMatcher 包装层。
 deep_adapter.py — 深度前端与匹配器路由入口，适合作为 Torch 环境匹配脚本的核心复用点。
-loftr_simple.py — 最小 LoFTR 示例，可作为 torch_sp 安装验证样板。
+test-loftr.py — 最小 LoFTR 导入/初始化 smoke test，可作为 torch_sp 安装验证样板。
 isis_stereo_dem.py — 已有 from-key 消费链路，是 .key 桥接格式的最佳下游目标。
 image_match.py — 现有影像匹配 CLI，总体流程和输出组织可作为 Env A 导出/消费的参考。
 bind_low_level_cube_io.cpp — Isis.Cube / Isis.Brick / Isis.Buffer 绑定来源，用于确认 Cube 数组导出能力。
@@ -131,7 +131,7 @@ Verification
 
 在 asp360_new 中验证基础能力：运行 /home/gengxun/miniconda3/envs/asp360_new/bin/python -c "import isis_pybind as ip; print(hasattr(ip, 'Cube'), hasattr(ip, 'TiffExporter'))"，确认不依赖 torch 也能读 Cube / 导出图。
 在 torch_sp 中验证深度能力：运行 python -c "import torch, kornia; from kornia.feature import LoFTR; print(torch.__version__, kornia.__version__)"。
-用 loftr_simple.py 在 torch_sp 中做最小演示，确认新环境本身能完成一对普通图像匹配。
+用 test-loftr.py 在 torch_sp 中做最小演示，确认新环境本身能够导入并初始化 LoFTR。
 用一个真实左右 Cube 样本在 asp360_new 中导出 left.png / right.png，再在 torch_sp 中生成 left.key / right.key，最后在 asp360_new 中走 examples/dem_extract/isis_stereo_dem.py from-key ... 做端到端最小闭环。
 若首版只做 SuperPoint 而非 LoFTR，额外验证关键点数量、匹配点数量和回写 .key 后的左右点数一致，避免下游几何阶段因为点对错位失败。
 Decisions

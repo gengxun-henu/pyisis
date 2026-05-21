@@ -20,7 +20,7 @@ UNIT_TEST_DIR = Path(__file__).resolve().parent
 if str(UNIT_TEST_DIR) not in sys.path:
     sys.path.insert(0, str(UNIT_TEST_DIR))
 
-from _unit_test_support import temporary_directory
+from _unit_test_support import temporary_directory, write_synthetic_stereo_lists
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -69,8 +69,7 @@ class DeepMatchPipelineSmokeUnitTest(unittest.TestCase):
             work_dir.mkdir()
             manifest_dir.mkdir()
 
-            (work_dir / "original_images.lis").write_text("left.cub\nright.cub\n", encoding="utf-8")
-            (work_dir / "doms.lis").write_text("left_dom.cub\nright_dom.cub\n", encoding="utf-8")
+            write_synthetic_stereo_lists(work_dir / "original_images.lis", work_dir / "doms.lis", work_dir / "inputs")
             (work_dir / "images_overlap.lis").write_text("left.cub,right.cub\n", encoding="utf-8")
 
             pair_manifest_dir = manifest_dir / "left__right"

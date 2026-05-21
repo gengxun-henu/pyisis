@@ -10,6 +10,7 @@ The workflow avoids importing heavy deep-learning dependencies inside `asp360_ne
 ## Directory roles
 
 - `run_deep_match_manifest.py` — reads an exported `tasks.json`, runs a deep matcher, and writes standardized `.npz` result files.
+- `test-lightglue.py`, `test-loftr.py` — minimal import-and-initialize smoke tests for checking whether LightGlue / LoFTR can be introduced into the current environment.
 - `run-lightglue.py`, `run-loftr.py`, and related scripts — standalone two-image experiments and local matcher diagnostics.
 - `sweep_lightglue_params.py`, `sweep_loftr_params.py` — parameter sweep utilities. Generated CSV output belongs in `sweep_results/` and is ignored by default.
 
@@ -107,6 +108,13 @@ For focused local validation in `asp360_new`, prefer:
 python -m unittest \
   tests.unitTest.image_match_deep_manifest_unit_test \
   tests.unitTest.learning_methods_deep_manifest_runner_unit_test
+```
+
+For lightweight deep-matcher smoke checks, run the example scripts directly:
+
+```bash
+python examples/learning_methods/test-lightglue.py
+python examples/learning_methods/test-loftr.py
 ```
 
 For repository-level validation, use the standard project script when appropriate:

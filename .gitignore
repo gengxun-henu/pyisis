@@ -21,11 +21,14 @@ UNIT_TEST_FAILURE_ANALYSIS.md
 learning/
 python/online_platform/
 nouse/
+reference/NO-USE-isis_headers9.0.0/
 docs/paper_pyisis_module_architecture.md
 docs/paper_appendix_pybind_camera_model.md
 tests/unitTest/controlnet_construct_dom2ori_unit_test*
 left_dom.cub
 right_dom.cub
-tests/unitTest/generated_reports/*
+tests/unitTest/generated_reports/
 print.prt
 examples/learning_methods/sweep_results/
+paper_use/
+python/online_platform/

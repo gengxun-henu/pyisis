@@ -719,11 +719,11 @@ run_step_2_image_match_batch() {
     local match_args=(
       "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/image_match/image_match.py"
       --config "$CONFIG_PATH"
-      --omit-tile-details
       "${dom_by_original[$left]}"
       "${dom_by_original[$right]}"
       "$DOM_KEYS_DIR/${pair_tag}_A.key"
       "$DOM_KEYS_DIR/${pair_tag}_B.key"
+      --omit-tile-details
       --metadata-output "$MATCH_METADATA_DIR/${pair_tag}.json"
       --result-output "$match_result_path"
       --match-visualization-output-dir "$PRE_RANSAC_MATCH_VIZ_DIR"

@@ -251,6 +251,69 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
             device_options={"prefer_gpu": False, "dtype": "float32", "batch_inference": True},
         )
 
+    def test_deep_matcher_adapter_uses_official_lightglue_frontend_when_backend_is_official(self):
+        runtime = SimpleNamespace(
+            prefer_gpu=False,
+            matcher_method="lightglue",
+            feature_extractor_method="disk",
+            matcher_options={"backend": "official", "filter_threshold": 0.05},
+            feature_options={"max_features": 64},
+            device_options={"prefer_gpu": False, "dtype": "float32"},
+        )
+        matcher = _CapturingFeatureMatcher()
+        frontend = mock.Mock()
+        left_features = {
+            "keypoints": np.array([[1.0, 1.0], [4.0, 4.0]], dtype=np.float32),
+            "descriptors": np.array([[10.0, 11.0], [20.0, 21.0]], dtype=np.float32),
+            "scales": np.array([1.5, 2.5], dtype=np.float32),
+            "image_size": np.array([8.0, 8.0], dtype=np.float32),
+            "scores": np.array([0.1, 0.2], dtype=np.float32),
+        }
+        right_features = {
+            "keypoints": np.array([[2.0, 2.0], [5.0, 5.0]], dtype=np.float32),
+            "descriptors": np.array([[12.0, 13.0], [22.0, 23.0]], dtype=np.float32),
+            "scales": np.array([3.5, 4.5], dtype=np.float32),
+            "image_size": np.array([8.0, 8.0], dtype=np.float32),
+            "scores": np.array([0.4, 0.5], dtype=np.float32),
+        }
+        frontend.extract.side_effect = [left_features, right_features]
+        left_mask = np.zeros((8, 8), dtype=bool)
+        left_mask[4, 4] = True
+
+        with mock.patch("image_match.deep_adapter.OfficialLightGlueFrontend", return_value=frontend) as frontend_constructor, mock.patch(
+            "image_match.deep_adapter.build_deep_matcher",
+            return_value=matcher,
+        ) as build_matcher_mock:
+            adapter = DeepMatcherAdapter(prefer_gpu=True, runtime_config=runtime)
+            adapter.match_pair(
+                matcher_method="lightglue",
+                left_image=np.zeros((8, 8), dtype=np.float32),
+                right_image=np.zeros((8, 8), dtype=np.float32),
+                left_mask=left_mask,
+            )
+
+        frontend_constructor.assert_called_once_with(
+            feature_extractor_method="disk",
+            feature_options={"max_features": 64},
+        )
+        self.assertEqual(frontend.extract.call_count, 2)
+        for extract_call in frontend.extract.call_args_list:
+            np.testing.assert_allclose(extract_call.args[0], np.zeros((8, 8), dtype=np.float32))
+            self.assertEqual(extract_call.kwargs["device"], "cpu")
+        build_matcher_mock.assert_called_once_with(
+            "lightglue",
+            device="cpu",
+            feature_extractor_method="disk",
+            matcher_options={"backend": "official", "filter_threshold": 0.05},
+            feature_options={"max_features": 64},
+            device_options={"prefer_gpu": False, "dtype": "float32"},
+        )
+        self.assertEqual(len(matcher.calls), 1)
+        np.testing.assert_allclose(matcher.calls[0]["features_left"]["keypoints"], np.array([[1.0, 1.0]], dtype=np.float32))
+        np.testing.assert_allclose(matcher.calls[0]["features_left"]["scales"], np.array([1.5], dtype=np.float32))
+        np.testing.assert_allclose(matcher.calls[0]["features_left"]["image_size"], left_features["image_size"])
+        np.testing.assert_allclose(matcher.calls[0]["features_right"]["keypoints"], right_features["keypoints"])
+
     def test_image_match_lightglue_applies_dtype_and_surfaces_ignored_device_options(self):
         deep_matchers_module = __import__("image_match.deep_matchers", fromlist=["build_deep_matcher"])
         lightglue_backend = _DTypeTrackingModule()

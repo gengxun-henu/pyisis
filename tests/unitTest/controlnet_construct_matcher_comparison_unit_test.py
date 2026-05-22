@@ -106,6 +106,49 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "requires deep_match_config_path"):
                 matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
 
+    def test_load_experiment_config_rejects_unsupported_matcher_method(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_minimal_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["methods"] = [{"label": "bad_matcher", "matcher_method": "orb"}]
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "Unsupported matcher_method.*orb.*bf.*flann.*superglue.*lightglue.*loftr"):
+                matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+
+    def test_load_experiment_config_rejects_string_false_for_skip_final_merge(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_minimal_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["execution"]["skip_final_merge"] = "false"
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "skip_final_merge must be a boolean"):
+                matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+
+    def test_load_experiment_config_prefers_existing_config_relative_path(self):
+        with temporary_directory() as temp_dir:
+            config_dir = temp_dir / "config_dir"
+            config_dir.mkdir()
+            original_images = config_dir / "original_images.lis"
+            original_images.write_text("config relative input\n", encoding="utf-8")
+            config_path = config_dir / "experiment.json"
+            _write_minimal_config(config_path)
+
+            config = matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+
+        self.assertEqual(config.inputs.original_images_list, original_images.resolve())
+
+    def test_example_config_loads_with_seven_methods(self):
+        config_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/matcher_comparison.example.json"
+
+        config = matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+
+        self.assertEqual(config.run_id, "lro_batch_20260522")
+        self.assertEqual(len(config.methods), 7)
+
 
 if __name__ == "__main__":
     unittest.main()

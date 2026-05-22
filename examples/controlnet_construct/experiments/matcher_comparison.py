@@ -13,6 +13,7 @@ from typing import Any
 
 
 DEEP_MATCHER_METHODS = {"lightglue", "loftr", "superglue"}
+SUPPORTED_MATCHER_METHODS = ("bf", "flann", "superglue", "lightglue", "loftr")
 
 
 @dataclass(frozen=True)
@@ -40,7 +41,7 @@ class MethodConfig:
 
     @property
     def is_deep_method(self) -> bool:
-        return self.matcher_method in DEEP_MATCHER_METHODS
+        return self.matcher_method.strip().lower() in DEEP_MATCHER_METHODS
 
 
 @dataclass(frozen=True)
@@ -111,12 +112,20 @@ def load_experiment_config(config_path: str | Path, *, repo_root: str | Path | N
     if not isinstance(execution_payload, dict):
         raise ValueError("execution must be an object")
     execution = ExecutionConfig(
-        asp360_env=execution_payload.get("asp360_env", ExecutionConfig.asp360_env),
-        deep_learning_env=execution_payload.get("deep_learning_env", ExecutionConfig.deep_learning_env),
-        device=execution_payload.get("device", ExecutionConfig.device),
-        skip_final_merge=execution_payload.get("skip_final_merge", ExecutionConfig.skip_final_merge),
-        keep_going=execution_payload.get("keep_going", ExecutionConfig.keep_going),
-        resume=execution_payload.get("resume", ExecutionConfig.resume),
+        asp360_env=_optional_string(execution_payload, "asp360_env", ExecutionConfig.asp360_env),
+        deep_learning_env=_optional_string(
+            execution_payload,
+            "deep_learning_env",
+            ExecutionConfig.deep_learning_env,
+        ),
+        device=_optional_string(execution_payload, "device", ExecutionConfig.device),
+        skip_final_merge=_optional_bool(
+            execution_payload,
+            "skip_final_merge",
+            ExecutionConfig.skip_final_merge,
+        ),
+        keep_going=_optional_bool(execution_payload, "keep_going", ExecutionConfig.keep_going),
+        resume=_optional_bool(execution_payload, "resume", ExecutionConfig.resume),
     )
 
     methods_payload = payload.get("methods")
@@ -135,6 +144,9 @@ def load_experiment_config(config_path: str | Path, *, repo_root: str | Path | N
         labels.add(label)
 
         matcher_method = _require_string(method_payload, "matcher_method").lower()
+        if matcher_method not in SUPPORTED_MATCHER_METHODS:
+            supported = ", ".join(SUPPORTED_MATCHER_METHODS)
+            raise ValueError(f"Unsupported matcher_method {matcher_method!r}; supported values: {supported}")
         deep_match_config_path = method_payload.get("deep_match_config_path")
         resolved_deep_match_config_path = None
         if deep_match_config_path is not None:
@@ -157,7 +169,7 @@ def load_experiment_config(config_path: str | Path, *, repo_root: str | Path | N
 
     return ExperimentConfig(
         run_id=run_id.strip(),
-        description=payload.get("description", ""),
+        description=_optional_string(payload, "description", ""),
         inputs=inputs,
         execution=execution,
         methods=tuple(methods),
@@ -170,3 +182,17 @@ def _require_string(payload: dict[str, Any], key: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"{key} must be a non-empty string")
     return value.strip()
+
+
+def _optional_string(payload: dict[str, Any], key: str, default: str) -> str:
+    value = payload.get(key, default)
+    if not isinstance(value, str):
+        raise ValueError(f"{key} must be a string")
+    return value.strip()
+
+
+def _optional_bool(payload: dict[str, Any], key: str, default: bool) -> bool:
+    value = payload.get(key, default)
+    if not isinstance(value, bool):
+        raise ValueError(f"{key} must be a boolean")
+    return value

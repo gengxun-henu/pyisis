@@ -483,6 +483,33 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
                 {"sift_flann": "dry_run", "loftr": "dry_run"},
             )
 
+    def test_run_experiment_dry_run_removes_stale_report_outputs_only(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+            reports_dir = temp_dir / "out/unit_run/reports"
+            reports_dir.mkdir(parents=True)
+            stale_report_names = ("summary.json", "summary.csv", "summary.md", "failures.json")
+            for report_name in stale_report_names:
+                (reports_dir / report_name).write_text(f"stale {report_name}\n", encoding="utf-8")
+            unrelated_report = reports_dir / "user_notes.txt"
+            unrelated_report.write_text("keep this\n", encoding="utf-8")
+
+            result = matcher_comparison.run_experiment(
+                config_path,
+                output_root=temp_dir / "out",
+                repo_root=PROJECT_ROOT,
+                dry_run=True,
+                only_labels={"sift_flann"},
+                resume=False,
+                keep_going=True,
+            )
+
+            self.assertEqual(result.run_dir, temp_dir / "out/unit_run")
+            for report_name in stale_report_names:
+                self.assertFalse((reports_dir / report_name).exists(), report_name)
+            self.assertEqual(unrelated_report.read_text(encoding="utf-8"), "keep this\n")
+
     def test_run_experiment_example_config_dry_run_allows_missing_input_lists(self):
         with temporary_directory() as temp_dir:
             config_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/matcher_comparison.example.json"

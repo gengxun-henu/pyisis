@@ -36,6 +36,7 @@ REPORT_COLUMNS = (
     "stdout_log",
     "stderr_log",
 )
+REPORT_OUTPUT_NAMES = ("summary.json", "summary.csv", "summary.md", "failures.json")
 SUCCESS_STATUSES = {"success", "skipped_success"}
 
 
@@ -551,6 +552,14 @@ def write_reports(reports_dir: str | Path, *, run_id: str, metrics: list[dict[st
     (reports_dir / "failures.json").write_text(json.dumps(failures_payload, indent=2) + "\n", encoding="utf-8")
 
 
+def _remove_report_outputs(reports_dir: str | Path) -> None:
+    reports_dir = Path(reports_dir).expanduser()
+    for report_name in REPORT_OUTPUT_NAMES:
+        report_path = reports_dir / report_name
+        if report_path.is_file() or report_path.is_symlink():
+            report_path.unlink()
+
+
 def _method_manifest_entry(
     method: MethodConfig,
     method_dir: str | Path,
@@ -614,6 +623,8 @@ def run_experiment(
     reports_dir = run_dir / "reports"
     methods_dir.mkdir(parents=True, exist_ok=True)
     reports_dir.mkdir(parents=True, exist_ok=True)
+    if dry_run:
+        _remove_report_outputs(reports_dir)
 
     shutil.copyfile(config.config_path, run_dir / "experiment_config.json")
 

@@ -330,22 +330,28 @@ def execute_method(*, label: str, command: list[str], method_dir: str | Path) ->
 
     started_at_utc = _utc_now_iso()
     start_time = time.monotonic()
-    result = subprocess.run(
-        command,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
+    return_code: int | None = None
+    error: OSError | None = None
+    with stdout_log.open("w", encoding="utf-8") as stdout_file, stderr_log.open("w", encoding="utf-8") as stderr_file:
+        try:
+            result = subprocess.run(
+                command,
+                stdout=stdout_file,
+                stderr=stderr_file,
+                text=True,
+                check=False,
+            )
+            return_code = result.returncode
+        except OSError as launch_error:
+            error = launch_error
+            stderr_file.write(f"{type(launch_error).__name__}: {launch_error}\n")
     total_wall_seconds = time.monotonic() - start_time
     finished_at_utc = _utc_now_iso()
 
-    stdout_log.write_text(result.stdout, encoding="utf-8")
-    stderr_log.write_text(result.stderr, encoding="utf-8")
-
     metrics = {
         "label": label,
-        "status": "success" if result.returncode == 0 else "failed",
-        "return_code": result.returncode,
+        "status": "success" if return_code == 0 else "failed",
+        "return_code": return_code,
         "started_at_utc": started_at_utc,
         "finished_at_utc": finished_at_utc,
         "total_wall_seconds": total_wall_seconds,
@@ -353,6 +359,9 @@ def execute_method(*, label: str, command: list[str], method_dir: str | Path) ->
         "stdout_log": str(stdout_log),
         "stderr_log": str(stderr_log),
     }
+    if error is not None:
+        metrics["error_type"] = type(error).__name__
+        metrics["error_message"] = str(error)
     metrics_path.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
     return metrics
 

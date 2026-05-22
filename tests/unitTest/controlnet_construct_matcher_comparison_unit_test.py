@@ -627,6 +627,40 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertEqual([method["label"] for method in manifest["methods"]], ["sift_flann"])
             self.assertEqual(manifest["methods"][0]["status"], "failed")
 
+    def test_run_experiment_non_dry_run_keeps_going_after_failure_when_enabled(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+
+            def fake_build_method_command(config, method, *, method_dir, repo_root, keep_going=None):
+                if method.label == "sift_flann":
+                    return [sys.executable, "-c", "import sys; print('bad', file=sys.stderr); sys.exit(7)"]
+                return self._fake_command_for_method(method)
+
+            with mock.patch.object(
+                matcher_comparison,
+                "build_method_command",
+                side_effect=fake_build_method_command,
+            ):
+                result = matcher_comparison.run_experiment(
+                    config_path,
+                    output_root=temp_dir / "out",
+                    repo_root=PROJECT_ROOT,
+                    dry_run=False,
+                    only_labels=None,
+                    resume=False,
+                    keep_going=True,
+                )
+
+            run_dir = result.run_dir
+            self.assertIn("bad", (run_dir / "methods/sift_flann/stderr.log").read_text(encoding="utf-8"))
+            self.assertIn("fake loftr success", (run_dir / "methods/loftr/stdout.log").read_text(encoding="utf-8"))
+            manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                {method["label"]: method["status"] for method in manifest["methods"]},
+                {"sift_flann": "failed", "loftr": "success"},
+            )
+
     def test_run_matcher_comparison_script_exec_help(self):
         script_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/run_matcher_comparison.py"
         self.assertTrue(os.access(script_path, os.X_OK))
@@ -682,6 +716,27 @@ class MatcherComparisonExecutionUnitTest(unittest.TestCase):
             self.assertEqual(metrics["status"], "failed")
             self.assertEqual(metrics["return_code"], 7)
             self.assertIn("bad", (method_dir / "stderr.log").read_text(encoding="utf-8"))
+
+    def test_execute_method_writes_failed_metrics_when_launch_fails(self):
+        with temporary_directory() as temp_dir:
+            method_dir = temp_dir / "method"
+            command = [str(temp_dir / "missing_executable")]
+
+            metrics = matcher_comparison.execute_method(
+                label="fake_launch_failure",
+                command=command,
+                method_dir=method_dir,
+            )
+
+            self.assertEqual(metrics["status"], "failed")
+            self.assertIsNone(metrics["return_code"])
+            self.assertEqual(metrics["error_type"], "FileNotFoundError")
+            stderr_text = (method_dir / "stderr.log").read_text(encoding="utf-8")
+            self.assertIn("FileNotFoundError", stderr_text)
+            self.assertIn(str(temp_dir / "missing_executable"), stderr_text)
+            metrics_payload = json.loads((method_dir / "metrics.json").read_text(encoding="utf-8"))
+            self.assertEqual(metrics_payload["status"], "failed")
+            self.assertEqual(metrics_payload["error_type"], "FileNotFoundError")
 
 
 if __name__ == "__main__":

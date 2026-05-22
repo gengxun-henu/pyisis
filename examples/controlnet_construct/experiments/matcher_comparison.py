@@ -13,7 +13,7 @@ from typing import Any
 
 
 DEEP_MATCHER_METHODS = {"lightglue", "loftr", "superglue"}
-SUPPORTED_MATCHER_METHODS = ("bf", "flann", "superglue", "lightglue", "loftr")
+SUPPORTED_MATCHER_METHODS = ("bf", "flann", "superpoint", "superglue", "lightglue", "loftr")
 
 
 @dataclass(frozen=True)

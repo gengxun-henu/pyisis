@@ -114,8 +114,26 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
             payload["methods"] = [{"label": "bad_matcher", "matcher_method": "orb"}]
             config_path.write_text(json.dumps(payload), encoding="utf-8")
 
-            with self.assertRaisesRegex(ValueError, "Unsupported matcher_method.*orb.*bf.*flann.*superglue.*lightglue.*loftr"):
+            with self.assertRaisesRegex(
+                ValueError,
+                "Unsupported matcher_method.*orb.*bf.*flann.*superpoint.*superglue.*lightglue.*loftr",
+            ):
                 matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+
+    def test_load_experiment_config_accepts_superpoint_without_deep_preset(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_minimal_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["methods"] = [{"label": "superpoint_baseline", "matcher_method": "superpoint"}]
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            config = matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+
+        self.assertEqual(config.methods[0].label, "superpoint_baseline")
+        self.assertEqual(config.methods[0].matcher_method, "superpoint")
+        self.assertIsNone(config.methods[0].deep_match_config_path)
+        self.assertFalse(config.methods[0].is_deep_method)
 
     def test_load_experiment_config_rejects_string_false_for_skip_final_merge(self):
         with temporary_directory() as temp_dir:

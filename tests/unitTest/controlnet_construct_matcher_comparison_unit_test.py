@@ -399,6 +399,8 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertFalse((result.run_dir / "methods/loftr/stdout.log").exists())
             manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
             self.assertTrue(manifest["dry_run"])
+            self.assertEqual(result.status, "dry_run")
+            self.assertEqual(manifest["status"], "dry_run")
             self.assertFalse(manifest["resume"])
             self.assertTrue(manifest["keep_going"])
             self.assertEqual(
@@ -590,6 +592,8 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertIn("fake loftr success", (loftr_dir / "stdout.log").read_text(encoding="utf-8"))
             manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
             self.assertFalse(manifest["dry_run"])
+            self.assertEqual(result.status, "success")
+            self.assertEqual(manifest["status"], "success")
             self.assertEqual(
                 {method["label"]: method["status"] for method in manifest["methods"]},
                 {"sift_flann": "success", "loftr": "success"},
@@ -610,7 +614,7 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
                 "build_method_command",
                 side_effect=fake_build_method_command,
             ):
-                matcher_comparison.run_experiment(
+                result = matcher_comparison.run_experiment(
                     config_path,
                     output_root=temp_dir / "out",
                     repo_root=PROJECT_ROOT,
@@ -624,6 +628,8 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertIn("bad", (run_dir / "methods/sift_flann/stderr.log").read_text(encoding="utf-8"))
             self.assertFalse((run_dir / "methods/loftr/command.sh").exists())
             manifest = json.loads((run_dir / "experiment_manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(result.status, "failed")
+            self.assertEqual(manifest["status"], "failed")
             self.assertEqual([method["label"] for method in manifest["methods"]], ["sift_flann"])
             self.assertEqual(manifest["methods"][0]["status"], "failed")
 
@@ -656,10 +662,96 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertIn("bad", (run_dir / "methods/sift_flann/stderr.log").read_text(encoding="utf-8"))
             self.assertIn("fake loftr success", (run_dir / "methods/loftr/stdout.log").read_text(encoding="utf-8"))
             manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(result.status, "failed")
+            self.assertEqual(manifest["status"], "failed")
             self.assertEqual(
                 {method["label"]: method["status"] for method in manifest["methods"]},
                 {"sift_flann": "failed", "loftr": "success"},
             )
+
+    def test_main_returns_nonzero_when_keep_going_run_has_failed_method(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+
+            def fake_build_method_command(config, method, *, method_dir, repo_root, keep_going=None):
+                if method.label == "sift_flann":
+                    return [sys.executable, "-c", "import sys; sys.exit(7)"]
+                return self._fake_command_for_method(method)
+
+            with mock.patch.object(
+                matcher_comparison,
+                "build_method_command",
+                side_effect=fake_build_method_command,
+            ):
+                return_code = matcher_comparison.main(
+                    [
+                        str(config_path),
+                        "--output-root",
+                        str(temp_dir / "out"),
+                        "--repo-root",
+                        str(PROJECT_ROOT),
+                        "--no-resume",
+                        "--keep-going",
+                    ]
+                )
+
+            self.assertEqual(return_code, 1)
+            manifest = json.loads((temp_dir / "out/unit_run/experiment_manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(manifest["status"], "failed")
+
+    def test_main_returns_nonzero_when_fail_fast_run_has_failed_method(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+
+            def fake_build_method_command(config, method, *, method_dir, repo_root, keep_going=None):
+                if method.label == "sift_flann":
+                    return [sys.executable, "-c", "import sys; sys.exit(7)"]
+                return self._fake_command_for_method(method)
+
+            with mock.patch.object(
+                matcher_comparison,
+                "build_method_command",
+                side_effect=fake_build_method_command,
+            ):
+                return_code = matcher_comparison.main(
+                    [
+                        str(config_path),
+                        "--output-root",
+                        str(temp_dir / "out"),
+                        "--repo-root",
+                        str(PROJECT_ROOT),
+                        "--no-resume",
+                        "--fail-fast",
+                    ]
+                )
+
+            self.assertEqual(return_code, 1)
+            manifest = json.loads((temp_dir / "out/unit_run/experiment_manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(manifest["status"], "failed")
+            self.assertEqual([method["label"] for method in manifest["methods"]], ["sift_flann"])
+
+    def test_main_returns_zero_for_dry_run_manifest_generation(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+
+            return_code = matcher_comparison.main(
+                [
+                    str(config_path),
+                    "--output-root",
+                    str(temp_dir / "out"),
+                    "--repo-root",
+                    str(PROJECT_ROOT),
+                    "--dry-run",
+                    "--no-resume",
+                ]
+            )
+
+            self.assertEqual(return_code, 0)
+            manifest = json.loads((temp_dir / "out/unit_run/experiment_manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(manifest["status"], "dry_run")
 
     def test_run_matcher_comparison_script_exec_help(self):
         script_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/run_matcher_comparison.py"

@@ -65,6 +65,7 @@ class ExperimentConfig:
 class ExperimentRunResult:
     run_dir: Path
     manifest_path: Path
+    status: str
 
 
 def _resolve_path(value: str | Path, base_dir: Path, repo_root: Path) -> Path:
@@ -388,6 +389,14 @@ def _method_manifest_entry(
     }
 
 
+def _experiment_status(*, dry_run: bool, method_entries: list[dict[str, Any]]) -> str:
+    if dry_run:
+        return "dry_run"
+    if any(method_entry.get("status") == "failed" for method_entry in method_entries):
+        return "failed"
+    return "success"
+
+
 def run_experiment(
     config_path: str | Path,
     *,
@@ -475,9 +484,11 @@ def run_experiment(
         )
         if not dry_run and status != "success" and not effective_keep_going:
             break
+    status = _experiment_status(dry_run=dry_run, method_entries=method_entries)
     manifest_path = run_dir / "experiment_manifest.json"
     manifest = {
         "run_id": config.run_id,
+        "status": status,
         "description": config.description,
         "created_at_utc": _utc_now_iso(),
         "dry_run": dry_run,
@@ -487,7 +498,7 @@ def run_experiment(
     }
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
 
-    return ExperimentRunResult(run_dir=run_dir, manifest_path=manifest_path)
+    return ExperimentRunResult(run_dir=run_dir, manifest_path=manifest_path, status=status)
 
 
 def build_argument_parser() -> argparse.ArgumentParser:
@@ -530,6 +541,8 @@ def main(argv: list[str] | None = None) -> int:
         keep_going=args.keep_going,
     )
     print(f"Experiment manifest: {result.manifest_path}")
+    if result.status == "failed":
+        return 1
     return 0
 
 

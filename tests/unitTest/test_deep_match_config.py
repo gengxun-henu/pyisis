@@ -2,6 +2,7 @@
 
 import json
 import tempfile
+import unittest
 from pathlib import Path
 from unittest.mock import patch
 import pytest
@@ -390,7 +391,7 @@ class TestDeepMatchConfigHelpers:
             assert check_deep_match_dependencies(runtime_config) == ["missing torch"]
 
 
-class TestPresetFiles:
+class TestPresetFiles(unittest.TestCase):
     """Verify all preset files are valid JSON and pass validation."""
 
     def _get_preset_files(self):
@@ -424,6 +425,25 @@ class TestPresetFiles:
             assert "feature_extractor" in config
             assert "matcher" in config
             assert config["matcher"]["method"] in ("superglue", "lightglue", "loftr")
+
+    def test_external_loftr_presets_exist_and_load(self):
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import load_deep_match_config
+
+        expected = {
+            "loftr_external_outdoor.json": "outdoor",
+            "loftr_external_indoor.json": "indoor",
+        }
+        presets_dir = DEEP_MATCH_CONFIG_PATH.parent / "presets"
+        for preset_name, model_type in expected.items():
+            with self.subTest(preset=preset_name):
+                config = load_deep_match_config(str(presets_dir / preset_name))
+                assert config["feature_extractor"]["method"] == "loftr"
+                assert config["feature_extractor"]["preprocess_mode"] == "pad"
+                assert config["matcher"]["method"] == "loftr"
+                assert config["matcher"]["backend"] == "external"
+                assert config["matcher"]["model_type"] == model_type
 
     def test_legacy_unsupported_presets_fail_validation(self):
         """Legacy non-SuperPoint matcher presets should fail until they declare a supported backend."""

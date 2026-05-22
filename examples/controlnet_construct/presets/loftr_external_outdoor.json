@@ -1,0 +1,24 @@
+{
+  "feature_extractor": {
+    "method": "loftr",
+    "preprocess_mode": "pad"
+  },
+  "matcher": {
+    "method": "loftr",
+    "backend": "external",
+    "model_type": "outdoor",
+    "temp_bug_fix": "auto",
+    "geometric_filter": "none",
+    "ransac_reproj_threshold": 3.0,
+    "ransac_confidence": 0.999,
+    "ransac_max_iters": 10000
+  },
+  "device": {
+    "prefer_gpu": true,
+    "dtype": "float32",
+    "batch_inference": false
+  },
+  "fallback": {
+    "on_error": "sift_flann"
+  }
+}

@@ -927,6 +927,86 @@ class MatcherComparisonExecutionUnitTest(unittest.TestCase):
             self.assertEqual(metrics_payload["status"], "success")
             self.assertEqual(metrics_payload["pair_count"], 2)
 
+    def test_execute_method_removes_stale_pipeline_outputs_before_run(self):
+        with temporary_directory() as temp_dir:
+            method_dir = temp_dir / "method"
+            reports_dir = method_dir / "work/reports"
+            pair_nets_dir = method_dir / "work/pair_nets"
+            merge_dir = method_dir / "work/merge"
+            reports_dir.mkdir(parents=True)
+            pair_nets_dir.mkdir(parents=True)
+            merge_dir.mkdir(parents=True)
+            stale_output_paths = (
+                reports_dir / "image_overlap_summary.json",
+                reports_dir / "controlnet_batch_summary.json",
+                reports_dir / "pipeline_timing.json",
+                pair_nets_dir / "stale_pair.net",
+                merge_dir / "dom_matching_merged.net",
+            )
+            for stale_output_path in stale_output_paths:
+                stale_output_path.write_text("stale\n", encoding="utf-8")
+            preserved_paths = (
+                method_dir / "command.sh",
+                method_dir / "stdout.previous.log",
+                method_dir / "work/reports/notes.txt",
+                method_dir / "work/pair_nets/notes.txt",
+                method_dir / "work/images/input.cub",
+            )
+            for preserved_path in preserved_paths:
+                preserved_path.parent.mkdir(parents=True, exist_ok=True)
+                preserved_path.write_text("keep\n", encoding="utf-8")
+
+            script = (
+                "from pathlib import Path\n"
+                "import json\n"
+                "import sys\n"
+                f"method_dir = Path({str(method_dir)!r})\n"
+                "stale_paths = [\n"
+                "    method_dir / 'work/reports/image_overlap_summary.json',\n"
+                "    method_dir / 'work/reports/controlnet_batch_summary.json',\n"
+                "    method_dir / 'work/reports/pipeline_timing.json',\n"
+                "    method_dir / 'work/pair_nets/stale_pair.net',\n"
+                "    method_dir / 'work/merge/dom_matching_merged.net',\n"
+                "]\n"
+                "remaining = [str(path) for path in stale_paths if path.exists()]\n"
+                "if remaining:\n"
+                "    print('stale outputs still present: ' + ', '.join(remaining), file=sys.stderr)\n"
+                "    sys.exit(9)\n"
+                "preserved_paths = [\n"
+                "    method_dir / 'command.sh',\n"
+                "    method_dir / 'stdout.previous.log',\n"
+                "    method_dir / 'work/reports/notes.txt',\n"
+                "    method_dir / 'work/pair_nets/notes.txt',\n"
+                "    method_dir / 'work/images/input.cub',\n"
+                "]\n"
+                "missing_preserved = [str(path) for path in preserved_paths if not path.exists()]\n"
+                "if missing_preserved:\n"
+                "    print('preserved files missing: ' + ', '.join(missing_preserved), file=sys.stderr)\n"
+                "    sys.exit(10)\n"
+                "reports_dir = method_dir / 'work/reports'\n"
+                "pair_nets_dir = method_dir / 'work/pair_nets'\n"
+                "merge_dir = method_dir / 'work/merge'\n"
+                "(reports_dir / 'image_overlap_summary.json').write_text(json.dumps({'pair_count': 1}), encoding='utf-8')\n"
+                "(reports_dir / 'controlnet_batch_summary.json').write_text(json.dumps({'total_final_control_point_count': 5}), encoding='utf-8')\n"
+                "(reports_dir / 'pipeline_timing.json').write_text(json.dumps({'total_seconds': 6}), encoding='utf-8')\n"
+                "(pair_nets_dir / 'fresh_pair.net').write_text('fresh\\n', encoding='utf-8')\n"
+                "(merge_dir / 'dom_matching_merged.net').write_text('fresh merged\\n', encoding='utf-8')\n"
+            )
+
+            metrics = matcher_comparison.execute_method(
+                label="fake_success",
+                command=[sys.executable, "-c", script],
+                method_dir=method_dir,
+            )
+
+            self.assertEqual(metrics["status"], "success")
+            self.assertEqual(metrics["pair_count"], 1)
+            self.assertEqual(metrics["pairwise_controlnet_count"], 1)
+            self.assertEqual(metrics["total_final_control_point_count"], 5)
+            self.assertEqual(metrics["pipeline_total_seconds"], 6)
+            for preserved_path in preserved_paths:
+                self.assertTrue(preserved_path.exists(), msg=str(preserved_path))
+
     def test_execute_method_writes_failed_metrics_and_logs(self):
         with temporary_directory() as temp_dir:
             method_dir = temp_dir / "method"
@@ -941,6 +1021,49 @@ class MatcherComparisonExecutionUnitTest(unittest.TestCase):
             self.assertEqual(metrics["status"], "failed")
             self.assertEqual(metrics["return_code"], 7)
             self.assertIn("bad", (method_dir / "stderr.log").read_text(encoding="utf-8"))
+
+    def test_execute_method_failed_run_does_not_report_stale_output_metrics(self):
+        with temporary_directory() as temp_dir:
+            method_dir = temp_dir / "method"
+            reports_dir = method_dir / "work/reports"
+            pair_nets_dir = method_dir / "work/pair_nets"
+            merge_dir = method_dir / "work/merge"
+            reports_dir.mkdir(parents=True)
+            pair_nets_dir.mkdir(parents=True)
+            merge_dir.mkdir(parents=True)
+            (reports_dir / "image_overlap_summary.json").write_text(
+                json.dumps({"pair_count": 3}),
+                encoding="utf-8",
+            )
+            (reports_dir / "controlnet_batch_summary.json").write_text(
+                json.dumps({"total_final_control_point_count": 21}),
+                encoding="utf-8",
+            )
+            (reports_dir / "pipeline_timing.json").write_text(
+                json.dumps({"total_seconds": 123}),
+                encoding="utf-8",
+            )
+            (pair_nets_dir / "stale_pair.net").write_text("stale\n", encoding="utf-8")
+            (merge_dir / "dom_matching_merged.net").write_text("stale merged\n", encoding="utf-8")
+            command = [sys.executable, "-c", "import sys; print('bad', file=sys.stderr); sys.exit(7)"]
+
+            metrics = matcher_comparison.execute_method(
+                label="fake_failure",
+                command=command,
+                method_dir=method_dir,
+            )
+
+            self.assertEqual(metrics["status"], "failed")
+            self.assertEqual(metrics["return_code"], 7)
+            self.assertEqual(metrics["pair_count"], None)
+            self.assertEqual(metrics["pairwise_controlnet_count"], 0)
+            self.assertFalse(metrics["merged_controlnet_exists"])
+            self.assertEqual(metrics["pipeline_total_seconds"], None)
+            self.assertEqual(metrics["total_final_control_point_count"], None)
+            self.assertIn("bad", (method_dir / "stderr.log").read_text(encoding="utf-8"))
+            metrics_payload = json.loads((method_dir / "metrics.json").read_text(encoding="utf-8"))
+            self.assertEqual(metrics_payload["status"], "failed")
+            self.assertEqual(metrics_payload["pair_count"], None)
 
     def test_execute_method_writes_failed_metrics_when_launch_fails(self):
         with temporary_directory() as temp_dir:

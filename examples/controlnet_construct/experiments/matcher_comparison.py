@@ -322,6 +322,26 @@ def _existing_success(metrics_path: str | Path, command: list[str]) -> bool:
     return isinstance(payload, dict) and payload.get("status") == "success" and payload.get("command") == command
 
 
+def _clear_collected_pipeline_outputs(method_dir: str | Path) -> None:
+    method_dir = Path(method_dir)
+    work_dir = method_dir / "work"
+    reports_dir = work_dir / "reports"
+    for output_path in (
+        reports_dir / "image_overlap_summary.json",
+        reports_dir / "controlnet_batch_summary.json",
+        reports_dir / "pipeline_timing.json",
+        work_dir / "merge/dom_matching_merged.net",
+    ):
+        if output_path.is_file() or output_path.is_symlink():
+            output_path.unlink()
+
+    pair_nets_dir = work_dir / "pair_nets"
+    if pair_nets_dir.exists():
+        for pair_net_path in pair_nets_dir.glob("*.net"):
+            if pair_net_path.is_file() or pair_net_path.is_symlink():
+                pair_net_path.unlink()
+
+
 def _read_json_if_present(path: Path, warnings: list[str]) -> dict[str, Any] | None:
     if not path.exists():
         warnings.append(f"missing: {path}")
@@ -416,6 +436,8 @@ def execute_method(*, label: str, command: list[str], method_dir: str | Path) ->
     stdout_log = method_dir / "stdout.log"
     stderr_log = method_dir / "stderr.log"
     metrics_path = method_dir / "metrics.json"
+
+    _clear_collected_pipeline_outputs(method_dir)
 
     started_at_utc = _utc_now_iso()
     start_time = time.monotonic()

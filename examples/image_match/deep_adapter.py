@@ -169,6 +169,8 @@ class DeepMatcherAdapter:
                     right_image=prepared["right"],
                     left_mask=prepared.get("left_mask"),
                     right_mask=prepared.get("right_mask"),
+                    left_meta=prepared.get("left_meta"),
+                    right_meta=prepared.get("right_meta"),
                     device=device,
                 )
         except DeepDependencyError as error:

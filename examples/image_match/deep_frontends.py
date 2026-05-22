@@ -245,7 +245,7 @@ class LoFTRFrontend:
 
         _require_kornia_feature(
             method="loftr",
-            feature_name="SuperPoint",
+            feature_name="LoFTR",
             install_hint="pip install \"kornia[loftr]\"",
         )
 

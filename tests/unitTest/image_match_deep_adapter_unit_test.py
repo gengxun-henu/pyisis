@@ -307,6 +307,29 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         self.assertEqual(prepared["left_meta"]["infer_size"], (8, 8))
         self.assertEqual(prepared["left_meta"]["scale"], (1.0, 1.0))
 
+    def test_kornia_loftr_frontend_requires_loftr_not_superpoint(self):
+        deep_frontends_module = __import__("image_match.deep_frontends", fromlist=["LoFTRFrontend"])
+        frontend = deep_frontends_module.LoFTRFrontend()
+        torch_module = _torch_frontend_stub()
+        kornia_feature_module = SimpleNamespace(LoFTR=object)
+        kornia_module = SimpleNamespace(feature=kornia_feature_module)
+
+        with mock.patch.dict(
+            sys.modules,
+            {"torch": torch_module, "kornia": kornia_module, "kornia.feature": kornia_feature_module},
+            clear=False,
+        ):
+            prepared = frontend.prepare(
+                np.ones((6, 6), dtype=np.float32),
+                np.ones((6, 6), dtype=np.float32),
+                device="cpu",
+            )
+
+        self.assertEqual(prepared["left"].shape, (1, 1, 6, 6))
+        self.assertEqual(prepared["right"].shape, (1, 1, 6, 6))
+        self.assertIsNone(prepared["left_mask"])
+        self.assertIsNone(prepared["right_mask"])
+
     def test_deep_matcher_adapter_rejects_invalid_runtime_config_early(self):
         runtime = SimpleNamespace(
             prefer_gpu=False,
@@ -423,6 +446,40 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         self.assertEqual(len(matcher.calls), 1)
         self.assertIs(matcher.calls[0]["left_mask"], prepared["left_mask"])
         self.assertIs(matcher.calls[0]["right_mask"], prepared["right_mask"])
+
+    def test_match_pair_passes_external_loftr_metadata_into_matcher(self):
+        runtime = SimpleNamespace(
+            prefer_gpu=False,
+            matcher_method="loftr",
+            feature_extractor_method="loftr",
+            matcher_options={"backend": "external", "top_k": 10},
+            feature_options={"preprocess_mode": "pad"},
+            device_options={"prefer_gpu": False, "dtype": "float32"},
+        )
+        adapter = DeepMatcherAdapter(prefer_gpu=True, runtime_config=runtime)
+        matcher = _CapturingLoFTRMatcher()
+        prepared = {
+            "left": object(),
+            "right": object(),
+            "left_mask": object(),
+            "right_mask": object(),
+            "left_meta": {"scale": (1.0, 1.0)},
+            "right_meta": {"scale": (2.0, 2.0)},
+        }
+
+        with mock.patch.object(adapter._loftr_frontend, "prepare", return_value=prepared), mock.patch(
+            "image_match.deep_adapter.build_deep_matcher",
+            return_value=matcher,
+        ):
+            adapter.match_pair(
+                matcher_method="loftr",
+                left_image=np.ones((6, 6), dtype=np.float32),
+                right_image=np.ones((6, 6), dtype=np.float32),
+            )
+
+        self.assertEqual(len(matcher.calls), 1)
+        self.assertIs(matcher.calls[0]["left_meta"], prepared["left_meta"])
+        self.assertIs(matcher.calls[0]["right_meta"], prepared["right_meta"])
 
 
 if __name__ == "__main__":

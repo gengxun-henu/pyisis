@@ -98,8 +98,9 @@ from datetime import datetime
 import json
 import os
 import sys
+import tempfile
 from pathlib import Path
-from types import ModuleType
+from types import ModuleType, SimpleNamespace
 import unittest
 from unittest import mock
 
@@ -1424,6 +1425,367 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         loftr_constructor.assert_called_once_with(pretrained="outdoor")
 
+    def test_external_loftr_matcher_loads_external_repo_checkpoint_and_config(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir) / "LoFTR"
+            (root / "src" / "loftr").mkdir(parents=True)
+            (root / "src" / "loftr" / "__init__.py").write_text("", encoding="utf-8")
+            checkpoint = root / "weights" / "outdoor.ckpt"
+            checkpoint.parent.mkdir()
+            checkpoint.write_bytes(b"stub")
+
+            loaded_state = {"state_dict": {"matcher.weight": object()}}
+            matcher_instance = _EvalToDeviceModule()
+            matcher_instance.load_state_dict = mock.Mock()
+            matcher_constructor = mock.Mock(return_value=matcher_instance)
+            loftr_module = _stub_module(
+                "src.loftr",
+                LoFTR=matcher_constructor,
+                default_cfg={"coarse": {"temp_bug_fix": False, "d_model": 256}, "match_coarse": {}, "resolution": (8, 2)},
+            )
+            torch_module = _stub_module("torch", float32="torch.float32", load=mock.Mock(return_value=loaded_state))
+
+            with mock.patch.dict(sys.modules, {"torch": torch_module, "src.loftr": loftr_module}, clear=False):
+                matcher = deep_matchers_module.build_deep_matcher(
+                    "loftr",
+                    device="cpu",
+                    feature_extractor_method="loftr",
+                    matcher_options={
+                        "backend": "external",
+                        "loftr_root": str(root),
+                        "checkpoint": str(checkpoint),
+                        "model_type": "outdoor",
+                        "temp_bug_fix": "true",
+                        "coarse_threshold": 0.3,
+                    },
+                    device_options={"dtype": "float32"},
+                )
+                matcher._load_matcher()
+
+        matcher_constructor.assert_called_once()
+        config = matcher_constructor.call_args.kwargs["config"]
+        self.assertIs(config["coarse"]["temp_bug_fix"], True)
+        self.assertAlmostEqual(config["match_coarse"]["thr"], 0.3)
+        torch_module.load.assert_called_once_with(checkpoint, map_location="cpu", weights_only=True)
+        matcher_instance.load_state_dict.assert_called_once_with(loaded_state["state_dict"], strict=True)
+
+    def test_external_loftr_matcher_filters_top_k_and_scales_points(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+
+        class _InferenceMode:
+            def __enter__(self):
+                return None
+
+            def __exit__(self, exc_type, exc, traceback):
+                return False
+
+        class _ExternalMatcher:
+            config = {"resolution": (8, 2), "coarse": {"d_model": 256, "temp_bug_fix": False}}
+            pos_encoding = SimpleNamespace(pe=np.zeros((1, 1, 8, 8), dtype=np.float32))
+
+            def __call__(self, batch):
+                batch["mkpts0_f"] = SimpleNamespace(detach=lambda: SimpleNamespace(cpu=lambda: SimpleNamespace(numpy=lambda: np.array([[1.0, 2.0], [3.0, 4.0], [5.0, 6.0]], dtype=np.float32))))
+                batch["mkpts1_f"] = SimpleNamespace(detach=lambda: SimpleNamespace(cpu=lambda: SimpleNamespace(numpy=lambda: np.array([[2.0, 3.0], [4.0, 5.0], [6.0, 7.0]], dtype=np.float32))))
+                batch["mconf"] = SimpleNamespace(detach=lambda: SimpleNamespace(cpu=lambda: SimpleNamespace(numpy=lambda: np.array([0.2, 0.9, 0.5], dtype=np.float32))))
+
+        matcher = deep_matchers_module.LoFTRMatcher(
+            device="cpu",
+            matcher_options={"backend": "external", "min_confidence": 0.3, "top_k": 1},
+        )
+        matcher._matcher = _ExternalMatcher()
+
+        torch_module = _stub_module("torch", inference_mode=lambda: _InferenceMode(), no_grad=lambda: _InferenceMode())
+        with mock.patch.object(matcher, "_load_matcher", return_value=(torch_module, matcher._matcher)):
+            left_points, right_points, scores = matcher.match(
+                left_image=object(),
+                right_image=object(),
+                left_meta={"scale": (2.0, 3.0)},
+                right_meta={"scale": (4.0, 5.0)},
+            )
+
+        np.testing.assert_allclose(left_points, np.array([[6.0, 12.0]], dtype=np.float32))
+        np.testing.assert_allclose(right_points, np.array([[16.0, 25.0]], dtype=np.float32))
+        np.testing.assert_allclose(scores, np.array([0.9], dtype=np.float32))
+
+    def test_external_loftr_matcher_downsamples_masks_to_coarse_resolution(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        captured_batches = []
+
+        class _InferenceMode:
+            def __enter__(self):
+                return None
+
+            def __exit__(self, exc_type, exc, traceback):
+                return False
+
+        class _TensorStub:
+            def __init__(self, array):
+                self.array = np.asarray(array)
+                self.shape = self.array.shape
+
+            def to(self, *args, **kwargs):
+                return self
+
+            def detach(self):
+                return self
+
+            def cpu(self):
+                return self
+
+            def numpy(self):
+                return self.array
+
+        class _ExternalMatcher:
+            config = {"resolution": (8, 2), "coarse": {"d_model": 256, "temp_bug_fix": False}}
+            pos_encoding = SimpleNamespace(pe=np.zeros((1, 1, 2, 3), dtype=np.float32))
+
+            def __call__(self, batch):
+                captured_batches.append(dict(batch))
+                batch["mkpts0_f"] = _TensorStub(np.zeros((0, 2), dtype=np.float32))
+                batch["mkpts1_f"] = _TensorStub(np.zeros((0, 2), dtype=np.float32))
+                batch["mconf"] = _TensorStub(np.zeros((0,), dtype=np.float32))
+
+        matcher = deep_matchers_module.LoFTRMatcher(
+            device="cpu",
+            matcher_options={"backend": "external"},
+        )
+        matcher._matcher = _ExternalMatcher()
+
+        torch_module = _stub_module("torch", inference_mode=lambda: _InferenceMode(), no_grad=lambda: _InferenceMode())
+        with mock.patch.object(matcher, "_load_matcher", return_value=(torch_module, matcher._matcher)):
+            matcher.match(
+                left_image=_TensorStub(np.zeros((1, 1, 16, 24), dtype=np.float32)),
+                right_image=_TensorStub(np.zeros((1, 1, 16, 24), dtype=np.float32)),
+                left_mask=_TensorStub(np.ones((16, 24), dtype=bool)),
+                right_mask=_TensorStub(np.ones((16, 24), dtype=bool)),
+            )
+
+        self.assertEqual(captured_batches[0]["mask0"].shape, (1, 2, 3))
+        self.assertEqual(captured_batches[0]["mask1"].shape, (1, 2, 3))
+
+    def test_external_loftr_matcher_applies_geometric_filter_before_top_k(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+
+        class _InferenceMode:
+            def __enter__(self):
+                return None
+
+            def __exit__(self, exc_type, exc, traceback):
+                return False
+
+        class _TensorStub:
+            def __init__(self, array):
+                self.array = np.asarray(array)
+                self.shape = self.array.shape
+
+            def detach(self):
+                return self
+
+            def cpu(self):
+                return self
+
+            def numpy(self):
+                return self.array
+
+        class _ExternalMatcher:
+            config = {"resolution": (8, 2), "coarse": {"d_model": 256, "temp_bug_fix": False}}
+            pos_encoding = SimpleNamespace(pe=np.zeros((1, 1, 8, 8), dtype=np.float32))
+
+            def __call__(self, batch):
+                batch["mkpts0_f"] = _TensorStub(np.array([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [1.0, 1.0]], dtype=np.float32))
+                batch["mkpts1_f"] = _TensorStub(np.array([[0.0, 0.0], [2.0, 0.0], [0.0, 2.0], [2.0, 2.0]], dtype=np.float32))
+                batch["mconf"] = _TensorStub(np.array([0.9, 0.8, 0.7, 0.6], dtype=np.float32))
+
+        matcher = deep_matchers_module.LoFTRMatcher(
+            device="cpu",
+            matcher_options={"backend": "external", "geometric_filter": "homography", "top_k": 1},
+        )
+        matcher._matcher = _ExternalMatcher()
+        torch_module = _stub_module("torch", inference_mode=lambda: _InferenceMode(), no_grad=lambda: _InferenceMode())
+        cv2_module = _stub_module(
+            "cv2",
+            RANSAC=8,
+            findHomography=mock.Mock(
+                return_value=(np.eye(3), np.array([[0], [1], [1], [1]], dtype=np.uint8))
+            ),
+        )
+
+        with mock.patch.dict(sys.modules, {"cv2": cv2_module}, clear=False), mock.patch.object(
+            matcher,
+            "_load_matcher",
+            return_value=(torch_module, matcher._matcher),
+        ):
+            left_points, right_points, scores = matcher.match(left_image=object(), right_image=object())
+
+        cv2_module.findHomography.assert_called_once()
+        np.testing.assert_allclose(left_points, np.array([[1.0, 0.0]], dtype=np.float32))
+        np.testing.assert_allclose(right_points, np.array([[2.0, 0.0]], dtype=np.float32))
+        np.testing.assert_allclose(scores, np.array([0.8], dtype=np.float32))
+
+    def test_external_loftr_import_reloads_stale_module_from_different_root(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            stale_root = Path(tmp_dir) / "stale" / "LoFTR"
+            root = Path(tmp_dir) / "fresh" / "LoFTR"
+            (stale_root / "src" / "loftr").mkdir(parents=True)
+            (root / "src" / "loftr").mkdir(parents=True)
+            (root / "src" / "loftr" / "__init__.py").write_text("", encoding="utf-8")
+            checkpoint = root / "weights" / "outdoor.ckpt"
+            checkpoint.parent.mkdir()
+            checkpoint.write_bytes(b"stub")
+
+            stale_module = _stub_module("src.loftr")
+            stale_module.__file__ = str(stale_root / "src" / "loftr" / "__init__.py")
+            fresh_matcher = _EvalToDeviceModule()
+            fresh_matcher.load_state_dict = mock.Mock()
+            fresh_module = _stub_module(
+                "src.loftr",
+                LoFTR=mock.Mock(return_value=fresh_matcher),
+                default_cfg={"coarse": {"temp_bug_fix": False, "d_model": 256}, "match_coarse": {}, "resolution": (8, 2)},
+            )
+            torch_module = _stub_module("torch", float32="torch.float32", load=mock.Mock(return_value={}))
+
+            with mock.patch.dict(sys.modules, {"torch": torch_module, "src.loftr": stale_module}, clear=False), mock.patch(
+                "importlib.import_module",
+                return_value=fresh_module,
+            ) as import_mock:
+                matcher = deep_matchers_module.LoFTRMatcher(
+                    device="cpu",
+                    matcher_options={"backend": "external", "loftr_root": str(root), "checkpoint": str(checkpoint)},
+                )
+                matcher._load_matcher()
+                self.assertIsNot(sys.modules.get("src.loftr"), stale_module)
+
+        import_mock.assert_called_once_with("src.loftr")
+        fresh_module.LoFTR.assert_called_once()
+
+    def test_external_loftr_import_error_includes_underlying_exception(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            root = Path(tmp_dir) / "LoFTR"
+            (root / "src" / "loftr").mkdir(parents=True)
+            (root / "src" / "loftr" / "__init__.py").write_text("", encoding="utf-8")
+            checkpoint = root / "weights" / "outdoor.ckpt"
+            checkpoint.parent.mkdir()
+            checkpoint.write_bytes(b"stub")
+            torch_module = _stub_module("torch", float32="torch.float32")
+
+            with mock.patch.dict(sys.modules, {"torch": torch_module}, clear=False), mock.patch(
+                "importlib.import_module",
+                side_effect=ImportError("No module named 'einops'"),
+            ):
+                matcher = deep_matchers_module.LoFTRMatcher(
+                    device="cpu",
+                    matcher_options={"backend": "external", "loftr_root": str(root), "checkpoint": str(checkpoint)},
+                )
+                with self.assertRaisesRegex(deep_matchers_module.DeepMatcherError, "einops"):
+                    matcher._load_matcher()
+
+    def test_external_loftr_position_encoding_resize_failure_is_reported(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+
+        class _TensorStub:
+            shape = (1, 1, 32, 32)
+
+        matcher = deep_matchers_module.LoFTRMatcher(
+            device="cpu",
+            matcher_options={"backend": "external"},
+        )
+        external_matcher = SimpleNamespace(
+            config={"resolution": (8, 2), "coarse": {"d_model": 256, "temp_bug_fix": False}},
+            pos_encoding=SimpleNamespace(pe=np.zeros((1, 1, 1, 1), dtype=np.float32)),
+        )
+        position_module = _stub_module(
+            "src.loftr.utils.position_encoding",
+            PositionEncodingSine=mock.Mock(side_effect=RuntimeError("position encoding failed")),
+        )
+
+        with mock.patch("importlib.import_module", return_value=position_module):
+            with self.assertRaisesRegex(deep_matchers_module.DeepMatcherError, "position encoding failed"):
+                matcher._ensure_external_position_encoding(
+                    torch=object(),
+                    matcher=external_matcher,
+                    batch={"image0": _TensorStub()},
+                )
+
+    def test_external_loftr_position_encoding_resize_preserves_dtype(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+
+        class _TensorStub:
+            shape = (1, 1, 32, 32)
+
+        class _PositionEncodingStub:
+            def __init__(self):
+                self.to_calls = []
+
+            def to(self, **kwargs):
+                self.to_calls.append(kwargs)
+                return self
+
+        position_encoding = _PositionEncodingStub()
+        matcher = deep_matchers_module.LoFTRMatcher(
+            device="cpu",
+            matcher_options={"backend": "external"},
+            device_options={"dtype": "float16"},
+        )
+        external_matcher = SimpleNamespace(
+            config={"resolution": (8, 2), "coarse": {"d_model": 256, "temp_bug_fix": False}},
+            pos_encoding=SimpleNamespace(pe=np.zeros((1, 1, 1, 1), dtype=np.float32)),
+        )
+        position_module = _stub_module(
+            "src.loftr.utils.position_encoding",
+            PositionEncodingSine=mock.Mock(return_value=position_encoding),
+        )
+        torch_module = _stub_module("torch", float16="torch.float16")
+
+        with mock.patch("importlib.import_module", return_value=position_module):
+            matcher._ensure_external_position_encoding(
+                torch=torch_module,
+                matcher=external_matcher,
+                batch={"image0": _TensorStub()},
+            )
+
+        self.assertEqual(position_encoding.to_calls, [{"device": "cpu", "dtype": "torch.float16"}])
+        self.assertIs(external_matcher.pos_encoding, position_encoding)
+
+    def test_external_loftr_position_encoding_resize_uses_larger_right_image(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+
+        class _LeftTensorStub:
+            shape = (1, 1, 16, 16)
+
+        class _RightTensorStub:
+            shape = (1, 1, 40, 56)
+
+        position_encoding = SimpleNamespace(to=lambda **_kwargs: position_encoding)
+        matcher = deep_matchers_module.LoFTRMatcher(
+            device="cpu",
+            matcher_options={"backend": "external"},
+        )
+        external_matcher = SimpleNamespace(
+            config={"resolution": (8, 2), "coarse": {"d_model": 256, "temp_bug_fix": False}},
+            pos_encoding=SimpleNamespace(pe=np.zeros((1, 1, 2, 2), dtype=np.float32)),
+        )
+        position_module = _stub_module(
+            "src.loftr.utils.position_encoding",
+            PositionEncodingSine=mock.Mock(return_value=position_encoding),
+        )
+        torch_module = _stub_module("torch")
+
+        with mock.patch("importlib.import_module", return_value=position_module):
+            matcher._ensure_external_position_encoding(
+                torch=torch_module,
+                matcher=external_matcher,
+                batch={"image0": _LeftTensorStub(), "image1": _RightTensorStub()},
+            )
+
+        position_module.PositionEncodingSine.assert_called_once_with(
+            256,
+            max_shape=(5, 7),
+            temp_bug_fix=False,
+        )
+
     def test_build_deep_matcher_defaults_loftr_extractor_for_loftr(self):
         deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
 
@@ -1901,15 +2263,22 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
     def test_deep_adapter_loftr_raises_dependency_error_without_optional_deps(self):
         deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
         image = np.arange(100, dtype=np.float32).reshape(10, 10)
+        kornia_feature_module = _stub_module("kornia.feature")
+        kornia_module = _stub_module("kornia", feature=kornia_feature_module)
 
         adapter = deep_adapter_module.DeepMatcherAdapter(prefer_gpu=False)
-        with self.assertRaises(deep_adapter_module.DeepDependencyError):
-            adapter.match_pair_with_fallback(
-                matcher_method="loftr",
-                left_image=image,
-                right_image=image,
-                prefer_gpu=False,
-            )
+        with mock.patch.dict(
+            sys.modules,
+            {"kornia": kornia_module, "kornia.feature": kornia_feature_module},
+            clear=False,
+        ):
+            with self.assertRaises(deep_adapter_module.DeepDependencyError):
+                adapter.match_pair_with_fallback(
+                    matcher_method="loftr",
+                    left_image=image,
+                    right_image=image,
+                    prefer_gpu=False,
+                )
 
     def test_deep_adapter_defaults_loftr_extractor_without_runtime_config(self):
         deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")

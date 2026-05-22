@@ -78,6 +78,26 @@ def _write_config_with_temp_inputs(config_path: Path, temp_dir: Path) -> None:
     config_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
+def _write_config_with_fingerprint_inputs(config_path: Path, temp_dir: Path) -> dict[str, Path]:
+    _write_config_with_temp_inputs(config_path, temp_dir)
+    controlnet_config = temp_dir / "controlnet_config.json"
+    deep_preset = temp_dir / "loftr_preset.json"
+    controlnet_config.write_text('{"controlnet": "v1"}\n', encoding="utf-8")
+    deep_preset.write_text('{"matcher": "loftr", "version": 1}\n', encoding="utf-8")
+
+    payload = json.loads(config_path.read_text(encoding="utf-8"))
+    payload["inputs"]["controlnet_config"] = str(controlnet_config)
+    payload["methods"][1]["deep_match_config_path"] = str(deep_preset)
+    config_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+    return {
+        "original_images": Path(payload["inputs"]["original_images_list"]),
+        "doms": Path(payload["inputs"]["doms_list"]),
+        "controlnet_config": controlnet_config,
+        "deep_preset": deep_preset,
+    }
+
+
 def _sample_report_metrics() -> list[dict]:
     return [
         {
@@ -349,7 +369,7 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
             )
 
         self.assertIn("--no-fail-fast", keep_going_command)
-        self.assertIn("--continue-on-deep-failure", keep_going_command)
+        self.assertNotIn("--continue-on-deep-failure", keep_going_command)
         self.assertNotIn("--no-fail-fast", fail_fast_command)
         self.assertNotIn("--continue-on-deep-failure", fail_fast_command)
 
@@ -664,7 +684,62 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertFalse((result.run_dir / "methods/sift_flann").exists())
             self.assertTrue((result.run_dir / "methods/loftr/command.sh").exists())
 
-    def test_run_experiment_resume_skips_successful_metrics(self):
+    def test_run_experiment_resume_skips_successful_metrics_with_matching_fingerprint(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_fingerprint_inputs(config_path, temp_dir)
+            command = [sys.executable, "-c", "print('fingerprinted run')"]
+
+            def fake_build_method_command(config, method, *, method_dir, repo_root, keep_going=None):
+                return command
+
+            with mock.patch.object(
+                matcher_comparison,
+                "build_method_command",
+                side_effect=fake_build_method_command,
+            ):
+                first_result = matcher_comparison.run_experiment(
+                    config_path,
+                    output_root=temp_dir / "out",
+                    repo_root=PROJECT_ROOT,
+                    dry_run=False,
+                    only_labels={"sift_flann"},
+                    resume=False,
+                    keep_going=True,
+                )
+
+            method_dir = first_result.run_dir / "methods/sift_flann"
+            metrics_path = method_dir / "metrics.json"
+            first_metrics = json.loads(metrics_path.read_text(encoding="utf-8"))
+            self.assertIn("resume_fingerprint", first_metrics)
+
+            (method_dir / "command.sh").unlink()
+            with mock.patch.object(
+                matcher_comparison,
+                "build_method_command",
+                side_effect=fake_build_method_command,
+            ), mock.patch.object(
+                matcher_comparison,
+                "execute_method",
+                side_effect=AssertionError("matching fingerprint should skip execution"),
+            ):
+                result = matcher_comparison.run_experiment(
+                    config_path,
+                    output_root=temp_dir / "out",
+                    repo_root=PROJECT_ROOT,
+                    dry_run=False,
+                    only_labels={"sift_flann"},
+                    resume=True,
+                    keep_going=True,
+                )
+
+            self.assertFalse((method_dir / "command.sh").exists())
+            manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(manifest["methods"][0]["status"], "skipped_success")
+            summary_payload = json.loads((result.run_dir / "reports/summary.json").read_text(encoding="utf-8"))
+            self.assertEqual(summary_payload["metrics"][0]["status"], "success")
+
+    def test_run_experiment_resume_does_not_skip_success_metrics_without_fingerprint(self):
         with temporary_directory() as temp_dir:
             config_path = temp_dir / "experiment.json"
             _write_config_with_temp_inputs(config_path, temp_dir)
@@ -691,11 +766,77 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             )
 
             self.assertEqual(json.loads(metrics_path.read_text(encoding="utf-8"))["status"], "success")
-            self.assertFalse((result.run_dir / "methods/sift_flann/command.sh").exists())
+            self.assertTrue((result.run_dir / "methods/sift_flann/command.sh").exists())
             self.assertTrue((result.run_dir / "methods/loftr/command.sh").exists())
             manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
-            self.assertEqual(manifest["methods"][0]["status"], "skipped_success")
+            self.assertEqual(manifest["methods"][0]["status"], "dry_run")
             self.assertEqual(manifest["methods"][1]["status"], "dry_run")
+
+    def test_run_experiment_resume_reruns_when_fingerprinted_content_changes(self):
+        mutation_cases = (
+            ("original image list", "sift_flann", "original_images", "image_1.cub\nimage_3.cub\n"),
+            ("controlnet config", "sift_flann", "controlnet_config", '{"controlnet": "v2"}\n'),
+            ("deep preset", "loftr", "deep_preset", '{"matcher": "loftr", "version": 2}\n'),
+        )
+        for _name, label, path_key, replacement_text in mutation_cases:
+            with self.subTest(_name), temporary_directory() as temp_dir:
+                config_path = temp_dir / "experiment.json"
+                fingerprint_paths = _write_config_with_fingerprint_inputs(config_path, temp_dir)
+                command = [
+                    sys.executable,
+                    "-c",
+                    (
+                        "from pathlib import Path\n"
+                        f"counter = Path({str(temp_dir / (label + '_runs.txt'))!r})\n"
+                        "count = int(counter.read_text(encoding='utf-8')) if counter.exists() else 0\n"
+                        "counter.write_text(str(count + 1), encoding='utf-8')\n"
+                    ),
+                ]
+
+                def fake_build_method_command(config, method, *, method_dir, repo_root, keep_going=None):
+                    return command
+
+                with mock.patch.object(
+                    matcher_comparison,
+                    "build_method_command",
+                    side_effect=fake_build_method_command,
+                ):
+                    first_result = matcher_comparison.run_experiment(
+                        config_path,
+                        output_root=temp_dir / "out",
+                        repo_root=PROJECT_ROOT,
+                        dry_run=False,
+                        only_labels={label},
+                        resume=False,
+                        keep_going=True,
+                    )
+
+                counter_path = temp_dir / f"{label}_runs.txt"
+                self.assertEqual(counter_path.read_text(encoding="utf-8"), "1")
+                self.assertIn(
+                    "resume_fingerprint",
+                    json.loads((first_result.run_dir / f"methods/{label}/metrics.json").read_text(encoding="utf-8")),
+                )
+                fingerprint_paths[path_key].write_text(replacement_text, encoding="utf-8")
+
+                with mock.patch.object(
+                    matcher_comparison,
+                    "build_method_command",
+                    side_effect=fake_build_method_command,
+                ):
+                    result = matcher_comparison.run_experiment(
+                        config_path,
+                        output_root=temp_dir / "out",
+                        repo_root=PROJECT_ROOT,
+                        dry_run=False,
+                        only_labels={label},
+                        resume=True,
+                        keep_going=True,
+                    )
+
+                self.assertEqual(counter_path.read_text(encoding="utf-8"), "2")
+                manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+                self.assertEqual(manifest["methods"][0]["status"], "success")
 
     def test_run_experiment_resume_regenerates_command_for_stale_success_metrics(self):
         with temporary_directory() as temp_dir:
@@ -779,6 +920,7 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             sift_dir = temp_dir / "out/unit_run/methods/sift_flann"
             sift_dir.mkdir(parents=True)
             resumed_command = [sys.executable, "-c", "print('resumed sift')"]
+            config = matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
             resumed_metrics = {
                 "label": "sift_flann",
                 "status": "success",
@@ -792,6 +934,7 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
                 "stdout_log": str(sift_dir / "stdout.log"),
                 "stderr_log": str(sift_dir / "stderr.log"),
                 "command": resumed_command,
+                "resume_fingerprint": matcher_comparison._resume_fingerprint(config, config.methods[0]),
             }
             (sift_dir / "metrics.json").write_text(json.dumps(resumed_metrics), encoding="utf-8")
 

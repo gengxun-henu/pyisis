@@ -10,6 +10,7 @@ import argparse
 import csv
 from dataclasses import dataclass
 from datetime import datetime, timezone
+import hashlib
 import json
 from pathlib import Path
 import re
@@ -38,6 +39,7 @@ REPORT_COLUMNS = (
 )
 REPORT_OUTPUT_NAMES = ("summary.json", "summary.csv", "summary.md", "failures.json")
 SUCCESS_STATUSES = {"success", "skipped_success"}
+RESUME_FINGERPRINT_VERSION = 1
 
 
 @dataclass(frozen=True)
@@ -284,7 +286,7 @@ def build_method_command(
         if method.deep_match_config_path is not None:
             command.extend(["--deep-match-config-path", str(method.deep_match_config_path)])
         if effective_keep_going:
-            command.extend(["--no-fail-fast", "--continue-on-deep-failure"])
+            command.append("--no-fail-fast")
     else:
         script_path = repo_root / "examples/controlnet_construct/run_pipeline_example.sh"
         command = [
@@ -325,7 +327,64 @@ def _write_command_script(path: str | Path, command: list[str]) -> None:
     path.chmod(0o755)
 
 
-def _existing_success(metrics_path: str | Path, command: list[str]) -> bool:
+def _hash_file(path: Path) -> tuple[dict[str, Any], bool]:
+    path = path.expanduser()
+    resolved_path = path.resolve(strict=False)
+    fingerprint: dict[str, Any] = {
+        "path": str(resolved_path),
+        "exists": path.exists(),
+        "is_file": path.is_file(),
+        "size_bytes": None,
+        "sha256": None,
+    }
+    if not path.is_file():
+        return fingerprint, False
+
+    sha256 = hashlib.sha256()
+    try:
+        stat = path.stat()
+        with path.open("rb") as input_file:
+            for chunk in iter(lambda: input_file.read(1024 * 1024), b""):
+                sha256.update(chunk)
+    except OSError as exc:
+        fingerprint["read_error"] = f"{type(exc).__name__}: {exc}"
+        return fingerprint, False
+
+    fingerprint["size_bytes"] = stat.st_size
+    fingerprint["sha256"] = sha256.hexdigest()
+    return fingerprint, True
+
+
+def _resume_fingerprint(config: ExperimentConfig, method: MethodConfig) -> dict[str, Any]:
+    files: dict[str, dict[str, Any] | None] = {}
+    complete = True
+    for key, path in (
+        ("original_images_list", config.inputs.original_images_list),
+        ("doms_list", config.inputs.doms_list),
+        ("controlnet_config", config.inputs.controlnet_config),
+    ):
+        files[key], file_complete = _hash_file(path)
+        complete = complete and file_complete
+
+    deep_match_config_path = method.deep_match_config_path
+    if deep_match_config_path is None:
+        files["deep_match_config_path"] = None
+    else:
+        files["deep_match_config_path"], file_complete = _hash_file(deep_match_config_path)
+        complete = complete and file_complete
+
+    return {
+        "version": RESUME_FINGERPRINT_VERSION,
+        "complete": complete,
+        "files": files,
+    }
+
+
+def _existing_success(
+    metrics_path: str | Path,
+    command: list[str],
+    resume_fingerprint: dict[str, Any] | None,
+) -> bool:
     metrics_path = Path(metrics_path)
     if not metrics_path.exists():
         return False
@@ -336,7 +395,15 @@ def _existing_success(metrics_path: str | Path, command: list[str]) -> bool:
     except (OSError, json.JSONDecodeError):
         return False
 
-    return isinstance(payload, dict) and payload.get("status") == "success" and payload.get("command") == command
+    if not isinstance(payload, dict):
+        return False
+    if not isinstance(resume_fingerprint, dict) or not resume_fingerprint.get("complete"):
+        return False
+    return (
+        payload.get("status") == "success"
+        and payload.get("command") == command
+        and payload.get("resume_fingerprint") == resume_fingerprint
+    )
 
 
 def _read_metrics_file(metrics_path: str | Path) -> dict[str, Any]:
@@ -455,7 +522,13 @@ def collect_method_metrics(label: str, method_dir: str | Path) -> dict[str, Any]
     }
 
 
-def execute_method(*, label: str, command: list[str], method_dir: str | Path) -> dict[str, Any]:
+def execute_method(
+    *,
+    label: str,
+    command: list[str],
+    method_dir: str | Path,
+    resume_fingerprint: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     method_dir = Path(method_dir).expanduser().resolve()
     method_dir.mkdir(parents=True, exist_ok=True)
     stdout_log = method_dir / "stdout.log"
@@ -495,6 +568,8 @@ def execute_method(*, label: str, command: list[str], method_dir: str | Path) ->
         "stdout_log": str(stdout_log),
         "stderr_log": str(stderr_log),
     }
+    if resume_fingerprint is not None:
+        execution_metrics["resume_fingerprint"] = resume_fingerprint
     if error is not None:
         execution_metrics["error_type"] = type(error).__name__
         execution_metrics["error_message"] = str(error)
@@ -640,7 +715,8 @@ def run_experiment(
             repo_root=repo_root_path,
             keep_going=effective_keep_going,
         )
-        if effective_resume and _existing_success(metrics_path, command):
+        resume_fingerprint = _resume_fingerprint(config, method)
+        if effective_resume and _existing_success(metrics_path, command, resume_fingerprint):
             if not dry_run:
                 report_metrics.append(_read_metrics_file(metrics_path))
             method_entries.append(
@@ -669,7 +745,12 @@ def run_experiment(
         _write_command_script(method_dir / "command.sh", command)
         status = "dry_run"
         if not dry_run:
-            metrics = execute_method(label=method.label, command=command, method_dir=method_dir)
+            metrics = execute_method(
+                label=method.label,
+                command=command,
+                method_dir=method_dir,
+                resume_fingerprint=resume_fingerprint,
+            )
             report_metrics.append(metrics)
             status = metrics["status"]
         method_entries.append(

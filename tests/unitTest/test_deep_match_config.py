@@ -5,7 +5,7 @@ import tempfile
 from pathlib import Path
 import pytest
 
-DEEP_MATCH_CONFIG_PATH = Path(__file__).resolve().parents[1] / "examples" / "controlnet_construct" / "deep_match_config.py"
+DEEP_MATCH_CONFIG_PATH = Path(__file__).resolve().parents[2] / "examples" / "controlnet_construct" / "deep_match_config.py"
 
 
 class TestDeepMatchConfigLoad:
@@ -129,6 +129,67 @@ class TestDeepMatchConfigValidation:
         config = self._make_minimal_config()
         validate_deep_match_config(config)
 
+    def test_official_lightglue_accepts_supported_frontends(self):
+        """Official LightGlue backend should accept all supported official frontends."""
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import validate_deep_match_config
+        for extractor in ("superpoint", "disk", "aliked", "doghardnet", "lightglue_sift"):
+            config = {
+                "feature_extractor": {"method": extractor},
+                "matcher": {"method": "lightglue", "backend": "official"},
+            }
+            validate_deep_match_config(config)
+
+    def test_non_official_lightglue_still_rejects_non_superpoint_frontends(self):
+        """Legacy LightGlue validation should still only accept SuperPoint."""
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import validate_deep_match_config
+        for extractor in ("disk", "aliked", "doghardnet", "lightglue_sift"):
+            config = self._make_minimal_config(extractor=extractor, matcher="lightglue")
+            with pytest.raises(ValueError, match="superpoint"):
+                validate_deep_match_config(config)
+
+    def test_lightglue_rejects_unknown_backend(self):
+        """LightGlue backend values should be restricted to supported backends."""
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import validate_deep_match_config
+        config = {
+            "feature_extractor": {"method": "superpoint"},
+            "matcher": {"method": "lightglue", "backend": "experimental"},
+        }
+        with pytest.raises(ValueError, match="backend"):
+            validate_deep_match_config(config)
+
+    def test_official_lightglue_rejects_unknown_options_and_feature_alias_conflict(self):
+        """Official LightGlue backend should reject unsupported options and aliases used together."""
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import validate_deep_match_config
+
+        config = {
+            "feature_extractor": {"method": "superpoint", "remove_borders": 4},
+            "matcher": {"method": "lightglue", "backend": "official"},
+        }
+        with pytest.raises(ValueError, match="unknown feature_extractor option"):
+            validate_deep_match_config(config)
+
+        config = {
+            "feature_extractor": {"method": "superpoint", "max_features": 4096, "max_keypoints": 4096},
+            "matcher": {"method": "lightglue", "backend": "official"},
+        }
+        with pytest.raises(ValueError, match="max_features.*max_keypoints"):
+            validate_deep_match_config(config)
+
+        config = {
+            "feature_extractor": {"method": "superpoint"},
+            "matcher": {"method": "lightglue", "backend": "official", "prune_threshold": 0.1},
+        }
+        with pytest.raises(ValueError, match="unknown matcher option"):
+            validate_deep_match_config(config)
+
 
 class TestDeepMatchConfigHelpers:
     """Tests for helper functions."""
@@ -174,24 +235,49 @@ class TestPresetFiles:
         presets_dir = DEEP_MATCH_CONFIG_PATH.parent / "presets"
         return sorted(presets_dir.glob("*.json"))
 
-    def test_all_presets_load_successfully(self):
-        """All preset files should load without errors."""
+    def _read_preset_config(self, preset_path):
+        return json.loads(preset_path.read_text(encoding="utf-8"))
+
+    def _is_legacy_unsupported_preset(self, preset_path):
+        config = self._read_preset_config(preset_path)
+        extractor_method = config["feature_extractor"]["method"]
+        matcher = config["matcher"]
+        matcher_method = matcher["method"]
+        matcher_backend = matcher.get("backend")
+        if matcher_method == "lightglue" and not matcher_backend:
+            return extractor_method != "superpoint"
+        if matcher_method == "superglue":
+            return extractor_method != "superpoint"
+        return False
+
+    def test_supported_presets_load_successfully(self):
+        """Supported preset files should load without errors."""
         import sys
         sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
         from deep_match_config import load_deep_match_config
         for preset_path in self._get_preset_files():
+            if self._is_legacy_unsupported_preset(preset_path):
+                continue
             config = load_deep_match_config(str(preset_path))
             assert "feature_extractor" in config
             assert "matcher" in config
             assert config["matcher"]["method"] in ("superglue", "lightglue", "loftr")
 
-    def test_all_presets_have_fallback(self):
-        """All preset files should have a fallback configured."""
+    def test_legacy_unsupported_presets_fail_validation(self):
+        """Legacy non-SuperPoint matcher presets should fail until they declare a supported backend."""
         import sys
         sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
         from deep_match_config import load_deep_match_config
+        unsupported_presets = [p for p in self._get_preset_files() if self._is_legacy_unsupported_preset(p)]
+        assert unsupported_presets
+        for preset_path in unsupported_presets:
+            with pytest.raises(ValueError, match="superpoint"):
+                load_deep_match_config(str(preset_path))
+
+    def test_all_presets_have_fallback(self):
+        """All preset files should have a fallback configured."""
         for preset_path in self._get_preset_files():
-            config = load_deep_match_config(str(preset_path))
+            config = self._read_preset_config(preset_path)
             fallback = config.get("fallback")
             assert fallback is not None, f"{preset_path.name} missing fallback config"
             assert fallback.get("on_error") in ("sift_bf", "sift_flann"), \

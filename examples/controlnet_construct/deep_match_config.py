@@ -13,6 +13,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 import importlib
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -32,6 +33,28 @@ OFFICIAL_LIGHTGLUE_MATCHER_OPTIONS = {
     "width_confidence",
     "flash",
     "mp",
+}
+LOFTR_BACKENDS = (None, "kornia", "external")
+EXTERNAL_LOFTR_MODEL_TYPES = ("indoor", "outdoor")
+EXTERNAL_LOFTR_TEMP_BUG_FIX_VALUES = ("auto", "true", "false")
+EXTERNAL_LOFTR_PREPROCESS_MODES = ("pad", "resize")
+EXTERNAL_LOFTR_GEOMETRIC_FILTERS = ("none", "homography", "fundamental")
+EXTERNAL_LOFTR_FEATURE_OPTIONS = {"method", "preprocess_mode", "resize_width", "resize_height"}
+EXTERNAL_LOFTR_MATCHER_OPTIONS = {
+    "method",
+    "backend",
+    "loftr_root",
+    "checkpoint",
+    "checkpoint_path",
+    "model_type",
+    "temp_bug_fix",
+    "coarse_threshold",
+    "min_confidence",
+    "top_k",
+    "geometric_filter",
+    "ransac_reproj_threshold",
+    "ransac_confidence",
+    "ransac_max_iters",
 }
 MATCHER_EXTRACTOR_REQUIREMENTS: dict[str, tuple[str, ...]] = {
     "lightglue": ("superpoint",),
@@ -77,7 +100,7 @@ def _payload_options(
     return {}
 
 
-def _normalized_lightglue_backend(matcher: dict[str, Any]) -> str | None:
+def _normalized_backend(matcher: dict[str, Any]) -> str | None:
     backend_value = matcher.get("backend")
     if backend_value is None:
         return None
@@ -85,16 +108,62 @@ def _normalized_lightglue_backend(matcher: dict[str, Any]) -> str | None:
     return normalized_backend or None
 
 
+def _normalized_lightglue_backend(matcher: dict[str, Any]) -> str | None:
+    return _normalized_backend(matcher)
+
+
+def _validate_positive_number(*, section_name: str, field_name: str, value: Any) -> None:
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(value)
+        or value <= 0
+    ):
+        raise ValueError(f"{section_name}.{field_name} must be a positive number.")
+
+
+def _validate_probability(*, section_name: str, field_name: str, value: Any) -> None:
+    if (
+        isinstance(value, bool)
+        or not isinstance(value, (int, float))
+        or not math.isfinite(value)
+        or not 0 < value <= 1
+    ):
+        raise ValueError(f"{section_name}.{field_name} must be in (0, 1].")
+
+
+def _validate_positive_int(*, section_name: str, field_name: str, value: Any) -> None:
+    if isinstance(value, bool) or not isinstance(value, int) or value <= 0:
+        raise ValueError(f"{section_name}.{field_name} must be a positive integer.")
+
+
+def _validate_option_choice(
+    *,
+    section_name: str,
+    field_name: str,
+    value: Any,
+    allowed_values: tuple[str, ...],
+) -> None:
+    normalized_value = str(value).strip().lower()
+    if normalized_value not in allowed_values:
+        supported_display = ", ".join(repr(option) for option in allowed_values)
+        raise ValueError(
+            f"{section_name}.{field_name} must be one of ({supported_display}); "
+            f"got {value!r}."
+        )
+
+
 def _reject_unknown_options(
     *,
     section_name: str,
     section: dict[str, Any],
     allowed_options: set[str],
+    backend_label: str = "official LightGlue",
 ) -> None:
     unknown_options = sorted(set(section) - allowed_options)
     if unknown_options:
         raise ValueError(
-            f"unknown {section_name} option(s) for official LightGlue backend: "
+            f"unknown {section_name} option(s) for {backend_label} backend: "
             f"{', '.join(unknown_options)}"
         )
 
@@ -119,6 +188,98 @@ def _validate_official_lightglue_options(
         section=matcher,
         allowed_options=OFFICIAL_LIGHTGLUE_MATCHER_OPTIONS,
     )
+
+
+def _validate_external_loftr_options(
+    *,
+    matcher: dict[str, Any],
+    feature_extractor: dict[str, Any],
+) -> None:
+    _reject_unknown_options(
+        section_name="feature_extractor",
+        section=feature_extractor,
+        allowed_options=EXTERNAL_LOFTR_FEATURE_OPTIONS,
+        backend_label="external LoFTR",
+    )
+    _reject_unknown_options(
+        section_name="matcher",
+        section=matcher,
+        allowed_options=EXTERNAL_LOFTR_MATCHER_OPTIONS,
+        backend_label="external LoFTR",
+    )
+
+    if "checkpoint" in matcher and "checkpoint_path" in matcher:
+        raise ValueError(
+            "external LoFTR matcher options must not include both checkpoint "
+            "and checkpoint_path."
+        )
+
+    if "preprocess_mode" in feature_extractor:
+        _validate_option_choice(
+            section_name="feature_extractor",
+            field_name="preprocess_mode",
+            value=feature_extractor["preprocess_mode"],
+            allowed_values=EXTERNAL_LOFTR_PREPROCESS_MODES,
+        )
+
+    resize_width_present = "resize_width" in feature_extractor
+    resize_height_present = "resize_height" in feature_extractor
+    if resize_width_present != resize_height_present:
+        raise ValueError(
+            "external LoFTR feature_extractor options must include resize_width "
+            "and resize_height together."
+        )
+    if resize_width_present:
+        _validate_positive_int(
+            section_name="feature_extractor",
+            field_name="resize_width",
+            value=feature_extractor["resize_width"],
+        )
+        _validate_positive_int(
+            section_name="feature_extractor",
+            field_name="resize_height",
+            value=feature_extractor["resize_height"],
+        )
+
+    for field_name, allowed_values in (
+        ("model_type", EXTERNAL_LOFTR_MODEL_TYPES),
+        ("temp_bug_fix", EXTERNAL_LOFTR_TEMP_BUG_FIX_VALUES),
+        ("geometric_filter", EXTERNAL_LOFTR_GEOMETRIC_FILTERS),
+    ):
+        if field_name in matcher:
+            _validate_option_choice(
+                section_name="matcher",
+                field_name=field_name,
+                value=matcher[field_name],
+                allowed_values=allowed_values,
+            )
+
+    for field_name in (
+        "coarse_threshold",
+        "min_confidence",
+        "ransac_reproj_threshold",
+    ):
+        if field_name in matcher:
+            _validate_positive_number(
+                section_name="matcher",
+                field_name=field_name,
+                value=matcher[field_name],
+            )
+
+    if "ransac_confidence" in matcher:
+        _validate_probability(
+            section_name="matcher",
+            field_name="ransac_confidence",
+            value=matcher["ransac_confidence"],
+        )
+
+    for field_name in ("top_k", "ransac_max_iters"):
+        if field_name in matcher:
+            _validate_positive_int(
+                section_name="matcher",
+                field_name=field_name,
+                value=matcher[field_name],
+            )
 
 
 def validate_matcher_feature_compatibility(
@@ -154,6 +315,25 @@ def validate_matcher_feature_compatibility(
                 feature_extractor=feature_extractor_dict,
             )
             return
+
+    if normalized_matcher == "loftr":
+        backend = _normalized_backend(matcher_dict)
+        if backend not in LOFTR_BACKENDS:
+            raise ValueError(
+                f"unsupported LoFTR matcher.backend={backend!r}; "
+                "supported backends: kornia, external"
+            )
+        if normalized_extractor != "loftr":
+            raise ValueError(
+                f"matcher.method='loftr' requires feature_extractor.method='loftr'; "
+                f"got {normalized_extractor!r}."
+            )
+        if backend == "external":
+            _validate_external_loftr_options(
+                matcher=matcher_dict,
+                feature_extractor=feature_extractor_dict,
+            )
+        return
 
     supported_extractors = MATCHER_EXTRACTOR_REQUIREMENTS.get(normalized_matcher)
     if supported_extractors is None or normalized_extractor in supported_extractors:
@@ -301,10 +481,12 @@ def check_deep_match_dependencies(runtime_config: DeepMatchRuntimeConfig) -> lis
         return missing_messages
 
     if method == "loftr":
-        for message in (
-            _check_import("torch"),
-            _check_import("kornia.feature", attribute_name="LoFTR", missing_name="kornia.feature.LoFTR"),
-        ):
+        dependency_checks = [_check_import("torch")]
+        if _normalized_backend(runtime_config.matcher_options) != "external":
+            dependency_checks.append(
+                _check_import("kornia.feature", attribute_name="LoFTR", missing_name="kornia.feature.LoFTR")
+            )
+        for message in dependency_checks:
             if message is not None:
                 missing_messages.append(message)
         return missing_messages

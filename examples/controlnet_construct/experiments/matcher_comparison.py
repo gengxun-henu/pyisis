@@ -322,6 +322,63 @@ def _existing_success(metrics_path: str | Path, command: list[str]) -> bool:
     return isinstance(payload, dict) and payload.get("status") == "success" and payload.get("command") == command
 
 
+def _read_json_if_present(path: Path, warnings: list[str]) -> dict[str, Any] | None:
+    if not path.exists():
+        warnings.append(f"missing: {path}")
+        return None
+
+    try:
+        with path.open(encoding="utf-8") as metrics_file:
+            payload = json.load(metrics_file)
+    except (OSError, json.JSONDecodeError) as exc:
+        warnings.append(f"could not parse {path}: {exc}")
+        return None
+
+    if not isinstance(payload, dict):
+        warnings.append(f"not an object: {path}")
+        return None
+
+    return payload
+
+
+def collect_method_metrics(label: str, method_dir: str | Path) -> dict[str, Any]:
+    method_dir = Path(method_dir).expanduser().resolve()
+    work_dir = method_dir / "work"
+    reports_dir = work_dir / "reports"
+    warnings: list[str] = []
+
+    overlap_summary = _read_json_if_present(reports_dir / "image_overlap_summary.json", warnings)
+    controlnet_summary = _read_json_if_present(reports_dir / "controlnet_batch_summary.json", warnings)
+    pipeline_timing = _read_json_if_present(reports_dir / "pipeline_timing.json", warnings)
+
+    pair_count = None
+    if controlnet_summary is not None:
+        pair_count = controlnet_summary.get("pair_count")
+    if pair_count is None and overlap_summary is not None:
+        pair_count = overlap_summary.get("pair_count", overlap_summary.get("overlap_pair_count"))
+
+    pair_nets_dir = work_dir / "pair_nets"
+    pairwise_controlnet_count = len(list(pair_nets_dir.glob("*.net"))) if pair_nets_dir.exists() else 0
+    merged_controlnet_path = work_dir / "merge/dom_matching_merged.net"
+    merged_controlnet_exists = merged_controlnet_path.exists()
+
+    return {
+        "label": label,
+        "pair_count": pair_count,
+        "pairwise_controlnet_count": pairwise_controlnet_count,
+        "merged_controlnet_exists": merged_controlnet_exists,
+        "merged_controlnet_path": str(merged_controlnet_path) if merged_controlnet_exists else None,
+        "pipeline_total_seconds": pipeline_timing.get("total_seconds") if pipeline_timing is not None else None,
+        "total_final_control_point_count": (
+            controlnet_summary.get("total_final_control_point_count") if controlnet_summary is not None else None
+        ),
+        "total_dom2ori_retained_count": (
+            controlnet_summary.get("total_dom2ori_retained_count") if controlnet_summary is not None else None
+        ),
+        "warnings": warnings,
+    }
+
+
 def execute_method(*, label: str, command: list[str], method_dir: str | Path) -> dict[str, Any]:
     method_dir = Path(method_dir).expanduser().resolve()
     method_dir.mkdir(parents=True, exist_ok=True)
@@ -349,7 +406,7 @@ def execute_method(*, label: str, command: list[str], method_dir: str | Path) ->
     total_wall_seconds = time.monotonic() - start_time
     finished_at_utc = _utc_now_iso()
 
-    metrics = {
+    execution_metrics = {
         "label": label,
         "status": "success" if return_code == 0 else "failed",
         "return_code": return_code,
@@ -361,8 +418,10 @@ def execute_method(*, label: str, command: list[str], method_dir: str | Path) ->
         "stderr_log": str(stderr_log),
     }
     if error is not None:
-        metrics["error_type"] = type(error).__name__
-        metrics["error_message"] = str(error)
+        execution_metrics["error_type"] = type(error).__name__
+        execution_metrics["error_message"] = str(error)
+    metrics = collect_method_metrics(label, method_dir)
+    metrics.update(execution_metrics)
     metrics_path.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
     return metrics
 

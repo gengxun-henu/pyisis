@@ -196,6 +196,143 @@ class SuperPointFrontend:
         return {"keypoints": keypoint_array, "descriptors": descriptor_array}
 
 
+class OfficialLightGlueFrontend:
+    _EXTRACTOR_CLASS_NAMES = {
+        "superpoint": "SuperPoint",
+        "disk": "DISK",
+        "aliked": "ALIKED",
+        "doghardnet": "DoGHardNet",
+        "lightglue_sift": "SIFT",
+    }
+    _RGB_FRONTENDS = {"disk", "aliked"}
+
+    def __init__(
+        self,
+        *,
+        feature_extractor_method: str,
+        feature_options: dict[str, Any] | None = None,
+    ) -> None:
+        self.feature_extractor_method = str(feature_extractor_method).strip().lower()
+        if self.feature_extractor_method not in self._EXTRACTOR_CLASS_NAMES:
+            supported = tuple(self._EXTRACTOR_CLASS_NAMES)
+            raise DeepFrontendError(
+                f"Unsupported official LightGlue frontend {feature_extractor_method!r}. Expected one of {supported}."
+            )
+
+        self.feature_options = dict(feature_options or {})
+        self.max_num_keypoints = self._resolve_max_num_keypoints(self.feature_options)
+        self._extractor = None
+
+    def _resolve_max_num_keypoints(self, feature_options: dict[str, Any]) -> Any:
+        has_max_features = "max_features" in feature_options
+        has_max_keypoints = "max_keypoints" in feature_options
+        if has_max_features and has_max_keypoints:
+            raise ValueError("Specify only one of max_features or max_keypoints for official LightGlue frontends.")
+        if has_max_features:
+            return feature_options["max_features"]
+        if has_max_keypoints:
+            return feature_options["max_keypoints"]
+        return 2048
+
+    def extract(self, image, device: str):
+        try:
+            import torch
+        except Exception:
+            _raise_missing_dependency(
+                method="lightglue",
+                missing="torch",
+                install_hint="pip install torch lightglue",
+            )
+
+        try:
+            import lightglue
+        except Exception:
+            _raise_missing_dependency(
+                method="lightglue",
+                missing="lightglue",
+                install_hint="pip install lightglue",
+            )
+
+        image_tensor = self._as_tensor(image, device=device, torch_module=torch)
+        extractor = self._load_extractor(lightglue_module=lightglue, device=device)
+
+        with torch.no_grad():
+            features = extractor.extract(image_tensor)
+        return self._normalize_features(features)
+
+    def _load_extractor(self, *, lightglue_module: Any, device: str):
+        if self._extractor is None:
+            constructor_name = self._EXTRACTOR_CLASS_NAMES[self.feature_extractor_method]
+            if not hasattr(lightglue_module, constructor_name):
+                _raise_missing_dependency(
+                    method="lightglue",
+                    missing=f"lightglue.{constructor_name}",
+                    install_hint="pip install lightglue",
+                )
+            constructor = getattr(lightglue_module, constructor_name)
+            self._extractor = constructor(max_num_keypoints=self.max_num_keypoints).eval().to(device)
+        else:
+            self._extractor = self._extractor.to(device)
+        return self._extractor
+
+    def _as_tensor(self, image, *, device: str, torch_module: Any):
+        image_array = np.asarray(image, dtype=np.float32)
+        if image_array.ndim == 0:
+            image_array = image_array.reshape(1, 1)
+        elif image_array.ndim == 1:
+            image_array = image_array.reshape(1, -1)
+
+        image_array = np.nan_to_num(image_array, nan=0.0, posinf=0.0, neginf=0.0).astype(np.float32, copy=False)
+        scale = float(np.max(np.abs(image_array))) if image_array.size > 0 else 0.0
+        if scale > 0.0:
+            image_array = image_array / scale
+
+        channel_count = 3 if self.feature_extractor_method in self._RGB_FRONTENDS else 1
+        image_chw = self._to_chw(image_array, channel_count=channel_count)
+        return torch_module.from_numpy(np.ascontiguousarray(image_chw)).to(dtype=torch_module.float32)[None, :, :, :].to(device)
+
+    def _to_chw(self, image_array: np.ndarray, *, channel_count: int) -> np.ndarray:
+        if image_array.ndim == 2:
+            image_plane = image_array
+            if channel_count == 1:
+                return image_plane[None, :, :]
+            return np.repeat(image_plane[None, :, :], 3, axis=0)
+
+        if channel_count == 1:
+            return np.mean(image_array, axis=-1, dtype=np.float32)[None, :, :]
+
+        if image_array.shape[-1] >= 3:
+            return np.moveaxis(image_array[..., :3], -1, 0)
+        if image_array.shape[-1] == 1:
+            return np.repeat(np.moveaxis(image_array, -1, 0), 3, axis=0)
+
+        padding_shape = image_array.shape[:-1] + (3 - image_array.shape[-1],)
+        padded = np.concatenate((image_array, np.zeros(padding_shape, dtype=np.float32)), axis=-1)
+        return np.moveaxis(padded, -1, 0)
+
+    def _normalize_features(self, features: Any) -> dict[str, Any]:
+        normalized_features = {}
+        for key, value in dict(features).items():
+            normalized_features[key] = self._unbatch_feature_value(value)
+
+        keypoints = np.asarray(normalized_features.get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32)
+        normalized_features["keypoints"] = keypoints.reshape(-1, 2) if keypoints.size > 0 else np.zeros((0, 2), dtype=np.float32)
+        return normalized_features
+
+    def _unbatch_feature_value(self, value: Any) -> Any:
+        if hasattr(value, "detach"):
+            value = value.detach().cpu().numpy()
+        elif isinstance(value, (list, tuple)):
+            value = np.asarray(value)
+
+        if isinstance(value, np.ndarray):
+            if value.ndim > 0 and value.shape[0] == 1:
+                value = value[0]
+            if np.issubdtype(value.dtype, np.floating):
+                return value.astype(np.float32, copy=False)
+        return value
+
+
 class LoFTRFrontend:
     def __init__(self) -> None:
         self._torch = None

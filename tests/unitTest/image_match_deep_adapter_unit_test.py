@@ -29,7 +29,7 @@ for import_path in (PROJECT_ROOT, EXAMPLES_DIR):
         sys.path.insert(0, str(import_path))
 
 from image_match.deep_adapter import DeepMatcherAdapter
-from image_match.deep_frontends import DeepFrontendError, SuperPointFrontend
+from image_match.deep_frontends import DeepFrontendError, OfficialLightGlueFrontend, SuperPointFrontend
 from controlnet_construct.deep_match_config import DeepMatchRuntimeConfig
 
 
@@ -82,7 +82,86 @@ class _DTypeTrackingModule:
         return self
 
 
+class _OfficialExtractorStub:
+    instances: list["_OfficialExtractorStub"] = []
+
+    def __init__(self, **kwargs) -> None:
+        self.kwargs = kwargs
+        self.device = None
+        self.constructor_name = None
+        self.input_shapes: list[tuple[int, ...]] = []
+        type(self).instances.append(self)
+
+    def eval(self):
+        return self
+
+    def to(self, device):
+        self.device = device
+        return self
+
+    def extract(self, image):
+        import torch
+
+        self.input_shapes.append(tuple(image.shape))
+        return {
+            "keypoints": torch.tensor([[[1.0, 2.0], [3.0, 4.0]]], dtype=torch.float32, device=image.device),
+            "descriptors": torch.tensor([[[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]], dtype=torch.float32, device=image.device),
+            "scores": torch.tensor([[0.7, 0.8]], dtype=torch.float32, device=image.device),
+        }
+
+
 class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
+    def test_official_lightglue_frontend_builds_expected_extractors_and_channel_shapes(self):
+        import torch
+
+        def build_constructor(constructor_name):
+            def constructor(**kwargs):
+                extractor = _OfficialExtractorStub(**kwargs)
+                extractor.constructor_name = constructor_name
+                return extractor
+
+            return constructor
+
+        fake_lightglue = SimpleNamespace(
+            SuperPoint=build_constructor("SuperPoint"),
+            DISK=build_constructor("DISK"),
+            ALIKED=build_constructor("ALIKED"),
+            DoGHardNet=build_constructor("DoGHardNet"),
+            SIFT=build_constructor("SIFT"),
+        )
+
+        for method, expected_constructor, expected_channels in (
+            ("superpoint", "SuperPoint", 1),
+            ("disk", "DISK", 3),
+            ("aliked", "ALIKED", 3),
+            ("doghardnet", "DoGHardNet", 1),
+            ("lightglue_sift", "SIFT", 1),
+        ):
+            with self.subTest(method=method):
+                _OfficialExtractorStub.instances = []
+                with mock.patch.dict(sys.modules, {"torch": torch, "lightglue": fake_lightglue}, clear=False):
+                    frontend = OfficialLightGlueFrontend(
+                        feature_extractor_method=method,
+                        feature_options={"max_features": 123},
+                    )
+                    features = frontend.extract(np.arange(16, dtype=np.float32).reshape(4, 4), device="cpu")
+
+                self.assertEqual(len(_OfficialExtractorStub.instances), 1)
+                extractor = _OfficialExtractorStub.instances[0]
+                self.assertEqual(extractor.constructor_name, expected_constructor)
+                self.assertEqual(extractor.kwargs["max_num_keypoints"], 123)
+                self.assertEqual(extractor.device, "cpu")
+                self.assertEqual(extractor.input_shapes, [(1, expected_channels, 4, 4)])
+                self.assertEqual(features["keypoints"].shape, (2, 2))
+                self.assertEqual(features["descriptors"].shape[0], 2)
+
+    def test_official_lightglue_frontend_rejects_feature_alias_conflict(self):
+        with self.assertRaisesRegex(ValueError, r"max_features.*max_keypoints"):
+            OfficialLightGlueFrontend(
+                feature_extractor_method="superpoint",
+                feature_options={"max_features": 123, "max_keypoints": 456},
+            )
+
     def test_superpoint_frontend_reads_runtime_config_parameters(self):
         runtime = DeepMatchRuntimeConfig(
             matcher_method="lightglue",

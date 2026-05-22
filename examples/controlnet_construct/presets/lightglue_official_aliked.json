@@ -1,0 +1,22 @@
+{
+  "feature_extractor": {
+    "method": "aliked",
+    "max_features": 4096
+  },
+  "matcher": {
+    "method": "lightglue",
+    "backend": "official",
+    "filter_threshold": 0.05,
+    "depth_confidence": -1,
+    "width_confidence": -1,
+    "flash": true,
+    "mp": true
+  },
+  "device": {
+    "prefer_gpu": true,
+    "dtype": "float32"
+  },
+  "fallback": {
+    "on_error": "sift_flann"
+  }
+}

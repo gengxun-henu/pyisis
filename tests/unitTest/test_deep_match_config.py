@@ -274,6 +274,27 @@ class TestPresetFiles:
             with pytest.raises(ValueError, match="superpoint"):
                 load_deep_match_config(str(preset_path))
 
+    def test_official_lightglue_presets_exist_and_load(self):
+        """Official LightGlue presets should exist and load with the expected frontend."""
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import load_deep_match_config
+
+        expected_presets = {
+            "lightglue_official_superpoint.json": "superpoint",
+            "lightglue_official_disk.json": "disk",
+            "lightglue_official_aliked.json": "aliked",
+            "lightglue_official_doghardnet.json": "doghardnet",
+            "lightglue_official_sift.json": "lightglue_sift",
+        }
+        presets_dir = DEEP_MATCH_CONFIG_PATH.parent / "presets"
+
+        for preset_name, expected_method in expected_presets.items():
+            config = load_deep_match_config(str(presets_dir / preset_name))
+            assert config["feature_extractor"]["method"] == expected_method
+            assert config["matcher"]["method"] == "lightglue"
+            assert config["matcher"]["backend"] == "official"
+
     def test_all_presets_have_fallback(self):
         """All preset files should have a fallback configured."""
         for preset_path in self._get_preset_files():

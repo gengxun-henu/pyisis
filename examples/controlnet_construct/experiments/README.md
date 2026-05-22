@@ -34,6 +34,27 @@ workspace so the existing wrapper defaults continue to apply.
 Use `--only` with comma-separated labels for a subset run, for example
 `--only sift_flann,loftr`.
 
+## Runtime Setup
+
+Run these commands from the repository root before invoking the matcher
+comparison runner:
+
+```bash
+source $HOME/miniconda3/etc/profile.d/conda.sh
+conda activate asp360_new
+export PYTHONPATH="$PWD/build/python:$PWD/tests/unitTest"
+export ISISDATA="$PWD/tests/data/isisdata/mockup"
+```
+
+The mock `ISISDATA` path is appropriate for tests, smoke checks, and examples.
+For real data runs, set real ISISDATA to the production ISIS data location
+instead of the mock tree.
+
+Deep matcher methods such as LightGlue, SuperGlue, and LoFTR use the
+`deep-learning` conda environment named in the experiment config. That
+environment must already exist, and `conda` must be available on `PATH`, because
+the wrapper launches the deep-learning stage through conda.
+
 ## Dry Run
 
 Use dry-run mode to validate the config, create the run manifest, and write each
@@ -48,6 +69,24 @@ python examples/controlnet_construct/experiments/run_matcher_comparison.py \
 
 Dry-run mode allows missing input lists. When the configured lists are absent,
 the manifest records warnings and the command scripts are still written.
+
+## Dry-Run Output
+
+Dry-run output contains only the files needed to inspect the planned run:
+
+```text
+work/matcher_comparison/<run_id>/
+  experiment_config.json        # config snapshot
+  experiment_manifest.json
+  methods/
+    <method_label>/
+      command.sh
+```
+
+The manifest includes warnings for missing input lists. Dry-run mode does not write
+per-method `stdout.log`, `stderr.log`, or `metrics.json`, and it does not write
+real-run summary reports: `reports/summary.json`, `summary.csv`, `summary.md`,
+or `failures.json`.
 
 ## Real Run
 
@@ -64,7 +103,7 @@ python examples/controlnet_construct/experiments/run_matcher_comparison.py \
 The example config also enables resume and keep-going by default. CLI flags are
 useful when making the desired behavior explicit in a run log.
 
-## Output Layout
+## Real-Run Output
 
 Runs are created below the selected output root using the config `run_id`:
 

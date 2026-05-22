@@ -426,7 +426,15 @@ class MatcherComparisonReportsUnitTest(unittest.TestCase):
 
 
 class MatcherComparisonDocumentationUnitTest(unittest.TestCase):
-    def test_experiments_readme_documents_inputs_outputs_and_methods(self):
+    @staticmethod
+    def _readme_section(readme_text: str, heading: str, next_heading: str | None = None) -> str:
+        start = readme_text.index(heading)
+        if next_heading is None:
+            return readme_text[start:]
+        end = readme_text.index(next_heading, start + len(heading))
+        return readme_text[start:end]
+
+    def test_experiments_readme_documents_runtime_setup_and_output_modes(self):
         readme_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/README.md"
 
         readme_text = readme_path.read_text(encoding="utf-8")
@@ -434,12 +442,48 @@ class MatcherComparisonDocumentationUnitTest(unittest.TestCase):
         for expected_text in (
             "work/original_images.lis",
             "work/doms_scaled.lis",
-            "summary.csv",
             "sift_flann",
             "loftr",
+            "source $HOME/miniconda3/etc/profile.d/conda.sh",
+            "conda activate asp360_new",
+            'export PYTHONPATH="$PWD/build/python:$PWD/tests/unitTest"',
+            'export ISISDATA="$PWD/tests/data/isisdata/mockup"',
+            "real ISISDATA",
+            "deep-learning",
+            "conda",
+            "PATH",
         ):
             with self.subTest(expected_text=expected_text):
                 self.assertIn(expected_text, readme_text)
+
+        dry_run_section = self._readme_section(readme_text, "## Dry-Run Output", "## Real-Run Output")
+        for expected_text in (
+            "experiment_config.json",
+            "experiment_manifest.json",
+            "command.sh",
+            "warnings",
+            "missing input lists",
+            "does not write",
+            "summary.json",
+            "summary.csv",
+            "summary.md",
+            "failures.json",
+        ):
+            with self.subTest(section="dry-run", expected_text=expected_text):
+                self.assertIn(expected_text, dry_run_section)
+
+        real_run_section = self._readme_section(readme_text, "## Real-Run Output")
+        for expected_text in (
+            "stdout.log",
+            "stderr.log",
+            "metrics.json",
+            "reports/summary.json",
+            "summary.csv",
+            "summary.md",
+            "failures.json",
+        ):
+            with self.subTest(section="real-run", expected_text=expected_text):
+                self.assertIn(expected_text, real_run_section)
 
 
 class MatcherComparisonRunUnitTest(unittest.TestCase):

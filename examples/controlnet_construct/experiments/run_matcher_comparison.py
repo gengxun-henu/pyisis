@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Script entry point for matcher comparison experiments."""
 
 from __future__ import annotations

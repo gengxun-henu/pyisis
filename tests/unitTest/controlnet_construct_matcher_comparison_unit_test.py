@@ -346,6 +346,14 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertTrue((result.run_dir / "experiment_manifest.json").exists())
             self.assertTrue((result.run_dir / "methods/sift_flann/command.sh").exists())
             self.assertTrue((result.run_dir / "methods/loftr/command.sh").exists())
+            self.assertEqual(
+                (result.run_dir / "methods/sift_flann/work/original_images.lis").read_text(encoding="utf-8"),
+                "image_1.cub\nimage_2.cub\n",
+            )
+            self.assertEqual(
+                (result.run_dir / "methods/sift_flann/work/doms_scaled.lis").read_text(encoding="utf-8"),
+                "dom_1.cub\ndom_2.cub\n",
+            )
             self.assertFalse((result.run_dir / "methods/sift_flann/stdout.log").exists())
             self.assertFalse((result.run_dir / "methods/loftr/stdout.log").exists())
             manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
@@ -355,6 +363,33 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertEqual(
                 {method["label"]: method["status"] for method in manifest["methods"]},
                 {"sift_flann": "dry_run", "loftr": "dry_run"},
+            )
+
+    def test_run_experiment_example_config_dry_run_allows_missing_input_lists(self):
+        with temporary_directory() as temp_dir:
+            config_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/matcher_comparison.example.json"
+
+            result = matcher_comparison.run_experiment(
+                config_path,
+                output_root=temp_dir / "out",
+                repo_root=PROJECT_ROOT,
+                dry_run=True,
+                only_labels={"sift_flann"},
+                resume=False,
+                keep_going=True,
+            )
+
+            self.assertTrue(result.manifest_path.exists())
+            self.assertTrue((result.run_dir / "methods/sift_flann/command.sh").exists())
+            self.assertFalse((result.run_dir / "methods/sift_flann/work/original_images.lis").exists())
+            self.assertFalse((result.run_dir / "methods/sift_flann/work/doms_scaled.lis").exists())
+            manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                manifest["methods"][0]["warnings"],
+                [
+                    f"Dry-run input list missing; not copied: {PROJECT_ROOT / 'work/original_images.lis'}",
+                    f"Dry-run input list missing; not copied: {PROJECT_ROOT / 'work/doms_scaled.lis'}",
+                ],
             )
 
     def test_run_experiment_dry_run_command_script_quotes_paths_with_spaces(self):
@@ -472,6 +507,20 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
 
             self.assertFalse((temp_dir / "out/unit_run/experiment_config.json").exists())
             self.assertFalse((temp_dir / "out/unit_run/methods/sift_flann/command.sh").exists())
+
+    def test_run_matcher_comparison_script_exec_help(self):
+        script_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/run_matcher_comparison.py"
+        self.assertTrue(os.access(script_path, os.X_OK))
+
+        result = subprocess.run(
+            [str(script_path), "--help"],
+            check=False,
+            capture_output=True,
+            encoding="utf-8",
+        )
+
+        self.assertEqual(result.returncode, 0, msg=result.stderr)
+        self.assertIn("Run a ControlNet matcher comparison experiment.", result.stdout)
 
 
 if __name__ == "__main__":

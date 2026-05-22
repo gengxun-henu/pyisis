@@ -205,6 +205,30 @@ def prepare_method_workspace(
     return work_dir
 
 
+def _prepare_dry_run_workspace(
+    method_dir: str | Path,
+    *,
+    original_images_list: str | Path,
+    doms_list: str | Path,
+) -> list[str]:
+    method_dir = Path(method_dir).expanduser().resolve()
+    work_dir = method_dir / "work"
+    work_dir.mkdir(parents=True, exist_ok=True)
+
+    warnings: list[str] = []
+    dry_run_inputs = (
+        (Path(original_images_list).expanduser(), work_dir / "original_images.lis"),
+        (Path(doms_list).expanduser(), work_dir / "doms_scaled.lis"),
+    )
+    for source_path, target_path in dry_run_inputs:
+        if source_path.exists():
+            shutil.copyfile(source_path, target_path)
+        else:
+            warnings.append(f"Dry-run input list missing; not copied: {source_path}")
+
+    return warnings
+
+
 def build_method_command(
     config: ExperimentConfig,
     method: MethodConfig,
@@ -295,6 +319,7 @@ def _method_manifest_entry(
     method_dir: str | Path,
     command: list[str] | None,
     status: str,
+    warnings: list[str] | None = None,
 ) -> dict[str, Any]:
     method_dir = Path(method_dir)
     return {
@@ -307,6 +332,7 @@ def _method_manifest_entry(
         "work_dir": str(method_dir / "work"),
         "command": command,
         "status": status,
+        "warnings": warnings or [],
     }
 
 
@@ -370,7 +396,7 @@ def run_experiment(
             )
             continue
 
-        work_dir = prepare_method_workspace(
+        warnings = _prepare_dry_run_workspace(
             method_dir,
             original_images_list=config.inputs.original_images_list,
             doms_list=config.inputs.doms_list,
@@ -382,6 +408,7 @@ def run_experiment(
                 method_dir,
                 command,
                 "dry_run" if dry_run else "pending",
+                warnings,
             )
         )
     manifest_path = run_dir / "experiment_manifest.json"

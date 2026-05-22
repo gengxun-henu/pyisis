@@ -36,6 +36,44 @@ class DeepMatchConfigRehydrationUnitTest(unittest.TestCase):
         self.assertEqual(runtime_config.feature_options, payload["feature_options"])
         self.assertEqual(runtime_config.device_options, payload["device_options"])
 
+    def test_rehydrates_external_loftr_backend_options(self):
+        from controlnet_construct.deep_match_config import deep_match_runtime_config_from_payload
+
+        payload = {
+            "matcher_method": "loftr",
+            "feature_extractor_method": "loftr",
+            "prefer_gpu": True,
+            "device_dtype": "float32",
+            "fallback_on_error": "sift_flann",
+            "raw_config": {
+                "feature_extractor": {
+                    "method": "loftr",
+                    "preprocess_mode": "pad",
+                    "resize_width": 640,
+                    "resize_height": 480,
+                },
+                "matcher": {
+                    "method": "loftr",
+                    "backend": "external",
+                    "model_type": "outdoor",
+                    "temp_bug_fix": "auto",
+                    "top_k": 100,
+                },
+                "device": {"prefer_gpu": True, "dtype": "float32"},
+            },
+        }
+
+        runtime = deep_match_runtime_config_from_payload(payload)
+
+        self.assertEqual(runtime.matcher_method, "loftr")
+        self.assertEqual(runtime.feature_extractor_method, "loftr")
+        self.assertEqual(runtime.matcher_options["backend"], "external")
+        self.assertEqual(runtime.matcher_options["model_type"], "outdoor")
+        self.assertEqual(runtime.matcher_options["top_k"], 100)
+        self.assertEqual(runtime.feature_options["preprocess_mode"], "pad")
+        self.assertEqual(runtime.feature_options["resize_width"], 640)
+        self.assertEqual(runtime.feature_options["resize_height"], 480)
+
 
 if __name__ == "__main__":
     unittest.main()

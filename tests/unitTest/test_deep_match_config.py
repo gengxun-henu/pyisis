@@ -3,6 +3,7 @@
 import json
 import tempfile
 from pathlib import Path
+from unittest.mock import patch
 import pytest
 
 DEEP_MATCH_CONFIG_PATH = Path(__file__).resolve().parents[2] / "examples" / "controlnet_construct" / "deep_match_config.py"
@@ -190,6 +191,143 @@ class TestDeepMatchConfigValidation:
         with pytest.raises(ValueError, match="unknown matcher option"):
             validate_deep_match_config(config)
 
+    def test_loftr_accepts_default_kornia_and_external_backends(self):
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import validate_deep_match_config
+
+        for matcher in (
+            {"method": "loftr"},
+            {"method": "loftr", "backend": "kornia"},
+            {"method": "loftr", "backend": "external", "model_type": "outdoor", "temp_bug_fix": "auto"},
+        ):
+            validate_deep_match_config(
+                {
+                    "feature_extractor": {"method": "loftr", "preprocess_mode": "pad"},
+                    "matcher": matcher,
+                }
+            )
+
+    def test_loftr_rejects_unknown_backend_and_non_loftr_extractor(self):
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import validate_deep_match_config
+
+        with pytest.raises(ValueError, match="LoFTR.*backend"):
+            validate_deep_match_config(
+                {
+                    "feature_extractor": {"method": "loftr"},
+                    "matcher": {"method": "loftr", "backend": "experimental"},
+                }
+            )
+
+        with pytest.raises(ValueError, match="feature_extractor.method.*loftr"):
+            validate_deep_match_config(
+                {
+                    "feature_extractor": {"method": "superpoint"},
+                    "matcher": {"method": "loftr", "backend": "external"},
+                }
+            )
+
+    def test_external_loftr_rejects_unknown_options_and_invalid_enums(self):
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import validate_deep_match_config
+
+        base = {
+            "feature_extractor": {"method": "loftr", "preprocess_mode": "pad"},
+            "matcher": {"method": "loftr", "backend": "external"},
+        }
+
+        config = {
+            "feature_extractor": {"method": "loftr", "remove_borders": 4},
+            "matcher": {"method": "loftr", "backend": "external"},
+        }
+        with pytest.raises(ValueError, match="unknown feature_extractor option"):
+            validate_deep_match_config(config)
+
+        config = {
+            "feature_extractor": {"method": "loftr"},
+            "matcher": {"method": "loftr", "backend": "external", "weights_path": "ignored.ckpt"},
+        }
+        with pytest.raises(ValueError, match="unknown matcher option"):
+            validate_deep_match_config(config)
+
+        for field_name, bad_value, pattern in (
+            ("model_type", "space", "model_type"),
+            ("temp_bug_fix", "maybe", "temp_bug_fix"),
+            ("geometric_filter", "essential", "geometric_filter"),
+        ):
+            config = {
+                "feature_extractor": dict(base["feature_extractor"]),
+                "matcher": dict(base["matcher"], **{field_name: bad_value}),
+            }
+            with pytest.raises(ValueError, match=pattern):
+                validate_deep_match_config(config)
+
+        config = {
+            "feature_extractor": {"method": "loftr", "preprocess_mode": "crop"},
+            "matcher": dict(base["matcher"]),
+        }
+        with pytest.raises(ValueError, match="preprocess_mode"):
+            validate_deep_match_config(config)
+
+    def test_external_loftr_rejects_checkpoint_alias_conflict_and_partial_resize(self):
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import validate_deep_match_config
+
+        with pytest.raises(ValueError, match="checkpoint.*checkpoint_path"):
+            validate_deep_match_config(
+                {
+                    "feature_extractor": {"method": "loftr"},
+                    "matcher": {
+                        "method": "loftr",
+                        "backend": "external",
+                        "checkpoint": "/tmp/a.ckpt",
+                        "checkpoint_path": "/tmp/b.ckpt",
+                    },
+                }
+            )
+
+        with pytest.raises(ValueError, match="resize_width.*resize_height"):
+            validate_deep_match_config(
+                {
+                    "feature_extractor": {"method": "loftr", "resize_width": 640},
+                    "matcher": {"method": "loftr", "backend": "external"},
+                }
+            )
+
+    def test_external_loftr_rejects_invalid_numeric_ranges(self):
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        from deep_match_config import validate_deep_match_config
+
+        base = {
+            "feature_extractor": {"method": "loftr"},
+            "matcher": {"method": "loftr", "backend": "external"},
+        }
+
+        for bad_value in (1.1, float("inf"), float("nan")):
+            config = {
+                "feature_extractor": dict(base["feature_extractor"]),
+                "matcher": dict(base["matcher"], ransac_confidence=bad_value),
+            }
+            with pytest.raises(ValueError, match="ransac_confidence"):
+                validate_deep_match_config(config)
+
+        for field_name, bad_value in (
+            ("coarse_threshold", float("inf")),
+            ("min_confidence", float("nan")),
+            ("ransac_reproj_threshold", float("inf")),
+        ):
+            config = {
+                "feature_extractor": dict(base["feature_extractor"]),
+                "matcher": dict(base["matcher"], **{field_name: bad_value}),
+            }
+            with pytest.raises(ValueError, match=field_name):
+                validate_deep_match_config(config)
+
 
 class TestDeepMatchConfigHelpers:
     """Tests for helper functions."""
@@ -226,6 +364,30 @@ class TestDeepMatchConfigHelpers:
         sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
         from deep_match_config import require_deep_config
         require_deep_config("flann", None)
+
+    def test_external_loftr_dependency_check_skips_kornia_loftr(self):
+        import sys
+        sys.path.insert(0, str(DEEP_MATCH_CONFIG_PATH.parent))
+        import deep_match_config
+        from deep_match_config import DeepMatchRuntimeConfig, check_deep_match_dependencies
+
+        runtime_config = DeepMatchRuntimeConfig(
+            matcher_method="loftr",
+            feature_extractor_method="loftr",
+            prefer_gpu=False,
+            device_dtype="float32",
+            fallback_on_error=None,
+            raw_config={"matcher": {"method": "loftr", "backend": "external"}},
+            matcher_options={"backend": "external"},
+        )
+
+        def _fake_import(name, package=None):
+            if name in {"torch", "kornia.feature"}:
+                raise ModuleNotFoundError(name=name)
+            return object()
+
+        with patch.object(deep_match_config.importlib, "import_module", side_effect=_fake_import):
+            assert check_deep_match_dependencies(runtime_config) == ["missing torch"]
 
 
 class TestPresetFiles:

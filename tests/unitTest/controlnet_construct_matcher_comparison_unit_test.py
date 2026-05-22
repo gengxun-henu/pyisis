@@ -12,6 +12,7 @@ import sys
 from pathlib import Path
 import subprocess
 import unittest
+from unittest import mock
 
 
 UNIT_TEST_DIR = Path(__file__).resolve().parent
@@ -354,6 +355,19 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
 
 
 class MatcherComparisonRunUnitTest(unittest.TestCase):
+    def _fake_command_for_method(self, method):
+        if method.label == "sift_flann":
+            return [
+                sys.executable,
+                "-c",
+                "print('fake sift success')",
+            ]
+        return [
+            sys.executable,
+            "-c",
+            "print('fake loftr success')",
+        ]
+
     def test_run_experiment_dry_run_writes_manifest_and_command_scripts(self):
         with temporary_directory() as temp_dir:
             config_path = temp_dir / "experiment.json"
@@ -545,13 +559,20 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertEqual(manifest["methods"][0]["status"], "dry_run")
             self.assertNotEqual(manifest["methods"][0]["command"], ["bash", "old-command.sh"])
 
-    def test_run_experiment_non_dry_run_raises_before_method_side_effects(self):
+    def test_run_experiment_non_dry_run_executes_fake_commands_and_records_success(self):
         with temporary_directory() as temp_dir:
             config_path = temp_dir / "experiment.json"
             _write_config_with_temp_inputs(config_path, temp_dir)
 
-            with self.assertRaisesRegex(NotImplementedError, "Task 4"):
-                matcher_comparison.run_experiment(
+            def fake_build_method_command(config, method, *, method_dir, repo_root, keep_going=None):
+                return self._fake_command_for_method(method)
+
+            with mock.patch.object(
+                matcher_comparison,
+                "build_method_command",
+                side_effect=fake_build_method_command,
+            ):
+                result = matcher_comparison.run_experiment(
                     config_path,
                     output_root=temp_dir / "out",
                     repo_root=PROJECT_ROOT,
@@ -561,8 +582,50 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
                     keep_going=True,
                 )
 
-            self.assertFalse((temp_dir / "out/unit_run/experiment_config.json").exists())
-            self.assertFalse((temp_dir / "out/unit_run/methods/sift_flann/command.sh").exists())
+            sift_dir = result.run_dir / "methods/sift_flann"
+            loftr_dir = result.run_dir / "methods/loftr"
+            self.assertTrue((sift_dir / "command.sh").exists())
+            self.assertTrue((loftr_dir / "command.sh").exists())
+            self.assertIn("fake sift success", (sift_dir / "stdout.log").read_text(encoding="utf-8"))
+            self.assertIn("fake loftr success", (loftr_dir / "stdout.log").read_text(encoding="utf-8"))
+            manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertFalse(manifest["dry_run"])
+            self.assertEqual(
+                {method["label"]: method["status"] for method in manifest["methods"]},
+                {"sift_flann": "success", "loftr": "success"},
+            )
+
+    def test_run_experiment_non_dry_run_stops_after_failure_when_fail_fast(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+
+            def fake_build_method_command(config, method, *, method_dir, repo_root, keep_going=None):
+                if method.label == "sift_flann":
+                    return [sys.executable, "-c", "import sys; print('bad', file=sys.stderr); sys.exit(7)"]
+                return self._fake_command_for_method(method)
+
+            with mock.patch.object(
+                matcher_comparison,
+                "build_method_command",
+                side_effect=fake_build_method_command,
+            ):
+                matcher_comparison.run_experiment(
+                    config_path,
+                    output_root=temp_dir / "out",
+                    repo_root=PROJECT_ROOT,
+                    dry_run=False,
+                    only_labels=None,
+                    resume=False,
+                    keep_going=False,
+                )
+
+            run_dir = temp_dir / "out/unit_run"
+            self.assertIn("bad", (run_dir / "methods/sift_flann/stderr.log").read_text(encoding="utf-8"))
+            self.assertFalse((run_dir / "methods/loftr/command.sh").exists())
+            manifest = json.loads((run_dir / "experiment_manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual([method["label"] for method in manifest["methods"]], ["sift_flann"])
+            self.assertEqual(manifest["methods"][0]["status"], "failed")
 
     def test_run_matcher_comparison_script_exec_help(self):
         script_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/run_matcher_comparison.py"
@@ -583,6 +646,42 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             with self.subTest(value=value):
                 with self.assertRaisesRegex(ValueError, "--only must include at least one method label"):
                     matcher_comparison._parse_only(value)
+
+
+class MatcherComparisonExecutionUnitTest(unittest.TestCase):
+    def test_execute_method_writes_success_metrics_and_logs(self):
+        with temporary_directory() as temp_dir:
+            method_dir = temp_dir / "method"
+            command = [sys.executable, "-c", "print('hello from fake method')"]
+
+            metrics = matcher_comparison.execute_method(
+                label="fake_success",
+                command=command,
+                method_dir=method_dir,
+            )
+
+            self.assertEqual(metrics["status"], "success")
+            self.assertEqual(metrics["return_code"], 0)
+            self.assertGreaterEqual(metrics["total_wall_seconds"], 0)
+            self.assertIn("hello from fake method", (method_dir / "stdout.log").read_text(encoding="utf-8"))
+            self.assertEqual((method_dir / "stderr.log").read_text(encoding="utf-8"), "")
+            metrics_payload = json.loads((method_dir / "metrics.json").read_text(encoding="utf-8"))
+            self.assertEqual(metrics_payload["status"], "success")
+
+    def test_execute_method_writes_failed_metrics_and_logs(self):
+        with temporary_directory() as temp_dir:
+            method_dir = temp_dir / "method"
+            command = [sys.executable, "-c", "import sys; print('bad', file=sys.stderr); sys.exit(7)"]
+
+            metrics = matcher_comparison.execute_method(
+                label="fake_failure",
+                command=command,
+                method_dir=method_dir,
+            )
+
+            self.assertEqual(metrics["status"], "failed")
+            self.assertEqual(metrics["return_code"], 7)
+            self.assertIn("bad", (method_dir / "stderr.log").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

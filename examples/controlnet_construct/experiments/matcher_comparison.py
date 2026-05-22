@@ -13,6 +13,8 @@ import json
 from pathlib import Path
 import re
 import shutil
+import subprocess
+import time
 from typing import Any
 
 
@@ -319,6 +321,42 @@ def _existing_success(metrics_path: str | Path, command: list[str]) -> bool:
     return isinstance(payload, dict) and payload.get("status") == "success" and payload.get("command") == command
 
 
+def execute_method(*, label: str, command: list[str], method_dir: str | Path) -> dict[str, Any]:
+    method_dir = Path(method_dir).expanduser().resolve()
+    method_dir.mkdir(parents=True, exist_ok=True)
+    stdout_log = method_dir / "stdout.log"
+    stderr_log = method_dir / "stderr.log"
+    metrics_path = method_dir / "metrics.json"
+
+    started_at_utc = _utc_now_iso()
+    start_time = time.monotonic()
+    result = subprocess.run(
+        command,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    total_wall_seconds = time.monotonic() - start_time
+    finished_at_utc = _utc_now_iso()
+
+    stdout_log.write_text(result.stdout, encoding="utf-8")
+    stderr_log.write_text(result.stderr, encoding="utf-8")
+
+    metrics = {
+        "label": label,
+        "status": "success" if result.returncode == 0 else "failed",
+        "return_code": result.returncode,
+        "started_at_utc": started_at_utc,
+        "finished_at_utc": finished_at_utc,
+        "total_wall_seconds": total_wall_seconds,
+        "command": command,
+        "stdout_log": str(stdout_log),
+        "stderr_log": str(stderr_log),
+    }
+    metrics_path.write_text(json.dumps(metrics, indent=2) + "\n", encoding="utf-8")
+    return metrics
+
+
 def _method_manifest_entry(
     method: MethodConfig,
     method_dir: str | Path,
@@ -369,9 +407,6 @@ def run_experiment(
             raise ValueError(f"Unknown method label(s): {', '.join(unknown_labels)}")
         selected_methods = tuple(method for method in config.methods if method.label in only_labels)
 
-    if not dry_run:
-        raise NotImplementedError("Real matcher comparison execution will be implemented in Task 4")
-
     run_dir = Path(output_root).expanduser() / config.run_id
     methods_dir = run_dir / "methods"
     reports_dir = run_dir / "reports"
@@ -402,21 +437,35 @@ def run_experiment(
             )
             continue
 
-        warnings = _prepare_dry_run_workspace(
-            method_dir,
-            original_images_list=config.inputs.original_images_list,
-            doms_list=config.inputs.doms_list,
-        )
+        if dry_run:
+            warnings = _prepare_dry_run_workspace(
+                method_dir,
+                original_images_list=config.inputs.original_images_list,
+                doms_list=config.inputs.doms_list,
+            )
+        else:
+            prepare_method_workspace(
+                method_dir,
+                original_images_list=config.inputs.original_images_list,
+                doms_list=config.inputs.doms_list,
+            )
+            warnings = []
         _write_command_script(method_dir / "command.sh", command)
+        status = "dry_run"
+        if not dry_run:
+            metrics = execute_method(label=method.label, command=command, method_dir=method_dir)
+            status = metrics["status"]
         method_entries.append(
             _method_manifest_entry(
                 method,
                 method_dir,
                 command,
-                "dry_run" if dry_run else "pending",
+                status,
                 warnings,
             )
         )
+        if not dry_run and status != "success" and not effective_keep_going:
+            break
     manifest_path = run_dir / "experiment_manifest.json"
     manifest = {
         "run_id": config.run_id,

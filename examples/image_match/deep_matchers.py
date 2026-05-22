@@ -538,6 +538,7 @@ class LoFTRMatcher:
         return pretrained or "outdoor"
 
     def _load_matcher(self):
+        pretrained = self._loftr_pretrained()
         try:
             import torch
         except Exception:
@@ -556,7 +557,7 @@ class LoFTRMatcher:
             )
         torch_dtype = _resolve_torch_dtype(torch=torch, method=self.method, device_dtype=self.device_dtype)
         if self._matcher is None:
-            self._matcher = kf.LoFTR(pretrained=self._loftr_pretrained()).eval().to(device=self.device, dtype=torch_dtype)
+            self._matcher = kf.LoFTR(pretrained=pretrained).eval().to(device=self.device, dtype=torch_dtype)
         return torch, self._matcher
 
     def match(

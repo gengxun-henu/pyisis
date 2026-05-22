@@ -1569,6 +1569,19 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         with self.assertRaisesRegex(deep_matchers_module.DeepMatcherError, "checkpoint_path"):
             matcher._load_matcher()
 
+    def test_loftr_matcher_options_validate_before_dependency_import(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        matcher = deep_matchers_module.build_deep_matcher(
+            "loftr",
+            device="cpu",
+            feature_extractor_method="loftr",
+            matcher_options={"checkpoint_path": "custom_loftr.ckpt"},
+        )
+
+        with mock.patch.dict(sys.modules, {"torch": None}, clear=False):
+            with self.assertRaisesRegex(deep_matchers_module.DeepMatcherError, "checkpoint_path"):
+                matcher._load_matcher()
+
     def test_deep_matchers_apply_dtype_and_surface_ignored_device_options(self):
         deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
 

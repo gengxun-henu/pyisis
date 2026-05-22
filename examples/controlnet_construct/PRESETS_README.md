@@ -69,6 +69,8 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
 | `superglue_default.json` | SuperPoint | SuperGlue | High-accuracy standard scenarios. Best match quality but slower. |
 | `lightglue_default.json` | SuperPoint | LightGlue | Speed-accuracy balance, recommended default. Adaptive feature cropping. |
 | `loftr_default.json` | LoFTR (built-in) | LoFTR (end-to-end) | Weak-texture areas, large viewpoint changes. No independent keypoints needed. |
+| `loftr_external_outdoor.json` | LoFTR (built-in) | LoFTR external backend | Outdoor external LoFTR repository/checkpoint path aligned with `run-loftr.py`. |
+| `loftr_external_indoor.json` | LoFTR (built-in) | LoFTR external backend | Indoor external LoFTR repository/checkpoint path aligned with `run-loftr.py`. |
 | `lightglue_high_recall.json` | SuperPoint | LightGlue | High-recall needs, extracts 8192 keypoints with lower detection threshold. |
 | `lightglue_disk.json` | DISK | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
 | `lightglue_aliked.json` | ALIKED | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
@@ -83,9 +85,11 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
 | `lightglue_high_recall.json` | LightGlue | SuperPoint | Supported in `direct`, `export`, and `import` workflows | Same as `lightglue_default.json` | Higher keypoint count raises runtime and memory cost. |
 | `superglue_default.json` | SuperGlue | SuperPoint | Supported in `direct`, `export`, and `import` workflows | `direct`: environment with ISIS + `torch` + `kornia` + `superglue-pretrained-network`; `export`/`import`: `asp360_new`, plus a deep-learning env for `run_deep_match_manifest.py` | Slower than LightGlue and usually the heaviest sparse preset. |
 | `loftr_default.json` | LoFTR | LoFTR (built-in) | Supported in `direct`, `export`, and `import` workflows | `direct`: environment with ISIS + `torch` + `kornia`; `export`/`import`: `asp360_new`, plus a deep-learning env for `run_deep_match_manifest.py` | Dense end-to-end matcher; CPU works for smoke validation, but GPU is strongly recommended for real runs. |
-| `lightglue_disk.json` | LightGlue | DISK | Rejected during config validation on this branch | No supported runtime path yet | Strict compatibility validation requires `feature_extractor.method="superpoint"` for LightGlue. |
-| `lightglue_aliked.json` | LightGlue | ALIKED | Rejected during config validation on this branch | No supported runtime path yet | Strict compatibility validation requires `feature_extractor.method="superpoint"` for LightGlue. |
-| `lightglue_doghardnet.json` | LightGlue | DoGHardNet | Rejected during config validation on this branch | No supported runtime path yet | Strict compatibility validation requires `feature_extractor.method="superpoint"` for LightGlue. |
+| `loftr_external_outdoor.json` | LoFTR | LoFTR (built-in) | Supported in `direct`, `export`, and `import` workflows when external LoFTR dependencies are available | `direct`: environment with ISIS + `torch` + external LoFTR repo/checkpoint; `export`/`import`: `asp360_new`, plus `deep-learning` for manifest execution | Uses `matcher.backend="external"` and the outdoor checkpoint family from `run-loftr.py`; `loftr_root` and checkpoint paths are machine-specific and should be supplied in local config when auto-discovery is not enough. |
+| `loftr_external_indoor.json` | LoFTR | LoFTR (built-in) | Supported in `direct`, `export`, and `import` workflows when external LoFTR dependencies are available | Same as `loftr_external_outdoor.json` | Uses the indoor checkpoint family and `temp_bug_fix:auto`; GPU is recommended for real runs. |
+| `lightglue_disk.json` | LightGlue | DISK | Unsupported by the current runtime on this branch | No supported runtime path yet | Official LightGlue preset validation may accept future extractor names, but this branch's runtime fails fast for non-SuperPoint LightGlue extraction. |
+| `lightglue_aliked.json` | LightGlue | ALIKED | Unsupported by the current runtime on this branch | No supported runtime path yet | Official LightGlue preset validation may accept future extractor names, but this branch's runtime fails fast for non-SuperPoint LightGlue extraction. |
+| `lightglue_doghardnet.json` | LightGlue | DoGHardNet | Unsupported by the current runtime on this branch | No supported runtime path yet | Official LightGlue preset validation may accept future extractor names, but this branch's runtime fails fast for non-SuperPoint LightGlue extraction. |
 | `superglue_aliked.json` | SuperGlue | ALIKED | Rejected during config validation on this branch | No supported runtime path yet | Strict compatibility validation requires `feature_extractor.method="superpoint"` for SuperGlue. |
 
 ## Feature Extractors
@@ -153,6 +157,41 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
 - **Pros:** No feature extraction needed, direct end-to-end matching
 - **Cons:** Slow, requires GPU
 
+## External LoFTR Backend
+
+LoFTR presets whose matcher section contains `"backend": "external"` use the
+external LoFTR repository and checkpoint workflow validated by
+`examples/learning_methods/run-loftr.py`.
+
+Existing LoFTR presets without `backend: "external"` keep the current
+ControlNet runtime behavior based on `kornia.feature.LoFTR(pretrained=...)`.
+This allows side-by-side comparison between the kornia backend and the external
+backend.
+
+External LoFTR supports these preset/runtime options:
+
+- `matcher.model_type`: `outdoor` or `indoor`
+- `matcher.loftr_root`: optional path to the external LoFTR repository
+- `matcher.checkpoint` or `matcher.checkpoint_path`: optional explicit checkpoint
+- `matcher.temp_bug_fix`: `auto`, `true`, or `false`
+- `matcher.coarse_threshold`
+- `matcher.min_confidence`
+- `matcher.top_k`
+- `matcher.geometric_filter`: `none`, `homography`, or `fundamental`
+- `matcher.ransac_reproj_threshold`
+- `matcher.ransac_confidence`
+- `matcher.ransac_max_iters`
+- `feature_extractor.preprocess_mode`: `pad` or `resize`
+- `feature_extractor.resize_width` and `feature_extractor.resize_height`
+
+Shared presets omit `loftr_root` and checkpoint paths because those values are
+machine-specific. If auto-discovery cannot find the sibling external LoFTR
+repository, copy the preset and add `matcher.loftr_root` locally.
+
+Real external LoFTR execution should run in the separate `deep-learning` conda
+environment. The `asp360_new` environment remains the recommended environment
+for ControlNet preparation, export, import, and unit tests.
+
 ## Usage
 
 Specify the preset path in the `ImageMatch` section of `controlnet_config.json`:
@@ -176,9 +215,9 @@ Both wrapper entrypoints (`run_pipeline_example.sh` and `run_image_match_batch_e
 
 When `ImageMatch.deep_matcher_config_path` is relative, the wrappers resolve it relative to the config file directory first. If that file does not exist, they fall back to resolving it relative to the repository root. The resolved path is printed in the wrapper log before it is forwarded to `examples/image_match/image_match.py`.
 
-Current compatibility validation is strict:
+Current runtime support boundaries are:
 
-- `lightglue` requires `feature_extractor.method: superpoint`
+- `lightglue` runtime support currently requires `feature_extractor.method: superpoint`; official LightGlue preset validation may accept future extractor names, but this branch's runtime fails fast for non-SuperPoint.
 - `superglue` requires `feature_extractor.method: superpoint`
 - `loftr` requires `feature_extractor.method: loftr`
 
@@ -198,6 +237,8 @@ Copy any preset file to a custom path, modify parameters, and specify it via `de
 - `keypoint_threshold`: Detection threshold (not needed for LoFTR)
 - `remove_borders`: Border removal pixels (not needed for LoFTR)
 - `detect_keypoints`: Enable keypoint detection mode (SuperPoint only)
+- `preprocess_mode`: LoFTR external preprocessing mode (`pad` or `resize`)
+- `resize_width`, `resize_height`: optional LoFTR external resize dimensions; must be provided together
 
 **matcher:**
 - `method`: Matcher method (`superglue`, `lightglue`, `loftr`)
@@ -205,6 +246,11 @@ Copy any preset file to a custom path, modify parameters, and specify it via `de
 - `flash`: Enable Flash Attention (LightGlue only)
 - `prune_threshold`: Feature pruning threshold (LightGlue only)
 - `sinkhorn_iterations`: Sinkhorn normalization iterations (SuperGlue only)
+- `backend`: LoFTR backend selector (`external` or `kornia`); LightGlue currently uses its existing default runtime path and shared presets should omit `backend` unless a runtime path explicitly documents it.
+- `loftr_root`: external LoFTR repository path for `backend: external`
+- `checkpoint`, `checkpoint_path`: external LoFTR checkpoint path aliases
+- `model_type`: LoFTR external checkpoint family (`outdoor` or `indoor`)
+- `temp_bug_fix`, `coarse_threshold`, `min_confidence`, `top_k`, `geometric_filter`, `ransac_reproj_threshold`, `ransac_confidence`, `ransac_max_iters`: LoFTR external tuning options
 
 **device:**
 - `prefer_gpu`: Prefer GPU execution

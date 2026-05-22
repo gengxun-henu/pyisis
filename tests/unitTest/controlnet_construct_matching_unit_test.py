@@ -1787,6 +1787,68 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "Unsupported matcher_method"):
             tile_matching_module._normalize_matcher_method("unknown-matcher")
 
+    def test_controlnet_deep_adapter_reexports_image_match_adapter_api(self):
+        controlnet_adapter = importlib.import_module("controlnet_construct.deep_adapter")
+        image_match_adapter = importlib.import_module("image_match.deep_adapter")
+        image_match_frontends = importlib.import_module("image_match.deep_frontends")
+        image_match_matchers = importlib.import_module("image_match.deep_matchers")
+
+        expected_exports = {
+            "DeepMatcherAdapter": image_match_adapter.DeepMatcherAdapter,
+            "DeepDependencyError": image_match_frontends.DeepDependencyError,
+            "DeepFrontendError": image_match_frontends.DeepFrontendError,
+            "LoFTRFrontend": image_match_frontends.LoFTRFrontend,
+            "SuperPointFrontend": image_match_frontends.SuperPointFrontend,
+            "normalize_deep_method": image_match_frontends.normalize_deep_method,
+            "resolve_torch_device": image_match_frontends.resolve_torch_device,
+            "DeepMatchResult": image_match_matchers.DeepMatchResult,
+            "DeepMatcherError": image_match_matchers.DeepMatcherError,
+            "_default_feature_extractor_for_matcher": image_match_matchers._default_feature_extractor_for_matcher,
+            "build_deep_matcher": image_match_matchers.build_deep_matcher,
+            "_filter_feature_dict_by_invalid_mask": image_match_adapter._filter_feature_dict_by_invalid_mask,
+            "_runtime_feature_extractor_method": image_match_adapter._runtime_feature_extractor_method,
+            "_valid_mask_keep": image_match_adapter._valid_mask_keep,
+            "_validate_runtime_matcher_compatibility": image_match_adapter._validate_runtime_matcher_compatibility,
+        }
+        for name, expected in expected_exports.items():
+            with self.subTest(name=name):
+                self.assertIs(getattr(controlnet_adapter, name), expected)
+                self.assertIn(name, controlnet_adapter.__all__)
+
+    def test_controlnet_deep_frontends_reexports_image_match_frontend_api(self):
+        controlnet_frontends = importlib.import_module("controlnet_construct.deep_frontends")
+        image_match_frontends = importlib.import_module("image_match.deep_frontends")
+
+        for name in (
+            "DeepDependencyError",
+            "DeepFrontendError",
+            "LoFTRFrontend",
+            "SUPPORTED_DEEP_METHODS",
+            "SuperPointFrontend",
+            "normalize_deep_method",
+            "resolve_torch_device",
+        ):
+            with self.subTest(name=name):
+                self.assertIs(getattr(controlnet_frontends, name), getattr(image_match_frontends, name))
+                self.assertIn(name, controlnet_frontends.__all__)
+
+    def test_controlnet_deep_matchers_reexports_image_match_matcher_api(self):
+        controlnet_matchers = importlib.import_module("controlnet_construct.deep_matchers")
+        image_match_matchers = importlib.import_module("image_match.deep_matchers")
+
+        for name in (
+            "DeepMatchResult",
+            "DeepMatcherError",
+            "LightGlueMatcher",
+            "LoFTRMatcher",
+            "SuperGlueMatcher",
+            "_default_feature_extractor_for_matcher",
+            "build_deep_matcher",
+        ):
+            with self.subTest(name=name):
+                self.assertIs(getattr(controlnet_matchers, name), getattr(image_match_matchers, name))
+                self.assertIn(name, controlnet_matchers.__all__)
+
     def test_deep_adapter_rejects_cross_method_fallback(self):
         deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
         adapter = deep_adapter_module.DeepMatcherAdapter()

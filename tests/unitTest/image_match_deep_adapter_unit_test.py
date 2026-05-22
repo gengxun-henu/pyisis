@@ -29,7 +29,7 @@ for import_path in (PROJECT_ROOT, EXAMPLES_DIR):
         sys.path.insert(0, str(import_path))
 
 from image_match.deep_adapter import DeepMatcherAdapter
-from image_match.deep_frontends import DeepFrontendError, SuperPointFrontend
+from image_match.deep_frontends import DeepFrontendError, OfficialLightGlueFrontend, SuperPointFrontend
 from controlnet_construct.deep_match_config import DeepMatchRuntimeConfig
 
 
@@ -82,7 +82,86 @@ class _DTypeTrackingModule:
         return self
 
 
+class _OfficialExtractorStub:
+    instances: list["_OfficialExtractorStub"] = []
+
+    def __init__(self, **kwargs) -> None:
+        self.kwargs = kwargs
+        self.device = None
+        self.constructor_name = None
+        self.input_shapes: list[tuple[int, ...]] = []
+        type(self).instances.append(self)
+
+    def eval(self):
+        return self
+
+    def to(self, device):
+        self.device = device
+        return self
+
+    def extract(self, image):
+        import torch
+
+        self.input_shapes.append(tuple(image.shape))
+        return {
+            "keypoints": torch.tensor([[[1.0, 2.0], [3.0, 4.0]]], dtype=torch.float32, device=image.device),
+            "descriptors": torch.tensor([[[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]], dtype=torch.float32, device=image.device),
+            "scores": torch.tensor([[0.7, 0.8]], dtype=torch.float32, device=image.device),
+        }
+
+
 class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
+    def test_official_lightglue_frontend_builds_expected_extractors_and_channel_shapes(self):
+        import torch
+
+        def build_constructor(constructor_name):
+            def constructor(**kwargs):
+                extractor = _OfficialExtractorStub(**kwargs)
+                extractor.constructor_name = constructor_name
+                return extractor
+
+            return constructor
+
+        fake_lightglue = SimpleNamespace(
+            SuperPoint=build_constructor("SuperPoint"),
+            DISK=build_constructor("DISK"),
+            ALIKED=build_constructor("ALIKED"),
+            DoGHardNet=build_constructor("DoGHardNet"),
+            SIFT=build_constructor("SIFT"),
+        )
+
+        for method, expected_constructor, expected_channels in (
+            ("superpoint", "SuperPoint", 1),
+            ("disk", "DISK", 3),
+            ("aliked", "ALIKED", 3),
+            ("doghardnet", "DoGHardNet", 1),
+            ("lightglue_sift", "SIFT", 1),
+        ):
+            with self.subTest(method=method):
+                _OfficialExtractorStub.instances = []
+                with mock.patch.dict(sys.modules, {"torch": torch, "lightglue": fake_lightglue}, clear=False):
+                    frontend = OfficialLightGlueFrontend(
+                        feature_extractor_method=method,
+                        feature_options={"max_features": 123},
+                    )
+                    features = frontend.extract(np.arange(16, dtype=np.float32).reshape(4, 4), device="cpu")
+
+                self.assertEqual(len(_OfficialExtractorStub.instances), 1)
+                extractor = _OfficialExtractorStub.instances[0]
+                self.assertEqual(extractor.constructor_name, expected_constructor)
+                self.assertEqual(extractor.kwargs["max_num_keypoints"], 123)
+                self.assertEqual(extractor.device, "cpu")
+                self.assertEqual(extractor.input_shapes, [(1, expected_channels, 4, 4)])
+                self.assertEqual(features["keypoints"].shape, (2, 2))
+                self.assertEqual(features["descriptors"].shape[0], 2)
+
+    def test_official_lightglue_frontend_rejects_feature_alias_conflict(self):
+        with self.assertRaisesRegex(ValueError, r"max_features.*max_keypoints"):
+            OfficialLightGlueFrontend(
+                feature_extractor_method="superpoint",
+                feature_options={"max_features": 123, "max_keypoints": 456},
+            )
+
     def test_superpoint_frontend_reads_runtime_config_parameters(self):
         runtime = DeepMatchRuntimeConfig(
             matcher_method="lightglue",
@@ -171,6 +250,69 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
             feature_options={"max_keypoints": 4096, "keypoint_threshold": 0.0005},
             device_options={"prefer_gpu": False, "dtype": "float32", "batch_inference": True},
         )
+
+    def test_deep_matcher_adapter_uses_official_lightglue_frontend_when_backend_is_official(self):
+        runtime = SimpleNamespace(
+            prefer_gpu=False,
+            matcher_method="lightglue",
+            feature_extractor_method="disk",
+            matcher_options={"backend": "official", "filter_threshold": 0.05},
+            feature_options={"max_features": 64},
+            device_options={"prefer_gpu": False, "dtype": "float32"},
+        )
+        matcher = _CapturingFeatureMatcher()
+        frontend = mock.Mock()
+        left_features = {
+            "keypoints": np.array([[1.0, 1.0], [4.0, 4.0]], dtype=np.float32),
+            "descriptors": np.array([[10.0, 11.0], [20.0, 21.0]], dtype=np.float32),
+            "scales": np.array([1.5, 2.5], dtype=np.float32),
+            "image_size": np.array([8.0, 8.0], dtype=np.float32),
+            "scores": np.array([0.1, 0.2], dtype=np.float32),
+        }
+        right_features = {
+            "keypoints": np.array([[2.0, 2.0], [5.0, 5.0]], dtype=np.float32),
+            "descriptors": np.array([[12.0, 13.0], [22.0, 23.0]], dtype=np.float32),
+            "scales": np.array([3.5, 4.5], dtype=np.float32),
+            "image_size": np.array([8.0, 8.0], dtype=np.float32),
+            "scores": np.array([0.4, 0.5], dtype=np.float32),
+        }
+        frontend.extract.side_effect = [left_features, right_features]
+        left_mask = np.zeros((8, 8), dtype=bool)
+        left_mask[4, 4] = True
+
+        with mock.patch("image_match.deep_adapter.OfficialLightGlueFrontend", return_value=frontend) as frontend_constructor, mock.patch(
+            "image_match.deep_adapter.build_deep_matcher",
+            return_value=matcher,
+        ) as build_matcher_mock:
+            adapter = DeepMatcherAdapter(prefer_gpu=True, runtime_config=runtime)
+            adapter.match_pair(
+                matcher_method="lightglue",
+                left_image=np.zeros((8, 8), dtype=np.float32),
+                right_image=np.zeros((8, 8), dtype=np.float32),
+                left_mask=left_mask,
+            )
+
+        frontend_constructor.assert_called_once_with(
+            feature_extractor_method="disk",
+            feature_options={"max_features": 64},
+        )
+        self.assertEqual(frontend.extract.call_count, 2)
+        for extract_call in frontend.extract.call_args_list:
+            np.testing.assert_allclose(extract_call.args[0], np.zeros((8, 8), dtype=np.float32))
+            self.assertEqual(extract_call.kwargs["device"], "cpu")
+        build_matcher_mock.assert_called_once_with(
+            "lightglue",
+            device="cpu",
+            feature_extractor_method="disk",
+            matcher_options={"backend": "official", "filter_threshold": 0.05},
+            feature_options={"max_features": 64},
+            device_options={"prefer_gpu": False, "dtype": "float32"},
+        )
+        self.assertEqual(len(matcher.calls), 1)
+        np.testing.assert_allclose(matcher.calls[0]["features_left"]["keypoints"], np.array([[1.0, 1.0]], dtype=np.float32))
+        np.testing.assert_allclose(matcher.calls[0]["features_left"]["scales"], np.array([1.5], dtype=np.float32))
+        np.testing.assert_allclose(matcher.calls[0]["features_left"]["image_size"], left_features["image_size"])
+        np.testing.assert_allclose(matcher.calls[0]["features_right"]["keypoints"], right_features["keypoints"])
 
     def test_image_match_lightglue_applies_dtype_and_surfaces_ignored_device_options(self):
         deep_matchers_module = __import__("image_match.deep_matchers", fromlist=["build_deep_matcher"])

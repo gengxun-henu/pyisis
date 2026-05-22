@@ -103,13 +103,27 @@ def _default_feature_extractor_for_matcher(matcher_method: str) -> str:
 
 
 def _validate_feature_extractor_compatibility(
-    *, matcher_method: str, feature_extractor_method: str | None
+    *,
+    matcher_method: str,
+    feature_extractor_method: str | None,
+    matcher_options: dict[str, Any] | None = None,
 ) -> str:
     normalized_matcher = str(matcher_method or "").strip().lower()
     if feature_extractor_method is None:
         normalized_extractor = _default_feature_extractor_for_matcher(normalized_matcher)
     else:
         normalized_extractor = str(feature_extractor_method).strip().lower()
+    if normalized_matcher == "lightglue":
+        backend = str((matcher_options or {}).get("backend") or "legacy").strip().lower()
+        if backend == "official":
+            supported_extractors = ("superpoint", "disk", "aliked", "doghardnet", "lightglue_sift")
+            if normalized_extractor in supported_extractors:
+                return normalized_extractor
+            supported_display = ", ".join(repr(method) for method in supported_extractors)
+            raise DeepMatcherError(
+                f"matcher.method={normalized_matcher!r} with backend='official' requires "
+                f"feature_extractor.method to be one of ({supported_display}); got {normalized_extractor!r}."
+            )
     supported_extractors = _MATCHER_FEATURE_EXTRACTOR_REQUIREMENTS.get(normalized_matcher)
     if supported_extractors is None or normalized_extractor in supported_extractors:
         return normalized_extractor
@@ -259,6 +273,25 @@ class SuperGlueMatcher:
         )
 
 
+OFFICIAL_LIGHTGLUE_FRONTEND_ALIASES = {"lightglue_sift": "sift"}
+OFFICIAL_LIGHTGLUE_MATCHER_OPTIONS = {"filter_threshold", "depth_confidence", "width_confidence", "flash", "mp"}
+OFFICIAL_LIGHTGLUE_FRONTEND_METHODS = {
+    "superpoint",
+    "disk",
+    "aliked",
+    "doghardnet",
+    *OFFICIAL_LIGHTGLUE_FRONTEND_ALIASES,
+}
+LEGACY_LIGHTGLUE_MATCHER_OPTIONS = {
+    "weights",
+    "flash",
+    "prune_threshold",
+    "filter_threshold",
+    "depth_confidence",
+    "width_confidence",
+}
+
+
 class LightGlueMatcher:
     method = "lightglue"
 
@@ -274,6 +307,7 @@ class LightGlueMatcher:
         self.device = device
         self.feature_extractor_method = str(feature_extractor_method or "superpoint").strip().lower()
         self.matcher_options = _copy_options(matcher_options)
+        self.backend = str(self.matcher_options.get("backend") or "legacy").strip().lower()
         self.feature_options = _copy_options(feature_options)
         self.device_options = _copy_options(device_options)
         self.ignored_parameters: list[str] = []
@@ -286,25 +320,51 @@ class LightGlueMatcher:
 
     def _lightglue_options(self) -> dict[str, Any]:
         options = _copy_options(self.matcher_options)
+        backend = str(options.pop("backend", self.backend) or "legacy").strip().lower()
+        if backend not in {"legacy", "official"}:
+            _raise_unsupported_option(method=self.method, option_name="backend", option_value=backend)
         _consume_matcher_placeholder(
             options,
             method=self.method,
             option_name="weights_path",
             ignored_parameters=self.ignored_parameters,
         )
+        if backend == "official":
+            _reject_unknown_options(
+                method=self.method,
+                options=options,
+                allowed=OFFICIAL_LIGHTGLUE_MATCHER_OPTIONS,
+            )
+            return options
         _reject_unknown_options(
             method=self.method,
             options=options,
-            allowed={"weights", "flash", "prune_threshold", "filter_threshold", "depth_confidence", "width_confidence"},
+            allowed=LEGACY_LIGHTGLUE_MATCHER_OPTIONS,
         )
         return options
 
     def _load_matcher(self):
-        if self.feature_extractor_method != "superpoint":
-            raise DeepMatcherError(
-                f"Deep matcher '{self.method}' currently only supports feature_extractor_method='superpoint', "
-                f"got {self.feature_extractor_method!r}."
+        if self.backend == "official":
+            if self.feature_extractor_method not in OFFICIAL_LIGHTGLUE_FRONTEND_METHODS:
+                supported_display = ", ".join(repr(method) for method in sorted(OFFICIAL_LIGHTGLUE_FRONTEND_METHODS))
+                raise DeepMatcherError(
+                    f"Deep matcher '{self.method}' with backend='official' supports "
+                    f"feature_extractor_method in ({supported_display}), got {self.feature_extractor_method!r}."
+                )
+            lightglue_features = OFFICIAL_LIGHTGLUE_FRONTEND_ALIASES.get(
+                self.feature_extractor_method,
+                self.feature_extractor_method,
             )
+        elif self.backend == "legacy":
+            if self.feature_extractor_method != "superpoint":
+                raise DeepMatcherError(
+                    f"Deep matcher '{self.method}' currently only supports feature_extractor_method='superpoint', "
+                    f"got {self.feature_extractor_method!r}."
+                )
+            lightglue_features = self.feature_extractor_method
+        else:
+            _raise_unsupported_option(method=self.method, option_name="backend", option_value=self.backend)
+
         try:
             import torch
         except Exception:
@@ -326,10 +386,41 @@ class LightGlueMatcher:
         torch_dtype = _resolve_torch_dtype(torch=torch, method=self.method, device_dtype=self.device_dtype)
         if self._matcher is None:
             self._matcher = LightGlue(
-                features=self.feature_extractor_method,
+                features=lightglue_features,
                 **self._lightglue_options(),
             ).eval().to(device=self.device, dtype=torch_dtype)
         return torch, self._matcher
+
+    def _lightglue_tensor(self, *, torch: Any, value: Any, torch_dtype: Any) -> Any:
+        if hasattr(value, "to"):
+            return value.to(device=self.device, dtype=torch_dtype)
+        array = np.asarray(value)
+        if array.ndim == 0:
+            array = array.reshape(1)
+        return torch.from_numpy(array)[None, ...].to(device=self.device, dtype=torch_dtype)
+
+    def _lightglue_feature_inputs(
+        self,
+        *,
+        torch: Any,
+        features: Any,
+        torch_dtype: Any,
+        keypoints: np.ndarray,
+        descriptors: np.ndarray,
+    ) -> dict[str, Any]:
+        if self.backend != "official":
+            return {
+                "keypoints": torch.from_numpy(keypoints)[None, :, :].to(device=self.device, dtype=torch_dtype),
+                "descriptors": torch.from_numpy(descriptors)[None, :, :].to(device=self.device, dtype=torch_dtype),
+            }
+
+        feature_map = dict(features or {})
+        feature_map["keypoints"] = keypoints
+        feature_map["descriptors"] = descriptors
+        return {
+            key: self._lightglue_tensor(torch=torch, value=value, torch_dtype=torch_dtype)
+            for key, value in feature_map.items()
+        }
 
     def match(self, *, features_left: Any, features_right: Any, device: str = "cpu"):
         torch, matcher = self._load_matcher()
@@ -349,14 +440,20 @@ class LightGlueMatcher:
             return np.zeros((0, 2), dtype=np.float32), np.zeros((0, 2), dtype=np.float32), np.zeros((0,), dtype=np.float32)
 
         inputs = {
-            "image0": {
-                "keypoints": torch.from_numpy(left_keypoints)[None, :, :].to(device=self.device, dtype=torch_dtype),
-                "descriptors": torch.from_numpy(left_descriptors)[None, :, :].to(device=self.device, dtype=torch_dtype),
-            },
-            "image1": {
-                "keypoints": torch.from_numpy(right_keypoints)[None, :, :].to(device=self.device, dtype=torch_dtype),
-                "descriptors": torch.from_numpy(right_descriptors)[None, :, :].to(device=self.device, dtype=torch_dtype),
-            },
+            "image0": self._lightglue_feature_inputs(
+                torch=torch,
+                features=features_left,
+                torch_dtype=torch_dtype,
+                keypoints=left_keypoints,
+                descriptors=left_descriptors,
+            ),
+            "image1": self._lightglue_feature_inputs(
+                torch=torch,
+                features=features_right,
+                torch_dtype=torch_dtype,
+                keypoints=right_keypoints,
+                descriptors=right_descriptors,
+            ),
         }
         with torch.no_grad():
             prediction = matcher(inputs)
@@ -441,6 +538,7 @@ class LoFTRMatcher:
         return pretrained or "outdoor"
 
     def _load_matcher(self):
+        pretrained = self._loftr_pretrained()
         try:
             import torch
         except Exception:
@@ -459,7 +557,7 @@ class LoFTRMatcher:
             )
         torch_dtype = _resolve_torch_dtype(torch=torch, method=self.method, device_dtype=self.device_dtype)
         if self._matcher is None:
-            self._matcher = kf.LoFTR(pretrained=self._loftr_pretrained()).eval().to(device=self.device, dtype=torch_dtype)
+            self._matcher = kf.LoFTR(pretrained=pretrained).eval().to(device=self.device, dtype=torch_dtype)
         return torch, self._matcher
 
     def match(
@@ -505,6 +603,7 @@ def build_deep_matcher(
     resolved_extractor = _validate_feature_extractor_compatibility(
         matcher_method=normalized,
         feature_extractor_method=feature_extractor_method,
+        matcher_options=matcher_options,
     )
     constructor_kwargs = {
         "device": device,

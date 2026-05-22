@@ -166,6 +166,50 @@ class _EvalToDeviceModule:
         return self
 
 
+class _FakeTorchTensor:
+    def __init__(self, array) -> None:
+        self.array = np.asarray(array)
+        self.device = None
+        self.dtype = None
+
+    def __getitem__(self, key):
+        return _FakeTorchTensor(self.array[key])
+
+    def to(self, *args, **kwargs):
+        if args:
+            self.device = args[0]
+        if "device" in kwargs:
+            self.device = kwargs["device"]
+        if "dtype" in kwargs:
+            self.dtype = kwargs["dtype"]
+        return self
+
+    def detach(self):
+        return self
+
+    def cpu(self):
+        return self
+
+    def numpy(self):
+        return self.array
+
+
+class _FakeTorchNoGrad:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, traceback):
+        return False
+
+
+def _fake_torch_module():
+    return _stub_module(
+        "torch",
+        from_numpy=lambda array: _FakeTorchTensor(array),
+        no_grad=lambda: _FakeTorchNoGrad(),
+    )
+
+
 def _stub_module(name: str, **attributes):
     module = ModuleType(name)
     if name == "torch":
@@ -1367,6 +1411,88 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             prune_threshold=4,
         )
 
+    def test_official_lightglue_matcher_uses_official_options_and_frontend_name(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        lightglue_constructor = mock.Mock(return_value=_EvalToDeviceModule())
+        torch_module = _stub_module("torch")
+        lightglue_module = _stub_module("lightglue", LightGlue=lightglue_constructor)
+
+        with mock.patch.dict(sys.modules, {"torch": torch_module, "lightglue": lightglue_module}, clear=False):
+            matcher = deep_matchers_module.build_deep_matcher(
+                "lightglue",
+                device="cpu",
+                feature_extractor_method="lightglue_sift",
+                matcher_options={
+                    "backend": "official",
+                    "weights_path": None,
+                    "filter_threshold": 0.05,
+                    "depth_confidence": -1,
+                    "width_confidence": -1,
+                    "flash": True,
+                    "mp": False,
+                },
+                feature_options={"max_features": 128},
+                device_options={"dtype": "float32"},
+            )
+            matcher._load_matcher()
+
+        lightglue_constructor.assert_called_once_with(
+            features="sift",
+            filter_threshold=0.05,
+            depth_confidence=-1,
+            width_confidence=-1,
+            flash=True,
+            mp=False,
+        )
+
+    def test_official_lightglue_matcher_preserves_frontend_metadata_fields(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        captured_inputs = []
+
+        class CapturingLightGlue(_EvalToDeviceModule):
+            def __call__(self, inputs):
+                captured_inputs.append(inputs)
+                return {
+                    "matches": _FakeTorchTensor(np.array([[[0, 0]]], dtype=np.int64)),
+                    "scores": _FakeTorchTensor(np.array([[0.9]], dtype=np.float32)),
+                }
+
+        lightglue_module = _stub_module("lightglue", LightGlue=mock.Mock(return_value=CapturingLightGlue()))
+        features_left = {
+            "keypoints": np.array([[1.0, 2.0], [3.0, 4.0]], dtype=np.float32),
+            "descriptors": np.array([[0.1, 0.2], [0.3, 0.4]], dtype=np.float32),
+            "scales": np.array([1.5, 2.5], dtype=np.float32),
+            "oris": np.array([0.25, 0.75], dtype=np.float32),
+            "image_size": np.array([640.0, 480.0], dtype=np.float32),
+        }
+        features_right = {
+            "keypoints": np.array([[5.0, 6.0], [7.0, 8.0]], dtype=np.float32),
+            "descriptors": np.array([[0.5, 0.6], [0.7, 0.8]], dtype=np.float32),
+            "scales": np.array([3.5, 4.5], dtype=np.float32),
+            "oris": np.array([1.25, 1.75], dtype=np.float32),
+            "image_size": np.array([640.0, 480.0], dtype=np.float32),
+        }
+
+        with mock.patch.dict(sys.modules, {"torch": _fake_torch_module(), "lightglue": lightglue_module}, clear=False):
+            matcher = deep_matchers_module.build_deep_matcher(
+                "lightglue",
+                device="cpu",
+                feature_extractor_method="lightglue_sift",
+                matcher_options={"backend": "official", "filter_threshold": 0.05},
+                device_options={"dtype": "float32"},
+            )
+            matcher.match(features_left=features_left, features_right=features_right, device="cpu")
+
+        self.assertEqual(len(captured_inputs), 1)
+        self.assertIn("scales", captured_inputs[0]["image0"])
+        self.assertIn("oris", captured_inputs[0]["image0"])
+        self.assertIn("image_size", captured_inputs[0]["image0"])
+        np.testing.assert_allclose(captured_inputs[0]["image0"]["scales"].array, np.array([[1.5, 2.5]], dtype=np.float32))
+        np.testing.assert_allclose(captured_inputs[0]["image0"]["oris"].array, np.array([[0.25, 0.75]], dtype=np.float32))
+        np.testing.assert_allclose(captured_inputs[0]["image0"]["image_size"].array, np.array([[640.0, 480.0]], dtype=np.float32))
+        np.testing.assert_allclose(captured_inputs[0]["image1"]["scales"].array, np.array([[3.5, 4.5]], dtype=np.float32))
+        np.testing.assert_allclose(captured_inputs[0]["image1"]["oris"].array, np.array([[1.25, 1.75]], dtype=np.float32))
+
     def test_superglue_matcher_uses_preset_matcher_options(self):
         deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
         runtime = deep_match_config_module.resolve_deep_match_runtime_config(
@@ -1442,6 +1568,19 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         with self.assertRaisesRegex(deep_matchers_module.DeepMatcherError, "checkpoint_path"):
             matcher._load_matcher()
+
+    def test_loftr_matcher_options_validate_before_dependency_import(self):
+        deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")
+        matcher = deep_matchers_module.build_deep_matcher(
+            "loftr",
+            device="cpu",
+            feature_extractor_method="loftr",
+            matcher_options={"checkpoint_path": "custom_loftr.ckpt"},
+        )
+
+        with mock.patch.dict(sys.modules, {"torch": None}, clear=False):
+            with self.assertRaisesRegex(deep_matchers_module.DeepMatcherError, "checkpoint_path"):
+                matcher._load_matcher()
 
     def test_deep_matchers_apply_dtype_and_surface_ignored_device_options(self):
         deep_matchers_module = importlib.import_module("controlnet_construct.deep_matchers")

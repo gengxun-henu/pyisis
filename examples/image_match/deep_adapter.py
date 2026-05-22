@@ -16,8 +16,22 @@ from typing import Any
 import cv2
 import numpy as np
 
-from .deep_frontends import DeepDependencyError, DeepFrontendError, LoFTRFrontend, SuperPointFrontend, normalize_deep_method, resolve_torch_device
-from .deep_matchers import DeepMatchResult, DeepMatcherError, _default_feature_extractor_for_matcher, build_deep_matcher
+from .deep_frontends import (
+    DeepDependencyError,
+    DeepFrontendError,
+    LoFTRFrontend,
+    OfficialLightGlueFrontend,
+    SuperPointFrontend,
+    normalize_deep_method,
+    resolve_torch_device,
+)
+from .deep_matchers import (
+    DeepMatchResult,
+    DeepMatcherError,
+    OFFICIAL_LIGHTGLUE_FRONTEND_METHODS,
+    _default_feature_extractor_for_matcher,
+    build_deep_matcher,
+)
 
 
 def _runtime_feature_extractor_method(runtime_config: Any | None, matcher_method: str) -> str:
@@ -32,11 +46,31 @@ def _runtime_feature_extractor_method(runtime_config: Any | None, matcher_method
     return normalized_method or _default_feature_extractor_for_matcher(matcher_method)
 
 
+def _runtime_matcher_backend(runtime_config: Any | None) -> str | None:
+    if runtime_config is None:
+        return None
+    matcher_options = getattr(runtime_config, "matcher_options", {}) or {}
+    backend_value = matcher_options.get("backend")
+    if backend_value is None:
+        return None
+    normalized_backend = str(backend_value).strip().lower()
+    return normalized_backend or None
+
+
 def _validate_runtime_matcher_compatibility(runtime_config: Any | None) -> None:
     if runtime_config is None:
         return
     matcher_method = str(getattr(runtime_config, "matcher_method", "") or "").strip().lower()
     feature_extractor_method = _runtime_feature_extractor_method(runtime_config, matcher_method)
+    backend = _runtime_matcher_backend(runtime_config)
+    if matcher_method == "lightglue" and backend == "official":
+        if feature_extractor_method in OFFICIAL_LIGHTGLUE_FRONTEND_METHODS:
+            return
+        supported_display = ", ".join(repr(method) for method in sorted(OFFICIAL_LIGHTGLUE_FRONTEND_METHODS))
+        raise ValueError(
+            f"matcher.method='lightglue' with backend='official' requires feature_extractor.method to be one of "
+            f"({supported_display}); got {feature_extractor_method!r}."
+        )
     supported_extractors = {
         "lightglue": ("superpoint",),
         "superglue": ("superpoint",),
@@ -70,13 +104,23 @@ def _filter_feature_dict_by_invalid_mask(features: Any, invalid_mask: np.ndarray
     feature_map = dict(features or {})
     keypoints = np.asarray(feature_map.get("keypoints", np.zeros((0, 2), dtype=np.float32)), dtype=np.float32).reshape(-1, 2)
     keep = _valid_mask_keep(keypoints, invalid_mask)
+    per_keypoint_fields = {
+        "descriptors",
+        "scores",
+        "scales",
+        "oris",
+        "orientations",
+        "responses",
+        "keypoint_scores",
+        "lafs",
+    }
     filtered: dict[str, Any] = {}
     for key, value in feature_map.items():
         if key == "keypoints":
             filtered[key] = keypoints[keep].astype(np.float32, copy=False)
             continue
         array = np.asarray(value)
-        if array.ndim > 0 and array.shape[0] == keypoints.shape[0]:
+        if array.ndim > 0 and array.shape[0] == keypoints.shape[0] and key in per_keypoint_fields:
             filtered[key] = array[keep]
             continue
         filtered[key] = value
@@ -96,8 +140,9 @@ class DeepMatcherAdapter:
         self._prefer_gpu = resolved_prefer_gpu
         self._device = resolve_torch_device(resolved_prefer_gpu)
         self._superpoint = SuperPointFrontend(runtime_config=runtime_config)
+        self._official_lightglue_frontend = None
         self._loftr_frontend = LoFTRFrontend()
-        self._matcher_cache: dict[tuple[str, str], Any] = {}
+        self._matcher_cache: dict[tuple[str, str, str, str, str, str], Any] = {}
 
     def _matcher_build_kwargs(self, *, method: str) -> dict[str, Any]:
         runtime_config = self._runtime_config
@@ -116,6 +161,19 @@ class DeepMatcherAdapter:
             "Deep matcher fallback must use the same method: "
             f"requested={requested!r}, fallback_to={fallback_to!r}."
         )
+
+    def _get_official_lightglue_frontend(self, extractor_method: str) -> OfficialLightGlueFrontend:
+        runtime_config = self._runtime_config
+        feature_options = dict(getattr(runtime_config, "feature_options", {}) or {})
+        if (
+            self._official_lightglue_frontend is None
+            or self._official_lightglue_frontend.feature_extractor_method != extractor_method
+        ):
+            self._official_lightglue_frontend = OfficialLightGlueFrontend(
+                feature_extractor_method=extractor_method,
+                feature_options=feature_options,
+            )
+        return self._official_lightglue_frontend
 
     def resolve_fallback_method(self, *, requested_method: str, fallback_method: str) -> str:
         requested = normalize_deep_method(requested_method)
@@ -138,12 +196,18 @@ class DeepMatcherAdapter:
         try:
             if method in ("superglue", "lightglue"):
                 extractor_method = _runtime_feature_extractor_method(self._runtime_config, method)
-                if extractor_method != "superpoint":
-                    raise DeepFrontendError(
-                        f"feature_extractor.method={extractor_method!r} is validated but not yet implemented for {method!r}."
-                    )
-                features_left = self._superpoint.extract(left_image, device=device)
-                features_right = self._superpoint.extract(right_image, device=device)
+                backend = _runtime_matcher_backend(self._runtime_config)
+                if method == "lightglue" and backend == "official":
+                    frontend = self._get_official_lightglue_frontend(extractor_method)
+                    features_left = frontend.extract(left_image, device=device)
+                    features_right = frontend.extract(right_image, device=device)
+                else:
+                    if extractor_method != "superpoint":
+                        raise DeepFrontendError(
+                            f"feature_extractor.method={extractor_method!r} is validated but not yet implemented for {method!r}."
+                        )
+                    features_left = self._superpoint.extract(left_image, device=device)
+                    features_right = self._superpoint.extract(right_image, device=device)
                 features_left = _filter_feature_dict_by_invalid_mask(features_left, left_mask)
                 features_right = _filter_feature_dict_by_invalid_mask(features_right, right_mask)
                 matcher = self._get_cached_matcher(method=method, device=device)

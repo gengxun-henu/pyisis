@@ -20,7 +20,19 @@ from typing import Any
 DEEP_MATCHER_METHODS = ("superglue", "lightglue", "loftr")
 
 # 支持的特征提取器（loftr 使用内置特征提取，不需要独立提取器）
-SUPPORTED_EXTRACTOR_METHODS = ("superpoint", "disk", "aliked", "doghardnet", "loftr")
+SUPPORTED_EXTRACTOR_METHODS = ("superpoint", "disk", "aliked", "doghardnet", "lightglue_sift", "loftr")
+LIGHTGLUE_BACKENDS = (None, "official")
+OFFICIAL_LIGHTGLUE_EXTRACTOR_METHODS = ("superpoint", "disk", "aliked", "doghardnet", "lightglue_sift")
+OFFICIAL_LIGHTGLUE_FEATURE_OPTIONS = {"method", "max_features", "max_keypoints"}
+OFFICIAL_LIGHTGLUE_MATCHER_OPTIONS = {
+    "method",
+    "backend",
+    "filter_threshold",
+    "depth_confidence",
+    "width_confidence",
+    "flash",
+    "mp",
+}
 MATCHER_EXTRACTOR_REQUIREMENTS: dict[str, tuple[str, ...]] = {
     "lightglue": ("superpoint",),
     "superglue": ("superpoint",),
@@ -65,10 +77,84 @@ def _payload_options(
     return {}
 
 
-def validate_matcher_feature_compatibility(*, matcher_method: str, feature_extractor_method: str) -> None:
+def _normalized_lightglue_backend(matcher: dict[str, Any]) -> str | None:
+    backend_value = matcher.get("backend")
+    if backend_value is None:
+        return None
+    normalized_backend = str(backend_value).strip().lower()
+    return normalized_backend or None
+
+
+def _reject_unknown_options(
+    *,
+    section_name: str,
+    section: dict[str, Any],
+    allowed_options: set[str],
+) -> None:
+    unknown_options = sorted(set(section) - allowed_options)
+    if unknown_options:
+        raise ValueError(
+            f"unknown {section_name} option(s) for official LightGlue backend: "
+            f"{', '.join(unknown_options)}"
+        )
+
+
+def _validate_official_lightglue_options(
+    *,
+    matcher: dict[str, Any],
+    feature_extractor: dict[str, Any],
+) -> None:
+    _reject_unknown_options(
+        section_name="feature_extractor",
+        section=feature_extractor,
+        allowed_options=OFFICIAL_LIGHTGLUE_FEATURE_OPTIONS,
+    )
+    if "max_features" in feature_extractor and "max_keypoints" in feature_extractor:
+        raise ValueError(
+            "official LightGlue feature_extractor options must not include both "
+            "max_features and max_keypoints."
+        )
+    _reject_unknown_options(
+        section_name="matcher",
+        section=matcher,
+        allowed_options=OFFICIAL_LIGHTGLUE_MATCHER_OPTIONS,
+    )
+
+
+def validate_matcher_feature_compatibility(
+    *,
+    matcher_method: str,
+    feature_extractor_method: str,
+    matcher: dict[str, Any] | None = None,
+    feature_extractor: dict[str, Any] | None = None,
+) -> None:
     """Reject matcher/extractor combinations that the runtime cannot execute."""
     normalized_matcher = str(matcher_method or "").strip().lower()
     normalized_extractor = str(feature_extractor_method or "").strip().lower()
+    matcher_dict = dict(matcher or {})
+    feature_extractor_dict = dict(feature_extractor or {})
+
+    if normalized_matcher == "lightglue":
+        backend = _normalized_lightglue_backend(matcher_dict)
+        if backend not in LIGHTGLUE_BACKENDS:
+            raise ValueError(
+                f"unsupported lightglue matcher.backend={backend!r}; "
+                "supported backends: official"
+            )
+        if backend == "official":
+            if normalized_extractor not in OFFICIAL_LIGHTGLUE_EXTRACTOR_METHODS:
+                supported_display = ", ".join(repr(method) for method in OFFICIAL_LIGHTGLUE_EXTRACTOR_METHODS)
+                raise ValueError(
+                    f"matcher.method='lightglue' with backend='official' requires "
+                    f"feature_extractor.method to be one of ({supported_display}); "
+                    f"got {normalized_extractor!r}."
+                )
+            _validate_official_lightglue_options(
+                matcher=matcher_dict,
+                feature_extractor=feature_extractor_dict,
+            )
+            return
+
     supported_extractors = MATCHER_EXTRACTOR_REQUIREMENTS.get(normalized_matcher)
     if supported_extractors is None or normalized_extractor in supported_extractors:
         return
@@ -272,6 +358,8 @@ def validate_deep_match_config(config: dict[str, Any]) -> None:
     validate_matcher_feature_compatibility(
         matcher_method=matcher_method,
         feature_extractor_method=extractor_method,
+        matcher=matcher,
+        feature_extractor=extractor,
     )
 
     # 可选校验 device 和 fallback（如果提供了但值不合法）

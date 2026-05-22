@@ -451,6 +451,96 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
                     for skipped_stage in skipped_stages:
                         self.assertNotIn(skipped_stage, output)
 
+            deep_match_only_result = subprocess.run(
+                [
+                    "bash",
+                    str(script_path),
+                    "--dry-run",
+                    "--mode",
+                    "deep-match-only",
+                    "--work-dir",
+                    str(temp_dir / "work_deep_match_only_import"),
+                    "--matcher-method",
+                    "loftr",
+                    "--resume-from",
+                    "import",
+                ],
+                check=False,
+                capture_output=True,
+                encoding="utf-8",
+                env=env,
+            )
+
+        self.assertEqual(deep_match_only_result.returncode, 0, msg=deep_match_only_result.stderr)
+        deep_match_only_output = deep_match_only_result.stdout + deep_match_only_result.stderr
+        self.assertIn("Stage 3", deep_match_only_output)
+        self.assertIn("Deep-match pipeline complete (deep-match-only mode)", deep_match_only_output)
+
+    def test_run_deep_match_pipeline_treats_completed_with_failures_as_failed_manifest(self):
+        with temporary_directory() as temp_dir:
+            fake_bin = temp_dir / "bin"
+            fake_bin.mkdir()
+            fake_conda = fake_bin / "conda"
+            fake_conda.write_text(
+                "#!/usr/bin/env bash\n"
+                "summary=''\n"
+                "while [[ $# -gt 0 ]]; do\n"
+                "  if [[ \"$1\" == '--summary-output' ]]; then\n"
+                "    summary=\"$2\"\n"
+                "    shift 2\n"
+                "  else\n"
+                "    shift\n"
+                "  fi\n"
+                "done\n"
+                "if [[ -n \"$summary\" ]]; then\n"
+                "  mkdir -p \"$(dirname \"$summary\")\"\n"
+                "  printf '%s\\n' '{\"status\":\"completed_with_failures\"}' > \"$summary\"\n"
+                "fi\n"
+                "exit 0\n",
+                encoding="utf-8",
+            )
+            fake_conda.chmod(0o755)
+            manifest_dir = temp_dir / "deep_match_workspaces/pair_1"
+            manifest_dir.mkdir(parents=True)
+            manifest_path = manifest_dir / "tasks.json"
+            manifest_path.write_text('{"tasks": []}\n', encoding="utf-8")
+            manifest_summary = temp_dir / "work/reports/deep_match_manifests.json"
+            manifest_summary.parent.mkdir(parents=True)
+            manifest_summary.write_text(
+                json.dumps({"pairs": [{"manifest_path": str(manifest_path)}]}) + "\n",
+                encoding="utf-8",
+            )
+            script_path = PROJECT_ROOT / "examples/controlnet_construct/run_deep_match_pipeline.sh"
+            env = os.environ.copy()
+            env["PATH"] = f"{fake_bin}{os.pathsep}{env['PATH']}"
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(script_path),
+                    "--mode",
+                    "deep-match-only",
+                    "--work-dir",
+                    str(temp_dir / "work"),
+                    "--matcher-method",
+                    "loftr",
+                    "--deep-match-manifest-summary",
+                    str(manifest_summary),
+                    "--resume-from",
+                    "deep-learning",
+                    "--no-fail-fast",
+                ],
+                check=False,
+                capture_output=True,
+                encoding="utf-8",
+                env=env,
+            )
+
+        self.assertNotEqual(result.returncode, 0, msg=result.stdout + result.stderr)
+        output = result.stdout + result.stderr
+        self.assertIn("completed_with_failures", output)
+        self.assertIn("Deep-learning stage had 1 failed pair", output)
+
 
 class MatcherComparisonReportsUnitTest(unittest.TestCase):
     def test_write_reports_creates_summary_csv_markdown_and_failures(self):

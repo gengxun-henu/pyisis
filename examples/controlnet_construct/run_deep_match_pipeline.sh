@@ -306,10 +306,10 @@ for m in manifests:
       local status
       status=$(python3 -c "import json; d=json.load(open('$result_json')); print(d.get('status','unknown'))")
       log "  result: $status"
-      if [[ "$status" == "failed" ]]; then
-        failed_manifests=$((failed_manifests + 1))
-      else
+      if [[ "$status" == "completed" ]]; then
         succeeded_manifests=$((succeeded_manifests + 1))
+      else
+        failed_manifests=$((failed_manifests + 1))
       fi
     else
       failed_manifests=$((failed_manifests + 1))
@@ -437,13 +437,13 @@ main() {
     stage_deep_learning
   fi
 
+  if [[ "$run_import" == "true" ]]; then
+    stage_import
+  fi
+
   if [[ "$MODE" == "deep-match-only" ]]; then
     log "Deep-match pipeline complete (deep-match-only mode)"
     return 0
-  fi
-
-  if [[ "$run_import" == "true" ]]; then
-    stage_import
   fi
 
   log "Full pipeline complete"

@@ -100,13 +100,11 @@ class _OfficialExtractorStub:
         return self
 
     def extract(self, image):
-        import torch
-
         self.input_shapes.append(tuple(image.shape))
         return {
-            "keypoints": torch.tensor([[[1.0, 2.0], [3.0, 4.0]]], dtype=torch.float32, device=image.device),
-            "descriptors": torch.tensor([[[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]], dtype=torch.float32, device=image.device),
-            "scores": torch.tensor([[0.7, 0.8]], dtype=torch.float32, device=image.device),
+            "keypoints": _TorchTensorStub([[[1.0, 2.0], [3.0, 4.0]]]).to(image.device),
+            "descriptors": _TorchTensorStub([[[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]]).to(image.device),
+            "scores": _TorchTensorStub([[0.7, 0.8]]).to(image.device),
         }
 
 
@@ -122,6 +120,9 @@ class _TorchTensorStub:
             self.device = args[0]
         if "device" in kwargs:
             self.device = kwargs["device"]
+        if "dtype" in kwargs:
+            self.array = self.array.astype(kwargs["dtype"], copy=False)
+            self.dtype = self.array.dtype
         return self
 
     def float(self):
@@ -129,21 +130,39 @@ class _TorchTensorStub:
         self.dtype = self.array.dtype
         return self
 
+    def detach(self):
+        return self
+
+    def cpu(self):
+        return self
+
+    def numpy(self):
+        return self.array
+
     def __getitem__(self, item):
-        return _TorchTensorStub(self.array[item])
+        tensor = _TorchTensorStub(self.array[item])
+        tensor.device = self.device
+        return tensor
+
+
+class _NoGradStub:
+    def __enter__(self):
+        return None
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        return False
 
 
 def _torch_frontend_stub():
     return SimpleNamespace(
         float32=np.float32,
         from_numpy=lambda array: _TorchTensorStub(array),
+        no_grad=lambda: _NoGradStub(),
     )
 
 
 class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
     def test_official_lightglue_frontend_builds_expected_extractors_and_channel_shapes(self):
-        import torch
-
         def build_constructor(constructor_name):
             def constructor(**kwargs):
                 extractor = _OfficialExtractorStub(**kwargs)
@@ -169,7 +188,7 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         ):
             with self.subTest(method=method):
                 _OfficialExtractorStub.instances = []
-                with mock.patch.dict(sys.modules, {"torch": torch, "lightglue": fake_lightglue}, clear=False):
+                with mock.patch.dict(sys.modules, {"torch": _torch_frontend_stub(), "lightglue": fake_lightglue}, clear=False):
                     frontend = OfficialLightGlueFrontend(
                         feature_extractor_method=method,
                         feature_options={"max_features": 123},

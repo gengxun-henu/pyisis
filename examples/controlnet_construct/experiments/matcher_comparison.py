@@ -6,7 +6,9 @@ Created: 2026-05-22
 
 from __future__ import annotations
 
+import argparse
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import json
 from pathlib import Path
 import shutil
@@ -53,6 +55,12 @@ class ExperimentConfig:
     execution: ExecutionConfig
     methods: tuple[MethodConfig, ...]
     config_path: Path
+
+
+@dataclass(frozen=True)
+class ExperimentRunResult:
+    run_dir: Path
+    manifest_path: Path
 
 
 def _resolve_path(value: str | Path, base_dir: Path, repo_root: Path) -> Path:
@@ -244,6 +252,191 @@ def build_method_command(
     return command
 
 
+def _utc_now_iso() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def _shell_quote_args(command: list[str]) -> str:
+    import shlex
+
+    return " ".join(shlex.quote(part) for part in command)
+
+
+def _write_command_script(path: str | Path, command: list[str]) -> None:
+    path = Path(path)
+    path.write_text(
+        "#!/usr/bin/env bash\n"
+        "set -euo pipefail\n\n"
+        f"{_shell_quote_args(command)}\n",
+        encoding="utf-8",
+    )
+    path.chmod(0o755)
+
+
+def _existing_success(metrics_path: str | Path) -> bool:
+    metrics_path = Path(metrics_path)
+    if not metrics_path.exists():
+        return False
+
+    try:
+        with metrics_path.open(encoding="utf-8") as metrics_file:
+            payload = json.load(metrics_file)
+    except (OSError, json.JSONDecodeError):
+        return False
+
+    return isinstance(payload, dict) and payload.get("status") == "success"
+
+
+def _method_manifest_entry(
+    method: MethodConfig,
+    method_dir: str | Path,
+    command: list[str] | None,
+    status: str,
+) -> dict[str, Any]:
+    method_dir = Path(method_dir)
+    return {
+        "label": method.label,
+        "matcher_method": method.matcher_method,
+        "deep_match_config_path": (
+            str(method.deep_match_config_path) if method.deep_match_config_path is not None else None
+        ),
+        "method_dir": str(method_dir),
+        "work_dir": str(method_dir / "work"),
+        "command": command,
+        "status": status,
+    }
+
+
+def run_experiment(
+    config_path: str | Path,
+    *,
+    output_root: str | Path,
+    repo_root: str | Path | None = None,
+    dry_run: bool = False,
+    only_labels: set[str] | None = None,
+    resume: bool | None = None,
+    keep_going: bool | None = None,
+) -> ExperimentRunResult:
+    if repo_root is None:
+        repo_root_path = Path(__file__).resolve().parents[3]
+    else:
+        repo_root_path = Path(repo_root).expanduser().resolve()
+
+    config = load_experiment_config(config_path, repo_root=repo_root_path)
+    effective_resume = config.execution.resume if resume is None else resume
+    effective_keep_going = config.execution.keep_going if keep_going is None else keep_going
+
+    configured_labels = {method.label for method in config.methods}
+    if only_labels is None:
+        selected_methods = config.methods
+    else:
+        unknown_labels = sorted(only_labels - configured_labels)
+        if unknown_labels:
+            raise ValueError(f"Unknown method label(s): {', '.join(unknown_labels)}")
+        selected_methods = tuple(method for method in config.methods if method.label in only_labels)
+
+    run_dir = Path(output_root).expanduser() / config.run_id
+    methods_dir = run_dir / "methods"
+    reports_dir = run_dir / "reports"
+    methods_dir.mkdir(parents=True, exist_ok=True)
+    reports_dir.mkdir(parents=True, exist_ok=True)
+
+    shutil.copyfile(config.config_path, run_dir / "experiment_config.json")
+
+    method_entries: list[dict[str, Any]] = []
+    for method in selected_methods:
+        method_dir = methods_dir / method.label
+        metrics_path = method_dir / "metrics.json"
+        if effective_resume and _existing_success(metrics_path):
+            method_entries.append(
+                _method_manifest_entry(
+                    method,
+                    method_dir,
+                    None,
+                    "skipped_success",
+                )
+            )
+            continue
+
+        work_dir = prepare_method_workspace(
+            method_dir,
+            original_images_list=config.inputs.original_images_list,
+            doms_list=config.inputs.doms_list,
+        )
+        command = build_method_command(
+            config,
+            method,
+            method_dir=method_dir,
+            repo_root=repo_root_path,
+        )
+        _write_command_script(method_dir / "command.sh", command)
+        method_entries.append(
+            _method_manifest_entry(
+                method,
+                method_dir,
+                command,
+                "dry_run" if dry_run else "pending",
+            )
+        )
+        if not dry_run:
+            raise NotImplementedError("Real matcher comparison execution will be implemented in Task 4")
+
+    manifest_path = run_dir / "experiment_manifest.json"
+    manifest = {
+        "run_id": config.run_id,
+        "description": config.description,
+        "created_at_utc": _utc_now_iso(),
+        "dry_run": dry_run,
+        "resume": effective_resume,
+        "keep_going": effective_keep_going,
+        "methods": method_entries,
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+    return ExperimentRunResult(run_dir=run_dir, manifest_path=manifest_path)
+
+
+def build_argument_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(description="Run a ControlNet matcher comparison experiment.")
+    parser.add_argument("config", help="Path to the matcher comparison experiment JSON config.")
+    parser.add_argument(
+        "--output-root",
+        default="work/matcher_comparison",
+        help="Directory where run outputs are created.",
+    )
+    parser.add_argument("--repo-root", help="Repository root used to resolve repo-relative paths.")
+    parser.add_argument("--resume", dest="resume", action="store_true", default=None)
+    parser.add_argument("--no-resume", dest="resume", action="store_false")
+    parser.add_argument("--only", help="Comma-separated method labels to run.")
+    parser.add_argument("--dry-run", action="store_true", help="Prepare manifests and command scripts only.")
+    parser.add_argument("--keep-going", dest="keep_going", action="store_true", default=None)
+    parser.add_argument("--fail-fast", dest="keep_going", action="store_false")
+    return parser
+
+
+def _parse_only(value: str | None) -> set[str] | None:
+    if value is None:
+        return None
+    labels = {label.strip() for label in value.split(",") if label.strip()}
+    return labels or None
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = build_argument_parser()
+    args = parser.parse_args(argv)
+    result = run_experiment(
+        args.config,
+        output_root=args.output_root,
+        repo_root=args.repo_root,
+        dry_run=args.dry_run,
+        only_labels=_parse_only(args.only),
+        resume=args.resume,
+        keep_going=args.keep_going,
+    )
+    print(f"Experiment manifest: {result.manifest_path}")
+    return 0
+
+
 def _require_string(payload: dict[str, Any], key: str) -> str:
     value = payload.get(key)
     if not isinstance(value, str) or not value.strip():
@@ -263,3 +456,7 @@ def _optional_bool(payload: dict[str, Any], key: str, default: bool) -> bool:
     if not isinstance(value, bool):
         raise ValueError(f"{key} must be a boolean")
     return value
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

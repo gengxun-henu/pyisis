@@ -64,6 +64,19 @@ def _write_minimal_config(path: Path) -> None:
     )
 
 
+def _write_config_with_temp_inputs(config_path: Path, temp_dir: Path) -> None:
+    _write_minimal_config(config_path)
+    original_images = temp_dir / "original_images.lis"
+    doms = temp_dir / "doms_scaled.lis"
+    original_images.write_text("image_1.cub\nimage_2.cub\n", encoding="utf-8")
+    doms.write_text("dom_1.cub\ndom_2.cub\n", encoding="utf-8")
+
+    payload = json.loads(config_path.read_text(encoding="utf-8"))
+    payload["inputs"]["original_images_list"] = str(original_images)
+    payload["inputs"]["doms_list"] = str(doms)
+    config_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
 class MatcherComparisonConfigUnitTest(unittest.TestCase):
     def test_load_experiment_config_expands_inputs_execution_and_methods(self):
         with temporary_directory() as temp_dir:
@@ -289,6 +302,71 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
         self.assertEqual(result.returncode, 0, msg=result.stderr)
         output = result.stdout + result.stderr
         self.assertEqual(output.count(f"--deep-match-config-path {preset_path}"), 2)
+
+
+class MatcherComparisonRunUnitTest(unittest.TestCase):
+    def test_run_experiment_dry_run_writes_manifest_and_command_scripts(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+
+            result = matcher_comparison.run_experiment(
+                config_path,
+                output_root=temp_dir / "out",
+                repo_root=PROJECT_ROOT,
+                dry_run=True,
+                only_labels=None,
+                resume=False,
+                keep_going=True,
+            )
+
+            self.assertEqual(result.run_dir, temp_dir / "out/unit_run")
+            self.assertTrue((result.run_dir / "experiment_manifest.json").exists())
+            self.assertTrue((result.run_dir / "methods/sift_flann/command.sh").exists())
+            self.assertTrue((result.run_dir / "methods/loftr/command.sh").exists())
+            self.assertFalse((result.run_dir / "methods/sift_flann/stdout.log").exists())
+            self.assertFalse((result.run_dir / "methods/loftr/stdout.log").exists())
+
+    def test_run_experiment_only_limits_methods(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+
+            result = matcher_comparison.run_experiment(
+                config_path,
+                output_root=temp_dir / "out",
+                repo_root=PROJECT_ROOT,
+                dry_run=True,
+                only_labels={"loftr"},
+                resume=False,
+                keep_going=True,
+            )
+
+            self.assertFalse((result.run_dir / "methods/sift_flann").exists())
+            self.assertTrue((result.run_dir / "methods/loftr/command.sh").exists())
+
+    def test_run_experiment_resume_skips_successful_metrics(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+            method_dir = temp_dir / "out/unit_run/methods/sift_flann"
+            method_dir.mkdir(parents=True)
+            metrics_path = method_dir / "metrics.json"
+            metrics_path.write_text(json.dumps({"status": "success"}), encoding="utf-8")
+
+            result = matcher_comparison.run_experiment(
+                config_path,
+                output_root=temp_dir / "out",
+                repo_root=PROJECT_ROOT,
+                dry_run=True,
+                only_labels=None,
+                resume=True,
+                keep_going=True,
+            )
+
+            self.assertEqual(json.loads(metrics_path.read_text(encoding="utf-8"))["status"], "success")
+            self.assertFalse((result.run_dir / "methods/sift_flann/command.sh").exists())
+            self.assertTrue((result.run_dir / "methods/loftr/command.sh").exists())
 
 
 if __name__ == "__main__":

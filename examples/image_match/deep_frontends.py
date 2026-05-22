@@ -10,10 +10,13 @@ from __future__ import annotations
 import inspect
 from typing import Any
 
+import cv2
 import numpy as np
 
 
 SUPPORTED_DEEP_METHODS = ("superglue", "lightglue", "loftr")
+LOFTR_DIVISIBILITY = 8
+LOFTR_PREPROCESS_MODES = {"pad", "resize"}
 
 
 class DeepFrontendError(RuntimeError):
@@ -197,7 +200,15 @@ class SuperPointFrontend:
 
 
 class LoFTRFrontend:
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        *,
+        feature_options: dict[str, Any] | None = None,
+        matcher_options: dict[str, Any] | None = None,
+    ) -> None:
+        self.feature_options = dict(feature_options or {})
+        self.matcher_options = dict(matcher_options or {})
+        self.backend = str(self.matcher_options.get("backend") or "kornia").strip().lower() or "kornia"
         self._torch = None
 
     def prepare(
@@ -217,19 +228,187 @@ class LoFTRFrontend:
                 install_hint="pip install torch kornia",
             )
 
+        self._torch = torch
+        if self.backend == "external":
+            left_prepared = self._prepare_external_image(left_image, device=device, invalid_mask=left_mask)
+            right_prepared = self._prepare_external_image(right_image, device=device, invalid_mask=right_mask)
+            return {
+                "left": left_prepared["image"],
+                "right": right_prepared["image"],
+                "left_mask": left_prepared["valid_mask"],
+                "right_mask": right_prepared["valid_mask"],
+                "left_valid_mask": left_prepared["valid_mask"],
+                "right_valid_mask": right_prepared["valid_mask"],
+                "left_meta": left_prepared["meta"],
+                "right_meta": right_prepared["meta"],
+            }
+
         _require_kornia_feature(
             method="loftr",
             feature_name="SuperPoint",
             install_hint="pip install \"kornia[loftr]\"",
         )
 
-        self._torch = torch
         return {
             "left": self._as_tensor(left_image, device=device),
             "right": self._as_tensor(right_image, device=device),
             "left_mask": self._as_mask_tensor(left_mask, device=device),
             "right_mask": self._as_mask_tensor(right_mask, device=device),
         }
+
+    def _prepare_external_image(self, image, *, device: str, invalid_mask: np.ndarray | None):
+        image_plane = self._as_float_plane(image)
+        original_height, original_width = image_plane.shape
+        resize_width = self.feature_options.get("resize_width")
+        resize_height = self.feature_options.get("resize_height")
+        preprocess_mode = str(self.feature_options.get("preprocess_mode") or "pad").strip().lower()
+        if preprocess_mode not in LOFTR_PREPROCESS_MODES:
+            preprocess_mode = "pad"
+
+        content_plane = image_plane
+        has_content = original_width > 0 and original_height > 0
+        if not has_content:
+            infer_width = LOFTR_DIVISIBILITY
+            infer_height = LOFTR_DIVISIBILITY
+            aligned_plane = np.zeros((infer_height, infer_width), dtype=np.float32)
+            valid_mask = np.zeros((infer_height, infer_width), dtype=bool)
+            return self._external_prepared_result(
+                aligned_plane=aligned_plane,
+                valid_mask=valid_mask,
+                device=device,
+                original_size=(original_width, original_height),
+                content_size=(original_width, original_height),
+                infer_size=(infer_width, infer_height),
+            )
+
+        if resize_width is not None and resize_height is not None:
+            content_width = self._align_size(int(resize_width), mode="floor")
+            content_height = self._align_size(int(resize_height), mode="floor")
+            content_plane = self._resize_plane(content_plane, width=content_width, height=content_height)
+
+        content_height, content_width = content_plane.shape
+        valid_mask = self._valid_content_mask(
+            invalid_mask,
+            original_size=(original_width, original_height),
+            content_size=(content_width, content_height),
+        )
+
+        if preprocess_mode == "resize":
+            infer_width = self._align_size(content_width, mode="floor")
+            infer_height = self._align_size(content_height, mode="floor")
+            aligned_plane = self._resize_plane(content_plane, width=infer_width, height=infer_height)
+            if valid_mask is not None and (infer_width, infer_height) != (content_width, content_height):
+                valid_mask = self._resize_valid_mask(valid_mask, width=infer_width, height=infer_height)
+            content_width = infer_width
+            content_height = infer_height
+        else:
+            infer_width = self._align_size(content_width, mode="ceil")
+            infer_height = self._align_size(content_height, mode="ceil")
+            aligned_plane = np.zeros((infer_height, infer_width), dtype=np.float32)
+            aligned_plane[:content_height, :content_width] = content_plane
+            if valid_mask is None and (infer_width, infer_height) != (content_width, content_height):
+                valid_mask = np.ones((content_height, content_width), dtype=bool)
+            if valid_mask is not None:
+                aligned_valid_mask = np.zeros((infer_height, infer_width), dtype=bool)
+                aligned_valid_mask[:content_height, :content_width] = valid_mask
+                valid_mask = aligned_valid_mask
+
+        return self._external_prepared_result(
+            aligned_plane=aligned_plane,
+            valid_mask=valid_mask,
+            device=device,
+            original_size=(original_width, original_height),
+            content_size=(content_width, content_height),
+            infer_size=(infer_width, infer_height),
+        )
+
+    def _external_prepared_result(
+        self,
+        *,
+        aligned_plane: np.ndarray,
+        valid_mask: np.ndarray | None,
+        device: str,
+        original_size: tuple[int, int],
+        content_size: tuple[int, int],
+        infer_size: tuple[int, int],
+    ):
+        image_tensor = self._torch.from_numpy(aligned_plane)[None][None].float().to(device)
+        valid_mask_tensor = None
+        if valid_mask is not None:
+            valid_mask_tensor = self._torch.from_numpy(valid_mask.astype(bool, copy=False)).to(device)
+
+        original_width, original_height = original_size
+        content_width, content_height = content_size
+        scale_width = original_width / content_width if content_width > 0 else 1.0
+        scale_height = original_height / content_height if content_height > 0 else 1.0
+        return {
+            "image": image_tensor,
+            "valid_mask": valid_mask_tensor,
+            "meta": {
+                "original_size": original_size,
+                "content_size": content_size,
+                "infer_size": infer_size,
+                "scale": (scale_width, scale_height),
+            },
+        }
+
+    def _as_float_plane(self, image) -> np.ndarray:
+        image_array = np.asarray(image, dtype=np.float32)
+        if image_array.ndim == 0:
+            image_plane = image_array.reshape(1, 1)
+        elif image_array.ndim == 1:
+            image_plane = image_array.reshape(1, -1)
+        elif image_array.ndim == 2:
+            image_plane = image_array
+        else:
+            image_plane = np.mean(image_array, axis=-1)
+
+        image_plane = np.nan_to_num(image_plane, nan=0.0, posinf=0.0, neginf=0.0).astype(np.float32, copy=False)
+        scale = float(np.max(np.abs(image_plane))) if image_plane.size > 0 else 0.0
+        if scale > 0.0:
+            image_plane = image_plane / scale
+        return image_plane
+
+    def _resize_plane(self, image_plane: np.ndarray, *, width: int, height: int) -> np.ndarray:
+        interpolation = cv2.INTER_AREA if width <= image_plane.shape[1] and height <= image_plane.shape[0] else cv2.INTER_LINEAR
+        return cv2.resize(image_plane, (width, height), interpolation=interpolation).astype(np.float32, copy=False)
+
+    def _valid_content_mask(
+        self,
+        invalid_mask,
+        *,
+        original_size: tuple[int, int],
+        content_size: tuple[int, int],
+    ) -> np.ndarray | None:
+        if invalid_mask is None:
+            return None
+        mask_array = ~np.asarray(invalid_mask, dtype=bool)
+        original_width, original_height = original_size
+        content_width, content_height = content_size
+        if mask_array.shape[:2] != (original_height, original_width):
+            mask_array = cv2.resize(
+                mask_array.astype(np.uint8, copy=False),
+                (original_width, original_height),
+                interpolation=cv2.INTER_NEAREST,
+            ).astype(bool, copy=False)
+        if (content_width, content_height) != (original_width, original_height):
+            mask_array = self._resize_valid_mask(mask_array, width=content_width, height=content_height)
+        return mask_array.astype(bool, copy=False)
+
+    def _resize_valid_mask(self, mask_array: np.ndarray, *, width: int, height: int) -> np.ndarray:
+        return cv2.resize(
+            mask_array.astype(np.uint8, copy=False),
+            (width, height),
+            interpolation=cv2.INTER_NEAREST,
+        ).astype(bool, copy=False)
+
+    def _align_size(self, size: int, *, mode: str) -> int:
+        size = max(1, int(size))
+        if mode == "floor":
+            aligned = (size // LOFTR_DIVISIBILITY) * LOFTR_DIVISIBILITY
+        else:
+            aligned = ((size + LOFTR_DIVISIBILITY - 1) // LOFTR_DIVISIBILITY) * LOFTR_DIVISIBILITY
+        return max(LOFTR_DIVISIBILITY, aligned)
 
     def _as_tensor(self, image, *, device: str):
         image_array = np.asarray(image, dtype=np.float32)

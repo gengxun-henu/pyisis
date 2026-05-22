@@ -96,7 +96,10 @@ class DeepMatcherAdapter:
         self._prefer_gpu = resolved_prefer_gpu
         self._device = resolve_torch_device(resolved_prefer_gpu)
         self._superpoint = SuperPointFrontend(runtime_config=runtime_config)
-        self._loftr_frontend = LoFTRFrontend()
+        self._loftr_frontend = LoFTRFrontend(
+            feature_options=dict(getattr(runtime_config, "feature_options", {}) or {}),
+            matcher_options=dict(getattr(runtime_config, "matcher_options", {}) or {}),
+        )
         self._matcher_cache: dict[tuple[str, str], Any] = {}
 
     def _matcher_build_kwargs(self, *, method: str) -> dict[str, Any]:

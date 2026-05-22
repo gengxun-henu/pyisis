@@ -82,6 +82,36 @@ class _DTypeTrackingModule:
         return self
 
 
+class _TorchTensorStub:
+    def __init__(self, array):
+        self.array = np.asarray(array)
+        self.shape = self.array.shape
+        self.dtype = self.array.dtype
+        self.device = None
+
+    def to(self, *args, **kwargs):
+        if args:
+            self.device = args[0]
+        if "device" in kwargs:
+            self.device = kwargs["device"]
+        return self
+
+    def float(self):
+        self.array = self.array.astype(np.float32, copy=False)
+        self.dtype = self.array.dtype
+        return self
+
+    def __getitem__(self, item):
+        return _TorchTensorStub(self.array[item])
+
+
+def _torch_frontend_stub():
+    return SimpleNamespace(
+        float32=np.float32,
+        from_numpy=lambda array: _TorchTensorStub(array),
+    )
+
+
 class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
     def test_superpoint_frontend_reads_runtime_config_parameters(self):
         runtime = DeepMatchRuntimeConfig(
@@ -218,6 +248,64 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         matcher = deep_matchers_module.build_deep_matcher("loftr", device="cpu")
 
         self.assertEqual(matcher.feature_extractor_method, "loftr")
+
+    def test_external_loftr_frontend_pad_mode_aligns_to_multiple_of_eight_and_keeps_scale(self):
+        deep_frontends_module = __import__("image_match.deep_frontends", fromlist=["LoFTRFrontend"])
+        frontend = deep_frontends_module.LoFTRFrontend(
+            feature_options={"preprocess_mode": "pad"},
+            matcher_options={"backend": "external"},
+        )
+        image = np.arange(30, dtype=np.float32).reshape(5, 6)
+        invalid_mask = np.zeros((5, 6), dtype=bool)
+        invalid_mask[2, 3] = True
+
+        with mock.patch.dict(sys.modules, {"torch": _torch_frontend_stub()}, clear=False):
+            prepared = frontend.prepare(image, image, device="cpu", left_mask=invalid_mask, right_mask=invalid_mask)
+
+        self.assertEqual(prepared["left"].shape, (1, 1, 8, 8))
+        self.assertEqual(prepared["right"].shape, (1, 1, 8, 8))
+        self.assertEqual(prepared["left_valid_mask"].shape, (8, 8))
+        self.assertFalse(bool(prepared["left_valid_mask"].array[2, 3]))
+        self.assertFalse(bool(prepared["left_valid_mask"].array[7, 7]))
+        self.assertEqual(prepared["left_meta"]["scale"], (1.0, 1.0))
+        self.assertEqual(prepared["left_meta"]["infer_size"], (8, 8))
+        self.assertEqual(prepared["left_meta"]["content_size"], (6, 5))
+
+    def test_external_loftr_frontend_resize_mode_records_coordinate_scale(self):
+        deep_frontends_module = __import__("image_match.deep_frontends", fromlist=["LoFTRFrontend"])
+        frontend = deep_frontends_module.LoFTRFrontend(
+            feature_options={"preprocess_mode": "resize", "resize_width": 8, "resize_height": 8},
+            matcher_options={"backend": "external"},
+        )
+        image = np.arange(24, dtype=np.float32).reshape(4, 6)
+
+        with mock.patch.dict(sys.modules, {"torch": _torch_frontend_stub()}, clear=False):
+            prepared = frontend.prepare(image, image, device="cpu")
+
+        self.assertEqual(prepared["left"].shape, (1, 1, 8, 8))
+        self.assertIsNone(prepared["left_valid_mask"])
+        self.assertEqual(prepared["left_meta"]["scale"], (0.75, 0.5))
+        self.assertEqual(prepared["left_meta"]["original_size"], (6, 4))
+        self.assertEqual(prepared["left_meta"]["content_size"], (8, 8))
+
+    def test_external_loftr_frontend_empty_plane_returns_minimum_masked_tensor(self):
+        deep_frontends_module = __import__("image_match.deep_frontends", fromlist=["LoFTRFrontend"])
+        frontend = deep_frontends_module.LoFTRFrontend(
+            feature_options={"preprocess_mode": "pad"},
+            matcher_options={"backend": "external"},
+        )
+        image = np.empty((0, 0), dtype=np.float32)
+
+        with mock.patch.dict(sys.modules, {"torch": _torch_frontend_stub()}, clear=False):
+            prepared = frontend.prepare(image, image, device="cpu")
+
+        self.assertEqual(prepared["left"].shape, (1, 1, 8, 8))
+        self.assertEqual(prepared["left_valid_mask"].shape, (8, 8))
+        self.assertFalse(bool(np.any(prepared["left_valid_mask"].array)))
+        self.assertEqual(prepared["left_meta"]["original_size"], (0, 0))
+        self.assertEqual(prepared["left_meta"]["content_size"], (0, 0))
+        self.assertEqual(prepared["left_meta"]["infer_size"], (8, 8))
+        self.assertEqual(prepared["left_meta"]["scale"], (1.0, 1.0))
 
     def test_deep_matcher_adapter_rejects_invalid_runtime_config_early(self):
         runtime = SimpleNamespace(

@@ -224,6 +224,7 @@ def _prepare_dry_run_workspace(
         if source_path.exists():
             shutil.copyfile(source_path, target_path)
         else:
+            target_path.unlink(missing_ok=True)
             warnings.append(f"Dry-run input list missing; not copied: {source_path}")
 
     return warnings
@@ -235,10 +236,12 @@ def build_method_command(
     *,
     method_dir: str | Path,
     repo_root: str | Path,
+    keep_going: bool | None = None,
 ) -> list[str]:
     repo_root = Path(repo_root).expanduser().resolve()
     method_dir = Path(method_dir).expanduser().resolve()
     work_dir = method_dir / "work"
+    effective_keep_going = config.execution.keep_going if keep_going is None else keep_going
 
     if method.is_deep_method:
         script_path = repo_root / "examples/controlnet_construct/run_deep_match_pipeline.sh"
@@ -260,6 +263,8 @@ def build_method_command(
         ]
         if method.deep_match_config_path is not None:
             command.extend(["--deep-match-config-path", str(method.deep_match_config_path)])
+        if effective_keep_going:
+            command.extend(["--no-fail-fast", "--continue-on-deep-failure"])
     else:
         script_path = repo_root / "examples/controlnet_construct/run_pipeline_example.sh"
         command = [
@@ -384,6 +389,7 @@ def run_experiment(
             method,
             method_dir=method_dir,
             repo_root=repo_root_path,
+            keep_going=effective_keep_going,
         )
         if effective_resume and _existing_success(metrics_path, command):
             method_entries.append(
@@ -448,6 +454,8 @@ def _parse_only(value: str | None) -> set[str] | None:
     if value is None:
         return None
     labels = {label.strip() for label in value.split(",") if label.strip()}
+    if not labels:
+        raise ValueError("--only must include at least one method label")
     return labels or None
 
 

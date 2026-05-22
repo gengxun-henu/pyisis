@@ -291,6 +291,33 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
             str(PROJECT_ROOT / "examples/controlnet_construct/presets/loftr_default.json"),
         )
 
+    def test_build_method_command_deep_pipeline_keep_going_controls_failure_flags(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_minimal_config(config_path)
+            config = matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+            method = config.methods[1]
+
+            keep_going_command = matcher_comparison.build_method_command(
+                config,
+                method,
+                method_dir=temp_dir / "loftr_keep_going",
+                repo_root=PROJECT_ROOT,
+                keep_going=True,
+            )
+            fail_fast_command = matcher_comparison.build_method_command(
+                config,
+                method,
+                method_dir=temp_dir / "loftr_fail_fast",
+                repo_root=PROJECT_ROOT,
+                keep_going=False,
+            )
+
+        self.assertIn("--no-fail-fast", keep_going_command)
+        self.assertIn("--continue-on-deep-failure", keep_going_command)
+        self.assertNotIn("--no-fail-fast", fail_fast_command)
+        self.assertNotIn("--continue-on-deep-failure", fail_fast_command)
+
     def test_run_deep_match_pipeline_dry_run_forwards_deep_match_config_path_to_export_and_import(self):
         with temporary_directory() as temp_dir:
             fake_bin = temp_dir / "bin"
@@ -383,6 +410,35 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertTrue((result.run_dir / "methods/sift_flann/command.sh").exists())
             self.assertFalse((result.run_dir / "methods/sift_flann/work/original_images.lis").exists())
             self.assertFalse((result.run_dir / "methods/sift_flann/work/doms_scaled.lis").exists())
+            manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                manifest["methods"][0]["warnings"],
+                [
+                    f"Dry-run input list missing; not copied: {PROJECT_ROOT / 'work/original_images.lis'}",
+                    f"Dry-run input list missing; not copied: {PROJECT_ROOT / 'work/doms_scaled.lis'}",
+                ],
+            )
+
+    def test_run_experiment_dry_run_missing_inputs_removes_stale_target_lists(self):
+        with temporary_directory() as temp_dir:
+            config_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/matcher_comparison.example.json"
+            stale_work_dir = temp_dir / "out/lro_batch_20260522/methods/sift_flann/work"
+            stale_work_dir.mkdir(parents=True)
+            (stale_work_dir / "original_images.lis").write_text("stale originals\n", encoding="utf-8")
+            (stale_work_dir / "doms_scaled.lis").write_text("stale doms\n", encoding="utf-8")
+
+            result = matcher_comparison.run_experiment(
+                config_path,
+                output_root=temp_dir / "out",
+                repo_root=PROJECT_ROOT,
+                dry_run=True,
+                only_labels={"sift_flann"},
+                resume=False,
+                keep_going=True,
+            )
+
+            self.assertFalse((stale_work_dir / "original_images.lis").exists())
+            self.assertFalse((stale_work_dir / "doms_scaled.lis").exists())
             manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
             self.assertEqual(
                 manifest["methods"][0]["warnings"],
@@ -521,6 +577,12 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, msg=result.stderr)
         self.assertIn("Run a ControlNet matcher comparison experiment.", result.stdout)
+
+    def test_parse_only_rejects_explicit_empty_filter(self):
+        for value in ("", ",", " , "):
+            with self.subTest(value=value):
+                with self.assertRaisesRegex(ValueError, "--only must include at least one method label"):
+                    matcher_comparison._parse_only(value)
 
 
 if __name__ == "__main__":

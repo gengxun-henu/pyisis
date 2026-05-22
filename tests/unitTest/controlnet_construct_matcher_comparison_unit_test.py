@@ -407,6 +407,50 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
         output = result.stdout + result.stderr
         self.assertEqual(output.count(f"--deep-match-config-path {preset_path}"), 2)
 
+    def test_run_deep_match_pipeline_resume_from_starts_at_requested_stage(self):
+        with temporary_directory() as temp_dir:
+            fake_bin = temp_dir / "bin"
+            fake_bin.mkdir()
+            fake_conda = fake_bin / "conda"
+            fake_conda.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
+            fake_conda.chmod(0o755)
+            script_path = PROJECT_ROOT / "examples/controlnet_construct/run_deep_match_pipeline.sh"
+            env = os.environ.copy()
+            env["PATH"] = f"{fake_bin}{os.pathsep}{env['PATH']}"
+
+            cases = (
+                ("export", ("Stage 1", "Stage 2", "Stage 3"), ()),
+                ("deep-learning", ("Stage 2", "Stage 3"), ("Stage 1",)),
+                ("import", ("Stage 3",), ("Stage 1", "Stage 2")),
+            )
+
+            for resume_from, expected_stages, skipped_stages in cases:
+                with self.subTest(resume_from=resume_from):
+                    result = subprocess.run(
+                        [
+                            "bash",
+                            str(script_path),
+                            "--dry-run",
+                            "--work-dir",
+                            str(temp_dir / f"work_{resume_from}"),
+                            "--matcher-method",
+                            "loftr",
+                            "--resume-from",
+                            resume_from,
+                        ],
+                        check=False,
+                        capture_output=True,
+                        encoding="utf-8",
+                        env=env,
+                    )
+
+                    self.assertEqual(result.returncode, 0, msg=result.stderr)
+                    output = result.stdout + result.stderr
+                    for expected_stage in expected_stages:
+                        self.assertIn(expected_stage, output)
+                    for skipped_stage in skipped_stages:
+                        self.assertNotIn(skipped_stage, output)
+
 
 class MatcherComparisonReportsUnitTest(unittest.TestCase):
     def test_write_reports_creates_summary_csv_markdown_and_failures(self):

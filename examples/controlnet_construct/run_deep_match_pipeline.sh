@@ -411,11 +411,29 @@ main() {
     die "conda not found in PATH. This script requires conda to switch environments."
   fi
 
-  if [[ "$RESUME_FROM" != "export" && "$RESUME_FROM" != "deep-learning" && "$RESUME_FROM" != "import" ]]; then
+  local run_export=false
+  local run_deep_learning=false
+  local run_import=false
+  case "$RESUME_FROM" in
+    ""|"export")
+      run_export=true
+      run_deep_learning=true
+      run_import=true
+      ;;
+    "deep-learning")
+      run_deep_learning=true
+      run_import=true
+      ;;
+    "import")
+      run_import=true
+      ;;
+  esac
+
+  if [[ "$run_export" == "true" ]]; then
     stage_export
   fi
 
-  if [[ "$RESUME_FROM" != "deep-learning" && "$RESUME_FROM" != "import" ]]; then
+  if [[ "$run_deep_learning" == "true" ]]; then
     stage_deep_learning
   fi
 
@@ -424,7 +442,7 @@ main() {
     return 0
   fi
 
-  if [[ "$RESUME_FROM" != "import" ]]; then
+  if [[ "$run_import" == "true" ]]; then
     stage_import
   fi
 

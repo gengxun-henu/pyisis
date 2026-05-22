@@ -110,6 +110,28 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "Duplicate method label"):
                 matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
 
+    def test_load_experiment_config_rejects_path_traversal_run_id(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_minimal_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["run_id"] = "../escape"
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "run_id must match"):
+                matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+
+    def test_load_experiment_config_rejects_path_traversal_method_label(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_minimal_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["methods"][0]["label"] = "bad/label"
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "label must match"):
+                matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+
     def test_load_experiment_config_rejects_deep_method_without_preset(self):
         with temporary_directory() as temp_dir:
             config_path = temp_dir / "experiment.json"
@@ -326,6 +348,33 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertTrue((result.run_dir / "methods/loftr/command.sh").exists())
             self.assertFalse((result.run_dir / "methods/sift_flann/stdout.log").exists())
             self.assertFalse((result.run_dir / "methods/loftr/stdout.log").exists())
+            manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertTrue(manifest["dry_run"])
+            self.assertFalse(manifest["resume"])
+            self.assertTrue(manifest["keep_going"])
+            self.assertEqual(
+                {method["label"]: method["status"] for method in manifest["methods"]},
+                {"sift_flann": "dry_run", "loftr": "dry_run"},
+            )
+
+    def test_run_experiment_dry_run_command_script_quotes_paths_with_spaces(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+
+            result = matcher_comparison.run_experiment(
+                config_path,
+                output_root=temp_dir / "out with spaces",
+                repo_root=PROJECT_ROOT,
+                dry_run=True,
+                only_labels={"sift_flann"},
+                resume=False,
+                keep_going=True,
+            )
+
+            command_script = (result.run_dir / "methods/sift_flann/command.sh").read_text(encoding="utf-8")
+            expected_work_dir = temp_dir / "out with spaces/unit_run/methods/sift_flann/work"
+            self.assertIn(f"'{expected_work_dir}'", command_script)
 
     def test_run_experiment_only_limits_methods(self):
         with temporary_directory() as temp_dir:
@@ -351,8 +400,15 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             _write_config_with_temp_inputs(config_path, temp_dir)
             method_dir = temp_dir / "out/unit_run/methods/sift_flann"
             method_dir.mkdir(parents=True)
+            config = matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+            command = matcher_comparison.build_method_command(
+                config,
+                config.methods[0],
+                method_dir=method_dir,
+                repo_root=PROJECT_ROOT,
+            )
             metrics_path = method_dir / "metrics.json"
-            metrics_path.write_text(json.dumps({"status": "success"}), encoding="utf-8")
+            metrics_path.write_text(json.dumps({"status": "success", "command": command}), encoding="utf-8")
 
             result = matcher_comparison.run_experiment(
                 config_path,
@@ -367,6 +423,55 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertEqual(json.loads(metrics_path.read_text(encoding="utf-8"))["status"], "success")
             self.assertFalse((result.run_dir / "methods/sift_flann/command.sh").exists())
             self.assertTrue((result.run_dir / "methods/loftr/command.sh").exists())
+            manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(manifest["methods"][0]["status"], "skipped_success")
+            self.assertEqual(manifest["methods"][1]["status"], "dry_run")
+
+    def test_run_experiment_resume_regenerates_command_for_stale_success_metrics(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+            method_dir = temp_dir / "out/unit_run/methods/sift_flann"
+            method_dir.mkdir(parents=True)
+            metrics_path = method_dir / "metrics.json"
+            metrics_path.write_text(
+                json.dumps({"status": "success", "command": ["bash", "old-command.sh"]}),
+                encoding="utf-8",
+            )
+
+            result = matcher_comparison.run_experiment(
+                config_path,
+                output_root=temp_dir / "out",
+                repo_root=PROJECT_ROOT,
+                dry_run=True,
+                only_labels={"sift_flann"},
+                resume=True,
+                keep_going=True,
+            )
+
+            self.assertTrue((result.run_dir / "methods/sift_flann/command.sh").exists())
+            manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(manifest["methods"][0]["status"], "dry_run")
+            self.assertNotEqual(manifest["methods"][0]["command"], ["bash", "old-command.sh"])
+
+    def test_run_experiment_non_dry_run_raises_before_method_side_effects(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+
+            with self.assertRaisesRegex(NotImplementedError, "Task 4"):
+                matcher_comparison.run_experiment(
+                    config_path,
+                    output_root=temp_dir / "out",
+                    repo_root=PROJECT_ROOT,
+                    dry_run=False,
+                    only_labels=None,
+                    resume=False,
+                    keep_going=True,
+                )
+
+            self.assertFalse((temp_dir / "out/unit_run/experiment_config.json").exists())
+            self.assertFalse((temp_dir / "out/unit_run/methods/sift_flann/command.sh").exists())
 
 
 if __name__ == "__main__":

@@ -11,12 +11,14 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+import re
 import shutil
 from typing import Any
 
 
 DEEP_MATCHER_METHODS = {"lightglue", "loftr", "superglue"}
 SUPPORTED_MATCHER_METHODS = ("bf", "flann", "superpoint", "superglue", "lightglue", "loftr")
+SAFE_PATH_COMPONENT_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")
 
 
 @dataclass(frozen=True)
@@ -97,6 +99,7 @@ def load_experiment_config(config_path: str | Path, *, repo_root: str | Path | N
     run_id = payload.get("run_id")
     if not isinstance(run_id, str) or not run_id.strip():
         raise ValueError("run_id must be a non-empty string")
+    run_id = _validate_path_component(run_id.strip(), "run_id")
 
     inputs_payload = _require_mapping(payload, "inputs")
     inputs = ExperimentInputs(
@@ -147,7 +150,7 @@ def load_experiment_config(config_path: str | Path, *, repo_root: str | Path | N
         if not isinstance(method_payload, dict):
             raise ValueError(f"methods[{index}] must be an object")
 
-        label = _require_string(method_payload, "label")
+        label = _validate_path_component(_require_string(method_payload, "label"), "label")
         if label in labels:
             raise ValueError(f"Duplicate method label: {label}")
         labels.add(label)
@@ -177,7 +180,7 @@ def load_experiment_config(config_path: str | Path, *, repo_root: str | Path | N
         methods.append(method)
 
     return ExperimentConfig(
-        run_id=run_id.strip(),
+        run_id=run_id,
         description=_optional_string(payload, "description", ""),
         inputs=inputs,
         execution=execution,
@@ -273,7 +276,7 @@ def _write_command_script(path: str | Path, command: list[str]) -> None:
     path.chmod(0o755)
 
 
-def _existing_success(metrics_path: str | Path) -> bool:
+def _existing_success(metrics_path: str | Path, command: list[str]) -> bool:
     metrics_path = Path(metrics_path)
     if not metrics_path.exists():
         return False
@@ -284,7 +287,7 @@ def _existing_success(metrics_path: str | Path) -> bool:
     except (OSError, json.JSONDecodeError):
         return False
 
-    return isinstance(payload, dict) and payload.get("status") == "success"
+    return isinstance(payload, dict) and payload.get("status") == "success" and payload.get("command") == command
 
 
 def _method_manifest_entry(
@@ -335,6 +338,9 @@ def run_experiment(
             raise ValueError(f"Unknown method label(s): {', '.join(unknown_labels)}")
         selected_methods = tuple(method for method in config.methods if method.label in only_labels)
 
+    if not dry_run:
+        raise NotImplementedError("Real matcher comparison execution will be implemented in Task 4")
+
     run_dir = Path(output_root).expanduser() / config.run_id
     methods_dir = run_dir / "methods"
     reports_dir = run_dir / "reports"
@@ -347,12 +353,18 @@ def run_experiment(
     for method in selected_methods:
         method_dir = methods_dir / method.label
         metrics_path = method_dir / "metrics.json"
-        if effective_resume and _existing_success(metrics_path):
+        command = build_method_command(
+            config,
+            method,
+            method_dir=method_dir,
+            repo_root=repo_root_path,
+        )
+        if effective_resume and _existing_success(metrics_path, command):
             method_entries.append(
                 _method_manifest_entry(
                     method,
                     method_dir,
-                    None,
+                    command,
                     "skipped_success",
                 )
             )
@@ -363,12 +375,6 @@ def run_experiment(
             original_images_list=config.inputs.original_images_list,
             doms_list=config.inputs.doms_list,
         )
-        command = build_method_command(
-            config,
-            method,
-            method_dir=method_dir,
-            repo_root=repo_root_path,
-        )
         _write_command_script(method_dir / "command.sh", command)
         method_entries.append(
             _method_manifest_entry(
@@ -378,9 +384,6 @@ def run_experiment(
                 "dry_run" if dry_run else "pending",
             )
         )
-        if not dry_run:
-            raise NotImplementedError("Real matcher comparison execution will be implemented in Task 4")
-
     manifest_path = run_dir / "experiment_manifest.json"
     manifest = {
         "run_id": config.run_id,
@@ -442,6 +445,19 @@ def _require_string(payload: dict[str, Any], key: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"{key} must be a non-empty string")
     return value.strip()
+
+
+def _validate_path_component(value: str, field_name: str) -> str:
+    if (
+        not value
+        or Path(value).is_absolute()
+        or ".." in value
+        or "/" in value
+        or "\\" in value
+        or not SAFE_PATH_COMPONENT_RE.fullmatch(value)
+    ):
+        raise ValueError(f"{field_name} must match [A-Za-z0-9][A-Za-z0-9._-]* and be a safe path component")
+    return value
 
 
 def _optional_string(payload: dict[str, Any], key: str, default: str) -> str:

@@ -9,6 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import json
 from pathlib import Path
+import shutil
 from typing import Any
 
 
@@ -175,6 +176,70 @@ def load_experiment_config(config_path: str | Path, *, repo_root: str | Path | N
         methods=tuple(methods),
         config_path=config_path,
     )
+
+
+def prepare_method_workspace(
+    method_dir: str | Path,
+    *,
+    original_images_list: str | Path,
+    doms_list: str | Path,
+) -> Path:
+    method_dir = Path(method_dir).expanduser().resolve()
+    work_dir = method_dir / "work"
+    work_dir.mkdir(parents=True, exist_ok=True)
+
+    shutil.copyfile(Path(original_images_list).expanduser(), work_dir / "original_images.lis")
+    shutil.copyfile(Path(doms_list).expanduser(), work_dir / "doms_scaled.lis")
+
+    return work_dir
+
+
+def build_method_command(
+    config: ExperimentConfig,
+    method: MethodConfig,
+    *,
+    method_dir: str | Path,
+    repo_root: str | Path,
+) -> list[str]:
+    repo_root = Path(repo_root).expanduser().resolve()
+    method_dir = Path(method_dir).expanduser().resolve()
+    work_dir = method_dir / "work"
+
+    if method.is_deep_method:
+        script_path = repo_root / "examples/controlnet_construct/run_deep_match_pipeline.sh"
+        command = [
+            "bash",
+            str(script_path),
+            "--work-dir",
+            str(work_dir),
+            "--config",
+            str(config.inputs.controlnet_config),
+            "--matcher-method",
+            method.matcher_method,
+            "--asp360-env",
+            config.execution.asp360_env,
+            "--deep-learning-env",
+            config.execution.deep_learning_env,
+            "--device",
+            config.execution.device,
+        ]
+    else:
+        script_path = repo_root / "examples/controlnet_construct/run_pipeline_example.sh"
+        command = [
+            "bash",
+            str(script_path),
+            "--work-dir",
+            str(work_dir),
+            "--config",
+            str(config.inputs.controlnet_config),
+            "--matcher-method",
+            method.matcher_method,
+        ]
+
+    if config.execution.skip_final_merge:
+        command.append("--skip-final-merge")
+
+    return command
 
 
 def _require_string(payload: dict[str, Any], key: str) -> str:

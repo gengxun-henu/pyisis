@@ -167,6 +167,88 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
         self.assertEqual(config.run_id, "lro_batch_20260522")
         self.assertEqual(len(config.methods), 7)
 
+    def test_prepare_method_workspace_copies_input_lists_to_wrapper_default_names(self):
+        with temporary_directory() as temp_dir:
+            source_original = temp_dir / "source_originals.lis"
+            source_doms = temp_dir / "source_doms.lis"
+            source_original.write_text("original 1\noriginal 2\n", encoding="utf-8")
+            source_doms.write_text("dom 1\ndom 2\n", encoding="utf-8")
+            method_dir = temp_dir / "method"
+
+            work_dir = matcher_comparison.prepare_method_workspace(
+                method_dir,
+                original_images_list=source_original,
+                doms_list=source_doms,
+            )
+
+            self.assertEqual(work_dir, method_dir.resolve() / "work")
+            self.assertEqual(
+                (method_dir / "work/original_images.lis").read_text(encoding="utf-8"),
+                "original 1\noriginal 2\n",
+            )
+            self.assertEqual(
+                (method_dir / "work/doms_scaled.lis").read_text(encoding="utf-8"),
+                "dom 1\ndom 2\n",
+            )
+
+    def test_build_method_command_uses_plain_pipeline_for_flann(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_minimal_config(config_path)
+            config = matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+            method = config.methods[0]
+            method_dir = temp_dir / "sift_flann"
+
+            command = matcher_comparison.build_method_command(
+                config,
+                method,
+                method_dir=method_dir,
+                repo_root=PROJECT_ROOT,
+            )
+
+        self.assertIn("bash", command)
+        self.assertIn(
+            str(PROJECT_ROOT / "examples/controlnet_construct/run_pipeline_example.sh"),
+            command,
+        )
+        self.assertIn("--work-dir", command)
+        self.assertIn(str(method_dir.resolve() / "work"), command)
+        self.assertIn("--matcher-method", command)
+        self.assertIn("flann", command)
+        self.assertIn("--skip-final-merge", command)
+        self.assertNotIn(
+            str(PROJECT_ROOT / "examples/controlnet_construct/run_deep_match_pipeline.sh"),
+            command,
+        )
+
+    def test_build_method_command_uses_deep_pipeline_for_loftr(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_minimal_config(config_path)
+            config = matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
+            method = config.methods[1]
+            method_dir = temp_dir / "loftr"
+
+            command = matcher_comparison.build_method_command(
+                config,
+                method,
+                method_dir=method_dir,
+                repo_root=PROJECT_ROOT,
+            )
+
+        self.assertIn(
+            str(PROJECT_ROOT / "examples/controlnet_construct/run_deep_match_pipeline.sh"),
+            command,
+        )
+        self.assertIn("--asp360-env", command)
+        self.assertIn("asp360_new", command)
+        self.assertIn("--deep-learning-env", command)
+        self.assertIn("deep-learning", command)
+        self.assertIn("--device", command)
+        self.assertIn("auto", command)
+        self.assertIn("--matcher-method", command)
+        self.assertIn("loftr", command)
+
 
 if __name__ == "__main__":
     unittest.main()

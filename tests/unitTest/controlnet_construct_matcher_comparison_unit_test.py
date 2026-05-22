@@ -425,6 +425,23 @@ class MatcherComparisonReportsUnitTest(unittest.TestCase):
             self.assertEqual([failure["label"] for failure in failures_payload["failures"]], ["loftr"])
 
 
+class MatcherComparisonDocumentationUnitTest(unittest.TestCase):
+    def test_experiments_readme_documents_inputs_outputs_and_methods(self):
+        readme_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/README.md"
+
+        readme_text = readme_path.read_text(encoding="utf-8")
+
+        for expected_text in (
+            "work/original_images.lis",
+            "work/doms_scaled.lis",
+            "summary.csv",
+            "sift_flann",
+            "loftr",
+        ):
+            with self.subTest(expected_text=expected_text):
+                self.assertIn(expected_text, readme_text)
+
+
 class MatcherComparisonRunUnitTest(unittest.TestCase):
     def _fake_command_for_method(self, method):
         if method.label == "sift_flann":
@@ -938,6 +955,9 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
 
         self.assertEqual(result.returncode, 0, msg=result.stderr)
         self.assertIn("Run a ControlNet matcher comparison experiment.", result.stdout)
+        self.assertIn("--output-root", result.stdout)
+        self.assertIn("--dry-run", result.stdout)
+        self.assertIn("--only", result.stdout)
 
     def test_parse_only_rejects_explicit_empty_filter(self):
         for value in ("", ",", " , "):

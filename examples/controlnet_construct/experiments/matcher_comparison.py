@@ -7,6 +7,7 @@ Created: 2026-05-22
 from __future__ import annotations
 
 import argparse
+import csv
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
@@ -21,6 +22,21 @@ from typing import Any
 DEEP_MATCHER_METHODS = {"lightglue", "loftr", "superglue"}
 SUPPORTED_MATCHER_METHODS = ("bf", "flann", "superpoint", "superglue", "lightglue", "loftr")
 SAFE_PATH_COMPONENT_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")
+REPORT_COLUMNS = (
+    "label",
+    "status",
+    "return_code",
+    "total_wall_seconds",
+    "pipeline_total_seconds",
+    "pair_count",
+    "pairwise_controlnet_count",
+    "merged_controlnet_exists",
+    "total_final_control_point_count",
+    "total_dom2ori_retained_count",
+    "stdout_log",
+    "stderr_log",
+)
+SUCCESS_STATUSES = {"success", "skipped_success"}
 
 
 @dataclass(frozen=True)
@@ -322,6 +338,14 @@ def _existing_success(metrics_path: str | Path, command: list[str]) -> bool:
     return isinstance(payload, dict) and payload.get("status") == "success" and payload.get("command") == command
 
 
+def _read_metrics_file(metrics_path: str | Path) -> dict[str, Any]:
+    with Path(metrics_path).open(encoding="utf-8") as metrics_file:
+        payload = json.load(metrics_file)
+    if not isinstance(payload, dict):
+        raise ValueError(f"Metrics file must contain an object: {metrics_path}")
+    return payload
+
+
 def _clear_collected_pipeline_outputs(method_dir: str | Path) -> None:
     method_dir = Path(method_dir)
     work_dir = method_dir / "work"
@@ -479,6 +503,54 @@ def execute_method(*, label: str, command: list[str], method_dir: str | Path) ->
     return metrics
 
 
+def _failed_metrics(metrics: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [metric for metric in metrics if metric.get("status") not in SUCCESS_STATUSES]
+
+
+def _markdown_cell(value: Any) -> str:
+    if value is None:
+        return ""
+    return str(value).replace("|", "\\|").replace("\n", " ")
+
+
+def write_reports(reports_dir: str | Path, *, run_id: str, metrics: list[dict[str, Any]]) -> None:
+    reports_dir = Path(reports_dir).expanduser()
+    reports_dir.mkdir(parents=True, exist_ok=True)
+
+    summary_payload = {
+        "run_id": run_id,
+        "metrics": metrics,
+    }
+    (reports_dir / "summary.json").write_text(json.dumps(summary_payload, indent=2) + "\n", encoding="utf-8")
+
+    with (reports_dir / "summary.csv").open("w", encoding="utf-8", newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=REPORT_COLUMNS, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(metrics)
+
+    failures = _failed_metrics(metrics)
+    lines = [
+        f"# Matcher Comparison Summary: {run_id}",
+        "",
+        "| " + " | ".join(REPORT_COLUMNS) + " |",
+        "| " + " | ".join("---" for _ in REPORT_COLUMNS) + " |",
+    ]
+    for metric in metrics:
+        lines.append("| " + " | ".join(_markdown_cell(metric.get(column)) for column in REPORT_COLUMNS) + " |")
+    lines.extend(["", "## Failures"])
+    if failures:
+        lines.extend(f"- {_markdown_cell(failure.get('label'))}: {_markdown_cell(failure.get('status'))}" for failure in failures)
+    else:
+        lines.append("None")
+    (reports_dir / "summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+    failures_payload = {
+        "run_id": run_id,
+        "failures": failures,
+    }
+    (reports_dir / "failures.json").write_text(json.dumps(failures_payload, indent=2) + "\n", encoding="utf-8")
+
+
 def _method_manifest_entry(
     method: MethodConfig,
     method_dir: str | Path,
@@ -546,6 +618,7 @@ def run_experiment(
     shutil.copyfile(config.config_path, run_dir / "experiment_config.json")
 
     method_entries: list[dict[str, Any]] = []
+    report_metrics: list[dict[str, Any]] = []
     for method in selected_methods:
         method_dir = methods_dir / method.label
         metrics_path = method_dir / "metrics.json"
@@ -557,6 +630,8 @@ def run_experiment(
             keep_going=effective_keep_going,
         )
         if effective_resume and _existing_success(metrics_path, command):
+            if not dry_run:
+                report_metrics.append(_read_metrics_file(metrics_path))
             method_entries.append(
                 _method_manifest_entry(
                     method,
@@ -584,6 +659,7 @@ def run_experiment(
         status = "dry_run"
         if not dry_run:
             metrics = execute_method(label=method.label, command=command, method_dir=method_dir)
+            report_metrics.append(metrics)
             status = metrics["status"]
         method_entries.append(
             _method_manifest_entry(
@@ -609,6 +685,9 @@ def run_experiment(
         "methods": method_entries,
     }
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+    if not dry_run and report_metrics:
+        write_reports(reports_dir, run_id=config.run_id, metrics=report_metrics)
 
     return ExperimentRunResult(run_dir=run_dir, manifest_path=manifest_path, status=status)
 

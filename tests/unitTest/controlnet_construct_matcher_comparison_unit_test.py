@@ -78,6 +78,40 @@ def _write_config_with_temp_inputs(config_path: Path, temp_dir: Path) -> None:
     config_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
+def _sample_report_metrics() -> list[dict]:
+    return [
+        {
+            "label": "sift_flann",
+            "status": "success",
+            "return_code": 0,
+            "total_wall_seconds": 1.25,
+            "pipeline_total_seconds": 1.0,
+            "pair_count": 2,
+            "pairwise_controlnet_count": 2,
+            "merged_controlnet_exists": True,
+            "total_final_control_point_count": 15,
+            "total_dom2ori_retained_count": 12,
+            "stdout_log": "/tmp/sift_stdout.log",
+            "stderr_log": "/tmp/sift_stderr.log",
+            "extra_key_ignored_by_csv": "extra",
+        },
+        {
+            "label": "loftr",
+            "status": "failed",
+            "return_code": 7,
+            "total_wall_seconds": 0.5,
+            "pipeline_total_seconds": None,
+            "pair_count": None,
+            "pairwise_controlnet_count": 0,
+            "merged_controlnet_exists": False,
+            "total_final_control_point_count": None,
+            "total_dom2ori_retained_count": None,
+            "stdout_log": "/tmp/loftr_stdout.log",
+            "stderr_log": "/tmp/loftr_stderr.log",
+        },
+    ]
+
+
 class MatcherComparisonConfigUnitTest(unittest.TestCase):
     def test_load_experiment_config_expands_inputs_execution_and_methods(self):
         with temporary_directory() as temp_dir:
@@ -354,6 +388,43 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
         self.assertEqual(output.count(f"--deep-match-config-path {preset_path}"), 2)
 
 
+class MatcherComparisonReportsUnitTest(unittest.TestCase):
+    def test_write_reports_creates_summary_csv_markdown_and_failures(self):
+        with temporary_directory() as temp_dir:
+            reports_dir = temp_dir / "reports"
+            metrics = _sample_report_metrics()
+
+            matcher_comparison.write_reports(reports_dir, run_id="unit_run", metrics=metrics)
+
+            summary_json_path = reports_dir / "summary.json"
+            summary_csv_path = reports_dir / "summary.csv"
+            summary_md_path = reports_dir / "summary.md"
+            failures_json_path = reports_dir / "failures.json"
+            for report_path in (summary_json_path, summary_csv_path, summary_md_path, failures_json_path):
+                self.assertTrue(report_path.exists(), msg=str(report_path))
+
+            summary_payload = json.loads(summary_json_path.read_text(encoding="utf-8"))
+            self.assertEqual(summary_payload["run_id"], "unit_run")
+            self.assertEqual(summary_payload["metrics"], metrics)
+
+            csv_text = summary_csv_path.read_text(encoding="utf-8")
+            self.assertIn("label,status,return_code", csv_text)
+            self.assertIn("sift_flann,success,0", csv_text)
+            self.assertIn("loftr,failed,7", csv_text)
+            self.assertNotIn("extra_key_ignored_by_csv", csv_text)
+
+            markdown_text = summary_md_path.read_text(encoding="utf-8")
+            self.assertIn("| label | status |", markdown_text)
+            self.assertIn("| sift_flann | success |", markdown_text)
+            self.assertIn("| loftr | failed |", markdown_text)
+            self.assertIn("## Failures", markdown_text)
+            self.assertIn("- loftr: failed", markdown_text)
+
+            failures_payload = json.loads(failures_json_path.read_text(encoding="utf-8"))
+            self.assertEqual(failures_payload["run_id"], "unit_run")
+            self.assertEqual([failure["label"] for failure in failures_payload["failures"]], ["loftr"])
+
+
 class MatcherComparisonRunUnitTest(unittest.TestCase):
     def _fake_command_for_method(self, method):
         if method.label == "sift_flann":
@@ -387,6 +458,10 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertTrue((result.run_dir / "experiment_manifest.json").exists())
             self.assertTrue((result.run_dir / "methods/sift_flann/command.sh").exists())
             self.assertTrue((result.run_dir / "methods/loftr/command.sh").exists())
+            self.assertFalse((result.run_dir / "reports/summary.json").exists())
+            self.assertFalse((result.run_dir / "reports/summary.csv").exists())
+            self.assertFalse((result.run_dir / "reports/summary.md").exists())
+            self.assertFalse((result.run_dir / "reports/failures.json").exists())
             self.assertEqual(
                 (result.run_dir / "methods/sift_flann/work/original_images.lis").read_text(encoding="utf-8"),
                 "image_1.cub\nimage_2.cub\n",
@@ -597,6 +672,76 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             self.assertEqual(
                 {method["label"]: method["status"] for method in manifest["methods"]},
                 {"sift_flann": "success", "loftr": "success"},
+            )
+            self.assertTrue((result.run_dir / "reports/summary.json").exists())
+            self.assertTrue((result.run_dir / "reports/summary.csv").exists())
+            self.assertTrue((result.run_dir / "reports/summary.md").exists())
+            self.assertTrue((result.run_dir / "reports/failures.json").exists())
+            summary_payload = json.loads((result.run_dir / "reports/summary.json").read_text(encoding="utf-8"))
+            self.assertEqual(summary_payload["run_id"], "unit_run")
+            self.assertEqual(
+                {metric["label"]: metric["status"] for metric in summary_payload["metrics"]},
+                {"sift_flann": "success", "loftr": "success"},
+            )
+
+    def test_run_experiment_non_dry_run_reports_resumed_success_metrics(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_temp_inputs(config_path, temp_dir)
+            sift_dir = temp_dir / "out/unit_run/methods/sift_flann"
+            sift_dir.mkdir(parents=True)
+            resumed_command = [sys.executable, "-c", "print('resumed sift')"]
+            resumed_metrics = {
+                "label": "sift_flann",
+                "status": "success",
+                "return_code": 0,
+                "total_wall_seconds": 9.0,
+                "pair_count": 4,
+                "pairwise_controlnet_count": 4,
+                "merged_controlnet_exists": True,
+                "total_final_control_point_count": 20,
+                "total_dom2ori_retained_count": 18,
+                "stdout_log": str(sift_dir / "stdout.log"),
+                "stderr_log": str(sift_dir / "stderr.log"),
+                "command": resumed_command,
+            }
+            (sift_dir / "metrics.json").write_text(json.dumps(resumed_metrics), encoding="utf-8")
+
+            def fake_build_method_command(config, method, *, method_dir, repo_root, keep_going=None):
+                if method.label == "sift_flann":
+                    return resumed_command
+                return [sys.executable, "-c", "print('fresh loftr')"]
+
+            with mock.patch.object(
+                matcher_comparison,
+                "build_method_command",
+                side_effect=fake_build_method_command,
+            ):
+                result = matcher_comparison.run_experiment(
+                    config_path,
+                    output_root=temp_dir / "out",
+                    repo_root=PROJECT_ROOT,
+                    dry_run=False,
+                    only_labels=None,
+                    resume=True,
+                    keep_going=True,
+                )
+
+            manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(
+                {method["label"]: method["status"] for method in manifest["methods"]},
+                {"sift_flann": "skipped_success", "loftr": "success"},
+            )
+            summary_payload = json.loads((result.run_dir / "reports/summary.json").read_text(encoding="utf-8"))
+            self.assertEqual(
+                {metric["label"]: metric["status"] for metric in summary_payload["metrics"]},
+                {"sift_flann": "success", "loftr": "success"},
+            )
+            self.assertEqual(
+                next(metric for metric in summary_payload["metrics"] if metric["label"] == "sift_flann")[
+                    "pair_count"
+                ],
+                4,
             )
 
     def test_run_experiment_non_dry_run_stops_after_failure_when_fail_fast(self):

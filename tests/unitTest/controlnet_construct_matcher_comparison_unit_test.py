@@ -783,6 +783,58 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
             summary_payload = json.loads((result.run_dir / "reports/summary.json").read_text(encoding="utf-8"))
             self.assertEqual(summary_payload["metrics"][0]["status"], "success")
 
+    def test_run_experiment_dry_run_ignores_resume_skip_and_refreshes_command_script(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "experiment.json"
+            _write_config_with_fingerprint_inputs(config_path, temp_dir)
+            command = [sys.executable, "-c", "print('fingerprinted run')"]
+
+            def fake_build_method_command(config, method, *, method_dir, repo_root, keep_going=None):
+                return command
+
+            with mock.patch.object(
+                matcher_comparison,
+                "build_method_command",
+                side_effect=fake_build_method_command,
+            ):
+                first_result = matcher_comparison.run_experiment(
+                    config_path,
+                    output_root=temp_dir / "out",
+                    repo_root=PROJECT_ROOT,
+                    dry_run=False,
+                    only_labels={"sift_flann"},
+                    resume=False,
+                    keep_going=True,
+                )
+
+            method_dir = first_result.run_dir / "methods/sift_flann"
+            command_script = method_dir / "command.sh"
+            command_script.unlink()
+
+            with mock.patch.object(
+                matcher_comparison,
+                "build_method_command",
+                side_effect=fake_build_method_command,
+            ), mock.patch.object(
+                matcher_comparison,
+                "execute_method",
+                side_effect=AssertionError("dry-run must not execute methods"),
+            ):
+                result = matcher_comparison.run_experiment(
+                    config_path,
+                    output_root=temp_dir / "out",
+                    repo_root=PROJECT_ROOT,
+                    dry_run=True,
+                    only_labels={"sift_flann"},
+                    resume=True,
+                    keep_going=True,
+                )
+
+            self.assertTrue(command_script.exists())
+            self.assertIn("fingerprinted run", command_script.read_text(encoding="utf-8"))
+            manifest = json.loads(result.manifest_path.read_text(encoding="utf-8"))
+            self.assertEqual(manifest["methods"][0]["status"], "dry_run")
+
     def test_run_experiment_resume_does_not_skip_success_metrics_without_fingerprint(self):
         with temporary_directory() as temp_dir:
             config_path = temp_dir / "experiment.json"
@@ -1487,6 +1539,53 @@ class MatcherComparisonExecutionUnitTest(unittest.TestCase):
             metrics_payload = json.loads((method_dir / "metrics.json").read_text(encoding="utf-8"))
             self.assertEqual(metrics_payload["status"], "failed")
             self.assertEqual(metrics_payload["pair_count"], None)
+
+    def test_execute_method_skips_cleanup_and_metrics_through_symlinked_output_dirs(self):
+        with temporary_directory() as temp_dir:
+            method_dir = temp_dir / "method"
+            outside_dir = temp_dir / "outside"
+            outside_reports = outside_dir / "reports"
+            outside_pair_nets = outside_dir / "pair_nets"
+            outside_merge = outside_dir / "merge"
+            outside_reports.mkdir(parents=True)
+            outside_pair_nets.mkdir(parents=True)
+            outside_merge.mkdir(parents=True)
+            (outside_reports / "image_overlap_summary.json").write_text(
+                json.dumps({"pair_count": 99}),
+                encoding="utf-8",
+            )
+            (outside_reports / "controlnet_batch_summary.json").write_text(
+                json.dumps({"total_final_control_point_count": 99}),
+                encoding="utf-8",
+            )
+            (outside_reports / "pipeline_timing.json").write_text(
+                json.dumps({"total_seconds": 99}),
+                encoding="utf-8",
+            )
+            (outside_pair_nets / "stale.net").write_text("outside net\n", encoding="utf-8")
+            (outside_merge / "dom_matching_merged.net").write_text("outside merged\n", encoding="utf-8")
+
+            work_dir = method_dir / "work"
+            work_dir.mkdir(parents=True)
+            os.symlink(outside_reports, work_dir / "reports")
+            os.symlink(outside_pair_nets, work_dir / "pair_nets")
+            os.symlink(outside_merge, work_dir / "merge")
+
+            metrics = matcher_comparison.execute_method(
+                label="fake_success",
+                command=[sys.executable, "-c", "print('ok')"],
+                method_dir=method_dir,
+            )
+
+            self.assertEqual(metrics["status"], "success")
+            self.assertEqual(metrics["pair_count"], None)
+            self.assertEqual(metrics["pairwise_controlnet_count"], 0)
+            self.assertFalse(metrics["merged_controlnet_exists"])
+            self.assertEqual(metrics["pipeline_total_seconds"], None)
+            self.assertTrue((outside_reports / "image_overlap_summary.json").exists())
+            self.assertTrue((outside_pair_nets / "stale.net").exists())
+            self.assertTrue((outside_merge / "dom_matching_merged.net").exists())
+            self.assertTrue(any("symlinked" in warning for warning in metrics["warnings"]))
 
     def test_execute_method_writes_failed_metrics_when_launch_fails(self):
         with temporary_directory() as temp_dir:

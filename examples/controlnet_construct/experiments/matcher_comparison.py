@@ -414,6 +414,26 @@ def _read_metrics_file(metrics_path: str | Path) -> dict[str, Any]:
     return payload
 
 
+def _has_symlinked_parent(path: Path, root: Path) -> bool:
+    if root.is_symlink():
+        return True
+
+    parent = path.parent
+    while True:
+        if parent.is_symlink():
+            return True
+        if parent == root or parent == parent.parent:
+            return False
+        parent = parent.parent
+
+
+def _unlink_known_output(path: Path, root: Path) -> None:
+    if _has_symlinked_parent(path, root):
+        return
+    if path.is_file() or path.is_symlink():
+        path.unlink()
+
+
 def _clear_collected_pipeline_outputs(method_dir: str | Path) -> None:
     method_dir = Path(method_dir)
     work_dir = method_dir / "work"
@@ -424,17 +444,19 @@ def _clear_collected_pipeline_outputs(method_dir: str | Path) -> None:
         reports_dir / "pipeline_timing.json",
         work_dir / "merge/dom_matching_merged.net",
     ):
-        if output_path.is_file() or output_path.is_symlink():
-            output_path.unlink()
+        _unlink_known_output(output_path, work_dir)
 
     pair_nets_dir = work_dir / "pair_nets"
-    if pair_nets_dir.exists():
+    if pair_nets_dir.exists() and not pair_nets_dir.is_symlink() and not work_dir.is_symlink():
         for pair_net_path in pair_nets_dir.glob("*.net"):
-            if pair_net_path.is_file() or pair_net_path.is_symlink():
-                pair_net_path.unlink()
+            _unlink_known_output(pair_net_path, work_dir)
 
 
-def _read_json_if_present(path: Path, warnings: list[str]) -> dict[str, Any] | None:
+def _read_json_if_present(path: Path, warnings: list[str], *, root: Path | None = None) -> dict[str, Any] | None:
+    if root is not None and _has_symlinked_parent(path, root):
+        warnings.append(f"skipped symlinked parent path: {path}")
+        return None
+
     if not path.exists():
         warnings.append(f"missing: {path}")
         return None
@@ -489,10 +511,14 @@ def collect_method_metrics(label: str, method_dir: str | Path) -> dict[str, Any]
     reports_dir = work_dir / "reports"
     warnings: list[str] = []
 
-    overlap_summary = _read_json_if_present(reports_dir / "image_overlap_summary.json", warnings)
-    controlnet_summary = _read_json_if_present(reports_dir / "controlnet_batch_summary.json", warnings)
+    overlap_summary = _read_json_if_present(reports_dir / "image_overlap_summary.json", warnings, root=work_dir)
+    controlnet_summary = _read_json_if_present(
+        reports_dir / "controlnet_batch_summary.json",
+        warnings,
+        root=work_dir,
+    )
     pipeline_timing_path = reports_dir / "pipeline_timing.json"
-    pipeline_timing = _read_json_if_present(pipeline_timing_path, warnings)
+    pipeline_timing = _read_json_if_present(pipeline_timing_path, warnings, root=work_dir)
 
     pair_count = None
     if controlnet_summary is not None:
@@ -501,9 +527,17 @@ def collect_method_metrics(label: str, method_dir: str | Path) -> dict[str, Any]
         pair_count = overlap_summary.get("pair_count", overlap_summary.get("overlap_pair_count"))
 
     pair_nets_dir = work_dir / "pair_nets"
-    pairwise_controlnet_count = len(list(pair_nets_dir.glob("*.net"))) if pair_nets_dir.exists() else 0
+    if _has_symlinked_parent(pair_nets_dir / "placeholder", work_dir) or pair_nets_dir.is_symlink():
+        warnings.append(f"skipped symlinked pair_nets path: {pair_nets_dir}")
+        pairwise_controlnet_count = 0
+    else:
+        pairwise_controlnet_count = len(list(pair_nets_dir.glob("*.net"))) if pair_nets_dir.exists() else 0
     merged_controlnet_path = work_dir / "merge/dom_matching_merged.net"
-    merged_controlnet_exists = merged_controlnet_path.exists()
+    if _has_symlinked_parent(merged_controlnet_path, work_dir):
+        warnings.append(f"skipped symlinked merged controlnet path: {merged_controlnet_path}")
+        merged_controlnet_exists = False
+    else:
+        merged_controlnet_exists = merged_controlnet_path.exists()
 
     return {
         "label": label,
@@ -630,9 +664,7 @@ def write_reports(reports_dir: str | Path, *, run_id: str, metrics: list[dict[st
 def _remove_report_outputs(reports_dir: str | Path) -> None:
     reports_dir = Path(reports_dir).expanduser()
     for report_name in REPORT_OUTPUT_NAMES:
-        report_path = reports_dir / report_name
-        if report_path.is_file() or report_path.is_symlink():
-            report_path.unlink()
+        _unlink_known_output(reports_dir / report_name, reports_dir)
 
 
 def _method_manifest_entry(
@@ -716,7 +748,7 @@ def run_experiment(
             keep_going=effective_keep_going,
         )
         resume_fingerprint = _resume_fingerprint(config, method)
-        if effective_resume and _existing_success(metrics_path, command, resume_fingerprint):
+        if not dry_run and effective_resume and _existing_success(metrics_path, command, resume_fingerprint):
             if not dry_run:
                 report_metrics.append(_read_metrics_file(metrics_path))
             method_entries.append(

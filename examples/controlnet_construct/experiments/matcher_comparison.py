@@ -223,6 +223,8 @@ def build_method_command(
             "--device",
             config.execution.device,
         ]
+        if method.deep_match_config_path is not None:
+            command.extend(["--deep-match-config-path", str(method.deep_match_config_path)])
     else:
         script_path = repo_root / "examples/controlnet_construct/run_pipeline_example.sh"
         command = [

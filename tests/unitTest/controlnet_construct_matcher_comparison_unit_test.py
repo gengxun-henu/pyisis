@@ -7,8 +7,10 @@ Created: 2026-05-22
 from __future__ import annotations
 
 import json
+import os
 import sys
 from pathlib import Path
+import subprocess
 import unittest
 
 
@@ -248,6 +250,45 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
         self.assertIn("auto", command)
         self.assertIn("--matcher-method", command)
         self.assertIn("loftr", command)
+        preset_flag_index = command.index("--deep-match-config-path")
+        self.assertEqual(
+            command[preset_flag_index + 1],
+            str(PROJECT_ROOT / "examples/controlnet_construct/presets/loftr_default.json"),
+        )
+
+    def test_run_deep_match_pipeline_dry_run_forwards_deep_match_config_path_to_export_and_import(self):
+        with temporary_directory() as temp_dir:
+            fake_bin = temp_dir / "bin"
+            fake_bin.mkdir()
+            fake_conda = fake_bin / "conda"
+            fake_conda.write_text("#!/usr/bin/env bash\nexit 0\n", encoding="utf-8")
+            fake_conda.chmod(0o755)
+            preset_path = PROJECT_ROOT / "examples/controlnet_construct/presets/loftr_default.json"
+            script_path = PROJECT_ROOT / "examples/controlnet_construct/run_deep_match_pipeline.sh"
+            env = os.environ.copy()
+            env["PATH"] = f"{fake_bin}{os.pathsep}{env['PATH']}"
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(script_path),
+                    "--dry-run",
+                    "--work-dir",
+                    str(temp_dir / "work"),
+                    "--matcher-method",
+                    "loftr",
+                    "--deep-match-config-path",
+                    str(preset_path),
+                ],
+                check=False,
+                capture_output=True,
+                encoding="utf-8",
+                env=env,
+            )
+
+        self.assertEqual(result.returncode, 0, msg=result.stderr)
+        output = result.stdout + result.stderr
+        self.assertEqual(output.count(f"--deep-match-config-path {preset_path}"), 2)
 
 
 if __name__ == "__main__":

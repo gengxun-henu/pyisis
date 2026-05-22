@@ -48,6 +48,8 @@ Pipeline arguments (forwarded to run_pipeline_example.sh):
   --work-dir PATH           Root working directory. Default: work
   --config PATH             Path to JSON config file.
   --matcher-method NAME     Matcher backend (e.g. lightglue, loftr, superglue).
+  --deep-match-config-path PATH
+                            Path to deep matcher preset JSON config.
   --skip-final-merge        Skip the final cnetmerge step in full mode.
 
 Deep-match arguments:
@@ -100,6 +102,7 @@ DEEP_LEARNING_ENV="deep-learning"
 WORK_DIR="work"
 CONFIG_PATH=""
 MATCHER_METHOD=""
+DEEP_MATCH_CONFIG_PATH=""
 SKIP_FINAL_MERGE=false
 DEEP_MATCH_TEMP_ROOT_DIR=""
 DEEP_MATCH_MANIFEST_SUMMARY=""
@@ -132,6 +135,9 @@ while [[ $# -gt 0 ]]; do
     --matcher-method)
       [[ $# -ge 2 ]] || die "missing value for --matcher-method"
       MATCHER_METHOD=$2; shift 2 ;;
+    --deep-match-config-path)
+      [[ $# -ge 2 ]] || die "missing value for --deep-match-config-path"
+      DEEP_MATCH_CONFIG_PATH=$2; shift 2 ;;
     --skip-final-merge)
       SKIP_FINAL_MERGE=true; shift ;;
     --deep-match-temp-root-dir)
@@ -209,6 +215,10 @@ stage_export() {
 
   if [[ -n "$CONFIG_PATH" ]]; then
     pipeline_args+=(--config "$CONFIG_PATH")
+  fi
+
+  if [[ -n "$DEEP_MATCH_CONFIG_PATH" ]]; then
+    pipeline_args+=(--deep-match-config-path "$DEEP_MATCH_CONFIG_PATH")
   fi
 
   if [[ "$SKIP_FINAL_MERGE" == "true" && "$MODE" == "full" ]]; then
@@ -329,21 +339,18 @@ stage_import() {
 
   if [[ "$DRY_RUN" == "true" ]]; then
     log "  import from: $DEEP_MATCH_TEMP_ROOT_DIR"
-    log "Import stage complete (dry-run)"
-    return 0
-  fi
-
-  # Verify that results exist before importing
-  local missing_results=0
-  while IFS= read -r manifest_path; do
-    [[ -n "$manifest_path" ]] || continue
-    local results_dir
-    results_dir=$(dirname "$(dirname "$manifest_path")")/results
-    if [[ ! -d "$results_dir" ]] || [[ -z "$(ls -A "$results_dir" 2>/dev/null)" ]]; then
-      missing_results=$((missing_results + 1))
-      warn "  no results found for pair: $(basename "$(dirname "$manifest_path")")"
-    fi
-  done < <(python3 -c "
+  else
+    # Verify that results exist before importing
+    local missing_results=0
+    while IFS= read -r manifest_path; do
+      [[ -n "$manifest_path" ]] || continue
+      local results_dir
+      results_dir=$(dirname "$(dirname "$manifest_path")")/results
+      if [[ ! -d "$results_dir" ]] || [[ -z "$(ls -A "$results_dir" 2>/dev/null)" ]]; then
+        missing_results=$((missing_results + 1))
+        warn "  no results found for pair: $(basename "$(dirname "$manifest_path")")"
+      fi
+    done < <(python3 -c "
 import json
 data = json.load(open('$DEEP_MATCH_MANIFEST_SUMMARY'))
 for p in data.get('pairs', []):
@@ -352,8 +359,9 @@ for p in data.get('pairs', []):
         print(mp)
 ")
 
-  if [[ "$missing_results" -gt 0 && "$CONTINUE_ON_DEEP_FAILURE" != "true" ]]; then
-    die "$missing_results pair(s) have no results. Run deep-learning stage first."
+    if [[ "$missing_results" -gt 0 && "$CONTINUE_ON_DEEP_FAILURE" != "true" ]]; then
+      die "$missing_results pair(s) have no results. Run deep-learning stage first."
+    fi
   fi
 
   local pipeline_args=(
@@ -369,11 +377,19 @@ for p in data.get('pairs', []):
     pipeline_args+=(--config "$CONFIG_PATH")
   fi
 
+  if [[ -n "$DEEP_MATCH_CONFIG_PATH" ]]; then
+    pipeline_args+=(--deep-match-config-path "$DEEP_MATCH_CONFIG_PATH")
+  fi
+
   if [[ "$SKIP_FINAL_MERGE" == "true" ]]; then
     pipeline_args+=(--skip-final-merge)
   fi
 
   run_in_conda_env "$ASP360_ENV" bash "${pipeline_args[@]}"
+
+  if [[ "$DRY_RUN" == "true" ]]; then
+    log "Import stage complete (dry-run)"
+  fi
 }
 
 # ── Main ──────────────────────────────────────────────────────────────────

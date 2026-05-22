@@ -799,7 +799,20 @@ class MatcherComparisonMetricsUnitTest(unittest.TestCase):
                 encoding="utf-8",
             )
             (reports_dir / "pipeline_timing.json").write_text(
-                json.dumps({"total_seconds": 44.5}),
+                json.dumps(
+                    {
+                        "pipeline": {"status": "success"},
+                        "steps": [
+                            {"name": "image_overlap", "duration_seconds": 10},
+                            {"name": "image_match_batch", "duration_seconds": 12.5},
+                            {"name": "pairwise_controlnets", "duration_seconds": "ignored"},
+                            {"name": "merge_control_measure", "duration_seconds": True},
+                            {"name": "merge", "duration_seconds": 22},
+                            {"name": "post_merge_control_measure"},
+                        ],
+                        "pair_matches": [{"name": "S1", "duration_seconds": 99}],
+                    }
+                ),
                 encoding="utf-8",
             )
             (pair_nets_dir / "S1.net").write_text("net 1\n", encoding="utf-8")
@@ -827,6 +840,33 @@ class MatcherComparisonMetricsUnitTest(unittest.TestCase):
         self.assertEqual(metrics["pairwise_controlnet_count"], 0)
         self.assertFalse(metrics["merged_controlnet_exists"])
         self.assertTrue(metrics["warnings"])
+
+    def test_collect_method_metrics_warns_when_timing_total_cannot_be_derived(self):
+        with temporary_directory() as temp_dir:
+            method_dir = temp_dir / "sift_flann"
+            reports_dir = method_dir / "work/reports"
+            reports_dir.mkdir(parents=True)
+            (reports_dir / "pipeline_timing.json").write_text(
+                json.dumps(
+                    {
+                        "pipeline": {"status": "success"},
+                        "steps": [
+                            {"name": "image_overlap", "duration_seconds": "unknown"},
+                            {"name": "image_match_batch"},
+                        ],
+                        "pair_matches": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            metrics = matcher_comparison.collect_method_metrics("sift_flann", method_dir)
+
+        self.assertEqual(metrics["pipeline_total_seconds"], None)
+        self.assertTrue(
+            any("could not derive pipeline_total_seconds" in warning for warning in metrics["warnings"]),
+            msg=metrics["warnings"],
+        )
 
 
 class MatcherComparisonExecutionUnitTest(unittest.TestCase):

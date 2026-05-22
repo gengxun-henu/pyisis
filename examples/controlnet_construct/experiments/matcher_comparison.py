@@ -341,6 +341,36 @@ def _read_json_if_present(path: Path, warnings: list[str]) -> dict[str, Any] | N
     return payload
 
 
+def _is_number(value: Any) -> bool:
+    return isinstance(value, int | float) and not isinstance(value, bool)
+
+
+def _pipeline_total_seconds(timing_payload: dict[str, Any] | None, warnings: list[str], timing_path: Path) -> int | float | None:
+    if timing_payload is None:
+        return None
+
+    total_seconds = timing_payload.get("total_seconds")
+    if _is_number(total_seconds):
+        return total_seconds
+
+    steps = timing_payload.get("steps")
+    if isinstance(steps, list):
+        step_total = 0.0
+        found_duration = False
+        for step in steps:
+            if not isinstance(step, dict):
+                continue
+            duration_seconds = step.get("duration_seconds")
+            if _is_number(duration_seconds):
+                step_total += duration_seconds
+                found_duration = True
+        if found_duration:
+            return step_total
+
+    warnings.append(f"could not derive pipeline_total_seconds: {timing_path}")
+    return None
+
+
 def collect_method_metrics(label: str, method_dir: str | Path) -> dict[str, Any]:
     method_dir = Path(method_dir).expanduser().resolve()
     work_dir = method_dir / "work"
@@ -349,7 +379,8 @@ def collect_method_metrics(label: str, method_dir: str | Path) -> dict[str, Any]
 
     overlap_summary = _read_json_if_present(reports_dir / "image_overlap_summary.json", warnings)
     controlnet_summary = _read_json_if_present(reports_dir / "controlnet_batch_summary.json", warnings)
-    pipeline_timing = _read_json_if_present(reports_dir / "pipeline_timing.json", warnings)
+    pipeline_timing_path = reports_dir / "pipeline_timing.json"
+    pipeline_timing = _read_json_if_present(pipeline_timing_path, warnings)
 
     pair_count = None
     if controlnet_summary is not None:
@@ -368,7 +399,7 @@ def collect_method_metrics(label: str, method_dir: str | Path) -> dict[str, Any]
         "pairwise_controlnet_count": pairwise_controlnet_count,
         "merged_controlnet_exists": merged_controlnet_exists,
         "merged_controlnet_path": str(merged_controlnet_path) if merged_controlnet_exists else None,
-        "pipeline_total_seconds": pipeline_timing.get("total_seconds") if pipeline_timing is not None else None,
+        "pipeline_total_seconds": _pipeline_total_seconds(pipeline_timing, warnings, pipeline_timing_path),
         "total_final_control_point_count": (
             controlnet_summary.get("total_final_control_point_count") if controlnet_summary is not None else None
         ),

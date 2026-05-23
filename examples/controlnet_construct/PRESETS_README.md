@@ -247,15 +247,26 @@ for ControlNet preparation, export, import, and unit tests.
 
 ## Usage
 
-For learning-only legacy configuration, specify `deep_matcher_config_path` in
-`ImageMatch`. For unified classic/deep selection, prefer
-`ImageMatch.match_preset_path`.
+For unified classic/deep selection, prefer `ImageMatch.match_preset_path` and
+leave the legacy deep-only `deep_matcher_config_path` unset:
 
 ```json
 {
   "ImageMatch": {
     "matcher_method": "lightglue",
     "match_preset_path": "presets/lightglue_default.json",
+    "deep_matcher_config_path": null
+  }
+}
+```
+
+For learning-only legacy configuration, specify only
+`ImageMatch.deep_matcher_config_path`:
+
+```json
+{
+  "ImageMatch": {
+    "matcher_method": "lightglue",
     "deep_matcher_config_path": "presets/lightglue_default.json"
   }
 }
@@ -284,7 +295,9 @@ For example, if `examples/controlnet_construct/controlnet_config.example.json` c
 
 ## Custom Presets
 
-Copy any preset file to a custom path, modify parameters, and specify it via `deep_matcher_config_path`.
+Copy any preset file to a custom path, modify parameters, and specify it via
+`match_preset_path` for neutral classic/deep preset selection. Use
+`deep_matcher_config_path` only for legacy deep-only configuration.
 
 ### Configuration Fields
 
@@ -299,12 +312,12 @@ Copy any preset file to a custom path, modify parameters, and specify it via `de
 
 **matcher:**
 - `method`: Matcher method (`superglue`, `lightglue`, `loftr`)
-- `backend`: LightGlue backend (`official` to use the official LightGlue package family; omitted for the legacy ControlNet behavior)
+- For LightGlue, `backend: "official"` selects the official LightGlue package family; omitted keeps legacy ControlNet LightGlue behavior
+- For LoFTR, `backend: "external"` or `backend: "kornia"` selects the LoFTR backend
 - `weights_path`: Model weight path, null uses default weights
 - `flash`: Enable Flash Attention (LightGlue only)
 - `prune_threshold`: Feature pruning threshold (LightGlue only)
 - `sinkhorn_iterations`: Sinkhorn normalization iterations (SuperGlue only)
-- `backend`: LoFTR backend selector (`external` or `kornia`); LightGlue currently uses its existing default runtime path and shared presets should omit `backend` unless a runtime path explicitly documents it.
 - `loftr_root`: external LoFTR repository path for `backend: external`
 - `checkpoint`, `checkpoint_path`: external LoFTR checkpoint path aliases
 - `model_type`: LoFTR external checkpoint family (`outdoor` or `indoor`)

@@ -143,6 +143,8 @@ class MatchPresetConfigUnitTest(unittest.TestCase):
 
         self.assertIn("match_preset_path", payload["ImageMatch"])
         self.assertIsNone(payload["ImageMatch"]["match_preset_path"])
+        self.assertIn("deep_matcher_config_path", payload["ImageMatch"])
+        self.assertIsNone(payload["ImageMatch"]["deep_matcher_config_path"])
 
     def test_deep_preset_maps_to_existing_deep_config_path(self):
         from match_preset_config import resolve_match_preset_runtime_config

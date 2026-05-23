@@ -567,14 +567,17 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("--pair-id-start must be at least 1", result.stderr)
 
-    def test_run_ori_match_pipeline_rejects_deep_only_flags(self):
+    def test_run_ori_match_pipeline_rejects_unsupported_deep_export_mode(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work_ori"
             work_dir.mkdir()
             original_list = work_dir / "original_images.lis"
-            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
-            config_path = temp_dir / "controlnet_config.json"
-            config_path.write_text('{"NetworkId":"n","TargetName":"Mars","UserName":"u"}\n', encoding="utf-8")
+            config_path = temp_dir / "config.json"
+            original_list.write_text("", encoding="utf-8")
+            config_path.write_text(
+                json.dumps({"NetworkId": "raw_unit", "TargetName": "Moon", "UserName": "tester"}),
+                encoding="utf-8",
+            )
 
             result = subprocess.run(
                 [
@@ -586,8 +589,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     str(original_list),
                     "--config",
                     str(config_path),
-                    "--deep-match-config-path",
-                    "examples/controlnet_construct/presets/loftr_default.json",
+                    "--deep-match-mode",
+                    "export",
                     "--dry-run",
                 ],
                 cwd=PROJECT_ROOT,
@@ -597,7 +600,94 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             )
 
         self.assertNotEqual(result.returncode, 0)
-        self.assertIn("is not supported by the raw image space wrapper first version", result.stderr)
+        self.assertIn("--deep-match-mode currently supports only direct", result.stderr)
+
+    def test_run_ori_match_pipeline_forwards_adaptive_and_official_deep_presets(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work_ori"
+            work_dir.mkdir()
+            left = temp_dir / "left.cub"
+            right = temp_dir / "right.cub"
+            left.write_text("left", encoding="utf-8")
+            right.write_text("right", encoding="utf-8")
+            original_list = work_dir / "original_images.lis"
+            overlap_list = work_dir / "images_overlap.lis"
+            config_path = temp_dir / "config.json"
+            original_list.write_text(f"{left}\n{right}\n", encoding="utf-8")
+            overlap_list.write_text(f"{left},{right}\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "raw_adaptive_unit",
+                        "TargetName": "Moon",
+                        "UserName": "tester",
+                        "ImageMatch": {
+                            "enable_adaptive_routing": True,
+                            "adaptive_routing_profile": "strict",
+                            "matcher_method": "flann",
+                            "deep_matcher_config_path": "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                            "adaptive_routing_deep_presets": {
+                                "lightglue": "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                                "loftr": "examples/controlnet_construct/presets/loftr_external_outdoor.json",
+                            },
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--original-list",
+                    str(original_list),
+                    "--images-overlap-list",
+                    str(overlap_list),
+                    "--config",
+                    str(config_path),
+                    "--dry-run",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            command_text = (work_dir / "command.sh").read_text(encoding="utf-8")
+            parsed_commands = [
+                shlex.split(line)
+                for line in command_text.splitlines()
+                if line and not line.startswith("#") and not line.startswith("set ")
+            ]
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        expected_lightglue = str(PROJECT_ROOT / "examples/controlnet_construct/presets/lightglue_official_superpoint.json")
+        expected_loftr = str(PROJECT_ROOT / "examples/controlnet_construct/presets/loftr_external_outdoor.json")
+        pair_command = next(command for command in parsed_commands if "from-ori-match" in command)
+        self.assertIn("--adaptive-routing", pair_command)
+        self.assertIn("--adaptive-routing-profile", pair_command)
+        self.assertEqual(pair_command[pair_command.index("--adaptive-routing-profile") + 1], "strict")
+        self.assertIn("--deep-match-config-path", pair_command)
+        self.assertEqual(
+            pair_command[pair_command.index("--deep-match-config-path") + 1],
+            expected_lightglue,
+        )
+        preset_values = [
+            pair_command[index + 1]
+            for index, value in enumerate(pair_command)
+            if value == "--adaptive-routing-deep-preset"
+        ]
+        self.assertIn(
+            f"lightglue={expected_lightglue}",
+            preset_values,
+        )
+        self.assertIn(
+            f"loftr={expected_loftr}",
+            preset_values,
+        )
 
     def test_deep_match_manifest_roundtrip_preserves_runtime_config_provenance_fields(self):
         runtime_config = DeepMatchRuntimeConfig(

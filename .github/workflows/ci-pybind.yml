@@ -156,7 +156,6 @@ jobs:
     name: Build and smoke-test isis_pybind_standalone
     needs:
       - resolve_runner
-      - report-inventory
     uses: ./.github/workflows/reusable-pybind-build.yml
     secrets: inherit
     with:

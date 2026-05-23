@@ -40,6 +40,11 @@ on:
         required: false
         default: build
         type: string
+      build_cache_ref_slug:
+        description: Optional stable self-hosted build cache namespace. Defaults to the current branch/ref when empty.
+        required: false
+        default: ""
+        type: string
       run_smoke_import:
         description: Whether to run tests/smoke_import.py after a successful build.
         required: false
@@ -99,6 +104,7 @@ jobs:
       fallback_conda_prefix: ${{ inputs.fallback_conda_prefix }}
       pybind_dir: ${{ inputs.pybind_dir }}
       build_dir: ${{ inputs.build_dir }}
+      build_cache_ref_slug: ${{ inputs.build_cache_ref_slug }}
       run_smoke_import: ${{ inputs.run_smoke_import }}
       ccache_max_size: ${{ inputs.ccache_max_size }}
       upload_build_artifact: ${{ inputs.upload_build_artifact }}

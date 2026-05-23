@@ -1,0 +1,53 @@
+{
+  "run_id": "lro_batch_20260522",
+  "description": "Compare ControlNet construction matchers on one LRO batch.",
+  "inputs": {
+    "original_images_list": "work/original_images.lis",
+    "doms_list": "work/doms_scaled.lis",
+    "controlnet_config": "examples/controlnet_construct/controlnet_config.example.json"
+  },
+  "execution": {
+    "asp360_env": "asp360_new",
+    "deep_learning_env": "deep-learning",
+    "device": "auto",
+    "skip_final_merge": false,
+    "keep_going": true,
+    "resume": true
+  },
+  "methods": [
+    {
+      "label": "sift_flann",
+      "matcher_method": "flann"
+    },
+    {
+      "label": "sift_lightglue",
+      "matcher_method": "lightglue",
+      "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_sift.json"
+    },
+    {
+      "label": "disk_lightglue",
+      "matcher_method": "lightglue",
+      "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_disk.json"
+    },
+    {
+      "label": "aliked_lightglue",
+      "matcher_method": "lightglue",
+      "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_aliked.json"
+    },
+    {
+      "label": "doghardnet_lightglue",
+      "matcher_method": "lightglue",
+      "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_doghardnet.json"
+    },
+    {
+      "label": "superpoint_lightglue",
+      "matcher_method": "lightglue",
+      "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_superpoint.json"
+    },
+    {
+      "label": "loftr",
+      "matcher_method": "loftr",
+      "deep_match_config_path": "examples/controlnet_construct/presets/loftr_default.json"
+    }
+  ]
+}

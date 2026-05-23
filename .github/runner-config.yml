@@ -2,12 +2,14 @@
 #
 # Switching strategy:
 # - Set `active_profile` to one of the profiles listed below.
-# - This repository currently defaults to `self-hosted-watt` because direct GitHub
-#   access is not stable enough on the local network without WATT/Hosts acceleration.
-# - Switch back to `self-hosted-http` only when plain direct HTTPS becomes stable enough
-#   for unattended automation.
+# - This repository currently defaults to `self-hosted-http` because WATT/Hosts
+#   acceleration is not always running on the local self-hosted runner.
+# - Switch to `self-hosted-watt` only when WATT Toolkit is running reliably for
+#   unattended automation.
+# when using `self-hosted-ssh`, ensure that the self-hosted runner is configured
+# to allow SSH access and that the necessary SSH keys are set up in GitHub Secrets.
 
-active_profile: self-hosted-watt
+active_profile: self-hosted-http
 
 # Shared local fallback used by self-hosted runners
 fallback_conda_prefix: /home/gengxun/miniconda3/envs/asp360_new

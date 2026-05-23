@@ -399,6 +399,15 @@ def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) ->
     }
 
 
+def load_cpp_result(path: str | Path) -> dict[str, Any]:
+    path = Path(path).expanduser().resolve()
+    with path.open(encoding="utf-8") as result_file:
+        payload = json.load(result_file)
+    if not isinstance(payload, dict) or payload.get("implementation") != "cpp":
+        raise ValueError("Expected cpp result")
+    return payload
+
+
 def compare_camera_results(
     label: str,
     pyisis_result: dict[str, Any],

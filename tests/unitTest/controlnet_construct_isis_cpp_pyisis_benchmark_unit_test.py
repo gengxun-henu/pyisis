@@ -484,6 +484,34 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertIsNone(result["valid_point_count"])
         self.assertIsNone(result["valid_measure_count"])
 
+    def test_load_cpp_result_rejects_non_dict_json(self):
+        with temporary_directory() as temp_dir:
+            result_path = temp_dir / "result.json"
+            result_path.write_text(json.dumps(["not", "an", "object"]), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "Expected cpp result"):
+                benchmark.load_cpp_result(result_path)
+
+    def test_load_cpp_result_rejects_wrong_implementation(self):
+        with temporary_directory() as temp_dir:
+            result_path = temp_dir / "result.json"
+            result_path.write_text(json.dumps({"implementation": "pyisis"}), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "Expected cpp result"):
+                benchmark.load_cpp_result(result_path)
+
+    def test_load_cpp_result_accepts_cpp_result(self):
+        with temporary_directory() as temp_dir:
+            result_path = temp_dir / "result.json"
+            result_path.write_text(
+                json.dumps({"implementation": "cpp", "task_type": "camera"}),
+                encoding="utf-8",
+            )
+
+            result = benchmark.load_cpp_result(result_path)
+
+        self.assertEqual(result["task_type"], "camera")
+
     def test_compare_camera_results_computes_stats_and_top_errors(self):
         py_result = {
             "points": [

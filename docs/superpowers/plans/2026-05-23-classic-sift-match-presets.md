@@ -1055,7 +1055,7 @@ git commit -m "feat: wire match presets through pipeline wrapper"
 - Modify: `examples/controlnet_construct/run_image_match_batch_example.sh`
 - Test: `tests/unitTest/controlnet_construct_pipeline_unit_test.py`
 
-- [ ] **Step 1: Add failing batch wrapper test**
+- [x] **Step 1: Add failing batch wrapper test**
 
 Add this method to `ControlNetConstructPipelineUnitTest` near existing `run_image_match_batch_example.sh` tests:
 
@@ -1142,7 +1142,7 @@ Add this method to `ControlNetConstructPipelineUnitTest` near existing `run_imag
         self.assertIn("Matcher method: bf", completed.stdout)
 ```
 
-- [ ] **Step 2: Run the failing test**
+- [x] **Step 2: Run the failing test**
 
 Run:
 
@@ -1152,7 +1152,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: FAIL because the batch wrapper does not recognize `--match-preset-path`.
 
-- [ ] **Step 3: Mirror wrapper state and helpers**
+- [x] **Step 3: Mirror wrapper state and helpers**
 
 In `examples/controlnet_construct/run_image_match_batch_example.sh`:
 
@@ -1210,7 +1210,7 @@ Add conflict checks after parsing:
   fi
 ```
 
-- [ ] **Step 4: Resolve config preset and forward it**
+- [x] **Step 4: Resolve config preset and forward it**
 
 Inside the `if [[ -n "$CONFIG_PATH" ]]; then` block, before reading `matcher_method`, add:
 
@@ -1272,7 +1272,7 @@ Change `match_args` construction so `--matcher-method` is only forwarded when no
 
 Remove `--matcher-method "$matcher_method"` from the initial `match_args` array literals.
 
-- [ ] **Step 5: Run batch wrapper test**
+- [x] **Step 5: Run batch wrapper test**
 
 Run:
 
@@ -1282,7 +1282,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 Run:
 

@@ -119,6 +119,7 @@ DEFAULT_REAL_LRO_DOM_LEFT = Path("/media/gengxun/Elements/data/lro/test_controln
 DEFAULT_REAL_LRO_DOM_RIGHT = Path("/media/gengxun/Elements/data/lro/test_controlnet_python/dom_M104318871RE.cub")
 RUN_PIPELINE_EXAMPLE_PATH = PROJECT_ROOT / "examples" / "controlnet_construct" / "run_pipeline_example.sh"
 RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH = PROJECT_ROOT / "examples" / "controlnet_construct" / "run_image_match_batch_example.sh"
+RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH = PROJECT_ROOT / "examples" / "controlnet_construct" / "run_ori_match_pipeline_example.sh"
 
 
 def _embedded_python_script(source: str) -> str:
@@ -134,6 +135,93 @@ def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
 
 
 class ControlNetConstructPipelineUnitTest(unittest.TestCase):
+    def test_run_ori_match_pipeline_dry_run_writes_expected_commands(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work_ori"
+            work_dir.mkdir()
+            inputs_dir = temp_dir / "inputs"
+            inputs_dir.mkdir()
+            left = inputs_dir / "left.cub"
+            right = inputs_dir / "right.cub"
+            left.write_text("left placeholder\n", encoding="utf-8")
+            right.write_text("right placeholder\n", encoding="utf-8")
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text(f"{left}\n{right}\n", encoding="utf-8")
+            overlap_list = work_dir / "images_overlap.lis"
+            overlap_list.write_text(f"{left},{right}\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "raw_ori_unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                        "Description": "raw image unit test",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--original-list",
+                    str(original_list),
+                    "--images-overlap-list",
+                    str(overlap_list),
+                    "--config",
+                    str(config_path),
+                    "--matcher-method",
+                    "flann",
+                    "--ratio-test",
+                    "0.8",
+                    "--max-features",
+                    "1200",
+                    "--pair-id-prefix",
+                    "R",
+                    "--pair-id-start",
+                    "7",
+                    "--num-worker-parallel-cpu",
+                    "2",
+                    "--dry-run",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            command_script = work_dir / "command.sh"
+            self.assertTrue(command_script.exists())
+            command_text = command_script.read_text(encoding="utf-8")
+
+        self.assertIn("image_overlap.py", command_text)
+        self.assertIn("controlnet_stereopair.py", command_text)
+        self.assertIn("from-ori-match", command_text)
+        self.assertIn("controlnet_merge.py", command_text)
+        self.assertIn(str(left), command_text)
+        self.assertIn(str(right), command_text)
+        self.assertIn("--pair-id", command_text)
+        self.assertIn("R7", command_text)
+        self.assertIn("--left-output-key", command_text)
+        self.assertIn("ori_keys/left__right_A.key", command_text)
+        self.assertIn("ori_keys/left__right_B.key", command_text)
+        self.assertIn("ori_pair_nets/left__right.net", command_text)
+        self.assertIn("--matcher-method", command_text)
+        self.assertIn("flann", command_text)
+        self.assertIn("--ratio-test", command_text)
+        self.assertIn("0.8", command_text)
+        self.assertIn("--max-features", command_text)
+        self.assertIn("1200", command_text)
+        self.assertIn("--num-worker-parallel-cpu", command_text)
+        self.assertIn("2", command_text)
+        self.assertIn("merge_all_controlnets.sh", command_text)
+
     def test_deep_match_manifest_roundtrip_preserves_runtime_config_provenance_fields(self):
         runtime_config = DeepMatchRuntimeConfig(
             matcher_method="lightglue",

@@ -309,6 +309,7 @@ if [[ "$SKIP_FINAL_MERGE" != "1" ]]; then
     append_command bash "$MERGE_SCRIPT_PATH"
   else
     run_command "stage 4: executing merge script" bash "$MERGE_SCRIPT_PATH"
+    require_existing_file "$MERGE_OUTPUT_NET"
   fi
 fi
 

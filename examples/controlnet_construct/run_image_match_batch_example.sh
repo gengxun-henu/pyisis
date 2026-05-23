@@ -843,7 +843,7 @@ main() {
       match_args+=(--no-adaptive-routing)
     fi
     match_args+=(--adaptive-routing-profile "$adaptive_routing_profile")
-    if [[ -n "$deep_match_config_path" ]]; then
+    if [[ -z "$match_preset_path" && -n "$deep_match_config_path" ]]; then
       match_args+=(--deep-match-config-path "$deep_match_config_path")
     fi
     match_args+=(--num-worker-parallel-cpu "$num_worker_parallel_cpu")

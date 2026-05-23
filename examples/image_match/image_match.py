@@ -503,16 +503,47 @@ class _MatchPresetPathAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
         try:
             preset_path = _resolve_match_preset_path(values)
-            preset_defaults = _resolve_match_preset_defaults(preset_path)
         except ValueError as exc:
             raise argparse.ArgumentError(self, str(exc)) from exc
-        for key, value in preset_defaults.items():
-            setattr(namespace, key, value)
         setattr(namespace, self.dest, str(preset_path))
+
+
+_MATCH_PRESET_DEFAULT_OPTION_NAMES: dict[str, tuple[str, ...]] = {
+    "matcher_method": ("--matcher-method",),
+    "deep_match_config_path": ("--deep-match-config-path",),
+    "ratio_test": ("--ratio-test",),
+    "max_features": ("--max-features",),
+    "sift_octave_layers": ("--sift-octave-layers",),
+    "sift_contrast_threshold": ("--sift-contrast-threshold",),
+    "sift_edge_threshold": ("--sift-edge-threshold",),
+    "sift_sigma": ("--sift-sigma",),
+}
 
 
 def _argv_has_option(argv: list[str], option_name: str) -> bool:
     return any(arg == option_name or arg.startswith(f"{option_name}=") for arg in argv)
+
+
+def _argv_has_any_option(argv: list[str], option_names: tuple[str, ...]) -> bool:
+    return any(_argv_has_option(argv, option_name) for option_name in option_names)
+
+
+class _ImageMatchArgumentParser(argparse.ArgumentParser):
+    def parse_known_args(self, args=None, namespace=None):
+        resolved_args = sys.argv[1:] if args is None else list(args)
+        parsed, extras = super().parse_known_args(args, namespace)
+        match_preset_path = getattr(parsed, "match_preset_path", None)
+        if match_preset_path not in (None, ""):
+            try:
+                preset_defaults = _resolve_match_preset_defaults(match_preset_path)
+            except ValueError as exc:
+                self.error(str(exc))
+            for key, value in preset_defaults.items():
+                option_names = _MATCH_PRESET_DEFAULT_OPTION_NAMES.get(key, ())
+                if option_names and _argv_has_any_option(resolved_args, option_names):
+                    continue
+                setattr(parsed, key, value)
+        return parsed, extras
 
 
 def _runtime_config_to_metadata(runtime_config: object | None) -> dict[str, object] | None:
@@ -3039,7 +3070,7 @@ def match_dom_pair_to_key_files(
 
 
 def build_argument_parser(config_defaults: dict[str, object] | None = None) -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Match two DOM cubes with OpenCV SIFT and write DOM-space `.key` files.")
+    parser = _ImageMatchArgumentParser(description="Match two DOM cubes with OpenCV SIFT and write DOM-space `.key` files.")
     parser.add_argument("--config", default=None, help="Optional config JSON path. When provided, the ImageMatch section supplies default values for this CLI; explicit CLI flags still win.")
     parser.add_argument("left_dom", help="Left DOM cube path.")
     parser.add_argument("right_dom", help="Right DOM cube path.")

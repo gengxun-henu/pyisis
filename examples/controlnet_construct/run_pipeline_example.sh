@@ -819,7 +819,7 @@ run_step_2_image_match_batch() {
     if [[ -z "$match_preset_path" ]]; then
       match_args+=(--matcher-method "$MATCHER_METHOD")
     fi
-    if [[ -n "$DEEP_MATCHER_CONFIG_PATH" ]]; then
+    if [[ -z "$match_preset_path" && -n "$DEEP_MATCHER_CONFIG_PATH" ]]; then
       match_args+=(--deep-match-config-path "$DEEP_MATCHER_CONFIG_PATH")
     fi
     if [[ "$ADAPTIVE_ROUTING" == "1" ]]; then

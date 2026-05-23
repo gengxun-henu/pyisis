@@ -904,6 +904,100 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("Match preset path:", completed.stdout)
         self.assertIn("Matcher method: bf", completed.stdout)
 
+    def test_run_image_match_batch_example_does_not_forward_deep_config_with_deep_match_preset(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+            expected_preset = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_official_superpoint.json"
+
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import sys
+                    from pathlib import Path
+
+                    EXPECTED_PRESET = {str(expected_preset)!r}
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+                        if script_name == "match_preset_config.py":
+                            if args != [EXPECTED_PRESET, "--shell-assignments"]:
+                                raise SystemExit(f"unexpected match preset resolver args: {{args}}")
+                            print("MATCHER_METHOD=lightglue")
+                            print(f"DEEP_MATCHER_CONFIG_PATH={{EXPECTED_PRESET!r}}")
+                            return 0
+                        if script_name == "image_match.py":
+                            if "--match-preset-path" not in args:
+                                raise SystemExit("missing --match-preset-path")
+                            if "--deep-match-config-path" in args:
+                                raise SystemExit("deep preset should not forward --deep-match-config-path")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            return 0
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--python",
+                    str(fake_python),
+                    "--match-preset-path",
+                    str(expected_preset),
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Matcher method: lightglue", completed.stdout)
+        self.assertIn(f"Deep-match config path: {expected_preset}", completed.stdout)
+
     def test_run_image_match_batch_example_resolves_cli_match_preset_path_from_caller_cwd(self):
         with temporary_directory() as temp_dir:
             caller_dir = temp_dir / "caller"
@@ -1933,6 +2027,131 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("Match preset path:", completed.stdout)
         self.assertIn("Matcher method: flann", completed.stdout)
 
+    def test_run_pipeline_example_does_not_forward_deep_config_with_deep_match_preset(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+            expected_preset = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_official_superpoint.json"
+
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "deep-preset-net",
+                        "ImageMatch": {"match_preset_path": str(expected_preset)},
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import sys
+                    from pathlib import Path
+
+                    EXPECTED_PRESET = {str(expected_preset)!r}
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+                        if script_name == "image_overlap.py":
+                            if "--report-json" in args:
+                                report_json_path = Path(args[args.index("--report-json") + 1])
+                                report_json_path.parent.mkdir(parents=True, exist_ok=True)
+                                report_json_path.write_text(json.dumps({{"pair_count": 1, "image_count": 2}}), encoding="utf-8")
+                            Path(args[1]).write_text("left.cub,right.cub\\n", encoding="utf-8")
+                            return 0
+                        if script_name == "match_preset_config.py":
+                            if args != [EXPECTED_PRESET, "--shell-assignments"]:
+                                raise SystemExit(f"unexpected match preset resolver args: {{args}}")
+                            print("MATCHER_METHOD=lightglue")
+                            print(f"DEEP_MATCHER_CONFIG_PATH={{EXPECTED_PRESET!r}}")
+                            return 0
+                        if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                print(image_match_config.get(field_name, ""))
+                                return 0
+                            if "--match-preset-path" not in args:
+                                raise SystemExit("missing --match-preset-path")
+                            if "--deep-match-config-path" in args:
+                                raise SystemExit("deep preset should not forward --deep-match-config-path")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            return 0
+                        if script_name == "controlnet_stereopair.py":
+                            output_dir = Path(args[6])
+                            output_dir.mkdir(parents=True, exist_ok=True)
+                            (output_dir / "synthetic_pair.net").write_text("net", encoding="utf-8")
+                            return 0
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                    "--skip-final-merge",
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Matcher method: lightglue", completed.stdout)
+        self.assertIn(f"Deep match config: {expected_preset}", completed.stdout)
+
     def test_run_pipeline_example_ignores_config_match_preset_when_matcher_method_cli_is_explicit(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
@@ -2869,6 +3088,31 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     str(preset_path),
                     "--ratio-test",
                     "0.9",
+                ]
+            )
+
+        self.assertEqual(match_mock.call_args.kwargs["matcher_method"], "bf")
+        self.assertEqual(match_mock.call_args.kwargs["ratio_test"], 0.9)
+
+    def test_image_match_cli_match_preset_allows_earlier_ratio_override(self):
+        fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
+        stdout = io.StringIO()
+        preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_bf.json"
+
+        with (
+            patch("controlnet_construct.image_match.match_dom_pair_to_key_files", return_value=fake_result) as match_mock,
+            patch.object(sys, "stdout", stdout),
+        ):
+            image_match_main(
+                [
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left.key",
+                    "right.key",
+                    "--ratio-test",
+                    "0.9",
+                    "--match-preset-path",
+                    str(preset_path),
                 ]
             )
 

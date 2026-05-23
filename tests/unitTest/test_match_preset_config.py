@@ -115,6 +115,28 @@ class MatchPresetConfigUnitTest(unittest.TestCase):
         self.assertEqual(runtime.image_match_defaults["matcher_method"], "bf")
         self.assertEqual(runtime.image_match_defaults["ratio_test"], 0.8)
 
+    def test_shared_classic_sift_flann_preset_loads(self):
+        from match_preset_config import resolve_match_preset_runtime_config
+
+        preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_flann.json"
+
+        runtime = resolve_match_preset_runtime_config(preset_path)
+
+        self.assertEqual(runtime.matcher_method, "flann")
+        self.assertFalse(runtime.is_deep_matcher)
+        self.assertEqual(runtime.image_match_defaults["max_features"], 1000)
+
+    def test_shared_classic_sift_bf_preset_loads(self):
+        from match_preset_config import resolve_match_preset_runtime_config
+
+        preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_bf.json"
+
+        runtime = resolve_match_preset_runtime_config(preset_path)
+
+        self.assertEqual(runtime.matcher_method, "bf")
+        self.assertFalse(runtime.is_deep_matcher)
+        self.assertEqual(runtime.image_match_defaults["ratio_test"], 0.75)
+
     def test_deep_preset_maps_to_existing_deep_config_path(self):
         from match_preset_config import resolve_match_preset_runtime_config
 

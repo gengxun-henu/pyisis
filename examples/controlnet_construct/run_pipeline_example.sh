@@ -666,6 +666,43 @@ summary_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
 PY
 }
 
+resolve_deep_match_manifest_for_pair() {
+  local pair_tag=$1
+  local left_dom=$2
+  local right_dom=$3
+  "$PYTHON_EXECUTABLE" - "$pair_tag" "$left_dom" "$right_dom" "$DEEP_MATCH_MANIFEST_SUMMARY" "$DEEP_MATCH_MANIFEST_DIR" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+pair_tag = sys.argv[1]
+left_dom = str(Path(sys.argv[2]).expanduser().resolve())
+right_dom = str(Path(sys.argv[3]).expanduser().resolve())
+summary_path = Path(sys.argv[4])
+manifest_dir = Path(sys.argv[5]).expanduser().resolve()
+
+if summary_path.exists():
+    payload = json.loads(summary_path.read_text(encoding="utf-8"))
+    for entry in payload.get("pairs", []):
+        if entry.get("pair_tag") == pair_tag and entry.get("manifest_path"):
+            print(entry["manifest_path"])
+            raise SystemExit(0)
+
+for manifest_path in sorted(manifest_dir.glob("*/tasks.json")):
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        continue
+    manifest_left = str(Path(manifest.get("left_dom_path", "")).expanduser().resolve())
+    manifest_right = str(Path(manifest.get("right_dom_path", "")).expanduser().resolve())
+    if manifest_left == left_dom and manifest_right == right_dom:
+        print(manifest_path)
+        raise SystemExit(0)
+
+print(str(manifest_dir / pair_tag / "tasks.json"))
+PY
+}
+
 run_step_2_image_match_batch() {
   log "$(pipeline_step_label 2): matching DOM pairs listed in ${IMAGES_OVERLAP_LIST}"
 
@@ -771,7 +808,9 @@ run_step_2_image_match_batch() {
       if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
         match_args+=(--deep-match-temp-root-dir "$DEEP_MATCH_TEMP_ROOT_DIR")
       elif [[ "$DEEP_MATCH_MODE" == "import" ]]; then
-        match_args+=(--deep-match-manifest "$DEEP_MATCH_MANIFEST_DIR/${pair_tag}/tasks.json")
+        local deep_match_manifest_path
+        deep_match_manifest_path=$(resolve_deep_match_manifest_for_pair "$pair_tag" "${dom_by_original[$left]}" "${dom_by_original[$right]}")
+        match_args+=(--deep-match-manifest "$deep_match_manifest_path")
       fi
     fi
 
@@ -1238,7 +1277,7 @@ main() {
   if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
     mkdir -p "$DEEP_MATCH_TEMP_ROOT_DIR"
   fi
-  if [[ "$DEEP_MATCH_MODE" != "direct" ]]; then
+  if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
     initialize_deep_match_manifest_summary "$DEEP_MATCH_MANIFEST_SUMMARY"
   fi
 

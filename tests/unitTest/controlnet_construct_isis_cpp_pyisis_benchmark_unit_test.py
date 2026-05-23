@@ -4,9 +4,13 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import sys
 from pathlib import Path
+import stat
+import subprocess
 import unittest
+from unittest import mock
 
 
 UNIT_TEST_DIR = Path(__file__).resolve().parent
@@ -784,6 +788,264 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
                 (temp_dir / "reports" / "controlnet_summary.json").read_text(encoding="utf-8")
             )
             self.assertEqual(controlnet_summary["results"], [results[1]])
+
+    def test_build_cpp_camera_command_includes_required_arguments(self):
+        task = benchmark.CameraTaskConfig(
+            label="camera_a",
+            cube_path=Path("/tmp/input cube.cub"),
+            sample_step=7,
+            line_step=11,
+            max_points=13,
+        )
+
+        command = benchmark.build_cpp_camera_command(
+            Path("/tmp/cpp benchmark"),
+            task,
+            Path("/tmp/out/result.json"),
+        )
+
+        self.assertEqual(
+            command,
+            [
+                "/tmp/cpp benchmark",
+                "camera",
+                "--label",
+                "camera_a",
+                "--cube",
+                "/tmp/input cube.cub",
+                "--sample-step",
+                "7",
+                "--line-step",
+                "11",
+                "--output",
+                "/tmp/out/result.json",
+                "--max-points",
+                "13",
+            ],
+        )
+
+    def test_build_cpp_camera_command_omits_unconfigured_max_points(self):
+        task = benchmark.CameraTaskConfig(
+            label="camera_a",
+            cube_path=Path("/tmp/input.cub"),
+            sample_step=7,
+            line_step=11,
+        )
+
+        command = benchmark.build_cpp_camera_command(
+            Path("/tmp/cpp_benchmark"),
+            task,
+            Path("/tmp/out/result.json"),
+        )
+
+        self.assertNotIn("--max-points", command)
+
+    def test_build_cpp_controlnet_command_includes_required_arguments(self):
+        task = benchmark.ControlNetTaskConfig(
+            label="net_a",
+            net_path=Path("/tmp/control.net"),
+        )
+
+        command = benchmark.build_cpp_controlnet_command(
+            Path("/tmp/cpp_benchmark"),
+            task,
+            Path("/tmp/out/result.json"),
+        )
+
+        self.assertEqual(
+            command,
+            [
+                "/tmp/cpp_benchmark",
+                "controlnet",
+                "--label",
+                "net_a",
+                "--net",
+                "/tmp/control.net",
+                "--output",
+                "/tmp/out/result.json",
+            ],
+        )
+
+    def test_run_cpp_command_keep_going_records_failure_without_raising(self):
+        command = [
+            sys.executable,
+            "-c",
+            "import sys; print('out text'); print('err text', file=sys.stderr); sys.exit(7)",
+        ]
+
+        result = benchmark.run_cpp_command(command, keep_going=True)
+
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual(result["return_code"], 7)
+        self.assertEqual(result["stdout"], "out text\n")
+        self.assertEqual(result["stderr"], "err text\n")
+        self.assertEqual(result["command"], command)
+        self.assertGreaterEqual(result["wall_seconds"], 0.0)
+
+    def test_run_cpp_command_fail_fast_raises_on_failure(self):
+        command = [sys.executable, "-c", "import sys; sys.exit(3)"]
+
+        with self.assertRaises(subprocess.CalledProcessError) as context:
+            benchmark.run_cpp_command(command, keep_going=False)
+
+        self.assertEqual(context.exception.returncode, 3)
+        self.assertEqual(context.exception.cmd, command)
+
+    def test_write_command_uses_shell_quoting_and_executable_mode(self):
+        with temporary_directory() as temp_dir:
+            command_path = temp_dir / "command.sh"
+
+            benchmark._write_command(command_path, ["/tmp/cpp benchmark", "camera", "--label", "space label"])
+
+            mode = command_path.stat().st_mode
+            self.assertTrue(mode & stat.S_IXUSR)
+            self.assertTrue(mode & stat.S_IXGRP)
+            self.assertTrue(mode & stat.S_IXOTH)
+            self.assertEqual(
+                command_path.read_text(encoding="utf-8").splitlines(),
+                [
+                    "#!/usr/bin/env bash",
+                    "set -euo pipefail",
+                    "'/tmp/cpp benchmark' camera --label 'space label'",
+                ],
+            )
+
+    def test_run_benchmark_dry_run_writes_cpp_command_scripts_without_reports(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+            run_dir = benchmark.run_benchmark(
+                config,
+                output_root=temp_dir / "out",
+                dry_run=True,
+                only={"config_relative_camera", "controlnet_fixture"},
+                keep_going=True,
+            )
+
+            camera_command_path = run_dir / "cpp" / "config_relative_camera" / "command.sh"
+            controlnet_command_path = run_dir / "cpp" / "controlnet_fixture" / "command.sh"
+            self.assertTrue(camera_command_path.is_file())
+            self.assertTrue(os.access(camera_command_path, os.X_OK))
+            self.assertTrue(controlnet_command_path.is_file())
+            self.assertIn("camera", camera_command_path.read_text(encoding="utf-8"))
+            self.assertIn("--cube", camera_command_path.read_text(encoding="utf-8"))
+            self.assertIn("controlnet", controlnet_command_path.read_text(encoding="utf-8"))
+            self.assertIn("--net", controlnet_command_path.read_text(encoding="utf-8"))
+            self.assertFalse((run_dir / "cpp" / "repo_relative_camera").exists())
+            self.assertFalse((run_dir / "reports" / "summary.json").exists())
+            self.assertFalse(any((run_dir / "pyisis").iterdir()))
+
+    def test_run_benchmark_with_stubbed_tasks_writes_results_and_reports(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+            expected_camera_cpp = {
+                "task_type": "camera",
+                "implementation": "cpp",
+                "label": "config_relative_camera",
+                "status": "completed",
+                "points": [
+                    {
+                        "index": 0,
+                        "latitude": 1.0,
+                        "longitude": 2.0,
+                        "roundtrip_sample": 3.0,
+                        "roundtrip_line": 4.0,
+                    }
+                ],
+            }
+            expected_controlnet_cpp = {
+                "task_type": "controlnet",
+                "implementation": "cpp",
+                "label": "controlnet_fixture",
+                "status": "completed",
+                "point_count": 2,
+                "measure_count": 3,
+            }
+
+            def fake_run_pyisis_camera_task(task):
+                return {
+                    "task_type": "camera",
+                    "implementation": "pyisis",
+                    "label": task.label,
+                    "status": "completed",
+                    "points": [
+                        {
+                            "index": 0,
+                            "latitude": 1.0,
+                            "longitude": 2.0,
+                            "roundtrip_sample": 3.0,
+                            "roundtrip_line": 4.0,
+                        }
+                    ],
+                }
+
+            def fake_run_pyisis_controlnet_task(task):
+                return {
+                    "task_type": "controlnet",
+                    "implementation": "pyisis",
+                    "label": task.label,
+                    "status": "completed",
+                    "point_count": 2,
+                    "measure_count": 3,
+                }
+
+            def fake_run_cpp_command(command, *, keep_going):
+                output_path = Path(command[command.index("--output") + 1])
+                if command[1] == "camera":
+                    output_path.write_text(json.dumps(expected_camera_cpp), encoding="utf-8")
+                else:
+                    output_path.write_text(json.dumps(expected_controlnet_cpp), encoding="utf-8")
+                return {
+                    "status": "completed",
+                    "return_code": 0,
+                    "stdout": "",
+                    "stderr": "",
+                    "command": command,
+                    "wall_seconds": 0.01,
+                }
+
+            with (
+                mock.patch.object(benchmark, "run_pyisis_camera_task", side_effect=fake_run_pyisis_camera_task),
+                mock.patch.object(
+                    benchmark,
+                    "run_pyisis_controlnet_task",
+                    side_effect=fake_run_pyisis_controlnet_task,
+                ),
+                mock.patch.object(benchmark, "run_cpp_command", side_effect=fake_run_cpp_command),
+            ):
+                run_dir = benchmark.run_benchmark(
+                    config,
+                    output_root=temp_dir / "out",
+                    dry_run=False,
+                    only={"config_relative_camera", "controlnet_fixture"},
+                    keep_going=True,
+                )
+
+            camera_pyisis_path = run_dir / "pyisis" / "config_relative_camera.json"
+            camera_cpp_path = run_dir / "cpp" / "config_relative_camera.json"
+            controlnet_pyisis_path = run_dir / "pyisis" / "controlnet_fixture.json"
+            controlnet_cpp_path = run_dir / "cpp" / "controlnet_fixture.json"
+            self.assertTrue(camera_pyisis_path.is_file())
+            self.assertTrue(camera_cpp_path.is_file())
+            self.assertTrue(controlnet_pyisis_path.is_file())
+            self.assertTrue(controlnet_cpp_path.is_file())
+            self.assertEqual(json.loads(camera_cpp_path.read_text(encoding="utf-8")), expected_camera_cpp)
+            summary = json.loads((run_dir / "reports" / "summary.json").read_text(encoding="utf-8"))
+            self.assertEqual(
+                [(result["implementation"], result["label"]) for result in summary["results"]],
+                [
+                    ("pyisis", "config_relative_camera"),
+                    ("cpp", "config_relative_camera"),
+                    ("pyisis", "controlnet_fixture"),
+                    ("cpp", "controlnet_fixture"),
+                ],
+            )
+            self.assertEqual(len(summary["camera_comparisons"]), 1)
+            self.assertEqual(summary["camera_comparisons"][0]["label"], "config_relative_camera")
 
 
 if __name__ == "__main__":

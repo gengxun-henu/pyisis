@@ -5,13 +5,16 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 import csv
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 import json
 import math
 from pathlib import Path
 import re
+import shlex
 import shutil
+import stat
+import subprocess
 import time
 from typing import Any
 
@@ -399,6 +402,69 @@ def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) ->
     }
 
 
+def build_cpp_camera_command(
+    cpp_path: str | Path,
+    task: CameraTaskConfig,
+    output_path: str | Path,
+) -> list[str]:
+    command = [
+        str(cpp_path),
+        "camera",
+        "--label",
+        task.label,
+        "--cube",
+        str(task.cube_path),
+        "--sample-step",
+        str(task.sample_step),
+        "--line-step",
+        str(task.line_step),
+        "--output",
+        str(output_path),
+    ]
+    if task.max_points is not None:
+        command.extend(["--max-points", str(task.max_points)])
+    return command
+
+
+def build_cpp_controlnet_command(
+    cpp_path: str | Path,
+    task: ControlNetTaskConfig,
+    output_path: str | Path,
+) -> list[str]:
+    return [
+        str(cpp_path),
+        "controlnet",
+        "--label",
+        task.label,
+        "--net",
+        str(task.net_path),
+        "--output",
+        str(output_path),
+    ]
+
+
+def run_cpp_command(command: list[str], *, keep_going: bool) -> dict[str, Any]:
+    start = time.perf_counter()
+    completed = subprocess.run(command, text=True, capture_output=True, check=False)
+    wall_seconds = time.perf_counter() - start
+    result = {
+        "status": "completed" if completed.returncode == 0 else "failed",
+        "return_code": completed.returncode,
+        "stdout": completed.stdout,
+        "stderr": completed.stderr,
+        "command": command,
+        "wall_seconds": wall_seconds,
+    }
+    if completed.returncode != 0 and not keep_going:
+        raise subprocess.CalledProcessError(
+            completed.returncode,
+            command,
+            output=completed.stdout,
+            stderr=completed.stderr,
+        )
+    return result
+
+
 def load_cpp_result(path: str | Path) -> dict[str, Any]:
     path = Path(path).expanduser().resolve()
     with path.open(encoding="utf-8") as result_file:
@@ -504,6 +570,183 @@ def prepare_run_directory(config: BenchmarkConfig, *, output_root: str | Path, d
     return run_dir
 
 
+def _write_json(path: Path, payload: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _task_labels(config: BenchmarkConfig) -> set[str]:
+    return {task.label for task in config.camera_tasks} | {task.label for task in config.controlnet_tasks}
+
+
+def _selected_labels(config: BenchmarkConfig, only: set[str] | None) -> set[str] | None:
+    if only is None:
+        return None
+    unknown_labels = sorted(only - _task_labels(config))
+    if unknown_labels:
+        raise ValueError(f"Unknown task label(s): {', '.join(unknown_labels)}")
+    return only
+
+
+def _is_selected(task_label: str, selected_labels: set[str] | None) -> bool:
+    return selected_labels is None or task_label in selected_labels
+
+
+def _write_command(path: str | Path, command: list[str]) -> None:
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        "#!/usr/bin/env bash\n"
+        "set -euo pipefail\n"
+        f"{shlex.join(command)}\n",
+        encoding="utf-8",
+    )
+    path.chmod(path.stat().st_mode | stat.S_IXUSR | stat.S_IXGRP | stat.S_IXOTH)
+
+
+def _write_dry_run_commands(
+    config: BenchmarkConfig,
+    run_dir: str | Path,
+    *,
+    only: set[str] | None,
+) -> None:
+    run_dir = Path(run_dir)
+    selected_labels = _selected_labels(config, only)
+    for task in config.camera_tasks:
+        if not _is_selected(task.label, selected_labels):
+            continue
+        command = build_cpp_camera_command(
+            config.execution.cpp_benchmark_path,
+            task,
+            run_dir / "cpp" / f"{task.label}.json",
+        )
+        _write_command(run_dir / "cpp" / task.label / "command.sh", command)
+
+    for task in config.controlnet_tasks:
+        if not _is_selected(task.label, selected_labels):
+            continue
+        command = build_cpp_controlnet_command(
+            config.execution.cpp_benchmark_path,
+            task,
+            run_dir / "cpp" / f"{task.label}.json",
+        )
+        _write_command(run_dir / "cpp" / task.label / "command.sh", command)
+
+
+def _record_pyisis_result(path: Path, task_runner, task) -> dict[str, Any]:
+    start = time.perf_counter()
+    result = task_runner(task)
+    result = dict(result)
+    result.setdefault("status", "completed")
+    result.setdefault("wall_seconds", time.perf_counter() - start)
+    _write_json(path, result)
+    return result
+
+
+def _record_cpp_result(
+    path: Path,
+    command: list[str],
+    *,
+    task_type: str,
+    label: str,
+    keep_going: bool,
+) -> dict[str, Any]:
+    execution_result = run_cpp_command(command, keep_going=keep_going)
+    if execution_result["status"] != "completed":
+        failure_result = {
+            "task_type": task_type,
+            "implementation": "cpp",
+            "label": label,
+            **execution_result,
+        }
+        _write_json(path, failure_result)
+        return failure_result
+
+    cpp_result = load_cpp_result(path)
+    cpp_result = dict(cpp_result)
+    cpp_result.setdefault("status", "completed")
+    cpp_result["return_code"] = execution_result["return_code"]
+    cpp_result["stdout"] = execution_result["stdout"]
+    cpp_result["stderr"] = execution_result["stderr"]
+    cpp_result["command"] = execution_result["command"]
+    cpp_result["wall_seconds"] = execution_result["wall_seconds"]
+    return cpp_result
+
+
+def run_benchmark(
+    config: BenchmarkConfig,
+    *,
+    output_root: str | Path,
+    dry_run: bool,
+    only: set[str] | None,
+    keep_going: bool,
+) -> Path:
+    selected_labels = _selected_labels(config, only)
+    run_dir = prepare_run_directory(config, output_root=output_root, dry_run=dry_run)
+    if dry_run:
+        _write_dry_run_commands(config, run_dir, only=selected_labels)
+        return run_dir
+
+    results: list[dict[str, Any]] = []
+    camera_comparisons: list[dict[str, Any]] = []
+
+    for task in config.camera_tasks:
+        if not _is_selected(task.label, selected_labels):
+            continue
+
+        pyisis_result = _record_pyisis_result(
+            run_dir / "pyisis" / f"{task.label}.json",
+            run_pyisis_camera_task,
+            task,
+        )
+        results.append(pyisis_result)
+
+        cpp_output_path = run_dir / "cpp" / f"{task.label}.json"
+        cpp_command = build_cpp_camera_command(config.execution.cpp_benchmark_path, task, cpp_output_path)
+        cpp_result = _record_cpp_result(
+            cpp_output_path,
+            cpp_command,
+            task_type="camera",
+            label=task.label,
+            keep_going=keep_going,
+        )
+        results.append(cpp_result)
+        if cpp_result.get("status") == "completed":
+            camera_comparisons.append(
+                compare_camera_results(
+                    task.label,
+                    pyisis_result,
+                    cpp_result,
+                    top_error_count=task.top_error_count,
+                )
+            )
+
+    for task in config.controlnet_tasks:
+        if not _is_selected(task.label, selected_labels):
+            continue
+
+        pyisis_result = _record_pyisis_result(
+            run_dir / "pyisis" / f"{task.label}.json",
+            run_pyisis_controlnet_task,
+            task,
+        )
+        results.append(pyisis_result)
+
+        cpp_output_path = run_dir / "cpp" / f"{task.label}.json"
+        cpp_command = build_cpp_controlnet_command(config.execution.cpp_benchmark_path, task, cpp_output_path)
+        cpp_result = _record_cpp_result(
+            cpp_output_path,
+            cpp_command,
+            task_type="controlnet",
+            label=task.label,
+            keep_going=keep_going,
+        )
+        results.append(cpp_result)
+
+    write_summary_reports(run_dir, results, camera_comparisons)
+    return run_dir
+
+
 def write_summary_reports(
     run_dir: str | Path,
     results: list[dict[str, Any]],
@@ -595,12 +838,69 @@ def _write_camera_top_errors(path: Path, camera_comparisons: list[dict[str, Any]
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Load an ISIS C++ vs PyISIS benchmark config.")
+    parser = argparse.ArgumentParser(description="Run ISIS C++ vs PyISIS benchmark experiments.")
     parser.add_argument("config", help="Path to benchmark JSON config")
+    parser.add_argument(
+        "--output-root",
+        default="work/isis_cpp_pyisis_benchmark",
+        help="Directory under which the benchmark run directory is created",
+    )
+    parser.add_argument("--dry-run", action="store_true", help="Write C++ command scripts without executing tasks")
+    parser.add_argument(
+        "--only",
+        action="append",
+        default=[],
+        help="Task label to run. Repeat or pass comma-separated labels.",
+    )
+    failure_group = parser.add_mutually_exclusive_group()
+    failure_group.add_argument(
+        "--keep-going",
+        action="store_true",
+        help="Record C++ command failures and continue writing reports",
+    )
+    failure_group.add_argument(
+        "--fail-fast",
+        action="store_false",
+        dest="keep_going",
+        help="Raise on the first C++ command failure",
+    )
+    parser.set_defaults(keep_going=False)
+    parser.add_argument(
+        "--cpp-benchmark-path",
+        help="Override execution.cpp_benchmark_path from the config",
+    )
     args = parser.parse_args(argv)
 
-    load_benchmark_config(args.config)
+    config = load_benchmark_config(args.config)
+    if args.cpp_benchmark_path:
+        config = replace(
+            config,
+            execution=replace(
+                config.execution,
+                cpp_benchmark_path=Path(args.cpp_benchmark_path).expanduser().resolve(),
+            ),
+        )
+
+    only = _parse_only_labels(args.only)
+    run_dir = run_benchmark(
+        config,
+        output_root=args.output_root,
+        dry_run=args.dry_run,
+        only=only,
+        keep_going=args.keep_going,
+    )
+    print(run_dir)
     return 0
+
+
+def _parse_only_labels(values: list[str]) -> set[str] | None:
+    labels: set[str] = set()
+    for value in values:
+        for label in value.split(","):
+            stripped = label.strip()
+            if stripped:
+                labels.add(stripped)
+    return labels or None
 
 
 if __name__ == "__main__":

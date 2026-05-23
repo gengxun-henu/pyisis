@@ -514,7 +514,7 @@ git commit -m "feat: add match preset resolver"
 - Create: `examples/controlnet_construct/presets/classic_sift_bf.json`
 - Test: `tests/unitTest/test_match_preset_config.py`
 
-- [ ] **Step 1: Create the FLANN preset**
+- [x] **Step 1: Create the FLANN preset**
 
 Create `examples/controlnet_construct/presets/classic_sift_flann.json`:
 
@@ -535,7 +535,7 @@ Create `examples/controlnet_construct/presets/classic_sift_flann.json`:
 }
 ```
 
-- [ ] **Step 2: Create the BF preset**
+- [x] **Step 2: Create the BF preset**
 
 Create `examples/controlnet_construct/presets/classic_sift_bf.json`:
 
@@ -556,7 +556,7 @@ Create `examples/controlnet_construct/presets/classic_sift_bf.json`:
 }
 ```
 
-- [ ] **Step 3: Add shared preset file tests**
+- [x] **Step 3: Add shared preset file tests**
 
 Append these tests to `MatchPresetConfigUnitTest` in `tests/unitTest/test_match_preset_config.py`:
 
@@ -584,7 +584,7 @@ Append these tests to `MatchPresetConfigUnitTest` in `tests/unitTest/test_match_
         self.assertEqual(runtime.image_match_defaults["ratio_test"], 0.75)
 ```
 
-- [ ] **Step 4: Run preset tests**
+- [x] **Step 4: Run preset tests**
 
 Run:
 
@@ -594,7 +594,7 @@ python -m unittest tests.unitTest.test_match_preset_config -v
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Run:
 

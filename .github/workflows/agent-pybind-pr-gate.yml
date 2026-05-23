@@ -124,6 +124,7 @@ jobs:
       fallback_conda_prefix: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
       pybind_dir: .
       build_dir: build
+      build_cache_ref_slug: pr-gate-shared
       run_smoke_import: true
       upload_build_artifact: true
 

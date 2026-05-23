@@ -1300,7 +1300,7 @@ git commit -m "feat: wire match presets through batch wrapper"
 - Modify: `examples/controlnet_construct/PRESETS_README.md`
 - Test: `tests/unitTest/test_match_preset_config.py`
 
-- [ ] **Step 1: Update example config**
+- [x] **Step 1: Update example config**
 
 In `examples/controlnet_construct/controlnet_config.example.json`, add `match_preset_path` next to existing matcher fields:
 
@@ -1312,7 +1312,7 @@ In `examples/controlnet_construct/controlnet_config.example.json`, add `match_pr
 
 Keep `matcher_method` for backward compatibility.
 
-- [ ] **Step 2: Update preset catalog docs**
+- [x] **Step 2: Update preset catalog docs**
 
 In `examples/controlnet_construct/PRESETS_README.md`, add these two rows near the top of the Preset Catalog:
 
@@ -1364,7 +1364,7 @@ For learning-only legacy configuration, specify `deep_matcher_config_path` in
 `ImageMatch.match_preset_path`.
 ```
 
-- [ ] **Step 3: Add JSON parse regression test**
+- [x] **Step 3: Add JSON parse regression test**
 
 Append this test to `tests/unitTest/test_match_preset_config.py`:
 
@@ -1377,7 +1377,7 @@ Append this test to `tests/unitTest/test_match_preset_config.py`:
         self.assertIsNone(payload["ImageMatch"]["match_preset_path"])
 ```
 
-- [ ] **Step 4: Run docs/config tests**
+- [x] **Step 4: Run docs/config tests**
 
 Run:
 
@@ -1390,7 +1390,7 @@ python -m json.tool examples/controlnet_construct/presets/classic_sift_bf.json >
 
 Expected: all commands exit 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Run:
 

@@ -39,6 +39,21 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
         self.assertIn("deep matcher", result.error_text())
         self.assertIn("deep_match_config_path", result.error_text())
 
+    def test_deep_matcher_errors_when_deep_match_config_path_is_missing(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters(
+            "run_pipeline_example",
+            cli_values={
+                "matcher_method": "lightglue",
+                "deep_match_config_path": "/tmp/does-not-exist-lightglue.json",
+            },
+        )
+
+        self.assertTrue(result.has_errors)
+        self.assertIn("deep_match_config_path", result.error_text())
+        self.assertIn("does not exist", result.error_text())
+
     def test_cli_match_preset_path_conflicts_with_cli_matcher_method(self):
         from controlnet_construct.parameter_validation import validate_parameters
 
@@ -98,6 +113,84 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
         self.assertTrue(result.has_errors)
         self.assertIn("gpu_min_batch_size", result.error_text())
         self.assertIn("gpu_max_batch_size", result.error_text())
+
+    def test_run_pipeline_import_requires_deep_match_manifest_dir(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters("run_pipeline_example", cli_values={"deep_match_mode": "import"})
+
+        self.assertTrue(result.has_errors)
+        self.assertIn("deep_match_manifest_dir", result.error_text())
+
+    def test_image_match_import_requires_deep_match_manifest(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters("image_match", cli_values={"deep_match_mode": "import"})
+
+        self.assertTrue(result.has_errors)
+        self.assertIn("deep_match_manifest", result.error_text())
+        self.assertNotIn("deep_match_manifest_dir", result.error_text())
+
+    def test_full_visualization_mode_warns_for_reduced_preview_fields(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters(
+            "image_match",
+            cli_values={"visualization_mode": "full", "visualization_target_long_edge": 1024},
+        )
+
+        self.assertFalse(result.has_errors, result.error_text())
+        self.assertIn("visualization_target_long_edge", result.warning_text())
+        self.assertIn("visualization_mode is full", result.warning_text())
+
+    def test_strict_validation_promotes_full_visualization_mode_warning(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters(
+            "run_pipeline_example",
+            cli_values={
+                "visualization_mode": "full",
+                "visualization_target_long_edge": 1024,
+                "strict_parameter_validation": True,
+            },
+        )
+
+        self.assertTrue(result.has_errors)
+        self.assertIn("strict parameter validation", result.error_text())
+        self.assertIn("visualization_target_long_edge", result.error_text())
+
+    def test_allowed_value_normalization_preserves_catalog_canonical_values(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters(
+            "image_match",
+            cli_values={"memory_profile": "low-memory", "preview_cache_source": "matching-cache"},
+        )
+
+        self.assertFalse(result.has_errors, result.error_text())
+        self.assertEqual(result.values["memory_profile"], "low-memory")
+        self.assertEqual(result.values["preview_cache_source"], "matching_cache")
+
+    def test_skip_final_merge_allows_false_post_merge_control_measure(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters(
+            "run_pipeline_example",
+            cli_values={"skip_final_merge": True, "post_merge_control_measure": False},
+        )
+
+        self.assertFalse(result.has_errors, result.error_text())
+
+    def test_skip_final_merge_conflicts_with_true_post_merge_control_measure(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters(
+            "run_pipeline_example",
+            cli_values={"skip_final_merge": True, "post_merge_control_measure": True},
+        )
+
+        self.assertTrue(result.has_errors)
+        self.assertIn("post_merge_control_measure", result.error_text())
 
     def test_shell_assignments_quote_values(self):
         from controlnet_construct.parameter_validation import validate_parameters

@@ -91,6 +91,17 @@ class ControlNetParameterCatalogUnitTest(unittest.TestCase):
         image_match_grouped = grouped_parameters_for_entrypoint("image_match")
         self.assertNotIn("controlnet", image_match_grouped)
 
+    def test_deep_match_import_manifest_parameters_are_entrypoint_specific(self):
+        from controlnet_construct.parameter_catalog import parameters_for_entrypoint
+
+        run_pipeline_names = {parameter.name for parameter in parameters_for_entrypoint("run_pipeline_example")}
+        image_match_names = {parameter.name for parameter in parameters_for_entrypoint("image_match")}
+
+        self.assertIn("deep_match_manifest_dir", run_pipeline_names)
+        self.assertNotIn("deep_match_manifest", run_pipeline_names)
+        self.assertIn("deep_match_manifest", image_match_names)
+        self.assertNotIn("deep_match_manifest_dir", image_match_names)
+
 
 if __name__ == "__main__":
     unittest.main()

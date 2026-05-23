@@ -18,6 +18,15 @@ except ImportError:
 
 
 _SOURCE_ORDER = ("config", "preset", "cli")
+_REDUCED_PREVIEW_FIELDS = (
+    "visualization_target_long_edge",
+    "max_preview_pixels",
+    "preview_crop_margin_pixels",
+    "preview_cache_dir",
+    "preview_cache_source",
+    "preview_force_regenerate",
+    "preview_level",
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -219,6 +228,12 @@ def _validate_deep_match_config(values: dict[str, Any], spec_by_name: dict[str, 
 
     resolved_path = Path(str(deep_match_config_path))
     if not resolved_path.exists():
+        errors.append(
+            ValidationMessage(
+                "deep_match_config_path",
+                f"deep_match_config_path does not exist for deep matcher {matcher_method!r}: {resolved_path}",
+            )
+        )
         return
     try:
         load_deep_match_config(resolved_path)
@@ -233,6 +248,15 @@ def _validate_cross_field_rules(entrypoint: str, values: dict[str, Any], errors:
                 ValidationMessage(
                     "deep_match_manifest_dir",
                     "deep_match_mode import requires deep_match_manifest_dir for run_pipeline_example",
+                )
+            )
+
+    if entrypoint == "image_match" and values.get("deep_match_mode") == "import":
+        if _is_absent(values.get("deep_match_manifest")):
+            errors.append(
+                ValidationMessage(
+                    "deep_match_manifest",
+                    "deep_match_mode import requires deep_match_manifest for image_match",
                 )
             )
 
@@ -258,7 +282,7 @@ def _validate_cross_field_rules(entrypoint: str, values: dict[str, Any], errors:
             )
         )
 
-    if values.get("skip_final_merge") is True and not _is_absent(values.get("post_merge_control_measure")):
+    if values.get("skip_final_merge") is True and values.get("post_merge_control_measure") is True:
         errors.append(
             ValidationMessage(
                 "post_merge_control_measure",
@@ -298,12 +322,27 @@ def _collect_inactive_parameter_warnings(
         )
 
     if values.get("deep_match_mode") == "direct":
-        for name in ("deep_match_temp_root_dir", "deep_match_manifest_dir", "deep_match_manifest_summary"):
+        for name in (
+            "deep_match_temp_root_dir",
+            "deep_match_manifest_dir",
+            "deep_match_manifest",
+            "deep_match_manifest_summary",
+        ):
             if name in spec_by_name and _is_explicit_value(provenance, name):
                 warnings.append(
                     ValidationMessage(
                         name,
                         f"{name} was explicitly set while deep_match_mode is direct",
+                    )
+                )
+
+    if values.get("visualization_mode") == "full":
+        for name in _REDUCED_PREVIEW_FIELDS:
+            if name in spec_by_name and _is_explicit_value(provenance, name):
+                warnings.append(
+                    ValidationMessage(
+                        name,
+                        f"{name} was explicitly set while visualization_mode is full",
                     )
                 )
 

@@ -54,6 +54,18 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
         self.assertIn("deep_match_config_path", result.error_text())
         self.assertIn("does not exist", result.error_text())
 
+    def test_deep_match_config_path_is_validated_when_matcher_is_classic_default(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters(
+            "image_match",
+            cli_values={"deep_match_config_path": "/tmp/definitely-missing-lightglue.json"},
+        )
+
+        self.assertTrue(result.has_errors)
+        self.assertIn("deep_match_config_path", result.error_text())
+        self.assertRegex(result.error_text(), "missing|not found|does not exist")
+
     def test_cli_match_preset_path_conflicts_with_cli_matcher_method(self):
         from controlnet_construct.parameter_validation import validate_parameters
 
@@ -191,6 +203,45 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
 
         self.assertTrue(result.has_errors)
         self.assertIn("post_merge_control_measure", result.error_text())
+
+    def test_bool_strings_are_coerced_before_validation(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters(
+            "run_pipeline_example",
+            cli_values={
+                "enable_low_resolution_offset_estimation": "off",
+                "low_resolution_level": 4,
+                "strict_parameter_validation": "1",
+            },
+        )
+
+        self.assertIs(result.values["enable_low_resolution_offset_estimation"], False)
+        self.assertIs(result.values["strict_parameter_validation"], True)
+        self.assertTrue(result.has_errors)
+        self.assertIn("strict parameter validation", result.error_text())
+
+    def test_bool_strings_trigger_cross_field_conflicts_after_coercion(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters(
+            "run_pipeline_example",
+            cli_values={"skip_final_merge": "true", "post_merge_control_measure": "true"},
+        )
+
+        self.assertIs(result.values["skip_final_merge"], True)
+        self.assertIs(result.values["post_merge_control_measure"], True)
+        self.assertTrue(result.has_errors)
+        self.assertIn("post_merge_control_measure", result.error_text())
+
+    def test_invalid_bool_string_is_rejected(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters("run_pipeline_example", cli_values={"skip_final_merge": "maybe"})
+
+        self.assertTrue(result.has_errors)
+        self.assertIn("skip_final_merge", result.error_text())
+        self.assertIn("boolean", result.error_text())
 
     def test_shell_assignments_quote_values(self):
         from controlnet_construct.parameter_validation import validate_parameters

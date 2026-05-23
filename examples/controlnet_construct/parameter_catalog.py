@@ -146,7 +146,7 @@ PARAMETERS = (
     _spec("deep_match_manifest", "pipeline", config_path=_image_match_path("deep_match_manifest"), entrypoints=(IMAGE_MATCH,), help="Deep-match manifest tasks JSON path."),
     _spec("deep_match_manifest_summary", "pipeline", config_path=_image_match_path("deep_match_manifest_summary"), entrypoints=(RUN_PIPELINE,), help="Manifest summary JSON path."),
     _spec("skip_final_merge", "pipeline", value_type="bool", entrypoints=(RUN_PIPELINE,), help="Skip the final control-network merge step."),
-    _spec("post_merge_control_measure", "pipeline", entrypoints=(RUN_PIPELINE,), help="Control measure run after merge."),
+    _spec("post_merge_control_measure", "pipeline", value_type="bool", default=False, entrypoints=(RUN_PIPELINE,), help="Control measure run after merge."),
     _spec("post_merge_output", "pipeline", entrypoints=(RUN_PIPELINE,), help="Post-merge control-measure output path."),
     _spec("post_merge_decimals", "pipeline", value_type="int", min_value=0, entrypoints=(RUN_PIPELINE,), help="Decimal precision for post-merge output."),
     _spec(

@@ -18,6 +18,8 @@ except ImportError:
 
 
 _SOURCE_ORDER = ("config", "preset", "cli")
+_BOOL_TRUE_STRINGS = {"1", "true", "yes", "on"}
+_BOOL_FALSE_STRINGS = {"0", "false", "no", "off"}
 _REDUCED_PREVIEW_FIELDS = (
     "visualization_target_long_edge",
     "max_preview_pixels",
@@ -165,6 +167,18 @@ def _validate_and_normalize_value(spec: Any, value: Any, errors: list[Validation
             return value
         return normalized_allowed[normalized_value]
 
+    if spec.value_type == "bool":
+        if isinstance(value, bool):
+            return value
+        if isinstance(value, str):
+            normalized_value = value.strip().lower()
+            if normalized_value in _BOOL_TRUE_STRINGS:
+                return True
+            if normalized_value in _BOOL_FALSE_STRINGS:
+                return False
+        errors.append(ValidationMessage(spec.name, f"must be a boolean value; got {value!r}"))
+        return value
+
     if spec.value_type == "int":
         if isinstance(value, bool) or not isinstance(value, int):
             errors.append(ValidationMessage(spec.name, f"must be a finite integer; got {value!r}"))
@@ -209,21 +223,19 @@ def _validate_cli_conflicts(cli_values: dict[str, Any], errors: list[ValidationM
 
 
 def _validate_deep_match_config(values: dict[str, Any], spec_by_name: dict[str, Any], errors: list[ValidationMessage]) -> None:
-    if "matcher_method" not in spec_by_name:
+    if "deep_match_config_path" not in spec_by_name:
         return
 
     matcher_method = values.get("matcher_method")
-    if _normalize_choice(matcher_method or "") not in set(DEEP_MATCHER_METHODS):
-        return
-
     deep_match_config_path = values.get("deep_match_config_path")
     if _is_absent(deep_match_config_path):
-        errors.append(
-            ValidationMessage(
-                "deep_match_config_path",
-                f"deep matcher {matcher_method!r} requires deep_match_config_path",
+        if _normalize_choice(matcher_method or "") in set(DEEP_MATCHER_METHODS):
+            errors.append(
+                ValidationMessage(
+                    "deep_match_config_path",
+                    f"deep matcher {matcher_method!r} requires deep_match_config_path",
+                )
             )
-        )
         return
 
     resolved_path = Path(str(deep_match_config_path))
@@ -231,7 +243,7 @@ def _validate_deep_match_config(values: dict[str, Any], spec_by_name: dict[str, 
         errors.append(
             ValidationMessage(
                 "deep_match_config_path",
-                f"deep_match_config_path does not exist for deep matcher {matcher_method!r}: {resolved_path}",
+                f"deep_match_config_path does not exist: {resolved_path}",
             )
         )
         return

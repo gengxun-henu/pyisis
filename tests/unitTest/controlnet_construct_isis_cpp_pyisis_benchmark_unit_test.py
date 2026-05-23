@@ -141,6 +141,55 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "sample_step must be positive"):
                 benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
 
+    def test_load_benchmark_config_rejects_path_traversal_run_id(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["run_id"] = "../escape"
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "run_id must match"):
+                benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+    def test_load_benchmark_config_rejects_path_traversal_task_label(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["camera_tasks"][0]["label"] = "bad/label"
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "label must match"):
+                benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+    def test_load_benchmark_config_requires_at_least_one_task(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["camera_tasks"] = []
+            payload["controlnet_tasks"] = []
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with self.assertRaisesRegex(
+                ValueError,
+                "At least one camera task or controlnet task is required",
+            ):
+                benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+    def test_example_config_loads_with_camera_and_controlnet_tasks(self):
+        config_path = (
+            PROJECT_ROOT
+            / "examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.example.json"
+        )
+
+        config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+        self.assertEqual(config.run_id, "lro_nac_pyisis_cpp_20260523")
+        self.assertGreaterEqual(len(config.camera_tasks), 1)
+        self.assertGreaterEqual(len(config.controlnet_tasks), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

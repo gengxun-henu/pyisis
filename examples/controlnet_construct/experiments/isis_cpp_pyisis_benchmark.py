@@ -6,7 +6,11 @@ import argparse
 from dataclasses import dataclass
 import json
 from pathlib import Path
+import re
 from typing import Any
+
+
+SAFE_PATH_COMPONENT_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._-]*\Z")
 
 
 @dataclass(frozen=True)
@@ -72,6 +76,19 @@ def _require_string(payload: dict[str, Any], key: str) -> str:
     if not isinstance(value, str) or not value.strip():
         raise ValueError(f"{key} must be a non-empty string")
     return value.strip()
+
+
+def _validate_path_component(value: str, field_name: str) -> str:
+    if (
+        not value
+        or Path(value).is_absolute()
+        or ".." in value
+        or "/" in value
+        or "\\" in value
+        or not SAFE_PATH_COMPONENT_RE.fullmatch(value)
+    ):
+        raise ValueError(f"{field_name} must match [A-Za-z0-9][A-Za-z0-9._-]* and be a safe path component")
+    return value
 
 
 def _optional_string(payload: dict[str, Any], key: str, default: str) -> str:
@@ -151,7 +168,7 @@ def load_benchmark_config(config_path: str | Path, *, repo_root: str | Path | No
     labels: set[str] = set()
     camera_tasks: list[CameraTaskConfig] = []
     for task_payload in _load_task_list(payload, "camera_tasks"):
-        label = _require_string(task_payload, "label")
+        label = _validate_path_component(_require_string(task_payload, "label"), "label")
         _add_label(label, labels)
         camera_tasks.append(
             CameraTaskConfig(
@@ -170,7 +187,7 @@ def load_benchmark_config(config_path: str | Path, *, repo_root: str | Path | No
 
     controlnet_tasks: list[ControlNetTaskConfig] = []
     for task_payload in _load_task_list(payload, "controlnet_tasks"):
-        label = _require_string(task_payload, "label")
+        label = _validate_path_component(_require_string(task_payload, "label"), "label")
         _add_label(label, labels)
         controlnet_tasks.append(
             ControlNetTaskConfig(
@@ -183,8 +200,11 @@ def load_benchmark_config(config_path: str | Path, *, repo_root: str | Path | No
             )
         )
 
+    if not camera_tasks and not controlnet_tasks:
+        raise ValueError("At least one camera task or controlnet task is required")
+
     return BenchmarkConfig(
-        run_id=_require_string(payload, "run_id"),
+        run_id=_validate_path_component(_require_string(payload, "run_id"), "run_id"),
         description=_optional_string(payload, "description", ""),
         execution=execution,
         camera_tasks=tuple(camera_tasks),

@@ -42,6 +42,7 @@ jobs:
     runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
     outputs:
       changed_tests: ${{ steps.diff.outputs.changed_tests }}
+      requires_python_unit_fallback: ${{ steps.diff.outputs.requires_python_unit_fallback }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -68,10 +69,23 @@ jobs:
           changed_files="$(git diff --name-only "$base_sha...$head_sha")"
 
           changed_tests=$(printf '%s\n' "$changed_files" | grep '^tests/unitTest/.*_unit_test\.py$' || true)
+          requires_python_unit_fallback=false
+          if [ -z "$changed_tests" ]; then
+            while IFS= read -r changed_file; do
+              [ -n "$changed_file" ] || continue
+              case "$changed_file" in
+                CMakeLists.txt|src/*|python/*|tests/*|.github/conda/*|.github/actions/resolve-conda-isis-prefix/*|.github/actions/setup-hosted-micromamba/*|scripts/build_log_analyzer.py)
+                  requires_python_unit_fallback=true
+                  break
+                  ;;
+              esac
+            done <<< "$changed_files"
+          fi
           {
             echo 'changed_tests<<EOF'
             printf '%s\n' "$changed_tests"
             echo 'EOF'
+            echo "requires_python_unit_fallback=$requires_python_unit_fallback"
           } >> "$GITHUB_OUTPUT"
 
           {
@@ -84,6 +98,14 @@ jobs:
             echo "```text"
             printf '%s\n' "$changed_files"
             echo "```"
+            echo ""
+            if [ -n "$changed_tests" ]; then
+              echo "Python unit-test gate: changed unit-test files only."
+            elif [ "$requires_python_unit_fallback" = "true" ]; then
+              echo "Python unit-test gate: fallback \`ctest -R python-unit-tests\` required by core/runtime changes."
+            else
+              echo "Python unit-test gate: skipped because this PR only changes workflow/docs/examples/config metadata covered by build/smoke and metadata audit."
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
 
   build_and_smoke:
@@ -111,7 +133,7 @@ jobs:
       - resolve_runner
       - build_and_smoke
       - prepare
-    if: ${{ always() && needs.build_and_smoke.outputs.build_succeeded == 'true' }}
+    if: ${{ always() && needs.build_and_smoke.outputs.build_succeeded == 'true' && (needs.prepare.outputs.changed_tests != '' || needs.prepare.outputs.requires_python_unit_fallback == 'true') }}
     runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
     timeout-minutes: 90
     permissions:
@@ -121,6 +143,7 @@ jobs:
       PYTHONUNBUFFERED: "1"
       FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
       CHANGED_TESTS: ${{ needs.prepare.outputs.changed_tests }}
+      LOCAL_BUILD_CACHE_DIR: ${{ needs.build_and_smoke.outputs.local_build_cache_dir }}
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
@@ -156,10 +179,27 @@ jobs:
           hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Download build artifact
+        if: ${{ needs.resolve_runner.outputs.runner_mode == 'github-hosted' }}
         uses: actions/download-artifact@v4
         with:
           name: ${{ needs.build_and_smoke.outputs.build_artifact_name }}
           path: ${{ env.BUILD_DIR }}
+
+      - name: Restore build tree from self-hosted local cache
+        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${LOCAL_BUILD_CACHE_DIR:-}" ]; then
+            echo "::error::Self-hosted build cache output was empty."
+            exit 1
+          fi
+          if [ ! -d "$LOCAL_BUILD_CACHE_DIR" ]; then
+            echo "::error::Self-hosted build cache does not exist: $LOCAL_BUILD_CACHE_DIR"
+            exit 1
+          fi
+          rm -rf "$BUILD_DIR"
+          cp -a "$LOCAL_BUILD_CACHE_DIR" "$BUILD_DIR"
 
       - name: Run changed unit tests or fallback CTest python group
         shell: bash

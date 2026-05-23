@@ -807,6 +807,209 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("CPU parallel tile matching: enabled", completed.stdout)
         self.assertIn("CPU parallel worker limit: 8", completed.stdout)
 
+    def test_run_image_match_batch_example_forwards_cli_match_preset(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+            expected_preset = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_bf.json"
+
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import sys
+                    from pathlib import Path
+
+                    EXPECTED_PRESET = {str(expected_preset)!r}
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+                        if script_name == "match_preset_config.py":
+                            if args != [EXPECTED_PRESET, "--shell-assignments"]:
+                                raise SystemExit(f"unexpected match preset resolver args: {{args}}")
+                            print("MATCHER_METHOD=bf")
+                            print("DEEP_MATCHER_CONFIG_PATH=''")
+                            return 0
+                        if script_name == "image_match.py":
+                            if "--match-preset-path" not in args:
+                                raise SystemExit("missing --match-preset-path")
+                            preset_value = args[args.index("--match-preset-path") + 1]
+                            if preset_value != EXPECTED_PRESET:
+                                raise SystemExit(f"unexpected match preset: {{preset_value}}")
+                            if "--matcher-method" in args:
+                                raise SystemExit("preset should not forward --matcher-method")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            return 0
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--python",
+                    str(fake_python),
+                    "--match-preset-path",
+                    str(expected_preset),
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Match preset path:", completed.stdout)
+        self.assertIn("Matcher method: bf", completed.stdout)
+
+    def test_run_image_match_batch_example_ignores_config_match_preset_when_matcher_method_cli_is_explicit(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+            config_preset = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_flann.json"
+
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps({"ImageMatch": {"match_preset_path": str(config_preset)}}),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+                        if script_name == "match_preset_config.py":
+                            raise SystemExit("config match_preset_path should not be applied")
+                        if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                config_path = Path(args[args.index("--config") + 1])
+                                field_name = args[args.index("--print-config-default") + 1]
+                                payload = json.loads(config_path.read_text(encoding="utf-8"))
+                                image_match_config = payload.get("ImageMatch") or {{}}
+                                print(image_match_config.get(field_name, ""))
+                                return 0
+                            if "--match-preset-path" in args:
+                                raise SystemExit("explicit matcher method should suppress config match preset")
+                            if "--matcher-method" not in args:
+                                raise SystemExit("missing --matcher-method")
+                            matcher_method = args[args.index("--matcher-method") + 1]
+                            if matcher_method != "bf":
+                                raise SystemExit(f"unexpected matcher method: {{matcher_method}}")
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            return 0
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                    "--matcher-method",
+                    "bf",
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertNotIn("Match preset path:", completed.stdout)
+        self.assertIn("Matcher method: bf", completed.stdout)
+
     def test_run_image_match_batch_example_reads_parallel_worker_limit_from_config(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"

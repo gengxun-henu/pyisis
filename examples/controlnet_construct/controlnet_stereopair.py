@@ -23,6 +23,7 @@ Updated: 2026-05-10  Geng Xun added a baseline from-ori-match parser skeleton fo
 Updated: 2026-05-10  Geng Xun made the Task-1 from-ori-match CLI fail safely with a clear not-yet-implemented error instead of crashing on missing parser attrs.
 Updated: 2026-05-10  Geng Xun switched the Task-1 from-ori-match rejection to a clean argparse CLI error without a traceback.
 Updated: 2026-05-10  Geng Xun implemented from-ori-match execution to run original-image matching and build ControlNet in one command.
+Updated: 2026-05-23  Geng Xun forwarded deep matcher config and adaptive routing options through from-ori-match.
 """
 
 from __future__ import annotations
@@ -833,6 +834,21 @@ def _build_from_original_match_parser(subparsers) -> None:
     parser.add_argument("--left-output-key", default=None, help="Optional path to persist the matched original-image .key for image A.")
     parser.add_argument("--right-output-key", default=None, help="Optional path to persist the matched original-image .key for image B.")
     parser.add_argument("--matcher-method", default="sift", help="Matcher method forwarded to image_match.")
+    parser.add_argument("--deep-match-config-path", default=None, help="Deep matcher preset JSON forwarded to image_match.")
+    parser.add_argument(
+        "--adaptive-routing",
+        dest="enable_adaptive_routing",
+        action="store_true",
+        help="Enable image_match adaptive routing for original-image matching.",
+    )
+    parser.add_argument(
+        "--no-adaptive-routing",
+        dest="enable_adaptive_routing",
+        action="store_false",
+        help="Disable image_match adaptive routing for original-image matching.",
+    )
+    parser.set_defaults(enable_adaptive_routing=False)
+    parser.add_argument("--adaptive-routing-profile", default="balanced", help="Adaptive-routing quality profile forwarded to image_match.")
     parser.add_argument("--band", type=int, default=1, help="Band index used for original-image matching.")
     parser.add_argument("--ratio-test", type=float, default=0.75, help="Ratio test threshold forwarded to image_match.")
     parser.add_argument("--max-features", type=int, default=None, help="Optional SIFT max_features forwarded to image_match.")
@@ -1129,6 +1145,9 @@ def main(argv: list[str] | None = None) -> None:
             left_output_key,
             right_output_key,
             matcher_method=args.matcher_method,
+            deep_match_config_path=args.deep_match_config_path,
+            enable_adaptive_routing=args.enable_adaptive_routing,
+            adaptive_routing_profile=args.adaptive_routing_profile,
             band=args.band,
             ratio_test=args.ratio_test,
             max_features=args.max_features,

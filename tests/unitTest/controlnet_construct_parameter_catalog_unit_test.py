@@ -2,8 +2,11 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
+import subprocess
 import sys
+import tempfile
 import unittest
 
 
@@ -14,6 +17,62 @@ if str(EXAMPLES_ROOT) not in sys.path:
 
 
 class ControlNetParameterCatalogUnitTest(unittest.TestCase):
+    def test_catalog_cli_prints_grouped_pipeline_help(self):
+        script_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "print_parameter_catalog.py"
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(script_path),
+                "--entrypoint",
+                "run_pipeline_example",
+                "--format",
+                "text",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Parameter groups for run_pipeline_example", result.stdout)
+        self.assertIn("Matching", result.stdout)
+        self.assertIn("--matcher-method", result.stdout)
+        self.assertIn("Low Resolution", result.stdout)
+        self.assertIn("--low-resolution-level", result.stdout)
+
+    def test_catalog_cli_validates_payload_json(self):
+        script_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "print_parameter_catalog.py"
+        payload = {
+            "entrypoint": "run_pipeline_example",
+            "cli_values": {
+                "matcher_method": "bf",
+                "work_dir": "work with space",
+                "validate_parameters_only": True,
+            },
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            payload_path = Path(temp_dir) / "payload.json"
+            payload_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(script_path),
+                    "--validate-json",
+                    str(payload_path),
+                    "--shell-assignments",
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("MATCHER_METHOD=bf", result.stdout)
+        self.assertIn("WORK_DIR='work with space'", result.stdout)
+
     def test_required_groups_are_declared_in_expected_order(self):
         from controlnet_construct.parameter_catalog import PARAMETER_GROUPS
 

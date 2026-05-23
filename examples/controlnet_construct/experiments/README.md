@@ -132,3 +132,50 @@ runner prepared for that method, `stdout.log` and `stderr.log` capture pipeline
 output, and `metrics.json` stores the collected method metrics. The `reports/`
 directory contains cross-method summaries, including `reports/summary.json`,
 `summary.csv`, `summary.md`, and `failures.json`.
+
+## ISIS C++ vs PyISIS Benchmark
+
+`isis_cpp_pyisis_benchmark.py` compares direct ISIS C++ calls against PyISIS for
+camera coordinate conversion and ControlNet traversal. It is a benchmark
+harness, not a ControlNet construction pipeline.
+
+Build the C++ benchmark first. If the build directory has not been configured
+yet, configure it with the conda compiler:
+
+```bash
+source "$HOME/miniconda3/etc/profile.d/conda.sh"
+conda activate asp360_new
+export ISIS_PREFIX="$CONDA_PREFIX"
+cmake -S . -B build \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DPython3_EXECUTABLE="$CONDA_PREFIX/bin/python" \
+  -DISIS_PREFIX="$ISIS_PREFIX" \
+  -DISIS_EXCLUDE_ASP_VW_CAMERA_LIBS=ON \
+  -DCMAKE_CXX_COMPILER="$HOME/miniconda3/bin/x86_64-conda-linux-gnu-c++"
+cmake --build build --target isis_cpp_benchmark -j"$(nproc)"
+```
+
+Dry-run mode validates the config and writes the planned command files without
+running PyISIS or the C++ benchmark:
+
+```bash
+python examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.py \
+  examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.example.json \
+  --output-root work/isis_cpp_pyisis_benchmark \
+  --dry-run
+```
+
+Fixture smoke mode runs the repo fixture with mock `ISISDATA`:
+
+```bash
+export PYTHONPATH="$PWD/build/python:$PWD/tests/unitTest"
+export ISISDATA="$PWD/tests/data/isisdata/mockup"
+python examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.py \
+  examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.example.json \
+  --output-root work/isis_cpp_pyisis_benchmark \
+  --keep-going
+```
+
+For real LRO NAC performance runs, set production `ISISDATA` and point the
+config at production CUBE and ControlNet files. Remove `max_points` from a
+camera task when you want full-grid sampling at the configured step.

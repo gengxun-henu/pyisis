@@ -787,7 +787,7 @@ git commit -m "feat: apply match presets in image_match"
 - Modify: `examples/controlnet_construct/run_pipeline_example.sh`
 - Test: `tests/unitTest/controlnet_construct_pipeline_unit_test.py`
 
-- [ ] **Step 1: Add failing wrapper test**
+- [x] **Step 1: Add failing wrapper test**
 
 Add this method to `ControlNetConstructPipelineUnitTest` near the existing `run_pipeline_example.sh` wrapper tests:
 
@@ -898,7 +898,7 @@ Add this method to `ControlNetConstructPipelineUnitTest` near the existing `run_
         self.assertIn("Matcher method: flann", completed.stdout)
 ```
 
-- [ ] **Step 2: Run the failing test**
+- [x] **Step 2: Run the failing test**
 
 Run:
 
@@ -908,7 +908,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: FAIL because the wrapper does not read or forward `match_preset_path`.
 
-- [ ] **Step 3: Add wrapper helper functions**
+- [x] **Step 3: Add wrapper helper functions**
 
 In `examples/controlnet_construct/run_pipeline_example.sh`, add this helper after `resolve_config_relative_path`:
 
@@ -928,7 +928,7 @@ apply_match_preset_path() {
 }
 ```
 
-- [ ] **Step 4: Add option state and parsing**
+- [x] **Step 4: Add option state and parsing**
 
 In `main`, add local state near `explicit_matcher_method`:
 
@@ -959,7 +959,7 @@ After argument parsing and before `require_command "$PYTHON_EXECUTABLE"`, add:
   fi
 ```
 
-- [ ] **Step 5: Resolve config preset and apply it**
+- [x] **Step 5: Resolve config preset and apply it**
 
 After `require_file "$CONFIG_PATH"` and before reading `ImageMatch.matcher_method`, insert:
 
@@ -1001,7 +1001,7 @@ and:
   fi
 ```
 
-- [ ] **Step 6: Forward and log the preset**
+- [x] **Step 6: Forward and log the preset**
 
 In the logging area, add:
 
@@ -1028,7 +1028,7 @@ Remove the unconditional existing line:
     match_args+=(--matcher-method "$MATCHER_METHOD")
 ```
 
-- [ ] **Step 7: Run the focused test**
+- [x] **Step 7: Run the focused test**
 
 Run:
 
@@ -1038,7 +1038,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: PASS.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 Run:
 

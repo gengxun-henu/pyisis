@@ -66,6 +66,8 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
 
 | Preset File | Feature Extractor | Matcher | Use Case |
 |-------------|-------------------|---------|----------|
+| `classic_sift_flann.json` | OpenCV SIFT | FLANN | Classic non-learning SIFT descriptor matching. Recommended traditional baseline. |
+| `classic_sift_bf.json` | OpenCV SIFT | BF | Classic non-learning SIFT descriptor matching with brute-force L2 matching. |
 | `superglue_default.json` | SuperPoint | SuperGlue | High-accuracy standard scenarios. Best match quality but slower. |
 | `lightglue_default.json` | SuperPoint | LightGlue | Speed-accuracy balance, recommended default. Adaptive feature cropping. |
 | `loftr_default.json` | LoFTR (built-in) | LoFTR (end-to-end) | Weak-texture areas, large viewpoint changes. No independent keypoints needed. |
@@ -81,6 +83,32 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
 | `lightglue_aliked.json` | ALIKED | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
 | `lightglue_doghardnet.json` | DoGHardNet | LightGlue | Compatibility reference preset only. Current runtime rejects it because LightGlue execution is limited to SuperPoint-backed extraction. |
 | `superglue_aliked.json` | ALIKED | SuperGlue | Compatibility reference preset only. Current runtime rejects it because SuperGlue execution is limited to SuperPoint-backed extraction. |
+
+## Classic SIFT Presets
+
+`classic_sift_flann.json` and `classic_sift_bf.json` select the original OpenCV SIFT path in `examples/image_match/tile_matching.py`. These are not deep-learning presets, and they run in the normal `asp360_new` conda environment without a separate `deep-learning` environment.
+
+Use `classic_sift_flann.json` as the recommended traditional baseline:
+
+```bash
+bash examples/controlnet_construct/run_image_match_batch_example.sh \
+  --work-dir work \
+  --match-preset-path examples/controlnet_construct/presets/classic_sift_flann.json
+```
+
+The same selection can be stored under `ImageMatch.match_preset_path` in a ControlNet config:
+
+```json
+{
+  "ImageMatch": {
+    "matcher_method": "flann",
+    "match_preset_path": "examples/controlnet_construct/presets/classic_sift_flann.json",
+    "deep_matcher_config_path": null
+  }
+}
+```
+
+The `classic_sift_*` presets are distinct from `lightglue_official_sift.json`. `lightglue_official_sift.json` uses `lightglue.SIFT` plus `lightglue.LightGlue` and follows the deep matcher `direct` / `export` / `import` workflows.
 
 ## Official LightGlue Backend
 
@@ -219,12 +247,15 @@ for ControlNet preparation, export, import, and unit tests.
 
 ## Usage
 
-Specify the preset path in the `ImageMatch` section of `controlnet_config.json`:
+For learning-only legacy configuration, specify `deep_matcher_config_path` in
+`ImageMatch`. For unified classic/deep selection, prefer
+`ImageMatch.match_preset_path`.
 
 ```json
 {
   "ImageMatch": {
     "matcher_method": "lightglue",
+    "match_preset_path": "presets/lightglue_default.json",
     "deep_matcher_config_path": "presets/lightglue_default.json"
   }
 }

@@ -469,6 +469,8 @@ def _remove_benchmark_owned_path(path: Path) -> None:
 def prepare_run_directory(config: BenchmarkConfig, *, output_root: str | Path, dry_run: bool) -> Path:
     output_root = Path(output_root).expanduser().resolve()
     run_dir = output_root / config.run_id
+    if run_dir.is_symlink():
+        run_dir.unlink()
     run_dir.mkdir(parents=True, exist_ok=True)
     for child_name in ("pyisis", "cpp", "reports"):
         _remove_benchmark_owned_path(run_dir / child_name)

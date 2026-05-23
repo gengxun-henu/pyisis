@@ -816,7 +816,10 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
   --work-dir work_ori \
   --original-list work/original_images.lis \
   --config examples/controlnet_construct/controlnet_config.example.json \
-  --matcher-method flann \
+  --matcher-method lightglue \
+  --deep-match-config-path examples/controlnet_construct/presets/lightglue_official_superpoint.json \
+  --adaptive-routing \
+  --adaptive-routing-profile balanced \
   --num-worker-parallel-cpu 8
 ```
 
@@ -835,7 +838,9 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
 - `work_ori/merge/merge_all_controlnets.sh`
 - `work_ori/merge/ori_matching_merged.net`
 
-第一版不接入 deep matcher、adaptive routing、DOM low-resolution offset 或 DOM-space RANSAC 可视化。需要这些能力时继续使用 DOM pipeline，或者后续再按小步方式扩展这个 wrapper。
+该 wrapper 现在可以把 `--deep-match-config-path`、`--adaptive-routing` / `--no-adaptive-routing` 和 `--adaptive-routing-profile` 转发给
+`from-ori-match`，因此可直接使用 official LightGlue preset 等原始影像空间 deep matcher 配置。DOM low-resolution offset 与
+DOM-space RANSAC 可视化仍属于 DOM pipeline 专用能力；需要这些 DOM 侧处理时继续使用 `run_pipeline_example.sh`。
 
 ### 手工四步版本
 

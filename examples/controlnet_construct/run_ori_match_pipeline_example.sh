@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-
 # End-to-end raw/original image matching ControlNet pipeline example runner.
+#
+# Author: Geng Xun
+# Created: 2026-05-23
+# Updated: 2026-05-23  Geng Xun added the raw image ControlNet batch wrapper.
+# Updated: 2026-05-23  Geng Xun enabled deep matcher and adaptive-routing forwarding for raw image matching.
 
 set -euo pipefail
 
@@ -94,6 +98,9 @@ build_match_args() {
     --log-level "$LOG_LEVEL"
   )
   [[ -z "$MAX_FEATURES" ]] || match_args+=(--max-features "$MAX_FEATURES")
+  [[ -z "$DEEP_MATCH_CONFIG_PATH" ]] || match_args+=(--deep-match-config-path "$DEEP_MATCH_CONFIG_PATH")
+  [[ "$ADAPTIVE_ROUTING" == "1" ]] && match_args+=(--adaptive-routing) || match_args+=(--no-adaptive-routing)
+  match_args+=(--adaptive-routing-profile "$ADAPTIVE_ROUTING_PROFILE")
   [[ "$USE_PARALLEL_CPU" == "1" ]] && match_args+=(--use-parallel-cpu) || match_args+=(--no-parallel-cpu)
   [[ "$USE_GPU" == "1" ]] && match_args+=(--use-gpu)
   [[ "$GPU_DYNAMIC_BATCH" == "1" ]] && match_args+=(--gpu-dynamic-batch) || match_args+=(--no-gpu-dynamic-batch)
@@ -120,6 +127,11 @@ Options:
   --images-overlap-list PATH     images_overlap.lis path. Default: <work-dir>/images_overlap.lis
   --config PATH                  ControlNet config JSON. Default: examples/controlnet_construct/controlnet_config.example.json
   --matcher-method NAME          Matcher method forwarded to from-ori-match. Default: flann
+  --deep-match-config-path PATH  Deep matcher preset forwarded to from-ori-match.
+  --adaptive-routing             Enable adaptive matcher routing in from-ori-match.
+  --no-adaptive-routing          Disable adaptive matcher routing in from-ori-match. Default.
+  --adaptive-routing-profile NAME
+                                  Adaptive-routing quality profile. Default: balanced
   --band N                       Band forwarded to from-ori-match. Default: 1
   --ratio-test FLOAT             Ratio test threshold. Default: 0.75
   --max-features N               Optional SIFT max_features.
@@ -146,6 +158,9 @@ ORIGINAL_LIST=""
 IMAGES_OVERLAP_LIST=""
 CONFIG_PATH=""
 MATCHER_METHOD="flann"
+DEEP_MATCH_CONFIG_PATH=""
+ADAPTIVE_ROUTING="0"
+ADAPTIVE_ROUTING_PROFILE="balanced"
 BAND="1"
 RATIO_TEST="0.75"
 MAX_FEATURES=""
@@ -169,6 +184,10 @@ while [[ $# -gt 0 ]]; do
     --images-overlap-list) [[ $# -ge 2 ]] || die "missing value for --images-overlap-list"; IMAGES_OVERLAP_LIST=$2; shift 2 ;;
     --config) [[ $# -ge 2 ]] || die "missing value for --config"; CONFIG_PATH=$2; shift 2 ;;
     --matcher-method) [[ $# -ge 2 ]] || die "missing value for --matcher-method"; MATCHER_METHOD=$2; shift 2 ;;
+    --deep-match-config-path) [[ $# -ge 2 ]] || die "missing value for --deep-match-config-path"; DEEP_MATCH_CONFIG_PATH=$2; shift 2 ;;
+    --adaptive-routing) ADAPTIVE_ROUTING="1"; shift ;;
+    --no-adaptive-routing) ADAPTIVE_ROUTING="0"; shift ;;
+    --adaptive-routing-profile) [[ $# -ge 2 ]] || die "missing value for --adaptive-routing-profile"; ADAPTIVE_ROUTING_PROFILE=$2; shift 2 ;;
     --band) [[ $# -ge 2 ]] || die "missing value for --band"; BAND=$2; shift 2 ;;
     --ratio-test) [[ $# -ge 2 ]] || die "missing value for --ratio-test"; RATIO_TEST=$2; shift 2 ;;
     --max-features) [[ $# -ge 2 ]] || die "missing value for --max-features"; MAX_FEATURES=$2; shift 2 ;;
@@ -187,7 +206,7 @@ while [[ $# -gt 0 ]]; do
     --dry-run) DRY_RUN="1"; shift ;;
     --log-level) [[ $# -ge 2 ]] || die "missing value for --log-level"; LOG_LEVEL=$2; shift 2 ;;
     -h|--help) usage; exit 0 ;;
-    --deep-match-config-path|--deep-match-mode|--adaptive-routing|--no-adaptive-routing)
+    --deep-match-mode)
       die "$1 is not supported by the raw image space wrapper first version"
       ;;
     *) die "unknown option: $1" ;;
@@ -205,6 +224,9 @@ WORK_DIR=$(resolve_path "${WORK_DIR:-$REPO_ROOT/$DEFAULT_WORK_DIR_RELATIVE}")
 mkdir -p "$WORK_DIR"
 
 CONFIG_PATH=$(resolve_path "${CONFIG_PATH:-$REPO_ROOT/$DEFAULT_CONFIG_RELATIVE}")
+if [[ -n "$DEEP_MATCH_CONFIG_PATH" ]]; then
+  DEEP_MATCH_CONFIG_PATH=$(resolve_path "$DEEP_MATCH_CONFIG_PATH")
+fi
 ORIGINAL_LIST=$(resolve_path "${ORIGINAL_LIST:-$WORK_DIR/original_images.lis}")
 IMAGES_OVERLAP_LIST=$(resolve_path "${IMAGES_OVERLAP_LIST:-$WORK_DIR/images_overlap.lis}")
 
@@ -318,7 +340,7 @@ if [[ "$DRY_RUN" == "1" ]]; then
   exit 0
 fi
 
-"$HOST_PYTHON_EXECUTABLE" - "$BATCH_REPORT_PATH" "$PAIRS_JSON" "$ORIGINAL_LIST" "$IMAGES_OVERLAP_LIST" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_OUTPUT_NET" "$MERGE_SCRIPT_PATH" "$PAIR_ID_PREFIX" "$PAIR_ID_START" "$MATCHER_METHOD" <<'PY'
+"$HOST_PYTHON_EXECUTABLE" - "$BATCH_REPORT_PATH" "$PAIRS_JSON" "$ORIGINAL_LIST" "$IMAGES_OVERLAP_LIST" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_OUTPUT_NET" "$MERGE_SCRIPT_PATH" "$PAIR_ID_PREFIX" "$PAIR_ID_START" "$MATCHER_METHOD" "$DEEP_MATCH_CONFIG_PATH" "$ADAPTIVE_ROUTING" "$ADAPTIVE_ROUTING_PROFILE" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -335,6 +357,9 @@ from pathlib import Path
     pair_id_prefix,
     pair_id_start,
     matcher_method,
+    deep_match_config_path,
+    adaptive_routing,
+    adaptive_routing_profile,
 ) = sys.argv[1:]
 pairs = [
     json.loads(line)
@@ -349,6 +374,9 @@ payload = {
     "pair_id_prefix": pair_id_prefix,
     "pair_id_start": int(pair_id_start),
     "matcher_method": matcher_method,
+    "deep_match_config_path": deep_match_config_path or None,
+    "adaptive_routing": adaptive_routing == "1",
+    "adaptive_routing_profile": adaptive_routing_profile,
     "pair_net_directory": pair_nets_dir,
     "report_directory": reports_dir,
     "merge_output_net": merge_output_net,

@@ -443,17 +443,44 @@ def build_cpp_controlnet_command(
     ]
 
 
-def run_cpp_command(command: list[str], *, keep_going: bool) -> dict[str, Any]:
+def run_cpp_command(
+    command: list[str],
+    *,
+    keep_going: bool,
+    task_type: str = "",
+    label: str = "",
+) -> dict[str, Any]:
     start = time.perf_counter()
-    completed = subprocess.run(command, text=True, capture_output=True, check=False)
+    try:
+        completed = subprocess.run(command, text=True, capture_output=True, check=False)
+    except OSError as error:
+        wall_seconds = time.perf_counter() - start
+        result = {
+            "status": "failed",
+            "return_code": None,
+            "stdout": "",
+            "stderr": str(error),
+            "command": command,
+            "wall_seconds": wall_seconds,
+            "implementation": "cpp",
+            "label": label,
+            "task_type": task_type,
+        }
+        if not keep_going:
+            raise RuntimeError(f"Failed to launch C++ benchmark command: {error}") from error
+        return result
+
     wall_seconds = time.perf_counter() - start
     result = {
-        "status": "completed" if completed.returncode == 0 else "failed",
+        "status": "success" if completed.returncode == 0 else "failed",
         "return_code": completed.returncode,
         "stdout": completed.stdout,
         "stderr": completed.stderr,
         "command": command,
         "wall_seconds": wall_seconds,
+        "implementation": "cpp",
+        "label": label,
+        "task_type": task_type,
     }
     if completed.returncode != 0 and not keep_going:
         raise subprocess.CalledProcessError(
@@ -637,7 +664,7 @@ def _record_pyisis_result(path: Path, task_runner, task) -> dict[str, Any]:
     start = time.perf_counter()
     result = task_runner(task)
     result = dict(result)
-    result.setdefault("status", "completed")
+    result["status"] = "success"
     result.setdefault("wall_seconds", time.perf_counter() - start)
     _write_json(path, result)
     return result
@@ -651,8 +678,8 @@ def _record_cpp_result(
     label: str,
     keep_going: bool,
 ) -> dict[str, Any]:
-    execution_result = run_cpp_command(command, keep_going=keep_going)
-    if execution_result["status"] != "completed":
+    execution_result = run_cpp_command(command, keep_going=keep_going, task_type=task_type, label=label)
+    if execution_result["status"] != "success":
         failure_result = {
             "task_type": task_type,
             "implementation": "cpp",
@@ -664,7 +691,7 @@ def _record_cpp_result(
 
     cpp_result = load_cpp_result(path)
     cpp_result = dict(cpp_result)
-    cpp_result.setdefault("status", "completed")
+    cpp_result["status"] = "success"
     cpp_result["return_code"] = execution_result["return_code"]
     cpp_result["stdout"] = execution_result["stdout"]
     cpp_result["stderr"] = execution_result["stderr"]
@@ -703,6 +730,7 @@ def run_benchmark(
 
         cpp_output_path = run_dir / "cpp" / f"{task.label}.json"
         cpp_command = build_cpp_camera_command(config.execution.cpp_benchmark_path, task, cpp_output_path)
+        _write_command(run_dir / "cpp" / task.label / "command.sh", cpp_command)
         cpp_result = _record_cpp_result(
             cpp_output_path,
             cpp_command,
@@ -711,7 +739,7 @@ def run_benchmark(
             keep_going=keep_going,
         )
         results.append(cpp_result)
-        if cpp_result.get("status") == "completed":
+        if cpp_result.get("status") == "success":
             camera_comparisons.append(
                 compare_camera_results(
                     task.label,
@@ -734,6 +762,7 @@ def run_benchmark(
 
         cpp_output_path = run_dir / "cpp" / f"{task.label}.json"
         cpp_command = build_cpp_controlnet_command(config.execution.cpp_benchmark_path, task, cpp_output_path)
+        _write_command(run_dir / "cpp" / task.label / "command.sh", cpp_command)
         cpp_result = _record_cpp_result(
             cpp_output_path,
             cpp_command,

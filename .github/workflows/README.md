@@ -61,6 +61,7 @@ Purpose:
 Characteristics:
 - triggered by push and workflow_dispatch
 - broad repository coverage
+- binding inventory reporting and build/smoke start in parallel after runner resolution, so inventory logging does not delay the build path
 - not task-budget aware
 - not tied to one specific upstream class or one specific issue
 

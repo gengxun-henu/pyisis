@@ -141,7 +141,10 @@ class DeepMatcherAdapter:
         self._device = resolve_torch_device(resolved_prefer_gpu)
         self._superpoint = SuperPointFrontend(runtime_config=runtime_config)
         self._official_lightglue_frontend = None
-        self._loftr_frontend = LoFTRFrontend()
+        self._loftr_frontend = LoFTRFrontend(
+            feature_options=dict(getattr(runtime_config, "feature_options", {}) or {}),
+            matcher_options=dict(getattr(runtime_config, "matcher_options", {}) or {}),
+        )
         self._matcher_cache: dict[tuple[str, str, str, str, str, str], Any] = {}
 
     def _matcher_build_kwargs(self, *, method: str) -> dict[str, Any]:
@@ -230,6 +233,8 @@ class DeepMatcherAdapter:
                     right_image=prepared["right"],
                     left_mask=prepared.get("left_mask"),
                     right_mask=prepared.get("right_mask"),
+                    left_meta=prepared.get("left_meta"),
+                    right_meta=prepared.get("right_meta"),
                     device=device,
                 )
         except DeepDependencyError as error:

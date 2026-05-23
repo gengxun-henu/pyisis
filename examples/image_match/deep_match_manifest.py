@@ -16,13 +16,30 @@ import json
 import numpy as np
 from pathlib import Path
 import sys
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
-from .tile_matching import TileMatchTask, tile_match_task_from_payload, tile_match_task_to_payload
+if TYPE_CHECKING:
+    from .tile_matching import TileMatchTask
 
 
 DEEP_MATCH_MANIFEST_FORMAT_VERSION = 1
 DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME = "tmp_deep_match"
+
+
+def _tile_match_task_to_payload(tile_task: Any) -> dict[str, Any]:
+    if isinstance(tile_task, dict):
+        return dict(tile_task)
+    from .tile_matching import tile_match_task_to_payload
+
+    return tile_match_task_to_payload(tile_task)
+
+
+def _tile_match_task_from_payload(payload: dict[str, Any]) -> Any:
+    try:
+        from .tile_matching import tile_match_task_from_payload
+    except Exception:
+        return dict(payload)
+    return tile_match_task_from_payload(dict(payload))
 
 
 @dataclass(frozen=True, slots=True)
@@ -252,7 +269,7 @@ def deep_match_task_record_to_payload(record: DeepMatchTaskRecord) -> dict[str, 
         "right_mask_path": record.right_mask_path,
         "result_path": record.result_path,
         "log_path": record.log_path,
-        "tile_task": tile_match_task_to_payload(record.tile_task),
+        "tile_task": _tile_match_task_to_payload(record.tile_task),
         "deep_match_config_path": record.deep_match_config_path,
         "deep_match_runtime_config": record.deep_match_runtime_config,
         "matcher_method": record.matcher_method,
@@ -276,7 +293,7 @@ def deep_match_task_record_from_payload(payload: dict[str, Any]) -> DeepMatchTas
         right_mask_path=str(payload["right_mask_path"]),
         result_path=str(payload["result_path"]),
         log_path=str(payload["log_path"]),
-        tile_task=tile_match_task_from_payload(dict(payload["tile_task"])),
+        tile_task=_tile_match_task_from_payload(dict(payload["tile_task"])),
         deep_match_config_path=payload.get("deep_match_config_path"),
         deep_match_runtime_config=dict(payload["deep_match_runtime_config"])
         if isinstance(payload.get("deep_match_runtime_config"), dict)

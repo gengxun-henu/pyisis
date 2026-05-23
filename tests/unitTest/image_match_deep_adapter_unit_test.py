@@ -100,20 +100,69 @@ class _OfficialExtractorStub:
         return self
 
     def extract(self, image):
-        import torch
-
         self.input_shapes.append(tuple(image.shape))
         return {
-            "keypoints": torch.tensor([[[1.0, 2.0], [3.0, 4.0]]], dtype=torch.float32, device=image.device),
-            "descriptors": torch.tensor([[[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]], dtype=torch.float32, device=image.device),
-            "scores": torch.tensor([[0.7, 0.8]], dtype=torch.float32, device=image.device),
+            "keypoints": _TorchTensorStub([[[1.0, 2.0], [3.0, 4.0]]]).to(image.device),
+            "descriptors": _TorchTensorStub([[[0.1, 0.2, 0.3], [0.4, 0.5, 0.6]]]).to(image.device),
+            "scores": _TorchTensorStub([[0.7, 0.8]]).to(image.device),
         }
+
+
+class _TorchTensorStub:
+    def __init__(self, array):
+        self.array = np.asarray(array)
+        self.shape = self.array.shape
+        self.dtype = self.array.dtype
+        self.device = None
+
+    def to(self, *args, **kwargs):
+        if args:
+            self.device = args[0]
+        if "device" in kwargs:
+            self.device = kwargs["device"]
+        if "dtype" in kwargs:
+            self.array = self.array.astype(kwargs["dtype"], copy=False)
+            self.dtype = self.array.dtype
+        return self
+
+    def float(self):
+        self.array = self.array.astype(np.float32, copy=False)
+        self.dtype = self.array.dtype
+        return self
+
+    def detach(self):
+        return self
+
+    def cpu(self):
+        return self
+
+    def numpy(self):
+        return self.array
+
+    def __getitem__(self, item):
+        tensor = _TorchTensorStub(self.array[item])
+        tensor.device = self.device
+        return tensor
+
+
+class _NoGradStub:
+    def __enter__(self):
+        return None
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        return False
+
+
+def _torch_frontend_stub():
+    return SimpleNamespace(
+        float32=np.float32,
+        from_numpy=lambda array: _TorchTensorStub(array),
+        no_grad=lambda: _NoGradStub(),
+    )
 
 
 class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
     def test_official_lightglue_frontend_builds_expected_extractors_and_channel_shapes(self):
-        import torch
-
         def build_constructor(constructor_name):
             def constructor(**kwargs):
                 extractor = _OfficialExtractorStub(**kwargs)
@@ -139,7 +188,7 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         ):
             with self.subTest(method=method):
                 _OfficialExtractorStub.instances = []
-                with mock.patch.dict(sys.modules, {"torch": torch, "lightglue": fake_lightglue}, clear=False):
+                with mock.patch.dict(sys.modules, {"torch": _torch_frontend_stub(), "lightglue": fake_lightglue}, clear=False):
                     frontend = OfficialLightGlueFrontend(
                         feature_extractor_method=method,
                         feature_options={"max_features": 123},
@@ -361,6 +410,87 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
 
         self.assertEqual(matcher.feature_extractor_method, "loftr")
 
+    def test_external_loftr_frontend_pad_mode_aligns_to_multiple_of_eight_and_keeps_scale(self):
+        deep_frontends_module = __import__("image_match.deep_frontends", fromlist=["LoFTRFrontend"])
+        frontend = deep_frontends_module.LoFTRFrontend(
+            feature_options={"preprocess_mode": "pad"},
+            matcher_options={"backend": "external"},
+        )
+        image = np.arange(30, dtype=np.float32).reshape(5, 6)
+        invalid_mask = np.zeros((5, 6), dtype=bool)
+        invalid_mask[2, 3] = True
+
+        with mock.patch.dict(sys.modules, {"torch": _torch_frontend_stub()}, clear=False):
+            prepared = frontend.prepare(image, image, device="cpu", left_mask=invalid_mask, right_mask=invalid_mask)
+
+        self.assertEqual(prepared["left"].shape, (1, 1, 8, 8))
+        self.assertEqual(prepared["right"].shape, (1, 1, 8, 8))
+        self.assertEqual(prepared["left_valid_mask"].shape, (8, 8))
+        self.assertFalse(bool(prepared["left_valid_mask"].array[2, 3]))
+        self.assertFalse(bool(prepared["left_valid_mask"].array[7, 7]))
+        self.assertEqual(prepared["left_meta"]["scale"], (1.0, 1.0))
+        self.assertEqual(prepared["left_meta"]["infer_size"], (8, 8))
+        self.assertEqual(prepared["left_meta"]["content_size"], (6, 5))
+
+    def test_external_loftr_frontend_resize_mode_records_coordinate_scale(self):
+        deep_frontends_module = __import__("image_match.deep_frontends", fromlist=["LoFTRFrontend"])
+        frontend = deep_frontends_module.LoFTRFrontend(
+            feature_options={"preprocess_mode": "resize", "resize_width": 8, "resize_height": 8},
+            matcher_options={"backend": "external"},
+        )
+        image = np.arange(24, dtype=np.float32).reshape(4, 6)
+
+        with mock.patch.dict(sys.modules, {"torch": _torch_frontend_stub()}, clear=False):
+            prepared = frontend.prepare(image, image, device="cpu")
+
+        self.assertEqual(prepared["left"].shape, (1, 1, 8, 8))
+        self.assertIsNone(prepared["left_valid_mask"])
+        self.assertEqual(prepared["left_meta"]["scale"], (0.75, 0.5))
+        self.assertEqual(prepared["left_meta"]["original_size"], (6, 4))
+        self.assertEqual(prepared["left_meta"]["content_size"], (8, 8))
+
+    def test_external_loftr_frontend_empty_plane_returns_minimum_masked_tensor(self):
+        deep_frontends_module = __import__("image_match.deep_frontends", fromlist=["LoFTRFrontend"])
+        frontend = deep_frontends_module.LoFTRFrontend(
+            feature_options={"preprocess_mode": "pad"},
+            matcher_options={"backend": "external"},
+        )
+        image = np.empty((0, 0), dtype=np.float32)
+
+        with mock.patch.dict(sys.modules, {"torch": _torch_frontend_stub()}, clear=False):
+            prepared = frontend.prepare(image, image, device="cpu")
+
+        self.assertEqual(prepared["left"].shape, (1, 1, 8, 8))
+        self.assertEqual(prepared["left_valid_mask"].shape, (8, 8))
+        self.assertFalse(bool(np.any(prepared["left_valid_mask"].array)))
+        self.assertEqual(prepared["left_meta"]["original_size"], (0, 0))
+        self.assertEqual(prepared["left_meta"]["content_size"], (0, 0))
+        self.assertEqual(prepared["left_meta"]["infer_size"], (8, 8))
+        self.assertEqual(prepared["left_meta"]["scale"], (1.0, 1.0))
+
+    def test_kornia_loftr_frontend_requires_loftr_not_superpoint(self):
+        deep_frontends_module = __import__("image_match.deep_frontends", fromlist=["LoFTRFrontend"])
+        frontend = deep_frontends_module.LoFTRFrontend()
+        torch_module = _torch_frontend_stub()
+        kornia_feature_module = SimpleNamespace(LoFTR=object)
+        kornia_module = SimpleNamespace(feature=kornia_feature_module)
+
+        with mock.patch.dict(
+            sys.modules,
+            {"torch": torch_module, "kornia": kornia_module, "kornia.feature": kornia_feature_module},
+            clear=False,
+        ):
+            prepared = frontend.prepare(
+                np.ones((6, 6), dtype=np.float32),
+                np.ones((6, 6), dtype=np.float32),
+                device="cpu",
+            )
+
+        self.assertEqual(prepared["left"].shape, (1, 1, 6, 6))
+        self.assertEqual(prepared["right"].shape, (1, 1, 6, 6))
+        self.assertIsNone(prepared["left_mask"])
+        self.assertIsNone(prepared["right_mask"])
+
     def test_deep_matcher_adapter_rejects_invalid_runtime_config_early(self):
         runtime = SimpleNamespace(
             prefer_gpu=False,
@@ -477,6 +607,40 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         self.assertEqual(len(matcher.calls), 1)
         self.assertIs(matcher.calls[0]["left_mask"], prepared["left_mask"])
         self.assertIs(matcher.calls[0]["right_mask"], prepared["right_mask"])
+
+    def test_match_pair_passes_external_loftr_metadata_into_matcher(self):
+        runtime = SimpleNamespace(
+            prefer_gpu=False,
+            matcher_method="loftr",
+            feature_extractor_method="loftr",
+            matcher_options={"backend": "external", "top_k": 10},
+            feature_options={"preprocess_mode": "pad"},
+            device_options={"prefer_gpu": False, "dtype": "float32"},
+        )
+        adapter = DeepMatcherAdapter(prefer_gpu=True, runtime_config=runtime)
+        matcher = _CapturingLoFTRMatcher()
+        prepared = {
+            "left": object(),
+            "right": object(),
+            "left_mask": object(),
+            "right_mask": object(),
+            "left_meta": {"scale": (1.0, 1.0)},
+            "right_meta": {"scale": (2.0, 2.0)},
+        }
+
+        with mock.patch.object(adapter._loftr_frontend, "prepare", return_value=prepared), mock.patch(
+            "image_match.deep_adapter.build_deep_matcher",
+            return_value=matcher,
+        ):
+            adapter.match_pair(
+                matcher_method="loftr",
+                left_image=np.ones((6, 6), dtype=np.float32),
+                right_image=np.ones((6, 6), dtype=np.float32),
+            )
+
+        self.assertEqual(len(matcher.calls), 1)
+        self.assertIs(matcher.calls[0]["left_meta"], prepared["left_meta"])
+        self.assertIs(matcher.calls[0]["right_meta"], prepared["right_meta"])
 
 
 if __name__ == "__main__":

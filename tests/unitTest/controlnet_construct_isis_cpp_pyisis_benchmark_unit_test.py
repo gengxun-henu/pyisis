@@ -405,6 +405,8 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             },
         )
         self.assertGreaterEqual(result["core_seconds"], 0.0)
+        self.assertIn("average_successful_point_seconds", result)
+        self.assertIsNotNone(result["average_successful_point_seconds"])
 
     def test_run_pyisis_camera_task_includes_edges_for_three_by_three_grid(self):
         fake_ip = _FakeIpModule()

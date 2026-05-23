@@ -333,6 +333,7 @@ def run_pyisis_camera_task(task: CameraTaskConfig, *, ip_module=None) -> dict[st
         "first_point_index": first_point_index,
         "points": point_records,
         "core_seconds": core_seconds,
+        "average_successful_point_seconds": core_seconds / len(point_records) if point_records else None,
     }
 
 

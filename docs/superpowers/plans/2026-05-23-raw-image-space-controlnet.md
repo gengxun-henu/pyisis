@@ -29,7 +29,7 @@ No changes should be made to `examples/controlnet_construct/run_pipeline_example
 - Create: `examples/controlnet_construct/run_ori_match_pipeline_example.sh`
 - Modify: `tests/unitTest/controlnet_construct_pipeline_unit_test.py`
 
-- [ ] **Step 1: Add the wrapper path constant to the test file**
+- [x] **Step 1: Add the wrapper path constant to the test file**
 
 In `tests/unitTest/controlnet_construct_pipeline_unit_test.py`, add this near the existing `RUN_PIPELINE_EXAMPLE_PATH` constants:
 
@@ -37,7 +37,7 @@ In `tests/unitTest/controlnet_construct_pipeline_unit_test.py`, add this near th
 RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH = PROJECT_ROOT / "examples" / "controlnet_construct" / "run_ori_match_pipeline_example.sh"
 ```
 
-- [ ] **Step 2: Write the failing dry-run command-generation test**
+- [x] **Step 2: Write the failing dry-run command-generation test**
 
 Add this method to `ControlNetConstructPipelineUnitTest`:
 
@@ -130,7 +130,7 @@ Add this method to `ControlNetConstructPipelineUnitTest`:
         self.assertIn("merge_all_controlnets.sh", command_text)
 ```
 
-- [ ] **Step 3: Run the new test and verify it fails**
+- [x] **Step 3: Run the new test and verify it fails**
 
 Run:
 
@@ -144,7 +144,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: `FAIL` or `ERROR` because `run_ori_match_pipeline_example.sh` does not exist yet.
 
-- [ ] **Step 4: Add the minimal shell wrapper skeleton**
+- [x] **Step 4: Add the minimal shell wrapper skeleton**
 
 Create `examples/controlnet_construct/run_ori_match_pipeline_example.sh` with:
 
@@ -376,7 +376,7 @@ fi
 die "execution mode is not implemented yet"
 ```
 
-- [ ] **Step 5: Run the dry-run test and verify it passes**
+- [x] **Step 5: Run the dry-run test and verify it passes**
 
 Run:
 
@@ -390,7 +390,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: `OK`.
 
-- [ ] **Step 6: Commit Task 1**
+- [x] **Step 6: Commit Task 1**
 
 ```bash
 git add examples/controlnet_construct/run_ori_match_pipeline_example.sh tests/unitTest/controlnet_construct_pipeline_unit_test.py

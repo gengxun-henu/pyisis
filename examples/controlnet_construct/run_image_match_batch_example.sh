@@ -11,6 +11,7 @@
 
 set -euo pipefail
 
+CALLER_CWD=$(pwd)
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(cd -- "${SCRIPT_DIR}/../.." && pwd)
 DEFAULT_WORK_DIR_RELATIVE="work"
@@ -71,6 +72,11 @@ Options:
   --matcher-method NAME           Matcher backend forwarded to examples/image_match/image_match.py.
                                   Supported values: bf, flann, superglue, lightglue, loftr.
                                   Default: bf unless omitted and resolved from --config.
+  --match-preset-path PATH        Forwarded to examples/image_match/image_match.py to select a match preset.
+                                  Relative CLI paths resolve first from the current working directory, then
+                                  from the repository root. If omitted, this script falls back to config JSON field
+                                  ImageMatch.match_preset_path when present. Cannot be combined with
+                                  --matcher-method or --deep-match-config-path.
   --deep-match-config-path PATH   Path to deep matcher preset JSON config.
                                   If omitted, this script falls back to config JSON field
                                   ImageMatch.deep_matcher_config_path when present. Relative config values
@@ -210,6 +216,48 @@ resolve_config_relative_path() {
   printf '%s\n' "$REPO_ROOT/$raw_path"
 }
 
+resolve_cli_relative_path() {
+  local raw_path=$1
+
+  [[ -n "$raw_path" ]] || return 0
+  if [[ "$raw_path" = /* ]]; then
+    printf '%s\n' "$raw_path"
+    return 0
+  fi
+
+  local caller_relative_candidate="$CALLER_CWD/$raw_path"
+  if [[ -f "$caller_relative_candidate" ]]; then
+    printf '%s\n' "$(cd -- "$(dirname -- "$caller_relative_candidate")" && pwd)/$(basename -- "$caller_relative_candidate")"
+    return 0
+  fi
+
+  local repo_relative_candidate="$REPO_ROOT/$raw_path"
+  if [[ -f "$repo_relative_candidate" ]]; then
+    printf '%s\n' "$(cd -- "$(dirname -- "$repo_relative_candidate")" && pwd)/$(basename -- "$repo_relative_candidate")"
+    return 0
+  fi
+
+  printf '%s\n' "$REPO_ROOT/$raw_path"
+}
+
+resolve_match_preset_shell_assignments() {
+  local preset_path=$1
+  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/match_preset_config.py" \
+    "$preset_path" \
+    --shell-assignments
+}
+
+apply_match_preset_path() {
+  local preset_path=$1
+  local assignments
+  local MATCHER_METHOD=""
+  local DEEP_MATCHER_CONFIG_PATH=""
+  assignments=$(resolve_match_preset_shell_assignments "$preset_path")
+  eval "$assignments"
+  matcher_method="$MATCHER_METHOD"
+  deep_match_config_path="$DEEP_MATCHER_CONFIG_PATH"
+}
+
 initialize_deep_match_manifest_summary() {
   local summary_path=$1
   "$PYTHON_EXECUTABLE" - "$summary_path" "$deep_match_mode" "$DEEP_MATCH_TEMP_ROOT_DIR" "$DEEP_MATCH_MANIFEST_DIR" <<'PY'
@@ -281,6 +329,8 @@ main() {
   local explicit_invalid_pixel_radius=""
   local matcher_method="bf"
   local explicit_matcher_method=""
+  local explicit_match_preset_path=""
+  local match_preset_path=""
   local deep_match_config_path=""
   local explicit_deep_match_config_path=""
   local adaptive_routing="0"
@@ -380,6 +430,12 @@ main() {
         explicit_invalid_pixel_radius=$2
         shift 2
         ;;
+      --match-preset-path)
+        [[ $# -ge 2 ]] || die "missing value for --match-preset-path"
+        match_preset_path=$2
+        explicit_match_preset_path=$2
+        shift 2
+        ;;
       --matcher-method)
         [[ $# -ge 2 ]] || die "missing value for --matcher-method"
         matcher_method=$2
@@ -477,6 +533,13 @@ main() {
     esac
   done
 
+  if [[ -n "$explicit_match_preset_path" && -n "$explicit_matcher_method" ]]; then
+    die "--match-preset-path cannot be combined with --matcher-method"
+  fi
+  if [[ -n "$explicit_match_preset_path" && -n "$explicit_deep_match_config_path" ]]; then
+    die "--match-preset-path cannot be combined with --deep-match-config-path"
+  fi
+
   require_command "$PYTHON_EXECUTABLE"
 
   cd "$REPO_ROOT"
@@ -521,6 +584,19 @@ main() {
     initialize_deep_match_manifest_summary "$DEEP_MATCH_MANIFEST_SUMMARY"
   fi
 
+  if [[ -n "$explicit_match_preset_path" ]]; then
+    match_preset_path=$(resolve_cli_relative_path "$explicit_match_preset_path")
+  elif [[ -n "$CONFIG_PATH" && -z "$explicit_matcher_method" && -z "$explicit_deep_match_config_path" ]]; then
+    local config_match_preset_path
+    config_match_preset_path=$(extract_image_match_config_value "$config_input" "match_preset_path")
+    if [[ -n "$config_match_preset_path" && "$config_match_preset_path" != "null" ]]; then
+      match_preset_path=$(resolve_config_relative_path "$config_match_preset_path" "$CONFIG_PATH")
+    fi
+  fi
+  if [[ -n "$match_preset_path" ]]; then
+    apply_match_preset_path "$match_preset_path"
+  fi
+
   if [[ -n "$CONFIG_PATH" ]]; then
     config_threshold=$(extract_image_match_config_value "$config_input" "valid_pixel_percent_threshold")
     if [[ -n "$config_threshold" ]]; then
@@ -547,14 +623,14 @@ main() {
         invalid_pixel_radius="$config_invalid_pixel_radius"
       fi
     fi
-    if [[ -z "$explicit_matcher_method" ]]; then
+    if [[ -z "$match_preset_path" && -z "$explicit_matcher_method" ]]; then
       local config_matcher_method
       config_matcher_method=$(extract_image_match_config_value "$config_input" "matcher_method")
       if [[ -n "$config_matcher_method" ]]; then
         matcher_method="$config_matcher_method"
       fi
     fi
-    if [[ -z "$explicit_deep_match_config_path" ]]; then
+    if [[ -z "$match_preset_path" && -z "$deep_match_config_path" ]]; then
       local config_deep_matcher_config_path
       config_deep_matcher_config_path=$(extract_image_match_config_value "$config_input" "deep_matcher_config_path")
       if [[ -n "$config_deep_matcher_config_path" && "$config_deep_matcher_config_path" != "null" ]]; then
@@ -629,6 +705,9 @@ main() {
   log "Match viz dir: $MATCH_VIZ_DIR"
   log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
   log "Invalid pixel radius: $invalid_pixel_radius"
+  if [[ -n "$match_preset_path" ]]; then
+    log "Match preset path: $match_preset_path"
+  fi
   log "Matcher method: $matcher_method"
   if [[ -n "$deep_match_config_path" ]]; then
     log "Deep-match config path: $deep_match_config_path"
@@ -733,7 +812,6 @@ main() {
       --match-visualization-output-dir "$MATCH_VIZ_DIR"
       --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
       --invalid-pixel-radius "$invalid_pixel_radius"
-      --matcher-method "$matcher_method"
     )
     if [[ -n "$CONFIG_PATH" ]]; then
       match_args=(
@@ -747,8 +825,12 @@ main() {
         --match-visualization-output-dir "$MATCH_VIZ_DIR"
         --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
         --invalid-pixel-radius "$invalid_pixel_radius"
-        --matcher-method "$matcher_method"
       )
+    fi
+    if [[ -n "$match_preset_path" ]]; then
+      match_args+=(--match-preset-path "$match_preset_path")
+    else
+      match_args+=(--matcher-method "$matcher_method")
     fi
     if [[ "$use_parallel_cpu" == "1" ]]; then
       match_args+=(--use-parallel-cpu)
@@ -761,7 +843,7 @@ main() {
       match_args+=(--no-adaptive-routing)
     fi
     match_args+=(--adaptive-routing-profile "$adaptive_routing_profile")
-    if [[ -n "$deep_match_config_path" ]]; then
+    if [[ -z "$match_preset_path" && -n "$deep_match_config_path" ]]; then
       match_args+=(--deep-match-config-path "$deep_match_config_path")
     fi
     match_args+=(--num-worker-parallel-cpu "$num_worker_parallel_cpu")

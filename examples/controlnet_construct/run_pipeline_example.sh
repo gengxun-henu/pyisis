@@ -12,6 +12,7 @@
 
 set -euo pipefail
 
+CALLER_CWD=$(pwd)
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(cd -- "${SCRIPT_DIR}/../.." && pwd)
 DEFAULT_CONFIG_RELATIVE="examples/controlnet_construct/controlnet_config.example.json"
@@ -289,6 +290,10 @@ Options:
                                  If omitted, this script falls back to
                                  config JSON field ImageMatch.matcher_method when present; otherwise
                                  examples/image_match/image_match.py keeps its own default.
+  --match-preset-path PATH        Forwarded to examples/image_match/image_match.py to select a match preset.
+                                  If omitted, this script falls back to config JSON field
+                                  ImageMatch.match_preset_path when present. Cannot be combined with
+                                  --matcher-method or --deep-match-config-path.
   --deep-match-config-path PATH   Path to deep matcher preset JSON config.
                                   Required when --matcher-method is superglue, lightglue, or loftr.
                                   Default: (read from config JSON). Relative config values are resolved first
@@ -603,6 +608,44 @@ resolve_config_relative_path() {
   printf '%s\n' "$REPO_ROOT/$raw_path"
 }
 
+resolve_cli_relative_path() {
+  local raw_path=$1
+
+  [[ -n "$raw_path" ]] || return 0
+  if [[ "$raw_path" = /* ]]; then
+    printf '%s\n' "$raw_path"
+    return 0
+  fi
+
+  local caller_relative_candidate="$CALLER_CWD/$raw_path"
+  if [[ -f "$caller_relative_candidate" ]]; then
+    printf '%s\n' "$(cd -- "$(dirname -- "$caller_relative_candidate")" && pwd)/$(basename -- "$caller_relative_candidate")"
+    return 0
+  fi
+
+  local repo_relative_candidate="$REPO_ROOT/$raw_path"
+  if [[ -f "$repo_relative_candidate" ]]; then
+    printf '%s\n' "$(cd -- "$(dirname -- "$repo_relative_candidate")" && pwd)/$(basename -- "$repo_relative_candidate")"
+    return 0
+  fi
+
+  printf '%s\n' "$REPO_ROOT/$raw_path"
+}
+
+resolve_match_preset_shell_assignments() {
+  local preset_path=$1
+  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/match_preset_config.py" \
+    "$preset_path" \
+    --shell-assignments
+}
+
+apply_match_preset_path() {
+  local preset_path=$1
+  local assignments
+  assignments=$(resolve_match_preset_shell_assignments "$preset_path")
+  eval "$assignments"
+}
+
 run_step_1_image_overlap() {
   log "$(pipeline_step_label 1): computing overlap pairs -> ${IMAGES_OVERLAP_LIST}"
   bash -lc '"$@" >/dev/null' bash \
@@ -770,8 +813,13 @@ run_step_2_image_match_batch() {
       match_args+=(--valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD")
     fi
     match_args+=(--invalid-pixel-radius "$INVALID_PIXEL_RADIUS")
-    match_args+=(--matcher-method "$MATCHER_METHOD")
-    if [[ -n "$DEEP_MATCHER_CONFIG_PATH" ]]; then
+    if [[ -n "$match_preset_path" ]]; then
+      match_args+=(--match-preset-path "$match_preset_path")
+    fi
+    if [[ -z "$match_preset_path" ]]; then
+      match_args+=(--matcher-method "$MATCHER_METHOD")
+    fi
+    if [[ -z "$match_preset_path" && -n "$DEEP_MATCHER_CONFIG_PATH" ]]; then
       match_args+=(--deep-match-config-path "$DEEP_MATCHER_CONFIG_PATH")
     fi
     if [[ "$ADAPTIVE_ROUTING" == "1" ]]; then
@@ -937,6 +985,9 @@ main() {
   local explicit_use_parallel_cpu=""
   local explicit_invalid_pixel_radius=""
   local explicit_matcher_method=""
+  local explicit_match_preset_path=""
+  local explicit_deep_matcher_config_path=""
+  local match_preset_path=""
   local explicit_adaptive_routing=""
   local explicit_adaptive_routing_profile=""
   local explicit_enable_low_resolution_offset_estimation=""
@@ -1047,6 +1098,12 @@ main() {
         explicit_invalid_pixel_radius=$2
         shift 2
         ;;
+      --match-preset-path)
+        [[ $# -ge 2 ]] || die "missing value for --match-preset-path"
+        match_preset_path=$2
+        explicit_match_preset_path=$2
+        shift 2
+        ;;
       --matcher-method)
         [[ $# -ge 2 ]] || die "missing value for --matcher-method"
         MATCHER_METHOD=$2
@@ -1077,6 +1134,7 @@ main() {
       --deep-match-config-path)
         [[ $# -ge 2 ]] || die "missing value for --deep-match-config-path"
         DEEP_MATCHER_CONFIG_PATH=$2
+        explicit_deep_matcher_config_path=$2
         shift 2
         ;;
       --deep-match-temp-root-dir)
@@ -1222,6 +1280,13 @@ main() {
     esac
   done
 
+  if [[ -n "$explicit_match_preset_path" && -n "$explicit_matcher_method" ]]; then
+    die "--match-preset-path cannot be combined with --matcher-method"
+  fi
+  if [[ -n "$explicit_match_preset_path" && -n "$explicit_deep_matcher_config_path" ]]; then
+    die "--match-preset-path cannot be combined with --deep-match-config-path"
+  fi
+
   require_command "$PYTHON_EXECUTABLE"
 
   cd "$REPO_ROOT"
@@ -1269,6 +1334,19 @@ main() {
   require_file "$DOM_LIST"
   require_file "$CONFIG_PATH"
 
+  if [[ -n "$explicit_match_preset_path" ]]; then
+    match_preset_path=$(resolve_cli_relative_path "$explicit_match_preset_path")
+  elif [[ -z "$explicit_matcher_method" && -z "$explicit_deep_matcher_config_path" ]]; then
+    local config_match_preset_path
+    config_match_preset_path=$(extract_image_match_config_value "$CONFIG_PATH" "match_preset_path")
+    if [[ -n "$config_match_preset_path" && "$config_match_preset_path" != "null" ]]; then
+      match_preset_path=$(resolve_config_relative_path "$config_match_preset_path" "$CONFIG_PATH")
+    fi
+  fi
+  if [[ -n "$match_preset_path" ]]; then
+    apply_match_preset_path "$match_preset_path"
+  fi
+
   if [[ "$POST_MERGE_CONTROL_MEASURE" == "1" && "$SKIP_FINAL_MERGE" == "1" ]]; then
     die "--post-merge-control-measure cannot be used together with --skip-final-merge"
   fi
@@ -1315,7 +1393,7 @@ main() {
       INVALID_PIXEL_RADIUS="$config_invalid_pixel_radius"
     fi
   fi
-  if [[ -z "$explicit_matcher_method" ]]; then
+  if [[ -z "$match_preset_path" && -z "$explicit_matcher_method" ]]; then
     local config_matcher_method
     config_matcher_method=$(extract_image_match_config_value "$CONFIG_PATH" "matcher_method")
     if [[ -n "$config_matcher_method" ]]; then
@@ -1336,7 +1414,7 @@ main() {
       ADAPTIVE_ROUTING_PROFILE="$config_adaptive_routing_profile"
     fi
   fi
-  if [[ -z "$DEEP_MATCHER_CONFIG_PATH" ]]; then
+  if [[ -z "$match_preset_path" && -z "$DEEP_MATCHER_CONFIG_PATH" ]]; then
     local config_deep_matcher_config_path
     config_deep_matcher_config_path=$(extract_image_match_config_value "$CONFIG_PATH" "deep_matcher_config_path")
     if [[ -n "$config_deep_matcher_config_path" && "$config_deep_matcher_config_path" != "null" ]]; then
@@ -1467,6 +1545,9 @@ PY
     log "Valid pixel percent threshold: examples/image_match/image_match.py default"
   fi
   log "Invalid pixel radius: $INVALID_PIXEL_RADIUS"
+  if [[ -n "$match_preset_path" ]]; then
+    log "Match preset path: $match_preset_path"
+  fi
   log "Matcher method: $MATCHER_METHOD"
   if [[ -n "$DEEP_MATCHER_CONFIG_PATH" ]]; then
     log "Deep match config: $DEEP_MATCHER_CONFIG_PATH"

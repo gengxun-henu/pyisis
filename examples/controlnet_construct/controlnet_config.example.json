@@ -25,6 +25,7 @@
     "tile_validity_cell_width": 1024,
     "tile_validity_cell_height": 1024,
     "matcher_method": "flann",
+    "match_preset_path": null,
     "deep_matcher_config_path": null,
     "enable_adaptive_routing": false,
     "adaptive_routing_profile": "balanced",

@@ -474,6 +474,78 @@ def _resolve_deep_match_runtime_config(config_path: str | Path):
     return resolve_deep_match_runtime_config(config_path)
 
 
+def _resolve_match_preset_path(raw_path: str | Path, *, config_path: str | Path | None = None) -> Path:
+    from controlnet_construct.match_preset_config import resolve_match_preset_path
+
+    raw = Path(raw_path).expanduser()
+    if config_path is None:
+        if raw.is_absolute():
+            return raw.resolve()
+        caller_relative = raw.resolve()
+        if caller_relative.exists():
+            return caller_relative
+
+    return resolve_match_preset_path(
+        raw,
+        config_path=config_path,
+        repo_root=Path(__file__).resolve().parents[2],
+    )
+
+
+def _resolve_match_preset_defaults(raw_path: str | Path, *, config_path: str | Path | None = None) -> dict[str, object]:
+    from controlnet_construct.match_preset_config import resolve_match_preset_runtime_config
+
+    preset_path = _resolve_match_preset_path(raw_path, config_path=config_path)
+    return dict(resolve_match_preset_runtime_config(preset_path).image_match_defaults)
+
+
+class _MatchPresetPathAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        try:
+            preset_path = _resolve_match_preset_path(values)
+        except ValueError as exc:
+            raise argparse.ArgumentError(self, str(exc)) from exc
+        setattr(namespace, self.dest, str(preset_path))
+
+
+_MATCH_PRESET_DEFAULT_OPTION_NAMES: dict[str, tuple[str, ...]] = {
+    "matcher_method": ("--matcher-method",),
+    "deep_match_config_path": ("--deep-match-config-path",),
+    "ratio_test": ("--ratio-test",),
+    "max_features": ("--max-features",),
+    "sift_octave_layers": ("--sift-octave-layers",),
+    "sift_contrast_threshold": ("--sift-contrast-threshold",),
+    "sift_edge_threshold": ("--sift-edge-threshold",),
+    "sift_sigma": ("--sift-sigma",),
+}
+
+
+def _argv_has_option(argv: list[str], option_name: str) -> bool:
+    return any(arg == option_name or arg.startswith(f"{option_name}=") for arg in argv)
+
+
+def _argv_has_any_option(argv: list[str], option_names: tuple[str, ...]) -> bool:
+    return any(_argv_has_option(argv, option_name) for option_name in option_names)
+
+
+class _ImageMatchArgumentParser(argparse.ArgumentParser):
+    def parse_known_args(self, args=None, namespace=None):
+        resolved_args = sys.argv[1:] if args is None else list(args)
+        parsed, extras = super().parse_known_args(args, namespace)
+        match_preset_path = getattr(parsed, "match_preset_path", None)
+        if match_preset_path not in (None, ""):
+            try:
+                preset_defaults = _resolve_match_preset_defaults(match_preset_path)
+            except ValueError as exc:
+                self.error(str(exc))
+            for key, value in preset_defaults.items():
+                option_names = _MATCH_PRESET_DEFAULT_OPTION_NAMES.get(key, ())
+                if option_names and _argv_has_any_option(resolved_args, option_names):
+                    continue
+                setattr(parsed, key, value)
+        return parsed, extras
+
+
 def _runtime_config_to_metadata(runtime_config: object | None) -> dict[str, object] | None:
     if runtime_config is None:
         return None
@@ -680,6 +752,11 @@ def load_image_match_defaults_from_config(
             "tile_validity_cell_height",
             ("tile_validity_cell_height", "tileValidityCellHeight", "TileValidityCellHeight"),
             lambda value: validate_tile_validity_cell_size(int(value), field_name="tile_validity_cell_height"),
+        ),
+        (
+            "match_preset_path",
+            ("match_preset_path", "matchPresetPath", "MatchPresetPath"),
+            lambda value: str(value),
         ),
         (
             "matcher_method",
@@ -943,6 +1020,13 @@ def load_image_match_defaults_from_config(
             raise ValueError(
                 f"Invalid ImageMatch config value for {destination!r}: {value!r}"
             ) from exc
+    match_preset_path = defaults.get("match_preset_path")
+    if match_preset_path not in (None, ""):
+        preset_defaults = _resolve_match_preset_defaults(
+            str(match_preset_path),
+            config_path=resolved_path,
+        )
+        defaults.update(preset_defaults)
     return defaults
 
 
@@ -2986,7 +3070,7 @@ def match_dom_pair_to_key_files(
 
 
 def build_argument_parser(config_defaults: dict[str, object] | None = None) -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Match two DOM cubes with OpenCV SIFT and write DOM-space `.key` files.")
+    parser = _ImageMatchArgumentParser(description="Match two DOM cubes with OpenCV SIFT and write DOM-space `.key` files.")
     parser.add_argument("--config", default=None, help="Optional config JSON path. When provided, the ImageMatch section supplies default values for this CLI; explicit CLI flags still win.")
     parser.add_argument("left_dom", help="Left DOM cube path.")
     parser.add_argument("right_dom", help="Right DOM cube path.")
@@ -3012,6 +3096,15 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--tile-validity-cache-dir", default=None, help="Directory for reusable per-DOM tile-validity index cache files.")
     parser.add_argument("--tile-validity-cell-width", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_width"), default=DEFAULT_TILE_VALIDITY_CELL_WIDTH, help=f"Coarse validity-index cell width. Default: {DEFAULT_TILE_VALIDITY_CELL_WIDTH}.")
     parser.add_argument("--tile-validity-cell-height", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_height"), default=DEFAULT_TILE_VALIDITY_CELL_HEIGHT, help=f"Coarse validity-index cell height. Default: {DEFAULT_TILE_VALIDITY_CELL_HEIGHT}.")
+    parser.add_argument(
+        "--match-preset-path",
+        action=_MatchPresetPathAction,
+        default=None,
+        help=(
+            "Path to a neutral match preset JSON. Classic SIFT presets set OpenCV SIFT/BF/FLANN "
+            "parameters; deep presets set matcher_method plus deep_match_config_path."
+        ),
+    )
     parser.add_argument("--matcher-method", type=_parse_matcher_method, default=DEFAULT_MATCHER_METHOD, help="Matcher method: bf, flann, superpoint, superglue, lightglue, loftr (default: bf).")
     parser.add_argument(
         "--deep-match-config-path",
@@ -3250,6 +3343,11 @@ def main(argv: list[str] | None = None) -> None:
             config_probe_parser.error(str(exc))
 
     parser = build_argument_parser(config_defaults=config_defaults)
+    if _argv_has_option(resolved_argv, "--match-preset-path"):
+        if _argv_has_option(resolved_argv, "--matcher-method"):
+            parser.error("--match-preset-path conflicts with --matcher-method")
+        if _argv_has_option(resolved_argv, "--deep-match-config-path"):
+            parser.error("--match-preset-path conflicts with --deep-match-config-path")
     args = parser.parse_args(resolved_argv)
     try:
         _validate_low_resolution_dom_pair_args(args.left_low_resolution_dom, args.right_low_resolution_dom)

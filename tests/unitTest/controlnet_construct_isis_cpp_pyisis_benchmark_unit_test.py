@@ -617,6 +617,29 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             self.assertTrue((prepared_run_dir / "experiment_config.json").is_file())
             self.assertTrue((prepared_run_dir / "experiment_manifest.json").is_file())
 
+    def test_prepare_run_directory_replaces_owned_symlink_without_removing_target(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+            run_dir = temp_dir / "out" / "unit_benchmark"
+            external_target = temp_dir / "external_pyisis_target"
+            external_target.mkdir()
+            (external_target / "keep.txt").write_text("external\n", encoding="utf-8")
+            run_dir.mkdir(parents=True)
+            (run_dir / "pyisis").symlink_to(external_target, target_is_directory=True)
+
+            prepared_run_dir = benchmark.prepare_run_directory(
+                config,
+                output_root=temp_dir / "out",
+                dry_run=True,
+            )
+
+            self.assertFalse((prepared_run_dir / "pyisis").is_symlink())
+            self.assertTrue((prepared_run_dir / "pyisis").is_dir())
+            self.assertTrue(external_target.is_dir())
+            self.assertEqual((external_target / "keep.txt").read_text(encoding="utf-8"), "external\n")
+
     def test_write_summary_reports_writes_json_and_csv_schemas(self):
         results = [
             {

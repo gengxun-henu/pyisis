@@ -457,24 +457,23 @@ def _camera_error_stats(rows: list[dict[str, Any]]) -> dict[str, float | None]:
     return stats
 
 
+def _remove_benchmark_owned_path(path: Path) -> None:
+    if path.is_symlink():
+        path.unlink()
+    elif path.is_dir():
+        shutil.rmtree(path)
+    elif path.exists():
+        path.unlink()
+
+
 def prepare_run_directory(config: BenchmarkConfig, *, output_root: str | Path, dry_run: bool) -> Path:
     output_root = Path(output_root).expanduser().resolve()
     run_dir = output_root / config.run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     for child_name in ("pyisis", "cpp", "reports"):
-        child_path = run_dir / child_name
-        if child_path.exists():
-            if child_path.is_dir():
-                shutil.rmtree(child_path)
-            else:
-                child_path.unlink()
+        _remove_benchmark_owned_path(run_dir / child_name)
     for file_name in ("experiment_config.json", "experiment_manifest.json"):
-        file_path = run_dir / file_name
-        if file_path.exists():
-            if file_path.is_dir():
-                shutil.rmtree(file_path)
-            else:
-                file_path.unlink()
+        _remove_benchmark_owned_path(run_dir / file_name)
     for child_name in ("pyisis", "cpp", "reports"):
         (run_dir / child_name).mkdir(exist_ok=True)
 

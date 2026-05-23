@@ -313,10 +313,10 @@ void write_controlnet_result(const Options &options) {
   Isis::ControlNet control_net(QString::fromStdString(options.net_path));
   const double load_seconds = elapsed_seconds(load_start);
 
-  const int point_count = control_net.GetNumPoints();
   int measure_count = 0;
   std::map<std::string, int> serial_measure_counts;
   const auto traverse_start = std::chrono::steady_clock::now();
+  const int point_count = control_net.GetNumPoints();
   for (int point_index = 0; point_index < point_count; ++point_index) {
     Isis::ControlPoint *point = control_net.GetPoint(point_index);
     (void)point->GetId();

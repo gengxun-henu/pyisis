@@ -512,6 +512,16 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
 
         self.assertEqual(result["task_type"], "camera")
 
+    def test_cpp_controlnet_timing_includes_point_count_lookup(self):
+        source_path = PROJECT_ROOT / "tools/benchmarks/isis_cpp_benchmark.cpp"
+        source = source_path.read_text(encoding="utf-8")
+        function_body = source.split("void write_controlnet_result", 1)[1].split("std::ofstream out", 1)[0]
+
+        self.assertLess(
+            function_body.index("const auto traverse_start"),
+            function_body.index("control_net.GetNumPoints()"),
+        )
+
     def test_compare_camera_results_computes_stats_and_top_errors(self):
         py_result = {
             "points": [

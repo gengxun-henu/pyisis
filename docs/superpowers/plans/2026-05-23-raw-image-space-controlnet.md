@@ -909,7 +909,7 @@ git commit -m "docs: document raw image controlnet pipeline"
 **Files:**
 - Verify only.
 
-- [ ] **Step 1: Run targeted wrapper tests**
+- [x] **Step 1: Run targeted wrapper tests**
 
 Run:
 
@@ -923,7 +923,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test -v
 
 Expected: `OK`.
 
-- [ ] **Step 2: Run smoke import**
+- [x] **Step 2: Run smoke import**
 
 Run:
 
@@ -937,7 +937,7 @@ python tests/smoke_import.py
 
 Expected: output ends with `smoke import ok`.
 
-- [ ] **Step 3: Inspect worktree status**
+- [x] **Step 3: Inspect worktree status**
 
 Run:
 
@@ -947,7 +947,7 @@ git status --short --branch
 
 Expected: only intended files are modified, or clean after commits.
 
-- [ ] **Step 4: Commit verification notes if any plan checkboxes were updated**
+- [x] **Step 4: Commit verification notes if any plan checkboxes were updated**
 
 If this plan file has checklist updates, commit them:
 

@@ -276,6 +276,26 @@ def _parse_preview_cache_source(value: str) -> str:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
+def _parse_adaptive_routing_deep_preset_entries(entries: list[str] | None) -> dict[str, str]:
+    presets: dict[str, str] = {}
+    for entry in entries or []:
+        if "=" not in entry:
+            raise ValueError(
+                "--adaptive-routing-deep-preset entries must use KEY=PATH, "
+                f"got {entry!r}."
+            )
+        key, value = entry.split("=", 1)
+        normalized_key = key.strip().lower()
+        resolved_value = value.strip()
+        if not normalized_key or not resolved_value:
+            raise ValueError(
+                "--adaptive-routing-deep-preset entries must include both key and path, "
+                f"got {entry!r}."
+            )
+        presets[normalized_key] = resolved_value
+    return presets
+
+
 def _compose_point_id_namespace(config: ControlNetConfig) -> str:
     if config.pair_id is None:
         return config.point_id_prefix
@@ -846,6 +866,17 @@ def _build_from_original_match_parser(subparsers) -> None:
     parser.add_argument("--num-worker-parallel-cpu", type=int, default=8, help="CPU worker count for parallel matching.")
     parser.add_argument("--use-parallel-cpu", action="store_true", default=True, help="Enable parallel CPU matching.")
     parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable parallel CPU matching.")
+    parser.set_defaults(enable_adaptive_routing=False)
+    parser.add_argument("--adaptive-routing", dest="enable_adaptive_routing", action="store_true", help="Enable adaptive texture/lighting routing for raw image matching.")
+    parser.add_argument("--no-adaptive-routing", dest="enable_adaptive_routing", action="store_false", help="Disable adaptive texture/lighting routing for raw image matching.")
+    parser.add_argument("--adaptive-routing-profile", default="balanced", choices=("balanced", "strict", "relaxed", "fast"), help="Adaptive routing quality profile.")
+    parser.add_argument("--deep-match-config-path", default=None, help="Optional deep matcher preset JSON path for direct raw image matching.")
+    parser.add_argument(
+        "--adaptive-routing-deep-preset",
+        action="append",
+        default=[],
+        help="Adaptive deep preset mapping in KEY=PATH form. Repeat for lightglue and loftr.",
+    )
     parser.add_argument("--binary", action="store_true", help="Write the ControlNet in binary format instead of PVL.")
     parser.add_argument(
         "--log-level",
@@ -1123,6 +1154,12 @@ def main(argv: list[str] | None = None) -> None:
             if args.right_output_key is not None
             else _default_intermediate_key_path(args.output_net, "right", "ori_match")
         )
+        try:
+            adaptive_routing_deep_presets = _parse_adaptive_routing_deep_preset_entries(
+                args.adaptive_routing_deep_preset
+            )
+        except ValueError as exc:
+            parser.error(str(exc))
         match_result = match_ori_pair_to_key_files(
             args.left_cube,
             args.right_cube,
@@ -1140,6 +1177,11 @@ def main(argv: list[str] | None = None) -> None:
             gpu_max_batch_size=args.gpu_max_batch_size,
             num_worker_parallel_cpu=args.num_worker_parallel_cpu,
             use_parallel_cpu=args.use_parallel_cpu,
+            enable_adaptive_routing=args.enable_adaptive_routing,
+            adaptive_routing_profile=args.adaptive_routing_profile,
+            adaptive_routing_deep_presets=adaptive_routing_deep_presets,
+            deep_match_config_path=args.deep_match_config_path,
+            deep_match_mode="direct",
         )
         controlnet_result = build_controlnet_for_stereo_pair(
             left_output_key,

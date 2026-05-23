@@ -611,7 +611,7 @@ git commit -m "feat: add classic sift presets"
 - Modify: `examples/image_match/image_match.py`
 - Test: `tests/unitTest/controlnet_construct_pipeline_unit_test.py`
 
-- [ ] **Step 1: Add failing parser/config tests**
+- [x] **Step 1: Add failing parser/config tests**
 
 In `tests/unitTest/controlnet_construct_pipeline_unit_test.py`, add these methods near existing image-match parser/config tests:
 
@@ -662,7 +662,7 @@ In `tests/unitTest/controlnet_construct_pipeline_unit_test.py`, add these method
         self.assertEqual(parsed.max_features, 1000)
 ```
 
-- [ ] **Step 2: Run the failing tests**
+- [x] **Step 2: Run the failing tests**
 
 Run:
 
@@ -673,7 +673,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: FAIL because `match_preset_path` is not parsed or applied yet.
 
-- [ ] **Step 3: Add imports and helper functions**
+- [x] **Step 3: Add imports and helper functions**
 
 In `examples/image_match/image_match.py`, add helper imports next to `_load_deep_match_config` helpers:
 
@@ -695,7 +695,7 @@ def _resolve_match_preset_defaults(raw_path: str | Path, *, config_path: str | P
     return dict(resolve_match_preset_runtime_config(preset_path).image_match_defaults)
 ```
 
-- [ ] **Step 4: Add `match_preset_path` to config defaults**
+- [x] **Step 4: Add `match_preset_path` to config defaults**
 
 In `load_image_match_defaults_from_config`, add this field spec before `matcher_method`:
 
@@ -722,7 +722,7 @@ After the existing `for destination, candidate_keys, coercer in field_specs:` lo
 
 Remove the existing `return defaults` that immediately followed the loop so there is only one return.
 
-- [ ] **Step 5: Add parser support for CLI preset defaults**
+- [x] **Step 5: Add parser support for CLI preset defaults**
 
 In `build_argument_parser`, add this argument immediately before `--matcher-method`:
 
@@ -749,7 +749,7 @@ In `main`, after `args = parser.parse_args(resolved_argv)` and before validation
 
 This makes CLI `--match-preset-path` a complete matcher selection and lets its values override parser defaults.
 
-- [ ] **Step 6: Run the focused tests**
+- [x] **Step 6: Run the focused tests**
 
 Run:
 
@@ -760,7 +760,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: PASS.
 
-- [ ] **Step 7: Run resolver and pipeline parser tests together**
+- [x] **Step 7: Run resolver and pipeline parser tests together**
 
 Run:
 
@@ -770,7 +770,7 @@ python -m unittest tests.unitTest.test_match_preset_config tests.unitTest.contro
 
 Expected: PASS.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 Run:
 

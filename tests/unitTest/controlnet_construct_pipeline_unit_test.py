@@ -303,6 +303,70 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertNotIn("from-ori-match", command_text)
         self.assertNotIn(" /images_overlap.lis", command_text)
 
+    def test_run_ori_match_pipeline_rejects_invalid_pair_id_start(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work_ori"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text('{"NetworkId":"n","TargetName":"Mars","UserName":"u"}\n', encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--original-list",
+                    str(original_list),
+                    "--config",
+                    str(config_path),
+                    "--pair-id-start",
+                    "0",
+                    "--dry-run",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("--pair-id-start must be at least 1", result.stderr)
+
+    def test_run_ori_match_pipeline_rejects_deep_only_flags(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work_ori"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text("left.cub\nright.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text('{"NetworkId":"n","TargetName":"Mars","UserName":"u"}\n', encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--original-list",
+                    str(original_list),
+                    "--config",
+                    str(config_path),
+                    "--deep-match-config-path",
+                    "examples/controlnet_construct/presets/loftr_default.json",
+                    "--dry-run",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("is not supported by the raw image space wrapper first version", result.stderr)
+
     def test_deep_match_manifest_roundtrip_preserves_runtime_config_provenance_fields(self):
         runtime_config = DeepMatchRuntimeConfig(
             matcher_method="lightglue",

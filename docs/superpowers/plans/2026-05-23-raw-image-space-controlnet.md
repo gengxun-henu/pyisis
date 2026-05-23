@@ -403,7 +403,7 @@ git commit -m "test: cover raw image pipeline dry run"
 - Modify: `examples/controlnet_construct/run_ori_match_pipeline_example.sh`
 - Modify: `tests/unitTest/controlnet_construct_pipeline_unit_test.py`
 
-- [ ] **Step 1: Add failing validation tests**
+- [x] **Step 1: Add failing validation tests**
 
 Add these methods to `ControlNetConstructPipelineUnitTest`:
 
@@ -473,7 +473,7 @@ Add these methods to `ControlNetConstructPipelineUnitTest`:
         self.assertIn("is not supported by the raw image space wrapper first version", result.stderr)
 ```
 
-- [ ] **Step 2: Run validation tests and verify expected failure**
+- [x] **Step 2: Run validation tests and verify expected failure**
 
 Run:
 
@@ -490,7 +490,7 @@ python -m unittest \
 
 Expected before tightening: at least one failure if Task 1 skeleton has drifted from the desired validation behavior.
 
-- [ ] **Step 3: Ensure wrapper validation matches tests**
+- [x] **Step 3: Ensure wrapper validation matches tests**
 
 In `run_ori_match_pipeline_example.sh`, keep these exact parsing branches:
 
@@ -511,13 +511,13 @@ if [[ "$PAIR_ID_START" -lt 1 ]]; then
 fi
 ```
 
-- [ ] **Step 4: Run validation tests and verify pass**
+- [x] **Step 4: Run validation tests and verify pass**
 
 Run the same command from Step 2.
 
 Expected: `OK`.
 
-- [ ] **Step 5: Commit Task 2**
+- [x] **Step 5: Commit Task 2**
 
 ```bash
 git add examples/controlnet_construct/run_ori_match_pipeline_example.sh tests/unitTest/controlnet_construct_pipeline_unit_test.py

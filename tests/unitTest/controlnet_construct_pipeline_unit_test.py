@@ -1803,6 +1803,51 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         )
         self.assertEqual(parsed.matcher_method, "lightglue")
 
+    def test_image_match_config_match_preset_overrides_legacy_matcher_fields(self):
+        from image_match.image_match import load_image_match_defaults_from_config
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_bf.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "match_preset_path": str(preset_path),
+                            "matcher_method": "lightglue",
+                            "deep_matcher_config_path": "examples/controlnet_construct/presets/lightglue_default.json",
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            defaults = load_image_match_defaults_from_config(config_path)
+
+        self.assertEqual(defaults["match_preset_path"], str(preset_path.resolve()))
+        self.assertEqual(defaults["matcher_method"], "bf")
+        self.assertIsNone(defaults["deep_match_config_path"])
+        self.assertEqual(defaults["max_features"], 1000)
+
+    def test_image_match_parser_accepts_match_preset_path_cli(self):
+        parser = build_controlnet_stereopair_argument_parser()
+        preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_flann.json"
+
+        parsed = parser.parse_args(
+            [
+                "left_dom.cub",
+                "right_dom.cub",
+                "left.key",
+                "right.key",
+                "--match-preset-path",
+                str(preset_path),
+            ]
+        )
+
+        self.assertEqual(parsed.match_preset_path, str(preset_path.resolve()))
+        self.assertEqual(parsed.matcher_method, "flann")
+        self.assertEqual(parsed.max_features, 1000)
+
     def test_pipeline_forwards_deep_matcher_method(self):
         fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
         stdout = io.StringIO()

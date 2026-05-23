@@ -474,6 +474,32 @@ def _resolve_deep_match_runtime_config(config_path: str | Path):
     return resolve_deep_match_runtime_config(config_path)
 
 
+def _resolve_match_preset_path(raw_path: str | Path, *, config_path: str | Path | None = None) -> Path:
+    from controlnet_construct.match_preset_config import resolve_match_preset_path
+
+    return resolve_match_preset_path(
+        raw_path,
+        config_path=config_path,
+        repo_root=Path(__file__).resolve().parents[2],
+    )
+
+
+def _resolve_match_preset_defaults(raw_path: str | Path, *, config_path: str | Path | None = None) -> dict[str, object]:
+    from controlnet_construct.match_preset_config import resolve_match_preset_runtime_config
+
+    preset_path = _resolve_match_preset_path(raw_path, config_path=config_path)
+    return dict(resolve_match_preset_runtime_config(preset_path).image_match_defaults)
+
+
+class _MatchPresetPathAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        preset_path = _resolve_match_preset_path(values)
+        preset_defaults = _resolve_match_preset_defaults(preset_path)
+        for key, value in preset_defaults.items():
+            setattr(namespace, key, value)
+        setattr(namespace, self.dest, str(preset_path))
+
+
 def _runtime_config_to_metadata(runtime_config: object | None) -> dict[str, object] | None:
     if runtime_config is None:
         return None
@@ -680,6 +706,11 @@ def load_image_match_defaults_from_config(
             "tile_validity_cell_height",
             ("tile_validity_cell_height", "tileValidityCellHeight", "TileValidityCellHeight"),
             lambda value: validate_tile_validity_cell_size(int(value), field_name="tile_validity_cell_height"),
+        ),
+        (
+            "match_preset_path",
+            ("match_preset_path", "matchPresetPath", "MatchPresetPath"),
+            lambda value: str(value),
         ),
         (
             "matcher_method",
@@ -943,6 +974,13 @@ def load_image_match_defaults_from_config(
             raise ValueError(
                 f"Invalid ImageMatch config value for {destination!r}: {value!r}"
             ) from exc
+    match_preset_path = defaults.get("match_preset_path")
+    if match_preset_path not in (None, ""):
+        preset_defaults = _resolve_match_preset_defaults(
+            str(match_preset_path),
+            config_path=resolved_path,
+        )
+        defaults.update(preset_defaults)
     return defaults
 
 
@@ -3012,6 +3050,15 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--tile-validity-cache-dir", default=None, help="Directory for reusable per-DOM tile-validity index cache files.")
     parser.add_argument("--tile-validity-cell-width", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_width"), default=DEFAULT_TILE_VALIDITY_CELL_WIDTH, help=f"Coarse validity-index cell width. Default: {DEFAULT_TILE_VALIDITY_CELL_WIDTH}.")
     parser.add_argument("--tile-validity-cell-height", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_height"), default=DEFAULT_TILE_VALIDITY_CELL_HEIGHT, help=f"Coarse validity-index cell height. Default: {DEFAULT_TILE_VALIDITY_CELL_HEIGHT}.")
+    parser.add_argument(
+        "--match-preset-path",
+        action=_MatchPresetPathAction,
+        default=None,
+        help=(
+            "Path to a neutral match preset JSON. Classic SIFT presets set OpenCV SIFT/BF/FLANN "
+            "parameters; deep presets set matcher_method plus deep_match_config_path."
+        ),
+    )
     parser.add_argument("--matcher-method", type=_parse_matcher_method, default=DEFAULT_MATCHER_METHOD, help="Matcher method: bf, flann, superpoint, superglue, lightglue, loftr (default: bf).")
     parser.add_argument(
         "--deep-match-config-path",
@@ -3251,6 +3298,10 @@ def main(argv: list[str] | None = None) -> None:
 
     parser = build_argument_parser(config_defaults=config_defaults)
     args = parser.parse_args(resolved_argv)
+    if args.match_preset_path not in (None, ""):
+        preset_defaults = _resolve_match_preset_defaults(args.match_preset_path)
+        for key, value in preset_defaults.items():
+            setattr(args, key, value)
     try:
         _validate_low_resolution_dom_pair_args(args.left_low_resolution_dom, args.right_low_resolution_dom)
     except ValueError as exc:

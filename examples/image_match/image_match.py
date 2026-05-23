@@ -493,8 +493,11 @@ def _resolve_match_preset_defaults(raw_path: str | Path, *, config_path: str | P
 
 class _MatchPresetPathAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
-        preset_path = _resolve_match_preset_path(values)
-        preset_defaults = _resolve_match_preset_defaults(preset_path)
+        try:
+            preset_path = _resolve_match_preset_path(values)
+            preset_defaults = _resolve_match_preset_defaults(preset_path)
+        except ValueError as exc:
+            raise argparse.ArgumentError(self, str(exc)) from exc
         for key, value in preset_defaults.items():
             setattr(namespace, key, value)
         setattr(namespace, self.dest, str(preset_path))
@@ -3298,10 +3301,6 @@ def main(argv: list[str] | None = None) -> None:
 
     parser = build_argument_parser(config_defaults=config_defaults)
     args = parser.parse_args(resolved_argv)
-    if args.match_preset_path not in (None, ""):
-        preset_defaults = _resolve_match_preset_defaults(args.match_preset_path)
-        for key, value in preset_defaults.items():
-            setattr(args, key, value)
     try:
         _validate_low_resolution_dom_pair_args(args.left_low_resolution_dom, args.right_low_resolution_dom)
     except ValueError as exc:

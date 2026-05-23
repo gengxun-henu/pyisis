@@ -1848,6 +1848,79 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(parsed.matcher_method, "flann")
         self.assertEqual(parsed.max_features, 1000)
 
+    def test_image_match_config_match_preset_allows_cli_ratio_override(self):
+        fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
+        stdout = io.StringIO()
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_bf.json"
+            config_path.write_text(
+                json.dumps({"ImageMatch": {"match_preset_path": str(preset_path)}}),
+                encoding="utf-8",
+            )
+
+            with (
+                patch("controlnet_construct.image_match.match_dom_pair_to_key_files", return_value=fake_result) as match_mock,
+                patch.object(sys, "stdout", stdout),
+            ):
+                image_match_main(
+                    [
+                        "--config",
+                        str(config_path),
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        "left.key",
+                        "right.key",
+                        "--ratio-test",
+                        "0.9",
+                    ]
+                )
+
+        self.assertEqual(match_mock.call_args.kwargs["matcher_method"], "bf")
+        self.assertEqual(match_mock.call_args.kwargs["ratio_test"], 0.9)
+
+    def test_image_match_cli_match_preset_allows_later_ratio_override(self):
+        fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
+        stdout = io.StringIO()
+        preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_bf.json"
+
+        with (
+            patch("controlnet_construct.image_match.match_dom_pair_to_key_files", return_value=fake_result) as match_mock,
+            patch.object(sys, "stdout", stdout),
+        ):
+            image_match_main(
+                [
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left.key",
+                    "right.key",
+                    "--match-preset-path",
+                    str(preset_path),
+                    "--ratio-test",
+                    "0.9",
+                ]
+            )
+
+        self.assertEqual(match_mock.call_args.kwargs["matcher_method"], "bf")
+        self.assertEqual(match_mock.call_args.kwargs["ratio_test"], 0.9)
+
+    def test_image_match_parser_rejects_invalid_match_preset_path_cleanly(self):
+        parser = build_controlnet_stereopair_argument_parser()
+        stderr = io.StringIO()
+
+        with patch.object(sys, "stderr", stderr), self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left.key",
+                    "right.key",
+                    "--match-preset-path",
+                    "does-not-exist.json",
+                ]
+            )
+
     def test_pipeline_forwards_deep_matcher_method(self):
         fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
         stdout = io.StringIO()

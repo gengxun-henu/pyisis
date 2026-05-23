@@ -32,3 +32,5 @@ print.prt
 examples/learning_methods/sweep_results/
 paper_use/
 python/online_platform/
+.env
+pyisis_development.code-workspace

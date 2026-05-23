@@ -1,0 +1,25 @@
+{
+  "run_id": "lro_nac_pyisis_cpp_20260523",
+  "description": "Compare ISIS C++ benchmark output with PyISIS wrappers on LRO NAC fixtures.",
+  "execution": {
+    "cpp_benchmark_path": "build/tools/benchmarks/isis_cpp_benchmark",
+    "repeat_count": 1,
+    "keep_intermediate_json": true
+  },
+  "camera_tasks": [
+    {
+      "label": "lro_nac_camera",
+      "cube_path": "tests/data/lronacpho/M143947267L.cal.echo.crop.cub",
+      "sample_step": 10,
+      "line_step": 10,
+      "max_points": 100,
+      "top_error_count": 20
+    }
+  ],
+  "controlnet_tasks": [
+    {
+      "label": "three_image_controlnet",
+      "net_path": "tests/data/threeImageNetwork/controlnetwork.net"
+    }
+  ]
+}

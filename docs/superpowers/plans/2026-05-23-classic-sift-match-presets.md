@@ -44,7 +44,7 @@
 - Create: `tests/unitTest/test_match_preset_config.py`
 - Later Create: `examples/controlnet_construct/match_preset_config.py`
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Create `tests/unitTest/test_match_preset_config.py` with this complete content:
 
@@ -226,7 +226,7 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] **Step 2: Run the failing tests**
+- [x] **Step 2: Run the failing tests**
 
 Run:
 
@@ -240,7 +240,7 @@ python -m unittest tests.unitTest.test_match_preset_config -v
 
 Expected: FAIL with `ModuleNotFoundError: No module named 'match_preset_config'`.
 
-- [ ] **Step 3: Implement `match_preset_config.py`**
+- [x] **Step 3: Implement `match_preset_config.py`**
 
 Create `examples/controlnet_construct/match_preset_config.py`:
 
@@ -486,7 +486,7 @@ if __name__ == "__main__":
     main()
 ```
 
-- [ ] **Step 4: Run tests again**
+- [x] **Step 4: Run tests again**
 
 Run:
 
@@ -496,7 +496,7 @@ python -m unittest tests.unitTest.test_match_preset_config -v
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Run:
 

@@ -351,7 +351,6 @@ def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) ->
     traverse_start = time.perf_counter()
     point_count = int(control_net.get_num_points())
     measure_count = 0
-    valid_point_count = _optional_call(control_net, "get_num_valid_points")
     serial_measure_counts: Counter[str] = Counter()
 
     for point_index in range(point_count):
@@ -377,6 +376,7 @@ def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) ->
                 serial_measure_counts[str(serial)] += 1
 
     traverse_seconds = time.perf_counter() - traverse_start
+    valid_point_count = _optional_call(control_net, "get_num_valid_points")
     valid_measure_count = _optional_call(control_net, "get_num_valid_measures")
 
     return {

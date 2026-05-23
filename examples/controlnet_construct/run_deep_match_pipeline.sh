@@ -338,7 +338,7 @@ stage_import() {
   while IFS= read -r manifest_path; do
     [[ -n "$manifest_path" ]] || continue
     local results_dir
-    results_dir=$(dirname "$(dirname "$manifest_path")")/results
+    results_dir=$(dirname "$manifest_path")/results
     if [[ ! -d "$results_dir" ]] || [[ -z "$(ls -A "$results_dir" 2>/dev/null)" ]]; then
       missing_results=$((missing_results + 1))
       warn "  no results found for pair: $(basename "$(dirname "$manifest_path")")"

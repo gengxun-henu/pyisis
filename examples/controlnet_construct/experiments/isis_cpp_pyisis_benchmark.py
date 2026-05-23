@@ -293,18 +293,23 @@ def run_pyisis_camera_task(task: CameraTaskConfig, *, ip_module=None) -> dict[st
         if samples:
             first_point_index = samples[0].index
 
-        loop_start = time.perf_counter()
         for sample in samples:
+            operation_start = time.perf_counter()
             if not camera.set_image(sample.sample, sample.line):
+                core_seconds += time.perf_counter() - operation_start
                 failed_set_image_count += 1
                 continue
 
             latitude = camera.universal_latitude()
             longitude = camera.universal_longitude()
             if not camera.set_universal_ground(latitude, longitude):
+                core_seconds += time.perf_counter() - operation_start
                 failed_set_universal_ground_count += 1
                 continue
 
+            roundtrip_sample = camera.sample()
+            roundtrip_line = camera.line()
+            core_seconds += time.perf_counter() - operation_start
             point_records.append(
                 {
                     "index": sample.index,
@@ -312,12 +317,11 @@ def run_pyisis_camera_task(task: CameraTaskConfig, *, ip_module=None) -> dict[st
                     "input_line": sample.line,
                     "latitude": latitude,
                     "longitude": longitude,
-                    "roundtrip_sample": camera.sample(),
-                    "roundtrip_line": camera.line(),
+                    "roundtrip_sample": roundtrip_sample,
+                    "roundtrip_line": roundtrip_line,
                 }
             )
             successful_point_count += 1
-        core_seconds = time.perf_counter() - loop_start
     finally:
         cube.close()
 
@@ -374,10 +378,6 @@ def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) ->
 
     traverse_seconds = time.perf_counter() - traverse_start
     valid_measure_count = _optional_call(control_net, "get_num_valid_measures")
-    if valid_point_count is None:
-        valid_point_count = point_count
-    if valid_measure_count is None:
-        valid_measure_count = measure_count
 
     return {
         "task_type": "controlnet",
@@ -386,8 +386,8 @@ def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) ->
         "net_path": str(task.net_path),
         "point_count": point_count,
         "measure_count": measure_count,
-        "valid_point_count": int(valid_point_count),
-        "valid_measure_count": int(valid_measure_count),
+        "valid_point_count": int(valid_point_count) if valid_point_count is not None else None,
+        "valid_measure_count": int(valid_measure_count) if valid_measure_count is not None else None,
         "serial_measure_counts": dict(serial_measure_counts),
         "load_seconds": load_seconds,
         "traverse_seconds": traverse_seconds,

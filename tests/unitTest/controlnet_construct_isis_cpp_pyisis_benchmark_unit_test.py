@@ -157,6 +157,20 @@ class _FakeControlNet:
         return self._points[index]
 
 
+class _FakeControlNetWithoutValidCounts:
+    def __init__(self, path):
+        self.path = path
+        self._points = [
+            _FakeControlPoint("P1", [_FakeControlMeasure("SERIAL_A", 1.0, 2.0)]),
+        ]
+
+    def get_num_points(self):
+        return len(self._points)
+
+    def get_point(self, index):
+        return self._points[index]
+
+
 class _FakeIpModule:
     def __init__(self):
         self.cubes = []
@@ -169,6 +183,13 @@ class _FakeIpModule:
 
     def ControlNet(self, path):
         control_net = _FakeControlNet(path)
+        self.control_nets.append(control_net)
+        return control_net
+
+
+class _FakeIpModuleWithoutValidCounts(_FakeIpModule):
+    def ControlNet(self, path):
+        control_net = _FakeControlNetWithoutValidCounts(path)
         self.control_nets.append(control_net)
         return control_net
 
@@ -407,6 +428,10 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertGreaterEqual(result["core_seconds"], 0.0)
         self.assertIn("average_successful_point_seconds", result)
         self.assertIsNotNone(result["average_successful_point_seconds"])
+        self.assertAlmostEqual(
+            result["average_successful_point_seconds"],
+            result["core_seconds"] / len(result["points"]),
+        )
 
     def test_run_pyisis_camera_task_includes_edges_for_three_by_three_grid(self):
         fake_ip = _FakeIpModule()
@@ -443,6 +468,20 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertGreaterEqual(result["traverse_seconds"], 0.0)
         self.assertGreaterEqual(result["core_seconds"], result["load_seconds"])
         self.assertGreaterEqual(result["core_seconds"], result["traverse_seconds"])
+
+    def test_run_pyisis_controlnet_task_returns_none_for_missing_valid_count_apis(self):
+        fake_ip = _FakeIpModuleWithoutValidCounts()
+        task = benchmark.ControlNetTaskConfig(
+            label="fake_controlnet_no_valid_counts",
+            net_path=Path("/tmp/fake-no-valid.net"),
+        )
+
+        result = benchmark.run_pyisis_controlnet_task(task, ip_module=fake_ip)
+
+        self.assertEqual(result["point_count"], 1)
+        self.assertEqual(result["measure_count"], 1)
+        self.assertIsNone(result["valid_point_count"])
+        self.assertIsNone(result["valid_measure_count"])
 
 
 if __name__ == "__main__":

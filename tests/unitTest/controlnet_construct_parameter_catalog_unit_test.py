@@ -73,6 +73,53 @@ class ControlNetParameterCatalogUnitTest(unittest.TestCase):
         self.assertIn("MATCHER_METHOD=bf", result.stdout)
         self.assertIn("WORK_DIR='work with space'", result.stdout)
 
+    def test_catalog_cli_rejects_unknown_payload_field(self):
+        script_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "print_parameter_catalog.py"
+        payload = {
+            "entrypoint": "run_pipeline_example",
+            "cli_values": {"matcher_mtehod": "bf"},
+        }
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            payload_path = Path(temp_dir) / "payload.json"
+            payload_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(script_path),
+                    "--validate-json",
+                    str(payload_path),
+                    "--shell-assignments",
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("matcher_mtehod", result.stderr)
+
+    def test_catalog_cli_rejects_unknown_entrypoint_for_catalog_printing(self):
+        script_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "print_parameter_catalog.py"
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(script_path),
+                "--entrypoint",
+                "unknown_entrypoint",
+                "--format",
+                "json",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("unknown_entrypoint", result.stderr)
+
     def test_required_groups_are_declared_in_expected_order(self):
         from controlnet_construct.parameter_catalog import PARAMETER_GROUPS
 

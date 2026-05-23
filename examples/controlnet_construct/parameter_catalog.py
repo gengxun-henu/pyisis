@@ -226,6 +226,7 @@ PARAMETERS = (
     _spec("omit_tile_details", "reporting", config_path="Reporting.omit_tile_details", value_type="bool", default=False, entrypoints=(RUN_PIPELINE, IMAGE_MATCH), help="Omit per-tile detail records."),
     _spec("omit_detail_records", "reporting", config_path="Reporting.omit_detail_records", value_type="bool", default=False, entrypoints=(RUN_PIPELINE, FROM_DOM_BATCH), help="Omit per-pair detail records."),
     _spec("log_level", "reporting", config_path="Reporting.log_level", default="info", allowed_values=("debug", "info", "warning", "error"), entrypoints=_ALL_ENTRYPOINTS, help="Logging verbosity."),
+    _spec("validate_parameters_only", "reporting", value_type="bool", default=False, entrypoints=(RUN_PIPELINE,), help="Validate effective parameters and exit before running pipeline steps."),
     _spec("strict_parameter_validation", "reporting", cli_flag="--strict-parameter-validation", config_path="Reporting.strict_parameter_validation", value_type="bool", default=False, entrypoints=(RUN_PIPELINE,), help="Promote parameter validation warnings to errors."),
 )
 

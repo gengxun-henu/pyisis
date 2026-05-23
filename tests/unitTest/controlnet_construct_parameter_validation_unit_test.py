@@ -14,6 +14,22 @@ if str(EXAMPLES_ROOT) not in sys.path:
 
 
 class ControlNetParameterValidationUnitTest(unittest.TestCase):
+    def test_unknown_entrypoint_is_rejected(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters("unknown_entrypoint", cli_values={"matcher_method": "bf"})
+
+        self.assertTrue(result.has_errors)
+        self.assertIn("unknown_entrypoint", result.error_text())
+
+    def test_unknown_cli_field_is_rejected(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters("run_pipeline_example", cli_values={"matcher_mtehod": "bf"})
+
+        self.assertTrue(result.has_errors)
+        self.assertIn("matcher_mtehod", result.error_text())
+
     def test_cli_values_override_preset_config_and_defaults_with_provenance(self):
         from controlnet_construct.parameter_validation import validate_parameters
 

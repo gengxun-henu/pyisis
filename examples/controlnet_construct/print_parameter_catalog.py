@@ -28,7 +28,7 @@ def format_grouped_help(entrypoint: str) -> str:
     """Return grouped text help for catalog parameters supported by an entry point."""
 
     lines = [f"Parameter groups for {entrypoint}"]
-    grouped = grouped_parameters_for_entrypoint(entrypoint)
+    grouped = _grouped_parameters_or_error(entrypoint)
     for group_name, parameters in grouped.items():
         group = GROUP_BY_NAME[group_name]
         lines.extend(("", group.title, group.description))
@@ -44,6 +44,13 @@ def format_grouped_help(entrypoint: str) -> str:
                 details.append(f"default: {parameter.default}")
             lines.append(f"  {display_name}: {'; '.join(details)}")
     return "\n".join(lines) + "\n"
+
+
+def _grouped_parameters_or_error(entrypoint: str) -> dict[str, tuple[Any, ...]]:
+    grouped = grouped_parameters_for_entrypoint(entrypoint)
+    if not grouped:
+        raise ValueError(f"unknown entrypoint: {entrypoint}")
+    return grouped
 
 
 def _load_payload(path: str) -> dict[str, Any]:
@@ -76,6 +83,11 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.validate_json is None:
+        try:
+            _grouped_parameters_or_error(args.entrypoint)
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
         if args.format == "json":
             print(json.dumps(parameter_catalog_as_dict(entrypoint=args.entrypoint), indent=2, sort_keys=True))
         else:

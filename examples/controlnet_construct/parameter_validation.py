@@ -91,6 +91,11 @@ def validate_parameters(
     warnings: list[ValidationMessage] = []
     errors: list[ValidationMessage] = []
 
+    if not specs:
+        errors.append(ValidationMessage("entrypoint", f"unknown entrypoint: {entrypoint}"))
+
+    _validate_known_parameter_names(provided_by_source, spec_by_name, errors)
+
     for spec in specs:
         value = spec.default
         source = "absent" if _is_absent(spec.default) else "default"
@@ -143,6 +148,18 @@ def _is_explicit(mapping: dict[str, Any], name: str) -> bool:
 
 def _is_explicit_value(provenance: dict[str, str], name: str) -> bool:
     return provenance.get(name) in _SOURCE_ORDER
+
+
+def _validate_known_parameter_names(
+    provided_by_source: dict[str, dict[str, Any]],
+    spec_by_name: dict[str, Any],
+    errors: list[ValidationMessage],
+) -> None:
+    known_names = set(spec_by_name)
+    for source in _SOURCE_ORDER:
+        for name in sorted(provided_by_source[source]):
+            if name not in known_names:
+                errors.append(ValidationMessage(name, f"unknown {source} parameter: {name}"))
 
 
 def _normalize_choice(value: Any) -> str:

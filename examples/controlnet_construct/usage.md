@@ -820,6 +820,20 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
   --num-worker-parallel-cpu 8
 ```
 
+如果你想在 raw/original image 路径中启用自适应路由，可以直接传：
+
+```bash
+bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
+  --work-dir work_ori \
+  --original-list work/original_images.lis \
+  --config examples/controlnet_construct/controlnet_config.example.json \
+  --matcher-method flann \
+  --adaptive-routing \
+  --adaptive-routing-profile balanced \
+  --adaptive-routing-deep-preset lightglue=examples/controlnet_construct/presets/lightglue_official_superpoint.json \
+  --adaptive-routing-deep-preset loftr=examples/controlnet_construct/presets/loftr_external_outdoor.json
+```
+
 这条路径会复用：
 
 - `image_overlap.py` 生成候选像对；
@@ -835,7 +849,15 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
 - `work_ori/merge/merge_all_controlnets.sh`
 - `work_ori/merge/ori_matching_merged.net`
 
-第一版不接入 deep matcher、adaptive routing、DOM low-resolution offset 或 DOM-space RANSAC 可视化。需要这些能力时继续使用 DOM pipeline，或者后续再按小步方式扩展这个 wrapper。
+当前 raw/original image wrapper 支持直接启用 adaptive routing。该路径不会依赖 DOM low-resolution preview 或 DOM-to-original 回投；纹理与光照诊断来自原始 cube 自身。默认仍使用 classic `flann`，只有显式传入 `--adaptive-routing` 或在 `ImageMatch.enable_adaptive_routing` 中启用时才进入自适应路由。
+
+推荐的深度学习 preset 面收敛为 official LightGlue 与 external official LoFTR：
+
+- `examples/controlnet_construct/presets/lightglue_official_superpoint.json`
+- `examples/controlnet_construct/presets/loftr_external_outdoor.json`
+- `examples/controlnet_construct/presets/loftr_external_indoor.json`
+
+`loftr_default.json` is the Kornia compatibility preset, not the official LoFTR repository/checkpoint route. 旧的非 official LightGlue preset 与 `superglue_*` preset 不再作为推荐控制网构建路径；清理前仅作为兼容历史实验引用。
 
 ### 手工四步版本
 

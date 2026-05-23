@@ -689,6 +689,40 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             preset_values,
         )
 
+    def test_recommended_docs_use_official_lightglue_and_external_loftr_presets(self):
+        usage = (PROJECT_ROOT / "examples" / "controlnet_construct" / "usage.md").read_text(encoding="utf-8")
+        templates = (PROJECT_ROOT / "examples" / "controlnet_construct" / "recommended_batch_templates.md").read_text(encoding="utf-8")
+        matcher_example = json.loads(
+            (PROJECT_ROOT / "examples" / "controlnet_construct" / "experiments" / "matcher_comparison.example.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        combined_docs = usage + "\n" + templates
+
+        self.assertIn("lightglue_official_superpoint.json", combined_docs)
+        self.assertIn("loftr_external_outdoor.json", combined_docs)
+        self.assertIn("loftr_default.json` is the Kornia compatibility preset", combined_docs)
+        for legacy in (
+            "lightglue_default.json",
+            "lightglue_high_recall.json",
+            "lightglue_disk.json",
+            "lightglue_aliked.json",
+            "lightglue_doghardnet.json",
+            "superglue_default.json",
+            "superglue_aliked.json",
+        ):
+            self.assertNotIn(f"presets/{legacy}", combined_docs)
+
+        method_presets = {
+            method.get("deep_match_config_path")
+            for method in matcher_example.get("methods", [])
+            if method.get("deep_match_config_path")
+        }
+        self.assertIn("examples/controlnet_construct/presets/lightglue_official_superpoint.json", method_presets)
+        self.assertIn("examples/controlnet_construct/presets/loftr_external_outdoor.json", method_presets)
+        self.assertNotIn("examples/controlnet_construct/presets/superglue_aliked.json", method_presets)
+        self.assertNotIn("examples/controlnet_construct/presets/lightglue_disk.json", method_presets)
+
     def test_deep_match_manifest_roundtrip_preserves_runtime_config_provenance_fields(self):
         runtime_config = DeepMatchRuntimeConfig(
             matcher_method="lightglue",

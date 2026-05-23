@@ -20,34 +20,14 @@
       "matcher_method": "flann"
     },
     {
-      "label": "sift_lightglue",
-      "matcher_method": "lightglue",
-      "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_sift.json"
-    },
-    {
-      "label": "disk_lightglue",
-      "matcher_method": "lightglue",
-      "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_disk.json"
-    },
-    {
-      "label": "aliked_lightglue",
-      "matcher_method": "lightglue",
-      "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_aliked.json"
-    },
-    {
-      "label": "doghardnet_lightglue",
-      "matcher_method": "lightglue",
-      "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_doghardnet.json"
-    },
-    {
-      "label": "superpoint_lightglue",
+      "label": "official_lightglue_superpoint",
       "matcher_method": "lightglue",
       "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_superpoint.json"
     },
     {
-      "label": "loftr",
+      "label": "official_loftr_external_outdoor",
       "matcher_method": "loftr",
-      "deep_match_config_path": "examples/controlnet_construct/presets/loftr_default.json"
+      "deep_match_config_path": "examples/controlnet_construct/presets/loftr_external_outdoor.json"
     }
   ]
 }

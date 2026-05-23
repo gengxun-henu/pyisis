@@ -2875,6 +2875,92 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(match_mock.call_args.kwargs["matcher_method"], "bf")
         self.assertEqual(match_mock.call_args.kwargs["ratio_test"], 0.9)
 
+    def test_image_match_cli_rejects_match_preset_with_explicit_matcher_method(self):
+        preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_bf.json"
+        stderr = io.StringIO()
+
+        with patch.object(sys, "stderr", stderr), self.assertRaises(SystemExit):
+            image_match_main(
+                [
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left.key",
+                    "right.key",
+                    "--match-preset-path",
+                    str(preset_path),
+                    "--matcher-method",
+                    "flann",
+                ]
+            )
+
+        self.assertIn("--match-preset-path conflicts with --matcher-method", stderr.getvalue())
+
+    def test_image_match_cli_rejects_match_preset_with_explicit_deep_config_path(self):
+        preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "classic_sift_bf.json"
+        stderr = io.StringIO()
+
+        with patch.object(sys, "stderr", stderr), self.assertRaises(SystemExit):
+            image_match_main(
+                [
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left.key",
+                    "right.key",
+                    "--match-preset-path",
+                    str(preset_path),
+                    "--deep-match-config-path",
+                    "examples/controlnet_construct/presets/lightglue_default.json",
+                ]
+            )
+
+        self.assertIn("--match-preset-path conflicts with --deep-match-config-path", stderr.getvalue())
+
+    def test_image_match_cli_match_preset_path_prefers_caller_cwd_over_repo_relative(self):
+        parser = build_controlnet_stereopair_argument_parser()
+
+        with temporary_directory() as temp_dir:
+            caller_dir = temp_dir / "caller"
+            local_preset = caller_dir / "examples" / "controlnet_construct" / "presets" / "classic_sift_bf.json"
+            local_preset.parent.mkdir(parents=True)
+            local_preset.write_text(
+                json.dumps(
+                    {
+                        "feature_extractor": {
+                            "method": "classic_sift",
+                            "max_features": 77,
+                            "octave_layers": 3,
+                            "contrast_threshold": 0.04,
+                            "edge_threshold": 10.0,
+                            "sigma": 1.6,
+                        },
+                        "matcher": {
+                            "method": "bf",
+                            "ratio_test": 0.61,
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+            previous_cwd = Path.cwd()
+            try:
+                os.chdir(caller_dir)
+                parsed = parser.parse_args(
+                    [
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        "left.key",
+                        "right.key",
+                        "--match-preset-path",
+                        "examples/controlnet_construct/presets/classic_sift_bf.json",
+                    ]
+                )
+            finally:
+                os.chdir(previous_cwd)
+
+        self.assertEqual(parsed.match_preset_path, str(local_preset.resolve()))
+        self.assertEqual(parsed.max_features, 77)
+        self.assertEqual(parsed.ratio_test, 0.61)
+
     def test_image_match_parser_rejects_invalid_match_preset_path_cleanly(self):
         parser = build_controlnet_stereopair_argument_parser()
         stderr = io.StringIO()

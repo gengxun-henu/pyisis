@@ -477,8 +477,16 @@ def _resolve_deep_match_runtime_config(config_path: str | Path):
 def _resolve_match_preset_path(raw_path: str | Path, *, config_path: str | Path | None = None) -> Path:
     from controlnet_construct.match_preset_config import resolve_match_preset_path
 
+    raw = Path(raw_path).expanduser()
+    if config_path is None:
+        if raw.is_absolute():
+            return raw.resolve()
+        caller_relative = raw.resolve()
+        if caller_relative.exists():
+            return caller_relative
+
     return resolve_match_preset_path(
-        raw_path,
+        raw,
         config_path=config_path,
         repo_root=Path(__file__).resolve().parents[2],
     )
@@ -501,6 +509,10 @@ class _MatchPresetPathAction(argparse.Action):
         for key, value in preset_defaults.items():
             setattr(namespace, key, value)
         setattr(namespace, self.dest, str(preset_path))
+
+
+def _argv_has_option(argv: list[str], option_name: str) -> bool:
+    return any(arg == option_name or arg.startswith(f"{option_name}=") for arg in argv)
 
 
 def _runtime_config_to_metadata(runtime_config: object | None) -> dict[str, object] | None:
@@ -3300,6 +3312,11 @@ def main(argv: list[str] | None = None) -> None:
             config_probe_parser.error(str(exc))
 
     parser = build_argument_parser(config_defaults=config_defaults)
+    if _argv_has_option(resolved_argv, "--match-preset-path"):
+        if _argv_has_option(resolved_argv, "--matcher-method"):
+            parser.error("--match-preset-path conflicts with --matcher-method")
+        if _argv_has_option(resolved_argv, "--deep-match-config-path"):
+            parser.error("--match-preset-path conflicts with --deep-match-config-path")
     args = parser.parse_args(resolved_argv)
     try:
         _validate_low_resolution_dom_pair_args(args.left_low_resolution_dom, args.right_low_resolution_dom)

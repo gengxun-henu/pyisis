@@ -807,14 +807,14 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
   --skip-final-merge
 ```
 
-## 原始影像空间匹配流水线
+### 原始影像空间匹配流水线
 
 如果你想跳过 DOM 匹配和 `dom2ori` 回投，可以使用独立的原始影像空间 wrapper：
 
 ```bash
 bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
   --work-dir work_ori \
-  --original-list work_ori/original_images.lis \
+  --original-list work/original_images.lis \
   --config examples/controlnet_construct/controlnet_config.example.json \
   --matcher-method flann \
   --num-worker-parallel-cpu 8

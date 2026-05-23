@@ -816,7 +816,10 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
   --work-dir work_ori \
   --original-list work/original_images.lis \
   --config examples/controlnet_construct/controlnet_config.example.json \
-  --matcher-method flann \
+  --matcher-method lightglue \
+  --deep-match-config-path examples/controlnet_construct/presets/lightglue_official_superpoint.json \
+  --adaptive-routing \
+  --adaptive-routing-profile balanced \
   --num-worker-parallel-cpu 8
 ```
 
@@ -850,6 +853,10 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
 - `work_ori/merge/ori_matching_merged.net`
 
 当前 raw/original image wrapper 支持直接启用 adaptive routing。该路径不会依赖 DOM low-resolution preview 或 DOM-to-original 回投；纹理与光照诊断来自原始 cube 自身。默认仍使用 classic `flann`，只有显式传入 `--adaptive-routing` 或在 `ImageMatch.enable_adaptive_routing` 中启用时才进入自适应路由。
+
+该 wrapper 现在可以把 `--deep-match-config-path`、`--adaptive-routing` / `--no-adaptive-routing`、`--adaptive-routing-profile` 和 `--adaptive-routing-deep-preset` 转发给
+`from-ori-match`，因此可直接使用 official LightGlue preset 等原始影像空间 deep matcher 配置。DOM low-resolution offset 与
+DOM-space RANSAC 可视化仍属于 DOM pipeline 专用能力；需要这些 DOM 侧处理时继续使用 `run_pipeline_example.sh`。
 
 推荐的深度学习 preset 面收敛为 official LightGlue 与 external official LoFTR：
 

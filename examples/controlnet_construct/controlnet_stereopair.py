@@ -23,6 +23,7 @@ Updated: 2026-05-10  Geng Xun added a baseline from-ori-match parser skeleton fo
 Updated: 2026-05-10  Geng Xun made the Task-1 from-ori-match CLI fail safely with a clear not-yet-implemented error instead of crashing on missing parser attrs.
 Updated: 2026-05-10  Geng Xun switched the Task-1 from-ori-match rejection to a clean argparse CLI error without a traceback.
 Updated: 2026-05-10  Geng Xun implemented from-ori-match execution to run original-image matching and build ControlNet in one command.
+Updated: 2026-05-23  Geng Xun forwarded deep matcher config and adaptive routing options through from-ori-match.
 """
 
 from __future__ import annotations

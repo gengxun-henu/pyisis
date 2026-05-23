@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-20
+Last Modified: 2026-05-23
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -44,6 +44,8 @@ Updated: 2026-05-19  Geng Xun added regression coverage for deep matcher config 
 Updated: 2026-05-19  Geng Xun aligned wrapper regression coverage for ImageMatch-only defaults, adaptive routing, and resolved deep matcher config paths.
 Updated: 2026-05-20  Geng Xun added preset-aware adaptive-routing forwarding coverage for deep preset maps loaded from config.
 Updated: 2026-05-20  Geng Xun added stage-6 manifest provenance roundtrip coverage for deep-match runtime config export metadata.
+Updated: 2026-05-23  Geng Xun added raw image ControlNet wrapper dry-run and execution coverage.
+Updated: 2026-05-23  Geng Xun added raw image deep matcher and adaptive-routing forwarding coverage.
 """
 
 from __future__ import annotations
@@ -163,6 +165,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 + "\n",
                 encoding="utf-8",
             )
+            deep_config_path = temp_dir / "lightglue_official_superpoint.json"
+            deep_config_path.write_text('{"matcher":{"method":"lightglue","backend":"official"}}\n', encoding="utf-8")
 
             result = subprocess.run(
                 [
@@ -177,7 +181,12 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     "--config",
                     str(config_path),
                     "--matcher-method",
-                    "flann",
+                    "lightglue",
+                    "--deep-match-config-path",
+                    str(deep_config_path),
+                    "--adaptive-routing",
+                    "--adaptive-routing-profile",
+                    "relaxed",
                     "--ratio-test",
                     "0.8",
                     "--max-features",
@@ -218,7 +227,12 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("ori_keys/left__right_B.key", command_text)
         self.assertIn("ori_pair_nets/left__right.net", command_text)
         self.assertIn("--matcher-method", command_text)
-        self.assertIn("flann", command_text)
+        self.assertIn("lightglue", command_text)
+        self.assertIn("--deep-match-config-path", command_text)
+        self.assertIn(str(deep_config_path), command_text)
+        self.assertIn("--adaptive-routing", command_text)
+        self.assertIn("--adaptive-routing-profile", command_text)
+        self.assertIn("relaxed", command_text)
         self.assertIn("--ratio-test", command_text)
         self.assertIn("0.8", command_text)
         self.assertIn("--max-features", command_text)
@@ -240,7 +254,10 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(pair_command[pair_command.index("--left-output-key") + 1], str(work_dir / "ori_keys" / "left__right_A.key"))
         self.assertEqual(pair_command[pair_command.index("--right-output-key") + 1], str(work_dir / "ori_keys" / "left__right_B.key"))
         self.assertEqual(pair_command[pair_command.index("--report-path") + 1], str(work_dir / "reports" / "left__right.summary.json"))
-        self.assertEqual(pair_command[pair_command.index("--matcher-method") + 1], "flann")
+        self.assertEqual(pair_command[pair_command.index("--matcher-method") + 1], "lightglue")
+        self.assertEqual(pair_command[pair_command.index("--deep-match-config-path") + 1], str(deep_config_path))
+        self.assertIn("--adaptive-routing", pair_command)
+        self.assertEqual(pair_command[pair_command.index("--adaptive-routing-profile") + 1], "relaxed")
         self.assertEqual(pair_command[pair_command.index("--ratio-test") + 1], "0.8")
         self.assertEqual(pair_command[pair_command.index("--max-features") + 1], "1200")
         self.assertEqual(pair_command[pair_command.index("--num-worker-parallel-cpu") + 1], "2")
@@ -321,6 +338,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 '{"NetworkId":"raw_image_matching","TargetName":"Mars","UserName":"unit"}\n',
                 encoding="utf-8",
             )
+            deep_config_path = temp_dir / "lightglue_official_superpoint.json"
+            deep_config_path.write_text('{"matcher":{"method":"lightglue","backend":"official"}}\n', encoding="utf-8")
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
             fake_python_dispatcher.write_text(
                 textwrap.dedent(
@@ -345,6 +364,12 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         raise SystemExit(0)
 
                     if script.name == "controlnet_stereopair.py" and args[0] == "from-ori-match":
+                        if "--deep-match-config-path" not in args:
+                            raise SystemExit("missing --deep-match-config-path forwarding")
+                        if "--adaptive-routing" not in args:
+                            raise SystemExit("missing --adaptive-routing forwarding")
+                        if args[args.index("--adaptive-routing-profile") + 1] != "fast":
+                            raise SystemExit("missing --adaptive-routing-profile fast forwarding")
                         output_net = Path(args[4])
                         left_key = Path(args[args.index("--left-output-key") + 1])
                         right_key = Path(args[args.index("--right-output-key") + 1])
@@ -398,6 +423,13 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     str(original_list),
                     "--config",
                     str(config_path),
+                    "--matcher-method",
+                    "lightglue",
+                    "--deep-match-config-path",
+                    str(deep_config_path),
+                    "--adaptive-routing",
+                    "--adaptive-routing-profile",
+                    "fast",
                     "--skip-final-merge",
                 ],
                 cwd=PROJECT_ROOT,
@@ -418,7 +450,10 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(summary["pair_count"], 1)
         self.assertEqual(summary["pair_id_prefix"], "S")
         self.assertEqual(summary["pair_id_start"], 1)
-        self.assertEqual(summary["matcher_method"], "flann")
+        self.assertEqual(summary["matcher_method"], "lightglue")
+        self.assertEqual(summary["deep_match_config_path"], str(deep_config_path))
+        self.assertTrue(summary["adaptive_routing"])
+        self.assertEqual(summary["adaptive_routing_profile"], "fast")
         self.assertEqual(summary["pair_net_directory"], str(work_dir / "ori_pair_nets"))
         self.assertEqual(summary["report_directory"], str(work_dir / "reports"))
         self.assertEqual(summary["merge_output_net"], str(work_dir / "merge" / "ori_matching_merged.net"))
@@ -601,6 +636,59 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("--deep-match-mode currently supports only direct", result.stderr)
+
+    def test_run_ori_match_pipeline_forwards_official_deep_and_adaptive_flags(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work_ori"
+            work_dir.mkdir()
+            inputs_dir = temp_dir / "inputs"
+            inputs_dir.mkdir()
+            left = inputs_dir / "left.cub"
+            right = inputs_dir / "right.cub"
+            left.write_text("left placeholder\n", encoding="utf-8")
+            right.write_text("right placeholder\n", encoding="utf-8")
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text(f"{left}\n{right}\n", encoding="utf-8")
+            overlap_list = work_dir / "images_overlap.lis"
+            overlap_list.write_text(f"{left},{right}\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text('{"NetworkId":"n","TargetName":"Mars","UserName":"u"}\n', encoding="utf-8")
+            deep_config_path = temp_dir / "lightglue_official_superpoint.json"
+            deep_config_path.write_text('{"matcher":{"method":"lightglue","backend":"official"}}\n', encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--original-list",
+                    str(original_list),
+                    "--images-overlap-list",
+                    str(overlap_list),
+                    "--config",
+                    str(config_path),
+                    "--matcher-method",
+                    "lightglue",
+                    "--deep-match-config-path",
+                    str(deep_config_path),
+                    "--adaptive-routing",
+                    "--adaptive-routing-profile",
+                    "strict",
+                    "--dry-run",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            command_text = (work_dir / "command.sh").read_text(encoding="utf-8")
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--matcher-method lightglue", command_text)
+        self.assertIn(f"--deep-match-config-path {deep_config_path}", command_text)
+        self.assertIn("--adaptive-routing", command_text)
+        self.assertIn("--adaptive-routing-profile strict", command_text)
 
     def test_run_ori_match_pipeline_forwards_adaptive_and_official_deep_presets(self):
         with temporary_directory() as temp_dir:

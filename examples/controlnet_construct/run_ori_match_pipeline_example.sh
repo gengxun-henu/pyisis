@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
-
 # End-to-end raw/original image matching ControlNet pipeline example runner.
+#
+# Author: Geng Xun
+# Created: 2026-05-23
+# Updated: 2026-05-23  Geng Xun added the raw image ControlNet batch wrapper.
+# Updated: 2026-05-23  Geng Xun enabled deep matcher and adaptive-routing forwarding for raw image matching.
 
 set -euo pipefail
 
@@ -182,19 +186,12 @@ build_match_args() {
     --log-level "$LOG_LEVEL"
   )
   [[ -z "$MAX_FEATURES" ]] || match_args+=(--max-features "$MAX_FEATURES")
+  [[ -z "$DEEP_MATCH_CONFIG_PATH" ]] || match_args+=(--deep-match-config-path "$DEEP_MATCH_CONFIG_PATH")
+  [[ "$ADAPTIVE_ROUTING" == "1" ]] && match_args+=(--adaptive-routing) || match_args+=(--no-adaptive-routing)
+  match_args+=(--adaptive-routing-profile "$ADAPTIVE_ROUTING_PROFILE")
   [[ "$USE_PARALLEL_CPU" == "1" ]] && match_args+=(--use-parallel-cpu) || match_args+=(--no-parallel-cpu)
   [[ "$USE_GPU" == "1" ]] && match_args+=(--use-gpu)
   [[ "$GPU_DYNAMIC_BATCH" == "1" ]] && match_args+=(--gpu-dynamic-batch) || match_args+=(--no-gpu-dynamic-batch)
-  if [[ "$ADAPTIVE_ROUTING" == "1" ]]; then
-    match_args+=(--adaptive-routing)
-  else
-    match_args+=(--no-adaptive-routing)
-  fi
-  match_args+=(--adaptive-routing-profile "$ADAPTIVE_ROUTING_PROFILE")
-  if [[ -n "$DEEP_MATCHER_CONFIG_PATH" ]]; then
-    match_args+=(--deep-match-config-path "$DEEP_MATCHER_CONFIG_PATH")
-  fi
-  match_args+=(--deep-match-mode "$DEEP_MATCH_MODE")
   local preset_arg
   for preset_arg in "${ADAPTIVE_ROUTING_DEEP_PRESET_ARGS[@]}"; do
     match_args+=(--adaptive-routing-deep-preset "$preset_arg")
@@ -222,6 +219,14 @@ Options:
   --images-overlap-list PATH     images_overlap.lis path. Default: <work-dir>/images_overlap.lis
   --config PATH                  ControlNet config JSON. Default: examples/controlnet_construct/controlnet_config.example.json
   --matcher-method NAME          Matcher method forwarded to from-ori-match. Default: flann
+  --deep-match-config-path PATH  Deep matcher preset forwarded to from-ori-match.
+  --deep-match-mode MODE         Deep matcher mode. Only direct is supported here.
+  --adaptive-routing             Enable adaptive matcher routing in from-ori-match.
+  --no-adaptive-routing          Disable adaptive matcher routing in from-ori-match. Default.
+  --adaptive-routing-profile NAME
+                                  Adaptive-routing quality profile. Default: balanced
+  --adaptive-routing-deep-preset KEY=PATH
+                                  Adaptive deep preset mapping. Repeat as needed.
   --band N                       Band forwarded to from-ori-match. Default: 1
   --ratio-test FLOAT             Ratio test threshold. Default: 0.75
   --max-features N               Optional SIFT max_features.
@@ -236,13 +241,6 @@ Options:
   --no-gpu-dynamic-batch         Disable dynamic GPU batch sizing.
   --gpu-min-batch-size N         Minimum dynamic GPU batch size. Default: 2
   --gpu-max-batch-size N         Maximum dynamic GPU batch size. Default: 16
-  --adaptive-routing             Enable adaptive texture/lighting routing.
-  --no-adaptive-routing          Disable adaptive texture/lighting routing. Default.
-  --adaptive-routing-profile P   Adaptive routing profile. Default: balanced
-  --deep-match-config-path PATH  Direct deep matcher preset path.
-  --deep-match-mode MODE         Deep matcher mode. Only direct is supported here.
-  --adaptive-routing-deep-preset KEY=PATH
-                                  Adaptive deep preset mapping. Repeat as needed.
   --skip-final-merge             Generate but do not execute merge shell.
   --dry-run                      Write command.sh and summary without executing commands.
   --log-level VALUE              from-ori-match log level. Default: INFO
@@ -255,6 +253,9 @@ ORIGINAL_LIST=""
 IMAGES_OVERLAP_LIST=""
 CONFIG_PATH=""
 MATCHER_METHOD="flann"
+DEEP_MATCH_CONFIG_PATH=""
+ADAPTIVE_ROUTING="0"
+ADAPTIVE_ROUTING_PROFILE="balanced"
 BAND="1"
 RATIO_TEST="0.75"
 MAX_FEATURES=""
@@ -267,9 +268,6 @@ GPU_BATCH_SIZE="4"
 GPU_DYNAMIC_BATCH="1"
 GPU_MIN_BATCH_SIZE="2"
 GPU_MAX_BATCH_SIZE="16"
-ADAPTIVE_ROUTING="0"
-ADAPTIVE_ROUTING_PROFILE="balanced"
-DEEP_MATCHER_CONFIG_PATH=""
 DEEP_MATCH_MODE="direct"
 ADAPTIVE_ROUTING_DEEP_PRESET_ARGS=()
 explicit_adaptive_routing=""
@@ -286,6 +284,10 @@ while [[ $# -gt 0 ]]; do
     --images-overlap-list) [[ $# -ge 2 ]] || die "missing value for --images-overlap-list"; IMAGES_OVERLAP_LIST=$2; shift 2 ;;
     --config) [[ $# -ge 2 ]] || die "missing value for --config"; CONFIG_PATH=$2; shift 2 ;;
     --matcher-method) [[ $# -ge 2 ]] || die "missing value for --matcher-method"; MATCHER_METHOD=$2; shift 2 ;;
+    --deep-match-config-path) [[ $# -ge 2 ]] || die "missing value for --deep-match-config-path"; DEEP_MATCH_CONFIG_PATH=$2; explicit_deep_match_config_path="1"; shift 2 ;;
+    --adaptive-routing) ADAPTIVE_ROUTING="1"; explicit_adaptive_routing="1"; shift ;;
+    --no-adaptive-routing) ADAPTIVE_ROUTING="0"; explicit_adaptive_routing="1"; shift ;;
+    --adaptive-routing-profile) [[ $# -ge 2 ]] || die "missing value for --adaptive-routing-profile"; ADAPTIVE_ROUTING_PROFILE=$2; explicit_adaptive_routing_profile="1"; shift 2 ;;
     --band) [[ $# -ge 2 ]] || die "missing value for --band"; BAND=$2; shift 2 ;;
     --ratio-test) [[ $# -ge 2 ]] || die "missing value for --ratio-test"; RATIO_TEST=$2; shift 2 ;;
     --max-features) [[ $# -ge 2 ]] || die "missing value for --max-features"; MAX_FEATURES=$2; shift 2 ;;
@@ -300,10 +302,6 @@ while [[ $# -gt 0 ]]; do
     --no-gpu-dynamic-batch) GPU_DYNAMIC_BATCH="0"; shift ;;
     --gpu-min-batch-size) [[ $# -ge 2 ]] || die "missing value for --gpu-min-batch-size"; GPU_MIN_BATCH_SIZE=$2; shift 2 ;;
     --gpu-max-batch-size) [[ $# -ge 2 ]] || die "missing value for --gpu-max-batch-size"; GPU_MAX_BATCH_SIZE=$2; shift 2 ;;
-    --adaptive-routing) ADAPTIVE_ROUTING="1"; explicit_adaptive_routing="1"; shift ;;
-    --no-adaptive-routing) ADAPTIVE_ROUTING="0"; explicit_adaptive_routing="1"; shift ;;
-    --adaptive-routing-profile) [[ $# -ge 2 ]] || die "missing value for --adaptive-routing-profile"; ADAPTIVE_ROUTING_PROFILE=$2; explicit_adaptive_routing_profile="1"; shift 2 ;;
-    --deep-match-config-path) [[ $# -ge 2 ]] || die "missing value for --deep-match-config-path"; DEEP_MATCHER_CONFIG_PATH=$2; explicit_deep_match_config_path="1"; shift 2 ;;
     --deep-match-mode) [[ $# -ge 2 ]] || die "missing value for --deep-match-mode"; DEEP_MATCH_MODE=$2; shift 2 ;;
     --deep-match-mode=*) DEEP_MATCH_MODE=${1#*=}; shift ;;
     --adaptive-routing-deep-preset) [[ $# -ge 2 ]] || die "missing value for --adaptive-routing-deep-preset"; ADAPTIVE_ROUTING_DEEP_PRESET_ARGS+=("$2"); shift 2 ;;
@@ -346,10 +344,10 @@ fi
 if [[ -z "$explicit_deep_match_config_path" ]]; then
   config_deep_matcher_config_path=$(extract_image_match_config_value "$CONFIG_PATH" "deep_matcher_config_path")
   if [[ -n "$config_deep_matcher_config_path" ]]; then
-    DEEP_MATCHER_CONFIG_PATH=$(resolve_config_relative_path "$config_deep_matcher_config_path" "$CONFIG_PATH")
+    DEEP_MATCH_CONFIG_PATH=$(resolve_config_relative_path "$config_deep_matcher_config_path" "$CONFIG_PATH")
   fi
-elif [[ -n "$DEEP_MATCHER_CONFIG_PATH" ]]; then
-  DEEP_MATCHER_CONFIG_PATH=$(resolve_path "$DEEP_MATCHER_CONFIG_PATH")
+elif [[ -n "$DEEP_MATCH_CONFIG_PATH" ]]; then
+  DEEP_MATCH_CONFIG_PATH=$(resolve_path "$DEEP_MATCH_CONFIG_PATH")
 fi
 if [[ "${#ADAPTIVE_ROUTING_DEEP_PRESET_ARGS[@]}" -eq 0 ]]; then
   while IFS= read -r preset_arg; do
@@ -466,7 +464,7 @@ if [[ "$DRY_RUN" == "1" ]]; then
   exit 0
 fi
 
-"$HOST_PYTHON_EXECUTABLE" - "$BATCH_REPORT_PATH" "$PAIRS_JSON" "$ORIGINAL_LIST" "$IMAGES_OVERLAP_LIST" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_OUTPUT_NET" "$MERGE_SCRIPT_PATH" "$PAIR_ID_PREFIX" "$PAIR_ID_START" "$MATCHER_METHOD" "$ADAPTIVE_ROUTING" "$ADAPTIVE_ROUTING_PROFILE" "$DEEP_MATCHER_CONFIG_PATH" "$DEEP_MATCH_MODE" <<'PY'
+"$HOST_PYTHON_EXECUTABLE" - "$BATCH_REPORT_PATH" "$PAIRS_JSON" "$ORIGINAL_LIST" "$IMAGES_OVERLAP_LIST" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_OUTPUT_NET" "$MERGE_SCRIPT_PATH" "$PAIR_ID_PREFIX" "$PAIR_ID_START" "$MATCHER_METHOD" "$DEEP_MATCH_CONFIG_PATH" "$ADAPTIVE_ROUTING" "$ADAPTIVE_ROUTING_PROFILE" "$DEEP_MATCH_MODE" <<'PY'
 import json
 import sys
 from pathlib import Path
@@ -483,9 +481,9 @@ from pathlib import Path
     pair_id_prefix,
     pair_id_start,
     matcher_method,
+    deep_match_config_path,
     adaptive_routing,
     adaptive_routing_profile,
-    deep_match_config_path,
     deep_match_mode,
 ) = sys.argv[1:]
 pairs = [
@@ -501,9 +499,9 @@ payload = {
     "pair_id_prefix": pair_id_prefix,
     "pair_id_start": int(pair_id_start),
     "matcher_method": matcher_method,
+    "deep_match_config_path": deep_match_config_path or None,
     "adaptive_routing": adaptive_routing == "1",
     "adaptive_routing_profile": adaptive_routing_profile,
-    "deep_match_config_path": deep_match_config_path or None,
     "deep_match_mode": deep_match_mode,
     "pair_net_directory": pair_nets_dir,
     "report_directory": reports_dir,

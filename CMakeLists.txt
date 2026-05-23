@@ -291,6 +291,40 @@ set_target_properties(_isis_core PROPERTIES
 
 add_dependencies(_isis_core sync_python_package_files)
 
+add_executable(isis_cpp_benchmark
+  tools/benchmarks/isis_cpp_benchmark.cpp)
+
+target_compile_definitions(isis_cpp_benchmark
+  PRIVATE
+    _GNU_SOURCE)
+
+target_include_directories(isis_cpp_benchmark
+  PRIVATE
+    "${ISIS_INCLUDE_DIR}"
+    "${ISIS_DEP_INCLUDE_DIR}"
+    "${ISIS_DEP_INCLUDE_DIR}/csm"
+    "${ISIS_DEP_INCLUDE_DIR}/cspice"
+    "${ISIS_DEP_INCLUDE_DIR}/bullet"
+    "${ISIS_DEP_INCLUDE_DIR}/tnt"
+    ${PCL_INCLUDE_DIRS}
+    ${EIGEN3_INCLUDE_DIR}
+    "${ISIS_DEP_INCLUDE_DIR}/qt"
+    "${ISIS_DEP_INCLUDE_DIR}/qt/QtCore"
+    ${Qt5Core_INCLUDE_DIRS})
+
+target_link_libraries(isis_cpp_benchmark
+  PRIVATE
+    "${ISIS_CORE_LIBRARY}"
+    ${ISIS_EXTRA_CAMERA_LIBS}
+    ${ISIS_EXTRA_PROJECTION_LIBS}
+    ${BULLET_RUNTIME_LIBS}
+    Qt5::Core)
+
+set_target_properties(isis_cpp_benchmark PROPERTIES
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tools/benchmarks"
+  BUILD_RPATH "${ISIS_LIBRARY_DIR}"
+  INSTALL_RPATH "${ISIS_LIBRARY_DIR}")
+
 install(TARGETS _isis_core LIBRARY DESTINATION "${Python3_SITEARCH}/${ISIS_PYBIND_PACKAGE_NAME}")
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/python/${ISIS_PYBIND_PACKAGE_NAME}/__init__.py"
         DESTINATION "${Python3_SITELIB}/${ISIS_PYBIND_PACKAGE_NAME}")

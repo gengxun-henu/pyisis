@@ -1,13 +1,12 @@
 """
-Unit tests for Batch 2 bindings: ProcessMosaic, CsmBundleObservation,
-IsisBundleObservation, ImagePolygon, and GSLUtility.
+Unit tests for mosaic, bundle observation, image polygon, and GSL utility bindings.
 
 Author: Geng Xun
 Created: 2026-04-10
 Last Modified: 2026-04-10
 Updated: 2026-04-10  Geng Xun added focused unit tests covering construction,
          flag setters/getters, enum values, WKT polygon creation, and singleton
-         access for the five Batch-2 classes.
+         access for the five mosaic, bundle, polygon, and utility classes.
 """
 import unittest
 

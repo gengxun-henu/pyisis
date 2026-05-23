@@ -2012,28 +2012,28 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 ### Class 1: ProcessMosaic
 - 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessMosaic（继承已绑定的 Process）。
 - 暴露：ImageOverlay 枚举（PlaceImagesOnTop/PlaceImagesBehind/UseBandPlacementCriteria/AverageImageWithMosaic）、SetTrackFlag/GetTrackFlag、SetNullFlag/GetNullFlag、SetHighSaturationFlag/GetHighSaturationFlag、SetLowSaturationFlag/GetLowSaturationFlag、SetImageOverlay、SetBandBinMatch/SetBandNumber/SetBandUseMaxValue、SetCreateFlag/SetMatchDEM、GetInputStartLineInMosaic/Sample/Band、OverlayToString/StringToOverlay（静态）。
-- focused 单测：`tests/unitTest/batch2_unit_test.py`（ProcessMosaicUnitTest 类）。
+- focused 单测：`tests/unitTest/mosaic_bundle_image_polygon_utility_unit_test.py`（ProcessMosaicUnitTest 类）。
 
 ### Class 2: CsmBundleObservation
 - 在 `src/control/bind_bundle_advanced.cpp` 追加 CsmBundleObservation（继承已绑定的 BundleObservation）。
 - 暴露：默认构造函数、number_parameters、parameter_list、bundle_output_csv。
-- focused 单测：`tests/unitTest/batch2_unit_test.py`（CsmBundleObservationUnitTest 类）。
+- focused 单测：`tests/unitTest/mosaic_bundle_image_polygon_utility_unit_test.py`（CsmBundleObservationUnitTest 类）。
 
 ### Class 3: IsisBundleObservation
 - 在 `src/control/bind_bundle_advanced.cpp` 追加 IsisBundleObservation（继承 BundleObservation）。
 - 暴露：默认构造函数、number_parameters/number_position_parameters/number_pointing_parameters、parameter_list、bundle_output_csv、spice_position（返回 SpicePosition*）、spice_rotation（返回 SpiceRotation*）。
 - SpicePosition/SpiceRotation 在 Batch 1 中已暴露，返回引用使用 reference_internal。
-- focused 单测：`tests/unitTest/batch2_unit_test.py`（IsisBundleObservationUnitTest 类）。
+- focused 单测：`tests/unitTest/mosaic_bundle_image_polygon_utility_unit_test.py`（IsisBundleObservationUnitTest 类）。
 
 ### Class 4: ImagePolygon
 - 新建 `src/base/bind_base_image_polygon.cpp`，暴露 ImagePolygon。
 - 暴露：默认构造函数、Blob 构造函数、create_from_coords（std::vector<std::vector<double>>）、set_emission/set_incidence/set_ellipsoid_limb/set_subpixel_accuracy（setters）、poly_str（WKT）、valid_sample_dim/valid_line_dim、get_sinc/get_linc、num_vertices、to_blob。
-- focused 单测：`tests/unitTest/batch2_unit_test.py`（ImagePolygonUnitTest 类）。
+- focused 单测：`tests/unitTest/mosaic_bundle_image_polygon_utility_unit_test.py`（ImagePolygonUnitTest 类）。
 
 ### Class 5: GSLUtility
 - 在 `src/base/bind_base_utility.cpp` 追加 GSLUtility（GSL::GSLUtility singleton）。
 - 暴露：get_instance（静态，返回单例引用）、success(int)、status(int)。
-- focused 单测：`tests/unitTest/batch2_unit_test.py`（GSLUtilityUnitTest 类）。
+- focused 单测：`tests/unitTest/mosaic_bundle_image_polygon_utility_unit_test.py`（GSLUtilityUnitTest 类）。
 
 ### 台账更新
 - `todo_pybind11.csv`: 5 个类 → 已转换
@@ -2049,28 +2049,28 @@ Corrected 24 already-bound classes in `todo_pybind11.csv` that were incorrectly 
 ### Class 1: ProcessMapMosaic
 - 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessMapMosaic（继承已绑定的 ProcessMosaic）。
 - 暴露：默认构造函数（继承所有 ProcessMosaic 方法）。
-- focused 单测：`tests/unitTest/batch3_unit_test.py`。
+- focused 单测：`tests/unitTest/high_level_cube_io_process_polygon_tools_unit_test.py`。
 
 ### Class 2: ProcessRubberSheet
 - 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessRubberSheet（继承 Process）。
 - 暴露：构造函数（start_size/end_size）、force_tile（固定 tile 位置）、set_tiling（设置 tile 大小范围）、start_process（Transform&, Interpolator&）。
-- focused 单测：`tests/unitTest/batch3_unit_test.py`。
+- focused 单测：`tests/unitTest/high_level_cube_io_process_polygon_tools_unit_test.py`。
 
 ### Class 3: ProcessPolygons
 - 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessPolygons（继承 Process）。
 - 暴露：默认构造函数、set_intersect_algorithm（中心/覆盖算法选择）、rasterize（samples/lines/values 向量）、end_process、finalize。
-- focused 单测：`tests/unitTest/batch3_unit_test.py`。
+- focused 单测：`tests/unitTest/high_level_cube_io_process_polygon_tools_unit_test.py`。
 
 ### Class 4: ProcessGroundPolygons
 - 在 `src/bind_high_level_cube_io.cpp` 追加 ProcessGroundPolygons（继承 ProcessPolygons）。
 - 暴露：默认构造函数、rasterize_latlon（lat/lon/values 向量 → 覆盖 Rasterize 地面版本）。
-- focused 单测：`tests/unitTest/batch3_unit_test.py`。
+- focused 单测：`tests/unitTest/high_level_cube_io_process_polygon_tools_unit_test.py`。
 
 ### Class 5: PolygonTools
 - 在 `src/base/bind_base_utility.cpp` 追加 PolygonTools 静态方法包装。
 - 暴露：Equal（浮点数近似相等）、ReducePrecision（精度缩减）、DecimalPlace（小数位检测）、GMLSchema（GML 格式字符串）。
 - 注：大多数 PolygonTools 方法返回 GEOS 几何类型，不予绑定。
-- focused 单测：`tests/unitTest/batch3_unit_test.py`。
+- focused 单测：`tests/unitTest/high_level_cube_io_process_polygon_tools_unit_test.py`。
 
 ### 台账更新
 - `todo_pybind11.csv`: 5 个类 → 已转换

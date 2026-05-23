@@ -1,13 +1,12 @@
 """
-Unit tests for Batch 3 bindings: ProcessMapMosaic, ProcessRubberSheet,
-ProcessPolygons, ProcessGroundPolygons, and PolygonTools.
+Unit tests for high-level cube I/O process and PolygonTools bindings.
 
 Author: Geng Xun
 Created: 2026-04-10
 Last Modified: 2026-04-10
 Updated: 2026-04-10  Geng Xun added focused unit tests covering construction,
          flag inheritance, static utility methods, and enum/type checks for the
-         five Batch-3 Process and PolygonTools classes.
+         high-level cube I/O process and PolygonTools classes.
 """
 import unittest
 

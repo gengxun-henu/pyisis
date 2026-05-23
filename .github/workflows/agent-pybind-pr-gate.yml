@@ -35,58 +35,45 @@ jobs:
   resolve_runner:
     name: Resolve runner mode
     uses: ./.github/workflows/reusable-runner-config.yml
-    with:
-      runner_profile: github-hosted
 
   prepare:
     name: Prepare PR context
     needs: resolve_runner
     runs-on: ${{ fromJSON(needs.resolve_runner.outputs.runs_on_json) }}
+    permissions:
+      contents: read
+      pull-requests: read
     outputs:
       changed_tests: ${{ steps.diff.outputs.changed_tests }}
+      changed_files: ${{ steps.diff.outputs.changed_files }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ github.token }}
-          fetch-depth: 0
-
-      - name: Normalize and verify checkout transport
-        uses: ./.github/actions/normalized-safe-checkout
-        with:
-          skip-checkout: "true"
-          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
-          github-token: ${{ github.token }}
-          fetch-depth: "0"
-          summary-context: pr-gate-prepare
-
       - name: Summarize changed files
         id: diff
-        shell: bash
-        run: |
-          set -euo pipefail
-          base_sha="${{ github.event.pull_request.base.sha }}"
-          head_sha="${{ github.event.pull_request.head.sha }}"
-          changed_files="$(git diff --name-only "$base_sha...$head_sha")"
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pull = context.payload.pull_request;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pull.number,
+              per_page: 100,
+            });
+            const changedFiles = files.map((file) => file.filename);
+            const changedTests = changedFiles.filter((file) =>
+              /^tests\/unitTest\/.*_unit_test\.py$/.test(file)
+            );
 
-          changed_tests=$(printf '%s\n' "$changed_files" | grep '^tests/unitTest/.*_unit_test\.py$' || true)
-          {
-            echo 'changed_tests<<EOF'
-            printf '%s\n' "$changed_tests"
-            echo 'EOF'
-          } >> "$GITHUB_OUTPUT"
+            core.setOutput('changed_files', changedFiles.join('\n'));
+            core.setOutput('changed_tests', changedTests.join('\n'));
 
-          {
-            echo "## PR gate change summary"
-            echo ""
-            echo "Base SHA: \`$base_sha\`"
-            echo "Head SHA: \`$head_sha\`"
-            echo ""
-            echo "### Changed files"
-            echo "```text"
-            printf '%s\n' "$changed_files"
-            echo "```"
-          } >> "$GITHUB_STEP_SUMMARY"
+            await core.summary
+              .addHeading('PR gate change summary', 2)
+              .addRaw(`Base SHA: \`${pull.base.sha}\`\n\n`)
+              .addRaw(`Head SHA: \`${pull.head.sha}\`\n\n`)
+              .addHeading('Changed files', 3)
+              .addCodeBlock(changedFiles.join('\n'), 'text')
+              .write();
 
   build_and_smoke:
     name: Build and smoke gate
@@ -123,6 +110,7 @@ jobs:
       PYTHONUNBUFFERED: "1"
       FALLBACK_CONDA_PREFIX: ${{ needs.resolve_runner.outputs.fallback_conda_prefix }}
       CHANGED_TESTS: ${{ needs.prepare.outputs.changed_tests }}
+      LOCAL_BUILD_CACHE_DIR: ${{ needs.build_and_smoke.outputs.local_build_cache_dir }}
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/asp360_new
     steps:
@@ -158,10 +146,27 @@ jobs:
           hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
 
       - name: Download build artifact
+        if: ${{ needs.resolve_runner.outputs.runner_mode == 'github-hosted' }}
         uses: actions/download-artifact@v4
         with:
           name: ${{ needs.build_and_smoke.outputs.build_artifact_name }}
           path: ${{ env.BUILD_DIR }}
+
+      - name: Restore build tree from self-hosted local cache
+        if: ${{ needs.resolve_runner.outputs.runner_mode == 'self-hosted' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${LOCAL_BUILD_CACHE_DIR:-}" ]; then
+            echo "::error::Self-hosted build cache output was empty."
+            exit 1
+          fi
+          if [ ! -d "$LOCAL_BUILD_CACHE_DIR" ]; then
+            echo "::error::Self-hosted build cache does not exist: $LOCAL_BUILD_CACHE_DIR"
+            exit 1
+          fi
+          rm -rf "$BUILD_DIR"
+          cp -a "$LOCAL_BUILD_CACHE_DIR" "$BUILD_DIR"
 
       - name: Run changed unit tests or fallback CTest python group
         shell: bash
@@ -200,29 +205,14 @@ jobs:
       - prepare
     permissions:
       contents: read
+    env:
+      CHANGED_FILES: ${{ needs.prepare.outputs.changed_files }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ github.token }}
-          fetch-depth: 0
-
-      - name: Normalize and verify checkout transport
-        uses: ./.github/actions/normalized-safe-checkout
-        with:
-          skip-checkout: "true"
-          runner-mode: ${{ needs.resolve_runner.outputs.runner_mode }}
-          github-token: ${{ github.token }}
-          fetch-depth: "0"
-          summary-context: pr-gate-metadata-audit
-
       - name: Audit progress/export metadata changes
         shell: bash
         run: |
           set -euo pipefail
-          base_sha="${{ github.event.pull_request.base.sha }}"
-          head_sha="${{ github.event.pull_request.head.sha }}"
-          changed_files="$(git diff --name-only "$base_sha...$head_sha")"
+          changed_files="${CHANGED_FILES:-}"
 
           src_changed=0
           metadata_changed=0

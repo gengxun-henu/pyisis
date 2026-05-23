@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-
 # End-to-end raw/original image matching ControlNet pipeline example runner.
+#
+# Author: Geng Xun
+# Created: 2026-05-23
+# Updated: 2026-05-23  Geng Xun added the raw image ControlNet batch wrapper.
 
 set -euo pipefail
 

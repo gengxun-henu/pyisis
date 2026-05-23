@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-20
+Last Modified: 2026-05-23
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -44,6 +44,7 @@ Updated: 2026-05-19  Geng Xun added regression coverage for deep matcher config 
 Updated: 2026-05-19  Geng Xun aligned wrapper regression coverage for ImageMatch-only defaults, adaptive routing, and resolved deep matcher config paths.
 Updated: 2026-05-20  Geng Xun added preset-aware adaptive-routing forwarding coverage for deep preset maps loaded from config.
 Updated: 2026-05-20  Geng Xun added stage-6 manifest provenance roundtrip coverage for deep-match runtime config export metadata.
+Updated: 2026-05-23  Geng Xun added raw image ControlNet wrapper dry-run and execution coverage.
 """
 
 from __future__ import annotations

@@ -787,7 +787,7 @@ git commit -m "feat: apply match presets in image_match"
 - Modify: `examples/controlnet_construct/run_pipeline_example.sh`
 - Test: `tests/unitTest/controlnet_construct_pipeline_unit_test.py`
 
-- [ ] **Step 1: Add failing wrapper test**
+- [x] **Step 1: Add failing wrapper test**
 
 Add this method to `ControlNetConstructPipelineUnitTest` near the existing `run_pipeline_example.sh` wrapper tests:
 
@@ -898,7 +898,7 @@ Add this method to `ControlNetConstructPipelineUnitTest` near the existing `run_
         self.assertIn("Matcher method: flann", completed.stdout)
 ```
 
-- [ ] **Step 2: Run the failing test**
+- [x] **Step 2: Run the failing test**
 
 Run:
 
@@ -908,7 +908,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: FAIL because the wrapper does not read or forward `match_preset_path`.
 
-- [ ] **Step 3: Add wrapper helper functions**
+- [x] **Step 3: Add wrapper helper functions**
 
 In `examples/controlnet_construct/run_pipeline_example.sh`, add this helper after `resolve_config_relative_path`:
 
@@ -928,7 +928,7 @@ apply_match_preset_path() {
 }
 ```
 
-- [ ] **Step 4: Add option state and parsing**
+- [x] **Step 4: Add option state and parsing**
 
 In `main`, add local state near `explicit_matcher_method`:
 
@@ -959,7 +959,7 @@ After argument parsing and before `require_command "$PYTHON_EXECUTABLE"`, add:
   fi
 ```
 
-- [ ] **Step 5: Resolve config preset and apply it**
+- [x] **Step 5: Resolve config preset and apply it**
 
 After `require_file "$CONFIG_PATH"` and before reading `ImageMatch.matcher_method`, insert:
 
@@ -1001,7 +1001,7 @@ and:
   fi
 ```
 
-- [ ] **Step 6: Forward and log the preset**
+- [x] **Step 6: Forward and log the preset**
 
 In the logging area, add:
 
@@ -1028,7 +1028,7 @@ Remove the unconditional existing line:
     match_args+=(--matcher-method "$MATCHER_METHOD")
 ```
 
-- [ ] **Step 7: Run the focused test**
+- [x] **Step 7: Run the focused test**
 
 Run:
 
@@ -1038,7 +1038,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: PASS.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 Run:
 
@@ -1055,7 +1055,7 @@ git commit -m "feat: wire match presets through pipeline wrapper"
 - Modify: `examples/controlnet_construct/run_image_match_batch_example.sh`
 - Test: `tests/unitTest/controlnet_construct_pipeline_unit_test.py`
 
-- [ ] **Step 1: Add failing batch wrapper test**
+- [x] **Step 1: Add failing batch wrapper test**
 
 Add this method to `ControlNetConstructPipelineUnitTest` near existing `run_image_match_batch_example.sh` tests:
 
@@ -1142,7 +1142,7 @@ Add this method to `ControlNetConstructPipelineUnitTest` near existing `run_imag
         self.assertIn("Matcher method: bf", completed.stdout)
 ```
 
-- [ ] **Step 2: Run the failing test**
+- [x] **Step 2: Run the failing test**
 
 Run:
 
@@ -1152,7 +1152,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: FAIL because the batch wrapper does not recognize `--match-preset-path`.
 
-- [ ] **Step 3: Mirror wrapper state and helpers**
+- [x] **Step 3: Mirror wrapper state and helpers**
 
 In `examples/controlnet_construct/run_image_match_batch_example.sh`:
 
@@ -1210,7 +1210,7 @@ Add conflict checks after parsing:
   fi
 ```
 
-- [ ] **Step 4: Resolve config preset and forward it**
+- [x] **Step 4: Resolve config preset and forward it**
 
 Inside the `if [[ -n "$CONFIG_PATH" ]]; then` block, before reading `matcher_method`, add:
 
@@ -1272,7 +1272,7 @@ Change `match_args` construction so `--matcher-method` is only forwarded when no
 
 Remove `--matcher-method "$matcher_method"` from the initial `match_args` array literals.
 
-- [ ] **Step 5: Run batch wrapper test**
+- [x] **Step 5: Run batch wrapper test**
 
 Run:
 
@@ -1282,7 +1282,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: PASS.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 Run:
 
@@ -1300,7 +1300,7 @@ git commit -m "feat: wire match presets through batch wrapper"
 - Modify: `examples/controlnet_construct/PRESETS_README.md`
 - Test: `tests/unitTest/test_match_preset_config.py`
 
-- [ ] **Step 1: Update example config**
+- [x] **Step 1: Update example config**
 
 In `examples/controlnet_construct/controlnet_config.example.json`, add `match_preset_path` next to existing matcher fields:
 
@@ -1312,7 +1312,7 @@ In `examples/controlnet_construct/controlnet_config.example.json`, add `match_pr
 
 Keep `matcher_method` for backward compatibility.
 
-- [ ] **Step 2: Update preset catalog docs**
+- [x] **Step 2: Update preset catalog docs**
 
 In `examples/controlnet_construct/PRESETS_README.md`, add these two rows near the top of the Preset Catalog:
 
@@ -1364,7 +1364,7 @@ For learning-only legacy configuration, specify `deep_matcher_config_path` in
 `ImageMatch.match_preset_path`.
 ```
 
-- [ ] **Step 3: Add JSON parse regression test**
+- [x] **Step 3: Add JSON parse regression test**
 
 Append this test to `tests/unitTest/test_match_preset_config.py`:
 
@@ -1377,7 +1377,7 @@ Append this test to `tests/unitTest/test_match_preset_config.py`:
         self.assertIsNone(payload["ImageMatch"]["match_preset_path"])
 ```
 
-- [ ] **Step 4: Run docs/config tests**
+- [x] **Step 4: Run docs/config tests**
 
 Run:
 
@@ -1390,7 +1390,7 @@ python -m json.tool examples/controlnet_construct/presets/classic_sift_bf.json >
 
 Expected: all commands exit 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Run:
 

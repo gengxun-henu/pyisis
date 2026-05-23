@@ -53,6 +53,7 @@ import importlib
 import json
 import io
 import os
+import shlex
 import subprocess
 import sys
 import textwrap
@@ -196,10 +197,14 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             )
 
             self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(result.stderr, "")
             command_script = work_dir / "command.sh"
             self.assertTrue(command_script.exists())
             command_text = command_script.read_text(encoding="utf-8")
+            command_lines = command_text.splitlines()
+            parsed_commands = [shlex.split(line) for line in command_lines[2:]]
 
+        self.assertEqual(command_lines[:2], ["#!/usr/bin/env bash", "set -euo pipefail"])
         self.assertIn("image_overlap.py", command_text)
         self.assertIn("controlnet_stereopair.py", command_text)
         self.assertIn("from-ori-match", command_text)
@@ -221,6 +226,82 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("--num-worker-parallel-cpu", command_text)
         self.assertIn("2", command_text)
         self.assertIn("merge_all_controlnets.sh", command_text)
+        self.assertNotIn(" /images_overlap.lis", command_text)
+
+        overlap_command = parsed_commands[0]
+        self.assertEqual(overlap_command[1], str(PROJECT_ROOT / "examples" / "controlnet_construct" / "image_overlap.py"))
+        self.assertEqual(overlap_command[2:4], [str(original_list), str(overlap_list)])
+        self.assertEqual(overlap_command[4:6], ["--report-json", str(work_dir / "reports" / "image_overlap_summary.json")])
+
+        pair_command = next(command for command in parsed_commands if "from-ori-match" in command)
+        self.assertEqual(pair_command[1], str(PROJECT_ROOT / "examples" / "controlnet_construct" / "controlnet_stereopair.py"))
+        self.assertEqual(pair_command[2:7], ["from-ori-match", str(left), str(right), str(config_path), str(work_dir / "ori_pair_nets" / "left__right.net")])
+        self.assertEqual(pair_command[pair_command.index("--pair-id") + 1], "R7")
+        self.assertEqual(pair_command[pair_command.index("--left-output-key") + 1], str(work_dir / "ori_keys" / "left__right_A.key"))
+        self.assertEqual(pair_command[pair_command.index("--right-output-key") + 1], str(work_dir / "ori_keys" / "left__right_B.key"))
+        self.assertEqual(pair_command[pair_command.index("--report-path") + 1], str(work_dir / "reports" / "left__right.summary.json"))
+        self.assertEqual(pair_command[pair_command.index("--matcher-method") + 1], "flann")
+        self.assertEqual(pair_command[pair_command.index("--ratio-test") + 1], "0.8")
+        self.assertEqual(pair_command[pair_command.index("--max-features") + 1], "1200")
+        self.assertEqual(pair_command[pair_command.index("--num-worker-parallel-cpu") + 1], "2")
+
+        merge_command = next(command for command in parsed_commands if any(Path(arg).name == "controlnet_merge.py" for arg in command))
+        self.assertEqual(merge_command[2:6], [str(overlap_list), str(work_dir / "ori_pair_nets"), str(work_dir / "merge" / "ori_matching_merged.net"), str(work_dir / "merge" / "merge_all_controlnets.sh")])
+
+    def test_run_ori_match_pipeline_fresh_dry_run_warns_without_overlap_list(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "missing_parent" / "work_ori"
+            inputs_dir = temp_dir / "inputs"
+            inputs_dir.mkdir()
+            left = inputs_dir / "left.cub"
+            right = inputs_dir / "right.cub"
+            left.write_text("left placeholder\n", encoding="utf-8")
+            right.write_text("right placeholder\n", encoding="utf-8")
+            original_list = temp_dir / "original_images.lis"
+            original_list.write_text(f"{left}\n{right}\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "raw_ori_fresh_unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--original-list",
+                    str(original_list),
+                    "--config",
+                    str(config_path),
+                    "--dry-run",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertNotIn("cd:", result.stderr)
+            self.assertIn("overlap list not found", result.stderr)
+            command_script = work_dir / "command.sh"
+            self.assertTrue(command_script.exists())
+            command_text = command_script.read_text(encoding="utf-8")
+
+        self.assertTrue(command_text.startswith("#!/usr/bin/env bash\nset -euo pipefail\n"))
+        self.assertIn("image_overlap.py", command_text)
+        self.assertIn("controlnet_merge.py", command_text)
+        self.assertNotIn("from-ori-match", command_text)
+        self.assertNotIn(" /images_overlap.lis", command_text)
 
     def test_deep_match_manifest_roundtrip_preserves_runtime_config_provenance_fields(self):
         runtime_config = DeepMatchRuntimeConfig(

@@ -35,6 +35,20 @@ append_command() {
   quote_cmd "$@" >> "$COMMAND_SCRIPT"
 }
 
+resolve_path() {
+  local path=$1
+  if command -v realpath >/dev/null 2>&1; then
+    realpath -m -- "$path"
+  else
+    python - "$path" <<'PY'
+from pathlib import Path
+import sys
+
+print(Path(sys.argv[1]).expanduser().resolve(strict=False))
+PY
+  fi
+}
+
 pair_tag_from_paths() {
   local left=$1
   local right=$2
@@ -142,15 +156,12 @@ if [[ "$PAIR_ID_START" -lt 1 ]]; then
   die "--pair-id-start must be at least 1"
 fi
 
-WORK_DIR="${WORK_DIR:-$REPO_ROOT/$DEFAULT_WORK_DIR_RELATIVE}"
-CONFIG_PATH="${CONFIG_PATH:-$REPO_ROOT/$DEFAULT_CONFIG_RELATIVE}"
-ORIGINAL_LIST="${ORIGINAL_LIST:-$WORK_DIR/original_images.lis}"
-IMAGES_OVERLAP_LIST="${IMAGES_OVERLAP_LIST:-$WORK_DIR/images_overlap.lis}"
+WORK_DIR=$(resolve_path "${WORK_DIR:-$REPO_ROOT/$DEFAULT_WORK_DIR_RELATIVE}")
+mkdir -p "$WORK_DIR"
 
-WORK_DIR=$(cd -- "$(dirname -- "$WORK_DIR")" && pwd)/$(basename -- "$WORK_DIR")
-CONFIG_PATH=$(cd -- "$(dirname -- "$CONFIG_PATH")" && pwd)/$(basename -- "$CONFIG_PATH")
-ORIGINAL_LIST=$(cd -- "$(dirname -- "$ORIGINAL_LIST")" && pwd)/$(basename -- "$ORIGINAL_LIST")
-IMAGES_OVERLAP_LIST=$(cd -- "$(dirname -- "$IMAGES_OVERLAP_LIST")" && pwd)/$(basename -- "$IMAGES_OVERLAP_LIST")
+CONFIG_PATH=$(resolve_path "${CONFIG_PATH:-$REPO_ROOT/$DEFAULT_CONFIG_RELATIVE}")
+ORIGINAL_LIST=$(resolve_path "${ORIGINAL_LIST:-$WORK_DIR/original_images.lis}")
+IMAGES_OVERLAP_LIST=$(resolve_path "${IMAGES_OVERLAP_LIST:-$WORK_DIR/images_overlap.lis}")
 
 ORI_KEYS_DIR="$WORK_DIR/ori_keys"
 PAIR_NETS_DIR="$WORK_DIR/ori_pair_nets"
@@ -163,8 +174,11 @@ MERGE_SCRIPT_PATH="$MERGE_DIR/merge_all_controlnets.sh"
 MERGE_PAIR_LIST_PATH="$MERGE_DIR/merge_all_controlnets.lis"
 MERGE_REPORT_PATH="$MERGE_DIR/controlnet_merge_summary.json"
 
-mkdir -p "$WORK_DIR" "$ORI_KEYS_DIR" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_DIR"
-: > "$COMMAND_SCRIPT"
+mkdir -p "$ORI_KEYS_DIR" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_DIR"
+{
+  printf '#!/usr/bin/env bash\n'
+  printf 'set -euo pipefail\n'
+} > "$COMMAND_SCRIPT"
 chmod 755 "$COMMAND_SCRIPT"
 
 [[ -f "$ORIGINAL_LIST" ]] || die "original image list not found: $ORIGINAL_LIST"
@@ -203,6 +217,8 @@ if [[ -f "$IMAGES_OVERLAP_LIST" ]]; then
     [[ "$GPU_DYNAMIC_BATCH" == "1" ]] && match_args+=(--gpu-dynamic-batch) || match_args+=(--no-gpu-dynamic-batch)
     append_command "${match_args[@]}"
   done < "$IMAGES_OVERLAP_LIST"
+else
+  log "warning: overlap list not found; pair commands were not expanded: $IMAGES_OVERLAP_LIST" >&2
 fi
 
 append_command "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/controlnet_merge.py" \

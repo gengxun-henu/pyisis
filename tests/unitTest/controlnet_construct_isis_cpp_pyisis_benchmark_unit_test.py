@@ -483,6 +483,178 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertIsNone(result["valid_point_count"])
         self.assertIsNone(result["valid_measure_count"])
 
+    def test_compare_camera_results_computes_stats_and_top_errors(self):
+        py_result = {
+            "points": [
+                {
+                    "index": 0,
+                    "latitude": 1.0,
+                    "longitude": 2.0,
+                    "roundtrip_sample": 10.0,
+                    "roundtrip_line": 20.0,
+                },
+                {
+                    "index": 1,
+                    "latitude": 2.0,
+                    "longitude": 4.0,
+                    "roundtrip_sample": 30.0,
+                    "roundtrip_line": 40.0,
+                },
+                {
+                    "index": 3,
+                    "latitude": 10.0,
+                    "longitude": 12.0,
+                    "roundtrip_sample": 50.0,
+                    "roundtrip_line": 60.0,
+                },
+            ]
+        }
+        cpp_result = {
+            "points": [
+                {
+                    "index": 0,
+                    "latitude": 1.5,
+                    "longitude": 2.25,
+                    "roundtrip_sample": 11.0,
+                    "roundtrip_line": 20.5,
+                },
+                {
+                    "index": 2,
+                    "latitude": 9.0,
+                    "longitude": 9.0,
+                    "roundtrip_sample": 9.0,
+                    "roundtrip_line": 9.0,
+                },
+                {
+                    "index": 3,
+                    "latitude": 8.0,
+                    "longitude": 11.0,
+                    "roundtrip_sample": 48.0,
+                    "roundtrip_line": 59.0,
+                },
+            ]
+        }
+
+        comparison = benchmark.compare_camera_results(
+            "camera_a",
+            py_result,
+            cpp_result,
+            top_error_count=1,
+        )
+
+        self.assertEqual(comparison["label"], "camera_a")
+        self.assertEqual(comparison["matched_point_count"], 2)
+        self.assertEqual(comparison["missing_in_pyisis"], [2])
+        self.assertEqual(comparison["missing_in_cpp"], [1])
+        self.assertAlmostEqual(comparison["stats"]["latitude_abs_max"], 2.0)
+        self.assertAlmostEqual(comparison["stats"]["latitude_abs_mean"], 1.25)
+        self.assertAlmostEqual(comparison["stats"]["latitude_abs_rms"], ((0.5**2 + 2.0**2) / 2) ** 0.5)
+        self.assertAlmostEqual(comparison["stats"]["longitude_abs_max"], 1.0)
+        self.assertAlmostEqual(comparison["stats"]["sample_abs_max"], 2.0)
+        self.assertAlmostEqual(comparison["stats"]["line_abs_max"], 1.0)
+        self.assertEqual([row["index"] for row in comparison["top_errors"]], [3])
+        self.assertAlmostEqual(comparison["top_errors"][0]["combined_error"], 6.0)
+
+    def test_prepare_run_directory_writes_config_snapshot_manifest_and_dirs(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+            run_dir = benchmark.prepare_run_directory(
+                config,
+                output_root=temp_dir / "out",
+                dry_run=True,
+            )
+
+            self.assertEqual(run_dir, (temp_dir / "out" / "unit_benchmark").resolve())
+            self.assertTrue((run_dir / "experiment_config.json").is_file())
+            self.assertEqual(
+                json.loads((run_dir / "experiment_config.json").read_text(encoding="utf-8")),
+                json.loads(config_path.read_text(encoding="utf-8")),
+            )
+            manifest = json.loads((run_dir / "experiment_manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(manifest["run_id"], "unit_benchmark")
+            self.assertTrue(manifest["dry_run"])
+            self.assertEqual(
+                manifest["tasks"],
+                ["config_relative_camera", "repo_relative_camera", "controlnet_fixture"],
+            )
+            self.assertEqual(manifest["cpp_benchmark_path"], str(PROJECT_ROOT / "tools/cpp_benchmark"))
+            self.assertRegex(manifest["created_at"], r"^\d{4}-\d{2}-\d{2}T.*\+00:00$")
+            self.assertTrue((run_dir / "pyisis").is_dir())
+            self.assertTrue((run_dir / "cpp").is_dir())
+            self.assertTrue((run_dir / "reports").is_dir())
+
+    def test_write_summary_reports_writes_json_and_csv_schemas(self):
+        results = [
+            {
+                "label": "camera_a",
+                "task_type": "camera",
+                "implementation": "pyisis",
+                "status": "completed",
+                "core_seconds": 1.25,
+                "wall_seconds": 1.5,
+                "successful_point_count": 2,
+            },
+            {
+                "label": "net_a",
+                "task_type": "controlnet",
+                "implementation": "cpp",
+                "status": "completed",
+                "core_seconds": 2.0,
+                "wall_seconds": 2.25,
+                "point_count": 7,
+                "measure_count": 11,
+            },
+        ]
+        camera_comparisons = [
+            {
+                "label": "camera_a",
+                "matched_point_count": 1,
+                "missing_in_pyisis": [],
+                "missing_in_cpp": [],
+                "stats": {"latitude_abs_max": 0.5},
+                "top_errors": [
+                    {
+                        "label": "camera_a",
+                        "index": 4,
+                        "combined_error": 1.5,
+                        "latitude_abs": 0.5,
+                        "longitude_abs": 0.25,
+                        "sample_abs": 0.5,
+                        "line_abs": 0.25,
+                    }
+                ],
+            }
+        ]
+
+        with temporary_directory() as temp_dir:
+            benchmark.write_summary_reports(temp_dir, results, camera_comparisons)
+
+            summary = json.loads((temp_dir / "reports" / "summary.json").read_text(encoding="utf-8"))
+            self.assertEqual(summary["results"], results)
+            self.assertEqual(summary["camera_comparisons"], camera_comparisons)
+            self.assertEqual(
+                (temp_dir / "reports" / "summary.csv").read_text(encoding="utf-8").splitlines(),
+                [
+                    "label,task_type,implementation,status,core_seconds,wall_seconds,point_count,measure_count,successful_point_count",
+                    "camera_a,camera,pyisis,completed,1.25,1.5,,,2",
+                    "net_a,controlnet,cpp,completed,2.0,2.25,7,11,",
+                ],
+            )
+            self.assertEqual(
+                (temp_dir / "reports" / "camera_top_errors.csv").read_text(encoding="utf-8").splitlines(),
+                [
+                    "label,index,combined_error,latitude_abs,longitude_abs,sample_abs,line_abs",
+                    "camera_a,4,1.5,0.5,0.25,0.5,0.25",
+                ],
+            )
+            controlnet_summary = json.loads(
+                (temp_dir / "reports" / "controlnet_summary.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(controlnet_summary["results"], [results[1]])
+
 
 if __name__ == "__main__":
     unittest.main()

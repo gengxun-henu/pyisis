@@ -4,10 +4,14 @@ from __future__ import annotations
 
 import argparse
 from collections import Counter
+import csv
 from dataclasses import dataclass
+from datetime import datetime, timezone
 import json
+import math
 from pathlib import Path
 import re
+import shutil
 import time
 from typing import Any
 
@@ -393,6 +397,150 @@ def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) ->
         "traverse_seconds": traverse_seconds,
         "core_seconds": load_seconds + traverse_seconds,
     }
+
+
+def compare_camera_results(
+    label: str,
+    pyisis_result: dict[str, Any],
+    cpp_result: dict[str, Any],
+    *,
+    top_error_count: int,
+) -> dict[str, Any]:
+    py_points = {int(point["index"]): point for point in pyisis_result.get("points", [])}
+    cpp_points = {int(point["index"]): point for point in cpp_result.get("points", [])}
+    matched_indices = sorted(set(py_points) & set(cpp_points))
+    missing_in_pyisis = sorted(set(cpp_points) - set(py_points))
+    missing_in_cpp = sorted(set(py_points) - set(cpp_points))
+
+    error_rows: list[dict[str, Any]] = []
+    for index in matched_indices:
+        py_point = py_points[index]
+        cpp_point = cpp_points[index]
+        row = {
+            "label": label,
+            "index": index,
+            "latitude_abs": abs(float(py_point["latitude"]) - float(cpp_point["latitude"])),
+            "longitude_abs": abs(float(py_point["longitude"]) - float(cpp_point["longitude"])),
+            "sample_abs": abs(float(py_point["roundtrip_sample"]) - float(cpp_point["roundtrip_sample"])),
+            "line_abs": abs(float(py_point["roundtrip_line"]) - float(cpp_point["roundtrip_line"])),
+        }
+        row["combined_error"] = (
+            row["latitude_abs"]
+            + row["longitude_abs"]
+            + row["sample_abs"]
+            + row["line_abs"]
+        )
+        error_rows.append(row)
+
+    return {
+        "label": label,
+        "matched_point_count": len(matched_indices),
+        "missing_in_pyisis": missing_in_pyisis,
+        "missing_in_cpp": missing_in_cpp,
+        "stats": _camera_error_stats(error_rows),
+        "top_errors": sorted(error_rows, key=lambda row: row["combined_error"], reverse=True)[:top_error_count],
+    }
+
+
+def _camera_error_stats(rows: list[dict[str, Any]]) -> dict[str, float | None]:
+    stats: dict[str, float | None] = {}
+    for key in ("latitude_abs", "longitude_abs", "sample_abs", "line_abs"):
+        values = [float(row[key]) for row in rows]
+        if values:
+            stats[f"{key}_max"] = max(values)
+            stats[f"{key}_mean"] = sum(values) / len(values)
+            stats[f"{key}_rms"] = math.sqrt(sum(value * value for value in values) / len(values))
+        else:
+            stats[f"{key}_max"] = None
+            stats[f"{key}_mean"] = None
+            stats[f"{key}_rms"] = None
+    return stats
+
+
+def prepare_run_directory(config: BenchmarkConfig, *, output_root: str | Path, dry_run: bool) -> Path:
+    output_root = Path(output_root).expanduser().resolve()
+    run_dir = output_root / config.run_id
+    run_dir.mkdir(parents=True, exist_ok=True)
+    for child_name in ("pyisis", "cpp", "reports"):
+        (run_dir / child_name).mkdir(exist_ok=True)
+
+    shutil.copyfile(config.config_path, run_dir / "experiment_config.json")
+    manifest = {
+        "run_id": config.run_id,
+        "description": config.description,
+        "dry_run": dry_run,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "tasks": [task.label for task in config.camera_tasks] + [task.label for task in config.controlnet_tasks],
+        "cpp_benchmark_path": str(config.execution.cpp_benchmark_path),
+    }
+    (run_dir / "experiment_manifest.json").write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return run_dir
+
+
+def write_summary_reports(
+    run_dir: str | Path,
+    results: list[dict[str, Any]],
+    camera_comparisons: list[dict[str, Any]],
+) -> None:
+    reports_dir = Path(run_dir) / "reports"
+    reports_dir.mkdir(parents=True, exist_ok=True)
+
+    summary = {
+        "results": results,
+        "camera_comparisons": camera_comparisons,
+    }
+    (reports_dir / "summary.json").write_text(
+        json.dumps(summary, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    _write_summary_csv(reports_dir / "summary.csv", results)
+    _write_camera_top_errors(reports_dir / "camera_top_errors.csv", camera_comparisons)
+
+    controlnet_results = [result for result in results if result.get("task_type") == "controlnet"]
+    (reports_dir / "controlnet_summary.json").write_text(
+        json.dumps({"results": controlnet_results}, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _write_summary_csv(path: Path, results: list[dict[str, Any]]) -> None:
+    columns = [
+        "label",
+        "task_type",
+        "implementation",
+        "status",
+        "core_seconds",
+        "wall_seconds",
+        "point_count",
+        "measure_count",
+        "successful_point_count",
+    ]
+    with path.open("w", encoding="utf-8", newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=columns)
+        writer.writeheader()
+        for result in results:
+            writer.writerow({column: result.get(column) for column in columns})
+
+
+def _write_camera_top_errors(path: Path, camera_comparisons: list[dict[str, Any]]) -> None:
+    columns = [
+        "label",
+        "index",
+        "combined_error",
+        "latitude_abs",
+        "longitude_abs",
+        "sample_abs",
+        "line_abs",
+    ]
+    with path.open("w", encoding="utf-8", newline="") as csv_file:
+        writer = csv.DictWriter(csv_file, fieldnames=columns)
+        writer.writeheader()
+        for comparison in camera_comparisons:
+            for row in comparison.get("top_errors", []):
+                writer.writerow({column: row.get(column) for column in columns})
 
 
 def main(argv: list[str] | None = None) -> int:

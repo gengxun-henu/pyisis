@@ -27,11 +27,11 @@ Control Networks,ControlPointList,已转换,2026-03-21 已在 bind_control_core.
 Control Networks,ControlPointV0001,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL 构造与 protobuf bytes/debug-string 适配接口
 Control Networks,ControlPointV0002,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口
 Control Networks,ControlPointV0003,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口
-Control Networks,CsmBundleObservation,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 暴露 CsmBundleObservation（继承 BundleObservation；构造函数/number_parameters/parameter_list/bundle_output_csv）；focused 单测在 tests/unitTest/batch2_unit_test.py
+Control Networks,CsmBundleObservation,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 暴露 CsmBundleObservation（继承 BundleObservation；构造函数/number_parameters/parameter_list/bundle_output_csv）；focused 单测在 tests/unitTest/mosaic_bundle_image_polygon_utility_unit_test.py
 Control Networks,ImageOverlap,已转换,2026-04-14 全部 13/13 方法已绑定 100%；6N 为有意排除项：4 个 GEOS MultiPolygon 相关方法（SetPolygon/Polygon/构造）+ 2 个 std::istream/ostream 方法；Python 侧通过字符串序列号/area/query 接口覆盖
 Control Networks,InterestOperator,未转换,抽象基类/纯虚接口
 Control Networks,InterestOperatorFactory,已转换,2026-03-27 已在 bind_interest_operator_factory.cpp 暴露 create 静态工厂方法
-Control Networks,IsisBundleObservation,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 暴露 IsisBundleObservation（继承 BundleObservation；number_parameters/spice_rotation/spice_position）；focused 单测在 tests/unitTest/batch2_unit_test.py
+Control Networks,IsisBundleObservation,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 暴露 IsisBundleObservation（继承 BundleObservation；number_parameters/spice_rotation/spice_position）；focused 单测在 tests/unitTest/mosaic_bundle_image_polygon_utility_unit_test.py
 Control Networks,LidarControlPoint,已转换,2026-04-10 已在 src/control/bind_control_core.cpp 暴露构造/range/sigma/time/simultaneous 方法；继承 ControlPoint
 Control Networks,MeasureValidationResults,已转换,2026-03-21 已在 bind_control_core.cpp 暴露验证状态/失败消息/字符串格式化接口
 Control Networks,ObservationNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 possible_serial(...)
@@ -65,15 +65,15 @@ High Level Cube I/O,ProcessBySpectra,已转换,抽象基类/纯虚接口；流�
 High Level Cube I/O,ProcessByTile,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessExport,未转换,抽象基类/纯虚接口；流程/回调接口较多
 High Level Cube I/O,ProcessExportPds,未转换,流程/回调接口较多
-High Level Cube I/O,ProcessGroundPolygons,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessGroundPolygons（继承 ProcessPolygons；rasterize_latlon）；focused 单测在 batch3_unit_test.py
+High Level Cube I/O,ProcessGroundPolygons,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessGroundPolygons（继承 ProcessPolygons；rasterize_latlon）；focused 单测在 high_level_cube_io_process_polygon_tools_unit_test.py
 High Level Cube I/O,ProcessImport,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessImportFits,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessImportPds,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessImportVicar,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessMapMosaic,已转换,2026-04-14 全部 14/14 方法已绑定 100%；5N 为 RingsSetOutputCube 系列方法（环平面投影专用），有意不暴露；常规行星投影全部通过 SetOutputCube 覆盖
 High Level Cube I/O,ProcessMosaic,已转换,2026-04-11 新增 StartProcess/EndProcess/imagePositions/SetBandKeyword；SetInputCube/SetOutputCube 因 Cube 生命周期管理仍待处理
-High Level Cube I/O,ProcessPolygons,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessPolygons（继承 Process；rasterize/set_intersect_algorithm/end_process）；focused 单测在 batch3_unit_test.py
-High Level Cube I/O,ProcessRubberSheet,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessRubberSheet（继承 Process；start_process/force_tile/set_tiling）；focused 单测在 batch3_unit_test.py
+High Level Cube I/O,ProcessPolygons,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessPolygons（继承 Process；rasterize/set_intersect_algorithm/end_process）；focused 单测在 high_level_cube_io_process_polygon_tools_unit_test.py
+High Level Cube I/O,ProcessRubberSheet,已转换,2026-04-10 已在 src/bind_high_level_cube_io.cpp 暴露 ProcessRubberSheet（继承 Process；start_process/force_tile/set_tiling）；focused 单测在 high_level_cube_io_process_polygon_tools_unit_test.py
 High Level Cube I/O,QtExporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露构造函数、setGrayscale/setRgb/setRgba、write、canWriteFormat 方法；继承 ImageExporter
 High Level Cube I/O,QtImporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露构造函数与格式查询方法；继承 ImageImporter
 High Level Cube I/O,StreamExporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露抽象基类；继承 ImageExporter
@@ -214,7 +214,7 @@ Pattern Matching,Chip,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp
 Pattern Matching,GridPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/sub_grid/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
 Pattern Matching,Gruen,已转换,2026-04-14 全部 12/12 方法已绑定 100%；6N 为有意排除项：默认构造不暴露（需 PVL 配置）、4 个 GruenTypes 内部类型方法（AffineRadio/AffineTolerance/MatchPoint）、1 个 BigInt CallCount；Python 侧通过 Pvl 构造 + 约束访问器 + 继承 AutoReg 方法覆盖
 Pattern Matching,ImageOverlapSet,已转换,2026-04-14 全部 9/9 方法已绑定 100%；3 个 FindImageOverlaps 重载因 GEOS MultiPolygon/SerialNumberList 依赖有意不暴露；Python 侧通过 read/write 文件接口覆盖
-Pattern Matching,ImagePolygon,已转换,2026-04-10 已在 src/base/bind_base_image_polygon.cpp 暴露 ImagePolygon（从坐标创建多边形/poly_str WKT/顶点数/flag setters）；focused 单测在 batch2_unit_test.py
+Pattern Matching,ImagePolygon,已转换,2026-04-10 已在 src/base/bind_base_image_polygon.cpp 暴露 ImagePolygon（从坐标创建多边形/poly_str WKT/顶点数/flag setters）；focused 单测在 mosaic_bundle_image_polygon_utility_unit_test.py
 Pattern Matching,LimitPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
 Pattern Matching,MaximumCorrelation,已转换,2026-04-02 已在 bind_base_pattern.cpp 暴露构造函数，继承 AutoReg 全部方法
 Pattern Matching,MinimumDifference,已转换,2026-04-09 已在 src/base/bind_base_pattern.cpp 继承 AutoReg 暴露构造函数/ideal_fit/most_lenient_tolerance；focused 单测在 pattern_unit_test.py
@@ -335,7 +335,7 @@ Utility,Distance,已转换,
 Utility,EndianSwapper,已转换,2026-04-14 全部 11/11 方法已绑定 100%；新增 export_float/swap_uint32/swap_long_long
 Utility,ExportPdsTable,已转换,2026-04-12 已在 src/base/bind_base_pds_io.cpp 补 export_table bytearray wrapper；focused 单测与 smoke 已通过
 Utility,GaussianStretch,已转换,2026-04-10 已在 src/bind_statistics.cpp 暴露 constructor(Histogram)/map；focused 单测在 camera_maps_unit_test.py；smoke 已补符号
-Utility,GSLUtility,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 GSLUtility（singleton getInstance/success/status）；focused 单测在 batch2_unit_test.py
+Utility,GSLUtility,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 GSLUtility（singleton getInstance/success/status）；focused 单测在 mosaic_bundle_image_polygon_utility_unit_test.py
 Utility,ID,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 ID 构造与 next() 方法；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Utility,IException,已转换,2026-05-03 已在 src/base/bind_base_support.cpp 补 `IException.error_type_to_string(...)` 静态 helper 与 focused 单测；IException 本体仍通过 py::register_exception 暴露为 Python 异常类
 Utility,ImportPdsTable,已转换,2026-04-11 全部方法已绑定（新增 getFormattedName）
@@ -345,7 +345,7 @@ Utility,LineEquation,已转换,2026-03-30 已在 bind_base_utility.cpp 暴露默
 Utility,Longitude,已转换,2026-04-12 已补 to360_range(...) 静态方法；focused 单测已覆盖 wrap-around split
 Utility,Message,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 以 `ip.Message` 子模块暴露全部标准消息模板 helper，并补 focused 单测与 smoke 覆盖
 Utility,Pixel,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 Pixel 构造/accessors/转换方法/静态 special-pixel 谓词；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
-Utility,PolygonTools,已转换,2026-04-11 已在 src/base/bind_base_utility.cpp 将 PolygonTools 修正为真实 Python 类符号并暴露 static：equal/reduce_precision/decimal_place/gml_schema；保留旧 module-level helper alias；focused 单测在 batch3_unit_test.py，smoke 已恢复
+Utility,PolygonTools,已转换,2026-04-11 已在 src/base/bind_base_utility.cpp 将 PolygonTools 修正为真实 Python 类符号并暴露 static：equal/reduce_precision/decimal_place/gml_schema；保留旧 module-level helper alias；focused 单测在 high_level_cube_io_process_polygon_tools_unit_test.py，smoke 已恢复
 Utility,Progress,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 完成 py::class_ 绑定；focused 单测在 tests/unitTest/progress_unit_test.py；smoke 已补符号
 Utility,Resource,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 完成 PVL/name 核心接口绑定（跳过 GisGeometry/QVariant asset）；focused 单测在 tests/unitTest/resource_unit_test.py；smoke 已补符号
 Utility,Selection,未转换,抽象基类/纯虚接口

@@ -156,6 +156,25 @@ class ControlNetParameterCatalogUnitTest(unittest.TestCase):
         self.assertEqual(low_res.config_path, "ImageMatch.low_resolution_level")
         self.assertEqual(low_res.min_value, 0)
 
+        invalid_pixel_radius = PARAMETER_BY_NAME["invalid_pixel_radius"]
+        self.assertEqual(invalid_pixel_radius.group, "tile")
+        self.assertEqual(invalid_pixel_radius.cli_flag, "--invalid-pixel-radius")
+        self.assertEqual(invalid_pixel_radius.config_path, "ImageMatch.invalid_pixel_radius")
+        self.assertEqual(invalid_pixel_radius.min_value, 0)
+        self.assertEqual(invalid_pixel_radius.max_value, 100)
+
+        valid_pixel_threshold = PARAMETER_BY_NAME["valid_pixel_percent_threshold"]
+        self.assertEqual(valid_pixel_threshold.group, "tile")
+        self.assertEqual(valid_pixel_threshold.cli_flag, "--valid-pixel-percent-threshold")
+        self.assertEqual(valid_pixel_threshold.config_path, "ImageMatch.valid_pixel_percent_threshold")
+        self.assertEqual(valid_pixel_threshold.min_value, 0.0)
+        self.assertEqual(valid_pixel_threshold.max_value, 1.0)
+
+        pair_id_start = PARAMETER_BY_NAME["pair_id_start"]
+        self.assertEqual(pair_id_start.group, "controlnet")
+        self.assertEqual(pair_id_start.cli_flag, "--pair-id-start")
+        self.assertEqual(pair_id_start.min_value, 1)
+
         strict = PARAMETER_BY_NAME["strict_parameter_validation"]
         self.assertEqual(strict.group, "reporting")
         self.assertEqual(strict.cli_flag, "--strict-parameter-validation")

@@ -138,6 +138,48 @@ def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
 
 
 class ControlNetConstructPipelineUnitTest(unittest.TestCase):
+    def _run_pipeline_validate_parameters_only(self, extra_args: list[str]) -> subprocess.CompletedProcess[str]:
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text("/tmp/left.cub\n/tmp/right.cub\n", encoding="utf-8")
+            dom_list = work_dir / "doms.lis"
+            dom_list.write_text("/tmp/left_dom.cub\n/tmp/right_dom.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "validate_bad_wrapper_unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                        "ImageMatch": {
+                            "matcher_method": "bf",
+                            "num_worker_parallel_cpu": 3,
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            return subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    *extra_args,
+                    "--validate-parameters-only",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
     def test_run_pipeline_example_prints_parameter_groups(self):
         result = subprocess.run(
             [
@@ -205,6 +247,20 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn(f"WORK_DIR={work_dir}", result.stdout)
         self.assertIn("NETWORK_ID=validate_only_unit", result.stdout)
         self.assertNotIn("Step 1/", result.stdout)
+
+    def test_run_pipeline_example_validate_parameters_only_rejects_bad_wrapper_cli_values(self):
+        cases = (
+            ("pair_id_start", ["--pair-id-start", "not_an_int"]),
+            ("invalid_pixel_radius", ["--invalid-pixel-radius", "bad"]),
+            ("valid_pixel_percent_threshold", ["--valid-pixel-percent-threshold", "bad"]),
+        )
+
+        for expected_field, extra_args in cases:
+            with self.subTest(expected_field=expected_field):
+                result = self._run_pipeline_validate_parameters_only(extra_args)
+
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(expected_field, result.stderr)
 
     def test_run_pipeline_example_strict_parameter_validation_promotes_warning(self):
         with temporary_directory() as temp_dir:

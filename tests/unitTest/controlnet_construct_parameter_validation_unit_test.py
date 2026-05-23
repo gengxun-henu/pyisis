@@ -259,6 +259,24 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
         self.assertIn("skip_final_merge", result.error_text())
         self.assertIn("boolean", result.error_text())
 
+    def test_wrapper_owned_numeric_fields_validate_type_and_range(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        cases = (
+            ("pair_id_start", "not_an_int", "finite integer"),
+            ("pair_id_start", 0, ">= 1"),
+            ("invalid_pixel_radius", 101, "<= 100"),
+            ("valid_pixel_percent_threshold", 1.1, "<= 1.0"),
+        )
+
+        for field, value, expected_message in cases:
+            with self.subTest(field=field):
+                result = validate_parameters("run_pipeline_example", cli_values={field: value})
+
+                self.assertTrue(result.has_errors)
+                self.assertIn(field, result.error_text())
+                self.assertIn(expected_message, result.error_text())
+
     def test_shell_assignments_quote_values(self):
         from controlnet_construct.parameter_validation import validate_parameters
 

@@ -708,11 +708,22 @@ def coerce_value(name: str, value: object) -> object:
     if not isinstance(value, str):
         return value
     if spec.value_type == "bool":
-        return value.strip().lower() in {"1", "true", "yes", "on"}
+        normalized = value.strip().lower()
+        if normalized in {"1", "true", "yes", "on"}:
+            return True
+        if normalized in {"0", "false", "no", "off"}:
+            return False
+        return value
     if spec.value_type == "int":
-        return int(value)
+        try:
+            return int(value)
+        except ValueError:
+            return value
     if spec.value_type == "float":
-        return float(value)
+        try:
+            return float(value)
+        except ValueError:
+            return value
     return value
 
 
@@ -735,6 +746,12 @@ if env("explicit_strict_parameter_validation") == "1":
 cli_sources = {
     "num_worker_parallel_cpu": ("explicit_num_worker_parallel_cpu", "NUM_WORKER_PARALLEL_CPU"),
     "use_parallel_cpu": ("explicit_use_parallel_cpu", "USE_PARALLEL_CPU"),
+    "pair_id_start": ("explicit_pair_id_start", "PAIR_ID_START"),
+    "valid_pixel_percent_threshold": (
+        "explicit_valid_pixel_percent_threshold",
+        "VALID_PIXEL_PERCENT_THRESHOLD",
+    ),
+    "invalid_pixel_radius": ("explicit_invalid_pixel_radius", "INVALID_PIXEL_RADIUS"),
     "match_preset_path": ("explicit_match_preset_path", "match_preset_path"),
     "matcher_method": ("explicit_matcher_method", "MATCHER_METHOD"),
     "deep_match_config_path": ("explicit_deep_matcher_config_path", "DEEP_MATCHER_CONFIG_PATH"),
@@ -769,6 +786,8 @@ for parameter_name, (marker_name, value_name) in cli_sources.items():
 
 config_sources = {
     "match_preset_path": "config_match_preset_path",
+    "valid_pixel_percent_threshold": "config_valid_pixel_percent_threshold",
+    "invalid_pixel_radius": "config_invalid_pixel_radius",
     "num_worker_parallel_cpu": "config_num_worker_parallel_cpu",
     "use_parallel_cpu": "config_use_parallel_cpu",
     "matcher_method": "config_matcher_method",
@@ -1179,6 +1198,7 @@ main() {
   local explicit_valid_pixel_percent_threshold=""
   local explicit_num_worker_parallel_cpu=""
   local explicit_use_parallel_cpu=""
+  local explicit_pair_id_start=""
   local explicit_invalid_pixel_radius=""
   local explicit_matcher_method=""
   local explicit_match_preset_path=""
@@ -1317,6 +1337,7 @@ main() {
       --pair-id-start)
         [[ $# -ge 2 ]] || die "missing value for --pair-id-start"
         PAIR_ID_START=$2
+        explicit_pair_id_start=$2
         shift 2
         ;;
       --valid-pixel-percent-threshold)
@@ -1745,11 +1766,13 @@ PY
 
   export REPO_ROOT
   export print_parameter_groups validate_parameters_only strict_parameter_validation explicit_strict_parameter_validation
-  export explicit_num_worker_parallel_cpu explicit_use_parallel_cpu explicit_match_preset_path explicit_matcher_method explicit_deep_matcher_config_path
+  export explicit_num_worker_parallel_cpu explicit_use_parallel_cpu explicit_pair_id_start explicit_valid_pixel_percent_threshold explicit_invalid_pixel_radius
+  export explicit_match_preset_path explicit_matcher_method explicit_deep_matcher_config_path
   export explicit_adaptive_routing explicit_adaptive_routing_profile explicit_enable_low_resolution_offset_estimation explicit_low_resolution_level
   export explicit_low_resolution_max_mean_reprojection_error_pixels explicit_low_resolution_min_retained_match_count explicit_low_resolution_max_mean_projected_offset_meters
   export explicit_visualization_mode explicit_memory_profile explicit_visualization_target_long_edge explicit_preview_crop_margin_pixels explicit_preview_cache_source
   export match_preset_path MATCHER_METHOD DEEP_MATCHER_CONFIG_PATH ADAPTIVE_ROUTING ADAPTIVE_ROUTING_PROFILE USE_PARALLEL_CPU NUM_WORKER_PARALLEL_CPU
+  export PAIR_ID_START VALID_PIXEL_PERCENT_THRESHOLD INVALID_PIXEL_RADIUS
   export ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION LOW_RESOLUTION_LEVEL LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT
   export LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS VISUALIZATION_MODE MEMORY_PROFILE VISUALIZATION_TARGET_LONG_EDGE PREVIEW_CROP_MARGIN_PIXELS PREVIEW_CACHE_SOURCE
   export config_match_preset_path config_num_worker_parallel_cpu config_use_parallel_cpu config_matcher_method config_deep_matcher_config_path

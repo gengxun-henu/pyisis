@@ -303,6 +303,130 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertNotIn("from-ori-match", command_text)
         self.assertNotIn(" /images_overlap.lis", command_text)
 
+    def test_run_ori_match_pipeline_executes_fake_pipeline_and_writes_summary(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work_ori"
+            work_dir.mkdir()
+            inputs_dir = temp_dir / "inputs"
+            inputs_dir.mkdir()
+            left = inputs_dir / "left.cub"
+            right = inputs_dir / "right.cub"
+            left.write_text("left placeholder\n", encoding="utf-8")
+            right.write_text("right placeholder\n", encoding="utf-8")
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text(f"{left}\n{right}\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                '{"NetworkId":"raw_image_matching","TargetName":"Mars","UserName":"unit"}\n',
+                encoding="utf-8",
+            )
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python_dispatcher.write_text(
+                textwrap.dedent(
+                    r'''
+                    from __future__ import annotations
+
+                    import json
+                    from pathlib import Path
+                    import sys
+
+                    script = Path(sys.argv[1])
+                    args = sys.argv[2:]
+
+                    if script.name == "image_overlap.py":
+                        input_list = Path(args[0])
+                        output_list = Path(args[1])
+                        report_path = Path(args[args.index("--report-json") + 1])
+                        images = [line.strip() for line in input_list.read_text(encoding="utf-8").splitlines() if line.strip()]
+                        output_list.write_text(f"{images[0]},{images[1]}\n", encoding="utf-8")
+                        report_path.parent.mkdir(parents=True, exist_ok=True)
+                        report_path.write_text(json.dumps({"pair_count": 1, "image_count": 2}) + "\n", encoding="utf-8")
+                        raise SystemExit(0)
+
+                    if script.name == "controlnet_stereopair.py" and args[0] == "from-ori-match":
+                        output_net = Path(args[4])
+                        left_key = Path(args[args.index("--left-output-key") + 1])
+                        right_key = Path(args[args.index("--right-output-key") + 1])
+                        report_path = Path(args[args.index("--report-path") + 1])
+                        for path in (output_net, left_key, right_key, report_path):
+                            path.parent.mkdir(parents=True, exist_ok=True)
+                        output_net.write_text("pair net\n", encoding="utf-8")
+                        left_key.write_text("left key\n", encoding="utf-8")
+                        right_key.write_text("right key\n", encoding="utf-8")
+                        report_path.write_text(json.dumps({"mode": "from-ori-match", "controlnet": {"point_count": 3}}) + "\n", encoding="utf-8")
+                        raise SystemExit(0)
+
+                    if script.name == "controlnet_merge.py":
+                        pair_net_dir = Path(args[1])
+                        script_path = Path(args[3])
+                        pair_list = Path(args[args.index("--pair-list") + 1])
+                        report_path = Path(args[args.index("--report-json") + 1])
+                        output_net = Path(args[2])
+                        script_path.parent.mkdir(parents=True, exist_ok=True)
+                        pair_list.write_text("\n".join(str(path) for path in pair_net_dir.glob("*.net")) + "\n", encoding="utf-8")
+                        script_path.write_text("#!/usr/bin/env bash\nset -euo pipefail\nprintf merged > " + str(output_net) + "\n", encoding="utf-8")
+                        script_path.chmod(0o755)
+                        report_path.write_text(json.dumps({"included_count": 1, "output_net": str(output_net)}) + "\n", encoding="utf-8")
+                        raise SystemExit(0)
+
+                    raise SystemExit(f"unexpected command: {sys.argv}")
+                    '''
+                ),
+                encoding="utf-8",
+            )
+            fake_python = temp_dir / "fake_python"
+            fake_python.write_text(
+                "#!/usr/bin/env bash\n"
+                f"exec {sys.executable!s} {fake_python_dispatcher!s} \"$@\"\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            env = {**os.environ, "PYTHON_EXECUTABLE": str(fake_python)}
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--original-list",
+                    str(original_list),
+                    "--config",
+                    str(config_path),
+                    "--skip-final-merge",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+                env=env,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            summary_path = work_dir / "reports" / "ori_match_batch_summary.json"
+            self.assertTrue(summary_path.exists())
+            summary = json.loads(summary_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(summary["mode"], "from-ori-match-batch-wrapper")
+        self.assertEqual(summary["original_list"], str(original_list))
+        self.assertEqual(summary["images_overlap_list"], str(work_dir / "images_overlap.lis"))
+        self.assertEqual(summary["pair_count"], 1)
+        self.assertEqual(summary["pair_id_prefix"], "S")
+        self.assertEqual(summary["pair_id_start"], 1)
+        self.assertEqual(summary["matcher_method"], "flann")
+        self.assertEqual(summary["pair_net_directory"], str(work_dir / "ori_pair_nets"))
+        self.assertEqual(summary["report_directory"], str(work_dir / "reports"))
+        self.assertEqual(summary["merge_output_net"], str(work_dir / "merge" / "ori_matching_merged.net"))
+        self.assertEqual(summary["merge_script_path"], str(work_dir / "merge" / "merge_all_controlnets.sh"))
+        self.assertEqual(summary["pairs"][0]["pair_id"], "S1")
+        self.assertEqual(summary["pairs"][0]["pair"], f"{left},{right}")
+        self.assertEqual(summary["pairs"][0]["output_net"], str(work_dir / "ori_pair_nets" / "left__right.net"))
+        self.assertEqual(summary["pairs"][0]["left_key"], str(work_dir / "ori_keys" / "left__right_A.key"))
+        self.assertEqual(summary["pairs"][0]["right_key"], str(work_dir / "ori_keys" / "left__right_B.key"))
+        self.assertEqual(summary["pairs"][0]["report_path"], str(work_dir / "reports" / "left__right.summary.json"))
+        self.assertEqual(summary["pairs"][0]["status"], "success")
+        self.assertIn("raw image pair matching complete", result.stdout)
+
     def test_run_ori_match_pipeline_rejects_invalid_pair_id_start(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work_ori"

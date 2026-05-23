@@ -12,6 +12,7 @@ DEFAULT_WORK_DIR_RELATIVE="work_ori"
 DEFAULT_PAIR_ID_PREFIX="S"
 DEFAULT_PAIR_ID_START="1"
 PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
+HOST_PYTHON_EXECUTABLE="${HOST_PYTHON_EXECUTABLE:-python}"
 
 log() {
   printf '[ori-match-pipeline] %s\n' "$*"
@@ -33,6 +34,13 @@ quote_cmd() {
 
 append_command() {
   quote_cmd "$@" >> "$COMMAND_SCRIPT"
+}
+
+run_command() {
+  log "$1"
+  shift
+  append_command "$@"
+  "$@"
 }
 
 resolve_path() {
@@ -57,6 +65,38 @@ pair_tag_from_paths() {
   left_stem=$(basename "${left%.*}")
   right_stem=$(basename "${right%.*}")
   printf '%s__%s\n' "$left_stem" "$right_stem"
+}
+
+build_match_args() {
+  local left=$1
+  local right=$2
+  local pair_id=$3
+  local pair_tag=$4
+  local pair_net=$5
+  local left_key=$6
+  local right_key=$7
+  local pair_report=$8
+
+  match_args=(
+    "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/controlnet_stereopair.py" from-ori-match
+    "$left" "$right" "$CONFIG_PATH" "$pair_net"
+    --pair-id "$pair_id"
+    --left-output-key "$left_key"
+    --right-output-key "$right_key"
+    --report-path "$pair_report"
+    --matcher-method "$MATCHER_METHOD"
+    --band "$BAND"
+    --ratio-test "$RATIO_TEST"
+    --num-worker-parallel-cpu "$NUM_WORKER_PARALLEL_CPU"
+    --gpu-batch-size "$GPU_BATCH_SIZE"
+    --gpu-min-batch-size "$GPU_MIN_BATCH_SIZE"
+    --gpu-max-batch-size "$GPU_MAX_BATCH_SIZE"
+    --log-level "$LOG_LEVEL"
+  )
+  [[ -z "$MAX_FEATURES" ]] || match_args+=(--max-features "$MAX_FEATURES")
+  [[ "$USE_PARALLEL_CPU" == "1" ]] && match_args+=(--use-parallel-cpu) || match_args+=(--no-parallel-cpu)
+  [[ "$USE_GPU" == "1" ]] && match_args+=(--use-gpu)
+  [[ "$GPU_DYNAMIC_BATCH" == "1" ]] && match_args+=(--gpu-dynamic-batch) || match_args+=(--no-gpu-dynamic-batch)
 }
 
 usage() {
@@ -168,6 +208,8 @@ PAIR_NETS_DIR="$WORK_DIR/ori_pair_nets"
 REPORTS_DIR="$WORK_DIR/reports"
 MERGE_DIR="$WORK_DIR/merge"
 COMMAND_SCRIPT="$WORK_DIR/command.sh"
+BATCH_REPORT_PATH="$REPORTS_DIR/ori_match_batch_summary.json"
+PAIRS_JSON="$REPORTS_DIR/.ori_match_pairs.jsonl"
 OVERLAP_REPORT_PATH="$REPORTS_DIR/image_overlap_summary.json"
 MERGE_OUTPUT_NET="$MERGE_DIR/ori_matching_merged.net"
 MERGE_SCRIPT_PATH="$MERGE_DIR/merge_all_controlnets.sh"
@@ -183,9 +225,18 @@ chmod 755 "$COMMAND_SCRIPT"
 
 [[ -f "$ORIGINAL_LIST" ]] || die "original image list not found: $ORIGINAL_LIST"
 [[ -f "$CONFIG_PATH" ]] || die "controlnet config not found: $CONFIG_PATH"
+if [[ "$DRY_RUN" != "1" ]]; then
+  : > "$PAIRS_JSON"
+fi
 
-append_command "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_overlap.py" \
-  "$ORIGINAL_LIST" "$IMAGES_OVERLAP_LIST" --report-json "$OVERLAP_REPORT_PATH"
+if [[ "$DRY_RUN" == "1" ]]; then
+  append_command "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_overlap.py" \
+    "$ORIGINAL_LIST" "$IMAGES_OVERLAP_LIST" --report-json "$OVERLAP_REPORT_PATH"
+else
+  run_command "stage 1: discovering overlap pairs" "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/image_overlap.py" \
+    "$ORIGINAL_LIST" "$IMAGES_OVERLAP_LIST" --report-json "$OVERLAP_REPORT_PATH"
+  [[ -s "$IMAGES_OVERLAP_LIST" ]] || die "images overlap list is empty: $IMAGES_OVERLAP_LIST"
+fi
 
 pair_index=0
 if [[ -f "$IMAGES_OVERLAP_LIST" ]]; then
@@ -195,41 +246,60 @@ if [[ -f "$IMAGES_OVERLAP_LIST" ]]; then
     pair_index=$((pair_index + 1))
     pair_id="${PAIR_ID_PREFIX}$((PAIR_ID_START + pair_index - 1))"
     pair_tag=$(pair_tag_from_paths "$left" "$right")
-    match_args=(
-      "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/controlnet_stereopair.py" from-ori-match
-      "$left" "$right" "$CONFIG_PATH" "$PAIR_NETS_DIR/${pair_tag}.net"
-      --pair-id "$pair_id"
-      --left-output-key "$ORI_KEYS_DIR/${pair_tag}_A.key"
-      --right-output-key "$ORI_KEYS_DIR/${pair_tag}_B.key"
-      --report-path "$REPORTS_DIR/${pair_tag}.summary.json"
-      --matcher-method "$MATCHER_METHOD"
-      --band "$BAND"
-      --ratio-test "$RATIO_TEST"
-      --num-worker-parallel-cpu "$NUM_WORKER_PARALLEL_CPU"
-      --gpu-batch-size "$GPU_BATCH_SIZE"
-      --gpu-min-batch-size "$GPU_MIN_BATCH_SIZE"
-      --gpu-max-batch-size "$GPU_MAX_BATCH_SIZE"
-      --log-level "$LOG_LEVEL"
-    )
-    [[ -z "$MAX_FEATURES" ]] || match_args+=(--max-features "$MAX_FEATURES")
-    [[ "$USE_PARALLEL_CPU" == "1" ]] && match_args+=(--use-parallel-cpu) || match_args+=(--no-parallel-cpu)
-    [[ "$USE_GPU" == "1" ]] && match_args+=(--use-gpu)
-    [[ "$GPU_DYNAMIC_BATCH" == "1" ]] && match_args+=(--gpu-dynamic-batch) || match_args+=(--no-gpu-dynamic-batch)
-    append_command "${match_args[@]}"
+    pair_net="$PAIR_NETS_DIR/${pair_tag}.net"
+    left_key="$ORI_KEYS_DIR/${pair_tag}_A.key"
+    right_key="$ORI_KEYS_DIR/${pair_tag}_B.key"
+    pair_report="$REPORTS_DIR/${pair_tag}.summary.json"
+    build_match_args "$left" "$right" "$pair_id" "$pair_tag" "$pair_net" "$left_key" "$right_key" "$pair_report"
+    if [[ "$DRY_RUN" == "1" ]]; then
+      append_command "${match_args[@]}"
+    else
+      run_command "stage 2: matching pair $pair_tag" "${match_args[@]}"
+      "$HOST_PYTHON_EXECUTABLE" - "$PAIRS_JSON" "$left,$right" "$pair_id" "$pair_net" "$left_key" "$right_key" "$pair_report" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+jsonl, pair, pair_id, output_net, left_key, right_key, report_path = sys.argv[1:]
+record = {
+    "pair": pair,
+    "pair_id": pair_id,
+    "output_net": output_net,
+    "left_key": left_key,
+    "right_key": right_key,
+    "report_path": report_path,
+    "status": "success",
+}
+with Path(jsonl).open("a", encoding="utf-8") as stream:
+    stream.write(json.dumps(record, ensure_ascii=False) + "\n")
+PY
+    fi
   done < "$IMAGES_OVERLAP_LIST"
 else
   log "warning: overlap list not found; pair commands were not expanded: $IMAGES_OVERLAP_LIST" >&2
 fi
 
-append_command "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/controlnet_merge.py" \
-  "$IMAGES_OVERLAP_LIST" "$PAIR_NETS_DIR" "$MERGE_OUTPUT_NET" "$MERGE_SCRIPT_PATH" \
-  --network-id "raw_image_matching" \
-  --description "Merged raw image matching ControlNet" \
-  --pair-list "$MERGE_PAIR_LIST_PATH" \
+merge_args=(
+  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/controlnet_merge.py"
+  "$IMAGES_OVERLAP_LIST" "$PAIR_NETS_DIR" "$MERGE_OUTPUT_NET" "$MERGE_SCRIPT_PATH"
+  --network-id "raw_image_matching"
+  --description "Merged raw image matching ControlNet"
+  --pair-list "$MERGE_PAIR_LIST_PATH"
   --report-json "$MERGE_REPORT_PATH"
+)
+
+if [[ "$DRY_RUN" == "1" ]]; then
+  append_command "${merge_args[@]}"
+else
+  run_command "stage 3: generating merge script" "${merge_args[@]}"
+fi
 
 if [[ "$SKIP_FINAL_MERGE" != "1" ]]; then
-  append_command bash "$MERGE_SCRIPT_PATH"
+  if [[ "$DRY_RUN" == "1" ]]; then
+    append_command bash "$MERGE_SCRIPT_PATH"
+  else
+    run_command "stage 4: executing merge script" bash "$MERGE_SCRIPT_PATH"
+  fi
 fi
 
 if [[ "$DRY_RUN" == "1" ]]; then
@@ -237,4 +307,44 @@ if [[ "$DRY_RUN" == "1" ]]; then
   exit 0
 fi
 
-die "execution mode is not implemented yet"
+"$HOST_PYTHON_EXECUTABLE" - "$BATCH_REPORT_PATH" "$PAIRS_JSON" "$ORIGINAL_LIST" "$IMAGES_OVERLAP_LIST" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_OUTPUT_NET" "$MERGE_SCRIPT_PATH" "$PAIR_ID_PREFIX" "$PAIR_ID_START" "$MATCHER_METHOD" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+(
+    report_path,
+    pairs_json,
+    original_list,
+    overlap_list,
+    pair_nets_dir,
+    reports_dir,
+    merge_output_net,
+    merge_script_path,
+    pair_id_prefix,
+    pair_id_start,
+    matcher_method,
+) = sys.argv[1:]
+pairs = [
+    json.loads(line)
+    for line in Path(pairs_json).read_text(encoding="utf-8").splitlines()
+    if line.strip()
+]
+payload = {
+    "mode": "from-ori-match-batch-wrapper",
+    "original_list": original_list,
+    "images_overlap_list": overlap_list,
+    "pair_count": len(pairs),
+    "pair_id_prefix": pair_id_prefix,
+    "pair_id_start": int(pair_id_start),
+    "matcher_method": matcher_method,
+    "pair_net_directory": pair_nets_dir,
+    "report_directory": reports_dir,
+    "merge_output_net": merge_output_net,
+    "merge_script_path": merge_script_path,
+    "pairs": pairs,
+}
+Path(report_path).write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+PY
+
+log "raw image pair matching complete: $BATCH_REPORT_PATH"

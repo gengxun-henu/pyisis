@@ -530,7 +530,7 @@ git commit -m "test: validate raw image pipeline arguments"
 - Modify: `examples/controlnet_construct/run_ori_match_pipeline_example.sh`
 - Modify: `tests/unitTest/controlnet_construct_pipeline_unit_test.py`
 
-- [ ] **Step 1: Add a fake-python execution test**
+- [x] **Step 1: Add a fake-python execution test**
 
 Add this method to `ControlNetConstructPipelineUnitTest`:
 
@@ -648,7 +648,7 @@ Add this method to `ControlNetConstructPipelineUnitTest`:
         self.assertIn("raw image pair matching complete", result.stdout)
 ```
 
-- [ ] **Step 2: Run execution test and verify it fails**
+- [x] **Step 2: Run execution test and verify it fails**
 
 Run:
 
@@ -662,7 +662,7 @@ python -m unittest tests.unitTest.controlnet_construct_pipeline_unit_test.Contro
 
 Expected: failure because Task 1 skeleton exits with `execution mode is not implemented yet`.
 
-- [ ] **Step 3: Implement command execution helpers**
+- [x] **Step 3: Implement command execution helpers**
 
 In `run_ori_match_pipeline_example.sh`, add:
 
@@ -694,7 +694,7 @@ else
 fi
 ```
 
-- [ ] **Step 4: Implement pair execution and summary writing**
+- [x] **Step 4: Implement pair execution and summary writing**
 
 Replace the current final `die "execution mode is not implemented yet"` block with logic that:
 
@@ -814,13 +814,13 @@ PY
 log "raw image pair matching complete: $BATCH_REPORT_PATH"
 ```
 
-- [ ] **Step 5: Re-run execution test**
+- [x] **Step 5: Re-run execution test**
 
 Run the command from Step 2.
 
 Expected: `OK`.
 
-- [ ] **Step 6: Re-run dry-run and validation tests**
+- [x] **Step 6: Re-run dry-run and validation tests**
 
 Run:
 
@@ -839,7 +839,7 @@ python -m unittest \
 
 Expected: `OK`.
 
-- [ ] **Step 7: Commit Task 3**
+- [x] **Step 7: Commit Task 3**
 
 ```bash
 git add examples/controlnet_construct/run_ori_match_pipeline_example.sh tests/unitTest/controlnet_construct_pipeline_unit_test.py

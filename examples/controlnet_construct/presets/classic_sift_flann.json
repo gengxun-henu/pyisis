@@ -1,0 +1,14 @@
+{
+  "feature_extractor": {
+    "method": "classic_sift",
+    "max_features": 1000,
+    "octave_layers": 3,
+    "contrast_threshold": 0.04,
+    "edge_threshold": 10.0,
+    "sigma": 1.6
+  },
+  "matcher": {
+    "method": "flann",
+    "ratio_test": 0.75
+  }
+}

@@ -209,8 +209,8 @@ def _write_benchmark_config(path: Path) -> None:
                 "description": "unit benchmark config",
                 "execution": {
                     "cpp_benchmark_path": "tools/cpp_benchmark",
-                    "repeat_count": 3,
-                    "keep_intermediate_json": False,
+                    "repeat_count": 1,
+                    "keep_intermediate_json": True,
                 },
                 "camera_tasks": [
                     {
@@ -252,8 +252,8 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertEqual(config.description, "unit benchmark config")
         self.assertEqual(config.config_path, config_path.resolve())
         self.assertEqual(config.execution.cpp_benchmark_path, PROJECT_ROOT / "tools/cpp_benchmark")
-        self.assertEqual(config.execution.repeat_count, 3)
-        self.assertFalse(config.execution.keep_intermediate_json)
+        self.assertEqual(config.execution.repeat_count, 1)
+        self.assertTrue(config.execution.keep_intermediate_json)
 
         self.assertEqual(len(config.camera_tasks), 2)
         self.assertEqual(config.camera_tasks[0].label, "config_relative_camera")
@@ -333,6 +333,28 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             config_path.write_text(json.dumps(payload), encoding="utf-8")
 
             with self.assertRaisesRegex(ValueError, "sample_step must be positive"):
+                benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+    def test_load_benchmark_config_rejects_unimplemented_repeat_count(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["execution"]["repeat_count"] = 2
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "repeat_count values other than 1 are not supported"):
+                benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+    def test_load_benchmark_config_rejects_unimplemented_keep_intermediate_json_false(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["execution"]["keep_intermediate_json"] = False
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "keep_intermediate_json=false is not supported"):
                 benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
 
     def test_load_benchmark_config_rejects_path_traversal_run_id(self):
@@ -756,11 +778,20 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         ]
 
         with temporary_directory() as temp_dir:
-            benchmark.write_summary_reports(temp_dir, results, camera_comparisons)
+            provenance = {
+                "config_snapshot": "/tmp/run/experiment_config.json",
+                "pyisis_import_path": "/tmp/isis_pybind/__init__.py",
+                "cpp_benchmark_path": "/tmp/isis_cpp_benchmark",
+                "ISISDATA": "/tmp/isisdata",
+                "CONDA_DEFAULT_ENV": "asp360_new",
+                "git_commit": "abc123",
+            }
+            benchmark.write_summary_reports(temp_dir, results, camera_comparisons, provenance=provenance)
 
             summary = json.loads((temp_dir / "reports" / "summary.json").read_text(encoding="utf-8"))
             self.assertEqual(summary["results"], results)
             self.assertEqual(summary["camera_comparisons"], camera_comparisons)
+            self.assertEqual(summary["provenance"], provenance)
             with (temp_dir / "reports" / "summary.csv").open(encoding="utf-8", newline="") as csv_file:
                 rows = list(csv.DictReader(csv_file))
             self.assertEqual(rows[0]["label"], "camera_a")
@@ -788,6 +819,7 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
                 (temp_dir / "reports" / "controlnet_summary.json").read_text(encoding="utf-8")
             )
             self.assertEqual(controlnet_summary["results"], [results[1]])
+            self.assertEqual(controlnet_summary["provenance"], provenance)
 
     def test_build_cpp_camera_command_includes_required_arguments(self):
         task = benchmark.CameraTaskConfig(
@@ -927,6 +959,78 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
                     label="missing_binary",
                 )
 
+    def test_record_cpp_result_keep_going_records_bad_json_after_zero_exit(self):
+        with temporary_directory() as temp_dir:
+            result_path = temp_dir / "result.json"
+            command = [sys.executable, "-c", "print('unused')", "--output", str(result_path)]
+            result_path.write_text("{bad json", encoding="utf-8")
+
+            with mock.patch.object(
+                benchmark,
+                "run_cpp_command",
+                return_value={
+                    "status": "success",
+                    "return_code": 0,
+                    "stdout": "",
+                    "stderr": "",
+                    "command": command,
+                    "wall_seconds": 0.01,
+                    "implementation": "cpp",
+                    "label": "camera_a",
+                    "task_type": "camera",
+                },
+            ):
+                result = benchmark._record_cpp_result(
+                    result_path,
+                    command,
+                    task_type="camera",
+                    label="camera_a",
+                    keep_going=True,
+                )
+
+            self.assertEqual(result["status"], "failed")
+            self.assertEqual(result["implementation"], "cpp")
+            self.assertEqual(result["label"], "camera_a")
+            self.assertEqual(result["task_type"], "camera")
+            self.assertEqual(result["return_code"], 0)
+            self.assertEqual(result["command"], command)
+            self.assertIn("Failed to load C++ result", result["error"])
+            self.assertIn("Failed to load C++ result", result["stderr"])
+            self.assertGreaterEqual(result["wall_seconds"], 0.0)
+            self.assertEqual(json.loads(result_path.read_text(encoding="utf-8")), result)
+
+    def test_record_cpp_result_fail_fast_raises_on_bad_json_after_zero_exit(self):
+        with temporary_directory() as temp_dir:
+            result_path = temp_dir / "result.json"
+            command = [sys.executable, "-c", "print('unused')", "--output", str(result_path)]
+            result_path.write_text("{bad json", encoding="utf-8")
+
+            with (
+                mock.patch.object(
+                    benchmark,
+                    "run_cpp_command",
+                    return_value={
+                        "status": "success",
+                        "return_code": 0,
+                        "stdout": "",
+                        "stderr": "",
+                        "command": command,
+                        "wall_seconds": 0.01,
+                        "implementation": "cpp",
+                        "label": "camera_a",
+                        "task_type": "camera",
+                    },
+                ),
+                self.assertRaisesRegex(RuntimeError, "Failed to load C\\+\\+ result"),
+            ):
+                benchmark._record_cpp_result(
+                    result_path,
+                    command,
+                    task_type="camera",
+                    label="camera_a",
+                    keep_going=False,
+                )
+
     def test_write_command_uses_shell_quoting_and_executable_mode(self):
         with temporary_directory() as temp_dir:
             command_path = temp_dir / "command.sh"
@@ -972,6 +1076,149 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             self.assertFalse((run_dir / "cpp" / "repo_relative_camera").exists())
             self.assertFalse((run_dir / "reports" / "summary.json").exists())
             self.assertFalse(any((run_dir / "pyisis").iterdir()))
+
+    def test_run_benchmark_real_run_rejects_missing_selected_inputs_before_outputs(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["camera_tasks"][0]["cube_path"] = "missing.cub"
+            payload["controlnet_tasks"][0]["net_path"] = "missing.net"
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+            config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+            with self.assertRaisesRegex(ValueError, "Missing benchmark input path"):
+                benchmark.run_benchmark(
+                    config,
+                    output_root=temp_dir / "out",
+                    dry_run=False,
+                    only={"config_relative_camera", "controlnet_fixture"},
+                    keep_going=True,
+                )
+
+            self.assertFalse((temp_dir / "out" / "unit_benchmark" / "pyisis").exists())
+
+    def test_run_benchmark_dry_run_allows_missing_inputs_and_writes_commands(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["camera_tasks"][0]["cube_path"] = "missing.cub"
+            payload["controlnet_tasks"][0]["net_path"] = "missing.net"
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+            config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+            run_dir = benchmark.run_benchmark(
+                config,
+                output_root=temp_dir / "out",
+                dry_run=True,
+                only={"config_relative_camera", "controlnet_fixture"},
+                keep_going=True,
+            )
+
+            self.assertTrue((run_dir / "cpp" / "config_relative_camera" / "command.sh").is_file())
+            self.assertTrue((run_dir / "cpp" / "controlnet_fixture" / "command.sh").is_file())
+
+    def test_run_benchmark_keep_going_records_pyisis_failure_and_continues(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+            expected_camera_cpp = {
+                "task_type": "camera",
+                "implementation": "cpp",
+                "label": "config_relative_camera",
+                "status": "success",
+                "points": [],
+            }
+            expected_controlnet_cpp = {
+                "task_type": "controlnet",
+                "implementation": "cpp",
+                "label": "controlnet_fixture",
+                "status": "success",
+                "point_count": 2,
+                "measure_count": 3,
+            }
+
+            def fake_run_cpp_command(command, *, keep_going, task_type="", label=""):
+                output_path = Path(command[command.index("--output") + 1])
+                if task_type == "camera":
+                    output_path.write_text(json.dumps(expected_camera_cpp), encoding="utf-8")
+                else:
+                    output_path.write_text(json.dumps(expected_controlnet_cpp), encoding="utf-8")
+                return {
+                    "status": "success",
+                    "return_code": 0,
+                    "stdout": "",
+                    "stderr": "",
+                    "command": command,
+                    "wall_seconds": 0.01,
+                    "implementation": "cpp",
+                    "label": label,
+                    "task_type": task_type,
+                }
+
+            with (
+                mock.patch.object(benchmark, "run_pyisis_camera_task", side_effect=RuntimeError("camera exploded")),
+                mock.patch.object(
+                    benchmark,
+                    "run_pyisis_controlnet_task",
+                    return_value={
+                        "task_type": "controlnet",
+                        "implementation": "pyisis",
+                        "label": "controlnet_fixture",
+                        "status": "success",
+                        "point_count": 2,
+                        "measure_count": 3,
+                    },
+                ),
+                mock.patch.object(benchmark, "run_cpp_command", side_effect=fake_run_cpp_command),
+            ):
+                run_dir = benchmark.run_benchmark(
+                    config,
+                    output_root=temp_dir / "out",
+                    dry_run=False,
+                    only={"config_relative_camera", "controlnet_fixture"},
+                    keep_going=True,
+                )
+
+            summary = json.loads((run_dir / "reports" / "summary.json").read_text(encoding="utf-8"))
+            self.assertEqual([result["status"] for result in summary["results"]], ["failed", "success", "success", "success"])
+            pyisis_failure = summary["results"][0]
+            self.assertEqual(pyisis_failure["implementation"], "pyisis")
+            self.assertEqual(pyisis_failure["task_type"], "camera")
+            self.assertEqual(pyisis_failure["label"], "config_relative_camera")
+            self.assertIn("camera exploded", pyisis_failure["error"])
+            self.assertIn("camera exploded", pyisis_failure["stderr"])
+            self.assertGreaterEqual(pyisis_failure["wall_seconds"], 0.0)
+            self.assertTrue((run_dir / "pyisis" / "config_relative_camera.json").is_file())
+            self.assertTrue((run_dir / "pyisis" / "controlnet_fixture.json").is_file())
+
+    def test_main_defaults_to_keep_going(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            output_root = temp_dir / "out"
+
+            with mock.patch.object(benchmark, "run_benchmark", return_value=output_root / "unit_benchmark") as mocked:
+                exit_code = benchmark.main([str(config_path), "--output-root", str(output_root), "--dry-run"])
+
+            self.assertEqual(exit_code, 0)
+            self.assertTrue(mocked.call_args.kwargs["keep_going"])
+
+    def test_main_fail_fast_sets_keep_going_false(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            output_root = temp_dir / "out"
+
+            with mock.patch.object(benchmark, "run_benchmark", return_value=output_root / "unit_benchmark") as mocked:
+                exit_code = benchmark.main(
+                    [str(config_path), "--output-root", str(output_root), "--dry-run", "--fail-fast"]
+                )
+
+            self.assertEqual(exit_code, 0)
+            self.assertFalse(mocked.call_args.kwargs["keep_going"])
 
     def test_run_benchmark_with_stubbed_tasks_writes_results_and_reports(self):
         with temporary_directory() as temp_dir:
@@ -1089,6 +1336,17 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             )
             self.assertEqual(len(summary["camera_comparisons"]), 1)
             self.assertEqual(summary["camera_comparisons"][0]["label"], "config_relative_camera")
+            self.assertIn("provenance", summary)
+            self.assertEqual(summary["provenance"]["config_snapshot"], str(run_dir / "experiment_config.json"))
+            self.assertEqual(summary["provenance"]["cpp_benchmark_path"], str(PROJECT_ROOT / "tools/cpp_benchmark"))
+            self.assertIn("pyisis_import_path", summary["provenance"])
+            self.assertIn("ISISDATA", summary["provenance"])
+            self.assertIn("CONDA_DEFAULT_ENV", summary["provenance"])
+            self.assertIn("git_commit", summary["provenance"])
+            controlnet_summary = json.loads(
+                (run_dir / "reports" / "controlnet_summary.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(controlnet_summary["provenance"], summary["provenance"])
 
 
 if __name__ == "__main__":

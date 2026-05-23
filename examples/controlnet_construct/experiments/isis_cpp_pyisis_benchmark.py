@@ -9,6 +9,7 @@ from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 import json
 import math
+import os
 from pathlib import Path
 import re
 import shlex
@@ -164,14 +165,21 @@ def load_benchmark_config(config_path: str | Path, *, repo_root: str | Path | No
         raise ValueError("Benchmark config must be a JSON object")
 
     execution_payload = _require_mapping(payload, "execution")
+    repeat_count = _optional_positive_int(execution_payload, "repeat_count", 1)
+    if repeat_count != 1:
+        raise ValueError("repeat_count values other than 1 are not supported until repeat execution is implemented")
+    keep_intermediate_json = _optional_bool(execution_payload, "keep_intermediate_json", True)
+    if not keep_intermediate_json:
+        raise ValueError("keep_intermediate_json=false is not supported until cleanup support is implemented")
+
     execution = ExecutionConfig(
         cpp_benchmark_path=_resolve_path(
             _require_string(execution_payload, "cpp_benchmark_path"),
             config_path.parent,
             repo_root_path,
         ),
-        repeat_count=_optional_positive_int(execution_payload, "repeat_count", 1),
-        keep_intermediate_json=_optional_bool(execution_payload, "keep_intermediate_json", True),
+        repeat_count=repeat_count,
+        keep_intermediate_json=keep_intermediate_json,
     )
 
     labels: set[str] = set()
@@ -660,9 +668,39 @@ def _write_dry_run_commands(
         _write_command(run_dir / "cpp" / task.label / "command.sh", command)
 
 
-def _record_pyisis_result(path: Path, task_runner, task) -> dict[str, Any]:
+def _exception_message(error: BaseException) -> str:
+    return f"{type(error).__name__}: {error}"
+
+
+def _record_pyisis_result(
+    path: Path,
+    task_runner,
+    task,
+    *,
+    task_type: str,
+    label: str,
+    keep_going: bool,
+) -> dict[str, Any]:
     start = time.perf_counter()
-    result = task_runner(task)
+    try:
+        result = task_runner(task)
+    except Exception as error:
+        wall_seconds = time.perf_counter() - start
+        if not keep_going:
+            raise
+        error_message = _exception_message(error)
+        result = {
+            "status": "failed",
+            "implementation": "pyisis",
+            "label": label,
+            "task_type": task_type,
+            "error": error_message,
+            "stderr": error_message,
+            "wall_seconds": wall_seconds,
+        }
+        _write_json(path, result)
+        return result
+
     result = dict(result)
     result["status"] = "success"
     result.setdefault("wall_seconds", time.perf_counter() - start)
@@ -689,7 +727,24 @@ def _record_cpp_result(
         _write_json(path, failure_result)
         return failure_result
 
-    cpp_result = load_cpp_result(path)
+    try:
+        cpp_result = load_cpp_result(path)
+    except (OSError, ValueError) as error:
+        error_message = f"Failed to load C++ result from {path}: {error}"
+        if not keep_going:
+            raise RuntimeError(error_message) from error
+        failure_result = {
+            "task_type": task_type,
+            "implementation": "cpp",
+            "label": label,
+            **execution_result,
+            "status": "failed",
+            "error": error_message,
+            "stderr": execution_result.get("stderr") or error_message,
+        }
+        _write_json(path, failure_result)
+        return failure_result
+
     cpp_result = dict(cpp_result)
     cpp_result["status"] = "success"
     cpp_result["return_code"] = execution_result["return_code"]
@@ -698,6 +753,53 @@ def _record_cpp_result(
     cpp_result["command"] = execution_result["command"]
     cpp_result["wall_seconds"] = execution_result["wall_seconds"]
     return cpp_result
+
+
+def _validate_real_run_inputs(config: BenchmarkConfig, selected_labels: set[str] | None) -> None:
+    missing_paths: list[str] = []
+    for task in config.camera_tasks:
+        if _is_selected(task.label, selected_labels) and not task.cube_path.exists():
+            missing_paths.append(f"camera {task.label} cube_path={task.cube_path}")
+    for task in config.controlnet_tasks:
+        if _is_selected(task.label, selected_labels) and not task.net_path.exists():
+            missing_paths.append(f"controlnet {task.label} net_path={task.net_path}")
+    if missing_paths:
+        raise ValueError(f"Missing benchmark input path(s): {'; '.join(missing_paths)}")
+
+
+def collect_provenance(config: BenchmarkConfig, run_dir: str | Path) -> dict[str, Any]:
+    run_dir = Path(run_dir)
+    pyisis_import_path = None
+    try:
+        ip_module = _import_isis_pybind()
+        module_path = getattr(ip_module, "__file__", None)
+        if module_path is not None:
+            pyisis_import_path = str(module_path)
+    except Exception:
+        pyisis_import_path = None
+
+    repo_root = Path(__file__).resolve().parents[3]
+    git_commit = None
+    try:
+        completed = subprocess.run(
+            ["git", "-C", str(repo_root), "rev-parse", "HEAD"],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        if completed.returncode == 0:
+            git_commit = completed.stdout.strip() or None
+    except OSError:
+        git_commit = None
+
+    return {
+        "config_snapshot": str(run_dir / "experiment_config.json"),
+        "pyisis_import_path": pyisis_import_path,
+        "cpp_benchmark_path": str(config.execution.cpp_benchmark_path),
+        "ISISDATA": os.environ.get("ISISDATA"),
+        "CONDA_DEFAULT_ENV": os.environ.get("CONDA_DEFAULT_ENV"),
+        "git_commit": git_commit,
+    }
 
 
 def run_benchmark(
@@ -709,6 +811,8 @@ def run_benchmark(
     keep_going: bool,
 ) -> Path:
     selected_labels = _selected_labels(config, only)
+    if not dry_run:
+        _validate_real_run_inputs(config, selected_labels)
     run_dir = prepare_run_directory(config, output_root=output_root, dry_run=dry_run)
     if dry_run:
         _write_dry_run_commands(config, run_dir, only=selected_labels)
@@ -725,6 +829,9 @@ def run_benchmark(
             run_dir / "pyisis" / f"{task.label}.json",
             run_pyisis_camera_task,
             task,
+            task_type="camera",
+            label=task.label,
+            keep_going=keep_going,
         )
         results.append(pyisis_result)
 
@@ -739,7 +846,7 @@ def run_benchmark(
             keep_going=keep_going,
         )
         results.append(cpp_result)
-        if cpp_result.get("status") == "success":
+        if pyisis_result.get("status") == "success" and cpp_result.get("status") == "success":
             camera_comparisons.append(
                 compare_camera_results(
                     task.label,
@@ -757,6 +864,9 @@ def run_benchmark(
             run_dir / "pyisis" / f"{task.label}.json",
             run_pyisis_controlnet_task,
             task,
+            task_type="controlnet",
+            label=task.label,
+            keep_going=keep_going,
         )
         results.append(pyisis_result)
 
@@ -772,7 +882,7 @@ def run_benchmark(
         )
         results.append(cpp_result)
 
-    write_summary_reports(run_dir, results, camera_comparisons)
+    write_summary_reports(run_dir, results, camera_comparisons, provenance=collect_provenance(config, run_dir))
     return run_dir
 
 
@@ -780,6 +890,8 @@ def write_summary_reports(
     run_dir: str | Path,
     results: list[dict[str, Any]],
     camera_comparisons: list[dict[str, Any]],
+    *,
+    provenance: dict[str, Any] | None = None,
 ) -> None:
     reports_dir = Path(run_dir) / "reports"
     reports_dir.mkdir(parents=True, exist_ok=True)
@@ -787,6 +899,7 @@ def write_summary_reports(
     summary = {
         "results": results,
         "camera_comparisons": camera_comparisons,
+        "provenance": provenance or {},
     }
     (reports_dir / "summary.json").write_text(
         json.dumps(summary, indent=2, sort_keys=True) + "\n",
@@ -797,7 +910,7 @@ def write_summary_reports(
 
     controlnet_results = [result for result in results if result.get("task_type") == "controlnet"]
     (reports_dir / "controlnet_summary.json").write_text(
-        json.dumps({"results": controlnet_results}, indent=2, sort_keys=True) + "\n",
+        json.dumps({"results": controlnet_results, "provenance": provenance or {}}, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
 
@@ -885,7 +998,7 @@ def main(argv: list[str] | None = None) -> int:
     failure_group.add_argument(
         "--keep-going",
         action="store_true",
-        help="Record C++ command failures and continue writing reports",
+        help="Record task failures and continue writing reports",
     )
     failure_group.add_argument(
         "--fail-fast",
@@ -893,7 +1006,7 @@ def main(argv: list[str] | None = None) -> int:
         dest="keep_going",
         help="Raise on the first C++ command failure",
     )
-    parser.set_defaults(keep_going=False)
+    parser.set_defaults(keep_going=True)
     parser.add_argument(
         "--cpp-benchmark-path",
         help="Override execution.cpp_benchmark_path from the config",

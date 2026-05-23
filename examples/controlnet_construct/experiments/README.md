@@ -172,9 +172,16 @@ export PYTHONPATH="$PWD/build/python:$PWD/tests/unitTest"
 export ISISDATA="$PWD/tests/data/isisdata/mockup"
 python examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.py \
   examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.example.json \
-  --output-root work/isis_cpp_pyisis_benchmark \
-  --keep-going
+  --output-root work/isis_cpp_pyisis_benchmark
 ```
+
+Benchmark runs keep going after task failures by default; pass `--fail-fast`
+when the first PyISIS or C++ task failure should abort the run. Real runs
+validate selected CUBE and ControlNet input paths before task execution, while
+dry-run mode still permits missing inputs so command scripts can be reviewed.
+The JSON summaries include run provenance such as the config snapshot path,
+PyISIS import path, C++ benchmark path, ISIS environment, git commit, and
+per-result command arguments for C++ tasks.
 
 For real LRO NAC performance runs, set production `ISISDATA` and point the
 config at production CUBE and ControlNet files. Remove `max_points` from a

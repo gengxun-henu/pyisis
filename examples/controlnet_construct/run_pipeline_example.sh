@@ -607,6 +607,29 @@ resolve_config_relative_path() {
   printf '%s\n' "$REPO_ROOT/$raw_path"
 }
 
+resolve_cli_relative_path() {
+  local raw_path=$1
+
+  [[ -n "$raw_path" ]] || return 0
+  if [[ "$raw_path" = /* ]]; then
+    printf '%s\n' "$raw_path"
+    return 0
+  fi
+
+  if [[ -f "$raw_path" ]]; then
+    printf '%s\n' "$(cd -- "$(dirname -- "$raw_path")" && pwd)/$(basename -- "$raw_path")"
+    return 0
+  fi
+
+  local repo_relative_candidate="$REPO_ROOT/$raw_path"
+  if [[ -f "$repo_relative_candidate" ]]; then
+    printf '%s\n' "$(cd -- "$(dirname -- "$repo_relative_candidate")" && pwd)/$(basename -- "$repo_relative_candidate")"
+    return 0
+  fi
+
+  printf '%s\n' "$REPO_ROOT/$raw_path"
+}
+
 resolve_match_preset_shell_assignments() {
   local preset_path=$1
   "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/match_preset_config.py" \
@@ -961,6 +984,7 @@ main() {
   local explicit_invalid_pixel_radius=""
   local explicit_matcher_method=""
   local explicit_match_preset_path=""
+  local explicit_deep_matcher_config_path=""
   local match_preset_path=""
   local explicit_adaptive_routing=""
   local explicit_adaptive_routing_profile=""
@@ -1108,6 +1132,7 @@ main() {
       --deep-match-config-path)
         [[ $# -ge 2 ]] || die "missing value for --deep-match-config-path"
         DEEP_MATCHER_CONFIG_PATH=$2
+        explicit_deep_matcher_config_path=$2
         shift 2
         ;;
       --deep-match-temp-root-dir)
@@ -1256,7 +1281,7 @@ main() {
   if [[ -n "$explicit_match_preset_path" && -n "$explicit_matcher_method" ]]; then
     die "--match-preset-path cannot be combined with --matcher-method"
   fi
-  if [[ -n "$explicit_match_preset_path" && -n "$DEEP_MATCHER_CONFIG_PATH" ]]; then
+  if [[ -n "$explicit_match_preset_path" && -n "$explicit_deep_matcher_config_path" ]]; then
     die "--match-preset-path cannot be combined with --deep-match-config-path"
   fi
 
@@ -1307,7 +1332,9 @@ main() {
   require_file "$DOM_LIST"
   require_file "$CONFIG_PATH"
 
-  if [[ -z "$match_preset_path" ]]; then
+  if [[ -n "$explicit_match_preset_path" ]]; then
+    match_preset_path=$(resolve_cli_relative_path "$explicit_match_preset_path")
+  elif [[ -z "$explicit_matcher_method" && -z "$explicit_deep_matcher_config_path" ]]; then
     local config_match_preset_path
     config_match_preset_path=$(extract_image_match_config_value "$CONFIG_PATH" "match_preset_path")
     if [[ -n "$config_match_preset_path" && "$config_match_preset_path" != "null" ]]; then
@@ -1315,7 +1342,6 @@ main() {
     fi
   fi
   if [[ -n "$match_preset_path" ]]; then
-    match_preset_path=$(resolve_config_relative_path "$match_preset_path" "$CONFIG_PATH")
     apply_match_preset_path "$match_preset_path"
   fi
 

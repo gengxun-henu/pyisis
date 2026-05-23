@@ -584,6 +584,27 @@ extract_image_match_config_value() {
     --print-config-default-container-order "$container_order"
 }
 
+extract_reporting_config_value() {
+  local config_path=$1
+  local field_name=$2
+  "$CATALOG_PYTHON_EXECUTABLE" - "$config_path" "$field_name" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+config = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+field_name = sys.argv[2]
+reporting = config.get("Reporting") or config.get("reporting") or {}
+value = reporting.get(field_name)
+if value is None or value == "":
+    raise SystemExit(0)
+if isinstance(value, bool):
+    print("1" if value else "0")
+else:
+    print(value)
+PY
+}
+
 resolve_config_relative_path() {
   local raw_path=$1
   local config_path=$2
@@ -708,7 +729,7 @@ if env("print_parameter_groups") == "1":
     add_value(cli_values, "print_parameter_groups", True)
 if env("validate_parameters_only") == "1":
     add_value(cli_values, "validate_parameters_only", True)
-if env("strict_parameter_validation") == "1":
+if env("explicit_strict_parameter_validation") == "1":
     add_value(cli_values, "strict_parameter_validation", True)
 
 cli_sources = {
@@ -764,6 +785,7 @@ config_sources = {
     "visualization_target_long_edge": "config_visualization_target_long_edge",
     "preview_crop_margin_pixels": "config_preview_crop_margin_pixels",
     "preview_cache_source": "config_preview_cache_source",
+    "strict_parameter_validation": "config_strict_parameter_validation",
 }
 for parameter_name, value_name in config_sources.items():
     add_value(config_values, parameter_name, env(value_name))
@@ -796,6 +818,24 @@ validate_controlnet_parameters() {
     --shell-assignments || status=$?
   rm -f "$payload_path"
   return "$status"
+}
+
+print_parameter_validation_summary() {
+  printf 'WORK_DIR=%q\n' "$WORK_DIR"
+  printf 'ORIGINAL_LIST=%q\n' "$ORIGINAL_LIST"
+  printf 'DOM_LIST=%q\n' "$DOM_LIST"
+  printf 'CONFIG=%q\n' "$CONFIG_PATH"
+  printf 'NETWORK_ID=%q\n' "$NETWORK_ID"
+  printf 'MATCHER_METHOD=%q\n' "$MATCHER_METHOD"
+  printf 'NUM_WORKER_PARALLEL_CPU=%q\n' "$NUM_WORKER_PARALLEL_CPU"
+  printf 'ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION=%q\n' "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION"
+  printf 'LOW_RESOLUTION_LEVEL=%q\n' "$LOW_RESOLUTION_LEVEL"
+  printf 'LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS=%q\n' "$LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS"
+  printf 'LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT=%q\n' "$LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT"
+  printf 'LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS=%q\n' "$LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS"
+  printf 'VISUALIZATION_MODE=%q\n' "$VISUALIZATION_MODE"
+  printf 'PREVIEW_CROP_MARGIN_PIXELS=%q\n' "$PREVIEW_CROP_MARGIN_PIXELS"
+  printf 'STRICT_PARAMETER_VALIDATION=%q\n' "$strict_parameter_validation"
 }
 
 run_step_1_image_overlap() {
@@ -1135,6 +1175,7 @@ main() {
   local print_parameter_groups="0"
   local validate_parameters_only="0"
   local strict_parameter_validation="0"
+  local explicit_strict_parameter_validation="0"
   local explicit_valid_pixel_percent_threshold=""
   local explicit_num_worker_parallel_cpu=""
   local explicit_use_parallel_cpu=""
@@ -1177,6 +1218,7 @@ main() {
   local config_visualization_target_long_edge=""
   local config_preview_crop_margin_pixels=""
   local config_preview_cache_source=""
+  local config_strict_parameter_validation=""
   local preset_match_preset_path=""
   local preset_matcher_method=""
   local preset_deep_match_config_path=""
@@ -1248,6 +1290,7 @@ main() {
         ;;
       --strict-parameter-validation)
         strict_parameter_validation="1"
+        explicit_strict_parameter_validation="1"
         shift
         ;;
       --use-parallel-cpu)
@@ -1554,6 +1597,12 @@ main() {
   if [[ -z "$NETWORK_ID" ]]; then
     NETWORK_ID=$(extract_network_id_from_config "$CONFIG_PATH")
   fi
+  if [[ "$strict_parameter_validation" != "1" ]]; then
+    config_strict_parameter_validation=$(extract_reporting_config_value "$CONFIG_PATH" "strict_parameter_validation")
+    if [[ "$config_strict_parameter_validation" == "1" ]]; then
+      strict_parameter_validation="1"
+    fi
+  fi
   if [[ -z "$explicit_valid_pixel_percent_threshold" ]]; then
     config_valid_pixel_percent_threshold=$(extract_image_match_config_value "$CONFIG_PATH" "valid_pixel_percent_threshold")
     if [[ -n "$config_valid_pixel_percent_threshold" ]]; then
@@ -1695,7 +1744,7 @@ PY
   fi
 
   export REPO_ROOT
-  export print_parameter_groups validate_parameters_only strict_parameter_validation
+  export print_parameter_groups validate_parameters_only strict_parameter_validation explicit_strict_parameter_validation
   export explicit_num_worker_parallel_cpu explicit_use_parallel_cpu explicit_match_preset_path explicit_matcher_method explicit_deep_matcher_config_path
   export explicit_adaptive_routing explicit_adaptive_routing_profile explicit_enable_low_resolution_offset_estimation explicit_low_resolution_level
   export explicit_low_resolution_max_mean_reprojection_error_pixels explicit_low_resolution_min_retained_match_count explicit_low_resolution_max_mean_projected_offset_meters
@@ -1707,48 +1756,14 @@ PY
   export config_enable_adaptive_routing config_adaptive_routing_profile config_enable_low_resolution_offset_estimation config_low_resolution_level
   export config_low_resolution_max_mean_reprojection_error_pixels config_low_resolution_min_retained_match_count config_low_resolution_max_mean_projected_offset_meters
   export config_visualization_mode config_memory_profile config_visualization_target_long_edge config_preview_crop_margin_pixels config_preview_cache_source
+  export config_strict_parameter_validation
   export preset_match_preset_path preset_matcher_method preset_deep_match_config_path
 
-  local parameter_validation_assignments
-  parameter_validation_assignments=$(validate_controlnet_parameters)
-  local saved_work_dir="$WORK_DIR"
-  local saved_original_list="$ORIGINAL_LIST"
-  local saved_dom_list="$DOM_LIST"
-  local saved_network_id="$NETWORK_ID"
-  local saved_pair_id_prefix="$PAIR_ID_PREFIX"
-  local saved_pair_id_start="$PAIR_ID_START"
-  local saved_deep_match_mode="$DEEP_MATCH_MODE"
-  local saved_deep_match_temp_root_dir="$DEEP_MATCH_TEMP_ROOT_DIR"
-  local saved_deep_match_manifest_dir="$DEEP_MATCH_MANIFEST_DIR"
-  local saved_deep_match_manifest_summary="$DEEP_MATCH_MANIFEST_SUMMARY"
-  local saved_match_preset_path="$match_preset_path"
-  local saved_deep_matcher_config_path="$DEEP_MATCHER_CONFIG_PATH"
-  local saved_skip_final_merge="$SKIP_FINAL_MERGE"
-  local saved_post_merge_control_measure="$POST_MERGE_CONTROL_MEASURE"
-  local saved_post_merge_decimals="$POST_MERGE_DECIMALS"
-  eval "$parameter_validation_assignments"
-  WORK_DIR="$saved_work_dir"
-  ORIGINAL_LIST="$saved_original_list"
-  DOM_LIST="$saved_dom_list"
-  NETWORK_ID="$saved_network_id"
-  PAIR_ID_PREFIX="$saved_pair_id_prefix"
-  PAIR_ID_START="$saved_pair_id_start"
-  DEEP_MATCH_MODE="$saved_deep_match_mode"
-  DEEP_MATCH_TEMP_ROOT_DIR="$saved_deep_match_temp_root_dir"
-  DEEP_MATCH_MANIFEST_DIR="$saved_deep_match_manifest_dir"
-  DEEP_MATCH_MANIFEST_SUMMARY="$saved_deep_match_manifest_summary"
-  match_preset_path="${MATCH_PRESET_PATH:-$saved_match_preset_path}"
-  DEEP_MATCHER_CONFIG_PATH="${DEEP_MATCH_CONFIG_PATH:-$saved_deep_matcher_config_path}"
-  SKIP_FINAL_MERGE="$saved_skip_final_merge"
-  POST_MERGE_CONTROL_MEASURE="$saved_post_merge_control_measure"
-  POST_MERGE_DECIMALS="$saved_post_merge_decimals"
-  if [[ -n "${ENABLE_ADAPTIVE_ROUTING:-}" ]]; then
-    ADAPTIVE_ROUTING="$ENABLE_ADAPTIVE_ROUTING"
-  fi
+  validate_controlnet_parameters >/dev/null
 
   if [[ "$validate_parameters_only" == "1" ]]; then
     printf 'Parameter validation passed\n'
-    printf '%s\n' "$parameter_validation_assignments"
+    print_parameter_validation_summary
     exit 0
   fi
 

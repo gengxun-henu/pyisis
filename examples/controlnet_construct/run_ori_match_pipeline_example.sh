@@ -99,6 +99,11 @@ build_match_args() {
   [[ "$GPU_DYNAMIC_BATCH" == "1" ]] && match_args+=(--gpu-dynamic-batch) || match_args+=(--no-gpu-dynamic-batch)
 }
 
+require_existing_file() {
+  local path=$1
+  [[ -f "$path" ]] || die "expected from-ori-match output not found: $path"
+}
+
 usage() {
   cat <<'EOF'
 Usage:
@@ -255,6 +260,10 @@ if [[ -f "$IMAGES_OVERLAP_LIST" ]]; then
       append_command "${match_args[@]}"
     else
       run_command "stage 2: matching pair $pair_tag" "${match_args[@]}"
+      require_existing_file "$pair_net"
+      require_existing_file "$left_key"
+      require_existing_file "$right_key"
+      require_existing_file "$pair_report"
       "$HOST_PYTHON_EXECUTABLE" - "$PAIRS_JSON" "$left,$right" "$pair_id" "$pair_net" "$left_key" "$right_key" "$pair_report" <<'PY'
 import json
 import sys
@@ -286,6 +295,7 @@ merge_args=(
   --description "Merged raw image matching ControlNet"
   --pair-list "$MERGE_PAIR_LIST_PATH"
   --report-json "$MERGE_REPORT_PATH"
+  --strict
 )
 
 if [[ "$DRY_RUN" == "1" ]]; then

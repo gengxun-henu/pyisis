@@ -247,6 +247,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         merge_command = next(command for command in parsed_commands if any(Path(arg).name == "controlnet_merge.py" for arg in command))
         self.assertEqual(merge_command[2:6], [str(overlap_list), str(work_dir / "ori_pair_nets"), str(work_dir / "merge" / "ori_matching_merged.net"), str(work_dir / "merge" / "merge_all_controlnets.sh")])
+        self.assertIn("--strict", merge_command)
 
     def test_run_ori_match_pipeline_fresh_dry_run_warns_without_overlap_list(self):
         with temporary_directory() as temp_dir:
@@ -357,6 +358,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         raise SystemExit(0)
 
                     if script.name == "controlnet_merge.py":
+                        if "--strict" not in args:
+                            raise SystemExit("controlnet_merge.py was called without --strict")
                         pair_net_dir = Path(args[1])
                         script_path = Path(args[3])
                         pair_list = Path(args[args.index("--pair-list") + 1])
@@ -375,9 +378,11 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 encoding="utf-8",
             )
             fake_python = temp_dir / "fake_python"
+            quoted_python = shlex.quote(str(sys.executable))
+            quoted_dispatcher = shlex.quote(str(fake_python_dispatcher))
             fake_python.write_text(
                 "#!/usr/bin/env bash\n"
-                f"exec {sys.executable!s} {fake_python_dispatcher!s} \"$@\"\n",
+                f"exec {quoted_python} {quoted_dispatcher} \"$@\"\n",
                 encoding="utf-8",
             )
             fake_python.chmod(0o755)

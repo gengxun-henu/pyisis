@@ -33,7 +33,7 @@ class _FakeCamera:
         return 21
 
     def lines(self):
-        return 11
+        return 21
 
     def set_image(self, sample, line):
         index = len(self.set_image_calls)
@@ -146,6 +146,12 @@ class _FakeControlNet:
 
     def get_num_measures(self):
         return sum(point.get_num_measures() for point in self._points)
+
+    def get_num_valid_points(self):
+        return 1
+
+    def get_num_valid_measures(self):
+        return 2
 
     def get_point(self, index):
         return self._points[index]
@@ -263,6 +269,24 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             ),
         )
 
+    def test_generate_camera_samples_uses_step_grid_without_midpoint_insertion(self):
+        samples = benchmark.generate_camera_samples(
+            sample_count=11,
+            line_count=11,
+            sample_step=10,
+            line_step=10,
+        )
+
+        self.assertEqual(
+            samples,
+            (
+                benchmark.CameraSample(0, 1.0, 1.0),
+                benchmark.CameraSample(1, 11.0, 1.0),
+                benchmark.CameraSample(2, 1.0, 11.0),
+                benchmark.CameraSample(3, 11.0, 11.0),
+            ),
+        )
+
     def test_load_benchmark_config_rejects_duplicate_labels_across_task_types(self):
         with temporary_directory() as temp_dir:
             config_path = temp_dir / "benchmark.json"
@@ -351,12 +375,12 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             (1.0, 1.0),
             (11.0, 1.0),
             (21.0, 1.0),
-            (1.0, 6.0),
-            (11.0, 6.0),
-            (21.0, 6.0),
             (1.0, 11.0),
             (11.0, 11.0),
             (21.0, 11.0),
+            (1.0, 21.0),
+            (11.0, 21.0),
+            (21.0, 21.0),
         ])
         self.assertEqual(result["task_type"], "camera")
         self.assertEqual(result["implementation"], "pyisis")
@@ -366,6 +390,20 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertEqual(result["failed_set_image_count"], 1)
         self.assertEqual(result["failed_set_universal_ground_count"], 0)
         self.assertEqual(result["first_point_index"], 0)
+        self.assertIn("points", result)
+        self.assertEqual(len(result["points"]), 8)
+        self.assertEqual(
+            result["points"][0],
+            {
+                "index": 0,
+                "input_sample": 1.0,
+                "input_line": 1.0,
+                "latitude": 0.01,
+                "longitude": 0.01,
+                "roundtrip_sample": 1.0,
+                "roundtrip_line": 1.0,
+            },
+        )
         self.assertGreaterEqual(result["core_seconds"], 0.0)
 
     def test_run_pyisis_camera_task_includes_edges_for_three_by_three_grid(self):
@@ -396,7 +434,8 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertEqual(result["label"], "fake_controlnet")
         self.assertEqual(result["point_count"], 2)
         self.assertEqual(result["measure_count"], 3)
-        self.assertEqual(result["valid_measure_count"], 3)
+        self.assertEqual(result["valid_point_count"], 1)
+        self.assertEqual(result["valid_measure_count"], 2)
         self.assertEqual(result["serial_measure_counts"], {"SERIAL_A": 2, "SERIAL_B": 1})
         self.assertGreaterEqual(result["load_seconds"], 0.0)
         self.assertGreaterEqual(result["traverse_seconds"], 0.0)

@@ -229,10 +229,6 @@ def _axis_positions(count: int, step: int, name: str) -> list[float]:
     edge = float(count)
     if positions[-1] != edge:
         positions.append(edge)
-    if len(positions) == 2 and count > 2:
-        midpoint = float((count + 1) / 2)
-        if midpoint not in positions:
-            positions.insert(1, midpoint)
     return positions
 
 
@@ -275,12 +271,13 @@ def _optional_call(obj: object, method_name: str, default=None):
 def run_pyisis_camera_task(task: CameraTaskConfig, *, ip_module=None) -> dict[str, Any]:
     ip = ip_module or _import_isis_pybind()
     cube = ip.Cube()
-    start = time.perf_counter()
     failed_set_image_count = 0
     failed_set_universal_ground_count = 0
     successful_point_count = 0
     input_point_count = 0
     first_point_index: int | None = None
+    point_records: list[dict[str, Any]] = []
+    core_seconds = 0.0
 
     try:
         cube.open(str(task.cube_path), "r")
@@ -296,6 +293,7 @@ def run_pyisis_camera_task(task: CameraTaskConfig, *, ip_module=None) -> dict[st
         if samples:
             first_point_index = samples[0].index
 
+        loop_start = time.perf_counter()
         for sample in samples:
             if not camera.set_image(sample.sample, sample.line):
                 failed_set_image_count += 1
@@ -307,9 +305,19 @@ def run_pyisis_camera_task(task: CameraTaskConfig, *, ip_module=None) -> dict[st
                 failed_set_universal_ground_count += 1
                 continue
 
-            camera.sample()
-            camera.line()
+            point_records.append(
+                {
+                    "index": sample.index,
+                    "input_sample": sample.sample,
+                    "input_line": sample.line,
+                    "latitude": latitude,
+                    "longitude": longitude,
+                    "roundtrip_sample": camera.sample(),
+                    "roundtrip_line": camera.line(),
+                }
+            )
             successful_point_count += 1
+        core_seconds = time.perf_counter() - loop_start
     finally:
         cube.close()
 
@@ -323,7 +331,8 @@ def run_pyisis_camera_task(task: CameraTaskConfig, *, ip_module=None) -> dict[st
         "failed_set_image_count": failed_set_image_count,
         "failed_set_universal_ground_count": failed_set_universal_ground_count,
         "first_point_index": first_point_index,
-        "core_seconds": time.perf_counter() - start,
+        "points": point_records,
+        "core_seconds": core_seconds,
     }
 
 
@@ -337,7 +346,7 @@ def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) ->
     traverse_start = time.perf_counter()
     point_count = int(control_net.get_num_points())
     measure_count = 0
-    valid_measure_count = 0
+    valid_point_count = _optional_call(control_net, "get_num_valid_points")
     serial_measure_counts: Counter[str] = Counter()
 
     for point_index in range(point_count):
@@ -356,15 +365,18 @@ def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) ->
             _optional_call(measure, "get_sample")
             _optional_call(measure, "get_line")
             _optional_call(measure, "get_type")
-            measure_ignored = bool(_optional_call(measure, "is_ignored", False))
+            _optional_call(measure, "is_ignored", False)
             _optional_call(measure, "is_edit_locked", False)
 
             if serial:
                 serial_measure_counts[str(serial)] += 1
-            if not measure_ignored:
-                valid_measure_count += 1
 
     traverse_seconds = time.perf_counter() - traverse_start
+    valid_measure_count = _optional_call(control_net, "get_num_valid_measures")
+    if valid_point_count is None:
+        valid_point_count = point_count
+    if valid_measure_count is None:
+        valid_measure_count = measure_count
 
     return {
         "task_type": "controlnet",
@@ -373,7 +385,8 @@ def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) ->
         "net_path": str(task.net_path),
         "point_count": point_count,
         "measure_count": measure_count,
-        "valid_measure_count": valid_measure_count,
+        "valid_point_count": int(valid_point_count),
+        "valid_measure_count": int(valid_measure_count),
         "serial_measure_counts": dict(serial_measure_counts),
         "load_seconds": load_seconds,
         "traverse_seconds": traverse_seconds,

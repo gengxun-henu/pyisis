@@ -1,0 +1,231 @@
+"""Tests for neutral ControlNet match preset resolution."""
+
+from __future__ import annotations
+
+import json
+from pathlib import Path
+import sys
+import tempfile
+import unittest
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+EXAMPLES_ROOT = PROJECT_ROOT / "examples"
+CONTROLNET_EXAMPLES = PROJECT_ROOT / "examples" / "controlnet_construct"
+if str(CONTROLNET_EXAMPLES) not in sys.path:
+    sys.path.insert(0, str(CONTROLNET_EXAMPLES))
+
+
+class MatchPresetConfigUnitTest(unittest.TestCase):
+    def setUp(self):
+        self._temp_dirs: list[tempfile.TemporaryDirectory[str]] = []
+
+    def tearDown(self):
+        for temp_dir in self._temp_dirs:
+            temp_dir.cleanup()
+
+    def _make_temp_dir(self, prefix: str) -> Path:
+        temp_dir = tempfile.TemporaryDirectory(prefix=prefix)
+        self._temp_dirs.append(temp_dir)
+        return Path(temp_dir.name)
+
+    def _write_preset(self, payload: dict[str, object]) -> Path:
+        temp_dir = self._make_temp_dir("match_preset_test_")
+        preset_path = temp_dir / "preset.json"
+        preset_path.write_text(json.dumps(payload), encoding="utf-8")
+        return preset_path
+
+    def test_package_import_works_with_examples_on_sys_path(self):
+        original_sys_path = list(sys.path)
+        removed_module = sys.modules.pop("controlnet_construct.match_preset_config", None)
+        removed_deep_module = sys.modules.pop("deep_match_config", None)
+        try:
+            sys.path[:] = [path for path in sys.path if path != str(CONTROLNET_EXAMPLES)]
+            if str(EXAMPLES_ROOT) not in sys.path:
+                sys.path.insert(0, str(EXAMPLES_ROOT))
+
+            import controlnet_construct.match_preset_config as match_preset_config
+
+            self.assertEqual(match_preset_config.CLASSIC_SIFT_FEATURE_METHOD, "classic_sift")
+        finally:
+            if removed_module is not None:
+                sys.modules["controlnet_construct.match_preset_config"] = removed_module
+            if removed_deep_module is not None:
+                sys.modules["deep_match_config"] = removed_deep_module
+            sys.path[:] = original_sys_path
+
+    def test_classic_sift_flann_preset_maps_to_image_match_defaults(self):
+        from match_preset_config import resolve_match_preset_runtime_config
+
+        preset_path = self._write_preset(
+            {
+                "feature_extractor": {
+                    "method": "classic_sift",
+                    "max_features": 1000,
+                    "octave_layers": 3,
+                    "contrast_threshold": 0.04,
+                    "edge_threshold": 10.0,
+                    "sigma": 1.6,
+                },
+                "matcher": {"method": "flann", "ratio_test": 0.75},
+            }
+        )
+
+        runtime = resolve_match_preset_runtime_config(preset_path)
+
+        self.assertFalse(runtime.is_deep_matcher)
+        self.assertEqual(runtime.matcher_method, "flann")
+        self.assertIsNone(runtime.deep_match_config_path)
+        self.assertEqual(
+            runtime.image_match_defaults,
+            {
+                "match_preset_path": str(preset_path),
+                "matcher_method": "flann",
+                "deep_match_config_path": None,
+                "max_features": 1000,
+                "sift_octave_layers": 3,
+                "sift_contrast_threshold": 0.04,
+                "sift_edge_threshold": 10.0,
+                "sift_sigma": 1.6,
+                "ratio_test": 0.75,
+            },
+        )
+
+    def test_classic_sift_bf_preset_maps_to_bf_matcher(self):
+        from match_preset_config import resolve_match_preset_runtime_config
+
+        preset_path = self._write_preset(
+            {
+                "feature_extractor": {
+                    "method": "classic_sift",
+                    "max_features": 2048,
+                    "octave_layers": 4,
+                    "contrast_threshold": 0.03,
+                    "edge_threshold": 12.0,
+                    "sigma": 1.4,
+                },
+                "matcher": {"method": "bf", "ratio_test": 0.8},
+            }
+        )
+
+        runtime = resolve_match_preset_runtime_config(preset_path)
+
+        self.assertFalse(runtime.is_deep_matcher)
+        self.assertEqual(runtime.matcher_method, "bf")
+        self.assertEqual(runtime.image_match_defaults["matcher_method"], "bf")
+        self.assertEqual(runtime.image_match_defaults["ratio_test"], 0.8)
+
+    def test_deep_preset_maps_to_existing_deep_config_path(self):
+        from match_preset_config import resolve_match_preset_runtime_config
+
+        preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_official_superpoint.json"
+
+        runtime = resolve_match_preset_runtime_config(preset_path)
+
+        self.assertTrue(runtime.is_deep_matcher)
+        self.assertEqual(runtime.matcher_method, "lightglue")
+        self.assertEqual(runtime.deep_match_config_path, str(preset_path))
+        self.assertEqual(runtime.image_match_defaults["matcher_method"], "lightglue")
+        self.assertEqual(runtime.image_match_defaults["deep_match_config_path"], str(preset_path))
+
+    def test_classic_sift_rejects_lightglue_sift_name(self):
+        from match_preset_config import MatchPresetConfigError, resolve_match_preset_runtime_config
+
+        preset_path = self._write_preset(
+            {
+                "feature_extractor": {"method": "lightglue_sift", "max_features": 1000},
+                "matcher": {"method": "flann", "ratio_test": 0.75},
+            }
+        )
+
+        with self.assertRaisesRegex(MatchPresetConfigError, "classic_sift"):
+            resolve_match_preset_runtime_config(preset_path)
+
+    def test_classic_sift_rejects_invalid_ratio_test(self):
+        from match_preset_config import MatchPresetConfigError, resolve_match_preset_runtime_config
+
+        preset_path = self._write_preset(
+            {
+                "feature_extractor": {
+                    "method": "classic_sift",
+                    "max_features": 1000,
+                    "octave_layers": 3,
+                    "contrast_threshold": 0.04,
+                    "edge_threshold": 10.0,
+                    "sigma": 1.6,
+                },
+                "matcher": {"method": "flann", "ratio_test": 1.5},
+            }
+        )
+
+        with self.assertRaisesRegex(MatchPresetConfigError, "ratio_test"):
+            resolve_match_preset_runtime_config(preset_path)
+
+    def test_classic_sift_rejects_non_integer_positive_int_options(self):
+        from match_preset_config import MatchPresetConfigError, resolve_match_preset_runtime_config
+
+        for field_name, value in (("max_features", 3.0), ("octave_layers", True)):
+            with self.subTest(field_name=field_name, value=value):
+                feature_extractor = {
+                    "method": "classic_sift",
+                    "max_features": 1000,
+                    "octave_layers": 3,
+                    "contrast_threshold": 0.04,
+                    "edge_threshold": 10.0,
+                    "sigma": 1.6,
+                }
+                feature_extractor[field_name] = value
+                preset_path = self._write_preset(
+                    {
+                        "feature_extractor": feature_extractor,
+                        "matcher": {"method": "flann", "ratio_test": 0.75},
+                    }
+                )
+
+                with self.assertRaisesRegex(MatchPresetConfigError, field_name):
+                    resolve_match_preset_runtime_config(preset_path)
+
+    def test_classic_sift_rejects_deep_only_sections(self):
+        from match_preset_config import MatchPresetConfigError, resolve_match_preset_runtime_config
+
+        preset_path = self._write_preset(
+            {
+                "feature_extractor": {
+                    "method": "classic_sift",
+                    "max_features": 1000,
+                    "octave_layers": 3,
+                    "contrast_threshold": 0.04,
+                    "edge_threshold": 10.0,
+                    "sigma": 1.6,
+                },
+                "matcher": {"method": "flann", "ratio_test": 0.75},
+                "device": {"prefer_gpu": True},
+            }
+        )
+
+        with self.assertRaisesRegex(MatchPresetConfigError, "deep-only"):
+            resolve_match_preset_runtime_config(preset_path)
+
+    def test_resolve_match_preset_path_prefers_config_relative_path(self):
+        from match_preset_config import resolve_match_preset_path
+
+        temp_dir = self._make_temp_dir("match_preset_path_test_")
+        config_dir = temp_dir / "configs"
+        preset_dir = config_dir / "presets"
+        preset_dir.mkdir(parents=True)
+        config_path = config_dir / "controlnet_config.json"
+        preset_path = preset_dir / "classic_sift_flann.json"
+        config_path.write_text("{}", encoding="utf-8")
+        preset_path.write_text("{}", encoding="utf-8")
+
+        resolved = resolve_match_preset_path(
+            "presets/classic_sift_flann.json",
+            config_path=config_path,
+            repo_root=PROJECT_ROOT,
+        )
+
+        self.assertEqual(resolved, preset_path.resolve())
+
+
+if __name__ == "__main__":
+    unittest.main()

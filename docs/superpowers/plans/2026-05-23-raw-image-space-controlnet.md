@@ -851,7 +851,7 @@ git commit -m "feat: add raw image controlnet wrapper execution"
 **Files:**
 - Modify: `examples/controlnet_construct/usage.md`
 
-- [ ] **Step 1: Add documentation section**
+- [x] **Step 1: Add documentation section**
 
 Append this section near the existing end-to-end pipeline instructions in `examples/controlnet_construct/usage.md`:
 
@@ -887,7 +887,7 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
 第一版不接入 deep matcher、adaptive routing、DOM low-resolution offset 或 DOM-space RANSAC 可视化。需要这些能力时继续使用 DOM pipeline，或者后续再按小步方式扩展这个 wrapper。
 ````
 
-- [ ] **Step 2: Check markdown context**
+- [x] **Step 2: Check markdown context**
 
 Run:
 
@@ -897,7 +897,7 @@ rg -n "原始影像空间匹配流水线|run_ori_match_pipeline_example|ori_matc
 
 Expected: all three strings appear.
 
-- [ ] **Step 3: Commit Task 4**
+- [x] **Step 3: Commit Task 4**
 
 ```bash
 git add examples/controlnet_construct/usage.md

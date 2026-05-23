@@ -807,6 +807,36 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
   --skip-final-merge
 ```
 
+## 原始影像空间匹配流水线
+
+如果你想跳过 DOM 匹配和 `dom2ori` 回投，可以使用独立的原始影像空间 wrapper：
+
+```bash
+bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
+  --work-dir work_ori \
+  --original-list work_ori/original_images.lis \
+  --config examples/controlnet_construct/controlnet_config.example.json \
+  --matcher-method flann \
+  --num-worker-parallel-cpu 8
+```
+
+这条路径会复用：
+
+- `image_overlap.py` 生成候选像对；
+- `controlnet_stereopair.py from-ori-match` 对每个 pair 直接在原始 cube 上匹配并构建 pairwise ControlNet；
+- `controlnet_merge.py` 生成并默认执行最终 merge 脚本。
+
+默认输出位于：
+
+- `work_ori/images_overlap.lis`
+- `work_ori/ori_keys/*.key`
+- `work_ori/ori_pair_nets/*.net`
+- `work_ori/reports/ori_match_batch_summary.json`
+- `work_ori/merge/merge_all_controlnets.sh`
+- `work_ori/merge/ori_matching_merged.net`
+
+第一版不接入 deep matcher、adaptive routing、DOM low-resolution offset 或 DOM-space RANSAC 可视化。需要这些能力时继续使用 DOM pipeline，或者后续再按小步方式扩展这个 wrapper。
+
 ### 手工四步版本
 
 ### Step 1

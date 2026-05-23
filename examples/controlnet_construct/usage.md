@@ -823,6 +823,20 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
   --num-worker-parallel-cpu 8
 ```
 
+如果你想在 raw/original image 路径中启用自适应路由，可以直接传：
+
+```bash
+bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
+  --work-dir work_ori \
+  --original-list work/original_images.lis \
+  --config examples/controlnet_construct/controlnet_config.example.json \
+  --matcher-method flann \
+  --adaptive-routing \
+  --adaptive-routing-profile balanced \
+  --adaptive-routing-deep-preset lightglue=examples/controlnet_construct/presets/lightglue_official_superpoint.json \
+  --adaptive-routing-deep-preset loftr=examples/controlnet_construct/presets/loftr_external_outdoor.json
+```
+
 这条路径会复用：
 
 - `image_overlap.py` 生成候选像对；
@@ -838,9 +852,19 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
 - `work_ori/merge/merge_all_controlnets.sh`
 - `work_ori/merge/ori_matching_merged.net`
 
-该 wrapper 现在可以把 `--deep-match-config-path`、`--adaptive-routing` / `--no-adaptive-routing` 和 `--adaptive-routing-profile` 转发给
+当前 raw/original image wrapper 支持直接启用 adaptive routing。该路径不会依赖 DOM low-resolution preview 或 DOM-to-original 回投；纹理与光照诊断来自原始 cube 自身。默认仍使用 classic `flann`，只有显式传入 `--adaptive-routing` 或在 `ImageMatch.enable_adaptive_routing` 中启用时才进入自适应路由。
+
+该 wrapper 现在可以把 `--deep-match-config-path`、`--adaptive-routing` / `--no-adaptive-routing`、`--adaptive-routing-profile` 和 `--adaptive-routing-deep-preset` 转发给
 `from-ori-match`，因此可直接使用 official LightGlue preset 等原始影像空间 deep matcher 配置。DOM low-resolution offset 与
 DOM-space RANSAC 可视化仍属于 DOM pipeline 专用能力；需要这些 DOM 侧处理时继续使用 `run_pipeline_example.sh`。
+
+推荐的深度学习 preset 面收敛为 official LightGlue 与 external official LoFTR：
+
+- `examples/controlnet_construct/presets/lightglue_official_superpoint.json`
+- `examples/controlnet_construct/presets/loftr_external_outdoor.json`
+- `examples/controlnet_construct/presets/loftr_external_indoor.json`
+
+`loftr_default.json` is the Kornia compatibility preset, not the official LoFTR repository/checkpoint route. 旧的非 official LightGlue preset 与 `superglue_*` preset 不再作为推荐控制网构建路径；清理前仅作为兼容历史实验引用。
 
 ### 手工四步版本
 

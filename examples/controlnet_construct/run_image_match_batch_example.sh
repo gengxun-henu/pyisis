@@ -11,6 +11,7 @@
 
 set -euo pipefail
 
+CALLER_CWD=$(pwd)
 SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 REPO_ROOT=$(cd -- "${SCRIPT_DIR}/../.." && pwd)
 DEFAULT_WORK_DIR_RELATIVE="work"
@@ -224,8 +225,9 @@ resolve_cli_relative_path() {
     return 0
   fi
 
-  if [[ -f "$raw_path" ]]; then
-    printf '%s\n' "$(cd -- "$(dirname -- "$raw_path")" && pwd)/$(basename -- "$raw_path")"
+  local caller_relative_candidate="$CALLER_CWD/$raw_path"
+  if [[ -f "$caller_relative_candidate" ]]; then
+    printf '%s\n' "$(cd -- "$(dirname -- "$caller_relative_candidate")" && pwd)/$(basename -- "$caller_relative_candidate")"
     return 0
   fi
 

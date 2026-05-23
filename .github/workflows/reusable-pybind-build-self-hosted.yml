@@ -40,6 +40,11 @@ on:
         required: false
         default: build
         type: string
+      build_cache_ref_slug:
+        description: Optional stable build cache namespace. Defaults to the current branch/ref when empty.
+        required: false
+        default: ""
+        type: string
       run_smoke_import:
         description: Whether to run tests/smoke_import.py after a successful build.
         required: false
@@ -309,6 +314,14 @@ jobs:
           if [ -z "$ref_slug" ]; then
             ref_slug="detached"
           fi
+          cache_ref_name="${{ inputs.build_cache_ref_slug }}"
+          if [ -z "$cache_ref_name" ]; then
+            cache_ref_name="$ref_slug"
+          fi
+          cache_ref_slug="$(printf '%s' "$cache_ref_name" | tr -cs 'A-Za-z0-9._-' '-' | tr '[:upper:]' '[:lower:]' | sed 's/^-*//; s/-*$//' | cut -c1-80)"
+          if [ -z "$cache_ref_slug" ]; then
+            cache_ref_slug="detached"
+          fi
           compiler_bin="${CXX:-}"
           if [ -z "$compiler_bin" ] && [ -n "${CONDA_PREFIX:-}" ] && [ -x "${CONDA_PREFIX}/bin/x86_64-conda-linux-gnu-c++" ]; then
             compiler_bin="${CONDA_PREFIX}/bin/x86_64-conda-linux-gnu-c++"
@@ -336,14 +349,15 @@ jobs:
             "pybind_dir=${PYBIND_DIR:-}" \
             "python_bin=$python_bin" \
             "python_version=$python_version" \
-            "ref_slug=$ref_slug" \
+            "cache_ref_slug=$cache_ref_slug" \
             "ccache_dir=${CCACHE_DIR_RESOLVED:-}" | sha256sum | awk '{print $1}' | cut -c1-20)"
-          cache_dir="$SELF_HOSTED_BUILD_CACHE_ROOT/${{ inputs.artifact_prefix }}/$runner_slug/$ref_slug/$config_fingerprint"
+          cache_dir="$SELF_HOSTED_BUILD_CACHE_ROOT/${{ inputs.artifact_prefix }}/$runner_slug/$cache_ref_slug/$config_fingerprint"
           metadata_path="$cache_dir/.cache-metadata"
           echo "local_build_cache_dir=$cache_dir" >> "$GITHUB_OUTPUT"
           echo "cache_metadata_path=$metadata_path" >> "$GITHUB_OUTPUT"
           echo "config_fingerprint=$config_fingerprint" >> "$GITHUB_OUTPUT"
           echo "ref_slug=$ref_slug" >> "$GITHUB_OUTPUT"
+          echo "cache_ref_slug=$cache_ref_slug" >> "$GITHUB_OUTPUT"
           {
             echo "## Self-hosted build cache"
             echo ""
@@ -351,6 +365,7 @@ jobs:
             echo "- runner name: \`${RUNNER_NAME:-unknown}\`"
             echo "- machine name: \`$machine_name\`"
             echo "- ref slug: \`$ref_slug\`"
+            echo "- cache ref slug: \`$cache_ref_slug\`"
             echo "- config fingerprint: \`$config_fingerprint\`"
             echo "- artifact uploads are intentionally skipped on self-hosted runs to avoid extra GitHub artifact dependencies."
             echo ""
@@ -364,7 +379,7 @@ jobs:
           LOCAL_BUILD_CACHE_DIR: ${{ steps.cache-paths.outputs.local_build_cache_dir }}
           CACHE_METADATA_PATH: ${{ steps.cache-paths.outputs.cache_metadata_path }}
           EXPECTED_CONFIG_FINGERPRINT: ${{ steps.cache-paths.outputs.config_fingerprint }}
-          EXPECTED_REF_SLUG: ${{ steps.cache-paths.outputs.ref_slug }}
+          EXPECTED_CACHE_REF_SLUG: ${{ steps.cache-paths.outputs.cache_ref_slug }}
         run: |
           set -euo pipefail
           current_machine_name="$(hostname -f 2>/dev/null || hostname)"
@@ -387,9 +402,9 @@ jobs:
             elif [ "${runner_name:-unknown}" != "$current_runner_name" ]; then
               cache_ready=false
               reason="runner_name mismatch between persistent cache metadata and current workflow context"
-            elif [ "${ref_slug:-unknown}" != "$EXPECTED_REF_SLUG" ]; then
+            elif [ "${cache_ref_slug:-${ref_slug:-unknown}}" != "$EXPECTED_CACHE_REF_SLUG" ]; then
               cache_ready=false
-              reason="ref_slug mismatch between persistent cache metadata and current workflow context"
+              reason="cache_ref_slug mismatch between persistent cache metadata and current workflow context"
             elif [ "${config_fingerprint:-unknown}" != "$EXPECTED_CONFIG_FINGERPRINT" ]; then
               cache_ready=false
               reason="config_fingerprint mismatch between persistent cache metadata and current workflow context"
@@ -539,6 +554,7 @@ jobs:
           CACHE_METADATA_PATH: ${{ steps.cache-paths.outputs.cache_metadata_path }}
           CONFIG_FINGERPRINT: ${{ steps.cache-paths.outputs.config_fingerprint }}
           REF_SLUG: ${{ steps.cache-paths.outputs.ref_slug }}
+          CACHE_REF_SLUG: ${{ steps.cache-paths.outputs.cache_ref_slug }}
           CCACHE_DIR_RESOLVED: ${{ steps.ccache.outputs.ccache_dir }}
         run: |
           set -euo pipefail
@@ -552,6 +568,7 @@ jobs:
           git_sha=${GITHUB_SHA:-unknown}
           run_id=${GITHUB_RUN_ID:-unknown}
           ref_slug=${REF_SLUG}
+          cache_ref_slug=${CACHE_REF_SLUG}
           config_fingerprint=${CONFIG_FINGERPRINT}
           artifact_prefix=${{ inputs.artifact_prefix }}
           ccache_dir=${CCACHE_DIR_RESOLVED:-none}

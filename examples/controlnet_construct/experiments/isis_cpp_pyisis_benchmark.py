@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 from dataclasses import dataclass
 import json
 from pathlib import Path
 import re
+import time
 from typing import Any
 
 
@@ -227,6 +229,10 @@ def _axis_positions(count: int, step: int, name: str) -> list[float]:
     edge = float(count)
     if positions[-1] != edge:
         positions.append(edge)
+    if len(positions) == 2 and count > 2:
+        midpoint = float((count + 1) / 2)
+        if midpoint not in positions:
+            positions.insert(1, midpoint)
     return positions
 
 
@@ -251,6 +257,128 @@ def generate_camera_samples(
             if max_points is not None and len(samples) >= max_points:
                 return tuple(samples)
     return tuple(samples)
+
+
+def _import_isis_pybind():
+    import isis_pybind as ip
+
+    return ip
+
+
+def _optional_call(obj: object, method_name: str, default=None):
+    method = getattr(obj, method_name, None)
+    if method is None:
+        return default
+    return method()
+
+
+def run_pyisis_camera_task(task: CameraTaskConfig, *, ip_module=None) -> dict[str, Any]:
+    ip = ip_module or _import_isis_pybind()
+    cube = ip.Cube()
+    start = time.perf_counter()
+    failed_set_image_count = 0
+    failed_set_universal_ground_count = 0
+    successful_point_count = 0
+    input_point_count = 0
+    first_point_index: int | None = None
+
+    try:
+        cube.open(str(task.cube_path), "r")
+        camera = cube.camera()
+        samples = generate_camera_samples(
+            sample_count=int(camera.samples()),
+            line_count=int(camera.lines()),
+            sample_step=task.sample_step,
+            line_step=task.line_step,
+            max_points=task.max_points,
+        )
+        input_point_count = len(samples)
+        if samples:
+            first_point_index = samples[0].index
+
+        for sample in samples:
+            if not camera.set_image(sample.sample, sample.line):
+                failed_set_image_count += 1
+                continue
+
+            latitude = camera.universal_latitude()
+            longitude = camera.universal_longitude()
+            if not camera.set_universal_ground(latitude, longitude):
+                failed_set_universal_ground_count += 1
+                continue
+
+            camera.sample()
+            camera.line()
+            successful_point_count += 1
+    finally:
+        cube.close()
+
+    return {
+        "task_type": "camera",
+        "implementation": "pyisis",
+        "label": task.label,
+        "cube_path": str(task.cube_path),
+        "input_point_count": input_point_count,
+        "successful_point_count": successful_point_count,
+        "failed_set_image_count": failed_set_image_count,
+        "failed_set_universal_ground_count": failed_set_universal_ground_count,
+        "first_point_index": first_point_index,
+        "core_seconds": time.perf_counter() - start,
+    }
+
+
+def run_pyisis_controlnet_task(task: ControlNetTaskConfig, *, ip_module=None) -> dict[str, Any]:
+    ip = ip_module or _import_isis_pybind()
+
+    load_start = time.perf_counter()
+    control_net = ip.ControlNet(str(task.net_path))
+    load_seconds = time.perf_counter() - load_start
+
+    traverse_start = time.perf_counter()
+    point_count = int(control_net.get_num_points())
+    measure_count = 0
+    valid_measure_count = 0
+    serial_measure_counts: Counter[str] = Counter()
+
+    for point_index in range(point_count):
+        point = control_net.get_point(point_index)
+        _optional_call(point, "get_id")
+        _optional_call(point, "get_type")
+        _optional_call(point, "is_ignored", False)
+        _optional_call(point, "is_edit_locked", False)
+
+        point_measure_count = int(point.get_num_measures())
+        for measure_index in range(point_measure_count):
+            measure = point.get_measure(measure_index)
+            measure_count += 1
+
+            serial = _optional_call(measure, "get_cube_serial_number", "")
+            _optional_call(measure, "get_sample")
+            _optional_call(measure, "get_line")
+            _optional_call(measure, "get_type")
+            measure_ignored = bool(_optional_call(measure, "is_ignored", False))
+            _optional_call(measure, "is_edit_locked", False)
+
+            if serial:
+                serial_measure_counts[str(serial)] += 1
+            if not measure_ignored:
+                valid_measure_count += 1
+
+    traverse_seconds = time.perf_counter() - traverse_start
+
+    return {
+        "task_type": "controlnet",
+        "implementation": "pyisis",
+        "label": task.label,
+        "net_path": str(task.net_path),
+        "point_count": point_count,
+        "measure_count": measure_count,
+        "valid_measure_count": valid_measure_count,
+        "serial_measure_counts": dict(serial_measure_counts),
+        "load_seconds": load_seconds,
+        "traverse_seconds": traverse_seconds,
+        "core_seconds": load_seconds + traverse_seconds,
+    }
 
 
 def main(argv: list[str] | None = None) -> int:

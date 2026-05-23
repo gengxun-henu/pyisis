@@ -23,6 +23,150 @@ if str(EXAMPLES_DIR) not in sys.path:
 from controlnet_construct.experiments import isis_cpp_pyisis_benchmark as benchmark
 
 
+class _FakeCamera:
+    def __init__(self):
+        self._sample = None
+        self._line = None
+        self.set_image_calls = []
+
+    def samples(self):
+        return 21
+
+    def lines(self):
+        return 11
+
+    def set_image(self, sample, line):
+        index = len(self.set_image_calls)
+        self.set_image_calls.append((sample, line))
+        if index == 2:
+            return False
+        self._sample = sample
+        self._line = line
+        return True
+
+    def universal_latitude(self):
+        return self._line / 100.0
+
+    def universal_longitude(self):
+        return self._sample / 100.0
+
+    def set_universal_ground(self, latitude, longitude):
+        self._line = latitude * 100.0
+        self._sample = longitude * 100.0
+        return True
+
+    def sample(self):
+        return self._sample
+
+    def line(self):
+        return self._line
+
+
+class _FakeCube:
+    def __init__(self):
+        self.open_args = None
+        self.closed = False
+        self.fake_camera = _FakeCamera()
+
+    def open(self, path, mode):
+        self.open_args = (path, mode)
+
+    def camera(self):
+        return self.fake_camera
+
+    def close(self):
+        self.closed = True
+
+
+class _FakeControlMeasure:
+    def __init__(self, serial, sample, line):
+        self._serial = serial
+        self._sample = sample
+        self._line = line
+
+    def get_cube_serial_number(self):
+        return self._serial
+
+    def get_sample(self):
+        return self._sample
+
+    def get_line(self):
+        return self._line
+
+    def get_type(self):
+        return "Candidate"
+
+    def is_ignored(self):
+        return False
+
+    def is_edit_locked(self):
+        return False
+
+
+class _FakeControlPoint:
+    def __init__(self, point_id, measures):
+        self._point_id = point_id
+        self._measures = measures
+
+    def get_id(self):
+        return self._point_id
+
+    def get_type(self):
+        return "Free"
+
+    def is_ignored(self):
+        return False
+
+    def is_edit_locked(self):
+        return False
+
+    def get_num_measures(self):
+        return len(self._measures)
+
+    def get_measure(self, index):
+        return self._measures[index]
+
+
+class _FakeControlNet:
+    def __init__(self, path):
+        self.path = path
+        self._points = [
+            _FakeControlPoint(
+                "P1",
+                [
+                    _FakeControlMeasure("SERIAL_A", 1.0, 2.0),
+                    _FakeControlMeasure("SERIAL_B", 3.0, 4.0),
+                ],
+            ),
+            _FakeControlPoint("P2", [_FakeControlMeasure("SERIAL_A", 5.0, 6.0)]),
+        ]
+
+    def get_num_points(self):
+        return len(self._points)
+
+    def get_num_measures(self):
+        return sum(point.get_num_measures() for point in self._points)
+
+    def get_point(self, index):
+        return self._points[index]
+
+
+class _FakeIpModule:
+    def __init__(self):
+        self.cubes = []
+        self.control_nets = []
+
+    def Cube(self):
+        cube = _FakeCube()
+        self.cubes.append(cube)
+        return cube
+
+    def ControlNet(self, path):
+        control_net = _FakeControlNet(path)
+        self.control_nets.append(control_net)
+        return control_net
+
+
 def _write_benchmark_config(path: Path) -> None:
     local_cube = path.parent / "local.cub"
     local_cube.write_text("fixture\n", encoding="utf-8")
@@ -189,6 +333,75 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertEqual(config.run_id, "lro_nac_pyisis_cpp_20260523")
         self.assertGreaterEqual(len(config.camera_tasks), 1)
         self.assertGreaterEqual(len(config.controlnet_tasks), 1)
+
+    def test_run_pyisis_camera_task_round_trips_generated_camera_points(self):
+        fake_ip = _FakeIpModule()
+        task = benchmark.CameraTaskConfig(
+            label="fake_camera",
+            cube_path=Path("/tmp/fake.cub"),
+            sample_step=10,
+            line_step=10,
+        )
+
+        result = benchmark.run_pyisis_camera_task(task, ip_module=fake_ip)
+
+        self.assertEqual(fake_ip.cubes[0].open_args, ("/tmp/fake.cub", "r"))
+        self.assertTrue(fake_ip.cubes[0].closed)
+        self.assertEqual(fake_ip.cubes[0].fake_camera.set_image_calls, [
+            (1.0, 1.0),
+            (11.0, 1.0),
+            (21.0, 1.0),
+            (1.0, 6.0),
+            (11.0, 6.0),
+            (21.0, 6.0),
+            (1.0, 11.0),
+            (11.0, 11.0),
+            (21.0, 11.0),
+        ])
+        self.assertEqual(result["task_type"], "camera")
+        self.assertEqual(result["implementation"], "pyisis")
+        self.assertEqual(result["label"], "fake_camera")
+        self.assertEqual(result["input_point_count"], 9)
+        self.assertEqual(result["successful_point_count"], 8)
+        self.assertEqual(result["failed_set_image_count"], 1)
+        self.assertEqual(result["failed_set_universal_ground_count"], 0)
+        self.assertEqual(result["first_point_index"], 0)
+        self.assertGreaterEqual(result["core_seconds"], 0.0)
+
+    def test_run_pyisis_camera_task_includes_edges_for_three_by_three_grid(self):
+        fake_ip = _FakeIpModule()
+        task = benchmark.CameraTaskConfig(
+            label="fake_camera_edges",
+            cube_path=Path("/tmp/fake.cub"),
+            sample_step=10,
+            line_step=10,
+        )
+
+        result = benchmark.run_pyisis_camera_task(task, ip_module=fake_ip)
+
+        self.assertEqual(result["input_point_count"], 9)
+
+    def test_run_pyisis_controlnet_task_loads_and_traverses_control_net(self):
+        fake_ip = _FakeIpModule()
+        task = benchmark.ControlNetTaskConfig(
+            label="fake_controlnet",
+            net_path=Path("/tmp/fake.net"),
+        )
+
+        result = benchmark.run_pyisis_controlnet_task(task, ip_module=fake_ip)
+
+        self.assertEqual(fake_ip.control_nets[0].path, "/tmp/fake.net")
+        self.assertEqual(result["task_type"], "controlnet")
+        self.assertEqual(result["implementation"], "pyisis")
+        self.assertEqual(result["label"], "fake_controlnet")
+        self.assertEqual(result["point_count"], 2)
+        self.assertEqual(result["measure_count"], 3)
+        self.assertEqual(result["valid_measure_count"], 3)
+        self.assertEqual(result["serial_measure_counts"], {"SERIAL_A": 2, "SERIAL_B": 1})
+        self.assertGreaterEqual(result["load_seconds"], 0.0)
+        self.assertGreaterEqual(result["traverse_seconds"], 0.0)
+        self.assertGreaterEqual(result["core_seconds"], result["load_seconds"])
+        self.assertGreaterEqual(result["core_seconds"], result["traverse_seconds"])
 
 
 if __name__ == "__main__":

@@ -1421,6 +1421,9 @@ def _resolve_adaptive_route_for_pair(
     low_resolution_offset_summary: dict[str, object],
     left_low_resolution_dom: str | Path | None,
     right_low_resolution_dom: str | Path | None,
+    image_space: str = "dom",
+    left_source_path: str | Path | None = None,
+    right_source_path: str | Path | None = None,
 ) -> tuple[str, dict[str, object] | None]:
     if not enable_adaptive_routing:
         return requested_matcher_method, None
@@ -1429,6 +1432,13 @@ def _resolve_adaptive_route_for_pair(
     summary_right_preview = str(low_resolution_offset_summary.get("right_low_resolution_dom", "") or "")
     resolved_left_preview = summary_left_preview or (str(left_low_resolution_dom) if left_low_resolution_dom is not None else "")
     resolved_right_preview = summary_right_preview or (str(right_low_resolution_dom) if right_low_resolution_dom is not None else "")
+    normalized_image_space = str(image_space or "dom").strip().lower()
+    preview_source_type = "low_resolution_dom"
+    if normalized_image_space == "ori" and (not resolved_left_preview or not resolved_right_preview):
+        resolved_left_preview = str(left_source_path) if left_source_path is not None else ""
+        resolved_right_preview = str(right_source_path) if right_source_path is not None else ""
+        preview_source_type = "raw_original_cube"
+
     if not resolved_left_preview or not resolved_right_preview:
         return requested_matcher_method, {
             "enabled": True,
@@ -1437,12 +1447,12 @@ def _resolve_adaptive_route_for_pair(
             "selected_initial_matcher": requested_matcher_method,
             "selected_deep_match_config_path": None,
             "route_reason": (
-                "Adaptive routing currently requires low-resolution preview DOMs from the coarse-offset stage "
-                "or explicit precomputed preview inputs."
+                "Adaptive routing requires low-resolution preview DOMs for DOM-space matching "
+                "or original cube paths for raw image-space matching."
             ),
             "reason": (
-                "Adaptive routing currently requires low-resolution preview DOMs from the coarse-offset stage "
-                "or explicit precomputed preview inputs."
+                "Adaptive routing requires low-resolution preview DOMs for DOM-space matching "
+                "or original cube paths for raw image-space matching."
             ),
         }
 
@@ -1553,6 +1563,7 @@ def _resolve_adaptive_route_for_pair(
             "preview_sources": {
                 "left": resolved_left_preview,
                 "right": resolved_right_preview,
+                "source_type": preview_source_type,
             },
             "sidecar": sidecar_payload,
         }
@@ -1569,6 +1580,7 @@ def _resolve_adaptive_route_for_pair(
             "preview_sources": {
                 "left": resolved_left_preview,
                 "right": resolved_right_preview,
+                "source_type": preview_source_type,
             },
         }
 
@@ -2353,6 +2365,9 @@ def match_dom_pair(
             low_resolution_offset_summary=low_resolution_offset_summary,
             left_low_resolution_dom=resolved_left_low_resolution_dom,
             right_low_resolution_dom=resolved_right_low_resolution_dom,
+            image_space=image_backend.space,
+            left_source_path=left_dom_path,
+            right_source_path=right_dom_path,
         )
         routed_deep_match_config_path = (
             adaptive_routing_summary.get("selected_deep_match_config_path")

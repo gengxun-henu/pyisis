@@ -124,6 +124,10 @@ image_match = importlib.import_module("controlnet_construct.image_match")
 deep_match_config_module = importlib.import_module("controlnet_construct.deep_match_config")
 match_visualization_module = importlib.import_module("controlnet_construct.match_visualization")
 lowres_offset_module = importlib.import_module("controlnet_construct.lowres_offset")
+from image_match.adaptive_routing import ImageTextureProbe
+from image_match.lighting_difference import SolarGeometry
+from image_match.texture_sparseness import ImageSparsenessSummary
+
 build_argument_parser = image_match.build_argument_parser
 default_match_visualization_path = image_match.default_match_visualization_path
 filter_stereo_pair_keypoints_with_ransac = image_match.filter_stereo_pair_keypoints_with_ransac
@@ -5335,6 +5339,152 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["matcher"]["matcher_method_requested"], "bf")
         self.assertEqual(summary["matcher"]["matcher_method_effective"], "lightglue")
         self.assertEqual(summary["adaptive_routing"]["selected_initial_matcher"], "lightglue")
+
+    def test_match_ori_pair_uses_raw_inputs_for_adaptive_routing(self):
+        image = _build_textured_test_image(96, 96)
+        accepted_points = tuple(Keypoint(float(index), float(index)) for index in range(40))
+        fake_tile_result = tile_matching_module.TileMatchResult(
+            stats=tile_matching_module.TileMatchStats(
+                0, 0, 96, 96, 0, 0, 0, 0, 96 * 96, 96 * 96,
+                1.0, 1.0, 40, 40, 40, "matched",
+            ),
+            left_points=accepted_points,
+            right_points=accepted_points,
+        )
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_raw_adaptive.cub",
+                right_name="right_raw_adaptive.cub",
+            )
+
+            with mock.patch.object(
+                image_match,
+                "_compute_texture_probe_from_cube_path",
+                return_value=ImageTextureProbe(
+                    keypoint_count=200,
+                    valid_pixel_count=96 * 96,
+                    total_pixel_count=96 * 96,
+                    keypoint_density=0.02,
+                    mean_gradient=24.0,
+                    laplacian_variance=180.0,
+                    entropy=3.5,
+                    valid_pixel_ratio=1.0,
+                    real_texture_score=0.6,
+                ),
+            ), mock.patch.object(
+                image_match,
+                "_compute_texture_sparseness_and_geometry_from_cube_path",
+                side_effect=[
+                    (
+                        ImageSparsenessSummary(
+                            tile_total_count=1,
+                            tile_valid_count=1,
+                            tile_size=256,
+                            tile_step=128,
+                            min_valid_pixel_ratio=0.3,
+                            aggregation_quantile=0.90,
+                            image_texture_sparseness=0.25,
+                            sparseness_quantiles={"p10": 0.25, "p50": 0.25, "p90": 0.25, "max": 0.25},
+                            tile_metrics=(),
+                        ),
+                        SolarGeometry(30.0, 10.0, "Instrument", "SolarElevation", "SolarAzimuth"),
+                        None,
+                    ),
+                    (
+                        ImageSparsenessSummary(
+                            tile_total_count=1,
+                            tile_valid_count=1,
+                            tile_size=256,
+                            tile_step=128,
+                            min_valid_pixel_ratio=0.3,
+                            aggregation_quantile=0.90,
+                            image_texture_sparseness=0.30,
+                            sparseness_quantiles={"p10": 0.30, "p50": 0.30, "p90": 0.30, "max": 0.30},
+                            tile_metrics=(),
+                        ),
+                        SolarGeometry(33.0, 15.0, "Instrument", "SolarElevation", "SolarAzimuth"),
+                        None,
+                    ),
+                ],
+            ) as diag_mock, mock.patch.object(
+                image_match,
+                "_run_serial_tile_match_tasks",
+                return_value=[fake_tile_result],
+            ) as serial_mock:
+                _, _, summary = image_match.match_ori_pair(
+                    left_path,
+                    right_path,
+                    matcher_method="flann",
+                    enable_adaptive_routing=True,
+                    adaptive_routing_profile="balanced",
+                    adaptive_routing_deep_presets={
+                        "lightglue": "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                        "loftr": "examples/controlnet_construct/presets/loftr_external_outdoor.json",
+                    },
+                    use_parallel_cpu=False,
+                    max_image_dimension=512,
+                    min_valid_pixels=32,
+                )
+
+        adaptive = summary["adaptive_routing"]
+        self.assertEqual(adaptive["status"], "routed")
+        self.assertEqual(diag_mock.call_args_list[0].args[0], str(left_path))
+        self.assertEqual(diag_mock.call_args_list[1].args[0], str(right_path))
+        self.assertEqual(serial_mock.call_args.kwargs["matcher_method"], "flann")
+        self.assertEqual(adaptive["preview_sources"]["left"], str(left_path))
+        self.assertEqual(adaptive["preview_sources"]["right"], str(right_path))
+        self.assertEqual(adaptive["preview_sources"]["source_type"], "raw_original_cube")
+        self.assertEqual(adaptive["sidecar"]["texture_sparseness"]["pair_texture_sparseness"], 0.30)
+        self.assertIsNotNone(adaptive["sidecar"]["lighting_difference"]["lighting_difference_score"])
+
+    def test_match_ori_pair_adaptive_routing_falls_back_to_requested_matcher_when_raw_diagnostics_fail(self):
+        image = _build_textured_test_image(96, 96)
+        accepted_points = tuple(Keypoint(float(index), float(index)) for index in range(20))
+        fake_tile_result = tile_matching_module.TileMatchResult(
+            stats=tile_matching_module.TileMatchStats(
+                0, 0, 96, 96, 0, 0, 0, 0, 96 * 96, 96 * 96,
+                1.0, 1.0, 20, 20, 20, "matched",
+            ),
+            left_points=accepted_points,
+            right_points=accepted_points,
+        )
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_raw_adaptive_error.cub",
+                right_name="right_raw_adaptive_error.cub",
+            )
+
+            with mock.patch.object(
+                image_match,
+                "_compute_texture_probe_from_cube_path",
+                side_effect=RuntimeError("synthetic diagnostic failure"),
+            ), mock.patch.object(
+                image_match,
+                "_run_serial_tile_match_tasks",
+                return_value=[fake_tile_result],
+            ) as serial_mock:
+                _, _, summary = image_match.match_ori_pair(
+                    left_path,
+                    right_path,
+                    matcher_method="flann",
+                    enable_adaptive_routing=True,
+                    use_parallel_cpu=False,
+                    max_image_dimension=512,
+                    min_valid_pixels=32,
+                )
+
+        self.assertEqual(serial_mock.call_args.kwargs["matcher_method"], "flann")
+        self.assertEqual(summary["adaptive_routing"]["status"], "routing_failed")
+        self.assertEqual(summary["adaptive_routing"]["selected_initial_matcher"], "flann")
+        self.assertIn("synthetic diagnostic failure", summary["adaptive_routing"]["reason"])
 
     def test_match_dom_pair_falls_back_through_adaptive_cascade_after_failed_quality_gate(self):
         image = _build_textured_test_image(96, 96)

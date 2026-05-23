@@ -462,6 +462,20 @@ def prepare_run_directory(config: BenchmarkConfig, *, output_root: str | Path, d
     run_dir = output_root / config.run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     for child_name in ("pyisis", "cpp", "reports"):
+        child_path = run_dir / child_name
+        if child_path.exists():
+            if child_path.is_dir():
+                shutil.rmtree(child_path)
+            else:
+                child_path.unlink()
+    for file_name in ("experiment_config.json", "experiment_manifest.json"):
+        file_path = run_dir / file_name
+        if file_path.exists():
+            if file_path.is_dir():
+                shutil.rmtree(file_path)
+            else:
+                file_path.unlink()
+    for child_name in ("pyisis", "cpp", "reports"):
         (run_dir / child_name).mkdir(exist_ok=True)
 
     shutil.copyfile(config.config_path, run_dir / "experiment_config.json")
@@ -496,7 +510,7 @@ def write_summary_reports(
         json.dumps(summary, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    _write_summary_csv(reports_dir / "summary.csv", results)
+    _write_summary_csv(reports_dir / "summary.csv", results, camera_comparisons)
     _write_camera_top_errors(reports_dir / "camera_top_errors.csv", camera_comparisons)
 
     controlnet_results = [result for result in results if result.get("task_type") == "controlnet"]
@@ -506,7 +520,11 @@ def write_summary_reports(
     )
 
 
-def _write_summary_csv(path: Path, results: list[dict[str, Any]]) -> None:
+def _write_summary_csv(
+    path: Path,
+    results: list[dict[str, Any]],
+    camera_comparisons: list[dict[str, Any]],
+) -> None:
     columns = [
         "label",
         "task_type",
@@ -517,12 +535,35 @@ def _write_summary_csv(path: Path, results: list[dict[str, Any]]) -> None:
         "point_count",
         "measure_count",
         "successful_point_count",
+        "matched_point_count",
+        "missing_in_pyisis_count",
+        "missing_in_cpp_count",
+        "latitude_abs_max",
+        "longitude_abs_max",
+        "sample_abs_max",
+        "line_abs_max",
     ]
     with path.open("w", encoding="utf-8", newline="") as csv_file:
         writer = csv.DictWriter(csv_file, fieldnames=columns)
         writer.writeheader()
         for result in results:
             writer.writerow({column: result.get(column) for column in columns})
+        for comparison in camera_comparisons:
+            stats = comparison.get("stats", {})
+            writer.writerow(
+                {
+                    "label": comparison.get("label"),
+                    "task_type": "camera_comparison",
+                    "implementation": "comparison",
+                    "matched_point_count": comparison.get("matched_point_count"),
+                    "missing_in_pyisis_count": len(comparison.get("missing_in_pyisis", [])),
+                    "missing_in_cpp_count": len(comparison.get("missing_in_cpp", [])),
+                    "latitude_abs_max": stats.get("latitude_abs_max"),
+                    "longitude_abs_max": stats.get("longitude_abs_max"),
+                    "sample_abs_max": stats.get("sample_abs_max"),
+                    "line_abs_max": stats.get("line_abs_max"),
+                }
+            )
 
 
 def _write_camera_top_errors(path: Path, camera_comparisons: list[dict[str, Any]]) -> None:

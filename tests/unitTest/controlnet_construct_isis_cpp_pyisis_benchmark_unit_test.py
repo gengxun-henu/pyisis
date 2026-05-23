@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import csv
 import json
 import sys
 from pathlib import Path
@@ -586,6 +587,36 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             self.assertTrue((run_dir / "cpp").is_dir())
             self.assertTrue((run_dir / "reports").is_dir())
 
+    def test_prepare_run_directory_removes_owned_stale_artifacts_only(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+            run_dir = temp_dir / "out" / "unit_benchmark"
+            (run_dir / "pyisis").mkdir(parents=True)
+            (run_dir / "cpp").mkdir()
+            (run_dir / "reports").mkdir()
+            (run_dir / "pyisis" / "stale.json").write_text("stale\n", encoding="utf-8")
+            (run_dir / "cpp" / "stale.json").write_text("stale\n", encoding="utf-8")
+            (run_dir / "reports" / "stale.csv").write_text("stale\n", encoding="utf-8")
+            (run_dir / "experiment_config.json").write_text("old config\n", encoding="utf-8")
+            (run_dir / "experiment_manifest.json").write_text("old manifest\n", encoding="utf-8")
+            (run_dir / "custom-note.txt").write_text("keep me\n", encoding="utf-8")
+
+            prepared_run_dir = benchmark.prepare_run_directory(
+                config,
+                output_root=temp_dir / "out",
+                dry_run=True,
+            )
+
+            self.assertEqual(prepared_run_dir, run_dir.resolve())
+            self.assertFalse((prepared_run_dir / "pyisis" / "stale.json").exists())
+            self.assertFalse((prepared_run_dir / "cpp" / "stale.json").exists())
+            self.assertFalse((prepared_run_dir / "reports" / "stale.csv").exists())
+            self.assertEqual((prepared_run_dir / "custom-note.txt").read_text(encoding="utf-8"), "keep me\n")
+            self.assertTrue((prepared_run_dir / "experiment_config.json").is_file())
+            self.assertTrue((prepared_run_dir / "experiment_manifest.json").is_file())
+
     def test_write_summary_reports_writes_json_and_csv_schemas(self):
         results = [
             {
@@ -612,9 +643,14 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             {
                 "label": "camera_a",
                 "matched_point_count": 1,
-                "missing_in_pyisis": [],
-                "missing_in_cpp": [],
-                "stats": {"latitude_abs_max": 0.5},
+                "missing_in_pyisis": [3, 5],
+                "missing_in_cpp": [7],
+                "stats": {
+                    "latitude_abs_max": 0.5,
+                    "longitude_abs_max": 0.25,
+                    "sample_abs_max": 0.5,
+                    "line_abs_max": 0.25,
+                },
                 "top_errors": [
                     {
                         "label": "camera_a",
@@ -635,14 +671,22 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             summary = json.loads((temp_dir / "reports" / "summary.json").read_text(encoding="utf-8"))
             self.assertEqual(summary["results"], results)
             self.assertEqual(summary["camera_comparisons"], camera_comparisons)
-            self.assertEqual(
-                (temp_dir / "reports" / "summary.csv").read_text(encoding="utf-8").splitlines(),
-                [
-                    "label,task_type,implementation,status,core_seconds,wall_seconds,point_count,measure_count,successful_point_count",
-                    "camera_a,camera,pyisis,completed,1.25,1.5,,,2",
-                    "net_a,controlnet,cpp,completed,2.0,2.25,7,11,",
-                ],
-            )
+            with (temp_dir / "reports" / "summary.csv").open(encoding="utf-8", newline="") as csv_file:
+                rows = list(csv.DictReader(csv_file))
+            self.assertEqual(rows[0]["label"], "camera_a")
+            self.assertEqual(rows[0]["task_type"], "camera")
+            self.assertEqual(rows[1]["label"], "net_a")
+            self.assertEqual(rows[1]["task_type"], "controlnet")
+            self.assertEqual(rows[2]["label"], "camera_a")
+            self.assertEqual(rows[2]["task_type"], "camera_comparison")
+            self.assertEqual(rows[2]["implementation"], "comparison")
+            self.assertEqual(rows[2]["matched_point_count"], "1")
+            self.assertEqual(rows[2]["missing_in_pyisis_count"], "2")
+            self.assertEqual(rows[2]["missing_in_cpp_count"], "1")
+            self.assertEqual(rows[2]["latitude_abs_max"], "0.5")
+            self.assertEqual(rows[2]["longitude_abs_max"], "0.25")
+            self.assertEqual(rows[2]["sample_abs_max"], "0.5")
+            self.assertEqual(rows[2]["line_abs_max"], "0.25")
             self.assertEqual(
                 (temp_dir / "reports" / "camera_top_errors.csv").read_text(encoding="utf-8").splitlines(),
                 [

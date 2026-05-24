@@ -251,13 +251,31 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
 
         self.assertEqual(config.inputs.original_images_list, original_images.resolve())
 
-    def test_example_config_loads_with_seven_methods(self):
+    def test_example_config_loads_with_recommended_methods(self):
         config_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/matcher_comparison.example.json"
 
         config = matcher_comparison.load_experiment_config(config_path, repo_root=PROJECT_ROOT)
 
         self.assertEqual(config.run_id, "lro_batch_20260522")
-        self.assertEqual(len(config.methods), 7)
+        self.assertEqual(
+            [method.label for method in config.methods],
+            [
+                "sift_flann",
+                "official_lightglue_superpoint",
+                "official_loftr_external_outdoor",
+            ],
+        )
+        self.assertEqual(config.methods[0].matcher_method, "flann")
+        self.assertEqual(config.methods[1].matcher_method, "lightglue")
+        self.assertEqual(
+            config.methods[1].deep_match_config_path,
+            PROJECT_ROOT / "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+        )
+        self.assertEqual(config.methods[2].matcher_method, "loftr")
+        self.assertEqual(
+            config.methods[2].deep_match_config_path,
+            PROJECT_ROOT / "examples/controlnet_construct/presets/loftr_external_outdoor.json",
+        )
 
     def test_prepare_method_workspace_copies_input_lists_to_wrapper_default_names(self):
         with temporary_directory() as temp_dir:

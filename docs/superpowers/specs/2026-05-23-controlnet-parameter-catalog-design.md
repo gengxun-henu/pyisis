@@ -429,3 +429,8 @@ records for unclear legacy fields without adding new hard constraints.
 - Invalid combinations produce clear messages before expensive processing
   begins.
 - Unit tests cover both the catalog shape and the validation behavior.
+
+## Implementation Note
+
+The implementation plan is stored at
+`docs/superpowers/plans/2026-05-23-controlnet-parameter-catalog.md`.

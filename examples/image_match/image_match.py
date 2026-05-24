@@ -69,6 +69,7 @@ except ImportError:
 
 if __package__ in {None, ""}:
     sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from controlnet_construct.parameter_validation import parse_catalog_choice, parse_catalog_number
     from image_match.adaptive_routing import (
         DEFAULT_ADAPTIVE_ROUTING_PROFILE,
         SUPPORTED_ADAPTIVE_ROUTING_PROFILES,
@@ -145,6 +146,7 @@ if __package__ in {None, ""}:
     )
     import image_match.tile_matching as tile_matching_module
 else:
+    from controlnet_construct.parameter_validation import parse_catalog_choice, parse_catalog_number
     from .adaptive_routing import (
         DEFAULT_ADAPTIVE_ROUTING_PROFILE,
         SUPPORTED_ADAPTIVE_ROUTING_PROFILES,
@@ -385,28 +387,28 @@ def _normalize_preview_cache_source(value: object) -> str:
 
 def _parse_visualization_mode(value: str) -> str:
     try:
-        return _normalize_visualization_mode(value)
+        return parse_catalog_choice("visualization_mode", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
 def _parse_memory_profile(value: str) -> str:
     try:
-        return _normalize_memory_profile(value)
+        return parse_catalog_choice("memory_profile", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
 def _parse_preview_cache_source(value: str) -> str:
     try:
-        return _normalize_preview_cache_source(value)
+        return parse_catalog_choice("preview_cache_source", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
 def _parse_adaptive_routing_profile(value: str) -> str:
     try:
-        return normalize_adaptive_routing_profile(value)
+        return parse_catalog_choice("adaptive_routing_profile", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
@@ -441,7 +443,7 @@ def _parse_tile_validity_cell_size(value: str, *, field_name: str) -> int:
 
 def _parse_matcher_method(value: str) -> str:
     try:
-        return _normalize_matcher_method(value)
+        return parse_catalog_choice("matcher_method", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
@@ -457,7 +459,7 @@ def _normalize_deep_match_mode(value: object) -> str:
 
 def _parse_deep_match_mode(value: str) -> str:
     try:
-        return _normalize_deep_match_mode(value)
+        return parse_catalog_choice("deep_match_mode", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 

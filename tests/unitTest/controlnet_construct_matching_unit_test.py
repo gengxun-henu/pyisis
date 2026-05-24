@@ -125,6 +125,7 @@ deep_match_config_module = importlib.import_module("controlnet_construct.deep_ma
 match_visualization_module = importlib.import_module("controlnet_construct.match_visualization")
 lowres_offset_module = importlib.import_module("controlnet_construct.lowres_offset")
 build_argument_parser = image_match.build_argument_parser
+build_controlnet_stereopair_argument_parser = image_match.build_argument_parser
 default_match_visualization_path = image_match.default_match_visualization_path
 filter_stereo_pair_keypoints_with_ransac = image_match.filter_stereo_pair_keypoints_with_ransac
 match_dom_pair = image_match.match_dom_pair
@@ -908,6 +909,48 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         )
 
         self.assertEqual(args.adaptive_routing_profile, "strict")
+
+    def test_image_match_parser_uses_shared_parameter_value_rules(self):
+        parser = build_controlnet_stereopair_argument_parser()
+
+        valid_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--matcher-method",
+                "lightglue",
+                "--deep-match-mode",
+                "export",
+                "--adaptive-routing-profile",
+                "relaxed",
+                "--visualization-mode",
+                "reduced-cropped",
+                "--memory-profile",
+                "low-memory",
+                "--preview-cache-source",
+                "matching-cache",
+            ]
+        )
+
+        self.assertEqual(valid_args.matcher_method, "lightglue")
+        self.assertEqual(valid_args.deep_match_mode, "export")
+        self.assertEqual(valid_args.adaptive_routing_profile, "relaxed")
+        self.assertEqual(valid_args.visualization_mode, "reduced_cropped")
+        self.assertEqual(valid_args.memory_profile, "low-memory")
+        self.assertEqual(valid_args.preview_cache_source, "matching_cache")
+
+        for flag, value in (
+            ("--matcher-method", "unknown"),
+            ("--deep-match-mode", "bad"),
+            ("--adaptive-routing-profile", "bad"),
+            ("--visualization-mode", "bad"),
+            ("--memory-profile", "bad"),
+            ("--preview-cache-source", "bad"),
+        ):
+            with self.subTest(flag=flag, value=value), self.assertRaises(SystemExit):
+                parser.parse_args(["left.cub", "right.cub", "left.key", "right.key", flag, value])
 
     def test_build_argument_parser_accepts_deep_match_config_path(self):
         parser = build_argument_parser()

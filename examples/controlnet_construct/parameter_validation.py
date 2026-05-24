@@ -211,6 +211,52 @@ def _validate_and_normalize_value(spec: Any, value: Any, errors: list[Validation
     return value
 
 
+def parse_catalog_choice(field_name: str, value: str) -> str:
+    """Parse a catalog choice value and return the catalog's canonical spelling."""
+
+    spec = PARAMETER_BY_NAME[field_name]
+    if spec.allowed_values is None:
+        raise ValueError(f"{field_name} does not define allowed catalog values.")
+
+    normalized_allowed = {_normalize_choice(allowed): allowed for allowed in spec.allowed_values}
+    normalized_value = _normalize_choice(value)
+    if normalized_value not in normalized_allowed:
+        allowed_display = ", ".join(str(allowed) for allowed in spec.allowed_values)
+        raise ValueError(f"{field_name} must be one of: {allowed_display}.")
+    return normalized_allowed[normalized_value]
+
+
+def parse_catalog_number(field_name: str, value: str) -> int | float:
+    """Parse a numeric catalog value and enforce catalog range constraints."""
+
+    spec = PARAMETER_BY_NAME[field_name]
+    if spec.value_type == "bool":
+        raise ValueError(f"{field_name} must be numeric, not boolean.")
+    if spec.value_type not in {"int", "float"}:
+        raise ValueError(f"{field_name} is not a numeric catalog parameter.")
+
+    if isinstance(value, bool):
+        raise ValueError(f"{field_name} must be a finite number; got {value!r}.")
+
+    try:
+        parsed: int | float
+        if spec.value_type == "int":
+            parsed = int(value)
+        else:
+            parsed = float(value)
+    except (TypeError, ValueError) as exc:
+        expected_type = "integer" if spec.value_type == "int" else "number"
+        raise ValueError(f"{field_name} must be a finite {expected_type}; got {value!r}.") from exc
+
+    if isinstance(parsed, bool) or not math.isfinite(parsed):
+        raise ValueError(f"{field_name} must be finite; got {value!r}.")
+    if spec.min_value is not None and parsed < spec.min_value:
+        raise ValueError(f"{field_name} must be >= {spec.min_value}; got {value!r}.")
+    if spec.max_value is not None and parsed > spec.max_value:
+        raise ValueError(f"{field_name} must be <= {spec.max_value}; got {value!r}.")
+    return parsed
+
+
 def _validate_numeric_range(spec: Any, value: int | float, errors: list[ValidationMessage]) -> int | float:
     if not math.isfinite(value):
         errors.append(ValidationMessage(spec.name, f"must be finite; got {value!r}"))

@@ -17,7 +17,7 @@ except ImportError:
     from parameter_catalog import PARAMETER_BY_NAME, parameters_for_entrypoint
 
 
-_SOURCE_ORDER = ("config", "preset", "cli")
+_SOURCE_ORDER = ("profile", "config", "preset", "cli")
 _BOOL_TRUE_STRINGS = {"1", "true", "yes", "on"}
 _BOOL_FALSE_STRINGS = {"0", "false", "no", "off"}
 _REDUCED_PREVIEW_FIELDS = (
@@ -74,12 +74,14 @@ def validate_parameters(
     entrypoint: str,
     *,
     cli_values: dict[str, Any] | None = None,
+    profile_values: dict[str, Any] | None = None,
     preset_values: dict[str, Any] | None = None,
     config_values: dict[str, Any] | None = None,
 ) -> ParameterValidationResult:
     """Merge and validate parameters for a ControlNet entry point."""
 
     provided_by_source = {
+        "profile": dict(profile_values or {}),
         "config": dict(config_values or {}),
         "preset": dict(preset_values or {}),
         "cli": dict(cli_values or {}),

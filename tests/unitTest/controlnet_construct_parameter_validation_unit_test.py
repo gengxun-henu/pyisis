@@ -279,6 +279,23 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
         self.assertIn("skip_final_merge", result.error_text())
         self.assertIn("boolean", result.error_text())
 
+    def test_parameter_profile_accepts_cataloged_values(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters("run_pipeline_example", cli_values={"parameter_profile": "balanced"})
+
+        self.assertFalse(result.has_errors, result.error_text())
+        self.assertEqual(result.values["parameter_profile"], "balanced")
+
+    def test_parameter_profile_rejects_unknown_values(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters("run_pipeline_example", cli_values={"parameter_profile": "unknown"})
+
+        self.assertTrue(result.has_errors)
+        self.assertIn("parameter_profile", result.error_text())
+        self.assertIn("conservative", result.error_text())
+
     def test_wrapper_owned_numeric_fields_validate_type_and_range(self):
         from controlnet_construct.parameter_validation import validate_parameters
 

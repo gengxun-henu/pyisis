@@ -264,9 +264,33 @@ python examples/image_match/image_match.py \
 
 同理，如果你希望在只跑批量匹配时顺手关闭默认 PNG 输出，也可以在这个透传区里附加 `--no-write-match-visualization`。
 
-## 模板 3A：跨 conda deep-match handoff
+## 模板 3A：official deep matcher presets
 
-如果你想在 `controlnet_construct` 批量流程中使用 LightGlue / LoFTR / SuperGlue，但这些深度学习依赖只安装在 `deep-learning` conda 环境中，**推荐使用一键包装脚本**，它会自动完成三段式 handoff（export → deep-learning → import），不需要你手动切 conda 环境。
+推荐控制网构建里的 learned matching preset 先收敛到这两个入口：
+
+```text
+examples/controlnet_construct/presets/lightglue_official_superpoint.json
+examples/controlnet_construct/presets/loftr_external_outdoor.json
+```
+
+`loftr_default.json` is the Kornia compatibility preset; use `loftr_external_outdoor.json` or `loftr_external_indoor.json` for the official LoFTR repository/checkpoint route.
+
+如果你需要 raw/original image adaptive routing，可以把它们作为路由候选：
+
+```bash
+bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
+  --work-dir work_ori \
+  --original-list work/original_images.lis \
+  --config examples/controlnet_construct/controlnet_config.example.json \
+  --matcher-method flann \
+  --adaptive-routing \
+  --adaptive-routing-deep-preset lightglue=examples/controlnet_construct/presets/lightglue_official_superpoint.json \
+  --adaptive-routing-deep-preset loftr=examples/controlnet_construct/presets/loftr_external_outdoor.json
+```
+
+## 模板 3B：跨 conda deep-match handoff
+
+如果你想在 `controlnet_construct` 批量流程中使用 official LightGlue / external LoFTR，但这些深度学习依赖只安装在 `deep-learning` conda 环境中，**推荐使用一键包装脚本**，它会自动完成三段式 handoff（export → deep-learning → import），不需要你手动切 conda 环境。
 
 ### 推荐方式：一键包装脚本
 

@@ -979,6 +979,41 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("--pair-id-start must be at least 1", result.stderr)
 
+    def test_run_ori_match_pipeline_rejects_unsupported_deep_export_mode(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work_ori"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            config_path = temp_dir / "config.json"
+            original_list.write_text("", encoding="utf-8")
+            config_path.write_text(
+                json.dumps({"NetworkId": "raw_unit", "TargetName": "Moon", "UserName": "tester"}),
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--original-list",
+                    str(original_list),
+                    "--config",
+                    str(config_path),
+                    "--deep-match-mode",
+                    "export",
+                    "--dry-run",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("--deep-match-mode currently supports only direct", result.stderr)
+
     def test_run_ori_match_pipeline_forwards_official_deep_and_adaptive_flags(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work_ori"
@@ -1031,6 +1066,127 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn(f"--deep-match-config-path {deep_config_path}", command_text)
         self.assertIn("--adaptive-routing", command_text)
         self.assertIn("--adaptive-routing-profile strict", command_text)
+
+    def test_run_ori_match_pipeline_forwards_adaptive_and_official_deep_presets(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work_ori"
+            work_dir.mkdir()
+            left = temp_dir / "left.cub"
+            right = temp_dir / "right.cub"
+            left.write_text("left", encoding="utf-8")
+            right.write_text("right", encoding="utf-8")
+            original_list = work_dir / "original_images.lis"
+            overlap_list = work_dir / "images_overlap.lis"
+            config_path = temp_dir / "config.json"
+            original_list.write_text(f"{left}\n{right}\n", encoding="utf-8")
+            overlap_list.write_text(f"{left},{right}\n", encoding="utf-8")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "raw_adaptive_unit",
+                        "TargetName": "Moon",
+                        "UserName": "tester",
+                        "ImageMatch": {
+                            "enable_adaptive_routing": True,
+                            "adaptive_routing_profile": "strict",
+                            "matcher_method": "flann",
+                            "deep_matcher_config_path": "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                            "adaptive_routing_deep_presets": {
+                                "lightglue": "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                                "loftr": "examples/controlnet_construct/presets/loftr_external_outdoor.json",
+                            },
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_ORI_MATCH_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--original-list",
+                    str(original_list),
+                    "--images-overlap-list",
+                    str(overlap_list),
+                    "--config",
+                    str(config_path),
+                    "--dry-run",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            command_text = (work_dir / "command.sh").read_text(encoding="utf-8")
+            parsed_commands = [
+                shlex.split(line)
+                for line in command_text.splitlines()
+                if line and not line.startswith("#") and not line.startswith("set ")
+            ]
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        expected_lightglue = str(PROJECT_ROOT / "examples/controlnet_construct/presets/lightglue_official_superpoint.json")
+        expected_loftr = str(PROJECT_ROOT / "examples/controlnet_construct/presets/loftr_external_outdoor.json")
+        pair_command = next(command for command in parsed_commands if "from-ori-match" in command)
+        self.assertIn("--adaptive-routing", pair_command)
+        self.assertIn("--adaptive-routing-profile", pair_command)
+        self.assertEqual(pair_command[pair_command.index("--adaptive-routing-profile") + 1], "strict")
+        self.assertIn("--deep-match-config-path", pair_command)
+        self.assertEqual(
+            pair_command[pair_command.index("--deep-match-config-path") + 1],
+            expected_lightglue,
+        )
+        preset_values = [
+            pair_command[index + 1]
+            for index, value in enumerate(pair_command)
+            if value == "--adaptive-routing-deep-preset"
+        ]
+        self.assertIn(
+            f"lightglue={expected_lightglue}",
+            preset_values,
+        )
+        self.assertIn(
+            f"loftr={expected_loftr}",
+            preset_values,
+        )
+
+    def test_recommended_docs_use_official_lightglue_and_external_loftr_presets(self):
+        usage = (PROJECT_ROOT / "examples" / "controlnet_construct" / "usage.md").read_text(encoding="utf-8")
+        templates = (PROJECT_ROOT / "examples" / "controlnet_construct" / "recommended_batch_templates.md").read_text(encoding="utf-8")
+        matcher_example = json.loads(
+            (PROJECT_ROOT / "examples" / "controlnet_construct" / "experiments" / "matcher_comparison.example.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        combined_docs = usage + "\n" + templates
+
+        self.assertIn("lightglue_official_superpoint.json", combined_docs)
+        self.assertIn("loftr_external_outdoor.json", combined_docs)
+        self.assertIn("loftr_default.json` is the Kornia compatibility preset", combined_docs)
+        for legacy in (
+            "lightglue_default.json",
+            "lightglue_high_recall.json",
+            "lightglue_disk.json",
+            "lightglue_aliked.json",
+            "lightglue_doghardnet.json",
+            "superglue_default.json",
+            "superglue_aliked.json",
+        ):
+            self.assertNotIn(f"presets/{legacy}", combined_docs)
+
+        method_presets = {
+            method.get("deep_match_config_path")
+            for method in matcher_example.get("methods", [])
+            if method.get("deep_match_config_path")
+        }
+        self.assertIn("examples/controlnet_construct/presets/lightglue_official_superpoint.json", method_presets)
+        self.assertIn("examples/controlnet_construct/presets/loftr_external_outdoor.json", method_presets)
+        self.assertNotIn("examples/controlnet_construct/presets/superglue_aliked.json", method_presets)
+        self.assertNotIn("examples/controlnet_construct/presets/lightglue_disk.json", method_presets)
 
     def test_deep_match_manifest_roundtrip_preserves_runtime_config_provenance_fields(self):
         runtime_config = DeepMatchRuntimeConfig(
@@ -4953,6 +5109,103 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(parsed.matcher_method, "loftr")
         self.assertTrue(parsed.use_gpu)
         self.assertEqual(parsed.gpu_batch_size, 8)
+
+    def test_controlnet_stereopair_parser_accepts_from_ori_match_adaptive_and_deep_config(self):
+        parser = importlib.import_module("controlnet_construct.controlnet_stereopair").build_argument_parser()
+        parsed = parser.parse_args(
+            [
+                "from-ori-match",
+                "left.cub",
+                "right.cub",
+                "config.json",
+                "out.net",
+                "--adaptive-routing",
+                "--adaptive-routing-profile",
+                "strict",
+                "--deep-match-config-path",
+                "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                "--adaptive-routing-deep-preset",
+                "lightglue=examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                "--adaptive-routing-deep-preset",
+                "loftr=examples/controlnet_construct/presets/loftr_external_outdoor.json",
+            ]
+        )
+
+        self.assertEqual(parsed.command, "from-ori-match")
+        self.assertTrue(parsed.enable_adaptive_routing)
+        self.assertEqual(parsed.adaptive_routing_profile, "strict")
+        self.assertEqual(
+            parsed.deep_match_config_path,
+            "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+        )
+        self.assertEqual(
+            parsed.adaptive_routing_deep_preset,
+            [
+                "lightglue=examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                "loftr=examples/controlnet_construct/presets/loftr_external_outdoor.json",
+            ],
+        )
+
+    def test_controlnet_stereopair_main_from_ori_match_forwards_adaptive_and_deep_options(self):
+        with temporary_directory() as temp_dir:
+            left = temp_dir / "left.cub"
+            right = temp_dir / "right.cub"
+            config = temp_dir / "config.json"
+            output_net = temp_dir / "out.net"
+            left.write_text("left", encoding="utf-8")
+            right.write_text("right", encoding="utf-8")
+            config.write_text(
+                json.dumps({"NetworkId": "raw_adaptive", "TargetName": "Moon", "UserName": "tester"}),
+                encoding="utf-8",
+            )
+
+            with patch(
+                "controlnet_construct.controlnet_stereopair.match_ori_pair_to_key_files",
+                return_value={
+                    "status": "matched",
+                    "point_count": 4,
+                    "adaptive_routing": {"status": "routed"},
+                    "deep_match_config_path": "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                    "left_output_key": str(temp_dir / "left.key"),
+                    "right_output_key": str(temp_dir / "right.key"),
+                },
+            ) as match_mock, patch(
+                "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                return_value={"point_count": 4, "output_net": str(output_net)},
+            ):
+                controlnet_stereopair_main(
+                    [
+                        "from-ori-match",
+                        str(left),
+                        str(right),
+                        str(config),
+                        str(output_net),
+                        "--adaptive-routing",
+                        "--adaptive-routing-profile",
+                        "strict",
+                        "--deep-match-config-path",
+                        "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                        "--adaptive-routing-deep-preset",
+                        "lightglue=examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                        "--adaptive-routing-deep-preset",
+                        "loftr=examples/controlnet_construct/presets/loftr_external_outdoor.json",
+                    ]
+                )
+
+        kwargs = match_mock.call_args.kwargs
+        self.assertTrue(kwargs["enable_adaptive_routing"])
+        self.assertEqual(kwargs["adaptive_routing_profile"], "strict")
+        self.assertEqual(
+            kwargs["deep_match_config_path"],
+            "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+        )
+        self.assertEqual(
+            kwargs["adaptive_routing_deep_presets"],
+            {
+                "lightglue": "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+                "loftr": "examples/controlnet_construct/presets/loftr_external_outdoor.json",
+            },
+        )
 
     def test_controlnet_stereopair_main_from_ori_match_dispatches_matching_and_controlnet(self):
         fake_config = ControlNetConfig(network_id="N", target_name="Mars", user_name="tester")

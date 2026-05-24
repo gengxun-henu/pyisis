@@ -9,6 +9,7 @@ Updated: 2026-05-20  Geng Xun added manifest runtime-config preflight checks and
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -176,6 +177,14 @@ def _runtime_config_from_manifest(manifest: Any, *, prefer_gpu: bool) -> Any | N
     )
 
 
+def _normalize_runtime_config_device_preference(runtime_config: Any | None, *, prefer_gpu: bool) -> Any | None:
+    if runtime_config is None:
+        return None
+    if not hasattr(runtime_config, "prefer_gpu") or bool(runtime_config.prefer_gpu) == bool(prefer_gpu):
+        return runtime_config
+    return replace(runtime_config, prefer_gpu=bool(prefer_gpu))
+
+
 def _validate_runtime_config_matcher_method(manifest: Any, runtime_config: Any | None) -> None:
     if runtime_config is None:
         return
@@ -200,7 +209,10 @@ def run_manifest(
 
     manifest = read_deep_match_pair_manifest(manifest_path)
     prefer_gpu = _resolve_prefer_gpu(device)
-    runtime_config = _runtime_config_from_manifest(manifest, prefer_gpu=prefer_gpu)
+    runtime_config = _normalize_runtime_config_device_preference(
+        _runtime_config_from_manifest(manifest, prefer_gpu=prefer_gpu),
+        prefer_gpu=prefer_gpu,
+    )
     _validate_runtime_config_matcher_method(manifest, runtime_config)
     missing_dependencies = [] if runtime_config is None else check_deep_match_dependencies(runtime_config)
     if missing_dependencies:

@@ -46,6 +46,7 @@ if __package__ in {None, ""}:
     from image_match.image_match import match_ori_pair_to_key_files
     from image_match.keypoints import read_key_file
     from controlnet_construct.listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
+    from controlnet_construct.parameter_validation import parse_catalog_choice
     from image_match.match_visualization import (
         DEFAULT_MEMORY_PROFILE,
         DEFAULT_PREVIEW_CACHE_SOURCE,
@@ -53,7 +54,6 @@ if __package__ in {None, ""}:
         SUPPORTED_MEMORY_PROFILES,
         SUPPORTED_PREVIEW_CACHE_SOURCES,
         SUPPORTED_VISUALIZATION_MODES,
-        resolve_visualization_options,
         write_stereo_pair_match_visualization_from_key_files,
     )
     from controlnet_construct.runtime import bootstrap_runtime_environment
@@ -73,6 +73,7 @@ else:
     from image_match.image_match import match_ori_pair_to_key_files
     from image_match.keypoints import read_key_file
     from .listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
+    from .parameter_validation import parse_catalog_choice
     from image_match.match_visualization import (
         DEFAULT_MEMORY_PROFILE,
         DEFAULT_PREVIEW_CACHE_SOURCE,
@@ -80,7 +81,6 @@ else:
         SUPPORTED_MEMORY_PROFILES,
         SUPPORTED_PREVIEW_CACHE_SOURCES,
         SUPPORTED_VISUALIZATION_MODES,
-        resolve_visualization_options,
         write_stereo_pair_match_visualization_from_key_files,
     )
     from .runtime import bootstrap_runtime_environment
@@ -245,34 +245,34 @@ def _normalize_optional_identifier(value: object | None) -> str | None:
 
 
 def _normalize_visualization_mode(value: object) -> str:
-    return resolve_visualization_options(visualization_mode=str(value)).visualization_mode
+    return parse_catalog_choice("visualization_mode", str(value))
 
 
 def _normalize_memory_profile(value: object) -> str:
-    return resolve_visualization_options(memory_profile=str(value)).memory_profile
+    return parse_catalog_choice("memory_profile", str(value))
 
 
 def _normalize_preview_cache_source(value: object) -> str:
-    return resolve_visualization_options(preview_cache_source=str(value)).preview_cache_source
+    return parse_catalog_choice("preview_cache_source", str(value))
 
 
 def _parse_visualization_mode(value: str) -> str:
     try:
-        return _normalize_visualization_mode(value)
+        return parse_catalog_choice("visualization_mode", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
 def _parse_memory_profile(value: str) -> str:
     try:
-        return _normalize_memory_profile(value)
+        return parse_catalog_choice("memory_profile", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
 def _parse_preview_cache_source(value: str) -> str:
     try:
-        return _normalize_preview_cache_source(value)
+        return parse_catalog_choice("preview_cache_source", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 

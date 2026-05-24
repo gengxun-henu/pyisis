@@ -138,6 +138,383 @@ def _configured_real_lro_dom_pair() -> tuple[Path, Path]:
 
 
 class ControlNetConstructPipelineUnitTest(unittest.TestCase):
+    def _run_pipeline_validate_parameters_only(self, extra_args: list[str]) -> subprocess.CompletedProcess[str]:
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text("/tmp/left.cub\n/tmp/right.cub\n", encoding="utf-8")
+            dom_list = work_dir / "doms.lis"
+            dom_list.write_text("/tmp/left_dom.cub\n/tmp/right_dom.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "validate_bad_wrapper_unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                        "ImageMatch": {
+                            "matcher_method": "bf",
+                            "num_worker_parallel_cpu": 3,
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            return subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    *extra_args,
+                    "--validate-parameters-only",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+    def test_run_pipeline_example_prints_parameter_groups(self):
+        result = subprocess.run(
+            [
+                "bash",
+                str(RUN_PIPELINE_EXAMPLE_PATH),
+                "--print-parameter-groups",
+            ],
+            cwd=PROJECT_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Parameter groups for run_pipeline_example", result.stdout)
+        self.assertIn("Matching", result.stdout)
+        self.assertIn("--matcher-method", result.stdout)
+        self.assertIn("Low Resolution", result.stdout)
+
+    def test_run_pipeline_example_validates_parameters_only_from_config(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text("/tmp/left.cub\n/tmp/right.cub\n", encoding="utf-8")
+            dom_list = work_dir / "doms.lis"
+            dom_list.write_text("/tmp/left_dom.cub\n/tmp/right_dom.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "validate_only_unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                        "ImageMatch": {
+                            "matcher_method": "bf",
+                            "num_worker_parallel_cpu": 3,
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--validate-parameters-only",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Parameter validation passed", result.stdout)
+        self.assertIn("MATCHER_METHOD=bf", result.stdout)
+        self.assertIn("NUM_WORKER_PARALLEL_CPU=3", result.stdout)
+        self.assertIn(f"WORK_DIR={work_dir}", result.stdout)
+        self.assertIn("NETWORK_ID=validate_only_unit", result.stdout)
+        self.assertNotIn("Step 1/", result.stdout)
+
+    def test_run_pipeline_example_validate_parameters_only_rejects_bad_wrapper_cli_values(self):
+        cases = (
+            ("pair_id_start", ["--pair-id-start", "not_an_int"]),
+            ("invalid_pixel_radius", ["--invalid-pixel-radius", "bad"]),
+            ("valid_pixel_percent_threshold", ["--valid-pixel-percent-threshold", "bad"]),
+        )
+
+        for expected_field, extra_args in cases:
+            with self.subTest(expected_field=expected_field):
+                result = self._run_pipeline_validate_parameters_only(extra_args)
+
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn(expected_field, result.stderr)
+
+    def test_run_pipeline_example_strict_parameter_validation_promotes_warning(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text("/tmp/left.cub\n/tmp/right.cub\n", encoding="utf-8")
+            dom_list = work_dir / "doms.lis"
+            dom_list.write_text("/tmp/left_dom.cub\n/tmp/right_dom.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "strict_validate_unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                        "ImageMatch": {
+                            "matcher_method": "bf",
+                            "num_worker_parallel_cpu": 3,
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--low-resolution-level",
+                    "4",
+                    "--strict-parameter-validation",
+                    "--validate-parameters-only",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("strict parameter validation", result.stderr)
+        self.assertIn("low_resolution_level", result.stderr)
+
+    def test_run_pipeline_example_strict_parameter_validation_can_come_from_config(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text("/tmp/left.cub\n/tmp/right.cub\n", encoding="utf-8")
+            dom_list = work_dir / "doms.lis"
+            dom_list.write_text("/tmp/left_dom.cub\n/tmp/right_dom.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "strict_config_unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                        "ImageMatch": {
+                            "matcher_method": "bf",
+                            "num_worker_parallel_cpu": 3,
+                        },
+                        "Reporting": {
+                            "strict_parameter_validation": True,
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--low-resolution-level",
+                    "4",
+                    "--validate-parameters-only",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("strict parameter validation", result.stderr)
+        self.assertIn("low_resolution_level", result.stderr)
+
+    def test_run_pipeline_example_preserves_wrapper_defaults_after_parameter_validation(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "preserve-defaults-unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                        "ImageMatch": {
+                            "matcher_method": "bf",
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python_dispatcher.write_text(
+                "\n".join(
+                    [
+                        f"#!{sys.executable}",
+                        "import json",
+                        "import os",
+                        "import sys",
+                        "from pathlib import Path",
+                        "",
+                        "def _run_stdin_python() -> int:",
+                        "    code = sys.stdin.read()",
+                        "    globals_dict = {'__name__': '__main__', '__file__': '<stdin>'}",
+                        "    sys.argv = ['-'] + sys.argv[2:]",
+                        "    exec(compile(code, '<stdin>', 'exec'), globals_dict)",
+                        "    return 0",
+                        "",
+                        "def _write_fake_key_outputs(args: list[str]) -> None:",
+                        "    key_index = 4 if args and args[0] == '--config' else 2",
+                        "    Path(args[key_index]).write_text('synthetic-left-key\\n', encoding='utf-8')",
+                        "    Path(args[key_index + 1]).write_text('synthetic-right-key\\n', encoding='utf-8')",
+                        "",
+                        "def main() -> int:",
+                        "    if len(sys.argv) < 2:",
+                        "        return 0",
+                        "    if sys.argv[1] == '-':",
+                        "        return _run_stdin_python()",
+                        "    script_name = Path(sys.argv[1]).name",
+                        "    args = sys.argv[2:]",
+                        "",
+                        "    if script_name == 'image_overlap.py':",
+                        "        Path(args[1]).write_text('left.cub,right.cub\\n', encoding='utf-8')",
+                        "        return 0",
+                        "",
+                        "    if script_name == 'prepare_low_resolution_doms.py':",
+                        "        if '--level' not in args:",
+                        "            raise SystemExit('missing low-resolution prepare --level')",
+                        "        level = args[args.index('--level') + 1]",
+                        "        if level != '3':",
+                        "            raise SystemExit(f'unexpected prepare level: {level}')",
+                        "        output_list = Path(args[1])",
+                        "        output_list.parent.mkdir(parents=True, exist_ok=True)",
+                        "        output_list.write_text('left_low_level3.cub\\nright_low_level3.cub\\n', encoding='utf-8')",
+                        "        return 0",
+                        "",
+                        "    if script_name == 'image_match.py':",
+                        "        if '--print-config-default' in args:",
+                        "            config_path = Path(args[args.index('--config') + 1])",
+                        "            field_name = args[args.index('--print-config-default') + 1]",
+                        "            payload = json.loads(config_path.read_text(encoding='utf-8'))",
+                        "            image_match_config = payload.get('ImageMatch') or {}",
+                        "            if field_name == 'matcher_method':",
+                        "                print(image_match_config.get('matcher_method', ''))",
+                        "            else:",
+                        "                print('')",
+                        "            return 0",
+                        "        expected_pairs = {",
+                        "            '--low-resolution-level': '3',",
+                        "            '--low-resolution-max-mean-reprojection-error-pixels': '3.0',",
+                        "            '--low-resolution-min-retained-match-count': '5',",
+                        "            '--low-resolution-max-mean-projected-offset-meters': '0.0',",
+                        "        }",
+                        "        if '--enable-low-resolution-offset-estimation' not in args:",
+                        "            raise SystemExit('missing low-resolution enable flag')",
+                        "        for flag, expected in expected_pairs.items():",
+                        "            if flag not in args:",
+                        "                raise SystemExit(f'missing {flag}')",
+                        "            actual = args[args.index(flag) + 1]",
+                        "            if actual != expected:",
+                        "                raise SystemExit(f'unexpected {flag}: {actual!r}')",
+                        "        _write_fake_key_outputs(args)",
+                        "        return 0",
+                        "",
+                        "    if script_name == 'controlnet_stereopair.py':",
+                        "        if '--visualization-mode' not in args:",
+                        "            raise SystemExit('missing --visualization-mode')",
+                        "        visualization_mode = args[args.index('--visualization-mode') + 1]",
+                        "        if visualization_mode != 'full':",
+                        "            raise SystemExit(f'unexpected visualization mode: {visualization_mode}')",
+                        "        if '--preview-crop-margin-pixels' not in args:",
+                        "            raise SystemExit('missing --preview-crop-margin-pixels')",
+                        "        crop_margin = args[args.index('--preview-crop-margin-pixels') + 1]",
+                        "        if crop_margin != '128':",
+                        "            raise SystemExit(f'unexpected preview crop margin pixels: {crop_margin}')",
+                        "        output_dir = Path(args[6])",
+                        "        output_dir.mkdir(parents=True, exist_ok=True)",
+                        "        (output_dir / 'synthetic_pair.net').write_text('net', encoding='utf-8')",
+                        "        return 0",
+                        "",
+                        "    if script_name == 'controlnet_merge.py':",
+                        "        merge_script_path = Path(args[3])",
+                        "        merge_script_path.parent.mkdir(parents=True, exist_ok=True)",
+                        "        merge_script_path.write_text('#!/usr/bin/env bash\\nexit 0\\n', encoding='utf-8')",
+                        "        os.chmod(merge_script_path, 0o755)",
+                        "        return 0",
+                        "",
+                        "    raise SystemExit(f'Unhandled fake python script: {script_name}')",
+                        "",
+                        "raise SystemExit(main())",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python_dispatcher.chmod(0o755)
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python_dispatcher),
+                    "--enable-low-resolution-offset-estimation",
+                    "--skip-final-merge",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Low-resolution max mean reprojection error (pixels): 3.0", result.stdout)
+        self.assertIn("Low-resolution minimum retained matches: 5", result.stdout)
+        self.assertIn("Low-resolution max mean projected offset (meters): 0.0", result.stdout)
+        self.assertIn("Post-RANSAC visualization mode: full", result.stdout)
+        self.assertIn("Post-RANSAC preview crop margin (pixels): 128", result.stdout)
+
     def test_run_ori_match_pipeline_dry_run_writes_expected_commands(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work_ori"

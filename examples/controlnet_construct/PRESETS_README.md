@@ -277,8 +277,9 @@ For learning-only legacy configuration, specify only
 Both wrapper entrypoints (`run_pipeline_example.sh` and `run_image_match_batch_example.sh`) use the same precedence for matching options:
 
 1. explicit CLI flags such as `--matcher-method`, `--deep-match-config-path`, `--adaptive-routing`, or `--adaptive-routing-profile`
-2. fields under config JSON `ImageMatch`
-3. script defaults
+2. match preset fields
+3. fields under config JSON `ImageMatch`
+4. script defaults
 
 When `ImageMatch.deep_matcher_config_path` is relative, the wrappers resolve it relative to the config file directory first. If that file does not exist, they fall back to resolving it relative to the repository root. The resolved path is printed in the wrapper log before it is forwarded to `examples/image_match/image_match.py`.
 
@@ -330,3 +331,46 @@ Copy any preset file to a custom path, modify parameters, and specify it via
 
 **fallback:**
 - `on_error`: Fallback method (`sift_bf`, `sift_flann`, null)
+
+## Parameter Groups and Preflight Validation
+
+The end-to-end ControlNet pipeline exposes many options because it coordinates
+overlap discovery, DOM matching, low-resolution offset estimation, adaptive
+routing, visualization, pairwise ControlNet construction, and final merging.
+
+Use grouped help when choosing parameters:
+
+```bash
+bash examples/controlnet_construct/run_pipeline_example.sh --print-parameter-groups
+```
+
+Use validation-only mode before running expensive matching work:
+
+```bash
+bash examples/controlnet_construct/run_pipeline_example.sh \
+  --work-dir work \
+  --config examples/controlnet_construct/controlnet_config.example.json \
+  --validate-parameters-only
+```
+
+The effective-value precedence is:
+
+```text
+explicit CLI value > match preset value > config JSON value > entrypoint default
+```
+
+Default validation fails on invalid combinations such as a deep matcher without
+a deep matcher preset, `--match-preset-path` combined with explicit matcher
+overrides, `--deep-match-mode import` without a manifest source, or an invalid
+GPU batch range. Inactive options such as low-resolution thresholds while
+low-resolution offset estimation is disabled are warnings by default.
+
+Use strict mode in repeatable runs:
+
+```bash
+bash examples/controlnet_construct/run_pipeline_example.sh \
+  --work-dir work \
+  --config examples/controlnet_construct/controlnet_config.example.json \
+  --strict-parameter-validation \
+  --validate-parameters-only
+```

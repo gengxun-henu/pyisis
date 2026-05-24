@@ -270,6 +270,9 @@ Options:
   --config PATH                   ControlNet config JSON. Default: examples/controlnet_construct/controlnet_config.example.json
                                   Its ImageMatch section is forwarded to examples/image_match/image_match.py as default matching parameters.
   --python PATH                   Python interpreter to use. Default: $PYTHON_EXECUTABLE or python
+  --print-parameter-groups        Print the cataloged parameter groups for this wrapper and exit
+  --validate-parameters-only      Validate resolved parameters and exit before running pipeline steps
+  --strict-parameter-validation   Promote parameter validation warnings to errors
   --use-parallel-cpu              Forward explicit CPU tile parallelism enable flag to examples/image_match/image_match.py (default behavior)
   --no-parallel-cpu               Disable CPU tile parallelism in examples/image_match/image_match.py and force serial tile matching
   --num-worker-parallel-cpu N     Maximum worker-process count forwarded to examples/image_match/image_match.py when CPU parallelism is enabled.
@@ -364,6 +367,8 @@ Options:
 
 Environment overrides:
   PYTHON_EXECUTABLE               Python interpreter used by this script
+  PARAMETER_CATALOG_PYTHON_EXECUTABLE
+                                  Python interpreter used for parameter catalog validation. Default: python
   CNETMERGE_EXECUTABLE            cnetmerge executable path written into the generated merge shell
 
 Examples:
@@ -579,6 +584,27 @@ extract_image_match_config_value() {
     --print-config-default-container-order "$container_order"
 }
 
+extract_reporting_config_value() {
+  local config_path=$1
+  local field_name=$2
+  "$CATALOG_PYTHON_EXECUTABLE" - "$config_path" "$field_name" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+config = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
+field_name = sys.argv[2]
+reporting = config.get("Reporting") or config.get("reporting") or {}
+value = reporting.get(field_name)
+if value is None or value == "":
+    raise SystemExit(0)
+if isinstance(value, bool):
+    print("1" if value else "0")
+else:
+    print(value)
+PY
+}
+
 resolve_config_relative_path() {
   local raw_path=$1
   local config_path=$2
@@ -644,6 +670,191 @@ apply_match_preset_path() {
   local assignments
   assignments=$(resolve_match_preset_shell_assignments "$preset_path")
   eval "$assignments"
+}
+
+print_parameter_groups() {
+  "$CATALOG_PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/print_parameter_catalog.py" \
+    --entrypoint run_pipeline_example \
+    --format text
+}
+
+build_parameter_validation_payload() {
+  local payload_path=$1
+  "$CATALOG_PYTHON_EXECUTABLE" - "$payload_path" <<'PY'
+import json
+import os
+import sys
+from pathlib import Path
+
+repo_root = Path(os.environ["REPO_ROOT"])
+sys.path.insert(0, str(repo_root / "examples"))
+from controlnet_construct.parameter_catalog import PARAMETER_BY_NAME, parameters_for_entrypoint
+
+payload_path = Path(sys.argv[1])
+supported_names = {parameter.name for parameter in parameters_for_entrypoint("run_pipeline_example")}
+spec_by_name = {name: PARAMETER_BY_NAME[name] for name in supported_names}
+
+
+def env(name: str) -> str:
+    return os.environ.get(name, "")
+
+
+def is_present(value: object) -> bool:
+    return value is not None and value != "" and value != "null"
+
+
+def coerce_value(name: str, value: object) -> object:
+    spec = spec_by_name[name]
+    if not isinstance(value, str):
+        return value
+    if spec.value_type == "bool":
+        normalized = value.strip().lower()
+        if normalized in {"1", "true", "yes", "on"}:
+            return True
+        if normalized in {"0", "false", "no", "off"}:
+            return False
+        return value
+    if spec.value_type == "int":
+        try:
+            return int(value)
+        except ValueError:
+            return value
+    if spec.value_type == "float":
+        try:
+            return float(value)
+        except ValueError:
+            return value
+    return value
+
+
+def add_value(target: dict[str, object], name: str, value: object) -> None:
+    if name in supported_names and is_present(value):
+        target[name] = coerce_value(name, value)
+
+
+cli_values: dict[str, object] = {}
+config_values: dict[str, object] = {}
+preset_values: dict[str, object] = {}
+
+if env("print_parameter_groups") == "1":
+    add_value(cli_values, "print_parameter_groups", True)
+if env("validate_parameters_only") == "1":
+    add_value(cli_values, "validate_parameters_only", True)
+if env("explicit_strict_parameter_validation") == "1":
+    add_value(cli_values, "strict_parameter_validation", True)
+
+cli_sources = {
+    "num_worker_parallel_cpu": ("explicit_num_worker_parallel_cpu", "NUM_WORKER_PARALLEL_CPU"),
+    "use_parallel_cpu": ("explicit_use_parallel_cpu", "USE_PARALLEL_CPU"),
+    "pair_id_start": ("explicit_pair_id_start", "PAIR_ID_START"),
+    "valid_pixel_percent_threshold": (
+        "explicit_valid_pixel_percent_threshold",
+        "VALID_PIXEL_PERCENT_THRESHOLD",
+    ),
+    "invalid_pixel_radius": ("explicit_invalid_pixel_radius", "INVALID_PIXEL_RADIUS"),
+    "match_preset_path": ("explicit_match_preset_path", "match_preset_path"),
+    "matcher_method": ("explicit_matcher_method", "MATCHER_METHOD"),
+    "deep_match_config_path": ("explicit_deep_matcher_config_path", "DEEP_MATCHER_CONFIG_PATH"),
+    "enable_adaptive_routing": ("explicit_adaptive_routing", "ADAPTIVE_ROUTING"),
+    "adaptive_routing_profile": ("explicit_adaptive_routing_profile", "ADAPTIVE_ROUTING_PROFILE"),
+    "enable_low_resolution_offset_estimation": (
+        "explicit_enable_low_resolution_offset_estimation",
+        "ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION",
+    ),
+    "low_resolution_level": ("explicit_low_resolution_level", "LOW_RESOLUTION_LEVEL"),
+    "low_resolution_max_mean_reprojection_error_pixels": (
+        "explicit_low_resolution_max_mean_reprojection_error_pixels",
+        "LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS",
+    ),
+    "low_resolution_min_retained_match_count": (
+        "explicit_low_resolution_min_retained_match_count",
+        "LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT",
+    ),
+    "low_resolution_max_mean_projected_offset_meters": (
+        "explicit_low_resolution_max_mean_projected_offset_meters",
+        "LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS",
+    ),
+    "visualization_mode": ("explicit_visualization_mode", "VISUALIZATION_MODE"),
+    "memory_profile": ("explicit_memory_profile", "MEMORY_PROFILE"),
+    "visualization_target_long_edge": ("explicit_visualization_target_long_edge", "VISUALIZATION_TARGET_LONG_EDGE"),
+    "preview_crop_margin_pixels": ("explicit_preview_crop_margin_pixels", "PREVIEW_CROP_MARGIN_PIXELS"),
+    "preview_cache_source": ("explicit_preview_cache_source", "PREVIEW_CACHE_SOURCE"),
+}
+for parameter_name, (marker_name, value_name) in cli_sources.items():
+    if is_present(env(marker_name)):
+        add_value(cli_values, parameter_name, env(value_name))
+
+config_sources = {
+    "match_preset_path": "config_match_preset_path",
+    "valid_pixel_percent_threshold": "config_valid_pixel_percent_threshold",
+    "invalid_pixel_radius": "config_invalid_pixel_radius",
+    "num_worker_parallel_cpu": "config_num_worker_parallel_cpu",
+    "use_parallel_cpu": "config_use_parallel_cpu",
+    "matcher_method": "config_matcher_method",
+    "deep_match_config_path": "config_deep_matcher_config_path",
+    "enable_adaptive_routing": "config_enable_adaptive_routing",
+    "adaptive_routing_profile": "config_adaptive_routing_profile",
+    "enable_low_resolution_offset_estimation": "config_enable_low_resolution_offset_estimation",
+    "low_resolution_level": "config_low_resolution_level",
+    "low_resolution_max_mean_reprojection_error_pixels": "config_low_resolution_max_mean_reprojection_error_pixels",
+    "low_resolution_min_retained_match_count": "config_low_resolution_min_retained_match_count",
+    "low_resolution_max_mean_projected_offset_meters": "config_low_resolution_max_mean_projected_offset_meters",
+    "visualization_mode": "config_visualization_mode",
+    "memory_profile": "config_memory_profile",
+    "visualization_target_long_edge": "config_visualization_target_long_edge",
+    "preview_crop_margin_pixels": "config_preview_crop_margin_pixels",
+    "preview_cache_source": "config_preview_cache_source",
+    "strict_parameter_validation": "config_strict_parameter_validation",
+}
+for parameter_name, value_name in config_sources.items():
+    add_value(config_values, parameter_name, env(value_name))
+
+preset_sources = {
+    "match_preset_path": "preset_match_preset_path",
+    "matcher_method": "preset_matcher_method",
+    "deep_match_config_path": "preset_deep_match_config_path",
+}
+for parameter_name, value_name in preset_sources.items():
+    add_value(preset_values, parameter_name, env(value_name))
+
+payload = {
+    "entrypoint": "run_pipeline_example",
+    "cli_values": cli_values,
+    "config_values": config_values,
+    "preset_values": preset_values,
+}
+payload_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+PY
+}
+
+validate_controlnet_parameters() {
+  local payload_path
+  payload_path=$(mktemp "${TMPDIR:-/tmp}/run_pipeline_parameters.XXXXXX.json")
+  build_parameter_validation_payload "$payload_path"
+  local status=0
+  "$CATALOG_PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/print_parameter_catalog.py" \
+    --validate-json "$payload_path" \
+    --shell-assignments || status=$?
+  rm -f "$payload_path"
+  return "$status"
+}
+
+print_parameter_validation_summary() {
+  printf 'WORK_DIR=%q\n' "$WORK_DIR"
+  printf 'ORIGINAL_LIST=%q\n' "$ORIGINAL_LIST"
+  printf 'DOM_LIST=%q\n' "$DOM_LIST"
+  printf 'CONFIG=%q\n' "$CONFIG_PATH"
+  printf 'NETWORK_ID=%q\n' "$NETWORK_ID"
+  printf 'MATCHER_METHOD=%q\n' "$MATCHER_METHOD"
+  printf 'NUM_WORKER_PARALLEL_CPU=%q\n' "$NUM_WORKER_PARALLEL_CPU"
+  printf 'ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION=%q\n' "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION"
+  printf 'LOW_RESOLUTION_LEVEL=%q\n' "$LOW_RESOLUTION_LEVEL"
+  printf 'LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS=%q\n' "$LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS"
+  printf 'LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT=%q\n' "$LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT"
+  printf 'LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS=%q\n' "$LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS"
+  printf 'VISUALIZATION_MODE=%q\n' "$VISUALIZATION_MODE"
+  printf 'PREVIEW_CROP_MARGIN_PIXELS=%q\n' "$PREVIEW_CROP_MARGIN_PIXELS"
+  printf 'STRICT_PARAMETER_VALIDATION=%q\n' "$strict_parameter_validation"
 }
 
 run_step_1_image_overlap() {
@@ -980,9 +1191,14 @@ main() {
   local pair_list_input=""
   local timing_json_input=""
   local post_merge_output_input=""
+  local print_parameter_groups="0"
+  local validate_parameters_only="0"
+  local strict_parameter_validation="0"
+  local explicit_strict_parameter_validation="0"
   local explicit_valid_pixel_percent_threshold=""
   local explicit_num_worker_parallel_cpu=""
   local explicit_use_parallel_cpu=""
+  local explicit_pair_id_start=""
   local explicit_invalid_pixel_radius=""
   local explicit_matcher_method=""
   local explicit_match_preset_path=""
@@ -1003,8 +1219,32 @@ main() {
   local deep_match_temp_root_dir_input=""
   local deep_match_manifest_dir_input=""
   local deep_match_manifest_summary_input=""
+  local config_match_preset_path=""
+  local config_valid_pixel_percent_threshold=""
+  local config_num_worker_parallel_cpu=""
+  local config_use_parallel_cpu=""
+  local config_invalid_pixel_radius=""
+  local config_matcher_method=""
+  local config_deep_matcher_config_path=""
+  local config_enable_adaptive_routing=""
+  local config_adaptive_routing_profile=""
+  local config_enable_low_resolution_offset_estimation=""
+  local config_low_resolution_level=""
+  local config_low_resolution_max_mean_reprojection_error_pixels=""
+  local config_low_resolution_min_retained_match_count=""
+  local config_low_resolution_max_mean_projected_offset_meters=""
+  local config_visualization_mode=""
+  local config_memory_profile=""
+  local config_visualization_target_long_edge=""
+  local config_preview_crop_margin_pixels=""
+  local config_preview_cache_source=""
+  local config_strict_parameter_validation=""
+  local preset_match_preset_path=""
+  local preset_matcher_method=""
+  local preset_deep_match_config_path=""
 
   PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
+  CATALOG_PYTHON_EXECUTABLE="${PARAMETER_CATALOG_PYTHON_EXECUTABLE:-python}"
   CNETMERGE_PATH="${CNETMERGE_EXECUTABLE:-cnetmerge}"
   PAIR_ID_PREFIX="$DEFAULT_PAIR_ID_PREFIX"
   PAIR_ID_START="$DEFAULT_PAIR_ID_START"
@@ -1060,6 +1300,19 @@ main() {
         PYTHON_EXECUTABLE=$2
         shift 2
         ;;
+      --print-parameter-groups)
+        print_parameter_groups="1"
+        shift
+        ;;
+      --validate-parameters-only)
+        validate_parameters_only="1"
+        shift
+        ;;
+      --strict-parameter-validation)
+        strict_parameter_validation="1"
+        explicit_strict_parameter_validation="1"
+        shift
+        ;;
       --use-parallel-cpu)
         USE_PARALLEL_CPU="1"
         explicit_use_parallel_cpu="1"
@@ -1084,6 +1337,7 @@ main() {
       --pair-id-start)
         [[ $# -ge 2 ]] || die "missing value for --pair-id-start"
         PAIR_ID_START=$2
+        explicit_pair_id_start=$2
         shift 2
         ;;
       --valid-pixel-percent-threshold)
@@ -1288,8 +1542,14 @@ main() {
   fi
 
   require_command "$PYTHON_EXECUTABLE"
+  require_command "$CATALOG_PYTHON_EXECUTABLE"
 
   cd "$REPO_ROOT"
+
+  if [[ "$print_parameter_groups" == "1" ]]; then
+    print_parameter_groups
+    exit 0
+  fi
 
   WORK_DIR="$work_dir_input"
   ORIGINAL_LIST="${original_list_input:-$WORK_DIR/original_images.lis}"
@@ -1337,33 +1597,34 @@ main() {
   if [[ -n "$explicit_match_preset_path" ]]; then
     match_preset_path=$(resolve_cli_relative_path "$explicit_match_preset_path")
   elif [[ -z "$explicit_matcher_method" && -z "$explicit_deep_matcher_config_path" ]]; then
-    local config_match_preset_path
     config_match_preset_path=$(extract_image_match_config_value "$CONFIG_PATH" "match_preset_path")
     if [[ -n "$config_match_preset_path" && "$config_match_preset_path" != "null" ]]; then
       match_preset_path=$(resolve_config_relative_path "$config_match_preset_path" "$CONFIG_PATH")
     fi
   fi
   if [[ -n "$match_preset_path" ]]; then
-    apply_match_preset_path "$match_preset_path"
+    local match_preset_assignments
+    match_preset_assignments=$(resolve_match_preset_shell_assignments "$match_preset_path")
+    eval "$match_preset_assignments"
+    preset_match_preset_path="${MATCH_PRESET_PATH:-$match_preset_path}"
+    preset_matcher_method="$MATCHER_METHOD"
+    preset_deep_match_config_path="${DEEP_MATCHER_CONFIG_PATH:-}"
   fi
 
   if [[ "$POST_MERGE_CONTROL_MEASURE" == "1" && "$SKIP_FINAL_MERGE" == "1" ]]; then
     die "--post-merge-control-measure cannot be used together with --skip-final-merge"
   fi
 
-  mkdir -p "$DOM_KEYS_DIR" "$MATCH_METADATA_DIR" "$MATCH_RESULTS_DIR" "$PRE_RANSAC_MATCH_VIZ_DIR" "$POST_RANSAC_MATCH_VIZ_DIR" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_DIR"
-  if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
-    mkdir -p "$DEEP_MATCH_TEMP_ROOT_DIR"
-  fi
-  if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
-    initialize_deep_match_manifest_summary "$DEEP_MATCH_MANIFEST_SUMMARY"
-  fi
-
   if [[ -z "$NETWORK_ID" ]]; then
     NETWORK_ID=$(extract_network_id_from_config "$CONFIG_PATH")
   fi
+  if [[ "$strict_parameter_validation" != "1" ]]; then
+    config_strict_parameter_validation=$(extract_reporting_config_value "$CONFIG_PATH" "strict_parameter_validation")
+    if [[ "$config_strict_parameter_validation" == "1" ]]; then
+      strict_parameter_validation="1"
+    fi
+  fi
   if [[ -z "$explicit_valid_pixel_percent_threshold" ]]; then
-    local config_valid_pixel_percent_threshold
     config_valid_pixel_percent_threshold=$(extract_image_match_config_value "$CONFIG_PATH" "valid_pixel_percent_threshold")
     if [[ -n "$config_valid_pixel_percent_threshold" ]]; then
       VALID_PIXEL_PERCENT_THRESHOLD="$config_valid_pixel_percent_threshold"
@@ -1373,52 +1634,46 @@ main() {
     VALID_PIXEL_PERCENT_THRESHOLD="$DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD"
   fi
   if [[ -z "$explicit_use_parallel_cpu" ]]; then
-    local config_use_parallel_cpu
     config_use_parallel_cpu=$(extract_image_match_config_value "$CONFIG_PATH" "use_parallel_cpu" "image-match-first")
     if [[ -n "$config_use_parallel_cpu" ]]; then
       USE_PARALLEL_CPU="$config_use_parallel_cpu"
     fi
   fi
   if [[ -z "$explicit_num_worker_parallel_cpu" ]]; then
-    local config_num_worker_parallel_cpu
     config_num_worker_parallel_cpu=$(extract_image_match_config_value "$CONFIG_PATH" "num_worker_parallel_cpu")
     if [[ -n "$config_num_worker_parallel_cpu" ]]; then
       NUM_WORKER_PARALLEL_CPU="$config_num_worker_parallel_cpu"
     fi
   fi
   if [[ -z "$explicit_invalid_pixel_radius" ]]; then
-    local config_invalid_pixel_radius
     config_invalid_pixel_radius=$(extract_image_match_config_value "$CONFIG_PATH" "invalid_pixel_radius")
     if [[ -n "$config_invalid_pixel_radius" ]]; then
       INVALID_PIXEL_RADIUS="$config_invalid_pixel_radius"
     fi
   fi
   if [[ -z "$match_preset_path" && -z "$explicit_matcher_method" ]]; then
-    local config_matcher_method
     config_matcher_method=$(extract_image_match_config_value "$CONFIG_PATH" "matcher_method")
     if [[ -n "$config_matcher_method" ]]; then
       MATCHER_METHOD="$config_matcher_method"
     fi
   fi
   if [[ -z "$explicit_adaptive_routing" ]]; then
-    local config_enable_adaptive_routing
     config_enable_adaptive_routing=$(extract_image_match_config_value "$CONFIG_PATH" "enable_adaptive_routing")
     if [[ -n "$config_enable_adaptive_routing" ]]; then
       ADAPTIVE_ROUTING="$config_enable_adaptive_routing"
     fi
   fi
   if [[ -z "$explicit_adaptive_routing_profile" ]]; then
-    local config_adaptive_routing_profile
     config_adaptive_routing_profile=$(extract_image_match_config_value "$CONFIG_PATH" "adaptive_routing_profile")
     if [[ -n "$config_adaptive_routing_profile" ]]; then
       ADAPTIVE_ROUTING_PROFILE="$config_adaptive_routing_profile"
     fi
   fi
   if [[ -z "$match_preset_path" && -z "$DEEP_MATCHER_CONFIG_PATH" ]]; then
-    local config_deep_matcher_config_path
     config_deep_matcher_config_path=$(extract_image_match_config_value "$CONFIG_PATH" "deep_matcher_config_path")
     if [[ -n "$config_deep_matcher_config_path" && "$config_deep_matcher_config_path" != "null" ]]; then
-      DEEP_MATCHER_CONFIG_PATH=$(resolve_config_relative_path "$config_deep_matcher_config_path" "$CONFIG_PATH")
+      config_deep_matcher_config_path=$(resolve_config_relative_path "$config_deep_matcher_config_path" "$CONFIG_PATH")
+      DEEP_MATCHER_CONFIG_PATH="$config_deep_matcher_config_path"
     fi
   fi
 
@@ -1449,79 +1704,103 @@ PY
   esac
 
   if [[ -z "$explicit_enable_low_resolution_offset_estimation" ]]; then
-    local config_enable_low_resolution_offset_estimation
     config_enable_low_resolution_offset_estimation=$(extract_image_match_config_value "$CONFIG_PATH" "enable_low_resolution_offset_estimation")
     if [[ -n "$config_enable_low_resolution_offset_estimation" ]]; then
       ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION="$config_enable_low_resolution_offset_estimation"
     fi
   fi
   if [[ -z "$explicit_low_resolution_level" ]]; then
-    local config_low_resolution_level
     config_low_resolution_level=$(extract_image_match_config_value "$CONFIG_PATH" "low_resolution_level")
     if [[ -n "$config_low_resolution_level" ]]; then
       LOW_RESOLUTION_LEVEL="$config_low_resolution_level"
     fi
   fi
   if [[ -z "$explicit_low_resolution_max_mean_reprojection_error_pixels" ]]; then
-    local config_low_resolution_max_mean_reprojection_error_pixels
     config_low_resolution_max_mean_reprojection_error_pixels=$(extract_image_match_config_value "$CONFIG_PATH" "low_resolution_max_mean_reprojection_error_pixels")
     if [[ -n "$config_low_resolution_max_mean_reprojection_error_pixels" ]]; then
       LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS="$config_low_resolution_max_mean_reprojection_error_pixels"
     fi
   fi
   if [[ -z "$explicit_low_resolution_min_retained_match_count" ]]; then
-    local config_low_resolution_min_retained_match_count
     config_low_resolution_min_retained_match_count=$(extract_image_match_config_value "$CONFIG_PATH" "low_resolution_min_retained_match_count")
     if [[ -n "$config_low_resolution_min_retained_match_count" ]]; then
       LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT="$config_low_resolution_min_retained_match_count"
     fi
   fi
   if [[ -z "$explicit_low_resolution_max_mean_projected_offset_meters" ]]; then
-    local config_low_resolution_max_mean_projected_offset_meters
     config_low_resolution_max_mean_projected_offset_meters=$(extract_image_match_config_value "$CONFIG_PATH" "low_resolution_max_mean_projected_offset_meters")
     if [[ -n "$config_low_resolution_max_mean_projected_offset_meters" ]]; then
       LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS="$config_low_resolution_max_mean_projected_offset_meters"
     fi
   fi
   if [[ -z "$explicit_visualization_mode" ]]; then
-    local config_visualization_mode
     config_visualization_mode=$(extract_image_match_config_value "$CONFIG_PATH" "visualization_mode")
     if [[ -n "$config_visualization_mode" ]]; then
       VISUALIZATION_MODE="$config_visualization_mode"
     fi
   fi
   if [[ -z "$explicit_memory_profile" ]]; then
-    local config_memory_profile
     config_memory_profile=$(extract_image_match_config_value "$CONFIG_PATH" "memory_profile")
     if [[ -n "$config_memory_profile" ]]; then
       MEMORY_PROFILE="$config_memory_profile"
     fi
   fi
   if [[ -z "$explicit_visualization_target_long_edge" ]]; then
-    local config_visualization_target_long_edge
     config_visualization_target_long_edge=$(extract_image_match_config_value "$CONFIG_PATH" "visualization_target_long_edge")
     if [[ -n "$config_visualization_target_long_edge" ]]; then
       VISUALIZATION_TARGET_LONG_EDGE="$config_visualization_target_long_edge"
     fi
   fi
   if [[ -z "$explicit_preview_crop_margin_pixels" ]]; then
-    local config_preview_crop_margin_pixels
     config_preview_crop_margin_pixels=$(extract_image_match_config_value "$CONFIG_PATH" "preview_crop_margin_pixels")
     if [[ -n "$config_preview_crop_margin_pixels" ]]; then
       PREVIEW_CROP_MARGIN_PIXELS="$config_preview_crop_margin_pixels"
     fi
   fi
   if [[ -z "$explicit_preview_cache_source" ]]; then
-    local config_preview_cache_source
     config_preview_cache_source=$(extract_image_match_config_value "$CONFIG_PATH" "preview_cache_source")
     if [[ -n "$config_preview_cache_source" ]]; then
       PREVIEW_CACHE_SOURCE="$config_preview_cache_source"
     fi
   fi
 
+  export REPO_ROOT
+  export print_parameter_groups validate_parameters_only strict_parameter_validation explicit_strict_parameter_validation
+  export explicit_num_worker_parallel_cpu explicit_use_parallel_cpu explicit_pair_id_start explicit_valid_pixel_percent_threshold explicit_invalid_pixel_radius
+  export explicit_match_preset_path explicit_matcher_method explicit_deep_matcher_config_path
+  export explicit_adaptive_routing explicit_adaptive_routing_profile explicit_enable_low_resolution_offset_estimation explicit_low_resolution_level
+  export explicit_low_resolution_max_mean_reprojection_error_pixels explicit_low_resolution_min_retained_match_count explicit_low_resolution_max_mean_projected_offset_meters
+  export explicit_visualization_mode explicit_memory_profile explicit_visualization_target_long_edge explicit_preview_crop_margin_pixels explicit_preview_cache_source
+  export match_preset_path MATCHER_METHOD DEEP_MATCHER_CONFIG_PATH ADAPTIVE_ROUTING ADAPTIVE_ROUTING_PROFILE USE_PARALLEL_CPU NUM_WORKER_PARALLEL_CPU
+  export PAIR_ID_START VALID_PIXEL_PERCENT_THRESHOLD INVALID_PIXEL_RADIUS
+  export ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION LOW_RESOLUTION_LEVEL LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT
+  export LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS VISUALIZATION_MODE MEMORY_PROFILE VISUALIZATION_TARGET_LONG_EDGE PREVIEW_CROP_MARGIN_PIXELS PREVIEW_CACHE_SOURCE
+  export config_match_preset_path config_num_worker_parallel_cpu config_use_parallel_cpu config_matcher_method config_deep_matcher_config_path
+  export config_enable_adaptive_routing config_adaptive_routing_profile config_enable_low_resolution_offset_estimation config_low_resolution_level
+  export config_low_resolution_max_mean_reprojection_error_pixels config_low_resolution_min_retained_match_count config_low_resolution_max_mean_projected_offset_meters
+  export config_visualization_mode config_memory_profile config_visualization_target_long_edge config_preview_crop_margin_pixels config_preview_cache_source
+  export config_strict_parameter_validation
+  export preset_match_preset_path preset_matcher_method preset_deep_match_config_path
+
+  validate_controlnet_parameters >/dev/null
+
+  if [[ "$validate_parameters_only" == "1" ]]; then
+    printf 'Parameter validation passed\n'
+    print_parameter_validation_summary
+    exit 0
+  fi
+
   LOW_RESOLUTION_DOM_LIST="$WORK_DIR/doms_low_resolution_level${LOW_RESOLUTION_LEVEL}.lis"
   LOW_RESOLUTION_DOM_DIR="$WORK_DIR/low_resolution_doms/level${LOW_RESOLUTION_LEVEL}"
   LOW_RESOLUTION_DOM_REPORT="$REPORTS_DIR/low_resolution_doms_level${LOW_RESOLUTION_LEVEL}.json"
+
+  mkdir -p "$DOM_KEYS_DIR" "$MATCH_METADATA_DIR" "$MATCH_RESULTS_DIR" "$PRE_RANSAC_MATCH_VIZ_DIR" "$POST_RANSAC_MATCH_VIZ_DIR" "$PAIR_NETS_DIR" "$REPORTS_DIR" "$MERGE_DIR"
+  if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
+    mkdir -p "$DEEP_MATCH_TEMP_ROOT_DIR"
+  fi
+  if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
+    initialize_deep_match_manifest_summary "$DEEP_MATCH_MANIFEST_SUMMARY"
+  fi
 
   initialize_timing_json
 

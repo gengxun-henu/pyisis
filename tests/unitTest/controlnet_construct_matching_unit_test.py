@@ -121,6 +121,7 @@ if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
 image_match = importlib.import_module("controlnet_construct.image_match")
+controlnet_stereopair_module = importlib.import_module("controlnet_construct.controlnet_stereopair")
 deep_match_config_module = importlib.import_module("controlnet_construct.deep_match_config")
 match_visualization_module = importlib.import_module("controlnet_construct.match_visualization")
 lowres_offset_module = importlib.import_module("controlnet_construct.lowres_offset")
@@ -128,7 +129,9 @@ from image_match.adaptive_routing import ImageTextureProbe
 from image_match.lighting_difference import SolarGeometry
 from image_match.texture_sparseness import ImageSparsenessSummary
 
-build_argument_parser = image_match.build_argument_parser
+build_image_match_argument_parser = image_match.build_argument_parser
+build_argument_parser = build_image_match_argument_parser
+build_controlnet_stereopair_argument_parser = controlnet_stereopair_module.build_argument_parser
 default_match_visualization_path = image_match.default_match_visualization_path
 filter_stereo_pair_keypoints_with_ransac = image_match.filter_stereo_pair_keypoints_with_ransac
 match_dom_pair = image_match.match_dom_pair
@@ -912,6 +915,88 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         )
 
         self.assertEqual(args.adaptive_routing_profile, "strict")
+
+    def test_image_match_parser_uses_shared_parameter_value_rules(self):
+        parser = build_image_match_argument_parser()
+
+        valid_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--matcher-method",
+                "lightglue",
+                "--deep-match-mode",
+                "export",
+                "--adaptive-routing-profile",
+                "relaxed",
+                "--visualization-mode",
+                "reduced-cropped",
+                "--memory-profile",
+                "low-memory",
+                "--preview-cache-source",
+                "matching-cache",
+            ]
+        )
+
+        self.assertEqual(valid_args.matcher_method, "lightglue")
+        self.assertEqual(valid_args.deep_match_mode, "export")
+        self.assertEqual(valid_args.adaptive_routing_profile, "relaxed")
+        self.assertEqual(valid_args.visualization_mode, "reduced_cropped")
+        self.assertEqual(valid_args.memory_profile, "low-memory")
+        self.assertEqual(valid_args.preview_cache_source, "matching_cache")
+
+        for flag, value in (
+            ("--matcher-method", "unknown"),
+            ("--deep-match-mode", "bad"),
+            ("--adaptive-routing-profile", "bad"),
+            ("--visualization-mode", "bad"),
+            ("--memory-profile", "bad"),
+            ("--preview-cache-source", "bad"),
+        ):
+            with self.subTest(flag=flag, value=value), self.assertRaises(SystemExit):
+                parser.parse_args(["left.cub", "right.cub", "left.key", "right.key", flag, value])
+
+    def test_controlnet_stereopair_parser_uses_shared_visualization_rules(self):
+        parser = build_controlnet_stereopair_argument_parser()
+
+        parsed = parser.parse_args(
+            [
+                "from-dom-batch",
+                "overlap.lis",
+                "original.lis",
+                "doms.lis",
+                "dom_keys",
+                "config.json",
+                "pair_nets",
+                "--visualization-mode",
+                "reduced-cropped",
+                "--memory-profile",
+                "low-memory",
+                "--preview-cache-source",
+                "matching-cache",
+            ]
+        )
+
+        self.assertEqual(parsed.visualization_mode, "reduced_cropped")
+        self.assertEqual(parsed.memory_profile, "low-memory")
+        self.assertEqual(parsed.preview_cache_source, "matching_cache")
+
+        with self.assertRaises(SystemExit):
+            parser.parse_args(
+                [
+                    "from-dom-batch",
+                    "overlap.lis",
+                    "original.lis",
+                    "doms.lis",
+                    "dom_keys",
+                    "config.json",
+                    "pair_nets",
+                    "--visualization-mode",
+                    "bad",
+                ]
+            )
 
     def test_build_argument_parser_accepts_deep_match_config_path(self):
         parser = build_argument_parser()

@@ -199,6 +199,26 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
         self.assertEqual(result.values["memory_profile"], "low-memory")
         self.assertEqual(result.values["preview_cache_source"], "matching_cache")
 
+    def test_catalog_parse_helpers_preserve_canonical_choices_and_ranges(self):
+        from controlnet_construct.parameter_validation import parse_catalog_choice, parse_catalog_number
+
+        self.assertEqual(parse_catalog_choice("memory_profile", "low_memory"), "low-memory")
+        self.assertEqual(parse_catalog_choice("preview_cache_source", "matching-cache"), "matching_cache")
+        self.assertEqual(parse_catalog_number("pair_id_start", "3"), 3)
+        self.assertEqual(parse_catalog_number("valid_pixel_percent_threshold", "0.75"), 0.75)
+
+        for field, value, expected_message in (
+            ("matcher_method", "unknown", "must be one of"),
+            ("pair_id_start", "0", ">= 1"),
+            ("valid_pixel_percent_threshold", "nan", "finite"),
+            ("strict_parameter_validation", "true", "not boolean"),
+        ):
+            with self.subTest(field=field, value=value), self.assertRaisesRegex(ValueError, expected_message):
+                if field == "matcher_method":
+                    parse_catalog_choice(field, value)
+                else:
+                    parse_catalog_number(field, value)
+
     def test_skip_final_merge_allows_false_post_merge_control_measure(self):
         from controlnet_construct.parameter_validation import validate_parameters
 

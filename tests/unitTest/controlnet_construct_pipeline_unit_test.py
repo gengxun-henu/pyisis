@@ -4591,11 +4591,11 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             "enabled": True,
             "status": "routed",
             "selected_initial_matcher": "lightglue",
-            "selected_deep_match_config_path": "preset_lightglue.json",
+            "selected_deep_match_config_path": "preset_loftr.json",
         }
         routed_runtime_config = SimpleNamespace(
-            matcher_method="lightglue",
-            raw_config={"matcher": {"method": "lightglue"}},
+            matcher_method="loftr",
+            raw_config={"matcher": {"method": "loftr"}},
         )
 
         with (
@@ -4624,12 +4624,12 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         ):
             with self.assertRaisesRegex(
                 ValueError,
-                "matcher_method 'loftr' conflicts with deep_match_config matcher.method 'lightglue'",
+                "matcher_method 'lightglue' conflicts with deep_match_config matcher.method 'loftr'",
             ):
                 image_match_module.match_dom_pair(
                     "left.cub",
                     "right.cub",
-                    matcher_method="loftr",
+                    matcher_method="flann",
                     enable_adaptive_routing=True,
                 )
 

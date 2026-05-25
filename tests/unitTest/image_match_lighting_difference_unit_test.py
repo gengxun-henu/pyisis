@@ -44,15 +44,72 @@ class _FakePvlGroup:
         return self._keywords[name]
 
 
+class _FakeCamera:
+    def __init__(
+        self,
+        *,
+        set_image_result: bool = True,
+        sun_azimuth: object = 120.0,
+        incidence_angle: object = 55.0,
+        fail_camera_method: str | None = None,
+    ):
+        self.set_image_result = set_image_result
+        self.sun_azimuth_value = sun_azimuth
+        self.incidence_angle_value = incidence_angle
+        self.fail_camera_method = fail_camera_method
+        self.set_image_calls: list[tuple[float, float]] = []
+
+    def set_image(self, sample: float, line: float) -> bool:
+        self.set_image_calls.append((sample, line))
+        if self.fail_camera_method == "set_image":
+            raise RuntimeError("set_image failed from fake camera")
+        return self.set_image_result
+
+    def sun_azimuth(self):
+        if self.fail_camera_method == "sun_azimuth":
+            raise RuntimeError("sun_azimuth failed from fake camera")
+        return self.sun_azimuth_value
+
+    def incidence_angle(self):
+        if self.fail_camera_method == "incidence_angle":
+            raise RuntimeError("incidence_angle failed from fake camera")
+        return self.incidence_angle_value
+
+
 class _FakeCube:
-    def __init__(self, groups: dict[str, _FakePvlGroup]):
+    def __init__(
+        self,
+        groups: dict[str, _FakePvlGroup],
+        *,
+        camera: _FakeCamera | None = None,
+        sample_count: int = 100,
+        line_count: int = 50,
+        fail_camera: bool = False,
+    ):
         self._groups = groups
+        self._camera = camera
+        self._sample_count = sample_count
+        self._line_count = line_count
+        self._fail_camera = fail_camera
 
     def has_group(self, name: str) -> bool:
         return name in self._groups
 
     def group(self, name: str) -> _FakePvlGroup:
         return self._groups[name]
+
+    def sample_count(self) -> int:
+        return self._sample_count
+
+    def line_count(self) -> int:
+        return self._line_count
+
+    def camera(self) -> _FakeCamera:
+        if self._fail_camera:
+            raise RuntimeError("camera initialization failed from fake cube")
+        if self._camera is None:
+            raise RuntimeError("fake cube has no camera")
+        return self._camera
 
 
 class ImageMatchLightingDifferenceUnitTest(unittest.TestCase):
@@ -219,6 +276,86 @@ class ImageMatchLightingDifferenceUnitTest(unittest.TestCase):
         self.assertEqual(geometry.elevation_keyword, "SolarElevation")
         self.assertEqual(geometry.azimuth_keyword, "SubSolarAzimuth")
         self.assertEqual(geometry.source_group_name, "Instrument")
+
+    def test_read_solar_geometry_prefers_sensor_model_center(self):
+        camera = _FakeCamera(sun_azimuth=164.25, incidence_angle=56.5)
+        cube = _FakeCube(
+            {
+                "Instrument": _FakePvlGroup(
+                    {
+                        "SolarElevation": [10.0],
+                        "SolarAzimuth": [20.0],
+                    }
+                )
+            },
+            camera=camera,
+            sample_count=100,
+            line_count=50,
+        )
+
+        geometry = read_solar_geometry_from_cube(cube)
+
+        self.assertEqual(camera.set_image_calls, [(50.5, 25.5)])
+        self.assertAlmostEqual(geometry.solar_azimuth_degrees, 164.25)
+        self.assertAlmostEqual(geometry.solar_elevation_degrees, 33.5)
+        self.assertEqual(geometry.source_group_name, "SensorModelCenter")
+        self.assertEqual(geometry.elevation_keyword, "90-IncidenceAngle")
+        self.assertEqual(geometry.azimuth_keyword, "SunAzimuth")
+
+    def test_read_solar_geometry_accepts_sensor_model_azimuth_only(self):
+        camera = _FakeCamera(
+            sun_azimuth=75.0,
+            incidence_angle=None,
+            fail_camera_method="incidence_angle",
+        )
+        cube = _FakeCube({}, camera=camera, sample_count=9, line_count=9)
+
+        geometry = read_solar_geometry_from_cube(cube)
+
+        self.assertEqual(camera.set_image_calls, [(5.0, 5.0)])
+        self.assertIsNone(geometry.solar_elevation_degrees)
+        self.assertAlmostEqual(geometry.solar_azimuth_degrees, 75.0)
+        self.assertEqual(geometry.source_group_name, "SensorModelCenter")
+        self.assertIsNone(geometry.elevation_keyword)
+        self.assertEqual(geometry.azimuth_keyword, "SunAzimuth")
+
+    def test_read_solar_geometry_sensor_failure_falls_back_to_label_keywords(self):
+        camera = _FakeCamera(set_image_result=False)
+        cube = _FakeCube(
+            {
+                "Instrument": _FakePvlGroup(
+                    {
+                        "SolarElevation": [35.5],
+                        "SubSolarAzimuth": [120.25],
+                    }
+                ),
+            },
+            camera=camera,
+        )
+
+        geometry = read_solar_geometry_from_cube(cube)
+
+        self.assertAlmostEqual(geometry.solar_elevation_degrees, 35.5)
+        self.assertAlmostEqual(geometry.solar_azimuth_degrees, 120.25)
+        self.assertEqual(geometry.elevation_keyword, "SolarElevation")
+        self.assertEqual(geometry.azimuth_keyword, "SubSolarAzimuth")
+        self.assertEqual(geometry.source_group_name, "Instrument")
+        self.assertEqual(camera.set_image_calls, [(50.5, 25.5)])
+
+    def test_read_solar_geometry_error_mentions_sensor_and_label_failures(self):
+        cube = _FakeCube(
+            {"Mapping": _FakePvlGroup({"CenterLatitude": [0.0]})},
+            fail_camera=True,
+        )
+
+        with self.assertRaises(SolarGeometryFieldMissing) as context:
+            read_solar_geometry_from_cube(cube)
+
+        message = str(context.exception)
+        self.assertIn("sensor model", message)
+        self.assertIn("camera initialization failed from fake cube", message)
+        self.assertIn("label fallback", message)
+        self.assertIn("Could not resolve solar elevation or azimuth", message)
 
     def test_read_solar_geometry_raises_when_all_groups_missing(self):
         cube = _FakeCube({"Mapping": _FakePvlGroup({"CenterLatitude": [0.0]})})

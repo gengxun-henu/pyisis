@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 from datetime import datetime, timezone
 import json
+import os
 from pathlib import Path
 import sys
 from typing import Any, Callable
@@ -67,6 +68,46 @@ def _parse_torch_num_threads(value: str) -> int:
 
 def _utc_now_iso() -> str:
     return datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def _effective_torch_num_threads(num_workers: int, torch_num_threads: int | None) -> int | None:
+    if torch_num_threads is not None:
+        return torch_num_threads
+    if num_workers > 1:
+        return 1
+    return None
+
+
+def _apply_torch_thread_limit(torch_num_threads: int | None) -> None:
+    if torch_num_threads is None:
+        return
+    thread_count = str(torch_num_threads)
+    os.environ["OMP_NUM_THREADS"] = thread_count
+    os.environ["MKL_NUM_THREADS"] = thread_count
+    try:
+        import torch
+    except ModuleNotFoundError:
+        return
+    try:
+        torch.set_num_threads(torch_num_threads)
+    except Exception:
+        return
+
+
+def _safe_unlink(path: Path) -> None:
+    try:
+        path.unlink()
+    except FileNotFoundError:
+        return
+
+
+def _task_log_path(record: DeepMatchTaskRecord) -> Path:
+    return Path(record.log_path).expanduser().resolve()
+
+
+def _clean_task_outputs(record: DeepMatchTaskRecord) -> None:
+    _safe_unlink(Path(record.result_path).expanduser().resolve())
+    _safe_unlink(_task_log_path(record))
 
 
 def _resolve_prefer_gpu(device: str) -> bool:
@@ -174,7 +215,7 @@ def _filter_points_by_invalid_masks(
 
 
 def _write_task_log(record: DeepMatchTaskRecord, payload: dict[str, Any]) -> Path:
-    log_path = Path(record.log_path).expanduser().resolve()
+    log_path = _task_log_path(record)
     log_path.parent.mkdir(parents=True, exist_ok=True)
     log_path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return log_path
@@ -217,6 +258,107 @@ def _validate_runtime_config_matcher_method(manifest: Any, runtime_config: Any |
         )
 
 
+def _run_one_task(
+    *,
+    record: DeepMatchTaskRecord,
+    task_index: int,
+    task_count: int,
+    manifest: Any,
+    adapter: Any,
+    device: str,
+    actual_device: str,
+    torch_num_threads: int | None,
+) -> tuple[bool, dict[str, Any]]:
+    result_path = Path(record.result_path).expanduser().resolve()
+    worker_pid = os.getpid()
+    started_at = _utc_now_iso()
+    try:
+        arrays = read_deep_match_task_arrays(record)
+        match_result = adapter.match_pair(
+            matcher_method=manifest.matcher_method,
+            left_image=arrays["left_image"],
+            right_image=arrays["right_image"],
+            left_mask=arrays["left_mask"],
+            right_mask=arrays["right_mask"],
+        )
+        left_points, right_points, scores = _deep_match_result_to_arrays(match_result)
+        raw_match_count = int(min(left_points.shape[0], right_points.shape[0], scores.shape[0]))
+        left_points, right_points, scores, invalid_removed_count = _filter_points_by_invalid_masks(
+            left_points,
+            right_points,
+            scores,
+            left_mask=arrays["left_mask"],
+            right_mask=arrays["right_mask"],
+        )
+        status = "matched" if len(scores) > 0 else "matched_no_points"
+        finished_at = _utc_now_iso()
+        task_metadata = {
+            "task_index": record.task_index,
+            "task_position": task_index,
+            "task_count": task_count,
+            "matcher_method": manifest.matcher_method,
+            "requested_device": device,
+            "actual_device": actual_device,
+            "raw_match_count": raw_match_count,
+            "invalid_mask_removed_count": invalid_removed_count,
+            "worker_pid": worker_pid,
+            "torch_num_threads": torch_num_threads,
+            "started_at_utc": started_at,
+            "finished_at_utc": finished_at,
+        }
+        write_deep_match_task_result(
+            record,
+            left_points=left_points,
+            right_points=right_points,
+            scores=scores,
+            status=status,
+            metadata=task_metadata,
+        )
+        task_summary = {
+            "task_index": record.task_index,
+            "task_position": task_index,
+            "task_count": task_count,
+            "status": status,
+            "match_count": int(len(scores)),
+            "raw_match_count": raw_match_count,
+            "invalid_mask_removed_count": invalid_removed_count,
+            "result_path": str(result_path),
+            "log_path": str(_task_log_path(record)),
+            "worker_pid": worker_pid,
+            "torch_num_threads": torch_num_threads,
+            "started_at_utc": started_at,
+            "finished_at_utc": finished_at,
+        }
+        _write_task_log(record, task_summary)
+        return True, task_summary
+    except Exception as exc:
+        finished_at = _utc_now_iso()
+        error_summary = {
+            "task_index": record.task_index,
+            "task_position": task_index,
+            "task_count": task_count,
+            "status": "failed",
+            "error_type": type(exc).__name__,
+            "error": str(exc),
+            "result_path": str(result_path),
+            "log_path": str(_task_log_path(record)),
+            "worker_pid": worker_pid,
+            "torch_num_threads": torch_num_threads,
+            "started_at_utc": started_at,
+            "finished_at_utc": finished_at,
+        }
+        write_deep_match_task_result(
+            record,
+            left_points=np.empty((0, 2), dtype=np.float32),
+            right_points=np.empty((0, 2), dtype=np.float32),
+            scores=np.empty((0,), dtype=np.float32),
+            status="failed",
+            metadata=error_summary,
+        )
+        _write_task_log(record, error_summary)
+        return False, error_summary
+
+
 def run_manifest(
     manifest_path: str | Path,
     *,
@@ -230,6 +372,13 @@ def run_manifest(
 ) -> dict[str, Any]:
     """Execute every task in an exported deep-match manifest."""
 
+    if num_workers < 1:
+        raise ValueError("num_workers must be >= 1.")
+    if torch_num_threads is not None and torch_num_threads < 1:
+        raise ValueError("torch_num_threads must be >= 1 when provided.")
+    if skip_existing and force_rerun:
+        raise ValueError("skip_existing and force_rerun are mutually exclusive.")
+
     manifest = read_deep_match_pair_manifest(manifest_path)
     prefer_gpu = _resolve_prefer_gpu(device)
     runtime_config = _runtime_config_from_manifest(manifest, prefer_gpu=prefer_gpu)
@@ -240,6 +389,8 @@ def run_manifest(
             f"Deep matcher preflight failed for '{runtime_config.matcher_method}' using Python {sys.executable}: "
             f"{'; '.join(missing_dependencies)}. Use the deep-learning conda environment or install the dependency."
         )
+    effective_torch_threads = _effective_torch_num_threads(num_workers, torch_num_threads)
+    _apply_torch_thread_limit(effective_torch_threads)
     adapter = adapter_factory(prefer_gpu=prefer_gpu, runtime_config=runtime_config)
     actual_device = str(getattr(adapter, "_device", "cuda" if prefer_gpu else "cpu"))
 
@@ -248,8 +399,11 @@ def run_manifest(
     failed_count = 0
     skipped_existing_count = 0
 
-    for record in manifest.tasks:
+    task_count = len(manifest.tasks)
+    for task_position, record in enumerate(manifest.tasks, start=1):
         result_path = Path(record.result_path).expanduser().resolve()
+        if force_rerun:
+            _clean_task_outputs(record)
         if skip_existing and result_path.exists():
             skipped_existing_count += 1
             task_summaries.append(
@@ -261,79 +415,24 @@ def run_manifest(
             )
             continue
 
-        started_at = _utc_now_iso()
-        try:
-            arrays = read_deep_match_task_arrays(record)
-            match_result = adapter.match_pair(
-                matcher_method=manifest.matcher_method,
-                left_image=arrays["left_image"],
-                right_image=arrays["right_image"],
-                left_mask=arrays["left_mask"],
-                right_mask=arrays["right_mask"],
-            )
-            left_points, right_points, scores = _deep_match_result_to_arrays(match_result)
-            raw_match_count = int(min(left_points.shape[0], right_points.shape[0], scores.shape[0]))
-            left_points, right_points, scores, invalid_removed_count = _filter_points_by_invalid_masks(
-                left_points,
-                right_points,
-                scores,
-                left_mask=arrays["left_mask"],
-                right_mask=arrays["right_mask"],
-            )
-            status = "matched" if len(scores) > 0 else "matched_no_points"
-            write_deep_match_task_result(
-                record,
-                left_points=left_points,
-                right_points=right_points,
-                scores=scores,
-                status=status,
-                metadata={
-                    "task_index": record.task_index,
-                    "matcher_method": manifest.matcher_method,
-                    "requested_device": device,
-                    "actual_device": actual_device,
-                    "raw_match_count": raw_match_count,
-                    "invalid_mask_removed_count": invalid_removed_count,
-                    "started_at_utc": started_at,
-                    "finished_at_utc": _utc_now_iso(),
-                },
-            )
-            task_summary = {
-                "task_index": record.task_index,
-                "status": status,
-                "match_count": int(len(scores)),
-                "raw_match_count": raw_match_count,
-                "invalid_mask_removed_count": invalid_removed_count,
-                "result_path": str(result_path),
-                "log_path": record.log_path,
-            }
-            _write_task_log(record, task_summary)
+        succeeded, task_summary = _run_one_task(
+            record=record,
+            task_index=task_position,
+            task_count=task_count,
+            manifest=manifest,
+            adapter=adapter,
+            device=device,
+            actual_device=actual_device,
+            torch_num_threads=effective_torch_threads,
+        )
+        if succeeded:
             succeeded_count += 1
-            task_summaries.append(task_summary)
-        except Exception as exc:
+        else:
             failed_count += 1
-            error_summary = {
-                "task_index": record.task_index,
-                "status": "failed",
-                "error_type": type(exc).__name__,
-                "error": str(exc),
-                "result_path": str(result_path),
-                "log_path": record.log_path,
-                "started_at_utc": started_at,
-                "finished_at_utc": _utc_now_iso(),
-            }
-            write_deep_match_task_result(
-                record,
-                left_points=np.empty((0, 2), dtype=np.float32),
-                right_points=np.empty((0, 2), dtype=np.float32),
-                scores=np.empty((0,), dtype=np.float32),
-                status="failed",
-                metadata=error_summary,
-            )
-            _write_task_log(record, error_summary)
-            task_summaries.append(error_summary)
             if fail_fast:
+                task_summaries.append(task_summary)
                 break
+        task_summaries.append(task_summary)
 
     overall_status = "completed"
     if failed_count and succeeded_count:
@@ -349,6 +448,11 @@ def run_manifest(
         "requested_device": device,
         "actual_device": actual_device,
         "task_count": len(manifest.tasks),
+        "num_workers": num_workers,
+        "parallel_execution_used": False,
+        "worker_count": 1,
+        "torch_num_threads": effective_torch_threads,
+        "force_rerun": force_rerun,
         "succeeded_task_count": succeeded_count,
         "failed_task_count": failed_count,
         "skipped_existing_task_count": skipped_existing_count,

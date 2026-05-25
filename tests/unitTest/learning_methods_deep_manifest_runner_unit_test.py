@@ -43,7 +43,7 @@ from image_match.deep_match_manifest import (
 import controlnet_construct.deep_match_config as deep_match_config_module
 from image_match.tile_matching import PairedTileWindow, TileMatchTask, TileWindow
 from controlnet_construct.deep_match_config import DeepMatchRuntimeConfig
-from run_deep_match_manifest import build_argument_parser, run_manifest
+from run_deep_match_manifest import _task_log_path, build_argument_parser, run_manifest
 
 
 def _make_tile_task() -> TileMatchTask:
@@ -305,6 +305,88 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
             np.testing.assert_allclose(result["right_points"], np.array([[2.0, 2.0], [7.0, 7.0]], dtype=np.float32))
             np.testing.assert_allclose(result["scores"], np.array([0.9, 0.7], dtype=np.float32), rtol=1e-6)
             self.assertTrue(Path(record.log_path).exists())
+
+    def test_run_manifest_reports_serial_execution_fields(self):
+        with temporary_directory() as temp_dir:
+            manifest = build_deep_match_pair_manifest(
+                tasks=[_make_tile_task()],
+                left_dom_path="left_dom.cub",
+                right_dom_path="right_dom.cub",
+                matcher_method="lightglue",
+                band=1,
+                image_space="dom",
+                temp_root_dir=Path(temp_dir) / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                requested_device="cpu",
+                created_at_utc="2026-05-16T00:00:00Z",
+            )
+            record = manifest.tasks[0]
+            write_deep_match_task_arrays(
+                record,
+                left_image=np.arange(64, dtype=np.uint8).reshape(8, 8),
+                right_image=np.arange(64, dtype=np.uint8).reshape(8, 8),
+                left_mask=np.zeros((8, 8), dtype=bool),
+                right_mask=np.zeros((8, 8), dtype=bool),
+            )
+            manifest_path = write_deep_match_pair_manifest(manifest)
+
+            summary = run_manifest(
+                manifest_path,
+                device="cpu",
+                adapter_factory=FakeDeepMatcherAdapter,
+            )
+
+            self.assertEqual(summary["num_workers"], 1)
+            self.assertIs(summary["parallel_execution_used"], False)
+            self.assertEqual(summary["worker_count"], 1)
+            self.assertIsNone(summary["torch_num_threads"])
+            self.assertIs(summary["force_rerun"], False)
+            self.assertEqual(summary["succeeded_task_count"], 1)
+
+    def test_run_manifest_force_rerun_deletes_only_task_result_and_log(self):
+        with temporary_directory() as temp_dir:
+            manifest = build_deep_match_pair_manifest(
+                tasks=[_make_tile_task()],
+                left_dom_path="left_dom.cub",
+                right_dom_path="right_dom.cub",
+                matcher_method="lightglue",
+                band=1,
+                image_space="dom",
+                temp_root_dir=Path(temp_dir) / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                requested_device="cpu",
+                created_at_utc="2026-05-16T00:00:00Z",
+            )
+            record = manifest.tasks[0]
+            write_deep_match_task_arrays(
+                record,
+                left_image=np.arange(64, dtype=np.uint8).reshape(8, 8),
+                right_image=np.arange(64, dtype=np.uint8).reshape(8, 8),
+                left_mask=np.zeros((8, 8), dtype=bool),
+                right_mask=np.zeros((8, 8), dtype=bool),
+            )
+            manifest_path = write_deep_match_pair_manifest(manifest)
+            result_path = Path(record.result_path).expanduser().resolve()
+            log_path = _task_log_path(record)
+            result_path.parent.mkdir(parents=True, exist_ok=True)
+            log_path.parent.mkdir(parents=True, exist_ok=True)
+            result_path.write_text("stale result\n", encoding="utf-8")
+            log_path.write_text("stale log\n", encoding="utf-8")
+            unrelated_input_path = Path(record.left_image_path).expanduser().resolve().parent / "unrelated-input.npy"
+            unrelated_input_path.write_text("do not delete\n", encoding="utf-8")
+
+            summary = run_manifest(
+                manifest_path,
+                device="cpu",
+                force_rerun=True,
+                skip_existing=False,
+                adapter_factory=FakeDeepMatcherAdapter,
+            )
+            result = read_deep_match_task_result(record)
+
+            self.assertEqual(summary["succeeded_task_count"], 1)
+            self.assertNotEqual(result_path.read_bytes(), b"stale result\n")
+            self.assertNotEqual(log_path.read_text(encoding="utf-8"), "stale log\n")
+            self.assertEqual(result["metadata"]["status"], "matched")
+            self.assertTrue(unrelated_input_path.exists())
 
     def test_run_manifest_treats_uint8_masks_as_opencv_valid_pixel_masks(self):
         with temporary_directory() as temp_dir:

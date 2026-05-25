@@ -41,6 +41,28 @@ from controlnet_construct.deep_match_config import (
 )
 
 SUPPORTED_DEVICES = ("auto", "cpu", "cuda")
+MAX_MANIFEST_WORKERS = 64
+
+
+def _parse_positive_int(value: str, option_name: str) -> int:
+    try:
+        parsed = int(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"{option_name} must be a positive integer.") from exc
+    if parsed <= 0:
+        raise argparse.ArgumentTypeError(f"{option_name} must be a positive integer.")
+    return parsed
+
+
+def _parse_num_workers(value: str) -> int:
+    parsed = _parse_positive_int(value, "--num-workers")
+    if parsed > MAX_MANIFEST_WORKERS:
+        raise argparse.ArgumentTypeError(f"--num-workers must be between 1 and {MAX_MANIFEST_WORKERS}.")
+    return parsed
+
+
+def _parse_torch_num_threads(value: str) -> int:
+    return _parse_positive_int(value, "--torch-num-threads")
 
 
 def _utc_now_iso() -> str:
@@ -201,6 +223,9 @@ def run_manifest(
     device: str = "auto",
     fail_fast: bool = False,
     skip_existing: bool = False,
+    force_rerun: bool = False,
+    num_workers: int = 1,
+    torch_num_threads: int | None = None,
     adapter_factory: Callable[..., Any] = DeepMatcherAdapter,
 ) -> dict[str, Any]:
     """Execute every task in an exported deep-match manifest."""
@@ -354,10 +379,28 @@ def build_argument_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Stop after the first task failure instead of continuing through the manifest.",
     )
-    parser.add_argument(
+    existing_result_group = parser.add_mutually_exclusive_group()
+    existing_result_group.add_argument(
         "--skip-existing",
         action="store_true",
         help="Skip tasks whose result NPZ file already exists.",
+    )
+    existing_result_group.add_argument(
+        "--force-rerun",
+        action="store_true",
+        help="Recompute tasks even when result NPZ files already exist.",
+    )
+    parser.add_argument(
+        "--num-workers",
+        type=_parse_num_workers,
+        default=1,
+        help=f"Number of manifest tasks to execute concurrently. Reserved for future use. Range: 1-{MAX_MANIFEST_WORKERS}.",
+    )
+    parser.add_argument(
+        "--torch-num-threads",
+        type=_parse_torch_num_threads,
+        default=None,
+        help="Optional torch CPU thread count to use during manifest execution. Reserved for future use.",
     )
     return parser
 
@@ -370,6 +413,9 @@ def main(argv: list[str] | None = None) -> None:
         device=args.device,
         fail_fast=args.fail_fast,
         skip_existing=args.skip_existing,
+        force_rerun=args.force_rerun,
+        num_workers=args.num_workers,
+        torch_num_threads=args.torch_num_threads,
     )
     if args.summary_output is not None:
         output_path = Path(args.summary_output).expanduser().resolve()

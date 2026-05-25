@@ -213,21 +213,52 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
 
         parsed = parser.parse_args(
             [
-                "tasks.json",
+                "manifest.json",
                 "--device",
-                "cpu",
+                "cuda",
                 "--summary-output",
                 "summary.json",
                 "--fail-fast",
                 "--skip-existing",
+                "--num-workers",
+                "3",
+                "--torch-num-threads",
+                "2",
             ]
         )
 
-        self.assertEqual(parsed.manifest, "tasks.json")
-        self.assertEqual(parsed.device, "cpu")
+        self.assertEqual(parsed.manifest, "manifest.json")
+        self.assertEqual(parsed.device, "cuda")
         self.assertEqual(parsed.summary_output, "summary.json")
         self.assertTrue(parsed.fail_fast)
         self.assertTrue(parsed.skip_existing)
+        self.assertEqual(parsed.num_workers, 3)
+        self.assertEqual(parsed.torch_num_threads, 2)
+
+    def test_build_argument_parser_rejects_invalid_worker_counts(self):
+        parser = build_argument_parser()
+
+        for value in ("0", "65"):
+            with self.subTest(num_workers=value):
+                with self.assertRaises(SystemExit) as context:
+                    parser.parse_args(["manifest.json", "--num-workers", value])
+                self.assertEqual(context.exception.code, 2)
+
+    def test_build_argument_parser_rejects_invalid_torch_num_threads(self):
+        parser = build_argument_parser()
+
+        with self.assertRaises(SystemExit) as context:
+            parser.parse_args(["manifest.json", "--torch-num-threads", "0"])
+
+        self.assertEqual(context.exception.code, 2)
+
+    def test_build_argument_parser_rejects_skip_existing_with_force_rerun(self):
+        parser = build_argument_parser()
+
+        with self.assertRaises(SystemExit) as context:
+            parser.parse_args(["manifest.json", "--skip-existing", "--force-rerun"])
+
+        self.assertEqual(context.exception.code, 2)
 
     def test_run_manifest_writes_standard_result_npz_and_filters_invalid_mask_matches(self):
         with temporary_directory() as temp_dir:

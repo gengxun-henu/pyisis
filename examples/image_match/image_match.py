@@ -47,6 +47,9 @@ Updated: 2026-05-19  Geng Xun added shared deep matcher config path parsing, val
 Updated: 2026-05-19  Geng Xun resolved deep matcher runtime config and added matcher conflict checks.
 Updated: 2026-05-20  Geng Xun added preset-aware adaptive routing config loading, route metadata, and deep preset cascade execution.
 Updated: 2026-05-20  Geng Xun enriched export-mode deep-match manifests with per-task runtime-config provenance and environment metadata.
+Updated: 2026-05-20  Geng Xun normalized config-relative adaptive-routing deep preset paths during config loading.
+Updated: 2026-05-20  Geng Xun restored repo-root fallback when resolving adaptive-routing deep preset maps from config JSON.
+Updated: 2026-05-20  Geng Xun reused deep preset matcher compatibility validation for routed initial and cascade configs.
 """
 
 from __future__ import annotations
@@ -698,11 +701,19 @@ def _coerce_string_mapping(value: object, *, field_name: str) -> dict[str, str]:
 
 def _resolve_config_relative_string_mapping(mapping: dict[str, str], *, config_path: str | Path) -> dict[str, str]:
     config_dir = Path(config_path).parent
+    repo_root = Path(__file__).resolve().parents[2]
     resolved_mapping: dict[str, str] = {}
     for key, value in mapping.items():
         resolved_value = Path(value).expanduser()
-        if not resolved_value.is_absolute():
-            resolved_value = config_dir / resolved_value
+        if resolved_value.is_absolute():
+            resolved_mapping[key] = str(resolved_value)
+            continue
+
+        config_relative_candidate = config_dir / resolved_value
+        if config_relative_candidate.exists():
+            resolved_value = config_relative_candidate
+        else:
+            resolved_value = repo_root / resolved_value
         resolved_mapping[key] = str(resolved_value)
     return resolved_mapping
 
@@ -2394,6 +2405,10 @@ def match_dom_pair(
             resolved_deep_match_config_path = Path(str(routed_deep_match_config_path))
             resolved_deep_match_runtime_config = _resolve_deep_match_runtime_config(resolved_deep_match_config_path)
             resolved_deep_match_config = resolved_deep_match_runtime_config.raw_config
+            resolved_matcher_method = _resolve_matcher_method_with_deep_config(
+                requested_matcher_method=resolved_matcher_method,
+                deep_match_runtime_config=resolved_deep_match_runtime_config,
+            )
         elif resolved_matcher_method not in DEEP_MATCHER_METHODS:
             resolved_deep_match_config_path = None
             resolved_deep_match_runtime_config = None
@@ -2666,6 +2681,10 @@ def match_dom_pair(
                                     candidate_deep_match_config_path
                                 )
                                 candidate_deep_match_config = candidate_deep_match_runtime_config.raw_config
+                            candidate_matcher_method = _resolve_matcher_method_with_deep_config(
+                                requested_matcher_method=candidate_matcher_method,
+                                deep_match_runtime_config=candidate_deep_match_runtime_config,
+                            )
                         selected_tile_results = run_tile_matching_pass(
                             candidate_matcher_method,
                             candidate_deep_match_runtime_config=candidate_deep_match_runtime_config,

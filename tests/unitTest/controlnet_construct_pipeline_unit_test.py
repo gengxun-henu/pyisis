@@ -46,6 +46,10 @@ Updated: 2026-05-20  Geng Xun added preset-aware adaptive-routing forwarding cov
 Updated: 2026-05-20  Geng Xun added stage-6 manifest provenance roundtrip coverage for deep-match runtime config export metadata.
 Updated: 2026-05-23  Geng Xun added raw image ControlNet wrapper dry-run and execution coverage.
 Updated: 2026-05-23  Geng Xun added raw image deep matcher and adaptive-routing forwarding coverage.
+Updated: 2026-05-20  Geng Xun added config-relative adaptive-routing preset-map regression coverage.
+Updated: 2026-05-20  Geng Xun added repo-root fallback coverage for adaptive-routing deep preset maps loaded from config.
+Updated: 2026-05-20  Geng Xun added routed deep-preset compatibility regressions for initial and cascade adaptive routing.
+Updated: 2026-05-20  Geng Xun added an export-path regression ensuring initial routed flann adopts the selected deep preset matcher.
 """
 
 from __future__ import annotations
@@ -60,6 +64,7 @@ import subprocess
 import sys
 import textwrap
 from pathlib import Path
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 from contextlib import redirect_stdout
@@ -4435,6 +4440,9 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             config_dir.mkdir()
             preset_dir.mkdir()
             config_path = config_dir / "controlnet_config.json"
+            (preset_dir / "lightglue_default.json").write_text("{}", encoding="utf-8")
+            (preset_dir / "lightglue_high_recall.json").write_text("{}", encoding="utf-8")
+            (preset_dir / "loftr_default.json").write_text("{}", encoding="utf-8")
             expected_preset_map = {
                 "lightglue": str(preset_dir / "lightglue_default.json"),
                 "lightglue_high_recall": str(preset_dir / "lightglue_high_recall.json"),
@@ -4448,6 +4456,53 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 "lightglue": "presets/lightglue_default.json",
                                 "lightglue_high_recall": "presets/lightglue_high_recall.json",
                                 "loftr": "presets/loftr_default.json",
+                            }
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with (
+                patch("controlnet_construct.image_match.match_dom_pair_to_key_files", return_value=fake_result) as match_mock,
+                patch.object(sys, "stdout", stdout),
+            ):
+                image_match_main(
+                    [
+                        "--config",
+                        str(config_path),
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        "left.key",
+                        "right.key",
+                    ]
+                )
+
+        self.assertEqual(
+            match_mock.call_args.kwargs["adaptive_routing_deep_presets"],
+            expected_preset_map,
+        )
+
+    def test_pipeline_forwards_repo_relative_adaptive_routing_deep_presets_from_config(self):
+        fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
+        stdout = io.StringIO()
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            expected_preset_map = {
+                "lightglue": str(PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_default.json"),
+                "lightglue_high_recall": str(PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "lightglue_high_recall.json"),
+                "loftr": str(PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / "loftr_default.json"),
+            }
+
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "adaptive_routing_deep_presets": {
+                                "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
+                                "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
+                                "loftr": "examples/controlnet_construct/presets/loftr_default.json",
                             }
                         }
                     }
@@ -4497,6 +4552,328 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 {"matcher_method": "loftr", "deep_match_config_path": None},
             ),
         )
+
+    def test_match_dom_pair_rejects_initial_routed_deep_preset_matcher_conflict(self):
+        image_match_module = importlib.import_module("controlnet_construct.image_match")
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def sample_count(self):
+                return 64
+
+            def line_count(self):
+                return 64
+
+            def band_count(self):
+                return 1
+
+            def pixel_type(self):
+                return None
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        low_resolution_summary = {
+            "left_low_resolution_dom": "left_preview.cub",
+            "right_low_resolution_dom": "right_preview.cub",
+            "delta_x_projected": 0.0,
+            "delta_y_projected": 0.0,
+        }
+        routed_summary = {
+            "enabled": True,
+            "status": "routed",
+            "selected_initial_matcher": "lightglue",
+            "selected_deep_match_config_path": "preset_loftr.json",
+        }
+        routed_runtime_config = SimpleNamespace(
+            matcher_method="loftr",
+            raw_config={"matcher": {"method": "loftr"}},
+        )
+
+        with (
+            patch.object(image_match_module, "build_image_backend", return_value=SimpleNamespace(space="dom")),
+            patch.object(image_match_module.ip, "Cube", side_effect=[FakeCube(), FakeCube()]),
+            patch.object(
+                image_match_module,
+                "_estimate_low_resolution_projected_offset",
+                return_value=low_resolution_summary,
+            ),
+            patch.object(
+                image_match_module,
+                "_resolve_adaptive_route_for_pair",
+                return_value=("lightglue", routed_summary),
+            ),
+            patch.object(
+                image_match_module,
+                "_resolve_deep_match_runtime_config",
+                return_value=routed_runtime_config,
+            ),
+            patch.object(
+                image_match_module,
+                "prepare_dom_pair_for_matching",
+                side_effect=AssertionError("compatibility validation should stop before preparation"),
+            ),
+        ):
+            with self.assertRaisesRegex(
+                ValueError,
+                "matcher_method 'lightglue' conflicts with deep_match_config matcher.method 'loftr'",
+            ):
+                image_match_module.match_dom_pair(
+                    "left.cub",
+                    "right.cub",
+                    matcher_method="flann",
+                    enable_adaptive_routing=True,
+                )
+
+    def test_match_dom_pair_initial_routed_flann_export_uses_selected_deep_preset_matcher(self):
+        image_match_module = importlib.import_module("controlnet_construct.image_match")
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def sample_count(self):
+                return 64
+
+            def line_count(self):
+                return 64
+
+            def band_count(self):
+                return 1
+
+            def pixel_type(self):
+                return None
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        low_resolution_summary = {
+            "left_low_resolution_dom": "left_preview.cub",
+            "right_low_resolution_dom": "right_preview.cub",
+            "delta_x_projected": 0.0,
+            "delta_y_projected": 0.0,
+        }
+        routed_summary = {
+            "enabled": True,
+            "status": "routed",
+            "selected_initial_matcher": "lightglue",
+            "selected_deep_match_config_path": "preset_lightglue.json",
+        }
+        routed_runtime_config = SimpleNamespace(
+            matcher_method="lightglue",
+            raw_config={"matcher": {"method": "lightglue"}},
+        )
+        ready_preparation = SimpleNamespace(
+            status="ready",
+            reason="",
+            left=SimpleNamespace(offset_sample=0, offset_line=0),
+            right=SimpleNamespace(offset_sample=0, offset_line=0),
+            shared_width=32,
+            shared_height=32,
+        )
+
+        def fake_export_deep_match_pair_tasks(*_args, **kwargs):
+            self.assertEqual(kwargs["matcher_method"], "lightglue")
+            self.assertIs(kwargs["deep_match_runtime_config"], routed_runtime_config)
+            raise RuntimeError("stop after initial routed export assertion")
+
+        with (
+            patch.object(image_match_module, "build_image_backend", return_value=SimpleNamespace(space="dom")),
+            patch.object(image_match_module.ip, "Cube", side_effect=[FakeCube(), FakeCube()]),
+            patch.object(
+                image_match_module,
+                "_estimate_low_resolution_projected_offset",
+                return_value=low_resolution_summary,
+            ),
+            patch.object(
+                image_match_module,
+                "_resolve_adaptive_route_for_pair",
+                return_value=("lightglue", routed_summary),
+            ),
+            patch.object(
+                image_match_module,
+                "_resolve_deep_match_runtime_config",
+                return_value=routed_runtime_config,
+            ),
+            patch.object(
+                image_match_module,
+                "prepare_dom_pair_for_matching",
+                return_value=ready_preparation,
+            ),
+            patch.object(image_match_module, "_paired_windows", return_value=[object()]),
+            patch.object(
+                image_match_module,
+                "_export_deep_match_pair_tasks",
+                side_effect=fake_export_deep_match_pair_tasks,
+            ),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "stop after initial routed export assertion"):
+                image_match_module.match_dom_pair(
+                    "left.cub",
+                    "right.cub",
+                    matcher_method="flann",
+                    enable_adaptive_routing=True,
+                    deep_match_mode="export",
+                )
+
+    def test_match_dom_pair_rejects_cascade_routed_deep_preset_matcher_conflict(self):
+        image_match_module = importlib.import_module("controlnet_construct.image_match")
+        from image_match.adaptive_routing import MatchQualityReport
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def sample_count(self):
+                return 64
+
+            def line_count(self):
+                return 64
+
+            def band_count(self):
+                return 1
+
+            def pixel_type(self):
+                return None
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        low_resolution_summary = {
+            "left_low_resolution_dom": "left_preview.cub",
+            "right_low_resolution_dom": "right_preview.cub",
+            "delta_x_projected": 0.0,
+            "delta_y_projected": 0.0,
+        }
+        routed_summary = {
+            "enabled": True,
+            "status": "routed",
+            "selected_initial_matcher": "bf",
+            "selected_deep_match_config_path": None,
+        }
+        ready_preparation = SimpleNamespace(
+            status="ready",
+            reason="",
+            left=SimpleNamespace(offset_sample=0, offset_line=0),
+            right=SimpleNamespace(offset_sample=0, offset_line=0),
+            shared_width=32,
+            shared_height=32,
+        )
+        rejected_quality = MatchQualityReport(
+            inlier_count=0,
+            total_match_count=0,
+            inlier_ratio=0.0,
+            coverage=0.0,
+            residual_summary={"count": 0, "mean": 0.0, "median": 0.0, "p95": 0.0, "max": 0.0},
+            quality_score=0.0,
+            accepted=False,
+            rejection_reasons=("insufficient_inlier_count",),
+        )
+        run_tile_call_count = 0
+
+        def fake_run_serial_tile_match_tasks(*_args, **_kwargs):
+            nonlocal run_tile_call_count
+            run_tile_call_count += 1
+            if run_tile_call_count <= 2:
+                return []
+            raise AssertionError("cascade compatibility validation should stop before rerunning tiles")
+
+        def fake_resolve_deep_match_runtime_config(config_path):
+            if str(config_path).endswith("cascade_loftr.json"):
+                return SimpleNamespace(
+                    matcher_method="lightglue",
+                    raw_config={"matcher": {"method": "lightglue"}},
+                )
+            raise AssertionError(f"unexpected deep preset lookup: {config_path}")
+
+        with (
+            patch.object(image_match_module, "build_image_backend", return_value=SimpleNamespace(space="dom")),
+            patch.object(image_match_module.ip, "Cube", side_effect=[FakeCube(), FakeCube()]),
+            patch.object(
+                image_match_module,
+                "_estimate_low_resolution_projected_offset",
+                return_value=low_resolution_summary,
+            ),
+            patch.object(
+                image_match_module,
+                "_resolve_adaptive_route_for_pair",
+                return_value=("bf", routed_summary),
+            ),
+            patch.object(
+                image_match_module,
+                "prepare_dom_pair_for_matching",
+                return_value=ready_preparation,
+            ),
+            patch.object(image_match_module, "_paired_windows", return_value=[object()]),
+            patch.object(
+                image_match_module,
+                "_run_serial_tile_match_tasks",
+                side_effect=fake_run_serial_tile_match_tasks,
+            ),
+            patch.object(
+                image_match_module,
+                "_quality_report_for_tile_results",
+                return_value=rejected_quality,
+            ),
+            patch.object(
+                image_match_module,
+                "decide_post_match_action",
+                side_effect=[
+                    {
+                        "accepted": False,
+                        "fallback_used": False,
+                        "next_matcher": "lightglue",
+                        "selected_matcher": "bf",
+                        "stop_reason": "quality_insufficient_try_fallback",
+                    },
+                    {
+                        "accepted": False,
+                        "fallback_used": True,
+                        "next_matcher": "loftr",
+                        "selected_matcher": "lightglue",
+                        "stop_reason": "quality_insufficient_try_fallback",
+                    },
+                ],
+            ),
+            patch.object(
+                image_match_module,
+                "_resolve_deep_match_runtime_config",
+                side_effect=fake_resolve_deep_match_runtime_config,
+            ),
+        ):
+            with self.assertRaisesRegex(
+                ValueError,
+                "matcher_method 'loftr' conflicts with deep_match_config matcher.method 'lightglue'",
+            ):
+                image_match_module.match_dom_pair(
+                    "left.cub",
+                    "right.cub",
+                    matcher_method="bf",
+                    enable_adaptive_routing=True,
+                    adaptive_routing_deep_presets={
+                        "loftr": "cascade_loftr.json",
+                    },
+                )
 
     def test_batch_wrapper_accepts_lightglue_in_help_text(self):
         content = Path("examples/controlnet_construct/run_image_match_batch_example.sh").read_text(encoding="utf-8")

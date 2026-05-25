@@ -10,6 +10,7 @@ Updated: 2026-05-18  Geng Xun added a conservative pair router that combines pai
 Updated: 2026-05-19  Geng Xun added optional nested tile diagnostics to the
     sparseness/lighting sidecar augmenter.
 Updated: 2026-05-20  Geng Xun extended adaptive routing decisions with preset-aware deep config selection and route confidence summaries.
+Updated: 2026-05-20  Geng Xun restored public flann cascade planning to match the stage-7 internal adaptive flow.
 """
 
 from __future__ import annotations
@@ -505,6 +506,11 @@ def build_cascade_plan(
     """Build a fixed-order matcher cascade starting from the routed matcher."""
 
     ordered_matchers = tuple(canonical_order)
+    if initial_matcher == FLANN_MATCHER_METHOD and initial_matcher not in ordered_matchers:
+        ordered_matchers = (
+            FLANN_MATCHER_METHOD,
+            *(matcher for matcher in ordered_matchers if matcher != SIFT_ROUTED_MATCHER_METHOD),
+        )
     if initial_matcher not in ordered_matchers:
         raise ValueError(f"Unsupported initial_matcher: {initial_matcher!r}")
 

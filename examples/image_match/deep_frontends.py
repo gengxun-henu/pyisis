@@ -31,6 +31,9 @@ class DeepDependencyError(RuntimeError):
         self.reason = str(reason).strip()
         super().__init__(f"Deep matcher dependency unavailable for '{self.method}': {self.reason}")
 
+    def __reduce__(self):
+        return (type(self), (self.method, self.reason))
+
 
 def _raise_missing_dependency(*, method: str, missing: str, install_hint: str) -> None:
     raise DeepDependencyError(

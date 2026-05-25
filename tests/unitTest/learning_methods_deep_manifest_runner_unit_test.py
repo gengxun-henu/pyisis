@@ -275,6 +275,45 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
             np.testing.assert_allclose(result["scores"], np.array([0.9, 0.7], dtype=np.float32), rtol=1e-6)
             self.assertTrue(Path(record.log_path).exists())
 
+    def test_run_manifest_treats_uint8_masks_as_opencv_valid_pixel_masks(self):
+        with temporary_directory() as temp_dir:
+            manifest = build_deep_match_pair_manifest(
+                tasks=[_make_tile_task()],
+                left_dom_path="left_dom.cub",
+                right_dom_path="right_dom.cub",
+                matcher_method="lightglue",
+                band=1,
+                image_space="dom",
+                temp_root_dir=Path(temp_dir) / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                requested_device="cpu",
+                created_at_utc="2026-05-16T00:00:00Z",
+            )
+            record = manifest.tasks[0]
+            left_mask = np.full((8, 8), 255, dtype=np.uint8)
+            right_mask = np.full((8, 8), 255, dtype=np.uint8)
+            left_mask[4, 4] = 0
+            right_mask[5, 5] = 0
+            write_deep_match_task_arrays(
+                record,
+                left_image=np.arange(64, dtype=np.uint8).reshape(8, 8),
+                right_image=np.arange(64, dtype=np.uint8).reshape(8, 8),
+                left_mask=left_mask,
+                right_mask=right_mask,
+            )
+            manifest_path = write_deep_match_pair_manifest(manifest)
+
+            summary = run_manifest(
+                manifest_path,
+                device="cpu",
+                adapter_factory=FakeDeepMatcherAdapter,
+            )
+            result = read_deep_match_task_result(record)
+
+            self.assertEqual(summary["tasks"][0]["raw_match_count"], 3)
+            self.assertEqual(summary["tasks"][0]["invalid_mask_removed_count"], 1)
+            np.testing.assert_allclose(result["left_points"], np.array([[1.0, 1.0], [7.0, 7.0]], dtype=np.float32))
+            np.testing.assert_allclose(result["right_points"], np.array([[2.0, 2.0], [7.0, 7.0]], dtype=np.float32))
+
     def test_run_manifest_passes_invalid_masks_into_adapter(self):
         with temporary_directory() as temp_dir:
             manifest = build_deep_match_pair_manifest(

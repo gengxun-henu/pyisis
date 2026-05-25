@@ -85,12 +85,21 @@ def _validate_runtime_matcher_compatibility(runtime_config: Any | None) -> None:
     )
 
 
+def _as_invalid_mask(mask_value: np.ndarray | None) -> np.ndarray | None:
+    if mask_value is None:
+        return None
+    mask = np.asarray(mask_value)
+    if mask.dtype == np.bool_:
+        return mask
+    return mask == 0
+
+
 def _valid_mask_keep(points: np.ndarray, invalid_mask: np.ndarray | None) -> np.ndarray:
     if points.size <= 0:
         return np.zeros((0,), dtype=bool)
-    if invalid_mask is None:
+    mask = _as_invalid_mask(invalid_mask)
+    if mask is None:
         return np.ones((points.shape[0],), dtype=bool)
-    mask = np.asarray(invalid_mask, dtype=bool)
     height, width = mask.shape[:2]
     rounded_x = np.rint(points[:, 0]).astype(np.int64, copy=False)
     rounded_y = np.rint(points[:, 1]).astype(np.int64, copy=False)

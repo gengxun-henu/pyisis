@@ -101,6 +101,7 @@ def main(argv: list[str] | None = None) -> int:
         result = validate_parameters(
             entrypoint,
             cli_values=_mapping_from_payload(payload, "cli_values"),
+            profile_values=_mapping_from_payload(payload, "profile_values"),
             config_values=_mapping_from_payload(payload, "config_values"),
             preset_values=_mapping_from_payload(payload, "preset_values"),
         )

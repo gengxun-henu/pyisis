@@ -7,6 +7,11 @@ from typing import Any
 
 
 try:
+    from .parameter_profiles import PARAMETER_PROFILE_NAMES
+except ImportError:
+    from parameter_profiles import PARAMETER_PROFILE_NAMES
+
+try:
     from image_match.adaptive_routing import DEFAULT_ADAPTIVE_ROUTING_PROFILE, SUPPORTED_ADAPTIVE_ROUTING_PROFILES
     from image_match.match_visualization import (
         DEFAULT_MEMORY_PROFILE,
@@ -145,6 +150,7 @@ PARAMETERS = (
     _spec("deep_match_manifest_dir", "pipeline", config_path=_image_match_path("deep_match_manifest_dir"), entrypoints=(RUN_PIPELINE,), help="Directory containing deep-match manifests."),
     _spec("deep_match_manifest", "pipeline", config_path=_image_match_path("deep_match_manifest"), entrypoints=(IMAGE_MATCH,), help="Deep-match manifest tasks JSON path."),
     _spec("deep_match_manifest_summary", "pipeline", config_path=_image_match_path("deep_match_manifest_summary"), entrypoints=(RUN_PIPELINE,), help="Manifest summary JSON path."),
+    _spec("parameter_profile", "pipeline", allowed_values=PARAMETER_PROFILE_NAMES, entrypoints=(RUN_PIPELINE,), help="Named matching-parameter profile applied below config, preset, and CLI values."),
     _spec("skip_final_merge", "pipeline", value_type="bool", entrypoints=(RUN_PIPELINE,), help="Skip the final control-network merge step."),
     _spec("post_merge_control_measure", "pipeline", value_type="bool", default=False, entrypoints=(RUN_PIPELINE,), help="Control measure run after merge."),
     _spec("post_merge_output", "pipeline", entrypoints=(RUN_PIPELINE,), help="Post-merge control-measure output path."),

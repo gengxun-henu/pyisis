@@ -28,7 +28,7 @@ for import_path in (PROJECT_ROOT, EXAMPLES_DIR):
     if str(import_path) not in sys.path:
         sys.path.insert(0, str(import_path))
 
-from image_match.deep_adapter import DeepMatcherAdapter
+from image_match.deep_adapter import DeepMatcherAdapter, _valid_mask_keep
 from image_match.deep_frontends import DeepFrontendError, OfficialLightGlueFrontend, SuperPointFrontend
 from controlnet_construct.deep_match_config import DeepMatchRuntimeConfig
 
@@ -162,6 +162,15 @@ def _torch_frontend_stub():
 
 
 class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
+    def test_valid_mask_keep_treats_uint8_masks_as_opencv_valid_pixel_masks(self):
+        points = np.array([[1.0, 1.0], [4.0, 4.0]], dtype=np.float32)
+        opencv_mask = np.zeros((8, 8), dtype=np.uint8)
+        opencv_mask[1, 1] = 255
+
+        keep = _valid_mask_keep(points, opencv_mask)
+
+        np.testing.assert_array_equal(keep, np.array([True, False], dtype=bool))
+
     def test_official_lightglue_frontend_builds_expected_extractors_and_channel_shapes(self):
         def build_constructor(constructor_name):
             def constructor(**kwargs):

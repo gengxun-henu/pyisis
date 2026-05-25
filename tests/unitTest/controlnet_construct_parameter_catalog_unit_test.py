@@ -180,6 +180,12 @@ class ControlNetParameterCatalogUnitTest(unittest.TestCase):
         self.assertEqual(strict.cli_flag, "--strict-parameter-validation")
         self.assertIn("run_pipeline_example", strict.entrypoints)
 
+        profile = PARAMETER_BY_NAME["parameter_profile"]
+        self.assertEqual(profile.group, "pipeline")
+        self.assertEqual(profile.cli_flag, "--parameter-profile")
+        self.assertEqual(profile.allowed_values, ("conservative", "balanced", "aggressive"))
+        self.assertIn("run_pipeline_example", profile.entrypoints)
+
     def test_allowed_values_match_runtime_constants(self):
         from controlnet_construct.parameter_catalog import PARAMETER_BY_NAME
         from image_match.adaptive_routing import SUPPORTED_ADAPTIVE_ROUTING_PROFILES

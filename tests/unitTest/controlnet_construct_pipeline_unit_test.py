@@ -248,6 +248,135 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("NETWORK_ID=validate_only_unit", result.stdout)
         self.assertNotIn("Step 1/", result.stdout)
 
+    def test_run_pipeline_example_parameter_profile_applies_balanced_defaults(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            (work_dir / "original_images.lis").write_text("/tmp/left.cub\n/tmp/right.cub\n", encoding="utf-8")
+            (work_dir / "doms.lis").write_text("/tmp/left_dom.cub\n/tmp/right_dom.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps({"NetworkId": "profile_balanced_unit", "TargetName": "Mars", "UserName": "unit"})
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--parameter-profile",
+                    "balanced",
+                    "--validate-parameters-only",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("PARAMETER_PROFILE=balanced", result.stdout)
+        self.assertIn("MATCHER_METHOD=flann", result.stdout)
+        self.assertIn("NUM_WORKER_PARALLEL_CPU=8", result.stdout)
+        self.assertIn("ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION=1", result.stdout)
+        self.assertIn("LOW_RESOLUTION_LEVEL=3", result.stdout)
+
+    def test_run_pipeline_example_parameter_profile_does_not_override_cli_values(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            (work_dir / "original_images.lis").write_text("/tmp/left.cub\n/tmp/right.cub\n", encoding="utf-8")
+            (work_dir / "doms.lis").write_text("/tmp/left_dom.cub\n/tmp/right_dom.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps({"NetworkId": "profile_cli_unit", "TargetName": "Mars", "UserName": "unit"})
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--parameter-profile",
+                    "aggressive",
+                    "--matcher-method",
+                    "flann",
+                    "--num-worker-parallel-cpu",
+                    "6",
+                    "--low-resolution-level",
+                    "2",
+                    "--validate-parameters-only",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("PARAMETER_PROFILE=aggressive", result.stdout)
+        self.assertIn("MATCHER_METHOD=flann", result.stdout)
+        self.assertIn("NUM_WORKER_PARALLEL_CPU=6", result.stdout)
+        self.assertIn("LOW_RESOLUTION_LEVEL=2", result.stdout)
+
+    def test_run_pipeline_example_parameter_profile_does_not_override_config_values(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            (work_dir / "original_images.lis").write_text("/tmp/left.cub\n/tmp/right.cub\n", encoding="utf-8")
+            (work_dir / "doms.lis").write_text("/tmp/left_dom.cub\n/tmp/right_dom.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "profile_config_unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                        "ImageMatch": {
+                            "matcher_method": "bf",
+                            "num_worker_parallel_cpu": 3,
+                            "low_resolution_level": 5,
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--parameter-profile",
+                    "aggressive",
+                    "--validate-parameters-only",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("PARAMETER_PROFILE=aggressive", result.stdout)
+        self.assertIn("MATCHER_METHOD=bf", result.stdout)
+        self.assertIn("NUM_WORKER_PARALLEL_CPU=3", result.stdout)
+        self.assertIn("LOW_RESOLUTION_LEVEL=5", result.stdout)
+
     def test_run_pipeline_example_validate_parameters_only_rejects_bad_wrapper_cli_values(self):
         cases = (
             ("pair_id_start", ["--pair-id-start", "not_an_int"]),

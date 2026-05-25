@@ -201,47 +201,22 @@ PY
 
 
 # -----------------------------------------------------------------------------
-# One-click parameter presets for run_pipeline_example.sh (copy & paste)
+# One-click parameter profiles for run_pipeline_example.sh.
 #
 # Conservative (stability first):
 # bash examples/controlnet_construct/run_pipeline_example.sh \
 #   --work-dir work \
-#   --valid-pixel-percent-threshold 0.08 \
-#   --invalid-pixel-radius 2 \
-#   --matcher-method flann \
-#   --enable-low-resolution-offset-estimation \
-#   --low-resolution-level 3 \
-#   --low-resolution-max-mean-reprojection-error-pixels 2.5 \
-#   --low-resolution-min-retained-match-count 8 \
-#   --low-resolution-max-mean-projected-offset-meters 1200 \
-#   --num-worker-parallel-cpu 8
+#   --parameter-profile conservative
 #
 # Balanced (recommended default):
 # bash examples/controlnet_construct/run_pipeline_example.sh \
 #   --work-dir work \
-#   --valid-pixel-percent-threshold 0.05 \
-#   --invalid-pixel-radius 1 \
-#   --matcher-method flann \
-#   --enable-low-resolution-offset-estimation \
-#   --low-resolution-level 3 \
-#   --low-resolution-max-mean-reprojection-error-pixels 3.0 \
-#   --low-resolution-min-retained-match-count 5 \
-#   --low-resolution-max-mean-projected-offset-meters 2000 \
-#   --num-worker-parallel-cpu 8
+#   --parameter-profile balanced
 #
 # Aggressive (recall first):
 # bash examples/controlnet_construct/run_pipeline_example.sh \
 #   --work-dir work \
-#   --valid-pixel-percent-threshold 0.02 \
-#   --invalid-pixel-radius 1 \
-#   --matcher-method bf \
-#   --deep-match-mode export \
-#   --enable-low-resolution-offset-estimation \
-#   --low-resolution-level 4 \
-#   --low-resolution-max-mean-reprojection-error-pixels 4.0 \
-#   --low-resolution-min-retained-match-count 4 \
-#   --low-resolution-max-mean-projected-offset-meters 3500 \
-#   --num-worker-parallel-cpu 12
+#   --parameter-profile aggressive
 # -----------------------------------------------------------------------------
 
 
@@ -273,6 +248,8 @@ Options:
   --print-parameter-groups        Print the cataloged parameter groups for this wrapper and exit
   --validate-parameters-only      Validate resolved parameters and exit before running pipeline steps
   --strict-parameter-validation   Promote parameter validation warnings to errors
+  --parameter-profile NAME        Apply an opt-in matching parameter profile before config, preset, and CLI values.
+                                  Supported values: conservative, balanced, aggressive.
   --use-parallel-cpu              Forward explicit CPU tile parallelism enable flag to examples/image_match/image_match.py (default behavior)
   --no-parallel-cpu               Disable CPU tile parallelism in examples/image_match/image_match.py and force serial tile matching
   --num-worker-parallel-cpu N     Maximum worker-process count forwarded to examples/image_match/image_match.py when CPU parallelism is enabled.
@@ -378,6 +355,11 @@ Examples:
   bash examples/controlnet_construct/run_pipeline_example.sh \
     --work-dir work \
     --skip-final-merge
+
+  bash examples/controlnet_construct/run_pipeline_example.sh \
+    --work-dir work \
+    --parameter-profile balanced \
+    --validate-parameters-only
 
   bash examples/controlnet_construct/run_pipeline_example.sh \
     --work-dir work \
@@ -665,11 +647,49 @@ resolve_match_preset_shell_assignments() {
     --shell-assignments
 }
 
+resolve_parameter_profile_shell_assignments() {
+  local profile_name=$1
+  "$CATALOG_PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/parameter_profiles.py" \
+    "$profile_name" \
+    --shell-assignments
+}
+
 apply_match_preset_path() {
   local preset_path=$1
   local assignments
   assignments=$(resolve_match_preset_shell_assignments "$preset_path")
   eval "$assignments"
+}
+
+apply_profile_value_if_unset() {
+  local target_name=$1
+  local profile_value=$2
+  shift 2
+  local marker_name
+  for marker_name in "$@"; do
+    if [[ -n "${!marker_name:-}" ]]; then
+      return 0
+    fi
+  done
+  printf -v "$target_name" '%s' "$profile_value"
+}
+
+apply_parameter_profile_defaults() {
+  [[ -n "$parameter_profile" ]] || return 0
+
+  local profile_assignments
+  profile_assignments=$(resolve_parameter_profile_shell_assignments "$parameter_profile") || return $?
+  eval "$profile_assignments"
+
+  apply_profile_value_if_unset VALID_PIXEL_PERCENT_THRESHOLD "$PROFILE_VALID_PIXEL_PERCENT_THRESHOLD" explicit_valid_pixel_percent_threshold config_valid_pixel_percent_threshold
+  apply_profile_value_if_unset INVALID_PIXEL_RADIUS "$PROFILE_INVALID_PIXEL_RADIUS" explicit_invalid_pixel_radius config_invalid_pixel_radius
+  apply_profile_value_if_unset MATCHER_METHOD "$PROFILE_MATCHER_METHOD" explicit_matcher_method config_matcher_method match_preset_path
+  apply_profile_value_if_unset ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION "$PROFILE_ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION" explicit_enable_low_resolution_offset_estimation config_enable_low_resolution_offset_estimation
+  apply_profile_value_if_unset LOW_RESOLUTION_LEVEL "$PROFILE_LOW_RESOLUTION_LEVEL" explicit_low_resolution_level config_low_resolution_level
+  apply_profile_value_if_unset LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS "$PROFILE_LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS" explicit_low_resolution_max_mean_reprojection_error_pixels config_low_resolution_max_mean_reprojection_error_pixels
+  apply_profile_value_if_unset LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT "$PROFILE_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT" explicit_low_resolution_min_retained_match_count config_low_resolution_min_retained_match_count
+  apply_profile_value_if_unset LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS "$PROFILE_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS" explicit_low_resolution_max_mean_projected_offset_meters config_low_resolution_max_mean_projected_offset_meters
+  apply_profile_value_if_unset NUM_WORKER_PARALLEL_CPU "$PROFILE_NUM_WORKER_PARALLEL_CPU" explicit_num_worker_parallel_cpu config_num_worker_parallel_cpu
 }
 
 print_parameter_groups() {
@@ -733,6 +753,7 @@ def add_value(target: dict[str, object], name: str, value: object) -> None:
 
 
 cli_values: dict[str, object] = {}
+profile_values: dict[str, object] = {}
 config_values: dict[str, object] = {}
 preset_values: dict[str, object] = {}
 
@@ -742,6 +763,8 @@ if env("validate_parameters_only") == "1":
     add_value(cli_values, "validate_parameters_only", True)
 if env("explicit_strict_parameter_validation") == "1":
     add_value(cli_values, "strict_parameter_validation", True)
+if is_present(env("parameter_profile")):
+    add_value(cli_values, "parameter_profile", env("parameter_profile"))
 
 cli_sources = {
     "num_worker_parallel_cpu": ("explicit_num_worker_parallel_cpu", "NUM_WORKER_PARALLEL_CPU"),
@@ -784,6 +807,20 @@ for parameter_name, (marker_name, value_name) in cli_sources.items():
     if is_present(env(marker_name)):
         add_value(cli_values, parameter_name, env(value_name))
 
+profile_sources = {
+    "valid_pixel_percent_threshold": "PROFILE_VALID_PIXEL_PERCENT_THRESHOLD",
+    "invalid_pixel_radius": "PROFILE_INVALID_PIXEL_RADIUS",
+    "matcher_method": "PROFILE_MATCHER_METHOD",
+    "enable_low_resolution_offset_estimation": "PROFILE_ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION",
+    "low_resolution_level": "PROFILE_LOW_RESOLUTION_LEVEL",
+    "low_resolution_max_mean_reprojection_error_pixels": "PROFILE_LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS",
+    "low_resolution_min_retained_match_count": "PROFILE_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT",
+    "low_resolution_max_mean_projected_offset_meters": "PROFILE_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS",
+    "num_worker_parallel_cpu": "PROFILE_NUM_WORKER_PARALLEL_CPU",
+}
+for parameter_name, value_name in profile_sources.items():
+    add_value(profile_values, parameter_name, env(value_name))
+
 config_sources = {
     "match_preset_path": "config_match_preset_path",
     "valid_pixel_percent_threshold": "config_valid_pixel_percent_threshold",
@@ -820,6 +857,7 @@ for parameter_name, value_name in preset_sources.items():
 payload = {
     "entrypoint": "run_pipeline_example",
     "cli_values": cli_values,
+    "profile_values": profile_values,
     "config_values": config_values,
     "preset_values": preset_values,
 }
@@ -845,8 +883,11 @@ print_parameter_validation_summary() {
   printf 'DOM_LIST=%q\n' "$DOM_LIST"
   printf 'CONFIG=%q\n' "$CONFIG_PATH"
   printf 'NETWORK_ID=%q\n' "$NETWORK_ID"
+  printf 'PARAMETER_PROFILE=%q\n' "$parameter_profile"
   printf 'MATCHER_METHOD=%q\n' "$MATCHER_METHOD"
   printf 'NUM_WORKER_PARALLEL_CPU=%q\n' "$NUM_WORKER_PARALLEL_CPU"
+  printf 'VALID_PIXEL_PERCENT_THRESHOLD=%q\n' "$VALID_PIXEL_PERCENT_THRESHOLD"
+  printf 'INVALID_PIXEL_RADIUS=%q\n' "$INVALID_PIXEL_RADIUS"
   printf 'ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION=%q\n' "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION"
   printf 'LOW_RESOLUTION_LEVEL=%q\n' "$LOW_RESOLUTION_LEVEL"
   printf 'LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS=%q\n' "$LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS"
@@ -1195,6 +1236,7 @@ main() {
   local validate_parameters_only="0"
   local strict_parameter_validation="0"
   local explicit_strict_parameter_validation="0"
+  local parameter_profile=""
   local explicit_valid_pixel_percent_threshold=""
   local explicit_num_worker_parallel_cpu=""
   local explicit_use_parallel_cpu=""
@@ -1242,6 +1284,15 @@ main() {
   local preset_match_preset_path=""
   local preset_matcher_method=""
   local preset_deep_match_config_path=""
+  local PROFILE_VALID_PIXEL_PERCENT_THRESHOLD=""
+  local PROFILE_INVALID_PIXEL_RADIUS=""
+  local PROFILE_MATCHER_METHOD=""
+  local PROFILE_ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION=""
+  local PROFILE_LOW_RESOLUTION_LEVEL=""
+  local PROFILE_LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS=""
+  local PROFILE_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT=""
+  local PROFILE_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS=""
+  local PROFILE_NUM_WORKER_PARALLEL_CPU=""
 
   PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
   CATALOG_PYTHON_EXECUTABLE="${PARAMETER_CATALOG_PYTHON_EXECUTABLE:-python}"
@@ -1312,6 +1363,11 @@ main() {
         strict_parameter_validation="1"
         explicit_strict_parameter_validation="1"
         shift
+        ;;
+      --parameter-profile)
+        [[ $# -ge 2 ]] || die "missing value for --parameter-profile"
+        parameter_profile=$2
+        shift 2
         ;;
       --use-parallel-cpu)
         USE_PARALLEL_CPU="1"
@@ -1764,8 +1820,12 @@ PY
     fi
   fi
 
+  if [[ -n "$parameter_profile" ]]; then
+    apply_parameter_profile_defaults || die "unsupported --parameter-profile: $parameter_profile"
+  fi
+
   export REPO_ROOT
-  export print_parameter_groups validate_parameters_only strict_parameter_validation explicit_strict_parameter_validation
+  export print_parameter_groups validate_parameters_only strict_parameter_validation explicit_strict_parameter_validation parameter_profile
   export explicit_num_worker_parallel_cpu explicit_use_parallel_cpu explicit_pair_id_start explicit_valid_pixel_percent_threshold explicit_invalid_pixel_radius
   export explicit_match_preset_path explicit_matcher_method explicit_deep_matcher_config_path
   export explicit_adaptive_routing explicit_adaptive_routing_profile explicit_enable_low_resolution_offset_estimation explicit_low_resolution_level
@@ -1781,6 +1841,10 @@ PY
   export config_visualization_mode config_memory_profile config_visualization_target_long_edge config_preview_crop_margin_pixels config_preview_cache_source
   export config_strict_parameter_validation
   export preset_match_preset_path preset_matcher_method preset_deep_match_config_path
+  export PROFILE_VALID_PIXEL_PERCENT_THRESHOLD PROFILE_INVALID_PIXEL_RADIUS PROFILE_MATCHER_METHOD
+  export PROFILE_ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION PROFILE_LOW_RESOLUTION_LEVEL
+  export PROFILE_LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS PROFILE_LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT
+  export PROFILE_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS PROFILE_NUM_WORKER_PARALLEL_CPU
 
   validate_controlnet_parameters >/dev/null
 

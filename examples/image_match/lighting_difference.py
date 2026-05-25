@@ -7,11 +7,8 @@ Updated: 2026-05-18  Geng Xun added cube-label solar geometry parsing with
     normalized weighted-sum lighting-difference score.
 Updated: 2026-05-19  Geng Xun added sampler-driven tile lighting summaries for
     tile-aligned diagnostics without requiring SPICE-heavy unit fixtures.
-
-This first release intentionally limits itself to solar elevation and solar
-azimuth read from the cube ``Instrument`` group; ``incidence``, ``emission``,
-and ``phase`` angles are reserved for future expansion without changing the
-public API.
+Updated: 2026-05-26  Geng Xun made ISIS sensor-model center geometry the primary
+    solar geometry source, with cube-label keyword parsing retained as fallback.
 """
 
 from __future__ import annotations

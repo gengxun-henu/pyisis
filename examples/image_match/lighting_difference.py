@@ -7,11 +7,8 @@ Updated: 2026-05-18  Geng Xun added cube-label solar geometry parsing with
     normalized weighted-sum lighting-difference score.
 Updated: 2026-05-19  Geng Xun added sampler-driven tile lighting summaries for
     tile-aligned diagnostics without requiring SPICE-heavy unit fixtures.
-
-This first release intentionally limits itself to solar elevation and solar
-azimuth read from the cube ``Instrument`` group; ``incidence``, ``emission``,
-and ``phase`` angles are reserved for future expansion without changing the
-public API.
+Updated: 2026-05-26  Geng Xun made ISIS sensor-model center geometry the primary
+    solar geometry source, with cube-label keyword parsing retained as fallback.
 """
 
 from __future__ import annotations
@@ -42,6 +39,9 @@ DEFAULT_ELEVATION_WEIGHT = 0.4
 DEFAULT_AZIMUTH_WEIGHT = 0.6
 DEFAULT_ELEVATION_NORMALIZER_DEGREES = 90.0
 DEFAULT_AZIMUTH_NORMALIZER_DEGREES = 180.0
+SENSOR_MODEL_SOURCE_NAME = "SensorModelCenter"
+SENSOR_MODEL_ELEVATION_KEYWORD = "90-IncidenceAngle"
+SENSOR_MODEL_AZIMUTH_KEYWORD = "SunAzimuth"
 
 
 class SolarGeometryFieldMissing(LookupError):
@@ -168,7 +168,7 @@ def _resolve_keyword(group: Any, keyword_names: Iterable[str]) -> tuple[str, flo
     return None
 
 
-def read_solar_geometry_from_cube(
+def _read_label_solar_geometry_from_cube(
     cube: Any,
     *,
     group_names: Iterable[str] = DEFAULT_INSTRUMENT_GROUP_NAMES,
@@ -182,6 +182,7 @@ def read_solar_geometry_from_cube(
     when neither field could be resolved in any of the candidate groups.
     """
 
+    candidate_group_names = tuple(group_names)
     has_group = getattr(cube, "has_group", None)
     group_getter = getattr(cube, "group", None)
     if has_group is None or group_getter is None:
@@ -192,7 +193,7 @@ def read_solar_geometry_from_cube(
     resolved_elevation: tuple[str, float] | None = None
     resolved_azimuth: tuple[str, float] | None = None
     resolved_group_name: str | None = None
-    for candidate_group_name in group_names:
+    for candidate_group_name in candidate_group_names:
         if not has_group(candidate_group_name):
             continue
         group = group_getter(candidate_group_name)
@@ -210,7 +211,7 @@ def read_solar_geometry_from_cube(
     if resolved_elevation is None and resolved_azimuth is None:
         raise SolarGeometryFieldMissing(
             "Could not resolve solar elevation or azimuth from any of the candidate groups: "
-            f"{tuple(group_names)!r}."
+            f"{candidate_group_names!r}."
         )
 
     return SolarGeometry(
@@ -220,6 +221,143 @@ def read_solar_geometry_from_cube(
         elevation_keyword=None if resolved_elevation is None else resolved_elevation[0],
         azimuth_keyword=None if resolved_azimuth is None else resolved_azimuth[0],
     )
+
+
+def _read_sensor_model_solar_geometry_from_cube(cube: Any) -> SolarGeometry:
+    try:
+        camera_getter = getattr(cube, "camera")
+        sample_count_getter = getattr(cube, "sample_count")
+        line_count_getter = getattr(cube, "line_count")
+    except AttributeError as exc:
+        raise SolarGeometryFieldMissing(
+            f"sensor model error: cube object does not expose required sensor-model method: {exc}."
+        ) from exc
+
+    try:
+        sample_count = _finite_float(sample_count_getter())
+    except Exception as exc:
+        raise SolarGeometryFieldMissing(
+            f"sensor model error: could not read cube sample_count: {exc}."
+        ) from exc
+    if sample_count is None or sample_count <= 0.0:
+        raise SolarGeometryFieldMissing(
+            f"sensor model error: cube sample_count must be finite and positive; got {sample_count!r}."
+        )
+
+    try:
+        line_count = _finite_float(line_count_getter())
+    except Exception as exc:
+        raise SolarGeometryFieldMissing(
+            f"sensor model error: could not read cube line_count: {exc}."
+        ) from exc
+    if line_count is None or line_count <= 0.0:
+        raise SolarGeometryFieldMissing(
+            f"sensor model error: cube line_count must be finite and positive; got {line_count!r}."
+        )
+
+    center_sample = (sample_count + 1.0) / 2.0
+    center_line = (line_count + 1.0) / 2.0
+
+    try:
+        camera = camera_getter()
+    except Exception as exc:
+        raise SolarGeometryFieldMissing(
+            f"sensor model error: could not initialize cube camera: {exc}."
+        ) from exc
+
+    set_image = getattr(camera, "set_image", None)
+    if set_image is None:
+        raise SolarGeometryFieldMissing(
+            "sensor model error: cube camera does not expose set_image."
+        )
+
+    try:
+        if not set_image(center_sample, center_line):
+            raise SolarGeometryFieldMissing(
+                "sensor model error: camera.set_image returned false at cube center."
+            )
+    except SolarGeometryFieldMissing:
+        raise
+    except Exception as exc:
+        raise SolarGeometryFieldMissing(
+            f"sensor model error: camera.set_image failed at cube center: {exc}."
+        ) from exc
+
+    missing_reasons: list[str] = []
+
+    resolved_azimuth: float | None = None
+    sun_azimuth = getattr(camera, "sun_azimuth", None)
+    if sun_azimuth is None:
+        missing_reasons.append("camera does not expose sun_azimuth")
+    else:
+        try:
+            resolved_azimuth = _finite_float(sun_azimuth())
+        except Exception as exc:
+            missing_reasons.append(f"sun_azimuth failed: {exc}")
+        if resolved_azimuth is None:
+            missing_reasons.append("sun_azimuth was missing or non-finite")
+
+    resolved_elevation: float | None = None
+    incidence_angle = getattr(camera, "incidence_angle", None)
+    if incidence_angle is None:
+        missing_reasons.append("camera does not expose incidence_angle")
+    else:
+        try:
+            incidence = _finite_float(incidence_angle())
+        except Exception as exc:
+            missing_reasons.append(f"incidence_angle failed: {exc}")
+            incidence = None
+        if incidence is None:
+            missing_reasons.append("incidence_angle was missing or non-finite")
+        else:
+            resolved_elevation = 90.0 - incidence
+
+    if resolved_elevation is None and resolved_azimuth is None:
+        raise SolarGeometryFieldMissing(
+            "sensor model error: could not resolve solar elevation or azimuth from camera "
+            f"at cube center: {'; '.join(missing_reasons)}."
+        )
+
+    return SolarGeometry(
+        solar_elevation_degrees=resolved_elevation,
+        solar_azimuth_degrees=resolved_azimuth,
+        source_group_name=SENSOR_MODEL_SOURCE_NAME,
+        elevation_keyword=None if resolved_elevation is None else SENSOR_MODEL_ELEVATION_KEYWORD,
+        azimuth_keyword=None if resolved_azimuth is None else SENSOR_MODEL_AZIMUTH_KEYWORD,
+    )
+
+
+def read_solar_geometry_from_cube(
+    cube: Any,
+    *,
+    group_names: Iterable[str] = DEFAULT_INSTRUMENT_GROUP_NAMES,
+    elevation_keywords: Iterable[str] = DEFAULT_SOLAR_ELEVATION_KEYWORDS,
+    azimuth_keywords: Iterable[str] = DEFAULT_SOLAR_AZIMUTH_KEYWORDS,
+) -> SolarGeometry:
+    """Extract solar elevation/azimuth from an open ISIS cube.
+
+    Sensor-model geometry sampled at the cube center is preferred. Mission label
+    keywords remain the fallback when the camera model cannot provide either
+    elevation or azimuth.
+    """
+
+    try:
+        return _read_sensor_model_solar_geometry_from_cube(cube)
+    except SolarGeometryFieldMissing as sensor_error:
+        try:
+            return _read_label_solar_geometry_from_cube(
+                cube,
+                group_names=group_names,
+                elevation_keywords=elevation_keywords,
+                azimuth_keywords=azimuth_keywords,
+            )
+        except SolarGeometryFieldMissing as label_error:
+            sensor_message = str(sensor_error)
+            if not sensor_message.startswith("sensor model error:"):
+                sensor_message = f"sensor model error: {sensor_message}"
+            raise SolarGeometryFieldMissing(
+                f"{sensor_message}; label fallback error: {label_error}"
+            ) from label_error
 
 
 def azimuth_difference_degrees(left_degrees: float, right_degrees: float) -> float:
@@ -410,6 +548,9 @@ __all__ = [
     "DEFAULT_SOLAR_AZIMUTH_KEYWORDS",
     "DEFAULT_SOLAR_ELEVATION_KEYWORDS",
     "LightingDifferenceSummary",
+    "SENSOR_MODEL_AZIMUTH_KEYWORD",
+    "SENSOR_MODEL_ELEVATION_KEYWORD",
+    "SENSOR_MODEL_SOURCE_NAME",
     "SolarGeometry",
     "SolarGeometryFieldMissing",
     "TileLightingSample",

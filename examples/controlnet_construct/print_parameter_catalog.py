@@ -11,8 +11,9 @@ from typing import Any
 
 if __package__ is None or __package__ == "":
     EXAMPLES_ROOT = Path(__file__).resolve().parents[1]
-    if str(EXAMPLES_ROOT) not in sys.path:
-        sys.path.insert(0, str(EXAMPLES_ROOT))
+    examples_root = str(EXAMPLES_ROOT)
+    sys.path = [entry for entry in sys.path if entry != examples_root]
+    sys.path.insert(0, examples_root)
     from controlnet_construct.parameter_catalog import (  # type: ignore[import-not-found]
         GROUP_BY_NAME,
         grouped_parameters_for_entrypoint,

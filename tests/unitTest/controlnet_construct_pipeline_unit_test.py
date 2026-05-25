@@ -4425,20 +4425,29 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         self.assertEqual(match_mock.call_args.kwargs["matcher_method"], "lightglue")
 
-    def test_pipeline_forwards_adaptive_routing_deep_presets_from_config(self):
+    def test_pipeline_forwards_config_relative_adaptive_routing_deep_presets_from_config(self):
         fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}
         stdout = io.StringIO()
 
         with temporary_directory() as temp_dir:
-            config_path = temp_dir / "controlnet_config.json"
+            config_dir = temp_dir / "configs"
+            preset_dir = config_dir / "presets"
+            config_dir.mkdir()
+            preset_dir.mkdir()
+            config_path = config_dir / "controlnet_config.json"
+            expected_preset_map = {
+                "lightglue": str(preset_dir / "lightglue_default.json"),
+                "lightglue_high_recall": str(preset_dir / "lightglue_high_recall.json"),
+                "loftr": str(preset_dir / "loftr_default.json"),
+            }
             config_path.write_text(
                 json.dumps(
                     {
                         "ImageMatch": {
                             "adaptive_routing_deep_presets": {
-                                "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
-                                "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
-                                "loftr": "examples/controlnet_construct/presets/loftr_default.json",
+                                "lightglue": "presets/lightglue_default.json",
+                                "lightglue_high_recall": "presets/lightglue_high_recall.json",
+                                "loftr": "presets/loftr_default.json",
                             }
                         }
                     }
@@ -4463,11 +4472,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         self.assertEqual(
             match_mock.call_args.kwargs["adaptive_routing_deep_presets"],
-            {
-                "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
-                "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
-                "loftr": "examples/controlnet_construct/presets/loftr_default.json",
-            },
+            expected_preset_map,
         )
 
     def test_adaptive_cascade_steps_keep_legacy_method_only_fallback_without_presets(self):

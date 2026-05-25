@@ -696,6 +696,17 @@ def _coerce_string_mapping(value: object, *, field_name: str) -> dict[str, str]:
     }
 
 
+def _resolve_config_relative_string_mapping(mapping: dict[str, str], *, config_path: str | Path) -> dict[str, str]:
+    config_dir = Path(config_path).parent
+    resolved_mapping: dict[str, str] = {}
+    for key, value in mapping.items():
+        resolved_value = Path(value).expanduser()
+        if not resolved_value.is_absolute():
+            resolved_value = config_dir / resolved_value
+        resolved_mapping[key] = str(resolved_value)
+    return resolved_mapping
+
+
 def load_image_match_defaults_from_config(
     config_path: str | Path,
     *,
@@ -800,7 +811,10 @@ def load_image_match_defaults_from_config(
         (
             "adaptive_routing_deep_presets",
             ("adaptive_routing_deep_presets", "adaptiveRoutingDeepPresets", "AdaptiveRoutingDeepPresets"),
-            lambda value: _coerce_string_mapping(value, field_name="adaptive_routing_deep_presets"),
+            lambda value: _resolve_config_relative_string_mapping(
+                _coerce_string_mapping(value, field_name="adaptive_routing_deep_presets"),
+                config_path=resolved_path,
+            ),
         ),
         (
             "deep_match_mode",

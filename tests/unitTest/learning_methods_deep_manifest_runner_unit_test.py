@@ -1148,6 +1148,47 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
                         adapter_factory=lambda **kwargs: self.fail("adapter should not be created when preflight fails"),
                     )
 
+    def test_run_manifest_cpu_device_overrides_serialized_runtime_config_gpu_preference(self):
+        with temporary_directory() as temp_dir:
+            runtime_config = _make_runtime_config(prefer_gpu=True)
+            manifest = build_deep_match_pair_manifest(
+                tasks=[replace(_make_tile_task(), deep_match_runtime_config=runtime_config)],
+                left_dom_path="left_dom.cub",
+                right_dom_path="right_dom.cub",
+                matcher_method="lightglue",
+                band=1,
+                image_space="dom",
+                temp_root_dir=Path(temp_dir) / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                requested_device="cuda",
+                created_at_utc="2026-05-16T00:00:00Z",
+            )
+            record = manifest.tasks[0]
+            write_deep_match_task_arrays(
+                record,
+                left_image=np.arange(64, dtype=np.uint8).reshape(8, 8),
+                right_image=np.arange(64, dtype=np.uint8).reshape(8, 8),
+                left_mask=np.zeros((8, 8), dtype=bool),
+                right_mask=np.zeros((8, 8), dtype=bool),
+            )
+            manifest_path = write_deep_match_pair_manifest(manifest)
+            captured_runtime_config: list[DeepMatchRuntimeConfig] = []
+
+            def _fake_preflight(normalized_runtime_config: DeepMatchRuntimeConfig):
+                captured_runtime_config.append(normalized_runtime_config)
+                return []
+
+            with patch("run_deep_match_manifest.check_deep_match_dependencies", side_effect=_fake_preflight):
+                summary = run_manifest(
+                    manifest_path,
+                    device="cpu",
+                    adapter_factory=FakeDeepMatcherAdapter,
+                )
+
+            self.assertEqual(summary["status"], "completed")
+            self.assertEqual(len(captured_runtime_config), 1)
+            self.assertFalse(captured_runtime_config[0].prefer_gpu)
+            self.assertEqual(summary["actual_device"], "cpu")
+
     def test_run_manifest_rejects_manifest_and_runtime_config_matcher_mismatch(self):
         with temporary_directory() as temp_dir:
             runtime_config = _make_runtime_config()

@@ -2452,6 +2452,18 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertIn("lightglue", str(error))
         self.assertIn("torch not installed", str(error))
 
+    def test_deep_dependency_error_is_pickle_round_trippable(self):
+        import pickle
+
+        deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
+        error = deep_adapter_module.DeepDependencyError("lightglue", "torch not installed")
+
+        restored = pickle.loads(pickle.dumps(error))
+
+        self.assertIsInstance(restored, deep_adapter_module.DeepDependencyError)
+        self.assertEqual(restored.method, "lightglue")
+        self.assertEqual(restored.reason, "torch not installed")
+
     def test_deep_adapter_normalizes_outputs_to_match_triplet(self):
         deep_adapter_module = importlib.import_module("controlnet_construct.deep_adapter")
 

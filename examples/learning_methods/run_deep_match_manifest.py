@@ -9,8 +9,11 @@ Updated: 2026-05-20  Geng Xun added manifest runtime-config preflight checks and
 from __future__ import annotations
 
 import argparse
+from concurrent.futures import FIRST_COMPLETED, ProcessPoolExecutor, wait
 from datetime import datetime, timezone
+import functools
 import json
+import multiprocessing as mp
 import os
 from pathlib import Path
 import sys
@@ -43,6 +46,12 @@ from controlnet_construct.deep_match_config import (
 
 SUPPORTED_DEVICES = ("auto", "cpu", "cuda")
 MAX_MANIFEST_WORKERS = 64
+
+_WORKER_ADAPTER = None
+_WORKER_ACTUAL_DEVICE = None
+_WORKER_MATCHER_METHOD = None
+_WORKER_DEVICE = None
+_WORKER_TORCH_NUM_THREADS = None
 
 
 def _parse_positive_int(value: str, option_name: str) -> int:
@@ -92,6 +101,35 @@ def _apply_torch_thread_limit(torch_num_threads: int | None) -> None:
         torch.set_num_threads(torch_num_threads)
     except Exception:
         return
+
+
+def _manifest_process_pool_context() -> mp.context.BaseContext:
+    if os.name == "posix" and "fork" in mp.get_all_start_methods():
+        return mp.get_context("fork")
+    return mp.get_context()
+
+
+def _initialize_worker(
+    *,
+    adapter_factory: Callable[..., Any],
+    prefer_gpu: bool,
+    runtime_config: Any | None,
+    matcher_method: str,
+    device: str,
+    torch_num_threads: int | None,
+) -> None:
+    global _WORKER_ADAPTER
+    global _WORKER_ACTUAL_DEVICE
+    global _WORKER_MATCHER_METHOD
+    global _WORKER_DEVICE
+    global _WORKER_TORCH_NUM_THREADS
+
+    _apply_torch_thread_limit(torch_num_threads)
+    _WORKER_ADAPTER = adapter_factory(prefer_gpu=prefer_gpu, runtime_config=runtime_config)
+    _WORKER_ACTUAL_DEVICE = str(getattr(_WORKER_ADAPTER, "_device", "cuda" if prefer_gpu else "cpu"))
+    _WORKER_MATCHER_METHOD = matcher_method
+    _WORKER_DEVICE = device
+    _WORKER_TORCH_NUM_THREADS = torch_num_threads
 
 
 def _safe_unlink(path: Path) -> None:
@@ -319,6 +357,7 @@ def _run_one_task(
             "task_position": task_index,
             "task_count": task_count,
             "status": status,
+            "actual_device": actual_device,
             "match_count": int(len(scores)),
             "raw_match_count": raw_match_count,
             "invalid_mask_removed_count": invalid_removed_count,
@@ -338,6 +377,7 @@ def _run_one_task(
             "task_position": task_index,
             "task_count": task_count,
             "status": "failed",
+            "actual_device": actual_device,
             "error_type": type(exc).__name__,
             "error": str(exc),
             "result_path": str(result_path),
@@ -359,6 +399,231 @@ def _run_one_task(
         return False, error_summary
 
 
+def _run_one_task_worker(record: dict[str, Any]) -> tuple[bool, dict[str, Any]]:
+    if _WORKER_ADAPTER is None:
+        raise RuntimeError("Deep-match worker adapter was not initialized.")
+    manifest = argparse.Namespace(matcher_method=_WORKER_MATCHER_METHOD)
+    return _run_one_task(
+        record=record["task_record"],
+        task_index=record["task_position"],
+        task_count=record["task_count"],
+        manifest=manifest,
+        adapter=_WORKER_ADAPTER,
+        device=str(_WORKER_DEVICE),
+        actual_device=str(_WORKER_ACTUAL_DEVICE),
+        torch_num_threads=_WORKER_TORCH_NUM_THREADS,
+    )
+
+
+def _skipped_existing_summary(record: dict[str, Any]) -> dict[str, Any]:
+    task_record = record["task_record"]
+    result_path = Path(task_record.result_path).expanduser().resolve()
+    return {
+        "task_index": task_record.task_index,
+        "task_position": record["task_position"],
+        "task_count": record["task_count"],
+        "status": "skipped_existing",
+        "result_path": str(result_path),
+        "log_path": str(_task_log_path(task_record)),
+    }
+
+
+def _cleanup_failed_summary(record: dict[str, Any], exc: Exception) -> dict[str, Any]:
+    task_record = record["task_record"]
+    result_path = Path(task_record.result_path).expanduser().resolve()
+    finished_at = _utc_now_iso()
+    error_summary = {
+        "task_index": task_record.task_index,
+        "task_position": record["task_position"],
+        "task_count": record["task_count"],
+        "status": "failed",
+        "actual_device": None,
+        "error_type": type(exc).__name__,
+        "error": str(exc),
+        "result_path": str(result_path),
+        "log_path": str(_task_log_path(task_record)),
+        "worker_pid": None,
+        "torch_num_threads": record.get("torch_num_threads"),
+        "started_at_utc": finished_at,
+        "finished_at_utc": finished_at,
+    }
+    try:
+        write_deep_match_task_result(
+            task_record,
+            left_points=np.empty((0, 2), dtype=np.float32),
+            right_points=np.empty((0, 2), dtype=np.float32),
+            scores=np.empty((0,), dtype=np.float32),
+            status="failed",
+            metadata=error_summary,
+        )
+    except Exception as recording_exc:
+        error_summary["diagnostic_result_error_type"] = type(recording_exc).__name__
+        error_summary["diagnostic_result_error"] = str(recording_exc)
+    try:
+        _write_task_log(task_record, error_summary)
+    except Exception as recording_exc:
+        error_summary["diagnostic_log_error_type"] = type(recording_exc).__name__
+        error_summary["diagnostic_log_error"] = str(recording_exc)
+    return error_summary
+
+
+def _prepare_records_for_execution(
+    manifest: Any,
+    *,
+    torch_num_threads: int | None,
+) -> list[dict[str, Any]]:
+    execution_records: list[dict[str, Any]] = []
+    task_count = len(manifest.tasks)
+    for task_position, task_record in enumerate(manifest.tasks, start=1):
+        execution_records.append(
+            {
+                "task_record": task_record,
+                "task_position": task_position,
+                "task_count": task_count,
+                "torch_num_threads": torch_num_threads,
+            }
+        )
+    return execution_records
+
+
+def _prepare_record_for_execution(
+    record: dict[str, Any],
+    *,
+    skip_existing: bool,
+    force_rerun: bool,
+) -> tuple[str, dict[str, Any] | None]:
+    task_record = record["task_record"]
+    result_path = Path(task_record.result_path).expanduser().resolve()
+    if force_rerun:
+        try:
+            _clean_task_outputs(task_record)
+        except Exception as exc:
+            return "failed", _cleanup_failed_summary(record, exc)
+    if skip_existing and result_path.exists():
+        return "skipped", _skipped_existing_summary(record)
+    return "runnable", None
+
+
+def _run_parallel_tasks(
+    runnable_records: list[dict[str, Any]],
+    *,
+    adapter_factory: Callable[..., Any],
+    prefer_gpu: bool,
+    runtime_config: Any | None,
+    matcher_method: str,
+    device: str,
+    skip_existing: bool,
+    force_rerun: bool,
+    torch_num_threads: int | None,
+    fail_fast: bool,
+    worker_count: int,
+) -> tuple[list[dict[str, Any]], int, int, bool]:
+    task_summaries: list[dict[str, Any]] = []
+    succeeded_count = 0
+    failed_count = 0
+    fail_fast_stopped = False
+
+    if not runnable_records:
+        return _sort_task_summaries(task_summaries), succeeded_count, failed_count, fail_fast_stopped
+
+    with ProcessPoolExecutor(
+        max_workers=worker_count,
+        mp_context=_manifest_process_pool_context(),
+        initializer=functools.partial(
+            _initialize_worker,
+            adapter_factory=adapter_factory,
+            prefer_gpu=prefer_gpu,
+            runtime_config=runtime_config,
+            matcher_method=matcher_method,
+            device=device,
+            torch_num_threads=torch_num_threads,
+        ),
+        initargs=(),
+    ) as executor:
+        next_record_index = 0
+        futures = {}
+        pending = set()
+
+        def _submit_until_capacity() -> None:
+            nonlocal next_record_index
+            nonlocal failed_count
+            nonlocal fail_fast_stopped
+            while not fail_fast_stopped and next_record_index < len(runnable_records) and len(pending) < worker_count:
+                record_index = next_record_index
+                next_record_index += 1
+                prepare_status, prepare_summary = _prepare_record_for_execution(
+                    runnable_records[record_index],
+                    skip_existing=skip_existing,
+                    force_rerun=force_rerun,
+                )
+                if prepare_status == "skipped":
+                    task_summaries.append(prepare_summary)
+                    continue
+                if prepare_status == "failed":
+                    task_summaries.append(prepare_summary)
+                    failed_count += 1
+                    if fail_fast:
+                        fail_fast_stopped = True
+                    continue
+                try:
+                    future = executor.submit(_run_one_task_worker, runnable_records[record_index])
+                except Exception as exc:
+                    task_summaries.append(_cleanup_failed_summary(runnable_records[record_index], exc))
+                    failed_count += 1
+                    if fail_fast:
+                        fail_fast_stopped = True
+                    continue
+                futures[future] = record_index
+                pending.add(future)
+
+        _submit_until_capacity()
+
+        while pending:
+            done, pending = wait(pending, return_when=FIRST_COMPLETED)
+            batch_failed = False
+            for future in done:
+                if future.cancelled():
+                    continue
+                record_index = futures[future]
+                try:
+                    succeeded, task_summary = future.result()
+                except Exception as exc:
+                    succeeded = False
+                    task_summary = _cleanup_failed_summary(runnable_records[record_index], exc)
+                task_summaries.append(task_summary)
+                if succeeded:
+                    succeeded_count += 1
+                    continue
+                failed_count += 1
+                batch_failed = True
+            if fail_fast and batch_failed:
+                fail_fast_stopped = True
+                continue
+            _submit_until_capacity()
+
+    return _sort_task_summaries(task_summaries), succeeded_count, failed_count, fail_fast_stopped
+
+
+def _sort_task_summaries(task_summaries: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return sorted(
+        task_summaries,
+        key=lambda item: (item["task_index"], item.get("task_position", 0)),
+    )
+
+
+def _summary_actual_device(task_summaries: list[dict[str, Any]]) -> str | None:
+    actual_devices = {
+        str(task_summary["actual_device"])
+        for task_summary in task_summaries
+        if task_summary.get("actual_device") is not None
+    }
+    if not actual_devices:
+        return None
+    if len(actual_devices) == 1:
+        return next(iter(actual_devices))
+    return "mixed"
+
+
 def run_manifest(
     manifest_path: str | Path,
     *,
@@ -374,6 +639,8 @@ def run_manifest(
 
     if num_workers < 1:
         raise ValueError("num_workers must be >= 1.")
+    if num_workers > MAX_MANIFEST_WORKERS:
+        raise ValueError(f"num_workers must be <= {MAX_MANIFEST_WORKERS}.")
     if torch_num_threads is not None and torch_num_threads < 1:
         raise ValueError("torch_num_threads must be >= 1 when provided.")
     if skip_existing and force_rerun:
@@ -391,51 +658,102 @@ def run_manifest(
         )
     effective_torch_threads = _effective_torch_num_threads(num_workers, torch_num_threads)
     _apply_torch_thread_limit(effective_torch_threads)
-    adapter = adapter_factory(prefer_gpu=prefer_gpu, runtime_config=runtime_config)
-    actual_device = str(getattr(adapter, "_device", "cuda" if prefer_gpu else "cpu"))
-
-    task_summaries: list[dict[str, Any]] = []
-    succeeded_count = 0
-    failed_count = 0
-    skipped_existing_count = 0
-
     task_count = len(manifest.tasks)
-    for task_position, record in enumerate(manifest.tasks, start=1):
-        result_path = Path(record.result_path).expanduser().resolve()
-        if force_rerun:
-            _clean_task_outputs(record)
-        if skip_existing and result_path.exists():
-            skipped_existing_count += 1
-            task_summaries.append(
-                {
-                    "task_index": record.task_index,
-                    "status": "skipped_existing",
-                    "result_path": str(result_path),
-                }
-            )
-            continue
+    runnable_records = _prepare_records_for_execution(
+        manifest,
+        torch_num_threads=effective_torch_threads,
+    )
+    parallel_execution_used = False
+    fail_fast_stopped = False
 
-        succeeded, task_summary = _run_one_task(
-            record=record,
-            task_index=task_position,
-            task_count=task_count,
-            manifest=manifest,
-            adapter=adapter,
-            device=device,
-            actual_device=actual_device,
-            torch_num_threads=effective_torch_threads,
-        )
-        if succeeded:
-            succeeded_count += 1
-        else:
+    if skip_existing and not force_rerun and all(
+        Path(record["task_record"].result_path).expanduser().resolve().exists()
+        for record in runnable_records
+    ):
+        task_summaries = _sort_task_summaries([_skipped_existing_summary(record) for record in runnable_records])
+        succeeded_count = 0
+        failed_count = 0
+        worker_count = 0
+        actual_device = None
+    elif not runnable_records:
+        task_summaries = []
+        succeeded_count = 0
+        failed_count = 0
+        worker_count = 0
+        actual_device = None
+    elif num_workers == 1 or len(runnable_records) <= 1:
+        adapter = None
+        actual_device = None
+        task_summaries = []
+        succeeded_count = 0
+        failed_count = 0
+        for record in runnable_records:
+            prepare_status, prepare_summary = _prepare_record_for_execution(
+                record,
+                skip_existing=skip_existing,
+                force_rerun=force_rerun,
+            )
+            if prepare_status == "skipped":
+                task_summaries.append(prepare_summary)
+                continue
+            if prepare_status == "failed":
+                task_summaries.append(prepare_summary)
+                failed_count += 1
+                if fail_fast:
+                    fail_fast_stopped = True
+                    break
+                continue
+            if adapter is None:
+                adapter = adapter_factory(prefer_gpu=prefer_gpu, runtime_config=runtime_config)
+                actual_device = str(getattr(adapter, "_device", "cuda" if prefer_gpu else "cpu"))
+            succeeded, task_summary = _run_one_task(
+                record=record["task_record"],
+                task_index=record["task_position"],
+                task_count=task_count,
+                manifest=manifest,
+                adapter=adapter,
+                device=device,
+                actual_device=actual_device,
+                torch_num_threads=effective_torch_threads,
+            )
+            task_summaries.append(task_summary)
+            if succeeded:
+                succeeded_count += 1
+                continue
             failed_count += 1
             if fail_fast:
-                task_summaries.append(task_summary)
+                fail_fast_stopped = True
                 break
-        task_summaries.append(task_summary)
+        worker_count = 1 if adapter is not None else 0
+    else:
+        worker_count = min(num_workers, len(runnable_records))
+        parallel_execution_used = True
+        task_summaries, succeeded_count, failed_count, fail_fast_stopped = _run_parallel_tasks(
+            runnable_records,
+            adapter_factory=adapter_factory,
+            prefer_gpu=prefer_gpu,
+            runtime_config=runtime_config,
+            matcher_method=manifest.matcher_method,
+            device=device,
+            skip_existing=skip_existing,
+            force_rerun=force_rerun,
+            torch_num_threads=effective_torch_threads,
+            fail_fast=fail_fast,
+            worker_count=worker_count,
+        )
+        actual_device = _summary_actual_device(task_summaries)
+
+    skipped_existing_count = sum(1 for task_summary in task_summaries if task_summary.get("status") == "skipped_existing")
+
+    incomplete_task_count = max(
+        0,
+        len(manifest.tasks) - succeeded_count - failed_count - skipped_existing_count,
+    )
 
     overall_status = "completed"
-    if failed_count and succeeded_count:
+    if incomplete_task_count > 0:
+        overall_status = "stopped_incomplete"
+    elif failed_count and succeeded_count:
         overall_status = "completed_with_failures"
     elif failed_count:
         overall_status = "failed"
@@ -449,10 +767,12 @@ def run_manifest(
         "actual_device": actual_device,
         "task_count": len(manifest.tasks),
         "num_workers": num_workers,
-        "parallel_execution_used": False,
-        "worker_count": 1,
+        "parallel_execution_used": parallel_execution_used,
+        "worker_count": worker_count,
         "torch_num_threads": effective_torch_threads,
         "force_rerun": force_rerun,
+        "fail_fast_stopped": fail_fast_stopped,
+        "incomplete_task_count": incomplete_task_count,
         "succeeded_task_count": succeeded_count,
         "failed_task_count": failed_count,
         "skipped_existing_task_count": skipped_existing_count,
@@ -498,13 +818,13 @@ def build_argument_parser() -> argparse.ArgumentParser:
         "--num-workers",
         type=_parse_num_workers,
         default=1,
-        help=f"Number of manifest tasks to execute concurrently. Reserved for future use. Range: 1-{MAX_MANIFEST_WORKERS}.",
+        help=f"Number of manifest tasks to execute concurrently. Range: 1-{MAX_MANIFEST_WORKERS}.",
     )
     parser.add_argument(
         "--torch-num-threads",
         type=_parse_torch_num_threads,
         default=None,
-        help="Optional torch CPU thread count to use during manifest execution. Reserved for future use.",
+        help="Optional torch CPU thread count to apply in each manifest worker.",
     )
     return parser
 

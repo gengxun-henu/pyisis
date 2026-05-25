@@ -641,6 +641,8 @@ def run_manifest(
         raise ValueError("num_workers must be >= 1.")
     if num_workers > MAX_MANIFEST_WORKERS:
         raise ValueError(f"num_workers must be <= {MAX_MANIFEST_WORKERS}.")
+    if str(device).strip().lower() == "cuda" and num_workers > 1:
+        raise ValueError("CUDA device with num_workers > 1 is not supported; use num_workers=1 or device='auto'/'cpu'.")
     if torch_num_threads is not None and torch_num_threads < 1:
         raise ValueError("torch_num_threads must be >= 1 when provided.")
     if skip_existing and force_rerun:

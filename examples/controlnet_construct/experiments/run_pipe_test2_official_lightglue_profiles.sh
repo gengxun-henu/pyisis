@@ -66,6 +66,7 @@ Options:
                         $HOME/miniconda3/etc/profile.d/conda.sh.
   --device MODE         Device for run_deep_match_manifest.py in split mode.
                         Supported values: auto, cpu, cuda. Default: auto.
+                        Explicit cuda currently requires --deep-match-num-workers 1.
   --deep-match-num-workers N
                         Number of parallel manifest workers in split mode.
                         Range: 1-64. Default: 1.
@@ -115,6 +116,35 @@ require_option_value() {
   if [[ -z "$value" || "$value" == --* ]]; then
     die "missing value for $option_name"
   fi
+}
+
+check_manifest_summary_status() {
+  local summary_path=$1
+  python - "$summary_path" <<'PY'
+import json
+import sys
+from pathlib import Path
+
+summary_path = Path(sys.argv[1])
+try:
+    with summary_path.open("r", encoding="utf-8") as stream:
+        summary = json.load(stream)
+except Exception as exc:
+    print(f"ERROR: unable to read manifest summary {summary_path}: {exc}", file=sys.stderr)
+    sys.exit(1)
+
+status = summary.get("status")
+failed = summary.get("failed_task_count")
+incomplete = summary.get("incomplete_task_count")
+skipped = summary.get("skipped_existing_task_count")
+print(
+    "Manifest summary status: "
+    f"status={status} failed={failed} incomplete={incomplete} skipped_existing={skipped}"
+)
+if status != "completed":
+    print(f"ERROR: manifest summary is not completed: {summary_path}", file=sys.stderr)
+    sys.exit(1)
+PY
 }
 
 preset_for_label() {
@@ -228,6 +258,7 @@ run_deep_match_manifests() {
       printf ' %q' "${manifest_command[@]}"
       printf '\n'
       "${manifest_command[@]}"
+      check_manifest_summary_status "$summary_path"
     ) 2>&1 | tee -a "$manifest_log_path"
     local status=${PIPESTATUS[0]}
     [[ "$status" -eq 0 ]] || return "$status"
@@ -328,6 +359,9 @@ esac
 require_positive_integer "--deep-match-num-workers" "$deep_match_num_workers"
 if (( 10#$deep_match_num_workers > max_deep_match_num_workers )); then
   die "--deep-match-num-workers must be between 1 and $max_deep_match_num_workers"
+fi
+if [[ "$deep_match_device" == "cuda" && "$deep_match_num_workers" != "1" ]]; then
+  die "--device cuda is not supported with --deep-match-num-workers > 1"
 fi
 if [[ -n "$deep_match_torch_num_threads" ]]; then
   require_positive_integer "--deep-match-torch-num-threads" "$deep_match_torch_num_threads"

@@ -401,6 +401,10 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, f"num_workers must be <= {MAX_MANIFEST_WORKERS}"):
             run_manifest("missing_manifest.json", num_workers=MAX_MANIFEST_WORKERS + 1)
 
+    def test_run_manifest_rejects_explicit_cuda_with_parallel_workers(self):
+        with self.assertRaisesRegex(ValueError, "CUDA device with num_workers > 1 is not supported"):
+            run_manifest("missing_manifest.json", device="cuda", num_workers=2)
+
     def test_build_argument_parser_rejects_invalid_torch_num_threads(self):
         parser = build_argument_parser()
 

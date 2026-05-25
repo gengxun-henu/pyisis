@@ -16,10 +16,12 @@ Updated: 2026-05-20  Geng Xun added regression coverage for flann cascade planni
 
 from __future__ import annotations
 
+import importlib
 import json
 import sys
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 
@@ -381,6 +383,89 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
 
 
 class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
+    def test_resolve_adaptive_route_sidecar_uses_sensor_model_lighting(self):
+        image_match_module = importlib.import_module("image_match.image_match")
+        from image_match.lighting_difference import SolarGeometry
+
+        texture_probe = ImageTextureProbe(
+            keypoint_count=100,
+            valid_pixel_count=1000,
+            total_pixel_count=1000,
+            keypoint_density=0.10,
+            mean_gradient=120.0,
+            laplacian_variance=2500.0,
+            entropy=4.2,
+            valid_pixel_ratio=1.0,
+            real_texture_score=0.85,
+        )
+        left_geometry = SolarGeometry(
+            solar_elevation_degrees=33.5,
+            solar_azimuth_degrees=164.0,
+            source_group_name="SensorModelCenter",
+            elevation_keyword="90-IncidenceAngle",
+            azimuth_keyword="SunAzimuth",
+        )
+        right_geometry = SolarGeometry(
+            solar_elevation_degrees=33.0,
+            solar_azimuth_degrees=165.0,
+            source_group_name="SensorModelCenter",
+            elevation_keyword="90-IncidenceAngle",
+            azimuth_keyword="SunAzimuth",
+        )
+
+        with (
+            patch.object(
+                image_match_module,
+                "_compute_texture_probe_from_cube_path",
+                return_value=texture_probe,
+            ),
+            patch.object(
+                image_match_module,
+                "_compute_texture_sparseness_and_geometry_from_cube_path",
+                side_effect=[
+                    ("left_sparseness", left_geometry, None),
+                    ("right_sparseness", right_geometry, None),
+                ],
+            ),
+            patch.object(
+                image_match_module,
+                "aggregate_pair_texture_sparseness",
+                return_value="pair_sparseness",
+            ),
+            patch.object(
+                image_match_module,
+                "pair_summary_to_diagnostic_dict",
+                return_value={"pair_texture_sparseness": 0.12, "weaker_side": "left"},
+            ),
+        ):
+            selected, summary = image_match_module._resolve_adaptive_route_for_pair(
+                enable_adaptive_routing=True,
+                requested_matcher_method="flann",
+                adaptive_routing_deep_presets=None,
+                band=1,
+                invalid_values=(),
+                special_pixel_abs_threshold=1e300,
+                low_resolution_offset_summary={
+                    "left_low_resolution_dom": "left_preview.cub",
+                    "right_low_resolution_dom": "right_preview.cub",
+                },
+                left_low_resolution_dom=None,
+                right_low_resolution_dom=None,
+            )
+
+        self.assertEqual(selected, "flann")
+        self.assertIsNotNone(summary)
+        lighting = summary["sidecar"]["lighting_difference"]
+        score = lighting["lighting_difference_score"]
+        self.assertIsNotNone(score)
+        self.assertTrue(np.isfinite(score))
+        self.assertEqual(lighting["left_solar_geometry"]["source_group_name"], "SensorModelCenter")
+        self.assertEqual(lighting["right_solar_geometry"]["source_group_name"], "SensorModelCenter")
+        self.assertEqual(lighting["left_solar_geometry"]["elevation_keyword"], "90-IncidenceAngle")
+        self.assertEqual(lighting["left_solar_geometry"]["azimuth_keyword"], "SunAzimuth")
+        self.assertEqual(lighting["right_solar_geometry"]["elevation_keyword"], "90-IncidenceAngle")
+        self.assertEqual(lighting["right_solar_geometry"]["azimuth_keyword"], "SunAzimuth")
+
     def test_route_matcher_for_pair_with_sparseness_picks_bf_for_low_signals(self):
         from image_match.adaptive_routing import (
             SIFT_ROUTED_MATCHER_METHOD,

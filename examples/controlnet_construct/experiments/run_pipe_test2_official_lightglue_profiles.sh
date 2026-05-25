@@ -27,6 +27,10 @@ conda_sh="${PYISIS_CONDA_SH:-$HOME/miniconda3/etc/profile.d/conda.sh}"
 deep_learning_env="${DEEP_LEARNING_CONDA_ENV:-deep-learning}"
 deep_match_mode="split"
 deep_match_device="auto"
+deep_match_num_workers=1
+max_deep_match_num_workers=64
+deep_match_torch_num_threads=""
+force_rerun_deep_match=0
 validate_only=0
 run_final_merge=0
 only_labels="superpoint_lightglue,disk_lightglue,sift_lightglue"
@@ -62,6 +66,14 @@ Options:
                         $HOME/miniconda3/etc/profile.d/conda.sh.
   --device MODE         Device for run_deep_match_manifest.py in split mode.
                         Supported values: auto, cpu, cuda. Default: auto.
+  --deep-match-num-workers N
+                        Number of parallel manifest workers in split mode.
+                        Range: 1-64. Default: 1.
+  --deep-match-torch-num-threads N
+                        Torch thread count forwarded to manifest workers in split mode.
+                        Default: unset.
+  --force-rerun-deep-match
+                        Recompute deep-match manifest tasks instead of skipping existing results.
   --only LIST           Comma-separated labels to run.
                         Default: superpoint_lightglue,disk_lightglue,sift_lightglue
                         Supported labels: superpoint_lightglue, disk_lightglue, sift_lightglue
@@ -86,6 +98,23 @@ EOF
 die() {
   printf 'ERROR: %s\n' "$*" >&2
   exit 1
+}
+
+require_positive_integer() {
+  local option_name=$1
+  local value=$2
+  case "$value" in
+    ''|*[!0-9]*) die "$option_name must be a positive integer" ;;
+  esac
+  (( 10#$value > 0 )) || die "$option_name must be a positive integer"
+}
+
+require_option_value() {
+  local option_name=$1
+  local value=${2-}
+  if [[ -z "$value" || "$value" == --* ]]; then
+    die "missing value for $option_name"
+  fi
 }
 
 preset_for_label() {
@@ -180,11 +209,25 @@ run_deep_match_manifests() {
       conda activate "$deep_learning_env"
       set -u
       export PYTHONPATH="$repo_root/examples${PYTHONPATH:+:$PYTHONPATH}"
-      python "$repo_root/examples/learning_methods/run_deep_match_manifest.py" \
-        "$manifest_path" \
-        --device "$deep_match_device" \
-        --summary-output "$summary_path" \
-        --skip-existing
+      manifest_command=(
+        python "$repo_root/examples/learning_methods/run_deep_match_manifest.py"
+        "$manifest_path"
+        --device "$deep_match_device"
+        --summary-output "$summary_path"
+        --num-workers "$deep_match_num_workers"
+      )
+      if [[ -n "$deep_match_torch_num_threads" ]]; then
+        manifest_command+=(--torch-num-threads "$deep_match_torch_num_threads")
+      fi
+      if [[ "$force_rerun_deep_match" == "1" ]]; then
+        manifest_command+=(--force-rerun)
+      else
+        manifest_command+=(--skip-existing)
+      fi
+      printf 'Manifest command:'
+      printf ' %q' "${manifest_command[@]}"
+      printf '\n'
+      "${manifest_command[@]}"
     ) 2>&1 | tee -a "$manifest_log_path"
     local status=${PIPESTATUS[0]}
     [[ "$status" -eq 0 ]] || return "$status"
@@ -228,6 +271,20 @@ while [[ $# -gt 0 ]]; do
       deep_match_device=$2
       shift 2
       ;;
+    --deep-match-num-workers)
+      require_option_value "--deep-match-num-workers" "${2-}"
+      deep_match_num_workers=$2
+      shift 2
+      ;;
+    --deep-match-torch-num-threads)
+      require_option_value "--deep-match-torch-num-threads" "${2-}"
+      deep_match_torch_num_threads=$2
+      shift 2
+      ;;
+    --force-rerun-deep-match)
+      force_rerun_deep_match=1
+      shift
+      ;;
     --only)
       [[ $# -ge 2 ]] || die "missing value for --only"
       only_labels=$2
@@ -268,6 +325,13 @@ case "$deep_match_device" in
   auto|cpu|cuda) ;;
   *) die "unsupported --device: $deep_match_device" ;;
 esac
+require_positive_integer "--deep-match-num-workers" "$deep_match_num_workers"
+if (( 10#$deep_match_num_workers > max_deep_match_num_workers )); then
+  die "--deep-match-num-workers must be between 1 and $max_deep_match_num_workers"
+fi
+if [[ -n "$deep_match_torch_num_threads" ]]; then
+  require_positive_integer "--deep-match-torch-num-threads" "$deep_match_torch_num_threads"
+fi
 
 mkdir -p "$logs_dir"
 write_lightglue_config "$config_path"

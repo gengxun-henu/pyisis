@@ -803,6 +803,10 @@ cli_sources = {
     "match_preset_path": ("explicit_match_preset_path", "match_preset_path"),
     "matcher_method": ("explicit_matcher_method", "MATCHER_METHOD"),
     "deep_match_config_path": ("explicit_deep_matcher_config_path", "DEEP_MATCHER_CONFIG_PATH"),
+    "deep_match_mode": ("explicit_deep_match_mode", "DEEP_MATCH_MODE"),
+    "deep_match_temp_root_dir": ("explicit_deep_match_temp_root_dir", "DEEP_MATCH_TEMP_ROOT_DIR"),
+    "deep_match_manifest_dir": ("explicit_deep_match_manifest_dir", "DEEP_MATCH_MANIFEST_DIR"),
+    "deep_match_manifest_summary": ("explicit_deep_match_manifest_summary", "DEEP_MATCH_MANIFEST_SUMMARY"),
     "enable_adaptive_routing": ("explicit_adaptive_routing", "ADAPTIVE_ROUTING"),
     "adaptive_routing_profile": ("explicit_adaptive_routing_profile", "ADAPTIVE_ROUTING_PROFILE"),
     "enable_low_resolution_offset_estimation": (
@@ -827,6 +831,10 @@ cli_sources = {
     "visualization_target_long_edge": ("explicit_visualization_target_long_edge", "VISUALIZATION_TARGET_LONG_EDGE"),
     "preview_crop_margin_pixels": ("explicit_preview_crop_margin_pixels", "PREVIEW_CROP_MARGIN_PIXELS"),
     "preview_cache_source": ("explicit_preview_cache_source", "PREVIEW_CACHE_SOURCE"),
+    "skip_final_merge": ("explicit_skip_final_merge", "SKIP_FINAL_MERGE"),
+    "post_merge_control_measure": ("explicit_post_merge_control_measure", "POST_MERGE_CONTROL_MEASURE"),
+    "post_merge_output": ("explicit_post_merge_output", "POST_MERGE_OUTPUT_PATH"),
+    "post_merge_decimals": ("explicit_post_merge_decimals", "POST_MERGE_DECIMALS"),
 }
 for parameter_name, (marker_name, value_name) in cli_sources.items():
     if is_present(env(marker_name)):
@@ -1270,6 +1278,10 @@ main() {
   local explicit_matcher_method=""
   local explicit_match_preset_path=""
   local explicit_deep_matcher_config_path=""
+  local explicit_deep_match_mode=""
+  local explicit_deep_match_temp_root_dir=""
+  local explicit_deep_match_manifest_dir=""
+  local explicit_deep_match_manifest_summary=""
   local match_preset_path=""
   local explicit_adaptive_routing=""
   local explicit_adaptive_routing_profile=""
@@ -1283,6 +1295,10 @@ main() {
   local explicit_visualization_target_long_edge=""
   local explicit_preview_crop_margin_pixels=""
   local explicit_preview_cache_source=""
+  local explicit_skip_final_merge=""
+  local explicit_post_merge_control_measure=""
+  local explicit_post_merge_output=""
+  local explicit_post_merge_decimals=""
   local deep_match_temp_root_dir_input=""
   local deep_match_manifest_dir_input=""
   local deep_match_manifest_summary_input=""
@@ -1464,6 +1480,7 @@ main() {
       --deep-match-mode)
         [[ $# -ge 2 ]] || die "missing value for --deep-match-mode"
         DEEP_MATCH_MODE=$2
+        explicit_deep_match_mode=$2
         shift 2
         ;;
       --deep-match-config-path)
@@ -1475,16 +1492,19 @@ main() {
       --deep-match-temp-root-dir)
         [[ $# -ge 2 ]] || die "missing value for --deep-match-temp-root-dir"
         deep_match_temp_root_dir_input=$2
+        explicit_deep_match_temp_root_dir=$2
         shift 2
         ;;
       --deep-match-manifest-dir)
         [[ $# -ge 2 ]] || die "missing value for --deep-match-manifest-dir"
         deep_match_manifest_dir_input=$2
+        explicit_deep_match_manifest_dir=$2
         shift 2
         ;;
       --deep-match-manifest-summary)
         [[ $# -ge 2 ]] || die "missing value for --deep-match-manifest-summary"
         deep_match_manifest_summary_input=$2
+        explicit_deep_match_manifest_summary=$2
         shift 2
         ;;
       --enable-low-resolution-offset-estimation)
@@ -1588,20 +1608,24 @@ main() {
         ;;
       --skip-final-merge)
         SKIP_FINAL_MERGE="1"
+        explicit_skip_final_merge="1"
         shift
         ;;
       --post-merge-control-measure)
         POST_MERGE_CONTROL_MEASURE="1"
+        explicit_post_merge_control_measure="1"
         shift
         ;;
       --post-merge-output)
         [[ $# -ge 2 ]] || die "missing value for --post-merge-output"
         post_merge_output_input=$2
+        explicit_post_merge_output=$2
         shift 2
         ;;
       --post-merge-decimals)
         [[ $# -ge 2 ]] || die "missing value for --post-merge-decimals"
         POST_MERGE_DECIMALS=$2
+        explicit_post_merge_decimals=$2
         shift 2
         ;;
       -h|--help)
@@ -1853,10 +1877,14 @@ PY
   export print_parameter_groups validate_parameters_only strict_parameter_validation explicit_strict_parameter_validation parameter_profile
   export explicit_num_worker_parallel_cpu explicit_use_parallel_cpu explicit_pair_id_start explicit_valid_pixel_percent_threshold explicit_invalid_pixel_radius
   export explicit_match_preset_path explicit_matcher_method explicit_deep_matcher_config_path
+  export explicit_deep_match_mode explicit_deep_match_temp_root_dir explicit_deep_match_manifest_dir explicit_deep_match_manifest_summary
   export explicit_adaptive_routing explicit_adaptive_routing_profile explicit_enable_low_resolution_offset_estimation explicit_low_resolution_level
   export explicit_low_resolution_max_mean_reprojection_error_pixels explicit_low_resolution_min_retained_match_count explicit_low_resolution_max_mean_projected_offset_meters
   export explicit_visualization_mode explicit_memory_profile explicit_visualization_target_long_edge explicit_preview_crop_margin_pixels explicit_preview_cache_source
+  export explicit_skip_final_merge explicit_post_merge_control_measure explicit_post_merge_output explicit_post_merge_decimals
   export match_preset_path MATCHER_METHOD DEEP_MATCHER_CONFIG_PATH ADAPTIVE_ROUTING ADAPTIVE_ROUTING_PROFILE USE_PARALLEL_CPU NUM_WORKER_PARALLEL_CPU
+  export DEEP_MATCH_MODE DEEP_MATCH_TEMP_ROOT_DIR DEEP_MATCH_MANIFEST_DIR DEEP_MATCH_MANIFEST_SUMMARY
+  export SKIP_FINAL_MERGE POST_MERGE_CONTROL_MEASURE POST_MERGE_OUTPUT_PATH POST_MERGE_DECIMALS
   export PAIR_ID_START VALID_PIXEL_PERCENT_THRESHOLD INVALID_PIXEL_RADIUS
   export ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION LOW_RESOLUTION_LEVEL LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT
   export LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS VISUALIZATION_MODE MEMORY_PROFILE VISUALIZATION_TARGET_LONG_EDGE PREVIEW_CROP_MARGIN_PIXELS PREVIEW_CACHE_SOURCE

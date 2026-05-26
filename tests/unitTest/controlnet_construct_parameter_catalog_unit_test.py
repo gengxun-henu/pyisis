@@ -41,6 +41,63 @@ class ControlNetParameterCatalogUnitTest(unittest.TestCase):
         self.assertIn("Low Resolution", result.stdout)
         self.assertIn("--low-resolution-level", result.stdout)
 
+    def test_catalog_text_prints_canonical_names_defaults_allowed_values_and_config_paths(self):
+        script_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "print_parameter_catalog.py"
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(script_path),
+                "--entrypoint",
+                "run_pipeline_example",
+                "--format",
+                "text",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("--matcher-method", result.stdout)
+        self.assertIn("name: matcher_method", result.stdout)
+        self.assertIn("allowed: bf", result.stdout)
+        self.assertIn("config: ImageMatch.matcher_method", result.stdout)
+        self.assertIn("--strict-parameter-validation", result.stdout)
+        self.assertIn("default: False", result.stdout)
+
+    def test_run_pipeline_catalog_marks_config_only_parameters_without_cli_flags(self):
+        from controlnet_construct.parameter_catalog import parameter_catalog_as_dict
+
+        script_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "print_parameter_catalog.py"
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(script_path),
+                "--entrypoint",
+                "run_pipeline_example",
+                "--format",
+                "text",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("  ratio_test:", result.stdout)
+        self.assertIn("  use_gpu:", result.stdout)
+        self.assertIn("cli: config-only for run_pipeline_example", result.stdout)
+        self.assertNotIn("  --ratio-test:", result.stdout)
+        self.assertNotIn("  --use-gpu:", result.stdout)
+
+        catalog = parameter_catalog_as_dict(entrypoint="run_pipeline_example")
+        parameters = {parameter["name"]: parameter for parameter in catalog["parameters"]}
+        self.assertIsNone(parameters["ratio_test"]["cli_flag"])
+        self.assertIsNone(parameters["use_gpu"]["cli_flag"])
+        self.assertEqual(parameters["matcher_method"]["cli_flag"], "--matcher-method")
+
     def test_catalog_cli_validates_payload_json(self):
         script_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "print_parameter_catalog.py"
         payload = {
@@ -185,6 +242,57 @@ class ControlNetParameterCatalogUnitTest(unittest.TestCase):
         self.assertEqual(profile.cli_flag, "--parameter-profile")
         self.assertEqual(profile.allowed_values, ("conservative", "balanced", "aggressive"))
         self.assertIn("run_pipeline_example", profile.entrypoints)
+
+    def test_run_pipeline_catalog_covers_wrapper_validation_surface(self):
+        from controlnet_construct.parameter_catalog import PARAMETER_BY_NAME
+
+        expected_fields = {
+            "deep_match_mode",
+            "deep_match_temp_root_dir",
+            "deep_match_manifest_dir",
+            "deep_match_manifest_summary",
+            "match_preset_path",
+            "matcher_method",
+            "deep_match_config_path",
+            "valid_pixel_percent_threshold",
+            "invalid_pixel_radius",
+            "enable_low_resolution_offset_estimation",
+            "low_resolution_level",
+            "low_resolution_max_mean_reprojection_error_pixels",
+            "low_resolution_min_retained_match_count",
+            "low_resolution_max_mean_projected_offset_meters",
+            "adaptive_routing_profile",
+            "use_parallel_cpu",
+            "num_worker_parallel_cpu",
+            "visualization_mode",
+            "memory_profile",
+            "visualization_target_long_edge",
+            "preview_crop_margin_pixels",
+            "preview_cache_source",
+            "pair_id_start",
+            "merged_net",
+            "merge_script",
+            "merge_log",
+            "pair_list",
+            "timing_json",
+            "skip_final_merge",
+            "post_merge_control_measure",
+            "post_merge_output",
+            "post_merge_decimals",
+            "strict_parameter_validation",
+        }
+
+        missing = sorted(field for field in expected_fields if field not in PARAMETER_BY_NAME)
+        self.assertEqual(missing, [])
+        for field in expected_fields:
+            self.assertIn("run_pipeline_example", PARAMETER_BY_NAME[field].entrypoints, field)
+
+    def test_run_pipeline_catalog_uses_actual_wrapper_adaptive_routing_flag(self):
+        from controlnet_construct.parameter_catalog import PARAMETER_BY_NAME
+
+        adaptive = PARAMETER_BY_NAME["enable_adaptive_routing"]
+        self.assertEqual(adaptive.cli_flag, "--adaptive-routing")
+        self.assertIn("run_pipeline_example", adaptive.entrypoints)
 
     def test_allowed_values_match_runtime_constants(self):
         from controlnet_construct.parameter_catalog import PARAMETER_BY_NAME

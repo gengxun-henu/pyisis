@@ -106,7 +106,19 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
         self.assertIn("match_preset_path", result.error_text())
         self.assertIn("deep_match_config_path", result.error_text())
 
-    def test_inactive_low_resolution_values_warn_without_strict_validation(self):
+    def test_inactive_low_resolution_config_values_warn_without_strict_validation(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        result = validate_parameters(
+            "run_pipeline_example",
+            config_values={"enable_low_resolution_offset_estimation": False, "low_resolution_level": 4},
+        )
+
+        self.assertFalse(result.has_errors, result.error_text())
+        self.assertIn("low_resolution_level", result.warning_text())
+        self.assertIn("enable_low_resolution_offset_estimation is false", result.warning_text())
+
+    def test_inactive_low_resolution_cli_values_error_without_strict_validation(self):
         from controlnet_construct.parameter_validation import validate_parameters
 
         result = validate_parameters(
@@ -114,15 +126,34 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
             cli_values={"enable_low_resolution_offset_estimation": False, "low_resolution_level": 4},
         )
 
-        self.assertFalse(result.has_errors, result.error_text())
-        self.assertIn("low_resolution_level", result.warning_text())
+        self.assertTrue(result.has_errors)
+        self.assertIn("low_resolution_level", result.error_text())
+        self.assertIn("explicit CLI", result.error_text())
+
+    def test_inactive_gpu_config_values_warn_but_cli_values_error(self):
+        from controlnet_construct.parameter_validation import validate_parameters
+
+        config_result = validate_parameters(
+            "run_pipeline_example",
+            config_values={"use_gpu": False, "gpu_batch_size": 8},
+        )
+        self.assertFalse(config_result.has_errors, config_result.error_text())
+        self.assertIn("gpu_batch_size", config_result.warning_text())
+
+        cli_result = validate_parameters(
+            "run_pipeline_example",
+            cli_values={"use_gpu": False, "gpu_batch_size": 8},
+        )
+        self.assertTrue(cli_result.has_errors)
+        self.assertIn("gpu_batch_size", cli_result.error_text())
+        self.assertIn("explicit CLI", cli_result.error_text())
 
     def test_strict_parameter_validation_promotes_low_resolution_warning_to_error(self):
         from controlnet_construct.parameter_validation import validate_parameters
 
         result = validate_parameters(
             "run_pipeline_example",
-            cli_values={
+            config_values={
                 "enable_low_resolution_offset_estimation": False,
                 "low_resolution_level": 4,
                 "strict_parameter_validation": True,
@@ -164,7 +195,7 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
 
         result = validate_parameters(
             "image_match",
-            cli_values={"visualization_mode": "full", "visualization_target_long_edge": 1024},
+            config_values={"visualization_mode": "full", "visualization_target_long_edge": 1024},
         )
 
         self.assertFalse(result.has_errors, result.error_text())
@@ -176,7 +207,7 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
 
         result = validate_parameters(
             "run_pipeline_example",
-            cli_values={
+            config_values={
                 "visualization_mode": "full",
                 "visualization_target_long_edge": 1024,
                 "strict_parameter_validation": True,
@@ -245,7 +276,7 @@ class ControlNetParameterValidationUnitTest(unittest.TestCase):
 
         result = validate_parameters(
             "run_pipeline_example",
-            cli_values={
+            config_values={
                 "enable_low_resolution_offset_estimation": "off",
                 "low_resolution_level": 4,
                 "strict_parameter_validation": "1",

@@ -204,6 +204,37 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("--matcher-method", result.stdout)
         self.assertIn("Low Resolution", result.stdout)
 
+    def test_run_pipeline_example_help_shows_compact_parameter_group_index(self):
+        result = subprocess.run(
+            [
+                "bash",
+                str(RUN_PIPELINE_EXAMPLE_PATH),
+                "--help",
+            ],
+            cwd=PROJECT_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Parameter groups:", result.stdout)
+        for group_name in (
+            "inputs",
+            "pipeline",
+            "matching",
+            "tile",
+            "low_resolution",
+            "adaptive_routing",
+            "execution",
+            "visualization",
+            "controlnet",
+            "reporting",
+        ):
+            self.assertIn(group_name, result.stdout)
+        self.assertIn("--print-parameter-groups", result.stdout)
+        self.assertIn("full catalog", result.stdout)
+
     def test_run_pipeline_example_validates_parameters_only_from_config(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
@@ -396,6 +427,66 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(expected_field, result.stderr)
 
+    def test_run_pipeline_example_inactive_cli_low_resolution_value_errors_without_strict(self):
+        result = self._run_pipeline_validate_parameters_only(["--low-resolution-level", "4"])
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("low_resolution_level", result.stderr)
+        self.assertIn("explicit CLI", result.stderr)
+
+    def test_run_pipeline_example_inactive_config_low_resolution_value_warns_without_strict(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text("/tmp/left.cub\n/tmp/right.cub\n", encoding="utf-8")
+            dom_list = work_dir / "doms.lis"
+            dom_list.write_text("/tmp/left_dom.cub\n/tmp/right_dom.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "inactive_config_low_resolution_unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                        "ImageMatch": {
+                            "matcher_method": "bf",
+                            "enable_low_resolution_offset_estimation": False,
+                            "low_resolution_level": 4,
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--validate-parameters-only",
+                ],
+                cwd=PROJECT_ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("warning:", result.stderr)
+        self.assertIn("low_resolution_level", result.stderr)
+
+    def test_run_pipeline_example_deep_match_manifest_dir_is_inactive_in_direct_mode(self):
+        result = self._run_pipeline_validate_parameters_only(["--deep-match-manifest-dir", "/tmp/deep-match-manifests"])
+
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("deep_match_manifest_dir", result.stderr)
+        self.assertIn("deep_match_mode is direct", result.stderr)
+
     def test_run_pipeline_example_strict_parameter_validation_promotes_warning(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
@@ -414,6 +505,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "ImageMatch": {
                             "matcher_method": "bf",
                             "num_worker_parallel_cpu": 3,
+                            "enable_low_resolution_offset_estimation": False,
+                            "low_resolution_level": 4,
                         },
                     }
                 )
@@ -429,8 +522,6 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     str(work_dir),
                     "--config",
                     str(config_path),
-                    "--low-resolution-level",
-                    "4",
                     "--strict-parameter-validation",
                     "--validate-parameters-only",
                 ],
@@ -462,6 +553,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "ImageMatch": {
                             "matcher_method": "bf",
                             "num_worker_parallel_cpu": 3,
+                            "enable_low_resolution_offset_estimation": False,
+                            "low_resolution_level": 4,
                         },
                         "Reporting": {
                             "strict_parameter_validation": True,
@@ -480,8 +573,6 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     str(work_dir),
                     "--config",
                     str(config_path),
-                    "--low-resolution-level",
-                    "4",
                     "--validate-parameters-only",
                 ],
                 cwd=PROJECT_ROOT,

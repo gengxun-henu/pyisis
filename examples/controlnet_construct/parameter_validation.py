@@ -114,7 +114,7 @@ def validate_parameters(
     _validate_cli_conflicts(provided_by_source["cli"], errors)
     _validate_deep_match_config(values, spec_by_name, errors)
     _validate_cross_field_rules(entrypoint, values, errors)
-    _collect_inactive_parameter_warnings(values, provenance, spec_by_name, warnings)
+    _collect_inactive_parameter_messages(values, provenance, spec_by_name, warnings, errors)
 
     if values.get("strict_parameter_validation") is True and warnings:
         for warning in warnings:
@@ -368,34 +368,37 @@ def _validate_cross_field_rules(entrypoint: str, values: dict[str, Any], errors:
         )
 
 
-def _collect_inactive_parameter_warnings(
+def _collect_inactive_parameter_messages(
     values: dict[str, Any],
     provenance: dict[str, str],
     spec_by_name: dict[str, Any],
     warnings: list[ValidationMessage],
+    errors: list[ValidationMessage],
 ) -> None:
+    def add_inactive_message(name: str, message: str) -> None:
+        if provenance.get(name) == "cli":
+            errors.append(ValidationMessage(name, f"explicit CLI {message}"))
+        else:
+            warnings.append(ValidationMessage(name, message))
+
     if values.get("enable_low_resolution_offset_estimation") is False:
         for name in sorted(spec_by_name):
             if name.startswith("low_resolution_") or name in ("left_low_resolution_dom", "right_low_resolution_dom"):
                 if _is_explicit_value(provenance, name):
-                    warnings.append(
-                        ValidationMessage(
-                            name,
-                            f"{name} was explicitly set while enable_low_resolution_offset_estimation is false",
-                        )
+                    add_inactive_message(
+                        name,
+                        f"{name} was explicitly set while enable_low_resolution_offset_estimation is false",
                     )
 
     if values.get("use_gpu") is False:
         for name in sorted(spec_by_name):
             if name.startswith("gpu_") and _is_explicit_value(provenance, name):
-                warnings.append(ValidationMessage(name, f"{name} was explicitly set while use_gpu is false"))
+                add_inactive_message(name, f"{name} was explicitly set while use_gpu is false")
 
     if values.get("use_parallel_cpu") is False and _is_explicit_value(provenance, "num_worker_parallel_cpu"):
-        warnings.append(
-            ValidationMessage(
-                "num_worker_parallel_cpu",
-                "num_worker_parallel_cpu was explicitly set while use_parallel_cpu is false",
-            )
+        add_inactive_message(
+            "num_worker_parallel_cpu",
+            "num_worker_parallel_cpu was explicitly set while use_parallel_cpu is false",
         )
 
     if values.get("deep_match_mode") == "direct":
@@ -406,29 +409,23 @@ def _collect_inactive_parameter_warnings(
             "deep_match_manifest_summary",
         ):
             if name in spec_by_name and _is_explicit_value(provenance, name):
-                warnings.append(
-                    ValidationMessage(
-                        name,
-                        f"{name} was explicitly set while deep_match_mode is direct",
-                    )
+                add_inactive_message(
+                    name,
+                    f"{name} was explicitly set while deep_match_mode is direct",
                 )
 
     if values.get("visualization_mode") == "full":
         for name in _REDUCED_PREVIEW_FIELDS:
             if name in spec_by_name and _is_explicit_value(provenance, name):
-                warnings.append(
-                    ValidationMessage(
-                        name,
-                        f"{name} was explicitly set while visualization_mode is full",
-                    )
+                add_inactive_message(
+                    name,
+                    f"{name} was explicitly set while visualization_mode is full",
                 )
 
     if values.get("post_merge_control_measure") in (False, None, ""):
         for name in ("post_merge_output", "post_merge_decimals"):
             if name in spec_by_name and _is_explicit_value(provenance, name):
-                warnings.append(
-                    ValidationMessage(
-                        name,
-                        f"{name} was explicitly set while post_merge_control_measure is false",
-                    )
+                add_inactive_message(
+                    name,
+                    f"{name} was explicitly set while post_merge_control_measure is false",
                 )

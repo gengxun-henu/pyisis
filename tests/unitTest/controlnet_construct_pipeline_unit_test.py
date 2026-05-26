@@ -284,6 +284,114 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("NETWORK_ID=validate_only_unit", result.stdout)
         self.assertNotIn("Step 1/", result.stdout)
 
+    def test_run_pipeline_example_validate_only_reads_image_match_config_once(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+            original_list = work_dir / "original_images.lis"
+            original_list.write_text("/tmp/left.cub\n/tmp/right.cub\n", encoding="utf-8")
+            dom_list = work_dir / "doms.lis"
+            dom_list.write_text("/tmp/left_dom.cub\n/tmp/right_dom.cub\n", encoding="utf-8")
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "validate_config_probe_unit",
+                        "TargetName": "Mars",
+                        "UserName": "unit",
+                        "ImageMatch": {
+                            "matcher_method": "bf",
+                            "num_worker_parallel_cpu": 3,
+                            "low_resolution_level": 4,
+                        },
+                    }
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            calls_path = temp_dir / "print_config_default_calls.txt"
+            stdin_calls_path = temp_dir / "stdin_calls.txt"
+            catalog_calls_path = temp_dir / "catalog_calls.txt"
+            fake_python = temp_dir / "fake_python.py"
+            fake_python.write_text(
+                "\n".join(
+                    [
+                        "#!/usr/bin/env python3",
+                        "import os",
+                        "import subprocess",
+                        "import sys",
+                        f"real_python = {sys.executable!r}",
+                        f"calls_path = {str(calls_path)!r}",
+                        f"stdin_calls_path = {str(stdin_calls_path)!r}",
+                        "args = sys.argv[1:]",
+                        "if args and args[0].endswith('examples/image_match/image_match.py') and '--print-config-default' in args:",
+                        "    with open(calls_path, 'a', encoding='utf-8') as handle:",
+                        "        handle.write(args[args.index('--print-config-default') + 1] + '\\n')",
+                        "if args and args[0] == '-':",
+                        "    with open(stdin_calls_path, 'a', encoding='utf-8') as handle:",
+                        "        handle.write('stdin\\n')",
+                        "completed = subprocess.run([real_python, *args], check=False)",
+                        "raise SystemExit(completed.returncode)",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+            fake_catalog_python = temp_dir / "fake_catalog_python.py"
+            fake_catalog_python.write_text(
+                "\n".join(
+                    [
+                        "#!/usr/bin/env python3",
+                        "import subprocess",
+                        "import sys",
+                        "from pathlib import Path",
+                        f"real_python = {sys.executable!r}",
+                        f"catalog_calls_path = {str(catalog_calls_path)!r}",
+                        "args = sys.argv[1:]",
+                        "label = 'stdin' if args and args[0] == '-' else Path(args[0]).name if args else 'empty'",
+                        "with open(catalog_calls_path, 'a', encoding='utf-8') as handle:",
+                        "    handle.write(label + '\\n')",
+                        "completed = subprocess.run([real_python, *args], check=False)",
+                        "raise SystemExit(completed.returncode)",
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_catalog_python.chmod(0o755)
+            env = dict(os.environ)
+            env["PARAMETER_CATALOG_PYTHON_EXECUTABLE"] = str(fake_catalog_python)
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                    "--validate-parameters-only",
+                ],
+                cwd=PROJECT_ROOT,
+                env=env,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            calls = calls_path.read_text(encoding="utf-8").splitlines() if calls_path.exists() else []
+            stdin_calls = stdin_calls_path.read_text(encoding="utf-8").splitlines() if stdin_calls_path.exists() else []
+            catalog_calls = catalog_calls_path.read_text(encoding="utf-8").splitlines() if catalog_calls_path.exists() else []
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("NUM_WORKER_PARALLEL_CPU=3", result.stdout)
+        self.assertEqual(calls, [])
+        self.assertEqual(stdin_calls, ["stdin"])
+        self.assertEqual(catalog_calls, ["stdin"])
+
     def test_run_pipeline_example_parameter_profile_applies_balanced_defaults(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"

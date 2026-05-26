@@ -566,49 +566,60 @@ resolve_default_dom_list() {
   die "could not find a DOM list; checked: $scaled_list and $raw_list"
 }
 
-extract_network_id_from_config() {
+load_run_pipeline_config_values() {
   local config_path=$1
-  "$PYTHON_EXECUTABLE" - "$config_path" <<'PY'
+  "$PYTHON_EXECUTABLE" - "$config_path" "$REPO_ROOT" <<'PY'
 import json
+import shlex
 import sys
 from pathlib import Path
 
-config = json.loads(Path(sys.argv[1]).read_text(encoding='utf-8'))
-value = config.get('NetworkId') or config.get('network_id')
-if not value:
-    raise SystemExit('missing NetworkId in config JSON')
-print(value)
-PY
-}
+config_path = Path(sys.argv[1])
+repo_root = Path(sys.argv[2])
+sys.path.insert(0, str(repo_root / "examples"))
 
-extract_image_match_config_value() {
-  local config_path=$1
-  local field_name=$2
-  local container_order=${3:-image-match-first}
-  "$PYTHON_EXECUTABLE" "$REPO_ROOT/examples/image_match/image_match.py" \
-    --config "$config_path" \
-    --print-config-default "$field_name" \
-    --print-config-default-container-order "$container_order"
-}
+from image_match.image_match import format_image_match_default_for_shell, load_image_match_defaults_from_config
 
-extract_reporting_config_value() {
-  local config_path=$1
-  local field_name=$2
-  "$CATALOG_PYTHON_EXECUTABLE" - "$config_path" "$field_name" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-config = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
-field_name = sys.argv[2]
+config = json.loads(config_path.read_text(encoding="utf-8"))
+network_id = config.get("NetworkId") or config.get("network_id") or ""
 reporting = config.get("Reporting") or config.get("reporting") or {}
-value = reporting.get(field_name)
-if value is None or value == "":
-    raise SystemExit(0)
-if isinstance(value, bool):
-    print("1" if value else "0")
+strict_parameter_validation = reporting.get("strict_parameter_validation")
+
+print(f"config_network_id={shlex.quote(str(network_id))}")
+if strict_parameter_validation is None or strict_parameter_validation == "":
+    print("config_strict_parameter_validation=''")
+elif isinstance(strict_parameter_validation, bool):
+    print(f"config_strict_parameter_validation={'1' if strict_parameter_validation else '0'}")
 else:
-    print(value)
+    print(f"config_strict_parameter_validation={shlex.quote(str(strict_parameter_validation))}")
+
+defaults = load_image_match_defaults_from_config(config_path)
+field_map = {
+    "config_match_preset_path": "match_preset_path",
+    "config_valid_pixel_percent_threshold": "valid_pixel_percent_threshold",
+    "config_use_parallel_cpu": "use_parallel_cpu",
+    "config_num_worker_parallel_cpu": "num_worker_parallel_cpu",
+    "config_invalid_pixel_radius": "invalid_pixel_radius",
+    "config_matcher_method": "matcher_method",
+    "config_enable_adaptive_routing": "enable_adaptive_routing",
+    "config_adaptive_routing_profile": "adaptive_routing_profile",
+    "config_deep_matcher_config_path": "deep_match_config_path",
+    "config_enable_low_resolution_offset_estimation": "enable_low_resolution_offset_estimation",
+    "config_low_resolution_level": "low_resolution_level",
+    "config_low_resolution_max_mean_reprojection_error_pixels": "low_resolution_max_mean_reprojection_error_pixels",
+    "config_low_resolution_min_retained_match_count": "low_resolution_min_retained_match_count",
+    "config_low_resolution_max_mean_projected_offset_meters": "low_resolution_max_mean_projected_offset_meters",
+    "config_visualization_mode": "visualization_mode",
+    "config_memory_profile": "memory_profile",
+    "config_visualization_target_long_edge": "visualization_target_long_edge",
+    "config_preview_crop_margin_pixels": "preview_crop_margin_pixels",
+    "config_preview_cache_source": "preview_cache_source",
+}
+for shell_name, config_name in field_map.items():
+    value = ""
+    if config_name in defaults:
+        value = format_image_match_default_for_shell(defaults[config_name])
+    print(f"{shell_name}={shlex.quote(value)}")
 PY
 }
 
@@ -723,10 +734,8 @@ print_parameter_groups() {
     --format text
 }
 
-build_parameter_validation_payload() {
-  local payload_path=$1
-  "$CATALOG_PYTHON_EXECUTABLE" - "$payload_path" <<'PY'
-import json
+validate_controlnet_parameters() {
+  "$CATALOG_PYTHON_EXECUTABLE" - <<'PY'
 import os
 import sys
 from pathlib import Path
@@ -734,8 +743,8 @@ from pathlib import Path
 repo_root = Path(os.environ["REPO_ROOT"])
 sys.path.insert(0, str(repo_root / "examples"))
 from controlnet_construct.parameter_catalog import PARAMETER_BY_NAME, parameters_for_entrypoint
+from controlnet_construct.parameter_validation import validate_parameters
 
-payload_path = Path(sys.argv[1])
 supported_names = {parameter.name for parameter in parameters_for_entrypoint("run_pipeline_example")}
 spec_by_name = {name: PARAMETER_BY_NAME[name] for name in supported_names}
 
@@ -775,6 +784,11 @@ def coerce_value(name: str, value: object) -> object:
 def add_value(target: dict[str, object], name: str, value: object) -> None:
     if name in supported_names and is_present(value):
         target[name] = coerce_value(name, value)
+
+
+def print_messages(prefix: str, messages: tuple[object, ...]) -> None:
+    for message in messages:
+        print(f"{prefix}: {message.field}: {message.message}", file=sys.stderr)
 
 
 cli_values: dict[str, object] = {}
@@ -887,27 +901,25 @@ preset_sources = {
 for parameter_name, value_name in preset_sources.items():
     add_value(preset_values, parameter_name, env(value_name))
 
-payload = {
-    "entrypoint": "run_pipeline_example",
-    "cli_values": cli_values,
-    "profile_values": profile_values,
-    "config_values": config_values,
-    "preset_values": preset_values,
-}
-payload_path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-PY
-}
+try:
+    result = validate_parameters(
+        "run_pipeline_example",
+        cli_values=cli_values,
+        profile_values=profile_values,
+        config_values=config_values,
+        preset_values=preset_values,
+    )
+except ValueError as exc:
+    print(f"error: validate-json: {exc}", file=sys.stderr)
+    raise SystemExit(2)
 
-validate_controlnet_parameters() {
-  local payload_path
-  payload_path=$(mktemp "${TMPDIR:-/tmp}/run_pipeline_parameters.XXXXXX.json")
-  build_parameter_validation_payload "$payload_path"
-  local status=0
-  "$CATALOG_PYTHON_EXECUTABLE" "$REPO_ROOT/examples/controlnet_construct/print_parameter_catalog.py" \
-    --validate-json "$payload_path" \
-    --shell-assignments || status=$?
-  rm -f "$payload_path"
-  return "$status"
+print_messages("warning", result.warnings)
+if result.errors:
+    print_messages("error", result.errors)
+    raise SystemExit(2)
+
+print(result.to_shell_assignments())
+PY
 }
 
 print_parameter_validation_summary() {
@@ -1322,6 +1334,7 @@ main() {
   local config_preview_crop_margin_pixels=""
   local config_preview_cache_source=""
   local config_strict_parameter_validation=""
+  local config_network_id=""
   local preset_match_preset_path=""
   local preset_matcher_method=""
   local preset_deep_match_config_path=""
@@ -1698,11 +1711,13 @@ main() {
   require_file "$ORIGINAL_LIST"
   require_file "$DOM_LIST"
   require_file "$CONFIG_PATH"
+  local run_pipeline_config_assignments
+  run_pipeline_config_assignments=$(load_run_pipeline_config_values "$CONFIG_PATH")
+  eval "$run_pipeline_config_assignments"
 
   if [[ -n "$explicit_match_preset_path" ]]; then
     match_preset_path=$(resolve_cli_relative_path "$explicit_match_preset_path")
   elif [[ -z "$explicit_matcher_method" && -z "$explicit_deep_matcher_config_path" ]]; then
-    config_match_preset_path=$(extract_image_match_config_value "$CONFIG_PATH" "match_preset_path")
     if [[ -n "$config_match_preset_path" && "$config_match_preset_path" != "null" ]]; then
       match_preset_path=$(resolve_config_relative_path "$config_match_preset_path" "$CONFIG_PATH")
     fi
@@ -1721,16 +1736,15 @@ main() {
   fi
 
   if [[ -z "$NETWORK_ID" ]]; then
-    NETWORK_ID=$(extract_network_id_from_config "$CONFIG_PATH")
+    NETWORK_ID="$config_network_id"
+    [[ -n "$NETWORK_ID" ]] || die "missing NetworkId in config JSON"
   fi
   if [[ "$strict_parameter_validation" != "1" ]]; then
-    config_strict_parameter_validation=$(extract_reporting_config_value "$CONFIG_PATH" "strict_parameter_validation")
     if [[ "$config_strict_parameter_validation" == "1" ]]; then
       strict_parameter_validation="1"
     fi
   fi
   if [[ -z "$explicit_valid_pixel_percent_threshold" ]]; then
-    config_valid_pixel_percent_threshold=$(extract_image_match_config_value "$CONFIG_PATH" "valid_pixel_percent_threshold")
     if [[ -n "$config_valid_pixel_percent_threshold" ]]; then
       VALID_PIXEL_PERCENT_THRESHOLD="$config_valid_pixel_percent_threshold"
     fi
@@ -1739,43 +1753,36 @@ main() {
     VALID_PIXEL_PERCENT_THRESHOLD="$DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD"
   fi
   if [[ -z "$explicit_use_parallel_cpu" ]]; then
-    config_use_parallel_cpu=$(extract_image_match_config_value "$CONFIG_PATH" "use_parallel_cpu" "image-match-first")
     if [[ -n "$config_use_parallel_cpu" ]]; then
       USE_PARALLEL_CPU="$config_use_parallel_cpu"
     fi
   fi
   if [[ -z "$explicit_num_worker_parallel_cpu" ]]; then
-    config_num_worker_parallel_cpu=$(extract_image_match_config_value "$CONFIG_PATH" "num_worker_parallel_cpu")
     if [[ -n "$config_num_worker_parallel_cpu" ]]; then
       NUM_WORKER_PARALLEL_CPU="$config_num_worker_parallel_cpu"
     fi
   fi
   if [[ -z "$explicit_invalid_pixel_radius" ]]; then
-    config_invalid_pixel_radius=$(extract_image_match_config_value "$CONFIG_PATH" "invalid_pixel_radius")
     if [[ -n "$config_invalid_pixel_radius" ]]; then
       INVALID_PIXEL_RADIUS="$config_invalid_pixel_radius"
     fi
   fi
   if [[ -z "$match_preset_path" && -z "$explicit_matcher_method" ]]; then
-    config_matcher_method=$(extract_image_match_config_value "$CONFIG_PATH" "matcher_method")
     if [[ -n "$config_matcher_method" ]]; then
       MATCHER_METHOD="$config_matcher_method"
     fi
   fi
   if [[ -z "$explicit_adaptive_routing" ]]; then
-    config_enable_adaptive_routing=$(extract_image_match_config_value "$CONFIG_PATH" "enable_adaptive_routing")
     if [[ -n "$config_enable_adaptive_routing" ]]; then
       ADAPTIVE_ROUTING="$config_enable_adaptive_routing"
     fi
   fi
   if [[ -z "$explicit_adaptive_routing_profile" ]]; then
-    config_adaptive_routing_profile=$(extract_image_match_config_value "$CONFIG_PATH" "adaptive_routing_profile")
     if [[ -n "$config_adaptive_routing_profile" ]]; then
       ADAPTIVE_ROUTING_PROFILE="$config_adaptive_routing_profile"
     fi
   fi
   if [[ -z "$match_preset_path" && -z "$DEEP_MATCHER_CONFIG_PATH" ]]; then
-    config_deep_matcher_config_path=$(extract_image_match_config_value "$CONFIG_PATH" "deep_matcher_config_path")
     if [[ -n "$config_deep_matcher_config_path" && "$config_deep_matcher_config_path" != "null" ]]; then
       config_deep_matcher_config_path=$(resolve_config_relative_path "$config_deep_matcher_config_path" "$CONFIG_PATH")
       DEEP_MATCHER_CONFIG_PATH="$config_deep_matcher_config_path"
@@ -1809,61 +1816,51 @@ PY
   esac
 
   if [[ -z "$explicit_enable_low_resolution_offset_estimation" ]]; then
-    config_enable_low_resolution_offset_estimation=$(extract_image_match_config_value "$CONFIG_PATH" "enable_low_resolution_offset_estimation")
     if [[ -n "$config_enable_low_resolution_offset_estimation" ]]; then
       ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION="$config_enable_low_resolution_offset_estimation"
     fi
   fi
   if [[ -z "$explicit_low_resolution_level" ]]; then
-    config_low_resolution_level=$(extract_image_match_config_value "$CONFIG_PATH" "low_resolution_level")
     if [[ -n "$config_low_resolution_level" ]]; then
       LOW_RESOLUTION_LEVEL="$config_low_resolution_level"
     fi
   fi
   if [[ -z "$explicit_low_resolution_max_mean_reprojection_error_pixels" ]]; then
-    config_low_resolution_max_mean_reprojection_error_pixels=$(extract_image_match_config_value "$CONFIG_PATH" "low_resolution_max_mean_reprojection_error_pixels")
     if [[ -n "$config_low_resolution_max_mean_reprojection_error_pixels" ]]; then
       LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS="$config_low_resolution_max_mean_reprojection_error_pixels"
     fi
   fi
   if [[ -z "$explicit_low_resolution_min_retained_match_count" ]]; then
-    config_low_resolution_min_retained_match_count=$(extract_image_match_config_value "$CONFIG_PATH" "low_resolution_min_retained_match_count")
     if [[ -n "$config_low_resolution_min_retained_match_count" ]]; then
       LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT="$config_low_resolution_min_retained_match_count"
     fi
   fi
   if [[ -z "$explicit_low_resolution_max_mean_projected_offset_meters" ]]; then
-    config_low_resolution_max_mean_projected_offset_meters=$(extract_image_match_config_value "$CONFIG_PATH" "low_resolution_max_mean_projected_offset_meters")
     if [[ -n "$config_low_resolution_max_mean_projected_offset_meters" ]]; then
       LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS="$config_low_resolution_max_mean_projected_offset_meters"
     fi
   fi
   if [[ -z "$explicit_visualization_mode" ]]; then
-    config_visualization_mode=$(extract_image_match_config_value "$CONFIG_PATH" "visualization_mode")
     if [[ -n "$config_visualization_mode" ]]; then
       VISUALIZATION_MODE="$config_visualization_mode"
     fi
   fi
   if [[ -z "$explicit_memory_profile" ]]; then
-    config_memory_profile=$(extract_image_match_config_value "$CONFIG_PATH" "memory_profile")
     if [[ -n "$config_memory_profile" ]]; then
       MEMORY_PROFILE="$config_memory_profile"
     fi
   fi
   if [[ -z "$explicit_visualization_target_long_edge" ]]; then
-    config_visualization_target_long_edge=$(extract_image_match_config_value "$CONFIG_PATH" "visualization_target_long_edge")
     if [[ -n "$config_visualization_target_long_edge" ]]; then
       VISUALIZATION_TARGET_LONG_EDGE="$config_visualization_target_long_edge"
     fi
   fi
   if [[ -z "$explicit_preview_crop_margin_pixels" ]]; then
-    config_preview_crop_margin_pixels=$(extract_image_match_config_value "$CONFIG_PATH" "preview_crop_margin_pixels")
     if [[ -n "$config_preview_crop_margin_pixels" ]]; then
       PREVIEW_CROP_MARGIN_PIXELS="$config_preview_crop_margin_pixels"
     fi
   fi
   if [[ -z "$explicit_preview_cache_source" ]]; then
-    config_preview_cache_source=$(extract_image_match_config_value "$CONFIG_PATH" "preview_cache_source")
     if [[ -n "$config_preview_cache_source" ]]; then
       PREVIEW_CACHE_SOURCE="$config_preview_cache_source"
     fi

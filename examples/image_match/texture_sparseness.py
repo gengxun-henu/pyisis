@@ -34,6 +34,7 @@ DEFAULT_GLCM_LEVELS = 16
 DEFAULT_GLCM_DISTANCE = 1
 DEFAULT_GLCM_ANGLE_RADIANS = 0.0
 DEFAULT_IMAGE_AGGREGATION_QUANTILE = 0.90
+_FLOAT32_MAX = float(np.finfo(np.float32).max)
 
 # Sub-score weights for combining SIFT density, gradient magnitude, and GLCM
 # into the tile-level sparseness main score. The plan fixes these as
@@ -54,6 +55,15 @@ _GLCM_CONTRAST_RICH_THRESHOLD = 60.0
 
 def _clamp(value: float, minimum: float = 0.0, maximum: float = 1.0) -> float:
     return max(minimum, min(maximum, float(value)))
+
+
+def _coerce_texture_values(image_values: Any) -> tuple[np.ndarray, np.ndarray]:
+    raw_values = np.asarray(image_values, dtype=np.float64)
+    if raw_values.ndim != 2:
+        raise ValueError("image_values must be a 2-D grayscale array.")
+    finite_mask = np.isfinite(raw_values) & (np.abs(raw_values) <= _FLOAT32_MAX)
+    values = np.where(finite_mask, raw_values, 0.0).astype(np.float32)
+    return values, finite_mask
 
 
 @dataclass(frozen=True, slots=True)
@@ -113,10 +123,7 @@ def _normalize_image_to_uint8(
     are not crushed to zero just because the overall image has high outliers.
     """
 
-    values = np.asarray(image_values, dtype=np.float32)
-    if values.ndim != 2:
-        raise ValueError("image_values must be a 2-D grayscale array.")
-    finite_mask = np.isfinite(values)
+    values, finite_mask = _coerce_texture_values(image_values)
     if invalid_mask is not None:
         invalid_array = np.asarray(invalid_mask, dtype=bool)
         if invalid_array.shape != values.shape:
@@ -479,10 +486,7 @@ def compute_image_texture_sparseness_from_reader(
 
     tile_metrics: list[TileSparsenessMetrics] = []
     for start_y, start_x, height, width in windows:
-        tile_values = np.asarray(
-            read_window(start_x, start_y, width, height),
-            dtype=np.float32,
-        )
+        tile_values = np.asarray(read_window(start_x, start_y, width, height))
         if tile_values.shape != (height, width):
             raise ValueError("read_window must return an array matching the requested tile shape.")
         invalid_mask = None

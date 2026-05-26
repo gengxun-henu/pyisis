@@ -21,6 +21,7 @@ import json
 import sys
 from pathlib import Path
 import unittest
+import warnings
 from unittest.mock import patch
 
 import numpy as np
@@ -92,6 +93,17 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertGreater(structured_probe.mean_gradient, blank_probe.mean_gradient)
         self.assertGreater(structured_probe.laplacian_variance, blank_probe.laplacian_variance)
         self.assertGreater(structured_probe.real_texture_score, blank_probe.real_texture_score)
+
+    def test_texture_probe_ignores_overflow_sized_special_pixels_without_warning(self):
+        image = np.full((96, 96), 120.0, dtype=np.float64)
+        image[0, 0] = 1.0e300
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", RuntimeWarning)
+            probe = compute_real_image_texture_probe(image)
+
+        self.assertEqual(probe.total_pixel_count, image.size)
+        self.assertEqual(probe.valid_pixel_count, image.size - 1)
 
     def test_rich_pair_routes_to_sift_descriptor_matching_first(self):
         texture = ImageTextureProbe(

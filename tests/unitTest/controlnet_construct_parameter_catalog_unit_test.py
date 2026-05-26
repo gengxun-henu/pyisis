@@ -66,6 +66,38 @@ class ControlNetParameterCatalogUnitTest(unittest.TestCase):
         self.assertIn("--strict-parameter-validation", result.stdout)
         self.assertIn("default: False", result.stdout)
 
+    def test_run_pipeline_catalog_marks_config_only_parameters_without_cli_flags(self):
+        from controlnet_construct.parameter_catalog import parameter_catalog_as_dict
+
+        script_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "print_parameter_catalog.py"
+
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(script_path),
+                "--entrypoint",
+                "run_pipeline_example",
+                "--format",
+                "text",
+            ],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("  ratio_test:", result.stdout)
+        self.assertIn("  use_gpu:", result.stdout)
+        self.assertIn("cli: config-only for run_pipeline_example", result.stdout)
+        self.assertNotIn("  --ratio-test:", result.stdout)
+        self.assertNotIn("  --use-gpu:", result.stdout)
+
+        catalog = parameter_catalog_as_dict(entrypoint="run_pipeline_example")
+        parameters = {parameter["name"]: parameter for parameter in catalog["parameters"]}
+        self.assertIsNone(parameters["ratio_test"]["cli_flag"])
+        self.assertIsNone(parameters["use_gpu"]["cli_flag"])
+        self.assertEqual(parameters["matcher_method"]["cli_flag"], "--matcher-method")
+
     def test_catalog_cli_validates_payload_json(self):
         script_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "print_parameter_catalog.py"
         payload = {

@@ -16,12 +16,18 @@ if __package__ is None or __package__ == "":
     sys.path.insert(0, examples_root)
     from controlnet_construct.parameter_catalog import (  # type: ignore[import-not-found]
         GROUP_BY_NAME,
+        cli_flag_for_entrypoint,
         grouped_parameters_for_entrypoint,
         parameter_catalog_as_dict,
     )
     from controlnet_construct.parameter_validation import validate_parameters  # type: ignore[import-not-found]
 else:
-    from .parameter_catalog import GROUP_BY_NAME, grouped_parameters_for_entrypoint, parameter_catalog_as_dict
+    from .parameter_catalog import (
+        GROUP_BY_NAME,
+        cli_flag_for_entrypoint,
+        grouped_parameters_for_entrypoint,
+        parameter_catalog_as_dict,
+    )
     from .parameter_validation import validate_parameters
 
 
@@ -34,8 +40,11 @@ def format_grouped_help(entrypoint: str) -> str:
         group = GROUP_BY_NAME[group_name]
         lines.extend(("", group.title, group.description))
         for parameter in parameters:
-            display_name = parameter.cli_flag or parameter.name
+            entrypoint_cli_flag = cli_flag_for_entrypoint(parameter, entrypoint)
+            display_name = entrypoint_cli_flag or parameter.name
             details = [parameter.help, f"name: {parameter.name}"]
+            if entrypoint_cli_flag is None and parameter.cli_flag is not None:
+                details.append(f"cli: config-only for {entrypoint}")
             if parameter.allowed_values is not None:
                 allowed_values = ", ".join(str(value) for value in parameter.allowed_values)
                 details.append(f"allowed: {allowed_values}")

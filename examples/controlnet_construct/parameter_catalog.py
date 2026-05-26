@@ -54,6 +54,55 @@ _CONTROLNET_ENTRYPOINTS = (RUN_PIPELINE, FROM_ORI_MATCH, FROM_DOM, FROM_DOM_BATC
 _MATCH_ENTRYPOINTS = (RUN_PIPELINE, IMAGE_MATCH, FROM_ORI_MATCH)
 _DOM_ENTRYPOINTS = (RUN_PIPELINE, FROM_DOM, FROM_DOM_BATCH)
 _ALL_ENTRYPOINTS = (RUN_PIPELINE, IMAGE_MATCH, FROM_ORI_MATCH, FROM_DOM, FROM_DOM_BATCH)
+RUN_PIPELINE_CLI_PARAMETER_NAMES = frozenset(
+    {
+        "work_dir",
+        "original_list",
+        "dom_list",
+        "config",
+        "python",
+        "deep_match_mode",
+        "deep_match_temp_root_dir",
+        "deep_match_manifest_dir",
+        "deep_match_manifest_summary",
+        "parameter_profile",
+        "skip_final_merge",
+        "post_merge_control_measure",
+        "post_merge_output",
+        "post_merge_decimals",
+        "matcher_method",
+        "match_preset_path",
+        "deep_match_config_path",
+        "valid_pixel_percent_threshold",
+        "invalid_pixel_radius",
+        "enable_low_resolution_offset_estimation",
+        "low_resolution_level",
+        "low_resolution_max_mean_reprojection_error_pixels",
+        "low_resolution_min_retained_match_count",
+        "low_resolution_max_mean_projected_offset_meters",
+        "enable_adaptive_routing",
+        "adaptive_routing_profile",
+        "use_parallel_cpu",
+        "num_worker_parallel_cpu",
+        "visualization_mode",
+        "memory_profile",
+        "visualization_target_long_edge",
+        "preview_crop_margin_pixels",
+        "preview_cache_source",
+        "pair_id_prefix",
+        "pair_id_start",
+        "network_id",
+        "description",
+        "merged_net",
+        "merge_script",
+        "merge_log",
+        "pair_list",
+        "cnetmerge",
+        "timing_json",
+        "validate_parameters_only",
+        "strict_parameter_validation",
+    }
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -267,5 +316,19 @@ def parameter_catalog_as_dict(entrypoint: str | None = None) -> dict[str, Any]:
     groups = [group for group in PARAMETER_GROUPS if entrypoint is None or group.name in active_group_names]
     return {
         "groups": [asdict(group) for group in groups],
-        "parameters": [asdict(parameter) for parameter in parameters],
+        "parameters": [_parameter_as_dict(parameter, entrypoint) for parameter in parameters],
     }
+
+
+def cli_flag_for_entrypoint(parameter: ParameterSpec, entrypoint: str | None) -> str | None:
+    """Return the CLI flag accepted by an entry point for a catalog parameter."""
+
+    if entrypoint == RUN_PIPELINE and parameter.name not in RUN_PIPELINE_CLI_PARAMETER_NAMES:
+        return None
+    return parameter.cli_flag
+
+
+def _parameter_as_dict(parameter: ParameterSpec, entrypoint: str | None) -> dict[str, Any]:
+    data = asdict(parameter)
+    data["cli_flag"] = cli_flag_for_entrypoint(parameter, entrypoint)
+    return data

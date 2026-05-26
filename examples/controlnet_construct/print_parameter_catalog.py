@@ -35,7 +35,7 @@ def format_grouped_help(entrypoint: str) -> str:
         lines.extend(("", group.title, group.description))
         for parameter in parameters:
             display_name = parameter.cli_flag or parameter.name
-            details = [parameter.help]
+            details = [parameter.help, f"name: {parameter.name}"]
             if parameter.allowed_values is not None:
                 allowed_values = ", ".join(str(value) for value in parameter.allowed_values)
                 details.append(f"allowed: {allowed_values}")

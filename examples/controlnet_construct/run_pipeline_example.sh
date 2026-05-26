@@ -238,6 +238,31 @@ Default behavior:
   - examples/image_match/image_match.py writes pre-RANSAC match visualizations to <work-dir>/match_viz.
   - from-dom-batch writes post-RANSAC match visualizations to <work-dir>/match_viz_post_ransac.
 
+Parameter groups:
+  inputs: work/config/list paths and the Python executable
+    common flags: --work-dir, --original-list, --dom-list, --config
+  pipeline: high-level pipeline mode and deep-match manifest handoff
+    common flags: --deep-match-mode, --skip-final-merge, --parameter-profile
+  matching: matcher selection, presets, and deep matcher config
+    common flags: --matcher-method, --match-preset-path, --deep-match-config-path
+  tile: tile size, overlap, validity filtering, and invalid-pixel suppression
+    common flags: --valid-pixel-percent-threshold, --invalid-pixel-radius
+  low_resolution: coarse low-resolution offset estimation and gates
+    common flags: --enable-low-resolution-offset-estimation, --low-resolution-level
+  adaptive_routing: pair-level adaptive matcher routing controls
+    common flags: --adaptive-routing, --adaptive-routing-profile
+  execution: CPU/GPU execution controls
+    common flags: --use-parallel-cpu, --no-parallel-cpu, --num-worker-parallel-cpu
+  visualization: pre/post-RANSAC preview behavior and memory profile
+    common flags: --visualization-mode, --memory-profile, --preview-cache-source
+  controlnet: pair IDs, cnetmerge, final network paths, and merge behavior
+    common flags: --merged-net, --merge-script, --network-id, --cnetmerge
+  reporting: timing, validation, and report output controls
+    common flags: --timing-json, --validate-parameters-only, --strict-parameter-validation
+
+For the full catalog with allowed values, defaults, and config paths:
+  bash examples/controlnet_construct/run_pipeline_example.sh --print-parameter-groups
+
 Options:
   --work-dir PATH                 Root working directory. Default: work
   --original-list PATH            original_images.lis path. Default: <work-dir>/original_images.lis

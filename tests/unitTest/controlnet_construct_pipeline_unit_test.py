@@ -204,6 +204,37 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("--matcher-method", result.stdout)
         self.assertIn("Low Resolution", result.stdout)
 
+    def test_run_pipeline_example_help_shows_compact_parameter_group_index(self):
+        result = subprocess.run(
+            [
+                "bash",
+                str(RUN_PIPELINE_EXAMPLE_PATH),
+                "--help",
+            ],
+            cwd=PROJECT_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Parameter groups:", result.stdout)
+        for group_name in (
+            "inputs",
+            "pipeline",
+            "matching",
+            "tile",
+            "low_resolution",
+            "adaptive_routing",
+            "execution",
+            "visualization",
+            "controlnet",
+            "reporting",
+        ):
+            self.assertIn(group_name, result.stdout)
+        self.assertIn("--print-parameter-groups", result.stdout)
+        self.assertIn("full catalog", result.stdout)
+
     def test_run_pipeline_example_validates_parameters_only_from_config(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"

@@ -14,6 +14,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 import unittest
+import warnings
 
 import numpy as np
 
@@ -149,6 +150,27 @@ class ImageMatchTextureSparsenessUnitTest(unittest.TestCase):
         self.assertEqual(len(calls), 9)
         self.assertIn((0, 0, 128, 128), calls)
         self.assertIn((256, 256, 128, 128), calls)
+
+    def test_compute_image_texture_sparseness_from_reader_ignores_overflow_sized_special_pixels_without_warning(self):
+        source = _random_image(128, 128).astype(np.float64)
+        source[0, 0] = 1.0e300
+
+        def read_window(start_x: int, start_y: int, width: int, height: int) -> np.ndarray:
+            return source[start_y : start_y + height, start_x : start_x + width]
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("error", RuntimeWarning)
+            summary = compute_image_texture_sparseness_from_reader(
+                image_width=128,
+                image_height=128,
+                read_window=read_window,
+                tile_size=128,
+                tile_step=128,
+            )
+
+        self.assertEqual(summary.tile_total_count, 1)
+        self.assertEqual(summary.tile_valid_count, 1)
+        self.assertEqual(summary.tile_metrics[0].valid_pixel_count, source.size - 1)
 
     def test_compute_image_texture_sparseness_from_reader_matches_full_image_for_single_tile(self):
         source = _striped_image(192, 160, period=6)

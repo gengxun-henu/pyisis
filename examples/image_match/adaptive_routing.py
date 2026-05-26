@@ -40,6 +40,16 @@ SUPPORTED_ADAPTIVE_ROUTING_PROFILES = (
     "relaxed",
     "fast",
 )
+_FLOAT32_MAX = float(np.finfo(np.float32).max)
+
+
+def _coerce_probe_values(image_values: Any) -> tuple[np.ndarray, np.ndarray]:
+    raw_values = np.asarray(image_values, dtype=np.float64)
+    if raw_values.ndim != 2:
+        raise ValueError("image_values must be a 2-D grayscale array.")
+    finite_mask = np.isfinite(raw_values) & (np.abs(raw_values) <= _FLOAT32_MAX)
+    values = np.where(finite_mask, raw_values, 0.0).astype(np.float32)
+    return values, finite_mask
 
 
 def _clamp(value: float, minimum: float = 0.0, maximum: float = 1.0) -> float:
@@ -241,10 +251,7 @@ def build_spice_constrained_elevation_candidates(
 
 
 def _normalize_image_for_probe(image_values: Any, invalid_mask: Any | None = None) -> tuple[np.ndarray, np.ndarray]:
-    values = np.asarray(image_values, dtype=np.float32)
-    if values.ndim != 2:
-        raise ValueError("image_values must be a 2-D grayscale array.")
-    finite_mask = np.isfinite(values)
+    values, finite_mask = _coerce_probe_values(image_values)
     if invalid_mask is not None:
         finite_mask &= ~np.asarray(invalid_mask, dtype=bool)
 

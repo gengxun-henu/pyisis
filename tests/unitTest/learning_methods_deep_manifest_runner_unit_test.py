@@ -10,6 +10,7 @@ Updated: 2026-05-20  Geng Xun added stage-6 regression coverage for manifest run
 from __future__ import annotations
 
 from dataclasses import replace
+import os
 from pathlib import Path
 from types import SimpleNamespace
 import sys
@@ -404,6 +405,20 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
     def test_run_manifest_rejects_explicit_cuda_with_parallel_workers(self):
         with self.assertRaisesRegex(ValueError, "CUDA device with num_workers > 1 is not supported"):
             run_manifest("missing_manifest.json", device="cuda", num_workers=2)
+
+    def test_torch_thread_limit_ignores_non_missing_torch_import_failures(self):
+        real_import = __import__
+
+        def _fake_import(name, *args, **kwargs):
+            if name == "torch":
+                raise RuntimeError("function '_has_torch_function' already has a docstring")
+            return real_import(name, *args, **kwargs)
+
+        with patch.dict(os.environ, {}, clear=True), patch("builtins.__import__", side_effect=_fake_import):
+            manifest_runner._apply_torch_thread_limit(1)
+
+            self.assertEqual(os.environ["OMP_NUM_THREADS"], "1")
+            self.assertEqual(os.environ["MKL_NUM_THREADS"], "1")
 
     def test_build_argument_parser_rejects_invalid_torch_num_threads(self):
         parser = build_argument_parser()

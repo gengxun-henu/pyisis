@@ -96,7 +96,7 @@ def _apply_torch_thread_limit(torch_num_threads: int | None) -> None:
     os.environ["MKL_NUM_THREADS"] = thread_count
     try:
         import torch
-    except ModuleNotFoundError:
+    except Exception:
         return
     try:
         torch.set_num_threads(torch_num_threads)

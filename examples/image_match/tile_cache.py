@@ -73,6 +73,12 @@ class TileCache:
         self._reads_since_recheck: int = 0
         self._recheck_bytes: int = 0
         self._recheck_seconds: float = 0.0
+        self._read_window_count = 0
+        self._cache_hit_count = 0
+        self._cache_miss_count = 0
+        self._assembled_tile_reference_count = 0
+        self._load_seconds = 0.0
+        self._assembly_seconds = 0.0
 
     def read_region(
         self,
@@ -85,6 +91,7 @@ class TileCache:
         """Read a rectangular region from the cube, using tile cache."""
         import isis_pybind as ip
 
+        self._read_window_count += 1
         if self._state == CacheState.BYPASSED:
             return self._direct_read(x, y, w, h, band)
 
@@ -97,8 +104,10 @@ class TileCache:
             for col in range(start_col, end_col + 1):
                 key = TileCoord(col, row, band)
                 if key in self._cache:
+                    self._cache_hit_count += 1
                     self._cache.move_to_end(key)
                 else:
+                    self._cache_miss_count += 1
                     self._load_tile(ip, col, row, band)
 
         return self._assemble(x, y, w, h, start_col, end_col, start_row, end_row, band)
@@ -122,6 +131,7 @@ class TileCache:
         self._cube.read(brick)
         tile_data = np.asarray(brick.double_buffer(), dtype=np.float64).reshape((tile_h, tile_w))
         elapsed = time.monotonic() - t0
+        self._load_seconds += elapsed
 
         key = TileCoord(col, row, band)
         self._cache[key] = tile_data
@@ -176,7 +186,9 @@ class TileCache:
         band: int,
     ) -> np.ndarray:
         """Assemble the output region from cached tile data."""
+        t0 = time.monotonic()
         output = np.zeros((h, w), dtype=np.float64)
+        tile_reference_count = 0
 
         for row in range(start_row, end_row + 1):
             tile_y = row * self._tile_h
@@ -200,9 +212,12 @@ class TileCache:
                 dst_h = src_y1 - src_y0
 
                 if dst_w > 0 and dst_h > 0:
+                    tile_reference_count += 1
                     output[dst_y0:dst_y0 + dst_h, dst_x0:dst_x0 + dst_w] = \
                         tile_data[src_y0:src_y1, src_x0:src_x1]
 
+        self._assembled_tile_reference_count += tile_reference_count
+        self._assembly_seconds += time.monotonic() - t0
         return output
 
     def _direct_read(
@@ -219,6 +234,23 @@ class TileCache:
         brick.set_base_position(x + 1, y + 1, band)
         self._cube.read(brick)
         return np.asarray(brick.double_buffer(), dtype=np.float64).reshape((h, w))
+
+    def summary(self) -> dict[str, object]:
+        """Return lightweight cache diagnostics for metadata and profiling."""
+        return {
+            "state": self._state,
+            "tile_width": self._tile_w,
+            "tile_height": self._tile_h,
+            "cache_entry_count": len(self._cache),
+            "cache_bytes": self._cache_bytes,
+            "cache_max_bytes": self._cache_max_bytes,
+            "read_window_count": self._read_window_count,
+            "cache_hit_count": self._cache_hit_count,
+            "cache_miss_count": self._cache_miss_count,
+            "assembled_tile_reference_count": self._assembled_tile_reference_count,
+            "load_seconds": self._load_seconds,
+            "assembly_seconds": self._assembly_seconds,
+        }
 
     def close(self) -> None:
         """Release cached data. Does NOT close the underlying cube."""

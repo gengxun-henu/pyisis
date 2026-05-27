@@ -266,3 +266,26 @@ class TestMakeReadFn(unittest.TestCase):
             finally:
                 if cube.is_open():
                     cube.close()
+
+
+class TestTileCacheDiagnostics(unittest.TestCase):
+    def test_summary_reports_hits_misses_and_assembly(self):
+        data = np.arange(64, dtype=np.float64).reshape((8, 8))
+        with temporary_directory() as tmp:
+            cube, _ = make_tile_test_cube(tmp, data, tile_samples=4, tile_lines=4)
+            try:
+                cache = TileCache(cube, cache_max_mb=10)
+                cache.read_region(0, 0, 4, 4)
+                cache.read_region(0, 0, 4, 4)
+                summary = cache.summary()
+
+                self.assertEqual(summary["read_window_count"], 2)
+                self.assertEqual(summary["cache_miss_count"], 1)
+                self.assertEqual(summary["cache_hit_count"], 1)
+                self.assertEqual(summary["assembled_tile_reference_count"], 2)
+                self.assertIn(summary["state"], {CacheState.WARMING_UP, CacheState.ACTIVE, CacheState.BYPASSED})
+                self.assertGreaterEqual(summary["load_seconds"], 0.0)
+                self.assertGreaterEqual(summary["assembly_seconds"], 0.0)
+            finally:
+                if cube.is_open():
+                    cube.close()

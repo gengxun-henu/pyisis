@@ -91,6 +91,7 @@ Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing par
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
 Updated: 2026-05-16  Geng Xun added regression coverage for adaptive-routing profile CLI/config defaults and expanded metadata.
 Updated: 2026-05-27  Geng Xun added parser/config regression coverage for the new --opencv-num-threads CLI option and ImageMatch config alias validation.
+Updated: 2026-05-27  Geng Xun added worker-shard regression coverage for applying explicit OpenCV thread limits.
 """
 
 from __future__ import annotations
@@ -6322,6 +6323,93 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(close_count, 2)
         self.assertEqual([index for index, _ in results], [0, 1])
         self.assertEqual(progress_events, [1, 1])
+
+    def test_parallel_tile_batch_worker_applies_opencv_thread_config_once(self):
+        set_thread_calls: list[int] = []
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, path, mode):
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        task = tile_matching_module.IndexedTileMatchTask(
+            index=0,
+            task=tile_matching_module.TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=tile_matching_module.PairedTileWindow(
+                    local_window=tile_matching_module.TileWindow(0, 0, 8, 8),
+                    left_window=tile_matching_module.TileWindow(0, 0, 8, 8),
+                    right_window=tile_matching_module.TileWindow(0, 0, 8, 8),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=1,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                ratio_test=0.75,
+                matcher_method="bf",
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                opencv_num_threads=1,
+            ),
+        )
+        fake_result = tile_matching_module.TileMatchResult(
+            stats=tile_matching_module.TileMatchStats(
+                local_start_x=0,
+                local_start_y=0,
+                width=8,
+                height=8,
+                left_start_x=0,
+                left_start_y=0,
+                right_start_x=0,
+                right_start_y=0,
+                left_valid_pixel_count=64,
+                right_valid_pixel_count=64,
+                left_valid_pixel_ratio=1.0,
+                right_valid_pixel_ratio=1.0,
+                left_feature_count=0,
+                right_feature_count=0,
+                match_count=0,
+                status="skipped_insufficient_matches",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+
+        with mock.patch.object(tile_matching_module.ip, "Cube", FakeCube), mock.patch.object(
+            tile_matching_module.cv2,
+            "setNumThreads",
+            side_effect=lambda value: set_thread_calls.append(int(value)),
+        ), mock.patch.object(
+            tile_matching_module,
+            "_resolved_invalid_values_for_cube",
+            return_value=(),
+        ), mock.patch.object(
+            tile_matching_module,
+            "_match_tile_task_with_open_cubes",
+            return_value=fake_result,
+        ):
+            results = tile_matching_module._match_tile_task_batch_worker((task,))
+
+        self.assertEqual(set_thread_calls, [1])
+        self.assertEqual(results, ((0, fake_result),))
 
     def test_run_parallel_tile_match_tasks_drains_progress_queue_before_future_completion(self):
         progress_call_order: list[str] = []

@@ -19,6 +19,7 @@ Updated: 2026-05-10  Geng Xun accepted the ORI-facing `superpoint` matcher selec
 Updated: 2026-05-19  Geng Xun threaded resolved deep matcher runtime config through tile tasks and adapters.
 Updated: 2026-05-19  Geng Xun preserved matcher/feature/device option dictionaries when serializing deep matcher runtime config.
 Updated: 2026-05-27  Geng Xun added serial tile cache diagnostics for match metadata.
+Updated: 2026-05-27  Geng Xun applied explicit OpenCV thread limits inside tile worker shards.
 """
 
 from __future__ import annotations
@@ -1306,6 +1307,11 @@ def _match_tile_task_batch_worker(
         return ()
     resolved_indexed_tasks = tuple(_indexed_tile_match_task_from_payload(indexed_task) for indexed_task in indexed_tasks)
     first_task = resolved_indexed_tasks[0].task
+    opencv_num_threads = first_task.opencv_num_threads
+    if any(indexed_task.task.opencv_num_threads != opencv_num_threads for indexed_task in resolved_indexed_tasks):
+        raise ValueError("all tile tasks in a worker batch must use the same OpenCV thread limit")
+    if opencv_num_threads is not None:
+        cv2.setNumThreads(int(opencv_num_threads))
     left_cube = ip.Cube()
     right_cube = ip.Cube()
     left_cube.open(first_task.left_dom_path, "r")

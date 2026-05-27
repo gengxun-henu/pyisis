@@ -83,6 +83,7 @@ Updated: 2026-05-22  Geng Xun added ORI key export regression coverage for pair-
 Updated: 2026-05-22  Geng Xun tightened ORI delegation and `.key` file readability regression coverage for Task 3 review fixes.
 Updated: 2026-05-22  Geng Xun added matcher preset option resolution and constructor-forwarding regression coverage.
 Updated: 2026-05-27  Geng Xun added metadata regression coverage for ImageMatch tile block alignment modes.
+Updated: 2026-05-27  Geng Xun added regression coverage for non-ready DOM preparation with tile block alignment enabled.
 Updated: 2026-05-22  Geng Xun added fail-fast matcher and extractor compatibility regression coverage for deep presets.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
@@ -114,7 +115,7 @@ UNIT_TEST_DIR = Path(__file__).resolve().parent
 if str(UNIT_TEST_DIR) not in sys.path:
     sys.path.insert(0, str(UNIT_TEST_DIR))
 
-from _unit_test_support import attach_dom_like_projection_mapping, ip, make_test_cube, temporary_directory, workspace_test_data_path
+from _unit_test_support import attach_dom_like_projection_mapping, ip, make_test_cube, make_tile_test_cube, temporary_directory, workspace_test_data_path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -3977,6 +3978,49 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertGreaterEqual(alignment["effective_block_height"], 30)
         self.assertIn("left_storage_tile_width", alignment)
         self.assertIn("block_alignment_reason", summary)
+
+    def test_match_dom_pair_auto_alignment_preserves_failed_preparation_status(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_tile_test_cube(
+                temp_dir,
+                image,
+                tile_samples=16,
+                tile_lines=16,
+                name="left_alignment_failed_preparation.cub",
+            )
+            right_cube, right_path = make_tile_test_cube(
+                temp_dir,
+                image,
+                tile_samples=16,
+                tile_lines=16,
+                name="right_alignment_failed_preparation.cub",
+            )
+            try:
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=64.0)
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=64.0)
+                right_mapping = right_cube.group("Mapping")
+                right_mapping.delete_keyword("CenterLongitude")
+                right_mapping.add_keyword(ip.PvlKeyword("CenterLongitude", "10.0"))
+                right_cube.put_group(right_mapping)
+            finally:
+                left_cube.close()
+                right_cube.close()
+
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                min_valid_pixels=8,
+                tile_block_alignment_mode="auto",
+            )
+
+        self.assertEqual(summary["status"], "skipped_incompatible_projection")
+        self.assertIn("CenterLongitude", summary["reason"])
+        self.assertEqual(summary["shared_extent_width"], 0)
+        self.assertEqual(summary["shared_extent_height"], 0)
+        self.assertEqual(summary["tile_count"], 0)
+        self.assertEqual(summary["point_count"], 0)
 
     def test_match_dom_pair_reports_disabled_low_resolution_offset_summary_by_default(self):
         image = _build_textured_test_image(64, 64)

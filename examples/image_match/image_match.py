@@ -52,6 +52,7 @@ Updated: 2026-05-20  Geng Xun restored repo-root fallback when resolving adaptiv
 Updated: 2026-05-20  Geng Xun reused deep preset matcher compatibility validation for routed initial and cascade configs.
 Updated: 2026-05-27  Geng Xun added --opencv-num-threads CLI/config validation helpers and ImageMatch config alias parsing.
 Updated: 2026-05-27  Geng Xun wired ISIS storage-tile block alignment through ImageMatch API, config, CLI, and metadata.
+Updated: 2026-05-27  Geng Xun deferred storage-tile alignment until DOM preparation is ready.
 """
 
 from __future__ import annotations
@@ -2476,7 +2477,11 @@ def match_dom_pair(
         )
         resolved_tile_block_alignment_mode = normalize_tile_block_alignment_mode(tile_block_alignment_mode)
         tile_block_alignment = resolve_tile_aligned_block_config(
-            mode=resolved_tile_block_alignment_mode,
+            mode=(
+                resolved_tile_block_alignment_mode
+                if preparation.status == "ready"
+                else DEFAULT_TILE_BLOCK_ALIGNMENT_MODE
+            ),
             left_shape=storage_tile_shape_from_cube(left_cube),
             right_shape=storage_tile_shape_from_cube(right_cube),
             left_offset_x=preparation.left.offset_sample,

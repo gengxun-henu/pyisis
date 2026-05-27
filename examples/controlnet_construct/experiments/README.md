@@ -133,6 +133,65 @@ output, and `metrics.json` stores the collected method metrics. The `reports/`
 directory contains cross-method summaries, including `reports/summary.json`,
 `summary.csv`, `summary.md`, and `failures.json`.
 
+## pipe_test2 Adaptive Fast Pipeline
+
+`run_pipe_test2_adaptive_fast_pipeline.sh` packages the fast CPU release-candidate
+path for the real pipe_test2 ControlNet data. Run the setup from the repository
+root before invoking the runner:
+
+```bash
+source "$HOME/miniconda3/etc/profile.d/conda.sh"
+conda activate asp360_new
+export PYTHONPATH="$PWD/build/python:$PWD/tests/unitTest"
+export ISISDATA="$PWD/tests/data/isisdata/mockup"
+```
+
+For production data runs, replace the mock `ISISDATA` value with the production
+ISIS data location.
+
+The default command is:
+
+```bash
+bash examples/controlnet_construct/experiments/run_pipe_test2_adaptive_fast_pipeline.sh
+```
+
+By default, the runner reads
+`/media/gengxun/Elements/data/lro/test_controlnet_python/pipe_test2`, writes to
+`/tmp/pipe_test2_adaptive_fast_pipeline`, uses the `balanced` ControlNet
+parameter profile, uses the `balanced` adaptive routing profile, requests the
+classic SIFT/FLANN matcher with `--matcher-method flann`, enables adaptive
+routing, and skips the final merge. Pass `--run-final-merge` when the final
+`cnetmerge` step should run.
+
+The balanced run writes its pipeline workspace below
+`/tmp/pipe_test2_adaptive_fast_pipeline/balanced`. Important outputs are:
+
+```text
+/tmp/pipe_test2_adaptive_fast_pipeline/
+  logs/
+    adaptive_fast_pipeline.log
+  balanced/
+    reports/
+      adaptive_fast_summary.json
+      adaptive_fast_summary.md
+    merge/
+      dom_matching_merged.net    # present only when --run-final-merge is used
+```
+
+Validate the resolved parameters without executing the pipeline:
+
+```bash
+bash examples/controlnet_construct/experiments/run_pipe_test2_adaptive_fast_pipeline.sh \
+  --validate-only
+```
+
+Run the release-candidate path with final merge enabled:
+
+```bash
+bash examples/controlnet_construct/experiments/run_pipe_test2_adaptive_fast_pipeline.sh \
+  --run-final-merge
+```
+
 ## ISIS C++ vs PyISIS Benchmark
 
 `isis_cpp_pyisis_benchmark.py` compares direct ISIS C++ calls against PyISIS for

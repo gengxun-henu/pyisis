@@ -145,8 +145,10 @@ printf '\n'
 if [[ "$validate_only" == "1" ]]; then
   "${command[@]}"
 else
+  set +e
   /usr/bin/time -p "${command[@]}" 2>&1 | tee "$logs_dir/adaptive_fast_pipeline.log"
   status=${PIPESTATUS[0]}
+  set -e
   printf '===== adaptive fast pipeline done status=%s log=%s =====\n' "$status" "$logs_dir/adaptive_fast_pipeline.log"
   [[ "$status" -eq 0 ]] || exit "$status"
 

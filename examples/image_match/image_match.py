@@ -2245,7 +2245,7 @@ def _tile_cache_metadata(
     if aggregate_summary is not None:
         metadata = dict(aggregate_summary)
         metadata.setdefault("enabled", bool(use_tile_cache))
-        if "left" in metadata and "right" in metadata:
+        if metadata.get("left") is not None and metadata.get("right") is not None:
             metadata.setdefault("summary_available", True)
             metadata.setdefault("scope", "serial")
         else:

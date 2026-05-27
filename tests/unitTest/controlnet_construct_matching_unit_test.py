@@ -4091,6 +4091,20 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertIn("worker-local", cache_summary["reason"])
         self.assertIn("not aggregated", cache_summary["reason"])
 
+    def test_tile_cache_metadata_does_not_claim_none_summaries_available(self):
+        cache_summary = image_match._tile_cache_metadata(
+            use_tile_cache=True,
+            aggregate_summary={
+                "enabled": True,
+                "left": None,
+                "right": None,
+            },
+        )
+
+        self.assertTrue(cache_summary["enabled"])
+        self.assertFalse(cache_summary["summary_available"])
+        self.assertNotEqual(cache_summary.get("scope"), "serial")
+
     def test_match_dom_pair_auto_alignment_preserves_failed_preparation_status(self):
         image = _build_textured_test_image(64, 64)
 

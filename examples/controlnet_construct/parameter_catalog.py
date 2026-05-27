@@ -13,6 +13,7 @@ except ImportError:
 
 try:
     from image_match.adaptive_routing import DEFAULT_ADAPTIVE_ROUTING_PROFILE, SUPPORTED_ADAPTIVE_ROUTING_PROFILES
+    from image_match.tile_block_alignment import DEFAULT_TILE_BLOCK_ALIGNMENT_MODE, SUPPORTED_TILE_BLOCK_ALIGNMENT_MODES
     from image_match.match_visualization import (
         DEFAULT_MEMORY_PROFILE,
         DEFAULT_PREVIEW_CACHE_SOURCE,
@@ -26,6 +27,8 @@ try:
 except ImportError:
     DEFAULT_ADAPTIVE_ROUTING_PROFILE = "balanced"
     SUPPORTED_ADAPTIVE_ROUTING_PROFILES = ("balanced", "strict", "relaxed", "fast")
+    DEFAULT_TILE_BLOCK_ALIGNMENT_MODE = "off"
+    SUPPORTED_TILE_BLOCK_ALIGNMENT_MODES = ("off", "auto", "isis-storage")
     DEFAULT_MEMORY_PROFILE = "balanced"
     DEFAULT_PREVIEW_CACHE_SOURCE = "auto"
     DEFAULT_PREVIEW_CROP_MARGIN_PIXELS = 256
@@ -228,6 +231,15 @@ PARAMETERS = (
     _spec("sub_block_size_y", "tile", config_path=_image_match_path("sub_block_size_y"), value_type="int", min_value=1, entrypoints=_MATCH_ENTRYPOINTS, help="Tile height in pixels."),
     _spec("overlap_size_x", "tile", config_path=_image_match_path("overlap_size_x"), value_type="int", min_value=0, entrypoints=_MATCH_ENTRYPOINTS, help="Horizontal tile overlap in pixels."),
     _spec("overlap_size_y", "tile", config_path=_image_match_path("overlap_size_y"), value_type="int", min_value=0, entrypoints=_MATCH_ENTRYPOINTS, help="Vertical tile overlap in pixels."),
+    _spec(
+        "tile_block_alignment_mode",
+        "tile",
+        config_path=_image_match_path("tile_block_alignment_mode"),
+        default=DEFAULT_TILE_BLOCK_ALIGNMENT_MODE,
+        allowed_values=tuple(SUPPORTED_TILE_BLOCK_ALIGNMENT_MODES),
+        entrypoints=_MATCH_ENTRYPOINTS,
+        help="Full-resolution block alignment mode for ISIS storage tile boundaries.",
+    ),
     _spec("enable_tile_validity_prefilter", "tile", config_path=_image_match_path("enable_tile_validity_prefilter"), value_type="bool", default=False, entrypoints=_MATCH_ENTRYPOINTS, help="Enable coarse tile validity filtering."),
     _spec("tile_validity_cache_dir", "tile", config_path=_image_match_path("tile_validity_cache_dir"), entrypoints=_MATCH_ENTRYPOINTS, help="Tile validity cache directory."),
     _spec("tile_validity_cell_width", "tile", config_path=_image_match_path("tile_validity_cell_width"), value_type="int", min_value=1, entrypoints=_MATCH_ENTRYPOINTS, help="Tile validity cell width."),

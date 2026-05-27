@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-22
+Last Modified: 2026-05-27
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -82,10 +82,15 @@ Updated: 2026-05-22  Geng Xun added regression coverage for dom/ori image-space 
 Updated: 2026-05-22  Geng Xun added ORI key export regression coverage for pair-level `.key` output summaries.
 Updated: 2026-05-22  Geng Xun tightened ORI delegation and `.key` file readability regression coverage for Task 3 review fixes.
 Updated: 2026-05-22  Geng Xun added matcher preset option resolution and constructor-forwarding regression coverage.
+Updated: 2026-05-27  Geng Xun added metadata regression coverage for ImageMatch tile block alignment modes.
+Updated: 2026-05-27  Geng Xun added regression coverage for non-ready DOM preparation with tile block alignment enabled.
+Updated: 2026-05-27  Geng Xun added metadata regression coverage for tile cache diagnostics.
+Updated: 2026-05-27  Geng Xun added regression coverage for worker-local parallel tile cache metadata.
 Updated: 2026-05-22  Geng Xun added fail-fast matcher and extractor compatibility regression coverage for deep presets.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
 Updated: 2026-05-16  Geng Xun added regression coverage for adaptive-routing profile CLI/config defaults and expanded metadata.
+Updated: 2026-05-27  Geng Xun added parser/config regression coverage for the new --opencv-num-threads CLI option and ImageMatch config alias validation.
 """
 
 from __future__ import annotations
@@ -112,7 +117,7 @@ UNIT_TEST_DIR = Path(__file__).resolve().parent
 if str(UNIT_TEST_DIR) not in sys.path:
     sys.path.insert(0, str(UNIT_TEST_DIR))
 
-from _unit_test_support import attach_dom_like_projection_mapping, ip, make_test_cube, temporary_directory, workspace_test_data_path
+from _unit_test_support import attach_dom_like_projection_mapping, ip, make_test_cube, make_tile_test_cube, temporary_directory, workspace_test_data_path
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -1059,6 +1064,64 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     "4097",
                 ]
             )
+
+    def test_build_argument_parser_accepts_opencv_num_threads(self):
+        parser = build_argument_parser()
+
+        default_args = parser.parse_args(["left.cub", "right.cub", "left.key", "right.key"])
+        explicit_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--opencv-num-threads",
+                "1",
+            ]
+        )
+
+        self.assertIsNone(default_args.opencv_num_threads)
+        self.assertEqual(explicit_args.opencv_num_threads, 1)
+
+    def test_build_argument_parser_rejects_invalid_opencv_num_threads(self):
+        parser = build_argument_parser()
+
+        for value in ("0", "-1", "1.5", "auto"):
+            with self.subTest(value=value), self.assertRaises(SystemExit):
+                parser.parse_args(
+                    [
+                        "left.cub",
+                        "right.cub",
+                        "left.key",
+                        "right.key",
+                        "--opencv-num-threads",
+                        value,
+                    ]
+                )
+
+    def test_print_image_match_config_default_reads_opencv_num_threads(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps({"ImageMatch": {"opencvNumThreads": 2}}),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(
+                image_match.print_image_match_config_default(config_path, "opencv_num_threads"),
+                "2",
+            )
+
+    def test_image_match_config_rejects_invalid_opencv_num_threads(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps({"ImageMatch": {"opencv_num_threads": 0}}),
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(ValueError, "opencv_num_threads"):
+                image_match.load_image_match_defaults_from_config(config_path)
 
     def test_build_argument_parser_accepts_valid_pixel_percent_threshold(self):
         parser = build_argument_parser()
@@ -3864,6 +3927,226 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertIn("right_valid_pixel_ratio", summary["tiles"][0])
         self.assertGreaterEqual(summary["tiles"][0]["left_valid_pixel_ratio"], 0.0)
         self.assertLessEqual(summary["tiles"][0]["left_valid_pixel_ratio"], 1.0)
+
+    def test_match_dom_pair_reports_tile_block_alignment_off_by_default(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_alignment_default.cub",
+                right_name="right_alignment_default.cub",
+            )
+
+            _, _, summary = match_dom_pair(left_path, right_path, min_valid_pixels=8)
+
+        alignment = summary["tile_block_alignment"]
+        self.assertEqual(alignment["mode"], "off")
+        self.assertFalse(alignment["aligned"])
+        self.assertEqual(alignment["requested_block_width"], 1024)
+        self.assertEqual(alignment["effective_block_width"], 1024)
+
+    def test_match_dom_pair_auto_alignment_records_effective_geometry(self):
+        image = _build_textured_test_image(128, 128)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_alignment_auto.cub",
+                right_name="right_alignment_auto.cub",
+            )
+
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                block_width=30,
+                block_height=30,
+                overlap_x=4,
+                overlap_y=4,
+                min_valid_pixels=8,
+                tile_block_alignment_mode="auto",
+            )
+
+        alignment = summary["tile_block_alignment"]
+        self.assertEqual(alignment["mode"], "auto")
+        self.assertIn("aligned", alignment)
+        self.assertEqual(alignment["requested_block_width"], 30)
+        self.assertEqual(alignment["requested_block_height"], 30)
+        self.assertGreaterEqual(alignment["effective_block_width"], 30)
+        self.assertGreaterEqual(alignment["effective_block_height"], 30)
+        self.assertIn("left_storage_tile_width", alignment)
+        self.assertIn("block_alignment_reason", summary)
+
+    def test_match_dom_pair_reports_tile_cache_diagnostics_when_enabled(self):
+        image = _build_textured_test_image(96, 96)
+
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_tile_test_cube(
+                temp_dir,
+                image,
+                tile_samples=32,
+                tile_lines=32,
+                name="left_cache_diag.cub",
+            )
+            right_cube, right_path = make_tile_test_cube(
+                temp_dir,
+                image,
+                tile_samples=32,
+                tile_lines=32,
+                name="right_cache_diag.cub",
+            )
+            try:
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=96.0)
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=96.0)
+            finally:
+                left_cube.close()
+                right_cube.close()
+
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                max_image_dimension=32,
+                block_width=48,
+                block_height=48,
+                overlap_x=0,
+                overlap_y=0,
+                min_valid_pixels=8,
+                use_parallel_cpu=False,
+                use_tile_cache=True,
+            )
+
+        cache_summary = summary["tile_cache"]
+        self.assertTrue(cache_summary["enabled"])
+        self.assertIn("left", cache_summary)
+        self.assertIn("right", cache_summary)
+        self.assertGreaterEqual(cache_summary["left"]["read_window_count"], 1)
+        self.assertGreaterEqual(cache_summary["right"]["read_window_count"], 1)
+        self.assertTrue(cache_summary["summary_available"])
+        self.assertEqual(cache_summary["scope"], "serial")
+
+    def test_match_dom_pair_reports_worker_local_tile_cache_metadata_for_parallel_path(self):
+        image = _build_textured_test_image(128, 128)
+        synthetic_tile_results = [
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=5,
+                    right_feature_count=5,
+                    match_count=1,
+                    status="matched",
+                ),
+                left_points=(Keypoint(10.0, 10.0),),
+                right_points=(Keypoint(10.5, 10.5),),
+            )
+        ]
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_parallel_cache_metadata.cub",
+                right_name="right_parallel_cache_metadata.cub",
+            )
+            with mock.patch.object(
+                image_match,
+                "_run_parallel_tile_match_tasks",
+                return_value=synthetic_tile_results,
+            ) as parallel_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                    num_worker_parallel_cpu=2,
+                    use_tile_cache=True,
+                )
+
+        parallel_mock.assert_called_once()
+        self.assertTrue(parallel_mock.call_args.kwargs["use_tile_cache"])
+        self.assertTrue(summary["parallel_cpu_used"])
+        cache_summary = summary["tile_cache"]
+        self.assertTrue(cache_summary["enabled"])
+        self.assertFalse(cache_summary["summary_available"])
+        self.assertEqual(cache_summary["scope"], "parallel_worker_local")
+        self.assertIn("worker-local", cache_summary["reason"])
+        self.assertIn("not aggregated", cache_summary["reason"])
+
+    def test_tile_cache_metadata_does_not_claim_none_summaries_available(self):
+        cache_summary = image_match._tile_cache_metadata(
+            use_tile_cache=True,
+            aggregate_summary={
+                "enabled": True,
+                "left": None,
+                "right": None,
+            },
+        )
+
+        self.assertTrue(cache_summary["enabled"])
+        self.assertFalse(cache_summary["summary_available"])
+        self.assertNotEqual(cache_summary.get("scope"), "serial")
+
+    def test_match_dom_pair_auto_alignment_preserves_failed_preparation_status(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_tile_test_cube(
+                temp_dir,
+                image,
+                tile_samples=16,
+                tile_lines=16,
+                name="left_alignment_failed_preparation.cub",
+            )
+            right_cube, right_path = make_tile_test_cube(
+                temp_dir,
+                image,
+                tile_samples=16,
+                tile_lines=16,
+                name="right_alignment_failed_preparation.cub",
+            )
+            try:
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=64.0)
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=64.0)
+                right_mapping = right_cube.group("Mapping")
+                right_mapping.delete_keyword("CenterLongitude")
+                right_mapping.add_keyword(ip.PvlKeyword("CenterLongitude", "10.0"))
+                right_cube.put_group(right_mapping)
+            finally:
+                left_cube.close()
+                right_cube.close()
+
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                min_valid_pixels=8,
+                tile_block_alignment_mode="auto",
+            )
+
+        self.assertEqual(summary["status"], "skipped_incompatible_projection")
+        self.assertIn("CenterLongitude", summary["reason"])
+        self.assertEqual(summary["shared_extent_width"], 0)
+        self.assertEqual(summary["shared_extent_height"], 0)
+        self.assertEqual(summary["tile_count"], 0)
+        self.assertEqual(summary["point_count"], 0)
 
     def test_match_dom_pair_reports_disabled_low_resolution_offset_summary_by_default(self):
         image = _build_textured_test_image(64, 64)

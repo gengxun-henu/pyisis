@@ -50,6 +50,11 @@ Updated: 2026-05-20  Geng Xun enriched export-mode deep-match manifests with per
 Updated: 2026-05-20  Geng Xun normalized config-relative adaptive-routing deep preset paths during config loading.
 Updated: 2026-05-20  Geng Xun restored repo-root fallback when resolving adaptive-routing deep preset maps from config JSON.
 Updated: 2026-05-20  Geng Xun reused deep preset matcher compatibility validation for routed initial and cascade configs.
+Updated: 2026-05-27  Geng Xun added --opencv-num-threads CLI/config validation helpers and ImageMatch config alias parsing.
+Updated: 2026-05-27  Geng Xun wired ISIS storage-tile block alignment through ImageMatch API, config, CLI, and metadata.
+Updated: 2026-05-27  Geng Xun deferred storage-tile alignment until DOM preparation is ready.
+Updated: 2026-05-27  Geng Xun recorded serial tile cache summaries in match metadata.
+Updated: 2026-05-27  Geng Xun clarified worker-local parallel tile cache metadata when aggregate summaries are unavailable.
 """
 
 from __future__ import annotations
@@ -116,6 +121,13 @@ if __package__ in {None, ""}:
     from image_match.preprocess import summarize_valid_pixels, validate_invalid_pixel_radius
     from image_match.runtime import bootstrap_runtime_environment
     import image_match.stereo_ransac as _stereo_ransac
+    from image_match.tile_block_alignment import (
+        DEFAULT_TILE_BLOCK_ALIGNMENT_MODE,
+        SUPPORTED_TILE_BLOCK_ALIGNMENT_MODES,
+        normalize_tile_block_alignment_mode,
+        resolve_tile_aligned_block_config,
+        storage_tile_shape_from_cube,
+    )
     from image_match.tile_validity import (
         DEFAULT_TILE_VALIDITY_CELL_HEIGHT,
         DEFAULT_TILE_VALIDITY_CELL_WIDTH,
@@ -193,6 +205,13 @@ else:
     from .preprocess import summarize_valid_pixels, validate_invalid_pixel_radius
     from .runtime import bootstrap_runtime_environment
     from . import stereo_ransac as _stereo_ransac
+    from .tile_block_alignment import (
+        DEFAULT_TILE_BLOCK_ALIGNMENT_MODE,
+        SUPPORTED_TILE_BLOCK_ALIGNMENT_MODES,
+        normalize_tile_block_alignment_mode,
+        resolve_tile_aligned_block_config,
+        storage_tile_shape_from_cube,
+    )
     from .tile_validity import (
         DEFAULT_TILE_VALIDITY_CELL_HEIGHT,
         DEFAULT_TILE_VALIDITY_CELL_WIDTH,
@@ -358,6 +377,22 @@ def _parse_num_worker_parallel_cpu(value: str) -> int:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
+def _validate_opencv_num_threads(value: int | None) -> int | None:
+    if value is None:
+        return None
+    resolved_value = int(value)
+    if resolved_value < 1:
+        raise ValueError("opencv_num_threads must be >= 1.")
+    return resolved_value
+
+
+def _parse_opencv_num_threads(value: str) -> int:
+    try:
+        return _validate_opencv_num_threads(int(value))
+    except (TypeError, ValueError) as exc:
+        raise argparse.ArgumentTypeError("opencv_num_threads must be an integer >= 1.") from exc
+
+
 def _validate_low_resolution_level(value: int) -> int:
     resolved_value = int(value)
     if resolved_value < 0:
@@ -412,6 +447,13 @@ def _parse_preview_cache_source(value: str) -> str:
 def _parse_adaptive_routing_profile(value: str) -> str:
     try:
         return parse_catalog_choice("adaptive_routing_profile", value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _parse_tile_block_alignment_mode(value: str) -> str:
+    try:
+        return normalize_tile_block_alignment_mode(value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
@@ -740,6 +782,11 @@ def load_image_match_defaults_from_config(
         ("sub_block_size_y", ("sub_block_size_y", "subBlockSizeY", "SubBlockSizeY"), lambda value: int(value)),
         ("overlap_size_x", ("overlap_size_x", "overlapSizeX", "OverlapSizeX"), lambda value: int(value)),
         ("overlap_size_y", ("overlap_size_y", "overlapSizeY", "OverlapSizeY"), lambda value: int(value)),
+        (
+            "tile_block_alignment_mode",
+            ("tile_block_alignment_mode", "tileBlockAlignmentMode", "TileBlockAlignmentMode"),
+            lambda value: normalize_tile_block_alignment_mode(value),
+        ),
         ("minimum_value", ("minimum_value", "minimumValue", "MinimumValue"), lambda value: float(value)),
         ("maximum_value", ("maximum_value", "maximumValue", "MaximumValue"), lambda value: float(value)),
         ("lower_percent", ("lower_percent", "lowerPercent", "LowerPercent"), lambda value: float(value)),
@@ -908,6 +955,11 @@ def load_image_match_defaults_from_config(
             "num_worker_parallel_cpu",
             ("num_worker_parallel_cpu", "numWorkerParallelCpu", "NumWorkerParallelCpu"),
             lambda value: _validate_num_worker_parallel_cpu(int(value)),
+        ),
+        (
+            "opencv_num_threads",
+            ("opencv_num_threads", "opencvNumThreads", "OpenCVNumThreads"),
+            lambda value: _validate_opencv_num_threads(int(value)),
         ),
         (
             "write_match_visualization",
@@ -2185,6 +2237,33 @@ def match_ori_pair_to_key_files(
     }
 
 
+def _tile_cache_metadata(
+    *,
+    use_tile_cache: bool,
+    aggregate_summary: dict[str, object] | None,
+) -> dict[str, object]:
+    if aggregate_summary is not None:
+        metadata = dict(aggregate_summary)
+        metadata.setdefault("enabled", bool(use_tile_cache))
+        if metadata.get("left") is not None and metadata.get("right") is not None:
+            metadata.setdefault("summary_available", True)
+            metadata.setdefault("scope", "serial")
+        else:
+            metadata.setdefault("summary_available", False)
+        return metadata
+    if use_tile_cache:
+        return {
+            "enabled": True,
+            "summary_available": False,
+            "scope": "parallel_worker_local",
+            "reason": "TileCache summaries are worker-local and not aggregated for parallel tile matching.",
+        }
+    return {
+        "enabled": False,
+        "summary_available": False,
+    }
+
+
 def match_dom_pair(
     left_dom_path: str | Path,
     right_dom_path: str | Path,
@@ -2196,6 +2275,7 @@ def match_dom_pair(
     block_height: int = 1024,
     overlap_x: int = 128,
     overlap_y: int = 128,
+    tile_block_alignment_mode: str = DEFAULT_TILE_BLOCK_ALIGNMENT_MODE,
     minimum_value: float | None = None,
     maximum_value: float | None = None,
     lower_percent: float = 0.5,
@@ -2424,6 +2504,28 @@ def match_dom_pair(
             projected_delta_x=float(low_resolution_offset_summary["delta_x_projected"]),
             projected_delta_y=float(low_resolution_offset_summary["delta_y_projected"]),
         )
+        resolved_tile_block_alignment_mode = normalize_tile_block_alignment_mode(tile_block_alignment_mode)
+        tile_block_alignment = resolve_tile_aligned_block_config(
+            mode=(
+                resolved_tile_block_alignment_mode
+                if preparation.status == "ready"
+                else DEFAULT_TILE_BLOCK_ALIGNMENT_MODE
+            ),
+            left_shape=storage_tile_shape_from_cube(left_cube),
+            right_shape=storage_tile_shape_from_cube(right_cube),
+            left_offset_x=preparation.left.offset_sample,
+            left_offset_y=preparation.left.offset_line,
+            right_offset_x=preparation.right.offset_sample,
+            right_offset_y=preparation.right.offset_line,
+            requested_block_width=block_width,
+            requested_block_height=block_height,
+            requested_overlap_x=overlap_x,
+            requested_overlap_y=overlap_y,
+            common_width=preparation.shared_width,
+            common_height=preparation.shared_height,
+        )
+
+        tile_cache_summary: dict[str, object] | None = None
 
         if preparation.status == "ready":
             windows = _paired_windows(
@@ -2434,10 +2536,11 @@ def match_dom_pair(
                 common_width=preparation.shared_width,
                 common_height=preparation.shared_height,
                 max_image_dimension=max_image_dimension,
-                block_width=block_width,
-                block_height=block_height,
-                overlap_x=overlap_x,
-                overlap_y=overlap_y,
+                block_width=tile_block_alignment.effective_block_width,
+                block_height=tile_block_alignment.effective_block_height,
+                overlap_x=tile_block_alignment.effective_overlap_x,
+                overlap_y=tile_block_alignment.effective_overlap_y,
+                local_windows=tile_block_alignment.local_windows,
             )
             tile_count_before_preindex_filter = len(windows)
             preindexed_skipped_tile_count = 0
@@ -2538,7 +2641,7 @@ def match_dom_pair(
                         *,
                         candidate_deep_match_runtime_config: object | None = None,
                     ) -> list[TileMatchResult]:
-                        nonlocal parallel_cpu_used, parallel_cpu_backend, parallel_cpu_worker_count, tile_match_backend
+                        nonlocal parallel_cpu_used, parallel_cpu_backend, parallel_cpu_worker_count, tile_match_backend, tile_cache_summary
 
                         progress_bar = (
                             _TileProgressBar(
@@ -2613,7 +2716,7 @@ def match_dom_pair(
                                 return pass_results
 
                         try:
-                            pass_results = _run_serial_tile_match_tasks(
+                            serial_batch = _run_serial_tile_match_tasks(
                                 candidate_windows,
                                 image_space=image_backend.space,
                                 left_cube=left_cube,
@@ -2645,6 +2748,8 @@ def match_dom_pair(
                                 adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
                                 adaptive_recheck_every=adaptive_recheck_every,
                             )
+                            pass_results = serial_batch.results
+                            tile_cache_summary = serial_batch.tile_cache_summary
                         finally:
                             if progress_bar is not None:
                                 progress_bar.finish()
@@ -2774,6 +2879,9 @@ def match_dom_pair(
             "min_valid_pixels": min_valid_pixels,
             "valid_pixel_percent_threshold": resolved_valid_pixel_percent_threshold,
             "invalid_pixel_radius": resolved_invalid_pixel_radius,
+            "tile_block_alignment_mode": tile_block_alignment.mode,
+            "block_alignment_reason": tile_block_alignment.reason,
+            "tile_block_alignment": tile_block_alignment.to_metadata(),
             "matcher_method_requested": resolved_requested_matcher_method,
             "matcher_method_effective": resolved_matcher_method,
             "adaptive_routing_profile": resolved_adaptive_routing_quality_profile.profile,
@@ -2806,6 +2914,10 @@ def match_dom_pair(
             "parallel_cpu_backend": parallel_cpu_backend,
             "parallel_cpu_worker_count": parallel_cpu_worker_count,
             "tile_match_backend": tile_match_backend,
+            "tile_cache": _tile_cache_metadata(
+                use_tile_cache=bool(use_tile_cache),
+                aggregate_summary=tile_cache_summary,
+            ),
             "gpu": _gpu_execution_summary(
                 use_gpu=use_gpu,
                 gpu_effective=tile_match_backend == "gpu_tile_pipeline",
@@ -2882,6 +2994,7 @@ def match_dom_pair_to_key_files(
     preview_crop_margin_pixels: int = DEFAULT_PREVIEW_CROP_MARGIN_PIXELS,
     preview_cache_dir: str | Path | None = None,
     preview_cache_source: str = DEFAULT_PREVIEW_CACHE_SOURCE,
+    tile_block_alignment_mode: str = DEFAULT_TILE_BLOCK_ALIGNMENT_MODE,
     preview_force_regenerate: bool = False,
     preview_level: int | None = None,
     gpu_dynamic_batch: bool = True,
@@ -2987,6 +3100,7 @@ def match_dom_pair_to_key_files(
         deep_match_mode=resolved_deep_match_mode,
         deep_match_temp_root_dir=deep_match_temp_root_dir,
         deep_match_config_path=deep_match_config_path,
+        tile_block_alignment_mode=tile_block_alignment_mode,
         **kwargs,
     )
     export_only = summary.get("deep_match_mode") == "export"
@@ -3011,6 +3125,9 @@ def match_dom_pair_to_key_files(
             "tile_validity_cache_dir": summary["tile_validity_cache_dir"],
             "tile_validity_cell_width": summary["tile_validity_cell_width"],
             "tile_validity_cell_height": summary["tile_validity_cell_height"],
+            "tile_block_alignment_mode": summary["tile_block_alignment_mode"],
+            "block_alignment_reason": summary["block_alignment_reason"],
+            "tile_block_alignment": summary["tile_block_alignment"],
             "tile_validity_skip_reasons": summary["tile_validity_skip_reasons"],
             "left_tile_validity_index": summary["left_tile_validity_index"],
             "right_tile_validity_index": summary["right_tile_validity_index"],
@@ -3133,6 +3250,16 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--sub-block-size-y", type=int, default=1024, help="Tile height used when block matching is enabled.")
     parser.add_argument("--overlap-size-x", type=int, default=128, help="Horizontal overlap between adjacent tiles.")
     parser.add_argument("--overlap-size-y", type=int, default=128, help="Vertical overlap between adjacent tiles.")
+    parser.add_argument(
+        "--tile-block-alignment-mode",
+        type=_parse_tile_block_alignment_mode,
+        default=DEFAULT_TILE_BLOCK_ALIGNMENT_MODE,
+        help=(
+            "Full-resolution block alignment mode for ISIS storage tile boundaries. "
+            f"Supported values: {_format_supported_values(SUPPORTED_TILE_BLOCK_ALIGNMENT_MODES)}. "
+            f"Default: {DEFAULT_TILE_BLOCK_ALIGNMENT_MODE}."
+        ),
+    )
     parser.add_argument("--minimum-value", type=float, default=None, help="Manual gray-stretch minimum value.")
     parser.add_argument("--maximum-value", type=float, default=None, help="Manual gray-stretch maximum value.")
     parser.add_argument("--lower-percent", type=float, default=0.5, help="Lower percentile used by automatic gray stretch.")
@@ -3211,6 +3338,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--left-low-resolution-dom", default=None, help="Optional precomputed low-resolution DOM cube for the left input. Must be provided together with --right-low-resolution-dom.")
     parser.add_argument("--right-low-resolution-dom", default=None, help="Optional precomputed low-resolution DOM cube for the right input. Must be provided together with --left-low-resolution-dom.")
     parser.add_argument("--num-worker-parallel-cpu", type=_parse_num_worker_parallel_cpu, default=DEFAULT_NUM_WORKER_PARALLEL_CPU, help=f"Maximum worker-process count used when CPU tile parallelism is enabled. Must be within [1, {MAX_NUM_WORKER_PARALLEL_CPU}]. Default: {DEFAULT_NUM_WORKER_PARALLEL_CPU}.")
+    parser.add_argument("--opencv-num-threads", type=_parse_opencv_num_threads, default=None, help="Optional OpenCV internal thread limit for CPU SIFT/FLANN work. Must be >= 1. Omit to keep OpenCV's default thread policy; set to 1 alongside multiple CPU workers to avoid oversubscription.")
     parser.add_argument("--use-parallel-cpu", dest="use_parallel_cpu", action="store_true", help="Enable CPU process-pool parallelism for tiled matching. Enabled by default.")
     parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
     parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default pre-RANSAC drawMatches PNG output written for the matched DOM pair.")
@@ -3417,6 +3545,7 @@ def main(argv: list[str] | None = None) -> None:
         block_height=args.sub_block_size_y,
         overlap_x=args.overlap_size_x,
         overlap_y=args.overlap_size_y,
+        tile_block_alignment_mode=args.tile_block_alignment_mode,
         minimum_value=args.minimum_value,
         maximum_value=args.maximum_value,
         lower_percent=args.lower_percent,

@@ -18,6 +18,7 @@ Updated: 2026-05-10  Geng Xun added a minimal dom/ori image-space backend abstra
 Updated: 2026-05-10  Geng Xun accepted the ORI-facing `superpoint` matcher selector in shared matcher normalization.
 Updated: 2026-05-19  Geng Xun threaded resolved deep matcher runtime config through tile tasks and adapters.
 Updated: 2026-05-19  Geng Xun preserved matcher/feature/device option dictionaries when serializing deep matcher runtime config.
+Updated: 2026-05-27  Geng Xun added serial tile cache diagnostics for match metadata.
 """
 
 from __future__ import annotations
@@ -145,6 +146,12 @@ class TileMatchResult:
 
 
 @dataclass(frozen=True, slots=True)
+class TileMatchBatchResult:
+    results: list[TileMatchResult]
+    tile_cache_summary: dict[str, object] | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class PreparedGpuTilePayload:
     local_window: TileWindow
     left_window: TileWindow
@@ -232,12 +239,15 @@ def _paired_windows(
     block_height: int,
     overlap_x: int,
     overlap_y: int,
+    local_windows: list[TileWindow] | tuple[TileWindow, ...] | None = None,
 ) -> list[PairedTileWindow]:
     if common_width <= 0 or common_height <= 0:
         return []
 
-    if requires_tiling(common_width, common_height, max_dimension=max_image_dimension):
-        local_windows = generate_tiles(
+    if local_windows is not None:
+        resolved_local_windows = list(local_windows)
+    elif requires_tiling(common_width, common_height, max_dimension=max_image_dimension):
+        resolved_local_windows = generate_tiles(
             common_width,
             common_height,
             block_width=block_width,
@@ -246,7 +256,7 @@ def _paired_windows(
             overlap_y=overlap_y,
         )
     else:
-        local_windows = [_full_image_window(common_width, common_height)]
+        resolved_local_windows = [_full_image_window(common_width, common_height)]
 
     return [
         PairedTileWindow(
@@ -264,7 +274,7 @@ def _paired_windows(
                 height=local_window.height,
             ),
         )
-        for local_window in local_windows
+        for local_window in resolved_local_windows
     ]
 
 
@@ -1659,7 +1669,7 @@ def _run_serial_tile_match_tasks(
     adaptive_throughput_threshold_mbps: float = 200.0,
     adaptive_recheck_every: int = 0,
     deep_match_runtime_config: Any | None = None,
-) -> list[TileMatchResult]:
+) -> TileMatchBatchResult:
     build_image_backend(image_space)
     left_cache: TileCache | None = None
     right_cache: TileCache | None = None
@@ -1725,7 +1735,14 @@ def _run_serial_tile_match_tasks(
             )
             if progress_callback is not None:
                 progress_callback()
-        return tile_results
+        cache_summary = None
+        if use_tile_cache:
+            cache_summary = {
+                "enabled": True,
+                "left": None if left_cache is None else left_cache.summary(),
+                "right": None if right_cache is None else right_cache.summary(),
+            }
+        return TileMatchBatchResult(results=tile_results, tile_cache_summary=cache_summary)
     finally:
         if left_cache is not None:
             left_cache.close()
@@ -1765,6 +1782,7 @@ __all__ = [
     "IndexedTileMatchTask",
     "PairedTileWindow",
     "SUPPORTED_MATCHER_METHODS",
+    "TileMatchBatchResult",
     "TileMatchResult",
     "TileMatchStats",
     "TileMatchTask",

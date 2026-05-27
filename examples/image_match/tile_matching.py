@@ -232,12 +232,15 @@ def _paired_windows(
     block_height: int,
     overlap_x: int,
     overlap_y: int,
+    local_windows: list[TileWindow] | tuple[TileWindow, ...] | None = None,
 ) -> list[PairedTileWindow]:
     if common_width <= 0 or common_height <= 0:
         return []
 
-    if requires_tiling(common_width, common_height, max_dimension=max_image_dimension):
-        local_windows = generate_tiles(
+    if local_windows is not None:
+        resolved_local_windows = list(local_windows)
+    elif requires_tiling(common_width, common_height, max_dimension=max_image_dimension):
+        resolved_local_windows = generate_tiles(
             common_width,
             common_height,
             block_width=block_width,
@@ -246,7 +249,7 @@ def _paired_windows(
             overlap_y=overlap_y,
         )
     else:
-        local_windows = [_full_image_window(common_width, common_height)]
+        resolved_local_windows = [_full_image_window(common_width, common_height)]
 
     return [
         PairedTileWindow(
@@ -264,7 +267,7 @@ def _paired_windows(
                 height=local_window.height,
             ),
         )
-        for local_window in local_windows
+        for local_window in resolved_local_windows
     ]
 
 

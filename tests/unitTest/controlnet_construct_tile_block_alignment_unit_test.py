@@ -136,6 +136,55 @@ class TestTileBlockAlignmentResolver(unittest.TestCase):
             self.assertEqual((256 + start) % 128, 0)
             self.assertEqual((512 + start) % 128, 0)
 
+    def test_generate_tiles_from_explicit_starts(self):
+        tiling = importlib.import_module("image_match.tiling")
+        tiles = tiling.generate_tiles_from_starts(
+            image_width=1000,
+            image_height=900,
+            x_starts=[0, 384, 488],
+            y_starts=[0, 384],
+            block_width=512,
+            block_height=512,
+        )
+
+        self.assertEqual([(tile.start_x, tile.start_y, tile.width, tile.height) for tile in tiles], [
+            (0, 0, 512, 512),
+            (384, 0, 512, 512),
+            (488, 0, 512, 512),
+            (0, 384, 512, 512),
+            (384, 384, 512, 512),
+            (488, 384, 512, 512),
+        ])
+
+    def test_paired_windows_accept_precomputed_local_windows(self):
+        tile_matching = importlib.import_module("image_match.tile_matching")
+        tiling = importlib.import_module("image_match.tiling")
+        local_windows = [
+            tiling.TileWindow(start_x=0, start_y=0, width=512, height=512),
+            tiling.TileWindow(start_x=384, start_y=0, width=512, height=512),
+        ]
+
+        paired = tile_matching._paired_windows(
+            left_offset_x=128,
+            left_offset_y=256,
+            right_offset_x=384,
+            right_offset_y=512,
+            common_width=1024,
+            common_height=512,
+            max_image_dimension=1,
+            block_width=100,
+            block_height=100,
+            overlap_x=10,
+            overlap_y=10,
+            local_windows=local_windows,
+        )
+
+        self.assertEqual(len(paired), 2)
+        self.assertEqual(paired[0].left_window.start_x, 128)
+        self.assertEqual(paired[0].right_window.start_x, 384)
+        self.assertEqual(paired[1].left_window.start_x, 512)
+        self.assertEqual(paired[1].right_window.start_x, 768)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -72,3 +72,33 @@ def generate_tiles(
             tiles.append(TileWindow(start_x=start_x, start_y=start_y, width=tile_width, height=tile_height))
 
     return tiles
+
+
+def generate_tiles_from_starts(
+    image_width: int,
+    image_height: int,
+    *,
+    x_starts: list[int],
+    y_starts: list[int],
+    block_width: int,
+    block_height: int,
+) -> list[TileWindow]:
+    """Generate full-coverage tiles from precomputed axis starts."""
+    if image_width <= 0 or image_height <= 0:
+        raise ValueError("Image dimensions must be positive.")
+    if block_width <= 0 or block_height <= 0:
+        raise ValueError("Block dimensions must be positive.")
+    if not x_starts or not y_starts:
+        raise ValueError("x_starts and y_starts must be non-empty.")
+
+    tiles: list[TileWindow] = []
+    for start_y in y_starts:
+        if start_y < 0 or start_y >= image_height:
+            raise ValueError(f"Invalid y start {start_y} for image height {image_height}.")
+        tile_height = min(block_height, image_height - start_y)
+        for start_x in x_starts:
+            if start_x < 0 or start_x >= image_width:
+                raise ValueError(f"Invalid x start {start_x} for image width {image_width}.")
+            tile_width = min(block_width, image_width - start_x)
+            tiles.append(TileWindow(start_x=start_x, start_y=start_y, width=tile_width, height=tile_height))
+    return tiles

@@ -108,6 +108,13 @@ The same selection can be stored under `ImageMatch.match_preset_path` in a Contr
 }
 ```
 
+For fast CPU ControlNet construction, `classic_sift_flann.json` and
+`--matcher-method flann` are the recommended baseline. Adaptive routing can use
+this FLANN path as the first route, then escalate to deep matchers only when the
+configured texture, quality, or sensor-model-lighting thresholds require it. On
+pipe_test2-style data with rich texture and small lighting differences, adaptive
+routing often remains on the FLANN route rather than escalating.
+
 The `classic_sift_*` presets are distinct from `lightglue_official_sift.json`. `lightglue_official_sift.json` uses `lightglue.SIFT` plus `lightglue.LightGlue` and follows the deep matcher `direct` / `export` / `import` workflows.
 
 ## Official LightGlue Backend

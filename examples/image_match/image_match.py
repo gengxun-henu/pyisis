@@ -393,6 +393,19 @@ def _parse_opencv_num_threads(value: str) -> int:
         raise argparse.ArgumentTypeError("opencv_num_threads must be an integer >= 1.") from exc
 
 
+def _apply_opencv_thread_config(opencv_num_threads: int | None) -> dict[str, object]:
+    requested = _validate_opencv_num_threads(opencv_num_threads)
+    configured = requested is not None
+    if configured:
+        cv2.setNumThreads(requested)
+    return {
+        "opencv_num_threads_configured": configured,
+        "opencv_num_threads_requested": requested,
+        "opencv_num_threads_effective": int(cv2.getNumThreads()),
+        "opencv_use_optimized": bool(cv2.useOptimized()),
+    }
+
+
 def _validate_low_resolution_level(value: int) -> int:
     resolved_value = int(value)
     if resolved_value < 0:
@@ -2276,6 +2289,7 @@ def match_dom_pair(
     overlap_x: int = 128,
     overlap_y: int = 128,
     tile_block_alignment_mode: str = DEFAULT_TILE_BLOCK_ALIGNMENT_MODE,
+    opencv_num_threads: int | None = None,
     minimum_value: float | None = None,
     maximum_value: float | None = None,
     lower_percent: float = 0.5,
@@ -2357,6 +2371,8 @@ def match_dom_pair(
         right_cube.open(str(right_dom_path), "r")
         resolved_valid_pixel_percent_threshold = _validate_valid_pixel_percent_threshold(valid_pixel_percent_threshold)
         resolved_num_worker_parallel_cpu = _validate_num_worker_parallel_cpu(num_worker_parallel_cpu)
+        resolved_opencv_num_threads = _validate_opencv_num_threads(opencv_num_threads)
+        opencv_thread_summary = _apply_opencv_thread_config(resolved_opencv_num_threads)
         resolved_invalid_pixel_radius = validate_invalid_pixel_radius(invalid_pixel_radius)
         resolved_tile_validity_cell_width = validate_tile_validity_cell_size(
             tile_validity_cell_width,
@@ -2681,7 +2697,8 @@ def match_dom_pair(
                                      sift_sigma=sift_sigma,
                                      use_gpu=use_gpu,
                                      gpu_batch_size=gpu_batch_size,
-                                     deep_match_runtime_config=candidate_deep_match_runtime_config,
+                                    opencv_num_threads=resolved_opencv_num_threads,
+                                    deep_match_runtime_config=candidate_deep_match_runtime_config,
                                  )
                                 try:
                                     pass_results = _run_parallel_tile_match_tasks(
@@ -2918,6 +2935,7 @@ def match_dom_pair(
                 use_tile_cache=bool(use_tile_cache),
                 aggregate_summary=tile_cache_summary,
             ),
+            **opencv_thread_summary,
             "gpu": _gpu_execution_summary(
                 use_gpu=use_gpu,
                 gpu_effective=tile_match_backend == "gpu_tile_pipeline",
@@ -3617,6 +3635,7 @@ def main(argv: list[str] | None = None) -> None:
         adaptive_warmup_count=args.adaptive_warmup_count,
         adaptive_throughput_threshold_mbps=args.adaptive_throughput_threshold_mbps,
         adaptive_recheck_every=args.adaptive_recheck_every,
+        opencv_num_threads=args.opencv_num_threads,
     )
     result_output_path = None
     if args.result_output is not None:

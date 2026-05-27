@@ -1123,6 +1123,47 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "opencv_num_threads"):
                 image_match.load_image_match_defaults_from_config(config_path)
 
+    def test_apply_opencv_thread_config_skips_when_unset(self):
+        calls = []
+        original_set = image_match.cv2.setNumThreads
+        original_get = image_match.cv2.getNumThreads
+        original_optimized = image_match.cv2.useOptimized
+        image_match.cv2.setNumThreads = lambda value: calls.append(value)
+        image_match.cv2.getNumThreads = lambda: 8
+        image_match.cv2.useOptimized = lambda: True
+        try:
+            summary = image_match._apply_opencv_thread_config(None)
+        finally:
+            image_match.cv2.setNumThreads = original_set
+            image_match.cv2.getNumThreads = original_get
+            image_match.cv2.useOptimized = original_optimized
+
+        self.assertEqual(calls, [])
+        self.assertFalse(summary["opencv_num_threads_configured"])
+        self.assertIsNone(summary["opencv_num_threads_requested"])
+        self.assertEqual(summary["opencv_num_threads_effective"], 8)
+        self.assertTrue(summary["opencv_use_optimized"])
+
+    def test_apply_opencv_thread_config_sets_positive_value(self):
+        calls = []
+        original_set = image_match.cv2.setNumThreads
+        original_get = image_match.cv2.getNumThreads
+        original_optimized = image_match.cv2.useOptimized
+        image_match.cv2.setNumThreads = lambda value: calls.append(value)
+        image_match.cv2.getNumThreads = lambda: calls[-1]
+        image_match.cv2.useOptimized = lambda: True
+        try:
+            summary = image_match._apply_opencv_thread_config(2)
+        finally:
+            image_match.cv2.setNumThreads = original_set
+            image_match.cv2.getNumThreads = original_get
+            image_match.cv2.useOptimized = original_optimized
+
+        self.assertEqual(calls, [2])
+        self.assertTrue(summary["opencv_num_threads_configured"])
+        self.assertEqual(summary["opencv_num_threads_requested"], 2)
+        self.assertEqual(summary["opencv_num_threads_effective"], 2)
+
     def test_build_argument_parser_accepts_valid_pixel_percent_threshold(self):
         parser = build_argument_parser()
 

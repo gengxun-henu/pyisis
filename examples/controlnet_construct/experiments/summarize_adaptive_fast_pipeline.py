@@ -105,6 +105,8 @@ def _summarize_pair_result(path: Path) -> dict[str, Any]:
 
 def _summarize_pairs(root: Path) -> list[dict[str, Any]]:
     match_dir = root / "match_results"
+    if not match_dir.is_dir():
+        raise FileNotFoundError(f"pair-result directory not found: {match_dir}")
     return [_summarize_pair_result(path) for path in sorted(match_dir.glob("*.json"))]
 
 
@@ -160,11 +162,23 @@ def _route_counts(pairs: list[dict[str, Any]]) -> dict[str, int]:
     return counts
 
 
+def _markdown_cell(value: Any) -> str:
+    if value is None:
+        return ""
+    return (
+        str(value)
+        .replace("|", "\\|")
+        .replace("\r\n", "\n")
+        .replace("\r", "\n")
+        .replace("\n", "<br>")
+    )
+
+
 def _markdown_table(summary: dict[str, Any]) -> str:
     lines = [
         "# Adaptive Fast Pipeline Summary",
         "",
-        f"Output root: `{summary['output_root']}`",
+        f"Output root: `{_markdown_cell(summary['output_root'])}`",
         "",
         "## Stage Timing",
         "",
@@ -172,7 +186,13 @@ def _markdown_table(summary: dict[str, Any]) -> str:
         "|---|---|---:|",
     ]
     for step in summary["timing"]["steps"]:
-        lines.append(f"| {step['name']} | {step['status']} | {step['duration_seconds']} |")
+        lines.append(
+            "| {name} | {status} | {seconds} |".format(
+                name=_markdown_cell(step.get("name")),
+                status=_markdown_cell(step.get("status")),
+                seconds=_markdown_cell(step.get("duration_seconds")),
+            )
+        )
 
     lines.extend(
         [
@@ -188,11 +208,11 @@ def _markdown_table(summary: dict[str, Any]) -> str:
         route_label = f"{route.get('selected_initial_matcher')} -> {route.get('selected_final_matcher')}"
         lines.append(
             "| {pair} | {points} | {route_label} | {texture} | {lighting} |".format(
-                pair=pair["pair"],
-                points=pair.get("matched_point_count"),
-                route_label=route_label,
-                texture=route.get("pair_texture_sparseness"),
-                lighting=route.get("lighting_difference_score"),
+                pair=_markdown_cell(pair["pair"]),
+                points=_markdown_cell(pair.get("matched_point_count")),
+                route_label=_markdown_cell(route_label),
+                texture=_markdown_cell(route.get("pair_texture_sparseness")),
+                lighting=_markdown_cell(route.get("lighting_difference_score")),
             )
         )
     batch = summary["controlnet_batch"]
@@ -201,9 +221,10 @@ def _markdown_table(summary: dict[str, Any]) -> str:
             "",
             "## ControlNet",
             "",
-            f"Final control points: `{batch.get('total_final_control_point_count')}`",
-            f"Merged net exists: `{summary['merged_net']['exists']}`",
-            f"Merged net path: `{summary['merged_net']['path']}`",
+            "Final control points: "
+            f"`{_markdown_cell(batch.get('total_final_control_point_count'))}`",
+            f"Merged net exists: `{_markdown_cell(summary['merged_net']['exists'])}`",
+            f"Merged net path: `{_markdown_cell(summary['merged_net']['path'])}`",
             "",
         ]
     )

@@ -8,6 +8,7 @@
 # Updated: 2026-05-16  Geng Xun added deep-match export/import forwarding and manifest summary output for cross-conda handoff workflows.
 # Updated: 2026-05-19  Geng Xun added deep matcher config path CLI/config forwarding for batch matching.
 # Updated: 2026-05-19  Geng Xun aligned batch wrapper config precedence, adaptive routing flags, and resolved deep matcher config path logging with the main pipeline wrapper.
+# Updated: 2026-05-27  Geng Xun added explicit OpenCV thread-limit forwarding for batch DOM matching.
 
 set -euo pipefail
 
@@ -64,6 +65,10 @@ Options:
   --num-worker-parallel-cpu N     Maximum worker-process count forwarded to examples/image_match/image_match.py when CPU parallelism is enabled.
                                   Default: 8. If omitted, this script falls back to config JSON field
                                   ImageMatch.num_worker_parallel_cpu when present. Valid range: 1~4096.
+  --opencv-num-threads N          Optional OpenCV internal CPU thread limit for SIFT/FLANN work.
+                                  If omitted, this script falls back to config JSON field
+                                  ImageMatch.opencv_num_threads when present. Use 1 with multiple CPU
+                                  workers to avoid OpenCV/process-pool oversubscription.
   --valid-pixel-percent-threshold VALUE
                                  Minimum valid-pixel ratio forwarded to examples/image_match/image_match.py.
                                  Default: 0.05 unless omitted and resolved from --config.
@@ -324,6 +329,8 @@ main() {
   local explicit_use_parallel_cpu=""
   local num_worker_parallel_cpu="8"
   local explicit_num_worker_parallel_cpu=""
+  local opencv_num_threads=""
+  local explicit_opencv_num_threads=""
   local explicit_threshold=""
   local invalid_pixel_radius="$DEFAULT_INVALID_PIXEL_RADIUS"
   local explicit_invalid_pixel_radius=""
@@ -417,6 +424,12 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --num-worker-parallel-cpu"
         num_worker_parallel_cpu=$2
         explicit_num_worker_parallel_cpu=$2
+        shift 2
+        ;;
+      --opencv-num-threads)
+        [[ $# -ge 2 ]] || die "missing value for --opencv-num-threads"
+        opencv_num_threads=$2
+        explicit_opencv_num_threads=$2
         shift 2
         ;;
       --valid-pixel-percent-threshold)
@@ -616,6 +629,13 @@ main() {
         num_worker_parallel_cpu="$config_num_worker_parallel_cpu"
       fi
     fi
+    if [[ -z "$explicit_opencv_num_threads" ]]; then
+      local config_opencv_num_threads
+      config_opencv_num_threads=$(extract_image_match_config_value "$config_input" "opencv_num_threads")
+      if [[ -n "$config_opencv_num_threads" ]]; then
+        opencv_num_threads="$config_opencv_num_threads"
+      fi
+    fi
     if [[ -z "$explicit_invalid_pixel_radius" ]]; then
       local config_invalid_pixel_radius
       config_invalid_pixel_radius=$(extract_image_match_config_value "$config_input" "invalid_pixel_radius")
@@ -733,6 +753,11 @@ main() {
     log "CPU parallel tile matching: disabled"
     log "CPU parallel worker limit (forwarded default): $num_worker_parallel_cpu"
   fi
+  if [[ -n "$opencv_num_threads" ]]; then
+    log "OpenCV thread limit: $opencv_num_threads"
+  else
+    log "OpenCV thread limit: default"
+  fi
   if [[ "$enable_low_resolution_offset_estimation" == "1" ]]; then
     log "Low-resolution offset estimation: enabled"
     log "Low-resolution level: $low_resolution_level"
@@ -847,6 +872,9 @@ main() {
       match_args+=(--deep-match-config-path "$deep_match_config_path")
     fi
     match_args+=(--num-worker-parallel-cpu "$num_worker_parallel_cpu")
+    if [[ -n "$opencv_num_threads" ]]; then
+      match_args+=(--opencv-num-threads "$opencv_num_threads")
+    fi
     if [[ "$enable_low_resolution_offset_estimation" == "1" ]]; then
       if [[ -z "${low_resolution_dom_by_original[$left]+x}" ]]; then
         die "no low-resolution DOM path found for left original image: $left"

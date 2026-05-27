@@ -9,6 +9,7 @@
 # Updated: 2026-05-16  Geng Xun added adaptive-routing flag/profile forwarding for the latest image-match routing profiles.
 # Updated: 2026-05-19  Geng Xun aligned ImageMatch config precedence and resolved config-relative deep matcher preset paths before forwarding.
 # Updated: 2026-05-20  Geng Xun documented preset-aware adaptive-routing config support for deep matcher preset selection.
+# Updated: 2026-05-27  Geng Xun added explicit OpenCV thread-limit forwarding through the example pipeline.
 
 set -euo pipefail
 
@@ -252,7 +253,7 @@ Parameter groups:
   adaptive_routing: pair-level adaptive matcher routing controls
     common flags: --adaptive-routing, --adaptive-routing-profile
   execution: CPU/GPU execution controls
-    common flags: --use-parallel-cpu, --no-parallel-cpu, --num-worker-parallel-cpu
+    common flags: --use-parallel-cpu, --no-parallel-cpu, --num-worker-parallel-cpu, --opencv-num-threads
   visualization: pre/post-RANSAC preview behavior and memory profile
     common flags: --visualization-mode, --memory-profile, --preview-cache-source
   controlnet: pair IDs, cnetmerge, final network paths, and merge behavior
@@ -280,6 +281,10 @@ Options:
   --num-worker-parallel-cpu N     Maximum worker-process count forwarded to examples/image_match/image_match.py when CPU parallelism is enabled.
                                   Default: 8. If omitted, this script falls back to config JSON field
                                   ImageMatch.num_worker_parallel_cpu when present. Valid range: 1~4096.
+  --opencv-num-threads N          Optional OpenCV internal CPU thread limit for SIFT/FLANN work.
+                                  If omitted, this script falls back to config JSON field
+                                  ImageMatch.opencv_num_threads when present. Use 1 with multiple CPU
+                                  workers to avoid OpenCV/process-pool oversubscription.
   --pair-id-prefix PREFIX         Batch pair-id prefix. Default: S
   --pair-id-start N               Batch pair-id starting index. Default: 1
   --valid-pixel-percent-threshold VALUE
@@ -599,6 +604,7 @@ field_map = {
     "config_valid_pixel_percent_threshold": "valid_pixel_percent_threshold",
     "config_use_parallel_cpu": "use_parallel_cpu",
     "config_num_worker_parallel_cpu": "num_worker_parallel_cpu",
+    "config_opencv_num_threads": "opencv_num_threads",
     "config_invalid_pixel_radius": "invalid_pixel_radius",
     "config_matcher_method": "matcher_method",
     "config_enable_adaptive_routing": "enable_adaptive_routing",
@@ -807,6 +813,7 @@ if is_present(env("parameter_profile")):
 
 cli_sources = {
     "num_worker_parallel_cpu": ("explicit_num_worker_parallel_cpu", "NUM_WORKER_PARALLEL_CPU"),
+    "opencv_num_threads": ("explicit_opencv_num_threads", "OPENCV_NUM_THREADS"),
     "use_parallel_cpu": ("explicit_use_parallel_cpu", "USE_PARALLEL_CPU"),
     "pair_id_start": ("explicit_pair_id_start", "PAIR_ID_START"),
     "valid_pixel_percent_threshold": (
@@ -873,6 +880,7 @@ config_sources = {
     "valid_pixel_percent_threshold": "config_valid_pixel_percent_threshold",
     "invalid_pixel_radius": "config_invalid_pixel_radius",
     "num_worker_parallel_cpu": "config_num_worker_parallel_cpu",
+    "opencv_num_threads": "config_opencv_num_threads",
     "use_parallel_cpu": "config_use_parallel_cpu",
     "matcher_method": "config_matcher_method",
     "deep_match_config_path": "config_deep_matcher_config_path",
@@ -931,6 +939,7 @@ print_parameter_validation_summary() {
   printf 'PARAMETER_PROFILE=%q\n' "$parameter_profile"
   printf 'MATCHER_METHOD=%q\n' "$MATCHER_METHOD"
   printf 'NUM_WORKER_PARALLEL_CPU=%q\n' "$NUM_WORKER_PARALLEL_CPU"
+  printf 'OPENCV_NUM_THREADS=%q\n' "$OPENCV_NUM_THREADS"
   printf 'VALID_PIXEL_PERCENT_THRESHOLD=%q\n' "$VALID_PIXEL_PERCENT_THRESHOLD"
   printf 'INVALID_PIXEL_RADIUS=%q\n' "$INVALID_PIXEL_RADIUS"
   printf 'ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION=%q\n' "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION"
@@ -1131,6 +1140,9 @@ run_step_2_image_match_batch() {
       match_args+=(--no-parallel-cpu)
     fi
     match_args+=(--num-worker-parallel-cpu "$NUM_WORKER_PARALLEL_CPU")
+    if [[ -n "$OPENCV_NUM_THREADS" ]]; then
+      match_args+=(--opencv-num-threads "$OPENCV_NUM_THREADS")
+    fi
     if [[ "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION" == "1" ]]; then
       if [[ -z "${low_resolution_dom_by_original[$left]+x}" ]]; then
         die "no low-resolution DOM path found for left original image: $left"
@@ -1284,6 +1296,7 @@ main() {
   local parameter_profile=""
   local explicit_valid_pixel_percent_threshold=""
   local explicit_num_worker_parallel_cpu=""
+  local explicit_opencv_num_threads=""
   local explicit_use_parallel_cpu=""
   local explicit_pair_id_start=""
   local explicit_invalid_pixel_radius=""
@@ -1317,6 +1330,7 @@ main() {
   local config_match_preset_path=""
   local config_valid_pixel_percent_threshold=""
   local config_num_worker_parallel_cpu=""
+  local config_opencv_num_threads=""
   local config_use_parallel_cpu=""
   local config_invalid_pixel_radius=""
   local config_matcher_method=""
@@ -1372,6 +1386,7 @@ main() {
   PREVIEW_CACHE_SOURCE="auto"
   USE_PARALLEL_CPU="1"
   NUM_WORKER_PARALLEL_CPU="8"
+  OPENCV_NUM_THREADS=""
   NETWORK_ID=""
   MERGE_DESCRIPTION="Merged DOM matching ControlNet"
   SKIP_FINAL_MERGE="0"
@@ -1437,6 +1452,12 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --num-worker-parallel-cpu"
         NUM_WORKER_PARALLEL_CPU=$2
         explicit_num_worker_parallel_cpu=$2
+        shift 2
+        ;;
+      --opencv-num-threads)
+        [[ $# -ge 2 ]] || die "missing value for --opencv-num-threads"
+        OPENCV_NUM_THREADS=$2
+        explicit_opencv_num_threads=$2
         shift 2
         ;;
       --pair-id-prefix)
@@ -1762,6 +1783,11 @@ main() {
       NUM_WORKER_PARALLEL_CPU="$config_num_worker_parallel_cpu"
     fi
   fi
+  if [[ -z "$explicit_opencv_num_threads" ]]; then
+    if [[ -n "$config_opencv_num_threads" ]]; then
+      OPENCV_NUM_THREADS="$config_opencv_num_threads"
+    fi
+  fi
   if [[ -z "$explicit_invalid_pixel_radius" ]]; then
     if [[ -n "$config_invalid_pixel_radius" ]]; then
       INVALID_PIXEL_RADIUS="$config_invalid_pixel_radius"
@@ -1872,20 +1898,20 @@ PY
 
   export REPO_ROOT
   export print_parameter_groups validate_parameters_only strict_parameter_validation explicit_strict_parameter_validation parameter_profile
-  export explicit_num_worker_parallel_cpu explicit_use_parallel_cpu explicit_pair_id_start explicit_valid_pixel_percent_threshold explicit_invalid_pixel_radius
+  export explicit_num_worker_parallel_cpu explicit_opencv_num_threads explicit_use_parallel_cpu explicit_pair_id_start explicit_valid_pixel_percent_threshold explicit_invalid_pixel_radius
   export explicit_match_preset_path explicit_matcher_method explicit_deep_matcher_config_path
   export explicit_deep_match_mode explicit_deep_match_temp_root_dir explicit_deep_match_manifest_dir explicit_deep_match_manifest_summary
   export explicit_adaptive_routing explicit_adaptive_routing_profile explicit_enable_low_resolution_offset_estimation explicit_low_resolution_level
   export explicit_low_resolution_max_mean_reprojection_error_pixels explicit_low_resolution_min_retained_match_count explicit_low_resolution_max_mean_projected_offset_meters
   export explicit_visualization_mode explicit_memory_profile explicit_visualization_target_long_edge explicit_preview_crop_margin_pixels explicit_preview_cache_source
   export explicit_skip_final_merge explicit_post_merge_control_measure explicit_post_merge_output explicit_post_merge_decimals
-  export match_preset_path MATCHER_METHOD DEEP_MATCHER_CONFIG_PATH ADAPTIVE_ROUTING ADAPTIVE_ROUTING_PROFILE USE_PARALLEL_CPU NUM_WORKER_PARALLEL_CPU
+  export match_preset_path MATCHER_METHOD DEEP_MATCHER_CONFIG_PATH ADAPTIVE_ROUTING ADAPTIVE_ROUTING_PROFILE USE_PARALLEL_CPU NUM_WORKER_PARALLEL_CPU OPENCV_NUM_THREADS
   export DEEP_MATCH_MODE DEEP_MATCH_TEMP_ROOT_DIR DEEP_MATCH_MANIFEST_DIR DEEP_MATCH_MANIFEST_SUMMARY
   export SKIP_FINAL_MERGE POST_MERGE_CONTROL_MEASURE POST_MERGE_OUTPUT_PATH POST_MERGE_DECIMALS
   export PAIR_ID_START VALID_PIXEL_PERCENT_THRESHOLD INVALID_PIXEL_RADIUS
   export ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION LOW_RESOLUTION_LEVEL LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT
   export LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS VISUALIZATION_MODE MEMORY_PROFILE VISUALIZATION_TARGET_LONG_EDGE PREVIEW_CROP_MARGIN_PIXELS PREVIEW_CACHE_SOURCE
-  export config_match_preset_path config_num_worker_parallel_cpu config_use_parallel_cpu config_matcher_method config_deep_matcher_config_path
+  export config_match_preset_path config_num_worker_parallel_cpu config_opencv_num_threads config_use_parallel_cpu config_matcher_method config_deep_matcher_config_path
   export config_enable_adaptive_routing config_adaptive_routing_profile config_enable_low_resolution_offset_estimation config_low_resolution_level
   export config_low_resolution_max_mean_reprojection_error_pixels config_low_resolution_min_retained_match_count config_low_resolution_max_mean_projected_offset_meters
   export config_visualization_mode config_memory_profile config_visualization_target_long_edge config_preview_crop_margin_pixels config_preview_cache_source
@@ -1931,6 +1957,11 @@ PY
   else
     log "CPU parallel tile matching: disabled"
     log "CPU parallel worker limit (forwarded default): $NUM_WORKER_PARALLEL_CPU"
+  fi
+  if [[ -n "$OPENCV_NUM_THREADS" ]]; then
+    log "OpenCV thread limit: $OPENCV_NUM_THREADS"
+  else
+    log "OpenCV thread limit: default"
   fi
   if [[ -n "$VALID_PIXEL_PERCENT_THRESHOLD" ]]; then
     log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"

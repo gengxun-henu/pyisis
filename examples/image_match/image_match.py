@@ -54,6 +54,7 @@ Updated: 2026-05-27  Geng Xun added --opencv-num-threads CLI/config validation h
 Updated: 2026-05-27  Geng Xun wired ISIS storage-tile block alignment through ImageMatch API, config, CLI, and metadata.
 Updated: 2026-05-27  Geng Xun deferred storage-tile alignment until DOM preparation is ready.
 Updated: 2026-05-27  Geng Xun recorded serial tile cache summaries in match metadata.
+Updated: 2026-05-27  Geng Xun clarified worker-local parallel tile cache metadata when aggregate summaries are unavailable.
 """
 
 from __future__ import annotations
@@ -2236,6 +2237,33 @@ def match_ori_pair_to_key_files(
     }
 
 
+def _tile_cache_metadata(
+    *,
+    use_tile_cache: bool,
+    aggregate_summary: dict[str, object] | None,
+) -> dict[str, object]:
+    if aggregate_summary is not None:
+        metadata = dict(aggregate_summary)
+        metadata.setdefault("enabled", bool(use_tile_cache))
+        if "left" in metadata and "right" in metadata:
+            metadata.setdefault("summary_available", True)
+            metadata.setdefault("scope", "serial")
+        else:
+            metadata.setdefault("summary_available", False)
+        return metadata
+    if use_tile_cache:
+        return {
+            "enabled": True,
+            "summary_available": False,
+            "scope": "parallel_worker_local",
+            "reason": "TileCache summaries are worker-local and not aggregated for parallel tile matching.",
+        }
+    return {
+        "enabled": False,
+        "summary_available": False,
+    }
+
+
 def match_dom_pair(
     left_dom_path: str | Path,
     right_dom_path: str | Path,
@@ -2886,7 +2914,10 @@ def match_dom_pair(
             "parallel_cpu_backend": parallel_cpu_backend,
             "parallel_cpu_worker_count": parallel_cpu_worker_count,
             "tile_match_backend": tile_match_backend,
-            "tile_cache": tile_cache_summary if tile_cache_summary is not None else {"enabled": bool(use_tile_cache)},
+            "tile_cache": _tile_cache_metadata(
+                use_tile_cache=bool(use_tile_cache),
+                aggregate_summary=tile_cache_summary,
+            ),
             "gpu": _gpu_execution_summary(
                 use_gpu=use_gpu,
                 gpu_effective=tile_match_backend == "gpu_tile_pipeline",

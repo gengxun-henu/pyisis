@@ -85,6 +85,7 @@ Updated: 2026-05-22  Geng Xun added matcher preset option resolution and constru
 Updated: 2026-05-27  Geng Xun added metadata regression coverage for ImageMatch tile block alignment modes.
 Updated: 2026-05-27  Geng Xun added regression coverage for non-ready DOM preparation with tile block alignment enabled.
 Updated: 2026-05-27  Geng Xun added metadata regression coverage for tile cache diagnostics.
+Updated: 2026-05-27  Geng Xun added regression coverage for worker-local parallel tile cache metadata.
 Updated: 2026-05-22  Geng Xun added fail-fast matcher and extractor compatibility regression coverage for deep presets.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
@@ -4024,6 +4025,71 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertIn("right", cache_summary)
         self.assertGreaterEqual(cache_summary["left"]["read_window_count"], 1)
         self.assertGreaterEqual(cache_summary["right"]["read_window_count"], 1)
+        self.assertTrue(cache_summary["summary_available"])
+        self.assertEqual(cache_summary["scope"], "serial")
+
+    def test_match_dom_pair_reports_worker_local_tile_cache_metadata_for_parallel_path(self):
+        image = _build_textured_test_image(128, 128)
+        synthetic_tile_results = [
+            image_match.TileMatchResult(
+                stats=image_match.TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=64,
+                    height=64,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=4096,
+                    right_valid_pixel_count=4096,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=5,
+                    right_feature_count=5,
+                    match_count=1,
+                    status="matched",
+                ),
+                left_points=(Keypoint(10.0, 10.0),),
+                right_points=(Keypoint(10.5, 10.5),),
+            )
+        ]
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_parallel_cache_metadata.cub",
+                right_name="right_parallel_cache_metadata.cub",
+            )
+            with mock.patch.object(
+                image_match,
+                "_run_parallel_tile_match_tasks",
+                return_value=synthetic_tile_results,
+            ) as parallel_mock:
+                _, _, summary = match_dom_pair(
+                    left_path,
+                    right_path,
+                    max_image_dimension=64,
+                    block_width=64,
+                    block_height=64,
+                    overlap_x=0,
+                    overlap_y=0,
+                    min_valid_pixels=16,
+                    num_worker_parallel_cpu=2,
+                    use_tile_cache=True,
+                )
+
+        parallel_mock.assert_called_once()
+        self.assertTrue(parallel_mock.call_args.kwargs["use_tile_cache"])
+        self.assertTrue(summary["parallel_cpu_used"])
+        cache_summary = summary["tile_cache"]
+        self.assertTrue(cache_summary["enabled"])
+        self.assertFalse(cache_summary["summary_available"])
+        self.assertEqual(cache_summary["scope"], "parallel_worker_local")
+        self.assertIn("worker-local", cache_summary["reason"])
+        self.assertIn("not aggregated", cache_summary["reason"])
 
     def test_match_dom_pair_auto_alignment_preserves_failed_preparation_status(self):
         image = _build_textured_test_image(64, 64)

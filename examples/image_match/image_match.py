@@ -53,6 +53,7 @@ Updated: 2026-05-20  Geng Xun reused deep preset matcher compatibility validatio
 Updated: 2026-05-27  Geng Xun added --opencv-num-threads CLI/config validation helpers and ImageMatch config alias parsing.
 Updated: 2026-05-27  Geng Xun wired ISIS storage-tile block alignment through ImageMatch API, config, CLI, and metadata.
 Updated: 2026-05-27  Geng Xun deferred storage-tile alignment until DOM preparation is ready.
+Updated: 2026-05-27  Geng Xun recorded serial tile cache summaries in match metadata.
 """
 
 from __future__ import annotations
@@ -2496,6 +2497,8 @@ def match_dom_pair(
             common_height=preparation.shared_height,
         )
 
+        tile_cache_summary: dict[str, object] | None = None
+
         if preparation.status == "ready":
             windows = _paired_windows(
                 left_offset_x=preparation.left.offset_sample,
@@ -2610,7 +2613,7 @@ def match_dom_pair(
                         *,
                         candidate_deep_match_runtime_config: object | None = None,
                     ) -> list[TileMatchResult]:
-                        nonlocal parallel_cpu_used, parallel_cpu_backend, parallel_cpu_worker_count, tile_match_backend
+                        nonlocal parallel_cpu_used, parallel_cpu_backend, parallel_cpu_worker_count, tile_match_backend, tile_cache_summary
 
                         progress_bar = (
                             _TileProgressBar(
@@ -2685,7 +2688,7 @@ def match_dom_pair(
                                 return pass_results
 
                         try:
-                            pass_results = _run_serial_tile_match_tasks(
+                            serial_batch = _run_serial_tile_match_tasks(
                                 candidate_windows,
                                 image_space=image_backend.space,
                                 left_cube=left_cube,
@@ -2717,6 +2720,12 @@ def match_dom_pair(
                                 adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
                                 adaptive_recheck_every=adaptive_recheck_every,
                             )
+                            if isinstance(serial_batch, list):
+                                pass_results = serial_batch
+                                tile_cache_summary = None
+                            else:
+                                pass_results = serial_batch.results
+                                tile_cache_summary = serial_batch.tile_cache_summary
                         finally:
                             if progress_bar is not None:
                                 progress_bar.finish()
@@ -2881,6 +2890,7 @@ def match_dom_pair(
             "parallel_cpu_backend": parallel_cpu_backend,
             "parallel_cpu_worker_count": parallel_cpu_worker_count,
             "tile_match_backend": tile_match_backend,
+            "tile_cache": tile_cache_summary if tile_cache_summary is not None else {"enabled": bool(use_tile_cache)},
             "gpu": _gpu_execution_summary(
                 use_gpu=use_gpu,
                 gpu_effective=tile_match_backend == "gpu_tile_pipeline",

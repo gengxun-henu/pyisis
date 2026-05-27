@@ -84,6 +84,7 @@ Updated: 2026-05-22  Geng Xun tightened ORI delegation and `.key` file readabili
 Updated: 2026-05-22  Geng Xun added matcher preset option resolution and constructor-forwarding regression coverage.
 Updated: 2026-05-27  Geng Xun added metadata regression coverage for ImageMatch tile block alignment modes.
 Updated: 2026-05-27  Geng Xun added regression coverage for non-ready DOM preparation with tile block alignment enabled.
+Updated: 2026-05-27  Geng Xun added metadata regression coverage for tile cache diagnostics.
 Updated: 2026-05-22  Geng Xun added fail-fast matcher and extractor compatibility regression coverage for deep presets.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
@@ -3978,6 +3979,51 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertGreaterEqual(alignment["effective_block_height"], 30)
         self.assertIn("left_storage_tile_width", alignment)
         self.assertIn("block_alignment_reason", summary)
+
+    def test_match_dom_pair_reports_tile_cache_diagnostics_when_enabled(self):
+        image = _build_textured_test_image(96, 96)
+
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_tile_test_cube(
+                temp_dir,
+                image,
+                tile_samples=32,
+                tile_lines=32,
+                name="left_cache_diag.cub",
+            )
+            right_cube, right_path = make_tile_test_cube(
+                temp_dir,
+                image,
+                tile_samples=32,
+                tile_lines=32,
+                name="right_cache_diag.cub",
+            )
+            try:
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=96.0)
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=96.0)
+            finally:
+                left_cube.close()
+                right_cube.close()
+
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                max_image_dimension=32,
+                block_width=48,
+                block_height=48,
+                overlap_x=0,
+                overlap_y=0,
+                min_valid_pixels=8,
+                use_parallel_cpu=False,
+                use_tile_cache=True,
+            )
+
+        cache_summary = summary["tile_cache"]
+        self.assertTrue(cache_summary["enabled"])
+        self.assertIn("left", cache_summary)
+        self.assertIn("right", cache_summary)
+        self.assertGreaterEqual(cache_summary["left"]["read_window_count"], 1)
+        self.assertGreaterEqual(cache_summary["right"]["read_window_count"], 1)
 
     def test_match_dom_pair_auto_alignment_preserves_failed_preparation_status(self):
         image = _build_textured_test_image(64, 64)

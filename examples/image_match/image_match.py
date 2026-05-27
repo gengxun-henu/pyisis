@@ -2720,12 +2720,8 @@ def match_dom_pair(
                                 adaptive_throughput_threshold_mbps=adaptive_throughput_threshold_mbps,
                                 adaptive_recheck_every=adaptive_recheck_every,
                             )
-                            if isinstance(serial_batch, list):
-                                pass_results = serial_batch
-                                tile_cache_summary = None
-                            else:
-                                pass_results = serial_batch.results
-                                tile_cache_summary = serial_batch.tile_cache_summary
+                            pass_results = serial_batch.results
+                            tile_cache_summary = serial_batch.tile_cache_summary
                         finally:
                             if progress_bar is not None:
                                 progress_bar.finish()

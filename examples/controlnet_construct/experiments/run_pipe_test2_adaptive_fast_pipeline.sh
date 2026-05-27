@@ -147,10 +147,16 @@ if [[ "$validate_only" == "1" ]]; then
 else
   set +e
   /usr/bin/time -p "${command[@]}" 2>&1 | tee "$logs_dir/adaptive_fast_pipeline.log"
-  status=${PIPESTATUS[0]}
+  pipeline_statuses=("${PIPESTATUS[@]}")
+  command_status=${pipeline_statuses[0]}
+  tee_status=${pipeline_statuses[1]}
   set -e
-  printf '===== adaptive fast pipeline done status=%s log=%s =====\n' "$status" "$logs_dir/adaptive_fast_pipeline.log"
-  [[ "$status" -eq 0 ]] || exit "$status"
+  printf '===== adaptive fast pipeline done command_status=%s log=%s =====\n' "$command_status" "$logs_dir/adaptive_fast_pipeline.log"
+  [[ "$command_status" -eq 0 ]] || exit "$command_status"
+  if [[ "$tee_status" -ne 0 ]]; then
+    printf 'ERROR: failed to write adaptive fast pipeline log: %s\n' "$logs_dir/adaptive_fast_pipeline.log" >&2
+    exit "$tee_status"
+  fi
 
   "$python_executable" "$repo_root/examples/controlnet_construct/experiments/summarize_adaptive_fast_pipeline.py" \
     "$work_dir" \

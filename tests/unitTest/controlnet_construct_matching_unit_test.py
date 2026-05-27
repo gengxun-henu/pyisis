@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-22
+Last Modified: 2026-05-27
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -82,6 +82,7 @@ Updated: 2026-05-22  Geng Xun added regression coverage for dom/ori image-space 
 Updated: 2026-05-22  Geng Xun added ORI key export regression coverage for pair-level `.key` output summaries.
 Updated: 2026-05-22  Geng Xun tightened ORI delegation and `.key` file readability regression coverage for Task 3 review fixes.
 Updated: 2026-05-22  Geng Xun added matcher preset option resolution and constructor-forwarding regression coverage.
+Updated: 2026-05-27  Geng Xun added metadata regression coverage for ImageMatch tile block alignment modes.
 Updated: 2026-05-22  Geng Xun added fail-fast matcher and extractor compatibility regression coverage for deep presets.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
@@ -3923,6 +3924,59 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertIn("right_valid_pixel_ratio", summary["tiles"][0])
         self.assertGreaterEqual(summary["tiles"][0]["left_valid_pixel_ratio"], 0.0)
         self.assertLessEqual(summary["tiles"][0]["left_valid_pixel_ratio"], 1.0)
+
+    def test_match_dom_pair_reports_tile_block_alignment_off_by_default(self):
+        image = _build_textured_test_image(64, 64)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_alignment_default.cub",
+                right_name="right_alignment_default.cub",
+            )
+
+            _, _, summary = match_dom_pair(left_path, right_path, min_valid_pixels=8)
+
+        alignment = summary["tile_block_alignment"]
+        self.assertEqual(alignment["mode"], "off")
+        self.assertFalse(alignment["aligned"])
+        self.assertEqual(alignment["requested_block_width"], 1024)
+        self.assertEqual(alignment["effective_block_width"], 1024)
+
+    def test_match_dom_pair_auto_alignment_records_effective_geometry(self):
+        image = _build_textured_test_image(128, 128)
+
+        with temporary_directory() as temp_dir:
+            left_path, right_path = _write_projected_dom_pair(
+                temp_dir,
+                image,
+                pixel_type=ip.PixelType.UnsignedByte,
+                left_name="left_alignment_auto.cub",
+                right_name="right_alignment_auto.cub",
+            )
+
+            _, _, summary = match_dom_pair(
+                left_path,
+                right_path,
+                block_width=30,
+                block_height=30,
+                overlap_x=4,
+                overlap_y=4,
+                min_valid_pixels=8,
+                tile_block_alignment_mode="auto",
+            )
+
+        alignment = summary["tile_block_alignment"]
+        self.assertEqual(alignment["mode"], "auto")
+        self.assertIn("aligned", alignment)
+        self.assertEqual(alignment["requested_block_width"], 30)
+        self.assertEqual(alignment["requested_block_height"], 30)
+        self.assertGreaterEqual(alignment["effective_block_width"], 30)
+        self.assertGreaterEqual(alignment["effective_block_height"], 30)
+        self.assertIn("left_storage_tile_width", alignment)
+        self.assertIn("block_alignment_reason", summary)
 
     def test_match_dom_pair_reports_disabled_low_resolution_offset_summary_by_default(self):
         image = _build_textured_test_image(64, 64)

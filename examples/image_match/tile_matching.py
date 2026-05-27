@@ -129,6 +129,7 @@ class TileMatchTask:
     image_space: str = "dom"
     use_gpu: bool = False
     gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE
+    opencv_num_threads: int | None = None
     deep_match_runtime_config: Any | None = None
 
 
@@ -943,6 +944,7 @@ def _build_tile_match_tasks(
     sift_sigma: float,
     use_gpu: bool = False,
     gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE,
+    opencv_num_threads: int | None = None,
     deep_match_runtime_config: Any | None = None,
 ) -> list[TileMatchTask]:
     backend = build_image_backend(image_space)
@@ -971,6 +973,7 @@ def _build_tile_match_tasks(
             sift_sigma=sift_sigma,
             use_gpu=use_gpu,
             gpu_batch_size=gpu_batch_size,
+            opencv_num_threads=opencv_num_threads,
             deep_match_runtime_config=deep_match_runtime_config,
         )
         for paired_window in windows
@@ -1216,6 +1219,7 @@ def _tile_task_to_payload(task: TileMatchTask) -> dict[str, Any]:
         "sift_sigma": task.sift_sigma,
         "use_gpu": task.use_gpu,
         "gpu_batch_size": task.gpu_batch_size,
+        "opencv_num_threads": task.opencv_num_threads,
         "deep_match_runtime_config": _runtime_config_to_payload(task.deep_match_runtime_config),
     }
 
@@ -1251,6 +1255,11 @@ def _tile_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
         sift_sigma=float(payload["sift_sigma"]),
         use_gpu=bool(payload.get("use_gpu", False)),
         gpu_batch_size=int(payload.get("gpu_batch_size", DEFAULT_GPU_BATCH_SIZE)),
+        opencv_num_threads=(
+            None
+            if payload.get("opencv_num_threads") is None
+            else int(payload["opencv_num_threads"])
+        ),
         deep_match_runtime_config=_runtime_config_from_payload(payload.get("deep_match_runtime_config")),
     )
 

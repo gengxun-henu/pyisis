@@ -86,6 +86,7 @@ Updated: 2026-05-22  Geng Xun added fail-fast matcher and extractor compatibilit
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
 Updated: 2026-05-16  Geng Xun added regression coverage for adaptive-routing profile CLI/config defaults and expanded metadata.
+Updated: 2026-05-27  Geng Xun added parser/config regression coverage for the new --opencv-num-threads CLI option and ImageMatch config alias validation.
 """
 
 from __future__ import annotations
@@ -1059,6 +1060,64 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     "4097",
                 ]
             )
+
+    def test_build_argument_parser_accepts_opencv_num_threads(self):
+        parser = build_argument_parser()
+
+        default_args = parser.parse_args(["left.cub", "right.cub", "left.key", "right.key"])
+        explicit_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--opencv-num-threads",
+                "1",
+            ]
+        )
+
+        self.assertIsNone(default_args.opencv_num_threads)
+        self.assertEqual(explicit_args.opencv_num_threads, 1)
+
+    def test_build_argument_parser_rejects_invalid_opencv_num_threads(self):
+        parser = build_argument_parser()
+
+        for value in ("0", "-1", "1.5", "auto"):
+            with self.subTest(value=value), self.assertRaises(SystemExit):
+                parser.parse_args(
+                    [
+                        "left.cub",
+                        "right.cub",
+                        "left.key",
+                        "right.key",
+                        "--opencv-num-threads",
+                        value,
+                    ]
+                )
+
+    def test_print_image_match_config_default_reads_opencv_num_threads(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps({"ImageMatch": {"opencvNumThreads": 2}}),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(
+                image_match.print_image_match_config_default(config_path, "opencv_num_threads"),
+                "2",
+            )
+
+    def test_image_match_config_rejects_invalid_opencv_num_threads(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps({"ImageMatch": {"opencv_num_threads": 0}}),
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(ValueError, "opencv_num_threads"):
+                image_match.load_image_match_defaults_from_config(config_path)
 
     def test_build_argument_parser_accepts_valid_pixel_percent_threshold(self):
         parser = build_argument_parser()

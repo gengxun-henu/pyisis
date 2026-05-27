@@ -50,6 +50,7 @@ Updated: 2026-05-20  Geng Xun enriched export-mode deep-match manifests with per
 Updated: 2026-05-20  Geng Xun normalized config-relative adaptive-routing deep preset paths during config loading.
 Updated: 2026-05-20  Geng Xun restored repo-root fallback when resolving adaptive-routing deep preset maps from config JSON.
 Updated: 2026-05-20  Geng Xun reused deep preset matcher compatibility validation for routed initial and cascade configs.
+Updated: 2026-05-27  Geng Xun added --opencv-num-threads CLI/config validation helpers and ImageMatch config alias parsing.
 """
 
 from __future__ import annotations
@@ -356,6 +357,22 @@ def _parse_num_worker_parallel_cpu(value: str) -> int:
         return _validate_num_worker_parallel_cpu(int(value))
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _validate_opencv_num_threads(value: int | None) -> int | None:
+    if value is None:
+        return None
+    resolved_value = int(value)
+    if resolved_value < 1:
+        raise ValueError("opencv_num_threads must be >= 1.")
+    return resolved_value
+
+
+def _parse_opencv_num_threads(value: str) -> int:
+    try:
+        return _validate_opencv_num_threads(int(value))
+    except (TypeError, ValueError) as exc:
+        raise argparse.ArgumentTypeError("opencv_num_threads must be an integer >= 1.") from exc
 
 
 def _validate_low_resolution_level(value: int) -> int:
@@ -908,6 +925,11 @@ def load_image_match_defaults_from_config(
             "num_worker_parallel_cpu",
             ("num_worker_parallel_cpu", "numWorkerParallelCpu", "NumWorkerParallelCpu"),
             lambda value: _validate_num_worker_parallel_cpu(int(value)),
+        ),
+        (
+            "opencv_num_threads",
+            ("opencv_num_threads", "opencvNumThreads", "OpenCVNumThreads"),
+            lambda value: _validate_opencv_num_threads(int(value)),
         ),
         (
             "write_match_visualization",
@@ -3211,6 +3233,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--left-low-resolution-dom", default=None, help="Optional precomputed low-resolution DOM cube for the left input. Must be provided together with --right-low-resolution-dom.")
     parser.add_argument("--right-low-resolution-dom", default=None, help="Optional precomputed low-resolution DOM cube for the right input. Must be provided together with --left-low-resolution-dom.")
     parser.add_argument("--num-worker-parallel-cpu", type=_parse_num_worker_parallel_cpu, default=DEFAULT_NUM_WORKER_PARALLEL_CPU, help=f"Maximum worker-process count used when CPU tile parallelism is enabled. Must be within [1, {MAX_NUM_WORKER_PARALLEL_CPU}]. Default: {DEFAULT_NUM_WORKER_PARALLEL_CPU}.")
+    parser.add_argument("--opencv-num-threads", type=_parse_opencv_num_threads, default=None, help="Optional OpenCV internal thread limit for CPU SIFT/FLANN work. Must be >= 1. Omit to keep OpenCV's default thread policy; set to 1 alongside multiple CPU workers to avoid oversubscription.")
     parser.add_argument("--use-parallel-cpu", dest="use_parallel_cpu", action="store_true", help="Enable CPU process-pool parallelism for tiled matching. Enabled by default.")
     parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
     parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default pre-RANSAC drawMatches PNG output written for the matched DOM pair.")

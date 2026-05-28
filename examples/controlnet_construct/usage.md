@@ -24,8 +24,100 @@
 - `examples/controlnet_construct/run_pipeline_example.sh`
 - `examples/controlnet_construct/run_image_match_batch_example.sh`
 - `examples/controlnet_construct/recommended_batch_templates.md`
+- `examples/controlnet_construct/CONTROLNET_Step1_LRONAC_spiceinit_cal_echo_batch.sh`（LRO NAC Step1 任务导出；适合把输出重定向成批处理文件，再交给 GNU Parallel）
 
 它默认会依次执行本文的前四个主步骤，并在最后自动执行生成的 `merge_all_controlnets.sh`。如果你希望在最终总网生成后，再自动执行一轮 `merge_control_measure.py` 后处理，可以额外加上 `--post-merge-control-measure`。如果你只想先生成 merge 脚本、不立刻执行最终 `cnetmerge`，可以给它加 `--skip-final-merge`。
+
+如果你当前处在更早的 LRO NAC 预处理阶段，而不是 DOM matching 主流程本身，那么 `examples/controlnet_construct/CONTROLNET_Step1_LRONAC_spiceinit_cal_echo_batch.sh` 适合用来**导出 Step1 命令列表**。这个脚本本身不执行任务，只打印命令，因此可直接重定向成批处理文件，例如：
+
+```bash
+bash examples/controlnet_construct/CONTROLNET_Step1_LRONAC_spiceinit_cal_echo_batch.sh \
+  --input-dir /data/lro/img \
+  --step lronac2isis \
+  --output-file lronac2isis_batch.txt
+
+cat lronac2isis_batch.txt | parallel -j 8
+```
+
+其中 `--input-dir` 用来显式指定保存 `.IMG` / `.IMG*` 影像的目录，这样任务生成不再依赖当前工作目录；`--output-file` 则让脚本直接写出诸如 `step1_batch.txt` 这样的命令文件，不必再额外用 shell 重定向。
+
+如果某些前处理步骤已经完成，希望恢复时不要重复生成对应命令，可以使用 `--skip-step`。它支持：
+
+- 重复传多个：`--skip-step lronac2isis --skip-step reduce --skip-step spiceinit`
+- 或在一个参数里逗号分隔：`--skip-step lronac2isis,reduce,spiceinit`
+
+两种形式可以混用，适合断点恢复时跳过已经做过的阶段。
+
+如果你更希望直接表达“从哪一步继续”，可以使用 `--resume-from NAME`。它会自动跳过该步骤之前的所有 Step1 阶段；只有在同时开启 `--include-spiceinit` 时，`spiceinit` 这一条命令本身才会被重新导出。例如：
+
+- `--resume-from spiceinit`：自动跳过 `init-lists`、`lronac2isis`、`reduce`、`lronaccal`、`lronacecho`
+- `--resume-from cam2map`：自动跳过更早的预处理阶段，只保留 `cam2map` 及其后续命令
+
+`--resume-from` 和 `--skip-step` 可以叠加使用：前者负责按阶段顺序做大范围恢复，后者负责手工再剔除某些你不想重跑的步骤。
+
+如果你希望在 `lronac2isis` 之后立刻切到 `REDUCED_*` 版本，并让后续步骤全部围绕该版本执行，可以开启 `--use-reduce`：
+
+```bash
+bash examples/controlnet_construct/CONTROLNET_Step1_LRONAC_spiceinit_cal_echo_batch.sh \
+  --input-dir /data/lro/img \
+  --step all \
+  --use-reduce \
+  --output-file step1_reduced_batch.txt
+
+cat step1_reduced_batch.txt | parallel -j 8
+```
+
+例如，如果 `lronac2isis`、`reduce`、`spiceinit` 都已经处理过，而你想继续生成后续命令，可以这样：
+
+```bash
+bash examples/controlnet_construct/CONTROLNET_Step1_LRONAC_spiceinit_cal_echo_batch.sh \
+  --input-dir /data/lro/img \
+  --step all \
+  --use-reduce \
+  --include-spiceinit \
+  --skip-step lronac2isis,reduce \
+  --skip-step spiceinit \
+  --output-file step1_resume_batch.txt
+
+cat step1_resume_batch.txt | parallel -j 8
+```
+
+如果你想直接表达“从 spiceinit 开始恢复”，可以进一步简化为：
+
+```bash
+bash examples/controlnet_construct/CONTROLNET_Step1_LRONAC_spiceinit_cal_echo_batch.sh \
+  --input-dir /data/lro/img \
+  --step all \
+  --use-reduce \
+  --include-spiceinit \
+  --resume-from spiceinit \
+  --output-file step1_resume_from_spiceinit.txt
+
+cat step1_resume_from_spiceinit.txt | parallel -j 8
+```
+
+启用后，`reduce` 会自动插入在 `lronac2isis` 之后，而 `lronaccal`、`lronacecho`、`spiceinit`、`cam2map`、`isis2std`、`append-lists`、`cleanup` 会全部跟随 `REDUCED_<name>.cub` 这条链继续执行；未开启时，整条链仍沿用原始 `.cub` 版本。
+
+从当前版本开始，Step1 里有两种 `isis2std` 相关导出：
+
+- `isis2std-spiced`：在 `cam2map` 之前，把当前 working cube 直接导出为 TIFF
+  - 原始链：`<base>.cub -> <base>.tif`
+  - REDUCE 链：`REDUCED_<base>.cub -> REDUCED_<base>.tif`
+- `isis2std`：在 `cam2map` 之后，把 `dom_<working_base>.cub` 导出为 `dom_8bpp<working_base>.tif`
+
+如果你只想单独导出 Step1 当前 working cube 的 TIFF，可以直接生成 `isis2std-spiced` 批处理文件：
+
+```bash
+bash examples/controlnet_construct/CONTROLNET_Step1_LRONAC_spiceinit_cal_echo_batch.sh \
+  --input-dir /data/lro/img \
+  --step isis2std-spiced \
+  --use-reduce \
+  --output-file step1_spiced_tif_batch.txt
+
+cat step1_spiced_tif_batch.txt | parallel -j 8
+```
+
+当使用 `--resume-from spiceinit` 时，后续会继续从 `spiceinit` 这一恢复点往后生成 `isis2std-spiced`、`cam2map` 和 DOM `isis2std` 等命令；其中 `spiceinit` 命令本身只有在同时传入 `--include-spiceinit` 时才会被重新导出。如果使用 `--resume-from cam2map`，则不会再回头生成 `isis2std-spiced`。
 
 从当前版本开始，这两个示例脚本还带有两个新的**默认行为**：
 

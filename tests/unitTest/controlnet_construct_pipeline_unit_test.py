@@ -53,6 +53,7 @@ Updated: 2026-05-20  Geng Xun added an export-path regression ensuring initial r
 Updated: 2026-05-27  Geng Xun added wrapper regression coverage for forwarding explicit OpenCV thread limits.
 Updated: 2026-05-28  Geng Xun aligned adaptive-routing fake serial tile batches with TileMatchBatchResult.
 Updated: 2026-05-28  Geng Xun added focused Step1 spiced-isis2std regression coverage for working-cube export, resume ordering, and docs/help discoverability.
+Updated: 2026-05-28  Geng Xun restored Step1 wrapper regression coverage for input-dir, output-file, skip-step, and resume-from alongside the spiced stage checks.
 """
 
 from __future__ import annotations
@@ -257,6 +258,251 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 self.assertEqual(result.returncode, 0, result.stderr)
                 self.assertIn("--opencv-num-threads", result.stdout)
                 self.assertIn("OpenCV", result.stdout)
+
+    def test_lronac_step1_batch_script_accepts_explicit_input_dir(self):
+        with temporary_directory() as temp_dir:
+            input_dir = temp_dir / "img_inputs"
+            input_dir.mkdir()
+            (input_dir / "M123.IMG").write_text("", encoding="utf-8")
+            (input_dir / "E456.IMG").write_text("", encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(CONTROLNET_STEP1_BATCH_PATH),
+                    "--step",
+                    "lronac2isis",
+                    "--input-dir",
+                    str(input_dir),
+                ],
+                cwd=temp_dir,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        command_lines = [line for line in result.stdout.splitlines() if line.strip()]
+        self.assertEqual(
+            command_lines,
+            [
+                f"lronac2isis from={input_dir / 'E456.IMG'} to=E456.cub",
+                f"lronac2isis from={input_dir / 'M123.IMG'} to=M123.cub",
+            ],
+        )
+
+    def test_lronac_step1_batch_docs_mention_input_dir(self):
+        help_result = subprocess.run(
+            [
+                "bash",
+                str(CONTROLNET_STEP1_BATCH_PATH),
+                "--help",
+            ],
+            cwd=PROJECT_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        usage = (PROJECT_ROOT / "examples" / "controlnet_construct" / "usage.md").read_text(encoding="utf-8")
+        templates = (PROJECT_ROOT / "examples" / "controlnet_construct" / "recommended_batch_templates.md").read_text(
+            encoding="utf-8"
+        )
+        combined_docs = help_result.stdout + "\n" + usage + "\n" + templates
+
+        self.assertEqual(help_result.returncode, 0, help_result.stderr)
+        self.assertIn("--input-dir", help_result.stdout)
+        self.assertIn("--input-dir", usage)
+        self.assertIn("--input-dir", templates)
+        self.assertIn("--input-dir", combined_docs)
+
+    def test_lronac_step1_batch_script_writes_commands_to_output_file(self):
+        with temporary_directory() as temp_dir:
+            input_dir = temp_dir / "img_inputs"
+            input_dir.mkdir()
+            (input_dir / "M123.IMG").write_text("", encoding="utf-8")
+            (input_dir / "E456.IMG").write_text("", encoding="utf-8")
+            output_file = temp_dir / "step1_lronac2isis_batch.txt"
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(CONTROLNET_STEP1_BATCH_PATH),
+                    "--step",
+                    "lronac2isis",
+                    "--input-dir",
+                    str(input_dir),
+                    "--output-file",
+                    str(output_file),
+                ],
+                cwd=temp_dir,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            command_lines = [line for line in output_file.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(result.stdout, "")
+        self.assertEqual(
+            command_lines,
+            [
+                f"lronac2isis from={input_dir / 'E456.IMG'} to=E456.cub",
+                f"lronac2isis from={input_dir / 'M123.IMG'} to=M123.cub",
+            ],
+        )
+
+    def test_lronac_step1_batch_docs_mention_output_file(self):
+        help_result = subprocess.run(
+            [
+                "bash",
+                str(CONTROLNET_STEP1_BATCH_PATH),
+                "--help",
+            ],
+            cwd=PROJECT_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        usage = (PROJECT_ROOT / "examples" / "controlnet_construct" / "usage.md").read_text(encoding="utf-8")
+        templates = (PROJECT_ROOT / "examples" / "controlnet_construct" / "recommended_batch_templates.md").read_text(
+            encoding="utf-8"
+        )
+        combined_docs = help_result.stdout + "\n" + usage + "\n" + templates
+
+        self.assertEqual(help_result.returncode, 0, help_result.stderr)
+        self.assertIn("--output-file", help_result.stdout)
+        self.assertIn("--output-file", usage)
+        self.assertIn("--output-file", templates)
+        self.assertIn("--output-file", combined_docs)
+
+    def test_lronac_step1_batch_script_skips_multiple_requested_steps(self):
+        with temporary_directory() as temp_dir:
+            input_dir = temp_dir / "img_inputs"
+            input_dir.mkdir()
+            (input_dir / "M123.IMG").write_text("", encoding="utf-8")
+            (input_dir / "E456.IMG").write_text("", encoding="utf-8")
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(CONTROLNET_STEP1_BATCH_PATH),
+                    "--step",
+                    "all",
+                    "--use-reduce",
+                    "--input-dir",
+                    str(input_dir),
+                    "--skip-step",
+                    "lronac2isis,reduce",
+                    "--skip-step",
+                    "spiceinit",
+                ],
+                cwd=temp_dir,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("lronac2isis ", result.stdout)
+        self.assertNotIn("reduce from=", result.stdout)
+        self.assertNotIn("spiceinit from=", result.stdout)
+        self.assertIn("lronaccal from=REDUCED_E456.cub to=REDUCED_E456.cal.cub", result.stdout)
+        self.assertIn("lronacecho from=REDUCED_E456.cal.cub to=REDUCED_E456.echo.cal.cub", result.stdout)
+        self.assertIn("lronaccal from=REDUCED_M123.cub to=REDUCED_M123.cal.cub", result.stdout)
+        self.assertIn("lronacecho from=REDUCED_M123.cal.cub to=REDUCED_M123.echo.cal.cub", result.stdout)
+
+    def test_lronac_step1_batch_docs_mention_skip_step(self):
+        help_result = subprocess.run(
+            [
+                "bash",
+                str(CONTROLNET_STEP1_BATCH_PATH),
+                "--help",
+            ],
+            cwd=PROJECT_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        usage = (PROJECT_ROOT / "examples" / "controlnet_construct" / "usage.md").read_text(encoding="utf-8")
+        templates = (PROJECT_ROOT / "examples" / "controlnet_construct" / "recommended_batch_templates.md").read_text(
+            encoding="utf-8"
+        )
+        combined_docs = help_result.stdout + "\n" + usage + "\n" + templates
+
+        self.assertEqual(help_result.returncode, 0, help_result.stderr)
+        self.assertIn("--skip-step", help_result.stdout)
+        self.assertIn("--skip-step", usage)
+        self.assertIn("--skip-step", templates)
+        self.assertIn("lronac2isis,reduce", combined_docs)
+        self.assertIn("--skip-step spiceinit", combined_docs)
+
+    def test_lronac_step1_batch_script_resumes_from_named_step(self):
+        with temporary_directory() as temp_dir:
+            input_dir = temp_dir / "img_inputs"
+            input_dir.mkdir()
+            (input_dir / "M123.IMG").write_text("", encoding="utf-8")
+            (input_dir / "E456.IMG").write_text("", encoding="utf-8")
+            output_file = temp_dir / "step1_resume_batch.txt"
+
+            result = subprocess.run(
+                [
+                    "bash",
+                    str(CONTROLNET_STEP1_BATCH_PATH),
+                    "--step",
+                    "all",
+                    "--use-reduce",
+                    "--input-dir",
+                    str(input_dir),
+                    "--output-file",
+                    str(output_file),
+                    "--include-spiceinit",
+                    "--resume-from",
+                    "spiceinit",
+                ],
+                cwd=temp_dir,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+
+            command_text = output_file.read_text(encoding="utf-8")
+
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertNotIn("lronac2isis ", command_text)
+        self.assertNotIn("reduce from=", command_text)
+        self.assertNotIn("lronaccal from=", command_text)
+        self.assertNotIn("lronacecho from=", command_text)
+        self.assertIn("spiceinit from=REDUCED_E456.echo.cal.cub", command_text)
+        self.assertIn("cam2map from=REDUCED_E456.echo.cal.cub", command_text)
+        self.assertIn("isis2std from=dom_REDUCED_E456.cub", command_text)
+        self.assertIn("spiceinit from=REDUCED_M123.echo.cal.cub", command_text)
+        self.assertIn("cam2map from=REDUCED_M123.echo.cal.cub", command_text)
+        self.assertIn("isis2std from=dom_REDUCED_M123.cub", command_text)
+
+    def test_lronac_step1_batch_docs_mention_resume_from(self):
+        help_result = subprocess.run(
+            [
+                "bash",
+                str(CONTROLNET_STEP1_BATCH_PATH),
+                "--help",
+            ],
+            cwd=PROJECT_ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+        usage = (PROJECT_ROOT / "examples" / "controlnet_construct" / "usage.md").read_text(encoding="utf-8")
+        templates = (PROJECT_ROOT / "examples" / "controlnet_construct" / "recommended_batch_templates.md").read_text(
+            encoding="utf-8"
+        )
+        combined_docs = help_result.stdout + "\n" + usage + "\n" + templates
+
+        self.assertEqual(help_result.returncode, 0, help_result.stderr)
+        self.assertIn("--resume-from", help_result.stdout)
+        self.assertIn("--resume-from", usage)
+        self.assertIn("--resume-from", templates)
+        self.assertIn("--resume-from spiceinit", combined_docs)
 
     def test_lronac_step1_batch_script_emits_spiced_isis2std_for_original_working_cube(self):
         with temporary_directory() as temp_dir:

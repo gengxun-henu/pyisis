@@ -7,6 +7,7 @@ Updated: 2026-05-28  Geng Xun aligned the Task 1 caminfo record surface with opt
 Updated: 2026-05-28  Geng Xun added approved Task 2 caminfo numeric field parsing for selector metadata.
 Updated: 2026-05-28  Geng Xun added Task 3 rule evaluation helpers for approved range and center-distance selection.
 Updated: 2026-05-28  Geng Xun aligned Task 3 selection criteria names and list-based evaluation outcomes with the approved plan surface.
+Updated: 2026-05-28  Geng Xun added Task 4 move execution helpers with unresolved, dry-run, conflict, and successful move outcomes.
 """
 
 from __future__ import annotations
@@ -15,6 +16,7 @@ from dataclasses import dataclass
 import math
 from pathlib import Path
 import re
+import shutil
 
 
 @dataclass(frozen=True)
@@ -56,6 +58,14 @@ class SelectionCriteria:
 class EvaluationOutcome:
     matched: bool
     reasons: list[str]
+
+
+@dataclass(frozen=True)
+class MoveResult:
+    status: str
+    source_path: Path | None
+    destination_path: Path | None
+    message: str
 
 
 def _evaluate_range(
@@ -128,6 +138,58 @@ def evaluate_record(record: CaminfoRecord, criteria: SelectionCriteria) -> Evalu
                 )
 
     return EvaluationOutcome(matched=not reasons, reasons=reasons)
+
+
+def execute_move(record: CaminfoRecord, output_dir: Path, dry_run: bool) -> MoveResult:
+    source_path = None if record.cube_path is None else Path(record.cube_path)
+    output_dir = Path(output_dir)
+
+    if source_path is None:
+        return MoveResult(
+            status="unresolved",
+            source_path=None,
+            destination_path=None,
+            message="Cannot move cube because the cube path is missing.",
+        )
+
+    destination_path = output_dir / source_path.name
+
+    if not source_path.exists():
+        return MoveResult(
+            status="unresolved",
+            source_path=source_path,
+            destination_path=None,
+            message=f"Cannot move cube because source path does not exist: {source_path}",
+        )
+
+    if dry_run:
+        return MoveResult(
+            status="dry-run",
+            source_path=source_path,
+            destination_path=destination_path,
+            message=f"Dry-run only; cube would be moved to {destination_path}",
+        )
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    if destination_path.exists():
+        return MoveResult(
+            status="conflict",
+            source_path=source_path,
+            destination_path=destination_path,
+            message=(
+                "Cannot move cube because the destination already exists: "
+                f"{destination_path}"
+            ),
+        )
+
+    shutil.move(str(source_path), str(destination_path))
+    return MoveResult(
+        status="moved",
+        source_path=source_path,
+        destination_path=destination_path,
+        message=f"Moved cube to {destination_path}",
+    )
 
 
 def _extract_string(text: str, pattern: re.Pattern[str]) -> str | None:

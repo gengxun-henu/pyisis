@@ -9,6 +9,8 @@ Updated: 2026-05-28  Geng Xun aligned caminfo selector expectations with the app
 Updated: 2026-05-28  Geng Xun added Task 2 parser coverage for approved numeric metadata extraction and missing optional fields.
 Updated: 2026-05-28  Geng Xun added Task 3 selection-rule evaluation coverage for approved range and center-distance matching.
 Updated: 2026-05-28  Geng Xun aligned Task 3 tests with the approved selection criteria names and list-based evaluation reasons.
+Updated: 2026-05-28  Geng Xun added Task 4 move-execution coverage for unresolved, dry-run, conflict, and successful move behaviors.
+Updated: 2026-05-28  Geng Xun fixed Task 4 move tests to assert file-system effects before temporary directories are cleaned up.
 """
 
 from __future__ import annotations
@@ -254,6 +256,125 @@ class SelectionRulesTest(unittest.TestCase):
         self.assertEqual(len(non_matching_outcome.reasons), 1)
         self.assertIn("center distance", non_matching_outcome.reasons[0].lower())
         self.assertIn("1.0", non_matching_outcome.reasons[0])
+
+
+class MoveExecutionTest(unittest.TestCase):
+    @staticmethod
+    def _build_record(module, **overrides):
+        defaults = {
+            "cube_name": "example.cub",
+            "cube_path": Path("/tmp/example.cub"),
+            "center_latitude": 10.0,
+            "center_longitude": 20.0,
+            "minimum_latitude": None,
+            "maximum_latitude": None,
+            "minimum_longitude": None,
+            "maximum_longitude": None,
+            "incidence": 30.0,
+            "emission": 40.0,
+            "phase": 50.0,
+            "sub_solar_azimuth": 60.0,
+        }
+        defaults.update(overrides)
+        return module.CaminfoRecord(**defaults)
+
+    def test_execute_move_returns_unresolved_when_cube_path_is_missing(self):
+        module = load_select_isis_cubes_module()
+        record = self._build_record(module, cube_name=None, cube_path=None)
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            output_dir = Path(temp_dir) / "selected"
+
+            result = module.execute_move(record, output_dir, dry_run=False)
+
+        self.assertEqual(result.status, "unresolved")
+        self.assertIsNone(result.destination_path)
+        self.assertIn("missing", result.message.lower())
+        self.assertIn("cube path", result.message.lower())
+
+    def test_execute_move_returns_unresolved_when_cube_path_is_absent_on_disk(self):
+        module = load_select_isis_cubes_module()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            missing_cube_path = temp_path / "missing_input.cub"
+            output_dir = temp_path / "selected"
+            record = self._build_record(module, cube_name=missing_cube_path.name, cube_path=missing_cube_path)
+
+            result = module.execute_move(record, output_dir, dry_run=False)
+
+        self.assertEqual(result.status, "unresolved")
+        self.assertIsNone(result.destination_path)
+        self.assertIn("does not exist", result.message.lower())
+
+    def test_execute_move_dry_run_does_not_move_file(self):
+        module = load_select_isis_cubes_module()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            cube_path = temp_path / "dry_run_input.cub"
+            cube_path.write_text("cube data\n", encoding="utf-8")
+            output_dir = temp_path / "selected"
+            record = self._build_record(module, cube_name=cube_path.name, cube_path=cube_path)
+
+            result = module.execute_move(record, output_dir, dry_run=True)
+
+            source_exists = cube_path.exists()
+            destination_exists = (output_dir / cube_path.name).exists()
+
+        self.assertEqual(result.status, "dry-run")
+        self.assertEqual(result.destination_path, output_dir / cube_path.name)
+        self.assertTrue(source_exists)
+        self.assertFalse(destination_exists)
+        self.assertIn("dry-run", result.message.lower())
+
+    def test_execute_move_returns_conflict_without_overwriting_existing_destination(self):
+        module = load_select_isis_cubes_module()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            cube_path = temp_path / "conflict_input.cub"
+            cube_path.write_text("source cube\n", encoding="utf-8")
+            output_dir = temp_path / "selected"
+            output_dir.mkdir()
+            destination_path = output_dir / cube_path.name
+            destination_path.write_text("existing cube\n", encoding="utf-8")
+            record = self._build_record(module, cube_name=cube_path.name, cube_path=cube_path)
+
+            result = module.execute_move(record, output_dir, dry_run=False)
+
+            destination_contents = destination_path.read_text(encoding="utf-8")
+            source_exists = cube_path.exists()
+
+        self.assertEqual(result.status, "conflict")
+        self.assertEqual(result.destination_path, destination_path)
+        self.assertTrue(source_exists)
+        self.assertEqual(destination_contents, "existing cube\n")
+        self.assertIn("already exists", result.message.lower())
+
+    def test_execute_move_moves_file_and_creates_output_directory(self):
+        module = load_select_isis_cubes_module()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            cube_path = temp_path / "move_input.cub"
+            cube_path.write_text("cube payload\n", encoding="utf-8")
+            output_dir = temp_path / "nested" / "selected"
+            destination_path = output_dir / cube_path.name
+            record = self._build_record(module, cube_name=cube_path.name, cube_path=cube_path)
+
+            result = module.execute_move(record, output_dir, dry_run=False)
+
+            moved_contents = destination_path.read_text(encoding="utf-8")
+            source_exists = cube_path.exists()
+            output_dir_exists = output_dir.exists()
+
+        self.assertEqual(result.status, "moved")
+        self.assertEqual(result.destination_path, destination_path)
+        self.assertFalse(source_exists)
+        self.assertTrue(output_dir_exists)
+        self.assertEqual(moved_contents, "cube payload\n")
+        self.assertIn("moved", result.message.lower())
 
 
 if __name__ == "__main__":

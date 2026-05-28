@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-05-28
 Updated: 2026-05-28  Geng Xun added the initial caminfo parsing skeleton for cube selection workflows.
 Updated: 2026-05-28  Geng Xun aligned the Task 1 caminfo record surface with optional approved field names.
+Updated: 2026-05-28  Geng Xun added approved Task 2 caminfo numeric field parsing for selector metadata.
 """
 
 from __future__ import annotations
@@ -19,6 +20,13 @@ class CaminfoRecord:
     cube_path: Path | None
     center_latitude: float | None
     center_longitude: float | None
+    minimum_latitude: float | None
+    maximum_latitude: float | None
+    minimum_longitude: float | None
+    maximum_longitude: float | None
+    incidence: float | None
+    emission: float | None
+    phase: float | None
     sub_solar_azimuth: float | None
 
 
@@ -48,6 +56,13 @@ def parse_caminfo_file(caminfo_path: Path) -> CaminfoRecord:
     from_pattern = re.compile(r"^\s*From\s*=\s*(.+?)\s*$", re.MULTILINE)
     center_latitude_pattern = re.compile(r"^\s*CenterLatitude\s*=\s*(.+?)\s*$", re.MULTILINE)
     center_longitude_pattern = re.compile(r"^\s*CenterLongitude\s*=\s*(.+?)\s*$", re.MULTILINE)
+    minimum_latitude_pattern = re.compile(r"^\s*MinimumLatitude\s*=\s*(.+?)\s*$", re.MULTILINE)
+    maximum_latitude_pattern = re.compile(r"^\s*MaximumLatitude\s*=\s*(.+?)\s*$", re.MULTILINE)
+    minimum_longitude_pattern = re.compile(r"^\s*MinimumLongitude\s*=\s*(.+?)\s*$", re.MULTILINE)
+    maximum_longitude_pattern = re.compile(r"^\s*MaximumLongitude\s*=\s*(.+?)\s*$", re.MULTILINE)
+    incidence_angle_pattern = re.compile(r"^\s*IncidenceAngle\s*=\s*(.+?)\s*$", re.MULTILINE)
+    emission_angle_pattern = re.compile(r"^\s*EmissionAngle\s*=\s*(.+?)\s*$", re.MULTILINE)
+    phase_angle_pattern = re.compile(r"^\s*PhaseAngle\s*=\s*(.+?)\s*$", re.MULTILINE)
     sub_solar_azimuth_pattern = re.compile(r"^\s*SubSolarAzimuth\s*=\s*(.+?)\s*$", re.MULTILINE)
 
     cube_name = _extract_string(text, from_pattern)
@@ -62,5 +77,12 @@ def parse_caminfo_file(caminfo_path: Path) -> CaminfoRecord:
         cube_path=cube_path,
         center_latitude=_extract_float(text, center_latitude_pattern),
         center_longitude=_extract_float(text, center_longitude_pattern),
+        minimum_latitude=_extract_float(text, minimum_latitude_pattern),
+        maximum_latitude=_extract_float(text, maximum_latitude_pattern),
+        minimum_longitude=_extract_float(text, minimum_longitude_pattern),
+        maximum_longitude=_extract_float(text, maximum_longitude_pattern),
+        incidence=_extract_float(text, incidence_angle_pattern),
+        emission=_extract_float(text, emission_angle_pattern),
+        phase=_extract_float(text, phase_angle_pattern),
         sub_solar_azimuth=_extract_float(text, sub_solar_azimuth_pattern),
     )

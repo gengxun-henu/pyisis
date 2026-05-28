@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-23
+Last Modified: 2026-05-28
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -50,6 +50,8 @@ Updated: 2026-05-20  Geng Xun added config-relative adaptive-routing preset-map 
 Updated: 2026-05-20  Geng Xun added repo-root fallback coverage for adaptive-routing deep preset maps loaded from config.
 Updated: 2026-05-20  Geng Xun added routed deep-preset compatibility regressions for initial and cascade adaptive routing.
 Updated: 2026-05-20  Geng Xun added an export-path regression ensuring initial routed flann adopts the selected deep preset matcher.
+Updated: 2026-05-27  Geng Xun added wrapper regression coverage for forwarding explicit OpenCV thread limits.
+Updated: 2026-05-28  Geng Xun aligned adaptive-routing fake serial tile batches with TileMatchBatchResult.
 """
 
 from __future__ import annotations
@@ -114,7 +116,7 @@ from controlnet_construct.image_overlap import (
 )
 from controlnet_construct.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
 from image_match.deep_match_manifest import build_deep_match_pair_manifest, read_deep_match_pair_manifest, write_deep_match_pair_manifest
-from image_match.tile_matching import PairedTileWindow, TileMatchTask, TileWindow
+from image_match.tile_matching import PairedTileWindow, TileMatchBatchResult, TileMatchTask, TileWindow
 
 
 LEFT_CUBE_PATH = workspace_test_data_path("mosrange", "EN0108828322M_iof.cub")
@@ -235,6 +237,25 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("--print-parameter-groups", result.stdout)
         self.assertIn("full catalog", result.stdout)
 
+    def test_wrapper_help_mentions_opencv_num_threads(self):
+        for script_path in (RUN_PIPELINE_EXAMPLE_PATH, RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH):
+            with self.subTest(script_path=script_path.name):
+                result = subprocess.run(
+                    [
+                        "bash",
+                        str(script_path),
+                        "--help",
+                    ],
+                    cwd=PROJECT_ROOT,
+                    text=True,
+                    capture_output=True,
+                    check=False,
+                )
+
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn("--opencv-num-threads", result.stdout)
+                self.assertIn("OpenCV", result.stdout)
+
     def test_run_pipeline_example_validates_parameters_only_from_config(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
@@ -253,6 +274,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "ImageMatch": {
                             "matcher_method": "bf",
                             "num_worker_parallel_cpu": 3,
+                            "opencv_num_threads": 1,
                         },
                     }
                 )
@@ -280,6 +302,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("Parameter validation passed", result.stdout)
         self.assertIn("MATCHER_METHOD=bf", result.stdout)
         self.assertIn("NUM_WORKER_PARALLEL_CPU=3", result.stdout)
+        self.assertIn("OPENCV_NUM_THREADS=1", result.stdout)
         self.assertIn(f"WORK_DIR={work_dir}", result.stdout)
         self.assertIn("NETWORK_ID=validate_only_unit", result.stdout)
         self.assertNotIn("Step 1/", result.stdout)
@@ -2612,6 +2635,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "ImageMatch": {
                             "valid_pixel_percent_threshold": 0.05,
                             "num_worker_parallel_cpu": 6,
+                            "opencv_num_threads": 1,
                         },
                     }
                 ),
@@ -2650,6 +2674,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                                 mapping = {{
                                     "valid_pixel_percent_threshold": image_match_config.get("valid_pixel_percent_threshold", ""),
                                     "num_worker_parallel_cpu": image_match_config.get("num_worker_parallel_cpu", ""),
+                                    "opencv_num_threads": image_match_config.get("opencv_num_threads", ""),
                                     "invalid_pixel_radius": image_match_config.get("invalid_pixel_radius", ""),
                                     "matcher_method": image_match_config.get("matcher_method", ""),
                                     "enable_low_resolution_offset_estimation": "1" if image_match_config.get("enable_low_resolution_offset_estimation") else "",
@@ -2666,6 +2691,11 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             worker_limit = args[args.index("--num-worker-parallel-cpu") + 1]
                             if worker_limit != "6":
                                 raise SystemExit(f"unexpected worker limit: {{worker_limit}}")
+                            if "--opencv-num-threads" not in args:
+                                raise SystemExit("missing --opencv-num-threads forwarding")
+                            opencv_num_threads = args[args.index("--opencv-num-threads") + 1]
+                            if opencv_num_threads != "1":
+                                raise SystemExit(f"unexpected opencv thread limit: {{opencv_num_threads}}")
                             key_index = 4 if args and args[0] == "--config" else 2
                             Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
                             Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
@@ -2710,6 +2740,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         self.assertEqual(completed.returncode, 0, msg=completed.stderr)
         self.assertIn("CPU parallel worker limit: 6", completed.stdout)
+        self.assertIn("OpenCV thread limit: 1", completed.stdout)
 
     def test_run_image_match_batch_example_prefers_image_match_section_over_legacy_top_level_config_keys(self):
         with temporary_directory() as temp_dir:
@@ -4994,7 +5025,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             nonlocal run_tile_call_count
             run_tile_call_count += 1
             if run_tile_call_count <= 2:
-                return []
+                return TileMatchBatchResult(results=[])
             raise AssertionError("cascade compatibility validation should stop before rerunning tiles")
 
         def fake_resolve_deep_match_runtime_config(config_path):

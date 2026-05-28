@@ -60,6 +60,7 @@
     "preview_cache_source": "auto",
     "use_parallel_cpu": true,
     "num_worker_parallel_cpu": 4,
+    "opencv_num_threads": 1,
     "omit_tile_details": true,
     "write_match_visualization": true,
     "match_visualization_scale": 0.25

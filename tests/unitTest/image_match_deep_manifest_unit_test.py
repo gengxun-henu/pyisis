@@ -76,6 +76,7 @@ def _make_tile_task(
     left_start_y: int = 20,
     right_start_x: int = 30,
     right_start_y: int = 40,
+    opencv_num_threads: int | None = 2,
 ) -> TileMatchTask:
     return TileMatchTask(
         left_dom_path="left_dom.cub",
@@ -105,6 +106,7 @@ def _make_tile_task(
         image_space="dom",
         use_gpu=True,
         gpu_batch_size=8,
+        opencv_num_threads=opencv_num_threads,
     )
 
 
@@ -214,6 +216,17 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
         self.assertEqual(restored.gpu_batch_size, task.gpu_batch_size)
         self.assertEqual(restored.paired_window.left_window.start_x, 10)
         self.assertEqual(restored.paired_window.right_window.start_y, 40)
+        self.assertEqual(payload["opencv_num_threads"], 2)
+        self.assertEqual(restored.opencv_num_threads, 2)
+
+    def test_tile_match_task_payload_defaults_missing_opencv_num_threads_to_none(self):
+        task = _make_tile_task(opencv_num_threads=None)
+        payload = tile_match_task_to_payload(task)
+        payload.pop("opencv_num_threads")
+
+        restored = tile_match_task_from_payload(payload)
+
+        self.assertIsNone(restored.opencv_num_threads)
 
     def test_manifest_build_write_and_read_round_trip_preserves_records(self):
         task = _make_tile_task(matcher_method="loftr")

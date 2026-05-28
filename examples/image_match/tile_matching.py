@@ -19,6 +19,7 @@ Updated: 2026-05-10  Geng Xun accepted the ORI-facing `superpoint` matcher selec
 Updated: 2026-05-19  Geng Xun threaded resolved deep matcher runtime config through tile tasks and adapters.
 Updated: 2026-05-19  Geng Xun preserved matcher/feature/device option dictionaries when serializing deep matcher runtime config.
 Updated: 2026-05-27  Geng Xun added serial tile cache diagnostics for match metadata.
+Updated: 2026-05-27  Geng Xun applied explicit OpenCV thread limits inside tile worker shards.
 """
 
 from __future__ import annotations
@@ -129,6 +130,7 @@ class TileMatchTask:
     image_space: str = "dom"
     use_gpu: bool = False
     gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE
+    opencv_num_threads: int | None = None
     deep_match_runtime_config: Any | None = None
 
 
@@ -943,6 +945,7 @@ def _build_tile_match_tasks(
     sift_sigma: float,
     use_gpu: bool = False,
     gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE,
+    opencv_num_threads: int | None = None,
     deep_match_runtime_config: Any | None = None,
 ) -> list[TileMatchTask]:
     backend = build_image_backend(image_space)
@@ -971,6 +974,7 @@ def _build_tile_match_tasks(
             sift_sigma=sift_sigma,
             use_gpu=use_gpu,
             gpu_batch_size=gpu_batch_size,
+            opencv_num_threads=opencv_num_threads,
             deep_match_runtime_config=deep_match_runtime_config,
         )
         for paired_window in windows
@@ -1216,6 +1220,7 @@ def _tile_task_to_payload(task: TileMatchTask) -> dict[str, Any]:
         "sift_sigma": task.sift_sigma,
         "use_gpu": task.use_gpu,
         "gpu_batch_size": task.gpu_batch_size,
+        "opencv_num_threads": task.opencv_num_threads,
         "deep_match_runtime_config": _runtime_config_to_payload(task.deep_match_runtime_config),
     }
 
@@ -1251,6 +1256,11 @@ def _tile_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
         sift_sigma=float(payload["sift_sigma"]),
         use_gpu=bool(payload.get("use_gpu", False)),
         gpu_batch_size=int(payload.get("gpu_batch_size", DEFAULT_GPU_BATCH_SIZE)),
+        opencv_num_threads=(
+            None
+            if payload.get("opencv_num_threads") is None
+            else int(payload["opencv_num_threads"])
+        ),
         deep_match_runtime_config=_runtime_config_from_payload(payload.get("deep_match_runtime_config")),
     )
 
@@ -1297,6 +1307,11 @@ def _match_tile_task_batch_worker(
         return ()
     resolved_indexed_tasks = tuple(_indexed_tile_match_task_from_payload(indexed_task) for indexed_task in indexed_tasks)
     first_task = resolved_indexed_tasks[0].task
+    opencv_num_threads = first_task.opencv_num_threads
+    if any(indexed_task.task.opencv_num_threads != opencv_num_threads for indexed_task in resolved_indexed_tasks):
+        raise ValueError("all tile tasks in a worker batch must use the same OpenCV thread limit")
+    if opencv_num_threads is not None:
+        cv2.setNumThreads(int(opencv_num_threads))
     left_cube = ip.Cube()
     right_cube = ip.Cube()
     left_cube.open(first_task.left_dom_path, "r")

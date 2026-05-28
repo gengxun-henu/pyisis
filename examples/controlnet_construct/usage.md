@@ -46,7 +46,33 @@
   - `work/match_viz/`：`examples/image_match/image_match.py` 直接输出的 **pre-RANSAC** 连线图；
   - `work/match_viz_post_ransac/`：`controlnet_stereopair.py from-dom-batch` 在 merge + RANSAC 之后输出的 **post-RANSAC** 连线图。
 
-如果你想显式开启默认 CPU 并行标志，可以传 `--use-parallel-cpu`；如果你想关闭默认 CPU 并行，可以传 `--no-parallel-cpu`；如果你想把进程池 worker 上限改成别的值，可以传 `--num-worker-parallel-cpu 4` 之类；如果你想关闭 pre-RANSAC 连线图，可以在 `run_image_match_batch_example.sh` 后面通过 `-- --no-write-match-visualization` 把参数继续转发给 `examples/image_match/image_match.py`。
+如果你想显式开启默认 CPU 并行标志，可以传 `--use-parallel-cpu`；如果你想关闭默认 CPU 并行，可以传 `--no-parallel-cpu`；如果你想把进程池 worker 上限改成别的值，可以传 `--num-worker-parallel-cpu 4` 之类；如果你想限制每个进程里的 OpenCV 内部线程池，可以传 `--opencv-num-threads 1`；如果你想关闭 pre-RANSAC 连线图，可以在 `run_image_match_batch_example.sh` 后面通过 `-- --no-write-match-visualization` 把参数继续转发给 `examples/image_match/image_match.py`。
+
+### OpenCV internal thread control
+
+`--opencv-num-threads N` 会限制每个进程内 OpenCV 的 CPU 线程池。参数省略时，流水线不会调用 `cv2.setNumThreads`，OpenCV 会继续使用环境变量或库自身默认策略。
+
+对于经典 SIFT+FLANN 路径，总 CPU 压力大致是：
+
+```text
+num_worker_parallel_cpu × opencv_num_threads
+```
+
+建议起点：
+
+- CPU-only 经典 SIFT+FLANN 工作站运行：`--num-worker-parallel-cpu 2` 到 `4`，并配 `--opencv-num-threads 1`。
+- 单进程调试：`--no-parallel-cpu --opencv-num-threads 1`。
+- GPU SIFT 但可能走 CPU fallback：保留同样的 `--opencv-num-threads` 设置，让 fallback SIFT/FLANN 路径也受控。
+
+对应配置键可以写在 `ImageMatch` 段：
+
+```json
+{
+  "ImageMatch": {
+    "opencv_num_threads": 1
+  }
+}
+```
 
 与全分辨率 tile 读取优化相关的 `examples/image_match/image_match.py` 参数包括：
 
@@ -211,6 +237,7 @@ python -c "import isis_pybind as ip; print(ip.__file__)"
   "min_overlap_size": 16,
   "use_parallel_cpu": true,
   "num_worker_parallel_cpu": 8,
+  "opencv_num_threads": 1,
   "invalid_pixel_radius": 1,
   "enable_low_resolution_offset_estimation": false,
   "low_resolution_level": 3,

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-27
+Last Modified: 2026-05-28
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -91,6 +91,8 @@ Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing par
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
 Updated: 2026-05-16  Geng Xun added regression coverage for adaptive-routing profile CLI/config defaults and expanded metadata.
 Updated: 2026-05-27  Geng Xun added parser/config regression coverage for the new --opencv-num-threads CLI option and ImageMatch config alias validation.
+Updated: 2026-05-27  Geng Xun added worker-shard regression coverage for applying explicit OpenCV thread limits.
+Updated: 2026-05-28  Geng Xun aligned adaptive-routing serial tile mocks with TileMatchBatchResult return contracts.
 """
 
 from __future__ import annotations
@@ -144,6 +146,10 @@ match_dom_pair_to_key_files = image_match.match_dom_pair_to_key_files
 write_stereo_pair_match_visualization_from_key_files = image_match.write_stereo_pair_match_visualization_from_key_files
 
 tile_matching_module = importlib.import_module("controlnet_construct.tile_matching")
+
+
+def _tile_match_batch_result(*results):
+    return tile_matching_module.TileMatchBatchResult(results=list(results))
 tile_matching = tile_matching_module
 TileWindow = tile_matching_module.TileWindow
 
@@ -1122,6 +1128,47 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
             with self.assertRaisesRegex(ValueError, "opencv_num_threads"):
                 image_match.load_image_match_defaults_from_config(config_path)
+
+    def test_apply_opencv_thread_config_skips_when_unset(self):
+        calls = []
+        original_set = image_match.cv2.setNumThreads
+        original_get = image_match.cv2.getNumThreads
+        original_optimized = image_match.cv2.useOptimized
+        image_match.cv2.setNumThreads = lambda value: calls.append(value)
+        image_match.cv2.getNumThreads = lambda: 8
+        image_match.cv2.useOptimized = lambda: True
+        try:
+            summary = image_match._apply_opencv_thread_config(None)
+        finally:
+            image_match.cv2.setNumThreads = original_set
+            image_match.cv2.getNumThreads = original_get
+            image_match.cv2.useOptimized = original_optimized
+
+        self.assertEqual(calls, [])
+        self.assertFalse(summary["opencv_num_threads_configured"])
+        self.assertIsNone(summary["opencv_num_threads_requested"])
+        self.assertEqual(summary["opencv_num_threads_effective"], 8)
+        self.assertTrue(summary["opencv_use_optimized"])
+
+    def test_apply_opencv_thread_config_sets_positive_value(self):
+        calls = []
+        original_set = image_match.cv2.setNumThreads
+        original_get = image_match.cv2.getNumThreads
+        original_optimized = image_match.cv2.useOptimized
+        image_match.cv2.setNumThreads = lambda value: calls.append(value)
+        image_match.cv2.getNumThreads = lambda: calls[-1]
+        image_match.cv2.useOptimized = lambda: True
+        try:
+            summary = image_match._apply_opencv_thread_config(2)
+        finally:
+            image_match.cv2.setNumThreads = original_set
+            image_match.cv2.getNumThreads = original_get
+            image_match.cv2.useOptimized = original_optimized
+
+        self.assertEqual(calls, [2])
+        self.assertTrue(summary["opencv_num_threads_configured"])
+        self.assertEqual(summary["opencv_num_threads_requested"], 2)
+        self.assertEqual(summary["opencv_num_threads_effective"], 2)
 
     def test_build_argument_parser_accepts_valid_pixel_percent_threshold(self):
         parser = build_argument_parser()
@@ -3760,7 +3807,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                         right_points=(),
                     )
                 )
-            return tile_results
+            return tile_matching_module.TileMatchBatchResult(results=tile_results)
 
         with temporary_directory() as temp_dir:
             left_path, right_path = _write_projected_dom_pair(
@@ -5700,7 +5747,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ), mock.patch.object(
                 image_match,
                 "_run_serial_tile_match_tasks",
-                return_value=[fake_tile_result],
+                return_value=_tile_match_batch_result(fake_tile_result),
             ) as serial_mock:
                 _, _, summary = match_dom_pair(
                     left_path,
@@ -5793,7 +5840,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ) as diag_mock, mock.patch.object(
                 image_match,
                 "_run_serial_tile_match_tasks",
-                return_value=[fake_tile_result],
+                return_value=_tile_match_batch_result(fake_tile_result),
             ) as serial_mock:
                 _, _, summary = image_match.match_ori_pair(
                     left_path,
@@ -5849,7 +5896,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ), mock.patch.object(
                 image_match,
                 "_run_serial_tile_match_tasks",
-                return_value=[fake_tile_result],
+                return_value=_tile_match_batch_result(fake_tile_result),
             ) as serial_mock:
                 _, _, summary = image_match.match_ori_pair(
                     left_path,
@@ -5954,7 +6001,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ), mock.patch.object(
                 image_match,
                 "_run_serial_tile_match_tasks",
-                side_effect=[[weak_tile_result], [accepted_tile_result]],
+                side_effect=[
+                    _tile_match_batch_result(weak_tile_result),
+                    _tile_match_batch_result(accepted_tile_result),
+                ],
             ) as serial_mock:
                 _, _, summary = match_dom_pair(
                     left_path,
@@ -6039,6 +6089,13 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             "tile_validity_cache_dir": None,
             "tile_validity_cell_width": 256,
             "tile_validity_cell_height": 256,
+            "tile_block_alignment_mode": "off",
+            "block_alignment_reason": "alignment_disabled",
+            "tile_block_alignment": {
+                "mode": "off",
+                "status": "disabled",
+                "reason": "alignment_disabled",
+            },
             "tile_validity_skip_reasons": {},
             "left_tile_validity_index": None,
             "right_tile_validity_index": None,
@@ -6281,6 +6338,93 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(close_count, 2)
         self.assertEqual([index for index, _ in results], [0, 1])
         self.assertEqual(progress_events, [1, 1])
+
+    def test_parallel_tile_batch_worker_applies_opencv_thread_config_once(self):
+        set_thread_calls: list[int] = []
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, path, mode):
+                self._open = True
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        task = tile_matching_module.IndexedTileMatchTask(
+            index=0,
+            task=tile_matching_module.TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=tile_matching_module.PairedTileWindow(
+                    local_window=tile_matching_module.TileWindow(0, 0, 8, 8),
+                    left_window=tile_matching_module.TileWindow(0, 0, 8, 8),
+                    right_window=tile_matching_module.TileWindow(0, 0, 8, 8),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=1,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                ratio_test=0.75,
+                matcher_method="bf",
+                max_features=None,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                opencv_num_threads=1,
+            ),
+        )
+        fake_result = tile_matching_module.TileMatchResult(
+            stats=tile_matching_module.TileMatchStats(
+                local_start_x=0,
+                local_start_y=0,
+                width=8,
+                height=8,
+                left_start_x=0,
+                left_start_y=0,
+                right_start_x=0,
+                right_start_y=0,
+                left_valid_pixel_count=64,
+                right_valid_pixel_count=64,
+                left_valid_pixel_ratio=1.0,
+                right_valid_pixel_ratio=1.0,
+                left_feature_count=0,
+                right_feature_count=0,
+                match_count=0,
+                status="skipped_insufficient_matches",
+            ),
+            left_points=(),
+            right_points=(),
+        )
+
+        with mock.patch.object(tile_matching_module.ip, "Cube", FakeCube), mock.patch.object(
+            tile_matching_module.cv2,
+            "setNumThreads",
+            side_effect=lambda value: set_thread_calls.append(int(value)),
+        ), mock.patch.object(
+            tile_matching_module,
+            "_resolved_invalid_values_for_cube",
+            return_value=(),
+        ), mock.patch.object(
+            tile_matching_module,
+            "_match_tile_task_with_open_cubes",
+            return_value=fake_result,
+        ):
+            results = tile_matching_module._match_tile_task_batch_worker((task,))
+
+        self.assertEqual(set_thread_calls, [1])
+        self.assertEqual(results, ((0, fake_result),))
 
     def test_run_parallel_tile_match_tasks_drains_progress_queue_before_future_completion(self):
         progress_call_order: list[str] = []

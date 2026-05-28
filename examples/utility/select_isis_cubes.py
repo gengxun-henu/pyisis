@@ -9,15 +9,18 @@ Updated: 2026-05-28  Geng Xun added Task 3 rule evaluation helpers for approved 
 Updated: 2026-05-28  Geng Xun aligned Task 3 selection criteria names and list-based evaluation outcomes with the approved plan surface.
 Updated: 2026-05-28  Geng Xun added Task 4 move execution helpers with unresolved, dry-run, conflict, and successful move outcomes.
 Updated: 2026-05-28  Geng Xun aligned Task 4 move-result field names and status strings with the approved plan surface.
+Updated: 2026-05-28  Geng Xun added Task 5 CLI argument parsing, validation, batched execution, and concise summary output.
 """
 
 from __future__ import annotations
 
+import argparse
 from dataclasses import dataclass
 import math
 from pathlib import Path
 import re
 import shutil
+import sys
 
 
 @dataclass(frozen=True)
@@ -67,6 +70,102 @@ class MoveResult:
     source: Path | None
     destination: Path | None
     detail: str | None = None
+
+
+def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Select ISIS cubes from caminfo metadata files and move matches.",
+    )
+    parser.add_argument("--caminfo-list", type=Path, required=True)
+    parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--verbose", action="store_true")
+    parser.add_argument("--center-latitude", type=float)
+    parser.add_argument("--center-longitude", type=float)
+    parser.add_argument("--max-center-distance-deg", type=float)
+    parser.add_argument("--min-latitude", type=float)
+    parser.add_argument("--max-latitude", type=float)
+    parser.add_argument("--min-longitude", type=float)
+    parser.add_argument("--max-longitude", type=float)
+    parser.add_argument("--min-incidence", type=float)
+    parser.add_argument("--max-incidence", type=float)
+    parser.add_argument("--min-emission", type=float)
+    parser.add_argument("--max-emission", type=float)
+    parser.add_argument("--min-phase", type=float)
+    parser.add_argument("--max-phase", type=float)
+    parser.add_argument("--min-sub-solar-azimuth", type=float)
+    parser.add_argument("--max-sub-solar-azimuth", type=float)
+    return parser.parse_args(argv)
+
+
+def _validate_min_max(
+    field_name: str,
+    minimum: float | None,
+    maximum: float | None,
+) -> None:
+    if minimum is not None and maximum is not None and minimum > maximum:
+        raise ValueError(
+            f"Invalid {field_name} range: minimum {minimum} cannot exceed maximum {maximum}.",
+        )
+
+
+def build_criteria(args: argparse.Namespace) -> SelectionCriteria:
+    center_distance_values = (
+        args.center_latitude,
+        args.center_longitude,
+        args.max_center_distance_deg,
+    )
+    provided_center_distance_values = [value for value in center_distance_values if value is not None]
+    if provided_center_distance_values and len(provided_center_distance_values) != len(center_distance_values):
+        raise ValueError(
+            "Incomplete center distance filter: provide --center-latitude, "
+            "--center-longitude, and --max-center-distance-deg together.",
+        )
+
+    _validate_min_max("latitude", args.min_latitude, args.max_latitude)
+    _validate_min_max("longitude", args.min_longitude, args.max_longitude)
+    _validate_min_max("incidence", args.min_incidence, args.max_incidence)
+    _validate_min_max("emission", args.min_emission, args.max_emission)
+    _validate_min_max("phase", args.min_phase, args.max_phase)
+    _validate_min_max(
+        "sub-solar azimuth",
+        args.min_sub_solar_azimuth,
+        args.max_sub_solar_azimuth,
+    )
+
+    return SelectionCriteria(
+        center_latitude=args.center_latitude,
+        center_longitude=args.center_longitude,
+        max_center_distance_deg=args.max_center_distance_deg,
+        min_latitude=args.min_latitude,
+        max_latitude=args.max_latitude,
+        min_longitude=args.min_longitude,
+        max_longitude=args.max_longitude,
+        min_incidence=args.min_incidence,
+        max_incidence=args.max_incidence,
+        min_emission=args.min_emission,
+        max_emission=args.max_emission,
+        min_phase=args.min_phase,
+        max_phase=args.max_phase,
+        min_sub_solar_azimuth=args.min_sub_solar_azimuth,
+        max_sub_solar_azimuth=args.max_sub_solar_azimuth,
+    )
+
+
+def _read_caminfo_list(list_path: Path) -> list[Path]:
+    resolved_list_path = Path(list_path)
+    caminfo_paths: list[Path] = []
+    for line in resolved_list_path.read_text(encoding="utf-8").splitlines():
+        stripped_line = line.strip()
+        if not stripped_line or stripped_line.startswith("#"):
+            continue
+
+        entry_path = Path(stripped_line)
+        if not entry_path.is_absolute():
+            entry_path = (resolved_list_path.parent / entry_path).resolve()
+        caminfo_paths.append(entry_path)
+
+    return caminfo_paths
 
 
 def _evaluate_range(
@@ -249,3 +348,67 @@ def parse_caminfo_file(caminfo_path: Path) -> CaminfoRecord:
         phase=_extract_float(text, phase_angle_pattern),
         sub_solar_azimuth=_extract_float(text, sub_solar_azimuth_pattern),
     )
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parse_args(argv)
+
+    try:
+        criteria = build_criteria(args)
+    except ValueError as error:
+        print(f"Error: {error}", file=sys.stderr)
+        return 2
+
+    caminfo_paths = _read_caminfo_list(args.caminfo_list)
+    matched_count = 0
+    skipped_count = 0
+    moved_count = 0
+    dry_run_count = 0
+    destination_conflict_count = 0
+    unresolved_count = 0
+
+    for caminfo_path in caminfo_paths:
+        record = parse_caminfo_file(caminfo_path)
+        evaluation = evaluate_record(record, criteria)
+        if not evaluation.matched:
+            skipped_count += 1
+            if args.verbose:
+                print(
+                    f"SKIP {caminfo_path}: {'; '.join(evaluation.reasons)}",
+                )
+            continue
+
+        matched_count += 1
+        move_result = execute_move(record, args.output_dir, args.dry_run)
+        if move_result.status == "moved":
+            moved_count += 1
+        elif move_result.status == "dry-run":
+            dry_run_count += 1
+        elif move_result.status == "destination-conflict":
+            destination_conflict_count += 1
+        elif move_result.status == "unresolved":
+            unresolved_count += 1
+
+        if args.verbose:
+            source_label = record.cube_name or str(caminfo_path)
+            detail_suffix = "" if move_result.detail is None else f": {move_result.detail}"
+            print(f"MATCH {source_label}: {move_result.status}{detail_suffix}")
+
+    print(
+        " ".join(
+            [
+                f"Processed {len(caminfo_paths)} caminfo files.",
+                f"Matched {matched_count}.",
+                f"Skipped {skipped_count}.",
+                f"Moved {moved_count}.",
+                f"Dry-run moves {dry_run_count}.",
+                f"Destination conflicts {destination_conflict_count}.",
+                f"Unresolved moves {unresolved_count}.",
+            ]
+        )
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

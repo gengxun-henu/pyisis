@@ -12,15 +12,20 @@ Updated: 2026-05-28  Geng Xun aligned Task 3 tests with the approved selection c
 Updated: 2026-05-28  Geng Xun added Task 4 move-execution coverage for unresolved, dry-run, conflict, and successful move behaviors.
 Updated: 2026-05-28  Geng Xun fixed Task 4 move tests to assert file-system effects before temporary directories are cleaned up.
 Updated: 2026-05-28  Geng Xun aligned Task 4 move-result assertions with the approved plan field names and status strings.
+Updated: 2026-05-28  Geng Xun added Task 5 CLI-flow coverage for argument validation, batched processing, and concise summary output.
 """
 
 from __future__ import annotations
 
+import argparse
+from contextlib import redirect_stdout
 import importlib.util
+import io
 from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -381,6 +386,215 @@ class MoveExecutionTest(unittest.TestCase):
         self.assertTrue(output_dir_exists)
         self.assertEqual(moved_contents, "cube payload\n")
         self.assertIn("moved", result.detail.lower())
+
+
+class CliFlowTest(unittest.TestCase):
+    def test_parse_args_reads_approved_cli_surface(self):
+        module = load_select_isis_cubes_module()
+
+        args = module.parse_args(
+            [
+                "--caminfo-list",
+                "caminfo_files.txt",
+                "--output-dir",
+                "selected",
+                "--dry-run",
+                "--verbose",
+                "--center-latitude",
+                "10.5",
+                "--center-longitude",
+                "20.5",
+                "--max-center-distance-deg",
+                "2.5",
+                "--min-latitude",
+                "-5",
+                "--max-latitude",
+                "15",
+                "--min-incidence",
+                "30",
+                "--max-incidence",
+                "70",
+            ]
+        )
+
+        self.assertEqual(args.caminfo_list, Path("caminfo_files.txt"))
+        self.assertEqual(args.output_dir, Path("selected"))
+        self.assertTrue(args.dry_run)
+        self.assertTrue(args.verbose)
+        self.assertEqual(args.center_latitude, 10.5)
+        self.assertEqual(args.center_longitude, 20.5)
+        self.assertEqual(args.max_center_distance_deg, 2.5)
+        self.assertEqual(args.min_latitude, -5.0)
+        self.assertEqual(args.max_latitude, 15.0)
+        self.assertEqual(args.min_incidence, 30.0)
+        self.assertEqual(args.max_incidence, 70.0)
+
+    def test_build_criteria_rejects_incomplete_center_distance_input(self):
+        module = load_select_isis_cubes_module()
+        args = argparse.Namespace(
+            center_latitude=10.0,
+            center_longitude=None,
+            max_center_distance_deg=2.0,
+            min_latitude=None,
+            max_latitude=None,
+            min_longitude=None,
+            max_longitude=None,
+            min_incidence=None,
+            max_incidence=None,
+            min_emission=None,
+            max_emission=None,
+            min_phase=None,
+            max_phase=None,
+            min_sub_solar_azimuth=None,
+            max_sub_solar_azimuth=None,
+        )
+
+        with self.assertRaisesRegex(ValueError, "center distance"):
+            module.build_criteria(args)
+
+    def test_build_criteria_rejects_invalid_min_max_pair(self):
+        module = load_select_isis_cubes_module()
+        args = argparse.Namespace(
+            center_latitude=None,
+            center_longitude=None,
+            max_center_distance_deg=None,
+            min_latitude=20.0,
+            max_latitude=10.0,
+            min_longitude=None,
+            max_longitude=None,
+            min_incidence=None,
+            max_incidence=None,
+            min_emission=None,
+            max_emission=None,
+            min_phase=None,
+            max_phase=None,
+            min_sub_solar_azimuth=None,
+            max_sub_solar_azimuth=None,
+        )
+
+        with self.assertRaisesRegex(ValueError, "latitude"):
+            module.build_criteria(args)
+
+    def test_main_dry_run_processes_caminfo_batch_and_prints_concise_summary(self):
+        module = load_select_isis_cubes_module()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            caminfo_list_path = temp_path / "caminfo_list.txt"
+            caminfo_a = temp_path / "a.caminfo"
+            caminfo_b = temp_path / "b.caminfo"
+            caminfo_c = temp_path / "c.caminfo"
+            for caminfo_path in (caminfo_a, caminfo_b, caminfo_c):
+                caminfo_path.write_text("placeholder\n", encoding="utf-8")
+
+            caminfo_list_path.write_text(
+                f"{caminfo_a}\n\n{caminfo_b}\n{caminfo_c}\n",
+                encoding="utf-8",
+            )
+            output_dir = temp_path / "selected"
+            criteria = module.SelectionCriteria(min_incidence=10.0)
+            record_a = module.CaminfoRecord(
+                cube_name="a.cub",
+                cube_path=temp_path / "a.cub",
+                center_latitude=1.0,
+                center_longitude=2.0,
+                minimum_latitude=None,
+                maximum_latitude=None,
+                minimum_longitude=None,
+                maximum_longitude=None,
+                incidence=12.0,
+                emission=20.0,
+                phase=30.0,
+                sub_solar_azimuth=40.0,
+            )
+            record_b = module.CaminfoRecord(
+                cube_name="b.cub",
+                cube_path=temp_path / "b.cub",
+                center_latitude=3.0,
+                center_longitude=4.0,
+                minimum_latitude=None,
+                maximum_latitude=None,
+                minimum_longitude=None,
+                maximum_longitude=None,
+                incidence=8.0,
+                emission=20.0,
+                phase=30.0,
+                sub_solar_azimuth=40.0,
+            )
+            record_c = module.CaminfoRecord(
+                cube_name="c.cub",
+                cube_path=temp_path / "c.cub",
+                center_latitude=5.0,
+                center_longitude=6.0,
+                minimum_latitude=None,
+                maximum_latitude=None,
+                minimum_longitude=None,
+                maximum_longitude=None,
+                incidence=18.0,
+                emission=20.0,
+                phase=30.0,
+                sub_solar_azimuth=40.0,
+            )
+
+            parse_side_effect = [record_a, record_b, record_c]
+            evaluate_side_effect = [
+                module.EvaluationOutcome(matched=True, reasons=[]),
+                module.EvaluationOutcome(matched=False, reasons=["incidence 8.0 is below minimum 10.0."]),
+                module.EvaluationOutcome(matched=True, reasons=[]),
+            ]
+            move_side_effect = [
+                module.MoveResult(
+                    status="dry-run",
+                    source=record_a.cube_path,
+                    destination=output_dir / "a.cub",
+                    detail="Dry-run only; cube would be moved.",
+                ),
+                module.MoveResult(
+                    status="unresolved",
+                    source=record_c.cube_path,
+                    destination=None,
+                    detail="Cannot move cube because source path does not exist.",
+                ),
+            ]
+
+            stdout_buffer = io.StringIO()
+            with mock.patch.object(module, "build_criteria", return_value=criteria) as build_criteria_mock, mock.patch.object(
+                module, "parse_caminfo_file", side_effect=parse_side_effect
+            ) as parse_mock, mock.patch.object(
+                module, "evaluate_record", side_effect=evaluate_side_effect
+            ) as evaluate_mock, mock.patch.object(
+                module, "execute_move", side_effect=move_side_effect
+            ) as move_mock, redirect_stdout(stdout_buffer):
+                exit_code = module.main(
+                    [
+                        "--caminfo-list",
+                        str(caminfo_list_path),
+                        "--output-dir",
+                        str(output_dir),
+                        "--dry-run",
+                    ]
+                )
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(build_criteria_mock.call_count, 1)
+        self.assertEqual(parse_mock.call_count, 3)
+        self.assertEqual(evaluate_mock.call_count, 3)
+        self.assertEqual(move_mock.call_count, 2)
+        self.assertEqual([call.args[0] for call in parse_mock.call_args_list], [caminfo_a, caminfo_b, caminfo_c])
+        self.assertEqual([call.args[0] for call in evaluate_mock.call_args_list], [record_a, record_b, record_c])
+        self.assertTrue(all(call.args[1] == criteria for call in evaluate_mock.call_args_list))
+        self.assertEqual([call.args[0] for call in move_mock.call_args_list], [record_a, record_c])
+        self.assertTrue(all(call.args[1] == output_dir for call in move_mock.call_args_list))
+        self.assertTrue(all(call.args[2] is True for call in move_mock.call_args_list))
+
+        output = stdout_buffer.getvalue()
+        self.assertIn("Processed 3 caminfo files.", output)
+        self.assertIn("Matched 2.", output)
+        self.assertIn("Skipped 1.", output)
+        self.assertIn("Dry-run moves 1.", output)
+        self.assertIn("Unresolved moves 1.", output)
+        self.assertNotIn("a.caminfo", output)
+        self.assertNotIn("b.caminfo", output)
 
 
 if __name__ == "__main__":

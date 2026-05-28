@@ -8,6 +8,7 @@ Updated: 2026-05-28  Geng Xun added focused coverage for parsing synthetic camin
 Updated: 2026-05-28  Geng Xun aligned caminfo selector expectations with the approved Task 1 field names.
 Updated: 2026-05-28  Geng Xun added Task 2 parser coverage for approved numeric metadata extraction and missing optional fields.
 Updated: 2026-05-28  Geng Xun added Task 3 selection-rule evaluation coverage for approved range and center-distance matching.
+Updated: 2026-05-28  Geng Xun aligned Task 3 tests with the approved selection criteria names and list-based evaluation reasons.
 """
 
 from __future__ import annotations
@@ -176,55 +177,56 @@ class SelectionRulesTest(unittest.TestCase):
         module = load_select_isis_cubes_module()
         record = self._build_record()
         criteria = module.SelectionCriteria(
-            latitude_min=9.5,
-            latitude_max=10.5,
-            longitude_min=19.5,
-            longitude_max=20.5,
-            incidence_min=29.0,
-            incidence_max=31.0,
-            emission_min=39.0,
-            emission_max=41.0,
-            phase_min=49.0,
-            phase_max=51.0,
-            sub_solar_azimuth_min=59.0,
-            sub_solar_azimuth_max=61.0,
+            min_latitude=9.5,
+            max_latitude=10.5,
+            min_longitude=19.5,
+            max_longitude=20.5,
+            min_incidence=29.0,
+            max_incidence=31.0,
+            min_emission=39.0,
+            max_emission=41.0,
+            min_phase=49.0,
+            max_phase=51.0,
+            min_sub_solar_azimuth=59.0,
+            max_sub_solar_azimuth=61.0,
         )
 
         outcome = module.evaluate_record(record, criteria)
 
-        self.assertTrue(outcome.is_match)
-        self.assertIn("matched", outcome.reason.lower())
+        self.assertTrue(outcome.matched)
+        self.assertEqual(outcome.reasons, [])
 
-    def test_evaluate_record_uses_and_composition_for_range_rules(self):
+    def test_evaluate_record_accumulates_all_enabled_range_failure_reasons(self):
         module = load_select_isis_cubes_module()
         record = self._build_record()
         criteria = module.SelectionCriteria(
-            latitude_min=9.5,
-            latitude_max=10.5,
-            longitude_min=19.5,
-            longitude_max=20.5,
-            incidence_min=29.0,
-            incidence_max=31.0,
-            emission_min=39.0,
-            emission_max=39.5,
+            min_latitude=10.5,
+            max_longitude=19.5,
+            max_emission=39.5,
         )
 
         outcome = module.evaluate_record(record, criteria)
 
-        self.assertFalse(outcome.is_match)
-        self.assertIn("emission", outcome.reason.lower())
-        self.assertIn("39.5", outcome.reason)
+        self.assertFalse(outcome.matched)
+        self.assertEqual(len(outcome.reasons), 3)
+        self.assertTrue(any("latitude" in reason.lower() for reason in outcome.reasons))
+        self.assertTrue(any("longitude" in reason.lower() for reason in outcome.reasons))
+        self.assertTrue(any("emission" in reason.lower() for reason in outcome.reasons))
+        self.assertTrue(any("10.5" in reason for reason in outcome.reasons))
+        self.assertTrue(any("19.5" in reason for reason in outcome.reasons))
+        self.assertTrue(any("39.5" in reason for reason in outcome.reasons))
 
     def test_evaluate_record_reports_missing_required_field_as_non_match(self):
         module = load_select_isis_cubes_module()
         record = self._build_record(incidence=None)
-        criteria = module.SelectionCriteria(incidence_min=10.0)
+        criteria = module.SelectionCriteria(min_incidence=10.0)
 
         outcome = module.evaluate_record(record, criteria)
 
-        self.assertFalse(outcome.is_match)
-        self.assertIn("incidence", outcome.reason.lower())
-        self.assertIn("missing", outcome.reason.lower())
+        self.assertFalse(outcome.matched)
+        self.assertEqual(len(outcome.reasons), 1)
+        self.assertIn("incidence", outcome.reasons[0].lower())
+        self.assertIn("missing", outcome.reasons[0].lower())
 
     def test_evaluate_record_applies_center_distance_in_degree_space(self):
         module = load_select_isis_cubes_module()
@@ -232,25 +234,26 @@ class SelectionRulesTest(unittest.TestCase):
         matching_criteria = module.SelectionCriteria(
             center_latitude=10.0,
             center_longitude=20.0,
-            center_distance_max=1.5,
+            max_center_distance_deg=1.5,
         )
 
         matching_outcome = module.evaluate_record(matching_record, matching_criteria)
 
-        self.assertTrue(matching_outcome.is_match)
-        self.assertIn("matched", matching_outcome.reason.lower())
+        self.assertTrue(matching_outcome.matched)
+        self.assertEqual(matching_outcome.reasons, [])
 
         non_matching_criteria = module.SelectionCriteria(
             center_latitude=10.0,
             center_longitude=20.0,
-            center_distance_max=1.0,
+            max_center_distance_deg=1.0,
         )
 
         non_matching_outcome = module.evaluate_record(matching_record, non_matching_criteria)
 
-        self.assertFalse(non_matching_outcome.is_match)
-        self.assertIn("center distance", non_matching_outcome.reason.lower())
-        self.assertIn("1.0", non_matching_outcome.reason)
+        self.assertFalse(non_matching_outcome.matched)
+        self.assertEqual(len(non_matching_outcome.reasons), 1)
+        self.assertIn("center distance", non_matching_outcome.reasons[0].lower())
+        self.assertIn("1.0", non_matching_outcome.reasons[0])
 
 
 if __name__ == "__main__":

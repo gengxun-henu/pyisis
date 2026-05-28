@@ -6,6 +6,7 @@ Updated: 2026-05-28  Geng Xun added the initial caminfo parsing skeleton for cub
 Updated: 2026-05-28  Geng Xun aligned the Task 1 caminfo record surface with optional approved field names.
 Updated: 2026-05-28  Geng Xun added approved Task 2 caminfo numeric field parsing for selector metadata.
 Updated: 2026-05-28  Geng Xun added Task 3 rule evaluation helpers for approved range and center-distance selection.
+Updated: 2026-05-28  Geng Xun aligned Task 3 selection criteria names and list-based evaluation outcomes with the approved plan surface.
 """
 
 from __future__ import annotations
@@ -34,27 +35,27 @@ class CaminfoRecord:
 
 @dataclass(frozen=True)
 class SelectionCriteria:
-    latitude_min: float | None = None
-    latitude_max: float | None = None
-    longitude_min: float | None = None
-    longitude_max: float | None = None
-    incidence_min: float | None = None
-    incidence_max: float | None = None
-    emission_min: float | None = None
-    emission_max: float | None = None
-    phase_min: float | None = None
-    phase_max: float | None = None
-    sub_solar_azimuth_min: float | None = None
-    sub_solar_azimuth_max: float | None = None
     center_latitude: float | None = None
     center_longitude: float | None = None
-    center_distance_max: float | None = None
+    max_center_distance_deg: float | None = None
+    min_latitude: float | None = None
+    max_latitude: float | None = None
+    min_longitude: float | None = None
+    max_longitude: float | None = None
+    min_incidence: float | None = None
+    max_incidence: float | None = None
+    min_emission: float | None = None
+    max_emission: float | None = None
+    min_phase: float | None = None
+    max_phase: float | None = None
+    min_sub_solar_azimuth: float | None = None
+    max_sub_solar_azimuth: float | None = None
 
 
 @dataclass(frozen=True)
 class EvaluationOutcome:
-    is_match: bool
-    reason: str
+    matched: bool
+    reasons: list[str]
 
 
 def _evaluate_range(
@@ -80,17 +81,19 @@ def _evaluate_range(
 
 
 def evaluate_record(record: CaminfoRecord, criteria: SelectionCriteria) -> EvaluationOutcome:
+    reasons: list[str] = []
+
     range_checks = (
-        ("latitude", record.center_latitude, criteria.latitude_min, criteria.latitude_max),
-        ("longitude", record.center_longitude, criteria.longitude_min, criteria.longitude_max),
-        ("incidence", record.incidence, criteria.incidence_min, criteria.incidence_max),
-        ("emission", record.emission, criteria.emission_min, criteria.emission_max),
-        ("phase", record.phase, criteria.phase_min, criteria.phase_max),
+        ("latitude", record.center_latitude, criteria.min_latitude, criteria.max_latitude),
+        ("longitude", record.center_longitude, criteria.min_longitude, criteria.max_longitude),
+        ("incidence", record.incidence, criteria.min_incidence, criteria.max_incidence),
+        ("emission", record.emission, criteria.min_emission, criteria.max_emission),
+        ("phase", record.phase, criteria.min_phase, criteria.max_phase),
         (
             "sub_solar_azimuth",
             record.sub_solar_azimuth,
-            criteria.sub_solar_azimuth_min,
-            criteria.sub_solar_azimuth_max,
+            criteria.min_sub_solar_azimuth,
+            criteria.max_sub_solar_azimuth,
         ),
     )
 
@@ -102,35 +105,29 @@ def evaluate_record(record: CaminfoRecord, criteria: SelectionCriteria) -> Evalu
             maximum=maximum,
         )
         if mismatch_reason is not None:
-            return EvaluationOutcome(is_match=False, reason=mismatch_reason)
+            reasons.append(mismatch_reason)
 
-    if criteria.center_distance_max is not None:
+    if criteria.max_center_distance_deg is not None:
         if record.center_latitude is None or record.center_longitude is None:
-            return EvaluationOutcome(
-                is_match=False,
-                reason="Missing required center latitude/longitude for center distance check.",
+            reasons.append(
+                "Missing required center latitude/longitude for center distance check.",
             )
-
-        if criteria.center_latitude is None or criteria.center_longitude is None:
-            return EvaluationOutcome(
-                is_match=False,
-                reason="Missing required selection center latitude/longitude for center distance check.",
+        elif criteria.center_latitude is None or criteria.center_longitude is None:
+            reasons.append(
+                "Missing required selection center latitude/longitude for center distance check.",
             )
-
-        center_distance = math.hypot(
-            record.center_latitude - criteria.center_latitude,
-            record.center_longitude - criteria.center_longitude,
-        )
-        if center_distance > criteria.center_distance_max:
-            return EvaluationOutcome(
-                is_match=False,
-                reason=(
+        else:
+            center_distance = math.hypot(
+                record.center_latitude - criteria.center_latitude,
+                record.center_longitude - criteria.center_longitude,
+            )
+            if center_distance > criteria.max_center_distance_deg:
+                reasons.append(
                     f"Center distance {center_distance} exceeds maximum "
-                    f"{criteria.center_distance_max}."
-                ),
-            )
+                    f"{criteria.max_center_distance_deg}."
+                )
 
-    return EvaluationOutcome(is_match=True, reason="Matched all selection criteria.")
+    return EvaluationOutcome(matched=not reasons, reasons=reasons)
 
 
 def _extract_string(text: str, pattern: re.Pattern[str]) -> str | None:

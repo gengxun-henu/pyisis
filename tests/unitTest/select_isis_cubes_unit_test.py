@@ -11,6 +11,7 @@ Updated: 2026-05-28  Geng Xun added Task 3 selection-rule evaluation coverage fo
 Updated: 2026-05-28  Geng Xun aligned Task 3 tests with the approved selection criteria names and list-based evaluation reasons.
 Updated: 2026-05-28  Geng Xun added Task 4 move-execution coverage for unresolved, dry-run, conflict, and successful move behaviors.
 Updated: 2026-05-28  Geng Xun fixed Task 4 move tests to assert file-system effects before temporary directories are cleaned up.
+Updated: 2026-05-28  Geng Xun aligned Task 4 move-result assertions with the approved plan field names and status strings.
 """
 
 from __future__ import annotations
@@ -288,9 +289,10 @@ class MoveExecutionTest(unittest.TestCase):
             result = module.execute_move(record, output_dir, dry_run=False)
 
         self.assertEqual(result.status, "unresolved")
-        self.assertIsNone(result.destination_path)
-        self.assertIn("missing", result.message.lower())
-        self.assertIn("cube path", result.message.lower())
+        self.assertIsNone(result.source)
+        self.assertIsNone(result.destination)
+        self.assertIn("missing", result.detail.lower())
+        self.assertIn("cube path", result.detail.lower())
 
     def test_execute_move_returns_unresolved_when_cube_path_is_absent_on_disk(self):
         module = load_select_isis_cubes_module()
@@ -304,8 +306,9 @@ class MoveExecutionTest(unittest.TestCase):
             result = module.execute_move(record, output_dir, dry_run=False)
 
         self.assertEqual(result.status, "unresolved")
-        self.assertIsNone(result.destination_path)
-        self.assertIn("does not exist", result.message.lower())
+        self.assertEqual(result.source, missing_cube_path)
+        self.assertIsNone(result.destination)
+        self.assertIn("does not exist", result.detail.lower())
 
     def test_execute_move_dry_run_does_not_move_file(self):
         module = load_select_isis_cubes_module()
@@ -323,12 +326,13 @@ class MoveExecutionTest(unittest.TestCase):
             destination_exists = (output_dir / cube_path.name).exists()
 
         self.assertEqual(result.status, "dry-run")
-        self.assertEqual(result.destination_path, output_dir / cube_path.name)
+        self.assertEqual(result.source, cube_path)
+        self.assertEqual(result.destination, output_dir / cube_path.name)
         self.assertTrue(source_exists)
         self.assertFalse(destination_exists)
-        self.assertIn("dry-run", result.message.lower())
+        self.assertIn("dry-run", result.detail.lower())
 
-    def test_execute_move_returns_conflict_without_overwriting_existing_destination(self):
+    def test_execute_move_returns_destination_conflict_without_overwriting_existing_destination(self):
         module = load_select_isis_cubes_module()
 
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -346,11 +350,12 @@ class MoveExecutionTest(unittest.TestCase):
             destination_contents = destination_path.read_text(encoding="utf-8")
             source_exists = cube_path.exists()
 
-        self.assertEqual(result.status, "conflict")
-        self.assertEqual(result.destination_path, destination_path)
+        self.assertEqual(result.status, "destination-conflict")
+        self.assertEqual(result.source, cube_path)
+        self.assertEqual(result.destination, destination_path)
         self.assertTrue(source_exists)
         self.assertEqual(destination_contents, "existing cube\n")
-        self.assertIn("already exists", result.message.lower())
+        self.assertIn("already exists", result.detail.lower())
 
     def test_execute_move_moves_file_and_creates_output_directory(self):
         module = load_select_isis_cubes_module()
@@ -370,11 +375,12 @@ class MoveExecutionTest(unittest.TestCase):
             output_dir_exists = output_dir.exists()
 
         self.assertEqual(result.status, "moved")
-        self.assertEqual(result.destination_path, destination_path)
+        self.assertEqual(result.source, cube_path)
+        self.assertEqual(result.destination, destination_path)
         self.assertFalse(source_exists)
         self.assertTrue(output_dir_exists)
         self.assertEqual(moved_contents, "cube payload\n")
-        self.assertIn("moved", result.message.lower())
+        self.assertIn("moved", result.detail.lower())
 
 
 if __name__ == "__main__":

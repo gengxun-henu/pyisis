@@ -10,6 +10,7 @@ Updated: 2026-05-28  Geng Xun aligned Task 3 selection criteria names and list-b
 Updated: 2026-05-28  Geng Xun added Task 4 move execution helpers with unresolved, dry-run, conflict, and successful move outcomes.
 Updated: 2026-05-28  Geng Xun aligned Task 4 move-result field names and status strings with the approved plan surface.
 Updated: 2026-05-28  Geng Xun added Task 5 CLI argument parsing, validation, batched execution, and concise summary output.
+Updated: 2026-05-28  Geng Xun hardened Task 5 batch input handling for unreadable list files, per-entry parse failures, and invalid negative center distance.
 """
 
 from __future__ import annotations
@@ -120,6 +121,11 @@ def build_criteria(args: argparse.Namespace) -> SelectionCriteria:
         raise ValueError(
             "Incomplete center distance filter: provide --center-latitude, "
             "--center-longitude, and --max-center-distance-deg together.",
+        )
+
+    if args.max_center_distance_deg is not None and args.max_center_distance_deg < 0:
+        raise ValueError(
+            "Invalid --max-center-distance-deg value: cannot be negative.",
         )
 
     _validate_min_max("latitude", args.min_latitude, args.max_latitude)
@@ -359,16 +365,32 @@ def main(argv: list[str] | None = None) -> int:
         print(f"Error: {error}", file=sys.stderr)
         return 2
 
-    caminfo_paths = _read_caminfo_list(args.caminfo_list)
+    try:
+        caminfo_paths = _read_caminfo_list(args.caminfo_list)
+    except OSError as error:
+        print(
+            f"Error: Unable to read caminfo list {args.caminfo_list}: {error}",
+            file=sys.stderr,
+        )
+        return 2
+
     matched_count = 0
     skipped_count = 0
+    parse_failure_count = 0
     moved_count = 0
     dry_run_count = 0
     destination_conflict_count = 0
     unresolved_count = 0
 
     for caminfo_path in caminfo_paths:
-        record = parse_caminfo_file(caminfo_path)
+        try:
+            record = parse_caminfo_file(caminfo_path)
+        except (OSError, ValueError) as error:
+            parse_failure_count += 1
+            if args.verbose:
+                print(f"PARSE-FAIL {caminfo_path}: {error}")
+            continue
+
         evaluation = evaluate_record(record, criteria)
         if not evaluation.matched:
             skipped_count += 1
@@ -400,6 +422,7 @@ def main(argv: list[str] | None = None) -> int:
                 f"Processed {len(caminfo_paths)} caminfo files.",
                 f"Matched {matched_count}.",
                 f"Skipped {skipped_count}.",
+                f"Parse failures {parse_failure_count}.",
                 f"Moved {moved_count}.",
                 f"Dry-run moves {dry_run_count}.",
                 f"Destination conflicts {destination_conflict_count}.",

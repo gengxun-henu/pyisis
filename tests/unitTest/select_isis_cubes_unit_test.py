@@ -13,11 +13,13 @@ Updated: 2026-05-28  Geng Xun added Task 4 move-execution coverage for unresolve
 Updated: 2026-05-28  Geng Xun fixed Task 4 move tests to assert file-system effects before temporary directories are cleaned up.
 Updated: 2026-05-28  Geng Xun aligned Task 4 move-result assertions with the approved plan field names and status strings.
 Updated: 2026-05-28  Geng Xun added Task 5 CLI-flow coverage for argument validation, batched processing, and concise summary output.
+Updated: 2026-05-28  Geng Xun added Task 5 failure-path coverage for invalid center distance input and robust batch file handling.
 """
 
 from __future__ import annotations
 
 import argparse
+from contextlib import redirect_stderr
 from contextlib import redirect_stdout
 import importlib.util
 import io
@@ -475,6 +477,29 @@ class CliFlowTest(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "latitude"):
             module.build_criteria(args)
 
+    def test_build_criteria_rejects_negative_max_center_distance(self):
+        module = load_select_isis_cubes_module()
+        args = argparse.Namespace(
+            center_latitude=10.0,
+            center_longitude=20.0,
+            max_center_distance_deg=-0.5,
+            min_latitude=None,
+            max_latitude=None,
+            min_longitude=None,
+            max_longitude=None,
+            min_incidence=None,
+            max_incidence=None,
+            min_emission=None,
+            max_emission=None,
+            min_phase=None,
+            max_phase=None,
+            min_sub_solar_azimuth=None,
+            max_sub_solar_azimuth=None,
+        )
+
+        with self.assertRaisesRegex(ValueError, "max-center-distance-deg"):
+            module.build_criteria(args)
+
     def test_main_dry_run_processes_caminfo_batch_and_prints_concise_summary(self):
         module = load_select_isis_cubes_module()
 
@@ -595,6 +620,88 @@ class CliFlowTest(unittest.TestCase):
         self.assertIn("Unresolved moves 1.", output)
         self.assertNotIn("a.caminfo", output)
         self.assertNotIn("b.caminfo", output)
+
+    def test_main_returns_error_without_traceback_when_caminfo_list_is_unreadable(self):
+        module = load_select_isis_cubes_module()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            missing_list_path = temp_path / "missing_list.txt"
+            output_dir = temp_path / "selected"
+            stdout_buffer = io.StringIO()
+            stderr_buffer = io.StringIO()
+
+            with redirect_stdout(stdout_buffer), redirect_stderr(stderr_buffer):
+                exit_code = module.main(
+                    [
+                        "--caminfo-list",
+                        str(missing_list_path),
+                        "--output-dir",
+                        str(output_dir),
+                    ]
+                )
+
+        self.assertEqual(exit_code, 2)
+        self.assertEqual(stdout_buffer.getvalue(), "")
+        error_output = stderr_buffer.getvalue()
+        self.assertIn("Error:", error_output)
+        self.assertIn("caminfo list", error_output)
+        self.assertIn(str(missing_list_path), error_output)
+        self.assertNotIn("Traceback", error_output)
+
+    def test_main_continues_after_missing_caminfo_file_and_reports_parse_failures(self):
+        module = load_select_isis_cubes_module()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            missing_caminfo_path = temp_path / "missing.caminfo"
+            valid_caminfo_path = temp_path / "valid.caminfo"
+            valid_cube_path = temp_path / "valid.cub"
+            valid_cube_path.write_text("cube data\n", encoding="utf-8")
+            valid_caminfo_path.write_text(
+                f"""
+Object = Caminfo
+  From = {valid_cube_path.name}
+  CenterLatitude = 1.0
+  CenterLongitude = 2.0
+  IncidenceAngle = 12.0
+End_Object
+End
+""".strip()
+                + "\n",
+                encoding="utf-8",
+            )
+            caminfo_list_path = temp_path / "caminfo_list.txt"
+            caminfo_list_path.write_text(
+                f"{missing_caminfo_path}\n{valid_caminfo_path}\n",
+                encoding="utf-8",
+            )
+            output_dir = temp_path / "selected"
+            stdout_buffer = io.StringIO()
+            stderr_buffer = io.StringIO()
+
+            with redirect_stdout(stdout_buffer), redirect_stderr(stderr_buffer):
+                exit_code = module.main(
+                    [
+                        "--caminfo-list",
+                        str(caminfo_list_path),
+                        "--output-dir",
+                        str(output_dir),
+                        "--dry-run",
+                        "--min-incidence",
+                        "10",
+                    ]
+                )
+
+        self.assertEqual(exit_code, 0)
+        self.assertEqual(stderr_buffer.getvalue(), "")
+        output = stdout_buffer.getvalue()
+        self.assertIn("Processed 2 caminfo files.", output)
+        self.assertIn("Matched 1.", output)
+        self.assertIn("Skipped 0.", output)
+        self.assertIn("Parse failures 1.", output)
+        self.assertIn("Dry-run moves 1.", output)
+        self.assertNotIn("Traceback", output)
 
 
 if __name__ == "__main__":

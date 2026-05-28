@@ -15,6 +15,7 @@ Updated: 2026-05-28  Geng Xun aligned Task 4 move-result assertions with the app
 Updated: 2026-05-28  Geng Xun added Task 5 CLI-flow coverage for argument validation, batched processing, and concise summary output.
 Updated: 2026-05-28  Geng Xun added Task 5 failure-path coverage for invalid center distance input and robust batch file handling.
 Updated: 2026-05-28  Geng Xun added Task 6 regression coverage for readable verbose per-entry diagnostics and unresolved move details.
+Updated: 2026-05-28  Geng Xun added focused usage-helper coverage for example text generation and argparse help integration.
 """
 
 from __future__ import annotations
@@ -835,6 +836,36 @@ End
         self.assertIn("Parse failures 1.", output)
         self.assertIn("Dry-run moves 1.", output)
         self.assertNotIn("Traceback", output)
+
+
+class UsageHelperTest(unittest.TestCase):
+    def test_build_usage_examples_returns_examples_block_with_public_flags(self):
+        module = load_select_isis_cubes_module()
+
+        examples_text = module.build_usage_examples()
+
+        self.assertIn("Examples:", examples_text)
+        self.assertIn("--caminfo-list", examples_text)
+        self.assertIn("--output-dir", examples_text)
+        self.assertIn("--dry-run", examples_text)
+        self.assertTrue(
+            "--min-sub-solar-azimuth" in examples_text
+            or "--max-sub-solar-azimuth" in examples_text
+        )
+
+    def test_parse_args_help_includes_usage_examples_block(self):
+        module = load_select_isis_cubes_module()
+        stdout_buffer = io.StringIO()
+
+        with self.assertRaises(SystemExit) as context:
+            with redirect_stdout(stdout_buffer):
+                module.parse_args(["--help"])
+
+        self.assertEqual(context.exception.code, 0)
+        help_text = stdout_buffer.getvalue()
+        self.assertIn("Examples:", help_text)
+        self.assertIn("--dry-run", help_text)
+        self.assertIn("--min-sub-solar-azimuth", help_text)
 
 
 if __name__ == "__main__":

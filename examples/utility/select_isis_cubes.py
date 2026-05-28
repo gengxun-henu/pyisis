@@ -12,6 +12,7 @@ Updated: 2026-05-28  Geng Xun aligned Task 4 move-result field names and status 
 Updated: 2026-05-28  Geng Xun added Task 5 CLI argument parsing, validation, batched execution, and concise summary output.
 Updated: 2026-05-28  Geng Xun hardened Task 5 batch input handling for unreadable list files, per-entry parse failures, and invalid negative center distance.
 Updated: 2026-05-28  Geng Xun polished Task 6 verbose reporting so per-entry diagnostics keep caminfo context and unresolved move details readable.
+Updated: 2026-05-28  Geng Xun added usage examples helper text and integrated it into argparse help output.
 """
 
 from __future__ import annotations
@@ -74,9 +75,27 @@ class MoveResult:
     detail: str | None = None
 
 
+def build_usage_examples() -> str:
+    return "\n".join(
+        [
+            "Examples:",
+            "  # Preview matches inside a latitude/longitude box without moving files",
+            "  python examples/utility/select_isis_cubes.py --caminfo-list caminfo_files.txt --output-dir selected --min-latitude -10 --max-latitude 10 --min-longitude 120 --max-longitude 150 --dry-run",
+            "",
+            "  # Select cubes by sub-solar azimuth range",
+            "  python examples/utility/select_isis_cubes.py --caminfo-list caminfo_files.txt --output-dir selected --min-sub-solar-azimuth 90 --max-sub-solar-azimuth 180",
+            "",
+            "  # Select cubes near a center point within a maximum degree distance",
+            "  python examples/utility/select_isis_cubes.py --caminfo-list caminfo_files.txt --output-dir selected --center-latitude 5 --center-longitude 135 --max-center-distance-deg 2.5",
+        ]
+    )
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Select ISIS cubes from caminfo metadata files and move matches.",
+        epilog=build_usage_examples(),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     parser.add_argument("--caminfo-list", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)

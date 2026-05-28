@@ -11,6 +11,7 @@ Updated: 2026-05-28  Geng Xun added Task 4 move execution helpers with unresolve
 Updated: 2026-05-28  Geng Xun aligned Task 4 move-result field names and status strings with the approved plan surface.
 Updated: 2026-05-28  Geng Xun added Task 5 CLI argument parsing, validation, batched execution, and concise summary output.
 Updated: 2026-05-28  Geng Xun hardened Task 5 batch input handling for unreadable list files, per-entry parse failures, and invalid negative center distance.
+Updated: 2026-05-28  Geng Xun polished Task 6 verbose reporting so per-entry diagnostics keep caminfo context and unresolved move details readable.
 """
 
 from __future__ import annotations
@@ -356,6 +357,30 @@ def parse_caminfo_file(caminfo_path: Path) -> CaminfoRecord:
     )
 
 
+def _record_display_label(record: CaminfoRecord) -> str:
+    if record.cube_name:
+        return record.cube_name
+
+    if record.cube_path is not None:
+        return record.cube_path.name
+
+    return "<unknown cube>"
+
+
+def _format_match_diagnostic(
+    caminfo_path: Path,
+    record: CaminfoRecord,
+    move_result: MoveResult,
+) -> str:
+    message = (
+        f"MATCH {caminfo_path} -> {_record_display_label(record)} "
+        f"[{move_result.status}]"
+    )
+    if move_result.detail:
+        message += f": {move_result.detail}"
+    return message
+
+
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
 
@@ -412,9 +437,7 @@ def main(argv: list[str] | None = None) -> int:
             unresolved_count += 1
 
         if args.verbose:
-            source_label = record.cube_name or str(caminfo_path)
-            detail_suffix = "" if move_result.detail is None else f": {move_result.detail}"
-            print(f"MATCH {source_label}: {move_result.status}{detail_suffix}")
+            print(_format_match_diagnostic(caminfo_path, record, move_result))
 
     print(
         " ".join(

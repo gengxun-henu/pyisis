@@ -14,6 +14,7 @@ Updated: 2026-05-28  Geng Xun fixed Task 4 move tests to assert file-system effe
 Updated: 2026-05-28  Geng Xun aligned Task 4 move-result assertions with the approved plan field names and status strings.
 Updated: 2026-05-28  Geng Xun added Task 5 CLI-flow coverage for argument validation, batched processing, and concise summary output.
 Updated: 2026-05-28  Geng Xun added Task 5 failure-path coverage for invalid center distance input and robust batch file handling.
+Updated: 2026-05-28  Geng Xun added Task 6 regression coverage for readable verbose per-entry diagnostics and unresolved move details.
 """
 
 from __future__ import annotations
@@ -620,6 +621,138 @@ class CliFlowTest(unittest.TestCase):
         self.assertIn("Unresolved moves 1.", output)
         self.assertNotIn("a.caminfo", output)
         self.assertNotIn("b.caminfo", output)
+
+    def test_main_verbose_reports_readable_per_entry_diagnostics(self):
+        module = load_select_isis_cubes_module()
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_path = Path(temp_dir)
+            caminfo_list_path = temp_path / "caminfo_list.txt"
+            caminfo_a = temp_path / "a.caminfo"
+            caminfo_b = temp_path / "b.caminfo"
+            caminfo_c = temp_path / "c.caminfo"
+            caminfo_d = temp_path / "d.caminfo"
+            for caminfo_path in (caminfo_a, caminfo_b, caminfo_c, caminfo_d):
+                caminfo_path.write_text("placeholder\n", encoding="utf-8")
+
+            caminfo_list_path.write_text(
+                f"{caminfo_a}\n{caminfo_b}\n{caminfo_c}\n{caminfo_d}\n",
+                encoding="utf-8",
+            )
+            output_dir = temp_path / "selected"
+            criteria = module.SelectionCriteria(min_incidence=10.0)
+            record_a = module.CaminfoRecord(
+                cube_name="a.cub",
+                cube_path=temp_path / "a.cub",
+                center_latitude=1.0,
+                center_longitude=2.0,
+                minimum_latitude=None,
+                maximum_latitude=None,
+                minimum_longitude=None,
+                maximum_longitude=None,
+                incidence=12.0,
+                emission=20.0,
+                phase=30.0,
+                sub_solar_azimuth=40.0,
+            )
+            record_b = module.CaminfoRecord(
+                cube_name="b.cub",
+                cube_path=temp_path / "b.cub",
+                center_latitude=3.0,
+                center_longitude=4.0,
+                minimum_latitude=None,
+                maximum_latitude=None,
+                minimum_longitude=None,
+                maximum_longitude=None,
+                incidence=8.0,
+                emission=20.0,
+                phase=30.0,
+                sub_solar_azimuth=40.0,
+            )
+            record_c = module.CaminfoRecord(
+                cube_name="c.cub",
+                cube_path=temp_path / "missing.cub",
+                center_latitude=5.0,
+                center_longitude=6.0,
+                minimum_latitude=None,
+                maximum_latitude=None,
+                minimum_longitude=None,
+                maximum_longitude=None,
+                incidence=18.0,
+                emission=20.0,
+                phase=30.0,
+                sub_solar_azimuth=40.0,
+            )
+
+            parse_side_effect = [
+                record_a,
+                record_b,
+                record_c,
+                OSError("synthetic parse failure"),
+            ]
+            evaluate_side_effect = [
+                module.EvaluationOutcome(matched=True, reasons=[]),
+                module.EvaluationOutcome(matched=False, reasons=["incidence 8.0 is below minimum 10.0."]),
+                module.EvaluationOutcome(matched=True, reasons=[]),
+            ]
+            move_side_effect = [
+                module.MoveResult(
+                    status="dry-run",
+                    source=record_a.cube_path,
+                    destination=output_dir / "a.cub",
+                    detail="Dry-run only; cube would be moved to selected/a.cub",
+                ),
+                module.MoveResult(
+                    status="unresolved",
+                    source=record_c.cube_path,
+                    destination=None,
+                    detail="Cannot move cube because source path does not exist.",
+                ),
+            ]
+
+            stdout_buffer = io.StringIO()
+            with mock.patch.object(module, "build_criteria", return_value=criteria), mock.patch.object(
+                module, "parse_caminfo_file", side_effect=parse_side_effect
+            ), mock.patch.object(
+                module, "evaluate_record", side_effect=evaluate_side_effect
+            ), mock.patch.object(
+                module, "execute_move", side_effect=move_side_effect
+            ), redirect_stdout(stdout_buffer):
+                exit_code = module.main(
+                    [
+                        "--caminfo-list",
+                        str(caminfo_list_path),
+                        "--output-dir",
+                        str(output_dir),
+                        "--dry-run",
+                        "--verbose",
+                    ]
+                )
+
+        self.assertEqual(exit_code, 0)
+        output = stdout_buffer.getvalue()
+        self.assertIn(
+            f"MATCH {caminfo_a} -> a.cub [dry-run]: Dry-run only; cube would be moved to selected/a.cub",
+            output,
+        )
+        self.assertIn(
+            f"SKIP {caminfo_b}: incidence 8.0 is below minimum 10.0.",
+            output,
+        )
+        self.assertIn(
+            f"MATCH {caminfo_c} -> c.cub [unresolved]: Cannot move cube because source path does not exist.",
+            output,
+        )
+        self.assertIn(
+            f"PARSE-FAIL {caminfo_d}: synthetic parse failure",
+            output,
+        )
+        self.assertIn("Processed 4 caminfo files.", output)
+        self.assertIn("Matched 2.", output)
+        self.assertIn("Skipped 1.", output)
+        self.assertIn("Parse failures 1.", output)
+        self.assertIn("Dry-run moves 1.", output)
+        self.assertIn("Unresolved moves 1.", output)
 
     def test_main_returns_error_without_traceback_when_caminfo_list_is_unreadable(self):
         module = load_select_isis_cubes_module()

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-27
+Last Modified: 2026-05-28
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -51,6 +51,7 @@ Updated: 2026-05-20  Geng Xun added repo-root fallback coverage for adaptive-rou
 Updated: 2026-05-20  Geng Xun added routed deep-preset compatibility regressions for initial and cascade adaptive routing.
 Updated: 2026-05-20  Geng Xun added an export-path regression ensuring initial routed flann adopts the selected deep preset matcher.
 Updated: 2026-05-27  Geng Xun added wrapper regression coverage for forwarding explicit OpenCV thread limits.
+Updated: 2026-05-28  Geng Xun aligned adaptive-routing fake serial tile batches with TileMatchBatchResult.
 """
 
 from __future__ import annotations
@@ -115,7 +116,7 @@ from controlnet_construct.image_overlap import (
 )
 from controlnet_construct.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
 from image_match.deep_match_manifest import build_deep_match_pair_manifest, read_deep_match_pair_manifest, write_deep_match_pair_manifest
-from image_match.tile_matching import PairedTileWindow, TileMatchTask, TileWindow
+from image_match.tile_matching import PairedTileWindow, TileMatchBatchResult, TileMatchTask, TileWindow
 
 
 LEFT_CUBE_PATH = workspace_test_data_path("mosrange", "EN0108828322M_iof.cub")
@@ -5024,7 +5025,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             nonlocal run_tile_call_count
             run_tile_call_count += 1
             if run_tile_call_count <= 2:
-                return []
+                return TileMatchBatchResult(results=[])
             raise AssertionError("cascade compatibility validation should stop before rerunning tiles")
 
         def fake_resolve_deep_match_runtime_config(config_path):

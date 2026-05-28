@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-27
+Last Modified: 2026-05-28
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -92,6 +92,7 @@ Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback ca
 Updated: 2026-05-16  Geng Xun added regression coverage for adaptive-routing profile CLI/config defaults and expanded metadata.
 Updated: 2026-05-27  Geng Xun added parser/config regression coverage for the new --opencv-num-threads CLI option and ImageMatch config alias validation.
 Updated: 2026-05-27  Geng Xun added worker-shard regression coverage for applying explicit OpenCV thread limits.
+Updated: 2026-05-28  Geng Xun aligned adaptive-routing serial tile mocks with TileMatchBatchResult return contracts.
 """
 
 from __future__ import annotations
@@ -145,6 +146,10 @@ match_dom_pair_to_key_files = image_match.match_dom_pair_to_key_files
 write_stereo_pair_match_visualization_from_key_files = image_match.write_stereo_pair_match_visualization_from_key_files
 
 tile_matching_module = importlib.import_module("controlnet_construct.tile_matching")
+
+
+def _tile_match_batch_result(*results):
+    return tile_matching_module.TileMatchBatchResult(results=list(results))
 tile_matching = tile_matching_module
 TileWindow = tile_matching_module.TileWindow
 
@@ -3802,7 +3807,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                         right_points=(),
                     )
                 )
-            return tile_results
+            return tile_matching_module.TileMatchBatchResult(results=tile_results)
 
         with temporary_directory() as temp_dir:
             left_path, right_path = _write_projected_dom_pair(
@@ -5742,7 +5747,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ), mock.patch.object(
                 image_match,
                 "_run_serial_tile_match_tasks",
-                return_value=[fake_tile_result],
+                return_value=_tile_match_batch_result(fake_tile_result),
             ) as serial_mock:
                 _, _, summary = match_dom_pair(
                     left_path,
@@ -5835,7 +5840,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ) as diag_mock, mock.patch.object(
                 image_match,
                 "_run_serial_tile_match_tasks",
-                return_value=[fake_tile_result],
+                return_value=_tile_match_batch_result(fake_tile_result),
             ) as serial_mock:
                 _, _, summary = image_match.match_ori_pair(
                     left_path,
@@ -5891,7 +5896,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ), mock.patch.object(
                 image_match,
                 "_run_serial_tile_match_tasks",
-                return_value=[fake_tile_result],
+                return_value=_tile_match_batch_result(fake_tile_result),
             ) as serial_mock:
                 _, _, summary = image_match.match_ori_pair(
                     left_path,
@@ -5996,7 +6001,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ), mock.patch.object(
                 image_match,
                 "_run_serial_tile_match_tasks",
-                side_effect=[[weak_tile_result], [accepted_tile_result]],
+                side_effect=[
+                    _tile_match_batch_result(weak_tile_result),
+                    _tile_match_batch_result(accepted_tile_result),
+                ],
             ) as serial_mock:
                 _, _, summary = match_dom_pair(
                     left_path,
@@ -6081,6 +6089,13 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             "tile_validity_cache_dir": None,
             "tile_validity_cell_width": 256,
             "tile_validity_cell_height": 256,
+            "tile_block_alignment_mode": "off",
+            "block_alignment_reason": "alignment_disabled",
+            "tile_block_alignment": {
+                "mode": "off",
+                "status": "disabled",
+                "reason": "alignment_disabled",
+            },
             "tile_validity_skip_reasons": {},
             "left_tile_validity_index": None,
             "right_tile_validity_index": None,

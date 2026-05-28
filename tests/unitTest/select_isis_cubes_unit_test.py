@@ -5,6 +5,7 @@ Author: Geng Xun
 Created: 2026-05-28
 Last Modified: 2026-05-28
 Updated: 2026-05-28  Geng Xun added focused coverage for parsing synthetic caminfo records and resolving same-directory cube paths.
+Updated: 2026-05-28  Geng Xun aligned caminfo selector expectations with the approved Task 1 field names.
 """
 
 from __future__ import annotations
@@ -59,11 +60,11 @@ End
 
             record = module.parse_caminfo_file(caminfo_path)
 
-        self.assertEqual(record.from_value, "example_input.cub")
+        self.assertEqual(record.cube_name, "example_input.cub")
         self.assertEqual(record.cube_path, expected_cube_path)
         self.assertAlmostEqual(record.center_latitude, 12.5)
         self.assertAlmostEqual(record.center_longitude, -45.25)
-        self.assertAlmostEqual(record.subsolar_azimuth, 123.75)
+        self.assertAlmostEqual(record.sub_solar_azimuth, 123.75)
 
 
 if __name__ == "__main__":

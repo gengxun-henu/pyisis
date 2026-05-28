@@ -7,6 +7,7 @@ Last Modified: 2026-05-28
 Updated: 2026-05-28  Geng Xun added focused coverage for parsing synthetic caminfo records and resolving same-directory cube paths.
 Updated: 2026-05-28  Geng Xun aligned caminfo selector expectations with the approved Task 1 field names.
 Updated: 2026-05-28  Geng Xun added Task 2 parser coverage for approved numeric metadata extraction and missing optional fields.
+Updated: 2026-05-28  Geng Xun added Task 3 selection-rule evaluation coverage for approved range and center-distance matching.
 """
 
 from __future__ import annotations
@@ -148,6 +149,108 @@ End
         self.assertIsNone(record.emission)
         self.assertIsNone(record.phase)
         self.assertIsNone(record.sub_solar_azimuth)
+
+
+class SelectionRulesTest(unittest.TestCase):
+    @staticmethod
+    def _build_record(**overrides):
+        module = load_select_isis_cubes_module()
+        defaults = {
+            "cube_name": "example.cub",
+            "cube_path": Path("/tmp/example.cub"),
+            "center_latitude": 10.0,
+            "center_longitude": 20.0,
+            "minimum_latitude": None,
+            "maximum_latitude": None,
+            "minimum_longitude": None,
+            "maximum_longitude": None,
+            "incidence": 30.0,
+            "emission": 40.0,
+            "phase": 50.0,
+            "sub_solar_azimuth": 60.0,
+        }
+        defaults.update(overrides)
+        return module.CaminfoRecord(**defaults)
+
+    def test_evaluate_record_matches_when_all_approved_ranges_are_satisfied(self):
+        module = load_select_isis_cubes_module()
+        record = self._build_record()
+        criteria = module.SelectionCriteria(
+            latitude_min=9.5,
+            latitude_max=10.5,
+            longitude_min=19.5,
+            longitude_max=20.5,
+            incidence_min=29.0,
+            incidence_max=31.0,
+            emission_min=39.0,
+            emission_max=41.0,
+            phase_min=49.0,
+            phase_max=51.0,
+            sub_solar_azimuth_min=59.0,
+            sub_solar_azimuth_max=61.0,
+        )
+
+        outcome = module.evaluate_record(record, criteria)
+
+        self.assertTrue(outcome.is_match)
+        self.assertIn("matched", outcome.reason.lower())
+
+    def test_evaluate_record_uses_and_composition_for_range_rules(self):
+        module = load_select_isis_cubes_module()
+        record = self._build_record()
+        criteria = module.SelectionCriteria(
+            latitude_min=9.5,
+            latitude_max=10.5,
+            longitude_min=19.5,
+            longitude_max=20.5,
+            incidence_min=29.0,
+            incidence_max=31.0,
+            emission_min=39.0,
+            emission_max=39.5,
+        )
+
+        outcome = module.evaluate_record(record, criteria)
+
+        self.assertFalse(outcome.is_match)
+        self.assertIn("emission", outcome.reason.lower())
+        self.assertIn("39.5", outcome.reason)
+
+    def test_evaluate_record_reports_missing_required_field_as_non_match(self):
+        module = load_select_isis_cubes_module()
+        record = self._build_record(incidence=None)
+        criteria = module.SelectionCriteria(incidence_min=10.0)
+
+        outcome = module.evaluate_record(record, criteria)
+
+        self.assertFalse(outcome.is_match)
+        self.assertIn("incidence", outcome.reason.lower())
+        self.assertIn("missing", outcome.reason.lower())
+
+    def test_evaluate_record_applies_center_distance_in_degree_space(self):
+        module = load_select_isis_cubes_module()
+        matching_record = self._build_record(center_latitude=11.0, center_longitude=21.0)
+        matching_criteria = module.SelectionCriteria(
+            center_latitude=10.0,
+            center_longitude=20.0,
+            center_distance_max=1.5,
+        )
+
+        matching_outcome = module.evaluate_record(matching_record, matching_criteria)
+
+        self.assertTrue(matching_outcome.is_match)
+        self.assertIn("matched", matching_outcome.reason.lower())
+
+        non_matching_criteria = module.SelectionCriteria(
+            center_latitude=10.0,
+            center_longitude=20.0,
+            center_distance_max=1.0,
+        )
+
+        non_matching_outcome = module.evaluate_record(matching_record, non_matching_criteria)
+
+        self.assertFalse(non_matching_outcome.is_match)
+        self.assertIn("center distance", non_matching_outcome.reason.lower())
+        self.assertIn("1.0", non_matching_outcome.reason)
 
 
 if __name__ == "__main__":

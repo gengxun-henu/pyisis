@@ -4408,3 +4408,2452 @@ Object = reduce
 End_Object
 
 
+Object = spiceinit
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2021-08-10
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T08:26:13
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Update SPICE data (kernels, pointing, and position) for
+                       a camera cube"
+
+  Group = UserParameters
+    FROM         = /tmp/tmp.xftzZ1hvOD/test.cub
+    WEB          = false
+    ATTACH       = TRUE
+    CKSMITHED    = FALSE
+    CKRECON      = TRUE
+    CKPREDICTED  = FALSE
+    CKNADIR      = FALSE
+    SPKSMITHED   = FALSE
+    SPKRECON     = TRUE
+    SPKPREDICTED = FALSE
+    SHAPE        = ellipsoid
+    STARTPAD     = 0.0
+    ENDPAD       = 0.0
+    URL          = https://astrogeology.usgs.gov/apis/ale/v0.9.1/spiceserver/
+    PORT         = 443
+  End_Group
+
+  Group = Error
+    Program = spiceinit
+    Code    = 1
+    Message = "No existing files found with a numerical version matching
+               [kernels.????.db] in
+               [/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-e-
+               xt/isis_pybind_standalone/tests/data/isisdata/mockup/lro/kernel-
+               s/ck]"
+    File    = FileName.cpp
+    Line    = 669
+    Program = spiceinit
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T15:18:42
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M110860982RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M110860982RE__5f19c0885f-
+                    0289873346118b56ed5536c957dd557aa03362781fff3aa27dd8b0.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 44348
+    InputSamples    = 106190
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 44348
+    EndingSample    = 106190
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 346
+    OutputSamples   = 830
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:04:03.6
+    CpuTime     = 00:03:54.0
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T15:22:46
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M110881352RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M110881352RE__73e3776abc-
+                    b16eb7612c3c657c86fb41f62198b02591fa5b37227009ed2b4d73.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 38401
+    InputSamples    = 107975
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 38401
+    EndingSample    = 107975
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 300
+    OutputSamples   = 844
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:29.2
+    CpuTime     = 00:03:20.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T15:31:17
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M110840613RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M110840613RE__192026ac9d-
+                    b6ee0d850570fadc9a588796f32d85bcfe11621da494b3d3137720.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 49927
+    InputSamples    = 103882
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 49927
+    EndingSample    = 103882
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 390
+    OutputSamples   = 812
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:04:28.2
+    CpuTime     = 00:04:17.3
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T15:36:23
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1109027420LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M1109027420LE__f7ba29996-
+                    6af4f1b1043f1e3af600b55b2f1364de25b4834de2cbe00a0f49e3b.cu-
+                    b"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 38215
+    InputSamples    = 81497
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 38215
+    EndingSample    = 81497
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 299
+    OutputSamples   = 637
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:33.6
+    CpuTime     = 00:02:26.9
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T15:38:57
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M140537125RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M140537125RE__16a6b730ee-
+                    e0d4b68aa6bbc51363835844a750fbdafd9824efbd5535aaac37ad.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8331
+    InputSamples    = 55363
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8331
+    EndingSample    = 55363
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 65
+    OutputSamples   = 433
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:17.1
+    CpuTime     = 00:00:16.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T15:39:55
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M140550700LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M140550700LE__c254b00449-
+                    3fb3f2035f2388e7815febf32a13133daa387ded81b331254f87fb.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 10312
+    InputSamples    = 55181
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 10312
+    EndingSample    = 55181
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 81
+    OutputSamples   = 431
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:22.8
+    CpuTime     = 00:00:21.6
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T15:44:55
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1106754872LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M1106754872LE__3d3c8c8f2-
+                    f7d432c9945a4fd822d32cd78389acc7bf31f4ea2a1ab68df7ddbe7.cu-
+                    b"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 55478
+    InputSamples    = 71484
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 55478
+    EndingSample    = 71484
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 433
+    OutputSamples   = 558
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:05.6
+    CpuTime     = 00:02:57.4
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T15:48:01
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1106769166LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M1106769166LE__c487508bc-
+                    0d69e448b266fad9020ab27cdce8bca27b05d48db2d46548d235c78.cu-
+                    b"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 58110
+    InputSamples    = 69339
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 58110
+    EndingSample    = 69339
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 454
+    OutputSamples   = 542
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:14.6
+    CpuTime     = 00:03:05.9
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T15:55:36
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173710225LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M173710225LE__e8e60cecbc-
+                    6a9bf65878c2780a83c65efcd5a7f5dd04ff7d1e3c165c778db061.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 46039
+    InputSamples    = 75337
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 46039
+    EndingSample    = 75337
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 360
+    OutputSamples   = 589
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:45.0
+    CpuTime     = 00:02:37.7
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T15:58:21
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173717012LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M173717012LE__f5101f8353-
+                    303259df62ae90bff43cfc0d21c1172931ff97848d0489b2819343.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 47356
+    InputSamples    = 74529
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 47356
+    EndingSample    = 74529
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 370
+    OutputSamples   = 582
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:45.2
+    CpuTime     = 00:02:37.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T16:01:52
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1203964116RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level6/dom_M1203964116RE__f524722d0-
+                    e9dff730351ab059ae10b2d63d0626f3c2e1ff1ab8364f5de57369c.cu-
+                    b"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 64
+    LSCALE       = 64
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 61891
+    InputSamples    = 65272
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 61891
+    EndingSample    = 65272
+    LineIncrement   = 64.0
+    SampleIncrement = 64.0
+    OutputLines     = 967
+    OutputSamples   = 1020
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:13.3
+    CpuTime     = 00:03:04.9
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T16:05:05
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M140577849LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level6/dom_M140577849LE__1f8dff2169-
+                    28472c82ac64ec769c9838b6f07332486dcfd57e319cb5929dac7a.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 64
+    LSCALE       = 64
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 14432
+    InputSamples    = 55329
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 14432
+    EndingSample    = 55329
+    LineIncrement   = 64.0
+    SampleIncrement = 64.0
+    OutputLines     = 226
+    OutputSamples   = 865
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:33.9
+    CpuTime     = 00:00:32.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T16:06:25
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M140577849RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level6/dom_M140577849RE__d36c42331d-
+                    d790665e246b368b5ee22ea437a8bece6f6a887e2ab5cacd54a6e9.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 64
+    LSCALE       = 64
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 14447
+    InputSamples    = 55334
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 14447
+    EndingSample    = 55334
+    LineIncrement   = 64.0
+    SampleIncrement = 64.0
+    OutputLines     = 226
+    OutputSamples   = 865
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:33.7
+    CpuTime     = 00:00:32.0
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-29T16:10:35
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1232279241LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M1232279241LE__aa455f069-
+                    7e53ea0a2c2c4663ecf2035c4fa6f08f7e06ae632448d57e17ebe2a.cu-
+                    b"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 48708
+    InputSamples    = 75647
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 48708
+    EndingSample    = 75647
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 381
+    OutputSamples   = 591
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:52.2
+    CpuTime     = 00:02:44.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T08:42:37
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1232286275LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M1232286275LE__b574dd436-
+                    ee4a2441d9d00607e15ba5b2650ad818728d1e0f460bc10fcd1cd8c.cu-
+                    b"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 47314
+    InputSamples    = 76497
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 47314
+    EndingSample    = 76497
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 370
+    OutputSamples   = 598
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:06.5
+    CpuTime     = 00:02:59.0
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T08:48:59
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1232293303LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M1232293303LE__f15c23a91-
+                    5843343858ab8663318bc079cbd5076d38f04529a1a8d97797fab66.cu-
+                    b"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 45842
+    InputSamples    = 77288
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 45842
+    EndingSample    = 77288
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 358
+    OutputSamples   = 604
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:00.0
+    CpuTime     = 00:02:52.6
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T08:52:20
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173554018LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M173554018LE__50abf69ca6-
+                    0747a323304420f43b08fb032190c5b247568f3747f98c96722aa6.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 5597
+    InputSamples    = 26397
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 5597
+    EndingSample    = 26397
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 44
+    OutputSamples   = 206
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:04.4
+    CpuTime     = 00:00:04.4
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T08:52:42
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173554018RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M173554018RE__786fc51c59-
+                    a423bbcc032e516a5c2dd90e6ea38c7331f05daeafd1f2d708c9dd.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 5744
+    InputSamples    = 26387
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 5744
+    EndingSample    = 26387
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 45
+    OutputSamples   = 206
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:04.7
+    CpuTime     = 00:00:04.7
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T08:53:23
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173554018LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level5/dom_M173554018LE__50abf69ca6-
+                    0747a323304420f43b08fb032190c5b247568f3747f98c96722aa6.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 32
+    LSCALE       = 32
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 5597
+    InputSamples    = 26397
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 5597
+    EndingSample    = 26397
+    LineIncrement   = 32.0
+    SampleIncrement = 32.0
+    OutputLines     = 175
+    OutputSamples   = 825
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:04.5
+    CpuTime     = 00:00:04.5
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T08:53:27
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173554018RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level5/dom_M173554018RE__786fc51c59-
+                    a423bbcc032e516a5c2dd90e6ea38c7331f05daeafd1f2d708c9dd.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 32
+    LSCALE       = 32
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 5744
+    InputSamples    = 26387
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 5744
+    EndingSample    = 26387
+    LineIncrement   = 32.0
+    SampleIncrement = 32.0
+    OutputLines     = 180
+    OutputSamples   = 825
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:04.7
+    CpuTime     = 00:00:04.7
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T08:54:25
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1137240043RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M1137240043RE__e24ce9bea-
+                    5fe8055d6fb53889367f3db1d0c6d0c7e3a0b49d8b8ff14b61a12ff.cu-
+                    b"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 20627
+    InputSamples    = 69601
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 20627
+    EndingSample    = 69601
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 161
+    OutputSamples   = 544
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:01:08.6
+    CpuTime     = 00:01:06.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T08:55:34
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1137247155LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M1137247155LE__66e1be3d1-
+                    b6ce6674499641d3f209db5e78ee31c113e6a3985dda4629296ef93.cu-
+                    b"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 15189
+    InputSamples    = 45892
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 15189
+    EndingSample    = 45892
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 119
+    OutputSamples   = 359
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:31.4
+    CpuTime     = 00:00:30.5
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T08:56:33
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1200848465RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M1200848465RE__85ac0cb76-
+                    ad48f0022420d4d486c6e4393f906c3c2a69329b9e09970c28b0493.cu-
+                    b"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 32675
+    InputSamples    = 84447
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 32675
+    EndingSample    = 84447
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 255
+    OutputSamples   = 660
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:16.0
+    CpuTime     = 00:02:10.3
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T08:58:49
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173567595LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_flann/m-
+                    atch_viz/preview_cache/level7/dom_M173567595LE__f8e3bf9cfb-
+                    433bbe9f3627312d1f1f42090928570d3403cfe5481e9cad1eb4ac.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 6532
+    InputSamples    = 26365
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 6532
+    EndingSample    = 26365
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 51
+    OutputSamples   = 206
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:05.7
+    CpuTime     = 00:00:05.3
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:04:13
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M110860982RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M110860982RE__5f19c0885f02-
+                    89873346118b56ed5536c957dd557aa03362781fff3aa27dd8b0.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 44348
+    InputSamples    = 106190
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 44348
+    EndingSample    = 106190
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 346
+    OutputSamples   = 830
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:42.4
+    CpuTime     = 00:03:32.0
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:07:56
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M110881352RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M110881352RE__73e3776abcb1-
+                    6eb7612c3c657c86fb41f62198b02591fa5b37227009ed2b4d73.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 38401
+    InputSamples    = 107975
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 38401
+    EndingSample    = 107975
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 300
+    OutputSamples   = 844
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:16.0
+    CpuTime     = 00:03:06.9
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:16:36
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M110840613RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M110840613RE__192026ac9db6-
+                    ee0d850570fadc9a588796f32d85bcfe11621da494b3d3137720.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 49927
+    InputSamples    = 103882
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 49927
+    EndingSample    = 103882
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 390
+    OutputSamples   = 812
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:04:28.4
+    CpuTime     = 00:04:16.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:21:39
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1109027420LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M1109027420LE__f7ba299966a-
+                    f4f1b1043f1e3af600b55b2f1364de25b4834de2cbe00a0f49e3b.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 38215
+    InputSamples    = 81497
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 38215
+    EndingSample    = 81497
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 299
+    OutputSamples   = 637
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:40.8
+    CpuTime     = 00:02:34.0
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:24:20
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M140537125RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M140537125RE__16a6b730eee0-
+                    d4b68aa6bbc51363835844a750fbdafd9824efbd5535aaac37ad.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 8331
+    InputSamples    = 55363
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 8331
+    EndingSample    = 55363
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 65
+    OutputSamples   = 433
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:18.4
+    CpuTime     = 00:00:17.4
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:25:20
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M140550700LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M140550700LE__c254b004493f-
+                    b3f2035f2388e7815febf32a13133daa387ded81b331254f87fb.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 10312
+    InputSamples    = 55181
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 10312
+    EndingSample    = 55181
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 81
+    OutputSamples   = 431
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:22.6
+    CpuTime     = 00:00:22.6
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:31:13
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1106754872LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M1106754872LE__3d3c8c8f2f7-
+                    d432c9945a4fd822d32cd78389acc7bf31f4ea2a1ab68df7ddbe7.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 55478
+    InputSamples    = 71484
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 55478
+    EndingSample    = 71484
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 433
+    OutputSamples   = 558
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:08.3
+    CpuTime     = 00:02:58.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:34:22
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1106769166LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M1106769166LE__c487508bc0d-
+                    69e448b266fad9020ab27cdce8bca27b05d48db2d46548d235c78.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 58110
+    InputSamples    = 69339
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 58110
+    EndingSample    = 69339
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 454
+    OutputSamples   = 542
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:14.1
+    CpuTime     = 00:03:04.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:43:20
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173710225LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M173710225LE__e8e60cecbc6a-
+                    9bf65878c2780a83c65efcd5a7f5dd04ff7d1e3c165c778db061.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 46039
+    InputSamples    = 75337
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 46039
+    EndingSample    = 75337
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 360
+    OutputSamples   = 589
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:44.2
+    CpuTime     = 00:02:36.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:46:04
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173717012LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M173717012LE__f5101f835330-
+                    3259df62ae90bff43cfc0d21c1172931ff97848d0489b2819343.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 47356
+    InputSamples    = 74529
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 47356
+    EndingSample    = 74529
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 370
+    OutputSamples   = 582
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:45.5
+    CpuTime     = 00:02:37.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:49:40
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1203964116RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level6/dom_M1203964116RE__f524722d0e9-
+                    dff730351ab059ae10b2d63d0626f3c2e1ff1ab8364f5de57369c.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 64
+    LSCALE       = 64
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 61891
+    InputSamples    = 65272
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 61891
+    EndingSample    = 65272
+    LineIncrement   = 64.0
+    SampleIncrement = 64.0
+    OutputLines     = 967
+    OutputSamples   = 1020
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:03:10.8
+    CpuTime     = 00:03:02.4
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:52:51
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M140577849LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level6/dom_M140577849LE__1f8dff216928-
+                    472c82ac64ec769c9838b6f07332486dcfd57e319cb5929dac7a.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 64
+    LSCALE       = 64
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 14432
+    InputSamples    = 55329
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 14432
+    EndingSample    = 55329
+    LineIncrement   = 64.0
+    SampleIncrement = 64.0
+    OutputLines     = 226
+    OutputSamples   = 865
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:33.5
+    CpuTime     = 00:00:32.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:54:12
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M140577849RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level6/dom_M140577849RE__d36c42331dd7-
+                    90665e246b368b5ee22ea437a8bece6f6a887e2ab5cacd54a6e9.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 64
+    LSCALE       = 64
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 14447
+    InputSamples    = 55334
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 14447
+    EndingSample    = 55334
+    LineIncrement   = 64.0
+    SampleIncrement = 64.0
+    OutputLines     = 226
+    OutputSamples   = 865
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:32.4
+    CpuTime     = 00:00:31.2
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T09:58:17
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1232279241LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M1232279241LE__aa455f0697e-
+                    53ea0a2c2c4663ecf2035c4fa6f08f7e06ae632448d57e17ebe2a.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 48708
+    InputSamples    = 75647
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 48708
+    EndingSample    = 75647
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 381
+    OutputSamples   = 591
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:46.8
+    CpuTime     = 00:02:40.7
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T10:01:04
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1232286275LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M1232286275LE__b574dd436ee-
+                    4a2441d9d00607e15ba5b2650ad818728d1e0f460bc10fcd1cd8c.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 47314
+    InputSamples    = 76497
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 47314
+    EndingSample    = 76497
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 370
+    OutputSamples   = 598
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:48.7
+    CpuTime     = 00:02:40.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T10:06:50
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1232293303LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M1232293303LE__f15c23a9158-
+                    43343858ab8663318bc079cbd5076d38f04529a1a8d97797fab66.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 45842
+    InputSamples    = 77288
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 45842
+    EndingSample    = 77288
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 358
+    OutputSamples   = 604
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:44.8
+    CpuTime     = 00:02:37.4
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T10:10:00
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173554018LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M173554018LE__50abf69ca607-
+                    47a323304420f43b08fb032190c5b247568f3747f98c96722aa6.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 5597
+    InputSamples    = 26397
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 5597
+    EndingSample    = 26397
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 44
+    OutputSamples   = 206
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:04.0
+    CpuTime     = 00:00:04.0
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T10:10:28
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173554018RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M173554018RE__786fc51c59a4-
+                    23bbcc032e516a5c2dd90e6ea38c7331f05daeafd1f2d708c9dd.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 5744
+    InputSamples    = 26387
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 5744
+    EndingSample    = 26387
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 45
+    OutputSamples   = 206
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:04.4
+    CpuTime     = 00:00:04.4
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T10:11:36
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173554018LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level5/dom_M173554018LE__50abf69ca607-
+                    47a323304420f43b08fb032190c5b247568f3747f98c96722aa6.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 32
+    LSCALE       = 32
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 5597
+    InputSamples    = 26397
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 5597
+    EndingSample    = 26397
+    LineIncrement   = 32.0
+    SampleIncrement = 32.0
+    OutputLines     = 175
+    OutputSamples   = 825
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:04.1
+    CpuTime     = 00:00:04.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T10:11:40
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173554018RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level5/dom_M173554018RE__786fc51c59a4-
+                    23bbcc032e516a5c2dd90e6ea38c7331f05daeafd1f2d708c9dd.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 32
+    LSCALE       = 32
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 5744
+    InputSamples    = 26387
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 5744
+    EndingSample    = 26387
+    LineIncrement   = 32.0
+    SampleIncrement = 32.0
+    OutputLines     = 180
+    OutputSamples   = 825
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:04.4
+    CpuTime     = 00:00:04.4
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T10:12:54
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1137240043RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M1137240043RE__e24ce9bea5f-
+                    e8055d6fb53889367f3db1d0c6d0c7e3a0b49d8b8ff14b61a12ff.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 20627
+    InputSamples    = 69601
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 20627
+    EndingSample    = 69601
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 161
+    OutputSamples   = 544
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:01:00.8
+    CpuTime     = 00:00:58.8
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T10:13:55
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1137247155LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M1137247155LE__66e1be3d1b6-
+                    ce6674499641d3f209db5e78ee31c113e6a3985dda4629296ef93.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 15189
+    InputSamples    = 45892
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 15189
+    EndingSample    = 45892
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 119
+    OutputSamples   = 359
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:28.0
+    CpuTime     = 00:00:27.6
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T10:15:01
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M1200848465RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M1200848465RE__85ac0cb76ad-
+                    48f0022420d4d486c6e4393f906c3c2a69329b9e09970c28b0493.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 32675
+    InputSamples    = 84447
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 32675
+    EndingSample    = 84447
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 255
+    OutputSamples   = 660
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:02:08.2
+    CpuTime     = 00:02:02.7
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T10:17:10
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M173567595LE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/adaptive/mat-
+                    ch_viz/preview_cache/level7/dom_M173567595LE__f8e3bf9cfb43-
+                    3bbe9f3627312d1f1f42090928570d3403cfe5481e9cad1eb4ac.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 6532
+    InputSamples    = 26365
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 6532
+    EndingSample    = 26365
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 51
+    OutputSamples   = 206
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:00:05.5
+    CpuTime     = 00:00:05.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T11:21:38
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M110860982RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/superpoint_l-
+                    ightglue/match_viz/preview_cache/level7/dom_M110860982RE__-
+                    5f19c0885f0289873346118b56ed5536c957dd557aa03362781fff3aa2-
+                    7dd8b0.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 44348
+    InputSamples    = 106190
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 44348
+    EndingSample    = 106190
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 346
+    OutputSamples   = 830
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:04:28.1
+    CpuTime     = 00:04:18.0
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T11:26:06
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M110881352RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/superpoint_l-
+                    ightglue/match_viz/preview_cache/level7/dom_M110881352RE__-
+                    73e3776abcb16eb7612c3c657c86fb41f62198b02591fa5b37227009ed-
+                    2b4d73.cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 38401
+    InputSamples    = 107975
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 38401
+    EndingSample    = 107975
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 300
+    OutputSamples   = 844
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:04:01.2
+    CpuTime     = 00:03:52.5
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T12:06:07
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M110860982RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_lightgl-
+                    ue/match_viz/preview_cache/level7/dom_M110860982RE__5f19c0-
+                    885f0289873346118b56ed5536c957dd557aa03362781fff3aa27dd8b0-
+                    .cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 44348
+    InputSamples    = 106190
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 44348
+    EndingSample    = 106190
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 346
+    OutputSamples   = 830
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:04:36.9
+    CpuTime     = 00:04:27.1
+  End_Group
+End_Object
+
+
+Object = reduce
+  IsisVersion       = "9.0.0  | 2026-01-05"
+  ProgramVersion    = 2013-11-06
+  ProgramPath       = /home/gengxun/miniconda3/envs/asp360_new/bin
+  ExecutionDateTime = 2026-05-30T12:10:44
+  HostName          = Unknown
+  UserName          = gengxun
+  Description       = "Reduce the pixel dimensions of an image"
+
+  Group = UserParameters
+    FROM         = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/work/dom_M110881352RE.cub"
+    TO           = "/media/gengxun/My
+                    Passport/data/lro/testdata_lunar_80S_89.9S/texture_lightin-
+                    g_pair_selection/original_gsd/large_dom_match/sift_lightgl-
+                    ue/match_viz/preview_cache/level7/dom_M110881352RE__73e377-
+                    6abcb16eb7612c3c657c86fb41f62198b02591fa5b37227009ed2b4d73-
+                    .cub"
+    ALGORITHM    = AVERAGE
+    MODE         = scale
+    SSCALE       = 128
+    LSCALE       = 128
+    VALIDPER     = 50
+    VPER_REPLACE = NULL
+  End_Group
+
+  Group = Results
+    InputLines      = 38401
+    InputSamples    = 107975
+    StartingLine    = 1
+    StartingSample  = 1
+    EndingLine      = 38401
+    EndingSample    = 107975
+    LineIncrement   = 128.0
+    SampleIncrement = 128.0
+    OutputLines     = 300
+    OutputSamples   = 844
+  End_Group
+
+  Group = Accounting
+    ConnectTime = 00:04:14.1
+    CpuTime     = 00:04:05.5
+  End_Group
+End_Object
+
+

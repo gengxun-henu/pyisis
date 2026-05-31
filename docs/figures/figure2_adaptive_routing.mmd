@@ -1,0 +1,47 @@
+%% Figure 2: Adaptive Routing System Flowchart
+%% IEEE JSTARS Paper - PyISIS
+%% Render with: mmdc -i figure2_adaptive_routing.mmd -o figure2_adaptive_routing.pdf
+
+graph TD
+    Start(["Image Pair"]) --> TextureAnalysis["Texture Sparseness Analysis<br/><i>S_d</i> (SIFT density, w=0.45)<br/><i>S_g</i> (Gradient, w=0.30)<br/><i>S_c</i> (GLCM contrast, w=0.25)<br/><b>S<sub>pair</sub> = max(P90 tiles)</b>"]
+
+    Start --> LightingAnalysis["Lighting Difference Analysis<br/><i>Δα</i> (elevation difference, w=0.4)<br/><i>Δφ</i> (azimuth difference, w=0.6)<br/><b>D<sub>lighting</sub> from SPICE</b>"]
+
+    TextureAnalysis --> Decision{"Routing Decision"}
+    LightingAnalysis --> Decision
+
+    Decision -->|"S ≤ 0.35<br/>D ≤ 0.20"| SIFT["SIFT/BF or FLANN<br/><i>Fast classical method</i>"]
+    Decision -->|"S ≥ 0.65<br/>or D ≥ 0.55"| LoFTR["LoFTR<br/><i>Detector-free DL</i>"]
+    Decision -->|"Otherwise"| LightGlue["LightGlue<br/><i>Learned descriptors</i>"]
+
+    SIFT --> QualityGate{"Quality Gate<br/>(Balanced Profile)"}
+    LightGlue --> QualityGate
+    LoFTR --> QualityGate
+
+    QualityGate -->|"Pass<br/>Q ≥ threshold"| Accept(["Accept Match"])
+    QualityGate -->|"Fail"| CascadeCheck{"Cascade<br/>Available?"}
+
+    CascadeCheck -->|"SIFT → LightGlue"| LightGlue
+    CascadeCheck -->|"LightGlue → LoFTR"| LoFTR
+    CascadeCheck -->|"LoFTR (no fallback)"| Reject(["Reject Tile"])
+
+    Accept --> Aggregate["Aggregate Results<br/>RANSAC Filtering"]
+    Reject --> Aggregate
+
+    Aggregate --> ControlNet["Control Network Assembly"]
+
+    classDef startEnd fill:#2ca02c,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+    classDef analysis fill:#1f77b4,stroke:#000,stroke-width:2px,color:#fff
+    classDef decision fill:#ff7f0e,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+    classDef matcher fill:#9467bd,stroke:#000,stroke-width:2px,color:#fff
+    classDef process fill:#8c564b,stroke:#000,stroke-width:1.5px,color:#fff
+
+    class Start,Accept,Reject startEnd
+    class TextureAnalysis,LightingAnalysis analysis
+    class Decision,QualityGate,CascadeCheck decision
+    class SIFT,LightGlue,LoFTR matcher
+    class Aggregate,ControlNet process
+
+    style Start fill:#2ca02c
+    style Accept fill:#2ca02c
+    style Reject fill:#d62728

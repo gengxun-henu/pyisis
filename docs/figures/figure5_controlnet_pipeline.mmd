@@ -1,0 +1,51 @@
+%% Figure 5: Control Network Construction Pipeline
+%% IEEE JSTARS Paper - PyISIS
+%% Render with: mmdc -i figure5_controlnet_pipeline.mmd -o figure5_controlnet_pipeline.pdf
+
+graph LR
+    Step1["<b>Step 1:</b><br/>Image Pair<br/>Selection<br/><i>Overlap detection</i>"]
+    Step2["<b>Step 2:</b><br/>DOM<br/>Preparation<br/><i>Map projection</i>"]
+    Step3["<b>Step 3:</b><br/>Overlap<br/>Crop<br/><i>ROI extraction</i>"]
+    Step4["<b>Step 4:</b><br/>Adaptive<br/>Matching<br/><i>Routing + cascade</i>"]
+    Step5["<b>Step 5:</b><br/>Coordinate<br/>Transformation<br/><i>DOM → original</i>"]
+    Step6["<b>Step 6:</b><br/>ControlNet<br/>Assembly<br/><i>Point + measure</i>"]
+    Step7["<b>Step 7:</b><br/>Network<br/>Merging<br/><i>Project-wide</i>"]
+
+    Step1 --> Step2 --> Step3 --> Step4 --> Step5 --> Step6 --> Step7
+
+    subgraph Inputs["<b>Inputs</b>"]
+        I1["ISIS Cubes"]
+        I2["SPICE Kernels"]
+        I3["DEM Reference"]
+    end
+
+    subgraph Processing["<b>PyISIS Processing</b>"]
+        P1["Camera Models"]
+        P2["SPICE Navigation"]
+        P3["Projection"]
+        P4["Adaptive Routing"]
+        P5["Control Network API"]
+    end
+
+    subgraph Output["<b>Output</b>"]
+        O1["ControlNet (.net)<br/>121,856 points<br/>Ready for jigsaw"]
+    end
+
+    I1 & I2 & I3 -.-> Step1
+    P1 & P2 & P3 & P4 & P5 -.-> Step4
+
+    Step7 --> O1
+
+    classDef step fill:#2ca02c,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+    classDef input fill:#1f77b4,stroke:#000,stroke-width:1.5px,color:#fff
+    classDef process fill:#9467bd,stroke:#000,stroke-width:1.5px,color:#fff
+    classDef output fill:#d62728,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+
+    class Step1,Step2,Step3,Step4,Step5,Step6,Step7 step
+    class I1,I2,I3 input
+    class P1,P2,P3,P4,P5 process
+    class O1 output
+
+    style Inputs fill:#e6f3ff,stroke:#1f77b4,stroke-width:2px
+    style Processing fill:#f0e6ff,stroke:#9467bd,stroke-width:2px
+    style Output fill:#ffe6e6,stroke:#d62728,stroke-width:2px

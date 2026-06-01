@@ -260,6 +260,8 @@ DEFAULT_LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS = _lowres_offset.DEFAULT
 DEFAULT_ENABLE_ADAPTIVE_ROUTING = False
 DEFAULT_DEEP_MATCH_MODE = "direct"
 SUPPORTED_DEEP_MATCH_MODES = ("direct", "export", "import")
+DEFAULT_VALID_INTENSITY_LOWER_PERCENT = 0.1
+DEFAULT_VALID_INTENSITY_UPPER_PERCENT = 99.9
 
 
 _run_command = _lowres_offset._run_command
@@ -359,6 +361,40 @@ def _parse_valid_pixel_percent_threshold(value: str) -> float:
         return _validate_valid_pixel_percent_threshold(float(value))
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _validate_valid_intensity_percentile_bounds(
+    lower_percent: float | None,
+    upper_percent: float | None,
+) -> tuple[float | None, float | None]:
+    if lower_percent is None and upper_percent is None:
+        return None, None
+    if lower_percent is None or upper_percent is None:
+        raise ValueError(
+            "valid_intensity_lower_percent and valid_intensity_upper_percent must be provided together."
+        )
+    lower = float(lower_percent)
+    upper = float(upper_percent)
+    if not (0.0 <= lower < upper <= 100.0):
+        raise ValueError("valid intensity percentile bounds must satisfy 0 <= lower < upper <= 100.")
+    return lower, upper
+
+
+def _parse_valid_intensity_percent(value: str) -> float:
+    try:
+        parsed = float(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError("valid intensity percent must be numeric.") from exc
+    if not (0.0 <= parsed <= 100.0):
+        raise argparse.ArgumentTypeError("valid intensity percent must be within [0.0, 100.0].")
+    return parsed
+
+
+class _DisableValidIntensityPercentileMaskAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        setattr(namespace, "valid_intensity_lower_percent", None)
+        setattr(namespace, "valid_intensity_upper_percent", None)
+        setattr(namespace, self.dest, True)
 
 
 def _validate_num_worker_parallel_cpu(value: int) -> int:
@@ -804,6 +840,16 @@ def load_image_match_defaults_from_config(
         ("maximum_value", ("maximum_value", "maximumValue", "MaximumValue"), lambda value: float(value)),
         ("lower_percent", ("lower_percent", "lowerPercent", "LowerPercent"), lambda value: float(value)),
         ("upper_percent", ("upper_percent", "upperPercent", "UpperPercent"), lambda value: float(value)),
+        (
+            "valid_intensity_lower_percent",
+            ("valid_intensity_lower_percent", "validIntensityLowerPercent", "ValidIntensityLowerPercent"),
+            lambda value: _parse_valid_intensity_percent(str(value)),
+        ),
+        (
+            "valid_intensity_upper_percent",
+            ("valid_intensity_upper_percent", "validIntensityUpperPercent", "ValidIntensityUpperPercent"),
+            lambda value: _parse_valid_intensity_percent(str(value)),
+        ),
         ("invalid_value", ("invalid_values", "invalid_value", "invalidValues", "invalidValue", "InvalidValues", "InvalidValue"), _coerce_invalid_value_list),
         ("special_pixel_abs_threshold", ("special_pixel_abs_threshold", "specialPixelAbsThreshold", "SpecialPixelAbsThreshold"), lambda value: float(value)),
         ("min_valid_pixels", ("min_valid_pixels", "minValidPixels", "MinValidPixels"), lambda value: int(value)),
@@ -1763,6 +1809,8 @@ def _export_deep_match_pair_tasks(
     min_valid_pixels: int,
     valid_pixel_percent_threshold: float,
     invalid_pixel_radius: int,
+    valid_intensity_lower_percent: float | None,
+    valid_intensity_upper_percent: float | None,
     ratio_test: float,
     matcher_method: str,
     max_features: int | None,
@@ -1792,6 +1840,8 @@ def _export_deep_match_pair_tasks(
         min_valid_pixels=min_valid_pixels,
         valid_pixel_percent_threshold=valid_pixel_percent_threshold,
         invalid_pixel_radius=invalid_pixel_radius,
+        valid_intensity_lower_percent=valid_intensity_lower_percent,
+        valid_intensity_upper_percent=valid_intensity_upper_percent,
         ratio_test=ratio_test,
         matcher_method=matcher_method,
         max_features=max_features,
@@ -1860,6 +1910,8 @@ def _export_deep_match_pair_tasks(
             min_valid_pixels=task.min_valid_pixels,
             valid_pixel_percent_threshold=task.valid_pixel_percent_threshold,
             invalid_pixel_radius=task.invalid_pixel_radius,
+            valid_intensity_lower_percent=task.valid_intensity_lower_percent,
+            valid_intensity_upper_percent=task.valid_intensity_upper_percent,
         )
         if isinstance(prepared, TileMatchResult):
             tile_summaries.append(prepared.stats)
@@ -2299,6 +2351,8 @@ def match_dom_pair(
     min_valid_pixels: int = 64,
     valid_pixel_percent_threshold: float = 0.0,
     invalid_pixel_radius: int = 1,
+    valid_intensity_lower_percent: float | None = DEFAULT_VALID_INTENSITY_LOWER_PERCENT,
+    valid_intensity_upper_percent: float | None = DEFAULT_VALID_INTENSITY_UPPER_PERCENT,
     enable_tile_validity_prefilter: bool = False,
     tile_validity_cache_dir: str | Path | None = None,
     tile_validity_cell_width: int = DEFAULT_TILE_VALIDITY_CELL_WIDTH,
@@ -2370,6 +2424,13 @@ def match_dom_pair(
         left_cube.open(str(left_dom_path), "r")
         right_cube.open(str(right_dom_path), "r")
         resolved_valid_pixel_percent_threshold = _validate_valid_pixel_percent_threshold(valid_pixel_percent_threshold)
+        (
+            resolved_valid_intensity_lower_percent,
+            resolved_valid_intensity_upper_percent,
+        ) = _validate_valid_intensity_percentile_bounds(
+            valid_intensity_lower_percent,
+            valid_intensity_upper_percent,
+        )
         resolved_num_worker_parallel_cpu = _validate_num_worker_parallel_cpu(num_worker_parallel_cpu)
         resolved_opencv_num_threads = _validate_opencv_num_threads(opencv_num_threads)
         opencv_thread_summary = _apply_opencv_thread_config(resolved_opencv_num_threads)
@@ -2634,6 +2695,8 @@ def match_dom_pair(
                         min_valid_pixels=min_valid_pixels,
                         valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
                         invalid_pixel_radius=resolved_invalid_pixel_radius,
+                        valid_intensity_lower_percent=resolved_valid_intensity_lower_percent,
+                        valid_intensity_upper_percent=resolved_valid_intensity_upper_percent,
                         ratio_test=ratio_test,
                         matcher_method=resolved_matcher_method,
                         max_features=max_features,
@@ -2688,6 +2751,8 @@ def match_dom_pair(
                                     min_valid_pixels=min_valid_pixels,
                                     valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
                                     invalid_pixel_radius=resolved_invalid_pixel_radius,
+                                    valid_intensity_lower_percent=resolved_valid_intensity_lower_percent,
+                                    valid_intensity_upper_percent=resolved_valid_intensity_upper_percent,
                                     matcher_method=candidate_matcher_method,
                                     ratio_test=ratio_test,
                                     max_features=max_features,
@@ -2749,6 +2814,8 @@ def match_dom_pair(
                                 min_valid_pixels=min_valid_pixels,
                                 valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
                                 invalid_pixel_radius=resolved_invalid_pixel_radius,
+                                valid_intensity_lower_percent=resolved_valid_intensity_lower_percent,
+                                valid_intensity_upper_percent=resolved_valid_intensity_upper_percent,
                                 matcher_method=candidate_matcher_method,
                                 ratio_test=ratio_test,
                                 max_features=max_features,
@@ -2896,6 +2963,8 @@ def match_dom_pair(
             "min_valid_pixels": min_valid_pixels,
             "valid_pixel_percent_threshold": resolved_valid_pixel_percent_threshold,
             "invalid_pixel_radius": resolved_invalid_pixel_radius,
+            "valid_intensity_lower_percent": resolved_valid_intensity_lower_percent,
+            "valid_intensity_upper_percent": resolved_valid_intensity_upper_percent,
             "tile_block_alignment_mode": tile_block_alignment.mode,
             "block_alignment_reason": tile_block_alignment.reason,
             "tile_block_alignment": tile_block_alignment.to_metadata(),
@@ -3152,6 +3221,8 @@ def match_dom_pair_to_key_files(
             "tiling_used": summary["tiling_used"],
             "valid_pixel_percent_threshold": summary["valid_pixel_percent_threshold"],
             "invalid_pixel_radius": summary["invalid_pixel_radius"],
+            "valid_intensity_lower_percent": summary.get("valid_intensity_lower_percent"),
+            "valid_intensity_upper_percent": summary.get("valid_intensity_upper_percent"),
             "matcher": summary["matcher"],
             "parallel_cpu_requested": summary["parallel_cpu_requested"],
             "num_worker_parallel_cpu": summary["num_worker_parallel_cpu"],
@@ -3282,6 +3353,9 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--maximum-value", type=float, default=None, help="Manual gray-stretch maximum value.")
     parser.add_argument("--lower-percent", type=float, default=0.5, help="Lower percentile used by automatic gray stretch.")
     parser.add_argument("--upper-percent", type=float, default=99.5, help="Upper percentile used by automatic gray stretch.")
+    parser.add_argument("--valid-intensity-lower-percent", type=_parse_valid_intensity_percent, default=DEFAULT_VALID_INTENSITY_LOWER_PERCENT, help="Lower percentile below which pixels are treated as invalid before matching. Default: 0.1.")
+    parser.add_argument("--valid-intensity-upper-percent", type=_parse_valid_intensity_percent, default=DEFAULT_VALID_INTENSITY_UPPER_PERCENT, help="Upper percentile above which pixels are treated as invalid before matching. Default: 99.9.")
+    parser.add_argument("--disable-valid-intensity-percentile-mask", nargs=0, action=_DisableValidIntensityPercentileMaskAction, default=False, help="Disable the default valid-intensity percentile mask.")
     parser.add_argument("--invalid-value", action="append", default=[], type=float, help="Additional invalid pixel sentinel. Repeat for multiple values.")
     parser.add_argument("--special-pixel-abs-threshold", type=float, default=1.0e300, help="Absolute-value threshold used to treat extreme ISIS special pixels as invalid.")
     parser.add_argument("--min-valid-pixels", type=int, default=64, help="Minimum number of valid pixels required before attempting SIFT on a tile.")
@@ -3551,6 +3625,13 @@ def main(argv: list[str] | None = None) -> None:
         parser.error(str(exc))
     if args.deep_match_mode == "import" and args.deep_match_manifest is None:
         parser.error("--deep-match-mode import requires --deep-match-manifest")
+    try:
+        _validate_valid_intensity_percentile_bounds(
+            args.valid_intensity_lower_percent,
+            args.valid_intensity_upper_percent,
+        )
+    except ValueError as exc:
+        parser.error(str(exc))
     result = match_dom_pair_to_key_files(
         args.left_dom,
         args.right_dom,
@@ -3568,6 +3649,8 @@ def main(argv: list[str] | None = None) -> None:
         maximum_value=args.maximum_value,
         lower_percent=args.lower_percent,
         upper_percent=args.upper_percent,
+        valid_intensity_lower_percent=args.valid_intensity_lower_percent,
+        valid_intensity_upper_percent=args.valid_intensity_upper_percent,
         invalid_values=tuple(args.invalid_value),
         special_pixel_abs_threshold=args.special_pixel_abs_threshold,
         min_valid_pixels=args.min_valid_pixels,

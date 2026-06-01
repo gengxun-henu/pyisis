@@ -617,6 +617,41 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         self.assertIs(matcher.calls[0]["left_mask"], prepared["left_mask"])
         self.assertIs(matcher.calls[0]["right_mask"], prepared["right_mask"])
 
+    def test_match_pair_converts_uint8_valid_masks_for_loftr_frontend(self):
+        adapter = DeepMatcherAdapter(prefer_gpu=False)
+        matcher = _CapturingLoFTRMatcher()
+        prepared = {
+            "left": object(),
+            "right": object(),
+            "left_mask": object(),
+            "right_mask": object(),
+        }
+        left_mask = np.full((6, 6), 255, dtype=np.uint8)
+        right_mask = np.full((6, 6), 255, dtype=np.uint8)
+        left_mask[2, 3] = 0
+        right_mask[4, 1] = 0
+
+        with mock.patch.object(adapter._loftr_frontend, "prepare", return_value=prepared) as prepare_mock, mock.patch(
+            "image_match.deep_adapter.build_deep_matcher",
+            return_value=matcher,
+        ):
+            adapter.match_pair(
+                matcher_method="loftr",
+                left_image=np.ones((6, 6), dtype=np.float32),
+                right_image=np.ones((6, 6), dtype=np.float32),
+                left_mask=left_mask,
+                right_mask=right_mask,
+            )
+
+        left_invalid = prepare_mock.call_args.kwargs["left_mask"]
+        right_invalid = prepare_mock.call_args.kwargs["right_mask"]
+        self.assertEqual(left_invalid.dtype, np.bool_)
+        self.assertEqual(right_invalid.dtype, np.bool_)
+        self.assertTrue(left_invalid[2, 3])
+        self.assertFalse(left_invalid[0, 0])
+        self.assertTrue(right_invalid[4, 1])
+        self.assertFalse(right_invalid[0, 0])
+
     def test_match_pair_passes_external_loftr_metadata_into_matcher(self):
         runtime = SimpleNamespace(
             prefer_gpu=False,

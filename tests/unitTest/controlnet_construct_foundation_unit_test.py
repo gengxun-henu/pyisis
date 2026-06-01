@@ -63,7 +63,7 @@ from controlnet_construct.listing import (
     write_stereo_pair_list,
 )
 from controlnet_construct.merge import merge_duplicate_keypoints
-from controlnet_construct.preprocess import stretch_to_byte
+from controlnet_construct.preprocess import summarize_valid_pixels, stretch_to_byte
 from controlnet_construct.tie_point_merge_in_overlap import merge_stereo_pair_key_files, validate_merge_decimals
 from controlnet_construct.tiling import generate_tiles, requires_tiling
 
@@ -400,6 +400,22 @@ class ControlNetConstructFoundationUnitTest(unittest.TestCase):
         self.assertEqual(int(stretched[-1]), 255)
         self.assertEqual(stats.minimum_value, 0.0)
         self.assertEqual(stats.maximum_value, 40.0)
+
+    def test_summarize_valid_pixels_can_mask_intensity_percentile_tails(self):
+        values = np.arange(100, dtype=np.float64).reshape(10, 10)
+
+        invalid_mask, stats = summarize_valid_pixels(
+            values,
+            valid_intensity_lower_percent=1.0,
+            valid_intensity_upper_percent=99.0,
+        )
+
+        self.assertTrue(invalid_mask[0, 0])
+        self.assertFalse(invalid_mask[0, 1])
+        self.assertFalse(invalid_mask[9, 8])
+        self.assertTrue(invalid_mask[9, 9])
+        self.assertEqual(stats.invalid_pixel_count, 2)
+        self.assertEqual(stats.valid_pixel_count, 98)
 
     def test_stretch_to_byte_supports_configurable_real_lro_dom_cube_when_available(self):
         

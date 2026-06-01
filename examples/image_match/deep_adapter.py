@@ -233,8 +233,8 @@ class DeepMatcherAdapter:
                     left_image,
                     right_image,
                     device=device,
-                    left_mask=left_mask,
-                    right_mask=right_mask,
+                    left_mask=_as_invalid_mask(left_mask),
+                    right_mask=_as_invalid_mask(right_mask),
                 )
                 matcher = self._get_cached_matcher(method=method, device=device)
                 left_points, right_points, scores = matcher.match(

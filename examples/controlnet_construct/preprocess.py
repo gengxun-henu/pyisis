@@ -55,6 +55,8 @@ def build_invalid_mask(
     *,
     invalid_values: tuple[float, ...] = (),
     special_pixel_abs_threshold: float = 1.0e300,
+    valid_intensity_lower_percent: float | None = None,
+    valid_intensity_upper_percent: float | None = None,
 ) -> np.ndarray:
     """构建无效像素掩膜，覆盖非有限值、极端特殊像素和调用方指定的哨兵值。
 
@@ -70,6 +72,22 @@ def build_invalid_mask(
     for invalid_value in invalid_values:
         mask |= array == invalid_value
 
+    if valid_intensity_lower_percent is not None or valid_intensity_upper_percent is not None:
+        if valid_intensity_lower_percent is None or valid_intensity_upper_percent is None:
+            raise ValueError(
+                "Both valid_intensity_lower_percent and valid_intensity_upper_percent must be provided together."
+            )
+        lower = float(valid_intensity_lower_percent)
+        upper = float(valid_intensity_upper_percent)
+        if not (0.0 <= lower < upper <= 100.0):
+            raise ValueError(
+                "Intensity percentile mask bounds must satisfy 0 <= lower < upper <= 100."
+            )
+        candidate_values = float_array[~mask]
+        if candidate_values.size > 0:
+            lower_bound, upper_bound = np.percentile(candidate_values, [lower, upper])
+            mask |= (float_array < lower_bound) | (float_array > upper_bound)
+
     return mask
 
 
@@ -79,6 +97,8 @@ def summarize_valid_pixels(
     invalid_values: tuple[float, ...] = (),
     special_pixel_abs_threshold: float = 1.0e300,
     invalid_mask: np.ndarray | None = None,
+    valid_intensity_lower_percent: float | None = None,
+    valid_intensity_upper_percent: float | None = None,
 ) -> tuple[np.ndarray, ValidPixelStats]:
     """Return the invalid-pixel mask plus valid/invalid count and ratio summary."""
     array = np.asarray(values)
@@ -87,6 +107,8 @@ def summarize_valid_pixels(
             array,
             invalid_values=invalid_values,
             special_pixel_abs_threshold=special_pixel_abs_threshold,
+            valid_intensity_lower_percent=valid_intensity_lower_percent,
+            valid_intensity_upper_percent=valid_intensity_upper_percent,
         )
         if invalid_mask is None
         else np.asarray(invalid_mask, dtype=bool)
@@ -173,6 +195,8 @@ def stretch_to_byte(
     invalid_values: tuple[float, ...] = (),
     special_pixel_abs_threshold: float = 1.0e300,
     invalid_mask: np.ndarray | None = None,
+    valid_intensity_lower_percent: float | None = None,
+    valid_intensity_upper_percent: float | None = None,
 ) -> tuple[np.ndarray, np.ndarray, StretchStats]:
     """将数值数组拉伸到 uint8 灰度范围，同时保留无效像素掩膜。
 
@@ -186,6 +210,8 @@ def stretch_to_byte(
             array,
             invalid_values=invalid_values,
             special_pixel_abs_threshold=special_pixel_abs_threshold,
+            valid_intensity_lower_percent=valid_intensity_lower_percent,
+            valid_intensity_upper_percent=valid_intensity_upper_percent,
         )
     min_value, max_value = _resolve_stretch_bounds(
         array,

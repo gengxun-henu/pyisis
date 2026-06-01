@@ -47,7 +47,7 @@ import controlnet_construct.deep_match_config as deep_match_config_module
 from image_match.tile_matching import PairedTileWindow, TileMatchTask, TileWindow
 from controlnet_construct.deep_match_config import DeepMatchRuntimeConfig
 import run_deep_match_manifest as manifest_runner
-from run_deep_match_manifest import MAX_MANIFEST_WORKERS, _task_log_path, build_argument_parser, run_manifest
+from run_deep_match_manifest import DEFAULT_TORCH_NUM_THREADS, MAX_MANIFEST_WORKERS, _task_log_path, build_argument_parser, run_manifest
 
 
 def _make_tile_task() -> TileMatchTask:
@@ -389,6 +389,14 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
         self.assertEqual(parsed.num_workers, 3)
         self.assertEqual(parsed.torch_num_threads, 2)
 
+    def test_build_argument_parser_defaults_to_serial_workers_and_eight_torch_threads(self):
+        parser = build_argument_parser()
+
+        parsed = parser.parse_args(["manifest.json"])
+
+        self.assertEqual(parsed.num_workers, 1)
+        self.assertEqual(parsed.torch_num_threads, DEFAULT_TORCH_NUM_THREADS)
+
     def test_build_argument_parser_rejects_invalid_worker_counts(self):
         parser = build_argument_parser()
 
@@ -514,7 +522,7 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
             self.assertEqual(summary["num_workers"], 1)
             self.assertIs(summary["parallel_execution_used"], False)
             self.assertEqual(summary["worker_count"], 1)
-            self.assertIsNone(summary["torch_num_threads"])
+            self.assertEqual(summary["torch_num_threads"], DEFAULT_TORCH_NUM_THREADS)
             self.assertIs(summary["force_rerun"], False)
             self.assertEqual(summary["succeeded_task_count"], 1)
 

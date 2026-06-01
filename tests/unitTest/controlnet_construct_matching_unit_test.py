@@ -1186,6 +1186,56 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         self.assertAlmostEqual(args.valid_pixel_percent_threshold, 0.35)
 
+    def test_build_argument_parser_accepts_valid_intensity_percentile_mask(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--valid-intensity-lower-percent",
+                "1.0",
+                "--valid-intensity-upper-percent",
+                "99.0",
+            ]
+        )
+
+        self.assertAlmostEqual(args.valid_intensity_lower_percent, 1.0)
+        self.assertAlmostEqual(args.valid_intensity_upper_percent, 99.0)
+
+    def test_build_argument_parser_defaults_to_conservative_valid_intensity_percentile_mask(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+            ]
+        )
+
+        self.assertAlmostEqual(args.valid_intensity_lower_percent, 0.1)
+        self.assertAlmostEqual(args.valid_intensity_upper_percent, 99.9)
+
+    def test_build_argument_parser_can_disable_default_valid_intensity_percentile_mask(self):
+        parser = build_argument_parser()
+
+        args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--disable-valid-intensity-percentile-mask",
+            ]
+        )
+
+        self.assertIsNone(args.valid_intensity_lower_percent)
+        self.assertIsNone(args.valid_intensity_upper_percent)
+
     def test_build_argument_parser_accepts_tile_validity_prefilter_options(self):
         parser = build_argument_parser()
 

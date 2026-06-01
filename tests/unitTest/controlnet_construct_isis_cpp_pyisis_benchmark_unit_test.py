@@ -60,6 +60,12 @@ class _FakeCamera:
         self._sample = longitude * 100.0
         return True
 
+    def sun_azimuth(self):
+        return self._sample + self._line
+
+    def incidence_angle(self):
+        return 90.0 - (self._sample - self._line)
+
     def sample(self):
         return self._sample
 
@@ -79,8 +85,28 @@ class _FakeCube:
     def camera(self):
         return self.fake_camera
 
+    def sample_count(self):
+        return 21
+
+    def line_count(self):
+        return 21
+
     def close(self):
         self.closed = True
+
+
+class _FakeSolarCamera(_FakeCamera):
+    def set_image(self, sample, line):
+        self.set_image_calls.append((sample, line))
+        self._sample = sample
+        self._line = line
+        return True
+
+
+class _FakeSolarCube(_FakeCube):
+    def __init__(self):
+        super().__init__()
+        self.fake_camera = _FakeSolarCamera()
 
 
 class _FakeControlMeasure:
@@ -199,9 +225,61 @@ class _FakeIpModuleWithoutValidCounts(_FakeIpModule):
         return control_net
 
 
+class _FakeUniversalGroundMap:
+    class CameraPriority:
+        ProjectionFirst = object()
+        CameraFirst = object()
+
+    def __init__(self, cube, priority):
+        self.cube = cube
+        self.priority = priority
+        self._sample = None
+        self._line = None
+
+    def set_image(self, sample, line):
+        self._sample = sample
+        self._line = line
+        return True
+
+    def universal_latitude(self):
+        return self._line / 100.0
+
+    def universal_longitude(self):
+        return self._sample / 100.0
+
+    def set_universal_ground(self, latitude, longitude):
+        self._line = latitude * 100.0
+        self._sample = longitude * 100.0
+        return True
+
+    def sample(self):
+        return self._sample
+
+    def line(self):
+        return self._line
+
+
+class _FakeIpModuleWithGroundMap(_FakeIpModule):
+    UniversalGroundMap = _FakeUniversalGroundMap
+
+    def Cube(self):
+        cube = _FakeSolarCube()
+        self.cubes.append(cube)
+        return cube
+
+
+class _FakeSolarIpModule(_FakeIpModule):
+    def Cube(self):
+        cube = _FakeSolarCube()
+        self.cubes.append(cube)
+        return cube
+
+
 def _write_benchmark_config(path: Path) -> None:
     local_cube = path.parent / "local.cub"
     local_cube.write_text("fixture\n", encoding="utf-8")
+    local_dom = path.parent / "dom.cub"
+    local_dom.write_text("fixture\n", encoding="utf-8")
     path.write_text(
         json.dumps(
             {
@@ -230,6 +308,23 @@ def _write_benchmark_config(path: Path) -> None:
                     {
                         "label": "controlnet_fixture",
                         "net_path": "tests/data/threeImageNetwork/controlnetwork.net",
+                    }
+                ],
+                "dom_ori_tasks": [
+                    {
+                        "label": "dom_ori_fixture",
+                        "dom_path": "dom.cub",
+                        "original_path": "local.cub",
+                        "point_count": 9,
+                        "top_error_count": 3,
+                    }
+                ],
+                "solar_geometry_tasks": [
+                    {
+                        "label": "solar_fixture",
+                        "cube_path": "local.cub",
+                        "point_count": 9,
+                        "top_error_count": 3,
                     }
                 ],
             },
@@ -273,6 +368,18 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             config.controlnet_tasks[0].net_path,
             PROJECT_ROOT / "tests/data/threeImageNetwork/controlnetwork.net",
         )
+        self.assertEqual(len(config.dom_ori_tasks), 1)
+        self.assertEqual(config.dom_ori_tasks[0].label, "dom_ori_fixture")
+        self.assertEqual(config.dom_ori_tasks[0].dom_path, (config_path.parent / "dom.cub").resolve())
+        self.assertEqual(config.dom_ori_tasks[0].original_path, (config_path.parent / "local.cub").resolve())
+        self.assertEqual(config.dom_ori_tasks[0].point_count, 9)
+        self.assertEqual(config.dom_ori_tasks[0].top_error_count, 3)
+        self.assertEqual(config.dom_ori_tasks[0].sampling_mode, "ori_roundtrip")
+        self.assertEqual(len(config.solar_geometry_tasks), 1)
+        self.assertEqual(config.solar_geometry_tasks[0].label, "solar_fixture")
+        self.assertEqual(config.solar_geometry_tasks[0].cube_path, (config_path.parent / "local.cub").resolve())
+        self.assertEqual(config.solar_geometry_tasks[0].point_count, 9)
+        self.assertEqual(config.solar_geometry_tasks[0].top_error_count, 3)
 
     def test_generate_camera_samples_includes_edges_and_respects_max_points(self):
         samples = benchmark.generate_camera_samples(
@@ -313,12 +420,35 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             ),
         )
 
+    def test_generate_regular_grid_samples_spreads_exact_point_count_over_extent(self):
+        samples = benchmark.generate_regular_grid_samples(
+            sample_count=21,
+            line_count=21,
+            point_count=9,
+        )
+
+        self.assertEqual(len(samples), 9)
+        self.assertEqual(samples[0], benchmark.CameraSample(0, 1.0, 1.0))
+        self.assertEqual(samples[4], benchmark.CameraSample(4, 11.0, 11.0))
+        self.assertEqual(samples[8], benchmark.CameraSample(8, 21.0, 21.0))
+
     def test_load_benchmark_config_rejects_duplicate_labels_across_task_types(self):
         with temporary_directory() as temp_dir:
             config_path = temp_dir / "benchmark.json"
             _write_benchmark_config(config_path)
             payload = json.loads(config_path.read_text(encoding="utf-8"))
             payload["controlnet_tasks"][0]["label"] = "config_relative_camera"
+            config_path.write_text(json.dumps(payload), encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "Duplicate task label"):
+                benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
+
+    def test_load_benchmark_config_rejects_duplicate_labels_across_new_task_types(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "benchmark.json"
+            _write_benchmark_config(config_path)
+            payload = json.loads(config_path.read_text(encoding="utf-8"))
+            payload["solar_geometry_tasks"][0]["label"] = "dom_ori_fixture"
             config_path.write_text(json.dumps(payload), encoding="utf-8")
 
             with self.assertRaisesRegex(ValueError, "Duplicate task label"):
@@ -386,6 +516,8 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             payload = json.loads(config_path.read_text(encoding="utf-8"))
             payload["camera_tasks"] = []
             payload["controlnet_tasks"] = []
+            payload["dom_ori_tasks"] = []
+            payload["solar_geometry_tasks"] = []
             config_path.write_text(json.dumps(payload), encoding="utf-8")
 
             with self.assertRaisesRegex(
@@ -510,6 +642,74 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertIsNone(result["valid_point_count"])
         self.assertIsNone(result["valid_measure_count"])
 
+    def test_run_pyisis_dom_ori_task_uses_ori_seed_roundtrip_without_full_point_dump_by_default(self):
+        fake_ip = _FakeIpModuleWithGroundMap()
+        task = benchmark.DomOriTaskConfig(
+            label="fake_dom_ori",
+            dom_path=Path("/tmp/dom.cub"),
+            original_path=Path("/tmp/original.cub"),
+            point_count=9,
+            top_error_count=3,
+        )
+
+        result = benchmark.run_pyisis_dom_ori_task(task, ip_module=fake_ip)
+
+        self.assertEqual(result["task_type"], "dom_ori")
+        self.assertEqual(result["implementation"], "pyisis")
+        self.assertEqual(result["label"], "fake_dom_ori")
+        self.assertEqual(result["sampling_mode"], "ori_roundtrip")
+        self.assertEqual(result["input_point_count"], 9)
+        self.assertEqual(result["ori_seed_point_count"], 9)
+        self.assertEqual(result["ori_to_dom_successful_count"], 9)
+        self.assertEqual(result["ori_to_dom_failed_count"], 0)
+        self.assertEqual(result["dom_ori_successful_count"], 9)
+        self.assertEqual(result["dom_ori_failed_count"], 0)
+        self.assertEqual(result["roundtrip_successful_count"], 9)
+        self.assertEqual(result["roundtrip_success_rate"], 1.0)
+        self.assertEqual(result["successful_point_count"], 9)
+        self.assertEqual(result["failed_count"], 0)
+        self.assertEqual(result["failed_ori_set_image_count"], 0)
+        self.assertEqual(result["failed_ori_ground_not_finite_count"], 0)
+        self.assertEqual(result["failed_ori_to_dom_projection_count"], 0)
+        self.assertEqual(result["failed_dom_point_out_of_bounds_count"], 0)
+        self.assertEqual(result["failed_dom_lookup_count"], 0)
+        self.assertEqual(result["failed_dom_to_ori_projection_count"], 0)
+        self.assertGreaterEqual(result["ori_to_dom_seconds"], 0.0)
+        self.assertGreaterEqual(result["dom_to_ori_seconds"], 0.0)
+        self.assertAlmostEqual(result["core_seconds"], result["ori_to_dom_seconds"] + result["dom_to_ori_seconds"])
+        self.assertGreater(result["points_per_second"], 0.0)
+        self.assertGreater(result["roundtrip_points_per_second"], 0.0)
+        self.assertNotIn("points", result)
+        self.assertLessEqual(len(result["top_errors"]), 3)
+        self.assertEqual(result["top_errors"][0]["index"], 0)
+        self.assertEqual(result["top_errors"][0]["pixel_error"], 0.0)
+        self.assertEqual(result["sample_abs_max"], 0.0)
+        self.assertEqual(result["line_abs_max"], 0.0)
+        self.assertEqual(result["pixel_error_abs_max"], 0.0)
+
+    def test_run_pyisis_solar_geometry_task_samples_pixel_angles_without_full_point_dump_by_default(self):
+        fake_ip = _FakeSolarIpModule()
+        task = benchmark.SolarGeometryTaskConfig(
+            label="fake_solar",
+            cube_path=Path("/tmp/original.cub"),
+            point_count=9,
+            top_error_count=3,
+        )
+
+        result = benchmark.run_pyisis_solar_geometry_task(task, ip_module=fake_ip)
+
+        self.assertEqual(result["task_type"], "solar_geometry")
+        self.assertEqual(result["implementation"], "pyisis")
+        self.assertEqual(result["label"], "fake_solar")
+        self.assertEqual(result["input_point_count"], 9)
+        self.assertEqual(result["successful_point_count"], 9)
+        self.assertEqual(result["failed_count"], 0)
+        self.assertGreater(result["points_per_second"], 0.0)
+        self.assertNotIn("points", result)
+        self.assertEqual(result["top_errors"], [])
+        self.assertEqual(result["azimuth_abs_max"], 0.0)
+        self.assertEqual(result["elevation_abs_max"], 0.0)
+
     def test_load_cpp_result_rejects_non_dict_json(self):
         with temporary_directory() as temp_dir:
             result_path = temp_dir / "result.json"
@@ -547,6 +747,14 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             function_body.index("const auto traverse_start"),
             function_body.index("control_net.GetNumPoints()"),
         )
+
+    def test_cpp_controlnet_result_reports_file_size_and_measure_throughput(self):
+        source_path = PROJECT_ROOT / "tools/benchmarks/isis_cpp_benchmark.cpp"
+        source = source_path.read_text(encoding="utf-8")
+        function_body = source.split("void write_controlnet_result", 1)[1].split("std::ofstream out", 1)[0]
+
+        self.assertIn("file_size_bytes", function_body)
+        self.assertIn("measures_per_second", function_body)
 
     def test_compare_camera_results_computes_stats_and_top_errors(self):
         py_result = {
@@ -643,7 +851,13 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             self.assertTrue(manifest["dry_run"])
             self.assertEqual(
                 manifest["tasks"],
-                ["config_relative_camera", "repo_relative_camera", "controlnet_fixture"],
+                [
+                    "config_relative_camera",
+                    "repo_relative_camera",
+                    "controlnet_fixture",
+                    "dom_ori_fixture",
+                    "solar_fixture",
+                ],
             )
             self.assertEqual(manifest["cpp_benchmark_path"], str(PROJECT_ROOT / "tools/cpp_benchmark"))
             self.assertRegex(manifest["created_at"], r"^\d{4}-\d{2}-\d{2}T.*\+00:00$")
@@ -749,6 +963,36 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
                 "wall_seconds": 2.25,
                 "point_count": 7,
                 "measure_count": 11,
+                "file_size_bytes": 12345,
+                "measures_per_second": 5.5,
+            },
+            {
+                "label": "dom_ori_a",
+                "task_type": "dom_ori",
+                "implementation": "pyisis",
+                "status": "success",
+                "core_seconds": 3.0,
+                "ori_to_dom_seconds": 1.25,
+                "dom_to_ori_seconds": 1.75,
+                "successful_point_count": 100,
+                "roundtrip_successful_count": 100,
+                "roundtrip_success_rate": 1.0,
+                "points_per_second": 33.3,
+                "roundtrip_points_per_second": 33.3,
+                "sample_abs_max": 0.0,
+                "line_abs_max": 0.0,
+                "pixel_error_abs_max": 0.0,
+            },
+            {
+                "label": "solar_a",
+                "task_type": "solar_geometry",
+                "implementation": "cpp",
+                "status": "success",
+                "core_seconds": 4.0,
+                "successful_point_count": 100,
+                "points_per_second": 25.0,
+                "azimuth_abs_max": 0.0,
+                "elevation_abs_max": 0.0,
             },
         ]
         camera_comparisons = [
@@ -798,16 +1042,30 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             self.assertEqual(rows[0]["task_type"], "camera")
             self.assertEqual(rows[1]["label"], "net_a")
             self.assertEqual(rows[1]["task_type"], "controlnet")
-            self.assertEqual(rows[2]["label"], "camera_a")
-            self.assertEqual(rows[2]["task_type"], "camera_comparison")
-            self.assertEqual(rows[2]["implementation"], "comparison")
-            self.assertEqual(rows[2]["matched_point_count"], "1")
-            self.assertEqual(rows[2]["missing_in_pyisis_count"], "2")
-            self.assertEqual(rows[2]["missing_in_cpp_count"], "1")
-            self.assertEqual(rows[2]["latitude_abs_max"], "0.5")
-            self.assertEqual(rows[2]["longitude_abs_max"], "0.25")
-            self.assertEqual(rows[2]["sample_abs_max"], "0.5")
-            self.assertEqual(rows[2]["line_abs_max"], "0.25")
+            self.assertEqual(rows[1]["file_size_bytes"], "12345")
+            self.assertEqual(rows[1]["measures_per_second"], "5.5")
+            self.assertEqual(rows[2]["label"], "dom_ori_a")
+            self.assertEqual(rows[2]["task_type"], "dom_ori")
+            self.assertEqual(rows[2]["points_per_second"], "33.3")
+            self.assertEqual(rows[2]["roundtrip_points_per_second"], "33.3")
+            self.assertEqual(rows[2]["roundtrip_success_rate"], "1.0")
+            self.assertEqual(rows[2]["ori_to_dom_seconds"], "1.25")
+            self.assertEqual(rows[2]["dom_to_ori_seconds"], "1.75")
+            self.assertEqual(rows[2]["pixel_error_abs_max"], "0.0")
+            self.assertEqual(rows[3]["label"], "solar_a")
+            self.assertEqual(rows[3]["task_type"], "solar_geometry")
+            self.assertEqual(rows[3]["azimuth_abs_max"], "0.0")
+            self.assertEqual(rows[3]["elevation_abs_max"], "0.0")
+            self.assertEqual(rows[4]["label"], "camera_a")
+            self.assertEqual(rows[4]["task_type"], "camera_comparison")
+            self.assertEqual(rows[4]["implementation"], "comparison")
+            self.assertEqual(rows[4]["matched_point_count"], "1")
+            self.assertEqual(rows[4]["missing_in_pyisis_count"], "2")
+            self.assertEqual(rows[4]["missing_in_cpp_count"], "1")
+            self.assertEqual(rows[4]["latitude_abs_max"], "0.5")
+            self.assertEqual(rows[4]["longitude_abs_max"], "0.25")
+            self.assertEqual(rows[4]["sample_abs_max"], "0.5")
+            self.assertEqual(rows[4]["line_abs_max"], "0.25")
             self.assertEqual(
                 (temp_dir / "reports" / "camera_top_errors.csv").read_text(encoding="utf-8").splitlines(),
                 [
@@ -820,6 +1078,17 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             )
             self.assertEqual(controlnet_summary["results"], [results[1]])
             self.assertEqual(controlnet_summary["provenance"], provenance)
+            precision_summary = json.loads(
+                (temp_dir / "reports" / "precision_comparison.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual([row["label"] for row in precision_summary["dom_ori"]], ["dom_ori_a"])
+            self.assertEqual(precision_summary["dom_ori"][0]["pixel_error_abs_max"], 0.0)
+            self.assertEqual([row["label"] for row in precision_summary["solar_geometry"]], ["solar_a"])
+            self.assertEqual(precision_summary["solar_geometry"][0]["azimuth_abs_max"], 0.0)
+            self.assertEqual(precision_summary["provenance"], provenance)
+            self.assertTrue((temp_dir / "reports" / "benchmark_figure.svg").is_file())
+            self.assertTrue((temp_dir / "reports" / "benchmark_figure.pdf").is_file())
+            self.assertTrue((temp_dir / "reports" / "benchmark_figure.tiff").is_file())
 
     def test_build_cpp_camera_command_includes_required_arguments(self):
         task = benchmark.CameraTaskConfig(
@@ -893,6 +1162,93 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
                 "net_a",
                 "--net",
                 "/tmp/control.net",
+                "--output",
+                "/tmp/out/result.json",
+            ],
+        )
+
+    def test_build_cpp_dom_ori_command_includes_required_arguments(self):
+        task = benchmark.DomOriTaskConfig(
+            label="dom_ori_a",
+            dom_path=Path("/tmp/dom.cub"),
+            original_path=Path("/tmp/original.cub"),
+            point_count=1000000,
+            top_error_count=25,
+        )
+
+        command = benchmark.build_cpp_dom_ori_command(
+            Path("/tmp/cpp_benchmark"),
+            task,
+            Path("/tmp/out/result.json"),
+        )
+
+        self.assertEqual(
+            command,
+            [
+                "/tmp/cpp_benchmark",
+                "dom-ori",
+                "--label",
+                "dom_ori_a",
+                "--dom",
+                "/tmp/dom.cub",
+                "--original",
+                "/tmp/original.cub",
+                "--point-count",
+                "1000000",
+                "--top-error-count",
+                "25",
+                "--sampling-mode",
+                "ori_roundtrip",
+                "--output",
+                "/tmp/out/result.json",
+            ],
+        )
+
+    def test_build_cpp_dom_ori_command_preserves_direct_dom_diagnostic_mode(self):
+        task = benchmark.DomOriTaskConfig(
+            label="dom_ori_direct",
+            dom_path=Path("/tmp/dom.cub"),
+            original_path=Path("/tmp/original.cub"),
+            point_count=10,
+            sampling_mode="direct_dom",
+        )
+
+        command = benchmark.build_cpp_dom_ori_command(
+            Path("/tmp/cpp_benchmark"),
+            task,
+            Path("/tmp/out/result.json"),
+        )
+
+        self.assertIn("--sampling-mode", command)
+        self.assertEqual(command[command.index("--sampling-mode") + 1], "direct_dom")
+
+    def test_build_cpp_solar_geometry_command_includes_required_arguments(self):
+        task = benchmark.SolarGeometryTaskConfig(
+            label="solar_a",
+            cube_path=Path("/tmp/original.cub"),
+            point_count=1000000,
+            top_error_count=25,
+        )
+
+        command = benchmark.build_cpp_solar_geometry_command(
+            Path("/tmp/cpp_benchmark"),
+            task,
+            Path("/tmp/out/result.json"),
+        )
+
+        self.assertEqual(
+            command,
+            [
+                "/tmp/cpp_benchmark",
+                "solar-geometry",
+                "--label",
+                "solar_a",
+                "--cube",
+                "/tmp/original.cub",
+                "--point-count",
+                "1000000",
+                "--top-error-count",
+                "25",
                 "--output",
                 "/tmp/out/result.json",
             ],

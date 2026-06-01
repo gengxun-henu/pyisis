@@ -63,6 +63,8 @@ DEEP_MATCHER_METHODS = ("superglue", "lightglue", "loftr")
 DEFAULT_FLANN_TREES = 5
 DEFAULT_FLANN_CHECKS = 50
 DEFAULT_GPU_BATCH_SIZE = 4
+DEFAULT_VALID_INTENSITY_LOWER_PERCENT = 0.1
+DEFAULT_VALID_INTENSITY_UPPER_PERCENT = 99.9
 _DEEP_MATCHER_ADAPTER_CACHE: dict[bool, DeepMatcherAdapter] = {}
 
 
@@ -132,6 +134,8 @@ class TileMatchTask:
     gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE
     opencv_num_threads: int | None = None
     deep_match_runtime_config: Any | None = None
+    valid_intensity_lower_percent: float | None = DEFAULT_VALID_INTENSITY_LOWER_PERCENT
+    valid_intensity_upper_percent: float | None = DEFAULT_VALID_INTENSITY_UPPER_PERCENT
 
 
 @dataclass(frozen=True, slots=True)
@@ -313,6 +317,8 @@ def _prepare_image_for_sift(
     special_pixel_abs_threshold: float,
     invalid_mask: np.ndarray | None = None,
     invalid_pixel_radius: int = 0,
+    valid_intensity_lower_percent: float | None = DEFAULT_VALID_INTENSITY_LOWER_PERCENT,
+    valid_intensity_upper_percent: float | None = DEFAULT_VALID_INTENSITY_UPPER_PERCENT,
 ) -> tuple[np.ndarray, np.ndarray, StretchStats]:
     if invalid_mask is not None:
         resolved_invalid_mask = np.asarray(invalid_mask, dtype=bool)
@@ -321,6 +327,8 @@ def _prepare_image_for_sift(
             values,
             invalid_values=invalid_values,
             special_pixel_abs_threshold=special_pixel_abs_threshold,
+            valid_intensity_lower_percent=valid_intensity_lower_percent,
+            valid_intensity_upper_percent=valid_intensity_upper_percent,
         )
     resolved_invalid_mask = expand_invalid_mask_for_radius(
         resolved_invalid_mask,
@@ -347,6 +355,8 @@ def _prepare_image_for_sift(
         invalid_values=invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
         invalid_mask=resolved_invalid_mask,
+        valid_intensity_lower_percent=valid_intensity_lower_percent,
+        valid_intensity_upper_percent=valid_intensity_upper_percent,
     )
     sift_mask = np.where(resolved_invalid_mask, 0, 255).astype(np.uint8)
     return stretched, sift_mask, stretch_stats
@@ -525,16 +535,22 @@ def _prepare_gpu_tile_payload_from_values(
     min_valid_pixels: int,
     valid_pixel_percent_threshold: float,
     invalid_pixel_radius: int,
+    valid_intensity_lower_percent: float | None = DEFAULT_VALID_INTENSITY_LOWER_PERCENT,
+    valid_intensity_upper_percent: float | None = DEFAULT_VALID_INTENSITY_UPPER_PERCENT,
 ) -> PreparedGpuTilePayload | TileMatchResult:
     left_invalid_mask, _ = summarize_valid_pixels(
         left_values,
         invalid_values=left_invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
+        valid_intensity_lower_percent=valid_intensity_lower_percent,
+        valid_intensity_upper_percent=valid_intensity_upper_percent,
     )
     right_invalid_mask, _ = summarize_valid_pixels(
         right_values,
         invalid_values=right_invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
+        valid_intensity_lower_percent=valid_intensity_lower_percent,
+        valid_intensity_upper_percent=valid_intensity_upper_percent,
     )
     left_invalid_mask = expand_invalid_mask_for_radius(left_invalid_mask, invalid_pixel_radius=invalid_pixel_radius)
     right_invalid_mask = expand_invalid_mask_for_radius(right_invalid_mask, invalid_pixel_radius=invalid_pixel_radius)
@@ -697,16 +713,22 @@ def _match_tile_from_window_values(
     sift_sigma: float,
     use_gpu: bool = False,
     deep_match_runtime_config: Any | None = None,
+    valid_intensity_lower_percent: float | None = DEFAULT_VALID_INTENSITY_LOWER_PERCENT,
+    valid_intensity_upper_percent: float | None = DEFAULT_VALID_INTENSITY_UPPER_PERCENT,
 ) -> TileMatchResult:
     left_invalid_mask, left_valid_pixel_stats = summarize_valid_pixels(
         left_values,
         invalid_values=left_invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
+        valid_intensity_lower_percent=valid_intensity_lower_percent,
+        valid_intensity_upper_percent=valid_intensity_upper_percent,
     )
     right_invalid_mask, right_valid_pixel_stats = summarize_valid_pixels(
         right_values,
         invalid_values=right_invalid_values,
         special_pixel_abs_threshold=special_pixel_abs_threshold,
+        valid_intensity_lower_percent=valid_intensity_lower_percent,
+        valid_intensity_upper_percent=valid_intensity_upper_percent,
     )
 
     left_invalid_mask = expand_invalid_mask_for_radius(
@@ -947,6 +969,8 @@ def _build_tile_match_tasks(
     gpu_batch_size: int = DEFAULT_GPU_BATCH_SIZE,
     opencv_num_threads: int | None = None,
     deep_match_runtime_config: Any | None = None,
+    valid_intensity_lower_percent: float | None = DEFAULT_VALID_INTENSITY_LOWER_PERCENT,
+    valid_intensity_upper_percent: float | None = DEFAULT_VALID_INTENSITY_UPPER_PERCENT,
 ) -> list[TileMatchTask]:
     backend = build_image_backend(image_space)
     return [
@@ -965,6 +989,8 @@ def _build_tile_match_tasks(
             min_valid_pixels=min_valid_pixels,
             valid_pixel_percent_threshold=valid_pixel_percent_threshold,
             invalid_pixel_radius=invalid_pixel_radius,
+            valid_intensity_lower_percent=valid_intensity_lower_percent,
+            valid_intensity_upper_percent=valid_intensity_upper_percent,
             ratio_test=ratio_test,
             matcher_method=_normalize_matcher_method(matcher_method),
             max_features=max_features,
@@ -1080,6 +1106,8 @@ def _match_tile_task_with_open_cubes(
         min_valid_pixels=task.min_valid_pixels,
         valid_pixel_percent_threshold=task.valid_pixel_percent_threshold,
         invalid_pixel_radius=task.invalid_pixel_radius,
+        valid_intensity_lower_percent=task.valid_intensity_lower_percent,
+        valid_intensity_upper_percent=task.valid_intensity_upper_percent,
         ratio_test=task.ratio_test,
         matcher_method=task.matcher_method,
         max_features=task.max_features,
@@ -1211,6 +1239,8 @@ def _tile_task_to_payload(task: TileMatchTask) -> dict[str, Any]:
         "min_valid_pixels": task.min_valid_pixels,
         "valid_pixel_percent_threshold": task.valid_pixel_percent_threshold,
         "invalid_pixel_radius": task.invalid_pixel_radius,
+        "valid_intensity_lower_percent": task.valid_intensity_lower_percent,
+        "valid_intensity_upper_percent": task.valid_intensity_upper_percent,
         "ratio_test": task.ratio_test,
         "matcher_method": task.matcher_method,
         "max_features": task.max_features,
@@ -1247,6 +1277,16 @@ def _tile_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
         min_valid_pixels=int(payload["min_valid_pixels"]),
         valid_pixel_percent_threshold=float(payload["valid_pixel_percent_threshold"]),
         invalid_pixel_radius=int(payload["invalid_pixel_radius"]),
+        valid_intensity_lower_percent=(
+            None
+            if payload.get("valid_intensity_lower_percent") is None
+            else float(payload["valid_intensity_lower_percent"])
+        ),
+        valid_intensity_upper_percent=(
+            None
+            if payload.get("valid_intensity_upper_percent") is None
+            else float(payload["valid_intensity_upper_percent"])
+        ),
         ratio_test=float(payload["ratio_test"]),
         matcher_method=str(payload["matcher_method"]),
         max_features=None if payload["max_features"] is None else int(payload["max_features"]),
@@ -1519,6 +1559,8 @@ def _run_gpu_tile_match_tasks(
                 min_valid_pixels=task.min_valid_pixels,
                 valid_pixel_percent_threshold=task.valid_pixel_percent_threshold,
                 invalid_pixel_radius=task.invalid_pixel_radius,
+                valid_intensity_lower_percent=task.valid_intensity_lower_percent,
+                valid_intensity_upper_percent=task.valid_intensity_upper_percent,
             )
         finally:
             if left_cube.is_open():
@@ -1684,6 +1726,8 @@ def _run_serial_tile_match_tasks(
     adaptive_throughput_threshold_mbps: float = 200.0,
     adaptive_recheck_every: int = 0,
     deep_match_runtime_config: Any | None = None,
+    valid_intensity_lower_percent: float | None = DEFAULT_VALID_INTENSITY_LOWER_PERCENT,
+    valid_intensity_upper_percent: float | None = DEFAULT_VALID_INTENSITY_UPPER_PERCENT,
 ) -> TileMatchBatchResult:
     build_image_backend(image_space)
     left_cache: TileCache | None = None
@@ -1737,6 +1781,8 @@ def _run_serial_tile_match_tasks(
                     min_valid_pixels=min_valid_pixels,
                     valid_pixel_percent_threshold=valid_pixel_percent_threshold,
                     invalid_pixel_radius=invalid_pixel_radius,
+                    valid_intensity_lower_percent=valid_intensity_lower_percent,
+                    valid_intensity_upper_percent=valid_intensity_upper_percent,
                     ratio_test=ratio_test,
                     matcher_method=matcher_method,
                     max_features=max_features,

@@ -47,6 +47,7 @@ from controlnet_construct.deep_match_config import (
 
 SUPPORTED_DEVICES = ("auto", "cpu", "cuda")
 MAX_MANIFEST_WORKERS = 64
+DEFAULT_TORCH_NUM_THREADS = 8
 
 _WORKER_ADAPTER = None
 _WORKER_ACTUAL_DEVICE = None
@@ -641,7 +642,7 @@ def run_manifest(
     skip_existing: bool = False,
     force_rerun: bool = False,
     num_workers: int = 1,
-    torch_num_threads: int | None = None,
+    torch_num_threads: int | None = DEFAULT_TORCH_NUM_THREADS,
     adapter_factory: Callable[..., Any] = DeepMatcherAdapter,
 ) -> dict[str, Any]:
     """Execute every task in an exported deep-match manifest."""
@@ -837,8 +838,8 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--torch-num-threads",
         type=_parse_torch_num_threads,
-        default=None,
-        help="Optional torch CPU thread count to apply in each manifest worker.",
+        default=DEFAULT_TORCH_NUM_THREADS,
+        help=f"Torch CPU thread count to apply in each manifest worker. Default: {DEFAULT_TORCH_NUM_THREADS}.",
     )
     return parser
 

@@ -195,8 +195,9 @@ bash examples/controlnet_construct/experiments/run_pipe_test2_adaptive_fast_pipe
 ## ISIS C++ vs PyISIS Benchmark
 
 `isis_cpp_pyisis_benchmark.py` compares direct ISIS C++ calls against PyISIS for
-camera coordinate conversion and ControlNet traversal. It is a benchmark
-harness, not a ControlNet construction pipeline.
+camera coordinate conversion, DOM/ORI round-trip projection, solar geometry,
+and ControlNet traversal. It is a benchmark harness, not a ControlNet
+construction pipeline.
 
 Build the C++ benchmark first. If the build directory has not been configured
 yet, configure it with the conda compiler:
@@ -244,4 +245,44 @@ per-result command arguments for C++ tasks.
 
 For real LRO NAC performance runs, set production `ISISDATA` and point the
 config at production CUBE and ControlNet files. Remove `max_points` from a
-camera task when you want full-grid sampling at the configured step.
+camera task when you want full-grid sampling at the configured step. DOM/ORI
+tasks default to `sampling_mode: "ori_roundtrip"`, which samples seed pixels in
+the original image, projects them to DOM coordinates, then back-projects the DOM
+coordinates to the original image. Use `sampling_mode: "direct_dom"` only for
+the older direct DOM-grid coverage/failure-rate diagnostic.
+
+### LRO PAPER-use million-point benchmark
+
+`isis_cpp_pyisis_benchmark.lro_paper_use.json` is the paper-oriented benchmark
+config for ORI-seeded DOM/ORI round-trip conversion, per-pixel solar geometry,
+and three-size ControlNet traversal. It uses the SPICE-initialized LRO CUBEs under
+`/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use` and the
+three real ControlNet files used for the 3.8MB, 21MB, and 82MB traversal tests.
+
+Run a dry-run first:
+
+```bash
+python examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.py \
+  examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.lro_paper_use.json \
+  --output-root work/isis_cpp_pyisis_benchmark \
+  --dry-run
+```
+
+Then run the full benchmark:
+
+```bash
+export PYTHONPATH="$PWD/build/python:$PWD/tests/unitTest:$PWD/examples"
+export ISISDATA="$PWD/tests/data/isisdata/mockup"
+export MPLCONFIGDIR=/tmp/matplotlib-pyisis-benchmark
+python examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.py \
+  examples/controlnet_construct/experiments/isis_cpp_pyisis_benchmark.lro_paper_use.json \
+  --output-root work/isis_cpp_pyisis_benchmark \
+  --keep-going
+```
+
+The reports directory includes `summary.json`, `summary.csv`,
+`controlnet_summary.json`, and the Python/matplotlib figure exports
+`benchmark_figure.svg`, `benchmark_figure.pdf`, and `benchmark_figure.tiff`.
+For DOM/ORI rows, `summary.csv` also includes `ori_to_dom_seconds`,
+`dom_to_ori_seconds`, `roundtrip_success_rate`, `roundtrip_points_per_second`,
+and `pixel_error_abs_max`.

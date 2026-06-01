@@ -1,0 +1,92 @@
+{
+  "run_id": "lro_paper_use_pyisis_cpp_million_points_20260601",
+  "description": "Compare ISIS C++ benchmark output with PyISIS wrappers on LRO PAPER-use DOM/ORI, solar geometry, and ControlNet traversal tasks.",
+  "execution": {
+    "cpp_benchmark_path": "build/tools/benchmarks/isis_cpp_benchmark",
+    "repeat_count": 1,
+    "keep_intermediate_json": true
+  },
+  "camera_tasks": [],
+  "dom_ori_tasks": [
+    {
+      "label": "dom_ori_M104311715LE",
+      "dom_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/dom_M104311715LE.cub",
+      "original_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/REDUCED_M104311715LE.echo.cal.cub",
+      "point_count": 1000000,
+      "top_error_count": 50,
+      "keep_point_records": false,
+      "sampling_mode": "ori_roundtrip"
+    },
+    {
+      "label": "dom_ori_M104311715RE",
+      "dom_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/dom_M104311715RE.cub",
+      "original_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/REDUCED_M104311715RE.echo.cal.cub",
+      "point_count": 1000000,
+      "top_error_count": 50,
+      "keep_point_records": false,
+      "sampling_mode": "ori_roundtrip"
+    },
+    {
+      "label": "dom_ori_M104318871LE",
+      "dom_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/dom_M104318871LE.cub",
+      "original_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/REDUCED_M104318871LE.echo.cal.cub",
+      "point_count": 1000000,
+      "top_error_count": 50,
+      "keep_point_records": false,
+      "sampling_mode": "ori_roundtrip"
+    },
+    {
+      "label": "dom_ori_M104318871RE",
+      "dom_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/dom_M104318871RE.cub",
+      "original_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/REDUCED_M104318871RE.echo.cal.cub",
+      "point_count": 1000000,
+      "top_error_count": 50,
+      "keep_point_records": false,
+      "sampling_mode": "ori_roundtrip"
+    }
+  ],
+  "solar_geometry_tasks": [
+    {
+      "label": "solar_M104311715LE",
+      "cube_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/REDUCED_M104311715LE.echo.cal.cub",
+      "point_count": 1000000,
+      "top_error_count": 50,
+      "keep_point_records": false
+    },
+    {
+      "label": "solar_M104311715RE",
+      "cube_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/REDUCED_M104311715RE.echo.cal.cub",
+      "point_count": 1000000,
+      "top_error_count": 50,
+      "keep_point_records": false
+    },
+    {
+      "label": "solar_M104318871LE",
+      "cube_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/REDUCED_M104318871LE.echo.cal.cub",
+      "point_count": 1000000,
+      "top_error_count": 50,
+      "keep_point_records": false
+    },
+    {
+      "label": "solar_M104318871RE",
+      "cube_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/PAPER-use/REDUCED_M104318871RE.echo.cal.cub",
+      "point_count": 1000000,
+      "top_error_count": 50,
+      "keep_point_records": false
+    }
+  ],
+  "controlnet_tasks": [
+    {
+      "label": "controlnet_3p8mb",
+      "net_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/pipe_test2/old/merge/dom_matching_merged.net"
+    },
+    {
+      "label": "controlnet_21mb",
+      "net_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/pipe_test/merge/dom_matching_merged.net"
+    },
+    {
+      "label": "controlnet_82mb",
+      "net_path": "/media/gengxun/Elements/data/lro/test_controlnet_python/pipe_test2/disk_lightglue_cnet/merge/ba1_dom_matching_merged.net"
+    }
+  ]
+}

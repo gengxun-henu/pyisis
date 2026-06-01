@@ -1006,6 +1006,28 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
 `from-ori-match`，因此可直接使用 official LightGlue preset 等原始影像空间 deep matcher 配置。DOM low-resolution offset 与
 DOM-space RANSAC 可视化仍属于 DOM pipeline 专用能力；需要这些 DOM 侧处理时继续使用 `run_pipeline_example.sh`。
 
+如果你没有预生成 DOM `.key`，但已经有成对的 DOM cube 和对应 original cube，也可以直接使用
+`controlnet_stereopair.py from-dom-match`。它会先在 DOM 空间完成匹配，再自动执行
+DOM-to-original 坐标回投并输出最终 ControlNet：
+
+```bash
+python examples/controlnet_construct/controlnet_stereopair.py from-dom-match \
+  left_dom.cub \
+  right_dom.cub \
+  left_original.cub \
+  right_original.cub \
+  examples/controlnet_construct/controlnet_config.example.json \
+  work/pair_nets/left__right.net \
+  --report-path work/reports/left__right.controlnet.json \
+  --adaptive-routing \
+  --adaptive-routing-profile strict \
+  --adaptive-routing-deep-preset loftr=examples/controlnet_construct/presets/loftr_external_outdoor.json
+```
+
+这条单对 wrapper 会把 DOM matching summary、标准化后的 `routing_audit`、中间 DOM match key 路径，以及
+DOM-to-ORI 阶段返回的 `controlnet` 结果一起写入 report JSON。`from-dom-batch` 仍适合“DOM key 已经提前算好”的批处理；
+`from-dom-match` 适合按 pair 即时匹配和构网。
+
 推荐的深度学习 preset 面收敛为 official LightGlue 与 external official LoFTR：
 
 - `examples/controlnet_construct/presets/lightglue_official_superpoint.json`

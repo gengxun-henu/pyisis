@@ -43,7 +43,7 @@ if __package__ in {None, ""}:
     from controlnet_construct.controlnet_merge import pair_controlnet_filename
     from controlnet_construct.coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
-    from image_match.image_match import match_ori_pair_to_key_files
+    from image_match.image_match import match_dom_pair_to_key_files, match_ori_pair_to_key_files
     from image_match.keypoints import read_key_file
     from controlnet_construct.listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
     from controlnet_construct.parameter_validation import parse_catalog_choice
@@ -70,7 +70,7 @@ else:
     from .controlnet_merge import pair_controlnet_filename
     from .coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from .dom2ori import convert_paired_dom_keypoints_to_original
-    from image_match.image_match import match_ori_pair_to_key_files
+    from image_match.image_match import match_dom_pair_to_key_files, match_ori_pair_to_key_files
     from image_match.keypoints import read_key_file
     from .listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
     from .parameter_validation import parse_catalog_choice
@@ -297,6 +297,33 @@ def _parse_adaptive_routing_deep_preset_entries(entries: list[str] | None) -> di
     return presets
 
 
+def _safe_mapping(value: object) -> dict[str, object]:
+    return dict(value) if isinstance(value, dict) else {}
+
+
+def _route_audit_from_match_summary(match_summary: dict[str, object]) -> dict[str, object]:
+    matcher = _safe_mapping(match_summary.get("matcher"))
+    adaptive = _safe_mapping(match_summary.get("adaptive_routing"))
+    requested_matcher = matcher.get("matcher_method_requested") or matcher.get("requested_matcher")
+    effective_matcher = matcher.get("matcher_method_effective") or matcher.get("effective_matcher")
+    selected_initial = adaptive.get("selected_initial_matcher") or adaptive.get("initial_matcher")
+    selected_final = adaptive.get("selected_final_matcher") or adaptive.get("final_matcher") or effective_matcher
+    return {
+        "requested_matcher": requested_matcher,
+        "effective_matcher": effective_matcher,
+        "adaptive_routing_profile": match_summary.get("adaptive_routing_profile"),
+        "adaptive_routing_status": adaptive.get("status"),
+        "selected_initial_matcher": selected_initial,
+        "selected_final_matcher": selected_final,
+        "fallback_chain": adaptive.get("fallback_chain"),
+        "cascade_steps": adaptive.get("cascade_steps"),
+        "quality_gate": adaptive.get("match_quality") or adaptive.get("quality_gate"),
+        "final_decision": adaptive.get("final_decision"),
+        "deep_match_config_path": match_summary.get("deep_match_config_path"),
+        "match_count": match_summary.get("point_count"),
+    }
+
+
 def _compose_point_id_namespace(config: ControlNetConfig) -> str:
     if config.pair_id is None:
         return config.point_id_prefix
@@ -486,6 +513,173 @@ def build_controlnets_for_dom_overlap_list(
     )
     return {
         "mode": "from-dom-batch",
+        "overlap_list_path": str(overlap_list_path),
+        "pair_count": len(overlap_pairs),
+        "pair_id_prefix": pair_id_prefix,
+        "pair_id_start": pair_id_start,
+        "output_directory": str(net_output_dir),
+        "report_directory": str(report_dir),
+        "batch_report_path": str(batch_report_path),
+        "pairs": batch_pairs,
+        "batch_summary": batch_summary,
+    }
+
+
+def _extract_pair_control_point_count(pair_result: dict[str, object]) -> int:
+    controlnet_summary = pair_result.get("controlnet")
+    if isinstance(controlnet_summary, dict):
+        nested_controlnet = controlnet_summary.get("controlnet")
+        if isinstance(nested_controlnet, dict) and "point_count" in nested_controlnet:
+            return int(nested_controlnet["point_count"])
+        if "point_count" in controlnet_summary:
+            return int(controlnet_summary["point_count"])
+    raise KeyError("Unable to determine control point count from pair result.")
+
+
+def build_controlnets_for_dom_match_overlap_list(
+    overlap_list_path: str | Path,
+    original_list_path: str | Path,
+    dom_list_path: str | Path,
+    output_directory: str | Path,
+    config: ControlNetConfig,
+    *,
+    report_directory: str | Path | None = None,
+    pair_id_prefix: str = "S",
+    pair_id_start: int = 1,
+    pair_net_suffix: str = ".net",
+    matcher_method: str = "sift",
+    band: int = 1,
+    ratio_test: float = 0.75,
+    max_features: int | None = None,
+    show_progress: bool = False,
+    use_gpu: bool = False,
+    gpu_batch_size: int = 4,
+    gpu_dynamic_batch: bool = True,
+    gpu_min_batch_size: int = 2,
+    gpu_max_batch_size: int = 16,
+    num_worker_parallel_cpu: int = 8,
+    use_parallel_cpu: bool = True,
+    enable_adaptive_routing: bool = False,
+    adaptive_routing_profile: str = "balanced",
+    adaptive_routing_deep_presets: dict[str, str] | None = None,
+    deep_match_config_path: str | Path | None = None,
+    deep_match_mode: str = "direct",
+    write_match_visualization: bool = True,
+    match_visualization_output_dir: str | Path | None = None,
+    match_visualization_scale: float = 1.0 / 3.0,
+    merge_decimals: int = 3,
+    skip_merge: bool = False,
+    ransac_reproj_threshold: float = 3.0,
+    ransac_confidence: float = 0.995,
+    ransac_max_iters: int = 5000,
+    ransac_mode: str = "loose",
+    loose_ransac_keep_threshold: float = 1.0,
+    pvl_format: bool = True,
+    logger: logging.Logger | None = None,
+) -> dict[str, object]:
+    overlap_pairs = read_stereo_pair_list(overlap_list_path)
+    if not overlap_pairs:
+        raise ValueError("The overlap pair list is empty.")
+
+    dom_lookup = _build_dom_lookup(original_list_path, dom_list_path)
+    net_output_dir = Path(output_directory)
+    report_dir = Path(report_directory) if report_directory is not None else net_output_dir
+    match_visualization_dir = (
+        Path(match_visualization_output_dir) if match_visualization_output_dir is not None else None
+    )
+    net_output_dir.mkdir(parents=True, exist_ok=True)
+    report_dir.mkdir(parents=True, exist_ok=True)
+    if match_visualization_dir is not None:
+        match_visualization_dir.mkdir(parents=True, exist_ok=True)
+
+    pair_results: list[dict[str, object]] = []
+    pair_report_paths: list[str] = []
+    batch_pairs: list[dict[str, object]] = []
+    for index, pair in enumerate(overlap_pairs, start=1):
+        if pair.left not in dom_lookup or pair.right not in dom_lookup:
+            raise KeyError(
+                f"Unable to resolve DOM paths for stereo pair {pair.as_csv_line()} from the provided original/dom lists."
+            )
+
+        pair_id = _auto_batch_pair_id(index, prefix=pair_id_prefix, start=pair_id_start)
+        pair_output_net = net_output_dir / pair_controlnet_filename(pair, suffix=pair_net_suffix)
+        pair_report_path = report_dir / default_controlnet_report_path(pair_output_net).name
+        pair_config = replace(config, pair_id=pair_id)
+        if logger is not None and config.pair_id is not None:
+            logger.info(
+                "controlnet_stereopair DOM-match batch auto pair-id override: config_pair_id=%s generated_pair_id=%s pair=%s",
+                config.pair_id,
+                pair_id,
+                pair.as_csv_line(),
+            )
+
+        pair_result = build_controlnet_for_dom_match_stereo_pair(
+            dom_lookup[pair.left],
+            dom_lookup[pair.right],
+            pair.left,
+            pair.right,
+            pair_config,
+            pair_output_net,
+            matcher_method=matcher_method,
+            band=band,
+            ratio_test=ratio_test,
+            max_features=max_features,
+            show_progress=show_progress,
+            use_gpu=use_gpu,
+            gpu_batch_size=gpu_batch_size,
+            gpu_dynamic_batch=gpu_dynamic_batch,
+            gpu_min_batch_size=gpu_min_batch_size,
+            gpu_max_batch_size=gpu_max_batch_size,
+            num_worker_parallel_cpu=num_worker_parallel_cpu,
+            use_parallel_cpu=use_parallel_cpu,
+            enable_adaptive_routing=enable_adaptive_routing,
+            adaptive_routing_profile=adaptive_routing_profile,
+            adaptive_routing_deep_presets=adaptive_routing_deep_presets,
+            deep_match_config_path=deep_match_config_path,
+            deep_match_mode=deep_match_mode,
+            write_match_visualization=write_match_visualization,
+            match_visualization_output_dir=match_visualization_dir,
+            match_visualization_scale=match_visualization_scale,
+            merge_decimals=merge_decimals,
+            skip_merge=skip_merge,
+            ransac_reproj_threshold=ransac_reproj_threshold,
+            ransac_confidence=ransac_confidence,
+            ransac_max_iters=ransac_max_iters,
+            ransac_mode=ransac_mode,
+            loose_ransac_keep_threshold=loose_ransac_keep_threshold,
+            pvl_format=pvl_format,
+            logger=logger,
+        )
+        pair_result = {
+            "pair": pair.as_csv_line(),
+            "pair_id": pair_id,
+            **pair_result,
+        }
+        report_path = write_controlnet_result_report(pair_result, pair_output_net, report_path=pair_report_path)
+        pair_result = {
+            **pair_result,
+            "report_path": report_path,
+        }
+        pair_results.append(pair_result)
+        pair_report_paths.append(report_path)
+        batch_pairs.append(
+            {
+                "pair": pair.as_csv_line(),
+                "pair_id": pair_id,
+                "output_net": str(pair_output_net),
+                "report_path": report_path,
+                "control_point_count": _extract_pair_control_point_count(pair_result),
+            }
+        )
+
+    batch_report_path = report_dir / DEFAULT_BATCH_REPORT_NAME
+    batch_summary = write_batch_summary_report(
+        pair_results,
+        batch_report_path,
+        source_reports=pair_report_paths,
+    )
+    return {
+        "mode": "from-dom-match-batch",
         "overlap_list_path": str(overlap_list_path),
         "pair_count": len(overlap_pairs),
         "pair_id_prefix": pair_id_prefix,
@@ -809,6 +1003,126 @@ def build_controlnet_for_dom_stereo_pair(
     }
 
 
+def build_controlnet_for_dom_match_stereo_pair(
+    left_dom_cube_path: str | Path,
+    right_dom_cube_path: str | Path,
+    left_cube_path: str | Path,
+    right_cube_path: str | Path,
+    config: ControlNetConfig,
+    output_path: str | Path,
+    *,
+    left_dom_match_key_path: str | Path | None = None,
+    right_dom_match_key_path: str | Path | None = None,
+    matcher_method: str = "sift",
+    band: int = 1,
+    ratio_test: float = 0.75,
+    max_features: int | None = None,
+    show_progress: bool = False,
+    use_gpu: bool = False,
+    gpu_batch_size: int = 4,
+    gpu_dynamic_batch: bool = True,
+    gpu_min_batch_size: int = 2,
+    gpu_max_batch_size: int = 16,
+    num_worker_parallel_cpu: int = 8,
+    use_parallel_cpu: bool = True,
+    enable_adaptive_routing: bool = False,
+    adaptive_routing_profile: str = "balanced",
+    adaptive_routing_deep_presets: dict[str, str] | None = None,
+    deep_match_config_path: str | Path | None = None,
+    deep_match_mode: str = "direct",
+    write_match_visualization: bool = True,
+    match_visualization_output_path: str | Path | None = None,
+    match_visualization_output_dir: str | Path | None = None,
+    match_visualization_scale: float = 1.0 / 3.0,
+    left_merged_dom_key_path: str | Path | None = None,
+    right_merged_dom_key_path: str | Path | None = None,
+    left_ransac_dom_key_path: str | Path | None = None,
+    right_ransac_dom_key_path: str | Path | None = None,
+    left_output_key_path: str | Path | None = None,
+    right_output_key_path: str | Path | None = None,
+    merge_decimals: int = 3,
+    skip_merge: bool = False,
+    ransac_reproj_threshold: float = 3.0,
+    ransac_confidence: float = 0.995,
+    ransac_max_iters: int = 5000,
+    ransac_mode: str = "loose",
+    loose_ransac_keep_threshold: float = 1.0,
+    pvl_format: bool = True,
+    logger: logging.Logger | None = None,
+) -> dict[str, object]:
+    left_dom_match_key = (
+        Path(left_dom_match_key_path)
+        if left_dom_match_key_path is not None
+        else _default_intermediate_key_path(output_path, "left", "dom_match")
+    )
+    right_dom_match_key = (
+        Path(right_dom_match_key_path)
+        if right_dom_match_key_path is not None
+        else _default_intermediate_key_path(output_path, "right", "dom_match")
+    )
+    match_summary = match_dom_pair_to_key_files(
+        left_dom_cube_path,
+        right_dom_cube_path,
+        left_dom_match_key,
+        right_dom_match_key,
+        write_match_visualization=write_match_visualization,
+        match_visualization_output_path=match_visualization_output_path,
+        match_visualization_output_dir=match_visualization_output_dir,
+        match_visualization_scale=match_visualization_scale,
+        show_progress=show_progress,
+        matcher_method=matcher_method,
+        band=band,
+        ratio_test=ratio_test,
+        max_features=max_features,
+        use_gpu=use_gpu,
+        gpu_batch_size=gpu_batch_size,
+        gpu_dynamic_batch=gpu_dynamic_batch,
+        gpu_min_batch_size=gpu_min_batch_size,
+        gpu_max_batch_size=gpu_max_batch_size,
+        num_worker_parallel_cpu=num_worker_parallel_cpu,
+        use_parallel_cpu=use_parallel_cpu,
+        enable_adaptive_routing=enable_adaptive_routing,
+        adaptive_routing_profile=adaptive_routing_profile,
+        adaptive_routing_deep_presets=adaptive_routing_deep_presets or {},
+        deep_match_config_path=deep_match_config_path,
+        deep_match_mode=deep_match_mode,
+    )
+    controlnet_result = build_controlnet_for_dom_stereo_pair(
+        left_dom_match_key,
+        right_dom_match_key,
+        left_dom_cube_path,
+        right_dom_cube_path,
+        left_cube_path,
+        right_cube_path,
+        config,
+        output_path,
+        left_merged_dom_key_path=left_merged_dom_key_path,
+        right_merged_dom_key_path=right_merged_dom_key_path,
+        left_ransac_dom_key_path=left_ransac_dom_key_path,
+        right_ransac_dom_key_path=right_ransac_dom_key_path,
+        left_output_key_path=left_output_key_path,
+        right_output_key_path=right_output_key_path,
+        merge_decimals=merge_decimals,
+        skip_merge=skip_merge,
+        ransac_reproj_threshold=ransac_reproj_threshold,
+        ransac_confidence=ransac_confidence,
+        ransac_max_iters=ransac_max_iters,
+        ransac_mode=ransac_mode,
+        loose_ransac_keep_threshold=loose_ransac_keep_threshold,
+        write_match_visualization=False,
+        pvl_format=pvl_format,
+        logger=logger,
+    )
+    return {
+        "mode": "from-dom-match",
+        "match": match_summary,
+        "routing_audit": _route_audit_from_match_summary(match_summary),
+        "left_dom_match_key": str(left_dom_match_key),
+        "right_dom_match_key": str(right_dom_match_key),
+        "controlnet": controlnet_result,
+    }
+
+
 def _build_from_original_parser(subparsers) -> None:
     parser = subparsers.add_parser(
         "from-ori",
@@ -1013,6 +1327,77 @@ def _build_from_dom_parser(subparsers) -> None:
     _add_stdout_detail_control_arguments(parser)
 
 
+def _build_from_dom_match_parser(subparsers) -> None:
+    parser = subparsers.add_parser(
+        "from-dom-match",
+        help="Match DOM cubes, convert matched DOM keys to original-image coordinates, and build a ControlNet.",
+    )
+    parser.add_argument("left_dom_cube", help="DOM cube path for image A.")
+    parser.add_argument("right_dom_cube", help="DOM cube path for image B.")
+    parser.add_argument("left_cube", help="Original cube path for image A.")
+    parser.add_argument("right_cube", help="Original cube path for image B.")
+    parser.add_argument("config", help="JSON config file containing NetworkId, TargetName, and UserName.")
+    parser.add_argument("output_net", help="Output ControlNet path.")
+    parser.add_argument("--report-path", default=None, help="Optional JSON path used to persist the per-pair result summary.")
+    parser.add_argument(
+        "--pair-id",
+        default=None,
+        help="Optional stereo-pair ID appended to the point-id namespace so different pairwise ControlNets avoid PointId collisions during later cnetmerge steps.",
+    )
+    parser.add_argument("--left-dom-match-key", default=None, help="Optional path to persist the matched DOM-space .key for image A.")
+    parser.add_argument("--right-dom-match-key", default=None, help="Optional path to persist the matched DOM-space .key for image B.")
+    parser.add_argument("--left-output-key", default=None, help="Optional path to persist the converted original-image .key for image A.")
+    parser.add_argument("--right-output-key", default=None, help="Optional path to persist the converted original-image .key for image B.")
+    parser.add_argument("--matcher-method", default="sift", help="Matcher method forwarded to image_match.")
+    parser.add_argument("--band", type=int, default=1, help="Band index used for DOM matching.")
+    parser.add_argument("--ratio-test", type=float, default=0.75, help="Ratio test threshold forwarded to image_match.")
+    parser.add_argument("--max-features", type=int, default=None, help="Optional SIFT max_features forwarded to image_match.")
+    parser.add_argument("--show-progress", action="store_true", help="Show tile matching progress output.")
+    parser.add_argument("--use-gpu", action="store_true", help="Enable GPU matching route when supported.")
+    parser.add_argument("--gpu-batch-size", type=int, default=4, help="GPU batch size for matching.")
+    parser.add_argument("--gpu-dynamic-batch", action="store_true", default=True, help="Enable dynamic GPU batch sizing.")
+    parser.add_argument("--no-gpu-dynamic-batch", dest="gpu_dynamic_batch", action="store_false", help="Disable dynamic GPU batch sizing.")
+    parser.add_argument("--gpu-min-batch-size", type=int, default=2, help="Minimum dynamic GPU batch size.")
+    parser.add_argument("--gpu-max-batch-size", type=int, default=16, help="Maximum dynamic GPU batch size.")
+    parser.add_argument("--num-worker-parallel-cpu", type=int, default=8, help="CPU worker count for parallel matching.")
+    parser.add_argument("--use-parallel-cpu", action="store_true", default=True, help="Enable parallel CPU matching.")
+    parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable parallel CPU matching.")
+    parser.set_defaults(enable_adaptive_routing=False)
+    parser.add_argument("--adaptive-routing", dest="enable_adaptive_routing", action="store_true", help="Enable adaptive texture/lighting routing for DOM matching.")
+    parser.add_argument("--no-adaptive-routing", dest="enable_adaptive_routing", action="store_false", help="Disable adaptive texture/lighting routing for DOM matching.")
+    parser.add_argument("--adaptive-routing-profile", default="balanced", choices=("balanced", "strict", "relaxed", "fast"), help="Adaptive routing quality profile.")
+    parser.add_argument("--deep-match-config-path", default=None, help="Optional deep matcher preset JSON path for DOM matching.")
+    parser.add_argument(
+        "--adaptive-routing-deep-preset",
+        action="append",
+        default=[],
+        help="Adaptive deep preset mapping in KEY=PATH form. Repeat for lightglue and loftr.",
+    )
+    parser.add_argument(
+        "--merge-decimals",
+        type=validate_merge_decimals,
+        default=3,
+        help=(
+            "Decimal precision used by the rounded left/right sample-line coordinate hash when"
+            " merging duplicate DOM tie points. Valid range: 0-6."
+        ),
+    )
+    parser.add_argument("--skip-merge", action="store_true", help="Skip DOM-space duplicate merge and pass matched DOM keys straight to dom2ori.")
+    parser.add_argument("--ransac-reproj-threshold", type=float, default=3.0, help="Reprojection threshold passed to OpenCV homography RANSAC.")
+    parser.add_argument("--ransac-confidence", type=float, default=0.995, help="Confidence passed to OpenCV homography RANSAC.")
+    parser.add_argument("--ransac-max-iters", type=int, default=5000, help="Maximum iteration count passed to OpenCV homography RANSAC.")
+    parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="RANSAC outlier handling mode.")
+    parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep soft outliers.")
+    parser.add_argument("--binary", action="store_true", help="Write the ControlNet in binary format instead of PVL.")
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=("DEBUG", "INFO", "WARNING", "ERROR"),
+        help="Logging verbosity for runtime diagnostics.",
+    )
+    _add_stdout_detail_control_arguments(parser)
+
+
 def _build_from_dom_batch_parser(subparsers) -> None:
     parser = subparsers.add_parser(
         "from-dom-batch",
@@ -1118,7 +1503,7 @@ def _build_from_dom_batch_parser(subparsers) -> None:
 
 
 def _normalize_cli_argv(argv: list[str]) -> list[str]:
-    if argv and argv[0] not in {"from-ori", "from-ori-match", "from-dom", "from-dom-batch", "-h", "--help"}:
+    if argv and argv[0] not in {"from-ori", "from-ori-match", "from-dom", "from-dom-match", "from-dom-batch", "-h", "--help"}:
         return ["from-ori", *argv]
     return argv
 
@@ -1129,6 +1514,7 @@ def build_argument_parser() -> argparse.ArgumentParser:
     _build_from_original_parser(subparsers)
     _build_from_original_match_parser(subparsers)
     _build_from_dom_parser(subparsers)
+    _build_from_dom_match_parser(subparsers)
     _build_from_dom_batch_parser(subparsers)
     return parser
 
@@ -1184,6 +1570,12 @@ def main(argv: list[str] | None = None) -> None:
             deep_match_config_path=args.deep_match_config_path,
             deep_match_mode="direct",
         )
+        if isinstance(match_result, tuple) and len(match_result) == 3:
+            match_summary = match_result[2]
+        else:
+            match_summary = match_result
+        if not isinstance(match_summary, dict):
+            raise TypeError("match_ori_pair_to_key_files must return a match summary mapping.")
         controlnet_result = build_controlnet_for_stereo_pair(
             left_output_key,
             right_output_key,
@@ -1195,9 +1587,57 @@ def main(argv: list[str] | None = None) -> None:
         )
         result = {
             "mode": "from-ori-match",
-            "match": match_result,
+            "match": match_summary,
+            "routing_audit": _route_audit_from_match_summary(match_summary),
+            "left_output_key": str(left_output_key),
+            "right_output_key": str(right_output_key),
             "controlnet": controlnet_result,
         }
+    elif args.command == "from-dom-match":
+        config = _apply_cli_pair_id_override(read_controlnet_config(args.config), args.pair_id)
+        try:
+            adaptive_routing_deep_presets = _parse_adaptive_routing_deep_preset_entries(
+                args.adaptive_routing_deep_preset
+            )
+        except ValueError as exc:
+            parser.error(str(exc))
+        result = build_controlnet_for_dom_match_stereo_pair(
+            args.left_dom_cube,
+            args.right_dom_cube,
+            args.left_cube,
+            args.right_cube,
+            config,
+            Path(args.output_net),
+            left_dom_match_key_path=args.left_dom_match_key,
+            right_dom_match_key_path=args.right_dom_match_key,
+            left_output_key_path=args.left_output_key,
+            right_output_key_path=args.right_output_key,
+            matcher_method=args.matcher_method,
+            band=args.band,
+            ratio_test=args.ratio_test,
+            max_features=args.max_features,
+            show_progress=args.show_progress,
+            use_gpu=args.use_gpu,
+            gpu_batch_size=args.gpu_batch_size,
+            gpu_dynamic_batch=args.gpu_dynamic_batch,
+            gpu_min_batch_size=args.gpu_min_batch_size,
+            gpu_max_batch_size=args.gpu_max_batch_size,
+            num_worker_parallel_cpu=args.num_worker_parallel_cpu,
+            use_parallel_cpu=args.use_parallel_cpu,
+            enable_adaptive_routing=args.enable_adaptive_routing,
+            adaptive_routing_profile=args.adaptive_routing_profile,
+            adaptive_routing_deep_presets=adaptive_routing_deep_presets,
+            deep_match_config_path=args.deep_match_config_path,
+            merge_decimals=args.merge_decimals,
+            skip_merge=args.skip_merge,
+            ransac_reproj_threshold=args.ransac_reproj_threshold,
+            ransac_confidence=args.ransac_confidence,
+            ransac_max_iters=args.ransac_max_iters,
+            ransac_mode=args.ransac_mode,
+            loose_ransac_keep_threshold=args.loose_ransac_keep_threshold,
+            pvl_format=not args.binary,
+            logger=logger,
+        )
     elif args.command == "from-dom":
         config = _apply_cli_pair_id_override(read_controlnet_config(args.config), args.pair_id)
         result = build_controlnet_for_dom_stereo_pair(

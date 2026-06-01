@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-28
+Last Modified: 2026-06-01
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -54,6 +54,7 @@ Updated: 2026-05-27  Geng Xun added wrapper regression coverage for forwarding e
 Updated: 2026-05-28  Geng Xun aligned adaptive-routing fake serial tile batches with TileMatchBatchResult.
 Updated: 2026-05-28  Geng Xun added focused Step1 spiced-isis2std regression coverage for working-cube export, resume ordering, and docs/help discoverability.
 Updated: 2026-05-28  Geng Xun restored Step1 wrapper regression coverage for input-dir, output-file, skip-step, and resume-from alongside the spiced stage checks.
+Updated: 2026-06-01  Geng Xun added adaptive-routing ControlNet orchestration coverage for ORI and DOM matching flows.
 """
 
 from __future__ import annotations
@@ -88,6 +89,9 @@ if str(EXAMPLES_DIR) not in sys.path:
 
 from controlnet_construct.controlnet_stereopair import (
     ControlNetConfig,
+    build_argument_parser as build_controlnet_stereopair_parser,
+    build_controlnet_for_dom_match_stereo_pair,
+    build_controlnets_for_dom_match_overlap_list,
     build_controlnets_for_dom_overlap_list,
     build_controlnet_for_dom_stereo_pair,
     build_controlnet_for_stereo_pair,
@@ -6409,6 +6413,170 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(payload["match"], fake_match_result)
         self.assertEqual(payload["controlnet"], fake_controlnet_result)
 
+    def test_controlnet_from_ori_match_writes_json_safe_route_audit(self):
+        fake_match_summary = {
+            "status": "matched",
+            "point_count": 7,
+            "matcher": {
+                "matcher_method_requested": "flann",
+                "matcher_method_effective": "lightglue",
+                "ratio_test": 0.75,
+            },
+            "adaptive_routing_profile": "balanced",
+            "adaptive_routing": {
+                "status": "routed",
+                "selected_initial_matcher": "lightglue",
+                "selected_final_matcher": "flann",
+                "fallback_chain": ["lightglue", "flann", "bf"],
+                "cascade_steps": [
+                    {"matcher": "lightglue", "status": "failed_quality_gate"},
+                    {"matcher": "flann", "status": "accepted"},
+                ],
+                "match_quality": {"accepted": True, "inlier_count": 7},
+                "final_decision": "accepted",
+            },
+            "deep_match_config_path": "presets/lightglue_official_superpoint.json",
+        }
+        fake_controlnet = {
+            "output_path": "pair.net",
+            "point_count": 7,
+            "measure_count": 14,
+        }
+        stdout = io.StringIO()
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            report_path = temp_dir / "pair.summary.json"
+            output_net = temp_dir / "pair.net"
+            config_path.write_text(
+                json.dumps({"NetworkId": "route_unit", "TargetName": "Mars", "UserName": "unit"}) + "\n",
+                encoding="utf-8",
+            )
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.match_ori_pair_to_key_files",
+                    return_value=("left-key-object", "right-key-object", fake_match_summary),
+                ),
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                    return_value=fake_controlnet,
+                ),
+                patch.object(sys, "stdout", stdout),
+            ):
+                controlnet_stereopair_main(
+                    [
+                        "from-ori-match",
+                        "left.cub",
+                        "right.cub",
+                        str(config_path),
+                        str(output_net),
+                        "--report-path",
+                        str(report_path),
+                        "--adaptive-routing",
+                    ]
+                )
+
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(report["mode"], "from-ori-match")
+        self.assertEqual(report["match"]["point_count"], 7)
+        self.assertEqual(report["routing_audit"]["requested_matcher"], "flann")
+        self.assertEqual(report["routing_audit"]["effective_matcher"], "lightglue")
+        self.assertEqual(report["routing_audit"]["adaptive_routing_profile"], "balanced")
+        self.assertEqual(report["routing_audit"]["selected_initial_matcher"], "lightglue")
+        self.assertEqual(report["routing_audit"]["selected_final_matcher"], "flann")
+        self.assertEqual(report["routing_audit"]["match_count"], 7)
+        json.dumps(json.loads(stdout.getvalue()))
+
+    def test_controlnet_stereopair_parser_accepts_from_dom_match_adaptive_flags(self):
+        parser = build_controlnet_stereopair_parser()
+        parsed = parser.parse_args(
+            [
+                "from-dom-match",
+                "left_dom.cub",
+                "right_dom.cub",
+                "left.cub",
+                "right.cub",
+                "config.json",
+                "pair.net",
+                "--adaptive-routing",
+                "--adaptive-routing-profile",
+                "fast",
+                "--adaptive-routing-deep-preset",
+                "loftr=presets/loftr_external_outdoor.json",
+                "--matcher-method",
+                "flann",
+            ]
+        )
+
+        self.assertEqual(parsed.command, "from-dom-match")
+        self.assertTrue(parsed.enable_adaptive_routing)
+        self.assertEqual(parsed.adaptive_routing_profile, "fast")
+        self.assertEqual(parsed.adaptive_routing_deep_preset, ["loftr=presets/loftr_external_outdoor.json"])
+        self.assertEqual(parsed.matcher_method, "flann")
+
+    def test_controlnet_stereopair_from_dom_match_dispatches_helper_and_writes_report(self):
+        fake_result = {
+            "mode": "from-dom-match",
+            "routing_audit": {"selected_final_matcher": "loftr", "match_count": 9},
+            "match": {"point_count": 9},
+            "controlnet": {"controlnet": {"point_count": 9}},
+        }
+        stdout = io.StringIO()
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "config.json"
+            report_path = temp_dir / "pair.summary.json"
+            output_net = temp_dir / "pair.net"
+            config_path.write_text(
+                json.dumps({"NetworkId": "dom_match_cli", "TargetName": "Mars", "UserName": "unit"}) + "\n",
+                encoding="utf-8",
+            )
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_match_stereo_pair",
+                    return_value=fake_result,
+                ) as build_mock,
+                patch.object(sys, "stdout", stdout),
+            ):
+                controlnet_stereopair_main(
+                    [
+                        "from-dom-match",
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        "left.cub",
+                        "right.cub",
+                        str(config_path),
+                        str(output_net),
+                        "--report-path",
+                        str(report_path),
+                        "--adaptive-routing",
+                        "--adaptive-routing-profile",
+                        "fast",
+                        "--adaptive-routing-deep-preset",
+                        "loftr=presets/loftr_external_outdoor.json",
+                    ]
+                )
+
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            expected_config = read_controlnet_config(config_path)
+
+        self.assertEqual(report["mode"], "from-dom-match")
+        self.assertEqual(report["routing_audit"]["selected_final_matcher"], "loftr")
+        self.assertEqual(
+            build_mock.call_args.args[:6],
+            ("left_dom.cub", "right_dom.cub", "left.cub", "right.cub", expected_config, Path(output_net)),
+        )
+        self.assertTrue(build_mock.call_args.kwargs["enable_adaptive_routing"])
+        self.assertEqual(build_mock.call_args.kwargs["adaptive_routing_profile"], "fast")
+        self.assertEqual(
+            build_mock.call_args.kwargs["adaptive_routing_deep_presets"],
+            {"loftr": "presets/loftr_external_outdoor.json"},
+        )
+        json.dumps(json.loads(stdout.getvalue()))
+
     def test_run_pipeline_example_forwards_adaptive_routing_and_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
@@ -7600,6 +7768,87 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     self.assertTrue(call_kwargs["preview_force_regenerate"])
                     self.assertEqual(call_kwargs["preview_level"], 3)
 
+    def test_build_controlnets_for_dom_match_overlap_list_auto_assigns_pair_ids_and_writes_summary(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_match_batch",
+            target_name="Mars",
+            user_name="zmoratto",
+            point_id_prefix="CTX",
+            pair_id="CFG_SINGLE",
+        )
+        fake_pair_result = {
+            "mode": "from-dom-match",
+            "match": {"point_count": 5},
+            "routing_audit": {"selected_final_matcher": "loftr", "match_count": 5},
+            "controlnet": {
+                "mode": "from-dom",
+                "controlnet": {"point_count": 5, "measure_count": 10},
+            },
+        }
+
+        with temporary_directory() as temp_dir:
+            overlap_list_path = temp_dir / "images_overlap.lis"
+            overlap_list_path.write_text(
+                "left1.cub,right1.cub\nleft2.cub,right2.cub\n",
+                encoding="utf-8",
+            )
+            original_list_path = temp_dir / "original_images.lis"
+            original_list_path.write_text(
+                "left1.cub\nright1.cub\nleft2.cub\nright2.cub\n",
+                encoding="utf-8",
+            )
+            dom_list_path = temp_dir / "doms.lis"
+            dom_list_path.write_text(
+                "left1_dom.cub\nright1_dom.cub\nleft2_dom.cub\nright2_dom.cub\n",
+                encoding="utf-8",
+            )
+            output_dir = temp_dir / "pair_nets"
+            report_dir = temp_dir / "reports"
+
+            with patch(
+                "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_match_stereo_pair",
+                return_value=fake_pair_result,
+            ) as build_mock:
+                summary = build_controlnets_for_dom_match_overlap_list(
+                    overlap_list_path,
+                    original_list_path,
+                    dom_list_path,
+                    output_dir,
+                    config,
+                    report_directory=report_dir,
+                    pair_id_prefix="S",
+                    pair_id_start=4,
+                    enable_adaptive_routing=True,
+                    adaptive_routing_profile="strict",
+                    adaptive_routing_deep_presets={"loftr": "presets/loftr_external_outdoor.json"},
+                )
+                self.assertEqual(build_mock.call_count, 2)
+                first_call = build_mock.call_args_list[0]
+                second_call = build_mock.call_args_list[1]
+                self.assertEqual(
+                    first_call.args[:4],
+                    ("left1_dom.cub", "right1_dom.cub", "left1.cub", "right1.cub"),
+                )
+                self.assertEqual(
+                    second_call.args[:4],
+                    ("left2_dom.cub", "right2_dom.cub", "left2.cub", "right2.cub"),
+                )
+                self.assertEqual(first_call.args[4].pair_id, "S4")
+                self.assertEqual(second_call.args[4].pair_id, "S5")
+                self.assertTrue(first_call.kwargs["enable_adaptive_routing"])
+                self.assertEqual(first_call.kwargs["adaptive_routing_profile"], "strict")
+                self.assertEqual(
+                    first_call.kwargs["adaptive_routing_deep_presets"],
+                    {"loftr": "presets/loftr_external_outdoor.json"},
+                )
+                self.assertEqual(summary["pair_count"], 2)
+                self.assertEqual(summary["pairs"][0]["pair_id"], "S4")
+                self.assertEqual(summary["pairs"][1]["pair_id"], "S5")
+                self.assertEqual(summary["pairs"][0]["control_point_count"], 5)
+                self.assertTrue(Path(summary["batch_report_path"]).exists())
+                self.assertTrue(Path(summary["pairs"][0]["report_path"]).exists())
+                self.assertTrue(Path(summary["pairs"][1]["report_path"]).exists())
+
     def test_controlnet_stereopair_cli_from_dom_batch_dispatches(self):
         fake_summary = {
             "mode": "from-dom-batch",
@@ -7998,6 +8247,112 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(result["left_conversion"]["output_count"], 1)
         self.assertEqual(result["right_conversion"]["output_count"], 1)
         self.assertEqual(result["controlnet"]["point_count"], 1)
+
+    def test_build_controlnet_for_dom_match_stereo_pair_matches_then_converts(self):
+        config = ControlNetConfig(
+            network_id="dom_match_unit",
+            target_name="Mars",
+            user_name="unit",
+            description="",
+            point_id_prefix="P",
+            pair_id=None,
+        )
+        fake_match_summary = {
+            "status": "matched",
+            "point_count": 5,
+            "matcher": {
+                "matcher_method_requested": "flann",
+                "matcher_method_effective": "loftr",
+            },
+            "adaptive_routing_profile": "strict",
+            "adaptive_routing": {
+                "status": "routed",
+                "selected_initial_matcher": "loftr",
+                "selected_final_matcher": "loftr",
+                "final_decision": "accepted",
+            },
+            "deep_match_config_path": "presets/loftr_external_outdoor.json",
+        }
+        fake_controlnet = {
+            "mode": "from-dom",
+            "controlnet": {"output_path": "pair.net", "point_count": 5},
+        }
+
+        with temporary_directory() as temp_dir:
+            output_net = temp_dir / "pair.net"
+            left_dom_key = temp_dir / "pair_left_dom_match.key"
+            right_dom_key = temp_dir / "pair_right_dom_match.key"
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.match_dom_pair_to_key_files",
+                    return_value=fake_match_summary,
+                ) as match_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_stereo_pair",
+                    return_value=fake_controlnet,
+                ) as build_mock,
+            ):
+                result = build_controlnet_for_dom_match_stereo_pair(
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left_original.cub",
+                    "right_original.cub",
+                    config,
+                    output_net,
+                    left_dom_match_key_path=left_dom_key,
+                    right_dom_match_key_path=right_dom_key,
+                    matcher_method="flann",
+                    enable_adaptive_routing=True,
+                    adaptive_routing_profile="strict",
+                    adaptive_routing_deep_presets={"loftr": "presets/loftr_external_outdoor.json"},
+                    deep_match_config_path="presets/loftr_external_outdoor.json",
+                    write_match_visualization=False,
+                )
+
+        self.assertEqual(result["mode"], "from-dom-match")
+        self.assertEqual(result["match"], fake_match_summary)
+        self.assertEqual(result["routing_audit"]["selected_final_matcher"], "loftr")
+        self.assertEqual(result["routing_audit"]["match_count"], 5)
+        self.assertEqual(match_mock.call_args.args[:4], ("left_dom.cub", "right_dom.cub", left_dom_key, right_dom_key))
+        self.assertTrue(match_mock.call_args.kwargs["enable_adaptive_routing"])
+        self.assertEqual(match_mock.call_args.kwargs["adaptive_routing_profile"], "strict")
+        self.assertEqual(
+            build_mock.call_args.args[:6],
+            (left_dom_key, right_dom_key, "left_dom.cub", "right_dom.cub", "left_original.cub", "right_original.cub"),
+        )
+
+    def test_build_controlnet_for_dom_match_stereo_pair_does_not_convert_after_match_failure(self):
+        config = ControlNetConfig(
+            network_id="dom_match_failure_unit",
+            target_name="Mars",
+            user_name="unit",
+            description="",
+            point_id_prefix="P",
+            pair_id=None,
+        )
+
+        with temporary_directory() as temp_dir:
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.match_dom_pair_to_key_files",
+                    side_effect=RuntimeError("all routed matchers failed"),
+                ),
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_stereo_pair",
+                ) as build_mock,
+            ):
+                with self.assertRaisesRegex(RuntimeError, "all routed matchers failed"):
+                    build_controlnet_for_dom_match_stereo_pair(
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        "left_original.cub",
+                        "right_original.cub",
+                        config,
+                        temp_dir / "pair.net",
+                        enable_adaptive_routing=True,
+                    )
+
+        build_mock.assert_not_called()
 
     def test_build_controlnet_for_dom_stereo_pair_applies_ransac_and_optional_visualization_after_merge(self):
         config = ControlNetConfig(

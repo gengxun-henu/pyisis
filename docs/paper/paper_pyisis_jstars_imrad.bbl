@@ -67,6 +67,12 @@ D.~G. Lowe, ``Distinctive image features from scale-invariant keypoints,''
 ``Deep learning meets satellite images: Benchmarking feature matching on
   {WorldView-3} stereo pairs,'' \emph{arXiv preprint arXiv:2409.02825}, 2024.
 
+\bibitem{usgs2024findfeatures}
+{USGS Astrogeology Science Center}, ``{findfeatures}: Feature-based control
+  network generation in {ISIS},''
+  \url{https://isis.astrogeology.usgs.gov/Application/presentation/Tabbed/findfeatures/findfeatures.html},
+  2024.
+
 \bibitem{edmundson2012jigsaw}
 K.~L. Edmundson, B.~A. Archinal, M.~S. Robinson, and {the LROC Team},
   ``{JIGSAW}: The {ISIS3} bundle adjustment for extraterrestrial mapping,'' in
@@ -110,6 +116,17 @@ D.~G. Lowe, ``Object recognition from local scale-invariant features,'' in
 M.~Muja and D.~G. Lowe, ``Fast approximate nearest neighbors with automatic
   algorithm configuration,'' in \emph{Proc. International Conference on
   Computer Vision Theory and Applications (VISAPP)}, 2009, pp. 331--340.
+
+\bibitem{wu2015illumination}
+B.~Wu, H.~Hu, Q.~Zhu, and Y.~Zhang, ``An illumination-invariant {SIFT} matching
+  method for planetary images,'' \emph{ISPRS Journal of Photogrammetry and
+  Remote Sensing}, vol. 109, pp. 52--66, 2015.
+
+\bibitem{huang2020matching}
+H.~Huang, B.~Wu, and Y.~Chen, ``An improved image matching method for
+  high-resolution planetary images through extracting low--high frequency
+  features,'' \emph{IEEE Geoscience and Remote Sensing Letters}, vol.~17,
+  no.~10, pp. 1756--1760, 2020.
 
 \bibitem{ye2024planetary}
 Z.~Ye and Y.~Zhou, ``Comparison and evaluation of feature matching methods for
@@ -171,9 +188,14 @@ W.~Jakob, J.~Rhinelander, and D.~Moldovan, ``pybind11 --- seamless operability
   between {C++11} and {Python},'' \url{https://github.com/pybind/pybind11},
   2017.
 
-\bibitem{li2018megadepth}
-Z.~Li, N.~Snavely, and N.~Snavely, ``{MegaDepth}: Learning single-view depth
-  prediction from internet photos,'' in \emph{Proc. IEEE/CVF Conference on
-  Computer Vision and Pattern Recognition (CVPR)}, 2018, pp. 659--668.
+\bibitem{geng2019groundtoimage}
+X.~Geng, Q.~Xu, S.~Xing, and C.~Lan, ``A robust ground-to-image transformation
+  algorithm and its applications in the geometric processing of linear
+  pushbroom images,'' \emph{Earth and Space Science}, vol.~6, pp. 1805--1830,
+  2019.
+
+\bibitem{geng2020genericpushbroom}
+------, ``A generic pushbroom sensor model for planetary photogrammetry,''
+  \emph{Earth and Space Science}, vol.~7, p. e2019EA001014, 2020.
 
 \end{thebibliography}

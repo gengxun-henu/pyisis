@@ -1,13 +1,13 @@
 This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
-The top-level auxiliary file: paper_pyisis_jstars_final.aux
+The top-level auxiliary file: paper_pyisis_jstars_imrad.aux
 The style file: IEEEtran.bst
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Reallocated singl_function (elt_size=4) to 100 items from 50.
-Database file #1: supplementary/references.bib
+Database file #1: ../supplementary/references.bib
 -- IEEEtran.bst version 1.14 (2015/08/26) by Michael Shell.
 -- http://www.michaelshell.org/tex/ieeetran/bibtex/
 -- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
@@ -23,45 +23,45 @@ Warning--empty author in weaktexture2023
 Warning--empty author in yutu2_2024
 
 Done.
-You've used 30 entries,
+You've used 34 entries,
             4087 wiz_defined-function locations,
-            965 strings with 13149 characters,
-and the built_in function-call counts, 21505 in all, are:
-= -- 1631
-> -- 570
-< -- 161
-+ -- 334
-- -- 128
-* -- 1029
-:= -- 3070
-add.period$ -- 60
-call.type$ -- 30
-change.case$ -- 30
-chr.to.int$ -- 390
-cite$ -- 40
-duplicate$ -- 1565
-empty$ -- 1790
-format.name$ -- 121
-if$ -- 5008
+            985 strings with 13914 characters,
+and the built_in function-call counts, 24650 in all, are:
+= -- 1918
+> -- 643
+< -- 187
++ -- 374
+- -- 141
+* -- 1167
+:= -- 3533
+add.period$ -- 68
+call.type$ -- 34
+change.case$ -- 34
+chr.to.int$ -- 444
+cite$ -- 44
+duplicate$ -- 1801
+empty$ -- 2002
+format.name$ -- 137
+if$ -- 5749
 int.to.chr$ -- 0
-int.to.str$ -- 30
-missing$ -- 289
-newline$ -- 113
-num.names$ -- 22
-pop$ -- 741
+int.to.str$ -- 34
+missing$ -- 326
+newline$ -- 125
+num.names$ -- 26
+pop$ -- 819
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 2
-skip$ -- 1645
+skip$ -- 1906
 stack$ -- 0
-substring$ -- 1014
-swap$ -- 1220
-text.length$ -- 31
+substring$ -- 1170
+swap$ -- 1425
+text.length$ -- 39
 text.prefix$ -- 0
 top$ -- 5
-type$ -- 30
+type$ -- 34
 warning$ -- 10
-while$ -- 80
-width$ -- 32
-write$ -- 283
+while$ -- 93
+width$ -- 36
+write$ -- 323
 (There were 10 warnings)

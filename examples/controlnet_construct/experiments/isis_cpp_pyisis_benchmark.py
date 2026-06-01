@@ -1657,6 +1657,8 @@ def write_benchmark_figure(
 ) -> None:
     reports_dir = Path(reports_dir)
     import matplotlib as mpl
+
+    mpl.use("Agg", force=True)
     import matplotlib.pyplot as plt
 
     mpl.rcParams.update(

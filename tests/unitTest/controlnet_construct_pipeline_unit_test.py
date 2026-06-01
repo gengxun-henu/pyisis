@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-28
+Last Modified: 2026-06-01
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -54,6 +54,7 @@ Updated: 2026-05-27  Geng Xun added wrapper regression coverage for forwarding e
 Updated: 2026-05-28  Geng Xun aligned adaptive-routing fake serial tile batches with TileMatchBatchResult.
 Updated: 2026-05-28  Geng Xun added focused Step1 spiced-isis2std regression coverage for working-cube export, resume ordering, and docs/help discoverability.
 Updated: 2026-05-28  Geng Xun restored Step1 wrapper regression coverage for input-dir, output-file, skip-step, and resume-from alongside the spiced stage checks.
+Updated: 2026-06-01  Geng Xun added adaptive-routing ControlNet orchestration coverage for ORI and DOM matching flows.
 """
 
 from __future__ import annotations
@@ -6408,6 +6409,82 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(payload["mode"], "from-ori-match")
         self.assertEqual(payload["match"], fake_match_result)
         self.assertEqual(payload["controlnet"], fake_controlnet_result)
+
+    def test_controlnet_from_ori_match_writes_json_safe_route_audit(self):
+        fake_match_summary = {
+            "status": "matched",
+            "point_count": 7,
+            "matcher": {
+                "matcher_method_requested": "flann",
+                "matcher_method_effective": "lightglue",
+                "ratio_test": 0.75,
+            },
+            "adaptive_routing_profile": "balanced",
+            "adaptive_routing": {
+                "status": "routed",
+                "selected_initial_matcher": "lightglue",
+                "selected_final_matcher": "flann",
+                "fallback_chain": ["lightglue", "flann", "bf"],
+                "cascade_steps": [
+                    {"matcher": "lightglue", "status": "failed_quality_gate"},
+                    {"matcher": "flann", "status": "accepted"},
+                ],
+                "match_quality": {"accepted": True, "inlier_count": 7},
+                "final_decision": "accepted",
+            },
+            "deep_match_config_path": "presets/lightglue_official_superpoint.json",
+        }
+        fake_controlnet = {
+            "output_path": "pair.net",
+            "point_count": 7,
+            "measure_count": 14,
+        }
+        stdout = io.StringIO()
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            report_path = temp_dir / "pair.summary.json"
+            output_net = temp_dir / "pair.net"
+            config_path.write_text(
+                json.dumps({"NetworkId": "route_unit", "TargetName": "Mars", "UserName": "unit"}) + "\n",
+                encoding="utf-8",
+            )
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.match_ori_pair_to_key_files",
+                    return_value=("left-key-object", "right-key-object", fake_match_summary),
+                ),
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                    return_value=fake_controlnet,
+                ),
+                patch.object(sys, "stdout", stdout),
+            ):
+                controlnet_stereopair_main(
+                    [
+                        "from-ori-match",
+                        "left.cub",
+                        "right.cub",
+                        str(config_path),
+                        str(output_net),
+                        "--report-path",
+                        str(report_path),
+                        "--adaptive-routing",
+                    ]
+                )
+
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(report["mode"], "from-ori-match")
+        self.assertEqual(report["match"]["point_count"], 7)
+        self.assertEqual(report["routing_audit"]["requested_matcher"], "flann")
+        self.assertEqual(report["routing_audit"]["effective_matcher"], "lightglue")
+        self.assertEqual(report["routing_audit"]["adaptive_routing_profile"], "balanced")
+        self.assertEqual(report["routing_audit"]["selected_initial_matcher"], "lightglue")
+        self.assertEqual(report["routing_audit"]["selected_final_matcher"], "flann")
+        self.assertEqual(report["routing_audit"]["match_count"], 7)
+        json.dumps(json.loads(stdout.getvalue()))
 
     def test_run_pipeline_example_forwards_adaptive_routing_and_new_matching_options_from_config(self):
         with temporary_directory() as temp_dir:

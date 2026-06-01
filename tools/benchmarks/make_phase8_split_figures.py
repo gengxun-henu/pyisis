@@ -8,6 +8,8 @@ import json
 from pathlib import Path
 
 import matplotlib as mpl
+
+mpl.use("Agg", force=True)
 import matplotlib.pyplot as plt
 import numpy as np
 

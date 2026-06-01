@@ -43,7 +43,7 @@ if __package__ in {None, ""}:
     from controlnet_construct.controlnet_merge import pair_controlnet_filename
     from controlnet_construct.coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from controlnet_construct.dom2ori import convert_paired_dom_keypoints_to_original
-    from image_match.image_match import match_ori_pair_to_key_files
+    from image_match.image_match import match_dom_pair_to_key_files, match_ori_pair_to_key_files
     from image_match.keypoints import read_key_file
     from controlnet_construct.listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
     from controlnet_construct.parameter_validation import parse_catalog_choice
@@ -70,7 +70,7 @@ else:
     from .controlnet_merge import pair_controlnet_filename
     from .coordinate_metadata import CONTROLNET_RESULT_COORDINATE_FIELD_BASES, annotate_coordinate_payload
     from .dom2ori import convert_paired_dom_keypoints_to_original
-    from image_match.image_match import match_ori_pair_to_key_files
+    from image_match.image_match import match_dom_pair_to_key_files, match_ori_pair_to_key_files
     from image_match.keypoints import read_key_file
     from .listing import StereoPair, read_path_list, read_stereo_pair_list, validate_paired_path_lists
     from .parameter_validation import parse_catalog_choice
@@ -833,6 +833,126 @@ def build_controlnet_for_dom_stereo_pair(
         "right_conversion": right_conversion,
         "controlnet": controlnet_result,
         **({"match_visualization": match_visualization_result} if match_visualization_result is not None else {}),
+    }
+
+
+def build_controlnet_for_dom_match_stereo_pair(
+    left_dom_cube_path: str | Path,
+    right_dom_cube_path: str | Path,
+    left_cube_path: str | Path,
+    right_cube_path: str | Path,
+    config: ControlNetConfig,
+    output_path: str | Path,
+    *,
+    left_dom_match_key_path: str | Path | None = None,
+    right_dom_match_key_path: str | Path | None = None,
+    matcher_method: str = "sift",
+    band: int = 1,
+    ratio_test: float = 0.75,
+    max_features: int | None = None,
+    show_progress: bool = False,
+    use_gpu: bool = False,
+    gpu_batch_size: int = 4,
+    gpu_dynamic_batch: bool = True,
+    gpu_min_batch_size: int = 2,
+    gpu_max_batch_size: int = 16,
+    num_worker_parallel_cpu: int = 8,
+    use_parallel_cpu: bool = True,
+    enable_adaptive_routing: bool = False,
+    adaptive_routing_profile: str = "balanced",
+    adaptive_routing_deep_presets: dict[str, str] | None = None,
+    deep_match_config_path: str | Path | None = None,
+    deep_match_mode: str = "direct",
+    write_match_visualization: bool = True,
+    match_visualization_output_path: str | Path | None = None,
+    match_visualization_output_dir: str | Path | None = None,
+    match_visualization_scale: float = 1.0 / 3.0,
+    left_merged_dom_key_path: str | Path | None = None,
+    right_merged_dom_key_path: str | Path | None = None,
+    left_ransac_dom_key_path: str | Path | None = None,
+    right_ransac_dom_key_path: str | Path | None = None,
+    left_output_key_path: str | Path | None = None,
+    right_output_key_path: str | Path | None = None,
+    merge_decimals: int = 3,
+    skip_merge: bool = False,
+    ransac_reproj_threshold: float = 3.0,
+    ransac_confidence: float = 0.995,
+    ransac_max_iters: int = 5000,
+    ransac_mode: str = "loose",
+    loose_ransac_keep_threshold: float = 1.0,
+    pvl_format: bool = True,
+    logger: logging.Logger | None = None,
+) -> dict[str, object]:
+    left_dom_match_key = (
+        Path(left_dom_match_key_path)
+        if left_dom_match_key_path is not None
+        else _default_intermediate_key_path(output_path, "left", "dom_match")
+    )
+    right_dom_match_key = (
+        Path(right_dom_match_key_path)
+        if right_dom_match_key_path is not None
+        else _default_intermediate_key_path(output_path, "right", "dom_match")
+    )
+    match_summary = match_dom_pair_to_key_files(
+        left_dom_cube_path,
+        right_dom_cube_path,
+        left_dom_match_key,
+        right_dom_match_key,
+        write_match_visualization=write_match_visualization,
+        match_visualization_output_path=match_visualization_output_path,
+        match_visualization_output_dir=match_visualization_output_dir,
+        match_visualization_scale=match_visualization_scale,
+        show_progress=show_progress,
+        matcher_method=matcher_method,
+        band=band,
+        ratio_test=ratio_test,
+        max_features=max_features,
+        use_gpu=use_gpu,
+        gpu_batch_size=gpu_batch_size,
+        gpu_dynamic_batch=gpu_dynamic_batch,
+        gpu_min_batch_size=gpu_min_batch_size,
+        gpu_max_batch_size=gpu_max_batch_size,
+        num_worker_parallel_cpu=num_worker_parallel_cpu,
+        use_parallel_cpu=use_parallel_cpu,
+        enable_adaptive_routing=enable_adaptive_routing,
+        adaptive_routing_profile=adaptive_routing_profile,
+        adaptive_routing_deep_presets=adaptive_routing_deep_presets or {},
+        deep_match_config_path=deep_match_config_path,
+        deep_match_mode=deep_match_mode,
+    )
+    controlnet_result = build_controlnet_for_dom_stereo_pair(
+        left_dom_match_key,
+        right_dom_match_key,
+        left_dom_cube_path,
+        right_dom_cube_path,
+        left_cube_path,
+        right_cube_path,
+        config,
+        output_path,
+        left_merged_dom_key_path=left_merged_dom_key_path,
+        right_merged_dom_key_path=right_merged_dom_key_path,
+        left_ransac_dom_key_path=left_ransac_dom_key_path,
+        right_ransac_dom_key_path=right_ransac_dom_key_path,
+        left_output_key_path=left_output_key_path,
+        right_output_key_path=right_output_key_path,
+        merge_decimals=merge_decimals,
+        skip_merge=skip_merge,
+        ransac_reproj_threshold=ransac_reproj_threshold,
+        ransac_confidence=ransac_confidence,
+        ransac_max_iters=ransac_max_iters,
+        ransac_mode=ransac_mode,
+        loose_ransac_keep_threshold=loose_ransac_keep_threshold,
+        write_match_visualization=False,
+        pvl_format=pvl_format,
+        logger=logger,
+    )
+    return {
+        "mode": "from-dom-match",
+        "match": match_summary,
+        "routing_audit": _route_audit_from_match_summary(match_summary),
+        "left_dom_match_key": str(left_dom_match_key),
+        "right_dom_match_key": str(right_dom_match_key),
+        "controlnet": controlnet_result,
     }
 
 

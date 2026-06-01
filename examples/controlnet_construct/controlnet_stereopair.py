@@ -1160,6 +1160,77 @@ def _build_from_dom_parser(subparsers) -> None:
     _add_stdout_detail_control_arguments(parser)
 
 
+def _build_from_dom_match_parser(subparsers) -> None:
+    parser = subparsers.add_parser(
+        "from-dom-match",
+        help="Match DOM cubes, convert matched DOM keys to original-image coordinates, and build a ControlNet.",
+    )
+    parser.add_argument("left_dom_cube", help="DOM cube path for image A.")
+    parser.add_argument("right_dom_cube", help="DOM cube path for image B.")
+    parser.add_argument("left_cube", help="Original cube path for image A.")
+    parser.add_argument("right_cube", help="Original cube path for image B.")
+    parser.add_argument("config", help="JSON config file containing NetworkId, TargetName, and UserName.")
+    parser.add_argument("output_net", help="Output ControlNet path.")
+    parser.add_argument("--report-path", default=None, help="Optional JSON path used to persist the per-pair result summary.")
+    parser.add_argument(
+        "--pair-id",
+        default=None,
+        help="Optional stereo-pair ID appended to the point-id namespace so different pairwise ControlNets avoid PointId collisions during later cnetmerge steps.",
+    )
+    parser.add_argument("--left-dom-match-key", default=None, help="Optional path to persist the matched DOM-space .key for image A.")
+    parser.add_argument("--right-dom-match-key", default=None, help="Optional path to persist the matched DOM-space .key for image B.")
+    parser.add_argument("--left-output-key", default=None, help="Optional path to persist the converted original-image .key for image A.")
+    parser.add_argument("--right-output-key", default=None, help="Optional path to persist the converted original-image .key for image B.")
+    parser.add_argument("--matcher-method", default="sift", help="Matcher method forwarded to image_match.")
+    parser.add_argument("--band", type=int, default=1, help="Band index used for DOM matching.")
+    parser.add_argument("--ratio-test", type=float, default=0.75, help="Ratio test threshold forwarded to image_match.")
+    parser.add_argument("--max-features", type=int, default=None, help="Optional SIFT max_features forwarded to image_match.")
+    parser.add_argument("--show-progress", action="store_true", help="Show tile matching progress output.")
+    parser.add_argument("--use-gpu", action="store_true", help="Enable GPU matching route when supported.")
+    parser.add_argument("--gpu-batch-size", type=int, default=4, help="GPU batch size for matching.")
+    parser.add_argument("--gpu-dynamic-batch", action="store_true", default=True, help="Enable dynamic GPU batch sizing.")
+    parser.add_argument("--no-gpu-dynamic-batch", dest="gpu_dynamic_batch", action="store_false", help="Disable dynamic GPU batch sizing.")
+    parser.add_argument("--gpu-min-batch-size", type=int, default=2, help="Minimum dynamic GPU batch size.")
+    parser.add_argument("--gpu-max-batch-size", type=int, default=16, help="Maximum dynamic GPU batch size.")
+    parser.add_argument("--num-worker-parallel-cpu", type=int, default=8, help="CPU worker count for parallel matching.")
+    parser.add_argument("--use-parallel-cpu", action="store_true", default=True, help="Enable parallel CPU matching.")
+    parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable parallel CPU matching.")
+    parser.set_defaults(enable_adaptive_routing=False)
+    parser.add_argument("--adaptive-routing", dest="enable_adaptive_routing", action="store_true", help="Enable adaptive texture/lighting routing for DOM matching.")
+    parser.add_argument("--no-adaptive-routing", dest="enable_adaptive_routing", action="store_false", help="Disable adaptive texture/lighting routing for DOM matching.")
+    parser.add_argument("--adaptive-routing-profile", default="balanced", choices=("balanced", "strict", "relaxed", "fast"), help="Adaptive routing quality profile.")
+    parser.add_argument("--deep-match-config-path", default=None, help="Optional deep matcher preset JSON path for DOM matching.")
+    parser.add_argument(
+        "--adaptive-routing-deep-preset",
+        action="append",
+        default=[],
+        help="Adaptive deep preset mapping in KEY=PATH form. Repeat for lightglue and loftr.",
+    )
+    parser.add_argument(
+        "--merge-decimals",
+        type=validate_merge_decimals,
+        default=3,
+        help=(
+            "Decimal precision used by the rounded left/right sample-line coordinate hash when"
+            " merging duplicate DOM tie points. Valid range: 0-6."
+        ),
+    )
+    parser.add_argument("--skip-merge", action="store_true", help="Skip DOM-space duplicate merge and pass matched DOM keys straight to dom2ori.")
+    parser.add_argument("--ransac-reproj-threshold", type=float, default=3.0, help="Reprojection threshold passed to OpenCV homography RANSAC.")
+    parser.add_argument("--ransac-confidence", type=float, default=0.995, help="Confidence passed to OpenCV homography RANSAC.")
+    parser.add_argument("--ransac-max-iters", type=int, default=5000, help="Maximum iteration count passed to OpenCV homography RANSAC.")
+    parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="RANSAC outlier handling mode.")
+    parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep soft outliers.")
+    parser.add_argument("--binary", action="store_true", help="Write the ControlNet in binary format instead of PVL.")
+    parser.add_argument(
+        "--log-level",
+        default="INFO",
+        choices=("DEBUG", "INFO", "WARNING", "ERROR"),
+        help="Logging verbosity for runtime diagnostics.",
+    )
+    _add_stdout_detail_control_arguments(parser)
+
+
 def _build_from_dom_batch_parser(subparsers) -> None:
     parser = subparsers.add_parser(
         "from-dom-batch",
@@ -1265,7 +1336,7 @@ def _build_from_dom_batch_parser(subparsers) -> None:
 
 
 def _normalize_cli_argv(argv: list[str]) -> list[str]:
-    if argv and argv[0] not in {"from-ori", "from-ori-match", "from-dom", "from-dom-batch", "-h", "--help"}:
+    if argv and argv[0] not in {"from-ori", "from-ori-match", "from-dom", "from-dom-match", "from-dom-batch", "-h", "--help"}:
         return ["from-ori", *argv]
     return argv
 
@@ -1276,6 +1347,7 @@ def build_argument_parser() -> argparse.ArgumentParser:
     _build_from_original_parser(subparsers)
     _build_from_original_match_parser(subparsers)
     _build_from_dom_parser(subparsers)
+    _build_from_dom_match_parser(subparsers)
     _build_from_dom_batch_parser(subparsers)
     return parser
 
@@ -1354,6 +1426,51 @@ def main(argv: list[str] | None = None) -> None:
             "right_output_key": str(right_output_key),
             "controlnet": controlnet_result,
         }
+    elif args.command == "from-dom-match":
+        config = _apply_cli_pair_id_override(read_controlnet_config(args.config), args.pair_id)
+        try:
+            adaptive_routing_deep_presets = _parse_adaptive_routing_deep_preset_entries(
+                args.adaptive_routing_deep_preset
+            )
+        except ValueError as exc:
+            parser.error(str(exc))
+        result = build_controlnet_for_dom_match_stereo_pair(
+            args.left_dom_cube,
+            args.right_dom_cube,
+            args.left_cube,
+            args.right_cube,
+            config,
+            Path(args.output_net),
+            left_dom_match_key_path=args.left_dom_match_key,
+            right_dom_match_key_path=args.right_dom_match_key,
+            left_output_key_path=args.left_output_key,
+            right_output_key_path=args.right_output_key,
+            matcher_method=args.matcher_method,
+            band=args.band,
+            ratio_test=args.ratio_test,
+            max_features=args.max_features,
+            show_progress=args.show_progress,
+            use_gpu=args.use_gpu,
+            gpu_batch_size=args.gpu_batch_size,
+            gpu_dynamic_batch=args.gpu_dynamic_batch,
+            gpu_min_batch_size=args.gpu_min_batch_size,
+            gpu_max_batch_size=args.gpu_max_batch_size,
+            num_worker_parallel_cpu=args.num_worker_parallel_cpu,
+            use_parallel_cpu=args.use_parallel_cpu,
+            enable_adaptive_routing=args.enable_adaptive_routing,
+            adaptive_routing_profile=args.adaptive_routing_profile,
+            adaptive_routing_deep_presets=adaptive_routing_deep_presets,
+            deep_match_config_path=args.deep_match_config_path,
+            merge_decimals=args.merge_decimals,
+            skip_merge=args.skip_merge,
+            ransac_reproj_threshold=args.ransac_reproj_threshold,
+            ransac_confidence=args.ransac_confidence,
+            ransac_max_iters=args.ransac_max_iters,
+            ransac_mode=args.ransac_mode,
+            loose_ransac_keep_threshold=args.loose_ransac_keep_threshold,
+            pvl_format=not args.binary,
+            logger=logger,
+        )
     elif args.command == "from-dom":
         config = _apply_cli_pair_id_override(read_controlnet_config(args.config), args.pair_id)
         result = build_controlnet_for_dom_stereo_pair(

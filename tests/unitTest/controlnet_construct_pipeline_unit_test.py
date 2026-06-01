@@ -89,6 +89,7 @@ if str(EXAMPLES_DIR) not in sys.path:
 
 from controlnet_construct.controlnet_stereopair import (
     ControlNetConfig,
+    build_argument_parser as build_controlnet_stereopair_parser,
     build_controlnet_for_dom_match_stereo_pair,
     build_controlnets_for_dom_overlap_list,
     build_controlnet_for_dom_stereo_pair,
@@ -6485,6 +6486,94 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(report["routing_audit"]["selected_initial_matcher"], "lightglue")
         self.assertEqual(report["routing_audit"]["selected_final_matcher"], "flann")
         self.assertEqual(report["routing_audit"]["match_count"], 7)
+        json.dumps(json.loads(stdout.getvalue()))
+
+    def test_controlnet_stereopair_parser_accepts_from_dom_match_adaptive_flags(self):
+        parser = build_controlnet_stereopair_parser()
+        parsed = parser.parse_args(
+            [
+                "from-dom-match",
+                "left_dom.cub",
+                "right_dom.cub",
+                "left.cub",
+                "right.cub",
+                "config.json",
+                "pair.net",
+                "--adaptive-routing",
+                "--adaptive-routing-profile",
+                "fast",
+                "--adaptive-routing-deep-preset",
+                "loftr=presets/loftr_external_outdoor.json",
+                "--matcher-method",
+                "flann",
+            ]
+        )
+
+        self.assertEqual(parsed.command, "from-dom-match")
+        self.assertTrue(parsed.enable_adaptive_routing)
+        self.assertEqual(parsed.adaptive_routing_profile, "fast")
+        self.assertEqual(parsed.adaptive_routing_deep_preset, ["loftr=presets/loftr_external_outdoor.json"])
+        self.assertEqual(parsed.matcher_method, "flann")
+
+    def test_controlnet_stereopair_from_dom_match_dispatches_helper_and_writes_report(self):
+        fake_result = {
+            "mode": "from-dom-match",
+            "routing_audit": {"selected_final_matcher": "loftr", "match_count": 9},
+            "match": {"point_count": 9},
+            "controlnet": {"controlnet": {"point_count": 9}},
+        }
+        stdout = io.StringIO()
+
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "config.json"
+            report_path = temp_dir / "pair.summary.json"
+            output_net = temp_dir / "pair.net"
+            config_path.write_text(
+                json.dumps({"NetworkId": "dom_match_cli", "TargetName": "Mars", "UserName": "unit"}) + "\n",
+                encoding="utf-8",
+            )
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_match_stereo_pair",
+                    return_value=fake_result,
+                ) as build_mock,
+                patch.object(sys, "stdout", stdout),
+            ):
+                controlnet_stereopair_main(
+                    [
+                        "from-dom-match",
+                        "left_dom.cub",
+                        "right_dom.cub",
+                        "left.cub",
+                        "right.cub",
+                        str(config_path),
+                        str(output_net),
+                        "--report-path",
+                        str(report_path),
+                        "--adaptive-routing",
+                        "--adaptive-routing-profile",
+                        "fast",
+                        "--adaptive-routing-deep-preset",
+                        "loftr=presets/loftr_external_outdoor.json",
+                    ]
+                )
+
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            expected_config = read_controlnet_config(config_path)
+
+        self.assertEqual(report["mode"], "from-dom-match")
+        self.assertEqual(report["routing_audit"]["selected_final_matcher"], "loftr")
+        self.assertEqual(
+            build_mock.call_args.args[:6],
+            ("left_dom.cub", "right_dom.cub", "left.cub", "right.cub", expected_config, Path(output_net)),
+        )
+        self.assertTrue(build_mock.call_args.kwargs["enable_adaptive_routing"])
+        self.assertEqual(build_mock.call_args.kwargs["adaptive_routing_profile"], "fast")
+        self.assertEqual(
+            build_mock.call_args.kwargs["adaptive_routing_deep_presets"],
+            {"loftr": "presets/loftr_external_outdoor.json"},
+        )
         json.dumps(json.loads(stdout.getvalue()))
 
     def test_run_pipeline_example_forwards_adaptive_routing_and_new_matching_options_from_config(self):

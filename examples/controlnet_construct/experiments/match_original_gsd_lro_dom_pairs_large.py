@@ -342,6 +342,16 @@ def _build_batch_command(
     if args.enable_low_resolution_offset_estimation:
         command.append("--enable-low-resolution-offset-estimation")
         command.extend(["--low-resolution-level", str(args.low_resolution_level)])
+    if args.deep_match_mode != "direct":
+        command.extend(["--deep-match-mode", args.deep_match_mode])
+        if args.deep_match_mode == "export":
+            temp_root = args.deep_match_temp_root_dir or (method_dir / "deep_match_workspaces")
+            command.extend(["--deep-match-temp-root-dir", str(temp_root)])
+        elif args.deep_match_mode == "import":
+            manifest_dir = args.deep_match_manifest_dir or (method_dir / "deep_match_workspaces")
+            command.extend(["--deep-match-manifest-dir", str(manifest_dir)])
+        manifest_summary = args.deep_match_manifest_summary or (method_dir / "deep_match_manifests.json")
+        command.extend(["--deep-match-manifest-summary", str(manifest_summary)])
     command.append("--")
     command.extend(
         [
@@ -491,6 +501,10 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--overlap-size-x", type=int, default=128)
     parser.add_argument("--overlap-size-y", type=int, default=128)
     parser.add_argument("--memory-profile", choices=("high-memory", "balanced", "low-memory"), default="low-memory")
+    parser.add_argument("--deep-match-mode", choices=("direct", "export", "import"), default="direct", help="Deep matcher handoff mode forwarded to the batch runner.")
+    parser.add_argument("--deep-match-temp-root-dir", type=Path, default=None, help="Workspace root for exported deep-match task manifests.")
+    parser.add_argument("--deep-match-manifest-dir", type=Path, default=None, help="Workspace root containing deep-match manifests for import mode.")
+    parser.add_argument("--deep-match-manifest-summary", type=Path, default=None, help="JSON summary of exported/imported deep-match manifests.")
     parser.add_argument("--skip-existing", action="store_true")
     parser.add_argument("--continue-on-error", action="store_true", help="Continue remaining methods if one method returns non-zero.")
     parser.add_argument("--dry-run", action="store_true", help="Prepare files and print commands without running matching.")

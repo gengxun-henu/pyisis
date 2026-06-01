@@ -1,0 +1,31 @@
+graph LR
+    subgraph DecisionSpace["<b>Routing Decision Space</b>"]
+        direction TB
+
+        subgraph SIFT_Region["<b>SIFT Region</b><br/>S ≤ 0.35, D ≤ 0.20<br/><i>Rich texture, similar lighting</i>"]
+            P1["Pair 1<br/>(S=0.28, D=0.12)<br/>Same-orbit"]
+            P2["Pair 2<br/>(S=0.32, D=0.18)<br/>Same-orbit"]
+        end
+
+        subgraph LightGlue_Region["<b>LightGlue Region</b><br/>0.35 < S < 0.65, D < 0.55<br/><i>Moderate conditions</i>"]
+            P3["Pair 3<br/>(S=0.48, D=0.32)<br/>Cross-track"]
+            P4["Pair 4<br/>(S=0.52, D=0.41)<br/>Cross-track"]
+        end
+
+        subgraph LoFTR_Region["<b>LoFTR Region</b><br/>S ≥ 0.65 or D ≥ 0.55<br/><i>Sparse texture or large illumination gap</i>"]
+            P5["Pair 5<br/>(S=0.71, D=0.38)<br/>Cross-track"]
+            P6["Pair 6<br/>(S=0.45, D=0.62)<br/>Cross-track"]
+        end
+    end
+
+    classDef sift fill:#1f77b4,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+    classDef lightglue fill:#ff7f0e,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+    classDef loftr fill:#d62728,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+
+    class P1,P2 sift
+    class P3,P4 lightglue
+    class P5,P6 loftr
+
+    style SIFT_Region fill:#e6f3ff,stroke:#1f77b4,stroke-width:2px
+    style LightGlue_Region fill:#fff0e6,stroke:#ff7f0e,stroke-width:2px
+    style LoFTR_Region fill:#ffe6e6,stroke:#d62728,stroke-width:2px

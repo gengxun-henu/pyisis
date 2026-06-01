@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-05-11
 Updated: 2026-05-19  Geng Xun added runtime-configured SuperPoint frontend options and explicit ignored-parameter tracking.
+Updated: 2026-05-30  Geng Xun made LoFTR mask tensors compatible with Torch/Kornia nearest-neighbor resizing.
 """
 
 from __future__ import annotations
@@ -571,7 +572,7 @@ class LoFTRFrontend:
         if invalid_mask is None:
             return None
         mask_array = ~np.asarray(invalid_mask, dtype=bool)
-        return self._torch.from_numpy(mask_array)[None, :, :].to(device)
+        return self._torch.from_numpy(mask_array.astype(np.float32, copy=False))[None, :, :].to(device)
 
 
 def normalize_deep_method(method: str) -> str:

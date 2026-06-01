@@ -1,0 +1,74 @@
+%% Figure 1: PyISIS Framework Architecture
+%% IEEE JSTARS Paper - PyISIS
+%% Render with: mmdc -i figure1_architecture.mmd -o figure1_architecture.pdf
+
+graph TB
+    subgraph Layer5["<b>Application Layer</b>"]
+        direction LR
+        App1["Image Matching<br/>Pipeline"]
+        App2["Adaptive<br/>Routing"]
+        App3["Control Network<br/>Construction"]
+        App4["Bundle<br/>Adjustment"]
+        App5["Custom<br/>Workflows"]
+    end
+
+    subgraph Layer4["<b>Python Package (isis_pybind v1.2.0)</b>"]
+        direction LR
+        PyPkg["Unified Python API<br/>Flat Namespace • NumPy Interoperability"]
+    end
+
+    subgraph Layer3["<b>Python Module Bindings (7 Modules)</b>"]
+        direction LR
+        M1["Core I/O<br/>(Cube, Brick)"]
+        M2["Camera Models<br/>(50+ missions)"]
+        M3["SPICE<br/>Navigation"]
+        M4["Control<br/>Network"]
+        M5["Projection<br/>(16 types)"]
+        M6["Photometry<br/>(Hapke, etc.)"]
+        M7["Shape<br/>Model"]
+    end
+
+    subgraph Layer2["<b>pybind11 Binding Layer</b>"]
+        direction LR
+        PB["37 C++ Source Files<br/>Type Conversion • Memory Management"]
+    end
+
+    subgraph Layer1["<b>USGS ISIS 9.0.0 (C++ Core)</b>"]
+        direction LR
+        ISIS["Planetary Image Processing Library<br/>Camera Models • SPICE • Bundle Adjustment"]
+    end
+
+    subgraph Ecosystem["<b>Python Ecosystem Integration</b>"]
+        direction TB
+        E1["NumPy"]
+        E2["OpenCV"]
+        E3["PyTorch"]
+        E4["Kornia"]
+    end
+
+    ISIS --> PB
+    PB --> M1 & M2 & M3 & M4 & M5 & M6 & M7
+    M1 & M2 & M3 & M4 & M5 & M6 & M7 --> PyPkg
+    PyPkg --> App1 & App2 & App3 & App4 & App5
+    PyPkg -.-> Ecosystem
+
+    classDef appStyle fill:#d62728,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+    classDef pythonStyle fill:#2ca02c,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+    classDef moduleStyle fill:#9467bd,stroke:#000,stroke-width:1.5px,color:#fff,font-weight:bold
+    classDef pybindStyle fill:#ff7f0e,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+    classDef cppStyle fill:#1f77b4,stroke:#000,stroke-width:2px,color:#fff,font-weight:bold
+    classDef ecoStyle fill:#8c564b,stroke:#000,stroke-width:1.5px,color:#fff,font-weight:bold
+
+    class App1,App2,App3,App4,App5 appStyle
+    class PyPkg pythonStyle
+    class M1,M2,M3,M4,M5,M6,M7 moduleStyle
+    class PB pybindStyle
+    class ISIS cppStyle
+    class E1,E2,E3,E4 ecoStyle
+
+    style Layer5 fill:#ffe6e6,stroke:#d62728,stroke-width:2px
+    style Layer4 fill:#e6ffe6,stroke:#2ca02c,stroke-width:2px
+    style Layer3 fill:#f0e6ff,stroke:#9467bd,stroke-width:2px
+    style Layer2 fill:#fff0e6,stroke:#ff7f0e,stroke-width:2px
+    style Layer1 fill:#e6f3ff,stroke:#1f77b4,stroke-width:2px
+    style Ecosystem fill:#f0e6e6,stroke:#8c564b,stroke-width:2px

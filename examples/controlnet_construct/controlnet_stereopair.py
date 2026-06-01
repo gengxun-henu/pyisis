@@ -525,6 +525,173 @@ def build_controlnets_for_dom_overlap_list(
     }
 
 
+def _extract_pair_control_point_count(pair_result: dict[str, object]) -> int:
+    controlnet_summary = pair_result.get("controlnet")
+    if isinstance(controlnet_summary, dict):
+        nested_controlnet = controlnet_summary.get("controlnet")
+        if isinstance(nested_controlnet, dict) and "point_count" in nested_controlnet:
+            return int(nested_controlnet["point_count"])
+        if "point_count" in controlnet_summary:
+            return int(controlnet_summary["point_count"])
+    raise KeyError("Unable to determine control point count from pair result.")
+
+
+def build_controlnets_for_dom_match_overlap_list(
+    overlap_list_path: str | Path,
+    original_list_path: str | Path,
+    dom_list_path: str | Path,
+    output_directory: str | Path,
+    config: ControlNetConfig,
+    *,
+    report_directory: str | Path | None = None,
+    pair_id_prefix: str = "S",
+    pair_id_start: int = 1,
+    pair_net_suffix: str = ".net",
+    matcher_method: str = "sift",
+    band: int = 1,
+    ratio_test: float = 0.75,
+    max_features: int | None = None,
+    show_progress: bool = False,
+    use_gpu: bool = False,
+    gpu_batch_size: int = 4,
+    gpu_dynamic_batch: bool = True,
+    gpu_min_batch_size: int = 2,
+    gpu_max_batch_size: int = 16,
+    num_worker_parallel_cpu: int = 8,
+    use_parallel_cpu: bool = True,
+    enable_adaptive_routing: bool = False,
+    adaptive_routing_profile: str = "balanced",
+    adaptive_routing_deep_presets: dict[str, str] | None = None,
+    deep_match_config_path: str | Path | None = None,
+    deep_match_mode: str = "direct",
+    write_match_visualization: bool = True,
+    match_visualization_output_dir: str | Path | None = None,
+    match_visualization_scale: float = 1.0 / 3.0,
+    merge_decimals: int = 3,
+    skip_merge: bool = False,
+    ransac_reproj_threshold: float = 3.0,
+    ransac_confidence: float = 0.995,
+    ransac_max_iters: int = 5000,
+    ransac_mode: str = "loose",
+    loose_ransac_keep_threshold: float = 1.0,
+    pvl_format: bool = True,
+    logger: logging.Logger | None = None,
+) -> dict[str, object]:
+    overlap_pairs = read_stereo_pair_list(overlap_list_path)
+    if not overlap_pairs:
+        raise ValueError("The overlap pair list is empty.")
+
+    dom_lookup = _build_dom_lookup(original_list_path, dom_list_path)
+    net_output_dir = Path(output_directory)
+    report_dir = Path(report_directory) if report_directory is not None else net_output_dir
+    match_visualization_dir = (
+        Path(match_visualization_output_dir) if match_visualization_output_dir is not None else None
+    )
+    net_output_dir.mkdir(parents=True, exist_ok=True)
+    report_dir.mkdir(parents=True, exist_ok=True)
+    if match_visualization_dir is not None:
+        match_visualization_dir.mkdir(parents=True, exist_ok=True)
+
+    pair_results: list[dict[str, object]] = []
+    pair_report_paths: list[str] = []
+    batch_pairs: list[dict[str, object]] = []
+    for index, pair in enumerate(overlap_pairs, start=1):
+        if pair.left not in dom_lookup or pair.right not in dom_lookup:
+            raise KeyError(
+                f"Unable to resolve DOM paths for stereo pair {pair.as_csv_line()} from the provided original/dom lists."
+            )
+
+        pair_id = _auto_batch_pair_id(index, prefix=pair_id_prefix, start=pair_id_start)
+        pair_output_net = net_output_dir / pair_controlnet_filename(pair, suffix=pair_net_suffix)
+        pair_report_path = report_dir / default_controlnet_report_path(pair_output_net).name
+        pair_config = replace(config, pair_id=pair_id)
+        if logger is not None and config.pair_id is not None:
+            logger.info(
+                "controlnet_stereopair DOM-match batch auto pair-id override: config_pair_id=%s generated_pair_id=%s pair=%s",
+                config.pair_id,
+                pair_id,
+                pair.as_csv_line(),
+            )
+
+        pair_result = build_controlnet_for_dom_match_stereo_pair(
+            dom_lookup[pair.left],
+            dom_lookup[pair.right],
+            pair.left,
+            pair.right,
+            pair_config,
+            pair_output_net,
+            matcher_method=matcher_method,
+            band=band,
+            ratio_test=ratio_test,
+            max_features=max_features,
+            show_progress=show_progress,
+            use_gpu=use_gpu,
+            gpu_batch_size=gpu_batch_size,
+            gpu_dynamic_batch=gpu_dynamic_batch,
+            gpu_min_batch_size=gpu_min_batch_size,
+            gpu_max_batch_size=gpu_max_batch_size,
+            num_worker_parallel_cpu=num_worker_parallel_cpu,
+            use_parallel_cpu=use_parallel_cpu,
+            enable_adaptive_routing=enable_adaptive_routing,
+            adaptive_routing_profile=adaptive_routing_profile,
+            adaptive_routing_deep_presets=adaptive_routing_deep_presets,
+            deep_match_config_path=deep_match_config_path,
+            deep_match_mode=deep_match_mode,
+            write_match_visualization=write_match_visualization,
+            match_visualization_output_dir=match_visualization_dir,
+            match_visualization_scale=match_visualization_scale,
+            merge_decimals=merge_decimals,
+            skip_merge=skip_merge,
+            ransac_reproj_threshold=ransac_reproj_threshold,
+            ransac_confidence=ransac_confidence,
+            ransac_max_iters=ransac_max_iters,
+            ransac_mode=ransac_mode,
+            loose_ransac_keep_threshold=loose_ransac_keep_threshold,
+            pvl_format=pvl_format,
+            logger=logger,
+        )
+        pair_result = {
+            "pair": pair.as_csv_line(),
+            "pair_id": pair_id,
+            **pair_result,
+        }
+        report_path = write_controlnet_result_report(pair_result, pair_output_net, report_path=pair_report_path)
+        pair_result = {
+            **pair_result,
+            "report_path": report_path,
+        }
+        pair_results.append(pair_result)
+        pair_report_paths.append(report_path)
+        batch_pairs.append(
+            {
+                "pair": pair.as_csv_line(),
+                "pair_id": pair_id,
+                "output_net": str(pair_output_net),
+                "report_path": report_path,
+                "control_point_count": _extract_pair_control_point_count(pair_result),
+            }
+        )
+
+    batch_report_path = report_dir / DEFAULT_BATCH_REPORT_NAME
+    batch_summary = write_batch_summary_report(
+        pair_results,
+        batch_report_path,
+        source_reports=pair_report_paths,
+    )
+    return {
+        "mode": "from-dom-match-batch",
+        "overlap_list_path": str(overlap_list_path),
+        "pair_count": len(overlap_pairs),
+        "pair_id_prefix": pair_id_prefix,
+        "pair_id_start": pair_id_start,
+        "output_directory": str(net_output_dir),
+        "report_directory": str(report_dir),
+        "batch_report_path": str(batch_report_path),
+        "pairs": batch_pairs,
+        "batch_summary": batch_summary,
+    }
+
+
 def read_controlnet_config(config_path: str | Path) -> ControlNetConfig:
     payload = json.loads(Path(config_path).read_text(encoding="utf-8"))
     network_id = _first_present(payload, "NetworkId", "network_id")

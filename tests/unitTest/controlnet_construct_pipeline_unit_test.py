@@ -7822,33 +7822,32 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     adaptive_routing_profile="strict",
                     adaptive_routing_deep_presets={"loftr": "presets/loftr_external_outdoor.json"},
                 )
-
-        self.assertEqual(build_mock.call_count, 2)
-        first_call = build_mock.call_args_list[0]
-        second_call = build_mock.call_args_list[1]
-        self.assertEqual(
-            first_call.args[:4],
-            ("left1_dom.cub", "right1_dom.cub", "left1.cub", "right1.cub"),
-        )
-        self.assertEqual(
-            second_call.args[:4],
-            ("left2_dom.cub", "right2_dom.cub", "left2.cub", "right2.cub"),
-        )
-        self.assertEqual(first_call.args[4].pair_id, "S4")
-        self.assertEqual(second_call.args[4].pair_id, "S5")
-        self.assertTrue(first_call.kwargs["enable_adaptive_routing"])
-        self.assertEqual(first_call.kwargs["adaptive_routing_profile"], "strict")
-        self.assertEqual(
-            first_call.kwargs["adaptive_routing_deep_presets"],
-            {"loftr": "presets/loftr_external_outdoor.json"},
-        )
-        self.assertEqual(summary["pair_count"], 2)
-        self.assertEqual(summary["pairs"][0]["pair_id"], "S4")
-        self.assertEqual(summary["pairs"][1]["pair_id"], "S5")
-        self.assertEqual(summary["pairs"][0]["control_point_count"], 5)
-        self.assertTrue(Path(summary["batch_report_path"]).exists())
-        self.assertTrue(Path(summary["pairs"][0]["report_path"]).exists())
-        self.assertTrue(Path(summary["pairs"][1]["report_path"]).exists())
+                self.assertEqual(build_mock.call_count, 2)
+                first_call = build_mock.call_args_list[0]
+                second_call = build_mock.call_args_list[1]
+                self.assertEqual(
+                    first_call.args[:4],
+                    ("left1_dom.cub", "right1_dom.cub", "left1.cub", "right1.cub"),
+                )
+                self.assertEqual(
+                    second_call.args[:4],
+                    ("left2_dom.cub", "right2_dom.cub", "left2.cub", "right2.cub"),
+                )
+                self.assertEqual(first_call.args[4].pair_id, "S4")
+                self.assertEqual(second_call.args[4].pair_id, "S5")
+                self.assertTrue(first_call.kwargs["enable_adaptive_routing"])
+                self.assertEqual(first_call.kwargs["adaptive_routing_profile"], "strict")
+                self.assertEqual(
+                    first_call.kwargs["adaptive_routing_deep_presets"],
+                    {"loftr": "presets/loftr_external_outdoor.json"},
+                )
+                self.assertEqual(summary["pair_count"], 2)
+                self.assertEqual(summary["pairs"][0]["pair_id"], "S4")
+                self.assertEqual(summary["pairs"][1]["pair_id"], "S5")
+                self.assertEqual(summary["pairs"][0]["control_point_count"], 5)
+                self.assertTrue(Path(summary["batch_report_path"]).exists())
+                self.assertTrue(Path(summary["pairs"][0]["report_path"]).exists())
+                self.assertTrue(Path(summary["pairs"][1]["report_path"]).exists())
 
     def test_controlnet_stereopair_cli_from_dom_batch_dispatches(self):
         fake_summary = {

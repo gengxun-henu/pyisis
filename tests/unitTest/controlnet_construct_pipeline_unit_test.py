@@ -91,6 +91,7 @@ from controlnet_construct.controlnet_stereopair import (
     ControlNetConfig,
     build_argument_parser as build_controlnet_stereopair_parser,
     build_controlnet_for_dom_match_stereo_pair,
+    build_controlnets_for_dom_match_overlap_list,
     build_controlnets_for_dom_overlap_list,
     build_controlnet_for_dom_stereo_pair,
     build_controlnet_for_stereo_pair,
@@ -7766,6 +7767,88 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     self.assertEqual(call_kwargs["preview_cache_source"], "visualization_cache")
                     self.assertTrue(call_kwargs["preview_force_regenerate"])
                     self.assertEqual(call_kwargs["preview_level"], 3)
+
+    def test_build_controlnets_for_dom_match_overlap_list_auto_assigns_pair_ids_and_writes_summary(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_match_batch",
+            target_name="Mars",
+            user_name="zmoratto",
+            point_id_prefix="CTX",
+            pair_id="CFG_SINGLE",
+        )
+        fake_pair_result = {
+            "mode": "from-dom-match",
+            "match": {"point_count": 5},
+            "routing_audit": {"selected_final_matcher": "loftr", "match_count": 5},
+            "controlnet": {
+                "mode": "from-dom",
+                "controlnet": {"point_count": 5, "measure_count": 10},
+            },
+        }
+
+        with temporary_directory() as temp_dir:
+            overlap_list_path = temp_dir / "images_overlap.lis"
+            overlap_list_path.write_text(
+                "left1.cub,right1.cub\nleft2.cub,right2.cub\n",
+                encoding="utf-8",
+            )
+            original_list_path = temp_dir / "original_images.lis"
+            original_list_path.write_text(
+                "left1.cub\nright1.cub\nleft2.cub\nright2.cub\n",
+                encoding="utf-8",
+            )
+            dom_list_path = temp_dir / "doms.lis"
+            dom_list_path.write_text(
+                "left1_dom.cub\nright1_dom.cub\nleft2_dom.cub\nright2_dom.cub\n",
+                encoding="utf-8",
+            )
+            output_dir = temp_dir / "pair_nets"
+            report_dir = temp_dir / "reports"
+
+            with patch(
+                "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_match_stereo_pair",
+                return_value=fake_pair_result,
+            ) as build_mock:
+                summary = build_controlnets_for_dom_match_overlap_list(
+                    overlap_list_path,
+                    original_list_path,
+                    dom_list_path,
+                    output_dir,
+                    config,
+                    report_directory=report_dir,
+                    pair_id_prefix="S",
+                    pair_id_start=4,
+                    enable_adaptive_routing=True,
+                    adaptive_routing_profile="strict",
+                    adaptive_routing_deep_presets={"loftr": "presets/loftr_external_outdoor.json"},
+                )
+
+        self.assertEqual(build_mock.call_count, 2)
+        first_call = build_mock.call_args_list[0]
+        second_call = build_mock.call_args_list[1]
+        self.assertEqual(
+            first_call.args[:4],
+            ("left1_dom.cub", "right1_dom.cub", "left1.cub", "right1.cub"),
+        )
+        self.assertEqual(
+            second_call.args[:4],
+            ("left2_dom.cub", "right2_dom.cub", "left2.cub", "right2.cub"),
+        )
+        self.assertEqual(first_call.args[4].pair_id, "S4")
+        self.assertEqual(second_call.args[4].pair_id, "S5")
+        self.assertTrue(first_call.kwargs["enable_adaptive_routing"])
+        self.assertEqual(first_call.kwargs["adaptive_routing_profile"], "strict")
+        self.assertEqual(
+            first_call.kwargs["adaptive_routing_deep_presets"],
+            {"loftr": "presets/loftr_external_outdoor.json"},
+        )
+        self.assertEqual(summary["pair_count"], 2)
+        self.assertEqual(summary["pairs"][0]["pair_id"], "S4")
+        self.assertEqual(summary["pairs"][1]["pair_id"], "S5")
+        self.assertEqual(summary["pairs"][0]["control_point_count"], 5)
+        self.assertTrue(Path(summary["batch_report_path"]).exists())
+        self.assertTrue(Path(summary["pairs"][0]["report_path"]).exists())
+        self.assertTrue(Path(summary["pairs"][1]["report_path"]).exists())
 
     def test_controlnet_stereopair_cli_from_dom_batch_dispatches(self):
         fake_summary = {

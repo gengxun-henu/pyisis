@@ -297,6 +297,33 @@ def _parse_adaptive_routing_deep_preset_entries(entries: list[str] | None) -> di
     return presets
 
 
+def _safe_mapping(value: object) -> dict[str, object]:
+    return dict(value) if isinstance(value, dict) else {}
+
+
+def _route_audit_from_match_summary(match_summary: dict[str, object]) -> dict[str, object]:
+    matcher = _safe_mapping(match_summary.get("matcher"))
+    adaptive = _safe_mapping(match_summary.get("adaptive_routing"))
+    requested_matcher = matcher.get("matcher_method_requested") or matcher.get("requested_matcher")
+    effective_matcher = matcher.get("matcher_method_effective") or matcher.get("effective_matcher")
+    selected_initial = adaptive.get("selected_initial_matcher") or adaptive.get("initial_matcher")
+    selected_final = adaptive.get("selected_final_matcher") or adaptive.get("final_matcher") or effective_matcher
+    return {
+        "requested_matcher": requested_matcher,
+        "effective_matcher": effective_matcher,
+        "adaptive_routing_profile": match_summary.get("adaptive_routing_profile"),
+        "adaptive_routing_status": adaptive.get("status"),
+        "selected_initial_matcher": selected_initial,
+        "selected_final_matcher": selected_final,
+        "fallback_chain": adaptive.get("fallback_chain"),
+        "cascade_steps": adaptive.get("cascade_steps"),
+        "quality_gate": adaptive.get("match_quality") or adaptive.get("quality_gate"),
+        "final_decision": adaptive.get("final_decision"),
+        "deep_match_config_path": match_summary.get("deep_match_config_path"),
+        "match_count": match_summary.get("point_count"),
+    }
+
+
 def _compose_point_id_namespace(config: ControlNetConfig) -> str:
     if config.pair_id is None:
         return config.point_id_prefix
@@ -1184,6 +1211,12 @@ def main(argv: list[str] | None = None) -> None:
             deep_match_config_path=args.deep_match_config_path,
             deep_match_mode="direct",
         )
+        if isinstance(match_result, tuple) and len(match_result) == 3:
+            match_summary = match_result[2]
+        else:
+            match_summary = match_result
+        if not isinstance(match_summary, dict):
+            raise TypeError("match_ori_pair_to_key_files must return a match summary mapping.")
         controlnet_result = build_controlnet_for_stereo_pair(
             left_output_key,
             right_output_key,
@@ -1195,7 +1228,10 @@ def main(argv: list[str] | None = None) -> None:
         )
         result = {
             "mode": "from-ori-match",
-            "match": match_result,
+            "match": match_summary,
+            "routing_audit": _route_audit_from_match_summary(match_summary),
+            "left_output_key": str(left_output_key),
+            "right_output_key": str(right_output_key),
             "controlnet": controlnet_result,
         }
     elif args.command == "from-dom":

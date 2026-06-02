@@ -243,6 +243,14 @@ The implementation should avoid switching environments per tile, per method, or 
   - classic tile matching for `sift_flann` groups still needs a batch runner path in `asp360_new`;
   - deep grouped manifest execution still occurs in the separate `deep-learning` environment;
   - imported deep results and classic results still need to be merged into one pair-level `.key` output with per-tile provenance.
+- Task 12 added the minimal helper layer for that boundary:
+  - `_run_classic_route_groups()` executes classic `asp360_new` tile groups through the existing tile matcher call boundary and summarizes group/task/match counts;
+  - `import_grouped_deep_match_manifest_results()` imports multiple grouped deep manifests and merges their keypoints into one pair-level keypoint set, with per-manifest route summaries;
+  - `_merge_classic_and_deep_tile_results()` merges classic `TileMatchResult` points and imported deep `KeypointFile` pairs into one final left/right keypoint pair.
+- The end-to-end orchestration is still intentionally not complete:
+  - export mode can group deep manifests and now has a classic execution helper, but it does not yet persist classic tile results across a later `deep-learning` run;
+  - CLI import mode still imports one manifest path by default;
+  - the next step should wire grouped manifest paths plus persisted classic results into a single import/merge workflow before any full 16-pair benchmark rerun.
 - Real-data geometry smoke must use a real ISISDATA tree, not the unit-test mock tree. With `ISISDATA=/media/gengxun/My Passport/data`, a single tile produced one fully projectable pair:
   - left DOM sample/line: `(2768.0, 1200.0)`;
   - right DOM sample/line: `(2768.0, 1143.0)`;

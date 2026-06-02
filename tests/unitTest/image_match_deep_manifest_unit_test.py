@@ -12,6 +12,7 @@ Updated: 2026-05-16  Geng Xun added import edge-case coverage for missing, faile
 from __future__ import annotations
 
 from dataclasses import replace
+import importlib
 import sys
 from pathlib import Path
 import unittest
@@ -556,6 +557,73 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
         self.assertAlmostEqual(left_key.points[0].line, 111.0)
         self.assertAlmostEqual(right_key.points[1].sample, 127.0)
         self.assertAlmostEqual(right_key.points[1].line, 138.0)
+
+    def test_import_grouped_deep_match_manifests_merges_multiple_routes(self):
+        image_match = importlib.import_module("image_match.image_match")
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_test_cube(temp_dir, name="left_group_import.cub", samples=128, lines=128, bands=1)
+            right_cube, right_path = make_test_cube(temp_dir, name="right_group_import.cub", samples=128, lines=128, bands=1)
+            left_cube.close()
+            right_cube.close()
+
+            route_inputs = [
+                ("sift_lightglue", "lightglue", _make_tile_task(left_start_x=0, left_start_y=0, right_start_x=10, right_start_y=10)),
+                ("loftr", "loftr", _make_tile_task(left_start_x=40, left_start_y=50, right_start_x=60, right_start_y=70)),
+            ]
+            manifest_paths = []
+            for route, matcher, task in route_inputs:
+                routed_task = tile_match_task_from_payload(
+                    {
+                        **tile_match_task_to_payload(task),
+                        "left_dom_path": str(left_path),
+                        "right_dom_path": str(right_path),
+                        "matcher_method": matcher,
+                        "route_metadata": {
+                            "selected_route": route,
+                            "selected_matcher": matcher,
+                            "selected_execution_environment": "deep-learning",
+                        },
+                    }
+                )
+                manifest = build_deep_match_pair_manifest(
+                    tasks=[routed_task],
+                    left_dom_path=left_path,
+                    right_dom_path=right_path,
+                    matcher_method=matcher,
+                    band=1,
+                    image_space="dom",
+                    temp_root_dir=temp_dir / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                    requested_device="cpu",
+                    pair_id=f"{route}_manifest",
+                )
+                write_deep_match_task_result(
+                    manifest.tasks[0],
+                    left_points=np.array([[1.0, 2.0]], dtype=np.float32),
+                    right_points=np.array([[3.0, 4.0]], dtype=np.float32),
+                    scores=np.array([0.9], dtype=np.float32),
+                    status="matched",
+                )
+                manifest_paths.append(write_deep_match_pair_manifest(manifest))
+
+            left_key, right_key, summary = image_match.import_grouped_deep_match_manifest_results(
+                manifest_paths,
+                left_dom_path=left_path,
+                right_dom_path=right_path,
+            )
+
+        self.assertEqual(summary["status"], "imported")
+        self.assertEqual(summary["point_count"], 2)
+        self.assertEqual(summary["deep_match_import"]["manifest_count"], 2)
+        self.assertEqual(summary["deep_match_import"]["imported_task_count"], 2)
+        self.assertEqual(
+            [manifest["selected_route"] for manifest in summary["deep_match_import"]["manifests"]],
+            ["sift_lightglue", "loftr"],
+        )
+        self.assertEqual(len(left_key.points), 2)
+        self.assertEqual(len(right_key.points), 2)
+        self.assertAlmostEqual(left_key.points[0].sample, 2.0)
+        self.assertAlmostEqual(left_key.points[1].sample, 42.0)
+        self.assertAlmostEqual(right_key.points[1].line, 75.0)
 
     def test_import_mode_reports_no_usable_results_when_all_tasks_missing_or_failed(self):
         with temporary_directory() as temp_dir:

@@ -6,7 +6,7 @@ Redesign the LRO NAC adaptive-routing benchmark so matcher selection can use til
 
 ## Current Status
 
-Status: implementation in progress in isolated worktree; Tasks 1-11 complete. Physical tile illumination metadata and per-tile route metadata are connected into the `image_match.py` runtime path, single-tile real-data geometry/routing smoke passed, and export-mode deep manifests are now grouped by per-tile selected route while classic SIFT+FLANN groups remain marked for `asp360_new`.
+Status: implementation in progress in isolated worktree; Tasks 1-12 complete. Physical tile illumination metadata and per-tile route metadata are connected into the `image_match.py` runtime path, single-tile real-data geometry/routing smoke passed, export-mode deep manifests are grouped by per-tile selected route, and minimal mixed-route helper coverage now exists for classic `asp360_new` execution, grouped deep manifest import, and classic+deep keypoint merging.
 
 The previous polar adaptive-routing plan remains useful as baseline context, but this is a new architecture task because illumination evidence, tile routing, deep-learning manifest grouping, reporting, and paper figures all need changes.
 
@@ -129,6 +129,7 @@ Status: executing
 - [x] Task 9 follow-up: run single-tile real-data physical illumination smoke.
 - [x] Task 10: connect per-tile texture/keypoint evidence to physical illumination route metadata.
 - [x] Task 11: use per-tile route metadata to group matcher execution for classic/deep batches.
+- [x] Task 12: implement minimal mixed route classic execution, grouped deep import, and classic+deep key merge helpers.
 
 ## Key Decisions
 

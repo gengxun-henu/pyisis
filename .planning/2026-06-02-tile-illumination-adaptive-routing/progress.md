@@ -182,3 +182,23 @@
   - result: OK.
   - `git status --short -- .gitignore print.prt`
   - result: no output; neither file is modified in the Task 11 worktree.
+- Completed Task 12 minimal mixed-route execution/import/merge helpers:
+  - added `_run_classic_route_groups()` so routed `sift_flann`/classic groups can execute in `asp360_new` through the existing tile matcher path;
+  - added `import_grouped_deep_match_manifest_results()` to import multiple grouped deep manifests and combine their points into one pair-level keypoint set;
+  - added `_merge_classic_and_deep_tile_results()` to combine classic `TileMatchResult` output and imported deep `KeypointFile` pairs into one left/right pair-level key set;
+  - kept this as a minimal helper-level implementation and did not run full real-data benchmarks.
+- Task 12 TDD coverage:
+  - red: `test_run_classic_route_groups_executes_sift_flann_in_asp360_new` initially failed with missing `_run_classic_route_groups`, then passed after implementation;
+  - red: `test_import_grouped_deep_match_manifests_merges_multiple_routes` initially failed with missing `import_grouped_deep_match_manifest_results`, then passed after implementation;
+  - red: `test_merge_classic_and_deep_tile_results_writes_one_pair_key_set` initially failed with missing `_merge_classic_and_deep_tile_results`, then passed after implementation.
+- Task 12 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 52 tests OK.
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 16 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+  - `git diff --check`
+  - result: OK.
+  - `git status --short -- .gitignore print.prt`
+  - result: no output; neither file is modified in the Task 12 worktree.

@@ -1986,6 +1986,95 @@ def _group_tile_tasks_by_selected_route(tile_tasks: list[TileMatchTask]) -> dict
     }
 
 
+def _run_classic_route_groups(
+    classic_groups: list[dict[str, object]],
+    *,
+    left_cube: object,
+    right_cube: object,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+    match_task: Callable[..., TileMatchResult] | None = None,
+) -> tuple[list[TileMatchResult], dict[str, object]]:
+    resolved_match_task = match_task or tile_matching_module._match_tile_task_with_open_cubes
+    results: list[TileMatchResult] = []
+    group_summaries: list[dict[str, object]] = []
+    for group in classic_groups:
+        tasks = list(group.get("tasks", []))
+        group_results: list[TileMatchResult] = []
+        for task in tasks:
+            result = resolved_match_task(
+                task,
+                left_cube=left_cube,
+                right_cube=right_cube,
+                left_invalid_values=left_invalid_values,
+                right_invalid_values=right_invalid_values,
+            )
+            group_results.append(result)
+            results.append(result)
+        group_summaries.append(
+            {
+                "execution_environment": "asp360_new",
+                "selected_route": group.get("selected_route"),
+                "selected_matcher": group.get("selected_matcher"),
+                "task_count": len(tasks),
+                "executed_task_count": len(group_results),
+                "matched_task_count": sum(1 for result in group_results if result.stats.status == "matched"),
+                "match_count": sum(int(result.stats.match_count) for result in group_results),
+            }
+        )
+
+    return results, {
+        "status": "executed_classic_route_groups" if results else "no_classic_route_groups",
+        "execution_environment": "asp360_new",
+        "group_count": len(group_summaries),
+        "task_count": sum(int(group.get("task_count", 0)) for group in group_summaries),
+        "executed_task_count": len(results),
+        "matched_task_count": sum(1 for result in results if result.stats.status == "matched"),
+        "match_count": sum(int(result.stats.match_count) for result in results),
+        "groups": group_summaries,
+    }
+
+
+def _merge_classic_and_deep_tile_results(
+    *,
+    left_image_width: int,
+    left_image_height: int,
+    right_image_width: int,
+    right_image_height: int,
+    classic_tile_results: list[TileMatchResult] | tuple[TileMatchResult, ...] = (),
+    deep_key_files: list[tuple[KeypointFile, KeypointFile]] | tuple[tuple[KeypointFile, KeypointFile], ...] = (),
+) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
+    left_points: list[Keypoint] = []
+    right_points: list[Keypoint] = []
+    for result in classic_tile_results:
+        left_points.extend(result.left_points)
+        right_points.extend(result.right_points)
+
+    classic_point_count = len(left_points)
+    for left_key_file, right_key_file in deep_key_files:
+        if (
+            left_key_file.image_width != int(left_image_width)
+            or left_key_file.image_height != int(left_image_height)
+            or right_key_file.image_width != int(right_image_width)
+            or right_key_file.image_height != int(right_image_height)
+        ):
+            raise ValueError("Deep key files must match the target pair image dimensions.")
+        left_points.extend(left_key_file.points)
+        right_points.extend(right_key_file.points)
+
+    deep_point_count = len(left_points) - classic_point_count
+    left_key_file = KeypointFile(int(left_image_width), int(left_image_height), tuple(left_points))
+    right_key_file = KeypointFile(int(right_image_width), int(right_image_height), tuple(right_points))
+    return left_key_file, right_key_file, {
+        "status": "merged_mixed_route_results" if left_points else "merged_no_points",
+        "point_count": len(left_points),
+        "classic_point_count": classic_point_count,
+        "deep_point_count": deep_point_count,
+        "classic_tile_result_count": len(classic_tile_results),
+        "deep_key_file_pair_count": len(deep_key_files),
+    }
+
+
 def _dom_source_metadata_summary(
     *,
     left_dom_path: str | Path,
@@ -3006,6 +3095,141 @@ def import_deep_match_manifest_results(
             "status": import_status,
             "reason": "Imported standardized deep-learning match results from a manifest workspace.",
         },
+    }
+    return left_key_file, right_key_file, summary
+
+
+def _selected_route_from_import_summary(summary: dict[str, object]) -> str | None:
+    deep_import = summary.get("deep_match_import")
+    if isinstance(deep_import, dict):
+        tasks = deep_import.get("tasks")
+        if isinstance(tasks, list):
+            for task in tasks:
+                if not isinstance(task, dict):
+                    continue
+                metadata = task.get("metadata")
+                if isinstance(metadata, dict):
+                    route = metadata.get("selected_route")
+                    if route not in (None, ""):
+                        return str(route)
+    return None
+
+
+def _selected_route_from_manifest(manifest_path: str | Path) -> str | None:
+    manifest = read_deep_match_pair_manifest(manifest_path)
+    route = manifest.metadata.get("selected_route")
+    if route not in (None, ""):
+        return str(route)
+    for record in manifest.tasks:
+        route_metadata = getattr(record, "route_metadata", None)
+        if isinstance(route_metadata, dict):
+            route = route_metadata.get("selected_route")
+            if route not in (None, ""):
+                return str(route)
+    return None
+
+
+def import_grouped_deep_match_manifest_results(
+    manifest_paths: list[str | Path] | tuple[str | Path, ...],
+    *,
+    left_dom_path: str | Path | None = None,
+    right_dom_path: str | Path | None = None,
+) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
+    """Import multiple grouped deep-match manifests into one pair-level key set."""
+
+    imported_left: list[Keypoint] = []
+    imported_right: list[Keypoint] = []
+    manifest_summaries: list[dict[str, object]] = []
+    left_dimensions: tuple[int, int] | None = None
+    right_dimensions: tuple[int, int] | None = None
+    imported_task_count = 0
+    failed_task_count = 0
+    missing_result_count = 0
+    skipped_empty_task_count = 0
+
+    for manifest_path in manifest_paths:
+        left_key_file, right_key_file, summary = import_deep_match_manifest_results(
+            manifest_path,
+            left_dom_path=left_dom_path,
+            right_dom_path=right_dom_path,
+        )
+        current_left_dimensions = (left_key_file.image_width, left_key_file.image_height)
+        current_right_dimensions = (right_key_file.image_width, right_key_file.image_height)
+        if left_dimensions is None:
+            left_dimensions = current_left_dimensions
+            right_dimensions = current_right_dimensions
+        elif left_dimensions != current_left_dimensions or right_dimensions != current_right_dimensions:
+            raise ValueError("Grouped deep manifest imports must target the same left/right image dimensions.")
+
+        imported_left.extend(left_key_file.points)
+        imported_right.extend(right_key_file.points)
+        deep_import = dict(summary.get("deep_match_import", {}))
+        imported_task_count += int(deep_import.get("imported_task_count", 0) or 0)
+        failed_task_count += int(deep_import.get("failed_task_count", 0) or 0)
+        missing_result_count += int(deep_import.get("missing_result_count", 0) or 0)
+        skipped_empty_task_count += int(deep_import.get("skipped_empty_task_count", 0) or 0)
+        route = _selected_route_from_import_summary(summary) or _selected_route_from_manifest(manifest_path)
+        manifest_summaries.append(
+            {
+                "manifest_path": str(Path(manifest_path).expanduser().resolve()),
+                "selected_route": route,
+                "status": summary.get("status"),
+                "point_count": summary.get("point_count", 0),
+                "task_count": deep_import.get("task_count", 0),
+                "imported_task_count": deep_import.get("imported_task_count", 0),
+                "failed_task_count": deep_import.get("failed_task_count", 0),
+                "missing_result_count": deep_import.get("missing_result_count", 0),
+                "skipped_empty_task_count": deep_import.get("skipped_empty_task_count", 0),
+            }
+        )
+
+    if left_dimensions is None:
+        if left_dom_path is None or right_dom_path is None:
+            raise ValueError("Grouped deep manifest import requires at least one manifest or explicit DOM paths.")
+        left_cube = ip.Cube()
+        right_cube = ip.Cube()
+        left_cube.open(str(left_dom_path), "r")
+        right_cube.open(str(right_dom_path), "r")
+        try:
+            left_dimensions = (left_cube.sample_count(), left_cube.line_count())
+            right_dimensions = (right_cube.sample_count(), right_cube.line_count())
+        finally:
+            if left_cube.is_open():
+                left_cube.close()
+            if right_cube.is_open():
+                right_cube.close()
+
+    total_issue_count = failed_task_count + missing_result_count
+    status = "imported" if imported_left else "imported_no_points"
+    if total_issue_count and imported_task_count:
+        status = "imported_with_missing_or_failed_tasks"
+    elif total_issue_count and not imported_task_count:
+        status = "import_failed_no_usable_results"
+
+    left_key_file = KeypointFile(left_dimensions[0], left_dimensions[1], tuple(imported_left))
+    right_key_file = KeypointFile(right_dimensions[0], right_dimensions[1], tuple(imported_right))
+    summary = {
+        "left_dom": str(left_dom_path) if left_dom_path is not None else None,
+        "right_dom": str(right_dom_path) if right_dom_path is not None else None,
+        "image_space": "dom",
+        "status": status,
+        "reason": "Imported grouped deep-learning match results from multiple manifest workspaces.",
+        "point_count": len(imported_left),
+        "left_image_width": left_key_file.image_width,
+        "left_image_height": left_key_file.image_height,
+        "right_image_width": right_key_file.image_width,
+        "right_image_height": right_key_file.image_height,
+        "deep_match_mode": "import_grouped",
+        "deep_match_import": {
+            "manifest_count": len(manifest_summaries),
+            "manifests": manifest_summaries,
+            "imported_task_count": imported_task_count,
+            "failed_task_count": failed_task_count,
+            "missing_result_count": missing_result_count,
+            "skipped_empty_task_count": skipped_empty_task_count,
+            "imported_match_count": len(imported_left),
+        },
+        "deep_match_export": None,
     }
     return left_key_file, right_key_file, summary
 

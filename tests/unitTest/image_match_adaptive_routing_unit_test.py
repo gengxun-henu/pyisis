@@ -777,6 +777,138 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(tasks[0].route_metadata["selected_route"], "sift_flann")
         self.assertEqual(tasks[1].route_metadata["deep_match_config_path"], "loftr.json")
 
+    def test_run_classic_route_groups_executes_sift_flann_in_asp360_new(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.keypoints import Keypoint
+        from image_match.tile_matching import PairedTileWindow, TileMatchResult, TileMatchStats, TileMatchTask
+        from image_match.tiling import TileWindow
+
+        task = TileMatchTask(
+            left_dom_path="left.cub",
+            right_dom_path="right.cub",
+            band=1,
+            paired_window=PairedTileWindow(
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+            ),
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            invalid_values=(),
+            special_pixel_abs_threshold=1.0e38,
+            min_valid_pixels=4,
+            valid_pixel_percent_threshold=0.0,
+            invalid_pixel_radius=0,
+            ratio_test=0.75,
+            matcher_method="flann",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+            route_metadata={
+                "tile_index": 0,
+                "selected_route": "sift_flann",
+                "selected_matcher": "flann",
+                "selected_execution_environment": "asp360_new",
+            },
+        )
+        groups = image_match._group_tile_tasks_by_selected_route([task])
+        executed: list[str] = []
+
+        def fake_match_task(task: TileMatchTask, **kwargs: object) -> TileMatchResult:
+            executed.append(task.route_metadata["selected_route"])
+            return TileMatchResult(
+                stats=TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=16,
+                    height=16,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=256,
+                    right_valid_pixel_count=256,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=12,
+                    right_feature_count=11,
+                    match_count=1,
+                    status="matched",
+                ),
+                left_points=(Keypoint(sample=2.0, line=3.0),),
+                right_points=(Keypoint(sample=4.0, line=5.0),),
+            )
+
+        results, summary = image_match._run_classic_route_groups(
+            groups["classic"],
+            left_cube=object(),
+            right_cube=object(),
+            left_invalid_values=(),
+            right_invalid_values=(),
+            match_task=fake_match_task,
+        )
+
+        self.assertEqual(executed, ["sift_flann"])
+        self.assertEqual(len(results), 1)
+        self.assertEqual(summary["execution_environment"], "asp360_new")
+        self.assertEqual(summary["group_count"], 1)
+        self.assertEqual(summary["executed_task_count"], 1)
+        self.assertEqual(summary["matched_task_count"], 1)
+        self.assertEqual(summary["groups"][0]["selected_route"], "sift_flann")
+
+    def test_merge_classic_and_deep_tile_results_writes_one_pair_key_set(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.keypoints import Keypoint, KeypointFile
+        from image_match.tile_matching import TileMatchResult, TileMatchStats
+
+        classic_result = TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=0,
+                local_start_y=0,
+                width=16,
+                height=16,
+                left_start_x=0,
+                left_start_y=0,
+                right_start_x=0,
+                right_start_y=0,
+                left_valid_pixel_count=256,
+                right_valid_pixel_count=256,
+                left_valid_pixel_ratio=1.0,
+                right_valid_pixel_ratio=1.0,
+                left_feature_count=10,
+                right_feature_count=10,
+                match_count=1,
+                status="matched",
+            ),
+            left_points=(Keypoint(sample=2.0, line=3.0),),
+            right_points=(Keypoint(sample=4.0, line=5.0),),
+        )
+        deep_left = KeypointFile(128, 96, (Keypoint(sample=20.0, line=30.0),))
+        deep_right = KeypointFile(160, 112, (Keypoint(sample=40.0, line=50.0),))
+
+        left_key, right_key, summary = image_match._merge_classic_and_deep_tile_results(
+            left_image_width=128,
+            left_image_height=96,
+            right_image_width=160,
+            right_image_height=112,
+            classic_tile_results=[classic_result],
+            deep_key_files=[(deep_left, deep_right)],
+        )
+
+        self.assertEqual(left_key.image_width, 128)
+        self.assertEqual(right_key.image_height, 112)
+        self.assertEqual(len(left_key.points), 2)
+        self.assertEqual(len(right_key.points), 2)
+        self.assertEqual(left_key.points[0].sample, 2.0)
+        self.assertEqual(left_key.points[1].sample, 20.0)
+        self.assertEqual(summary["point_count"], 2)
+        self.assertEqual(summary["classic_point_count"], 1)
+        self.assertEqual(summary["deep_point_count"], 1)
+
     def test_build_physical_tile_illumination_metadata_samples_tiles_with_projectors(self):
         image_match = importlib.import_module("image_match.image_match")
         from image_match.tile_matching import PairedTileWindow

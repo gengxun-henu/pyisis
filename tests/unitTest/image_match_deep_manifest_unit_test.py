@@ -11,7 +11,7 @@ Updated: 2026-05-16  Geng Xun added import edge-case coverage for missing, faile
 
 from __future__ import annotations
 
-from dataclasses import replace
+from dataclasses import dataclass, replace
 import importlib
 import sys
 from pathlib import Path
@@ -49,6 +49,19 @@ from image_match.deep_match_manifest import (
 from image_match.image_match import build_argument_parser, match_dom_pair_to_key_files
 from image_match.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
 from image_match.tile_matching import PairedTileWindow, TileMatchTask, TileWindow, tile_match_task_from_payload, tile_match_task_to_payload
+
+
+@dataclass(frozen=True)
+class _RuntimeConfigForTest:
+    matcher_method: str
+    feature_extractor_method: str
+    prefer_gpu: bool
+    device_dtype: str
+    fallback_on_error: str | None
+    matcher_options: dict[str, object]
+    feature_options: dict[str, object]
+    device_options: dict[str, object]
+    raw_config: dict[str, object]
 
 
 def _build_textured_test_image(width: int, height: int) -> np.ndarray:
@@ -433,6 +446,106 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
             self.assertGreater(len(manifest.tasks), 0)
             self.assertTrue(Path(manifest.tasks[0].left_image_path).exists())
             self.assertTrue(Path(manifest.tasks[0].right_mask_path).exists())
+
+    def test_match_dom_pair_to_key_files_export_mode_ignores_empty_grouped_import_args(self):
+        width = 96
+        height = 96
+        image = _build_textured_test_image(width, height)
+
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_test_cube(temp_dir, name="left_export_cli_defaults.cub", samples=width, lines=height, bands=1)
+            right_cube, right_path = make_test_cube(temp_dir, name="right_export_cli_defaults.cub", samples=width, lines=height, bands=1)
+            try:
+                _write_array_to_cube(left_cube, image)
+                _write_array_to_cube(right_cube, image)
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
+            finally:
+                left_cube.close()
+                right_cube.close()
+
+            result = match_dom_pair_to_key_files(
+                left_path,
+                right_path,
+                temp_dir / "left_export_cli_defaults.key",
+                temp_dir / "right_export_cli_defaults.key",
+                matcher_method="lightglue",
+                deep_match_mode="export",
+                deep_match_temp_root_dir=temp_dir / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                grouped_deep_match_manifests=[],
+                classic_left_key=None,
+                classic_right_key=None,
+                write_match_visualization=False,
+                max_image_dimension=64,
+                block_width=64,
+                block_height=64,
+                overlap_x=16,
+                overlap_y=16,
+                min_valid_pixels=32,
+            )
+
+        self.assertEqual(result["status"], "exported_for_deep_learning")
+        self.assertTrue(result["export_only"])
+
+    def test_export_deep_match_tile_tasks_overrides_stale_task_runtime_config(self):
+        image_match = importlib.import_module("image_match.image_match")
+        stale_lightglue_config = _RuntimeConfigForTest(
+            matcher_method="lightglue",
+            feature_extractor_method="lightglue_sift",
+            prefer_gpu=True,
+            device_dtype="float32",
+            fallback_on_error="sift_flann",
+            matcher_options={"backend": "official"},
+            feature_options={"max_features": 1000},
+            device_options={"prefer_gpu": True},
+            raw_config={"matcher": {"method": "lightglue"}},
+        )
+        loftr_config = _RuntimeConfigForTest(
+            matcher_method="loftr",
+            feature_extractor_method="loftr",
+            prefer_gpu=True,
+            device_dtype="float32",
+            fallback_on_error="sift_flann",
+            matcher_options={"pretrained": "outdoor"},
+            feature_options={},
+            device_options={"prefer_gpu": True},
+            raw_config={"matcher": {"method": "loftr"}},
+        )
+        task = replace(
+            _make_tile_task(matcher_method="loftr"),
+            deep_match_runtime_config=stale_lightglue_config,
+        )
+
+        with temporary_directory() as temp_dir:
+            tile_summaries, summary = image_match._export_deep_match_tile_tasks(
+                left_dom_path=temp_dir / "left.cub",
+                right_dom_path=temp_dir / "right.cub",
+                image_space="dom",
+                left_cube=object(),
+                right_cube=object(),
+                tile_tasks=[task],
+                band=1,
+                left_invalid_values=(),
+                right_invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=16,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                use_gpu=False,
+                deep_match_temp_root_dir=temp_dir / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                selected_route="loftr",
+                selected_matcher="loftr",
+                deep_match_config_path=temp_dir / "loftr_default.json",
+                deep_match_runtime_config=loftr_config,
+                read_window=lambda _cube, _window, *, band: _build_textured_test_image(64, 64),
+            )
+            manifest = read_deep_match_pair_manifest(summary["manifest_path"])
+
+        self.assertEqual(len(tile_summaries), 1)
+        self.assertEqual(len(manifest.tasks), 1)
+        self.assertEqual(manifest.tasks[0].matcher_method, "loftr")
+        self.assertEqual(manifest.tasks[0].deep_match_runtime_config["matcher_method"], "loftr")
+        self.assertEqual(manifest.tasks[0].feature_extractor_method, "loftr")
 
     def test_match_dom_pair_to_key_files_import_mode_writes_offset_key_files_from_npz_results(self):
         with temporary_directory() as temp_dir:

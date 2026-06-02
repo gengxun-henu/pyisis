@@ -60,7 +60,7 @@ Updated: 2026-05-27  Geng Xun clarified worker-local parallel tile cache metadat
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from datetime import datetime
 import json
 import math
@@ -2566,8 +2566,20 @@ def _export_deep_match_tile_tasks(
 ) -> tuple[list[TileMatchStats], dict[str, object]]:
     image_backend = build_image_backend(image_space)
     resolved_read_window = read_window or (lambda cube, window, *, band: _read_cube_window(cube, window, band=band))
+    export_tasks = [
+        replace(
+            task,
+            matcher_method=selected_matcher,
+            deep_match_runtime_config=(
+                deep_match_runtime_config
+                if deep_match_runtime_config is not None
+                else task.deep_match_runtime_config
+            ),
+        )
+        for task in tile_tasks
+    ]
     manifest = build_deep_match_pair_manifest(
-        tasks=tile_tasks,
+        tasks=export_tasks,
         left_dom_path=left_dom_path,
         right_dom_path=right_dom_path,
         matcher_method=selected_matcher,
@@ -2588,7 +2600,7 @@ def _export_deep_match_tile_tasks(
         created_by_python=sys.executable,
         metadata={
             "export_source": "image_match.match_dom_pair.grouped_tile_routes",
-            "candidate_tile_count": len(tile_tasks),
+            "candidate_tile_count": len(export_tasks),
             "selected_route": selected_route,
             "selected_matcher": selected_matcher,
             "deep_match_config_path": (
@@ -4463,6 +4475,11 @@ def match_dom_pair_to_key_files(
             metadata_output=metadata_output,
             left_output_key=left_output_key,
         )
+    grouped_deep_match_manifests = tuple(kwargs.pop("grouped_deep_match_manifests", ()) or ())
+    classic_left_key = kwargs.pop("classic_left_key", None)
+    classic_right_key = kwargs.pop("classic_right_key", None)
+    if grouped_deep_match_manifests or classic_left_key is not None or classic_right_key is not None:
+        raise ValueError("grouped/classic mixed-route import arguments require deep_match_mode='import'.")
     if "low_resolution_output_dir" not in kwargs or kwargs.get("low_resolution_output_dir") is None:
         kwargs["low_resolution_output_dir"] = _default_low_resolution_output_dir(
             left_dom_path,

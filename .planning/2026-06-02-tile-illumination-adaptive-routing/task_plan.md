@@ -131,6 +131,7 @@ Status: executing
 - [x] Task 11: use per-tile route metadata to group matcher execution for classic/deep batches.
 - [x] Task 12: implement minimal mixed route classic execution, grouped deep import, and classic+deep key merge helpers.
 - [x] Task 13: wire mixed-route export/import workflow so persisted classic results and grouped deep manifests merge into final `.key` outputs.
+- [x] Task 14: run a small real-data export/deep/import smoke on one LRO NAC pair and fix mixed-route manifest integration issues found by the smoke.
 
 ## Key Decisions
 
@@ -170,3 +171,6 @@ Status: executing
 | Left rich-tile center projected from DOM to ground but failed `source_ground_map.set_universal_ground` in the source cube | 1 | Recorded as an important design boundary: a representative point must be DOM-valid and source-camera-projectable, not only DOM-valid. The right tile completed the full geometry/solar chain. |
 | Real-data Task 9 smoke with mock ISISDATA failed to initialize source camera | 1 | Re-ran with `ISISDATA=/media/gengxun/My Passport/data`, which provides `base/dems/ldem_128ppd_Mar2011_clon180_radius_pad.cub`. |
 | First single-tile geometry smoke used the wrong 33x33 window origin | 1 | Recomputed the 0-based tile origin so the center maps to the known projectable samples: left `(2768,1200)` and right `(2768,1143)`. |
+| Real-data Task 14 export failed with `match_dom_pair() got an unexpected keyword argument 'grouped_deep_match_manifests'` | 1 | Added a regression test and stopped non-import CLI mixed-route arguments from leaking into `match_dom_pair()`. |
+| Real-data Task 14 LoFTR grouped manifest had top-level LoFTR config but task-level SIFT+LightGlue runtime config | 1 | Added a regression test and rewrote deep export tile tasks to use the selected route matcher/runtime config before manifest construction. |
+| Task 14 LoFTR CPU smoke on the full 2048x2048 exported tile exited without NPZ/log output | 1 | Treated this as a smoke-size/resource issue; used a 512x512 crop from the real exported tile for the deep-learning NPZ/import smoke. |

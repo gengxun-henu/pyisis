@@ -261,6 +261,23 @@ The implementation should avoid switching environments per tile, per method, or 
   - verify the deep-learning runner accepts each grouped manifest and writes NPZ files;
   - verify the returned import command uses the persisted classic key paths and all grouped manifest paths;
   - only then rerun the selected 16-pair benchmark.
+- Task 14 real-data smoke completed the grouped deep export -> deep-learning NPZ -> import `.key` loop on a reduced real LRO NAC pair:
+  - output root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_mixed_route_smoke_20260603`;
+  - export route distribution for `dom_REDUCED_M110860982RE.cub` vs `dom_REDUCED_M110881352RE.cub`: `{"loftr": 12}`;
+  - grouped LoFTR export produced 7 valid task arrays and skipped 5 invalid/nonprojectable tasks;
+  - a 512x512 real-data crop smoke in `deep-learning` produced 236 LoFTR matches with `invalid_mask_removed_count=0`;
+  - import returned `status=merged_mixed_route_results` and wrote 236-point `final_512_left.key` / `final_512_right.key`.
+- The Task 14 smoke did not naturally produce classic `sift_flann` key files:
+  - the first sparse-consistent pair routed all 12 tiles to LoFTR;
+  - a second rich-consistent pair with 4096 tiles also routed all 4 tiles to LoFTR;
+  - this suggests the current hard keypoint/sparseness rules are conservative on the tested real DOMs, or the current texture evidence still underestimates usable SIFT texture after radiometric masking.
+- Two real integration defects were fixed before full benchmark:
+  - CLI default mixed-import args were leaking into non-import `match_dom_pair()`;
+  - grouped LoFTR manifests had correct top-level route config but stale SIFT+LightGlue task-level runtime config, which caused the deep-learning runner to reject the manifest.
+- LoFTR smoke size matters:
+  - the full 2048x2048 LoFTR task exited without NPZ/log output on CPU;
+  - the 512x512 real crop completed successfully;
+  - full benchmark execution should either use smaller deep tiles, GPU, or a guarded per-task size policy before running many LoFTR tasks.
 - Real-data geometry smoke must use a real ISISDATA tree, not the unit-test mock tree. With `ISISDATA=/media/gengxun/My Passport/data`, a single tile produced one fully projectable pair:
   - left DOM sample/line: `(2768.0, 1200.0)`;
   - right DOM sample/line: `(2768.0, 1143.0)`;

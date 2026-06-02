@@ -368,8 +368,8 @@ class ControlNetConstructFoundationUnitTest(unittest.TestCase):
         self.assertTrue(any(tile.end_y == 2100 for tile in tiles))
 
     def test_requires_tiling_uses_default_threshold(self):
-        self.assertFalse(requires_tiling(3000, 3000))
-        self.assertTrue(requires_tiling(3001, 3000))
+        self.assertFalse(requires_tiling(1024, 1024))
+        self.assertTrue(requires_tiling(1025, 1024))
 
     def test_stretch_to_byte_excludes_invalid_values_from_statistics(self):
         values = np.array([

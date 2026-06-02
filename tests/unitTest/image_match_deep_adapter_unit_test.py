@@ -578,6 +578,36 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
         self.assertEqual(len(result.right_keypoints), 2)
         self.assertEqual(len(result.matches), 2)
 
+    def test_match_pair_short_circuits_blank_all_invalid_official_sift_tile(self):
+        runtime = SimpleNamespace(
+            prefer_gpu=False,
+            matcher_method="lightglue",
+            feature_extractor_method="lightglue_sift",
+            matcher_options={"backend": "official"},
+            feature_options={"max_features": 1000},
+            device_options={"prefer_gpu": False, "dtype": "float32"},
+        )
+        adapter = DeepMatcherAdapter(prefer_gpu=False, runtime_config=runtime)
+
+        with mock.patch(
+            "image_match.deep_adapter.OfficialLightGlueFrontend",
+            side_effect=AssertionError("blank all-invalid tiles should not invoke official SIFT extraction"),
+        ), mock.patch(
+            "image_match.deep_adapter.build_deep_matcher",
+            side_effect=AssertionError("blank all-invalid tiles should not invoke LightGlue matching"),
+        ):
+            result = adapter.match_pair(
+                matcher_method="lightglue",
+                left_image=np.zeros((512, 512), dtype=np.uint8),
+                right_image=np.zeros((512, 512), dtype=np.uint8),
+                left_mask=np.zeros((512, 512), dtype=np.uint8),
+                right_mask=np.zeros((512, 512), dtype=np.uint8),
+            )
+
+        self.assertEqual(len(result.left_keypoints), 0)
+        self.assertEqual(len(result.right_keypoints), 0)
+        self.assertEqual(len(result.matches), 0)
+
     def test_match_pair_passes_prepared_loftr_masks_into_matcher(self):
         adapter = DeepMatcherAdapter(prefer_gpu=False)
         matcher = _CapturingLoFTRMatcher()

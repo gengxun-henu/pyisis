@@ -137,6 +137,44 @@ def _filter_feature_dict_by_invalid_mask(features: Any, invalid_mask: np.ndarray
     return filtered
 
 
+def _as_float_image_plane(image: Any) -> np.ndarray:
+    image_array = np.asarray(image, dtype=np.float32)
+    if image_array.ndim == 0:
+        return image_array.reshape(1, 1)
+    if image_array.ndim == 1:
+        return image_array.reshape(1, -1)
+    if image_array.ndim == 2:
+        return image_array
+    return np.mean(image_array, axis=-1, dtype=np.float32)
+
+
+def _valid_image_pixels(image: Any, invalid_mask: np.ndarray | None) -> np.ndarray:
+    image_plane = _as_float_image_plane(image)
+    finite = np.isfinite(image_plane)
+    invalid = _as_invalid_mask(invalid_mask)
+    if invalid is not None and invalid.shape[:2] == image_plane.shape[:2]:
+        finite &= ~invalid
+    return finite
+
+
+def _image_has_valid_pixels(image: Any, invalid_mask: np.ndarray | None) -> bool:
+    image_array = np.asarray(image)
+    if image_array.size <= 0:
+        return False
+    return bool(_valid_image_pixels(image, invalid_mask).any())
+
+
+def _image_has_intensity_variation(image: Any, invalid_mask: np.ndarray | None) -> bool:
+    finite = _valid_image_pixels(image, invalid_mask)
+    if not bool(finite.any()):
+        return False
+    image_plane = _as_float_image_plane(image)
+    valid_values = image_plane[finite]
+    if valid_values.size <= 1:
+        return False
+    return bool(float(np.max(valid_values) - np.min(valid_values)) > 1.0e-6)
+
+
 class DeepMatcherAdapter:
     def __init__(self, *, prefer_gpu: bool = True, runtime_config: Any | None = None) -> None:
         _validate_runtime_matcher_compatibility(runtime_config)
@@ -206,10 +244,17 @@ class DeepMatcherAdapter:
     ) -> DeepMatchResult:
         method = normalize_deep_method(matcher_method)
         try:
+            if not _image_has_valid_pixels(left_image, left_mask) or not _image_has_valid_pixels(right_image, right_mask):
+                return DeepMatchResult()
             if method in ("superglue", "lightglue"):
                 extractor_method = _runtime_feature_extractor_method(self._runtime_config, method)
                 backend = _runtime_matcher_backend(self._runtime_config)
                 if method == "lightglue" and backend == "official":
+                    if extractor_method == "lightglue_sift" and (
+                        not _image_has_intensity_variation(left_image, left_mask)
+                        or not _image_has_intensity_variation(right_image, right_mask)
+                    ):
+                        return DeepMatchResult()
                     frontend = self._get_official_lightglue_frontend(extractor_method)
                     features_left = frontend.extract(left_image, device=device)
                     features_right = frontend.extract(right_image, device=device)

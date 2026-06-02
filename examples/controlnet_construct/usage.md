@@ -340,7 +340,7 @@ python -c "import isis_pybind as ip; print(ip.__file__)"
 ```json
 "ImageMatch": {
   "band": 1,
-  "max_image_dimension": 3000,
+  "max_image_dimension": 1024,
   "sub_block_size_x": 1024,
   "sub_block_size_y": 1024,
   "overlap_size_x": 128,
@@ -450,7 +450,7 @@ mkdir -p work/dom_keys work/match_metadata work/match_viz work/low_resolution wo
   "PointIdPrefix": "P",
   "ImageMatch": {
     "band": 1,
-    "max_image_dimension": 3000,
+    "max_image_dimension": 1024,
     "sub_block_size_x": 1024,
     "sub_block_size_y": 1024,
     "overlap_size_x": 128,
@@ -703,7 +703,7 @@ done < work/images_overlap.lis
 
 - `--band 1`
 - `--valid-pixel-percent-threshold 0.05`
-- `--max-image-dimension 3000`
+- `--max-image-dimension 1024`
 - `--sub-block-size-x 1024`
 - `--sub-block-size-y 1024`
 - `--overlap-size-x 128`

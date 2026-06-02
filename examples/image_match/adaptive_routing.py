@@ -10,7 +10,7 @@ Updated: 2026-05-18  Geng Xun added a conservative pair router that combines pai
 Updated: 2026-05-19  Geng Xun added optional nested tile diagnostics to the
     sparseness/lighting sidecar augmenter.
 Updated: 2026-05-20  Geng Xun extended adaptive routing decisions with preset-aware deep config selection and route confidence summaries.
-Updated: 2026-05-20  Geng Xun restored public flann cascade planning to match the stage-7 internal adaptive flow.
+Updated: 2026-06-02  Geng Xun changed adaptive routing to prior-only matcher selection without post-match fallback cascades.
 """
 
 from __future__ import annotations
@@ -28,11 +28,7 @@ SIFT_ROUTED_MATCHER_METHOD = "bf"
 FLANN_MATCHER_METHOD = "flann"
 LIGHTGLUE_MATCHER_METHOD = "lightglue"
 LOFTR_MATCHER_METHOD = "loftr"
-DEFAULT_ROUTER_FALLBACK_CHAIN = (
-    SIFT_ROUTED_MATCHER_METHOD,
-    LIGHTGLUE_MATCHER_METHOD,
-    LOFTR_MATCHER_METHOD,
-)
+DEFAULT_ROUTER_FALLBACK_CHAIN = ()
 DEFAULT_ADAPTIVE_ROUTING_PROFILE = "balanced"
 SUPPORTED_ADAPTIVE_ROUTING_PROFILES = (
     "balanced",
@@ -110,13 +106,33 @@ class PairRoutingDecision:
     initial_matcher: str
     fallback_chain: tuple[str, ...]
     route_reason: str
-    mean_real_texture_score: float
+    mean_real_texture_score: float | None
     mean_terrain_explainability_score: float | None
     render_inferred_elevation_gap: float | None
     render_peak_sharpness: float | None
     estimated_match_difficulty: float
     deep_match_config_path: str | None = None
     route_confidence: float | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class TileRoutingDecision:
+    """Tile-level prior matcher route decision and sidecar-ready diagnostics."""
+
+    tile_index: int
+    texture_sparseness: float | None
+    texture_probe_keypoint_count_left: int | None
+    texture_probe_keypoint_count_right: int | None
+    texture_probe_keypoint_density_left: float | None
+    texture_probe_keypoint_density_right: float | None
+    illumination: dict[str, Any]
+    selected_route: str
+    selected_matcher: str
+    selected_execution_environment: str
+    route_reason: str
+    route_confidence: float
+    no_post_match_fallback: bool
+    deep_match_config_path: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -323,7 +339,7 @@ def compute_real_image_texture_probe(
     gradient_component = _clamp(mean_gradient / 64.0)
     entropy_component = _clamp(entropy / 5.0)
     laplacian_component = _clamp(laplacian_variance / 1000.0)
-    real_texture_score = valid_pixel_ratio * (
+    real_texture_score = (
         0.35 * keypoint_component
         + 0.25 * gradient_component
         + 0.20 * entropy_component
@@ -510,26 +526,18 @@ def build_cascade_plan(
     fallback_chain: Iterable[str] = (),
     canonical_order: Iterable[str] = DEFAULT_ROUTER_FALLBACK_CHAIN,
 ) -> tuple[str, ...]:
-    """Build a fixed-order matcher cascade starting from the routed matcher."""
+    """Return the single prior-selected matcher for no-fallback adaptive routing."""
 
-    ordered_matchers = tuple(canonical_order)
-    if initial_matcher == FLANN_MATCHER_METHOD and initial_matcher not in ordered_matchers:
-        ordered_matchers = (
-            FLANN_MATCHER_METHOD,
-            *(matcher for matcher in ordered_matchers if matcher != SIFT_ROUTED_MATCHER_METHOD),
-        )
-    if initial_matcher not in ordered_matchers:
+    supported_matchers = {
+        SIFT_ROUTED_MATCHER_METHOD,
+        FLANN_MATCHER_METHOD,
+        LIGHTGLUE_MATCHER_METHOD,
+        LOFTR_MATCHER_METHOD,
+        *tuple(canonical_order),
+    }
+    if initial_matcher not in supported_matchers:
         raise ValueError(f"Unsupported initial_matcher: {initial_matcher!r}")
-
-    start_index = ordered_matchers.index(initial_matcher)
-    default_tail = ordered_matchers[start_index + 1 :]
-    requested_fallbacks = tuple(fallback_chain)
-    if requested_fallbacks:
-        requested_set = set(requested_fallbacks)
-        tail = tuple(matcher for matcher in default_tail if matcher in requested_set)
-    else:
-        tail = default_tail
-    return (initial_matcher, *tail)
+    return (initial_matcher,)
 
 
 def decide_post_match_action(
@@ -559,17 +567,12 @@ def decide_post_match_action(
             "rejection_reasons": (),
         }
 
-    next_matcher = plan[resolved_current_index + 1] if resolved_current_index + 1 < len(plan) else None
     return {
         "selected_matcher": current_matcher,
         "accepted": False,
         "fallback_used": fallback_used,
-        "next_matcher": next_matcher,
-        "stop_reason": (
-            "quality_insufficient_try_fallback"
-            if next_matcher is not None
-            else "quality_insufficient_no_fallback"
-        ),
+        "next_matcher": None,
+        "stop_reason": "quality_insufficient_no_fallback",
         "rejection_reasons": quality_report.rejection_reasons,
     }
 
@@ -592,7 +595,7 @@ def route_matcher_for_pair(
     right_render_probe: RenderProbe | None = None,
     spice_constraints: SpiceLightingConstraints | None = None,
 ) -> PairRoutingDecision:
-    """Route a pair to SIFT/BF, LightGlue, or LoFTR using Phase-1 rules."""
+    """Route a pair to one prior-selected matcher without post-match fallback."""
 
     left_render_probe = left_render_probe or RenderProbe()
     right_render_probe = right_render_probe or RenderProbe()
@@ -625,22 +628,16 @@ def route_matcher_for_pair(
     terrain_support = mean_terrain is None or mean_terrain >= 0.35
 
     if mean_texture >= 0.55 and small_lighting_gap and terrain_support:
-        initial_matcher = SIFT_ROUTED_MATCHER_METHOD
-        reason = "rich texture and small inferred lighting gap; route to SIFT descriptor matching first"
+        initial_matcher = FLANN_MATCHER_METHOD
+        reason = "rich texture and small inferred lighting gap; route to SIFT + FLANN"
     elif mean_texture >= 0.28 and medium_lighting_gap:
         initial_matcher = LIGHTGLUE_MATCHER_METHOD
-        reason = "moderate texture or moderate lighting gap; route to SuperPoint + LightGlue first"
+        reason = "moderate texture or moderate lighting gap; route to SIFT + LightGlue"
     else:
         initial_matcher = LOFTR_MATCHER_METHOD
-        reason = "weak texture or large inferred lighting gap; route to LoFTR first"
+        reason = "weak texture or large inferred lighting gap; route to LoFTR"
 
-    fallback_chain = tuple(
-        matcher for matcher in DEFAULT_ROUTER_FALLBACK_CHAIN if matcher != initial_matcher
-    )
-    if initial_matcher == LIGHTGLUE_MATCHER_METHOD:
-        fallback_chain = (LOFTR_MATCHER_METHOD,)
-    elif initial_matcher == LOFTR_MATCHER_METHOD:
-        fallback_chain = ()
+    fallback_chain = ()
 
     return PairRoutingDecision(
         initial_matcher=initial_matcher,
@@ -691,11 +688,15 @@ def route_matcher_for_pair_with_sparseness(
     *,
     pair_texture_sparseness: float | None,
     lighting_difference_score: float | None,
+    left_texture_probe: ImageTextureProbe | None = None,
+    right_texture_probe: ImageTextureProbe | None = None,
     sparseness_low_threshold: float = 0.35,
     sparseness_high_threshold: float = 0.65,
     lighting_low_threshold: float = 0.20,
     lighting_high_threshold: float = 0.55,
-    traditional_matcher: str = SIFT_ROUTED_MATCHER_METHOD,
+    min_texture_probe_keypoints: int = 12,
+    min_texture_probe_keypoint_density: float = 1.0e-5,
+    traditional_matcher: str = FLANN_MATCHER_METHOD,
     adaptive_routing_deep_presets: dict[str, str] | None = None,
 ) -> PairRoutingDecision:
     """Conservative Phase-7 router using pair texture sparseness and lighting difference.
@@ -704,29 +705,43 @@ def route_matcher_for_pair_with_sparseness(
         - ``pair_texture_sparseness``: ``0 = rich, 1 = sparse``
         - ``lighting_difference_score``: ``0 = identical lighting, 1 = opposite``
 
-    Rules (intentionally conservative for the initial release):
-        - low sparseness and low lighting difference -> SIFT/BF
-        - high sparseness or high lighting difference -> LoFTR
-        - otherwise -> LightGlue
+    Rules:
+        - low sparseness and low lighting difference -> SIFT+FLANN
+        - moderate texture/lighting -> SIFT+LightGlue as the primary deep route
+        - weak-to-moderate texture without extreme lighting -> SuperPoint+LightGlue
+        - high sparseness and high lighting difference, or either extreme -> LoFTR
     """
 
     resolved_sparseness = _finite_float(pair_texture_sparseness)
     resolved_lighting = _finite_float(lighting_difference_score)
+    texture_probes = tuple(probe for probe in (left_texture_probe, right_texture_probe) if probe is not None)
+    low_probe_keypoints = bool(texture_probes) and any(
+        int(probe.keypoint_count) < int(min_texture_probe_keypoints)
+        for probe in texture_probes
+    )
+    low_probe_density = bool(texture_probes) and any(
+        float(probe.keypoint_density) < float(min_texture_probe_keypoint_density)
+        for probe in texture_probes
+    )
     preset_map = {
         str(key).strip().lower(): str(value)
         for key, value in (adaptive_routing_deep_presets or {}).items()
         if value not in (None, "")
     }
-    normalized_traditional_matcher = str(traditional_matcher).strip().lower()
-    if normalized_traditional_matcher not in {SIFT_ROUTED_MATCHER_METHOD, FLANN_MATCHER_METHOD}:
-        normalized_traditional_matcher = SIFT_ROUTED_MATCHER_METHOD
     route_confidence = 0.5
 
-    if resolved_sparseness is None and resolved_lighting is None:
+    if low_probe_keypoints or low_probe_density:
+        initial_matcher = LOFTR_MATCHER_METHOD
+        reason = (
+            "texture probe extracted too few keypoints on at least one image; "
+            "route directly to LoFTR"
+        )
+        route_confidence = 0.85
+    elif resolved_sparseness is None and resolved_lighting is None:
         initial_matcher = LIGHTGLUE_MATCHER_METHOD
         reason = (
             "pair-level texture sparseness and lighting difference are both unavailable; "
-            "fall back to SuperPoint + LightGlue"
+            "route to SIFT + LightGlue as the default deep matcher"
         )
         route_confidence = 0.5
     else:
@@ -735,9 +750,9 @@ def route_matcher_for_pair_with_sparseness(
         is_lighting_low = resolved_lighting is not None and resolved_lighting <= float(lighting_low_threshold)
         is_lighting_high = resolved_lighting is not None and resolved_lighting >= float(lighting_high_threshold)
 
-        if is_sparse_high or is_lighting_high:
+        if is_sparse_high and is_lighting_high:
             initial_matcher = LOFTR_MATCHER_METHOD
-            reason = "high texture sparseness or large lighting difference; route to LoFTR first"
+            reason = "high texture sparseness and large lighting difference; route to LoFTR"
             sparseness_confidence = 0.0 if resolved_sparseness is None else _clamp(
                 (resolved_sparseness - float(sparseness_high_threshold))
                 / max(1.0 - float(sparseness_high_threshold), 1e-6)
@@ -747,9 +762,19 @@ def route_matcher_for_pair_with_sparseness(
                 / max(1.0 - float(lighting_high_threshold), 1e-6)
             )
             route_confidence = _clamp(0.75 + 0.25 * max(sparseness_confidence, lighting_confidence))
+        elif (
+            resolved_sparseness is not None
+            and resolved_sparseness >= 0.85
+        ) or (
+            resolved_lighting is not None
+            and resolved_lighting >= 0.75
+        ):
+            initial_matcher = LOFTR_MATCHER_METHOD
+            reason = "extreme texture sparseness or extreme lighting difference; route to LoFTR"
+            route_confidence = 0.80
         elif is_sparse_low and (resolved_lighting is None or is_lighting_low):
-            initial_matcher = normalized_traditional_matcher
-            reason = "rich texture and small lighting difference; route to SIFT descriptor matching first"
+            initial_matcher = FLANN_MATCHER_METHOD
+            reason = "rich texture and small lighting difference; route to SIFT + FLANN"
             sparseness_confidence = 1.0 if resolved_sparseness is None else _clamp(
                 1.0 - (resolved_sparseness / max(float(sparseness_low_threshold), 1e-6))
             )
@@ -757,9 +782,13 @@ def route_matcher_for_pair_with_sparseness(
                 1.0 - (resolved_lighting / max(float(lighting_low_threshold), 1e-6))
             )
             route_confidence = _clamp(0.70 + 0.30 * min(sparseness_confidence, lighting_confidence))
+        elif resolved_sparseness is not None and resolved_sparseness >= 0.58 and not is_lighting_high:
+            initial_matcher = LIGHTGLUE_MATCHER_METHOD
+            reason = "weak-to-moderate texture with non-extreme lighting; route to SuperPoint + LightGlue"
+            route_confidence = 0.62
         else:
             initial_matcher = LIGHTGLUE_MATCHER_METHOD
-            reason = "moderate texture sparseness or moderate lighting difference; route to SuperPoint + LightGlue"
+            reason = "moderate texture or moderate lighting difference; route to SIFT + LightGlue"
             midpoint_sparseness = (
                 0.5
                 if resolved_sparseness is None
@@ -778,24 +807,29 @@ def route_matcher_for_pair_with_sparseness(
             )
             route_confidence = _clamp(0.55 + 0.15 * max(midpoint_sparseness, midpoint_lighting))
 
-    if initial_matcher in {SIFT_ROUTED_MATCHER_METHOD, FLANN_MATCHER_METHOD}:
-        fallback_chain = (LIGHTGLUE_MATCHER_METHOD, LOFTR_MATCHER_METHOD)
-    elif initial_matcher == LIGHTGLUE_MATCHER_METHOD:
-        fallback_chain = (LOFTR_MATCHER_METHOD,)
-    else:
-        fallback_chain = ()
+    fallback_chain = ()
 
     deep_match_config_path = None
     if initial_matcher == LIGHTGLUE_MATCHER_METHOD:
-        deep_match_config_path = preset_map.get(LIGHTGLUE_MATCHER_METHOD)
+        if "SuperPoint + LightGlue" in reason:
+            deep_match_config_path = (
+                preset_map.get("superpoint_lightglue")
+                or preset_map.get("lightglue_superpoint")
+                or preset_map.get(LIGHTGLUE_MATCHER_METHOD)
+            )
+        else:
+            deep_match_config_path = (
+                preset_map.get("sift_lightglue")
+                or preset_map.get(LIGHTGLUE_MATCHER_METHOD)
+            )
     elif initial_matcher == LOFTR_MATCHER_METHOD:
         deep_match_config_path = preset_map.get(LOFTR_MATCHER_METHOD)
 
     # Use the pair sparseness (0..1) as a proxy "1 - mean_real_texture_score" for
-    # legacy sidecar compatibility, so downstream consumers that only look at the
-    # mean texture score still see a meaningful value.
+    # legacy sidecar compatibility. When no valid texture tiles are available,
+    # keep the value missing instead of manufacturing neutral evidence.
     mean_real_texture_score = (
-        0.5 if resolved_sparseness is None else _clamp(1.0 - resolved_sparseness)
+        None if resolved_sparseness is None else _clamp(1.0 - resolved_sparseness)
     )
     estimated_difficulty = _clamp(
         (0.0 if resolved_sparseness is None else resolved_sparseness)
@@ -813,6 +847,126 @@ def route_matcher_for_pair_with_sparseness(
         estimated_match_difficulty=estimated_difficulty,
         deep_match_config_path=deep_match_config_path,
         route_confidence=route_confidence,
+    )
+
+
+def route_matcher_for_tile(
+    *,
+    tile_index: int,
+    texture_sparseness: float | None,
+    lighting_difference_score: float | None,
+    texture_probe_keypoint_count_left: int | None,
+    texture_probe_keypoint_count_right: int | None,
+    texture_probe_keypoint_density_left: float | None,
+    texture_probe_keypoint_density_right: float | None,
+    illumination: dict[str, Any] | None,
+    adaptive_routing_deep_presets: dict[str, str] | None = None,
+    sparseness_low_threshold: float = 0.35,
+    sparseness_high_threshold: float = 0.65,
+    lighting_low_threshold: float = 0.20,
+    lighting_high_threshold: float = 0.55,
+    min_texture_probe_keypoints: int = 12,
+    min_texture_probe_keypoint_density: float = 1.0e-5,
+) -> TileRoutingDecision:
+    """Route one tile to a prior-selected matcher without post-match fallback."""
+
+    preset_map = {
+        str(key).strip().lower(): str(value)
+        for key, value in (adaptive_routing_deep_presets or {}).items()
+        if value not in (None, "")
+    }
+    count_values = (
+        _finite_float(texture_probe_keypoint_count_left),
+        _finite_float(texture_probe_keypoint_count_right),
+    )
+    density_values = (
+        _finite_float(texture_probe_keypoint_density_left),
+        _finite_float(texture_probe_keypoint_density_right),
+    )
+    missing_probe_evidence = any(value is None for value in (*count_values, *density_values))
+    finite_counts = tuple(value for value in count_values if value is not None)
+    finite_densities = tuple(value for value in density_values if value is not None)
+    low_keypoints = len(finite_counts) == 2 and min(finite_counts) < float(min_texture_probe_keypoints)
+    low_density = len(finite_densities) == 2 and min(finite_densities) < float(min_texture_probe_keypoint_density)
+    sparseness = _finite_float(texture_sparseness)
+    lighting = _finite_float(lighting_difference_score)
+
+    if missing_probe_evidence:
+        selected_route = LOFTR_MATCHER_METHOD
+        selected = LOFTR_MATCHER_METHOD
+        reason = "texture probe evidence is missing or non-finite; route conservatively to LoFTR"
+        confidence = 0.88
+        config = preset_map.get(LOFTR_MATCHER_METHOD)
+    elif low_keypoints or low_density:
+        selected_route = LOFTR_MATCHER_METHOD
+        selected = LOFTR_MATCHER_METHOD
+        reason = "texture probe keypoint count or density below hard threshold; route to LoFTR"
+        confidence = 0.90
+        config = preset_map.get(LOFTR_MATCHER_METHOD)
+    elif (
+        (sparseness is not None and sparseness >= 0.85)
+        or (lighting is not None and lighting >= 0.75)
+    ):
+        selected_route = LOFTR_MATCHER_METHOD
+        selected = LOFTR_MATCHER_METHOD
+        reason = "extreme texture sparseness or extreme physical illumination difference; route to LoFTR"
+        confidence = 0.84
+        config = preset_map.get(LOFTR_MATCHER_METHOD)
+    elif (
+        sparseness is not None
+        and sparseness <= float(sparseness_low_threshold)
+        and (lighting is None or lighting <= float(lighting_low_threshold))
+    ):
+        selected_route = "sift_flann"
+        selected = FLANN_MATCHER_METHOD
+        reason = "rich texture and small physical illumination difference; route to SIFT + FLANN"
+        confidence = 0.85
+        config = None
+    elif (
+        sparseness is not None
+        and sparseness >= float(sparseness_high_threshold)
+        and lighting is not None
+        and lighting >= float(lighting_high_threshold)
+    ):
+        selected_route = LOFTR_MATCHER_METHOD
+        selected = LOFTR_MATCHER_METHOD
+        reason = "weak texture and large physical illumination difference; route to LoFTR"
+        confidence = 0.82
+        config = preset_map.get(LOFTR_MATCHER_METHOD)
+    elif sparseness is not None and sparseness >= 0.58 and (lighting is None or lighting < float(lighting_high_threshold)):
+        selected_route = "superpoint_lightglue"
+        selected = LIGHTGLUE_MATCHER_METHOD
+        reason = "weak-to-moderate texture with non-extreme illumination; route to SuperPoint + LightGlue"
+        confidence = 0.65
+        config = (
+            preset_map.get("superpoint_lightglue")
+            or preset_map.get("lightglue_superpoint")
+            or preset_map.get("lightglue_high_recall")
+            or preset_map.get(LIGHTGLUE_MATCHER_METHOD)
+        )
+    else:
+        selected_route = "sift_lightglue"
+        selected = LIGHTGLUE_MATCHER_METHOD
+        reason = "moderate texture or moderate physical illumination difference; route to SIFT + LightGlue"
+        confidence = 0.60
+        config = preset_map.get("sift_lightglue") or preset_map.get(LIGHTGLUE_MATCHER_METHOD)
+
+    environment = "asp360_new" if selected == FLANN_MATCHER_METHOD else "deep-learning"
+    return TileRoutingDecision(
+        tile_index=int(tile_index),
+        texture_sparseness=sparseness,
+        texture_probe_keypoint_count_left=None if count_values[0] is None else int(count_values[0]),
+        texture_probe_keypoint_count_right=None if count_values[1] is None else int(count_values[1]),
+        texture_probe_keypoint_density_left=density_values[0],
+        texture_probe_keypoint_density_right=density_values[1],
+        illumination=dict(illumination or {}),
+        selected_route=selected_route,
+        selected_matcher=selected,
+        selected_execution_environment=environment,
+        route_reason=reason,
+        route_confidence=confidence,
+        no_post_match_fallback=True,
+        deep_match_config_path=config,
     )
 
 
@@ -853,6 +1007,7 @@ __all__ = [
     "SIFT_ROUTED_MATCHER_METHOD",
     "SpiceLightingConstraints",
     "SUPPORTED_ADAPTIVE_ROUTING_PROFILES",
+    "TileRoutingDecision",
     "augment_pair_probe_sidecar_with_sparseness_lighting",
     "build_pair_probe_sidecar",
     "build_cascade_plan",
@@ -864,4 +1019,5 @@ __all__ = [
     "resolve_adaptive_routing_quality_profile",
     "route_matcher_for_pair",
     "route_matcher_for_pair_with_sparseness",
+    "route_matcher_for_tile",
 ]

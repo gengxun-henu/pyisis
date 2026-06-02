@@ -163,6 +163,60 @@ def _quality_from_adaptive(adaptive: Any) -> dict[str, Any]:
     }
 
 
+def _adaptive_from_metadata(metadata: dict[str, Any]) -> dict[str, Any]:
+    image_match = metadata.get("image_match")
+    if isinstance(image_match, dict):
+        adaptive = image_match.get("adaptive_routing")
+        if isinstance(adaptive, dict):
+            return adaptive
+    adaptive = metadata.get("adaptive_routing")
+    return adaptive if isinstance(adaptive, dict) else {}
+
+
+def _extract_tile_illumination_summary(metadata: dict[str, Any]) -> dict[str, Any]:
+    adaptive = _adaptive_from_metadata(metadata)
+    tile_illumination = adaptive.get("tile_illumination")
+    if not isinstance(tile_illumination, dict):
+        return {}
+    summary = tile_illumination.get("summary")
+    if not isinstance(summary, dict):
+        return {}
+    return {
+        "tile_illumination_tile_count": int(summary.get("tile_count", 0) or 0),
+        "tile_illumination_projectable_tile_count": int(summary.get("projectable_tile_count", 0) or 0),
+        "tile_illumination_skipped_tile_count": int(summary.get("skipped_tile_count", 0) or 0),
+        "tile_illumination_skip_reasons": dict(summary.get("skip_reasons", {}) or {}),
+        "tile_illumination_route_distribution_by_tile": dict(summary.get("route_distribution_by_tile", {}) or {}),
+        "tile_illumination_route_distribution_by_projectable_tile": dict(
+            summary.get("route_distribution_by_projectable_tile", {}) or {}
+        ),
+    }
+
+
+def _extract_ransac_summary(metadata: dict[str, Any]) -> dict[str, Any]:
+    adaptive = _adaptive_from_metadata(metadata)
+    ransac = adaptive.get("ransac")
+    if not isinstance(ransac, dict):
+        image_match = metadata.get("image_match")
+        if isinstance(image_match, dict):
+            visualization = image_match.get("match_visualization")
+            if isinstance(visualization, dict):
+                ransac = visualization.get("ransac")
+    if not isinstance(ransac, dict):
+        visualization = metadata.get("match_visualization")
+        if isinstance(visualization, dict):
+            ransac = visualization.get("ransac")
+    if not isinstance(ransac, dict):
+        return {}
+    raw_match_count = ransac.get("raw_match_count", ransac.get("input_count"))
+    inlier_count = ransac.get("ransac_inlier_count", ransac.get("retained_count"))
+    return {
+        "raw_match_count": raw_match_count,
+        "ransac_inlier_count": inlier_count,
+        "ransac_inlier_ratio": ransac.get("ransac_inlier_ratio", ransac.get("inlier_ratio")),
+    }
+
+
 def _row_from_metadata(
     *,
     method: str,
@@ -206,6 +260,8 @@ def _row_from_metadata(
     adaptive = image_match.get("adaptive_routing")
     adaptive_dict = adaptive if isinstance(adaptive, dict) else {}
     quality = _quality_from_adaptive(adaptive)
+    tile_illumination_summary = _extract_tile_illumination_summary(metadata)
+    ransac_summary = _extract_ransac_summary(metadata)
     status = str(image_match.get("status") or metadata.get("status") or "")
     point_count = image_match.get("point_count")
     success = status in {"matched", "imported"} and isinstance(point_count, int) and point_count > 0
@@ -245,6 +301,8 @@ def _row_from_metadata(
         "adaptive_cascade_plan": ",".join(str(item) for item in adaptive_dict.get("cascade_plan", []))
         if isinstance(adaptive_dict.get("cascade_plan"), list)
         else "",
+        **tile_illumination_summary,
+        **ransac_summary,
         **quality,
     }
 

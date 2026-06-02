@@ -60,12 +60,13 @@ Updated: 2026-05-27  Geng Xun clarified worker-local parallel tile cache metadat
 from __future__ import annotations
 
 import argparse
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from datetime import datetime
 import json
+import math
 from pathlib import Path
 import sys
-from typing import TextIO, Literal
+from typing import Any, Callable, TextIO, Literal
 
 import numpy as np
 
@@ -91,6 +92,7 @@ if __package__ in {None, ""}:
         resolve_adaptive_routing_quality_profile,
         route_matcher_for_pair,
         route_matcher_for_pair_with_sparseness,
+        route_matcher_for_tile,
     )
     from image_match.lighting_difference import (
         SolarGeometryFieldMissing,
@@ -103,11 +105,23 @@ if __package__ in {None, ""}:
         compute_image_texture_sparseness_from_reader,
         pair_summary_to_diagnostic_dict,
     )
+    from image_match.tile_illumination import (
+        TileIlluminationPair,
+        illumination_pair_to_payload,
+        load_dom_source_metadata_csv,
+        resolve_dom_source_metadata,
+        summarize_tile_illumination_pairs,
+    )
+    from image_match.tile_illumination_geometry import (
+        build_pyisis_projector,
+        select_representative_point,
+    )
     from image_match.tiling import TileWindow
     from image_match.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from image_match.deep_match_manifest import (
         DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
         build_deep_match_pair_manifest,
+        default_deep_match_pair_id,
         ensure_deep_match_workspace,
         read_deep_match_pair_manifest,
         read_deep_match_task_result,
@@ -115,7 +129,7 @@ if __package__ in {None, ""}:
         write_deep_match_pair_manifest,
         write_deep_match_task_arrays,
     )
-    from image_match.keypoints import Keypoint, KeypointFile, write_key_file
+    from image_match.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
     import image_match.lowres_offset as _lowres_offset
     import image_match.match_visualization as _match_visualization
     from image_match.preprocess import summarize_valid_pixels, validate_invalid_pixel_radius
@@ -175,6 +189,7 @@ else:
         resolve_adaptive_routing_quality_profile,
         route_matcher_for_pair,
         route_matcher_for_pair_with_sparseness,
+        route_matcher_for_tile,
     )
     from .lighting_difference import (
         SolarGeometryFieldMissing,
@@ -187,11 +202,23 @@ else:
         compute_image_texture_sparseness_from_reader,
         pair_summary_to_diagnostic_dict,
     )
+    from .tile_illumination import (
+        TileIlluminationPair,
+        illumination_pair_to_payload,
+        load_dom_source_metadata_csv,
+        resolve_dom_source_metadata,
+        summarize_tile_illumination_pairs,
+    )
+    from .tile_illumination_geometry import (
+        build_pyisis_projector,
+        select_representative_point,
+    )
     from .tiling import TileWindow
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from .deep_match_manifest import (
         DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
         build_deep_match_pair_manifest,
+        default_deep_match_pair_id,
         ensure_deep_match_workspace,
         read_deep_match_pair_manifest,
         read_deep_match_task_result,
@@ -199,7 +226,7 @@ else:
         write_deep_match_pair_manifest,
         write_deep_match_task_arrays,
     )
-    from .keypoints import Keypoint, KeypointFile, write_key_file
+    from .keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
     from . import lowres_offset as _lowres_offset
     from . import match_visualization as _match_visualization
     from .preprocess import summarize_valid_pixels, validate_invalid_pixel_radius
@@ -283,6 +310,12 @@ DEFAULT_MATCH_VISUALIZATION_MODE = _match_visualization.DEFAULT_VISUALIZATION_MO
 DEFAULT_MEMORY_PROFILE = _match_visualization.DEFAULT_MEMORY_PROFILE
 DEFAULT_PREVIEW_CROP_MARGIN_PIXELS = _match_visualization.DEFAULT_PREVIEW_CROP_MARGIN_PIXELS
 DEFAULT_PREVIEW_CACHE_SOURCE = _match_visualization.DEFAULT_PREVIEW_CACHE_SOURCE
+DEFAULT_MATCH_VISUALIZATION_RANSAC = True
+DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD = 3.0
+DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE = 0.995
+DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS = 5000
+DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE = "loose"
+DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD = 1.0
 SUPPORTED_VISUALIZATION_MODES = _match_visualization.SUPPORTED_VISUALIZATION_MODES
 SUPPORTED_MEMORY_PROFILES = _match_visualization.SUPPORTED_MEMORY_PROFILES
 SUPPORTED_PREVIEW_CACHE_SOURCES = _match_visualization.SUPPORTED_PREVIEW_CACHE_SOURCES
@@ -477,6 +510,13 @@ def _parse_visualization_mode(value: str) -> str:
         return parse_catalog_choice("visualization_mode", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _parse_match_visualization_ransac_mode(value: str) -> str:
+    normalized = str(value).strip().lower()
+    if normalized not in {"strict", "loose"}:
+        raise argparse.ArgumentTypeError("match visualization RANSAC mode must be 'strict' or 'loose'.")
+    return normalized
 
 
 def _parse_memory_profile(value: str) -> str:
@@ -1041,6 +1081,52 @@ def load_image_match_defaults_from_config(
             lambda value: float(value),
         ),
         (
+            "match_visualization_ransac",
+            ("match_visualization_ransac", "matchVisualizationRansac", "MatchVisualizationRansac"),
+            lambda value: _coerce_config_bool(value, field_name="match_visualization_ransac"),
+        ),
+        (
+            "match_visualization_ransac_threshold",
+            (
+                "match_visualization_ransac_threshold",
+                "matchVisualizationRansacThreshold",
+                "MatchVisualizationRansacThreshold",
+            ),
+            lambda value: float(value),
+        ),
+        (
+            "match_visualization_ransac_confidence",
+            (
+                "match_visualization_ransac_confidence",
+                "matchVisualizationRansacConfidence",
+                "MatchVisualizationRansacConfidence",
+            ),
+            lambda value: float(value),
+        ),
+        (
+            "match_visualization_ransac_max_iters",
+            (
+                "match_visualization_ransac_max_iters",
+                "matchVisualizationRansacMaxIters",
+                "MatchVisualizationRansacMaxIters",
+            ),
+            lambda value: int(value),
+        ),
+        (
+            "match_visualization_ransac_mode",
+            ("match_visualization_ransac_mode", "matchVisualizationRansacMode", "MatchVisualizationRansacMode"),
+            lambda value: _parse_match_visualization_ransac_mode(str(value)),
+        ),
+        (
+            "match_visualization_loose_ransac_keep_threshold",
+            (
+                "match_visualization_loose_ransac_keep_threshold",
+                "matchVisualizationLooseRansacKeepThreshold",
+                "MatchVisualizationLooseRansacKeepThreshold",
+            ),
+            lambda value: float(value),
+        ),
+        (
             "visualization_mode",
             ("visualization_mode", "visualizationMode", "VisualizationMode"),
             lambda value: _normalize_visualization_mode(value),
@@ -1282,6 +1368,46 @@ def filter_stereo_pair_key_files_with_ransac(
     )
 
 
+def _keypoints_for_match_visualization(
+    left_key_file: KeypointFile,
+    right_key_file: KeypointFile,
+    *,
+    use_ransac: bool = DEFAULT_MATCH_VISUALIZATION_RANSAC,
+    ransac_reproj_threshold: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD,
+    ransac_confidence: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE,
+    ransac_max_iters: int = DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS,
+    ransac_mode: str = DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE,
+    loose_keep_pixel_threshold: float = DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD,
+) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
+    if not use_ransac:
+        return (
+            left_key_file,
+            right_key_file,
+            {
+                "applied": False,
+                "status": "disabled",
+                "mode": ransac_mode,
+                "input_count": len(left_key_file.points),
+                "retained_count": len(left_key_file.points),
+                "dropped_count": 0,
+                "retained_soft_outlier_positions": [],
+                "reproj_threshold": float(ransac_reproj_threshold),
+                "confidence": float(ransac_confidence),
+                "max_iters": int(ransac_max_iters),
+                "loose_keep_pixel_threshold": float(loose_keep_pixel_threshold),
+            },
+        )
+    return filter_stereo_pair_keypoints_with_ransac(
+        left_key_file,
+        right_key_file,
+        ransac_reproj_threshold=ransac_reproj_threshold,
+        ransac_confidence=ransac_confidence,
+        ransac_max_iters=ransac_max_iters,
+        ransac_mode=ransac_mode,
+        loose_keep_pixel_threshold=loose_keep_pixel_threshold,
+    )
+
+
 def _tile_execution_backend_summary(
     *,
     use_parallel_cpu: bool,
@@ -1461,6 +1587,57 @@ def _read_full_cube_band(cube: ip.Cube, *, band: int) -> np.ndarray:
     )
 
 
+def _read_cube_band_preview(
+    cube: ip.Cube,
+    *,
+    band: int,
+    max_dimension: int = 2048,
+    preview_tile_size: int = 256,
+) -> np.ndarray:
+    """Read a bounded preview for adaptive texture probing.
+
+    Texture routing should describe the actual matched image product, but it
+    does not need every pixel from 10k-scale DOMs.  Reading a bounded preview
+    avoids OOM/SIGKILL during adaptive route selection while preserving a
+    spatially broad sample of the same cube.
+    """
+
+    image_width = int(cube.sample_count())
+    image_height = int(cube.line_count())
+    max_dimension = max(1, int(max_dimension))
+    if max(image_width, image_height) <= max_dimension:
+        return _read_full_cube_band(cube, band=band)
+
+    scale = min(max_dimension / image_width, max_dimension / image_height)
+    preview_width = max(1, int(round(image_width * scale)))
+    preview_height = max(1, int(round(image_height * scale)))
+    preview = np.zeros((preview_height, preview_width), dtype=np.float32)
+    tile_size = max(1, int(preview_tile_size))
+
+    for preview_y0 in range(0, preview_height, tile_size):
+        preview_y1 = min(preview_y0 + tile_size, preview_height)
+        source_y0 = max(0, int(np.floor(preview_y0 / scale)))
+        source_y1 = min(image_height, int(np.ceil(preview_y1 / scale)))
+        source_h = max(1, source_y1 - source_y0)
+        for preview_x0 in range(0, preview_width, tile_size):
+            preview_x1 = min(preview_x0 + tile_size, preview_width)
+            source_x0 = max(0, int(np.floor(preview_x0 / scale)))
+            source_x1 = min(image_width, int(np.ceil(preview_x1 / scale)))
+            source_w = max(1, source_x1 - source_x0)
+            source_values = _read_cube_window(
+                cube,
+                TileWindow(start_x=source_x0, start_y=source_y0, width=source_w, height=source_h),
+                band=band,
+            )
+            resized = cv2.resize(
+                source_values.astype(np.float32, copy=False),
+                (preview_x1 - preview_x0, preview_y1 - preview_y0),
+                interpolation=cv2.INTER_AREA,
+            )
+            preview[preview_y0:preview_y1, preview_x0:preview_x1] = resized
+    return preview
+
+
 def _compute_texture_probe_from_cube_path(
     cube_path: str | Path,
     *,
@@ -1471,7 +1648,7 @@ def _compute_texture_probe_from_cube_path(
     cube = ip.Cube()
     cube.open(str(cube_path), "r")
     try:
-        values = _read_full_cube_band(cube, band=band)
+        values = _read_cube_band_preview(cube, band=band)
         resolved_invalid_values = _resolved_invalid_values_for_cube(cube, invalid_values)
         invalid_mask, _ = summarize_valid_pixels(
             values,
@@ -1548,6 +1725,550 @@ def _compute_texture_sparseness_and_geometry_from_cube_path(
             cube.close()
 
 
+def _select_adaptive_texture_source_paths(
+    *,
+    image_space: str,
+    left_source_path: str | Path | None,
+    right_source_path: str | Path | None,
+    left_low_resolution_dom: str | Path | None,
+    right_low_resolution_dom: str | Path | None,
+    low_resolution_offset_summary: dict[str, object],
+) -> tuple[str, str, str, bool]:
+    """Select image paths used for adaptive texture evidence."""
+
+    normalized_image_space = str(image_space or "dom").strip().lower()
+    left_actual = str(left_source_path) if left_source_path is not None else ""
+    right_actual = str(right_source_path) if right_source_path is not None else ""
+    if left_actual and right_actual:
+        source_type = "raw_original_cube" if normalized_image_space == "ori" else "matched_dom"
+        return left_actual, right_actual, source_type, False
+
+    summary_left_preview = str(low_resolution_offset_summary.get("left_low_resolution_dom", "") or "")
+    summary_right_preview = str(low_resolution_offset_summary.get("right_low_resolution_dom", "") or "")
+    resolved_left_preview = summary_left_preview or (
+        str(left_low_resolution_dom) if left_low_resolution_dom is not None else ""
+    )
+    resolved_right_preview = summary_right_preview or (
+        str(right_low_resolution_dom) if right_low_resolution_dom is not None else ""
+    )
+    if resolved_left_preview and resolved_right_preview:
+        return resolved_left_preview, resolved_right_preview, "low_resolution_dom", True
+    return "", "", "missing", False
+
+
+def _optional_float(value: object) -> float | None:
+    if value is None:
+        return None
+    try:
+        resolved = float(value)
+    except (TypeError, ValueError):
+        return None
+    return resolved if math.isfinite(resolved) else None
+
+
+def _optional_int(value: object) -> int | None:
+    resolved = _optional_float(value)
+    if resolved is None:
+        return None
+    return int(resolved)
+
+
+def _build_tile_route_metadata(
+    *,
+    tile_index: int,
+    illumination_pair: object,
+    texture_sparseness: float | None,
+    left_probe: dict[str, object],
+    right_probe: dict[str, object],
+    adaptive_routing_deep_presets: dict[str, str] | None,
+) -> dict[str, object]:
+    illumination_payload = illumination_pair_to_payload(illumination_pair)
+    decision = route_matcher_for_tile(
+        tile_index=tile_index,
+        texture_sparseness=texture_sparseness,
+        lighting_difference_score=_optional_float(illumination_payload.get("illumination_difference_score")),
+        texture_probe_keypoint_count_left=_optional_int(left_probe.get("keypoint_count")),
+        texture_probe_keypoint_count_right=_optional_int(right_probe.get("keypoint_count")),
+        texture_probe_keypoint_density_left=_optional_float(left_probe.get("keypoint_density")),
+        texture_probe_keypoint_density_right=_optional_float(right_probe.get("keypoint_density")),
+        illumination=illumination_payload,
+        adaptive_routing_deep_presets=adaptive_routing_deep_presets,
+    )
+    return {
+        "tile_index": int(tile_index),
+        "selected_route": decision.selected_route,
+        "selected_matcher": decision.selected_matcher,
+        "selected_execution_environment": decision.selected_execution_environment,
+        "route_reason": decision.route_reason,
+        "route_confidence": decision.route_confidence,
+        "no_post_match_fallback": decision.no_post_match_fallback,
+        "deep_match_config_path": decision.deep_match_config_path,
+        "texture_sparseness": decision.texture_sparseness,
+        "texture_probe_keypoint_count_left": decision.texture_probe_keypoint_count_left,
+        "texture_probe_keypoint_count_right": decision.texture_probe_keypoint_count_right,
+        "texture_probe_keypoint_density_left": decision.texture_probe_keypoint_density_left,
+        "texture_probe_keypoint_density_right": decision.texture_probe_keypoint_density_right,
+        "illumination": illumination_payload,
+    }
+
+
+def _apply_tile_route_metadata_to_tasks(
+    tile_tasks: list[TileMatchTask],
+    route_metadata_by_tile_index: dict[int, dict[str, object]] | None,
+) -> list[TileMatchTask]:
+    if not route_metadata_by_tile_index:
+        return list(tile_tasks)
+
+    routed_tasks: list[TileMatchTask] = []
+    for tile_index, task in enumerate(tile_tasks):
+        route_metadata = route_metadata_by_tile_index.get(tile_index)
+        if route_metadata is None:
+            routed_tasks.append(task)
+            continue
+        selected_matcher = str(route_metadata.get("selected_matcher", task.matcher_method))
+        routed_tasks.append(
+            TileMatchTask(
+                left_dom_path=task.left_dom_path,
+                right_dom_path=task.right_dom_path,
+                band=task.band,
+                paired_window=task.paired_window,
+                minimum_value=task.minimum_value,
+                maximum_value=task.maximum_value,
+                lower_percent=task.lower_percent,
+                upper_percent=task.upper_percent,
+                invalid_values=task.invalid_values,
+                special_pixel_abs_threshold=task.special_pixel_abs_threshold,
+                min_valid_pixels=task.min_valid_pixels,
+                valid_pixel_percent_threshold=task.valid_pixel_percent_threshold,
+                invalid_pixel_radius=task.invalid_pixel_radius,
+                ratio_test=task.ratio_test,
+                matcher_method=selected_matcher,
+                max_features=task.max_features,
+                sift_octave_layers=task.sift_octave_layers,
+                sift_contrast_threshold=task.sift_contrast_threshold,
+                sift_edge_threshold=task.sift_edge_threshold,
+                sift_sigma=task.sift_sigma,
+                image_space=task.image_space,
+                use_gpu=task.use_gpu,
+                gpu_batch_size=task.gpu_batch_size,
+                opencv_num_threads=task.opencv_num_threads,
+                deep_match_runtime_config=task.deep_match_runtime_config,
+                valid_intensity_lower_percent=task.valid_intensity_lower_percent,
+                valid_intensity_upper_percent=task.valid_intensity_upper_percent,
+                route_metadata=route_metadata,
+            )
+        )
+    return routed_tasks
+
+
+def _route_metadata_by_tile_index_from_summary(
+    adaptive_routing_summary: dict[str, object] | None,
+) -> dict[int, dict[str, object]]:
+    if not isinstance(adaptive_routing_summary, dict):
+        return {}
+    tile_illumination = adaptive_routing_summary.get("tile_illumination")
+    if not isinstance(tile_illumination, dict):
+        return {}
+    route_metadata = tile_illumination.get("route_metadata")
+    if not isinstance(route_metadata, list):
+        return {}
+
+    resolved: dict[int, dict[str, object]] = {}
+    for fallback_index, metadata in enumerate(route_metadata):
+        if not isinstance(metadata, dict):
+            continue
+        raw_tile_index = metadata.get("tile_index", fallback_index)
+        try:
+            tile_index = int(raw_tile_index)
+        except (TypeError, ValueError):
+            tile_index = fallback_index
+        resolved[tile_index] = dict(metadata)
+    return resolved
+
+
+def _build_tile_tasks_for_candidate_windows(
+    candidate_windows: list[PairedTileWindow],
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    image_space: str,
+    band: int,
+    minimum_value: float | None,
+    maximum_value: float | None,
+    lower_percent: float,
+    upper_percent: float,
+    invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
+    valid_intensity_lower_percent: float | None,
+    valid_intensity_upper_percent: float | None,
+    ratio_test: float,
+    matcher_method: str,
+    max_features: int | None,
+    sift_octave_layers: int,
+    sift_contrast_threshold: float,
+    sift_edge_threshold: float,
+    sift_sigma: float,
+    use_gpu: bool,
+    gpu_batch_size: int,
+    opencv_num_threads: int | None = None,
+    deep_match_runtime_config: object | None = None,
+    adaptive_routing_summary: dict[str, object] | None = None,
+) -> list[TileMatchTask]:
+    tile_tasks = _build_tile_match_tasks(
+        candidate_windows,
+        left_dom_path=left_dom_path,
+        right_dom_path=right_dom_path,
+        image_space=image_space,
+        band=band,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+        min_valid_pixels=min_valid_pixels,
+        valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+        invalid_pixel_radius=invalid_pixel_radius,
+        valid_intensity_lower_percent=valid_intensity_lower_percent,
+        valid_intensity_upper_percent=valid_intensity_upper_percent,
+        ratio_test=ratio_test,
+        matcher_method=matcher_method,
+        max_features=max_features,
+        sift_octave_layers=sift_octave_layers,
+        sift_contrast_threshold=sift_contrast_threshold,
+        sift_edge_threshold=sift_edge_threshold,
+        sift_sigma=sift_sigma,
+        use_gpu=use_gpu,
+        gpu_batch_size=gpu_batch_size,
+        opencv_num_threads=opencv_num_threads,
+        deep_match_runtime_config=deep_match_runtime_config,
+    )
+    return _apply_tile_route_metadata_to_tasks(
+        tile_tasks,
+        _route_metadata_by_tile_index_from_summary(adaptive_routing_summary),
+    )
+
+
+def _group_tile_tasks_by_selected_route(tile_tasks: list[TileMatchTask]) -> dict[str, list[dict[str, object]]]:
+    """Group routed tile tasks by execution environment and selected matcher."""
+    grouped: dict[tuple[str, str, str, str | None], dict[str, object]] = {}
+    for task in tile_tasks:
+        route_metadata = task.route_metadata or {}
+        selected_route = str(route_metadata.get("selected_route", task.matcher_method)).strip().lower()
+        selected_matcher = str(route_metadata.get("selected_matcher", task.matcher_method)).strip().lower()
+        raw_deep_config = route_metadata.get("deep_match_config_path")
+        deep_match_config_path = None if raw_deep_config in (None, "") else str(raw_deep_config)
+        requested_environment = str(route_metadata.get("selected_execution_environment", "") or "").strip()
+        execution_environment = (
+            "deep-learning"
+            if selected_matcher in DEEP_MATCHER_METHODS or requested_environment == "deep-learning"
+            else "asp360_new"
+        )
+        key = (execution_environment, selected_route, selected_matcher, deep_match_config_path)
+        group = grouped.get(key)
+        if group is None:
+            group = {
+                "execution_environment": execution_environment,
+                "selected_route": selected_route,
+                "selected_matcher": selected_matcher,
+                "deep_match_config_path": deep_match_config_path,
+                "tasks": [],
+            }
+            grouped[key] = group
+        group["tasks"].append(task)
+
+    return {
+        "classic": [group for group in grouped.values() if group["execution_environment"] == "asp360_new"],
+        "deep": [group for group in grouped.values() if group["execution_environment"] == "deep-learning"],
+    }
+
+
+def _run_classic_route_groups(
+    classic_groups: list[dict[str, object]],
+    *,
+    left_cube: object,
+    right_cube: object,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+    match_task: Callable[..., TileMatchResult] | None = None,
+) -> tuple[list[TileMatchResult], dict[str, object]]:
+    resolved_match_task = match_task or tile_matching_module._match_tile_task_with_open_cubes
+    results: list[TileMatchResult] = []
+    group_summaries: list[dict[str, object]] = []
+    for group in classic_groups:
+        tasks = list(group.get("tasks", []))
+        group_results: list[TileMatchResult] = []
+        for task in tasks:
+            result = resolved_match_task(
+                task,
+                left_cube=left_cube,
+                right_cube=right_cube,
+                left_invalid_values=left_invalid_values,
+                right_invalid_values=right_invalid_values,
+            )
+            group_results.append(result)
+            results.append(result)
+        group_summaries.append(
+            {
+                "execution_environment": "asp360_new",
+                "selected_route": group.get("selected_route"),
+                "selected_matcher": group.get("selected_matcher"),
+                "task_count": len(tasks),
+                "executed_task_count": len(group_results),
+                "matched_task_count": sum(1 for result in group_results if result.stats.status == "matched"),
+                "match_count": sum(int(result.stats.match_count) for result in group_results),
+            }
+        )
+
+    return results, {
+        "status": "executed_classic_route_groups" if results else "no_classic_route_groups",
+        "execution_environment": "asp360_new",
+        "group_count": len(group_summaries),
+        "task_count": sum(int(group.get("task_count", 0)) for group in group_summaries),
+        "executed_task_count": len(results),
+        "matched_task_count": sum(1 for result in results if result.stats.status == "matched"),
+        "match_count": sum(int(result.stats.match_count) for result in results),
+        "groups": group_summaries,
+    }
+
+
+def _merge_classic_and_deep_tile_results(
+    *,
+    left_image_width: int,
+    left_image_height: int,
+    right_image_width: int,
+    right_image_height: int,
+    classic_tile_results: list[TileMatchResult] | tuple[TileMatchResult, ...] = (),
+    deep_key_files: list[tuple[KeypointFile, KeypointFile]] | tuple[tuple[KeypointFile, KeypointFile], ...] = (),
+) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
+    left_points: list[Keypoint] = []
+    right_points: list[Keypoint] = []
+    for result in classic_tile_results:
+        left_points.extend(result.left_points)
+        right_points.extend(result.right_points)
+
+    classic_point_count = len(left_points)
+    for left_key_file, right_key_file in deep_key_files:
+        if (
+            left_key_file.image_width != int(left_image_width)
+            or left_key_file.image_height != int(left_image_height)
+            or right_key_file.image_width != int(right_image_width)
+            or right_key_file.image_height != int(right_image_height)
+        ):
+            raise ValueError("Deep key files must match the target pair image dimensions.")
+        left_points.extend(left_key_file.points)
+        right_points.extend(right_key_file.points)
+
+    deep_point_count = len(left_points) - classic_point_count
+    left_key_file = KeypointFile(int(left_image_width), int(left_image_height), tuple(left_points))
+    right_key_file = KeypointFile(int(right_image_width), int(right_image_height), tuple(right_points))
+    return left_key_file, right_key_file, {
+        "status": "merged_mixed_route_results" if left_points else "merged_no_points",
+        "point_count": len(left_points),
+        "classic_point_count": classic_point_count,
+        "deep_point_count": deep_point_count,
+        "classic_tile_result_count": len(classic_tile_results),
+        "deep_key_file_pair_count": len(deep_key_files),
+    }
+
+
+def _persist_classic_route_results(
+    *,
+    classic_tile_results: list[TileMatchResult] | tuple[TileMatchResult, ...],
+    left_image_width: int,
+    left_image_height: int,
+    right_image_width: int,
+    right_image_height: int,
+    output_root: str | Path,
+    pair_id: str,
+) -> dict[str, object]:
+    output_dir = Path(output_root).expanduser().resolve() / str(pair_id) / "classic_results"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    left_key_file, right_key_file, merge_summary = _merge_classic_and_deep_tile_results(
+        left_image_width=left_image_width,
+        left_image_height=left_image_height,
+        right_image_width=right_image_width,
+        right_image_height=right_image_height,
+        classic_tile_results=classic_tile_results,
+        deep_key_files=(),
+    )
+    left_key_path = output_dir / "left_classic.key"
+    right_key_path = output_dir / "right_classic.key"
+    write_key_file(left_key_path, left_key_file)
+    write_key_file(right_key_path, right_key_file)
+    return {
+        "status": "persisted_classic_route_results",
+        "reason": "Persisted classic route matches for later mixed-route import.",
+        "left_key_path": str(left_key_path),
+        "right_key_path": str(right_key_path),
+        "point_count": int(merge_summary["classic_point_count"]),
+        "tile_result_count": len(classic_tile_results),
+        "output_dir": str(output_dir),
+    }
+
+
+def _dom_source_metadata_summary(
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    lookup: dict[str, dict[str, object]] | None,
+    csv_path: str | Path | None = None,
+) -> dict[str, object]:
+    resolved_lookup = lookup or {}
+    if not resolved_lookup:
+        return {
+            "enabled": False,
+            "status": "missing",
+            "csv_path": None if csv_path is None else str(csv_path),
+            "lookup_entry_count": 0,
+        }
+    left_metadata = resolve_dom_source_metadata(left_dom_path, resolved_lookup)
+    right_metadata = resolve_dom_source_metadata(right_dom_path, resolved_lookup)
+    left_source = str(left_metadata.get("dom_source_cube", "") or "")
+    right_source = str(right_metadata.get("dom_source_cube", "") or "")
+    status = "ready" if left_source and right_source else "missing_source_for_pair"
+    return {
+        "enabled": True,
+        "status": status,
+        "csv_path": None if csv_path is None else str(csv_path),
+        "lookup_entry_count": len(resolved_lookup),
+        "left": left_metadata,
+        "right": right_metadata,
+    }
+
+
+def _close_projector(projector: object) -> None:
+    close = getattr(projector, "close", None)
+    if close is not None:
+        close()
+
+
+def _build_physical_tile_illumination_metadata(
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    left_cube: object,
+    right_cube: object,
+    candidate_windows: list[PairedTileWindow],
+    band: int,
+    dom_source_summary: dict[str, object],
+    adaptive_routing_deep_presets: dict[str, str] | None = None,
+    max_features: int | None = None,
+    sift_contrast_threshold: float = 0.04,
+    read_window: Callable[[object, TileWindow], np.ndarray] | None = None,
+    projector_factory: Callable[..., object] | None = None,
+) -> dict[str, object]:
+    """Sample physical source-camera illumination for each candidate tile."""
+    metadata: dict[str, object] = {
+        "source_metadata": dom_source_summary,
+    }
+    if dom_source_summary.get("status") != "ready":
+        metadata["status"] = "skipped_source_metadata_not_ready"
+        metadata["summary"] = summarize_tile_illumination_pairs(())
+        metadata["pairs"] = []
+        return metadata
+
+    left_source_metadata = dom_source_summary.get("left")
+    right_source_metadata = dom_source_summary.get("right")
+    if not isinstance(left_source_metadata, dict) or not isinstance(right_source_metadata, dict):
+        metadata["status"] = "skipped_source_metadata_not_ready"
+        metadata["summary"] = summarize_tile_illumination_pairs(())
+        metadata["pairs"] = []
+        return metadata
+
+    left_source_cube = str(left_source_metadata.get("dom_source_cube", "") or "")
+    right_source_cube = str(right_source_metadata.get("dom_source_cube", "") or "")
+    if not left_source_cube or not right_source_cube:
+        metadata["status"] = "skipped_source_metadata_not_ready"
+        metadata["summary"] = summarize_tile_illumination_pairs(())
+        metadata["pairs"] = []
+        return metadata
+
+    resolved_read_window = read_window or (lambda cube, window, *, band: _read_cube_window(cube, window, band=band))
+    resolved_projector_factory = projector_factory or build_pyisis_projector
+    left_projector = resolved_projector_factory(dom_path=left_dom_path, source_cube_path=left_source_cube)
+    right_projector = resolved_projector_factory(dom_path=right_dom_path, source_cube_path=right_source_cube)
+    pairs: list[TileIlluminationPair] = []
+    route_metadata: list[dict[str, object]] = []
+    route_distribution_by_tile: dict[str, int] = {}
+    route_distribution_by_projectable_tile: dict[str, int] = {}
+    try:
+        for tile_index, paired_window in enumerate(candidate_windows):
+            left_values = resolved_read_window(left_cube, paired_window.left_window, band=band)
+            right_values = resolved_read_window(right_cube, paired_window.right_window, band=band)
+            left_sample = select_representative_point(
+                dom_values=left_values,
+                tile_start_x=paired_window.left_window.start_x,
+                tile_start_y=paired_window.left_window.start_y,
+                project_source_pixel=left_projector,
+                side="left",
+                dom_path=str(left_dom_path),
+                dom_source_cube=left_source_cube,
+                upstream_source_cube=left_source_metadata.get("upstream_source_cube"),
+                tile_index=tile_index,
+            )
+            right_sample = select_representative_point(
+                dom_values=right_values,
+                tile_start_x=paired_window.right_window.start_x,
+                tile_start_y=paired_window.right_window.start_y,
+                project_source_pixel=right_projector,
+                side="right",
+                dom_path=str(right_dom_path),
+                dom_source_cube=right_source_cube,
+                upstream_source_cube=right_source_metadata.get("upstream_source_cube"),
+                tile_index=tile_index,
+            )
+            pair = TileIlluminationPair.from_samples(
+                tile_index=tile_index,
+                left=left_sample,
+                right=right_sample,
+            )
+            pairs.append(pair)
+            left_probe = compute_real_image_texture_probe(
+                left_values,
+                max_features=max_features,
+                sift_contrast_threshold=sift_contrast_threshold,
+            )
+            right_probe = compute_real_image_texture_probe(
+                right_values,
+                max_features=max_features,
+                sift_contrast_threshold=sift_contrast_threshold,
+            )
+            texture_sparseness = 1.0 - (
+                (float(left_probe.real_texture_score) + float(right_probe.real_texture_score)) / 2.0
+            )
+            route = _build_tile_route_metadata(
+                tile_index=tile_index,
+                illumination_pair=pair,
+                texture_sparseness=texture_sparseness,
+                left_probe=asdict(left_probe),
+                right_probe=asdict(right_probe),
+                adaptive_routing_deep_presets=adaptive_routing_deep_presets,
+            )
+            route_metadata.append(route)
+            selected_route = str(route.get("selected_route", "unknown"))
+            route_distribution_by_tile[selected_route] = route_distribution_by_tile.get(selected_route, 0) + 1
+            if pair.status == "ok":
+                route_distribution_by_projectable_tile[selected_route] = (
+                    route_distribution_by_projectable_tile.get(selected_route, 0) + 1
+                )
+    finally:
+        _close_projector(right_projector)
+        _close_projector(left_projector)
+
+    metadata["status"] = "sampled"
+    summary = summarize_tile_illumination_pairs(pairs)
+    summary["route_distribution_by_tile"] = route_distribution_by_tile
+    summary["route_distribution_by_projectable_tile"] = route_distribution_by_projectable_tile
+    metadata["summary"] = summary
+    metadata["pairs"] = [illumination_pair_to_payload(pair) for pair in pairs]
+    metadata["route_metadata"] = route_metadata
+    return metadata
+
+
 def _resolve_adaptive_route_for_pair(
     *,
     enable_adaptive_routing: bool,
@@ -1566,16 +2287,16 @@ def _resolve_adaptive_route_for_pair(
     if not enable_adaptive_routing:
         return requested_matcher_method, None
 
-    summary_left_preview = str(low_resolution_offset_summary.get("left_low_resolution_dom", "") or "")
-    summary_right_preview = str(low_resolution_offset_summary.get("right_low_resolution_dom", "") or "")
-    resolved_left_preview = summary_left_preview or (str(left_low_resolution_dom) if left_low_resolution_dom is not None else "")
-    resolved_right_preview = summary_right_preview or (str(right_low_resolution_dom) if right_low_resolution_dom is not None else "")
-    normalized_image_space = str(image_space or "dom").strip().lower()
-    preview_source_type = "low_resolution_dom"
-    if normalized_image_space == "ori" and (not resolved_left_preview or not resolved_right_preview):
-        resolved_left_preview = str(left_source_path) if left_source_path is not None else ""
-        resolved_right_preview = str(right_source_path) if right_source_path is not None else ""
-        preview_source_type = "raw_original_cube"
+    resolved_left_preview, resolved_right_preview, preview_source_type, preview_is_fallback = (
+        _select_adaptive_texture_source_paths(
+            image_space=image_space,
+            left_source_path=left_source_path,
+            right_source_path=right_source_path,
+            left_low_resolution_dom=left_low_resolution_dom,
+            right_low_resolution_dom=right_low_resolution_dom,
+            low_resolution_offset_summary=low_resolution_offset_summary,
+        )
+    )
 
     if not resolved_left_preview or not resolved_right_preview:
         return requested_matcher_method, {
@@ -1592,6 +2313,12 @@ def _resolve_adaptive_route_for_pair(
                 "Adaptive routing requires low-resolution preview DOMs for DOM-space matching "
                 "or original cube paths for raw image-space matching."
             ),
+            "preview_sources": {
+                "left": resolved_left_preview,
+                "right": resolved_right_preview,
+                "source_type": preview_source_type,
+                "fallback_used": preview_is_fallback,
+            },
         }
 
     try:
@@ -1654,6 +2381,8 @@ def _resolve_adaptive_route_for_pair(
             route_decision = route_matcher_for_pair_with_sparseness(
                 pair_texture_sparseness=sparseness_diagnostic.get("pair_texture_sparseness"),
                 lighting_difference_score=lighting_diagnostic.get("lighting_difference_score"),
+                left_texture_probe=left_texture_probe,
+                right_texture_probe=right_texture_probe,
                 traditional_matcher=requested_matcher_method,
                 adaptive_routing_deep_presets=adaptive_routing_deep_presets,
             )
@@ -1702,6 +2431,7 @@ def _resolve_adaptive_route_for_pair(
                 "left": resolved_left_preview,
                 "right": resolved_right_preview,
                 "source_type": preview_source_type,
+                "fallback_used": preview_is_fallback,
             },
             "sidecar": sidecar_payload,
         }
@@ -1719,6 +2449,7 @@ def _resolve_adaptive_route_for_pair(
                 "left": resolved_left_preview,
                 "right": resolved_right_preview,
                 "source_type": preview_source_type,
+                "fallback_used": preview_is_fallback,
             },
         }
 
@@ -1787,6 +2518,265 @@ def _export_tile_summary_from_payload(payload: object) -> TileMatchStats:
         match_count=0,
         status="exported_for_deep_learning",
     )
+
+
+def _deep_group_pair_id(
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    selected_route: str,
+    selected_matcher: str,
+    band: int,
+    image_space: str,
+) -> str:
+    route_token = str(selected_route).strip().lower().replace("/", "_").replace(" ", "_") or "deep"
+    matcher_token = str(selected_matcher).strip().lower().replace("/", "_").replace(" ", "_") or "matcher"
+    base_id = default_deep_match_pair_id(
+        left_dom_path=left_dom_path,
+        right_dom_path=right_dom_path,
+        matcher_method=f"{matcher_token}_{route_token}",
+        band=band,
+        image_space=image_space,
+    )
+    return f"{route_token}__{base_id}"
+
+
+def _export_deep_match_tile_tasks(
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    image_space: str,
+    left_cube: object,
+    right_cube: object,
+    tile_tasks: list[TileMatchTask],
+    band: int,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
+    use_gpu: bool,
+    deep_match_temp_root_dir: str | Path,
+    selected_route: str,
+    selected_matcher: str,
+    deep_match_config_path: str | Path | None = None,
+    deep_match_runtime_config: object | None = None,
+    read_window: Callable[[object, TileWindow], np.ndarray] | None = None,
+) -> tuple[list[TileMatchStats], dict[str, object]]:
+    image_backend = build_image_backend(image_space)
+    resolved_read_window = read_window or (lambda cube, window, *, band: _read_cube_window(cube, window, band=band))
+    export_tasks = [
+        replace(
+            task,
+            matcher_method=selected_matcher,
+            deep_match_runtime_config=(
+                deep_match_runtime_config
+                if deep_match_runtime_config is not None
+                else task.deep_match_runtime_config
+            ),
+        )
+        for task in tile_tasks
+    ]
+    manifest = build_deep_match_pair_manifest(
+        tasks=export_tasks,
+        left_dom_path=left_dom_path,
+        right_dom_path=right_dom_path,
+        matcher_method=selected_matcher,
+        band=band,
+        image_space=image_backend.space,
+        temp_root_dir=deep_match_temp_root_dir,
+        requested_device="cuda" if use_gpu else "cpu",
+        pair_id=_deep_group_pair_id(
+            left_dom_path=left_dom_path,
+            right_dom_path=right_dom_path,
+            selected_route=selected_route,
+            selected_matcher=selected_matcher,
+            band=band,
+            image_space=image_backend.space,
+        ),
+        deep_match_config_path=deep_match_config_path,
+        deep_match_runtime_config=deep_match_runtime_config,
+        created_by_python=sys.executable,
+        metadata={
+            "export_source": "image_match.match_dom_pair.grouped_tile_routes",
+            "candidate_tile_count": len(export_tasks),
+            "selected_route": selected_route,
+            "selected_matcher": selected_matcher,
+            "deep_match_config_path": (
+                None if deep_match_config_path is None else str(Path(deep_match_config_path))
+            ),
+            "deep_match_runtime_config": _runtime_config_to_metadata(deep_match_runtime_config),
+            "matcher_method": selected_matcher,
+            "feature_extractor_method": (
+                None
+                if deep_match_runtime_config is None
+                else getattr(deep_match_runtime_config, "feature_extractor_method", None)
+            ),
+            "created_by_python": sys.executable,
+        },
+    )
+    workspace = resolve_deep_match_workspace(
+        temp_root_dir=deep_match_temp_root_dir,
+        pair_id=manifest.pair_id,
+    )
+    ensure_deep_match_workspace(workspace)
+
+    exported_records = []
+    tile_summaries: list[TileMatchStats] = []
+    skipped_tile_count = 0
+    for record in manifest.tasks:
+        task = record.tile_task
+        left_values = resolved_read_window(left_cube, task.paired_window.left_window, band=task.band)
+        right_values = resolved_read_window(right_cube, task.paired_window.right_window, band=task.band)
+        prepared = tile_matching_module._prepare_gpu_tile_payload_from_values(
+            left_values=left_values,
+            right_values=right_values,
+            local_window=task.paired_window.local_window,
+            left_window=task.paired_window.left_window,
+            right_window=task.paired_window.right_window,
+            minimum_value=task.minimum_value,
+            maximum_value=task.maximum_value,
+            lower_percent=task.lower_percent,
+            upper_percent=task.upper_percent,
+            left_invalid_values=left_invalid_values,
+            right_invalid_values=right_invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+            min_valid_pixels=min_valid_pixels,
+            valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+            invalid_pixel_radius=invalid_pixel_radius,
+            valid_intensity_lower_percent=task.valid_intensity_lower_percent,
+            valid_intensity_upper_percent=task.valid_intensity_upper_percent,
+        )
+        if isinstance(prepared, TileMatchResult):
+            tile_summaries.append(prepared.stats)
+            skipped_tile_count += 1
+            continue
+        write_deep_match_task_arrays(
+            record,
+            left_image=prepared.left_image,
+            right_image=prepared.right_image,
+            left_mask=prepared.left_mask,
+            right_mask=prepared.right_mask,
+        )
+        exported_records.append(record)
+        tile_summaries.append(_export_tile_summary_from_payload(prepared))
+
+    filtered_manifest = manifest.__class__(
+        format_version=manifest.format_version,
+        pair_id=manifest.pair_id,
+        workspace_root=manifest.workspace_root,
+        left_dom_path=manifest.left_dom_path,
+        right_dom_path=manifest.right_dom_path,
+        image_space=manifest.image_space,
+        matcher_method=manifest.matcher_method,
+        requested_device=manifest.requested_device,
+        band=manifest.band,
+        created_at_utc=manifest.created_at_utc,
+        tasks=tuple(exported_records),
+        metadata={
+            **manifest.metadata,
+            "exported_task_count": len(exported_records),
+            "skipped_task_count": skipped_tile_count,
+        },
+    )
+    manifest_path = write_deep_match_pair_manifest(filtered_manifest)
+    return tile_summaries, {
+        "status": "exported_for_deep_learning" if exported_records else "export_skipped_no_tasks",
+        "reason": (
+            "Prepared grouped deep-matching task workspace for execution in the deep-learning environment."
+            if exported_records
+            else "No tile tasks met the validity requirements for grouped deep-learning export."
+        ),
+        "selected_route": selected_route,
+        "selected_matcher": selected_matcher,
+        "deep_match_config_path": None if deep_match_config_path is None else str(Path(deep_match_config_path)),
+        "manifest_path": str(manifest_path),
+        "workspace_root": str(workspace.root_dir),
+        "images_dir": str(workspace.images_dir),
+        "results_dir": str(workspace.results_dir),
+        "logs_dir": str(workspace.logs_dir),
+        "pair_id": filtered_manifest.pair_id,
+        "exported_task_count": len(exported_records),
+        "skipped_task_count": skipped_tile_count,
+        "requested_device": filtered_manifest.requested_device,
+    }
+
+
+def _export_grouped_deep_match_tile_tasks(
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    image_space: str,
+    left_cube: object,
+    right_cube: object,
+    deep_groups: list[dict[str, object]],
+    band: int,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
+    use_gpu: bool,
+    deep_match_temp_root_dir: str | Path,
+    read_window: Callable[[object, TileWindow], np.ndarray] | None = None,
+) -> tuple[list[TileMatchStats], dict[str, object]]:
+    all_tile_summaries: list[TileMatchStats] = []
+    group_summaries: list[dict[str, object]] = []
+    for group in deep_groups:
+        tasks = list(group.get("tasks", []))
+        if not tasks:
+            continue
+        deep_match_config_path = group.get("deep_match_config_path")
+        deep_match_runtime_config = group.get("deep_match_runtime_config")
+        if (
+            deep_match_runtime_config is None
+            and deep_match_config_path not in (None, "")
+            and Path(str(deep_match_config_path)).expanduser().exists()
+        ):
+            deep_match_runtime_config = _resolve_deep_match_runtime_config(
+                Path(str(deep_match_config_path)).expanduser()
+            )
+        tile_summaries, group_summary = _export_deep_match_tile_tasks(
+            left_dom_path=left_dom_path,
+            right_dom_path=right_dom_path,
+            image_space=image_space,
+            left_cube=left_cube,
+            right_cube=right_cube,
+            tile_tasks=tasks,
+            band=band,
+            left_invalid_values=left_invalid_values,
+            right_invalid_values=right_invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+            min_valid_pixels=min_valid_pixels,
+            valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+            invalid_pixel_radius=invalid_pixel_radius,
+            use_gpu=use_gpu,
+            deep_match_temp_root_dir=deep_match_temp_root_dir,
+            selected_route=str(group.get("selected_route", group.get("selected_matcher", "deep"))),
+            selected_matcher=str(group.get("selected_matcher", "lightglue")),
+            deep_match_config_path=deep_match_config_path,
+            deep_match_runtime_config=deep_match_runtime_config,
+            read_window=read_window,
+        )
+        all_tile_summaries.extend(tile_summaries)
+        group_summaries.append(group_summary)
+
+    exported_task_count = sum(int(group.get("exported_task_count", 0) or 0) for group in group_summaries)
+    skipped_task_count = sum(int(group.get("skipped_task_count", 0) or 0) for group in group_summaries)
+    return all_tile_summaries, {
+        "status": "exported_grouped_for_deep_learning" if exported_task_count else "export_skipped_no_tasks",
+        "reason": (
+            "Prepared grouped deep-matching manifests for execution in the deep-learning environment."
+            if exported_task_count
+            else "No grouped deep tile tasks met the validity requirements for export."
+        ),
+        "group_count": len(group_summaries),
+        "exported_task_count": exported_task_count,
+        "skipped_task_count": skipped_task_count,
+        "groups": group_summaries,
+    }
 
 
 def _export_deep_match_pair_tasks(
@@ -1978,93 +2968,16 @@ def _adaptive_cascade_steps_from_summary(
     if not adaptive_routing_summary or adaptive_routing_summary.get("status") != "routed":
         return ({"matcher_method": initial_matcher, "deep_match_config_path": normalized_initial_config_path},)
 
-    preset_map = {
-        str(key).strip().lower(): str(value)
-        for key, value in (adaptive_routing_deep_presets or {}).items()
-        if value not in (None, "")
-    }
     selected_matcher = str(adaptive_routing_summary.get("selected_initial_matcher", initial_matcher))
     selected_config_path = adaptive_routing_summary.get("selected_deep_match_config_path")
-    steps: list[dict[str, object]] = [
+    return (
         {
             "matcher_method": selected_matcher,
             "deep_match_config_path": (
                 None if selected_config_path in (None, "") else str(selected_config_path)
             ),
-        }
-    ]
-    if selected_matcher in {"bf", "flann"}:
-        if preset_map.get("lightglue_high_recall"):
-            steps.append(
-                {
-                    "matcher_method": "lightglue",
-                    "deep_match_config_path": preset_map["lightglue_high_recall"],
-                }
-            )
-        elif preset_map.get("lightglue"):
-            steps.append(
-                {
-                    "matcher_method": "lightglue",
-                    "deep_match_config_path": preset_map["lightglue"],
-                }
-            )
-        else:
-            steps.append(
-                {
-                    "matcher_method": "lightglue",
-                    "deep_match_config_path": None,
-                }
-            )
-        if preset_map.get("loftr"):
-            steps.append(
-                {
-                    "matcher_method": "loftr",
-                    "deep_match_config_path": preset_map["loftr"],
-                }
-            )
-        else:
-            steps.append(
-                {
-                    "matcher_method": "loftr",
-                    "deep_match_config_path": None,
-                }
-            )
-    elif selected_matcher == "lightglue":
-        high_recall_path = preset_map.get("lightglue_high_recall")
-        if high_recall_path and high_recall_path != steps[0]["deep_match_config_path"]:
-            steps.append(
-                {
-                    "matcher_method": "lightglue",
-                    "deep_match_config_path": high_recall_path,
-                }
-            )
-        if preset_map.get("loftr"):
-            steps.append(
-                {
-                    "matcher_method": "loftr",
-                    "deep_match_config_path": preset_map["loftr"],
-                }
-            )
-        else:
-            steps.append(
-                {
-                    "matcher_method": "loftr",
-                    "deep_match_config_path": None,
-                }
-            )
-
-    deduped_steps: list[dict[str, object]] = []
-    seen: set[tuple[str, str | None]] = set()
-    for step in steps:
-        dedupe_key = (
-            str(step["matcher_method"]),
-            None if step["deep_match_config_path"] in (None, "") else str(step["deep_match_config_path"]),
-        )
-        if dedupe_key in seen:
-            continue
-        seen.add(dedupe_key)
-        deduped_steps.append(step)
-    return tuple(deduped_steps)
+        },
+    )
 
 
 def _local_points_to_keypoints(points: np.ndarray, window: object) -> tuple[Keypoint, ...]:
@@ -2233,6 +3146,141 @@ def import_deep_match_manifest_results(
     return left_key_file, right_key_file, summary
 
 
+def _selected_route_from_import_summary(summary: dict[str, object]) -> str | None:
+    deep_import = summary.get("deep_match_import")
+    if isinstance(deep_import, dict):
+        tasks = deep_import.get("tasks")
+        if isinstance(tasks, list):
+            for task in tasks:
+                if not isinstance(task, dict):
+                    continue
+                metadata = task.get("metadata")
+                if isinstance(metadata, dict):
+                    route = metadata.get("selected_route")
+                    if route not in (None, ""):
+                        return str(route)
+    return None
+
+
+def _selected_route_from_manifest(manifest_path: str | Path) -> str | None:
+    manifest = read_deep_match_pair_manifest(manifest_path)
+    route = manifest.metadata.get("selected_route")
+    if route not in (None, ""):
+        return str(route)
+    for record in manifest.tasks:
+        route_metadata = getattr(record, "route_metadata", None)
+        if isinstance(route_metadata, dict):
+            route = route_metadata.get("selected_route")
+            if route not in (None, ""):
+                return str(route)
+    return None
+
+
+def import_grouped_deep_match_manifest_results(
+    manifest_paths: list[str | Path] | tuple[str | Path, ...],
+    *,
+    left_dom_path: str | Path | None = None,
+    right_dom_path: str | Path | None = None,
+) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
+    """Import multiple grouped deep-match manifests into one pair-level key set."""
+
+    imported_left: list[Keypoint] = []
+    imported_right: list[Keypoint] = []
+    manifest_summaries: list[dict[str, object]] = []
+    left_dimensions: tuple[int, int] | None = None
+    right_dimensions: tuple[int, int] | None = None
+    imported_task_count = 0
+    failed_task_count = 0
+    missing_result_count = 0
+    skipped_empty_task_count = 0
+
+    for manifest_path in manifest_paths:
+        left_key_file, right_key_file, summary = import_deep_match_manifest_results(
+            manifest_path,
+            left_dom_path=left_dom_path,
+            right_dom_path=right_dom_path,
+        )
+        current_left_dimensions = (left_key_file.image_width, left_key_file.image_height)
+        current_right_dimensions = (right_key_file.image_width, right_key_file.image_height)
+        if left_dimensions is None:
+            left_dimensions = current_left_dimensions
+            right_dimensions = current_right_dimensions
+        elif left_dimensions != current_left_dimensions or right_dimensions != current_right_dimensions:
+            raise ValueError("Grouped deep manifest imports must target the same left/right image dimensions.")
+
+        imported_left.extend(left_key_file.points)
+        imported_right.extend(right_key_file.points)
+        deep_import = dict(summary.get("deep_match_import", {}))
+        imported_task_count += int(deep_import.get("imported_task_count", 0) or 0)
+        failed_task_count += int(deep_import.get("failed_task_count", 0) or 0)
+        missing_result_count += int(deep_import.get("missing_result_count", 0) or 0)
+        skipped_empty_task_count += int(deep_import.get("skipped_empty_task_count", 0) or 0)
+        route = _selected_route_from_import_summary(summary) or _selected_route_from_manifest(manifest_path)
+        manifest_summaries.append(
+            {
+                "manifest_path": str(Path(manifest_path).expanduser().resolve()),
+                "selected_route": route,
+                "status": summary.get("status"),
+                "point_count": summary.get("point_count", 0),
+                "task_count": deep_import.get("task_count", 0),
+                "imported_task_count": deep_import.get("imported_task_count", 0),
+                "failed_task_count": deep_import.get("failed_task_count", 0),
+                "missing_result_count": deep_import.get("missing_result_count", 0),
+                "skipped_empty_task_count": deep_import.get("skipped_empty_task_count", 0),
+            }
+        )
+
+    if left_dimensions is None:
+        if left_dom_path is None or right_dom_path is None:
+            raise ValueError("Grouped deep manifest import requires at least one manifest or explicit DOM paths.")
+        left_cube = ip.Cube()
+        right_cube = ip.Cube()
+        left_cube.open(str(left_dom_path), "r")
+        right_cube.open(str(right_dom_path), "r")
+        try:
+            left_dimensions = (left_cube.sample_count(), left_cube.line_count())
+            right_dimensions = (right_cube.sample_count(), right_cube.line_count())
+        finally:
+            if left_cube.is_open():
+                left_cube.close()
+            if right_cube.is_open():
+                right_cube.close()
+
+    total_issue_count = failed_task_count + missing_result_count
+    status = "imported" if imported_left else "imported_no_points"
+    if total_issue_count and imported_task_count:
+        status = "imported_with_missing_or_failed_tasks"
+    elif total_issue_count and not imported_task_count:
+        status = "import_failed_no_usable_results"
+
+    left_key_file = KeypointFile(left_dimensions[0], left_dimensions[1], tuple(imported_left))
+    right_key_file = KeypointFile(right_dimensions[0], right_dimensions[1], tuple(imported_right))
+    summary = {
+        "left_dom": str(left_dom_path) if left_dom_path is not None else None,
+        "right_dom": str(right_dom_path) if right_dom_path is not None else None,
+        "image_space": "dom",
+        "status": status,
+        "reason": "Imported grouped deep-learning match results from multiple manifest workspaces.",
+        "point_count": len(imported_left),
+        "left_image_width": left_key_file.image_width,
+        "left_image_height": left_key_file.image_height,
+        "right_image_width": right_key_file.image_width,
+        "right_image_height": right_key_file.image_height,
+        "deep_match_mode": "import_grouped",
+        "deep_match_import": {
+            "manifest_count": len(manifest_summaries),
+            "manifests": manifest_summaries,
+            "imported_task_count": imported_task_count,
+            "failed_task_count": failed_task_count,
+            "missing_result_count": missing_result_count,
+            "skipped_empty_task_count": skipped_empty_task_count,
+            "imported_match_count": len(imported_left),
+        },
+        "deep_match_export": None,
+    }
+    return left_key_file, right_key_file, summary
+
+
 def _match_pair_generic(
     left_path: str | Path,
     right_path: str | Path,
@@ -2335,7 +3383,7 @@ def match_dom_pair(
     *,
     image_space: str = "dom",
     band: int = 1,
-    max_image_dimension: int = 3000,
+    max_image_dimension: int = 1024,
     block_width: int = 1024,
     block_height: int = 1024,
     overlap_x: int = 128,
@@ -2372,6 +3420,8 @@ def match_dom_pair(
     enable_adaptive_routing: bool = DEFAULT_ENABLE_ADAPTIVE_ROUTING,
     adaptive_routing_profile: str = DEFAULT_ADAPTIVE_ROUTING_PROFILE,
     adaptive_routing_deep_presets: dict[str, str] | None = None,
+    dom_source_metadata_lookup: dict[str, dict[str, object]] | None = None,
+    dom_source_metadata_csv: str | Path | None = None,
     low_resolution_level: int | None = None,
     low_resolution_matching_target_long_edge: int | None = None,
     low_resolution_trim_fraction_each_side: float = DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE,
@@ -2419,6 +3469,12 @@ def match_dom_pair(
             deep_match_runtime_config=resolved_deep_match_runtime_config,
         )
         resolved_requested_matcher_method = resolved_matcher_method
+        dom_source_summary = _dom_source_metadata_summary(
+            left_dom_path=left_dom_path,
+            right_dom_path=right_dom_path,
+            lookup=dom_source_metadata_lookup,
+            csv_path=dom_source_metadata_csv,
+        )
 
         image_backend = build_image_backend(image_space)
         left_cube.open(str(left_dom_path), "r")
@@ -2573,6 +3629,9 @@ def match_dom_pair(
         if adaptive_routing_summary is not None:
             adaptive_routing_summary["profile"] = resolved_adaptive_routing_quality_profile.profile
             adaptive_routing_summary["quality_gate"] = dict(adaptive_routing_quality_gate)
+            adaptive_routing_summary["tile_illumination"] = {
+                "source_metadata": dom_source_summary,
+            }
         preparation = prepare_dom_pair_for_matching(
             left_dom_path,
             right_dom_path,
@@ -2669,27 +3728,32 @@ def match_dom_pair(
                 preindexed_skipped_tile_count = prefilter_result.preindexed_skipped_tile_count
                 tile_validity_skip_reasons = prefilter_result.skip_reasons
 
+            if adaptive_routing_summary is not None:
+                adaptive_routing_summary["tile_illumination"] = _build_physical_tile_illumination_metadata(
+                    left_dom_path=left_dom_path,
+                    right_dom_path=right_dom_path,
+                    left_cube=left_cube,
+                    right_cube=right_cube,
+                    candidate_windows=candidate_windows,
+                    band=band,
+                    dom_source_summary=dom_source_summary,
+                    adaptive_routing_deep_presets=resolved_adaptive_routing_deep_presets,
+                    max_features=max_features,
+                    sift_contrast_threshold=sift_contrast_threshold,
+                )
+
             if candidate_windows:
                 if resolved_deep_match_mode == "export":
-                    if resolved_matcher_method not in DEEP_MATCHER_METHODS:
-                        raise ValueError(
-                            "deep_match_mode='export' currently supports only deep matcher methods: "
-                            f"{DEEP_MATCHER_METHODS}."
-                        )
-                    tile_summaries, deep_match_export_summary = _export_deep_match_pair_tasks(
+                    routed_export_tile_tasks = _build_tile_tasks_for_candidate_windows(
+                        candidate_windows,
                         left_dom_path=left_dom_path,
                         right_dom_path=right_dom_path,
                         image_space=image_backend.space,
-                        left_cube=left_cube,
-                        right_cube=right_cube,
-                        candidate_windows=candidate_windows,
                         band=band,
                         minimum_value=minimum_value,
                         maximum_value=maximum_value,
                         lower_percent=lower_percent,
                         upper_percent=upper_percent,
-                        left_invalid_values=left_invalid_values,
-                        right_invalid_values=right_invalid_values,
                         invalid_values=invalid_values,
                         special_pixel_abs_threshold=special_pixel_abs_threshold,
                         min_valid_pixels=min_valid_pixels,
@@ -2706,14 +3770,127 @@ def match_dom_pair(
                         sift_sigma=sift_sigma,
                         use_gpu=use_gpu,
                         gpu_batch_size=gpu_batch_size,
-                        deep_match_temp_root_dir=(
+                        opencv_num_threads=resolved_opencv_num_threads,
+                        deep_match_runtime_config=resolved_deep_match_runtime_config,
+                        adaptive_routing_summary=adaptive_routing_summary,
+                    )
+                    route_groups = _group_tile_tasks_by_selected_route(routed_export_tile_tasks)
+                    route_metadata_enabled = any(task.route_metadata is not None for task in routed_export_tile_tasks)
+                    if route_metadata_enabled:
+                        resolved_deep_match_temp_root_dir = (
                             deep_match_temp_root_dir
                             if deep_match_temp_root_dir is not None
                             else Path.cwd() / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME
-                        ),
-                        deep_match_config_path=resolved_deep_match_config_path,
-                        deep_match_runtime_config=resolved_deep_match_runtime_config,
-                    )
+                        )
+                        classic_tile_results, classic_route_summary = _run_classic_route_groups(
+                            route_groups["classic"],
+                            left_cube=left_cube,
+                            right_cube=right_cube,
+                            left_invalid_values=left_invalid_values,
+                            right_invalid_values=right_invalid_values,
+                        )
+                        classic_tile_summaries = [result.stats for result in classic_tile_results]
+                        for tile_result in classic_tile_results:
+                            left_points.extend(tile_result.left_points)
+                            right_points.extend(tile_result.right_points)
+                        classic_results_summary = None
+                        if classic_tile_results:
+                            classic_pair_id = default_deep_match_pair_id(
+                                left_dom_path=left_dom_path,
+                                right_dom_path=right_dom_path,
+                                matcher_method="classic_sift_flann",
+                                band=band,
+                                image_space=image_backend.space,
+                            )
+                            classic_results_summary = _persist_classic_route_results(
+                                classic_tile_results=classic_tile_results,
+                                left_image_width=left_width,
+                                left_image_height=left_height,
+                                right_image_width=right_width,
+                                right_image_height=right_height,
+                                output_root=resolved_deep_match_temp_root_dir,
+                                pair_id=classic_pair_id,
+                            )
+                        deep_tile_summaries, deep_match_export_summary = _export_grouped_deep_match_tile_tasks(
+                            left_dom_path=left_dom_path,
+                            right_dom_path=right_dom_path,
+                            image_space=image_backend.space,
+                            left_cube=left_cube,
+                            right_cube=right_cube,
+                            deep_groups=route_groups["deep"],
+                            band=band,
+                            left_invalid_values=left_invalid_values,
+                            right_invalid_values=right_invalid_values,
+                            special_pixel_abs_threshold=special_pixel_abs_threshold,
+                            min_valid_pixels=min_valid_pixels,
+                            valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                            invalid_pixel_radius=resolved_invalid_pixel_radius,
+                            use_gpu=use_gpu,
+                            deep_match_temp_root_dir=resolved_deep_match_temp_root_dir,
+                        )
+                        tile_summaries = [*classic_tile_summaries, *deep_tile_summaries]
+                        classic_task_count = sum(len(group.get("tasks", [])) for group in route_groups["classic"])
+                        deep_match_export_summary = {
+                            **deep_match_export_summary,
+                            "status": (
+                                "exported_grouped_for_mixed_route"
+                                if classic_results_summary is not None or deep_match_export_summary.get("exported_task_count", 0)
+                                else deep_match_export_summary.get("status")
+                            ),
+                            "route_metadata_enabled": True,
+                            "classic_group_count": len(route_groups["classic"]),
+                            "classic_task_count": classic_task_count,
+                            "classic_route_execution": classic_route_summary,
+                            "classic_results": classic_results_summary,
+                            "deep_group_count": len(route_groups["deep"]),
+                            "deep_task_count": sum(len(group.get("tasks", [])) for group in route_groups["deep"]),
+                            "classic_execution_environment": "asp360_new",
+                            "deep_execution_environment": "deep-learning",
+                        }
+                    elif resolved_matcher_method not in DEEP_MATCHER_METHODS:
+                        raise ValueError(
+                            "deep_match_mode='export' currently supports only deep matcher methods: "
+                            f"{DEEP_MATCHER_METHODS}."
+                        )
+                    else:
+                        tile_summaries, deep_match_export_summary = _export_deep_match_pair_tasks(
+                            left_dom_path=left_dom_path,
+                            right_dom_path=right_dom_path,
+                            image_space=image_backend.space,
+                            left_cube=left_cube,
+                            right_cube=right_cube,
+                            candidate_windows=candidate_windows,
+                            band=band,
+                            minimum_value=minimum_value,
+                            maximum_value=maximum_value,
+                            lower_percent=lower_percent,
+                            upper_percent=upper_percent,
+                            left_invalid_values=left_invalid_values,
+                            right_invalid_values=right_invalid_values,
+                            invalid_values=invalid_values,
+                            special_pixel_abs_threshold=special_pixel_abs_threshold,
+                            min_valid_pixels=min_valid_pixels,
+                            valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                            invalid_pixel_radius=resolved_invalid_pixel_radius,
+                            valid_intensity_lower_percent=resolved_valid_intensity_lower_percent,
+                            valid_intensity_upper_percent=resolved_valid_intensity_upper_percent,
+                            ratio_test=ratio_test,
+                            matcher_method=resolved_matcher_method,
+                            max_features=max_features,
+                            sift_octave_layers=sift_octave_layers,
+                            sift_contrast_threshold=sift_contrast_threshold,
+                            sift_edge_threshold=sift_edge_threshold,
+                            sift_sigma=sift_sigma,
+                            use_gpu=use_gpu,
+                            gpu_batch_size=gpu_batch_size,
+                            deep_match_temp_root_dir=(
+                                deep_match_temp_root_dir
+                                if deep_match_temp_root_dir is not None
+                                else Path.cwd() / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME
+                            ),
+                            deep_match_config_path=resolved_deep_match_config_path,
+                            deep_match_runtime_config=resolved_deep_match_runtime_config,
+                        )
                 else:
                     def run_tile_matching_pass(
                         candidate_matcher_method: str,
@@ -2912,6 +4089,8 @@ def match_dom_pair(
                     if adaptive_routing_summary is not None:
                         adaptive_routing_summary["profile"] = resolved_adaptive_routing_quality_profile.profile
                         adaptive_routing_summary["quality_gate"] = dict(adaptive_routing_quality_gate)
+                        adaptive_routing_summary["cascade_disabled"] = True
+                        adaptive_routing_summary["no_post_match_fallback"] = True
                         adaptive_routing_summary["cascade_plan"] = [
                             str(step["matcher_method"]) for step in cascade_plan
                         ]
@@ -2929,6 +4108,8 @@ def match_dom_pair(
                             adaptive_routing_summary["final_decision"] = final_decision
                         sidecar = adaptive_routing_summary.get("sidecar")
                         if isinstance(sidecar, dict):
+                            sidecar["cascade_disabled"] = True
+                            sidecar["no_post_match_fallback"] = True
                             if final_quality_report is not None:
                                 sidecar["match_quality"] = asdict(final_quality_report)
                             if final_decision is not None:
@@ -2950,6 +4131,9 @@ def match_dom_pair(
         left_key_file = KeypointFile(left_width, left_height, tuple(left_points))
         right_key_file = KeypointFile(right_width, right_height, tuple(right_points))
         full_resolution_skipped_tile_count = sum(1 for tile in tile_summaries if tile.status != "matched")
+        left_feature_count_total = sum(int(tile.left_feature_count) for tile in tile_summaries)
+        right_feature_count_total = sum(int(tile.right_feature_count) for tile in tile_summaries)
+        tile_match_count_total = sum(int(tile.match_count) for tile in tile_summaries)
         resolved_status = preparation.status if preparation.status != "ready" else ("matched" if left_points else "matched_no_points")
         resolved_reason = preparation.reason
         if deep_match_export_summary is not None:
@@ -2972,6 +4156,7 @@ def match_dom_pair(
             "matcher_method_effective": resolved_matcher_method,
             "adaptive_routing_profile": resolved_adaptive_routing_quality_profile.profile,
             "adaptive_routing_quality_gate": adaptive_routing_quality_gate,
+            "dom_source_metadata": dom_source_summary,
             "ratio_test": ratio_test,
             "status": resolved_status,
             "reason": resolved_reason,
@@ -2994,6 +4179,10 @@ def match_dom_pair(
             "left_tile_validity_index": left_tile_validity_index_summary,
             "right_tile_validity_index": right_tile_validity_index_summary,
             "point_count": len(left_points),
+            "left_feature_count_total": left_feature_count_total,
+            "right_feature_count_total": right_feature_count_total,
+            "feature_count_total": left_feature_count_total + right_feature_count_total,
+            "tile_match_count_total": tile_match_count_total,
             "parallel_cpu_requested": parallel_cpu_requested,
             "num_worker_parallel_cpu": resolved_num_worker_parallel_cpu,
             "parallel_cpu_used": parallel_cpu_used,
@@ -3074,6 +4263,12 @@ def match_dom_pair_to_key_files(
     match_visualization_scale: float = 1.0 / 3.0,
     show_progress: bool = False,
     *,
+    match_visualization_ransac: bool = DEFAULT_MATCH_VISUALIZATION_RANSAC,
+    match_visualization_ransac_threshold: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD,
+    match_visualization_ransac_confidence: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE,
+    match_visualization_ransac_max_iters: int = DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS,
+    match_visualization_ransac_mode: str = DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE,
+    match_visualization_loose_ransac_keep_threshold: float = DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD,
     visualization_mode: str = DEFAULT_MATCH_VISUALIZATION_MODE,
     memory_profile: str = DEFAULT_MEMORY_PROFILE,
     visualization_target_long_edge: int | None = None,
@@ -3095,13 +4290,111 @@ def match_dom_pair_to_key_files(
 ) -> dict[str, object]:
     resolved_deep_match_mode = _normalize_deep_match_mode(deep_match_mode)
     if resolved_deep_match_mode == "import":
-        if deep_match_manifest is None:
+        grouped_deep_match_manifests = tuple(kwargs.pop("grouped_deep_match_manifests", ()) or ())
+        classic_left_key = kwargs.pop("classic_left_key", None)
+        classic_right_key = kwargs.pop("classic_right_key", None)
+        mixed_import_requested = bool(grouped_deep_match_manifests) or classic_left_key is not None or classic_right_key is not None
+        if not mixed_import_requested and deep_match_manifest is None:
             raise ValueError("deep_match_mode='import' requires deep_match_manifest.")
-        left_key_file, right_key_file, summary = import_deep_match_manifest_results(
-            deep_match_manifest,
-            left_dom_path=left_dom_path,
-            right_dom_path=right_dom_path,
-        )
+        if mixed_import_requested:
+            if classic_left_key is not None and classic_right_key is None:
+                raise ValueError("classic_right_key is required when classic_left_key is provided.")
+            if classic_right_key is not None and classic_left_key is None:
+                raise ValueError("classic_left_key is required when classic_right_key is provided.")
+            deep_key_pairs: list[tuple[KeypointFile, KeypointFile]] = []
+            grouped_summary: dict[str, object] | None = None
+            if grouped_deep_match_manifests:
+                deep_left_key, deep_right_key, grouped_summary = import_grouped_deep_match_manifest_results(
+                    grouped_deep_match_manifests,
+                    left_dom_path=left_dom_path,
+                    right_dom_path=right_dom_path,
+                )
+                deep_key_pairs.append((deep_left_key, deep_right_key))
+            classic_results: list[TileMatchResult] = []
+            classic_key_pair: tuple[KeypointFile, KeypointFile] | None = None
+            if classic_left_key is not None and classic_right_key is not None:
+                classic_key_pair = (
+                    read_key_file(classic_left_key),
+                    read_key_file(classic_right_key),
+                )
+            left_cube = ip.Cube()
+            right_cube = ip.Cube()
+            left_cube.open(str(left_dom_path), "r")
+            right_cube.open(str(right_dom_path), "r")
+            try:
+                left_width = left_cube.sample_count()
+                left_height = left_cube.line_count()
+                right_width = right_cube.sample_count()
+                right_height = right_cube.line_count()
+            finally:
+                if left_cube.is_open():
+                    left_cube.close()
+                if right_cube.is_open():
+                    right_cube.close()
+            merge_deep_key_pairs = list(deep_key_pairs)
+            if classic_key_pair is not None:
+                merge_deep_key_pairs.insert(0, classic_key_pair)
+            left_key_file, right_key_file, merge_summary = _merge_classic_and_deep_tile_results(
+                left_image_width=left_width,
+                left_image_height=left_height,
+                right_image_width=right_width,
+                right_image_height=right_height,
+                classic_tile_results=classic_results,
+                deep_key_files=merge_deep_key_pairs,
+            )
+            classic_point_count = 0 if classic_key_pair is None else len(classic_key_pair[0].points)
+            deep_point_count = len(left_key_file.points) - classic_point_count
+            merge_summary = {
+                **merge_summary,
+                "classic_point_count": classic_point_count,
+                "deep_point_count": deep_point_count,
+                "classic_left_key": None if classic_left_key is None else str(classic_left_key),
+                "classic_right_key": None if classic_right_key is None else str(classic_right_key),
+                "grouped_deep_match_manifests": [str(path) for path in grouped_deep_match_manifests],
+            }
+            deep_import_summary = (
+                dict(grouped_summary["deep_match_import"])
+                if isinstance(grouped_summary, dict) and isinstance(grouped_summary.get("deep_match_import"), dict)
+                else {
+                    "manifest_count": 0,
+                    "manifests": [],
+                    "imported_task_count": 0,
+                    "failed_task_count": 0,
+                    "missing_result_count": 0,
+                    "skipped_empty_task_count": 0,
+                    "imported_match_count": 0,
+                }
+            )
+            summary = {
+                "left_dom": str(left_dom_path),
+                "right_dom": str(right_dom_path),
+                "image_space": "dom",
+                "status": str(merge_summary["status"]),
+                "reason": "Merged persisted classic route results with grouped deep-learning manifest imports.",
+                "point_count": len(left_key_file.points),
+                "left_image_width": left_width,
+                "left_image_height": left_height,
+                "right_image_width": right_width,
+                "right_image_height": right_height,
+                "deep_match_mode": "import",
+                "deep_match_import": deep_import_summary,
+                "deep_match_export": None,
+                "mixed_route_import": merge_summary,
+                "matcher": {
+                    "matcher_method_requested": "mixed_route",
+                    "matcher_method_effective": "mixed_route",
+                },
+                "preparation": {
+                    "status": str(merge_summary["status"]),
+                    "reason": "Merged persisted classic route results with grouped deep-learning manifest imports.",
+                },
+            }
+        else:
+            left_key_file, right_key_file, summary = import_deep_match_manifest_results(
+                deep_match_manifest,
+                left_dom_path=left_dom_path,
+                right_dom_path=right_dom_path,
+            )
         Path(left_output_key).parent.mkdir(parents=True, exist_ok=True)
         Path(right_output_key).parent.mkdir(parents=True, exist_ok=True)
         write_key_file(left_output_key, left_key_file)
@@ -3113,10 +4406,11 @@ def match_dom_pair_to_key_files(
                 "status": summary["status"],
                 "reason": summary["reason"],
                 "point_count": summary["point_count"],
-                "matcher": summary["matcher"],
+                "matcher": summary.get("matcher"),
                 "deep_match_mode": summary["deep_match_mode"],
                 "deep_match_import": summary["deep_match_import"],
                 "deep_match_export": summary["deep_match_export"],
+                **({"mixed_route_import": summary["mixed_route_import"]} if "mixed_route_import" in summary else {}),
             }
         match_visualization_result: dict[str, object] | None = None
         if write_match_visualization:
@@ -3126,11 +4420,21 @@ def match_dom_pair_to_key_files(
                 else (None if match_visualization_output_path is not None else Path(left_output_key).parent)
             )
             visualization_timestamp = None if match_visualization_output_path is not None else datetime.now()
+            visualization_left_key_file, visualization_right_key_file, visualization_ransac_summary = _keypoints_for_match_visualization(
+                left_key_file,
+                right_key_file,
+                use_ransac=match_visualization_ransac,
+                ransac_reproj_threshold=match_visualization_ransac_threshold,
+                ransac_confidence=match_visualization_ransac_confidence,
+                ransac_max_iters=match_visualization_ransac_max_iters,
+                ransac_mode=match_visualization_ransac_mode,
+                loose_keep_pixel_threshold=match_visualization_loose_ransac_keep_threshold,
+            )
             match_visualization_result = write_stereo_pair_match_visualization(
                 left_dom_path,
                 right_dom_path,
-                left_key_file,
-                right_key_file,
+                visualization_left_key_file,
+                visualization_right_key_file,
                 output_path=match_visualization_output_path,
                 output_directory=visualization_output_directory,
                 timestamp=visualization_timestamp,
@@ -3152,6 +4456,7 @@ def match_dom_pair_to_key_files(
                 invalid_values=tuple(kwargs.get("invalid_values", ())),
                 special_pixel_abs_threshold=float(kwargs.get("special_pixel_abs_threshold", 1.0e300)),
             )
+            match_visualization_result["ransac"] = visualization_ransac_summary
         if metadata_output is not None and metadata_payload is not None:
             if match_visualization_result is not None:
                 metadata_payload["match_visualization"] = match_visualization_result
@@ -3170,6 +4475,11 @@ def match_dom_pair_to_key_files(
             metadata_output=metadata_output,
             left_output_key=left_output_key,
         )
+    grouped_deep_match_manifests = tuple(kwargs.pop("grouped_deep_match_manifests", ()) or ())
+    classic_left_key = kwargs.pop("classic_left_key", None)
+    classic_right_key = kwargs.pop("classic_right_key", None)
+    if grouped_deep_match_manifests or classic_left_key is not None or classic_right_key is not None:
+        raise ValueError("grouped/classic mixed-route import arguments require deep_match_mode='import'.")
     if "low_resolution_output_dir" not in kwargs or kwargs.get("low_resolution_output_dir") is None:
         kwargs["low_resolution_output_dir"] = _default_low_resolution_output_dir(
             left_dom_path,
@@ -3201,6 +4511,10 @@ def match_dom_pair_to_key_files(
             "status": summary["status"],
             "reason": summary["reason"],
             "point_count": summary["point_count"],
+            "left_feature_count_total": summary.get("left_feature_count_total"),
+            "right_feature_count_total": summary.get("right_feature_count_total"),
+            "feature_count_total": summary.get("feature_count_total"),
+            "tile_match_count_total": summary.get("tile_match_count_total"),
             "tile_count": summary["tile_count"],
             "tile_count_before_preindex_filter": summary["tile_count_before_preindex_filter"],
             "tile_count_after_preindex_filter": summary["tile_count_after_preindex_filter"],
@@ -3255,11 +4569,21 @@ def match_dom_pair_to_key_files(
         visualization_timestamp = None if match_visualization_output_path is not None else datetime.now()
         low_resolution_visualization_preview = summary.get("low_resolution_offset", {})
         try:
+            visualization_left_key_file, visualization_right_key_file, visualization_ransac_summary = _keypoints_for_match_visualization(
+                left_key_file,
+                right_key_file,
+                use_ransac=match_visualization_ransac,
+                ransac_reproj_threshold=match_visualization_ransac_threshold,
+                ransac_confidence=match_visualization_ransac_confidence,
+                ransac_max_iters=match_visualization_ransac_max_iters,
+                ransac_mode=match_visualization_ransac_mode,
+                loose_keep_pixel_threshold=match_visualization_loose_ransac_keep_threshold,
+            )
             match_visualization_result = write_stereo_pair_match_visualization(
                 left_dom_path,
                 right_dom_path,
-                left_key_file,
-                right_key_file,
+                visualization_left_key_file,
+                visualization_right_key_file,
                 output_path=match_visualization_output_path,
                 output_directory=visualization_output_directory,
                 timestamp=visualization_timestamp,
@@ -3284,6 +4608,7 @@ def match_dom_pair_to_key_files(
                 invalid_values=tuple(kwargs.get("invalid_values", ())),
                 special_pixel_abs_threshold=float(kwargs.get("special_pixel_abs_threshold", 1.0e300)),
             )
+            match_visualization_result["ransac"] = visualization_ransac_summary
         except Exception as exc:
             if metadata_output is not None and metadata_payload is not None:
                 match_visualization_result = {
@@ -3334,7 +4659,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("right_output_key", help="Output `.key` file for the right DOM image.")
     parser.add_argument("--metadata-output", default=None, help="Optional JSON sidecar path for projected-overlap crop metadata.")
     parser.add_argument("--band", type=int, default=1, help="Cube band index used for matching.")
-    parser.add_argument("--max-image-dimension", type=int, default=3000, help="Maximum image dimension allowed before tiling is enabled.")
+    parser.add_argument("--max-image-dimension", type=int, default=1024, help="Maximum image dimension allowed before tiling is enabled.")
     parser.add_argument("--sub-block-size-x", type=int, default=1024, help="Tile width used when block matching is enabled.")
     parser.add_argument("--sub-block-size-y", type=int, default=1024, help="Tile height used when block matching is enabled.")
     parser.add_argument("--overlap-size-x", type=int, default=128, help="Horizontal overlap between adjacent tiles.")
@@ -3387,6 +4712,9 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--deep-match-mode", type=_parse_deep_match_mode, default=DEFAULT_DEEP_MATCH_MODE, help="Deep-match execution mode: direct, export, or import. 'export' writes a manifest plus tile arrays; 'import' reads completed manifest NPZ results and writes `.key` files.")
     parser.add_argument("--deep-match-temp-root-dir", default=None, help="Root directory used for exported deep-match workspaces when --deep-match-mode export is selected.")
     parser.add_argument("--deep-match-manifest", default=None, help="Path to an exported deep-match tasks.json manifest when --deep-match-mode import is selected.")
+    parser.add_argument("--grouped-deep-match-manifest", action="append", default=[], help="Path to one grouped deep-match tasks.json manifest. Repeat for mixed-route imports.")
+    parser.add_argument("--classic-left-key", default=None, help="Persisted classic-route left .key file used during mixed-route import.")
+    parser.add_argument("--classic-right-key", default=None, help="Persisted classic-route right .key file used during mixed-route import.")
     parser.add_argument("--ratio-test", type=float, default=0.75, help="Lowe ratio-test threshold used for descriptor filtering.")
     parser.add_argument("--max-features", type=int, default=None, help="Optional maximum number of SIFT features per tile.")
     parser.add_argument("--sift-octave-layers", type=int, default=3, help="Number of octave layers used by the OpenCV SIFT detector.")
@@ -3406,6 +4734,11 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
             f"Supported values: {_format_supported_values(SUPPORTED_ADAPTIVE_ROUTING_PROFILES)}. "
             f"Default: {DEFAULT_ADAPTIVE_ROUTING_PROFILE}."
         ),
+    )
+    parser.add_argument(
+        "--dom-source-metadata-csv",
+        default=None,
+        help="CSV mapping DOM cube paths to the source/original camera cubes used to generate them.",
     )
     parser.add_argument("--enable-low-resolution-offset-estimation", dest="enable_low_resolution_offset_estimation", action="store_true", help="Enable low-resolution DOM matching to estimate a projected global offset before the full-resolution overlap crop is prepared.")
     parser.add_argument(
@@ -3433,20 +4766,27 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--opencv-num-threads", type=_parse_opencv_num_threads, default=None, help="Optional OpenCV internal thread limit for CPU SIFT/FLANN work. Must be >= 1. Omit to keep OpenCV's default thread policy; set to 1 alongside multiple CPU workers to avoid oversubscription.")
     parser.add_argument("--use-parallel-cpu", dest="use_parallel_cpu", action="store_true", help="Enable CPU process-pool parallelism for tiled matching. Enabled by default.")
     parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
-    parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default pre-RANSAC drawMatches PNG output written for the matched DOM pair.")
+    parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default drawMatches PNG output written for the matched DOM pair.")
     parser.add_argument("--no-progress", dest="show_progress", action="store_false", help="Disable full-resolution tile progress output on stderr.")
     parser.add_argument("--omit-tile-details", dest="omit_tile_details", action="store_true", help="Omit per-tile detail records from the JSON printed to stdout while keeping top-level tile counters and summary diagnostics.")
     parser.add_argument("--include-tile-details", dest="omit_tile_details", action="store_false", help="Force per-tile detail records to remain in the JSON printed to stdout, even if config defaults requested omission.")
     parser.add_argument("--result-output", default=None, help="Optional JSON path used to persist the full image-match result, including per-tile details, before any stdout trimming is applied.")
-    parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the pre-RANSAC drawMatches PNG written by the image-match stage.")
-    parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the pre-RANSAC drawMatches PNG written by the image-match stage.")
-    parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the pre-RANSAC drawMatches PNG. Defaults to 1/3 for a smaller preview.")
+    parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the drawMatches PNG written by the image-match stage.")
+    parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the drawMatches PNG written by the image-match stage.")
+    parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the drawMatches PNG. Defaults to 1/3 for a smaller preview.")
+    parser.add_argument("--match-visualization-ransac", dest="match_visualization_ransac", action="store_true", help="Use RANSAC-filtered matches for the visualization PNG while keeping the original key outputs unchanged.")
+    parser.add_argument("--no-match-visualization-ransac", dest="match_visualization_ransac", action="store_false", help="Draw all preserved matches in the visualization PNG without RANSAC filtering.")
+    parser.add_argument("--match-visualization-ransac-threshold", type=float, default=DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD, help=f"RANSAC reprojection threshold in pixels for match visualization filtering. Default: {DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD}.")
+    parser.add_argument("--match-visualization-ransac-confidence", type=float, default=DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE, help=f"RANSAC confidence for match visualization filtering. Default: {DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE}.")
+    parser.add_argument("--match-visualization-ransac-max-iters", type=int, default=DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS, help=f"Maximum RANSAC iterations for match visualization filtering. Default: {DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS}.")
+    parser.add_argument("--match-visualization-ransac-mode", type=_parse_match_visualization_ransac_mode, default=DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE, help=f"RANSAC visualization filtering mode: strict or loose. Default: {DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE}.")
+    parser.add_argument("--match-visualization-loose-ransac-keep-threshold", type=float, default=DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD, help=f"Pixel error threshold for retaining soft outliers in loose visualization RANSAC mode. Default: {DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD}.")
     parser.add_argument(
         "--visualization-mode",
         type=_parse_visualization_mode,
         default=DEFAULT_MATCH_VISUALIZATION_MODE,
         help=(
-            "Visualization mode used for the pre-RANSAC match preview. "
+            "Visualization mode used for the match preview. "
             f"Supported values: {_format_supported_values(SUPPORTED_VISUALIZATION_MODES)}. "
             f"Default: {DEFAULT_MATCH_VISUALIZATION_MODE}."
         ),
@@ -3572,7 +4912,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
         default=16,
         help="Maximum dynamic GPU batch size for 8GB-class GPUs (default: 16)",
     )
-    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_adaptive_routing=DEFAULT_ENABLE_ADAPTIVE_ROUTING, enable_tile_validity_prefilter=False, show_progress=True, gpu_dynamic_batch=True)
+    parser.set_defaults(write_match_visualization=True, match_visualization_ransac=DEFAULT_MATCH_VISUALIZATION_RANSAC, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_adaptive_routing=DEFAULT_ENABLE_ADAPTIVE_ROUTING, enable_tile_validity_prefilter=False, show_progress=True, gpu_dynamic_batch=True)
     if config_defaults:
         parser.set_defaults(**config_defaults)
     return parser
@@ -3623,14 +4963,28 @@ def main(argv: list[str] | None = None) -> None:
         _validate_low_resolution_dom_pair_args(args.left_low_resolution_dom, args.right_low_resolution_dom)
     except ValueError as exc:
         parser.error(str(exc))
-    if args.deep_match_mode == "import" and args.deep_match_manifest is None:
-        parser.error("--deep-match-mode import requires --deep-match-manifest")
+    if (
+        args.deep_match_mode == "import"
+        and args.deep_match_manifest is None
+        and not args.grouped_deep_match_manifest
+        and args.classic_left_key is None
+        and args.classic_right_key is None
+    ):
+        parser.error("--deep-match-mode import requires --deep-match-manifest or grouped/classic mixed-route inputs")
     try:
         _validate_valid_intensity_percentile_bounds(
             args.valid_intensity_lower_percent,
             args.valid_intensity_upper_percent,
         )
     except ValueError as exc:
+        parser.error(str(exc))
+    try:
+        dom_source_metadata_lookup = (
+            load_dom_source_metadata_csv(args.dom_source_metadata_csv)
+            if args.dom_source_metadata_csv not in (None, "")
+            else {}
+        )
+    except (OSError, ValueError) as exc:
         parser.error(str(exc))
     result = match_dom_pair_to_key_files(
         args.left_dom,
@@ -3675,6 +5029,8 @@ def main(argv: list[str] | None = None) -> None:
         enable_adaptive_routing=args.enable_adaptive_routing,
         adaptive_routing_profile=args.adaptive_routing_profile,
         adaptive_routing_deep_presets=getattr(args, "adaptive_routing_deep_presets", None),
+        dom_source_metadata_lookup=dom_source_metadata_lookup,
+        dom_source_metadata_csv=args.dom_source_metadata_csv,
         low_resolution_level=args.low_resolution_level,
         low_resolution_matching_target_long_edge=args.low_resolution_matching_target_long_edge,
         low_resolution_trim_fraction_each_side=args.low_resolution_trim_fraction_each_side,
@@ -3688,6 +5044,12 @@ def main(argv: list[str] | None = None) -> None:
         match_visualization_output_path=args.match_visualization_output_path,
         match_visualization_output_dir=args.match_visualization_output_dir,
         match_visualization_scale=args.match_visualization_scale,
+        match_visualization_ransac=args.match_visualization_ransac,
+        match_visualization_ransac_threshold=args.match_visualization_ransac_threshold,
+        match_visualization_ransac_confidence=args.match_visualization_ransac_confidence,
+        match_visualization_ransac_max_iters=args.match_visualization_ransac_max_iters,
+        match_visualization_ransac_mode=args.match_visualization_ransac_mode,
+        match_visualization_loose_ransac_keep_threshold=args.match_visualization_loose_ransac_keep_threshold,
         visualization_mode=args.visualization_mode,
         memory_profile=args.memory_profile,
         visualization_target_long_edge=args.visualization_target_long_edge,
@@ -3713,6 +5075,9 @@ def main(argv: list[str] | None = None) -> None:
             )
         ),
         deep_match_manifest=args.deep_match_manifest,
+        grouped_deep_match_manifests=args.grouped_deep_match_manifest,
+        classic_left_key=args.classic_left_key,
+        classic_right_key=args.classic_right_key,
         use_tile_cache=args.use_tile_cache,
         tile_cache_max_mb=args.tile_cache_max_mb,
         adaptive_warmup_count=args.adaptive_warmup_count,

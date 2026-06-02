@@ -99,6 +99,11 @@ class ImageSparsenessSummary:
     aggregation_quantile: float
     image_texture_sparseness: float | None
     sparseness_quantiles: dict[str, float | None] = field(default_factory=dict)
+    skipped_invalid_tile_count: int = 0
+    aggregation_tile_count: int = 0
+    aggregation_pixel_count: int = 0
+    aggregation_valid_pixel_count: int = 0
+    aggregation_valid_pixel_ratio: float | None = None
     tile_metrics: tuple[TileSparsenessMetrics, ...] = ()
 
 
@@ -367,6 +372,14 @@ def _build_image_sparseness_summary(
     aggregation_quantile: float,
     keep_tile_metrics: bool,
 ) -> ImageSparsenessSummary:
+    aggregation_tile_count = len(tile_metrics)
+    aggregation_pixel_count = sum(int(metric.width * metric.height) for metric in tile_metrics)
+    aggregation_valid_pixel_count = sum(int(metric.valid_pixel_count) for metric in tile_metrics)
+    aggregation_valid_pixel_ratio = (
+        None
+        if aggregation_pixel_count <= 0
+        else aggregation_valid_pixel_count / float(aggregation_pixel_count)
+    )
     if tile_metrics:
         sparseness_values = [metric.texture_sparseness for metric in tile_metrics]
         image_sparseness = _interpolated_quantile(sparseness_values, aggregation_quantile)
@@ -389,6 +402,11 @@ def _build_image_sparseness_summary(
         aggregation_quantile=float(aggregation_quantile),
         image_texture_sparseness=image_sparseness,
         sparseness_quantiles=sparseness_quantiles,
+        skipped_invalid_tile_count=max(0, int(tile_total_count) - aggregation_tile_count),
+        aggregation_tile_count=aggregation_tile_count,
+        aggregation_pixel_count=aggregation_pixel_count,
+        aggregation_valid_pixel_count=aggregation_valid_pixel_count,
+        aggregation_valid_pixel_ratio=aggregation_valid_pixel_ratio,
         tile_metrics=tuple(tile_metrics) if keep_tile_metrics else (),
     )
 

@@ -1,0 +1,180 @@
+# Tile-Level Physical Illumination Adaptive Routing Plan
+
+## Goal
+
+Redesign the LRO NAC adaptive-routing benchmark so matcher selection can use tile-level physical solar geometry instead of pair-level or grayscale-proxy lighting only, while preserving a pair-center fallback for compact lower-latitude stereo pairs.
+
+## Current Status
+
+Status: implementation in progress in isolated worktree; Tasks 1-16 complete. Physical tile illumination metadata and per-tile route metadata are connected into the `image_match.py` runtime path, single-tile real-data geometry/routing smoke passed, export-mode deep manifests are grouped by per-tile selected route, classic `asp360_new` route results are persisted for later import, import mode can merge persisted classic keys plus multiple grouped deep manifests into final pair-level `.key` files, and the SIFT+LightGlue blank/all-invalid tile backend failure is guarded in the deep adapter.
+
+The previous polar adaptive-routing plan remains useful as baseline context, but this is a new architecture task because illumination evidence, tile routing, deep-learning manifest grouping, reporting, and paper figures all need changes.
+
+## Success Criteria
+
+- Adaptive routing supports automatic illumination granularity:
+  - tiled long-strip DOM matching uses one representative valid point per tile;
+  - compact/non-tiled pair matching uses one representative valid point per pair overlap.
+- Tile representative point selection is bounded:
+  - use center if pixel-available and source-camera-projectable;
+  - otherwise use the nearest pixel-available and source-camera-projectable point;
+  - skip illumination/routing for a tile with no source-projectable representative point.
+- Physical illumination metadata is computed from the source/original camera geometry corresponding to each DOM:
+  - the source cube may be full original resolution or REDUCED, depending on how that DOM was generated;
+  - do not assume every DOM maps back to a `REDUCED_*.cub` input.
+  - solar azimuth;
+  - incidence angle;
+  - solar elevation as `90.0 - incidence_angle`;
+  - left/right azimuth, elevation, and incidence differences.
+- Deep-learning execution remains grouped by selected method rather than launching one process per tile.
+- RANSAC-filtered success metrics and tile-level method-selection diagnostics are available for final Nature-style figures.
+
+## Phase 1: Architecture Audit
+
+Status: complete
+
+- [x] Inspect existing pair-level adaptive routing and sidecar flow.
+- [x] Inspect tile task and deep-match manifest organization.
+- [x] Identify affected modules and experiment outputs.
+- [x] Confirm current PyISIS camera/projection API calls needed for DOM tile center -> original image solar geometry.
+- [x] Confirm where each DOM's source/original cube path is preserved in DOM pair metadata for both fixed and adaptive runs.
+
+## Phase 2: Design the Illumination Data Model
+
+Status: complete
+
+- [x] Define `TileIlluminationSample` fields for representative point, coordinate basis, validity status, original-image sample/line, and solar geometry.
+- [x] Define pair-center metadata fields for compact non-tiled pairs.
+- [x] Define aggregate pair summary fields for reporting route distributions and figure source data.
+- [x] Define JSON compatibility policy so older sidecars without tile illumination still load.
+
+## Phase 3: Implement Bounded Representative-Point Selection
+
+Status: pending
+
+- [ ] Add `pixel_available` checks for finite DOM pixels and true ISIS no-data/special pixels.
+- [ ] Keep `radiometric_valid_for_matching` separate for matching, texture, keypoint, and visualization masks.
+- [ ] Add center-first source-projectable check using DOM-to-ground-to-source-camera projection.
+- [ ] Add nearest pixel-available and source-projectable fallback with deterministic tie breaking.
+- [ ] Add skip status for no projectable representative point.
+- [ ] Add focused tests for center projectable, shadowed-but-projectable center, center projection fallback, no-projectable skip, and coordinate basis.
+
+## Phase 4: Implement Physical Solar Geometry Extraction
+
+Status: pending
+
+- [ ] Convert DOM sample/line representative point to ground coordinates using DOM projection/UniversalGroundMap.
+- [ ] Project ground point into the corresponding source/original left/right cubes using CameraFirst ground map.
+- [ ] Compute solar azimuth, incidence angle, and elevation at original-image pixel positions.
+- [ ] Record failure reasons separately for DOM ground failure, original projection failure, and camera solar-geometry failure.
+- [ ] Add smoke tests on existing SPICE-initialized fixture or real-data dry-run sample.
+
+## Phase 5: Route Per Tile and Group Work by Matcher
+
+Status: pending
+
+- [ ] Change adaptive routing from one pair-level route to per-tile route decisions when multiple tiles exist.
+- [ ] Keep pair-center routing when there is one tile or matching is not tiled.
+- [ ] Preserve current prior-only semantics: do not cascade to another matcher after failure.
+- [x] Group tile tasks by selected matcher and execution environment:
+  - first stay in `asp360_new` and complete all SIFT+FLANN matching, physical illumination metadata, manifest export, and non-deep bookkeeping for the stereo pair batch;
+  - then switch once to `deep-learning` and run all required SIFT+LightGlue, SuperPoint+LightGlue, and LoFTR grouped manifests for the relevant stereo pair batch;
+  - avoid repeated conda switching inside per-tile or per-method loops.
+- [x] Ensure imported deep results merge back into one pair-level `.key` output with per-tile provenance.
+
+## Phase 6: Update Reports and Nature-Style Figures
+
+Status: pending
+
+- [ ] Extend pair and method summaries with tile-level route counts and illumination bins.
+- [ ] Report success using RANSAC-retained matches, not raw imported match count.
+- [ ] Regenerate five-method source data with tile-level adaptive routing.
+- [ ] Generate case-study figures:
+  - high texture + small physical illumination difference tile;
+  - low texture + large physical illumination difference tile.
+- [ ] Clearly label grayscale brightness metrics as visualization-only if retained.
+
+## Phase 7: Full Benchmark Rerun
+
+Status: pending
+
+- [ ] Run focused unit tests and smoke tests in `asp360_new`.
+- [ ] In `asp360_new`, complete all classic SIFT+FLANN work and export all grouped deep manifests needed for the benchmark batch.
+- [ ] Switch once to `deep-learning` and run all required deep-learning grouped manifests with `torch_num_threads=8` and `num_workers=1`.
+- [ ] Import results, run RANSAC filtering, and regenerate visualizations.
+- [ ] Compare new tile-illumination adaptive routing against:
+  - SIFT+FLANN;
+  - SIFT+LightGlue;
+  - SuperPoint+LightGlue;
+  - LoFTR;
+  - previous pair-level adaptive baseline.
+
+## Implementation Plan
+
+Status: executing
+
+- [x] Wrote Superpowers implementation plan:
+  - `docs/superpowers/plans/2026-06-02-tile-illumination-adaptive-routing.md`
+- [x] Chose subagent-driven task execution with review checkpoints.
+- [x] Task 1: tile illumination data models.
+- [x] Task 2: bounded representative-point geometry helpers and PyISIS projector boundary.
+- [x] Task 3: DOM source cube metadata CSV loading and lookup.
+- [x] Task 4: tile-level prior-only matcher router.
+- [x] Task 5: route metadata preservation through tile tasks and deep manifests.
+- [x] Task 6: pure tile route metadata builder and task metadata application helper.
+- [x] Task 7: CLI and pipeline source metadata handoff.
+- [x] Task 8: reporting summaries.
+- [x] Task 9: focused validation.
+- [x] Task 9 follow-up: connect physical tile illumination computation into `image_match.py`.
+- [x] Task 9 follow-up: run single-tile real-data physical illumination smoke.
+- [x] Task 10: connect per-tile texture/keypoint evidence to physical illumination route metadata.
+- [x] Task 11: use per-tile route metadata to group matcher execution for classic/deep batches.
+- [x] Task 12: implement minimal mixed route classic execution, grouped deep import, and classic+deep key merge helpers.
+- [x] Task 13: wire mixed-route export/import workflow so persisted classic results and grouped deep manifests merge into final `.key` outputs.
+- [x] Task 14: run a small real-data export/deep/import smoke on one LRO NAC pair and fix mixed-route manifest integration issues found by the smoke.
+- [x] Task 15: analyze all-LoFTR real routing, fix texture scoring over-penalty from invalid background ratio, and complete a true mixed-route real-data smoke.
+- [x] Task 16: fix SIFT+LightGlue official SIFT failure on blank/all-invalid deep tiles and verify the previous 512x512 real manifest now completes as `matched_no_points`.
+
+## Key Decisions
+
+| Decision | Rationale |
+| --- | --- |
+| Use automatic illumination granularity | Tiled long-strip polar NAC images need local solar geometry; compact low/mid-latitude pairs can use a pair-center approximation. |
+| Use one representative valid point per tile | Keeps solar-angle computation bounded and avoids expensive per-pixel camera calls. |
+| Prefer nearest source-projectable fallback when center fails | DOM-space polar images often have black/no-data or non-projectable regions; the nearest pixel-available and source-projectable point gives bounded local physical illumination evidence. |
+| Use the DOM source/original cube camera geometry for solar angles | The correct camera model is the image that generated the DOM; it may be full-resolution original or REDUCED, so routing must not hard-code REDUCED-only paths. |
+| Group work by environment and matcher | Complete all `asp360_new` work first, then switch once to `deep-learning` for the required deep manifests. This preserves tile-level routing while avoiding repeated conda switching overhead. |
+| Keep prior-only routing | User clarified adaptive routing means choosing a method from texture/illumination evidence, not retrying a cascade after failure. |
+| Keep route identity separate from backend matcher | `selected_route` distinguishes `sift_lightglue` from `superpoint_lightglue`, while `selected_matcher` stays compatible with backend values such as `lightglue`. |
+| Apply route metadata in the same filtered tile-task order or with explicit indexes | Candidate-window prefiltering can change tile order/count; future integration must not mix global tile indexes with filtered task indexes. |
+| Run real-data geometry smoke with real ISISDATA | LRO NAC source-camera initialization needs a real lunar DEM under `ISISDATA`; the mock test ISISDATA is only valid for unit tests and smoke imports. |
+
+## Open Questions
+
+1. Should tile-level physical illumination sample only the left/right tile representative point, or also record optional corner diagnostics for later analysis?
+2. Should route thresholds use absolute solar-elevation/azimuth differences, or a normalized combined score with tunable weights?
+3. Should pair-center fallback apply only when there is one generated tile, or also when the overlap footprint is below a fixed pixel-area threshold?
+
+## Environment Notes
+
+- Main repo: `/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone`
+- Real-data root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd`
+- Reduced/DOM experiment root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m`
+- Use `asp360_new` for ISIS/PyISIS preprocessing, source-cube metadata resolution, physical illumination extraction, classic SIFT, deep manifest export/import, RANSAC summaries, and plotting.
+- Use `deep-learning` for LightGlue/SuperPoint/LoFTR inference. Prefer one environment switch per benchmark batch: enter `deep-learning`, run all needed manifests, exit back to `asp360_new` for import/reporting.
+- Do not modify, delete, or commit `.gitignore` or `print.prt`.
+
+## Errors Encountered
+
+| Error | Attempt | Resolution |
+| --- | --- | --- |
+| None yet | Plan initialization | N/A |
+| `_resolved_invalid_values_for_cube` called with `None` or `Path` during temporary validation | 2 | The helper expects an open `ip.Cube` plus a tuple of invalid values. Temporary script was corrected to call `_resolved_invalid_values_for_cube(cube, ())`. |
+| Left rich-tile center projected from DOM to ground but failed `source_ground_map.set_universal_ground` in the source cube | 1 | Recorded as an important design boundary: a representative point must be DOM-valid and source-camera-projectable, not only DOM-valid. The right tile completed the full geometry/solar chain. |
+| Real-data Task 9 smoke with mock ISISDATA failed to initialize source camera | 1 | Re-ran with `ISISDATA=/media/gengxun/My Passport/data`, which provides `base/dems/ldem_128ppd_Mar2011_clon180_radius_pad.cub`. |
+| First single-tile geometry smoke used the wrong 33x33 window origin | 1 | Recomputed the 0-based tile origin so the center maps to the known projectable samples: left `(2768,1200)` and right `(2768,1143)`. |
+| Real-data Task 14 export failed with `match_dom_pair() got an unexpected keyword argument 'grouped_deep_match_manifests'` | 1 | Added a regression test and stopped non-import CLI mixed-route arguments from leaking into `match_dom_pair()`. |
+| Real-data Task 14 LoFTR grouped manifest had top-level LoFTR config but task-level SIFT+LightGlue runtime config | 1 | Added a regression test and rewrote deep export tile tasks to use the selected route matcher/runtime config before manifest construction. |
+| Task 14 LoFTR CPU smoke on the full 2048x2048 exported tile exited without NPZ/log output | 1 | Treated this as a smoke-size/resource issue; used a 512x512 crop from the real exported tile for the deep-learning NPZ/import smoke. |
+| Task 15 real route evidence showed rich tiles with thousands of keypoints still had `texture_sparseness` near 0.95 | 1 | Removed the direct `valid_pixel_ratio` multiplier from `compute_real_image_texture_probe().real_texture_score`; valid-pixel ratio remains a diagnostic field. |
+| Task 15 SIFT+LightGlue 512x512 crop smoke failed with `ValueError: array is not broadcastable to correct shape` | 1 | Root cause: the smoke crop had all-zero images and all-zero uint8 masks, so official LightGlue SIFT entered its DoG filter on a blank/all-invalid tile and raised inside `np.maximum.at`. Task 16 added deep-adapter guards that return empty matches when either image has no valid pixels, and for official SIFT when either valid image has no intensity variation. The same manifest now completes with `matched_no_points`, `failed_task_count=0`. |

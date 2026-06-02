@@ -1,7 +1,7 @@
 {
   "feature_extractor": {
     "method": "lightglue_sift",
-    "max_features": 4096
+    "max_features": 1000
   },
   "matcher": {
     "method": "lightglue",

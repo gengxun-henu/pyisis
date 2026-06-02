@@ -6,7 +6,7 @@ Build a reproducible experiment on reduced LRO NAC polar imagery to compare adap
 
 ## Current Phase
 
-Phase 11
+Phase 18 latest-parameter five-method rerun is complete.
 
 ## Phases
 
@@ -122,6 +122,95 @@ Phase 11
 - [ ] Decide whether to apply the intensity-percentile mask to the remaining full deep-learning runs
 - **Status:** in_progress
 
+### Phase 12: Deep-Learning Rerun in Separate Output Directory
+
+- [x] Restore previous deep-learning experiment context and identify migrated reduced-10m data
+- [x] Define a new output root that does not overwrite prior deep-learning outputs
+- [x] Export deep-learning manifests for LoFTR, SuperPoint+LightGlue, and SIFT+LightGlue into the new root
+- [x] Run exported manifests in `deep-learning` with `num_workers=1` and `torch_num_threads=8`
+- [x] Import completed deep-learning results back in `asp360_new`
+- [x] Regenerate summaries for the rerun directory
+- [x] Record output paths, result counts, runtime, and any failures
+- [x] Run full selected-pair rerun if first-pair smoke results are accepted
+- [x] Generate match-line visualizations for every selected pair and method
+- [x] Regenerate deep-learning match-line visualizations after RANSAC filtering and summarize raw/retained/dropped connection counts
+- **Status:** complete with caveat: LoFTR has one selected pair recorded as `import_failed_no_usable_results` after a deep-learning SIGKILL; all import stages completed and match-line PNGs were generated.
+
+### Phase 13: Five-Method RANSAC Visualization and Nature Figure Inputs
+
+- [x] Run SIFT+FLANN on the full 16 selected pairs in the full benchmark output root
+- [x] Run adaptive routing on the full 16 selected pairs in the full benchmark output root
+- [x] Regenerate RANSAC-filtered match-line visualizations for LoFTR, SuperPoint+LightGlue, SIFT+LightGlue, SIFT+FLANN, and adaptive routing
+- [x] Write before/after RANSAC connection-count summaries for all five methods
+- [x] Generate Nature-style source data CSV/JSON for the five-method comparison
+- [x] Export the five-method comparison figure as SVG, PDF, TIFF, and PNG
+- [x] Verify all five methods have 16 RANSAC visualization PNGs and inspect the figure preview
+- **Status:** complete
+
+### Phase 14: True Deep-Learning Adaptive Routing Rerun
+
+- [x] Fix adaptive export so FLANN-routed pairs can be handed off through the first deep fallback instead of failing in `deep_match_mode=export`
+- [x] Verify the fallback-export behavior with focused unit coverage
+- [x] Export all 16 selected adaptive-routing pairs with low-resolution DOM/lighting diagnostics enabled
+- [x] Run all exported adaptive deep manifests in the `deep-learning` conda environment with `num_workers=1` and `torch_num_threads=8`
+- [x] Create real import alias directories for the external filesystem
+- [x] Import the deep-learning results back in `asp360_new`
+- [x] Regenerate RANSAC-filtered adaptive match-line visualizations and before/after counts
+- [x] Replace the previous FLANN-fallback adaptive row in the five-method Nature-style source data with the true deep-learning adaptive result
+- [x] Export updated SVG/PDF/TIFF/PNG comparison figure outputs
+- **Status:** complete
+
+### Phase 15: Prior-Only Adaptive Routing Rule Revision
+
+- [x] Replace adaptive post-match cascade/fallback with a single prior-selected matcher
+- [x] Route rich texture + small lighting difference to SIFT+FLANN
+- [x] Route moderate texture/lighting to SIFT+LightGlue as the main deep-learning matcher
+- [x] Route weak-to-moderate texture with non-extreme lighting to SuperPoint+LightGlue
+- [x] Route weak texture + large lighting difference, or extreme single-condition cases, to LoFTR
+- [x] Remove export-mode deep fallback for traditional selected routes
+- [x] Update focused unit tests for no-fallback routing and metadata
+- [x] Re-run real selected-pair adaptive benchmark with the revised prior-only routing
+- [x] Regenerate RANSAC summaries and Nature-style comparison inputs after rerun
+- **Status:** complete
+
+### Phase 16: Valid-Block Texture Evidence Cleanup
+
+- [x] Inspect adaptive routing texture probe, tile sparseness, and preview/source path selection
+- [x] Use the actual matched image source for texture evidence: DOM for DOM-space matching and original/REDUCED cube for ORI-space matching
+- [x] Keep low-resolution previews only as fallback diagnostics when the actual matching source path is unavailable
+- [x] Ensure invalid/empty blocks do not participate in texture aggregation
+- [x] Avoid converting missing pair texture evidence into neutral `0.5` values in route sidecars
+- [x] Add focused unit regression coverage
+- [x] Run focused adaptive-routing and texture-sparseness tests
+- [x] Update findings/progress with implementation details and verification results
+- **Status:** complete
+
+### Phase 17: Feature-Count Routing and Reporting Cleanup
+
+- [x] Restore context and confirm existing tile-level feature-count fields
+- [x] Add a texture-probe keypoint-count/density hard rule that routes very low-feature pairs directly to LoFTR
+- [x] Align SIFT+LightGlue SIFT extraction defaults with SIFT+FLANN where the experiment expects comparable SIFT feature counts
+- [x] Aggregate extracted feature counts separately from raw matched correspondence counts in match summaries
+- [x] Propagate feature-count source data into five-method figure CSV/JSON inputs
+- [x] Add focused unit tests for LoFTR hard routing and feature-count aggregation
+- [x] Run focused verification and update findings/progress
+- **Status:** complete
+
+### Phase 18: Latest-Parameter Five-Method Full Rerun
+
+- [x] Restore current runner parameters and plan context
+- [x] Create an isolated latest-parameter output root
+- [x] Run SIFT+FLANN full selected-pair benchmark in `asp360_new`
+- [x] Export LoFTR, SuperPoint+LightGlue, and SIFT+LightGlue manifests in `asp360_new`
+- [x] Execute all deep-learning manifests in the `deep-learning` conda environment with `num_workers=1` and `torch_num_threads=8`
+- [x] Import deep-learning results back in `asp360_new`
+- [x] Run prior-only adaptive routing with latest texture/keypoint rules
+- [x] Regenerate RANSAC-filtered match-line visualizations for all five methods
+- [x] Generate five-method Nature-style source data and SVG/PDF/TIFF/PNG figure outputs
+- [x] Summarize point counts, feature counts, RANSAC success, runtime, and output paths
+- [x] Update findings/progress with final results
+- **Status:** complete
+
 ## Key Questions
 
 1. Are the 22 `work/*.echo.cal.cub` files already SPICE-initialized and suitable for `reduce`/`cam2map`, or should the backup cubes be used as the source of truth?
@@ -141,6 +230,14 @@ Phase 11
 | Migrate final reduced-10m experiment artifacts to the external source data tree | User requested the generated DOMs and all related experiment files under `original_gsd/work/reduced-10m` for the remaining deep-learning experiments. |
 | Add a default-off intensity-percentile invalid mask instead of changing gray stretch semantics | The previous `lower_percent`/`upper_percent` controls only display/matcher stretch. A separate valid-intensity mask preserves backward compatibility and makes shadow/highlight exclusion explicit. |
 | Use `0.1/99.9` rather than `1.0/99.0` as the default valid-intensity mask | LRO NAC polar scenes can contain real low-light texture; `1.0/99.0` removed 11.2% of first-pair LoFTR matches, so it is better treated as a stricter ablation setting. |
+| Supersede Phase 14 export fallback with prior-only adaptive routing | User clarified that adaptive routing means selecting a matcher from texture/lighting diagnostics, not recursively trying SIFT -> LightGlue -> LoFTR after quality failure. |
+| Use SIFT+LightGlue as the main adaptive deep matcher | SIFT keypoints remain reliable in moderate-to-rich texture, while LightGlue improves matching under moderate illumination/contrast changes. |
+| Use SuperPoint+LightGlue for weak-to-moderate texture with non-extreme lighting | Learned keypoints can help where SIFT keypoints are sparse, but dense LoFTR is reserved for combined weak texture and large lighting difference. |
+| Use actual matched imagery for adaptive texture evidence | Texture should describe the same image product used by matching: DOM-space matching uses DOMs, ORI-space matching uses original/REDUCED cubes. Low-resolution DOM previews are now fallback diagnostics only. |
+| Preserve missing texture evidence as missing, not neutral `0.5` | When no valid texture blocks exist, storing `None` makes routing diagnostics auditable and avoids treating failed texture computation as medium texture. |
+| Route very low texture-probe keypoint evidence directly to LoFTR | A hard keypoint-count/density rule prevents feature-sparse images from being forced through sparse-keypoint matchers. |
+| Align SIFT+LightGlue and SIFT+FLANN SIFT feature budgets for comparison | `lightglue_official_sift.json` and `classic_sift_flann.json` now both use `max_features=1000`; matched correspondence counts may still differ because FLANN ratio test and LightGlue matching are different stages. |
+| Report extracted feature counts separately from matched correspondences | `left_feature_count_total`, `right_feature_count_total`, and `feature_count_total` are extracted features; `tile_match_count_total`, `raw_match_count`, and RANSAC-retained counts are matching/geometric-filter outputs. |
 
 ## Errors Encountered
 
@@ -152,6 +249,10 @@ Phase 11
 | LoFTR smoke failed with `BrokenProcessPool` in the current CPU worker environment | 1 | Recorded as an environment/runtime failure; avoided repeating full LoFTR runs that would only reproduce the same failure. |
 | Adaptive routing with low-resolution previews selected a LightGlue route and failed because `lightglue` is unavailable | 1 | Completed the no-preview adaptive cascade benchmark, and recorded the low-resolution preview route failure as an environment constraint. |
 | LoFTR raw matches were all removed by invalid-mask filtering | 1 | Diagnosed a mask polarity mismatch: exported task masks are uint8 OpenCV valid masks, while the LoFTR frontend expects bool invalid masks. Fixed adapter-side normalization and added regression coverage. |
+| Full LoFTR selected-pair rerun hit SIGKILL on one long CPU tile | 1 | Recorded the affected pair as `import_failed_no_usable_results`, continued SuperPoint+LightGlue and SIFT+LightGlue, and generated summaries/visualizations for all selected pairs. |
+| Adaptive export failed when low-resolution routing selected FLANN for a pair | 1 | Added export-mode fallback selection: preserve the routed traditional matcher in metadata, but export the first deep cascade fallback so deep inference still runs in `deep-learning`. |
+| Phase 14 fallback export no longer matches the intended adaptive definition | 1 | Replaced fallback/cascade behavior with prior-only routing; non-deep selected routes are rejected in `deep_match_mode=export` instead of silently exporting a deep fallback. |
+| A stale unit test still expected adaptive cascade fallback to LoFTR | 1 | Updated the regression to assert current prior-only no-fallback behavior and `quality_insufficient_no_fallback`. |
 
 ## Notes
 
@@ -169,3 +270,5 @@ Phase 11
 - Deep-learning supplement output root after migration: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep`.
 - Repo rule: do not modify, delete, stage, or restore `.gitignore` or `print.prt` unless explicitly requested.
 - Deep-learning manifest runtime defaults: `num_workers=1`, `torch_num_threads=8`.
+- Deep-learning rerun output root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep_rerun_20260602`.
+- True adaptive deep-learning output root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_adaptive_deep_20260602`.

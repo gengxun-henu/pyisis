@@ -142,8 +142,9 @@ Examples:
     --config examples/controlnet_construct/controlnet_config.example.json \
     -- \
     --ratio-test 0.8 \
-    --sub-block-size-x 1536 \
-    --sub-block-size-y 1536
+    --max-image-dimension 1024 \
+    --sub-block-size-x 1024 \
+    --sub-block-size-y 1024
 
   bash examples/controlnet_construct/run_image_match_batch_example.sh \
     --work-dir work \

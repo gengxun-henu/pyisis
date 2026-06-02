@@ -1,0 +1,313 @@
+# Progress: Tile-Level Physical Illumination Adaptive Routing
+
+## 2026-06-02
+
+- Created new isolated plan directory: `.planning/2026-06-02-tile-illumination-adaptive-routing/`.
+- Used `superpowers:brainstorming` to frame the architectural impact before implementation.
+- Used `planning-with-files` to persist the new experiment redesign plan.
+- Inspected existing architecture:
+  - pair-level adaptive routing in `examples/image_match/adaptive_routing.py`;
+  - tile task model in `examples/image_match/tile_matching.py`;
+  - deep-learning manifest model in `examples/image_match/deep_match_manifest.py`;
+  - prior polar benchmark plan and findings.
+- Recorded that the new requirement changes the routing unit from pair-level to tile-level for long-strip tiled data.
+- Recorded automatic granularity decision:
+  - tile-level for tiled long-strip matching;
+  - pair-center fallback for compact/non-tiled stereo pairs.
+- Recorded initial bounded representative-point policy, later refined after PyISIS validation:
+  - center first;
+  - nearest bounded fallback if center fails;
+  - skip if no usable representative point.
+- No implementation changes were made in code during this planning step.
+- Updated plan after user clarification:
+  - solar geometry must use the source/original cube corresponding to each DOM, which may be full-resolution original or REDUCED;
+  - avoid naming this dependency as REDUCED-only in the design;
+  - execution should batch by environment: complete all `asp360_new` classic/export work first, switch once to `deep-learning` for all required deep manifests, then return to `asp360_new` for import/reporting;
+  - avoid repeated conda switching per tile or per method.
+- Executed Phase 1 minimum PyISIS geometry validation with temporary Python only.
+- Confirmed working API chain:
+  - DOM `UniversalGroundMap(... ProjectionFirst)` + `set_image(sample, line)`;
+  - source/original `UniversalGroundMap(... CameraFirst)` + `set_universal_ground(lat, lon)`;
+  - source/original `cube.camera().set_image(sample, line)`;
+  - `sun_azimuth()` and `incidence_angle()`, with solar elevation as `90.0 - incidence_angle`.
+- Confirmed one full successful right-tile sample:
+  - DOM sample/line: `7681.0`, `2561.0`;
+  - ground latitude/longitude: `-88.5690777294848`, `123.06565999195881`;
+  - source sample/line: `234.50167129021804`, `1513.9141017113047`;
+  - sun azimuth: `232.70515244608052`;
+  - incidence angle: `87.03439723962823`;
+  - solar elevation: `2.965602760371766`.
+- Found a left-tile boundary case where DOM center lookup succeeded but source camera projection failed; future representative-point logic must require source-projectable points, not only DOM-valid pixels.
+- Confirmed current fixed/adaptive match metadata does not embed source/original cube paths; source mapping is currently recoverable from `reduced_selected_pair_paths.csv`.
+- Marked Phase 1 complete in `task_plan.md`.
+- Wrote Superpowers SPEC:
+  - `docs/superpowers/specs/2026-06-02-tile-illumination-adaptive-routing-design.md`.
+- Incorporated user clarification that DOM pixel validity for illumination should not reuse the 0.1/99.9 radiometric matching mask.
+- SPEC separates:
+  - `pixel_available`;
+  - `radiometric_valid_for_matching`;
+  - `source_projectable`.
+- SPEC requires representative points to be `pixel_available + source_projectable`, while shadowed/radiometrically invalid-for-matching pixels may still be used for solar geometry if projectable.
+- Marked Phase 2 complete in `task_plan.md`; implementation has not started.
+- Self-review found older planning wording that still implied using the matching valid mask for representative-point selection.
+- Updated `task_plan.md` and `findings.md` so representative-point selection consistently uses `pixel_available + source_projectable`, with `radiometric_valid_for_matching` kept separate for matching/texture/keypoint work.
+- Wrote implementation plan:
+  - `docs/superpowers/plans/2026-06-02-tile-illumination-adaptive-routing.md`.
+- Plan decomposes implementation into:
+  - tile illumination data models;
+  - bounded source-projectable representative selection;
+  - source cube metadata resolution;
+  - tile prior router;
+  - tile route metadata through tile tasks and deep manifests;
+  - `image_match.py` integration;
+  - pipeline source metadata handoff;
+  - reporting summaries;
+  - focused unit tests and real-data smoke validation.
+- No implementation code was changed during plan writing.
+- Created isolated worktree:
+  - `/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/.worktrees/tile-illumination-adaptive-routing-20260602`
+  - branch `feature/tile-illumination-adaptive-routing-20260602`.
+- Preserved baseline dirty state in commit `4da6856e`.
+- Completed Task 1 data models in `examples/image_match/tile_illumination.py`.
+- Completed Task 2 geometry helpers in `examples/image_match/tile_illumination_geometry.py`.
+- Completed Task 3 source metadata CSV lookup helpers in `examples/image_match/tile_illumination.py`.
+- Completed Task 4 tile-level prior-only router in `examples/image_match/adaptive_routing.py`.
+- Task 4 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 42 tests OK before Task 6, then 44 tests OK after Task 6 additions.
+- Completed Task 5 route metadata preservation:
+  - `TileMatchTask.route_metadata`;
+  - tile task payload round-trip;
+  - `DeepMatchTaskRecord.route_metadata`;
+  - manifest top-level and nested tile-task payload preservation.
+- Task 5 validation:
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 15 tests OK.
+- Task 5 commit:
+  - `96d7e499 feat: preserve tile route metadata in manifests`.
+- Completed Task 6 pure tile route metadata helpers:
+  - `_build_tile_route_metadata()`;
+  - `_apply_tile_route_metadata_to_tasks()`.
+- Task 6 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 59 tests OK.
+- Task 6 commit:
+  - `ab8ed16c feat: build tile adaptive route metadata`.
+- Completed Task 7 CLI and pipeline source metadata handoff:
+  - `image_match.py --dom-source-metadata-csv`;
+  - CSV loaded once in CLI through `load_dom_source_metadata_csv()`;
+  - `match_dom_pair()` records `dom_source_metadata`;
+  - adaptive metadata records `adaptive_routing.tile_illumination.source_metadata`;
+  - `run_pipeline_example.sh --dom-source-metadata-csv` forwards the CSV path to every image-match pair.
+- Task 7 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 46 tests OK.
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_deep_manifest_unit_test tests.unitTest.controlnet_construct_pipeline_unit_test -v`
+  - result: 181 tests OK, 1 skipped.
+- Task 7 commit:
+  - `3b0f567a feat: pass DOM source metadata to image matching`.
+- Completed Task 8 reporting summary extraction:
+  - polar adaptive summarizer extracts tile illumination summary fields under prefixed `tile_illumination_*` keys;
+  - preserves tile route distributions and skip reasons as dictionaries;
+  - extracts adaptive RANSAC counts;
+  - falls back to top-level `match_visualization.ransac` for current persisted metadata.
+- Task 8 validation:
+  - `python -m unittest tests.unitTest.controlnet_construct_matcher_comparison_unit_test -v`
+  - result: 51 tests OK.
+- Completed Task 9 focused validation in `asp360_new` with:
+  - `python -m unittest tests.unitTest.image_match_tile_illumination_unit_test tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_deep_manifest_unit_test tests.unitTest.controlnet_construct_pipeline_unit_test -v`
+  - result: 205 tests OK, 1 skipped.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+  - `python -m unittest tests.unitTest.controlnet_construct_matcher_comparison_unit_test -v`
+  - result: 51 tests OK.
+- Deferred the planned real-data tile illumination dry-run because current `image_match.py` runtime metadata records `adaptive_routing.tile_illumination.source_metadata` only. It does not yet compute physical tile illumination `summary/pairs`, so the planned smoke assertion on `adaptive_routing.tile_illumination.summary.tile_count` would fail for an integration reason rather than a data reason.
+- Added runtime physical tile illumination metadata construction in `examples/image_match/image_match.py`:
+  - `_build_physical_tile_illumination_metadata()` samples candidate tile windows after tile-validity prefiltering, so tile order matches downstream tile task order;
+  - the helper opens one PyISIS DOM-to-source projector per side, selects bounded representative points, builds `TileIlluminationPair` records, and writes `adaptive_routing.tile_illumination.summary` plus per-tile `pairs`;
+  - this step records physical metadata but intentionally does not yet change matcher execution to per-tile physical routing.
+- Added TDD coverage:
+  - `test_build_physical_tile_illumination_metadata_samples_tiles_with_projectors`.
+  - red result before implementation: `AttributeError: module 'image_match.image_match' has no attribute '_build_physical_tile_illumination_metadata'`.
+  - green result after implementation: test OK.
+- Ran real single-tile physical illumination smoke with real LRO NAC data:
+  - output: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_smoke/single_tile_physical_illumination_metadata.json`;
+  - required `ISISDATA=/media/gengxun/My Passport/data`; mock ISISDATA failed because the real source camera needs `base/dems/ldem_128ppd_Mar2011_clon180_radius_pad.cub`;
+  - final smoke result: `status=sampled`, `tile_count=1`, `projectable_tile_count=1`, `skipped_tile_count=0`;
+  - representative points: left center `(2768.0, 1200.0)`, right center `(2768.0, 1143.0)`;
+  - physical differences: `azimuth_difference_degrees=1.3686125681990404`, `elevation_difference_degrees=0.025346435004621526`.
+- Validation after runtime metadata integration:
+  - `python -m unittest tests.unitTest.image_match_tile_illumination_unit_test tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_deep_manifest_unit_test tests.unitTest.controlnet_construct_pipeline_unit_test -v`
+  - result: 206 tests OK, 1 skipped.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+- Extended runtime physical tile illumination metadata with per-tile route metadata:
+  - each sampled tile now computes left/right `compute_real_image_texture_probe()` metrics from the same DOM windows used for representative-point selection;
+  - `_build_tile_route_metadata()` combines texture/keypoint evidence with the physical illumination pair;
+  - metadata now includes `adaptive_routing.tile_illumination.route_metadata`;
+  - summary now includes `route_distribution_by_tile` and `route_distribution_by_projectable_tile` for downstream figure source data.
+- Re-ran the real single-tile smoke with deep route presets:
+  - output remains `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_smoke/single_tile_physical_illumination_metadata.json`;
+  - route result: `selected_route=loftr`, `selected_matcher=loftr`;
+  - route reason: `texture probe keypoint count or density below hard threshold; route to LoFTR`;
+  - left/right detected keypoints in the 33x33 smoke tile: `20` and `9`;
+  - route distributions: `{"loftr": 1}` by tile and by projectable tile.
+- Validation after route metadata integration:
+  - `python -m unittest tests.unitTest.image_match_tile_illumination_unit_test tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_deep_manifest_unit_test tests.unitTest.controlnet_construct_pipeline_unit_test -v`
+  - result: 206 tests OK, 1 skipped.
+  - `python -m unittest tests.unitTest.controlnet_construct_matcher_comparison_unit_test -v`
+  - result: 51 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+- Current next step:
+  - use the per-tile route metadata to group execution by selected matcher for classic/deep batches.
+- Completed Task 11 grouped route execution scaffold:
+  - added `_route_metadata_by_tile_index_from_summary()` and `_build_tile_tasks_for_candidate_windows()` so candidate tile tasks receive per-tile route metadata from `adaptive_routing.tile_illumination.route_metadata`;
+  - added `_group_tile_tasks_by_selected_route()` to partition routed tile tasks into `asp360_new` classic groups and `deep-learning` groups keyed by selected route, backend matcher, and deep preset path;
+  - added grouped deep manifest export helpers that write one manifest workspace per deep route, preserving `route_metadata` in every manifest task;
+  - connected `match_dom_pair()` export mode to use grouped deep manifests when route metadata is present, while recording classic SIFT+FLANN group/task counts as `asp360_new` work rather than exporting them to `deep-learning`;
+  - preserved the legacy single deep-matcher export path when route metadata is absent.
+- Task 11 TDD coverage:
+  - red: `test_export_grouped_deep_match_tasks_writes_one_manifest_per_deep_route` initially failed with `AttributeError`/missing grouped export helper, then passed after implementation;
+  - red: `test_build_tile_tasks_for_candidate_windows_applies_route_metadata` initially failed with `AttributeError`, then passed after the routed tile-task helper was implemented;
+  - focused Task 11 tests passed: 3 tests OK.
+- Task 11 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 50 tests OK.
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 15 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+  - `git diff --check`
+  - result: OK.
+  - `git status --short -- .gitignore print.prt`
+  - result: no output; neither file is modified in the Task 11 worktree.
+- Completed Task 12 minimal mixed-route execution/import/merge helpers:
+  - added `_run_classic_route_groups()` so routed `sift_flann`/classic groups can execute in `asp360_new` through the existing tile matcher path;
+  - added `import_grouped_deep_match_manifest_results()` to import multiple grouped deep manifests and combine their points into one pair-level keypoint set;
+  - added `_merge_classic_and_deep_tile_results()` to combine classic `TileMatchResult` output and imported deep `KeypointFile` pairs into one left/right pair-level key set;
+  - kept this as a minimal helper-level implementation and did not run full real-data benchmarks.
+- Task 12 TDD coverage:
+  - red: `test_run_classic_route_groups_executes_sift_flann_in_asp360_new` initially failed with missing `_run_classic_route_groups`, then passed after implementation;
+  - red: `test_import_grouped_deep_match_manifests_merges_multiple_routes` initially failed with missing `import_grouped_deep_match_manifest_results`, then passed after implementation;
+  - red: `test_merge_classic_and_deep_tile_results_writes_one_pair_key_set` initially failed with missing `_merge_classic_and_deep_tile_results`, then passed after implementation.
+- Task 12 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 52 tests OK.
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 16 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+  - `git diff --check`
+  - result: OK.
+  - `git status --short -- .gitignore print.prt`
+  - result: no output; neither file is modified in the Task 12 worktree.
+- Completed Task 13 mixed-route end-to-end wiring:
+  - export-mode grouped routing now executes classic `asp360_new` groups, persists classic route matches as pair-specific `left_classic.key` / `right_classic.key`, and records those paths in `deep_match_export.classic_results`;
+  - import mode now accepts grouped deep manifests plus persisted classic key files, imports the grouped deep results, merges them with classic keypoints, and writes the final pair-level `.key` files;
+  - CLI now supports repeatable `--grouped-deep-match-manifest` plus `--classic-left-key` / `--classic-right-key` for mixed-route import;
+  - the legacy single `--deep-match-manifest` import path remains supported.
+- Task 13 TDD coverage:
+  - red: `test_import_mode_merges_grouped_deep_manifests_with_persisted_classic_keys` initially failed because import mode required a single `deep_match_manifest`, then passed after mixed-route import wiring;
+  - red: `test_persist_classic_route_results_writes_importable_key_files` initially failed with missing `_persist_classic_route_results`, then passed after implementation;
+  - red: `test_build_argument_parser_accepts_grouped_mixed_import_arguments` initially failed with unrecognized CLI args, then passed after parser/main wiring.
+- Task 13 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 53 tests OK.
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 18 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+  - `git diff --check`
+  - result: OK.
+  - `git status --short -- .gitignore print.prt`
+  - result: no output; neither file is modified in the Task 13 worktree.
+- Completed Task 14 small real-data smoke and integration fixes:
+  - worktree: `/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/.worktrees/tile-illumination-adaptive-routing-20260602`;
+  - output root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_mixed_route_smoke_20260603`;
+  - real-data pair: `dom_REDUCED_M110860982RE.cub` vs `dom_REDUCED_M110881352RE.cub`;
+  - export used `ISISDATA=/media/gengxun/My Passport/data`, `asp360_new`, grouped route manifests, `sub-block-size=2048`, `num-worker-parallel-cpu=1`, `opencv-num-threads=8`;
+  - export result: `status=exported_grouped_for_mixed_route`, `tile_count=12`, `projectable_tile_count=7`, `skipped_tile_count=5`, route distribution `{"loftr": 12}`;
+  - grouped manifest: `deep_match_work/loftr__dom_REDUCED_M110860982RE__dom_REDUCED_M110881352RE__9f68383252dd3000/tasks.json`, 7 exported LoFTR tasks.
+- Task 14 found that the tested real pairs route entirely to LoFTR under the current hard keypoint/sparseness rules:
+  - first pair route distribution: `{"loftr": 12}`;
+  - second rich-pair smoke output root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_mixed_route_smoke_20260603_rich_pair`;
+  - second pair route distribution: `{"loftr": 4}`;
+  - no natural classic `sift_flann` group/key was generated by these two real-smoke samples.
+- Task 14 fixed two integration bugs exposed by the smoke:
+  - `match_dom_pair_to_key_files()` now strips/guards mixed-route import-only kwargs in non-import modes, so CLI defaults do not leak into `match_dom_pair()`;
+  - `_export_deep_match_tile_tasks()` now rewrites exported tile tasks with the selected route matcher and runtime config before manifest construction, so LoFTR tasks no longer carry stale SIFT+LightGlue runtime config.
+- Task 14 deep-learning smoke:
+  - a full 2048x2048 LoFTR tile exited without NPZ/log output, so the smoke used a 512x512 crop from the real exported tile;
+  - manifest: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_mixed_route_smoke_20260603/one_task_512_loftr_workspace/tasks.json`;
+  - ran in `deep-learning` with `--device cpu --num-workers 1 --torch-num-threads 8 --force-rerun`;
+  - result: `status=completed`, `succeeded_task_count=1`, `match_count=236`, `invalid_mask_removed_count=0`.
+- Task 14 import smoke:
+  - ran in `asp360_new` with `--deep-match-mode import --grouped-deep-match-manifest .../one_task_512_loftr_workspace/tasks.json`;
+  - output keys: `final_512_left.key` and `final_512_right.key`;
+  - result: `status=merged_mixed_route_results`, `point_count=236`, `imported_task_count=1`, `missing_result_count=0`, `failed_task_count=0`.
+- Task 14 validation:
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 20 tests OK.
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 53 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+- Committed Task 14 changes before starting Task 15:
+  - commit `6f72fa5a test: validate mixed route real-data smoke`.
+- Completed Task 15 root-cause analysis for all-LoFTR real routing:
+  - extracted route metadata from Task 14 sparse and rich real-data exports;
+  - rich tiles had high keypoint counts and densities, e.g. 7790-13420 keypoints and densities around `0.0145-0.0179`, but still had `texture_sparseness` around `0.95-0.97`;
+  - root cause was `compute_real_image_texture_probe().real_texture_score` multiplying texture components by `valid_pixel_ratio`, so partially valid polar DOM tiles were scored as sparse even when their valid regions had strong texture.
+- Applied TDD fix for Task 15:
+  - added `test_texture_probe_scores_texture_on_valid_pixels_not_invalid_background_ratio`;
+  - red result before implementation: `real_texture_score=0.0585`, below the expected texture threshold;
+  - changed `real_texture_score` to score texture quality over valid pixels without directly multiplying by `valid_pixel_ratio`;
+  - `valid_pixel_ratio` remains recorded as an independent diagnostic.
+- Re-ran real mixed-route export after the texture-score fix:
+  - output root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_mixed_route_smoke_task15_20260603`;
+  - real-data pair: `dom_REDUCED_M110860982RE.cub` vs `dom_REDUCED_M110881352RE.cub`;
+  - route distribution by tile: `{"superpoint_lightglue": 2, "sift_lightglue": 2, "sift_flann": 3, "loftr": 5}`;
+  - route distribution by projectable tile: `{"superpoint_lightglue": 2, "sift_lightglue": 2, "sift_flann": 3}`;
+  - classic `sift_flann` route persisted `2853` points across 3 tile results.
+- Task 15 deep-learning smoke:
+  - created 512x512 real-data crop manifests for one SIFT+LightGlue tile and one SuperPoint+LightGlue tile;
+  - ran in `deep-learning` with `--device cpu --num-workers 1 --torch-num-threads 8 --force-rerun`;
+  - SIFT+LightGlue crop failed with `ValueError: array is not broadcastable to correct shape`, producing a failed NPZ/log;
+  - SuperPoint+LightGlue crop succeeded with `match_count=7` and `invalid_mask_removed_count=0`.
+- Task 15 mixed import smoke:
+  - ran in `asp360_new` with persisted classic keys plus both grouped deep manifests;
+  - output keys: `final_mixed_left.key` and `final_mixed_right.key`;
+  - result: `status=merged_mixed_route_results`, `point_count=2860`;
+  - import summary: `classic_point_count=2853`, `deep_point_count=7`, `failed_task_count=1`, `missing_result_count=0`, `imported_task_count=1`.
+- Task 15 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 54 tests OK.
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 20 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+
+## 2026-06-03 Task 16 SIFT+LightGlue blank/all-invalid tile fix
+
+- Investigated the Task 15 SIFT+LightGlue 512x512 crop failure in the isolated worktree:
+  - worktree: `/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/.worktrees/tile-illumination-adaptive-routing-20260602`;
+  - branch: `feature/tile-illumination-adaptive-routing-20260602`;
+  - failing manifest: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_mixed_route_smoke_task15_20260603/one_task_512_sift_lightglue_workspace/tasks.json`.
+- Reproduced the backend traceback in `deep-learning` without the manifest runner catch:
+  - failure came from official LightGlue SIFT, `lightglue/sift.py::filter_dog_point()`, at `np.maximum.at(buffer, tuple(ij), s)`;
+  - the task arrays had `left_image=(512,512) uint8 min=max=0`, `right_image=(512,512) uint8 min=max=0`, and both uint8 masks had `min=max=0`;
+  - in this pipeline, uint8 mask value 0 means invalid, so the smoke tile had no valid pixels and no intensity variation.
+- Added TDD regression coverage:
+  - `test_match_pair_short_circuits_blank_all_invalid_official_sift_tile` first failed because the adapter still constructed `OfficialLightGlueFrontend`;
+  - implemented deep-adapter guards for no-valid-pixel tiles and official-SIFT blank valid tiles.
+- Real manifest verification:
+  - re-ran the exact SIFT+LightGlue manifest in `deep-learning` with `--device cpu --num-workers 1 --torch-num-threads 8 --force-rerun`;
+  - result: `status=completed`, `succeeded_task_count=1`, `failed_task_count=0`;
+  - task result: `status=matched_no_points`, `match_count=0`, `raw_match_count=0`, `invalid_mask_removed_count=0`.
+- Validation:
+  - `python -m unittest tests.unitTest.image_match_deep_adapter_unit_test -v`: 22 tests OK;
+  - `python -m unittest tests.unitTest.learning_methods_deep_manifest_runner_unit_test -v`: 30 tests OK;
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`: 54 tests OK;
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`: 20 tests OK;
+  - `python tests/smoke_import.py`: `smoke import ok`.

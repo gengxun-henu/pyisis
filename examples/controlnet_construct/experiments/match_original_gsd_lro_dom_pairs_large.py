@@ -127,7 +127,9 @@ def _method_specs(args: argparse.Namespace) -> dict[str, MethodSpec]:
     adaptive_payload = {
         "ImageMatch": {
             "adaptive_routing_deep_presets": {
-                "lightglue": str((preset_dir / "lightglue_official_superpoint.json").resolve()),
+                "lightglue": str((preset_dir / "lightglue_official_sift.json").resolve()),
+                "sift_lightglue": str((preset_dir / "lightglue_official_sift.json").resolve()),
+                "superpoint_lightglue": str((preset_dir / "lightglue_official_superpoint.json").resolve()),
                 "loftr": str((preset_dir / "loftr_default.json").resolve()),
             },
         }
@@ -381,6 +383,9 @@ def _build_batch_command(
 
 
 def _metadata_status(metadata: dict[str, Any]) -> str:
+    image_match = metadata.get("image_match")
+    if isinstance(image_match, dict):
+        return _metadata_status(image_match)
     if "status" in metadata:
         return str(metadata.get("status"))
     if "point_count" in metadata:
@@ -388,6 +393,15 @@ def _metadata_status(metadata: dict[str, Any]) -> str:
     if "tile_summary" in metadata:
         return "matched"
     return "unknown"
+
+
+def _metadata_value(metadata: dict[str, Any], key: str) -> Any:
+    if key in metadata:
+        return metadata.get(key)
+    image_match = metadata.get("image_match")
+    if isinstance(image_match, dict) and key in image_match:
+        return image_match.get(key)
+    return None
 
 
 def _summarize_method_outputs(method_dir: Path, method: MethodSpec, pair_count: int, command: list[str], return_code: int | None, status: str) -> MethodRunSummary:
@@ -413,18 +427,22 @@ def _summarize_method_outputs(method_dir: Path, method: MethodSpec, pair_count: 
                 "pair_tag": metadata_path.stem,
                 "metadata_path": str(metadata_path),
                 "status": _metadata_status(metadata),
-                "point_count": metadata.get("point_count"),
-                "left_dom": metadata.get("left_dom") or metadata.get("left_dom_path"),
-                "right_dom": metadata.get("right_dom") or metadata.get("right_dom_path"),
-                "matcher_method": metadata.get("matcher_method"),
-                "resolved_matcher_method": metadata.get("resolved_matcher_method"),
-                "adaptive_routing": json.dumps(metadata.get("adaptive_routing"), ensure_ascii=False, default=str)
-                if metadata.get("adaptive_routing") is not None
+                "point_count": _metadata_value(metadata, "point_count"),
+                "left_feature_count_total": _metadata_value(metadata, "left_feature_count_total"),
+                "right_feature_count_total": _metadata_value(metadata, "right_feature_count_total"),
+                "feature_count_total": _metadata_value(metadata, "feature_count_total"),
+                "tile_match_count_total": _metadata_value(metadata, "tile_match_count_total"),
+                "left_dom": _metadata_value(metadata, "left_dom") or _metadata_value(metadata, "left_dom_path"),
+                "right_dom": _metadata_value(metadata, "right_dom") or _metadata_value(metadata, "right_dom_path"),
+                "matcher_method": _metadata_value(metadata, "matcher_method"),
+                "resolved_matcher_method": _metadata_value(metadata, "resolved_matcher_method"),
+                "adaptive_routing": json.dumps(_metadata_value(metadata, "adaptive_routing"), ensure_ascii=False, default=str)
+                if _metadata_value(metadata, "adaptive_routing") is not None
                 else "",
-                "match_visualization": json.dumps(metadata.get("match_visualization"), ensure_ascii=False, default=str)
-                if metadata.get("match_visualization") is not None
+                "match_visualization": json.dumps(_metadata_value(metadata, "match_visualization"), ensure_ascii=False, default=str)
+                if _metadata_value(metadata, "match_visualization") is not None
                 else "",
-                "error": metadata.get("error"),
+                "error": _metadata_value(metadata, "error"),
             }
         )
 
@@ -495,7 +513,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--adaptive-routing-profile", choices=("balanced", "strict", "relaxed", "fast"), default="balanced")
     parser.add_argument("--enable-low-resolution-offset-estimation", action="store_true", help="Prepare and use low-resolution DOMs for projected-offset estimation.")
     parser.add_argument("--low-resolution-level", type=int, default=3)
-    parser.add_argument("--max-image-dimension", type=int, default=3000)
+    parser.add_argument("--max-image-dimension", type=int, default=1024)
     parser.add_argument("--sub-block-size-x", type=int, default=1024)
     parser.add_argument("--sub-block-size-y", type=int, default=1024)
     parser.add_argument("--overlap-size-x", type=int, default=128)

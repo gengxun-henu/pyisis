@@ -11,6 +11,8 @@ Updated: 2026-05-16  Geng Xun added import edge-case coverage for missing, faile
 
 from __future__ import annotations
 
+from dataclasses import dataclass, replace
+import importlib
 import sys
 from pathlib import Path
 import unittest
@@ -35,6 +37,8 @@ from image_match.deep_match_manifest import (
     DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
     build_deep_match_pair_manifest,
     default_deep_match_pair_id,
+    deep_match_pair_manifest_from_payload,
+    deep_match_pair_manifest_to_payload,
     read_deep_match_task_arrays,
     read_deep_match_pair_manifest,
     resolve_deep_match_workspace,
@@ -43,8 +47,21 @@ from image_match.deep_match_manifest import (
     write_deep_match_task_result,
 )
 from image_match.image_match import build_argument_parser, match_dom_pair_to_key_files
-from image_match.keypoints import read_key_file
+from image_match.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
 from image_match.tile_matching import PairedTileWindow, TileMatchTask, TileWindow, tile_match_task_from_payload, tile_match_task_to_payload
+
+
+@dataclass(frozen=True)
+class _RuntimeConfigForTest:
+    matcher_method: str
+    feature_extractor_method: str
+    prefer_gpu: bool
+    device_dtype: str
+    fallback_on_error: str | None
+    matcher_options: dict[str, object]
+    feature_options: dict[str, object]
+    device_options: dict[str, object]
+    raw_config: dict[str, object]
 
 
 def _build_textured_test_image(width: int, height: int) -> np.ndarray:
@@ -152,6 +169,39 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
         self.assertEqual(parsed.deep_match_mode, "import")
         self.assertEqual(parsed.deep_match_manifest, "tmp_deep_match_workspace/pair/tasks.json")
 
+    def test_build_argument_parser_accepts_grouped_mixed_import_arguments(self):
+        parser = build_argument_parser()
+
+        parsed = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--deep-match-mode",
+                "import",
+                "--grouped-deep-match-manifest",
+                "tmp_deep_match_workspace/sift_lightglue/tasks.json",
+                "--grouped-deep-match-manifest",
+                "tmp_deep_match_workspace/loftr/tasks.json",
+                "--classic-left-key",
+                "tmp_deep_match_workspace/classic/left_classic.key",
+                "--classic-right-key",
+                "tmp_deep_match_workspace/classic/right_classic.key",
+            ]
+        )
+
+        self.assertEqual(parsed.deep_match_mode, "import")
+        self.assertEqual(
+            parsed.grouped_deep_match_manifest,
+            [
+                "tmp_deep_match_workspace/sift_lightglue/tasks.json",
+                "tmp_deep_match_workspace/loftr/tasks.json",
+            ],
+        )
+        self.assertEqual(parsed.classic_left_key, "tmp_deep_match_workspace/classic/left_classic.key")
+        self.assertEqual(parsed.classic_right_key, "tmp_deep_match_workspace/classic/right_classic.key")
+
     def test_match_dom_pair_to_key_files_import_mode_requires_manifest_path(self):
         with self.assertRaisesRegex(ValueError, "requires deep_match_manifest"):
             match_dom_pair_to_key_files(
@@ -218,6 +268,56 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
         self.assertEqual(restored.paired_window.right_window.start_y, 40)
         self.assertEqual(payload["opencv_num_threads"], 2)
         self.assertEqual(restored.opencv_num_threads, 2)
+
+    def test_deep_manifest_preserves_tile_route_metadata(self):
+        task = replace(
+            _make_tile_task(),
+            route_metadata={
+                "tile_index": 7,
+                "selected_route": "sift_lightglue",
+                "selected_matcher": "lightglue",
+                "illumination": {"status": "ok"},
+            },
+        )
+
+        manifest = build_deep_match_pair_manifest(
+            tasks=[task],
+            left_dom_path="left_dom.cub",
+            right_dom_path="right_dom.cub",
+            matcher_method="lightglue",
+            band=1,
+            image_space="dom",
+            temp_root_dir="/tmp/deep",
+            pair_id="pair",
+        )
+        payload = deep_match_pair_manifest_to_payload(manifest)
+        restored = deep_match_pair_manifest_from_payload(payload)
+
+        self.assertEqual(restored.tasks[0].route_metadata["tile_index"], 7)
+        self.assertEqual(restored.tasks[0].tile_task.route_metadata["selected_route"], "sift_lightglue")
+        self.assertEqual(payload["tasks"][0]["route_metadata"]["selected_matcher"], "lightglue")
+        self.assertEqual(payload["tasks"][0]["tile_task"]["route_metadata"]["illumination"]["status"], "ok")
+
+    def test_deep_manifest_accepts_legacy_payload_without_tile_route_metadata(self):
+        task = _make_tile_task()
+        manifest = build_deep_match_pair_manifest(
+            tasks=[task],
+            left_dom_path="left_dom.cub",
+            right_dom_path="right_dom.cub",
+            matcher_method="lightglue",
+            band=1,
+            image_space="dom",
+            temp_root_dir="/tmp/deep",
+            pair_id="pair",
+        )
+        payload = deep_match_pair_manifest_to_payload(manifest)
+        payload["tasks"][0].pop("route_metadata", None)
+        payload["tasks"][0]["tile_task"].pop("route_metadata", None)
+
+        restored = deep_match_pair_manifest_from_payload(payload)
+
+        self.assertIsNone(restored.tasks[0].route_metadata)
+        self.assertIsNone(restored.tasks[0].tile_task.route_metadata)
 
     def test_tile_match_task_payload_defaults_missing_opencv_num_threads_to_none(self):
         task = _make_tile_task(opencv_num_threads=None)
@@ -346,6 +446,106 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
             self.assertGreater(len(manifest.tasks), 0)
             self.assertTrue(Path(manifest.tasks[0].left_image_path).exists())
             self.assertTrue(Path(manifest.tasks[0].right_mask_path).exists())
+
+    def test_match_dom_pair_to_key_files_export_mode_ignores_empty_grouped_import_args(self):
+        width = 96
+        height = 96
+        image = _build_textured_test_image(width, height)
+
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_test_cube(temp_dir, name="left_export_cli_defaults.cub", samples=width, lines=height, bands=1)
+            right_cube, right_path = make_test_cube(temp_dir, name="right_export_cli_defaults.cub", samples=width, lines=height, bands=1)
+            try:
+                _write_array_to_cube(left_cube, image)
+                _write_array_to_cube(right_cube, image)
+                attach_dom_like_projection_mapping(left_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
+                attach_dom_like_projection_mapping(right_cube, pixel_resolution=1.0, upper_left_x=0.0, upper_left_y=float(height))
+            finally:
+                left_cube.close()
+                right_cube.close()
+
+            result = match_dom_pair_to_key_files(
+                left_path,
+                right_path,
+                temp_dir / "left_export_cli_defaults.key",
+                temp_dir / "right_export_cli_defaults.key",
+                matcher_method="lightglue",
+                deep_match_mode="export",
+                deep_match_temp_root_dir=temp_dir / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                grouped_deep_match_manifests=[],
+                classic_left_key=None,
+                classic_right_key=None,
+                write_match_visualization=False,
+                max_image_dimension=64,
+                block_width=64,
+                block_height=64,
+                overlap_x=16,
+                overlap_y=16,
+                min_valid_pixels=32,
+            )
+
+        self.assertEqual(result["status"], "exported_for_deep_learning")
+        self.assertTrue(result["export_only"])
+
+    def test_export_deep_match_tile_tasks_overrides_stale_task_runtime_config(self):
+        image_match = importlib.import_module("image_match.image_match")
+        stale_lightglue_config = _RuntimeConfigForTest(
+            matcher_method="lightglue",
+            feature_extractor_method="lightglue_sift",
+            prefer_gpu=True,
+            device_dtype="float32",
+            fallback_on_error="sift_flann",
+            matcher_options={"backend": "official"},
+            feature_options={"max_features": 1000},
+            device_options={"prefer_gpu": True},
+            raw_config={"matcher": {"method": "lightglue"}},
+        )
+        loftr_config = _RuntimeConfigForTest(
+            matcher_method="loftr",
+            feature_extractor_method="loftr",
+            prefer_gpu=True,
+            device_dtype="float32",
+            fallback_on_error="sift_flann",
+            matcher_options={"pretrained": "outdoor"},
+            feature_options={},
+            device_options={"prefer_gpu": True},
+            raw_config={"matcher": {"method": "loftr"}},
+        )
+        task = replace(
+            _make_tile_task(matcher_method="loftr"),
+            deep_match_runtime_config=stale_lightglue_config,
+        )
+
+        with temporary_directory() as temp_dir:
+            tile_summaries, summary = image_match._export_deep_match_tile_tasks(
+                left_dom_path=temp_dir / "left.cub",
+                right_dom_path=temp_dir / "right.cub",
+                image_space="dom",
+                left_cube=object(),
+                right_cube=object(),
+                tile_tasks=[task],
+                band=1,
+                left_invalid_values=(),
+                right_invalid_values=(),
+                special_pixel_abs_threshold=1.0e300,
+                min_valid_pixels=16,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                use_gpu=False,
+                deep_match_temp_root_dir=temp_dir / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                selected_route="loftr",
+                selected_matcher="loftr",
+                deep_match_config_path=temp_dir / "loftr_default.json",
+                deep_match_runtime_config=loftr_config,
+                read_window=lambda _cube, _window, *, band: _build_textured_test_image(64, 64),
+            )
+            manifest = read_deep_match_pair_manifest(summary["manifest_path"])
+
+        self.assertEqual(len(tile_summaries), 1)
+        self.assertEqual(len(manifest.tasks), 1)
+        self.assertEqual(manifest.tasks[0].matcher_method, "loftr")
+        self.assertEqual(manifest.tasks[0].deep_match_runtime_config["matcher_method"], "loftr")
+        self.assertEqual(manifest.tasks[0].feature_extractor_method, "loftr")
 
     def test_match_dom_pair_to_key_files_import_mode_writes_offset_key_files_from_npz_results(self):
         with temporary_directory() as temp_dir:
@@ -503,6 +703,158 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
         self.assertAlmostEqual(left_key.points[0].line, 111.0)
         self.assertAlmostEqual(right_key.points[1].sample, 127.0)
         self.assertAlmostEqual(right_key.points[1].line, 138.0)
+
+    def test_import_grouped_deep_match_manifests_merges_multiple_routes(self):
+        image_match = importlib.import_module("image_match.image_match")
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_test_cube(temp_dir, name="left_group_import.cub", samples=128, lines=128, bands=1)
+            right_cube, right_path = make_test_cube(temp_dir, name="right_group_import.cub", samples=128, lines=128, bands=1)
+            left_cube.close()
+            right_cube.close()
+
+            route_inputs = [
+                ("sift_lightglue", "lightglue", _make_tile_task(left_start_x=0, left_start_y=0, right_start_x=10, right_start_y=10)),
+                ("loftr", "loftr", _make_tile_task(left_start_x=40, left_start_y=50, right_start_x=60, right_start_y=70)),
+            ]
+            manifest_paths = []
+            for route, matcher, task in route_inputs:
+                routed_task = tile_match_task_from_payload(
+                    {
+                        **tile_match_task_to_payload(task),
+                        "left_dom_path": str(left_path),
+                        "right_dom_path": str(right_path),
+                        "matcher_method": matcher,
+                        "route_metadata": {
+                            "selected_route": route,
+                            "selected_matcher": matcher,
+                            "selected_execution_environment": "deep-learning",
+                        },
+                    }
+                )
+                manifest = build_deep_match_pair_manifest(
+                    tasks=[routed_task],
+                    left_dom_path=left_path,
+                    right_dom_path=right_path,
+                    matcher_method=matcher,
+                    band=1,
+                    image_space="dom",
+                    temp_root_dir=temp_dir / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                    requested_device="cpu",
+                    pair_id=f"{route}_manifest",
+                )
+                write_deep_match_task_result(
+                    manifest.tasks[0],
+                    left_points=np.array([[1.0, 2.0]], dtype=np.float32),
+                    right_points=np.array([[3.0, 4.0]], dtype=np.float32),
+                    scores=np.array([0.9], dtype=np.float32),
+                    status="matched",
+                )
+                manifest_paths.append(write_deep_match_pair_manifest(manifest))
+
+            left_key, right_key, summary = image_match.import_grouped_deep_match_manifest_results(
+                manifest_paths,
+                left_dom_path=left_path,
+                right_dom_path=right_path,
+            )
+
+        self.assertEqual(summary["status"], "imported")
+        self.assertEqual(summary["point_count"], 2)
+        self.assertEqual(summary["deep_match_import"]["manifest_count"], 2)
+        self.assertEqual(summary["deep_match_import"]["imported_task_count"], 2)
+        self.assertEqual(
+            [manifest["selected_route"] for manifest in summary["deep_match_import"]["manifests"]],
+            ["sift_lightglue", "loftr"],
+        )
+        self.assertEqual(len(left_key.points), 2)
+        self.assertEqual(len(right_key.points), 2)
+        self.assertAlmostEqual(left_key.points[0].sample, 2.0)
+        self.assertAlmostEqual(left_key.points[1].sample, 42.0)
+        self.assertAlmostEqual(right_key.points[1].line, 75.0)
+
+    def test_import_mode_merges_grouped_deep_manifests_with_persisted_classic_keys(self):
+        with temporary_directory() as temp_dir:
+            left_cube, left_path = make_test_cube(temp_dir, name="left_mixed_import.cub", samples=128, lines=96, bands=1)
+            right_cube, right_path = make_test_cube(temp_dir, name="right_mixed_import.cub", samples=160, lines=112, bands=1)
+            left_cube.close()
+            right_cube.close()
+
+            classic_left_key = temp_dir / "classic_left.key"
+            classic_right_key = temp_dir / "classic_right.key"
+            write_key_file(
+                classic_left_key,
+                KeypointFile(128, 96, (Keypoint(sample=5.0, line=6.0),)),
+            )
+            write_key_file(
+                classic_right_key,
+                KeypointFile(160, 112, (Keypoint(sample=7.0, line=8.0),)),
+            )
+
+            route_inputs = [
+                ("sift_lightglue", "lightglue", _make_tile_task(left_start_x=20, left_start_y=30, right_start_x=40, right_start_y=50)),
+                ("loftr", "loftr", _make_tile_task(left_start_x=60, left_start_y=70, right_start_x=80, right_start_y=90)),
+            ]
+            manifest_paths = []
+            for route, matcher, task in route_inputs:
+                routed_task = tile_match_task_from_payload(
+                    {
+                        **tile_match_task_to_payload(task),
+                        "left_dom_path": str(left_path),
+                        "right_dom_path": str(right_path),
+                        "matcher_method": matcher,
+                        "route_metadata": {
+                            "selected_route": route,
+                            "selected_matcher": matcher,
+                            "selected_execution_environment": "deep-learning",
+                        },
+                    }
+                )
+                manifest = build_deep_match_pair_manifest(
+                    tasks=[routed_task],
+                    left_dom_path=left_path,
+                    right_dom_path=right_path,
+                    matcher_method=matcher,
+                    band=1,
+                    image_space="dom",
+                    temp_root_dir=temp_dir / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
+                    requested_device="cpu",
+                    pair_id=f"mixed_{route}_manifest",
+                )
+                write_deep_match_task_result(
+                    manifest.tasks[0],
+                    left_points=np.array([[1.0, 2.0]], dtype=np.float32),
+                    right_points=np.array([[3.0, 4.0]], dtype=np.float32),
+                    scores=np.array([0.9], dtype=np.float32),
+                    status="matched",
+                )
+                manifest_paths.append(write_deep_match_pair_manifest(manifest))
+
+            left_output_key = temp_dir / "final_left.key"
+            right_output_key = temp_dir / "final_right.key"
+            result = match_dom_pair_to_key_files(
+                left_path,
+                right_path,
+                left_output_key,
+                right_output_key,
+                deep_match_mode="import",
+                grouped_deep_match_manifests=manifest_paths,
+                classic_left_key=classic_left_key,
+                classic_right_key=classic_right_key,
+                write_match_visualization=False,
+            )
+            left_key = read_key_file(left_output_key)
+            right_key = read_key_file(right_output_key)
+
+        self.assertEqual(result["status"], "merged_mixed_route_results")
+        self.assertEqual(result["point_count"], 3)
+        self.assertEqual(result["mixed_route_import"]["classic_point_count"], 1)
+        self.assertEqual(result["mixed_route_import"]["deep_point_count"], 2)
+        self.assertEqual(result["deep_match_import"]["manifest_count"], 2)
+        self.assertEqual(len(left_key.points), 3)
+        self.assertEqual(len(right_key.points), 3)
+        self.assertAlmostEqual(left_key.points[0].sample, 5.0)
+        self.assertAlmostEqual(left_key.points[1].sample, 22.0)
+        self.assertAlmostEqual(left_key.points[2].sample, 62.0)
+        self.assertAlmostEqual(right_key.points[2].line, 95.0)
 
     def test_import_mode_reports_no_usable_results_when_all_tasks_missing_or_failed(self):
         with temporary_directory() as temp_dir:

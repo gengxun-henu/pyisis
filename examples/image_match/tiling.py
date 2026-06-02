@@ -21,7 +21,7 @@ class TileWindow:
         return self.start_y + self.height
 
 
-def requires_tiling(image_width: int, image_height: int, *, max_dimension: int = 3000) -> bool:
+def requires_tiling(image_width: int, image_height: int, *, max_dimension: int = 1024) -> bool:
     return image_width > max_dimension or image_height > max_dimension
 
 

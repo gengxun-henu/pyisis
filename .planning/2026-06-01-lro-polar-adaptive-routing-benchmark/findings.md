@@ -209,6 +209,134 @@
     - The default valid-intensity percentile mask is now conservative `0.1/99.9`.
     - The stricter `1.0/99.0` setting remains available through CLI/config for shadow/highlight ablation experiments.
     - CLI can disable the default mask with `--disable-valid-intensity-percentile-mask`.
+- Separate rerun in `deep-learning` after the default `0.1/99.9` mask update:
+  - Output root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep_rerun_20260602`.
+  - Scope: first selected DOM pair only, using the migrated reduced-10m selected-pair CSV.
+  - Execution split: `asp360_new` exported/imported manifests and key files; `deep-learning` executed LoFTR, SuperPoint+LightGlue, and SIFT+LightGlue manifests.
+  - Runtime settings: CPU, `num_workers=1`, `torch_num_threads=8`, `force_rerun=True`.
+  - LoFTR: 15/15 tile tasks completed, 7246 raw matches, 7228 retained/imported matches, 18 invalid-mask removals, import status `imported`.
+  - SuperPoint+LightGlue: 15/15 tile tasks completed, 728 retained/imported matches, import status `imported`.
+  - SIFT+LightGlue: 15/15 tile tasks completed, 6347 retained/imported matches, one empty tile skipped during import, import status `imported`.
+  - All method summary JSON/CSV files and root method summary JSON/CSV files were regenerated in the rerun root.
+- Full selected-pair rerun after first-pair smoke acceptance:
+  - Output root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep_full_20260602`.
+  - Scope: 16 selected DOM pairs; each method exported 16 metadata entries, 15 pairs with deep-learning tasks, and 1 zero-task pair.
+  - Execution split: manifest export/import in `asp360_new`, deep inference in `deep-learning`.
+  - Runtime settings: CPU, `num_workers=1`, `torch_num_threads=8`, `force_rerun=True`.
+  - LoFTR: 14 imported pairs, 1 imported-no-points zero-task pair, 1 `import_failed_no_usable_results` pair after a deep-learning SIGKILL on a single long tile; total imported/visualized points from successful rows: 30595.
+  - SuperPoint+LightGlue: 14 imported pairs, 2 imported-no-points pairs, no failed metadata; total imported/visualized points: 3109.
+  - SIFT+LightGlue: 11 imported pairs, 5 imported-no-points pairs, no failed metadata; total imported/visualized points: 13541.
+  - Match-line visualization PNGs were generated for all 16 selected pairs for each method:
+    - LoFTR: `loftr/match_viz/*.png` = 16
+    - SuperPoint+LightGlue: `superpoint_lightglue/match_viz/*.png` = 16
+    - SIFT+LightGlue: `sift_lightglue/match_viz/*.png` = 16
+  - Summary outputs exist:
+    - Root: `large_dom_match_methods_summary.json`, `large_dom_match_methods_summary.csv`
+    - Per method: `<method>_large_dom_match_summary.json`, `<method>_large_dom_match_summary.csv`
+  - Note: per-method CSV `point_count` cells are currently blank after import, but the same rows contain `match_visualization.point_count`, and each metadata JSON contains `image_match.point_count`. Use those fields for quantitative summaries until the CSV writer is corrected.
+- LoFTR pair 15 retry after the original full-run SIGKILL:
+  - The original one-task retry failed again without writing a result or retry summary.
+  - Re-exporting the same pair with `max_image_dimension=1024` and `sub_block_size_x/y=1024` split the `2623 x 652` shared extent into 3 LoFTR tasks.
+  - The smaller-tile retry completed in `deep-learning`: 3/3 tasks succeeded, 395 raw matches, 383 retained/imported matches, 12 invalid-mask removals.
+  - Import in `asp360_new` succeeded with `status=imported`, `point_count=383`, and `imported_task_count=3`.
+  - Retry output root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep_full_20260602/loftr_pair15_retry_1024_20260602`.
+  - Match-line PNG: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep_full_20260602/loftr_pair15_retry_1024_20260602/loftr/match_viz/dom_REDUCED_M1200848465RE__dom_REDUCED_M173567595LE__20260602T081305.png`.
+  - Interpretation: the previous failure was caused by LoFTR CPU memory/attention pressure on an overly long tile; using the new 1024 tiling default resolves this pair.
+- RANSAC-filtered match-line visualization follow-up:
+  - Added script: `examples/controlnet_construct/experiments/rerender_ransac_match_visualizations.py`.
+  - The script regenerates match-line PNGs from existing imported deep-match `.key` files and applies homography RANSAC before drawing. It does not rerun deep inference and does not overwrite original `match_viz/` outputs.
+  - Full selected-pair root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep_full_20260602`.
+  - RANSAC-filtered PNGs are under each method's `match_viz_ransac/` directory.
+  - Full-run summary files:
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep_full_20260602/ransac_match_visualization_summary.csv`
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep_full_20260602/ransac_match_visualization_summary.json`
+  - Full-run before/after counts:
+    - LoFTR: 30,595 raw matches -> 11,145 RANSAC-retained matches; retained fraction 36.43%.
+    - SuperPoint+LightGlue: 3,109 raw matches -> 765 RANSAC-retained matches; retained fraction 24.61%.
+    - SIFT+LightGlue: 13,541 raw matches -> 12,478 RANSAC-retained matches; retained fraction 92.15%.
+    - Combined: 47,245 raw matches -> 24,388 retained; retained fraction 51.62%.
+  - Interpretation:
+    - SIFT+LightGlue has the highest geometric consistency on this selected-pair set after import.
+    - LoFTR and SuperPoint+LightGlue produce many raw correspondences in difficult lighting/texture cases, but a large fraction are inconsistent with a single homography. Their raw match counts should not be interpreted as control-network quality without geometric filtering.
+- Five-method RANSAC visualization and Nature-style figure input follow-up:
+  - Full selected-pair root:
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep_full_20260602`
+  - SIFT+FLANN and adaptive routing were rerun for all 16 selected pairs using 1024 x 1024 tiles, one OpenCV thread, and four Python process workers.
+  - The adaptive run completed, but all 16 adaptive metadata records still report `adaptive_routing.status=skipped_missing_previews` and select final matcher `flann`; this is therefore a quality-gated adaptive wrapper/fallback baseline, not a full low-resolution-preview route-selection result.
+  - RANSAC-filtered PNG counts:
+    - LoFTR: 16
+    - SuperPoint+LightGlue: 16
+    - SIFT+LightGlue: 16
+    - SIFT+FLANN: 16
+    - Adaptive: 16
+  - Five-method before/after RANSAC counts:
+    - LoFTR: 30,595 raw -> 11,145 retained; retained fraction 36.43%; 14/16 pairs retained at least one match.
+    - SuperPoint+LightGlue: 3,109 raw -> 765 retained; retained fraction 24.61%; 14/16 pairs retained at least one match.
+    - SIFT+LightGlue: 13,541 raw -> 12,478 retained; retained fraction 92.15%; 11/16 pairs retained at least one match.
+    - SIFT+FLANN: 3,606 raw -> 2,754 retained; retained fraction 76.37%; 16/16 pairs retained at least one match.
+    - Adaptive: 9,011 raw -> 7,077 retained; retained fraction 78.54%; 16/16 pairs retained at least one match.
+    - Combined: 59,862 raw -> 34,219 retained; retained fraction 57.16%.
+  - Runtime fields in the Nature-style source data intentionally use method-specific provenance:
+    - Deep methods: summed per-task `started_at_utc`/`finished_at_utc` as deep inference core seconds.
+    - SIFT+FLANN/adaptive: `command.json` to method-summary mtime as a wall-time proxy because the classic matcher runner does not yet emit per-tile core timings.
+  - Runtime summary:
+    - LoFTR: 2,011.998 s (33.53 min), source `deep_task_started_finished_sum`.
+    - SuperPoint+LightGlue: 556.809 s (9.28 min), source `deep_task_started_finished_sum`.
+    - SIFT+LightGlue: 541.780 s (9.03 min), source `deep_task_started_finished_sum`.
+    - SIFT+FLANN: 93.710 s (1.56 min), source `command_to_method_summary_mtime_proxy`.
+    - Adaptive: 103.370 s (1.72 min), source `command_to_method_summary_mtime_proxy`.
+  - Nature-style source data and figure outputs:
+    - `nature_figure_inputs/five_method_pair_summary.csv`
+    - `nature_figure_inputs/five_method_method_summary.csv`
+    - `nature_figure_inputs/five_method_match_comparison_source_data.json`
+    - `nature_figure_inputs/five_method_match_comparison.svg`
+    - `nature_figure_inputs/five_method_match_comparison.pdf`
+    - `nature_figure_inputs/five_method_match_comparison.tiff`
+    - `nature_figure_inputs/five_method_match_comparison.png`
+  - LoFTR pair-15 retry RANSAC visualization:
+    - Raw 383 -> retained 9; retained fraction 2.35%.
+    - PNG: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_match_benchmark_deep_full_20260602/loftr_pair15_retry_1024_20260602/loftr/match_viz_ransac/dom_REDUCED_M1200848465RE__dom_REDUCED_M173567595LE__20260602T081305__ransac.png`.
+- True deep-learning adaptive routing rerun:
+  - Output root:
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_adaptive_deep_20260602`
+  - Low-resolution DOMs:
+    - 22 precomputed low-resolution DOMs were reused under `adaptive/low_resolution_doms/level3`.
+    - The routing metadata includes low-resolution preview source paths and, where available, solar elevation/azimuth differences derived from the corresponding reduced original image metadata.
+  - Adaptive export behavior:
+    - `deep_match_mode=export` previously failed when adaptive routing selected FLANN because export mode only supports deep matchers.
+    - The implemented fix keeps the routed traditional matcher as the initial decision, then exports the first deep fallback from the adaptive cascade for execution in the `deep-learning` conda environment.
+    - This preserves routing evidence while satisfying the user's environment split: ISIS/metadata/import in `asp360_new`, deep inference in `deep-learning`.
+  - Full execution:
+    - 16/16 selected pairs exported.
+    - 95 LightGlue/SuperPoint tile tasks exported.
+    - 16/16 manifests completed in `deep-learning`.
+    - 95/95 tasks succeeded, 0 task failures.
+    - Runtime settings: CPU, `num_workers=1`, `torch_num_threads=8`.
+    - Deep task runtime for true adaptive: 605.001 s; wrapper elapsed time: 642.578 s.
+  - RANSAC-filtered success metric:
+    - Pair success is counted only when `ransac_retained_count > 0`.
+    - True adaptive raw/imported matches: 3,573.
+    - True adaptive RANSAC-retained matches: 830.
+    - True adaptive retained fraction: 23.23%.
+    - True adaptive pair success after RANSAC: 15/16.
+  - Updated five-method comparison with true adaptive:
+    - LoFTR: 30,595 raw -> 11,145 retained; 14/16 successful after RANSAC; runtime 2,011.998 s.
+    - SuperPoint+LightGlue: 3,109 raw -> 765 retained; 14/16 successful after RANSAC; runtime 556.809 s.
+    - SIFT+LightGlue: 13,541 raw -> 12,478 retained; 11/16 successful after RANSAC; runtime 541.780 s.
+    - SIFT+FLANN: 3,606 raw -> 2,754 retained; 16/16 successful after RANSAC; runtime 93.710 s mtime proxy.
+    - True adaptive deep-learning: 3,573 raw -> 830 retained; 15/16 successful after RANSAC; runtime 605.001 s.
+  - Interpretation:
+    - The true adaptive rerun now genuinely exercises the deep-learning handoff, but in this selected-pair set it mostly routes to SuperPoint+LightGlue and therefore behaves closer to the SuperPoint+LightGlue baseline than to the previous FLANN-fallback adaptive result.
+    - The previous adaptive row in Phase 13 should be described as a fast FLANN-backed adaptive fallback baseline, not the final deep-learning adaptive result.
+    - For manuscript claims, use the true-adaptive `nature_figure_inputs_true_adaptive/` outputs when discussing deep-learning routing, and use pair success after RANSAC rather than raw match count.
+  - Updated Nature-style source data and figure outputs:
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_adaptive_deep_20260602/nature_figure_inputs_true_adaptive/five_method_pair_summary.csv`
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_adaptive_deep_20260602/nature_figure_inputs_true_adaptive/five_method_method_summary.csv`
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_adaptive_deep_20260602/nature_figure_inputs_true_adaptive/five_method_match_comparison_source_data.json`
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_adaptive_deep_20260602/nature_figure_inputs_true_adaptive/five_method_match_comparison_true_adaptive.svg`
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_adaptive_deep_20260602/nature_figure_inputs_true_adaptive/five_method_match_comparison_true_adaptive.pdf`
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_adaptive_deep_20260602/nature_figure_inputs_true_adaptive/five_method_match_comparison_true_adaptive.tiff`
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_adaptive_deep_20260602/nature_figure_inputs_true_adaptive/five_method_match_comparison_true_adaptive.png`
 
 ## Resources
 
@@ -228,3 +356,164 @@
 ## Visual/Browser Findings
 
 - No image/PDF/browser visual inspection has been performed yet.
+
+## Phase 15 Prior-Only Adaptive Routing Findings
+
+- The previous Phase 14 adaptive export behavior is now superseded for the main experiment claim. It preserved a FLANN/BF prior route in metadata but exported the first deep fallback for execution in `deep-learning`; the user clarified that this is not the intended adaptive-routing definition.
+- The revised adaptive rule is prior-only:
+  - Rich texture and small lighting difference -> SIFT+FLANN.
+  - Moderate texture or moderate lighting difference -> SIFT+LightGlue as the main deep-learning matcher.
+  - Weak-to-moderate texture with non-extreme lighting -> SuperPoint+LightGlue.
+  - Weak texture plus large lighting difference, or extreme single-condition cases -> LoFTR.
+- Post-match quality evaluation remains useful for reporting success/failure, but it no longer triggers a recursive matcher change. A failed selected matcher records `quality_insufficient_no_fallback`.
+- `deep_match_mode=export` now rejects an adaptive route that selects a traditional matcher, instead of silently exporting LightGlue/LoFTR fallback tasks. Real mixed adaptive experiments should either:
+  - run prior-selected FLANN/BF routes directly in `asp360_new`, or
+  - export only pairs whose prior route selected a deep matcher.
+- The adaptive experiment runner now maps the main `lightglue` route to `lightglue_official_sift.json` and reserves `superpoint_lightglue` for the SuperPoint+LightGlue branch.
+
+## Phase 15 Final Prior-Only Adaptive Rerun
+
+- Phase 14 true-adaptive outputs are now treated as old fallback-export strategy results, not the final prior-only adaptive conclusion.
+- Real 16 selected-pair prior-only route partition:
+  - SIFT+FLANN: 3 pairs
+  - SIFT+LightGlue: 13 pairs
+  - SuperPoint+LightGlue: 0 pairs
+  - LoFTR: 0 pairs
+- Deep-learning execution:
+  - Ran in `deep-learning` conda environment with `--num-workers 1` and `--torch-num-threads 8`.
+  - CUDA was unavailable, so SIFT+LightGlue ran on CPU.
+  - 13/13 manifests completed with 0 process-level failures.
+- Import detail:
+  - Exported workspaces used DOM/hash names, while import looked for `REDUCED_*.echo.cal` pair-tag directories.
+  - Pair-tag alias `tasks.json` directories were created without rerunning deep inference.
+- Final adaptive outputs:
+  - 16 `_A.key`/`_B.key` pairs.
+  - Matcher split: 13 SIFT+LightGlue, 3 SIFT+FLANN.
+  - Status split: 8 imported, 5 imported_no_points, 3 matched.
+  - Clean summary:
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_prior_only_20260602/adaptive/adaptive_prior_only_clean_pair_summary.csv`
+    - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_prior_only_20260602/adaptive/adaptive_prior_only_clean_pair_summary.json`
+- Final adaptive RANSAC summary:
+  - pair_count: 16
+  - raw_match_count: 13,930
+  - ransac_retained_count: 12,767
+  - ransac_dropped_count: 1,163
+  - retained fraction: 0.9165
+- Final five-method comparison uses Phase 14 fixed-method baselines plus Phase 15 prior-only adaptive only.
+  - LoFTR: 11,145 retained, 33.53 min.
+  - SuperPoint+LightGlue: 765 retained, 9.28 min.
+  - SIFT+LightGlue: 12,478 retained, 9.03 min.
+  - SIFT+FLANN: 2,754 retained, 1.56 min.
+  - Adaptive prior-only: 12,767 retained, 6.84 min.
+- Adaptive runtime provenance is hybrid:
+  - deep task started/finished sum: 371.67 s
+  - classic command-to-summary mtime proxy: 38.51 s
+  - total: 410.18 s
+- Final source data and figure outputs:
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_prior_only_20260602/nature_figure_inputs_prior_only/five_method_pair_summary.csv`
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_prior_only_20260602/nature_figure_inputs_prior_only/five_method_method_summary.csv`
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_prior_only_20260602/nature_figure_inputs_prior_only/five_method_match_comparison_source_data.json`
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_prior_only_20260602/nature_figure_inputs_prior_only/five_method_match_comparison.svg`
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_prior_only_20260602/nature_figure_inputs_prior_only/five_method_match_comparison.pdf`
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_prior_only_20260602/nature_figure_inputs_prior_only/five_method_match_comparison.tiff`
+
+## Phase 16 Valid-Block Texture Evidence Cleanup
+
+- Adaptive routing texture diagnostics now prefer the actual matched image paths:
+  - DOM-space matching uses the matched DOM paths.
+  - ORI-space matching uses the original/REDUCED cube paths.
+  - Low-resolution DOM previews remain available only as fallback diagnostics when actual source paths are unavailable.
+- The route summary `preview_sources` payload now reports the selected texture diagnostic source and whether it was a fallback:
+  - `source_type="matched_dom"` for actual DOM texture evidence.
+  - `source_type="raw_original_cube"` for ORI-space texture evidence.
+  - `source_type="low_resolution_dom"` only when falling back to previews.
+  - `fallback_used` records whether the source was fallback rather than the actual matched image.
+- Tile-level texture sparseness already excluded invalid blocks via `min_valid_pixel_ratio`; this behavior is now preserved by selecting the actual matched image instead of bypassing through preview-source selection.
+- Missing pair texture evidence now remains missing in route diagnostics:
+  - `PairRoutingDecision.mean_real_texture_score` is `None` when `pair_texture_sparseness` is unavailable.
+  - This removes the misleading legacy neutral `0.5` value when no valid texture tiles could be computed.
+- A stale controlnet matching regression still expected old adaptive cascade fallback. It was updated to current Phase 15 prior-only semantics:
+  - one prior-selected matcher is run;
+  - no LoFTR fallback is requested after a failed quality gate;
+  - the stop reason is `quality_insufficient_no_fallback`.
+- Verification:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_texture_sparseness_unit_test tests.unitTest.controlnet_construct_matching_unit_test -v` passed: 262 tests, 1 skipped.
+  - `python tests/smoke_import.py` passed.
+  - `git diff --check` passed for touched files.
+- Follow-up texture aggregation detail:
+  - `ImageSparsenessSummary` now includes effective aggregation counts that exclude invalid texture blocks from the pixel denominator:
+    - `skipped_invalid_tile_count`
+    - `aggregation_tile_count`
+    - `aggregation_pixel_count`
+    - `aggregation_valid_pixel_count`
+    - `aggregation_valid_pixel_ratio`
+  - `tile_total_count` remains the scanned-window count for diagnostics, while aggregation fields are the clean evidence denominator for texture analysis.
+  - Focused verification passed: `python -m unittest tests.unitTest.image_match_texture_sparseness_unit_test tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_tile_diagnostics_unit_test -v`.
+
+## Phase 17 Feature-Count Routing and Reporting Cleanup
+
+- Adaptive routing now has an explicit hard route for very low texture-probe keypoint evidence:
+  - if either side has fewer than `min_texture_probe_keypoints=12`, route directly to LoFTR;
+  - if either side has keypoint density lower than `min_texture_probe_keypoint_density=1.0e-5`, route directly to LoFTR.
+- This hard rule is evaluated before texture-sparseness/lighting bins, so a pair that otherwise looks rich by aggregate texture can still go LoFTR when actual keypoint evidence is too sparse.
+- The previous SIFT+FLANN vs SIFT+LightGlue feature-count mismatch was caused by different feature budgets:
+  - `classic_sift_flann.json`: OpenCV SIFT `max_features=1000`;
+  - `lightglue_official_sift.json`: official SIFT frontend was `max_features=4096`.
+- `lightglue_official_sift.json` is now aligned to `max_features=1000`, so SIFT+FLANN and SIFT+LightGlue use the same intended SIFT feature budget for this experiment.
+- Even with the same feature budget, matched-count outputs should not be expected to match:
+  - extracted SIFT features are the detector output;
+  - FLANN ratio-test correspondences and LightGlue learned correspondences are different matcher outputs;
+  - RANSAC-retained counts are the final geometric-success evidence.
+- Match summaries now report extracted features separately:
+  - `left_feature_count_total`
+  - `right_feature_count_total`
+  - `feature_count_total`
+  - `tile_match_count_total`
+- Five-method source-data generation now propagates those fields into:
+  - pair-level CSV/JSON rows;
+  - method-level totals and median extracted feature counts.
+- Verification:
+  - `python -m py_compile examples/controlnet_construct/experiments/plot_lro_polar_match_method_comparison.py examples/controlnet_construct/experiments/match_original_gsd_lro_dom_pairs_large.py examples/image_match/image_match.py examples/image_match/adaptive_routing.py` passed.
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.controlnet_construct_matching_unit_test -v` passed: 249 tests, 1 skipped.
+  - `python tests/smoke_import.py` passed.
+  - `git diff --check` passed for touched files.
+
+## Phase 18 Latest-Parameter Five-Method Final Rerun
+
+- Output root:
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602`
+- Deep-learning execution policy:
+  - conda env: `deep-learning`
+  - device: CPU
+  - `num_workers=1`
+  - `torch_num_threads=8`
+- Fixed deep-method completion:
+  - LoFTR: 16/16 manifests, 96/96 tile tasks succeeded, 0 failed.
+  - SuperPoint+LightGlue: 16/16 manifests, 96/96 tile tasks succeeded, 0 failed.
+  - SIFT+LightGlue: 16/16 manifests, 96/96 tile tasks succeeded, 0 failed.
+- Adaptive prior-only route distribution with the latest texture/keypoint rules:
+  - SIFT+FLANN/direct: 14 pairs.
+  - SIFT+LightGlue/deep import: 2 pairs.
+  - SuperPoint+LightGlue: 0 pairs.
+  - LoFTR: 0 pairs.
+- Final RANSAC-filtered counts:
+  - LoFTR: raw 31,565; retained 11,172; retained fraction 0.3539; runtime 30.70 min.
+  - SuperPoint+LightGlue: raw 3,439; retained 770; retained fraction 0.2239; runtime 8.37 min.
+  - SIFT+LightGlue: raw 5,348; retained 3,906; retained fraction 0.7304; runtime 1.58 min.
+  - SIFT+FLANN: raw 3,611; retained 2,757; retained fraction 0.7635; runtime 1.48 min.
+  - Adaptive: raw 5,511; retained 4,220; retained fraction 0.7657; runtime 4.99 min.
+- Feature-count reporting:
+  - SIFT+FLANN now records extracted SIFT features for all 16 pairs; total extracted features: 168,395; median per pair: 6,295.
+  - Adaptive records extracted SIFT features for 14 direct SIFT+FLANN branches; total extracted features: 347,797; median per recorded pair: 14,461. The 2 deep-import branches do not currently record detector feature totals in imported manifest metadata.
+- Final figure/source outputs:
+  - `nature_figure_inputs_latest_params/five_method_pair_summary.csv`
+  - `nature_figure_inputs_latest_params/five_method_method_summary.csv`
+  - `nature_figure_inputs_latest_params/five_method_match_comparison_source_data.json`
+  - `nature_figure_inputs_latest_params/five_method_match_comparison.svg`
+  - `nature_figure_inputs_latest_params/five_method_match_comparison.pdf`
+  - `nature_figure_inputs_latest_params/five_method_match_comparison.tiff`
+  - `nature_figure_inputs_latest_params/five_method_match_comparison.png`
+- Implementation findings:
+  - Adaptive route probing must not load full 10k-scale DOM bands. A bounded preview reader now keeps actual matched-image evidence while avoiding OOM/SIGKILL.
+  - RANSAC rerendering cannot assume an old `match_visualization` block exists because low-memory reruns can disable initial visualization. It now falls back to direct pair metadata or deep-import manifest DOM paths.
+  - Batch and plotting summaries must read nested `image_match` fields. Direct metadata sidecars now persist feature-count totals so source data can distinguish extracted features from matched correspondences.

@@ -11,7 +11,7 @@ Updated: 2026-05-16  Geng Xun added coverage for named adaptive-routing quality 
 Updated: 2026-05-18  Geng Xun added focused coverage for the sparseness/lighting-aware conservative router and the sidecar diagnostics augmenter.
 Updated: 2026-05-19  Geng Xun added coverage for optional nested tile diagnostics in adaptive sidecars.
 Updated: 2026-05-20  Geng Xun added preset-aware adaptive-routing coverage for deep preset selection and sidecar serialization.
-Updated: 2026-05-20  Geng Xun added regression coverage for flann cascade planning in the public adaptive-routing flow.
+Updated: 2026-06-02  Geng Xun changed adaptive routing to prior-only matcher selection with no post-match fallback cascade.
 """
 
 from __future__ import annotations
@@ -20,6 +20,7 @@ import importlib
 import json
 import sys
 from pathlib import Path
+import tempfile
 import unittest
 import warnings
 from unittest.mock import patch
@@ -38,6 +39,7 @@ from image_match.adaptive_routing import (
     PairRoutingDecision,
     RenderProbe,
     SpiceLightingConstraints,
+    TileRoutingDecision,
     build_pair_probe_sidecar,
     build_cascade_plan,
     build_spice_constrained_elevation_candidates,
@@ -47,6 +49,7 @@ from image_match.adaptive_routing import (
     normalize_adaptive_routing_profile,
     resolve_adaptive_routing_quality_profile,
     route_matcher_for_pair,
+    route_matcher_for_tile,
 )
 
 
@@ -94,6 +97,21 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertGreater(structured_probe.laplacian_variance, blank_probe.laplacian_variance)
         self.assertGreater(structured_probe.real_texture_score, blank_probe.real_texture_score)
 
+    def test_texture_probe_scores_texture_on_valid_pixels_not_invalid_background_ratio(self):
+        full_texture = np.indices((128, 128)).sum(axis=0).astype(np.float32) % 32
+        full_texture[32:96, 32:96] += 80.0
+        sparse_tile = np.zeros((512, 512), dtype=np.float32)
+        sparse_tile[192:320, 192:320] = full_texture
+        invalid_mask = sparse_tile == 0.0
+
+        full_probe = compute_real_image_texture_probe(full_texture)
+        sparse_probe = compute_real_image_texture_probe(sparse_tile, invalid_mask=invalid_mask)
+
+        self.assertLess(sparse_probe.valid_pixel_ratio, 0.10)
+        self.assertGreater(sparse_probe.keypoint_count, 0)
+        self.assertGreater(sparse_probe.real_texture_score, 0.35)
+        self.assertGreater(sparse_probe.real_texture_score, full_probe.real_texture_score * 0.5)
+
     def test_texture_probe_ignores_overflow_sized_special_pixels_without_warning(self):
         image = np.full((96, 96), 120.0, dtype=np.float64)
         image[0, 0] = 1.0e300
@@ -125,8 +143,8 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             right_render_probe=RenderProbe(best_render_elevation=36.0, terrain_explainability_score=0.55),
         )
 
-        self.assertEqual(decision.initial_matcher, "bf")
-        self.assertEqual(decision.fallback_chain, ("lightglue", "loftr"))
+        self.assertEqual(decision.initial_matcher, "flann")
+        self.assertEqual(decision.fallback_chain, ())
         self.assertLess(decision.estimated_match_difficulty, 0.5)
 
     def test_weak_or_large_lighting_gap_pair_routes_to_loftr_first(self):
@@ -242,7 +260,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         )
 
         json.dumps(payload)
-        self.assertEqual(payload["pair_route"]["fallback_chain"], ["loftr"])
+        self.assertEqual(payload["pair_route"]["fallback_chain"], [])
         self.assertEqual(payload["match_quality"]["inlier_count"], 32)
         self.assertEqual(payload["match_quality"]["rejection_reasons"], [])
         self.assertTrue(payload["final_decision"]["accepted"])
@@ -262,7 +280,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         )
         decision = PairRoutingDecision(
             initial_matcher="lightglue",
-            fallback_chain=("loftr",),
+            fallback_chain=(),
             route_reason="moderate texture and moderate lighting gap",
             mean_real_texture_score=0.4,
             mean_terrain_explainability_score=None,
@@ -327,14 +345,14 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertAlmostEqual(report.residual_summary["p95"], 7.4)
         self.assertTrue(report.accepted)
 
-    def test_build_cascade_plan_preserves_fixed_matcher_order(self):
+    def test_build_cascade_plan_returns_only_the_prior_selected_matcher(self):
         plan = build_cascade_plan(
             initial_matcher="bf",
             fallback_chain=("loftr", "lightglue"),
         )
 
-        self.assertEqual(plan, ("bf", "lightglue", "loftr"))
-        self.assertEqual(build_cascade_plan(initial_matcher="lightglue"), ("lightglue", "loftr"))
+        self.assertEqual(plan, ("bf",))
+        self.assertEqual(build_cascade_plan(initial_matcher="lightglue"), ("lightglue",))
         self.assertEqual(build_cascade_plan(initial_matcher="loftr"), ("loftr",))
 
     def test_build_cascade_plan_accepts_flann_in_public_adaptive_flow(self):
@@ -343,9 +361,9 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             fallback_chain=("loftr", "lightglue"),
         )
 
-        self.assertEqual(plan, ("flann", "lightglue", "loftr"))
+        self.assertEqual(plan, ("flann",))
 
-    def test_decide_post_match_action_requests_next_matcher_after_failed_gate(self):
+    def test_decide_post_match_action_does_not_request_fallback_after_failed_gate(self):
         plan = build_cascade_plan(initial_matcher="bf")
         report = MatchQualityReport(
             inlier_count=10,
@@ -366,8 +384,8 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
 
         self.assertFalse(action["accepted"])
         self.assertFalse(action["fallback_used"])
-        self.assertEqual(action["next_matcher"], "lightglue")
-        self.assertEqual(action["stop_reason"], "quality_insufficient_try_fallback")
+        self.assertIsNone(action["next_matcher"])
+        self.assertEqual(action["stop_reason"], "quality_insufficient_no_fallback")
 
     def test_decide_post_match_action_accepts_successful_fallback(self):
         accepted_report = MatchQualityReport(
@@ -384,14 +402,828 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         action = decide_post_match_action(
             current_matcher="lightglue",
             quality_report=accepted_report,
-            cascade_plan=("bf", "lightglue", "loftr"),
+            cascade_plan=("lightglue",),
         )
 
         self.assertTrue(action["accepted"])
-        self.assertTrue(action["fallback_used"])
+        self.assertFalse(action["fallback_used"])
         self.assertIsNone(action["next_matcher"])
         self.assertEqual(action["selected_matcher"], "lightglue")
         self.assertEqual(action["stop_reason"], "quality_accepted")
+
+    def test_tile_router_uses_flann_for_rich_texture_small_physical_lighting_gap(self):
+        decision = route_matcher_for_tile(
+            tile_index=2,
+            texture_sparseness=0.12,
+            lighting_difference_score=0.05,
+            texture_probe_keypoint_count_left=250,
+            texture_probe_keypoint_count_right=240,
+            texture_probe_keypoint_density_left=0.002,
+            texture_probe_keypoint_density_right=0.002,
+            illumination={"status": "ok", "illumination_difference_score": 0.05},
+            adaptive_routing_deep_presets={},
+        )
+
+        self.assertIsInstance(decision, TileRoutingDecision)
+        self.assertEqual(decision.selected_route, "sift_flann")
+        self.assertEqual(decision.selected_matcher, "flann")
+        self.assertEqual(decision.selected_execution_environment, "asp360_new")
+        self.assertTrue(decision.no_post_match_fallback)
+
+    def test_build_tile_route_metadata_partitions_classic_and_deep_tiles(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.tile_illumination import (
+            RepresentativePoint,
+            TileIlluminationPair,
+            TileIlluminationSample,
+            TileWindowMetadata,
+        )
+
+        point = RepresentativePoint(
+            status="center_projectable",
+            selection_reason="center pixel projected to source camera",
+            local_x_0_based=1,
+            local_y_0_based=1,
+            dom_sample_1_based=2.0,
+            dom_line_1_based=2.0,
+            pixel_available=True,
+            radiometric_valid_for_matching=True,
+            source_projectable=True,
+            failure_reason=None,
+        )
+        sample = TileIlluminationSample(
+            side="left",
+            dom_path="left.cub",
+            dom_source_cube="left_source.cub",
+            upstream_source_cube=None,
+            tile_index=0,
+            tile_window_0_based=TileWindowMetadata(0, 0, 4, 4),
+            representative_point=point,
+            latitude=-88.0,
+            longitude=123.0,
+            source_sample_1_based=1.0,
+            source_line_1_based=1.0,
+            sun_azimuth_degrees=10.0,
+            incidence_angle_degrees=87.0,
+            solar_elevation_degrees=3.0,
+        )
+        pair = TileIlluminationPair.from_samples(tile_index=0, left=sample, right=sample)
+
+        metadata = image_match._build_tile_route_metadata(
+            tile_index=0,
+            illumination_pair=pair,
+            texture_sparseness=0.10,
+            left_probe={"keypoint_count": 200, "keypoint_density": 0.002},
+            right_probe={"keypoint_count": 210, "keypoint_density": 0.002},
+            adaptive_routing_deep_presets={},
+        )
+
+        self.assertEqual(metadata["selected_route"], "sift_flann")
+        self.assertEqual(metadata["selected_matcher"], "flann")
+        self.assertEqual(metadata["selected_execution_environment"], "asp360_new")
+        self.assertEqual(metadata["illumination"]["status"], "ok")
+
+    def test_image_match_parser_accepts_dom_source_metadata_csv(self):
+        image_match = importlib.import_module("image_match.image_match")
+
+        parsed = image_match.build_argument_parser().parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--dom-source-metadata-csv",
+                "reduced_selected_pair_paths.csv",
+            ]
+        )
+
+        self.assertEqual(parsed.dom_source_metadata_csv, "reduced_selected_pair_paths.csv")
+
+    def test_dom_source_metadata_summary_records_pair_lookup_status(self):
+        image_match = importlib.import_module("image_match.image_match")
+
+        summary = image_match._dom_source_metadata_summary(
+            left_dom_path="/data/dom_left.cub",
+            right_dom_path="/data/dom_right.cub",
+            lookup={
+                "/data/dom_left.cub": {
+                    "dom_path": "/data/dom_left.cub",
+                    "dom_source_cube": "/data/left_source.cub",
+                    "upstream_source_cube": None,
+                    "dom_source_kind": "reduced",
+                },
+                "/data/dom_right.cub": {
+                    "dom_path": "/data/dom_right.cub",
+                    "dom_source_cube": "/data/right_source.cub",
+                    "upstream_source_cube": None,
+                    "dom_source_kind": "reduced",
+                },
+            },
+            csv_path="reduced_selected_pair_paths.csv",
+        )
+
+        self.assertTrue(summary["enabled"])
+        self.assertEqual(summary["status"], "ready")
+        self.assertEqual(summary["csv_path"], "reduced_selected_pair_paths.csv")
+        self.assertEqual(summary["left"]["dom_source_cube"], "/data/left_source.cub")
+        self.assertEqual(summary["right"]["dom_source_cube"], "/data/right_source.cub")
+
+    def test_apply_tile_route_metadata_updates_task_matcher_and_preserves_metadata(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.tile_matching import PairedTileWindow, TileMatchTask
+        from image_match.tiling import TileWindow
+
+        task = TileMatchTask(
+            left_dom_path="left.cub",
+            right_dom_path="right.cub",
+            band=1,
+            paired_window=PairedTileWindow(
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+            ),
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            invalid_values=(),
+            special_pixel_abs_threshold=1.0e38,
+            min_valid_pixels=4,
+            valid_pixel_percent_threshold=0.0,
+            invalid_pixel_radius=0,
+            ratio_test=0.75,
+            matcher_method="flann",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+        )
+
+        routed = image_match._apply_tile_route_metadata_to_tasks(
+            [task],
+            {
+                0: {
+                    "tile_index": 0,
+                    "selected_route": "sift_lightglue",
+                    "selected_matcher": "lightglue",
+                }
+            },
+        )
+
+        self.assertEqual(routed[0].matcher_method, "lightglue")
+        self.assertEqual(routed[0].route_metadata["selected_route"], "sift_lightglue")
+        self.assertEqual(task.matcher_method, "flann")
+        self.assertIsNone(task.route_metadata)
+
+    def test_group_tile_tasks_by_route_keeps_classic_and_deep_batches_separate(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.tile_matching import PairedTileWindow, TileMatchTask
+        from image_match.tiling import TileWindow
+
+        def make_task(index: int, route: str, matcher: str, config_path: str | None = None) -> TileMatchTask:
+            return TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=PairedTileWindow(
+                    local_window=TileWindow(index * 16, 0, 16, 16),
+                    left_window=TileWindow(index * 16, 0, 16, 16),
+                    right_window=TileWindow(index * 16, 0, 16, 16),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e38,
+                min_valid_pixels=4,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                ratio_test=0.75,
+                matcher_method=matcher,
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                route_metadata={
+                    "tile_index": index,
+                    "selected_route": route,
+                    "selected_matcher": matcher,
+                    "selected_execution_environment": (
+                        "asp360_new" if route == "sift_flann" else "deep-learning"
+                    ),
+                    "deep_match_config_path": config_path,
+                },
+            )
+
+        groups = image_match._group_tile_tasks_by_selected_route(
+            [
+                make_task(0, "sift_flann", "flann"),
+                make_task(1, "sift_lightglue", "lightglue", "sift_lg.json"),
+                make_task(2, "sift_lightglue", "lightglue", "sift_lg.json"),
+                make_task(3, "loftr", "loftr", "loftr.json"),
+            ]
+        )
+
+        self.assertEqual(len(groups["classic"]), 1)
+        self.assertEqual(groups["classic"][0]["selected_route"], "sift_flann")
+        self.assertEqual([task.route_metadata["tile_index"] for task in groups["classic"][0]["tasks"]], [0])
+        self.assertEqual(
+            [(group["selected_route"], group["selected_matcher"], group["deep_match_config_path"], len(group["tasks"]))
+             for group in groups["deep"]],
+            [
+                ("sift_lightglue", "lightglue", "sift_lg.json", 2),
+                ("loftr", "loftr", "loftr.json", 1),
+            ],
+        )
+
+    def test_export_grouped_deep_match_tasks_writes_one_manifest_per_deep_route(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.deep_match_manifest import read_deep_match_pair_manifest
+        from image_match.tile_matching import PairedTileWindow, TileMatchTask
+        from image_match.tiling import TileWindow
+
+        def make_task(index: int, route: str, matcher: str, config_path: str) -> TileMatchTask:
+            return TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=PairedTileWindow(
+                    local_window=TileWindow(index * 16, 0, 16, 16),
+                    left_window=TileWindow(index * 16, 0, 16, 16),
+                    right_window=TileWindow(index * 16, 0, 16, 16),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e38,
+                min_valid_pixels=4,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                ratio_test=0.75,
+                matcher_method=matcher,
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                route_metadata={
+                    "tile_index": index,
+                    "selected_route": route,
+                    "selected_matcher": matcher,
+                    "selected_execution_environment": "deep-learning",
+                    "deep_match_config_path": config_path,
+                },
+            )
+
+        def read_window(cube: object, window: object, *, band: int) -> np.ndarray:
+            return np.arange(window.width * window.height, dtype=np.float64).reshape(window.height, window.width)
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            groups = image_match._group_tile_tasks_by_selected_route(
+                [
+                    make_task(0, "sift_lightglue", "lightglue", "sift_lg.json"),
+                    make_task(1, "loftr", "loftr", "loftr.json"),
+                ]
+            )
+            tile_summaries, export_summary = image_match._export_grouped_deep_match_tile_tasks(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                image_space="dom",
+                left_cube=object(),
+                right_cube=object(),
+                deep_groups=groups["deep"],
+                band=1,
+                left_invalid_values=(),
+                right_invalid_values=(),
+                special_pixel_abs_threshold=1.0e38,
+                min_valid_pixels=4,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                use_gpu=False,
+                deep_match_temp_root_dir=tmp_dir,
+                read_window=read_window,
+            )
+
+            self.assertEqual(len(tile_summaries), 2)
+            self.assertEqual(export_summary["status"], "exported_grouped_for_deep_learning")
+            self.assertEqual(export_summary["group_count"], 2)
+            self.assertEqual(export_summary["exported_task_count"], 2)
+            route_summaries = export_summary["groups"]
+            self.assertEqual([group["selected_route"] for group in route_summaries], ["sift_lightglue", "loftr"])
+            for group in route_summaries:
+                manifest = read_deep_match_pair_manifest(group["manifest_path"])
+                self.assertEqual(len(manifest.tasks), 1)
+                self.assertEqual(manifest.tasks[0].route_metadata["selected_route"], group["selected_route"])
+
+    def test_build_tile_tasks_for_candidate_windows_applies_route_metadata(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.tile_matching import PairedTileWindow
+        from image_match.tiling import TileWindow
+
+        windows = [
+            PairedTileWindow(
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+            ),
+            PairedTileWindow(
+                local_window=TileWindow(16, 0, 16, 16),
+                left_window=TileWindow(16, 0, 16, 16),
+                right_window=TileWindow(16, 0, 16, 16),
+            ),
+        ]
+        adaptive_summary = {
+            "tile_illumination": {
+                "route_metadata": [
+                    {
+                        "tile_index": 0,
+                        "selected_route": "sift_flann",
+                        "selected_matcher": "flann",
+                        "selected_execution_environment": "asp360_new",
+                    },
+                    {
+                        "tile_index": 1,
+                        "selected_route": "loftr",
+                        "selected_matcher": "loftr",
+                        "selected_execution_environment": "deep-learning",
+                        "deep_match_config_path": "loftr.json",
+                    },
+                ]
+            }
+        }
+
+        tasks = image_match._build_tile_tasks_for_candidate_windows(
+            windows,
+            left_dom_path="left.cub",
+            right_dom_path="right.cub",
+            image_space="dom",
+            band=1,
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            invalid_values=(),
+            special_pixel_abs_threshold=1.0e38,
+            min_valid_pixels=4,
+            valid_pixel_percent_threshold=0.0,
+            invalid_pixel_radius=0,
+            valid_intensity_lower_percent=None,
+            valid_intensity_upper_percent=None,
+            ratio_test=0.75,
+            matcher_method="flann",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+            use_gpu=False,
+            gpu_batch_size=1,
+            opencv_num_threads=None,
+            deep_match_runtime_config=None,
+            adaptive_routing_summary=adaptive_summary,
+        )
+
+        self.assertEqual([task.matcher_method for task in tasks], ["flann", "loftr"])
+        self.assertEqual(tasks[0].route_metadata["selected_route"], "sift_flann")
+        self.assertEqual(tasks[1].route_metadata["deep_match_config_path"], "loftr.json")
+
+    def test_run_classic_route_groups_executes_sift_flann_in_asp360_new(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.keypoints import Keypoint
+        from image_match.tile_matching import PairedTileWindow, TileMatchResult, TileMatchStats, TileMatchTask
+        from image_match.tiling import TileWindow
+
+        task = TileMatchTask(
+            left_dom_path="left.cub",
+            right_dom_path="right.cub",
+            band=1,
+            paired_window=PairedTileWindow(
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+            ),
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            invalid_values=(),
+            special_pixel_abs_threshold=1.0e38,
+            min_valid_pixels=4,
+            valid_pixel_percent_threshold=0.0,
+            invalid_pixel_radius=0,
+            ratio_test=0.75,
+            matcher_method="flann",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+            route_metadata={
+                "tile_index": 0,
+                "selected_route": "sift_flann",
+                "selected_matcher": "flann",
+                "selected_execution_environment": "asp360_new",
+            },
+        )
+        groups = image_match._group_tile_tasks_by_selected_route([task])
+        executed: list[str] = []
+
+        def fake_match_task(task: TileMatchTask, **kwargs: object) -> TileMatchResult:
+            executed.append(task.route_metadata["selected_route"])
+            return TileMatchResult(
+                stats=TileMatchStats(
+                    local_start_x=0,
+                    local_start_y=0,
+                    width=16,
+                    height=16,
+                    left_start_x=0,
+                    left_start_y=0,
+                    right_start_x=0,
+                    right_start_y=0,
+                    left_valid_pixel_count=256,
+                    right_valid_pixel_count=256,
+                    left_valid_pixel_ratio=1.0,
+                    right_valid_pixel_ratio=1.0,
+                    left_feature_count=12,
+                    right_feature_count=11,
+                    match_count=1,
+                    status="matched",
+                ),
+                left_points=(Keypoint(sample=2.0, line=3.0),),
+                right_points=(Keypoint(sample=4.0, line=5.0),),
+            )
+
+        results, summary = image_match._run_classic_route_groups(
+            groups["classic"],
+            left_cube=object(),
+            right_cube=object(),
+            left_invalid_values=(),
+            right_invalid_values=(),
+            match_task=fake_match_task,
+        )
+
+        self.assertEqual(executed, ["sift_flann"])
+        self.assertEqual(len(results), 1)
+        self.assertEqual(summary["execution_environment"], "asp360_new")
+        self.assertEqual(summary["group_count"], 1)
+        self.assertEqual(summary["executed_task_count"], 1)
+        self.assertEqual(summary["matched_task_count"], 1)
+        self.assertEqual(summary["groups"][0]["selected_route"], "sift_flann")
+
+    def test_merge_classic_and_deep_tile_results_writes_one_pair_key_set(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.keypoints import Keypoint, KeypointFile
+        from image_match.tile_matching import TileMatchResult, TileMatchStats
+
+        classic_result = TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=0,
+                local_start_y=0,
+                width=16,
+                height=16,
+                left_start_x=0,
+                left_start_y=0,
+                right_start_x=0,
+                right_start_y=0,
+                left_valid_pixel_count=256,
+                right_valid_pixel_count=256,
+                left_valid_pixel_ratio=1.0,
+                right_valid_pixel_ratio=1.0,
+                left_feature_count=10,
+                right_feature_count=10,
+                match_count=1,
+                status="matched",
+            ),
+            left_points=(Keypoint(sample=2.0, line=3.0),),
+            right_points=(Keypoint(sample=4.0, line=5.0),),
+        )
+        deep_left = KeypointFile(128, 96, (Keypoint(sample=20.0, line=30.0),))
+        deep_right = KeypointFile(160, 112, (Keypoint(sample=40.0, line=50.0),))
+
+        left_key, right_key, summary = image_match._merge_classic_and_deep_tile_results(
+            left_image_width=128,
+            left_image_height=96,
+            right_image_width=160,
+            right_image_height=112,
+            classic_tile_results=[classic_result],
+            deep_key_files=[(deep_left, deep_right)],
+        )
+
+        self.assertEqual(left_key.image_width, 128)
+        self.assertEqual(right_key.image_height, 112)
+        self.assertEqual(len(left_key.points), 2)
+        self.assertEqual(len(right_key.points), 2)
+        self.assertEqual(left_key.points[0].sample, 2.0)
+        self.assertEqual(left_key.points[1].sample, 20.0)
+        self.assertEqual(summary["point_count"], 2)
+        self.assertEqual(summary["classic_point_count"], 1)
+        self.assertEqual(summary["deep_point_count"], 1)
+
+    def test_persist_classic_route_results_writes_importable_key_files(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.keypoints import Keypoint, read_key_file
+        from image_match.tile_matching import TileMatchResult, TileMatchStats
+
+        result = TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=0,
+                local_start_y=0,
+                width=16,
+                height=16,
+                left_start_x=0,
+                left_start_y=0,
+                right_start_x=0,
+                right_start_y=0,
+                left_valid_pixel_count=256,
+                right_valid_pixel_count=256,
+                left_valid_pixel_ratio=1.0,
+                right_valid_pixel_ratio=1.0,
+                left_feature_count=10,
+                right_feature_count=10,
+                match_count=1,
+                status="matched",
+            ),
+            left_points=(Keypoint(sample=11.0, line=12.0),),
+            right_points=(Keypoint(sample=21.0, line=22.0),),
+        )
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            summary = image_match._persist_classic_route_results(
+                classic_tile_results=[result],
+                left_image_width=128,
+                left_image_height=96,
+                right_image_width=160,
+                right_image_height=112,
+                output_root=Path(tmp_dir),
+                pair_id="pair_a",
+            )
+            left_key = read_key_file(summary["left_key_path"])
+            right_key = read_key_file(summary["right_key_path"])
+
+        self.assertEqual(summary["status"], "persisted_classic_route_results")
+        self.assertEqual(summary["point_count"], 1)
+        self.assertEqual(left_key.image_width, 128)
+        self.assertEqual(right_key.image_height, 112)
+        self.assertEqual(left_key.points[0].sample, 11.0)
+        self.assertEqual(right_key.points[0].line, 22.0)
+
+    def test_build_physical_tile_illumination_metadata_samples_tiles_with_projectors(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.tile_matching import PairedTileWindow
+        from image_match.tiling import TileWindow
+
+        class FakeProjector:
+            def __init__(self, *, sun_azimuth: float, incidence: float):
+                self.sun_azimuth = sun_azimuth
+                self.incidence = incidence
+                self.closed = False
+
+            def __call__(self, dom_sample: float, dom_line: float) -> dict[str, float]:
+                return {
+                    "latitude": -88.0 + dom_line * 0.001,
+                    "longitude": 123.0 + dom_sample * 0.001,
+                    "source_sample": dom_sample + 10.0,
+                    "source_line": dom_line + 20.0,
+                    "sun_azimuth": self.sun_azimuth,
+                    "incidence": self.incidence,
+                }
+
+            def close(self) -> None:
+                self.closed = True
+
+        opened_projectors: list[FakeProjector] = []
+
+        def projector_factory(*, dom_path: str | Path, source_cube_path: str | Path) -> FakeProjector:
+            projector = (
+                FakeProjector(sun_azimuth=10.0, incidence=80.0)
+                if "left_source" in str(source_cube_path)
+                else FakeProjector(sun_azimuth=30.0, incidence=82.0)
+            )
+            opened_projectors.append(projector)
+            return projector
+
+        def read_window(cube: object, window: object, *, band: int) -> np.ndarray:
+            return np.full((window.height, window.width), 100.0, dtype=np.float64)
+
+        metadata = image_match._build_physical_tile_illumination_metadata(
+            left_dom_path="left_dom.cub",
+            right_dom_path="right_dom.cub",
+            left_cube=object(),
+            right_cube=object(),
+            candidate_windows=[
+                PairedTileWindow(
+                    local_window=TileWindow(0, 0, 2, 2),
+                    left_window=TileWindow(4, 6, 2, 2),
+                    right_window=TileWindow(8, 10, 2, 2),
+                )
+            ],
+            band=1,
+            dom_source_summary={
+                "enabled": True,
+                "status": "ready",
+                "left": {
+                    "dom_source_cube": "left_source.cub",
+                    "upstream_source_cube": "left_original.cub",
+                },
+                "right": {
+                    "dom_source_cube": "right_source.cub",
+                    "upstream_source_cube": "right_original.cub",
+                },
+            },
+            adaptive_routing_deep_presets={"loftr": "loftr_default.json"},
+            read_window=read_window,
+            projector_factory=projector_factory,
+        )
+
+        self.assertEqual(metadata["summary"]["tile_count"], 1)
+        self.assertEqual(metadata["summary"]["projectable_tile_count"], 1)
+        self.assertEqual(len(metadata["pairs"]), 1)
+        pair = metadata["pairs"][0]
+        self.assertEqual(pair["status"], "ok")
+        self.assertEqual(pair["left"]["representative_point"]["status"], "center_projectable")
+        self.assertEqual(pair["right"]["representative_point"]["status"], "center_projectable")
+        self.assertEqual(pair["azimuth_difference_degrees"], 20.0)
+        self.assertEqual(pair["elevation_difference_degrees"], 2.0)
+        self.assertEqual(metadata["route_metadata"][0]["selected_route"], "loftr")
+        self.assertEqual(metadata["summary"]["route_distribution_by_tile"], {"loftr": 1})
+        self.assertEqual(metadata["summary"]["route_distribution_by_projectable_tile"], {"loftr": 1})
+        self.assertTrue(all(projector.closed for projector in opened_projectors))
+
+    def test_tile_router_uses_loftr_when_probe_evidence_is_missing(self):
+        decision = route_matcher_for_tile(
+            tile_index=5,
+            texture_sparseness=0.12,
+            lighting_difference_score=0.05,
+            texture_probe_keypoint_count_left=250,
+            texture_probe_keypoint_count_right=None,
+            texture_probe_keypoint_density_left=0.002,
+            texture_probe_keypoint_density_right=0.002,
+            illumination={"status": "ok", "illumination_difference_score": 0.05},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertEqual(decision.deep_match_config_path, "examples/controlnet_construct/presets/loftr_default.json")
+        self.assertIsNone(decision.texture_probe_keypoint_count_right)
+
+    def test_tile_router_uses_loftr_for_low_keypoint_density_hard_rule(self):
+        decision = route_matcher_for_tile(
+            tile_index=3,
+            texture_sparseness=0.25,
+            lighting_difference_score=0.10,
+            texture_probe_keypoint_count_left=4,
+            texture_probe_keypoint_count_right=80,
+            texture_probe_keypoint_density_left=1.0e-7,
+            texture_probe_keypoint_density_right=1.0e-4,
+            illumination={"status": "ok", "illumination_difference_score": 0.10},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertEqual(decision.selected_execution_environment, "deep-learning")
+        self.assertEqual(decision.deep_match_config_path, "examples/controlnet_construct/presets/loftr_default.json")
+
+    def test_tile_router_uses_superpoint_lightglue_for_weak_non_extreme_texture(self):
+        decision = route_matcher_for_tile(
+            tile_index=4,
+            texture_sparseness=0.62,
+            lighting_difference_score=0.30,
+            texture_probe_keypoint_count_left=90,
+            texture_probe_keypoint_count_right=95,
+            texture_probe_keypoint_density_left=2.0e-5,
+            texture_probe_keypoint_density_right=2.5e-5,
+            illumination={"status": "ok", "illumination_difference_score": 0.30},
+            adaptive_routing_deep_presets={
+                "superpoint_lightglue": "examples/controlnet_construct/presets/lightglue_official_superpoint.json"
+            },
+        )
+
+        self.assertEqual(decision.selected_route, "superpoint_lightglue")
+        self.assertEqual(decision.selected_matcher, "lightglue")
+        self.assertEqual(
+            decision.deep_match_config_path,
+            "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+        )
+        self.assertIn("SuperPoint", decision.route_reason)
+
+    def test_tile_router_uses_sift_lightglue_route_identity_for_moderate_texture(self):
+        decision = route_matcher_for_tile(
+            tile_index=6,
+            texture_sparseness=0.45,
+            lighting_difference_score=0.30,
+            texture_probe_keypoint_count_left=90,
+            texture_probe_keypoint_count_right=95,
+            texture_probe_keypoint_density_left=2.0e-5,
+            texture_probe_keypoint_density_right=2.5e-5,
+            illumination={"status": "ok", "illumination_difference_score": 0.30},
+            adaptive_routing_deep_presets={
+                "sift_lightglue": "examples/controlnet_construct/presets/lightglue_official_sift.json"
+            },
+        )
+
+        self.assertEqual(decision.selected_route, "sift_lightglue")
+        self.assertEqual(decision.selected_matcher, "lightglue")
+        self.assertEqual(
+            decision.deep_match_config_path,
+            "examples/controlnet_construct/presets/lightglue_official_sift.json",
+        )
+
+    def test_tile_router_uses_loftr_for_extreme_texture_sparseness_single_axis(self):
+        decision = route_matcher_for_tile(
+            tile_index=7,
+            texture_sparseness=0.85,
+            lighting_difference_score=0.30,
+            texture_probe_keypoint_count_left=90,
+            texture_probe_keypoint_count_right=95,
+            texture_probe_keypoint_density_left=2.0e-5,
+            texture_probe_keypoint_density_right=2.5e-5,
+            illumination={"status": "ok", "illumination_difference_score": 0.30},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertEqual(decision.deep_match_config_path, "examples/controlnet_construct/presets/loftr_default.json")
+
+    def test_tile_router_uses_loftr_for_extreme_lighting_single_axis(self):
+        decision = route_matcher_for_tile(
+            tile_index=8,
+            texture_sparseness=0.45,
+            lighting_difference_score=0.75,
+            texture_probe_keypoint_count_left=90,
+            texture_probe_keypoint_count_right=95,
+            texture_probe_keypoint_density_left=2.0e-5,
+            texture_probe_keypoint_density_right=2.5e-5,
+            illumination={"status": "ok", "illumination_difference_score": 0.75},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertEqual(decision.deep_match_config_path, "examples/controlnet_construct/presets/loftr_default.json")
+
+    def test_tile_router_uses_high_recall_alias_for_superpoint_lightglue(self):
+        decision = route_matcher_for_tile(
+            tile_index=9,
+            texture_sparseness=0.62,
+            lighting_difference_score=0.30,
+            texture_probe_keypoint_count_left=90,
+            texture_probe_keypoint_count_right=95,
+            texture_probe_keypoint_density_left=2.0e-5,
+            texture_probe_keypoint_density_right=2.5e-5,
+            illumination={"status": "ok", "illumination_difference_score": 0.30},
+            adaptive_routing_deep_presets={
+                "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
+                "lightglue": "examples/controlnet_construct/presets/lightglue_official_sift.json",
+            },
+        )
+
+        self.assertEqual(decision.selected_route, "superpoint_lightglue")
+        self.assertEqual(
+            decision.deep_match_config_path,
+            "examples/controlnet_construct/presets/lightglue_high_recall.json",
+        )
+
+    def test_tile_router_treats_non_finite_density_as_missing_evidence(self):
+        decision = route_matcher_for_tile(
+            tile_index=10,
+            texture_sparseness=0.12,
+            lighting_difference_score=0.05,
+            texture_probe_keypoint_count_left=250,
+            texture_probe_keypoint_count_right=240,
+            texture_probe_keypoint_density_left=float("nan"),
+            texture_probe_keypoint_density_right=0.002,
+            illumination={"status": "ok", "illumination_difference_score": 0.05},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertIsNone(decision.texture_probe_keypoint_density_left)
+
+    def test_tile_router_treats_non_finite_count_as_missing_evidence(self):
+        decision = route_matcher_for_tile(
+            tile_index=11,
+            texture_sparseness=0.12,
+            lighting_difference_score=0.05,
+            texture_probe_keypoint_count_left=float("inf"),
+            texture_probe_keypoint_count_right=240,
+            texture_probe_keypoint_density_left=0.002,
+            texture_probe_keypoint_density_right=0.002,
+            illumination={"status": "ok", "illumination_difference_score": 0.05},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertIsNone(decision.texture_probe_keypoint_count_left)
 
 
 class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
@@ -478,9 +1310,76 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         self.assertEqual(lighting["right_solar_geometry"]["elevation_keyword"], "90-IncidenceAngle")
         self.assertEqual(lighting["right_solar_geometry"]["azimuth_keyword"], "SunAzimuth")
 
-    def test_route_matcher_for_pair_with_sparseness_picks_bf_for_low_signals(self):
+    def test_resolve_adaptive_route_uses_actual_dom_for_texture_when_matching_dom(self):
+        image_match_module = importlib.import_module("image_match.image_match")
+
+        texture_probe = ImageTextureProbe(
+            keypoint_count=100,
+            valid_pixel_count=1000,
+            total_pixel_count=1000,
+            keypoint_density=0.10,
+            mean_gradient=120.0,
+            laplacian_variance=2500.0,
+            entropy=4.2,
+            valid_pixel_ratio=1.0,
+            real_texture_score=0.85,
+        )
+
+        with (
+            patch.object(
+                image_match_module,
+                "_compute_texture_probe_from_cube_path",
+                return_value=texture_probe,
+            ) as probe_mock,
+            patch.object(
+                image_match_module,
+                "_compute_texture_sparseness_and_geometry_from_cube_path",
+                side_effect=[
+                    ("left_sparseness", None, "missing solar"),
+                    ("right_sparseness", None, "missing solar"),
+                ],
+            ) as sparseness_mock,
+            patch.object(
+                image_match_module,
+                "aggregate_pair_texture_sparseness",
+                return_value="pair_sparseness",
+            ),
+            patch.object(
+                image_match_module,
+                "pair_summary_to_diagnostic_dict",
+                return_value={"pair_texture_sparseness": 0.12, "weaker_side": "left"},
+            ),
+        ):
+            selected, summary = image_match_module._resolve_adaptive_route_for_pair(
+                enable_adaptive_routing=True,
+                requested_matcher_method="flann",
+                adaptive_routing_deep_presets=None,
+                band=1,
+                invalid_values=(),
+                special_pixel_abs_threshold=1e300,
+                low_resolution_offset_summary={
+                    "left_low_resolution_dom": "left_preview.cub",
+                    "right_low_resolution_dom": "right_preview.cub",
+                },
+                left_low_resolution_dom=None,
+                right_low_resolution_dom=None,
+                image_space="dom",
+                left_source_path="left_actual_dom.cub",
+                right_source_path="right_actual_dom.cub",
+            )
+
+        self.assertEqual(selected, "flann")
+        self.assertIsNotNone(summary)
+        self.assertEqual(probe_mock.call_args_list[0].args[0], "left_actual_dom.cub")
+        self.assertEqual(probe_mock.call_args_list[1].args[0], "right_actual_dom.cub")
+        self.assertEqual(sparseness_mock.call_args_list[0].args[0], "left_actual_dom.cub")
+        self.assertEqual(sparseness_mock.call_args_list[1].args[0], "right_actual_dom.cub")
+        self.assertEqual(summary["preview_sources"]["source_type"], "matched_dom")
+        self.assertFalse(summary["preview_sources"]["fallback_used"])
+
+    def test_route_matcher_for_pair_with_sparseness_picks_flann_for_low_signals(self):
         from image_match.adaptive_routing import (
-            SIFT_ROUTED_MATCHER_METHOD,
+            FLANN_MATCHER_METHOD,
             route_matcher_for_pair_with_sparseness,
         )
 
@@ -489,9 +1388,9 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
             lighting_difference_score=0.10,
         )
 
-        self.assertEqual(decision.initial_matcher, SIFT_ROUTED_MATCHER_METHOD)
+        self.assertEqual(decision.initial_matcher, FLANN_MATCHER_METHOD)
         self.assertIn("rich texture", decision.route_reason)
-        self.assertEqual(decision.fallback_chain, ("lightglue", "loftr"))
+        self.assertEqual(decision.fallback_chain, ())
 
     def test_adaptive_routing_deep_presets_keep_requested_flann_without_deep_preset(self):
         from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
@@ -508,12 +1407,13 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         )
 
         self.assertEqual(decision.initial_matcher, "flann")
+        self.assertEqual(decision.fallback_chain, ())
         self.assertIsNone(decision.deep_match_config_path)
         self.assertGreater(decision.route_confidence, 0.7)
 
-    def test_route_matcher_for_pair_with_sparseness_picks_loftr_for_high_sparseness(self):
+    def test_route_matcher_for_pair_with_sparseness_picks_lightglue_for_high_sparseness_only(self):
         from image_match.adaptive_routing import (
-            LOFTR_MATCHER_METHOD,
+            LIGHTGLUE_MATCHER_METHOD,
             route_matcher_for_pair_with_sparseness,
         )
 
@@ -522,7 +1422,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
             lighting_difference_score=0.10,
         )
 
-        self.assertEqual(decision.initial_matcher, LOFTR_MATCHER_METHOD)
+        self.assertEqual(decision.initial_matcher, LIGHTGLUE_MATCHER_METHOD)
         self.assertEqual(decision.fallback_chain, ())
 
     def test_adaptive_routing_deep_presets_route_medium_pair_to_lightglue_default(self):
@@ -543,9 +1443,9 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         self.assertEqual(decision.deep_match_config_path, preset_map["lightglue"])
         self.assertGreater(decision.route_confidence, 0.5)
 
-    def test_route_matcher_for_pair_with_sparseness_picks_loftr_for_high_lighting(self):
+    def test_route_matcher_for_pair_with_sparseness_picks_lightglue_for_high_lighting_only(self):
         from image_match.adaptive_routing import (
-            LOFTR_MATCHER_METHOD,
+            LIGHTGLUE_MATCHER_METHOD,
             route_matcher_for_pair_with_sparseness,
         )
 
@@ -554,7 +1454,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
             lighting_difference_score=0.70,
         )
 
-        self.assertEqual(decision.initial_matcher, LOFTR_MATCHER_METHOD)
+        self.assertEqual(decision.initial_matcher, LIGHTGLUE_MATCHER_METHOD)
 
     def test_adaptive_routing_deep_presets_route_sparse_pair_to_loftr_default(self):
         from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
@@ -566,13 +1466,55 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         }
         decision = route_matcher_for_pair_with_sparseness(
             pair_texture_sparseness=0.78,
-            lighting_difference_score=0.20,
+            lighting_difference_score=0.70,
             adaptive_routing_deep_presets=preset_map,
         )
 
         self.assertEqual(decision.initial_matcher, "loftr")
         self.assertEqual(decision.deep_match_config_path, preset_map["loftr"])
         self.assertGreater(decision.route_confidence, 0.7)
+
+    def test_route_matcher_for_pair_with_sparseness_routes_low_probe_keypoints_to_loftr(self):
+        from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
+
+        preset_map = {
+            "lightglue": "examples/controlnet_construct/presets/lightglue_official_sift.json",
+            "loftr": "examples/controlnet_construct/presets/loftr_default.json",
+        }
+        low_probe = ImageTextureProbe(
+            keypoint_count=4,
+            valid_pixel_count=1000,
+            total_pixel_count=1000,
+            keypoint_density=0.004,
+            mean_gradient=20.0,
+            laplacian_variance=50.0,
+            entropy=2.0,
+            valid_pixel_ratio=1.0,
+            real_texture_score=0.2,
+        )
+        rich_probe = ImageTextureProbe(
+            keypoint_count=200,
+            valid_pixel_count=1000,
+            total_pixel_count=1000,
+            keypoint_density=0.2,
+            mean_gradient=120.0,
+            laplacian_variance=2500.0,
+            entropy=4.5,
+            valid_pixel_ratio=1.0,
+            real_texture_score=0.9,
+        )
+
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.20,
+            lighting_difference_score=0.10,
+            left_texture_probe=low_probe,
+            right_texture_probe=rich_probe,
+            adaptive_routing_deep_presets=preset_map,
+        )
+
+        self.assertEqual(decision.initial_matcher, "loftr")
+        self.assertEqual(decision.deep_match_config_path, preset_map["loftr"])
+        self.assertIn("too few keypoints", decision.route_reason)
 
     def test_route_matcher_for_pair_with_sparseness_picks_lightglue_in_middle(self):
         from image_match.adaptive_routing import (
@@ -586,7 +1528,25 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         )
 
         self.assertEqual(decision.initial_matcher, LIGHTGLUE_MATCHER_METHOD)
-        self.assertEqual(decision.fallback_chain, ("loftr",))
+        self.assertEqual(decision.fallback_chain, ())
+
+    def test_route_matcher_for_pair_with_sparseness_uses_superpoint_lightglue_for_weak_non_extreme_pair(self):
+        from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
+
+        preset_map = {
+            "lightglue": "examples/controlnet_construct/presets/lightglue_official_sift.json",
+            "superpoint_lightglue": "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+            "loftr": "examples/controlnet_construct/presets/loftr_default.json",
+        }
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.62,
+            lighting_difference_score=0.25,
+            adaptive_routing_deep_presets=preset_map,
+        )
+
+        self.assertEqual(decision.initial_matcher, "lightglue")
+        self.assertEqual(decision.deep_match_config_path, preset_map["superpoint_lightglue"])
+        self.assertIn("SuperPoint", decision.route_reason)
 
     def test_route_matcher_for_pair_with_sparseness_falls_back_when_both_missing(self):
         from image_match.adaptive_routing import (
@@ -601,6 +1561,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
 
         self.assertEqual(decision.initial_matcher, LIGHTGLUE_MATCHER_METHOD)
         self.assertIn("unavailable", decision.route_reason)
+        self.assertIsNone(decision.mean_real_texture_score)
 
     def test_augment_pair_probe_sidecar_keeps_schema_shape(self):
         from image_match.adaptive_routing import (

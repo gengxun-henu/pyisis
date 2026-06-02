@@ -278,6 +278,18 @@ The implementation should avoid switching environments per tile, per method, or 
   - the full 2048x2048 LoFTR task exited without NPZ/log output on CPU;
   - the 512x512 real crop completed successfully;
   - full benchmark execution should either use smaller deep tiles, GPU, or a guarded per-task size policy before running many LoFTR tasks.
+- Task 15 identified why real routing was previously all LoFTR:
+  - rich tiles already had high keypoint evidence, so the hard keypoint-count/density rule was not the main cause;
+  - the main cause was `real_texture_score = valid_pixel_ratio * texture_components`, which penalized partially valid polar DOM tiles even when their valid pixels were strongly textured;
+  - after removing the direct valid-pixel-ratio multiplier, the same sparse-consistent real pair produced a true mixed route distribution: `{"superpoint_lightglue": 2, "sift_lightglue": 2, "sift_flann": 3, "loftr": 5}`.
+- Task 15 true mixed-route smoke succeeded:
+  - export persisted classic SIFT+FLANN keys with 2853 points;
+  - deep manifests were generated for SIFT+LightGlue and SuperPoint+LightGlue;
+  - SuperPoint+LightGlue 512x512 real crop produced 7 matches with no invalid-mask removals;
+  - final import merged classic and deep outputs into `final_mixed_left.key` / `final_mixed_right.key` with 2860 points.
+- SIFT+LightGlue still needs follow-up:
+  - the 512x512 real crop failed in `deep-learning` with `ValueError: array is not broadcastable to correct shape`;
+  - import handled the failed manifest correctly, but this backend-specific failure should be debugged before using SIFT+LightGlue as a production route in the full benchmark.
 - Real-data geometry smoke must use a real ISISDATA tree, not the unit-test mock tree. With `ISISDATA=/media/gengxun/My Passport/data`, a single tile produced one fully projectable pair:
   - left DOM sample/line: `(2768.0, 1200.0)`;
   - right DOM sample/line: `(2768.0, 1143.0)`;

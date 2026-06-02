@@ -339,7 +339,7 @@ def compute_real_image_texture_probe(
     gradient_component = _clamp(mean_gradient / 64.0)
     entropy_component = _clamp(entropy / 5.0)
     laplacian_component = _clamp(laplacian_variance / 1000.0)
-    real_texture_score = valid_pixel_ratio * (
+    real_texture_score = (
         0.35 * keypoint_component
         + 0.25 * gradient_component
         + 0.20 * entropy_component

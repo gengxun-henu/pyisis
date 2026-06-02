@@ -97,6 +97,21 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertGreater(structured_probe.laplacian_variance, blank_probe.laplacian_variance)
         self.assertGreater(structured_probe.real_texture_score, blank_probe.real_texture_score)
 
+    def test_texture_probe_scores_texture_on_valid_pixels_not_invalid_background_ratio(self):
+        full_texture = np.indices((128, 128)).sum(axis=0).astype(np.float32) % 32
+        full_texture[32:96, 32:96] += 80.0
+        sparse_tile = np.zeros((512, 512), dtype=np.float32)
+        sparse_tile[192:320, 192:320] = full_texture
+        invalid_mask = sparse_tile == 0.0
+
+        full_probe = compute_real_image_texture_probe(full_texture)
+        sparse_probe = compute_real_image_texture_probe(sparse_tile, invalid_mask=invalid_mask)
+
+        self.assertLess(sparse_probe.valid_pixel_ratio, 0.10)
+        self.assertGreater(sparse_probe.keypoint_count, 0)
+        self.assertGreater(sparse_probe.real_texture_score, 0.35)
+        self.assertGreater(sparse_probe.real_texture_score, full_probe.real_texture_score * 0.5)
+
     def test_texture_probe_ignores_overflow_sized_special_pixels_without_warning(self):
         image = np.full((96, 96), 120.0, dtype=np.float64)
         image[0, 0] = 1.0e300

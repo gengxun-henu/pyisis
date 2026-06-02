@@ -253,3 +253,37 @@
   - result: 53 tests OK.
   - `python tests/smoke_import.py`
   - result: `smoke import ok`.
+- Committed Task 14 changes before starting Task 15:
+  - commit `6f72fa5a test: validate mixed route real-data smoke`.
+- Completed Task 15 root-cause analysis for all-LoFTR real routing:
+  - extracted route metadata from Task 14 sparse and rich real-data exports;
+  - rich tiles had high keypoint counts and densities, e.g. 7790-13420 keypoints and densities around `0.0145-0.0179`, but still had `texture_sparseness` around `0.95-0.97`;
+  - root cause was `compute_real_image_texture_probe().real_texture_score` multiplying texture components by `valid_pixel_ratio`, so partially valid polar DOM tiles were scored as sparse even when their valid regions had strong texture.
+- Applied TDD fix for Task 15:
+  - added `test_texture_probe_scores_texture_on_valid_pixels_not_invalid_background_ratio`;
+  - red result before implementation: `real_texture_score=0.0585`, below the expected texture threshold;
+  - changed `real_texture_score` to score texture quality over valid pixels without directly multiplying by `valid_pixel_ratio`;
+  - `valid_pixel_ratio` remains recorded as an independent diagnostic.
+- Re-ran real mixed-route export after the texture-score fix:
+  - output root: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_mixed_route_smoke_task15_20260603`;
+  - real-data pair: `dom_REDUCED_M110860982RE.cub` vs `dom_REDUCED_M110881352RE.cub`;
+  - route distribution by tile: `{"superpoint_lightglue": 2, "sift_lightglue": 2, "sift_flann": 3, "loftr": 5}`;
+  - route distribution by projectable tile: `{"superpoint_lightglue": 2, "sift_lightglue": 2, "sift_flann": 3}`;
+  - classic `sift_flann` route persisted `2853` points across 3 tile results.
+- Task 15 deep-learning smoke:
+  - created 512x512 real-data crop manifests for one SIFT+LightGlue tile and one SuperPoint+LightGlue tile;
+  - ran in `deep-learning` with `--device cpu --num-workers 1 --torch-num-threads 8 --force-rerun`;
+  - SIFT+LightGlue crop failed with `ValueError: array is not broadcastable to correct shape`, producing a failed NPZ/log;
+  - SuperPoint+LightGlue crop succeeded with `match_count=7` and `invalid_mask_removed_count=0`.
+- Task 15 mixed import smoke:
+  - ran in `asp360_new` with persisted classic keys plus both grouped deep manifests;
+  - output keys: `final_mixed_left.key` and `final_mixed_right.key`;
+  - result: `status=merged_mixed_route_results`, `point_count=2860`;
+  - import summary: `classic_point_count=2853`, `deep_point_count=7`, `failed_task_count=1`, `missing_result_count=0`, `imported_task_count=1`.
+- Task 15 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 54 tests OK.
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 20 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.

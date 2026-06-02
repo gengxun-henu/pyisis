@@ -9,6 +9,9 @@ from pathlib import Path
 from typing import Any, Iterable, Mapping
 
 
+_BASENAME_LOOKUP_PREFIX = "__basename__:"
+
+
 def _finite_or_none(value: float | None) -> float | None:
     if value is None:
         return None
@@ -193,14 +196,15 @@ def load_dom_source_metadata_csv(csv_path: str | Path) -> dict[str, dict[str, st
             }
             lookup[dom_path] = metadata
             dom_basename = Path(dom_path).name
+            basename_lookup_key = _basename_lookup_key(dom_basename)
             if dom_basename in ambiguous_basenames:
                 continue
-            existing_basename_metadata = lookup.get(dom_basename)
+            existing_basename_metadata = lookup.get(basename_lookup_key)
             if existing_basename_metadata is not None and existing_basename_metadata.get("dom_path") != dom_path:
                 ambiguous_basenames.add(dom_basename)
-                lookup.pop(dom_basename, None)
+                lookup.pop(basename_lookup_key, None)
                 continue
-            lookup[dom_basename] = metadata
+            lookup[basename_lookup_key] = metadata
     return lookup
 
 
@@ -209,7 +213,7 @@ def resolve_dom_source_metadata(
     lookup: Mapping[str, Mapping[str, str | None]] | None,
 ) -> dict[str, str | None]:
     resolved_dom_path = str(dom_path)
-    candidates = (resolved_dom_path, Path(resolved_dom_path).name)
+    candidates = (resolved_dom_path, _basename_lookup_key(Path(resolved_dom_path).name))
     if lookup is not None:
         for candidate in candidates:
             metadata = lookup.get(candidate)
@@ -230,6 +234,10 @@ def _unknown_dom_source_metadata(dom_path: str) -> dict[str, str | None]:
         "upstream_source_cube": None,
         "dom_source_kind": "unknown",
     }
+
+
+def _basename_lookup_key(basename: str) -> str:
+    return f"{_BASENAME_LOOKUP_PREFIX}{basename}"
 
 
 def _dom_source_kind(source_cube: str | None) -> str:

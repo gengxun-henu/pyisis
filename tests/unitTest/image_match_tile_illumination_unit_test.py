@@ -199,6 +199,31 @@ class ImageMatchTileIlluminationUnitTest(unittest.TestCase):
         self.assertIsNone(metadata["upstream_source_cube"])
         self.assertEqual(metadata["dom_source_kind"], "unknown")
 
+    def test_source_metadata_exact_key_wins_when_exact_path_is_ambiguous_basename(self):
+        import tempfile
+        from image_match.tile_illumination import load_dom_source_metadata_csv, resolve_dom_source_metadata
+
+        with tempfile.TemporaryDirectory() as tmp:
+            csv_path = Path(tmp) / "reduced_selected_pair_paths.csv"
+            csv_path.write_text(
+                "source_echo_cal_cube,echo_cal_cube,source_dom_cube,dom_cube\n"
+                "/full/A.echo.cal.cub,/reduced/REDUCED_A.echo.cal.cub,/dom/a_full.cub,dom_DUP.cub\n"
+                "/full/B.echo.cal.cub,/reduced/REDUCED_B.echo.cal.cub,/dom/b_full.cub,/other/dom_DUP.cub\n",
+                encoding="utf-8",
+            )
+
+            lookup = load_dom_source_metadata_csv(csv_path)
+            exact_metadata = resolve_dom_source_metadata("dom_DUP.cub", lookup)
+            basename_metadata = resolve_dom_source_metadata("/unlisted/dom_DUP.cub", lookup)
+
+        self.assertEqual(exact_metadata["dom_source_cube"], "/reduced/REDUCED_A.echo.cal.cub")
+        self.assertEqual(exact_metadata["upstream_source_cube"], "/full/A.echo.cal.cub")
+        self.assertEqual(exact_metadata["dom_source_kind"], "reduced")
+        self.assertEqual(basename_metadata["dom_path"], "/unlisted/dom_DUP.cub")
+        self.assertEqual(basename_metadata["dom_source_cube"], "")
+        self.assertIsNone(basename_metadata["upstream_source_cube"])
+        self.assertEqual(basename_metadata["dom_source_kind"], "unknown")
+
     def test_shadowed_pixel_can_be_selected_when_source_projectable(self):
         from image_match.tile_illumination_geometry import select_representative_point
 

@@ -414,6 +414,107 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(decision.selected_execution_environment, "asp360_new")
         self.assertTrue(decision.no_post_match_fallback)
 
+    def test_build_tile_route_metadata_partitions_classic_and_deep_tiles(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.tile_illumination import (
+            RepresentativePoint,
+            TileIlluminationPair,
+            TileIlluminationSample,
+            TileWindowMetadata,
+        )
+
+        point = RepresentativePoint(
+            status="center_projectable",
+            selection_reason="center pixel projected to source camera",
+            local_x_0_based=1,
+            local_y_0_based=1,
+            dom_sample_1_based=2.0,
+            dom_line_1_based=2.0,
+            pixel_available=True,
+            radiometric_valid_for_matching=True,
+            source_projectable=True,
+            failure_reason=None,
+        )
+        sample = TileIlluminationSample(
+            side="left",
+            dom_path="left.cub",
+            dom_source_cube="left_source.cub",
+            upstream_source_cube=None,
+            tile_index=0,
+            tile_window_0_based=TileWindowMetadata(0, 0, 4, 4),
+            representative_point=point,
+            latitude=-88.0,
+            longitude=123.0,
+            source_sample_1_based=1.0,
+            source_line_1_based=1.0,
+            sun_azimuth_degrees=10.0,
+            incidence_angle_degrees=87.0,
+            solar_elevation_degrees=3.0,
+        )
+        pair = TileIlluminationPair.from_samples(tile_index=0, left=sample, right=sample)
+
+        metadata = image_match._build_tile_route_metadata(
+            tile_index=0,
+            illumination_pair=pair,
+            texture_sparseness=0.10,
+            left_probe={"keypoint_count": 200, "keypoint_density": 0.002},
+            right_probe={"keypoint_count": 210, "keypoint_density": 0.002},
+            adaptive_routing_deep_presets={},
+        )
+
+        self.assertEqual(metadata["selected_route"], "sift_flann")
+        self.assertEqual(metadata["selected_matcher"], "flann")
+        self.assertEqual(metadata["selected_execution_environment"], "asp360_new")
+        self.assertEqual(metadata["illumination"]["status"], "ok")
+
+    def test_apply_tile_route_metadata_updates_task_matcher_and_preserves_metadata(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.tile_matching import PairedTileWindow, TileMatchTask
+        from image_match.tiling import TileWindow
+
+        task = TileMatchTask(
+            left_dom_path="left.cub",
+            right_dom_path="right.cub",
+            band=1,
+            paired_window=PairedTileWindow(
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+            ),
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            invalid_values=(),
+            special_pixel_abs_threshold=1.0e38,
+            min_valid_pixels=4,
+            valid_pixel_percent_threshold=0.0,
+            invalid_pixel_radius=0,
+            ratio_test=0.75,
+            matcher_method="flann",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+        )
+
+        routed = image_match._apply_tile_route_metadata_to_tasks(
+            [task],
+            {
+                0: {
+                    "tile_index": 0,
+                    "selected_route": "sift_lightglue",
+                    "selected_matcher": "lightglue",
+                }
+            },
+        )
+
+        self.assertEqual(routed[0].matcher_method, "lightglue")
+        self.assertEqual(routed[0].route_metadata["selected_route"], "sift_lightglue")
+        self.assertEqual(task.matcher_method, "flann")
+        self.assertIsNone(task.route_metadata)
+
     def test_tile_router_uses_loftr_when_probe_evidence_is_missing(self):
         decision = route_matcher_for_tile(
             tile_index=5,

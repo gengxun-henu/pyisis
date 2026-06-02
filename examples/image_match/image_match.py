@@ -63,6 +63,7 @@ import argparse
 from dataclasses import asdict
 from datetime import datetime
 import json
+import math
 from pathlib import Path
 import sys
 from typing import TextIO, Literal
@@ -91,6 +92,7 @@ if __package__ in {None, ""}:
         resolve_adaptive_routing_quality_profile,
         route_matcher_for_pair,
         route_matcher_for_pair_with_sparseness,
+        route_matcher_for_tile,
     )
     from image_match.lighting_difference import (
         SolarGeometryFieldMissing,
@@ -103,6 +105,7 @@ if __package__ in {None, ""}:
         compute_image_texture_sparseness_from_reader,
         pair_summary_to_diagnostic_dict,
     )
+    from image_match.tile_illumination import illumination_pair_to_payload
     from image_match.tiling import TileWindow
     from image_match.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from image_match.deep_match_manifest import (
@@ -175,6 +178,7 @@ else:
         resolve_adaptive_routing_quality_profile,
         route_matcher_for_pair,
         route_matcher_for_pair_with_sparseness,
+        route_matcher_for_tile,
     )
     from .lighting_difference import (
         SolarGeometryFieldMissing,
@@ -187,6 +191,7 @@ else:
         compute_image_texture_sparseness_from_reader,
         pair_summary_to_diagnostic_dict,
     )
+    from .tile_illumination import illumination_pair_to_payload
     from .tiling import TileWindow
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from .deep_match_manifest import (
@@ -1727,6 +1732,111 @@ def _select_adaptive_texture_source_paths(
     if resolved_left_preview and resolved_right_preview:
         return resolved_left_preview, resolved_right_preview, "low_resolution_dom", True
     return "", "", "missing", False
+
+
+def _optional_float(value: object) -> float | None:
+    if value is None:
+        return None
+    try:
+        resolved = float(value)
+    except (TypeError, ValueError):
+        return None
+    return resolved if math.isfinite(resolved) else None
+
+
+def _optional_int(value: object) -> int | None:
+    resolved = _optional_float(value)
+    if resolved is None:
+        return None
+    return int(resolved)
+
+
+def _build_tile_route_metadata(
+    *,
+    tile_index: int,
+    illumination_pair: object,
+    texture_sparseness: float | None,
+    left_probe: dict[str, object],
+    right_probe: dict[str, object],
+    adaptive_routing_deep_presets: dict[str, str] | None,
+) -> dict[str, object]:
+    illumination_payload = illumination_pair_to_payload(illumination_pair)
+    decision = route_matcher_for_tile(
+        tile_index=tile_index,
+        texture_sparseness=texture_sparseness,
+        lighting_difference_score=_optional_float(illumination_payload.get("illumination_difference_score")),
+        texture_probe_keypoint_count_left=_optional_int(left_probe.get("keypoint_count")),
+        texture_probe_keypoint_count_right=_optional_int(right_probe.get("keypoint_count")),
+        texture_probe_keypoint_density_left=_optional_float(left_probe.get("keypoint_density")),
+        texture_probe_keypoint_density_right=_optional_float(right_probe.get("keypoint_density")),
+        illumination=illumination_payload,
+        adaptive_routing_deep_presets=adaptive_routing_deep_presets,
+    )
+    return {
+        "tile_index": int(tile_index),
+        "selected_route": decision.selected_route,
+        "selected_matcher": decision.selected_matcher,
+        "selected_execution_environment": decision.selected_execution_environment,
+        "route_reason": decision.route_reason,
+        "route_confidence": decision.route_confidence,
+        "no_post_match_fallback": decision.no_post_match_fallback,
+        "deep_match_config_path": decision.deep_match_config_path,
+        "texture_sparseness": decision.texture_sparseness,
+        "texture_probe_keypoint_count_left": decision.texture_probe_keypoint_count_left,
+        "texture_probe_keypoint_count_right": decision.texture_probe_keypoint_count_right,
+        "texture_probe_keypoint_density_left": decision.texture_probe_keypoint_density_left,
+        "texture_probe_keypoint_density_right": decision.texture_probe_keypoint_density_right,
+        "illumination": illumination_payload,
+    }
+
+
+def _apply_tile_route_metadata_to_tasks(
+    tile_tasks: list[TileMatchTask],
+    route_metadata_by_tile_index: dict[int, dict[str, object]] | None,
+) -> list[TileMatchTask]:
+    if not route_metadata_by_tile_index:
+        return list(tile_tasks)
+
+    routed_tasks: list[TileMatchTask] = []
+    for tile_index, task in enumerate(tile_tasks):
+        route_metadata = route_metadata_by_tile_index.get(tile_index)
+        if route_metadata is None:
+            routed_tasks.append(task)
+            continue
+        selected_matcher = str(route_metadata.get("selected_matcher", task.matcher_method))
+        routed_tasks.append(
+            TileMatchTask(
+                left_dom_path=task.left_dom_path,
+                right_dom_path=task.right_dom_path,
+                band=task.band,
+                paired_window=task.paired_window,
+                minimum_value=task.minimum_value,
+                maximum_value=task.maximum_value,
+                lower_percent=task.lower_percent,
+                upper_percent=task.upper_percent,
+                invalid_values=task.invalid_values,
+                special_pixel_abs_threshold=task.special_pixel_abs_threshold,
+                min_valid_pixels=task.min_valid_pixels,
+                valid_pixel_percent_threshold=task.valid_pixel_percent_threshold,
+                invalid_pixel_radius=task.invalid_pixel_radius,
+                ratio_test=task.ratio_test,
+                matcher_method=selected_matcher,
+                max_features=task.max_features,
+                sift_octave_layers=task.sift_octave_layers,
+                sift_contrast_threshold=task.sift_contrast_threshold,
+                sift_edge_threshold=task.sift_edge_threshold,
+                sift_sigma=task.sift_sigma,
+                image_space=task.image_space,
+                use_gpu=task.use_gpu,
+                gpu_batch_size=task.gpu_batch_size,
+                opencv_num_threads=task.opencv_num_threads,
+                deep_match_runtime_config=task.deep_match_runtime_config,
+                valid_intensity_lower_percent=task.valid_intensity_lower_percent,
+                valid_intensity_upper_percent=task.valid_intensity_upper_percent,
+                route_metadata=route_metadata,
+            )
+        )
+    return routed_tasks
 
 
 def _resolve_adaptive_route_for_pair(

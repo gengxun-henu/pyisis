@@ -216,6 +216,12 @@ The implementation should avoid switching environments per tile, per method, or 
 - Future integration must avoid mixing global tile indexes with filtered candidate-window order. Route metadata should either be generated after prefiltering in the same order as `TileMatchTask` construction, or use explicit stable tile IDs carried through both structures.
 - `image_match.py` metadata currently stores `match_visualization` at top level in the metadata sidecar, not under `image_match`. Reporting code that wants RANSAC fallback counts must check top-level `metadata["match_visualization"]["ransac"]`.
 - Polar adaptive summary rows use prefixed `tile_illumination_*` fields to avoid overwriting existing generic `tile_count` and `skipped_tile_count` fields.
+- Focused validation passed for the scaffolded tile illumination modules, adaptive routing helpers, deep manifest preservation, pipeline option forwarding, and polar summary extraction:
+  - 205 tests OK, 1 skipped for the combined image-match/pipeline suite.
+  - `tests/smoke_import.py` passed under `MPLBACKEND=Agg`.
+  - 51 matcher comparison tests passed, including tile illumination and RANSAC summary extraction.
+- The real-data Task 9 smoke is not yet meaningful because the runtime `image_match.py` adaptive metadata currently attaches only `adaptive_routing.tile_illumination.source_metadata`. It does not yet compute and attach physical tile illumination `summary` and per-tile `pairs` from PyISIS geometry.
+- The next implementation boundary is to call the bounded representative-point/PyISIS projector path during tile task construction, generate `TileIlluminationPair` records in the same filtered tile-task order, and pass those records into `_build_tile_route_metadata()`.
 
 ## Representative Point Policy
 

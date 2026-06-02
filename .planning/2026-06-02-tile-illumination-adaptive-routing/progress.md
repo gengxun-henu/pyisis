@@ -114,5 +114,13 @@
 - Task 8 validation:
   - `python -m unittest tests.unitTest.controlnet_construct_matcher_comparison_unit_test -v`
   - result: 51 tests OK.
+- Completed Task 9 focused validation in `asp360_new` with:
+  - `python -m unittest tests.unitTest.image_match_tile_illumination_unit_test tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_deep_manifest_unit_test tests.unitTest.controlnet_construct_pipeline_unit_test -v`
+  - result: 205 tests OK, 1 skipped.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+  - `python -m unittest tests.unitTest.controlnet_construct_matcher_comparison_unit_test -v`
+  - result: 51 tests OK.
+- Deferred the planned real-data tile illumination dry-run because current `image_match.py` runtime metadata records `adaptive_routing.tile_illumination.source_metadata` only. It does not yet compute physical tile illumination `summary/pairs`, so the planned smoke assertion on `adaptive_routing.tile_illumination.summary.tile_count` would fail for an integration reason rather than a data reason.
 - Current next step:
-  - Task 9 focused validation and real-data smoke.
+  - connect the PyISIS tile illumination geometry path into `image_match.py` tile task creation, attach physical tile illumination pair summaries, then rerun the real-data smoke before deep-learning batch execution.

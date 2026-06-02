@@ -6,7 +6,7 @@ Redesign the LRO NAC adaptive-routing benchmark so matcher selection can use til
 
 ## Current Status
 
-Status: implementation in progress in isolated worktree; Tasks 1-6 complete, Task 7 source metadata handoff starting.
+Status: implementation in progress in isolated worktree; Tasks 1-8 complete and focused Task 9 validation passed. Real-data tile illumination smoke remains blocked until physical tile illumination computation is connected into the `image_match.py` runtime path.
 
 The previous polar adaptive-routing plan remains useful as baseline context, but this is a new architecture task because illumination evidence, tile routing, deep-learning manifest grouping, reporting, and paper figures all need changes.
 
@@ -124,7 +124,8 @@ Status: executing
 - [x] Task 6: pure tile route metadata builder and task metadata application helper.
 - [x] Task 7: CLI and pipeline source metadata handoff.
 - [x] Task 8: reporting summaries.
-- [ ] Task 9: focused validation and real-data smoke.
+- [x] Task 9: focused validation.
+- [ ] Task 9 follow-up: connect physical tile illumination computation into `image_match.py`, then run real-data tile illumination smoke.
 
 ## Key Decisions
 
@@ -138,6 +139,7 @@ Status: executing
 | Keep prior-only routing | User clarified adaptive routing means choosing a method from texture/illumination evidence, not retrying a cascade after failure. |
 | Keep route identity separate from backend matcher | `selected_route` distinguishes `sift_lightglue` from `superpoint_lightglue`, while `selected_matcher` stays compatible with backend values such as `lightglue`. |
 | Apply route metadata in the same filtered tile-task order or with explicit indexes | Candidate-window prefiltering can change tile order/count; future integration must not mix global tile indexes with filtered task indexes. |
+| Do not run the real-data smoke until runtime tile illumination is wired | Current runtime metadata records DOM source metadata, but not physical tile illumination `summary/pairs`; the planned smoke assertion would be invalid before that integration. |
 
 ## Open Questions
 
@@ -161,3 +163,4 @@ Status: executing
 | None yet | Plan initialization | N/A |
 | `_resolved_invalid_values_for_cube` called with `None` or `Path` during temporary validation | 2 | The helper expects an open `ip.Cube` plus a tuple of invalid values. Temporary script was corrected to call `_resolved_invalid_values_for_cube(cube, ())`. |
 | Left rich-tile center projected from DOM to ground but failed `source_ground_map.set_universal_ground` in the source cube | 1 | Recorded as an important design boundary: a representative point must be DOM-valid and source-camera-projectable, not only DOM-valid. The right tile completed the full geometry/solar chain. |
+| Real-data Task 9 smoke would not produce `adaptive_routing.tile_illumination.summary` yet | 1 | Focused validation was completed; real-data smoke is deferred until `image_match.py` computes physical tile illumination samples and attaches summary/pair metadata, not only source metadata. |

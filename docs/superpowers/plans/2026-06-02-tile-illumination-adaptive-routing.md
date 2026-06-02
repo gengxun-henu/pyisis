@@ -1556,7 +1556,7 @@ git commit -m "feat: summarize tile illumination adaptive routing"
 **Files:**
 - Modify only `.planning/2026-06-02-tile-illumination-adaptive-routing/progress.md` after commands finish.
 
-- [ ] **Step 1: Run focused unit tests**
+- [x] **Step 1: Run focused unit tests**
 
 Run:
 
@@ -1571,7 +1571,7 @@ python -m unittest \
 
 Expected: PASS.
 
-- [ ] **Step 2: Run smoke import**
+- [x] **Step 2: Run smoke import**
 
 Run:
 
@@ -1582,6 +1582,8 @@ python tests/smoke_import.py
 Expected: PASS and no Qt/matplotlib backend crash.
 
 - [ ] **Step 3: Run one real-data tile illumination dry-run**
+
+Status: deferred. Current runtime metadata records `adaptive_routing.tile_illumination.source_metadata`, but physical tile illumination `summary/pairs` are not yet computed by `image_match.py`. Connect the PyISIS representative-point geometry path into tile task construction before running this command.
 
 Use the Phase 1 pair and metadata table:
 
@@ -1611,6 +1613,8 @@ Expected:
 
 - [ ] **Step 4: Run deep manifest smoke in `deep-learning`**
 
+Status: deferred until Step 3 produces real routed deep tasks from physical tile illumination.
+
 Run:
 
 ```bash
@@ -1626,7 +1630,7 @@ python examples/learning_methods/run_deep_match_manifest.py \
 
 Expected: deep result NPZ files are written for exported deep tasks. If no deep tasks are selected for this smoke pair, record `no_deep_tasks_selected` in progress and continue.
 
-- [ ] **Step 5: Update planning files**
+- [x] **Step 5: Update planning files**
 
 Append to `.planning/2026-06-02-tile-illumination-adaptive-routing/progress.md`:
 
@@ -1640,6 +1644,8 @@ Append to `.planning/2026-06-02-tile-illumination-adaptive-routing/progress.md`:
 ```
 
 - [ ] **Step 6: Commit**
+
+Status: optional for this focused validation checkpoint; commit after deciding whether to include the planning-file update alone or continue directly into the runtime integration follow-up.
 
 ```bash
 git add .planning/2026-06-02-tile-illumination-adaptive-routing/progress.md

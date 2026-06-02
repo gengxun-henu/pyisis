@@ -287,3 +287,27 @@
   - result: 20 tests OK.
   - `python tests/smoke_import.py`
   - result: `smoke import ok`.
+
+## 2026-06-03 Task 16 SIFT+LightGlue blank/all-invalid tile fix
+
+- Investigated the Task 15 SIFT+LightGlue 512x512 crop failure in the isolated worktree:
+  - worktree: `/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/.worktrees/tile-illumination-adaptive-routing-20260602`;
+  - branch: `feature/tile-illumination-adaptive-routing-20260602`;
+  - failing manifest: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_mixed_route_smoke_task15_20260603/one_task_512_sift_lightglue_workspace/tasks.json`.
+- Reproduced the backend traceback in `deep-learning` without the manifest runner catch:
+  - failure came from official LightGlue SIFT, `lightglue/sift.py::filter_dog_point()`, at `np.maximum.at(buffer, tuple(ij), s)`;
+  - the task arrays had `left_image=(512,512) uint8 min=max=0`, `right_image=(512,512) uint8 min=max=0`, and both uint8 masks had `min=max=0`;
+  - in this pipeline, uint8 mask value 0 means invalid, so the smoke tile had no valid pixels and no intensity variation.
+- Added TDD regression coverage:
+  - `test_match_pair_short_circuits_blank_all_invalid_official_sift_tile` first failed because the adapter still constructed `OfficialLightGlueFrontend`;
+  - implemented deep-adapter guards for no-valid-pixel tiles and official-SIFT blank valid tiles.
+- Real manifest verification:
+  - re-ran the exact SIFT+LightGlue manifest in `deep-learning` with `--device cpu --num-workers 1 --torch-num-threads 8 --force-rerun`;
+  - result: `status=completed`, `succeeded_task_count=1`, `failed_task_count=0`;
+  - task result: `status=matched_no_points`, `match_count=0`, `raw_match_count=0`, `invalid_mask_removed_count=0`.
+- Validation:
+  - `python -m unittest tests.unitTest.image_match_deep_adapter_unit_test -v`: 22 tests OK;
+  - `python -m unittest tests.unitTest.learning_methods_deep_manifest_runner_unit_test -v`: 30 tests OK;
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`: 54 tests OK;
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`: 20 tests OK;
+  - `python tests/smoke_import.py`: `smoke import ok`.

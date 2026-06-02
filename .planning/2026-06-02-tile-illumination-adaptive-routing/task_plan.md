@@ -6,7 +6,7 @@ Redesign the LRO NAC adaptive-routing benchmark so matcher selection can use til
 
 ## Current Status
 
-Status: implementation in progress in isolated worktree; Tasks 1-13 complete. Physical tile illumination metadata and per-tile route metadata are connected into the `image_match.py` runtime path, single-tile real-data geometry/routing smoke passed, export-mode deep manifests are grouped by per-tile selected route, classic `asp360_new` route results are persisted for later import, and import mode can merge persisted classic keys plus multiple grouped deep manifests into final pair-level `.key` files.
+Status: implementation in progress in isolated worktree; Tasks 1-16 complete. Physical tile illumination metadata and per-tile route metadata are connected into the `image_match.py` runtime path, single-tile real-data geometry/routing smoke passed, export-mode deep manifests are grouped by per-tile selected route, classic `asp360_new` route results are persisted for later import, import mode can merge persisted classic keys plus multiple grouped deep manifests into final pair-level `.key` files, and the SIFT+LightGlue blank/all-invalid tile backend failure is guarded in the deep adapter.
 
 The previous polar adaptive-routing plan remains useful as baseline context, but this is a new architecture task because illumination evidence, tile routing, deep-learning manifest grouping, reporting, and paper figures all need changes.
 
@@ -133,6 +133,7 @@ Status: executing
 - [x] Task 13: wire mixed-route export/import workflow so persisted classic results and grouped deep manifests merge into final `.key` outputs.
 - [x] Task 14: run a small real-data export/deep/import smoke on one LRO NAC pair and fix mixed-route manifest integration issues found by the smoke.
 - [x] Task 15: analyze all-LoFTR real routing, fix texture scoring over-penalty from invalid background ratio, and complete a true mixed-route real-data smoke.
+- [x] Task 16: fix SIFT+LightGlue official SIFT failure on blank/all-invalid deep tiles and verify the previous 512x512 real manifest now completes as `matched_no_points`.
 
 ## Key Decisions
 
@@ -176,4 +177,4 @@ Status: executing
 | Real-data Task 14 LoFTR grouped manifest had top-level LoFTR config but task-level SIFT+LightGlue runtime config | 1 | Added a regression test and rewrote deep export tile tasks to use the selected route matcher/runtime config before manifest construction. |
 | Task 14 LoFTR CPU smoke on the full 2048x2048 exported tile exited without NPZ/log output | 1 | Treated this as a smoke-size/resource issue; used a 512x512 crop from the real exported tile for the deep-learning NPZ/import smoke. |
 | Task 15 real route evidence showed rich tiles with thousands of keypoints still had `texture_sparseness` near 0.95 | 1 | Removed the direct `valid_pixel_ratio` multiplier from `compute_real_image_texture_probe().real_texture_score`; valid-pixel ratio remains a diagnostic field. |
-| Task 15 SIFT+LightGlue 512x512 crop smoke failed with `ValueError: array is not broadcastable to correct shape` | 1 | Recorded as a deep runner/backend issue; import still handled the failed manifest and merged classic plus successful SuperPoint+LightGlue results. |
+| Task 15 SIFT+LightGlue 512x512 crop smoke failed with `ValueError: array is not broadcastable to correct shape` | 1 | Root cause: the smoke crop had all-zero images and all-zero uint8 masks, so official LightGlue SIFT entered its DoG filter on a blank/all-invalid tile and raised inside `np.maximum.at`. Task 16 added deep-adapter guards that return empty matches when either image has no valid pixels, and for official SIFT when either valid image has no intensity variation. The same manifest now completes with `matched_no_points`, `failed_task_count=0`. |

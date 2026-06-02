@@ -290,6 +290,12 @@ The implementation should avoid switching environments per tile, per method, or 
 - SIFT+LightGlue still needs follow-up:
   - the 512x512 real crop failed in `deep-learning` with `ValueError: array is not broadcastable to correct shape`;
   - import handled the failed manifest correctly, but this backend-specific failure should be debugged before using SIFT+LightGlue as a production route in the full benchmark.
+- Task 16 resolved the SIFT+LightGlue failure:
+  - direct deep-learning traceback showed the exception came from `/home/gengxun/PlanetaryMapping/asp360_new/LightGlue/lightglue/sift.py`, where `filter_dog_point()` calls `np.maximum.at`;
+  - the failing 512x512 task arrays were all zero for both left/right images, and the uint8 masks were also all zero, which this pipeline interprets as all invalid pixels;
+  - the correct behavior for an all-invalid or blank official-SIFT tile is zero matches, not a failed manifest task;
+  - `DeepMatcherAdapter` now short-circuits when either side has no valid pixels, and additionally short-circuits official LightGlue SIFT when either side has no intensity variation over valid pixels;
+  - re-running the exact SIFT+LightGlue manifest in `deep-learning` produced `status=completed`, `succeeded_task_count=1`, `failed_task_count=0`, task status `matched_no_points`.
 - Real-data geometry smoke must use a real ISISDATA tree, not the unit-test mock tree. With `ISISDATA=/media/gengxun/My Passport/data`, a single tile produced one fully projectable pair:
   - left DOM sample/line: `(2768.0, 1200.0)`;
   - right DOM sample/line: `(2768.0, 1143.0)`;

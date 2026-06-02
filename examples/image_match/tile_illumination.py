@@ -29,12 +29,15 @@ def illumination_difference_score(
     elevation_difference_degrees: float | None,
 ) -> float | None:
     terms: list[float] = []
-    if azimuth_difference_degrees is not None:
-        terms.append(min(float(azimuth_difference_degrees) / 180.0, 1.0))
-    if incidence_difference_degrees is not None:
-        terms.append(min(abs(float(incidence_difference_degrees)) / 90.0, 1.0))
-    if elevation_difference_degrees is not None:
-        terms.append(min(abs(float(elevation_difference_degrees)) / 90.0, 1.0))
+    azimuth = _finite_or_none(azimuth_difference_degrees)
+    incidence = _finite_or_none(incidence_difference_degrees)
+    elevation = _finite_or_none(elevation_difference_degrees)
+    if azimuth is not None:
+        terms.append(min(azimuth / 180.0, 1.0))
+    if incidence is not None:
+        terms.append(min(abs(incidence) / 90.0, 1.0))
+    if elevation is not None:
+        terms.append(min(abs(elevation) / 90.0, 1.0))
     if not terms:
         return None
     return max(0.0, min(1.0, sum(terms) / len(terms)))

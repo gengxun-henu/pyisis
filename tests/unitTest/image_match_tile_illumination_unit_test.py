@@ -16,6 +16,7 @@ from image_match.tile_illumination import (
     TileIlluminationSample,
     TileWindowMetadata,
     angular_difference_degrees,
+    illumination_difference_score,
     illumination_pair_to_payload,
     summarize_tile_illumination_pairs,
 )
@@ -26,7 +27,34 @@ class ImageMatchTileIlluminationUnitTest(unittest.TestCase):
         self.assertEqual(angular_difference_degrees(359.0, 1.0), 2.0)
         self.assertEqual(angular_difference_degrees(10.0, 350.0), 20.0)
 
-    def test_pair_payload_contains_elevation_from_incidence(self):
+    def test_illumination_difference_score_returns_none_when_all_inputs_none(self):
+        self.assertIsNone(
+            illumination_difference_score(
+                azimuth_difference_degrees=None,
+                incidence_difference_degrees=None,
+                elevation_difference_degrees=None,
+            )
+        )
+
+    def test_illumination_difference_score_returns_none_when_all_inputs_non_finite(self):
+        self.assertIsNone(
+            illumination_difference_score(
+                azimuth_difference_degrees=float("nan"),
+                incidence_difference_degrees=float("inf"),
+                elevation_difference_degrees=float("-inf"),
+            )
+        )
+
+    def test_illumination_difference_score_uses_only_finite_inputs(self):
+        score = illumination_difference_score(
+            azimuth_difference_degrees=float("nan"),
+            incidence_difference_degrees=45.0,
+            elevation_difference_degrees=float("inf"),
+        )
+
+        self.assertEqual(score, 0.5)
+
+    def test_pair_payload_preserves_solar_elevation(self):
         point = RepresentativePoint(
             status="center_projectable",
             selection_reason="center pixel projected to source camera",

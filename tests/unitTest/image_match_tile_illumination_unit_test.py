@@ -24,6 +24,10 @@ from image_match.tile_illumination import (
 )
 
 
+def _float32_from_bits(bits: int) -> float:
+    return float(np.array([bits], dtype=np.uint32).view(np.float32)[0])
+
+
 class ImageMatchTileIlluminationUnitTest(unittest.TestCase):
     def test_angular_difference_handles_wraparound(self):
         self.assertEqual(angular_difference_degrees(359.0, 1.0), 2.0)
@@ -187,7 +191,7 @@ class ImageMatchTileIlluminationUnitTest(unittest.TestCase):
         from image_match.tile_illumination_geometry import select_representative_point
 
         values = np.ones((3, 3), dtype=np.float64)
-        values[1, 1] = np.finfo(np.float32).max
+        values[1, 1] = _float32_from_bits(0xFF7FFFFB)
         calls = []
 
         def projector(sample, line):
@@ -220,6 +224,21 @@ class ImageMatchTileIlluminationUnitTest(unittest.TestCase):
         self.assertFalse(pixel_available(float("nan")))
         self.assertFalse(pixel_available(float("inf")))
         self.assertFalse(pixel_available(float("-inf")))
+
+    def test_pixel_available_rejects_all_isis_float_special_values(self):
+        from image_match.tile_illumination_geometry import pixel_available
+
+        special_pixel_bits = (
+            0xFF7FFFFB,  # NULL4
+            0xFF7FFFFC,  # LOW_REPR_SAT4
+            0xFF7FFFFD,  # LOW_INSTR_SAT4
+            0xFF7FFFFE,  # HIGH_INSTR_SAT4
+            0xFF7FFFFF,  # HIGH_REPR_SAT4
+        )
+
+        for bits in special_pixel_bits:
+            with self.subTest(bits=hex(bits)):
+                self.assertFalse(pixel_available(_float32_from_bits(bits)))
 
     def test_no_projectable_pixel_reports_failure(self):
         from image_match.tile_illumination_geometry import select_representative_point

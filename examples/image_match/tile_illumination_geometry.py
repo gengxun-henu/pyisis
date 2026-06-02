@@ -13,19 +13,26 @@ from .tile_illumination import RepresentativePoint, TileIlluminationSample, Tile
 
 
 ProjectionResult = dict[str, float]
-DEFAULT_SPECIAL_PIXEL_ABS_THRESHOLD = float(np.finfo(np.float32).max)
+ISIS_VALID_MIN4_BITS = 0xFF7FFFFA
+
+
+def _float32_from_bits(bits: int) -> float:
+    return float(np.array([bits], dtype=np.uint32).view(np.float32)[0])
+
+
+ISIS_VALID_MIN4 = _float32_from_bits(ISIS_VALID_MIN4_BITS)
 
 
 def pixel_available(
     value: float,
     *,
-    special_pixel_abs_threshold: float | None = DEFAULT_SPECIAL_PIXEL_ABS_THRESHOLD,
+    special_pixel_min: float | None = ISIS_VALID_MIN4,
 ) -> bool:
     """Return whether a DOM pixel exists for representative-point selection."""
     resolved = float(value)
     if not math.isfinite(resolved):
         return False
-    if special_pixel_abs_threshold is not None and abs(resolved) >= float(special_pixel_abs_threshold):
+    if special_pixel_min is not None and resolved < float(special_pixel_min):
         return False
     return True
 
@@ -59,7 +66,7 @@ def select_representative_point(
     dom_source_cube: str = "",
     upstream_source_cube: str | None = None,
     tile_index: int = 0,
-    special_pixel_abs_threshold: float | None = DEFAULT_SPECIAL_PIXEL_ABS_THRESHOLD,
+    special_pixel_min: float | None = ISIS_VALID_MIN4,
 ) -> TileIlluminationSample:
     """Select the nearest source-projectable DOM pixel for tile illumination."""
     values = np.asarray(dom_values, dtype=np.float64)
@@ -84,7 +91,7 @@ def select_representative_point(
     for local_x, local_y in representative_candidate_offsets(width, height):
         if not pixel_available(
             values[local_y, local_x],
-            special_pixel_abs_threshold=special_pixel_abs_threshold,
+            special_pixel_min=special_pixel_min,
         ):
             continue
 

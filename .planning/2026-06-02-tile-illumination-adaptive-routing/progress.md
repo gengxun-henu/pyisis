@@ -161,3 +161,24 @@
   - result: `smoke import ok`.
 - Current next step:
   - use the per-tile route metadata to group execution by selected matcher for classic/deep batches.
+- Completed Task 11 grouped route execution scaffold:
+  - added `_route_metadata_by_tile_index_from_summary()` and `_build_tile_tasks_for_candidate_windows()` so candidate tile tasks receive per-tile route metadata from `adaptive_routing.tile_illumination.route_metadata`;
+  - added `_group_tile_tasks_by_selected_route()` to partition routed tile tasks into `asp360_new` classic groups and `deep-learning` groups keyed by selected route, backend matcher, and deep preset path;
+  - added grouped deep manifest export helpers that write one manifest workspace per deep route, preserving `route_metadata` in every manifest task;
+  - connected `match_dom_pair()` export mode to use grouped deep manifests when route metadata is present, while recording classic SIFT+FLANN group/task counts as `asp360_new` work rather than exporting them to `deep-learning`;
+  - preserved the legacy single deep-matcher export path when route metadata is absent.
+- Task 11 TDD coverage:
+  - red: `test_export_grouped_deep_match_tasks_writes_one_manifest_per_deep_route` initially failed with `AttributeError`/missing grouped export helper, then passed after implementation;
+  - red: `test_build_tile_tasks_for_candidate_windows_applies_route_metadata` initially failed with `AttributeError`, then passed after the routed tile-task helper was implemented;
+  - focused Task 11 tests passed: 3 tests OK.
+- Task 11 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 50 tests OK.
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 15 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+  - `git diff --check`
+  - result: OK.
+  - `git status --short -- .gitignore print.prt`
+  - result: no output; neither file is modified in the Task 11 worktree.

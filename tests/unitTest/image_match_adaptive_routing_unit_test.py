@@ -20,6 +20,7 @@ import importlib
 import json
 import sys
 from pathlib import Path
+import tempfile
 import unittest
 import warnings
 from unittest.mock import patch
@@ -559,6 +560,222 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(routed[0].route_metadata["selected_route"], "sift_lightglue")
         self.assertEqual(task.matcher_method, "flann")
         self.assertIsNone(task.route_metadata)
+
+    def test_group_tile_tasks_by_route_keeps_classic_and_deep_batches_separate(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.tile_matching import PairedTileWindow, TileMatchTask
+        from image_match.tiling import TileWindow
+
+        def make_task(index: int, route: str, matcher: str, config_path: str | None = None) -> TileMatchTask:
+            return TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=PairedTileWindow(
+                    local_window=TileWindow(index * 16, 0, 16, 16),
+                    left_window=TileWindow(index * 16, 0, 16, 16),
+                    right_window=TileWindow(index * 16, 0, 16, 16),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e38,
+                min_valid_pixels=4,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                ratio_test=0.75,
+                matcher_method=matcher,
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                route_metadata={
+                    "tile_index": index,
+                    "selected_route": route,
+                    "selected_matcher": matcher,
+                    "selected_execution_environment": (
+                        "asp360_new" if route == "sift_flann" else "deep-learning"
+                    ),
+                    "deep_match_config_path": config_path,
+                },
+            )
+
+        groups = image_match._group_tile_tasks_by_selected_route(
+            [
+                make_task(0, "sift_flann", "flann"),
+                make_task(1, "sift_lightglue", "lightglue", "sift_lg.json"),
+                make_task(2, "sift_lightglue", "lightglue", "sift_lg.json"),
+                make_task(3, "loftr", "loftr", "loftr.json"),
+            ]
+        )
+
+        self.assertEqual(len(groups["classic"]), 1)
+        self.assertEqual(groups["classic"][0]["selected_route"], "sift_flann")
+        self.assertEqual([task.route_metadata["tile_index"] for task in groups["classic"][0]["tasks"]], [0])
+        self.assertEqual(
+            [(group["selected_route"], group["selected_matcher"], group["deep_match_config_path"], len(group["tasks"]))
+             for group in groups["deep"]],
+            [
+                ("sift_lightglue", "lightglue", "sift_lg.json", 2),
+                ("loftr", "loftr", "loftr.json", 1),
+            ],
+        )
+
+    def test_export_grouped_deep_match_tasks_writes_one_manifest_per_deep_route(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.deep_match_manifest import read_deep_match_pair_manifest
+        from image_match.tile_matching import PairedTileWindow, TileMatchTask
+        from image_match.tiling import TileWindow
+
+        def make_task(index: int, route: str, matcher: str, config_path: str) -> TileMatchTask:
+            return TileMatchTask(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                band=1,
+                paired_window=PairedTileWindow(
+                    local_window=TileWindow(index * 16, 0, 16, 16),
+                    left_window=TileWindow(index * 16, 0, 16, 16),
+                    right_window=TileWindow(index * 16, 0, 16, 16),
+                ),
+                minimum_value=None,
+                maximum_value=None,
+                lower_percent=0.5,
+                upper_percent=99.5,
+                invalid_values=(),
+                special_pixel_abs_threshold=1.0e38,
+                min_valid_pixels=4,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                ratio_test=0.75,
+                matcher_method=matcher,
+                max_features=100,
+                sift_octave_layers=3,
+                sift_contrast_threshold=0.04,
+                sift_edge_threshold=10.0,
+                sift_sigma=1.6,
+                route_metadata={
+                    "tile_index": index,
+                    "selected_route": route,
+                    "selected_matcher": matcher,
+                    "selected_execution_environment": "deep-learning",
+                    "deep_match_config_path": config_path,
+                },
+            )
+
+        def read_window(cube: object, window: object, *, band: int) -> np.ndarray:
+            return np.arange(window.width * window.height, dtype=np.float64).reshape(window.height, window.width)
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            groups = image_match._group_tile_tasks_by_selected_route(
+                [
+                    make_task(0, "sift_lightglue", "lightglue", "sift_lg.json"),
+                    make_task(1, "loftr", "loftr", "loftr.json"),
+                ]
+            )
+            tile_summaries, export_summary = image_match._export_grouped_deep_match_tile_tasks(
+                left_dom_path="left.cub",
+                right_dom_path="right.cub",
+                image_space="dom",
+                left_cube=object(),
+                right_cube=object(),
+                deep_groups=groups["deep"],
+                band=1,
+                left_invalid_values=(),
+                right_invalid_values=(),
+                special_pixel_abs_threshold=1.0e38,
+                min_valid_pixels=4,
+                valid_pixel_percent_threshold=0.0,
+                invalid_pixel_radius=0,
+                use_gpu=False,
+                deep_match_temp_root_dir=tmp_dir,
+                read_window=read_window,
+            )
+
+            self.assertEqual(len(tile_summaries), 2)
+            self.assertEqual(export_summary["status"], "exported_grouped_for_deep_learning")
+            self.assertEqual(export_summary["group_count"], 2)
+            self.assertEqual(export_summary["exported_task_count"], 2)
+            route_summaries = export_summary["groups"]
+            self.assertEqual([group["selected_route"] for group in route_summaries], ["sift_lightglue", "loftr"])
+            for group in route_summaries:
+                manifest = read_deep_match_pair_manifest(group["manifest_path"])
+                self.assertEqual(len(manifest.tasks), 1)
+                self.assertEqual(manifest.tasks[0].route_metadata["selected_route"], group["selected_route"])
+
+    def test_build_tile_tasks_for_candidate_windows_applies_route_metadata(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.tile_matching import PairedTileWindow
+        from image_match.tiling import TileWindow
+
+        windows = [
+            PairedTileWindow(
+                local_window=TileWindow(0, 0, 16, 16),
+                left_window=TileWindow(0, 0, 16, 16),
+                right_window=TileWindow(0, 0, 16, 16),
+            ),
+            PairedTileWindow(
+                local_window=TileWindow(16, 0, 16, 16),
+                left_window=TileWindow(16, 0, 16, 16),
+                right_window=TileWindow(16, 0, 16, 16),
+            ),
+        ]
+        adaptive_summary = {
+            "tile_illumination": {
+                "route_metadata": [
+                    {
+                        "tile_index": 0,
+                        "selected_route": "sift_flann",
+                        "selected_matcher": "flann",
+                        "selected_execution_environment": "asp360_new",
+                    },
+                    {
+                        "tile_index": 1,
+                        "selected_route": "loftr",
+                        "selected_matcher": "loftr",
+                        "selected_execution_environment": "deep-learning",
+                        "deep_match_config_path": "loftr.json",
+                    },
+                ]
+            }
+        }
+
+        tasks = image_match._build_tile_tasks_for_candidate_windows(
+            windows,
+            left_dom_path="left.cub",
+            right_dom_path="right.cub",
+            image_space="dom",
+            band=1,
+            minimum_value=None,
+            maximum_value=None,
+            lower_percent=0.5,
+            upper_percent=99.5,
+            invalid_values=(),
+            special_pixel_abs_threshold=1.0e38,
+            min_valid_pixels=4,
+            valid_pixel_percent_threshold=0.0,
+            invalid_pixel_radius=0,
+            valid_intensity_lower_percent=None,
+            valid_intensity_upper_percent=None,
+            ratio_test=0.75,
+            matcher_method="flann",
+            max_features=100,
+            sift_octave_layers=3,
+            sift_contrast_threshold=0.04,
+            sift_edge_threshold=10.0,
+            sift_sigma=1.6,
+            use_gpu=False,
+            gpu_batch_size=1,
+            opencv_num_threads=None,
+            deep_match_runtime_config=None,
+            adaptive_routing_summary=adaptive_summary,
+        )
+
+        self.assertEqual([task.matcher_method for task in tasks], ["flann", "loftr"])
+        self.assertEqual(tasks[0].route_metadata["selected_route"], "sift_flann")
+        self.assertEqual(tasks[1].route_metadata["deep_match_config_path"], "loftr.json")
 
     def test_build_physical_tile_illumination_metadata_samples_tiles_with_projectors(self):
         image_match = importlib.import_module("image_match.image_match")

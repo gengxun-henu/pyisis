@@ -121,6 +121,7 @@ if __package__ in {None, ""}:
     from image_match.deep_match_manifest import (
         DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
         build_deep_match_pair_manifest,
+        default_deep_match_pair_id,
         ensure_deep_match_workspace,
         read_deep_match_pair_manifest,
         read_deep_match_task_result,
@@ -217,6 +218,7 @@ else:
     from .deep_match_manifest import (
         DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
         build_deep_match_pair_manifest,
+        default_deep_match_pair_id,
         ensure_deep_match_workspace,
         read_deep_match_pair_manifest,
         read_deep_match_task_result,
@@ -1859,6 +1861,131 @@ def _apply_tile_route_metadata_to_tasks(
     return routed_tasks
 
 
+def _route_metadata_by_tile_index_from_summary(
+    adaptive_routing_summary: dict[str, object] | None,
+) -> dict[int, dict[str, object]]:
+    if not isinstance(adaptive_routing_summary, dict):
+        return {}
+    tile_illumination = adaptive_routing_summary.get("tile_illumination")
+    if not isinstance(tile_illumination, dict):
+        return {}
+    route_metadata = tile_illumination.get("route_metadata")
+    if not isinstance(route_metadata, list):
+        return {}
+
+    resolved: dict[int, dict[str, object]] = {}
+    for fallback_index, metadata in enumerate(route_metadata):
+        if not isinstance(metadata, dict):
+            continue
+        raw_tile_index = metadata.get("tile_index", fallback_index)
+        try:
+            tile_index = int(raw_tile_index)
+        except (TypeError, ValueError):
+            tile_index = fallback_index
+        resolved[tile_index] = dict(metadata)
+    return resolved
+
+
+def _build_tile_tasks_for_candidate_windows(
+    candidate_windows: list[PairedTileWindow],
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    image_space: str,
+    band: int,
+    minimum_value: float | None,
+    maximum_value: float | None,
+    lower_percent: float,
+    upper_percent: float,
+    invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
+    valid_intensity_lower_percent: float | None,
+    valid_intensity_upper_percent: float | None,
+    ratio_test: float,
+    matcher_method: str,
+    max_features: int | None,
+    sift_octave_layers: int,
+    sift_contrast_threshold: float,
+    sift_edge_threshold: float,
+    sift_sigma: float,
+    use_gpu: bool,
+    gpu_batch_size: int,
+    opencv_num_threads: int | None = None,
+    deep_match_runtime_config: object | None = None,
+    adaptive_routing_summary: dict[str, object] | None = None,
+) -> list[TileMatchTask]:
+    tile_tasks = _build_tile_match_tasks(
+        candidate_windows,
+        left_dom_path=left_dom_path,
+        right_dom_path=right_dom_path,
+        image_space=image_space,
+        band=band,
+        minimum_value=minimum_value,
+        maximum_value=maximum_value,
+        lower_percent=lower_percent,
+        upper_percent=upper_percent,
+        invalid_values=invalid_values,
+        special_pixel_abs_threshold=special_pixel_abs_threshold,
+        min_valid_pixels=min_valid_pixels,
+        valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+        invalid_pixel_radius=invalid_pixel_radius,
+        valid_intensity_lower_percent=valid_intensity_lower_percent,
+        valid_intensity_upper_percent=valid_intensity_upper_percent,
+        ratio_test=ratio_test,
+        matcher_method=matcher_method,
+        max_features=max_features,
+        sift_octave_layers=sift_octave_layers,
+        sift_contrast_threshold=sift_contrast_threshold,
+        sift_edge_threshold=sift_edge_threshold,
+        sift_sigma=sift_sigma,
+        use_gpu=use_gpu,
+        gpu_batch_size=gpu_batch_size,
+        opencv_num_threads=opencv_num_threads,
+        deep_match_runtime_config=deep_match_runtime_config,
+    )
+    return _apply_tile_route_metadata_to_tasks(
+        tile_tasks,
+        _route_metadata_by_tile_index_from_summary(adaptive_routing_summary),
+    )
+
+
+def _group_tile_tasks_by_selected_route(tile_tasks: list[TileMatchTask]) -> dict[str, list[dict[str, object]]]:
+    """Group routed tile tasks by execution environment and selected matcher."""
+    grouped: dict[tuple[str, str, str, str | None], dict[str, object]] = {}
+    for task in tile_tasks:
+        route_metadata = task.route_metadata or {}
+        selected_route = str(route_metadata.get("selected_route", task.matcher_method)).strip().lower()
+        selected_matcher = str(route_metadata.get("selected_matcher", task.matcher_method)).strip().lower()
+        raw_deep_config = route_metadata.get("deep_match_config_path")
+        deep_match_config_path = None if raw_deep_config in (None, "") else str(raw_deep_config)
+        requested_environment = str(route_metadata.get("selected_execution_environment", "") or "").strip()
+        execution_environment = (
+            "deep-learning"
+            if selected_matcher in DEEP_MATCHER_METHODS or requested_environment == "deep-learning"
+            else "asp360_new"
+        )
+        key = (execution_environment, selected_route, selected_matcher, deep_match_config_path)
+        group = grouped.get(key)
+        if group is None:
+            group = {
+                "execution_environment": execution_environment,
+                "selected_route": selected_route,
+                "selected_matcher": selected_matcher,
+                "deep_match_config_path": deep_match_config_path,
+                "tasks": [],
+            }
+            grouped[key] = group
+        group["tasks"].append(task)
+
+    return {
+        "classic": [group for group in grouped.values() if group["execution_environment"] == "asp360_new"],
+        "deep": [group for group in grouped.values() if group["execution_environment"] == "deep-learning"],
+    }
+
+
 def _dom_source_metadata_summary(
     *,
     left_dom_path: str | Path,
@@ -2267,6 +2394,253 @@ def _export_tile_summary_from_payload(payload: object) -> TileMatchStats:
         match_count=0,
         status="exported_for_deep_learning",
     )
+
+
+def _deep_group_pair_id(
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    selected_route: str,
+    selected_matcher: str,
+    band: int,
+    image_space: str,
+) -> str:
+    route_token = str(selected_route).strip().lower().replace("/", "_").replace(" ", "_") or "deep"
+    matcher_token = str(selected_matcher).strip().lower().replace("/", "_").replace(" ", "_") or "matcher"
+    base_id = default_deep_match_pair_id(
+        left_dom_path=left_dom_path,
+        right_dom_path=right_dom_path,
+        matcher_method=f"{matcher_token}_{route_token}",
+        band=band,
+        image_space=image_space,
+    )
+    return f"{route_token}__{base_id}"
+
+
+def _export_deep_match_tile_tasks(
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    image_space: str,
+    left_cube: object,
+    right_cube: object,
+    tile_tasks: list[TileMatchTask],
+    band: int,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
+    use_gpu: bool,
+    deep_match_temp_root_dir: str | Path,
+    selected_route: str,
+    selected_matcher: str,
+    deep_match_config_path: str | Path | None = None,
+    deep_match_runtime_config: object | None = None,
+    read_window: Callable[[object, TileWindow], np.ndarray] | None = None,
+) -> tuple[list[TileMatchStats], dict[str, object]]:
+    image_backend = build_image_backend(image_space)
+    resolved_read_window = read_window or (lambda cube, window, *, band: _read_cube_window(cube, window, band=band))
+    manifest = build_deep_match_pair_manifest(
+        tasks=tile_tasks,
+        left_dom_path=left_dom_path,
+        right_dom_path=right_dom_path,
+        matcher_method=selected_matcher,
+        band=band,
+        image_space=image_backend.space,
+        temp_root_dir=deep_match_temp_root_dir,
+        requested_device="cuda" if use_gpu else "cpu",
+        pair_id=_deep_group_pair_id(
+            left_dom_path=left_dom_path,
+            right_dom_path=right_dom_path,
+            selected_route=selected_route,
+            selected_matcher=selected_matcher,
+            band=band,
+            image_space=image_backend.space,
+        ),
+        deep_match_config_path=deep_match_config_path,
+        deep_match_runtime_config=deep_match_runtime_config,
+        created_by_python=sys.executable,
+        metadata={
+            "export_source": "image_match.match_dom_pair.grouped_tile_routes",
+            "candidate_tile_count": len(tile_tasks),
+            "selected_route": selected_route,
+            "selected_matcher": selected_matcher,
+            "deep_match_config_path": (
+                None if deep_match_config_path is None else str(Path(deep_match_config_path))
+            ),
+            "deep_match_runtime_config": _runtime_config_to_metadata(deep_match_runtime_config),
+            "matcher_method": selected_matcher,
+            "feature_extractor_method": (
+                None
+                if deep_match_runtime_config is None
+                else getattr(deep_match_runtime_config, "feature_extractor_method", None)
+            ),
+            "created_by_python": sys.executable,
+        },
+    )
+    workspace = resolve_deep_match_workspace(
+        temp_root_dir=deep_match_temp_root_dir,
+        pair_id=manifest.pair_id,
+    )
+    ensure_deep_match_workspace(workspace)
+
+    exported_records = []
+    tile_summaries: list[TileMatchStats] = []
+    skipped_tile_count = 0
+    for record in manifest.tasks:
+        task = record.tile_task
+        left_values = resolved_read_window(left_cube, task.paired_window.left_window, band=task.band)
+        right_values = resolved_read_window(right_cube, task.paired_window.right_window, band=task.band)
+        prepared = tile_matching_module._prepare_gpu_tile_payload_from_values(
+            left_values=left_values,
+            right_values=right_values,
+            local_window=task.paired_window.local_window,
+            left_window=task.paired_window.left_window,
+            right_window=task.paired_window.right_window,
+            minimum_value=task.minimum_value,
+            maximum_value=task.maximum_value,
+            lower_percent=task.lower_percent,
+            upper_percent=task.upper_percent,
+            left_invalid_values=left_invalid_values,
+            right_invalid_values=right_invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+            min_valid_pixels=min_valid_pixels,
+            valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+            invalid_pixel_radius=invalid_pixel_radius,
+            valid_intensity_lower_percent=task.valid_intensity_lower_percent,
+            valid_intensity_upper_percent=task.valid_intensity_upper_percent,
+        )
+        if isinstance(prepared, TileMatchResult):
+            tile_summaries.append(prepared.stats)
+            skipped_tile_count += 1
+            continue
+        write_deep_match_task_arrays(
+            record,
+            left_image=prepared.left_image,
+            right_image=prepared.right_image,
+            left_mask=prepared.left_mask,
+            right_mask=prepared.right_mask,
+        )
+        exported_records.append(record)
+        tile_summaries.append(_export_tile_summary_from_payload(prepared))
+
+    filtered_manifest = manifest.__class__(
+        format_version=manifest.format_version,
+        pair_id=manifest.pair_id,
+        workspace_root=manifest.workspace_root,
+        left_dom_path=manifest.left_dom_path,
+        right_dom_path=manifest.right_dom_path,
+        image_space=manifest.image_space,
+        matcher_method=manifest.matcher_method,
+        requested_device=manifest.requested_device,
+        band=manifest.band,
+        created_at_utc=manifest.created_at_utc,
+        tasks=tuple(exported_records),
+        metadata={
+            **manifest.metadata,
+            "exported_task_count": len(exported_records),
+            "skipped_task_count": skipped_tile_count,
+        },
+    )
+    manifest_path = write_deep_match_pair_manifest(filtered_manifest)
+    return tile_summaries, {
+        "status": "exported_for_deep_learning" if exported_records else "export_skipped_no_tasks",
+        "reason": (
+            "Prepared grouped deep-matching task workspace for execution in the deep-learning environment."
+            if exported_records
+            else "No tile tasks met the validity requirements for grouped deep-learning export."
+        ),
+        "selected_route": selected_route,
+        "selected_matcher": selected_matcher,
+        "deep_match_config_path": None if deep_match_config_path is None else str(Path(deep_match_config_path)),
+        "manifest_path": str(manifest_path),
+        "workspace_root": str(workspace.root_dir),
+        "images_dir": str(workspace.images_dir),
+        "results_dir": str(workspace.results_dir),
+        "logs_dir": str(workspace.logs_dir),
+        "pair_id": filtered_manifest.pair_id,
+        "exported_task_count": len(exported_records),
+        "skipped_task_count": skipped_tile_count,
+        "requested_device": filtered_manifest.requested_device,
+    }
+
+
+def _export_grouped_deep_match_tile_tasks(
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    image_space: str,
+    left_cube: object,
+    right_cube: object,
+    deep_groups: list[dict[str, object]],
+    band: int,
+    left_invalid_values: tuple[float, ...],
+    right_invalid_values: tuple[float, ...],
+    special_pixel_abs_threshold: float,
+    min_valid_pixels: int,
+    valid_pixel_percent_threshold: float,
+    invalid_pixel_radius: int,
+    use_gpu: bool,
+    deep_match_temp_root_dir: str | Path,
+    read_window: Callable[[object, TileWindow], np.ndarray] | None = None,
+) -> tuple[list[TileMatchStats], dict[str, object]]:
+    all_tile_summaries: list[TileMatchStats] = []
+    group_summaries: list[dict[str, object]] = []
+    for group in deep_groups:
+        tasks = list(group.get("tasks", []))
+        if not tasks:
+            continue
+        deep_match_config_path = group.get("deep_match_config_path")
+        deep_match_runtime_config = group.get("deep_match_runtime_config")
+        if (
+            deep_match_runtime_config is None
+            and deep_match_config_path not in (None, "")
+            and Path(str(deep_match_config_path)).expanduser().exists()
+        ):
+            deep_match_runtime_config = _resolve_deep_match_runtime_config(
+                Path(str(deep_match_config_path)).expanduser()
+            )
+        tile_summaries, group_summary = _export_deep_match_tile_tasks(
+            left_dom_path=left_dom_path,
+            right_dom_path=right_dom_path,
+            image_space=image_space,
+            left_cube=left_cube,
+            right_cube=right_cube,
+            tile_tasks=tasks,
+            band=band,
+            left_invalid_values=left_invalid_values,
+            right_invalid_values=right_invalid_values,
+            special_pixel_abs_threshold=special_pixel_abs_threshold,
+            min_valid_pixels=min_valid_pixels,
+            valid_pixel_percent_threshold=valid_pixel_percent_threshold,
+            invalid_pixel_radius=invalid_pixel_radius,
+            use_gpu=use_gpu,
+            deep_match_temp_root_dir=deep_match_temp_root_dir,
+            selected_route=str(group.get("selected_route", group.get("selected_matcher", "deep"))),
+            selected_matcher=str(group.get("selected_matcher", "lightglue")),
+            deep_match_config_path=deep_match_config_path,
+            deep_match_runtime_config=deep_match_runtime_config,
+            read_window=read_window,
+        )
+        all_tile_summaries.extend(tile_summaries)
+        group_summaries.append(group_summary)
+
+    exported_task_count = sum(int(group.get("exported_task_count", 0) or 0) for group in group_summaries)
+    skipped_task_count = sum(int(group.get("skipped_task_count", 0) or 0) for group in group_summaries)
+    return all_tile_summaries, {
+        "status": "exported_grouped_for_deep_learning" if exported_task_count else "export_skipped_no_tasks",
+        "reason": (
+            "Prepared grouped deep-matching manifests for execution in the deep-learning environment."
+            if exported_task_count
+            else "No grouped deep tile tasks met the validity requirements for export."
+        ),
+        "group_count": len(group_summaries),
+        "exported_task_count": exported_task_count,
+        "skipped_task_count": skipped_task_count,
+        "groups": group_summaries,
+    }
 
 
 def _export_deep_match_pair_tasks(
@@ -3099,25 +3473,16 @@ def match_dom_pair(
 
             if candidate_windows:
                 if resolved_deep_match_mode == "export":
-                    if resolved_matcher_method not in DEEP_MATCHER_METHODS:
-                        raise ValueError(
-                            "deep_match_mode='export' currently supports only deep matcher methods: "
-                            f"{DEEP_MATCHER_METHODS}."
-                        )
-                    tile_summaries, deep_match_export_summary = _export_deep_match_pair_tasks(
+                    routed_export_tile_tasks = _build_tile_tasks_for_candidate_windows(
+                        candidate_windows,
                         left_dom_path=left_dom_path,
                         right_dom_path=right_dom_path,
                         image_space=image_backend.space,
-                        left_cube=left_cube,
-                        right_cube=right_cube,
-                        candidate_windows=candidate_windows,
                         band=band,
                         minimum_value=minimum_value,
                         maximum_value=maximum_value,
                         lower_percent=lower_percent,
                         upper_percent=upper_percent,
-                        left_invalid_values=left_invalid_values,
-                        right_invalid_values=right_invalid_values,
                         invalid_values=invalid_values,
                         special_pixel_abs_threshold=special_pixel_abs_threshold,
                         min_valid_pixels=min_valid_pixels,
@@ -3134,14 +3499,89 @@ def match_dom_pair(
                         sift_sigma=sift_sigma,
                         use_gpu=use_gpu,
                         gpu_batch_size=gpu_batch_size,
-                        deep_match_temp_root_dir=(
-                            deep_match_temp_root_dir
-                            if deep_match_temp_root_dir is not None
-                            else Path.cwd() / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME
-                        ),
-                        deep_match_config_path=resolved_deep_match_config_path,
+                        opencv_num_threads=resolved_opencv_num_threads,
                         deep_match_runtime_config=resolved_deep_match_runtime_config,
+                        adaptive_routing_summary=adaptive_routing_summary,
                     )
+                    route_groups = _group_tile_tasks_by_selected_route(routed_export_tile_tasks)
+                    route_metadata_enabled = any(task.route_metadata is not None for task in routed_export_tile_tasks)
+                    if route_metadata_enabled:
+                        tile_summaries, deep_match_export_summary = _export_grouped_deep_match_tile_tasks(
+                            left_dom_path=left_dom_path,
+                            right_dom_path=right_dom_path,
+                            image_space=image_backend.space,
+                            left_cube=left_cube,
+                            right_cube=right_cube,
+                            deep_groups=route_groups["deep"],
+                            band=band,
+                            left_invalid_values=left_invalid_values,
+                            right_invalid_values=right_invalid_values,
+                            special_pixel_abs_threshold=special_pixel_abs_threshold,
+                            min_valid_pixels=min_valid_pixels,
+                            valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                            invalid_pixel_radius=resolved_invalid_pixel_radius,
+                            use_gpu=use_gpu,
+                            deep_match_temp_root_dir=(
+                                deep_match_temp_root_dir
+                                if deep_match_temp_root_dir is not None
+                                else Path.cwd() / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME
+                            ),
+                        )
+                        classic_task_count = sum(len(group.get("tasks", [])) for group in route_groups["classic"])
+                        deep_match_export_summary = {
+                            **deep_match_export_summary,
+                            "route_metadata_enabled": True,
+                            "classic_group_count": len(route_groups["classic"]),
+                            "classic_task_count": classic_task_count,
+                            "deep_group_count": len(route_groups["deep"]),
+                            "deep_task_count": sum(len(group.get("tasks", [])) for group in route_groups["deep"]),
+                            "classic_execution_environment": "asp360_new",
+                            "deep_execution_environment": "deep-learning",
+                        }
+                    elif resolved_matcher_method not in DEEP_MATCHER_METHODS:
+                        raise ValueError(
+                            "deep_match_mode='export' currently supports only deep matcher methods: "
+                            f"{DEEP_MATCHER_METHODS}."
+                        )
+                    else:
+                        tile_summaries, deep_match_export_summary = _export_deep_match_pair_tasks(
+                            left_dom_path=left_dom_path,
+                            right_dom_path=right_dom_path,
+                            image_space=image_backend.space,
+                            left_cube=left_cube,
+                            right_cube=right_cube,
+                            candidate_windows=candidate_windows,
+                            band=band,
+                            minimum_value=minimum_value,
+                            maximum_value=maximum_value,
+                            lower_percent=lower_percent,
+                            upper_percent=upper_percent,
+                            left_invalid_values=left_invalid_values,
+                            right_invalid_values=right_invalid_values,
+                            invalid_values=invalid_values,
+                            special_pixel_abs_threshold=special_pixel_abs_threshold,
+                            min_valid_pixels=min_valid_pixels,
+                            valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
+                            invalid_pixel_radius=resolved_invalid_pixel_radius,
+                            valid_intensity_lower_percent=resolved_valid_intensity_lower_percent,
+                            valid_intensity_upper_percent=resolved_valid_intensity_upper_percent,
+                            ratio_test=ratio_test,
+                            matcher_method=resolved_matcher_method,
+                            max_features=max_features,
+                            sift_octave_layers=sift_octave_layers,
+                            sift_contrast_threshold=sift_contrast_threshold,
+                            sift_edge_threshold=sift_edge_threshold,
+                            sift_sigma=sift_sigma,
+                            use_gpu=use_gpu,
+                            gpu_batch_size=gpu_batch_size,
+                            deep_match_temp_root_dir=(
+                                deep_match_temp_root_dir
+                                if deep_match_temp_root_dir is not None
+                                else Path.cwd() / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME
+                            ),
+                            deep_match_config_path=resolved_deep_match_config_path,
+                            deep_match_runtime_config=resolved_deep_match_runtime_config,
+                        )
                 else:
                     def run_tile_matching_pass(
                         candidate_matcher_method: str,

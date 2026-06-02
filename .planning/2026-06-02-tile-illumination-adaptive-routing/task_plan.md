@@ -6,7 +6,7 @@ Redesign the LRO NAC adaptive-routing benchmark so matcher selection can use til
 
 ## Current Status
 
-Status: implementation in progress in isolated worktree; Tasks 1-8 complete, focused Task 9 validation passed, and physical tile illumination metadata plus per-tile route metadata are now connected into the `image_match.py` runtime path. A single-tile real-data geometry/routing smoke passed; full grouped per-route matcher execution remains pending.
+Status: implementation in progress in isolated worktree; Tasks 1-11 complete. Physical tile illumination metadata and per-tile route metadata are connected into the `image_match.py` runtime path, single-tile real-data geometry/routing smoke passed, and export-mode deep manifests are now grouped by per-tile selected route while classic SIFT+FLANN groups remain marked for `asp360_new`.
 
 The previous polar adaptive-routing plan remains useful as baseline context, but this is a new architecture task because illumination evidence, tile routing, deep-learning manifest grouping, reporting, and paper figures all need changes.
 
@@ -76,7 +76,7 @@ Status: pending
 - [ ] Change adaptive routing from one pair-level route to per-tile route decisions when multiple tiles exist.
 - [ ] Keep pair-center routing when there is one tile or matching is not tiled.
 - [ ] Preserve current prior-only semantics: do not cascade to another matcher after failure.
-- [ ] Group tile tasks by selected matcher and execution environment:
+- [x] Group tile tasks by selected matcher and execution environment:
   - first stay in `asp360_new` and complete all SIFT+FLANN matching, physical illumination metadata, manifest export, and non-deep bookkeeping for the stereo pair batch;
   - then switch once to `deep-learning` and run all required SIFT+LightGlue, SuperPoint+LightGlue, and LoFTR grouped manifests for the relevant stereo pair batch;
   - avoid repeated conda switching inside per-tile or per-method loops.
@@ -128,7 +128,7 @@ Status: executing
 - [x] Task 9 follow-up: connect physical tile illumination computation into `image_match.py`.
 - [x] Task 9 follow-up: run single-tile real-data physical illumination smoke.
 - [x] Task 10: connect per-tile texture/keypoint evidence to physical illumination route metadata.
-- [ ] Task 11: use per-tile route metadata to group matcher execution for classic/deep batches.
+- [x] Task 11: use per-tile route metadata to group matcher execution for classic/deep batches.
 
 ## Key Decisions
 

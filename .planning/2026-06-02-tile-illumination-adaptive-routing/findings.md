@@ -231,6 +231,18 @@ The implementation should avoid switching environments per tile, per method, or 
   - route metadata records `selected_route`, backend `selected_matcher`, execution environment, keypoint counts/densities, and the physical illumination payload;
   - summary records route distributions by all sampled tiles and by fully projectable tiles.
 - The runtime still executes one matcher for the pair. The next boundary is execution grouping: split tile tasks by `selected_route`/`selected_matcher`, run classic SIFT+FLANN in `asp360_new`, export/run/import deep groups in `deep-learning`, then merge per-tile results.
+- Task 11 now splits export-mode tile tasks by per-tile route metadata:
+  - `sift_flann` remains a classic `asp360_new` group and is reported in export metadata as classic group/task counts;
+  - `sift_lightglue`, `superpoint_lightglue`, and `loftr` are deep-learning groups;
+  - each deep group receives its own manifest workspace, so routes that share the same backend matcher such as `sift_lightglue` and `superpoint_lightglue` do not collide;
+  - every deep manifest task preserves the original per-tile `route_metadata`, including selected route, backend matcher, execution environment, and deep preset path.
+- Export mode remains backward-compatible:
+  - when no tile route metadata is present, the previous single deep-matcher manifest export path is used;
+  - grouped export only activates when at least one candidate tile has route metadata.
+- The remaining architecture boundary is executing/importing mixed results:
+  - classic tile matching for `sift_flann` groups still needs a batch runner path in `asp360_new`;
+  - deep grouped manifest execution still occurs in the separate `deep-learning` environment;
+  - imported deep results and classic results still need to be merged into one pair-level `.key` output with per-tile provenance.
 - Real-data geometry smoke must use a real ISISDATA tree, not the unit-test mock tree. With `ISISDATA=/media/gengxun/My Passport/data`, a single tile produced one fully projectable pair:
   - left DOM sample/line: `(2768.0, 1200.0)`;
   - right DOM sample/line: `(2768.0, 1143.0)`;

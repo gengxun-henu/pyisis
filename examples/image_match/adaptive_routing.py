@@ -126,6 +126,7 @@ class TileRoutingDecision:
     texture_probe_keypoint_density_left: float | None
     texture_probe_keypoint_density_right: float | None
     illumination: dict[str, Any]
+    selected_route: str
     selected_matcher: str
     selected_execution_environment: str
     route_reason: str
@@ -874,31 +875,49 @@ def route_matcher_for_tile(
         for key, value in (adaptive_routing_deep_presets or {}).items()
         if value not in (None, "")
     }
-    counts = [
-        value
-        for value in (texture_probe_keypoint_count_left, texture_probe_keypoint_count_right)
-        if value is not None
-    ]
-    densities = [
-        value
-        for value in (texture_probe_keypoint_density_left, texture_probe_keypoint_density_right)
-        if value is not None
-    ]
-    low_keypoints = bool(counts) and min(int(value) for value in counts) < int(min_texture_probe_keypoints)
-    low_density = bool(densities) and min(float(value) for value in densities) < float(min_texture_probe_keypoint_density)
+    count_values = (
+        _finite_float(texture_probe_keypoint_count_left),
+        _finite_float(texture_probe_keypoint_count_right),
+    )
+    density_values = (
+        _finite_float(texture_probe_keypoint_density_left),
+        _finite_float(texture_probe_keypoint_density_right),
+    )
+    missing_probe_evidence = any(value is None for value in (*count_values, *density_values))
+    finite_counts = tuple(value for value in count_values if value is not None)
+    finite_densities = tuple(value for value in density_values if value is not None)
+    low_keypoints = len(finite_counts) == 2 and min(finite_counts) < float(min_texture_probe_keypoints)
+    low_density = len(finite_densities) == 2 and min(finite_densities) < float(min_texture_probe_keypoint_density)
     sparseness = _finite_float(texture_sparseness)
     lighting = _finite_float(lighting_difference_score)
 
-    if low_keypoints or low_density:
+    if missing_probe_evidence:
+        selected_route = LOFTR_MATCHER_METHOD
+        selected = LOFTR_MATCHER_METHOD
+        reason = "texture probe evidence is missing or non-finite; route conservatively to LoFTR"
+        confidence = 0.88
+        config = preset_map.get(LOFTR_MATCHER_METHOD)
+    elif low_keypoints or low_density:
+        selected_route = LOFTR_MATCHER_METHOD
         selected = LOFTR_MATCHER_METHOD
         reason = "texture probe keypoint count or density below hard threshold; route to LoFTR"
         confidence = 0.90
+        config = preset_map.get(LOFTR_MATCHER_METHOD)
+    elif (
+        (sparseness is not None and sparseness >= 0.85)
+        or (lighting is not None and lighting >= 0.75)
+    ):
+        selected_route = LOFTR_MATCHER_METHOD
+        selected = LOFTR_MATCHER_METHOD
+        reason = "extreme texture sparseness or extreme physical illumination difference; route to LoFTR"
+        confidence = 0.84
         config = preset_map.get(LOFTR_MATCHER_METHOD)
     elif (
         sparseness is not None
         and sparseness <= float(sparseness_low_threshold)
         and (lighting is None or lighting <= float(lighting_low_threshold))
     ):
+        selected_route = "sift_flann"
         selected = FLANN_MATCHER_METHOD
         reason = "rich texture and small physical illumination difference; route to SIFT + FLANN"
         confidence = 0.85
@@ -909,20 +928,24 @@ def route_matcher_for_tile(
         and lighting is not None
         and lighting >= float(lighting_high_threshold)
     ):
+        selected_route = LOFTR_MATCHER_METHOD
         selected = LOFTR_MATCHER_METHOD
         reason = "weak texture and large physical illumination difference; route to LoFTR"
         confidence = 0.82
         config = preset_map.get(LOFTR_MATCHER_METHOD)
     elif sparseness is not None and sparseness >= 0.58 and (lighting is None or lighting < float(lighting_high_threshold)):
+        selected_route = "superpoint_lightglue"
         selected = LIGHTGLUE_MATCHER_METHOD
         reason = "weak-to-moderate texture with non-extreme illumination; route to SuperPoint + LightGlue"
         confidence = 0.65
         config = (
             preset_map.get("superpoint_lightglue")
             or preset_map.get("lightglue_superpoint")
+            or preset_map.get("lightglue_high_recall")
             or preset_map.get(LIGHTGLUE_MATCHER_METHOD)
         )
     else:
+        selected_route = "sift_lightglue"
         selected = LIGHTGLUE_MATCHER_METHOD
         reason = "moderate texture or moderate physical illumination difference; route to SIFT + LightGlue"
         confidence = 0.60
@@ -932,11 +955,12 @@ def route_matcher_for_tile(
     return TileRoutingDecision(
         tile_index=int(tile_index),
         texture_sparseness=sparseness,
-        texture_probe_keypoint_count_left=texture_probe_keypoint_count_left,
-        texture_probe_keypoint_count_right=texture_probe_keypoint_count_right,
-        texture_probe_keypoint_density_left=texture_probe_keypoint_density_left,
-        texture_probe_keypoint_density_right=texture_probe_keypoint_density_right,
+        texture_probe_keypoint_count_left=None if count_values[0] is None else int(count_values[0]),
+        texture_probe_keypoint_count_right=None if count_values[1] is None else int(count_values[1]),
+        texture_probe_keypoint_density_left=density_values[0],
+        texture_probe_keypoint_density_right=density_values[1],
         illumination=dict(illumination or {}),
+        selected_route=selected_route,
         selected_matcher=selected,
         selected_execution_environment=environment,
         route_reason=reason,

@@ -409,9 +409,28 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         )
 
         self.assertIsInstance(decision, TileRoutingDecision)
+        self.assertEqual(decision.selected_route, "sift_flann")
         self.assertEqual(decision.selected_matcher, "flann")
         self.assertEqual(decision.selected_execution_environment, "asp360_new")
         self.assertTrue(decision.no_post_match_fallback)
+
+    def test_tile_router_uses_loftr_when_probe_evidence_is_missing(self):
+        decision = route_matcher_for_tile(
+            tile_index=5,
+            texture_sparseness=0.12,
+            lighting_difference_score=0.05,
+            texture_probe_keypoint_count_left=250,
+            texture_probe_keypoint_count_right=None,
+            texture_probe_keypoint_density_left=0.002,
+            texture_probe_keypoint_density_right=0.002,
+            illumination={"status": "ok", "illumination_difference_score": 0.05},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertEqual(decision.deep_match_config_path, "examples/controlnet_construct/presets/loftr_default.json")
+        self.assertIsNone(decision.texture_probe_keypoint_count_right)
 
     def test_tile_router_uses_loftr_for_low_keypoint_density_hard_rule(self):
         decision = route_matcher_for_tile(
@@ -426,6 +445,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
         )
 
+        self.assertEqual(decision.selected_route, "loftr")
         self.assertEqual(decision.selected_matcher, "loftr")
         self.assertEqual(decision.selected_execution_environment, "deep-learning")
         self.assertEqual(decision.deep_match_config_path, "examples/controlnet_construct/presets/loftr_default.json")
@@ -445,12 +465,125 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             },
         )
 
+        self.assertEqual(decision.selected_route, "superpoint_lightglue")
         self.assertEqual(decision.selected_matcher, "lightglue")
         self.assertEqual(
             decision.deep_match_config_path,
             "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
         )
         self.assertIn("SuperPoint", decision.route_reason)
+
+    def test_tile_router_uses_sift_lightglue_route_identity_for_moderate_texture(self):
+        decision = route_matcher_for_tile(
+            tile_index=6,
+            texture_sparseness=0.45,
+            lighting_difference_score=0.30,
+            texture_probe_keypoint_count_left=90,
+            texture_probe_keypoint_count_right=95,
+            texture_probe_keypoint_density_left=2.0e-5,
+            texture_probe_keypoint_density_right=2.5e-5,
+            illumination={"status": "ok", "illumination_difference_score": 0.30},
+            adaptive_routing_deep_presets={
+                "sift_lightglue": "examples/controlnet_construct/presets/lightglue_official_sift.json"
+            },
+        )
+
+        self.assertEqual(decision.selected_route, "sift_lightglue")
+        self.assertEqual(decision.selected_matcher, "lightglue")
+        self.assertEqual(
+            decision.deep_match_config_path,
+            "examples/controlnet_construct/presets/lightglue_official_sift.json",
+        )
+
+    def test_tile_router_uses_loftr_for_extreme_texture_sparseness_single_axis(self):
+        decision = route_matcher_for_tile(
+            tile_index=7,
+            texture_sparseness=0.85,
+            lighting_difference_score=0.30,
+            texture_probe_keypoint_count_left=90,
+            texture_probe_keypoint_count_right=95,
+            texture_probe_keypoint_density_left=2.0e-5,
+            texture_probe_keypoint_density_right=2.5e-5,
+            illumination={"status": "ok", "illumination_difference_score": 0.30},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertEqual(decision.deep_match_config_path, "examples/controlnet_construct/presets/loftr_default.json")
+
+    def test_tile_router_uses_loftr_for_extreme_lighting_single_axis(self):
+        decision = route_matcher_for_tile(
+            tile_index=8,
+            texture_sparseness=0.45,
+            lighting_difference_score=0.75,
+            texture_probe_keypoint_count_left=90,
+            texture_probe_keypoint_count_right=95,
+            texture_probe_keypoint_density_left=2.0e-5,
+            texture_probe_keypoint_density_right=2.5e-5,
+            illumination={"status": "ok", "illumination_difference_score": 0.75},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertEqual(decision.deep_match_config_path, "examples/controlnet_construct/presets/loftr_default.json")
+
+    def test_tile_router_uses_high_recall_alias_for_superpoint_lightglue(self):
+        decision = route_matcher_for_tile(
+            tile_index=9,
+            texture_sparseness=0.62,
+            lighting_difference_score=0.30,
+            texture_probe_keypoint_count_left=90,
+            texture_probe_keypoint_count_right=95,
+            texture_probe_keypoint_density_left=2.0e-5,
+            texture_probe_keypoint_density_right=2.5e-5,
+            illumination={"status": "ok", "illumination_difference_score": 0.30},
+            adaptive_routing_deep_presets={
+                "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
+                "lightglue": "examples/controlnet_construct/presets/lightglue_official_sift.json",
+            },
+        )
+
+        self.assertEqual(decision.selected_route, "superpoint_lightglue")
+        self.assertEqual(
+            decision.deep_match_config_path,
+            "examples/controlnet_construct/presets/lightglue_high_recall.json",
+        )
+
+    def test_tile_router_treats_non_finite_density_as_missing_evidence(self):
+        decision = route_matcher_for_tile(
+            tile_index=10,
+            texture_sparseness=0.12,
+            lighting_difference_score=0.05,
+            texture_probe_keypoint_count_left=250,
+            texture_probe_keypoint_count_right=240,
+            texture_probe_keypoint_density_left=float("nan"),
+            texture_probe_keypoint_density_right=0.002,
+            illumination={"status": "ok", "illumination_difference_score": 0.05},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertIsNone(decision.texture_probe_keypoint_density_left)
+
+    def test_tile_router_treats_non_finite_count_as_missing_evidence(self):
+        decision = route_matcher_for_tile(
+            tile_index=11,
+            texture_sparseness=0.12,
+            lighting_difference_score=0.05,
+            texture_probe_keypoint_count_left=float("inf"),
+            texture_probe_keypoint_count_right=240,
+            texture_probe_keypoint_density_left=0.002,
+            texture_probe_keypoint_density_right=0.002,
+            illumination={"status": "ok", "illumination_difference_score": 0.05},
+            adaptive_routing_deep_presets={"loftr": "examples/controlnet_construct/presets/loftr_default.json"},
+        )
+
+        self.assertEqual(decision.selected_route, "loftr")
+        self.assertEqual(decision.selected_matcher, "loftr")
+        self.assertIsNone(decision.texture_probe_keypoint_count_left)
 
 
 class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):

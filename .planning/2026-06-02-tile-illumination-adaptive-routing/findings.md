@@ -220,8 +220,16 @@ The implementation should avoid switching environments per tile, per method, or 
   - 205 tests OK, 1 skipped for the combined image-match/pipeline suite.
   - `tests/smoke_import.py` passed under `MPLBACKEND=Agg`.
   - 51 matcher comparison tests passed, including tile illumination and RANSAC summary extraction.
-- The real-data Task 9 smoke is not yet meaningful because the runtime `image_match.py` adaptive metadata currently attaches only `adaptive_routing.tile_illumination.source_metadata`. It does not yet compute and attach physical tile illumination `summary` and per-tile `pairs` from PyISIS geometry.
-- The next implementation boundary is to call the bounded representative-point/PyISIS projector path during tile task construction, generate `TileIlluminationPair` records in the same filtered tile-task order, and pass those records into `_build_tile_route_metadata()`.
+- `image_match.py` now computes and attaches physical tile illumination metadata after candidate-window prefiltering:
+  - `adaptive_routing.tile_illumination.source_metadata`;
+  - `adaptive_routing.tile_illumination.summary`;
+  - `adaptive_routing.tile_illumination.pairs`.
+- Physical tile illumination sampling is currently metadata-only. It does not yet alter matcher execution. The next implementation boundary is to combine these `TileIlluminationPair` records with per-tile texture/keypoint evidence, build route metadata, and partition execution by selected matcher.
+- Real-data geometry smoke must use a real ISISDATA tree, not the unit-test mock tree. With `ISISDATA=/media/gengxun/My Passport/data`, a single tile produced one fully projectable pair:
+  - left DOM sample/line: `(2768.0, 1200.0)`;
+  - right DOM sample/line: `(2768.0, 1143.0)`;
+  - azimuth difference: `1.3686125681990404` degrees;
+  - elevation difference: `0.025346435004621526` degrees.
 
 ## Representative Point Policy
 
@@ -286,7 +294,8 @@ Suggested claim boundary:
 
 ## Current Workspace Notes
 
-- Current branch: `fix/benchmark-matplotlib-headless-20260602`.
-- The working tree is already dirty from prior benchmark/adaptive work.
-- `.planning/.active_plan` was previously pointing to `2026-06-01-lro-polar-adaptive-routing-benchmark`.
-- `print.prt` is dirty and must remain out of commits/publish flows unless explicitly requested.
+- Active implementation worktree:
+  - `/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/.worktrees/tile-illumination-adaptive-routing-20260602`
+  - branch `feature/tile-illumination-adaptive-routing-20260602`.
+- Main checkout remains a separate dirty branch and should not be used for this implementation.
+- `print.prt` and `.gitignore` must remain out of commits/publish flows unless explicitly requested.

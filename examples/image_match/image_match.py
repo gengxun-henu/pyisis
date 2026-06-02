@@ -66,7 +66,7 @@ import json
 import math
 from pathlib import Path
 import sys
-from typing import TextIO, Literal
+from typing import Any, Callable, TextIO, Literal
 
 import numpy as np
 
@@ -106,9 +106,15 @@ if __package__ in {None, ""}:
         pair_summary_to_diagnostic_dict,
     )
     from image_match.tile_illumination import (
+        TileIlluminationPair,
         illumination_pair_to_payload,
         load_dom_source_metadata_csv,
         resolve_dom_source_metadata,
+        summarize_tile_illumination_pairs,
+    )
+    from image_match.tile_illumination_geometry import (
+        build_pyisis_projector,
+        select_representative_point,
     )
     from image_match.tiling import TileWindow
     from image_match.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
@@ -196,9 +202,15 @@ else:
         pair_summary_to_diagnostic_dict,
     )
     from .tile_illumination import (
+        TileIlluminationPair,
         illumination_pair_to_payload,
         load_dom_source_metadata_csv,
         resolve_dom_source_metadata,
+        summarize_tile_illumination_pairs,
+    )
+    from .tile_illumination_geometry import (
+        build_pyisis_projector,
+        select_representative_point,
     )
     from .tiling import TileWindow
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
@@ -1877,6 +1889,98 @@ def _dom_source_metadata_summary(
     }
 
 
+def _close_projector(projector: object) -> None:
+    close = getattr(projector, "close", None)
+    if close is not None:
+        close()
+
+
+def _build_physical_tile_illumination_metadata(
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    left_cube: object,
+    right_cube: object,
+    candidate_windows: list[PairedTileWindow],
+    band: int,
+    dom_source_summary: dict[str, object],
+    read_window: Callable[[object, TileWindow], np.ndarray] | None = None,
+    projector_factory: Callable[..., object] | None = None,
+) -> dict[str, object]:
+    """Sample physical source-camera illumination for each candidate tile."""
+    metadata: dict[str, object] = {
+        "source_metadata": dom_source_summary,
+    }
+    if dom_source_summary.get("status") != "ready":
+        metadata["status"] = "skipped_source_metadata_not_ready"
+        metadata["summary"] = summarize_tile_illumination_pairs(())
+        metadata["pairs"] = []
+        return metadata
+
+    left_source_metadata = dom_source_summary.get("left")
+    right_source_metadata = dom_source_summary.get("right")
+    if not isinstance(left_source_metadata, dict) or not isinstance(right_source_metadata, dict):
+        metadata["status"] = "skipped_source_metadata_not_ready"
+        metadata["summary"] = summarize_tile_illumination_pairs(())
+        metadata["pairs"] = []
+        return metadata
+
+    left_source_cube = str(left_source_metadata.get("dom_source_cube", "") or "")
+    right_source_cube = str(right_source_metadata.get("dom_source_cube", "") or "")
+    if not left_source_cube or not right_source_cube:
+        metadata["status"] = "skipped_source_metadata_not_ready"
+        metadata["summary"] = summarize_tile_illumination_pairs(())
+        metadata["pairs"] = []
+        return metadata
+
+    resolved_read_window = read_window or (lambda cube, window, *, band: _read_cube_window(cube, window, band=band))
+    resolved_projector_factory = projector_factory or build_pyisis_projector
+    left_projector = resolved_projector_factory(dom_path=left_dom_path, source_cube_path=left_source_cube)
+    right_projector = resolved_projector_factory(dom_path=right_dom_path, source_cube_path=right_source_cube)
+    pairs: list[TileIlluminationPair] = []
+    try:
+        for tile_index, paired_window in enumerate(candidate_windows):
+            left_values = resolved_read_window(left_cube, paired_window.left_window, band=band)
+            right_values = resolved_read_window(right_cube, paired_window.right_window, band=band)
+            left_sample = select_representative_point(
+                dom_values=left_values,
+                tile_start_x=paired_window.left_window.start_x,
+                tile_start_y=paired_window.left_window.start_y,
+                project_source_pixel=left_projector,
+                side="left",
+                dom_path=str(left_dom_path),
+                dom_source_cube=left_source_cube,
+                upstream_source_cube=left_source_metadata.get("upstream_source_cube"),
+                tile_index=tile_index,
+            )
+            right_sample = select_representative_point(
+                dom_values=right_values,
+                tile_start_x=paired_window.right_window.start_x,
+                tile_start_y=paired_window.right_window.start_y,
+                project_source_pixel=right_projector,
+                side="right",
+                dom_path=str(right_dom_path),
+                dom_source_cube=right_source_cube,
+                upstream_source_cube=right_source_metadata.get("upstream_source_cube"),
+                tile_index=tile_index,
+            )
+            pairs.append(
+                TileIlluminationPair.from_samples(
+                    tile_index=tile_index,
+                    left=left_sample,
+                    right=right_sample,
+                )
+            )
+    finally:
+        _close_projector(right_projector)
+        _close_projector(left_projector)
+
+    metadata["status"] = "sampled"
+    metadata["summary"] = summarize_tile_illumination_pairs(pairs)
+    metadata["pairs"] = [illumination_pair_to_payload(pair) for pair in pairs]
+    return metadata
+
+
 def _resolve_adaptive_route_for_pair(
     *,
     enable_adaptive_routing: bool,
@@ -2941,6 +3045,17 @@ def match_dom_pair(
                 candidate_windows = prefilter_result.kept_windows
                 preindexed_skipped_tile_count = prefilter_result.preindexed_skipped_tile_count
                 tile_validity_skip_reasons = prefilter_result.skip_reasons
+
+            if adaptive_routing_summary is not None:
+                adaptive_routing_summary["tile_illumination"] = _build_physical_tile_illumination_metadata(
+                    left_dom_path=left_dom_path,
+                    right_dom_path=right_dom_path,
+                    left_cube=left_cube,
+                    right_cube=right_cube,
+                    candidate_windows=candidate_windows,
+                    band=band,
+                    dom_source_summary=dom_source_summary,
+                )
 
             if candidate_windows:
                 if resolved_deep_match_mode == "export":

@@ -122,5 +122,24 @@
   - `python -m unittest tests.unitTest.controlnet_construct_matcher_comparison_unit_test -v`
   - result: 51 tests OK.
 - Deferred the planned real-data tile illumination dry-run because current `image_match.py` runtime metadata records `adaptive_routing.tile_illumination.source_metadata` only. It does not yet compute physical tile illumination `summary/pairs`, so the planned smoke assertion on `adaptive_routing.tile_illumination.summary.tile_count` would fail for an integration reason rather than a data reason.
+- Added runtime physical tile illumination metadata construction in `examples/image_match/image_match.py`:
+  - `_build_physical_tile_illumination_metadata()` samples candidate tile windows after tile-validity prefiltering, so tile order matches downstream tile task order;
+  - the helper opens one PyISIS DOM-to-source projector per side, selects bounded representative points, builds `TileIlluminationPair` records, and writes `adaptive_routing.tile_illumination.summary` plus per-tile `pairs`;
+  - this step records physical metadata but intentionally does not yet change matcher execution to per-tile physical routing.
+- Added TDD coverage:
+  - `test_build_physical_tile_illumination_metadata_samples_tiles_with_projectors`.
+  - red result before implementation: `AttributeError: module 'image_match.image_match' has no attribute '_build_physical_tile_illumination_metadata'`.
+  - green result after implementation: test OK.
+- Ran real single-tile physical illumination smoke with real LRO NAC data:
+  - output: `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_smoke/single_tile_physical_illumination_metadata.json`;
+  - required `ISISDATA=/media/gengxun/My Passport/data`; mock ISISDATA failed because the real source camera needs `base/dems/ldem_128ppd_Mar2011_clon180_radius_pad.cub`;
+  - final smoke result: `status=sampled`, `tile_count=1`, `projectable_tile_count=1`, `skipped_tile_count=0`;
+  - representative points: left center `(2768.0, 1200.0)`, right center `(2768.0, 1143.0)`;
+  - physical differences: `azimuth_difference_degrees=1.3686125681990404`, `elevation_difference_degrees=0.025346435004621526`.
+- Validation after runtime metadata integration:
+  - `python -m unittest tests.unitTest.image_match_tile_illumination_unit_test tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_deep_manifest_unit_test tests.unitTest.controlnet_construct_pipeline_unit_test -v`
+  - result: 206 tests OK, 1 skipped.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
 - Current next step:
-  - connect the PyISIS tile illumination geometry path into `image_match.py` tile task creation, attach physical tile illumination pair summaries, then rerun the real-data smoke before deep-learning batch execution.
+  - connect per-tile texture/keypoint evidence to the physical illumination pairs, build per-tile route metadata, then group execution by selected matcher for classic/deep batches.

@@ -560,6 +560,84 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(task.matcher_method, "flann")
         self.assertIsNone(task.route_metadata)
 
+    def test_build_physical_tile_illumination_metadata_samples_tiles_with_projectors(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.tile_matching import PairedTileWindow
+        from image_match.tiling import TileWindow
+
+        class FakeProjector:
+            def __init__(self, *, sun_azimuth: float, incidence: float):
+                self.sun_azimuth = sun_azimuth
+                self.incidence = incidence
+                self.closed = False
+
+            def __call__(self, dom_sample: float, dom_line: float) -> dict[str, float]:
+                return {
+                    "latitude": -88.0 + dom_line * 0.001,
+                    "longitude": 123.0 + dom_sample * 0.001,
+                    "source_sample": dom_sample + 10.0,
+                    "source_line": dom_line + 20.0,
+                    "sun_azimuth": self.sun_azimuth,
+                    "incidence": self.incidence,
+                }
+
+            def close(self) -> None:
+                self.closed = True
+
+        opened_projectors: list[FakeProjector] = []
+
+        def projector_factory(*, dom_path: str | Path, source_cube_path: str | Path) -> FakeProjector:
+            projector = (
+                FakeProjector(sun_azimuth=10.0, incidence=80.0)
+                if "left_source" in str(source_cube_path)
+                else FakeProjector(sun_azimuth=30.0, incidence=82.0)
+            )
+            opened_projectors.append(projector)
+            return projector
+
+        def read_window(cube: object, window: object, *, band: int) -> np.ndarray:
+            return np.full((window.height, window.width), 100.0, dtype=np.float64)
+
+        metadata = image_match._build_physical_tile_illumination_metadata(
+            left_dom_path="left_dom.cub",
+            right_dom_path="right_dom.cub",
+            left_cube=object(),
+            right_cube=object(),
+            candidate_windows=[
+                PairedTileWindow(
+                    local_window=TileWindow(0, 0, 2, 2),
+                    left_window=TileWindow(4, 6, 2, 2),
+                    right_window=TileWindow(8, 10, 2, 2),
+                )
+            ],
+            band=1,
+            dom_source_summary={
+                "enabled": True,
+                "status": "ready",
+                "left": {
+                    "dom_source_cube": "left_source.cub",
+                    "upstream_source_cube": "left_original.cub",
+                },
+                "right": {
+                    "dom_source_cube": "right_source.cub",
+                    "upstream_source_cube": "right_original.cub",
+                },
+            },
+            read_window=read_window,
+            projector_factory=projector_factory,
+        )
+
+        self.assertEqual(metadata["summary"]["tile_count"], 1)
+        self.assertEqual(metadata["summary"]["projectable_tile_count"], 1)
+        self.assertEqual(len(metadata["pairs"]), 1)
+        pair = metadata["pairs"][0]
+        self.assertEqual(pair["status"], "ok")
+        self.assertEqual(pair["left"]["representative_point"]["status"], "center_projectable")
+        self.assertEqual(pair["right"]["representative_point"]["status"], "center_projectable")
+        self.assertEqual(pair["azimuth_difference_degrees"], 20.0)
+        self.assertEqual(pair["elevation_difference_degrees"], 2.0)
+        self.assertTrue(all(projector.closed for projector in opened_projectors))
+
     def test_tile_router_uses_loftr_when_probe_evidence_is_missing(self):
         decision = route_matcher_for_tile(
             tile_index=5,

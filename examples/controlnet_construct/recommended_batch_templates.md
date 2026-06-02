@@ -198,7 +198,7 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
   "PointIdPrefix": "P",
   "ImageMatch": {
     "band": 1,
-    "max_image_dimension": 3000,
+    "max_image_dimension": 1024,
     "sub_block_size_x": 1024,
     "sub_block_size_y": 1024,
     "overlap_size_x": 128,
@@ -365,8 +365,9 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
   --valid-pixel-percent-threshold 0.05 \
   -- \
   --ratio-test 0.8 \
-  --sub-block-size-x 1536 \
-  --sub-block-size-y 1536 \
+  --max-image-dimension 1024 \
+  --sub-block-size-x 1024 \
+  --sub-block-size-y 1024 \
   --overlap-size-x 192 \
   --overlap-size-y 192
 ```

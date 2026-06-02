@@ -7,9 +7,9 @@
   "PairId": "S1",
   "ImageMatch": {
     "band": 1,
-    "max_image_dimension": 3000,
-    "sub_block_size_x": 2048,
-    "sub_block_size_y": 2048,
+    "max_image_dimension": 1024,
+    "sub_block_size_x": 1024,
+    "sub_block_size_y": 1024,
     "overlap_size_x": 128,
     "overlap_size_y": 128,
     "minimum_value": null,

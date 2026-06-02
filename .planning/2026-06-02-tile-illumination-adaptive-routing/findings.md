@@ -1,0 +1,268 @@
+# Findings: Tile-Level Physical Illumination Adaptive Routing
+
+## User Intent
+
+The user wants to redesign the current adaptive routing experiment because the existing pair-level or grayscale-proxy lighting evidence is not strong enough for LRO NAC long-strip polar images. The desired method should:
+
+- use physical solar geometry at the tile level where tiled matching is used;
+- keep a pair-center approximation for compact low/mid-latitude stereo pairs;
+- handle failed DOM centers by selecting one nearest pixel-available and source-projectable point rather than computing many solar-angle samples;
+- support DOM-space lunar south-pole data with large invalid/no-data regions and shadows;
+- preserve deep-learning environment separation while minimizing conda environment switches, then rerun the five-method comparison.
+
+## Current Architecture Observations
+
+- `examples/image_match/adaptive_routing.py` currently exposes pair-level routing types such as `PairRoutingDecision`, sidecar builders, and prior-only matcher selection.
+- `examples/image_match/image_match.py` currently performs adaptive prepass logic before full-resolution matching and records adaptive sidecars in pair metadata.
+- `examples/image_match/tile_matching.py` already represents matching work as `TileMatchTask`, `PairedTileWindow`, and `TileMatchResult`.
+- `examples/image_match/deep_match_manifest.py` already exports deep-learning work as per-pair manifests containing multiple tile task records.
+- Current deep-learning handoff can therefore support per-tile routing if tasks are partitioned into method groups before manifest export.
+- Existing polar benchmark outputs show that fixed deep methods run all 96 tile tasks for 16 pairs, and adaptive routing currently reports pair-level selected method distribution.
+
+## Phase 1 Minimal PyISIS Geometry Validation
+
+Validation was performed with temporary Python only; no `examples/`, `tests/`, or `tools/` code was modified.
+
+### Data Used
+
+- Case metadata:
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_metadata.json`
+- Source mapping table:
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/reduced_selected_pair_paths.csv`
+
+### Confirmed PyISIS API Chain
+
+The minimum working chain is:
+
+1. Open DOM cube and source/original cube with `ip.Cube().open(path, "r")`.
+2. Build DOM ground map:
+   - `ip.UniversalGroundMap(dom_cube, ip.UniversalGroundMap.CameraPriority.ProjectionFirst)`
+3. Build source/original ground map:
+   - `ip.UniversalGroundMap(source_cube, ip.UniversalGroundMap.CameraPriority.CameraFirst)`
+4. Convert DOM pixel to ground:
+   - `dom_ground_map.set_image(dom_sample, dom_line)`
+   - `dom_ground_map.universal_latitude()`
+   - `dom_ground_map.universal_longitude()`
+5. Project ground to source/original cube:
+   - `source_ground_map.set_universal_ground(latitude, longitude)`
+   - `source_ground_map.sample()`
+   - `source_ground_map.line()`
+6. Compute solar geometry:
+   - `camera = source_cube.camera()`
+   - `camera.set_image(source_sample, source_line)`
+   - `camera.sun_azimuth()`
+   - `camera.incidence_angle()`
+   - `solar_elevation = 90.0 - incidence_angle`
+
+Coordinates are 1-based ISIS sample/line when passed to `set_image`.
+
+### Successful Right-Tile Result
+
+- Side: right
+- Product ID: `M110881352RE`
+- DOM:
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/doms_10m/dom_REDUCED_M110881352RE.cub`
+- Source cube used for solar geometry:
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/reduced_cubes/REDUCED_M110881352RE.echo.cal.cub`
+- Upstream full-resolution source:
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/M110881352RE.echo.cal.cub`
+- Tile window, 0-based:
+  - `start_x=7168`, `start_y=2048`, `width=1024`, `height=1024`
+- Representative point:
+  - source: `center`
+  - local x/y, 0-based: `512`, `512`
+  - DOM sample/line, 1-based: `7681.0`, `2561.0`
+- Ground:
+  - latitude: `-88.5690777294848`
+  - longitude: `123.06565999195881`
+- Source/original image point:
+  - sample: `234.50167129021804`
+  - line: `1513.9141017113047`
+- Solar geometry:
+  - sun azimuth: `232.70515244608052`
+  - incidence angle: `87.03439723962823`
+  - solar elevation: `2.965602760371766`
+
+### Failed Left-Tile Boundary Case
+
+- Side: left
+- Product ID: `M110860982RE`
+- DOM:
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/doms_10m/dom_REDUCED_M110860982RE.cub`
+- Source cube used for solar geometry:
+  - `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/reduced_cubes/REDUCED_M110860982RE.echo.cal.cub`
+- Representative point:
+  - source: `center`
+  - DOM sample/line, 1-based: `7681.0`, `2618.0`
+- DOM ground lookup succeeded:
+  - latitude: `-88.60489080469283`
+  - longitude: `119.62813470400582`
+- Source/original projection failed:
+  - `source_ground_map.set_universal_ground_failed`
+
+This is an important design result: representative point selection should not stop at DOM valid-pixel status. It must also require successful projection into the corresponding source/original camera cube. A future implementation should treat source-projection failure as either:
+
+- a reason to select the nearest valid-and-projectable pixel; or
+- a skip status such as `no_source_projectable_representative_point`.
+
+### Source Path Metadata Finding
+
+Current fixed/adaptive match metadata does not directly preserve `source_echo_cal_cube`, `echo_cal_cube`, `source_cube`, or `original_cube` paths.
+
+- `sift_flann/match_metadata/...json` stores DOM paths and overlap/crop metadata.
+- `adaptive/match_metadata/...json` stores adaptive/deep import/export status and image-match summaries.
+- The authoritative DOM-to-source mapping is currently in `reduced_selected_pair_paths.csv`, with columns:
+  - `source_echo_cal_cube`: upstream full-resolution original echo/cal cube.
+  - `echo_cal_cube`: the cube used to generate the reduced DOM in this experiment.
+  - `source_dom_cube`: upstream original-GSD DOM.
+  - `dom_cube`: reduced 10 m DOM used by matching.
+
+Future sidecars should embed `dom_source_cube` or `source_cube` directly so tile illumination does not depend on external CSV lookup.
+
+## Why the Architecture Must Change
+
+This is not a threshold-only update. It changes the unit of routing:
+
+- Current unit: one route decision per stereo pair.
+- Needed unit: one route decision per tile for tiled long-strip data, with pair-center fallback for compact data.
+
+This affects:
+
+- adaptive-routing data model;
+- tile task construction;
+- valid-pixel mask handling;
+- DOM-to-ground and ground-to-original camera geometry;
+- deep manifest export/import;
+- pair-level `.key` merge and provenance;
+- reports, figures, and paper claims.
+
+## Proposed Data Flow
+
+1. Generate paired tile windows as before.
+2. For each tile, keep three validity concepts separate:
+   - `pixel_available`: finite DOM pixel and not true ISIS no-data/special pixel;
+   - `radiometric_valid_for_matching`: percentile/mask rule for matching, texture, keypoint, and visualization only;
+   - `source_projectable`: DOM point projects through the corresponding source/original camera and returns finite solar geometry.
+3. Select a representative point:
+   - center if pixel-available and source-projectable;
+   - nearest pixel-available and source-projectable point if center fails;
+   - skip tile if there is no source-projectable representative point.
+4. For the representative point:
+   - convert DOM pixel to ground coordinates;
+   - project the ground point into each DOM's corresponding source/original cube;
+   - compute solar azimuth, incidence angle, and elevation.
+5. Compute tile-level texture and keypoint-density evidence.
+6. Select one matcher for the tile using prior-only adaptive rules.
+7. Partition tile tasks by selected matcher.
+8. In `asp360_new`, complete all classic SIFT+FLANN work and export all grouped deep manifests needed for the benchmark batch.
+9. Switch once to `deep-learning` and run all required deep manifests for SIFT+LightGlue, SuperPoint+LightGlue, and LoFTR.
+10. Switch back to `asp360_new`, import/merge tile results into pair-level key files.
+11. Apply RANSAC and summarize success using RANSAC-retained counts.
+
+## Matching Method Organization
+
+Recommended organization for one long-strip pair:
+
+- `pair_id/route_metadata.json`: all tile-level route decisions and evidence.
+- `pair_id/classic/sift_flann`: tile tasks selected for classic matching in `asp360_new`, completed before deep-learning execution begins.
+- `pair_id/deep/sift_lightglue/tasks.json`: grouped deep manifest for SIFT+LightGlue tiles.
+- `pair_id/deep/superpoint_lightglue/tasks.json`: grouped deep manifest for SuperPoint+LightGlue tiles.
+- `pair_id/deep/loftr/tasks.json`: grouped deep manifest for LoFTR tiles.
+- `pair_id/imported_keys/`: merged pair-level `.key` files with per-tile provenance available in metadata.
+
+This avoids per-tile process startup and repeated conda switching while preserving per-tile routing.
+
+## Source Cube Policy
+
+Do not assume the source camera cube for solar geometry is always a `REDUCED_*.cub`.
+
+- If the DOM was generated from a full-resolution original cube, use that original cube for camera solar geometry.
+- If the DOM was generated from a REDUCED cube, use the REDUCED cube for camera solar geometry.
+- Metadata should name this as `source_cube` or `dom_source_cube`, not `reduced_cube`.
+- Reports should preserve both DOM path and source/original cube path so tile illumination is auditable.
+
+## Environment Execution Policy
+
+The benchmark should minimize conda activation overhead:
+
+- Run all `asp360_new` work first for the selected benchmark batch:
+  - source-cube path resolution;
+  - physical illumination metadata extraction;
+  - SIFT+FLANN/classic work;
+  - grouped deep manifest export.
+- Then switch once to `deep-learning`:
+  - run all required SIFT+LightGlue manifests;
+  - run all required SuperPoint+LightGlue manifests;
+  - run all required LoFTR manifests;
+  - keep `torch_num_threads=8` and `num_workers=1`.
+- Then return to `asp360_new` for import, RANSAC filtering, summaries, and figures.
+
+The implementation should avoid switching environments per tile, per method, or repeatedly inside a single stereo-pair batch.
+
+## Representative Point Policy
+
+The proposed policy is intentionally bounded:
+
+- exactly one physical solar-geometry sample per tile or compact pair;
+- deterministic center-first selection;
+- nearest pixel-available and source-projectable fallback only once;
+- no random sampling;
+- no iterative unlimited solar-angle calls;
+- no per-pixel solar geometry.
+
+This is appropriate for lunar south-pole DOMs, where tile centers may lie in black/no-data regions but valid image strips may cross tile boundaries.
+
+Phase 2 refines the validity model:
+
+- `pixel_available`: finite DOM pixel and not true ISIS no-data/special pixel.
+- `radiometric_valid_for_matching`: passes matching masks such as 0.1/99.9 percentile filtering.
+- `source_projectable`: DOM point projects to the source/original camera and can produce finite solar geometry.
+
+Representative-point selection must use `pixel_available + source_projectable`. It must not use `radiometric_valid_for_matching` as a hard exclusion, because shadowed terrain can be invalid for feature matching while still physically meaningful for illumination sampling.
+
+The design SPEC is written at:
+
+- `docs/superpowers/specs/2026-06-02-tile-illumination-adaptive-routing-design.md`
+
+## Scientific Framing
+
+The manuscript should distinguish:
+
+- physical tile illumination: computed from the DOM source/original cube camera geometry and suitable for adaptive routing evidence;
+- display brightness gap: useful for visual explanation but not a physical lighting proxy.
+
+Suggested claim boundary:
+
+> An illumination-aware tile-level adaptive routing strategy was used for long-strip polar NAC images, while a pair-center approximation was retained for compact lower-latitude stereo pairs.
+
+## Affected Areas
+
+- Adaptive routing:
+  - pair-level decision model must be extended or complemented by tile-level decisions.
+- Tile matching:
+  - `TileMatchTask` may need route metadata or a sidecar mapping keyed by tile index.
+- Deep manifests:
+  - task records should preserve tile illumination evidence and selected route provenance.
+- ControlNet experiments:
+  - batch orchestrators need to run grouped manifests and import multiple selected methods per pair.
+- Figures:
+  - method comparison should include route distribution by tile and success after RANSAC.
+- Tests:
+  - coordinate basis, invalid center fallback, no valid tile skip, manifest round-trip, and route grouping need coverage.
+
+## Risks
+
+- DOM-to-ground-to-original projection can fail near invalid projection areas or outside original image bounds.
+- Camera calls may be expensive if accidentally performed per pixel rather than per tile.
+- Hard-coding REDUCED cube path patterns would fail for DOMs generated from full-resolution original images.
+- Repeated conda switching inside method or tile loops would add avoidable wall-time overhead and make benchmark timing harder to interpret.
+- Mixed-method tile results can complicate `.key` merge and provenance unless tile IDs remain stable.
+- Pair-level summary may hide tile-level route diversity unless reports include both levels.
+- Existing unit tests may assume a single selected matcher per pair.
+
+## Current Workspace Notes
+
+- Current branch: `fix/benchmark-matplotlib-headless-20260602`.
+- The working tree is already dirty from prior benchmark/adaptive work.
+- `.planning/.active_plan` was previously pointing to `2026-06-01-lro-polar-adaptive-routing-benchmark`.
+- `print.prt` is dirty and must remain out of commits/publish flows unless explicitly requested.

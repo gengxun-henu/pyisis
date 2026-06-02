@@ -173,7 +173,7 @@ def benchmark_tile_validity_pair(args: argparse.Namespace) -> dict[str, object]:
         config_defaults = load_image_match_defaults_from_config(str(config_path))
 
     band = int(_resolved_setting(args, config_defaults, "band", 1))
-    max_image_dimension = int(_resolved_setting(args, config_defaults, "max_image_dimension", 3000))
+    max_image_dimension = int(_resolved_setting(args, config_defaults, "max_image_dimension", 1024))
     sub_block_size_x = int(_resolved_setting(args, config_defaults, "sub_block_size_x", 1024))
     sub_block_size_y = int(_resolved_setting(args, config_defaults, "sub_block_size_y", 1024))
     overlap_size_x = int(_resolved_setting(args, config_defaults, "overlap_size_x", 128))

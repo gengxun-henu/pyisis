@@ -117,6 +117,16 @@ class ImageMatchTextureSparsenessUnitTest(unittest.TestCase):
 
         self.assertIsInstance(summary, ImageSparsenessSummary)
         self.assertGreater(summary.tile_total_count, summary.tile_valid_count)
+        self.assertEqual(summary.aggregation_tile_count, summary.tile_valid_count)
+        self.assertEqual(summary.skipped_invalid_tile_count, summary.tile_total_count - summary.tile_valid_count)
+        self.assertEqual(
+            summary.aggregation_pixel_count,
+            sum(metric.width * metric.height for metric in summary.tile_metrics),
+        )
+        self.assertEqual(
+            summary.aggregation_valid_pixel_count,
+            sum(metric.valid_pixel_count for metric in summary.tile_metrics),
+        )
         for metric in summary.tile_metrics:
             self.assertGreaterEqual(metric.valid_pixel_ratio, summary.min_valid_pixel_ratio)
 
@@ -128,6 +138,10 @@ class ImageMatchTextureSparsenessUnitTest(unittest.TestCase):
 
         self.assertIsNone(summary.image_texture_sparseness)
         self.assertEqual(summary.tile_valid_count, 0)
+        self.assertEqual(summary.aggregation_tile_count, 0)
+        self.assertEqual(summary.aggregation_pixel_count, 0)
+        self.assertEqual(summary.aggregation_valid_pixel_count, 0)
+        self.assertIsNone(summary.aggregation_valid_pixel_ratio)
 
     def test_compute_image_texture_sparseness_from_reader_uses_tile_windows(self):
         source = _random_image(384, 384)

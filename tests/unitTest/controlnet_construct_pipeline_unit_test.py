@@ -407,10 +407,10 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertNotIn("lronac2isis ", result.stdout)
         self.assertNotIn("reduce from=", result.stdout)
         self.assertNotIn("spiceinit from=", result.stdout)
-        self.assertIn("lronaccal from=REDUCED_E456.cub to=REDUCED_E456.cal.cub", result.stdout)
-        self.assertIn("lronacecho from=REDUCED_E456.cal.cub to=REDUCED_E456.echo.cal.cub", result.stdout)
-        self.assertIn("lronaccal from=REDUCED_M123.cub to=REDUCED_M123.cal.cub", result.stdout)
-        self.assertIn("lronacecho from=REDUCED_M123.cal.cub to=REDUCED_M123.echo.cal.cub", result.stdout)
+        self.assertIn("lronaccal from=E456.cub to=E456.cal.cub", result.stdout)
+        self.assertIn("lronacecho from=E456.cal.cub to=E456.echo.cal.cub", result.stdout)
+        self.assertIn("lronaccal from=M123.cub to=M123.cal.cub", result.stdout)
+        self.assertIn("lronacecho from=M123.cal.cub to=M123.echo.cal.cub", result.stdout)
 
     def test_lronac_step1_batch_docs_mention_skip_step(self):
         help_result = subprocess.run(
@@ -530,7 +530,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             self.assertEqual(
                 command_lines,
                 [
-                    "isis2std from=M123.cub to=M123.tif format=tiff minpercent=0.1 maxpercent=99.9",
+                    "isis2std from=M123.echo.cal.cub to=M123.tif format=tiff minpercent=0.1 maxpercent=99.9",
                 ],
             )
 
@@ -561,7 +561,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             self.assertEqual(
                 command_lines,
                 [
-                    "isis2std from=REDUCED_M123.cub to=REDUCED_M123.tif format=tiff minpercent=0.1 maxpercent=99.9",
+                    "isis2std from=REDUCED_M123.echo.cal.cub to=REDUCED_M123.tif format=tiff minpercent=0.1 maxpercent=99.9",
                 ],
             )
 
@@ -596,7 +596,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             command_text = output_file.read_text(encoding="utf-8")
             self.assertIn("spiceinit from=REDUCED_M123.echo.cal.cub", command_text)
-            self.assertIn("isis2std from=REDUCED_M123.cub to=REDUCED_M123.tif", command_text)
+            self.assertIn("isis2std from=REDUCED_M123.echo.cal.cub to=REDUCED_M123.tif", command_text)
             self.assertIn("cam2map from=REDUCED_M123.echo.cal.cub", command_text)
             self.assertIn("isis2std from=dom_REDUCED_M123.cub", command_text)
 
@@ -5165,7 +5165,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             expected_preset_map,
         )
 
-    def test_adaptive_cascade_steps_keep_legacy_method_only_fallback_without_presets(self):
+    def test_adaptive_cascade_steps_keep_only_prior_selected_matcher_without_presets(self):
         from controlnet_construct.image_match import _adaptive_cascade_steps_from_summary
 
         steps = _adaptive_cascade_steps_from_summary(
@@ -5183,8 +5183,6 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             steps,
             (
                 {"matcher_method": "flann", "deep_match_config_path": None},
-                {"matcher_method": "lightglue", "deep_match_config_path": None},
-                {"matcher_method": "loftr", "deep_match_config_path": None},
             ),
         )
 
@@ -5365,9 +5363,95 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     deep_match_mode="export",
                 )
 
-    def test_match_dom_pair_rejects_cascade_routed_deep_preset_matcher_conflict(self):
+    def test_match_dom_pair_export_rejects_non_deep_adaptive_route_without_fallback(self):
+        image_match_module = importlib.import_module("controlnet_construct.image_match")
+
+        class FakeCube:
+            def __init__(self):
+                self._open = False
+
+            def open(self, *_args):
+                self._open = True
+
+            def sample_count(self):
+                return 64
+
+            def line_count(self):
+                return 64
+
+            def band_count(self):
+                return 1
+
+            def pixel_type(self):
+                return None
+
+            def is_open(self):
+                return self._open
+
+            def close(self):
+                self._open = False
+
+        low_resolution_summary = {
+            "left_low_resolution_dom": "left_preview.cub",
+            "right_low_resolution_dom": "right_preview.cub",
+            "delta_x_projected": 0.0,
+            "delta_y_projected": 0.0,
+        }
+        routed_summary = {
+            "enabled": True,
+            "status": "routed",
+            "selected_initial_matcher": "flann",
+            "selected_deep_match_config_path": None,
+        }
+        ready_preparation = SimpleNamespace(
+            status="ready",
+            reason="",
+            left=SimpleNamespace(offset_sample=0, offset_line=0),
+            right=SimpleNamespace(offset_sample=0, offset_line=0),
+            shared_width=32,
+            shared_height=32,
+        )
+
+        with (
+            patch.object(image_match_module, "build_image_backend", return_value=SimpleNamespace(space="dom")),
+            patch.object(image_match_module.ip, "Cube", side_effect=[FakeCube(), FakeCube()]),
+            patch.object(
+                image_match_module,
+                "_estimate_low_resolution_projected_offset",
+                return_value=low_resolution_summary,
+            ),
+            patch.object(
+                image_match_module,
+                "_resolve_adaptive_route_for_pair",
+                return_value=("flann", routed_summary),
+            ),
+            patch.object(
+                image_match_module,
+                "prepare_dom_pair_for_matching",
+                return_value=ready_preparation,
+            ),
+            patch.object(image_match_module, "_paired_windows", return_value=[object()]),
+            patch.object(
+                image_match_module,
+                "_export_deep_match_pair_tasks",
+            ) as export_mock,
+        ):
+            with self.assertRaisesRegex(ValueError, "deep_match_mode='export' currently supports only deep matcher"):
+                image_match_module.match_dom_pair(
+                    "left.cub",
+                    "right.cub",
+                    matcher_method="flann",
+                    enable_adaptive_routing=True,
+                    adaptive_routing_deep_presets={"lightglue": "preset_lightglue.json"},
+                    deep_match_mode="export",
+                )
+        export_mock.assert_not_called()
+        self.assertEqual(routed_summary["selected_initial_matcher"], "flann")
+
+    def test_match_dom_pair_adaptive_quality_rejection_records_no_post_match_fallback(self):
         image_match_module = importlib.import_module("controlnet_construct.image_match")
         from image_match.adaptive_routing import MatchQualityReport
+        from image_match.dom_prepare import CropWindow, PairPreparationMetadata
 
         class FakeCube:
             def __init__(self):
@@ -5406,13 +5490,57 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             "selected_initial_matcher": "bf",
             "selected_deep_match_config_path": None,
         }
-        ready_preparation = SimpleNamespace(
-            status="ready",
-            reason="",
-            left=SimpleNamespace(offset_sample=0, offset_line=0),
-            right=SimpleNamespace(offset_sample=0, offset_line=0),
+        left_window = CropWindow(
+            path="left.cub",
+            start_sample=1,
+            start_line=1,
+            width=32,
+            height=32,
+            offset_sample=0,
+            offset_line=0,
+            projected_min_x=0.0,
+            projected_max_x=32.0,
+            projected_min_y=0.0,
+            projected_max_y=32.0,
+            clipped_by_image_bounds=False,
+        )
+        right_window = CropWindow(
+            path="right.cub",
+            start_sample=1,
+            start_line=1,
+            width=32,
+            height=32,
+            offset_sample=0,
+            offset_line=0,
+            projected_min_x=0.0,
+            projected_max_x=32.0,
+            projected_min_y=0.0,
+            projected_max_y=32.0,
+            clipped_by_image_bounds=False,
+        )
+        ready_preparation = PairPreparationMetadata(
+            left=left_window,
+            right=right_window,
+            overlap_min_x=0.0,
+            overlap_max_x=32.0,
+            overlap_min_y=0.0,
+            overlap_max_y=32.0,
+            expanded_min_x=0.0,
+            expanded_max_x=32.0,
+            expanded_min_y=0.0,
+            expanded_max_y=32.0,
+            projected_delta_x=0.0,
+            projected_delta_y=0.0,
+            expand_pixels=0,
+            min_overlap_size=1,
             shared_width=32,
             shared_height=32,
+            left_resolution=1.0,
+            right_resolution=1.0,
+            reference_resolution=1.0,
+            gsd_ratio=1.0,
+            status="ready",
+            reason="",
         )
         rejected_quality = MatchQualityReport(
             inlier_count=0,
@@ -5429,17 +5557,9 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         def fake_run_serial_tile_match_tasks(*_args, **_kwargs):
             nonlocal run_tile_call_count
             run_tile_call_count += 1
-            if run_tile_call_count <= 2:
-                return TileMatchBatchResult(results=[])
-            raise AssertionError("cascade compatibility validation should stop before rerunning tiles")
-
-        def fake_resolve_deep_match_runtime_config(config_path):
-            if str(config_path).endswith("cascade_loftr.json"):
-                return SimpleNamespace(
-                    matcher_method="lightglue",
-                    raw_config={"matcher": {"method": "lightglue"}},
-                )
-            raise AssertionError(f"unexpected deep preset lookup: {config_path}")
+            if run_tile_call_count > 1:
+                raise AssertionError("adaptive routing must not rerun tiles through fallback matchers")
+            return TileMatchBatchResult(results=[])
 
         with (
             patch.object(image_match_module, "build_image_backend", return_value=SimpleNamespace(space="dom")),
@@ -5473,42 +5593,38 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             patch.object(
                 image_match_module,
                 "decide_post_match_action",
-                side_effect=[
-                    {
-                        "accepted": False,
-                        "fallback_used": False,
-                        "next_matcher": "lightglue",
-                        "selected_matcher": "bf",
-                        "stop_reason": "quality_insufficient_try_fallback",
-                    },
-                    {
-                        "accepted": False,
-                        "fallback_used": True,
-                        "next_matcher": "loftr",
-                        "selected_matcher": "lightglue",
-                        "stop_reason": "quality_insufficient_try_fallback",
-                    },
-                ],
-            ),
+                return_value={
+                    "accepted": False,
+                    "fallback_used": False,
+                    "next_matcher": None,
+                    "selected_matcher": "bf",
+                    "stop_reason": "quality_insufficient_no_fallback",
+                    "rejection_reasons": ("insufficient_inlier_count",),
+                },
+            ) as decision_mock,
             patch.object(
                 image_match_module,
                 "_resolve_deep_match_runtime_config",
-                side_effect=fake_resolve_deep_match_runtime_config,
+                side_effect=AssertionError("adaptive routing must not resolve fallback deep presets"),
             ),
         ):
-            with self.assertRaisesRegex(
-                ValueError,
-                "matcher_method 'loftr' conflicts with deep_match_config matcher.method 'lightglue'",
-            ):
-                image_match_module.match_dom_pair(
-                    "left.cub",
-                    "right.cub",
-                    matcher_method="bf",
-                    enable_adaptive_routing=True,
-                    adaptive_routing_deep_presets={
-                        "loftr": "cascade_loftr.json",
-                    },
-                )
+            _left_key_file, _right_key_file, summary = image_match_module.match_dom_pair(
+                "left.cub",
+                "right.cub",
+                matcher_method="bf",
+                enable_adaptive_routing=True,
+                adaptive_routing_deep_presets={
+                    "loftr": "cascade_loftr.json",
+                },
+            )
+
+        self.assertEqual(run_tile_call_count, 1)
+        self.assertEqual(decision_mock.call_count, 1)
+        adaptive_summary = summary["adaptive_routing"]
+        self.assertTrue(adaptive_summary["no_post_match_fallback"])
+        self.assertTrue(adaptive_summary["cascade_disabled"])
+        self.assertEqual(adaptive_summary["cascade_plan"], ["bf"])
+        self.assertEqual(adaptive_summary["final_decision"]["stop_reason"], "quality_insufficient_no_fallback")
 
     def test_batch_wrapper_accepts_lightglue_in_help_text(self):
         content = Path("examples/controlnet_construct/run_image_match_batch_example.sh").read_text(encoding="utf-8")

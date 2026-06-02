@@ -853,6 +853,18 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         self.assertTrue(default_args.write_match_visualization)
         self.assertFalse(disabled_args.write_match_visualization)
+        self.assertTrue(default_args.match_visualization_ransac)
+
+        unfiltered_args = parser.parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--no-match-visualization-ransac",
+            ]
+        )
+        self.assertFalse(unfiltered_args.match_visualization_ransac)
 
     def test_build_argument_parser_defaults_to_parallel_cpu_and_allows_disabling_it(self):
         parser = build_argument_parser()
@@ -2366,6 +2378,12 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                             "previewCacheSource": "visualization-cache",
                             "previewForceRegenerate": True,
                             "previewLevel": 3,
+                            "matchVisualizationRansac": False,
+                            "matchVisualizationRansacThreshold": 4.5,
+                            "matchVisualizationRansacConfidence": 0.99,
+                            "matchVisualizationRansacMaxIters": 2500,
+                            "matchVisualizationRansacMode": "strict",
+                            "matchVisualizationLooseRansacKeepThreshold": 0.25,
                             "lowResolutionMatchingTargetLongEdge": 1024,
                         }
                     }
@@ -2383,6 +2401,12 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(defaults["preview_cache_source"], "visualization_cache")
         self.assertTrue(defaults["preview_force_regenerate"])
         self.assertEqual(defaults["preview_level"], 3)
+        self.assertFalse(defaults["match_visualization_ransac"])
+        self.assertEqual(defaults["match_visualization_ransac_threshold"], 4.5)
+        self.assertEqual(defaults["match_visualization_ransac_confidence"], 0.99)
+        self.assertEqual(defaults["match_visualization_ransac_max_iters"], 2500)
+        self.assertEqual(defaults["match_visualization_ransac_mode"], "strict")
+        self.assertEqual(defaults["match_visualization_loose_ransac_keep_threshold"], 0.25)
         self.assertEqual(defaults["low_resolution_matching_target_long_edge"], 1024)
 
     def test_load_image_match_defaults_from_config_reads_adaptive_routing_flag(self):
@@ -3732,6 +3756,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["tile_match_backend"], "process_pool_batched_cube_reuse")
         self.assertEqual(summary["parallel_cpu_worker_count"], 4)
         self.assertEqual(summary["point_count"], 2)
+        self.assertEqual(summary["left_feature_count_total"], 10)
+        self.assertEqual(summary["right_feature_count_total"], 10)
+        self.assertEqual(summary["feature_count_total"], 20)
+        self.assertEqual(summary["tile_match_count_total"], 2)
         self.assertEqual(len(left_key_file.points), 2)
         self.assertEqual(len(right_key_file.points), 2)
 
@@ -5963,9 +5991,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(summary["adaptive_routing"]["selected_initial_matcher"], "flann")
         self.assertIn("synthetic diagnostic failure", summary["adaptive_routing"]["reason"])
 
-    def test_match_dom_pair_falls_back_through_adaptive_cascade_after_failed_quality_gate(self):
+    def test_match_dom_pair_stops_after_prior_selected_matcher_fails_quality_gate(self):
         image = _build_textured_test_image(96, 96)
-        accepted_points = tuple(Keypoint(float(index), float(index)) for index in range(40))
         weak_tile_result = tile_matching_module.TileMatchResult(
             stats=tile_matching_module.TileMatchStats(
                 0,
@@ -5987,28 +6014,6 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ),
             left_points=(),
             right_points=(),
-        )
-        accepted_tile_result = tile_matching_module.TileMatchResult(
-            stats=tile_matching_module.TileMatchStats(
-                0,
-                0,
-                96,
-                96,
-                0,
-                0,
-                0,
-                0,
-                96 * 96,
-                96 * 96,
-                1.0,
-                1.0,
-                40,
-                40,
-                40,
-                "matched",
-            ),
-            left_points=accepted_points,
-            right_points=accepted_points,
         )
 
         with temporary_directory() as temp_dir:
@@ -6043,7 +6048,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                         "sidecar": {
                             "pair_route": {
                                 "initial_matcher": "lightglue",
-                                "fallback_chain": ["loftr"],
+                                "fallback_chain": [],
                             }
                         },
                     },
@@ -6051,10 +6056,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ), mock.patch.object(
                 image_match,
                 "_run_serial_tile_match_tasks",
-                side_effect=[
-                    _tile_match_batch_result(weak_tile_result),
-                    _tile_match_batch_result(accepted_tile_result),
-                ],
+                return_value=_tile_match_batch_result(weak_tile_result),
             ) as serial_mock:
                 _, _, summary = match_dom_pair(
                     left_path,
@@ -6068,21 +6070,22 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 )
 
         called_matchers = [call.kwargs["matcher_method"] for call in serial_mock.call_args_list]
-        self.assertEqual(called_matchers, ["lightglue", "loftr"])
-        self.assertEqual(summary["point_count"], len(accepted_points))
-        self.assertEqual(summary["matcher_method_effective"], "loftr")
-        self.assertEqual(summary["matcher"]["matcher_method_effective"], "loftr")
+        self.assertEqual(called_matchers, ["lightglue"])
+        self.assertEqual(summary["point_count"], 0)
+        self.assertEqual(summary["matcher_method_effective"], "lightglue")
+        self.assertEqual(summary["matcher"]["matcher_method_effective"], "lightglue")
         adaptive_summary = summary["adaptive_routing"]
         self.assertEqual(summary["adaptive_routing_profile"], "strict")
         self.assertEqual(summary["adaptive_routing_quality_gate"]["min_inlier_count"], 36)
         self.assertEqual(adaptive_summary["profile"], "strict")
         self.assertEqual(adaptive_summary["quality_gate"]["max_p95_residual"], 3.0)
-        self.assertEqual(adaptive_summary["cascade_plan"], ["lightglue", "loftr"])
-        self.assertEqual(adaptive_summary["selected_final_matcher"], "loftr")
-        self.assertEqual(len(adaptive_summary["cascade_attempts"]), 2)
-        self.assertEqual(adaptive_summary["cascade_attempts"][0]["decision"]["next_matcher"], "loftr")
-        self.assertTrue(adaptive_summary["final_decision"]["accepted"])
-        self.assertTrue(adaptive_summary["final_decision"]["fallback_used"])
+        self.assertEqual(adaptive_summary["cascade_plan"], ["lightglue"])
+        self.assertEqual(adaptive_summary["selected_final_matcher"], "lightglue")
+        self.assertEqual(len(adaptive_summary["cascade_attempts"]), 1)
+        self.assertIsNone(adaptive_summary["cascade_attempts"][0]["decision"]["next_matcher"])
+        self.assertFalse(adaptive_summary["final_decision"]["accepted"])
+        self.assertFalse(adaptive_summary["final_decision"]["fallback_used"])
+        self.assertEqual(adaptive_summary["final_decision"]["stop_reason"], "quality_insufficient_no_fallback")
 
     def test_match_dom_pair_to_key_files_metadata_includes_visualization(self):
         width = 96
@@ -6122,6 +6125,132 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         visualization_payload = payload["match_visualization"]
         self.assertIn("visualization_mode_used", visualization_payload)
         self.assertEqual(visualization_payload["output_path"], result["match_visualization"]["output_path"])
+
+    def test_match_dom_pair_to_key_files_visualization_uses_ransac_filtered_keypoints(self):
+        summary = {
+            "status": "matched",
+            "reason": "synthetic visualization RANSAC regression",
+            "point_count": 5,
+            "tile_count": 1,
+            "tile_count_before_preindex_filter": 1,
+            "tile_count_after_preindex_filter": 1,
+            "preindexed_skipped_tile_count": 0,
+            "full_resolution_skipped_tile_count": 0,
+            "matched_tile_count": 1,
+            "skipped_tile_count": 0,
+            "tile_validity_prefilter_enabled": False,
+            "tile_validity_cache_dir": None,
+            "tile_validity_cell_width": 256,
+            "tile_validity_cell_height": 256,
+            "tile_block_alignment_mode": "off",
+            "block_alignment_reason": "alignment_disabled",
+            "tile_block_alignment": {
+                "mode": "off",
+                "status": "disabled",
+                "reason": "alignment_disabled",
+            },
+            "tile_validity_skip_reasons": {},
+            "left_tile_validity_index": None,
+            "right_tile_validity_index": None,
+            "tiling_used": False,
+            "valid_pixel_percent_threshold": 0.0,
+            "invalid_pixel_radius": 1,
+            "matcher": {
+                "matcher_method_requested": "bf",
+                "matcher_method_effective": "bf",
+                "matcher_method_used": "bf",
+                "ratio_test": 0.75,
+            },
+            "parallel_cpu_requested": False,
+            "num_worker_parallel_cpu": 1,
+            "parallel_cpu_used": False,
+            "parallel_cpu_backend": "serial",
+            "parallel_cpu_worker_count": 1,
+            "tile_match_backend": "serial",
+            "low_resolution_offset": {
+                "enabled": False,
+                "status": "disabled",
+                "delta_x_projected": 0.0,
+                "delta_y_projected": 0.0,
+            },
+            "low_resolution_matching_target_long_edge": None,
+            "resolved_low_resolution_level": 3,
+            "adaptive_routing": {
+                "enabled": False,
+                "status": "disabled",
+            },
+            "preparation": {
+                "status": "ready",
+                "reason": "ready",
+            },
+        }
+        original_left = KeypointFile(
+            64,
+            64,
+            tuple(Keypoint(float(index), float(index + 1)) for index in range(5)),
+        )
+        original_right = KeypointFile(
+            64,
+            64,
+            tuple(Keypoint(float(index + 2), float(index + 3)) for index in range(5)),
+        )
+        filtered_left = KeypointFile(64, 64, original_left.points[:3])
+        filtered_right = KeypointFile(64, 64, original_right.points[:3])
+        ransac_summary = {
+            "applied": True,
+            "status": "filtered",
+            "mode": "strict",
+            "input_count": 5,
+            "retained_count": 3,
+            "dropped_count": 2,
+            "retained_soft_outlier_positions": [],
+        }
+
+        with temporary_directory() as temp_dir:
+            left_key = temp_dir / "left_ransac_viz.key"
+            right_key = temp_dir / "right_ransac_viz.key"
+            metadata_output = temp_dir / "metadata.json"
+
+            def fake_visualization(left_dom, right_dom, left_key_file, right_key_file, **kwargs):
+                return {
+                    "status": "written",
+                    "output_path": str(temp_dir / "viz.png"),
+                    "point_count": len(left_key_file.points),
+                    "left_points": [(point.sample, point.line) for point in left_key_file.points],
+                    "right_points": [(point.sample, point.line) for point in right_key_file.points],
+                }
+
+            with mock.patch.object(
+                image_match,
+                "match_dom_pair",
+                return_value=(original_left, original_right, summary),
+            ), mock.patch.object(
+                image_match,
+                "filter_stereo_pair_keypoints_with_ransac",
+                return_value=(filtered_left, filtered_right, ransac_summary),
+            ) as ransac_mock, mock.patch.object(
+                image_match,
+                "write_stereo_pair_match_visualization",
+                side_effect=fake_visualization,
+            ):
+                result = match_dom_pair_to_key_files(
+                    "left.cub",
+                    "right.cub",
+                    left_key,
+                    right_key,
+                    metadata_output=metadata_output,
+                    match_visualization_ransac_mode="strict",
+                )
+
+            persisted_left = read_key_file(left_key)
+            payload = json.loads(metadata_output.read_text(encoding="utf-8"))
+
+        ransac_mock.assert_called_once()
+        self.assertEqual(len(persisted_left.points), 5)
+        self.assertEqual(result["match_visualization"]["point_count"], 3)
+        self.assertEqual(result["match_visualization"]["left_points"], [(0.0, 1.0), (1.0, 2.0), (2.0, 3.0)])
+        self.assertEqual(result["match_visualization"]["ransac"]["retained_count"], 3)
+        self.assertEqual(payload["match_visualization"]["ransac"]["status"], "filtered")
 
     def test_match_dom_pair_to_key_files_metadata_includes_adaptive_routing(self):
         summary = {

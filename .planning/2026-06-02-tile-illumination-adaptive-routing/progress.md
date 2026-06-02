@@ -1,0 +1,66 @@
+# Progress: Tile-Level Physical Illumination Adaptive Routing
+
+## 2026-06-02
+
+- Created new isolated plan directory: `.planning/2026-06-02-tile-illumination-adaptive-routing/`.
+- Used `superpowers:brainstorming` to frame the architectural impact before implementation.
+- Used `planning-with-files` to persist the new experiment redesign plan.
+- Inspected existing architecture:
+  - pair-level adaptive routing in `examples/image_match/adaptive_routing.py`;
+  - tile task model in `examples/image_match/tile_matching.py`;
+  - deep-learning manifest model in `examples/image_match/deep_match_manifest.py`;
+  - prior polar benchmark plan and findings.
+- Recorded that the new requirement changes the routing unit from pair-level to tile-level for long-strip tiled data.
+- Recorded automatic granularity decision:
+  - tile-level for tiled long-strip matching;
+  - pair-center fallback for compact/non-tiled stereo pairs.
+- Recorded initial bounded representative-point policy, later refined after PyISIS validation:
+  - center first;
+  - nearest bounded fallback if center fails;
+  - skip if no usable representative point.
+- No implementation changes were made in code during this planning step.
+- Updated plan after user clarification:
+  - solar geometry must use the source/original cube corresponding to each DOM, which may be full-resolution original or REDUCED;
+  - avoid naming this dependency as REDUCED-only in the design;
+  - execution should batch by environment: complete all `asp360_new` classic/export work first, switch once to `deep-learning` for all required deep manifests, then return to `asp360_new` for import/reporting;
+  - avoid repeated conda switching per tile or per method.
+- Executed Phase 1 minimum PyISIS geometry validation with temporary Python only.
+- Confirmed working API chain:
+  - DOM `UniversalGroundMap(... ProjectionFirst)` + `set_image(sample, line)`;
+  - source/original `UniversalGroundMap(... CameraFirst)` + `set_universal_ground(lat, lon)`;
+  - source/original `cube.camera().set_image(sample, line)`;
+  - `sun_azimuth()` and `incidence_angle()`, with solar elevation as `90.0 - incidence_angle`.
+- Confirmed one full successful right-tile sample:
+  - DOM sample/line: `7681.0`, `2561.0`;
+  - ground latitude/longitude: `-88.5690777294848`, `123.06565999195881`;
+  - source sample/line: `234.50167129021804`, `1513.9141017113047`;
+  - sun azimuth: `232.70515244608052`;
+  - incidence angle: `87.03439723962823`;
+  - solar elevation: `2.965602760371766`.
+- Found a left-tile boundary case where DOM center lookup succeeded but source camera projection failed; future representative-point logic must require source-projectable points, not only DOM-valid pixels.
+- Confirmed current fixed/adaptive match metadata does not embed source/original cube paths; source mapping is currently recoverable from `reduced_selected_pair_paths.csv`.
+- Marked Phase 1 complete in `task_plan.md`.
+- Wrote Superpowers SPEC:
+  - `docs/superpowers/specs/2026-06-02-tile-illumination-adaptive-routing-design.md`.
+- Incorporated user clarification that DOM pixel validity for illumination should not reuse the 0.1/99.9 radiometric matching mask.
+- SPEC separates:
+  - `pixel_available`;
+  - `radiometric_valid_for_matching`;
+  - `source_projectable`.
+- SPEC requires representative points to be `pixel_available + source_projectable`, while shadowed/radiometrically invalid-for-matching pixels may still be used for solar geometry if projectable.
+- Marked Phase 2 complete in `task_plan.md`; implementation has not started.
+- Self-review found older planning wording that still implied using the matching valid mask for representative-point selection.
+- Updated `task_plan.md` and `findings.md` so representative-point selection consistently uses `pixel_available + source_projectable`, with `radiometric_valid_for_matching` kept separate for matching/texture/keypoint work.
+- Wrote implementation plan:
+  - `docs/superpowers/plans/2026-06-02-tile-illumination-adaptive-routing.md`.
+- Plan decomposes implementation into:
+  - tile illumination data models;
+  - bounded source-projectable representative selection;
+  - source cube metadata resolution;
+  - tile prior router;
+  - tile route metadata through tile tasks and deep manifests;
+  - `image_match.py` integration;
+  - pipeline source metadata handoff;
+  - reporting summaries;
+  - focused unit tests and real-data smoke validation.
+- No implementation code was changed during plan writing.

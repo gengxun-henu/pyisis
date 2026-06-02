@@ -11,7 +11,7 @@ Updated: 2026-05-16  Geng Xun added coverage for named adaptive-routing quality 
 Updated: 2026-05-18  Geng Xun added focused coverage for the sparseness/lighting-aware conservative router and the sidecar diagnostics augmenter.
 Updated: 2026-05-19  Geng Xun added coverage for optional nested tile diagnostics in adaptive sidecars.
 Updated: 2026-05-20  Geng Xun added preset-aware adaptive-routing coverage for deep preset selection and sidecar serialization.
-Updated: 2026-05-20  Geng Xun added regression coverage for flann cascade planning in the public adaptive-routing flow.
+Updated: 2026-06-02  Geng Xun changed adaptive routing to prior-only matcher selection with no post-match fallback cascade.
 """
 
 from __future__ import annotations
@@ -125,8 +125,8 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             right_render_probe=RenderProbe(best_render_elevation=36.0, terrain_explainability_score=0.55),
         )
 
-        self.assertEqual(decision.initial_matcher, "bf")
-        self.assertEqual(decision.fallback_chain, ("lightglue", "loftr"))
+        self.assertEqual(decision.initial_matcher, "flann")
+        self.assertEqual(decision.fallback_chain, ())
         self.assertLess(decision.estimated_match_difficulty, 0.5)
 
     def test_weak_or_large_lighting_gap_pair_routes_to_loftr_first(self):
@@ -242,7 +242,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         )
 
         json.dumps(payload)
-        self.assertEqual(payload["pair_route"]["fallback_chain"], ["loftr"])
+        self.assertEqual(payload["pair_route"]["fallback_chain"], [])
         self.assertEqual(payload["match_quality"]["inlier_count"], 32)
         self.assertEqual(payload["match_quality"]["rejection_reasons"], [])
         self.assertTrue(payload["final_decision"]["accepted"])
@@ -262,7 +262,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         )
         decision = PairRoutingDecision(
             initial_matcher="lightglue",
-            fallback_chain=("loftr",),
+            fallback_chain=(),
             route_reason="moderate texture and moderate lighting gap",
             mean_real_texture_score=0.4,
             mean_terrain_explainability_score=None,
@@ -327,14 +327,14 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertAlmostEqual(report.residual_summary["p95"], 7.4)
         self.assertTrue(report.accepted)
 
-    def test_build_cascade_plan_preserves_fixed_matcher_order(self):
+    def test_build_cascade_plan_returns_only_the_prior_selected_matcher(self):
         plan = build_cascade_plan(
             initial_matcher="bf",
             fallback_chain=("loftr", "lightglue"),
         )
 
-        self.assertEqual(plan, ("bf", "lightglue", "loftr"))
-        self.assertEqual(build_cascade_plan(initial_matcher="lightglue"), ("lightglue", "loftr"))
+        self.assertEqual(plan, ("bf",))
+        self.assertEqual(build_cascade_plan(initial_matcher="lightglue"), ("lightglue",))
         self.assertEqual(build_cascade_plan(initial_matcher="loftr"), ("loftr",))
 
     def test_build_cascade_plan_accepts_flann_in_public_adaptive_flow(self):
@@ -343,9 +343,9 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             fallback_chain=("loftr", "lightglue"),
         )
 
-        self.assertEqual(plan, ("flann", "lightglue", "loftr"))
+        self.assertEqual(plan, ("flann",))
 
-    def test_decide_post_match_action_requests_next_matcher_after_failed_gate(self):
+    def test_decide_post_match_action_does_not_request_fallback_after_failed_gate(self):
         plan = build_cascade_plan(initial_matcher="bf")
         report = MatchQualityReport(
             inlier_count=10,
@@ -366,8 +366,8 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
 
         self.assertFalse(action["accepted"])
         self.assertFalse(action["fallback_used"])
-        self.assertEqual(action["next_matcher"], "lightglue")
-        self.assertEqual(action["stop_reason"], "quality_insufficient_try_fallback")
+        self.assertIsNone(action["next_matcher"])
+        self.assertEqual(action["stop_reason"], "quality_insufficient_no_fallback")
 
     def test_decide_post_match_action_accepts_successful_fallback(self):
         accepted_report = MatchQualityReport(
@@ -384,11 +384,11 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         action = decide_post_match_action(
             current_matcher="lightglue",
             quality_report=accepted_report,
-            cascade_plan=("bf", "lightglue", "loftr"),
+            cascade_plan=("lightglue",),
         )
 
         self.assertTrue(action["accepted"])
-        self.assertTrue(action["fallback_used"])
+        self.assertFalse(action["fallback_used"])
         self.assertIsNone(action["next_matcher"])
         self.assertEqual(action["selected_matcher"], "lightglue")
         self.assertEqual(action["stop_reason"], "quality_accepted")
@@ -478,9 +478,76 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         self.assertEqual(lighting["right_solar_geometry"]["elevation_keyword"], "90-IncidenceAngle")
         self.assertEqual(lighting["right_solar_geometry"]["azimuth_keyword"], "SunAzimuth")
 
-    def test_route_matcher_for_pair_with_sparseness_picks_bf_for_low_signals(self):
+    def test_resolve_adaptive_route_uses_actual_dom_for_texture_when_matching_dom(self):
+        image_match_module = importlib.import_module("image_match.image_match")
+
+        texture_probe = ImageTextureProbe(
+            keypoint_count=100,
+            valid_pixel_count=1000,
+            total_pixel_count=1000,
+            keypoint_density=0.10,
+            mean_gradient=120.0,
+            laplacian_variance=2500.0,
+            entropy=4.2,
+            valid_pixel_ratio=1.0,
+            real_texture_score=0.85,
+        )
+
+        with (
+            patch.object(
+                image_match_module,
+                "_compute_texture_probe_from_cube_path",
+                return_value=texture_probe,
+            ) as probe_mock,
+            patch.object(
+                image_match_module,
+                "_compute_texture_sparseness_and_geometry_from_cube_path",
+                side_effect=[
+                    ("left_sparseness", None, "missing solar"),
+                    ("right_sparseness", None, "missing solar"),
+                ],
+            ) as sparseness_mock,
+            patch.object(
+                image_match_module,
+                "aggregate_pair_texture_sparseness",
+                return_value="pair_sparseness",
+            ),
+            patch.object(
+                image_match_module,
+                "pair_summary_to_diagnostic_dict",
+                return_value={"pair_texture_sparseness": 0.12, "weaker_side": "left"},
+            ),
+        ):
+            selected, summary = image_match_module._resolve_adaptive_route_for_pair(
+                enable_adaptive_routing=True,
+                requested_matcher_method="flann",
+                adaptive_routing_deep_presets=None,
+                band=1,
+                invalid_values=(),
+                special_pixel_abs_threshold=1e300,
+                low_resolution_offset_summary={
+                    "left_low_resolution_dom": "left_preview.cub",
+                    "right_low_resolution_dom": "right_preview.cub",
+                },
+                left_low_resolution_dom=None,
+                right_low_resolution_dom=None,
+                image_space="dom",
+                left_source_path="left_actual_dom.cub",
+                right_source_path="right_actual_dom.cub",
+            )
+
+        self.assertEqual(selected, "flann")
+        self.assertIsNotNone(summary)
+        self.assertEqual(probe_mock.call_args_list[0].args[0], "left_actual_dom.cub")
+        self.assertEqual(probe_mock.call_args_list[1].args[0], "right_actual_dom.cub")
+        self.assertEqual(sparseness_mock.call_args_list[0].args[0], "left_actual_dom.cub")
+        self.assertEqual(sparseness_mock.call_args_list[1].args[0], "right_actual_dom.cub")
+        self.assertEqual(summary["preview_sources"]["source_type"], "matched_dom")
+        self.assertFalse(summary["preview_sources"]["fallback_used"])
+
+    def test_route_matcher_for_pair_with_sparseness_picks_flann_for_low_signals(self):
         from image_match.adaptive_routing import (
-            SIFT_ROUTED_MATCHER_METHOD,
+            FLANN_MATCHER_METHOD,
             route_matcher_for_pair_with_sparseness,
         )
 
@@ -489,9 +556,9 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
             lighting_difference_score=0.10,
         )
 
-        self.assertEqual(decision.initial_matcher, SIFT_ROUTED_MATCHER_METHOD)
+        self.assertEqual(decision.initial_matcher, FLANN_MATCHER_METHOD)
         self.assertIn("rich texture", decision.route_reason)
-        self.assertEqual(decision.fallback_chain, ("lightglue", "loftr"))
+        self.assertEqual(decision.fallback_chain, ())
 
     def test_adaptive_routing_deep_presets_keep_requested_flann_without_deep_preset(self):
         from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
@@ -508,12 +575,13 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         )
 
         self.assertEqual(decision.initial_matcher, "flann")
+        self.assertEqual(decision.fallback_chain, ())
         self.assertIsNone(decision.deep_match_config_path)
         self.assertGreater(decision.route_confidence, 0.7)
 
-    def test_route_matcher_for_pair_with_sparseness_picks_loftr_for_high_sparseness(self):
+    def test_route_matcher_for_pair_with_sparseness_picks_lightglue_for_high_sparseness_only(self):
         from image_match.adaptive_routing import (
-            LOFTR_MATCHER_METHOD,
+            LIGHTGLUE_MATCHER_METHOD,
             route_matcher_for_pair_with_sparseness,
         )
 
@@ -522,7 +590,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
             lighting_difference_score=0.10,
         )
 
-        self.assertEqual(decision.initial_matcher, LOFTR_MATCHER_METHOD)
+        self.assertEqual(decision.initial_matcher, LIGHTGLUE_MATCHER_METHOD)
         self.assertEqual(decision.fallback_chain, ())
 
     def test_adaptive_routing_deep_presets_route_medium_pair_to_lightglue_default(self):
@@ -543,9 +611,9 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         self.assertEqual(decision.deep_match_config_path, preset_map["lightglue"])
         self.assertGreater(decision.route_confidence, 0.5)
 
-    def test_route_matcher_for_pair_with_sparseness_picks_loftr_for_high_lighting(self):
+    def test_route_matcher_for_pair_with_sparseness_picks_lightglue_for_high_lighting_only(self):
         from image_match.adaptive_routing import (
-            LOFTR_MATCHER_METHOD,
+            LIGHTGLUE_MATCHER_METHOD,
             route_matcher_for_pair_with_sparseness,
         )
 
@@ -554,7 +622,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
             lighting_difference_score=0.70,
         )
 
-        self.assertEqual(decision.initial_matcher, LOFTR_MATCHER_METHOD)
+        self.assertEqual(decision.initial_matcher, LIGHTGLUE_MATCHER_METHOD)
 
     def test_adaptive_routing_deep_presets_route_sparse_pair_to_loftr_default(self):
         from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
@@ -566,13 +634,55 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         }
         decision = route_matcher_for_pair_with_sparseness(
             pair_texture_sparseness=0.78,
-            lighting_difference_score=0.20,
+            lighting_difference_score=0.70,
             adaptive_routing_deep_presets=preset_map,
         )
 
         self.assertEqual(decision.initial_matcher, "loftr")
         self.assertEqual(decision.deep_match_config_path, preset_map["loftr"])
         self.assertGreater(decision.route_confidence, 0.7)
+
+    def test_route_matcher_for_pair_with_sparseness_routes_low_probe_keypoints_to_loftr(self):
+        from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
+
+        preset_map = {
+            "lightglue": "examples/controlnet_construct/presets/lightglue_official_sift.json",
+            "loftr": "examples/controlnet_construct/presets/loftr_default.json",
+        }
+        low_probe = ImageTextureProbe(
+            keypoint_count=4,
+            valid_pixel_count=1000,
+            total_pixel_count=1000,
+            keypoint_density=0.004,
+            mean_gradient=20.0,
+            laplacian_variance=50.0,
+            entropy=2.0,
+            valid_pixel_ratio=1.0,
+            real_texture_score=0.2,
+        )
+        rich_probe = ImageTextureProbe(
+            keypoint_count=200,
+            valid_pixel_count=1000,
+            total_pixel_count=1000,
+            keypoint_density=0.2,
+            mean_gradient=120.0,
+            laplacian_variance=2500.0,
+            entropy=4.5,
+            valid_pixel_ratio=1.0,
+            real_texture_score=0.9,
+        )
+
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.20,
+            lighting_difference_score=0.10,
+            left_texture_probe=low_probe,
+            right_texture_probe=rich_probe,
+            adaptive_routing_deep_presets=preset_map,
+        )
+
+        self.assertEqual(decision.initial_matcher, "loftr")
+        self.assertEqual(decision.deep_match_config_path, preset_map["loftr"])
+        self.assertIn("too few keypoints", decision.route_reason)
 
     def test_route_matcher_for_pair_with_sparseness_picks_lightglue_in_middle(self):
         from image_match.adaptive_routing import (
@@ -586,7 +696,25 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         )
 
         self.assertEqual(decision.initial_matcher, LIGHTGLUE_MATCHER_METHOD)
-        self.assertEqual(decision.fallback_chain, ("loftr",))
+        self.assertEqual(decision.fallback_chain, ())
+
+    def test_route_matcher_for_pair_with_sparseness_uses_superpoint_lightglue_for_weak_non_extreme_pair(self):
+        from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
+
+        preset_map = {
+            "lightglue": "examples/controlnet_construct/presets/lightglue_official_sift.json",
+            "superpoint_lightglue": "examples/controlnet_construct/presets/lightglue_official_superpoint.json",
+            "loftr": "examples/controlnet_construct/presets/loftr_default.json",
+        }
+        decision = route_matcher_for_pair_with_sparseness(
+            pair_texture_sparseness=0.62,
+            lighting_difference_score=0.25,
+            adaptive_routing_deep_presets=preset_map,
+        )
+
+        self.assertEqual(decision.initial_matcher, "lightglue")
+        self.assertEqual(decision.deep_match_config_path, preset_map["superpoint_lightglue"])
+        self.assertIn("SuperPoint", decision.route_reason)
 
     def test_route_matcher_for_pair_with_sparseness_falls_back_when_both_missing(self):
         from image_match.adaptive_routing import (
@@ -601,6 +729,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
 
         self.assertEqual(decision.initial_matcher, LIGHTGLUE_MATCHER_METHOD)
         self.assertIn("unavailable", decision.route_reason)
+        self.assertIsNone(decision.mean_real_texture_score)
 
     def test_augment_pair_probe_sidecar_keeps_schema_shape(self):
         from image_match.adaptive_routing import (

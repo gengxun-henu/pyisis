@@ -283,6 +283,12 @@ DEFAULT_MATCH_VISUALIZATION_MODE = _match_visualization.DEFAULT_VISUALIZATION_MO
 DEFAULT_MEMORY_PROFILE = _match_visualization.DEFAULT_MEMORY_PROFILE
 DEFAULT_PREVIEW_CROP_MARGIN_PIXELS = _match_visualization.DEFAULT_PREVIEW_CROP_MARGIN_PIXELS
 DEFAULT_PREVIEW_CACHE_SOURCE = _match_visualization.DEFAULT_PREVIEW_CACHE_SOURCE
+DEFAULT_MATCH_VISUALIZATION_RANSAC = True
+DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD = 3.0
+DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE = 0.995
+DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS = 5000
+DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE = "loose"
+DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD = 1.0
 SUPPORTED_VISUALIZATION_MODES = _match_visualization.SUPPORTED_VISUALIZATION_MODES
 SUPPORTED_MEMORY_PROFILES = _match_visualization.SUPPORTED_MEMORY_PROFILES
 SUPPORTED_PREVIEW_CACHE_SOURCES = _match_visualization.SUPPORTED_PREVIEW_CACHE_SOURCES
@@ -477,6 +483,13 @@ def _parse_visualization_mode(value: str) -> str:
         return parse_catalog_choice("visualization_mode", value)
     except ValueError as exc:
         raise argparse.ArgumentTypeError(str(exc)) from exc
+
+
+def _parse_match_visualization_ransac_mode(value: str) -> str:
+    normalized = str(value).strip().lower()
+    if normalized not in {"strict", "loose"}:
+        raise argparse.ArgumentTypeError("match visualization RANSAC mode must be 'strict' or 'loose'.")
+    return normalized
 
 
 def _parse_memory_profile(value: str) -> str:
@@ -1041,6 +1054,52 @@ def load_image_match_defaults_from_config(
             lambda value: float(value),
         ),
         (
+            "match_visualization_ransac",
+            ("match_visualization_ransac", "matchVisualizationRansac", "MatchVisualizationRansac"),
+            lambda value: _coerce_config_bool(value, field_name="match_visualization_ransac"),
+        ),
+        (
+            "match_visualization_ransac_threshold",
+            (
+                "match_visualization_ransac_threshold",
+                "matchVisualizationRansacThreshold",
+                "MatchVisualizationRansacThreshold",
+            ),
+            lambda value: float(value),
+        ),
+        (
+            "match_visualization_ransac_confidence",
+            (
+                "match_visualization_ransac_confidence",
+                "matchVisualizationRansacConfidence",
+                "MatchVisualizationRansacConfidence",
+            ),
+            lambda value: float(value),
+        ),
+        (
+            "match_visualization_ransac_max_iters",
+            (
+                "match_visualization_ransac_max_iters",
+                "matchVisualizationRansacMaxIters",
+                "MatchVisualizationRansacMaxIters",
+            ),
+            lambda value: int(value),
+        ),
+        (
+            "match_visualization_ransac_mode",
+            ("match_visualization_ransac_mode", "matchVisualizationRansacMode", "MatchVisualizationRansacMode"),
+            lambda value: _parse_match_visualization_ransac_mode(str(value)),
+        ),
+        (
+            "match_visualization_loose_ransac_keep_threshold",
+            (
+                "match_visualization_loose_ransac_keep_threshold",
+                "matchVisualizationLooseRansacKeepThreshold",
+                "MatchVisualizationLooseRansacKeepThreshold",
+            ),
+            lambda value: float(value),
+        ),
+        (
             "visualization_mode",
             ("visualization_mode", "visualizationMode", "VisualizationMode"),
             lambda value: _normalize_visualization_mode(value),
@@ -1282,6 +1341,46 @@ def filter_stereo_pair_key_files_with_ransac(
     )
 
 
+def _keypoints_for_match_visualization(
+    left_key_file: KeypointFile,
+    right_key_file: KeypointFile,
+    *,
+    use_ransac: bool = DEFAULT_MATCH_VISUALIZATION_RANSAC,
+    ransac_reproj_threshold: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD,
+    ransac_confidence: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE,
+    ransac_max_iters: int = DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS,
+    ransac_mode: str = DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE,
+    loose_keep_pixel_threshold: float = DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD,
+) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
+    if not use_ransac:
+        return (
+            left_key_file,
+            right_key_file,
+            {
+                "applied": False,
+                "status": "disabled",
+                "mode": ransac_mode,
+                "input_count": len(left_key_file.points),
+                "retained_count": len(left_key_file.points),
+                "dropped_count": 0,
+                "retained_soft_outlier_positions": [],
+                "reproj_threshold": float(ransac_reproj_threshold),
+                "confidence": float(ransac_confidence),
+                "max_iters": int(ransac_max_iters),
+                "loose_keep_pixel_threshold": float(loose_keep_pixel_threshold),
+            },
+        )
+    return filter_stereo_pair_keypoints_with_ransac(
+        left_key_file,
+        right_key_file,
+        ransac_reproj_threshold=ransac_reproj_threshold,
+        ransac_confidence=ransac_confidence,
+        ransac_max_iters=ransac_max_iters,
+        ransac_mode=ransac_mode,
+        loose_keep_pixel_threshold=loose_keep_pixel_threshold,
+    )
+
+
 def _tile_execution_backend_summary(
     *,
     use_parallel_cpu: bool,
@@ -1461,6 +1560,57 @@ def _read_full_cube_band(cube: ip.Cube, *, band: int) -> np.ndarray:
     )
 
 
+def _read_cube_band_preview(
+    cube: ip.Cube,
+    *,
+    band: int,
+    max_dimension: int = 2048,
+    preview_tile_size: int = 256,
+) -> np.ndarray:
+    """Read a bounded preview for adaptive texture probing.
+
+    Texture routing should describe the actual matched image product, but it
+    does not need every pixel from 10k-scale DOMs.  Reading a bounded preview
+    avoids OOM/SIGKILL during adaptive route selection while preserving a
+    spatially broad sample of the same cube.
+    """
+
+    image_width = int(cube.sample_count())
+    image_height = int(cube.line_count())
+    max_dimension = max(1, int(max_dimension))
+    if max(image_width, image_height) <= max_dimension:
+        return _read_full_cube_band(cube, band=band)
+
+    scale = min(max_dimension / image_width, max_dimension / image_height)
+    preview_width = max(1, int(round(image_width * scale)))
+    preview_height = max(1, int(round(image_height * scale)))
+    preview = np.zeros((preview_height, preview_width), dtype=np.float32)
+    tile_size = max(1, int(preview_tile_size))
+
+    for preview_y0 in range(0, preview_height, tile_size):
+        preview_y1 = min(preview_y0 + tile_size, preview_height)
+        source_y0 = max(0, int(np.floor(preview_y0 / scale)))
+        source_y1 = min(image_height, int(np.ceil(preview_y1 / scale)))
+        source_h = max(1, source_y1 - source_y0)
+        for preview_x0 in range(0, preview_width, tile_size):
+            preview_x1 = min(preview_x0 + tile_size, preview_width)
+            source_x0 = max(0, int(np.floor(preview_x0 / scale)))
+            source_x1 = min(image_width, int(np.ceil(preview_x1 / scale)))
+            source_w = max(1, source_x1 - source_x0)
+            source_values = _read_cube_window(
+                cube,
+                TileWindow(start_x=source_x0, start_y=source_y0, width=source_w, height=source_h),
+                band=band,
+            )
+            resized = cv2.resize(
+                source_values.astype(np.float32, copy=False),
+                (preview_x1 - preview_x0, preview_y1 - preview_y0),
+                interpolation=cv2.INTER_AREA,
+            )
+            preview[preview_y0:preview_y1, preview_x0:preview_x1] = resized
+    return preview
+
+
 def _compute_texture_probe_from_cube_path(
     cube_path: str | Path,
     *,
@@ -1471,7 +1621,7 @@ def _compute_texture_probe_from_cube_path(
     cube = ip.Cube()
     cube.open(str(cube_path), "r")
     try:
-        values = _read_full_cube_band(cube, band=band)
+        values = _read_cube_band_preview(cube, band=band)
         resolved_invalid_values = _resolved_invalid_values_for_cube(cube, invalid_values)
         invalid_mask, _ = summarize_valid_pixels(
             values,
@@ -1548,6 +1698,37 @@ def _compute_texture_sparseness_and_geometry_from_cube_path(
             cube.close()
 
 
+def _select_adaptive_texture_source_paths(
+    *,
+    image_space: str,
+    left_source_path: str | Path | None,
+    right_source_path: str | Path | None,
+    left_low_resolution_dom: str | Path | None,
+    right_low_resolution_dom: str | Path | None,
+    low_resolution_offset_summary: dict[str, object],
+) -> tuple[str, str, str, bool]:
+    """Select image paths used for adaptive texture evidence."""
+
+    normalized_image_space = str(image_space or "dom").strip().lower()
+    left_actual = str(left_source_path) if left_source_path is not None else ""
+    right_actual = str(right_source_path) if right_source_path is not None else ""
+    if left_actual and right_actual:
+        source_type = "raw_original_cube" if normalized_image_space == "ori" else "matched_dom"
+        return left_actual, right_actual, source_type, False
+
+    summary_left_preview = str(low_resolution_offset_summary.get("left_low_resolution_dom", "") or "")
+    summary_right_preview = str(low_resolution_offset_summary.get("right_low_resolution_dom", "") or "")
+    resolved_left_preview = summary_left_preview or (
+        str(left_low_resolution_dom) if left_low_resolution_dom is not None else ""
+    )
+    resolved_right_preview = summary_right_preview or (
+        str(right_low_resolution_dom) if right_low_resolution_dom is not None else ""
+    )
+    if resolved_left_preview and resolved_right_preview:
+        return resolved_left_preview, resolved_right_preview, "low_resolution_dom", True
+    return "", "", "missing", False
+
+
 def _resolve_adaptive_route_for_pair(
     *,
     enable_adaptive_routing: bool,
@@ -1566,16 +1747,16 @@ def _resolve_adaptive_route_for_pair(
     if not enable_adaptive_routing:
         return requested_matcher_method, None
 
-    summary_left_preview = str(low_resolution_offset_summary.get("left_low_resolution_dom", "") or "")
-    summary_right_preview = str(low_resolution_offset_summary.get("right_low_resolution_dom", "") or "")
-    resolved_left_preview = summary_left_preview or (str(left_low_resolution_dom) if left_low_resolution_dom is not None else "")
-    resolved_right_preview = summary_right_preview or (str(right_low_resolution_dom) if right_low_resolution_dom is not None else "")
-    normalized_image_space = str(image_space or "dom").strip().lower()
-    preview_source_type = "low_resolution_dom"
-    if normalized_image_space == "ori" and (not resolved_left_preview or not resolved_right_preview):
-        resolved_left_preview = str(left_source_path) if left_source_path is not None else ""
-        resolved_right_preview = str(right_source_path) if right_source_path is not None else ""
-        preview_source_type = "raw_original_cube"
+    resolved_left_preview, resolved_right_preview, preview_source_type, preview_is_fallback = (
+        _select_adaptive_texture_source_paths(
+            image_space=image_space,
+            left_source_path=left_source_path,
+            right_source_path=right_source_path,
+            left_low_resolution_dom=left_low_resolution_dom,
+            right_low_resolution_dom=right_low_resolution_dom,
+            low_resolution_offset_summary=low_resolution_offset_summary,
+        )
+    )
 
     if not resolved_left_preview or not resolved_right_preview:
         return requested_matcher_method, {
@@ -1592,6 +1773,12 @@ def _resolve_adaptive_route_for_pair(
                 "Adaptive routing requires low-resolution preview DOMs for DOM-space matching "
                 "or original cube paths for raw image-space matching."
             ),
+            "preview_sources": {
+                "left": resolved_left_preview,
+                "right": resolved_right_preview,
+                "source_type": preview_source_type,
+                "fallback_used": preview_is_fallback,
+            },
         }
 
     try:
@@ -1654,6 +1841,8 @@ def _resolve_adaptive_route_for_pair(
             route_decision = route_matcher_for_pair_with_sparseness(
                 pair_texture_sparseness=sparseness_diagnostic.get("pair_texture_sparseness"),
                 lighting_difference_score=lighting_diagnostic.get("lighting_difference_score"),
+                left_texture_probe=left_texture_probe,
+                right_texture_probe=right_texture_probe,
                 traditional_matcher=requested_matcher_method,
                 adaptive_routing_deep_presets=adaptive_routing_deep_presets,
             )
@@ -1702,6 +1891,7 @@ def _resolve_adaptive_route_for_pair(
                 "left": resolved_left_preview,
                 "right": resolved_right_preview,
                 "source_type": preview_source_type,
+                "fallback_used": preview_is_fallback,
             },
             "sidecar": sidecar_payload,
         }
@@ -1719,6 +1909,7 @@ def _resolve_adaptive_route_for_pair(
                 "left": resolved_left_preview,
                 "right": resolved_right_preview,
                 "source_type": preview_source_type,
+                "fallback_used": preview_is_fallback,
             },
         }
 
@@ -1978,93 +2169,16 @@ def _adaptive_cascade_steps_from_summary(
     if not adaptive_routing_summary or adaptive_routing_summary.get("status") != "routed":
         return ({"matcher_method": initial_matcher, "deep_match_config_path": normalized_initial_config_path},)
 
-    preset_map = {
-        str(key).strip().lower(): str(value)
-        for key, value in (adaptive_routing_deep_presets or {}).items()
-        if value not in (None, "")
-    }
     selected_matcher = str(adaptive_routing_summary.get("selected_initial_matcher", initial_matcher))
     selected_config_path = adaptive_routing_summary.get("selected_deep_match_config_path")
-    steps: list[dict[str, object]] = [
+    return (
         {
             "matcher_method": selected_matcher,
             "deep_match_config_path": (
                 None if selected_config_path in (None, "") else str(selected_config_path)
             ),
-        }
-    ]
-    if selected_matcher in {"bf", "flann"}:
-        if preset_map.get("lightglue_high_recall"):
-            steps.append(
-                {
-                    "matcher_method": "lightglue",
-                    "deep_match_config_path": preset_map["lightglue_high_recall"],
-                }
-            )
-        elif preset_map.get("lightglue"):
-            steps.append(
-                {
-                    "matcher_method": "lightglue",
-                    "deep_match_config_path": preset_map["lightglue"],
-                }
-            )
-        else:
-            steps.append(
-                {
-                    "matcher_method": "lightglue",
-                    "deep_match_config_path": None,
-                }
-            )
-        if preset_map.get("loftr"):
-            steps.append(
-                {
-                    "matcher_method": "loftr",
-                    "deep_match_config_path": preset_map["loftr"],
-                }
-            )
-        else:
-            steps.append(
-                {
-                    "matcher_method": "loftr",
-                    "deep_match_config_path": None,
-                }
-            )
-    elif selected_matcher == "lightglue":
-        high_recall_path = preset_map.get("lightglue_high_recall")
-        if high_recall_path and high_recall_path != steps[0]["deep_match_config_path"]:
-            steps.append(
-                {
-                    "matcher_method": "lightglue",
-                    "deep_match_config_path": high_recall_path,
-                }
-            )
-        if preset_map.get("loftr"):
-            steps.append(
-                {
-                    "matcher_method": "loftr",
-                    "deep_match_config_path": preset_map["loftr"],
-                }
-            )
-        else:
-            steps.append(
-                {
-                    "matcher_method": "loftr",
-                    "deep_match_config_path": None,
-                }
-            )
-
-    deduped_steps: list[dict[str, object]] = []
-    seen: set[tuple[str, str | None]] = set()
-    for step in steps:
-        dedupe_key = (
-            str(step["matcher_method"]),
-            None if step["deep_match_config_path"] in (None, "") else str(step["deep_match_config_path"]),
-        )
-        if dedupe_key in seen:
-            continue
-        seen.add(dedupe_key)
-        deduped_steps.append(step)
-    return tuple(deduped_steps)
+        },
+    )
 
 
 def _local_points_to_keypoints(points: np.ndarray, window: object) -> tuple[Keypoint, ...]:
@@ -2335,7 +2449,7 @@ def match_dom_pair(
     *,
     image_space: str = "dom",
     band: int = 1,
-    max_image_dimension: int = 3000,
+    max_image_dimension: int = 1024,
     block_width: int = 1024,
     block_height: int = 1024,
     overlap_x: int = 128,
@@ -2912,6 +3026,8 @@ def match_dom_pair(
                     if adaptive_routing_summary is not None:
                         adaptive_routing_summary["profile"] = resolved_adaptive_routing_quality_profile.profile
                         adaptive_routing_summary["quality_gate"] = dict(adaptive_routing_quality_gate)
+                        adaptive_routing_summary["cascade_disabled"] = True
+                        adaptive_routing_summary["no_post_match_fallback"] = True
                         adaptive_routing_summary["cascade_plan"] = [
                             str(step["matcher_method"]) for step in cascade_plan
                         ]
@@ -2929,6 +3045,8 @@ def match_dom_pair(
                             adaptive_routing_summary["final_decision"] = final_decision
                         sidecar = adaptive_routing_summary.get("sidecar")
                         if isinstance(sidecar, dict):
+                            sidecar["cascade_disabled"] = True
+                            sidecar["no_post_match_fallback"] = True
                             if final_quality_report is not None:
                                 sidecar["match_quality"] = asdict(final_quality_report)
                             if final_decision is not None:
@@ -2950,6 +3068,9 @@ def match_dom_pair(
         left_key_file = KeypointFile(left_width, left_height, tuple(left_points))
         right_key_file = KeypointFile(right_width, right_height, tuple(right_points))
         full_resolution_skipped_tile_count = sum(1 for tile in tile_summaries if tile.status != "matched")
+        left_feature_count_total = sum(int(tile.left_feature_count) for tile in tile_summaries)
+        right_feature_count_total = sum(int(tile.right_feature_count) for tile in tile_summaries)
+        tile_match_count_total = sum(int(tile.match_count) for tile in tile_summaries)
         resolved_status = preparation.status if preparation.status != "ready" else ("matched" if left_points else "matched_no_points")
         resolved_reason = preparation.reason
         if deep_match_export_summary is not None:
@@ -2994,6 +3115,10 @@ def match_dom_pair(
             "left_tile_validity_index": left_tile_validity_index_summary,
             "right_tile_validity_index": right_tile_validity_index_summary,
             "point_count": len(left_points),
+            "left_feature_count_total": left_feature_count_total,
+            "right_feature_count_total": right_feature_count_total,
+            "feature_count_total": left_feature_count_total + right_feature_count_total,
+            "tile_match_count_total": tile_match_count_total,
             "parallel_cpu_requested": parallel_cpu_requested,
             "num_worker_parallel_cpu": resolved_num_worker_parallel_cpu,
             "parallel_cpu_used": parallel_cpu_used,
@@ -3074,6 +3199,12 @@ def match_dom_pair_to_key_files(
     match_visualization_scale: float = 1.0 / 3.0,
     show_progress: bool = False,
     *,
+    match_visualization_ransac: bool = DEFAULT_MATCH_VISUALIZATION_RANSAC,
+    match_visualization_ransac_threshold: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD,
+    match_visualization_ransac_confidence: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE,
+    match_visualization_ransac_max_iters: int = DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS,
+    match_visualization_ransac_mode: str = DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE,
+    match_visualization_loose_ransac_keep_threshold: float = DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD,
     visualization_mode: str = DEFAULT_MATCH_VISUALIZATION_MODE,
     memory_profile: str = DEFAULT_MEMORY_PROFILE,
     visualization_target_long_edge: int | None = None,
@@ -3126,11 +3257,21 @@ def match_dom_pair_to_key_files(
                 else (None if match_visualization_output_path is not None else Path(left_output_key).parent)
             )
             visualization_timestamp = None if match_visualization_output_path is not None else datetime.now()
+            visualization_left_key_file, visualization_right_key_file, visualization_ransac_summary = _keypoints_for_match_visualization(
+                left_key_file,
+                right_key_file,
+                use_ransac=match_visualization_ransac,
+                ransac_reproj_threshold=match_visualization_ransac_threshold,
+                ransac_confidence=match_visualization_ransac_confidence,
+                ransac_max_iters=match_visualization_ransac_max_iters,
+                ransac_mode=match_visualization_ransac_mode,
+                loose_keep_pixel_threshold=match_visualization_loose_ransac_keep_threshold,
+            )
             match_visualization_result = write_stereo_pair_match_visualization(
                 left_dom_path,
                 right_dom_path,
-                left_key_file,
-                right_key_file,
+                visualization_left_key_file,
+                visualization_right_key_file,
                 output_path=match_visualization_output_path,
                 output_directory=visualization_output_directory,
                 timestamp=visualization_timestamp,
@@ -3152,6 +3293,7 @@ def match_dom_pair_to_key_files(
                 invalid_values=tuple(kwargs.get("invalid_values", ())),
                 special_pixel_abs_threshold=float(kwargs.get("special_pixel_abs_threshold", 1.0e300)),
             )
+            match_visualization_result["ransac"] = visualization_ransac_summary
         if metadata_output is not None and metadata_payload is not None:
             if match_visualization_result is not None:
                 metadata_payload["match_visualization"] = match_visualization_result
@@ -3201,6 +3343,10 @@ def match_dom_pair_to_key_files(
             "status": summary["status"],
             "reason": summary["reason"],
             "point_count": summary["point_count"],
+            "left_feature_count_total": summary.get("left_feature_count_total"),
+            "right_feature_count_total": summary.get("right_feature_count_total"),
+            "feature_count_total": summary.get("feature_count_total"),
+            "tile_match_count_total": summary.get("tile_match_count_total"),
             "tile_count": summary["tile_count"],
             "tile_count_before_preindex_filter": summary["tile_count_before_preindex_filter"],
             "tile_count_after_preindex_filter": summary["tile_count_after_preindex_filter"],
@@ -3255,11 +3401,21 @@ def match_dom_pair_to_key_files(
         visualization_timestamp = None if match_visualization_output_path is not None else datetime.now()
         low_resolution_visualization_preview = summary.get("low_resolution_offset", {})
         try:
+            visualization_left_key_file, visualization_right_key_file, visualization_ransac_summary = _keypoints_for_match_visualization(
+                left_key_file,
+                right_key_file,
+                use_ransac=match_visualization_ransac,
+                ransac_reproj_threshold=match_visualization_ransac_threshold,
+                ransac_confidence=match_visualization_ransac_confidence,
+                ransac_max_iters=match_visualization_ransac_max_iters,
+                ransac_mode=match_visualization_ransac_mode,
+                loose_keep_pixel_threshold=match_visualization_loose_ransac_keep_threshold,
+            )
             match_visualization_result = write_stereo_pair_match_visualization(
                 left_dom_path,
                 right_dom_path,
-                left_key_file,
-                right_key_file,
+                visualization_left_key_file,
+                visualization_right_key_file,
                 output_path=match_visualization_output_path,
                 output_directory=visualization_output_directory,
                 timestamp=visualization_timestamp,
@@ -3284,6 +3440,7 @@ def match_dom_pair_to_key_files(
                 invalid_values=tuple(kwargs.get("invalid_values", ())),
                 special_pixel_abs_threshold=float(kwargs.get("special_pixel_abs_threshold", 1.0e300)),
             )
+            match_visualization_result["ransac"] = visualization_ransac_summary
         except Exception as exc:
             if metadata_output is not None and metadata_payload is not None:
                 match_visualization_result = {
@@ -3334,7 +3491,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("right_output_key", help="Output `.key` file for the right DOM image.")
     parser.add_argument("--metadata-output", default=None, help="Optional JSON sidecar path for projected-overlap crop metadata.")
     parser.add_argument("--band", type=int, default=1, help="Cube band index used for matching.")
-    parser.add_argument("--max-image-dimension", type=int, default=3000, help="Maximum image dimension allowed before tiling is enabled.")
+    parser.add_argument("--max-image-dimension", type=int, default=1024, help="Maximum image dimension allowed before tiling is enabled.")
     parser.add_argument("--sub-block-size-x", type=int, default=1024, help="Tile width used when block matching is enabled.")
     parser.add_argument("--sub-block-size-y", type=int, default=1024, help="Tile height used when block matching is enabled.")
     parser.add_argument("--overlap-size-x", type=int, default=128, help="Horizontal overlap between adjacent tiles.")
@@ -3433,20 +3590,27 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--opencv-num-threads", type=_parse_opencv_num_threads, default=None, help="Optional OpenCV internal thread limit for CPU SIFT/FLANN work. Must be >= 1. Omit to keep OpenCV's default thread policy; set to 1 alongside multiple CPU workers to avoid oversubscription.")
     parser.add_argument("--use-parallel-cpu", dest="use_parallel_cpu", action="store_true", help="Enable CPU process-pool parallelism for tiled matching. Enabled by default.")
     parser.add_argument("--no-parallel-cpu", dest="use_parallel_cpu", action="store_false", help="Disable CPU process-pool parallelism and force serial tile matching.")
-    parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default pre-RANSAC drawMatches PNG output written for the matched DOM pair.")
+    parser.add_argument("--no-write-match-visualization", dest="write_match_visualization", action="store_false", help="Disable the default drawMatches PNG output written for the matched DOM pair.")
     parser.add_argument("--no-progress", dest="show_progress", action="store_false", help="Disable full-resolution tile progress output on stderr.")
     parser.add_argument("--omit-tile-details", dest="omit_tile_details", action="store_true", help="Omit per-tile detail records from the JSON printed to stdout while keeping top-level tile counters and summary diagnostics.")
     parser.add_argument("--include-tile-details", dest="omit_tile_details", action="store_false", help="Force per-tile detail records to remain in the JSON printed to stdout, even if config defaults requested omission.")
     parser.add_argument("--result-output", default=None, help="Optional JSON path used to persist the full image-match result, including per-tile details, before any stdout trimming is applied.")
-    parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the pre-RANSAC drawMatches PNG written by the image-match stage.")
-    parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the pre-RANSAC drawMatches PNG written by the image-match stage.")
-    parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the pre-RANSAC drawMatches PNG. Defaults to 1/3 for a smaller preview.")
+    parser.add_argument("--match-visualization-output-path", default=None, help="Optional explicit output path for the drawMatches PNG written by the image-match stage.")
+    parser.add_argument("--match-visualization-output-dir", default=None, help="Optional directory used when auto-naming the drawMatches PNG written by the image-match stage.")
+    parser.add_argument("--match-visualization-scale", type=float, default=1.0 / 3.0, help="Image scale factor used when writing the drawMatches PNG. Defaults to 1/3 for a smaller preview.")
+    parser.add_argument("--match-visualization-ransac", dest="match_visualization_ransac", action="store_true", help="Use RANSAC-filtered matches for the visualization PNG while keeping the original key outputs unchanged.")
+    parser.add_argument("--no-match-visualization-ransac", dest="match_visualization_ransac", action="store_false", help="Draw all preserved matches in the visualization PNG without RANSAC filtering.")
+    parser.add_argument("--match-visualization-ransac-threshold", type=float, default=DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD, help=f"RANSAC reprojection threshold in pixels for match visualization filtering. Default: {DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD}.")
+    parser.add_argument("--match-visualization-ransac-confidence", type=float, default=DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE, help=f"RANSAC confidence for match visualization filtering. Default: {DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE}.")
+    parser.add_argument("--match-visualization-ransac-max-iters", type=int, default=DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS, help=f"Maximum RANSAC iterations for match visualization filtering. Default: {DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS}.")
+    parser.add_argument("--match-visualization-ransac-mode", type=_parse_match_visualization_ransac_mode, default=DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE, help=f"RANSAC visualization filtering mode: strict or loose. Default: {DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE}.")
+    parser.add_argument("--match-visualization-loose-ransac-keep-threshold", type=float, default=DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD, help=f"Pixel error threshold for retaining soft outliers in loose visualization RANSAC mode. Default: {DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD}.")
     parser.add_argument(
         "--visualization-mode",
         type=_parse_visualization_mode,
         default=DEFAULT_MATCH_VISUALIZATION_MODE,
         help=(
-            "Visualization mode used for the pre-RANSAC match preview. "
+            "Visualization mode used for the match preview. "
             f"Supported values: {_format_supported_values(SUPPORTED_VISUALIZATION_MODES)}. "
             f"Default: {DEFAULT_MATCH_VISUALIZATION_MODE}."
         ),
@@ -3572,7 +3736,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
         default=16,
         help="Maximum dynamic GPU batch size for 8GB-class GPUs (default: 16)",
     )
-    parser.set_defaults(write_match_visualization=True, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_adaptive_routing=DEFAULT_ENABLE_ADAPTIVE_ROUTING, enable_tile_validity_prefilter=False, show_progress=True, gpu_dynamic_batch=True)
+    parser.set_defaults(write_match_visualization=True, match_visualization_ransac=DEFAULT_MATCH_VISUALIZATION_RANSAC, use_parallel_cpu=True, enable_low_resolution_offset_estimation=False, enable_adaptive_routing=DEFAULT_ENABLE_ADAPTIVE_ROUTING, enable_tile_validity_prefilter=False, show_progress=True, gpu_dynamic_batch=True)
     if config_defaults:
         parser.set_defaults(**config_defaults)
     return parser
@@ -3688,6 +3852,12 @@ def main(argv: list[str] | None = None) -> None:
         match_visualization_output_path=args.match_visualization_output_path,
         match_visualization_output_dir=args.match_visualization_output_dir,
         match_visualization_scale=args.match_visualization_scale,
+        match_visualization_ransac=args.match_visualization_ransac,
+        match_visualization_ransac_threshold=args.match_visualization_ransac_threshold,
+        match_visualization_ransac_confidence=args.match_visualization_ransac_confidence,
+        match_visualization_ransac_max_iters=args.match_visualization_ransac_max_iters,
+        match_visualization_ransac_mode=args.match_visualization_ransac_mode,
+        match_visualization_loose_ransac_keep_threshold=args.match_visualization_loose_ransac_keep_threshold,
         visualization_mode=args.visualization_mode,
         memory_profile=args.memory_profile,
         visualization_target_long_edge=args.visualization_target_long_edge,

@@ -119,8 +119,10 @@ def select_representative_point(
                 projected["incidence"],
                 "solar_geometry_missing_or_non_finite",
             )
-        except Exception as exc:  # noqa: BLE001
+        except (RuntimeError, ValueError) as exc:
             reason = _projection_failure_reason(exc)
+            if not _swallow_projection_failure(exc, reason):
+                raise
             if reason != "no_projectable_pixel":
                 projection_failure_reason = reason
             continue
@@ -217,6 +219,12 @@ def _projection_failure_reason(exc: Exception) -> str:
     return "no_projectable_pixel"
 
 
+def _swallow_projection_failure(exc: Exception, reason: str) -> bool:
+    if isinstance(exc, RuntimeError):
+        return True
+    return reason != "no_projectable_pixel"
+
+
 class PyISISProjector:
     """Callable DOM-to-source projector that owns its PyISIS cube handles."""
 
@@ -242,7 +250,10 @@ class PyISISProjector:
             )
             self._source_camera = self._source_cube.camera()
         except Exception:
-            self.close()
+            try:
+                self.close()
+            except Exception:
+                pass
             raise
 
     def __call__(self, dom_sample: float, dom_line: float) -> ProjectionResult:
@@ -268,15 +279,25 @@ class PyISISProjector:
         }
 
     def close(self) -> None:
-        for cube in (self._source_cube, self._dom_cube):
-            close = getattr(cube, "close", None)
-            if close is not None:
-                close()
-        self._source_camera = None
-        self._source_ground_map = None
-        self._dom_ground_map = None
-        self._source_cube = None
-        self._dom_cube = None
+        close_error: Exception | None = None
+        try:
+            for cube in (self._source_cube, self._dom_cube):
+                close = getattr(cube, "close", None)
+                if close is None:
+                    continue
+                try:
+                    close()
+                except Exception as exc:  # noqa: BLE001
+                    if close_error is None:
+                        close_error = exc
+        finally:
+            self._source_camera = None
+            self._source_ground_map = None
+            self._dom_ground_map = None
+            self._source_cube = None
+            self._dom_cube = None
+        if close_error is not None:
+            raise close_error
 
     def __enter__(self) -> "PyISISProjector":
         return self

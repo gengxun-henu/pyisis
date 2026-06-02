@@ -275,6 +275,24 @@ class ImageMatchTileIlluminationUnitTest(unittest.TestCase):
             "source_ground_map_set_universal_ground_failed",
         )
 
+    def test_malformed_projector_output_raises_key_error(self):
+        from image_match.tile_illumination_geometry import select_representative_point
+
+        with self.assertRaises(KeyError):
+            select_representative_point(
+                dom_values=np.ones((2, 2), dtype=np.float64),
+                tile_start_x=0,
+                tile_start_y=0,
+                radiometric_valid_for_matching_mask=None,
+                project_source_pixel=lambda sample, line: {
+                    "latitude": -88.0,
+                    "longitude": 123.0,
+                    "source_sample": 11.0,
+                    "source_line": 12.0,
+                    "incidence": 80.0,
+                },
+            )
+
     def test_pyisis_projector_is_context_managed_and_closes_cubes(self):
         from image_match import runtime
         from image_match.tile_illumination_geometry import build_pyisis_projector
@@ -353,6 +371,58 @@ class ImageMatchTileIlluminationUnitTest(unittest.TestCase):
 
         self.assertEqual(len(created_cubes), 2)
         self.assertTrue(all(cube.closed for cube in created_cubes))
+
+    def test_pyisis_projector_close_is_best_effort_when_source_close_raises(self):
+        from image_match.tile_illumination_geometry import PyISISProjector
+
+        class FakeCube:
+            def __init__(self, name):
+                self.name = name
+                self.closed = False
+
+            def open(self, path, mode):
+                pass
+
+            def camera(self):
+                return object()
+
+            def close(self):
+                self.closed = True
+                if self.name == "source":
+                    raise RuntimeError("source close failed")
+
+        class FakeUniversalGroundMap:
+            class CameraPriority:
+                ProjectionFirst = "ProjectionFirst"
+                CameraFirst = "CameraFirst"
+
+            def __init__(self, cube, priority):
+                self.cube = cube
+                self.priority = priority
+
+        class FakeIP:
+            UniversalGroundMap = FakeUniversalGroundMap
+
+            def __init__(self):
+                self.cubes = [FakeCube("dom"), FakeCube("source")]
+
+            def Cube(self):
+                return self.cubes.pop(0)
+
+        fake_ip = FakeIP()
+        projector = PyISISProjector(ip_module=fake_ip, dom_path="dom.cub", source_cube_path="source.cub")
+        dom_cube = projector._dom_cube
+        source_cube = projector._source_cube
+
+        with self.assertRaisesRegex(RuntimeError, "source close failed"):
+            projector.close()
+
+        self.assertTrue(source_cube.closed)
+        self.assertTrue(dom_cube.closed)
+        self.assertIsNone(projector._source_cube)
+        self.assertIsNone(projector._dom_cube)
+        self.assertIsNone(projector._source_ground_map)
+        self.assertIsNone(projector._dom_ground_map)
 
     def test_pyisis_projector_closes_dom_cube_when_source_open_fails(self):
         from image_match import runtime

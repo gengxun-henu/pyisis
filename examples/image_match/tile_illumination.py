@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import csv
 from dataclasses import asdict, dataclass
 import math
-from typing import Any, Iterable
+from pathlib import Path
+from typing import Any, Iterable, Mapping
 
 
 def _finite_or_none(value: float | None) -> float | None:
@@ -167,6 +169,64 @@ def _abs_difference(left: float | None, right: float | None) -> float | None:
     if left_value is None or right_value is None:
         return None
     return abs(left_value - right_value)
+
+
+def load_dom_source_metadata_csv(csv_path: str | Path) -> dict[str, dict[str, str | None]]:
+    lookup: dict[str, dict[str, str | None]] = {}
+    path = Path(csv_path)
+    if not path.exists():
+        return lookup
+
+    with path.open(newline="", encoding="utf-8") as stream:
+        for row in csv.DictReader(stream):
+            dom_path = (row.get("dom_cube") or "").strip()
+            if not dom_path:
+                continue
+            selected_source_cube = (row.get("echo_cal_cube") or "").strip() or None
+            upstream_source_cube = (row.get("source_echo_cal_cube") or "").strip() or None
+            metadata = {
+                "dom_path": dom_path,
+                "dom_source_cube": selected_source_cube,
+                "upstream_source_cube": upstream_source_cube,
+                "dom_source_kind": _dom_source_kind(selected_source_cube),
+            }
+            lookup[dom_path] = metadata
+            lookup[Path(dom_path).name] = metadata
+    return lookup
+
+
+def resolve_dom_source_metadata(
+    dom_path: str | Path,
+    lookup: Mapping[str, Mapping[str, str | None]] | None,
+) -> dict[str, str | None]:
+    resolved_dom_path = str(dom_path)
+    candidates = (resolved_dom_path, Path(resolved_dom_path).name)
+    if lookup is not None:
+        for candidate in candidates:
+            metadata = lookup.get(candidate)
+            if metadata is not None:
+                return {
+                    "dom_path": metadata.get("dom_path") or resolved_dom_path,
+                    "dom_source_cube": metadata.get("dom_source_cube"),
+                    "upstream_source_cube": metadata.get("upstream_source_cube"),
+                    "dom_source_kind": metadata.get("dom_source_kind") or "unknown",
+                }
+    return _unknown_dom_source_metadata(resolved_dom_path)
+
+
+def _unknown_dom_source_metadata(dom_path: str) -> dict[str, str | None]:
+    return {
+        "dom_path": dom_path,
+        "dom_source_cube": None,
+        "upstream_source_cube": None,
+        "dom_source_kind": "unknown",
+    }
+
+
+def _dom_source_kind(source_cube: str | None) -> str:
+    if source_cube is not None and Path(source_cube).name.startswith("REDUCED_"):
+        return "reduced"
+    return "unknown"
 
 
 def illumination_pair_to_payload(pair: TileIlluminationPair) -> dict[str, Any]:

@@ -136,6 +136,7 @@ class TileMatchTask:
     deep_match_runtime_config: Any | None = None
     valid_intensity_lower_percent: float | None = DEFAULT_VALID_INTENSITY_LOWER_PERCENT
     valid_intensity_upper_percent: float | None = DEFAULT_VALID_INTENSITY_UPPER_PERCENT
+    route_metadata: dict[str, Any] | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -1252,6 +1253,7 @@ def _tile_task_to_payload(task: TileMatchTask) -> dict[str, Any]:
         "gpu_batch_size": task.gpu_batch_size,
         "opencv_num_threads": task.opencv_num_threads,
         "deep_match_runtime_config": _runtime_config_to_payload(task.deep_match_runtime_config),
+        "route_metadata": None if task.route_metadata is None else dict(task.route_metadata),
     }
 
 
@@ -1302,6 +1304,7 @@ def _tile_task_from_payload(payload: dict[str, Any]) -> TileMatchTask:
             else int(payload["opencv_num_threads"])
         ),
         deep_match_runtime_config=_runtime_config_from_payload(payload.get("deep_match_runtime_config")),
+        route_metadata=None if payload.get("route_metadata") is None else dict(payload["route_metadata"]),
     )
 
 

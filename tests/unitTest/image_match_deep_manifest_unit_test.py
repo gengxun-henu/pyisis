@@ -11,6 +11,7 @@ Updated: 2026-05-16  Geng Xun added import edge-case coverage for missing, faile
 
 from __future__ import annotations
 
+from dataclasses import replace
 import sys
 from pathlib import Path
 import unittest
@@ -35,6 +36,8 @@ from image_match.deep_match_manifest import (
     DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME,
     build_deep_match_pair_manifest,
     default_deep_match_pair_id,
+    deep_match_pair_manifest_from_payload,
+    deep_match_pair_manifest_to_payload,
     read_deep_match_task_arrays,
     read_deep_match_pair_manifest,
     resolve_deep_match_workspace,
@@ -218,6 +221,56 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
         self.assertEqual(restored.paired_window.right_window.start_y, 40)
         self.assertEqual(payload["opencv_num_threads"], 2)
         self.assertEqual(restored.opencv_num_threads, 2)
+
+    def test_deep_manifest_preserves_tile_route_metadata(self):
+        task = replace(
+            _make_tile_task(),
+            route_metadata={
+                "tile_index": 7,
+                "selected_route": "sift_lightglue",
+                "selected_matcher": "lightglue",
+                "illumination": {"status": "ok"},
+            },
+        )
+
+        manifest = build_deep_match_pair_manifest(
+            tasks=[task],
+            left_dom_path="left_dom.cub",
+            right_dom_path="right_dom.cub",
+            matcher_method="lightglue",
+            band=1,
+            image_space="dom",
+            temp_root_dir="/tmp/deep",
+            pair_id="pair",
+        )
+        payload = deep_match_pair_manifest_to_payload(manifest)
+        restored = deep_match_pair_manifest_from_payload(payload)
+
+        self.assertEqual(restored.tasks[0].route_metadata["tile_index"], 7)
+        self.assertEqual(restored.tasks[0].tile_task.route_metadata["selected_route"], "sift_lightglue")
+        self.assertEqual(payload["tasks"][0]["route_metadata"]["selected_matcher"], "lightglue")
+        self.assertEqual(payload["tasks"][0]["tile_task"]["route_metadata"]["illumination"]["status"], "ok")
+
+    def test_deep_manifest_accepts_legacy_payload_without_tile_route_metadata(self):
+        task = _make_tile_task()
+        manifest = build_deep_match_pair_manifest(
+            tasks=[task],
+            left_dom_path="left_dom.cub",
+            right_dom_path="right_dom.cub",
+            matcher_method="lightglue",
+            band=1,
+            image_space="dom",
+            temp_root_dir="/tmp/deep",
+            pair_id="pair",
+        )
+        payload = deep_match_pair_manifest_to_payload(manifest)
+        payload["tasks"][0].pop("route_metadata", None)
+        payload["tasks"][0]["tile_task"].pop("route_metadata", None)
+
+        restored = deep_match_pair_manifest_from_payload(payload)
+
+        self.assertIsNone(restored.tasks[0].route_metadata)
+        self.assertIsNone(restored.tasks[0].tile_task.route_metadata)
 
     def test_tile_match_task_payload_defaults_missing_opencv_num_threads_to_none(self):
         task = _make_tile_task(opencv_num_threads=None)

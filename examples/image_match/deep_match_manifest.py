@@ -73,6 +73,7 @@ class DeepMatchTaskRecord:
     tile_window: dict[str, Any] | None = None
     invalid_mask_summary: dict[str, Any] | None = None
     normalization: dict[str, Any] | None = None
+    route_metadata: dict[str, Any] | None = None
     created_by_python: str | None = None
     created_at_utc: str | None = None
 
@@ -194,6 +195,9 @@ def build_deep_match_task_record(
             "lower_percent": float(tile_task.lower_percent),
             "upper_percent": float(tile_task.upper_percent),
         },
+        route_metadata=(
+            None if getattr(tile_task, "route_metadata", None) is None else dict(tile_task.route_metadata)
+        ),
         created_by_python=created_by_python,
         created_at_utc=created_at_utc,
     )
@@ -277,6 +281,7 @@ def deep_match_task_record_to_payload(record: DeepMatchTaskRecord) -> dict[str, 
         "tile_window": record.tile_window,
         "invalid_mask_summary": record.invalid_mask_summary,
         "normalization": record.normalization,
+        "route_metadata": None if record.route_metadata is None else dict(record.route_metadata),
         "created_by_python": record.created_by_python,
         "created_at_utc": record.created_at_utc,
     }
@@ -307,6 +312,9 @@ def deep_match_task_record_from_payload(payload: dict[str, Any]) -> DeepMatchTas
         normalization=dict(payload["normalization"])
         if isinstance(payload.get("normalization"), dict)
         else payload.get("normalization"),
+        route_metadata=dict(payload["route_metadata"])
+        if isinstance(payload.get("route_metadata"), dict)
+        else payload.get("route_metadata"),
         created_by_python=payload.get("created_by_python"),
         created_at_utc=payload.get("created_at_utc"),
     )

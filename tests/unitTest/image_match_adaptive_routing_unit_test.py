@@ -623,6 +623,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
                     "upstream_source_cube": "right_original.cub",
                 },
             },
+            adaptive_routing_deep_presets={"loftr": "loftr_default.json"},
             read_window=read_window,
             projector_factory=projector_factory,
         )
@@ -636,6 +637,9 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(pair["right"]["representative_point"]["status"], "center_projectable")
         self.assertEqual(pair["azimuth_difference_degrees"], 20.0)
         self.assertEqual(pair["elevation_difference_degrees"], 2.0)
+        self.assertEqual(metadata["route_metadata"][0]["selected_route"], "loftr")
+        self.assertEqual(metadata["summary"]["route_distribution_by_tile"], {"loftr": 1})
+        self.assertEqual(metadata["summary"]["route_distribution_by_projectable_tile"], {"loftr": 1})
         self.assertTrue(all(projector.closed for projector in opened_projectors))
 
     def test_tile_router_uses_loftr_when_probe_evidence_is_missing(self):

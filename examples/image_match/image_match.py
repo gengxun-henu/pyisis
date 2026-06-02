@@ -1904,6 +1904,9 @@ def _build_physical_tile_illumination_metadata(
     candidate_windows: list[PairedTileWindow],
     band: int,
     dom_source_summary: dict[str, object],
+    adaptive_routing_deep_presets: dict[str, str] | None = None,
+    max_features: int | None = None,
+    sift_contrast_threshold: float = 0.04,
     read_window: Callable[[object, TileWindow], np.ndarray] | None = None,
     projector_factory: Callable[..., object] | None = None,
 ) -> dict[str, object]:
@@ -1938,6 +1941,9 @@ def _build_physical_tile_illumination_metadata(
     left_projector = resolved_projector_factory(dom_path=left_dom_path, source_cube_path=left_source_cube)
     right_projector = resolved_projector_factory(dom_path=right_dom_path, source_cube_path=right_source_cube)
     pairs: list[TileIlluminationPair] = []
+    route_metadata: list[dict[str, object]] = []
+    route_distribution_by_tile: dict[str, int] = {}
+    route_distribution_by_projectable_tile: dict[str, int] = {}
     try:
         for tile_index, paired_window in enumerate(candidate_windows):
             left_values = resolved_read_window(left_cube, paired_window.left_window, band=band)
@@ -1964,20 +1970,51 @@ def _build_physical_tile_illumination_metadata(
                 upstream_source_cube=right_source_metadata.get("upstream_source_cube"),
                 tile_index=tile_index,
             )
-            pairs.append(
-                TileIlluminationPair.from_samples(
-                    tile_index=tile_index,
-                    left=left_sample,
-                    right=right_sample,
-                )
+            pair = TileIlluminationPair.from_samples(
+                tile_index=tile_index,
+                left=left_sample,
+                right=right_sample,
             )
+            pairs.append(pair)
+            left_probe = compute_real_image_texture_probe(
+                left_values,
+                max_features=max_features,
+                sift_contrast_threshold=sift_contrast_threshold,
+            )
+            right_probe = compute_real_image_texture_probe(
+                right_values,
+                max_features=max_features,
+                sift_contrast_threshold=sift_contrast_threshold,
+            )
+            texture_sparseness = 1.0 - (
+                (float(left_probe.real_texture_score) + float(right_probe.real_texture_score)) / 2.0
+            )
+            route = _build_tile_route_metadata(
+                tile_index=tile_index,
+                illumination_pair=pair,
+                texture_sparseness=texture_sparseness,
+                left_probe=asdict(left_probe),
+                right_probe=asdict(right_probe),
+                adaptive_routing_deep_presets=adaptive_routing_deep_presets,
+            )
+            route_metadata.append(route)
+            selected_route = str(route.get("selected_route", "unknown"))
+            route_distribution_by_tile[selected_route] = route_distribution_by_tile.get(selected_route, 0) + 1
+            if pair.status == "ok":
+                route_distribution_by_projectable_tile[selected_route] = (
+                    route_distribution_by_projectable_tile.get(selected_route, 0) + 1
+                )
     finally:
         _close_projector(right_projector)
         _close_projector(left_projector)
 
     metadata["status"] = "sampled"
-    metadata["summary"] = summarize_tile_illumination_pairs(pairs)
+    summary = summarize_tile_illumination_pairs(pairs)
+    summary["route_distribution_by_tile"] = route_distribution_by_tile
+    summary["route_distribution_by_projectable_tile"] = route_distribution_by_projectable_tile
+    metadata["summary"] = summary
     metadata["pairs"] = [illumination_pair_to_payload(pair) for pair in pairs]
+    metadata["route_metadata"] = route_metadata
     return metadata
 
 
@@ -3055,6 +3092,9 @@ def match_dom_pair(
                     candidate_windows=candidate_windows,
                     band=band,
                     dom_source_summary=dom_source_summary,
+                    adaptive_routing_deep_presets=resolved_adaptive_routing_deep_presets,
+                    max_features=max_features,
+                    sift_contrast_threshold=sift_contrast_threshold,
                 )
 
             if candidate_windows:

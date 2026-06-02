@@ -6,7 +6,7 @@ Redesign the LRO NAC adaptive-routing benchmark so matcher selection can use til
 
 ## Current Status
 
-Status: implementation in progress in isolated worktree; Tasks 1-8 complete, focused Task 9 validation passed, and physical tile illumination metadata is now connected into the `image_match.py` runtime path. A single-tile real-data geometry smoke passed; full per-tile adaptive route execution remains pending.
+Status: implementation in progress in isolated worktree; Tasks 1-8 complete, focused Task 9 validation passed, and physical tile illumination metadata plus per-tile route metadata are now connected into the `image_match.py` runtime path. A single-tile real-data geometry/routing smoke passed; full grouped per-route matcher execution remains pending.
 
 The previous polar adaptive-routing plan remains useful as baseline context, but this is a new architecture task because illumination evidence, tile routing, deep-learning manifest grouping, reporting, and paper figures all need changes.
 
@@ -127,7 +127,8 @@ Status: executing
 - [x] Task 9: focused validation.
 - [x] Task 9 follow-up: connect physical tile illumination computation into `image_match.py`.
 - [x] Task 9 follow-up: run single-tile real-data physical illumination smoke.
-- [ ] Task 10: connect per-tile texture/keypoint evidence to physical illumination route decisions and grouped matcher execution.
+- [x] Task 10: connect per-tile texture/keypoint evidence to physical illumination route metadata.
+- [ ] Task 11: use per-tile route metadata to group matcher execution for classic/deep batches.
 
 ## Key Decisions
 

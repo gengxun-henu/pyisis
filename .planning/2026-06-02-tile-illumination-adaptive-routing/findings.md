@@ -225,11 +225,21 @@ The implementation should avoid switching environments per tile, per method, or 
   - `adaptive_routing.tile_illumination.summary`;
   - `adaptive_routing.tile_illumination.pairs`.
 - Physical tile illumination sampling is currently metadata-only. It does not yet alter matcher execution. The next implementation boundary is to combine these `TileIlluminationPair` records with per-tile texture/keypoint evidence, build route metadata, and partition execution by selected matcher.
+- Physical tile illumination route metadata is now generated:
+  - per-tile left/right texture probes are computed from the actual DOM windows;
+  - `texture_sparseness = 1.0 - mean(left.real_texture_score, right.real_texture_score)`;
+  - route metadata records `selected_route`, backend `selected_matcher`, execution environment, keypoint counts/densities, and the physical illumination payload;
+  - summary records route distributions by all sampled tiles and by fully projectable tiles.
+- The runtime still executes one matcher for the pair. The next boundary is execution grouping: split tile tasks by `selected_route`/`selected_matcher`, run classic SIFT+FLANN in `asp360_new`, export/run/import deep groups in `deep-learning`, then merge per-tile results.
 - Real-data geometry smoke must use a real ISISDATA tree, not the unit-test mock tree. With `ISISDATA=/media/gengxun/My Passport/data`, a single tile produced one fully projectable pair:
   - left DOM sample/line: `(2768.0, 1200.0)`;
   - right DOM sample/line: `(2768.0, 1143.0)`;
   - azimuth difference: `1.3686125681990404` degrees;
   - elevation difference: `0.025346435004621526` degrees.
+- The same smoke tile currently routes to LoFTR because the 33x33 diagnostic window has low keypoint evidence:
+  - left keypoints: `20`;
+  - right keypoints: `9`;
+  - route distribution: `{"loftr": 1}`.
 
 ## Representative Point Policy
 

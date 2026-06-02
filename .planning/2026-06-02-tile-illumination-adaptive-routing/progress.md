@@ -141,5 +141,23 @@
   - result: 206 tests OK, 1 skipped.
   - `python tests/smoke_import.py`
   - result: `smoke import ok`.
+- Extended runtime physical tile illumination metadata with per-tile route metadata:
+  - each sampled tile now computes left/right `compute_real_image_texture_probe()` metrics from the same DOM windows used for representative-point selection;
+  - `_build_tile_route_metadata()` combines texture/keypoint evidence with the physical illumination pair;
+  - metadata now includes `adaptive_routing.tile_illumination.route_metadata`;
+  - summary now includes `route_distribution_by_tile` and `route_distribution_by_projectable_tile` for downstream figure source data.
+- Re-ran the real single-tile smoke with deep route presets:
+  - output remains `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/tile_illumination_smoke/single_tile_physical_illumination_metadata.json`;
+  - route result: `selected_route=loftr`, `selected_matcher=loftr`;
+  - route reason: `texture probe keypoint count or density below hard threshold; route to LoFTR`;
+  - left/right detected keypoints in the 33x33 smoke tile: `20` and `9`;
+  - route distributions: `{"loftr": 1}` by tile and by projectable tile.
+- Validation after route metadata integration:
+  - `python -m unittest tests.unitTest.image_match_tile_illumination_unit_test tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_deep_manifest_unit_test tests.unitTest.controlnet_construct_pipeline_unit_test -v`
+  - result: 206 tests OK, 1 skipped.
+  - `python -m unittest tests.unitTest.controlnet_construct_matcher_comparison_unit_test -v`
+  - result: 51 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
 - Current next step:
-  - connect per-tile texture/keypoint evidence to the physical illumination pairs, build per-tile route metadata, then group execution by selected matcher for classic/deep batches.
+  - use the per-tile route metadata to group execution by selected matcher for classic/deep batches.

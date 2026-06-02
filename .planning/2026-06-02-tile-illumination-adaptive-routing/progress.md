@@ -93,5 +93,26 @@
   - result: 59 tests OK.
 - Task 6 commit:
   - `ab8ed16c feat: build tile adaptive route metadata`.
+- Completed Task 7 CLI and pipeline source metadata handoff:
+  - `image_match.py --dom-source-metadata-csv`;
+  - CSV loaded once in CLI through `load_dom_source_metadata_csv()`;
+  - `match_dom_pair()` records `dom_source_metadata`;
+  - adaptive metadata records `adaptive_routing.tile_illumination.source_metadata`;
+  - `run_pipeline_example.sh --dom-source-metadata-csv` forwards the CSV path to every image-match pair.
+- Task 7 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 46 tests OK.
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_deep_manifest_unit_test tests.unitTest.controlnet_construct_pipeline_unit_test -v`
+  - result: 181 tests OK, 1 skipped.
+- Task 7 commit:
+  - `3b0f567a feat: pass DOM source metadata to image matching`.
+- Completed Task 8 reporting summary extraction:
+  - polar adaptive summarizer extracts tile illumination summary fields under prefixed `tile_illumination_*` keys;
+  - preserves tile route distributions and skip reasons as dictionaries;
+  - extracts adaptive RANSAC counts;
+  - falls back to top-level `match_visualization.ransac` for current persisted metadata.
+- Task 8 validation:
+  - `python -m unittest tests.unitTest.controlnet_construct_matcher_comparison_unit_test -v`
+  - result: 51 tests OK.
 - Current next step:
-  - Task 7 CLI and pipeline source metadata handoff.
+  - Task 9 focused validation and real-data smoke.

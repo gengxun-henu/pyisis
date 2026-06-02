@@ -28,6 +28,7 @@ if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
 from controlnet_construct.experiments import matcher_comparison
+from controlnet_construct.experiments import summarize_lro_polar_adaptive_routing_benchmark as polar_summary
 
 
 def _write_minimal_config(path: Path) -> None:
@@ -133,6 +134,57 @@ def _sample_report_metrics() -> list[dict]:
 
 
 class MatcherComparisonConfigUnitTest(unittest.TestCase):
+    def test_lro_polar_summary_extracts_tile_illumination_and_ransac_fields(self):
+        metadata = {
+            "image_match": {
+                "adaptive_routing": {
+                    "tile_illumination": {
+                        "summary": {
+                            "tile_count": 2,
+                            "projectable_tile_count": 1,
+                            "skipped_tile_count": 1,
+                            "skip_reasons": {"left_failed": 1},
+                            "route_distribution_by_tile": {"flann": 1, "loftr": 1},
+                        }
+                    },
+                    "ransac": {
+                        "raw_match_count": 100,
+                        "ransac_inlier_count": 60,
+                    },
+                }
+            }
+        }
+
+        tile_summary = polar_summary._extract_tile_illumination_summary(metadata)
+        ransac_summary = polar_summary._extract_ransac_summary(metadata)
+
+        self.assertEqual(tile_summary["tile_illumination_tile_count"], 2)
+        self.assertEqual(tile_summary["tile_illumination_projectable_tile_count"], 1)
+        self.assertEqual(tile_summary["tile_illumination_skipped_tile_count"], 1)
+        self.assertEqual(tile_summary["tile_illumination_route_distribution_by_tile"]["loftr"], 1)
+        self.assertEqual(ransac_summary["raw_match_count"], 100)
+        self.assertEqual(ransac_summary["ransac_inlier_count"], 60)
+
+    def test_lro_polar_summary_uses_top_level_match_visualization_ransac_fallback(self):
+        metadata = {
+            "image_match": {
+                "adaptive_routing": {"status": "routed"},
+            },
+            "match_visualization": {
+                "ransac": {
+                    "input_count": 80,
+                    "retained_count": 55,
+                    "inlier_ratio": 0.6875,
+                }
+            },
+        }
+
+        ransac_summary = polar_summary._extract_ransac_summary(metadata)
+
+        self.assertEqual(ransac_summary["raw_match_count"], 80)
+        self.assertEqual(ransac_summary["ransac_inlier_count"], 55)
+        self.assertEqual(ransac_summary["ransac_inlier_ratio"], 0.6875)
+
     def test_load_experiment_config_expands_inputs_execution_and_methods(self):
         with temporary_directory() as temp_dir:
             config_path = temp_dir / "experiment.json"

@@ -214,6 +214,8 @@ The implementation should avoid switching environments per tile, per method, or 
 - `_build_tile_route_metadata()` is pure and does not open cubes; it converts illumination evidence to payload and delegates routing to `route_matcher_for_tile()`.
 - `_apply_tile_route_metadata_to_tasks()` creates new task objects and leaves original tasks unchanged.
 - Future integration must avoid mixing global tile indexes with filtered candidate-window order. Route metadata should either be generated after prefiltering in the same order as `TileMatchTask` construction, or use explicit stable tile IDs carried through both structures.
+- `image_match.py` metadata currently stores `match_visualization` at top level in the metadata sidecar, not under `image_match`. Reporting code that wants RANSAC fallback counts must check top-level `metadata["match_visualization"]["ransac"]`.
+- Polar adaptive summary rows use prefixed `tile_illumination_*` fields to avoid overwriting existing generic `tile_count` and `skipped_tile_count` fields.
 
 ## Representative Point Policy
 

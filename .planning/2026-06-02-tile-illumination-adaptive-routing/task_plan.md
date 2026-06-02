@@ -122,8 +122,8 @@ Status: executing
 - [x] Task 4: tile-level prior-only matcher router.
 - [x] Task 5: route metadata preservation through tile tasks and deep manifests.
 - [x] Task 6: pure tile route metadata builder and task metadata application helper.
-- [ ] Task 7: CLI and pipeline source metadata handoff.
-- [ ] Task 8: reporting summaries.
+- [x] Task 7: CLI and pipeline source metadata handoff.
+- [x] Task 8: reporting summaries.
 - [ ] Task 9: focused validation and real-data smoke.
 
 ## Key Decisions

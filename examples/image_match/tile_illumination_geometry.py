@@ -13,9 +13,14 @@ from .tile_illumination import RepresentativePoint, TileIlluminationSample, Tile
 
 
 ProjectionResult = dict[str, float]
+DEFAULT_SPECIAL_PIXEL_ABS_THRESHOLD = float(np.finfo(np.float32).max)
 
 
-def pixel_available(value: float, *, special_pixel_abs_threshold: float | None = None) -> bool:
+def pixel_available(
+    value: float,
+    *,
+    special_pixel_abs_threshold: float | None = DEFAULT_SPECIAL_PIXEL_ABS_THRESHOLD,
+) -> bool:
     """Return whether a DOM pixel exists for representative-point selection."""
     resolved = float(value)
     if not math.isfinite(resolved):
@@ -54,7 +59,7 @@ def select_representative_point(
     dom_source_cube: str = "",
     upstream_source_cube: str | None = None,
     tile_index: int = 0,
-    special_pixel_abs_threshold: float | None = None,
+    special_pixel_abs_threshold: float | None = DEFAULT_SPECIAL_PIXEL_ABS_THRESHOLD,
 ) -> TileIlluminationSample:
     """Select the nearest source-projectable DOM pixel for tile illumination."""
     values = np.asarray(dom_values, dtype=np.float64)

@@ -183,6 +183,44 @@ class ImageMatchTileIlluminationUnitTest(unittest.TestCase):
         self.assertEqual(calls[0], (2.0, 2.0))
         self.assertGreaterEqual(len(calls), 2)
 
+    def test_finite_isis_special_center_pixel_is_skipped_by_default(self):
+        from image_match.tile_illumination_geometry import select_representative_point
+
+        values = np.ones((3, 3), dtype=np.float64)
+        values[1, 1] = np.finfo(np.float32).max
+        calls = []
+
+        def projector(sample, line):
+            calls.append((sample, line))
+            return {
+                "latitude": -88.0,
+                "longitude": 123.0,
+                "source_sample": sample + 10.0,
+                "source_line": line + 10.0,
+                "sun_azimuth": 180.0,
+                "incidence": 80.0,
+            }
+
+        selected = select_representative_point(
+            dom_values=values,
+            tile_start_x=0,
+            tile_start_y=0,
+            radiometric_valid_for_matching_mask=None,
+            project_source_pixel=projector,
+        )
+
+        self.assertEqual(selected.representative_point.status, "nearest_projectable_pixel")
+        self.assertEqual(selected.representative_point.local_x_0_based, 1)
+        self.assertEqual(selected.representative_point.local_y_0_based, 0)
+        self.assertNotIn((2.0, 2.0), calls)
+
+    def test_pixel_available_rejects_non_finite_values(self):
+        from image_match.tile_illumination_geometry import pixel_available
+
+        self.assertFalse(pixel_available(float("nan")))
+        self.assertFalse(pixel_available(float("inf")))
+        self.assertFalse(pixel_available(float("-inf")))
+
     def test_no_projectable_pixel_reports_failure(self):
         from image_match.tile_illumination_geometry import select_representative_point
 

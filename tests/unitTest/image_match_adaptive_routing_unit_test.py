@@ -909,6 +909,54 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(summary["classic_point_count"], 1)
         self.assertEqual(summary["deep_point_count"], 1)
 
+    def test_persist_classic_route_results_writes_importable_key_files(self):
+        image_match = importlib.import_module("image_match.image_match")
+        from image_match.keypoints import Keypoint, read_key_file
+        from image_match.tile_matching import TileMatchResult, TileMatchStats
+
+        result = TileMatchResult(
+            stats=TileMatchStats(
+                local_start_x=0,
+                local_start_y=0,
+                width=16,
+                height=16,
+                left_start_x=0,
+                left_start_y=0,
+                right_start_x=0,
+                right_start_y=0,
+                left_valid_pixel_count=256,
+                right_valid_pixel_count=256,
+                left_valid_pixel_ratio=1.0,
+                right_valid_pixel_ratio=1.0,
+                left_feature_count=10,
+                right_feature_count=10,
+                match_count=1,
+                status="matched",
+            ),
+            left_points=(Keypoint(sample=11.0, line=12.0),),
+            right_points=(Keypoint(sample=21.0, line=22.0),),
+        )
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            summary = image_match._persist_classic_route_results(
+                classic_tile_results=[result],
+                left_image_width=128,
+                left_image_height=96,
+                right_image_width=160,
+                right_image_height=112,
+                output_root=Path(tmp_dir),
+                pair_id="pair_a",
+            )
+            left_key = read_key_file(summary["left_key_path"])
+            right_key = read_key_file(summary["right_key_path"])
+
+        self.assertEqual(summary["status"], "persisted_classic_route_results")
+        self.assertEqual(summary["point_count"], 1)
+        self.assertEqual(left_key.image_width, 128)
+        self.assertEqual(right_key.image_height, 112)
+        self.assertEqual(left_key.points[0].sample, 11.0)
+        self.assertEqual(right_key.points[0].line, 22.0)
+
     def test_build_physical_tile_illumination_metadata_samples_tiles_with_projectors(self):
         image_match = importlib.import_module("image_match.image_match")
         from image_match.tile_matching import PairedTileWindow

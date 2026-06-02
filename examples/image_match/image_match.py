@@ -129,7 +129,7 @@ if __package__ in {None, ""}:
         write_deep_match_pair_manifest,
         write_deep_match_task_arrays,
     )
-    from image_match.keypoints import Keypoint, KeypointFile, write_key_file
+    from image_match.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
     import image_match.lowres_offset as _lowres_offset
     import image_match.match_visualization as _match_visualization
     from image_match.preprocess import summarize_valid_pixels, validate_invalid_pixel_radius
@@ -226,7 +226,7 @@ else:
         write_deep_match_pair_manifest,
         write_deep_match_task_arrays,
     )
-    from .keypoints import Keypoint, KeypointFile, write_key_file
+    from .keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
     from . import lowres_offset as _lowres_offset
     from . import match_visualization as _match_visualization
     from .preprocess import summarize_valid_pixels, validate_invalid_pixel_radius
@@ -2075,6 +2075,41 @@ def _merge_classic_and_deep_tile_results(
     }
 
 
+def _persist_classic_route_results(
+    *,
+    classic_tile_results: list[TileMatchResult] | tuple[TileMatchResult, ...],
+    left_image_width: int,
+    left_image_height: int,
+    right_image_width: int,
+    right_image_height: int,
+    output_root: str | Path,
+    pair_id: str,
+) -> dict[str, object]:
+    output_dir = Path(output_root).expanduser().resolve() / str(pair_id) / "classic_results"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    left_key_file, right_key_file, merge_summary = _merge_classic_and_deep_tile_results(
+        left_image_width=left_image_width,
+        left_image_height=left_image_height,
+        right_image_width=right_image_width,
+        right_image_height=right_image_height,
+        classic_tile_results=classic_tile_results,
+        deep_key_files=(),
+    )
+    left_key_path = output_dir / "left_classic.key"
+    right_key_path = output_dir / "right_classic.key"
+    write_key_file(left_key_path, left_key_file)
+    write_key_file(right_key_path, right_key_file)
+    return {
+        "status": "persisted_classic_route_results",
+        "reason": "Persisted classic route matches for later mixed-route import.",
+        "left_key_path": str(left_key_path),
+        "right_key_path": str(right_key_path),
+        "point_count": int(merge_summary["classic_point_count"]),
+        "tile_result_count": len(classic_tile_results),
+        "output_dir": str(output_dir),
+    }
+
+
 def _dom_source_metadata_summary(
     *,
     left_dom_path: str | Path,
@@ -3730,7 +3765,41 @@ def match_dom_pair(
                     route_groups = _group_tile_tasks_by_selected_route(routed_export_tile_tasks)
                     route_metadata_enabled = any(task.route_metadata is not None for task in routed_export_tile_tasks)
                     if route_metadata_enabled:
-                        tile_summaries, deep_match_export_summary = _export_grouped_deep_match_tile_tasks(
+                        resolved_deep_match_temp_root_dir = (
+                            deep_match_temp_root_dir
+                            if deep_match_temp_root_dir is not None
+                            else Path.cwd() / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME
+                        )
+                        classic_tile_results, classic_route_summary = _run_classic_route_groups(
+                            route_groups["classic"],
+                            left_cube=left_cube,
+                            right_cube=right_cube,
+                            left_invalid_values=left_invalid_values,
+                            right_invalid_values=right_invalid_values,
+                        )
+                        classic_tile_summaries = [result.stats for result in classic_tile_results]
+                        for tile_result in classic_tile_results:
+                            left_points.extend(tile_result.left_points)
+                            right_points.extend(tile_result.right_points)
+                        classic_results_summary = None
+                        if classic_tile_results:
+                            classic_pair_id = default_deep_match_pair_id(
+                                left_dom_path=left_dom_path,
+                                right_dom_path=right_dom_path,
+                                matcher_method="classic_sift_flann",
+                                band=band,
+                                image_space=image_backend.space,
+                            )
+                            classic_results_summary = _persist_classic_route_results(
+                                classic_tile_results=classic_tile_results,
+                                left_image_width=left_width,
+                                left_image_height=left_height,
+                                right_image_width=right_width,
+                                right_image_height=right_height,
+                                output_root=resolved_deep_match_temp_root_dir,
+                                pair_id=classic_pair_id,
+                            )
+                        deep_tile_summaries, deep_match_export_summary = _export_grouped_deep_match_tile_tasks(
                             left_dom_path=left_dom_path,
                             right_dom_path=right_dom_path,
                             image_space=image_backend.space,
@@ -3745,18 +3814,22 @@ def match_dom_pair(
                             valid_pixel_percent_threshold=resolved_valid_pixel_percent_threshold,
                             invalid_pixel_radius=resolved_invalid_pixel_radius,
                             use_gpu=use_gpu,
-                            deep_match_temp_root_dir=(
-                                deep_match_temp_root_dir
-                                if deep_match_temp_root_dir is not None
-                                else Path.cwd() / DEFAULT_DEEP_MATCH_TEMP_ROOT_NAME
-                            ),
+                            deep_match_temp_root_dir=resolved_deep_match_temp_root_dir,
                         )
+                        tile_summaries = [*classic_tile_summaries, *deep_tile_summaries]
                         classic_task_count = sum(len(group.get("tasks", [])) for group in route_groups["classic"])
                         deep_match_export_summary = {
                             **deep_match_export_summary,
+                            "status": (
+                                "exported_grouped_for_mixed_route"
+                                if classic_results_summary is not None or deep_match_export_summary.get("exported_task_count", 0)
+                                else deep_match_export_summary.get("status")
+                            ),
                             "route_metadata_enabled": True,
                             "classic_group_count": len(route_groups["classic"]),
                             "classic_task_count": classic_task_count,
+                            "classic_route_execution": classic_route_summary,
+                            "classic_results": classic_results_summary,
                             "deep_group_count": len(route_groups["deep"]),
                             "deep_task_count": sum(len(group.get("tasks", [])) for group in route_groups["deep"]),
                             "classic_execution_environment": "asp360_new",
@@ -4205,13 +4278,111 @@ def match_dom_pair_to_key_files(
 ) -> dict[str, object]:
     resolved_deep_match_mode = _normalize_deep_match_mode(deep_match_mode)
     if resolved_deep_match_mode == "import":
-        if deep_match_manifest is None:
+        grouped_deep_match_manifests = tuple(kwargs.pop("grouped_deep_match_manifests", ()) or ())
+        classic_left_key = kwargs.pop("classic_left_key", None)
+        classic_right_key = kwargs.pop("classic_right_key", None)
+        mixed_import_requested = bool(grouped_deep_match_manifests) or classic_left_key is not None or classic_right_key is not None
+        if not mixed_import_requested and deep_match_manifest is None:
             raise ValueError("deep_match_mode='import' requires deep_match_manifest.")
-        left_key_file, right_key_file, summary = import_deep_match_manifest_results(
-            deep_match_manifest,
-            left_dom_path=left_dom_path,
-            right_dom_path=right_dom_path,
-        )
+        if mixed_import_requested:
+            if classic_left_key is not None and classic_right_key is None:
+                raise ValueError("classic_right_key is required when classic_left_key is provided.")
+            if classic_right_key is not None and classic_left_key is None:
+                raise ValueError("classic_left_key is required when classic_right_key is provided.")
+            deep_key_pairs: list[tuple[KeypointFile, KeypointFile]] = []
+            grouped_summary: dict[str, object] | None = None
+            if grouped_deep_match_manifests:
+                deep_left_key, deep_right_key, grouped_summary = import_grouped_deep_match_manifest_results(
+                    grouped_deep_match_manifests,
+                    left_dom_path=left_dom_path,
+                    right_dom_path=right_dom_path,
+                )
+                deep_key_pairs.append((deep_left_key, deep_right_key))
+            classic_results: list[TileMatchResult] = []
+            classic_key_pair: tuple[KeypointFile, KeypointFile] | None = None
+            if classic_left_key is not None and classic_right_key is not None:
+                classic_key_pair = (
+                    read_key_file(classic_left_key),
+                    read_key_file(classic_right_key),
+                )
+            left_cube = ip.Cube()
+            right_cube = ip.Cube()
+            left_cube.open(str(left_dom_path), "r")
+            right_cube.open(str(right_dom_path), "r")
+            try:
+                left_width = left_cube.sample_count()
+                left_height = left_cube.line_count()
+                right_width = right_cube.sample_count()
+                right_height = right_cube.line_count()
+            finally:
+                if left_cube.is_open():
+                    left_cube.close()
+                if right_cube.is_open():
+                    right_cube.close()
+            merge_deep_key_pairs = list(deep_key_pairs)
+            if classic_key_pair is not None:
+                merge_deep_key_pairs.insert(0, classic_key_pair)
+            left_key_file, right_key_file, merge_summary = _merge_classic_and_deep_tile_results(
+                left_image_width=left_width,
+                left_image_height=left_height,
+                right_image_width=right_width,
+                right_image_height=right_height,
+                classic_tile_results=classic_results,
+                deep_key_files=merge_deep_key_pairs,
+            )
+            classic_point_count = 0 if classic_key_pair is None else len(classic_key_pair[0].points)
+            deep_point_count = len(left_key_file.points) - classic_point_count
+            merge_summary = {
+                **merge_summary,
+                "classic_point_count": classic_point_count,
+                "deep_point_count": deep_point_count,
+                "classic_left_key": None if classic_left_key is None else str(classic_left_key),
+                "classic_right_key": None if classic_right_key is None else str(classic_right_key),
+                "grouped_deep_match_manifests": [str(path) for path in grouped_deep_match_manifests],
+            }
+            deep_import_summary = (
+                dict(grouped_summary["deep_match_import"])
+                if isinstance(grouped_summary, dict) and isinstance(grouped_summary.get("deep_match_import"), dict)
+                else {
+                    "manifest_count": 0,
+                    "manifests": [],
+                    "imported_task_count": 0,
+                    "failed_task_count": 0,
+                    "missing_result_count": 0,
+                    "skipped_empty_task_count": 0,
+                    "imported_match_count": 0,
+                }
+            )
+            summary = {
+                "left_dom": str(left_dom_path),
+                "right_dom": str(right_dom_path),
+                "image_space": "dom",
+                "status": str(merge_summary["status"]),
+                "reason": "Merged persisted classic route results with grouped deep-learning manifest imports.",
+                "point_count": len(left_key_file.points),
+                "left_image_width": left_width,
+                "left_image_height": left_height,
+                "right_image_width": right_width,
+                "right_image_height": right_height,
+                "deep_match_mode": "import",
+                "deep_match_import": deep_import_summary,
+                "deep_match_export": None,
+                "mixed_route_import": merge_summary,
+                "matcher": {
+                    "matcher_method_requested": "mixed_route",
+                    "matcher_method_effective": "mixed_route",
+                },
+                "preparation": {
+                    "status": str(merge_summary["status"]),
+                    "reason": "Merged persisted classic route results with grouped deep-learning manifest imports.",
+                },
+            }
+        else:
+            left_key_file, right_key_file, summary = import_deep_match_manifest_results(
+                deep_match_manifest,
+                left_dom_path=left_dom_path,
+                right_dom_path=right_dom_path,
+            )
         Path(left_output_key).parent.mkdir(parents=True, exist_ok=True)
         Path(right_output_key).parent.mkdir(parents=True, exist_ok=True)
         write_key_file(left_output_key, left_key_file)
@@ -4223,10 +4394,11 @@ def match_dom_pair_to_key_files(
                 "status": summary["status"],
                 "reason": summary["reason"],
                 "point_count": summary["point_count"],
-                "matcher": summary["matcher"],
+                "matcher": summary.get("matcher"),
                 "deep_match_mode": summary["deep_match_mode"],
                 "deep_match_import": summary["deep_match_import"],
                 "deep_match_export": summary["deep_match_export"],
+                **({"mixed_route_import": summary["mixed_route_import"]} if "mixed_route_import" in summary else {}),
             }
         match_visualization_result: dict[str, object] | None = None
         if write_match_visualization:
@@ -4523,6 +4695,9 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--deep-match-mode", type=_parse_deep_match_mode, default=DEFAULT_DEEP_MATCH_MODE, help="Deep-match execution mode: direct, export, or import. 'export' writes a manifest plus tile arrays; 'import' reads completed manifest NPZ results and writes `.key` files.")
     parser.add_argument("--deep-match-temp-root-dir", default=None, help="Root directory used for exported deep-match workspaces when --deep-match-mode export is selected.")
     parser.add_argument("--deep-match-manifest", default=None, help="Path to an exported deep-match tasks.json manifest when --deep-match-mode import is selected.")
+    parser.add_argument("--grouped-deep-match-manifest", action="append", default=[], help="Path to one grouped deep-match tasks.json manifest. Repeat for mixed-route imports.")
+    parser.add_argument("--classic-left-key", default=None, help="Persisted classic-route left .key file used during mixed-route import.")
+    parser.add_argument("--classic-right-key", default=None, help="Persisted classic-route right .key file used during mixed-route import.")
     parser.add_argument("--ratio-test", type=float, default=0.75, help="Lowe ratio-test threshold used for descriptor filtering.")
     parser.add_argument("--max-features", type=int, default=None, help="Optional maximum number of SIFT features per tile.")
     parser.add_argument("--sift-octave-layers", type=int, default=3, help="Number of octave layers used by the OpenCV SIFT detector.")
@@ -4771,8 +4946,14 @@ def main(argv: list[str] | None = None) -> None:
         _validate_low_resolution_dom_pair_args(args.left_low_resolution_dom, args.right_low_resolution_dom)
     except ValueError as exc:
         parser.error(str(exc))
-    if args.deep_match_mode == "import" and args.deep_match_manifest is None:
-        parser.error("--deep-match-mode import requires --deep-match-manifest")
+    if (
+        args.deep_match_mode == "import"
+        and args.deep_match_manifest is None
+        and not args.grouped_deep_match_manifest
+        and args.classic_left_key is None
+        and args.classic_right_key is None
+    ):
+        parser.error("--deep-match-mode import requires --deep-match-manifest or grouped/classic mixed-route inputs")
     try:
         _validate_valid_intensity_percentile_bounds(
             args.valid_intensity_lower_percent,
@@ -4877,6 +5058,9 @@ def main(argv: list[str] | None = None) -> None:
             )
         ),
         deep_match_manifest=args.deep_match_manifest,
+        grouped_deep_match_manifests=args.grouped_deep_match_manifest,
+        classic_left_key=args.classic_left_key,
+        classic_right_key=args.classic_right_key,
         use_tile_cache=args.use_tile_cache,
         tile_cache_max_mb=args.tile_cache_max_mb,
         adaptive_warmup_count=args.adaptive_warmup_count,

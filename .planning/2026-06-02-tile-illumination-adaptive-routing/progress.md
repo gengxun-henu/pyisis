@@ -202,3 +202,23 @@
   - result: OK.
   - `git status --short -- .gitignore print.prt`
   - result: no output; neither file is modified in the Task 12 worktree.
+- Completed Task 13 mixed-route end-to-end wiring:
+  - export-mode grouped routing now executes classic `asp360_new` groups, persists classic route matches as pair-specific `left_classic.key` / `right_classic.key`, and records those paths in `deep_match_export.classic_results`;
+  - import mode now accepts grouped deep manifests plus persisted classic key files, imports the grouped deep results, merges them with classic keypoints, and writes the final pair-level `.key` files;
+  - CLI now supports repeatable `--grouped-deep-match-manifest` plus `--classic-left-key` / `--classic-right-key` for mixed-route import;
+  - the legacy single `--deep-match-manifest` import path remains supported.
+- Task 13 TDD coverage:
+  - red: `test_import_mode_merges_grouped_deep_manifests_with_persisted_classic_keys` initially failed because import mode required a single `deep_match_manifest`, then passed after mixed-route import wiring;
+  - red: `test_persist_classic_route_results_writes_importable_key_files` initially failed with missing `_persist_classic_route_results`, then passed after implementation;
+  - red: `test_build_argument_parser_accepts_grouped_mixed_import_arguments` initially failed with unrecognized CLI args, then passed after parser/main wiring.
+- Task 13 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 53 tests OK.
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 18 tests OK.
+  - `python tests/smoke_import.py`
+  - result: `smoke import ok`.
+  - `git diff --check`
+  - result: OK.
+  - `git status --short -- .gitignore print.prt`
+  - result: no output; neither file is modified in the Task 13 worktree.

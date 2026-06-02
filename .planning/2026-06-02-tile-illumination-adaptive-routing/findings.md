@@ -251,6 +251,16 @@ The implementation should avoid switching environments per tile, per method, or 
   - export mode can group deep manifests and now has a classic execution helper, but it does not yet persist classic tile results across a later `deep-learning` run;
   - CLI import mode still imports one manifest path by default;
   - the next step should wire grouped manifest paths plus persisted classic results into a single import/merge workflow before any full 16-pair benchmark rerun.
+- Task 13 wires that workflow at the image-match CLI/API level:
+  - during mixed-route export, classic `sift_flann` groups run in `asp360_new` and persist classic key files under the deep-match temp root; the paths are recorded in `deep_match_export.classic_results`;
+  - after `deep-learning` fills the grouped manifests, import mode can combine repeated `--grouped-deep-match-manifest` paths with `--classic-left-key` and `--classic-right-key`;
+  - the final import writes one pair-level left/right `.key` output and reports `mixed_route_import.classic_point_count` and `mixed_route_import.deep_point_count`;
+  - the old single-manifest import path remains available for fixed-method deep runs.
+- Remaining boundary before full benchmark:
+  - run a small real-data mixed-route smoke with one pair and limited tiles;
+  - verify the deep-learning runner accepts each grouped manifest and writes NPZ files;
+  - verify the returned import command uses the persisted classic key paths and all grouped manifest paths;
+  - only then rerun the selected 16-pair benchmark.
 - Real-data geometry smoke must use a real ISISDATA tree, not the unit-test mock tree. With `ISISDATA=/media/gengxun/My Passport/data`, a single tile produced one fully projectable pair:
   - left DOM sample/line: `(2768.0, 1200.0)`;
   - right DOM sample/line: `(2768.0, 1143.0)`;

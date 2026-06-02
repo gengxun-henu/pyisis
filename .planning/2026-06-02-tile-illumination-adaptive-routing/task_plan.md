@@ -6,7 +6,7 @@ Redesign the LRO NAC adaptive-routing benchmark so matcher selection can use til
 
 ## Current Status
 
-Status: implementation in progress in isolated worktree; Tasks 1-12 complete. Physical tile illumination metadata and per-tile route metadata are connected into the `image_match.py` runtime path, single-tile real-data geometry/routing smoke passed, export-mode deep manifests are grouped by per-tile selected route, and minimal mixed-route helper coverage now exists for classic `asp360_new` execution, grouped deep manifest import, and classic+deep keypoint merging.
+Status: implementation in progress in isolated worktree; Tasks 1-13 complete. Physical tile illumination metadata and per-tile route metadata are connected into the `image_match.py` runtime path, single-tile real-data geometry/routing smoke passed, export-mode deep manifests are grouped by per-tile selected route, classic `asp360_new` route results are persisted for later import, and import mode can merge persisted classic keys plus multiple grouped deep manifests into final pair-level `.key` files.
 
 The previous polar adaptive-routing plan remains useful as baseline context, but this is a new architecture task because illumination evidence, tile routing, deep-learning manifest grouping, reporting, and paper figures all need changes.
 
@@ -80,7 +80,7 @@ Status: pending
   - first stay in `asp360_new` and complete all SIFT+FLANN matching, physical illumination metadata, manifest export, and non-deep bookkeeping for the stereo pair batch;
   - then switch once to `deep-learning` and run all required SIFT+LightGlue, SuperPoint+LightGlue, and LoFTR grouped manifests for the relevant stereo pair batch;
   - avoid repeated conda switching inside per-tile or per-method loops.
-- [ ] Ensure imported deep results merge back into one pair-level `.key` output with per-tile provenance.
+- [x] Ensure imported deep results merge back into one pair-level `.key` output with per-tile provenance.
 
 ## Phase 6: Update Reports and Nature-Style Figures
 
@@ -130,6 +130,7 @@ Status: executing
 - [x] Task 10: connect per-tile texture/keypoint evidence to physical illumination route metadata.
 - [x] Task 11: use per-tile route metadata to group matcher execution for classic/deep batches.
 - [x] Task 12: implement minimal mixed route classic execution, grouped deep import, and classic+deep key merge helpers.
+- [x] Task 13: wire mixed-route export/import workflow so persisted classic results and grouped deep manifests merge into final `.key` outputs.
 
 ## Key Decisions
 

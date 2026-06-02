@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import sys
+import types
 from pathlib import Path
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -253,6 +255,139 @@ class ImageMatchTileIlluminationUnitTest(unittest.TestCase):
 
         self.assertEqual(selected.representative_point.status, "no_projectable_pixel")
         self.assertEqual(selected.representative_point.failure_reason, "no_projectable_pixel")
+
+    def test_no_projectable_pixel_preserves_classified_projection_failure(self):
+        from image_match.tile_illumination_geometry import select_representative_point
+
+        selected = select_representative_point(
+            dom_values=np.ones((2, 2), dtype=np.float64),
+            tile_start_x=0,
+            tile_start_y=0,
+            radiometric_valid_for_matching_mask=None,
+            project_source_pixel=lambda sample, line: (_ for _ in ()).throw(
+                RuntimeError("source_ground_map_set_universal_ground_failed")
+            ),
+        )
+
+        self.assertEqual(selected.representative_point.status, "no_projectable_pixel")
+        self.assertEqual(
+            selected.representative_point.failure_reason,
+            "source_ground_map_set_universal_ground_failed",
+        )
+
+    def test_pyisis_projector_is_context_managed_and_closes_cubes(self):
+        from image_match import runtime
+        from image_match.tile_illumination_geometry import build_pyisis_projector
+
+        created_cubes = []
+
+        class FakeCube:
+            def __init__(self):
+                self.closed = False
+                self.opened = []
+                created_cubes.append(self)
+
+            def open(self, path, mode):
+                self.opened.append((path, mode))
+
+            def close(self):
+                self.closed = True
+
+            def camera(self):
+                return FakeCamera()
+
+        class FakeCamera:
+            def set_image(self, sample, line):
+                return True
+
+            def sun_azimuth(self):
+                return 120.0
+
+            def incidence_angle(self):
+                return 80.0
+
+        class FakeUniversalGroundMap:
+            class CameraPriority:
+                ProjectionFirst = "ProjectionFirst"
+                CameraFirst = "CameraFirst"
+
+            def __init__(self, cube, priority):
+                self.priority = priority
+
+            def set_image(self, sample, line):
+                return True
+
+            def universal_latitude(self):
+                return -88.0
+
+            def universal_longitude(self):
+                return 123.0
+
+            def set_universal_ground(self, latitude, longitude):
+                return True
+
+            def sample(self):
+                return 11.0
+
+            def line(self):
+                return 12.0
+
+        fake_ip = types.SimpleNamespace(Cube=FakeCube, UniversalGroundMap=FakeUniversalGroundMap)
+
+        with mock.patch.object(runtime, "bootstrap_runtime_environment"), mock.patch.dict(
+            sys.modules,
+            {"isis_pybind": fake_ip},
+        ):
+            projector = build_pyisis_projector(dom_path="dom.cub", source_cube_path="source.cub")
+            self.assertTrue(callable(projector))
+            self.assertTrue(hasattr(projector, "close"))
+            self.assertTrue(hasattr(projector, "__enter__"))
+            self.assertTrue(hasattr(projector, "__exit__"))
+
+            with projector as active_projector:
+                self.assertIs(active_projector, projector)
+                self.assertEqual(
+                    active_projector(1.0, 2.0)["source_sample"],
+                    11.0,
+                )
+
+        self.assertEqual(len(created_cubes), 2)
+        self.assertTrue(all(cube.closed for cube in created_cubes))
+
+    def test_pyisis_projector_closes_dom_cube_when_source_open_fails(self):
+        from image_match import runtime
+        from image_match.tile_illumination_geometry import build_pyisis_projector
+
+        created_cubes = []
+
+        class FakeCube:
+            def __init__(self):
+                self.closed = False
+                created_cubes.append(self)
+
+            def open(self, path, mode):
+                if path == "source.cub":
+                    raise RuntimeError("source open failed")
+
+            def close(self):
+                self.closed = True
+
+        class FakeUniversalGroundMap:
+            class CameraPriority:
+                ProjectionFirst = "ProjectionFirst"
+                CameraFirst = "CameraFirst"
+
+        fake_ip = types.SimpleNamespace(Cube=FakeCube, UniversalGroundMap=FakeUniversalGroundMap)
+
+        with mock.patch.object(runtime, "bootstrap_runtime_environment"), mock.patch.dict(
+            sys.modules,
+            {"isis_pybind": fake_ip},
+        ):
+            with self.assertRaisesRegex(RuntimeError, "source open failed"):
+                build_pyisis_projector(dom_path="dom.cub", source_cube_path="source.cub")
+
+        self.assertEqual(len(created_cubes), 2)
+        self.assertTrue(all(cube.closed for cube in created_cubes))
 
 
 if __name__ == "__main__":

@@ -116,6 +116,25 @@ class PairRoutingDecision:
 
 
 @dataclass(frozen=True, slots=True)
+class TileRoutingDecision:
+    """Tile-level prior matcher route decision and sidecar-ready diagnostics."""
+
+    tile_index: int
+    texture_sparseness: float | None
+    texture_probe_keypoint_count_left: int | None
+    texture_probe_keypoint_count_right: int | None
+    texture_probe_keypoint_density_left: float | None
+    texture_probe_keypoint_density_right: float | None
+    illumination: dict[str, Any]
+    selected_matcher: str
+    selected_execution_environment: str
+    route_reason: str
+    route_confidence: float
+    no_post_match_fallback: bool
+    deep_match_config_path: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
 class MatchQualityReport:
     """Summary of post-match quality gating signals for one matcher result."""
 
@@ -830,6 +849,103 @@ def route_matcher_for_pair_with_sparseness(
     )
 
 
+def route_matcher_for_tile(
+    *,
+    tile_index: int,
+    texture_sparseness: float | None,
+    lighting_difference_score: float | None,
+    texture_probe_keypoint_count_left: int | None,
+    texture_probe_keypoint_count_right: int | None,
+    texture_probe_keypoint_density_left: float | None,
+    texture_probe_keypoint_density_right: float | None,
+    illumination: dict[str, Any] | None,
+    adaptive_routing_deep_presets: dict[str, str] | None = None,
+    sparseness_low_threshold: float = 0.35,
+    sparseness_high_threshold: float = 0.65,
+    lighting_low_threshold: float = 0.20,
+    lighting_high_threshold: float = 0.55,
+    min_texture_probe_keypoints: int = 12,
+    min_texture_probe_keypoint_density: float = 1.0e-5,
+) -> TileRoutingDecision:
+    """Route one tile to a prior-selected matcher without post-match fallback."""
+
+    preset_map = {
+        str(key).strip().lower(): str(value)
+        for key, value in (adaptive_routing_deep_presets or {}).items()
+        if value not in (None, "")
+    }
+    counts = [
+        value
+        for value in (texture_probe_keypoint_count_left, texture_probe_keypoint_count_right)
+        if value is not None
+    ]
+    densities = [
+        value
+        for value in (texture_probe_keypoint_density_left, texture_probe_keypoint_density_right)
+        if value is not None
+    ]
+    low_keypoints = bool(counts) and min(int(value) for value in counts) < int(min_texture_probe_keypoints)
+    low_density = bool(densities) and min(float(value) for value in densities) < float(min_texture_probe_keypoint_density)
+    sparseness = _finite_float(texture_sparseness)
+    lighting = _finite_float(lighting_difference_score)
+
+    if low_keypoints or low_density:
+        selected = LOFTR_MATCHER_METHOD
+        reason = "texture probe keypoint count or density below hard threshold; route to LoFTR"
+        confidence = 0.90
+        config = preset_map.get(LOFTR_MATCHER_METHOD)
+    elif (
+        sparseness is not None
+        and sparseness <= float(sparseness_low_threshold)
+        and (lighting is None or lighting <= float(lighting_low_threshold))
+    ):
+        selected = FLANN_MATCHER_METHOD
+        reason = "rich texture and small physical illumination difference; route to SIFT + FLANN"
+        confidence = 0.85
+        config = None
+    elif (
+        sparseness is not None
+        and sparseness >= float(sparseness_high_threshold)
+        and lighting is not None
+        and lighting >= float(lighting_high_threshold)
+    ):
+        selected = LOFTR_MATCHER_METHOD
+        reason = "weak texture and large physical illumination difference; route to LoFTR"
+        confidence = 0.82
+        config = preset_map.get(LOFTR_MATCHER_METHOD)
+    elif sparseness is not None and sparseness >= 0.58 and (lighting is None or lighting < float(lighting_high_threshold)):
+        selected = LIGHTGLUE_MATCHER_METHOD
+        reason = "weak-to-moderate texture with non-extreme illumination; route to SuperPoint + LightGlue"
+        confidence = 0.65
+        config = (
+            preset_map.get("superpoint_lightglue")
+            or preset_map.get("lightglue_superpoint")
+            or preset_map.get(LIGHTGLUE_MATCHER_METHOD)
+        )
+    else:
+        selected = LIGHTGLUE_MATCHER_METHOD
+        reason = "moderate texture or moderate physical illumination difference; route to SIFT + LightGlue"
+        confidence = 0.60
+        config = preset_map.get("sift_lightglue") or preset_map.get(LIGHTGLUE_MATCHER_METHOD)
+
+    environment = "asp360_new" if selected == FLANN_MATCHER_METHOD else "deep-learning"
+    return TileRoutingDecision(
+        tile_index=int(tile_index),
+        texture_sparseness=sparseness,
+        texture_probe_keypoint_count_left=texture_probe_keypoint_count_left,
+        texture_probe_keypoint_count_right=texture_probe_keypoint_count_right,
+        texture_probe_keypoint_density_left=texture_probe_keypoint_density_left,
+        texture_probe_keypoint_density_right=texture_probe_keypoint_density_right,
+        illumination=dict(illumination or {}),
+        selected_matcher=selected,
+        selected_execution_environment=environment,
+        route_reason=reason,
+        route_confidence=confidence,
+        no_post_match_fallback=True,
+        deep_match_config_path=config,
+    )
+
+
 def augment_pair_probe_sidecar_with_sparseness_lighting(
     sidecar: dict[str, Any],
     *,
@@ -867,6 +983,7 @@ __all__ = [
     "SIFT_ROUTED_MATCHER_METHOD",
     "SpiceLightingConstraints",
     "SUPPORTED_ADAPTIVE_ROUTING_PROFILES",
+    "TileRoutingDecision",
     "augment_pair_probe_sidecar_with_sparseness_lighting",
     "build_pair_probe_sidecar",
     "build_cascade_plan",
@@ -878,4 +995,5 @@ __all__ = [
     "resolve_adaptive_routing_quality_profile",
     "route_matcher_for_pair",
     "route_matcher_for_pair_with_sparseness",
+    "route_matcher_for_tile",
 ]

@@ -4,6 +4,8 @@ import sys
 from pathlib import Path
 import unittest
 
+import numpy as np
+
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 EXAMPLES_DIR = PROJECT_ROOT / "examples"
@@ -121,6 +123,79 @@ class ImageMatchTileIlluminationUnitTest(unittest.TestCase):
         self.assertEqual(summary["projectable_tile_count"], 0)
         self.assertEqual(summary["skipped_tile_count"], 1)
         self.assertEqual(summary["skip_reasons"]["both_failed"], 1)
+
+    def test_shadowed_pixel_can_be_selected_when_source_projectable(self):
+        from image_match.tile_illumination_geometry import select_representative_point
+
+        values = np.full((5, 5), 10.0, dtype=np.float64)
+        radiometric_mask = np.ones((5, 5), dtype=bool)
+        radiometric_mask[2, 2] = False
+
+        selected = select_representative_point(
+            dom_values=values,
+            tile_start_x=100,
+            tile_start_y=200,
+            radiometric_valid_for_matching_mask=radiometric_mask,
+            project_source_pixel=lambda sample, line: {
+                "latitude": -88.0,
+                "longitude": 123.0,
+                "source_sample": 11.0,
+                "source_line": 12.0,
+                "sun_azimuth": 250.0,
+                "incidence": 87.5,
+            },
+        )
+
+        self.assertEqual(selected.representative_point.status, "center_projectable")
+        self.assertFalse(selected.representative_point.radiometric_valid_for_matching)
+        self.assertEqual(selected.representative_point.dom_sample_1_based, 103.0)
+        self.assertEqual(selected.representative_point.dom_line_1_based, 203.0)
+        self.assertEqual(selected.solar_elevation_degrees, 2.5)
+
+    def test_center_projection_failure_uses_nearest_projectable_pixel(self):
+        from image_match.tile_illumination_geometry import select_representative_point
+
+        values = np.ones((3, 3), dtype=np.float64)
+        calls = []
+
+        def projector(sample, line):
+            calls.append((sample, line))
+            if (sample, line) == (2.0, 2.0):
+                raise RuntimeError("center outside source camera")
+            return {
+                "latitude": -88.0,
+                "longitude": 123.0,
+                "source_sample": sample + 10.0,
+                "source_line": line + 10.0,
+                "sun_azimuth": 180.0,
+                "incidence": 80.0,
+            }
+
+        selected = select_representative_point(
+            dom_values=values,
+            tile_start_x=0,
+            tile_start_y=0,
+            radiometric_valid_for_matching_mask=None,
+            project_source_pixel=projector,
+        )
+
+        self.assertEqual(selected.representative_point.status, "nearest_projectable_pixel")
+        self.assertEqual(calls[0], (2.0, 2.0))
+        self.assertGreaterEqual(len(calls), 2)
+
+    def test_no_projectable_pixel_reports_failure(self):
+        from image_match.tile_illumination_geometry import select_representative_point
+
+        selected = select_representative_point(
+            dom_values=np.ones((2, 2), dtype=np.float64),
+            tile_start_x=0,
+            tile_start_y=0,
+            radiometric_valid_for_matching_mask=None,
+            project_source_pixel=lambda sample, line: (_ for _ in ()).throw(RuntimeError("not covered")),
+        )
+
+        self.assertEqual(selected.representative_point.status, "no_projectable_pixel")
+        self.assertEqual(selected.representative_point.failure_reason, "no_projectable_pixel")
 
 
 if __name__ == "__main__":

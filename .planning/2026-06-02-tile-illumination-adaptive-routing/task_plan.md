@@ -6,7 +6,7 @@ Redesign the LRO NAC adaptive-routing benchmark so matcher selection can use til
 
 ## Current Status
 
-Status: Phase 2 design SPEC drafted and implementation plan written; ready for execution approach selection.
+Status: implementation in progress in isolated worktree; Tasks 1-6 complete, Task 7 source metadata handoff starting.
 
 The previous polar adaptive-routing plan remains useful as baseline context, but this is a new architecture task because illumination evidence, tile routing, deep-learning manifest grouping, reporting, and paper figures all need changes.
 
@@ -111,13 +111,20 @@ Status: pending
 
 ## Implementation Plan
 
-Status: written
+Status: executing
 
 - [x] Wrote Superpowers implementation plan:
   - `docs/superpowers/plans/2026-06-02-tile-illumination-adaptive-routing.md`
-- [ ] Choose execution mode:
-  - subagent-driven task execution; or
-  - inline execution with checkpoints.
+- [x] Chose subagent-driven task execution with review checkpoints.
+- [x] Task 1: tile illumination data models.
+- [x] Task 2: bounded representative-point geometry helpers and PyISIS projector boundary.
+- [x] Task 3: DOM source cube metadata CSV loading and lookup.
+- [x] Task 4: tile-level prior-only matcher router.
+- [x] Task 5: route metadata preservation through tile tasks and deep manifests.
+- [x] Task 6: pure tile route metadata builder and task metadata application helper.
+- [ ] Task 7: CLI and pipeline source metadata handoff.
+- [ ] Task 8: reporting summaries.
+- [ ] Task 9: focused validation and real-data smoke.
 
 ## Key Decisions
 
@@ -129,6 +136,8 @@ Status: written
 | Use the DOM source/original cube camera geometry for solar angles | The correct camera model is the image that generated the DOM; it may be full-resolution original or REDUCED, so routing must not hard-code REDUCED-only paths. |
 | Group work by environment and matcher | Complete all `asp360_new` work first, then switch once to `deep-learning` for the required deep manifests. This preserves tile-level routing while avoiding repeated conda switching overhead. |
 | Keep prior-only routing | User clarified adaptive routing means choosing a method from texture/illumination evidence, not retrying a cascade after failure. |
+| Keep route identity separate from backend matcher | `selected_route` distinguishes `sift_lightglue` from `superpoint_lightglue`, while `selected_matcher` stays compatible with backend values such as `lightglue`. |
+| Apply route metadata in the same filtered tile-task order or with explicit indexes | Candidate-window prefiltering can change tile order/count; future integration must not mix global tile indexes with filtered task indexes. |
 
 ## Open Questions
 

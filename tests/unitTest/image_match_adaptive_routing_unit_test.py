@@ -467,6 +467,51 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(metadata["selected_execution_environment"], "asp360_new")
         self.assertEqual(metadata["illumination"]["status"], "ok")
 
+    def test_image_match_parser_accepts_dom_source_metadata_csv(self):
+        image_match = importlib.import_module("image_match.image_match")
+
+        parsed = image_match.build_argument_parser().parse_args(
+            [
+                "left.cub",
+                "right.cub",
+                "left.key",
+                "right.key",
+                "--dom-source-metadata-csv",
+                "reduced_selected_pair_paths.csv",
+            ]
+        )
+
+        self.assertEqual(parsed.dom_source_metadata_csv, "reduced_selected_pair_paths.csv")
+
+    def test_dom_source_metadata_summary_records_pair_lookup_status(self):
+        image_match = importlib.import_module("image_match.image_match")
+
+        summary = image_match._dom_source_metadata_summary(
+            left_dom_path="/data/dom_left.cub",
+            right_dom_path="/data/dom_right.cub",
+            lookup={
+                "/data/dom_left.cub": {
+                    "dom_path": "/data/dom_left.cub",
+                    "dom_source_cube": "/data/left_source.cub",
+                    "upstream_source_cube": None,
+                    "dom_source_kind": "reduced",
+                },
+                "/data/dom_right.cub": {
+                    "dom_path": "/data/dom_right.cub",
+                    "dom_source_cube": "/data/right_source.cub",
+                    "upstream_source_cube": None,
+                    "dom_source_kind": "reduced",
+                },
+            },
+            csv_path="reduced_selected_pair_paths.csv",
+        )
+
+        self.assertTrue(summary["enabled"])
+        self.assertEqual(summary["status"], "ready")
+        self.assertEqual(summary["csv_path"], "reduced_selected_pair_paths.csv")
+        self.assertEqual(summary["left"]["dom_source_cube"], "/data/left_source.cub")
+        self.assertEqual(summary["right"]["dom_source_cube"], "/data/right_source.cub")
+
     def test_apply_tile_route_metadata_updates_task_matcher_and_preserves_metadata(self):
         image_match = importlib.import_module("image_match.image_match")
         from image_match.tile_matching import PairedTileWindow, TileMatchTask

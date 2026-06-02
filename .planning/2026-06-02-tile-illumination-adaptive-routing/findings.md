@@ -199,6 +199,22 @@ The benchmark should minimize conda activation overhead:
 
 The implementation should avoid switching environments per tile, per method, or repeatedly inside a single stereo-pair batch.
 
+## Implementation Findings Through Task 6
+
+- Tile route identity must be separate from backend matcher identity:
+  - `sift_flann` uses backend `flann`;
+  - `sift_lightglue` uses backend `lightglue`;
+  - `superpoint_lightglue` uses backend `lightglue`;
+  - `loftr` uses backend `loftr`.
+- Missing or non-finite texture probe keypoint count/density is treated as missing evidence and routes conservatively to LoFTR.
+- Very low keypoint count or density is a hard LoFTR rule.
+- Extreme single-axis texture sparseness or physical illumination difference also routes to LoFTR.
+- `TileMatchTask.route_metadata` is now preserved in both tile task payloads and deep manifest task records.
+- Legacy deep manifest payloads without `route_metadata` remain loadable and restore `None`.
+- `_build_tile_route_metadata()` is pure and does not open cubes; it converts illumination evidence to payload and delegates routing to `route_matcher_for_tile()`.
+- `_apply_tile_route_metadata_to_tasks()` creates new task objects and leaves original tasks unchanged.
+- Future integration must avoid mixing global tile indexes with filtered candidate-window order. Route metadata should either be generated after prefiltering in the same order as `TileMatchTask` construction, or use explicit stable tile IDs carried through both structures.
+
 ## Representative Point Policy
 
 The proposed policy is intentionally bounded:

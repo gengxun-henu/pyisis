@@ -6532,10 +6532,12 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
             original_list = work_dir / "original_images.lis"
             dom_list = work_dir / "doms.lis"
+            dom_source_metadata_csv = work_dir / "reduced_selected_pair_paths.csv"
             config_path = temp_dir / "controlnet_config.json"
             fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
 
             write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
+            dom_source_metadata_csv.write_text("dom_cube,echo_cal_cube\n", encoding="utf-8")
             config_path.write_text(
                 json.dumps(
                     {
@@ -6667,6 +6669,11 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "            raise SystemExit(f'unexpected left low-resolution DOM: {left_low}')",
                         "        if right_low != 'right_low_level5.cub':",
                         "            raise SystemExit(f'unexpected right low-resolution DOM: {right_low}')",
+                        "        if '--dom-source-metadata-csv' not in args:",
+                        "            raise SystemExit('missing --dom-source-metadata-csv')",
+                        "        source_metadata_csv = args[args.index('--dom-source-metadata-csv') + 1]",
+                        f"        if source_metadata_csv != {str(dom_source_metadata_csv)!r}:",
+                        "            raise SystemExit(f'unexpected DOM source metadata CSV: {source_metadata_csv}')",
                         "        Path(args[2]).write_text('synthetic-left-key\\n', encoding='utf-8')",
                         "        Path(args[3]).write_text('synthetic-right-key\\n', encoding='utf-8')",
                         "        return 0",
@@ -6733,6 +6740,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     str(config_path),
                     "--python",
                     str(fake_python_dispatcher),
+                    "--dom-source-metadata-csv",
+                    str(dom_source_metadata_csv),
                     "--skip-final-merge",
                 ],
                 cwd=PROJECT_ROOT,

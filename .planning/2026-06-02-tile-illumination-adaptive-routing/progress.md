@@ -64,3 +64,34 @@
   - reporting summaries;
   - focused unit tests and real-data smoke validation.
 - No implementation code was changed during plan writing.
+- Created isolated worktree:
+  - `/home/gengxun/PlanetaryMapping/asp360_new/pyisis/ISIS3-9.0.0-ext/isis_pybind_standalone/.worktrees/tile-illumination-adaptive-routing-20260602`
+  - branch `feature/tile-illumination-adaptive-routing-20260602`.
+- Preserved baseline dirty state in commit `4da6856e`.
+- Completed Task 1 data models in `examples/image_match/tile_illumination.py`.
+- Completed Task 2 geometry helpers in `examples/image_match/tile_illumination_geometry.py`.
+- Completed Task 3 source metadata CSV lookup helpers in `examples/image_match/tile_illumination.py`.
+- Completed Task 4 tile-level prior-only router in `examples/image_match/adaptive_routing.py`.
+- Task 4 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test -v`
+  - result: 42 tests OK before Task 6, then 44 tests OK after Task 6 additions.
+- Completed Task 5 route metadata preservation:
+  - `TileMatchTask.route_metadata`;
+  - tile task payload round-trip;
+  - `DeepMatchTaskRecord.route_metadata`;
+  - manifest top-level and nested tile-task payload preservation.
+- Task 5 validation:
+  - `python -m unittest tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 15 tests OK.
+- Task 5 commit:
+  - `96d7e499 feat: preserve tile route metadata in manifests`.
+- Completed Task 6 pure tile route metadata helpers:
+  - `_build_tile_route_metadata()`;
+  - `_apply_tile_route_metadata_to_tasks()`.
+- Task 6 validation:
+  - `python -m unittest tests.unitTest.image_match_adaptive_routing_unit_test tests.unitTest.image_match_deep_manifest_unit_test -v`
+  - result: 59 tests OK.
+- Task 6 commit:
+  - `ab8ed16c feat: build tile adaptive route metadata`.
+- Current next step:
+  - Task 7 CLI and pipeline source metadata handoff.

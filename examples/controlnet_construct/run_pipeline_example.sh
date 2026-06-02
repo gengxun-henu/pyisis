@@ -316,6 +316,8 @@ Options:
                                    to config JSON field ImageMatch.adaptive_routing_profile when present; otherwise balanced.
                                    Preset-aware adaptive routing can additionally read ImageMatch.adaptive_routing_deep_presets
                                    from the config JSON so routed LightGlue/LoFTR passes select concrete preset files.
+  --dom-source-metadata-csv PATH  CSV mapping DOM cube paths to the source/original camera cubes used to generate them.
+                                  Forwarded to image_match.py for tile-level physical illumination routing.
   --deep-match-mode MODE          Deep-match execution mode forwarded to image_match.py: direct, export, or import.
                                   Default: direct. Export mode stops after Step 2 and writes manifest workspaces;
                                   import mode consumes completed per-pair manifests before continuing ControlNet steps.
@@ -1134,6 +1136,9 @@ run_step_2_image_match_batch() {
       match_args+=(--no-adaptive-routing)
     fi
     match_args+=(--adaptive-routing-profile "$ADAPTIVE_ROUTING_PROFILE")
+    if [[ -n "$DOM_SOURCE_METADATA_CSV" ]]; then
+      match_args+=(--dom-source-metadata-csv "$DOM_SOURCE_METADATA_CSV")
+    fi
     if [[ "$USE_PARALLEL_CPU" == "1" ]]; then
       match_args+=(--use-parallel-cpu)
     else
@@ -1310,6 +1315,7 @@ main() {
   local match_preset_path=""
   local explicit_adaptive_routing=""
   local explicit_adaptive_routing_profile=""
+  local explicit_dom_source_metadata_csv=""
   local explicit_enable_low_resolution_offset_estimation=""
   local explicit_low_resolution_level=""
   local explicit_low_resolution_max_mean_reprojection_error_pixels=""
@@ -1327,6 +1333,7 @@ main() {
   local deep_match_temp_root_dir_input=""
   local deep_match_manifest_dir_input=""
   local deep_match_manifest_summary_input=""
+  local DOM_SOURCE_METADATA_CSV=""
   local config_match_preset_path=""
   local config_valid_pixel_percent_threshold=""
   local config_num_worker_parallel_cpu=""
@@ -1509,6 +1516,12 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --adaptive-routing-profile"
         ADAPTIVE_ROUTING_PROFILE=$2
         explicit_adaptive_routing_profile=$2
+        shift 2
+        ;;
+      --dom-source-metadata-csv)
+        [[ $# -ge 2 ]] || die "missing value for --dom-source-metadata-csv"
+        DOM_SOURCE_METADATA_CSV=$2
+        explicit_dom_source_metadata_csv=$2
         shift 2
         ;;
       --deep-match-mode)
@@ -1901,11 +1914,11 @@ PY
   export explicit_num_worker_parallel_cpu explicit_opencv_num_threads explicit_use_parallel_cpu explicit_pair_id_start explicit_valid_pixel_percent_threshold explicit_invalid_pixel_radius
   export explicit_match_preset_path explicit_matcher_method explicit_deep_matcher_config_path
   export explicit_deep_match_mode explicit_deep_match_temp_root_dir explicit_deep_match_manifest_dir explicit_deep_match_manifest_summary
-  export explicit_adaptive_routing explicit_adaptive_routing_profile explicit_enable_low_resolution_offset_estimation explicit_low_resolution_level
+  export explicit_adaptive_routing explicit_adaptive_routing_profile explicit_dom_source_metadata_csv explicit_enable_low_resolution_offset_estimation explicit_low_resolution_level
   export explicit_low_resolution_max_mean_reprojection_error_pixels explicit_low_resolution_min_retained_match_count explicit_low_resolution_max_mean_projected_offset_meters
   export explicit_visualization_mode explicit_memory_profile explicit_visualization_target_long_edge explicit_preview_crop_margin_pixels explicit_preview_cache_source
   export explicit_skip_final_merge explicit_post_merge_control_measure explicit_post_merge_output explicit_post_merge_decimals
-  export match_preset_path MATCHER_METHOD DEEP_MATCHER_CONFIG_PATH ADAPTIVE_ROUTING ADAPTIVE_ROUTING_PROFILE USE_PARALLEL_CPU NUM_WORKER_PARALLEL_CPU OPENCV_NUM_THREADS
+  export match_preset_path MATCHER_METHOD DEEP_MATCHER_CONFIG_PATH ADAPTIVE_ROUTING ADAPTIVE_ROUTING_PROFILE DOM_SOURCE_METADATA_CSV USE_PARALLEL_CPU NUM_WORKER_PARALLEL_CPU OPENCV_NUM_THREADS
   export DEEP_MATCH_MODE DEEP_MATCH_TEMP_ROOT_DIR DEEP_MATCH_MANIFEST_DIR DEEP_MATCH_MANIFEST_SUMMARY
   export SKIP_FINAL_MERGE POST_MERGE_CONTROL_MEASURE POST_MERGE_OUTPUT_PATH POST_MERGE_DECIMALS
   export PAIR_ID_START VALID_PIXEL_PERCENT_THRESHOLD INVALID_PIXEL_RADIUS
@@ -1982,6 +1995,9 @@ PY
     log "Adaptive routing: disabled"
   fi
   log "Adaptive routing profile: $ADAPTIVE_ROUTING_PROFILE"
+  if [[ -n "$DOM_SOURCE_METADATA_CSV" ]]; then
+    log "DOM source metadata CSV: $DOM_SOURCE_METADATA_CSV"
+  fi
   log "Deep-match mode: $DEEP_MATCH_MODE"
   if [[ "$DEEP_MATCH_MODE" == "export" ]]; then
     log "Deep-match temp root dir: $DEEP_MATCH_TEMP_ROOT_DIR"

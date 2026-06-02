@@ -105,7 +105,11 @@ if __package__ in {None, ""}:
         compute_image_texture_sparseness_from_reader,
         pair_summary_to_diagnostic_dict,
     )
-    from image_match.tile_illumination import illumination_pair_to_payload
+    from image_match.tile_illumination import (
+        illumination_pair_to_payload,
+        load_dom_source_metadata_csv,
+        resolve_dom_source_metadata,
+    )
     from image_match.tiling import TileWindow
     from image_match.dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from image_match.deep_match_manifest import (
@@ -191,7 +195,11 @@ else:
         compute_image_texture_sparseness_from_reader,
         pair_summary_to_diagnostic_dict,
     )
-    from .tile_illumination import illumination_pair_to_payload
+    from .tile_illumination import (
+        illumination_pair_to_payload,
+        load_dom_source_metadata_csv,
+        resolve_dom_source_metadata,
+    )
     from .tiling import TileWindow
     from .dom_prepare import prepare_dom_pair_for_matching, write_pair_preparation_metadata
     from .deep_match_manifest import (
@@ -1839,6 +1847,36 @@ def _apply_tile_route_metadata_to_tasks(
     return routed_tasks
 
 
+def _dom_source_metadata_summary(
+    *,
+    left_dom_path: str | Path,
+    right_dom_path: str | Path,
+    lookup: dict[str, dict[str, object]] | None,
+    csv_path: str | Path | None = None,
+) -> dict[str, object]:
+    resolved_lookup = lookup or {}
+    if not resolved_lookup:
+        return {
+            "enabled": False,
+            "status": "missing",
+            "csv_path": None if csv_path is None else str(csv_path),
+            "lookup_entry_count": 0,
+        }
+    left_metadata = resolve_dom_source_metadata(left_dom_path, resolved_lookup)
+    right_metadata = resolve_dom_source_metadata(right_dom_path, resolved_lookup)
+    left_source = str(left_metadata.get("dom_source_cube", "") or "")
+    right_source = str(right_metadata.get("dom_source_cube", "") or "")
+    status = "ready" if left_source and right_source else "missing_source_for_pair"
+    return {
+        "enabled": True,
+        "status": status,
+        "csv_path": None if csv_path is None else str(csv_path),
+        "lookup_entry_count": len(resolved_lookup),
+        "left": left_metadata,
+        "right": right_metadata,
+    }
+
+
 def _resolve_adaptive_route_for_pair(
     *,
     enable_adaptive_routing: bool,
@@ -2596,6 +2634,8 @@ def match_dom_pair(
     enable_adaptive_routing: bool = DEFAULT_ENABLE_ADAPTIVE_ROUTING,
     adaptive_routing_profile: str = DEFAULT_ADAPTIVE_ROUTING_PROFILE,
     adaptive_routing_deep_presets: dict[str, str] | None = None,
+    dom_source_metadata_lookup: dict[str, dict[str, object]] | None = None,
+    dom_source_metadata_csv: str | Path | None = None,
     low_resolution_level: int | None = None,
     low_resolution_matching_target_long_edge: int | None = None,
     low_resolution_trim_fraction_each_side: float = DEFAULT_LOW_RESOLUTION_TRIM_FRACTION_EACH_SIDE,
@@ -2643,6 +2683,12 @@ def match_dom_pair(
             deep_match_runtime_config=resolved_deep_match_runtime_config,
         )
         resolved_requested_matcher_method = resolved_matcher_method
+        dom_source_summary = _dom_source_metadata_summary(
+            left_dom_path=left_dom_path,
+            right_dom_path=right_dom_path,
+            lookup=dom_source_metadata_lookup,
+            csv_path=dom_source_metadata_csv,
+        )
 
         image_backend = build_image_backend(image_space)
         left_cube.open(str(left_dom_path), "r")
@@ -2797,6 +2843,9 @@ def match_dom_pair(
         if adaptive_routing_summary is not None:
             adaptive_routing_summary["profile"] = resolved_adaptive_routing_quality_profile.profile
             adaptive_routing_summary["quality_gate"] = dict(adaptive_routing_quality_gate)
+            adaptive_routing_summary["tile_illumination"] = {
+                "source_metadata": dom_source_summary,
+            }
         preparation = prepare_dom_pair_for_matching(
             left_dom_path,
             right_dom_path,
@@ -3203,6 +3252,7 @@ def match_dom_pair(
             "matcher_method_effective": resolved_matcher_method,
             "adaptive_routing_profile": resolved_adaptive_routing_quality_profile.profile,
             "adaptive_routing_quality_gate": adaptive_routing_quality_gate,
+            "dom_source_metadata": dom_source_summary,
             "ratio_test": ratio_test,
             "status": resolved_status,
             "reason": resolved_reason,
@@ -3674,6 +3724,11 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
             f"Default: {DEFAULT_ADAPTIVE_ROUTING_PROFILE}."
         ),
     )
+    parser.add_argument(
+        "--dom-source-metadata-csv",
+        default=None,
+        help="CSV mapping DOM cube paths to the source/original camera cubes used to generate them.",
+    )
     parser.add_argument("--enable-low-resolution-offset-estimation", dest="enable_low_resolution_offset_estimation", action="store_true", help="Enable low-resolution DOM matching to estimate a projected global offset before the full-resolution overlap crop is prepared.")
     parser.add_argument(
         "--low-resolution-level",
@@ -3906,6 +3961,14 @@ def main(argv: list[str] | None = None) -> None:
         )
     except ValueError as exc:
         parser.error(str(exc))
+    try:
+        dom_source_metadata_lookup = (
+            load_dom_source_metadata_csv(args.dom_source_metadata_csv)
+            if args.dom_source_metadata_csv not in (None, "")
+            else {}
+        )
+    except (OSError, ValueError) as exc:
+        parser.error(str(exc))
     result = match_dom_pair_to_key_files(
         args.left_dom,
         args.right_dom,
@@ -3949,6 +4012,8 @@ def main(argv: list[str] | None = None) -> None:
         enable_adaptive_routing=args.enable_adaptive_routing,
         adaptive_routing_profile=args.adaptive_routing_profile,
         adaptive_routing_deep_presets=getattr(args, "adaptive_routing_deep_presets", None),
+        dom_source_metadata_lookup=dom_source_metadata_lookup,
+        dom_source_metadata_csv=args.dom_source_metadata_csv,
         low_resolution_level=args.low_resolution_level,
         low_resolution_matching_target_long_edge=args.low_resolution_matching_target_long_edge,
         low_resolution_trim_fraction_each_side=args.low_resolution_trim_fraction_each_side,

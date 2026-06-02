@@ -173,6 +173,7 @@ def _abs_difference(left: float | None, right: float | None) -> float | None:
 
 def load_dom_source_metadata_csv(csv_path: str | Path) -> dict[str, dict[str, str | None]]:
     lookup: dict[str, dict[str, str | None]] = {}
+    ambiguous_basenames: set[str] = set()
     path = Path(csv_path)
     if not path.exists():
         return lookup
@@ -182,7 +183,7 @@ def load_dom_source_metadata_csv(csv_path: str | Path) -> dict[str, dict[str, st
             dom_path = (row.get("dom_cube") or "").strip()
             if not dom_path:
                 continue
-            selected_source_cube = (row.get("echo_cal_cube") or "").strip() or None
+            selected_source_cube = (row.get("echo_cal_cube") or "").strip()
             upstream_source_cube = (row.get("source_echo_cal_cube") or "").strip() or None
             metadata = {
                 "dom_path": dom_path,
@@ -191,7 +192,15 @@ def load_dom_source_metadata_csv(csv_path: str | Path) -> dict[str, dict[str, st
                 "dom_source_kind": _dom_source_kind(selected_source_cube),
             }
             lookup[dom_path] = metadata
-            lookup[Path(dom_path).name] = metadata
+            dom_basename = Path(dom_path).name
+            if dom_basename in ambiguous_basenames:
+                continue
+            existing_basename_metadata = lookup.get(dom_basename)
+            if existing_basename_metadata is not None and existing_basename_metadata.get("dom_path") != dom_path:
+                ambiguous_basenames.add(dom_basename)
+                lookup.pop(dom_basename, None)
+                continue
+            lookup[dom_basename] = metadata
     return lookup
 
 
@@ -207,7 +216,7 @@ def resolve_dom_source_metadata(
             if metadata is not None:
                 return {
                     "dom_path": metadata.get("dom_path") or resolved_dom_path,
-                    "dom_source_cube": metadata.get("dom_source_cube"),
+                    "dom_source_cube": metadata.get("dom_source_cube") or "",
                     "upstream_source_cube": metadata.get("upstream_source_cube"),
                     "dom_source_kind": metadata.get("dom_source_kind") or "unknown",
                 }
@@ -217,7 +226,7 @@ def resolve_dom_source_metadata(
 def _unknown_dom_source_metadata(dom_path: str) -> dict[str, str | None]:
     return {
         "dom_path": dom_path,
-        "dom_source_cube": None,
+        "dom_source_cube": "",
         "upstream_source_cube": None,
         "dom_source_kind": "unknown",
     }

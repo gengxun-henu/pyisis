@@ -1,0 +1,53 @@
+# Progress: LRO Polar Adaptive-Tile Routing Benchmark
+
+- 2026-06-03 08:12 +0800: Created new planning directory `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/`.
+- 2026-06-03 08:12 +0800: Read the previous reduced-10m benchmark plan `.planning/2026-06-01-lro-polar-adaptive-routing-benchmark/` and tile illumination plan `.planning/2026-06-02-tile-illumination-adaptive-routing/`.
+- 2026-06-03 08:12 +0800: Defined the main five-method manuscript set as SIFT+FLANN, SIFT+LightGlue, SuperPoint+LightGlue, LoFTR, and Adaptive-tile. Adaptive-pair is retained only for supplementary/ablation.
+- 2026-06-03 08:12 +0800: Recorded reduced-10m input data root and selected-pair CSV.
+- 2026-06-03 08:12 +0800: Recorded tile/mask defaults: 1024x1024 tiles, 128 overlap, valid-pixel threshold 0.02, min valid pixels 256, valid intensity percentiles 0.1/99.9.
+- 2026-06-03 08:12 +0800: Recorded Adaptive-tile execution strategy: per-tile physical illumination routing, group by selected route, run classic route tiles in `asp360_new`, run grouped deep manifests in `deep-learning`, then import and merge to pair-level key outputs.
+- 2026-06-03 08:12 +0800: Noted that a separate earlier reduced rerun SIFT+FLANN output exists under `lro_polar_adaptive_routing_reduced_rerun_20260603/sift_flann` with 16 metadata files, but this new plan should audit reuse before treating it as final evidence.
+- 2026-06-03 17:03 +0800: Completed Phase 2 implementation audit. Core `image_match.py` Adaptive-tile functionality exists for physical tile illumination, grouped deep export, classic route persistence, and mixed-route import.
+- 2026-06-03 17:03 +0800: Added missing outer-wrapper forwarding for `--min-valid-pixels`, `--valid-intensity-lower-percent`, `--valid-intensity-upper-percent`, and `--dom-source-metadata-csv` in `match_original_gsd_lro_dom_pairs_large.py` and `run_image_match_batch_example.sh`.
+- 2026-06-03 17:03 +0800: Added focused wrapper regression test `test_run_image_match_batch_example_forwards_tile_validity_and_source_metadata`.
+- 2026-06-03 17:03 +0800: Ran focused unit tests: `tests.unitTest.controlnet_construct_pipeline_unit_test`, `tests.unitTest.image_match_adaptive_routing_unit_test`, `tests.unitTest.image_match_deep_manifest_unit_test`, and `tests.unitTest.image_match_tile_illumination_unit_test`; result 225 tests OK, 1 expected skip.
+- 2026-06-03 20:43 +0800: Completed Phase 3 one-pair Adaptive-tile smoke. First attempt failed with mock `ISISDATA`; reran successfully with `ISISDATA=$CONDA_PREFIX/data`.
+- 2026-06-03 20:43 +0800: Adaptive-tile smoke export produced 60 candidate tiles, 32 tiles after validity prefilter, and route distribution `sift_flann=14`, `superpoint_lightglue=2`, `loftr=11`, `sift_lightglue=5`.
+- 2026-06-03 20:43 +0800: Smoke classic route produced 3479 SIFT+FLANN matches; grouped deep export produced 6 executable tasks across SIFT+LightGlue and SuperPoint+LightGlue.
+- 2026-06-03 20:43 +0800: Ran deep-learning smoke manifests: SIFT+LightGlue 4/4 tasks completed with 519 matches; SuperPoint+LightGlue 2/2 tasks completed with 27 matches.
+- 2026-06-03 20:43 +0800: Imported mixed Adaptive-tile smoke result in `asp360_new`; final pair-level key output has 4025 matches: 3479 classic plus 546 deep.
+- 2026-06-03 20:43 +0800: Generated RANSAC-filtered smoke PNG with 3507 retained matches and 518 dropped matches.
+- 2026-06-03 20:50 +0800: Completed full SIFT+FLANN fixed baseline for 16 selected pairs under `lro_polar_adaptive_tile_routing_20260603/sift_flann`.
+- 2026-06-03 20:50 +0800: SIFT+FLANN baseline produced 16/16 matched metadata files, raw matches 3761, RANSAC-retained matches 2846, dropped matches 915, retained fraction 0.7567, and 14 pairs with retained matches >= 4.
+- 2026-06-03 21:00 +0800: Completed fixed deep exports for LoFTR, SuperPoint+LightGlue, and SIFT+LightGlue under `lro_polar_adaptive_tile_routing_20260603`.
+- 2026-06-03 21:00 +0800: Each fixed deep method produced 16 manifests with 107 exported tile tasks and 90 skipped invalid/filtered tile tasks; failed metadata count was 0 for all three methods.
+- 2026-06-03 21:53 +0800: Completed all fixed deep manifest inference in `deep-learning`. SIFT+LightGlue, SuperPoint+LightGlue, and LoFTR each ran 16 manifests and 107 tasks with 0 failed tasks.
+- 2026-06-03 21:53 +0800: Fixed deep inference totals: SIFT+LightGlue 5621 matches, SuperPoint+LightGlue 3545 matches, LoFTR 32610 importable matches after invalid-mask filtering.
+- 2026-06-03 21:59 +0800: Fixed deep batch import initially failed because import mode searched for `<deep_match_workspaces>/<original_pair_tag>/tasks.json`, while export workspaces use DOM-id-plus-hash names. External-disk symlink creation was not permitted, so imports were rerun directly with cached per-pair `manifest_path` values from export metadata.
+- 2026-06-03 21:59 +0800: Completed fixed deep imports in `asp360_new`; wrote `deep_match_import_manifests.json` for SIFT+LightGlue, SuperPoint+LightGlue, and LoFTR.
+- 2026-06-03 21:59 +0800: Fixed deep import/RANSAC totals: SIFT+LightGlue raw 5621, retained 4048, successful pairs 12; SuperPoint+LightGlue raw 3545, retained 830, successful pairs 15; LoFTR raw 32610, retained 11767, successful pairs 16.
+- 2026-06-03 22:06 +0800: Completed Adaptive-tile export/classic-route phase for 16 selected pairs under `lro_polar_adaptive_tile_routing_20260603/adaptive`; failed metadata count was 0.
+- 2026-06-03 22:06 +0800: Adaptive-tile export summary: 369 candidate tiles, 197 after validity prefilter, 110 classic route tasks with 9082 persisted classic matches, 87 deep route candidate tasks, 13 exported deep tasks, 74 skipped deep tasks, and 7 non-empty grouped deep manifests.
+- 2026-06-03 22:21 +0800: Completed Adaptive-tile grouped deep inference in `deep-learning`; 7/7 manifests and 13/13 tasks succeeded with 0 failed tasks.
+- 2026-06-03 22:23 +0800: Completed Adaptive-tile mixed import in `asp360_new`; wrote `adaptive_mixed_import_summary.json` and final pair-level key outputs for 16/16 pairs.
+- 2026-06-03 22:23 +0800: Adaptive-tile final totals: raw 9748, classic 9082, deep 666, RANSAC-retained 7736, dropped 2012, retained fraction 0.7936, successful pairs 14.
+- 2026-06-03 22:23 +0800: Five-method final RANSAC retained totals: SIFT+FLANN 2846, SIFT+LightGlue 4048, SuperPoint+LightGlue 830, LoFTR 11767, Adaptive-tile 7736.
+- 2026-06-03 23:08 +0800: Generated Phase 6 Adaptive-tile diagnostics under `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase6_diagnostics/`.
+- 2026-06-03 23:08 +0800: Wrote `adaptive_tile_phase6_diagnostics_summary.json`, `adaptive_tile_route_distribution_by_pair.csv`, and `adaptive_tile_route_illumination_by_tile.csv`.
+- 2026-06-03 23:08 +0800: Phase 6 route distribution: 197 routed tiles after validity prefilter; SIFT+FLANN 110, LoFTR 72, SIFT+LightGlue 12, SuperPoint+LightGlue 3.
+- 2026-06-03 23:08 +0800: Phase 6 illumination diagnostics: 133 projectable tiles, 64 skipped tiles; illumination score mean 0.0257080, median 0.000874726, p90 0.169672.
+- 2026-06-03 23:08 +0800: Marked Phase 6 complete and advanced the plan to Phase 7 source-data and figure generation.
+- 2026-06-03 23:14 +0800: Regenerated combined RANSAC match visualization summary for all five methods using `rerender_ransac_match_visualizations.py`; output root summary has 80 pair-method rows and retained totals matching the Phase 6 findings.
+- 2026-06-03 23:15 +0800: Generated Nature-style five-method source CSV/JSON and main comparison figure with `plot_lro_polar_match_method_comparison.py`.
+- 2026-06-03 23:15 +0800: Phase 7 outputs written under `lro_polar_adaptive_tile_routing_20260603/nature_figure_inputs/`: `five_method_pair_summary.csv`, `five_method_method_summary.csv`, `five_method_match_comparison_source_data.json`, and `five_method_match_comparison.{svg,pdf,tiff,png}`.
+- 2026-06-03 23:15 +0800: Verified source-data row counts: pair summary 80 rows plus header, method summary 5 rows plus header. Noted runtime caveat for fixed deep methods because the plotting script did not find per-method deep runtime summaries in its expected directory layout.
+- 2026-06-03 23:32 +0800: Generated Phase 7 supplementary ablation source data under `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/`.
+- 2026-06-03 23:32 +0800: Adaptive-pair vs Adaptive-tile ablation totals: Adaptive-pair raw 13,930 / retained 12,767 / successful pairs 9; Adaptive-tile raw 9,748 / retained 7,736 / successful pairs 14.
+- 2026-06-03 23:32 +0800: Wrote `figure_source_data_provenance_check.json` with SVG label checks and deep runtime evidence recovered from manifest summaries.
+- 2026-06-03 23:33 +0800: Recorded existing case-study tile comparison figures in `tile_case_comparison_manifest.json`: rich/small-lighting-gap has 12 files; sparse/large-lighting-gap has 7 files.
+- 2026-06-03 23:33 +0800: Marked Phase 7 complete and advanced the plan to Phase 8 verification and handoff.
+- 2026-06-03 23:43 +0800: Phase 8 output existence verification passed for Phase 6 diagnostics, Phase 7 supplementary source data, and external five-method figure/source-data files.
+- 2026-06-03 23:43 +0800: Git status verification confirmed `.gitignore` is not modified. `print.prt` remains modified as a local ISIS runtime artifact and was not staged.
+- 2026-06-03 23:44 +0800: Ran smoke import in `asp360_new` with mock `ISISDATA`; result `smoke import ok`.
+- 2026-06-03 23:45 +0800: Ran focused unit verification for pipeline, adaptive routing, deep manifests, and tile illumination; result `Ran 225 tests in 47.830s`, `OK (skipped=1)`.
+- 2026-06-03 23:45 +0800: Marked Phase 8 complete. All phases in this active plan are complete.

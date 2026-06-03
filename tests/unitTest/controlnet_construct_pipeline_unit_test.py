@@ -2626,6 +2626,111 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("CPU parallel tile matching: enabled", completed.stdout)
         self.assertIn("CPU parallel worker limit: 8", completed.stdout)
 
+    def test_run_image_match_batch_example_forwards_tile_validity_and_source_metadata(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            pair_list = work_dir / "images_overlap.lis"
+            dom_source_metadata_csv = work_dir / "dom_source_metadata.csv"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
+            pair_list.write_text("left.cub,right.cub\n", encoding="utf-8")
+            dom_source_metadata_csv.write_text("dom_cube,echo_cal_cube\n", encoding="utf-8")
+
+            fake_python_dispatcher.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!{sys.executable}
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+
+                    def _arg_value(args, name):
+                        if name not in args:
+                            raise SystemExit(f"missing {{name}}")
+                        return args[args.index(name) + 1]
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+                        if script_name != "image_match.py":
+                            raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+                        if "--print-config-default" in args:
+                            return 0
+                        if _arg_value(args, "--min-valid-pixels") != "256":
+                            raise SystemExit("unexpected --min-valid-pixels")
+                        if _arg_value(args, "--valid-intensity-lower-percent") != "0.1":
+                            raise SystemExit("unexpected --valid-intensity-lower-percent")
+                        if _arg_value(args, "--valid-intensity-upper-percent") != "99.9":
+                            raise SystemExit("unexpected --valid-intensity-upper-percent")
+                        if _arg_value(args, "--dom-source-metadata-csv") != {str(dom_source_metadata_csv)!r}:
+                            raise SystemExit("unexpected --dom-source-metadata-csv")
+                        key_index = 4 if args and args[0] == "--config" else 2
+                        Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                        Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                        return 0
+
+                    raise SystemExit(main())
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--python",
+                    str(fake_python),
+                    "--min-valid-pixels",
+                    "256",
+                    "--valid-intensity-lower-percent",
+                    "0.1",
+                    "--valid-intensity-upper-percent",
+                    "99.9",
+                    "--dom-source-metadata-csv",
+                    str(dom_source_metadata_csv),
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Minimum valid pixels: 256", completed.stdout)
+        self.assertIn("Valid intensity percentile mask: 0.1..99.9", completed.stdout)
+        self.assertIn(f"DOM source metadata CSV: {dom_source_metadata_csv}", completed.stdout)
+
     def test_run_image_match_batch_example_forwards_cli_match_preset(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"

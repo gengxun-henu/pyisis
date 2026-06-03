@@ -1,0 +1,434 @@
+{
+  "case_study_dir": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params",
+  "cases": {
+    "rich_texture_small_lighting_gap": {
+      "case_dir": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap",
+      "description": "rich/small-lighting-gap case study",
+      "exists": true,
+      "file_count": 12,
+      "files": [
+        {
+          "name": "rich_texture_small_lighting_gap_adaptive.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_adaptive.png",
+          "size_bytes": 330547
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_adaptive_ransac_tile_matches.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_adaptive_ransac_tile_matches.png",
+          "size_bytes": 336686
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_five_method_tile_comparison.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_five_method_tile_comparison.png",
+          "size_bytes": 1503935
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_loftr.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_loftr.png",
+          "size_bytes": 209144
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_loftr_ransac_tile_matches.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_loftr_ransac_tile_matches.png",
+          "size_bytes": 286131
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_metadata.json",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_metadata.json",
+          "size_bytes": 4409
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_sift_flann.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_sift_flann.png",
+          "size_bytes": 296413
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_sift_flann_ransac_tile_matches.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_sift_flann_ransac_tile_matches.png",
+          "size_bytes": 300328
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_sift_lightglue.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_sift_lightglue.png",
+          "size_bytes": 303668
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_sift_lightglue_ransac_tile_matches.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_sift_lightglue_ransac_tile_matches.png",
+          "size_bytes": 311861
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_superpoint_lightglue.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_superpoint_lightglue.png",
+          "size_bytes": 242749
+        },
+        {
+          "name": "rich_texture_small_lighting_gap_superpoint_lightglue_ransac_tile_matches.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_superpoint_lightglue_ransac_tile_matches.png",
+          "size_bytes": 267631
+        }
+      ],
+      "metadata": {
+        "case": "rich_texture_small_lighting_gap",
+        "case_title": "High texture / small brightness gap",
+        "composite_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_five_method_tile_comparison.png",
+        "display_brightness_gap": 0.07335904985666275,
+        "display_left_stats": {
+          "display_mean": 0.06546022742986679,
+          "display_texture_score": 0.0612604022026062,
+          "pixel_count": 1048576
+        },
+        "display_right_stats": {
+          "display_mean": 0.13881927728652954,
+          "display_texture_score": 0.1249992698431015,
+          "pixel_count": 1048576
+        },
+        "display_texture_score": 0.0612604022026062,
+        "left_dom": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/doms_10m/dom_REDUCED_M110860982RE.cub",
+        "left_window": {
+          "height": 1024,
+          "start_x": 7168,
+          "start_y": 2105,
+          "width": 1024
+        },
+        "note": "selection_* values come from the raw candidate scan; display_* values are computed from the 1-99 percentile rendered tile images. Brightness gap is a DOM gray-value proxy, not physical solar-angle lighting.",
+        "pair": "REDUCED_M110860982RE.echo.cal__REDUCED_M110881352RE.echo.cal",
+        "right_dom": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/doms_10m/dom_REDUCED_M110881352RE.cub",
+        "right_window": {
+          "height": 1024,
+          "start_x": 7168,
+          "start_y": 2048,
+          "width": 1024
+        },
+        "rows": [
+          {
+            "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_loftr_ransac_tile_matches.png",
+            "label": "LoFTR",
+            "method": "loftr",
+            "ransac_retained_count": 4635,
+            "raw_pair_count": 7228,
+            "tile_ransac_match_count": 463
+          },
+          {
+            "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_superpoint_lightglue_ransac_tile_matches.png",
+            "label": "SuperPoint+LG",
+            "method": "superpoint_lightglue",
+            "ransac_retained_count": 309,
+            "raw_pair_count": 730,
+            "tile_ransac_match_count": 20
+          },
+          {
+            "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_sift_lightglue_ransac_tile_matches.png",
+            "label": "SIFT+LG",
+            "method": "sift_lightglue",
+            "ransac_retained_count": 1979,
+            "raw_pair_count": 2097,
+            "tile_ransac_match_count": 177
+          },
+          {
+            "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_sift_flann_ransac_tile_matches.png",
+            "label": "SIFT+FLANN",
+            "method": "sift_flann",
+            "ransac_retained_count": 1296,
+            "raw_pair_count": 1476,
+            "tile_ransac_match_count": 140
+          },
+          {
+            "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_adaptive_ransac_tile_matches.png",
+            "label": "Adaptive",
+            "method": "adaptive",
+            "ransac_retained_count": 2048,
+            "raw_pair_count": 2151,
+            "tile_ransac_match_count": 211
+          }
+        ],
+        "selection_brightness_gap": 0.001067936907062736,
+        "selection_texture_score": 112.63111877441406
+      },
+      "metadata_file": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_metadata.json"
+    },
+    "sparse_texture_large_lighting_gap": {
+      "case_dir": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap",
+      "description": "sparse-or-weak/large-lighting-gap case study",
+      "exists": true,
+      "file_count": 7,
+      "files": [
+        {
+          "name": "sparse_texture_large_lighting_gap_adaptive_ransac_tile_matches.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_adaptive_ransac_tile_matches.png",
+          "size_bytes": 115771
+        },
+        {
+          "name": "sparse_texture_large_lighting_gap_five_method_tile_comparison.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_five_method_tile_comparison.png",
+          "size_bytes": 575107
+        },
+        {
+          "name": "sparse_texture_large_lighting_gap_loftr_ransac_tile_matches.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_loftr_ransac_tile_matches.png",
+          "size_bytes": 117275
+        },
+        {
+          "name": "sparse_texture_large_lighting_gap_metadata.json",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_metadata.json",
+          "size_bytes": 4436
+        },
+        {
+          "name": "sparse_texture_large_lighting_gap_sift_flann_ransac_tile_matches.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_sift_flann_ransac_tile_matches.png",
+          "size_bytes": 112866
+        },
+        {
+          "name": "sparse_texture_large_lighting_gap_sift_lightglue_ransac_tile_matches.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_sift_lightglue_ransac_tile_matches.png",
+          "size_bytes": 114615
+        },
+        {
+          "name": "sparse_texture_large_lighting_gap_superpoint_lightglue_ransac_tile_matches.png",
+          "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_superpoint_lightglue_ransac_tile_matches.png",
+          "size_bytes": 110294
+        }
+      ],
+      "metadata": {
+        "case": "sparse_texture_large_lighting_gap",
+        "case_title": "Low texture / larger brightness gap",
+        "composite_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_five_method_tile_comparison.png",
+        "display_brightness_gap": 0.05660864291712642,
+        "display_left_stats": {
+          "display_mean": 0.001980931032449007,
+          "display_texture_score": 0.0025749492924660444,
+          "pixel_count": 1048576
+        },
+        "display_right_stats": {
+          "display_mean": 0.058589573949575424,
+          "display_texture_score": 0.05104785040020943,
+          "pixel_count": 1048576
+        },
+        "display_texture_score": 0.0025749492924660444,
+        "left_dom": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/doms_10m/dom_REDUCED_M110840613RE.cub",
+        "left_window": {
+          "height": 1024,
+          "start_x": 6144,
+          "start_y": 2048,
+          "width": 1024
+        },
+        "note": "selection_* values come from the raw candidate scan; display_* values are computed from the 1-99 percentile rendered tile images. Brightness gap is a DOM gray-value proxy, not physical solar-angle lighting.",
+        "pair": "REDUCED_M110840613RE.echo.cal__REDUCED_M110860982RE.echo.cal",
+        "right_dom": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/doms_10m/dom_REDUCED_M110860982RE.cub",
+        "right_window": {
+          "height": 1024,
+          "start_x": 6144,
+          "start_y": 2048,
+          "width": 1024
+        },
+        "rows": [
+          {
+            "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_loftr_ransac_tile_matches.png",
+            "label": "LoFTR",
+            "method": "loftr",
+            "ransac_retained_count": 6325,
+            "raw_pair_count": 8832,
+            "tile_ransac_match_count": 24
+          },
+          {
+            "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_superpoint_lightglue_ransac_tile_matches.png",
+            "label": "SuperPoint+LG",
+            "method": "superpoint_lightglue",
+            "ransac_retained_count": 290,
+            "raw_pair_count": 840,
+            "tile_ransac_match_count": 1
+          },
+          {
+            "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_sift_lightglue_ransac_tile_matches.png",
+            "label": "SIFT+LG",
+            "method": "sift_lightglue",
+            "ransac_retained_count": 1679,
+            "raw_pair_count": 1738,
+            "tile_ransac_match_count": 3
+          },
+          {
+            "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_sift_flann_ransac_tile_matches.png",
+            "label": "SIFT+FLANN",
+            "method": "sift_flann",
+            "ransac_retained_count": 1215,
+            "raw_pair_count": 1403,
+            "tile_ransac_match_count": 3
+          },
+          {
+            "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_adaptive_ransac_tile_matches.png",
+            "label": "Adaptive",
+            "method": "adaptive",
+            "ransac_retained_count": 1682,
+            "raw_pair_count": 1741,
+            "tile_ransac_match_count": 3
+          }
+        ],
+        "selection_brightness_gap": 0.007341755703020181,
+        "selection_texture_score": 6.2738871574401855
+      },
+      "metadata_file": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_metadata.json"
+    }
+  },
+  "source_note": "Existing latest-params tile case comparison outputs are recorded for Phase 7 provenance; no new figure was rendered in this side conversation.",
+  "summary": {
+    "rich_texture_small_lighting_gap": {
+      "case": "rich_texture_small_lighting_gap",
+      "case_title": "High texture / small brightness gap",
+      "composite_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_five_method_tile_comparison.png",
+      "display_brightness_gap": 0.07335904985666275,
+      "display_left_stats": {
+        "display_mean": 0.06546022742986679,
+        "display_texture_score": 0.0612604022026062,
+        "pixel_count": 1048576
+      },
+      "display_right_stats": {
+        "display_mean": 0.13881927728652954,
+        "display_texture_score": 0.1249992698431015,
+        "pixel_count": 1048576
+      },
+      "display_texture_score": 0.0612604022026062,
+      "left_dom": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/doms_10m/dom_REDUCED_M110860982RE.cub",
+      "left_window": {
+        "height": 1024,
+        "start_x": 7168,
+        "start_y": 2105,
+        "width": 1024
+      },
+      "note": "selection_* values come from the raw candidate scan; display_* values are computed from the 1-99 percentile rendered tile images. Brightness gap is a DOM gray-value proxy, not physical solar-angle lighting.",
+      "pair": "REDUCED_M110860982RE.echo.cal__REDUCED_M110881352RE.echo.cal",
+      "right_dom": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/doms_10m/dom_REDUCED_M110881352RE.cub",
+      "right_window": {
+        "height": 1024,
+        "start_x": 7168,
+        "start_y": 2048,
+        "width": 1024
+      },
+      "rows": [
+        {
+          "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_loftr_ransac_tile_matches.png",
+          "label": "LoFTR",
+          "method": "loftr",
+          "ransac_retained_count": 4635,
+          "raw_pair_count": 7228,
+          "tile_ransac_match_count": 463
+        },
+        {
+          "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_superpoint_lightglue_ransac_tile_matches.png",
+          "label": "SuperPoint+LG",
+          "method": "superpoint_lightglue",
+          "ransac_retained_count": 309,
+          "raw_pair_count": 730,
+          "tile_ransac_match_count": 20
+        },
+        {
+          "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_sift_lightglue_ransac_tile_matches.png",
+          "label": "SIFT+LG",
+          "method": "sift_lightglue",
+          "ransac_retained_count": 1979,
+          "raw_pair_count": 2097,
+          "tile_ransac_match_count": 177
+        },
+        {
+          "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_sift_flann_ransac_tile_matches.png",
+          "label": "SIFT+FLANN",
+          "method": "sift_flann",
+          "ransac_retained_count": 1296,
+          "raw_pair_count": 1476,
+          "tile_ransac_match_count": 140
+        },
+        {
+          "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/rich_texture_small_lighting_gap/rich_texture_small_lighting_gap_adaptive_ransac_tile_matches.png",
+          "label": "Adaptive",
+          "method": "adaptive",
+          "ransac_retained_count": 2048,
+          "raw_pair_count": 2151,
+          "tile_ransac_match_count": 211
+        }
+      ],
+      "selection_brightness_gap": 0.001067936907062736,
+      "selection_texture_score": 112.63111877441406
+    },
+    "sparse_texture_large_lighting_gap": {
+      "case": "sparse_texture_large_lighting_gap",
+      "case_title": "Low texture / larger brightness gap",
+      "composite_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_five_method_tile_comparison.png",
+      "display_brightness_gap": 0.05660864291712642,
+      "display_left_stats": {
+        "display_mean": 0.001980931032449007,
+        "display_texture_score": 0.0025749492924660444,
+        "pixel_count": 1048576
+      },
+      "display_right_stats": {
+        "display_mean": 0.058589573949575424,
+        "display_texture_score": 0.05104785040020943,
+        "pixel_count": 1048576
+      },
+      "display_texture_score": 0.0025749492924660444,
+      "left_dom": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/doms_10m/dom_REDUCED_M110840613RE.cub",
+      "left_window": {
+        "height": 1024,
+        "start_x": 6144,
+        "start_y": 2048,
+        "width": 1024
+      },
+      "note": "selection_* values come from the raw candidate scan; display_* values are computed from the 1-99 percentile rendered tile images. Brightness gap is a DOM gray-value proxy, not physical solar-angle lighting.",
+      "pair": "REDUCED_M110840613RE.echo.cal__REDUCED_M110860982RE.echo.cal",
+      "right_dom": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_preprocess/doms_10m/dom_REDUCED_M110860982RE.cub",
+      "right_window": {
+        "height": 1024,
+        "start_x": 6144,
+        "start_y": 2048,
+        "width": 1024
+      },
+      "rows": [
+        {
+          "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_loftr_ransac_tile_matches.png",
+          "label": "LoFTR",
+          "method": "loftr",
+          "ransac_retained_count": 6325,
+          "raw_pair_count": 8832,
+          "tile_ransac_match_count": 24
+        },
+        {
+          "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_superpoint_lightglue_ransac_tile_matches.png",
+          "label": "SuperPoint+LG",
+          "method": "superpoint_lightglue",
+          "ransac_retained_count": 290,
+          "raw_pair_count": 840,
+          "tile_ransac_match_count": 1
+        },
+        {
+          "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_sift_lightglue_ransac_tile_matches.png",
+          "label": "SIFT+LG",
+          "method": "sift_lightglue",
+          "ransac_retained_count": 1679,
+          "raw_pair_count": 1738,
+          "tile_ransac_match_count": 3
+        },
+        {
+          "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_sift_flann_ransac_tile_matches.png",
+          "label": "SIFT+FLANN",
+          "method": "sift_flann",
+          "ransac_retained_count": 1215,
+          "raw_pair_count": 1403,
+          "tile_ransac_match_count": 3
+        },
+        {
+          "image_path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/sparse_texture_large_lighting_gap/sparse_texture_large_lighting_gap_adaptive_ransac_tile_matches.png",
+          "label": "Adaptive",
+          "method": "adaptive",
+          "ransac_retained_count": 1682,
+          "raw_pair_count": 1741,
+          "tile_ransac_match_count": 3
+        }
+      ],
+      "selection_brightness_gap": 0.007341755703020181,
+      "selection_texture_score": 6.2738871574401855
+    }
+  },
+  "summary_file": {
+    "exists": true,
+    "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_latest_params_20260602/tile_case_comparison_latest_params/tile_case_comparison_summary.json",
+    "size_bytes": 9231
+  }
+}

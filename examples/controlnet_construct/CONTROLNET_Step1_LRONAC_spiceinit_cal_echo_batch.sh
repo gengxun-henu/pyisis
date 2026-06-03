@@ -8,7 +8,7 @@
 # Updated: 2026-05-28  Geng Xun added a dedicated spiced-cube isis2std stage before cam2map while preserving the DOM export stage.
 # Updated: 2026-05-28  Geng Xun added orchestrator output with per-stage barriers, moved reduce after lronacecho, and added batched cleanup.
 # Updated: 2026-05-29  Geng Xun added configurable cam2map map resolution for reduced polar DOM generation.
-# Updated: 2026-06-01  Geng Xun restored working-cube routing so Step1 TIFF/list outputs use *.cub while spiceinit/cam2map still use *.echo.cal.cub.
+# Updated: 2026-06-03  Geng Xun restored echo/cal downstream routing after reduce so Step1 TIFF/list outputs match spiced camera products.
 
 set -euo pipefail
 
@@ -191,9 +191,9 @@ build_stage_commands_for_file() {
   local reduced_base_name=""
   local filename_q=""
   local base_cub_q=""
-  local reduced_cub_q=""
-  local working_cub_q=""
-  local working_cal_q=""
+  local base_cal_q=""
+  local base_echo_cal_q=""
+  local reduced_echo_cal_q=""
   local working_base_name=""
   local working_echo_cal_q=""
   local working_tif_q=""
@@ -209,16 +209,16 @@ build_stage_commands_for_file() {
 
   filename_q=$(quote_arg "$filename")
   base_cub_q=$(quote_arg "${base_name}.cub")
-  reduced_cub_q=$(quote_arg "${reduced_base_name}.cub")
+  base_cal_q=$(quote_arg "${base_name}.cal.cub")
+  base_echo_cal_q=$(quote_arg "${base_name}.echo.cal.cub")
+  reduced_echo_cal_q=$(quote_arg "${reduced_base_name}.echo.cal.cub")
   if [[ "$USE_REDUCE" == "1" ]]; then
     working_base_name="$reduced_base_name"
-    working_cub_q="$reduced_cub_q"
+    working_echo_cal_q="$reduced_echo_cal_q"
   else
     working_base_name="$base_name"
-    working_cub_q="$base_cub_q"
+    working_echo_cal_q="$base_echo_cal_q"
   fi
-  working_cal_q=$(quote_arg "${working_base_name}.cal.cub")
-  working_echo_cal_q=$(quote_arg "${working_base_name}.echo.cal.cub")
   working_tif_q=$(quote_arg "${working_base_name}.tif")
   dom_cub_q=$(quote_arg "dom_${working_base_name}.cub")
   dom_tif_q=$(quote_arg "dom_8bpp${working_base_name}.tif")
@@ -231,13 +231,13 @@ build_stage_commands_for_file() {
       printf '%s\n' "lronac2isis from=${filename_q} to=${base_cub_q}"
       ;;
     lronaccal)
-      printf '%s\n' "lronaccal from=${working_cub_q} to=${working_cal_q}"
+      printf '%s\n' "lronaccal from=${base_cub_q} to=${base_cal_q}"
       ;;
     lronacecho)
-      printf '%s\n' "lronacecho from=${working_cal_q} to=${working_echo_cal_q}"
+      printf '%s\n' "lronacecho from=${base_cal_q} to=${base_echo_cal_q}"
       ;;
     reduce)
-      printf '%s\n' "reduce from=${base_cub_q} to=${reduced_cub_q} sscale=10 lscale=10"
+      printf '%s\n' "reduce from=${base_echo_cal_q} to=${reduced_echo_cal_q} sscale=10 lscale=10"
       ;;
     spiceinit)
       if [[ "$INCLUDE_SPICEINIT" == "1" ]]; then
@@ -249,7 +249,7 @@ build_stage_commands_for_file() {
       fi
       ;;
     isis2std-spiced)
-      printf '%s\n' "isis2std from=${working_cub_q} to=${working_tif_q} format=tiff minpercent=0.1 maxpercent=99.9"
+      printf '%s\n' "isis2std from=${working_echo_cal_q} to=${working_tif_q} format=tiff minpercent=0.1 maxpercent=99.9"
       ;;
     cam2map)
       printf '%s\n' "cam2map from=${working_echo_cal_q} map=${map_q} to=${dom_cub_q} interp=bilinear warpalgorithm=forwardpatch patchsize=21 pixres=mpp resolution=${cam2map_resolution_q}"
@@ -259,16 +259,16 @@ build_stage_commands_for_file() {
       ;;
     append-lists)
       printf '%s\n' "printf '%s\\n' ${caminfo_q} >> caminfo_all.lis"
-      printf '%s\n' "printf '%s\\n' ${working_cub_q} >> original_images.lis"
+      printf '%s\n' "printf '%s\\n' ${working_echo_cal_q} >> original_images.lis"
       if [[ "$USE_REDUCE" == "1" ]]; then
-        printf '%s\n' "printf '%s\\n' ${working_cub_q} >> image_all_reduced.lis"
+        printf '%s\n' "printf '%s\\n' ${working_echo_cal_q} >> image_all_reduced.lis"
       fi
       printf '%s\n' "printf '%s\\n' ${dom_cub_q} >> doms.lis"
       ;;
     cleanup)
-      cleanup_targets="${working_cal_q} ${working_cub_q}"
+      cleanup_targets="${base_cal_q} ${base_cub_q}"
       if [[ "$USE_REDUCE" == "1" ]]; then
-        cleanup_targets+=" ${base_cub_q}"
+        cleanup_targets+=" ${base_echo_cal_q}"
       fi
       printf '%s\n' "rm -f ${cleanup_targets}"
       ;;

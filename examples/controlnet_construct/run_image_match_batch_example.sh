@@ -72,8 +72,14 @@ Options:
   --valid-pixel-percent-threshold VALUE
                                  Minimum valid-pixel ratio forwarded to examples/image_match/image_match.py.
                                  Default: 0.05 unless omitted and resolved from --config.
+  --min-valid-pixels N           Minimum valid pixels per tile before matching. Default: image_match.py default.
+  --valid-intensity-lower-percent VALUE
+                                 Lower intensity percentile masked before matching. Default: image_match.py default.
+  --valid-intensity-upper-percent VALUE
+                                 Upper intensity percentile masked before matching. Default: image_match.py default.
   --invalid-pixel-radius N        Suppress feature detection near invalid pixels or image borders.
                                   Default: 1 unless omitted and resolved from --config.
+  --dom-source-metadata-csv PATH   CSV mapping DOM cubes to source/original camera cubes for physical tile illumination.
   --matcher-method NAME           Matcher backend forwarded to examples/image_match/image_match.py.
                                   Supported values: bf, flann, superglue, lightglue, loftr.
                                   Default: bf unless omitted and resolved from --config.
@@ -333,8 +339,15 @@ main() {
   local opencv_num_threads=""
   local explicit_opencv_num_threads=""
   local explicit_threshold=""
+  local min_valid_pixels=""
+  local explicit_min_valid_pixels=""
+  local valid_intensity_lower_percent=""
+  local explicit_valid_intensity_lower_percent=""
+  local valid_intensity_upper_percent=""
+  local explicit_valid_intensity_upper_percent=""
   local invalid_pixel_radius="$DEFAULT_INVALID_PIXEL_RADIUS"
   local explicit_invalid_pixel_radius=""
+  local dom_source_metadata_csv_input=""
   local matcher_method="bf"
   local explicit_matcher_method=""
   local explicit_match_preset_path=""
@@ -438,10 +451,33 @@ main() {
         explicit_threshold=$2
         shift 2
         ;;
+      --min-valid-pixels)
+        [[ $# -ge 2 ]] || die "missing value for --min-valid-pixels"
+        min_valid_pixels=$2
+        explicit_min_valid_pixels=$2
+        shift 2
+        ;;
+      --valid-intensity-lower-percent)
+        [[ $# -ge 2 ]] || die "missing value for --valid-intensity-lower-percent"
+        valid_intensity_lower_percent=$2
+        explicit_valid_intensity_lower_percent=$2
+        shift 2
+        ;;
+      --valid-intensity-upper-percent)
+        [[ $# -ge 2 ]] || die "missing value for --valid-intensity-upper-percent"
+        valid_intensity_upper_percent=$2
+        explicit_valid_intensity_upper_percent=$2
+        shift 2
+        ;;
       --invalid-pixel-radius)
         [[ $# -ge 2 ]] || die "missing value for --invalid-pixel-radius"
         invalid_pixel_radius=$2
         explicit_invalid_pixel_radius=$2
+        shift 2
+        ;;
+      --dom-source-metadata-csv)
+        [[ $# -ge 2 ]] || die "missing value for --dom-source-metadata-csv"
+        dom_source_metadata_csv_input=$2
         shift 2
         ;;
       --match-preset-path)
@@ -644,6 +680,27 @@ main() {
         invalid_pixel_radius="$config_invalid_pixel_radius"
       fi
     fi
+    if [[ -z "$explicit_min_valid_pixels" ]]; then
+      local config_min_valid_pixels
+      config_min_valid_pixels=$(extract_image_match_config_value "$config_input" "min_valid_pixels")
+      if [[ -n "$config_min_valid_pixels" ]]; then
+        min_valid_pixels="$config_min_valid_pixels"
+      fi
+    fi
+    if [[ -z "$explicit_valid_intensity_lower_percent" ]]; then
+      local config_valid_intensity_lower_percent
+      config_valid_intensity_lower_percent=$(extract_image_match_config_value "$config_input" "valid_intensity_lower_percent")
+      if [[ -n "$config_valid_intensity_lower_percent" && "$config_valid_intensity_lower_percent" != "None" && "$config_valid_intensity_lower_percent" != "null" ]]; then
+        valid_intensity_lower_percent="$config_valid_intensity_lower_percent"
+      fi
+    fi
+    if [[ -z "$explicit_valid_intensity_upper_percent" ]]; then
+      local config_valid_intensity_upper_percent
+      config_valid_intensity_upper_percent=$(extract_image_match_config_value "$config_input" "valid_intensity_upper_percent")
+      if [[ -n "$config_valid_intensity_upper_percent" && "$config_valid_intensity_upper_percent" != "None" && "$config_valid_intensity_upper_percent" != "null" ]]; then
+        valid_intensity_upper_percent="$config_valid_intensity_upper_percent"
+      fi
+    fi
     if [[ -z "$match_preset_path" && -z "$explicit_matcher_method" ]]; then
       local config_matcher_method
       config_matcher_method=$(extract_image_match_config_value "$config_input" "matcher_method")
@@ -725,7 +782,16 @@ main() {
   log "Metadata dir: $METADATA_DIR"
   log "Match viz dir: $MATCH_VIZ_DIR"
   log "Valid pixel percent threshold: $VALID_PIXEL_PERCENT_THRESHOLD"
+  if [[ -n "$min_valid_pixels" ]]; then
+    log "Minimum valid pixels: $min_valid_pixels"
+  fi
+  if [[ -n "$valid_intensity_lower_percent" || -n "$valid_intensity_upper_percent" ]]; then
+    log "Valid intensity percentile mask: ${valid_intensity_lower_percent:-unset}..${valid_intensity_upper_percent:-unset}"
+  fi
   log "Invalid pixel radius: $invalid_pixel_radius"
+  if [[ -n "$dom_source_metadata_csv_input" ]]; then
+    log "DOM source metadata CSV: $dom_source_metadata_csv_input"
+  fi
   if [[ -n "$match_preset_path" ]]; then
     log "Match preset path: $match_preset_path"
   fi
@@ -852,6 +918,18 @@ main() {
         --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
         --invalid-pixel-radius "$invalid_pixel_radius"
       )
+    fi
+    if [[ -n "$min_valid_pixels" ]]; then
+      match_args+=(--min-valid-pixels "$min_valid_pixels")
+    fi
+    if [[ -n "$valid_intensity_lower_percent" ]]; then
+      match_args+=(--valid-intensity-lower-percent "$valid_intensity_lower_percent")
+    fi
+    if [[ -n "$valid_intensity_upper_percent" ]]; then
+      match_args+=(--valid-intensity-upper-percent "$valid_intensity_upper_percent")
+    fi
+    if [[ -n "$dom_source_metadata_csv_input" ]]; then
+      match_args+=(--dom-source-metadata-csv "$dom_source_metadata_csv_input")
     fi
     if [[ -n "$match_preset_path" ]]; then
       match_args+=(--match-preset-path "$match_preset_path")

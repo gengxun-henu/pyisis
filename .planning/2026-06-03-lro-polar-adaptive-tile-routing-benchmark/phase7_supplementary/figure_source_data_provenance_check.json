@@ -1,0 +1,98 @@
+{
+  "adaptive_deep_runtime_from_manifest_summaries": {
+    "sift_lightglue": {
+      "failed_task_count": 0,
+      "manifest_count": 5,
+      "manifest_wall_seconds": 2832.940154,
+      "missing_summary_count": 0,
+      "succeeded_task_count": 10,
+      "task_count": 10,
+      "task_runtime_seconds": 13.839013000000001
+    },
+    "superpoint_lightglue": {
+      "failed_task_count": 0,
+      "manifest_count": 2,
+      "manifest_wall_seconds": 1656.626103,
+      "missing_summary_count": 0,
+      "succeeded_task_count": 3,
+      "task_count": 3,
+      "task_runtime_seconds": 20.062877
+    }
+  },
+  "figure_dir": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_tile_routing_20260603/nature_figure_inputs",
+  "figure_files": {
+    "five_method_match_comparison.pdf": {
+      "exists": true,
+      "size_bytes": 40252
+    },
+    "five_method_match_comparison.png": {
+      "exists": true,
+      "size_bytes": 143616
+    },
+    "five_method_match_comparison.svg": {
+      "exists": true,
+      "size_bytes": 40876
+    },
+    "five_method_match_comparison.tiff": {
+      "exists": true,
+      "size_bytes": 57039650
+    }
+  },
+  "fixed_deep_runtime_from_manifest_summaries": {
+    "loftr": {
+      "failed_task_count": 0,
+      "manifest_count": 16,
+      "manifest_wall_seconds": 44072.606842,
+      "missing_summary_count": 0,
+      "succeeded_task_count": 107,
+      "task_count": 107,
+      "task_runtime_seconds": 2136.681059
+    },
+    "sift_lightglue": {
+      "failed_task_count": 0,
+      "manifest_count": 16,
+      "manifest_wall_seconds": 7599.822395,
+      "missing_summary_count": 0,
+      "succeeded_task_count": 107,
+      "task_count": 107,
+      "task_runtime_seconds": 144.33667999999997
+    },
+    "superpoint_lightglue": {
+      "failed_task_count": 0,
+      "manifest_count": 16,
+      "manifest_wall_seconds": 17970.896394,
+      "missing_summary_count": 0,
+      "succeeded_task_count": 107,
+      "task_count": 107,
+      "task_runtime_seconds": 727.9210810000003
+    }
+  },
+  "runtime_caveat": "Generated method summary CSV currently reports fixed deep runtime as not_available; this provenance report recovers runtime from manifest_run_summary.json files and should be merged into final source data if runtime panel D is retained.",
+  "source_data_files": {
+    "method_csv": {
+      "exists": true,
+      "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_tile_routing_20260603/nature_figure_inputs/five_method_method_summary.csv",
+      "row_count_excluding_header": 5
+    },
+    "pair_csv": {
+      "exists": true,
+      "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_tile_routing_20260603/nature_figure_inputs/five_method_pair_summary.csv",
+      "row_count_excluding_header": 80
+    },
+    "source_json": {
+      "exists": true,
+      "path": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_tile_routing_20260603/nature_figure_inputs/five_method_match_comparison_source_data.json",
+      "size_bytes": 71018
+    }
+  },
+  "svg_label_counts": {
+    "Adaptive": 4,
+    "LoFTR": 4,
+    "RANSAC retained": 1,
+    "Retained after RANSAC (%)": 1,
+    "Runtime (min)": 1,
+    "SIFT+FLANN": 4,
+    "SIFT+LG": 4,
+    "SuperPoint+LG": 4
+  }
+}

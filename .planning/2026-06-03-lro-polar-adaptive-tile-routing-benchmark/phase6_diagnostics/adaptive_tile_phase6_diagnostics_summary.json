@@ -1,0 +1,58 @@
+{
+  "illumination_difference_score": {
+    "count": 133,
+    "max": 0.21046298896558233,
+    "mean": 0.025707977606333747,
+    "min": 8.7878480450572e-05,
+    "p50": 0.0008747260380774666,
+    "p90": 0.16967160293674644
+  },
+  "illumination_status_counts": {
+    "both_failed": 24,
+    "left_failed": 31,
+    "ok": 133,
+    "right_failed": 9
+  },
+  "input_summary": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_tile_routing_20260603/adaptive/adaptive_large_dom_match_summary.json",
+  "outputs": {
+    "pair_csv": ".planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase6_diagnostics/adaptive_tile_route_distribution_by_pair.csv",
+    "tile_csv": ".planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase6_diagnostics/adaptive_tile_route_illumination_by_tile.csv"
+  },
+  "pair_count": 16,
+  "projectable_tile_count": 133,
+  "representative_point_selection_reason_counts": {
+    "center pixel projected to source camera": 72,
+    "nearest pixel projected to source camera": 234,
+    "no pixel projected to source camera": 88
+  },
+  "representative_point_status_counts": {
+    "center_projectable": 72,
+    "nearest_projectable_pixel": 234,
+    "no_projectable_pixel": 88
+  },
+  "route_distribution_by_projectable_tile": {
+    "loftr": 8,
+    "sift_flann": 110,
+    "sift_lightglue": 12,
+    "superpoint_lightglue": 3
+  },
+  "route_distribution_by_tile": {
+    "loftr": 72,
+    "sift_flann": 110,
+    "sift_lightglue": 12,
+    "superpoint_lightglue": 3
+  },
+  "route_reason_counts": {
+    "moderate texture or moderate physical illumination difference; route to SIFT + LightGlue": 12,
+    "rich texture and small physical illumination difference; route to SIFT + FLANN": 110,
+    "texture probe keypoint count or density below hard threshold; route to LoFTR": 72,
+    "weak-to-moderate texture with non-extreme illumination; route to SuperPoint + LightGlue": 3
+  },
+  "skip_reasons": {
+    "both_failed": 24,
+    "left_failed": 31,
+    "right_failed": 9
+  },
+  "skipped_tile_count": 64,
+  "tile_count": 197
+}

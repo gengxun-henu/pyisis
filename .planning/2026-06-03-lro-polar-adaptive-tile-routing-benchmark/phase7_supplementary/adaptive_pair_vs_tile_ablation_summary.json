@@ -1,0 +1,31 @@
+{
+  "adaptive_pair": {
+    "ransac_dropped_count": 1163,
+    "ransac_retained_count": 12767,
+    "ransac_retained_fraction": 0.9165111270638909,
+    "raw_match_count": 13930,
+    "successful_pairs_retained_ge4": 9
+  },
+  "adaptive_pair_input": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_prior_only_20260602/adaptive/ransac_match_visualization_summary.csv",
+  "adaptive_tile": {
+    "ransac_dropped_count": 2012,
+    "ransac_retained_count": 7736,
+    "ransac_retained_fraction": 0.7935986869101355,
+    "raw_match_count": 9748,
+    "successful_pairs_retained_ge4": 14
+  },
+  "adaptive_tile_input": "/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_tile_routing_20260603/adaptive/ransac_match_visualization_summary.csv",
+  "delta_tile_minus_pair": {
+    "pairs_equal_retained": 3,
+    "pairs_where_pair_retained_more": 5,
+    "pairs_where_tile_retained_more": 8,
+    "ransac_retained_count": -5031,
+    "raw_match_count": -4182,
+    "successful_pairs_retained_ge4": 5
+  },
+  "outputs": {
+    "ablation_by_pair_csv": ".planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/adaptive_pair_vs_tile_ablation_by_pair.csv"
+  },
+  "pair_count": 16,
+  "source_data_note": "Adaptive-pair uses prior-only 20260602 outputs; Adaptive-tile uses 20260603 tile-level physical illumination routing outputs. This is supplementary/ablation, not a same-day rerun."
+}

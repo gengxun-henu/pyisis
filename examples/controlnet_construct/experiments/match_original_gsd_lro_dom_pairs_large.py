@@ -321,9 +321,17 @@ def _build_batch_command(
         str(args.opencv_num_threads),
         "--valid-pixel-percent-threshold",
         str(args.valid_pixel_percent_threshold),
+        "--min-valid-pixels",
+        str(args.min_valid_pixels),
+        "--valid-intensity-lower-percent",
+        str(args.valid_intensity_lower_percent),
+        "--valid-intensity-upper-percent",
+        str(args.valid_intensity_upper_percent),
         "--invalid-pixel-radius",
         str(args.invalid_pixel_radius),
     ]
+    if args.dom_source_metadata_csv is not None:
+        command.extend(["--dom-source-metadata-csv", str(args.dom_source_metadata_csv)])
     if spec.config_path is not None:
         command.extend(["--config", str(spec.config_path)])
     if spec.match_preset_path is not None:
@@ -509,7 +517,11 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--num-worker-parallel-cpu", type=int, default=4, help="Tile worker process count forwarded to image_match.py.")
     parser.add_argument("--opencv-num-threads", type=int, default=1, help="OpenCV internal thread cap per tile worker.")
     parser.add_argument("--valid-pixel-percent-threshold", type=float, default=0.05)
+    parser.add_argument("--min-valid-pixels", type=int, default=64)
+    parser.add_argument("--valid-intensity-lower-percent", type=float, default=0.1)
+    parser.add_argument("--valid-intensity-upper-percent", type=float, default=99.9)
     parser.add_argument("--invalid-pixel-radius", type=int, default=1)
+    parser.add_argument("--dom-source-metadata-csv", type=Path, default=None)
     parser.add_argument("--adaptive-routing-profile", choices=("balanced", "strict", "relaxed", "fast"), default="balanced")
     parser.add_argument("--enable-low-resolution-offset-estimation", action="store_true", help="Prepare and use low-resolution DOMs for projected-offset estimation.")
     parser.add_argument("--low-resolution-level", type=int, default=3)

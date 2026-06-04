@@ -156,7 +156,7 @@ def _load_upstream_ground_distance_filter_summary(metadata_path: str | Path | No
         return None
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
-    except json.JSONDecodeError:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError):
         return None
     if not isinstance(payload, dict):
         return None
@@ -1155,6 +1155,11 @@ def build_controlnet_for_dom_match_stereo_pair(
         if right_dom_match_key_path is not None
         else _default_intermediate_key_path(output_path, "right", "dom_match")
     )
+    match_metadata_kwargs = (
+        {"metadata_output": pre_ransac_match_metadata_path}
+        if pre_ransac_match_metadata_path is not None
+        else {}
+    )
     match_summary = match_dom_pair_to_key_files(
         left_dom_cube_path,
         right_dom_cube_path,
@@ -1181,6 +1186,7 @@ def build_controlnet_for_dom_match_stereo_pair(
         adaptive_routing_deep_presets=adaptive_routing_deep_presets or {},
         deep_match_config_path=deep_match_config_path,
         deep_match_mode=deep_match_mode,
+        **match_metadata_kwargs,
     )
     controlnet_result = build_controlnet_for_dom_stereo_pair(
         left_dom_match_key,
@@ -1510,6 +1516,11 @@ def _build_from_dom_match_parser(subparsers) -> None:
         default=DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
         help="How to handle DOM ground lookup failures during the pre-RANSAC ground-distance filter.",
     )
+    parser.add_argument(
+        "--pre-ransac-match-metadata-path",
+        default=None,
+        help="Optional match metadata JSON path used to write and read upstream pre-RANSAC ground-distance filter status.",
+    )
     parser.add_argument("--binary", action="store_true", help="Write the ControlNet in binary format instead of PVL.")
     parser.add_argument(
         "--log-level",
@@ -1771,6 +1782,7 @@ def main(argv: list[str] | None = None) -> None:
             loose_ransac_keep_threshold=args.loose_ransac_keep_threshold,
             pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
             pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
+            pre_ransac_match_metadata_path=args.pre_ransac_match_metadata_path,
             pvl_format=not args.binary,
             logger=logger,
         )

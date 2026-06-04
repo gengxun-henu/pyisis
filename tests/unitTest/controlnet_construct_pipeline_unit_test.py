@@ -6733,6 +6733,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 "0",
                 "--pre-ransac-ground-lookup-failure-policy",
                 "keep",
+                "--pre-ransac-match-metadata-path",
+                "match_metadata.json",
             ]
         )
 
@@ -6743,6 +6745,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(parsed.matcher_method, "flann")
         self.assertEqual(parsed.pre_ransac_max_ground_distance_km, 0.0)
         self.assertEqual(parsed.pre_ransac_ground_lookup_failure_policy, "keep")
+        self.assertEqual(parsed.pre_ransac_match_metadata_path, "match_metadata.json")
 
     def test_controlnet_stereopair_from_dom_match_dispatches_helper_and_writes_report(self):
         fake_result = {
@@ -6756,6 +6759,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         with temporary_directory() as temp_dir:
             config_path = temp_dir / "config.json"
             report_path = temp_dir / "pair.summary.json"
+            match_metadata_path = temp_dir / "match.summary.json"
             output_net = temp_dir / "pair.net"
             config_path.write_text(
                 json.dumps({"NetworkId": "dom_match_cli", "TargetName": "Mars", "UserName": "unit"}) + "\n",
@@ -6789,6 +6793,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "0",
                         "--pre-ransac-ground-lookup-failure-policy",
                         "keep",
+                        "--pre-ransac-match-metadata-path",
+                        str(match_metadata_path),
                     ]
                 )
 
@@ -6809,6 +6815,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         )
         self.assertEqual(build_mock.call_args.kwargs["pre_ransac_max_ground_distance_km"], 0.0)
         self.assertEqual(build_mock.call_args.kwargs["pre_ransac_ground_lookup_failure_policy"], "keep")
+        self.assertEqual(build_mock.call_args.kwargs["pre_ransac_match_metadata_path"], str(match_metadata_path))
         json.dumps(json.loads(stdout.getvalue()))
 
     def test_run_pipeline_example_forwards_adaptive_routing_and_new_matching_options_from_config(self):
@@ -8567,6 +8574,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(match_mock.call_args.args[:4], ("left_dom.cub", "right_dom.cub", left_dom_key, right_dom_key))
         self.assertTrue(match_mock.call_args.kwargs["enable_adaptive_routing"])
         self.assertEqual(match_mock.call_args.kwargs["adaptive_routing_profile"], "strict")
+        self.assertEqual(match_mock.call_args.kwargs["metadata_output"], match_metadata)
         self.assertEqual(
             build_mock.call_args.args[:6],
             (left_dom_key, right_dom_key, "left_dom.cub", "right_dom.cub", "left_original.cub", "right_original.cub"),

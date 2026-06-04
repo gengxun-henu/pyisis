@@ -329,6 +329,10 @@ def _build_batch_command(
         str(args.valid_intensity_upper_percent),
         "--invalid-pixel-radius",
         str(args.invalid_pixel_radius),
+        "--pre-ransac-distance-method",
+        args.pre_ransac_distance_method,
+        "--ransac-model",
+        args.ransac_model,
     ]
     if args.dom_source_metadata_csv is not None:
         command.extend(["--dom-source-metadata-csv", str(args.dom_source_metadata_csv)])
@@ -521,6 +525,8 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--valid-intensity-lower-percent", type=float, default=0.1)
     parser.add_argument("--valid-intensity-upper-percent", type=float, default=99.9)
     parser.add_argument("--invalid-pixel-radius", type=int, default=1)
+    parser.add_argument("--pre-ransac-distance-method", choices=("dom-projected", "ori-spherical"), default="dom-projected")
+    parser.add_argument("--ransac-model", choices=("affine-partial", "affine", "homography"), default="affine-partial")
     parser.add_argument("--dom-source-metadata-csv", type=Path, default=None)
     parser.add_argument("--adaptive-routing-profile", choices=("balanced", "strict", "relaxed", "fast"), default="balanced")
     parser.add_argument("--enable-low-resolution-offset-estimation", action="store_true", help="Prepare and use low-resolution DOMs for projected-offset estimation.")

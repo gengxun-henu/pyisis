@@ -595,6 +595,7 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
                 deep_match_mode="import",
                 deep_match_manifest=manifest_path,
                 write_match_visualization=False,
+                pre_ransac_max_ground_distance_km=0.0,
             )
             left_key = read_key_file(left_key_path)
             right_key = read_key_file(right_key_path)
@@ -684,6 +685,7 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
                 deep_match_mode="import",
                 deep_match_manifest=manifest_path,
                 write_match_visualization=False,
+                pre_ransac_max_ground_distance_km=0.0,
             )
             left_key = read_key_file(left_key_path)
             right_key = read_key_file(right_key_path)
@@ -840,6 +842,7 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
                 classic_left_key=classic_left_key,
                 classic_right_key=classic_right_key,
                 write_match_visualization=False,
+                pre_ransac_max_ground_distance_km=0.0,
             )
             left_key = read_key_file(left_output_key)
             right_key = read_key_file(right_output_key)
@@ -906,6 +909,7 @@ class ImageMatchDeepManifestUnitTest(unittest.TestCase):
                 deep_match_mode="import",
                 deep_match_manifest=manifest_path,
                 write_match_visualization=False,
+                pre_ransac_max_ground_distance_km=0.0,
             )
             left_key = read_key_file(left_key_path)
             right_key = read_key_file(right_key_path)

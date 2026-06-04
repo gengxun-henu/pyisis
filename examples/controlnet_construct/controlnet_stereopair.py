@@ -59,7 +59,12 @@ if __package__ in {None, ""}:
         write_stereo_pair_match_visualization_from_key_files,
     )
     from controlnet_construct.runtime import bootstrap_runtime_environment
-    from image_match.stereo_ransac import filter_stereo_pair_key_files_with_ransac
+    from image_match.stereo_ransac import (
+        DEFAULT_RANSAC_MODEL,
+        DEFAULT_RANSAC_REPROJ_THRESHOLD,
+        SUPPORTED_RANSAC_MODELS,
+        filter_stereo_pair_key_files_with_ransac,
+    )
     from controlnet_construct.tie_point_merge_in_overlap import (
         MERGE_HASH_DESCRIPTION,
         MERGE_HASH_COORDINATE_FIELDS,
@@ -87,7 +92,12 @@ else:
         write_stereo_pair_match_visualization_from_key_files,
     )
     from .runtime import bootstrap_runtime_environment
-    from image_match.stereo_ransac import filter_stereo_pair_key_files_with_ransac
+    from image_match.stereo_ransac import (
+        DEFAULT_RANSAC_MODEL,
+        DEFAULT_RANSAC_REPROJ_THRESHOLD,
+        SUPPORTED_RANSAC_MODELS,
+        filter_stereo_pair_key_files_with_ransac,
+    )
     from .tie_point_merge_in_overlap import (
         MERGE_HASH_DESCRIPTION,
         MERGE_HASH_COORDINATE_FIELDS,
@@ -122,6 +132,8 @@ SUPPORTED_TARGET_NAMES = {
 
 
 DEFAULT_CONTROLNET_REPORT_SUFFIX = ".summary.json"
+DEFAULT_PRE_RANSAC_DISTANCE_METHOD = "dom-projected"
+SUPPORTED_PRE_RANSAC_DISTANCE_METHODS = ("dom-projected", "ori-spherical")
 DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM = 1.0
 DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY = "drop"
 
@@ -169,6 +181,27 @@ def _load_upstream_ground_distance_filter_summary(metadata_path: str | Path | No
         if isinstance(summary, dict) and summary.get("applied") is True:
             return dict(summary)
     return None
+
+
+def _normalize_pre_ransac_distance_method(value: object) -> str:
+    normalized = str(value).strip().lower().replace("_", "-")
+    if normalized not in SUPPORTED_PRE_RANSAC_DISTANCE_METHODS:
+        raise ValueError("pre_ransac_distance_method must be one of: dom-projected, ori-spherical.")
+    return normalized
+
+
+def _normalize_ransac_model(value: object) -> str:
+    normalized = str(value).strip().lower().replace("_", "-")
+    if normalized not in SUPPORTED_RANSAC_MODELS:
+        raise ValueError("ransac_model must be one of: affine-partial, affine, homography.")
+    return normalized
+
+
+def _upstream_ground_filter_is_dom_projected(summary: dict[str, object]) -> bool:
+    return (
+        summary.get("distance_method") == "dom_projected"
+        and summary.get("geometry_source") == "dom_projection_coordinate"
+    )
 
 
 def write_controlnet_result_report(
@@ -407,12 +440,14 @@ def build_controlnets_for_dom_overlap_list(
     pair_net_suffix: str = ".net",
     merge_decimals: int = 3,
     skip_merge: bool = False,
-    ransac_reproj_threshold: float = 3.0,
+    ransac_reproj_threshold: float = DEFAULT_RANSAC_REPROJ_THRESHOLD,
+    ransac_model: str = DEFAULT_RANSAC_MODEL,
     ransac_confidence: float = 0.995,
     ransac_max_iters: int = 5000,
     ransac_mode: str = "loose",
     loose_ransac_keep_threshold: float = 1.0,
     pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+    pre_ransac_distance_method: str = DEFAULT_PRE_RANSAC_DISTANCE_METHOD,
     pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
     pre_ransac_match_metadata_directory: str | Path | None = None,
     write_match_visualization: bool = False,
@@ -497,11 +532,13 @@ def build_controlnets_for_dom_overlap_list(
             merge_decimals=merge_decimals,
             skip_merge=skip_merge,
             ransac_reproj_threshold=ransac_reproj_threshold,
+            ransac_model=ransac_model,
             ransac_confidence=ransac_confidence,
             ransac_max_iters=ransac_max_iters,
             ransac_mode=ransac_mode,
             loose_ransac_keep_threshold=loose_ransac_keep_threshold,
             pre_ransac_max_ground_distance_km=pre_ransac_max_ground_distance_km,
+            pre_ransac_distance_method=pre_ransac_distance_method,
             pre_ransac_ground_lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
             pre_ransac_match_metadata_path=pre_ransac_match_metadata_path,
             write_match_visualization=write_match_visualization,
@@ -609,12 +646,14 @@ def build_controlnets_for_dom_match_overlap_list(
     match_visualization_scale: float = 1.0 / 3.0,
     merge_decimals: int = 3,
     skip_merge: bool = False,
-    ransac_reproj_threshold: float = 3.0,
+    ransac_reproj_threshold: float = DEFAULT_RANSAC_REPROJ_THRESHOLD,
+    ransac_model: str = DEFAULT_RANSAC_MODEL,
     ransac_confidence: float = 0.995,
     ransac_max_iters: int = 5000,
     ransac_mode: str = "loose",
     loose_ransac_keep_threshold: float = 1.0,
     pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+    pre_ransac_distance_method: str = DEFAULT_PRE_RANSAC_DISTANCE_METHOD,
     pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
     pvl_format: bool = True,
     logger: logging.Logger | None = None,
@@ -685,11 +724,13 @@ def build_controlnets_for_dom_match_overlap_list(
             merge_decimals=merge_decimals,
             skip_merge=skip_merge,
             ransac_reproj_threshold=ransac_reproj_threshold,
+            ransac_model=ransac_model,
             ransac_confidence=ransac_confidence,
             ransac_max_iters=ransac_max_iters,
             ransac_mode=ransac_mode,
             loose_ransac_keep_threshold=loose_ransac_keep_threshold,
             pre_ransac_max_ground_distance_km=pre_ransac_max_ground_distance_km,
+            pre_ransac_distance_method=pre_ransac_distance_method,
             pre_ransac_ground_lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
             pvl_format=pvl_format,
             logger=logger,
@@ -854,12 +895,14 @@ def build_controlnet_for_dom_stereo_pair(
     right_output_key_path: str | Path | None = None,
     merge_decimals: int = 3,
     skip_merge: bool = False,
-    ransac_reproj_threshold: float = 3.0,
+    ransac_reproj_threshold: float = DEFAULT_RANSAC_REPROJ_THRESHOLD,
+    ransac_model: str = DEFAULT_RANSAC_MODEL,
     ransac_confidence: float = 0.995,
     ransac_max_iters: int = 5000,
     ransac_mode: str = "loose",
     loose_ransac_keep_threshold: float = 1.0,
     pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+    pre_ransac_distance_method: str = DEFAULT_PRE_RANSAC_DISTANCE_METHOD,
     pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
     pre_ransac_match_metadata_path: str | Path | None = None,
     write_match_visualization: bool = False,
@@ -884,6 +927,11 @@ def build_controlnet_for_dom_stereo_pair(
     report_path: str | Path | None = None,
     logger: logging.Logger | None = None,
 ) -> dict[str, object]:
+    resolved_ransac_model = _normalize_ransac_model(ransac_model)
+    resolved_distance_method = _normalize_pre_ransac_distance_method(pre_ransac_distance_method)
+    if resolved_distance_method != "dom-projected":
+        raise ValueError("from-dom ControlNet filtering supports dom-projected distance only.")
+
     validated_merge_decimals = validate_merge_decimals(merge_decimals)
     left_output_key = Path(left_output_key_path) if left_output_key_path is not None else _default_intermediate_key_path(output_path, "left", "ori")
     right_output_key = Path(right_output_key_path) if right_output_key_path is not None else _default_intermediate_key_path(output_path, "right", "ori")
@@ -952,10 +1000,12 @@ def build_controlnet_for_dom_stereo_pair(
             )
 
     upstream_ground_filter = _load_upstream_ground_distance_filter_summary(pre_ransac_match_metadata_path)
-    if upstream_ground_filter is not None:
+    if upstream_ground_filter is not None and _upstream_ground_filter_is_dom_projected(upstream_ground_filter):
         pre_ransac_ground_distance_filter = {
             "applied": False,
             "already_prefiltered": True,
+            "distance_method": "dom_projected",
+            "geometry_source": "dom_projection_coordinate",
             "source": "input_metadata",
             "upstream_summary": upstream_ground_filter,
         }
@@ -994,7 +1044,8 @@ def build_controlnet_for_dom_stereo_pair(
             "threshold_km": pre_ransac_ground_distance_threshold,
             "lookup_failure_policy": pre_ransac_ground_lookup_failure_policy,
             "space": "dom",
-            "geometry_source": "dom_projection_set_image",
+            "distance_method": "dom_projected",
+            "geometry_source": "dom_projection_coordinate",
         }
 
     ransac_result = filter_stereo_pair_key_files_with_ransac(
@@ -1003,6 +1054,8 @@ def build_controlnet_for_dom_stereo_pair(
         str(left_ransac_dom_key),
         str(right_ransac_dom_key),
         ransac_reproj_threshold=ransac_reproj_threshold,
+        ransac_model=resolved_ransac_model,
+        ransac_coordinate_space="dom_pixel",
         ransac_confidence=ransac_confidence,
         ransac_max_iters=ransac_max_iters,
         ransac_mode=ransac_mode,
@@ -1142,12 +1195,14 @@ def build_controlnet_for_dom_match_stereo_pair(
     right_output_key_path: str | Path | None = None,
     merge_decimals: int = 3,
     skip_merge: bool = False,
-    ransac_reproj_threshold: float = 3.0,
+    ransac_reproj_threshold: float = DEFAULT_RANSAC_REPROJ_THRESHOLD,
+    ransac_model: str = DEFAULT_RANSAC_MODEL,
     ransac_confidence: float = 0.995,
     ransac_max_iters: int = 5000,
     ransac_mode: str = "loose",
     loose_ransac_keep_threshold: float = 1.0,
     pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+    pre_ransac_distance_method: str = DEFAULT_PRE_RANSAC_DISTANCE_METHOD,
     pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
     pre_ransac_match_metadata_path: str | Path | None = None,
     pvl_format: bool = True,
@@ -1194,6 +1249,8 @@ def build_controlnet_for_dom_match_stereo_pair(
         adaptive_routing_deep_presets=adaptive_routing_deep_presets or {},
         deep_match_config_path=deep_match_config_path,
         deep_match_mode=deep_match_mode,
+        pre_ransac_distance_method=pre_ransac_distance_method,
+        ransac_model=ransac_model,
         pre_ransac_max_ground_distance_km=pre_ransac_max_ground_distance_km,
         pre_ransac_ground_lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
         **match_metadata_kwargs,
@@ -1216,11 +1273,13 @@ def build_controlnet_for_dom_match_stereo_pair(
         merge_decimals=merge_decimals,
         skip_merge=skip_merge,
         ransac_reproj_threshold=ransac_reproj_threshold,
+        ransac_model=ransac_model,
         ransac_confidence=ransac_confidence,
         ransac_max_iters=ransac_max_iters,
         ransac_mode=ransac_mode,
         loose_ransac_keep_threshold=loose_ransac_keep_threshold,
         pre_ransac_max_ground_distance_km=pre_ransac_max_ground_distance_km,
+        pre_ransac_distance_method=pre_ransac_distance_method,
         pre_ransac_ground_lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
         pre_ransac_match_metadata_path=pre_ransac_match_metadata_path,
         write_match_visualization=False,
@@ -1328,6 +1387,21 @@ def _build_from_original_match_parser(subparsers) -> None:
     _add_stdout_detail_control_arguments(parser)
 
 
+def _add_dom_ransac_distance_arguments(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--pre-ransac-distance-method",
+        choices=SUPPORTED_PRE_RANSAC_DISTANCE_METHODS,
+        default=DEFAULT_PRE_RANSAC_DISTANCE_METHOD,
+        help="Distance method before RANSAC. Default: dom-projected.",
+    )
+    parser.add_argument(
+        "--ransac-model",
+        choices=SUPPORTED_RANSAC_MODELS,
+        default=DEFAULT_RANSAC_MODEL,
+        help="RANSAC model. Default: affine-partial.",
+    )
+
+
 def _build_from_dom_parser(subparsers) -> None:
     parser = subparsers.add_parser(
         "from-dom",
@@ -1363,11 +1437,12 @@ def _build_from_dom_parser(subparsers) -> None:
         ),
     )
     parser.add_argument("--skip-merge", action="store_true", help="Skip DOM-space duplicate merge and pass the input DOM .key files straight to dom2ori.")
-    parser.add_argument("--ransac-reproj-threshold", type=float, default=3.0, help="Reprojection threshold passed to OpenCV homography RANSAC on merged DOM tie points.")
+    parser.add_argument("--ransac-reproj-threshold", type=float, default=DEFAULT_RANSAC_REPROJ_THRESHOLD, help="Reprojection threshold passed to OpenCV RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-confidence", type=float, default=0.995, help="Confidence passed to OpenCV homography RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-max-iters", type=int, default=5000, help="Maximum iteration count passed to OpenCV homography RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="Strict mode drops every OpenCV RANSAC outlier; loose mode re-checks outliers against the fitted homography and keeps those within the loose threshold.")
     parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep OpenCV RANSAC outliers whose homography reprojection error stays within this limit.")
+    _add_dom_ransac_distance_arguments(parser)
     parser.add_argument(
         "--pre-ransac-max-ground-distance-km",
         type=float,
@@ -1526,11 +1601,12 @@ def _build_from_dom_match_parser(subparsers) -> None:
         ),
     )
     parser.add_argument("--skip-merge", action="store_true", help="Skip DOM-space duplicate merge and pass matched DOM keys straight to dom2ori.")
-    parser.add_argument("--ransac-reproj-threshold", type=float, default=3.0, help="Reprojection threshold passed to OpenCV homography RANSAC.")
+    parser.add_argument("--ransac-reproj-threshold", type=float, default=DEFAULT_RANSAC_REPROJ_THRESHOLD, help="Reprojection threshold passed to OpenCV RANSAC.")
     parser.add_argument("--ransac-confidence", type=float, default=0.995, help="Confidence passed to OpenCV homography RANSAC.")
     parser.add_argument("--ransac-max-iters", type=int, default=5000, help="Maximum iteration count passed to OpenCV homography RANSAC.")
     parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="RANSAC outlier handling mode.")
     parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep soft outliers.")
+    _add_dom_ransac_distance_arguments(parser)
     parser.add_argument(
         "--pre-ransac-max-ground-distance-km",
         type=float,
@@ -1585,11 +1661,12 @@ def _build_from_dom_batch_parser(subparsers) -> None:
         ),
     )
     parser.add_argument("--skip-merge", action="store_true", help="Skip DOM-space duplicate merge and pass the input DOM .key files straight to dom2ori.")
-    parser.add_argument("--ransac-reproj-threshold", type=float, default=3.0, help="Reprojection threshold passed to OpenCV homography RANSAC on merged DOM tie points.")
+    parser.add_argument("--ransac-reproj-threshold", type=float, default=DEFAULT_RANSAC_REPROJ_THRESHOLD, help="Reprojection threshold passed to OpenCV RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-confidence", type=float, default=0.995, help="Confidence passed to OpenCV homography RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-max-iters", type=int, default=5000, help="Maximum iteration count passed to OpenCV homography RANSAC on merged DOM tie points.")
     parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="Strict mode drops every OpenCV RANSAC outlier; loose mode re-checks outliers against the fitted homography and keeps those within the loose threshold.")
     parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep OpenCV RANSAC outliers whose homography reprojection error stays within this limit.")
+    _add_dom_ransac_distance_arguments(parser)
     parser.add_argument(
         "--pre-ransac-max-ground-distance-km",
         type=float,
@@ -1810,11 +1887,13 @@ def main(argv: list[str] | None = None) -> None:
             merge_decimals=args.merge_decimals,
             skip_merge=args.skip_merge,
             ransac_reproj_threshold=args.ransac_reproj_threshold,
+            ransac_model=args.ransac_model,
             ransac_confidence=args.ransac_confidence,
             ransac_max_iters=args.ransac_max_iters,
             ransac_mode=args.ransac_mode,
             loose_ransac_keep_threshold=args.loose_ransac_keep_threshold,
             pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
+            pre_ransac_distance_method=args.pre_ransac_distance_method,
             pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
             pre_ransac_match_metadata_path=args.pre_ransac_match_metadata_path,
             pvl_format=not args.binary,
@@ -1840,11 +1919,13 @@ def main(argv: list[str] | None = None) -> None:
             merge_decimals=args.merge_decimals,
             skip_merge=args.skip_merge,
             ransac_reproj_threshold=args.ransac_reproj_threshold,
+            ransac_model=args.ransac_model,
             ransac_confidence=args.ransac_confidence,
             ransac_max_iters=args.ransac_max_iters,
             ransac_mode=args.ransac_mode,
             loose_ransac_keep_threshold=args.loose_ransac_keep_threshold,
             pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
+            pre_ransac_distance_method=args.pre_ransac_distance_method,
             pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
             pre_ransac_match_metadata_path=args.pre_ransac_match_metadata_path,
             write_match_visualization=args.write_match_visualization,
@@ -1887,11 +1968,13 @@ def main(argv: list[str] | None = None) -> None:
             merge_decimals=args.merge_decimals,
             skip_merge=args.skip_merge,
             ransac_reproj_threshold=args.ransac_reproj_threshold,
+            ransac_model=args.ransac_model,
             ransac_confidence=args.ransac_confidence,
             ransac_max_iters=args.ransac_max_iters,
             ransac_mode=args.ransac_mode,
             loose_ransac_keep_threshold=args.loose_ransac_keep_threshold,
             pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
+            pre_ransac_distance_method=args.pre_ransac_distance_method,
             pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
             pre_ransac_match_metadata_directory=args.pre_ransac_match_metadata_dir,
             write_match_visualization=args.write_match_visualization,

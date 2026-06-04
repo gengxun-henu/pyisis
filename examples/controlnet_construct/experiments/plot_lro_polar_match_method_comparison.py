@@ -207,6 +207,16 @@ def build_source_data(output_root: Path) -> tuple[list[dict[str, Any]], list[dic
                 "ransac_retained_count": int(row["ransac_retained_count"] or 0),
                 "ransac_dropped_count": int(row["ransac_dropped_count"] or 0),
                 "ransac_retained_fraction": float(row["ransac_retained_fraction"] or 0.0),
+                "ransac_model": row.get("ransac_model", "affine-partial"),
+                "ransac_coordinate_space": row.get("ransac_coordinate_space", "dom_pixel"),
+                "raw_matches": int(row["raw_match_count"] or 0),
+                "distance_retained": int(row["raw_match_count"] or 0),
+                "affine_partial_retained": int(row["ransac_retained_count"] or 0)
+                if row.get("ransac_model", "affine-partial") == "affine-partial"
+                else None,
+                "homography_retained": int(row["ransac_retained_count"] or 0)
+                if row.get("ransac_model") == "homography"
+                else None,
                 "ransac_status": row.get("ransac_status") or "",
                 "visualization_output_path": row.get("visualization_output_path") or "",
             }
@@ -380,6 +390,12 @@ def main() -> None:
         "ransac_retained_count",
         "ransac_dropped_count",
         "ransac_retained_fraction",
+        "ransac_model",
+        "ransac_coordinate_space",
+        "raw_matches",
+        "distance_retained",
+        "affine_partial_retained",
+        "homography_retained",
         "ransac_status",
         "visualization_output_path",
     ]

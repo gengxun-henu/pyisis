@@ -815,6 +815,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             filtered_left, filtered_right, summary = filter_stereo_pair_keypoints_with_ransac(
                 left_key_file,
                 right_key_file,
+                ransac_model="homography",
                 ransac_mode="strict",
             )
 
@@ -856,6 +857,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             filtered_left, filtered_right, summary = filter_stereo_pair_keypoints_with_ransac(
                 left_key_file,
                 right_key_file,
+                ransac_model="homography",
                 ransac_mode="loose",
                 loose_keep_pixel_threshold=1.0,
             )
@@ -2616,6 +2618,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     "right.cub",
                     left_key,
                     right_key,
+                    pre_ransac_distance_method="ori-spherical",
                     pre_ransac_max_ground_distance_km=0.0,
                 )
 
@@ -2673,6 +2676,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     "right.cub",
                     left_key,
                     right_key,
+                    pre_ransac_distance_method="ori-spherical",
                     pre_ransac_max_ground_distance_km=1.0,
                 )
             persisted_left_count = len(read_key_file(left_key).points)
@@ -2686,6 +2690,114 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(result["point_count_after_pre_ransac_ground_filter"], 1)
         self.assertEqual(persisted_left_count, 1)
         self.assertEqual(persisted_right_count, 1)
+
+    def test_match_ori_pair_default_dom_projected_requires_corresponding_doms(self):
+        with temporary_directory() as temp_dir:
+            left_key = temp_dir / "left.key"
+            right_key = temp_dir / "right.key"
+
+            with self.assertRaisesRegex(ValueError, "left_corresponding_dom and right_corresponding_dom are required"):
+                image_match.match_ori_pair_to_key_files(
+                    "left_ori.cub",
+                    "right_ori.cub",
+                    left_key,
+                    right_key,
+                    write_match_visualization=False,
+                    pre_ransac_distance_method="dom-projected",
+                )
+
+    def test_match_ori_pair_legacy_spherical_does_not_require_corresponding_doms(self):
+        with temporary_directory() as temp_dir:
+            left_key = temp_dir / "left.key"
+            right_key = temp_dir / "right.key"
+            raw_left = KeypointFile(100, 100, (Keypoint(1.0, 1.0),))
+            raw_right = KeypointFile(100, 100, (Keypoint(1.0, 1.0),))
+
+            with mock.patch.object(image_match, "match_ori_pair", return_value=(raw_left, raw_right, {
+                "status": "matched",
+                "reason": "test",
+                "point_count": 1,
+                "matcher": {},
+                "preparation": {"status": "prepared"},
+            })), mock.patch.object(image_match, "filter_ori_key_files_by_ground_distance", return_value={
+                "applied": False,
+                "already_prefiltered": False,
+                "status": "disabled",
+                "distance_method": "ori_spherical",
+                "space": "ori",
+                "geometry_source": "ori_camera_set_image",
+                "threshold_km": 0.0,
+                "lookup_failure_policy": "drop",
+            }):
+                result = image_match.match_ori_pair_to_key_files(
+                    "left_ori.cub",
+                    "right_ori.cub",
+                    left_key,
+                    right_key,
+                    write_match_visualization=False,
+                    pre_ransac_distance_method="ori-spherical",
+                    pre_ransac_max_ground_distance_km=0.0,
+                )
+
+            self.assertEqual(result["pre_ransac_ground_distance_filter"]["distance_method"], "ori_spherical")
+
+    def test_match_ori_pair_default_dom_projected_uses_corresponding_doms(self):
+        with temporary_directory() as temp_dir:
+            left_key = temp_dir / "left.key"
+            right_key = temp_dir / "right.key"
+            left_dom = temp_dir / "left_dom.cub"
+            right_dom = temp_dir / "right_dom.cub"
+            left_dom.write_text("left dom", encoding="utf-8")
+            right_dom.write_text("right dom", encoding="utf-8")
+            raw_left = KeypointFile(100, 100, (Keypoint(1.0, 1.0), Keypoint(2.0, 2.0)))
+            raw_right = KeypointFile(100, 100, (Keypoint(1.0, 1.0), Keypoint(4.0, 4.0)))
+            filtered_left = KeypointFile(100, 100, raw_left.points[:1])
+            filtered_right = KeypointFile(100, 100, raw_right.points[:1])
+
+            def fake_prefilter(left_input, right_input, left_output, right_output, *args, **kwargs):
+                write_key_file(left_output, filtered_left)
+                write_key_file(right_output, filtered_right)
+                return {
+                    "applied": True,
+                    "already_prefiltered": False,
+                    "status": "filtered",
+                    "distance_method": "dom_projected",
+                    "space": "dom",
+                    "geometry_source": "ori_camera_to_dom_projection_coordinate",
+                    "input_count": 2,
+                    "retained_count": 1,
+                    "dropped_count": 1,
+                    "retained_indices": [0],
+                    "left_dom": str(left_dom),
+                    "right_dom": str(right_dom),
+                }
+
+            with mock.patch.object(image_match, "match_ori_pair", return_value=(raw_left, raw_right, {
+                "status": "matched",
+                "reason": "test",
+                "point_count": 2,
+                "matcher": {},
+                "preparation": {"status": "prepared"},
+            })), mock.patch.object(
+                image_match,
+                "filter_ori_key_files_by_dom_projected_distance",
+                side_effect=fake_prefilter,
+            ) as prefilter_mock:
+                result = image_match.match_ori_pair_to_key_files(
+                    "left_ori.cub",
+                    "right_ori.cub",
+                    left_key,
+                    right_key,
+                    left_corresponding_dom=left_dom,
+                    right_corresponding_dom=right_dom,
+                    pre_ransac_max_ground_distance_km=1.0,
+                )
+
+            prefilter_mock.assert_called_once()
+            self.assertEqual(prefilter_mock.call_args.args[6], left_dom)
+            self.assertEqual(prefilter_mock.call_args.args[7], right_dom)
+            self.assertEqual(result["pre_ransac_ground_distance_filter"]["distance_method"], "dom_projected")
+            self.assertEqual(result["point_count"], 1)
 
     def test_build_image_backend_accepts_ori_space(self):
         backend = tile_matching.build_image_backend("ori")
@@ -6517,6 +6629,111 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(result["match_visualization"]["left_points"], [(0.0, 1.0), (1.0, 2.0), (2.0, 3.0)])
         self.assertEqual(result["match_visualization"]["ransac"]["retained_count"], 3)
         self.assertEqual(payload["match_visualization"]["ransac"]["status"], "filtered")
+
+    def test_match_dom_pair_to_key_files_visualization_forwards_affine_partial_ransac_model(self):
+        with temporary_directory() as temp_dir:
+            left_dom = temp_dir / "left.cub"
+            right_dom = temp_dir / "right.cub"
+            left_key = temp_dir / "left.key"
+            right_key = temp_dir / "right.key"
+            metadata = temp_dir / "metadata.json"
+            left_dom.write_text("left", encoding="utf-8")
+            right_dom.write_text("right", encoding="utf-8")
+
+            raw_left = KeypointFile(100, 100, (Keypoint(1.0, 1.0), Keypoint(2.0, 2.0)))
+            raw_right = KeypointFile(100, 100, (Keypoint(1.0, 2.0), Keypoint(2.0, 3.0)))
+            ransac_summary = {
+                "applied": False,
+                "status": "skipped_insufficient_points",
+                "mode": "loose",
+                "model": "affine-partial",
+                "coordinate_space": "dom_pixel",
+                "input_count": 2,
+                "retained_count": 2,
+                "dropped_count": 0,
+                "opencv_inlier_count": 2,
+                "opencv_outlier_count": 0,
+                "retained_soft_outlier_count": 0,
+                "soft_outlier_original_indices": [],
+                "retained_soft_outlier_positions": [],
+                "reproj_threshold": 10.0,
+                "confidence": 0.995,
+                "max_iters": 5000,
+                "loose_keep_pixel_threshold": 1.0,
+                "matrix": None,
+                "matrix_type": None,
+                "homography_matrix": None,
+                "skipped_reason": "insufficient_points",
+            }
+
+            with mock.patch.object(image_match, "match_dom_pair", return_value=(raw_left, raw_right, {
+                "status": "matched",
+                "reason": "test",
+                "point_count": 2,
+                "tile_count": 1,
+                "tile_count_before_preindex_filter": 1,
+                "tile_count_after_preindex_filter": 1,
+                "preindexed_skipped_tile_count": 0,
+                "full_resolution_skipped_tile_count": 0,
+                "matched_tile_count": 1,
+                "skipped_tile_count": 0,
+                "tile_validity_prefilter_enabled": False,
+                "tile_validity_cache_dir": None,
+                "tile_validity_cell_width": 512,
+                "tile_validity_cell_height": 512,
+                "tile_block_alignment_mode": "off",
+                "block_alignment_reason": "off",
+                "tile_block_alignment": {},
+                "tile_validity_skip_reasons": {},
+                "left_tile_validity_index": None,
+                "right_tile_validity_index": None,
+                "tiling_used": False,
+                "valid_pixel_percent_threshold": 0.0,
+                "invalid_pixel_radius": 1,
+                "matcher": {},
+                "parallel_cpu_requested": False,
+                "num_worker_parallel_cpu": 1,
+                "parallel_cpu_used": False,
+                "parallel_cpu_backend": "serial",
+                "parallel_cpu_worker_count": 0,
+                "tile_match_backend": {},
+                "low_resolution_offset": {},
+                "low_resolution_matching_target_long_edge": None,
+                "resolved_low_resolution_level": None,
+                "adaptive_routing": {"enabled": False},
+                "preparation": {"status": "prepared"},
+            })), mock.patch.object(image_match, "filter_dom_key_files_by_ground_distance", return_value={
+                "applied": False,
+                "already_prefiltered": False,
+                "status": "disabled",
+                "threshold_km": 0.0,
+                "lookup_failure_policy": "drop",
+                "distance_method": "dom_projected",
+                "space": "dom",
+                "geometry_source": "dom_projection_coordinate",
+            }), mock.patch.object(
+                image_match,
+                "filter_stereo_pair_keypoints_with_ransac",
+                return_value=(raw_left, raw_right, ransac_summary),
+            ) as ransac_mock, mock.patch.object(
+                image_match,
+                "write_stereo_pair_match_visualization",
+                return_value={"status": "written", "output_path": str(temp_dir / "viz.png"), "point_count": 2},
+            ):
+                result = match_dom_pair_to_key_files(
+                    left_dom,
+                    right_dom,
+                    left_key,
+                    right_key,
+                    metadata_output=metadata,
+                    write_match_visualization=True,
+                    pre_ransac_max_ground_distance_km=0.0,
+                )
+
+            ransac_mock.assert_called_once()
+            self.assertEqual(ransac_mock.call_args.kwargs["ransac_model"], "affine-partial")
+            self.assertEqual(ransac_mock.call_args.kwargs["ransac_reproj_threshold"], 10.0)
+            self.assertEqual(result["match_visualization"]["ransac"]["coordinate_space"], "dom_pixel")
 
     def test_match_dom_pair_to_key_files_metadata_includes_adaptive_routing(self):
         summary = {

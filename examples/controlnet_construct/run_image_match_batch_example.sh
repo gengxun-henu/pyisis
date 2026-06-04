@@ -19,7 +19,9 @@ DEFAULT_WORK_DIR_RELATIVE="work"
 DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD="0.05"
 DEFAULT_INVALID_PIXEL_RADIUS="1"
 DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM="1.0"
+DEFAULT_PRE_RANSAC_DISTANCE_METHOD="dom-projected"
 DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY="drop"
+DEFAULT_RANSAC_MODEL="affine-partial"
 
 log() {
   printf '[image-match-batch] %s\n' "$*"
@@ -84,9 +86,14 @@ Options:
   --pre-ransac-max-ground-distance-km VALUE
                                   Maximum paired ground distance retained before RANSAC. Use 0 to disable.
                                   Default: 1.0 unless omitted and resolved from --config.
+  --pre-ransac-distance-method VALUE
+                                  Pre-RANSAC distance method: dom-projected or ori-spherical.
+                                  Default: dom-projected unless omitted and resolved from --config.
   --pre-ransac-ground-lookup-failure-policy VALUE
                                   Ground lookup failure policy for the pre-RANSAC ground-distance filter: drop or keep.
                                   Default: drop unless omitted and resolved from --config.
+  --ransac-model VALUE            RANSAC model: affine-partial, affine, or homography.
+                                  Default: affine-partial unless omitted and resolved from --config.
   --dom-source-metadata-csv PATH   CSV mapping DOM cubes to source/original camera cubes for physical tile illumination.
   --matcher-method NAME           Matcher backend forwarded to examples/image_match/image_match.py.
                                   Supported values: bf, flann, superglue, lightglue, loftr.
@@ -357,8 +364,12 @@ main() {
   local explicit_invalid_pixel_radius=""
   local pre_ransac_max_ground_distance_km="$DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM"
   local explicit_pre_ransac_max_ground_distance_km=""
+  local pre_ransac_distance_method="$DEFAULT_PRE_RANSAC_DISTANCE_METHOD"
+  local explicit_pre_ransac_distance_method=""
   local pre_ransac_ground_lookup_failure_policy="$DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY"
   local explicit_pre_ransac_ground_lookup_failure_policy=""
+  local ransac_model="$DEFAULT_RANSAC_MODEL"
+  local explicit_ransac_model=""
   local dom_source_metadata_csv_input=""
   local matcher_method="bf"
   local explicit_matcher_method=""
@@ -493,6 +504,16 @@ main() {
         explicit_pre_ransac_max_ground_distance_km=$2
         shift 2
         ;;
+      --pre-ransac-distance-method)
+        [[ $# -ge 2 ]] || die "missing value for --pre-ransac-distance-method"
+        case "$2" in
+          dom-projected|ori-spherical) ;;
+          *) die "--pre-ransac-distance-method must be dom-projected or ori-spherical" ;;
+        esac
+        pre_ransac_distance_method=$2
+        explicit_pre_ransac_distance_method=$2
+        shift 2
+        ;;
       --pre-ransac-ground-lookup-failure-policy)
         [[ $# -ge 2 ]] || die "missing value for --pre-ransac-ground-lookup-failure-policy"
         case "$2" in
@@ -501,6 +522,16 @@ main() {
         esac
         pre_ransac_ground_lookup_failure_policy=$2
         explicit_pre_ransac_ground_lookup_failure_policy=$2
+        shift 2
+        ;;
+      --ransac-model)
+        [[ $# -ge 2 ]] || die "missing value for --ransac-model"
+        case "$2" in
+          affine-partial|affine|homography) ;;
+          *) die "--ransac-model must be affine-partial, affine, or homography" ;;
+        esac
+        ransac_model=$2
+        explicit_ransac_model=$2
         shift 2
         ;;
       --dom-source-metadata-csv)
@@ -715,11 +746,25 @@ main() {
         pre_ransac_max_ground_distance_km="$config_pre_ransac_max_ground_distance_km"
       fi
     fi
+    if [[ -z "$explicit_pre_ransac_distance_method" ]]; then
+      local config_pre_ransac_distance_method
+      config_pre_ransac_distance_method=$(extract_image_match_config_value "$config_input" "pre_ransac_distance_method")
+      if [[ -n "$config_pre_ransac_distance_method" ]]; then
+        pre_ransac_distance_method="$config_pre_ransac_distance_method"
+      fi
+    fi
     if [[ -z "$explicit_pre_ransac_ground_lookup_failure_policy" ]]; then
       local config_pre_ransac_ground_lookup_failure_policy
       config_pre_ransac_ground_lookup_failure_policy=$(extract_image_match_config_value "$config_input" "pre_ransac_ground_lookup_failure_policy")
       if [[ -n "$config_pre_ransac_ground_lookup_failure_policy" ]]; then
         pre_ransac_ground_lookup_failure_policy="$config_pre_ransac_ground_lookup_failure_policy"
+      fi
+    fi
+    if [[ -z "$explicit_ransac_model" ]]; then
+      local config_ransac_model
+      config_ransac_model=$(extract_image_match_config_value "$config_input" "ransac_model")
+      if [[ -n "$config_ransac_model" ]]; then
+        ransac_model="$config_ransac_model"
       fi
     fi
     if [[ -z "$explicit_min_valid_pixels" ]]; then
@@ -832,7 +877,9 @@ main() {
   fi
   log "Invalid pixel radius: $invalid_pixel_radius"
   log "Pre-RANSAC max ground distance (km): $pre_ransac_max_ground_distance_km"
+  log "Pre-RANSAC distance method: $pre_ransac_distance_method"
   log "Pre-RANSAC ground lookup failure policy: $pre_ransac_ground_lookup_failure_policy"
+  log "RANSAC model: $ransac_model"
   if [[ -n "$dom_source_metadata_csv_input" ]]; then
     log "DOM source metadata CSV: $dom_source_metadata_csv_input"
   fi
@@ -949,7 +996,9 @@ main() {
       --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
       --invalid-pixel-radius "$invalid_pixel_radius"
       --pre-ransac-max-ground-distance-km "$pre_ransac_max_ground_distance_km"
+      --pre-ransac-distance-method "$pre_ransac_distance_method"
       --pre-ransac-ground-lookup-failure-policy "$pre_ransac_ground_lookup_failure_policy"
+      --ransac-model "$ransac_model"
     )
     if [[ -n "$CONFIG_PATH" ]]; then
       match_args=(
@@ -964,7 +1013,9 @@ main() {
         --valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD"
         --invalid-pixel-radius "$invalid_pixel_radius"
         --pre-ransac-max-ground-distance-km "$pre_ransac_max_ground_distance_km"
+        --pre-ransac-distance-method "$pre_ransac_distance_method"
         --pre-ransac-ground-lookup-failure-policy "$pre_ransac_ground_lookup_failure_policy"
+        --ransac-model "$ransac_model"
       )
     fi
     if [[ -n "$min_valid_pixels" ]]; then

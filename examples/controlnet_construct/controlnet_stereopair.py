@@ -1186,6 +1186,8 @@ def build_controlnet_for_dom_match_stereo_pair(
         adaptive_routing_deep_presets=adaptive_routing_deep_presets or {},
         deep_match_config_path=deep_match_config_path,
         deep_match_mode=deep_match_mode,
+        pre_ransac_max_ground_distance_km=pre_ransac_max_ground_distance_km,
+        pre_ransac_ground_lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
         **match_metadata_kwargs,
     )
     controlnet_result = build_controlnet_for_dom_stereo_pair(

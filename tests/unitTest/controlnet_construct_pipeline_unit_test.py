@@ -8575,6 +8575,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertTrue(match_mock.call_args.kwargs["enable_adaptive_routing"])
         self.assertEqual(match_mock.call_args.kwargs["adaptive_routing_profile"], "strict")
         self.assertEqual(match_mock.call_args.kwargs["metadata_output"], match_metadata)
+        self.assertEqual(match_mock.call_args.kwargs["pre_ransac_max_ground_distance_km"], 0.0)
+        self.assertEqual(match_mock.call_args.kwargs["pre_ransac_ground_lookup_failure_policy"], "keep")
         self.assertEqual(
             build_mock.call_args.args[:6],
             (left_dom_key, right_dom_key, "left_dom.cub", "right_dom.cub", "left_original.cub", "right_original.cub"),
@@ -8582,6 +8584,51 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(build_mock.call_args.kwargs["pre_ransac_max_ground_distance_km"], 0.0)
         self.assertEqual(build_mock.call_args.kwargs["pre_ransac_ground_lookup_failure_policy"], "keep")
         self.assertEqual(build_mock.call_args.kwargs["pre_ransac_match_metadata_path"], match_metadata)
+
+    def test_build_controlnet_for_dom_match_stereo_pair_forwards_disabled_prefilter_to_matching_stage(self):
+        config = ControlNetConfig(
+            network_id="dom_match_prefilter_disabled_unit",
+            target_name="Mars",
+            user_name="unit",
+            description="",
+            point_id_prefix="P",
+            pair_id=None,
+        )
+        fake_match_summary = {
+            "status": "matched",
+            "point_count": 3,
+        }
+        fake_controlnet = {
+            "mode": "from-dom",
+            "controlnet": {"output_path": "pair.net", "point_count": 3},
+        }
+
+        with temporary_directory() as temp_dir:
+            output_net = temp_dir / "pair.net"
+            match_metadata = temp_dir / "pair_match.summary.json"
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.match_dom_pair_to_key_files",
+                    return_value=fake_match_summary,
+                ) as match_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_dom_stereo_pair",
+                    return_value=fake_controlnet,
+                ),
+            ):
+                build_controlnet_for_dom_match_stereo_pair(
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    "left_original.cub",
+                    "right_original.cub",
+                    config,
+                    output_net,
+                    pre_ransac_max_ground_distance_km=0.0,
+                    pre_ransac_match_metadata_path=match_metadata,
+                    write_match_visualization=False,
+                )
+
+        self.assertEqual(match_mock.call_args.kwargs["pre_ransac_max_ground_distance_km"], 0.0)
 
     def test_build_controlnet_for_dom_match_stereo_pair_does_not_convert_after_match_failure(self):
         config = ControlNetConfig(

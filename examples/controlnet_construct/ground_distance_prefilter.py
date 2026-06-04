@@ -21,6 +21,9 @@ except ImportError:  # pragma: no cover - exercised when imported as a local pac
 LUNAR_MEAN_RADIUS_KM = 1737.4
 PREFILTER_METADATA_KEY = "pre_ransac_ground_distance_filter"
 GroundLookup = Callable[[float, float], tuple[float, float] | None]
+ProjectedLookup = Callable[[float, float], tuple[float, float] | None]
+SUPPORTED_PRE_RANSAC_DISTANCE_METHODS = ("dom-projected", "ori-spherical")
+DEFAULT_PRE_RANSAC_DISTANCE_METHOD = "dom-projected"
 
 
 def _validate_threshold(threshold_km: float) -> float:
@@ -69,6 +72,20 @@ def ground_distance_km(
     haversine = sin_half_lat**2 + math.cos(lat1) * math.cos(lat2) * sin_half_lon**2
     central_angle = 2.0 * math.asin(min(1.0, math.sqrt(haversine)))
     return radius * central_angle
+
+
+def projected_distance_km(
+    left_x: float,
+    left_y: float,
+    right_x: float,
+    right_y: float,
+) -> float:
+    """Return planar projected-coordinate distance in kilometers."""
+    left_projected_x = _validate_finite_coordinate(left_x, "left_x")
+    left_projected_y = _validate_finite_coordinate(left_y, "left_y")
+    right_projected_x = _validate_finite_coordinate(right_x, "right_x")
+    right_projected_y = _validate_finite_coordinate(right_y, "right_y")
+    return math.hypot(right_projected_x - left_projected_x, right_projected_y - left_projected_y) / 1000.0
 
 
 def _distance_summary(distances: list[float]) -> dict[str, object]:
@@ -226,6 +243,99 @@ def filter_stereo_pair_keypoints_by_ground_distance(
     )
 
 
+def filter_stereo_pair_keypoints_by_projected_distance(
+    left_key_file: KeypointFile,
+    right_key_file: KeypointFile,
+    *,
+    left_projected_lookup: ProjectedLookup,
+    right_projected_lookup: ProjectedLookup,
+    threshold_km: float,
+    lookup_failure_policy: str = "drop",
+    left_dom: str | Path | None = None,
+    right_dom: str | Path | None = None,
+) -> tuple[KeypointFile, KeypointFile, dict[str, object], tuple[int, ...]]:
+    if len(left_key_file.points) != len(right_key_file.points):
+        raise ValueError("Left and right keypoint files must contain the same number of points.")
+
+    threshold = _validate_threshold(threshold_km)
+    policy = _validate_lookup_failure_policy(lookup_failure_policy)
+
+    if threshold == 0.0:
+        summary = _disabled_summary(
+            left_key_file,
+            right_key_file,
+            threshold,
+            policy,
+            LUNAR_MEAN_RADIUS_KM,
+            space="dom",
+            geometry_source="dom_projection_coordinate",
+        )
+        summary["distance_method"] = "dom_projected"
+        if left_dom is not None:
+            summary["left_dom"] = str(left_dom)
+        if right_dom is not None:
+            summary["right_dom"] = str(right_dom)
+        return left_key_file, right_key_file, summary, tuple(range(len(left_key_file.points)))
+
+    retained_left_points: list[Keypoint] = []
+    retained_right_points: list[Keypoint] = []
+    retained_indices: list[int] = []
+    distances: list[float] = []
+    dropped_ground_distance_count = 0
+    ground_lookup_failure_count = 0
+
+    for index, (left_point, right_point) in enumerate(zip(left_key_file.points, right_key_file.points, strict=True)):
+        left_projected = left_projected_lookup(left_point.sample, left_point.line)
+        right_projected = right_projected_lookup(right_point.sample, right_point.line)
+        if left_projected is None or right_projected is None:
+            ground_lookup_failure_count += 1
+            if policy == "keep":
+                retained_left_points.append(left_point)
+                retained_right_points.append(right_point)
+                retained_indices.append(index)
+            continue
+
+        distance = projected_distance_km(left_projected[0], left_projected[1], right_projected[0], right_projected[1])
+        distances.append(distance)
+        if distance > threshold:
+            dropped_ground_distance_count += 1
+            continue
+        retained_left_points.append(left_point)
+        retained_right_points.append(right_point)
+        retained_indices.append(index)
+
+    retained_count = len(retained_left_points)
+    distance_summary = _distance_summary(distances)
+    summary: dict[str, object] = {
+        "applied": True,
+        "already_prefiltered": False,
+        "status": "filtered",
+        "distance_method": "dom_projected",
+        "space": "dom",
+        "geometry_source": "dom_projection_coordinate",
+        "threshold_km": threshold,
+        "lookup_failure_policy": policy,
+        "input_count": len(left_key_file.points),
+        "retained_count": retained_count,
+        "dropped_count": len(left_key_file.points) - retained_count,
+        "dropped_ground_distance_count": dropped_ground_distance_count,
+        "ground_lookup_failure_count": ground_lookup_failure_count,
+        "distance_summary_km": distance_summary,
+        "max_ground_distance_km": distance_summary["max"],
+    }
+    if left_dom is not None:
+        summary["left_dom"] = str(left_dom)
+    if right_dom is not None:
+        summary["right_dom"] = str(right_dom)
+
+    return (
+        KeypointFile(left_key_file.image_width, left_key_file.image_height, tuple(retained_left_points)),
+        KeypointFile(right_key_file.image_width, right_key_file.image_height, tuple(retained_right_points)),
+        summary,
+        tuple(retained_indices),
+    )
+
+
 def filter_stereo_pair_key_files_by_ground_distance(
     left_input: str | Path,
     right_input: str | Path,
@@ -301,6 +411,34 @@ def _lookup_from_ground_map(ground_map) -> GroundLookup:
     return lookup
 
 
+def _open_dom_projection(cube_path: str | Path):
+    bootstrap_runtime_environment()
+    import isis_pybind as ip
+
+    cube = ip.Cube()
+    try:
+        cube.open(str(cube_path), "r")
+        projection = ip.ProjectionFactory.create_from_cube(cube)
+        return cube, projection
+    except Exception:
+        if cube.is_open():
+            cube.close()
+        raise
+
+
+def _lookup_from_dom_projection(projection) -> ProjectedLookup:
+    def lookup(sample: float, line: float) -> tuple[float, float] | None:
+        if hasattr(projection, "set_world") and not projection.set_world(float(sample), float(line)):
+            return None
+        projected_x = float(projection.to_projection_x(float(sample)))
+        projected_y = float(projection.to_projection_y(float(line)))
+        if not (math.isfinite(projected_x) and math.isfinite(projected_y)):
+            return None
+        return projected_x, projected_y
+
+    return lookup
+
+
 def _filter_key_files_with_cube_ground_maps(
     left_input: str | Path,
     right_input: str | Path,
@@ -355,21 +493,38 @@ def filter_dom_key_files_by_ground_distance(
     lunar_radius_km: float = LUNAR_MEAN_RADIUS_KM,
     dom_band: int = 1,
 ) -> dict[str, object]:
-    return _filter_key_files_with_cube_ground_maps(
-        left_input,
-        right_input,
-        left_output,
-        right_output,
-        left_dom_cube_path,
-        right_dom_cube_path,
-        threshold_km=threshold_km,
-        priority_name="ProjectionFirst",
-        lookup_failure_policy=lookup_failure_policy,
-        lunar_radius_km=lunar_radius_km,
-        space="dom",
-        geometry_source="dom_projection_set_image",
-        band=dom_band,
-    )
+    del lunar_radius_km, dom_band
+    left_cube = None
+    right_cube = None
+    try:
+        left_cube, left_projection = _open_dom_projection(left_dom_cube_path)
+        right_cube, right_projection = _open_dom_projection(right_dom_cube_path)
+        left_key_file = read_key_file(left_input)
+        right_key_file = read_key_file(right_input)
+        filtered_left, filtered_right, summary, _retained_indices = filter_stereo_pair_keypoints_by_projected_distance(
+            left_key_file,
+            right_key_file,
+            left_projected_lookup=_lookup_from_dom_projection(left_projection),
+            right_projected_lookup=_lookup_from_dom_projection(right_projection),
+            threshold_km=threshold_km,
+            lookup_failure_policy=lookup_failure_policy,
+            left_dom=left_dom_cube_path,
+            right_dom=right_dom_cube_path,
+        )
+        write_key_file(left_output, filtered_left)
+        write_key_file(right_output, filtered_right)
+        return {
+            **summary,
+            "left_input": str(left_input),
+            "right_input": str(right_input),
+            "left_output": str(left_output),
+            "right_output": str(right_output),
+        }
+    finally:
+        if left_cube is not None and left_cube.is_open():
+            left_cube.close()
+        if right_cube is not None and right_cube.is_open():
+            right_cube.close()
 
 
 def filter_ori_key_files_by_ground_distance(
@@ -403,12 +558,17 @@ def filter_ori_key_files_by_ground_distance(
 
 
 __all__ = [
+    "DEFAULT_PRE_RANSAC_DISTANCE_METHOD",
     "GroundLookup",
     "LUNAR_MEAN_RADIUS_KM",
     "PREFILTER_METADATA_KEY",
+    "ProjectedLookup",
+    "SUPPORTED_PRE_RANSAC_DISTANCE_METHODS",
     "filter_dom_key_files_by_ground_distance",
     "filter_ori_key_files_by_ground_distance",
     "filter_stereo_pair_key_files_by_ground_distance",
     "filter_stereo_pair_keypoints_by_ground_distance",
+    "filter_stereo_pair_keypoints_by_projected_distance",
     "ground_distance_km",
+    "projected_distance_km",
 ]

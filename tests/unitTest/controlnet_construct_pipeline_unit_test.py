@@ -8898,7 +8898,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             point_id_prefix="PRB",
         )
 
-        metadata_variants = ("malformed", "missing")
+        metadata_variants = ("malformed", "missing", "non_dict")
         for metadata_variant in metadata_variants:
             with self.subTest(metadata_variant=metadata_variant):
                 with temporary_directory() as temp_dir:
@@ -8910,6 +8910,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
                     if metadata_variant == "malformed":
                         metadata_path.write_text("{bad json", encoding="utf-8")
+                    elif metadata_variant == "non_dict":
+                        metadata_path.write_text("[]", encoding="utf-8")
 
                     fake_pair_result = {
                         "left_conversion": {"output_count": 1, "failure_count": 0},

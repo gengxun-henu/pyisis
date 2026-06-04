@@ -158,6 +158,8 @@ def _load_upstream_ground_distance_filter_summary(metadata_path: str | Path | No
         payload = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return None
+    if not isinstance(payload, dict):
+        return None
     summary = payload.get(PREFILTER_METADATA_KEY)
     if isinstance(summary, dict) and summary.get("applied") is True:
         return dict(summary)

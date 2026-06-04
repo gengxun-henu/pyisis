@@ -2626,6 +2626,11 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 "geometry_source": "ori_camera_set_image",
             }
 
+            def fake_prefilter(left_input, right_input, left_output, right_output, *args, **kwargs):
+                write_key_file(left_output, KeypointFile(32, 32, expected_left_key_file.points[:1]))
+                write_key_file(right_output, KeypointFile(32, 32, expected_right_key_file.points[:1]))
+                return prefilter_summary
+
             with mock.patch.object(
                 image_match,
                 "match_ori_pair",
@@ -2634,13 +2639,14 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     expected_right_key_file,
                     {
                         "status": "matched",
+                        "point_count": 2,
                         "matcher": {"matcher_method_requested": "sift"},
                     },
                 ),
             ), mock.patch.object(
                 image_match,
                 "filter_ori_key_files_by_ground_distance",
-                return_value=prefilter_summary,
+                side_effect=fake_prefilter,
                 create=True,
             ) as prefilter_mock:
                 result = image_match.match_ori_pair_to_key_files(
@@ -2650,10 +2656,17 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     right_key,
                     pre_ransac_max_ground_distance_km=1.0,
                 )
+            persisted_left_count = len(read_key_file(left_key).points)
+            persisted_right_count = len(read_key_file(right_key).points)
 
         prefilter_mock.assert_called_once()
         self.assertTrue(result[PREFILTER_METADATA_KEY]["applied"])
         self.assertEqual(result[PREFILTER_METADATA_KEY]["space"], "ori")
+        self.assertEqual(result["point_count"], 1)
+        self.assertEqual(result["point_count_before_pre_ransac_ground_filter"], 2)
+        self.assertEqual(result["point_count_after_pre_ransac_ground_filter"], 1)
+        self.assertEqual(persisted_left_count, 1)
+        self.assertEqual(persisted_right_count, 1)
 
     def test_build_image_backend_accepts_ori_space(self):
         backend = tile_matching.build_image_backend("ori")

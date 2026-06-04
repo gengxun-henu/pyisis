@@ -367,11 +367,15 @@ def _disabled_pre_ransac_ground_distance_summary(
     return summary
 
 
-def _update_dom_summary_after_pre_ransac_ground_filter(
+def _update_summary_after_pre_ransac_ground_filter(
     summary: dict[str, object],
     left_key_file: KeypointFile,
+    *,
+    prefilter_summary: dict[str, object],
 ) -> None:
-    before_count = int(summary.get("point_count", len(left_key_file.points)))
+    before_count = int(
+        summary.get("point_count", prefilter_summary.get("input_count", len(left_key_file.points)))
+    )
     after_count = len(left_key_file.points)
     summary["point_count_before_pre_ransac_ground_filter"] = before_count
     summary["point_count_after_pre_ransac_ground_filter"] = after_count
@@ -3418,6 +3422,13 @@ def match_ori_pair_to_key_files(
             lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
             band=int(kwargs.get("band", 1)),
         )
+        left_key_file = read_key_file(left_output_key)
+        right_key_file = read_key_file(right_output_key)
+        _update_summary_after_pre_ransac_ground_filter(
+            summary,
+            left_key_file,
+            prefilter_summary=pre_ransac_ground_distance_filter,
+        )
     else:
         pre_ransac_ground_distance_filter = _disabled_pre_ransac_ground_distance_summary(
             threshold_km=pre_ransac_ground_distance_threshold,
@@ -4501,7 +4512,11 @@ def match_dom_pair_to_key_files(
             )
             left_key_file = read_key_file(left_output_key)
             right_key_file = read_key_file(right_output_key)
-            _update_dom_summary_after_pre_ransac_ground_filter(summary, left_key_file)
+            _update_summary_after_pre_ransac_ground_filter(
+                summary,
+                left_key_file,
+                prefilter_summary=pre_ransac_ground_distance_filter,
+            )
         else:
             pre_ransac_ground_distance_filter = _disabled_pre_ransac_ground_distance_summary(
                 threshold_km=pre_ransac_ground_distance_threshold,
@@ -4642,7 +4657,11 @@ def match_dom_pair_to_key_files(
         )
         left_key_file = read_key_file(left_output_key)
         right_key_file = read_key_file(right_output_key)
-        _update_dom_summary_after_pre_ransac_ground_filter(summary, left_key_file)
+        _update_summary_after_pre_ransac_ground_filter(
+            summary,
+            left_key_file,
+            prefilter_summary=pre_ransac_ground_distance_filter,
+        )
     else:
         pre_ransac_ground_distance_filter = _disabled_pre_ransac_ground_distance_summary(
             threshold_km=pre_ransac_ground_distance_threshold,

@@ -132,6 +132,7 @@ controlnet_stereopair_module = importlib.import_module("controlnet_construct.con
 deep_match_config_module = importlib.import_module("controlnet_construct.deep_match_config")
 match_visualization_module = importlib.import_module("controlnet_construct.match_visualization")
 lowres_offset_module = importlib.import_module("controlnet_construct.lowres_offset")
+from controlnet_construct.ground_distance_prefilter import PREFILTER_METADATA_KEY
 from image_match.adaptive_routing import ImageTextureProbe
 from image_match.lighting_difference import SolarGeometry
 from image_match.texture_sparseness import ImageSparsenessSummary
@@ -150,6 +151,66 @@ tile_matching_module = importlib.import_module("controlnet_construct.tile_matchi
 
 def _tile_match_batch_result(*results):
     return tile_matching_module.TileMatchBatchResult(results=list(results))
+
+
+def _complete_dom_key_output_summary(*, point_count: int = 2) -> dict[str, object]:
+    return {
+        "status": "matched",
+        "reason": "synthetic matching-stage prefilter regression",
+        "point_count": point_count,
+        "tile_count": 1,
+        "tile_count_before_preindex_filter": 1,
+        "tile_count_after_preindex_filter": 1,
+        "preindexed_skipped_tile_count": 0,
+        "full_resolution_skipped_tile_count": 0,
+        "matched_tile_count": 1,
+        "skipped_tile_count": 0,
+        "tile_validity_prefilter_enabled": False,
+        "tile_validity_cache_dir": None,
+        "tile_validity_cell_width": 256,
+        "tile_validity_cell_height": 256,
+        "tile_block_alignment_mode": "off",
+        "block_alignment_reason": "alignment_disabled",
+        "tile_block_alignment": {
+            "mode": "off",
+            "status": "disabled",
+            "reason": "alignment_disabled",
+        },
+        "tile_validity_skip_reasons": {},
+        "left_tile_validity_index": None,
+        "right_tile_validity_index": None,
+        "tiling_used": False,
+        "valid_pixel_percent_threshold": 0.0,
+        "invalid_pixel_radius": 1,
+        "matcher": {
+            "matcher_method_requested": "bf",
+            "matcher_method_effective": "bf",
+            "matcher_method_used": "bf",
+            "ratio_test": 0.75,
+        },
+        "parallel_cpu_requested": False,
+        "num_worker_parallel_cpu": 1,
+        "parallel_cpu_used": False,
+        "parallel_cpu_backend": "serial",
+        "parallel_cpu_worker_count": 1,
+        "tile_match_backend": "serial",
+        "low_resolution_offset": {
+            "enabled": False,
+            "status": "disabled",
+            "delta_x_projected": 0.0,
+            "delta_y_projected": 0.0,
+        },
+        "low_resolution_matching_target_long_edge": None,
+        "resolved_low_resolution_level": 3,
+        "adaptive_routing": {
+            "enabled": False,
+            "status": "disabled",
+        },
+        "preparation": {
+            "status": "ready",
+            "reason": "ready",
+        },
+    }
 tile_matching = tile_matching_module
 TileWindow = tile_matching_module.TileWindow
 
@@ -2536,6 +2597,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     "right.cub",
                     left_key,
                     right_key,
+                    pre_ransac_max_ground_distance_km=0.0,
                 )
 
             self.assertEqual(result["left_output_key"], str(left_key))
@@ -2544,6 +2606,54 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             self.assertTrue(right_key.is_file())
             self.assertEqual(read_key_file(left_key), expected_left_key_file)
             self.assertEqual(read_key_file(right_key), expected_right_key_file)
+
+    def test_match_ori_pair_to_key_files_applies_pre_ransac_ground_filter(self):
+        with temporary_directory() as temp_dir:
+            left_key = temp_dir / "left_ori_prefilter.key"
+            right_key = temp_dir / "right_ori_prefilter.key"
+            expected_left_key_file = KeypointFile(32, 32, (Keypoint(1.5, 2.5), Keypoint(3.5, 4.5)))
+            expected_right_key_file = KeypointFile(32, 32, (Keypoint(5.5, 6.5), Keypoint(7.5, 8.5)))
+            prefilter_summary = {
+                "applied": True,
+                "already_prefiltered": False,
+                "status": "filtered",
+                "input_count": 2,
+                "retained_count": 1,
+                "dropped_count": 1,
+                "threshold_km": 1.0,
+                "lookup_failure_policy": "drop",
+                "space": "ori",
+                "geometry_source": "ori_camera_set_image",
+            }
+
+            with mock.patch.object(
+                image_match,
+                "match_ori_pair",
+                return_value=(
+                    expected_left_key_file,
+                    expected_right_key_file,
+                    {
+                        "status": "matched",
+                        "matcher": {"matcher_method_requested": "sift"},
+                    },
+                ),
+            ), mock.patch.object(
+                image_match,
+                "filter_ori_key_files_by_ground_distance",
+                return_value=prefilter_summary,
+                create=True,
+            ) as prefilter_mock:
+                result = image_match.match_ori_pair_to_key_files(
+                    "left.cub",
+                    "right.cub",
+                    left_key,
+                    right_key,
+                    pre_ransac_max_ground_distance_km=1.0,
+                )
+
+        prefilter_mock.assert_called_once()
+        self.assertTrue(result[PREFILTER_METADATA_KEY]["applied"])
+        self.assertEqual(result[PREFILTER_METADATA_KEY]["space"], "ori")
 
     def test_build_image_backend_accepts_ori_space(self):
         backend = tile_matching.build_image_backend("ori")
@@ -6126,6 +6236,118 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertIn("visualization_mode_used", visualization_payload)
         self.assertEqual(visualization_payload["output_path"], result["match_visualization"]["output_path"])
 
+    def test_match_dom_pair_to_key_files_metadata_includes_pre_ransac_ground_filter(self):
+        left_key_file = KeypointFile(32, 32, (Keypoint(1.0, 2.0), Keypoint(3.0, 4.0)))
+        right_key_file = KeypointFile(32, 32, (Keypoint(5.0, 6.0), Keypoint(7.0, 8.0)))
+        prefilter_summary = {
+            "applied": True,
+            "already_prefiltered": False,
+            "status": "filtered",
+            "input_count": 2,
+            "retained_count": 1,
+            "dropped_count": 1,
+            "threshold_km": 1.0,
+            "lookup_failure_policy": "drop",
+            "space": "dom",
+            "geometry_source": "dom_projection_set_image",
+        }
+
+        with temporary_directory() as temp_dir:
+            left_key = temp_dir / "left_prefilter.key"
+            right_key = temp_dir / "right_prefilter.key"
+            metadata_output = temp_dir / "match_metadata" / "pair.json"
+            metadata_output.parent.mkdir(parents=True)
+
+            with mock.patch.object(
+                image_match,
+                "match_dom_pair",
+                return_value=(left_key_file, right_key_file, _complete_dom_key_output_summary(point_count=2)),
+            ), mock.patch.object(
+                image_match,
+                "filter_dom_key_files_by_ground_distance",
+                return_value=prefilter_summary,
+                create=True,
+            ) as prefilter_mock:
+                result = match_dom_pair_to_key_files(
+                    "left.cub",
+                    "right.cub",
+                    left_key,
+                    right_key,
+                    metadata_output=metadata_output,
+                    write_match_visualization=False,
+                    pre_ransac_max_ground_distance_km=1.0,
+                )
+
+            payload = json.loads(metadata_output.read_text(encoding="utf-8"))
+
+        prefilter_mock.assert_called_once()
+        self.assertTrue(result[PREFILTER_METADATA_KEY]["applied"])
+        self.assertTrue(payload["image_match"][PREFILTER_METADATA_KEY]["applied"])
+
+    def test_match_dom_pair_to_key_files_disables_pre_ransac_ground_filter_at_zero_threshold(self):
+        left_key_file = KeypointFile(32, 32, (Keypoint(1.0, 2.0),))
+        right_key_file = KeypointFile(32, 32, (Keypoint(5.0, 6.0),))
+
+        with temporary_directory() as temp_dir:
+            left_key = temp_dir / "left_prefilter_disabled.key"
+            right_key = temp_dir / "right_prefilter_disabled.key"
+            metadata_output = temp_dir / "match_metadata" / "pair.json"
+            metadata_output.parent.mkdir(parents=True)
+
+            with mock.patch.object(
+                image_match,
+                "match_dom_pair",
+                return_value=(left_key_file, right_key_file, _complete_dom_key_output_summary(point_count=1)),
+            ), mock.patch.object(
+                image_match,
+                "filter_dom_key_files_by_ground_distance",
+                create=True,
+            ) as prefilter_mock:
+                result = match_dom_pair_to_key_files(
+                    "left.cub",
+                    "right.cub",
+                    left_key,
+                    right_key,
+                    metadata_output=metadata_output,
+                    write_match_visualization=False,
+                    pre_ransac_max_ground_distance_km=0.0,
+                )
+
+            payload = json.loads(metadata_output.read_text(encoding="utf-8"))
+
+        prefilter_mock.assert_not_called()
+        self.assertEqual(result[PREFILTER_METADATA_KEY]["status"], "disabled")
+        self.assertFalse(result[PREFILTER_METADATA_KEY]["applied"])
+        self.assertEqual(payload["image_match"][PREFILTER_METADATA_KEY]["status"], "disabled")
+
+    def test_match_dom_pair_to_key_files_rejects_invalid_pre_ransac_ground_filter_threshold(self):
+        for invalid_threshold in (-1.0, float("nan")):
+            with self.subTest(invalid_threshold=invalid_threshold):
+                with temporary_directory() as temp_dir:
+                    with mock.patch.object(
+                        image_match,
+                        "match_dom_pair",
+                    ) as match_mock, mock.patch.object(
+                        image_match,
+                        "filter_dom_key_files_by_ground_distance",
+                        create=True,
+                    ) as prefilter_mock:
+                        with self.assertRaisesRegex(
+                            ValueError,
+                            "pre_ransac_max_ground_distance_km must be finite and non-negative",
+                        ):
+                            match_dom_pair_to_key_files(
+                                "left.cub",
+                                "right.cub",
+                                temp_dir / "left_invalid_threshold.key",
+                                temp_dir / "right_invalid_threshold.key",
+                                write_match_visualization=False,
+                                pre_ransac_max_ground_distance_km=invalid_threshold,
+                            )
+
+                match_mock.assert_not_called()
+                prefilter_mock.assert_not_called()
+
     def test_match_dom_pair_to_key_files_visualization_uses_ransac_filtered_keypoints(self):
         summary = {
             "status": "matched",
@@ -6240,6 +6462,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     right_key,
                     metadata_output=metadata_output,
                     match_visualization_ransac_mode="strict",
+                    pre_ransac_max_ground_distance_km=0.0,
                 )
 
             persisted_left = read_key_file(left_key)
@@ -6332,6 +6555,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                     right_key,
                     metadata_output=metadata_output,
                     write_match_visualization=False,
+                    pre_ransac_max_ground_distance_km=0.0,
                 )
 
             payload = json.loads(metadata_output.read_text(encoding="utf-8"))

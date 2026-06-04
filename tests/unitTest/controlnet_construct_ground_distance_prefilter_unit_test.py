@@ -70,10 +70,10 @@ class FakeGroundMap:
     def universal_latitude(self) -> float:
         if self.sample in FakeGroundMap.non_finite_samples:
             return float("nan")
-        return 0.0
+        return float(self.sample)
 
     def universal_longitude(self) -> float:
-        return 0.0 if self.sample < 50.0 else 0.01
+        return float(self.line)
 
 
 class FakeProjection:
@@ -91,6 +91,17 @@ class FakeProjection:
 
     def to_projection_y(self, line: float) -> float:
         return float(line) * 1000.0
+
+    def set_universal_ground(self, latitude: float, longitude: float) -> bool:
+        self.latitude = float(latitude)
+        self.longitude = float(longitude)
+        return self.latitude != 99.0
+
+    def x_coord(self) -> float:
+        return self.latitude * 1000.0
+
+    def y_coord(self) -> float:
+        return self.longitude * 1000.0
 
 
 FakeCameraPriority = type(
@@ -436,6 +447,46 @@ class GroundDistancePrefilterTest(unittest.TestCase):
                 ["CameraFirst", "CameraFirst"],
             )
             self.assertEqual([cube.closed for cube in FakeCube.instances], [True, True])
+
+    def test_filter_ori_key_files_by_dom_projected_distance_uses_camera_then_dom_projection(self) -> None:
+        from controlnet_construct.ground_distance_prefilter import filter_ori_key_files_by_dom_projected_distance
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            left_input = tmp_path / "left.key"
+            right_input = tmp_path / "right.key"
+            left_output = tmp_path / "left.filtered.key"
+            right_output = tmp_path / "right.filtered.key"
+            write_key_file(left_input, KeypointFile(100, 100, (Keypoint(1.0, 1.0), Keypoint(2.0, 1.0))))
+            write_key_file(right_input, KeypointFile(100, 100, (Keypoint(1.0, 1.0), Keypoint(5.0, 1.0))))
+
+            with (
+                mock.patch.object(ground_distance_module, "bootstrap_runtime_environment", lambda: None),
+                mock.patch.dict(sys.modules, {"isis_pybind": fake_ip}),
+            ):
+                summary = filter_ori_key_files_by_dom_projected_distance(
+                    left_input,
+                    right_input,
+                    left_output,
+                    right_output,
+                    "left_ori.cub",
+                    "right_ori.cub",
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    threshold_km=1.0,
+                )
+
+            self.assertEqual(summary["distance_method"], "dom_projected")
+            self.assertEqual(summary["space"], "dom")
+            self.assertEqual(summary["geometry_source"], "ori_camera_to_dom_projection_coordinate")
+            self.assertEqual(summary["left_dom"], "left_dom.cub")
+            self.assertEqual(summary["right_dom"], "right_dom.cub")
+            self.assertEqual(summary["left_ori"], "left_ori.cub")
+            self.assertEqual(summary["right_ori"], "right_ori.cub")
+            self.assertEqual(summary["retained_indices"], [0])
+            self.assertEqual(len(read_key_file(left_output).points), 1)
+            self.assertEqual(len(read_key_file(right_output).points), 1)
+            self.assertEqual([cube.closed for cube in FakeCube.instances], [True, True, True, True])
 
     def test_ori_wrapper_drops_non_finite_ground_lookup(self) -> None:
         FakeGroundMap.non_finite_samples.add(42.0)

@@ -276,6 +276,7 @@ try:
     from controlnet_construct.ground_distance_prefilter import (
         PREFILTER_METADATA_KEY,
         filter_dom_key_files_by_ground_distance,
+        filter_ori_key_files_by_dom_projected_distance,
         filter_ori_key_files_by_ground_distance,
     )
 except ImportError:
@@ -285,6 +286,9 @@ except ImportError:
         raise RuntimeError("Ground-distance prefilter support is unavailable.")
 
     def filter_ori_key_files_by_ground_distance(*args, **kwargs):  # type: ignore[no-untyped-def]
+        raise RuntimeError("Ground-distance prefilter support is unavailable.")
+
+    def filter_ori_key_files_by_dom_projected_distance(*args, **kwargs):  # type: ignore[no-untyped-def]
         raise RuntimeError("Ground-distance prefilter support is unavailable.")
 
 
@@ -306,6 +310,8 @@ DEFAULT_VALID_INTENSITY_LOWER_PERCENT = 0.1
 DEFAULT_VALID_INTENSITY_UPPER_PERCENT = 99.9
 DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM = 1.0
 DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY = "drop"
+DEFAULT_PRE_RANSAC_DISTANCE_METHOD = "dom-projected"
+SUPPORTED_PRE_RANSAC_DISTANCE_METHODS = ("dom-projected", "ori-spherical")
 
 
 _run_command = _lowres_offset._run_command
@@ -328,11 +334,13 @@ DEFAULT_MEMORY_PROFILE = _match_visualization.DEFAULT_MEMORY_PROFILE
 DEFAULT_PREVIEW_CROP_MARGIN_PIXELS = _match_visualization.DEFAULT_PREVIEW_CROP_MARGIN_PIXELS
 DEFAULT_PREVIEW_CACHE_SOURCE = _match_visualization.DEFAULT_PREVIEW_CACHE_SOURCE
 DEFAULT_MATCH_VISUALIZATION_RANSAC = True
-DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD = 3.0
+DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD = _stereo_ransac.DEFAULT_RANSAC_REPROJ_THRESHOLD
 DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE = 0.995
 DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS = 5000
 DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE = "loose"
 DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD = 1.0
+DEFAULT_RANSAC_MODEL = _stereo_ransac.DEFAULT_RANSAC_MODEL
+SUPPORTED_RANSAC_MODELS = _stereo_ransac.SUPPORTED_RANSAC_MODELS
 SUPPORTED_VISUALIZATION_MODES = _match_visualization.SUPPORTED_VISUALIZATION_MODES
 SUPPORTED_MEMORY_PROFILES = _match_visualization.SUPPORTED_MEMORY_PROFILES
 SUPPORTED_PREVIEW_CACHE_SOURCES = _match_visualization.SUPPORTED_PREVIEW_CACHE_SOURCES
@@ -343,6 +351,20 @@ def _validate_pre_ransac_ground_distance_threshold(value: float) -> float:
     if not math.isfinite(threshold) or threshold < 0.0:
         raise ValueError("pre_ransac_max_ground_distance_km must be finite and non-negative.")
     return threshold
+
+
+def _parse_pre_ransac_distance_method(value: object) -> str:
+    normalized = str(value).strip().lower().replace("_", "-")
+    if normalized not in SUPPORTED_PRE_RANSAC_DISTANCE_METHODS:
+        raise ValueError("pre_ransac_distance_method must be one of: dom-projected, ori-spherical.")
+    return normalized
+
+
+def _parse_ransac_model(value: object) -> str:
+    normalized = str(value).strip().lower().replace("_", "-")
+    if normalized not in SUPPORTED_RANSAC_MODELS:
+        raise ValueError("ransac_model must be one of: affine-partial, affine, homography.")
+    return normalized
 
 
 def _disabled_pre_ransac_ground_distance_summary(
@@ -364,6 +386,10 @@ def _disabled_pre_ransac_ground_distance_summary(
         summary["space"] = space
     if geometry_source is not None:
         summary["geometry_source"] = geometry_source
+    if space == "dom" and geometry_source == "dom_projection_coordinate":
+        summary["distance_method"] = "dom_projected"
+    elif space == "ori" and geometry_source == "ori_camera_set_image":
+        summary["distance_method"] = "ori_spherical"
     return summary
 
 
@@ -999,6 +1025,16 @@ def load_image_match_defaults_from_config(
             _validate_pre_ransac_ground_lookup_failure_policy,
         ),
         (
+            "pre_ransac_distance_method",
+            ("pre_ransac_distance_method", "preRansacDistanceMethod", "PreRansacDistanceMethod"),
+            _parse_pre_ransac_distance_method,
+        ),
+        (
+            "ransac_model",
+            ("ransac_model", "ransacModel", "RansacModel"),
+            _parse_ransac_model,
+        ),
+        (
             "match_preset_path",
             ("match_preset_path", "matchPresetPath", "MatchPresetPath"),
             lambda value: str(value),
@@ -1408,9 +1444,9 @@ def filter_stereo_pair_keypoints_with_ransac(
     left_key_file: KeypointFile,
     right_key_file: KeypointFile,
     *,
-    ransac_model: str = _stereo_ransac.DEFAULT_RANSAC_MODEL,
+    ransac_model: str = DEFAULT_RANSAC_MODEL,
     ransac_coordinate_space: str = "dom_pixel",
-    ransac_reproj_threshold: float = 3.0,
+    ransac_reproj_threshold: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD,
     ransac_confidence: float = 0.995,
     ransac_max_iters: int = 5000,
     ransac_mode: str = "loose",
@@ -1435,9 +1471,9 @@ def filter_stereo_pair_key_files_with_ransac(
     left_output: str | Path,
     right_output: str | Path,
     *,
-    ransac_model: str = _stereo_ransac.DEFAULT_RANSAC_MODEL,
+    ransac_model: str = DEFAULT_RANSAC_MODEL,
     ransac_coordinate_space: str = "dom_pixel",
-    ransac_reproj_threshold: float = 3.0,
+    ransac_reproj_threshold: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_THRESHOLD,
     ransac_confidence: float = 0.995,
     ransac_max_iters: int = 5000,
     ransac_mode: str = "loose",
@@ -1467,6 +1503,8 @@ def _keypoints_for_match_visualization(
     ransac_confidence: float = DEFAULT_MATCH_VISUALIZATION_RANSAC_CONFIDENCE,
     ransac_max_iters: int = DEFAULT_MATCH_VISUALIZATION_RANSAC_MAX_ITERS,
     ransac_mode: str = DEFAULT_MATCH_VISUALIZATION_RANSAC_MODE,
+    ransac_model: str = DEFAULT_RANSAC_MODEL,
+    ransac_coordinate_space: str = "dom_pixel",
     loose_keep_pixel_threshold: float = DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD,
 ) -> tuple[KeypointFile, KeypointFile, dict[str, object]]:
     if not use_ransac:
@@ -1477,6 +1515,8 @@ def _keypoints_for_match_visualization(
                 "applied": False,
                 "status": "disabled",
                 "mode": ransac_mode,
+                "model": ransac_model,
+                "coordinate_space": ransac_coordinate_space,
                 "input_count": len(left_key_file.points),
                 "retained_count": len(left_key_file.points),
                 "dropped_count": 0,
@@ -1490,6 +1530,8 @@ def _keypoints_for_match_visualization(
     return filter_stereo_pair_keypoints_with_ransac(
         left_key_file,
         right_key_file,
+        ransac_model=ransac_model,
+        ransac_coordinate_space=ransac_coordinate_space,
         ransac_reproj_threshold=ransac_reproj_threshold,
         ransac_confidence=ransac_confidence,
         ransac_max_iters=ransac_max_iters,
@@ -3425,10 +3467,28 @@ def match_ori_pair_to_key_files(
     left_output_key: str | Path,
     right_output_key: str | Path,
     *,
+    left_corresponding_dom: str | Path | None = None,
+    right_corresponding_dom: str | Path | None = None,
+    pre_ransac_distance_method: str = DEFAULT_PRE_RANSAC_DISTANCE_METHOD,
     pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
     pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
+    ransac_model: str = DEFAULT_RANSAC_MODEL,
+    write_match_visualization: bool = False,
     **kwargs,
 ) -> dict[str, object]:
+    del write_match_visualization
+    resolved_distance_method = _parse_pre_ransac_distance_method(pre_ransac_distance_method)
+    _parse_ransac_model(ransac_model)
+    if resolved_distance_method == "dom-projected":
+        if left_corresponding_dom is None or right_corresponding_dom is None:
+            raise ValueError(
+                "left_corresponding_dom and right_corresponding_dom are required for dom-projected ORI filtering."
+            )
+        if not Path(left_corresponding_dom).exists():
+            raise ValueError(f"left_corresponding_dom does not exist: {left_corresponding_dom}")
+        if not Path(right_corresponding_dom).exists():
+            raise ValueError(f"right_corresponding_dom does not exist: {right_corresponding_dom}")
+
     pre_ransac_ground_distance_threshold = _validate_pre_ransac_ground_distance_threshold(
         pre_ransac_max_ground_distance_km
     )
@@ -3439,7 +3499,28 @@ def match_ori_pair_to_key_files(
     )
     write_key_file(left_output_key, left_key_file)
     write_key_file(right_output_key, right_key_file)
-    if pre_ransac_ground_distance_threshold > 0.0:
+    if resolved_distance_method == "dom-projected" and pre_ransac_ground_distance_threshold > 0.0:
+        pre_ransac_ground_distance_filter = filter_ori_key_files_by_dom_projected_distance(
+            left_output_key,
+            right_output_key,
+            left_output_key,
+            right_output_key,
+            left_cube_path,
+            right_cube_path,
+            left_corresponding_dom,
+            right_corresponding_dom,
+            threshold_km=pre_ransac_ground_distance_threshold,
+            lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
+            band=int(kwargs.get("band", 1)),
+        )
+        left_key_file = read_key_file(left_output_key)
+        right_key_file = read_key_file(right_output_key)
+        _update_summary_after_pre_ransac_ground_filter(
+            summary,
+            left_key_file,
+            prefilter_summary=pre_ransac_ground_distance_filter,
+        )
+    elif resolved_distance_method == "ori-spherical" and pre_ransac_ground_distance_threshold > 0.0:
         pre_ransac_ground_distance_filter = filter_ori_key_files_by_ground_distance(
             left_output_key,
             right_output_key,
@@ -3459,12 +3540,21 @@ def match_ori_pair_to_key_files(
             prefilter_summary=pre_ransac_ground_distance_filter,
         )
     else:
+        disabled_space = "dom" if resolved_distance_method == "dom-projected" else "ori"
+        disabled_geometry = (
+            "dom_projection_coordinate"
+            if resolved_distance_method == "dom-projected"
+            else "ori_camera_set_image"
+        )
         pre_ransac_ground_distance_filter = _disabled_pre_ransac_ground_distance_summary(
             threshold_km=pre_ransac_ground_distance_threshold,
             lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
-            space="ori",
-            geometry_source="ori_camera_set_image",
+            space=disabled_space,
+            geometry_source=disabled_geometry,
         )
+        if resolved_distance_method == "dom-projected":
+            pre_ransac_ground_distance_filter["left_dom"] = str(left_corresponding_dom)
+            pre_ransac_ground_distance_filter["right_dom"] = str(right_corresponding_dom)
     summary[PREFILTER_METADATA_KEY] = pre_ransac_ground_distance_filter
     return {
         **summary,
@@ -4411,9 +4501,15 @@ def match_dom_pair_to_key_files(
     deep_match_config_path: str | Path | None = None,
     pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
     pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
+    pre_ransac_distance_method: str = DEFAULT_PRE_RANSAC_DISTANCE_METHOD,
+    ransac_model: str = DEFAULT_RANSAC_MODEL,
     **kwargs,
 ) -> dict[str, object]:
     resolved_deep_match_mode = _normalize_deep_match_mode(deep_match_mode)
+    resolved_distance_method = _parse_pre_ransac_distance_method(pre_ransac_distance_method)
+    resolved_ransac_model = _parse_ransac_model(ransac_model)
+    if resolved_distance_method != "dom-projected":
+        raise ValueError("pre_ransac_distance_method='ori-spherical' is only supported for ORI matching.")
     pre_ransac_ground_distance_threshold = _validate_pre_ransac_ground_distance_threshold(
         pre_ransac_max_ground_distance_km
     )
@@ -4551,7 +4647,7 @@ def match_dom_pair_to_key_files(
                 threshold_km=pre_ransac_ground_distance_threshold,
                 lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
                 space="dom",
-                geometry_source="dom_projection_set_image",
+                geometry_source="dom_projection_coordinate",
             )
         summary[PREFILTER_METADATA_KEY] = pre_ransac_ground_distance_filter
         metadata_payload = None
@@ -4596,6 +4692,8 @@ def match_dom_pair_to_key_files(
                 ransac_confidence=match_visualization_ransac_confidence,
                 ransac_max_iters=match_visualization_ransac_max_iters,
                 ransac_mode=match_visualization_ransac_mode,
+                ransac_model=resolved_ransac_model,
+                ransac_coordinate_space="dom_pixel",
                 loose_keep_pixel_threshold=match_visualization_loose_ransac_keep_threshold,
             )
             match_visualization_result = write_stereo_pair_match_visualization(
@@ -4696,7 +4794,7 @@ def match_dom_pair_to_key_files(
             threshold_km=pre_ransac_ground_distance_threshold,
             lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
             space="dom",
-            geometry_source="dom_projection_set_image",
+            geometry_source="dom_projection_coordinate",
         )
     summary[PREFILTER_METADATA_KEY] = pre_ransac_ground_distance_filter
     metadata_payload = None
@@ -4785,6 +4883,8 @@ def match_dom_pair_to_key_files(
                 ransac_confidence=match_visualization_ransac_confidence,
                 ransac_max_iters=match_visualization_ransac_max_iters,
                 ransac_mode=match_visualization_ransac_mode,
+                ransac_model=resolved_ransac_model,
+                ransac_coordinate_space="dom_pixel",
                 loose_keep_pixel_threshold=match_visualization_loose_ransac_keep_threshold,
             )
             match_visualization_result = write_stereo_pair_match_visualization(
@@ -4916,6 +5016,28 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
             "Policy for tie points whose cube-to-ground lookup fails during pre-RANSAC filtering. "
             f"Default: {DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY}."
         ),
+    )
+    parser.add_argument(
+        "--pre-ransac-distance-method",
+        type=_parse_pre_ransac_distance_method,
+        default=DEFAULT_PRE_RANSAC_DISTANCE_METHOD,
+        help="Pre-RANSAC distance filter method: dom-projected or ori-spherical. Default: dom-projected.",
+    )
+    parser.add_argument(
+        "--ransac-model",
+        type=_parse_ransac_model,
+        default=DEFAULT_RANSAC_MODEL,
+        help="RANSAC model for visualization/control filtering: affine-partial, affine, or homography. Default: affine-partial.",
+    )
+    parser.add_argument(
+        "--left-corresponding-dom",
+        default=None,
+        help="DOM cube corresponding to the left ORI input; required for dom-projected ORI filtering.",
+    )
+    parser.add_argument(
+        "--right-corresponding-dom",
+        default=None,
+        help="DOM cube corresponding to the right ORI input; required for dom-projected ORI filtering.",
     )
     parser.add_argument(
         "--match-preset-path",
@@ -5243,6 +5365,8 @@ def main(argv: list[str] | None = None) -> None:
         tile_validity_cell_height=args.tile_validity_cell_height,
         pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
         pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
+        pre_ransac_distance_method=args.pre_ransac_distance_method,
+        ransac_model=args.ransac_model,
         matcher_method=args.matcher_method,
         ratio_test=args.ratio_test,
         max_features=args.max_features,

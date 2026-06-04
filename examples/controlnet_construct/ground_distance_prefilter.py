@@ -439,6 +439,25 @@ def _lookup_from_dom_projection(projection) -> ProjectedLookup:
     return lookup
 
 
+def _lookup_from_ori_camera_to_dom_projection(camera_ground_map, dom_projection) -> ProjectedLookup:
+    def lookup(sample: float, line: float) -> tuple[float, float] | None:
+        if not camera_ground_map.set_image(float(sample), float(line)):
+            return None
+        latitude = float(camera_ground_map.universal_latitude())
+        longitude = float(camera_ground_map.universal_longitude())
+        if not (math.isfinite(latitude) and math.isfinite(longitude)):
+            return None
+        if not dom_projection.set_universal_ground(latitude, longitude):
+            return None
+        projected_x = float(dom_projection.x_coord())
+        projected_y = float(dom_projection.y_coord())
+        if not (math.isfinite(projected_x) and math.isfinite(projected_y)):
+            return None
+        return projected_x, projected_y
+
+    return lookup
+
+
 def _filter_key_files_with_cube_ground_maps(
     left_input: str | Path,
     right_input: str | Path,
@@ -557,6 +576,74 @@ def filter_ori_key_files_by_ground_distance(
     )
 
 
+def filter_ori_key_files_by_dom_projected_distance(
+    left_input: str | Path,
+    right_input: str | Path,
+    left_output: str | Path,
+    right_output: str | Path,
+    left_cube_path: str | Path,
+    right_cube_path: str | Path,
+    left_dom_cube_path: str | Path,
+    right_dom_cube_path: str | Path,
+    *,
+    threshold_km: float,
+    lookup_failure_policy: str = "drop",
+    band: int = 1,
+) -> dict[str, object]:
+    left_ori_cube = None
+    right_ori_cube = None
+    left_dom_cube = None
+    right_dom_cube = None
+    try:
+        left_ori_cube, left_camera_ground_map = _open_ground_map(
+            left_cube_path,
+            band=band,
+            priority_name="CameraFirst",
+        )
+        right_ori_cube, right_camera_ground_map = _open_ground_map(
+            right_cube_path,
+            band=band,
+            priority_name="CameraFirst",
+        )
+        left_dom_cube, left_dom_projection = _open_dom_projection(left_dom_cube_path)
+        right_dom_cube, right_dom_projection = _open_dom_projection(right_dom_cube_path)
+        left_key_file = read_key_file(left_input)
+        right_key_file = read_key_file(right_input)
+        filtered_left, filtered_right, summary, retained_indices = filter_stereo_pair_keypoints_by_projected_distance(
+            left_key_file,
+            right_key_file,
+            left_projected_lookup=_lookup_from_ori_camera_to_dom_projection(
+                left_camera_ground_map,
+                left_dom_projection,
+            ),
+            right_projected_lookup=_lookup_from_ori_camera_to_dom_projection(
+                right_camera_ground_map,
+                right_dom_projection,
+            ),
+            threshold_km=threshold_km,
+            lookup_failure_policy=lookup_failure_policy,
+            left_dom=left_dom_cube_path,
+            right_dom=right_dom_cube_path,
+        )
+        summary["geometry_source"] = "ori_camera_to_dom_projection_coordinate"
+        summary["left_ori"] = str(left_cube_path)
+        summary["right_ori"] = str(right_cube_path)
+        summary["retained_indices"] = list(retained_indices)
+        write_key_file(left_output, filtered_left)
+        write_key_file(right_output, filtered_right)
+        return {
+            **summary,
+            "left_input": str(left_input),
+            "right_input": str(right_input),
+            "left_output": str(left_output),
+            "right_output": str(right_output),
+        }
+    finally:
+        for cube in (left_ori_cube, right_ori_cube, left_dom_cube, right_dom_cube):
+            if cube is not None and cube.is_open():
+                cube.close()
+
+
 __all__ = [
     "DEFAULT_PRE_RANSAC_DISTANCE_METHOD",
     "GroundLookup",
@@ -565,6 +652,7 @@ __all__ = [
     "ProjectedLookup",
     "SUPPORTED_PRE_RANSAC_DISTANCE_METHODS",
     "filter_dom_key_files_by_ground_distance",
+    "filter_ori_key_files_by_dom_projected_distance",
     "filter_ori_key_files_by_ground_distance",
     "filter_stereo_pair_key_files_by_ground_distance",
     "filter_stereo_pair_keypoints_by_ground_distance",

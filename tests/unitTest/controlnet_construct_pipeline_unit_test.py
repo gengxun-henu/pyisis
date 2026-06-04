@@ -107,6 +107,7 @@ from controlnet_construct.dom2ori import (
     convert_paired_dom_key_files_via_ground_functions,
     convert_points_via_ground_functions,
 )
+from controlnet_construct.ground_distance_prefilter import PREFILTER_METADATA_KEY
 from controlnet_construct.deep_match_config import DeepMatchRuntimeConfig
 from controlnet_construct.image_match import (
     build_argument_parser as build_controlnet_stereopair_argument_parser,
@@ -8676,6 +8677,180 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(result["ransac"]["retained_count"], 1)
         self.assertEqual(result["match_visualization"]["highlighted_match_count"], 1)
         self.assertEqual(result["controlnet"]["point_count"], 1)
+
+    def test_build_controlnet_for_dom_stereo_pair_prefilters_after_merge_before_ransac(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_prefilter",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="dom pre-ransac prefilter wrapper test",
+            point_id_prefix="PRF",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_dom.key"
+            right_dom_key = temp_dir / "right_dom.key"
+            output_net = temp_dir / "prefilter_wrapper.net"
+            write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+            calls: list[str] = []
+
+            fake_pair_result = {
+                "left_conversion": {"output_count": 1, "failure_count": 0},
+                "right_conversion": {"output_count": 1, "failure_count": 0},
+                "retained_pair_count": 1,
+            }
+            fake_controlnet_result = {
+                "output_path": str(output_net),
+                "network_id": config.network_id,
+                "target_name": config.target_name,
+                "user_name": config.user_name,
+                "point_count": 1,
+                "measure_count": 2,
+                "left_serial_number": "left-serial",
+                "right_serial_number": "right-serial",
+                "pvl_format": True,
+            }
+
+            def fake_prefilter(left_input, right_input, left_output, right_output, *args, **kwargs):
+                calls.append("prefilter")
+                self.assertTrue(Path(left_input).name.endswith("_left_dom_merged.key"))
+                self.assertTrue(Path(right_input).name.endswith("_right_dom_merged.key"))
+                write_key_file(Path(left_output), read_key_file(left_input))
+                write_key_file(Path(right_output), read_key_file(right_input))
+                self.assertEqual(kwargs["threshold_km"], 1.0)
+                self.assertEqual(kwargs["lookup_failure_policy"], "drop")
+                self.assertEqual(kwargs["dom_band"], 1)
+                return {"applied": True, "retained_count": 1, "dropped_count": 0, "threshold_km": 1.0}
+
+            def fake_ransac(left_input, right_input, *args, **kwargs):
+                calls.append("ransac")
+                self.assertTrue(Path(left_input).name.endswith("_left_dom_ground_prefilter.key"))
+                self.assertTrue(Path(right_input).name.endswith("_right_dom_ground_prefilter.key"))
+                return {
+                    "applied": True,
+                    "status": "filtered",
+                    "mode": "loose",
+                    "input_count": 1,
+                    "retained_count": 1,
+                    "dropped_count": 0,
+                    "retained_soft_outlier_positions": [],
+                }
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_dom_key_files_by_ground_distance",
+                    side_effect=fake_prefilter,
+                    create=True,
+                ) as prefilter_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_stereo_pair_key_files_with_ransac",
+                    side_effect=fake_ransac,
+                ) as ransac_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.convert_paired_dom_keypoints_to_original",
+                    return_value=fake_pair_result,
+                ),
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                    return_value=fake_controlnet_result,
+                ),
+            ):
+                result = build_controlnet_for_dom_stereo_pair(
+                    left_dom_key,
+                    right_dom_key,
+                    REAL_DOM_LEFT,
+                    REAL_DOM_RIGHT,
+                    LEFT_CUBE_PATH,
+                    RIGHT_CUBE_PATH,
+                    config,
+                    output_net,
+                )
+
+        prefilter_mock.assert_called_once()
+        ransac_mock.assert_called_once()
+        self.assertEqual(calls, ["prefilter", "ransac"])
+        self.assertTrue(result[PREFILTER_METADATA_KEY]["applied"])
+
+    def test_build_controlnet_for_dom_stereo_pair_skips_pre_ransac_prefilter_when_threshold_disabled(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_prefilter_disabled",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="disabled dom pre-ransac prefilter wrapper test",
+            point_id_prefix="PRD",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_dom.key"
+            right_dom_key = temp_dir / "right_dom.key"
+            output_net = temp_dir / "prefilter_disabled_wrapper.net"
+            write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+
+            fake_pair_result = {
+                "left_conversion": {"output_count": 1, "failure_count": 0},
+                "right_conversion": {"output_count": 1, "failure_count": 0},
+                "retained_pair_count": 1,
+            }
+            fake_controlnet_result = {
+                "output_path": str(output_net),
+                "network_id": config.network_id,
+                "target_name": config.target_name,
+                "user_name": config.user_name,
+                "point_count": 1,
+                "measure_count": 2,
+                "left_serial_number": "left-serial",
+                "right_serial_number": "right-serial",
+                "pvl_format": True,
+            }
+
+            def fake_ransac(left_input, right_input, *args, **kwargs):
+                self.assertEqual(Path(left_input), left_dom_key)
+                self.assertEqual(Path(right_input), right_dom_key)
+                return {
+                    "applied": True,
+                    "status": "filtered",
+                    "mode": "loose",
+                    "input_count": 1,
+                    "retained_count": 1,
+                    "dropped_count": 0,
+                    "retained_soft_outlier_positions": [],
+                }
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_dom_key_files_by_ground_distance",
+                    create=True,
+                ) as prefilter_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_stereo_pair_key_files_with_ransac",
+                    side_effect=fake_ransac,
+                ),
+                patch(
+                    "controlnet_construct.controlnet_stereopair.convert_paired_dom_keypoints_to_original",
+                    return_value=fake_pair_result,
+                ),
+                patch(
+                    "controlnet_construct.controlnet_stereopair.build_controlnet_for_stereo_pair",
+                    return_value=fake_controlnet_result,
+                ),
+            ):
+                result = build_controlnet_for_dom_stereo_pair(
+                    left_dom_key,
+                    right_dom_key,
+                    REAL_DOM_LEFT,
+                    REAL_DOM_RIGHT,
+                    LEFT_CUBE_PATH,
+                    RIGHT_CUBE_PATH,
+                    config,
+                    output_net,
+                    skip_merge=True,
+                    pre_ransac_max_ground_distance_km=0.0,
+                )
+
+        prefilter_mock.assert_not_called()
+        self.assertEqual(result[PREFILTER_METADATA_KEY]["status"], "disabled")
 
     def test_build_controlnet_for_dom_stereo_pair_forwards_visualization_preview_options(self):
         config = ControlNetConfig(

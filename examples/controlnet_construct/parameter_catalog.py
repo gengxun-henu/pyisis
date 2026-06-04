@@ -43,6 +43,9 @@ except ImportError:
 
 DEFAULT_DEEP_MATCH_MODE = "direct"
 DEFAULT_LOW_RESOLUTION_LEVEL = 3
+DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM = 1.0
+DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY = "drop"
+SUPPORTED_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICIES = ("drop", "keep")
 DEFAULT_NUM_WORKER_PARALLEL_CPU = 8
 MAX_NUM_WORKER_PARALLEL_CPU = 4096
 SUPPORTED_DEEP_MATCH_MODES = ("direct", "export", "import")
@@ -220,6 +223,8 @@ PARAMETERS = (
     _spec("match_preset_path", "matching", config_path=_image_match_path("match_preset_path"), entrypoints=_MATCH_ENTRYPOINTS, help="Image-match preset JSON path."),
     _spec("deep_match_config_path", "matching", config_path=_image_match_path("deep_match_config_path"), entrypoints=_MATCH_ENTRYPOINTS, help="Deep matcher runtime config path."),
     _spec("ratio_test", "matching", config_path=_image_match_path("ratio_test"), value_type="float", min_value=0.0, max_value=1.0, entrypoints=_MATCH_ENTRYPOINTS, help="Descriptor ratio-test threshold."),
+    _spec("pre_ransac_max_ground_distance_km", "matching", config_path=_image_match_path("pre_ransac_max_ground_distance_km"), value_type="float", default=DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM, min_value=0.0, entrypoints=_MATCH_ENTRYPOINTS, help="Maximum paired ground distance retained before RANSAC; 0 disables the filter."),
+    _spec("pre_ransac_ground_lookup_failure_policy", "matching", config_path=_image_match_path("pre_ransac_ground_lookup_failure_policy"), default=DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY, allowed_values=SUPPORTED_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICIES, entrypoints=_MATCH_ENTRYPOINTS, help="Policy for match points whose cube-to-ground lookup fails before RANSAC."),
     _spec("max_features", "matching", config_path=_image_match_path("max_features"), value_type="int", min_value=1, entrypoints=_MATCH_ENTRYPOINTS, help="Maximum SIFT feature count."),
     _spec("sift_octave_layers", "matching", config_path=_image_match_path("sift_octave_layers"), value_type="int", min_value=1, entrypoints=_MATCH_ENTRYPOINTS, help="SIFT octave layer count."),
     _spec("sift_contrast_threshold", "matching", config_path=_image_match_path("sift_contrast_threshold"), value_type="float", min_value=0.0, entrypoints=_MATCH_ENTRYPOINTS, help="SIFT contrast threshold."),

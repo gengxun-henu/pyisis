@@ -22,6 +22,8 @@ DEFAULT_PAIR_ID_PREFIX="S"
 DEFAULT_PAIR_ID_START="1"
 DEFAULT_VALID_PIXEL_PERCENT_THRESHOLD="0.05"
 DEFAULT_INVALID_PIXEL_RADIUS="1"
+DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM="1.0"
+DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY="drop"
 
 log() {
   printf '[controlnet-pipeline] %s\n' "$*"
@@ -295,6 +297,16 @@ Options:
                                  invalid pixels and image borders. If omitted, this script falls
                                  back to config JSON field ImageMatch.invalid_pixel_radius when present;
                                  otherwise examples/image_match/image_match.py keeps its own default.
+  --pre-ransac-max-ground-distance-km VALUE
+                                  Forwarded to image_match.py and controlnet_stereopair.py from-dom-batch as the
+                                  maximum paired ground distance before RANSAC. Use 0 to disable. If omitted,
+                                  this script falls back to ImageMatch.pre_ransac_max_ground_distance_km when present;
+                                  otherwise defaults to 1.0.
+  --pre-ransac-ground-lookup-failure-policy VALUE
+                                  Forwarded to image_match.py and controlnet_stereopair.py from-dom-batch as the
+                                  ground lookup failure policy for the pre-RANSAC ground-distance filter: drop or keep.
+                                  If omitted, this script falls back to ImageMatch.pre_ransac_ground_lookup_failure_policy
+                                  when present; otherwise defaults to drop.
   --matcher-method NAME           Forwarded to examples/image_match/image_match.py to select matcher backend.
                                  Supported values: bf, flann, superglue, lightglue, loftr.
                                  If omitted, this script falls back to
@@ -608,6 +620,8 @@ field_map = {
     "config_num_worker_parallel_cpu": "num_worker_parallel_cpu",
     "config_opencv_num_threads": "opencv_num_threads",
     "config_invalid_pixel_radius": "invalid_pixel_radius",
+    "config_pre_ransac_max_ground_distance_km": "pre_ransac_max_ground_distance_km",
+    "config_pre_ransac_ground_lookup_failure_policy": "pre_ransac_ground_lookup_failure_policy",
     "config_matcher_method": "matcher_method",
     "config_enable_adaptive_routing": "enable_adaptive_routing",
     "config_adaptive_routing_profile": "adaptive_routing_profile",
@@ -823,6 +837,14 @@ cli_sources = {
         "VALID_PIXEL_PERCENT_THRESHOLD",
     ),
     "invalid_pixel_radius": ("explicit_invalid_pixel_radius", "INVALID_PIXEL_RADIUS"),
+    "pre_ransac_max_ground_distance_km": (
+        "explicit_pre_ransac_max_ground_distance_km",
+        "PRE_RANSAC_MAX_GROUND_DISTANCE_KM",
+    ),
+    "pre_ransac_ground_lookup_failure_policy": (
+        "explicit_pre_ransac_ground_lookup_failure_policy",
+        "PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY",
+    ),
     "match_preset_path": ("explicit_match_preset_path", "match_preset_path"),
     "matcher_method": ("explicit_matcher_method", "MATCHER_METHOD"),
     "deep_match_config_path": ("explicit_deep_matcher_config_path", "DEEP_MATCHER_CONFIG_PATH"),
@@ -881,6 +903,8 @@ config_sources = {
     "match_preset_path": "config_match_preset_path",
     "valid_pixel_percent_threshold": "config_valid_pixel_percent_threshold",
     "invalid_pixel_radius": "config_invalid_pixel_radius",
+    "pre_ransac_max_ground_distance_km": "config_pre_ransac_max_ground_distance_km",
+    "pre_ransac_ground_lookup_failure_policy": "config_pre_ransac_ground_lookup_failure_policy",
     "num_worker_parallel_cpu": "config_num_worker_parallel_cpu",
     "opencv_num_threads": "config_opencv_num_threads",
     "use_parallel_cpu": "config_use_parallel_cpu",
@@ -944,6 +968,8 @@ print_parameter_validation_summary() {
   printf 'OPENCV_NUM_THREADS=%q\n' "$OPENCV_NUM_THREADS"
   printf 'VALID_PIXEL_PERCENT_THRESHOLD=%q\n' "$VALID_PIXEL_PERCENT_THRESHOLD"
   printf 'INVALID_PIXEL_RADIUS=%q\n' "$INVALID_PIXEL_RADIUS"
+  printf 'PRE_RANSAC_MAX_GROUND_DISTANCE_KM=%q\n' "$PRE_RANSAC_MAX_GROUND_DISTANCE_KM"
+  printf 'PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY=%q\n' "$PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY"
   printf 'ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION=%q\n' "$ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION"
   printf 'LOW_RESOLUTION_LEVEL=%q\n' "$LOW_RESOLUTION_LEVEL"
   printf 'LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS=%q\n' "$LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS"
@@ -1121,6 +1147,8 @@ run_step_2_image_match_batch() {
       match_args+=(--valid-pixel-percent-threshold "$VALID_PIXEL_PERCENT_THRESHOLD")
     fi
     match_args+=(--invalid-pixel-radius "$INVALID_PIXEL_RADIUS")
+    match_args+=(--pre-ransac-max-ground-distance-km "$PRE_RANSAC_MAX_GROUND_DISTANCE_KM")
+    match_args+=(--pre-ransac-ground-lookup-failure-policy "$PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY")
     if [[ -n "$match_preset_path" ]]; then
       match_args+=(--match-preset-path "$match_preset_path")
     fi
@@ -1214,6 +1242,8 @@ run_step_3_pairwise_controlnets() {
     --memory-profile "$MEMORY_PROFILE"
     --preview-crop-margin-pixels "$PREVIEW_CROP_MARGIN_PIXELS"
     --preview-cache-source "$PREVIEW_CACHE_SOURCE"
+    --pre-ransac-max-ground-distance-km "$PRE_RANSAC_MAX_GROUND_DISTANCE_KM"
+    --pre-ransac-ground-lookup-failure-policy "$PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY"
   )
   if [[ -n "$VISUALIZATION_TARGET_LONG_EDGE" ]]; then
     controlnet_args+=(--visualization-target-long-edge "$VISUALIZATION_TARGET_LONG_EDGE")
@@ -1305,6 +1335,8 @@ main() {
   local explicit_use_parallel_cpu=""
   local explicit_pair_id_start=""
   local explicit_invalid_pixel_radius=""
+  local explicit_pre_ransac_max_ground_distance_km=""
+  local explicit_pre_ransac_ground_lookup_failure_policy=""
   local explicit_matcher_method=""
   local explicit_match_preset_path=""
   local explicit_deep_matcher_config_path=""
@@ -1340,6 +1372,8 @@ main() {
   local config_opencv_num_threads=""
   local config_use_parallel_cpu=""
   local config_invalid_pixel_radius=""
+  local config_pre_ransac_max_ground_distance_km=""
+  local config_pre_ransac_ground_lookup_failure_policy=""
   local config_matcher_method=""
   local config_deep_matcher_config_path=""
   local config_enable_adaptive_routing=""
@@ -1376,6 +1410,8 @@ main() {
   PAIR_ID_START="$DEFAULT_PAIR_ID_START"
   VALID_PIXEL_PERCENT_THRESHOLD=""
   INVALID_PIXEL_RADIUS="$DEFAULT_INVALID_PIXEL_RADIUS"
+  PRE_RANSAC_MAX_GROUND_DISTANCE_KM="$DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM"
+  PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY="$DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY"
   MATCHER_METHOD="bf"
   ADAPTIVE_ROUTING="0"
   ADAPTIVE_ROUTING_PROFILE="balanced"
@@ -1488,6 +1524,22 @@ main() {
         [[ $# -ge 2 ]] || die "missing value for --invalid-pixel-radius"
         INVALID_PIXEL_RADIUS=$2
         explicit_invalid_pixel_radius=$2
+        shift 2
+        ;;
+      --pre-ransac-max-ground-distance-km)
+        [[ $# -ge 2 ]] || die "missing value for --pre-ransac-max-ground-distance-km"
+        PRE_RANSAC_MAX_GROUND_DISTANCE_KM=$2
+        explicit_pre_ransac_max_ground_distance_km=$2
+        shift 2
+        ;;
+      --pre-ransac-ground-lookup-failure-policy)
+        [[ $# -ge 2 ]] || die "missing value for --pre-ransac-ground-lookup-failure-policy"
+        case "$2" in
+          drop|keep) ;;
+          *) die "--pre-ransac-ground-lookup-failure-policy must be drop or keep" ;;
+        esac
+        PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY=$2
+        explicit_pre_ransac_ground_lookup_failure_policy=$2
         shift 2
         ;;
       --match-preset-path)
@@ -1806,6 +1858,16 @@ main() {
       INVALID_PIXEL_RADIUS="$config_invalid_pixel_radius"
     fi
   fi
+  if [[ -z "$explicit_pre_ransac_max_ground_distance_km" ]]; then
+    if [[ -n "$config_pre_ransac_max_ground_distance_km" ]]; then
+      PRE_RANSAC_MAX_GROUND_DISTANCE_KM="$config_pre_ransac_max_ground_distance_km"
+    fi
+  fi
+  if [[ -z "$explicit_pre_ransac_ground_lookup_failure_policy" ]]; then
+    if [[ -n "$config_pre_ransac_ground_lookup_failure_policy" ]]; then
+      PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY="$config_pre_ransac_ground_lookup_failure_policy"
+    fi
+  fi
   if [[ -z "$match_preset_path" && -z "$explicit_matcher_method" ]]; then
     if [[ -n "$config_matcher_method" ]]; then
       MATCHER_METHOD="$config_matcher_method"
@@ -1912,6 +1974,7 @@ PY
   export REPO_ROOT
   export print_parameter_groups validate_parameters_only strict_parameter_validation explicit_strict_parameter_validation parameter_profile
   export explicit_num_worker_parallel_cpu explicit_opencv_num_threads explicit_use_parallel_cpu explicit_pair_id_start explicit_valid_pixel_percent_threshold explicit_invalid_pixel_radius
+  export explicit_pre_ransac_max_ground_distance_km explicit_pre_ransac_ground_lookup_failure_policy
   export explicit_match_preset_path explicit_matcher_method explicit_deep_matcher_config_path
   export explicit_deep_match_mode explicit_deep_match_temp_root_dir explicit_deep_match_manifest_dir explicit_deep_match_manifest_summary
   export explicit_adaptive_routing explicit_adaptive_routing_profile explicit_dom_source_metadata_csv explicit_enable_low_resolution_offset_estimation explicit_low_resolution_level
@@ -1921,10 +1984,11 @@ PY
   export match_preset_path MATCHER_METHOD DEEP_MATCHER_CONFIG_PATH ADAPTIVE_ROUTING ADAPTIVE_ROUTING_PROFILE DOM_SOURCE_METADATA_CSV USE_PARALLEL_CPU NUM_WORKER_PARALLEL_CPU OPENCV_NUM_THREADS
   export DEEP_MATCH_MODE DEEP_MATCH_TEMP_ROOT_DIR DEEP_MATCH_MANIFEST_DIR DEEP_MATCH_MANIFEST_SUMMARY
   export SKIP_FINAL_MERGE POST_MERGE_CONTROL_MEASURE POST_MERGE_OUTPUT_PATH POST_MERGE_DECIMALS
-  export PAIR_ID_START VALID_PIXEL_PERCENT_THRESHOLD INVALID_PIXEL_RADIUS
+  export PAIR_ID_START VALID_PIXEL_PERCENT_THRESHOLD INVALID_PIXEL_RADIUS PRE_RANSAC_MAX_GROUND_DISTANCE_KM PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY
   export ENABLE_LOW_RESOLUTION_OFFSET_ESTIMATION LOW_RESOLUTION_LEVEL LOW_RESOLUTION_MAX_MEAN_REPROJECTION_ERROR_PIXELS LOW_RESOLUTION_MIN_RETAINED_MATCH_COUNT
   export LOW_RESOLUTION_MAX_MEAN_PROJECTED_OFFSET_METERS VISUALIZATION_MODE MEMORY_PROFILE VISUALIZATION_TARGET_LONG_EDGE PREVIEW_CROP_MARGIN_PIXELS PREVIEW_CACHE_SOURCE
   export config_match_preset_path config_num_worker_parallel_cpu config_opencv_num_threads config_use_parallel_cpu config_matcher_method config_deep_matcher_config_path
+  export config_pre_ransac_max_ground_distance_km config_pre_ransac_ground_lookup_failure_policy
   export config_enable_adaptive_routing config_adaptive_routing_profile config_enable_low_resolution_offset_estimation config_low_resolution_level
   export config_low_resolution_max_mean_reprojection_error_pixels config_low_resolution_min_retained_match_count config_low_resolution_max_mean_projected_offset_meters
   export config_visualization_mode config_memory_profile config_visualization_target_long_edge config_preview_crop_margin_pixels config_preview_cache_source
@@ -1982,6 +2046,8 @@ PY
     log "Valid pixel percent threshold: examples/image_match/image_match.py default"
   fi
   log "Invalid pixel radius: $INVALID_PIXEL_RADIUS"
+  log "Pre-RANSAC max ground distance (km): $PRE_RANSAC_MAX_GROUND_DISTANCE_KM"
+  log "Pre-RANSAC ground lookup failure policy: $PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY"
   if [[ -n "$match_preset_path" ]]; then
     log "Match preset path: $match_preset_path"
   fi

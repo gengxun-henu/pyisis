@@ -1298,6 +1298,18 @@ def _build_from_original_match_parser(subparsers) -> None:
         default=[],
         help="Adaptive deep preset mapping in KEY=PATH form. Repeat for lightglue and loftr.",
     )
+    parser.add_argument(
+        "--pre-ransac-max-ground-distance-km",
+        type=float,
+        default=DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+        help="Maximum original-image paired ground distance in kilometers retained before RANSAC. Set to 0 to disable.",
+    )
+    parser.add_argument(
+        "--pre-ransac-ground-lookup-failure-policy",
+        choices=("drop", "keep"),
+        default=DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
+        help="How to handle original-image ground lookup failures during the pre-RANSAC ground-distance filter.",
+    )
     parser.add_argument("--binary", action="store_true", help="Write the ControlNet in binary format instead of PVL.")
     parser.add_argument(
         "--log-level",
@@ -1716,6 +1728,8 @@ def main(argv: list[str] | None = None) -> None:
             adaptive_routing_deep_presets=adaptive_routing_deep_presets,
             deep_match_config_path=args.deep_match_config_path,
             deep_match_mode="direct",
+            pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
+            pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
         )
         if isinstance(match_result, tuple) and len(match_result) == 3:
             match_summary = match_result[2]

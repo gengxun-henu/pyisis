@@ -15,6 +15,8 @@ DEFAULT_CONFIG_RELATIVE="examples/controlnet_construct/controlnet_config.example
 DEFAULT_WORK_DIR_RELATIVE="work_ori"
 DEFAULT_PAIR_ID_PREFIX="S"
 DEFAULT_PAIR_ID_START="1"
+DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM="1.0"
+DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY="drop"
 PYTHON_EXECUTABLE="${PYTHON_EXECUTABLE:-python}"
 HOST_PYTHON_EXECUTABLE="${HOST_PYTHON_EXECUTABLE:-python}"
 
@@ -64,25 +66,21 @@ PY
 extract_image_match_config_value() {
   local config_path=$1
   local field_name=$2
-  "$HOST_PYTHON_EXECUTABLE" - "$config_path" "$field_name" <<'PY'
-import json
+  "$HOST_PYTHON_EXECUTABLE" - "$config_path" "$field_name" "$REPO_ROOT" <<'PY'
 import sys
 from pathlib import Path
 
-config_path, field_name = sys.argv[1:]
-payload = json.loads(Path(config_path).read_text(encoding="utf-8"))
-section = payload.get("ImageMatch", {})
-if not isinstance(section, dict) or field_name not in section:
+config_path, field_name, repo_root = sys.argv[1:]
+sys.path.insert(0, str(Path(repo_root) / "examples"))
+
+from image_match.image_match import format_image_match_default_for_shell, load_image_match_defaults_from_config
+
+defaults = load_image_match_defaults_from_config(config_path)
+if field_name == "deep_matcher_config_path" and field_name not in defaults:
+    field_name = "deep_match_config_path"
+if field_name not in defaults:
     raise SystemExit(0)
-value = section[field_name]
-if isinstance(value, bool):
-    print("1" if value else "0")
-elif value is None:
-    raise SystemExit(0)
-elif isinstance(value, (dict, list)):
-    print(json.dumps(value, ensure_ascii=False))
-else:
-    print(value)
+print(format_image_match_default_for_shell(defaults[field_name]))
 PY
 }
 
@@ -189,6 +187,8 @@ build_match_args() {
   [[ -z "$DEEP_MATCH_CONFIG_PATH" ]] || match_args+=(--deep-match-config-path "$DEEP_MATCH_CONFIG_PATH")
   [[ "$ADAPTIVE_ROUTING" == "1" ]] && match_args+=(--adaptive-routing) || match_args+=(--no-adaptive-routing)
   match_args+=(--adaptive-routing-profile "$ADAPTIVE_ROUTING_PROFILE")
+  match_args+=(--pre-ransac-max-ground-distance-km "$PRE_RANSAC_MAX_GROUND_DISTANCE_KM")
+  match_args+=(--pre-ransac-ground-lookup-failure-policy "$PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY")
   [[ "$USE_PARALLEL_CPU" == "1" ]] && match_args+=(--use-parallel-cpu) || match_args+=(--no-parallel-cpu)
   [[ "$USE_GPU" == "1" ]] && match_args+=(--use-gpu)
   [[ "$GPU_DYNAMIC_BATCH" == "1" ]] && match_args+=(--gpu-dynamic-batch) || match_args+=(--no-gpu-dynamic-batch)
@@ -227,6 +227,12 @@ Options:
                                   Adaptive-routing quality profile. Default: balanced
   --adaptive-routing-deep-preset KEY=PATH
                                   Adaptive deep preset mapping. Repeat as needed.
+  --pre-ransac-max-ground-distance-km VALUE
+                                  Maximum paired ground distance retained before RANSAC. Use 0 to disable.
+                                  Default: 1.0 unless omitted and resolved from ImageMatch config.
+  --pre-ransac-ground-lookup-failure-policy VALUE
+                                  Ground lookup failure policy for pre-RANSAC filtering: drop or keep.
+                                  Default: drop unless omitted and resolved from ImageMatch config.
   --band N                       Band forwarded to from-ori-match. Default: 1
   --ratio-test FLOAT             Ratio test threshold. Default: 0.75
   --max-features N               Optional SIFT max_features.
@@ -256,6 +262,8 @@ MATCHER_METHOD="flann"
 DEEP_MATCH_CONFIG_PATH=""
 ADAPTIVE_ROUTING="0"
 ADAPTIVE_ROUTING_PROFILE="balanced"
+PRE_RANSAC_MAX_GROUND_DISTANCE_KM="$DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM"
+PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY="$DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY"
 BAND="1"
 RATIO_TEST="0.75"
 MAX_FEATURES=""
@@ -273,6 +281,8 @@ ADAPTIVE_ROUTING_DEEP_PRESET_ARGS=()
 explicit_adaptive_routing=""
 explicit_adaptive_routing_profile=""
 explicit_deep_match_config_path=""
+explicit_pre_ransac_max_ground_distance_km=""
+explicit_pre_ransac_ground_lookup_failure_policy=""
 SKIP_FINAL_MERGE="0"
 DRY_RUN="0"
 LOG_LEVEL="INFO"
@@ -288,6 +298,14 @@ while [[ $# -gt 0 ]]; do
     --adaptive-routing) ADAPTIVE_ROUTING="1"; explicit_adaptive_routing="1"; shift ;;
     --no-adaptive-routing) ADAPTIVE_ROUTING="0"; explicit_adaptive_routing="1"; shift ;;
     --adaptive-routing-profile) [[ $# -ge 2 ]] || die "missing value for --adaptive-routing-profile"; ADAPTIVE_ROUTING_PROFILE=$2; explicit_adaptive_routing_profile="1"; shift 2 ;;
+    --pre-ransac-max-ground-distance-km) [[ $# -ge 2 ]] || die "missing value for --pre-ransac-max-ground-distance-km"; PRE_RANSAC_MAX_GROUND_DISTANCE_KM=$2; explicit_pre_ransac_max_ground_distance_km="1"; shift 2 ;;
+    --pre-ransac-ground-lookup-failure-policy)
+      [[ $# -ge 2 ]] || die "missing value for --pre-ransac-ground-lookup-failure-policy"
+      case "$2" in drop|keep) ;; *) die "--pre-ransac-ground-lookup-failure-policy must be drop or keep" ;; esac
+      PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY=$2
+      explicit_pre_ransac_ground_lookup_failure_policy="1"
+      shift 2
+      ;;
     --band) [[ $# -ge 2 ]] || die "missing value for --band"; BAND=$2; shift 2 ;;
     --ratio-test) [[ $# -ge 2 ]] || die "missing value for --ratio-test"; RATIO_TEST=$2; shift 2 ;;
     --max-features) [[ $# -ge 2 ]] || die "missing value for --max-features"; MAX_FEATURES=$2; shift 2 ;;
@@ -348,6 +366,14 @@ if [[ -z "$explicit_deep_match_config_path" ]]; then
   fi
 elif [[ -n "$DEEP_MATCH_CONFIG_PATH" ]]; then
   DEEP_MATCH_CONFIG_PATH=$(resolve_path "$DEEP_MATCH_CONFIG_PATH")
+fi
+if [[ -z "$explicit_pre_ransac_max_ground_distance_km" ]]; then
+  config_pre_ransac_max_ground_distance_km=$(extract_image_match_config_value "$CONFIG_PATH" "pre_ransac_max_ground_distance_km")
+  [[ -z "$config_pre_ransac_max_ground_distance_km" ]] || PRE_RANSAC_MAX_GROUND_DISTANCE_KM="$config_pre_ransac_max_ground_distance_km"
+fi
+if [[ -z "$explicit_pre_ransac_ground_lookup_failure_policy" ]]; then
+  config_pre_ransac_ground_lookup_failure_policy=$(extract_image_match_config_value "$CONFIG_PATH" "pre_ransac_ground_lookup_failure_policy")
+  [[ -z "$config_pre_ransac_ground_lookup_failure_policy" ]] || PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY="$config_pre_ransac_ground_lookup_failure_policy"
 fi
 if [[ "${#ADAPTIVE_ROUTING_DEEP_PRESET_ARGS[@]}" -eq 0 ]]; then
   while IFS= read -r preset_arg; do

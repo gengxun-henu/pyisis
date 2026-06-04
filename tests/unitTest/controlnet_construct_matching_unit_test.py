@@ -2504,6 +2504,25 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
 
         self.assertEqual(defaults["adaptive_routing_profile"], "relaxed")
 
+    def test_load_image_match_defaults_from_config_reads_pre_ransac_ground_distance_fields(self):
+        with temporary_directory() as temp_dir:
+            config_path = temp_dir / "controlnet_config.json"
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "ImageMatch": {
+                            "preRansacMaxGroundDistanceKm": 0.25,
+                            "preRansacGroundLookupFailurePolicy": "keep",
+                        }
+                    }
+                ),
+                encoding="utf-8",
+            )
+            defaults = image_match.load_image_match_defaults_from_config(config_path)
+
+        self.assertEqual(defaults["pre_ransac_max_ground_distance_km"], 0.25)
+        self.assertEqual(defaults["pre_ransac_ground_lookup_failure_policy"], "keep")
+
     def test_create_descriptor_matcher_supports_bf_and_flann(self):
         fake_bf_matcher = object()
         fake_flann_matcher = object()

@@ -985,6 +985,20 @@ def load_image_match_defaults_from_config(
             lambda value: validate_tile_validity_cell_size(int(value), field_name="tile_validity_cell_height"),
         ),
         (
+            "pre_ransac_max_ground_distance_km",
+            ("pre_ransac_max_ground_distance_km", "preRansacMaxGroundDistanceKm", "PreRansacMaxGroundDistanceKm"),
+            lambda value: float(value),
+        ),
+        (
+            "pre_ransac_ground_lookup_failure_policy",
+            (
+                "pre_ransac_ground_lookup_failure_policy",
+                "preRansacGroundLookupFailurePolicy",
+                "PreRansacGroundLookupFailurePolicy",
+            ),
+            _validate_pre_ransac_ground_lookup_failure_policy,
+        ),
+        (
             "match_preset_path",
             ("match_preset_path", "matchPresetPath", "MatchPresetPath"),
             lambda value: str(value),
@@ -1347,6 +1361,13 @@ def _stdout_result_payload(result: dict[str, object], *, omit_tile_details: bool
     if omit_tile_details:
         payload.pop("tiles", None)
     return payload
+
+
+def _validate_pre_ransac_ground_lookup_failure_policy(value: object) -> str:
+    normalized = str(value).strip().lower()
+    if normalized not in {"drop", "keep"}:
+        raise ValueError("pre_ransac_ground_lookup_failure_policy must be one of: drop, keep.")
+    return normalized
 
 
 def _write_json_output(output_path: str | Path, payload: object) -> str:
@@ -4881,6 +4902,7 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     )
     parser.add_argument(
         "--pre-ransac-ground-lookup-failure-policy",
+        choices=("drop", "keep"),
         default=DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
         help=(
             "Policy for tie points whose cube-to-ground lookup fails during pre-RANSAC filtering. "

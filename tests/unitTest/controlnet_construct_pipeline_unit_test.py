@@ -6309,6 +6309,168 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertIn("Adaptive routing: enabled", completed.stdout)
         self.assertIn("Adaptive routing profile: relaxed", completed.stdout)
 
+    def test_run_pipeline_example_forwards_pre_ransac_ground_distance_config_to_matching_and_controlnet_batch(self):
+        with temporary_directory() as temp_dir:
+            work_dir = temp_dir / "work"
+            work_dir.mkdir()
+
+            original_list = work_dir / "original_images.lis"
+            dom_list = work_dir / "doms.lis"
+            config_path = temp_dir / "controlnet_config.json"
+            fake_python_dispatcher = temp_dir / "fake_python_dispatcher.py"
+            fake_python = temp_dir / "fake_python"
+
+            write_synthetic_stereo_lists(original_list, dom_list, work_dir / "inputs")
+            config_path.write_text(
+                json.dumps(
+                    {
+                        "NetworkId": "pre-ransac-forwarding-net",
+                        "TargetName": "Mars",
+                        "UserName": "copilot",
+                        "ImageMatch": {
+                            "pre_ransac_max_ground_distance_km": 0.25,
+                            "pre_ransac_ground_lookup_failure_policy": "keep",
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            fake_python_dispatcher.write_text(
+                _embedded_python_script(
+                    f"""
+                    #!{sys.executable}
+                    import json
+                    import os
+                    import sys
+                    from pathlib import Path
+
+                    def _run_stdin_python() -> int:
+                        code = sys.stdin.read()
+                        globals_dict = {{"__name__": "__main__", "__file__": "<stdin>"}}
+                        sys.argv = ['-'] + sys.argv[2:]
+                        exec(compile(code, "<stdin>", "exec"), globals_dict)
+                        return 0
+
+                    def _config_default(args: list[str]) -> int:
+                        config_path = Path(args[args.index("--config") + 1])
+                        field_name = args[args.index("--print-config-default") + 1]
+                        payload = json.loads(config_path.read_text(encoding="utf-8"))
+                        image_match_config = payload.get("ImageMatch") or {{}}
+                        mapping = {{
+                            "pre_ransac_max_ground_distance_km": image_match_config.get("pre_ransac_max_ground_distance_km", ""),
+                            "pre_ransac_ground_lookup_failure_policy": image_match_config.get("pre_ransac_ground_lookup_failure_policy", ""),
+                        }}
+                        print(mapping.get(field_name, ""))
+                        return 0
+
+                    def _assert_pre_ransac_forwarded(args: list[str]) -> None:
+                        if "--pre-ransac-max-ground-distance-km" not in args:
+                            raise SystemExit("missing --pre-ransac-max-ground-distance-km forwarding")
+                        if "--pre-ransac-ground-lookup-failure-policy" not in args:
+                            raise SystemExit("missing --pre-ransac-ground-lookup-failure-policy forwarding")
+                        threshold = args[args.index("--pre-ransac-max-ground-distance-km") + 1]
+                        policy = args[args.index("--pre-ransac-ground-lookup-failure-policy") + 1]
+                        if threshold != "0.25":
+                            raise SystemExit(f"unexpected pre-RANSAC ground distance threshold: {{threshold}}")
+                        if policy != "keep":
+                            raise SystemExit(f"unexpected pre-RANSAC lookup policy: {{policy}}")
+
+                    def main() -> int:
+                        if len(sys.argv) < 2:
+                            return 0
+                        if sys.argv[1] == "-":
+                            return _run_stdin_python()
+
+                        script_name = Path(sys.argv[1]).name
+                        args = sys.argv[2:]
+
+                        if script_name == "image_overlap.py":
+                            Path(args[1]).write_text("left.cub,right.cub\\n", encoding="utf-8")
+                            if "--report-json" in args:
+                                report_json_path = Path(args[args.index("--report-json") + 1])
+                                report_json_path.parent.mkdir(parents=True, exist_ok=True)
+                                report_json_path.write_text(json.dumps({{"pair_count": 1}}), encoding="utf-8")
+                            return 0
+
+                        if script_name == "image_match.py":
+                            if "--print-config-default" in args:
+                                return _config_default(args)
+                            _assert_pre_ransac_forwarded(args)
+                            key_index = 4 if args and args[0] == "--config" else 2
+                            Path(args[key_index]).write_text("synthetic-left-key\\n", encoding="utf-8")
+                            Path(args[key_index + 1]).write_text("synthetic-right-key\\n", encoding="utf-8")
+                            if "--metadata-output" in args:
+                                metadata_path = Path(args[args.index("--metadata-output") + 1])
+                                metadata_path.parent.mkdir(parents=True, exist_ok=True)
+                                metadata_path.write_text(json.dumps({{"status": "matched"}}), encoding="utf-8")
+                            if "--result-output" in args:
+                                result_path = Path(args[args.index("--result-output") + 1])
+                                result_path.parent.mkdir(parents=True, exist_ok=True)
+                                result_path.write_text(json.dumps({{"status": "matched", "point_count": 1}}), encoding="utf-8")
+                            return 0
+
+                        if script_name == "controlnet_stereopair.py":
+                            _assert_pre_ransac_forwarded(args)
+                            output_dir = Path(args[6])
+                            output_dir.mkdir(parents=True, exist_ok=True)
+                            (output_dir / "synthetic_pair.net").write_text("net", encoding="utf-8")
+                            if "--report-dir" in args:
+                                report_dir = Path(args[args.index("--report-dir") + 1])
+                                report_dir.mkdir(parents=True, exist_ok=True)
+                                (report_dir / "synthetic_pair.summary.json").write_text(json.dumps({{"point_count": 1}}), encoding="utf-8")
+                            print(json.dumps({{"pair_count": 1}}))
+                            return 0
+
+                        if script_name == "controlnet_merge.py":
+                            merge_script_path = Path(args[3])
+                            merge_script_path.parent.mkdir(parents=True, exist_ok=True)
+                            merge_script_path.write_text("#!/usr/bin/env bash\\nexit 0\\n", encoding="utf-8")
+                            os.chmod(merge_script_path, 0o755)
+                            print(json.dumps({{"merge_script": str(merge_script_path)}}))
+                            return 0
+
+                        raise SystemExit(f"Unhandled fake python script: {{script_name}}")
+
+                    raise SystemExit(main())
+                    """
+                ),
+                encoding="utf-8",
+            )
+            fake_python.write_text(
+                textwrap.dedent(
+                    f"""
+                    #!/usr/bin/env bash
+                    exec {sys.executable} "{fake_python_dispatcher}" "$@"
+                    """
+                ).lstrip()
+                + "\n",
+                encoding="utf-8",
+            )
+            fake_python.chmod(0o755)
+
+            completed = subprocess.run(
+                [
+                    "bash",
+                    str(RUN_PIPELINE_EXAMPLE_PATH),
+                    "--work-dir",
+                    str(work_dir),
+                    "--config",
+                    str(config_path),
+                    "--python",
+                    str(fake_python),
+                    "--skip-final-merge",
+                ],
+                cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+        self.assertEqual(completed.returncode, 0, msg=completed.stderr)
+        self.assertIn("Pre-RANSAC max ground distance (km): 0.25", completed.stdout)
+        self.assertIn("Pre-RANSAC ground lookup failure policy: keep", completed.stdout)
+
     def test_run_pipeline_example_resolves_deep_match_config_path_and_export_mode_stops_after_manifest_export(self):
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"

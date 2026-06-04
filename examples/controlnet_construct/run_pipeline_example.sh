@@ -1244,6 +1244,7 @@ run_step_3_pairwise_controlnets() {
     --preview-cache-source "$PREVIEW_CACHE_SOURCE"
     --pre-ransac-max-ground-distance-km "$PRE_RANSAC_MAX_GROUND_DISTANCE_KM"
     --pre-ransac-ground-lookup-failure-policy "$PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY"
+    --pre-ransac-match-metadata-dir "$MATCH_METADATA_DIR"
   )
   if [[ -n "$VISUALIZATION_TARGET_LONG_EDGE" ]]; then
     controlnet_args+=(--visualization-target-long-edge "$VISUALIZATION_TARGET_LONG_EDGE")

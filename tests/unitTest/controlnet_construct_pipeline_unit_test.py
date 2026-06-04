@@ -6364,17 +6364,23 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         print(mapping.get(field_name, ""))
                         return 0
 
-                    def _assert_pre_ransac_forwarded(args: list[str]) -> None:
+                    def _assert_pre_ransac_forwarded(args: list[str], *, require_metadata_dir: bool = False) -> None:
                         if "--pre-ransac-max-ground-distance-km" not in args:
                             raise SystemExit("missing --pre-ransac-max-ground-distance-km forwarding")
                         if "--pre-ransac-ground-lookup-failure-policy" not in args:
                             raise SystemExit("missing --pre-ransac-ground-lookup-failure-policy forwarding")
+                        if require_metadata_dir and "--pre-ransac-match-metadata-dir" not in args:
+                            raise SystemExit("missing --pre-ransac-match-metadata-dir forwarding")
                         threshold = args[args.index("--pre-ransac-max-ground-distance-km") + 1]
                         policy = args[args.index("--pre-ransac-ground-lookup-failure-policy") + 1]
                         if threshold != "0.25":
                             raise SystemExit(f"unexpected pre-RANSAC ground distance threshold: {{threshold}}")
                         if policy != "keep":
                             raise SystemExit(f"unexpected pre-RANSAC lookup policy: {{policy}}")
+                        if require_metadata_dir:
+                            metadata_dir = Path(args[args.index("--pre-ransac-match-metadata-dir") + 1])
+                            if metadata_dir.name != "match_metadata":
+                                raise SystemExit(f"unexpected pre-RANSAC match metadata dir: {{metadata_dir}}")
 
                     def main() -> int:
                         if len(sys.argv) < 2:
@@ -6411,7 +6417,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                             return 0
 
                         if script_name == "controlnet_stereopair.py":
-                            _assert_pre_ransac_forwarded(args)
+                            _assert_pre_ransac_forwarded(args, require_metadata_dir=True)
                             output_dir = Path(args[6])
                             output_dir.mkdir(parents=True, exist_ok=True)
                             (output_dir / "synthetic_pair.net").write_text("net", encoding="utf-8")
@@ -8055,6 +8061,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             dom_key_dir.mkdir()
             output_dir = temp_dir / "pair_nets"
             report_dir = temp_dir / "reports"
+            match_metadata_dir = temp_dir / "match_metadata"
             for filename in (
                 "left1__right1_A.key",
                 "left1__right1_B.key",
@@ -8075,6 +8082,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     output_dir,
                     config,
                     report_directory=report_dir,
+                    pre_ransac_match_metadata_directory=match_metadata_dir,
                     pair_id_prefix="S",
                     pair_id_start=1,
                 )
@@ -8085,6 +8093,14 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 self.assertEqual(first_config.pair_id, "S1")
                 self.assertEqual(second_config.pair_id, "S2")
                 self.assertEqual(first_config.point_id_prefix, "CTX")
+                self.assertEqual(
+                    build_mock.call_args_list[0].kwargs["pre_ransac_match_metadata_path"],
+                    match_metadata_dir / "left1__right1.json",
+                )
+                self.assertEqual(
+                    build_mock.call_args_list[1].kwargs["pre_ransac_match_metadata_path"],
+                    match_metadata_dir / "left2__right2.json",
+                )
                 self.assertEqual(summary["pair_count"], 2)
                 self.assertEqual(summary["pairs"][0]["pair_id"], "S1")
                 self.assertEqual(summary["pairs"][1]["pair_id"], "S2")
@@ -8326,6 +8342,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         str(preview_cache_dir),
                         "--preview-cache-source",
                         "visualization-cache",
+                        "--pre-ransac-match-metadata-dir",
+                        "match_metadata",
                         "--preview-level",
                         "3",
                         "--preview-force-regenerate",
@@ -8347,6 +8365,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(call_kwargs["preview_crop_margin_pixels"], 32)
         self.assertEqual(call_kwargs["preview_cache_dir"], str(preview_cache_dir))
         self.assertEqual(call_kwargs["preview_cache_source"], "visualization_cache")
+        self.assertEqual(call_kwargs["pre_ransac_match_metadata_directory"], "match_metadata")
         self.assertEqual(call_kwargs["preview_level"], 3)
         self.assertTrue(call_kwargs["preview_force_regenerate"])
         stdout_payload = json.loads(stdout.getvalue())

@@ -414,6 +414,7 @@ def build_controlnets_for_dom_overlap_list(
     loose_ransac_keep_threshold: float = 1.0,
     pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
     pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
+    pre_ransac_match_metadata_directory: str | Path | None = None,
     write_match_visualization: bool = False,
     match_visualization_scale: float = 1.0 / 3.0,
     match_visualization_output_dir: str | Path | None = None,
@@ -440,6 +441,9 @@ def build_controlnets_for_dom_overlap_list(
     dom_key_dir = Path(dom_key_directory)
     net_output_dir = Path(output_directory)
     report_dir = Path(report_directory) if report_directory is not None else net_output_dir
+    match_metadata_dir = (
+        Path(pre_ransac_match_metadata_directory) if pre_ransac_match_metadata_directory is not None else None
+    )
     match_visualization_dir = (
         Path(match_visualization_output_dir) if match_visualization_output_dir is not None else None
     )
@@ -469,6 +473,9 @@ def build_controlnets_for_dom_overlap_list(
 
         pair_output_net = net_output_dir / pair_controlnet_filename(pair, suffix=pair_net_suffix)
         pair_report_path = report_dir / default_controlnet_report_path(pair_output_net).name
+        pre_ransac_match_metadata_path = (
+            match_metadata_dir / f"{pair_tag}.json" if match_metadata_dir is not None else None
+        )
         pair_config = replace(config, pair_id=pair_id)
         if logger is not None and config.pair_id is not None:
             logger.info(
@@ -496,6 +503,7 @@ def build_controlnets_for_dom_overlap_list(
             loose_ransac_keep_threshold=loose_ransac_keep_threshold,
             pre_ransac_max_ground_distance_km=pre_ransac_max_ground_distance_km,
             pre_ransac_ground_lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
+            pre_ransac_match_metadata_path=pre_ransac_match_metadata_path,
             write_match_visualization=write_match_visualization,
             match_visualization_scale=match_visualization_scale,
             match_visualization_output_dir=match_visualization_dir,
@@ -1373,6 +1381,11 @@ def _build_from_dom_parser(subparsers) -> None:
         help="How to handle DOM ground lookup failures during the pre-RANSAC ground-distance filter.",
     )
     parser.add_argument(
+        "--pre-ransac-match-metadata-path",
+        default=None,
+        help="Optional match metadata JSON path used to skip duplicate pre-RANSAC ground-distance filtering when upstream image_match already applied it.",
+    )
+    parser.add_argument(
         "--write-match-visualization",
         action="store_true",
         help=(
@@ -1588,6 +1601,11 @@ def _build_from_dom_batch_parser(subparsers) -> None:
         choices=("drop", "keep"),
         default=DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
         help="How to handle DOM ground lookup failures during the pre-RANSAC ground-distance filter.",
+    )
+    parser.add_argument(
+        "--pre-ransac-match-metadata-dir",
+        default=None,
+        help="Optional directory containing image_match metadata JSON files named like <left>__<right>.json, used to skip duplicate pre-RANSAC ground-distance filtering.",
     )
     parser.add_argument("--write-match-visualization", action="store_true", help="Write a post-RANSAC drawMatches PNG after merge-stage RANSAC filtering for each pair in the batch.")
     parser.add_argument(
@@ -1828,6 +1846,7 @@ def main(argv: list[str] | None = None) -> None:
             loose_ransac_keep_threshold=args.loose_ransac_keep_threshold,
             pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
             pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
+            pre_ransac_match_metadata_path=args.pre_ransac_match_metadata_path,
             write_match_visualization=args.write_match_visualization,
             match_visualization_output_path=args.match_visualization_output_path,
             match_visualization_scale=args.match_visualization_scale,
@@ -1874,6 +1893,7 @@ def main(argv: list[str] | None = None) -> None:
             loose_ransac_keep_threshold=args.loose_ransac_keep_threshold,
             pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
             pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
+            pre_ransac_match_metadata_directory=args.pre_ransac_match_metadata_dir,
             write_match_visualization=args.write_match_visualization,
             match_visualization_scale=args.match_visualization_scale,
             match_visualization_output_dir=args.match_visualization_output_dir,

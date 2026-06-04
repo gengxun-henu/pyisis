@@ -8852,6 +8852,47 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         prefilter_mock.assert_not_called()
         self.assertEqual(result[PREFILTER_METADATA_KEY]["status"], "disabled")
 
+    def test_build_controlnet_for_dom_stereo_pair_rejects_negative_pre_ransac_prefilter_threshold(self):
+        config = ControlNetConfig(
+            network_id="ctx_dom_prefilter_negative",
+            target_name="Mars",
+            user_name="zmoratto",
+            description="negative dom pre-ransac prefilter threshold test",
+            point_id_prefix="PRN",
+        )
+
+        with temporary_directory() as temp_dir:
+            left_dom_key = temp_dir / "left_dom.key"
+            right_dom_key = temp_dir / "right_dom.key"
+            output_net = temp_dir / "prefilter_negative_wrapper.net"
+            write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
+
+            with (
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_dom_key_files_by_ground_distance",
+                ) as prefilter_mock,
+                patch(
+                    "controlnet_construct.controlnet_stereopair.filter_stereo_pair_key_files_with_ransac",
+                ) as ransac_mock,
+            ):
+                with self.assertRaisesRegex(ValueError, "pre_ransac_max_ground_distance_km must be non-negative"):
+                    build_controlnet_for_dom_stereo_pair(
+                        left_dom_key,
+                        right_dom_key,
+                        REAL_DOM_LEFT,
+                        REAL_DOM_RIGHT,
+                        LEFT_CUBE_PATH,
+                        RIGHT_CUBE_PATH,
+                        config,
+                        output_net,
+                        skip_merge=True,
+                        pre_ransac_max_ground_distance_km=-1.0,
+                    )
+
+        prefilter_mock.assert_not_called()
+        ransac_mock.assert_not_called()
+
     def test_build_controlnet_for_dom_stereo_pair_forwards_visualization_preview_options(self):
         config = ControlNetConfig(
             network_id="ctx_dom_preview",

@@ -856,6 +856,9 @@ def build_controlnet_for_dom_stereo_pair(
     right_ransac_dom_key = Path(right_ransac_dom_key_path) if right_ransac_dom_key_path is not None else _default_intermediate_key_path(output_path, "right", "dom_ransac")
     left_ground_prefilter_dom_key = _default_intermediate_key_path(output_path, "left", "dom_ground_prefilter")
     right_ground_prefilter_dom_key = _default_intermediate_key_path(output_path, "right", "dom_ground_prefilter")
+    pre_ransac_ground_distance_threshold = float(pre_ransac_max_ground_distance_km)
+    if pre_ransac_ground_distance_threshold < 0.0:
+        raise ValueError("pre_ransac_max_ground_distance_km must be non-negative.")
 
     if logger is not None:
         logger.info(
@@ -911,7 +914,6 @@ def build_controlnet_for_dom_stereo_pair(
                 merge_stats["duplicate_count"],
             )
 
-    pre_ransac_ground_distance_threshold = float(pre_ransac_max_ground_distance_km)
     if pre_ransac_ground_distance_threshold > 0.0:
         pre_ransac_ground_distance_filter = filter_dom_key_files_by_ground_distance(
             left_dom_key_for_conversion,

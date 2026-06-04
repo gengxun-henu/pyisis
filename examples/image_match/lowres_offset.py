@@ -503,6 +503,8 @@ def estimate_low_resolution_projected_offset(
         filtered_left_key, filtered_right_key, ransac_summary = filter_stereo_pair_keypoints_with_ransac_func(
             raw_left_key,
             raw_right_key,
+            ransac_model="homography",
+            ransac_coordinate_space="dom_pixel",
         )
         filtered_left_key_path = resolved_output_dir / f"{pair_tag}_low_resolution_A.key"
         filtered_right_key_path = resolved_output_dir / f"{pair_tag}_low_resolution_B.key"

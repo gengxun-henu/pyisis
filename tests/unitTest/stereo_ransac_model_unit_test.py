@@ -83,6 +83,48 @@ class StereoRansacModelTest(unittest.TestCase):
         self.assertEqual(summary["homography_matrix"], np.eye(3).tolist())
         self.assertEqual(summary["retained_count"], 3)
 
+    def test_affine_partial_real_opencv_keeps_soft_outlier_in_loose_mode(self) -> None:
+        left_key = KeypointFile(
+            100,
+            100,
+            (
+                Keypoint(0.0, 0.0),
+                Keypoint(10.0, 0.0),
+                Keypoint(0.0, 10.0),
+                Keypoint(10.0, 10.0),
+                Keypoint(5.0, 5.0),
+            ),
+        )
+        right_key = KeypointFile(
+            100,
+            100,
+            (
+                Keypoint(2.0, 3.0),
+                Keypoint(12.0, 3.0),
+                Keypoint(2.0, 13.0),
+                Keypoint(12.0, 13.0),
+                Keypoint(7.4, 8.3),
+            ),
+        )
+
+        filtered_left, filtered_right, summary = stereo_ransac.filter_stereo_pair_keypoints_with_ransac(
+            left_key,
+            right_key,
+            ransac_model="affine-partial",
+            ransac_reproj_threshold=0.2,
+            ransac_mode="loose",
+            loose_keep_pixel_threshold=0.6,
+        )
+
+        self.assertEqual(len(filtered_left.points), 5)
+        self.assertEqual(len(filtered_right.points), 5)
+        self.assertEqual(summary["model"], "affine-partial")
+        self.assertEqual(summary["matrix_type"], "affine_2x3")
+        self.assertEqual(summary["retained_count"], 5)
+        self.assertEqual(summary["opencv_outlier_count"], 1)
+        self.assertEqual(summary["retained_soft_outlier_count"], 1)
+        self.assertEqual(summary["soft_outlier_original_indices"], [4])
+
     def test_insufficient_points_for_affine_partial_keeps_all_points(self) -> None:
         left_key = _key_file(1)
         right_key = _key_file(1)

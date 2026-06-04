@@ -148,6 +148,27 @@ def default_controlnet_report_path(output_path: str | Path) -> Path:
     return output.with_name(f"{output.name}{DEFAULT_CONTROLNET_REPORT_SUFFIX}")
 
 
+def _load_upstream_ground_distance_filter_summary(metadata_path: str | Path | None) -> dict[str, object] | None:
+    if metadata_path is None:
+        return None
+    path = Path(metadata_path)
+    if not path.exists():
+        return None
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    summary = payload.get(PREFILTER_METADATA_KEY)
+    if isinstance(summary, dict) and summary.get("applied") is True:
+        return dict(summary)
+    image_match = payload.get("image_match")
+    if isinstance(image_match, dict):
+        summary = image_match.get(PREFILTER_METADATA_KEY)
+        if isinstance(summary, dict) and summary.get("applied") is True:
+            return dict(summary)
+    return None
+
+
 def write_controlnet_result_report(
     result: dict[str, object],
     output_path: str | Path,
@@ -830,6 +851,7 @@ def build_controlnet_for_dom_stereo_pair(
     loose_ransac_keep_threshold: float = 1.0,
     pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
     pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
+    pre_ransac_match_metadata_path: str | Path | None = None,
     write_match_visualization: bool = False,
     match_visualization_output_path: str | Path | None = None,
     match_visualization_scale: float = 1.0 / 3.0,
@@ -919,7 +941,19 @@ def build_controlnet_for_dom_stereo_pair(
                 merge_stats["duplicate_count"],
             )
 
-    if pre_ransac_ground_distance_threshold > 0.0:
+    upstream_ground_filter = _load_upstream_ground_distance_filter_summary(pre_ransac_match_metadata_path)
+    if upstream_ground_filter is not None:
+        pre_ransac_ground_distance_filter = {
+            "applied": False,
+            "already_prefiltered": True,
+            "source": "input_metadata",
+            "upstream_summary": upstream_ground_filter,
+        }
+        if logger is not None:
+            logger.info(
+                "controlnet_stereopair skipped pre-RANSAC DOM ground-distance filtering because input metadata reports it was already applied."
+            )
+    elif pre_ransac_ground_distance_threshold > 0.0:
         pre_ransac_ground_distance_filter = filter_dom_key_files_by_ground_distance(
             left_dom_key_for_conversion,
             right_dom_key_for_conversion,
@@ -1105,6 +1139,7 @@ def build_controlnet_for_dom_match_stereo_pair(
     loose_ransac_keep_threshold: float = 1.0,
     pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
     pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
+    pre_ransac_match_metadata_path: str | Path | None = None,
     pvl_format: bool = True,
     logger: logging.Logger | None = None,
 ) -> dict[str, object]:
@@ -1169,6 +1204,7 @@ def build_controlnet_for_dom_match_stereo_pair(
         loose_ransac_keep_threshold=loose_ransac_keep_threshold,
         pre_ransac_max_ground_distance_km=pre_ransac_max_ground_distance_km,
         pre_ransac_ground_lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
+        pre_ransac_match_metadata_path=pre_ransac_match_metadata_path,
         write_match_visualization=False,
         pvl_format=pvl_format,
         logger=logger,

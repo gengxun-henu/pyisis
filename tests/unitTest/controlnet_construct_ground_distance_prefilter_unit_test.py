@@ -1,8 +1,14 @@
 from __future__ import annotations
 
 import tempfile
+import sys
 import unittest
 from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+EXAMPLES_DIR = PROJECT_ROOT / "examples"
+if str(EXAMPLES_DIR) not in sys.path:
+    sys.path.insert(0, str(EXAMPLES_DIR))
 
 from controlnet_construct.ground_distance_prefilter import (
     LUNAR_MEAN_RADIUS_KM,

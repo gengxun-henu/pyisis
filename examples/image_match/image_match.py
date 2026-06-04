@@ -272,6 +272,21 @@ else:
     )
     from . import tile_matching as tile_matching_module
 
+try:
+    from controlnet_construct.ground_distance_prefilter import (
+        PREFILTER_METADATA_KEY,
+        filter_dom_key_files_by_ground_distance,
+        filter_ori_key_files_by_ground_distance,
+    )
+except ImportError:
+    PREFILTER_METADATA_KEY = "pre_ransac_ground_distance_filter"
+
+    def filter_dom_key_files_by_ground_distance(*args, **kwargs):  # type: ignore[no-untyped-def]
+        raise RuntimeError("Ground-distance prefilter support is unavailable.")
+
+    def filter_ori_key_files_by_ground_distance(*args, **kwargs):  # type: ignore[no-untyped-def]
+        raise RuntimeError("Ground-distance prefilter support is unavailable.")
+
 
 bootstrap_runtime_environment()
 
@@ -289,6 +304,8 @@ DEFAULT_DEEP_MATCH_MODE = "direct"
 SUPPORTED_DEEP_MATCH_MODES = ("direct", "export", "import")
 DEFAULT_VALID_INTENSITY_LOWER_PERCENT = 0.1
 DEFAULT_VALID_INTENSITY_UPPER_PERCENT = 99.9
+DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM = 1.0
+DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY = "drop"
 
 
 _run_command = _lowres_offset._run_command
@@ -319,6 +336,50 @@ DEFAULT_MATCH_VISUALIZATION_LOOSE_RANSAC_KEEP_THRESHOLD = 1.0
 SUPPORTED_VISUALIZATION_MODES = _match_visualization.SUPPORTED_VISUALIZATION_MODES
 SUPPORTED_MEMORY_PROFILES = _match_visualization.SUPPORTED_MEMORY_PROFILES
 SUPPORTED_PREVIEW_CACHE_SOURCES = _match_visualization.SUPPORTED_PREVIEW_CACHE_SOURCES
+
+
+def _validate_pre_ransac_ground_distance_threshold(value: float) -> float:
+    threshold = float(value)
+    if not math.isfinite(threshold) or threshold < 0.0:
+        raise ValueError("pre_ransac_max_ground_distance_km must be finite and non-negative.")
+    return threshold
+
+
+def _disabled_pre_ransac_ground_distance_summary(
+    *,
+    threshold_km: float,
+    lookup_failure_policy: str,
+    space: str | None = None,
+    geometry_source: str | None = None,
+) -> dict[str, object]:
+    threshold = _validate_pre_ransac_ground_distance_threshold(threshold_km)
+    summary: dict[str, object] = {
+        "applied": False,
+        "already_prefiltered": False,
+        "status": "disabled",
+        "threshold_km": threshold,
+        "lookup_failure_policy": lookup_failure_policy,
+    }
+    if space is not None:
+        summary["space"] = space
+    if geometry_source is not None:
+        summary["geometry_source"] = geometry_source
+    return summary
+
+
+def _update_summary_after_pre_ransac_ground_filter(
+    summary: dict[str, object],
+    left_key_file: KeypointFile,
+    *,
+    prefilter_summary: dict[str, object],
+) -> None:
+    before_count = int(
+        summary.get("point_count", prefilter_summary.get("input_count", len(left_key_file.points)))
+    )
+    after_count = len(left_key_file.points)
+    summary["point_count_before_pre_ransac_ground_filter"] = before_count
+    summary["point_count_after_pre_ransac_ground_filter"] = after_count
+    summary["point_count"] = after_count
 
 
 class _TileProgressBar:
@@ -924,6 +985,20 @@ def load_image_match_defaults_from_config(
             lambda value: validate_tile_validity_cell_size(int(value), field_name="tile_validity_cell_height"),
         ),
         (
+            "pre_ransac_max_ground_distance_km",
+            ("pre_ransac_max_ground_distance_km", "preRansacMaxGroundDistanceKm", "PreRansacMaxGroundDistanceKm"),
+            lambda value: float(value),
+        ),
+        (
+            "pre_ransac_ground_lookup_failure_policy",
+            (
+                "pre_ransac_ground_lookup_failure_policy",
+                "preRansacGroundLookupFailurePolicy",
+                "PreRansacGroundLookupFailurePolicy",
+            ),
+            _validate_pre_ransac_ground_lookup_failure_policy,
+        ),
+        (
             "match_preset_path",
             ("match_preset_path", "matchPresetPath", "MatchPresetPath"),
             lambda value: str(value),
@@ -1286,6 +1361,13 @@ def _stdout_result_payload(result: dict[str, object], *, omit_tile_details: bool
     if omit_tile_details:
         payload.pop("tiles", None)
     return payload
+
+
+def _validate_pre_ransac_ground_lookup_failure_policy(value: object) -> str:
+    normalized = str(value).strip().lower()
+    if normalized not in {"drop", "keep"}:
+        raise ValueError("pre_ransac_ground_lookup_failure_policy must be one of: drop, keep.")
+    return normalized
 
 
 def _write_json_output(output_path: str | Path, payload: object) -> str:
@@ -3334,8 +3416,14 @@ def match_ori_pair_to_key_files(
     right_cube_path: str | Path,
     left_output_key: str | Path,
     right_output_key: str | Path,
+    *,
+    pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+    pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
     **kwargs,
 ) -> dict[str, object]:
+    pre_ransac_ground_distance_threshold = _validate_pre_ransac_ground_distance_threshold(
+        pre_ransac_max_ground_distance_km
+    )
     left_key_file, right_key_file, summary = match_ori_pair(
         left_cube_path,
         right_cube_path,
@@ -3343,6 +3431,33 @@ def match_ori_pair_to_key_files(
     )
     write_key_file(left_output_key, left_key_file)
     write_key_file(right_output_key, right_key_file)
+    if pre_ransac_ground_distance_threshold > 0.0:
+        pre_ransac_ground_distance_filter = filter_ori_key_files_by_ground_distance(
+            left_output_key,
+            right_output_key,
+            left_output_key,
+            right_output_key,
+            left_cube_path,
+            right_cube_path,
+            threshold_km=pre_ransac_ground_distance_threshold,
+            lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
+            band=int(kwargs.get("band", 1)),
+        )
+        left_key_file = read_key_file(left_output_key)
+        right_key_file = read_key_file(right_output_key)
+        _update_summary_after_pre_ransac_ground_filter(
+            summary,
+            left_key_file,
+            prefilter_summary=pre_ransac_ground_distance_filter,
+        )
+    else:
+        pre_ransac_ground_distance_filter = _disabled_pre_ransac_ground_distance_summary(
+            threshold_km=pre_ransac_ground_distance_threshold,
+            lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
+            space="ori",
+            geometry_source="ori_camera_set_image",
+        )
+    summary[PREFILTER_METADATA_KEY] = pre_ransac_ground_distance_filter
     return {
         **summary,
         "left_output_key": str(left_output_key),
@@ -4286,9 +4401,14 @@ def match_dom_pair_to_key_files(
     deep_match_temp_root_dir: str | Path | None = None,
     deep_match_manifest: str | Path | None = None,
     deep_match_config_path: str | Path | None = None,
+    pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+    pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
     **kwargs,
 ) -> dict[str, object]:
     resolved_deep_match_mode = _normalize_deep_match_mode(deep_match_mode)
+    pre_ransac_ground_distance_threshold = _validate_pre_ransac_ground_distance_threshold(
+        pre_ransac_max_ground_distance_km
+    )
     if resolved_deep_match_mode == "import":
         grouped_deep_match_manifests = tuple(kwargs.pop("grouped_deep_match_manifests", ()) or ())
         classic_left_key = kwargs.pop("classic_left_key", None)
@@ -4399,6 +4519,33 @@ def match_dom_pair_to_key_files(
         Path(right_output_key).parent.mkdir(parents=True, exist_ok=True)
         write_key_file(left_output_key, left_key_file)
         write_key_file(right_output_key, right_key_file)
+        if pre_ransac_ground_distance_threshold > 0.0:
+            pre_ransac_ground_distance_filter = filter_dom_key_files_by_ground_distance(
+                left_output_key,
+                right_output_key,
+                left_output_key,
+                right_output_key,
+                left_dom_path,
+                right_dom_path,
+                threshold_km=pre_ransac_ground_distance_threshold,
+                lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
+                dom_band=int(kwargs.get("band", 1)),
+            )
+            left_key_file = read_key_file(left_output_key)
+            right_key_file = read_key_file(right_output_key)
+            _update_summary_after_pre_ransac_ground_filter(
+                summary,
+                left_key_file,
+                prefilter_summary=pre_ransac_ground_distance_filter,
+            )
+        else:
+            pre_ransac_ground_distance_filter = _disabled_pre_ransac_ground_distance_summary(
+                threshold_km=pre_ransac_ground_distance_threshold,
+                lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
+                space="dom",
+                geometry_source="dom_projection_set_image",
+            )
+        summary[PREFILTER_METADATA_KEY] = pre_ransac_ground_distance_filter
         metadata_payload = None
         if metadata_output is not None:
             metadata_payload = dict(summary["preparation"])
@@ -4406,10 +4553,23 @@ def match_dom_pair_to_key_files(
                 "status": summary["status"],
                 "reason": summary["reason"],
                 "point_count": summary["point_count"],
+                **(
+                    {
+                        "point_count_before_pre_ransac_ground_filter": summary[
+                            "point_count_before_pre_ransac_ground_filter"
+                        ],
+                        "point_count_after_pre_ransac_ground_filter": summary[
+                            "point_count_after_pre_ransac_ground_filter"
+                        ],
+                    }
+                    if "point_count_before_pre_ransac_ground_filter" in summary
+                    else {}
+                ),
                 "matcher": summary.get("matcher"),
                 "deep_match_mode": summary["deep_match_mode"],
                 "deep_match_import": summary["deep_match_import"],
                 "deep_match_export": summary["deep_match_export"],
+                PREFILTER_METADATA_KEY: summary[PREFILTER_METADATA_KEY],
                 **({"mixed_route_import": summary["mixed_route_import"]} if "mixed_route_import" in summary else {}),
             }
         match_visualization_result: dict[str, object] | None = None
@@ -4504,6 +4664,33 @@ def match_dom_pair_to_key_files(
     if not export_only:
         write_key_file(left_output_key, left_key_file)
         write_key_file(right_output_key, right_key_file)
+    if pre_ransac_ground_distance_threshold > 0.0 and not export_only:
+        pre_ransac_ground_distance_filter = filter_dom_key_files_by_ground_distance(
+            left_output_key,
+            right_output_key,
+            left_output_key,
+            right_output_key,
+            left_dom_path,
+            right_dom_path,
+            threshold_km=pre_ransac_ground_distance_threshold,
+            lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
+            dom_band=int(kwargs.get("band", 1)),
+        )
+        left_key_file = read_key_file(left_output_key)
+        right_key_file = read_key_file(right_output_key)
+        _update_summary_after_pre_ransac_ground_filter(
+            summary,
+            left_key_file,
+            prefilter_summary=pre_ransac_ground_distance_filter,
+        )
+    else:
+        pre_ransac_ground_distance_filter = _disabled_pre_ransac_ground_distance_summary(
+            threshold_km=pre_ransac_ground_distance_threshold,
+            lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
+            space="dom",
+            geometry_source="dom_projection_set_image",
+        )
+    summary[PREFILTER_METADATA_KEY] = pre_ransac_ground_distance_filter
     metadata_payload = None
     if metadata_output is not None:
         metadata_payload = dict(summary["preparation"])
@@ -4511,6 +4698,18 @@ def match_dom_pair_to_key_files(
             "status": summary["status"],
             "reason": summary["reason"],
             "point_count": summary["point_count"],
+            **(
+                {
+                    "point_count_before_pre_ransac_ground_filter": summary[
+                        "point_count_before_pre_ransac_ground_filter"
+                    ],
+                    "point_count_after_pre_ransac_ground_filter": summary[
+                        "point_count_after_pre_ransac_ground_filter"
+                    ],
+                }
+                if "point_count_before_pre_ransac_ground_filter" in summary
+                else {}
+            ),
             "left_feature_count_total": summary.get("left_feature_count_total"),
             "right_feature_count_total": summary.get("right_feature_count_total"),
             "feature_count_total": summary.get("feature_count_total"),
@@ -4558,6 +4757,7 @@ def match_dom_pair_to_key_files(
             "deep_match_config": summary.get("deep_match_config"),
             "deep_match_runtime_config": summary.get("deep_match_runtime_config"),
             "deep_match_export": summary.get("deep_match_export"),
+            PREFILTER_METADATA_KEY: summary[PREFILTER_METADATA_KEY],
         }
     match_visualization_result: dict[str, object] | None = None
     if write_match_visualization and not export_only:
@@ -4690,6 +4890,25 @@ def build_argument_parser(config_defaults: dict[str, object] | None = None) -> a
     parser.add_argument("--tile-validity-cache-dir", default=None, help="Directory for reusable per-DOM tile-validity index cache files.")
     parser.add_argument("--tile-validity-cell-width", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_width"), default=DEFAULT_TILE_VALIDITY_CELL_WIDTH, help=f"Coarse validity-index cell width. Default: {DEFAULT_TILE_VALIDITY_CELL_WIDTH}.")
     parser.add_argument("--tile-validity-cell-height", type=lambda value: _parse_tile_validity_cell_size(value, field_name="tile_validity_cell_height"), default=DEFAULT_TILE_VALIDITY_CELL_HEIGHT, help=f"Coarse validity-index cell height. Default: {DEFAULT_TILE_VALIDITY_CELL_HEIGHT}.")
+    parser.add_argument(
+        "--pre-ransac-max-ground-distance-km",
+        type=float,
+        default=DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+        help=(
+            "Maximum allowed paired ground distance before visualization RANSAC. "
+            "Use 0 to disable this matching-stage filter. "
+            f"Default: {DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM}."
+        ),
+    )
+    parser.add_argument(
+        "--pre-ransac-ground-lookup-failure-policy",
+        choices=("drop", "keep"),
+        default=DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
+        help=(
+            "Policy for tie points whose cube-to-ground lookup fails during pre-RANSAC filtering. "
+            f"Default: {DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY}."
+        ),
+    )
     parser.add_argument(
         "--match-preset-path",
         action=_MatchPresetPathAction,
@@ -5014,6 +5233,8 @@ def main(argv: list[str] | None = None) -> None:
         tile_validity_cache_dir=args.tile_validity_cache_dir,
         tile_validity_cell_width=args.tile_validity_cell_width,
         tile_validity_cell_height=args.tile_validity_cell_height,
+        pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
+        pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
         matcher_method=args.matcher_method,
         ratio_test=args.ratio_test,
         max_features=args.max_features,

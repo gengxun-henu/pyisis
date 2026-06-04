@@ -294,6 +294,28 @@ class ControlNetParameterCatalogUnitTest(unittest.TestCase):
         self.assertEqual(adaptive.cli_flag, "--adaptive-routing")
         self.assertIn("run_pipeline_example", adaptive.entrypoints)
 
+    def test_pre_ransac_ground_filter_parameters_cover_dom_entrypoints_and_pipeline_cli(self):
+        from controlnet_construct.parameter_catalog import (
+            FROM_DOM,
+            FROM_DOM_BATCH,
+            PARAMETER_BY_NAME,
+            RUN_PIPELINE,
+            cli_flag_for_entrypoint,
+        )
+
+        threshold = PARAMETER_BY_NAME["pre_ransac_max_ground_distance_km"]
+        policy = PARAMETER_BY_NAME["pre_ransac_ground_lookup_failure_policy"]
+
+        self.assertEqual(cli_flag_for_entrypoint(threshold, RUN_PIPELINE), "--pre-ransac-max-ground-distance-km")
+        self.assertEqual(
+            cli_flag_for_entrypoint(policy, RUN_PIPELINE),
+            "--pre-ransac-ground-lookup-failure-policy",
+        )
+        self.assertIn(FROM_DOM, threshold.entrypoints)
+        self.assertIn(FROM_DOM_BATCH, threshold.entrypoints)
+        self.assertIn(FROM_DOM, policy.entrypoints)
+        self.assertIn(FROM_DOM_BATCH, policy.entrypoints)
+
     def test_allowed_values_match_runtime_constants(self):
         from controlnet_construct.parameter_catalog import PARAMETER_BY_NAME
         from image_match.adaptive_routing import SUPPORTED_ADAPTIVE_ROUTING_PROFILES

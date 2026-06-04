@@ -80,6 +80,14 @@ _LAZY_MATCH_VIS_EXPORTS = {
     "write_stereo_pair_match_visualization_from_key_files",
 }
 
+_LAZY_GROUND_DISTANCE_PREFILTER_EXPORTS = {
+    "filter_dom_key_files_by_ground_distance",
+    "filter_ori_key_files_by_ground_distance",
+    "filter_stereo_pair_key_files_by_ground_distance",
+    "filter_stereo_pair_keypoints_by_ground_distance",
+    "ground_distance_km",
+}
+
 
 def __getattr__(name: str):
     if name in _LAZY_CONTROLNET_STEREOPAIR_EXPORTS:
@@ -122,6 +130,11 @@ def __getattr__(name: str):
         value = getattr(module, name)
         globals()[name] = value
         return value
+    if name in _LAZY_GROUND_DISTANCE_PREFILTER_EXPORTS:
+        module = import_module(".ground_distance_prefilter", __name__)
+        value = getattr(module, name)
+        globals()[name] = value
+        return value
     if name == "gpu_sift":
         module = import_module(".gpu_sift", __name__)
         globals()["gpu_sift"] = module
@@ -157,9 +170,14 @@ __all__ = [
     "convert_dom_keypoints_to_original",
     "extract_camera_ground_bounds",
     "find_overlapping_image_pairs",
+    "filter_dom_key_files_by_ground_distance",
+    "filter_ori_key_files_by_ground_distance",
+    "filter_stereo_pair_key_files_by_ground_distance",
+    "filter_stereo_pair_keypoints_by_ground_distance",
     "filter_stereo_pair_key_files_with_ransac",
     "filter_stereo_pair_keypoints_with_ransac",
     "generate_tiles",
+    "ground_distance_km",
     "match_dom_pair",
     "match_dom_pair_to_key_files",
     "merge_stereo_pair_key_files",

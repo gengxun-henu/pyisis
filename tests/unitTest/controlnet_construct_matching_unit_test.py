@@ -6258,6 +6258,11 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             metadata_output = temp_dir / "match_metadata" / "pair.json"
             metadata_output.parent.mkdir(parents=True)
 
+            def fake_prefilter(left_input, right_input, left_output, right_output, *args, **kwargs):
+                write_key_file(left_output, KeypointFile(32, 32, left_key_file.points[:1]))
+                write_key_file(right_output, KeypointFile(32, 32, right_key_file.points[:1]))
+                return prefilter_summary
+
             with mock.patch.object(
                 image_match,
                 "match_dom_pair",
@@ -6265,7 +6270,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             ), mock.patch.object(
                 image_match,
                 "filter_dom_key_files_by_ground_distance",
-                return_value=prefilter_summary,
+                side_effect=fake_prefilter,
                 create=True,
             ) as prefilter_mock:
                 result = match_dom_pair_to_key_files(
@@ -6283,6 +6288,12 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         prefilter_mock.assert_called_once()
         self.assertTrue(result[PREFILTER_METADATA_KEY]["applied"])
         self.assertTrue(payload["image_match"][PREFILTER_METADATA_KEY]["applied"])
+        self.assertEqual(result["point_count"], 1)
+        self.assertEqual(payload["image_match"]["point_count"], 1)
+        self.assertEqual(result["point_count_before_pre_ransac_ground_filter"], 2)
+        self.assertEqual(payload["image_match"]["point_count_before_pre_ransac_ground_filter"], 2)
+        self.assertEqual(result["point_count_after_pre_ransac_ground_filter"], 1)
+        self.assertEqual(payload["image_match"]["point_count_after_pre_ransac_ground_filter"], 1)
 
     def test_match_dom_pair_to_key_files_disables_pre_ransac_ground_filter_at_zero_threshold(self):
         left_key_file = KeypointFile(32, 32, (Keypoint(1.0, 2.0),))

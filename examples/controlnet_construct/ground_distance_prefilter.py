@@ -100,8 +100,10 @@ def _disabled_summary(
     threshold_km: float,
     lookup_failure_policy: str,
     lunar_radius_km: float,
+    space: str | None = None,
+    geometry_source: str | None = None,
 ) -> dict[str, object]:
-    return {
+    summary: dict[str, object] = {
         "applied": False,
         "already_prefiltered": False,
         "status": "disabled",
@@ -116,6 +118,11 @@ def _disabled_summary(
         "distance_summary_km": _distance_summary([]),
         "max_ground_distance_km": None,
     }
+    if space:
+        summary["space"] = space
+    if geometry_source:
+        summary["geometry_source"] = geometry_source
+    return summary
 
 
 def _validate_lookup_failure_policy(lookup_failure_policy: str) -> str:
@@ -149,7 +156,15 @@ def filter_stereo_pair_keypoints_by_ground_distance(
         return (
             left_key_file,
             right_key_file,
-            _disabled_summary(left_key_file, right_key_file, threshold, policy, radius),
+            _disabled_summary(
+                left_key_file,
+                right_key_file,
+                threshold,
+                policy,
+                radius,
+                space=space,
+                geometry_source=geometry_source,
+            ),
         )
 
     retained_left_points: list[Keypoint] = []

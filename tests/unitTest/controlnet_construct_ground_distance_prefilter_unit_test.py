@@ -22,11 +22,14 @@ from image_match.keypoints import Keypoint, KeypointFile, read_key_file, write_k
 
 
 class FakeCube:
+    instances = []
+
     def __init__(self) -> None:
         self.opened_path = None
         self.opened_mode = None
         self.closed = False
         self._open = False
+        FakeCube.instances.append(self)
 
     def open(self, path, mode) -> None:
         self.opened_path = path
@@ -46,6 +49,7 @@ class FakeCube:
 
 class FakeGroundMap:
     instances = []
+    non_finite_samples = set()
 
     def __init__(self, cube, priority) -> None:
         self.cube = cube
@@ -64,6 +68,8 @@ class FakeGroundMap:
         return sample != 99.0
 
     def universal_latitude(self) -> float:
+        if self.sample in FakeGroundMap.non_finite_samples:
+            return float("nan")
         return 0.0
 
     def universal_longitude(self) -> float:
@@ -88,7 +94,9 @@ fake_ip = type("FakeIsisPybind", (), {"Cube": FakeCube, "UniversalGroundMap": Fa
 
 class GroundDistancePrefilterTest(unittest.TestCase):
     def setUp(self) -> None:
+        FakeCube.instances.clear()
         FakeGroundMap.instances.clear()
+        FakeGroundMap.non_finite_samples.clear()
 
     def test_ground_distance_km_handles_longitude_wrap(self) -> None:
         distance = ground_distance_km(
@@ -254,6 +262,36 @@ class GroundDistancePrefilterTest(unittest.TestCase):
                 [ground_map.priority for ground_map in FakeGroundMap.instances],
                 ["ProjectionFirst", "ProjectionFirst"],
             )
+            self.assertEqual([cube.closed for cube in FakeCube.instances], [True, True])
+
+    def test_dom_wrapper_disabled_threshold_keeps_summary_identity(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            left_input = tmp_path / "left.key"
+            right_input = tmp_path / "right.key"
+            left_output = tmp_path / "left.filtered.key"
+            right_output = tmp_path / "right.filtered.key"
+            write_key_file(left_input, KeypointFile(100, 100, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_input, KeypointFile(100, 100, (Keypoint(60.0, 1.0),)))
+
+            with (
+                mock.patch.object(ground_distance_module, "bootstrap_runtime_environment", lambda: None),
+                mock.patch.dict(sys.modules, {"isis_pybind": fake_ip}),
+            ):
+                summary = ground_distance_module.filter_dom_key_files_by_ground_distance(
+                    left_input,
+                    right_input,
+                    left_output,
+                    right_output,
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    threshold_km=0.0,
+                )
+
+            self.assertFalse(summary["applied"])
+            self.assertEqual(summary["space"], "dom")
+            self.assertEqual(summary["geometry_source"], "dom_projection_set_image")
+            self.assertEqual([cube.closed for cube in FakeCube.instances], [True, True])
 
     def test_ori_wrapper_uses_camera_first_and_drops_lookup_failure(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -287,6 +325,36 @@ class GroundDistancePrefilterTest(unittest.TestCase):
                 [ground_map.priority for ground_map in FakeGroundMap.instances],
                 ["CameraFirst", "CameraFirst"],
             )
+            self.assertEqual([cube.closed for cube in FakeCube.instances], [True, True])
+
+    def test_ori_wrapper_drops_non_finite_ground_lookup(self) -> None:
+        FakeGroundMap.non_finite_samples.add(42.0)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            left_input = tmp_path / "left.key"
+            right_input = tmp_path / "right.key"
+            left_output = tmp_path / "left.filtered.key"
+            right_output = tmp_path / "right.filtered.key"
+            write_key_file(left_input, KeypointFile(100, 100, (Keypoint(42.0, 1.0),)))
+            write_key_file(right_input, KeypointFile(100, 100, (Keypoint(1.0, 1.0),)))
+
+            with (
+                mock.patch.object(ground_distance_module, "bootstrap_runtime_environment", lambda: None),
+                mock.patch.dict(sys.modules, {"isis_pybind": fake_ip}),
+            ):
+                summary = ground_distance_module.filter_ori_key_files_by_ground_distance(
+                    left_input,
+                    right_input,
+                    left_output,
+                    right_output,
+                    "left.cub",
+                    "right.cub",
+                    threshold_km=1.0,
+                )
+
+            self.assertEqual(summary["ground_lookup_failure_count"], 1)
+            self.assertEqual(summary["retained_count"], 0)
+            self.assertEqual([cube.closed for cube in FakeCube.instances], [True, True])
 
 
 if __name__ == "__main__":

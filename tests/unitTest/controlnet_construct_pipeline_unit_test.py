@@ -9499,6 +9499,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(failure_report["match_visualization"]["error_type"], "RuntimeError")
         self.assertEqual(failure_report["match_visualization"]["error"], "visualization exploded")
         self.assertEqual(failure_report["match_visualization"]["output_path"], str(visualization_output_path))
+        self.assertIn(PREFILTER_METADATA_KEY, failure_report)
+        self.assertIn("status", failure_report[PREFILTER_METADATA_KEY])
         self.assertEqual(failure_report["ransac"]["retained_count"], 1)
 
     def test_dom2ori_cli_paired_mode_dispatches_to_paired_conversion(self):

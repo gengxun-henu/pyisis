@@ -815,6 +815,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             filtered_left, filtered_right, summary = filter_stereo_pair_keypoints_with_ransac(
                 left_key_file,
                 right_key_file,
+                ransac_model="homography",
                 ransac_mode="strict",
             )
 
@@ -856,6 +857,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             filtered_left, filtered_right, summary = filter_stereo_pair_keypoints_with_ransac(
                 left_key_file,
                 right_key_file,
+                ransac_model="homography",
                 ransac_mode="loose",
                 loose_keep_pixel_threshold=1.0,
             )

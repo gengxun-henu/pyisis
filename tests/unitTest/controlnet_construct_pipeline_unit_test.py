@@ -6729,6 +6729,10 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                 "loftr=presets/loftr_external_outdoor.json",
                 "--matcher-method",
                 "flann",
+                "--pre-ransac-max-ground-distance-km",
+                "0",
+                "--pre-ransac-ground-lookup-failure-policy",
+                "keep",
             ]
         )
 
@@ -6737,6 +6741,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(parsed.adaptive_routing_profile, "fast")
         self.assertEqual(parsed.adaptive_routing_deep_preset, ["loftr=presets/loftr_external_outdoor.json"])
         self.assertEqual(parsed.matcher_method, "flann")
+        self.assertEqual(parsed.pre_ransac_max_ground_distance_km, 0.0)
+        self.assertEqual(parsed.pre_ransac_ground_lookup_failure_policy, "keep")
 
     def test_controlnet_stereopair_from_dom_match_dispatches_helper_and_writes_report(self):
         fake_result = {
@@ -6779,6 +6785,10 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                         "fast",
                         "--adaptive-routing-deep-preset",
                         "loftr=presets/loftr_external_outdoor.json",
+                        "--pre-ransac-max-ground-distance-km",
+                        "0",
+                        "--pre-ransac-ground-lookup-failure-policy",
+                        "keep",
                     ]
                 )
 
@@ -6797,6 +6807,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             build_mock.call_args.kwargs["adaptive_routing_deep_presets"],
             {"loftr": "presets/loftr_external_outdoor.json"},
         )
+        self.assertEqual(build_mock.call_args.kwargs["pre_ransac_max_ground_distance_km"], 0.0)
+        self.assertEqual(build_mock.call_args.kwargs["pre_ransac_ground_lookup_failure_policy"], "keep")
         json.dumps(json.loads(stdout.getvalue()))
 
     def test_run_pipeline_example_forwards_adaptive_routing_and_new_matching_options_from_config(self):
@@ -8052,6 +8064,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     enable_adaptive_routing=True,
                     adaptive_routing_profile="strict",
                     adaptive_routing_deep_presets={"loftr": "presets/loftr_external_outdoor.json"},
+                    pre_ransac_max_ground_distance_km=0.0,
+                    pre_ransac_ground_lookup_failure_policy="keep",
                 )
                 self.assertEqual(build_mock.call_count, 2)
                 first_call = build_mock.call_args_list[0]
@@ -8072,6 +8086,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     first_call.kwargs["adaptive_routing_deep_presets"],
                     {"loftr": "presets/loftr_external_outdoor.json"},
                 )
+                self.assertEqual(first_call.kwargs["pre_ransac_max_ground_distance_km"], 0.0)
+                self.assertEqual(first_call.kwargs["pre_ransac_ground_lookup_failure_policy"], "keep")
                 self.assertEqual(summary["pair_count"], 2)
                 self.assertEqual(summary["pairs"][0]["pair_id"], "S4")
                 self.assertEqual(summary["pairs"][1]["pair_id"], "S5")
@@ -8537,6 +8553,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
                     adaptive_routing_profile="strict",
                     adaptive_routing_deep_presets={"loftr": "presets/loftr_external_outdoor.json"},
                     deep_match_config_path="presets/loftr_external_outdoor.json",
+                    pre_ransac_max_ground_distance_km=0.0,
+                    pre_ransac_ground_lookup_failure_policy="keep",
                     write_match_visualization=False,
                 )
 
@@ -8551,6 +8569,8 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             build_mock.call_args.args[:6],
             (left_dom_key, right_dom_key, "left_dom.cub", "right_dom.cub", "left_original.cub", "right_original.cub"),
         )
+        self.assertEqual(build_mock.call_args.kwargs["pre_ransac_max_ground_distance_km"], 0.0)
+        self.assertEqual(build_mock.call_args.kwargs["pre_ransac_ground_lookup_failure_policy"], "keep")
 
     def test_build_controlnet_for_dom_match_stereo_pair_does_not_convert_after_match_failure(self):
         config = ControlNetConfig(
@@ -8852,12 +8872,12 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         prefilter_mock.assert_not_called()
         self.assertEqual(result[PREFILTER_METADATA_KEY]["status"], "disabled")
 
-    def test_build_controlnet_for_dom_stereo_pair_rejects_negative_pre_ransac_prefilter_threshold(self):
+    def test_build_controlnet_for_dom_stereo_pair_rejects_invalid_pre_ransac_prefilter_threshold(self):
         config = ControlNetConfig(
             network_id="ctx_dom_prefilter_negative",
             target_name="Mars",
             user_name="zmoratto",
-            description="negative dom pre-ransac prefilter threshold test",
+            description="invalid dom pre-ransac prefilter threshold test",
             point_id_prefix="PRN",
         )
 
@@ -8868,30 +8888,35 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
             write_key_file(left_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
             write_key_file(right_dom_key, KeypointFile(10, 10, (Keypoint(1.0, 1.0),)))
 
-            with (
-                patch(
-                    "controlnet_construct.controlnet_stereopair.filter_dom_key_files_by_ground_distance",
-                ) as prefilter_mock,
-                patch(
-                    "controlnet_construct.controlnet_stereopair.filter_stereo_pair_key_files_with_ransac",
-                ) as ransac_mock,
-            ):
-                with self.assertRaisesRegex(ValueError, "pre_ransac_max_ground_distance_km must be non-negative"):
-                    build_controlnet_for_dom_stereo_pair(
-                        left_dom_key,
-                        right_dom_key,
-                        REAL_DOM_LEFT,
-                        REAL_DOM_RIGHT,
-                        LEFT_CUBE_PATH,
-                        RIGHT_CUBE_PATH,
-                        config,
-                        output_net,
-                        skip_merge=True,
-                        pre_ransac_max_ground_distance_km=-1.0,
-                    )
+            for invalid_threshold in (-1.0, float("nan")):
+                with self.subTest(invalid_threshold=invalid_threshold):
+                    with (
+                        patch(
+                            "controlnet_construct.controlnet_stereopair.filter_dom_key_files_by_ground_distance",
+                        ) as prefilter_mock,
+                        patch(
+                            "controlnet_construct.controlnet_stereopair.filter_stereo_pair_key_files_with_ransac",
+                        ) as ransac_mock,
+                    ):
+                        with self.assertRaisesRegex(
+                            ValueError,
+                            "pre_ransac_max_ground_distance_km must be finite and non-negative",
+                        ):
+                            build_controlnet_for_dom_stereo_pair(
+                                left_dom_key,
+                                right_dom_key,
+                                REAL_DOM_LEFT,
+                                REAL_DOM_RIGHT,
+                                LEFT_CUBE_PATH,
+                                RIGHT_CUBE_PATH,
+                                config,
+                                output_net,
+                                skip_merge=True,
+                                pre_ransac_max_ground_distance_km=invalid_threshold,
+                            )
 
-        prefilter_mock.assert_not_called()
-        ransac_mock.assert_not_called()
+                    prefilter_mock.assert_not_called()
+                    ransac_mock.assert_not_called()
 
     def test_build_controlnet_for_dom_stereo_pair_forwards_visualization_preview_options(self):
         config = ControlNetConfig(

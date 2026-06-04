@@ -33,6 +33,7 @@ from dataclasses import dataclass, replace
 from datetime import datetime, timezone
 import json
 import logging
+import math
 from pathlib import Path
 import sys
 
@@ -582,6 +583,8 @@ def build_controlnets_for_dom_match_overlap_list(
     ransac_max_iters: int = 5000,
     ransac_mode: str = "loose",
     loose_ransac_keep_threshold: float = 1.0,
+    pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+    pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
     pvl_format: bool = True,
     logger: logging.Logger | None = None,
 ) -> dict[str, object]:
@@ -655,6 +658,8 @@ def build_controlnets_for_dom_match_overlap_list(
             ransac_max_iters=ransac_max_iters,
             ransac_mode=ransac_mode,
             loose_ransac_keep_threshold=loose_ransac_keep_threshold,
+            pre_ransac_max_ground_distance_km=pre_ransac_max_ground_distance_km,
+            pre_ransac_ground_lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
             pvl_format=pvl_format,
             logger=logger,
         )
@@ -857,8 +862,8 @@ def build_controlnet_for_dom_stereo_pair(
     left_ground_prefilter_dom_key = _default_intermediate_key_path(output_path, "left", "dom_ground_prefilter")
     right_ground_prefilter_dom_key = _default_intermediate_key_path(output_path, "right", "dom_ground_prefilter")
     pre_ransac_ground_distance_threshold = float(pre_ransac_max_ground_distance_km)
-    if pre_ransac_ground_distance_threshold < 0.0:
-        raise ValueError("pre_ransac_max_ground_distance_km must be non-negative.")
+    if not math.isfinite(pre_ransac_ground_distance_threshold) or pre_ransac_ground_distance_threshold < 0.0:
+        raise ValueError("pre_ransac_max_ground_distance_km must be finite and non-negative.")
 
     if logger is not None:
         logger.info(
@@ -1098,6 +1103,8 @@ def build_controlnet_for_dom_match_stereo_pair(
     ransac_max_iters: int = 5000,
     ransac_mode: str = "loose",
     loose_ransac_keep_threshold: float = 1.0,
+    pre_ransac_max_ground_distance_km: float = DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+    pre_ransac_ground_lookup_failure_policy: str = DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
     pvl_format: bool = True,
     logger: logging.Logger | None = None,
 ) -> dict[str, object]:
@@ -1160,6 +1167,8 @@ def build_controlnet_for_dom_match_stereo_pair(
         ransac_max_iters=ransac_max_iters,
         ransac_mode=ransac_mode,
         loose_ransac_keep_threshold=loose_ransac_keep_threshold,
+        pre_ransac_max_ground_distance_km=pre_ransac_max_ground_distance_km,
+        pre_ransac_ground_lookup_failure_policy=pre_ransac_ground_lookup_failure_policy,
         write_match_visualization=False,
         pvl_format=pvl_format,
         logger=logger,
@@ -1451,6 +1460,18 @@ def _build_from_dom_match_parser(subparsers) -> None:
     parser.add_argument("--ransac-max-iters", type=int, default=5000, help="Maximum iteration count passed to OpenCV homography RANSAC.")
     parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose", help="RANSAC outlier handling mode.")
     parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0, help="Loose-mode pixel threshold used to keep soft outliers.")
+    parser.add_argument(
+        "--pre-ransac-max-ground-distance-km",
+        type=float,
+        default=DEFAULT_PRE_RANSAC_MAX_GROUND_DISTANCE_KM,
+        help="Maximum DOM-projected ground distance in kilometers retained before RANSAC. Set to 0 to disable.",
+    )
+    parser.add_argument(
+        "--pre-ransac-ground-lookup-failure-policy",
+        choices=("drop", "keep"),
+        default=DEFAULT_PRE_RANSAC_GROUND_LOOKUP_FAILURE_POLICY,
+        help="How to handle DOM ground lookup failures during the pre-RANSAC ground-distance filter.",
+    )
     parser.add_argument("--binary", action="store_true", help="Write the ControlNet in binary format instead of PVL.")
     parser.add_argument(
         "--log-level",
@@ -1710,6 +1731,8 @@ def main(argv: list[str] | None = None) -> None:
             ransac_max_iters=args.ransac_max_iters,
             ransac_mode=args.ransac_mode,
             loose_ransac_keep_threshold=args.loose_ransac_keep_threshold,
+            pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
+            pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
             pvl_format=not args.binary,
             logger=logger,
         )

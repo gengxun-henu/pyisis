@@ -3,6 +3,7 @@ from __future__ import annotations
 import tempfile
 import sys
 import unittest
+from unittest import mock
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -10,6 +11,7 @@ EXAMPLES_DIR = PROJECT_ROOT / "examples"
 if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
+from controlnet_construct import ground_distance_prefilter as ground_distance_module
 from controlnet_construct.ground_distance_prefilter import (
     LUNAR_MEAN_RADIUS_KM,
     filter_stereo_pair_key_files_by_ground_distance,
@@ -19,7 +21,75 @@ from controlnet_construct.ground_distance_prefilter import (
 from image_match.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
 
 
+class FakeCube:
+    def __init__(self) -> None:
+        self.opened_path = None
+        self.opened_mode = None
+        self.closed = False
+        self._open = False
+
+    def open(self, path, mode) -> None:
+        self.opened_path = path
+        self.opened_mode = mode
+        self._open = True
+
+    def band_count(self) -> int:
+        return 1
+
+    def is_open(self) -> bool:
+        return self._open
+
+    def close(self) -> None:
+        self.closed = True
+        self._open = False
+
+
+class FakeGroundMap:
+    instances = []
+
+    def __init__(self, cube, priority) -> None:
+        self.cube = cube
+        self.priority = priority
+        self.band = None
+        self.sample = 0.0
+        self.line = 0.0
+        FakeGroundMap.instances.append(self)
+
+    def set_band(self, band: int) -> None:
+        self.band = band
+
+    def set_image(self, sample: float, line: float) -> bool:
+        self.sample = sample
+        self.line = line
+        return sample != 99.0
+
+    def universal_latitude(self) -> float:
+        return 0.0
+
+    def universal_longitude(self) -> float:
+        return 0.0 if self.sample < 50.0 else 0.01
+
+
+FakeCameraPriority = type(
+    "CameraPriority",
+    (),
+    {
+        "ProjectionFirst": "ProjectionFirst",
+        "CameraFirst": "CameraFirst",
+    },
+)
+FakeUniversalGroundMap = type(
+    "UniversalGroundMap",
+    (FakeGroundMap,),
+    {"CameraPriority": FakeCameraPriority},
+)
+fake_ip = type("FakeIsisPybind", (), {"Cube": FakeCube, "UniversalGroundMap": FakeUniversalGroundMap})
+
+
 class GroundDistancePrefilterTest(unittest.TestCase):
+    def setUp(self) -> None:
+        FakeGroundMap.instances.clear()
+
     def test_ground_distance_km_handles_longitude_wrap(self) -> None:
         distance = ground_distance_km(
             0.0,
@@ -152,6 +222,71 @@ class GroundDistancePrefilterTest(unittest.TestCase):
             self.assertEqual(summary["retained_count"], 1)
             self.assertEqual(len(read_key_file(left_output).points), 1)
             self.assertEqual(len(read_key_file(right_output).points), 1)
+
+    def test_dom_wrapper_uses_projection_first_and_writes_summary(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            left_input = tmp_path / "left.key"
+            right_input = tmp_path / "right.key"
+            left_output = tmp_path / "left.filtered.key"
+            right_output = tmp_path / "right.filtered.key"
+            write_key_file(left_input, KeypointFile(100, 100, (Keypoint(1.0, 1.0),)))
+            write_key_file(right_input, KeypointFile(100, 100, (Keypoint(60.0, 1.0),)))
+
+            with (
+                mock.patch.object(ground_distance_module, "bootstrap_runtime_environment", lambda: None),
+                mock.patch.dict(sys.modules, {"isis_pybind": fake_ip}),
+            ):
+                summary = ground_distance_module.filter_dom_key_files_by_ground_distance(
+                    left_input,
+                    right_input,
+                    left_output,
+                    right_output,
+                    "left_dom.cub",
+                    "right_dom.cub",
+                    threshold_km=0.1,
+                )
+
+            self.assertEqual(summary["space"], "dom")
+            self.assertEqual(summary["geometry_source"], "dom_projection_set_image")
+            self.assertEqual(summary["retained_count"], 0)
+            self.assertEqual(
+                [ground_map.priority for ground_map in FakeGroundMap.instances],
+                ["ProjectionFirst", "ProjectionFirst"],
+            )
+
+    def test_ori_wrapper_uses_camera_first_and_drops_lookup_failure(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp_path = Path(tmpdir)
+            left_input = tmp_path / "left.key"
+            right_input = tmp_path / "right.key"
+            left_output = tmp_path / "left.filtered.key"
+            right_output = tmp_path / "right.filtered.key"
+            write_key_file(left_input, KeypointFile(100, 100, (Keypoint(99.0, 1.0),)))
+            write_key_file(right_input, KeypointFile(100, 100, (Keypoint(1.0, 1.0),)))
+
+            with (
+                mock.patch.object(ground_distance_module, "bootstrap_runtime_environment", lambda: None),
+                mock.patch.dict(sys.modules, {"isis_pybind": fake_ip}),
+            ):
+                summary = ground_distance_module.filter_ori_key_files_by_ground_distance(
+                    left_input,
+                    right_input,
+                    left_output,
+                    right_output,
+                    "left.cub",
+                    "right.cub",
+                    threshold_km=1.0,
+                )
+
+            self.assertEqual(summary["space"], "ori")
+            self.assertEqual(summary["geometry_source"], "ori_camera_set_image")
+            self.assertEqual(summary["ground_lookup_failure_count"], 1)
+            self.assertEqual(summary["retained_count"], 0)
+            self.assertEqual(
+                [ground_map.priority for ground_map in FakeGroundMap.instances],
+                ["CameraFirst", "CameraFirst"],
+            )
 
 
 if __name__ == "__main__":

@@ -12,6 +12,11 @@ try:
 except ImportError:  # pragma: no cover - exercised when imported as a local package fallback.
     from .keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
 
+try:
+    from controlnet_construct.runtime import bootstrap_runtime_environment
+except ImportError:  # pragma: no cover - exercised when imported as a local package fallback.
+    from .runtime import bootstrap_runtime_environment
+
 
 LUNAR_MEAN_RADIUS_KM = 1737.4
 PREFILTER_METADATA_KEY = "pre_ransac_ground_distance_filter"
@@ -244,10 +249,150 @@ def filter_stereo_pair_key_files_by_ground_distance(
     }
 
 
+def _open_ground_map(cube_path: str | Path, *, band: int, priority_name: str):
+    band_number = int(band)
+    if band_number <= 0:
+        raise ValueError("band must be a positive integer.")
+
+    bootstrap_runtime_environment()
+    import isis_pybind as ip
+
+    cube = ip.Cube()
+    try:
+        cube.open(str(cube_path), "r")
+        if band_number > cube.band_count():
+            raise ValueError(f"Band {band_number} is out of range for cube {cube_path}.")
+
+        priority = getattr(ip.UniversalGroundMap.CameraPriority, priority_name)
+        ground_map = ip.UniversalGroundMap(cube, priority)
+        ground_map.set_band(band_number)
+        return cube, ground_map
+    except Exception:
+        if cube.is_open():
+            cube.close()
+        raise
+
+
+def _lookup_from_ground_map(ground_map) -> GroundLookup:
+    def lookup(sample: float, line: float) -> tuple[float, float] | None:
+        if not ground_map.set_image(sample, line):
+            return None
+        latitude = float(ground_map.universal_latitude())
+        longitude = float(ground_map.universal_longitude())
+        if not (math.isfinite(latitude) and math.isfinite(longitude)):
+            return None
+        return latitude, longitude
+
+    return lookup
+
+
+def _filter_key_files_with_cube_ground_maps(
+    left_input: str | Path,
+    right_input: str | Path,
+    left_output: str | Path,
+    right_output: str | Path,
+    left_cube_path: str | Path,
+    right_cube_path: str | Path,
+    *,
+    threshold_km: float,
+    priority_name: str,
+    lookup_failure_policy: str,
+    lunar_radius_km: float,
+    space: str,
+    geometry_source: str,
+    band: int,
+) -> dict[str, object]:
+    left_cube = None
+    right_cube = None
+    try:
+        left_cube, left_ground_map = _open_ground_map(left_cube_path, band=band, priority_name=priority_name)
+        right_cube, right_ground_map = _open_ground_map(right_cube_path, band=band, priority_name=priority_name)
+        return filter_stereo_pair_key_files_by_ground_distance(
+            left_input,
+            right_input,
+            left_output,
+            right_output,
+            left_ground_lookup=_lookup_from_ground_map(left_ground_map),
+            right_ground_lookup=_lookup_from_ground_map(right_ground_map),
+            threshold_km=threshold_km,
+            lookup_failure_policy=lookup_failure_policy,
+            lunar_radius_km=lunar_radius_km,
+            space=space,
+            geometry_source=geometry_source,
+        )
+    finally:
+        if left_cube is not None and left_cube.is_open():
+            left_cube.close()
+        if right_cube is not None and right_cube.is_open():
+            right_cube.close()
+
+
+def filter_dom_key_files_by_ground_distance(
+    left_input: str | Path,
+    right_input: str | Path,
+    left_output: str | Path,
+    right_output: str | Path,
+    left_dom_cube_path: str | Path,
+    right_dom_cube_path: str | Path,
+    *,
+    threshold_km: float,
+    lookup_failure_policy: str = "drop",
+    lunar_radius_km: float = LUNAR_MEAN_RADIUS_KM,
+    dom_band: int = 1,
+) -> dict[str, object]:
+    return _filter_key_files_with_cube_ground_maps(
+        left_input,
+        right_input,
+        left_output,
+        right_output,
+        left_dom_cube_path,
+        right_dom_cube_path,
+        threshold_km=threshold_km,
+        priority_name="ProjectionFirst",
+        lookup_failure_policy=lookup_failure_policy,
+        lunar_radius_km=lunar_radius_km,
+        space="dom",
+        geometry_source="dom_projection_set_image",
+        band=dom_band,
+    )
+
+
+def filter_ori_key_files_by_ground_distance(
+    left_input: str | Path,
+    right_input: str | Path,
+    left_output: str | Path,
+    right_output: str | Path,
+    left_cube_path: str | Path,
+    right_cube_path: str | Path,
+    *,
+    threshold_km: float,
+    lookup_failure_policy: str = "drop",
+    lunar_radius_km: float = LUNAR_MEAN_RADIUS_KM,
+    band: int = 1,
+) -> dict[str, object]:
+    return _filter_key_files_with_cube_ground_maps(
+        left_input,
+        right_input,
+        left_output,
+        right_output,
+        left_cube_path,
+        right_cube_path,
+        threshold_km=threshold_km,
+        priority_name="CameraFirst",
+        lookup_failure_policy=lookup_failure_policy,
+        lunar_radius_km=lunar_radius_km,
+        space="ori",
+        geometry_source="ori_camera_set_image",
+        band=band,
+    )
+
+
 __all__ = [
     "GroundLookup",
     "LUNAR_MEAN_RADIUS_KM",
     "PREFILTER_METADATA_KEY",
+    "filter_dom_key_files_by_ground_distance",
+    "filter_ori_key_files_by_ground_distance",
     "filter_stereo_pair_key_files_by_ground_distance",
     "filter_stereo_pair_keypoints_by_ground_distance",
     "ground_distance_km",

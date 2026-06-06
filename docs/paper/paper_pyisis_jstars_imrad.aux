@@ -1,4 +1,4 @@
-\relax 
+\relax
 \providecommand\hyper@newdestlabel[2]{}
 \providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
 \HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
@@ -12,7 +12,7 @@
 \let\newlabel\oldnewlabel
 \fi}
 \fi}
-\global\let\hyper@last\relax 
+\global\let\hyper@last\relax
 \gdef\HyperFirstAtBeginDocument#1{#1}
 \providecommand\HyField@AuxAddToFields[1]{}
 \providecommand\HyField@AuxAddToCoFields[2]{}
@@ -114,34 +114,39 @@
 \@writefile{lot}{\contentsline {table}{\numberline {VII}{\ignorespaces Routing Decision Distribution}}{9}{table.7}\protected@file@percent }
 \newlabel{tab:routing_dist}{{VII}{9}{Routing Decision Distribution}{table.7}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}Texture and Lighting Analysis}{9}{subsection.4.5}\protected@file@percent }
-\citation{geng2019groundtoimage,geng2020genericpushbroom}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Routing decision space showing the six test pairs positioned by their texture sparseness ($S$) and lighting difference ($D$) scores. Decision boundaries at $S=0.35$, $S=0.65$, $D=0.20$, and $D=0.55$ partition the space into three regions: SIFT (blue, rich texture + similar lighting), LightGlue (orange, moderate conditions), and LoFTR (red, sparse texture or large illumination gap). Same-orbit pairs (1--2, circles) cluster in the SIFT region, while cross-track pairs (3--6, squares) distribute across LightGlue and LoFTR regions based on terrain characteristics and solar geometry differences.}}{10}{figure.4}\protected@file@percent }
 \newlabel{fig:routing_space}{{4}{10}{Routing decision space showing the six test pairs positioned by their texture sparseness ($S$) and lighting difference ($D$) scores. Decision boundaries at $S=0.35$, $S=0.65$, $D=0.20$, and $D=0.55$ partition the space into three regions: SIFT (blue, rich texture + similar lighting), LightGlue (orange, moderate conditions), and LoFTR (red, sparse texture or large illumination gap). Same-orbit pairs (1--2, circles) cluster in the SIFT region, while cross-track pairs (3--6, squares) distribute across LightGlue and LoFTR regions based on terrain characteristics and solar geometry differences}{figure.4}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-F}}Computational Performance}{10}{subsection.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-F}}Representative Five-Method Matching Benchmark}{10}{subsection.4.6}\protected@file@percent }
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Qualitative comparison of matching performance across three representative scenarios. (Top) Texture-rich terrain with low sparseness and illumination difference: all methods succeed, with SIFT routed for computational efficiency. (Middle) Texture-poor terrain with high sparseness: SIFT fails due to insufficient keypoints (15\% success), while LoFTR's detector-free approach produces semi-dense correspondences (62\% success). (Bottom) High illumination difference terrain: SIFT features become unreliable under dramatic shadow pattern changes (8\% success), while LoFTR maintains robustness (58\% success). Checkmarks ($\text  {$\mathsurround \z@ \mathchar "458$}$) indicate $>$80\% success, triangles ($\triangle $) indicate 30--60\% success, and crosses ($\times $) indicate $<$20\% success.}}{10}{figure.5}\protected@file@percent }
 \newlabel{fig:matching_examples}{{5}{10}{Qualitative comparison of matching performance across three representative scenarios. (Top) Texture-rich terrain with low sparseness and illumination difference: all methods succeed, with SIFT routed for computational efficiency. (Middle) Texture-poor terrain with high sparseness: SIFT fails due to insufficient keypoints (15\% success), while LoFTR's detector-free approach produces semi-dense correspondences (62\% success). (Bottom) High illumination difference terrain: SIFT features become unreliable under dramatic shadow pattern changes (8\% success), while LoFTR maintains robustness (58\% success). Checkmarks ($\checkmark $) indicate $>$80\% success, triangles ($\triangle $) indicate 30--60\% success, and crosses ($\times $) indicate $<$20\% success}{figure.5}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {VIII}{\ignorespaces Computational Cost Breakdown}}{10}{table.8}\protected@file@percent }
-\newlabel{tab:performance}{{VIII}{10}{Computational Cost Breakdown}{table.8}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-G}}Binding-Level Geometry and Control Network Benchmarks}{11}{subsection.4.7}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Original-image-to-DOM projection performance for four LRO NAC image/DOM pairs. Timings report only the core coordinate transformation loop over $10^6$ original-image seed pixels. Ratio labels indicate PyISIS{}/ISIS{} C++ runtime.}}{11}{figure.6}\protected@file@percent }
-\newlabel{fig:ori_dom_performance}{{6}{11}{Original-image-to-DOM projection performance for four LRO NAC image/DOM pairs. Timings report only the core coordinate transformation loop over $10^6$ original-image seed pixels. Ratio labels indicate \pyisis {}/\isis {} C++ runtime}{figure.6}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces DOM-to-original-image back-projection performance for the same four LRO NAC image/DOM pairs. The input DOM points were obtained from the successful original-image-to-DOM projection stage, reducing non-overlap failures and measuring the inverse transformation used during ControlNet assembly.}}{11}{figure.7}\protected@file@percent }
-\newlabel{fig:dom_ori_performance}{{7}{11}{DOM-to-original-image back-projection performance for the same four LRO NAC image/DOM pairs. The input DOM points were obtained from the successful original-image-to-DOM projection stage, reducing non-overlap failures and measuring the inverse transformation used during ControlNet assembly}{figure.7}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces DOM/original-image round-trip accuracy. Original-image seed pixels were projected to the DOM and then back-projected to the original image; the plotted values are absolute round-trip pixel errors in units of $10^{-3}$ pixels. The bottom row reports the successful round-trip fraction for each image pair.}}{11}{figure.8}\protected@file@percent }
-\newlabel{fig:dom_ori_accuracy}{{8}{11}{DOM/original-image round-trip accuracy. Original-image seed pixels were projected to the DOM and then back-projected to the original image; the plotted values are absolute round-trip pixel errors in units of $10^{-3}$ pixels. The bottom row reports the successful round-trip fraction for each image pair}{figure.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Adaptive routing balances robustness and computational cost in representative lunar polar stereo matching. (a) Route-level design: image-pair diagnostics select either a classical SIFT+FLANN route or a deep SIFT+LightGlue route before geometric filtering. (b) Post-RANSAC tie-point counts for five matchers across three selected stereo pairs. (c) Success rate under a minimum 10-point criterion and deep-model workload. The adaptive workflow achieves 3/3 successful pairs while executing only 15 deep tile tasks, compared with 27 tasks for each fixed deep matcher. (d--f) Representative adaptive matching visualizations after ground-distance filtering and affine-partial RANSAC.}}{11}{figure.6}\protected@file@percent }
+\newlabel{fig:adaptive_efficiency_main}{{6}{11}{Adaptive routing balances robustness and computational cost in representative lunar polar stereo matching. (a) Route-level design: image-pair diagnostics select either a classical SIFT+FLANN route or a deep SIFT+LightGlue route before geometric filtering. (b) Post-RANSAC tie-point counts for five matchers across three selected stereo pairs. (c) Success rate under a minimum 10-point criterion and deep-model workload. The adaptive workflow achieves 3/3 successful pairs while executing only 15 deep tile tasks, compared with 27 tasks for each fixed deep matcher. (d--f) Representative adaptive matching visualizations after ground-distance filtering and affine-partial RANSAC}{figure.6}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-G}}Computational Performance}{11}{subsection.4.7}\protected@file@percent }
+\citation{geng2019groundtoimage,geng2020genericpushbroom}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Complete matching-line visualizations for five methods and three representative LRO NAC stereo pairs. Rows correspond to SIFT+FLANN, adaptive routing, LoFTR, SuperPoint+LightGlue, and SIFT+LightGlue; columns correspond to sparse-texture, rich-texture, and moderate-texture pairs. Labels in each panel report the number of correspondences retained after the 1\nobreakspace  {}km ground-distance filter and affine-partial RANSAC.}}{12}{figure.7}\protected@file@percent }
+\newlabel{fig:matching_line_matrix}{{7}{12}{Complete matching-line visualizations for five methods and three representative LRO NAC stereo pairs. Rows correspond to SIFT+FLANN, adaptive routing, LoFTR, SuperPoint+LightGlue, and SIFT+LightGlue; columns correspond to sparse-texture, rich-texture, and moderate-texture pairs. Labels in each panel report the number of correspondences retained after the 1~km ground-distance filter and affine-partial RANSAC}{figure.7}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {VIII}{\ignorespaces Computational Cost Breakdown}}{12}{table.8}\protected@file@percent }
+\newlabel{tab:performance}{{VIII}{12}{Computational Cost Breakdown}{table.8}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-H}}Binding-Level Geometry and Control Network Benchmarks}{12}{subsection.4.8}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Original-image-to-DOM projection performance for four LRO NAC image/DOM pairs. Timings report only the core coordinate transformation loop over $10^6$ original-image seed pixels. Ratio labels indicate PyISIS{}/ISIS{} C++ runtime.}}{13}{figure.8}\protected@file@percent }
+\newlabel{fig:ori_dom_performance}{{8}{13}{Original-image-to-DOM projection performance for four LRO NAC image/DOM pairs. Timings report only the core coordinate transformation loop over $10^6$ original-image seed pixels. Ratio labels indicate \pyisis {}/\isis {} C++ runtime}{figure.8}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces DOM-to-original-image back-projection performance for the same four LRO NAC image/DOM pairs. The input DOM points were obtained from the successful original-image-to-DOM projection stage, reducing non-overlap failures and measuring the inverse transformation used during ControlNet assembly.}}{13}{figure.9}\protected@file@percent }
+\newlabel{fig:dom_ori_performance}{{9}{13}{DOM-to-original-image back-projection performance for the same four LRO NAC image/DOM pairs. The input DOM points were obtained from the successful original-image-to-DOM projection stage, reducing non-overlap failures and measuring the inverse transformation used during ControlNet assembly}{figure.9}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces DOM/original-image round-trip accuracy. Original-image seed pixels were projected to the DOM and then back-projected to the original image; the plotted values are absolute round-trip pixel errors in units of $10^{-3}$ pixels. The bottom row reports the successful round-trip fraction for each image pair.}}{13}{figure.10}\protected@file@percent }
+\newlabel{fig:dom_ori_accuracy}{{10}{13}{DOM/original-image round-trip accuracy. Original-image seed pixels were projected to the DOM and then back-projected to the original image; the plotted values are absolute round-trip pixel errors in units of $10^{-3}$ pixels. The bottom row reports the successful round-trip fraction for each image pair}{figure.10}{}}
 \citation{laura2018autocnet}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Solar angle computation performance over $10^6$ pixels per LRO NAC image. The benchmark evaluates the per-pixel camera geometry calls required to retrieve solar azimuth and incidence-derived solar elevation. Ratio labels indicate PyISIS{}/ISIS{} C++ runtime.}}{12}{figure.9}\protected@file@percent }
-\newlabel{fig:solar_performance}{{9}{12}{Solar angle computation performance over $10^6$ pixels per LRO NAC image. The benchmark evaluates the per-pixel camera geometry calls required to retrieve solar azimuth and incidence-derived solar elevation. Ratio labels indicate \pyisis {}/\isis {} C++ runtime}{figure.9}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Numerical agreement of solar azimuth and solar elevation between PyISIS{} and the native ISIS{} C++ benchmark. Elevation is defined as $90^\circ $ minus the ISIS incidence angle. Errors are shown in units of $10^{-3}$ degrees.}}{12}{figure.10}\protected@file@percent }
-\newlabel{fig:solar_accuracy}{{10}{12}{Numerical agreement of solar azimuth and solar elevation between \pyisis {} and the native \isis {} C++ benchmark. Elevation is defined as $90^\circ $ minus the ISIS incidence angle. Errors are shown in units of $10^{-3}$ degrees}{figure.10}{}}
-\@writefile{lot}{\contentsline {table}{\numberline {IX}{\ignorespaces ControlNet Loading and Measure Traversal Benchmark}}{12}{table.9}\protected@file@percent }
-\newlabel{tab:controlnet_binding}{{IX}{12}{ControlNet Loading and Measure Traversal Benchmark}{table.9}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-H}}Comparison with Domain and Single-Method Baselines}{12}{subsection.4.8}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {V}Discussion}{12}{section.5}\protected@file@percent }
-\newlabel{sec:discussion}{{V}{12}{Discussion}{section.5}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Solar angle computation performance over $10^6$ pixels per LRO NAC image. The benchmark evaluates the per-pixel camera geometry calls required to retrieve solar azimuth and incidence-derived solar elevation. Ratio labels indicate PyISIS{}/ISIS{} C++ runtime.}}{14}{figure.11}\protected@file@percent }
+\newlabel{fig:solar_performance}{{11}{14}{Solar angle computation performance over $10^6$ pixels per LRO NAC image. The benchmark evaluates the per-pixel camera geometry calls required to retrieve solar azimuth and incidence-derived solar elevation. Ratio labels indicate \pyisis {}/\isis {} C++ runtime}{figure.11}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {12}{\ignorespaces Numerical agreement of solar azimuth and solar elevation between PyISIS{} and the native ISIS{} C++ benchmark. Elevation is defined as $90^\circ $ minus the ISIS incidence angle. Errors are shown in units of $10^{-3}$ degrees.}}{14}{figure.12}\protected@file@percent }
+\newlabel{fig:solar_accuracy}{{12}{14}{Numerical agreement of solar azimuth and solar elevation between \pyisis {} and the native \isis {} C++ benchmark. Elevation is defined as $90^\circ $ minus the ISIS incidence angle. Errors are shown in units of $10^{-3}$ degrees}{figure.12}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {IX}{\ignorespaces ControlNet Loading and Measure Traversal Benchmark}}{14}{table.9}\protected@file@percent }
+\newlabel{tab:controlnet_binding}{{IX}{14}{ControlNet Loading and Measure Traversal Benchmark}{table.9}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-I}}Comparison with Domain and Single-Method Baselines}{14}{subsection.4.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}Discussion}{14}{section.5}\protected@file@percent }
+\newlabel{sec:discussion}{{V}{14}{Discussion}{section.5}{}}
 \citation{wang2024efficientloftr}
-\@writefile{lot}{\contentsline {table}{\numberline {X}{\ignorespaces Control-Network Construction Baselines and Reporting Metrics}}{13}{table.10}\protected@file@percent }
-\newlabel{tab:baselines}{{X}{13}{Control-Network Construction Baselines and Reporting Metrics}{table.10}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {X}{\ignorespaces Control-Network Construction Baselines and Reporting Metrics}}{15}{table.10}\protected@file@percent }
+\newlabel{tab:baselines}{{X}{15}{Control-Network Construction Baselines and Reporting Metrics}{table.10}{}}
 \bibstyle{IEEEtran}
 \bibdata{../supplementary/references}
 \bibcite{archinal2018iau}{1}
@@ -157,11 +162,11 @@
 \bibcite{laura2018autocnet}{11}
 \bibcite{mcmichael2024asp}{12}
 \bibcite{usgs2024spiceql}{13}
-\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{14}{section.6}\protected@file@percent }
-\newlabel{sec:conclusion}{{VI}{14}{Conclusion}{section.6}{}}
-\@writefile{toc}{\contentsline {section}{References}{14}{section*.2}\protected@file@percent }
 \bibcite{pyisis2026discussion}{14}
 \bibcite{wang2025controlnet}{15}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Conclusion}{16}{section.6}\protected@file@percent }
+\newlabel{sec:conclusion}{{VI}{16}{Conclusion}{section.6}{}}
+\@writefile{toc}{\contentsline {section}{References}{16}{section*.2}\protected@file@percent }
 \bibcite{lowe1999ratio}{16}
 \bibcite{muja2009flann}{17}
 \bibcite{wu2015illumination}{18}
@@ -181,6 +186,6 @@
 \bibcite{jakob2017pybind11}{32}
 \bibcite{geng2019groundtoimage}{33}
 \bibcite{geng2020genericpushbroom}{34}
-\@writefile{toc}{\contentsline {section}{Biographies}{15}{IEEEbiography.0}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{Xun Geng}{15}{IEEEbiography.1}\protected@file@percent }
-\gdef \@abspage@last{15}
+\@writefile{toc}{\contentsline {section}{Biographies}{17}{IEEEbiography.0}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{Xun Geng}{17}{IEEEbiography.1}\protected@file@percent }
+\gdef \@abspage@last{17}

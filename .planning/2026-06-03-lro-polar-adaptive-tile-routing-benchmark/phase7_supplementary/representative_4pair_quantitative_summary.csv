@@ -1,0 +1,6 @@
+method,method_label,raw_matches_total,ransac_retained_total,ransac_dropped_total,retained_fraction,successful_pairs_retained_ge_4,success_rate,mean_retained_per_pair,median_retained_per_pair
+sift_flann,SIFT+FLANN,131,25,106,0.190840,4,1.000000,6.250,5.500
+sift_lightglue,SIFT+LightGlue,344,35,309,0.101744,3,0.750000,8.750,7.000
+superpoint_lightglue,SuperPoint+LightGlue,339,45,294,0.132743,4,1.000000,11.250,10.000
+loftr,LoFTR,3429,61,3368,0.017789,4,1.000000,15.250,13.000
+adaptive,Adaptive-tile,249,37,212,0.148594,4,1.000000,9.250,9.500

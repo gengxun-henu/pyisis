@@ -1,0 +1,130 @@
+{
+  "input_csv": ".planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_test_results.csv",
+  "success_threshold_ransac_retained": 4,
+  "method_summary": [
+    {
+      "method": "sift_flann",
+      "method_label": "SIFT+FLANN",
+      "raw_matches_total": 131,
+      "ransac_retained_total": 25,
+      "ransac_dropped_total": 106,
+      "retained_fraction": "0.190840",
+      "successful_pairs_retained_ge_4": 4,
+      "success_rate": "1.000000",
+      "mean_retained_per_pair": "6.250",
+      "median_retained_per_pair": "5.500"
+    },
+    {
+      "method": "sift_lightglue",
+      "method_label": "SIFT+LightGlue",
+      "raw_matches_total": 344,
+      "ransac_retained_total": 35,
+      "ransac_dropped_total": 309,
+      "retained_fraction": "0.101744",
+      "successful_pairs_retained_ge_4": 3,
+      "success_rate": "0.750000",
+      "mean_retained_per_pair": "8.750",
+      "median_retained_per_pair": "7.000"
+    },
+    {
+      "method": "superpoint_lightglue",
+      "method_label": "SuperPoint+LightGlue",
+      "raw_matches_total": 339,
+      "ransac_retained_total": 45,
+      "ransac_dropped_total": 294,
+      "retained_fraction": "0.132743",
+      "successful_pairs_retained_ge_4": 4,
+      "success_rate": "1.000000",
+      "mean_retained_per_pair": "11.250",
+      "median_retained_per_pair": "10.000"
+    },
+    {
+      "method": "loftr",
+      "method_label": "LoFTR",
+      "raw_matches_total": 3429,
+      "ransac_retained_total": 61,
+      "ransac_dropped_total": 3368,
+      "retained_fraction": "0.017789",
+      "successful_pairs_retained_ge_4": 4,
+      "success_rate": "1.000000",
+      "mean_retained_per_pair": "15.250",
+      "median_retained_per_pair": "13.000"
+    },
+    {
+      "method": "adaptive",
+      "method_label": "Adaptive-tile",
+      "raw_matches_total": 249,
+      "ransac_retained_total": 37,
+      "ransac_dropped_total": 212,
+      "retained_fraction": "0.148594",
+      "successful_pairs_retained_ge_4": 4,
+      "success_rate": "1.000000",
+      "mean_retained_per_pair": "9.250",
+      "median_retained_per_pair": "9.500"
+    }
+  ],
+  "case_table": [
+    {
+      "case_id": "near_pole_sparse",
+      "case_label": "85-89.9S sparse",
+      "sift_flann_retained": 6,
+      "sift_flann_raw": 11,
+      "sift_lightglue_retained": 0,
+      "sift_lightglue_raw": 0,
+      "superpoint_lightglue_retained": 19,
+      "superpoint_lightglue_raw": 40,
+      "loftr_retained": 19,
+      "loftr_raw": 154,
+      "adaptive_retained": 11,
+      "adaptive_raw": 25
+    },
+    {
+      "case_id": "near_pole_rich",
+      "case_label": "85-89.9S rich",
+      "sift_flann_retained": 5,
+      "sift_flann_raw": 5,
+      "sift_lightglue_retained": 8,
+      "sift_lightglue_raw": 26,
+      "superpoint_lightglue_retained": 6,
+      "superpoint_lightglue_raw": 17,
+      "loftr_retained": 7,
+      "loftr_raw": 211,
+      "adaptive_retained": 8,
+      "adaptive_raw": 26
+    },
+    {
+      "case_id": "near_80S_sparse",
+      "case_label": "80-82S sparse",
+      "sift_flann_retained": 4,
+      "sift_flann_raw": 6,
+      "sift_lightglue_retained": 6,
+      "sift_lightglue_raw": 25,
+      "superpoint_lightglue_retained": 6,
+      "superpoint_lightglue_raw": 14,
+      "loftr_retained": 6,
+      "loftr_raw": 228,
+      "adaptive_retained": 5,
+      "adaptive_raw": 22
+    },
+    {
+      "case_id": "near_80S_rich",
+      "case_label": "80-82S rich",
+      "sift_flann_retained": 10,
+      "sift_flann_raw": 109,
+      "sift_lightglue_retained": 21,
+      "sift_lightglue_raw": 293,
+      "superpoint_lightglue_retained": 14,
+      "superpoint_lightglue_raw": 268,
+      "loftr_retained": 29,
+      "loftr_raw": 2836,
+      "adaptive_retained": 13,
+      "adaptive_raw": 176
+    }
+  ],
+  "outputs": {
+    "summary_csv": ".planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_quantitative_summary.csv",
+    "plot_png": ".planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_retained_line_plot.png",
+    "plot_pdf": ".planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_retained_line_plot.pdf",
+    "plot_svg": ".planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_retained_line_plot.svg"
+  }
+}

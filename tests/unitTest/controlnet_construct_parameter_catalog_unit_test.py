@@ -256,6 +256,8 @@ class ControlNetParameterCatalogUnitTest(unittest.TestCase):
             "deep_match_config_path",
             "valid_pixel_percent_threshold",
             "invalid_pixel_radius",
+            "pre_ransac_distance_method",
+            "ransac_model",
             "enable_low_resolution_offset_estimation",
             "low_resolution_level",
             "low_resolution_max_mean_reprojection_error_pixels",
@@ -293,6 +295,15 @@ class ControlNetParameterCatalogUnitTest(unittest.TestCase):
         adaptive = PARAMETER_BY_NAME["enable_adaptive_routing"]
         self.assertEqual(adaptive.cli_flag, "--adaptive-routing")
         self.assertIn("run_pipeline_example", adaptive.entrypoints)
+
+    def test_new_filter_policy_parameters_have_expected_defaults(self):
+        from controlnet_construct import parameter_catalog
+
+        by_name = {parameter.name: parameter for parameter in parameter_catalog.PARAMETERS}
+        self.assertEqual(by_name["pre_ransac_distance_method"].default, "dom-projected")
+        self.assertEqual(by_name["pre_ransac_distance_method"].allowed_values, ("dom-projected", "ori-spherical"))
+        self.assertEqual(by_name["ransac_model"].default, "affine-partial")
+        self.assertEqual(by_name["ransac_model"].allowed_values, ("affine-partial", "affine", "homography"))
 
     def test_pre_ransac_ground_filter_parameters_cover_dom_entrypoints_and_pipeline_cli(self):
         from controlnet_construct.parameter_catalog import (

@@ -138,6 +138,7 @@ def _row_for_pair(
     ransac_reproj_threshold: float,
     ransac_confidence: float,
     ransac_max_iters: int,
+    ransac_model: str,
     ransac_mode: str,
     loose_keep_pixel_threshold: float,
     dry_run: bool,
@@ -167,6 +168,8 @@ def _row_for_pair(
         ransac_reproj_threshold=ransac_reproj_threshold,
         ransac_confidence=ransac_confidence,
         ransac_max_iters=ransac_max_iters,
+        ransac_model=ransac_model,
+        ransac_coordinate_space="dom_pixel",
         ransac_mode=ransac_mode,
         loose_keep_pixel_threshold=loose_keep_pixel_threshold,
     )
@@ -217,6 +220,9 @@ def _row_for_pair(
         "ransac_retained_fraction": retained_fraction,
         "ransac_status": ransac_summary.get("status"),
         "ransac_applied": ransac_summary.get("applied"),
+        "ransac_model": ransac_summary.get("model"),
+        "ransac_coordinate_space": ransac_summary.get("coordinate_space"),
+        "ransac_matrix_type": ransac_summary.get("matrix_type"),
         "ransac_mode": ransac_summary.get("mode"),
         "opencv_inlier_count": ransac_summary.get("opencv_inlier_count"),
         "opencv_outlier_count": ransac_summary.get("opencv_outlier_count"),
@@ -241,6 +247,9 @@ def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         "ransac_retained_fraction",
         "ransac_status",
         "ransac_applied",
+        "ransac_model",
+        "ransac_coordinate_space",
+        "ransac_matrix_type",
         "ransac_mode",
         "opencv_inlier_count",
         "opencv_outlier_count",
@@ -286,6 +295,7 @@ def rerender_root(
     ransac_reproj_threshold: float,
     ransac_confidence: float,
     ransac_max_iters: int,
+    ransac_model: str,
     ransac_mode: str,
     loose_keep_pixel_threshold: float,
     dry_run: bool,
@@ -326,6 +336,7 @@ def rerender_root(
                     ransac_reproj_threshold=ransac_reproj_threshold,
                     ransac_confidence=ransac_confidence,
                     ransac_max_iters=ransac_max_iters,
+                    ransac_model=ransac_model,
                     ransac_mode=ransac_mode,
                     loose_keep_pixel_threshold=loose_keep_pixel_threshold,
                     dry_run=dry_run,
@@ -353,6 +364,7 @@ def rerender_root(
             "ransac_reproj_threshold": ransac_reproj_threshold,
             "ransac_confidence": ransac_confidence,
             "ransac_max_iters": ransac_max_iters,
+            "ransac_model": ransac_model,
             "ransac_mode": ransac_mode,
             "loose_keep_pixel_threshold": loose_keep_pixel_threshold,
         },
@@ -381,6 +393,7 @@ def build_argument_parser() -> argparse.ArgumentParser:
     parser.add_argument("--ransac-reproj-threshold", type=float, default=3.0)
     parser.add_argument("--ransac-confidence", type=float, default=0.995)
     parser.add_argument("--ransac-max-iters", type=int, default=5000)
+    parser.add_argument("--ransac-model", choices=("affine-partial", "affine", "homography"), default="affine-partial")
     parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose")
     parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0)
     parser.add_argument("--dry-run", action="store_true")
@@ -396,6 +409,7 @@ def main(argv: list[str] | None = None) -> None:
         ransac_reproj_threshold=args.ransac_reproj_threshold,
         ransac_confidence=args.ransac_confidence,
         ransac_max_iters=args.ransac_max_iters,
+        ransac_model=args.ransac_model,
         ransac_mode=args.ransac_mode,
         loose_keep_pixel_threshold=args.loose_ransac_keep_threshold,
         dry_run=args.dry_run,

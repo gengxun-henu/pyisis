@@ -505,6 +505,30 @@ Figure~\ref{fig:matching_examples} illustrates these performance patterns schema
 \label{fig:matching_examples}
 \end{figure}
 
+\subsection{Representative Five-Method Matching Benchmark}
+
+To further isolate the effect of matcher routing from the full six-pair control-network pipeline, we selected three representative LRO NAC stereo pairs from the lunar south-polar test area. The selected pairs span sparse texture, relatively rich texture, and moderate-texture scenes with different illumination conditions. Each pair was processed with five strategies: SIFT+FLANN, adaptive routing, LoFTR, SuperPoint+LightGlue, and SIFT+LightGlue. A pair was counted as successful when at least 10 correspondences remained after the pre-RANSAC 1~km ground-distance filter and the affine-partial RANSAC stage.
+
+Figure~\ref{fig:adaptive_efficiency_main} summarizes the quantitative result. All five strategies reached the 10-point success criterion on all three selected pairs, but their point yield and computational profiles differed substantially. The adaptive strategy produced 208, 10,415, and 1,985 post-RANSAC correspondences on the sparse-texture, rich-texture, and moderate-texture pairs, respectively. Thus, adaptive routing did not maximize the raw match count in every case--LoFTR produced more correspondences on all three pairs--but it preserved a robust tie-point set while avoiding blanket use of expensive deep matchers.
+
+The workload difference is central to the interpretation. On this three-pair benchmark, fixed deep matchers executed 27 deep tile tasks each, whereas adaptive routing executed only 15 deep tile tasks because two pairs were accepted through the faster SIFT+FLANN route and only one pair required the SIFT+LightGlue deep route. This corresponds to a 44.4\% reduction in deep-model tile workload while maintaining the same 3/3 pair success rate under the 10-point criterion. With CUDA unavailable, the task-level manifest timestamps report CPU deep-model execution spans of 23.9~s for adaptive routing, 49.7~s for SIFT+LightGlue, 215.5~s for SuperPoint+LightGlue, and 712.7~s for LoFTR. These values are reported only as deep-model execution spans, not as complete end-to-end pipeline wall-clock times.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figure6_adaptive_efficiency_main}
+\caption{Adaptive routing balances robustness and computational cost in representative lunar polar stereo matching. (a) Route-level design: image-pair diagnostics select either a classical SIFT+FLANN route or a deep SIFT+LightGlue route before geometric filtering. (b) Post-RANSAC tie-point counts for five matchers across three selected stereo pairs. (c) Success rate under a minimum 10-point criterion and deep-model workload. The adaptive workflow achieves 3/3 successful pairs while executing only 15 deep tile tasks, compared with 27 tasks for each fixed deep matcher. (d--f) Representative adaptive matching visualizations after ground-distance filtering and affine-partial RANSAC.}
+\label{fig:adaptive_efficiency_main}
+\end{figure*}
+
+Figure~\ref{fig:matching_line_matrix} provides the corresponding match-line visualizations for all five methods and all three selected pairs. The sparse-texture pair highlights the limitation of relying only on classical SIFT+FLANN: it retained 67 correspondences after RANSAC, whereas adaptive routing retained 208 and the fixed deep matchers retained 703--5,161 points depending on the model. The rich-texture pair shows the opposite case: adaptive routing retained 10,415 points without requiring a fixed deep-matcher policy for all pairs. The moderate-texture pair retained 1,985 points with adaptive routing, comparable to SIFT+LightGlue (1,983) and above the minimum required for control-network generation. Together, these visualizations support the main routing claim: the adaptive workflow is not intended to produce the largest possible correspondence set for every pair; it is designed to preserve sufficient, geometrically filtered correspondences while reducing unnecessary deep-model execution.
+
+\begin{figure*}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figure7_matching_line_matrix}
+\caption{Complete matching-line visualizations for five methods and three representative LRO NAC stereo pairs. Rows correspond to SIFT+FLANN, adaptive routing, LoFTR, SuperPoint+LightGlue, and SIFT+LightGlue; columns correspond to sparse-texture, rich-texture, and moderate-texture pairs. Labels in each panel report the number of correspondences retained after the 1~km ground-distance filter and affine-partial RANSAC.}
+\label{fig:matching_line_matrix}
+\end{figure*}
+
 \subsection{Computational Performance}
 
 The computational cost breakdown (Table~\ref{tab:performance}) demonstrates that the TileCache mechanism is critical for efficient processing of large planetary imagery.

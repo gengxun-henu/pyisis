@@ -111,6 +111,22 @@ Required outputs:
 - Nature-style source CSV/JSON
 - SVG/PDF/TIFF/PNG figure outputs
 
+## Representative Four-Pair Case Set
+
+The 16-pair run is useful as the reproducible candidate pool and aggregate support, but it is too broad for the main narrative. For manuscript case-study figures, use four representative pairs:
+
+| Role | Latitude interval | Texture | Pair tag | Adaptive-pair retained | Adaptive-tile retained | Delta |
+| --- | --- | --- | --- | ---: | ---: | ---: |
+| Near-pole sparse | 85-to-89.9S | sparse, inconsistent lighting | `REDUCED_M1109027420LE.echo.cal__REDUCED_M140550700LE.echo.cal` | 0 | 11 | +11 |
+| Near-pole rich | 85-to-89.9S | rich, inconsistent lighting | `REDUCED_M1203964116RE.echo.cal__REDUCED_M140577849LE.echo.cal` | 0 | 8 | +8 |
+| Near-80S sparse | 80-to-82S | sparse, inconsistent lighting | `REDUCED_M1232286275LE.echo.cal__REDUCED_M173554018RE.echo.cal` | 1 | 5 | +4 |
+| Near-80S rich | 80-to-82S | rich, consistent lighting | `REDUCED_M1137240043RE.echo.cal__REDUCED_M1137247155LE.echo.cal` | 6 | 13 | +7 |
+
+Use the two sparse/inconsistent rows to make the low-texture claim: Adaptive-tile crosses or restores the RANSAC-success threshold where Adaptive-pair fails or remains below threshold. Use the two rich rows as controls showing that the method is not only a low-texture rescue case.
+
+Source CSV:
+`.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_case_selection.csv`
+
 ## Risks
 
 - If route metadata is missing, adaptive export can fall back to pair-level behavior; this must be detected before the full run.
@@ -367,7 +383,17 @@ Required outputs:
   - PDF: 40,252 bytes
   - TIFF: 57,039,650 bytes
   - PNG: 143,616 bytes
-- Runtime caveat: SIFT+FLANN and Adaptive have command-to-summary mtime proxy runtimes in the generated method summary, but fixed deep methods currently show `runtime_source=not_available`. The deep execution evidence exists in `fixed_deep_manifest_run_summaries.json`; the plotting script needs a follow-up provenance merge if runtime is to be plotted or reported for deep methods.
+- Runtime provenance update: `plot_lro_polar_match_method_comparison.py` now accepts per-manifest deep runtime files named either `deep_match_run_summary.json` or `manifest_run_summary.json`. After redraw, Figure D has fixed deep method runtimes:
+  - LoFTR: 35.6114 min, `runtime_source=deep_task_started_finished_sum`, 16 summaries, 107 tasks, 0 failed
+  - SuperPoint+LightGlue: 12.1320 min, `runtime_source=deep_task_started_finished_sum`, 16 summaries, 107 tasks, 0 failed
+  - SIFT+LightGlue: 2.4056 min, `runtime_source=deep_task_started_finished_sum`, 16 summaries, 107 tasks, 0 failed
+  - SIFT+FLANN remains a command-to-summary mtime proxy: 2.0845 min
+  - Adaptive uses deep task runtime plus command-to-summary mtime proxy: 16.5139 min
+- Redrawn file sizes:
+  - SVG: 41,419 bytes
+  - PDF: 40,280 bytes
+  - TIFF: 57,039,650 bytes
+  - PNG: 146,725 bytes
 
 ### Supplementary Adaptive-Pair vs Adaptive-Tile Ablation
 
@@ -432,3 +458,53 @@ Required outputs:
   `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_routing_reduced_rerun_20260603/sift_flann`
 - It has 16 match metadata JSON files and no active matching process was found when checked.
 - This new plan should not automatically continue that older Phase 19 rerun; it should first audit whether the output should be reused or discarded.
+
+## Representative Four-Pair Rerun
+
+- Representative rerun output root:
+  `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_tile_routing_representative_4pair_20260604`
+- Selection files:
+  - `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/representative_4pair_paths.csv`
+  - `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_case_selection.csv`
+- Result files:
+  - `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_test_results.csv`
+  - `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_adaptive_route_summary.csv`
+  - `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_test_summary.md`
+  - `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_quantitative_summary.csv`
+  - `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_quantitative_summary.json`
+  - `.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_retained_line_plot.{png,pdf,svg}`
+- Four cases: near-pole sparse/inconsistent, near-pole rich/inconsistent, near-80S sparse/inconsistent, and near-80S rich/consistent.
+- Deep inference completed with 55/55 tasks succeeded and 0 failed.
+- Four-case method totals:
+  - SIFT+FLANN: raw 131; RANSAC retained 25; successful pairs 4.
+  - SIFT+LightGlue: raw 344; RANSAC retained 35; successful pairs 3.
+  - SuperPoint+LightGlue: raw 339; RANSAC retained 45; successful pairs 4.
+  - LoFTR: raw 3429; RANSAC retained 61; successful pairs 4.
+  - Adaptive-tile: raw 249; RANSAC retained 37; successful pairs 4.
+- Adaptive-tile retained counts by representative case:
+  - near-pole sparse/inconsistent: 11 retained from 25 raw matches.
+  - near-pole rich/inconsistent: 8 retained from 26 raw matches.
+  - near-80S sparse/inconsistent: 5 retained from 22 raw matches.
+  - near-80S rich/consistent: 13 retained from 176 raw matches.
+- Interpretation: this subset supports the method rationale better than a broad 16-pair timing-only table. Adaptive-tile produces fewer raw matches than fixed LoFTR but preserves successful pair coverage while avoiding indiscriminate deep matching. In sparse low-texture cases, it keeps enough geometrically consistent matches; in rich/consistent cases, it keeps the simpler classic route where that route is already appropriate.
+
+## Figure C Coverage Threshold Update
+
+- Updated `five_method_match_comparison` Panel C to count pair coverage only when a pair has at least 10 RANSAC-retained matches.
+- Updated source data fields:
+  - pair-level `coverage_min_retained_match_threshold=10`
+  - pair-level `coverage_pair_passes_threshold`
+  - method-level `ransac_min10_pair_count`
+- Updated Panel C coverage counts:
+  - LoFTR: 9/16
+  - SuperPoint+LightGlue: 10/16
+  - SIFT+LightGlue: 6/16
+  - SIFT+FLANN: 4/16
+  - Adaptive-tile: 5/16
+- Redrawn figure/source files:
+  `/media/gengxun/My Passport/data/lro/testdata_lunar_80S_89.9S/texture_lighting_pair_selection/original_gsd/work/reduced-10m/lro_polar_adaptive_tile_routing_20260603/nature_figure_inputs/five_method_match_comparison.{svg,pdf,tiff,png}`
+- Redrawn file sizes:
+  - SVG: 41,434 bytes
+  - PDF: 40,751 bytes
+  - TIFF: 57,039,650 bytes
+  - PNG: 153,151 bytes

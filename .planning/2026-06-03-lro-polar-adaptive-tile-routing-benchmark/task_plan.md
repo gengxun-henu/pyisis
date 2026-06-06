@@ -14,6 +14,23 @@ All phases are complete. The remaining repository state is a dirty worktree cont
 - Pair CSV: `lro_polar_adaptive_routing_preprocess/reduced_selected_pair_paths.csv`
 - Original/source cubes: `REDUCED_*.echo.cal.cub` for this reduced-10m benchmark
 - DOMs: 10 m/pixel reduced DOMs listed by the pair CSV
+- The 16 selected pairs should be treated as the candidate/evidence pool. For manuscript case-study figures and narrative examples, use a four-pair representative subset rather than showing all 16 pairs.
+
+## Representative Four-Pair Reporting Scope
+
+Use four representative groups across latitude and texture:
+
+| Role | Latitude interval | Texture | Pair folder | Main evidence |
+| --- | --- | --- | --- | --- |
+| Near-pole sparse | 85-to-89.9S | sparse, inconsistent lighting | `04_south-85-to-89.9_sparse-inconsistent_rank02_M1109027420LE__M140550700LE` | Adaptive-tile retained 11 RANSAC matches versus Adaptive-pair 0. |
+| Near-pole rich | 85-to-89.9S | rich, inconsistent lighting | `07_south-85-to-89.9_rich-inconsistent_rank01_M1203964116RE__M140577849LE` | Adaptive-tile retained 8 RANSAC matches versus Adaptive-pair 0. |
+| Near-80S sparse | 80-to-82S | sparse, inconsistent lighting | `12_south-80-to-82_sparse-inconsistent_rank02_M1232286275LE__M173554018RE` | Adaptive-tile retained 5 RANSAC matches versus Adaptive-pair 1. |
+| Near-80S rich | 80-to-82S | rich, consistent lighting | `14_south-80-to-82_rich-consistent_rank02_M1137240043RE__M1137247155LE` | Adaptive-tile retained 13 RANSAC matches versus Adaptive-pair 6. |
+
+Source table:
+`.planning/2026-06-03-lro-polar-adaptive-tile-routing-benchmark/phase7_supplementary/representative_4pair_case_selection.csv`
+
+This keeps the main example set compact while preserving two low-texture cases that directly show why Adaptive-tile is useful.
 
 ## Main Method Set
 
@@ -140,6 +157,15 @@ Adaptive-tile must route per tile:
 - [x] Update `findings.md`, `progress.md`, and this plan with final results
 - [x] Confirm `.gitignore` and `print.prt` are not staged or intentionally modified
 - [x] Provide final paths and manuscript-ready summary
+- **Status:** complete
+
+### Phase 9: Representative Four-Pair Manuscript Rerun
+
+- [x] Select four representative pairs by latitude and texture: near-pole sparse, near-pole rich, near-80S sparse, and near-80S rich
+- [x] Run SIFT+FLANN, SIFT+LightGlue, SuperPoint+LightGlue, LoFTR, and Adaptive-tile on the four-pair subset
+- [x] Run all deep manifests and Adaptive-tile grouped manifests
+- [x] Import deep and mixed-route results and extract RANSAC retained counts
+- [x] Write representative source CSVs and interpretation summary under `phase7_supplementary/`
 - **Status:** complete
 
 ## Key Decisions

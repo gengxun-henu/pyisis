@@ -1,0 +1,6 @@
+method,pre_ground_input,pre_ground_retained,pre_ground_dropped,ransac_input,ransac_retained,ransac_dropped,ransac_retained_fraction
+sift_flann,4122,3843,279,3843,3816,27,0.992974
+loftr,25825,22561,3264,22561,15490,7071,0.686583
+superpoint_lightglue,5447,5121,326,5121,4326,795,0.844757
+sift_lightglue,6021,5908,113,5908,5567,341,0.942282
+adaptive,14928,14239,689,14239,14166,73,0.994873

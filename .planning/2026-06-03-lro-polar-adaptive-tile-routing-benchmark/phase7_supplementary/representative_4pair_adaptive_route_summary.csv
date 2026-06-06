@@ -1,0 +1,5 @@
+case_id,latitude_bin,texture_class,pair_tag,candidate_tiles,valid_tiles_after_prefilter,classic_task_count,classic_point_count,deep_task_count,exported_deep_task_count,skipped_deep_task_count,adaptive_raw_matches,adaptive_ransac_retained
+near_pole_sparse,south-85-to-89.9,sparse-inconsistent,REDUCED_M1109027420LE.echo.cal__REDUCED_M140550700LE.echo.cal,14,12,6,25,6,0,6,25,11
+near_pole_rich,south-85-to-89.9,rich-inconsistent,REDUCED_M1203964116RE.echo.cal__REDUCED_M140577849LE.echo.cal,10,5,0,,5,1,4,26,8
+near_80S_sparse,south-80-to-82,sparse-inconsistent,REDUCED_M1232286275LE.echo.cal__REDUCED_M173554018RE.echo.cal,3,3,2,22,1,0,1,22,5
+near_80S_rich,south-80-to-82,rich-consistent,REDUCED_M1137240043RE.echo.cal__REDUCED_M1137247155LE.echo.cal,10,9,9,176,0,0,0,176,13

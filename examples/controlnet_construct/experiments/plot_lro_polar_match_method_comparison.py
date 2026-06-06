@@ -33,6 +33,7 @@ METHOD_COLORS = {
     "sift_flann": "#C9A24A",
     "adaptive": "#D67C63",
 }
+COVERAGE_RETAINED_MATCH_THRESHOLD = 10
 
 
 def _read_csv(path: Path) -> list[dict[str, str]]:
@@ -102,7 +103,10 @@ def _parse_utc(value: str | None) -> datetime | None:
 
 
 def _deep_runtime_seconds(method_dir: Path) -> tuple[float | None, dict[str, Any]]:
-    summaries = sorted((method_dir / "deep_match_workspaces").glob("*/deep_match_run_summary.json"))
+    workspace_dir = method_dir / "deep_match_workspaces"
+    summaries = sorted(workspace_dir.glob("*/deep_match_run_summary.json"))
+    if not summaries:
+        summaries = sorted(workspace_dir.glob("*/manifest_run_summary.json"))
     if not summaries:
         return None, {
             "runtime_source": "not_available",
@@ -194,6 +198,7 @@ def build_source_data(output_root: Path) -> tuple[list[dict[str, Any]], list[dic
         if feature_count is None and left_feature_count is not None and right_feature_count is not None:
             feature_count = left_feature_count + right_feature_count
         tile_match_count = _finite_int_or_none(_metadata_value(pair_metadata, "tile_match_count_total"))
+        ransac_retained_count = int(row["ransac_retained_count"] or 0)
         pair_rows.append(
             {
                 "method": method,
@@ -204,9 +209,11 @@ def build_source_data(output_root: Path) -> tuple[list[dict[str, Any]], list[dic
                 "feature_count_total": feature_count,
                 "tile_match_count_total": tile_match_count,
                 "raw_match_count": int(row["raw_match_count"] or 0),
-                "ransac_retained_count": int(row["ransac_retained_count"] or 0),
+                "ransac_retained_count": ransac_retained_count,
                 "ransac_dropped_count": int(row["ransac_dropped_count"] or 0),
                 "ransac_retained_fraction": float(row["ransac_retained_fraction"] or 0.0),
+                "coverage_min_retained_match_threshold": COVERAGE_RETAINED_MATCH_THRESHOLD,
+                "coverage_pair_passes_threshold": ransac_retained_count >= COVERAGE_RETAINED_MATCH_THRESHOLD,
                 "ransac_status": row.get("ransac_status") or "",
                 "visualization_output_path": row.get("visualization_output_path") or "",
             }
@@ -251,6 +258,12 @@ def build_source_data(output_root: Path) -> tuple[list[dict[str, Any]], list[dic
                 "raw_nonzero_pair_count": sum(1 for row in method_pair_rows if row["raw_match_count"] > 0),
                 "ransac_nonzero_pair_count": sum(
                     1 for row in method_pair_rows if row["ransac_retained_count"] > 0
+                ),
+                "coverage_min_retained_match_threshold": COVERAGE_RETAINED_MATCH_THRESHOLD,
+                "ransac_min10_pair_count": sum(
+                    1
+                    for row in method_pair_rows
+                    if row["ransac_retained_count"] >= COVERAGE_RETAINED_MATCH_THRESHOLD
                 ),
                 "feature_count_total": sum(feature_values) if feature_values else None,
                 "feature_count_pair_count": len(feature_values),
@@ -320,17 +333,17 @@ def plot_method_comparison(method_rows: list[dict[str, Any]], output_prefix: Pat
     ax.set_title("Geometric consistency differs by method")
 
     ax = axes[1, 0]
-    nonzero = np.array([row["ransac_nonzero_pair_count"] for row in method_rows], dtype=float)
+    coverage = np.array([row["ransac_min10_pair_count"] for row in method_rows], dtype=float)
     pair_count = np.array([row["pair_count"] for row in method_rows], dtype=float)
     ax.bar(x, pair_count, color="#E8EAED", label="Attempted pairs")
-    ax.bar(x, nonzero, color=colors, label="Pairs with retained matches")
+    ax.bar(x, coverage, color=colors, label="Pairs with >=10 retained")
     ax.set_ylim(0, max(pair_count) + 2)
     ax.set_ylabel("Pair count")
     ax.set_xticks(x, labels, rotation=25, ha="right")
-    for xpos, ok, total in zip(x, nonzero, pair_count):
+    for xpos, ok, total in zip(x, coverage, pair_count):
         ax.text(xpos, ok + 0.35, f"{int(ok)}/{int(total)}", ha="center", va="bottom", fontsize=6)
     ax.text(-0.12, 1.06, "C", transform=ax.transAxes, fontweight="bold", fontsize=10)
-    ax.set_title("Selected-pair coverage")
+    ax.set_title("Selected-pair coverage (>=10 retained)")
 
     ax = axes[1, 1]
     minutes = np.array(
@@ -380,6 +393,8 @@ def main() -> None:
         "ransac_retained_count",
         "ransac_dropped_count",
         "ransac_retained_fraction",
+        "coverage_min_retained_match_threshold",
+        "coverage_pair_passes_threshold",
         "ransac_status",
         "visualization_output_path",
     ]
@@ -393,6 +408,8 @@ def main() -> None:
         "ransac_retained_fraction",
         "raw_nonzero_pair_count",
         "ransac_nonzero_pair_count",
+        "coverage_min_retained_match_threshold",
+        "ransac_min10_pair_count",
         "feature_count_total",
         "feature_count_pair_count",
         "median_feature_count_total",
@@ -424,6 +441,10 @@ def main() -> None:
                 "runtime_note": (
                     "Deep-learning runtime is summed from task started/finished timestamps; "
                     "SIFT+FLANN and adaptive runtime uses command-to-summary mtime proxy."
+                ),
+                "coverage_note": (
+                    "Panel C counts a pair as covered only when RANSAC retained at least "
+                    f"{COVERAGE_RETAINED_MATCH_THRESHOLD} matches."
                 ),
             },
             "method_summary": method_rows,

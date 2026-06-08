@@ -1,6 +1,0 @@
-method,method_label,success_count_min10,pair_count,mean_ransac_points,median_ransac_points,deep_task_count,deep_task_success,deep_task_span_sec,deep_manifest_count
-sift_flann,SIFT+FLANN,3,3,1266.3333333333333,1292,0,0,0.0,0
-adaptive,Adaptive,3,3,4202.666666666667,1985,15,15,23.9,1
-loftr,LoFTR,3,3,7100.666666666667,5161,27,27,712.7,3
-superpoint_lightglue,SuperPoint+LG,3,3,1640.6666666666667,703,27,27,215.5,3
-sift_lightglue,SIFT+LG,3,3,1913.3333333333333,1983,27,27,49.7,3

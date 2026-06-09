@@ -130,6 +130,11 @@ python examples/forward_intersection/forward_intersection.py \
   outside the task scope.
 - For larger features, benchmarks, or design-heavy work, prefer an isolated
   branch under `.worktrees/` and report the exact worktree path and branch.
+- For paper-related coding tasks (especially experiment plotting, paper-specific
+  data processing, and manuscript-support scripts), default to placing runnable
+  scripts under `docs/paper/` (for example `docs/paper/scripts/`) rather than
+  under general `examples/` or `tools/` paths, unless the user explicitly asks
+  for a reusable repository-wide utility.
 - If the user invokes a publish or merge-to-main workflow, complete the flow
   end-to-end: validate, commit, push, open/merge PR, sync local `main`, and
   clean up the linked worktree or branch when appropriate.

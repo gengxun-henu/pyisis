@@ -2,6 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-24
+Updated: 2026-06-08  Geng Xun added optional thin translucent match-line rendering for publication figures.
 """
 
 from __future__ import annotations
@@ -432,6 +433,13 @@ def _resize_visualization_image(image: np.ndarray, *, scale_factor: float) -> np
     return cv2.resize(image, dsize=None, fx=scale_factor, fy=scale_factor, interpolation=interpolation)
 
 
+def _pad_bgr_image_to_height(image: np.ndarray, *, target_height: int) -> np.ndarray:
+    if image.shape[0] >= target_height:
+        return image
+    pad_height = int(target_height) - int(image.shape[0])
+    return cv2.copyMakeBorder(image, 0, pad_height, 0, 0, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+
+
 def _read_cube_as_stretched_byte(
     cube_path: str | Path,
     *,
@@ -496,11 +504,21 @@ def write_stereo_pair_match_visualization(
     left_matching_preview_dom: str | Path | None = None,
     right_matching_preview_dom: str | Path | None = None,
     matching_preview_level: int | None = None,
+    match_line_thickness: int = 1,
+    match_line_alpha: float = 1.0,
+    match_point_radius: int = 3,
+    match_color: tuple[int, int, int] = (0, 220, 0),
 ) -> dict[str, object]:
     if len(left_key_file.points) != len(right_key_file.points):
         raise ValueError("Left and right keypoint files must contain the same number of points for visualization.")
     if scale_factor <= 0.0:
         raise ValueError("scale_factor must be positive.")
+    if match_line_thickness <= 0:
+        raise ValueError("match_line_thickness must be positive.")
+    if not (0.0 < match_line_alpha <= 1.0):
+        raise ValueError("match_line_alpha must be in (0, 1].")
+    if match_point_radius < 0:
+        raise ValueError("match_point_radius must be non-negative.")
 
     resolved_output_path = (
         Path(output_path)
@@ -730,22 +748,37 @@ def write_stereo_pair_match_visualization(
     right_keypoints = [
         _isis_keypoint_to_draw_matches_keypoint(point, scale_factor=scale_factor) for point in right_render_key_file.points
     ]
-    matches = [cv2.DMatch(_queryIdx=index, _trainIdx=index, _distance=0.0) for index in range(len(left_keypoints))]
-
-    rendered = cv2.drawMatches(
-        scaled_left,
-        left_keypoints,
-        scaled_right,
-        right_keypoints,
-        matches,
-        None,
-        matchColor=(0, 220, 0),
-        singlePointColor=(255, 80, 80),
-        flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS,
-    )
+    left_bgr = cv2.cvtColor(scaled_left, cv2.COLOR_GRAY2BGR)
+    right_bgr = cv2.cvtColor(scaled_right, cv2.COLOR_GRAY2BGR)
+    target_panel_height = max(left_bgr.shape[0], right_bgr.shape[0])
+    left_bgr = _pad_bgr_image_to_height(left_bgr, target_height=target_panel_height)
+    right_bgr = _pad_bgr_image_to_height(right_bgr, target_height=target_panel_height)
+    rendered = np.hstack((left_bgr, right_bgr))
+    overlay = rendered.copy()
+    left_panel_width = scaled_left.shape[1]
+    resolved_match_color = tuple(int(channel) for channel in match_color)
+    for left_keypoint, right_keypoint in zip(left_keypoints, right_keypoints, strict=True):
+        left_point = left_keypoint.pt
+        right_point = right_keypoint.pt
+        left_center = (int(round(left_point[0])), int(round(left_point[1])))
+        right_center = (left_panel_width + int(round(right_point[0])), int(round(right_point[1])))
+        cv2.line(
+            overlay,
+            left_center,
+            right_center,
+            resolved_match_color,
+            int(match_line_thickness),
+            cv2.LINE_AA,
+        )
+        if match_point_radius > 0:
+            cv2.circle(overlay, left_center, int(match_point_radius), resolved_match_color, -1, cv2.LINE_AA)
+            cv2.circle(overlay, right_center, int(match_point_radius), resolved_match_color, -1, cv2.LINE_AA)
+    if match_line_alpha < 1.0:
+        rendered = cv2.addWeighted(overlay, float(match_line_alpha), rendered, 1.0 - float(match_line_alpha), 0.0)
+    else:
+        rendered = overlay
 
     if highlight_match_indices:
-        left_panel_width = scaled_left.shape[1]
         for match_index in highlight_match_indices:
             if match_index < 0 or match_index >= len(left_keypoints):
                 continue
@@ -782,6 +815,10 @@ def write_stereo_pair_match_visualization(
         "point_count": len(left_keypoints),
         "scale_factor": float(scale_factor),
         "highlighted_match_count": 0 if highlight_match_indices is None else len(highlight_match_indices),
+        "match_line_thickness": int(match_line_thickness),
+        "match_line_alpha": float(match_line_alpha),
+        "match_point_radius": int(match_point_radius),
+        "match_color": list(resolved_match_color),
         "left_dom": str(left_dom_path),
         "right_dom": str(right_dom_path),
         "visualization_mode_requested": options.visualization_mode,

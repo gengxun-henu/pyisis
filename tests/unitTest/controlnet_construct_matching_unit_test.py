@@ -94,6 +94,7 @@ Updated: 2026-05-16  Geng Xun added regression coverage for adaptive-routing pro
 Updated: 2026-05-27  Geng Xun added parser/config regression coverage for the new --opencv-num-threads CLI option and ImageMatch config alias validation.
 Updated: 2026-05-27  Geng Xun added worker-shard regression coverage for applying explicit OpenCV thread limits.
 Updated: 2026-05-28  Geng Xun aligned adaptive-routing serial tile mocks with TileMatchBatchResult return contracts.
+Updated: 2026-06-09  Geng Xun added regression coverage for fork-safe parallel tile process contexts.
 """
 
 from __future__ import annotations
@@ -7080,6 +7081,27 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(set_thread_calls, [1])
         self.assertEqual(results, ((0, fake_result),))
 
+    def test_tile_match_process_pool_context_prefers_forkserver_over_fork(self):
+        selected_contexts: list[str | None] = []
+
+        def fake_get_context(name=None):
+            selected_contexts.append(name)
+            return SimpleNamespace(name=name)
+
+        with mock.patch.object(
+            tile_matching_module.mp,
+            "get_all_start_methods",
+            return_value=["fork", "spawn", "forkserver"],
+        ), mock.patch.object(
+            tile_matching_module.mp,
+            "get_context",
+            side_effect=fake_get_context,
+        ):
+            context = tile_matching_module._tile_match_process_pool_context()
+
+        self.assertEqual(context.name, "forkserver")
+        self.assertEqual(selected_contexts, ["forkserver"])
+
     def test_run_parallel_tile_match_tasks_drains_progress_queue_before_future_completion(self):
         progress_call_order: list[str] = []
 
@@ -7147,11 +7169,16 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         future_a = FakeFuture("a", ((0, result_zero),))
         future_b = FakeFuture("b", ((1, result_one),))
         submitted_queues: list[object] = []
+        executor_contexts: list[object] = []
         wait_call_count = 0
+
+        class FakeContext:
+            def Manager(self):
+                return fake_manager
 
         class FakeExecutor:
             def __init__(self, *args, **kwargs):
-                pass
+                executor_contexts.append(kwargs["mp_context"])
 
             def __enter__(self):
                 return self
@@ -7179,6 +7206,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         def progress_callback():
             progress_call_order.append(f"progress:{len([item for item in progress_call_order if item.startswith('progress:')]) + 1}")
 
+        fake_context = FakeContext()
         with mock.patch.object(
             tile_matching_module,
             "_chunk_tile_match_task_payloads",
@@ -7192,9 +7220,9 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             "wait",
             side_effect=fake_wait,
         ), mock.patch.object(
-            tile_matching_module.mp,
-            "Manager",
-            return_value=fake_manager,
+            tile_matching_module,
+            "_tile_match_process_pool_context",
+            return_value=fake_context,
         ):
             results = tile_matching_module._run_parallel_tile_match_tasks(
                 [object(), object()],
@@ -7203,6 +7231,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             )
 
         self.assertEqual(results, [result_zero, result_one])
+        self.assertEqual(executor_contexts, [fake_context])
         self.assertEqual(submitted_queues, [fake_queue, fake_queue])
         self.assertTrue(fake_manager.shutdown_called)
         self.assertEqual(

@@ -20,6 +20,7 @@ Updated: 2026-05-19  Geng Xun threaded resolved deep matcher runtime config thro
 Updated: 2026-05-19  Geng Xun preserved matcher/feature/device option dictionaries when serializing deep matcher runtime config.
 Updated: 2026-05-27  Geng Xun added serial tile cache diagnostics for match metadata.
 Updated: 2026-05-27  Geng Xun applied explicit OpenCV thread limits inside tile worker shards.
+Updated: 2026-06-09  Geng Xun avoided threaded fork warnings in parallel tile matching.
 """
 
 from __future__ import annotations
@@ -1180,8 +1181,11 @@ def _match_single_paired_window_worker(
 
 
 def _tile_match_process_pool_context() -> mp.context.BaseContext:
-    preferred_context = "fork" if os.name == "posix" else "spawn"
-    return mp.get_context(preferred_context)
+    available_methods = mp.get_all_start_methods()
+    for preferred_context in ("forkserver", "spawn"):
+        if preferred_context in available_methods:
+            return mp.get_context(preferred_context)
+    return mp.get_context()
 
 
 def _chunk_indexed_tile_match_tasks(
@@ -1639,9 +1643,10 @@ def _run_parallel_tile_match_tasks(
     manager = None
     progress_queue = None
     progress_event_count = 0
+    process_context = _tile_match_process_pool_context()
     try:
         if progress_callback is not None:
-            manager = mp.Manager()
+            manager = process_context.Manager()
             progress_queue = manager.Queue()
 
         def drain_progress_events() -> int:
@@ -1668,7 +1673,7 @@ def _run_parallel_tile_match_tasks(
             adaptive_recheck_every=adaptive_recheck_every,
         )
 
-        with ProcessPoolExecutor(max_workers=min(max_workers, len(chunks)), mp_context=_tile_match_process_pool_context()) as executor:
+        with ProcessPoolExecutor(max_workers=min(max_workers, len(chunks)), mp_context=process_context) as executor:
             futures = {
                 executor.submit(worker_fn, chunk, progress_queue): chunk
                 for chunk in chunks

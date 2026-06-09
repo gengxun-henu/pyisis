@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-05-28
+Last Modified: 2026-06-09
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -43,6 +43,7 @@ Updated: 2026-05-12  Geng Xun hardened reduced preview cache diagnostics and red
 Updated: 2026-05-12  Geng Xun added regression coverage for preview cache hash-key path normalization.
 Updated: 2026-05-12  Geng Xun added cache-hit validation assertions for reduced preview cache reuse.
 Updated: 2026-05-12  Geng Xun added regression coverage for corrupt preview cache regeneration.
+Updated: 2026-06-09  Geng Xun updated visualization keypoint assertions for custom match-line rendering.
 Updated: 2026-05-14  Geng Xun added preview cache metadata validation coverage and regeneration diagnostics.
 Updated: 2026-05-15  Geng Xun added reduced preview cache validation-failure regeneration tests.
 Updated: 2026-05-16  Geng Xun added preview cache fingerprint and metadata corruption validation coverage.
@@ -4678,8 +4679,9 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         left_key_file = KeypointFile(4000, 3000, (Keypoint(100.0, 100.0), Keypoint(120.0, 120.0)))
         right_key_file = KeypointFile(4000, 3000, (Keypoint(105.0, 105.0), Keypoint(125.0, 125.0)))
         read_windows: list[object | None] = []
-        captured_keypoints: dict[str, list[tuple[float, float]]] = {}
+        captured_keypoints: list[tuple[float, float]] = []
         reduced_paths: list[str] = []
+        original_keypoint_factory = match_visualization_module._isis_keypoint_to_draw_matches_keypoint
 
         def fake_read(cube_path, *, window=None, **kwargs):
             read_windows.append(window)
@@ -4691,18 +4693,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             Path(output).write_text("preview", encoding="utf-8")
             return Path(output)
 
-        def fake_draw_matches(
-            left_image,
-            left_keypoints,
-            right_image,
-            right_keypoints,
-            matches,
-            out_image,
-            **kwargs,
-        ):
-            captured_keypoints["left"] = [keypoint.pt for keypoint in left_keypoints]
-            captured_keypoints["right"] = [keypoint.pt for keypoint in right_keypoints]
-            return np.zeros((10, 10, 3), dtype=np.uint8)
+        def capture_draw_keypoint(point, *, scale_factor):
+            keypoint = original_keypoint_factory(point, scale_factor=scale_factor)
+            captured_keypoints.append(keypoint.pt)
+            return keypoint
 
         with temporary_directory() as temp_dir, mock.patch.object(
             match_visualization_module,
@@ -4717,9 +4711,9 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             "_read_cube_as_stretched_byte",
             side_effect=fake_read,
         ), mock.patch.object(
-            match_visualization_module.cv2,
-            "drawMatches",
-            side_effect=fake_draw_matches,
+            match_visualization_module,
+            "_isis_keypoint_to_draw_matches_keypoint",
+            side_effect=capture_draw_keypoint,
         ):
             result = match_visualization_module.write_stereo_pair_match_visualization(
                 "left.cub",
@@ -4741,10 +4735,12 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(cube_dimensions_mock.call_count, 2)
         self.assertEqual(read_windows, [None, None])
         self.assertTrue(all("preview_cache" in path for path in reduced_paths))
-        self.assertAlmostEqual(captured_keypoints["left"][0][0], (24.75) / 3.0, places=4)
-        self.assertAlmostEqual(captured_keypoints["left"][0][1], (24.75) / 3.0, places=4)
-        self.assertAlmostEqual(captured_keypoints["right"][0][0], (26.0) / 3.0, places=4)
-        self.assertAlmostEqual(captured_keypoints["right"][0][1], (26.0) / 3.0, places=4)
+        left_captured_keypoints = captured_keypoints[: len(left_key_file.points)]
+        right_captured_keypoints = captured_keypoints[len(left_key_file.points) :]
+        self.assertAlmostEqual(left_captured_keypoints[0][0], (24.75) / 3.0, places=4)
+        self.assertAlmostEqual(left_captured_keypoints[0][1], (24.75) / 3.0, places=4)
+        self.assertAlmostEqual(right_captured_keypoints[0][0], (26.0) / 3.0, places=4)
+        self.assertAlmostEqual(right_captured_keypoints[0][1], (26.0) / 3.0, places=4)
 
     def test_write_match_visualization_cropped_requires_keypoints(self):
         empty_left = KeypointFile(4000, 3000, ())
@@ -5767,7 +5763,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         left_key_file = KeypointFile(4096, 4096, (Keypoint(100.0, 100.0), Keypoint(120.0, 120.0)))
         right_key_file = KeypointFile(4096, 4096, (Keypoint(110.0, 110.0), Keypoint(130.0, 130.0)))
         read_windows: list[tuple[int, int, int, int]] = []
-        captured_keypoints: dict[str, list[tuple[float, float]]] = {}
+        captured_keypoints: list[tuple[float, float]] = []
+        original_keypoint_factory = match_visualization_module._isis_keypoint_to_draw_matches_keypoint
 
         def fake_dimensions(path):
             if "preview_cache" in str(path):
@@ -5783,18 +5780,10 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             Path(output).write_text("preview", encoding="utf-8")
             return Path(output)
 
-        def fake_draw_matches(
-            left_image,
-            left_keypoints,
-            right_image,
-            right_keypoints,
-            matches,
-            out_image,
-            **kwargs,
-        ):
-            captured_keypoints["left"] = [keypoint.pt for keypoint in left_keypoints]
-            captured_keypoints["right"] = [keypoint.pt for keypoint in right_keypoints]
-            return np.zeros((10, 10, 3), dtype=np.uint8)
+        def capture_draw_keypoint(point, *, scale_factor):
+            keypoint = original_keypoint_factory(point, scale_factor=scale_factor)
+            captured_keypoints.append(keypoint.pt)
+            return keypoint
 
         with temporary_directory() as temp_dir, mock.patch.object(
             match_visualization_module,
@@ -5809,9 +5798,9 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             "_read_cube_as_stretched_byte",
             side_effect=fake_read,
         ), mock.patch.object(
-            match_visualization_module.cv2,
-            "drawMatches",
-            side_effect=fake_draw_matches,
+            match_visualization_module,
+            "_isis_keypoint_to_draw_matches_keypoint",
+            side_effect=capture_draw_keypoint,
         ), mock.patch.object(
             match_visualization_module.cv2,
             "imwrite",
@@ -5899,10 +5888,12 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
                 ),
             ],
         )
-        for actual, expected in zip(captured_keypoints["left"], expected_left_pts):
+        left_captured_keypoints = captured_keypoints[: len(left_key_file.points)]
+        right_captured_keypoints = captured_keypoints[len(left_key_file.points) :]
+        for actual, expected in zip(left_captured_keypoints, expected_left_pts):
             self.assertAlmostEqual(actual[0], expected[0], places=4)
             self.assertAlmostEqual(actual[1], expected[1], places=4)
-        for actual, expected in zip(captured_keypoints["right"], expected_right_pts):
+        for actual, expected in zip(right_captured_keypoints, expected_right_pts):
             self.assertAlmostEqual(actual[0], expected[0], places=4)
             self.assertAlmostEqual(actual[1], expected[1], places=4)
 

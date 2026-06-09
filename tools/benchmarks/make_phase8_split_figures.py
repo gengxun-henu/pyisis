@@ -183,28 +183,58 @@ def make_solar_accuracy(grouped: dict[str, dict[str, dict]], out_dir: Path) -> N
         row = grouped[f"solar_{label}"]["pyisis"]
         rows.append(
             [
-                row["azimuth_abs_max"] * 1_000.0,
-                row["azimuth_abs_rms"] * 1_000.0,
-                row["elevation_abs_max"] * 1_000.0,
-                row["elevation_abs_rms"] * 1_000.0,
+                row["azimuth_abs_max"],
+                row["azimuth_abs_rms"],
+                row["elevation_abs_max"],
+                row["elevation_abs_rms"],
             ]
         )
     matrix = np.array(rows, dtype=float)
-    fig, ax = plt.subplots(figsize=(3.65, 2.35), constrained_layout=True)
-    image = ax.imshow(matrix, cmap="Blues", vmin=0.0, vmax=max(1.0, float(matrix.max())))
-    ax.set_xticks(
-        np.arange(4),
-        ["azimuth\nmax", "azimuth\nRMS", "elevation\nmax", "elevation\nRMS"],
+    max_value = float(np.nanmax(matrix)) if matrix.size else 0.0
+    if max_value > 0.0:
+        exponent = int(np.floor(np.log10(max_value)))
+        scale_factor = 10.0 ** (-exponent) if exponent < 0 else 1.0
+    else:
+        scale_factor = 1.0
+    matrix = matrix * scale_factor
+    vmax = max(1.0e-12, float(np.nanmax(matrix)))
+    if scale_factor == 1.0:
+        unit_label = "deg"
+    else:
+        power = int(round(np.log10(scale_factor)))
+        unit_label = f"x10^{power} deg"
+
+    def save_panel(
+        panel_matrix: np.ndarray,
+        xticklabels: list[str],
+        title: str,
+        output_name: str,
+    ) -> None:
+        fig, ax = plt.subplots(figsize=(3.45, 2.35), constrained_layout=True)
+        image = ax.imshow(panel_matrix, cmap="Blues", vmin=0.0, vmax=vmax)
+        ax.set_xticks(np.arange(len(xticklabels)), xticklabels)
+        ax.set_yticks(np.arange(len(labels)), labels)
+        ax.set_title(title, loc="left", fontweight="bold")
+        ax.set_xlabel(f"absolute error ({unit_label})")
+        for row_index in range(panel_matrix.shape[0]):
+            for col_index in range(panel_matrix.shape[1]):
+                ax.text(col_index, row_index, f"{panel_matrix[row_index, col_index]:.3f}", ha="center", va="center")
+        colorbar = fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
+        colorbar.set_label(unit_label)
+        save_pub(fig, out_dir / output_name)
+
+    save_panel(
+        matrix[:, :2],
+        ["azimuth\nmax", "azimuth\nRMS"],
+        "Solar azimuth numerical agreement",
+        "fig05a_solar_azimuth_accuracy",
     )
-    ax.set_yticks(np.arange(len(labels)), labels)
-    ax.set_title("Solar angle numerical agreement", loc="left", fontweight="bold")
-    ax.set_xlabel("absolute error (x10^-3 deg)")
-    for row_index in range(matrix.shape[0]):
-        for col_index in range(matrix.shape[1]):
-            ax.text(col_index, row_index, f"{matrix[row_index, col_index]:.3f}", ha="center", va="center")
-    colorbar = fig.colorbar(image, ax=ax, fraction=0.046, pad=0.04)
-    colorbar.set_label("x10^-3 deg")
-    save_pub(fig, out_dir / "fig05_solar_angle_accuracy")
+    save_panel(
+        matrix[:, 2:],
+        ["elevation\nmax", "elevation\nRMS"],
+        "Solar elevation numerical agreement",
+        "fig05b_solar_elevation_accuracy",
+    )
 
 
 def main() -> int:

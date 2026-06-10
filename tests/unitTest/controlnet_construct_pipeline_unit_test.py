@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-06-01
+Last Modified: 2026-06-10
 Updated: 2026-04-16  Geng Xun added regression coverage for geographic overlap estimation, stereo-pair ControlNet writing, and DOM-to-original conversion helper plumbing.
 Updated: 2026-04-16  Geng Xun added semi-integration coverage for dom2ori failure logging and DOM-wrapped ControlNet CLI preparation.
 Updated: 2026-04-16  Geng Xun extended the from-dom wrapper coverage to include upstream tie-point merging before dom2ori.
@@ -55,6 +55,7 @@ Updated: 2026-05-28  Geng Xun aligned adaptive-routing fake serial tile batches 
 Updated: 2026-05-28  Geng Xun added focused Step1 spiced-isis2std regression coverage for working-cube export, resume ordering, and docs/help discoverability.
 Updated: 2026-05-28  Geng Xun restored Step1 wrapper regression coverage for input-dir, output-file, skip-step, and resume-from alongside the spiced stage checks.
 Updated: 2026-06-01  Geng Xun added adaptive-routing ControlNet orchestration coverage for ORI and DOM matching flows.
+Updated: 2026-06-10  Geng Xun aligned classic SIFT preset max_features expectations with updated JSON presets.
 """
 
 from __future__ import annotations
@@ -4949,7 +4950,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
         self.assertEqual(defaults["match_preset_path"], str(preset_path.resolve()))
         self.assertEqual(defaults["matcher_method"], "bf")
         self.assertIsNone(defaults["deep_match_config_path"])
-        self.assertEqual(defaults["max_features"], 1000)
+        self.assertEqual(defaults["max_features"], 1024)
 
     def test_image_match_parser_accepts_match_preset_path_cli(self):
         parser = build_controlnet_stereopair_argument_parser()
@@ -4968,7 +4969,7 @@ class ControlNetConstructPipelineUnitTest(unittest.TestCase):
 
         self.assertEqual(parsed.match_preset_path, str(preset_path.resolve()))
         self.assertEqual(parsed.matcher_method, "flann")
-        self.assertEqual(parsed.max_features, 1000)
+        self.assertEqual(parsed.max_features, 1024)
 
     def test_image_match_config_match_preset_allows_cli_ratio_override(self):
         fake_result = {"status": "matched", "point_count": 0, "tile_count": 0}

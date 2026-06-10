@@ -1,4 +1,9 @@
-"""Config model for ISIS C++ vs PyISIS benchmark experiments."""
+"""Config model for ISIS C++ vs PyISIS benchmark experiments.
+
+Author: Geng Xun
+Created: 2026-06-09
+Updated: 2026-06-09  Geng Xun added optional matplotlib handling so benchmark reports still write without figure dependencies.
+"""
 
 from __future__ import annotations
 
@@ -1656,7 +1661,25 @@ def write_benchmark_figure(
     camera_comparisons: list[dict[str, Any]],
 ) -> None:
     reports_dir = Path(reports_dir)
-    import matplotlib as mpl
+    try:
+        import matplotlib as mpl
+    except ModuleNotFoundError as error:
+        if error.name != "matplotlib":
+            raise
+        (reports_dir / "benchmark_figure_skipped.json").write_text(
+            json.dumps(
+                {
+                    "status": "skipped",
+                    "reason": "matplotlib_unavailable",
+                    "message": "Install matplotlib to generate benchmark_figure.svg, .pdf, and .tiff.",
+                },
+                indent=2,
+                sort_keys=True,
+            )
+            + "\n",
+            encoding="utf-8",
+        )
+        return
 
     mpl.use("Agg", force=True)
     import matplotlib.pyplot as plt

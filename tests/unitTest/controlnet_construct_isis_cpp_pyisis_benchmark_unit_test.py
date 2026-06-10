@@ -1,4 +1,10 @@
-"""Unit tests for the ISIS C++ vs PyISIS benchmark config model."""
+"""Unit tests for the ISIS C++ vs PyISIS benchmark config model.
+
+Author: Geng Xun
+Created: 2026-06-09
+Last Modified: 2026-06-09
+Updated: 2026-06-09  Geng Xun added coverage for benchmark report generation without matplotlib.
+"""
 
 from __future__ import annotations
 
@@ -1086,9 +1092,15 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             self.assertEqual([row["label"] for row in precision_summary["solar_geometry"]], ["solar_a"])
             self.assertEqual(precision_summary["solar_geometry"][0]["azimuth_abs_max"], 0.0)
             self.assertEqual(precision_summary["provenance"], provenance)
-            self.assertTrue((temp_dir / "reports" / "benchmark_figure.svg").is_file())
-            self.assertTrue((temp_dir / "reports" / "benchmark_figure.pdf").is_file())
-            self.assertTrue((temp_dir / "reports" / "benchmark_figure.tiff").is_file())
+            figure_skip_path = temp_dir / "reports" / "benchmark_figure_skipped.json"
+            if figure_skip_path.is_file():
+                figure_skip = json.loads(figure_skip_path.read_text(encoding="utf-8"))
+                self.assertEqual(figure_skip["status"], "skipped")
+                self.assertEqual(figure_skip["reason"], "matplotlib_unavailable")
+            else:
+                self.assertTrue((temp_dir / "reports" / "benchmark_figure.svg").is_file())
+                self.assertTrue((temp_dir / "reports" / "benchmark_figure.pdf").is_file())
+                self.assertTrue((temp_dir / "reports" / "benchmark_figure.tiff").is_file())
 
     def test_build_cpp_camera_command_includes_required_arguments(self):
         task = benchmark.CameraTaskConfig(

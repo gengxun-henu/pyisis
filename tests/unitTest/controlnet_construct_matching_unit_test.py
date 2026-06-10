@@ -87,6 +87,7 @@ Updated: 2026-05-27  Geng Xun added metadata regression coverage for ImageMatch 
 Updated: 2026-05-27  Geng Xun added regression coverage for non-ready DOM preparation with tile block alignment enabled.
 Updated: 2026-05-27  Geng Xun added metadata regression coverage for tile cache diagnostics.
 Updated: 2026-05-27  Geng Xun added regression coverage for worker-local parallel tile cache metadata.
+Updated: 2026-06-09  Geng Xun added regression coverage for fork-free tile process-pool startup.
 Updated: 2026-05-22  Geng Xun added fail-fast matcher and extractor compatibility regression coverage for deep presets.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive-routing parser defaults, config loading, execution-time matcher overrides, and metadata sidecars.
 Updated: 2026-05-14  Geng Xun added regression coverage for adaptive fallback cascade execution after failed quality gating.
@@ -7173,7 +7174,11 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         wait_call_count = 0
 
         class FakeContext:
+            def __init__(self):
+                self.manager_called = False
+
             def Manager(self):
+                self.manager_called = True
                 return fake_manager
 
         class FakeExecutor:
@@ -7217,12 +7222,12 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             FakeExecutor,
         ), mock.patch.object(
             tile_matching_module,
-            "wait",
-            side_effect=fake_wait,
-        ), mock.patch.object(
-            tile_matching_module,
             "_tile_match_process_pool_context",
             return_value=fake_context,
+        ), mock.patch.object(
+            tile_matching_module,
+            "wait",
+            side_effect=fake_wait,
         ):
             results = tile_matching_module._run_parallel_tile_match_tasks(
                 [object(), object()],
@@ -7233,6 +7238,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(results, [result_zero, result_one])
         self.assertEqual(executor_contexts, [fake_context])
         self.assertEqual(submitted_queues, [fake_queue, fake_queue])
+        self.assertTrue(fake_context.manager_called)
         self.assertTrue(fake_manager.shutdown_called)
         self.assertEqual(
             [entry for entry in progress_call_order if entry.startswith("progress:")],

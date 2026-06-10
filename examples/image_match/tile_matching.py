@@ -1640,13 +1640,13 @@ def _run_parallel_tile_match_tasks(
     if all(getattr(task, "use_gpu", False) for task in tasks):
         tasks = [replace(task, use_gpu=False) for task in tasks]
     chunks = _chunk_tile_match_task_payloads(tasks, max_workers=max_workers)
+    process_pool_context = _tile_match_process_pool_context()
     manager = None
     progress_queue = None
     progress_event_count = 0
-    process_context = _tile_match_process_pool_context()
     try:
         if progress_callback is not None:
-            manager = process_context.Manager()
+            manager = process_pool_context.Manager()
             progress_queue = manager.Queue()
 
         def drain_progress_events() -> int:
@@ -1673,7 +1673,10 @@ def _run_parallel_tile_match_tasks(
             adaptive_recheck_every=adaptive_recheck_every,
         )
 
-        with ProcessPoolExecutor(max_workers=min(max_workers, len(chunks)), mp_context=process_context) as executor:
+        with ProcessPoolExecutor(
+            max_workers=min(max_workers, len(chunks)),
+            mp_context=process_pool_context,
+        ) as executor:
             futures = {
                 executor.submit(worker_fn, chunk, progress_queue): chunk
                 for chunk in chunks

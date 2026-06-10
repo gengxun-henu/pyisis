@@ -2,22 +2,42 @@
 
 Author: Geng Xun
 Created: 2026-05-07
-Last Modified: 2026-05-20
+Last Modified: 2026-06-09
 Updated: 2026-05-07  Geng Xun added GPU SIFT match stats and dynamic batch policy coverage.
 Updated: 2026-05-07  Geng Xun registered direct gpu_sift imports for dataclass decorators.
 Updated: 2026-05-07  Geng Xun added pair matcher CPU fallback coverage.
 Updated: 2026-05-07  Geng Xun added matcher method validation regression coverage.
 Updated: 2026-05-20  Geng Xun aligned GPU SIFT batch default coverage with conservative tile defaults.
 Updated: 2026-05-20  Geng Xun added batched GPU factory fallback regression coverage.
+Updated: 2026-06-09  Geng Xun made unittest discovery import this pytest-style module when pytest is unavailable.
+Updated: 2026-06-09  Geng Xun added LightGlue CUDA SIFT plus OpenCV CUDA BF routing coverage.
 """
 
 import importlib.util
 import sys
 from pathlib import Path
+import unittest
 from unittest.mock import Mock
 
 import numpy as np
-import pytest
+
+try:
+    import pytest
+except ModuleNotFoundError as error:
+    if error.name != "pytest":
+        raise
+
+    class _MissingPytest:
+        class mark:
+            @staticmethod
+            def skipif(_condition, *, reason=None):
+                return unittest.skip(reason or "pytest is required")
+
+        @staticmethod
+        def raises(*_args, **_kwargs):
+            raise unittest.SkipTest("pytest is required")
+
+    pytest = _MissingPytest()
 
 # Import gpu_sift.py directly to avoid triggering controlnet_construct/__init__.py
 # (which requires isis_pybind native module).
@@ -286,6 +306,56 @@ class TestGpuSiftPairMatcher:
         cpu_match.assert_called_once()
         assert cpu_match.call_args.kwargs["matcher_method"] == "flann"
         assert cpu_match.call_args.kwargs["failure_reason"] == "gpu_flann_unsupported"
+
+    def test_match_pair_uses_lightglue_sift_when_opencv_cuda_sift_is_missing(self, monkeypatch):
+        left = np.zeros((32, 32), dtype=np.uint8)
+        right = left.copy()
+        mask = np.ones((32, 32), dtype=np.uint8) * 255
+        keypoint = _gpu_sift_module.cv2.KeyPoint(4.0, 5.0, 1.0)
+        descriptors = np.ones((1, 128), dtype=np.float32)
+
+        class FakeGpuMat:
+            def upload(self, array):
+                self.array = array
+
+        class FakeCudaMatcher:
+            def knnMatch(self, _left_descriptors, _right_descriptors, k):
+                assert k == 2
+                return [[
+                    _gpu_sift_module.cv2.DMatch(0, 0, 0.1),
+                    _gpu_sift_module.cv2.DMatch(0, 0, 0.2),
+                ]]
+
+        monkeypatch.setattr(_gpu_sift_module, "HAS_GPU_SIFT", True)
+        monkeypatch.delattr(_gpu_sift_module.cv2.cuda, "SIFT_create", raising=False)
+        monkeypatch.setattr(_gpu_sift_module.cv2, "cuda_GpuMat", FakeGpuMat)
+        monkeypatch.setattr(
+            _gpu_sift_module.cv2.cuda,
+            "DescriptorMatcher_createBFMatcher",
+            Mock(return_value=FakeCudaMatcher()),
+            raising=False,
+        )
+        monkeypatch.setattr(
+            _gpu_sift_module,
+            "_extract_lightglue_cuda_sift_one",
+            Mock(return_value=([keypoint], descriptors)),
+        )
+
+        result = _gpu_sift_module.match_sift_pair(
+            left,
+            right,
+            left_mask=mask,
+            right_mask=mask,
+            ratio_test=0.75,
+            matcher_method="bf",
+            sift_kwargs={"nfeatures": 50},
+            use_gpu=True,
+        )
+
+        assert result.used_gpu is True
+        assert result.used_cpu_fallback is False
+        assert len(result.matches) == 1
+        assert _gpu_sift_module._extract_lightglue_cuda_sift_one.call_count == 2
 
     def test_match_pairs_falls_back_to_cpu_when_cuda_factory_fails(self, monkeypatch):
         left = np.zeros((32, 32), dtype=np.uint8)

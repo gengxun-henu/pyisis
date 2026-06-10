@@ -1,10 +1,12 @@
-"""GPU-accelerated SIFT feature extraction via OpenCV CUDA.
+"""GPU-accelerated SIFT feature extraction and BF matching.
 
-Wraps cv2.cuda.SIFT for batch GPU SIFT extraction.
-Falls back to CPU cv2.SIFT when CUDA is unavailable.
+Uses OpenCV CUDA SIFT when available, otherwise LightGlue's pycolmap CUDA SIFT
+frontend with OpenCV CUDA BF matching. Falls back to CPU cv2.SIFT when CUDA is
+unavailable.
 
 Author: Geng Xun
 Created: 2026-05-06
+Updated: 2026-06-09  Geng Xun added LightGlue CUDA SIFT extraction with OpenCV CUDA BF matching.
 """
 
 from __future__ import annotations
@@ -112,12 +114,119 @@ class DynamicGpuBatchController:
             self._current_batch_size = min(self._max_batch_size, self._current_batch_size * 2)
             self._stable_success_count = 0
 
-try:
-    _cuda_device_count = cv2.cuda.getCudaEnabledDeviceCount()
-    _ = cv2.cuda.SIFT_create
-    HAS_GPU_SIFT = _cuda_device_count > 0
-except Exception:
-    HAS_GPU_SIFT = False
+def _has_cuda_bf_matcher() -> bool:
+    try:
+        return (
+            cv2.cuda.getCudaEnabledDeviceCount() > 0
+            and hasattr(cv2.cuda, "DescriptorMatcher_createBFMatcher")
+        )
+    except Exception:
+        return False
+
+
+def _has_opencv_cuda_sift() -> bool:
+    try:
+        return cv2.cuda.getCudaEnabledDeviceCount() > 0 and hasattr(cv2.cuda, "SIFT_create")
+    except Exception:
+        return False
+
+
+def _has_lightglue_cuda_sift() -> bool:
+    try:
+        import pycolmap  # type: ignore[import-not-found]
+        import torch  # type: ignore[import-not-found]
+        from lightglue import SIFT as _LightGlueSIFT  # type: ignore[import-not-found]
+    except Exception:
+        return False
+    return bool(torch.cuda.is_available() and getattr(pycolmap, "has_cuda", False) and _LightGlueSIFT)
+
+
+HAS_GPU_BF_MATCHER = _has_cuda_bf_matcher()
+HAS_GPU_SIFT = _has_opencv_cuda_sift() or (HAS_GPU_BF_MATCHER and _has_lightglue_cuda_sift())
+
+
+def _lightglue_sift_config(sift_kwargs: dict[str, int | float]) -> dict[str, int | float | str | bool]:
+    nfeatures = int(sift_kwargs.get("nfeatures", 0) or 0)
+    octave_layers = max(1, int(sift_kwargs.get("nOctaveLayers", 3) or 3))
+    contrast_threshold = float(sift_kwargs.get("contrastThreshold", 0.04))
+    return {
+        "backend": "pycolmap_cuda",
+        "rootsift": False,
+        "max_num_keypoints": nfeatures if nfeatures > 0 else 4096,
+        "detection_threshold": contrast_threshold / max(1, octave_layers * 2),
+        "edge_threshold": float(sift_kwargs.get("edgeThreshold", 10.0)),
+    }
+
+
+def _extract_lightglue_cuda_sift_one(
+    image: np.ndarray,
+    mask: np.ndarray | None,
+    sift_kwargs: dict[str, int | float],
+) -> tuple[list[cv2.KeyPoint], np.ndarray | None]:
+    import torch  # type: ignore[import-not-found]
+    from lightglue import SIFT as LightGlueSIFT  # type: ignore[import-not-found]
+
+    source_array = np.asarray(image)
+    image_array = source_array.astype(np.float32, copy=False)
+    scale = 255.0 if source_array.dtype == np.uint8 else float(np.max(np.abs(image_array))) if image_array.size else 0.0
+    if scale > 0.0:
+        image_array = image_array / scale
+    image_tensor = torch.from_numpy(np.ascontiguousarray(image_array))[None, None].to(
+        device="cuda",
+        dtype=torch.float32,
+    )
+
+    extractor = LightGlueSIFT(**_lightglue_sift_config(sift_kwargs)).eval().to("cuda")
+    with torch.no_grad():
+        features = extractor.extract(image_tensor)
+
+    keypoint_array = features["keypoints"][0].detach().cpu().numpy().astype(np.float32, copy=False)
+    descriptor_array = features["descriptors"][0].detach().cpu().numpy().astype(np.float32, copy=False)
+    scale_array = features.get("scales")
+    if scale_array is not None:
+        scales = scale_array[0].detach().cpu().numpy().astype(np.float32, copy=False)
+    else:
+        scales = np.ones((len(keypoint_array),), dtype=np.float32)
+
+    if mask is not None and len(keypoint_array) > 0:
+        mask_array = np.asarray(mask)
+        rounded = np.rint(keypoint_array).astype(np.int64, copy=False)
+        valid = (
+            (rounded[:, 0] >= 0)
+            & (rounded[:, 0] < mask_array.shape[1])
+            & (rounded[:, 1] >= 0)
+            & (rounded[:, 1] < mask_array.shape[0])
+        )
+        valid_indices = np.flatnonzero(valid)
+        if len(valid_indices) > 0:
+            rounded_valid = rounded[valid_indices]
+            mask_valid = mask_array[rounded_valid[:, 1], rounded_valid[:, 0]] != 0
+            valid_indices = valid_indices[mask_valid]
+        keypoint_array = keypoint_array[valid_indices]
+        descriptor_array = descriptor_array[valid_indices]
+        scales = scales[valid_indices]
+
+    keypoints = [
+        cv2.KeyPoint(float(x), float(y), float(max(size, 1.0)))
+        for (x, y), size in zip(keypoint_array, scales, strict=True)
+    ]
+    if len(keypoints) == 0:
+        return [], None
+    return keypoints, np.ascontiguousarray(descriptor_array, dtype=np.float32)
+
+
+def _cuda_bf_knn_match(
+    left_descriptors: np.ndarray,
+    right_descriptors: np.ndarray,
+    *,
+    matcher: Any | None = None,
+) -> list[object]:
+    gpu_left_descriptors = cv2.cuda_GpuMat()
+    gpu_right_descriptors = cv2.cuda_GpuMat()
+    gpu_left_descriptors.upload(np.ascontiguousarray(left_descriptors, dtype=np.float32))
+    gpu_right_descriptors.upload(np.ascontiguousarray(right_descriptors, dtype=np.float32))
+    cuda_matcher = matcher or cv2.cuda.DescriptorMatcher_createBFMatcher(cv2.NORM_L2)
+    return cuda_matcher.knnMatch(gpu_left_descriptors, gpu_right_descriptors, k=2)
 
 
 class GpuSiftBatch:
@@ -172,10 +281,14 @@ class GpuSiftBatch:
 
     def _execute_gpu(self) -> list[tuple[list[cv2.KeyPoint], np.ndarray | None]]:
         results: list[tuple[list[cv2.KeyPoint], np.ndarray | None]] = []
-        sift = cv2.cuda.SIFT_create(**self._sift_kwargs)
+        sift = cv2.cuda.SIFT_create(**self._sift_kwargs) if hasattr(cv2.cuda, "SIFT_create") else None
 
         for image, mask in zip(self._images, self._masks):
             try:
+                if sift is None:
+                    results.append(_extract_lightglue_cuda_sift_one(image, mask, self._sift_kwargs))
+                    continue
+
                 gpu_image = cv2.cuda_GpuMat()
                 gpu_image.upload(image)
 
@@ -316,7 +429,38 @@ def match_sift_pair(
         )
 
     try:
-        sift = cv2.cuda.SIFT_create(**sift_kwargs)
+        sift = cv2.cuda.SIFT_create(**sift_kwargs) if hasattr(cv2.cuda, "SIFT_create") else None
+        matcher = cv2.cuda.DescriptorMatcher_createBFMatcher(cv2.NORM_L2)
+        if sift is None:
+            left_keypoints, left_descriptors = _extract_lightglue_cuda_sift_one(
+                left_image,
+                left_mask,
+                sift_kwargs,
+            )
+            right_keypoints, right_descriptors = _extract_lightglue_cuda_sift_one(
+                right_image,
+                right_mask,
+                sift_kwargs,
+            )
+            if left_descriptors is None or right_descriptors is None:
+                return GpuSiftMatchResult(
+                    left_keypoints=left_keypoints,
+                    right_keypoints=right_keypoints,
+                    matches=[],
+                    used_gpu=True,
+                    used_cpu_fallback=False,
+                    failure_reason=None,
+                )
+            raw_gpu_matches = _cuda_bf_knn_match(left_descriptors, right_descriptors, matcher=matcher)
+            return GpuSiftMatchResult(
+                left_keypoints=left_keypoints,
+                right_keypoints=right_keypoints,
+                matches=_filter_ratio_matches(raw_gpu_matches, ratio_test),
+                used_gpu=True,
+                used_cpu_fallback=False,
+                failure_reason=None,
+            )
+
         gpu_left = cv2.cuda_GpuMat()
         gpu_right = cv2.cuda_GpuMat()
         gpu_left_mask = cv2.cuda_GpuMat()
@@ -336,7 +480,6 @@ def match_sift_pair(
                 used_cpu_fallback=False,
                 failure_reason=None,
             )
-        matcher = cv2.cuda.DescriptorMatcher_createBFMatcher(cv2.NORM_L2)
         raw_gpu_matches = matcher.knnMatch(left_descriptors, right_descriptors, k=2)
         return GpuSiftMatchResult(
             left_keypoints=list(left_keypoints) if left_keypoints else [],
@@ -346,7 +489,7 @@ def match_sift_pair(
             used_cpu_fallback=False,
             failure_reason=None,
         )
-    except cv2.error as exc:
+    except Exception as exc:
         logger.warning("GPU SIFT pair matching failed, falling back to CPU", exc_info=True)
         return _cpu_match_sift_pair(
             left_image,
@@ -388,9 +531,9 @@ def match_sift_pairs(
         ]
 
     try:
-        sift = cv2.cuda.SIFT_create(**sift_kwargs)
+        sift = cv2.cuda.SIFT_create(**sift_kwargs) if hasattr(cv2.cuda, "SIFT_create") else None
         matcher = cv2.cuda.DescriptorMatcher_createBFMatcher(cv2.NORM_L2)
-    except cv2.error as exc:
+    except Exception as exc:
         logger.warning("GPU SIFT batch setup failed, falling back to CPU", exc_info=True)
         return [
             _cpu_match_sift_pair(
@@ -409,6 +552,42 @@ def match_sift_pairs(
     results: list[GpuSiftMatchResult] = []
     for left_image, right_image, left_mask, right_mask in pairs:
         try:
+            if sift is None:
+                left_keypoints, left_descriptors = _extract_lightglue_cuda_sift_one(
+                    left_image,
+                    left_mask,
+                    sift_kwargs,
+                )
+                right_keypoints, right_descriptors = _extract_lightglue_cuda_sift_one(
+                    right_image,
+                    right_mask,
+                    sift_kwargs,
+                )
+                if left_descriptors is None or right_descriptors is None:
+                    results.append(
+                        GpuSiftMatchResult(
+                            left_keypoints=left_keypoints,
+                            right_keypoints=right_keypoints,
+                            matches=[],
+                            used_gpu=True,
+                            used_cpu_fallback=False,
+                            failure_reason=None,
+                        )
+                    )
+                    continue
+                raw_gpu_matches = _cuda_bf_knn_match(left_descriptors, right_descriptors, matcher=matcher)
+                results.append(
+                    GpuSiftMatchResult(
+                        left_keypoints=left_keypoints,
+                        right_keypoints=right_keypoints,
+                        matches=_filter_ratio_matches(raw_gpu_matches, ratio_test),
+                        used_gpu=True,
+                        used_cpu_fallback=False,
+                        failure_reason=None,
+                    )
+                )
+                continue
+
             gpu_left = cv2.cuda_GpuMat()
             gpu_right = cv2.cuda_GpuMat()
             gpu_left_mask = cv2.cuda_GpuMat()
@@ -442,7 +621,7 @@ def match_sift_pairs(
                     failure_reason=None,
                 )
             )
-        except cv2.error as exc:
+        except Exception as exc:
             logger.warning("GPU SIFT pair matching failed, falling back to CPU", exc_info=True)
             results.append(
                 _cpu_match_sift_pair(

@@ -1,7 +1,7 @@
 {
   "feature_extractor": {
     "method": "aliked",
-    "max_features": 4096
+    "max_features": 1024
   },
   "matcher": {
     "method": "lightglue",

@@ -4011,7 +4011,7 @@ def match_dom_pair(
                             classic_pair_id = default_deep_match_pair_id(
                                 left_dom_path=left_dom_path,
                                 right_dom_path=right_dom_path,
-                                matcher_method="classic_sift_flann",
+                                matcher_method="classic_sift_bf",
                                 band=band,
                                 image_space=image_backend.space,
                             )

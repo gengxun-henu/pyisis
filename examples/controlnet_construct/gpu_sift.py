@@ -8,6 +8,7 @@ Author: Geng Xun
 Created: 2026-05-06
 Updated: 2026-05-11  Geng Xun added top-of-file metadata history so example GPU matcher helpers stay consistent with other example modules.
 Updated: 2026-06-09  Geng Xun added LightGlue CUDA SIFT extraction with OpenCV CUDA BF matching.
+Updated: 2026-06-10  Geng Xun routed GPU SIFT through PyCOLMAP CUDA with shared classic SIFT parameters.
 """
 
 from __future__ import annotations
@@ -152,8 +153,21 @@ def _has_lightglue_cuda_sift() -> bool:
     return bool(torch.cuda.is_available() and getattr(pycolmap, "has_cuda", False) and _LightGlueSIFT)
 
 
+def _has_pycolmap_cuda_sift() -> bool:
+    try:
+        import pycolmap  # type: ignore[import-not-found]
+    except Exception:
+        return False
+    try:
+        return bool(getattr(pycolmap, "has_cuda", False) and pycolmap.get_num_cuda_devices() > 0)
+    except Exception:
+        return bool(getattr(pycolmap, "has_cuda", False))
+
+
 HAS_GPU_BF_MATCHER = _has_cuda_bf_matcher()
-HAS_GPU_SIFT = _has_opencv_cuda_sift() or (HAS_GPU_BF_MATCHER and _has_lightglue_cuda_sift())
+HAS_GPU_SIFT = _has_opencv_cuda_sift() or (
+    HAS_GPU_BF_MATCHER and (_has_pycolmap_cuda_sift() or _has_lightglue_cuda_sift())
+)
 
 
 def _lightglue_sift_config(sift_kwargs: dict[str, int | float]) -> dict[str, int | float | str | bool]:
@@ -166,7 +180,71 @@ def _lightglue_sift_config(sift_kwargs: dict[str, int | float]) -> dict[str, int
         "max_num_keypoints": nfeatures if nfeatures > 0 else 4096,
         "detection_threshold": contrast_threshold / max(1, octave_layers * 2),
         "edge_threshold": float(sift_kwargs.get("edgeThreshold", 10.0)),
+        "octave_resolution": octave_layers,
+        "num_octaves": 4,
     }
+
+
+def _pycolmap_cuda_sift_one(
+    image: np.ndarray,
+    mask: np.ndarray | None,
+    sift_kwargs: dict[str, int | float],
+) -> tuple[list[cv2.KeyPoint], np.ndarray | None]:
+    import pycolmap  # type: ignore[import-not-found]
+
+    config = _lightglue_sift_config(sift_kwargs)
+    options = pycolmap.FeatureExtractionOptions()
+    options.sift.max_num_features = int(config["max_num_keypoints"])
+    options.sift.peak_threshold = float(config["detection_threshold"])
+    options.sift.edge_threshold = float(config["edge_threshold"])
+    if hasattr(options.sift, "octave_resolution"):
+        options.sift.octave_resolution = int(config["octave_resolution"])
+    if hasattr(options.sift, "num_octaves"):
+        options.sift.num_octaves = int(config["num_octaves"])
+    if hasattr(options.sift, "normalization"):
+        options.sift.normalization = pycolmap.Normalization.L2
+
+    device = getattr(pycolmap.Device, "cuda", "cuda")
+    sift = pycolmap.Sift(options=options, device=device)
+
+    source_array = np.asarray(image)
+    if source_array.dtype == np.uint8:
+        image_array = source_array
+    else:
+        float_array = source_array.astype(np.float32, copy=False)
+        scale = float(np.max(np.abs(float_array))) if float_array.size else 0.0
+        if scale > 0.0:
+            float_array = float_array / scale
+        image_array = np.clip(float_array * 255.0, 0, 255).astype(np.uint8)
+    detections, descriptor_array = sift.extract(np.ascontiguousarray(image_array))
+    keypoint_array = detections[:, :2].astype(np.float32, copy=False)
+    scales = detections[:, -2].astype(np.float32, copy=False)
+
+    if mask is not None and len(keypoint_array) > 0:
+        mask_array = np.asarray(mask)
+        rounded = np.rint(keypoint_array).astype(np.int64, copy=False)
+        valid = (
+            (rounded[:, 0] >= 0)
+            & (rounded[:, 0] < mask_array.shape[1])
+            & (rounded[:, 1] >= 0)
+            & (rounded[:, 1] < mask_array.shape[0])
+        )
+        valid_indices = np.flatnonzero(valid)
+        if len(valid_indices) > 0:
+            rounded_valid = rounded[valid_indices]
+            mask_valid = mask_array[rounded_valid[:, 1], rounded_valid[:, 0]] != 0
+            valid_indices = valid_indices[mask_valid]
+        keypoint_array = keypoint_array[valid_indices]
+        descriptor_array = descriptor_array[valid_indices]
+        scales = scales[valid_indices]
+
+    keypoints = [
+        cv2.KeyPoint(float(x), float(y), float(max(size, 1.0)))
+        for (x, y), size in zip(keypoint_array, scales, strict=True)
+    ]
+    if len(keypoints) == 0:
+        return [], None
+    return keypoints, np.ascontiguousarray(descriptor_array, dtype=np.float32)
 
 
 def _extract_lightglue_cuda_sift_one(
@@ -174,6 +252,11 @@ def _extract_lightglue_cuda_sift_one(
     mask: np.ndarray | None,
     sift_kwargs: dict[str, int | float],
 ) -> tuple[list[cv2.KeyPoint], np.ndarray | None]:
+    try:
+        return _pycolmap_cuda_sift_one(image, mask, sift_kwargs)
+    except Exception:
+        logger.debug("Direct PyCOLMAP CUDA SIFT failed; trying LightGlue SIFT wrapper", exc_info=True)
+
     import torch  # type: ignore[import-not-found]
     from lightglue import SIFT as LightGlueSIFT  # type: ignore[import-not-found]
 

@@ -556,10 +556,10 @@ def validate_deep_match_config(config: dict[str, Any]) -> None:
     fallback = config.get("fallback")
     if fallback is not None:
         on_error = fallback.get("on_error")
-        if on_error is not None and on_error not in ("sift_bf", "sift_flann", None):
+        if on_error is not None and on_error not in ("sift_bf", None):
             raise ValueError(
                 f"不支持的 fallback 方法 '{on_error}'。"
-                f"支持的 fallback: sift_bf, sift_flann, null"
+                f"支持的 fallback: sift_bf, null"
             )
 
 

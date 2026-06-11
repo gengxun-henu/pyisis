@@ -66,8 +66,8 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
 
 | Preset File | Feature Extractor | Matcher | Use Case |
 |-------------|-------------------|---------|----------|
-| `classic_sift_flann.json` | OpenCV SIFT | FLANN | Classic non-learning SIFT descriptor matching. Recommended traditional baseline. |
-| `classic_sift_bf.json` | OpenCV SIFT | BF | Classic non-learning SIFT descriptor matching with brute-force L2 matching. |
+| `classic_sift_flann.json` | OpenCV SIFT | FLANN | Legacy CPU-only SIFT descriptor matching route, kept for comparison. |
+| `classic_sift_bf.json` | OpenCV/PyCOLMAP SIFT | BF | Classic SIFT descriptor matching with brute-force L2 matching. With `--use-gpu`, uses CUDA SIFT plus CUDA BF when available. |
 | `superglue_default.json` | SuperPoint | SuperGlue | High-accuracy standard scenarios. Best match quality but slower. |
 | `lightglue_default.json` | SuperPoint | LightGlue | Speed-accuracy balance, recommended default. Adaptive feature cropping. |
 | `loftr_default.json` | LoFTR (built-in) | LoFTR (end-to-end) | Weak-texture areas, large viewpoint changes. No independent keypoints needed. |
@@ -86,14 +86,16 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
 
 ## Classic SIFT Presets
 
-`classic_sift_flann.json` and `classic_sift_bf.json` select the original OpenCV SIFT path in `examples/image_match/tile_matching.py`. These are not deep-learning presets, and they run in the normal `asp360_new` conda environment without a separate `deep-learning` environment.
+`classic_sift_flann.json` and `classic_sift_bf.json` select the classic SIFT path in `examples/image_match/tile_matching.py`. These are not deep matcher presets, and their SIFT parameters map to the same `max_features`, `sift_octave_layers`, `sift_contrast_threshold`, `sift_edge_threshold`, and `sift_sigma` runtime fields used by the ControlNet config.
 
-Use `classic_sift_flann.json` as the recommended traditional baseline:
+`classic_sift_bf.json` can use the GPU path when the caller also passes `--use-gpu`: SIFT extraction uses OpenCV CUDA SIFT when available, otherwise PyCOLMAP CUDA SIFT, and matching uses OpenCV CUDA BF. `classic_sift_flann.json` remains a CPU FLANN route even when `--use-gpu` is requested because this OpenCV CUDA path does not provide FLANN matching.
+
+Use `classic_sift_bf.json` as the recommended unified SIFT baseline:
 
 ```bash
 bash examples/controlnet_construct/run_image_match_batch_example.sh \
   --work-dir work \
-  --match-preset-path examples/controlnet_construct/presets/classic_sift_flann.json
+  --match-preset-path examples/controlnet_construct/presets/classic_sift_bf.json
 ```
 
 The same selection can be stored under `ImageMatch.match_preset_path` in a ControlNet config:
@@ -101,19 +103,18 @@ The same selection can be stored under `ImageMatch.match_preset_path` in a Contr
 ```json
 {
   "ImageMatch": {
-    "matcher_method": "flann",
-    "match_preset_path": "examples/controlnet_construct/presets/classic_sift_flann.json",
+    "matcher_method": "bf",
+    "match_preset_path": "examples/controlnet_construct/presets/classic_sift_bf.json",
     "deep_matcher_config_path": null
   }
 }
 ```
 
-For fast CPU ControlNet construction, `classic_sift_flann.json` and
-`--matcher-method flann` are the recommended baseline. Adaptive routing can use
-this FLANN path as the first route, then escalate to deep matchers only when the
-configured texture, quality, or sensor-model-lighting thresholds require it. On
-pipe_test2-style data with rich texture and small lighting differences, adaptive
-routing often remains on the FLANN route rather than escalating.
+For ControlNet construction, `classic_sift_bf.json` and `--matcher-method bf`
+are the recommended baseline. This keeps the SIFT route consistent across CPU
+and GPU: CPU uses OpenCV SIFT + BF, while GPU uses CUDA SIFT + CUDA BF when
+available. `classic_sift_flann.json` remains available only as a legacy
+CPU-only comparison route.
 
 The `classic_sift_*` presets are distinct from `lightglue_official_sift.json`. `lightglue_official_sift.json` uses `lightglue.SIFT` plus `lightglue.LightGlue` and follows the deep matcher `direct` / `export` / `import` workflows.
 
@@ -337,7 +338,7 @@ Copy any preset file to a custom path, modify parameters, and specify it via
 - `batch_inference`: Enable batch inference
 
 **fallback:**
-- `on_error`: Fallback method (`sift_bf`, `sift_flann`, null)
+- `on_error`: Fallback method (`sift_bf`, null)
 
 ## Parameter Groups and Preflight Validation
 

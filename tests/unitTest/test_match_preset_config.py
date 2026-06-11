@@ -1,4 +1,11 @@
-"""Tests for neutral ControlNet match preset resolution."""
+"""Tests for neutral ControlNet match preset resolution.
+
+Author: Geng Xun
+Created: 2026-05-23
+Last Modified: 2026-06-10
+Updated: 2026-06-10  Geng Xun added GPU SIFT preset parameter consistency coverage.
+Updated: 2026-06-10  Geng Xun aligned active ControlNet SIFT defaults on the BF route.
+"""
 
 from __future__ import annotations
 
@@ -137,6 +144,28 @@ class MatchPresetConfigUnitTest(unittest.TestCase):
         self.assertFalse(runtime.is_deep_matcher)
         self.assertEqual(runtime.image_match_defaults["ratio_test"], 0.75)
 
+    def test_shared_classic_sift_presets_match_controlnet_example_sift_defaults(self):
+        from match_preset_config import resolve_match_preset_runtime_config
+
+        config_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "controlnet_config.example.json"
+        image_match_config = json.loads(config_path.read_text(encoding="utf-8"))["ImageMatch"]
+        expected = {
+            "max_features": image_match_config["max_features"],
+            "sift_octave_layers": image_match_config["sift_octave_layers"],
+            "sift_contrast_threshold": image_match_config["sift_contrast_threshold"],
+            "sift_edge_threshold": image_match_config["sift_edge_threshold"],
+            "sift_sigma": image_match_config["sift_sigma"],
+            "ratio_test": image_match_config["ratio_test"],
+        }
+
+        for preset_name in ("classic_sift_bf.json", "classic_sift_flann.json"):
+            with self.subTest(preset_name=preset_name):
+                preset_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "presets" / preset_name
+                runtime = resolve_match_preset_runtime_config(preset_path)
+
+                for key, value in expected.items():
+                    self.assertEqual(runtime.image_match_defaults[key], value)
+
     def test_controlnet_example_config_declares_match_preset_path(self):
         config_path = PROJECT_ROOT / "examples" / "controlnet_construct" / "controlnet_config.example.json"
         payload = json.loads(config_path.read_text(encoding="utf-8"))
@@ -145,6 +174,22 @@ class MatchPresetConfigUnitTest(unittest.TestCase):
         self.assertIsNone(payload["ImageMatch"]["match_preset_path"])
         self.assertIn("deep_matcher_config_path", payload["ImageMatch"])
         self.assertIsNone(payload["ImageMatch"]["deep_matcher_config_path"])
+        self.assertEqual(payload["ImageMatch"]["matcher_method"], "bf")
+
+    def test_active_controlnet_configs_default_to_classic_sift_bf(self):
+        for config_name in ("controlnet_config.example.json", "controlnet_config.low_memory_lro.json"):
+            with self.subTest(config_name=config_name):
+                config_path = PROJECT_ROOT / "examples" / "controlnet_construct" / config_name
+                payload = json.loads(config_path.read_text(encoding="utf-8"))
+
+                self.assertEqual(payload["ImageMatch"]["matcher_method"], "bf")
+
+    def test_active_parameter_profiles_default_to_classic_sift_bf(self):
+        from parameter_profiles import PARAMETER_PROFILES
+
+        for profile_name, values in PARAMETER_PROFILES.items():
+            with self.subTest(profile_name=profile_name):
+                self.assertEqual(values["matcher_method"], "bf")
 
     def test_deep_preset_maps_to_existing_deep_config_path(self):
         from match_preset_config import resolve_match_preset_runtime_config

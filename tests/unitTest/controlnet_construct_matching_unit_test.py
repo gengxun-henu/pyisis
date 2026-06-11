@@ -1677,7 +1677,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(runtime.feature_extractor_method, "superpoint")
         self.assertTrue(runtime.prefer_gpu)
         self.assertEqual(runtime.device_dtype, "float32")
-        self.assertEqual(runtime.fallback_on_error, "sift_flann")
+        self.assertEqual(runtime.fallback_on_error, "sift_bf")
         self.assertEqual(runtime.raw_config["matcher"]["method"], "lightglue")
         self.assertEqual(getattr(runtime, "feature_options", None), {"max_keypoints": 4096, "keypoint_threshold": 0.0005, "remove_borders": 4, "detect_keypoints": True})
         self.assertEqual(

@@ -143,7 +143,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             right_render_probe=RenderProbe(best_render_elevation=36.0, terrain_explainability_score=0.55),
         )
 
-        self.assertEqual(decision.initial_matcher, "flann")
+        self.assertEqual(decision.initial_matcher, "bf")
         self.assertEqual(decision.fallback_chain, ())
         self.assertLess(decision.estimated_match_difficulty, 0.5)
 
@@ -357,11 +357,11 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
 
     def test_build_cascade_plan_accepts_flann_in_public_adaptive_flow(self):
         plan = build_cascade_plan(
-            initial_matcher="flann",
+            initial_matcher="bf",
             fallback_chain=("loftr", "lightglue"),
         )
 
-        self.assertEqual(plan, ("flann",))
+        self.assertEqual(plan, ("bf",))
 
     def test_decide_post_match_action_does_not_request_fallback_after_failed_gate(self):
         plan = build_cascade_plan(initial_matcher="bf")
@@ -411,7 +411,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         self.assertEqual(action["selected_matcher"], "lightglue")
         self.assertEqual(action["stop_reason"], "quality_accepted")
 
-    def test_tile_router_uses_flann_for_rich_texture_small_physical_lighting_gap(self):
+    def test_tile_router_uses_bf_for_rich_texture_small_physical_lighting_gap(self):
         decision = route_matcher_for_tile(
             tile_index=2,
             texture_sparseness=0.12,
@@ -425,8 +425,8 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         )
 
         self.assertIsInstance(decision, TileRoutingDecision)
-        self.assertEqual(decision.selected_route, "sift_flann")
-        self.assertEqual(decision.selected_matcher, "flann")
+        self.assertEqual(decision.selected_route, "sift_bf")
+        self.assertEqual(decision.selected_matcher, "bf")
         self.assertEqual(decision.selected_execution_environment, "asp360_new")
         self.assertTrue(decision.no_post_match_fallback)
 
@@ -478,8 +478,8 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             adaptive_routing_deep_presets={},
         )
 
-        self.assertEqual(metadata["selected_route"], "sift_flann")
-        self.assertEqual(metadata["selected_matcher"], "flann")
+        self.assertEqual(metadata["selected_route"], "sift_bf")
+        self.assertEqual(metadata["selected_matcher"], "bf")
         self.assertEqual(metadata["selected_execution_environment"], "asp360_new")
         self.assertEqual(metadata["illumination"]["status"], "ok")
 
@@ -552,7 +552,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             valid_pixel_percent_threshold=0.0,
             invalid_pixel_radius=0,
             ratio_test=0.75,
-            matcher_method="flann",
+            matcher_method="bf",
             max_features=100,
             sift_octave_layers=3,
             sift_contrast_threshold=0.04,
@@ -573,7 +573,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
 
         self.assertEqual(routed[0].matcher_method, "lightglue")
         self.assertEqual(routed[0].route_metadata["selected_route"], "sift_lightglue")
-        self.assertEqual(task.matcher_method, "flann")
+        self.assertEqual(task.matcher_method, "bf")
         self.assertIsNone(task.route_metadata)
 
     def test_group_tile_tasks_by_route_keeps_classic_and_deep_batches_separate(self):
@@ -612,7 +612,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
                     "selected_route": route,
                     "selected_matcher": matcher,
                     "selected_execution_environment": (
-                        "asp360_new" if route == "sift_flann" else "deep-learning"
+                        "asp360_new" if route == "sift_bf" else "deep-learning"
                     ),
                     "deep_match_config_path": config_path,
                 },
@@ -620,7 +620,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
 
         groups = image_match._group_tile_tasks_by_selected_route(
             [
-                make_task(0, "sift_flann", "flann"),
+                make_task(0, "sift_bf", "bf"),
                 make_task(1, "sift_lightglue", "lightglue", "sift_lg.json"),
                 make_task(2, "sift_lightglue", "lightglue", "sift_lg.json"),
                 make_task(3, "loftr", "loftr", "loftr.json"),
@@ -628,7 +628,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
         )
 
         self.assertEqual(len(groups["classic"]), 1)
-        self.assertEqual(groups["classic"][0]["selected_route"], "sift_flann")
+        self.assertEqual(groups["classic"][0]["selected_route"], "sift_bf")
         self.assertEqual([task.route_metadata["tile_index"] for task in groups["classic"][0]["tasks"]], [0])
         self.assertEqual(
             [(group["selected_route"], group["selected_matcher"], group["deep_match_config_path"], len(group["tasks"]))
@@ -742,8 +742,8 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
                 "route_metadata": [
                     {
                         "tile_index": 0,
-                        "selected_route": "sift_flann",
-                        "selected_matcher": "flann",
+                        "selected_route": "sift_bf",
+                        "selected_matcher": "bf",
                         "selected_execution_environment": "asp360_new",
                     },
                     {
@@ -775,7 +775,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             valid_intensity_lower_percent=None,
             valid_intensity_upper_percent=None,
             ratio_test=0.75,
-            matcher_method="flann",
+            matcher_method="bf",
             max_features=100,
             sift_octave_layers=3,
             sift_contrast_threshold=0.04,
@@ -788,11 +788,11 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             adaptive_routing_summary=adaptive_summary,
         )
 
-        self.assertEqual([task.matcher_method for task in tasks], ["flann", "loftr"])
-        self.assertEqual(tasks[0].route_metadata["selected_route"], "sift_flann")
+        self.assertEqual([task.matcher_method for task in tasks], ["bf", "loftr"])
+        self.assertEqual(tasks[0].route_metadata["selected_route"], "sift_bf")
         self.assertEqual(tasks[1].route_metadata["deep_match_config_path"], "loftr.json")
 
-    def test_run_classic_route_groups_executes_sift_flann_in_asp360_new(self):
+    def test_run_classic_route_groups_executes_sift_bf_in_asp360_new(self):
         image_match = importlib.import_module("image_match.image_match")
         from image_match.keypoints import Keypoint
         from image_match.tile_matching import PairedTileWindow, TileMatchResult, TileMatchStats, TileMatchTask
@@ -817,7 +817,7 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             valid_pixel_percent_threshold=0.0,
             invalid_pixel_radius=0,
             ratio_test=0.75,
-            matcher_method="flann",
+            matcher_method="bf",
             max_features=100,
             sift_octave_layers=3,
             sift_contrast_threshold=0.04,
@@ -825,8 +825,8 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             sift_sigma=1.6,
             route_metadata={
                 "tile_index": 0,
-                "selected_route": "sift_flann",
-                "selected_matcher": "flann",
+                "selected_route": "sift_bf",
+                "selected_matcher": "bf",
                 "selected_execution_environment": "asp360_new",
             },
         )
@@ -867,13 +867,13 @@ class ImageMatchAdaptiveRoutingUnitTest(unittest.TestCase):
             match_task=fake_match_task,
         )
 
-        self.assertEqual(executed, ["sift_flann"])
+        self.assertEqual(executed, ["sift_bf"])
         self.assertEqual(len(results), 1)
         self.assertEqual(summary["execution_environment"], "asp360_new")
         self.assertEqual(summary["group_count"], 1)
         self.assertEqual(summary["executed_task_count"], 1)
         self.assertEqual(summary["matched_task_count"], 1)
-        self.assertEqual(summary["groups"][0]["selected_route"], "sift_flann")
+        self.assertEqual(summary["groups"][0]["selected_route"], "sift_bf")
 
     def test_merge_classic_and_deep_tile_results_writes_one_pair_key_set(self):
         image_match = importlib.import_module("image_match.image_match")
@@ -1284,7 +1284,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         ):
             selected, summary = image_match_module._resolve_adaptive_route_for_pair(
                 enable_adaptive_routing=True,
-                requested_matcher_method="flann",
+                requested_matcher_method="bf",
                 adaptive_routing_deep_presets=None,
                 band=1,
                 invalid_values=(),
@@ -1297,7 +1297,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
                 right_low_resolution_dom=None,
             )
 
-        self.assertEqual(selected, "flann")
+        self.assertEqual(selected, "bf")
         self.assertIsNotNone(summary)
         lighting = summary["sidecar"]["lighting_difference"]
         score = lighting["lighting_difference_score"]
@@ -1352,7 +1352,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         ):
             selected, summary = image_match_module._resolve_adaptive_route_for_pair(
                 enable_adaptive_routing=True,
-                requested_matcher_method="flann",
+                requested_matcher_method="bf",
                 adaptive_routing_deep_presets=None,
                 band=1,
                 invalid_values=(),
@@ -1368,7 +1368,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
                 right_source_path="right_actual_dom.cub",
             )
 
-        self.assertEqual(selected, "flann")
+        self.assertEqual(selected, "bf")
         self.assertIsNotNone(summary)
         self.assertEqual(probe_mock.call_args_list[0].args[0], "left_actual_dom.cub")
         self.assertEqual(probe_mock.call_args_list[1].args[0], "right_actual_dom.cub")
@@ -1377,9 +1377,9 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
         self.assertEqual(summary["preview_sources"]["source_type"], "matched_dom")
         self.assertFalse(summary["preview_sources"]["fallback_used"])
 
-    def test_route_matcher_for_pair_with_sparseness_picks_flann_for_low_signals(self):
+    def test_route_matcher_for_pair_with_sparseness_picks_bf_for_low_signals(self):
         from image_match.adaptive_routing import (
-            FLANN_MATCHER_METHOD,
+            SIFT_ROUTED_MATCHER_METHOD,
             route_matcher_for_pair_with_sparseness,
         )
 
@@ -1388,17 +1388,17 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
             lighting_difference_score=0.10,
         )
 
-        self.assertEqual(decision.initial_matcher, FLANN_MATCHER_METHOD)
+        self.assertEqual(decision.initial_matcher, SIFT_ROUTED_MATCHER_METHOD)
         self.assertIn("rich texture", decision.route_reason)
         self.assertEqual(decision.fallback_chain, ())
 
-    def test_adaptive_routing_deep_presets_keep_requested_flann_without_deep_preset(self):
+    def test_adaptive_routing_deep_presets_keep_requested_bf_without_deep_preset(self):
         from image_match.adaptive_routing import route_matcher_for_pair_with_sparseness
 
         decision = route_matcher_for_pair_with_sparseness(
             pair_texture_sparseness=0.15,
             lighting_difference_score=0.10,
-            traditional_matcher="flann",
+            traditional_matcher="bf",
             adaptive_routing_deep_presets={
                 "lightglue": "examples/controlnet_construct/presets/lightglue_default.json",
                 "lightglue_high_recall": "examples/controlnet_construct/presets/lightglue_high_recall.json",
@@ -1406,7 +1406,7 @@ class ImageMatchAdaptiveRoutingSparsenessLightingUnitTest(unittest.TestCase):
             },
         )
 
-        self.assertEqual(decision.initial_matcher, "flann")
+        self.assertEqual(decision.initial_matcher, "bf")
         self.assertEqual(decision.fallback_chain, ())
         self.assertIsNone(decision.deep_match_config_path)
         self.assertGreater(decision.route_confidence, 0.7)

@@ -19,6 +19,6 @@
     "batch_inference": true
   },
   "fallback": {
-    "on_error": "sift_flann"
+    "on_error": "sift_bf"
   }
 }

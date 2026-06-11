@@ -1,7 +1,7 @@
 {
   "feature_extractor": {
     "method": "classic_sift",
-    "max_features": 1024,
+    "max_features": 1000,
     "octave_layers": 3,
     "contrast_threshold": 0.04,
     "edge_threshold": 10.0,

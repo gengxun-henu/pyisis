@@ -628,8 +628,8 @@ def route_matcher_for_pair(
     terrain_support = mean_terrain is None or mean_terrain >= 0.35
 
     if mean_texture >= 0.55 and small_lighting_gap and terrain_support:
-        initial_matcher = FLANN_MATCHER_METHOD
-        reason = "rich texture and small inferred lighting gap; route to SIFT + FLANN"
+        initial_matcher = SIFT_ROUTED_MATCHER_METHOD
+        reason = "rich texture and small inferred lighting gap; route to SIFT + BF"
     elif mean_texture >= 0.28 and medium_lighting_gap:
         initial_matcher = LIGHTGLUE_MATCHER_METHOD
         reason = "moderate texture or moderate lighting gap; route to SIFT + LightGlue"
@@ -696,7 +696,7 @@ def route_matcher_for_pair_with_sparseness(
     lighting_high_threshold: float = 0.55,
     min_texture_probe_keypoints: int = 12,
     min_texture_probe_keypoint_density: float = 1.0e-5,
-    traditional_matcher: str = FLANN_MATCHER_METHOD,
+    traditional_matcher: str = SIFT_ROUTED_MATCHER_METHOD,
     adaptive_routing_deep_presets: dict[str, str] | None = None,
 ) -> PairRoutingDecision:
     """Conservative Phase-7 router using pair texture sparseness and lighting difference.
@@ -706,7 +706,7 @@ def route_matcher_for_pair_with_sparseness(
         - ``lighting_difference_score``: ``0 = identical lighting, 1 = opposite``
 
     Rules:
-        - low sparseness and low lighting difference -> SIFT+FLANN
+        - low sparseness and low lighting difference -> SIFT+BF
         - moderate texture/lighting -> SIFT+LightGlue as the primary deep route
         - weak-to-moderate texture without extreme lighting -> SuperPoint+LightGlue
         - high sparseness and high lighting difference, or either extreme -> LoFTR
@@ -773,8 +773,8 @@ def route_matcher_for_pair_with_sparseness(
             reason = "extreme texture sparseness or extreme lighting difference; route to LoFTR"
             route_confidence = 0.80
         elif is_sparse_low and (resolved_lighting is None or is_lighting_low):
-            initial_matcher = FLANN_MATCHER_METHOD
-            reason = "rich texture and small lighting difference; route to SIFT + FLANN"
+            initial_matcher = SIFT_ROUTED_MATCHER_METHOD
+            reason = "rich texture and small lighting difference; route to SIFT + BF"
             sparseness_confidence = 1.0 if resolved_sparseness is None else _clamp(
                 1.0 - (resolved_sparseness / max(float(sparseness_low_threshold), 1e-6))
             )
@@ -917,9 +917,9 @@ def route_matcher_for_tile(
         and sparseness <= float(sparseness_low_threshold)
         and (lighting is None or lighting <= float(lighting_low_threshold))
     ):
-        selected_route = "sift_flann"
-        selected = FLANN_MATCHER_METHOD
-        reason = "rich texture and small physical illumination difference; route to SIFT + FLANN"
+        selected_route = "sift_bf"
+        selected = SIFT_ROUTED_MATCHER_METHOD
+        reason = "rich texture and small physical illumination difference; route to SIFT + BF"
         confidence = 0.85
         config = None
     elif (
@@ -951,7 +951,11 @@ def route_matcher_for_tile(
         confidence = 0.60
         config = preset_map.get("sift_lightglue") or preset_map.get(LIGHTGLUE_MATCHER_METHOD)
 
-    environment = "asp360_new" if selected == FLANN_MATCHER_METHOD else "deep-learning"
+    environment = (
+        "asp360_new"
+        if selected in {SIFT_ROUTED_MATCHER_METHOD, FLANN_MATCHER_METHOD}
+        else "deep-learning"
+    )
     return TileRoutingDecision(
         tile_index=int(tile_index),
         texture_sparseness=sparseness,

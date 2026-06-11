@@ -226,7 +226,7 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
             feature_extractor_method="superpoint",
             prefer_gpu=False,
             device_dtype="float32",
-            fallback_on_error="sift_flann",
+            fallback_on_error="sift_bf",
             raw_config={
                 "feature_extractor": {
                     "method": "superpoint",
@@ -251,7 +251,7 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
             feature_extractor_method="superpoint",
             prefer_gpu=False,
             device_dtype="float32",
-            fallback_on_error="sift_flann",
+            fallback_on_error="sift_bf",
             raw_config={"feature_extractor": {"method": "superpoint", "max_keypoints": 4096}},
         )
 
@@ -267,7 +267,7 @@ class ImageMatchDeepAdapterUnitTest(unittest.TestCase):
             feature_extractor_method="superpoint",
             prefer_gpu=False,
             device_dtype="float32",
-            fallback_on_error="sift_flann",
+            fallback_on_error="sift_bf",
             raw_config={"matcher": {"method": "lightglue"}},
         )
 

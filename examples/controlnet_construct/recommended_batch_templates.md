@@ -260,7 +260,7 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
   --skip-final-merge
 ```
 
-如果你想把 SIFT 描述子匹配切换为 FLANN，可以直接：
+默认 SIFT 匹配使用 BF。只有在做旧版 CPU FLANN 对照实验时，才需要显式切换：
 
 ```bash
 bash examples/controlnet_construct/run_pipeline_example.sh \
@@ -302,7 +302,7 @@ bash examples/controlnet_construct/run_image_match_batch_example.sh \
   - `work/match_metadata/`
   - `work/match_viz/`
 
-如果你想在批量匹配阶段显式切换 SIFT 描述子匹配后端，也可以直接传：
+批量匹配阶段默认使用统一的 SIFT+BF 路线。旧版 CPU FLANN 对照实验可以显式传：
 
 ```bash
 bash examples/controlnet_construct/run_image_match_batch_example.sh \
@@ -400,7 +400,7 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
   --work-dir work_ori \
   --original-list work/original_images.lis \
   --config examples/controlnet_construct/controlnet_config.example.json \
-  --matcher-method flann \
+  --matcher-method bf \
   --adaptive-routing \
   --adaptive-routing-deep-preset lightglue=examples/controlnet_construct/presets/lightglue_official_superpoint.json \
   --adaptive-routing-deep-preset loftr=examples/controlnet_construct/presets/loftr_external_outdoor.json

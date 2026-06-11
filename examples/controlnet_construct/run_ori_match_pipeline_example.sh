@@ -218,7 +218,7 @@ Options:
   --original-list PATH           original_images.lis path. Default: <work-dir>/original_images.lis
   --images-overlap-list PATH     images_overlap.lis path. Default: <work-dir>/images_overlap.lis
   --config PATH                  ControlNet config JSON. Default: examples/controlnet_construct/controlnet_config.example.json
-  --matcher-method NAME          Matcher method forwarded to from-ori-match. Default: flann
+  --matcher-method NAME          Matcher method forwarded to from-ori-match. Default: bf
   --deep-match-config-path PATH  Deep matcher preset forwarded to from-ori-match.
   --deep-match-mode MODE         Deep matcher mode. Only direct is supported here.
   --adaptive-routing             Enable adaptive matcher routing in from-ori-match.
@@ -258,7 +258,7 @@ WORK_DIR=""
 ORIGINAL_LIST=""
 IMAGES_OVERLAP_LIST=""
 CONFIG_PATH=""
-MATCHER_METHOD="flann"
+MATCHER_METHOD="bf"
 DEEP_MATCH_CONFIG_PATH=""
 ADAPTIVE_ROUTING="0"
 ADAPTIVE_ROUTING_PROFILE="balanced"

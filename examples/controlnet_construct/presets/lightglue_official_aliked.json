@@ -17,6 +17,6 @@
     "dtype": "float32"
   },
   "fallback": {
-    "on_error": "sift_flann"
+    "on_error": "sift_bf"
   }
 }

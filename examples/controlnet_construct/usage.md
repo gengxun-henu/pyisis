@@ -376,7 +376,7 @@ python examples/image_match/image_match.py \
   left_dom.cub right_dom.cub left.key right.key
 ```
 
-如果你又在命令行里显式传了某个匹配参数，例如 `--ratio-test 0.8`、`--matcher-method flann` 或 `--num-worker-parallel-cpu 4`，则命令行值会覆盖配置文件中的默认值。
+如果你又在命令行里显式传了某个匹配参数，例如 `--ratio-test 0.8`、`--matcher-method bf` 或 `--num-worker-parallel-cpu 4`，则命令行值会覆盖配置文件中的默认值。
 
 维护者提示：`image_match.py --config CONFIG --print-config-default FIELD` 是给示例 shell wrapper 使用的轻量 helper，用于从同一套 Python 配置解析逻辑中读取单个 `ImageMatch` 默认值；普通用户仍应优先通过 `--config` 和显式 CLI 参数运行匹配。
 
@@ -526,7 +526,7 @@ bash examples/controlnet_construct/run_pipeline_example.sh \
   --invalid-pixel-radius 2
 ```
 
-如果你想把 SIFT 描述子匹配后端切到 FLANN，可以显式加上：
+默认 SIFT 路线使用 BF。只有在做旧版 CPU FLANN 对照实验时，才需要显式切到 FLANN：
 
 ```bash
   --matcher-method flann
@@ -978,7 +978,7 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
   --work-dir work_ori \
   --original-list work/original_images.lis \
   --config examples/controlnet_construct/controlnet_config.example.json \
-  --matcher-method flann \
+  --matcher-method bf \
   --adaptive-routing \
   --adaptive-routing-profile balanced \
   --adaptive-routing-deep-preset lightglue=examples/controlnet_construct/presets/lightglue_official_superpoint.json \
@@ -1000,7 +1000,7 @@ bash examples/controlnet_construct/run_ori_match_pipeline_example.sh \
 - `work_ori/merge/merge_all_controlnets.sh`
 - `work_ori/merge/ori_matching_merged.net`
 
-当前 raw/original image wrapper 支持直接启用 adaptive routing。该路径不会依赖 DOM low-resolution preview 或 DOM-to-original 回投；纹理与光照诊断来自原始 cube 自身。默认仍使用 classic `flann`，只有显式传入 `--adaptive-routing` 或在 `ImageMatch.enable_adaptive_routing` 中启用时才进入自适应路由。
+当前 raw/original image wrapper 支持直接启用 adaptive routing。该路径不会依赖 DOM low-resolution preview 或 DOM-to-original 回投；纹理与光照诊断来自原始 cube 自身。默认使用统一的 classic `bf` SIFT 路线，只有显式传入 `--adaptive-routing` 或在 `ImageMatch.enable_adaptive_routing` 中启用时才进入自适应路由。
 
 该 wrapper 现在可以把 `--deep-match-config-path`、`--adaptive-routing` / `--no-adaptive-routing`、`--adaptive-routing-profile` 和 `--adaptive-routing-deep-preset` 转发给
 `from-ori-match`，因此可直接使用 official LightGlue preset 等原始影像空间 deep matcher 配置。DOM low-resolution offset 与

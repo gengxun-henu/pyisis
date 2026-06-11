@@ -22,7 +22,7 @@ class DeepMatchConfigRehydrationUnitTest(unittest.TestCase):
             "feature_extractor_method": "superpoint",
             "prefer_gpu": False,
             "device_dtype": "float32",
-            "fallback_on_error": "sift_flann",
+            "fallback_on_error": "sift_bf",
             "matcher_options": {"weights": "superpoint_lightglue", "flash": False},
             "feature_options": {"max_keypoints": 4096, "keypoint_threshold": 0.0005},
             "device_options": {"prefer_gpu": False, "dtype": "float32", "batch_inference": True},
@@ -44,7 +44,7 @@ class DeepMatchConfigRehydrationUnitTest(unittest.TestCase):
             "feature_extractor_method": "loftr",
             "prefer_gpu": True,
             "device_dtype": "float32",
-            "fallback_on_error": "sift_flann",
+            "fallback_on_error": "sift_bf",
             "raw_config": {
                 "feature_extractor": {
                     "method": "loftr",

@@ -21,7 +21,7 @@
     "min_valid_pixels": 64,
     "valid_pixel_percent_threshold": 0.08,
     "invalid_pixel_radius": 2,
-    "matcher_method": "flann",
+    "matcher_method": "bf",
     "ratio_test": 0.75,
     "max_features": 600,
     "sift_octave_layers": 3,

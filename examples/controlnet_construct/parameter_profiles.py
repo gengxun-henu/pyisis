@@ -15,7 +15,7 @@ PARAMETER_PROFILES: Mapping[str, Mapping[str, Any]] = MappingProxyType(
             {
                 "valid_pixel_percent_threshold": 0.08,
                 "invalid_pixel_radius": 2,
-                "matcher_method": "flann",
+                "matcher_method": "bf",
                 "enable_low_resolution_offset_estimation": True,
                 "low_resolution_level": 3,
                 "low_resolution_max_mean_reprojection_error_pixels": 2.5,
@@ -28,7 +28,7 @@ PARAMETER_PROFILES: Mapping[str, Mapping[str, Any]] = MappingProxyType(
             {
                 "valid_pixel_percent_threshold": 0.05,
                 "invalid_pixel_radius": 1,
-                "matcher_method": "flann",
+                "matcher_method": "bf",
                 "enable_low_resolution_offset_estimation": True,
                 "low_resolution_level": 3,
                 "low_resolution_max_mean_reprojection_error_pixels": 3.0,

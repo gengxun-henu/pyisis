@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-05-07
-Last Modified: 2026-06-09
+Last Modified: 2026-06-10
 Updated: 2026-05-07  Geng Xun added GPU SIFT match stats and dynamic batch policy coverage.
 Updated: 2026-05-07  Geng Xun registered direct gpu_sift imports for dataclass decorators.
 Updated: 2026-05-07  Geng Xun added pair matcher CPU fallback coverage.
@@ -11,6 +11,7 @@ Updated: 2026-05-20  Geng Xun aligned GPU SIFT batch default coverage with conse
 Updated: 2026-05-20  Geng Xun added batched GPU factory fallback regression coverage.
 Updated: 2026-06-09  Geng Xun made unittest discovery import this pytest-style module when pytest is unavailable.
 Updated: 2026-06-09  Geng Xun added LightGlue CUDA SIFT plus OpenCV CUDA BF routing coverage.
+Updated: 2026-06-10  Geng Xun added unittest coverage for GPU SIFT parameter consistency.
 """
 
 import importlib.util
@@ -47,8 +48,59 @@ _gpu_sift_module = importlib.util.module_from_spec(_spec)
 sys.modules[_spec.name] = _gpu_sift_module
 _spec.loader.exec_module(_gpu_sift_module)
 
+_IMAGE_GPU_SIFT_PATH = Path(__file__).resolve().parents[2] / "examples" / "image_match" / "gpu_sift.py"
+_image_spec = importlib.util.spec_from_file_location("image_match_gpu_sift", _IMAGE_GPU_SIFT_PATH)
+_image_gpu_sift_module = importlib.util.module_from_spec(_image_spec)
+sys.modules[_image_spec.name] = _image_gpu_sift_module
+_image_spec.loader.exec_module(_image_gpu_sift_module)
+
 HAS_GPU_SIFT = _gpu_sift_module.HAS_GPU_SIFT
 GpuSiftBatch = _gpu_sift_module.GpuSiftBatch
+
+
+class GpuSiftParameterConsistencyUnitTest(unittest.TestCase):
+    def test_lightglue_cuda_sift_config_uses_classic_sift_parameters(self):
+        config = _gpu_sift_module._lightglue_sift_config(
+            {
+                "nfeatures": 1000,
+                "nOctaveLayers": 3,
+                "contrastThreshold": 0.04,
+                "edgeThreshold": 10.0,
+                "sigma": 1.6,
+            }
+        )
+
+        self.assertEqual(config["backend"], "pycolmap_cuda")
+        self.assertFalse(config["rootsift"])
+        self.assertEqual(config["max_num_keypoints"], 1000)
+        self.assertEqual(config["octave_resolution"], 3)
+        self.assertEqual(config["edge_threshold"], 10.0)
+        self.assertAlmostEqual(config["detection_threshold"], 0.04 / 6.0)
+
+    def test_gpu_batch_keeps_one_mask_per_image(self):
+        batch = GpuSiftBatch(batch_size=4)
+        image = np.zeros((16, 16), dtype=np.uint8)
+        mask = np.ones((16, 16), dtype=np.uint8) * 255
+
+        batch.add(image, mask)
+        batch.add(image, mask)
+
+        self.assertEqual(len(batch._images), 2)
+        self.assertEqual(len(batch._masks), 2)
+
+    def test_image_match_and_controlnet_gpu_sift_configs_stay_in_sync(self):
+        sift_kwargs = {
+            "nfeatures": 1000,
+            "nOctaveLayers": 3,
+            "contrastThreshold": 0.04,
+            "edgeThreshold": 10.0,
+            "sigma": 1.6,
+        }
+
+        self.assertEqual(
+            _image_gpu_sift_module._lightglue_sift_config(sift_kwargs),
+            _gpu_sift_module._lightglue_sift_config(sift_kwargs),
+        )
 
 
 class TestHasGpuSift:

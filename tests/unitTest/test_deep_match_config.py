@@ -19,7 +19,7 @@ class TestDeepMatchConfigLoad:
             "feature_extractor": {"method": "superpoint", "max_keypoints": 4096},
             "matcher": {"method": "lightglue"},
             "device": {"prefer_gpu": True, "dtype": "float32"},
-            "fallback": {"on_error": "sift_flann"},
+            "fallback": {"on_error": "sift_bf"},
         }
         cfg_path = tmp_path / "test_config.json"
         cfg_path.write_text(json.dumps(config), encoding="utf-8")
@@ -483,7 +483,7 @@ class TestPresetFiles(unittest.TestCase):
             config = self._read_preset_config(preset_path)
             fallback = config.get("fallback")
             assert fallback is not None, f"{preset_path.name} missing fallback config"
-            assert fallback.get("on_error") in ("sift_bf", "sift_flann"), \
+            assert fallback.get("on_error") in ("sift_bf", None), \
                 f"{preset_path.name} has invalid fallback: {fallback.get('on_error')}"
 
     def test_loftr_presets_use_loftr_extractor(self):

@@ -20,7 +20,7 @@
 | Create | `ports/windows/env/pyisis-isis-win64.yml` | Initial conda-forge environment definition for MSVC/Ninja/CMake/Python/pybind11/Qt-side development dependencies. |
 | Create | `ports/windows/isis/README.md` | ISIS SDK/runtime subset workflow and prefix contract. |
 | Create | `ports/windows/isis/common.ps1` | Shared PowerShell helpers for paths, logging, command checks, and repository root detection. |
-| Create | `ports/windows/isis/fetch_isis_900.ps1` | Fetch ISIS 9.0.0 source into a local generated directory. |
+| Create | `ports/windows/isis/fetch_isis_900.ps1` | Fetch ISIS 9.0.0 source into a local generated directory, defaulting to the GitHub tag archive with a direct git clone option. |
 | Create | `ports/windows/isis/apply_patches.ps1` | Apply tracked patch files to the local ISIS source checkout. |
 | Create | `ports/windows/isis/configure_isis.ps1` | Configure ISIS with MSVC/Ninja into a local generated build directory. |
 | Create | `ports/windows/isis/build_isis.ps1` | Build the ISIS SDK/runtime subset. |

@@ -43,6 +43,13 @@ call Visual Studio's `vcvars64.bat` before continuing. The prerequisite checker
 prints the detected `vcvars64.bat` path when Visual Studio Build Tools are
 installed but not active in the current shell.
 
+You can also load the detected MSVC environment into the current PowerShell
+session with:
+
+```powershell
+.\ports\windows\activate_msvc.ps1
+```
+
 ## Stage 1: ISIS Prefix
 
 ```powershell

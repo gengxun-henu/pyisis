@@ -15,6 +15,7 @@
 | Action | File | Responsibility |
 | --- | --- | --- |
 | Create | `ports/windows/README.md` | Top-level Windows port workflow, prerequisites, and two-stage commands. |
+| Create | `ports/windows/activate_msvc.ps1` | Load `vcvars64.bat` output into the current PowerShell process when the user is not already in an MSVC shell. |
 | Create | `ports/windows/check_prereqs.ps1` | Diagnose missing conda, CMake, Ninja, Git, and MSVC shell setup before running the port workflow. |
 | Create | `ports/windows/env/pyisis-isis-win64.yml` | Initial conda-forge environment definition for MSVC/Ninja/CMake/Python/pybind11/Qt-side development dependencies. |
 | Create | `ports/windows/isis/README.md` | ISIS SDK/runtime subset workflow and prefix contract. |

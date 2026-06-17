@@ -208,6 +208,12 @@ find_path(EIGEN3_INCLUDE_DIR
           PATHS "${ISIS_DEP_INCLUDE_DIR}/eigen3" "${ISIS_DEP_INCLUDE_DIR}"
           NO_DEFAULT_PATH)
 
+set(ISIS_OPTIONAL_INCLUDE_DIRS ${PCL_INCLUDE_DIRS})
+if(EIGEN3_INCLUDE_DIR)
+  list(APPEND ISIS_OPTIONAL_INCLUDE_DIRS "${EIGEN3_INCLUDE_DIR}")
+endif()
+list(REMOVE_DUPLICATES ISIS_OPTIONAL_INCLUDE_DIRS)
+
 if(NOT Python3_SITELIB)
   execute_process(
     COMMAND "${Python3_EXECUTABLE}" -c "import sysconfig; print(sysconfig.get_path('purelib'))"
@@ -319,8 +325,7 @@ target_include_directories(_isis_core
     "${ISIS_DEP_INCLUDE_DIR}/cspice"
     "${ISIS_DEP_INCLUDE_DIR}/bullet"
     "${ISIS_DEP_INCLUDE_DIR}/tnt"
-    ${PCL_INCLUDE_DIRS}
-    ${EIGEN3_INCLUDE_DIR}
+    ${ISIS_OPTIONAL_INCLUDE_DIRS}
     "${ISIS_DEP_INCLUDE_DIR}/qt"
     "${ISIS_DEP_INCLUDE_DIR}/qt/QtCore"
     ${Qt5Core_INCLUDE_DIRS}
@@ -370,8 +375,7 @@ target_include_directories(isis_cpp_benchmark
     "${ISIS_DEP_INCLUDE_DIR}/cspice"
     "${ISIS_DEP_INCLUDE_DIR}/bullet"
     "${ISIS_DEP_INCLUDE_DIR}/tnt"
-    ${PCL_INCLUDE_DIRS}
-    ${EIGEN3_INCLUDE_DIR}
+    ${ISIS_OPTIONAL_INCLUDE_DIRS}
     "${ISIS_DEP_INCLUDE_DIR}/qt"
     "${ISIS_DEP_INCLUDE_DIR}/qt/QtCore"
     ${Qt5Core_INCLUDE_DIRS})
@@ -436,7 +440,6 @@ endif()
 set_tests_properties(python-unit-tests PROPERTIES
   ENVIRONMENT "${_python_test_environment}")
 
-  
 message(STATUS "Using external ISIS prefix: ${ISIS_PREFIX}")
 message(STATUS "Using ISIS include dir: ${ISIS_INCLUDE_DIR}")
 message(STATUS "Using ISIS dependency include dir: ${ISIS_DEP_INCLUDE_DIR}")
@@ -449,6 +452,7 @@ message(STATUS "Using extra projection libs: ${ISIS_EXTRA_PROJECTION_LIBS}")
 message(STATUS "Using Bullet runtime libs: ${BULLET_RUNTIME_LIBS}")
 message(STATUS "Using PCL include dirs: ${PCL_INCLUDE_DIRS}")
 message(STATUS "Using Eigen include dir: ${EIGEN3_INCLUDE_DIR}")
+message(STATUS "Using optional include dirs: ${ISIS_OPTIONAL_INCLUDE_DIRS}")
 message(STATUS "Using Qt5 config dir: ${Qt5_DIR}")
 if(DEFINED CMAKE_CXX_COMPILER_LAUNCHER AND NOT CMAKE_CXX_COMPILER_LAUNCHER STREQUAL "")
   message(STATUS "Using C++ compiler launcher: ${CMAKE_CXX_COMPILER_LAUNCHER}")

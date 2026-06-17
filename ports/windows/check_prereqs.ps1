@@ -34,7 +34,18 @@ if (-not $hasCl) {
     $vswhere = Join-Path ${env:ProgramFiles(x86)} "Microsoft Visual Studio\Installer\vswhere.exe"
     if (Test-Path $vswhere) {
         Write-Check "found vswhere: $vswhere"
-        Write-Check "MSVC cl.exe is not on PATH; run from an x64 Native Tools prompt or call vcvars64.bat."
+        $vsInstall = & $vswhere -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+        if ($LASTEXITCODE -eq 0 -and $vsInstall) {
+            $vcvars64 = Join-Path $vsInstall "VC\Auxiliary\Build\vcvars64.bat"
+            if (Test-Path $vcvars64) {
+                Write-Check "MSVC cl.exe is not on PATH; open an x64 Native Tools prompt or run:"
+                Write-Check "  cmd /c `"$vcvars64`" && powershell"
+            } else {
+                Write-Check "MSVC cl.exe is not on PATH, and vcvars64.bat was not found under $vsInstall."
+            }
+        } else {
+            Write-Check "MSVC cl.exe is not on PATH; run from an x64 Native Tools prompt or call vcvars64.bat."
+        }
     } else {
         Write-Check "Visual Studio Build Tools were not detected via vswhere."
     }

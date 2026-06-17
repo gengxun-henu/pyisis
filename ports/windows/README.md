@@ -39,7 +39,9 @@ Check that the shell is ready before configuring anything:
 ```
 
 If `cl.exe` is missing, run these scripts from an x64 Native Tools prompt or
-call Visual Studio's `vcvars64.bat` before continuing.
+call Visual Studio's `vcvars64.bat` before continuing. The prerequisite checker
+prints the detected `vcvars64.bat` path when Visual Studio Build Tools are
+installed but not active in the current shell.
 
 ## Stage 1: ISIS Prefix
 

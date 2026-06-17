@@ -32,6 +32,15 @@ conda env create -f ports\windows\env\pyisis-isis-win64.yml
 conda activate pyisis-isis-win64
 ```
 
+Check that the shell is ready before configuring anything:
+
+```powershell
+.\ports\windows\check_prereqs.ps1
+```
+
+If `cl.exe` is missing, run these scripts from an x64 Native Tools prompt or
+call Visual Studio's `vcvars64.bat` before continuing.
+
 ## Stage 1: ISIS Prefix
 
 ```powershell

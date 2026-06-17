@@ -306,7 +306,7 @@ Create `ports/windows/isis/fetch_isis_900.ps1` with this content:
 param(
     [string]$SourceDir,
     [string]$Repository = "https://github.com/DOI-USGS/ISIS3.git",
-    [string]$Ref = "v9.0.0"
+    [string]$Ref = "9.0.0"
 )
 
 . "$PSScriptRoot\common.ps1"

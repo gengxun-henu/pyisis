@@ -1,0 +1,14 @@
+name: pyisis-isis-win64
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - cmake
+  - ninja
+  - git
+  - pybind11
+  - qt-main=5.*
+  - eigen
+  - bullet
+  - cspice
+  - numpy

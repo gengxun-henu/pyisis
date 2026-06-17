@@ -4,6 +4,8 @@ param(
     [string]$Ref = "9.0.0",
     [ValidateSet("archive", "git")]
     [string]$Method = "archive",
+    [ValidateSet("tar.gz", "zip")]
+    [string]$ArchiveFormat = "tar.gz",
     [int]$DownloadTimeoutSeconds = 300,
     [int]$LowSpeedLimitBytesPerSecond = 1024,
     [int]$LowSpeedTimeoutSeconds = 60,
@@ -40,8 +42,13 @@ if (Test-Path (Join-Path $SourceDir ".git")) {
     Write-Step "cloning ISIS source to $SourceDir"
     Invoke-CheckedCommand git clone --branch $Ref --single-branch --depth 1 --filter=blob:none $Repository $SourceDir
 } else {
-    $archiveUrl = "https://github.com/DOI-USGS/ISIS3/archive/refs/tags/$Ref.zip"
-    $archivePath = Join-Path $externalDir "ISIS3-$Ref.zip"
+    if ($ArchiveFormat -eq "zip") {
+        $archiveUrl = "https://github.com/DOI-USGS/ISIS3/archive/refs/tags/$Ref.zip"
+        $archivePath = Join-Path $externalDir "ISIS3-$Ref.zip"
+    } else {
+        $archiveUrl = "https://github.com/DOI-USGS/ISIS3/archive/refs/tags/$Ref.tar.gz"
+        $archivePath = Join-Path $externalDir "ISIS3-$Ref.tar.gz"
+    }
     $extractDir = Join-Path $externalDir "ISIS3-$Ref-extract"
     $extractedSourceDir = Join-Path $extractDir "ISIS3-$Ref"
 
@@ -73,7 +80,13 @@ if (Test-Path (Join-Path $SourceDir ".git")) {
     }
 
     Write-Step "expanding ISIS source archive"
-    Expand-Archive -LiteralPath $archivePath -DestinationPath $extractDir
+    if ($ArchiveFormat -eq "zip") {
+        Expand-Archive -LiteralPath $archivePath -DestinationPath $extractDir
+    } else {
+        Require-Command tar
+        New-Item -ItemType Directory -Path $extractDir | Out-Null
+        Invoke-CheckedCommand tar -xzf $archivePath -C $extractDir
+    }
     if (-not (Test-Path $extractedSourceDir)) {
         Fail "expected extracted source directory not found: $extractedSourceDir"
     }

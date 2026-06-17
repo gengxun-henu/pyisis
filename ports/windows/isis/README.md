@@ -9,6 +9,8 @@ defaults to the GitHub tag archive because it is more reliable on Windows
 networks than a large shallow clone; `fetch_isis_900.ps1 -Method git` remains
 available when direct Git traffic is preferred. Archive downloads prefer
 `curl.exe` when available and fall back to PowerShell's `Invoke-WebRequest`.
+The default archive format is `tar.gz` because it is usually smaller than the
+GitHub zip archive; pass `-ArchiveFormat zip` to use zip extraction instead.
 The archive path supports `-DownloadTimeoutSeconds`, `-DownloadRetries`,
 `-LowSpeedLimitBytesPerSecond`, and `-LowSpeedTimeoutSeconds` so slow network
 failures are reported at the fetch layer instead of hanging silently.

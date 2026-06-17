@@ -61,10 +61,11 @@ session with:
 .\ports\windows\isis\verify_isis_prefix.ps1
 ```
 
-`fetch_isis_900.ps1` defaults to downloading the `9.0.0` source archive and
-initializing a local git worktree for patch application. Use
-`-Method git` only when a direct shallow clone is preferred and the network is
-stable enough for GitHub clone traffic.
+`fetch_isis_900.ps1` defaults to downloading the `9.0.0` `tar.gz` source
+archive and initializing a local git worktree for patch application. Use
+`-ArchiveFormat zip` when a zip archive is preferred. Use `-Method git` only
+when a direct shallow clone is preferred and the network is stable enough for
+GitHub clone traffic.
 
 ## Stage 2: pyisis
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.18)
 
-if(NOT DEFINED CMAKE_CXX_COMPILER AND DEFINED ENV{CONDA_PREFIX})
+if(NOT WIN32 AND NOT DEFINED CMAKE_CXX_COMPILER AND DEFINED ENV{CONDA_PREFIX})
   find_program(CONDA_CXX_COMPILER
     NAMES x86_64-conda-linux-gnu-c++
     HINTS
@@ -34,10 +34,27 @@ endif()
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
 find_package(pybind11 CONFIG REQUIRED)
 
+function(pyisis_first_existing_path out_var)
+  foreach(candidate IN LISTS ARGN)
+    if(candidate AND EXISTS "${candidate}")
+      set(${out_var} "${candidate}" PARENT_SCOPE)
+      return()
+    endif()
+  endforeach()
+  set(${out_var} "" PARENT_SCOPE)
+endfunction()
+
 set(ISIS_PREFIX "$ENV{ISIS_PREFIX}" CACHE PATH "Prefix of an external ISIS installation or conda environment")
 if(NOT ISIS_PREFIX AND DEFINED ENV{CONDA_PREFIX})
-  if(EXISTS "$ENV{CONDA_PREFIX}/include/isis" AND EXISTS "$ENV{CONDA_PREFIX}/lib/libisis.so")
-    set(ISIS_PREFIX "$ENV{CONDA_PREFIX}" CACHE PATH "Prefix of an external ISIS installation or conda environment" FORCE)
+  if(WIN32)
+    if((EXISTS "$ENV{CONDA_PREFIX}/Library/include/isis" OR EXISTS "$ENV{CONDA_PREFIX}/include/isis")
+       AND (EXISTS "$ENV{CONDA_PREFIX}/Library/lib/isis.lib" OR EXISTS "$ENV{CONDA_PREFIX}/lib/isis.lib"))
+      set(ISIS_PREFIX "$ENV{CONDA_PREFIX}" CACHE PATH "Prefix of an external ISIS installation or conda environment" FORCE)
+    endif()
+  else()
+    if(EXISTS "$ENV{CONDA_PREFIX}/include/isis" AND EXISTS "$ENV{CONDA_PREFIX}/lib/libisis.so")
+      set(ISIS_PREFIX "$ENV{CONDA_PREFIX}" CACHE PATH "Prefix of an external ISIS installation or conda environment" FORCE)
+    endif()
   endif()
 endif()
 
@@ -45,7 +62,13 @@ if(NOT ISIS_PREFIX)
   message(FATAL_ERROR "ISIS_PREFIX is not set. Point it to the external ISIS installation (for example the asp360_new conda environment).")
 endif()
 
-set(_qt5_cmake_root "${ISIS_PREFIX}/lib/cmake")
+if(WIN32)
+  pyisis_first_existing_path(_qt5_cmake_root
+    "${ISIS_PREFIX}/Library/lib/cmake"
+    "${ISIS_PREFIX}/lib/cmake")
+else()
+  set(_qt5_cmake_root "${ISIS_PREFIX}/lib/cmake")
+endif()
 set(_qt5_config_dir "${_qt5_cmake_root}/Qt5")
 if(EXISTS "${_qt5_config_dir}/Qt5Config.cmake")
   set(Qt5_DIR "${_qt5_config_dir}" CACHE PATH
@@ -64,11 +87,39 @@ endif()
 
 find_package(Qt5 CONFIG REQUIRED COMPONENTS Core Concurrent Xml Widgets)
 
-set(ISIS_INCLUDE_DIR "${ISIS_PREFIX}/include/isis" CACHE PATH "Directory containing ISIS headers")
-set(ISIS_DEP_INCLUDE_DIR "${ISIS_PREFIX}/include" CACHE PATH "Directory containing external ISIS dependencies such as CSPICE and Qt headers")
-set(ISIS_LIBRARY_DIR "${ISIS_PREFIX}/lib" CACHE PATH "Directory containing ISIS shared libraries")
-set(ISIS_CORE_LIBRARY "${ISIS_LIBRARY_DIR}/libisis.so" CACHE FILEPATH "Path to libisis shared library")
-set(ISIS_PLUGIN_FILE "${ISIS_LIBRARY_DIR}/Camera.plugin" CACHE FILEPATH "Path to Camera.plugin")
+if(WIN32)
+  pyisis_first_existing_path(_default_isis_include_dir
+    "${ISIS_PREFIX}/Library/include/isis"
+    "${ISIS_PREFIX}/include/isis")
+  pyisis_first_existing_path(_default_isis_dep_include_dir
+    "${ISIS_PREFIX}/Library/include"
+    "${ISIS_PREFIX}/include")
+  pyisis_first_existing_path(_default_isis_library_dir
+    "${ISIS_PREFIX}/Library/lib"
+    "${ISIS_PREFIX}/lib")
+  pyisis_first_existing_path(_default_isis_runtime_dir
+    "${ISIS_PREFIX}/Library/bin"
+    "${ISIS_PREFIX}/bin")
+  pyisis_first_existing_path(_default_isis_core_library
+    "${_default_isis_library_dir}/isis.lib")
+  pyisis_first_existing_path(_default_isis_plugin_file
+    "${_default_isis_library_dir}/Camera.plugin"
+    "${_default_isis_runtime_dir}/Camera.plugin")
+else()
+  set(_default_isis_include_dir "${ISIS_PREFIX}/include/isis")
+  set(_default_isis_dep_include_dir "${ISIS_PREFIX}/include")
+  set(_default_isis_library_dir "${ISIS_PREFIX}/lib")
+  set(_default_isis_runtime_dir "${ISIS_PREFIX}/lib")
+  set(_default_isis_core_library "${_default_isis_library_dir}/libisis.so")
+  set(_default_isis_plugin_file "${_default_isis_library_dir}/Camera.plugin")
+endif()
+
+set(ISIS_INCLUDE_DIR "${_default_isis_include_dir}" CACHE PATH "Directory containing ISIS headers")
+set(ISIS_DEP_INCLUDE_DIR "${_default_isis_dep_include_dir}" CACHE PATH "Directory containing external ISIS dependencies such as CSPICE and Qt headers")
+set(ISIS_LIBRARY_DIR "${_default_isis_library_dir}" CACHE PATH "Directory containing ISIS import/shared libraries")
+set(ISIS_RUNTIME_DIR "${_default_isis_runtime_dir}" CACHE PATH "Directory containing ISIS runtime shared libraries")
+set(ISIS_CORE_LIBRARY "${_default_isis_core_library}" CACHE FILEPATH "Path to the ISIS core import/shared library")
+set(ISIS_PLUGIN_FILE "${_default_isis_plugin_file}" CACHE FILEPATH "Path to Camera.plugin")
 set(ISIS_CAMERA_LIBS ""
     CACHE STRING
     "Semicolon-separated extra ISIS camera libraries to link (empty means auto-detect a minimal set)")
@@ -76,7 +127,7 @@ option(ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS
   "Exclude libAsp* and libVw* camera libraries from the extra ISIS camera link set"
   ON)
 
-foreach(required_path IN ITEMS ISIS_INCLUDE_DIR ISIS_DEP_INCLUDE_DIR ISIS_LIBRARY_DIR ISIS_CORE_LIBRARY ISIS_PLUGIN_FILE)
+foreach(required_path IN ITEMS ISIS_INCLUDE_DIR ISIS_DEP_INCLUDE_DIR ISIS_LIBRARY_DIR ISIS_RUNTIME_DIR ISIS_CORE_LIBRARY ISIS_PLUGIN_FILE)
   if(NOT EXISTS "${${required_path}}")
     message(FATAL_ERROR "${required_path} does not exist: ${${required_path}}")
   endif()
@@ -85,14 +136,20 @@ endforeach()
 if(ISIS_CAMERA_LIBS)
   set(ISIS_EXTRA_CAMERA_LIBS ${ISIS_CAMERA_LIBS})
 else()
-  file(GLOB ISIS_EXTRA_CAMERA_LIBS
-       "${ISIS_LIBRARY_DIR}/lib*Camera.so"
-       "${ISIS_LIBRARY_DIR}/libMiniRF.so")
+  if(WIN32)
+    file(GLOB ISIS_EXTRA_CAMERA_LIBS
+         "${ISIS_LIBRARY_DIR}/*Camera.lib"
+         "${ISIS_LIBRARY_DIR}/MiniRF.lib")
+  else()
+    file(GLOB ISIS_EXTRA_CAMERA_LIBS
+         "${ISIS_LIBRARY_DIR}/lib*Camera.so"
+         "${ISIS_LIBRARY_DIR}/libMiniRF.so")
+  endif()
   list(REMOVE_DUPLICATES ISIS_EXTRA_CAMERA_LIBS)
 endif()
 
 if(ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS)
-  list(FILTER ISIS_EXTRA_CAMERA_LIBS EXCLUDE REGEX "/lib(Asp|ASP|Vw|VW)[^/]*$")
+  list(FILTER ISIS_EXTRA_CAMERA_LIBS EXCLUDE REGEX "[/\\\\](lib)?(Asp|ASP|Vw|VW)[^/\\\\]*$")
 endif()
 
 set(ISIS_PROJECTION_LIB_NAMES
@@ -239,17 +296,19 @@ pybind11_add_module(_isis_core
   src/bind_spice_navigation.cpp
   src/bind_camera_factory.cpp)
 
-target_compile_definitions(_isis_core
-  PRIVATE
-    _GNU_SOURCE)
+if(NOT WIN32)
+  target_compile_definitions(_isis_core PRIVATE _GNU_SOURCE)
+endif()
 
-set_source_files_properties(
-  src/base/bind_base_shape.cpp
-  PROPERTIES COMPILE_OPTIONS "-fpermissive")
+if(NOT MSVC)
+  set_source_files_properties(
+    src/base/bind_base_shape.cpp
+    PROPERTIES COMPILE_OPTIONS "-fpermissive")
 
-set_source_files_properties(
-  src/base/bind_base_shape_support.cpp
-  PROPERTIES COMPILE_OPTIONS "-fpermissive")
+  set_source_files_properties(
+    src/base/bind_base_shape_support.cpp
+    PROPERTIES COMPILE_OPTIONS "-fpermissive")
+endif()
 
 target_include_directories(_isis_core
   PRIVATE
@@ -286,17 +345,22 @@ set_target_properties(_isis_core PROPERTIES
   CXX_VISIBILITY_PRESET hidden
   VISIBILITY_INLINES_HIDDEN ON
   LIBRARY_OUTPUT_DIRECTORY "${ISIS_PYBIND_BUILD_PACKAGE_DIR}"
-  BUILD_RPATH "${ISIS_LIBRARY_DIR}"
-  INSTALL_RPATH "${ISIS_LIBRARY_DIR}")
+  RUNTIME_OUTPUT_DIRECTORY "${ISIS_PYBIND_BUILD_PACKAGE_DIR}")
+
+if(NOT WIN32)
+  set_target_properties(_isis_core PROPERTIES
+    BUILD_RPATH "${ISIS_LIBRARY_DIR}"
+    INSTALL_RPATH "${ISIS_LIBRARY_DIR}")
+endif()
 
 add_dependencies(_isis_core sync_python_package_files)
 
 add_executable(isis_cpp_benchmark
   tools/benchmarks/isis_cpp_benchmark.cpp)
 
-target_compile_definitions(isis_cpp_benchmark
-  PRIVATE
-    _GNU_SOURCE)
+if(NOT WIN32)
+  target_compile_definitions(isis_cpp_benchmark PRIVATE _GNU_SOURCE)
+endif()
 
 target_include_directories(isis_cpp_benchmark
   PRIVATE
@@ -321,11 +385,17 @@ target_link_libraries(isis_cpp_benchmark
     Qt5::Core)
 
 set_target_properties(isis_cpp_benchmark PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tools/benchmarks"
-  BUILD_RPATH "${ISIS_LIBRARY_DIR}"
-  INSTALL_RPATH "${ISIS_LIBRARY_DIR}")
+  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tools/benchmarks")
 
-install(TARGETS _isis_core LIBRARY DESTINATION "${Python3_SITEARCH}/${ISIS_PYBIND_PACKAGE_NAME}")
+if(NOT WIN32)
+  set_target_properties(isis_cpp_benchmark PROPERTIES
+    BUILD_RPATH "${ISIS_LIBRARY_DIR}"
+    INSTALL_RPATH "${ISIS_LIBRARY_DIR}")
+endif()
+
+install(TARGETS _isis_core
+        LIBRARY DESTINATION "${Python3_SITEARCH}/${ISIS_PYBIND_PACKAGE_NAME}"
+        RUNTIME DESTINATION "${Python3_SITEARCH}/${ISIS_PYBIND_PACKAGE_NAME}")
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/python/${ISIS_PYBIND_PACKAGE_NAME}/__init__.py"
         DESTINATION "${Python3_SITELIB}/${ISIS_PYBIND_PACKAGE_NAME}")
 install(FILES "${ISIS_PYBIND_LICENSE_FILE}"
@@ -335,11 +405,6 @@ if(NOT Python3_SITEARCH STREQUAL Python3_SITELIB)
     DESTINATION "${Python3_SITEARCH}/${ISIS_PYBIND_PACKAGE_NAME}")
 endif()
 
-set(_test_ld_library_path "${ISIS_LIBRARY_DIR}")
-if(DEFINED ENV{LD_LIBRARY_PATH} AND NOT "$ENV{LD_LIBRARY_PATH}" STREQUAL "")
-  set(_test_ld_library_path "${_test_ld_library_path}:$ENV{LD_LIBRARY_PATH}")
-endif()
-
 add_test(
   NAME python-unit-tests
   COMMAND "${Python3_EXECUTABLE}" -m unittest discover
@@ -347,16 +412,36 @@ add_test(
     -p "*_unit_test.py"
   WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}")
 
+if(WIN32)
+  set(_test_path "${ISIS_RUNTIME_DIR}")
+  if(DEFINED ENV{PATH} AND NOT "$ENV{PATH}" STREQUAL "")
+    set(_test_path "${_test_path};$ENV{PATH}")
+  endif()
+  string(REPLACE ";" "\\;" _test_path_escaped "${_test_path}")
+  set(_python_test_environment
+      "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python"
+      "PATH=${_test_path_escaped}"
+      "ISISDATA=${CMAKE_CURRENT_SOURCE_DIR}/tests/data/isisdata/mockup")
+else()
+  set(_test_ld_library_path "${ISIS_LIBRARY_DIR}")
+  if(DEFINED ENV{LD_LIBRARY_PATH} AND NOT "$ENV{LD_LIBRARY_PATH}" STREQUAL "")
+    set(_test_ld_library_path "${_test_ld_library_path}:$ENV{LD_LIBRARY_PATH}")
+  endif()
+  set(_python_test_environment
+      "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python"
+      "LD_LIBRARY_PATH=${_test_ld_library_path}"
+      "ISISDATA=${CMAKE_CURRENT_SOURCE_DIR}/tests/data/isisdata/mockup")
+endif()
+
 set_tests_properties(python-unit-tests PROPERTIES
-  ENVIRONMENT
-    "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python"
-    "LD_LIBRARY_PATH=${_test_ld_library_path}"
-    "ISISDATA=${CMAKE_CURRENT_SOURCE_DIR}/tests/data/isisdata/mockup")
+  ENVIRONMENT "${_python_test_environment}")
 
   
 message(STATUS "Using external ISIS prefix: ${ISIS_PREFIX}")
 message(STATUS "Using ISIS include dir: ${ISIS_INCLUDE_DIR}")
 message(STATUS "Using ISIS dependency include dir: ${ISIS_DEP_INCLUDE_DIR}")
+message(STATUS "Using ISIS library dir: ${ISIS_LIBRARY_DIR}")
+message(STATUS "Using ISIS runtime dir: ${ISIS_RUNTIME_DIR}")
 message(STATUS "Using ISIS core library: ${ISIS_CORE_LIBRARY}")
 message(STATUS "Using extra camera libs: ${ISIS_EXTRA_CAMERA_LIBS}")
 message(STATUS "Exclude ASP/VW camera libs: ${ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS}")

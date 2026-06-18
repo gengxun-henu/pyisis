@@ -11,7 +11,11 @@ except ImportError:
     _configure_pyisis_runtime = None
 
 if _configure_pyisis_runtime is not None:
-    _configure_pyisis_runtime()
+    try:
+        _configure_pyisis_runtime()
+    except Exception:
+        # Runtime package discovery is optional; keep explicit user envs usable.
+        pass
 
 from ._isis_core import (
     Angle,

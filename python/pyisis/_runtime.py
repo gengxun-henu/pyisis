@@ -79,7 +79,7 @@ def _register_windows_dll_directories(paths: list[str]) -> None:
         return
 
     for path_text in paths:
-        key = path_text.lower()
+        key = os.path.normcase(os.path.normpath(path_text))
         if key in _REGISTERED_DLL_DIRECTORIES:
             continue
         try:
@@ -93,15 +93,20 @@ def _register_windows_dll_directories(paths: list[str]) -> None:
 def configure_runtime(*, register_dll_directories: bool = True) -> RuntimeDiscovery:
     """Configure environment variables and DLL lookup for the best available runtime."""
 
-    runtime = _runtime_module()
-    packaged_prefix = (
-        _path_text(runtime.prefix()) if runtime and hasattr(runtime, "prefix") else None
-    )
-    prefix_candidate = os.environ.get("ISIS_PREFIX") or os.environ.get("ISISROOT") or packaged_prefix
+    explicit_prefix = os.environ.get("ISIS_PREFIX") or os.environ.get("ISISROOT")
+    runtime = None
+    packaged_prefix = None
+    if explicit_prefix is None:
+        runtime = _runtime_module()
+        packaged_prefix = (
+            _path_text(runtime.prefix()) if runtime and hasattr(runtime, "prefix") else None
+        )
+    prefix_candidate = explicit_prefix or packaged_prefix
 
     isis_prefix = _setdefault_path_env("ISIS_PREFIX", prefix_candidate)
     isisroot = _setdefault_path_env("ISISROOT", isis_prefix or prefix_candidate)
-    isisdata = _setdefault_path_env("ISISDATA", _minimal_data_path())
+    minimal_data = None if os.environ.get("ISISDATA") else _minimal_data_path()
+    isisdata = _setdefault_path_env("ISISDATA", minimal_data)
 
     dll_directories = []
     if runtime and hasattr(runtime, "dll_directories"):

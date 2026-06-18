@@ -7,6 +7,8 @@ Last Modified: 2026-06-18
 Updated: 2026-06-18  Geng Xun added CMake wheel staging coverage for scikit-build-core.
 Updated: 2026-06-18  Geng Xun added packaging license metadata coverage for wheel builds.
 Updated: 2026-06-18  Geng Xun raised scikit-build-core coverage for PEP 639 license metadata.
+Updated: 2026-06-18  Geng Xun added CMake install coverage for the pyisis runtime helper.
+Updated: 2026-06-18  Geng Xun prevented cached scikit-build wheel install paths.
 """
 
 import tomllib
@@ -102,9 +104,23 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
 
         self.assertIn("if(SKBUILD)", cmake_lists)
-        self.assertIn("SKBUILD_PLATLIB_DIR", cmake_lists)
-        self.assertIn("PYISIS_INSTALL_SITELIB", cmake_lists)
-        self.assertIn("PYISIS_INSTALL_SITEARCH", cmake_lists)
+        self.assertIn('set(PYISIS_INSTALL_SITELIB ".")', cmake_lists)
+        self.assertIn('set(PYISIS_INSTALL_SITEARCH ".")', cmake_lists)
+        self.assertIn(
+            'set(PYISIS_INSTALL_SITELIB "${PYISIS_DEFAULT_SITELIB}" CACHE PATH',
+            cmake_lists,
+        )
+        self.assertIn(
+            'set(PYISIS_INSTALL_SITEARCH "${PYISIS_DEFAULT_SITEARCH}" CACHE PATH',
+            cmake_lists,
+        )
+
+    def test_cmake_installs_pyisis_runtime_helper(self):
+        cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
+
+        self.assertIn("PYISIS_FACADE_SOURCE_RUNTIME_FILE", cmake_lists)
+        self.assertIn("PYISIS_FACADE_BUILD_RUNTIME_FILE", cmake_lists)
+        self.assertIn("_runtime.py", cmake_lists)
 
 
 if __name__ == "__main__":

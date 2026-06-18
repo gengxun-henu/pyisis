@@ -3,50 +3,15 @@
 # Copyright (c) 2026 Geng Xun, Henan University
 # SPDX-License-Identifier: MIT
 
-import os
-from pathlib import Path
-
 __version__ = "1.2.0"
 
-_DLL_DIRECTORY_HANDLES = []
+try:
+    from pyisis._runtime import configure_runtime as _configure_pyisis_runtime
+except ImportError:
+    _configure_pyisis_runtime = None
 
-
-def _existing_windows_prefixes():
-    seen = set()
-    for name in ("ISISROOT", "ISIS_PREFIX", "CONDA_PREFIX"):
-        value = os.environ.get(name)
-        if not value:
-            continue
-        path = Path(value)
-        key = str(path).lower()
-        if key in seen or not path.exists():
-            continue
-        seen.add(key)
-        yield path
-
-
-def _configure_windows_runtime():
-    if os.name != "nt":
-        return
-
-    if not os.environ.get("ISISROOT"):
-        isis_prefix = os.environ.get("ISIS_PREFIX")
-        if isis_prefix:
-            os.environ["ISISROOT"] = isis_prefix
-
-    for prefix in _existing_windows_prefixes():
-        for relative in ("Library/bin", "Library/lib", "bin", "lib"):
-            dll_dir = prefix / relative
-            if not dll_dir.exists():
-                continue
-            try:
-                handle = os.add_dll_directory(str(dll_dir))
-            except OSError:
-                continue
-            _DLL_DIRECTORY_HANDLES.append(handle)
-
-
-_configure_windows_runtime()
+if _configure_pyisis_runtime is not None:
+    _configure_pyisis_runtime()
 
 from ._isis_core import (
     Angle,

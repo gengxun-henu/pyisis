@@ -14,10 +14,10 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any, Iterator
 
+from ._runtime import RuntimeDiscovery, configure_runtime
+
 
 _CORE_MODULE: ModuleType | None = None
-_DLL_DIRECTORY_HANDLES: list[Any] = []
-_REGISTERED_DLL_DIRECTORIES: set[str] = set()
 
 
 class PyisisError(RuntimeError):
@@ -78,27 +78,7 @@ def _set_path_env(name: str, value: str | PathLike[str] | None) -> str | None:
 
 
 def _register_windows_dll_directories() -> None:
-    if os.name != "nt":
-        return
-
-    for env_name in ("ISISROOT", "ISIS_PREFIX", "CONDA_PREFIX"):
-        prefix_text = os.environ.get(env_name)
-        if not prefix_text:
-            continue
-        prefix = Path(prefix_text)
-        if not prefix.exists():
-            continue
-        for relative in ("Library/bin", "Library/lib", "bin", "lib"):
-            dll_dir = prefix / relative
-            key = str(dll_dir).lower()
-            if key in _REGISTERED_DLL_DIRECTORIES or not dll_dir.exists():
-                continue
-            try:
-                handle = os.add_dll_directory(str(dll_dir))
-            except OSError:
-                continue
-            _REGISTERED_DLL_DIRECTORIES.add(key)
-            _DLL_DIRECTORY_HANDLES.append(handle)
+    configure_runtime(register_dll_directories=True)
 
 
 def configure(
@@ -117,12 +97,12 @@ def configure(
     resolved_isisdata = _set_path_env("ISISDATA", isisdata)
     resolved_conda_prefix = _set_path_env("CONDA_PREFIX", conda_prefix)
 
-    _register_windows_dll_directories()
+    runtime = configure_runtime(register_dll_directories=True)
 
     return RuntimeConfig(
-        isis_prefix=resolved_isis_prefix,
-        isisroot=resolved_isisroot,
-        isisdata=resolved_isisdata,
+        isis_prefix=runtime.isis_prefix or resolved_isis_prefix,
+        isisroot=runtime.isisroot or resolved_isisroot,
+        isisdata=runtime.isisdata or resolved_isisdata,
         conda_prefix=resolved_conda_prefix,
     )
 
@@ -340,7 +320,9 @@ __all__ = [
     "IsisDataStatus",
     "PyisisError",
     "RuntimeConfig",
+    "RuntimeDiscovery",
     "configure",
+    "configure_runtime",
     "core",
     "cube_dimensions",
     "data_status",

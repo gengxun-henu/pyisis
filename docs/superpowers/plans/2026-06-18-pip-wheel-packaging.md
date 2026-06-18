@@ -223,9 +223,16 @@ Append these test methods to `PythonPackagingUnitTest` in `tests/unitTest/python
         cmake_lists = (PROJECT_ROOT / "CMakeLists.txt").read_text(encoding="utf-8")
 
         self.assertIn("if(SKBUILD)", cmake_lists)
-        self.assertIn("SKBUILD_PLATLIB_DIR", cmake_lists)
-        self.assertIn("PYISIS_INSTALL_SITELIB", cmake_lists)
-        self.assertIn("PYISIS_INSTALL_SITEARCH", cmake_lists)
+        self.assertIn('set(PYISIS_INSTALL_SITELIB ".")', cmake_lists)
+        self.assertIn('set(PYISIS_INSTALL_SITEARCH ".")', cmake_lists)
+        self.assertIn(
+            'set(PYISIS_INSTALL_SITELIB "${PYISIS_DEFAULT_SITELIB}" CACHE PATH',
+            cmake_lists,
+        )
+        self.assertIn(
+            'set(PYISIS_INSTALL_SITEARCH "${PYISIS_DEFAULT_SITEARCH}" CACHE PATH',
+            cmake_lists,
+        )
 ```
 
 - [ ] **Step 2: Run the failing CMake packaging tests**
@@ -277,8 +284,8 @@ Replace the current `Python3_SITELIB` / `Python3_SITEARCH` default block in `CMa
 
 ```cmake
 if(SKBUILD)
-  set(PYISIS_DEFAULT_SITELIB "${SKBUILD_PLATLIB_DIR}")
-  set(PYISIS_DEFAULT_SITEARCH "${SKBUILD_PLATLIB_DIR}")
+  set(PYISIS_INSTALL_SITELIB ".")
+  set(PYISIS_INSTALL_SITEARCH ".")
 else()
   if(NOT Python3_SITELIB)
     execute_process(
@@ -296,12 +303,11 @@ else()
 
   set(PYISIS_DEFAULT_SITELIB "${Python3_SITELIB}")
   set(PYISIS_DEFAULT_SITEARCH "${Python3_SITEARCH}")
+  set(PYISIS_INSTALL_SITELIB "${PYISIS_DEFAULT_SITELIB}" CACHE PATH
+    "Python purelib install directory for the pyisis facade package")
+  set(PYISIS_INSTALL_SITEARCH "${PYISIS_DEFAULT_SITEARCH}" CACHE PATH
+    "Python platlib install directory for the compiled isis_pybind package")
 endif()
-
-set(PYISIS_INSTALL_SITELIB "${PYISIS_DEFAULT_SITELIB}" CACHE PATH
-  "Python purelib install directory for the pyisis facade package")
-set(PYISIS_INSTALL_SITEARCH "${PYISIS_DEFAULT_SITEARCH}" CACHE PATH
-  "Python platlib install directory for the compiled isis_pybind package")
 ```
 
 - [ ] **Step 6: Run the focused tests**

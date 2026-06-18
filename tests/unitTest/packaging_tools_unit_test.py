@@ -17,6 +17,7 @@ from unittest import mock
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels.ps1"
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
+PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
 
 
 class PackagingToolsUnitTest(unittest.TestCase):
@@ -104,6 +105,21 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertNotIn("PYTHONPATH", env)
         self.assertNotIn("CONDA_PREFIX", env)
         self.assertEqual(env["PATH"], r"C:\Windows\System32")
+
+    def test_testpypi_publish_script_checks_wheels_before_optional_upload(self):
+        self.assertTrue(PUBLISH_TESTPYPI_SCRIPT.is_file())
+
+        script = PUBLISH_TESTPYPI_SCRIPT.read_text(encoding="utf-8")
+        self.assertIn("twine check", script)
+        self.assertIn("[ValidateSet(\"testpypi\")]", script)
+        self.assertIn('$Repository = "testpypi"', script)
+        self.assertIn("twine upload --repository $Repository", script)
+        self.assertIn("[switch]$Upload", script)
+        self.assertIn("[switch]$CheckOnly", script)
+        self.assertIn("if (-not $Upload)", script)
+        self.assertIn("PSBoundParameters.ContainsKey(\"Wheelhouse\")", script)
+        self.assertIn("ExpectedWheelNames", script)
+        self.assertIn("Upload switch was not set", script)
 
 
 if __name__ == "__main__":

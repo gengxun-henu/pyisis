@@ -1,0 +1,119 @@
+name: wheels
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_isis_app_smoke:
+        description: "Run the optional ISIS CLI smoke test before building wheels"
+        required: false
+        default: false
+        type: boolean
+  pull_request:
+    paths:
+      - "CMakeLists.txt"
+      - "pyproject.toml"
+      - "python/**"
+      - "src/**"
+      - "packaging/**"
+      - "tools/packaging/**"
+      - "ports/windows/**"
+      - "tests/unitTest/*packaging*_unit_test.py"
+      - "tests/unitTest/*runtime*_unit_test.py"
+      - "tests/unitTest/wheel_workflow_unit_test.py"
+      - ".github/workflows/wheels.yml"
+
+concurrency:
+  group: wheels-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows-cp312:
+    name: Build Windows cp312 wheels
+    runs-on: windows-2022
+    timeout-minutes: 360
+    permissions:
+      contents: read
+
+    defaults:
+      run:
+        shell: pwsh
+
+    env:
+      PYISIS_WINDOWS_ISIS_PREFIX: ${{ github.workspace }}\build\windows\isis-prefix
+      WHEELHOUSE: ${{ github.workspace }}\wheelhouse
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python for packaging checks
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Set up Windows ISIS build environment
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-file: ports/windows/env/pyisis-isis-win64.yml
+          cache-environment: true
+          init-shell: powershell
+
+      - name: Resolve Windows dependency prefix
+        run: |
+          $prefix = (& python -c "import sys; print(sys.prefix)").Trim()
+          $env:CONDA_PREFIX = $prefix
+          "CONDA_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "PYISIS_WINDOWS_DEP_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "$prefix" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Scripts" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\mingw-w64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+      - name: Build ISIS 9.0.0 Windows prefix
+        run: |
+          . .\ports\windows\activate_msvc.ps1
+          .\ports\windows\isis\fetch_isis_900.ps1
+          .\ports\windows\isis\apply_patches.ps1
+          .\ports\windows\isis\configure_isis.ps1
+          .\ports\windows\isis\build_isis.ps1
+          .\ports\windows\isis\install_isis.ps1
+          .\ports\windows\isis\verify_isis_prefix.ps1 -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+
+      - name: Run optional ISIS app smoke
+        if: ${{ github.event.inputs.run_isis_app_smoke == 'true' }}
+        run: .\ports\windows\isis\test_isis_apps_smoke.ps1 -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+
+      - name: Build wheelhouse
+        run: |
+          .\tools\packaging\build_wheels.ps1 `
+            -IsisPrefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+            -OutputDir $env:WHEELHOUSE `
+            -PythonExecutable "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" `
+            -DependencyPrefix $env:PYISIS_WINDOWS_DEP_PREFIX
+
+      - name: Test wheel install
+        run: |
+          $venv = Join-Path $env:GITHUB_WORKSPACE "build\packaging\pip-smoke-venv"
+          if (Test-Path -LiteralPath $venv) {
+            Remove-Item -LiteralPath $venv -Recurse -Force
+          }
+          & "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" tools\packaging\test_wheel_install.py `
+            --wheelhouse $env:WHEELHOUSE `
+            --venv $venv
+
+      - name: Check wheel metadata
+        run: |
+          .\tools\packaging\publish_testpypi.ps1 `
+            -Wheelhouse $env:WHEELHOUSE `
+            -PythonExecutable "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" `
+            -CheckOnly
+
+      - name: Upload wheel artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pyisis-windows-cp312-wheels
+          if-no-files-found: error
+          path: wheelhouse/*.whl

@@ -1,0 +1,60 @@
+param(
+    [string]$Wheelhouse = "$PWD\wheelhouse",
+    [string]$PythonExecutable = "python",
+    [ValidateSet("testpypi")]
+    [string]$Repository = "testpypi",
+    [string]$ExpectedVersion = "1.2.0",
+    [switch]$CheckOnly,
+    [switch]$Upload
+)
+
+$ErrorActionPreference = "Stop"
+
+if ($CheckOnly -and $Upload) {
+    throw "Use either -CheckOnly or -Upload, not both."
+}
+
+if ($Upload -and -not $PSBoundParameters.ContainsKey("Wheelhouse")) {
+    throw "Uploading requires an explicit -Wheelhouse path to avoid publishing stale local wheels."
+}
+
+if (-not (Test-Path -LiteralPath $Wheelhouse)) {
+    throw "Wheelhouse not found: $Wheelhouse"
+}
+
+$Wheels = Get-ChildItem -LiteralPath $Wheelhouse -Filter "*.whl" | Sort-Object Name
+if (-not $Wheels) {
+    throw "No wheel files found in: $Wheelhouse"
+}
+
+$ExpectedWheelNames = @(
+    "pyisis-$ExpectedVersion-cp312-cp312-win_amd64.whl",
+    "pyisis_runtime_win64-$ExpectedVersion-py3-none-win_amd64.whl",
+    "pyisis_isisdata_minimal-$ExpectedVersion-py3-none-any.whl"
+)
+$ActualWheelNames = @($Wheels | ForEach-Object { $_.Name })
+$MissingWheelNames = @($ExpectedWheelNames | Where-Object { $_ -notin $ActualWheelNames })
+$UnexpectedWheelNames = @($ActualWheelNames | Where-Object { $_ -notin $ExpectedWheelNames })
+if ($MissingWheelNames -or $UnexpectedWheelNames) {
+    throw (
+        "Wheelhouse does not match expected pyisis $ExpectedVersion wheel set. " +
+        "Missing: $($MissingWheelNames -join ', '); " +
+        "Unexpected: $($UnexpectedWheelNames -join ', ')"
+    )
+}
+$WheelPaths = @($Wheels | ForEach-Object { $_.FullName })
+
+& $PythonExecutable -m pip install -U twine
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+& $PythonExecutable -m twine check @WheelPaths
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+if (-not $Upload) {
+    Write-Host "Upload switch was not set; completed twine check only."
+    $Wheels | ForEach-Object { Write-Host $_.FullName }
+    exit 0
+}
+
+& $PythonExecutable -m twine upload --repository $Repository @WheelPaths
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

@@ -14,7 +14,7 @@ if (-not (Test-Path (Join-Path $SourceDir ".git"))) {
     Fail "ISIS source checkout not found: $SourceDir"
 }
 
-$patches = Get-ChildItem -Path $patchDir -Filter "*.patch" | Sort-Object Name
+$patches = @(Get-ChildItem -Path $patchDir -Filter "*.patch" | Sort-Object Name)
 if ($patches.Count -eq 0) {
     Write-Step "no patch files found in $patchDir"
     exit 0

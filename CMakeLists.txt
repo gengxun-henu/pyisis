@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.18)
 
+if(POLICY CMP0177)
+  cmake_policy(SET CMP0177 NEW)
+endif()
+
 if(NOT WIN32 AND NOT DEFINED CMAKE_CXX_COMPILER AND DEFINED ENV{CONDA_PREFIX})
   find_program(CONDA_CXX_COMPILER
     NAMES x86_64-conda-linux-gnu-c++
@@ -42,6 +46,30 @@ function(pyisis_first_existing_path out_var)
     endif()
   endforeach()
   set(${out_var} "" PARENT_SCOPE)
+endfunction()
+
+function(pyisis_existing_paths out_var)
+  set(existing_paths "")
+  foreach(candidate IN LISTS ARGN)
+    if(candidate AND EXISTS "${candidate}")
+      list(APPEND existing_paths "${candidate}")
+    endif()
+  endforeach()
+  if(existing_paths)
+    list(REMOVE_DUPLICATES existing_paths)
+  endif()
+  set(${out_var} "${existing_paths}" PARENT_SCOPE)
+endfunction()
+
+function(pyisis_first_runtime_dir out_var)
+  foreach(candidate IN LISTS ARGN)
+    if(candidate AND EXISTS "${candidate}/isis.dll")
+      set(${out_var} "${candidate}" PARENT_SCOPE)
+      return()
+    endif()
+  endforeach()
+  pyisis_first_existing_path(existing_runtime_dir ${ARGN})
+  set(${out_var} "${existing_runtime_dir}" PARENT_SCOPE)
 endfunction()
 
 set(ISIS_PREFIX "$ENV{ISIS_PREFIX}" CACHE PATH "Prefix of an external ISIS installation or conda environment")
@@ -92,14 +120,26 @@ if(WIN32)
     "${ISIS_PREFIX}/Library/include/isis"
     "${ISIS_PREFIX}/include/isis")
   pyisis_first_existing_path(_default_isis_dep_include_dir
+    "$ENV{CONDA_PREFIX}/Library/include"
+    "$ENV{CONDA_PREFIX}/include"
+    "${ISIS_PREFIX}/Library/include"
+    "${ISIS_PREFIX}/include")
+  pyisis_existing_paths(_default_isis_dep_include_dirs
+    "$ENV{CONDA_PREFIX}/Library/include"
+    "$ENV{CONDA_PREFIX}/include"
     "${ISIS_PREFIX}/Library/include"
     "${ISIS_PREFIX}/include")
   pyisis_first_existing_path(_default_isis_library_dir
     "${ISIS_PREFIX}/Library/lib"
     "${ISIS_PREFIX}/lib")
-  pyisis_first_existing_path(_default_isis_runtime_dir
+  pyisis_existing_paths(_default_isis_dep_library_dirs
+    "$ENV{CONDA_PREFIX}/Library/lib"
+    "$ENV{CONDA_PREFIX}/lib")
+  pyisis_first_runtime_dir(_default_isis_runtime_dir
     "${ISIS_PREFIX}/Library/bin"
-    "${ISIS_PREFIX}/bin")
+    "${ISIS_PREFIX}/Library/lib"
+    "${ISIS_PREFIX}/bin"
+    "${ISIS_PREFIX}/lib")
   pyisis_first_existing_path(_default_isis_core_library
     "${_default_isis_library_dir}/isis.lib")
   pyisis_first_existing_path(_default_isis_plugin_file
@@ -108,7 +148,9 @@ if(WIN32)
 else()
   set(_default_isis_include_dir "${ISIS_PREFIX}/include/isis")
   set(_default_isis_dep_include_dir "${ISIS_PREFIX}/include")
+  set(_default_isis_dep_include_dirs "${_default_isis_dep_include_dir}")
   set(_default_isis_library_dir "${ISIS_PREFIX}/lib")
+  set(_default_isis_dep_library_dirs "")
   set(_default_isis_runtime_dir "${ISIS_PREFIX}/lib")
   set(_default_isis_core_library "${_default_isis_library_dir}/libisis.so")
   set(_default_isis_plugin_file "${_default_isis_library_dir}/Camera.plugin")
@@ -116,7 +158,9 @@ endif()
 
 set(ISIS_INCLUDE_DIR "${_default_isis_include_dir}" CACHE PATH "Directory containing ISIS headers")
 set(ISIS_DEP_INCLUDE_DIR "${_default_isis_dep_include_dir}" CACHE PATH "Directory containing external ISIS dependencies such as CSPICE and Qt headers")
+set(ISIS_DEP_INCLUDE_DIRS "${_default_isis_dep_include_dirs}" CACHE STRING "Semicolon-separated directories containing external ISIS dependency headers")
 set(ISIS_LIBRARY_DIR "${_default_isis_library_dir}" CACHE PATH "Directory containing ISIS import/shared libraries")
+set(ISIS_DEP_LIBRARY_DIRS "${_default_isis_dep_library_dirs}" CACHE STRING "Semicolon-separated directories containing external ISIS dependency libraries")
 set(ISIS_RUNTIME_DIR "${_default_isis_runtime_dir}" CACHE PATH "Directory containing ISIS runtime shared libraries")
 set(ISIS_CORE_LIBRARY "${_default_isis_core_library}" CACHE FILEPATH "Path to the ISIS core import/shared library")
 set(ISIS_PLUGIN_FILE "${_default_isis_plugin_file}" CACHE FILEPATH "Path to Camera.plugin")
@@ -126,6 +170,24 @@ set(ISIS_CAMERA_LIBS ""
 option(ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS
   "Exclude libAsp* and libVw* camera libraries from the extra ISIS camera link set"
   ON)
+
+set(ISIS_DEP_INCLUDE_SEARCH_DIRS "${ISIS_DEP_INCLUDE_DIR}" ${ISIS_DEP_INCLUDE_DIRS})
+list(REMOVE_DUPLICATES ISIS_DEP_INCLUDE_SEARCH_DIRS)
+
+set(ISIS_DEP_SUBDIR_INCLUDE_DIRS "")
+foreach(dep_include_dir IN LISTS ISIS_DEP_INCLUDE_SEARCH_DIRS)
+  list(APPEND ISIS_DEP_SUBDIR_INCLUDE_DIRS
+    "${dep_include_dir}/csm"
+    "${dep_include_dir}/cspice"
+    "${dep_include_dir}/bullet"
+    "${dep_include_dir}/tnt"
+    "${dep_include_dir}/qt"
+    "${dep_include_dir}/qt/QtCore")
+endforeach()
+list(REMOVE_DUPLICATES ISIS_DEP_SUBDIR_INCLUDE_DIRS)
+
+set(ISIS_DEP_LIBRARY_SEARCH_DIRS "${ISIS_LIBRARY_DIR}" ${ISIS_DEP_LIBRARY_DIRS})
+list(REMOVE_DUPLICATES ISIS_DEP_LIBRARY_SEARCH_DIRS)
 
 foreach(required_path IN ITEMS ISIS_INCLUDE_DIR ISIS_DEP_INCLUDE_DIR ISIS_LIBRARY_DIR ISIS_RUNTIME_DIR ISIS_CORE_LIBRARY ISIS_PLUGIN_FILE)
   if(NOT EXISTS "${${required_path}}")
@@ -150,6 +212,16 @@ endif()
 
 if(ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS)
   list(FILTER ISIS_EXTRA_CAMERA_LIBS EXCLUDE REGEX "[/\\\\](lib)?(Asp|ASP|Vw|VW)[^/\\\\]*$")
+endif()
+
+set(ISIS_EXTRA_MODULE_LIBS "")
+if(WIN32)
+  file(GLOB ISIS_EXTRA_MODULE_LIBS "${ISIS_LIBRARY_DIR}/*.lib")
+  list(FILTER ISIS_EXTRA_MODULE_LIBS EXCLUDE REGEX "[/\\\\]isis\\.lib$")
+  if(ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS)
+    list(FILTER ISIS_EXTRA_MODULE_LIBS EXCLUDE REGEX "[/\\\\](lib)?(Asp|ASP|Vw|VW)[^/\\\\]*$")
+  endif()
+  list(REMOVE_DUPLICATES ISIS_EXTRA_MODULE_LIBS)
 endif()
 
 set(ISIS_PROJECTION_LIB_NAMES
@@ -192,7 +264,7 @@ set(BULLET_RUNTIME_LIBS "")
 foreach(bullet_lib_name IN LISTS BULLET_LIBRARY_NAMES)
   find_library(BULLET_LIB_${bullet_lib_name}
                NAMES ${bullet_lib_name}
-               PATHS "${ISIS_LIBRARY_DIR}"
+               PATHS ${ISIS_DEP_LIBRARY_SEARCH_DIRS}
                NO_DEFAULT_PATH)
   if(BULLET_LIB_${bullet_lib_name})
     list(APPEND BULLET_RUNTIME_LIBS "${BULLET_LIB_${bullet_lib_name}}")
@@ -200,17 +272,67 @@ foreach(bullet_lib_name IN LISTS BULLET_LIBRARY_NAMES)
 endforeach()
 list(REMOVE_DUPLICATES BULLET_RUNTIME_LIBS)
 
+set(ISIS_RUNTIME_DEP_LIB_NAMES
+    ale
+    csmapi
+    geos
+    geos_c
+    gsl
+    gslcblas
+    libprotobuf
+    libprotobuf-lite
+    xerces-c_3)
+
+set(ISIS_RUNTIME_DEP_LIBS "")
+foreach(runtime_dep_lib_name IN LISTS ISIS_RUNTIME_DEP_LIB_NAMES)
+  find_library(ISIS_RUNTIME_DEP_LIB_${runtime_dep_lib_name}
+               NAMES ${runtime_dep_lib_name}
+               PATHS ${ISIS_DEP_LIBRARY_SEARCH_DIRS}
+               NO_DEFAULT_PATH)
+  if(ISIS_RUNTIME_DEP_LIB_${runtime_dep_lib_name})
+    list(APPEND ISIS_RUNTIME_DEP_LIBS "${ISIS_RUNTIME_DEP_LIB_${runtime_dep_lib_name}}")
+  endif()
+endforeach()
+list(REMOVE_DUPLICATES ISIS_RUNTIME_DEP_LIBS)
+
 file(GLOB PCL_INCLUDE_DIRS "${ISIS_DEP_INCLUDE_DIR}/pcl-*")
+foreach(dep_include_dir IN LISTS ISIS_DEP_INCLUDE_SEARCH_DIRS)
+  file(GLOB dep_pcl_include_dirs "${dep_include_dir}/pcl-*")
+  list(APPEND PCL_INCLUDE_DIRS ${dep_pcl_include_dirs})
+endforeach()
 list(REMOVE_DUPLICATES PCL_INCLUDE_DIRS)
+
+find_path(PYISIS_PCL_INCLUDE_DIR
+          NAMES pcl/io/auto_io.h
+          PATHS ${ISIS_DEP_INCLUDE_SEARCH_DIRS} ${PCL_INCLUDE_DIRS}
+          NO_DEFAULT_PATH)
+if(PYISIS_PCL_INCLUDE_DIR)
+  list(APPEND PCL_INCLUDE_DIRS "${PYISIS_PCL_INCLUDE_DIR}")
+  list(REMOVE_DUPLICATES PCL_INCLUDE_DIRS)
+endif()
+
+find_path(PYISIS_EMBREE_INCLUDE_DIR
+          NAMES embree3/rtcore.h
+          PATHS ${ISIS_DEP_INCLUDE_SEARCH_DIRS}
+          NO_DEFAULT_PATH)
+
+set(PYISIS_HAS_EMBREE_SHAPE_MODEL OFF)
+if(PYISIS_PCL_INCLUDE_DIR AND PYISIS_EMBREE_INCLUDE_DIR)
+  set(PYISIS_HAS_EMBREE_SHAPE_MODEL ON)
+endif()
 
 find_path(EIGEN3_INCLUDE_DIR
           NAMES Eigen/StdVector
-          PATHS "${ISIS_DEP_INCLUDE_DIR}/eigen3" "${ISIS_DEP_INCLUDE_DIR}"
+          PATHS ${ISIS_DEP_INCLUDE_SEARCH_DIRS}
+          PATH_SUFFIXES eigen3
           NO_DEFAULT_PATH)
 
 set(ISIS_OPTIONAL_INCLUDE_DIRS ${PCL_INCLUDE_DIRS})
 if(EIGEN3_INCLUDE_DIR)
   list(APPEND ISIS_OPTIONAL_INCLUDE_DIRS "${EIGEN3_INCLUDE_DIR}")
+endif()
+if(PYISIS_EMBREE_INCLUDE_DIR)
+  list(APPEND ISIS_OPTIONAL_INCLUDE_DIRS "${PYISIS_EMBREE_INCLUDE_DIR}")
 endif()
 list(REMOVE_DUPLICATES ISIS_OPTIONAL_INCLUDE_DIRS)
 
@@ -306,6 +428,10 @@ if(NOT WIN32)
   target_compile_definitions(_isis_core PRIVATE _GNU_SOURCE)
 endif()
 
+if(PYISIS_HAS_EMBREE_SHAPE_MODEL)
+  target_compile_definitions(_isis_core PRIVATE PYISIS_HAS_EMBREE_SHAPE_MODEL=1)
+endif()
+
 if(NOT MSVC)
   set_source_files_properties(
     src/base/bind_base_shape.cpp
@@ -320,14 +446,9 @@ target_include_directories(_isis_core
   PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     "${ISIS_INCLUDE_DIR}"
-    "${ISIS_DEP_INCLUDE_DIR}"
-    "${ISIS_DEP_INCLUDE_DIR}/csm"
-    "${ISIS_DEP_INCLUDE_DIR}/cspice"
-    "${ISIS_DEP_INCLUDE_DIR}/bullet"
-    "${ISIS_DEP_INCLUDE_DIR}/tnt"
+    ${ISIS_DEP_INCLUDE_SEARCH_DIRS}
+    ${ISIS_DEP_SUBDIR_INCLUDE_DIRS}
     ${ISIS_OPTIONAL_INCLUDE_DIRS}
-    "${ISIS_DEP_INCLUDE_DIR}/qt"
-    "${ISIS_DEP_INCLUDE_DIR}/qt/QtCore"
     ${Qt5Core_INCLUDE_DIRS}
     ${Qt5Concurrent_INCLUDE_DIRS}
     ${Qt5Xml_INCLUDE_DIRS}
@@ -337,8 +458,10 @@ target_include_directories(_isis_core
 target_link_libraries(_isis_core
   PRIVATE
     "${ISIS_CORE_LIBRARY}"
+    ${ISIS_EXTRA_MODULE_LIBS}
     ${ISIS_EXTRA_CAMERA_LIBS}
     ${ISIS_EXTRA_PROJECTION_LIBS}
+    ${ISIS_RUNTIME_DEP_LIBS}
     ${BULLET_RUNTIME_LIBS}
     Qt5::Core
     Qt5::Concurrent
@@ -370,21 +493,18 @@ endif()
 target_include_directories(isis_cpp_benchmark
   PRIVATE
     "${ISIS_INCLUDE_DIR}"
-    "${ISIS_DEP_INCLUDE_DIR}"
-    "${ISIS_DEP_INCLUDE_DIR}/csm"
-    "${ISIS_DEP_INCLUDE_DIR}/cspice"
-    "${ISIS_DEP_INCLUDE_DIR}/bullet"
-    "${ISIS_DEP_INCLUDE_DIR}/tnt"
+    ${ISIS_DEP_INCLUDE_SEARCH_DIRS}
+    ${ISIS_DEP_SUBDIR_INCLUDE_DIRS}
     ${ISIS_OPTIONAL_INCLUDE_DIRS}
-    "${ISIS_DEP_INCLUDE_DIR}/qt"
-    "${ISIS_DEP_INCLUDE_DIR}/qt/QtCore"
     ${Qt5Core_INCLUDE_DIRS})
 
 target_link_libraries(isis_cpp_benchmark
   PRIVATE
     "${ISIS_CORE_LIBRARY}"
+    ${ISIS_EXTRA_MODULE_LIBS}
     ${ISIS_EXTRA_CAMERA_LIBS}
     ${ISIS_EXTRA_PROJECTION_LIBS}
+    ${ISIS_RUNTIME_DEP_LIBS}
     ${BULLET_RUNTIME_LIBS}
     Qt5::Core)
 
@@ -443,14 +563,19 @@ set_tests_properties(python-unit-tests PROPERTIES
 message(STATUS "Using external ISIS prefix: ${ISIS_PREFIX}")
 message(STATUS "Using ISIS include dir: ${ISIS_INCLUDE_DIR}")
 message(STATUS "Using ISIS dependency include dir: ${ISIS_DEP_INCLUDE_DIR}")
+message(STATUS "Using ISIS dependency include dirs: ${ISIS_DEP_INCLUDE_SEARCH_DIRS}")
 message(STATUS "Using ISIS library dir: ${ISIS_LIBRARY_DIR}")
+message(STATUS "Using ISIS dependency library dirs: ${ISIS_DEP_LIBRARY_SEARCH_DIRS}")
 message(STATUS "Using ISIS runtime dir: ${ISIS_RUNTIME_DIR}")
 message(STATUS "Using ISIS core library: ${ISIS_CORE_LIBRARY}")
 message(STATUS "Using extra camera libs: ${ISIS_EXTRA_CAMERA_LIBS}")
 message(STATUS "Exclude ASP/VW camera libs: ${ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS}")
+message(STATUS "Using extra ISIS module libs: ${ISIS_EXTRA_MODULE_LIBS}")
 message(STATUS "Using extra projection libs: ${ISIS_EXTRA_PROJECTION_LIBS}")
+message(STATUS "Using ISIS runtime dependency libs: ${ISIS_RUNTIME_DEP_LIBS}")
 message(STATUS "Using Bullet runtime libs: ${BULLET_RUNTIME_LIBS}")
 message(STATUS "Using PCL include dirs: ${PCL_INCLUDE_DIRS}")
+message(STATUS "Using Embree shape bindings: ${PYISIS_HAS_EMBREE_SHAPE_MODEL}")
 message(STATUS "Using Eigen include dir: ${EIGEN3_INCLUDE_DIR}")
 message(STATUS "Using optional include dirs: ${ISIS_OPTIONAL_INCLUDE_DIRS}")
 message(STATUS "Using Qt5 config dir: ${Qt5_DIR}")

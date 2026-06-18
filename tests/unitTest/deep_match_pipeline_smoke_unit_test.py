@@ -2,13 +2,16 @@
 
 Author: Geng Xun
 Created: 2026-05-20
-Last Modified: 2026-05-20
+Last Modified: 2026-06-18
 Updated: 2026-05-20  Geng Xun added stage-8 smoke coverage for deep-match mode documentation and import-summary wrapper structure.
+Updated: 2026-06-18  Geng Xun skipped shell wrapper execution when only WSL bash is available on Windows.
 """
 
 from __future__ import annotations
 
 import json
+import os
+import shutil
 import subprocess
 import sys
 import textwrap
@@ -27,6 +30,14 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 RUN_IMAGE_MATCH_BATCH_EXAMPLE_PATH = PROJECT_ROOT / "examples" / "controlnet_construct" / "run_image_match_batch_example.sh"
 PRESETS_README_PATH = PROJECT_ROOT / "examples" / "controlnet_construct" / "PRESETS_README.md"
 README_ZH_PATH = PROJECT_ROOT / "README.zh-CN.md"
+
+
+def _require_native_bash_for_windows_paths(test_case: unittest.TestCase) -> None:
+    bash_path = shutil.which("bash")
+    if bash_path is None:
+        test_case.skipTest("bash is unavailable in PATH.")
+    if os.name == "nt" and Path(bash_path).resolve().as_posix().lower().endswith("/windows/system32/bash.exe"):
+        test_case.skipTest("WSL bash cannot execute this native Windows-path shell wrapper test.")
 
 
 def _embedded_python_script(source: str) -> str:
@@ -63,6 +74,7 @@ class DeepMatchPipelineSmokeUnitTest(unittest.TestCase):
         self.assertIn("PRESETS_README.md", content)
 
     def test_batch_wrapper_import_mode_writes_manifest_summary_structure(self):
+        _require_native_bash_for_windows_paths(self)
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
             manifest_dir = temp_dir / "imported_manifests"

@@ -23,6 +23,21 @@ function Require-Command {
     }
 }
 
+function Get-DefaultPythonExecutable {
+    if ($env:CONDA_PREFIX) {
+        $condaPython = Join-Path $env:CONDA_PREFIX "python.exe"
+        if (Test-Path $condaPython) {
+            return (Resolve-Path $condaPython).Path
+        }
+    }
+
+    $pythonCommand = Get-Command python -ErrorAction SilentlyContinue
+    if (-not $pythonCommand) {
+        Fail "required command not found: python"
+    }
+    return $pythonCommand.Source
+}
+
 function Invoke-CheckedCommand {
     param(
         [Parameter(Mandatory = $true)][string]$FilePath,
@@ -69,7 +84,9 @@ function Get-IsisRuntimeDirs {
     param([Parameter(Mandatory = $true)][string]$IsisPrefix)
     $runtimeCandidates = @(
         (Join-Path $IsisPrefix "Library\bin")
+        (Join-Path $IsisPrefix "Library\lib")
         (Join-Path $IsisPrefix "bin")
+        (Join-Path $IsisPrefix "lib")
     )
     return @($runtimeCandidates | Where-Object { Test-Path $_ })
 }
@@ -92,6 +109,8 @@ function Set-PyisisTestEnvironment {
     )
     $repoRoot = Get-RepoRoot
     $env:PYTHONPATH = "$BuildDir\python;$repoRoot\tests\unitTest"
+    $env:ISIS_PREFIX = $IsisPrefix
+    $env:ISISROOT = $IsisPrefix
     $env:ISISDATA = "$repoRoot\tests\data\isisdata\mockup"
     Add-IsisRuntimePath -IsisPrefix $IsisPrefix
 }

@@ -3,8 +3,9 @@ Shared helpers for ISIS pybind unit tests.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-03-28
+Last Modified: 2026-06-18
 Updated: 2026-03-28  Geng Xun added shared test environment bootstrap helpers for ISISDATA, build-directory resolution, and reusable fixture factories.
+Updated: 2026-06-18  Geng Xun added temporary cube cleanup before directory removal on Windows.
 """
 
 import os
@@ -25,6 +26,7 @@ BUILD_PYTHON_DIR = Path(
 )
 #WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT.parent / "isis" / "tests" / "data" / "isisdata" / "mockup"
 WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT / "tests" / "data" / "isisdata" / "mockup"
+_TEMPORARY_DIRECTORY_STACK = []
 
 
 def _has_leap_second_kernels(data_root):
@@ -66,7 +68,14 @@ DISPLACEMENT_PIXELS = ip.Displacement.Units.Pixels
 @contextmanager
 def temporary_directory():
         with tempfile.TemporaryDirectory() as temp_dir:
-                yield Path(temp_dir)
+                temp_path = Path(temp_dir)
+                _TEMPORARY_DIRECTORY_STACK.append({"path": temp_path.resolve(), "cubes": []})
+                try:
+                        yield temp_path
+                finally:
+                        scope = _TEMPORARY_DIRECTORY_STACK.pop()
+                        for cube in reversed(scope["cubes"]):
+                                close_cube_quietly(cube)
 
 
 @contextmanager
@@ -597,6 +606,25 @@ def close_cube_quietly(cube, remove=False):
         pass
 
 
+def _is_relative_to(path, parent):
+    try:
+        path.relative_to(parent)
+        return True
+    except ValueError:
+        return False
+
+
+def _register_temp_cube(cube, cube_path):
+    if not _TEMPORARY_DIRECTORY_STACK:
+        return
+
+    resolved_path = Path(cube_path).resolve()
+    for scope in reversed(_TEMPORARY_DIRECTORY_STACK):
+        if _is_relative_to(resolved_path, scope["path"]):
+            scope["cubes"].append(cube)
+            return
+
+
 def make_test_cube(
     temp_dir,
     name="test.cub",
@@ -631,6 +659,7 @@ def make_test_cube(
         cube.set_base_multiplier(base, multiplier)
 
     cube.create(str(cube_path))
+    _register_temp_cube(cube, cube_path)
     return cube, cube_path
 
 
@@ -643,6 +672,7 @@ def make_closed_test_cube(temp_dir, **kwargs):
 def open_cube(path, access="r"):
     cube = ip.Cube()
     cube.open(str(path), access)
+    _register_temp_cube(cube, path)
     return cube
 
 

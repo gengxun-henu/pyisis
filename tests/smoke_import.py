@@ -74,6 +74,16 @@ HAS_ADVANCED_BUNDLE_BINDINGS = all(
     )
 )
 
+EMBREE_BINDING_NAMES = (
+    "EmbreeTargetShape",
+    "EmbreeTargetManager",
+    "EmbreeShapeModel",
+)
+MISSING_EMBREE_BINDINGS = [
+    name for name in EMBREE_BINDING_NAMES if not hasattr(ip, name)
+]
+HAS_EMBREE_BINDINGS = not MISSING_EMBREE_BINDINGS
+
 
 @contextmanager
 def temporary_raw_input_file(name="example.raw"):
@@ -304,15 +314,19 @@ def test_basic_symbols_present():
     assert hasattr(ip, "AbstractPlate")
     assert hasattr(ip, "TriangularPlate")
     assert hasattr(ip, "NaifDskPlateModel")
-    assert hasattr(ip, "EmbreeTargetShape")
-    assert hasattr(ip, "EmbreeTargetManager")
+    if HAS_EMBREE_BINDINGS:
+        assert hasattr(ip, "EmbreeTargetShape")
+        assert hasattr(ip, "EmbreeTargetManager")
+    else:
+        assert set(MISSING_EMBREE_BINDINGS) == set(EMBREE_BINDING_NAMES)
     assert hasattr(ip, "BulletTargetShape")
     assert hasattr(ip, "BulletWorldManager")
     assert hasattr(ip, "EllipsoidShape")
     assert hasattr(ip, "DemShape")
     assert hasattr(ip, "PlaneShape")
     assert hasattr(ip, "NaifDskShape")
-    assert hasattr(ip, "EmbreeShapeModel")
+    if HAS_EMBREE_BINDINGS:
+        assert hasattr(ip, "EmbreeShapeModel")
     assert hasattr(ip, "BulletShapeModel")
     assert hasattr(ip, "LineScanCameraDetectorMap")
     assert hasattr(ip, "LineScanCameraGroundMap")
@@ -908,11 +922,12 @@ def test_shape_bindings_work():
     assert naif_shape.name() == "DSK"
     assert not naif_shape.is_dem()
 
-    embree_shape = ip.EmbreeShapeModel()
-    assert embree_shape.name() == "Embree"
-    assert not embree_shape.is_dem()
-    embree_shape.set_tolerance(0.25)
-    assert embree_shape.get_tolerance() == 0.25
+    if HAS_EMBREE_BINDINGS:
+        embree_shape = ip.EmbreeShapeModel()
+        assert embree_shape.name() == "Embree"
+        assert not embree_shape.is_dem()
+        embree_shape.set_tolerance(0.25)
+        assert embree_shape.get_tolerance() == 0.25
 
     bullet_shape = ip.BulletShapeModel()
     assert bullet_shape.name() == "Bullet"
@@ -985,17 +1000,18 @@ def test_lower_level_shape_support_bindings_work():
     assert dsk_model.number_plates() == 0
     assert dsk_model.number_vertices() == 0
 
-    embree_target_shape = ip.EmbreeTargetShape()
-    assert not embree_target_shape.is_valid()
-    assert embree_target_shape.number_of_polygons() == 0
-    assert embree_target_shape.number_of_vertices() == 0
+    if HAS_EMBREE_BINDINGS:
+        embree_target_shape = ip.EmbreeTargetShape()
+        assert not embree_target_shape.is_valid()
+        assert embree_target_shape.number_of_polygons() == 0
+        assert embree_target_shape.number_of_vertices() == 0
 
-    embree_manager = ip.EmbreeTargetManager.instance()
-    original_max_cache_size = embree_manager.max_cache_size()
-    embree_manager.set_max_cache_size(3)
-    assert embree_manager.max_cache_size() == 3
-    assert embree_manager.current_cache_size() >= 0
-    embree_manager.set_max_cache_size(original_max_cache_size)
+        embree_manager = ip.EmbreeTargetManager.instance()
+        original_max_cache_size = embree_manager.max_cache_size()
+        embree_manager.set_max_cache_size(3)
+        assert embree_manager.max_cache_size() == 3
+        assert embree_manager.current_cache_size() >= 0
+        embree_manager.set_max_cache_size(original_max_cache_size)
 
     bullet_target_shape = ip.BulletTargetShape()
     assert bullet_target_shape.name() == ""

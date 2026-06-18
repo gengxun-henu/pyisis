@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-04-08  Geng Xun added Intercept constructor binding that clones shape/point inputs for safe ownership
+// Updated: 2026-06-18  Geng Xun made Embree target-shape support conditional on available PCL/Embree headers for Windows builds.
 // Purpose: pybind11 bindings for ISIS plate geometry, intercept results, and target-shape support utilities used by shape-model workflows
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -16,8 +17,10 @@
 #include "AbstractPlate.h"
 #include "BulletTargetShape.h"
 #include "BulletWorldManager.h"
+#ifdef PYISIS_HAS_EMBREE_SHAPE_MODEL
 #include "EmbreeTargetManager.h"
 #include "EmbreeTargetShape.h"
+#endif
 #include "Intercept.h"
 #include "Latitude.h"
 #include "Longitude.h"
@@ -315,6 +318,7 @@ void bind_base_shape_support(py::module_ &m) {
 					 },
 					 py::arg("plate_id"));
 
+#ifdef PYISIS_HAS_EMBREE_SHAPE_MODEL
 	py::class_<Isis::EmbreeTargetShape>(m, "EmbreeTargetShape")
 			.def(py::init<>())
 			.def("name", [](const Isis::EmbreeTargetShape &self) { return qStringToStdString(self.name()); })
@@ -348,6 +352,7 @@ void bind_base_shape_support(py::module_ &m) {
 					 },
 					 py::arg("shape_file"))
 			.def("set_max_cache_size", &Isis::EmbreeTargetManager::setMaxCacheSize, py::arg("num_shapes"));
+#endif
 
 	py::class_<Isis::BulletTargetShape>(m, "BulletTargetShape")
 			.def(py::init<>())

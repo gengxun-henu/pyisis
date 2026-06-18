@@ -1,4 +1,10 @@
-"""Unit tests for adaptive fast pipeline summary and runner packaging."""
+"""Unit tests for adaptive fast pipeline summary and runner packaging.
+
+Author: Geng Xun
+Created: 2026-05-27
+Last Modified: 2026-06-18
+Updated: 2026-06-18  Geng Xun made adaptive-fast summary fixtures portable on Windows.
+"""
 
 from __future__ import annotations
 
@@ -88,8 +94,9 @@ def _write_synthetic_pipeline_output(root: Path) -> None:
         },
     )
     _write_json(
-        root / "match_results" / "PAIR|B.json",
+        root / "match_results" / "PAIR_B.json",
         {
+            "pair": "PAIR|B",
             "status": "success",
             "point_count": 7,
             "adaptive_routing_profile": "balanced",
@@ -131,7 +138,7 @@ class AdaptiveFastSummaryUnitTest(unittest.TestCase):
             self.assertTrue(markdown_output.exists())
             payload = json.loads(json_output.read_text(encoding="utf-8"))
             self.assertEqual(payload["controlnet_batch"]["total_final_control_point_count"], 17)
-            self.assertEqual(payload["merged_net"]["size_bytes"], len("synthetic net\n"))
+            self.assertEqual(payload["merged_net"]["size_bytes"], (root / "merge" / "dom_matching_merged.net").stat().st_size)
             markdown_text = markdown_output.read_text(encoding="utf-8")
             self.assertIn("# Adaptive Fast Pipeline Summary", markdown_text)
             self.assertIn("| PAIR_A | 10 | sift -> flann | 0.125 | 0.25 |", markdown_text)
@@ -182,6 +189,8 @@ class AdaptiveFastSummaryUnitTest(unittest.TestCase):
 class AdaptiveFastRunnerPackagingUnitTest(unittest.TestCase):
     def test_runner_script_exists_and_is_executable(self):
         self.assertTrue(RUNNER_PATH.is_file())
+        if os.name == "nt":
+            self.skipTest("POSIX executable bits are not meaningful on native Windows.")
         mode = RUNNER_PATH.stat().st_mode
         self.assertTrue(mode & stat.S_IXUSR)
         self.assertTrue(os.access(RUNNER_PATH, os.X_OK))

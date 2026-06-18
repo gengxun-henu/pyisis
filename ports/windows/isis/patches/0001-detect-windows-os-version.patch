@@ -1,0 +1,21 @@
+diff --git a/isis/cmake/Utilities.cmake b/isis/cmake/Utilities.cmake
+index 9eaf1ed..81f2e56 100644
+--- a/isis/cmake/Utilities.cmake
++++ b/isis/cmake/Utilities.cmake
+@@ -176,6 +176,16 @@ function(get_os_version text)
+     set(name   "MacOSX")
+     set(prefix "Darwin_x86_64_")
+ 
++  elseif(WIN32)
++
++    set(name "Windows")
++    set(version "${CMAKE_SYSTEM_VERSION}")
++    if(NOT version)
++      set(version "unknown")
++    endif()
++    string(REPLACE "." "_" version "${version}")
++    set(prefix "Windows_x86_64_")
++
+   else()
+     message( FATAL_ERROR "Did not recognize a supported operating system!" )
+   endif()

@@ -1,0 +1,51 @@
+diff --git a/isis/src/base/objs/Cube/Cube.cpp b/isis/src/base/objs/Cube/Cube.cpp
+index cb5a0c8..95557a2 100644
+--- a/isis/src/base/objs/Cube/Cube.cpp
++++ b/isis/src/base/objs/Cube/Cube.cpp
+@@ -2144,9 +2144,13 @@ namespace Isis {
+       m_ioHandler = NULL;
+     }
+ 
++    QString tempCubeToRemove;
++    QString labelFileToRemove;
++    QString dataFileToRemove;
++
+     // Always remove a temporary file
+     if (m_tempCube) {
+-      QFile::remove(m_tempCube->expanded());
++      tempCubeToRemove = m_tempCube->expanded();
+       removeIt = false; // dont remove originals
+ 
+       delete m_tempCube;
+@@ -2154,10 +2158,10 @@ namespace Isis {
+     }
+ 
+     if (removeIt) {
+-      QFile::remove(m_labelFileName->expanded());
++      labelFileToRemove = m_labelFileName->expanded();
+ 
+       if (*m_labelFileName != *m_dataFileName)
+-        QFile::remove(m_dataFileName->expanded());
++        dataFileToRemove = m_dataFileName->expanded();
+     }
+ 
+     delete m_labelFile;
+@@ -2176,6 +2180,18 @@ namespace Isis {
+     delete m_virtualBandList;
+     m_virtualBandList = NULL;
+ 
++    if (!tempCubeToRemove.isEmpty()) {
++      QFile::remove(tempCubeToRemove);
++    }
++
++    if (!labelFileToRemove.isEmpty()) {
++      QFile::remove(labelFileToRemove);
++    }
++
++    if (!dataFileToRemove.isEmpty()) {
++      QFile::remove(dataFileToRemove);
++    }
++
+     initialize();
+   }
+ 

@@ -2,9 +2,10 @@
 
 Author: Geng Xun
 Created: 2026-05-16
-Last Modified: 2026-05-20
+Last Modified: 2026-06-18
 Updated: 2026-05-16  Geng Xun added regression coverage for manifest execution with a fake deep matcher adapter and standardized NPZ results.
 Updated: 2026-05-20  Geng Xun added stage-6 regression coverage for manifest runtime-config preflight and adapter provenance handoff.
+Updated: 2026-06-18  Geng Xun escaped interpreter paths in regex assertions for Windows.
 """
 
 from __future__ import annotations
@@ -12,6 +13,7 @@ from __future__ import annotations
 from dataclasses import replace
 import os
 from pathlib import Path
+import re
 from types import SimpleNamespace
 import sys
 import time
@@ -1163,7 +1165,7 @@ class LearningMethodsDeepManifestRunnerUnitTest(unittest.TestCase):
             ):
                 with self.assertRaisesRegex(
                     RuntimeError,
-                    rf"Deep matcher preflight failed for 'lightglue' using Python {sys.executable}: missing lightglue",
+                    rf"Deep matcher preflight failed for 'lightglue' using Python {re.escape(sys.executable)}: missing lightglue",
                 ):
                     run_manifest(
                         manifest_path,

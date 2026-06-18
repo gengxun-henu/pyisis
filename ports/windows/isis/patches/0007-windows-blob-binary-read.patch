@@ -1,0 +1,22 @@
+diff --git a/isis/src/base/objs/Blob/Blob.cpp b/isis/src/base/objs/Blob/Blob.cpp
+index 81e7843..f9adf5d 100644
+--- a/isis/src/base/objs/Blob/Blob.cpp
++++ b/isis/src/base/objs/Blob/Blob.cpp
+@@ -282,7 +282,7 @@ namespace Isis {
+ 
+     // Open the file
+     fstream istm;
+-    istm.open(temp.toLatin1().data(), std::ios::in);
++    istm.open(temp.toLatin1().data(), std::ios::in | std::ios::binary);
+     if (!istm) {
+       QString message = Message::FileOpen(temp);
+       throw IException(IException::Io, message, _FILEINFO_);
+@@ -316,7 +316,7 @@ namespace Isis {
+       ReadInit();
+       if (p_detached != "") {
+         fstream dstm;
+-        dstm.open(p_detached.toLatin1().data(), std::ios::in);
++        dstm.open(p_detached.toLatin1().data(), std::ios::in | std::ios::binary);
+         if (!dstm) {
+           QString message = Message::FileOpen(p_detached);
+           throw IException(IException::Io, message, _FILEINFO_);

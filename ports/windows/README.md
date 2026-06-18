@@ -22,14 +22,19 @@ layout.
 
 - Windows 10 or newer
 - Visual Studio Build Tools with the MSVC C++ toolchain
-- Conda or Mamba
+- Conda, Mamba, or Micromamba
 - Ninja and CMake from the active conda environment
 
-Create the initial environment with:
+Create the initial environment with a short prefix. Some conda-forge packages
+used by ISIS, especially Qt and Bullet, contain deep include paths that can
+exceed Windows path limits when extracted under this repository's worktree.
 
 ```powershell
-conda env create -f ports\windows\env\pyisis-isis-win64.yml
-conda activate pyisis-isis-win64
+$mambaRoot = "E:\code\pyisis-win-mamba-root"
+$envPrefix = "E:\code\pyisis-win-env"
+micromamba --root-prefix $mambaRoot create -y -p $envPrefix -f ports\windows\env\pyisis-isis-win64.yml
+$env:CONDA_PREFIX = $envPrefix
+$env:PATH = "$envPrefix;$envPrefix\Scripts;$envPrefix\Library\bin;$envPrefix\Library\usr\bin;$envPrefix\Library\mingw-w64\bin;$envPrefix\bin;$env:PATH"
 ```
 
 Check that the shell is ready before configuring anything:
@@ -61,21 +66,26 @@ session with:
 .\ports\windows\isis\verify_isis_prefix.ps1
 ```
 
-`fetch_isis_900.ps1` defaults to downloading the `9.0.0` `tar.gz` source
-archive and initializing a local git worktree for patch application. Use
-`-ArchiveFormat zip` when a zip archive is preferred. Use `-Method git` only
-when a direct shallow clone is preferred and the network is stable enough for
-GitHub clone traffic.
+`fetch_isis_900.ps1` defaults to a sparse Git checkout of the `9.0.0` tag
+because this keeps the source patchable and avoids GitHub archive resume issues
+seen on Windows. Use `-Method archive` when direct archive downloads are more
+reliable on a given network.
 
 ## Stage 2: pyisis
 
 ```powershell
 $env:ISIS_PREFIX = "$PWD\build\windows\isis-prefix"
+$env:ISISROOT = $env:ISIS_PREFIX
 .\ports\windows\pyisis\configure_pyisis.ps1
 .\ports\windows\pyisis\build_pyisis.ps1
 .\ports\windows\pyisis\test_pyisis_smoke.ps1
 .\ports\windows\pyisis\test_pyisis_basic.ps1
 ```
+
+The pyisis test scripts set `ISISROOT`, `ISISDATA`, `PYTHONPATH`, and the
+runtime `PATH` for the current test process. The Python package also registers
+Windows DLL search directories with `os.add_dll_directory` during import when
+`ISISROOT`, `ISIS_PREFIX`, or `CONDA_PREFIX` are available.
 
 The first milestone does not promise full ISIS CLI support, production
 `ISISDATA`, GitHub Actions, or conda packaging.

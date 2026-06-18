@@ -3,6 +3,7 @@
 Author: Geng Xun
 Created: 2026-06-09
 Updated: 2026-06-09  Geng Xun added optional matplotlib handling so benchmark reports still write without figure dependencies.
+Updated: 2026-06-18  Geng Xun improved Windows launch-failure diagnostics for benchmark commands.
 """
 
 from __future__ import annotations
@@ -984,11 +985,12 @@ def run_cpp_command(
         completed = subprocess.run(command, text=True, capture_output=True, check=False)
     except OSError as error:
         wall_seconds = time.perf_counter() - start
+        error_message = f"{command[0]}: {error}" if command else str(error)
         result = {
             "status": "failed",
             "return_code": None,
             "stdout": "",
-            "stderr": str(error),
+            "stderr": error_message,
             "command": command,
             "wall_seconds": wall_seconds,
             "implementation": "cpp",
@@ -996,7 +998,7 @@ def run_cpp_command(
             "task_type": task_type,
         }
         if not keep_going:
-            raise RuntimeError(f"Failed to launch C++ benchmark command: {error}") from error
+            raise RuntimeError(f"Failed to launch C++ benchmark command: {error_message}") from error
         return result
 
     wall_seconds = time.perf_counter() - start

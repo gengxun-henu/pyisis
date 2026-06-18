@@ -3,7 +3,50 @@
 # Copyright (c) 2026 Geng Xun, Henan University
 # SPDX-License-Identifier: MIT
 
+import os
+from pathlib import Path
+
 __version__ = "1.2.0"
+
+_DLL_DIRECTORY_HANDLES = []
+
+
+def _existing_windows_prefixes():
+    seen = set()
+    for name in ("ISISROOT", "ISIS_PREFIX", "CONDA_PREFIX"):
+        value = os.environ.get(name)
+        if not value:
+            continue
+        path = Path(value)
+        key = str(path).lower()
+        if key in seen or not path.exists():
+            continue
+        seen.add(key)
+        yield path
+
+
+def _configure_windows_runtime():
+    if os.name != "nt":
+        return
+
+    if not os.environ.get("ISISROOT"):
+        isis_prefix = os.environ.get("ISIS_PREFIX")
+        if isis_prefix:
+            os.environ["ISISROOT"] = isis_prefix
+
+    for prefix in _existing_windows_prefixes():
+        for relative in ("Library/bin", "Library/lib", "bin", "lib"):
+            dll_dir = prefix / relative
+            if not dll_dir.exists():
+                continue
+            try:
+                handle = os.add_dll_directory(str(dll_dir))
+            except OSError:
+                continue
+            _DLL_DIRECTORY_HANDLES.append(handle)
+
+
+_configure_windows_runtime()
 
 from ._isis_core import (
     Angle,
@@ -166,9 +209,6 @@ from ._isis_core import (
     Distance,
     Enlarge,
     EllipsoidShape,
-    EmbreeTargetManager,
-    EmbreeTargetShape,
-    EmbreeShapeModel,
     Environment,
     EndianSwapper,
     ExportDescription,
@@ -433,6 +473,24 @@ from ._isis_core import (
     to_double,
     to_string,
 )
+
+_OPTIONAL_EMBREE_EXPORTS = []
+try:
+    from ._isis_core import (
+        EmbreeTargetManager,
+        EmbreeTargetShape,
+        EmbreeShapeModel,
+    )
+except ImportError:
+    pass
+else:
+    _OPTIONAL_EMBREE_EXPORTS.extend(
+        [
+            "EmbreeTargetManager",
+            "EmbreeTargetShape",
+            "EmbreeShapeModel",
+        ]
+    )
 
 __all__ = [
     "Sensor",
@@ -757,8 +815,6 @@ __all__ = [
     "Intercept",
     "TriangularPlate",
     "NaifDskPlateModel",
-    "EmbreeTargetShape",
-    "EmbreeTargetManager",
     "BulletTargetShape",
     "BulletWorldManager",
     "ShapeModel",
@@ -766,7 +822,6 @@ __all__ = [
     "DemShape",
     "PlaneShape",
     "NaifDskShape",
-    "EmbreeShapeModel",
     "BulletShapeModel",
     "ApolloMetricCamera",
     "ApolloMetricDistortionMap",
@@ -861,3 +916,5 @@ __all__ = [
     "to_double",
     "to_string",
 ]
+
+__all__.extend(_OPTIONAL_EMBREE_EXPORTS)

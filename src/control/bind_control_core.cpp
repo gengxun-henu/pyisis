@@ -5,6 +5,7 @@
 // Updated: 2026-04-10  Geng Xun added ControlNetVersioner binding with file/ControlNet constructors and network metadata accessors.
 // Updated: 2026-04-10  Geng Xun removed private default constructor from ControlNetVersioner binding (upstream has it private).
 // Updated: 2026-04-11  Geng Xun reused top-level Spice interpolation enums inside BundleObservationSolveSettings to avoid duplicate pybind enum registration.
+// Updated: 2026-06-18  Geng Xun skipped ControlNet::GetUserName on MSVC because the installed Windows ISIS library does not export it.
 // Purpose: pybind11 bindings for ISIS control network core classes, filters, and bundle-control helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -787,8 +788,10 @@ void bind_control_core(py::module_ &m)
          .def("get_num_valid_points", &Isis::ControlNet::GetNumValidPoints)
          .def("get_target", [](const Isis::ControlNet &self)
               { return qStringToStdString(self.GetTarget()); })
+#ifndef _MSC_VER
          .def("get_user_name", [](const Isis::ControlNet &self)
               { return qStringToStdString(self.GetUserName()); })
+#endif
          .def("get_last_modified", [](const Isis::ControlNet &self)
               { return qStringToStdString(self.GetLastModified()); })
          .def("get_points", [](Isis::ControlNet &self)

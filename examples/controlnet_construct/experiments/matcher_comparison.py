@@ -2,6 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-05-22
+Updated: 2026-06-18  Geng Xun included command paths in Windows launch-failure logs.
 """
 
 from __future__ import annotations
@@ -587,7 +588,8 @@ def execute_method(
             return_code = result.returncode
         except OSError as launch_error:
             error = launch_error
-            stderr_file.write(f"{type(launch_error).__name__}: {launch_error}\n")
+            command_path = command[0] if command else "<empty command>"
+            stderr_file.write(f"{command_path}: {type(launch_error).__name__}: {launch_error}\n")
     total_wall_seconds = time.monotonic() - start_time
     finished_at_utc = _utc_now_iso()
 

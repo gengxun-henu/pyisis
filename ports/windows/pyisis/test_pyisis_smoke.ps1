@@ -9,7 +9,7 @@ param(
 if (-not $BuildDir) { $BuildDir = Get-DefaultBuildDir }
 $BuildDir = Resolve-FullPath $BuildDir
 $IsisPrefix = Require-IsisPrefix -Prefix $IsisPrefix
-if (-not $PythonExecutable) { $PythonExecutable = (Get-Command python).Source }
+if (-not $PythonExecutable) { $PythonExecutable = Get-DefaultPythonExecutable }
 
 Set-PyisisTestEnvironment -BuildDir $BuildDir -IsisPrefix $IsisPrefix
 

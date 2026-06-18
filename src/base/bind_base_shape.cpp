@@ -1,6 +1,7 @@
 // Binding author: Geng Xun
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added ShapeModel hierarchy bindings covering ellipsoid, DEM, plane, DSK, Embree, and Bullet-backed shape helpers
+// Updated: 2026-06-18  Geng Xun made Embree shape bindings conditional on available PCL/Embree headers for Windows builds.
 // Purpose: pybind11 bindings for ISIS shape-model abstractions and concrete surface-intersection implementations
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -17,7 +18,9 @@
 #include "DemShape.h"
 #include "Distance.h"
 #include "EllipsoidShape.h"
+#ifdef PYISIS_HAS_EMBREE_SHAPE_MODEL
 #include "EmbreeShapeModel.h"
+#endif
 #include "Latitude.h"
 #include "Longitude.h"
 #include "NaifDskShape.h"
@@ -131,6 +134,7 @@ void bind_base_shape(py::module_ &m) {
       .def("ellipsoid_normal", [](Isis::NaifDskShape &self) { return qVectorToStdVector(self.ellipsoidNormal()); })
       .def("is_dem", &Isis::NaifDskShape::isDEM);
 
+#ifdef PYISIS_HAS_EMBREE_SHAPE_MODEL
   py::class_<Isis::EmbreeShapeModel, Isis::ShapeModel>(m, "EmbreeShapeModel")
       .def(py::init<>())
       .def("intersect_surface",
@@ -158,6 +162,7 @@ void bind_base_shape(py::module_ &m) {
       .def("incidence_angle", &Isis::EmbreeShapeModel::incidenceAngle, py::arg("illuminator_body_fixed_position"))
       .def("local_radius", &Isis::EmbreeShapeModel::localRadius, py::arg("latitude"), py::arg("longitude"))
       .def("is_visible_from", &Isis::EmbreeShapeModel::isVisibleFrom, py::arg("observer_position"), py::arg("look_direction"));
+#endif
 
   py::class_<Isis::BulletShapeModel, Isis::ShapeModel>(m, "BulletShapeModel")
       .def(py::init<>())

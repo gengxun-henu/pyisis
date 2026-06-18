@@ -3,8 +3,9 @@ Unit tests for ISIS Target and shape-model bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-09
+Last Modified: 2026-06-18
 Updated: 2026-04-09  Geng Xun added focused Target tests for camera-derived NAIF metadata and body-rotation coefficient accessors.
+Updated: 2026-06-18  Geng Xun made Embree shape expectations conditional on optional PCL-backed bindings.
 """
 
 import unittest
@@ -13,6 +14,14 @@ from _unit_test_support import make_sky_target_label, ip, workspace_test_data_pa
 
 
 MDIS_TARGET_CUBE = workspace_test_data_path("mosrange", "EN0108828322M_iof.cub")
+HAS_EMBREE_BINDINGS = all(
+    hasattr(ip, name)
+    for name in (
+        "EmbreeTargetShape",
+        "EmbreeTargetManager",
+        "EmbreeShapeModel",
+    )
+)
 
 
 class TargetAndShapeUnitTest(unittest.TestCase):
@@ -132,25 +141,27 @@ End
         dem_shape = ip.DemShape()
         plane_shape = ip.PlaneShape()
         naif_shape = ip.NaifDskShape()
-        embree_shape = ip.EmbreeShapeModel()
         bullet_shape = ip.BulletShapeModel()
 
-        embree_shape.set_tolerance(0.25)
+        if HAS_EMBREE_BINDINGS:
+            embree_shape = ip.EmbreeShapeModel()
+            embree_shape.set_tolerance(0.25)
         bullet_shape.set_tolerance(0.5)
 
         self.assertEqual(ellipsoid.name(), "Ellipsoid")
         self.assertEqual(dem_shape.name(), "DemShape")
         self.assertEqual(plane_shape.name(), "Plane")
         self.assertEqual(naif_shape.name(), "DSK")
-        self.assertEqual(embree_shape.name(), "Embree")
         self.assertEqual(bullet_shape.name(), "Bullet")
         self.assertFalse(ellipsoid.is_dem())
         self.assertTrue(dem_shape.is_dem())
         self.assertFalse(plane_shape.is_dem())
         self.assertFalse(naif_shape.is_dem())
-        self.assertFalse(embree_shape.is_dem())
         self.assertFalse(bullet_shape.is_dem())
-        self.assertAlmostEqual(embree_shape.get_tolerance(), 0.25)
+        if HAS_EMBREE_BINDINGS:
+            self.assertEqual(embree_shape.name(), "Embree")
+            self.assertFalse(embree_shape.is_dem())
+            self.assertAlmostEqual(embree_shape.get_tolerance(), 0.25)
         self.assertAlmostEqual(bullet_shape.get_tolerance(), 0.5)
 
     def test_shape_surface_point_lifecycle(self):

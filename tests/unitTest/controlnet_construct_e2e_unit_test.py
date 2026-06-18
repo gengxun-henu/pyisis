@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-17
-Last Modified: 2026-04-20
+Last Modified: 2026-06-18
 Updated: 2026-04-17  Geng Xun added an LRO NAC DOM-matching E2E regression that runs overlap discovery, DOM matching, duplicate merge, dom2ori conversion, and ControlNet writing from the provided `.lis` inputs.
 Updated: 2026-04-17  Geng Xun expanded the external LRO regression to batch-process every overlap pair written to `images_overlap.lis`.
 Updated: 2026-04-17  Geng Xun added per-pair pipeline statistics and a CLI black-box batch regression that drives the full example workflow through script entrypoints.
@@ -17,6 +17,7 @@ Updated: 2026-04-19  Geng Xun removed the obsolete E2E match-plot environment to
 Updated: 2026-04-19  Geng Xun clarified these header notes so the earlier opt-in match-plot history is explicitly marked as superseded by the current image_match.py default behavior.
 Updated: 2026-04-19  Geng Xun fixed the function-level all-overlap-pairs E2E gate to read the intended environment variable name instead of the literal string "1".
 Updated: 2026-04-20  Geng Xun updated the function and CLI E2E flows to preserve deterministic pre-RANSAC and post-RANSAC match PNGs for each stereo pair.
+Updated: 2026-06-18  Geng Xun made CLI E2E PYTHONPATH propagation portable for Windows build directories.
 """
 
 from __future__ import annotations
@@ -264,10 +265,46 @@ class ControlNetConstructE2eUnitTest(unittest.TestCase):
 
     def _make_cli_environment(self) -> dict[str, str]:
         env = os.environ.copy()
-        build_python = str(PROJECT_ROOT / "build" / "python")
+        pythonpath_entries = [
+            env.get("ISIS_PYBIND_BUILD_DIR"),
+            str(PROJECT_ROOT / "build" / "python"),
+            str(PROJECT_ROOT / "build" / "windows" / "pyisis-build" / "python"),
+        ]
         existing_pythonpath = env.get("PYTHONPATH")
-        env["PYTHONPATH"] = build_python if not existing_pythonpath else f"{build_python}:{existing_pythonpath}"
+        if existing_pythonpath:
+            pythonpath_entries.extend(existing_pythonpath.split(os.pathsep))
+
+        unique_entries: list[str] = []
+        seen_entries: set[str] = set()
+        for entry in pythonpath_entries:
+            if not entry or entry in seen_entries:
+                continue
+            unique_entries.append(entry)
+            seen_entries.add(entry)
+
+        if unique_entries:
+            env["PYTHONPATH"] = os.pathsep.join(unique_entries)
         return env
+
+    def test_make_cli_environment_preserves_existing_pythonpath_with_platform_separator(self):
+        sentinel_entries = [
+            str(PROJECT_ROOT / "sentinel_pythonpath_one"),
+            str(PROJECT_ROOT / "sentinel_pythonpath_two"),
+        ]
+        previous_pythonpath = os.environ.get("PYTHONPATH")
+        try:
+            os.environ["PYTHONPATH"] = os.pathsep.join(sentinel_entries)
+            env = self._make_cli_environment()
+        finally:
+            if previous_pythonpath is None:
+                os.environ.pop("PYTHONPATH", None)
+            else:
+                os.environ["PYTHONPATH"] = previous_pythonpath
+
+        entries = env["PYTHONPATH"].split(os.pathsep)
+        self.assertIn(str(PROJECT_ROOT / "build" / "python"), entries)
+        self.assertIn(str(PROJECT_ROOT / "build" / "windows" / "pyisis-build" / "python"), entries)
+        self.assertTrue(all(entry in entries for entry in sentinel_entries))
 
     def _run_cli_json(self, *args: str) -> dict[str, object]:
         completed = subprocess.run(

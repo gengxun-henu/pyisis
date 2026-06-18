@@ -1,6 +1,7 @@
 param(
     [string]$BuildDir,
-    [int]$Jobs = 0
+    [string]$Config = "Release",
+    [int]$Jobs = 1
 )
 
 . "$PSScriptRoot\common.ps1"
@@ -14,8 +15,9 @@ if (-not (Test-Path $BuildDir)) {
     Fail "ISIS build directory not found: $BuildDir"
 }
 
+$cmakeArgs = @("--build", $BuildDir, "--config", $Config)
 if ($Jobs -gt 0) {
-    Invoke-CheckedCommand cmake --build $BuildDir --parallel $Jobs
-} else {
-    Invoke-CheckedCommand cmake --build $BuildDir
+    $cmakeArgs += @("--parallel", $Jobs)
 }
+
+Invoke-CheckedCommand cmake @cmakeArgs

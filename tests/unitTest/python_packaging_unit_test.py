@@ -10,6 +10,7 @@ Updated: 2026-06-18  Geng Xun raised scikit-build-core coverage for PEP 639 lice
 Updated: 2026-06-18  Geng Xun added CMake install coverage for the pyisis runtime helper.
 Updated: 2026-06-18  Geng Xun prevented cached scikit-build wheel install paths.
 Updated: 2026-06-18  Geng Xun added minimal ISISDATA package coverage.
+Updated: 2026-06-18  Geng Xun added Windows runtime package metadata coverage.
 """
 
 import importlib
@@ -160,6 +161,25 @@ class PythonPackagingMetadataTest(unittest.TestCase):
             sys.path.remove(str(package_src))
 
         self.assertTrue((data_path / "base" / "kernels" / "lsk" / "naif0012.tls").is_file())
+
+    def test_windows_runtime_package_metadata_exists(self):
+        runtime_pyproject = (
+            self.repo_root / "packaging" / "runtime-win64" / "pyproject.toml"
+        )
+        self.assertTrue(runtime_pyproject.is_file())
+
+        config = tomllib.loads(runtime_pyproject.read_text(encoding="utf-8"))
+        project = config["project"]
+        self.assertEqual(project["name"], "pyisis-runtime-win64")
+        self.assertEqual(project["version"], "1.2.0")
+        self.assertEqual(project["license"], "MIT")
+        self.assertEqual(config["build-system"]["build-backend"], "setuptools.build_meta")
+        self.assertEqual(config["tool"]["setuptools"]["packages"], ["pyisis_runtime"])
+        self.assertFalse(config["tool"]["setuptools"]["include-package-data"])
+        self.assertEqual(
+            config["tool"]["setuptools"]["package-data"]["pyisis_runtime"],
+            ["vendor/isis/**/*"],
+        )
 
 
 if __name__ == "__main__":

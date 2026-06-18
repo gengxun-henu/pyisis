@@ -893,6 +893,7 @@ license = "MIT"
 [tool.setuptools]
 package-dir = { "" = "src" }
 packages = ["pyisis_runtime"]
+include-package-data = false
 
 [tool.setuptools.package-data]
 pyisis_runtime = ["vendor/isis/**/*"]
@@ -1007,10 +1008,7 @@ def stage_runtime(isis_prefix: Path, stage_dir: Path) -> Path:
             if source.is_file():
                 _copy_file(source, isis_prefix, vendor_root)
 
-    required = [
-        vendor_root / "bin" / "isis.dll",
-    ]
-    if not any(path.exists() for path in required):
+    if not any(vendor_root.glob("**/isis.dll")):
         raise FileNotFoundError("Staged runtime is missing isis.dll")
 
     camera_plugin = list(vendor_root.glob("**/Camera.plugin"))

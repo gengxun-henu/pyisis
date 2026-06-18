@@ -1,0 +1,52 @@
+[build-system]
+requires = [
+  "scikit-build-core>=0.10",
+  "pybind11>=2.11",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "pyisis"
+version = "1.2.0"
+description = "Standalone pybind11 bindings and a Python facade for selected USGS ISIS APIs."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  { name = "Geng Xun" },
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: C++",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering",
+]
+dependencies = [
+  'pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
+  "pyisis-isisdata-minimal==1.2.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/guderianXu/pyisis"
+Source = "https://github.com/guderianXu/pyisis"
+
+[tool.scikit-build]
+minimum-version = "build-system.requires"
+build-dir = "build/{wheel_tag}"
+wheel.packages = []
+wheel.platlib = true
+wheel.license-files = ["LICENSE"]
+
+[tool.scikit-build.cmake.define]
+PYISIS_BUILD_BENCHMARKS = "OFF"
+ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS = "ON"
+
+[tool.cibuildwheel]
+build = "cp312-win_amd64"
+test-command = "python -c \"import pyisis; import isis_pybind; print(pyisis.data_status().message)\""

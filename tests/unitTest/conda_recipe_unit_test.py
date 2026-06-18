@@ -4,6 +4,8 @@ Author: Geng Xun
 Created: 2026-06-18
 Last Modified: 2026-06-18
 Updated: 2026-06-18  Geng Xun added conda recipe coverage for package metadata, build scripts, and smoke-test commands.
+Updated: 2026-06-18  Geng Xun added git source coverage to keep local build artifacts out of conda-build work copies.
+Updated: 2026-06-18  Geng Xun added compiler variant coverage for Windows conda-build packaging.
 """
 
 from __future__ import annotations
@@ -23,9 +25,10 @@ class CondaRecipeUnitTest(unittest.TestCase):
         self.assertTrue((RECIPE_DIR / "meta.yaml").is_file())
         self.assertTrue((RECIPE_DIR / "build.sh").is_file())
         self.assertTrue((RECIPE_DIR / "bld.bat").is_file())
+        self.assertTrue((RECIPE_DIR / "conda_build_config.yaml").is_file())
         self.assertTrue((RECIPE_DIR / "README.md").is_file())
 
-    def test_meta_yaml_declares_pyisis_package_and_local_source(self):
+    def test_meta_yaml_declares_pyisis_package_and_git_source(self):
         recipe_file = RECIPE_DIR / "meta.yaml"
         self.assertTrue(recipe_file.is_file(), f"Missing conda recipe metadata: {recipe_file}")
         meta_yaml = recipe_file.read_text(encoding="utf-8")
@@ -34,10 +37,18 @@ class CondaRecipeUnitTest(unittest.TestCase):
         self.assertIn("{% set version = \"1.2.0\" %}", meta_yaml)
         self.assertIn("name: {{ name|lower }}", meta_yaml)
         self.assertIn("source:", meta_yaml)
-        self.assertIn("path: ..", meta_yaml)
+        self.assertIn("git_url: ..", meta_yaml)
+        self.assertIn("git_rev: HEAD", meta_yaml)
         self.assertIn("script_env:", meta_yaml)
         self.assertIn("- ISIS_PREFIX", meta_yaml)
         self.assertIn("- PYISIS_DEP_PREFIX", meta_yaml)
+
+    def test_meta_yaml_uses_git_source_to_exclude_local_build_artifacts(self):
+        meta_yaml = (RECIPE_DIR / "meta.yaml").read_text(encoding="utf-8")
+
+        self.assertIn("git_url: ..", meta_yaml)
+        self.assertIn("git_rev: HEAD", meta_yaml)
+        self.assertNotIn("path: ..", meta_yaml)
 
     def test_meta_yaml_covers_build_host_run_and_import_smoke_tests(self):
         recipe_file = RECIPE_DIR / "meta.yaml"
@@ -54,6 +65,15 @@ class CondaRecipeUnitTest(unittest.TestCase):
         self.assertIn("- pyisis", meta_yaml)
         self.assertIn("pyisis.core()", meta_yaml)
         self.assertIn("import isis_pybind", meta_yaml)
+
+    def test_windows_compiler_variant_uses_installed_vs2022_toolchain(self):
+        config_file = RECIPE_DIR / "conda_build_config.yaml"
+        self.assertTrue(config_file.is_file(), f"Missing conda-build variant config: {config_file}")
+        config = config_file.read_text(encoding="utf-8")
+
+        self.assertIn("c_compiler:", config)
+        self.assertIn("cxx_compiler:", config)
+        self.assertIn("- vs2022", config)
 
     def test_build_scripts_configure_build_and_install_with_cmake(self):
         build_sh_path = RECIPE_DIR / "build.sh"

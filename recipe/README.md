@@ -6,6 +6,10 @@ the local repository with CMake and installs both Python packages:
 - `pyisis`, the high-level Python facade.
 - `isis_pybind`, including the compiled `_isis_core` extension.
 
+The recipe reads source from the local git checkout, so package builds use
+tracked source files instead of local `build/` artifacts. Windows builds are
+configured for the VS2022 conda-build compiler variant.
+
 ## Local Windows build
 
 The current Windows port keeps the ISIS runtime in a separate prefix from the

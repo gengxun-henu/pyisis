@@ -24,6 +24,12 @@ Default local paths:
 The prefix is considered usable for the first pyisis milestone when
 `verify_isis_prefix.ps1` passes.
 
+After the prefix verifies, run `test_isis_apps_smoke.ps1` for a lightweight
+end-to-end check of common ISIS applications. The default smoke set covers
+metadata, label export, geometry, reprojection, image export, cube stacking, and
+expression-generated cube output. Use `-ListCommands` to print the command set
+without running it.
+
 ## Current Windows Configure/Build Status
 
 The Windows environment should be created under a short prefix, for example
@@ -86,6 +92,9 @@ Verified so far:
   upstream CMake rules.
 - `verify_isis_prefix.ps1` passes against `build\windows\isis-prefix`,
   including a direct `isis.dll` load probe with `ISISROOT` set to the prefix.
+- `test_isis_apps_smoke.ps1` passes against `build\windows\isis-prefix` for
+  `stats`, `getkey`, `catlab`, `campt`, `reduce`, `cam2map`, `isis2std`,
+  `cubeit`, and `fx`.
 
 Use `-j 1` with MSVC for now; higher parallelism has exposed intermittent
 object-list and file-lock issues in this porting environment.

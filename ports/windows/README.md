@@ -64,12 +64,21 @@ session with:
 .\ports\windows\isis\build_isis.ps1
 .\ports\windows\isis\install_isis.ps1
 .\ports\windows\isis\verify_isis_prefix.ps1
+.\ports\windows\isis\test_isis_apps_smoke.ps1
 ```
 
 `fetch_isis_900.ps1` defaults to a sparse Git checkout of the `9.0.0` tag
 because this keeps the source patchable and avoids GitHub archive resume issues
 seen on Windows. Use `-Method archive` when direct archive downloads are more
 reliable on a given network.
+
+`test_isis_apps_smoke.ps1` exercises a small representative command set against
+the installed prefix: `stats`, `getkey`, `catlab`, `campt`, `reduce`,
+`cam2map`, `isis2std`, `cubeit`, and `fx`. It writes command logs and generated
+outputs under `build/windows/isis-command-smoke` by default. Pass
+`-RunLroPipeline -LroRawImage <path>` to additionally smoke-test the LRO chain
+`lronac2isis`, `spiceinit`, `lronaccal`, and `lronacecho` when a raw NAC image
+is available.
 
 ## Stage 2: pyisis
 

@@ -1,0 +1,49 @@
+{% set name = "pyisis" %}
+{% set version = "1.2.0" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  path: ..
+
+build:
+  number: 0
+  script_env:
+    - ISIS_PREFIX
+    - ISISDATA
+    - PYISIS_DEP_PREFIX
+    - PYISIS_BUILD_DIR
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - cmake >=3.18
+    - ninja
+  host:
+    - python
+    - pybind11
+  run:
+    - python
+
+test:
+  imports:
+    - pyisis
+  commands:
+    - python -c "import os, pyisis; pyisis.configure(isis_prefix=os.environ.get('ISIS_PREFIX'), isisdata=os.environ.get('ISISDATA'), conda_prefix=os.environ.get('PYISIS_DEP_PREFIX')); pyisis.core(); import isis_pybind; print('pyisis conda smoke ok')"
+
+about:
+  home: https://github.com/guderianXu/pyisis
+  license: MIT
+  license_file: LICENSE
+  summary: Standalone pybind11 bindings and a Python facade for selected USGS ISIS APIs.
+  description: |
+    pyisis provides the high-level Python facade and the isis_pybind._isis_core
+    extension module for selected USGS ISIS 9 APIs. This recipe builds the
+    extension from the local repository with CMake and installs both Python
+    packages into the active conda prefix.
+
+extra:
+  recipe-maintainers:
+    - guderianXu

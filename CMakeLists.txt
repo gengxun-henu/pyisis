@@ -35,7 +35,7 @@ if((NOT DEFINED CMAKE_CXX_COMPILER_LAUNCHER OR CMAKE_CXX_COMPILER_LAUNCHER STREQ
   endif()
 endif()
 
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
 find_package(pybind11 CONFIG REQUIRED)
 
 function(pyisis_first_existing_path out_var)
@@ -170,6 +170,7 @@ set(ISIS_CAMERA_LIBS ""
 option(ISIS_EXCLUDE_ASP_VW_CAMERA_LIBS
   "Exclude libAsp* and libVw* camera libraries from the extra ISIS camera link set"
   ON)
+option(PYISIS_BUILD_BENCHMARKS "Build pyisis developer benchmark executables" ON)
 
 set(ISIS_DEP_INCLUDE_SEARCH_DIRS "${ISIS_DEP_INCLUDE_DIR}" ${ISIS_DEP_INCLUDE_DIRS})
 list(REMOVE_DUPLICATES ISIS_DEP_INCLUDE_SEARCH_DIRS)
@@ -336,23 +337,31 @@ if(PYISIS_EMBREE_INCLUDE_DIR)
 endif()
 list(REMOVE_DUPLICATES ISIS_OPTIONAL_INCLUDE_DIRS)
 
-if(NOT Python3_SITELIB)
-  execute_process(
-    COMMAND "${Python3_EXECUTABLE}" -c "import sysconfig; print(sysconfig.get_path('purelib'))"
-    OUTPUT_VARIABLE Python3_SITELIB
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
+if(SKBUILD)
+  set(PYISIS_DEFAULT_SITELIB "${SKBUILD_PLATLIB_DIR}")
+  set(PYISIS_DEFAULT_SITEARCH "${SKBUILD_PLATLIB_DIR}")
+else()
+  if(NOT Python3_SITELIB)
+    execute_process(
+      COMMAND "${Python3_EXECUTABLE}" -c "import sysconfig; print(sysconfig.get_path('purelib'))"
+      OUTPUT_VARIABLE Python3_SITELIB
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+  endif()
+
+  if(NOT Python3_SITEARCH)
+    execute_process(
+      COMMAND "${Python3_EXECUTABLE}" -c "import sysconfig; print(sysconfig.get_path('platlib'))"
+      OUTPUT_VARIABLE Python3_SITEARCH
+      OUTPUT_STRIP_TRAILING_WHITESPACE)
+  endif()
+
+  set(PYISIS_DEFAULT_SITELIB "${Python3_SITELIB}")
+  set(PYISIS_DEFAULT_SITEARCH "${Python3_SITEARCH}")
 endif()
 
-if(NOT Python3_SITEARCH)
-  execute_process(
-    COMMAND "${Python3_EXECUTABLE}" -c "import sysconfig; print(sysconfig.get_path('platlib'))"
-    OUTPUT_VARIABLE Python3_SITEARCH
-    OUTPUT_STRIP_TRAILING_WHITESPACE)
-endif()
-
-set(PYISIS_INSTALL_SITELIB "${Python3_SITELIB}" CACHE PATH
+set(PYISIS_INSTALL_SITELIB "${PYISIS_DEFAULT_SITELIB}" CACHE PATH
   "Python purelib install directory for the pyisis facade package")
-set(PYISIS_INSTALL_SITEARCH "${Python3_SITEARCH}" CACHE PATH
+set(PYISIS_INSTALL_SITEARCH "${PYISIS_DEFAULT_SITEARCH}" CACHE PATH
   "Python platlib install directory for the compiled isis_pybind package")
 
 set(ISIS_PYBIND_PACKAGE_NAME isis_pybind)
@@ -523,38 +532,40 @@ endif()
 
 add_dependencies(_isis_core sync_python_package_files)
 
-add_executable(isis_cpp_benchmark
-  tools/benchmarks/isis_cpp_benchmark.cpp)
+if(PYISIS_BUILD_BENCHMARKS)
+  add_executable(isis_cpp_benchmark
+    tools/benchmarks/isis_cpp_benchmark.cpp)
 
-if(NOT WIN32)
-  target_compile_definitions(isis_cpp_benchmark PRIVATE _GNU_SOURCE)
-endif()
+  if(NOT WIN32)
+    target_compile_definitions(isis_cpp_benchmark PRIVATE _GNU_SOURCE)
+  endif()
 
-target_include_directories(isis_cpp_benchmark
-  PRIVATE
-    "${ISIS_INCLUDE_DIR}"
-    ${ISIS_DEP_INCLUDE_SEARCH_DIRS}
-    ${ISIS_DEP_SUBDIR_INCLUDE_DIRS}
-    ${ISIS_OPTIONAL_INCLUDE_DIRS}
-    ${Qt5Core_INCLUDE_DIRS})
+  target_include_directories(isis_cpp_benchmark
+    PRIVATE
+      "${ISIS_INCLUDE_DIR}"
+      ${ISIS_DEP_INCLUDE_SEARCH_DIRS}
+      ${ISIS_DEP_SUBDIR_INCLUDE_DIRS}
+      ${ISIS_OPTIONAL_INCLUDE_DIRS}
+      ${Qt5Core_INCLUDE_DIRS})
 
-target_link_libraries(isis_cpp_benchmark
-  PRIVATE
-    "${ISIS_CORE_LIBRARY}"
-    ${ISIS_EXTRA_MODULE_LIBS}
-    ${ISIS_EXTRA_CAMERA_LIBS}
-    ${ISIS_EXTRA_PROJECTION_LIBS}
-    ${ISIS_RUNTIME_DEP_LIBS}
-    ${BULLET_RUNTIME_LIBS}
-    Qt5::Core)
+  target_link_libraries(isis_cpp_benchmark
+    PRIVATE
+      "${ISIS_CORE_LIBRARY}"
+      ${ISIS_EXTRA_MODULE_LIBS}
+      ${ISIS_EXTRA_CAMERA_LIBS}
+      ${ISIS_EXTRA_PROJECTION_LIBS}
+      ${ISIS_RUNTIME_DEP_LIBS}
+      ${BULLET_RUNTIME_LIBS}
+      Qt5::Core)
 
-set_target_properties(isis_cpp_benchmark PROPERTIES
-  RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tools/benchmarks")
-
-if(NOT WIN32)
   set_target_properties(isis_cpp_benchmark PROPERTIES
-    BUILD_RPATH "${ISIS_LIBRARY_DIR}"
-    INSTALL_RPATH "${ISIS_LIBRARY_DIR}")
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tools/benchmarks")
+
+  if(NOT WIN32)
+    set_target_properties(isis_cpp_benchmark PROPERTIES
+      BUILD_RPATH "${ISIS_LIBRARY_DIR}"
+      INSTALL_RPATH "${ISIS_LIBRARY_DIR}")
+  endif()
 endif()
 
 install(TARGETS _isis_core

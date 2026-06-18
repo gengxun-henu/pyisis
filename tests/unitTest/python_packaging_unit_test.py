@@ -4,6 +4,9 @@ Unit tests for Python packaging metadata.
 Author: Geng Xun
 Created: 2026-06-18
 Last Modified: 2026-06-18
+Updated: 2026-06-18  Geng Xun added CMake wheel staging coverage for scikit-build-core.
+Updated: 2026-06-18  Geng Xun added packaging license metadata coverage for wheel builds.
+Updated: 2026-06-18  Geng Xun raised scikit-build-core coverage for PEP 639 license metadata.
 """
 
 import tomllib
@@ -41,6 +44,12 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         )
         self.assertTrue(any(requirement.startswith("pybind11") for requirement in requirements))
 
+    def test_build_requirements_pin_scikit_build_core_with_license_metadata_support(self):
+        pyproject = self.load_pyproject()
+
+        requirements = pyproject["build-system"]["requires"]
+        self.assertIn("scikit-build-core>=0.11", requirements)
+
     def test_project_identity_and_python_metadata(self):
         pyproject = self.load_pyproject()
 
@@ -49,6 +58,15 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         self.assertEqual("1.2.0", project["version"])
         self.assertIn("README.md", project["readme"])
         self.assertIn(">=3.10", project["requires-python"])
+
+    def test_project_license_metadata_avoids_deprecated_license_classifier(self):
+        pyproject = self.load_pyproject()
+
+        project = pyproject["project"]
+        self.assertEqual("MIT", project["license"])
+        self.assertFalse(
+            any(classifier.startswith("License ::") for classifier in project["classifiers"])
+        )
 
     def test_project_dependencies_include_runtime_packages(self):
         pyproject = self.load_pyproject()
@@ -67,6 +85,26 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         self.assertEqual("build-system.requires", scikit_build["minimum-version"])
         self.assertEqual([], scikit_build["wheel"]["packages"])
         self.assertTrue(scikit_build["wheel"]["platlib"])
+
+    def test_cmake_uses_development_module_for_extension_builds(self):
+        cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
+
+        self.assertIn(
+            "find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)",
+            cmake_lists,
+        )
+        self.assertNotIn(
+            "find_package(Python3 REQUIRED COMPONENTS Interpreter Development)",
+            cmake_lists,
+        )
+
+    def test_cmake_honors_scikit_build_wheel_staging_paths(self):
+        cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
+
+        self.assertIn("if(SKBUILD)", cmake_lists)
+        self.assertIn("SKBUILD_PLATLIB_DIR", cmake_lists)
+        self.assertIn("PYISIS_INSTALL_SITELIB", cmake_lists)
+        self.assertIn("PYISIS_INSTALL_SITEARCH", cmake_lists)
 
 
 if __name__ == "__main__":

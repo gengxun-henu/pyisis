@@ -130,7 +130,7 @@ Create `pyproject.toml` with this content:
 ```toml
 [build-system]
 requires = [
-  "scikit-build-core>=0.10",
+  "scikit-build-core>=0.11",
   "pybind11>=2.11",
 ]
 build-backend = "scikit_build_core.build"
@@ -148,7 +148,6 @@ authors = [
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Intended Audience :: Science/Research",
-  "License :: OSI Approved :: MIT License",
   "Programming Language :: C++",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
@@ -324,10 +323,14 @@ $env:ISIS_PREFIX = "$PWD\build\windows\isis-prefix"
 $env:ISISROOT = $env:ISIS_PREFIX
 $env:PYISIS_DEP_PREFIX = "E:\code\pyisis-win-env"
 python -m pip install -U build scikit-build-core pybind11
-python -m build --wheel --no-isolation
+python -m build --wheel --no-isolation --skip-dependency-check
 ```
 
-Expected: a `dist\pyisis-1.2.0-*.whl` is produced. If this fails before linking, fix CMake install or dependency discovery before moving on.
+Expected: a `dist\pyisis-1.2.0-*.whl` is produced. `--skip-dependency-check`
+keeps `python -m build --no-isolation` from requiring Python `cmake` and
+`ninja` wheels when the active conda environment already supplies the
+executables. If this fails before linking, fix CMake install or dependency
+discovery before moving on.
 
 - [ ] **Step 8: Commit**
 
@@ -1106,7 +1109,7 @@ if ($runtimeAnyWheel) {
 & $PythonExecutable -m build packaging\isisdata-minimal --wheel --outdir $OutputDir
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-& $PythonExecutable -m build . --wheel --no-isolation --outdir $OutputDir
+& $PythonExecutable -m build . --wheel --no-isolation --skip-dependency-check --outdir $OutputDir
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Get-ChildItem -LiteralPath $OutputDir -Filter "*.whl" | Sort-Object Name | ForEach-Object {

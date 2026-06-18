@@ -38,6 +38,30 @@ if (-not (Test-Path $coreHeader)) { Fail "missing core header: $coreHeader" }
 if (-not (Test-Path $coreLib)) { Fail "missing core import library: $coreLib" }
 if (-not (Test-Path $coreDll)) { Fail "missing core runtime DLL: $coreDll" }
 
+function Ensure-AppXmlExeAliases {
+    param([Parameter(Mandatory = $true)][string]$Prefix)
+
+    $binDir = Join-Path $Prefix "bin"
+    $xmlDir = Join-Path $binDir "xml"
+    if (-not (Test-Path $binDir) -or -not (Test-Path $xmlDir)) {
+        return 0
+    }
+
+    $created = 0
+    Get-ChildItem -LiteralPath $binDir -Filter "*.exe" -File | ForEach-Object {
+        $baseXml = Join-Path $xmlDir "$($_.BaseName).xml"
+        $exeXml = Join-Path $xmlDir "$($_.Name).xml"
+        if ((Test-Path -LiteralPath $baseXml) -and -not (Test-Path -LiteralPath $exeXml)) {
+            Copy-Item -LiteralPath $baseXml -Destination $exeXml
+            $created += 1
+        }
+    }
+
+    return $created
+}
+
+$createdXmlAliases = Ensure-AppXmlExeAliases -Prefix $Prefix
+
 $cameraPlugin = @(
     (Join-Path $libDir "Camera.plugin")
     (Join-Path $runtimeDir "Camera.plugin")
@@ -107,3 +131,4 @@ Write-Step "ISIS prefix verified: $Prefix"
 Write-Step "include: $includeDir"
 Write-Step "lib: $libDir"
 Write-Step "runtime: $runtimeDir"
+Write-Step "application XML .exe aliases created: $createdXmlAliases"

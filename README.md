@@ -13,12 +13,16 @@ This project wraps the powerful USGS ISIS (v9.0.0) photogrammetric software, ena
 
 # pyISIS / `isis_pybind_standalone`
 
-This repository provides Python bindings for **USGS ISIS 9.0.0**, built with `pybind11`, and currently delivers the `isis_pybind` extension module primarily for Linux.
+This repository provides Python bindings for **USGS ISIS 9.0.0**, built with `pybind11`.
+The low-level binding package is `isis_pybind`; the recommended user-facing
+entrypoint is the lightweight `pyisis` facade.
 
 The scope of this repository is intentionally clear:
 
 - use an **already installed ISIS environment** as the external SDK / runtime
 - build the Python-importable extension module `isis_pybind._isis_core`
+- provide the higher-level `pyisis` facade for runtime configuration, cube
+  context management, and common cube/camera helpers
 - expose Python access to APIs used in planetary remote sensing, photogrammetry, control networks, camera models, projections, and geometry processing
 
 > The currently recommended distribution model is **GitHub Release + installation instructions + Linux build artifacts**.
@@ -41,18 +45,38 @@ The current recommended and validated compatibility range is:
 After a successful build, the core Python package directory is:
 
 - `build/python/isis_pybind/`
+- `build/python/pyisis/`
 
 It typically contains:
 
 - `build/python/isis_pybind/__init__.py`
 - `build/python/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so`
 - `build/python/isis_pybind/LICENSE`
+- `build/python/pyisis/__init__.py`
+- `build/python/pyisis/LICENSE`
 
 The actual bound shared library is:
 
 - `_isis_core.cpython-312-x86_64-linux-gnu.so`
 
 However, **do not copy and use only the `.so` file by itself**. It should live inside the `isis_pybind/` package directory together with `__init__.py`.
+
+Most application code should import the facade:
+
+```python
+import pyisis
+
+with pyisis.open_cube("image.cub") as cube:
+    print(pyisis.cube_dimensions(cube))
+    print(pyisis.ground_at_center(cube))
+```
+
+When you need direct access to the bound ISIS C++ API, import the low-level
+package:
+
+```python
+import isis_pybind as ip
+```
 
 ## Install USGS ISIS first
 
@@ -181,6 +205,8 @@ isis_pybind/
 ```
 
 then you can copy the entire `isis_pybind/` directory into the target Python environment's `site-packages` directory.
+If the artifact also contains the `pyisis/` facade directory, copy that
+directory beside `isis_pybind/`.
 
 For a conda environment on Linux, the destination is typically:
 
@@ -220,6 +246,8 @@ Then copy the entire built package directory into that location so that the resu
 <site-packages>/isis_pybind/__init__.py
 <site-packages>/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so
 <site-packages>/isis_pybind/LICENSE
+<site-packages>/pyisis/__init__.py
+<site-packages>/pyisis/LICENSE
 ```
 
 Make sure the target environment uses a compatible Python ABI. For example, a file named `_isis_core.cpython-312-x86_64-linux-gnu.so` is built for CPython 3.12 and should be installed into a Python 3.12 environment rather than copied into Python 3.11 or 3.13.
@@ -249,13 +277,13 @@ scripts/build_test_smoke.sh full
 ### 1. Verify that Python can import the package
 
 ```bash
-python -c "import isis_pybind as ip; print(ip.__file__)"
+python -c "import pyisis; print(pyisis.__file__)"
 ```
 
 ### 2. Verify that the core extension is loaded
 
 ```bash
-python -c "import isis_pybind as ip; print(hasattr(ip, 'Cube'), hasattr(ip, 'Camera'))"
+python -c "import pyisis; print(pyisis.Cube, pyisis.Camera)"
 ```
 
 ### 3. Run the minimal smoke flow

@@ -9,11 +9,13 @@ Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 from __future__ import annotations
 
 import importlib
+import importlib.util
 from pathlib import Path
 import subprocess
 import sys
 from tempfile import TemporaryDirectory
 import unittest
+from unittest import mock
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -71,6 +73,8 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     str(prefix),
                     "--dependency-prefix",
                     str(dep_prefix),
+                    "--dependency-copy-mode",
+                    "pattern",
                     "--stage-dir",
                     str(stage),
                 ],
@@ -107,6 +111,51 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             finally:
                 sys.modules.pop("pyisis_runtime", None)
                 sys.path.remove(str(stage / "src"))
+
+    def test_stage_runtime_closure_copies_only_resolved_dependency_dlls(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_win64",
+            STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        with TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            prefix = temp / "isis-prefix"
+            (prefix / "bin").mkdir(parents=True)
+            (prefix / "lib").mkdir(parents=True)
+            (prefix / "IsisPreferences").write_text("Group = DataDirectory", encoding="utf-8")
+            (prefix / "lib" / "isis.dll").write_bytes(b"isis")
+            (prefix / "lib" / "Camera.plugin").write_bytes(b"camera")
+
+            dep_prefix = temp / "dep-prefix"
+            (dep_prefix / "Library" / "bin").mkdir(parents=True)
+            (dep_prefix / "bin").mkdir(parents=True)
+            (dep_prefix / "Library" / "bin" / "needed.dll").write_bytes(b"needed")
+            (dep_prefix / "Library" / "bin" / "unused.dll").write_bytes(b"unused")
+            (dep_prefix / "bin" / "cspice.dll").write_bytes(b"cspice")
+
+            def fake_dumpbin(binary):
+                if binary.name == "isis.dll":
+                    return ("needed.dll", "cspice.dll", "KERNEL32.dll")
+                return ()
+
+            stage = temp / "runtime-stage"
+            with mock.patch.object(stage_module, "_dumpbin_dependencies", fake_dumpbin):
+                stage_module.stage_runtime(
+                    prefix,
+                    stage,
+                    (dep_prefix,),
+                    dependency_copy_mode="closure",
+                )
+
+            vendor = stage / "src" / "pyisis_runtime" / "vendor" / "isis"
+            self.assertTrue((vendor / "Library" / "bin" / "needed.dll").is_file())
+            self.assertTrue((vendor / "bin" / "cspice.dll").is_file())
+            self.assertFalse((vendor / "Library" / "bin" / "unused.dll").exists())
 
 
 if __name__ == "__main__":

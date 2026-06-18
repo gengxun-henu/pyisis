@@ -1079,7 +1079,7 @@ Run:
 ```powershell
 $env:ISIS_PREFIX = "$PWD\build\windows\isis-prefix"
 $env:PYISIS_DEP_PREFIX = "E:\code\pyisis-win-env"
-python tools\packaging\stage_runtime_win64.py --isis-prefix $env:ISIS_PREFIX --dependency-prefix $env:PYISIS_DEP_PREFIX --stage-dir build\packaging\pyisis-runtime-win64
+python tools\packaging\stage_runtime_win64.py --isis-prefix $env:ISIS_PREFIX --dependency-prefix $env:PYISIS_DEP_PREFIX --dependency-copy-mode closure --stage-dir build\packaging\pyisis-runtime-win64
 python -m build build\packaging\pyisis-runtime-win64 --wheel
 python -m wheel tags --platform-tag win_amd64 --remove build\packaging\pyisis-runtime-win64\dist\pyisis_runtime_win64-1.2.0-py3-none-any.whl
 ```
@@ -1140,6 +1140,7 @@ $env:PYISIS_DEP_PREFIX = (Resolve-Path $DependencyPrefix).Path
 & $PythonExecutable tools\packaging\stage_runtime_win64.py `
     --isis-prefix $env:ISIS_PREFIX `
     --dependency-prefix $env:PYISIS_DEP_PREFIX `
+    --dependency-copy-mode closure `
     --stage-dir build\packaging\pyisis-runtime-win64
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

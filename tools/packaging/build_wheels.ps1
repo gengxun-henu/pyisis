@@ -36,6 +36,7 @@ $RuntimeStageDir = Join-Path $PWD "build\packaging\pyisis-runtime-win64"
 & $PythonExecutable tools\packaging\stage_runtime_win64.py `
     --isis-prefix $env:ISIS_PREFIX `
     --dependency-prefix $env:PYISIS_DEP_PREFIX `
+    --dependency-copy-mode closure `
     --stage-dir $RuntimeStageDir
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

@@ -28,6 +28,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         script = BUILD_WHEELS_SCRIPT.read_text(encoding="utf-8")
         self.assertIn("stage_runtime_win64.py", script)
         self.assertIn("--dependency-prefix", script)
+        self.assertIn("--dependency-copy-mode closure", script)
         self.assertIn("wheel tags --platform-tag win_amd64", script)
         self.assertIn("packaging\\isisdata-minimal", script)
         self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)

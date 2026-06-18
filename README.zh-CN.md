@@ -122,6 +122,22 @@ python tools\packaging\test_wheel_install.py `
 
 验证脚本会从 `wheelhouse` 安装 `pyisis`，导入 `pyisis` 和 `isis_pybind`，并确认打包进去的最小 `ISISDATA` 可用于 smoke test。真实任务处理仍建议配置完整的外部 `ISISDATA`。
 
+上传到 TestPyPI 之前，先运行受保护的 check-only 辅助脚本：
+
+```powershell
+.\tools\packaging\publish_testpypi.ps1 `
+  -Wheelhouse wheelhouse `
+  -PythonExecutable "$env:CONDA_PREFIX\python.exe" `
+  -CheckOnly
+```
+
+当 TestPyPI 凭据已经在仓库外配置好后，再额外传入 `-Upload`。上传完成后，用全新的 venv 验证真实索引安装：
+
+```powershell
+python tools\packaging\test_testpypi_install.py `
+  --venv build\packaging\testpypi-venv
+```
+
 ### 方式 A：从源码构建并安装到当前 Python 环境
 
 这是目前**最推荐**、也最可靠的安装方式。

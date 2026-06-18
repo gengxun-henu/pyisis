@@ -18,6 +18,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels.ps1"
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
 PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
+TEST_TESTPYPI_INSTALL_SCRIPT = (
+    PROJECT_ROOT / "tools" / "packaging" / "test_testpypi_install.py"
+)
 
 
 class PackagingToolsUnitTest(unittest.TestCase):
@@ -120,6 +123,18 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("PSBoundParameters.ContainsKey(\"Wheelhouse\")", script)
         self.assertIn("ExpectedWheelNames", script)
         self.assertIn("Upload switch was not set", script)
+
+    def test_testpypi_install_script_installs_from_testpypi_with_pypi_fallback(self):
+        self.assertTrue(TEST_TESTPYPI_INSTALL_SCRIPT.is_file())
+
+        script = TEST_TESTPYPI_INSTALL_SCRIPT.read_text(encoding="utf-8")
+        self.assertIn("https://test.pypi.org/simple", script)
+        self.assertIn("https://pypi.org/simple", script)
+        self.assertIn("--index-url", script)
+        self.assertIn("--extra-index-url", script)
+        self.assertIn("pyisis", script)
+        self.assertIn("_verification_environment", script)
+        self.assertIn("status.usable_for_smoke_tests", script)
 
 
 if __name__ == "__main__":

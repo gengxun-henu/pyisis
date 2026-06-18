@@ -1415,8 +1415,7 @@ Expected: wheelhouse contains exactly one wheel per distribution for the current
 Run:
 
 ```powershell
-python -m pip install -U twine
-python -m twine check wheelhouse\*.whl
+.\tools\packaging\publish_testpypi.ps1 -Wheelhouse wheelhouse -PythonExecutable python -CheckOnly
 ```
 
 Expected: PASS for all wheels.
@@ -1437,7 +1436,7 @@ Expected: PASS.
 Run only after credentials are configured outside the repository:
 
 ```powershell
-python -m twine upload --repository testpypi wheelhouse\*.whl
+.\tools\packaging\publish_testpypi.ps1 -Wheelhouse wheelhouse -PythonExecutable python -Upload
 ```
 
 Expected: TestPyPI accepts all three distributions.
@@ -1447,12 +1446,7 @@ Expected: TestPyPI accepts all three distributions.
 Run in a brand-new venv:
 
 ```powershell
-python -m venv build\packaging\testpypi-venv
-build\packaging\testpypi-venv\Scripts\python.exe -m pip install `
-  --index-url https://test.pypi.org/simple `
-  --extra-index-url https://pypi.org/simple `
-  pyisis
-build\packaging\testpypi-venv\Scripts\python.exe -c "import pyisis, isis_pybind; print(pyisis.data_status().message)"
+python tools\packaging\test_testpypi_install.py --venv build\packaging\testpypi-venv
 ```
 
 Expected: import succeeds and minimal ISISDATA is usable.

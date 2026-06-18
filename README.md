@@ -152,6 +152,23 @@ The local validation should install `pyisis` from `wheelhouse`, import
 usable for smoke tests. Real mission processing should still use a complete
 external `ISISDATA` tree.
 
+Before uploading to TestPyPI, run the protected check-only helper:
+
+```powershell
+.\tools\packaging\publish_testpypi.ps1 `
+  -Wheelhouse wheelhouse `
+  -PythonExecutable "$env:CONDA_PREFIX\python.exe" `
+  -CheckOnly
+```
+
+When TestPyPI credentials are configured outside the repository, add `-Upload`.
+After upload, verify the published packages from a new venv:
+
+```powershell
+python tools\packaging\test_testpypi_install.py `
+  --venv build\packaging\testpypi-venv
+```
+
 ### Option A: build from source and install into the current Python environment
 
 This is the **recommended** and most reliable installation method at the moment.

@@ -42,7 +42,7 @@
 - Create: `tests/unitTest/python_packaging_unit_test.py`
 - Create later: `pyproject.toml`
 
-- [ ] **Step 1: Write the failing metadata tests**
+- [x] **Step 1: Write the failing metadata tests**
 
 Create `tests/unitTest/python_packaging_unit_test.py` with this content:
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] **Step 2: Run the failing metadata tests**
+- [x] **Step 2: Run the failing metadata tests**
 
 Run:
 
@@ -123,7 +123,7 @@ python -m unittest tests.unitTest.python_packaging_unit_test -v
 
 Expected: FAIL because `pyproject.toml` does not exist yet.
 
-- [ ] **Step 3: Add the main package `pyproject.toml`**
+- [x] **Step 3: Add the main package `pyproject.toml`**
 
 Create `pyproject.toml` with this content:
 
@@ -181,7 +181,7 @@ build = "cp312-win_amd64"
 test-command = "python -c \"import pyisis; import isis_pybind; print(pyisis.data_status().message)\""
 ```
 
-- [ ] **Step 4: Run metadata tests again**
+- [x] **Step 4: Run metadata tests again**
 
 Run:
 
@@ -191,7 +191,7 @@ python -m unittest tests.unitTest.python_packaging_unit_test -v
 
 Expected: PASS.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Run:
 
@@ -208,7 +208,7 @@ git commit -m "test: add pip packaging metadata coverage"
 - Modify: `CMakeLists.txt`
 - Modify: `tests/unitTest/python_packaging_unit_test.py`
 
-- [ ] **Step 1: Add failing CMake install tests**
+- [x] **Step 1: Add failing CMake install tests**
 
 Append these test methods to `PythonPackagingUnitTest` in `tests/unitTest/python_packaging_unit_test.py`:
 
@@ -235,7 +235,7 @@ Append these test methods to `PythonPackagingUnitTest` in `tests/unitTest/python
         )
 ```
 
-- [ ] **Step 2: Run the failing CMake packaging tests**
+- [x] **Step 2: Run the failing CMake packaging tests**
 
 Run:
 
@@ -245,7 +245,7 @@ python -m unittest tests.unitTest.python_packaging_unit_test -v
 
 Expected: FAIL because `CMakeLists.txt` still uses `Development` and absolute Python install dirs by default.
 
-- [ ] **Step 3: Use Python extension-only development headers**
+- [x] **Step 3: Use Python extension-only development headers**
 
 Change the existing Python package discovery line in `CMakeLists.txt` from:
 
@@ -259,7 +259,7 @@ to:
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
 ```
 
-- [ ] **Step 4: Add a benchmark build option**
+- [x] **Step 4: Add a benchmark build option**
 
 Wrap the benchmark target in `CMakeLists.txt` with an option so pip wheels do not compile unrelated tools:
 
@@ -278,7 +278,7 @@ if(PYISIS_BUILD_BENCHMARKS)
 endif()
 ```
 
-- [ ] **Step 5: Teach install paths about scikit-build-core**
+- [x] **Step 5: Teach install paths about scikit-build-core**
 
 Replace the current `Python3_SITELIB` / `Python3_SITEARCH` default block in `CMakeLists.txt` with:
 
@@ -310,7 +310,7 @@ else()
 endif()
 ```
 
-- [ ] **Step 6: Run the focused tests**
+- [x] **Step 6: Run the focused tests**
 
 Run:
 
@@ -320,7 +320,7 @@ python -m unittest tests.unitTest.python_packaging_unit_test -v
 
 Expected: PASS.
 
-- [ ] **Step 7: Run a local configure smoke check**
+- [x] **Step 7: Run a local configure smoke check**
 
 Run from a shell with the existing Windows environment:
 
@@ -338,7 +338,7 @@ keeps `python -m build --no-isolation` from requiring Python `cmake` and
 executables. If this fails before linking, fix CMake install or dependency
 discovery before moving on.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 Run:
 
@@ -357,7 +357,7 @@ git commit -m "build: add scikit-build wheel packaging"
 - Modify: `python/isis_pybind/__init__.py`
 - Create: `tests/unitTest/pyisis_runtime_unit_test.py`
 
-- [ ] **Step 1: Write failing runtime discovery tests**
+- [x] **Step 1: Write failing runtime discovery tests**
 
 Create `tests/unitTest/pyisis_runtime_unit_test.py` with this content:
 
@@ -435,7 +435,7 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] **Step 2: Run the failing runtime discovery tests**
+- [x] **Step 2: Run the failing runtime discovery tests**
 
 Run:
 
@@ -445,7 +445,7 @@ python -m unittest tests.unitTest.pyisis_runtime_unit_test -v
 
 Expected: FAIL because `python/pyisis/_runtime.py` does not exist.
 
-- [ ] **Step 3: Add the shared runtime helper**
+- [x] **Step 3: Add the shared runtime helper**
 
 Create `python/pyisis/_runtime.py` with this content:
 
@@ -569,7 +569,7 @@ def configure_runtime(*, register_dll_directories: bool = True) -> RuntimeDiscov
     )
 ```
 
-- [ ] **Step 4: Wire `pyisis` facade to the helper**
+- [x] **Step 4: Wire `pyisis` facade to the helper**
 
 Modify `python/pyisis/__init__.py`:
 
@@ -590,7 +590,7 @@ Add these names to `__all__`:
     "configure_runtime",
 ```
 
-- [ ] **Step 5: Wire direct `isis_pybind` imports to the helper**
+- [x] **Step 5: Wire direct `isis_pybind` imports to the helper**
 
 In `python/isis_pybind/__init__.py`, replace the existing Windows-only runtime configuration block with:
 
@@ -606,7 +606,7 @@ if _configure_pyisis_runtime is not None:
 
 Keep the `from ._isis_core import (...)` section after this block.
 
-- [ ] **Step 6: Run runtime discovery tests**
+- [x] **Step 6: Run runtime discovery tests**
 
 Run:
 
@@ -617,7 +617,7 @@ python -m unittest tests.unitTest.pyisis_facade_unit_test -v
 
 Expected: PASS.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 Run:
 
@@ -636,7 +636,7 @@ git commit -m "feat: discover packaged pyisis runtime"
 - Create: `packaging/isisdata-minimal/src/pyisis_isisdata_minimal/__init__.py`
 - Modify: `tests/unitTest/python_packaging_unit_test.py`
 
-- [ ] **Step 1: Add failing minimal data package metadata tests**
+- [x] **Step 1: Add failing minimal data package metadata tests**
 
 Append this method to `PythonPackagingUnitTest`:
 
@@ -651,7 +651,7 @@ Append this method to `PythonPackagingUnitTest`:
         self.assertIn("tests/data/isisdata/mockup", str(config["tool"]["setuptools"]["package-data"]))
 ```
 
-- [ ] **Step 2: Run the failing data package test**
+- [x] **Step 2: Run the failing data package test**
 
 Run:
 
@@ -661,7 +661,7 @@ python -m unittest tests.unitTest.python_packaging_unit_test -v
 
 Expected: FAIL because `packaging/isisdata-minimal/pyproject.toml` does not exist.
 
-- [ ] **Step 3: Add the minimal data package README**
+- [x] **Step 3: Add the minimal data package README**
 
 Create `packaging/isisdata-minimal/README.md`:
 
@@ -679,7 +679,7 @@ print(pyisis_isisdata_minimal.data_path())
 ```
 ```
 
-- [ ] **Step 4: Add the minimal data package metadata**
+- [x] **Step 4: Add the minimal data package metadata**
 
 Create `packaging/isisdata-minimal/pyproject.toml`:
 
@@ -705,7 +705,7 @@ include-package-data = false
 pyisis_isisdata_minimal = ["data/**/*"]
 ```
 
-- [ ] **Step 5: Add the minimal data package module**
+- [x] **Step 5: Add the minimal data package module**
 
 Create `packaging/isisdata-minimal/src/pyisis_isisdata_minimal/__init__.py`:
 
@@ -729,7 +729,7 @@ def data_path() -> Path:
 __all__ = ["data_path"]
 ```
 
-- [ ] **Step 6: Add the data staging command to the local build flow**
+- [x] **Step 6: Add the data staging command to the local build flow**
 
 The implementation worker should copy the existing mockup data into the package source tree before building:
 
@@ -741,7 +741,7 @@ Copy-Item -LiteralPath "tests\data\isisdata\mockup" -Destination $dataTarget -Re
 
 Do not commit generated copies if they become large or duplicate tracked test data. If duplication is unacceptable, replace this command with a small Python build helper that stages into `build\packaging\isisdata-minimal` instead.
 
-- [ ] **Step 7: Build and inspect the data wheel**
+- [x] **Step 7: Build and inspect the data wheel**
 
 Run:
 
@@ -753,7 +753,7 @@ python -c "import pyisis_isisdata_minimal as d; print(d.data_path()); assert (d.
 
 Expected: PASS.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 Run:
 
@@ -773,7 +773,7 @@ git commit -m "build: add minimal ISISDATA wheel package"
 - Create: `tools/packaging/stage_runtime_win64.py`
 - Create: `tests/unitTest/runtime_wheel_script_unit_test.py`
 
-- [ ] **Step 1: Write failing runtime staging tests**
+- [x] **Step 1: Write failing runtime staging tests**
 
 Create `tests/unitTest/runtime_wheel_script_unit_test.py`:
 
@@ -843,7 +843,7 @@ if __name__ == "__main__":
     unittest.main()
 ```
 
-- [ ] **Step 2: Run the failing runtime staging test**
+- [x] **Step 2: Run the failing runtime staging test**
 
 Run:
 
@@ -853,7 +853,7 @@ python -m unittest tests.unitTest.runtime_wheel_script_unit_test -v
 
 Expected: FAIL because the staging script does not exist.
 
-- [ ] **Step 3: Add the runtime package README**
+- [x] **Step 3: Add the runtime package README**
 
 Create `packaging/runtime-win64/README.md`:
 
@@ -873,7 +873,7 @@ print(pyisis_runtime.dll_directories())
 ```
 ```
 
-- [ ] **Step 4: Add runtime package metadata**
+- [x] **Step 4: Add runtime package metadata**
 
 Create `packaging/runtime-win64/pyproject.toml`:
 
@@ -899,7 +899,7 @@ include-package-data = false
 pyisis_runtime = ["vendor/isis/**/*"]
 ```
 
-- [ ] **Step 5: Add the runtime package API**
+- [x] **Step 5: Add the runtime package API**
 
 Create `packaging/runtime-win64/src/pyisis_runtime/__init__.py`:
 
@@ -956,7 +956,7 @@ def configure_environment() -> Path:
 __all__ = ["configure_environment", "dll_directories", "prefix"]
 ```
 
-- [ ] **Step 6: Add the runtime staging script**
+- [x] **Step 6: Add the runtime staging script**
 
 Create `tools/packaging/stage_runtime_win64.py`:
 
@@ -1062,7 +1062,7 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-- [ ] **Step 7: Run runtime staging tests**
+- [x] **Step 7: Run runtime staging tests**
 
 Run:
 
@@ -1072,7 +1072,7 @@ python -m unittest tests.unitTest.runtime_wheel_script_unit_test -v
 
 Expected: PASS.
 
-- [ ] **Step 8: Build the generated runtime wheel locally**
+- [x] **Step 8: Build the generated runtime wheel locally**
 
 Run:
 
@@ -1086,7 +1086,7 @@ python -m wheel tags --platform-tag win_amd64 --remove build\packaging\pyisis-ru
 
 Expected: a wheel tagged `py3-none-win_amd64` remains in `build\packaging\pyisis-runtime-win64\dist`.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 Run:
 
@@ -1103,7 +1103,7 @@ git commit -m "build: add Windows runtime wheel staging"
 - Create: `tools/packaging/build_wheels.ps1`
 - Create: `tools/packaging/test_wheel_install.py`
 
-- [ ] **Step 1: Add the local wheel build harness**
+- [x] **Step 1: Add the local wheel build harness**
 
 Create `tools/packaging/build_wheels.ps1`:
 
@@ -1164,7 +1164,7 @@ Get-ChildItem -LiteralPath $OutputDir -Filter "*.whl" | Sort-Object Name | ForEa
 }
 ```
 
-- [ ] **Step 2: Add the clean venv verification script**
+- [x] **Step 2: Add the clean venv verification script**
 
 Create `tools/packaging/test_wheel_install.py`:
 
@@ -1255,7 +1255,7 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-- [ ] **Step 3: Build wheels locally**
+- [x] **Step 3: Build wheels locally**
 
 Run:
 
@@ -1265,7 +1265,7 @@ Run:
 
 Expected: `wheelhouse` contains wheels for `pyisis`, `pyisis-runtime-win64`, and `pyisis-isisdata-minimal`.
 
-- [ ] **Step 4: Verify the wheels in a clean venv**
+- [x] **Step 4: Verify the wheels in a clean venv**
 
 Run:
 
@@ -1275,7 +1275,7 @@ python tools\packaging\test_wheel_install.py --wheelhouse wheelhouse --venv buil
 
 Expected: PASS and the subprocess prints a usable minimal ISISDATA status message.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 Run:
 
@@ -1292,7 +1292,7 @@ git commit -m "build: add local pip wheel verification"
 - Create: `.github/workflows/wheels.yml`
 - Modify: `README.md`
 
-- [ ] **Step 1: Add a Windows-only wheel workflow**
+- [x] **Step 1: Add a Windows-only wheel workflow**
 
 Create `.github/workflows/wheels.yml`:
 
@@ -1351,7 +1351,7 @@ jobs:
 
 If GitHub-hosted runners cannot build ISIS within the time limit, replace the `Build ISIS prefix` step with a cached artifact or a release asset download that is produced by a separate runtime-prefix workflow.
 
-- [ ] **Step 2: Document pip install status**
+- [x] **Step 2: Document pip install status**
 
 Add this section to `README.md`:
 
@@ -1373,7 +1373,7 @@ Production ISISDATA is not bundled in the main wheel. Use a real `ISISDATA`
 directory for mission workflows beyond smoke tests.
 ```
 
-- [ ] **Step 3: Run local tests**
+- [x] **Step 3: Run local tests**
 
 Run:
 
@@ -1383,7 +1383,7 @@ python -m unittest tests.unitTest.python_packaging_unit_test tests.unitTest.pyis
 
 Expected: PASS.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 Run:
 
@@ -1394,12 +1394,19 @@ git commit -m "ci: add Windows wheel build workflow"
 
 ---
 
+## Current Execution Status
+
+- Tasks 1-7 are implemented, tested, committed, pushed, and represented in PR #329.
+- Task 8 steps 1-3 are complete locally: final wheelhouse build, protected `twine check`, and clean venv install smoke all pass.
+- Task 8 steps 4-5 remain external-gated: TestPyPI upload and TestPyPI install verification require TestPyPI credentials configured outside the repository.
+- GitHub Actions for PR #329 are currently `action_required` and require maintainer approval before workflow jobs run.
+
 ## Task 8: TestPyPI Publishing Dry Run
 
 **Files:**
 - No tracked files unless the dry run finds documentation gaps.
 
-- [ ] **Step 1: Build final local wheelhouse**
+- [x] **Step 1: Build final local wheelhouse**
 
 Run:
 
@@ -1410,7 +1417,7 @@ Remove-Item -LiteralPath wheelhouse -Recurse -Force -ErrorAction SilentlyContinu
 
 Expected: wheelhouse contains exactly one wheel per distribution for the current Python/platform build.
 
-- [ ] **Step 2: Check wheel metadata**
+- [x] **Step 2: Check wheel metadata**
 
 Run:
 
@@ -1420,7 +1427,7 @@ Run:
 
 Expected: PASS for all wheels.
 
-- [ ] **Step 3: Verify clean local install one last time**
+- [x] **Step 3: Verify clean local install one last time**
 
 Run:
 

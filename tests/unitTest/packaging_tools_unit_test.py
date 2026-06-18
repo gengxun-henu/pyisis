@@ -1,0 +1,109 @@
+"""Unit tests for local wheel packaging tools.
+
+Author: Geng Xun
+Created: 2026-06-18
+Last Modified: 2026-06-18
+Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
+"""
+
+from __future__ import annotations
+
+import importlib.util
+from pathlib import Path
+import unittest
+from unittest import mock
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels.ps1"
+TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
+
+
+class PackagingToolsUnitTest(unittest.TestCase):
+    """Test suite for wheel packaging helper scripts. Added: 2026-06-18."""
+
+    def test_build_wheels_script_runs_all_local_wheel_steps(self):
+        self.assertTrue(BUILD_WHEELS_SCRIPT.is_file())
+
+        script = BUILD_WHEELS_SCRIPT.read_text(encoding="utf-8")
+        self.assertIn("stage_runtime_win64.py", script)
+        self.assertIn("--dependency-prefix", script)
+        self.assertIn("wheel tags --platform-tag win_amd64", script)
+        self.assertIn("packaging\\isisdata-minimal", script)
+        self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)
+
+    def test_clean_venv_install_script_installs_from_wheelhouse(self):
+        self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())
+
+        script = TEST_WHEEL_INSTALL_SCRIPT.read_text(encoding="utf-8")
+        self.assertIn("--no-index", script)
+        self.assertIn("--find-links", script)
+        self.assertIn("pyisis", script)
+        self.assertIn("status.usable_for_smoke_tests", script)
+        self.assertIn("_verification_environment", script)
+        self.assertIn("ISIS_PREFIX", script)
+        self.assertIn("CONDA_PREFIX", script)
+
+    def test_clean_venv_install_script_selects_platform_python_path(self):
+        self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())
+
+        spec = importlib.util.spec_from_file_location(
+            "test_wheel_install",
+            TEST_WHEEL_INSTALL_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        self.assertEqual(
+            module._python_executable(Path("venv")).name,
+            "python.exe",
+        )
+
+    def test_clean_venv_verification_environment_removes_external_runtime(self):
+        self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())
+
+        spec = importlib.util.spec_from_file_location(
+            "test_wheel_install",
+            TEST_WHEEL_INSTALL_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        runtime_root = PROJECT_ROOT / "build" / "windows" / "isis-prefix"
+        dependency_root = PROJECT_ROOT / "fake-conda"
+        path = ";".join(
+            [
+                str(runtime_root / "bin"),
+                str(dependency_root / "Library" / "bin"),
+                r"C:\Windows\System32",
+            ]
+        )
+        with mock.patch.dict(
+            module.os.environ,
+            {
+                "ISIS_PREFIX": str(runtime_root),
+                "ISISROOT": str(runtime_root),
+                "ISISDATA": str(PROJECT_ROOT / "tests" / "data" / "isisdata" / "mockup"),
+                "PYISIS_DEP_PREFIX": str(dependency_root),
+                "CONDA_PREFIX": str(dependency_root),
+                "PYTHONPATH": str(PROJECT_ROOT / "build" / "python"),
+                "PATH": path,
+            },
+            clear=True,
+        ):
+            env = module._verification_environment()
+
+        self.assertNotIn("ISIS_PREFIX", env)
+        self.assertNotIn("ISISROOT", env)
+        self.assertNotIn("ISISDATA", env)
+        self.assertNotIn("PYTHONPATH", env)
+        self.assertNotIn("CONDA_PREFIX", env)
+        self.assertEqual(env["PATH"], r"C:\Windows\System32")
+
+
+if __name__ == "__main__":
+    unittest.main()

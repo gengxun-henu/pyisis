@@ -971,6 +971,9 @@ from pathlib import Path
 
 
 RUNTIME_PATTERNS = (
+    "IsisPreferences",
+    "isis_version.txt",
+    "LICENSE.md",
     "bin/**/*.dll",
     "bin/**/*.exe",
     "bin/xml/**/*.xml",
@@ -983,6 +986,13 @@ RUNTIME_PATTERNS = (
     "Library/lib/**/*.plugin",
 )
 
+DEPENDENCY_RUNTIME_PATTERNS = (
+    "Library/bin/**/*.dll",
+    "Library/bin/**/*.exe",
+    "Library/lib/**/*.dll",
+    "Library/plugins/**/*.dll",
+)
+
 
 def _copy_file(source: Path, source_root: Path, target_root: Path) -> None:
     relative = source.relative_to(source_root)
@@ -991,11 +1001,25 @@ def _copy_file(source: Path, source_root: Path, target_root: Path) -> None:
     shutil.copy2(source, target)
 
 
-def stage_runtime(isis_prefix: Path, stage_dir: Path) -> Path:
+def _copy_patterns(source_root: Path, target_root: Path, patterns: tuple[str, ...]) -> None:
+    for pattern in patterns:
+        for source in source_root.glob(pattern):
+            if source.is_file():
+                _copy_file(source, source_root, target_root)
+
+
+def stage_runtime(
+    isis_prefix: Path,
+    stage_dir: Path,
+    dependency_prefixes: tuple[Path, ...] = (),
+) -> Path:
     """Copy redistributable runtime files into a generated package stage."""
 
     if not (isis_prefix / "bin").exists() and not (isis_prefix / "Library").exists():
         raise FileNotFoundError(f"ISIS prefix does not look like a runtime prefix: {isis_prefix}")
+    for dependency_prefix in dependency_prefixes:
+        if not dependency_prefix.exists():
+            raise FileNotFoundError(f"Dependency prefix not found: {dependency_prefix}")
 
     template_root = Path(__file__).resolve().parents[2] / "packaging" / "runtime-win64"
     if stage_dir.exists():
@@ -1003,16 +1027,17 @@ def stage_runtime(isis_prefix: Path, stage_dir: Path) -> Path:
     shutil.copytree(template_root, stage_dir)
 
     vendor_root = stage_dir / "src" / "pyisis_runtime" / "vendor" / "isis"
-    for pattern in RUNTIME_PATTERNS:
-        for source in isis_prefix.glob(pattern):
-            if source.is_file():
-                _copy_file(source, isis_prefix, vendor_root)
+    _copy_patterns(isis_prefix, vendor_root, RUNTIME_PATTERNS)
+    for dependency_prefix in dependency_prefixes:
+        _copy_patterns(dependency_prefix, vendor_root, DEPENDENCY_RUNTIME_PATTERNS)
 
     if not any(vendor_root.glob("**/isis.dll")):
         raise FileNotFoundError("Staged runtime is missing isis.dll")
 
-    camera_plugin = list(vendor_root.glob("**/Camera.plugin"))
-    if not camera_plugin:
+    if not (vendor_root / "IsisPreferences").is_file():
+        raise FileNotFoundError("Staged runtime is missing IsisPreferences")
+
+    if not any(vendor_root.glob("**/Camera.plugin")):
         raise FileNotFoundError("Staged runtime is missing Camera.plugin")
 
     return stage_dir
@@ -1021,10 +1046,15 @@ def stage_runtime(isis_prefix: Path, stage_dir: Path) -> Path:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--isis-prefix", required=True, type=Path)
+    parser.add_argument("--dependency-prefix", action="append", default=[], type=Path)
     parser.add_argument("--stage-dir", required=True, type=Path)
     args = parser.parse_args()
 
-    stage_runtime(args.isis_prefix.resolve(), args.stage_dir.resolve())
+    stage_runtime(
+        args.isis_prefix.resolve(),
+        args.stage_dir.resolve(),
+        tuple(path.resolve() for path in args.dependency_prefix),
+    )
     return 0
 
 
@@ -1048,7 +1078,8 @@ Run:
 
 ```powershell
 $env:ISIS_PREFIX = "$PWD\build\windows\isis-prefix"
-python tools\packaging\stage_runtime_win64.py --isis-prefix $env:ISIS_PREFIX --stage-dir build\packaging\pyisis-runtime-win64
+$env:PYISIS_DEP_PREFIX = "E:\code\pyisis-win-env"
+python tools\packaging\stage_runtime_win64.py --isis-prefix $env:ISIS_PREFIX --dependency-prefix $env:PYISIS_DEP_PREFIX --stage-dir build\packaging\pyisis-runtime-win64
 python -m build build\packaging\pyisis-runtime-win64 --wheel
 python -m wheel tags --platform-tag win_amd64 --remove build\packaging\pyisis-runtime-win64\dist\pyisis_runtime_win64-1.2.0-py3-none-any.whl
 ```
@@ -1080,13 +1111,21 @@ Create `tools/packaging/build_wheels.ps1`:
 param(
     [string]$IsisPrefix = "$PWD\build\windows\isis-prefix",
     [string]$OutputDir = "$PWD\wheelhouse",
-    [string]$PythonExecutable = "python"
+    [string]$PythonExecutable = "python",
+    [string]$DependencyPrefix = $env:PYISIS_DEP_PREFIX
 )
 
 $ErrorActionPreference = "Stop"
 
 if (-not (Test-Path $IsisPrefix)) {
     throw "ISIS prefix not found: $IsisPrefix"
+}
+
+if (-not $DependencyPrefix) {
+    $DependencyPrefix = (& $PythonExecutable -c "import sys; print(sys.prefix)").Trim()
+}
+if (-not (Test-Path $DependencyPrefix)) {
+    throw "Dependency prefix not found: $DependencyPrefix"
 }
 
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
@@ -1096,9 +1135,11 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 $env:ISIS_PREFIX = (Resolve-Path $IsisPrefix).Path
 $env:ISISROOT = $env:ISIS_PREFIX
+$env:PYISIS_DEP_PREFIX = (Resolve-Path $DependencyPrefix).Path
 
 & $PythonExecutable tools\packaging\stage_runtime_win64.py `
     --isis-prefix $env:ISIS_PREFIX `
+    --dependency-prefix $env:PYISIS_DEP_PREFIX `
     --stage-dir build\packaging\pyisis-runtime-win64
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
@@ -1132,6 +1173,7 @@ Create `tools/packaging/test_wheel_install.py`:
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -1144,8 +1186,38 @@ def _python_executable(venv_dir: Path) -> Path:
     return venv_dir / "bin" / "python"
 
 
-def run(command: list[str]) -> None:
-    subprocess.run(command, check=True)
+def _path_contains(path_text: str, roots: tuple[Path, ...]) -> bool:
+    try:
+        path = Path(path_text).resolve()
+    except OSError:
+        return False
+
+    return any(path == root or path.is_relative_to(root) for root in roots)
+
+
+def _verification_environment() -> dict[str, str]:
+    env = os.environ.copy()
+    root_names = ("ISIS_PREFIX", "ISISROOT", "PYISIS_DEP_PREFIX")
+    roots = tuple(
+        Path(env[name]).resolve()
+        for name in root_names
+        if env.get(name)
+    )
+
+    for name in (*root_names, "ISISDATA", "PYTHONPATH", "CONDA_PREFIX"):
+        env.pop(name, None)
+
+    path_parts = [
+        part
+        for part in env.get("PATH", "").split(os.pathsep)
+        if part and not _path_contains(part, roots)
+    ]
+    env["PATH"] = os.pathsep.join(path_parts)
+    return env
+
+
+def run(command: list[str], *, env: dict[str, str] | None = None) -> None:
+    subprocess.run(command, check=True, env=env)
 
 
 def main() -> int:
@@ -1172,7 +1244,8 @@ def main() -> int:
                 "assert os.environ.get('ISISROOT'); "
                 "assert status.usable_for_smoke_tests"
             ),
-        ]
+        ],
+        env=_verification_environment(),
     )
     return 0
 

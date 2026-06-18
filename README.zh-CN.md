@@ -13,16 +13,17 @@
 
 # pyISIS / `isis_pybind_standalone`
 
-本仓库基于 `pybind11` 为 **USGS ISIS 9.0.0** 提供 Python 绑定，目前主要交付面向 Linux 的 `isis_pybind` 扩展模块。
+本仓库基于 `pybind11` 为 **USGS ISIS 9.0.0** 提供 Python 绑定。低层绑定包是 `isis_pybind`，推荐的用户入口是轻量级 `pyisis` facade。
 
 本仓库的目标范围非常明确：
 
 - 使用**已经安装好的 ISIS 环境**作为外部 SDK / 运行时
 - 构建可被 Python 导入的扩展模块 `isis_pybind._isis_core`
+- 提供用于运行时配置、cube 上下文管理和常用 cube/camera helper 的 `pyisis` facade
 - 向 Python 暴露行星遥感、摄影测量、控制网、相机模型、投影与几何处理等相关 API
 
-> 当前推荐的分发方式是 **GitHub Release + 安装说明 + Linux 构建产物**。
-> 这个项目并不适合被包装成一个“纯 Python、直接 `pip install` 即可”的软件包，因为它依赖外部 ISIS、Qt 以及相关共享库。
+> 当前主线开发方式仍然是基于 conda 的源码构建，但这个分支已经加入实验性的 Windows x64 pip wheel 路线。
+> Windows wheel 被拆成 `pyisis`、`pyisis-runtime-win64` 和 `pyisis-isisdata-minimal` 三个包，目标是在没有预先配置 ISIS conda 环境的情况下，也能完成自包含的导入和 smoke test。
 
 ## 当前支持范围
 
@@ -30,11 +31,11 @@
 
 | 项目 | 当前推荐 / 已验证范围 |
 | --- | --- |
-| 操作系统 | Linux x86_64 |
+| 操作系统 | Linux x86_64；实验性 Windows x64 wheel 构建 |
 | Python | CPython 3.12 |
 | ISIS | USGS ISIS 9.0.0 运行时 / 开发环境 |
-| 分发方式 | GitHub Release、源码构建、安装到已激活的 conda 环境 |
-| 是否建议首发为直接 PyPI 包 | 当前不建议 |
+| 分发方式 | GitHub Release、源码构建、安装到已激活的 conda 环境、实验性 Windows pip wheel |
+| 是否建议首发为直接 PyPI 包 | Windows wheel 已完成本地验证，但仍处于实验阶段 |
 
 ## 本仓库会构建什么
 
@@ -90,6 +91,36 @@
 - 但如果你要处理自己的真实影像和相机模型，仍然建议配置完整可用的真实 `ISISDATA`
 
 ## 安装本绑定：推荐方式
+
+### 方式 W：实验性 Windows pip wheel
+
+Windows pip 打包路线会生成三个发行包：
+
+- `pyisis`：Python facade 和 `isis_pybind._isis_core` 扩展
+- `pyisis-runtime-win64`：打包后的 Windows ISIS runtime 以及必要 DLL 依赖闭包
+- `pyisis-isisdata-minimal`：用于导入和 smoke test 的小型 ISISDATA 树
+
+在能够激活 MSVC、并且已经有本地 ISIS prefix 的 Windows shell 中构建本地 wheelhouse：
+
+```powershell
+$env:CONDA_PREFIX = "E:\code\pyisis-win-env"
+$env:PYISIS_DEP_PREFIX = $env:CONDA_PREFIX
+.\tools\packaging\build_wheels.ps1 `
+  -IsisPrefix "$PWD\build\windows\isis-prefix" `
+  -OutputDir "$PWD\wheelhouse" `
+  -PythonExecutable "$env:CONDA_PREFIX\python.exe" `
+  -DependencyPrefix "$env:CONDA_PREFIX"
+```
+
+然后在全新的虚拟环境中验证这些 wheel：
+
+```powershell
+python tools\packaging\test_wheel_install.py `
+  --wheelhouse wheelhouse `
+  --venv build\packaging\pip-smoke-venv
+```
+
+验证脚本会从 `wheelhouse` 安装 `pyisis`，导入 `pyisis` 和 `isis_pybind`，并确认打包进去的最小 `ISISDATA` 可用于 smoke test。真实任务处理仍建议配置完整的外部 `ISISDATA`。
 
 ### 方式 A：从源码构建并安装到当前 Python 环境
 
@@ -583,19 +614,9 @@ sha256sum -c SHA256SUMS.txt
 
 ### 4. 这个项目能作为普通 `pip install` 包来支持吗？
 
-目前不建议把本项目描述成一个普通的、只靠 pip 即可安装的软件包。
+对于 Windows x64，这个分支现在已经有一个本地验证通过的 pip wheel 原型。它不是纯 Python wheel，而是依赖一个平台 runtime wheel：里面包含 ISIS DLL、必要第三方 DLL、`IsisPreferences`，以及用于 smoke test 的最小 `ISISDATA` 包。
 
-原因在于它依赖：
-
-- 外部 ISIS 运行时
-- Qt 和其他 C++ 共享库
-- 特定的 Python ABI 与系统环境
-
-因此，当前更现实的分发模型是：
-
-- GitHub Release
-- 源码构建
-- 或面向已具备兼容 ISIS conda 环境用户的二进制分发
+接下来剩下的重点不是基础导入能力，而是正式发布治理：在 CI 中构建 wheel、运行 `twine check`、做 TestPyPI dry run、确认第三方依赖再分发许可，并根据体积限制决定 runtime wheel 放在 PyPI，还是采用类似 PyTorch 的额外 wheel index。
 
 ## 许可证
 

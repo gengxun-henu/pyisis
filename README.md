@@ -25,8 +25,11 @@ The scope of this repository is intentionally clear:
   context management, and common cube/camera helpers
 - expose Python access to APIs used in planetary remote sensing, photogrammetry, control networks, camera models, projections, and geometry processing
 
-> The currently recommended distribution model is **GitHub Release + installation instructions + Linux build artifacts**.
-> This is not the kind of project that can honestly be presented as a pure-Python “just `pip install` it” package; it depends on external ISIS, Qt, and related shared libraries.
+> The primary development model is still conda-backed source builds, but this
+> branch also contains an experimental Windows x64 pip wheel path. The Windows
+> wheel set is split into `pyisis`, `pyisis-runtime-win64`, and
+> `pyisis-isisdata-minimal` so users can install a self-contained smoke-test
+> runtime without a preconfigured ISIS conda environment.
 
 ## Supported scope
 
@@ -34,11 +37,11 @@ The current recommended and validated compatibility range is:
 
 | Item | Current recommendation / validated range |
 | --- | --- |
-| Operating system | Linux x86_64 |
+| Operating system | Linux x86_64; experimental Windows x64 wheel builds |
 | Python | CPython 3.12 |
 | ISIS | USGS ISIS 9.0.0 runtime / development environment |
-| Distribution mode | GitHub Release, source build, installation into an active conda environment |
-| Recommended as a direct PyPI first release | Not currently recommended |
+| Distribution mode | GitHub Release, source build, installation into an active conda environment, experimental Windows pip wheels |
+| Recommended as a direct PyPI first release | Windows wheels are locally validated but still experimental |
 
 ## What this repository builds
 
@@ -114,6 +117,40 @@ If those three items are missing, this project cannot be configured and linked s
 - But if you are processing your own real imagery and camera models, you should prefer a properly configured real `ISISDATA` setup.
 
 ## Installing this binding: recommended options
+
+### Option W: experimental Windows pip wheels
+
+The Windows pip packaging path builds three distributions:
+
+- `pyisis`: the Python facade and `isis_pybind._isis_core` extension
+- `pyisis-runtime-win64`: the staged Windows ISIS runtime and required DLL dependency closure
+- `pyisis-isisdata-minimal`: the small ISISDATA tree used for import and smoke tests
+
+Build the local wheelhouse from a Windows shell that can activate MSVC and has
+access to the locally built ISIS prefix:
+
+```powershell
+$env:CONDA_PREFIX = "E:\code\pyisis-win-env"
+$env:PYISIS_DEP_PREFIX = $env:CONDA_PREFIX
+.\tools\packaging\build_wheels.ps1 `
+  -IsisPrefix "$PWD\build\windows\isis-prefix" `
+  -OutputDir "$PWD\wheelhouse" `
+  -PythonExecutable "$env:CONDA_PREFIX\python.exe" `
+  -DependencyPrefix "$env:CONDA_PREFIX"
+```
+
+Then verify the wheels in a fresh virtual environment:
+
+```powershell
+python tools\packaging\test_wheel_install.py `
+  --wheelhouse wheelhouse `
+  --venv build\packaging\pip-smoke-venv
+```
+
+The local validation should install `pyisis` from `wheelhouse`, import
+`pyisis` and `isis_pybind`, and report that the packaged minimal `ISISDATA` is
+usable for smoke tests. Real mission processing should still use a complete
+external `ISISDATA` tree.
 
 ### Option A: build from source and install into the current Python environment
 
@@ -581,19 +618,16 @@ This usually means:
 
 ### 4. Can this be supported as a normal `pip install` package?
 
-At the moment, it is not recommended to describe this project as a normal pip-only package.
+For Windows x64, this branch now has a locally validated pip wheel prototype.
+It is not a pure-Python wheel: the install is backed by a platform runtime wheel
+that carries the ISIS DLLs, required third-party DLLs, `IsisPreferences`, and a
+minimal smoke-test `ISISDATA` package.
 
-That is because it depends on:
-
-- an external ISIS runtime
-- Qt and other C++ shared libraries
-- a specific Python ABI and system environment
-
-So the more realistic distribution model right now is:
-
-- GitHub Release
-- source build
-- or binary distribution for users who already have a compatible ISIS conda environment
+The remaining release work is packaging governance rather than basic import
+support: run the wheel build in CI, run `twine check`, dry-run TestPyPI, confirm
+third-party redistribution licensing, and decide whether the runtime wheel stays
+on PyPI or moves to a PyTorch-style extra wheel index if size limits become a
+problem.
 
 ## License
 

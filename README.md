@@ -162,7 +162,9 @@ Before uploading to TestPyPI, run the protected check-only helper:
 ```
 
 When TestPyPI credentials are configured outside the repository, add `-Upload`.
-After upload, verify the published packages from a new venv:
+For token-based uploads, set `$env:TESTPYPI_API_TOKEN` outside the repository;
+the helper maps it to twine's `__token__` login. After upload, verify the
+published packages from a new venv:
 
 ```powershell
 python tools\packaging\test_testpypi_install.py `

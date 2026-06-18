@@ -56,5 +56,10 @@ if (-not $Upload) {
     exit 0
 }
 
+if ($Repository -eq "testpypi" -and $env:TESTPYPI_API_TOKEN -and -not $env:TWINE_PASSWORD) {
+    $env:TWINE_USERNAME = "__token__"
+    $env:TWINE_PASSWORD = $env:TESTPYPI_API_TOKEN
+}
+
 & $PythonExecutable -m twine upload --repository $Repository @WheelPaths
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

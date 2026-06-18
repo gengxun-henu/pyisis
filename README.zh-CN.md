@@ -131,7 +131,9 @@ python tools\packaging\test_wheel_install.py `
   -CheckOnly
 ```
 
-当 TestPyPI 凭据已经在仓库外配置好后，再额外传入 `-Upload`。上传完成后，用全新的 venv 验证真实索引安装：
+当 TestPyPI 凭据已经在仓库外配置好后，再额外传入 `-Upload`。如果使用
+token 上传，请在仓库外设置 `$env:TESTPYPI_API_TOKEN`；辅助脚本会把它映射为
+twine 的 `__token__` 登录。上传完成后，用全新的 venv 验证真实索引安装：
 
 ```powershell
 python tools\packaging\test_testpypi_install.py `

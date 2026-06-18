@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-18
+Last Modified: 2026-06-19
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
+Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 """
 
 from __future__ import annotations
@@ -123,6 +124,14 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("PSBoundParameters.ContainsKey(\"Wheelhouse\")", script)
         self.assertIn("ExpectedWheelNames", script)
         self.assertIn("Upload switch was not set", script)
+
+    def test_testpypi_publish_script_can_use_testpypi_api_token(self):
+        self.assertTrue(PUBLISH_TESTPYPI_SCRIPT.is_file())
+
+        script = PUBLISH_TESTPYPI_SCRIPT.read_text(encoding="utf-8")
+        self.assertIn("TESTPYPI_API_TOKEN", script)
+        self.assertIn('$env:TWINE_USERNAME = "__token__"', script)
+        self.assertIn('$env:TWINE_PASSWORD = $env:TESTPYPI_API_TOKEN', script)
 
     def test_testpypi_install_script_installs_from_testpypi_with_pypi_fallback(self):
         self.assertTrue(TEST_TESTPYPI_INSTALL_SCRIPT.is_file())

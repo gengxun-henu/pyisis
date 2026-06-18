@@ -35,6 +35,19 @@ class RuntimeConfig:
 
 
 @dataclass(frozen=True)
+class IsisDataStatus:
+    """Basic diagnostics for the configured ISISDATA tree."""
+
+    path: str | None
+    exists: bool
+    has_leap_second_kernels: bool
+    leap_second_kernels: tuple[str, ...]
+    kernel_database_count: int
+    usable_for_smoke_tests: bool
+    message: str
+
+
+@dataclass(frozen=True)
 class CubeDimensions:
     """Sample, line, and band dimensions for an ISIS cube."""
 
@@ -111,6 +124,91 @@ def configure(
         isisroot=resolved_isisroot,
         isisdata=resolved_isisdata,
         conda_prefix=resolved_conda_prefix,
+    )
+
+
+def _leap_second_kernel_names(data_root: Path) -> tuple[str, ...]:
+    lsk_dir = data_root / "base" / "kernels" / "lsk"
+    if not lsk_dir.is_dir():
+        return ()
+
+    names = [
+        child.name
+        for child in lsk_dir.iterdir()
+        if child.is_file()
+        and child.name.lower().startswith("naif")
+        and child.name.lower().endswith(".tls")
+    ]
+    return tuple(sorted(names, key=str.lower))
+
+
+def _kernel_database_count(data_root: Path) -> int:
+    return sum(
+        1
+        for child in data_root.rglob("*")
+        if child.is_file()
+        and child.name.lower().startswith("kernels.")
+        and child.suffix.lower() == ".db"
+    )
+
+
+def data_status(isisdata: str | PathLike[str] | None = None) -> IsisDataStatus:
+    """Return lightweight diagnostics for an ISISDATA directory."""
+
+    path_text = _path_text(isisdata) if isisdata is not None else os.environ.get("ISISDATA")
+    if not path_text:
+        return IsisDataStatus(
+            path=None,
+            exists=False,
+            has_leap_second_kernels=False,
+            leap_second_kernels=(),
+            kernel_database_count=0,
+            usable_for_smoke_tests=False,
+            message="ISISDATA is not configured; set ISISDATA or install pyisis-isisdata-minimal.",
+        )
+
+    data_root = Path(path_text).expanduser()
+    normalized_path = str(data_root)
+    if not data_root.exists():
+        return IsisDataStatus(
+            path=normalized_path,
+            exists=False,
+            has_leap_second_kernels=False,
+            leap_second_kernels=(),
+            kernel_database_count=0,
+            usable_for_smoke_tests=False,
+            message=f"ISISDATA path does not exist: {normalized_path}",
+        )
+
+    leap_second_kernels = _leap_second_kernel_names(data_root)
+    kernel_database_count = _kernel_database_count(data_root)
+    has_leap_second_kernels = bool(leap_second_kernels)
+    if not has_leap_second_kernels:
+        return IsisDataStatus(
+            path=normalized_path,
+            exists=True,
+            has_leap_second_kernels=False,
+            leap_second_kernels=(),
+            kernel_database_count=kernel_database_count,
+            usable_for_smoke_tests=False,
+            message=(
+                "ISISDATA exists, but no leap-second kernels were found under "
+                "base/kernels/lsk."
+            ),
+        )
+
+    return IsisDataStatus(
+        path=normalized_path,
+        exists=True,
+        has_leap_second_kernels=True,
+        leap_second_kernels=leap_second_kernels,
+        kernel_database_count=kernel_database_count,
+        usable_for_smoke_tests=True,
+        message=(
+            f"ISISDATA is usable for pyisis smoke tests: {normalized_path} "
+            f"({len(leap_second_kernels)} leap-second kernels, "
+            f"{kernel_database_count} kernel database files)."
+        ),
     )
 
 
@@ -239,11 +337,13 @@ __all__ = [
     "CubeDimensions",
     "CubeSession",
     "GroundPoint",
+    "IsisDataStatus",
     "PyisisError",
     "RuntimeConfig",
     "configure",
     "core",
     "cube_dimensions",
+    "data_status",
     "ground_at",
     "ground_at_center",
     "open_cube",

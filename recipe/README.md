@@ -29,6 +29,18 @@ conda-build provides `SP_DIR`; the build scripts pass it into CMake so the
 Python files are installed into the package prefix instead of the build-time
 Python environment.
 
+## Minimal ISISDATA package
+
+`recipe/isisdata-minimal` packages the repository's small mock ISISDATA tree as
+`pyisis-isisdata-minimal`. It installs data into `share/isisdata` and adds
+conda activation hooks that set `ISISDATA` when the user has not already chosen
+one:
+
+```powershell
+conda build recipe\isisdata-minimal --no-anaconda-upload
+conda install --use-local pyisis-isisdata-minimal
+```
+
 ## Linux build
 
 For the existing Linux conda environment, `ISIS_PREFIX` and

@@ -6,6 +6,9 @@ Last Modified: 2026-06-18
 Updated: 2026-06-18  Geng Xun added conda recipe coverage for package metadata, build scripts, and smoke-test commands.
 Updated: 2026-06-18  Geng Xun added git source coverage to keep local build artifacts out of conda-build work copies.
 Updated: 2026-06-18  Geng Xun added compiler variant coverage for Windows conda-build packaging.
+Updated: 2026-06-18  Geng Xun added coverage for the minimal ISISDATA conda package and activation scripts.
+Updated: 2026-06-18  Geng Xun added regression coverage to keep conda-build helper files out of packaged ISISDATA.
+Updated: 2026-06-18  Geng Xun added package-test coverage for ISISDATA activation.
 """
 
 from __future__ import annotations
@@ -16,6 +19,7 @@ import unittest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 RECIPE_DIR = PROJECT_ROOT / "recipe"
+ISISDATA_RECIPE_DIR = RECIPE_DIR / "isisdata-minimal"
 
 
 class CondaRecipeUnitTest(unittest.TestCase):
@@ -118,6 +122,62 @@ class CondaRecipeUnitTest(unittest.TestCase):
         self.assertIn("ISIS_PREFIX", readme)
         self.assertIn("PYISIS_DEP_PREFIX", readme)
         self.assertIn("build\\windows\\isis-prefix", readme)
+
+    def test_minimal_isisdata_recipe_files_are_present(self):
+        self.assertTrue((ISISDATA_RECIPE_DIR / "meta.yaml").is_file())
+        self.assertTrue((ISISDATA_RECIPE_DIR / "build.sh").is_file())
+        self.assertTrue((ISISDATA_RECIPE_DIR / "bld.bat").is_file())
+        self.assertTrue((ISISDATA_RECIPE_DIR / "activate.d" / "pyisis-isisdata-minimal-activate.bat").is_file())
+        self.assertTrue((ISISDATA_RECIPE_DIR / "deactivate.d" / "pyisis-isisdata-minimal-deactivate.bat").is_file())
+        self.assertTrue((ISISDATA_RECIPE_DIR / "activate.d" / "pyisis-isisdata-minimal-activate.sh").is_file())
+        self.assertTrue((ISISDATA_RECIPE_DIR / "deactivate.d" / "pyisis-isisdata-minimal-deactivate.sh").is_file())
+
+    def test_minimal_isisdata_recipe_declares_data_package(self):
+        meta_yaml = (ISISDATA_RECIPE_DIR / "meta.yaml").read_text(encoding="utf-8")
+
+        self.assertIn("name: pyisis-isisdata-minimal", meta_yaml)
+        self.assertIn("version: 1.2.0", meta_yaml)
+        self.assertIn("path: ../../tests/data/isisdata/mockup", meta_yaml)
+        self.assertIn("noarch: generic", meta_yaml)
+        self.assertIn("share/isisdata", meta_yaml)
+        self.assertIn("naif0012.tls", meta_yaml)
+
+    def test_minimal_isisdata_recipe_tests_activation_sets_isisdata(self):
+        meta_yaml = (ISISDATA_RECIPE_DIR / "meta.yaml").read_text(encoding="utf-8")
+
+        self.assertIn('if "%ISISDATA%"=="" exit /b 1', meta_yaml)
+        self.assertIn('test -n "$ISISDATA"', meta_yaml)
+
+    def test_minimal_isisdata_build_scripts_install_data_and_activation_hooks(self):
+        build_sh = (ISISDATA_RECIPE_DIR / "build.sh").read_text(encoding="utf-8")
+        bld_bat = (ISISDATA_RECIPE_DIR / "bld.bat").read_text(encoding="utf-8")
+
+        for script in (build_sh, bld_bat):
+            self.assertIn("share", script)
+            self.assertIn("isisdata", script)
+            self.assertIn("activate.d", script)
+            self.assertIn("deactivate.d", script)
+
+    def test_minimal_isisdata_build_scripts_copy_only_data_directories(self):
+        build_sh = (ISISDATA_RECIPE_DIR / "build.sh").read_text(encoding="utf-8")
+        bld_bat = (ISISDATA_RECIPE_DIR / "bld.bat").read_text(encoding="utf-8")
+
+        self.assertNotIn('"${SRC_DIR}/."', build_sh)
+        self.assertNotIn('robocopy "%SRC_DIR%" "%DATA_DIR%" /E', bld_bat)
+        self.assertIn("for data_subdir in", build_sh)
+        self.assertIn("for /D %%D in", bld_bat)
+
+    def test_minimal_isisdata_activation_scripts_set_isisdata_without_overriding_user_value(self):
+        scripts = [
+            ISISDATA_RECIPE_DIR / "activate.d" / "pyisis-isisdata-minimal-activate.bat",
+            ISISDATA_RECIPE_DIR / "activate.d" / "pyisis-isisdata-minimal-activate.sh",
+        ]
+
+        for script_path in scripts:
+            script = script_path.read_text(encoding="utf-8")
+            self.assertIn("ISISDATA", script)
+            self.assertIn("PYISIS_OLD_ISISDATA", script)
+            self.assertIn("CONDA_PREFIX", script)
 
 
 if __name__ == "__main__":

@@ -699,6 +699,7 @@ license = "MIT"
 [tool.setuptools]
 package-dir = { "" = "src" }
 packages = ["pyisis_isisdata_minimal"]
+include-package-data = false
 
 [tool.setuptools.package-data]
 pyisis_isisdata_minimal = ["data/**/*"]

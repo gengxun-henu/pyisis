@@ -9,8 +9,11 @@ Updated: 2026-06-18  Geng Xun added packaging license metadata coverage for whee
 Updated: 2026-06-18  Geng Xun raised scikit-build-core coverage for PEP 639 license metadata.
 Updated: 2026-06-18  Geng Xun added CMake install coverage for the pyisis runtime helper.
 Updated: 2026-06-18  Geng Xun prevented cached scikit-build wheel install paths.
+Updated: 2026-06-18  Geng Xun added minimal ISISDATA package coverage.
 """
 
+import importlib
+import sys
 import tomllib
 import unittest
 from pathlib import Path
@@ -121,6 +124,42 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         self.assertIn("PYISIS_FACADE_SOURCE_RUNTIME_FILE", cmake_lists)
         self.assertIn("PYISIS_FACADE_BUILD_RUNTIME_FILE", cmake_lists)
         self.assertIn("_runtime.py", cmake_lists)
+
+    def test_minimal_isisdata_package_metadata_exists(self):
+        data_pyproject = (
+            self.repo_root / "packaging" / "isisdata-minimal" / "pyproject.toml"
+        )
+        self.assertTrue(data_pyproject.is_file())
+
+        config = tomllib.loads(data_pyproject.read_text(encoding="utf-8"))
+        project = config["project"]
+        self.assertEqual(project["name"], "pyisis-isisdata-minimal")
+        self.assertEqual(project["version"], "1.2.0")
+        self.assertEqual(project["license"], "MIT")
+        self.assertEqual(config["build-system"]["build-backend"], "setuptools.build_meta")
+        self.assertEqual(
+            config["tool"]["setuptools"]["packages"],
+            ["pyisis_isisdata_minimal"],
+        )
+        self.assertFalse(config["tool"]["setuptools"]["include-package-data"])
+        self.assertEqual(
+            config["tool"]["setuptools"]["package-data"]["pyisis_isisdata_minimal"],
+            ["data/**/*"],
+        )
+
+    def test_minimal_isisdata_package_exposes_packaged_data_path(self):
+        package_src = self.repo_root / "packaging" / "isisdata-minimal" / "src"
+        self.assertTrue(package_src.is_dir())
+        sys.path.insert(0, str(package_src))
+        sys.modules.pop("pyisis_isisdata_minimal", None)
+        try:
+            data_package = importlib.import_module("pyisis_isisdata_minimal")
+            data_path = data_package.data_path()
+        finally:
+            sys.modules.pop("pyisis_isisdata_minimal", None)
+            sys.path.remove(str(package_src))
+
+        self.assertTrue((data_path / "base" / "kernels" / "lsk" / "naif0012.tls").is_file())
 
 
 if __name__ == "__main__":

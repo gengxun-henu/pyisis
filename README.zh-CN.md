@@ -140,6 +140,9 @@ python tools\packaging\test_testpypi_install.py `
   --venv build\packaging\testpypi-venv
 ```
 
+`wheels` GitHub Actions workflow 也提供了手动 `publish_testpypi` 输入。常规
+PR 验证应保持关闭；只有在仓库 secret `TESTPYPI_API_TOKEN` 配好之后才打开。
+
 ### 方式 A：从源码构建并安装到当前 Python 环境
 
 这是目前**最推荐**、也最可靠的安装方式。

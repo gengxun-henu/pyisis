@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-18
+Last Modified: 2026-06-19
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
+Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 """
 
 from __future__ import annotations
@@ -56,6 +57,16 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("-CheckOnly", workflow)
         self.assertIn("actions/upload-artifact@v4", workflow)
         self.assertIn("wheelhouse/*.whl", workflow)
+
+    def test_workflow_can_optionally_publish_and_verify_testpypi(self):
+        workflow = self._workflow_text()
+
+        self.assertIn("publish_testpypi:", workflow)
+        self.assertIn("secrets.TESTPYPI_API_TOKEN", workflow)
+        self.assertIn("TESTPYPI_API_TOKEN secret is required", workflow)
+        self.assertIn("-Upload", workflow)
+        self.assertIn("tools\\packaging\\test_testpypi_install.py", workflow)
+        self.assertIn("build\\packaging\\testpypi-venv", workflow)
 
 
 if __name__ == "__main__":

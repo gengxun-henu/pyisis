@@ -8,6 +8,11 @@ on:
         required: false
         default: false
         type: boolean
+      publish_testpypi:
+        description: "Upload the checked wheelhouse to TestPyPI and verify install"
+        required: false
+        default: false
+        type: boolean
   pull_request:
     paths:
       - "CMakeLists.txt"
@@ -110,6 +115,29 @@ jobs:
             -Wheelhouse $env:WHEELHOUSE `
             -PythonExecutable "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" `
             -CheckOnly
+
+      - name: Publish wheelhouse to TestPyPI
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.publish_testpypi == 'true' }}
+        env:
+          TESTPYPI_API_TOKEN: ${{ secrets.TESTPYPI_API_TOKEN }}
+        run: |
+          if (-not $env:TESTPYPI_API_TOKEN) {
+            throw "TESTPYPI_API_TOKEN secret is required to publish wheels to TestPyPI."
+          }
+          .\tools\packaging\publish_testpypi.ps1 `
+            -Wheelhouse $env:WHEELHOUSE `
+            -PythonExecutable "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" `
+            -Upload
+
+      - name: Verify TestPyPI install
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.publish_testpypi == 'true' }}
+        run: |
+          $venv = Join-Path $env:GITHUB_WORKSPACE "build\packaging\testpypi-venv"
+          if (Test-Path -LiteralPath $venv) {
+            Remove-Item -LiteralPath $venv -Recurse -Force
+          }
+          & "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" tools\packaging\test_testpypi_install.py `
+            --venv $venv
 
       - name: Upload wheel artifacts
         uses: actions/upload-artifact@v4

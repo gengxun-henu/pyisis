@@ -171,6 +171,10 @@ python tools\packaging\test_testpypi_install.py `
   --venv build\packaging\testpypi-venv
 ```
 
+The `wheels` GitHub Actions workflow also has a manual `publish_testpypi`
+input. Keep it disabled for normal PR validation; enable it only after the
+`TESTPYPI_API_TOKEN` repository secret is configured.
+
 ### Option A: build from source and install into the current Python environment
 
 This is the **recommended** and most reliable installation method at the moment.

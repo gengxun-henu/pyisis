@@ -1399,6 +1399,7 @@ git commit -m "ci: add Windows wheel build workflow"
 - Tasks 1-7 are implemented, tested, committed, pushed, and represented in PR #329.
 - Task 8 steps 1-3 are complete locally: final wheelhouse build, protected `twine check`, and clean venv install smoke all pass.
 - Task 8 steps 4-5 remain external-gated: TestPyPI upload and TestPyPI install verification require TestPyPI credentials configured outside the repository.
+- The `wheels` workflow now exposes a manual `publish_testpypi` input for maintainers to run Task 8 steps 4-5 after `TESTPYPI_API_TOKEN` is configured.
 - GitHub Actions for PR #329 are currently `action_required` and require maintainer approval before workflow jobs run.
 
 ## Task 8: TestPyPI Publishing Dry Run

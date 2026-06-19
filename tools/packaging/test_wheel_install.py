@@ -1,4 +1,4 @@
-"""Verify pyisis wheels from a clean virtual environment."""
+"""Verify usgs-pyisis wheels from a clean virtual environment."""
 
 from __future__ import annotations
 
@@ -71,7 +71,7 @@ def main() -> int:
             "--no-index",
             "--find-links",
             str(args.wheelhouse),
-            "pyisis",
+            "usgs-pyisis",
         ]
     )
     run(

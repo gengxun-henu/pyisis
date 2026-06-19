@@ -1,4 +1,4 @@
-"""Windows x64 runtime package for pyisis."""
+"""Windows x64 runtime package for usgs-pyisis."""
 
 # Copyright (c) 2026 Geng Xun, Henan University
 # SPDX-License-Identifier: MIT

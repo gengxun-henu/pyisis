@@ -28,16 +28,16 @@ if (-not $Wheels) {
 }
 
 $ExpectedWheelNames = @(
-    "pyisis-$ExpectedVersion-cp312-cp312-win_amd64.whl",
-    "pyisis_runtime_win64-$ExpectedVersion-py3-none-win_amd64.whl",
-    "pyisis_isisdata_minimal-$ExpectedVersion-py3-none-any.whl"
+    "usgs_pyisis-$ExpectedVersion-cp312-cp312-win_amd64.whl",
+    "usgs_pyisis_runtime_win64-$ExpectedVersion-py3-none-win_amd64.whl",
+    "usgs_pyisis_isisdata_minimal-$ExpectedVersion-py3-none-any.whl"
 )
 $ActualWheelNames = @($Wheels | ForEach-Object { $_.Name })
 $MissingWheelNames = @($ExpectedWheelNames | Where-Object { $_ -notin $ActualWheelNames })
 $UnexpectedWheelNames = @($ActualWheelNames | Where-Object { $_ -notin $ExpectedWheelNames })
 if ($MissingWheelNames -or $UnexpectedWheelNames) {
     throw (
-        "Wheelhouse does not match expected pyisis $ExpectedVersion wheel set. " +
+        "Wheelhouse does not match expected usgs-pyisis $ExpectedVersion wheel set. " +
         "Missing: $($MissingWheelNames -join ', '); " +
         "Unexpected: $($UnexpectedWheelNames -join ', ')"
     )

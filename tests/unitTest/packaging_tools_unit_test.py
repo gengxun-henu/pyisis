@@ -5,6 +5,7 @@ Created: 2026-06-18
 Last Modified: 2026-06-19
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
+Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
 """
 
 from __future__ import annotations
@@ -36,6 +37,8 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("--dependency-copy-mode closure", script)
         self.assertIn("wheel tags --platform-tag win_amd64", script)
         self.assertIn("packaging\\isisdata-minimal", script)
+        self.assertIn("build\\packaging\\usgs-pyisis-runtime-win64", script)
+        self.assertIn("usgs_pyisis_runtime_win64-*-py3-none-any.whl", script)
         self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
@@ -44,6 +47,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         script = TEST_WHEEL_INSTALL_SCRIPT.read_text(encoding="utf-8")
         self.assertIn("--no-index", script)
         self.assertIn("--find-links", script)
+        self.assertIn("usgs-pyisis", script)
         self.assertIn("pyisis", script)
         self.assertIn("status.usable_for_smoke_tests", script)
         self.assertIn("_verification_environment", script)
@@ -123,6 +127,9 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("if (-not $Upload)", script)
         self.assertIn("PSBoundParameters.ContainsKey(\"Wheelhouse\")", script)
         self.assertIn("ExpectedWheelNames", script)
+        self.assertIn("usgs_pyisis-$ExpectedVersion-cp312-cp312-win_amd64.whl", script)
+        self.assertIn("usgs_pyisis_runtime_win64-$ExpectedVersion-py3-none-win_amd64.whl", script)
+        self.assertIn("usgs_pyisis_isisdata_minimal-$ExpectedVersion-py3-none-any.whl", script)
         self.assertIn("Upload switch was not set", script)
 
     def test_testpypi_publish_script_can_use_testpypi_api_token(self):
@@ -141,6 +148,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("https://pypi.org/simple", script)
         self.assertIn("--index-url", script)
         self.assertIn("--extra-index-url", script)
+        self.assertIn('default="usgs-pyisis"', script)
         self.assertIn("pyisis", script)
         self.assertIn("_verification_environment", script)
         self.assertIn("status.usable_for_smoke_tests", script)

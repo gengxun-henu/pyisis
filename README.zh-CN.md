@@ -23,7 +23,7 @@
 - 向 Python 暴露行星遥感、摄影测量、控制网、相机模型、投影与几何处理等相关 API
 
 > 当前主线开发方式仍然是基于 conda 的源码构建，但这个分支已经加入实验性的 Windows x64 pip wheel 路线。
-> Windows wheel 被拆成 `pyisis`、`pyisis-runtime-win64` 和 `pyisis-isisdata-minimal` 三个包，目标是在没有预先配置 ISIS conda 环境的情况下，也能完成自包含的导入和 smoke test。
+> Windows wheel 被拆成 `usgs-pyisis`、`usgs-pyisis-runtime-win64` 和 `usgs-pyisis-isisdata-minimal` 三个包，目标是在没有预先配置 ISIS conda 环境的情况下，也能完成自包含的导入和 smoke test。
 
 ## 当前支持范围
 
@@ -96,9 +96,9 @@
 
 Windows pip 打包路线会生成三个发行包：
 
-- `pyisis`：Python facade 和 `isis_pybind._isis_core` 扩展
-- `pyisis-runtime-win64`：打包后的 Windows ISIS runtime 以及必要 DLL 依赖闭包
-- `pyisis-isisdata-minimal`：用于导入和 smoke test 的小型 ISISDATA 树
+- `usgs-pyisis`：Python facade 和 `isis_pybind._isis_core` 扩展
+- `usgs-pyisis-runtime-win64`：打包后的 Windows ISIS runtime 以及必要 DLL 依赖闭包
+- `usgs-pyisis-isisdata-minimal`：用于导入和 smoke test 的小型 ISISDATA 树
 
 在能够激活 MSVC、并且已经有本地 ISIS prefix 的 Windows shell 中构建本地 wheelhouse：
 
@@ -120,7 +120,13 @@ python tools\packaging\test_wheel_install.py `
   --venv build\packaging\pip-smoke-venv
 ```
 
-验证脚本会从 `wheelhouse` 安装 `pyisis`，导入 `pyisis` 和 `isis_pybind`，并确认打包进去的最小 `ISISDATA` 可用于 smoke test。真实任务处理仍建议配置完整的外部 `ISISDATA`。
+也可以从这个 wheelhouse 手动安装：
+
+```powershell
+python -m pip install --no-index --find-links wheelhouse usgs-pyisis
+```
+
+验证脚本会从 `wheelhouse` 安装 `usgs-pyisis`，导入 `pyisis` 和 `isis_pybind`，并确认打包进去的最小 `ISISDATA` 可用于 smoke test。真实任务处理仍建议配置完整的外部 `ISISDATA`。
 
 上传到 TestPyPI 之前，先运行受保护的 check-only 辅助脚本：
 

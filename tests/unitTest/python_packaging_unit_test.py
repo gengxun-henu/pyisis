@@ -3,7 +3,7 @@ Unit tests for Python packaging metadata.
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-18
+Last Modified: 2026-06-19
 Updated: 2026-06-18  Geng Xun added CMake wheel staging coverage for scikit-build-core.
 Updated: 2026-06-18  Geng Xun added packaging license metadata coverage for wheel builds.
 Updated: 2026-06-18  Geng Xun raised scikit-build-core coverage for PEP 639 license metadata.
@@ -11,6 +11,7 @@ Updated: 2026-06-18  Geng Xun added CMake install coverage for the pyisis runtim
 Updated: 2026-06-18  Geng Xun prevented cached scikit-build wheel install paths.
 Updated: 2026-06-18  Geng Xun added minimal ISISDATA package coverage.
 Updated: 2026-06-18  Geng Xun added Windows runtime package metadata coverage.
+Updated: 2026-06-19  Geng Xun renamed public wheel distributions to the usgs-pyisis namespace.
 """
 
 import importlib
@@ -60,7 +61,7 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         pyproject = self.load_pyproject()
 
         project = pyproject["project"]
-        self.assertEqual("pyisis", project["name"])
+        self.assertEqual("usgs-pyisis", project["name"])
         self.assertEqual("1.2.0", project["version"])
         self.assertIn("README.md", project["readme"])
         self.assertIn(">=3.10", project["requires-python"])
@@ -79,10 +80,10 @@ class PythonPackagingMetadataTest(unittest.TestCase):
 
         dependencies = pyproject["project"]["dependencies"]
         self.assertIn(
-            'pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
+            'usgs-pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
             dependencies,
         )
-        self.assertIn("pyisis-isisdata-minimal==1.2.0", dependencies)
+        self.assertIn("usgs-pyisis-isisdata-minimal==1.2.0", dependencies)
 
     def test_scikit_build_wheel_metadata(self):
         pyproject = self.load_pyproject()
@@ -134,7 +135,7 @@ class PythonPackagingMetadataTest(unittest.TestCase):
 
         config = tomllib.loads(data_pyproject.read_text(encoding="utf-8"))
         project = config["project"]
-        self.assertEqual(project["name"], "pyisis-isisdata-minimal")
+        self.assertEqual(project["name"], "usgs-pyisis-isisdata-minimal")
         self.assertEqual(project["version"], "1.2.0")
         self.assertEqual(project["license"], "MIT")
         self.assertEqual(config["build-system"]["build-backend"], "setuptools.build_meta")
@@ -170,7 +171,7 @@ class PythonPackagingMetadataTest(unittest.TestCase):
 
         config = tomllib.loads(runtime_pyproject.read_text(encoding="utf-8"))
         project = config["project"]
-        self.assertEqual(project["name"], "pyisis-runtime-win64")
+        self.assertEqual(project["name"], "usgs-pyisis-runtime-win64")
         self.assertEqual(project["version"], "1.2.0")
         self.assertEqual(project["license"], "MIT")
         self.assertEqual(config["build-system"]["build-backend"], "setuptools.build_meta")

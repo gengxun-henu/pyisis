@@ -6,7 +6,7 @@ requires = [
 build-backend = "scikit_build_core.build"
 
 [project]
-name = "pyisis"
+name = "usgs-pyisis"
 version = "1.2.0"
 description = "Standalone pybind11 bindings and a Python facade for selected USGS ISIS APIs."
 readme = "README.md"
@@ -27,8 +27,8 @@ classifiers = [
   "Topic :: Scientific/Engineering",
 ]
 dependencies = [
-  'pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
-  "pyisis-isisdata-minimal==1.2.0",
+  'usgs-pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
+  "usgs-pyisis-isisdata-minimal==1.2.0",
 ]
 
 [project.urls]

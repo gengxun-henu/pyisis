@@ -142,6 +142,6 @@ jobs:
       - name: Upload wheel artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: pyisis-windows-cp312-wheels
+          name: usgs-pyisis-windows-cp312-wheels
           if-no-files-found: error
           path: wheelhouse/*.whl

@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Make pyisis installable with `pip install pyisis` by producing prebuilt wheels that can import `pyisis` and `isis_pybind._isis_core` without a user-managed conda ISIS environment.
+**Goal:** Make the USGS ISIS bindings installable with `pip install usgs-pyisis` by producing prebuilt wheels that can import `pyisis` and `isis_pybind._isis_core` without a user-managed conda ISIS environment.
 
-**Architecture:** Add a scikit-build-core based `pyproject.toml` for the main CMake/pybind package, split the Windows ISIS runtime into a platform wheel named `pyisis-runtime-win64`, and package the existing mock ISISDATA tree as `pyisis-isisdata-minimal`. The main package discovers the runtime and data packages at import time, configures `ISISROOT`/`ISIS_PREFIX`/`ISISDATA`, and registers Windows DLL directories before `_isis_core` is imported.
+**Architecture:** Add a scikit-build-core based `pyproject.toml` for the main CMake/pybind package, split the Windows ISIS runtime into a platform wheel named `usgs-pyisis-runtime-win64`, and package the existing mock ISISDATA tree as `usgs-pyisis-isisdata-minimal`. The main package discovers the runtime and data packages at import time, configures `ISISROOT`/`ISIS_PREFIX`/`ISISDATA`, and registers Windows DLL directories before `_isis_core` is imported.
 
 **Tech Stack:** Python packaging standards, scikit-build-core, CMake, pybind11, PowerShell, Python `unittest`, cibuildwheel, delvewheel, twine
 
@@ -20,10 +20,10 @@
 | Modify | `python/pyisis/__init__.py` | Re-export runtime helpers and use them before lazy core import. |
 | Modify | `python/isis_pybind/__init__.py` | Configure packaged runtime before importing `_isis_core` directly. |
 | Create | `packaging/runtime-win64/README.md` | Document the Windows runtime wheel contract and staging inputs. |
-| Create | `packaging/runtime-win64/pyproject.toml` | Template metadata for the `pyisis-runtime-win64` wheel. |
+| Create | `packaging/runtime-win64/pyproject.toml` | Template metadata for the `usgs-pyisis-runtime-win64` wheel. |
 | Create | `packaging/runtime-win64/src/pyisis_runtime/__init__.py` | Runtime package API: `prefix()`, `dll_directories()`, and `configure_environment()`. |
 | Create | `packaging/isisdata-minimal/README.md` | Document the minimal ISISDATA wheel and its smoke-test purpose. |
-| Create | `packaging/isisdata-minimal/pyproject.toml` | Pure Python/data wheel metadata for `pyisis-isisdata-minimal`. |
+| Create | `packaging/isisdata-minimal/pyproject.toml` | Pure Python/data wheel metadata for `usgs-pyisis-isisdata-minimal`. |
 | Create | `packaging/isisdata-minimal/src/pyisis_isisdata_minimal/__init__.py` | Data package API exposing `data_path()`. |
 | Create | `tools/packaging/stage_runtime_win64.py` | Copy a verified Windows ISIS prefix into a generated runtime wheel build tree. |
 | Create | `tools/packaging/build_wheels.ps1` | Local Windows wheel build harness for main, runtime, and data wheels. |
@@ -87,7 +87,7 @@ class PythonPackagingUnitTest(unittest.TestCase):
         config = self._pyproject()
         project = config["project"]
 
-        self.assertEqual(project["name"], "pyisis")
+        self.assertEqual(project["name"], "usgs-pyisis")
         self.assertEqual(project["version"], "1.2.0")
         self.assertIn("README.md", project["readme"])
         self.assertIn(">=3.10", project["requires-python"])
@@ -96,10 +96,10 @@ class PythonPackagingUnitTest(unittest.TestCase):
         dependencies = self._pyproject()["project"]["dependencies"]
 
         self.assertIn(
-            'pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
+            'usgs-pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
             dependencies,
         )
-        self.assertIn("pyisis-isisdata-minimal==1.2.0", dependencies)
+        self.assertIn("usgs-pyisis-isisdata-minimal==1.2.0", dependencies)
 
     def test_scikit_build_installs_from_cmake_only(self):
         tool = self._pyproject()["tool"]["scikit-build"]
@@ -136,7 +136,7 @@ requires = [
 build-backend = "scikit_build_core.build"
 
 [project]
-name = "pyisis"
+name = "usgs-pyisis"
 version = "1.2.0"
 description = "Standalone pybind11 bindings and a Python facade for selected USGS ISIS APIs."
 readme = "README.md"
@@ -157,8 +157,8 @@ classifiers = [
   "Topic :: Scientific/Engineering",
 ]
 dependencies = [
-  'pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
-  "pyisis-isisdata-minimal==1.2.0",
+  'usgs-pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
+  "usgs-pyisis-isisdata-minimal==1.2.0",
 ]
 
 [project.urls]
@@ -332,7 +332,7 @@ python -m pip install -U build scikit-build-core pybind11
 python -m build --wheel --no-isolation --skip-dependency-check
 ```
 
-Expected: a `dist\pyisis-1.2.0-*.whl` is produced. `--skip-dependency-check`
+Expected: a `dist\usgs_pyisis-1.2.0-*.whl` is produced. `--skip-dependency-check`
 keeps `python -m build --no-isolation` from requiring Python `cmake` and
 `ninja` wheels when the active conda environment already supplies the
 executables. If this fails before linking, fix CMake install or dependency
@@ -646,7 +646,7 @@ Append this method to `PythonPackagingUnitTest`:
         self.assertTrue(data_pyproject.is_file())
 
         config = tomllib.loads(data_pyproject.read_text(encoding="utf-8"))
-        self.assertEqual(config["project"]["name"], "pyisis-isisdata-minimal")
+        self.assertEqual(config["project"]["name"], "usgs-pyisis-isisdata-minimal")
         self.assertEqual(config["project"]["version"], "1.2.0")
         self.assertIn("tests/data/isisdata/mockup", str(config["tool"]["setuptools"]["package-data"]))
 ```
@@ -666,7 +666,7 @@ Expected: FAIL because `packaging/isisdata-minimal/pyproject.toml` does not exis
 Create `packaging/isisdata-minimal/README.md`:
 
 ```markdown
-# pyisis-isisdata-minimal
+# usgs-pyisis-isisdata-minimal
 
 This package contains the small ISISDATA mockup tree used by pyisis smoke tests.
 It is not a replacement for production USGS ISISDATA.
@@ -689,7 +689,7 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pyisis-isisdata-minimal"
+name = "usgs-pyisis-isisdata-minimal"
 version = "1.2.0"
 description = "Minimal ISISDATA tree for pyisis smoke tests."
 readme = "README.md"
@@ -858,7 +858,7 @@ Expected: FAIL because the staging script does not exist.
 Create `packaging/runtime-win64/README.md`:
 
 ```markdown
-# pyisis-runtime-win64
+# usgs-pyisis-runtime-win64
 
 This package contains the Windows x64 runtime files needed by pyisis wheels.
 It is generated from a verified ISIS 9.0.0 Windows prefix and intentionally
@@ -883,7 +883,7 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pyisis-runtime-win64"
+name = "usgs-pyisis-runtime-win64"
 version = "1.2.0"
 description = "Windows x64 ISIS runtime for pyisis."
 readme = "README.md"
@@ -961,7 +961,7 @@ __all__ = ["configure_environment", "dll_directories", "prefix"]
 Create `tools/packaging/stage_runtime_win64.py`:
 
 ```python
-"""Stage a Windows ISIS prefix into a pyisis-runtime-win64 wheel tree."""
+"""Stage a Windows ISIS prefix into a usgs-pyisis-runtime-win64 wheel tree."""
 
 from __future__ import annotations
 
@@ -1079,12 +1079,12 @@ Run:
 ```powershell
 $env:ISIS_PREFIX = "$PWD\build\windows\isis-prefix"
 $env:PYISIS_DEP_PREFIX = "E:\code\pyisis-win-env"
-python tools\packaging\stage_runtime_win64.py --isis-prefix $env:ISIS_PREFIX --dependency-prefix $env:PYISIS_DEP_PREFIX --dependency-copy-mode closure --stage-dir build\packaging\pyisis-runtime-win64
-python -m build build\packaging\pyisis-runtime-win64 --wheel
-python -m wheel tags --platform-tag win_amd64 --remove build\packaging\pyisis-runtime-win64\dist\pyisis_runtime_win64-1.2.0-py3-none-any.whl
+python tools\packaging\stage_runtime_win64.py --isis-prefix $env:ISIS_PREFIX --dependency-prefix $env:PYISIS_DEP_PREFIX --dependency-copy-mode closure --stage-dir build\packaging\usgs-pyisis-runtime-win64
+python -m build build\packaging\usgs-pyisis-runtime-win64 --wheel
+python -m wheel tags --platform-tag win_amd64 --remove build\packaging\usgs-pyisis-runtime-win64\dist\usgs_pyisis_runtime_win64-1.2.0-py3-none-any.whl
 ```
 
-Expected: a wheel tagged `py3-none-win_amd64` remains in `build\packaging\pyisis-runtime-win64\dist`.
+Expected: a wheel tagged `py3-none-win_amd64` remains in `build\packaging\usgs-pyisis-runtime-win64\dist`.
 
 - [x] **Step 9: Commit**
 
@@ -1141,10 +1141,10 @@ $env:PYISIS_DEP_PREFIX = (Resolve-Path $DependencyPrefix).Path
     --isis-prefix $env:ISIS_PREFIX `
     --dependency-prefix $env:PYISIS_DEP_PREFIX `
     --dependency-copy-mode closure `
-    --stage-dir build\packaging\pyisis-runtime-win64
+    --stage-dir build\packaging\usgs-pyisis-runtime-win64
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-& $PythonExecutable -m build build\packaging\pyisis-runtime-win64 --wheel --outdir $OutputDir
+& $PythonExecutable -m build build\packaging\usgs-pyisis-runtime-win64 --wheel --outdir $OutputDir
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 $runtimeAnyWheel = Get-ChildItem -LiteralPath $OutputDir -Filter "pyisis_runtime_win64-*-py3-none-any.whl" | Select-Object -First 1
@@ -1263,7 +1263,7 @@ Run:
 .\tools\packaging\build_wheels.ps1 -IsisPrefix "$PWD\build\windows\isis-prefix" -OutputDir "$PWD\wheelhouse"
 ```
 
-Expected: `wheelhouse` contains wheels for `pyisis`, `pyisis-runtime-win64`, and `pyisis-isisdata-minimal`.
+Expected: `wheelhouse` contains wheels for `usgs-pyisis`, `usgs-pyisis-runtime-win64`, and `usgs-pyisis-isisdata-minimal`.
 
 - [x] **Step 4: Verify the wheels in a clean venv**
 
@@ -1361,13 +1361,13 @@ Add this section to `README.md`:
 The pip packaging path is Windows-first. The intended user experience is:
 
 ```powershell
-pip install pyisis
+pip install usgs-pyisis
 python -c "import pyisis; import isis_pybind; print(pyisis.data_status().message)"
 ```
 
 The `pyisis` wheel contains the Python facade and `_isis_core` extension. The
-Windows ISIS runtime is split into `pyisis-runtime-win64`, and the smoke-test
-ISISDATA tree is split into `pyisis-isisdata-minimal`.
+Windows ISIS runtime is split into `usgs-pyisis-runtime-win64`, and the smoke-test
+ISISDATA tree is split into `usgs-pyisis-isisdata-minimal`.
 
 Production ISISDATA is not bundled in the main wheel. Use a real `ISISDATA`
 directory for mission workflows beyond smoke tests.
@@ -1397,6 +1397,7 @@ git commit -m "ci: add Windows wheel build workflow"
 ## Current Execution Status
 
 - Tasks 1-7 are implemented, tested, committed, pushed, and represented in PR #329.
+- Public wheel distribution names are being moved to the `usgs-pyisis` namespace to avoid the existing PyPI `pyIsis` project.
 - Task 8 steps 1-3 are complete locally: final wheelhouse build, protected `twine check`, and clean venv install smoke all pass.
 - Task 8 steps 4-5 remain external-gated: TestPyPI upload and TestPyPI install verification require TestPyPI credentials configured outside the repository.
 - The `wheels` workflow now exposes a manual `publish_testpypi` input for maintainers to run Task 8 steps 4-5 after `TESTPYPI_API_TOKEN` is configured.

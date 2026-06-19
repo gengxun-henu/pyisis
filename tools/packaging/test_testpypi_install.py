@@ -1,4 +1,4 @@
-"""Verify pyisis installation from TestPyPI in a clean virtual environment."""
+"""Verify usgs-pyisis installation from TestPyPI in a clean virtual environment."""
 
 from __future__ import annotations
 
@@ -57,7 +57,7 @@ def run(command: list[str], *, env: dict[str, str] | None = None) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--venv", required=True, type=Path)
-    parser.add_argument("--package", default="pyisis")
+    parser.add_argument("--package", default="usgs-pyisis")
     parser.add_argument("--index-url", default=DEFAULT_INDEX_URL)
     parser.add_argument("--extra-index-url", default=DEFAULT_EXTRA_INDEX_URL)
     args = parser.parse_args()

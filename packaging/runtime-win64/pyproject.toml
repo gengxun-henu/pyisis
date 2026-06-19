@@ -3,9 +3,9 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pyisis-runtime-win64"
+name = "usgs-pyisis-runtime-win64"
 version = "1.2.0"
-description = "Windows x64 ISIS runtime for pyisis."
+description = "Windows x64 ISIS runtime for usgs-pyisis."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"

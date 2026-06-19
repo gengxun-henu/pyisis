@@ -27,8 +27,8 @@ The scope of this repository is intentionally clear:
 
 > The primary development model is still conda-backed source builds, but this
 > branch also contains an experimental Windows x64 pip wheel path. The Windows
-> wheel set is split into `pyisis`, `pyisis-runtime-win64`, and
-> `pyisis-isisdata-minimal` so users can install a self-contained smoke-test
+> wheel set is split into `usgs-pyisis`, `usgs-pyisis-runtime-win64`, and
+> `usgs-pyisis-isisdata-minimal` so users can install a self-contained smoke-test
 > runtime without a preconfigured ISIS conda environment.
 
 ## Supported scope
@@ -122,9 +122,9 @@ If those three items are missing, this project cannot be configured and linked s
 
 The Windows pip packaging path builds three distributions:
 
-- `pyisis`: the Python facade and `isis_pybind._isis_core` extension
-- `pyisis-runtime-win64`: the staged Windows ISIS runtime and required DLL dependency closure
-- `pyisis-isisdata-minimal`: the small ISISDATA tree used for import and smoke tests
+- `usgs-pyisis`: the Python facade and `isis_pybind._isis_core` extension
+- `usgs-pyisis-runtime-win64`: the staged Windows ISIS runtime and required DLL dependency closure
+- `usgs-pyisis-isisdata-minimal`: the small ISISDATA tree used for import and smoke tests
 
 Build the local wheelhouse from a Windows shell that can activate MSVC and has
 access to the locally built ISIS prefix:
@@ -147,7 +147,13 @@ python tools\packaging\test_wheel_install.py `
   --venv build\packaging\pip-smoke-venv
 ```
 
-The local validation should install `pyisis` from `wheelhouse`, import
+For a manual local install from that wheelhouse:
+
+```powershell
+python -m pip install --no-index --find-links wheelhouse usgs-pyisis
+```
+
+The local validation should install `usgs-pyisis` from `wheelhouse`, import
 `pyisis` and `isis_pybind`, and report that the packaged minimal `ISISDATA` is
 usable for smoke tests. Real mission processing should still use a complete
 external `ISISDATA` tree.

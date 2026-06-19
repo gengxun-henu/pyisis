@@ -1,4 +1,4 @@
-"""Minimal ISISDATA package for pyisis smoke tests."""
+"""Minimal ISISDATA package for usgs-pyisis smoke tests."""
 
 # Copyright (c) 2026 Geng Xun, Henan University
 # SPDX-License-Identifier: MIT

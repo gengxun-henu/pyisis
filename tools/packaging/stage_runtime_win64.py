@@ -1,4 +1,4 @@
-"""Stage a Windows ISIS prefix into a pyisis-runtime-win64 wheel tree."""
+"""Stage a Windows ISIS prefix into a usgs-pyisis-runtime-win64 wheel tree."""
 
 from __future__ import annotations
 

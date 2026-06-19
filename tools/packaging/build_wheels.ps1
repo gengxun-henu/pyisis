@@ -32,7 +32,7 @@ $env:ISIS_PREFIX = (Resolve-Path -LiteralPath $IsisPrefix).Path
 $env:ISISROOT = $env:ISIS_PREFIX
 $env:PYISIS_DEP_PREFIX = (Resolve-Path -LiteralPath $DependencyPrefix).Path
 
-$RuntimeStageDir = Join-Path $PWD "build\packaging\pyisis-runtime-win64"
+$RuntimeStageDir = Join-Path $PWD "build\packaging\usgs-pyisis-runtime-win64"
 & $PythonExecutable tools\packaging\stage_runtime_win64.py `
     --isis-prefix $env:ISIS_PREFIX `
     --dependency-prefix $env:PYISIS_DEP_PREFIX `
@@ -43,7 +43,7 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & $PythonExecutable -m build $RuntimeStageDir --wheel --no-isolation --outdir $OutputDir
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-$RuntimeAnyWheel = Get-ChildItem -LiteralPath $OutputDir -Filter "pyisis_runtime_win64-*-py3-none-any.whl" | Select-Object -First 1
+$RuntimeAnyWheel = Get-ChildItem -LiteralPath $OutputDir -Filter "usgs_pyisis_runtime_win64-*-py3-none-any.whl" | Select-Object -First 1
 if ($RuntimeAnyWheel) {
     & $PythonExecutable -m wheel tags --platform-tag win_amd64 --remove $RuntimeAnyWheel.FullName
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

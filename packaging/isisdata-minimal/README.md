@@ -1,6 +1,6 @@
-# pyisis-isisdata-minimal
+# usgs-pyisis-isisdata-minimal
 
-This package contains the small ISISDATA mockup tree used by pyisis smoke tests.
+This package contains the small ISISDATA mockup tree used by usgs-pyisis smoke tests.
 It is not a replacement for production USGS ISISDATA.
 
 The package exposes:

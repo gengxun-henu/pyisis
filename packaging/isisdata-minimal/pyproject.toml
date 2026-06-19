@@ -3,9 +3,9 @@ requires = ["setuptools>=69", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pyisis-isisdata-minimal"
+name = "usgs-pyisis-isisdata-minimal"
 version = "1.2.0"
-description = "Minimal ISISDATA tree for pyisis smoke tests."
+description = "Minimal ISISDATA tree for usgs-pyisis smoke tests."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"

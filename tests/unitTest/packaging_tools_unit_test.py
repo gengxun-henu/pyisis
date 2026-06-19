@@ -7,6 +7,7 @@ Updated: 2026-06-18  Geng Xun added local wheel build and install verification c
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel build helper coverage.
+Updated: 2026-06-19  Geng Xun made wheel helper tests portable under WSL.
 """
 
 from __future__ import annotations
@@ -81,10 +82,8 @@ class PackagingToolsUnitTest(unittest.TestCase):
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
 
-        self.assertEqual(
-            module._python_executable(Path("venv")).name,
-            "python.exe",
-        )
+        expected_name = "python.exe" if module.sys.platform == "win32" else "python"
+        self.assertEqual(module._python_executable(Path("venv")).name, expected_name)
 
     def test_clean_venv_verification_environment_removes_external_runtime(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())
@@ -100,11 +99,12 @@ class PackagingToolsUnitTest(unittest.TestCase):
 
         runtime_root = PROJECT_ROOT / "build" / "windows" / "isis-prefix"
         dependency_root = PROJECT_ROOT / "fake-conda"
-        path = ";".join(
+        safe_path = PROJECT_ROOT / "safe-bin"
+        path = module.os.pathsep.join(
             [
                 str(runtime_root / "bin"),
                 str(dependency_root / "Library" / "bin"),
-                r"C:\Windows\System32",
+                str(safe_path),
             ]
         )
         with mock.patch.dict(
@@ -127,7 +127,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertNotIn("ISISDATA", env)
         self.assertNotIn("PYTHONPATH", env)
         self.assertNotIn("CONDA_PREFIX", env)
-        self.assertEqual(env["PATH"], r"C:\Windows\System32")
+        self.assertEqual(env["PATH"], str(safe_path))
 
     def test_testpypi_publish_script_checks_wheels_before_optional_upload(self):
         self.assertTrue(PUBLISH_TESTPYPI_SCRIPT.is_file())

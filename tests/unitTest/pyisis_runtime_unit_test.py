@@ -6,12 +6,14 @@ Last Modified: 2026-06-19
 Updated: 2026-06-18  Geng Xun added runtime package discovery coverage for pip wheels.
 Updated: 2026-06-18  Geng Xun kept packaged runtime discovery behind explicit envs.
 Updated: 2026-06-19  Geng Xun verified packaged runtime environment hooks.
+Updated: 2026-06-19  Geng Xun made Windows DLL directory tests portable under WSL.
 """
 
 from __future__ import annotations
 
 import os
 import importlib
+import ntpath
 from pathlib import Path
 import sys
 from types import ModuleType
@@ -133,7 +135,7 @@ class PyisisRuntimeUnitTest(unittest.TestCase):
             "add_dll_directory",
             side_effect=fake_add_dll_directory,
             create=True,
-        ):
+        ), mock.patch.object(_runtime.os, "path", ntpath):
             _runtime._REGISTERED_DLL_DIRECTORIES.clear()
             _runtime._DLL_DIRECTORY_HANDLES.clear()
             _runtime._register_windows_dll_directories(

@@ -22,8 +22,11 @@
 - 提供用于运行时配置、cube 上下文管理和常用 cube/camera helper 的 `pyisis` facade
 - 向 Python 暴露行星遥感、摄影测量、控制网、相机模型、投影与几何处理等相关 API
 
-> 当前主线开发方式仍然是基于 conda 的源码构建，但这个分支已经加入实验性的 Windows x64 pip wheel 路线。
-> Windows wheel 被拆成 `usgs-pyisis`、`usgs-pyisis-runtime-win64` 和 `usgs-pyisis-isisdata-minimal` 三个包，目标是在没有预先配置 ISIS conda 环境的情况下，也能完成自包含的导入和 smoke test。
+> 当前主线开发方式仍然是基于 conda 的源码构建，但这个分支已经加入实验性的平台 wheel 路线。
+> 主包 `usgs-pyisis` 会按平台自动依赖对应 runtime wheel：Windows x64 对应
+> `usgs-pyisis-runtime-win64`，Linux x86_64 对应
+> `usgs-pyisis-runtime-linux-x86_64`，并额外依赖
+> `usgs-pyisis-isisdata-minimal` 作为 smoke test 数据包。
 
 ## 当前支持范围
 
@@ -31,11 +34,11 @@
 
 | 项目 | 当前推荐 / 已验证范围 |
 | --- | --- |
-| 操作系统 | Linux x86_64；实验性 Windows x64 wheel 构建 |
+| 操作系统 | Linux x86_64 与 Windows x64；Windows wheel 已本地验证，Linux runtime 打包骨架已补齐 |
 | Python | CPython 3.12 |
 | ISIS | USGS ISIS 9.0.0 运行时 / 开发环境 |
-| 分发方式 | GitHub Release、源码构建、安装到已激活的 conda 环境、实验性 Windows pip wheel |
-| 是否建议首发为直接 PyPI 包 | Windows wheel 已完成本地验证，但仍处于实验阶段 |
+| 分发方式 | GitHub Release、源码构建、安装到已激活的 conda 环境、实验性平台 pip wheel |
+| 是否建议首发为直接 PyPI 包 | Windows wheel 已完成本地验证；Linux wheel 还需要 Linux/manylinux CI 验证 |
 
 ## 本仓库会构建什么
 
@@ -92,7 +95,7 @@
 
 ## 安装本绑定：推荐方式
 
-### 方式 W：实验性 Windows pip wheel
+### 方式 W：实验性平台 pip wheel
 
 Windows pip 打包路线会生成三个发行包：
 
@@ -148,6 +151,22 @@ python tools\packaging\test_testpypi_install.py `
 
 `wheels` GitHub Actions workflow 也提供了手动 `publish_testpypi` 输入。常规
 PR 验证应保持关闭；只有在仓库 secret `TESTPYPI_API_TOKEN` 配好之后才打开。
+
+在 Linux x86_64 上，只要主包和 runtime 包都已经发布到同一个索引，
+`pip install usgs-pyisis` 会通过平台 marker 自动安装
+`usgs-pyisis-runtime-linux-x86_64`。本地 Linux wheel 构建入口如下：
+
+```bash
+bash tools/packaging/build_wheels_linux.sh \
+  --isis-prefix "$CONDA_PREFIX" \
+  --output-dir "$PWD/wheelhouse" \
+  --python-executable "$CONDA_PREFIX/bin/python" \
+  --dependency-prefix "$CONDA_PREFIX"
+```
+
+这条 Linux 路线会 staging 出 `usgs-pyisis-runtime-linux-x86_64` wheel，并把
+runtime wheel 标记为 `manylinux_2_28_x86_64`。它仍需要真实 Linux/manylinux
+CI 验证后，才适合作为 PyPI 正式发布产物。
 
 ### 方式 A：从源码构建并安装到当前 Python 环境
 

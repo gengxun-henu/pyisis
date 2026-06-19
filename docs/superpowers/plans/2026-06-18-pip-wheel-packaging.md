@@ -1402,6 +1402,8 @@ git commit -m "ci: add Windows wheel build workflow"
 - Task 8 steps 4-5 remain external-gated: TestPyPI upload and TestPyPI install verification require TestPyPI credentials configured outside the repository.
 - The `wheels` workflow now exposes a manual `publish_testpypi` input for maintainers to run Task 8 steps 4-5 after `TESTPYPI_API_TOKEN` is configured.
 - GitHub Actions for PR #329 are currently `action_required` and require maintainer approval before workflow jobs run.
+- Linux x86_64 runtime dependency wiring is now represented in packaging metadata: `usgs-pyisis` depends on `usgs-pyisis-runtime-linux-x86_64` only when `platform_system == "Linux"` and `platform_machine == "x86_64"`.
+- A Linux runtime wheel template and staging helper exist at `packaging/runtime-linux-x86_64/` and `tools/packaging/stage_runtime_linux.py`. The Linux path still needs real Linux/manylinux CI validation before release.
 
 ## Task 8: TestPyPI Publishing Dry Run
 

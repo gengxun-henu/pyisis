@@ -2,9 +2,10 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-18
+Last Modified: 2026-06-19
 Updated: 2026-06-18  Geng Xun added runtime package discovery coverage for pip wheels.
 Updated: 2026-06-18  Geng Xun kept packaged runtime discovery behind explicit envs.
+Updated: 2026-06-19  Geng Xun verified packaged runtime environment hooks.
 """
 
 from __future__ import annotations
@@ -100,6 +101,23 @@ class PyisisRuntimeUnitTest(unittest.TestCase):
             config.dll_directories,
             (r"C:\venv\Lib\site-packages\pyisis_runtime\vendor\isis\bin",),
         )
+
+    def test_configure_runtime_calls_packaged_runtime_environment_hook(self):
+        fake_runtime = ModuleType("pyisis_runtime")
+        fake_runtime.prefix = mock.Mock(
+            return_value=r"C:\venv\Lib\site-packages\pyisis_runtime\vendor\isis"
+        )
+        fake_runtime.configure_environment = mock.Mock(return_value=fake_runtime.prefix())
+        fake_runtime.dll_directories = mock.Mock(return_value=[])
+        sys.modules["pyisis_runtime"] = fake_runtime
+
+        from pyisis._runtime import configure_runtime
+
+        with mock.patch.dict(os.environ, {}, clear=True):
+            config = configure_runtime(register_dll_directories=False)
+
+        fake_runtime.configure_environment.assert_called_once()
+        self.assertEqual(config.isis_prefix, fake_runtime.prefix())
 
     def test_register_windows_dll_directories_normalizes_duplicate_paths(self):
         from pyisis import _runtime

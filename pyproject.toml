@@ -28,6 +28,7 @@ classifiers = [
 ]
 dependencies = [
   'usgs-pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
+  'usgs-pyisis-runtime-linux-x86_64==1.2.0; platform_system == "Linux" and platform_machine == "x86_64"',
   "usgs-pyisis-isisdata-minimal==1.2.0",
 ]
 

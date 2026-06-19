@@ -57,6 +57,16 @@ def _minimal_data_path() -> str | None:
     return _path_text(data_module.data_path())
 
 
+def _configure_packaged_runtime(runtime: Any | None) -> str | None:
+    if runtime is None:
+        return None
+    if hasattr(runtime, "configure_environment"):
+        configured_prefix = runtime.configure_environment()
+        if configured_prefix is not None:
+            return _path_text(configured_prefix)
+    return _path_text(runtime.prefix()) if hasattr(runtime, "prefix") else None
+
+
 def _candidate_dll_directories(prefix_text: str | None) -> list[str]:
     if not prefix_text:
         return []
@@ -98,9 +108,7 @@ def configure_runtime(*, register_dll_directories: bool = True) -> RuntimeDiscov
     packaged_prefix = None
     if explicit_prefix is None:
         runtime = _runtime_module()
-        packaged_prefix = (
-            _path_text(runtime.prefix()) if runtime and hasattr(runtime, "prefix") else None
-        )
+        packaged_prefix = _configure_packaged_runtime(runtime)
     prefix_candidate = explicit_prefix or packaged_prefix
 
     isis_prefix = _setdefault_path_env("ISIS_PREFIX", prefix_candidate)

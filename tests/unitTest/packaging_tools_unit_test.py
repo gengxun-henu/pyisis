@@ -6,6 +6,7 @@ Last Modified: 2026-06-19
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
+Updated: 2026-06-19  Geng Xun added Linux runtime wheel build helper coverage.
 """
 
 from __future__ import annotations
@@ -18,6 +19,7 @@ from unittest import mock
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels.ps1"
+LINUX_BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels_linux.sh"
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
 PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
 TEST_TESTPYPI_INSTALL_SCRIPT = (
@@ -39,6 +41,19 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("packaging\\isisdata-minimal", script)
         self.assertIn("build\\packaging\\usgs-pyisis-runtime-win64", script)
         self.assertIn("usgs_pyisis_runtime_win64-*-py3-none-any.whl", script)
+        self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)
+
+    def test_linux_build_wheels_script_runs_runtime_and_main_wheel_steps(self):
+        self.assertTrue(LINUX_BUILD_WHEELS_SCRIPT.is_file())
+
+        script = LINUX_BUILD_WHEELS_SCRIPT.read_text(encoding="utf-8")
+        self.assertIn("stage_runtime_linux.py", script)
+        self.assertIn("--dependency-prefix", script)
+        self.assertIn("--dependency-copy-mode closure", script)
+        self.assertIn("usgs-pyisis-runtime-linux-x86_64", script)
+        self.assertIn("manylinux_2_28_x86_64", script)
+        self.assertIn("usgs_pyisis_runtime_linux_x86_64-*-py3-none-any.whl", script)
+        self.assertIn("packaging/isisdata-minimal", script)
         self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):

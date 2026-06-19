@@ -26,10 +26,11 @@ The scope of this repository is intentionally clear:
 - expose Python access to APIs used in planetary remote sensing, photogrammetry, control networks, camera models, projections, and geometry processing
 
 > The primary development model is still conda-backed source builds, but this
-> branch also contains an experimental Windows x64 pip wheel path. The Windows
-> wheel set is split into `usgs-pyisis`, `usgs-pyisis-runtime-win64`, and
-> `usgs-pyisis-isisdata-minimal` so users can install a self-contained smoke-test
-> runtime without a preconfigured ISIS conda environment.
+> branch also contains an experimental platform-wheel path. The main
+> `usgs-pyisis` wheel depends on the matching runtime wheel for each supported
+> platform, currently `usgs-pyisis-runtime-win64` on Windows x64 and
+> `usgs-pyisis-runtime-linux-x86_64` on Linux x86_64, plus
+> `usgs-pyisis-isisdata-minimal` for smoke-test data.
 
 ## Supported scope
 
@@ -37,11 +38,11 @@ The current recommended and validated compatibility range is:
 
 | Item | Current recommendation / validated range |
 | --- | --- |
-| Operating system | Linux x86_64; experimental Windows x64 wheel builds |
+| Operating system | Linux x86_64 and Windows x64; Windows wheels locally validated, Linux runtime packaging scaffolded |
 | Python | CPython 3.12 |
 | ISIS | USGS ISIS 9.0.0 runtime / development environment |
-| Distribution mode | GitHub Release, source build, installation into an active conda environment, experimental Windows pip wheels |
-| Recommended as a direct PyPI first release | Windows wheels are locally validated but still experimental |
+| Distribution mode | GitHub Release, source build, installation into an active conda environment, experimental platform pip wheels |
+| Recommended as a direct PyPI first release | Windows wheels are locally validated; Linux wheels still need Linux/manylinux CI validation |
 
 ## What this repository builds
 
@@ -118,7 +119,7 @@ If those three items are missing, this project cannot be configured and linked s
 
 ## Installing this binding: recommended options
 
-### Option W: experimental Windows pip wheels
+### Option W: experimental platform pip wheels
 
 The Windows pip packaging path builds three distributions:
 
@@ -180,6 +181,23 @@ python tools\packaging\test_testpypi_install.py `
 The `wheels` GitHub Actions workflow also has a manual `publish_testpypi`
 input. Keep it disabled for normal PR validation; enable it only after the
 `TESTPYPI_API_TOKEN` repository secret is configured.
+
+On Linux x86_64, `pip install usgs-pyisis` is wired to install
+`usgs-pyisis-runtime-linux-x86_64` automatically through a platform marker once
+both wheels are published to the same index. The local Linux wheel build helper
+is:
+
+```bash
+bash tools/packaging/build_wheels_linux.sh \
+  --isis-prefix "$CONDA_PREFIX" \
+  --output-dir "$PWD/wheelhouse" \
+  --python-executable "$CONDA_PREFIX/bin/python" \
+  --dependency-prefix "$CONDA_PREFIX"
+```
+
+That Linux path stages a `usgs-pyisis-runtime-linux-x86_64` wheel and tags it
+for `manylinux_2_28_x86_64`. It still needs real Linux/manylinux CI validation
+before being treated as a PyPI-ready release artifact.
 
 ### Option A: build from source and install into the current Python environment
 

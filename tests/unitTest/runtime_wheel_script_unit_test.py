@@ -1,15 +1,17 @@
-"""Unit tests for Windows runtime wheel staging.
+"""Unit tests for platform runtime wheel staging.
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-18
+Last Modified: 2026-06-19
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
+Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
 """
 
 from __future__ import annotations
 
 import importlib
 import importlib.util
+import os
 from pathlib import Path
 import subprocess
 import sys
@@ -19,7 +21,8 @@ from unittest import mock
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-STAGING_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "stage_runtime_win64.py"
+WINDOWS_STAGING_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "stage_runtime_win64.py"
+LINUX_STAGING_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "stage_runtime_linux.py"
 
 
 class RuntimeWheelScriptUnitTest(unittest.TestCase):
@@ -68,7 +71,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             subprocess.run(
                 [
                     sys.executable,
-                    str(STAGING_SCRIPT),
+                    str(WINDOWS_STAGING_SCRIPT),
                     "--isis-prefix",
                     str(prefix),
                     "--dependency-prefix",
@@ -115,7 +118,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
     def test_stage_runtime_closure_copies_only_resolved_dependency_dlls(self):
         spec = importlib.util.spec_from_file_location(
             "stage_runtime_win64",
-            STAGING_SCRIPT,
+            WINDOWS_STAGING_SCRIPT,
         )
         self.assertIsNotNone(spec)
         self.assertIsNotNone(spec.loader)
@@ -156,6 +159,88 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             self.assertTrue((vendor / "Library" / "bin" / "needed.dll").is_file())
             self.assertTrue((vendor / "bin" / "cspice.dll").is_file())
             self.assertFalse((vendor / "Library" / "bin" / "unused.dll").exists())
+
+    def test_stage_linux_runtime_copies_shared_libraries_plugins_and_resources(self):
+        with TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            prefix = temp / "isis-prefix"
+            (prefix / "bin").mkdir(parents=True)
+            (prefix / "include" / "isis").mkdir(parents=True)
+            (prefix / "lib").mkdir(parents=True)
+            (prefix / "share" / "isis" / "templates").mkdir(parents=True)
+            (prefix / "IsisPreferences").write_text("Group = DataDirectory", encoding="utf-8")
+            (prefix / "isis_version.txt").write_text("9.0.0", encoding="utf-8")
+            (prefix / "LICENSE.md").write_text("MIT", encoding="utf-8")
+            (prefix / "bin" / "cam2map").write_bytes(b"app")
+            (prefix / "lib" / "libisis.so").write_bytes(b"isis")
+            (prefix / "lib" / "libisis.so.9").write_bytes(b"isis-soname")
+            (prefix / "lib" / "Camera.plugin").write_bytes(b"camera")
+            (prefix / "lib" / "libisis.a").write_bytes(b"static")
+            (prefix / "include" / "isis" / "Cube.h").write_text("// header", encoding="utf-8")
+            (prefix / "share" / "isis" / "templates" / "stats.xml").write_text(
+                "<application />",
+                encoding="utf-8",
+            )
+
+            dep_prefix = temp / "dep-prefix"
+            (dep_prefix / "lib").mkdir(parents=True)
+            (dep_prefix / "plugins" / "platforms").mkdir(parents=True)
+            (dep_prefix / "include").mkdir(parents=True)
+            (dep_prefix / "lib" / "libQt5Core.so").write_bytes(b"qt")
+            (dep_prefix / "lib" / "libQt5Core.so.5").write_bytes(b"qt-soname")
+            (dep_prefix / "lib" / "libQt5Core.a").write_bytes(b"static")
+            (dep_prefix / "plugins" / "platforms" / "libqxcb.so").write_bytes(b"qt-platform")
+            (dep_prefix / "include" / "qt.h").write_text("// header", encoding="utf-8")
+
+            stage = temp / "runtime-stage"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(LINUX_STAGING_SCRIPT),
+                    "--isis-prefix",
+                    str(prefix),
+                    "--dependency-prefix",
+                    str(dep_prefix),
+                    "--dependency-copy-mode",
+                    "pattern",
+                    "--stage-dir",
+                    str(stage),
+                ],
+                check=True,
+                cwd=PROJECT_ROOT,
+            )
+
+            vendor = stage / "src" / "pyisis_runtime" / "vendor" / "isis"
+            self.assertTrue((vendor / "IsisPreferences").is_file())
+            self.assertTrue((vendor / "isis_version.txt").is_file())
+            self.assertTrue((vendor / "LICENSE.md").is_file())
+            self.assertTrue((vendor / "bin" / "cam2map").is_file())
+            self.assertTrue((vendor / "lib" / "libisis.so").is_file())
+            self.assertTrue((vendor / "lib" / "libisis.so.9").is_file())
+            self.assertTrue((vendor / "lib" / "Camera.plugin").is_file())
+            self.assertTrue((vendor / "share" / "isis" / "templates" / "stats.xml").is_file())
+            self.assertTrue((vendor / "lib" / "libQt5Core.so").is_file())
+            self.assertTrue((vendor / "lib" / "libQt5Core.so.5").is_file())
+            self.assertTrue((vendor / "plugins" / "platforms" / "libqxcb.so").is_file())
+            self.assertFalse((vendor / "lib" / "libisis.a").exists())
+            self.assertFalse((vendor / "include" / "isis" / "Cube.h").exists())
+            self.assertFalse((vendor / "include" / "qt.h").exists())
+
+            sys.path.insert(0, str(stage / "src"))
+            sys.modules.pop("pyisis_runtime", None)
+            try:
+                runtime = importlib.import_module("pyisis_runtime")
+                self.assertEqual(runtime.prefix(), vendor)
+                self.assertIn(vendor / "lib", runtime.dll_directories())
+                self.assertIn(vendor / "bin", runtime.dll_directories())
+                self.assertIn(vendor / "plugins", runtime.plugin_directories())
+                with mock.patch.dict("os.environ", {}, clear=True):
+                    runtime.configure_environment()
+                    self.assertEqual(os.environ["ISIS_PREFIX"], str(vendor))
+                    self.assertIn(str(vendor / "plugins"), os.environ["QT_PLUGIN_PATH"])
+            finally:
+                sys.modules.pop("pyisis_runtime", None)
+                sys.path.remove(str(stage / "src"))
 
 
 if __name__ == "__main__":

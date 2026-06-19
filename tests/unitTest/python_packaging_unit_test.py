@@ -12,6 +12,7 @@ Updated: 2026-06-18  Geng Xun prevented cached scikit-build wheel install paths.
 Updated: 2026-06-18  Geng Xun added minimal ISISDATA package coverage.
 Updated: 2026-06-18  Geng Xun added Windows runtime package metadata coverage.
 Updated: 2026-06-19  Geng Xun renamed public wheel distributions to the usgs-pyisis namespace.
+Updated: 2026-06-19  Geng Xun added Linux runtime package metadata coverage.
 """
 
 import importlib
@@ -81,6 +82,10 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         dependencies = pyproject["project"]["dependencies"]
         self.assertIn(
             'usgs-pyisis-runtime-win64==1.2.0; platform_system == "Windows" and platform_machine == "AMD64"',
+            dependencies,
+        )
+        self.assertIn(
+            'usgs-pyisis-runtime-linux-x86_64==1.2.0; platform_system == "Linux" and platform_machine == "x86_64"',
             dependencies,
         )
         self.assertIn("usgs-pyisis-isisdata-minimal==1.2.0", dependencies)
@@ -172,6 +177,25 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         config = tomllib.loads(runtime_pyproject.read_text(encoding="utf-8"))
         project = config["project"]
         self.assertEqual(project["name"], "usgs-pyisis-runtime-win64")
+        self.assertEqual(project["version"], "1.2.0")
+        self.assertEqual(project["license"], "MIT")
+        self.assertEqual(config["build-system"]["build-backend"], "setuptools.build_meta")
+        self.assertEqual(config["tool"]["setuptools"]["packages"], ["pyisis_runtime"])
+        self.assertFalse(config["tool"]["setuptools"]["include-package-data"])
+        self.assertEqual(
+            config["tool"]["setuptools"]["package-data"]["pyisis_runtime"],
+            ["vendor/isis/**/*"],
+        )
+
+    def test_linux_runtime_package_metadata_exists(self):
+        runtime_pyproject = (
+            self.repo_root / "packaging" / "runtime-linux-x86_64" / "pyproject.toml"
+        )
+        self.assertTrue(runtime_pyproject.is_file())
+
+        config = tomllib.loads(runtime_pyproject.read_text(encoding="utf-8"))
+        project = config["project"]
+        self.assertEqual(project["name"], "usgs-pyisis-runtime-linux-x86_64")
         self.assertEqual(project["version"], "1.2.0")
         self.assertEqual(project["license"], "MIT")
         self.assertEqual(config["build-system"]["build-backend"], "setuptools.build_meta")

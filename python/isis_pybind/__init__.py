@@ -5,6 +5,18 @@
 
 __version__ = "1.2.0"
 
+try:
+    from pyisis._runtime import configure_runtime as _configure_pyisis_runtime
+except ImportError:
+    _configure_pyisis_runtime = None
+
+if _configure_pyisis_runtime is not None:
+    try:
+        _configure_pyisis_runtime()
+    except Exception:
+        # Runtime package discovery is optional; keep explicit user envs usable.
+        pass
+
 from ._isis_core import (
     Angle,
     AbstractPlate,
@@ -166,9 +178,6 @@ from ._isis_core import (
     Distance,
     Enlarge,
     EllipsoidShape,
-    EmbreeTargetManager,
-    EmbreeTargetShape,
-    EmbreeShapeModel,
     Environment,
     EndianSwapper,
     ExportDescription,
@@ -433,6 +442,24 @@ from ._isis_core import (
     to_double,
     to_string,
 )
+
+_OPTIONAL_EMBREE_EXPORTS = []
+try:
+    from ._isis_core import (
+        EmbreeTargetManager,
+        EmbreeTargetShape,
+        EmbreeShapeModel,
+    )
+except ImportError:
+    pass
+else:
+    _OPTIONAL_EMBREE_EXPORTS.extend(
+        [
+            "EmbreeTargetManager",
+            "EmbreeTargetShape",
+            "EmbreeShapeModel",
+        ]
+    )
 
 __all__ = [
     "Sensor",
@@ -757,8 +784,6 @@ __all__ = [
     "Intercept",
     "TriangularPlate",
     "NaifDskPlateModel",
-    "EmbreeTargetShape",
-    "EmbreeTargetManager",
     "BulletTargetShape",
     "BulletWorldManager",
     "ShapeModel",
@@ -766,7 +791,6 @@ __all__ = [
     "DemShape",
     "PlaneShape",
     "NaifDskShape",
-    "EmbreeShapeModel",
     "BulletShapeModel",
     "ApolloMetricCamera",
     "ApolloMetricDistortionMap",
@@ -861,3 +885,5 @@ __all__ = [
     "to_double",
     "to_string",
 ]
+
+__all__.extend(_OPTIONAL_EMBREE_EXPORTS)

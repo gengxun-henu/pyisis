@@ -1,0 +1,39 @@
+name: pyisis-isis-win64
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - cmake
+  - ninja
+  - git
+  - ale
+  - armadillo
+  - pybind11
+  - qt-main=5.15.8
+  - qwt=6.2.0
+  - eigen
+  - boost-cpp
+  - bullet-cpp
+  - csm=3.0.3.3
+  - cspice
+  - embree=3.*
+  - geos
+  - geotiff
+  - gsl
+  - hdf5
+  - highfive
+  - inja
+  - jama
+  - libblas=*=*openblas
+  - libopencv=4.12.0
+  - libpng
+  - libprotobuf
+  - libtiff
+  - nanoflann
+  - nlohmann_json
+  - numpy
+  - protobuf
+  - suitesparse
+  - tnt
+  - usgscsm
+  - xerces-c

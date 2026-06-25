@@ -3,8 +3,9 @@ Unit tests for ISIS Cube bindings
 
 Author: Geng Xun
 Created: 2026-03-27
-Last Modified: 2026-03-29
+Last Modified: 2026-06-18
 Updated: 2026-03-29  Geng Xun added Cube lifecycle regression coverage for create/open/format/access behavior.
+Updated: 2026-06-18  Geng Xun fixed temporary cube cleanup for Windows file locking.
 """
 
 import unittest
@@ -36,9 +37,11 @@ class CubeConstructionAndLifecycleTest(unittest.TestCase):
             cube_path = make_closed_test_cube(temp_dir, name="from_filename.cub", samples=4, lines=4, bands=1)
             file_name = ip.FileName(str(cube_path))
             cube = ip.Cube(file_name, "r")
-            self.addCleanup(close_cube_quietly, cube)
-            self.assertTrue(cube.is_open())
-            self.assertTrue(cube.is_read_only())
+            try:
+                self.assertTrue(cube.is_open())
+                self.assertTrue(cube.is_read_only())
+            finally:
+                close_cube_quietly(cube)
 
     def test_create_close_and_reopen_access_modes(self):
         with temporary_directory() as temp_dir:

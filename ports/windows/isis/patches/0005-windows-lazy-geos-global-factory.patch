@@ -1,0 +1,40 @@
+diff --git a/isis/src/base/objs/PolygonTools/PolygonTools.h b/isis/src/base/objs/PolygonTools/PolygonTools.h
+index 1f28247..c1d4b85 100644
+--- a/isis/src/base/objs/PolygonTools/PolygonTools.h
++++ b/isis/src/base/objs/PolygonTools/PolygonTools.h
+@@ -48,8 +48,33 @@ namespace Isis {
+   class UniversalGroundMap;
+   class TProjection;
+   
+-  
+-  static geos::geom::GeometryFactory::Ptr globalFactory = geos::geom::GeometryFactory::create();
++  class LazyGeometryFactory {
++    public:
++      geos::geom::GeometryFactory *operator->() {
++        return factory().get();
++      }
++
++      const geos::geom::GeometryFactory *operator->() const {
++        return factory().get();
++      }
++
++      geos::geom::GeometryFactory &operator*() {
++        return *factory();
++      }
++
++      const geos::geom::GeometryFactory &operator*() const {
++        return *factory();
++      }
++
++    private:
++      static geos::geom::GeometryFactory::Ptr &factory() {
++        static geos::geom::GeometryFactory::Ptr globalFactory =
++            geos::geom::GeometryFactory::create();
++        return globalFactory;
++      }
++  };
++
++  static LazyGeometryFactory globalFactory;
+ 
+   /**
+    * @brief Provides various tools to work with geos multipolygons

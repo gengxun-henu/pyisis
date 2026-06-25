@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-06-09
-Last Modified: 2026-06-09
+Last Modified: 2026-06-18
 Updated: 2026-06-09  Geng Xun added coverage for benchmark report generation without matplotlib.
+Updated: 2026-06-18  Geng Xun made benchmark command and script-mode tests portable on Windows.
 """
 
 from __future__ import annotations
@@ -32,6 +33,23 @@ if str(EXAMPLES_DIR) not in sys.path:
     sys.path.insert(0, str(EXAMPLES_DIR))
 
 from controlnet_construct.experiments import isis_cpp_pyisis_benchmark as benchmark
+
+
+def _path_text(path: str) -> str:
+    return str(Path(path))
+
+
+def _require_directory_symlink(test_case: unittest.TestCase, temp_dir: Path) -> None:
+    probe_target = temp_dir / "symlink_probe_target"
+    probe_link = temp_dir / "symlink_probe_link"
+    probe_target.mkdir()
+    try:
+        probe_link.symlink_to(probe_target, target_is_directory=True)
+    except OSError as exc:
+        test_case.skipTest(f"directory symlinks are unavailable in this Windows session: {exc}")
+    else:
+        probe_link.unlink()
+        probe_target.rmdir()
 
 
 class _FakeCamera:
@@ -555,7 +573,7 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
 
         result = benchmark.run_pyisis_camera_task(task, ip_module=fake_ip)
 
-        self.assertEqual(fake_ip.cubes[0].open_args, ("/tmp/fake.cub", "r"))
+        self.assertEqual(fake_ip.cubes[0].open_args, (_path_text("/tmp/fake.cub"), "r"))
         self.assertTrue(fake_ip.cubes[0].closed)
         self.assertEqual(fake_ip.cubes[0].fake_camera.set_image_calls, [
             (1.0, 1.0),
@@ -620,7 +638,7 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
 
         result = benchmark.run_pyisis_controlnet_task(task, ip_module=fake_ip)
 
-        self.assertEqual(fake_ip.control_nets[0].path, "/tmp/fake.net")
+        self.assertEqual(fake_ip.control_nets[0].path, _path_text("/tmp/fake.net"))
         self.assertEqual(result["task_type"], "controlnet")
         self.assertEqual(result["implementation"], "pyisis")
         self.assertEqual(result["label"], "fake_controlnet")
@@ -903,6 +921,7 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
 
     def test_prepare_run_directory_replaces_owned_symlink_without_removing_target(self):
         with temporary_directory() as temp_dir:
+            _require_directory_symlink(self, temp_dir)
             config_path = temp_dir / "benchmark.json"
             _write_benchmark_config(config_path)
             config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
@@ -926,6 +945,7 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
 
     def test_prepare_run_directory_replaces_symlinked_run_dir_without_removing_target(self):
         with temporary_directory() as temp_dir:
+            _require_directory_symlink(self, temp_dir)
             config_path = temp_dir / "benchmark.json"
             _write_benchmark_config(config_path)
             config = benchmark.load_benchmark_config(config_path, repo_root=PROJECT_ROOT)
@@ -1120,18 +1140,18 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertEqual(
             command,
             [
-                "/tmp/cpp benchmark",
+                _path_text("/tmp/cpp benchmark"),
                 "camera",
                 "--label",
                 "camera_a",
                 "--cube",
-                "/tmp/input cube.cub",
+                _path_text("/tmp/input cube.cub"),
                 "--sample-step",
                 "7",
                 "--line-step",
                 "11",
                 "--output",
-                "/tmp/out/result.json",
+                _path_text("/tmp/out/result.json"),
                 "--max-points",
                 "13",
             ],
@@ -1168,14 +1188,14 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertEqual(
             command,
             [
-                "/tmp/cpp_benchmark",
+                _path_text("/tmp/cpp_benchmark"),
                 "controlnet",
                 "--label",
                 "net_a",
                 "--net",
-                "/tmp/control.net",
+                _path_text("/tmp/control.net"),
                 "--output",
-                "/tmp/out/result.json",
+                _path_text("/tmp/out/result.json"),
             ],
         )
 
@@ -1197,14 +1217,14 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertEqual(
             command,
             [
-                "/tmp/cpp_benchmark",
+                _path_text("/tmp/cpp_benchmark"),
                 "dom-ori",
                 "--label",
                 "dom_ori_a",
                 "--dom",
-                "/tmp/dom.cub",
+                _path_text("/tmp/dom.cub"),
                 "--original",
-                "/tmp/original.cub",
+                _path_text("/tmp/original.cub"),
                 "--point-count",
                 "1000000",
                 "--top-error-count",
@@ -1212,7 +1232,7 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
                 "--sampling-mode",
                 "ori_roundtrip",
                 "--output",
-                "/tmp/out/result.json",
+                _path_text("/tmp/out/result.json"),
             ],
         )
 
@@ -1251,18 +1271,18 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
         self.assertEqual(
             command,
             [
-                "/tmp/cpp_benchmark",
+                _path_text("/tmp/cpp_benchmark"),
                 "solar-geometry",
                 "--label",
                 "solar_a",
                 "--cube",
-                "/tmp/original.cub",
+                _path_text("/tmp/original.cub"),
                 "--point-count",
                 "1000000",
                 "--top-error-count",
                 "25",
                 "--output",
-                "/tmp/out/result.json",
+                _path_text("/tmp/out/result.json"),
             ],
         )
 
@@ -1406,9 +1426,10 @@ class IsisCppPyisisBenchmarkConfigUnitTest(unittest.TestCase):
             benchmark._write_command(command_path, ["/tmp/cpp benchmark", "camera", "--label", "space label"])
 
             mode = command_path.stat().st_mode
-            self.assertTrue(mode & stat.S_IXUSR)
-            self.assertTrue(mode & stat.S_IXGRP)
-            self.assertTrue(mode & stat.S_IXOTH)
+            if os.name != "nt":
+                self.assertTrue(mode & stat.S_IXUSR)
+                self.assertTrue(mode & stat.S_IXGRP)
+                self.assertTrue(mode & stat.S_IXOTH)
             self.assertEqual(
                 command_path.read_text(encoding="utf-8").splitlines(),
                 [

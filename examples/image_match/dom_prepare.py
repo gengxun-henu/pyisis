@@ -9,6 +9,7 @@ Updated: 2026-04-17  Geng Xun annotated projected-overlap JSON sidecars with exp
 Updated: 2026-04-19  Geng Xun polished comments into Chinese/English bilingual form and added bilingual docstrings for major DOM preparation functions.
 Updated: 2026-04-19  Geng Xun expanded bilingual documentation for DOM preparation data structures, projected-overlap windowing, and GSD normalization flow details.
 Updated: 2026-04-23  Geng Xun skipped projection-consistency cube opens for synthetic non-existent test paths while preserving real DOM checks.
+Updated: 2026-06-18  Geng Xun normalized relative output-list paths for stable Windows DOM preparation.
 """
 
 from __future__ import annotations
@@ -230,7 +231,7 @@ def _display_path_for_output(output_path: Path, *, output_list_path: Path, sourc
     source_entry_path = Path(source_entry)
     if source_entry_path.is_absolute():
         return str(output_path)
-    return os.path.relpath(output_path, start=output_list_path.parent)
+    return Path(os.path.relpath(output_path, start=output_list_path.parent)).as_posix()
 
 
 def _run_gdal_translate(command: list[str]) -> None:

@@ -1,8 +1,16 @@
-"""Regression tests for run_pipeline_example image_match argument ordering."""
+"""Regression tests for run_pipeline_example image_match argument ordering.
+
+Author: Geng Xun
+Created: 2026-05-27
+Last Modified: 2026-06-18
+Updated: 2026-06-18  Geng Xun skipped shell wrapper execution when only WSL bash is available on Windows.
+"""
 
 from __future__ import annotations
 
 import json
+import os
+import shutil
 import subprocess
 import sys
 import textwrap
@@ -21,8 +29,17 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 RUN_PIPELINE_EXAMPLE_PATH = PROJECT_ROOT / "examples" / "controlnet_construct" / "run_pipeline_example.sh"
 
 
+def _require_native_bash_for_windows_paths(test_case: unittest.TestCase) -> None:
+    bash_path = shutil.which("bash")
+    if bash_path is None:
+        test_case.skipTest("bash is unavailable in PATH.")
+    if os.name == "nt" and Path(bash_path).resolve().as_posix().lower().endswith("/windows/system32/bash.exe"):
+        test_case.skipTest("WSL bash cannot execute this native Windows-path shell wrapper test.")
+
+
 class ControlNetConstructPipelineCliOrderUnitTest(unittest.TestCase):
     def test_run_pipeline_example_keeps_image_match_positionals_before_compact_stdout_flags(self):
+        _require_native_bash_for_windows_paths(self)
         with temporary_directory() as temp_dir:
             work_dir = temp_dir / "work"
             work_dir.mkdir()

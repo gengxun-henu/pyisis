@@ -12,11 +12,13 @@
 // Updated: 2026-04-09  Geng Xun added OriginalXmlLabel blob/XML round-trip bindings with Python-friendly XML string access.
 // Updated: 2026-04-10  Geng Xun added HiBlob binding (inherits Blobber) with default constructor, cube constructor, and buffer accessor returning list-of-lists.
 // Updated: 2026-04-12  Geng Xun exposed Buffer raw_buffer bytes plus BufferManager setpos/swap parity helpers.
+// Updated: 2026-06-18  Geng Xun fixed Buffer raw_buffer byte-size typing for MSVC builds.
 // Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, OriginalLabel, RawCubeChunk, cache helpers, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, table structures, and HiBlob
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 
+#include <cstddef>
 #include <cstring>
 #include <memory>
 #include <vector>
@@ -506,8 +508,9 @@ void bind_low_level_cube_io(py::module_ &m) {
                .def("raw_buffer",
                           [](const Isis::Buffer &self) {
                                const void *raw_buffer = self.RawBuffer();
-                               const ssize_t raw_size = static_cast<ssize_t>(Isis::SizeOf(self.PixelType()) * self.size());
-                               if (!raw_buffer || raw_size <= 0) {
+                               const std::size_t raw_size =
+                                   static_cast<std::size_t>(Isis::SizeOf(self.PixelType()) * self.size());
+                               if (!raw_buffer || raw_size == 0) {
                                     return py::bytes();
                                }
                                return py::bytes(static_cast<const char *>(raw_buffer), raw_size);

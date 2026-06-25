@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-16
-Last Modified: 2026-06-09
+Last Modified: 2026-06-18
 Updated: 2026-04-16  Geng Xun added focused regression coverage for DOM cube block matching, global coordinate reassembly, and extreme special-pixel masking.
 Updated: 2026-04-17  Geng Xun added regression coverage for tiled DOM matching when the paired DOM cubes differ slightly in raster size.
 Updated: 2026-04-17  Geng Xun added focused regression coverage for configurable OpenCV SIFT CLI and detector parameters.
@@ -44,6 +44,7 @@ Updated: 2026-05-12  Geng Xun added regression coverage for preview cache hash-k
 Updated: 2026-05-12  Geng Xun added cache-hit validation assertions for reduced preview cache reuse.
 Updated: 2026-05-12  Geng Xun added regression coverage for corrupt preview cache regeneration.
 Updated: 2026-06-09  Geng Xun updated visualization keypoint assertions for custom match-line rendering.
+Updated: 2026-06-18  Geng Xun made path-string expectations portable on Windows.
 Updated: 2026-05-14  Geng Xun added preview cache metadata validation coverage and regeneration diagnostics.
 Updated: 2026-05-15  Geng Xun added reduced preview cache validation-failure regeneration tests.
 Updated: 2026-05-16  Geng Xun added preview cache fingerprint and metadata corruption validation coverage.
@@ -786,7 +787,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
             timestamp=timestamp,
         )
 
-        self.assertEqual(str(output_path), "/tmp/rendered/A__B__20260418T184432.png")
+        self.assertEqual(output_path.as_posix(), "/tmp/rendered/A__B__20260418T184432.png")
 
     def test_filter_stereo_pair_keypoints_with_ransac_strict_drops_marked_outlier(self):
         left_key_file = KeypointFile(
@@ -1102,7 +1103,7 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         )
 
         self.assertEqual(
-            str(args.deep_match_config_path),
+            Path(args.deep_match_config_path).as_posix(),
             "examples/controlnet_construct/presets/lightglue_default.json",
         )
 
@@ -6186,7 +6187,8 @@ class ControlNetConstructMatchingUnitTest(unittest.TestCase):
         self.assertEqual(adaptive["status"], "routed")
         self.assertEqual(diag_mock.call_args_list[0].args[0], str(left_path))
         self.assertEqual(diag_mock.call_args_list[1].args[0], str(right_path))
-        self.assertEqual(serial_mock.call_args.kwargs["matcher_method"], "flann")
+        self.assertEqual(serial_mock.call_args.kwargs["matcher_method"], "bf")
+        self.assertEqual(adaptive["selected_initial_matcher"], "bf")
         self.assertEqual(adaptive["preview_sources"]["left"], str(left_path))
         self.assertEqual(adaptive["preview_sources"]["right"], str(right_path))
         self.assertEqual(adaptive["preview_sources"]["source_type"], "raw_original_cube")

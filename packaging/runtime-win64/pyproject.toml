@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "usgs-pyisis-runtime-win64"
+version = "1.2.0"
+description = "Windows x64 ISIS runtime for usgs-pyisis."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  { name = "Geng Xun" },
+]
+
+[project.urls]
+Homepage = "https://github.com/guderianXu/pyisis"
+Source = "https://github.com/guderianXu/pyisis"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+packages = ["pyisis_runtime"]
+include-package-data = false
+
+[tool.setuptools.package-data]
+pyisis_runtime = ["vendor/isis/**/*"]

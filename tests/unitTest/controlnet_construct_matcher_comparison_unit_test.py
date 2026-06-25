@@ -2,12 +2,15 @@
 
 Author: Geng Xun
 Created: 2026-05-22
+Last Modified: 2026-06-18
+Updated: 2026-06-18  Geng Xun made matcher-comparison wrapper tests portable on native Windows.
 """
 
 from __future__ import annotations
 
 import json
 import os
+import shutil
 import sys
 from pathlib import Path
 import subprocess
@@ -29,6 +32,27 @@ if str(EXAMPLES_DIR) not in sys.path:
 
 from controlnet_construct.experiments import matcher_comparison
 from controlnet_construct.experiments import summarize_lro_polar_adaptive_routing_benchmark as polar_summary
+
+
+def _require_native_bash_for_windows_paths(test_case: unittest.TestCase) -> None:
+    bash_path = shutil.which("bash")
+    if bash_path is None:
+        test_case.skipTest("bash is unavailable in PATH.")
+    if os.name == "nt" and Path(bash_path).resolve().as_posix().lower().endswith("/windows/system32/bash.exe"):
+        test_case.skipTest("WSL bash cannot execute these native Windows-path shell wrapper tests.")
+
+
+def _require_directory_symlink(test_case: unittest.TestCase, temp_dir: Path) -> None:
+    probe_target = temp_dir / "symlink_probe_target"
+    probe_link = temp_dir / "symlink_probe_link"
+    probe_target.mkdir()
+    try:
+        probe_link.symlink_to(probe_target, target_is_directory=True)
+    except OSError as exc:
+        test_case.skipTest(f"directory symlinks are unavailable in this Windows session: {exc}")
+    else:
+        probe_link.unlink()
+        probe_target.rmdir()
 
 
 def _write_minimal_config(path: Path) -> None:
@@ -444,6 +468,7 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
         self.assertNotIn("--continue-on-deep-failure", fail_fast_command)
 
     def test_run_deep_match_pipeline_dry_run_forwards_deep_match_config_path_to_export_and_import(self):
+        _require_native_bash_for_windows_paths(self)
         with temporary_directory() as temp_dir:
             fake_bin = temp_dir / "bin"
             fake_bin.mkdir()
@@ -478,6 +503,7 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
         self.assertEqual(output.count(f"--deep-match-config-path {preset_path}"), 2)
 
     def test_run_deep_match_pipeline_resume_from_starts_at_requested_stage(self):
+        _require_native_bash_for_windows_paths(self)
         with temporary_directory() as temp_dir:
             fake_bin = temp_dir / "bin"
             fake_bin.mkdir()
@@ -547,6 +573,7 @@ class MatcherComparisonConfigUnitTest(unittest.TestCase):
         self.assertIn("Deep-match pipeline complete (deep-match-only mode)", deep_match_only_output)
 
     def test_run_deep_match_pipeline_treats_completed_with_failures_as_failed_manifest(self):
+        _require_native_bash_for_windows_paths(self)
         with temporary_directory() as temp_dir:
             fake_bin = temp_dir / "bin"
             fake_bin.mkdir()
@@ -1387,10 +1414,12 @@ class MatcherComparisonRunUnitTest(unittest.TestCase):
 
     def test_run_matcher_comparison_script_exec_help(self):
         script_path = PROJECT_ROOT / "examples/controlnet_construct/experiments/run_matcher_comparison.py"
-        self.assertTrue(os.access(script_path, os.X_OK))
+        if os.name != "nt":
+            self.assertTrue(os.access(script_path, os.X_OK))
+        command = [sys.executable, str(script_path)] if os.name == "nt" else [str(script_path)]
 
         result = subprocess.run(
-            [str(script_path), "--help"],
+            command + ["--help"],
             check=False,
             capture_output=True,
             encoding="utf-8",
@@ -1702,6 +1731,7 @@ class MatcherComparisonExecutionUnitTest(unittest.TestCase):
 
     def test_execute_method_skips_cleanup_and_metrics_through_symlinked_output_dirs(self):
         with temporary_directory() as temp_dir:
+            _require_directory_symlink(self, temp_dir)
             method_dir = temp_dir / "method"
             outside_dir = temp_dir / "outside"
             outside_reports = outside_dir / "reports"

@@ -1,0 +1,40 @@
+diff --git a/isis/cmake/CodeGeneration.cmake b/isis/cmake/CodeGeneration.cmake
+index 9f48041..dc0d4dc 100644
+--- a/isis/cmake/CodeGeneration.cmake
++++ b/isis/cmake/CodeGeneration.cmake
+@@ -35,7 +35,8 @@ function( generate_ui_files uiGenOut folder)
+     # - The generated files will be put in the CMake build directory,
+     #   not the source tree
+     add_custom_command(OUTPUT   ${outUiFile}
+-                       COMMAND  ${UIC}  ${uiFile} -o ${outUiFile} && cp ${outUiFile} ${CMAKE_BINARY_DIR}/inc
++                       COMMAND  ${UIC}  ${uiFile} -o ${outUiFile}
++                       COMMAND  ${CMAKE_COMMAND} -E copy_if_different ${outUiFile} ${CMAKE_BINARY_DIR}/inc
+                        DEPENDS  ${uiFile}
+                        WORKING_DIRECTORY ${folder}
+                        COMMENT "Generating UI headers...")
+@@ -57,12 +58,11 @@ function( generate_moc_files mocGenOut folder)
+   file(GLOB candidateFiles "${folder}/*.h")
+   set(mocInput)
+   foreach(f ${candidateFiles})
+-    execute_process(COMMAND grep Q_OBJECT ${f}
+-                    OUTPUT_VARIABLE result
+-                    RESULT_VARIABLE code)
+-    if("${code}" STREQUAL "0")
++    file(STRINGS "${f}" qObjectLines REGEX "Q_OBJECT")
++    if(qObjectLines)
+       set(mocInput ${mocInput} ${f})
+     endif()
++    unset(qObjectLines)
+   endforeach()
+ 
+   # If no Q_OBJECT files in this folder we are finished.
+@@ -129,7 +129,8 @@ function(generate_protobuf_files protoGenOut folder)
+   # Add the custom command that will generate all the files
+   # - The generated files will be put in the CMake build directory, not the source tree.
+   add_custom_command(OUTPUT   ${protoGen}
+-                     COMMAND  ${PROTOC} --proto_path ${folder} --cpp_out ${protoGenDir} ${protoInput} && cp ${PROTO_HEADERS} ${CMAKE_BINARY_DIR}/inc
++                     COMMAND  ${PROTOC} --proto_path ${folder} --cpp_out ${protoGenDir} ${protoInput}
++                     COMMAND  ${CMAKE_COMMAND} -E copy_if_different ${PROTO_HEADERS} ${CMAKE_BINARY_DIR}/inc
+                      DEPENDS  ${protoInput}
+                      WORKING_DIRECTORY ${folder}
+                      COMMENT "Generating Protocol Buffers...")

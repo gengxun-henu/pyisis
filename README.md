@@ -13,16 +13,24 @@ This project wraps the powerful USGS ISIS (v9.0.0) photogrammetric software, ena
 
 # pyISIS / `isis_pybind_standalone`
 
-This repository provides Python bindings for **USGS ISIS 9.0.0**, built with `pybind11`, and currently delivers the `isis_pybind` extension module primarily for Linux.
+This repository provides Python bindings for **USGS ISIS 9.0.0**, built with `pybind11`.
+The low-level binding package is `isis_pybind`; the recommended user-facing
+entrypoint is the lightweight `pyisis` facade.
 
 The scope of this repository is intentionally clear:
 
 - use an **already installed ISIS environment** as the external SDK / runtime
 - build the Python-importable extension module `isis_pybind._isis_core`
+- provide the higher-level `pyisis` facade for runtime configuration, cube
+  context management, and common cube/camera helpers
 - expose Python access to APIs used in planetary remote sensing, photogrammetry, control networks, camera models, projections, and geometry processing
 
-> The currently recommended distribution model is **GitHub Release + installation instructions + Linux build artifacts**.
-> This is not the kind of project that can honestly be presented as a pure-Python “just `pip install` it” package; it depends on external ISIS, Qt, and related shared libraries.
+> The primary development model is still conda-backed source builds, but this
+> branch also contains an experimental platform-wheel path. The main
+> `usgs-pyisis` wheel depends on the matching runtime wheel for each supported
+> platform, currently `usgs-pyisis-runtime-win64` on Windows x64 and
+> `usgs-pyisis-runtime-linux-x86_64` on Linux x86_64, plus
+> `usgs-pyisis-isisdata-minimal` for smoke-test data.
 
 ## Supported scope
 
@@ -30,29 +38,49 @@ The current recommended and validated compatibility range is:
 
 | Item | Current recommendation / validated range |
 | --- | --- |
-| Operating system | Linux x86_64 |
+| Operating system | Linux x86_64 and Windows x64; Windows wheels locally validated, Linux runtime packaging scaffolded |
 | Python | CPython 3.12 |
 | ISIS | USGS ISIS 9.0.0 runtime / development environment |
-| Distribution mode | GitHub Release, source build, installation into an active conda environment |
-| Recommended as a direct PyPI first release | Not currently recommended |
+| Distribution mode | GitHub Release, source build, installation into an active conda environment, experimental platform pip wheels |
+| Recommended as a direct PyPI first release | Windows wheels are locally validated; Linux wheels still need Linux/manylinux CI validation |
 
 ## What this repository builds
 
 After a successful build, the core Python package directory is:
 
 - `build/python/isis_pybind/`
+- `build/python/pyisis/`
 
 It typically contains:
 
 - `build/python/isis_pybind/__init__.py`
 - `build/python/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so`
 - `build/python/isis_pybind/LICENSE`
+- `build/python/pyisis/__init__.py`
+- `build/python/pyisis/LICENSE`
 
 The actual bound shared library is:
 
 - `_isis_core.cpython-312-x86_64-linux-gnu.so`
 
 However, **do not copy and use only the `.so` file by itself**. It should live inside the `isis_pybind/` package directory together with `__init__.py`.
+
+Most application code should import the facade:
+
+```python
+import pyisis
+
+with pyisis.open_cube("image.cub") as cube:
+    print(pyisis.cube_dimensions(cube))
+    print(pyisis.ground_at_center(cube))
+```
+
+When you need direct access to the bound ISIS C++ API, import the low-level
+package:
+
+```python
+import isis_pybind as ip
+```
 
 ## Install USGS ISIS first
 
@@ -90,6 +118,86 @@ If those three items are missing, this project cannot be configured and linked s
 - But if you are processing your own real imagery and camera models, you should prefer a properly configured real `ISISDATA` setup.
 
 ## Installing this binding: recommended options
+
+### Option W: experimental platform pip wheels
+
+The Windows pip packaging path builds three distributions:
+
+- `usgs-pyisis`: the Python facade and `isis_pybind._isis_core` extension
+- `usgs-pyisis-runtime-win64`: the staged Windows ISIS runtime and required DLL dependency closure
+- `usgs-pyisis-isisdata-minimal`: the small ISISDATA tree used for import and smoke tests
+
+Build the local wheelhouse from a Windows shell that can activate MSVC and has
+access to the locally built ISIS prefix:
+
+```powershell
+$env:CONDA_PREFIX = "E:\code\pyisis-win-env"
+$env:PYISIS_DEP_PREFIX = $env:CONDA_PREFIX
+.\tools\packaging\build_wheels.ps1 `
+  -IsisPrefix "$PWD\build\windows\isis-prefix" `
+  -OutputDir "$PWD\wheelhouse" `
+  -PythonExecutable "$env:CONDA_PREFIX\python.exe" `
+  -DependencyPrefix "$env:CONDA_PREFIX"
+```
+
+Then verify the wheels in a fresh virtual environment:
+
+```powershell
+python tools\packaging\test_wheel_install.py `
+  --wheelhouse wheelhouse `
+  --venv build\packaging\pip-smoke-venv
+```
+
+For a manual local install from that wheelhouse:
+
+```powershell
+python -m pip install --no-index --find-links wheelhouse usgs-pyisis
+```
+
+The local validation should install `usgs-pyisis` from `wheelhouse`, import
+`pyisis` and `isis_pybind`, and report that the packaged minimal `ISISDATA` is
+usable for smoke tests. Real mission processing should still use a complete
+external `ISISDATA` tree.
+
+Before uploading to TestPyPI, run the protected check-only helper:
+
+```powershell
+.\tools\packaging\publish_testpypi.ps1 `
+  -Wheelhouse wheelhouse `
+  -PythonExecutable "$env:CONDA_PREFIX\python.exe" `
+  -CheckOnly
+```
+
+When TestPyPI credentials are configured outside the repository, add `-Upload`.
+For token-based uploads, set `$env:TESTPYPI_API_TOKEN` outside the repository;
+the helper maps it to twine's `__token__` login. After upload, verify the
+published packages from a new venv:
+
+```powershell
+python tools\packaging\test_testpypi_install.py `
+  --venv build\packaging\testpypi-venv
+```
+
+The `wheels` GitHub Actions workflow also has a manual `publish_testpypi`
+input. Keep it disabled for normal PR validation; enable it only after the
+`TESTPYPI_API_TOKEN` repository secret is configured.
+
+On Linux x86_64, `pip install usgs-pyisis` is wired to install
+`usgs-pyisis-runtime-linux-x86_64` automatically through a platform marker once
+both wheels are published to the same index. The local Linux wheel build helper
+is:
+
+```bash
+bash tools/packaging/build_wheels_linux.sh \
+  --isis-prefix "$CONDA_PREFIX" \
+  --output-dir "$PWD/wheelhouse" \
+  --python-executable "$CONDA_PREFIX/bin/python" \
+  --dependency-prefix "$CONDA_PREFIX"
+```
+
+That Linux path stages a `usgs-pyisis-runtime-linux-x86_64` wheel and tags it
+for `manylinux_2_28_x86_64`. It still needs real Linux/manylinux CI validation
+before being treated as a PyPI-ready release artifact.
 
 ### Option A: build from source and install into the current Python environment
 
@@ -181,6 +289,8 @@ isis_pybind/
 ```
 
 then you can copy the entire `isis_pybind/` directory into the target Python environment's `site-packages` directory.
+If the artifact also contains the `pyisis/` facade directory, copy that
+directory beside `isis_pybind/`.
 
 For a conda environment on Linux, the destination is typically:
 
@@ -220,6 +330,8 @@ Then copy the entire built package directory into that location so that the resu
 <site-packages>/isis_pybind/__init__.py
 <site-packages>/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so
 <site-packages>/isis_pybind/LICENSE
+<site-packages>/pyisis/__init__.py
+<site-packages>/pyisis/LICENSE
 ```
 
 Make sure the target environment uses a compatible Python ABI. For example, a file named `_isis_core.cpython-312-x86_64-linux-gnu.so` is built for CPython 3.12 and should be installed into a Python 3.12 environment rather than copied into Python 3.11 or 3.13.
@@ -249,13 +361,13 @@ scripts/build_test_smoke.sh full
 ### 1. Verify that Python can import the package
 
 ```bash
-python -c "import isis_pybind as ip; print(ip.__file__)"
+python -c "import pyisis; print(pyisis.__file__)"
 ```
 
 ### 2. Verify that the core extension is loaded
 
 ```bash
-python -c "import isis_pybind as ip; print(hasattr(ip, 'Cube'), hasattr(ip, 'Camera'))"
+python -c "import pyisis; print(pyisis.Cube, pyisis.Camera)"
 ```
 
 ### 3. Run the minimal smoke flow
@@ -553,19 +665,16 @@ This usually means:
 
 ### 4. Can this be supported as a normal `pip install` package?
 
-At the moment, it is not recommended to describe this project as a normal pip-only package.
+For Windows x64, this branch now has a locally validated pip wheel prototype.
+It is not a pure-Python wheel: the install is backed by a platform runtime wheel
+that carries the ISIS DLLs, required third-party DLLs, `IsisPreferences`, and a
+minimal smoke-test `ISISDATA` package.
 
-That is because it depends on:
-
-- an external ISIS runtime
-- Qt and other C++ shared libraries
-- a specific Python ABI and system environment
-
-So the more realistic distribution model right now is:
-
-- GitHub Release
-- source build
-- or binary distribution for users who already have a compatible ISIS conda environment
+The remaining release work is packaging governance rather than basic import
+support: run the wheel build in CI, run `twine check`, dry-run TestPyPI, confirm
+third-party redistribution licensing, and decide whether the runtime wheel stays
+on PyPI or moves to a PyTorch-style extra wheel index if size limits become a
+problem.
 
 ## License
 

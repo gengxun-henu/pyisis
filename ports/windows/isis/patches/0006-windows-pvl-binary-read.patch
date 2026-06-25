@@ -1,0 +1,13 @@
+diff --git a/isis/src/base/objs/Pvl/Pvl.cpp b/isis/src/base/objs/Pvl/Pvl.cpp
+index 38fbc66..0fbe0cf 100644
+--- a/isis/src/base/objs/Pvl/Pvl.cpp
++++ b/isis/src/base/objs/Pvl/Pvl.cpp
+@@ -94,7 +94,7 @@ namespace Isis {
+ 
+     // Open the file
+     ifstream istm;
+-    istm.open(m_filename.toLatin1().data(), std::ios::in);
++    istm.open(m_filename.toLatin1().data(), std::ios::in | std::ios::binary);
+     if(!istm) {
+       QString message = Message::FileOpen(temp.expanded());
+       throw IException(IException::Io, message, _FILEINFO_);

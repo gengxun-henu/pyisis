@@ -1,0 +1,646 @@
+diff --git a/SensorUtilities/CMakeLists.txt b/SensorUtilities/CMakeLists.txt
+index e69081b..3397d3a 100644
+--- a/SensorUtilities/CMakeLists.txt
++++ b/SensorUtilities/CMakeLists.txt
+@@ -16,10 +16,14 @@ set(SENSOR_UTILITIES_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+ set(SENSOR_UTILITIES_INSTALL_INCLUDE_DIR "include/sensorutilities")
+ set(SENSOR_UTILITIES_HEADER_FILES "${SENSOR_UTILITIES_INCLUDE_DIR}/SensorUtilities.h"
+                                   "${SENSOR_UTILITIES_INCLUDE_DIR}/MathUtils.h")
++set(SENSOR_UTILITIES_SOURCE_FILES "${CMAKE_CURRENT_SOURCE_DIR}/src/MathUtils.cpp"
++                                  "${CMAKE_CURRENT_SOURCE_DIR}/src/SensorUtilities.cpp")
+ 
+-add_library(sensorutilities SHARED
+-            "${CMAKE_CURRENT_SOURCE_DIR}/src/MathUtils.cpp"
+-            "${CMAKE_CURRENT_SOURCE_DIR}/src/SensorUtilities.cpp")
++if(MSVC)
++  add_library(sensorutilities STATIC ${SENSOR_UTILITIES_SOURCE_FILES})
++else()
++  add_library(sensorutilities SHARED ${SENSOR_UTILITIES_SOURCE_FILES})
++endif()
+ 
+ target_include_directories(sensorutilities
+                            PUBLIC
+@@ -58,4 +62,4 @@ if(SENSOR_UTILITIES_BUILD_TESTS)
+                        TEST_PREFIX SensorUtilities.)
+ else()
+   message(STATUS "Skipping Tests")
+-endif()
+\ No newline at end of file
++endif()
+diff --git a/isis/CMakeLists.txt b/isis/CMakeLists.txt
+index 3782511..6162af8 100644
+--- a/isis/CMakeLists.txt
++++ b/isis/CMakeLists.txt
+@@ -75,6 +75,7 @@ option(buildStaticCore "Build libisis static as well as dynamic"        OFF )
+ option(buildTests      "Set up unit, application, and module tests."    ON  )
+ option(JP2KFLAG        "Whether or not to build using JPEG2000 support" OFF )
+ option(pybindings      "Turn on to build Python bindings"               ON )
++option(buildDocs       "Build ISIS documentation target."                ON )
+ 
+ # if cmake install prefix is not set, and conda env is activated, use the
+ # conda env as the install directory.
+@@ -155,17 +156,32 @@ endif()
+ # Specify flags used
+ # on linux, add the conda prefix to handle possible issues with rpaths at link time
+ # sometimes third parties do not set their rpaths correctly
+-set(thirdPartyCppFlags -Wall
+-                       -fPIC
+-                       -std=c++17
+-                       -DISIS_LITTLE_ENDIAN=1
+-                       -Wno-unused-parameter
+-                       -Wno-overloaded-virtual
+-                       -Wno-strict-aliasing
+-                       -DUSE_UNSTABLE_GEOS_CPP_API=1
+-                       -Wno-strict-overflow
+-                       -DENABLEJP2K=${JP2KFLAG}
+-                     )
++if(MSVC)
++  set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
++  set(thirdPartyCppFlags /DISIS_LITTLE_ENDIAN=1
++                         /DUSE_UNSTABLE_GEOS_CPP_API=1
++                         /D_USE_MATH_DEFINES
++                         /DQWT_DLL
++                         /DH5_BUILT_AS_DYNAMIC_LIB
++                         /DNOMINMAX
++                         /DWIN32_LEAN_AND_MEAN
++                         /DENABLEJP2K=${JP2KFLAG}
++                         /FI${CMAKE_CURRENT_LIST_DIR}/cmake/MSVCWindowsCompat.h
++                         /permissive-
++                       )
++else()
++  set(thirdPartyCppFlags -Wall
++                         -fPIC
++                         -std=c++17
++                         -DISIS_LITTLE_ENDIAN=1
++                         -Wno-unused-parameter
++                         -Wno-overloaded-virtual
++                         -Wno-strict-aliasing
++                         -DUSE_UNSTABLE_GEOS_CPP_API=1
++                         -Wno-strict-overflow
++                         -DENABLEJP2K=${JP2KFLAG}
++                       )
++endif()
+ 
+ set(CMAKE_CXX_STANDARD 17)
+ 
+@@ -177,31 +193,33 @@ set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${FLAGS_STR}" )
+ 
+ # Flag to fix numeric literals problem with boost on linux
+ # Add gold linker (and therefore, phtread) to speed up linux (spec. Ubuntu18.04) builds
+-if(NOT APPLE)
+-  set(thirdPartyCppFlags ${thirdPartyCppFlags} -fuse-ld=gold
+-	                                             -pthread
+-					                                     -fext-numeric-literals
+-                                               -Wl,-rpath,$ENV{CONDA_PREFIX}/lib)
++if(NOT APPLE AND NOT MSVC)
++  set(linuxCppFlags -fuse-ld=gold
++                    -pthread
++                    -fext-numeric-literals
++                    -Wl,-rpath,$ENV{CONDA_PREFIX}/lib)
++  string(REPLACE ";" " " FLAGS_STR "${linuxCppFlags}")
++  set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${FLAGS_STR}" )
+ endif()
+ 
+-# Append CPP flags set in the third party lib file to the string set in this file.
+-string(REPLACE ";" " " FLAGS_STR "${thirdPartyCppFlags}")
+-set(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${FLAGS_STR}" )
+-
+ if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "RELEASE")
+ endif()
+ 
+-if(APPLE)
++if(MSVC)
++  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zi /Od")
++elseif(APPLE)
+   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -O0")
+ else()
+   set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -Og")
+ endif()
+ 
+ # Paths to required executables
+-find_program(XALAN Xalan REQUIRED)
+-find_program(LATEX latex)
+-find_program(DOXYGEN NAME doxygen PATH_SUFFIXES doxygen REQUIRED)
++if(buildDocs)
++  find_program(XALAN Xalan REQUIRED)
++  find_program(LATEX latex)
++  find_program(DOXYGEN NAME doxygen PATH_SUFFIXES doxygen REQUIRED)
++endif()
+ find_program(UIC uic REQUIRED)
+ find_program(MOC moc REQUIRED)
+ find_program(RCC rcc REQUIRED)
+@@ -230,34 +248,37 @@ find_package(Qt5 COMPONENTS
+                 # Search this path explicitly for MacOS OpenGL Framework
+                 PATHS /System/Library/Frameworks/ REQUIRED)
+ 
+-find_package(Boost 1.59.0 REQUIRED atomic
+-                                        log
+-                                        regex
+-                                        log_setup
+-                                        serialization
+-                                        chrono
+-                                        math_c99
+-                                        container
+-                                        math_c99f
+-                                        context
+-                                        math_c99l
+-                                        system
+-                                        math_tr1
+-                                        math_tr1f
+-                                        math_tr1l
+-                                        test_exec_monitor
+-                                        date_time
+-                                        thread
+-                                        exception
+-                                        timer
+-                                        filesystem
+-                                        prg_exec_monitor
+-                                        program_options
+-                                        unit_test_framework
+-                                        iostreams
+-                                        wave
+-                                        random
+-                                        wserialization)
++set(BOOST_COMPONENTS atomic
++                     log
++                     regex
++                     log_setup
++                     serialization
++                     chrono
++                     math_c99
++                     container
++                     math_c99f
++                     context
++                     math_c99l
++                     system
++                     math_tr1
++                     math_tr1f
++                     math_tr1l
++                     date_time
++                     thread
++                     exception
++                     timer
++                     filesystem
++                     program_options
++                     iostreams
++                     wave
++                     random
++                     wserialization)
++if(buildTests)
++  list(APPEND BOOST_COMPONENTS test_exec_monitor
++                               prg_exec_monitor
++                               unit_test_framework)
++endif()
++find_package(Boost 1.59.0 REQUIRED ${BOOST_COMPONENTS})
+ 
+ find_package(Ale               REQUIRED)
+ find_package(Json              REQUIRED)
+@@ -272,7 +293,7 @@ SET(GSL_ROOT_DIR $ENV{CONDA_PREFIX})
+ find_package(GSL       2.2.1   REQUIRED)
+ find_package(HDF5      1.8.15  REQUIRED)
+ find_package(Jama      125     REQUIRED)
+-find_package(NN                REQUIRED)
++find_package(NN)
+ find_package(OpenCV    3.1.0   REQUIRED)
+ find_package(PCL               REQUIRED)
+ find_package(Protobuf          REQUIRED)
+@@ -290,6 +311,39 @@ find_package(Armadillo         REQUIRED)
+ find_package(Threads)
+ find_package(inja              REQUIRED)
+ 
++set(ISIS_HAVE_EMBREE_SHAPEMODEL OFF)
++if(PCL_INCLUDE_DIR AND
++   PCL_COMMON_LIBRARY AND
++   PCL_OCTREE_LIBRARY AND
++   PCL_IO_LIBRARY AND
++   NOT PCL_INCLUDE_DIR MATCHES "-NOTFOUND$" AND
++   NOT PCL_COMMON_LIBRARY MATCHES "-NOTFOUND$" AND
++   NOT PCL_OCTREE_LIBRARY MATCHES "-NOTFOUND$" AND
++   NOT PCL_IO_LIBRARY MATCHES "-NOTFOUND$")
++  set(ISIS_HAVE_EMBREE_SHAPEMODEL ON)
++endif()
++
++if(ISIS_HAVE_EMBREE_SHAPEMODEL)
++  add_compile_definitions(ISIS_HAVE_EMBREE_SHAPEMODEL)
++else()
++  message(WARNING "PCL was not found; disabling Embree shape model objects.")
++  list(APPEND ISIS_DISABLED_OBJ_FOLDERS EmbreeShapeModel EmbreeTargetManager EmbreeTargetShape)
++endif()
++
++set(ISIS_HAVE_NN OFF)
++if(NN_INCLUDE_DIR AND
++   NN_LIBRARY AND
++   NOT NN_INCLUDE_DIR MATCHES "-NOTFOUND$" AND
++   NOT NN_LIBRARY MATCHES "-NOTFOUND$")
++  set(ISIS_HAVE_NN ON)
++endif()
++
++if(ISIS_HAVE_NN)
++  add_compile_definitions(ISIS_HAVE_NN)
++else()
++  message(WARNING "NN was not found; disabling cnet2dem NaturalNeighborRadius.")
++endif()
++
+ # Setup for googletest/googlemock before adding SensorUtilities so we build its tests
+ if(buildTests)
+   set(INSTALL_GTEST OFF)
+@@ -320,26 +374,34 @@ set(ALLINCDIRS "")
+ # Get all include dir variables
+ foreach (_variableName ${_variableNames})
+   if (_variableName MATCHES ".+_INCLUDE_DIR$")
+-    list(APPEND ALLINCDIRS "${${_variableName}}")
++    foreach(ITEM IN LISTS ${_variableName})
++      if(ITEM AND NOT ITEM MATCHES "-NOTFOUND$")
++        list(APPEND ALLINCDIRS "${ITEM}")
++      endif()
++    endforeach()
+   elseif (_variableName MATCHES ".+_INCLUDE_PATH$")
+-    list(APPEND ALLINCDIRS "${${_variableName}}")
++    foreach(ITEM IN LISTS ${_variableName})
++      if(ITEM AND NOT ITEM MATCHES "-NOTFOUND$")
++        list(APPEND ALLINCDIRS "${ITEM}")
++      endif()
++    endforeach()
+   endif()
+ endforeach()
+ 
+ # get all Library variables
+ foreach (_variableName ${_variableNames})
+-  get_filename_component(LIBDIR "${${_variableName}}" DIRECTORY)
+-  get_filename_component(LIBNAME "${${_variableName}}" NAME)
+-
+   if (_variableName MATCHES "^CMAKE+")
+   elseif (_variableName MATCHES ".+_LIBRARY$|.+_LIBRARIES")
+     foreach(ITEM IN LISTS ${_variableName})
++      if(NOT ITEM OR ITEM MATCHES "-NOTFOUND$")
++        continue()
++      endif()
+       get_filename_component(LIBDIR ${ITEM} DIRECTORY)
+       get_filename_component(LIBNAME ${ITEM} NAME)
+       # Some library dependencies identified by the find_package commands are not
+       # libraries (i.e., *.so,*.dylib,*.a) or name spaces (e.g., Qt5::Xml).
+       # Remove the ones that are not libraries or name spaces  (e.g., OPENGL.framework).
+-      if(LIBNAME MATCHES ".+\.so$|.+\.dylib$|.+\.a$|.+::.+$|.+\.SO$|.+\.DYLIB$|.+\.A$")
++      if(LIBNAME MATCHES ".+\.so$|.+\.dylib$|.+\.a$|.+\.lib$|.+::.+$|.+\.SO$|.+\.DYLIB$|.+\.A$|.+\.LIB$")
+         # For MacOS, .so's are not the same as .dylib's, need to add the full path to the .so
+         if((APPLE) AND (LIBNAME MATCHES ".+\.so$|.+\.SO"))
+           list(APPEND ALLLIBS "${ITEM}")
+@@ -354,6 +416,15 @@ endforeach()
+ 
+ # add target based linkages to ALLLIBS variable
+ list(APPEND ALLLIBS pantor::inja sensorutilities protobuf::libprotobuf embree)
++if(MSVC)
++  file(GLOB ISIS_MSVC_PROTOBUF_DEP_LIBS
++       "$ENV{CONDA_PREFIX}/Library/lib/abseil*.lib"
++       "$ENV{CONDA_PREFIX}/Library/lib/absl_*.lib"
++       "$ENV{CONDA_PREFIX}/Library/lib/utf8_*.lib")
++  if(ISIS_MSVC_PROTOBUF_DEP_LIBS)
++    list(APPEND ALLLIBS ${ISIS_MSVC_PROTOBUF_DEP_LIBS})
++  endif()
++endif()
+ 
+ # Sometimes we add the same lib more than once (especially with LIBDIRS)
+ list(REMOVE_DUPLICATES ALLLIBDIRS)
+@@ -463,119 +534,138 @@ endif()
+ # Set up documentation build target.
+ # - This script is called by running "ninja docs".
+ # - This long call passes all desired variables to the script.
+-add_custom_target(docs COMMAND ${CMAKE_COMMAND}
+-                  -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
+-                  -DDOXYGEN=${DOXYGEN}  -DXALAN=${XALAN}
+-                  -DLATEX=${LATEX}
+-                  -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
+-                  -DPACKAGE_VERSION=${PACKAGE_VERSION}
+-                  -P ${CMAKE_MODULE_PATH}/BuildDocs.cmake)
++if(buildDocs)
++  add_custom_target(docs COMMAND ${CMAKE_COMMAND}
++                    -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
++                    -DDOXYGEN=${DOXYGEN}  -DXALAN=${XALAN}
++                    -DLATEX=${LATEX}
++                    -DCMAKE_INSTALL_PREFIX=${CMAKE_INSTALL_PREFIX}
++                    -DPACKAGE_VERSION=${PACKAGE_VERSION}
++                    -P ${CMAKE_MODULE_PATH}/BuildDocs.cmake)
++endif()
++
++function(add_glob_copy_target targetName destination)
++  file(MAKE_DIRECTORY ${destination})
++  file(GLOB copyFiles ${ARGN})
++  if(copyFiles)
++    file(COPY ${copyFiles} DESTINATION ${destination})
++  endif()
++  add_custom_target(${targetName} ALL
++    COMMAND ${CMAKE_COMMAND} -E make_directory ${destination}
++    VERBATIM)
++endfunction()
+ 
+ # Add custom build target to copy modified header files to the build/incs directory.
+ # ALL is specified so that the target is added to the default build target, i.e. the copy command
+ # will be executed when running "ninja install"
+ # On a clean build, all files will be copied over.
+-add_custom_target(incs ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
++add_glob_copy_target(incs ${CMAKE_BINARY_DIR}/inc
+   ${CMAKE_SOURCE_DIR}/src/*/objs/*/*.h ${CMAKE_SOURCE_DIR}/src/*/objs/*/*.hpp
+-  ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.h ${CMAKE_BINARY_DIR}/inc)
++  ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.h)
+ add_dependencies(isis incs)
+ 
+ # Add custom build target to copy modified translation files to the build/appdata/translations
+ ## directory.
+-add_custom_target(appdata ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
++add_glob_copy_target(appdata ${CMAKE_BINARY_DIR}/appdata/translations
+   ${CMAKE_SOURCE_DIR}/appdata/serialnumbers/*.trn ${CMAKE_SOURCE_DIR}/appdata/translations/*.trn
+   ${CMAKE_SOURCE_DIR}/appdata/translations/*.typ ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.typ
+   ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.trn  ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.pft
+   ${CMAKE_SOURCE_DIR}/src/*/apps/*/*.def ${CMAKE_SOURCE_DIR}/appdata/translations/*.def
+-  ${CMAKE_SOURCE_DIR}/appdata/translations/*.pvl
+-  ${CMAKE_BINARY_DIR}/appdata/translations)
++  ${CMAKE_SOURCE_DIR}/appdata/translations/*.pvl)
+ add_dependencies(isis appdata)
+ 
+ # Add custom build targets to copy modified template files to build/appdata/templates
+-add_custom_target(apollotemplate ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/src/*/templates/*.def ${CMAKE_BINARY_DIR}/appdata/templates/apollo/)
++add_glob_copy_target(apollotemplate ${CMAKE_BINARY_DIR}/appdata/templates/apollo
++  ${CMAKE_SOURCE_DIR}/src/*/templates/*.def)
+ add_dependencies(isis apollotemplate)
+ 
+-add_custom_target(autoreg ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/autoreg/* ${CMAKE_BINARY_DIR}/appdata/templates/autoreg/)
++add_glob_copy_target(autoreg ${CMAKE_BINARY_DIR}/appdata/templates/autoreg
++  ${CMAKE_SOURCE_DIR}/appdata/templates/autoreg/*)
+ add_dependencies(isis autoreg)
+ 
+-add_custom_target(autoseed ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/autoseed/* ${CMAKE_BINARY_DIR}/appdata/templates/autoseed/)
++add_glob_copy_target(autoseed ${CMAKE_BINARY_DIR}/appdata/templates/autoseed
++  ${CMAKE_SOURCE_DIR}/appdata/templates/autoseed/*)
+ 
+-add_custom_target(noproj ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/noproj/* ${CMAKE_BINARY_DIR}/appdata/templates/noproj/)
++add_glob_copy_target(noproj ${CMAKE_BINARY_DIR}/appdata/templates/noproj
++  ${CMAKE_SOURCE_DIR}/appdata/templates/noproj/*)
+ add_dependencies(isis noproj)
+ 
+-add_custom_target(cnetref ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/cnetref/* ${CMAKE_BINARY_DIR}/appdata/templates/cnetref/)
++add_glob_copy_target(cnetref ${CMAKE_BINARY_DIR}/appdata/templates/cnetref
++  ${CMAKE_SOURCE_DIR}/appdata/templates/cnetref/*)
+ add_dependencies(isis cnetref)
+ 
+-add_custom_target(cnetstats ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/cnetstats/* ${CMAKE_BINARY_DIR}/appdata/templates/cnetstats/)
++add_glob_copy_target(cnetstats ${CMAKE_BINARY_DIR}/appdata/templates/cnetstats
++  ${CMAKE_SOURCE_DIR}/appdata/templates/cnetstats/*)
+ add_dependencies(isis cnetstats)
+ 
+-add_custom_target(cnetvalid ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/cnet_validmeasure/* ${CMAKE_BINARY_DIR}/appdata/templates/cnet_validmeasure/)
++add_glob_copy_target(cnetvalid ${CMAKE_BINARY_DIR}/appdata/templates/cnet_validmeasure
++  ${CMAKE_SOURCE_DIR}/appdata/templates/cnet_validmeasure/*)
+ add_dependencies(isis cnetvalid)
+ 
+-add_custom_target(controlnetworks ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/controlnetworks/* ${CMAKE_BINARY_DIR}/appdata/templates/controlnetworks/)
++add_glob_copy_target(controlnetworks ${CMAKE_BINARY_DIR}/appdata/templates/controlnetworks
++  ${CMAKE_SOURCE_DIR}/appdata/templates/controlnetworks/*)
+ add_dependencies(isis controlnetworks)
+ 
+-add_custom_target(findfeatures ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/findfeatures/* ${CMAKE_BINARY_DIR}/appdata/templates/findfeatures/)
++add_glob_copy_target(findfeatures ${CMAKE_BINARY_DIR}/appdata/templates/findfeatures
++  ${CMAKE_SOURCE_DIR}/appdata/templates/findfeatures/*)
+ add_dependencies(isis findfeatures)
+ 
+-add_custom_target(fullcnetdiff ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/fullcnetdiff/* ${CMAKE_BINARY_DIR}/appdata/templates/fullcnetdiff/)
++add_glob_copy_target(fullcnetdiff ${CMAKE_BINARY_DIR}/appdata/templates/fullcnetdiff
++  ${CMAKE_SOURCE_DIR}/appdata/templates/fullcnetdiff/*)
+ add_dependencies(isis fullcnetdiff)
+ 
+-add_custom_target(jigsaw ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/jigsaw/* ${CMAKE_BINARY_DIR}/appdata/templates/jigsaw/)
++add_glob_copy_target(jigsaw ${CMAKE_BINARY_DIR}/appdata/templates/jigsaw
++  ${CMAKE_SOURCE_DIR}/appdata/templates/jigsaw/*)
+ add_dependencies(isis jigsaw)
+ 
+-add_custom_target(kernels ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/kernels/* ${CMAKE_BINARY_DIR}/appdata/templates/kernels/)
++add_glob_copy_target(kernels ${CMAKE_BINARY_DIR}/appdata/templates/kernels
++  ${CMAKE_SOURCE_DIR}/appdata/templates/kernels/*)
+ add_dependencies(isis kernels)
+ 
+-add_custom_target(photometry ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/photometry/* ${CMAKE_BINARY_DIR}/appdata/templates/photometry/)
++add_glob_copy_target(photometry ${CMAKE_BINARY_DIR}/appdata/templates/photometry
++  ${CMAKE_SOURCE_DIR}/appdata/templates/photometry/*)
+ add_dependencies(isis photometry)
+ 
+ add_custom_target(icons ALL COMMAND ${CMAKE_COMMAND} -E copy_directory
+   ${CMAKE_SOURCE_DIR}/appdata/images/icons/ ${CMAKE_BINARY_DIR}/appdata/images/icons/)
+ add_dependencies(isis icons)
+ 
+-add_custom_target(targets ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/images/targets/* ${CMAKE_BINARY_DIR}/appdata/images/targets/)
++add_glob_copy_target(targets ${CMAKE_BINARY_DIR}/appdata/images/targets
++  ${CMAKE_SOURCE_DIR}/appdata/images/targets/*)
+ add_dependencies(isis targets)
+ 
+-add_custom_target(maps ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/maps/* ${CMAKE_BINARY_DIR}/appdata/templates/maps/)
++add_glob_copy_target(maps ${CMAKE_BINARY_DIR}/appdata/templates/maps
++  ${CMAKE_SOURCE_DIR}/appdata/templates/maps/*)
+ add_dependencies(isis maps)
+ 
+-add_custom_target(labels ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/labels/* ${CMAKE_BINARY_DIR}/appdata/templates/labels/)
++add_glob_copy_target(labels ${CMAKE_BINARY_DIR}/appdata/templates/labels
++  ${CMAKE_SOURCE_DIR}/appdata/templates/labels/*)
+ add_dependencies(isis labels)
+ 
+-add_custom_target(hidtmgen ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/templates/hidtmgen/* ${CMAKE_BINARY_DIR}/appdata/templates/hidtmgen/)
++add_glob_copy_target(hidtmgen ${CMAKE_BINARY_DIR}/appdata/templates/hidtmgen
++  ${CMAKE_SOURCE_DIR}/appdata/templates/hidtmgen/*)
+ add_dependencies(isis hidtmgen)
+ 
+ add_custom_target(import ALL COMMAND ${CMAKE_COMMAND} -E copy_directory
+   ${CMAKE_SOURCE_DIR}/appdata/import/ ${CMAKE_BINARY_DIR}/appdata/import/)
+ add_dependencies(isis import)
+ 
+-add_custom_target(export ALL COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-  ${CMAKE_SOURCE_DIR}/appdata/export/* ${CMAKE_BINARY_DIR}/appdata/export/)
++add_glob_copy_target(export ${CMAKE_BINARY_DIR}/appdata/export
++  ${CMAKE_SOURCE_DIR}/appdata/export/*)
+ add_dependencies(isis export)
+ 
+-# Create the updateBuildPlugins.sh.in file
+-configure_file(${CMAKE_SOURCE_DIR}/cmake/updateBuildPlugins.sh.in ${CMAKE_BINARY_DIR}/scripts/updateBuildPlugins.sh)
+-
+ # Add custom build target to copy modified Camera.plugin files to the build/lib/Camera.plugin file
+-add_custom_target(cameraPlugins ALL COMMAND ${CMAKE_BINARY_DIR}/scripts/updateBuildPlugins.sh)
++file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
++file(GLOB CAMERA_PLUGIN_FILES ${CMAKE_SOURCE_DIR}/src/*/objs/*/Camera.plugin)
++set(CAMERA_PLUGIN_OUTPUT ${CMAKE_BINARY_DIR}/lib/Camera.plugin)
++file(WRITE ${CAMERA_PLUGIN_OUTPUT} "")
++foreach(CAMERA_PLUGIN_FILE ${CAMERA_PLUGIN_FILES})
++  file(READ ${CAMERA_PLUGIN_FILE} CAMERA_PLUGIN_CONTENTS)
++  file(APPEND ${CAMERA_PLUGIN_OUTPUT} "${CAMERA_PLUGIN_CONTENTS}")
++endforeach()
++add_custom_target(cameraPlugins ALL
++  COMMAND ${CMAKE_COMMAND} -E touch ${CAMERA_PLUGIN_OUTPUT}
++  VERBATIM)
+ add_dependencies(isis cameraPlugins)
+ 
+ # Add a custom build target to clean out everything that gets added to the source
+diff --git a/isis/cmake/AddIsisModule.cmake b/isis/cmake/AddIsisModule.cmake
+index fbd1be7..85cb40d 100644
+--- a/isis/cmake/AddIsisModule.cmake
++++ b/isis/cmake/AddIsisModule.cmake
+@@ -31,8 +31,14 @@ function(add_isis_app folder libDependencies)
+     endif()
+   endforeach()
+ 
+-  # Generate required QT files
+-  generate_moc_files(mocFiles ${folder})
++  # Non-main app sources are already included in the ISIS module library. On
++  # MSVC, generating app MOC files again in the executable creates direct
++  # references to QObject staticMetaObject data exported from isis.dll.
++  if(MSVC)
++    set(mocFiles)
++  else()
++    generate_moc_files(mocFiles ${folder})
++  endif()
+   set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+ 
+   # Set up the executable
+@@ -96,6 +102,19 @@ function(add_isis_obj folder reqLibs)
+ 
+   get_filename_component(folderName ${folder} NAME)
+ 
++  if(ISIS_DISABLED_OBJ_FOLDERS)
++    foreach(disabledObjFolder ${ISIS_DISABLED_OBJ_FOLDERS})
++      if(${folderName} STREQUAL ${disabledObjFolder})
++        message("Skipping disabled object folder: ${folderName}")
++        set(newSourceFiles PARENT_SCOPE)
++        set(newTestFiles PARENT_SCOPE)
++        set(newTruthFiles PARENT_SCOPE)
++        set(newPluginLib PARENT_SCOPE)
++        return()
++      endif()
++    endforeach()
++  endif()
++
+   # Look inside this folder for include files
+ 
+   # Find the source and header files
+diff --git a/isis/cmake/FindGeoTIFF.cmake b/isis/cmake/FindGeoTIFF.cmake
+index 9bfbb68..84517c0 100644
+--- a/isis/cmake/FindGeoTIFF.cmake
++++ b/isis/cmake/FindGeoTIFF.cmake
+@@ -11,7 +11,7 @@ find_path(GEOTIFF_INCLUDE_DIR
+ )
+ 
+ find_library(GEOTIFF_LIBRARY
+-  NAMES geotiff
++  NAMES geotiff geotiff_i
+ )
+ 
+ get_filename_component(GEOTIFF_ROOT_INCLUDE_DIR "${GEOTIFF_INCLUDE_DIR}" DIRECTORY)
+diff --git a/isis/cmake/FindOpenCV.cmake b/isis/cmake/FindOpenCV.cmake
+index 3f10043..5c6dca0 100644
+--- a/isis/cmake/FindOpenCV.cmake
++++ b/isis/cmake/FindOpenCV.cmake
+@@ -5,26 +5,40 @@
+ #   OPENCV_INCLUDE_DIR
+ #   OPENCV_LIBLSIT
+ 
++function(find_opencv_library outputName baseName)
++  find_library(${outputName} NAMES ${baseName})
++  if(WIN32 AND NOT ${outputName})
++    file(GLOB opencvCandidates
++      "$ENV{CONDA_PREFIX}/Library/lib/${baseName}*.lib"
++      "$ENV{CONDA_PREFIX}/lib/${baseName}*.lib")
++    list(SORT opencvCandidates)
++    list(GET opencvCandidates 0 opencvCandidate)
++    if(opencvCandidate)
++      set(${outputName} "${opencvCandidate}" CACHE FILEPATH "OpenCV library ${baseName}" FORCE)
++    endif()
++  endif()
++endfunction()
++
+ find_path(OPENCV_INCLUDE_DIR
+-    NAMES cv.h opencv.hpp
+-    PATH_SUFFIXES opencv "opencv4/opencv2"
++    NAMES opencv.hpp
++    PATH_SUFFIXES opencv2 "opencv4/opencv2"
+ )
+ 
+-find_library(OPENCV_CORE_LIBRARY              NAMES opencv_core)
+-find_library(OPENCV_VIDEOSTAB_LIBRARY         NAMES opencv_videostab)
+-find_library(OPENCV_VIDEO_LIBRARY             NAMES opencv_video)
+-find_library(OPENCV_SUPERRES_LIBRARY          NAMES opencv_superres)
+-find_library(OPENCV_STITCHING_LIBRARY         NAMES opencv_stitching)
+-find_library(OPENCV_PHOTO_LIBRARY             NAMES opencv_photo)
+-find_library(OPENCV_OBJDETECT_LIBRARY         NAMES opencv_objdetect)
+-find_library(OPENCV_ML_LIBRARY                NAMES opencv_ml)
+-find_library(OPENCV_IMGCODECS_LIBRARY         NAMES opencv_imgcodecs)
+-find_library(OPENCV_IMGPROC_LIBRARY           NAMES opencv_imgproc)
+-find_library(OPENCV_CALIB3D_LIBRARY           NAMES opencv_calib3d)
+-find_library(OPENCV_FEATURES2D_LIBRARY        NAMES opencv_features2d)
+-find_library(OPENCV_XFEATURES2D_LIBRARY       NAMES opencv_xfeatures2d)
+-find_library(OPENCV_HIGHGUI_LIBRARY           NAMES opencv_highgui)
+-find_library(OPENCV_FLANN_LIBRARY             NAMES opencv_flann)
++find_opencv_library(OPENCV_CORE_LIBRARY              opencv_core)
++find_opencv_library(OPENCV_VIDEOSTAB_LIBRARY         opencv_videostab)
++find_opencv_library(OPENCV_VIDEO_LIBRARY             opencv_video)
++find_opencv_library(OPENCV_SUPERRES_LIBRARY          opencv_superres)
++find_opencv_library(OPENCV_STITCHING_LIBRARY         opencv_stitching)
++find_opencv_library(OPENCV_PHOTO_LIBRARY             opencv_photo)
++find_opencv_library(OPENCV_OBJDETECT_LIBRARY         opencv_objdetect)
++find_opencv_library(OPENCV_ML_LIBRARY                opencv_ml)
++find_opencv_library(OPENCV_IMGCODECS_LIBRARY         opencv_imgcodecs)
++find_opencv_library(OPENCV_IMGPROC_LIBRARY           opencv_imgproc)
++find_opencv_library(OPENCV_CALIB3D_LIBRARY           opencv_calib3d)
++find_opencv_library(OPENCV_FEATURES2D_LIBRARY        opencv_features2d)
++find_opencv_library(OPENCV_XFEATURES2D_LIBRARY       opencv_xfeatures2d)
++find_opencv_library(OPENCV_HIGHGUI_LIBRARY           opencv_highgui)
++find_opencv_library(OPENCV_FLANN_LIBRARY             opencv_flann)
+ 
+ get_filename_component(OPENCV_ROOT_INCLUDE_DIR "${OPENCV_INCLUDE_DIR}" DIRECTORY)
+ 
+diff --git a/isis/cmake/MSVCWindowsCompat.h b/isis/cmake/MSVCWindowsCompat.h
+new file mode 100644
+index 0000000..050e881
+--- /dev/null
++++ b/isis/cmake/MSVCWindowsCompat.h
+@@ -0,0 +1,29 @@
++#ifndef ISIS_MSVC_WINDOWS_COMPAT_H
++#define ISIS_MSVC_WINDOWS_COMPAT_H
++
++#if defined(_WIN32) && defined(_MSC_VER)
++#  ifndef NOMINMAX
++#    define NOMINMAX
++#  endif
++#  ifndef WIN32_LEAN_AND_MEAN
++#    define WIN32_LEAN_AND_MEAN
++#  endif
++#  ifndef NOGDI
++#    define NOGDI
++#  endif
++
++#  define Ellipse WindowsSdkEllipse
++#  include <windows.h>
++#  undef Ellipse
++#  ifdef DIFFERENCE
++#    undef DIFFERENCE
++#  endif
++#  ifdef near
++#    undef near
++#  endif
++#  ifdef far
++#    undef far
++#  endif
++#endif
++
++#endif

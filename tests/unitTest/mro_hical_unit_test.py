@@ -3,8 +3,9 @@ Unit tests for MRO HiCal gain bindings.
 
 Author: Geng Xun
 Created: 2026-04-09
-Last Modified: 2026-04-09
+Last Modified: 2026-06-18
 Updated: 2026-04-09  Geng Xun added focused coverage for GainNonLinearity, GainTemperature, and GainUnitConversion using minimal local HiCal configs.
+Updated: 2026-06-18  Geng Xun made HiCal CSV path assertions portable on Windows.
 """
 
 from pathlib import Path
@@ -115,7 +116,7 @@ End
             self.assertEqual(module.name(), "GainTemperature")
             self.assertEqual(module.size(), 4)
             self.assertEqual(len(module), 4)
-            self.assertEqual(module.csv_file(), str(fpa_gain_csv))
+            self.assertEqual(Path(module.csv_file()), fpa_gain_csv)
             self.assertTrue(all(abs(value - 0.9) < 1e-12 for value in module.data()))
             self.assertAlmostEqual(module.at(-1), 0.9)
             self.assertTrue(any("FpaTemperatureFactor[0.05" in event for event in module.history()))

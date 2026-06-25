@@ -2,10 +2,11 @@
 
 Author: Geng Xun
 Created: 2026-04-19
-Last Modified: 2026-04-23
+Last Modified: 2026-06-18
 Updated: 2026-04-19  Geng Xun added per-function normal, boundary, and exception coverage for dom_prepare.py helpers, metadata writing, and CLI dispatch.
 Updated: 2026-04-19  Geng Xun added configurable real LRO DOM test-path overrides to match the optional user-specified input pattern used by the matching tests.
 Updated: 2026-04-23  Geng Xun synchronized PairPreparationMetadata test builders with projected delta fields and kept mocked DOM-overlap tests compatible with projection checks.
+Updated: 2026-06-18  Geng Xun made DOM preparation path expectations portable on Windows.
 """
 
 from __future__ import annotations
@@ -661,7 +662,7 @@ class DomPrepareUnitTest(unittest.TestCase):
 
         resolve_mock.assert_called_once_with("relative_left.cub", base_directory=input_list.parent)
         normalize_mock.assert_called_once_with(
-            [("relative_left.cub", "/tmp/resolved_left.cub")],
+            [("relative_left.cub", str(Path("/tmp/resolved_left.cub")))],
             str(temp_dir / "doms_scaled.lis"),
             gsd_report_path=str(temp_dir / "images_gsd.txt"),
             output_directory=str(temp_dir / "scaled"),

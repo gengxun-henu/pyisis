@@ -3,6 +3,10 @@
 
 Reads output produced by run_pipeline_example.sh and reports the fields needed
 to compare the adaptive SIFT/FLANN fast path with deep-matcher alternatives.
+
+Author: Geng Xun
+Created: 2026-05-27
+Updated: 2026-06-18  Geng Xun allowed pair IDs to come from JSON payloads for Windows-safe filenames.
 """
 
 from __future__ import annotations
@@ -78,7 +82,7 @@ def _summarize_pair_result(path: Path) -> dict[str, Any]:
         lighting = adaptive.get("lighting_difference") if isinstance(adaptive.get("lighting_difference"), dict) else {}
 
     return {
-        "pair": path.stem,
+        "pair": str(_first_present(payload.get("pair"), payload.get("pair_id"), payload.get("pair_label"), path.stem)),
         "path": str(path),
         "status": payload.get("status"),
         "matched_point_count": _first_present(

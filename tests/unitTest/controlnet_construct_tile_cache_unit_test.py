@@ -2,14 +2,18 @@
 
 Author: Geng Xun
 Created: 2026-05-05
+Last Modified: 2026-06-18
+Updated: 2026-06-18  Geng Xun made tile-cache temporary cube and timing tests portable on Windows.
 """
 
 from __future__ import annotations
 
+from contextlib import contextmanager
 import importlib
 import sys
 from pathlib import Path
 import unittest
+from unittest import mock
 
 import numpy as np
 
@@ -66,48 +70,41 @@ class TestTileCacheTileDimensions(unittest.TestCase):
 class TestTileCacheReadRegion(unittest.TestCase):
     """Test read_region assembly from cached tiles."""
 
+    @contextmanager
     def _make_cube_with_data(self, data, tile_samples, tile_lines):
         with temporary_directory() as tmp:
             cube, _ = make_tile_test_cube(tmp, data, tile_samples=tile_samples, tile_lines=tile_lines)
-            return cube
+            try:
+                yield cube
+            finally:
+                if cube.is_open():
+                    cube.close()
 
     def test_single_tile_read(self):
         """Reading a region within one tile should return correct data."""
         data = np.arange(64, dtype=np.float64).reshape((8, 8))
-        cube = self._make_cube_with_data(data, tile_samples=8, tile_lines=8)
-        try:
+        with self._make_cube_with_data(data, tile_samples=8, tile_lines=8) as cube:
             cache = TileCache(cube, cache_max_mb=10)
             result = cache.read_region(0, 0, 4, 4)
             np.testing.assert_array_equal(result, data[0:4, 0:4])
-        finally:
-            if cube.is_open():
-                cube.close()
 
     def test_multi_tile_assembly(self):
         """Reading across tile boundary should assemble correctly."""
         data = np.arange(64, dtype=np.float64).reshape((8, 8))
-        cube = self._make_cube_with_data(data, tile_samples=4, tile_lines=4)
-        try:
+        with self._make_cube_with_data(data, tile_samples=4, tile_lines=4) as cube:
             cache = TileCache(cube, cache_max_mb=10)
             # Read across tile boundary: covers tiles (0,0), (1,0), (0,1), (1,1)
             result = cache.read_region(2, 2, 4, 4)
             np.testing.assert_array_equal(result, data[2:6, 2:6])
-        finally:
-            if cube.is_open():
-                cube.close()
 
     def test_edge_tile_read(self):
         """Reading near image edge should handle partial tiles."""
         data = np.arange(30, dtype=np.float64).reshape((5, 6))
-        cube = self._make_cube_with_data(data, tile_samples=4, tile_lines=4)
-        try:
+        with self._make_cube_with_data(data, tile_samples=4, tile_lines=4) as cube:
             cache = TileCache(cube, cache_max_mb=10)
             # Read last 2 rows and 3 cols -- crosses tile boundaries
             result = cache.read_region(3, 3, 3, 2)
             np.testing.assert_array_equal(result, data[3:5, 3:6])
-        finally:
-            if cube.is_open():
-                cube.close()
 
 
 class TestTileCacheLRU(unittest.TestCase):
@@ -169,6 +166,15 @@ class TestTileCacheLRU(unittest.TestCase):
 class TestTileCacheAdaptiveBypass(unittest.TestCase):
     """Test adaptive warmup -> bypass decision."""
 
+    def _monotonic_values(self, read_count, load_seconds=1.0):
+        values = []
+        current = 0.0
+        for _ in range(read_count):
+            values.extend([current, current + load_seconds])
+            current += load_seconds
+            values.extend([current, current])
+        return values
+
     def test_fast_disk_triggers_bypass(self):
         """Very low threshold should trigger BYPASSED state."""
         data = np.zeros((16, 16), dtype=np.float64)
@@ -181,8 +187,9 @@ class TestTileCacheAdaptiveBypass(unittest.TestCase):
                     adaptive_warmup_count=3,
                     adaptive_throughput_threshold_mbps=0.0001,
                 )
-                for i in range(3):
-                    cache.read_region(i * 4, 0, 4, 4)
+                with mock.patch.object(tile_cache_mod.time, "monotonic", side_effect=self._monotonic_values(3)):
+                    for i in range(3):
+                        cache.read_region(i * 4, 0, 4, 4)
                 self.assertEqual(cache._state, CacheState.BYPASSED)
             finally:
                 if cube.is_open():
@@ -200,8 +207,9 @@ class TestTileCacheAdaptiveBypass(unittest.TestCase):
                     adaptive_warmup_count=3,
                     adaptive_throughput_threshold_mbps=1e15,
                 )
-                for i in range(3):
-                    cache.read_region(i * 4, 0, 4, 4)
+                with mock.patch.object(tile_cache_mod.time, "monotonic", side_effect=self._monotonic_values(3)):
+                    for i in range(3):
+                        cache.read_region(i * 4, 0, 4, 4)
                 self.assertEqual(cache._state, CacheState.ACTIVE)
             finally:
                 if cube.is_open():
@@ -222,15 +230,16 @@ class TestTileCacheAdaptiveBypass(unittest.TestCase):
                     adaptive_recheck_every=2,  # Recheck every 2 reads after warmup.
                 )
                 # 2 warmup reads -> ACTIVE (threshold too high).
-                cache.read_region(0, 0, 4, 4)
-                cache.read_region(4, 0, 4, 4)
-                self.assertEqual(cache._state, CacheState.ACTIVE)
+                with mock.patch.object(tile_cache_mod.time, "monotonic", side_effect=self._monotonic_values(4)):
+                    cache.read_region(0, 0, 4, 4)
+                    cache.read_region(4, 0, 4, 4)
+                    self.assertEqual(cache._state, CacheState.ACTIVE)
 
-                # After 2 more ACTIVE reads, recheck should use fresh data.
-                # Use a very low threshold so the fresh reads will bypass.
-                cache._throughput_threshold = 0.0001
-                cache.read_region(0, 4, 4, 4)
-                cache.read_region(4, 4, 4, 4)
+                    # After 2 more ACTIVE reads, recheck should use fresh data.
+                    # Use a very low threshold so the fresh reads will bypass.
+                    cache._throughput_threshold = 0.0001
+                    cache.read_region(0, 4, 4, 4)
+                    cache.read_region(4, 4, 4, 4)
                 self.assertEqual(cache._state, CacheState.BYPASSED)
             finally:
                 if cube.is_open():

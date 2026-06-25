@@ -1,0 +1,23 @@
+package:
+  name: pyisis-isisdata-minimal
+  version: 1.2.0
+
+source:
+  path: ../../tests/data/isisdata/mockup
+
+build:
+  noarch: generic
+  number: 0
+
+test:
+  commands:
+    - if not exist "%PREFIX%\share\isisdata\base\kernels\lsk\naif0012.tls" exit /b 1  # [win]
+    - if not exist "%PREFIX%\etc\conda\activate.d\pyisis-isisdata-minimal-activate.bat" exit /b 1  # [win]
+    - if "%ISISDATA%"=="" exit /b 1  # [win]
+    - test -f "$PREFIX/share/isisdata/base/kernels/lsk/naif0012.tls"  # [unix]
+    - test -f "$PREFIX/etc/conda/activate.d/pyisis-isisdata-minimal-activate.sh"  # [unix]
+    - test -n "$ISISDATA"  # [unix]
+
+about:
+  summary: Minimal ISISDATA tree for pyisis smoke tests and examples.
+  license: MIT

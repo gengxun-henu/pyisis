@@ -25,6 +25,7 @@ reference/NO-USE-isis_headers9.0.0/
 docs/paper_pyisis_module_architecture.md
 docs/paper_appendix_pybind_camera_model.md
 docs/paper/
+docs/pyisis_paper
 tests/unitTest/controlnet_construct_dom2ori_unit_test*
 left_dom.cub
 right_dom.cub

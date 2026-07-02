@@ -557,6 +557,26 @@ In this mode:
 
 The resulting per-pair reports record the generated `pair_id`, `point_id_namespace`, and a sample point ID so downstream `cnetmerge` debugging is less of a treasure hunt.
 
+### Measure-level DOM RANSAC filtering
+
+After building or refining a control network whose measures are in original image
+coordinates, use `examples/controlnet_construct/filter_controlnet_dom_ransac.py`
+to project measures into DOM pixel space, run pair-parallel RANSAC, and mark
+outlier measures ignored in a new `.net`.
+
+```bash
+python examples/controlnet_construct/filter_controlnet_dom_ransac.py \
+  --input-net ba2_cnet_seedgrid.net \
+  --original-list reduced_original_images.lis \
+  --dom-list dom_images.lis \
+  --output-net ba2_dom_measure_ransac.net \
+  --report ba2_dom_measure_ransac_report.json \
+  --outlier-measures ba2_dom_measure_ransac_outliers.jsonl \
+  --projection-failures ba2_dom_measure_ransac_projection_failures.jsonl \
+  --num-workers 8 \
+  --max-open-cubes-per-worker 16
+```
+
 ## Unit tests: also useful as usage references
 
 The tests in this repository are both regression checks and practical API usage references.

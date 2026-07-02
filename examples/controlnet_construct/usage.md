@@ -874,6 +874,34 @@ python examples/controlnet_construct/merge_control_measure.py \
 
 > 这个脚本默认假设 `original_images.lis` 中的原始 cube 已经完成 `spiceinit`，且 `ISISDATA` 可用于 `SerialNumber.compose()`。如果 serial 号无法构成，脚本会直接报错，而不会悄悄继续。
 
+## 5.6 可选后处理：量测级 DOM RANSAC 滤波
+
+在完成 `pointreg` 或 BA 种子网生成后，如果控制网中的 `ControlMeasure` 坐标仍为
+原始影像 sample/line，可以使用 `filter_controlnet_dom_ransac.py` 做一轮量测级
+RANSAC 滤波：
+
+```bash
+python examples/controlnet_construct/filter_controlnet_dom_ransac.py \
+  --input-net work/merge/dom_matching_merged.net \
+  --original-list work/original_images.lis \
+  --dom-list work/doms_scaled.lis \
+  --output-net work/dom_measure_ransac.net \
+  --report work/reports/dom_measure_ransac_report.json \
+  --outlier-measures work/reports/dom_measure_ransac_outliers.jsonl \
+  --projection-failures work/reports/dom_measure_ransac_projection_failures.jsonl \
+  --num-workers 8 \
+  --max-open-cubes-per-worker 16
+```
+
+设计要点：
+
+- 量测坐标被解释为原始影像 sample/line；
+- 每个量测会被投影到 DOM 像素空间（通过 UniversalGround → DOM Projection）；
+- 投影失败的量测只会被记录到 `projection_failures.jsonl`，不会被标记为 ignored；
+- 同一像对的 DOM 像素坐标会经过 RANSAC 一致性检验，被丢弃的对应关系会导致双方量测被标记为 ignored；
+- 多 worker 模式下，RANSAC 计算在各 worker 中并行完成，但写 `.net` 始终在主进程单线程完成；
+- 默认输出 binary `.net`；加 `--pvl` 则输出 PVL 文本格式。
+
 ## 6. 一次跑完整条流水线时，应该检查哪些产物
 
 建议至少按下面顺序检查：

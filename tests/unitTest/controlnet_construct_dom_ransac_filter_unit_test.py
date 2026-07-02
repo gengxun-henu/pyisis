@@ -266,5 +266,25 @@ class DomRansacFilterReportingUnitTest(unittest.TestCase):
         self.assertEqual(len(summaries), 2)
 
 
+class DomRansacFilterCliUnitTest(unittest.TestCase):
+    def test_parser_accepts_required_paths_and_parallel_options(self):
+        from controlnet_construct.filter_controlnet_dom_ransac import build_argument_parser
+
+        args = build_argument_parser().parse_args([
+            "--input-net", "input.net",
+            "--original-list", "original.lis",
+            "--dom-list", "dom.lis",
+            "--output-net", "output.net",
+            "--report", "report.json",
+            "--outlier-measures", "outliers.jsonl",
+            "--projection-failures", "projection_failures.jsonl",
+            "--num-workers", "4",
+            "--max-open-cubes-per-worker", "32",
+        ])
+
+        self.assertEqual(args.num_workers, 4)
+        self.assertEqual(args.max_open_cubes_per_worker, 32)
+
+
 if __name__ == "__main__":
     unittest.main()

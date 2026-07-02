@@ -10,6 +10,8 @@ Created: 2026-07-02
 
 from __future__ import annotations
 
+import argparse
+import json
 import math
 
 import numpy as np
@@ -461,3 +463,101 @@ def _run_pair_ransac_task_in_subprocess(
         return run_pair_ransac_task(task, serial_maps, options, cache)
     finally:
         cache.close_all()
+
+
+def build_argument_parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(
+        description="Measure-level DOM-space RANSAC filter for ControlNet.",
+    )
+    parser.add_argument("--input-net", type=Path, required=True)
+    parser.add_argument("--original-list", type=Path, required=True)
+    parser.add_argument("--dom-list", type=Path, required=True)
+    parser.add_argument("--output-net", type=Path, required=True)
+    parser.add_argument("--report", type=Path, required=True)
+    parser.add_argument("--outlier-measures", type=Path, required=True)
+    parser.add_argument("--projection-failures", type=Path, required=True)
+    parser.add_argument("--ransac-model", choices=("affine-partial", "affine", "homography"), default="affine-partial")
+    parser.add_argument("--ransac-reproj-threshold", type=float, default=10.0)
+    parser.add_argument("--ransac-confidence", type=float, default=0.995)
+    parser.add_argument("--ransac-max-iters", type=int, default=5000)
+    parser.add_argument("--ransac-mode", choices=("strict", "loose"), default="loose")
+    parser.add_argument("--loose-ransac-keep-threshold", type=float, default=1.0)
+    parser.add_argument("--num-workers", type=int, default=1)
+    parser.add_argument("--max-open-cubes-per-worker", type=int, default=16)
+    parser.add_argument("--pvl", action="store_true", default=False, help="Write PVL text output instead of binary.")
+    return parser
+
+
+def filter_controlnet_dom_ransac(args, *, ip_module) -> dict[str, object]:
+    aligned = read_aligned_cube_lists(args.original_list, args.dom_list)
+    serial_maps = build_serial_path_maps(aligned, ip_module=ip_module)
+    net = ip_module.ControlNet(str(args.input_net))
+
+    input_point_count = net.get_num_points()
+    records = extract_active_measure_records(net)
+    input_measure_count = len(records)
+
+    grouped = group_measure_pairs_by_serial_pair(records)
+    tasks = [PairTask(serial_pair, pair_records) for serial_pair, pair_records in grouped.items()]
+
+    options = RansacOptions(
+        model=args.ransac_model,
+        reproj_threshold=args.ransac_reproj_threshold,
+        confidence=args.ransac_confidence,
+        max_iters=args.ransac_max_iters,
+        mode=args.ransac_mode,
+        loose_keep_pixel_threshold=args.loose_ransac_keep_threshold,
+    )
+
+    results = run_pair_tasks(
+        tasks, serial_maps, options,
+        num_workers=args.num_workers,
+        max_open_cubes_per_worker=args.max_open_cubes_per_worker,
+        ip_module=ip_module,
+    )
+
+    outlier_keys, projection_failures, pair_summaries = aggregate_worker_results(results)
+    changed = apply_ignored_measures(net, outlier_keys)
+
+    net.write(str(args.output_net), bool(args.pvl))
+
+    sorted_outlier_keys = sorted(outlier_keys, key=lambda k: (k.point_index, k.measure_index, k.serial))
+    write_jsonl(
+        args.outlier_measures,
+        [{"policy": "any_pair_outlier", **measure_key_to_dict(key)} for key in sorted_outlier_keys],
+    )
+    write_jsonl(
+        args.projection_failures,
+        [projection_failure_to_dict(failure) for failure in projection_failures],
+    )
+
+    report = {
+        "input_point_count": input_point_count,
+        "input_measure_count": input_measure_count,
+        "pair_count": len(tasks),
+        "outlier_measure_count": len(outlier_keys),
+        "projection_failure_count": len(projection_failures),
+        "changed_measure_count": changed,
+        "output_net": str(args.output_net),
+        "pair_summaries": pair_summaries,
+    }
+    write_summary_report(args.report, report)
+    return report
+
+
+def main(argv: list[str] | None = None) -> int:
+    import isis_pybind._isis_core as ip
+    args = build_argument_parser().parse_args(argv)
+    report = filter_controlnet_dom_ransac(args, ip_module=ip)
+    print(json.dumps({
+        "input_point_count": report["input_point_count"],
+        "input_measure_count": report["input_measure_count"],
+        "outlier_measure_count": report["outlier_measure_count"],
+        "projection_failure_count": report["projection_failure_count"],
+        "output_net": report["output_net"],
+    }, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

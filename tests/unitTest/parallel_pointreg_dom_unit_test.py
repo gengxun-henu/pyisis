@@ -269,3 +269,57 @@ class ParallelPointregDomUnitTest(unittest.TestCase):
              patch("scripts.parallel_pointreg_dom.run_cnetmerge"):
             exit_code = run_parallel_pointreg_dom(args)
         self.assertEqual(exit_code, 0)
+
+    def test_main_serial_fallback_strips_num_processes(self):
+        from scripts.parallel_pointreg_dom import main
+        from unittest.mock import patch, MagicMock
+        mock_result = MagicMock()
+        mock_result.returncode = 0
+        with patch("scripts.parallel_pointreg_dom.subprocess.run", return_value=mock_result) as mock_run:
+            exit_code = main([
+                "--num-processes", "1",
+                "--fromlist", "ori.lis",
+                "--domlist", "dom.lis",
+                "--cnet", "input.net",
+                "--deffile", "t.pvl",
+                "--onet", "output.net",
+            ])
+        self.assertEqual(exit_code, 0)
+        mock_run.assert_called_once()
+        forwarded_cmd = mock_run.call_args[0][0]
+        self.assertNotIn("--num-processes", forwarded_cmd)
+        self.assertNotIn("1", forwarded_cmd)
+
+    def test_main_serial_fallback_strips_equals_form(self):
+        from scripts.parallel_pointreg_dom import main
+        from unittest.mock import patch, MagicMock
+        mock_result = MagicMock()
+        mock_result.returncode = 0
+        with patch("scripts.parallel_pointreg_dom.subprocess.run", return_value=mock_result) as mock_run:
+            exit_code = main([
+                "--num-processes=1",
+                "--fromlist", "ori.lis",
+                "--domlist", "dom.lis",
+                "--cnet", "input.net",
+                "--deffile", "t.pvl",
+                "--onet", "output.net",
+            ])
+        self.assertEqual(exit_code, 0)
+        mock_run.assert_called_once()
+        forwarded_cmd = mock_run.call_args[0][0]
+        # Check that no token starts with --num-processes=
+        for token in forwarded_cmd:
+            self.assertFalse(token.startswith("--num-processes="),
+                            f"Token '{token}' should have been filtered out")
+
+    def test_main_rejects_invalid_num_processes(self):
+        from scripts.parallel_pointreg_dom import main
+        with self.assertRaises(SystemExit):
+            main([
+                "--num-processes", "0",
+                "--fromlist", "ori.lis",
+                "--domlist", "dom.lis",
+                "--cnet", "input.net",
+                "--deffile", "t.pvl",
+                "--onet", "output.net",
+            ])

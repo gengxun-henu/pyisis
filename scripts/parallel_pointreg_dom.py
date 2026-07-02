@@ -245,13 +245,19 @@ def main(argv: list[str] | None = None) -> int:
     args = build_argument_parser().parse_args(
         normalize_isis_style_args(argv or sys.argv[1:])
     )
-    if args.num_processes <= 1:
+    if args.num_processes < 1:
+        parser = build_argument_parser()
+        parser.error("--num-processes must be >= 1")
+    if args.num_processes == 1:
         script_path = str(Path(__file__).resolve().parent / "pointreg_dom.py")
         forwarded = normalize_isis_style_args(argv or sys.argv[1:])
         cmd = [sys.executable, script_path] + [
             t for i, t in enumerate(forwarded)
-            if not (t == "--num-processes"
-                    or (i > 0 and forwarded[i - 1] == "--num-processes"))
+            if not (
+                t == "--num-processes"
+                or t.startswith("--num-processes=")
+                or (i > 0 and forwarded[i - 1] == "--num-processes")
+            )
         ]
         result = subprocess.run(cmd, check=False)
         return result.returncode

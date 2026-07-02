@@ -191,3 +191,81 @@ class ParallelPointregDomUnitTest(unittest.TestCase):
                 content = Path(list_path).read_text()
                 self.assertIn("/tmp/r1.net", content)
                 self.assertIn("/tmp/r2.net", content)
+
+    def test_run_parallel_returns_1_on_cnetsplit_failure(self):
+        import subprocess
+        from scripts.parallel_pointreg_dom import run_parallel_pointreg_dom, build_argument_parser
+        from unittest.mock import patch
+        parser = build_argument_parser()
+        args = parser.parse_args([
+            "--fromlist", "ori.lis", "--domlist", "dom.lis",
+            "--cnet", "input.net", "--deffile", "t.pvl",
+            "--onet", "output.net", "--num-processes", "2",
+        ])
+        with patch("scripts.parallel_pointreg_dom.run_cnetsplit",
+                    side_effect=subprocess.CalledProcessError(1, "cnetsplit")):
+            exit_code = run_parallel_pointreg_dom(args)
+        self.assertEqual(exit_code, 1)
+
+    def test_run_parallel_returns_2_on_worker_failure(self):
+        from scripts.parallel_pointreg_dom import run_parallel_pointreg_dom, build_argument_parser
+        from unittest.mock import patch, MagicMock
+        parser = build_argument_parser()
+        args = parser.parse_args([
+            "--fromlist", "ori.lis", "--domlist", "dom.lis",
+            "--cnet", "input.net", "--deffile", "t.pvl",
+            "--onet", "output.net", "--num-processes", "2",
+        ])
+        failed_result = MagicMock()
+        failed_result.returncode = 1
+        ok_result = MagicMock()
+        ok_result.returncode = 0
+        with patch("scripts.parallel_pointreg_dom.run_cnetsplit"), \
+             patch("scripts.parallel_pointreg_dom.discover_chunk_files",
+                    return_value=["/tmp/c1.net", "/tmp/c2.net"]), \
+             patch("scripts.parallel_pointreg_dom.dispatch_workers",
+                    return_value=[(0, ok_result), (1, failed_result)]):
+            exit_code = run_parallel_pointreg_dom(args)
+        self.assertEqual(exit_code, 2)
+
+    def test_run_parallel_returns_3_on_cnetmerge_failure(self):
+        import subprocess
+        from scripts.parallel_pointreg_dom import run_parallel_pointreg_dom, build_argument_parser
+        from unittest.mock import patch, MagicMock
+        parser = build_argument_parser()
+        args = parser.parse_args([
+            "--fromlist", "ori.lis", "--domlist", "dom.lis",
+            "--cnet", "input.net", "--deffile", "t.pvl",
+            "--onet", "output.net", "--num-processes", "2",
+        ])
+        ok_result = MagicMock()
+        ok_result.returncode = 0
+        with patch("scripts.parallel_pointreg_dom.run_cnetsplit"), \
+             patch("scripts.parallel_pointreg_dom.discover_chunk_files",
+                    return_value=["/tmp/c1.net", "/tmp/c2.net"]), \
+             patch("scripts.parallel_pointreg_dom.dispatch_workers",
+                    return_value=[(0, ok_result), (1, ok_result)]), \
+             patch("scripts.parallel_pointreg_dom.run_cnetmerge",
+                    side_effect=subprocess.CalledProcessError(1, "cnetmerge")):
+            exit_code = run_parallel_pointreg_dom(args)
+        self.assertEqual(exit_code, 3)
+
+    def test_run_parallel_returns_0_on_success(self):
+        from scripts.parallel_pointreg_dom import run_parallel_pointreg_dom, build_argument_parser
+        from unittest.mock import patch, MagicMock
+        parser = build_argument_parser()
+        args = parser.parse_args([
+            "--fromlist", "ori.lis", "--domlist", "dom.lis",
+            "--cnet", "input.net", "--deffile", "t.pvl",
+            "--onet", "output.net", "--num-processes", "2",
+        ])
+        ok_result = MagicMock()
+        ok_result.returncode = 0
+        with patch("scripts.parallel_pointreg_dom.run_cnetsplit"), \
+             patch("scripts.parallel_pointreg_dom.discover_chunk_files",
+                    return_value=["/tmp/c1.net", "/tmp/c2.net"]), \
+             patch("scripts.parallel_pointreg_dom.dispatch_workers",
+                    return_value=[(0, ok_result), (1, ok_result)]), \
+             patch("scripts.parallel_pointreg_dom.run_cnetmerge"):
+            exit_code = run_parallel_pointreg_dom(args)
+        self.assertEqual(exit_code, 0)

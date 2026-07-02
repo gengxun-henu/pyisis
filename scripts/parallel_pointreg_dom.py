@@ -148,3 +148,115 @@ def run_cnetmerge(
         ],
         check=True,
     )
+
+
+def run_parallel_pointreg_dom(args: argparse.Namespace) -> int:
+    script_path = str(Path(__file__).resolve().parent / "pointreg_dom.py")
+    python_executable = sys.executable
+
+    auto_work_dir = args.work_dir is None
+    work_dir = args.work_dir if args.work_dir else tempfile.mkdtemp(prefix="pointreg_dom_")
+    Path(work_dir).mkdir(parents=True, exist_ok=True)
+
+    start_time = time.monotonic()
+
+    # Step 1: Split
+    try:
+        run_cnetsplit(args.cnetsplit, args.cnet, work_dir, args.num_processes)
+    except subprocess.CalledProcessError:
+        print(f"{_LOG_PREFIX} cnetsplit failed.", file=sys.stderr, flush=True)
+        if auto_work_dir:
+            shutil.rmtree(work_dir, ignore_errors=True)
+        return 1
+
+    chunk_files = discover_chunk_files(work_dir)
+    print(f"{_LOG_PREFIX} split into {len(chunk_files)} chunks.", file=sys.stderr, flush=True)
+
+    # Step 2: Dispatch workers
+    worker_commands = []
+    result_files = []
+    for index, chunk_path in enumerate(chunk_files):
+        result_path = str(Path(work_dir) / f"result_{index:03d}.net")
+        cmd = build_worker_command(python_executable, script_path, chunk_path, result_path, args)
+        worker_commands.append(cmd)
+        result_files.append(result_path)
+
+    worker_results = dispatch_workers(worker_commands, args.num_processes)
+
+    failed_workers = [(i, r) for i, r in worker_results if r.returncode != 0]
+    succeeded = len(worker_results) - len(failed_workers)
+    elapsed = time.monotonic() - start_time
+
+    for index, completed in worker_results:
+        status = "done" if completed.returncode == 0 else "FAILED"
+        chunk_name = Path(chunk_files[index]).name
+        result_name = Path(result_files[index]).name
+        print(
+            f"{_LOG_PREFIX} worker {index + 1}/{len(chunk_files)} {status} "
+            f"({chunk_name} -> {result_name}) exit={completed.returncode}",
+            file=sys.stderr,
+            flush=True,
+        )
+
+    if failed_workers:
+        print(
+            f"{_LOG_PREFIX} {len(failed_workers)} worker(s) failed. "
+            f"Work dir preserved: {work_dir}",
+            file=sys.stderr,
+            flush=True,
+        )
+        return 2
+
+    print(
+        f"{_LOG_PREFIX} {succeeded}/{len(chunk_files)} workers succeeded in {elapsed:.1f}s",
+        file=sys.stderr,
+        flush=True,
+    )
+
+    # Step 3: Merge
+    print(
+        f"{_LOG_PREFIX} merging {len(result_files)} result chunks -> {args.onet}",
+        file=sys.stderr,
+        flush=True,
+    )
+    try:
+        run_cnetmerge(args.cnetmerge, result_files, args.onet, work_dir)
+    except subprocess.CalledProcessError:
+        print(
+            f"{_LOG_PREFIX} cnetmerge failed. Work dir preserved: {work_dir}",
+            file=sys.stderr,
+            flush=True,
+        )
+        return 3
+
+    total_time = time.monotonic() - start_time
+    print(f"{_LOG_PREFIX} done. total_time={total_time:.1f}s", file=sys.stderr, flush=True)
+
+    # Step 4: Cleanup
+    if auto_work_dir:
+        shutil.rmtree(work_dir, ignore_errors=True)
+    else:
+        print(f"{_LOG_PREFIX} work dir preserved: {work_dir}", file=sys.stderr, flush=True)
+
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = build_argument_parser().parse_args(
+        normalize_isis_style_args(argv or sys.argv[1:])
+    )
+    if args.num_processes <= 1:
+        script_path = str(Path(__file__).resolve().parent / "pointreg_dom.py")
+        forwarded = normalize_isis_style_args(argv or sys.argv[1:])
+        cmd = [sys.executable, script_path] + [
+            t for i, t in enumerate(forwarded)
+            if not (t == "--num-processes"
+                    or (i > 0 and forwarded[i - 1] == "--num-processes"))
+        ]
+        result = subprocess.run(cmd, check=False)
+        return result.returncode
+    return run_parallel_pointreg_dom(args)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

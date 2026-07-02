@@ -308,10 +308,86 @@ def filter_stereo_pair_key_files_with_ransac(
     }
 
 
+def compute_ransac_retained_mask(
+    left_points_xy: np.ndarray,
+    right_points_xy: np.ndarray,
+    *,
+    ransac_model: str = DEFAULT_RANSAC_MODEL,
+    ransac_reproj_threshold: float = DEFAULT_RANSAC_REPROJ_THRESHOLD,
+    ransac_confidence: float = 0.995,
+    ransac_max_iters: int = 5000,
+    ransac_mode: str = "loose",
+    loose_keep_pixel_threshold: float = 1.0,
+) -> np.ndarray:
+    """Return a boolean mask indicating which correspondences survive RANSAC filtering."""
+    normalized_mode = _normalize_ransac_mode(ransac_mode)
+    normalized_model = _normalize_ransac_model(ransac_model)
+    threshold = float(ransac_reproj_threshold)
+    if not np.isfinite(threshold) or threshold <= 0.0:
+        raise ValueError("ransac_reproj_threshold must be finite and positive.")
+
+    input_count = len(left_points_xy)
+    minimum_points_by_model = {
+        "affine-partial": 2,
+        "affine": 3,
+        "homography": 4,
+    }
+    minimum_points = minimum_points_by_model[normalized_model]
+    if input_count < minimum_points:
+        return np.ones(input_count, dtype=bool)
+
+    left_xy = np.asarray(left_points_xy, dtype=np.float32).reshape(-1, 2)
+    right_xy = np.asarray(right_points_xy, dtype=np.float32).reshape(-1, 2)
+
+    if normalized_model == "affine-partial":
+        model_matrix, mask = cv2.estimateAffinePartial2D(
+            left_xy, right_xy, method=cv2.RANSAC,
+            ransacReprojThreshold=threshold,
+            confidence=float(ransac_confidence),
+            maxIters=int(ransac_max_iters),
+        )
+    elif normalized_model == "affine":
+        model_matrix, mask = cv2.estimateAffine2D(
+            left_xy, right_xy, method=cv2.RANSAC,
+            ransacReprojThreshold=threshold,
+            confidence=float(ransac_confidence),
+            maxIters=int(ransac_max_iters),
+        )
+    else:
+        left_pts = left_xy.reshape(-1, 1, 2)
+        right_pts = right_xy.reshape(-1, 1, 2)
+        model_matrix, mask = cv2.findHomography(
+            left_pts, right_pts, cv2.RANSAC,
+            ransacReprojThreshold=threshold,
+            confidence=float(ransac_confidence),
+            maxIters=int(ransac_max_iters),
+        )
+
+    if model_matrix is None or mask is None:
+        return np.ones(input_count, dtype=bool)
+
+    opencv_inlier_mask = mask.reshape(-1).astype(bool)
+    retained_mask = opencv_inlier_mask.copy()
+
+    if normalized_mode == "loose":
+        if normalized_model == "homography":
+            left_pts = left_xy.reshape(-1, 1, 2)
+            projected_right = cv2.perspectiveTransform(left_pts, model_matrix).reshape(-1, 2)
+        else:
+            projected_right = (left_xy @ model_matrix[:, :2].T) + model_matrix[:, 2]
+        errors = np.linalg.norm(projected_right - right_xy, axis=1)
+        outlier_mask = ~opencv_inlier_mask
+        soft_outlier_mask = (errors <= float(loose_keep_pixel_threshold)) & outlier_mask
+        retained_mask = opencv_inlier_mask | soft_outlier_mask
+
+    return retained_mask
+
+
 __all__ = [
     "DEFAULT_RANSAC_MODEL",
     "DEFAULT_RANSAC_REPROJ_THRESHOLD",
     "SUPPORTED_RANSAC_MODELS",
+    "compute_ransac_retained_mask",
     "filter_stereo_pair_key_files_with_ransac",
     "filter_stereo_pair_keypoints_with_ransac",
 ]

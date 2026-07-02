@@ -13,14 +13,19 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import sys
 
 import numpy as np
 from collections import OrderedDict, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
-
-from image_match.stereo_ransac import compute_ransac_retained_mask
 from typing import Callable, TypeVar
+
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+    from controlnet_construct.stereo_ransac import compute_ransac_retained_mask
+else:
+    from .stereo_ransac import compute_ransac_retained_mask
 
 T = TypeVar("T")
 
@@ -230,12 +235,26 @@ class WorkerProjectorCache:
         cube.open(path, "r")
         return cube
 
-    def _ensure_cube(self, serial: str, path: Path):
-        path_str = str(path)
-        cube = self._cube_cache.get(path_str)
-        if serial not in self._camera_cache:
-            self._camera_cache[serial] = cube.camera()
-            self._projection_cache[serial] = cube.projection()
+    def _ensure_camera(self, serial: str):
+        if serial in self._camera_cache:
+            return
+        path = self._serial_maps.original_by_serial.get(serial)
+        if path is None:
+            raise KeyError(f"Serial {serial!r} not found in original path maps.")
+        cube = self._cube_cache.get(str(path))
+        self._camera_cache[serial] = cube.camera()
+
+    def _ensure_projection(self, serial: str):
+        if serial in self._projection_cache:
+            return
+        dom_serial = self._serial_maps.dom_serial_by_original_serial.get(serial)
+        if dom_serial is None:
+            raise KeyError(f"Serial {serial!r} has no DOM counterpart.")
+        dom_path = self._serial_maps.dom_by_serial.get(dom_serial)
+        if dom_path is None:
+            raise KeyError(f"DOM serial {dom_serial!r} not found in DOM path maps.")
+        cube = self._cube_cache.get(str(dom_path))
+        self._projection_cache[serial] = cube.projection()
 
     def camera_for_serial(self, serial: str):
         return self._camera_cache[serial]
@@ -244,14 +263,8 @@ class WorkerProjectorCache:
         return self._projection_cache[serial]
 
     def resolve(self, serial: str) -> None:
-        if serial in self._camera_cache:
-            return
-        if serial in self._serial_maps.original_by_serial:
-            self._ensure_cube(serial, self._serial_maps.original_by_serial[serial])
-        elif serial in self._serial_maps.dom_by_serial:
-            self._ensure_cube(serial, self._serial_maps.dom_by_serial[serial])
-        else:
-            raise KeyError(f"Serial {serial!r} not found in original or DOM path maps.")
+        self._ensure_camera(serial)
+        self._ensure_projection(serial)
 
     def close_all(self) -> None:
         self._cube_cache.close_all()
@@ -442,7 +455,7 @@ def run_pair_tasks(
         futures = [
             executor.submit(
                 _run_pair_ransac_task_in_subprocess,
-                task, serial_maps, options, max_open_cubes_per_worker, ip_module,
+                task, serial_maps, options, max_open_cubes_per_worker,
             )
             for task in tasks
         ]
@@ -454,8 +467,8 @@ def _run_pair_ransac_task_in_subprocess(
     serial_maps: SerialPathMaps,
     options: RansacOptions,
     max_open_cubes_per_worker: int,
-    ip_module,
 ) -> PairRansacResult:
+    import isis_pybind._isis_core as ip_module
     cache = WorkerProjectorCache(serial_maps, max_open=max_open_cubes_per_worker, ip_module=ip_module)
     try:
         for serial in task.serial_pair:

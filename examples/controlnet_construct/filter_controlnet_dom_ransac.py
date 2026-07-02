@@ -12,9 +12,12 @@ from __future__ import annotations
 
 import math
 
+import numpy as np
 from collections import OrderedDict, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
+
+from image_match.stereo_ransac import compute_ransac_retained_mask
 from typing import Callable, TypeVar
 
 T = TypeVar("T")
@@ -165,6 +168,7 @@ class BoundedCubeCache:
 class SerialPathMaps:
     original_by_serial: dict[str, Path]
     dom_by_serial: dict[str, Path]
+    dom_serial_by_original_serial: dict[str, str]
 
 
 @dataclass(frozen=True, slots=True)
@@ -179,12 +183,18 @@ class ProjectionFailure:
 def build_serial_path_maps(aligned_pairs: list[tuple[Path, Path]], *, ip_module) -> SerialPathMaps:
     original_by_serial: dict[str, Path] = {}
     dom_by_serial: dict[str, Path] = {}
+    dom_serial_by_original_serial: dict[str, str] = {}
     for original_path, dom_path in aligned_pairs:
         original_serial = ip_module.SerialNumber.compose(str(original_path))
         dom_serial = ip_module.SerialNumber.compose(str(dom_path))
         original_by_serial[original_serial] = original_path
         dom_by_serial[dom_serial] = dom_path
-    return SerialPathMaps(original_by_serial=original_by_serial, dom_by_serial=dom_by_serial)
+        dom_serial_by_original_serial[original_serial] = dom_serial
+    return SerialPathMaps(
+        original_by_serial=original_by_serial,
+        dom_by_serial=dom_by_serial,
+        dom_serial_by_original_serial=dom_serial_by_original_serial,
+    )
 
 
 def project_measure_to_dom(record: MeasureRecord, camera, projection) -> tuple[float, float] | ProjectionFailure:
@@ -243,3 +253,108 @@ class WorkerProjectorCache:
 
     def close_all(self) -> None:
         self._cube_cache.close_all()
+
+
+@dataclass(frozen=True, slots=True)
+class RansacOptions:
+    model: str = "affine-partial"
+    reproj_threshold: float = 10.0
+    confidence: float = 0.995
+    max_iters: int = 5000
+    mode: str = "loose"
+    loose_keep_pixel_threshold: float = 1.0
+
+
+@dataclass(frozen=True, slots=True)
+class PairTask:
+    serial_pair: tuple[str, str]
+    records: list[PairRecord]
+
+
+@dataclass(frozen=True, slots=True)
+class PairRansacResult:
+    serial_pair: tuple[str, str]
+    outlier_measure_keys: set[MeasureKey]
+    projection_failures: list[ProjectionFailure]
+    summary: dict[str, object]
+
+
+def run_pair_ransac_task(
+    task: PairTask,
+    serial_maps: SerialPathMaps | None,
+    options: RansacOptions,
+    projector_cache: WorkerProjectorCache | None,
+) -> PairRansacResult:
+    left_serial, right_serial = task.serial_pair
+    projection_failures: list[ProjectionFailure] = []
+    projected_pairs: list[tuple[tuple[float, float], tuple[float, float], PairRecord]] = []
+
+    for record in task.records:
+        left_result = project_measure_to_dom(
+            record.left,
+            projector_cache.camera_for_serial(record.left.key.serial) if projector_cache else None,
+            projector_cache.projection_for_serial(record.left.key.serial) if projector_cache else None,
+        )
+        if isinstance(left_result, ProjectionFailure):
+            projection_failures.append(left_result)
+            continue
+        right_result = project_measure_to_dom(
+            record.right,
+            projector_cache.camera_for_serial(record.right.key.serial) if projector_cache else None,
+            projector_cache.projection_for_serial(record.right.key.serial) if projector_cache else None,
+        )
+        if isinstance(right_result, ProjectionFailure):
+            projection_failures.append(right_result)
+            continue
+        projected_pairs.append((left_result, right_result, record))
+
+    if not projected_pairs:
+        return PairRansacResult(
+            serial_pair=task.serial_pair,
+            outlier_measure_keys=set(),
+            projection_failures=projection_failures,
+            summary={
+                "status": "skipped_no_projected_correspondences",
+                "input_count": len(task.records),
+                "projected_count": 0,
+                "projection_failure_count": len(projection_failures),
+            },
+        )
+
+    left_dom_points = np.array([p[0] for p in projected_pairs], dtype=np.float64)
+    right_dom_points = np.array([p[1] for p in projected_pairs], dtype=np.float64)
+
+    retained_mask = compute_ransac_retained_mask(
+        left_dom_points,
+        right_dom_points,
+        ransac_model=options.model,
+        ransac_reproj_threshold=options.reproj_threshold,
+        ransac_confidence=options.confidence,
+        ransac_max_iters=options.max_iters,
+        ransac_mode=options.mode,
+        loose_keep_pixel_threshold=options.loose_keep_pixel_threshold,
+    )
+
+    outlier_keys: set[MeasureKey] = set()
+    dropped_count = 0
+    for index, (_, _, record) in enumerate(projected_pairs):
+        if not retained_mask[index]:
+            outlier_keys.add(record.left.key)
+            outlier_keys.add(record.right.key)
+            dropped_count += 1
+
+    summary = {
+        "status": "filtered",
+        "input_count": len(task.records),
+        "projected_count": len(projected_pairs),
+        "retained_count": int(retained_mask.sum()),
+        "dropped_count": dropped_count,
+        "projection_failure_count": len(projection_failures),
+    }
+
+    return PairRansacResult(
+        serial_pair=task.serial_pair,
+        outlier_measure_keys=outlier_keys,
+        projection_failures=projection_failures,
+        summary=summary,
+    )

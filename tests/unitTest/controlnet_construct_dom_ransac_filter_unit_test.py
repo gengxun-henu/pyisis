@@ -7,6 +7,7 @@ import unittest
 from controlnet_construct.filter_controlnet_dom_ransac import (
     MeasureKey,
     MeasureRecord,
+    PairRecord,
     group_measure_pairs_by_serial_pair,
 )
 
@@ -211,6 +212,41 @@ class DomRansacFilterProjectionUnitTest(unittest.TestCase):
         result = project_measure_to_dom(record, FakeCamera(ok=False), FakeProjection())
 
         self.assertEqual(result.failure_stage, "camera_set_image_failed")
+
+
+class DomRansacFilterWorkerUnitTest(unittest.TestCase):
+    def test_run_pair_ransac_marks_both_measures_from_dropped_correspondence(self):
+        from unittest.mock import patch
+        from controlnet_construct import filter_controlnet_dom_ransac as module
+        from controlnet_construct.filter_controlnet_dom_ransac import PairTask, run_pair_ransac_task
+
+        left = MeasureRecord(MeasureKey(0, "P1", 0, "A"), 1.0, 1.0)
+        right = MeasureRecord(MeasureKey(0, "P1", 1, "B"), 2.0, 2.0)
+        task = PairTask(("A", "B"), [PairRecord(left, right)])
+
+        with patch.object(module, "project_measure_to_dom", side_effect=[(1.0, 1.0), (100.0, 100.0)]), \
+             patch.object(module, "compute_ransac_retained_mask") as mask_fn:
+            import numpy as np
+            mask_fn.return_value = np.array([False], dtype=bool)
+            result = run_pair_ransac_task(task, serial_maps=None, options=module.RansacOptions(), projector_cache=None)
+
+        self.assertEqual(result.outlier_measure_keys, {left.key, right.key})
+
+    def test_run_pair_ransac_reports_projection_failures_without_outliers(self):
+        from unittest.mock import patch
+        from controlnet_construct import filter_controlnet_dom_ransac as module
+        from controlnet_construct.filter_controlnet_dom_ransac import PairTask, ProjectionFailure, run_pair_ransac_task
+
+        left = MeasureRecord(MeasureKey(0, "P1", 0, "A"), 1.0, 1.0)
+        right = MeasureRecord(MeasureKey(0, "P1", 1, "B"), 2.0, 2.0)
+        failure = ProjectionFailure(left.key, left.sample, left.line, "camera_set_image_failed", "failed")
+
+        with patch.object(module, "project_measure_to_dom", side_effect=[failure, (2.0, 2.0)]):
+            result = run_pair_ransac_task(PairTask(("A", "B"), [PairRecord(left, right)]), None, module.RansacOptions(), None)
+
+        self.assertEqual(result.outlier_measure_keys, set())
+        self.assertEqual(result.projection_failures, [failure])
+        self.assertEqual(result.summary["status"], "skipped_no_projected_correspondences")
 
 
 if __name__ == "__main__":

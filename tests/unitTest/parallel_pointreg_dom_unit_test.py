@@ -68,3 +68,64 @@ class ParallelPointregDomUnitTest(unittest.TestCase):
             "--cnet", "input.net",
             "--pvl",
         ])
+
+    def test_build_worker_command_includes_all_forwarded_args(self):
+        from scripts.parallel_pointreg_dom import build_worker_command, build_argument_parser
+        parser = build_argument_parser()
+        args = parser.parse_args([
+            "--fromlist", "ori.lis", "--domlist", "dom.lis",
+            "--cnet", "input.net", "--deffile", "template.pvl",
+            "--onet", "output.net", "--dom-band", "2",
+            "--original-band", "3", "--max-open-cubes", "128",
+            "--skip-serial-check", "--pvl",
+        ])
+        cmd = build_worker_command("python3", "/repo/scripts/pointreg_dom.py",
+                                   "/tmp/chunk_001.net", "/tmp/result_001.net", args)
+        self.assertEqual(cmd[0], "python3")
+        self.assertEqual(cmd[1], "/repo/scripts/pointreg_dom.py")
+        self.assertIn("--cnet", cmd)
+        self.assertIn("/tmp/chunk_001.net", cmd)
+        self.assertIn("--onet", cmd)
+        self.assertIn("/tmp/result_001.net", cmd)
+        self.assertIn("--fromlist", cmd)
+        self.assertIn("ori.lis", cmd)
+        self.assertIn("--domlist", cmd)
+        self.assertIn("dom.lis", cmd)
+        self.assertIn("--deffile", cmd)
+        self.assertIn("template.pvl", cmd)
+        self.assertIn("--dom-band", cmd)
+        self.assertIn("2", cmd)
+        self.assertIn("--original-band", cmd)
+        self.assertIn("3", cmd)
+        self.assertIn("--max-open-cubes", cmd)
+        self.assertIn("128", cmd)
+        self.assertIn("--skip-serial-check", cmd)
+        self.assertIn("--pvl", cmd)
+
+    def test_build_worker_command_omits_false_flags(self):
+        from scripts.parallel_pointreg_dom import build_worker_command, build_argument_parser
+        parser = build_argument_parser()
+        args = parser.parse_args([
+            "--fromlist", "ori.lis", "--domlist", "dom.lis",
+            "--cnet", "input.net", "--deffile", "template.pvl",
+            "--onet", "output.net",
+        ])
+        cmd = build_worker_command("python3", "pointreg_dom.py", "/c.net", "/o.net", args)
+        self.assertNotIn("--skip-serial-check", cmd)
+        self.assertNotIn("--pvl", cmd)
+
+    def test_build_worker_command_overrides_cnet_and_onet(self):
+        from scripts.parallel_pointreg_dom import build_worker_command, build_argument_parser
+        parser = build_argument_parser()
+        args = parser.parse_args([
+            "--fromlist", "ori.lis", "--domlist", "dom.lis",
+            "--cnet", "ORIGINAL_INPUT.net", "--deffile", "template.pvl",
+            "--onet", "ORIGINAL_OUTPUT.net",
+        ])
+        cmd = build_worker_command("python3", "pointreg_dom.py", "/chunk.net", "/result.net", args)
+        cnet_index = cmd.index("--cnet")
+        onet_index = cmd.index("--onet")
+        self.assertEqual(cmd[cnet_index + 1], "/chunk.net")
+        self.assertEqual(cmd[onet_index + 1], "/result.net")
+        self.assertNotIn("ORIGINAL_INPUT.net", cmd)
+        self.assertNotIn("ORIGINAL_OUTPUT.net", cmd)

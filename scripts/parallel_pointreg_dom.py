@@ -13,7 +13,12 @@ Updated: 2026-07-02  Geng Xun added parallel orchestration for DOM-space
 from __future__ import annotations
 
 import argparse
+import shutil
+import subprocess
 import sys
+import tempfile
+import time
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 
 
@@ -88,3 +93,58 @@ def discover_chunk_files(work_dir: str, prefix: str = "chunk") -> list[str]:
             f"cnetsplit may have failed."
         )
     return chunks
+
+
+_LOG_PREFIX = "[parallel_pointreg_dom]"
+
+
+def run_cnetsplit(cnetsplit_path: str, cnet: str, work_dir: str, num_output: int) -> None:
+    subprocess.run(
+        [
+            cnetsplit_path,
+            f"CNET={cnet}",
+            f"ONET_PREFIX={str(Path(work_dir) / 'chunk')}",
+            f"NUM_OUTPUT_FILES={num_output}",
+        ],
+        check=True,
+    )
+
+
+def _run_subprocess(command: list[str]) -> subprocess.CompletedProcess:
+    return subprocess.run(command, check=False)
+
+
+def dispatch_workers(
+    worker_commands: list[list[str]],
+    num_processes: int,
+) -> list[tuple[int, subprocess.CompletedProcess]]:
+    with ProcessPoolExecutor(max_workers=num_processes) as executor:
+        futures = {
+            executor.submit(_run_subprocess, cmd): index
+            for index, cmd in enumerate(worker_commands)
+        }
+        results = []
+        for future in as_completed(futures):
+            index = futures[future]
+            results.append((index, future.result()))
+    return sorted(results, key=lambda pair: pair[0])
+
+
+def run_cnetmerge(
+    cnetmerge_path: str,
+    result_files: list[str],
+    onet: str,
+    work_dir: str,
+) -> None:
+    list_path = str(Path(work_dir) / "results.lis")
+    Path(list_path).write_text("\n".join(result_files) + "\n", encoding="utf-8")
+    subprocess.run(
+        [
+            cnetmerge_path,
+            "INPUTTYPE=list",
+            f"CLIST={list_path}",
+            f"ONET={onet}",
+            "DUPLICATEPOINTS=merge",
+        ],
+        check=True,
+    )

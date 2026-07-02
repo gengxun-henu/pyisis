@@ -149,3 +149,45 @@ class ParallelPointregDomUnitTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             with self.assertRaises(FileNotFoundError):
                 discover_chunk_files(tmpdir)
+
+    def test_dispatch_workers_returns_exit_codes(self):
+        from scripts.parallel_pointreg_dom import dispatch_workers
+        commands = [
+            ["python3", "-c", "import sys; sys.exit(0)"],
+            ["python3", "-c", "import sys; sys.exit(0)"],
+        ]
+        results = dispatch_workers(commands, num_processes=2)
+        self.assertEqual(len(results), 2)
+        for index, completed in results:
+            self.assertEqual(completed.returncode, 0)
+
+    def test_dispatch_workers_reports_failure(self):
+        from scripts.parallel_pointreg_dom import dispatch_workers
+        commands = [
+            ["python3", "-c", "import sys; sys.exit(0)"],
+            ["python3", "-c", "import sys; sys.exit(1)"],
+        ]
+        results = dispatch_workers(commands, num_processes=2)
+        exit_codes = [completed.returncode for _, completed in results]
+        self.assertIn(1, exit_codes)
+
+    def test_run_cnetmerge_writes_results_list(self):
+        import tempfile
+        from scripts.parallel_pointreg_dom import run_cnetmerge
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmpdir:
+            result_files = ["/tmp/r1.net", "/tmp/r2.net"]
+            with patch("scripts.parallel_pointreg_dom.subprocess.run") as mock_run:
+                mock_run.return_value = None
+                run_cnetmerge("cnetmerge", result_files, "/out.net", tmpdir)
+                mock_run.assert_called_once()
+                call_args = mock_run.call_args[0][0]
+                self.assertEqual(call_args[0], "cnetmerge")
+                self.assertIn("INPUTTYPE=list", call_args)
+                self.assertIn("ONET=/out.net", call_args)
+                self.assertIn("DUPLICATEPOINTS=merge", call_args)
+                clist_arg = [a for a in call_args if a.startswith("CLIST=")][0]
+                list_path = clist_arg.split("=", 1)[1]
+                content = Path(list_path).read_text()
+                self.assertIn("/tmp/r1.net", content)
+                self.assertIn("/tmp/r2.net", content)

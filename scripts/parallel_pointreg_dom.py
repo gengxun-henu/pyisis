@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from pathlib import Path
 
 
 def normalize_isis_style_args(argv: list[str]) -> list[str]:
@@ -77,3 +78,13 @@ def build_worker_command(
     if args.pvl:
         cmd.append("--pvl")
     return cmd
+
+
+def discover_chunk_files(work_dir: str, prefix: str = "chunk") -> list[str]:
+    chunks = sorted(str(p) for p in Path(work_dir).glob(f"{prefix}*.net"))
+    if not chunks:
+        raise FileNotFoundError(
+            f"No chunk files found matching '{prefix}*.net' in {work_dir}. "
+            f"cnetsplit may have failed."
+        )
+    return chunks

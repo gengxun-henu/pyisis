@@ -129,3 +129,23 @@ class ParallelPointregDomUnitTest(unittest.TestCase):
         self.assertEqual(cmd[onet_index + 1], "/result.net")
         self.assertNotIn("ORIGINAL_INPUT.net", cmd)
         self.assertNotIn("ORIGINAL_OUTPUT.net", cmd)
+
+    def test_discover_chunk_files_finds_net_files_sorted(self):
+        import tempfile, os
+        from scripts.parallel_pointreg_dom import discover_chunk_files
+        with tempfile.TemporaryDirectory() as tmpdir:
+            for name in ["chunk_003.net", "chunk_001.net", "chunk_002.net"]:
+                Path(os.path.join(tmpdir, name)).touch()
+            Path(os.path.join(tmpdir, "results.lis")).touch()
+            result = discover_chunk_files(tmpdir)
+            self.assertEqual(len(result), 3)
+            self.assertTrue(result[0].endswith("chunk_001.net"))
+            self.assertTrue(result[1].endswith("chunk_002.net"))
+            self.assertTrue(result[2].endswith("chunk_003.net"))
+
+    def test_discover_chunk_files_raises_on_empty(self):
+        import tempfile
+        from scripts.parallel_pointreg_dom import discover_chunk_files
+        with tempfile.TemporaryDirectory() as tmpdir:
+            with self.assertRaises(FileNotFoundError):
+                discover_chunk_files(tmpdir)

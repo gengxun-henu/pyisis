@@ -34,5 +34,86 @@ class DomRansacFilterDataModelUnitTest(unittest.TestCase):
         self.assertEqual(first.right.key.point_id, "P1")
 
 
+class FakeMeasure:
+    def __init__(self, serial, sample, line, ignored=False):
+        self.serial = serial
+        self.sample = sample
+        self.line = line
+        self.ignored = ignored
+
+    def get_cube_serial_number(self):
+        return self.serial
+
+    def get_sample(self):
+        return self.sample
+
+    def get_line(self):
+        return self.line
+
+    def is_ignored(self):
+        return self.ignored
+
+    def set_ignored(self, ignored):
+        self.ignored = ignored
+
+
+class FakePoint:
+    def __init__(self, point_id, measures, ignored=False):
+        self.point_id = point_id
+        self.measures = measures
+        self.ignored = ignored
+
+    def get_id(self):
+        return self.point_id
+
+    def is_ignored(self):
+        return self.ignored
+
+    def get_num_measures(self):
+        return len(self.measures)
+
+    def get_measure(self, index):
+        return self.measures[index]
+
+
+class FakeNet:
+    def __init__(self, points):
+        self.points = points
+
+    def get_num_points(self):
+        return len(self.points)
+
+    def get_point(self, index):
+        return self.points[index]
+
+
+class DomRansacFilterControlNetUnitTest(unittest.TestCase):
+    def test_extract_active_measure_records_skips_ignored_points_and_measures(self):
+        from controlnet_construct.filter_controlnet_dom_ransac import extract_active_measure_records
+
+        net = FakeNet([
+            FakePoint("P1", [FakeMeasure("A", 1, 2), FakeMeasure("B", 3, 4, ignored=True)]),
+            FakePoint("P2", [FakeMeasure("A", 5, 6), FakeMeasure("B", 7, 8)], ignored=True),
+            FakePoint("P3", [FakeMeasure("C", 9, 10), FakeMeasure("D", 11, 12)]),
+        ])
+
+        records = extract_active_measure_records(net)
+
+        self.assertEqual([record.key.point_id for record in records], ["P1", "P3", "P3"])
+        self.assertEqual(records[0].key.measure_index, 0)
+
+    def test_apply_ignored_measures_marks_only_requested_measure_keys(self):
+        from controlnet_construct.filter_controlnet_dom_ransac import apply_ignored_measures
+
+        net = FakeNet([FakePoint("P1", [FakeMeasure("A", 1, 2), FakeMeasure("B", 3, 4)])])
+        key = MeasureKey(point_index=0, point_id="P1", measure_index=1, serial="B")
+
+        changed = apply_ignored_measures(net, {key})
+
+        self.assertEqual(changed, 1)
+        self.assertFalse(net.get_point(0).get_measure(0).is_ignored())
+        self.assertTrue(net.get_point(0).get_measure(1).is_ignored())
+
+
 if __name__ == "__main__":
     unittest.main()

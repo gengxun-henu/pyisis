@@ -10,6 +10,8 @@ Created: 2026-07-02
 
 from __future__ import annotations
 
+import math
+
 from collections import OrderedDict, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
@@ -183,3 +185,61 @@ def build_serial_path_maps(aligned_pairs: list[tuple[Path, Path]], *, ip_module)
         original_by_serial[original_serial] = original_path
         dom_by_serial[dom_serial] = dom_path
     return SerialPathMaps(original_by_serial=original_by_serial, dom_by_serial=dom_by_serial)
+
+
+def project_measure_to_dom(record: MeasureRecord, camera, projection) -> tuple[float, float] | ProjectionFailure:
+    if not (math.isfinite(record.sample) and math.isfinite(record.line)):
+        return ProjectionFailure(record.key, record.sample, record.line, "invalid_original_coordinate", "Sample/line is not finite.")
+    if not camera.set_image(record.sample, record.line):
+        return ProjectionFailure(record.key, record.sample, record.line, "camera_set_image_failed", "Camera failed to set image coordinate.")
+    latitude = float(camera.universal_latitude())
+    longitude = float(camera.universal_longitude())
+    if not (math.isfinite(latitude) and math.isfinite(longitude)):
+        return ProjectionFailure(record.key, record.sample, record.line, "invalid_ground_coordinate", "Camera returned non-finite ground coordinate.")
+    if not projection.set_universal_ground(latitude, longitude):
+        return ProjectionFailure(record.key, record.sample, record.line, "dom_set_universal_ground_failed", "DOM projection failed to set universal ground.")
+    dom_sample = float(projection.world_x())
+    dom_line = float(projection.world_y())
+    if not (math.isfinite(dom_sample) and math.isfinite(dom_line)):
+        return ProjectionFailure(record.key, record.sample, record.line, "invalid_dom_coordinate", "DOM projection returned non-finite sample/line.")
+    return dom_sample, dom_line
+
+
+class WorkerProjectorCache:
+    def __init__(self, serial_maps: SerialPathMaps, *, max_open: int, ip_module):
+        self._ip = ip_module
+        self._serial_maps = serial_maps
+        self._cube_cache = BoundedCubeCache(max_open=max_open, factory=self._open_cube)
+        self._camera_cache: dict[str, object] = {}
+        self._projection_cache: dict[str, object] = {}
+
+    def _open_cube(self, path: str):
+        cube = self._ip.Cube()
+        cube.open(path, "r")
+        return cube
+
+    def _ensure_cube(self, serial: str, path: Path):
+        path_str = str(path)
+        cube = self._cube_cache.get(path_str)
+        if serial not in self._camera_cache:
+            self._camera_cache[serial] = cube.camera()
+            self._projection_cache[serial] = cube.projection()
+
+    def camera_for_serial(self, serial: str):
+        return self._camera_cache[serial]
+
+    def projection_for_serial(self, serial: str):
+        return self._projection_cache[serial]
+
+    def resolve(self, serial: str) -> None:
+        if serial in self._camera_cache:
+            return
+        if serial in self._serial_maps.original_by_serial:
+            self._ensure_cube(serial, self._serial_maps.original_by_serial[serial])
+        elif serial in self._serial_maps.dom_by_serial:
+            self._ensure_cube(serial, self._serial_maps.dom_by_serial[serial])
+        else:
+            raise KeyError(f"Serial {serial!r} not found in original or DOM path maps.")
+
+    def close_all(self) -> None:
+        self._cube_cache.close_all()

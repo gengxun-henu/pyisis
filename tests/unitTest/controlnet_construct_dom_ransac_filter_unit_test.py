@@ -157,5 +157,61 @@ class DomRansacFilterMappingUnitTest(unittest.TestCase):
         self.assertFalse(opened[-1].closed)
 
 
+class FakeCamera:
+    def __init__(self, ok=True):
+        self.ok = ok
+        self.sample = None
+        self.line = None
+
+    def set_image(self, sample, line):
+        self.sample = sample
+        self.line = line
+        return self.ok
+
+    def universal_latitude(self):
+        return self.line + 1.0
+
+    def universal_longitude(self):
+        return self.sample + 2.0
+
+
+class FakeProjection:
+    def __init__(self, ok=True):
+        self.ok = ok
+        self.latitude = None
+        self.longitude = None
+
+    def set_universal_ground(self, latitude, longitude):
+        self.latitude = latitude
+        self.longitude = longitude
+        return self.ok
+
+    def world_x(self):
+        return self.longitude * 10.0
+
+    def world_y(self):
+        return self.latitude * 10.0
+
+
+class DomRansacFilterProjectionUnitTest(unittest.TestCase):
+    def test_project_measure_to_dom_returns_dom_pixel_coordinates(self):
+        from controlnet_construct.filter_controlnet_dom_ransac import project_measure_to_dom
+
+        record = MeasureRecord(MeasureKey(0, "P1", 0, "SERIAL_A"), sample=3.0, line=4.0)
+
+        result = project_measure_to_dom(record, FakeCamera(), FakeProjection())
+
+        self.assertEqual(result, (50.0, 50.0))
+
+    def test_project_measure_to_dom_reports_camera_failure(self):
+        from controlnet_construct.filter_controlnet_dom_ransac import project_measure_to_dom
+
+        record = MeasureRecord(MeasureKey(0, "P1", 0, "SERIAL_A"), sample=3.0, line=4.0)
+
+        result = project_measure_to_dom(record, FakeCamera(ok=False), FakeProjection())
+
+        self.assertEqual(result.failure_stage, "camera_set_image_failed")
+
+
 if __name__ == "__main__":
     unittest.main()

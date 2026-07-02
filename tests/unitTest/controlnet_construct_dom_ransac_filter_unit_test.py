@@ -115,5 +115,47 @@ class DomRansacFilterControlNetUnitTest(unittest.TestCase):
         self.assertTrue(net.get_point(0).get_measure(1).is_ignored())
 
 
+class FakeClosableCube:
+    def __init__(self, name):
+        self.name = name
+        self.closed = False
+
+    def close(self):
+        self.closed = True
+
+
+class DomRansacFilterMappingUnitTest(unittest.TestCase):
+    def test_read_aligned_cube_lists_rejects_mismatched_lengths(self):
+        from _unit_test_support import temporary_directory
+        from controlnet_construct.filter_controlnet_dom_ransac import read_aligned_cube_lists
+
+        with temporary_directory() as temp_dir:
+            original = temp_dir / "original.lis"
+            dom = temp_dir / "dom.lis"
+            original.write_text("a.cub\nb.cub\n", encoding="utf-8")
+            dom.write_text("dom_a.cub\n", encoding="utf-8")
+
+            with self.assertRaisesRegex(ValueError, "length"):
+                read_aligned_cube_lists(original, dom)
+
+    def test_lru_cache_closes_evicted_cubes(self):
+        from controlnet_construct.filter_controlnet_dom_ransac import BoundedCubeCache
+
+        opened = []
+
+        def factory(path):
+            cube = FakeClosableCube(path)
+            opened.append(cube)
+            return cube
+
+        cache = BoundedCubeCache(max_open=2, factory=factory)
+        first = cache.get("A")
+        cache.get("B")
+        cache.get("C")
+
+        self.assertTrue(first.closed)
+        self.assertFalse(opened[-1].closed)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -10,9 +10,12 @@ Created: 2026-07-02
 
 from __future__ import annotations
 
-from collections import defaultdict
+from collections import OrderedDict, defaultdict
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Callable, TypeVar
+
+T = TypeVar("T")
 
 
 @dataclass(frozen=True, slots=True)
@@ -102,3 +105,81 @@ def apply_ignored_measures(net, outlier_keys: set[MeasureKey]) -> int:
             measure.set_ignored(True)
             changed += 1
     return changed
+
+
+def _read_lis(path: Path) -> list[Path]:
+    base = path.parent
+    entries: list[Path] = []
+    for raw in path.read_text(encoding="utf-8").splitlines():
+        value = raw.strip()
+        if not value or value.startswith("#"):
+            continue
+        candidate = Path(value)
+        entries.append(candidate if candidate.is_absolute() else base / candidate)
+    return entries
+
+
+def read_aligned_cube_lists(original_list: Path, dom_list: Path) -> list[tuple[Path, Path]]:
+    originals = _read_lis(original_list)
+    doms = _read_lis(dom_list)
+    if len(originals) != len(doms):
+        raise ValueError(
+            f"Original and DOM list length mismatch: {original_list} has {len(originals)}, {dom_list} has {len(doms)}."
+        )
+    return list(zip(originals, doms, strict=True))
+
+
+class BoundedCubeCache:
+    def __init__(self, *, max_open: int, factory: Callable[[str], T]):
+        if max_open <= 0:
+            raise ValueError("max_open must be positive.")
+        self._max_open = max_open
+        self._factory = factory
+        self._items: OrderedDict[str, T] = OrderedDict()
+
+    def get(self, path: str) -> T:
+        if path in self._items:
+            value = self._items.pop(path)
+            self._items[path] = value
+            return value
+        value = self._factory(path)
+        self._items[path] = value
+        while len(self._items) > self._max_open:
+            _, evicted = self._items.popitem(last=False)
+            close = getattr(evicted, "close", None)
+            if close is not None:
+                close()
+        return value
+
+    def close_all(self) -> None:
+        while self._items:
+            _, value = self._items.popitem(last=False)
+            close = getattr(value, "close", None)
+            if close is not None:
+                close()
+
+
+@dataclass(frozen=True, slots=True)
+class SerialPathMaps:
+    original_by_serial: dict[str, Path]
+    dom_by_serial: dict[str, Path]
+
+
+@dataclass(frozen=True, slots=True)
+class ProjectionFailure:
+    measure_key: MeasureKey
+    original_sample: float
+    original_line: float
+    failure_stage: str
+    message: str
+
+
+def build_serial_path_maps(aligned_pairs: list[tuple[Path, Path]], *, ip_module) -> SerialPathMaps:
+    original_by_serial: dict[str, Path] = {}
+    dom_by_serial: dict[str, Path] = {}
+    for original_path, dom_path in aligned_pairs:
+        original_serial = ip_module.SerialNumber.compose(str(original_path))
+        dom_serial = ip_module.SerialNumber.compose(str(dom_path))
+        original_by_serial[original_serial] = original_path
+        dom_by_serial[dom_serial] = dom_path
+    return SerialPathMaps(original_by_serial=original_by_serial, dom_by_serial=dom_by_serial)

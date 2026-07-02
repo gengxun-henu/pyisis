@@ -358,3 +358,106 @@ def run_pair_ransac_task(
         projection_failures=projection_failures,
         summary=summary,
     )
+
+
+def aggregate_worker_results(
+    results: list[PairRansacResult],
+) -> tuple[set[MeasureKey], list[ProjectionFailure], list[dict[str, object]]]:
+    outliers: set[MeasureKey] = set()
+    failures: list[ProjectionFailure] = []
+    summaries: list[dict[str, object]] = []
+    for result in results:
+        outliers.update(result.outlier_measure_keys)
+        failures.extend(result.projection_failures)
+        summaries.append({
+            "left_serial": result.serial_pair[0],
+            "right_serial": result.serial_pair[1],
+            **result.summary,
+        })
+    return outliers, failures, summaries
+
+
+def measure_key_to_dict(key: MeasureKey) -> dict[str, object]:
+    return {
+        "point_index": key.point_index,
+        "point_id": key.point_id,
+        "measure_index": key.measure_index,
+        "serial": key.serial,
+    }
+
+
+def projection_failure_to_dict(failure: ProjectionFailure) -> dict[str, object]:
+    return {
+        **measure_key_to_dict(failure.measure_key),
+        "original_sample": failure.original_sample,
+        "original_line": failure.original_line,
+        "failure_stage": failure.failure_stage,
+        "message": failure.message,
+    }
+
+
+def write_jsonl(path: Path, rows: list[dict[str, object]]) -> None:
+    import json
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as file:
+        for row in rows:
+            file.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def write_summary_report(path: Path, report: dict[str, object]) -> None:
+    import json
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8") as file:
+        json.dump(report, file, indent=2, ensure_ascii=False)
+        file.write("\n")
+
+
+def run_pair_tasks(
+    tasks: list[PairTask],
+    serial_maps: SerialPathMaps,
+    options: RansacOptions,
+    *,
+    num_workers: int,
+    max_open_cubes_per_worker: int,
+    ip_module=None,
+) -> list[PairRansacResult]:
+    if num_workers <= 1:
+        cache = WorkerProjectorCache(serial_maps, max_open=max_open_cubes_per_worker, ip_module=ip_module)
+        try:
+            for task in tasks:
+                for serial in task.serial_pair:
+                    cache.resolve(serial)
+            return [
+                run_pair_ransac_task(task, serial_maps, options, cache)
+                for task in tasks
+            ]
+        finally:
+            cache.close_all()
+
+    from concurrent.futures import ProcessPoolExecutor, as_completed
+
+    with ProcessPoolExecutor(max_workers=num_workers) as executor:
+        futures = [
+            executor.submit(
+                _run_pair_ransac_task_in_subprocess,
+                task, serial_maps, options, max_open_cubes_per_worker, ip_module,
+            )
+            for task in tasks
+        ]
+        return [future.result() for future in as_completed(futures)]
+
+
+def _run_pair_ransac_task_in_subprocess(
+    task: PairTask,
+    serial_maps: SerialPathMaps,
+    options: RansacOptions,
+    max_open_cubes_per_worker: int,
+    ip_module,
+) -> PairRansacResult:
+    cache = WorkerProjectorCache(serial_maps, max_open=max_open_cubes_per_worker, ip_module=ip_module)
+    try:
+        for serial in task.serial_pair:
+            cache.resolve(serial)
+        return run_pair_ransac_task(task, serial_maps, options, cache)
+    finally:
+        cache.close_all()

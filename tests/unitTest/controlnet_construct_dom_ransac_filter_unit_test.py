@@ -249,5 +249,22 @@ class DomRansacFilterWorkerUnitTest(unittest.TestCase):
         self.assertEqual(result.summary["status"], "skipped_no_projected_correspondences")
 
 
+class DomRansacFilterReportingUnitTest(unittest.TestCase):
+    def test_aggregate_worker_results_uses_any_pair_outlier_policy(self):
+        from controlnet_construct.filter_controlnet_dom_ransac import PairRansacResult, aggregate_worker_results
+
+        key = MeasureKey(0, "P1", 0, "A")
+        results = [
+            PairRansacResult(("A", "B"), {key}, [], {"status": "filtered"}),
+            PairRansacResult(("A", "C"), set(), [], {"status": "filtered"}),
+        ]
+
+        outliers, failures, summaries = aggregate_worker_results(results)
+
+        self.assertEqual(outliers, {key})
+        self.assertEqual(failures, [])
+        self.assertEqual(len(summaries), 2)
+
+
 if __name__ == "__main__":
     unittest.main()

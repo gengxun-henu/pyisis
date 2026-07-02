@@ -550,7 +550,27 @@ python examples/controlnet_construct/controlnet_stereopair.py from-dom-batch \
 - pairwise `.net` 会写入 `work/pair_nets/`；
 - per-pair JSON sidecar 与 batch summary JSON 会写入 `work/reports/`。
 
-生成的 per-pair 报告中会记录 `pair_id`、`point_id_namespace` 以及示例控制点 ID，后续如果需要排查 `cnetmerge` 输入来源，会比“盯着一堆 `P00000001` 发呆”轻松很多。
+生成的 per-pair 报告中会记录 `pair_id`、`point_id_namespace` 以及示例控制点 ID，后续如果需要排查 `cnetmerge` 输入来源，会比”盯着一堆 `P00000001` 发呆”轻松很多。
+
+### 量测级 DOM RANSAC 滤波
+
+当控制网的 `ControlMeasure` 坐标为原始影像 sample/line 时，可用
+`examples/controlnet_construct/filter_controlnet_dom_ransac.py`
+将量测投影到 DOM 像素空间，逐像对并行运行 RANSAC，
+并在输出 `.net` 中将离群量测标记为 ignored（而非删除 `ControlPoint`）。
+
+```bash
+python examples/controlnet_construct/filter_controlnet_dom_ransac.py \
+  --input-net ba2_cnet_seedgrid.net \
+  --original-list reduced_original_images.lis \
+  --dom-list dom_images.lis \
+  --output-net ba2_dom_measure_ransac.net \
+  --report ba2_dom_measure_ransac_report.json \
+  --outlier-measures ba2_dom_measure_ransac_outliers.jsonl \
+  --projection-failures ba2_dom_measure_ransac_projection_failures.jsonl \
+  --num-workers 8 \
+  --max-open-cubes-per-worker 16
+```
 
 ## 单元测试：也是实用的 API 参考
 

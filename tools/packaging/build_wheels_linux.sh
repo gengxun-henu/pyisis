@@ -5,6 +5,7 @@ isis_prefix="${ISIS_PREFIX:-}"
 output_dir="${OUTPUT_DIR:-"$PWD/wheelhouse"}"
 python_executable="${PYTHON_EXECUTABLE:-python}"
 dependency_prefix="${PYISIS_DEP_PREFIX:-${CONDA_PREFIX:-}}"
+platform_tag="${PYISIS_LINUX_PLATFORM_TAG:-linux_x86_64}"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -22,6 +23,10 @@ while [ "$#" -gt 0 ]; do
       ;;
     --dependency-prefix)
       dependency_prefix="$2"
+      shift 2
+      ;;
+    --platform-tag)
+      platform_tag="$2"
       shift 2
       ;;
     *)
@@ -52,7 +57,7 @@ fi
 
 mkdir -p "$output_dir"
 
-"$python_executable" -m pip install -U build scikit-build-core pybind11 wheel
+"$python_executable" -c "import build, pybind11, scikit_build_core, wheel"
 
 export ISIS_PREFIX
 ISIS_PREFIX="$(cd "$isis_prefix" && pwd)"
@@ -74,7 +79,7 @@ runtime_any_wheel="$(
 )"
 if [ -n "$runtime_any_wheel" ]; then
   "$python_executable" -m wheel tags \
-    --platform-tag manylinux_2_28_x86_64 \
+    --platform-tag "$platform_tag" \
     --remove \
     "$runtime_any_wheel"
 fi

@@ -3,7 +3,7 @@ Unit tests for Python packaging metadata.
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-19
+Last Modified: 2026-07-22
 Updated: 2026-06-18  Geng Xun added CMake wheel staging coverage for scikit-build-core.
 Updated: 2026-06-18  Geng Xun added packaging license metadata coverage for wheel builds.
 Updated: 2026-06-18  Geng Xun raised scikit-build-core coverage for PEP 639 license metadata.
@@ -13,6 +13,7 @@ Updated: 2026-06-18  Geng Xun added minimal ISISDATA package coverage.
 Updated: 2026-06-18  Geng Xun added Windows runtime package metadata coverage.
 Updated: 2026-06-19  Geng Xun renamed public wheel distributions to the usgs-pyisis namespace.
 Updated: 2026-06-19  Geng Xun added Linux runtime package metadata coverage.
+Updated: 2026-07-22  Geng Xun covered relocatable Linux wheel RPATH configuration.
 """
 
 import importlib
@@ -131,6 +132,13 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         self.assertIn("PYISIS_FACADE_SOURCE_RUNTIME_FILE", cmake_lists)
         self.assertIn("PYISIS_FACADE_BUILD_RUNTIME_FILE", cmake_lists)
         self.assertIn("_runtime.py", cmake_lists)
+
+    def test_cmake_uses_packaged_linux_runtime_rpath_for_wheels(self):
+        cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
+
+        self.assertIn('"$ORIGIN/../pyisis_runtime/vendor/isis/lib"', cmake_lists)
+        self.assertIn("if(SKBUILD)", cmake_lists)
+        self.assertIn('INSTALL_RPATH "${PYISIS_INSTALL_RPATH}"', cmake_lists)
 
     def test_minimal_isisdata_package_metadata_exists(self):
         data_pyproject = (

@@ -2,9 +2,10 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-19
+Last Modified: 2026-07-22
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
+Updated: 2026-07-22  Geng Xun covered Linux SONAME aliases and closure verification.
 """
 
 from __future__ import annotations
@@ -241,6 +242,115 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             finally:
                 sys.modules.pop("pyisis_runtime", None)
                 sys.path.remove(str(stage / "src"))
+
+    def test_stage_linux_runtime_materializes_missing_soname_alias(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_linux",
+            LINUX_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        with TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            prefix = temp / "isis-prefix"
+            (prefix / "lib").mkdir(parents=True)
+            (prefix / "IsisPreferences").write_text("Group = DataDirectory", encoding="utf-8")
+            (prefix / "lib" / "libisis.so").write_bytes(b"isis")
+            (prefix / "lib" / "Camera.plugin").write_bytes(b"camera")
+
+            dep_prefix = temp / "dep-prefix"
+            (dep_prefix / "lib").mkdir(parents=True)
+            versioned_library = dep_prefix / "lib" / "libcsmapi.so.3.0.3"
+            versioned_library.write_bytes(b"csmapi")
+
+            def fake_ldd_dependencies(binary):
+                if binary.name == "libisis.so":
+                    return ("libcsmapi.so.3",)
+                return ()
+
+            stage = temp / "runtime-stage"
+            with mock.patch.object(
+                stage_module,
+                "_ldd_dependencies",
+                fake_ldd_dependencies,
+            ), mock.patch.object(
+                stage_module,
+                "_missing_runtime_dependencies",
+                return_value=(),
+            ):
+                stage_module.stage_runtime(
+                    prefix,
+                    stage,
+                    (dep_prefix,),
+                    dependency_copy_mode="closure",
+                )
+
+            vendor_lib = stage / "src" / "pyisis_runtime" / "vendor" / "isis" / "lib"
+            self.assertEqual((vendor_lib / "libcsmapi.so.3").read_bytes(), b"csmapi")
+            self.assertEqual((vendor_lib / "libcsmapi.so.3.0.3").read_bytes(), b"csmapi")
+
+    def test_verify_linux_runtime_closure_reports_missing_dependencies(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_linux_verify",
+            LINUX_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        with TemporaryDirectory() as temp_dir:
+            vendor = Path(temp_dir)
+            (vendor / "lib").mkdir(parents=True)
+            (vendor / "lib" / "libisis.so").write_bytes(b"isis")
+            with mock.patch.object(
+                stage_module,
+                "_missing_runtime_dependencies",
+                return_value=("libcsmapi.so.3",),
+            ):
+                with self.assertRaisesRegex(FileNotFoundError, "libcsmapi.so.3"):
+                    stage_module._verify_runtime_closure(vendor)
+
+    def test_linux_runtime_closure_check_excludes_external_library_paths(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_linux_environment",
+            LINUX_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        with TemporaryDirectory() as temp_dir:
+            vendor = Path(temp_dir)
+            (vendor / "lib").mkdir(parents=True)
+            libisis = vendor / "lib" / "libisis.so"
+            libisis.write_bytes(b"isis")
+            completed = subprocess.CompletedProcess(
+                ["ldd", str(libisis)],
+                0,
+                stdout="",
+                stderr="",
+            )
+            with mock.patch.dict(
+                stage_module.os.environ,
+                {"LD_LIBRARY_PATH": "/external/conda/lib"},
+            ), mock.patch.object(
+                stage_module.subprocess,
+                "run",
+                return_value=completed,
+            ) as run_mock:
+                self.assertEqual(
+                    stage_module._missing_runtime_dependencies(libisis, vendor),
+                    (),
+                )
+
+            verification_env = run_mock.call_args.kwargs["env"]
+            self.assertNotIn("/external/conda/lib", verification_env["LD_LIBRARY_PATH"])
+            self.assertIn(str(vendor / "lib"), verification_env["LD_LIBRARY_PATH"])
 
 
 if __name__ == "__main__":

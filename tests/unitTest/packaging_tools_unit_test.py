@@ -10,6 +10,7 @@ Updated: 2026-06-19  Geng Xun added Linux runtime wheel build helper coverage.
 Updated: 2026-06-19  Geng Xun made wheel helper tests portable under WSL.
 Updated: 2026-07-22  Geng Xun covered optional clean-wheel unittest lists.
 Updated: 2026-07-22  Geng Xun required truthful Linux platform tags and preinstalled conda build tools.
+Updated: 2026-07-22  Geng Xun covered CRLF-safe Windows ISIS patch application.
 """
 
 from __future__ import annotations
@@ -23,6 +24,14 @@ from unittest import mock
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels.ps1"
 LINUX_BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels_linux.sh"
+WINDOWS_CMAKE_PATCH = (
+    PROJECT_ROOT
+    / "ports"
+    / "windows"
+    / "isis"
+    / "patches"
+    / "0002-windows-cmake-portability.patch"
+)
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
 PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
 TEST_TESTPYPI_INSTALL_SCRIPT = (
@@ -61,6 +70,13 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("usgs_pyisis_runtime_linux_x86_64-*-py3-none-any.whl", script)
         self.assertIn("packaging/isisdata-minimal", script)
         self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)
+
+    def test_windows_cmake_patch_avoids_no_newline_only_hunk(self):
+        self.assertTrue(WINDOWS_CMAKE_PATCH.is_file())
+
+        patch = WINDOWS_CMAKE_PATCH.read_text(encoding="utf-8")
+        self.assertNotIn("No newline at end of file", patch)
+        self.assertNotIn("@@ -58,4 +62,4", patch)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

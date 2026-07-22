@@ -1,7 +1,0 @@
-Group = LambertAzimuthalEqualArea
-  Library = LambertAzimuthalEqualArea
-  Routine = LambertAzimuthalEqualAreaPlugin
-  Keyword = CenterLongitude
-  Keyword = CenterLatitude
-EndGroup
-

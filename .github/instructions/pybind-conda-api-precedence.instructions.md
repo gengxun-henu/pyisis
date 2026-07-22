@@ -10,7 +10,7 @@ Use this instruction for USGS ISIS pybind work in this repository when the activ
 ## Core rule
 
 - Treat the **active conda ISIS headers and linked libraries** as the source of truth for what may be bound and compiled.
-- Treat `reference/upstream_isis/` as a **reference mirror for reading implementation, lifecycle, defaults, usage, and tests**, not as the primary authority for the compile-time API surface.
+- Treat the optional `reference/upstream_isis/` checkout as a **reference mirror for reading implementation, lifecycle, defaults, usage, and tests**, not as the primary authority for the compile-time API surface. Restore it with `python tools/dev/sync_upstream_isis.py` only when source reading is needed.
 
 In practice, when these differ:
 

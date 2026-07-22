@@ -50,10 +50,23 @@ def run(command: list[str], *, env: dict[str, str] | None = None) -> None:
     subprocess.run(command, check=True, env=env)
 
 
+def _test_modules(test_list: Path) -> list[str]:
+    return [
+        line
+        for raw_line in test_list.read_text(encoding="utf-8").splitlines()
+        if (line := raw_line.strip()) and not line.startswith("#")
+    ]
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--wheelhouse", required=True, type=Path)
     parser.add_argument("--venv", required=True, type=Path)
+    parser.add_argument(
+        "--test-list",
+        type=Path,
+        help="Optional file containing unittest modules to run after the clean-wheel smoke test.",
+    )
     args = parser.parse_args()
 
     if args.venv.exists():
@@ -88,6 +101,10 @@ def main() -> int:
         ],
         env=_verification_environment(),
     )
+    if args.test_list:
+        verification_env = _verification_environment()
+        for module in _test_modules(args.test_list):
+            run([str(python), "-m", "unittest", module, "-v"], env=verification_env)
     return 0
 
 

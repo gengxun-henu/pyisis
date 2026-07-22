@@ -1,6 +1,0 @@
-Group = NewHorizons/LEISA
-  Version = 1
-  Library = NewHorizonsLeisaCamera
-  Routine = NewHorizonsLeisaCameraPlugin
-EndGroup
-

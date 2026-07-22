@@ -42,6 +42,16 @@ build-dir = "build/{wheel_tag}"
 wheel.packages = []
 wheel.platlib = true
 wheel.license-files = ["LICENSE"]
+sdist.exclude = [
+  ".planning/**",
+  "task_plan.md",
+  "findings.md",
+  "progress.md",
+  "docs/superpowers/**",
+  "reference/notes/**",
+  "reference/upstream_isis/**",
+  "tests/data/**",
+]
 
 [tool.scikit-build.cmake.define]
 PYISIS_BUILD_BENCHMARKS = "OFF"

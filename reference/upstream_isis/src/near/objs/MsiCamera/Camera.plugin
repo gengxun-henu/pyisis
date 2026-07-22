@@ -1,5 +1,0 @@
-Group = NEAR_EARTH_ASTEROID_RENDEZVOUS/MSI
-  Version = 2
-  Library = MsiCamera
-  Routine = MsiCameraPlugin
-EndGroup

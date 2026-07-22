@@ -1,7 +1,0 @@
-Group = Mercator
-  Library = Mercator
-  Routine = MercatorPlugin
-  Keyword = CenterLongitude
-  Keyword = CenterLatitude
-EndGroup
-

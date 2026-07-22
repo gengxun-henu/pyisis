@@ -1,7 +1,0 @@
-Group = Mollweide
-  Library = Mollweide
-  Routine = MollweidePlugin
-  Keyword = CenterLongitude
-EndGroup
-
-

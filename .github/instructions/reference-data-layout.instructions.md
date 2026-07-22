@@ -19,7 +19,7 @@ Use `reference/` for materials that help understand or implement bindings, but a
 
 Typical examples:
 
-- mirrored upstream ISIS source under `reference/upstream_isis/`
+- an optional, locally restored upstream ISIS source mirror under `reference/upstream_isis/`
 - upstream test source code and usage examples
 - API reading notes, behavior summaries, lifecycle analysis, and design notes
 - documents kept for comparison, review, or implementation guidance
@@ -46,6 +46,8 @@ Typical examples:
 
 - In instructions, reviews, plans, and CI-facing notes, prefer repository-relative paths.
 - For upstream mirrored source, prefer `reference/upstream_isis/...`.
+- The mirror is intentionally not tracked. Restore its pinned revision with
+  `python tools/dev/sync_upstream_isis.py` when implementation reading is needed.
 - For test assets, prefer `tests/data/...`.
 - Avoid machine-specific absolute paths in reusable guidance.
 

@@ -1,7 +1,0 @@
-Group = Equirectangular
-  Library = Equirectangular
-  Routine = EquirectangularPlugin
-  Keyword = CenterLongitude
-  Keyword = CenterLatitude
-EndGroup
- 

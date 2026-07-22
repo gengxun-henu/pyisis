@@ -113,8 +113,10 @@ python examples/forward_intersection/forward_intersection.py \
 
 - Treat the active conda ISIS headers and libraries as the source of truth for
   binding signatures and compile decisions.
-- Use `reference/upstream_isis/` mainly for implementation and behavior
-  reading, not as the final authority over the active conda API.
+- Use the optional `reference/upstream_isis/` checkout mainly for implementation
+  and behavior reading, not as the final authority over the active conda API.
+  Restore its pinned revision with `python tools/dev/sync_upstream_isis.py` when
+  source reading is needed and the directory is absent.
 - For QObject-derived ISIS classes, default to not binding Qt `signals` or
   `slots` into Python unless the user explicitly asks for that behavior.
 - Prefer exposing stable data methods, mutators, queries, and enums over Qt

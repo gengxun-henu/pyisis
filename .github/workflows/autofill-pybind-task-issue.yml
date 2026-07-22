@@ -184,6 +184,21 @@ jobs:
                   seen_upstream.add(rel)
                   upstream_candidates.append(rel)
 
+          def normalize_upstream_source(path_text: str) -> str:
+              normalized = path_text.strip().replace('\\', '/')
+              if normalized.startswith("reference/upstream_isis/"):
+                  return normalized
+              if normalized.startswith("isis/"):
+                  return f"reference/upstream_isis/{normalized[len('isis/'):]}"
+              if normalized.startswith("src/"):
+                  return f"reference/upstream_isis/{normalized}"
+              return ""
+
+          if source_path:
+              normalized_source = normalize_upstream_source(source_path)
+              if normalized_source:
+                  add_candidate(Path(normalized_source))
+
           if ref_root.exists():
               for pattern in (f"{target_class}.h", f"{target_class}.cpp"):
                   for path in sorted(ref_root.rglob(pattern))[:5]:

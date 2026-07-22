@@ -1,4 +1,0 @@
-Group = Topo
-  Library = Topo
-  Routine = TopoPlugin
-End_Group

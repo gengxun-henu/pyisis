@@ -1,6 +1,0 @@
-Group = IdealSpacecraft/IdealCamera
-  Version = 1
-  Library = IdealCamera
-  Routine = IdealCameraPlugin
-EndGroup
- 

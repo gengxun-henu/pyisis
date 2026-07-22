@@ -107,7 +107,8 @@ jobs:
           }
           & "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" tools\packaging\test_wheel_install.py `
             --wheelhouse $env:WHEELHOUSE `
-            --venv $venv
+            --venv $venv `
+            --test-list ports\windows\pyisis\basic_tests.txt
 
       - name: Check wheel metadata
         run: |

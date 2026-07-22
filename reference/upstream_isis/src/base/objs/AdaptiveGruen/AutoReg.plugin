@@ -1,5 +1,0 @@
-Group = AdaptiveGruen
-  Library = AdaptiveGruen
-  Routine = AdaptiveGruenPlugin
-End_Group
-

@@ -1,4 +1,0 @@
-Group = ShadeAtm
-  Library = ShadeAtm
-  Routine = ShadeAtmPlugin
-End_Group

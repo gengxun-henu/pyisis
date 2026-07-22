@@ -4,7 +4,7 @@
 
 ## 放这里
 
-- 上游 USGS ISIS 源码镜像：`reference/upstream_isis/`
+- 按需恢复的上游 USGS ISIS 源码镜像：`reference/upstream_isis/`
 - 上游测试源码、调用示例、阅读材料
 - 本仓库的行为分析、生命周期总结、设计笔记
 
@@ -18,7 +18,8 @@
 
 ## 推荐子目录
 
-- `reference/upstream_isis/`：上游 ISIS 源码和上游测试代码镜像
+- `reference/upstream_isis/`：不由 Git 跟踪的上游 ISIS 源码和测试代码镜像
+- `reference/upstream_isis.lock.json`：镜像的上游地址、版本和提交锁定信息
 - `reference/analysis/`：行为分析、绑定设计说明
 - `reference/notes/`：较轻量的阅读笔记
 
@@ -26,6 +27,14 @@
 
 - 优先使用仓库相对路径，例如 `reference/upstream_isis/...`
 - 不要在可复用说明里写 `/home/...` 这类本机绝对路径
+
+本地缺少镜像时，在仓库根目录执行：
+
+```bash
+python tools/dev/sync_upstream_isis.py
+```
+
+普通配置、编译、测试和 wheel 构建都不会自动下载这份可选参考源码。
 
 ## 快速判断
 

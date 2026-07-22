@@ -1747,13 +1747,6 @@ index ff80874..274de2d 100644
        QDir temp(tmpFolder + "/tmpProject");
        m_projectRoot = new QDir(temp);
      }
-@@ -3040,4 +3039,4 @@ namespace Isis {
-   QMutex *Project::workOrderMutex() {
-     return m_workOrderMutex;
-   }
--}
-\ No newline at end of file
-+}
 diff --git a/isis/src/qisis/objs/SocketThread/SocketThread.cpp b/isis/src/qisis/objs/SocketThread/SocketThread.cpp
 index 3f2390a..0410b80 100644
 --- a/isis/src/qisis/objs/SocketThread/SocketThread.cpp

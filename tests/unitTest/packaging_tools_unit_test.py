@@ -11,6 +11,7 @@ Updated: 2026-06-19  Geng Xun made wheel helper tests portable under WSL.
 Updated: 2026-07-22  Geng Xun covered optional clean-wheel unittest lists.
 Updated: 2026-07-22  Geng Xun required truthful Linux platform tags and preinstalled conda build tools.
 Updated: 2026-07-22  Geng Xun covered CRLF-safe Windows ISIS patch application.
+Updated: 2026-07-22  Geng Xun covered clean-wheel unit-test helper discovery.
 """
 
 from __future__ import annotations
@@ -24,14 +25,7 @@ from unittest import mock
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels.ps1"
 LINUX_BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels_linux.sh"
-WINDOWS_CMAKE_PATCH = (
-    PROJECT_ROOT
-    / "ports"
-    / "windows"
-    / "isis"
-    / "patches"
-    / "0002-windows-cmake-portability.patch"
-)
+WINDOWS_ISIS_PATCHES_DIR = PROJECT_ROOT / "ports" / "windows" / "isis" / "patches"
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
 PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
 TEST_TESTPYPI_INSTALL_SCRIPT = (
@@ -71,12 +65,26 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("packaging/isisdata-minimal", script)
         self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)
 
-    def test_windows_cmake_patch_avoids_no_newline_only_hunk(self):
-        self.assertTrue(WINDOWS_CMAKE_PATCH.is_file())
+    def test_windows_patch_queue_avoids_no_newline_only_hunks(self):
+        patch_paths = sorted(WINDOWS_ISIS_PATCHES_DIR.glob("*.patch"))
+        self.assertTrue(patch_paths)
 
-        patch = WINDOWS_CMAKE_PATCH.read_text(encoding="utf-8")
-        self.assertNotIn("No newline at end of file", patch)
-        self.assertNotIn("@@ -58,4 +62,4", patch)
+        patches = {
+            patch_path.name: patch_path.read_text(encoding="utf-8")
+            for patch_path in patch_paths
+        }
+        for patch_name, patch in patches.items():
+            with self.subTest(patch=patch_name):
+                self.assertNotIn("No newline at end of file", patch)
+
+        self.assertNotIn(
+            "@@ -58,4 +62,4",
+            patches["0002-windows-cmake-portability.patch"],
+        )
+        self.assertNotIn(
+            "@@ -3040,4 +3039,4",
+            patches["0004-windows-isis-core-msvc-portability.patch"],
+        )
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())
@@ -151,6 +159,34 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertNotIn("PYTHONPATH", env)
         self.assertNotIn("CONDA_PREFIX", env)
         self.assertEqual(env["PATH"], str(safe_path))
+
+    def test_clean_venv_unit_test_environment_exposes_only_test_helpers(self):
+        self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())
+
+        spec = importlib.util.spec_from_file_location(
+            "test_wheel_install",
+            TEST_WHEEL_INSTALL_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        with mock.patch.dict(
+            module.os.environ,
+            {
+                "PYTHONPATH": str(PROJECT_ROOT / "build" / "python"),
+                "CONDA_PREFIX": str(PROJECT_ROOT / "fake-conda"),
+            },
+            clear=True,
+        ):
+            env = module._unit_test_environment()
+
+        self.assertEqual(
+            env["PYTHONPATH"],
+            str(PROJECT_ROOT / "tests" / "unitTest"),
+        )
+        self.assertNotIn("CONDA_PREFIX", env)
 
     def test_testpypi_publish_script_checks_wheels_before_optional_upload(self):
         self.assertTrue(PUBLISH_TESTPYPI_SCRIPT.is_file())

@@ -10,6 +10,9 @@ from pathlib import Path
 import venv
 
 
+UNIT_TEST_DIR = Path(__file__).resolve().parents[2] / "tests" / "unitTest"
+
+
 def _python_executable(venv_dir: Path) -> Path:
     if sys.platform == "win32":
         return venv_dir / "Scripts" / "python.exe"
@@ -43,6 +46,12 @@ def _verification_environment() -> dict[str, str]:
         if part and not _path_contains(part, roots)
     ]
     env["PATH"] = os.pathsep.join(path_parts)
+    return env
+
+
+def _unit_test_environment() -> dict[str, str]:
+    env = _verification_environment()
+    env["PYTHONPATH"] = str(UNIT_TEST_DIR)
     return env
 
 
@@ -102,7 +111,7 @@ def main() -> int:
         env=_verification_environment(),
     )
     if args.test_list:
-        verification_env = _verification_environment()
+        verification_env = _unit_test_environment()
         for module in _test_modules(args.test_list):
             run([str(python), "-m", "unittest", module, "-v"], env=verification_env)
     return 0

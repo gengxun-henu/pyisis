@@ -3,9 +3,10 @@ Shared helpers for ISIS pybind unit tests.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-06-18
+Last Modified: 2026-07-22
 Updated: 2026-03-28  Geng Xun added shared test environment bootstrap helpers for ISISDATA, build-directory resolution, and reusable fixture factories.
 Updated: 2026-06-18  Geng Xun added temporary cube cleanup before directory removal on Windows.
+Updated: 2026-07-22  Geng Xun removed the unused NumPy runtime requirement from shared test imports.
 """
 
 import os
@@ -13,8 +14,6 @@ from pathlib import Path
 import sys
 import tempfile
 from contextlib import contextmanager
-
-import numpy as np
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -695,7 +694,7 @@ def make_filled_cube(temp_dir, value=5.0, **kwargs):
 
 def make_tile_test_cube(
     temp_dir,
-    data: np.ndarray,
+    data,
     tile_samples: int,
     tile_lines: int,
     name: str = "test.cub",

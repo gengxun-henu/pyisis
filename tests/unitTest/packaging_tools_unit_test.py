@@ -12,6 +12,7 @@ Updated: 2026-07-22  Geng Xun covered optional clean-wheel unittest lists.
 Updated: 2026-07-22  Geng Xun required truthful Linux platform tags and preinstalled conda build tools.
 Updated: 2026-07-22  Geng Xun covered CRLF-safe Windows ISIS patch application.
 Updated: 2026-07-22  Geng Xun covered clean-wheel unit-test helper discovery.
+Updated: 2026-07-22  Geng Xun kept clean-wheel binding tests independent of NumPy.
 """
 
 from __future__ import annotations
@@ -26,6 +27,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels.ps1"
 LINUX_BUILD_WHEELS_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_wheels_linux.sh"
 WINDOWS_ISIS_PATCHES_DIR = PROJECT_ROOT / "ports" / "windows" / "isis" / "patches"
+UNIT_TEST_SUPPORT = PROJECT_ROOT / "tests" / "unitTest" / "_unit_test_support.py"
 TEST_WHEEL_INSTALL_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "test_wheel_install.py"
 PUBLISH_TESTPYPI_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "publish_testpypi.ps1"
 TEST_TESTPYPI_INSTALL_SCRIPT = (
@@ -187,6 +189,12 @@ class PackagingToolsUnitTest(unittest.TestCase):
             str(PROJECT_ROOT / "tests" / "unitTest"),
         )
         self.assertNotIn("CONDA_PREFIX", env)
+
+    def test_clean_wheel_test_support_has_no_numpy_runtime_import(self):
+        self.assertTrue(UNIT_TEST_SUPPORT.is_file())
+
+        support = UNIT_TEST_SUPPORT.read_text(encoding="utf-8")
+        self.assertNotIn("import numpy", support)
 
     def test_testpypi_publish_script_checks_wheels_before_optional_upload(self):
         self.assertTrue(PUBLISH_TESTPYPI_SCRIPT.is_file())

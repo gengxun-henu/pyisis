@@ -9,6 +9,7 @@ Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel build helper coverage.
 Updated: 2026-06-19  Geng Xun made wheel helper tests portable under WSL.
 Updated: 2026-07-22  Geng Xun covered optional clean-wheel unittest lists.
+Updated: 2026-07-22  Geng Xun required truthful Linux platform tags and preinstalled conda build tools.
 """
 
 from __future__ import annotations
@@ -53,7 +54,10 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("--dependency-prefix", script)
         self.assertIn("--dependency-copy-mode closure", script)
         self.assertIn("usgs-pyisis-runtime-linux-x86_64", script)
-        self.assertIn("manylinux_2_28_x86_64", script)
+        self.assertIn('PYISIS_LINUX_PLATFORM_TAG:-linux_x86_64', script)
+        self.assertIn('--platform-tag "$platform_tag"', script)
+        self.assertNotIn("manylinux_2_28_x86_64", script)
+        self.assertNotIn("pip install", script)
         self.assertIn("usgs_pyisis_runtime_linux_x86_64-*-py3-none-any.whl", script)
         self.assertIn("packaging/isisdata-minimal", script)
         self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)

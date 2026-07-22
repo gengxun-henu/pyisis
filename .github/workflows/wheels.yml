@@ -21,6 +21,7 @@ on:
       - "src/**"
       - "packaging/**"
       - "tools/packaging/**"
+      - "ports/linux/**"
       - "ports/windows/**"
       - "tests/unitTest/*packaging*_unit_test.py"
       - "tests/unitTest/*runtime*_unit_test.py"
@@ -32,6 +33,104 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  linux-cp312-build:
+    name: Build Linux cp312 wheel prototype
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    env:
+      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
+      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/pyisis-isis-linux-64
+      WHEELHOUSE: ${{ github.workspace }}/wheelhouse
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Linux ISIS wheel environment
+        uses: ./.github/actions/setup-hosted-micromamba
+        with:
+          environment-name: pyisis-isis-linux-64
+          environment-file: ports/linux/env/pyisis-isis-linux-64.yml
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Resolve Linux ISIS prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: github-hosted
+          fallback-conda-prefix: ""
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Select conda compiler
+        shell: bash
+        run: |
+          set -euo pipefail
+          compiler="$CONDA_PREFIX/bin/x86_64-conda-linux-gnu-c++"
+          test -x "$compiler"
+          echo "CXX=$compiler" >> "$GITHUB_ENV"
+
+      - name: Build Linux wheelhouse
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash tools/packaging/build_wheels_linux.sh \
+            --isis-prefix "$ISIS_PREFIX" \
+            --output-dir "$WHEELHOUSE" \
+            --python-executable "$PYTHON_BIN" \
+            --dependency-prefix "$CONDA_PREFIX" \
+            --platform-tag linux_x86_64
+
+      - name: Reject unverified manylinux tags
+        shell: bash
+        run: |
+          set -euo pipefail
+          if find "$WHEELHOUSE" -maxdepth 1 -name "*manylinux*.whl" -print -quit | grep -q .; then
+            echo "::error::Linux prototype wheels must not claim an unaudited manylinux tag."
+            exit 1
+          fi
+
+      - name: Upload Linux wheelhouse
+        uses: actions/upload-artifact@v4
+        with:
+          name: usgs-pyisis-linux-cp312-wheel-prototype
+          if-no-files-found: error
+          path: wheelhouse/*.whl
+
+  linux-cp312-clean-install:
+    name: Test Linux cp312 wheels without the build prefix
+    needs: linux-cp312-build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up clean Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Download Linux wheelhouse
+        uses: actions/download-artifact@v4
+        with:
+          name: usgs-pyisis-linux-cp312-wheel-prototype
+          path: wheelhouse
+
+      - name: Test isolated wheel install
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/packaging/test_wheel_install.py \
+            --wheelhouse "$GITHUB_WORKSPACE/wheelhouse" \
+            --venv "$GITHUB_WORKSPACE/build/packaging/linux-pip-smoke-venv" \
+            --test-list tools/packaging/basic_tests.txt
+
   windows-cp312:
     name: Build Windows cp312 wheels
     runs-on: windows-2022
@@ -108,7 +207,7 @@ jobs:
           & "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" tools\packaging\test_wheel_install.py `
             --wheelhouse $env:WHEELHOUSE `
             --venv $venv `
-            --test-list ports\windows\pyisis\basic_tests.txt
+            --test-list tools\packaging\basic_tests.txt
 
       - name: Check wheel metadata
         run: |

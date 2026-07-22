@@ -1,4 +1,4 @@
-"""Unit tests for Windows wheel workflow metadata.
+"""Unit tests for cross-platform wheel workflow metadata.
 
 Author: Geng Xun
 Created: 2026-06-18
@@ -6,6 +6,7 @@ Last Modified: 2026-07-22
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
+Updated: 2026-07-22  Geng Xun added isolated Linux wheel build and install coverage.
 """
 
 from __future__ import annotations
@@ -19,7 +20,7 @@ WHEEL_WORKFLOW = PROJECT_ROOT / ".github" / "workflows" / "wheels.yml"
 
 
 class WheelWorkflowUnitTest(unittest.TestCase):
-    """Test suite for the Windows pip wheel workflow. Added: 2026-06-18."""
+    """Test suite for the cross-platform pip wheel workflow. Added: 2026-06-18."""
 
     def _workflow_text(self) -> str:
         self.assertTrue(WHEEL_WORKFLOW.is_file(), f"Missing workflow: {WHEEL_WORKFLOW}")
@@ -33,6 +34,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn('"pyproject.toml"', workflow)
         self.assertIn('"packaging/**"', workflow)
         self.assertIn('"tools/packaging/**"', workflow)
+        self.assertIn('"ports/linux/**"', workflow)
         self.assertIn('".github/workflows/wheels.yml"', workflow)
 
     def test_workflow_uses_windows_runner_and_isis_prefix_resolution(self):
@@ -53,7 +55,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
 
         self.assertIn("tools\\packaging\\build_wheels.ps1", workflow)
         self.assertIn("tools\\packaging\\test_wheel_install.py", workflow)
-        self.assertIn("--test-list ports\\windows\\pyisis\\basic_tests.txt", workflow)
+        self.assertIn("--test-list tools\\packaging\\basic_tests.txt", workflow)
         self.assertIn("tools\\packaging\\publish_testpypi.ps1", workflow)
         self.assertIn("-Wheelhouse $env:WHEELHOUSE", workflow)
         self.assertIn("-CheckOnly", workflow)
@@ -69,6 +71,20 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("-Upload", workflow)
         self.assertIn("tools\\packaging\\test_testpypi_install.py", workflow)
         self.assertIn("build\\packaging\\testpypi-venv", workflow)
+
+    def test_workflow_builds_linux_wheels_and_tests_on_a_clean_runner(self):
+        workflow = self._workflow_text()
+
+        self.assertIn("linux-cp312-build:", workflow)
+        self.assertIn("linux-cp312-clean-install:", workflow)
+        self.assertIn("needs: linux-cp312-build", workflow)
+        self.assertIn("ports/linux/env/pyisis-isis-linux-64.yml", workflow)
+        self.assertIn("tools/packaging/build_wheels_linux.sh", workflow)
+        self.assertIn("x86_64-conda-linux-gnu-c++", workflow)
+        self.assertIn("--platform-tag linux_x86_64", workflow)
+        self.assertIn("Reject unverified manylinux tags", workflow)
+        self.assertIn("actions/download-artifact@v4", workflow)
+        self.assertIn("--test-list tools/packaging/basic_tests.txt", workflow)
 
 
 if __name__ == "__main__":

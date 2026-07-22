@@ -1,0 +1,14 @@
+name: pyisis-isis-linux-64
+channels:
+  - conda-forge
+  - usgs-astrogeology
+dependencies:
+  - python=3.12
+  - cmake
+  - ninja
+  - pybind11
+  - scikit-build-core
+  - python-build
+  - wheel
+  - cxx-compiler
+  - isis=9.0.0

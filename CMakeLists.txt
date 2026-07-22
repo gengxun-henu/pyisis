@@ -538,9 +538,16 @@ set_target_properties(_isis_core PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY "${ISIS_PYBIND_BUILD_PACKAGE_DIR}")
 
 if(NOT WIN32)
+  set(PYISIS_LINUX_WHEEL_RPATH
+    "$ORIGIN/../pyisis_runtime/vendor/isis/lib")
+  if(SKBUILD)
+    set(PYISIS_INSTALL_RPATH "${PYISIS_LINUX_WHEEL_RPATH}")
+  else()
+    set(PYISIS_INSTALL_RPATH "${ISIS_LIBRARY_DIR}")
+  endif()
   set_target_properties(_isis_core PROPERTIES
     BUILD_RPATH "${ISIS_LIBRARY_DIR}"
-    INSTALL_RPATH "${ISIS_LIBRARY_DIR}")
+    INSTALL_RPATH "${PYISIS_INSTALL_RPATH}")
 endif()
 
 add_dependencies(_isis_core sync_python_package_files)

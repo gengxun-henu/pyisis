@@ -198,9 +198,12 @@ bash tools/packaging/build_wheels_linux.sh \
   --dependency-prefix "$CONDA_PREFIX"
 ```
 
-That Linux path stages a `usgs-pyisis-runtime-linux-x86_64` wheel and tags it
-for `manylinux_2_28_x86_64`. It still needs real Linux/manylinux CI validation
-before being treated as a PyPI-ready release artifact.
+That Linux path stages a `usgs-pyisis-runtime-linux-x86_64` wheel with the
+truthful `linux_x86_64` platform tag. The GitHub Actions workflow builds the
+wheelhouse in a pinned ISIS 9 conda environment and verifies it on a separate
+clean runner. The artifacts remain release prototypes until that workflow
+passes remotely and a real PyPA manylinux container build plus ABI/dependency
+audit justify a manylinux tag.
 
 ### Option A: build from source and install into the current Python environment
 

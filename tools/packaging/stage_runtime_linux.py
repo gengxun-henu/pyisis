@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import shutil
 import subprocess
@@ -43,6 +44,18 @@ def _copy_file(source: Path, source_root: Path, target_root: Path) -> None:
     shutil.copy2(source, target)
 
 
+def _copy_dependency_alias(
+    source: Path,
+    source_root: Path,
+    target_root: Path,
+    dependency_name: str,
+) -> None:
+    relative = source.relative_to(source_root)
+    target = target_root / relative.parent / dependency_name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(source, target)
+
+
 def _copy_patterns(source_root: Path, target_root: Path, patterns: tuple[str, ...]) -> None:
     for pattern in patterns:
         for source in source_root.glob(pattern):
@@ -69,6 +82,23 @@ def _dependency_index(dependency_prefixes: tuple[Path, ...]) -> dict[str, tuple[
                 if source.is_file() and ".so" in source.name:
                     index.setdefault(source.name, (source, dependency_prefix))
     return index
+
+
+def _resolve_dependency(
+    index: dict[str, tuple[Path, Path]],
+    dependency_name: str,
+) -> tuple[Path, Path] | None:
+    exact = index.get(dependency_name)
+    if exact is not None:
+        return exact
+
+    versioned_prefix = f"{dependency_name}."
+    compatible_names = sorted(
+        name for name in index if name.startswith(versioned_prefix)
+    )
+    if not compatible_names:
+        return None
+    return index[compatible_names[0]]
 
 
 def _ldd_dependencies(binary: Path) -> tuple[str, ...]:
@@ -110,14 +140,59 @@ def _copy_dependency_closure(
         visited.add(binary_key)
 
         for dependency_name in _ldd_dependencies(binary):
-            resolved = index.get(dependency_name)
+            resolved = _resolve_dependency(index, dependency_name)
             if resolved is None:
                 continue
 
             source, dependency_prefix = resolved
             _copy_file(source, dependency_prefix, vendor_root)
+            if source.name != dependency_name:
+                _copy_dependency_alias(
+                    source,
+                    dependency_prefix,
+                    vendor_root,
+                    dependency_name,
+                )
             if str(source.resolve()) not in visited:
                 queue.append(source)
+
+
+def _missing_runtime_dependencies(binary: Path, vendor_root: Path) -> tuple[str, ...]:
+    library_dirs = sorted(
+        {
+            str(path.parent)
+            for path in vendor_root.rglob("*")
+            if path.is_file() and ".so" in path.name
+        }
+    )
+    env = os.environ.copy()
+    env["LD_LIBRARY_PATH"] = os.pathsep.join(library_dirs)
+
+    result = subprocess.run(
+        ["ldd", str(binary)],
+        check=False,
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+    missing = []
+    for line in result.stdout.splitlines():
+        if "=> not found" not in line:
+            continue
+        name = line.split("=>", 1)[0].strip()
+        if SHARED_LIBRARY_RE.match(name):
+            missing.append(name)
+    return tuple(missing)
+
+
+def _verify_runtime_closure(vendor_root: Path) -> None:
+    libisis = next(iter(sorted(vendor_root.glob("lib/libisis.so*"))), None)
+    if libisis is None:
+        return
+    missing = _missing_runtime_dependencies(libisis, vendor_root)
+    if missing:
+        names = ", ".join(sorted(set(missing)))
+        raise FileNotFoundError(f"Staged Linux runtime has unresolved dependencies: {names}")
 
 
 def stage_runtime(
@@ -166,6 +241,8 @@ def stage_runtime(
 
     if not any(vendor_root.glob("**/Camera.plugin")):
         raise FileNotFoundError("Staged runtime is missing Camera.plugin")
+
+    _verify_runtime_closure(vendor_root)
 
     return stage_dir
 

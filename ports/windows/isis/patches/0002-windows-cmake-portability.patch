@@ -20,13 +20,6 @@ index e69081b..3397d3a 100644
  
  target_include_directories(sensorutilities
                             PUBLIC
-@@ -58,4 +62,4 @@ if(SENSOR_UTILITIES_BUILD_TESTS)
-                        TEST_PREFIX SensorUtilities.)
- else()
-   message(STATUS "Skipping Tests")
--endif()
-\ No newline at end of file
-+endif()
 diff --git a/isis/CMakeLists.txt b/isis/CMakeLists.txt
 index 3782511..6162af8 100644
 --- a/isis/CMakeLists.txt

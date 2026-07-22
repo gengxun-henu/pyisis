@@ -1,4 +1,0 @@
-Group = MoonAlbedo
-  Library = MoonAlbedo
-  Routine = MoonAlbedoPlugin
-End_Group

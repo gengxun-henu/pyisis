@@ -11,13 +11,13 @@ Use this instruction when binding, testing, or debugging a USGS ISIS class.
 ## Compile-surface precedence
 
 - For this repository's actual pybind compile and test work, treat the active conda ISIS environment referenced by `ISIS_PREFIX` / `CONDA_PREFIX` as the source of truth for available headers and bindable API surface.
-- Treat `reference/upstream_isis/` as the preferred mirror for upstream implementation reading, lifecycle analysis, and usage/reference study.
+- Treat the optional `reference/upstream_isis/` checkout as the preferred mirror for upstream implementation reading, lifecycle analysis, and usage/reference study.
 - If the mirrored upstream API and the active conda headers differ, bind against the **conda-installed API**, not the mirrored one.
 - Use the mirror to understand behavior and to design wrappers, but do not assume mirror-only helpers are safe to call from binding code.
 
 ## Canonical upstream source location
 
-- In this repository, treat `reference/upstream_isis/` as the default mirror for upstream USGS ISIS source and upstream test code.
+- In this repository, treat `reference/upstream_isis/` as the default local path for upstream USGS ISIS source and upstream test code. The directory is not tracked; restore the pinned revision with `python tools/dev/sync_upstream_isis.py` when it is absent and source reading is required.
 - When referring to upstream files in notes, plans, reviews, GitHub web discussions, or CI-oriented instructions, use repository-relative paths such as `reference/upstream_isis/...`.
 - Keep broader repository layout decisions aligned with `reference-data-layout.instructions.md`.
 - If an expected upstream file is not present under `reference/upstream_isis/`, say so explicitly and do not invent a path.

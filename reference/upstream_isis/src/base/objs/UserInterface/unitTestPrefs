@@ -1,5 +1,0 @@
-Group = UserInterface
-  HistoryRecording	= On
-  HistoryLength 	= 3
-EndGroup
-

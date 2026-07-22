@@ -9,6 +9,7 @@ dist/
 *.log
 __pycache__/
 reference/NO-USE*
+reference/upstream_isis/
 .github/README.md
 pybind_plan*
 .tmp_install

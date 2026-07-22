@@ -30,6 +30,9 @@
 
 ## 当前支持范围
 
+开发、打包与验证边界以
+[`docs/platform-support.md`](docs/platform-support.md) 为准。
+
 目前推荐并已验证的兼容范围如下：
 
 | 项目 | 当前推荐 / 已验证范围 |

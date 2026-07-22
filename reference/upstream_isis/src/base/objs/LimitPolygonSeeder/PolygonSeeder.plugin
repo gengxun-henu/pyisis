@@ -1,4 +1,0 @@
-Group = Limit
-  Library = LimitPolygonSeeder
-  Routine = LimitPolygonSeederPlugin
-End_Group

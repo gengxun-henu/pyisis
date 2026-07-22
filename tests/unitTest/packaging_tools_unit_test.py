@@ -2,12 +2,13 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-19
+Last Modified: 2026-07-22
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel build helper coverage.
 Updated: 2026-06-19  Geng Xun made wheel helper tests portable under WSL.
+Updated: 2026-07-22  Geng Xun covered optional clean-wheel unittest lists.
 """
 
 from __future__ import annotations
@@ -69,6 +70,8 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("_verification_environment", script)
         self.assertIn("ISIS_PREFIX", script)
         self.assertIn("CONDA_PREFIX", script)
+        self.assertIn("--test-list", script)
+        self.assertIn('"-m", "unittest"', script)
 
     def test_clean_venv_install_script_selects_platform_python_path(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

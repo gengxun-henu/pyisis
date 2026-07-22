@@ -24,7 +24,7 @@ Keep this file intentionally short to reduce Copilot context usage. `AGENTS.md` 
 
 ## Pybind defaults
 
-- For binding signatures and compile decisions, treat the active conda ISIS headers and libraries as the source of truth; use `reference/upstream_isis/` mainly for implementation and behavior reading.
+- For binding signatures and compile decisions, treat the active conda ISIS headers and libraries as the source of truth; use the optional `reference/upstream_isis/` checkout mainly for implementation and behavior reading, restoring it with `python tools/dev/sync_upstream_isis.py` when needed.
 - For QObject-derived ISIS classes, default to **not** binding Qt `signals`/`slots` into Python unless the user explicitly asks for that behavior.
 - Prefer exposing stable data methods, mutators, queries, and enums over Qt observer/event plumbing.
 - When binding, add `#include <pybind11/pybind11.h>` and `#include <pybind11/stl.h>` when necessary.

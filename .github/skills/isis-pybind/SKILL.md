@@ -16,6 +16,11 @@ Use this skill for repeatable pybind11 work in this repository, especially when 
 
 All paths below are relative to the repository root unless noted otherwise.
 
+The upstream implementation mirror at `reference/upstream_isis/` is optional
+and not tracked. If a task requires upstream implementation reading and the
+directory is absent, restore the pinned revision with
+`python tools/dev/sync_upstream_isis.py`.
+
 This skill is **workflow-oriented**. It does not replace the repository-wide rules in:
 
 - `../../copilot-instructions.md`

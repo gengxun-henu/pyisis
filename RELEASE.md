@@ -1,5 +1,9 @@
 # PyISIS v1.2.0
 
+> These release notes retain the original Linux-first release description. See
+> [`docs/platform-support.md`](docs/platform-support.md) for the current Windows
+> and Linux development and release boundary.
+
 This is the first stable GitHub release of PyISIS, intended for Linux users who already have a working **USGS ISIS 9.0.0** environment.
 
 ## Support Scope

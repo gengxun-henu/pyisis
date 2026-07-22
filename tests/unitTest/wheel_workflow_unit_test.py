@@ -2,9 +2,10 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-06-19
+Last Modified: 2026-07-22
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
+Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
 """
 
 from __future__ import annotations
@@ -52,6 +53,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
 
         self.assertIn("tools\\packaging\\build_wheels.ps1", workflow)
         self.assertIn("tools\\packaging\\test_wheel_install.py", workflow)
+        self.assertIn("--test-list ports\\windows\\pyisis\\basic_tests.txt", workflow)
         self.assertIn("tools\\packaging\\publish_testpypi.ps1", workflow)
         self.assertIn("-Wheelhouse $env:WHEELHOUSE", workflow)
         self.assertIn("-CheckOnly", workflow)

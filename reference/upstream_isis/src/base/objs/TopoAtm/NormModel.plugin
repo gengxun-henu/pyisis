@@ -1,4 +1,0 @@
-Group = TopoAtm
-  Library = TopoAtm
-  Routine = TopoAtmPlugin
-End_Group

@@ -1,8 +1,0 @@
-Group = Mapping
-  ProjectionName = Sinusoidal
-  CenterLongitude = 0.0
-  TargetName = Mars
-  LatitudeType = Planetocentric
-  LongitudeDirection = PositiveEast
-  LongitudeDomain = 180
-End_Group

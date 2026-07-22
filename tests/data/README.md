@@ -1,48 +1,46 @@
-# tests/data/
+# Test data policy
 
-这个目录放**测试运行时真正会读取的稳定输入数据**。
+`tests/data` contains deterministic inputs that repository tests open directly.
+Do not add complete mission archives, generated outputs, or developer-only
+reference material here.
 
-## 放这里
+## Data tiers
 
-- unit test 直接打开的 `.cub`、`.lbl`、`.pvl`、表格等 fixture
-- 从 upstream 测试样本裁剪出来的最小可复用数据
-- `tests/smoke_import.py` 或 `ctest` 运行时依赖的数据
-- mock ISISDATA 内容，例如 `tests/data/isisdata/mockup/`
+1. **Smoke data**: small inputs needed by import and routine CI checks. Keep
+   `tests/data/isisdata/mockup` in ordinary Git.
+2. **Unit fixtures**: the smallest scientifically valid files that reproduce a
+   binding or ISIS behavior. Keep small deterministic fixtures in ordinary Git.
+3. **Integration data**: large mission products used only by explicitly
+   selected integration tests. Store these in a versioned external archive with
+   a manifest and SHA-256 checksums; fetch them only for the jobs that need them.
 
-## 重点目录
+Git LFS is reserved for large binary fixtures that must remain coupled to every
+checkout. It is not the default for optional integration datasets.
 
-- `tests/data/isisdata/mockup/`
-  - 本仓库测试使用的最小 ISISDATA mock 环境
-- `tests/data/upstream_derived/`
-  - 从 upstream 测试资产裁剪出的最小样本
+## Current audit priorities
 
-## 不放这里
+The largest tracked groups should be reviewed first, without deleting or moving
+them until every direct and indirect test consumer is identified:
 
-- 只是给人阅读或行为对照的材料
-- 上游完整源码或上游测试源码
-- 当前测试根本不会用到的大型数据
-- 临时调试输出或依赖个人绝对路径的文件
+| Directory | Approximate size | Current action |
+| --- | ---: | --- |
+| `lronaccal` | 105 MB | Map consumers and investigate scientifically valid minimization |
+| `tagcams2isis` | 31 MB | Resolve file-level consumers before deciding whether to externalize |
+| `mosrange` | 21 MB | Keep until forward-intersection and camera consumers are mapped |
+| `clipper` | 21 MB | Keep until camera-model consumers are mapped |
+| `tgoCassis` | 20 MB | Resolve file-level consumers before deciding whether to externalize |
+| `kerneldbgen` | 17 MB | Separate small database fixtures from large kernel payloads |
 
-这些通常更适合放在 `reference/`，或者根本不应提交。
+Directory-name searches are only triage. Tests can reference individual
+filenames or shared fixture helpers, so a missing direct directory-name match is
+not evidence that data is unused.
 
-## 路径约定
+## Adding or moving data
 
-- 优先使用仓库相对路径，例如 `tests/data/...`
-- 需要 ISISDATA mock 时，优先引用 `tests/data/isisdata/mockup/...`
-- 不要在可复用说明中写死本机绝对路径
-
-## 快速判断
-
-新增数据前先问三句：
-
-1. 这个文件会被测试在运行时直接读取吗？
-   - 会：适合放这里
-2. 能不能缩成更小、更稳定的样本？
-   - 能：优先提交最小版本
-3. 它是不是其实只是参考材料？
-   - 是：改放 `reference/`
-
-## 一句话
-
-- 这里放“测试会读的”
-- 不放“只是想留着参考的”
+- Record the consuming test module and behavior being validated.
+- Prefer cropped or reduced fixtures when the transformation preserves the
+  behavior under test.
+- Keep license/provenance metadata with externally archived data.
+- Make missing optional integration data produce an explicit skip message.
+- Never weaken a routine unit test into an unconditional skip merely to reduce
+  repository size.

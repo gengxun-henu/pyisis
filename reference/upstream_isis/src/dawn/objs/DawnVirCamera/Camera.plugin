@@ -1,5 +1,0 @@
-Group = DAWN/VIR
-  Version = 1
-  Library = DawnVirCamera
-  Routine = DawnVirCameraPlugin
-EndGroup

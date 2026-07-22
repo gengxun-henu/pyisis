@@ -34,6 +34,9 @@ The scope of this repository is intentionally clear:
 
 ## Supported scope
 
+The canonical development, packaging, and validation boundary is maintained in
+[`docs/platform-support.md`](docs/platform-support.md).
+
 The current recommended and validated compatibility range is:
 
 | Item | Current recommendation / validated range |

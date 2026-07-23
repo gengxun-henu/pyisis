@@ -34,8 +34,10 @@ concurrency:
 
 jobs:
   linux-cp312-build:
-    name: Build Linux cp312 wheel prototype
+    name: Build Linux cp312 manylinux_2_28 wheels
     runs-on: ubuntu-24.04
+    container:
+      image: quay.io/pypa/manylinux_2_28_x86_64
     timeout-minutes: 180
     permissions:
       contents: read
@@ -43,6 +45,7 @@ jobs:
       MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
       HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/pyisis-isis-linux-64
       WHEELHOUSE: ${{ github.workspace }}/wheelhouse
+      ABI_REPORT_DIR: ${{ github.workspace }}/build/packaging/linux-abi-report
       PYTHONUNBUFFERED: "1"
 
     steps:
@@ -81,31 +84,70 @@ jobs:
             --output-dir "$WHEELHOUSE" \
             --python-executable "$PYTHON_BIN" \
             --dependency-prefix "$CONDA_PREFIX" \
-            --platform-tag linux_x86_64
+            --platform-tag manylinux_2_28_x86_64
 
-      - name: Reject unverified manylinux tags
+      - name: Audit Linux ABI and wheel policy
         shell: bash
         run: |
           set -euo pipefail
-          if find "$WHEELHOUSE" -maxdepth 1 -name "*manylinux*.whl" -print -quit | grep -q .; then
-            echo "::error::Linux prototype wheels must not claim an unaudited manylinux tag."
-            exit 1
-          fi
+          mkdir -p "$ABI_REPORT_DIR"
+          "$PYTHON_BIN" tools/packaging/audit_linux_wheelhouse.py \
+            --wheelhouse "$WHEELHOUSE" \
+            --target-glibc 2.28 \
+            --require-target \
+            --report "$ABI_REPORT_DIR/glibc-symbol-report.json"
+          native_wheel_count=0
+          for wheel in "$WHEELHOUSE"/*-manylinux_2_28_x86_64.whl; do
+            test -f "$wheel"
+            native_wheel_count=$((native_wheel_count + 1))
+            wheel_name="$(basename "$wheel" .whl)"
+            report="$ABI_REPORT_DIR/auditwheel-${wheel_name}.txt"
+            auditwheel show "$wheel" | tee "$report"
+          done
+          test "$native_wheel_count" -eq 2
+
+          extension_wheel="$(find "$WHEELHOUSE" -maxdepth 1 -name 'usgs_pyisis-*-manylinux_2_28_x86_64.whl' -print -quit)"
+          runtime_wheel="$(find "$WHEELHOUSE" -maxdepth 1 -name 'usgs_pyisis_runtime_linux_x86_64-*-manylinux_2_28_x86_64.whl' -print -quit)"
+          audit_bundle="$ABI_REPORT_DIR/combined/$(basename "$extension_wheel")"
+          "$PYTHON_BIN" tools/packaging/build_linux_audit_bundle.py \
+            --extension-wheel "$extension_wheel" \
+            --runtime-wheel "$runtime_wheel" \
+            --output "$audit_bundle"
+          combined_report="$ABI_REPORT_DIR/auditwheel-combined-installed-layout.txt"
+          auditwheel show "$audit_bundle" | tee "$combined_report"
+          "$PYTHON_BIN" tools/packaging/validate_auditwheel_policy.py \
+            --report "$combined_report" \
+            --target 2.28 \
+            --architecture x86_64
+          find "$ABI_REPORT_DIR/combined" -depth -delete
+
+      - name: Upload Linux ABI report
+        uses: actions/upload-artifact@v4
+        with:
+          name: usgs-pyisis-linux-cp312-abi-report
+          if-no-files-found: error
+          path: build/packaging/linux-abi-report/*
 
       - name: Upload Linux wheelhouse
         uses: actions/upload-artifact@v4
         with:
-          name: usgs-pyisis-linux-cp312-wheel-prototype
+          name: usgs-pyisis-linux-cp312-manylinux-wheelhouse
           if-no-files-found: error
           path: wheelhouse/*.whl
 
   linux-cp312-clean-install:
-    name: Test Linux cp312 wheels without the build prefix
+    name: Test Linux cp312 wheels on ${{ matrix.os }}
     needs: linux-cp312-build
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 60
     permissions:
       contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-22.04
+          - ubuntu-24.04
 
     steps:
       - name: Checkout repository
@@ -119,7 +161,7 @@ jobs:
       - name: Download Linux wheelhouse
         uses: actions/download-artifact@v4
         with:
-          name: usgs-pyisis-linux-cp312-wheel-prototype
+          name: usgs-pyisis-linux-cp312-manylinux-wheelhouse
           path: wheelhouse
 
       - name: Test isolated wheel install

@@ -9,6 +9,8 @@ dependencies:
   - pybind11
   - scikit-build-core
   - python-build
+  - setuptools>=77
   - wheel
+  - auditwheel=6.7.0
   - cxx-compiler
   - isis=9.0.0

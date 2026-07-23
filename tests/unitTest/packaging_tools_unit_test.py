@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-22
+Last Modified: 2026-07-23
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -13,6 +13,7 @@ Updated: 2026-07-22  Geng Xun required truthful Linux platform tags and preinsta
 Updated: 2026-07-22  Geng Xun covered CRLF-safe Windows ISIS patch application.
 Updated: 2026-07-22  Geng Xun covered clean-wheel unit-test helper discovery.
 Updated: 2026-07-22  Geng Xun kept clean-wheel binding tests independent of NumPy.
+Updated: 2026-07-23  Geng Xun covered Linux runtime size budgets and audited platform retagging.
 """
 
 from __future__ import annotations
@@ -61,9 +62,12 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("usgs-pyisis-runtime-linux-x86_64", script)
         self.assertIn('PYISIS_LINUX_PLATFORM_TAG:-linux_x86_64', script)
         self.assertIn('--platform-tag "$platform_tag"', script)
+        self.assertIn('--max-runtime-bytes "$max_runtime_bytes"', script)
+        self.assertIn("PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES", script)
+        self.assertIn('if [ "$platform_tag" != "linux_x86_64" ]', script)
         self.assertNotIn("manylinux_2_28_x86_64", script)
         self.assertNotIn("pip install", script)
-        self.assertIn("usgs_pyisis_runtime_linux_x86_64-*-py3-none-any.whl", script)
+        self.assertIn("usgs_pyisis_runtime_linux_x86_64-*-py3-none-*.whl", script)
         self.assertIn("packaging/isisdata-minimal", script)
         self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)
 

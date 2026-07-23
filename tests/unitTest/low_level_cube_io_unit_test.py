@@ -17,6 +17,7 @@ Updated: 2026-04-09  Geng Xun added RawCubeChunk and RegionalCachingAlgorithm ca
 Updated: 2026-04-09  Geng Xun added OriginalXmlLabel XML/blob/file round-trip coverage.
 Updated: 2026-04-10  Geng Xun added HiBlob focused coverage testing constructor, repr, and Blobber inheritance.
 Updated: 2026-04-12  Geng Xun added focused Buffer raw_buffer and BufferManager setpos/swap regression coverage.
+Updated: 2026-07-23  Geng Xun allowed ISIS 10 to defer invalid input-band rejection until band parsing.
 """
 
 import unittest
@@ -263,8 +264,13 @@ End
         self.assertIn("CubeAttributeInput", repr(attributes))
 
     def test_cube_attribute_input_rejects_unknown_attributes(self):
+        try:
+            attributes = ip.CubeAttributeInput("+not-a-band")
+        except ip.IException:
+            return
+
         with self.assertRaises(ip.IException):
-            ip.CubeAttributeInput("+not-a-band")
+            attributes.bands()
 
     def test_cube_attribute_output_parses_and_reports_core_state(self):
         attributes = ip.CubeAttributeOutput("+8bit+Tile+0.0:100.1+MSB")

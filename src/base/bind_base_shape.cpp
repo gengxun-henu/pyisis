@@ -2,17 +2,19 @@
 // Created: 2026-03-21
 // Updated: 2026-03-21  Geng Xun added ShapeModel hierarchy bindings covering ellipsoid, DEM, plane, DSK, Embree, and Bullet-backed shape helpers
 // Updated: 2026-06-18  Geng Xun made Embree shape bindings conditional on available PCL/Embree headers for Windows builds.
+// Updated: 2026-07-23  Geng Xun made the include order safe for Qt6 and Python 3.13.
+// Updated: 2026-07-23  Geng Xun preserved ellipsoid_normal across the ISIS 10 shape-model API change.
 // Purpose: pybind11 bindings for ISIS shape-model abstractions and concrete surface-intersection implementations
 
 // Copyright (c) 2026 Geng Xun, Henan University
 // SPDX-License-Identifier: MIT
 
-#include <QVector>
-
 #include <vector>
 
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
+#include <QVector>
 
 #include "BulletShapeModel.h"
 #include "DemShape.h"
@@ -34,6 +36,16 @@ namespace py = pybind11;
 namespace {
 std::vector<double> qVectorToStdVector(const QVector<double> &values) {
   return std::vector<double>(values.begin(), values.end());
+}
+
+template <typename Shape>
+std::vector<double> ellipsoidNormal(Shape &shape) {
+#ifdef PYISIS_ISIS10_API
+  shape.calculateSurfaceNormal();
+  return shape.normal();
+#else
+  return qVectorToStdVector(shape.ellipsoidNormal());
+#endif
 }
 }  // namespace
 
@@ -131,7 +143,7 @@ void bind_base_shape(py::module_ &m) {
       .def("calculate_default_normal", &Isis::NaifDskShape::calculateDefaultNormal)
       .def("calculate_surface_normal", &Isis::NaifDskShape::calculateSurfaceNormal)
       .def("local_radius", &Isis::NaifDskShape::localRadius, py::arg("latitude"), py::arg("longitude"))
-      .def("ellipsoid_normal", [](Isis::NaifDskShape &self) { return qVectorToStdVector(self.ellipsoidNormal()); })
+      .def("ellipsoid_normal", &ellipsoidNormal<Isis::NaifDskShape>)
       .def("is_dem", &Isis::NaifDskShape::isDEM);
 
 #ifdef PYISIS_HAS_EMBREE_SHAPE_MODEL
@@ -158,7 +170,7 @@ void bind_base_shape(py::module_ &m) {
       .def("set_tolerance", &Isis::EmbreeShapeModel::setTolerance, py::arg("tolerance"))
       .def("calculate_default_normal", &Isis::EmbreeShapeModel::calculateDefaultNormal)
       .def("calculate_surface_normal", &Isis::EmbreeShapeModel::calculateSurfaceNormal)
-      .def("ellipsoid_normal", [](Isis::EmbreeShapeModel &self) { return qVectorToStdVector(self.ellipsoidNormal()); })
+      .def("ellipsoid_normal", &ellipsoidNormal<Isis::EmbreeShapeModel>)
       .def("incidence_angle", &Isis::EmbreeShapeModel::incidenceAngle, py::arg("illuminator_body_fixed_position"))
       .def("local_radius", &Isis::EmbreeShapeModel::localRadius, py::arg("latitude"), py::arg("longitude"))
       .def("is_visible_from", &Isis::EmbreeShapeModel::isVisibleFrom, py::arg("observer_position"), py::arg("look_direction"));
@@ -186,7 +198,7 @@ void bind_base_shape(py::module_ &m) {
       .def("calculate_default_normal", &Isis::BulletShapeModel::calculateDefaultNormal)
       .def("calculate_surface_normal", &Isis::BulletShapeModel::calculateSurfaceNormal)
       .def("local_radius", &Isis::BulletShapeModel::localRadius, py::arg("latitude"), py::arg("longitude"))
-      .def("ellipsoid_normal", [](Isis::BulletShapeModel &self) { return qVectorToStdVector(self.ellipsoidNormal()); })
+      .def("ellipsoid_normal", &ellipsoidNormal<Isis::BulletShapeModel>)
       .def("get_tolerance", &Isis::BulletShapeModel::getTolerance)
       .def("set_tolerance", &Isis::BulletShapeModel::setTolerance, py::arg("tolerance"))
       .def("is_dem", &Isis::BulletShapeModel::isDEM)

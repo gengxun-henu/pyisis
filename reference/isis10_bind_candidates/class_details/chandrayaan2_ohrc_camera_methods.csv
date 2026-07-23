@@ -1,0 +1,9 @@
+Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
+Chandrayaan2OhrcCamera,Chandrayaan-2,isis/src/chandrayaan2/objs/Chandrayaan2OhrcCamera/Chandrayaan2OhrcCamera.h,N/A,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,优先绑定；沿用现有 mission camera 的 Cube 生命周期与 SPICE ID 模式
+
+Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
+Class Symbol,Chandrayaan2OhrcCamera,isis_pybind.Chandrayaan2OhrcCamera,N,公开面小，可补齐 Chandrayaan-2 OHRC 几何模型。
+Construction/Enum,Chandrayaan2OhrcCamera(Cube &cube),isis_pybind.Chandrayaan2OhrcCamera(),N,ISIS 10-only candidate; not bound yet
+Public API,virtual int CkFrameId() const,isis_pybind.Chandrayaan2OhrcCamera.ck_frame_id,N,ISIS 10-only candidate; not bound yet
+Public API,virtual int CkReferenceId() const,isis_pybind.Chandrayaan2OhrcCamera.ck_reference_id,N,ISIS 10-only candidate; not bound yet
+Public API,virtual int SpkReferenceId() const,isis_pybind.Chandrayaan2OhrcCamera.spk_reference_id,N,ISIS 10-only candidate; not bound yet

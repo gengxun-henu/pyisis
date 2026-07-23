@@ -13,6 +13,7 @@
 // Updated: 2026-04-10  Geng Xun added HiBlob binding (inherits Blobber) with default constructor, cube constructor, and buffer accessor returning list-of-lists.
 // Updated: 2026-04-12  Geng Xun exposed Buffer raw_buffer bytes plus BufferManager setpos/swap parity helpers.
 // Updated: 2026-06-18  Geng Xun fixed Buffer raw_buffer byte-size typing for MSVC builds.
+// Updated: 2026-07-23  Geng Xun added Endian/IEndian header compatibility for ISIS 9 and ISIS 10.
 // Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, OriginalLabel, RawCubeChunk, cache helpers, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, table structures, and HiBlob
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -44,7 +45,11 @@
 #include "CubeCachingAlgorithm.h"
 #include "CubeAttribute.h"
 #include "CubeTileHandler.h"
+#if __has_include("IEndian.h")
+#include "IEndian.h"
+#else
 #include "Endian.h"
+#endif
 #include "FileName.h"
 #include "Histogram.h"
 #include "LineManager.h"
@@ -69,6 +74,19 @@
 namespace py = pybind11;
 
 namespace {
+
+#ifdef PYISIS_ISIS10_API
+using PyLabelAttachment = Isis::Cube::LabelAttachment;
+constexpr PyLabelAttachment PyAttachedLabel = Isis::Cube::AttachedLabel;
+constexpr PyLabelAttachment PyDetachedLabel = Isis::Cube::DetachedLabel;
+constexpr PyLabelAttachment PyExternalLabel = Isis::Cube::ExternalLabel;
+constexpr PyLabelAttachment PyGdalLabel = Isis::Cube::GdalLabel;
+#else
+using PyLabelAttachment = Isis::LabelAttachment;
+constexpr PyLabelAttachment PyAttachedLabel = Isis::AttachedLabel;
+constexpr PyLabelAttachment PyDetachedLabel = Isis::DetachedLabel;
+constexpr PyLabelAttachment PyExternalLabel = Isis::ExternalLabel;
+#endif
 
 class CubeBsqHandlerWrapper {
   public:
@@ -331,12 +349,16 @@ void bind_low_level_cube_io(py::module_ &m) {
   m.def("byte_order_enumeration",
         [](const std::string &byte_order) { return Isis::ByteOrderEnumeration(stdStringToQString(byte_order)); },
         py::arg("byte_order"));
-     py::enum_<Isis::LabelAttachment>(m, "LabelAttachment")
-               .value("AttachedLabel", Isis::AttachedLabel)
-               .value("DetachedLabel", Isis::DetachedLabel)
-               .value("ExternalLabel", Isis::ExternalLabel);
+     auto labelAttachment = py::enum_<PyLabelAttachment>(m, "LabelAttachment");
+     labelAttachment
+               .value("AttachedLabel", PyAttachedLabel)
+               .value("DetachedLabel", PyDetachedLabel)
+               .value("ExternalLabel", PyExternalLabel);
+#ifdef PYISIS_ISIS10_API
+     labelAttachment.value("GdalLabel", PyGdalLabel);
+#endif
      m.def("label_attachment_name",
-                    [](Isis::LabelAttachment attachment) {
+                    [](PyLabelAttachment attachment) {
                          return qStringToStdString(Isis::LabelAttachmentName(attachment));
                     },
                     py::arg("attachment"));
@@ -1437,7 +1459,14 @@ void bind_low_level_cube_io(py::module_ &m) {
       .def("base", &Isis::Cube::base)
       .def("multiplier", &Isis::Cube::multiplier)
       .def("label_size", &Isis::Cube::labelSize, py::arg("actual") = false)
+#ifdef PYISIS_ISIS10_API
+      .def("stores_dn_data",
+           [](const Isis::Cube &self) {
+             return self.labelsAttached() != Isis::Cube::ExternalLabel;
+           })
+#else
       .def("stores_dn_data", &Isis::Cube::storesDnData)
+#endif
       .def("physical_band", &Isis::Cube::physicalBand, py::arg("virtual_band"))
       .def("set_dimensions", &Isis::Cube::setDimensions, py::arg("samples"), py::arg("lines"), py::arg("bands"))
       .def("set_format", &Isis::Cube::setFormat, py::arg("format"))

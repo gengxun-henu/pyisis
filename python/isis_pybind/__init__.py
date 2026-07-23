@@ -216,7 +216,6 @@ from ._isis_core import (
     ImageImporter,
     JP2Decoder,
     JP2Encoder,
-    JP2Error,
     JP2Exporter,
     JP2Importer,
     QtExporter,
@@ -443,6 +442,14 @@ from ._isis_core import (
     to_string,
 )
 
+_OPTIONAL_JP2_ERROR_EXPORTS = []
+try:
+    from ._isis_core import JP2Error
+except ImportError:
+    pass
+else:
+    _OPTIONAL_JP2_ERROR_EXPORTS.append("JP2Error")
+
 _OPTIONAL_EMBREE_EXPORTS = []
 try:
     from ._isis_core import (
@@ -655,7 +662,6 @@ __all__ = [
     "Interpolator",
     "JP2Decoder",
     "JP2Encoder",
-    "JP2Error",
     "JP2Exporter",
     "JP2Importer",
     "QtExporter",
@@ -886,4 +892,5 @@ __all__ = [
     "to_string",
 ]
 
+__all__.extend(_OPTIONAL_JP2_ERROR_EXPORTS)
 __all__.extend(_OPTIONAL_EMBREE_EXPORTS)

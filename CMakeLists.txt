@@ -36,7 +36,6 @@ if((NOT DEFINED CMAKE_CXX_COMPILER_LAUNCHER OR CMAKE_CXX_COMPILER_LAUNCHER STREQ
 endif()
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
-find_package(pybind11 CONFIG REQUIRED)
 
 function(pyisis_first_existing_path out_var)
   foreach(candidate IN LISTS ARGN)
@@ -90,30 +89,92 @@ if(NOT ISIS_PREFIX)
   message(FATAL_ERROR "ISIS_PREFIX is not set. Point it to the external ISIS installation (for example the asp360_new conda environment).")
 endif()
 
+if(NOT DEFINED pybind11_DIR OR pybind11_DIR STREQUAL "")
+  execute_process(
+    COMMAND "${Python3_EXECUTABLE}" -m pybind11 --cmakedir
+    RESULT_VARIABLE _pybind11_cmakedir_result
+    OUTPUT_VARIABLE _pybind11_cmakedir
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET)
+  if(_pybind11_cmakedir_result EQUAL 0
+     AND EXISTS "${_pybind11_cmakedir}/pybind11Config.cmake")
+    set(pybind11_DIR "${_pybind11_cmakedir}" CACHE PATH
+      "pybind11 config supplied by the selected Python interpreter" FORCE)
+  else()
+    message(FATAL_ERROR
+      "The selected Python interpreter (${Python3_EXECUTABLE}) does not provide "
+      "pybind11. Install pybind11 in that conda/build environment or pass an "
+      "explicit -Dpybind11_DIR=...; fallback to another conda environment is "
+      "disabled.")
+  endif()
+endif()
+find_package(pybind11 CONFIG REQUIRED PATHS "${pybind11_DIR}" NO_DEFAULT_PATH)
+
 if(WIN32)
-  pyisis_first_existing_path(_qt5_cmake_root
+  pyisis_first_existing_path(_qt_cmake_root
     "${ISIS_PREFIX}/Library/lib/cmake"
     "${ISIS_PREFIX}/lib/cmake")
+  pyisis_first_existing_path(_qt_isis_include_dir
+    "${ISIS_PREFIX}/Library/include/isis"
+    "${ISIS_PREFIX}/include/isis")
 else()
-  set(_qt5_cmake_root "${ISIS_PREFIX}/lib/cmake")
+  set(_qt_cmake_root "${ISIS_PREFIX}/lib/cmake")
+  set(_qt_isis_include_dir "${ISIS_PREFIX}/include/isis")
 endif()
-set(_qt5_config_dir "${_qt5_cmake_root}/Qt5")
-if(EXISTS "${_qt5_config_dir}/Qt5Config.cmake")
-  set(Qt5_DIR "${_qt5_config_dir}" CACHE PATH
-    "Qt5 config directory preferred from the active ISIS/conda prefix" FORCE)
-  set(Qt5Core_DIR "${_qt5_cmake_root}/Qt5Core" CACHE PATH
-    "Qt5Core config directory preferred from the active ISIS/conda prefix" FORCE)
-  set(Qt5Concurrent_DIR "${_qt5_cmake_root}/Qt5Concurrent" CACHE PATH
-    "Qt5Concurrent config directory preferred from the active ISIS/conda prefix" FORCE)
-  set(Qt5Xml_DIR "${_qt5_cmake_root}/Qt5Xml" CACHE PATH
-    "Qt5Xml config directory preferred from the active ISIS/conda prefix" FORCE)
-  set(Qt5Widgets_DIR "${_qt5_cmake_root}/Qt5Widgets" CACHE PATH
-    "Qt5Widgets config directory preferred from the active ISIS/conda prefix" FORCE)
-  set(Qt5Gui_DIR "${_qt5_cmake_root}/Qt5Gui" CACHE PATH
-    "Qt5Gui config directory preferred from the active ISIS/conda prefix" FORCE)
+set(PYISIS_QT_MAJOR "AUTO" CACHE STRING
+  "Qt major version linked by the target ISIS runtime (AUTO, 5, or 6)")
+set_property(CACHE PYISIS_QT_MAJOR PROPERTY STRINGS AUTO 5 6)
+if(PYISIS_QT_MAJOR STREQUAL "AUTO")
+  if(EXISTS "${_qt_isis_include_dir}/IEndian.h"
+     AND EXISTS "${_qt_cmake_root}/Qt6/Qt6Config.cmake")
+    set(_pyisis_qt_major 6)
+  elseif(EXISTS "${_qt_isis_include_dir}/Endian.h"
+         AND EXISTS "${_qt_cmake_root}/Qt5/Qt5Config.cmake")
+    set(_pyisis_qt_major 5)
+  elseif(EXISTS "${_qt_cmake_root}/Qt6/Qt6Config.cmake"
+         AND NOT EXISTS "${_qt_cmake_root}/Qt5/Qt5Config.cmake")
+    set(_pyisis_qt_major 6)
+  elseif(EXISTS "${_qt_cmake_root}/Qt5/Qt5Config.cmake"
+         AND NOT EXISTS "${_qt_cmake_root}/Qt6/Qt6Config.cmake")
+    set(_pyisis_qt_major 5)
+  else()
+    message(FATAL_ERROR
+      "Unable to select the Qt major version for the target ISIS prefix. "
+      "Pass -DPYISIS_QT_MAJOR=5 or -DPYISIS_QT_MAJOR=6 explicitly.")
+  endif()
+elseif(PYISIS_QT_MAJOR STREQUAL "5" OR PYISIS_QT_MAJOR STREQUAL "6")
+  set(_pyisis_qt_major "${PYISIS_QT_MAJOR}")
+else()
+  message(FATAL_ERROR
+    "PYISIS_QT_MAJOR must be AUTO, 5, or 6; got ${PYISIS_QT_MAJOR}.")
+endif()
+set(PYISIS_QT_PACKAGE "Qt${_pyisis_qt_major}")
+if(NOT EXISTS "${_qt_cmake_root}/${PYISIS_QT_PACKAGE}/${PYISIS_QT_PACKAGE}Config.cmake")
+  message(FATAL_ERROR
+    "${PYISIS_QT_PACKAGE} was selected for the target ISIS runtime, but its "
+    "CMake config is missing under ${_qt_cmake_root}.")
 endif()
 
-find_package(Qt5 CONFIG REQUIRED COMPONENTS Core Concurrent Xml Widgets)
+set(${PYISIS_QT_PACKAGE}_DIR
+  "${_qt_cmake_root}/${PYISIS_QT_PACKAGE}" CACHE PATH
+  "${PYISIS_QT_PACKAGE} config directory from the selected ISIS prefix" FORCE)
+set(PYISIS_QT_COMPONENTS Core Concurrent Xml Widgets)
+if(PYISIS_QT_PACKAGE STREQUAL "Qt6")
+  list(APPEND PYISIS_QT_COMPONENTS Core5Compat)
+endif()
+find_package(${PYISIS_QT_PACKAGE} CONFIG REQUIRED
+  COMPONENTS ${PYISIS_QT_COMPONENTS}
+  PATHS "${_qt_cmake_root}/${PYISIS_QT_PACKAGE}"
+  NO_DEFAULT_PATH)
+set(PYISIS_QT_TARGETS
+  ${PYISIS_QT_PACKAGE}::Core
+  ${PYISIS_QT_PACKAGE}::Concurrent
+  ${PYISIS_QT_PACKAGE}::Xml
+  ${PYISIS_QT_PACKAGE}::Widgets)
+if(PYISIS_QT_PACKAGE STREQUAL "Qt6")
+  list(APPEND PYISIS_QT_TARGETS Qt6::Core5Compat)
+endif()
+set(PYISIS_QT_CORE_TARGET ${PYISIS_QT_PACKAGE}::Core)
 
 if(WIN32)
   pyisis_first_existing_path(_default_isis_include_dir
@@ -490,6 +551,14 @@ if(NOT WIN32)
   target_compile_definitions(_isis_core PRIVATE _GNU_SOURCE)
 endif()
 
+if(EXISTS "${ISIS_INCLUDE_DIR}/IEndian.h")
+  target_compile_definitions(_isis_core PRIVATE PYISIS_ISIS10_API=1)
+endif()
+
+if(EXISTS "${ISIS_INCLUDE_DIR}/JP2Error.h")
+  target_compile_definitions(_isis_core PRIVATE PYISIS_HAS_JP2_ERROR=1)
+endif()
+
 if(PYISIS_HAS_EMBREE_SHAPE_MODEL)
   target_compile_definitions(_isis_core PRIVATE PYISIS_HAS_EMBREE_SHAPE_MODEL=1)
 endif()
@@ -511,10 +580,6 @@ target_include_directories(_isis_core
     ${ISIS_DEP_INCLUDE_SEARCH_DIRS}
     ${ISIS_DEP_SUBDIR_INCLUDE_DIRS}
     ${ISIS_OPTIONAL_INCLUDE_DIRS}
-    ${Qt5Core_INCLUDE_DIRS}
-    ${Qt5Concurrent_INCLUDE_DIRS}
-    ${Qt5Xml_INCLUDE_DIRS}
-    ${Qt5Widgets_INCLUDE_DIRS}
     "${CMAKE_CURRENT_SOURCE_DIR}/reference/SensorUtilities/include")
 
 target_link_libraries(_isis_core
@@ -525,10 +590,7 @@ target_link_libraries(_isis_core
     ${ISIS_EXTRA_PROJECTION_LIBS}
     ${ISIS_RUNTIME_DEP_LIBS}
     ${BULLET_RUNTIME_LIBS}
-    Qt5::Core
-    Qt5::Concurrent
-    Qt5::Xml
-    Qt5::Widgets
+    ${PYISIS_QT_TARGETS}
     Python3::Module)
 
 set_target_properties(_isis_core PROPERTIES
@@ -565,8 +627,7 @@ if(PYISIS_BUILD_BENCHMARKS)
       "${ISIS_INCLUDE_DIR}"
       ${ISIS_DEP_INCLUDE_SEARCH_DIRS}
       ${ISIS_DEP_SUBDIR_INCLUDE_DIRS}
-      ${ISIS_OPTIONAL_INCLUDE_DIRS}
-      ${Qt5Core_INCLUDE_DIRS})
+      ${ISIS_OPTIONAL_INCLUDE_DIRS})
 
   target_link_libraries(isis_cpp_benchmark
     PRIVATE
@@ -576,7 +637,7 @@ if(PYISIS_BUILD_BENCHMARKS)
       ${ISIS_EXTRA_PROJECTION_LIBS}
       ${ISIS_RUNTIME_DEP_LIBS}
       ${BULLET_RUNTIME_LIBS}
-      Qt5::Core)
+      ${PYISIS_QT_CORE_TARGET})
 
   set_target_properties(isis_cpp_benchmark PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/tools/benchmarks")
@@ -655,7 +716,9 @@ message(STATUS "Using PCL include dirs: ${PCL_INCLUDE_DIRS}")
 message(STATUS "Using Embree shape bindings: ${PYISIS_HAS_EMBREE_SHAPE_MODEL}")
 message(STATUS "Using Eigen include dir: ${EIGEN3_INCLUDE_DIR}")
 message(STATUS "Using optional include dirs: ${ISIS_OPTIONAL_INCLUDE_DIRS}")
-message(STATUS "Using Qt5 config dir: ${Qt5_DIR}")
+message(STATUS "Using Qt package: ${PYISIS_QT_PACKAGE}")
+message(STATUS "Using Qt config dir: ${${PYISIS_QT_PACKAGE}_DIR}")
+message(STATUS "Using pybind11 config dir: ${pybind11_DIR}")
 if(DEFINED CMAKE_CXX_COMPILER_LAUNCHER AND NOT CMAKE_CXX_COMPILER_LAUNCHER STREQUAL "")
   message(STATUS "Using C++ compiler launcher: ${CMAKE_CXX_COMPILER_LAUNCHER}")
 else()

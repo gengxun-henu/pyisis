@@ -3,14 +3,33 @@ Unit tests for ISIS high-level cube I/O bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-09
+Last Modified: 2026-07-23
 Updated: 2026-04-04  Geng Xun added focused ExportDescription and JPEG2000 surface regression coverage with environment-aware skips.
 Updated: 2026-04-09  Geng Xun added focused SubArea coverage for parameter validation and label propagation on local test cubes.
+Updated: 2026-07-23  Geng Xun made legacy JP2Error expectations conditional for the ISIS 10 GDAL/OpenJPEG API.
 """
 
+from pathlib import Path
+import sys
 import unittest
 
-from _unit_test_support import close_cube_quietly, ip, make_test_cube, temporary_directory, temporary_text_file
+try:
+    from _unit_test_support import (
+        close_cube_quietly,
+        ip,
+        make_test_cube,
+        temporary_directory,
+        temporary_text_file,
+    )
+except ModuleNotFoundError:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from _unit_test_support import (
+        close_cube_quietly,
+        ip,
+        make_test_cube,
+        temporary_directory,
+        temporary_text_file,
+    )
 
 
 # Suite-level gate is now open. Environment-sensitive JP2/Kakadu-dependent
@@ -123,6 +142,8 @@ class HighLevelCubeIoUnitTest(unittest.TestCase):
         "JP2Error binding is currently unstable in this build: message accumulation does not round-trip as expected and flush() teardown can crash the process."
     )
     def test_jp2_error_accumulates_text_and_flush_raises(self):
+        if not hasattr(ip, "JP2Error"):
+            self.skipTest("ISIS 10 GDAL/OpenJPEG API does not provide JP2Error")
         error = ip.JP2Error()
         error.put_text("first")
         error.add_text("second")
@@ -135,6 +156,8 @@ class HighLevelCubeIoUnitTest(unittest.TestCase):
         "JP2Decoder/JP2Encoder surface behavior is not yet stable in this build: JP2 signature detection does not currently match the fake-stream expectation."
     )
     def test_jp2_decoder_and_encoder_minimal_surface(self):
+        if not hasattr(ip.JP2Decoder, "kakadu_error"):
+            self.skipTest("ISIS 10 GDAL/OpenJPEG API removed Kakadu error helpers")
         with temporary_text_file("fake.jp2", "not a real jpeg2000 stream") as fake_jp2:
             self.assertFalse(ip.JP2Decoder.is_jp2(str(fake_jp2)))
 

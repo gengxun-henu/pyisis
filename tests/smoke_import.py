@@ -6,7 +6,12 @@ import tempfile
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-BUILD_PYTHON_DIR = PROJECT_ROOT / "build" / "python"
+BUILD_PYTHON_DIR = Path(
+    os.environ.get(
+        "ISIS_PYBIND_BUILD_DIR",
+        str(PROJECT_ROOT / "build" / "python"),
+    )
+)
 WORKSPACE_ISISDATA_MOCKUP = PROJECT_ROOT/ "tests" / "data" / "isisdata" / "mockup"
 print(f"Using workspace ISISDATA mockup at {WORKSPACE_ISISDATA_MOCKUP}")
 print(f"Using PROJECT_ROOT at {PROJECT_ROOT}")
@@ -258,9 +263,10 @@ def test_basic_symbols_present():
     assert hasattr(ip, "ExportDescription")
     assert hasattr(ip, "FileList")
     assert hasattr(ip, "ImageImporter")
-    assert hasattr(ip, "JP2Error")
     assert hasattr(ip, "JP2Decoder")
     assert hasattr(ip, "JP2Encoder")
+    if hasattr(ip.JP2Decoder, "kakadu_error"):
+        assert hasattr(ip, "JP2Error")
     assert hasattr(ip, "JP2Importer")
     assert hasattr(ip, "LineEquation")
     assert hasattr(ip, "PixelType")

@@ -8,6 +8,7 @@
 // Updated: 2026-04-11  Geng Xun added ImageImporter abstract base class and JP2Importer concrete class bindings.
 // Updated: 2026-04-11  Geng Xun added JP2Exporter, TiffExporter, TiffImporter, QtExporter, and QtImporter bindings for complete import/export coverage.
 // Updated: 2026-04-12  Geng Xun disambiguated ProcessMosaic::StartProcess binding against inherited Process overloads so high-level cube I/O compiles under asp360_new.
+// Updated: 2026-07-23  Geng Xun made legacy JP2Error/Kakadu helpers optional for the ISIS 10 GDAL/OpenJPEG API.
 // Purpose: pybind11 bindings for ISIS high-level cube I/O workflows including Process variants, import/export helpers, and JP2 utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -26,7 +27,9 @@
 #include "ImageImporter.h"
 #include "JP2Decoder.h"
 #include "JP2Encoder.h"
+#ifdef PYISIS_HAS_JP2_ERROR
 #include "JP2Error.h"
+#endif
 #include "JP2Exporter.h"
 #include "JP2Importer.h"
 #include "QtExporter.h"
@@ -576,6 +579,7 @@ void bind_high_level_cube_io(py::module_ &m) {
        return "ExportDescription(channel_count=" + std::to_string(self.channelCount()) + ")";
      });
 
+#ifdef PYISIS_HAS_JP2_ERROR
   py::class_<Isis::JP2Error>(m, "JP2Error")
    .def(py::init<>())
    .def("put_text", &Isis::JP2Error::put_text, py::arg("message"))
@@ -586,14 +590,17 @@ void bind_high_level_cube_io(py::module_ &m) {
      [](const Isis::JP2Error &self) {
        return "JP2Error(message='" + self.Message + "')";
      });
+#endif
 
   py::class_<Isis::JP2Decoder>(m, "JP2Decoder")
    .def(py::init([](const std::string &jp2file) {
           return std::make_unique<Isis::JP2Decoder>(stdStringToQString(jp2file));
         }),
      py::arg("jp2file"))
+#ifdef PYISIS_HAS_JP2_ERROR
    .def("kakadu_error", &Isis::JP2Decoder::kakadu_error,
      py::return_value_policy::reference_internal)
+#endif
    .def("open_file", &Isis::JP2Decoder::OpenFile)
    .def("sample_dimension", &Isis::JP2Decoder::GetSampleDimension)
    .def("line_dimension", &Isis::JP2Decoder::GetLineDimension)
@@ -623,8 +630,10 @@ void bind_high_level_cube_io(py::module_ &m) {
      py::arg("lines"),
      py::arg("bands"),
      py::arg("pixel_type"))
+#ifdef PYISIS_HAS_JP2_ERROR
    .def("kakadu_error", &Isis::JP2Encoder::kakadu_error,
      py::return_value_policy::reference_internal)
+#endif
    .def("open_file", &Isis::JP2Encoder::OpenFile)
    .def("__repr__",
      [](const Isis::JP2Encoder &) {
@@ -1052,5 +1061,4 @@ void bind_high_level_cube_io(py::module_ &m) {
       });
 
 }
-
 

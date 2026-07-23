@@ -66,30 +66,8 @@ summarize_controlnet_batch_report() {
     log "  pairwise ControlNet batch report: $report_path"
     return 0
   }
-  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-try:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-except Exception:
-    print(f"pairwise ControlNet batch report: {path}")
-    raise SystemExit(0)
-
-parts = []
-for key, label in (
-    ("pair_count", "pairs"),
-    ("total_final_control_point_count", "final_control_points"),
-    ("total_dom2ori_retained_count", "dom2ori_retained"),
-):
-    value = payload.get(key)
-    if value is not None:
-        parts.append(f"{label}={value}")
-parts.append(f"report_json={path}")
-print("pairwise ControlNet batch summary: " + " ".join(parts))
-PY
+  "$PYTHON_EXECUTABLE" "$SCRIPT_DIR/pipeline_report_summary.py" \
+    controlnet-batch "$report_path"
 }
 
 summarize_controlnet_merge_report() {
@@ -98,30 +76,8 @@ summarize_controlnet_merge_report() {
     log "  merge summary json: $report_path"
     return 0
   }
-  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-try:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-except Exception:
-    print(f"merge summary json: {path}")
-    raise SystemExit(0)
-
-parts = []
-for key, label in (
-    ("included_count", "included_nets"),
-    ("skipped_missing_count", "skipped_pairs"),
-):
-    value = payload.get(key)
-    if value is not None:
-        parts.append(f"{label}={value}")
-parts.append(f"script={payload.get('script_path', '')}")
-parts.append(f"report_json={path}")
-print("merge shell summary: " + " ".join(part for part in parts if not part.endswith('=')))
-PY
+  "$PYTHON_EXECUTABLE" "$SCRIPT_DIR/pipeline_report_summary.py" \
+    controlnet-merge "$report_path"
 }
 
 summarize_post_merge_report() {
@@ -130,29 +86,8 @@ summarize_post_merge_report() {
     log "  post-merge summary json: $report_path"
     return 0
   }
-  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-try:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-except Exception:
-    print(f"post-merge summary json: {path}")
-    raise SystemExit(0)
-
-parts = []
-for key, label in (
-    ("output_control_net", "output"),
-    ("point_count_after", "point_count_after"),
-):
-    value = payload.get(key)
-    if value is not None:
-        parts.append(f"{label}={value}")
-parts.append(f"report_json={path}")
-print("post-merge summary: " + " ".join(parts))
-PY
+  "$PYTHON_EXECUTABLE" "$SCRIPT_DIR/pipeline_report_summary.py" \
+    post-merge "$report_path"
 }
 
 

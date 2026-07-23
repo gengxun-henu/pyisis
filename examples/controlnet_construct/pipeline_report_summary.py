@@ -55,6 +55,61 @@ def summarize_image_match(pair_tag: str, path: Path) -> str:
     return "image-match summary: " + " ".join(parts)
 
 
+def summarize_controlnet_batch(path: Path) -> str:
+    payload = _load_payload(path)
+    if payload is None:
+        return f"pairwise ControlNet batch report: {path}"
+
+    parts = []
+    for key, label in (
+        ("pair_count", "pairs"),
+        ("total_final_control_point_count", "final_control_points"),
+        ("total_dom2ori_retained_count", "dom2ori_retained"),
+    ):
+        value = payload.get(key)
+        if value is not None:
+            parts.append(f"{label}={value}")
+    parts.append(f"report_json={path}")
+    return "pairwise ControlNet batch summary: " + " ".join(parts)
+
+
+def summarize_controlnet_merge(path: Path) -> str:
+    payload = _load_payload(path)
+    if payload is None:
+        return f"merge summary json: {path}"
+
+    parts = []
+    for key, label in (
+        ("included_count", "included_nets"),
+        ("skipped_missing_count", "skipped_pairs"),
+    ):
+        value = payload.get(key)
+        if value is not None:
+            parts.append(f"{label}={value}")
+    parts.append(f"script={payload.get('script_path', '')}")
+    parts.append(f"report_json={path}")
+    return "merge shell summary: " + " ".join(
+        part for part in parts if not part.endswith("=")
+    )
+
+
+def summarize_post_merge(path: Path) -> str:
+    payload = _load_payload(path)
+    if payload is None:
+        return f"post-merge summary json: {path}"
+
+    parts = []
+    for key, label in (
+        ("output_control_net", "output"),
+        ("point_count_after", "point_count_after"),
+    ):
+        value = payload.get(key)
+        if value is not None:
+            parts.append(f"{label}={value}")
+    parts.append(f"report_json={path}")
+    return "post-merge summary: " + " ".join(parts)
+
+
 def build_argument_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -65,6 +120,10 @@ def build_argument_parser() -> argparse.ArgumentParser:
     match_parser = subparsers.add_parser("image-match")
     match_parser.add_argument("pair_tag")
     match_parser.add_argument("report_path", type=Path)
+
+    for command in ("controlnet-batch", "controlnet-merge", "post-merge"):
+        report_parser = subparsers.add_parser(command)
+        report_parser.add_argument("report_path", type=Path)
     return parser
 
 
@@ -74,6 +133,12 @@ def main() -> int:
         print(summarize_image_overlap(args.report_path))
     elif args.command == "image-match":
         print(summarize_image_match(args.pair_tag, args.report_path))
+    elif args.command == "controlnet-batch":
+        print(summarize_controlnet_batch(args.report_path))
+    elif args.command == "controlnet-merge":
+        print(summarize_controlnet_merge(args.report_path))
+    elif args.command == "post-merge":
+        print(summarize_post_merge(args.report_path))
     return 0
 
 

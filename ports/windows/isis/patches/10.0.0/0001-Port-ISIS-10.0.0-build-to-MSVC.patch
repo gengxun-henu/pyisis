@@ -183,7 +183,7 @@ index f1fb6b281..d070b19dd 100644
  find_program(UIC uic PATH_SUFFIXES lib/qt6/ REQUIRED)
  find_program(MOC moc PATH_SUFFIXES lib/qt6/ REQUIRED)
  find_program(RCC rcc PATH_SUFFIXES lib/qt6/ REQUIRED)
-@@ -262,7 +277,7 @@ find_package(Qt6 COMPONENTS
+@@ -262,16 +277,15 @@ find_package(Qt6 COMPONENTS
                   # Search this path explicitly for MacOS OpenGL Framework
                   PATHS /System/Library/Frameworks/ REQUIRED CONFIG)
  
@@ -192,6 +192,15 @@ index f1fb6b281..d070b19dd 100644
                                          log
                                          regex
                                          log_setup
+                                         serialization
+                                         chrono
+                                         math_c99
+                                         container
+                                         math_c99f
+                                         context
+                                         math_c99l
+-                                        system
+                                         math_tr1
 @@ -282,12 +297,15 @@ find_package(Boost 1.59.0 REQUIRED      atomic
                                          exception
                                          timer

@@ -42,8 +42,8 @@ jobs:
     permissions:
       contents: read
     env:
-      MAMBA_ROOT_PREFIX: ${{ github.workspace }}/.micromamba
-      HOSTED_CONDA_PREFIX: ${{ github.workspace }}/.micromamba/envs/pyisis-isis-linux-64
+      MAMBA_ROOT_PREFIX: /opt/pyisis-micromamba
+      HOSTED_CONDA_PREFIX: /opt/pyisis-conda
       WHEELHOUSE: ${{ github.workspace }}/wheelhouse
       ABI_REPORT_DIR: ${{ github.workspace }}/build/packaging/linux-abi-report
       PYTHONUNBUFFERED: "1"

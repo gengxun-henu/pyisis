@@ -80,6 +80,8 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("linux-cp312-clean-install:", workflow)
         self.assertIn("needs: linux-cp312-build", workflow)
         self.assertIn("ports/linux/env/pyisis-isis-linux-64.yml", workflow)
+        self.assertIn("MAMBA_ROOT_PREFIX: /opt/pyisis-micromamba", workflow)
+        self.assertIn("HOSTED_CONDA_PREFIX: /opt/pyisis-conda", workflow)
         self.assertIn("tools/packaging/build_wheels_linux.sh", workflow)
         self.assertIn("x86_64-conda-linux-gnu-c++", workflow)
         self.assertIn("x86_64-conda-linux-gnu-g++", workflow)

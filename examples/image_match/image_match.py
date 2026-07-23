@@ -56,6 +56,8 @@ Updated: 2026-05-27  Geng Xun deferred storage-tile alignment until DOM preparat
 Updated: 2026-05-27  Geng Xun recorded serial tile cache summaries in match metadata.
 Updated: 2026-05-27  Geng Xun clarified worker-local parallel tile cache metadata when aggregate summaries are unavailable.
 Updated: 2026-07-23  Geng Xun extracted terminal tile progress rendering into a focused helper module.
+Updated: 2026-07-23  Geng Xun extracted shared JSON config I/O helpers from the orchestrator.
+Updated: 2026-07-23  Geng Xun extracted CLI-to-API argument forwarding into a focused adapter.
 """
 
 from __future__ import annotations
@@ -67,7 +69,7 @@ import json
 import math
 from pathlib import Path
 import sys
-from typing import Any, Callable, Literal
+from typing import Any, Callable
 
 import numpy as np
 
@@ -130,6 +132,17 @@ if __package__ in {None, ""}:
         write_deep_match_pair_manifest,
         write_deep_match_task_arrays,
     )
+    from image_match.config_io import (
+        ConfigContainerOrder,
+        coerce_config_bool as _coerce_config_bool,
+        coerce_invalid_value_list as _coerce_invalid_value_list,
+        coerce_string_mapping as _coerce_string_mapping,
+        first_present_config_value as _first_present_config_value,
+        format_image_match_default_for_shell,
+        image_match_config_containers as _image_match_config_containers,
+        resolve_config_relative_string_mapping,
+    )
+    from image_match.cli_runtime import build_match_dom_pair_kwargs
     from image_match.keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
     import image_match.lowres_offset as _lowres_offset
     import image_match.match_visualization as _match_visualization
@@ -228,6 +241,17 @@ else:
         write_deep_match_pair_manifest,
         write_deep_match_task_arrays,
     )
+    from .config_io import (
+        ConfigContainerOrder,
+        coerce_config_bool as _coerce_config_bool,
+        coerce_invalid_value_list as _coerce_invalid_value_list,
+        coerce_string_mapping as _coerce_string_mapping,
+        first_present_config_value as _first_present_config_value,
+        format_image_match_default_for_shell,
+        image_match_config_containers as _image_match_config_containers,
+        resolve_config_relative_string_mapping,
+    )
+    from .cli_runtime import build_match_dom_pair_kwargs
     from .keypoints import Keypoint, KeypointFile, read_key_file, write_key_file
     from . import lowres_offset as _lowres_offset
     from . import match_visualization as _match_visualization
@@ -789,96 +813,6 @@ def _parse_low_resolution_max_mean_projected_offset_meters(value: str) -> float:
         raise argparse.ArgumentTypeError(str(exc)) from exc
 
 
-ConfigContainerOrder = Literal["image-match-first", "top-level-first"]
-
-
-def _image_match_config_containers(
-    payload: object,
-    *,
-    container_order: ConfigContainerOrder = "image-match-first",
-) -> list[dict[str, object]]:
-    if not isinstance(payload, dict):
-        raise ValueError("image_match config JSON must decode to an object at the top level.")
-
-    image_match_containers: list[dict[str, object]] = []
-    for key in ("ImageMatch", "image_match", "imageMatch"):
-        value = payload.get(key)
-        if isinstance(value, dict):
-            image_match_containers.append(value)
-
-    if container_order == "top-level-first":
-        return [payload, *image_match_containers]
-    if container_order == "image-match-first":
-        return [*image_match_containers, payload]
-    raise ValueError(f"Unsupported ImageMatch config container order: {container_order}")
-
-
-def _first_present_config_value(
-    containers: list[dict[str, object]],
-    candidate_keys: tuple[str, ...],
-) -> object | None:
-    for container in containers:
-        for key in candidate_keys:
-            if key not in container:
-                continue
-            value = container[key]
-            if value is None:
-                continue
-            if isinstance(value, str) and value == "":
-                continue
-            return value
-    return None
-
-
-def _coerce_config_bool(value: object, *, field_name: str) -> bool:
-    if isinstance(value, bool):
-        return value
-    if isinstance(value, int) and value in {0, 1}:
-        return bool(value)
-    if isinstance(value, str):
-        normalized = value.strip().lower()
-        if normalized in {"1", "true", "yes", "on"}:
-            return True
-        if normalized in {"0", "false", "no", "off"}:
-            return False
-    raise ValueError(f"{field_name} in config JSON must be a boolean-compatible value.")
-
-
-def _coerce_invalid_value_list(value: object) -> list[float]:
-    if isinstance(value, (list, tuple)):
-        return [float(item) for item in value]
-    return [float(value)]
-
-
-def _coerce_string_mapping(value: object, *, field_name: str) -> dict[str, str]:
-    if not isinstance(value, dict):
-        raise ValueError(f"{field_name} in config JSON must be an object.")
-    return {
-        str(key).strip(): str(item)
-        for key, item in value.items()
-        if key not in (None, "") and item not in (None, "")
-    }
-
-
-def _resolve_config_relative_string_mapping(mapping: dict[str, str], *, config_path: str | Path) -> dict[str, str]:
-    config_dir = Path(config_path).parent
-    repo_root = Path(__file__).resolve().parents[2]
-    resolved_mapping: dict[str, str] = {}
-    for key, value in mapping.items():
-        resolved_value = Path(value).expanduser()
-        if resolved_value.is_absolute():
-            resolved_mapping[key] = str(resolved_value)
-            continue
-
-        config_relative_candidate = config_dir / resolved_value
-        if config_relative_candidate.exists():
-            resolved_value = config_relative_candidate
-        else:
-            resolved_value = repo_root / resolved_value
-        resolved_mapping[key] = str(resolved_value)
-    return resolved_mapping
-
-
 def load_image_match_defaults_from_config(
     config_path: str | Path,
     *,
@@ -1022,9 +956,10 @@ def load_image_match_defaults_from_config(
         (
             "adaptive_routing_deep_presets",
             ("adaptive_routing_deep_presets", "adaptiveRoutingDeepPresets", "AdaptiveRoutingDeepPresets"),
-            lambda value: _resolve_config_relative_string_mapping(
+            lambda value: resolve_config_relative_string_mapping(
                 _coerce_string_mapping(value, field_name="adaptive_routing_deep_presets"),
                 config_path=resolved_path,
+                repo_root=Path(__file__).resolve().parents[2],
             ),
         ),
         (
@@ -1306,16 +1241,6 @@ def load_image_match_defaults_from_config(
         )
         defaults.update(preset_defaults)
     return defaults
-
-
-def format_image_match_default_for_shell(value: object) -> str:
-    if isinstance(value, bool):
-        return "1" if value else "0"
-    if value is None:
-        return ""
-    if isinstance(value, (list, tuple)):
-        raise ValueError("List-valued ImageMatch defaults cannot be printed as a single shell scalar.")
-    return str(value)
 
 
 def print_image_match_config_default(
@@ -5279,108 +5204,17 @@ def main(argv: list[str] | None = None) -> None:
         )
     except (OSError, ValueError) as exc:
         parser.error(str(exc))
+    match_kwargs = build_match_dom_pair_kwargs(
+        args,
+        dom_source_metadata_lookup=dom_source_metadata_lookup,
+        default_deep_match_temp_root_dir=_default_deep_match_temp_root_dir,
+    )
     result = match_dom_pair_to_key_files(
         args.left_dom,
         args.right_dom,
         args.left_output_key,
         args.right_output_key,
-        metadata_output=args.metadata_output,
-        band=args.band,
-        max_image_dimension=args.max_image_dimension,
-        block_width=args.sub_block_size_x,
-        block_height=args.sub_block_size_y,
-        overlap_x=args.overlap_size_x,
-        overlap_y=args.overlap_size_y,
-        tile_block_alignment_mode=args.tile_block_alignment_mode,
-        minimum_value=args.minimum_value,
-        maximum_value=args.maximum_value,
-        lower_percent=args.lower_percent,
-        upper_percent=args.upper_percent,
-        valid_intensity_lower_percent=args.valid_intensity_lower_percent,
-        valid_intensity_upper_percent=args.valid_intensity_upper_percent,
-        invalid_values=tuple(args.invalid_value),
-        special_pixel_abs_threshold=args.special_pixel_abs_threshold,
-        min_valid_pixels=args.min_valid_pixels,
-        valid_pixel_percent_threshold=args.valid_pixel_percent_threshold,
-        invalid_pixel_radius=args.invalid_pixel_radius,
-        enable_tile_validity_prefilter=args.enable_tile_validity_prefilter,
-        tile_validity_cache_dir=args.tile_validity_cache_dir,
-        tile_validity_cell_width=args.tile_validity_cell_width,
-        tile_validity_cell_height=args.tile_validity_cell_height,
-        pre_ransac_max_ground_distance_km=args.pre_ransac_max_ground_distance_km,
-        pre_ransac_ground_lookup_failure_policy=args.pre_ransac_ground_lookup_failure_policy,
-        pre_ransac_distance_method=args.pre_ransac_distance_method,
-        ransac_model=args.ransac_model,
-        matcher_method=args.matcher_method,
-        ratio_test=args.ratio_test,
-        max_features=args.max_features,
-        sift_octave_layers=args.sift_octave_layers,
-        sift_contrast_threshold=args.sift_contrast_threshold,
-        sift_edge_threshold=args.sift_edge_threshold,
-        sift_sigma=args.sift_sigma,
-        crop_expand_pixels=args.crop_expand_pixels,
-        min_overlap_size=args.min_overlap_size,
-        use_parallel_cpu=args.use_parallel_cpu,
-        num_worker_parallel_cpu=args.num_worker_parallel_cpu,
-        enable_low_resolution_offset_estimation=args.enable_low_resolution_offset_estimation,
-        enable_adaptive_routing=args.enable_adaptive_routing,
-        adaptive_routing_profile=args.adaptive_routing_profile,
-        adaptive_routing_deep_presets=getattr(args, "adaptive_routing_deep_presets", None),
-        dom_source_metadata_lookup=dom_source_metadata_lookup,
-        dom_source_metadata_csv=args.dom_source_metadata_csv,
-        low_resolution_level=args.low_resolution_level,
-        low_resolution_matching_target_long_edge=args.low_resolution_matching_target_long_edge,
-        low_resolution_trim_fraction_each_side=args.low_resolution_trim_fraction_each_side,
-        low_resolution_max_mean_reprojection_error_pixels=args.low_resolution_max_mean_reprojection_error_pixels,
-        low_resolution_min_retained_match_count=args.low_resolution_min_retained_match_count,
-        low_resolution_max_mean_projected_offset_meters=args.low_resolution_max_mean_projected_offset_meters,
-        left_low_resolution_dom=args.left_low_resolution_dom,
-        right_low_resolution_dom=args.right_low_resolution_dom,
-        write_match_visualization=args.write_match_visualization,
-        show_progress=args.show_progress,
-        match_visualization_output_path=args.match_visualization_output_path,
-        match_visualization_output_dir=args.match_visualization_output_dir,
-        match_visualization_scale=args.match_visualization_scale,
-        match_visualization_ransac=args.match_visualization_ransac,
-        match_visualization_ransac_threshold=args.match_visualization_ransac_threshold,
-        match_visualization_ransac_confidence=args.match_visualization_ransac_confidence,
-        match_visualization_ransac_max_iters=args.match_visualization_ransac_max_iters,
-        match_visualization_ransac_mode=args.match_visualization_ransac_mode,
-        match_visualization_loose_ransac_keep_threshold=args.match_visualization_loose_ransac_keep_threshold,
-        visualization_mode=args.visualization_mode,
-        memory_profile=args.memory_profile,
-        visualization_target_long_edge=args.visualization_target_long_edge,
-        max_preview_pixels=args.max_preview_pixels,
-        preview_crop_margin_pixels=args.preview_crop_margin_pixels,
-        preview_cache_dir=args.preview_cache_dir,
-        preview_cache_source=args.preview_cache_source,
-        preview_force_regenerate=args.preview_force_regenerate,
-        preview_level=args.preview_level,
-        use_gpu=args.use_gpu,
-        gpu_batch_size=args.gpu_batch_size,
-        gpu_dynamic_batch=args.gpu_dynamic_batch,
-        gpu_min_batch_size=args.gpu_min_batch_size,
-        gpu_max_batch_size=args.gpu_max_batch_size,
-        deep_match_config_path=args.deep_match_config_path,
-        deep_match_mode=args.deep_match_mode,
-        deep_match_temp_root_dir=(
-            args.deep_match_temp_root_dir
-            if args.deep_match_temp_root_dir is not None
-            else _default_deep_match_temp_root_dir(
-                metadata_output=args.metadata_output,
-                left_output_key=args.left_output_key,
-            )
-        ),
-        deep_match_manifest=args.deep_match_manifest,
-        grouped_deep_match_manifests=args.grouped_deep_match_manifest,
-        classic_left_key=args.classic_left_key,
-        classic_right_key=args.classic_right_key,
-        use_tile_cache=args.use_tile_cache,
-        tile_cache_max_mb=args.tile_cache_max_mb,
-        adaptive_warmup_count=args.adaptive_warmup_count,
-        adaptive_throughput_threshold_mbps=args.adaptive_throughput_threshold_mbps,
-        adaptive_recheck_every=args.adaptive_recheck_every,
-        opencv_num_threads=args.opencv_num_threads,
+        **match_kwargs,
     )
     result_output_path = None
     if args.result_output is not None:

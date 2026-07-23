@@ -55,6 +55,7 @@ Updated: 2026-05-27  Geng Xun wired ISIS storage-tile block alignment through Im
 Updated: 2026-05-27  Geng Xun deferred storage-tile alignment until DOM preparation is ready.
 Updated: 2026-05-27  Geng Xun recorded serial tile cache summaries in match metadata.
 Updated: 2026-05-27  Geng Xun clarified worker-local parallel tile cache metadata when aggregate summaries are unavailable.
+Updated: 2026-07-23  Geng Xun extracted terminal tile progress rendering into a focused helper module.
 """
 
 from __future__ import annotations
@@ -66,7 +67,7 @@ import json
 import math
 from pathlib import Path
 import sys
-from typing import Any, Callable, TextIO, Literal
+from typing import Any, Callable, Literal
 
 import numpy as np
 
@@ -133,6 +134,7 @@ if __package__ in {None, ""}:
     import image_match.lowres_offset as _lowres_offset
     import image_match.match_visualization as _match_visualization
     from image_match.preprocess import summarize_valid_pixels, validate_invalid_pixel_radius
+    from image_match.progress import TileProgressBar as _TileProgressBar
     from image_match.runtime import bootstrap_runtime_environment
     import image_match.stereo_ransac as _stereo_ransac
     from image_match.tile_block_alignment import (
@@ -230,6 +232,7 @@ else:
     from . import lowres_offset as _lowres_offset
     from . import match_visualization as _match_visualization
     from .preprocess import summarize_valid_pixels, validate_invalid_pixel_radius
+    from .progress import TileProgressBar as _TileProgressBar
     from .runtime import bootstrap_runtime_environment
     from . import stereo_ransac as _stereo_ransac
     from .tile_block_alignment import (
@@ -406,66 +409,6 @@ def _update_summary_after_pre_ransac_ground_filter(
     summary["point_count_before_pre_ransac_ground_filter"] = before_count
     summary["point_count_after_pre_ransac_ground_filter"] = after_count
     summary["point_count"] = after_count
-
-
-class _TileProgressBar:
-    def __init__(
-        self,
-        *,
-        left_dom_path: str | Path,
-        right_dom_path: str | Path,
-        total_tiles: int,
-        stream: TextIO | None = None,
-        width: int = 30,
-    ) -> None:
-        self._left_dom_path = Path(left_dom_path)
-        self._right_dom_path = Path(right_dom_path)
-        self._total_tiles = max(0, int(total_tiles))
-        self._stream = sys.stderr if stream is None else stream
-        self._width = max(10, int(width))
-        self._completed_tiles = 0
-        self._started = False
-
-    def start(self) -> None:
-        if self._started:
-            return
-        self._started = True
-        print(
-            "[image-match] "
-            f"{self._left_dom_path.name} ↔ {self._right_dom_path.name}: "
-            f"{self._total_tiles} TILE(s) to process at full resolution.",
-            file=self._stream,
-            flush=True,
-        )
-        self._render()
-
-    def update(self) -> None:
-        if not self._started:
-            self.start()
-        self._completed_tiles = min(self._completed_tiles + 1, self._total_tiles)
-        self._render()
-
-    def finish(self) -> None:
-        if not self._started:
-            return
-        print(file=self._stream, flush=True)
-
-    def _render(self) -> None:
-        if self._total_tiles <= 0:
-            bar = "-" * self._width
-            percent = 100.0
-        else:
-            percent = 100.0 * self._completed_tiles / self._total_tiles
-            filled_width = int(round(self._width * self._completed_tiles / self._total_tiles))
-            bar = "#" * filled_width + "-" * (self._width - filled_width)
-        print(
-            "\r[image-match] "
-            f"[{bar}] {self._completed_tiles}/{self._total_tiles} TILE(s) "
-            f"done ({percent:5.1f}%)",
-            end="",
-            file=self._stream,
-            flush=True,
-        )
 
 
 def _validate_valid_pixel_percent_threshold(threshold: float) -> float:
@@ -4117,6 +4060,7 @@ def match_dom_pair(
                                 left_dom_path=left_dom_path,
                                 right_dom_path=right_dom_path,
                                 total_tiles=len(candidate_windows),
+                                stream=sys.stderr,
                             )
                             if show_progress
                             else None

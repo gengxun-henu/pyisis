@@ -96,6 +96,18 @@ index 5dd1d04..5448984 100644
 +#ifdef _WIN32
 +#undef VOID
 +#endif
+@@ -134,2 +137,4 @@ namespace SpiceQL {
++#if RESTINCURL_ENABLE_ASYNC
+         client.CloseWhenFinished();
+         client.WaitForFinish();
++#endif
+@@ -1199,3 +1204,3 @@ namespace SpiceQL {
+-        int FILESIZ = 128;
+-        int TYPESIZ = 32;
+-        int SOURCESIZ = 128;
++        constexpr int FILESIZ = 128;
++        constexpr int TYPESIZ = 32;
++        constexpr int SOURCESIZ = 128;
 diff --git a/SpiceQL/src/inventory.cpp b/SpiceQL/src/inventory.cpp
 index ffa969f..2cc147f 100644
 --- a/SpiceQL/src/inventory.cpp

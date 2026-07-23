@@ -20,6 +20,7 @@ Updated: 2026-07-23  Geng Xun covered Qt6 Core5Compat linkage for the developer 
 Updated: 2026-07-23  Geng Xun covered the separate ISIS 10 binding distribution manifest.
 Updated: 2026-07-23  Geng Xun required full prerelease versions in generated build metadata.
 Updated: 2026-07-23  Geng Xun required ISIS 10 Bullet float64 ABI selection.
+Updated: 2026-07-23  Geng Xun covered separate ISIS 9 and ISIS 10 release manifests.
 """
 
 import importlib
@@ -130,6 +131,41 @@ class PythonPackagingMetadataTest(unittest.TestCase):
             self.repo_root / "python" / "isis_pybind" / "__init__.py"
         ).read_text(encoding="utf-8")
         self.assertIn('__version__ = "1.3.0rc1"', package_init)
+
+    def test_versioned_release_manifests_match_both_package_lines(self):
+        release_root = self.repo_root / "packaging" / "releases"
+        isis9 = tomllib.loads(
+            (release_root / "isis9.toml").read_text(encoding="utf-8")
+        )["release"]
+        isis10 = tomllib.loads(
+            (release_root / "isis10.toml").read_text(encoding="utf-8")
+        )["release"]
+        isis10_project = tomllib.loads(
+            (
+                self.repo_root
+                / "packaging"
+                / "bindings-isis10"
+                / "pyproject.toml"
+            ).read_text(encoding="utf-8")
+        )["project"]
+
+        self.assertEqual("usgs-pyisis", isis9["distribution"])
+        self.assertEqual("1.3.0rc1", isis9["package_version"])
+        self.assertEqual("9.0.0", isis9["isis_version"])
+        self.assertEqual("cp312", isis9["python_abi"])
+
+        self.assertEqual(isis10_project["name"], isis10["distribution"])
+        self.assertEqual(isis10_project["version"], isis10["package_version"])
+        self.assertEqual("10.0.0", isis10["isis_version"])
+        self.assertEqual("cp313", isis10["python_abi"])
+        self.assertEqual(
+            "usgs-pyisis-runtime-isis10-win64",
+            isis10["runtime_distribution"],
+        )
+        for release in (isis9, isis10):
+            self.assertTrue(release["prerelease"])
+            for key in ("notes_file", "linux_install_file", "windows_install_file"):
+                self.assertTrue((self.repo_root / release[key]).is_file())
 
     def test_scikit_build_wheel_metadata(self):
         pyproject = self.load_pyproject()

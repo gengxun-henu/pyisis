@@ -18,6 +18,14 @@ on:
         required: false
         default: false
         type: boolean
+      release_line:
+        description: "Versioned package line to publish"
+        required: false
+        default: isis10
+        type: choice
+        options:
+          - isis9
+          - isis10
   pull_request:
     paths:
       - "CMakeLists.txt"
@@ -620,7 +628,10 @@ jobs:
     needs:
       - linux-cp312-build
       - linux-cp312-clean-install
+      - linux-isis10-cp313-build
+      - linux-isis10-cp313-clean-install
       - windows-cp312
+      - windows-isis10-cp313
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     permissions:
@@ -639,8 +650,12 @@ jobs:
           from pathlib import Path
           import tomllib
 
+          release_line = "${{ github.event.inputs.release_line }}"
+          if release_line not in {"isis9", "isis10"}:
+              raise ValueError(f"Unsupported release line: {release_line}")
+          manifest = Path("packaging/releases") / f"{release_line}.toml"
           release = tomllib.loads(
-              Path("packaging/release.toml").read_text(encoding="utf-8")
+              manifest.read_text(encoding="utf-8")
           )["release"]
           values = {
               "PACKAGE_VERSION": release["package_version"],
@@ -650,6 +665,13 @@ jobs:
               "PYTHON_ABI": release["python_abi"],
               "LINUX_PLATFORM": release["linux_platform"],
               "WINDOWS_PLATFORM": release["windows_platform"],
+              "DISTRIBUTION_NORMALIZED": release["distribution"].replace("-", "_"),
+              "RUNTIME_DISTRIBUTION_NORMALIZED": release[
+                  "runtime_distribution"
+              ].replace("-", "_"),
+              "MINIMAL_DATA_VERSION": release["minimal_data_version"],
+              "LINUX_ARTIFACT": release["linux_artifact"],
+              "WINDOWS_ARTIFACT": release["windows_artifact"],
               "RELEASE_PRERELEASE": str(release["prerelease"]).lower(),
               "LINUX_ASSET": release["linux_asset"],
               "WINDOWS_ASSET": release["windows_asset"],
@@ -664,16 +686,32 @@ jobs:
                   stream.write(f"{key}={value}\n")
           PY
 
-      - name: Download validated Linux wheelhouse
+      - name: Download validated ISIS 9 Linux wheelhouse
+        if: ${{ github.event.inputs.release_line == 'isis9' }}
         uses: actions/download-artifact@v4
         with:
           name: usgs-pyisis-linux-cp312-manylinux-wheelhouse
           path: release-input/linux/wheelhouse
 
-      - name: Download validated Windows wheelhouse
+      - name: Download validated ISIS 9 Windows wheelhouse
+        if: ${{ github.event.inputs.release_line == 'isis9' }}
         uses: actions/download-artifact@v4
         with:
           name: usgs-pyisis-windows-cp312-wheels
+          path: release-input/windows/wheelhouse
+
+      - name: Download validated ISIS 10 Linux wheelhouse
+        if: ${{ github.event.inputs.release_line == 'isis10' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-linux-cp313-manylinux-wheelhouse
+          path: release-input/linux/wheelhouse
+
+      - name: Download validated ISIS 10 Windows wheelhouse
+        if: ${{ github.event.inputs.release_line == 'isis10' }}
+        uses: actions/download-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-windows-cp313-wheels
           path: release-input/windows/wheelhouse
 
       - name: Validate release wheel sets
@@ -683,13 +721,13 @@ jobs:
           linux_wheelhouse="release-input/linux/wheelhouse"
           windows_wheelhouse="release-input/windows/wheelhouse"
 
-          test -f "$linux_wheelhouse/usgs_pyisis-${PACKAGE_VERSION}-${PYTHON_ABI}-${PYTHON_ABI}-${LINUX_PLATFORM}.whl"
-          test -f "$linux_wheelhouse/usgs_pyisis_isisdata_minimal-${PACKAGE_VERSION}-py3-none-any.whl"
+          test -f "$linux_wheelhouse/${DISTRIBUTION_NORMALIZED}-${PACKAGE_VERSION}-${PYTHON_ABI}-${PYTHON_ABI}-${LINUX_PLATFORM}.whl"
+          test -f "$linux_wheelhouse/usgs_pyisis_isisdata_minimal-${MINIMAL_DATA_VERSION}-py3-none-any.whl"
           test "$(find "$linux_wheelhouse" -maxdepth 1 -type f -name '*.whl' | wc -l)" -eq 2
 
-          test -f "$windows_wheelhouse/usgs_pyisis-${PACKAGE_VERSION}-${PYTHON_ABI}-${PYTHON_ABI}-${WINDOWS_PLATFORM}.whl"
-          test -f "$windows_wheelhouse/usgs_pyisis_runtime_win64-${PACKAGE_VERSION}-py3-none-${WINDOWS_PLATFORM}.whl"
-          test -f "$windows_wheelhouse/usgs_pyisis_isisdata_minimal-${PACKAGE_VERSION}-py3-none-any.whl"
+          test -f "$windows_wheelhouse/${DISTRIBUTION_NORMALIZED}-${PACKAGE_VERSION}-${PYTHON_ABI}-${PYTHON_ABI}-${WINDOWS_PLATFORM}.whl"
+          test -f "$windows_wheelhouse/${RUNTIME_DISTRIBUTION_NORMALIZED}-${PACKAGE_VERSION}-py3-none-${WINDOWS_PLATFORM}.whl"
+          test -f "$windows_wheelhouse/usgs_pyisis_isisdata_minimal-${MINIMAL_DATA_VERSION}-py3-none-any.whl"
           test "$(find "$windows_wheelhouse" -maxdepth 1 -type f -name '*.whl' | wc -l)" -eq 3
 
       - name: Assemble release archives and checksums

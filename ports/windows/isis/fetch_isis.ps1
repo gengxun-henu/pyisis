@@ -38,7 +38,7 @@ function Update-GitSparseCheckout {
 }
 
 if (-not $SourceDir) {
-    $SourceDir = Get-DefaultIsisSourceDir
+    $SourceDir = Get-DefaultIsisSourceDir -Version $Ref
 }
 $SourceDir = Resolve-FullPath $SourceDir
 $externalDir = Split-Path -Parent $SourceDir

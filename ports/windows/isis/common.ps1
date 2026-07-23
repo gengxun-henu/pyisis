@@ -36,8 +36,9 @@ function Invoke-CheckedCommand {
 }
 
 function Get-DefaultIsisSourceDir {
+    param([string]$Version = "9.0.0")
     $repoRoot = Get-RepoRoot
-    return Join-Path $repoRoot "build\windows\external\isis-9.0.0-src"
+    return Join-Path $repoRoot "build\windows\external\isis-$Version-src"
 }
 
 function Get-DefaultIsisBuildDir {

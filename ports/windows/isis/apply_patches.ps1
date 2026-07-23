@@ -1,4 +1,7 @@
-param([string]$SourceDir)
+param(
+    [string]$SourceDir,
+    [string]$PatchDir
+)
 
 . "$PSScriptRoot\common.ps1"
 
@@ -8,15 +11,18 @@ if (-not $SourceDir) {
     $SourceDir = Get-DefaultIsisSourceDir
 }
 $SourceDir = Resolve-FullPath $SourceDir
-$patchDir = Join-Path $PSScriptRoot "patches"
+if (-not $PatchDir) {
+    $PatchDir = Join-Path $PSScriptRoot "patches"
+}
+$PatchDir = Resolve-FullPath $PatchDir
 
 if (-not (Test-Path (Join-Path $SourceDir ".git"))) {
     Fail "ISIS source checkout not found: $SourceDir"
 }
 
-$patches = @(Get-ChildItem -Path $patchDir -Filter "*.patch" | Sort-Object Name)
+$patches = @(Get-ChildItem -Path $PatchDir -Filter "*.patch" | Sort-Object Name)
 if ($patches.Count -eq 0) {
-    Write-Step "no patch files found in $patchDir"
+    Write-Step "no patch files found in $PatchDir"
     exit 0
 }
 

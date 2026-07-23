@@ -388,14 +388,14 @@ jobs:
         if: ${{ steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' }}
         run: |
           . .\ports\windows\activate_msvc.ps1
-          .\ports\windows\isis\fetch_isis_900.ps1
+          .\ports\windows\isis\fetch_isis.ps1
           .\ports\windows\isis\apply_patches.ps1
           .\ports\windows\isis\configure_isis.ps1
           .\ports\windows\isis\build_isis.ps1
           .\ports\windows\isis\install_isis.ps1
 
       - name: Verify ISIS 9.0.0 Windows prefix
-        run: .\ports\windows\isis\verify_isis_prefix.ps1 -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+        run: .\ports\windows\isis\verify_isis_prefix.ps1 -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX -ExpectedVersion 9.0.0
 
       - name: Report ISIS 9.0.0 Windows prefix size
         run: |
@@ -436,6 +436,7 @@ jobs:
           & "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" tools\packaging\test_wheel_install.py `
             --wheelhouse $env:WHEELHOUSE `
             --venv $venv `
+            --expected-isis-version 9.0.0 `
             --test-list tools\packaging\basic_tests.txt
 
       - name: Check wheel metadata
@@ -474,6 +475,144 @@ jobs:
           name: usgs-pyisis-windows-cp312-wheels
           if-no-files-found: error
           path: wheelhouse/*.whl
+
+  windows-isis10-cp313:
+    name: Build ISIS 10 Windows cp313 wheels
+    runs-on: windows-2022
+    timeout-minutes: 360
+    permissions:
+      contents: read
+
+    defaults:
+      run:
+        shell: pwsh
+
+    env:
+      PYISIS_WINDOWS_ISIS_PREFIX: ${{ github.workspace }}\build\windows\isis10-prefix
+      PYISIS_WINDOWS_ISIS_SOURCE: ${{ github.workspace }}\build\windows\external\isis-10.0.0-src
+      PYISIS_WINDOWS_ISIS_BUILD: ${{ github.workspace }}\build\windows\isis10-build
+      WHEELHOUSE: ${{ github.workspace }}\wheelhouse-isis10-windows
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python for packaging checks
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Set up Windows ISIS 10 build environment
+        uses: mamba-org/setup-micromamba@v3
+        with:
+          environment-file: ports/windows/env/pyisis-isis10-win64.yml
+          cache-environment: true
+          init-shell: powershell
+
+      - name: Resolve Windows ISIS 10 dependency prefix
+        run: |
+          $prefix = (& python -c "import sys; print(sys.prefix)").Trim()
+          $env:CONDA_PREFIX = $prefix
+          "CONDA_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "PYISIS_WINDOWS_DEP_PREFIX=$prefix" | Out-File -FilePath $env:GITHUB_ENV -Append
+          "$prefix" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Scripts" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\usr\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\Library\mingw-w64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+          "$prefix\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
+
+      - name: Activate MSVC and build SpiceQL 1.3.0
+        run: |
+          . .\ports\windows\activate_msvc.ps1
+          .\ports\windows\isis\build_spiceql.ps1 -Ref 1.3.0 -Jobs 2
+
+      - name: Restore cached ISIS 10.0.0 Windows prefix
+        id: windows-isis10-prefix-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: build/windows/isis10-prefix
+          key: windows-2022-isis-10.0.0-prefix-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis10-win64.yml', 'ports/windows/isis/**') }}
+
+      - name: Build ISIS 10.0.0 Windows prefix
+        if: ${{ steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' }}
+        run: |
+          . .\ports\windows\activate_msvc.ps1
+          .\ports\windows\isis\fetch_isis.ps1 `
+            -Ref 10.0.0 `
+            -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE
+          .\ports\windows\isis\apply_patches.ps1 `
+            -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
+            -PatchDir .\ports\windows\isis\patches\10.0.0
+          .\ports\windows\isis\configure_isis.ps1 `
+            -SourceDir $env:PYISIS_WINDOWS_ISIS_SOURCE `
+            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
+            -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+          .\ports\windows\isis\build_isis.ps1 `
+            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD `
+            -Jobs 2
+          .\ports\windows\isis\install_isis.ps1 `
+            -BuildDir $env:PYISIS_WINDOWS_ISIS_BUILD
+
+      - name: Verify ISIS 10.0.0 Windows prefix
+        run: |
+          .\ports\windows\isis\verify_isis_prefix.ps1 `
+            -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+            -ExpectedVersion 10.0.0
+
+      - name: Save ISIS 10.0.0 Windows prefix cache
+        if: >-
+          ${{
+            steps.windows-isis10-prefix-cache.outputs.cache-hit != 'true' &&
+            (
+              github.event_name == 'workflow_dispatch' ||
+              github.event.pull_request.head.repo.full_name == github.repository
+            )
+          }}
+        uses: actions/cache/save@v6
+        with:
+          path: build/windows/isis10-prefix
+          key: ${{ steps.windows-isis10-prefix-cache.outputs.cache-primary-key }}
+
+      - name: Build ISIS 10 Windows wheelhouse
+        run: |
+          .\tools\packaging\build_wheels.ps1 `
+            -IsisPrefix $env:PYISIS_WINDOWS_ISIS_PREFIX `
+            -OutputDir $env:WHEELHOUSE `
+            -PythonExecutable "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" `
+            -DependencyPrefix $env:PYISIS_WINDOWS_DEP_PREFIX `
+            -BindingProjectDir packaging\bindings-isis10 `
+            -DistributionName usgs-pyisis-isis10 `
+            -RuntimeDistribution usgs-pyisis-runtime-isis10-win64 `
+            -PackageVersion 1.4.0rc1
+
+      - name: Test isolated ISIS 10 Windows wheel install
+        run: |
+          $venv = Join-Path $env:GITHUB_WORKSPACE "build\packaging\isis10-windows-pip-smoke-venv"
+          if (Test-Path -LiteralPath $venv) {
+            Remove-Item -LiteralPath $venv -Recurse -Force
+          }
+          & "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" tools\packaging\test_wheel_install.py `
+            --wheelhouse $env:WHEELHOUSE `
+            --venv $venv `
+            --package usgs-pyisis-isis10 `
+            --expected-isis-version 10.0.0 `
+            --test-list tools\packaging\basic_tests.txt
+
+      - name: Check ISIS 10 Windows wheel metadata
+        run: |
+          .\tools\packaging\publish_testpypi.ps1 `
+            -Wheelhouse $env:WHEELHOUSE `
+            -PythonExecutable "$env:PYISIS_WINDOWS_DEP_PREFIX\python.exe" `
+            -CheckOnly
+
+      - name: Upload ISIS 10 Windows wheel artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-windows-cp313-wheels
+          if-no-files-found: error
+          path: wheelhouse-isis10-windows/*.whl
 
   github-release:
     name: Publish configured GitHub Release

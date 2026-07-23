@@ -1,4 +1,7 @@
-param([string]$Prefix)
+param(
+    [string]$Prefix,
+    [string]$ExpectedVersion
+)
 
 . "$PSScriptRoot\common.ps1"
 
@@ -37,6 +40,15 @@ $coreDll = Join-Path $runtimeDir "isis.dll"
 if (-not (Test-Path $coreHeader)) { Fail "missing core header: $coreHeader" }
 if (-not (Test-Path $coreLib)) { Fail "missing core import library: $coreLib" }
 if (-not (Test-Path $coreDll)) { Fail "missing core runtime DLL: $coreDll" }
+
+$versionFile = Join-Path $Prefix "isis_version.txt"
+if (-not (Test-Path $versionFile)) {
+    Fail "missing ISIS version file: $versionFile"
+}
+$versionLine = (Get-Content -LiteralPath $versionFile -TotalCount 1).Trim()
+if ($ExpectedVersion -and $versionLine -notmatch "^$([regex]::Escape($ExpectedVersion))(\D|$)") {
+    Fail "ISIS prefix version mismatch: expected $ExpectedVersion, found $versionLine"
+}
 
 function Ensure-AppXmlExeAliases {
     param([Parameter(Mandatory = $true)][string]$Prefix)
@@ -131,4 +143,5 @@ Write-Step "ISIS prefix verified: $Prefix"
 Write-Step "include: $includeDir"
 Write-Step "lib: $libDir"
 Write-Step "runtime: $runtimeDir"
+Write-Step "version: $versionLine"
 Write-Step "application XML .exe aliases created: $createdXmlAliases"

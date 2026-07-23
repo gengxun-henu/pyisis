@@ -159,11 +159,37 @@ def _copy_dependency_closure(
                 queue.append(source)
 
 
+def _set_project_identity(
+    stage_dir: Path,
+    distribution_name: str,
+    package_version: str,
+) -> None:
+    pyproject = stage_dir / "pyproject.toml"
+    payload = pyproject.read_text(encoding="utf-8")
+    payload, name_count = re.subn(
+        r'(?m)^name = "[^"]+"$',
+        f'name = "{distribution_name}"',
+        payload,
+        count=1,
+    )
+    payload, version_count = re.subn(
+        r'(?m)^version = "[^"]+"$',
+        f'version = "{package_version}"',
+        payload,
+        count=1,
+    )
+    if name_count != 1 or version_count != 1:
+        raise ValueError(f"Unable to update runtime project identity in {pyproject}")
+    pyproject.write_text(payload, encoding="utf-8")
+
+
 def stage_runtime(
     isis_prefix: Path,
     stage_dir: Path,
     dependency_prefixes: tuple[Path, ...] = (),
     dependency_copy_mode: str = "closure",
+    distribution_name: str = "usgs-pyisis-runtime-win64",
+    package_version: str = "1.3.0rc1",
 ) -> Path:
     """Copy redistributable runtime files into a generated package stage."""
 
@@ -179,6 +205,7 @@ def stage_runtime(
     if stage_dir.exists():
         shutil.rmtree(stage_dir)
     shutil.copytree(template_root, stage_dir)
+    _set_project_identity(stage_dir, distribution_name, package_version)
 
     vendor_root = stage_dir / "src" / "pyisis_runtime" / "vendor" / "isis"
     _copy_patterns(isis_prefix, vendor_root, RUNTIME_PATTERNS)
@@ -217,6 +244,11 @@ def main() -> int:
         default="closure",
     )
     parser.add_argument("--stage-dir", required=True, type=Path)
+    parser.add_argument(
+        "--distribution-name",
+        default="usgs-pyisis-runtime-win64",
+    )
+    parser.add_argument("--package-version", default="1.3.0rc1")
     args = parser.parse_args()
 
     stage_runtime(
@@ -224,6 +256,8 @@ def main() -> int:
         args.stage_dir.resolve(),
         tuple(path.resolve() for path in args.dependency_prefix),
         args.dependency_copy_mode,
+        args.distribution_name,
+        args.package_version,
     )
     return 0
 

@@ -16,6 +16,7 @@ Updated: 2026-07-22  Geng Xun kept clean-wheel binding tests independent of NumP
 Updated: 2026-07-23  Geng Xun covered Linux runtime size budgets and audited platform retagging.
 Updated: 2026-07-23  Geng Xun required PEP 639-capable setuptools for Windows wheel builds.
 Updated: 2026-07-23  Geng Xun covered versioned package and ISIS runtime checks during clean installs.
+Updated: 2026-07-23  Geng Xun covered parameterized ISIS 9/10 Windows wheel builds.
 """
 
 from __future__ import annotations
@@ -51,9 +52,16 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("--dependency-copy-mode closure", script)
         self.assertIn("wheel tags --platform-tag win_amd64", script)
         self.assertIn("packaging\\isisdata-minimal", script)
-        self.assertIn("build\\packaging\\usgs-pyisis-runtime-win64", script)
-        self.assertIn("usgs_pyisis_runtime_win64-*-py3-none-any.whl", script)
-        self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)
+        self.assertIn("build\\packaging\\$RuntimeDistribution", script)
+        self.assertIn('$RuntimeDistribution.Replace("-", "_")', script)
+        self.assertIn(
+            "-m build $BindingProjectDir --wheel --no-isolation "
+            "--skip-dependency-check",
+            script,
+        )
+        self.assertIn('$DistributionName.Replace("-", "_")', script)
+        self.assertIn("--distribution-name $RuntimeDistribution", script)
+        self.assertIn("--package-version $PackageVersion", script)
 
     def test_linux_build_wheels_script_runs_runtime_and_main_wheel_steps(self):
         self.assertTrue(LINUX_BUILD_WHEELS_SCRIPT.is_file())
@@ -85,11 +93,12 @@ class PackagingToolsUnitTest(unittest.TestCase):
         )
 
     def test_windows_patch_queue_avoids_no_newline_only_hunks(self):
-        patch_paths = sorted(WINDOWS_ISIS_PATCHES_DIR.glob("*.patch"))
+        patch_paths = sorted(WINDOWS_ISIS_PATCHES_DIR.glob("**/*.patch"))
         self.assertTrue(patch_paths)
 
         patches = {
-            patch_path.name: patch_path.read_text(encoding="utf-8")
+            patch_path.relative_to(WINDOWS_ISIS_PATCHES_DIR).as_posix():
+                patch_path.read_text(encoding="utf-8")
             for patch_path in patch_paths
         }
         for patch_name, patch in patches.items():
@@ -104,6 +113,36 @@ class PackagingToolsUnitTest(unittest.TestCase):
             "@@ -3040,4 +3039,4",
             patches["0004-windows-isis-core-msvc-portability.patch"],
         )
+
+    def test_isis10_windows_port_has_versioned_environment_and_patch_queue(self):
+        env_file = (
+            PROJECT_ROOT
+            / "ports"
+            / "windows"
+            / "env"
+            / "pyisis-isis10-win64.yml"
+        )
+        spiceql_script = (
+            PROJECT_ROOT / "ports" / "windows" / "isis" / "build_spiceql.ps1"
+        )
+        patch_dir = WINDOWS_ISIS_PATCHES_DIR / "10.0.0"
+
+        self.assertTrue(env_file.is_file())
+        environment = env_file.read_text(encoding="utf-8")
+        self.assertIn("python=3.13", environment)
+        self.assertIn("qt6-main", environment)
+        self.assertIn("pcl", environment)
+        self.assertIn("cereal", environment)
+
+        self.assertTrue(spiceql_script.is_file())
+        spiceql = spiceql_script.read_text(encoding="utf-8")
+        self.assertIn("DOI-USGS/SpiceQL.git", spiceql)
+        self.assertIn("SPICEQL_BUILD_TESTS=OFF", spiceql)
+        self.assertIn("SpiceQL.dll", spiceql)
+
+        patch_paths = sorted(patch_dir.glob("*.patch"))
+        self.assertEqual(len(patch_paths), 1)
+        self.assertIn("isis/src/core/src/Pvl.cpp", patch_paths[0].read_text(encoding="utf-8"))
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

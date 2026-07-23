@@ -7,7 +7,7 @@ tracked patches, configure with MSVC and Ninja, build the SDK/runtime subset,
 install it into a local prefix, and verify the installed prefix. Source fetching
 defaults to a sparse Git checkout of the `9.0.0` tag because it keeps the source
 patchable and avoids GitHub archive resume issues seen on Windows. The archive
-path remains available with `fetch_isis_900.ps1 -Method archive`; it prefers
+path remains available with `fetch_isis.ps1 -Method archive`; it prefers
 `curl.exe` when available and falls back to PowerShell's `Invoke-WebRequest`.
 The default archive format is `tar.gz`; pass `-ArchiveFormat zip` to use zip
 extraction instead. The archive path supports `-DownloadTimeoutSeconds`,

@@ -12,6 +12,7 @@ Updated: 2026-07-23  Geng Xun covered trusted Windows ISIS prefix cache reuse.
 Updated: 2026-07-23  Geng Xun gated GitHub Release publication on validated platform wheelhouses.
 Updated: 2026-07-23  Geng Xun covered ISIS 10 cp313 manylinux build and clean-install jobs.
 Updated: 2026-07-23  Geng Xun covered measured ISIS 10 runtime size budgets.
+Updated: 2026-07-23  Geng Xun covered the ISIS 10 Windows source-build wheel gate.
 """
 
 from __future__ import annotations
@@ -85,7 +86,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         )
         self.assertEqual(
             workflow.count("ports\\windows\\isis\\verify_isis_prefix.ps1"),
-            1,
+            2,
         )
         self.assertIn("actions/cache/save@v6", workflow)
         self.assertIn("github.event_name == 'workflow_dispatch'", workflow)
@@ -163,6 +164,25 @@ class WheelWorkflowUnitTest(unittest.TestCase):
             'PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES: "550000000"',
             workflow,
         )
+
+    def test_workflow_builds_and_tests_isis10_cp313_windows_wheels(self):
+        workflow = self._workflow_text()
+
+        self.assertIn("windows-isis10-cp313:", workflow)
+        self.assertIn("ports/windows/env/pyisis-isis10-win64.yml", workflow)
+        self.assertIn("ports\\windows\\isis\\build_spiceql.ps1", workflow)
+        self.assertIn("-Ref 10.0.0", workflow)
+        self.assertIn("-PatchDir .\\ports\\windows\\isis\\patches\\10.0.0", workflow)
+        self.assertIn("-ExpectedVersion 10.0.0", workflow)
+        self.assertIn("-BindingProjectDir packaging\\bindings-isis10", workflow)
+        self.assertIn("-DistributionName usgs-pyisis-isis10", workflow)
+        self.assertIn(
+            "-RuntimeDistribution usgs-pyisis-runtime-isis10-win64",
+            workflow,
+        )
+        self.assertIn("-PackageVersion 1.4.0rc1", workflow)
+        self.assertIn("--package usgs-pyisis-isis10", workflow)
+        self.assertIn("usgs-pyisis-isis10-windows-cp313-wheels", workflow)
 
     def test_workflow_can_publish_configured_release_after_platform_gates(self):
         workflow = self._workflow_text()

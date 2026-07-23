@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "repository": "https://github.com/USGS-Astrogeology/ISIS3.git",
+  "revision": "9.0.0",
+  "commit": "950a5606ffeaa13ddb40101fbf25a8737e88902a",
+  "destination": "reference/upstream_isis/9.0.0"
+}

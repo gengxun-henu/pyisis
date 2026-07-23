@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-07-22
-Last Modified: 2026-07-22
+Last Modified: 2026-07-23
 Updated: 2026-07-22  Geng Xun added lock validation and optional-mirror workflow coverage.
+Updated: 2026-07-23  Geng Xun added ISIS 9/10 versioned lock and selector coverage.
 """
 
 from __future__ import annotations
@@ -21,6 +22,8 @@ import unittest
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 SYNC_TOOL = PROJECT_ROOT / "tools" / "dev" / "sync_upstream_isis.py"
 LOCK_FILE = PROJECT_ROOT / "reference" / "upstream_isis.lock.json"
+ISIS9_LOCK_FILE = PROJECT_ROOT / "reference" / "upstream_isis-9.lock.json"
+ISIS10_LOCK_FILE = PROJECT_ROOT / "reference" / "upstream_isis-10.lock.json"
 AUTOFILL_WORKFLOW = PROJECT_ROOT / ".github" / "workflows" / "autofill-pybind-task-issue.yml"
 
 
@@ -47,6 +50,51 @@ class UpstreamReferenceToolUnitTest(unittest.TestCase):
         self.assertEqual(payload["revision"], "9.0.0")
         self.assertEqual(payload["commit"], "950a5606ffeaa13ddb40101fbf25a8737e88902a")
         self.assertEqual(payload["destination"], "reference/upstream_isis")
+
+    def test_versioned_locks_pin_official_isis_releases(self):
+        expected = {
+            ISIS9_LOCK_FILE: (
+                "9.0.0",
+                "950a5606ffeaa13ddb40101fbf25a8737e88902a",
+                "reference/upstream_isis/9.0.0",
+            ),
+            ISIS10_LOCK_FILE: (
+                "10.0.0",
+                "524eec10a7b0ffa2c591fb7f8bc82b3223bc6904",
+                "reference/upstream_isis/10.0.0",
+            ),
+        }
+
+        for lock_file, values in expected.items():
+            with self.subTest(lock_file=lock_file.name):
+                payload = json.loads(lock_file.read_text(encoding="utf-8"))
+                self.assertEqual(
+                    (
+                        payload["revision"],
+                        payload["commit"],
+                        payload["destination"],
+                    ),
+                    values,
+                )
+
+    def test_version_selector_resolves_versioned_lock_files(self):
+        self.assertEqual(self.module.DEFAULT_LOCK_FILE, ISIS9_LOCK_FILE)
+        self.assertEqual(self.module.LEGACY_LOCK_FILE, LOCK_FILE)
+        self.assertEqual(self.module.lock_file_for_version("9.0.0"), ISIS9_LOCK_FILE)
+        self.assertEqual(self.module.lock_file_for_version("10.0.0"), ISIS10_LOCK_FILE)
+
+        with self.assertRaisesRegex(ValueError, "Unsupported ISIS version"):
+            self.module.lock_file_for_version("11.0.0")
+
+    def test_cli_lists_supported_versions(self):
+        completed = subprocess.run(
+            [sys.executable, str(SYNC_TOOL), "--list-versions"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+
+        self.assertEqual(completed.stdout.splitlines(), ["9.0.0", "10.0.0"])
 
     def test_load_spec_rejects_destination_outside_project(self):
         with tempfile.TemporaryDirectory() as temp_dir:
@@ -86,6 +134,22 @@ class UpstreamReferenceToolUnitTest(unittest.TestCase):
             self.assertTrue(present)
             self.assertIn("unmanaged local snapshot", message)
             self.assertEqual((destination / "local-source.cpp").read_text(), "local")
+
+    def test_version_container_is_not_treated_as_legacy_snapshot(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            destination = Path(temp_dir) / "reference" / "upstream_isis"
+            (destination / "9.0.0").mkdir(parents=True)
+            spec = self.module.UpstreamSpec(
+                "https://example.invalid/upstream.git",
+                "9.0.0",
+                "a" * 40,
+                destination,
+            )
+
+            present, message = self.module.destination_status(spec)
+
+            self.assertFalse(present)
+            self.assertIn("version container", message)
 
     def test_restore_clones_and_checks_out_pinned_commit(self):
         with tempfile.TemporaryDirectory() as temp_dir:

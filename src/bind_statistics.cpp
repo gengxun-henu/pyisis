@@ -6,6 +6,7 @@
 // Updated: 2026-04-10  Geng Xun added GaussianStretch binding
 // Updated: 2026-04-10  Geng Xun removed the duplicate GaussianStretch registration here and kept the canonical binding in src/base/bind_base_filters.cpp.
 // Updated: 2026-04-14  Geng Xun added OverlapStatistics extent accessors, set_mincount, min_count, and is_valid.
+// Updated: 2026-07-23  Geng Xun made the include order safe for Qt6 and Python 3.13.
 // Purpose: pybind11 bindings for ISIS statistics, histogram, grouped-statistics, multivariate-statistics, and vector-filter utilities
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -14,10 +15,10 @@
 #include <stdexcept>
 #include <vector>
 
-#include <QVector>
-
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
+#include <QVector>
 
 #include "Cube.h"
 #include "Camera.h"

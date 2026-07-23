@@ -12,6 +12,7 @@
 // Updated: 2026-04-12  Geng Xun exposed the LroNarrowAngleCamera Cube constructor to finish the current low-risk mission-camera rollout queue.
 // Updated: 2026-04-14  Geng Xun completed CTXCamera, HiriseCamera, MocNarrowAngleCamera, CrismCamera, MarciCamera constructor + SPICE ID + band methods.
 // Updated: 2026-04-14  Geng Xun completed MdisCamera and MsiCamera Cube constructors + shutter_open_close_times + SPICE ID methods.
+// Updated: 2026-07-23  Geng Xun made the include order safe for Qt6 and Python 3.13.
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -21,11 +22,11 @@
 #include <utility>
 #include <vector>
 
-#include <QList>
-#include <QPointF>
-
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
+#include <QList>
+#include <QPointF>
 
 #include "ApolloMetricCamera.h"
 #include "ApolloMetricDistortionMap.h"

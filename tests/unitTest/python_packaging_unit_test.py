@@ -15,6 +15,7 @@ Updated: 2026-06-19  Geng Xun renamed public wheel distributions to the usgs-pyi
 Updated: 2026-06-19  Geng Xun added Linux runtime package metadata coverage.
 Updated: 2026-07-22  Geng Xun covered relocatable Linux wheel RPATH configuration.
 Updated: 2026-07-23  Geng Xun aligned package metadata with the ISIS 9.0.0 release manifest.
+Updated: 2026-07-23  Geng Xun covered Qt discovery from the separate Windows dependency prefix.
 """
 
 import importlib
@@ -126,6 +127,21 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         self.assertNotIn(
             "find_package(Python3 REQUIRED COMPONENTS Interpreter Development)",
             cmake_lists,
+        )
+
+    def test_cmake_finds_windows_qt_in_the_dependency_prefix(self):
+        cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
+
+        dependency_qt_root = (
+            '"$ENV{PYISIS_DEP_PREFIX}/Library/lib/cmake"'
+        )
+        isis_qt_root = '"${ISIS_PREFIX}/Library/lib/cmake"'
+
+        self.assertIn(dependency_qt_root, cmake_lists)
+        self.assertIn(isis_qt_root, cmake_lists)
+        self.assertLess(
+            cmake_lists.index(dependency_qt_root),
+            cmake_lists.index(isis_qt_root),
         )
 
     def test_cmake_honors_scikit_build_wheel_staging_paths(self):

@@ -1,6 +1,7 @@
 # ISIS 9 / ISIS 10 双版本绑定与跨平台发布规划
 
-> 状态：总体路线已确认，待按阶段实施。
+> 状态：Linux 双版本源码兼容基线已在本机验证；CI、分版安装包和
+> Windows ISIS 10 仍待后续阶段实施。
 >
 > 更新日期：2026-07-23。本规划不表示 ISIS 10 已获得稳定支持；每条产品线
 > 仍需分别通过对应验收门槛。
@@ -165,6 +166,23 @@ ISIS 9 与 ISIS 10 分别从 USGS channel 安装精确版本，随后校验：
 
 Linux 开发环境与最终 manylinux wheel 构建环境分开：开发环境用于日常编译测试，manylinux 容器用于正式发行兼容性验证。
 
+截至 2026-07-23，本机已有两套可直接用于对比的开发环境：
+
+- `asp360_new`：Python 3.12.2、ISIS 9.0.0 `h1f94ec8_0`
+  (`usgs-astrogeology`)；
+- `asp370`：Python 3.13.14、ISIS 10.0.0 `asp_4`
+  (`nasa-ames-stereo-pipeline`)。
+
+切换产品线时必须同时把 `ISISROOT` 指向对应 conda prefix，并设置匹配的
+`ISISDATA` 和 binding build 目录。只更换 Python 解释器会继承 shell 中
+另一 ISIS 主版本的 plugin、ALE 和偏好路径，形成运行时混用。
+
+USGS channel 同期可解析到的 ISIS 10.0.0 `h1f94ec8_1` 也依赖 CPython
+3.13。因此第一轮 ISIS 10 Linux 编译验证直接使用 `asp370`，而 CPython
+3.12 wheel 不能在未解决 runtime prefix 与 Python ABI 解耦前直接承诺。
+可选路线是构建独立 ISIS 10 runtime prefix，或先把 ISIS 10 wheel 产品线
+调整到 CPython 3.13，二者需通过实际构建结果再决定。
+
 ### 5.3 Windows 环境
 
 Windows 环境分为两层：
@@ -234,11 +252,14 @@ conda 侧建议使用两个明确包名或 build variant：
 | OS | ISIS | Python | PR 检查 | 正式发布 |
 | --- | --- | --- | --- | --- |
 | Linux x86_64 | 9.0.0 | 3.12 | 编译、聚焦测试、smoke | manylinux wheelhouse、干净安装、完整基础测试 |
-| Linux x86_64 | 10.0.0 | 3.12 | 编译、API 差异测试、smoke | manylinux wheelhouse、干净安装、完整基础测试 |
+| Linux x86_64 | 10.0.0 | 3.13（官方 conda build）；3.12 待验证 | 编译、API 差异测试、smoke | manylinux wheelhouse、干净安装、完整基础测试 |
 | Windows x64 | 9.0.0 | 3.12 | prefix 缓存、编译、基础测试 | win_amd64 wheelhouse、干净安装、基础测试 |
 | Windows x64 | 10.0.0 | 3.12 | 移植阶段先手动/定时；稳定后纳入 PR | 通过发布门槛后才生成稳定 wheelhouse |
 
-第一阶段只支持 CPython 3.12。等四条产品线稳定后，再扩展 Python 3.10、3.11、3.13，避免同时放大 ISIS 和 Python 两个兼容维度。
+ISIS 9 和现有 wheel 继续以 CPython 3.12 为稳定基线。ISIS 10 Linux
+第一阶段先使用官方 conda build 要求的 CPython 3.13 完成源码兼容验证；
+正式 wheel 的 Python ABI 在 runtime prefix 路线确认后再冻结。除这两个
+必要版本外，暂不扩展 Python 3.10、3.11 等更多维度。
 
 ### 7.2 CI 分层
 
@@ -297,6 +318,26 @@ reference/compatibility/
 3. 对直接成员函数指针检查链接符号是否存在。
 4. 先保证现有公共 Python API 在 ISIS 10 下编译。
 5. 再绑定 ISIS 10 新增 API，不与兼容迁移混在同一个 PR。
+
+### 8.1 ISIS 10 新增绑定候选
+
+ISIS 10 新增类和函数使用独立目录维护：
+
+```text
+reference/isis10_bind_candidates/
+  README.md
+  classes_inventory_summary.csv
+  class_details/
+  functions_inventory.csv
+  excluded_new_headers.csv
+```
+
+该目录只记录 ISIS 10 相对 ISIS 9 新增的能力，不重复登记 ISIS 9 已绑定
+类。第一批建议评估 `IProj`、`Chandrayaan2OhrcCamera` 和
+`Chandrayaan2TmcCamera`；第二批再评估
+`OsirisRexOcamsOpenCVDistortionMap`、`csv2table`、`ocams2isis` 和
+`eisstitch`。`GdalIoHandler` 先设计 Python facade，不直接暴露裸
+`GDALDataset*`/Qt 指针接口。
 
 ## 9. 分阶段实施路线
 
@@ -422,18 +463,35 @@ Windows ISIS 10 移植适合使用独立 worktree 和功能分支，确认可行
   PyPI 和 conda 可用性。
 - [x] 先完成 Linux ISIS 10，再推进 Windows ISIS 10 源码移植。
 - [x] Windows ISIS 10 在全部门槛通过前标记为 `experimental`。
-- [x] 第一阶段只支持 CPython 3.12，稳定后再扩展其他 Python 版本。
+- [x] ISIS 9 保持 CPython 3.12；ISIS 10 Linux 先按官方 conda build 使用
+  CPython 3.13 验证，正式 wheel ABI 由 runtime prefix 实测决定。
 - [x] 正式 runtime 包优先发布到 GitHub Release，许可和体积审核通过后再
   决定 PyPI。
 
-## 14. 下一项实施工作
+## 14. 当前进度与下一项实施工作
 
-使用独立分支 `agent/isis10-source-audit` 和 worktree
-`.worktrees/isis10-source-audit`，只启动阶段 0 和阶段 1 的前半部分：
+2026-07-23 已在隔离分支和 worktree 完成：
 
-1. 锁定 ISIS 9.0.0 与 ISIS 10.0.0 的源码 commit 和 Linux conda build。
-2. 建立 Linux 双版本开发环境文件。
-3. 为当前已绑定 API 生成 ISIS 9/10 差异清单。
-4. 提交版本探测设计和测试，但暂不批量修改绑定实现。
+1. 锁定 ISIS 9.0.0 与 ISIS 10.0.0 的源码 commit，并生成当前绑定头文件
+   差异报告。
+2. CMake 从所选 Python 环境解析 pybind11，禁止静默混入另一个 conda
+   环境。
+3. 按目标 ISIS prefix 自动选择 Qt5/Qt6；ISIS 10 补充
+   `Qt6::Core5Compat`。
+4. 适配 `Endian.h`/`IEndian.h`、Cube label attachment、
+   `storesDnData()`、JP2Error/Kakadu 和 shape-model normal API 差异。
+5. 同一份源码在 `asp360_new`（ISIS 9/Python 3.12/Qt5）和 `asp370`
+   （ISIS 10/Python 3.13/Qt6）均完成 `_isis_core` 编译、链接、导入及
+   Cube I/O 聚焦测试。
+6. 建立独立的 ISIS 10 新增类/函数候选目录，不把工作限制为迁移 ISIS 9
+   已绑定 API。
 
-完成差异报告后，再根据真实不兼容项确定兼容层工作量和 Windows ISIS 10 移植范围。
+下一环节建议拆成两个独立 PR，避免把兼容基线和新增能力耦合：
+
+1. 先提交本轮双版本锁文件、审计工具、Linux 兼容层、候选目录和测试。
+2. 再建立 Linux 双版本 GitHub Actions 矩阵，并让日志明确输出 Python、
+   ISIS、Qt 和扩展产物路径。
+3. CI 稳定后，按候选目录先绑定 `IProj`，再绑定两项 Chandrayaan-2
+   camera；每一批分别在 ISIS 9/10 下验证公共导入面。
+4. Linux ISIS 10 稳定后，再进入 Windows ISIS 9 脚本参数化和 Windows
+   ISIS 10 实验性源码移植。

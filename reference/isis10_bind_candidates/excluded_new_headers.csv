@@ -1,0 +1,5 @@
+Header,Reason
+Fixtures.h,上游测试 fixture，不是运行时 API
+IEndian.h,Endian.h 的重命名兼容项，功能已由现有 ByteOrder 绑定覆盖
+RestfulSpice.h,当前公开内容为注释占位，没有可绑定的有效声明
+restincurl.h,第三方内部 HTTP 实现，不应成为 isis_pybind 公共 API

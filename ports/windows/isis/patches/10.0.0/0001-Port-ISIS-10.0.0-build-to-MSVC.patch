@@ -930,6 +930,15 @@ index 1a5b96329..85bec174e 100644
  
  #include <QDebug>
  #include <QDir>
+@@ -2226,7 +2228,7 @@ namespace Isis {
+ 
+           if (gdalDataset()) {
+-            CPLStringList metadata = CPLStringList(gdalDataset()->GetMetadata("json:ISIS3"), false);
++            CSLConstList metadata = gdalDataset()->GetMetadata("json:ISIS3");
+             const char *metadataJsonString = metadata[0];
+             nlohmann::ordered_json jsonblob = nlohmann::ordered_json::parse(metadataJsonString);
+ 
+             bool keyErased = jsonblob.erase(key.toStdString());
 @@ -2397,9 +2399,13 @@ namespace Isis {
        m_ioHandler = NULL;
      }
@@ -977,6 +986,15 @@ index 1a5b96329..85bec174e 100644
      initialize();
    }
  
+@@ -2946,7 +2964,7 @@ namespace Isis {
+       nlohmann::ordered_json jsonOut;
+ 
+       // Check for existing data, if there is data update it
+-      CPLStringList metadata = CPLStringList(gdalDataset()->GetMetadata("json:ISIS3"), false);
++      CSLConstList metadata = gdalDataset()->GetMetadata("json:ISIS3");
+ 
+       if (metadata[0] != nullptr) {
+         const char *metadataJsonString = metadata[0];
 diff --git a/isis/src/base/objs/CubeManager/CubeManager.cpp b/isis/src/base/objs/CubeManager/CubeManager.cpp
 index a80c7858f..4e3b97652 100644
 --- a/isis/src/base/objs/CubeManager/CubeManager.cpp

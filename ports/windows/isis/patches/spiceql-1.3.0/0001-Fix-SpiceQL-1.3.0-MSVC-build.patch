@@ -142,6 +142,13 @@ index 951b610..a91142f 100644
 @@ -124 +124 @@ namespace SpiceQL {
 -        files.push_back({k});
 +        files.push_back({k.string()});
+diff --git a/SpiceQL/src/spice_types.cpp b/SpiceQL/src/spice_types.cpp
+index 027ac7c..9c7f320 100644
+--- a/SpiceQL/src/spice_types.cpp
++++ b/SpiceQL/src/spice_types.cpp
+@@ -138 +138 @@ namespace SpiceQL {
+-      this->path = getDataDirectory() / fs::path(path);
++      this->path = (getDataDirectory() / fs::path(path)).string();
 diff --git a/SpiceQL/src/spiceql.cpp b/SpiceQL/src/spiceql.cpp
 index 89e8eab..8b88d99 100644
 --- a/SpiceQL/src/spiceql.cpp

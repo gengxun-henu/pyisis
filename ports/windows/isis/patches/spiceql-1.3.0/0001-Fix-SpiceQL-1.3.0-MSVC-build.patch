@@ -70,9 +70,12 @@ diff --git a/SpiceQL/include/restincurl.h b/SpiceQL/include/restincurl.h
 index 6818b03..1e05357 100644
 --- a/SpiceQL/include/restincurl.h
 +++ b/SpiceQL/include/restincurl.h
-@@ -50,5 +50,9 @@
+@@ -50,5 +50,12 @@
 +#ifdef _WIN32
 +#include <winsock2.h>
++#ifdef DELETE
++#undef DELETE
++#endif
 +#else
  #include <sys/select.h>
  #include <sys/time.h>

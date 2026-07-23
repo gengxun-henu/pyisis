@@ -37,6 +37,13 @@ index 0000000..43f2869
 +__int64 __cdecl _filelengthi64(int file_descriptor);
 +}
 +#endif
+diff --git a/SpiceQL/include/memo.h b/SpiceQL/include/memo.h
+index 0fe5435..4120ecb 100644
+--- a/SpiceQL/include/memo.h
++++ b/SpiceQL/include/memo.h
+@@ -108 +108 @@ namespace Memo {
+-                cache_dir = fs::temp_directory_path() / tempname / "spiceql_cache"; 
++                cache_dir = (fs::temp_directory_path() / tempname / "spiceql_cache").string();
 diff --git a/SpiceQL/src/api.cpp b/SpiceQL/src/api.cpp
 index 5dd1d04..5448984 100644
 --- a/SpiceQL/src/api.cpp
@@ -61,12 +68,48 @@ index 0d7ebb0..1931a1c 100644
 +#ifdef _WIN32
 +#undef VOID
 +#endif
+@@ -65 +68 @@ template <> struct fmt::formatter<fs::path> {
+-        p.c_str());
++        p.string());
 @@ -72,4 +76,4 @@ namespace SpiceQL {
    string gen_random(const int len) {
        size_t seed = 0;
 -      seed = Memo::hash_combine(seed, clock(), time(NULL), getpid());
 +      seed = Memo::hash_combine(seed, clock(), time(NULL), _getpid());
        srand(seed);
+@@ -141 +144 @@ namespace SpiceQL {
+-        temp = fs::path(f).filename();
++        temp = fs::path(f).filename().string();
+@@ -260 +263 @@ namespace SpiceQL {
+-    frmchg_((int *) &refFrame, (int *) &toFrame, &et, (doublereal *) stateCJ);
++    frmchg_((integer *) &refFrame, (integer *) &toFrame, &et, (doublereal *) stateCJ);
+@@ -278 +281 @@ namespace SpiceQL {
+-      refchg_((int *) &refFrame, (int *) &toFrame, &et, (doublereal *) CJ_spice);
++      refchg_((integer *) &refFrame, (integer *) &toFrame, &et, (doublereal *) CJ_spice);
+@@ -692 +695 @@ namespace SpiceQL {
+-      if (regex_search(f.c_str(), basic_regex(reg, regex_constants::optimize|regex_constants::ECMAScript)) && string(fs::path(f).filename()).at(0) != '.') {
++      if (regex_search(f.c_str(), basic_regex(reg, regex_constants::optimize|regex_constants::ECMAScript)) && fs::path(f).filename().string().at(0) != '.') {
+@@ -990 +993 @@ namespace SpiceQL {
+-         return spiceDataDir;
++         return spiceDataDir.string();
+@@ -994 +997 @@ namespace SpiceQL {
+-        return aleDataDir;
++        return aleDataDir.string();
+@@ -998 +1001 @@ namespace SpiceQL {
+-        return isisDataDir;
++        return isisDataDir.string();
+@@ -1025 +1028 @@ namespace SpiceQL {
+-    return dbPath; 
++    return dbPath.string();
+@@ -1032 +1035 @@ namespace SpiceQL {
+-    return glob(dbDir, ".json", false);
++    return glob(dbDir.string(), ".json", false);
+@@ -1053 +1056 @@ namespace SpiceQL {
+-        return p;
++        return p.string();
+@@ -1316 +1319 @@ namespace SpiceQL {
+-    return aliasMapPath; 
++    return aliasMapPath.string();
 diff --git a/SpiceQL/src/spiceql.cpp b/SpiceQL/src/spiceql.cpp
 index 89e8eab..8b88d99 100644
 --- a/SpiceQL/src/spiceql.cpp

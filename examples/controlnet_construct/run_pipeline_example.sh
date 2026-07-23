@@ -10,6 +10,7 @@
 # Updated: 2026-05-19  Geng Xun aligned ImageMatch config precedence and resolved config-relative deep matcher preset paths before forwarding.
 # Updated: 2026-05-20  Geng Xun documented preset-aware adaptive-routing config support for deep matcher preset selection.
 # Updated: 2026-05-27  Geng Xun added explicit OpenCV thread-limit forwarding through the example pipeline.
+# Updated: 2026-07-23  Geng Xun extracted JSON report summarization from the shell orchestrator.
 
 set -euo pipefail
 
@@ -44,32 +45,8 @@ summarize_image_overlap_report() {
     log "  image-overlap summary json: $report_path"
     return 0
   }
-  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-try:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-except Exception:
-    print(f"image-overlap summary json: {path}")
-    raise SystemExit(0)
-
-pair_count = payload.get("pair_count")
-image_count = payload.get("image_count")
-if pair_count is None:
-  pair_count = payload.get("overlap_pair_count")
-if image_count is None:
-  image_count = payload.get("input_count")
-parts = []
-if pair_count is not None:
-    parts.append(f"pairs={pair_count}")
-if image_count is not None:
-    parts.append(f"images={image_count}")
-parts.append(f"summary_json={path}")
-print("image-overlap summary: " + " ".join(parts))
-PY
+  "$PYTHON_EXECUTABLE" "$SCRIPT_DIR/pipeline_report_summary.py" \
+    image-overlap "$report_path"
 }
 
 summarize_image_match_result() {
@@ -79,32 +56,8 @@ summarize_image_match_result() {
     log "    image-match result json: $report_path"
     return 0
   }
-  "$PYTHON_EXECUTABLE" - "$pair_tag" "$report_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-pair_tag = sys.argv[1]
-path = Path(sys.argv[2])
-try:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-except Exception:
-    print(f"image-match {pair_tag}: result_json={path}")
-    raise SystemExit(0)
-
-parts = [f"pair={pair_tag}"]
-for key, label in (
-    ("point_count", "points"),
-    ("matched_tile_count", "matched_tiles"),
-    ("skipped_tile_count", "skipped_tiles"),
-    ("tile_count", "tiles"),
-):
-    value = payload.get(key)
-    if value is not None:
-        parts.append(f"{label}={value}")
-parts.append(f"result_json={path}")
-print("image-match summary: " + " ".join(parts))
-PY
+  "$PYTHON_EXECUTABLE" "$SCRIPT_DIR/pipeline_report_summary.py" \
+    image-match "$pair_tag" "$report_path"
 }
 
 summarize_controlnet_batch_report() {
@@ -113,30 +66,8 @@ summarize_controlnet_batch_report() {
     log "  pairwise ControlNet batch report: $report_path"
     return 0
   }
-  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-try:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-except Exception:
-    print(f"pairwise ControlNet batch report: {path}")
-    raise SystemExit(0)
-
-parts = []
-for key, label in (
-    ("pair_count", "pairs"),
-    ("total_final_control_point_count", "final_control_points"),
-    ("total_dom2ori_retained_count", "dom2ori_retained"),
-):
-    value = payload.get(key)
-    if value is not None:
-        parts.append(f"{label}={value}")
-parts.append(f"report_json={path}")
-print("pairwise ControlNet batch summary: " + " ".join(parts))
-PY
+  "$PYTHON_EXECUTABLE" "$SCRIPT_DIR/pipeline_report_summary.py" \
+    controlnet-batch "$report_path"
 }
 
 summarize_controlnet_merge_report() {
@@ -145,30 +76,8 @@ summarize_controlnet_merge_report() {
     log "  merge summary json: $report_path"
     return 0
   }
-  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-try:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-except Exception:
-    print(f"merge summary json: {path}")
-    raise SystemExit(0)
-
-parts = []
-for key, label in (
-    ("included_count", "included_nets"),
-    ("skipped_missing_count", "skipped_pairs"),
-):
-    value = payload.get(key)
-    if value is not None:
-        parts.append(f"{label}={value}")
-parts.append(f"script={payload.get('script_path', '')}")
-parts.append(f"report_json={path}")
-print("merge shell summary: " + " ".join(part for part in parts if not part.endswith('=')))
-PY
+  "$PYTHON_EXECUTABLE" "$SCRIPT_DIR/pipeline_report_summary.py" \
+    controlnet-merge "$report_path"
 }
 
 summarize_post_merge_report() {
@@ -177,29 +86,8 @@ summarize_post_merge_report() {
     log "  post-merge summary json: $report_path"
     return 0
   }
-  "$PYTHON_EXECUTABLE" - "$report_path" <<'PY'
-import json
-import sys
-from pathlib import Path
-
-path = Path(sys.argv[1])
-try:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-except Exception:
-    print(f"post-merge summary json: {path}")
-    raise SystemExit(0)
-
-parts = []
-for key, label in (
-    ("output_control_net", "output"),
-    ("point_count_after", "point_count_after"),
-):
-    value = payload.get(key)
-    if value is not None:
-        parts.append(f"{label}={value}")
-parts.append(f"report_json={path}")
-print("post-merge summary: " + " ".join(parts))
-PY
+  "$PYTHON_EXECUTABLE" "$SCRIPT_DIR/pipeline_report_summary.py" \
+    post-merge "$report_path"
 }
 
 

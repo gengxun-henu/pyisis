@@ -22,6 +22,19 @@ index 7bdc2ec..9124b7b 100644
                          PRIVATE
                          CSPICE::cspice
                          spdlog::spdlog_header_only
+diff --git a/SpiceQL/src/config.cpp b/SpiceQL/src/config.cpp
+index 1565d50..a83aa4d 100644
+--- a/SpiceQL/src/config.cpp
++++ b/SpiceQL/src/config.cpp
+@@ -143 +143 @@ namespace SpiceQL {
+-      if (fs::exists((string)fsDataPath + kernelPath.to_string())) {
++      if (fs::exists(fsDataPath.string() + kernelPath.to_string())) {
+@@ -148 +148 @@ namespace SpiceQL {
+-        if (fs::exists((string)fsDataPath + kernelPath.to_string())) {
++        if (fs::exists(fsDataPath.string() + kernelPath.to_string())) {
+@@ -153 +153 @@ namespace SpiceQL {
+-      vector<vector<string>> res = getPathsFromRegex(fsDataPath, jsonArrayToVector(eval_json[json_pointer]));
++      vector<vector<string>> res = getPathsFromRegex(fsDataPath.string(), jsonArrayToVector(eval_json[json_pointer]));
 diff --git a/SpiceQL/include/msvc_compat.h b/SpiceQL/include/msvc_compat.h
 new file mode 100644
 index 0000000..43f2869

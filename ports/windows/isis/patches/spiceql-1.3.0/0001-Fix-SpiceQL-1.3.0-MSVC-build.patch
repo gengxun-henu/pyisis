@@ -113,6 +113,35 @@ index 0d7ebb0..1931a1c 100644
 @@ -1316 +1319 @@ namespace SpiceQL {
 -    return aliasMapPath; 
 +    return aliasMapPath.string();
+diff --git a/SpiceQL/src/query.cpp b/SpiceQL/src/query.cpp
+index 951b610..a91142f 100644
+--- a/SpiceQL/src/query.cpp
++++ b/SpiceQL/src/query.cpp
+@@ -75,2 +75,2 @@ namespace SpiceQL {
+-      string fna = static_cast<fs::path>(a).filename();
+-      string fnb = static_cast<fs::path>(b).filename();
++      string fna = static_cast<fs::path>(a).filename().string();
++      string fnb = static_cast<fs::path>(b).filename().string();
+@@ -88 +88 @@ namespace SpiceQL {
+-    string extension = static_cast<fs::path>(kernels.at(0)).extension();
++    string extension = static_cast<fs::path>(kernels.at(0)).extension().string();
+@@ -92 +92 @@ namespace SpiceQL {
+-      string currentKernelExt = k.extension();
++      string currentKernelExt = k.extension().string();
+@@ -95 +95 @@ namespace SpiceQL {
+-        throw invalid_argument("The input extensions (" + (string)k.filename() + ") are not different versions of the same file " + kernels.at(0));
++        throw invalid_argument("The input extensions (" + k.filename().string() + ") are not different versions of the same file " + kernels.at(0));
+@@ -101,2 +101,2 @@ namespace SpiceQL {
+-        string fileName = firstVecElem.filename();
+-        string kernelName = k.filename();
++        string fileName = firstVecElem.filename().string();
++        string kernelName = k.filename().string();
+@@ -119 +119 @@ namespace SpiceQL {
+-          files[i].push_back(k);
++          files[i].push_back(k.string());
+@@ -124 +124 @@ namespace SpiceQL {
+-        files.push_back({k});
++        files.push_back({k.string()});
 diff --git a/SpiceQL/src/spiceql.cpp b/SpiceQL/src/spiceql.cpp
 index 89e8eab..8b88d99 100644
 --- a/SpiceQL/src/spiceql.cpp

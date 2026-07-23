@@ -116,7 +116,7 @@ jobs:
             native_wheel_count=$((native_wheel_count + 1))
             wheel_name="$(basename "$wheel" .whl)"
             report="$ABI_REPORT_DIR/auditwheel-${wheel_name}.txt"
-            auditwheel show "$wheel" 2>&1 | tee "$report"
+            env -u LD_LIBRARY_PATH auditwheel show "$wheel" 2>&1 | tee "$report"
           done
           test "$native_wheel_count" -eq 2
 
@@ -128,7 +128,7 @@ jobs:
             --runtime-wheel "$runtime_wheel" \
             --output "$audit_bundle"
           combined_report="$ABI_REPORT_DIR/auditwheel-combined-installed-layout.txt"
-          auditwheel show "$audit_bundle" 2>&1 | tee "$combined_report"
+          env -u LD_LIBRARY_PATH auditwheel show "$audit_bundle" 2>&1 | tee "$combined_report"
           "$PYTHON_BIN" tools/packaging/validate_auditwheel_policy.py \
             --report "$combined_report" \
             --target 2.35 \

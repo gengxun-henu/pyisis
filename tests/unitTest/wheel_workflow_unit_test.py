@@ -93,7 +93,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("--target-glibc 2.28", workflow)
         self.assertIn("--require-target", workflow)
         self.assertIn("--target 2.35", workflow)
-        self.assertIn("auditwheel show", workflow)
+        self.assertIn("env -u LD_LIBRARY_PATH auditwheel show", workflow)
         self.assertIn("build_linux_audit_bundle.py", workflow)
         self.assertIn("auditwheel-combined-installed-layout.txt", workflow)
         self.assertIn("validate_auditwheel_policy.py", workflow)

@@ -2,11 +2,10 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 7bdc2ec..9124b7b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -157,7 +157,14 @@ target_include_directories(SpiceQL
+@@ -157,7 +157,13 @@ target_include_directories(SpiceQL
 +  target_compile_options(SpiceQL
 +                         PRIVATE
-+                         $<$<CXX_COMPILER_ID:MSVC>:/FIio.h>
-+                         $<$<CXX_COMPILER_ID:MSVC>:/FIprocess.h>
++                         $<$<CXX_COMPILER_ID:MSVC>:/FImsvc_compat.h>
 +                         )
 +
    target_link_libraries(SpiceQL
@@ -17,3 +16,36 @@ index 7bdc2ec..9124b7b 100644
                          PRIVATE
                          CSPICE::cspice
                          spdlog::spdlog_header_only
+diff --git a/SpiceQL/include/msvc_compat.h b/SpiceQL/include/msvc_compat.h
+new file mode 100644
+index 0000000..f210678
+--- /dev/null
++++ b/SpiceQL/include/msvc_compat.h
+@@ -0,0 +1,14 @@
++#pragma once
++
++#ifdef _MSC_VER
++extern "C" {
++__int64 __cdecl _get_osfhandle(int file_descriptor);
++int __cdecl _isatty(int file_descriptor);
++__int64 __cdecl _filelengthi64(int file_descriptor);
++int __cdecl _getpid(void);
++}
++
++#ifndef getpid
++#define getpid _getpid
++#endif
++#endif
+diff --git a/SpiceQL/src/spiceql.cpp b/SpiceQL/src/spiceql.cpp
+index 89e8eab..e06ce2a 100644
+--- a/SpiceQL/src/spiceql.cpp
++++ b/SpiceQL/src/spiceql.cpp
+@@ -68,7 +68,7 @@ namespace SpiceQL {
+           auto max_size = 1048576 * 10;
+           auto max_files = 5;
+           try {
+-              auto logger = spdlog::rotating_logger_mt("spiceql_file_log", log_file, max_size, max_files);
++              auto logger = spdlog::rotating_logger_mt("spiceql_file_log", log_file.native(), max_size, max_files);
+           }
+           catch (const spdlog::spdlog_ex &ex) {
+               SPDLOG_ERROR("file log init failed: {}", ex.what());

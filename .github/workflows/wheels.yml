@@ -13,6 +13,11 @@ on:
         required: false
         default: false
         type: boolean
+      publish_github_release:
+        description: "Create the configured GitHub prerelease after all platform checks pass"
+        required: false
+        default: false
+        type: boolean
   pull_request:
     paths:
       - "CMakeLists.txt"
@@ -318,3 +323,130 @@ jobs:
           name: usgs-pyisis-windows-cp312-wheels
           if-no-files-found: error
           path: wheelhouse/*.whl
+
+  github-release:
+    name: Publish configured GitHub Release
+    if: ${{ github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' && github.event.inputs.publish_github_release == 'true' }}
+    needs:
+      - linux-cp312-build
+      - linux-cp312-clean-install
+      - windows-cp312
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Resolve release manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          import tomllib
+
+          release = tomllib.loads(
+              Path("packaging/release.toml").read_text(encoding="utf-8")
+          )["release"]
+          values = {
+              "PACKAGE_VERSION": release["package_version"],
+              "ISIS_VERSION": release["isis_version"],
+              "RELEASE_TAG": release["tag"],
+              "RELEASE_TITLE": release["title"],
+              "PYTHON_ABI": release["python_abi"],
+              "LINUX_PLATFORM": release["linux_platform"],
+              "WINDOWS_PLATFORM": release["windows_platform"],
+              "RELEASE_PRERELEASE": str(release["prerelease"]).lower(),
+              "LINUX_ASSET": release["linux_asset"],
+              "WINDOWS_ASSET": release["windows_asset"],
+              "RELEASE_NOTES_FILE": release["notes_file"],
+              "LINUX_INSTALL_FILE": release["linux_install_file"],
+              "WINDOWS_INSTALL_FILE": release["windows_install_file"],
+          }
+          with Path(os.environ["GITHUB_ENV"]).open("a", encoding="utf-8") as stream:
+              for key, value in values.items():
+                  if "\n" in value:
+                      raise ValueError(f"Release manifest value contains a newline: {key}")
+                  stream.write(f"{key}={value}\n")
+          PY
+
+      - name: Download validated Linux wheelhouse
+        uses: actions/download-artifact@v4
+        with:
+          name: usgs-pyisis-linux-cp312-manylinux-wheelhouse
+          path: release-input/linux/wheelhouse
+
+      - name: Download validated Windows wheelhouse
+        uses: actions/download-artifact@v4
+        with:
+          name: usgs-pyisis-windows-cp312-wheels
+          path: release-input/windows/wheelhouse
+
+      - name: Validate release wheel sets
+        shell: bash
+        run: |
+          set -euo pipefail
+          linux_wheelhouse="release-input/linux/wheelhouse"
+          windows_wheelhouse="release-input/windows/wheelhouse"
+
+          test -f "$linux_wheelhouse/usgs_pyisis-${PACKAGE_VERSION}-${PYTHON_ABI}-${PYTHON_ABI}-${LINUX_PLATFORM}.whl"
+          test -f "$linux_wheelhouse/usgs_pyisis_isisdata_minimal-${PACKAGE_VERSION}-py3-none-any.whl"
+          test "$(find "$linux_wheelhouse" -maxdepth 1 -type f -name '*.whl' | wc -l)" -eq 2
+
+          test -f "$windows_wheelhouse/usgs_pyisis-${PACKAGE_VERSION}-${PYTHON_ABI}-${PYTHON_ABI}-${WINDOWS_PLATFORM}.whl"
+          test -f "$windows_wheelhouse/usgs_pyisis_runtime_win64-${PACKAGE_VERSION}-py3-none-${WINDOWS_PLATFORM}.whl"
+          test -f "$windows_wheelhouse/usgs_pyisis_isisdata_minimal-${PACKAGE_VERSION}-py3-none-any.whl"
+          test "$(find "$windows_wheelhouse" -maxdepth 1 -type f -name '*.whl' | wc -l)" -eq 3
+
+      - name: Assemble release archives and checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p release-assets/linux/wheelhouse release-assets/windows/wheelhouse
+          cp release-input/linux/wheelhouse/*.whl release-assets/linux/wheelhouse/
+          cp release-input/windows/wheelhouse/*.whl release-assets/windows/wheelhouse/
+          cp "$LINUX_INSTALL_FILE" release-assets/linux/INSTALL.md
+          cp "$WINDOWS_INSTALL_FILE" release-assets/windows/INSTALL.md
+          cp LICENSE THIRD_PARTY_NOTICES.md release-assets/linux/
+          cp LICENSE THIRD_PARTY_NOTICES.md release-assets/windows/
+
+          (
+            cd release-assets/linux
+            zip -r "../$LINUX_ASSET" .
+          )
+          (
+            cd release-assets/windows
+            zip -r "../$WINDOWS_ASSET" .
+          )
+          (
+            cd release-assets
+            sha256sum "$LINUX_ASSET" "$WINDOWS_ASSET" > SHA256SUMS.txt
+          )
+
+      - name: Create GitHub prerelease
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "::error::GitHub Release already exists: $RELEASE_TAG"
+            exit 1
+          fi
+
+          prerelease_args=()
+          if [ "$RELEASE_PRERELEASE" = "true" ]; then
+            prerelease_args+=(--prerelease)
+          fi
+          gh release create "$RELEASE_TAG" \
+            "release-assets/$LINUX_ASSET" \
+            "release-assets/$WINDOWS_ASSET" \
+            "release-assets/SHA256SUMS.txt" \
+            --target "$GITHUB_SHA" \
+            --title "$RELEASE_TITLE" \
+            --notes-file "$RELEASE_NOTES_FILE" \
+            "${prerelease_args[@]}"

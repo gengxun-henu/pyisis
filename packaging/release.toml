@@ -1,0 +1,14 @@
+[release]
+package_version = "1.3.0rc1"
+isis_version = "9.0.0"
+tag = "v1.3.0rc1-isis9.0.0"
+title = "PyISIS v1.3.0rc1 (USGS ISIS 9.0.0)"
+python_abi = "cp312"
+linux_platform = "manylinux_2_35_x86_64"
+windows_platform = "win_amd64"
+prerelease = true
+linux_asset = "pyisis-v1.3.0rc1-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip"
+windows_asset = "pyisis-v1.3.0rc1-isis9.0.0-windows-x64-cp312-wheelhouse.zip"
+notes_file = "docs/releases/v1.3.0rc1-isis9.0.0.md"
+linux_install_file = "docs/releases/INSTALL-LINUX-ISIS9.0.0.md"
+windows_install_file = "docs/releases/INSTALL-WINDOWS-ISIS9.0.0.md"

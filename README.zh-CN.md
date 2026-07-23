@@ -22,11 +22,11 @@
 - 提供用于运行时配置、cube 上下文管理和常用 cube/camera helper 的 `pyisis` facade
 - 向 Python 暴露行星遥感、摄影测量、控制网、相机模型、投影与几何处理等相关 API
 
-> 当前主线开发方式仍然是基于 conda 的源码构建，但这个分支已经加入实验性的平台 wheel 路线。
-> 主包 `usgs-pyisis` 会按平台自动依赖对应 runtime wheel：Windows x64 对应
-> `usgs-pyisis-runtime-win64`，Linux x86_64 对应
-> `usgs-pyisis-runtime-linux-x86_64`，并额外依赖
-> `usgs-pyisis-isisdata-minimal` 作为 smoke test 数据包。
+> 当前主线开发方式仍然是基于 conda 的源码构建。
+> `v1.3.0rc1-isis9.0.0` 预发布版本同时通过 GitHub Releases 提供已验证的平台 wheelhouse。
+> Windows 使用 `usgs-pyisis-runtime-win64`；发布的 Linux 主 wheel 已合并并审计
+> runtime 依赖闭包。两个平台都包含用于 smoke test 的
+> `usgs-pyisis-isisdata-minimal`。
 
 ## 当前支持范围
 
@@ -37,11 +37,12 @@
 
 | 项目 | 当前推荐 / 已验证范围 |
 | --- | --- |
-| 操作系统 | Linux x86_64 与 Windows x64；Windows wheel 已本地验证，Linux runtime 打包骨架已补齐 |
+| 操作系统 | Linux x86_64 与 Windows x64 |
 | Python | CPython 3.12 |
 | ISIS | USGS ISIS 9.0.0 运行时 / 开发环境 |
-| 分发方式 | GitHub Release、源码构建、安装到已激活的 conda 环境、实验性平台 pip wheel |
-| 是否建议首发为直接 PyPI 包 | Windows wheel 已完成本地验证；Linux wheel 还需要 Linux/manylinux CI 验证 |
+| 分发方式 | GitHub Release wheelhouse、源码构建、安装到已激活的 conda 环境 |
+| 二进制验证 | Windows Server 2022；Linux manylinux 构建并在 Ubuntu 22.04/24.04 全新安装 |
+| PyPI 状态 | GitHub Release 工作流不上传 PyPI；下载 wheelhouse 后使用 pip 安装 |
 
 ## 本仓库会构建什么
 
@@ -63,7 +64,9 @@
 
 ## 请先安装 USGS ISIS
 
-这个绑定项目不会替你安装 ISIS。你需要先准备一个**可正常工作的 ISIS 环境**，最好通过 conda / mamba 管理。
+对于源码构建，这个绑定项目不会替你安装 ISIS。你需要先准备一个**可正常工作的
+ISIS 环境**，最好通过 conda / mamba 管理。GitHub Release wheelhouse 已携带
+平台运行时，但真实任务处理仍需要完整的外部 `ISISDATA`。
 
 ### 推荐方式
 
@@ -98,7 +101,21 @@
 
 ## 安装本绑定：推荐方式
 
-### 方式 W：实验性平台 pip wheel
+### 方式 W：GitHub Release 平台 wheelhouse
+
+从
+[`v1.3.0rc1-isis9.0.0`](https://github.com/gengxun-henu/pyisis/releases/tag/v1.3.0rc1-isis9.0.0)
+下载对应平台的压缩包，解压后阅读其中的 `INSTALL.md`。核心安装命令是：
+
+```text
+python -m pip install --no-index --find-links wheelhouse usgs-pyisis==1.3.0rc1
+```
+
+仓库中也保留了
+[`Windows 安装说明`](docs/releases/INSTALL-WINDOWS-ISIS9.0.0.md)和
+[`Linux 安装说明`](docs/releases/INSTALL-LINUX-ISIS9.0.0.md)。
+
+下面的命令供需要在本地重建 wheelhouse 的维护者使用。
 
 Windows pip 打包路线会生成三个发行包：
 
@@ -167,9 +184,9 @@ bash tools/packaging/build_wheels_linux.sh \
   --dependency-prefix "$CONDA_PREFIX"
 ```
 
-这条 Linux 路线会 staging 出 `usgs-pyisis-runtime-linux-x86_64` wheel，并把
-runtime wheel 标记为 `manylinux_2_28_x86_64`。它仍需要真实 Linux/manylinux
-CI 验证后，才适合作为 PyPI 正式发布产物。
+GitHub Actions 会在 PyPA manylinux 容器中构建 Linux wheelhouse，将 runtime
+合并进主 wheel，检查 ABI 与 `manylinux_2_35_x86_64` 策略，并在 Ubuntu
+22.04 和 24.04 上进行全新安装验证。
 
 ### 方式 A：从源码构建并安装到当前 Python 环境
 
@@ -612,9 +629,9 @@ ctest --output-on-failure -R python-unit-tests
 
 1. **源码包**
 	- GitHub 自动生成的仓库源码归档（`zip` / `tar.gz`）即可。
-2. **Linux 构建产物**
-	- 例如：`isis_pybind-linux-x86_64-cp312-isis9.0.0.tar.gz`
-	- 应包含完整的 `isis_pybind/` 包目录，而不是单独一个裸 `.so` 文件。
+2. **已验证的平台 wheelhouse**
+	- Linux x86_64 / CPython 3.12 / manylinux 2.35
+	- Windows x64 / CPython 3.12
 3. **安装说明**
 	- 可以放在本 README、Release 页面，或单独的 `INSTALL.md` 中。
 4. **版本兼容说明**
@@ -629,12 +646,13 @@ ctest --output-on-failure -R python-unit-tests
 - 平台：`linux-x86_64`
 - Python ABI：`cp312`
 - ISIS 版本：`isis9.0.0`
-- 项目版本：例如 `v1.2.0`
+- 项目版本：`v1.3.0rc1`
 
 例如：
 
 ```text
-isis_pybind-v1.0.0-linux-x86_64-cp312-isis9.0.0.tar.gz
+pyisis-v1.3.0rc1-isis9.0.0-linux-x86_64-cp312-manylinux_2_35-wheelhouse.zip
+pyisis-v1.3.0rc1-isis9.0.0-windows-x64-cp312-wheelhouse.zip
 SHA256SUMS.txt
 ```
 
@@ -683,9 +701,10 @@ sha256sum -c SHA256SUMS.txt
 
 ### 4. 这个项目能作为普通 `pip install` 包来支持吗？
 
-对于 Windows x64，这个分支现在已经有一个本地验证通过的 pip wheel 原型。它不是纯 Python wheel，而是依赖一个平台 runtime wheel：里面包含 ISIS DLL、必要第三方 DLL、`IsisPreferences`，以及用于 smoke test 的最小 `ISISDATA` 包。
-
-接下来剩下的重点不是基础导入能力，而是正式发布治理：在 CI 中构建 wheel、运行 `twine check`、做 TestPyPI dry run、确认第三方依赖再分发许可，并根据体积限制决定 runtime wheel 放在 PyPI，还是采用类似 PyTorch 的额外 wheel index。
+可以，但当前限定为已验证的 CPython 3.12 平台。下载对应的 GitHub Release
+压缩包后，用 pip 从本地 `wheelhouse` 安装。Windows 使用独立 runtime wheel；
+Linux 使用已经审计并合并 runtime 的主 wheel。GitHub Release 工作流不会把这些
+wheelhouse 上传到 PyPI，随包提供的最小 ISISDATA 也仍然只用于导入与 smoke test。
 
 ## 许可证
 

@@ -3,7 +3,7 @@ param(
     [string]$PythonExecutable = "python",
     [ValidateSet("testpypi")]
     [string]$Repository = "testpypi",
-    [string]$ExpectedVersion = "1.2.0",
+    [string]$ExpectedVersion = "1.3.0rc1",
     [switch]$CheckOnly,
     [switch]$Upload
 )

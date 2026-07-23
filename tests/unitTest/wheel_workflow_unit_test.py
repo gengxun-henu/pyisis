@@ -9,6 +9,7 @@ Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic bin
 Updated: 2026-07-22  Geng Xun added isolated Linux wheel build and install coverage.
 Updated: 2026-07-23  Geng Xun required manylinux 2.35 builds and Ubuntu 22.04/24.04 install tests.
 Updated: 2026-07-23  Geng Xun covered trusted Windows ISIS prefix cache reuse.
+Updated: 2026-07-23  Geng Xun gated GitHub Release publication on validated platform wheelhouses.
 """
 
 from __future__ import annotations
@@ -135,6 +136,21 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("ubuntu-24.04", workflow)
         self.assertIn("runs-on: ${{ matrix.os }}", workflow)
         self.assertIn("--test-list tools/packaging/basic_tests.txt", workflow)
+
+    def test_workflow_can_publish_configured_release_after_platform_gates(self):
+        workflow = self._workflow_text()
+
+        self.assertIn("publish_github_release:", workflow)
+        self.assertIn("github-release:", workflow)
+        self.assertIn("github.ref == 'refs/heads/main'", workflow)
+        self.assertIn("linux-cp312-clean-install", workflow)
+        self.assertIn("windows-cp312", workflow)
+        self.assertIn("packaging/release.toml", workflow)
+        self.assertIn("THIRD_PARTY_NOTICES.md", workflow)
+        self.assertIn("SHA256SUMS.txt", workflow)
+        self.assertIn('gh release create "$RELEASE_TAG"', workflow)
+        self.assertIn("--target \"$GITHUB_SHA\"", workflow)
+        self.assertIn("--notes-file \"$RELEASE_NOTES_FILE\"", workflow)
 
 
 if __name__ == "__main__":

@@ -1,5 +1,5 @@
 {% set name = "pyisis" %}
-{% set version = "1.2.0" %}
+{% set version = "1.3.0rc1" %}
 
 package:
   name: {{ name|lower }}
@@ -35,7 +35,7 @@ test:
     - python -c "import os, pyisis; pyisis.configure(isis_prefix=os.environ.get('ISIS_PREFIX'), isisdata=os.environ.get('ISISDATA'), conda_prefix=os.environ.get('PYISIS_DEP_PREFIX')); pyisis.core(); import isis_pybind; print('pyisis conda smoke ok')"
 
 about:
-  home: https://github.com/guderianXu/pyisis
+  home: https://github.com/gengxun-henu/pyisis
   license: MIT
   license_file: LICENSE
   summary: Standalone pybind11 bindings and a Python facade for selected USGS ISIS APIs.

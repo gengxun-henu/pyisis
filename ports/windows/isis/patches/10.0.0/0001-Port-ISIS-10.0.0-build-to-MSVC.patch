@@ -102,7 +102,7 @@ index f1fb6b281..d070b19dd 100644
  else()
   # User specified a test output folder, make sure it exists.
   message("Writing test data folders to = ${testOutputDir}")
-@@ -187,28 +187,41 @@ endif()
+@@ -187,28 +187,42 @@ endif()
  # Specify flags used
  # on linux, add the conda prefix to handle possible issues with rpaths at link time
  # sometimes third parties do not set their rpaths correctly
@@ -124,6 +124,7 @@ index f1fb6b281..d070b19dd 100644
 +                         /D_USE_MATH_DEFINES
 +                         /DQWT_DLL
 +                         /DH5_BUILT_AS_DYNAMIC_LIB
++                         /DEIGEN_MAX_ALIGN_BYTES=32
 +                         /DNOMINMAX
 +                         /DWIN32_LEAN_AND_MEAN
 +                         /DENABLEJP2K=${JP2KFLAG}

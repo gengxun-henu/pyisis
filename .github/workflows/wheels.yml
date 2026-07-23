@@ -221,7 +221,15 @@ jobs:
           "$prefix\Library\mingw-w64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
           "$prefix\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
 
+      - name: Restore cached ISIS 9.0.0 Windows prefix
+        id: windows-isis-prefix-cache
+        uses: actions/cache/restore@v6
+        with:
+          path: build/windows/isis-prefix
+          key: windows-2022-isis-9.0.0-prefix-v1-${{ hashFiles('ports/windows/activate_msvc.ps1', 'ports/windows/env/pyisis-isis-win64.yml', 'ports/windows/isis/**') }}
+
       - name: Build ISIS 9.0.0 Windows prefix
+        if: ${{ steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' }}
         run: |
           . .\ports\windows\activate_msvc.ps1
           .\ports\windows\isis\fetch_isis_900.ps1
@@ -229,7 +237,27 @@ jobs:
           .\ports\windows\isis\configure_isis.ps1
           .\ports\windows\isis\build_isis.ps1
           .\ports\windows\isis\install_isis.ps1
-          .\ports\windows\isis\verify_isis_prefix.ps1 -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+
+      - name: Verify ISIS 9.0.0 Windows prefix
+        run: .\ports\windows\isis\verify_isis_prefix.ps1 -Prefix $env:PYISIS_WINDOWS_ISIS_PREFIX
+
+      - name: Report ISIS 9.0.0 Windows prefix size
+        run: |
+          $files = Get-ChildItem -LiteralPath $env:PYISIS_WINDOWS_ISIS_PREFIX -Recurse -File
+          $bytes = ($files | Measure-Object -Property Length -Sum).Sum
+          if ($null -eq $bytes) {
+            $bytes = 0
+          }
+          $gib = $bytes / 1GB
+          "ISIS Windows prefix: $($files.Count) files, $bytes bytes ($($gib.ToString('F2')) GiB)" |
+            Tee-Object -FilePath $env:GITHUB_STEP_SUMMARY -Append
+
+      - name: Save ISIS 9.0.0 Windows prefix cache
+        if: ${{ steps.windows-isis-prefix-cache.outputs.cache-hit != 'true' && github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main' }}
+        uses: actions/cache/save@v6
+        with:
+          path: build/windows/isis-prefix
+          key: ${{ steps.windows-isis-prefix-cache.outputs.cache-primary-key }}
 
       - name: Run optional ISIS app smoke
         if: ${{ github.event.inputs.run_isis_app_smoke == 'true' }}

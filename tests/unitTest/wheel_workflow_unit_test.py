@@ -8,6 +8,7 @@ Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
 Updated: 2026-07-22  Geng Xun added isolated Linux wheel build and install coverage.
 Updated: 2026-07-23  Geng Xun required manylinux 2.35 builds and Ubuntu 22.04/24.04 install tests.
+Updated: 2026-07-23  Geng Xun covered trusted Windows ISIS prefix cache reuse.
 """
 
 from __future__ import annotations
@@ -62,6 +63,34 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("-CheckOnly", workflow)
         self.assertIn("actions/upload-artifact@v4", workflow)
         self.assertIn("wheelhouse/*.whl", workflow)
+
+    def test_workflow_reuses_trusted_windows_isis_prefix_cache(self):
+        workflow = self._workflow_text()
+
+        self.assertIn("actions/cache/restore@v6", workflow)
+        self.assertIn("id: windows-isis-prefix-cache", workflow)
+        self.assertIn(
+            "windows-2022-isis-9.0.0-prefix-v1-${{ hashFiles(",
+            workflow,
+        )
+        self.assertIn("'ports/windows/activate_msvc.ps1'", workflow)
+        self.assertIn("'ports/windows/env/pyisis-isis-win64.yml'", workflow)
+        self.assertIn("'ports/windows/isis/**'", workflow)
+        self.assertIn(
+            "steps.windows-isis-prefix-cache.outputs.cache-hit != 'true'",
+            workflow,
+        )
+        self.assertEqual(
+            workflow.count("ports\\windows\\isis\\verify_isis_prefix.ps1"),
+            1,
+        )
+        self.assertIn("actions/cache/save@v6", workflow)
+        self.assertIn("github.event_name == 'workflow_dispatch'", workflow)
+        self.assertIn("github.ref == 'refs/heads/main'", workflow)
+        self.assertIn(
+            "steps.windows-isis-prefix-cache.outputs.cache-primary-key",
+            workflow,
+        )
 
     def test_workflow_can_optionally_publish_and_verify_testpypi(self):
         workflow = self._workflow_text()

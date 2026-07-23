@@ -546,6 +546,23 @@ index 9f48041af..dc0d4dc1e 100644
                       DEPENDS  ${protoInput}
                       WORKING_DIRECTORY ${folder}
                       COMMENT "Generating Protocol Buffers...")
+diff --git a/isis/cmake/FindAle.cmake b/isis/cmake/FindAle.cmake
+index 5e3274153..b17e91ed4 100644
+--- a/isis/cmake/FindAle.cmake
++++ b/isis/cmake/FindAle.cmake
+@@ -27,10 +27,10 @@ execute_process(
+ )
+ 
+ # Extract version and build string
+-string(REGEX MATCH "\"version\": \"([^\"]+)\"" _ ${ALE_VERSION_JSON})
++string(REGEX MATCH "\"version\": \"([^\"]+)\"" _ "${ALE_VERSION_JSON}")
+ set(ALE_VERSION ${CMAKE_MATCH_1})
+ 
+-string(REGEX MATCH "\"build_string\": \"([^\"]+)\"" _ ${ALE_VERSION_JSON})
++string(REGEX MATCH "\"build_string\": \"([^\"]+)\"" _ "${ALE_VERSION_JSON}")
+ set(ALE_BUILD ${CMAKE_MATCH_1})
+ 
+ set(ALE_VERSION_FULL "${ALE_VERSION} | ${ALE_BUILD}")
 diff --git a/isis/cmake/FindGeoTIFF.cmake b/isis/cmake/FindGeoTIFF.cmake
 index 9bfbb68ca..84517c02d 100644
 --- a/isis/cmake/FindGeoTIFF.cmake

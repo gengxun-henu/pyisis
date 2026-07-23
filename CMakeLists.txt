@@ -112,6 +112,10 @@ find_package(pybind11 CONFIG REQUIRED PATHS "${pybind11_DIR}" NO_DEFAULT_PATH)
 
 if(WIN32)
   pyisis_first_existing_path(_qt_cmake_root
+    "$ENV{PYISIS_DEP_PREFIX}/Library/lib/cmake"
+    "$ENV{PYISIS_DEP_PREFIX}/lib/cmake"
+    "$ENV{CONDA_PREFIX}/Library/lib/cmake"
+    "$ENV{CONDA_PREFIX}/lib/cmake"
     "${ISIS_PREFIX}/Library/lib/cmake"
     "${ISIS_PREFIX}/lib/cmake")
   pyisis_first_existing_path(_qt_isis_include_dir

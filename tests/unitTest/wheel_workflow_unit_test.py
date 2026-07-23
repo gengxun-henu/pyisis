@@ -82,6 +82,8 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("ports/linux/env/pyisis-isis-linux-64.yml", workflow)
         self.assertIn("tools/packaging/build_wheels_linux.sh", workflow)
         self.assertIn("x86_64-conda-linux-gnu-c++", workflow)
+        self.assertIn("x86_64-conda-linux-gnu-g++", workflow)
+        self.assertIn('candidate="$(command -v "$compiler_name" || true)"', workflow)
         self.assertIn("quay.io/pypa/manylinux_2_28_x86_64", workflow)
         self.assertIn("--platform-tag manylinux_2_28_x86_64", workflow)
         self.assertIn("Audit Linux ABI and wheel policy", workflow)

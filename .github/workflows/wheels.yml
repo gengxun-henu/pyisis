@@ -71,8 +71,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          compiler="$CONDA_PREFIX/bin/x86_64-conda-linux-gnu-c++"
-          test -x "$compiler"
+          compiler=""
+          for compiler_name in \
+            x86_64-conda-linux-gnu-c++ \
+            x86_64-conda-linux-gnu-g++ \
+            g++; do
+            candidate="$(command -v "$compiler_name" || true)"
+            if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+              compiler="$candidate"
+              break
+            fi
+          done
+          if [ -z "$compiler" ]; then
+            echo "::error::No usable C++ compiler was found in the manylinux container."
+            exit 1
+          fi
+          "$compiler" --version
           echo "CXX=$compiler" >> "$GITHUB_ENV"
 
       - name: Build Linux wheelhouse

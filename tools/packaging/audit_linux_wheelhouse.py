@@ -109,10 +109,7 @@ def audit_wheelhouse(
     require_target: bool = False,
 ) -> dict[str, object]:
     extension = inspect_wheel(_single_wheel(wheelhouse, "usgs_pyisis-*.whl"))
-    runtime = inspect_wheel(
-        _single_wheel(wheelhouse, "usgs_pyisis_runtime_linux_x86_64-*.whl")
-    )
-    wheels = (extension, runtime)
+    wheels = (extension,)
     observed_versions = [
         _parse_version(wheel.maximum_glibc)
         for wheel in wheels

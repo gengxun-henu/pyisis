@@ -1,4 +1,4 @@
-"""Unit tests for the temporary combined Linux audit archive.
+"""Unit tests for the combined, repairable Linux wheel.
 
 Author: Geng Xun
 Created: 2026-07-23
@@ -20,7 +20,7 @@ BUNDLE_SCRIPT = PROJECT_ROOT / "tools" / "packaging" / "build_linux_audit_bundle
 
 
 class LinuxAuditBundleUnitTest(unittest.TestCase):
-    """Test payload union semantics used only for auditwheel inspection."""
+    """Test the payload and metadata union used before auditwheel repair."""
 
     @classmethod
     def setUpClass(cls):
@@ -44,6 +44,14 @@ class LinuxAuditBundleUnitTest(unittest.TestCase):
                 {
                     "isis_pybind/_isis_core.so": b"extension",
                     "usgs_pyisis-1.2.0.dist-info/WHEEL": b"extension metadata",
+                    "usgs_pyisis-1.2.0.dist-info/METADATA": (
+                        b"Metadata-Version: 2.4\n"
+                        b"Name: usgs-pyisis\n"
+                        b"Requires-Dist: usgs-pyisis-runtime-linux-x86_64==1.2.0; "
+                        b'platform_system == "Linux"\n'
+                        b"Requires-Dist: usgs-pyisis-isisdata-minimal==1.2.0\n"
+                    ),
+                    "usgs_pyisis-1.2.0.dist-info/RECORD": b"stale record",
                 },
             )
             runtime = self._wheel(
@@ -61,15 +69,30 @@ class LinuxAuditBundleUnitTest(unittest.TestCase):
             )
             with zipfile.ZipFile(output) as archive:
                 names = set(archive.namelist())
+                metadata = archive.read(
+                    "usgs_pyisis-1.2.0.dist-info/METADATA"
+                ).decode("utf-8")
+                record = archive.read(
+                    "usgs_pyisis-1.2.0.dist-info/RECORD"
+                ).decode("utf-8")
             self.assertIn("isis_pybind/_isis_core.so", names)
             self.assertIn("pyisis_runtime/vendor/isis/lib/libisis.so", names)
             self.assertIn("usgs_pyisis-1.2.0.dist-info/WHEEL", names)
             self.assertNotIn("runtime-1.2.0.dist-info/WHEEL", names)
+            self.assertNotIn("runtime-linux-x86_64", metadata)
+            self.assertIn("usgs-pyisis-isisdata-minimal", metadata)
+            self.assertIn("pyisis_runtime/vendor/isis/lib/libisis.so", record)
 
     def test_bundle_rejects_payload_collisions(self):
         with TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
-            extension = self._wheel(root / "extension.whl", {"same": b"one"})
+            extension = self._wheel(
+                root / "extension.whl",
+                {
+                    "same": b"one",
+                    "main.dist-info/RECORD": b"record",
+                },
+            )
             runtime = self._wheel(root / "runtime.whl", {"same": b"two"})
             with self.assertRaisesRegex(ValueError, "payload collision"):
                 self.module.build_audit_bundle(

@@ -85,19 +85,7 @@ runtime_stage_dir="$PWD/build/packaging/usgs-pyisis-runtime-linux-x86_64"
 
 "$python_executable" -m build "$runtime_stage_dir" --wheel --no-isolation --outdir "$output_dir"
 
-runtime_source_wheel="$("$python_executable" -c 'from pathlib import Path; import sys; wheels=sorted(Path(sys.argv[1]).glob("usgs_pyisis_runtime_linux_x86_64-*-py3-none-*.whl")); print(wheels[-1] if wheels else "")' "$output_dir")"
-if [ -z "$runtime_source_wheel" ]; then
-  echo "Linux runtime wheel was not produced." >&2
-  exit 1
-fi
-if [[ "$runtime_source_wheel" != *-"$platform_tag".whl ]]; then
-  "$python_executable" -m wheel tags \
-    --platform-tag "$platform_tag" \
-    --remove \
-    "$runtime_source_wheel"
-fi
-
-runtime_wheel="$("$python_executable" -c 'from pathlib import Path; import sys; wheels=sorted(Path(sys.argv[1]).glob("usgs_pyisis_runtime_linux_x86_64-*.whl")); print(wheels[-1] if wheels else "")' "$output_dir")"
+runtime_wheel="$("$python_executable" -c 'from pathlib import Path; import sys; wheels=sorted(Path(sys.argv[1]).glob("usgs_pyisis_runtime_linux_x86_64-*-py3-none-*.whl")); print(wheels[-1] if wheels else "")' "$output_dir")"
 if [ -z "$runtime_wheel" ]; then
   echo "Linux runtime wheel was not produced." >&2
   exit 1
@@ -111,16 +99,39 @@ fi
 "$python_executable" -m build packaging/isisdata-minimal --wheel --no-isolation --outdir "$output_dir"
 "$python_executable" -m build . --wheel --no-isolation --skip-dependency-check --outdir "$output_dir"
 
-if [ "$platform_tag" != "linux_x86_64" ]; then
-  extension_wheel="$("$python_executable" -c 'from pathlib import Path; import sys; wheels=sorted(Path(sys.argv[1]).glob("usgs_pyisis-*-linux_x86_64.whl")); print(wheels[-1] if wheels else "")' "$output_dir")"
-  if [ -z "$extension_wheel" ]; then
-    echo "Linux extension wheel was not produced." >&2
-    exit 1
-  fi
-  "$python_executable" -m wheel tags \
-    --platform-tag "$platform_tag" \
-    --remove \
+extension_wheel="$("$python_executable" -c 'from pathlib import Path; import sys; wheels=sorted(Path(sys.argv[1]).glob("usgs_pyisis-*-linux_x86_64.whl")); print(wheels[-1] if wheels else "")' "$output_dir")"
+if [ -z "$extension_wheel" ]; then
+  echo "Linux extension wheel was not produced." >&2
+  exit 1
+fi
+
+combined_dir="$PWD/build/packaging/linux-combined-wheel"
+combined_wheel="$combined_dir/$(basename "$extension_wheel")"
+"$python_executable" tools/packaging/build_linux_audit_bundle.py \
+  --extension-wheel "$extension_wheel" \
+  --runtime-wheel "$runtime_wheel" \
+  --output "$combined_wheel"
+
+runtime_lib="$runtime_stage_dir/src/pyisis_runtime/vendor/isis/lib"
+if [ "$platform_tag" = "linux_x86_64" ]; then
+  "$python_executable" -c 'from pathlib import Path; import sys; Path(sys.argv[1]).unlink()' \
+    "$extension_wheel"
+  "$python_executable" -c 'from pathlib import Path; import sys; Path(sys.argv[1]).replace(Path(sys.argv[2]))' \
+    "$combined_wheel" \
+    "$output_dir/$(basename "$combined_wheel")"
+else
+  repair_library_path="$runtime_lib:$PYISIS_DEP_PREFIX/lib"
+  LD_LIBRARY_PATH="$repair_library_path" auditwheel repair \
+    --plat "$platform_tag" \
+    --wheel-dir "$output_dir" \
+    "$combined_wheel"
+  "$python_executable" -c 'from pathlib import Path; import sys; Path(sys.argv[1]).unlink()' \
     "$extension_wheel"
 fi
+
+"$python_executable" -c 'from pathlib import Path; import sys; Path(sys.argv[1]).unlink()' \
+  "$runtime_wheel"
+"$python_executable" -c 'from pathlib import Path; import shutil, sys; shutil.rmtree(Path(sys.argv[1]))' \
+  "$combined_dir"
 
 find "$output_dir" -maxdepth 1 -name "*.whl" -print | sort

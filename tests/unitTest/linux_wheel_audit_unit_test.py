@@ -50,15 +50,11 @@ class LinuxWheelAuditUnitTest(unittest.TestCase):
     def _wheelhouse(self, root: Path, platform_tag: str = "linux_x86_64") -> Path:
         wheelhouse = root / "wheelhouse"
         wheelhouse.mkdir()
-        _write_wheel(
-            wheelhouse / f"usgs_pyisis-1.2.0-cp312-cp312-{platform_tag}.whl",
-            {"isis_pybind/_isis_core.so": b"\x7fELF\x00GLIBC_2.34\x00"},
-        )
         runtime_payload = b"\x7fELF\x00GLIBC_2.17\x00"
         _write_wheel(
-            wheelhouse
-            / f"usgs_pyisis_runtime_linux_x86_64-1.2.0-py3-none-{platform_tag}.whl",
+            wheelhouse / f"usgs_pyisis-1.2.0-cp312-cp312-{platform_tag}.whl",
             {
+                "isis_pybind/_isis_core.so": b"\x7fELF\x00GLIBC_2.34\x00",
                 "pyisis_runtime/vendor/isis/lib/libisis.so": runtime_payload,
                 "pyisis_runtime/vendor/isis/lib/libisis.so.9": runtime_payload,
                 "pyisis_runtime/vendor/isis/IsisPreferences": b"preferences",
@@ -73,9 +69,9 @@ class LinuxWheelAuditUnitTest(unittest.TestCase):
 
         self.assertFalse(report["target_met"])
         self.assertEqual(report["maximum_glibc"], "2.34")
-        runtime = report["wheels"][1]
-        self.assertEqual(runtime["elf_payloads"], 1)
-        self.assertEqual(runtime["unique_native_payloads"], 1)
+        wheel = report["wheels"][0]
+        self.assertEqual(wheel["elf_payloads"], 2)
+        self.assertEqual(wheel["unique_native_payloads"], 2)
 
     def test_manylinux_claim_is_rejected_when_target_is_not_met(self):
         with TemporaryDirectory() as temp_dir:

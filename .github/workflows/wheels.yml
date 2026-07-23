@@ -118,22 +118,15 @@ jobs:
             report="$ABI_REPORT_DIR/auditwheel-${wheel_name}.txt"
             env -u LD_LIBRARY_PATH auditwheel show "$wheel" 2>&1 | tee "$report"
           done
-          test "$native_wheel_count" -eq 2
+          test "$native_wheel_count" -eq 1
 
           extension_wheel="$(find "$WHEELHOUSE" -maxdepth 1 -name 'usgs_pyisis-*-manylinux_2_35_x86_64.whl' -print -quit)"
-          runtime_wheel="$(find "$WHEELHOUSE" -maxdepth 1 -name 'usgs_pyisis_runtime_linux_x86_64-*-manylinux_2_35_x86_64.whl' -print -quit)"
-          audit_bundle="$ABI_REPORT_DIR/combined/$(basename "$extension_wheel")"
-          "$PYTHON_BIN" tools/packaging/build_linux_audit_bundle.py \
-            --extension-wheel "$extension_wheel" \
-            --runtime-wheel "$runtime_wheel" \
-            --output "$audit_bundle"
-          combined_report="$ABI_REPORT_DIR/auditwheel-combined-installed-layout.txt"
-          env -u LD_LIBRARY_PATH auditwheel show "$audit_bundle" 2>&1 | tee "$combined_report"
+          combined_report="$ABI_REPORT_DIR/auditwheel-manylinux-wheel.txt"
+          env -u LD_LIBRARY_PATH auditwheel show "$extension_wheel" 2>&1 | tee "$combined_report"
           "$PYTHON_BIN" tools/packaging/validate_auditwheel_policy.py \
             --report "$combined_report" \
             --target 2.35 \
             --architecture x86_64
-          find "$ABI_REPORT_DIR/combined" -depth -delete
 
       - name: Upload Linux ABI report
         uses: actions/upload-artifact@v4

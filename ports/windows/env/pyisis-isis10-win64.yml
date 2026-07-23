@@ -14,7 +14,7 @@ dependencies:
   - qt6-multimedia
   - qwt=6.3
   - eigen
-  - libboost-devel
+  - boost-cpp
   - bullet-cpp=3.25
   - cereal
   - csm=3.0.3.3

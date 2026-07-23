@@ -56,6 +56,38 @@ index 5dd1d04..5448984 100644
 +#ifdef _WIN32
 +#undef VOID
 +#endif
+diff --git a/SpiceQL/src/inventory.cpp b/SpiceQL/src/inventory.cpp
+index ffa969f..2cc147f 100644
+--- a/SpiceQL/src/inventory.cpp
++++ b/SpiceQL/src/inventory.cpp
+@@ -80 +80 @@ namespace SpiceQL {
+-                string key = p.parent_path();
++                string key = p.parent_path().string();
+@@ -89 +89 @@ namespace SpiceQL {
+-                        kernel_type = part; 
++                        kernel_type = part.string();
+@@ -91 +91 @@ namespace SpiceQL {
+-                        quality = part; 
++                        quality = part.string();
+@@ -94 +94 @@ namespace SpiceQL {
+-                string regex = p.filename();
++                string regex = p.filename().string();
+@@ -123 +123 @@ namespace SpiceQL {
+-                    temp = fs::path(f).filename();
++                    temp = fs::path(f).filename().string();
+@@ -154 +154 @@ namespace SpiceQL {
+-            static string db_path = fs::path(getCacheDir()) / DB_HDF_FILE;
++            static string db_path = (fs::path(getCacheDir()) / DB_HDF_FILE).string();
+diff --git a/SpiceQL/src/inventoryimpl.cpp b/SpiceQL/src/inventoryimpl.cpp
+index 46f1a28..ab44cd7 100644
+--- a/SpiceQL/src/inventoryimpl.cpp
++++ b/SpiceQL/src/inventoryimpl.cpp
+@@ -119 +119 @@ namespace SpiceQL {
+-      static std::string db_path = fs::path(getCacheDir()) / DB_HDF_FILE;
++      static std::string db_path = (fs::path(getCacheDir()) / DB_HDF_FILE).string();
+@@ -286 +286 @@ namespace SpiceQL {
+-    string hdf_file = fs::path(getCacheDir()) / DB_HDF_FILE;
++    string hdf_file = (fs::path(getCacheDir()) / DB_HDF_FILE).string();
 diff --git a/SpiceQL/src/utils.cpp b/SpiceQL/src/utils.cpp
 index 0d7ebb0..1931a1c 100644
 --- a/SpiceQL/src/utils.cpp

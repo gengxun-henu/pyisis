@@ -8,7 +8,7 @@ index 7bdc2ec..9124b7b 100644
 -                            cereal
 +                            ${CEREAL_INCLUDE_DIRS}
                              ${CSPICE_INCLUDE_DIRS}
-@@ -157,7 +157,18 @@ target_include_directories(SpiceQL
+@@ -157,7 +157,19 @@ target_include_directories(SpiceQL
 +  target_compile_options(SpiceQL
 +                         PRIVATE
 +                         $<$<CXX_COMPILER_ID:MSVC>:/FImsvc_compat.h>
@@ -17,6 +17,7 @@ index 7bdc2ec..9124b7b 100644
 +  target_compile_definitions(SpiceQL
 +                             PRIVATE
 +                             $<$<CXX_COMPILER_ID:MSVC>:NOMINMAX>
++                             $<$<CXX_COMPILER_ID:MSVC>:RESTINCURL_ENABLE_ASYNC=0>
 +                             )
 +
    target_link_libraries(SpiceQL
@@ -65,6 +66,21 @@ index 0fe5435..4120ecb 100644
 @@ -108 +108 @@ namespace Memo {
 -                cache_dir = fs::temp_directory_path() / tempname / "spiceql_cache"; 
 +                cache_dir = (fs::temp_directory_path() / tempname / "spiceql_cache").string();
+diff --git a/SpiceQL/include/restincurl.h b/SpiceQL/include/restincurl.h
+index 6818b03..1e05357 100644
+--- a/SpiceQL/include/restincurl.h
++++ b/SpiceQL/include/restincurl.h
+@@ -50,5 +50,9 @@
++#ifdef _WIN32
++#include <winsock2.h>
++#else
+ #include <sys/select.h>
+ #include <sys/time.h>
++#include <unistd.h>
++#endif
+ #include <sys/types.h>
+ #include <sys/stat.h>
+-#include <unistd.h>
 diff --git a/SpiceQL/src/api.cpp b/SpiceQL/src/api.cpp
 index 5dd1d04..5448984 100644
 --- a/SpiceQL/src/api.cpp

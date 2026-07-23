@@ -644,7 +644,7 @@ new file mode 100644
 index 000000000..050e8816a
 --- /dev/null
 +++ b/isis/cmake/MSVCWindowsCompat.h
-@@ -0,0 +1,29 @@
+@@ -0,0 +1,38 @@
 +#ifndef ISIS_MSVC_WINDOWS_COMPAT_H
 +#define ISIS_MSVC_WINDOWS_COMPAT_H
 +
@@ -671,6 +671,15 @@ index 000000000..050e8816a
 +#  ifdef far
 +#    undef far
 +#  endif
++
++extern "C" {
++int __cdecl _open(const char *filename, int open_flag, ...);
++int __cdecl _close(int file_descriptor);
++long __cdecl _lseek(int file_descriptor, long offset, int origin);
++int __cdecl _read(int file_descriptor, void *buffer, unsigned int buffer_size);
++int __cdecl _write(int file_descriptor, const void *buffer, unsigned int buffer_size);
++int __cdecl _chsize(int file_descriptor, long size);
++}
 +#endif
 +
 +#endif

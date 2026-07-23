@@ -2,16 +2,18 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-22
+Last Modified: 2026-07-23
 Updated: 2026-06-18  Geng Xun added runtime wheel staging coverage.
 Updated: 2026-06-19  Geng Xun added Linux runtime wheel staging coverage.
 Updated: 2026-07-22  Geng Xun covered Linux SONAME aliases and closure verification.
+Updated: 2026-07-23  Geng Xun limited Linux runtime staging to ISIS-owned binding files.
 """
 
 from __future__ import annotations
 
 import importlib
 import importlib.util
+import json
 import os
 from pathlib import Path
 import subprocess
@@ -166,6 +168,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             temp = Path(temp_dir)
             prefix = temp / "isis-prefix"
             (prefix / "bin").mkdir(parents=True)
+            (prefix / "appdata" / "templates").mkdir(parents=True)
             (prefix / "include" / "isis").mkdir(parents=True)
             (prefix / "lib").mkdir(parents=True)
             (prefix / "share" / "isis" / "templates").mkdir(parents=True)
@@ -173,6 +176,10 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             (prefix / "isis_version.txt").write_text("9.0.0", encoding="utf-8")
             (prefix / "LICENSE.md").write_text("MIT", encoding="utf-8")
             (prefix / "bin" / "cam2map").write_bytes(b"app")
+            (prefix / "appdata" / "templates" / "map.tpl").write_text(
+                "template",
+                encoding="utf-8",
+            )
             (prefix / "lib" / "libisis.so").write_bytes(b"isis")
             (prefix / "lib" / "libisis.so.9").write_bytes(b"isis-soname")
             (prefix / "lib" / "Camera.plugin").write_bytes(b"camera")
@@ -215,7 +222,8 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             self.assertTrue((vendor / "IsisPreferences").is_file())
             self.assertTrue((vendor / "isis_version.txt").is_file())
             self.assertTrue((vendor / "LICENSE.md").is_file())
-            self.assertTrue((vendor / "bin" / "cam2map").is_file())
+            self.assertFalse((vendor / "bin").exists())
+            self.assertTrue((vendor / "appdata" / "templates" / "map.tpl").is_file())
             self.assertTrue((vendor / "lib" / "libisis.so").is_file())
             self.assertTrue((vendor / "lib" / "libisis.so.9").is_file())
             self.assertTrue((vendor / "lib" / "Camera.plugin").is_file())
@@ -233,7 +241,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                 runtime = importlib.import_module("pyisis_runtime")
                 self.assertEqual(runtime.prefix(), vendor)
                 self.assertIn(vendor / "lib", runtime.dll_directories())
-                self.assertIn(vendor / "bin", runtime.dll_directories())
+                self.assertNotIn(vendor / "bin", runtime.dll_directories())
                 self.assertIn(vendor / "plugins", runtime.plugin_directories())
                 with mock.patch.dict("os.environ", {}, clear=True):
                     runtime.configure_environment()
@@ -242,6 +250,62 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
             finally:
                 sys.modules.pop("pyisis_runtime", None)
                 sys.path.remove(str(stage / "src"))
+
+    def test_stage_linux_runtime_uses_conda_isis_manifest_as_allowlist(self):
+        with TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            prefix = temp / "isis-prefix"
+            (prefix / "conda-meta").mkdir(parents=True)
+            (prefix / "appdata").mkdir()
+            (prefix / "bin").mkdir()
+            (prefix / "include").mkdir()
+            (prefix / "lib").mkdir()
+            (prefix / "IsisPreferences").write_text("preferences", encoding="utf-8")
+            (prefix / "appdata" / "template.tpl").write_text("template", encoding="utf-8")
+            (prefix / "bin" / "cam2map").write_bytes(b"application")
+            (prefix / "include" / "Cube.h").write_text("header", encoding="utf-8")
+            (prefix / "lib" / "Camera.plugin").write_text(
+                "Group = Camera\n  Library = TestCamera\nEndGroup\n",
+                encoding="utf-8",
+            )
+            (prefix / "lib" / "libisis.so").write_bytes(b"isis")
+            (prefix / "lib" / "libTestCamera.so").write_bytes(b"camera")
+            manifest_files = [
+                "IsisPreferences",
+                "appdata/template.tpl",
+                "bin/cam2map",
+                "include/Cube.h",
+                "lib/Camera.plugin",
+                "lib/libisis.so",
+                "lib/libTestCamera.so",
+            ]
+            (prefix / "conda-meta" / "isis-9.0.0-test.json").write_text(
+                json.dumps({"name": "isis", "files": manifest_files}),
+                encoding="utf-8",
+            )
+
+            stage = temp / "runtime-stage"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(LINUX_STAGING_SCRIPT),
+                    "--isis-prefix",
+                    str(prefix),
+                    "--dependency-copy-mode",
+                    "closure",
+                    "--stage-dir",
+                    str(stage),
+                ],
+                check=True,
+                cwd=PROJECT_ROOT,
+            )
+
+            vendor = stage / "src" / "pyisis_runtime" / "vendor" / "isis"
+            self.assertTrue((vendor / "appdata" / "template.tpl").is_file())
+            self.assertTrue((vendor / "lib" / "libisis.so").is_file())
+            self.assertTrue((vendor / "lib" / "libTestCamera.so").is_file())
+            self.assertFalse((vendor / "bin").exists())
+            self.assertFalse((vendor / "include").exists())
 
     def test_stage_linux_runtime_materializes_missing_soname_alias(self):
         spec = importlib.util.spec_from_file_location(
@@ -290,6 +354,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
 
             vendor_lib = stage / "src" / "pyisis_runtime" / "vendor" / "isis" / "lib"
             self.assertEqual((vendor_lib / "libcsmapi.so.3").read_bytes(), b"csmapi")
+            self.assertFalse((vendor_lib / "libcsmapi.so.3").is_symlink())
             self.assertEqual((vendor_lib / "libcsmapi.so.3.0.3").read_bytes(), b"csmapi")
 
     def test_verify_linux_runtime_closure_reports_missing_dependencies(self):
@@ -347,10 +412,38 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
                     stage_module._missing_runtime_dependencies(libisis, vendor),
                     (),
                 )
-
             verification_env = run_mock.call_args.kwargs["env"]
             self.assertNotIn("/external/conda/lib", verification_env["LD_LIBRARY_PATH"])
             self.assertIn(str(vendor / "lib"), verification_env["LD_LIBRARY_PATH"])
+
+    def test_stage_linux_runtime_enforces_size_budget(self):
+        spec = importlib.util.spec_from_file_location(
+            "stage_runtime_linux_size_budget",
+            LINUX_STAGING_SCRIPT,
+        )
+        self.assertIsNotNone(spec)
+        self.assertIsNotNone(spec.loader)
+        stage_module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(stage_module)
+
+        with TemporaryDirectory() as temp_dir:
+            temp = Path(temp_dir)
+            prefix = temp / "isis-prefix"
+            (prefix / "lib").mkdir(parents=True)
+            (prefix / "IsisPreferences").write_text("preferences", encoding="utf-8")
+            (prefix / "lib" / "libisis.so").write_bytes(b"isis")
+            (prefix / "lib" / "Camera.plugin").write_bytes(b"camera")
+
+            with mock.patch.object(
+                stage_module,
+                "_missing_runtime_dependencies",
+                return_value=(),
+            ), self.assertRaisesRegex(ValueError, "exceeds its size budget"):
+                stage_module.stage_runtime(
+                    prefix,
+                    temp / "runtime-stage",
+                    max_runtime_bytes=1,
+                )
 
 
 if __name__ == "__main__":

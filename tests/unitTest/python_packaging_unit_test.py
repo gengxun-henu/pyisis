@@ -207,12 +207,18 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         self.assertEqual(project["version"], "1.2.0")
         self.assertEqual(project["license"], "MIT")
         self.assertEqual(config["build-system"]["build-backend"], "setuptools.build_meta")
+        self.assertIn("setuptools>=77", config["build-system"]["requires"])
         self.assertEqual(config["tool"]["setuptools"]["packages"], ["pyisis_runtime"])
         self.assertFalse(config["tool"]["setuptools"]["include-package-data"])
         self.assertEqual(
             config["tool"]["setuptools"]["package-data"]["pyisis_runtime"],
             ["vendor/isis/**/*"],
         )
+        setup_script = runtime_pyproject.with_name("setup.py")
+        self.assertTrue(setup_script.is_file())
+        setup_text = setup_script.read_text(encoding="utf-8")
+        self.assertIn("has_ext_modules", setup_text)
+        self.assertIn('return "py3", "none", platform_tag', setup_text)
 
 
 if __name__ == "__main__":

@@ -14,6 +14,7 @@ Updated: 2026-07-22  Geng Xun covered CRLF-safe Windows ISIS patch application.
 Updated: 2026-07-22  Geng Xun covered clean-wheel unit-test helper discovery.
 Updated: 2026-07-22  Geng Xun kept clean-wheel binding tests independent of NumPy.
 Updated: 2026-07-23  Geng Xun covered Linux runtime size budgets and audited platform retagging.
+Updated: 2026-07-23  Geng Xun required PEP 639-capable setuptools for Windows wheel builds.
 """
 
 from __future__ import annotations
@@ -43,6 +44,7 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertTrue(BUILD_WHEELS_SCRIPT.is_file())
 
         script = BUILD_WHEELS_SCRIPT.read_text(encoding="utf-8")
+        self.assertIn('"setuptools>=77"', script)
         self.assertIn("stage_runtime_win64.py", script)
         self.assertIn("--dependency-prefix", script)
         self.assertIn("--dependency-copy-mode closure", script)

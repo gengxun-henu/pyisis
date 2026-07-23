@@ -25,7 +25,7 @@ if (Test-Path -LiteralPath $MsvcActivationScript) {
 
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 
-& $PythonExecutable -m pip install -U build scikit-build-core pybind11 wheel
+& $PythonExecutable -m pip install -U build scikit-build-core pybind11 "setuptools>=77" wheel
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 $env:ISIS_PREFIX = (Resolve-Path -LiteralPath $IsisPrefix).Path

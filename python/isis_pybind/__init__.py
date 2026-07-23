@@ -3,7 +3,7 @@
 # Copyright (c) 2026 Geng Xun, Henan University
 # SPDX-License-Identifier: MIT
 
-__version__ = "1.2.0"
+__version__ = "1.3.0rc1"
 
 try:
     from pyisis._runtime import configure_runtime as _configure_pyisis_runtime

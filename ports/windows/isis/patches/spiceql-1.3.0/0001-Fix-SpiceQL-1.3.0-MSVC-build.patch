@@ -2,6 +2,12 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 7bdc2ec..9124b7b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
+@@ -151,4 +151,4 @@ target_include_directories(SpiceQL
+                             PRIVATE
+                             ${CMAKE_CURRENT_SOURCE_DIR}/submodules/BTree/include/
+-                            cereal
++                            ${CEREAL_INCLUDE_DIRS}
+                             ${CSPICE_INCLUDE_DIRS}
 @@ -157,7 +157,13 @@ target_include_directories(SpiceQL
 +  target_compile_options(SpiceQL
 +                         PRIVATE

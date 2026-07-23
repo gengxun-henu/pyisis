@@ -86,6 +86,9 @@ index 0d7ebb0..1931a1c 100644
 @@ -278 +281 @@ namespace SpiceQL {
 -      refchg_((int *) &refFrame, (int *) &toFrame, &et, (doublereal *) CJ_spice);
 +      refchg_((integer *) &refFrame, (integer *) &toFrame, &et, (doublereal *) CJ_spice);
+@@ -674 +677 @@ namespace SpiceQL {
+-          paths.emplace_back(i->path());
++          paths.emplace_back(i->path().string());
 @@ -692 +695 @@ namespace SpiceQL {
 -      if (regex_search(f.c_str(), basic_regex(reg, regex_constants::optimize|regex_constants::ECMAScript)) && string(fs::path(f).filename()).at(0) != '.') {
 +      if (regex_search(f.c_str(), basic_regex(reg, regex_constants::optimize|regex_constants::ECMAScript)) && fs::path(f).filename().string().at(0) != '.') {

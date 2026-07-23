@@ -94,7 +94,10 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("--require-target", workflow)
         self.assertIn("--target 2.35", workflow)
         self.assertIn("env -u LD_LIBRARY_PATH auditwheel show", workflow)
-        self.assertIn("auditwheel-manylinux-wheel.txt", workflow)
+        self.assertEqual(
+            workflow.count("env -u LD_LIBRARY_PATH auditwheel show"),
+            1,
+        )
         self.assertIn("validate_auditwheel_policy.py", workflow)
         self.assertIn("test \"$native_wheel_count\" -eq 1", workflow)
         self.assertIn("usgs-pyisis-linux-cp312-abi-report", workflow)

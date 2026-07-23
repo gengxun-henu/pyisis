@@ -117,16 +117,12 @@ jobs:
             wheel_name="$(basename "$wheel" .whl)"
             report="$ABI_REPORT_DIR/auditwheel-${wheel_name}.txt"
             env -u LD_LIBRARY_PATH auditwheel show "$wheel" 2>&1 | tee "$report"
+            "$PYTHON_BIN" tools/packaging/validate_auditwheel_policy.py \
+              --report "$report" \
+              --target 2.35 \
+              --architecture x86_64
           done
           test "$native_wheel_count" -eq 1
-
-          extension_wheel="$(find "$WHEELHOUSE" -maxdepth 1 -name 'usgs_pyisis-*-manylinux_2_35_x86_64.whl' -print -quit)"
-          combined_report="$ABI_REPORT_DIR/auditwheel-manylinux-wheel.txt"
-          env -u LD_LIBRARY_PATH auditwheel show "$extension_wheel" 2>&1 | tee "$combined_report"
-          "$PYTHON_BIN" tools/packaging/validate_auditwheel_policy.py \
-            --report "$combined_report" \
-            --target 2.35 \
-            --architecture x86_64
 
       - name: Upload Linux ABI report
         uses: actions/upload-artifact@v4

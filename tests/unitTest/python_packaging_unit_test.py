@@ -16,6 +16,10 @@ Updated: 2026-06-19  Geng Xun added Linux runtime package metadata coverage.
 Updated: 2026-07-22  Geng Xun covered relocatable Linux wheel RPATH configuration.
 Updated: 2026-07-23  Geng Xun aligned package metadata with the ISIS 9.0.0 release manifest.
 Updated: 2026-07-23  Geng Xun covered Qt discovery from the separate Windows dependency prefix.
+Updated: 2026-07-23  Geng Xun covered Qt6 Core5Compat linkage for the developer benchmark.
+Updated: 2026-07-23  Geng Xun covered the separate ISIS 10 binding distribution manifest.
+Updated: 2026-07-23  Geng Xun required full prerelease versions in generated build metadata.
+Updated: 2026-07-23  Geng Xun required ISIS 10 Bullet float64 ABI selection.
 """
 
 import importlib
@@ -93,6 +97,24 @@ class PythonPackagingMetadataTest(unittest.TestCase):
         )
         self.assertIn("usgs-pyisis-isisdata-minimal==1.3.0rc1", dependencies)
 
+    def test_isis10_distribution_uses_shared_cmake_source_and_cp313(self):
+        manifest_path = (
+            self.repo_root / "packaging" / "bindings-isis10" / "pyproject.toml"
+        )
+        manifest = tomllib.loads(manifest_path.read_text(encoding="utf-8"))
+
+        self.assertEqual("usgs-pyisis-isis10", manifest["project"]["name"])
+        self.assertEqual("1.4.0rc1", manifest["project"]["version"])
+        self.assertEqual(">=3.13", manifest["project"]["requires-python"])
+        self.assertEqual(
+            "../..",
+            manifest["tool"]["scikit-build"]["cmake"]["source-dir"],
+        )
+        self.assertIn(
+            'usgs-pyisis-runtime-isis10-linux-x86_64==1.4.0rc1; platform_system == "Linux" and platform_machine == "x86_64"',
+            manifest["project"]["dependencies"],
+        )
+
     def test_release_manifest_matches_active_package_identity(self):
         pyproject = self.load_pyproject()
         release_path = self.repo_root / "packaging" / "release.toml"
@@ -144,6 +166,16 @@ class PythonPackagingMetadataTest(unittest.TestCase):
             cmake_lists.index(isis_qt_root),
         )
 
+    def test_cmake_links_all_selected_qt_compatibility_targets_to_benchmark(self):
+        cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
+        benchmark_block = cmake_lists.split(
+            "if(PYISIS_BUILD_BENCHMARKS)",
+            maxsplit=1,
+        )[1].split("install(TARGETS _isis_core", maxsplit=1)[0]
+
+        self.assertIn("${PYISIS_QT_TARGETS}", benchmark_block)
+        self.assertNotIn("${PYISIS_QT_CORE_TARGET})", benchmark_block)
+
     def test_cmake_honors_scikit_build_wheel_staging_paths(self):
         cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
 
@@ -158,6 +190,22 @@ class PythonPackagingMetadataTest(unittest.TestCase):
             'set(PYISIS_INSTALL_SITEARCH "${PYISIS_DEFAULT_SITEARCH}" CACHE PATH',
             cmake_lists,
         )
+
+    def test_cmake_embeds_full_prerelease_version(self):
+        cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
+
+        self.assertIn("SKBUILD_PROJECT_VERSION_FULL", cmake_lists)
+        self.assertLess(
+            cmake_lists.index("SKBUILD_PROJECT_VERSION_FULL"),
+            cmake_lists.index("SKBUILD_PROJECT_VERSION AND"),
+        )
+
+    def test_cmake_prefers_isis10_bullet_float64_libraries(self):
+        cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")
+
+        self.assertIn("PYISIS_ISIS_VERSION_MAJOR GREATER_EQUAL 10", cmake_lists)
+        self.assertIn('"${bullet_lib_name}-float64"', cmake_lists)
+        self.assertIn("NAMES ${_pyisis_bullet_candidates}", cmake_lists)
 
     def test_cmake_installs_pyisis_runtime_helper(self):
         cmake_lists = (self.repo_root / "CMakeLists.txt").read_text(encoding="utf-8")

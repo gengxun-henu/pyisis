@@ -2,11 +2,11 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 IProj,Map Projection,isis/src/base/objs/IProj/IProj.h,N/A,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,优先绑定；复用现有 TProjection/Pvl 包装和 tuple 型 XYRange 返回值
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,IProj,isis_pybind.IProj,N,通过 PROJ 支持通用投影，适用范围比新增任务专用类更广。
-Construction/Enum,"IProj(Pvl &label, bool allowDefaults = false)",isis_pybind.IProj(),N,ISIS 10-only candidate; not bound yet
-Public API,QString Name() const,isis_pybind.IProj.name,N,ISIS 10-only candidate; not bound yet
-Public API,QString Version() const,isis_pybind.IProj.version,N,ISIS 10-only candidate; not bound yet
-Public API,PvlGroup Mapping(),isis_pybind.IProj.mapping,N,ISIS 10-only candidate; not bound yet
-Mutation/Configuration,"bool SetGround(double lat, double lon)",isis_pybind.IProj.set_ground,N,ISIS 10-only candidate; not bound yet
-Mutation/Configuration,"bool SetCoordinate(double x, double y)",isis_pybind.IProj.set_coordinate,N,ISIS 10-only candidate; not bound yet
-Public API,"bool XYRange(double &minX, double &maxX, double &minY, double &maxY)",isis_pybind.IProj.xy_range,N,建议返回 Python 4-tuple
+Class Symbol,IProj,isis_pybind.IProj,Y,ISIS 10-only binding; tested against asp370
+Construction/Enum,"IProj(Pvl &label, bool allowDefaults = false)",isis_pybind.IProj(),Y,Bound with Pvl reference and allow_defaults
+Public API,QString Name() const,isis_pybind.IProj.name,Y,Converted to Python str
+Public API,QString Version() const,isis_pybind.IProj.version,Y,Converted to Python str
+Public API,PvlGroup Mapping(),isis_pybind.IProj.mapping,Y,Returns bound PvlGroup
+Mutation/Configuration,"bool SetGround(double lat, double lon)",isis_pybind.IProj.set_ground,Y,Bound
+Mutation/Configuration,"bool SetCoordinate(double x, double y)",isis_pybind.IProj.set_coordinate,Y,Bound
+Public API,"bool XYRange(double &minX, double &maxX, double &minY, double &maxY)",isis_pybind.IProj.xy_range,Y,Returns Python 4-tuple and raises on failure

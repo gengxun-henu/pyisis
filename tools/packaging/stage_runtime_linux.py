@@ -12,6 +12,8 @@ from pathlib import Path
 
 
 SHARED_LIBRARY_RE = re.compile(r"^[A-Za-z0-9_.+\-]+\.so(?:\.[A-Za-z0-9_.+\-]+)*$")
+PROJECT_NAME_RE = re.compile(r'(?m)^name = "[^"]+"$')
+PROJECT_VERSION_RE = re.compile(r'(?m)^version = "[^"]+"$')
 
 RUNTIME_ROOT_FILES = frozenset(
     {
@@ -282,12 +284,36 @@ def _runtime_size_bytes(vendor_root: Path) -> int:
     return sum(path.lstat().st_size for path in vendor_root.rglob("*") if path.is_file())
 
 
+def _set_project_identity(
+    stage_dir: Path,
+    distribution_name: str,
+    package_version: str,
+) -> None:
+    pyproject = stage_dir / "pyproject.toml"
+    payload = pyproject.read_text(encoding="utf-8")
+    payload, name_count = PROJECT_NAME_RE.subn(
+        f'name = "{distribution_name}"',
+        payload,
+        count=1,
+    )
+    payload, version_count = PROJECT_VERSION_RE.subn(
+        f'version = "{package_version}"',
+        payload,
+        count=1,
+    )
+    if name_count != 1 or version_count != 1:
+        raise ValueError(f"Unable to update runtime project identity in {pyproject}")
+    pyproject.write_text(payload, encoding="utf-8")
+
+
 def stage_runtime(
     isis_prefix: Path,
     stage_dir: Path,
     dependency_prefixes: tuple[Path, ...] = (),
     dependency_copy_mode: str = "closure",
     max_runtime_bytes: int | None = None,
+    distribution_name: str = "usgs-pyisis-runtime-linux-x86_64",
+    package_version: str = "1.3.0rc1",
 ) -> Path:
     """Copy redistributable Linux runtime files into a generated package stage."""
 
@@ -305,6 +331,7 @@ def stage_runtime(
     if stage_dir.exists():
         shutil.rmtree(stage_dir)
     shutil.copytree(template_root, stage_dir)
+    _set_project_identity(stage_dir, distribution_name, package_version)
 
     vendor_root = stage_dir / "src" / "pyisis_runtime" / "vendor" / "isis"
     _copy_isis_runtime(isis_prefix, vendor_root)
@@ -360,6 +387,11 @@ def main() -> int:
     )
     parser.add_argument("--stage-dir", required=True, type=Path)
     parser.add_argument("--max-runtime-bytes", type=int)
+    parser.add_argument(
+        "--distribution-name",
+        default="usgs-pyisis-runtime-linux-x86_64",
+    )
+    parser.add_argument("--package-version", default="1.3.0rc1")
     args = parser.parse_args()
 
     stage_runtime(
@@ -368,6 +400,8 @@ def main() -> int:
         tuple(path.resolve() for path in args.dependency_prefix),
         args.dependency_copy_mode,
         args.max_runtime_bytes,
+        args.distribution_name,
+        args.package_version,
     )
     return 0
 

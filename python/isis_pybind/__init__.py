@@ -6,18 +6,50 @@
 __version__ = "1.3.0rc1"
 
 try:
-    from pyisis._runtime import configure_runtime as _configure_pyisis_runtime
+    from pyisis._runtime import (
+        configure_runtime as _configure_pyisis_runtime,
+        validate_runtime_version as _validate_pyisis_runtime_version,
+    )
 except ImportError:
     _configure_pyisis_runtime = None
+    _validate_pyisis_runtime_version = None
 
+try:
+    from ._build_info import (
+        ISIS_VERSION as _compiled_isis_version,
+        ISIS_VERSION_MAJOR as _compiled_isis_major,
+        PACKAGE_VERSION as _built_package_version,
+    )
+except ImportError:
+    _compiled_isis_version = None
+    _compiled_isis_major = None
+    _built_package_version = None
+
+if _built_package_version is not None:
+    __version__ = _built_package_version
+
+_runtime_discovery = None
 if _configure_pyisis_runtime is not None:
     try:
-        _configure_pyisis_runtime()
+        _runtime_discovery = _configure_pyisis_runtime()
     except Exception:
         # Runtime package discovery is optional; keep explicit user envs usable.
         pass
 
+if (
+    _validate_pyisis_runtime_version is not None
+    and _compiled_isis_version is not None
+    and _compiled_isis_major is not None
+):
+    _validate_pyisis_runtime_version(
+        _compiled_isis_version,
+        _compiled_isis_major,
+        discovery=_runtime_discovery,
+    )
+
 from ._isis_core import (
+    __isis_major__ as _core_isis_major,
+    __isis_version__ as _core_isis_version,
     Angle,
     AbstractPlate,
     Affine,
@@ -442,6 +474,15 @@ from ._isis_core import (
     to_string,
 )
 
+if _compiled_isis_version is not None and _core_isis_version != _compiled_isis_version:
+    raise ImportError(
+        "Generated PyISIS build metadata does not match the loaded extension: "
+        f"{_compiled_isis_version} != {_core_isis_version}"
+    )
+
+__isis_version__ = _core_isis_version
+__isis_major__ = _core_isis_major
+
 _OPTIONAL_JP2_ERROR_EXPORTS = []
 try:
     from ._isis_core import JP2Error
@@ -468,7 +509,27 @@ else:
         ]
     )
 
+_OPTIONAL_ISIS10_EXPORTS = []
+try:
+    from ._isis_core import (
+        Chandrayaan2OhrcCamera,
+        Chandrayaan2TmcCamera,
+        IProj,
+    )
+except ImportError:
+    pass
+else:
+    _OPTIONAL_ISIS10_EXPORTS.extend(
+        [
+            "Chandrayaan2OhrcCamera",
+            "Chandrayaan2TmcCamera",
+            "IProj",
+        ]
+    )
+
 __all__ = [
+    "__isis_major__",
+    "__isis_version__",
     "Sensor",
     "Camera",
     "CameraDetectorMap",
@@ -894,3 +955,4 @@ __all__ = [
 
 __all__.extend(_OPTIONAL_JP2_ERROR_EXPORTS)
 __all__.extend(_OPTIONAL_EMBREE_EXPORTS)
+__all__.extend(_OPTIONAL_ISIS10_EXPORTS)

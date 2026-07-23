@@ -8,6 +8,8 @@
 // Updated: 2026-04-10  Geng Xun added bind_spice_navigation for SpicePosition/SpiceRotation/SpacecraftPosition (Batch 1)
 // Updated: 2026-04-10  Geng Xun added bind_base_image_polygon for ImagePolygon (Batch 2)
 // Updated: 2026-04-10  Geng Xun added ProcessMapMosaic/RubberSheet/Polygons/GroundPolygons/PolygonTools (Batch 3)
+// Updated: 2026-07-23  Geng Xun exposed the compile-time ISIS version for ABI validation.
+// Updated: 2026-07-23  Geng Xun registered the first version-gated ISIS 10 binding batch.
 // Purpose: define the top-level pybind11 _isis_core module and register all binding submodules
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -49,6 +51,7 @@ void bind_mgs_utilities(py::module_ &m);
 void bind_lro_utilities(py::module_ &m);
 void bind_mro_hical(py::module_ &m);
 void bind_spice_navigation(py::module_ &m);
+void bind_isis10(py::module_ &m);
 void bind_camera_factory(py::module_ &m);
 void bind_statistics(py::module_ &m);
 void bind_low_level_cube_io(py::module_ &m);
@@ -56,6 +59,8 @@ void bind_high_level_cube_io(py::module_ &m);
 
 PYBIND11_MODULE(_isis_core, m) {
   m.doc() = "Standalone pybind11 bindings for selected ISIS C++ APIs";
+  m.attr("__isis_version__") = PYISIS_COMPILED_ISIS_VERSION;
+  m.attr("__isis_major__") = PYISIS_COMPILED_ISIS_VERSION_MAJOR;
 
   bind_sensor(m);
   bind_camera(m);
@@ -86,6 +91,7 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_lro_utilities(m);
   bind_mro_hical(m);
   bind_spice_navigation(m);
+  bind_isis10(m);
   bind_camera_factory(m);
   bind_low_level_cube_io(m);
   bind_high_level_cube_io(m);

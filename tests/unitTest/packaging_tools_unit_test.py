@@ -15,6 +15,7 @@ Updated: 2026-07-22  Geng Xun covered clean-wheel unit-test helper discovery.
 Updated: 2026-07-22  Geng Xun kept clean-wheel binding tests independent of NumPy.
 Updated: 2026-07-23  Geng Xun covered Linux runtime size budgets and audited platform retagging.
 Updated: 2026-07-23  Geng Xun required PEP 639-capable setuptools for Windows wheel builds.
+Updated: 2026-07-23  Geng Xun covered versioned package and ISIS runtime checks during clean installs.
 """
 
 from __future__ import annotations
@@ -69,9 +70,19 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES", script)
         self.assertNotIn("manylinux_2_28_x86_64", script)
         self.assertNotIn("pip install", script)
-        self.assertIn("usgs_pyisis_runtime_linux_x86_64-*-py3-none-*.whl", script)
+        self.assertIn(
+            "PYISIS_RUNTIME_DISTRIBUTION:-usgs-pyisis-runtime-linux-x86_64",
+            script,
+        )
+        self.assertIn('runtime_normalized="${runtime_distribution//-/_}"', script)
+        self.assertIn('--runtime-dependency "$runtime_distribution"', script)
+        self.assertIn('"$binding_project_dir"', script)
         self.assertIn("packaging/isisdata-minimal", script)
-        self.assertIn("-m build . --wheel --no-isolation --skip-dependency-check", script)
+        self.assertIn(
+            '-m build "$binding_project_dir" --wheel --no-isolation '
+            "--skip-dependency-check",
+            script,
+        )
 
     def test_windows_patch_queue_avoids_no_newline_only_hunks(self):
         patch_paths = sorted(WINDOWS_ISIS_PATCHES_DIR.glob("*.patch"))
@@ -107,6 +118,9 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("ISIS_PREFIX", script)
         self.assertIn("CONDA_PREFIX", script)
         self.assertIn("--test-list", script)
+        self.assertIn("--package", script)
+        self.assertIn("--expected-isis-version", script)
+        self.assertIn("__isis_version__", script)
         self.assertIn('"-m", "unittest"', script)
 
     def test_clean_venv_install_script_selects_platform_python_path(self):

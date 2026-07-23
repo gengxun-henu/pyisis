@@ -25,11 +25,15 @@ python tools/dev/generate_isis10_bind_inventory.py \
 
 ## 当前建议顺序
 
-第一批建议绑定：
+第一批已完成绑定（仅在 ISIS 10 构建中导出）：
 
 1. `IProj`：通用 PROJ 投影，用户覆盖面最大。
 2. `Chandrayaan2OhrcCamera`：小而稳定的任务相机模型。
 3. `Chandrayaan2TmcCamera`：小而稳定的任务相机模型。
+
+实现位于 `src/bind_isis10.cpp`，并由 `PYISIS_ISIS10_API` 条件编译保护。
+同一源码在 ISIS 9 中不导出这些类，在 ISIS 10 中导出并由
+`tests/unitTest/isis10_api_unit_test.py` 验证。
 
 第二批建议评估：
 

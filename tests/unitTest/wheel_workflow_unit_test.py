@@ -10,6 +10,8 @@ Updated: 2026-07-22  Geng Xun added isolated Linux wheel build and install cover
 Updated: 2026-07-23  Geng Xun required manylinux 2.35 builds and Ubuntu 22.04/24.04 install tests.
 Updated: 2026-07-23  Geng Xun covered trusted Windows ISIS prefix cache reuse.
 Updated: 2026-07-23  Geng Xun gated GitHub Release publication on validated platform wheelhouses.
+Updated: 2026-07-23  Geng Xun covered ISIS 10 cp313 manylinux build and clean-install jobs.
+Updated: 2026-07-23  Geng Xun covered measured ISIS 10 runtime size budgets.
 """
 
 from __future__ import annotations
@@ -126,7 +128,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("env -u LD_LIBRARY_PATH auditwheel show", workflow)
         self.assertEqual(
             workflow.count("env -u LD_LIBRARY_PATH auditwheel show"),
-            1,
+            2,
         )
         self.assertIn("validate_auditwheel_policy.py", workflow)
         self.assertIn("test \"$native_wheel_count\" -eq 1", workflow)
@@ -136,6 +138,31 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("ubuntu-24.04", workflow)
         self.assertIn("runs-on: ${{ matrix.os }}", workflow)
         self.assertIn("--test-list tools/packaging/basic_tests.txt", workflow)
+
+    def test_workflow_builds_and_tests_isis10_cp313_linux_wheels(self):
+        workflow = self._workflow_text()
+
+        self.assertIn("linux-isis10-cp313-build:", workflow)
+        self.assertIn("linux-isis10-cp313-clean-install:", workflow)
+        self.assertIn("ports/linux/env/pyisis-isis10-linux-64.yml", workflow)
+        self.assertIn("packaging/bindings-isis10", workflow)
+        self.assertIn("--distribution-name usgs-pyisis-isis10", workflow)
+        self.assertIn(
+            "--runtime-distribution usgs-pyisis-runtime-isis10-linux-x86_64",
+            workflow,
+        )
+        self.assertIn('python-version: "3.13"', workflow)
+        self.assertIn("--package usgs-pyisis-isis10", workflow)
+        self.assertIn("--expected-isis-version 10.0.0", workflow)
+        self.assertIn(
+            "usgs-pyisis-isis10-linux-cp313-manylinux-wheelhouse",
+            workflow,
+        )
+        self.assertIn('PYISIS_MAX_LINUX_RUNTIME_BYTES: "1100000000"', workflow)
+        self.assertIn(
+            'PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES: "550000000"',
+            workflow,
+        )
 
     def test_workflow_can_publish_configured_release_after_platform_gates(self):
         workflow = self._workflow_text()

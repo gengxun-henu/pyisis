@@ -2323,3 +2323,19 @@ Ledger syncs: ControlMeasureLogData, Enlarge, TableRecord, FileName
 - `class_bind_methods_details/methods_inventory_summary.csv`: 5 行更新（全部 100%）
 - `class_bind_methods_details/`: 5 个 detail CSV 更新
 - `pybind_progress_log.md`: 本条目
+
+## ISIS 10 Batch 1 — 2026-07-23
+
+**Queue (3 ISIS 10-only classes):** IProj, Chandrayaan2OhrcCamera,
+Chandrayaan2TmcCamera
+
+- 新增 `src/bind_isis10.cpp`，以 `PYISIS_ISIS10_API` 隔离 ISIS 10 专属 API；
+  ISIS 9 保持原有导出面。
+- `IProj` 完成构造、名称、版本、Mapping、正反算和 Python 4-tuple
+  `xy_range` 绑定。
+- 两项 Chandrayaan-2 线阵相机完成 Cube 构造、生命周期和 SPICE ID 绑定。
+- `tests/unitTest/isis10_api_unit_test.py` 在 ISIS 9 验证符号缺席，在 ISIS 10
+  验证导出、继承关系和 IProj 行为。
+- `asp360_new`（ISIS 9.0.0/Python 3.12/Qt5）和
+  `asp370`（ISIS 10.0.0/Python 3.13/Qt6）均完成重新编译；ISIS 10 聚焦测试
+  3/3 通过。

@@ -71,6 +71,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--wheelhouse", required=True, type=Path)
     parser.add_argument("--venv", required=True, type=Path)
+    parser.add_argument("--package", default="usgs-pyisis")
+    parser.add_argument("--expected-isis-version")
     parser.add_argument(
         "--test-list",
         type=Path,
@@ -93,9 +95,12 @@ def main() -> int:
             "--no-index",
             "--find-links",
             str(args.wheelhouse),
-            "usgs-pyisis",
+            args.package,
         ]
     )
+    verification_env = _verification_environment()
+    if args.expected_isis_version:
+        verification_env["PYISIS_EXPECTED_ISIS_VERSION"] = args.expected_isis_version
     run(
         [
             str(python),
@@ -105,10 +110,12 @@ def main() -> int:
                 "status = pyisis.data_status(); "
                 "print(status.message); "
                 "assert os.environ.get('ISISROOT'); "
-                "assert status.usable_for_smoke_tests"
+                "assert status.usable_for_smoke_tests; "
+                "expected = os.environ.get('PYISIS_EXPECTED_ISIS_VERSION'); "
+                "assert expected is None or isis_pybind.__isis_version__ == expected"
             ),
         ],
-        env=_verification_environment(),
+        env=verification_env,
     )
     if args.test_list:
         verification_env = _unit_test_environment()

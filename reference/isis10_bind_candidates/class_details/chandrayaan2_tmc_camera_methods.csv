@@ -2,8 +2,8 @@ Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
 Chandrayaan2TmcCamera,Chandrayaan-2,isis/src/chandrayaan2/objs/Chandrayaan2TmcCamera/Chandrayaan2TmcCamera.h,N/A,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,优先绑定；沿用现有 mission camera 的 Cube 生命周期与 SPICE ID 模式
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Chandrayaan2TmcCamera,isis_pybind.Chandrayaan2TmcCamera,N,公开面小，可补齐 Chandrayaan-2 TMC 几何模型。
-Construction/Enum,Chandrayaan2TmcCamera(Cube &cube),isis_pybind.Chandrayaan2TmcCamera(),N,ISIS 10-only candidate; not bound yet
-Public API,virtual int CkFrameId() const,isis_pybind.Chandrayaan2TmcCamera.ck_frame_id,N,ISIS 10-only candidate; not bound yet
-Public API,virtual int CkReferenceId() const,isis_pybind.Chandrayaan2TmcCamera.ck_reference_id,N,ISIS 10-only candidate; not bound yet
-Public API,virtual int SpkReferenceId() const,isis_pybind.Chandrayaan2TmcCamera.spk_reference_id,N,ISIS 10-only candidate; not bound yet
+Class Symbol,Chandrayaan2TmcCamera,isis_pybind.Chandrayaan2TmcCamera,Y,ISIS 10-only binding; tested against asp370
+Construction/Enum,Chandrayaan2TmcCamera(Cube &cube),isis_pybind.Chandrayaan2TmcCamera(),Y,Bound with Cube keep-alive policy
+Public API,virtual int CkFrameId() const,isis_pybind.Chandrayaan2TmcCamera.ck_frame_id,Y,Bound
+Public API,virtual int CkReferenceId() const,isis_pybind.Chandrayaan2TmcCamera.ck_reference_id,Y,Bound
+Public API,virtual int SpkReferenceId() const,isis_pybind.Chandrayaan2TmcCamera.spk_reference_id,Y,Bound

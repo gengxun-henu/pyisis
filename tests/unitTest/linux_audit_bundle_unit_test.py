@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-07-23
 Last Modified: 2026-07-23
 Updated: 2026-07-23  Geng Xun added cross-wheel audit bundle coverage.
+Updated: 2026-07-23  Geng Xun covered removal of versioned ISIS runtime dependencies.
 """
 
 from __future__ import annotations
@@ -100,6 +101,21 @@ class LinuxAuditBundleUnitTest(unittest.TestCase):
                     runtime,
                     root / "combined.whl",
                 )
+
+    def test_bundle_removes_selected_isis10_runtime_dependency(self):
+        metadata = (
+            b"Metadata-Version: 2.4\n"
+            b"Requires-Dist: usgs-pyisis-runtime-isis10-linux-x86_64==1.4.0rc1\n"
+            b"Requires-Dist: usgs-pyisis-isisdata-minimal==1.3.0rc1\n"
+        )
+
+        filtered = self.module._metadata_without_runtime_dependency(
+            metadata,
+            "usgs-pyisis-runtime-isis10-linux-x86_64",
+        ).decode("utf-8")
+
+        self.assertNotIn("runtime-isis10-linux", filtered)
+        self.assertIn("isisdata-minimal", filtered)
 
 
 if __name__ == "__main__":

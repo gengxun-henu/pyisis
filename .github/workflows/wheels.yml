@@ -181,6 +181,157 @@ jobs:
             --venv "$GITHUB_WORKSPACE/build/packaging/linux-pip-smoke-venv" \
             --test-list tools/packaging/basic_tests.txt
 
+  linux-isis10-cp313-build:
+    name: Build ISIS 10 Linux cp313 manylinux_2_35 wheels
+    runs-on: ubuntu-24.04
+    container:
+      image: quay.io/pypa/manylinux_2_28_x86_64
+    timeout-minutes: 180
+    permissions:
+      contents: read
+    env:
+      MAMBA_ROOT_PREFIX: /opt/pyisis-isis10-micromamba
+      HOSTED_CONDA_PREFIX: /opt/pyisis-isis10-conda
+      WHEELHOUSE: ${{ github.workspace }}/wheelhouse-isis10
+      ABI_REPORT_DIR: ${{ github.workspace }}/build/packaging/linux-isis10-abi-report
+      PYISIS_MAX_LINUX_RUNTIME_BYTES: "1100000000"
+      PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES: "550000000"
+      PYTHONUNBUFFERED: "1"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Linux ISIS 10 wheel environment
+        uses: ./.github/actions/setup-hosted-micromamba
+        with:
+          environment-name: pyisis-isis10-linux-64
+          environment-file: ports/linux/env/pyisis-isis10-linux-64.yml
+          root-prefix: ${{ env.MAMBA_ROOT_PREFIX }}
+          target-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Resolve Linux ISIS 10 prefix
+        uses: ./.github/actions/resolve-conda-isis-prefix
+        with:
+          runner-mode: github-hosted
+          fallback-conda-prefix: ""
+          hosted-conda-prefix: ${{ env.HOSTED_CONDA_PREFIX }}
+
+      - name: Select conda compiler
+        shell: bash
+        run: |
+          set -euo pipefail
+          compiler=""
+          for compiler_name in \
+            x86_64-conda-linux-gnu-c++ \
+            x86_64-conda-linux-gnu-g++ \
+            g++; do
+            candidate="$(command -v "$compiler_name" || true)"
+            if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+              compiler="$candidate"
+              break
+            fi
+          done
+          if [ -z "$compiler" ]; then
+            echo "::error::No usable C++ compiler was found in the manylinux container."
+            exit 1
+          fi
+          "$compiler" --version
+          echo "CXX=$compiler" >> "$GITHUB_ENV"
+
+      - name: Build ISIS 10 Linux wheelhouse
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash tools/packaging/build_wheels_linux.sh \
+            --isis-prefix "$ISIS_PREFIX" \
+            --output-dir "$WHEELHOUSE" \
+            --python-executable "$PYTHON_BIN" \
+            --dependency-prefix "$CONDA_PREFIX" \
+            --platform-tag manylinux_2_35_x86_64 \
+            --binding-project-dir packaging/bindings-isis10 \
+            --distribution-name usgs-pyisis-isis10 \
+            --runtime-distribution usgs-pyisis-runtime-isis10-linux-x86_64 \
+            --package-version 1.4.0rc1
+
+      - name: Audit ISIS 10 Linux ABI and wheel policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$ABI_REPORT_DIR"
+          "$PYTHON_BIN" tools/packaging/audit_linux_wheelhouse.py \
+            --wheelhouse "$WHEELHOUSE" \
+            --target-glibc 2.28 \
+            --require-target \
+            --report "$ABI_REPORT_DIR/glibc-symbol-report.json"
+          native_wheel_count=0
+          for wheel in "$WHEELHOUSE"/*-manylinux_2_35_x86_64.whl; do
+            test -f "$wheel"
+            native_wheel_count=$((native_wheel_count + 1))
+            wheel_name="$(basename "$wheel" .whl)"
+            report="$ABI_REPORT_DIR/auditwheel-${wheel_name}.txt"
+            env -u LD_LIBRARY_PATH auditwheel show "$wheel" 2>&1 | tee "$report"
+            "$PYTHON_BIN" tools/packaging/validate_auditwheel_policy.py \
+              --report "$report" \
+              --target 2.35 \
+              --architecture x86_64
+          done
+          test "$native_wheel_count" -eq 1
+
+      - name: Upload ISIS 10 Linux ABI report
+        uses: actions/upload-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-linux-cp313-abi-report
+          if-no-files-found: error
+          path: build/packaging/linux-isis10-abi-report/*
+
+      - name: Upload ISIS 10 Linux wheelhouse
+        uses: actions/upload-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-linux-cp313-manylinux-wheelhouse
+          if-no-files-found: error
+          path: wheelhouse-isis10/*.whl
+
+  linux-isis10-cp313-clean-install:
+    name: Test ISIS 10 Linux cp313 wheels on ${{ matrix.os }}
+    needs: linux-isis10-cp313-build
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-22.04
+          - ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up clean Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Download ISIS 10 Linux wheelhouse
+        uses: actions/download-artifact@v4
+        with:
+          name: usgs-pyisis-isis10-linux-cp313-manylinux-wheelhouse
+          path: wheelhouse-isis10
+
+      - name: Test isolated ISIS 10 wheel install
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/packaging/test_wheel_install.py \
+            --wheelhouse "$GITHUB_WORKSPACE/wheelhouse-isis10" \
+            --venv "$GITHUB_WORKSPACE/build/packaging/linux-isis10-pip-smoke-venv" \
+            --package usgs-pyisis-isis10 \
+            --expected-isis-version 10.0.0 \
+            --test-list tools/packaging/basic_tests.txt
+
   windows-cp312:
     name: Build Windows cp312 wheels
     runs-on: windows-2022

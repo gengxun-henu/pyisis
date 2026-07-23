@@ -43,7 +43,6 @@ dependencies:
   - protobuf
   - spdlog
   - suitesparse
-  - superlu
   - tnt
   - usgscsm
   - xerces-c

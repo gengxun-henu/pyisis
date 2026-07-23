@@ -7,7 +7,7 @@ Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
 Updated: 2026-07-22  Geng Xun added isolated Linux wheel build and install coverage.
-Updated: 2026-07-23  Geng Xun required manylinux 2.28 builds and Ubuntu 22.04/24.04 install tests.
+Updated: 2026-07-23  Geng Xun required manylinux 2.35 builds and Ubuntu 22.04/24.04 install tests.
 """
 
 from __future__ import annotations
@@ -87,11 +87,12 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("x86_64-conda-linux-gnu-g++", workflow)
         self.assertIn('candidate="$(command -v "$compiler_name" || true)"', workflow)
         self.assertIn("quay.io/pypa/manylinux_2_28_x86_64", workflow)
-        self.assertIn("--platform-tag manylinux_2_28_x86_64", workflow)
+        self.assertIn("--platform-tag manylinux_2_35_x86_64", workflow)
         self.assertIn("Audit Linux ABI and wheel policy", workflow)
         self.assertIn("audit_linux_wheelhouse.py", workflow)
         self.assertIn("--target-glibc 2.28", workflow)
         self.assertIn("--require-target", workflow)
+        self.assertIn("--target 2.35", workflow)
         self.assertIn("auditwheel show", workflow)
         self.assertIn("build_linux_audit_bundle.py", workflow)
         self.assertIn("auditwheel-combined-installed-layout.txt", workflow)

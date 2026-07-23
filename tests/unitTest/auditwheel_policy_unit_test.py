@@ -32,7 +32,7 @@ class AuditwheelPolicyUnitTest(unittest.TestCase):
     def _report(self, root: Path, policy: str) -> Path:
         report = root / f"{policy}.txt"
         report.write_text(
-            f'wheel.whl is consistent with the following platform tag: "{policy}".\n',
+            f'wheel.whl is consistent\nwith the following platform tag: "{policy}".\n',
             encoding="utf-8",
         )
         return report

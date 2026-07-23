@@ -354,7 +354,7 @@ class RuntimeWheelScriptUnitTest(unittest.TestCase):
 
             vendor_lib = stage / "src" / "pyisis_runtime" / "vendor" / "isis" / "lib"
             self.assertEqual((vendor_lib / "libcsmapi.so.3").read_bytes(), b"csmapi")
-            self.assertTrue((vendor_lib / "libcsmapi.so.3").is_symlink())
+            self.assertFalse((vendor_lib / "libcsmapi.so.3").is_symlink())
             self.assertEqual((vendor_lib / "libcsmapi.so.3.0.3").read_bytes(), b"csmapi")
 
     def test_verify_linux_runtime_closure_reports_missing_dependencies(self):

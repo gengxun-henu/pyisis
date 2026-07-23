@@ -34,7 +34,7 @@ concurrency:
 
 jobs:
   linux-cp312-build:
-    name: Build Linux cp312 manylinux_2_28 wheels
+    name: Build Linux cp312 manylinux_2_35 wheels
     runs-on: ubuntu-24.04
     container:
       image: quay.io/pypa/manylinux_2_28_x86_64
@@ -98,7 +98,7 @@ jobs:
             --output-dir "$WHEELHOUSE" \
             --python-executable "$PYTHON_BIN" \
             --dependency-prefix "$CONDA_PREFIX" \
-            --platform-tag manylinux_2_28_x86_64
+            --platform-tag manylinux_2_35_x86_64
 
       - name: Audit Linux ABI and wheel policy
         shell: bash
@@ -111,27 +111,27 @@ jobs:
             --require-target \
             --report "$ABI_REPORT_DIR/glibc-symbol-report.json"
           native_wheel_count=0
-          for wheel in "$WHEELHOUSE"/*-manylinux_2_28_x86_64.whl; do
+          for wheel in "$WHEELHOUSE"/*-manylinux_2_35_x86_64.whl; do
             test -f "$wheel"
             native_wheel_count=$((native_wheel_count + 1))
             wheel_name="$(basename "$wheel" .whl)"
             report="$ABI_REPORT_DIR/auditwheel-${wheel_name}.txt"
-            auditwheel show "$wheel" | tee "$report"
+            auditwheel show "$wheel" 2>&1 | tee "$report"
           done
           test "$native_wheel_count" -eq 2
 
-          extension_wheel="$(find "$WHEELHOUSE" -maxdepth 1 -name 'usgs_pyisis-*-manylinux_2_28_x86_64.whl' -print -quit)"
-          runtime_wheel="$(find "$WHEELHOUSE" -maxdepth 1 -name 'usgs_pyisis_runtime_linux_x86_64-*-manylinux_2_28_x86_64.whl' -print -quit)"
+          extension_wheel="$(find "$WHEELHOUSE" -maxdepth 1 -name 'usgs_pyisis-*-manylinux_2_35_x86_64.whl' -print -quit)"
+          runtime_wheel="$(find "$WHEELHOUSE" -maxdepth 1 -name 'usgs_pyisis_runtime_linux_x86_64-*-manylinux_2_35_x86_64.whl' -print -quit)"
           audit_bundle="$ABI_REPORT_DIR/combined/$(basename "$extension_wheel")"
           "$PYTHON_BIN" tools/packaging/build_linux_audit_bundle.py \
             --extension-wheel "$extension_wheel" \
             --runtime-wheel "$runtime_wheel" \
             --output "$audit_bundle"
           combined_report="$ABI_REPORT_DIR/auditwheel-combined-installed-layout.txt"
-          auditwheel show "$audit_bundle" | tee "$combined_report"
+          auditwheel show "$audit_bundle" 2>&1 | tee "$combined_report"
           "$PYTHON_BIN" tools/packaging/validate_auditwheel_policy.py \
             --report "$combined_report" \
-            --target 2.28 \
+            --target 2.35 \
             --architecture x86_64
           find "$ABI_REPORT_DIR/combined" -depth -delete
 

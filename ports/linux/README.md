@@ -15,9 +15,11 @@ build files, and unrelated environment libraries are excluded. CI enforces a
 The hosted build records two complementary ABI reports. `auditwheel show`
 records each native wheel and evaluates a temporary union of the extension and
 runtime payloads, matching their installed layout without changing the three
-published wheels. The combined policy result must be manylinux 2.28 or older.
+published wheels. The combined policy result must be manylinux 2.35 or older.
 Meanwhile,
 `tools/packaging/audit_linux_wheelhouse.py` streams GLIBC symbol versions from
-both native wheels without expanding them. The manylinux tag is accepted only
-when the GLIBC 2.28 symbol gate and combined auditwheel policy gate pass,
+both native wheels without expanding them. The release target is 2.35 because
+the pinned Conda ISIS runtime requires that C++ ABI level; the independent
+GLIBC symbol gate remains at 2.28 and currently observes 2.17. The manylinux
+tag is accepted only when both gates pass,
 followed by the two clean-install jobs.

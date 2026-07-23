@@ -12,5 +12,5 @@ dependencies:
   - setuptools>=77
   - wheel
   - auditwheel=6.7.0
-  - cxx-compiler
+  - cxx-compiler=1.7.0
   - isis=9.0.0

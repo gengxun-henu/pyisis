@@ -52,20 +52,6 @@ def _copy_file(source: Path, source_root: Path, target_root: Path) -> None:
     relative = source.relative_to(source_root)
     target = target_root / relative
     target.parent.mkdir(parents=True, exist_ok=True)
-    if source.is_symlink():
-        resolved_source = source.resolve(strict=True)
-        try:
-            resolved_relative = resolved_source.relative_to(source_root.resolve())
-        except ValueError as exc:
-            raise ValueError(
-                f"Runtime symlink escapes its source prefix: {source}"
-            ) from exc
-        _copy_file(resolved_source, source_root.resolve(), target_root)
-        if target.exists() or target.is_symlink():
-            target.unlink()
-        staged_target = target_root / resolved_relative
-        target.symlink_to(os.path.relpath(staged_target, target.parent))
-        return
     shutil.copy2(source, target)
 
 
@@ -78,10 +64,7 @@ def _copy_dependency_alias(
     relative = source.relative_to(source_root)
     target = target_root / relative.parent / dependency_name
     target.parent.mkdir(parents=True, exist_ok=True)
-    copied_source = target_root / relative
-    if target.exists() or target.is_symlink():
-        target.unlink()
-    target.symlink_to(os.path.relpath(copied_source, target.parent))
+    shutil.copy2(source, target)
 
 
 def _copy_patterns(source_root: Path, target_root: Path, patterns: tuple[str, ...]) -> None:

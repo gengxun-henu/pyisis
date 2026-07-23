@@ -8,7 +8,7 @@ import re
 
 
 POLICY_RE = re.compile(
-    r'is consistent with the following platform tag: "([^"]+)"\.'
+    r'is\s+consistent\s+with\s+the\s+following\s+platform\s+tag:\s+"([^"]+)"\.'
 )
 LEGACY_POLICIES = {
     "manylinux1": (2, 5),

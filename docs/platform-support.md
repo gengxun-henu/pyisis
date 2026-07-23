@@ -6,7 +6,7 @@ trees and runtime binaries are never source-controlled.
 | Platform | Development input | Release layout | Current validation |
 | --- | --- | --- | --- |
 | Windows x64 | MSVC, the pinned ISIS 9.0.0 patch queue under `ports/windows/`, and the conda dependency environment | `usgs-pyisis`, `usgs-pyisis-runtime-win64`, and `usgs-pyisis-isisdata-minimal` wheels | CPython 3.12 wheel build/install is covered by Windows CI; the clean wheel runs the basic binding test list |
-| Linux x86_64 | The pinned ISIS 9.0.0 conda environment under `ports/linux/env/`, the conda C++ compiler, and the PyPA `manylinux_2_28_x86_64` container | `usgs-pyisis`, `usgs-pyisis-runtime-linux-x86_64`, and `usgs-pyisis-isisdata-minimal` wheels | CI is configured to build CPython 3.12 wheels in the manylinux 2.28 container, enforce GLIBC/auditwheel gates, and clean-install the same wheelhouse on Ubuntu 22.04 and 24.04; PyPI release remains blocked until that workflow passes |
+| Linux x86_64 | The pinned ISIS 9.0.0 conda environment under `ports/linux/env/`, the pinned GCC 12 toolchain, and the PyPA `manylinux_2_28_x86_64` container | `usgs-pyisis`, `usgs-pyisis-runtime-linux-x86_64`, and `usgs-pyisis-isisdata-minimal` wheels | CI builds CPython 3.12 `manylinux_2_35_x86_64` wheels, keeps a stricter GLIBC 2.28 symbol gate, enforces the auditwheel 2.35 policy, and clean-installs the same wheelhouse on Ubuntu 22.04 and 24.04; PyPI release remains blocked until that workflow passes |
 | macOS | Not implemented | None | Unsupported |
 
 ## Content boundaries
@@ -29,7 +29,7 @@ on them.
 ## Claim boundary
 
 Describe Windows support as Windows x64 / CPython 3.12 wheel support. Describe
-Linux support as a configured CPython 3.12 manylinux 2.28 build with Ubuntu
+Linux support as a configured CPython 3.12 manylinux 2.35 build with Ubuntu
 22.04/24.04 clean-install validation. Do not call the artifacts PyPI-ready
 until the container build and ABI/auditwheel gates pass. Do not claim universal cross-platform support until
 additional platforms and Python ABI combinations are built and tested.

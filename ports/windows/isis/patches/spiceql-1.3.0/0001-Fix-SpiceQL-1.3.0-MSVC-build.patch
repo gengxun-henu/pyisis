@@ -8,11 +8,16 @@ index 7bdc2ec..9124b7b 100644
 -                            cereal
 +                            ${CEREAL_INCLUDE_DIRS}
                              ${CSPICE_INCLUDE_DIRS}
-@@ -157,7 +157,13 @@ target_include_directories(SpiceQL
+@@ -157,7 +157,18 @@ target_include_directories(SpiceQL
 +  target_compile_options(SpiceQL
 +                         PRIVATE
 +                         $<$<CXX_COMPILER_ID:MSVC>:/FImsvc_compat.h>
 +                         )
++
++  target_compile_definitions(SpiceQL
++                             PRIVATE
++                             $<$<CXX_COMPILER_ID:MSVC>:NOMINMAX>
++                             )
 +
    target_link_libraries(SpiceQL
                          PUBLIC
@@ -40,10 +45,13 @@ new file mode 100644
 index 0000000..43f2869
 --- /dev/null
 +++ b/SpiceQL/include/msvc_compat.h
-@@ -0,0 +1,9 @@
+@@ -0,0 +1,12 @@
 +#pragma once
 +
 +#ifdef _MSC_VER
++#include <memory_resource>
++namespace stdpmr = std::pmr;
++
 +extern "C" {
 +__int64 __cdecl _get_osfhandle(int file_descriptor);
 +int __cdecl _isatty(int file_descriptor);
@@ -95,12 +103,36 @@ diff --git a/SpiceQL/src/inventoryimpl.cpp b/SpiceQL/src/inventoryimpl.cpp
 index 46f1a28..ab44cd7 100644
 --- a/SpiceQL/src/inventoryimpl.cpp
 +++ b/SpiceQL/src/inventoryimpl.cpp
+@@ -67 +67 @@ namespace SpiceQL {
+-      CACHE_DIRECTORY = fs::temp_directory_path() / tempname / "spiceql_cache"; 
++      CACHE_DIRECTORY = (fs::temp_directory_path() / tempname / "spiceql_cache").string();
 @@ -119 +119 @@ namespace SpiceQL {
 -      static std::string db_path = fs::path(getCacheDir()) / DB_HDF_FILE;
 +      static std::string db_path = (fs::path(getCacheDir()) / DB_HDF_FILE).string();
+@@ -165 +165 @@ namespace SpiceQL {
+-          kernel_times->file_paths.push_back(relative_path_kernel);
++          kernel_times->file_paths.push_back(relative_path_kernel.generic_string());
+@@ -267 +267 @@ namespace SpiceQL {
+-                  kernel_vec.push_back(relative_path_kernel); 
++                  kernel_vec.push_back(relative_path_kernel.generic_string());
 @@ -286 +286 @@ namespace SpiceQL {
 -    string hdf_file = fs::path(getCacheDir()) / DB_HDF_FILE;
 +    string hdf_file = (fs::path(getCacheDir()) / DB_HDF_FILE).string();
+@@ -461 +461 @@ namespace SpiceQL {
+-                  limitedKernels.push_back(data_dir / final_time_kernels[i]);
++                  limitedKernels.push_back((data_dir / final_time_kernels[i]).string());
+@@ -473 +473 @@ namespace SpiceQL {
+-                  allKernels.push_back(data_dir / e);
++                  allKernels.push_back((data_dir / e).string());
+@@ -493 +493 @@ namespace SpiceQL {
+-            for(auto &e : ks) e =  data_dir / e; // re-add the data dir 
++            for(auto &e : ks) e = (data_dir / e).string(); // re-add the data dir
+@@ -503 +503 @@ namespace SpiceQL {
+-              for(auto &e : ks) e = data_dir / e; // re-add the data dir
++              for(auto &e : ks) e = (data_dir / e).string(); // re-add the data dir
+@@ -519 +519 @@ namespace SpiceQL {
+-    string hdf_file = db_root / DB_HDF_FILE;
++    string hdf_file = (db_root / DB_HDF_FILE).string();
 diff --git a/SpiceQL/src/utils.cpp b/SpiceQL/src/utils.cpp
 index 0d7ebb0..1931a1c 100644
 --- a/SpiceQL/src/utils.cpp

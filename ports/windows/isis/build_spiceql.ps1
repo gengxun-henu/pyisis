@@ -50,6 +50,22 @@ if (-not (Test-Path (Join-Path $SourceDir ".git"))) {
         $SourceDir
 }
 
+$patchDir = Join-Path $PSScriptRoot "patches\spiceql-$Ref"
+if (Test-Path $patchDir) {
+    $patches = Get-ChildItem -LiteralPath $patchDir -Filter "*.patch" -File |
+        Sort-Object Name
+    foreach ($patch in $patches) {
+        & git -C $SourceDir apply --reverse --check $patch.FullName 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            Write-Step "SpiceQL patch already applied: $($patch.Name)"
+            continue
+        }
+        Write-Step "applying SpiceQL patch: $($patch.Name)"
+        Invoke-CheckedCommand git -C $SourceDir apply --check $patch.FullName
+        Invoke-CheckedCommand git -C $SourceDir apply $patch.FullName
+    }
+}
+
 Write-Step "configuring SpiceQL $Ref"
 Invoke-CheckedCommand cmake `
     -S $SourceDir `

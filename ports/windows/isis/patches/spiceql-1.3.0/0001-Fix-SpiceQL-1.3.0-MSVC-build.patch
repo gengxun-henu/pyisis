@@ -1,0 +1,19 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7bdc2ec..9124b7b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -157,7 +157,14 @@ target_include_directories(SpiceQL
++  target_compile_options(SpiceQL
++                         PRIVATE
++                         $<$<CXX_COMPILER_ID:MSVC>:/FIio.h>
++                         $<$<CXX_COMPILER_ID:MSVC>:/FIprocess.h>
++                         )
++
+   target_link_libraries(SpiceQL
+                         PUBLIC
+                         fmt::fmt-header-only
+                         nlohmann_json::nlohmann_json
++                        ghc_filesystem
+                         PRIVATE
+                         CSPICE::cspice
+                         spdlog::spdlog_header_only

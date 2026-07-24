@@ -18,6 +18,7 @@ Updated: 2026-07-23  Geng Xun required PEP 639-capable setuptools for Windows wh
 Updated: 2026-07-23  Geng Xun covered versioned package and ISIS runtime checks during clean installs.
 Updated: 2026-07-23  Geng Xun covered parameterized ISIS 9/10 Windows wheel builds.
 Updated: 2026-07-24  Geng Xun covered private Linux toolchain runtime packaging and the split ISIS 10 Windows patch queue.
+Updated: 2026-07-24  Geng Xun preserved qisis data objects and exported SpiceQL symbols on Windows.
 """
 
 from __future__ import annotations
@@ -149,6 +150,15 @@ class PackagingToolsUnitTest(unittest.TestCase):
         patches = [path.read_text(encoding="utf-8") for path in patch_paths]
         self.assertIn("isis/src/core/src/Pvl.cpp", patches[0])
         self.assertIn("Trim Windows runtime to non-GUI core", patches[1])
+        self.assertIn("set(thisAppFolders)", patches[1])
+        self.assertNotIn("list(REMOVE_ITEM modules", patches[1])
+
+        spiceql_patch = (
+            WINDOWS_ISIS_PATCHES_DIR
+            / "spiceql-1.3.0"
+            / "0001-Fix-SpiceQL-1.3.0-MSVC-build.patch"
+        ).read_text(encoding="utf-8")
+        self.assertIn("WINDOWS_EXPORT_ALL_SYMBOLS ON", spiceql_patch)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

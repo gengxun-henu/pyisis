@@ -2609,3 +2609,19 @@ Chandrayaan2TmcCamera
   smoke均通过。
 
 **Current 19-header batch:** 15/19 closed.
+
+### Seeder, validation, and OSIRIS-REx batch（4 headers closed）
+
+- `GridPolygonSeeder.h`只把private `CheckSubGrid`参数从`MultiPolygon`
+  收窄为`Polygon`；不影响现有构造、`sub_grid`和`plugin_parameters`。
+- `MeasureValidationResults.h`只以显式`QVector` include替代前置声明；
+  验证结果公开API不变。
+- ISIS 10的`OsirisRexOcamsCamera`新增protected
+  `getFunctionalIkCode()`，属于内部相机初始化逻辑，按规则不绑定。
+- `OsirisRexDistortionMap.set_distortion()`已按版本适配并显式处理
+  Python `str`到`QString`：ISIS 9保留必填filter和None返回，
+  ISIS 10提供`UNKNOWN`默认值并返回bool。
+- ISIS 9/10的polygon seeder、control core与OSIRIS-REx组合测试各87项通过
+  （1项插件环境跳过），smoke均通过。
+
+**Current 19-header batch:** 19/19 closed.

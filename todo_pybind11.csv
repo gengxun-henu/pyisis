@@ -33,7 +33,7 @@ Control Networks,InterestOperator,未转换,抽象基类/纯虚接口
 Control Networks,InterestOperatorFactory,已转换,2026-03-27 已在 bind_interest_operator_factory.cpp 暴露 create 静态工厂方法
 Control Networks,IsisBundleObservation,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 暴露 IsisBundleObservation（继承 BundleObservation；number_parameters/spice_rotation/spice_position）；focused 单测在 tests/unitTest/mosaic_bundle_image_polygon_utility_unit_test.py
 Control Networks,LidarControlPoint,已转换,2026-04-10 已在 src/control/bind_control_core.cpp 暴露构造/range/sigma/time/simultaneous 方法；继承 ControlPoint
-Control Networks,MeasureValidationResults,已转换,2026-03-21 已在 bind_control_core.cpp 暴露验证状态/失败消息/字符串格式化接口
+Control Networks,MeasureValidationResults,已转换,2026-07-24 ISIS 10仅调整QVector include；验证状态/失败消息/格式化接口双版本稳定
 Control Networks,ObservationNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 possible_serial(...)
 Control Networks,SerialNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 compose_observation(...)
 Control Networks,SerialNumberList,已转换,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；构造/增删/查询/索引接口双版本验证通过
@@ -211,7 +211,7 @@ Pattern Matching,AutoReg,已转换,2026-04-03 已在 bind_base_pattern.cpp 暴�
 Pattern Matching,AutoRegFactory,已转换,2026-04-03 已在 bind_auto_reg_factory.cpp 暴露 create 静态工厂方法
 Pattern Matching,Centroid,已转换,2026-04-08 已在 src/base/bind_base_pattern.cpp 暴露构造/select/set_dn_range/get_min_dn/get_max_dn，并补 Chip 连通域 focused 单测与 smoke 覆盖
 Pattern Matching,Chip,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp 暴露 Chip 抽象基类（set_size、get_value、SetHalf 等方法）；smoke 已补符号
-Pattern Matching,GridPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/sub_grid/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
+Pattern Matching,GridPolygonSeeder,已转换,2026-07-24 ISIS 10仅改变private CheckSubGrid参数类型；构造/sub_grid/plugin_parameters公开接口双版本稳定
 Pattern Matching,Gruen,已转换,2026-04-14 全部 12/12 方法已绑定 100%；6N 为有意排除项：默认构造不暴露（需 PVL 配置）、4 个 GruenTypes 内部类型方法（AffineRadio/AffineTolerance/MatchPoint）、1 个 BigInt CallCount；Python 侧通过 Pvl 构造 + 约束访问器 + 继承 AutoReg 方法覆盖
 Pattern Matching,ImageOverlapSet,已转换,2026-04-14 全部 9/9 方法已绑定 100%；3 个 FindImageOverlaps 重载因 GEOS MultiPolygon/SerialNumberList 依赖有意不暴露；Python 侧通过 read/write 文件接口覆盖
 Pattern Matching,ImagePolygon,已转换,2026-07-24 ISIS 9/10兼容闭环：ImagePolygon.h声明完全一致；现有Blob/WKT/几何参数绑定无需版本分支；双版本focused各10/10及smoke通过
@@ -321,8 +321,8 @@ Lunar Reconnaissance Orbiter,LroWideAngleCamera,已转换,2026-04-06 已在 bind
 Lunar Reconnaissance Orbiter,LroWideAngleCameraDistortionMap,已转换,2026-04-06 已在 bind_lro_utilities.cpp 暴露带独立失真映射接口
 Lunar Reconnaissance Orbiter,LroWideAngleCameraFocalPlaneMap,已转换,2026-04-06 已在 bind_lro_utilities.cpp 暴露带独立焦平面映射接口
 Lunar Reconnaissance Orbiter,MiniRF,已转换,2026-04-06 已在 bind_mission_cameras.cpp 暴露完整 SPICE ID 方法（CK 方法抛出异常符合上游行为）
-OSIRIS-REx,OsirisRexOcamsCamera,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、快门时间与 SPICE ID 方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
-OSIRIS-REx,OsirisRexDistortionMap,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数与失真映射方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+OSIRIS-REx,OsirisRexOcamsCamera,已转换,2026-07-24 ISIS 10新增protected功能IK helper不暴露；公开构造/快门/SPICE ID接口双版本稳定
+OSIRIS-REx,OsirisRexDistortionMap,已转换,2026-07-24 SetDistortion按版本适配；ISIS 9保留必填filter/None返回；ISIS 10提供UNKNOWN默认值/bool返回
 OSIRIS-REx,OsirisRexTagcamsCamera,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、快门时间与 SPICE ID 方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 OSIRIS-REx,OsirisRexTagcamsDistortionMap,已转换,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、温度配置与失真映射方法；亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Utility,Area3D,已转换,2026-04-10 已在 src/base/bind_base_geometry.cpp 暴露全部公开方法（构造/访问器/变换器/isValid/intersect）；focused 单测在 geometry_unit_test.py

@@ -1,9 +1,9 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-OsirisRexDistortionMap,OSIRIS-REx,isis/src/osirisrex/objs/OsirisRexOcamsCamera/OsirisRexDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+OsirisRexDistortionMap,OSIRIS-REx,isis/src/osirisrex/objs/OsirisRexOcamsCamera/OsirisRexDistortionMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 SetDistortion已按版本适配：ISIS 9保留必填filter/None返回；ISIS 10提供UNKNOWN默认值/bool返回；两边显式转换Python str到QString
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,OsirisRexDistortionMap,isis_pybind.OsirisRexDistortionMap,Y,"2026-04-07 已在 bind_mission_cameras.cpp 暴露"
 Construction/Enum,OsirisRexDistortionMap(Camera *parent, double zDirection = 1.0),isis_pybind.OsirisRexDistortionMap(),Y,"2026-04-07 已在 bind_mission_cameras.cpp 暴露"
-Mutation/Configuration,virtual void SetDistortion(int naifIkCode, QString filterName),isis_pybind.OsirisRexDistortionMap.set_distortion,Y,"2026-04-07 已在 bind_mission_cameras.cpp 暴露"
+Mutation/Configuration,"ISIS 9: void SetDistortion(int, QString); ISIS 10: bool SetDistortion(int, QString=""UNKNOWN"")",isis_pybind.OsirisRexDistortionMap.set_distortion,Y,"2026-07-24 版本分支适配；ISIS 9保留旧Python语义，ISIS 10暴露默认filter和bool结果"
 Mutation/Configuration,virtual bool SetFocalPlane(double dx, double dy),isis_pybind.OsirisRexDistortionMap.set_focal_plane,Y,"2026-04-07 已在 bind_mission_cameras.cpp 暴露"
 Mutation/Configuration,virtual bool SetUndistortedFocalPlane(double ux, double uy),isis_pybind.OsirisRexDistortionMap.set_undistorted_focal_plane,Y,"2026-04-07 已在 bind_mission_cameras.cpp 暴露"

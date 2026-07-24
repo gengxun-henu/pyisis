@@ -13,6 +13,7 @@
 // Updated: 2026-04-14  Geng Xun completed CTXCamera, HiriseCamera, MocNarrowAngleCamera, CrismCamera, MarciCamera constructor + SPICE ID + band methods.
 // Updated: 2026-04-14  Geng Xun completed MdisCamera and MsiCamera Cube constructors + shutter_open_close_times + SPICE ID methods.
 // Updated: 2026-07-23  Geng Xun made the include order safe for Qt6 and Python 3.13.
+// Updated: 2026-07-24  Geng Xun adapted the versioned OSIRIS-REx distortion setup signature.
 // Purpose: pybind11 bindings for mission-specific camera models and related mission helpers
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -1216,10 +1217,27 @@ void bind_mission_cameras(py::module_ &m) {
            "    parent: Pointer to the parent Camera object\n"
            "    z_direction: Direction of the z-axis (1.0 or -1.0)")
       .def("set_distortion",
-           &Isis::OsirisRexDistortionMap::SetDistortion,
+#ifdef PYISIS_ISIS10_API
+           [](Isis::OsirisRexDistortionMap &self,
+              int naifIkCode,
+              const std::string &filterName) {
+             return self.SetDistortion(
+                 naifIkCode, QString::fromStdString(filterName));
+           },
+           py::arg("naif_ik_code"),
+           py::arg("filter_name") = "UNKNOWN",
+           "Load ISIS 10 distortion coefficients for the NAIF code and optional filter.")
+#else
+           [](Isis::OsirisRexDistortionMap &self,
+              int naifIkCode,
+              const std::string &filterName) {
+             self.SetDistortion(
+                 naifIkCode, QString::fromStdString(filterName));
+           },
            py::arg("naif_ik_code"),
            py::arg("filter_name"),
            "Load distortion coefficients from the instrument kernel for the given NAIF code and filter.")
+#endif
       .def("set_focal_plane",
            &Isis::OsirisRexDistortionMap::SetFocalPlane,
            py::arg("dx"),

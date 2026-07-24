@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-OsirisRexOcamsCamera,OSIRIS-REx,isis/src/osirisrex/objs/OsirisRexOcamsCamera/OsirisRexOcamsCamera.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
+OsirisRexOcamsCamera,OSIRIS-REx,isis/src/osirisrex/objs/OsirisRexOcamsCamera/OsirisRexOcamsCamera.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 10新增protected getFunctionalIkCode供内部相机初始化；按规则不暴露；公开相机API双版本稳定
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,OsirisRexOcamsCamera,isis_pybind.OsirisRexOcamsCamera,Y,"2026-04-07 已在 bind_mission_cameras.cpp 暴露构造函数、快门时间与 SPICE ID 方法"

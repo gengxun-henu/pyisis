@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-GridPolygonSeeder,Pattern Matching,reference/upstream_isis/src/base/objs/GridPolygonSeeder/GridPolygonSeeder.h,src/base/bind_base_polygon_seeder.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+GridPolygonSeeder,Pattern Matching,reference/upstream_isis/src/base/objs/GridPolygonSeeder/GridPolygonSeeder.h,src/base/bind_base_polygon_seeder.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 10仅将private CheckSubGrid参数从MultiPolygon收窄为Polygon；Python公开接口不变；双版本验证通过
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,GridPolygonSeeder,isis_pybind.GridPolygonSeeder,Y,2026-04-10 绑定

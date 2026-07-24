@@ -514,7 +514,10 @@ try:
     from ._isis_core import (
         Chandrayaan2OhrcCamera,
         Chandrayaan2TmcCamera,
+        GdalIoHandler,
+        ImageIoHandler,
         IProj,
+        OsirisRexOcamsOpenCVDistortionMap,
     )
 except ImportError:
     pass
@@ -523,7 +526,10 @@ else:
         [
             "Chandrayaan2OhrcCamera",
             "Chandrayaan2TmcCamera",
+            "GdalIoHandler",
+            "ImageIoHandler",
             "IProj",
+            "OsirisRexOcamsOpenCVDistortionMap",
         ]
     )
 

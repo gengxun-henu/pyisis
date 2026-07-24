@@ -10,6 +10,7 @@
 // Updated: 2026-04-10  Geng Xun added ProcessMapMosaic/RubberSheet/Polygons/GroundPolygons/PolygonTools (Batch 3)
 // Updated: 2026-07-23  Geng Xun exposed the compile-time ISIS version for ABI validation.
 // Updated: 2026-07-23  Geng Xun registered the first version-gated ISIS 10 binding batch.
+// Updated: 2026-07-24  Geng Xun registered ISIS 10 image-I/O types after their shared low-level dependencies.
 // Purpose: define the top-level pybind11 _isis_core module and register all binding submodules
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -91,9 +92,9 @@ PYBIND11_MODULE(_isis_core, m) {
   bind_lro_utilities(m);
   bind_mro_hical(m);
   bind_spice_navigation(m);
-  bind_isis10(m);
   bind_camera_factory(m);
   bind_low_level_cube_io(m);
+  bind_isis10(m);
   bind_high_level_cube_io(m);
   bind_control_core(m);
   bind_interest_operator_factory(m);

@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-BundleSettings,Control Networks,isis/src/control/objs/BundleSettings/BundleSettings.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+BundleSettings,Control Networks,isis/src/control/objs/BundleSettings/BundleSettings.h,src/control/bind_bundle_advanced.cpp; src/control/bind_control_core.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 9/10兼容闭环；仅增加QStringRef兼容头，不改变绑定使用的公开签名
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,BundleSettings,isis_pybind.BundleSettings,Y,Bound in src/control/bind_control_core.cpp; remaining gaps are observation settings / target body / XML IO

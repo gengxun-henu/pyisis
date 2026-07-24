@@ -2412,3 +2412,97 @@ Chandrayaan2TmcCamera
 - 双版本均重新构建成功；两边`PvlUnitTest`各17/17通过，smoke均通过。
 
 **Next:** PvlObject
+
+### Class 2: PvlObject（closed / shared-no-change）
+
+- ISIS 10仅将内部PVL组/对象容器从QList切换为QLinkedList；Python绑定
+  不暴露Qt容器或迭代器，现有对象/组查找和引用返回无需版本分支。
+- 双版本PvlUnitTest各19/19通过，smoke均通过。
+
+### Class 3: PvlKeyword（closed / version-gated-addition）
+
+- ISIS 10新增JSON标量/数组helper和toJson；Python侧转换为原生容器。
+- 双版本focused测试各2/2通过，smoke均通过。
+
+### Class 4: PvlContainer（closed / version-gated-addition）
+
+- ISIS 10新增默认构造；内部QList到QLinkedList变化不泄漏到Python。
+- 仅ISIS 10暴露PvlContainer()；双版本PvlUnitTest各19/19通过，smoke均通过。
+
+**Next:** 下一轮兼容队列从Control/Bundle与Shape高风险组开始
+
+### Control/Bundle Class: BundleSettings（closed / shared-no-change）
+
+- ISIS 10仅在头文件中补充Qt6兼容的QStringRef include，公开配置、枚举
+  和求解设置签名没有变化。
+- 复用现有控制网绑定，不增加版本分支；ISIS 9/10的control_core与
+  bundle_advanced测试均为85项通过（各有1项已知跳过），smoke均通过。
+
+**Next:** Shape组的ImagePolygon
+
+### Shape Class: ImagePolygon（closed / shared-no-change）
+
+- ISIS 9/10的ImagePolygon.h声明完全一致，当前绑定涉及的坐标、WKT、
+  几何参数和Blob序列化接口无需版本分支。
+- 双版本ImagePolygon focused测试各10/10通过，smoke均通过。
+
+**Next:** Shape组的SurfaceModel与相关Geometry公共类
+
+### Shape/Geometry Batch: SurfaceModel, Latitude, Longitude（closed / shared-no-change）
+
+- 三个头文件在ISIS 9/10中声明一致，当前数值、坐标和范围绑定无需版本分支。
+- SurfaceModel、Latitude、Longitude双版本focused测试分别通过
+  6/6、6/6、6/6，smoke均通过。
+
+**Next:** 继续检查Shape与Camera/Spice组的声明变化
+
+### Camera/Spice Class: Spice（closed / shared-wrapper）
+
+- ISIS 10将未绑定的Pvl+JSON构造改为Cube+Pvl+JSON，并将load移到公开区。
+- 当前Python只使用两版共有的Spice(Cube)构造及访问器，因此不增加
+  版本分支，也不暴露不稳定的JSON/关键字装载接口。
+- 双版本camera_unit_test各9/9通过，smoke均通过。
+
+**Next:** SpiceRotation与SpicePosition声明复核
+
+### Camera/Spice Classes: SpiceRotation, SpicePosition（closed / shared-no-change）
+
+- SpiceRotation仅有内部成员初始化与布局变化，SpicePosition声明完全一致；
+  当前Python暴露的缓存、旋转、位置、多项式接口均无版本差异。
+- 双版本spice_navigation测试各57/57通过，smoke均通过。
+
+**Next:** 继续检查Camera层的CameraFactory、CameraStatistics和地图类
+
+### Camera Classes: CameraFactory, CameraStatistics, CameraDetectorMap, CameraDistortionMap（closed / ISIS 9/10 compatibility verified）
+
+- CameraFactory.h only adds ISIS 10 CSM ISD helpers returning csm::Model*/QStringList; current Python surface intentionally keeps the stable Cube-driven factory API.
+- CameraStatistics.h, CameraDetectorMap.h, and CameraDistortionMap.h have no public declaration drift.
+- Both asp360_new (ISIS 9) and asp370 (ISIS 10) passed camera_unit_test 9/9, camera_maps_unit_test 50/50, and image_overlap_camera_unit_test 43 tests with 4 expected skips; smoke checks passed.
+
+- CameraFocalPlaneMap, CameraGroundMap, CameraSkyMap, and CSMSkyMap were additionally checked; only CameraFocalPlaneMap changes an internal QVector include strategy, with no Python-visible API drift.
+
+## ISIS 10 Batch 2 — 2026-07-24
+
+### OsirisRexOcamsOpenCVDistortionMap（closed / ISIS 10-only）
+
+- 在正式ISIS10头文件、上游实现和libOsirisRexOcamsCamera导出符号中核实构造及三个公开方法。
+- 在src/bind_isis10.cpp完成条件绑定：Python str显式转换QString，父Camera使用keep_alive，空父相机抛ValueError。
+- ISIS9重新构建通过，符号保持不导出；isis10_api测试1项通过、4项按版本预期跳过。
+- ISIS10重新构建通过，isis10_api测试5/5、osirisrex_camera测试14/14通过。
+- 两个版本使用各自构建目录运行smoke_import.py均通过。
+
+### ImageIoHandler / GdalIoHandler（closed / ISIS 10-only curated facade）
+
+- 注册`ImageIoHandler`抽象基类，暴露`Buffer`读写、数据大小、Python列表
+  虚拟波段设置和标签更新；不暴露抽象构造、裸缓存算法所有权、无操作的
+  基类`clearCache`和`QMutex`。
+- 为`GdalIoHandler`提供路径、Python波段列表、`PixelType`和`writable`
+  参数 facade；在进入上游构造器前预检文件和波段，避免失败打开后的
+  空`GDALDataset*`解引用。
+- 不暴露裸`GDALDataset*`构造和构造器已调用的`init()`；派生类
+  `clear_cache`保留。
+- ISIS10使用真实`grayscale.tif`完成`Brick`读取、有效像元、
+  `update_labels`及错误路径/波段防护测试，`isis10_api`为7/7；
+  ISIS9为1项通过、6项按版本预期跳过，双版本smoke均通过。
+
+**Next:** ISIS 10-only类候选已完成；返回共享兼容队列并准备双版本发布门禁。

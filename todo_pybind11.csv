@@ -10,7 +10,7 @@ Control Networks,BundleObservation,已转换,2026-04-10 已在 src/control/bind_
 Control Networks,BundleObservationSolveSettings,已转换,2026-03-21 已在 bind_control_core.cpp 暴露枚举/求解配置/观测号接口
 Control Networks,BundleObservationVector,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；构造/迭代/参数计数/instrument 查询
 Control Networks,BundleResults,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；收敛状态/残差/参数计数/sigma range/maximum likelihood 全面暴露
-Control Networks,BundleSettings,已转换,2026-03-21 已在 bind_control_core.cpp 暴露核心 bundle 配置/观测求解设置/目标体链接
+Control Networks,BundleSettings,已转换,2026-07-24 ISIS 9/10兼容闭环：公开配置与枚举签名一致，仅ISIS 10头文件补充QStringRef；双版本control_core与bundle_advanced测试及smoke通过
 Control Networks,BundleSolutionInfo,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；名称/时间/文件名/设置/结果/输出方法全面暴露
 Control Networks,BundleTargetBody,已转换,2026-03-21 已在 bind_control_core.cpp 暴露目标体求解配置/格式化/局部半径接口
 Control Networks,ControlMeasure,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
@@ -182,7 +182,7 @@ Math,NumericalAtmosApprox,已转换,2026-04-09 已在 src/base/bind_base_photome
 Math,PolynomialBivariate,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/expand 接口并补充单测
 Math,PolynomialUnivariate,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/expand/derivative 接口并补充单测
 Math,Ransac,已转换,2026-04-09 已在 src/base/bind_base_math.cpp 以 `ip.Ransac` 子模块暴露全部 free-function helper，并补 focused 单测与 smoke 覆盖
-Math,SurfaceModel,已转换,2026-04-09 已在 src/base/bind_base_math.cpp 完成全部公开方法绑定；focused 单测追加在 tests/unitTest/math_unit_test.py；smoke 已补符号
+Math,SurfaceModel,已转换,2026-07-24 ISIS 9/10兼容闭环：SurfaceModel.h声明一致；双版本focused各6/6及smoke通过
 Near Earth Asteroid Rendezvous - Shoemaker,MsiCamera,已转换,2026-04-14 全部 6/6 方法已绑定 100%；新增 Cube 构造函数/shutter_open_close_times 和全部 SPICE ID 方法
 Messenger,MdisCamera,已转换,2026-04-14 全部 7/7 方法已绑定 100%；新增 Cube 构造函数/shutter_open_close_times 和全部 SPICE ID 方法
 Parsing,CSVReader,已转换,2026-04-09 已在 src/base/bind_base_filters.cpp 完成 CSVReader 全部 inventory helper 绑定；focused 单测在 tests/unitTest/filters_unit_test.py；smoke 已补符号
@@ -192,11 +192,11 @@ Parsing,IString,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 暴�
 Parsing,iTime,已转换,2026-04-11 全部方法已绑定（CurrentGMT/CurrentLocalTime 之前已有只是台账滞后）
 Parsing,LabelTranslationManager,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露抽象基类 auto_translate/parse_specification；Python 侧不可直接实例化；继承链 PvlTranslationTable->LabelTranslationManager 已正确注册
 Parsing,Pvl,已转换,2026-07-24 ISIS 9/10兼容闭环：ISIS 10新增to_json返回Python容器、read_gdal路径；内部readObject helper不直接暴露；双版本PvlUnitTest各17/17及smoke通过
-Parsing,PvlContainer,已转换,
+Parsing,PvlContainer,已转换,2026-07-24 ISIS 9/10兼容闭环：ISIS 10新增默认构造；QList到QLinkedList仅为内部存储差异；双版本PvlUnitTest各19/19及smoke通过
 Parsing,PvlFormat,已转换,2026-04-12 已补 format_end(name, keyword)；当前暴露构造函数/add/set_char_limit/char_limit/format_value/format_name/format_end/format_eol/type/accuracy/add_quotes/is_single_unit；focused 单测在 pvl_unit_test.py；smoke 已补符号
 Parsing,PvlFormatPds,已转换,2026-04-12 已补 format_end(name, keyword)；继承 PvlFormat 暴露 PDS-specific 格式化接口与 CRLF format_eol；focused 单测在 pvl_unit_test.py；smoke 已补符号
 Parsing,PvlGroup,已转换,2026-04-11 补 validateGroup；全部公开方法已绑定
-Parsing,PvlKeyword,已转换,Qt 类型/信号槽较多
+Parsing,PvlKeyword,已转换,2026-07-24 ISIS 9/10兼容闭环：ISIS 10新增JSON标量/数组写入与to_json；Python侧转换为原生字符串列表/容器；双版本focused测试及smoke通过
 Parsing,PvlObject,已转换,
 Parsing,PvlSequence,已转换,
 Parsing,PvlToken,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露构造函数/set_key/key/key_upper/add_value/value/value_upper/value_size/value_clear/value_vector；focused 单测在 tests/unitTest/pvl_unit_test.py；smoke 已补符号
@@ -214,7 +214,7 @@ Pattern Matching,Chip,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp
 Pattern Matching,GridPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/sub_grid/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
 Pattern Matching,Gruen,已转换,2026-04-14 全部 12/12 方法已绑定 100%；6N 为有意排除项：默认构造不暴露（需 PVL 配置）、4 个 GruenTypes 内部类型方法（AffineRadio/AffineTolerance/MatchPoint）、1 个 BigInt CallCount；Python 侧通过 Pvl 构造 + 约束访问器 + 继承 AutoReg 方法覆盖
 Pattern Matching,ImageOverlapSet,已转换,2026-04-14 全部 9/9 方法已绑定 100%；3 个 FindImageOverlaps 重载因 GEOS MultiPolygon/SerialNumberList 依赖有意不暴露；Python 侧通过 read/write 文件接口覆盖
-Pattern Matching,ImagePolygon,已转换,2026-04-10 已在 src/base/bind_base_image_polygon.cpp 暴露 ImagePolygon（从坐标创建多边形/poly_str WKT/顶点数/flag setters）；focused 单测在 mosaic_bundle_image_polygon_utility_unit_test.py
+Pattern Matching,ImagePolygon,已转换,2026-07-24 ISIS 9/10兼容闭环：ImagePolygon.h声明完全一致；现有Blob/WKT/几何参数绑定无需版本分支；双版本focused各10/10及smoke通过
 Pattern Matching,LimitPolygonSeeder,已转换,2026-04-10 已在 src/base/bind_base_polygon_seeder.cpp 暴露构造函数/plugin_parameters；focused 单测在 tests/unitTest/polygon_seeder_unit_test.py；smoke 已补符号
 Pattern Matching,MaximumCorrelation,已转换,2026-04-02 已在 bind_base_pattern.cpp 暴露构造函数，继承 AutoReg 全部方法
 Pattern Matching,MinimumDifference,已转换,2026-04-09 已在 src/base/bind_base_pattern.cpp 继承 AutoReg 暴露构造函数/ideal_fit/most_lenient_tolerance；focused 单测在 pattern_unit_test.py
@@ -251,12 +251,12 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",CameraPointInfo,已转换,2026-04-08 已在 src/bind_camera.cpp 暴露 CameraPointInfo 全部公开入口，并补本地 mosrange focused 单测与 smoke 覆盖
 "Spice, Instruments, and Cameras",CameraDetectorMap,已转换,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
 "Spice, Instruments, and Cameras",CameraDistortionMap,已转换,第七批已补基础单测（局部畸变正反变换）
-"Spice, Instruments, and Cameras",CameraFactory,已转换,工厂类，静态创建接口较多；第五批已补基础单测与失败路径
-"Spice, Instruments, and Cameras",CameraFocalPlaneMap,已转换,第六批已补基础单测（局部几何 round-trip / 系数访问）
-"Spice, Instruments, and Cameras",CameraGroundMap,已转换,第六批已补基础单测（相机派生地面几何）
-"Spice, Instruments, and Cameras",CameraSkyMap,已转换,第六批已补基础单测（相机派生天球几何）
-"Spice, Instruments, and Cameras",CameraStatistics,已转换,2026-04-10 已在 src/bind_statistics.cpp 暴露双构造函数及全部 16 个 stat 访问器（filename 和 Camera 版本）；focused 单测在 image_overlap_camera_unit_test.py；smoke 已补符号
-"Spice, Instruments, and Cameras",CSMSkyMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露 constructor(Camera*)/set_sky；focused 单测在 camera_maps_unit_test.py；smoke 已补符号
+"Spice, Instruments, and Cameras",CameraFactory,已转换,2026-07-24 ISIS9/10兼容闭环；Cube 驱动 create/camera_version/init_plugin 双版本测试通过；ISIS10 新增 CSM ISD 工厂接口因 csm::Model 生命周期与插件依赖暂不暴露
+"Spice, Instruments, and Cameras",CameraFocalPlaneMap,已转换,2026-07-24 仅 ISIS10 改为直接 include QVector；公开焦平面 API 不变，双版本 camera_maps_unit_test 通过
+"Spice, Instruments, and Cameras",CameraGroundMap,已转换,2026-07-24 头文件公开 API 无差异；双版本 camera_maps_unit_test 地面几何通过
+"Spice, Instruments, and Cameras",CameraSkyMap,已转换,2026-07-24 头文件公开 API 无差异；双版本 camera_maps_unit_test 天球几何通过
+"Spice, Instruments, and Cameras",CameraStatistics,已转换,2026-07-24 头文件无公开差异；双版本 image_overlap_camera_unit_test 与 smoke 通过
+"Spice, Instruments, and Cameras",CSMSkyMap,已转换,2026-07-24 头文件公开 API 无差异；双版本 camera_maps_unit_test 与 smoke 通过
 "Spice, Instruments, and Cameras",FramingCamera,已转换,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已验证层级关系
 "Spice, Instruments, and Cameras",IdealCamera,已转换,相机模型/Spice 依赖
 "Spice, Instruments, and Cameras",IrregularBodyCameraGroundMap,已转换,"2026-04-10 已在 src/bind_camera_maps.cpp 暴露 constructor(Camera*, bool)/get_xy；focused 单测在 camera_maps_unit_test.py；smoke 已补符号"
@@ -282,9 +282,9 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",RollingShutterCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露构造函数/set_parent/set_detector/apply_jitter
 "Spice, Instruments, and Cameras",Sensor,已转换,抽象基类/纯虚接口；已补 get_surface_point() 以支撑 measure-level 地面点/半径提取
 "Spice, Instruments, and Cameras",SpacecraftPosition,已转换,2026-04-10 已在 src/bind_spice_navigation.cpp 暴露 SpacecraftPosition（继承 SpicePosition；光行时修正状态）；focused 单测在 spice_navigation_unit_test.py
-"Spice, Instruments, and Cameras",Spice,已转换,2026-04-12 已在 src/bind_spice_navigation.cpp 暴露 Cube 构造/向量 helper 与 NAIF 访问器；camera_unit_test 增补表驱动 Spice 覆盖
-"Spice, Instruments, and Cameras",SpicePosition,已转换,2026-04-13 完成全部公开方法绑定；LoadCache (4 overloads)/polynomial/coordinate/velocity/partial/hermite/cache 全部暴露；focused 单测在 spice_navigation_unit_test.py
-"Spice, Instruments, and Cameras",SpiceRotation,已转换,2026-04-10 已在 src/bind_spice_navigation.cpp 暴露 SpiceRotation（帧设置/时间偏置/旋转枚举/矢量旋转）；focused 单测在 spice_navigation_unit_test.py
+"Spice, Instruments, and Cameras",Spice,已转换,2026-07-24 ISIS 9/10兼容闭环：当前Python仅依赖共有Spice(Cube)与访问器；ISIS 10新增构造/公开load未直接暴露；双版本camera_unit_test各9/9及smoke通过
+"Spice, Instruments, and Cameras",SpicePosition,已转换,2026-07-24 ISIS 9/10兼容闭环：SpicePosition.h公开声明一致；双版本spice_navigation测试各57/57及smoke通过
+"Spice, Instruments, and Cameras",SpiceRotation,已转换,2026-07-24 ISIS 9/10兼容闭环：差异仅为内部成员初始化/布局；双版本spice_navigation测试各57/57及smoke通过
 "Spice, Instruments, and Cameras",Target,已转换,2026-04-09 已在 src/base/bind_base_target.cpp 补齐 Target(Pvl&) 与 NAIF/frame/body-rotation accessor，并在 src/bind_camera.cpp 新增 Camera.target()；显式 Spice* API 仍因无 Python Spice 绑定而保留未覆盖
 "Spice, Instruments, and Cameras",VariableLineScanCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露 set_parent/set_detector/exposure_duration
 Statistics,FourierTransform,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露 FourierTransform 构造/transform/inverse/helper 方法；focused 单测在 tests/unitTest/math_unit_test.py；smoke 已补符号
@@ -340,9 +340,9 @@ Utility,ID,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 ID 
 Utility,IException,已转换,2026-05-03 已在 src/base/bind_base_support.cpp 补 `IException.error_type_to_string(...)` 静态 helper 与 focused 单测；IException 本体仍通过 py::register_exception 暴露为 Python 异常类
 Utility,ImportPdsTable,已转换,2026-04-11 全部方法已绑定（新增 getFormattedName）
 Utility,Kernels,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露 Kernels 构造与核文件管理方法；focused 单测在 tests/unitTest/filters_unit_test.py
-Utility,Latitude,已转换,2026-04-12 已补两个 add(...) 重载（mapping-group 与 explicit-radii）；focused 单测已覆盖
+Utility,Latitude,已转换,2026-07-24 ISIS 9/10兼容闭环：Latitude.h声明一致；双版本focused各6/6及smoke通过
 Utility,LineEquation,已转换,2026-03-30 已在 bind_base_utility.cpp 暴露默认构造/二点构造/add_point/slope/intercept/points/defined/have_slope/have_intercept 接口并补充单测
-Utility,Longitude,已转换,2026-04-12 已补 to360_range(...) 静态方法；focused 单测已覆盖 wrap-around split
+Utility,Longitude,已转换,2026-07-24 ISIS 9/10兼容闭环：Longitude.h声明一致；双版本focused各6/6及smoke通过
 Utility,Message,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 以 `ip.Message` 子模块暴露全部标准消息模板 helper，并补 focused 单测与 smoke 覆盖
 Utility,Pixel,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 Pixel 构造/accessors/转换方法/静态 special-pixel 谓词；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Utility,PolygonTools,已转换,2026-04-11 已在 src/base/bind_base_utility.cpp 将 PolygonTools 修正为真实 Python 类符号并暴露 static：equal/reduce_precision/decimal_place/gml_schema；保留旧 module-level helper alias；focused 单测在 high_level_cube_io_process_polygon_tools_unit_test.py，smoke 已恢复

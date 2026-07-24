@@ -5,32 +5,147 @@
 // - reference/upstream_isis/10.0.0/isis/src/base/objs/IProj/IProj.h
 // - reference/upstream_isis/10.0.0/isis/src/chandrayaan2/objs/Chandrayaan2OhrcCamera/Chandrayaan2OhrcCamera.h
 // - reference/upstream_isis/10.0.0/isis/src/chandrayaan2/objs/Chandrayaan2TmcCamera/Chandrayaan2TmcCamera.h
-// Source classes: IProj, Chandrayaan2OhrcCamera, Chandrayaan2TmcCamera
-// Source header author(s): Adam Paquette for IProj; not explicitly stated for the camera headers
+// - reference/upstream_isis/10.0.0/isis/src/osirisrex/objs/OsirisRexOcamsCamera/OsirisRexOcamsOpenCVDistortionMap.h
+// - reference/upstream_isis/10.0.0/isis/src/base/objs/ImageIoHandler/ImageIoHandler.h
+// - reference/upstream_isis/10.0.0/isis/src/base/objs/ImageIoHandler/GdalIoHandler.h
+// Source classes: IProj, Chandrayaan2OhrcCamera, Chandrayaan2TmcCamera,
+// OsirisRexOcamsOpenCVDistortionMap, ImageIoHandler, GdalIoHandler
+// Source header author(s): Adam Paquette for IProj; Kris Becker for
+// OsirisRexOcamsOpenCVDistortionMap; Jai Rideout and Steven Lambright for
+// ImageIoHandler; Adam Paquette for GdalIoHandler; not explicitly stated for
+// the camera headers
 // Binding author: Geng Xun
 // Created: 2026-07-23
 // Updated: 2026-07-23  Geng Xun added the first ISIS 10-only non-GUI binding batch.
-// Purpose: Expose stable ISIS 10-only projection and Chandrayaan-2 camera APIs.
+// Updated: 2026-07-24  Geng Xun added the ISIS 10-only OCAMS OpenCV distortion model.
+// Updated: 2026-07-24  Geng Xun added safe ISIS 10 GDAL image-I/O bindings.
+// Purpose: Expose stable ISIS 10-only projection, camera, distortion, and image-I/O APIs.
 
+#include <filesystem>
+#include <memory>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
 #include <pybind11/pybind11.h>
+#include <pybind11/stl.h>
 
 #ifdef PYISIS_ISIS10_API
+#include <QList>
+
+#include "CameraDistortionMap.h"
 #include "Chandrayaan2OhrcCamera.h"
 #include "Chandrayaan2TmcCamera.h"
 #include "Cube.h"
+#include "GdalIoHandler.h"
 #include "helpers.h"
+#include "ImageIoHandler.h"
 #include "IProj.h"
 #include "LineScanCamera.h"
+#include "OsirisRexOcamsOpenCVDistortionMap.h"
+#include "PixelType.h"
 #include "Pvl.h"
 #include "TProjection.h"
 #endif
 
 namespace py = pybind11;
 
+#ifdef PYISIS_ISIS10_API
+namespace {
+
+QList<int> toVirtualBandList(const std::vector<int> &virtualBands) {
+  QList<int> result;
+  for (int band : virtualBands) {
+    if (band < 1) {
+      throw py::value_error("virtual band numbers must be positive and 1-based");
+    }
+    result.append(band);
+  }
+  return result;
+}
+
+std::unique_ptr<Isis::GdalIoHandler> makeGdalIoHandler(
+    const std::string &dataFilePath,
+    const std::vector<int> &virtualBands,
+    Isis::PixelType pixelType,
+    bool writable) {
+  if (!std::filesystem::is_regular_file(dataFilePath)) {
+    throw py::value_error("data_file_path does not identify an existing file");
+  }
+
+  GDALAllRegister();
+
+  const GDALAccess access = writable ? GA_Update : GA_ReadOnly;
+  GDALDatasetH preflight = GDALOpen(dataFilePath.c_str(), access);
+  if (preflight == nullptr) {
+    throw py::value_error(
+        "GDAL could not open data_file_path with the requested access");
+  }
+
+  const int rasterBandCount = GDALGetRasterCount(preflight);
+  for (int band : virtualBands) {
+    if (band < 1 || band > rasterBandCount) {
+      GDALClose(preflight);
+      throw py::value_error(
+          "virtual band number is outside the GDAL dataset band range");
+    }
+  }
+  GDALClose(preflight);
+
+  const GDALDataType gdalPixelType = Isis::IsisPixelToGdal(pixelType);
+  if (gdalPixelType == GDT_Unknown) {
+    throw py::value_error("pixel_type is not supported by GdalIoHandler");
+  }
+
+  QString path = stdStringToQString(dataFilePath);
+  QList<int> bands = toVirtualBandList(virtualBands);
+  return std::make_unique<Isis::GdalIoHandler>(
+      path,
+      bands.empty() ? nullptr : &bands,
+      gdalPixelType,
+      access);
+}
+
+void setImageIoVirtualBands(
+    Isis::ImageIoHandler &handler,
+    const std::vector<int> &virtualBands) {
+  QList<int> bands = toVirtualBandList(virtualBands);
+  handler.setVirtualBands(bands.empty() ? nullptr : &bands);
+}
+
+}  // namespace
+#endif
+
 void bind_isis10(py::module_ &m) {
 #ifdef PYISIS_ISIS10_API
+  py::class_<Isis::ImageIoHandler>(m, "ImageIoHandler")
+      .def("read", &Isis::ImageIoHandler::read, py::arg("buffer"))
+      .def("write", &Isis::ImageIoHandler::write, py::arg("buffer"))
+      .def("get_data_size", &Isis::ImageIoHandler::getDataSize)
+      .def("set_virtual_bands",
+           &setImageIoVirtualBands,
+           py::arg("virtual_bands"))
+      .def("update_labels",
+           &Isis::ImageIoHandler::updateLabels,
+           py::arg("labels"));
+
+  py::class_<Isis::GdalIoHandler, Isis::ImageIoHandler>(m, "GdalIoHandler")
+      .def(py::init(&makeGdalIoHandler),
+           py::arg("data_file_path"),
+           py::arg("virtual_bands") = std::vector<int>{},
+           py::arg("pixel_type") = Isis::PixelType::Double,
+           py::arg("writable") = false,
+           "Open an existing GDAL-supported raster through the ISIS 10 image-I/O backend.")
+      .def("read", &Isis::GdalIoHandler::read, py::arg("buffer"))
+      .def("write", &Isis::GdalIoHandler::write, py::arg("buffer"))
+      .def("get_data_size", &Isis::GdalIoHandler::getDataSize)
+      .def("update_labels",
+           &Isis::GdalIoHandler::updateLabels,
+           py::arg("labels"))
+      .def("clear_cache",
+           &Isis::GdalIoHandler::clearCache,
+           py::arg("block_for_write_cache") = false);
+
   py::class_<Isis::IProj, Isis::TProjection>(m, "IProj")
       .def(py::init<Isis::Pvl &, bool>(),
            py::arg("label"),
@@ -60,6 +175,43 @@ void bind_isis10(py::module_ &m) {
         }
         return py::make_tuple(minX, maxX, minY, maxY);
       });
+
+  py::class_<Isis::OsirisRexOcamsOpenCVDistortionMap,
+             Isis::CameraDistortionMap>(
+      m, "OsirisRexOcamsOpenCVDistortionMap")
+      .def(py::init([](Isis::Camera *parent,
+                       int naifIkCode,
+                       int functionIkCode,
+                       const std::string &filterName,
+                       double zDirection) {
+             if (parent == nullptr) {
+               throw py::value_error("parent must be a valid Camera");
+             }
+             return std::make_unique<Isis::OsirisRexOcamsOpenCVDistortionMap>(
+                 parent,
+                 naifIkCode,
+                 functionIkCode,
+                 stdStringToQString(filterName),
+                 zDirection);
+           }),
+           py::arg("parent"),
+           py::arg("naif_ik_code"),
+           py::arg("function_ik_code"),
+           py::arg("filter_name") = "",
+           py::arg("z_direction") = 1.0,
+           py::keep_alive<1, 2>(),
+           "Construct the ISIS 10 OSIRIS-REx OCAMS OpenCV distortion model.")
+      .def("set_camera_temperature",
+           &Isis::OsirisRexOcamsOpenCVDistortionMap::SetCameraTemperature,
+           py::arg("temperature_celsius"))
+      .def("set_focal_plane",
+           &Isis::OsirisRexOcamsOpenCVDistortionMap::SetFocalPlane,
+           py::arg("dx"),
+           py::arg("dy"))
+      .def("set_undistorted_focal_plane",
+           &Isis::OsirisRexOcamsOpenCVDistortionMap::SetUndistortedFocalPlane,
+           py::arg("ux"),
+           py::arg("uy"));
 
   py::class_<Isis::Chandrayaan2OhrcCamera, Isis::LineScanCamera>(
       m, "Chandrayaan2OhrcCamera")

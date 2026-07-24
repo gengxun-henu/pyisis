@@ -10,6 +10,7 @@
 // Updated: 2026-04-14  Geng Xun replaced the direct validate_pvl binding with an empty-template-safe wrapper to prevent PVL validation segfaults.
 // Updated: 2026-04-14  Geng Xun added Pvl set_format_template (2 overloads) and validate_pvl.
 // Updated: 2026-04-15  Geng Xun routed PvlGroup.validate_group through the same empty-template-safe wrapper used by validate_pvl.
+// Updated: 2026-07-24  Geng Xun exposed ISIS 10 PvlKeyword JSON value/array helpers through Python JSON conversion.
 // Updated: 2026-07-24  Geng Xun exposed ISIS 10 Pvl JSON conversion and GDAL label reading behind the version capability gate.
 // Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, PvlFormatPds, PvlTranslationTable, LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, and XmlToPvlTranslationManager
 
@@ -406,6 +407,36 @@ void bind_base_pvl(py::module_ &m) {
            },
            py::arg("value"),
            py::arg("unit") = "")
+#ifdef PYISIS_ISIS10_API
+      .def("set_json_value",
+           [](Isis::PvlKeyword &self, const py::object &value) {
+             auto json_text = py::module_::import("json").attr("dumps")(value).cast<std::string>();
+             self.setJsonValue(nlohmann::json::parse(json_text));
+           },
+           py::arg("value"))
+      .def("set_json_array_value",
+           [](Isis::PvlKeyword &self, const py::object &value) {
+             auto json_text = py::module_::import("json").attr("dumps")(value).cast<std::string>();
+             self.setJsonArrayValue(nlohmann::json::parse(json_text));
+           },
+           py::arg("value"))
+      .def("add_json_value",
+           [](Isis::PvlKeyword &self, const py::object &value) {
+             auto json_text = py::module_::import("json").attr("dumps")(value).cast<std::string>();
+             self.addJsonValue(nlohmann::json::parse(json_text));
+           },
+           py::arg("value"))
+      .def("add_json_array_value",
+           [](Isis::PvlKeyword &self, const py::object &value) {
+             auto json_text = py::module_::import("json").attr("dumps")(value).cast<std::string>();
+             self.addJsonArrayValue(nlohmann::json::parse(json_text));
+           },
+           py::arg("value"))
+      .def("to_json",
+           [](Isis::PvlKeyword &self) {
+             return py::module_::import("json").attr("loads")(self.toJson().dump());
+           })
+#endif
       .def("size", &Isis::PvlKeyword::size)
       .def("is_null", &Isis::PvlKeyword::isNull, py::arg("index") = 0)
       .def("clear", &Isis::PvlKeyword::clear)
@@ -442,6 +473,9 @@ void bind_base_pvl(py::module_ &m) {
       .value("Replace", Isis::PvlContainer::Replace);
 
   pvl_container
+#ifdef PYISIS_ISIS10_API
+      .def(py::init<>())
+#endif
       .def("name", [](const Isis::PvlContainer &self) { return qStringToStdString(self.name()); })
       .def("set_name",
            [](Isis::PvlContainer &self, const std::string &name) { self.setName(stdStringToQString(name)); },

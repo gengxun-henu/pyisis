@@ -35,17 +35,17 @@ python tools/dev/generate_isis10_bind_inventory.py \
 同一源码在 ISIS 9 中不导出这些类，在 ISIS 10 中导出并由
 `tests/unitTest/isis10_api_unit_test.py` 验证。
 
-第二批建议评估：
+第二批当前进度：
 
-1. `OsirisRexOcamsOpenCVDistortionMap`：对 OSIRIS-REx 数据有明确价值，
-   但需要 Camera 生命周期和 QString 包装。
-2. `csv2table`：通用价值高，但应设计 Python 参数 facade，而不是暴露
+1. `OsirisRexOcamsOpenCVDistortionMap`：已完成条件绑定、Camera 生命周期、
+   QString 转换、双版本构建和聚焦测试。
+2. `ImageIoHandler` 与 `GdalIoHandler`：已完成抽象基类注册和 Python
+   友好 facade；构造时预检文件及波段，通过 `PixelType` 选择输出类型，
+   默认只读，并排除 `GDALDataset*`、Qt mutex 和不明确的裸所有权。
+3. `csv2table`：通用价值高，但应设计 Python 参数 facade，而不是暴露
    `UserInterface`。
-3. `ocams2isis`、`eisstitch`：任务价值明确，但依赖输入产品和运行数据。
-
-`GdalIoHandler` 值得保留在候选池中，但原始 API 包含 `GDALDataset*`、
-`QList*` 和所有权问题，应先设计 Python 友好 facade。`ImageIoHandler`
-主要作为其抽象基类注册，不建议直接提供构造器。
+4. `ocams2isis`、`eisstitch`：任务价值明确，但依赖输入产品和运行数据，
+   按当前范围留待后续 Windows APP 工作。
 
 ## 边界
 

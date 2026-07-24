@@ -1,13 +1,13 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-GdalIoHandler,Image I/O,isis/src/base/objs/ImageIoHandler/GdalIoHandler.h,N/A,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,先设计 Python 友好 facade；不直接暴露 GDALDataset*、QList* 和裸所有权
+GdalIoHandler,Image I/O,isis/src/base/objs/ImageIoHandler/GdalIoHandler.h,src/bind_isis10.cpp,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,已绑定 Python 友好 facade；预检路径和波段，映射 PixelType，默认只读且不暴露 GDALDataset*
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,GdalIoHandler,isis_pybind.GdalIoHandler,N,GDAL 后端具有通用价值，但原始构造器和缓冲区接口不适合作为稳定 Python API。
-Construction/Enum,"GdalIoHandler(QString &dataFilePath, const QList<int> *virtualBandList, GDALDataType pixelType = GDT_Float64, GDALAccess eAccess = GA_ReadOnly)",isis_pybind.GdalIoHandler(),N,应包装为 path、bands、dtype、mode
-Construction/Enum,"GdalIoHandler(GDALDataset *geodataSet, const QList<int> *virtualBandList, GDALDataType pixelType = GDT_Float64)",isis_pybind.GdalIoHandler.from_dataset,N,默认不暴露裸 GDALDataset*
-Public API,void init(),isis_pybind.GdalIoHandler.init,N,ISIS 10-only candidate; not bound yet
-Read/Write IO,virtual void read(Buffer &bufferToFill) const,isis_pybind.GdalIoHandler.read,N,ISIS 10-only candidate; not bound yet
-Read/Write IO,virtual void write(const Buffer &bufferToWrite),isis_pybind.GdalIoHandler.write,N,ISIS 10-only candidate; not bound yet
-Query,virtual BigInt getDataSize() const,isis_pybind.GdalIoHandler.get_data_size,N,ISIS 10-only candidate; not bound yet
-Mutation/Configuration,virtual void updateLabels(Pvl &labels),isis_pybind.GdalIoHandler.update_labels,N,ISIS 10-only candidate; not bound yet
-Mutation/Configuration,virtual void clearCache(bool blockForWriteCache = false),isis_pybind.GdalIoHandler.clear_cache,N,ISIS 10-only candidate; not bound yet
+Class Symbol,GdalIoHandler,isis_pybind.GdalIoHandler,Y,ISIS 10-only binding; tested against the target ISIS 10 environment
+Construction/Enum,"GdalIoHandler(QString &dataFilePath, const QList<int> *virtualBandList, GDALDataType pixelType = GDT_Float64, GDALAccess eAccess = GA_ReadOnly)",isis_pybind.GdalIoHandler(),Y,"Bound as path, Python band list, PixelType, and writable flag; validates file and bands"
+Construction/Enum,"GdalIoHandler(GDALDataset *geodataSet, const QList<int> *virtualBandList, GDALDataType pixelType = GDT_Float64)",isis_pybind.GdalIoHandler.from_dataset,N,Intentionally excluded: raw GDALDataset pointer ownership is unsafe
+Public API,void init(),isis_pybind.GdalIoHandler.init,N,Intentionally excluded: the public constructor initializes the handler
+Read/Write IO,virtual void read(Buffer &bufferToFill) const,isis_pybind.GdalIoHandler.read,Y,Bound and tested with Brick
+Read/Write IO,virtual void write(const Buffer &bufferToWrite),isis_pybind.GdalIoHandler.write,Y,Bound
+Query,virtual BigInt getDataSize() const,isis_pybind.GdalIoHandler.get_data_size,Y,Bound
+Mutation/Configuration,virtual void updateLabels(Pvl &labels),isis_pybind.GdalIoHandler.update_labels,Y,Bound and tested with a GTiff label
+Mutation/Configuration,virtual void clearCache(bool blockForWriteCache = false),isis_pybind.GdalIoHandler.clear_cache,Y,Bound on the derived handler

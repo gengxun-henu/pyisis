@@ -4,6 +4,7 @@ Author: Geng Xun
 Created: 2026-07-23
 Updated: 2026-07-24  Geng Xun added automatic prefix diff and classification gates.
 Updated: 2026-07-24  Geng Xun aligned discovery with the official USGS ISIS 10 package.
+Updated: 2026-07-24  Geng Xun recorded curated bindings and intentional API exclusions.
 """
 
 from __future__ import annotations
@@ -27,6 +28,7 @@ class ApiItem:
     cpp_signature: str
     python_name: str
     note: str
+    converted: str | None = None
 
 
 @dataclass(frozen=True)
@@ -71,8 +73,9 @@ def _api(
     signature: str,
     python_name: str,
     note: str = "ISIS 10-only candidate; not bound yet",
+    converted: str | None = None,
 ) -> ApiItem:
-    return ApiItem(group, signature, python_name, note)
+    return ApiItem(group, signature, python_name, note, converted)
 
 
 CLASS_CANDIDATES = (
@@ -138,13 +141,13 @@ CLASS_CANDIDATES = (
         "isis/src/osirisrex/objs/OsirisRexOcamsCamera/OsirisRexOcamsOpenCVDistortionMap.h",
         "libOsirisRexOcamsCamera",
         "Medium",
-        "第二批绑定；显式转换 QString，并复用 CameraDistortionMap 生命周期策略",
+        "已绑定；显式转换 QString、拒绝空 Camera，并用 keep_alive 保持父相机生命周期",
         "提供 ISIS 10 新增的 OCAMS OpenCV 标定模型，对 OSIRIS-REx 数据有直接价值。",
         (
-            _api("Construction/Enum", "OsirisRexOcamsOpenCVDistortionMap(Camera *parent, int naifIkCode, int functionIkCode, const QString &filtername, double zdir = 1.0)", "isis_pybind.OsirisRexOcamsOpenCVDistortionMap()", "需要 Camera keep_alive 和 str/QString 转换"),
-            _api("Mutation/Configuration", "void SetCameraTemperature(double temp)", "isis_pybind.OsirisRexOcamsOpenCVDistortionMap.set_camera_temperature"),
-            _api("Mutation/Configuration", "virtual bool SetFocalPlane(double dx, double dy)", "isis_pybind.OsirisRexOcamsOpenCVDistortionMap.set_focal_plane"),
-            _api("Mutation/Configuration", "virtual bool SetUndistortedFocalPlane(double ux, double uy)", "isis_pybind.OsirisRexOcamsOpenCVDistortionMap.set_undistorted_focal_plane"),
+            _api("Construction/Enum", "OsirisRexOcamsOpenCVDistortionMap(Camera *parent, int naifIkCode, int functionIkCode, const QString &filtername, double zdir = 1.0)", "isis_pybind.OsirisRexOcamsOpenCVDistortionMap()", "Camera uses keep_alive; Python str is converted to QString; null Camera raises ValueError"),
+            _api("Mutation/Configuration", "void SetCameraTemperature(double temp)", "isis_pybind.OsirisRexOcamsOpenCVDistortionMap.set_camera_temperature", "Bound"),
+            _api("Mutation/Configuration", "virtual bool SetFocalPlane(double dx, double dy)", "isis_pybind.OsirisRexOcamsOpenCVDistortionMap.set_focal_plane", "Bound"),
+            _api("Mutation/Configuration", "virtual bool SetUndistortedFocalPlane(double ux, double uy)", "isis_pybind.OsirisRexOcamsOpenCVDistortionMap.set_undistorted_focal_plane", "Bound"),
         ),
     ),
     ClassCandidate(
@@ -155,17 +158,17 @@ CLASS_CANDIDATES = (
         "isis/src/base/objs/ImageIoHandler/GdalIoHandler.h",
         "libisis",
         "High",
-        "先设计 Python 友好 facade；不直接暴露 GDALDataset*、QList* 和裸所有权",
+        "已绑定 Python 友好 facade；预检路径和波段，映射 PixelType，默认只读且不暴露 GDALDataset*",
         "GDAL 后端具有通用价值，但原始构造器和缓冲区接口不适合作为稳定 Python API。",
         (
-            _api("Construction/Enum", "GdalIoHandler(QString &dataFilePath, const QList<int> *virtualBandList, GDALDataType pixelType = GDT_Float64, GDALAccess eAccess = GA_ReadOnly)", "isis_pybind.GdalIoHandler()", "应包装为 path、bands、dtype、mode"),
-            _api("Construction/Enum", "GdalIoHandler(GDALDataset *geodataSet, const QList<int> *virtualBandList, GDALDataType pixelType = GDT_Float64)", "isis_pybind.GdalIoHandler.from_dataset", "默认不暴露裸 GDALDataset*"),
-            _api("Public API", "void init()", "isis_pybind.GdalIoHandler.init"),
-            _api("Read/Write IO", "virtual void read(Buffer &bufferToFill) const", "isis_pybind.GdalIoHandler.read"),
-            _api("Read/Write IO", "virtual void write(const Buffer &bufferToWrite)", "isis_pybind.GdalIoHandler.write"),
-            _api("Query", "virtual BigInt getDataSize() const", "isis_pybind.GdalIoHandler.get_data_size"),
-            _api("Mutation/Configuration", "virtual void updateLabels(Pvl &labels)", "isis_pybind.GdalIoHandler.update_labels"),
-            _api("Mutation/Configuration", "virtual void clearCache(bool blockForWriteCache = false)", "isis_pybind.GdalIoHandler.clear_cache"),
+            _api("Construction/Enum", "GdalIoHandler(QString &dataFilePath, const QList<int> *virtualBandList, GDALDataType pixelType = GDT_Float64, GDALAccess eAccess = GA_ReadOnly)", "isis_pybind.GdalIoHandler()", "Bound as path, Python band list, PixelType, and writable flag; validates file and bands"),
+            _api("Construction/Enum", "GdalIoHandler(GDALDataset *geodataSet, const QList<int> *virtualBandList, GDALDataType pixelType = GDT_Float64)", "isis_pybind.GdalIoHandler.from_dataset", "Intentionally excluded: raw GDALDataset pointer ownership is unsafe", "N"),
+            _api("Public API", "void init()", "isis_pybind.GdalIoHandler.init", "Intentionally excluded: the public constructor initializes the handler", "N"),
+            _api("Read/Write IO", "virtual void read(Buffer &bufferToFill) const", "isis_pybind.GdalIoHandler.read", "Bound and tested with Brick"),
+            _api("Read/Write IO", "virtual void write(const Buffer &bufferToWrite)", "isis_pybind.GdalIoHandler.write", "Bound"),
+            _api("Query", "virtual BigInt getDataSize() const", "isis_pybind.GdalIoHandler.get_data_size", "Bound"),
+            _api("Mutation/Configuration", "virtual void updateLabels(Pvl &labels)", "isis_pybind.GdalIoHandler.update_labels", "Bound and tested with a GTiff label"),
+            _api("Mutation/Configuration", "virtual void clearCache(bool blockForWriteCache = false)", "isis_pybind.GdalIoHandler.clear_cache", "Bound on the derived handler"),
         ),
     ),
     ClassCandidate(
@@ -176,18 +179,18 @@ CLASS_CANDIDATES = (
         "isis/src/base/objs/ImageIoHandler/ImageIoHandler.h",
         "libisis",
         "High",
-        "仅作为 GdalIoHandler 的抽象基类注册；不单独提供裸指针构造",
+        "已注册抽象基类并暴露共享 I/O 方法；排除裸所有权、Qt mutex 和无操作基类缓存接口",
         "主要是底层抽象和 Qt 指针生命周期接口，直接 Python 使用价值有限。",
         (
-            _api("Construction/Enum", "ImageIoHandler(const QList<int> *virtualBandList)", "isis_pybind.ImageIoHandler()", "抽象类；默认不暴露构造器"),
-            _api("Read/Write IO", "virtual void read(Buffer &bufferToFill) const = 0", "isis_pybind.ImageIoHandler.read"),
-            _api("Read/Write IO", "virtual void write(const Buffer &bufferToWrite) = 0", "isis_pybind.ImageIoHandler.write"),
-            _api("Mutation/Configuration", "virtual void addCachingAlgorithm(CubeCachingAlgorithm *algorithm)", "isis_pybind.ImageIoHandler.add_caching_algorithm", "需要明确所有权"),
-            _api("Mutation/Configuration", "virtual void clearCache(bool blockForWriteCache = true) const", "isis_pybind.ImageIoHandler.clear_cache"),
-            _api("Query", "virtual BigInt getDataSize() const = 0", "isis_pybind.ImageIoHandler.get_data_size"),
-            _api("Mutation/Configuration", "void setVirtualBands(const QList<int> *virtualBandList)", "isis_pybind.ImageIoHandler.set_virtual_bands", "建议改为 Python list 拷贝"),
-            _api("Mutation/Configuration", "virtual void updateLabels(Pvl &labels) = 0", "isis_pybind.ImageIoHandler.update_labels"),
-            _api("Public API", "QMutex *dataFileMutex()", "isis_pybind.ImageIoHandler.data_file_mutex", "Qt 同步原语默认不绑定"),
+            _api("Construction/Enum", "ImageIoHandler(const QList<int> *virtualBandList)", "isis_pybind.ImageIoHandler()", "Intentionally excluded: abstract base is not directly constructible", "N"),
+            _api("Read/Write IO", "virtual void read(Buffer &bufferToFill) const = 0", "isis_pybind.ImageIoHandler.read", "Bound as the inherited I/O contract"),
+            _api("Read/Write IO", "virtual void write(const Buffer &bufferToWrite) = 0", "isis_pybind.ImageIoHandler.write", "Bound as the inherited I/O contract"),
+            _api("Mutation/Configuration", "virtual void addCachingAlgorithm(CubeCachingAlgorithm *algorithm)", "isis_pybind.ImageIoHandler.add_caching_algorithm", "Intentionally excluded: raw algorithm ownership is unclear", "N"),
+            _api("Mutation/Configuration", "virtual void clearCache(bool blockForWriteCache = true) const", "isis_pybind.ImageIoHandler.clear_cache", "Intentionally excluded: base implementation is a no-op; derived clear_cache is exposed", "N"),
+            _api("Query", "virtual BigInt getDataSize() const = 0", "isis_pybind.ImageIoHandler.get_data_size", "Bound"),
+            _api("Mutation/Configuration", "void setVirtualBands(const QList<int> *virtualBandList)", "isis_pybind.ImageIoHandler.set_virtual_bands", "Bound through a copied Python list"),
+            _api("Mutation/Configuration", "virtual void updateLabels(Pvl &labels) = 0", "isis_pybind.ImageIoHandler.update_labels", "Bound"),
+            _api("Public API", "QMutex *dataFileMutex()", "isis_pybind.ImageIoHandler.data_file_mutex", "Intentionally excluded: Qt synchronization primitive", "N"),
         ),
     ),
 )
@@ -270,7 +273,7 @@ HEADER_CLASSIFICATIONS = {
         "class",
         "candidate",
         "GdalIoHandler",
-        "Public image-I/O class; raw GDAL and Qt ownership require a facade",
+        "Public image-I/O class; curated Python facade is complete",
     ),
     "IEndian.h": HeaderClassification(
         "compatibility",
@@ -288,7 +291,7 @@ HEADER_CLASSIFICATIONS = {
         "class",
         "candidate",
         "ImageIoHandler",
-        "Abstract image-I/O base; register only when required by a usable derived facade",
+        "Abstract image-I/O base registered for the completed GdalIoHandler facade",
     ),
     "OsirisRexOcamsOpenCVDistortionMap.h": HeaderClassification(
         "class",
@@ -332,6 +335,9 @@ COMPLETE_CLASS_BINDINGS = {
     "IProj",
     "Chandrayaan2OhrcCamera",
     "Chandrayaan2TmcCamera",
+    "OsirisRexOcamsOpenCVDistortionMap",
+    "GdalIoHandler",
+    "ImageIoHandler",
 }
 
 
@@ -470,8 +476,9 @@ def _write_class_detail(output_dir: Path, candidate: ClassCandidate) -> str:
             ["Class Symbol", candidate.class_name, f"isis_pybind.{candidate.class_name}", converted, class_note]
         )
         for item in candidate.api:
+            item_converted = item.converted if item.converted is not None else converted
             writer.writerow(
-                [item.group, item.cpp_signature, item.python_name, converted, item.note]
+                [item.group, item.cpp_signature, item.python_name, item_converted, item.note]
             )
     return path.name
 

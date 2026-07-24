@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Spice,"Spice, Instruments, and Cameras",isis/src/base/objs/Spice/Spice.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,已完成绑定；向量输出以 tuple 返回
+Spice,"Spice, Instruments, and Cameras",isis/src/base/objs/Spice/Spice.h,src/bind_spice_navigation.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 9/10兼容闭环；仅绑定两版共有Spice(Cube)构造和访问器，ISIS 10专有构造/load保持排除
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Spice,isis_pybind.Spice,Y,

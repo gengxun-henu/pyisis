@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-BundleResults,Control Networks,isis/src/control/objs/BundleResults/BundleResults.h,src/control/bind_bundle_advanced.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多
+BundleResults,Control Networks,isis/src/control/objs/BundleResults/BundleResults.h,src/control/bind_bundle_advanced.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 10 删除冗余 QVector overload；QList/Python list facade 双版本稳定
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,BundleResults,isis_pybind.BundleResults,Y,2026-04-13 台账同步；顶层导出已存在（src/control/bind_bundle_advanced.cpp）

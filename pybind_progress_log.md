@@ -2636,3 +2636,17 @@ Chandrayaan2TmcCamera
 - ISIS 10新增候选台账已将三项从`candidate`收口为`complete`。
 
 **Current 9-header batch:** 3/9 closed.
+
+### Control/Bundle Qt compatibility closure（6 headers closed）
+
+- `BundleResults.h`仅删除Qt 6中冗余的`QVector` residual-list overload；
+  现有clone helper和Python facade继续使用`QList`/Python list。
+- `BundleSolutionInfo.h`只有history注释变化；`ControlMeasure.h`、
+  `ControlNet.h`、`ControlPoint.h`和`ImageList.h`只有Qt include或未使用
+  前置声明调整，公开数据API不变。
+- 继续有意排除signals、slots、`QVariant` observer emission及Qt容器专属
+  overload；没有引入版本分支或重复绑定。
+- ISIS 9/10的control core、bundle advanced和image utility组合测试各126项
+  通过（1项既有BundleResults copy测试跳过），smoke均通过。
+
+**Current 9-header batch:** 9/9 closed.

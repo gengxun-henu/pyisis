@@ -9,20 +9,20 @@ Control Networks,BundleMeasure,已转换,2026-04-10 已在 src/control/bind_bund
 Control Networks,BundleObservation,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；抽象基类暴露 index/instrument_id/vtpv/parameter_list
 Control Networks,BundleObservationSolveSettings,已转换,2026-03-21 已在 bind_control_core.cpp 暴露枚举/求解配置/观测号接口
 Control Networks,BundleObservationVector,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；构造/迭代/参数计数/instrument 查询
-Control Networks,BundleResults,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；收敛状态/残差/参数计数/sigma range/maximum likelihood 全面暴露
+Control Networks,BundleResults,已转换,2026-07-24 ISIS 10 仅删除冗余 QVector residual-list overload；现有 QList/Python list facade 双版本通过
 Control Networks,BundleSettings,已转换,2026-07-24 ISIS 9/10兼容闭环：公开配置与枚举签名一致，仅ISIS 10头文件补充QStringRef；双版本control_core与bundle_advanced测试及smoke通过
-Control Networks,BundleSolutionInfo,已转换,2026-04-10 已在 src/control/bind_bundle_advanced.cpp 重新启用；名称/时间/文件名/设置/结果/输出方法全面暴露
+Control Networks,BundleSolutionInfo,已转换,2026-07-24 公开 API 双版本一致；名称/时间/文件名/设置/结果/输出方法通过
 Control Networks,BundleTargetBody,已转换,2026-03-21 已在 bind_control_core.cpp 暴露目标体求解配置/格式化/局部半径接口
-Control Networks,ControlMeasure,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Control Networks,ControlMeasure,已转换,2026-07-24 ISIS 10 仅调整 Qt include；稳定数据 API 双版本通过，observer plumbing 有意排除
 Control Networks,ControlMeasureLogData,已转换,"2026-04-14 台账同步：所有公开方法（enum/getter/setter/query/serialization）已在 bind_control_core.cpp 绑定（12/12 100%）"
-Control Networks,ControlNet,已转换,Qt 类型/信号槽较多；控制网对象关联紧密，需处理拷贝/引用语义
+Control Networks,ControlNet,已转换,2026-07-24 ISIS 10 仅删除未使用 QPair 前置声明；稳定网络 API 双版本通过，signals/slots 有意排除
 Control Networks,ControlNetDiff,已转换,2026-03-21 已在 bind_control_core.cpp 暴露 compare(...) 与 tolerances 接口
 Control Networks,ControlNetFilter,已转换,2026-04-08 已在 bind_control_core.cpp 同步暴露全部公开过滤器与输出 helper，并补 focused 单测
 Control Networks,ControlNetStatistics,已转换,2026-04-11 完成全部公开方法绑定；GenerateImageStats/PrintImageStats/GetImageStatsBySerialNum/GeneratePointStats 已补
 Control Networks,ControlNetValidMeasure,已转换,2026-04-08 已在 bind_control_core.cpp 暴露稳定配置/查询方法簇（构造/parse/阈值 getter/valid_* helper）；ValidStandardOptions 与 edge/camera 几何接口后续补
 Control Networks,ControlNetVersioner,已转换,2026-04-10 已在 src/control/bind_control_core.cpp 暴露构造/元数据 getter/write/toPvl；takeFirstPoint 因裸指针所有权问题暂跳过(N)
 Control Networks,ControlNetVitals,未转换,Qt 类型/信号槽较多
-Control Networks,ControlPoint,已转换,2026-04-11 已同步 ControlPoint detail inventory 到当前导出面；measure 管理当前 Python 名称仍为 add_measure/delete_measure；除 QVariant 信号型 emit_measure_modified 外其余现有公开入口已基本反映到台账
+Control Networks,ControlPoint,已转换,2026-07-24 公开 API 双版本稳定；measure 管理保持 add_measure/delete_measure，QVariant observer emission 有意排除
 Control Networks,ControlPointList,已转换,2026-03-21 已在 bind_control_core.cpp 暴露文件读取/索引/统计注册接口
 Control Networks,ControlPointV0001,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL 构造与 protobuf bytes/debug-string 适配接口
 Control Networks,ControlPointV0002,已转换,2026-03-22 已在 bind_control_core.cpp 暴露 PVL/升级构造与 protobuf bytes/debug-string 适配接口

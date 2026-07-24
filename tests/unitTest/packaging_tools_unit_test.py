@@ -151,7 +151,13 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("isis/src/core/src/Pvl.cpp", patches[0])
         self.assertIn("Trim Windows runtime to non-GUI core", patches[1])
         self.assertIn("set(thisAppFolders)", patches[1])
-        self.assertNotIn("list(REMOVE_ITEM modules", patches[1])
+        self.assertIn("ISIS_DISABLED_OBJ_FOLDERS BundleAdjust", patches[1])
+        self.assertIn(
+            'list(REMOVE_ITEM modules "${CMAKE_CURRENT_LIST_DIR}/qisis")',
+            patches[1],
+        )
+        self.assertIn("BundleSolutionInfo.cpp", patches[1])
+        self.assertIn("#if defined(_MSC_VER)", patches[1])
 
         spiceql_patch = (
             WINDOWS_ISIS_PATCHES_DIR

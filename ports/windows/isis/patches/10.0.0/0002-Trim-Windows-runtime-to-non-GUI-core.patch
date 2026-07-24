@@ -5,20 +5,24 @@ Subject: [PATCH] Trim Windows runtime to non-GUI core
 
 Keep the MSVC ISIS runtime focused on the object libraries consumed by the
 standalone bindings. Building every application implementation into one
-export-all DLL exceeds the 65,535-member MSVC import-library limit. Keep qisis
-objects because non-GUI control classes such as BundleSolutionInfo depend on
-its data-model classes. Linux and other upstream builds retain their existing
-source selection.
+export-all DLL exceeds the 65,535-member MSVC import-library limit. Exclude the
+qisis module and the unbound BundleAdjust implementation while keeping the
+bound BundleSolutionInfo data/statistics API. Its Project serialization paths
+are not exposed by the standalone bindings and depend on qisis, so omit those
+paths only on MSVC. Linux and other upstream builds retain their existing
+source selection and behavior.
 ---
- isis/cmake/AddIsisModule.cmake | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ isis/cmake/AddIsisModule.cmake                     |  6 +++++-
+ isis/src/CMakeLists.txt                            | 10 +++++++++-
+ .../objs/BundleSolutionInfo/BundleSolutionInfo.cpp | 17 +++++++++++++++++
+ 3 files changed, 31 insertions(+), 2 deletions(-)
 
 diff --git a/isis/cmake/AddIsisModule.cmake b/isis/cmake/AddIsisModule.cmake
 index b7615f2df..b86714ac9 100644
 --- a/isis/cmake/AddIsisModule.cmake
 +++ b/isis/cmake/AddIsisModule.cmake
 @@ -217,7 +217,11 @@ function(add_isis_module name)
- 
+
      # Start with the objs folder
      get_subdirectory_list(${objsDir} thisObjFolders)
 -    get_subdirectory_list(${appsDir} thisAppFolders)
@@ -28,7 +32,102 @@ index b7615f2df..b86714ac9 100644
 +      get_subdirectory_list(${appsDir} thisAppFolders)
 +    endif()
      get_subdirectory_list(${tstsDir} thisTstFolders)
- 
+
      set(objFolders ${objFolders} ${thisObjFolders} ${thisAppFolders})
+diff --git a/isis/src/CMakeLists.txt b/isis/src/CMakeLists.txt
+index 475a3291a..4989f0a85 100644
+--- a/isis/src/CMakeLists.txt
++++ b/isis/src/CMakeLists.txt
+@@ -1,5 +1,10 @@
+ #===============================================================================
+-set(CORE_LIST base database control qisis system socet dev)
++if(MSVC)
++  set(CORE_LIST base database control system socet dev)
++  list(APPEND ISIS_DISABLED_OBJ_FOLDERS BundleAdjust)
++else()
++  set(CORE_LIST base database control qisis system socet dev)
++endif()
+
+ include_directories(".")
+ get_subdirectory_list(${CMAKE_CURRENT_LIST_DIR} modules)
+@@ -15,6 +20,9 @@ foreach(core ${CORE_LIST})
+ endforeach()
+
+ list(REMOVE_ITEM modules "${CMAKE_CURRENT_LIST_DIR}/core")
++if(MSVC)
++  list(REMOVE_ITEM modules "${CMAKE_CURRENT_LIST_DIR}/qisis")
++endif()
+
+ foreach( mod ${modules} )
+   string(REPLACE "${CMAKE_CURRENT_LIST_DIR}/" "" strippedmod ${mod})
+diff --git a/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.cpp b/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.cpp
+index c20009c86..3d5683f3e 100755
+--- a/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.cpp
++++ b/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.cpp
+@@ -130,9 +130,11 @@ namespace Isis {
+
+   void BundleSolutionInfo::readBundleSolutionInfo(QXmlStreamReader *xmlReader) {
+     QString projectRoot;
++#if !defined(_MSC_VER)
+     if (m_xmlHandlerProject) {
+       projectRoot = m_xmlHandlerProject->projectRoot() + "/";
+     }
++#endif
+     if (!m_adjustedImages){
+       m_adjustedImages = new QList<ImageList *>;
+     }
+@@ -297,6 +299,9 @@ namespace Isis {
+    */
+   void BundleSolutionInfo::updateFileName(Project *project) {
+
++#if defined(_MSC_VER)
++    (void) project;
++#else
+     //TODO do we need to close anything here?
+
+     FileName oldInputFileName(*m_inputControlNetFileName);
+@@ -313,6 +318,7 @@ namespace Isis {
+     }
+     m_outputControl = new Control(newOutputFileName.expanded());
+     m_outputControlName = newOutputFileName.expanded();
++#endif
+   }
+
+
+@@ -386,10 +392,14 @@ namespace Isis {
+    */
+   QString BundleSolutionInfo::outputControlNetFileName() const {
+
++#if defined(_MSC_VER)
++    return m_outputControlName;
++#else
+     if (m_outputControl)
+       return m_outputControl->fileName();
+     else
+       return m_outputControlName;
++#endif
+   }
+
+
+@@ -1998,6 +2008,11 @@ namespace Isis {
+   void BundleSolutionInfo::save(QXmlStreamWriter &stream, const Project *project,
+                                 FileName newProjectRoot) const {
+
++#if defined(_MSC_VER)
++    (void) stream;
++    (void) project;
++    (void) newProjectRoot;
++#else
+     // This is done for testing serialization without a Project
+     QString relativePath;
+     QString relativeBundlePath;
+@@ -2114,6 +2129,7 @@ namespace Isis {
+     }
+
+     stream.writeEndElement(); //end bundleSolutionInfo
++#endif
+   }
+
+
 -- 
 2.43.0

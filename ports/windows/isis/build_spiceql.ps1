@@ -106,8 +106,12 @@ $spiceqlExports = & dumpbin /nologo /exports $builtSpiceqlDll.FullName
 if ($LASTEXITCODE -ne 0) {
     Fail "dumpbin could not inspect SpiceQL exports"
 }
-if (-not ($spiceqlExports -match "strSclkToEt")) {
+$matchingExports = @($spiceqlExports | Where-Object { $_ -match "strSclkToEt" })
+if ($matchingExports.Count -eq 0) {
     Fail "SpiceQL DLL does not export strSclkToEt"
+}
+foreach ($matchingExport in $matchingExports) {
+    Write-Step "SpiceQL export: $($matchingExport.Trim())"
 }
 
 if ($builtSpiceqlDll) {
@@ -131,5 +135,47 @@ if (-not (Test-Path $spiceqlHeader)) {
 if (-not $spiceqlLibrary) {
     Fail "SpiceQL import library was not installed under $Prefix"
 }
+
+$linkProbeSource = Join-Path $BuildDir "spiceql-link-probe.cpp"
+$linkProbeObject = Join-Path $BuildDir "spiceql-link-probe.obj"
+$linkProbeExe = Join-Path $BuildDir "spiceql-link-probe.exe"
+$spiceqlIncludeDir = Join-Path $Prefix "include"
+@'
+#include <SpiceQL/api.h>
+
+#include <string>
+#include <vector>
+
+int main() {
+    const auto result = SpiceQL::strSclkToEt(
+        0,
+        std::string(),
+        std::string(),
+        false,
+        false,
+        false,
+        -1,
+        1,
+        std::vector<std::string>());
+    return result.first == 0.0 ? 0 : 1;
+}
+'@ | Set-Content -LiteralPath $linkProbeSource -Encoding utf8
+
+Write-Step "verifying downstream MSVC linkage against SpiceQL"
+Invoke-CheckedCommand cl `
+    /nologo `
+    /EHsc `
+    /std:c++17 `
+    /MD `
+    "/I$spiceqlIncludeDir" `
+    /c `
+    $linkProbeSource `
+    "/Fo$linkProbeObject"
+Invoke-CheckedCommand link `
+    /nologo `
+    $linkProbeObject `
+    "/LIBPATH:$spiceqlLibDir" `
+    SpiceQL.lib `
+    "/OUT:$linkProbeExe"
 
 Write-Step "SpiceQL prefix verified: $Prefix"

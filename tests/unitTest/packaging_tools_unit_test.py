@@ -19,7 +19,7 @@ Updated: 2026-07-23  Geng Xun covered versioned package and ISIS runtime checks 
 Updated: 2026-07-23  Geng Xun covered parameterized ISIS 9/10 Windows wheel builds.
 Updated: 2026-07-24  Geng Xun covered private Linux toolchain runtime packaging and the split ISIS 10 Windows patch queue.
 Updated: 2026-07-24  Geng Xun preserved qisis data objects and exported SpiceQL symbols on Windows.
-Updated: 2026-07-25  Geng Xun covered the ISIS 10 SpiceQL 1.4.1 dependency and export gate.
+Updated: 2026-07-25  Geng Xun covered the ISIS 10 SpiceQL 1.4.1 export and MSVC link gates.
 """
 
 from __future__ import annotations
@@ -148,6 +148,8 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("SpiceQL.dll", spiceql)
         self.assertIn("dumpbin /nologo /exports", spiceql)
         self.assertIn("SpiceQL DLL does not export strSclkToEt", spiceql)
+        self.assertIn("spiceql-link-probe.cpp", spiceql)
+        self.assertIn("Invoke-CheckedCommand link", spiceql)
 
         apply_script = (
             PROJECT_ROOT / "ports" / "windows" / "isis" / "apply_patches.ps1"

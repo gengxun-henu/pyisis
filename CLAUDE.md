@@ -60,6 +60,15 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
+## 5. Disk Space and Build Cleanup
+
+This workstation has limited disk space. After a build succeeds and its result
+is verified, keep only artifacts needed for later use, such as wheels, shared
+libraries/DLLs, install packages, and reports. Promptly remove disposable build
+directories, downloaded CI copies, staging trees, build-only caches, and other
+temporary files. Identify and preserve the exact final artifacts first; never
+delete user files, reusable source/reference checkouts, or an active build.
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.

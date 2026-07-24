@@ -143,6 +143,16 @@ python examples/forward_intersection/forward_intersection.py \
 - In this repository, if a PR is mergeable and local validation has already
   been reported, queued or pending GitHub gate jobs are not blocking.
 
+## Disk Space and Build Cleanup
+
+- This workstation has limited disk space. After a build has completed and the
+  required result has been verified, retain only artifacts needed for later
+  use (for example wheels, shared libraries/DLLs, install packages, and reports)
+  and promptly remove disposable build trees, downloaded CI copies, extracted
+  staging directories, caches created only for that build, and other temporary
+  files. Resolve and preserve the exact final artifacts before cleanup; never
+  delete user files, reusable source/reference checkouts, or an active build.
+
 ## Local File Guardrails
 
 - Treat `.gitignore` and `print.prt` as local guardrail files.

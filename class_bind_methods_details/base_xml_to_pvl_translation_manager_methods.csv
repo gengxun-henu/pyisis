@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-XmlToPvlTranslationManager,Parsing,reference/upstream_isis/src/base/objs/XmlToPvlTranslationManager/XmlToPvlTranslationManager.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-12 已补齐 FileName + translation stream 构造；内部 QDomDocument 不暴露
+XmlToPvlTranslationManager,Parsing,reference/upstream_isis/src/base/objs/XmlToPvlTranslationManager/XmlToPvlTranslationManager.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 10仅移除传递性PvlTokenizer include；FileName/stream facade及QDomDocument边界不变；双版本验证通过
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,XmlToPvlTranslationManager,isis_pybind.XmlToPvlTranslationManager,Y,Inherits LabelTranslationManager

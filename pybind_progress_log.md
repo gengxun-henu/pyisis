@@ -2523,3 +2523,16 @@ Chandrayaan2TmcCamera
 - 双版本重新构建成功；utility/support聚焦测试各133/133，smoke均通过。
 
 **Continuous goal:** 4/20 additional compatibility headers closed.
+
+### PVL translation batch: PvlFormat and translation managers（5 headers closed）
+
+- `PvlFormat.h`仅把Qt5 `QRegExp` inline实现切换为Qt6
+  `QRegularExpression`；公开格式化和`KeywordType`接口不变。
+- `LabelTranslationManager.h`、`PvlToPvlTranslationManager.h`、
+  `PvlToXmlTranslationManager.h`和`XmlToPvlTranslationManager.h`
+  仅移除未使用的`PvlTokenizer`传递性include或调整空白。
+- 不增加版本分支；现有构造、翻译facade、抽象继承链和
+  `QDomDocument`排除边界保持一致。
+- ISIS 9/10的`pvl_unit_test`各82/82通过，smoke均通过。
+
+**Continuous goal:** 9/20 additional compatibility headers closed.

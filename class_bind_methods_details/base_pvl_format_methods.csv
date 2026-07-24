@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-PvlFormat,Parsing,reference/upstream_isis/src/base/objs/PvlFormat/PvlFormat.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-04-09 已在 src/base/bind_base_pvl.cpp 完成绑定；KeywordType enum 一并暴露
+PvlFormat,Parsing,reference/upstream_isis/src/base/objs/PvlFormat/PvlFormat.h,src/base/bind_base_pvl.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 Qt5 QRegExp切换为Qt6 QRegularExpression仅影响inline解析实现；公开绑定面不变；双版本PVL 82/82及smoke通过
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,PvlFormat,isis_pybind.PvlFormat,Y,Exposed as py::class_<Isis::PvlFormat>

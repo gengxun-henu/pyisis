@@ -190,10 +190,10 @@ Parsing,FileList,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 通�
 Parsing,FileName,已转换,2026-07-24 补共享 __eq__/__ne__ wrapper；采用 ISIS 10 canonical/expanded path 语义修复 ISIS 9 不存在同路径比较差异；Data private 接口不绑定
 Parsing,IString,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 暴露 IString 类与自由函数 to_bool/to_int/to_big_int/to_double/to_string；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Parsing,iTime,已转换,2026-04-11 全部方法已绑定（CurrentGMT/CurrentLocalTime 之前已有只是台账滞后）
-Parsing,LabelTranslationManager,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露抽象基类 auto_translate/parse_specification；Python 侧不可直接实例化；继承链 PvlTranslationTable->LabelTranslationManager 已正确注册
+Parsing,LabelTranslationManager,已转换,2026-07-24 ISIS 10仅移除PvlTokenizer传递性include；Python公开抽象接口及继承链不变；双版本验证通过
 Parsing,Pvl,已转换,2026-07-24 ISIS 9/10兼容闭环：ISIS 10新增to_json返回Python容器、read_gdal路径；内部readObject helper不直接暴露；双版本PvlUnitTest各17/17及smoke通过
 Parsing,PvlContainer,已转换,2026-07-24 ISIS 9/10兼容闭环：ISIS 10新增默认构造；QList到QLinkedList仅为内部存储差异；双版本PvlUnitTest各19/19及smoke通过
-Parsing,PvlFormat,已转换,2026-04-12 已补 format_end(name, keyword)；当前暴露构造函数/add/set_char_limit/char_limit/format_value/format_name/format_end/format_eol/type/accuracy/add_quotes/is_single_unit；focused 单测在 pvl_unit_test.py；smoke 已补符号
+Parsing,PvlFormat,已转换,2026-07-24 QRegExp到QRegularExpression仅影响inline关键字类型解析实现；Python公开API不变；双版本PVL 82/82及smoke通过
 Parsing,PvlFormatPds,已转换,2026-04-12 已补 format_end(name, keyword)；继承 PvlFormat 暴露 PDS-specific 格式化接口与 CRLF format_eol；focused 单测在 pvl_unit_test.py；smoke 已补符号
 Parsing,PvlGroup,已转换,2026-04-11 补 validateGroup；全部公开方法已绑定
 Parsing,PvlKeyword,已转换,2026-07-24 ISIS 9/10兼容闭环：ISIS 10新增JSON标量/数组写入与to_json；Python侧转换为原生字符串列表/容器；双版本focused测试及smoke通过
@@ -201,10 +201,10 @@ Parsing,PvlObject,已转换,
 Parsing,PvlSequence,已转换,
 Parsing,PvlToken,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露构造函数/set_key/key/key_upper/add_value/value/value_upper/value_size/value_clear/value_vector；focused 单测在 tests/unitTest/pvl_unit_test.py；smoke 已补符号
 Parsing,PvlTokenizer,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露构造函数/load/clear/get_token_list；focused 单测在 tests/unitTest/pvl_unit_test.py；smoke 已补符号
-Parsing,PvlToPvlTranslationManager,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露 4 个构造函数/translate/auto_translate/input_has_keyword/set_label；focused 单测在 pvl_unit_test.py
-Parsing,PvlToXmlTranslationManager,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露构造函数/translate/input_has_keyword/set_label（Auto(QDomDocument) 不暴露）；smoke 已补符号
+Parsing,PvlToPvlTranslationManager,已转换,2026-07-24 ISIS 10仅移除传递性include/空白；现有4构造和翻译API稳定；双版本验证通过
+Parsing,PvlToXmlTranslationManager,已转换,2026-07-24 ISIS 10仅移除传递性include；现有facade及QDomDocument排除边界稳定；双版本验证通过
 Parsing,PvlTranslationTable,已转换,2026-04-12 已补 find_translation_group/valid_keywords 安全 copy helper；focused 单测与 smoke 已通过
-Parsing,XmlToPvlTranslationManager,已转换,2026-04-12 已补 FileName + translation text stream 构造；内部 QDomDocument 仍不暴露；focused 单测已覆盖 XML 文件 + 翻译文本输入；smoke 已通过
+Parsing,XmlToPvlTranslationManager,已转换,2026-07-24 ISIS 10仅移除传递性include；FileName+stream facade及内部QDomDocument排除边界稳定；双版本验证通过
 Pattern Matching,AdaptiveGruen,已转换,2026-04-10 已在 src/base/bind_base_pattern.cpp 继承 Gruen 暴露构造函数；focused 单测在 pattern_unit_test.py
 Pattern Matching,AtmosModelFactory,已转换,2026-04-04 已在 bind_base_photometry.cpp 暴露 create 静态工厂方法并补最小工厂链单测
 Pattern Matching,AutoReg,已转换,2026-04-03 已在 bind_base_pattern.cpp 暴露全部公共方法（抽象基类，通过子类使用）

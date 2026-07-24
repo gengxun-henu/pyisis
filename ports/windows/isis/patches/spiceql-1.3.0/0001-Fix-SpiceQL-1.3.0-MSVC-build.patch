@@ -2,20 +2,17 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 7bdc2ec..9124b7b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -136 +136,5 @@
--  add_library(SpiceQL SHARED ${SPICEQL_SRC_FILES})
-+  if(MSVC)
-+    add_library(SpiceQL STATIC ${SPICEQL_SRC_FILES})
-+  else()
-+    add_library(SpiceQL SHARED ${SPICEQL_SRC_FILES})
-+  endif()
 @@ -151,4 +151,4 @@ target_include_directories(SpiceQL
                              PRIVATE
                              ${CMAKE_CURRENT_SOURCE_DIR}/submodules/BTree/include/
 -                            cereal
 +                            ${CEREAL_INCLUDE_DIRS}
                              ${CSPICE_INCLUDE_DIRS}
-@@ -157,7 +157,19 @@ target_include_directories(SpiceQL
+@@ -157,7 +157,23 @@ target_include_directories(SpiceQL
++  set_target_properties(SpiceQL
++                        PROPERTIES
++                        WINDOWS_EXPORT_ALL_SYMBOLS ON)
++
 +  target_compile_options(SpiceQL
 +                         PRIVATE
 +                         $<$<CXX_COMPILER_ID:MSVC>:/FImsvc_compat.h>
@@ -35,6 +32,25 @@ index 7bdc2ec..9124b7b 100644
                          PRIVATE
                          CSPICE::cspice
                          spdlog::spdlog_header_only
+diff --git a/SpiceQL/include/api.h b/SpiceQL/include/api.h
+index 2185db4..42e7af1 100644
+--- a/SpiceQL/include/api.h
++++ b/SpiceQL/include/api.h
+@@ -7 +7,11 @@
++#if defined(_WIN32)
++#  if defined(SpiceQL_EXPORTS)
++#    define SPICEQL_API __declspec(dllexport)
++#  else
++#    define SPICEQL_API __declspec(dllimport)
++#  endif
++#else
++#  define SPICEQL_API
++#endif
++
+ namespace SpiceQL {
+@@ -261 +271 @@ namespace SpiceQL {
+-    std::pair<double, nlohmann::json> strSclkToEt(
++    SPICEQL_API std::pair<double, nlohmann::json> strSclkToEt(
 diff --git a/SpiceQL/src/config.cpp b/SpiceQL/src/config.cpp
 index 1565d50..a83aa4d 100644
 --- a/SpiceQL/src/config.cpp

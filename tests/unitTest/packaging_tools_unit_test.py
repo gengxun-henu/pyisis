@@ -169,8 +169,12 @@ class PackagingToolsUnitTest(unittest.TestCase):
             / "spiceql-1.3.0"
             / "0001-Fix-SpiceQL-1.3.0-MSVC-build.patch"
         ).read_text(encoding="utf-8")
-        self.assertIn("add_library(SpiceQL STATIC", spiceql_patch)
-        self.assertIn("add_library(SpiceQL SHARED", spiceql_patch)
+        self.assertIn("WINDOWS_EXPORT_ALL_SYMBOLS ON", spiceql_patch)
+        self.assertIn("SPICEQL_API __declspec(dllexport)", spiceql_patch)
+        self.assertIn(
+            "SPICEQL_API std::pair<double, nlohmann::json> strSclkToEt",
+            spiceql_patch,
+        )
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

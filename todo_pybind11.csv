@@ -167,11 +167,11 @@ Mars Reconnaissance Orbiter,ZeroReverse,未转换,抽象基类/纯虚接口
 Math,Affine,已转换,2026-04-11 完成全部公开方法绑定；AMatrix getIdentity/Forward/Inverse 通过嵌套列表适配
 Math,Basis1VariableFunction,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露 Basis1VariableFunction 抽象基类（DerivativeVar/DerivativeCoef 方法）；smoke 已补符号
 Math,BasisFunction,已转换,2026-03-25 已在 bind_base_math.cpp 暴露三参构造/系数/求值接口
-Math,Calculator,已转换,2026-03-25 已在 bind_base_math.cpp 暴露 RPN 计算器主接口；Minimum2/Maximum2 上游源码未实现
-Math,CubeCalculator,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 新增绑定；构造/clear/prepare_calculations/run_calculations 以 lambda 适配 QVector 参数
+Math,Calculator,已转换,2026-07-24 ISIS 10仅删除重复QVector前置声明；RPN API稳定；Minimum2/Maximum2仍因上游无实现排除；双版本验证通过
+Math,CubeCalculator,已转换,2026-07-24 ISIS 10仅删除重复QVector前置声明；Python list/QVector facade稳定；双版本验证通过
 Math,CubeInfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造与继承的 convert/tokenize_equation 接口
 Math,FunctionTools,未转换,抽象基类/纯虚接口
-Math,InfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/convert/tokenize_equation 接口
+Math,InfixToPostfix,已转换,2026-07-24 ISIS 10仅增加Qt6 QRegularExpression include；构造/convert/tokenize接口稳定；双版本验证通过
 Math,InlineInfixToPostfix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造与继承的 convert/tokenize_equation 接口
 Math,LeastSquares,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/数据输入/求解/残差/配置接口并补充单测
 Math,Matrix,已转换,2026-03-26 已在 bind_base_math.cpp 暴露构造/矩阵运算/线性代数接口并补充单测

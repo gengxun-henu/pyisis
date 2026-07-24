@@ -2554,3 +2554,17 @@ Chandrayaan2TmcCamera
 - ISIS 9/10的`target_shape_unit_test`各7项（1项环境跳过），smoke均通过。
 
 **Continuous goal:** 16/20 additional compatibility headers closed.
+
+### Math/Pixel batch: Calculator family, InfixToPostfix, PixelType（4 headers closed）
+
+- `Calculator.h`和`CubeCalculator.h`仅删除重复的`QVector`前置声明；
+  现有RPN接口和Python list/QVector facade不变。
+- `InfixToPostfix.h`只增加Qt6 `QRegularExpression`显式include；
+  `convert()`和`tokenize_equation()`契约不变。
+- `PixelType.h`枚举保持一致；ISIS 10新增GDAL双向映射inline helper，
+  已由`GdalIoHandler`内部使用。Python继续只接收`PixelType`，不泄漏
+  `GDALDataType`。
+- ISIS 9/10的math、CubeCalculator和low-level组合测试各204项通过
+  （含1项既有expected failure），smoke均通过。
+
+**Continuous goal:** 20/20 additional compatibility headers closed; pause for user review.

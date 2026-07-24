@@ -2536,3 +2536,21 @@ Chandrayaan2TmcCamera
 - ISIS 9/10的`pvl_unit_test`各82/82通过，smoke均通过。
 
 **Continuous goal:** 9/20 additional compatibility headers closed.
+
+### Shape/DSK batch: ShapeModel hierarchy and BulletTargetShape（7 headers closed）
+
+- ISIS 10将`calculateDefaultNormal()`和`calculateSurfaceNormal()`的默认实现
+  上移至`ShapeModel`，多个派生类删除重复override；Python仍通过基类继承
+  保持原方法名。
+- `NaifDskShape`、`EmbreeShapeModel`和`BulletShapeModel`删除原
+  `QVector`版`ellipsoidNormal()`；既有条件wrapper在ISIS 9调用原方法，
+  ISIS 10调用`calculateSurfaceNormal()`后返回`normal()`列表。
+- `DemShape`新增的DEM误差/取值helper均为private；不进入Python API。
+- `BulletTargetShape`内部所有权从`QSharedPointer`切换为带deleter的
+  `std::shared_ptr`；Python load factory返回对象的`take_ownership`
+  策略不变。
+- 默认构造`BulletShapeModel`在两版本都没有内部Bullet world，不能直接
+  用于求交；这属于上游生命周期限制，不作为ISIS 10回归。
+- ISIS 9/10的`target_shape_unit_test`各7项（1项环境跳过），smoke均通过。
+
+**Continuous goal:** 16/20 additional compatibility headers closed.

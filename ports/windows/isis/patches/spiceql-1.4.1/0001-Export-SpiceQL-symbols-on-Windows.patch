@@ -2,6 +2,10 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index b7c7e6b..04e33db 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
+@@ -56 +55,0 @@
+-  add_subdirectory("submodules/json")
+@@ -59,0 +59,1 @@
++  find_package(nlohmann_json CONFIG REQUIRED)
 @@ -138,0 +139,4 @@
 +  if(WIN32)
 +    # Generate the import library required by downstream MSVC consumers.

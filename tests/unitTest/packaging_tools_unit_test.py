@@ -176,6 +176,8 @@ class PackagingToolsUnitTest(unittest.TestCase):
             / "0001-Export-SpiceQL-symbols-on-Windows.patch"
         ).read_text(encoding="utf-8")
         self.assertIn("WINDOWS_EXPORT_ALL_SYMBOLS ON", spiceql_patch)
+        self.assertIn("find_package(nlohmann_json CONFIG REQUIRED)", spiceql_patch)
+        self.assertIn('-  add_subdirectory("submodules/json")', spiceql_patch)
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

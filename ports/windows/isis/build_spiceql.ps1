@@ -140,6 +140,7 @@ $linkProbeSource = Join-Path $BuildDir "spiceql-link-probe.cpp"
 $linkProbeObject = Join-Path $BuildDir "spiceql-link-probe.obj"
 $linkProbeExe = Join-Path $BuildDir "spiceql-link-probe.exe"
 $spiceqlIncludeDir = Join-Path $Prefix "include"
+$condaIncludeDir = Join-Path $Prefix "Library\include"
 @'
 #include <SpiceQL/api.h>
 
@@ -168,6 +169,7 @@ Invoke-CheckedCommand cl `
     /std:c++17 `
     /MD `
     "/I$spiceqlIncludeDir" `
+    "/I$condaIncludeDir" `
     /c `
     $linkProbeSource `
     "/Fo$linkProbeObject"

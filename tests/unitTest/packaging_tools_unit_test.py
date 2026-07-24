@@ -145,6 +145,11 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("SPICEQL_BUILD_TESTS=OFF", spiceql)
         self.assertIn("SpiceQL.dll", spiceql)
 
+        apply_script = (
+            PROJECT_ROOT / "ports" / "windows" / "isis" / "apply_patches.ps1"
+        ).read_text(encoding="utf-8")
+        self.assertIn("apply --unidiff-zero --check", apply_script)
+
         patch_paths = sorted(patch_dir.glob("*.patch"))
         self.assertEqual(len(patch_paths), 2)
         patches = [path.read_text(encoding="utf-8") for path in patch_paths]

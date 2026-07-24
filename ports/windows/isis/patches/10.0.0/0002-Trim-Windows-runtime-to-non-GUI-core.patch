@@ -21,8 +21,7 @@ diff --git a/isis/cmake/AddIsisModule.cmake b/isis/cmake/AddIsisModule.cmake
 index b7615f2df..b86714ac9 100644
 --- a/isis/cmake/AddIsisModule.cmake
 +++ b/isis/cmake/AddIsisModule.cmake
-@@ -217,7 +217,11 @@ function(add_isis_module name)
-
+@@ -219,3 +219,7 @@ function(add_isis_module name)
      # Start with the objs folder
      get_subdirectory_list(${objsDir} thisObjFolders)
 -    get_subdirectory_list(${appsDir} thisAppFolders)
@@ -31,14 +30,11 @@ index b7615f2df..b86714ac9 100644
 +    else()
 +      get_subdirectory_list(${appsDir} thisAppFolders)
 +    endif()
-     get_subdirectory_list(${tstsDir} thisTstFolders)
-
-     set(objFolders ${objFolders} ${thisObjFolders} ${thisAppFolders})
 diff --git a/isis/src/CMakeLists.txt b/isis/src/CMakeLists.txt
 index 475a3291a..4989f0a85 100644
 --- a/isis/src/CMakeLists.txt
 +++ b/isis/src/CMakeLists.txt
-@@ -1,5 +1,10 @@
+@@ -1,2 +1,7 @@
  #===============================================================================
 -set(CORE_LIST base database control qisis system socet dev)
 +if(MSVC)
@@ -47,57 +43,31 @@ index 475a3291a..4989f0a85 100644
 +else()
 +  set(CORE_LIST base database control qisis system socet dev)
 +endif()
-
- include_directories(".")
- get_subdirectory_list(${CMAKE_CURRENT_LIST_DIR} modules)
-@@ -15,6 +20,9 @@ foreach(core ${CORE_LIST})
- endforeach()
-
+@@ -17,1 +22,4 @@ foreach(core ${CORE_LIST})
  list(REMOVE_ITEM modules "${CMAKE_CURRENT_LIST_DIR}/core")
 +if(MSVC)
 +  list(REMOVE_ITEM modules "${CMAKE_CURRENT_LIST_DIR}/qisis")
 +endif()
-
- foreach( mod ${modules} )
-   string(REPLACE "${CMAKE_CURRENT_LIST_DIR}/" "" strippedmod ${mod})
 diff --git a/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.cpp b/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.cpp
 index c20009c86..3d5683f3e 100755
 --- a/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.cpp
 +++ b/isis/src/control/objs/BundleSolutionInfo/BundleSolutionInfo.cpp
-@@ -130,9 +130,11 @@ namespace Isis {
-
-   void BundleSolutionInfo::readBundleSolutionInfo(QXmlStreamReader *xmlReader) {
+@@ -132,4 +132,6 @@ namespace Isis {
      QString projectRoot;
 +#if !defined(_MSC_VER)
      if (m_xmlHandlerProject) {
        projectRoot = m_xmlHandlerProject->projectRoot() + "/";
      }
 +#endif
-     if (!m_adjustedImages){
-       m_adjustedImages = new QList<ImageList *>;
-     }
-@@ -297,6 +299,9 @@ namespace Isis {
-    */
-   void BundleSolutionInfo::updateFileName(Project *project) {
-
+@@ -300,1 +302,4 @@ namespace Isis {
 +#if defined(_MSC_VER)
 +    (void) project;
 +#else
      //TODO do we need to close anything here?
-
-     FileName oldInputFileName(*m_inputControlNetFileName);
-@@ -313,6 +318,7 @@ namespace Isis {
-     }
-     m_outputControl = new Control(newOutputFileName.expanded());
+@@ -315,1 +320,2 @@ namespace Isis {
      m_outputControlName = newOutputFileName.expanded();
 +#endif
-   }
-
-
-@@ -386,10 +392,14 @@ namespace Isis {
-    */
-   QString BundleSolutionInfo::outputControlNetFileName() const {
-
+@@ -389,4 +395,8 @@ namespace Isis {
 +#if defined(_MSC_VER)
 +    return m_outputControlName;
 +#else
@@ -106,28 +76,15 @@ index c20009c86..3d5683f3e 100755
      else
        return m_outputControlName;
 +#endif
-   }
-
-
-@@ -1998,6 +2008,11 @@ namespace Isis {
-   void BundleSolutionInfo::save(QXmlStreamWriter &stream, const Project *project,
-                                 FileName newProjectRoot) const {
-
+@@ -2001,1 +2011,6 @@ namespace Isis {
 +#if defined(_MSC_VER)
 +    (void) stream;
 +    (void) project;
 +    (void) newProjectRoot;
 +#else
      // This is done for testing serialization without a Project
-     QString relativePath;
-     QString relativeBundlePath;
-@@ -2114,6 +2129,7 @@ namespace Isis {
-     }
-
+@@ -2116,1 +2131,2 @@ namespace Isis {
      stream.writeEndElement(); //end bundleSolutionInfo
 +#endif
-   }
-
-
 -- 
 2.43.0

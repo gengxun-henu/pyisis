@@ -28,6 +28,6 @@ if ($patches.Count -eq 0) {
 
 foreach ($patch in $patches) {
     Write-Step "applying $($patch.Name)"
-    Invoke-CheckedCommand git -C $SourceDir apply --check $patch.FullName
-    Invoke-CheckedCommand git -C $SourceDir apply $patch.FullName
+    Invoke-CheckedCommand git -C $SourceDir apply --unidiff-zero --check $patch.FullName
+    Invoke-CheckedCommand git -C $SourceDir apply --unidiff-zero $patch.FullName
 }

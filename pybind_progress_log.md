@@ -2650,3 +2650,12 @@ Chandrayaan2TmcCamera
   通过（1项既有BundleResults copy测试跳过），smoke均通过。
 
 **Current 9-header batch:** 9/9 closed.
+
+### Final conda matrix residual（1 header closed）
+
+- 重新生成conda安装面矩阵后，`Statistics.h`因含`Q_OBJECT`仍被列为
+  `qt_observer_review`；ISIS 9/10安装头SHA-256实际完全一致。
+- 稳定数值、像素计数和PVL接口保持共享，QObject observer元数据继续不绑定。
+- ISIS 9/10的statistics与cube组合测试各57项通过，smoke均通过。
+
+**Current conda risk matrix:** 57/57 unique headers closed; 0 remaining.

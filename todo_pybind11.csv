@@ -297,7 +297,7 @@ Statistics,OverlapStatistics,已转换,2026-04-14 全部 23/23 方法已绑定 1
 Statistics,PrincipalComponentAnalysis,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露全部公开方法（TNT::Array2D 通过 2D list 适配）；focused 单测在 statistics_unit_test.py
 Statistics,QuickFilter,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露完整 QuickFilter 接口（add_line/remove_line/average/variance/count/set_min_max 等）；focused 单测在 tests/unitTest/filters_unit_test.py
 Statistics,StatCumProbDistDynCalc,未转换,Qt 类型/信号槽较多
-Statistics,Statistics,已转换,Qt 类型/信号槽较多
+Statistics,Statistics,已转换,2026-07-24 ISIS 9/10 安装头文本一致；稳定数值/PVL API 双版本通过，QObject observer 元数据有意排除
 Statistics,VecFilter,已转换,
 System,Environment,已转换,2026-07-24 ISIS 10-only ale_version 已条件导出；ISIS 9 保持属性缺席；双版本 focused 与 smoke 通过
 System,Plugin,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 通过稳定 wrapper 暴露构造/get_plugin；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号

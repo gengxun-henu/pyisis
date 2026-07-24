@@ -3,7 +3,7 @@ param(
     [string]$BuildDir,
     [string]$Prefix = $env:CONDA_PREFIX,
     [string]$Repository = "https://github.com/DOI-USGS/SpiceQL.git",
-    [string]$Ref = "1.3.0",
+    [string]$Ref = "1.4.1",
     [int]$Jobs = 2,
     [switch]$Force
 )
@@ -13,6 +13,7 @@ param(
 Require-Command git
 Require-Command cmake
 Require-Command ninja
+Require-Command dumpbin
 
 $repoRoot = Get-RepoRoot
 if (-not $SourceDir) {
@@ -87,13 +88,28 @@ $spiceqlBinDir = Join-Path $Prefix "bin"
 $spiceqlLibDir = Join-Path $Prefix "lib"
 New-Item -ItemType Directory -Force -Path $spiceqlBinDir, $spiceqlLibDir | Out-Null
 
-# SpiceQL 1.3.0 only declares a CMake LIBRARY install destination. MSVC
+# SpiceQL only declares a CMake LIBRARY install destination. MSVC
 # classifies the DLL and import library as RUNTIME and ARCHIVE artifacts, so
 # copy those two generated files when the upstream install rule omits them.
 $builtSpiceqlDll = Get-ChildItem -LiteralPath $BuildDir -Recurse -Filter "SpiceQL.dll" -File |
     Select-Object -First 1
 $builtSpiceqlLib = Get-ChildItem -LiteralPath $BuildDir -Recurse -Filter "SpiceQL.lib" -File |
     Select-Object -First 1
+if (-not $builtSpiceqlDll) {
+    Fail "SpiceQL DLL was not produced under $BuildDir"
+}
+if (-not $builtSpiceqlLib) {
+    Fail "SpiceQL import library was not produced under $BuildDir"
+}
+
+$spiceqlExports = & dumpbin /nologo /exports $builtSpiceqlDll.FullName
+if ($LASTEXITCODE -ne 0) {
+    Fail "dumpbin could not inspect SpiceQL exports"
+}
+if (-not ($spiceqlExports -match "strSclkToEt")) {
+    Fail "SpiceQL DLL does not export strSclkToEt"
+}
+
 if ($builtSpiceqlDll) {
     Copy-Item -LiteralPath $builtSpiceqlDll.FullName -Destination $spiceqlBinDir -Force
 }

@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-24
+Last Modified: 2026-07-25
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -19,6 +19,7 @@ Updated: 2026-07-23  Geng Xun covered versioned package and ISIS runtime checks 
 Updated: 2026-07-23  Geng Xun covered parameterized ISIS 9/10 Windows wheel builds.
 Updated: 2026-07-24  Geng Xun covered private Linux toolchain runtime packaging and the split ISIS 10 Windows patch queue.
 Updated: 2026-07-24  Geng Xun preserved qisis data objects and exported SpiceQL symbols on Windows.
+Updated: 2026-07-25  Geng Xun covered the ISIS 10 SpiceQL 1.4.1 dependency and export gate.
 """
 
 from __future__ import annotations
@@ -142,8 +143,11 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertTrue(spiceql_script.is_file())
         spiceql = spiceql_script.read_text(encoding="utf-8")
         self.assertIn("DOI-USGS/SpiceQL.git", spiceql)
+        self.assertIn('[string]$Ref = "1.4.1"', spiceql)
         self.assertIn("SPICEQL_BUILD_TESTS=OFF", spiceql)
         self.assertIn("SpiceQL.dll", spiceql)
+        self.assertIn("dumpbin /nologo /exports", spiceql)
+        self.assertIn("SpiceQL DLL does not export strSclkToEt", spiceql)
 
         apply_script = (
             PROJECT_ROOT / "ports" / "windows" / "isis" / "apply_patches.ps1"
@@ -166,15 +170,10 @@ class PackagingToolsUnitTest(unittest.TestCase):
 
         spiceql_patch = (
             WINDOWS_ISIS_PATCHES_DIR
-            / "spiceql-1.3.0"
-            / "0001-Fix-SpiceQL-1.3.0-MSVC-build.patch"
+            / "spiceql-1.4.1"
+            / "0001-Export-SpiceQL-symbols-on-Windows.patch"
         ).read_text(encoding="utf-8")
         self.assertIn("WINDOWS_EXPORT_ALL_SYMBOLS ON", spiceql_patch)
-        self.assertIn("SPICEQL_API __declspec(dllexport)", spiceql_patch)
-        self.assertIn(
-            "SPICEQL_API std::pair<double, nlohmann::json> strSclkToEt",
-            spiceql_patch,
-        )
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

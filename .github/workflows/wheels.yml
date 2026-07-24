@@ -531,10 +531,10 @@ jobs:
           "$prefix\Library\mingw-w64\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
           "$prefix\bin" | Out-File -FilePath $env:GITHUB_PATH -Append
 
-      - name: Activate MSVC and build SpiceQL 1.3.0
+      - name: Activate MSVC and build SpiceQL 1.4.1
         run: |
           . .\ports\windows\activate_msvc.ps1
-          .\ports\windows\isis\build_spiceql.ps1 -Ref 1.3.0 -Jobs 2
+          .\ports\windows\isis\build_spiceql.ps1 -Ref 1.4.1 -Jobs 2
 
       - name: Restore cached ISIS 10.0.0 Windows prefix
         id: windows-isis10-prefix-cache

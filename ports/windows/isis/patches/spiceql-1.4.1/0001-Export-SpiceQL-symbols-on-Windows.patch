@@ -1,0 +1,9 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b7c7e6b..04e33db 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -138,0 +139,4 @@
++  if(WIN32)
++    # Generate the import library required by downstream MSVC consumers.
++    set_target_properties(SpiceQL PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
++  endif()

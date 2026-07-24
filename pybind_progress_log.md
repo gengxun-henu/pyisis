@@ -2595,3 +2595,17 @@ Chandrayaan2TmcCamera
   （2项既有JP2不稳定行为测试跳过），smoke均通过。
 
 **Current 19-header batch:** 12/19 closed.
+
+### Projection and UniversalGroundMap batch（3 headers closed）
+
+- `Projection.h`与`TProjection.h`只删除未使用的`<string>` include，
+  公开投影声明和既有Python派生类接口不变。
+- ISIS 10的`UniversalGroundMap`新增`LocalRadius()`、`currentPriority()`
+  和`setPriority()`；已条件暴露为`local_radius()`、`current_priority()`
+  和接收`CameraPriority`枚举的`set_priority()`。
+- ISIS 9保持原有Python表面；ISIS 10新增接口在camera-backed和
+  projection-backed fixture上均完成覆盖。
+- ISIS 9/10的projection与UniversalGroundMap组合测试各87项通过，
+  smoke均通过。
+
+**Current 19-header batch:** 15/19 closed.

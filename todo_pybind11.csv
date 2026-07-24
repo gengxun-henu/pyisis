@@ -46,7 +46,7 @@ Geometry,Average,未转换,2026-04-23 inventory sync：与 Reduce 同头文件�
 Geometry,Stereo,已转换,2026-04-08 已在 src/base/bind_base_geometry.cpp 暴露 Stereo 构造与 elevation/spherical/rectangular 静态接口；新增 tests/unitTest/stereo_unit_test.py 与 smoke 覆盖
 Geometry,SurfacePoint,已转换,
 Geometry,Transform,已转换,已在 bind_base_geometry.cpp 暴露
-Geometry,UniversalGroundMap,已转换,抽象基类/纯虚接口；已导出基础符号
+Geometry,UniversalGroundMap,已转换,2026-07-24 ISIS 10新增local_radius/current_priority/set_priority已条件绑定并测试；ISIS 9表面不变
 High Level Cube I/O,ExportDescription,已转换,已在高层 cube io 绑定中导出
 High Level Cube I/O,ImageExporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露抽象基类；samples/lines/bands/input_minimum/input_maximum/set_output_pixel_range 方法
 High Level Cube I/O,ImageImporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露抽象基类；构造/import/特殊像素范围设置/维度访问/格式查询方法
@@ -117,14 +117,14 @@ Map Projection,Orthographic,已转换,"2026-04-12 完成全部公开方法绑定
 Map Projection,Planar,已转换,"2026-04-12 完成全部公开方法绑定（13/13 Y, 100%）"
 Map Projection,PointPerspective,已转换,"2026-04-12 完成全部公开方法绑定（11/11 Y, 100%）"
 Map Projection,PolarStereographic,已转换,"2026-04-12 完成全部公开方法绑定（11/11 Y, 100%）"
-Map Projection,Projection,已转换,抽象基类/纯虚接口；基础单测已补
+Map Projection,Projection,已转换,2026-07-24 ISIS 10仅删除未使用string include；公开投影API不变；双版本验证通过
 Map Projection,ProjectionFactory,已转换,工厂类，静态创建接口较多；基础单测已补
 Map Projection,RingCylindrical,已转换,"2026-04-12 完成全部公开方法绑定（14/14 Y, 100%）；第四批已补单测"
 Map Projection,RingPlaneProjection,已转换,抽象基类/纯虚接口
 Map Projection,Robinson,已转换,"2026-04-12 完成全部公开方法绑定（10/10 Y, 100%）"
 Map Projection,SimpleCylindrical,已转换,"2026-04-12 完成全部公开方法绑定（11/11 Y, 100%）；第四批已补单测"
 Map Projection,Sinusoidal,已转换,"2026-04-12 完成全部公开方法绑定（10/10 Y, 100%）"
-Map Projection,TProjection,已转换,抽象基类/纯虚接口
+Map Projection,TProjection,已转换,2026-07-24 ISIS 10仅删除未使用string include；公开投影API不变；双版本验证通过
 Map Projection,TransverseMercator,已转换,"2026-04-12 完成全部公开方法绑定（10/10 Y, 100%）"
 Map Projection,UpturnedEllipsoidTransverseAzimuthal,已转换,"2026-04-12 完成全部公开方法绑定（10/10 Y, 100%）"
 Map Projection,WorldMapper,已转换,抽象基类/纯虚接口

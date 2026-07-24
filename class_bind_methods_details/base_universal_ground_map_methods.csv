@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-UniversalGroundMap,Geometry,isis/src/base/objs/UniversalGroundMap/UniversalGroundMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,抽象基类/纯虚接口
+UniversalGroundMap,Geometry,isis/src/base/objs/UniversalGroundMap/UniversalGroundMap.h,N/A,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 10新增local_radius/current_priority/set_priority已条件绑定；ISIS 9表面不变；双版本projection/ground-map 87项及smoke通过
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,UniversalGroundMap,isis_pybind.UniversalGroundMap,Y,2026-04-11 台账同步；已在 bind_base_ground_map.cpp 暴露
@@ -15,6 +15,9 @@ Public API,double Line() const,isis_pybind.UniversalGroundMap.line,Y,2026-04-11 
 Mutation/Configuration,"bool SetImage(double sample, double line)",isis_pybind.UniversalGroundMap.set_image,Y,2026-04-11 台账同步；已在 bind_base_ground_map.cpp 暴露
 Public API,double UniversalLatitude() const,isis_pybind.UniversalGroundMap.universal_latitude,Y,2026-04-11 台账同步；已在 bind_base_ground_map.cpp 暴露
 Public API,double UniversalLongitude() const,isis_pybind.UniversalGroundMap.universal_longitude,Y,2026-04-11 台账同步；已在 bind_base_ground_map.cpp 暴露
+Public API,double LocalRadius() const,isis_pybind.UniversalGroundMap.local_radius,Y,2026-07-24 ISIS 10条件绑定；返回当前camera或projection的局部半径
+Query,int currentPriority(),isis_pybind.UniversalGroundMap.current_priority,Y,2026-07-24 ISIS 10条件绑定；适配为CameraPriority枚举
+Mutation/Configuration,void setPriority(int priority),isis_pybind.UniversalGroundMap.set_priority,Y,2026-07-24 ISIS 10条件绑定；Python接收CameraPriority枚举
 Public API,double Resolution() const,isis_pybind.UniversalGroundMap.resolution,Y,2026-04-11 台账同步；已在 bind_base_ground_map.cpp 暴露
 Public API,"bool GroundRange(Cube *cube, Latitude &minLat, Latitude &maxLat, Longitude &minLon, Longitude &maxLon, bool allowEstimation = true)",isis_pybind.UniversalGroundMap.ground_range,Y,2026-04-11 台账同步；已在 bind_base_ground_map.cpp 暴露
 Query,bool HasProjection() { return p_projection != 0,isis_pybind.UniversalGroundMap.has_projection,Y,2026-04-11 台账同步；已在 bind_base_ground_map.cpp 暴露

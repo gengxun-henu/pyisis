@@ -2625,3 +2625,14 @@ Chandrayaan2TmcCamera
   （1项插件环境跳过），smoke均通过。
 
 **Current 19-header batch:** 19/19 closed.
+
+### ISIS 10-only compatibility closure（3 headers closed）
+
+- `IProj.h`、`Chandrayaan2OhrcCamera.h`和
+  `Chandrayaan2TmcCamera.h`的当前安装头文件公开面已由既有
+  `src/bind_isis10.cpp`完整覆盖，并继续由`PYISIS_ISIS10_API`隔离。
+- ISIS 9验证这些符号不导出；ISIS 10验证全部7项专属API测试通过，
+  包括真实PROJ投影行为和两项线阵相机的继承关系；两版本smoke均通过。
+- ISIS 10新增候选台账已将三项从`candidate`收口为`complete`。
+
+**Current 9-header batch:** 3/9 closed.

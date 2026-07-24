@@ -624,6 +624,12 @@ if(PYISIS_HAS_EMBREE_SHAPE_MODEL)
   target_compile_definitions(_isis_core PRIVATE PYISIS_HAS_EMBREE_SHAPE_MODEL=1)
 endif()
 
+if(MSVC AND PYISIS_PCL_INCLUDE_DIR)
+  # Match the 32-byte Eigen alignment used by conda-forge's Windows PCL build
+  # without requiring AVX instructions from every wheel consumer.
+  target_compile_definitions(_isis_core PRIVATE EIGEN_MAX_ALIGN_BYTES=32)
+endif()
+
 if(NOT MSVC)
   set_source_files_properties(
     src/base/bind_base_shape.cpp

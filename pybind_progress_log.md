@@ -2659,3 +2659,16 @@ Chandrayaan2TmcCamera
 - ISIS 9/10的statistics与cube组合测试各57项通过，smoke均通过。
 
 **Current conda risk matrix:** 57/57 unique headers closed; 0 remaining.
+
+## Dual-version release preflight — 2026-07-24
+
+- 实际运行时导出面对比确认：ISIS 10新增6个类；这些类含30个构造/方法入口。
+  既有类新增15个可调用入口和2个枚举值，另有1个方法签名/返回值按版本变化；
+  ISIS 9已有Python类和方法没有被删除。
+- 发布/运行时配置测试66项通过。
+- `tools/packaging/basic_tests.txt`发布门槛在ISIS 9/10中各329项通过
+  （各1项既有expected failure），两版本smoke均通过。
+- 全仓库discovery还会混入图像匹配多进程、CLI错误路径和实验/E2E测试；
+  该混合运行的失败不作为wheel绑定发布门槛，相关测试应在其独立工作流处理。
+- 下一门槛是将分支合入`main`后运行四条wheel链，重点重新验证Windows
+  ISIS 10 prefix的SpiceQL/mgs链接。

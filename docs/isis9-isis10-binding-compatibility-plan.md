@@ -6,13 +6,16 @@ ISIS 9 与 ISIS 10 继续共用同一套 pybind11 主体源码。新比较结果
 “哪些现有绑定必须重新审计”，不等于为两个版本复制两套绑定，也不等于
 把所有变化头文件全部重写。
 
-当前绑定引用 381 个唯一 ISIS 头文件：
+当前绑定引用 384 个唯一 ISIS 头文件：
 
 - 328 个在 ISIS 9/10 中相同，维持共享实现；
-- 48 个声明有变化，需要逐项核对绑定实际使用的签名；
+- 48 个声明有变化，已逐项核对绑定实际使用的签名；
 - 1 个是 `Endian.h` 到 `IEndian.h` 的兼容性重命名；
-- 4 个只在 ISIS 10 中被当前源码引用；
+- 7 个只在 ISIS 10 中被当前源码引用；
 - 没有发现 ISIS 10 中缺失且无替代的当前绑定头文件。
+
+按“非文本一致或含Qt observer元数据”的conda风险口径，共57个唯一头文件；
+`reference/compatibility/isis9-isis10-binding-review.csv`已关闭57个，剩余0个。
 
 完整机械清单见
 `reference/compatibility/isis9-isis10-symbol-report.md`，本文件定义人工执行顺序
@@ -86,19 +89,17 @@ ISIS 10 声明、导出库、分类、代码改动、ISIS 9 测试和 ISIS 10 �
 
 ## 5. ISIS 10 新增绑定队列
 
-### 已有实现，需在正式 USGS 环境重建复核
+### 已完成并通过正式 USGS 环境复核
 
 - `IProj`
 - `Chandrayaan2OhrcCamera`
 - `Chandrayaan2TmcCamera`
+- `OsirisRexOcamsOpenCVDistortionMap`
+- `GdalIoHandler`
+- `ImageIoHandler`
 
-### 待实现或设计
-
-- `OsirisRexOcamsOpenCVDistortionMap`：优先直接绑定稳定数据和畸变计算接口。
-- `GdalIoHandler`、`ImageIoHandler`：先判断直接暴露底层 I/O handler
-  是否会把所有权和 GDAL 内部状态泄漏给 Python；必要时提供较窄 facade。
-- `csv2table`、`eisstitch`、`ocams2isis`：以 Python-friendly 应用函数
-  facade 暴露，不复制 ISIS CLI 参数解析。
+上述6个类共完成30个构造/方法入口。`csv2table`、`eisstitch`和
+`ocams2isis`属于后续APP facade范围，不阻塞当前核心绑定发布。
 
 ### 明确排除
 
@@ -109,14 +110,13 @@ ISIS 10 声明、导出库、分类、代码改动、ISIS 9 测试和 ISIS 10 �
 
 ## 6. 执行顺序与完成门槛
 
-1. 从 P0 开始，为 48 个变化头文件生成并填写逐项兼容台账。
-2. 每完成一组，分别在 `asp360_new`（ISIS 9）与 `asp370`（ISIS 10）
-   编译、import，并运行对应聚焦测试。
-3. P0/P1 关闭后，重建复核已有 3 个 ISIS 10 独有绑定。
-4. 实现其余 ISIS 10 新增能力，并完成版本门测试。
-5. 运行四条发布链；Windows ISIS 10 当前须先解决 ISIS prefix 的 SpiceQL
-   链接问题。
-6. 只有 Linux/Windows × ISIS 9/10 全部通过，才创建正式双版本 Release。
+1. [x] 为conda风险集合生成并填写逐项兼容台账，57/57关闭。
+2. [x] 在`asp360_new`（ISIS 9）与`asp370`（ISIS 10）完成编译、import、
+   分组测试和发布基本测试。
+3. [x] 完成6个ISIS 10专属类及版本门测试。
+4. [ ] 运行Linux/Windows × ISIS 9/10四条发布链。
+5. [ ] 解决或重新验证Windows ISIS 10 prefix的SpiceQL/mgs链接门槛。
+6. [ ] 四条流水线全部通过后，分别创建两个版本的GitHub prerelease。
 
 完成标准不是“所有差异都产生代码改动”，而是所有差异都有明确分类、需要
 修改的部分实现并通过双版本验证、不需修改的部分有可复核证据。

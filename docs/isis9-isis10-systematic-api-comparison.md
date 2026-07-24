@@ -50,9 +50,9 @@ ISIS 10 二进制所需的 `libcsmapi.so.3` 链接名。
 | `IProj.h` | `IProj` | 公共投影类 | 已绑定 |
 | `Chandrayaan2OhrcCamera.h` | `Chandrayaan2OhrcCamera` | 任务相机类 | 已绑定 |
 | `Chandrayaan2TmcCamera.h` | `Chandrayaan2TmcCamera` | 任务相机类 | 已绑定 |
-| `OsirisRexOcamsOpenCVDistortionMap.h` | OCAMS OpenCV 畸变模型 | 公共任务类 | 待绑定 |
-| `GdalIoHandler.h` | GDAL Cube I/O 后端 | 公共底层类 | 待设计 Python facade |
-| `ImageIoHandler.h` | 图像 I/O 抽象基类 | 公共抽象类 | 作为派生类基础按需注册 |
+| `OsirisRexOcamsOpenCVDistortionMap.h` | OCAMS OpenCV 畸变模型 | 公共任务类 | 已绑定 |
+| `GdalIoHandler.h` | GDAL Cube I/O 后端 | 公共底层类 | 已绑定 Python facade |
+| `ImageIoHandler.h` | 图像 I/O 抽象基类 | 公共抽象类 | 已注册安全共享接口 |
 | `csv2table.h` | `csv2table` | 应用函数 | 待设计 `UserInterface` facade |
 | `eisstitch.h` | `eisstitch` | Europa Clipper 应用函数 | 待绑定 |
 | `ocams2isis.h` | `ocams2isis` | OSIRIS-REx 应用函数 | 待绑定 |
@@ -76,6 +76,32 @@ ISIS 10 二进制所需的 `libcsmapi.so.3` 链接名。
 | `csv2table` | `libisis10.0.0.so` |
 | `eisstitch` | `libclipper.so` |
 | `ocams2isis` | `libosirisrex.so` |
+
+### 3.3 当前 Python 导出面的实际差异
+
+2026-07-24 使用 `asp360_new` 和 `asp370` 的实际 `_isis_core` 运行时快照
+对比，而不是从 C++ 头文件数量推断：
+
+- ISIS 10 新增 6 个 Python 类：
+  `IProj`、`Chandrayaan2OhrcCamera`、`Chandrayaan2TmcCamera`、
+  `OsirisRexOcamsOpenCVDistortionMap`、`ImageIoHandler` 和
+  `GdalIoHandler`。
+- 这 6 个类当前包含 30 个已绑定构造/方法入口；连同 6 个类符号，候选
+  detail 台账共有 36 个已完成条目。
+- 既有类新增 15 个可调用入口：`Blob` 2 个、`CubeAttributeOutput` 1 个、
+  `PvlKeyword` 5 个、`PvlContainer` 1 个构造入口、`Pvl` 2 个、
+  `Environment` 1 个、`UniversalGroundMap` 3 个。
+- 新增 2 个枚举值：`LabelAttachment.GdalLabel` 和 `Cube.Format.GTiff`。
+- `OsirisRexDistortionMap.set_distortion()`有 1 处版本化签名/返回值变化：
+  ISIS 10 的 filter 可省略且返回 `bool`，ISIS 9 保持必填 filter 和
+  `None` 返回。
+- ISIS 10 没有从当前 ISIS 9 Python 顶层导出面删除类，也没有删除既有类
+  的 Python 方法。
+
+因此按 Python 用户实际可调用的口径，当前为 **6 个新增类、45 个新增
+构造/方法入口、2 个新增枚举值、1 个变更方法**。`csv2table`、
+`eisstitch` 和 `ocams2isis` 是已发现但按当前范围尚未绑定的应用函数，
+不计入已发布 Python API。
 
 ## 4. 删除、重命名和过时内容
 
@@ -166,17 +192,17 @@ C++ 签名变化，因此仍必须依赖安装头文件和导出符号。
 
 ## 6. 对当前 PyISIS 绑定的直接影响
 
-当前绑定源码引用了 381 个唯一 ISIS 头文件：
+当前绑定源码引用了 384 个唯一 ISIS 头文件：
 
 | 当前绑定头文件状态 | 数量 |
 |---|---:|
 | ISIS 9/10 文本一致 | 328 |
 | 需要人工 API 复核 | 48 |
 | 已识别重命名 | 1 |
-| ISIS 9 缺失、ISIS 10 新增 | 4 |
+| ISIS 9 缺失、ISIS 10 新增 | 7 |
 | ISIS 10 缺失 | 0 |
 
-其中 4 个 ISIS 9 缺失项是三个已加入的 ISIS 10 类头和条件包含的
+其中 7 个 ISIS 9 缺失项是 6 个 ISIS 10 专属类头和条件包含的
 `IEndian.h`。当前没有发现“绑定源码引用的头文件在 ISIS 10 中完全无替代地
 消失”，这是双版本共用一套 binding 源码的重要正面结果。
 
@@ -190,9 +216,11 @@ C++ 签名变化，因此仍必须依赖安装头文件和导出符号。
 - OSIRIS-REx 相机与畸变模型；
 - Calculator/CubeCalculator 和 Qt 容器接口。
 
-逐 binding 文件影响见
-`reference/compatibility/isis9-isis10-symbol-report.md` 和
-`reference/compatibility/isis9-isis10-header-matrix.csv`。
+逐 binding 文件影响见当前 conda 安装面报告
+`reference/compatibility/isis9-isis10-conda-report.md`、矩阵
+`reference/compatibility/isis9-isis10-conda-header-matrix.csv`和人工闭环
+台账`reference/compatibility/isis9-isis10-binding-review.csv`。当前风险
+集合为57个唯一头文件，已关闭57个，剩余0个。
 
 ## 7. 官方 Changelog 与机械审计的对应关系
 
@@ -213,18 +241,14 @@ Changelog 用于解释“为什么变化”，安装 prefix 用于确认“实�
 
 ## 8. 后续绑定与兼容工作顺序
 
-1. 先逐项关闭当前绑定引用的 48 个变化头文件，优先处理
-   `QVector/QList`、`QPair/std::pair` 和 Qt 6 字符串变化。
-2. 对已经绑定的 `IProj`、Chandrayaan-2 两个相机类在 USGS 正式 ISIS 10
-   环境重新编译、导入和测试。
-3. 绑定 `OsirisRexOcamsOpenCVDistortionMap`。
-4. 为 `GdalIoHandler/ImageIoHandler` 设计避免裸指针和 Qt 所有权泄漏的
-   Python facade。
-5. 为 `csv2table`、`eisstitch`、`ocams2isis` 设计参数字典/路径 facade，
-   不直接暴露 `UserInterface&`。
-6. 明确排除 internal、placeholder 和第三方实现，不用无价值绑定凑数量。
-7. Linux ISIS 10 全部通过后，再用同一审计逻辑核对 Windows DLL/import
-   library；不能用 Linux `.so` 结果替代 Windows 验证。
+1. 当前绑定引用的57个conda风险头文件已全部关闭，继续保持人工台账与
+   prefix矩阵同步。
+2. 6个ISIS 10专属类已在正式USGS ISIS 10环境完成编译、导入和聚焦测试。
+3. `csv2table`、`eisstitch`、`ocams2isis`按既定范围留待后续APP facade
+   工作，不阻塞本轮核心绑定发布。
+4. 下一门槛是运行Linux/Windows × ISIS 9/10四条wheel构建和干净安装；
+   Windows结果必须来自真实DLL/import library，不能用Linux `.so`替代。
+5. 四条流水线全部通过后，再分别创建ISIS 9和ISIS 10 GitHub prerelease。
 
 ## 9. 重新生成
 

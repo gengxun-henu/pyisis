@@ -12,6 +12,7 @@ binding_project_dir="${PYISIS_BINDING_PROJECT_DIR:-.}"
 distribution_name="${PYISIS_DISTRIBUTION_NAME:-usgs-pyisis}"
 runtime_distribution="${PYISIS_RUNTIME_DISTRIBUTION:-usgs-pyisis-runtime-linux-x86_64}"
 package_version="${PYISIS_PACKAGE_VERSION:-1.3.0rc1}"
+vendor_toolchain_runtime="${PYISIS_VENDOR_TOOLCHAIN_RUNTIME:-OFF}"
 
 while [ "$#" -gt 0 ]; do
   case "$1" in
@@ -58,6 +59,10 @@ while [ "$#" -gt 0 ]; do
     --package-version)
       package_version="$2"
       shift 2
+      ;;
+    --vendor-toolchain-runtime)
+      vendor_toolchain_runtime="ON"
+      shift
       ;;
     *)
       echo "Unknown argument: $1" >&2
@@ -138,6 +143,10 @@ combined_wheel="$combined_dir/$(basename "$extension_wheel")"
   --output "$combined_wheel"
 
 runtime_lib="$runtime_stage_dir/src/pyisis_runtime/vendor/isis/lib"
+if [ "$vendor_toolchain_runtime" = "ON" ]; then
+  "$python_executable" tools/packaging/vendor_linux_toolchain_runtime.py \
+    --wheel "$combined_wheel"
+fi
 if [ "$platform_tag" = "linux_x86_64" ]; then
   "$python_executable" -c 'from pathlib import Path; import sys; Path(sys.argv[1]).unlink()' \
     "$extension_wheel"
@@ -145,11 +154,22 @@ if [ "$platform_tag" = "linux_x86_64" ]; then
     "$combined_wheel" \
     "$output_dir/$(basename "$combined_wheel")"
 else
-  repair_library_path="$runtime_lib:$PYISIS_DEP_PREFIX/lib"
-  LD_LIBRARY_PATH="$repair_library_path" auditwheel repair \
-    --plat "$platform_tag" \
-    --wheel-dir "$output_dir" \
-    "$combined_wheel"
+  if [ "$vendor_toolchain_runtime" = "ON" ]; then
+    retagged_wheel="$(
+      cd "$combined_dir"
+      "$python_executable" -m wheel tags \
+        --platform-tag "$platform_tag" \
+        --remove \
+        "$(basename "$combined_wheel")"
+    )"
+    mv "$combined_dir/$retagged_wheel" "$output_dir/$retagged_wheel"
+  else
+    repair_library_path="$runtime_lib:$PYISIS_DEP_PREFIX/lib"
+    LD_LIBRARY_PATH="$repair_library_path" auditwheel repair \
+      --plat "$platform_tag" \
+      --wheel-dir "$output_dir" \
+      "$combined_wheel"
+  fi
   "$python_executable" -c 'from pathlib import Path; import sys; Path(sys.argv[1]).unlink()' \
     "$extension_wheel"
 fi

@@ -260,7 +260,8 @@ jobs:
             --binding-project-dir packaging/bindings-isis10 \
             --distribution-name usgs-pyisis-isis10 \
             --runtime-distribution usgs-pyisis-runtime-isis10-linux-x86_64 \
-            --package-version 1.4.0rc1
+            --package-version 1.4.0rc1 \
+            --vendor-toolchain-runtime
 
       - name: Audit ISIS 10 Linux ABI and wheel policy
         shell: bash
@@ -269,20 +270,19 @@ jobs:
           mkdir -p "$ABI_REPORT_DIR"
           "$PYTHON_BIN" tools/packaging/audit_linux_wheelhouse.py \
             --wheelhouse "$WHEELHOUSE" \
-            --target-glibc 2.28 \
+            --target-glibc 2.35 \
             --require-target \
+            --wheel-pattern "usgs_pyisis_isis10-*.whl" \
             --report "$ABI_REPORT_DIR/glibc-symbol-report.json"
           native_wheel_count=0
           for wheel in "$WHEELHOUSE"/*-manylinux_2_35_x86_64.whl; do
             test -f "$wheel"
             native_wheel_count=$((native_wheel_count + 1))
             wheel_name="$(basename "$wheel" .whl)"
-            report="$ABI_REPORT_DIR/auditwheel-${wheel_name}.txt"
-            env -u LD_LIBRARY_PATH auditwheel show "$wheel" 2>&1 | tee "$report"
-            "$PYTHON_BIN" tools/packaging/validate_auditwheel_policy.py \
-              --report "$report" \
-              --target 2.35 \
-              --architecture x86_64
+            report="$ABI_REPORT_DIR/private-toolchain-${wheel_name}.txt"
+            "$PYTHON_BIN" tools/packaging/vendor_linux_toolchain_runtime.py \
+              --wheel "$wheel" \
+              --verify-only 2>&1 | tee "$report"
           done
           test "$native_wheel_count" -eq 1
 

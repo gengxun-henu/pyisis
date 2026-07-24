@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-23
+Last Modified: 2026-07-24
 Updated: 2026-06-18  Geng Xun added workflow coverage for pip wheel builds.
 Updated: 2026-06-19  Geng Xun added optional TestPyPI publish workflow coverage.
 Updated: 2026-07-22  Geng Xun required clean Windows wheels to run the basic binding test list.
@@ -13,6 +13,7 @@ Updated: 2026-07-23  Geng Xun gated GitHub Release publication on validated plat
 Updated: 2026-07-23  Geng Xun covered ISIS 10 cp313 manylinux build and clean-install jobs.
 Updated: 2026-07-23  Geng Xun covered measured ISIS 10 runtime size budgets.
 Updated: 2026-07-23  Geng Xun covered the ISIS 10 Windows source-build wheel gate.
+Updated: 2026-07-24  Geng Xun covered ISIS 10 private toolchain verification for Ubuntu 22.04 compatibility.
 """
 
 from __future__ import annotations
@@ -129,7 +130,7 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("env -u LD_LIBRARY_PATH auditwheel show", workflow)
         self.assertEqual(
             workflow.count("env -u LD_LIBRARY_PATH auditwheel show"),
-            2,
+            1,
         )
         self.assertIn("validate_auditwheel_policy.py", workflow)
         self.assertIn("test \"$native_wheel_count\" -eq 1", workflow)
@@ -164,6 +165,10 @@ class WheelWorkflowUnitTest(unittest.TestCase):
             'PYISIS_MAX_LINUX_RUNTIME_WHEEL_BYTES: "550000000"',
             workflow,
         )
+        self.assertIn("--vendor-toolchain-runtime", workflow)
+        self.assertIn("--target-glibc 2.35", workflow)
+        self.assertIn('--wheel-pattern "usgs_pyisis_isis10-*.whl"', workflow)
+        self.assertIn("--verify-only", workflow)
 
     def test_workflow_builds_and_tests_isis10_cp313_windows_wheels(self):
         workflow = self._workflow_text()

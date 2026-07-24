@@ -2,8 +2,9 @@
 
 Author: Geng Xun
 Created: 2026-07-23
-Last Modified: 2026-07-23
+Last Modified: 2026-07-24
 Updated: 2026-07-23  Geng Xun added streaming GLIBC policy audit coverage.
+Updated: 2026-07-24  Geng Xun added versioned ISIS distribution wheel selection.
 """
 
 from __future__ import annotations
@@ -97,6 +98,26 @@ class LinuxWheelAuditUnitTest(unittest.TestCase):
         encoded = json.dumps(report)
         self.assertTrue(report["target_met"])
         self.assertIn("necessary but not sufficient", encoded)
+
+    def test_versioned_isis_wheel_pattern_selects_isis10_distribution(self):
+        with TemporaryDirectory() as temp_dir:
+            wheelhouse = Path(temp_dir) / "wheelhouse"
+            wheelhouse.mkdir()
+            _write_wheel(
+                wheelhouse
+                / "usgs_pyisis_isis10-1.4.0rc1-cp313-cp313-manylinux_2_35_x86_64.whl",
+                {"isis_pybind/_isis_core.so": b"\x7fELF\x00GLIBC_2.34\x00"},
+            )
+
+            report = self.audit.audit_wheelhouse(
+                wheelhouse,
+                (2, 35),
+                require_target=True,
+                wheel_pattern="usgs_pyisis_isis10-*.whl",
+            )
+
+        self.assertTrue(report["target_met"])
+        self.assertEqual(report["maximum_glibc"], "2.34")
 
 
 if __name__ == "__main__":

@@ -107,8 +107,9 @@ def audit_wheelhouse(
     wheelhouse: Path,
     target_glibc: tuple[int, int],
     require_target: bool = False,
+    wheel_pattern: str = "usgs_pyisis-*.whl",
 ) -> dict[str, object]:
-    extension = inspect_wheel(_single_wheel(wheelhouse, "usgs_pyisis-*.whl"))
+    extension = inspect_wheel(_single_wheel(wheelhouse, wheel_pattern))
     wheels = (extension,)
     observed_versions = [
         _parse_version(wheel.maximum_glibc)
@@ -149,12 +150,14 @@ def main() -> int:
     parser.add_argument("--target-glibc", default="2.28")
     parser.add_argument("--report", required=True, type=Path)
     parser.add_argument("--require-target", action="store_true")
+    parser.add_argument("--wheel-pattern", default="usgs_pyisis-*.whl")
     args = parser.parse_args()
 
     report = audit_wheelhouse(
         args.wheelhouse.resolve(),
         _parse_version(args.target_glibc),
         require_target=args.require_target,
+        wheel_pattern=args.wheel_pattern,
     )
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")

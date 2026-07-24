@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-06-18
-Last Modified: 2026-07-23
+Last Modified: 2026-07-24
 Updated: 2026-06-18  Geng Xun added local wheel build and install verification coverage.
 Updated: 2026-06-19  Geng Xun added TestPyPI API token helper coverage.
 Updated: 2026-06-19  Geng Xun covered usgs-pyisis wheel distribution names.
@@ -17,6 +17,7 @@ Updated: 2026-07-23  Geng Xun covered Linux runtime size budgets and audited pla
 Updated: 2026-07-23  Geng Xun required PEP 639-capable setuptools for Windows wheel builds.
 Updated: 2026-07-23  Geng Xun covered versioned package and ISIS runtime checks during clean installs.
 Updated: 2026-07-23  Geng Xun covered parameterized ISIS 9/10 Windows wheel builds.
+Updated: 2026-07-24  Geng Xun covered private Linux toolchain runtime packaging and the split ISIS 10 Windows patch queue.
 """
 
 from __future__ import annotations
@@ -71,6 +72,9 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("--dependency-prefix", script)
         self.assertIn("--dependency-copy-mode closure", script)
         self.assertIn("build_linux_audit_bundle.py", script)
+        self.assertIn("vendor_linux_toolchain_runtime.py", script)
+        self.assertIn("--vendor-toolchain-runtime", script)
+        self.assertIn("wheel tags", script)
         self.assertIn("auditwheel repair", script)
         self.assertIn('PYISIS_LINUX_PLATFORM_TAG:-linux_x86_64', script)
         self.assertIn('--plat "$platform_tag"', script)
@@ -141,8 +145,10 @@ class PackagingToolsUnitTest(unittest.TestCase):
         self.assertIn("SpiceQL.dll", spiceql)
 
         patch_paths = sorted(patch_dir.glob("*.patch"))
-        self.assertEqual(len(patch_paths), 1)
-        self.assertIn("isis/src/core/src/Pvl.cpp", patch_paths[0].read_text(encoding="utf-8"))
+        self.assertEqual(len(patch_paths), 2)
+        patches = [path.read_text(encoding="utf-8") for path in patch_paths]
+        self.assertIn("isis/src/core/src/Pvl.cpp", patches[0])
+        self.assertIn("Trim Windows runtime to non-GUI core", patches[1])
 
     def test_clean_venv_install_script_installs_from_wheelhouse(self):
         self.assertTrue(TEST_WHEEL_INSTALL_SCRIPT.is_file())

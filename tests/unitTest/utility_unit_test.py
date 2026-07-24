@@ -3,7 +3,7 @@ Unit tests for ISIS utility classes: Column, Environment, IString, LineEquation
 
 Author: Geng Xun
 Created: 2026-03-24
-Last Modified: 2026-04-14
+Last Modified: 2026-07-24
 Updated: 2026-04-09  Geng Xun added Message namespace regression coverage for standardized ISIS text templates.
 Updated: 2026-04-09  Geng Xun added CollectorMap focused coverage for unique and duplicate key policies.
 Updated: 2026-04-09  Geng Xun added Plugin focused coverage for runtime plugin address resolution and failure paths.
@@ -12,6 +12,7 @@ Updated: 2026-04-09  Geng Xun added IString and free-function helpers (to_bool/t
 Updated: 2026-04-10  Geng Xun added Pixel, ID, EndianSwapper, and TextFile focused unit tests.
 Updated: 2026-04-10  Geng Xun aligned ID overflow expectations with upstream placeholder-width semantics.
 Updated: 2026-04-14  Geng Xun added EndianSwapper export_float, swap_uint32, swap_long_long, and error-path tests.
+Updated: 2026-07-24  Geng Xun added ISIS 10 ALE-version gating coverage.
 """
 import os
 import tempfile
@@ -345,6 +346,25 @@ class EnvironmentUnitTest(unittest.TestCase):
 
             with mock.patch.dict(os.environ, {"ISISROOT": temp_dir}, clear=False):
                 self.assertEqual(ip.Environment.isis_version(), "isis9.0.0 beta | 2026-04-08")
+
+    def test_ale_version_matches_runtime_major(self):
+        self.assertEqual(
+            hasattr(ip.Environment, "ale_version"),
+            ip.__isis_major__ >= 10,
+        )
+        if ip.__isis_major__ < 10:
+            return
+
+        with tempfile.TemporaryDirectory() as temp_dir:
+            version_path = os.path.join(temp_dir, "ale_version.txt")
+            with open(version_path, "w", encoding="utf-8") as version_file:
+                version_file.write("1.2.0 | test-build\n")
+
+            with mock.patch.dict(os.environ, {"ISISROOT": temp_dir}, clear=False):
+                self.assertEqual(
+                    ip.Environment.ale_version(),
+                    "1.2.0 | test-build",
+                )
 
 
 class LineEquationUnitTest(unittest.TestCase):

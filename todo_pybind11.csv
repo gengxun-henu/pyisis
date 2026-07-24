@@ -187,7 +187,7 @@ Near Earth Asteroid Rendezvous - Shoemaker,MsiCamera,已转换,2026-04-14 全部
 Messenger,MdisCamera,已转换,2026-04-14 全部 7/7 方法已绑定 100%；新增 Cube 构造函数/shutter_open_close_times 和全部 SPICE ID 方法
 Parsing,CSVReader,已转换,2026-04-09 已在 src/base/bind_base_filters.cpp 完成 CSVReader 全部 inventory helper 绑定；focused 单测在 tests/unitTest/filters_unit_test.py；smoke 已补符号
 Parsing,FileList,已转换,2026-04-09 已在 src/base/bind_base_support.cpp 通过稳定 wrapper 暴露文件/字符串 I/O helper；focused 单测在 tests/unitTest/support_unit_test.py；smoke 已补符号
-Parsing,FileName,已转换,2026-04-11 补 dir() 包装；createTempFile 之前已有；Data 内部类方法为 private 不绑定
+Parsing,FileName,已转换,2026-07-24 补共享 __eq__/__ne__ wrapper；采用 ISIS 10 canonical/expanded path 语义修复 ISIS 9 不存在同路径比较差异；Data private 接口不绑定
 Parsing,IString,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 暴露 IString 类与自由函数 to_bool/to_int/to_big_int/to_double/to_string；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Parsing,iTime,已转换,2026-04-11 全部方法已绑定（CurrentGMT/CurrentLocalTime 之前已有只是台账滞后）
 Parsing,LabelTranslationManager,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露抽象基类 auto_translate/parse_specification；Python 侧不可直接实例化；继承链 PvlTranslationTable->LabelTranslationManager 已正确注册
@@ -299,7 +299,7 @@ Statistics,QuickFilter,已转换,2026-03-26 已在 src/base/bind_base_filters.cp
 Statistics,StatCumProbDistDynCalc,未转换,Qt 类型/信号槽较多
 Statistics,Statistics,已转换,Qt 类型/信号槽较多
 Statistics,VecFilter,已转换,
-System,Environment,已转换,2026-04-08 已在 src/base/bind_base_utility.cpp 暴露静态环境查询接口并新增 focused 单测与 smoke 覆盖
+System,Environment,已转换,2026-07-24 ISIS 10-only ale_version 已条件导出；ISIS 9 保持属性缺席；双版本 focused 与 smoke 通过
 System,Plugin,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 通过稳定 wrapper 暴露构造/get_plugin；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Trace Gas Orbiter,TgoCassisCamera,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
 Trace Gas Orbiter,TgoCassisDistortionMap,已转换,"亦属 Spice, Instruments, and Cameras 相关类；相机模型/Spice 依赖"
@@ -337,7 +337,7 @@ Utility,ExportPdsTable,已转换,2026-04-12 已在 src/base/bind_base_pds_io.cpp
 Utility,GaussianStretch,已转换,2026-04-10 已在 src/bind_statistics.cpp 暴露 constructor(Histogram)/map；focused 单测在 camera_maps_unit_test.py；smoke 已补符号
 Utility,GSLUtility,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 GSLUtility（singleton getInstance/success/status）；focused 单测在 mosaic_bundle_image_polygon_utility_unit_test.py
 Utility,ID,已转换,2026-04-10 已在 src/base/bind_base_utility.cpp 暴露 ID 构造与 next() 方法；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
-Utility,IException,已转换,2026-05-03 已在 src/base/bind_base_support.cpp 补 `IException.error_type_to_string(...)` 静态 helper 与 focused 单测；IException 本体仍通过 py::register_exception 暴露为 Python 异常类
+Utility,IException,已转换,2026-07-24 ISIS 10 新增 length() 依赖 C++ 异常实例链；py::register_exception 不保留该实例，故有意排除并保持现有异常翻译契约
 Utility,ImportPdsTable,已转换,2026-04-11 全部方法已绑定（新增 getFormattedName）
 Utility,Kernels,已转换,2026-03-26 已在 src/base/bind_base_filters.cpp 暴露 Kernels 构造与核文件管理方法；focused 单测在 tests/unitTest/filters_unit_test.py
 Utility,Latitude,已转换,2026-07-24 ISIS 9/10兼容闭环：Latitude.h声明一致；双版本focused各6/6及smoke通过

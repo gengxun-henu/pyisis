@@ -3,9 +3,10 @@ Unit tests for ISIS support utility bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-05-03
+Last Modified: 2026-07-24
 Updated: 2026-04-09  Geng Xun added focused FileList regression coverage for file and string based list parsing.
 Updated: 2026-05-03  Geng Xun added IException static helper coverage.
+Updated: 2026-07-24  Geng Xun added cross-version FileName equality coverage.
 """
 
 import unittest
@@ -51,6 +52,14 @@ class FileNameAndITimeUnitTest(unittest.TestCase):
             file_name = ip.FileName(str(file_path))
             self.assertTrue(file_name.file_exists())
             self.assertEqual(file_name.original(), str(file_path))
+
+    def test_filename_equality_is_stable_across_isis_versions(self):
+        first = ip.FileName("/tmp/pyisis-equality.cub")
+        same = ip.FileName("/tmp/pyisis-equality.cub")
+        different = ip.FileName("/tmp/pyisis-other.cub")
+
+        self.assertEqual(first, same)
+        self.assertNotEqual(first, different)
 
     def test_itime_string_constructor_and_accessors(self):
         time_value = self._make_itime_or_skip("2001-01-02T03:04:05")

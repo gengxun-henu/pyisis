@@ -24,3 +24,4 @@ Public API,QString toString() const,isis_pybind.IException.toString,N,转字符�
 Public API,"QString toString(bool printFileInfo) const",isis_pybind.IException.toString,N,可选文件信息
 Public API,"void swap(IException &other)",isis_pybind.IException.swap,N,交换内部状态
 Public API,"IException &operator=(const IException &rhs)",isis_pybind.IException.__copy__,N,赋值运算符
+Public API,int length(),isis_pybind.IException.length,N,ISIS 10-only；py::register_exception 不保留可调用的 C++ 实例；避免为单一方法破坏异常翻译语义

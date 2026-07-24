@@ -24,6 +24,8 @@ Public API,bool fileExists() const,isis_pybind.FileName.file_exists,Y,Current Py
 Public API,QDir dir() const,isis_pybind.FileName.dir,Y,2026-04-11 已在 bind_base_support.cpp 通过 lambda 包装返回 string 路径
 Static/Factory,"static FileName createTempFile(FileName templateFileName = ""$TEMPORARY/temp"")",isis_pybind.FileName.create_temp_file,Y,2026-04-11 已在 bind_base_support.cpp 暴露为 create_temp_file
 Public API,QString toString() const,isis_pybind.FileName.to_string,Y,Current Python name
+Public API,bool operator==(const FileName &rhs),isis_pybind.FileName.__eq__,Y,2026-07-24 使用 ISIS 10 canonical/expanded path 语义的共享 wrapper；规避 ISIS 9 对不存在同路径返回 false
+Public API,bool operator!=(const FileName &rhs),isis_pybind.FileName.__ne__,Y,2026-07-24 共享 wrapper；为 __eq__ 的逻辑取反
 Public API,Data(),isis_pybind.FileName.data,N,Private inner class Data；不属于公开 API；不暴露
 Public API,Data(const Data &other),isis_pybind.FileName.data,N,Private inner class Data copy ctor；不属于公开 API；不暴露
 Public API,QString original(bool includeAttributes) const,isis_pybind.FileName.original,Y,Current Python name

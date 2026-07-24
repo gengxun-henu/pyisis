@@ -2506,3 +2506,20 @@ Chandrayaan2TmcCamera
   ISIS9为1项通过、6项按版本预期跳过，双版本smoke均通过。
 
 **Next:** ISIS 10-only类候选已完成；返回共享兼容队列并准备双版本发布门禁。
+
+## ISIS 9 / ISIS 10 Compatibility Continuation — 2026-07-24
+
+### Base utility batch: Environment, FileName, IException, SpecialPixel（4 headers closed）
+
+- `Environment.h`新增`aleVersion()`；仅ISIS 10导出`Environment.ale_version()`，
+  显式转换为Python字符串。
+- `FileName.h`把比较运算符从成员改为friend；聚焦测试进一步发现ISIS 9
+  对两个相同但不存在的路径返回false。Python `__eq__/__ne__`现统一采用
+  ISIS 10的canonical/expanded path算法。
+- `IException.h`新增`length()`，但现有`py::register_exception`不会保留
+  可调用的C++异常实例；为保持异常翻译稳定而明确排除。
+- `SpecialPixel.h`新增signed int32/int8存储常量；现有Python `Pixel`
+  使用稳定double哨兵与predicate，不零散增加仅ISIS 10常量。
+- 双版本重新构建成功；utility/support聚焦测试各133/133，smoke均通过。
+
+**Continuous goal:** 4/20 additional compatibility headers closed.

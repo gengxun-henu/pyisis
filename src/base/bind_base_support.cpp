@@ -3,6 +3,7 @@
 // Updated: 2026-04-09  Geng Xun added Progress py::class_ binding and IException::ErrorType enum
 // Updated: 2026-04-09  Geng Xun added stable FileList wrapper bindings with file and string I/O helpers.
 // Updated: 2026-05-03  Geng Xun exposed IException::errorTypeToString as a static helper.
+// Updated: 2026-07-24  Geng Xun added version-neutral FileName equality operators.
 // Purpose: pybind11 bindings for core ISIS support utilities including FileName, iTime, SerialNumber, SerialNumberList, ObservationNumber, Progress, and IException
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -37,6 +38,7 @@
 #include "IException.h"
 
 #include <QDir>
+#include <QFileInfo>
 #include "ObservationNumber.h"
 #include "Progress.h"
 #include "Pvl.h"
@@ -48,6 +50,18 @@
 namespace py = pybind11;
 
 namespace {
+
+bool fileNamesEqual(const Isis::FileName &left, const Isis::FileName &right) {
+  const QString leftExpanded = left.expanded();
+  const QString rightExpanded = right.expanded();
+  const QString leftCanonical = QFileInfo(leftExpanded).canonicalFilePath();
+  const QString rightCanonical = QFileInfo(rightExpanded).canonicalFilePath();
+
+  if (!leftCanonical.isEmpty()) {
+    return leftCanonical == rightCanonical;
+  }
+  return rightCanonical.isEmpty() && leftExpanded == rightExpanded;
+}
 
 class FileListWrapper {
   public:
@@ -241,7 +255,17 @@ void bind_base_support(py::module_ &m) {
       .def("__str__", [](const Isis::FileName &self) { return qStringToStdString(self.toString()); })
       .def("__repr__", [](const Isis::FileName &self) {
         return "FileName('" + qStringToStdString(self.toString()) + "')";
-      });
+      })
+      .def("__eq__",
+           [](const Isis::FileName &self, const Isis::FileName &other) {
+             return fileNamesEqual(self, other);
+           },
+           py::is_operator())
+      .def("__ne__",
+           [](const Isis::FileName &self, const Isis::FileName &other) {
+             return !fileNamesEqual(self, other);
+           },
+           py::is_operator());
 
       // Added: 2026-04-09 - expose FileList through a wrapper instead of directly
       // inheriting from QList<FileName> to keep Python-side ownership stable.

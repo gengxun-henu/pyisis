@@ -2,17 +2,20 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index 7bdc2ec..9124b7b 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
+@@ -136 +136,5 @@
+-  add_library(SpiceQL SHARED ${SPICEQL_SRC_FILES})
++  if(MSVC)
++    add_library(SpiceQL STATIC ${SPICEQL_SRC_FILES})
++  else()
++    add_library(SpiceQL SHARED ${SPICEQL_SRC_FILES})
++  endif()
 @@ -151,4 +151,4 @@ target_include_directories(SpiceQL
                              PRIVATE
                              ${CMAKE_CURRENT_SOURCE_DIR}/submodules/BTree/include/
 -                            cereal
 +                            ${CEREAL_INCLUDE_DIRS}
                              ${CSPICE_INCLUDE_DIRS}
-@@ -157,7 +157,23 @@ target_include_directories(SpiceQL
-+  set_target_properties(SpiceQL
-+                        PROPERTIES
-+                        WINDOWS_EXPORT_ALL_SYMBOLS ON)
-+
+@@ -157,7 +157,19 @@ target_include_directories(SpiceQL
 +  target_compile_options(SpiceQL
 +                         PRIVATE
 +                         $<$<CXX_COMPILER_ID:MSVC>:/FImsvc_compat.h>

@@ -1,9 +1,9 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Cube,Low Level Cube I/O,isis/src/base/objs/Cube/Cube.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp; isis_pybind_standalone/src/bind_cube.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Cube,Low Level Cube I/O,isis/src/base/objs/Cube/Cube.h,isis_pybind_standalone/src/bind_low_level_cube_io.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 ISIS 9/10兼容闭环；标签附着bool/enum差异在绑定边界归一化
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,Cube,isis_pybind.Cube,Y,Python class symbol is exported; Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
-Construction/Enum,"Format enum (Bsq, Tile)",isis_pybind.Cube.Format,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
+Construction/Enum,"Format enum (Bsq, Tile; ISIS 10: GTiff)",isis_pybind.Cube.Format,Y,Bsq/Tile双版本可用；GTiff仅ISIS 10导出
 Construction/Enum,Cube(),isis_pybind.Cube(),Y,Constructor is explicitly bound
 Public API,"void fromIsd(const FileName &fileName, Pvl &label, nlohmann::json &isd, QString access)",isis_pybind.Cube.from_isd,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
 Public API,"void fromIsd(const FileName &fileName, FileName &labelFile, FileName &isdFile, QString access)",isis_pybind.Cube.from_isd,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
@@ -12,7 +12,7 @@ Query,bool isOpen() const,isis_pybind.Cube.is_open,Y,已在 bind_low_level_cube_
 Query,bool isProjected() const,isis_pybind.Cube.is_projected,Y,已在 bind_low_level_cube_io.cpp 绑定
 Query,bool isReadOnly() const,isis_pybind.Cube.is_read_only,Y,已在 bind_low_level_cube_io.cpp 绑定
 Query,bool isReadWrite() const,isis_pybind.Cube.is_read_write,Y,已在 bind_low_level_cube_io.cpp 绑定
-Public API,bool labelsAttached() const,isis_pybind.Cube.labels_attached,Y,已在 bind_low_level_cube_io.cpp 绑定
+Public API,"ISIS 9: bool labelsAttached() const; ISIS 10: LabelAttachment labelsAttached() const",isis_pybind.Cube.labels_attached,Y,双版本稳定返回bool；label_attachment返回精确枚举
 Mutation/Configuration,void attachSpiceFromIsd(nlohmann::json Isd),isis_pybind.Cube.attach_spice_from_isd,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
 Mutation/Configuration,void attachLineScanTableFromIsd(nlohmann::json isd),isis_pybind.Cube.attach_line_scan_table_from_isd,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
 Read/Write IO,void close(bool remove = false),isis_pybind.Cube.close,Y,已在 bind_low_level_cube_io.cpp 绑定
@@ -41,7 +41,7 @@ Mutation/Configuration,void setByteOrder(ByteOrder byteOrder),isis_pybind.Cube.s
 Mutation/Configuration,"void setDimensions(int ns, int nl, int nb)",isis_pybind.Cube.set_dimensions,Y,已在 bind_low_level_cube_io.cpp 绑定
 Mutation/Configuration,void setExternalDnData(FileName cubeFileWithDnData),isis_pybind.Cube.set_external_dn_data,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
 Mutation/Configuration,void setFormat(Format format),isis_pybind.Cube.set_format,Y,已在 bind_low_level_cube_io.cpp 绑定
-Mutation/Configuration,void setLabelsAttached(bool attached),isis_pybind.Cube.set_labels_attached,Y,已在 bind_low_level_cube_io.cpp 绑定
+Mutation/Configuration,"ISIS 9: void setLabelsAttached(bool); ISIS 10: void setLabelsAttached(LabelAttachment)",isis_pybind.Cube.set_labels_attached,Y,双版本稳定接受bool；set_label_attachment接受精确枚举
 Mutation/Configuration,void setLabelSize(int labelBytes),isis_pybind.Cube.set_label_size,Y,已在 bind_low_level_cube_io.cpp 绑定
 Mutation/Configuration,void setPixelType(PixelType pixelType),isis_pybind.Cube.set_pixel_type,Y,已在 bind_low_level_cube_io.cpp 绑定
 Mutation/Configuration,void setVirtualBands(const QList<QString> &vbands),isis_pybind.Cube.set_virtual_bands,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
@@ -66,7 +66,7 @@ Public API,Projection *projection(),isis_pybind.Cube.projection,Y,已在 bind_lo
 Public API,int sampleCount() const,isis_pybind.Cube.sample_count,Y,已在 bind_low_level_cube_io.cpp 绑定
 Public API,"Statistics *statistics(const int &band = 1, QString msg = ""Gathering statistics"")",isis_pybind.Cube.statistics,Y,已在 bind_low_level_cube_io.cpp 绑定
 Public API,"Statistics *statistics(const int &band, const double &validMin, const double &validMax, QString msg = ""Gathering statistics"")",isis_pybind.Cube.statistics,Y,已在 bind_low_level_cube_io.cpp 绑定
-Public API,bool storesDnData() const,isis_pybind.Cube.stores_dn_data,Y,已在 bind_low_level_cube_io.cpp 绑定
+Public API,"ISIS 9: bool storesDnData() const; ISIS 10: removed",isis_pybind.Cube.stores_dn_data,Y,ISIS 10由LabelAttachment是否为ExternalLabel推导
 Mutation/Configuration,void addCachingAlgorithm(CubeCachingAlgorithm *),isis_pybind.Cube.add_caching_algorithm,N,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
 Mutation/Configuration,void clearIoCache(),isis_pybind.Cube.clear_io_cache,Y,已在 bind_low_level_cube_io.cpp 绑定
 Mutation/Configuration,"bool deleteBlob(QString BlobName, QString BlobType)",isis_pybind.Cube.delete_blob,Y,已在 bind_low_level_cube_io.cpp 绑定

@@ -1,9 +1,9 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-Chandrayaan2OhrcCamera,Chandrayaan-2,isis/src/chandrayaan2/objs/Chandrayaan2OhrcCamera/Chandrayaan2OhrcCamera.h,N/A,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,优先绑定；沿用现有 mission camera 的 Cube 生命周期与 SPICE ID 模式
+Chandrayaan2OhrcCamera,Chandrayaan-2,isis/src/chandrayaan2/objs/Chandrayaan2OhrcCamera/Chandrayaan2OhrcCamera.h,src/bind_isis10.cpp,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,已绑定；沿用 mission camera 的 Cube 生命周期与 SPICE ID 模式
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,Chandrayaan2OhrcCamera,isis_pybind.Chandrayaan2OhrcCamera,Y,ISIS 10-only binding; tested against asp370
-Construction/Enum,Chandrayaan2OhrcCamera(Cube &cube),isis_pybind.Chandrayaan2OhrcCamera(),Y,Bound with Cube keep-alive policy
+Class Symbol,Chandrayaan2OhrcCamera,isis_pybind.Chandrayaan2OhrcCamera,Y,ISIS 10-only binding; tested against the target ISIS 10 environment
+Construction/Enum,Chandrayaan2OhrcCamera(Cube &cube),isis_pybind.Chandrayaan2OhrcCamera(),Y,Bound with Cube keep_alive
 Public API,virtual int CkFrameId() const,isis_pybind.Chandrayaan2OhrcCamera.ck_frame_id,Y,Bound
 Public API,virtual int CkReferenceId() const,isis_pybind.Chandrayaan2OhrcCamera.ck_reference_id,Y,Bound
 Public API,virtual int SpkReferenceId() const,isis_pybind.Chandrayaan2OhrcCamera.spk_reference_id,Y,Bound

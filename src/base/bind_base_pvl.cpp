@@ -10,6 +10,7 @@
 // Updated: 2026-04-14  Geng Xun replaced the direct validate_pvl binding with an empty-template-safe wrapper to prevent PVL validation segfaults.
 // Updated: 2026-04-14  Geng Xun added Pvl set_format_template (2 overloads) and validate_pvl.
 // Updated: 2026-04-15  Geng Xun routed PvlGroup.validate_group through the same empty-template-safe wrapper used by validate_pvl.
+// Updated: 2026-07-24  Geng Xun exposed ISIS 10 Pvl JSON conversion and GDAL label reading behind the version capability gate.
 // Purpose: pybind11 bindings for ISIS PVL parsing and container classes including PvlKeyword, PvlContainer, PvlGroup, PvlObject, Pvl, PvlSequence, PvlToken, PvlTokenizer, PvlFormat, PvlFormatPds, PvlTranslationTable, LabelTranslationManager, PvlToPvlTranslationManager, PvlToXmlTranslationManager, and XmlToPvlTranslationManager
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -617,6 +618,19 @@ void bind_base_pvl(py::module_ &m) {
       .def("append",
            [](Isis::Pvl &self, const std::string &file_name) { self.append(stdStringToQString(file_name)); },
            py::arg("file_name"))
+#ifdef PYISIS_ISIS10_API
+      .def("to_json",
+           [](Isis::Pvl &self) {
+             return py::module_::import("json").attr("loads")(self.toJson().dump());
+           },
+           "Return the ISIS 10 ordered JSON label representation as Python containers.")
+      .def("read_gdal",
+           [](Isis::Pvl &self, const std::string &file_name) {
+             self.readGdal(stdStringToQString(file_name));
+           },
+           py::arg("file_name"),
+           "Read label metadata through the ISIS 10 GDAL-backed path.")
+#endif
       .def("set_terminator",
            [](Isis::Pvl &self, const std::string &terminator) { self.setTerminator(stdStringToQString(terminator)); },
            py::arg("terminator"))

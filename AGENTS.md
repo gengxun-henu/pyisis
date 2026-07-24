@@ -6,8 +6,9 @@ These instructions are the primary agent-facing guidance for this repository.
 They are written for Codex and other coding agents working in this checkout.
 
 This repository provides standalone pybind11 bindings and tests for exposing
-selected USGS ISIS 9.0.0 functionality to Python. The core deliverable is
-`isis_pybind._isis_core`, a pybind11 extension module.
+selected USGS ISIS functionality to Python. It currently maintains ISIS 9.0.0
+and ISIS 10.0.0 targets and must remain extensible to later ISIS releases. The
+core deliverable is `isis_pybind._isis_core`, a pybind11 extension module.
 
 All dependencies are managed via conda. Do not introduce pip/npm workflows
 unless the user explicitly asks for them.
@@ -29,15 +30,20 @@ unless the user explicitly asks for them.
 
 - Project type: C++/Python binding project for USGS ISIS.
 - Main extension module: `isis_pybind._isis_core`.
-- Conda environment: `asp360_new`.
+- ISIS 9.0.0 conda environment: `asp360_new`.
+- ISIS 10.0.0 conda environment: `asp370` (USGS
+  `isis 10.0.0 h1f94ec8_1`, CPython 3.13).
 - Built module:
   `build/python/isis_pybind/_isis_core.cpython-312-x86_64-linux-gnu.so`.
 - Mock ISISDATA path: `tests/data/isisdata/mockup`.
 
 ## Environment
 
-Use the Python interpreter and compiler from the `asp360_new` conda
-environment for build, test, and validation work.
+Use the Python interpreter and compiler from the target ISIS conda environment.
+Use `asp360_new` for the ISIS 9 baseline and shared compatibility work; use
+`asp370` for ISIS 10-specific compile, link, import, and behavior validation.
+Keep ISIS 10 on `csm 3.0.3.3`: unconstrained `csm 3.1.0` does not provide the
+`libcsmapi.so.3` ABI required by the official ISIS 10.0.0 binary.
 
 ```bash
 source $HOME/miniconda3/etc/profile.d/conda.sh
@@ -123,6 +129,39 @@ python examples/forward_intersection/forward_intersection.py \
   observer/event plumbing.
 - Add `#include <pybind11/pybind11.h>` and `#include <pybind11/stl.h>` when
   necessary.
+
+## ISIS Version Expansion Policy
+
+Before adding support for a new ISIS major or minor version, read and follow
+`docs/isis-version-expansion-policy.md`. This policy is mandatory for Codex,
+Claude Code, and other repository agents.
+
+Core requirements:
+
+- Record the exact upstream tag/commit and the exact conda package version,
+  build string, channel, subdir, and target platform. A semantic version alone
+  is not enough.
+- Treat the active conda prefix as the compile/link authority. Use the official
+  tag and `CHANGELOG.md` as important context, but do not assume they completely
+  describe channel-specific patches or the installed API.
+- Audit both directions: added, removed, renamed, and same-name changed headers.
+  Also compare public classes, inheritance, constructors, methods, free
+  functions, enums, default arguments, deprecation markers, application entry
+  points, and installed library exports.
+- Keep the automatically discovered raw diff separate from the curated binding
+  queue. Every discovered item must be classified as bind, compatibility-only,
+  replaced/renamed, internal/GUI/test-only, or blocked, with evidence and a
+  reason. "All new functionality complete" means no unclassified item remains;
+  it does not mean exposing unsafe third-party or internal APIs.
+- Verify declarations against exported symbols before binding. Check Linux
+  shared libraries and Windows DLL/import libraries independently.
+- Prefer shared binding sources for compatible APIs and use explicit
+  version-feature guards only for real API differences. Do not duplicate the
+  ISIS 9 binding tree just to create an ISIS 10 tree.
+- Do not publish a dual-version release until the required Linux/Windows ×
+  ISIS-version build, wheel-install, import, and focused-test matrix passes.
+  Release assets and reports must identify the ISIS version/build, OS,
+  architecture, Python ABI, and wheel hash.
 
 ## Git and Worktree Rules
 

@@ -3,7 +3,7 @@ Unit tests for ISIS PVL and PvlSequence bindings.
 
 Author: Geng Xun
 Created: 2026-03-21
-Last Modified: 2026-04-12
+Last Modified: 2026-07-24
 Updated: 2026-03-30  Geng Xun added PvlSequence regression coverage alongside core PVL keyword, group, object, and container tests.
 Updated: 2026-04-09  Geng Xun added PvlToken and PvlTokenizer focused unit tests.
 Updated: 2026-04-09  Geng Xun added PvlFormat, PvlTranslationTable, PvlFormatPds, PvlToPvlTranslationManager unit tests.
@@ -15,6 +15,7 @@ Updated: 2026-04-14  Geng Xun added focused Pvl set_format_template and validate
 Updated: 2026-04-10  Geng Xun aligned PVL helper test expectations with upstream ISIS behavior for empty units and PDS uppercase names.
 Updated: 2026-04-14  Geng Xun added regressions for set_format_template and empty-valued validate_pvl template keywords.
 Updated: 2026-04-15  Geng Xun added a regression ensuring PvlGroup.validate_group safely handles empty-valued template keywords.
+Updated: 2026-07-24  Geng Xun added ISIS 9/10 version-gated Pvl JSON and GDAL API coverage.
 """
 
 import unittest
@@ -81,6 +82,16 @@ class PvlUnitTest(unittest.TestCase):
             loaded = ip.Pvl(str(file_path))
             self.assertTrue(loaded.has_group("Instrument"))
             self.assertEqual(loaded.find_group("Instrument").find_keyword("InstrumentId")[0], "HIRISE")
+
+    def test_pvl_versioned_json_and_gdal_surface(self):
+        pvl = make_simple_pvl()
+        if hasattr(pvl, "to_json"):
+            json_label = pvl.to_json()
+            self.assertIsInstance(json_label, (dict, list))
+            self.assertTrue(json_label)
+            self.assertTrue(hasattr(pvl, "read_gdal"))
+        else:
+            self.assertFalse(hasattr(pvl, "read_gdal"))
 
     def test_pvl_set_format_template(self):
         """Test set_format_template with a Pvl object."""

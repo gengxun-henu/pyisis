@@ -14,4 +14,5 @@ dependencies:
   - auditwheel=6.7.0
   - patchelf
   - cxx-compiler=1.7.0
-  - isis=10.0.0
+  - csm=3.0.3.3
+  - isis=10.0.0=h1f94ec8_1

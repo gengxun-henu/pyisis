@@ -14,6 +14,7 @@ Updated: 2026-07-23  Geng Xun covered ISIS 10 cp313 manylinux build and clean-in
 Updated: 2026-07-23  Geng Xun covered measured ISIS 10 runtime size budgets.
 Updated: 2026-07-23  Geng Xun covered the ISIS 10 Windows source-build wheel gate.
 Updated: 2026-07-24  Geng Xun covered ISIS 10 private toolchain verification for Ubuntu 22.04 compatibility.
+Updated: 2026-07-24  Geng Xun pinned the official ISIS 10 build and compatible CSM ABI.
 """
 
 from __future__ import annotations
@@ -24,6 +25,9 @@ import unittest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 WHEEL_WORKFLOW = PROJECT_ROOT / ".github" / "workflows" / "wheels.yml"
+ISIS10_LINUX_ENV = (
+    PROJECT_ROOT / "ports" / "linux" / "env" / "pyisis-isis10-linux-64.yml"
+)
 
 
 class WheelWorkflowUnitTest(unittest.TestCase):
@@ -169,6 +173,13 @@ class WheelWorkflowUnitTest(unittest.TestCase):
         self.assertIn("--target-glibc 2.35", workflow)
         self.assertIn('--wheel-pattern "usgs_pyisis_isis10-*.whl"', workflow)
         self.assertIn("--verify-only", workflow)
+
+    def test_isis10_linux_environment_pins_official_runtime_abi(self):
+        environment = ISIS10_LINUX_ENV.read_text(encoding="utf-8")
+
+        self.assertIn("- python=3.13", environment)
+        self.assertIn("- isis=10.0.0=h1f94ec8_1", environment)
+        self.assertIn("- csm=3.0.3.3", environment)
 
     def test_workflow_builds_and_tests_isis10_cp313_windows_wheels(self):
         workflow = self._workflow_text()

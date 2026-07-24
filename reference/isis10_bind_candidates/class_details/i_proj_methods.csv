@@ -1,8 +1,8 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-IProj,Map Projection,isis/src/base/objs/IProj/IProj.h,N/A,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,优先绑定；复用现有 TProjection/Pvl 包装和 tuple 型 XYRange 返回值
+IProj,Map Projection,isis/src/base/objs/IProj/IProj.h,src/bind_isis10.cpp,Y = converted; N = not converted; Partial = partially converted,Unconverted entries use the proposed Python name,已绑定；复用 TProjection/Pvl 包装并以 tuple 返回 XYRange
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
-Class Symbol,IProj,isis_pybind.IProj,Y,ISIS 10-only binding; tested against asp370
+Class Symbol,IProj,isis_pybind.IProj,Y,ISIS 10-only binding; tested against the target ISIS 10 environment
 Construction/Enum,"IProj(Pvl &label, bool allowDefaults = false)",isis_pybind.IProj(),Y,Bound with Pvl reference and allow_defaults
 Public API,QString Name() const,isis_pybind.IProj.name,Y,Converted to Python str
 Public API,QString Version() const,isis_pybind.IProj.version,Y,Converted to Python str

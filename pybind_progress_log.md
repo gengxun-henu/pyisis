@@ -2339,3 +2339,76 @@ Chandrayaan2TmcCamera
 - `asp360_new`（ISIS 9.0.0/Python 3.12/Qt5）和
   `asp370`（ISIS 10.0.0/Python 3.13/Qt6）均完成重新编译；ISIS 10 聚焦测试
   3/3 通过。
+
+## ISIS 9/10 Compatibility Queue 1 — 2026-07-24
+
+**Queue:** Cube, CubeAttribute, Blob, Table, ProcessByBrick
+
+### Class 1: Cube（closed / shared-wrapper）
+
+- ISIS 10 将 `labelsAttached/setLabelsAttached` 从 `bool` 改为
+  `Cube::LabelAttachment`，删除 `storesDnData()`，并在 `Cube::Format`
+  增加 `GTiff`。
+- 保持 `labels_attached()` 返回 `bool`、`set_labels_attached(bool)` 接受
+  布尔值；新增 `label_attachment/set_label_attachment` 精确枚举接口。
+- ISIS 10的`stores_dn_data()`由`LabelAttachment != ExternalLabel`推导；
+  ISIS 9继续调用原方法。
+- ISIS 9和ISIS 10均重新构建成功；两边`cube_unit_test`各30/30通过，
+  `tests/smoke_import.py`均通过。
+- 兼容台账：`reference/compatibility/isis9-isis10-binding-review.csv`。
+
+### Class 2: CubeAttribute（closed / shared-wrapper）
+
+- ISIS 9的`LabelAttachmentEnumeration()`存在大小写归一化后仍比较混合大小写
+  `"External"`的问题；绑定层统一保证`External`字符串可跨版本解析。
+- ISIS 10新增`GdalLabel`、`Cube::Format::GTiff`与
+  `CubeAttributeOutput::propagateFileFormat()`；仅在ISIS 10导出。
+- 不为`+Gdal`属性字符串提供虚假兼容：ISIS 10上游解析器本身仍不接受该值。
+- ISIS 9和ISIS 10均增量重建成功；两边CubeAttribute聚焦测试各7/7通过，
+  `tests/smoke_import.py`均通过。
+
+### Class 3: Blob（closed / version-gated-addition）
+
+- 两版已有文件、bytes、label及缓冲区所有权接口签名保持兼容。
+- ISIS 10新增`Key()`与`StartByte()`，按版本暴露为`key()`和
+  `start_byte()`；正式环境确认key格式为`Blob_UnitTest`。
+- ISIS 10新增GDALDataset裸指针接口，且C++ `fstream`写入签名发生变化；
+  两者均不直接作为Python API暴露，避免形成不稳定的跨语言流契约。
+- ISIS 9和ISIS 10均增量重建成功；两边Blob聚焦测试各2/2通过，
+  `tests/smoke_import.py`均通过。
+
+### Class 4: Table（closed / shared-no-change）
+
+- ISIS 10只移除了ISIS 9的`Table()`无参构造；该构造原本未在Python绑定，
+  因此现有契约不受影响。`TableRecord.h`与`TableField.h`声明完全一致。
+- 审计发现详情台账明显落后于真实绑定：绝大多数Table公开方法早已导出。
+  本轮补齐`Table(Blob&)`与`to_blob()`，形成稳定的双向值语义往返。
+- ISIS 9和ISIS 10均增量重建成功；两边Table/TableRecord/TableField聚焦
+  测试各8/8通过，`tests/smoke_import.py`均通过。
+
+### Class 5: ProcessByBrick（closed / shared-no-change）
+
+- 唯一头文件差异位于QtConcurrent内部：ISIS 9使用`QFuture<void>`，
+  ISIS 10使用`QFuture<void*>`；公开配置方法及当前绑定引用的签名未变。
+- 无需增加版本分支。详情台账中多项已经绑定的方法仍被误记为N，本轮按
+  实际代码校正；模板实现内部语句不等同于可直接绑定的公开Python API。
+- Python回调式`StartProcess/ProcessCube*`仍是独立设计项，需要明确GIL、
+  Buffer生命周期和线程模型后再实现，不阻塞当前跨版本兼容闭环。
+- 两边`process_unit_test`各6/6通过，`tests/smoke_import.py`均通过。
+
+**Queue 1 closed. Next queue:** Pvl, PvlObject, PvlKeyword, PvlContainer
+
+## ISIS 9/10 Compatibility Queue 2 — 2026-07-24
+
+**Queue:** Pvl, PvlObject, PvlKeyword, PvlContainer
+
+### Class 1: Pvl（closed / version-gated-addition）
+
+- ISIS 10新增`toJson()`、`readGdal(path)`和递归`readObject(...)` helper。
+- `to_json()`将`ordered_json`序列化后交给Python标准库，返回原生
+  `dict/list`；`read_gdal(path)`按版本导出。
+- `readObject(PvlObject&, ordered_json)`是递归实现细节且采用引用out-param，
+  不作为用户级API直接暴露。
+- 双版本均重新构建成功；两边`PvlUnitTest`各17/17通过，smoke均通过。
+
+**Next:** PvlObject

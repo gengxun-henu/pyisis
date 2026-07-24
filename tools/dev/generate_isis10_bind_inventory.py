@@ -1,7 +1,9 @@
-"""Generate the curated ISIS 10-only pybind candidate inventory.
+"""Generate the complete installed-header diff and curated ISIS 10 inventory.
 
 Author: Geng Xun
 Created: 2026-07-23
+Updated: 2026-07-24  Geng Xun added automatic prefix diff and classification gates.
+Updated: 2026-07-24  Geng Xun aligned discovery with the official USGS ISIS 10 package.
 """
 
 from __future__ import annotations
@@ -56,6 +58,14 @@ class FunctionCandidate:
     reason: str
 
 
+@dataclass(frozen=True)
+class HeaderClassification:
+    kind: str
+    disposition: str
+    symbols: str
+    reason: str
+
+
 def _api(
     group: str,
     signature: str,
@@ -74,16 +84,16 @@ CLASS_CANDIDATES = (
         "isis/src/base/objs/IProj/IProj.h",
         "libisis",
         "Medium",
-        "优先绑定；复用现有 TProjection/Pvl 包装和 tuple 型 XYRange 返回值",
+        "已绑定；复用 TProjection/Pvl 包装并以 tuple 返回 XYRange",
         "通过 PROJ 支持通用投影，适用范围比新增任务专用类更广。",
         (
-            _api("Construction/Enum", "IProj(Pvl &label, bool allowDefaults = false)", "isis_pybind.IProj()"),
-            _api("Public API", "QString Name() const", "isis_pybind.IProj.name"),
-            _api("Public API", "QString Version() const", "isis_pybind.IProj.version"),
-            _api("Public API", "PvlGroup Mapping()", "isis_pybind.IProj.mapping"),
-            _api("Mutation/Configuration", "bool SetGround(double lat, double lon)", "isis_pybind.IProj.set_ground"),
-            _api("Mutation/Configuration", "bool SetCoordinate(double x, double y)", "isis_pybind.IProj.set_coordinate"),
-            _api("Public API", "bool XYRange(double &minX, double &maxX, double &minY, double &maxY)", "isis_pybind.IProj.xy_range", "建议返回 Python 4-tuple"),
+            _api("Construction/Enum", "IProj(Pvl &label, bool allowDefaults = false)", "isis_pybind.IProj()", "Bound with Pvl reference and allow_defaults"),
+            _api("Public API", "QString Name() const", "isis_pybind.IProj.name", "Converted to Python str"),
+            _api("Public API", "QString Version() const", "isis_pybind.IProj.version", "Converted to Python str"),
+            _api("Public API", "PvlGroup Mapping()", "isis_pybind.IProj.mapping", "Returns bound PvlGroup"),
+            _api("Mutation/Configuration", "bool SetGround(double lat, double lon)", "isis_pybind.IProj.set_ground", "Bound"),
+            _api("Mutation/Configuration", "bool SetCoordinate(double x, double y)", "isis_pybind.IProj.set_coordinate", "Bound"),
+            _api("Public API", "bool XYRange(double &minX, double &maxX, double &minY, double &maxY)", "isis_pybind.IProj.xy_range", "Returns Python 4-tuple and raises on failure"),
         ),
     ),
     ClassCandidate(
@@ -94,13 +104,13 @@ CLASS_CANDIDATES = (
         "isis/src/chandrayaan2/objs/Chandrayaan2OhrcCamera/Chandrayaan2OhrcCamera.h",
         "libChandrayaan2OhrcCamera",
         "Low",
-        "优先绑定；沿用现有 mission camera 的 Cube 生命周期与 SPICE ID 模式",
+        "已绑定；沿用 mission camera 的 Cube 生命周期与 SPICE ID 模式",
         "公开面小，可补齐 Chandrayaan-2 OHRC 几何模型。",
         (
-            _api("Construction/Enum", "Chandrayaan2OhrcCamera(Cube &cube)", "isis_pybind.Chandrayaan2OhrcCamera()"),
-            _api("Public API", "virtual int CkFrameId() const", "isis_pybind.Chandrayaan2OhrcCamera.ck_frame_id"),
-            _api("Public API", "virtual int CkReferenceId() const", "isis_pybind.Chandrayaan2OhrcCamera.ck_reference_id"),
-            _api("Public API", "virtual int SpkReferenceId() const", "isis_pybind.Chandrayaan2OhrcCamera.spk_reference_id"),
+            _api("Construction/Enum", "Chandrayaan2OhrcCamera(Cube &cube)", "isis_pybind.Chandrayaan2OhrcCamera()", "Bound with Cube keep_alive"),
+            _api("Public API", "virtual int CkFrameId() const", "isis_pybind.Chandrayaan2OhrcCamera.ck_frame_id", "Bound"),
+            _api("Public API", "virtual int CkReferenceId() const", "isis_pybind.Chandrayaan2OhrcCamera.ck_reference_id", "Bound"),
+            _api("Public API", "virtual int SpkReferenceId() const", "isis_pybind.Chandrayaan2OhrcCamera.spk_reference_id", "Bound"),
         ),
     ),
     ClassCandidate(
@@ -111,13 +121,13 @@ CLASS_CANDIDATES = (
         "isis/src/chandrayaan2/objs/Chandrayaan2TmcCamera/Chandrayaan2TmcCamera.h",
         "libChandrayaan2TmcCamera",
         "Low",
-        "优先绑定；沿用现有 mission camera 的 Cube 生命周期与 SPICE ID 模式",
+        "已绑定；沿用 mission camera 的 Cube 生命周期与 SPICE ID 模式",
         "公开面小，可补齐 Chandrayaan-2 TMC 几何模型。",
         (
-            _api("Construction/Enum", "Chandrayaan2TmcCamera(Cube &cube)", "isis_pybind.Chandrayaan2TmcCamera()"),
-            _api("Public API", "virtual int CkFrameId() const", "isis_pybind.Chandrayaan2TmcCamera.ck_frame_id"),
-            _api("Public API", "virtual int CkReferenceId() const", "isis_pybind.Chandrayaan2TmcCamera.ck_reference_id"),
-            _api("Public API", "virtual int SpkReferenceId() const", "isis_pybind.Chandrayaan2TmcCamera.spk_reference_id"),
+            _api("Construction/Enum", "Chandrayaan2TmcCamera(Cube &cube)", "isis_pybind.Chandrayaan2TmcCamera()", "Bound with Cube keep_alive"),
+            _api("Public API", "virtual int CkFrameId() const", "isis_pybind.Chandrayaan2TmcCamera.ck_frame_id", "Bound"),
+            _api("Public API", "virtual int CkReferenceId() const", "isis_pybind.Chandrayaan2TmcCamera.ck_reference_id", "Bound"),
+            _api("Public API", "virtual int SpkReferenceId() const", "isis_pybind.Chandrayaan2TmcCamera.spk_reference_id", "Bound"),
         ),
     ),
     ClassCandidate(
@@ -234,6 +244,97 @@ EXCLUDED_HEADERS = (
 )
 
 
+# This table classifies the automatically discovered installed-header diff.
+# It is intentionally separate from CLASS_CANDIDATES/FUNCTION_CANDIDATES:
+# discovery must remain complete even while detailed API review is unfinished.
+HEADER_CLASSIFICATIONS = {
+    "Chandrayaan2OhrcCamera.h": HeaderClassification(
+        "class",
+        "candidate",
+        "Chandrayaan2OhrcCamera",
+        "ISIS 10-only mission camera; first binding batch complete",
+    ),
+    "Chandrayaan2TmcCamera.h": HeaderClassification(
+        "class",
+        "candidate",
+        "Chandrayaan2TmcCamera",
+        "ISIS 10-only mission camera; first binding batch complete",
+    ),
+    "DskSegmentBuffer.hpp": HeaderClassification(
+        "internal",
+        "excluded",
+        "DskSegmentBuffer",
+        "Header marks this DSK mesh buffer internal; do not expose it as public API",
+    ),
+    "GdalIoHandler.h": HeaderClassification(
+        "class",
+        "candidate",
+        "GdalIoHandler",
+        "Public image-I/O class; raw GDAL and Qt ownership require a facade",
+    ),
+    "IEndian.h": HeaderClassification(
+        "compatibility",
+        "excluded",
+        "ByteOrder",
+        "Endian.h rename/compatibility surface already covered by the existing binding",
+    ),
+    "IProj.h": HeaderClassification(
+        "class",
+        "candidate",
+        "IProj",
+        "ISIS 10-only projection class; first binding batch complete",
+    ),
+    "ImageIoHandler.h": HeaderClassification(
+        "class",
+        "candidate",
+        "ImageIoHandler",
+        "Abstract image-I/O base; register only when required by a usable derived facade",
+    ),
+    "OsirisRexOcamsOpenCVDistortionMap.h": HeaderClassification(
+        "class",
+        "candidate",
+        "OsirisRexOcamsOpenCVDistortionMap",
+        "Public OCAMS OpenCV distortion model with mission-specific value",
+    ),
+    "RestfulSpice.h": HeaderClassification(
+        "placeholder",
+        "excluded",
+        "",
+        "Installed header contains no bindable public declaration",
+    ),
+    "csv2table.h": HeaderClassification(
+        "function",
+        "candidate",
+        "csv2table",
+        "Public application entry point; design a Python-friendly UserInterface facade",
+    ),
+    "eisstitch.h": HeaderClassification(
+        "function",
+        "candidate",
+        "eisstitch",
+        "Public Europa Clipper application entry point",
+    ),
+    "ocams2isis.h": HeaderClassification(
+        "function",
+        "candidate",
+        "ocams2isis",
+        "Public OSIRIS-REx ingestion entry point",
+    ),
+    "restincurl.h": HeaderClassification(
+        "internal",
+        "excluded",
+        "restincurl implementation types",
+        "Third-party HTTP implementation must not become public isis_pybind API",
+    ),
+}
+
+COMPLETE_CLASS_BINDINGS = {
+    "IProj",
+    "Chandrayaan2OhrcCamera",
+    "Chandrayaan2TmcCamera",
+}
+
+
 def _normalized(text: str) -> str:
     return re.sub(r"\s+", "", text)
 
@@ -245,6 +346,60 @@ def _camel_to_snake(name: str) -> str:
 
 def _header_path(root: Path, relative_header: str) -> Path:
     return root / relative_header
+
+
+def _installed_header_names(prefix: Path) -> set[str]:
+    header_dir = prefix / "include" / "isis"
+    if not header_dir.is_dir():
+        raise FileNotFoundError(f"ISIS include directory not found: {header_dir}")
+    return {
+        path.name
+        for path in header_dir.iterdir()
+        if path.is_file() and path.suffix in {".h", ".hpp"}
+    }
+
+
+def _discover_new_installed_headers(
+    isis9_prefix: Path, isis10_prefix: Path
+) -> list[str]:
+    return sorted(
+        _installed_header_names(isis10_prefix)
+        - _installed_header_names(isis9_prefix)
+    )
+
+
+def _validate_header_classifications(
+    discovered_headers: list[str],
+    classifications: dict[str, HeaderClassification],
+) -> None:
+    discovered = set(discovered_headers)
+    classified = set(classifications)
+    missing = sorted(discovered - classified)
+    stale = sorted(classified - discovered)
+    errors = []
+    if missing:
+        errors.append(f"Unclassified ISIS 10 headers: {', '.join(missing)}")
+    if stale:
+        errors.append(
+            "Classifications not present in installed ISIS 10 diff: "
+            + ", ".join(stale)
+        )
+    if errors:
+        raise ValueError("\n".join(errors))
+
+
+def _validate_candidate_installation(discovered_headers: list[str]) -> None:
+    discovered = set(discovered_headers)
+    candidate_headers = {
+        Path(candidate.header).name
+        for candidate in (*CLASS_CANDIDATES, *FUNCTION_CANDIDATES)
+    }
+    missing = sorted(candidate_headers - discovered)
+    if missing:
+        raise ValueError(
+            "Curated candidates not present in installed ISIS 10 diff: "
+            + ", ".join(missing)
+        )
 
 
 def _validate_candidates(isis9_root: Path, isis10_root: Path) -> None:
@@ -305,11 +460,19 @@ def _write_class_detail(output_dir: Path, candidate: ClassCandidate) -> str:
         )
         writer.writerow([])
         writer.writerow(["Group", "C++ Method/Content", "Python Class/Function Name", "Converted", "Notes"])
+        converted = "Y" if candidate.class_name in COMPLETE_CLASS_BINDINGS else "N"
+        class_note = (
+            "ISIS 10-only binding; tested against the target ISIS 10 environment"
+            if converted == "Y"
+            else candidate.reason
+        )
         writer.writerow(
-            ["Class Symbol", candidate.class_name, f"isis_pybind.{candidate.class_name}", "N", candidate.reason]
+            ["Class Symbol", candidate.class_name, f"isis_pybind.{candidate.class_name}", converted, class_note]
         )
         for item in candidate.api:
-            writer.writerow([item.group, item.cpp_signature, item.python_name, "N", item.note])
+            writer.writerow(
+                [item.group, item.cpp_signature, item.python_name, converted, item.note]
+            )
     return path.name
 
 
@@ -350,7 +513,11 @@ def _write_summary(
                     "Source": candidate.header,
                     "Installed in ISIS 10 Prefix": _is_prefix_installed(prefix, candidate.header),
                     "ISIS 9 Same Path": "no",
-                    "Current Binding": _current_binding(candidate.class_name),
+                    "Current Binding": (
+                        "ISIS 10-only (complete)"
+                        if candidate.class_name in COMPLETE_CLASS_BINDINGS
+                        else _current_binding(candidate.class_name)
+                    ),
                     "Public API Items": len(candidate.api),
                     "Runtime Library": candidate.runtime_library,
                     "Binding Risk": candidate.risk,
@@ -408,17 +575,50 @@ def _write_exclusions(output_dir: Path) -> None:
         writer.writerows(EXCLUDED_HEADERS)
 
 
+def _write_raw_header_diff(
+    output_dir: Path,
+    discovered_headers: list[str],
+    classifications: dict[str, HeaderClassification],
+) -> None:
+    fields = ["Header", "Kind", "Disposition", "Symbols", "Reason"]
+    with (output_dir / "raw_new_headers.csv").open(
+        "w", encoding="utf-8", newline=""
+    ) as stream:
+        writer = csv.DictWriter(stream, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        for header in discovered_headers:
+            classification = classifications[header]
+            writer.writerow(
+                {
+                    "Header": header,
+                    "Kind": classification.kind,
+                    "Disposition": classification.disposition,
+                    "Symbols": classification.symbols,
+                    "Reason": classification.reason,
+                }
+            )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Generate the curated ISIS 10-only class and function inventory."
     )
     parser.add_argument("--isis9-root", type=Path, default=DEFAULT_ISIS9_ROOT)
     parser.add_argument("--isis10-root", type=Path, default=DEFAULT_ISIS10_ROOT)
-    parser.add_argument("--isis10-prefix", type=Path)
+    parser.add_argument("--isis9-prefix", type=Path, required=True)
+    parser.add_argument("--isis10-prefix", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     args = parser.parse_args()
 
-    _validate_candidates(args.isis9_root, args.isis10_root)
+    discovered_headers = _discover_new_installed_headers(
+        args.isis9_prefix, args.isis10_prefix
+    )
+    _validate_header_classifications(
+        discovered_headers, HEADER_CLASSIFICATIONS
+    )
+    _validate_candidate_installation(discovered_headers)
+    if args.isis9_root.is_dir() and args.isis10_root.is_dir():
+        _validate_candidates(args.isis9_root, args.isis10_root)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     details = {
         candidate.class_name: _write_class_detail(args.output_dir, candidate)
@@ -427,8 +627,12 @@ def main() -> int:
     _write_summary(args.output_dir, args.isis10_prefix, details)
     _write_functions(args.output_dir, args.isis10_prefix)
     _write_exclusions(args.output_dir)
+    _write_raw_header_diff(
+        args.output_dir, discovered_headers, HEADER_CLASSIFICATIONS
+    )
     print(
-        f"wrote {len(CLASS_CANDIDATES)} class candidates and "
+        f"wrote {len(discovered_headers)} discovered headers, "
+        f"{len(CLASS_CANDIDATES)} class candidates and "
         f"{len(FUNCTION_CANDIDATES)} function candidates to {args.output_dir}"
     )
     return 0

@@ -14,6 +14,10 @@
 // Updated: 2026-04-12  Geng Xun exposed Buffer raw_buffer bytes plus BufferManager setpos/swap parity helpers.
 // Updated: 2026-06-18  Geng Xun fixed Buffer raw_buffer byte-size typing for MSVC builds.
 // Updated: 2026-07-23  Geng Xun added Endian/IEndian header compatibility for ISIS 9 and ISIS 10.
+// Updated: 2026-07-24  Geng Xun normalized Cube label-attachment behavior across ISIS 9 and ISIS 10.
+// Updated: 2026-07-24  Geng Xun normalized CubeAttribute label parsing and exposed ISIS 10 file-format propagation.
+// Updated: 2026-07-24  Geng Xun exposed ISIS 10 Blob key and start-byte metadata without changing the ISIS 9 surface.
+// Updated: 2026-07-24  Geng Xun completed the shared Table-to-Blob round-trip surface for ISIS 9 and ISIS 10.
 // Purpose: pybind11 bindings for low-level ISIS cube I/O types including Blob, OriginalLabel, RawCubeChunk, cache helpers, CubeAttribute helpers, Cube, buffers, managers, AlphaCube, table structures, and HiBlob
 
 // Copyright (c) 2026 Geng Xun, Henan University
@@ -364,6 +368,15 @@ void bind_low_level_cube_io(py::module_ &m) {
                     py::arg("attachment"));
      m.def("label_attachment_enumeration",
                     [](const std::string &attachment) {
+                         const QString normalized = stdStringToQString(attachment).toUpper();
+                         if (normalized == "EXTERNAL") {
+                              return PyExternalLabel;
+                         }
+#ifdef PYISIS_ISIS10_API
+                         if (normalized == "GDAL") {
+                              return PyGdalLabel;
+                         }
+#endif
                          return Isis::LabelAttachmentEnumeration(stdStringToQString(attachment));
                     },
                     py::arg("attachment"));
@@ -446,6 +459,9 @@ void bind_low_level_cube_io(py::module_ &m) {
                           "Construct an output attribute parser from a FileName.")
                .def("propagate_pixel_type", &Isis::CubeAttributeOutput::propagatePixelType)
                .def("propagate_minimum_maximum", &Isis::CubeAttributeOutput::propagateMinimumMaximum)
+#ifdef PYISIS_ISIS10_API
+               .def("propagate_file_format", &Isis::CubeAttributeOutput::propagateFileFormat)
+#endif
                .def("file_format", &Isis::CubeAttributeOutput::fileFormat)
                .def("file_format_string",
                           [](const Isis::CubeAttributeOutput &self) {
@@ -862,6 +878,10 @@ void bind_low_level_cube_io(py::module_ &m) {
                .def("__deepcopy__", [](const Isis::Blob &self, py::dict) { return Isis::Blob(self); }, py::arg("memo"))
                .def("type", [](const Isis::Blob &self) { return qStringToStdString(self.Type()); })
                .def("name", [](const Isis::Blob &self) { return qStringToStdString(self.Name()); })
+#ifdef PYISIS_ISIS10_API
+               .def("key", [](const Isis::Blob &self) { return qStringToStdString(self.Key()); })
+               .def("start_byte", &Isis::Blob::StartByte)
+#endif
                .def("size", &Isis::Blob::Size)
                .def("label",
                           [](Isis::Blob &self) -> Isis::PvlObject & { return self.Label(); },
@@ -1340,6 +1360,8 @@ void bind_low_level_cube_io(py::module_ &m) {
       .value("Bands", Isis::Table::Bands);
 
   table
+      .def(py::init<Isis::Blob &>(),
+           py::arg("blob"))
       .def(py::init([](const std::string &table_name, Isis::TableRecord &record) {
              return Isis::Table(stdStringToQString(table_name), record);
            }),
@@ -1401,6 +1423,7 @@ void bind_low_level_cube_io(py::module_ &m) {
       .def("update", &Isis::Table::Update, py::arg("record"), py::arg("index"))
       .def("delete", &Isis::Table::Delete, py::arg("index"))
       .def("clear", &Isis::Table::Clear)
+      .def("to_blob", &Isis::Table::toBlob)
       .def("to_string",
            [](const Isis::Table &self, const std::string &field_delimiter) {
              return qStringToStdString(Isis::Table::toString(self, stdStringToQString(field_delimiter)));
@@ -1423,7 +1446,11 @@ void bind_low_level_cube_io(py::module_ &m) {
 
   py::enum_<Isis::Cube::Format>(cube, "Format")
       .value("Bsq", Isis::Cube::Format::Bsq)
-      .value("Tile", Isis::Cube::Format::Tile);
+      .value("Tile", Isis::Cube::Format::Tile)
+#ifdef PYISIS_ISIS10_API
+      .value("GTiff", Isis::Cube::Format::GTiff)
+#endif
+      ;
 
   cube.def(py::init<>())
       .def(py::init([](const Isis::FileName &file_name, const std::string &access) {
@@ -1452,7 +1479,25 @@ void bind_low_level_cube_io(py::module_ &m) {
       .def("is_projected", &Isis::Cube::isProjected)
       .def("is_read_only", &Isis::Cube::isReadOnly)
       .def("is_read_write", &Isis::Cube::isReadWrite)
-      .def("labels_attached", &Isis::Cube::labelsAttached)
+      .def("labels_attached",
+           [](const Isis::Cube &self) {
+#ifdef PYISIS_ISIS10_API
+             return self.labelsAttached() == Isis::Cube::AttachedLabel;
+#else
+             return self.labelsAttached();
+#endif
+           })
+      .def("label_attachment",
+           [](const Isis::Cube &self) -> PyLabelAttachment {
+#ifdef PYISIS_ISIS10_API
+             return self.labelsAttached();
+#else
+             if (!self.storesDnData()) {
+               return PyExternalLabel;
+             }
+             return self.labelsAttached() ? PyAttachedLabel : PyDetachedLabel;
+#endif
+           })
       .def("sample_count", &Isis::Cube::sampleCount)
       .def("line_count", &Isis::Cube::lineCount)
       .def("band_count", &Isis::Cube::bandCount)
@@ -1475,7 +1520,28 @@ void bind_low_level_cube_io(py::module_ &m) {
       .def("byte_order", &Isis::Cube::byteOrder)
       .def("set_pixel_type", &Isis::Cube::setPixelType, py::arg("pixel_type"))
       .def("pixel_type", &Isis::Cube::pixelType)
-      .def("set_labels_attached", &Isis::Cube::setLabelsAttached, py::arg("attached"))
+      .def("set_labels_attached",
+           [](Isis::Cube &self, bool attached) {
+#ifdef PYISIS_ISIS10_API
+             self.setLabelsAttached(attached ? Isis::Cube::AttachedLabel : Isis::Cube::DetachedLabel);
+#else
+             self.setLabelsAttached(attached);
+#endif
+           },
+           py::arg("attached"))
+      .def("set_label_attachment",
+           [](Isis::Cube &self, PyLabelAttachment attachment) {
+#ifdef PYISIS_ISIS10_API
+             self.setLabelsAttached(attachment);
+#else
+             if (attachment == PyExternalLabel) {
+               throw py::value_error(
+                   "ISIS 9 cannot select ExternalLabel without an external DN data file");
+             }
+             self.setLabelsAttached(attachment == PyAttachedLabel);
+#endif
+           },
+           py::arg("attachment"))
       .def("set_label_size", &Isis::Cube::setLabelSize, py::arg("label_bytes"))
       .def("set_base_multiplier", &Isis::Cube::setBaseMultiplier, py::arg("base"), py::arg("multiplier"))
       .def("set_min_max", &Isis::Cube::setMinMax, py::arg("minimum"), py::arg("maximum"))

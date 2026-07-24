@@ -2,7 +2,7 @@
 
 Author: Geng Xun
 Created: 2026-04-03
-Last Modified: 2026-04-09
+Last Modified: 2026-07-24
 Updated: 2026-04-08  Geng Xun added focused low-level Cube I/O regression coverage for Blob file/bytes helpers alongside managers, pixel helpers, and table primitives.
 Updated: 2026-04-09  Geng Xun added CubeAttributeInput/Output and LabelAttachment focused tests.
 Updated: 2026-04-09  Geng Xun added TrackingTable focused unit tests.
@@ -18,6 +18,9 @@ Updated: 2026-04-09  Geng Xun added OriginalXmlLabel XML/blob/file round-trip co
 Updated: 2026-04-10  Geng Xun added HiBlob focused coverage testing constructor, repr, and Blobber inheritance.
 Updated: 2026-04-12  Geng Xun added focused Buffer raw_buffer and BufferManager setpos/swap regression coverage.
 Updated: 2026-07-23  Geng Xun allowed ISIS 10 to defer invalid input-band rejection until band parsing.
+Updated: 2026-07-24  Geng Xun added ISIS 9/10 CubeAttribute compatibility coverage.
+Updated: 2026-07-24  Geng Xun added version-gated ISIS 10 Blob metadata coverage.
+Updated: 2026-07-24  Geng Xun added shared Table-to-Blob round-trip coverage.
 """
 
 import unittest
@@ -109,6 +112,26 @@ End
             ip.label_attachment_enumeration("DETACHED"),
             ip.LabelAttachment.DetachedLabel,
         )
+        self.assertEqual(
+            ip.label_attachment_enumeration("External"),
+            ip.LabelAttachment.ExternalLabel,
+        )
+        self.assertEqual(
+            ip.label_attachment_name(ip.LabelAttachment.ExternalLabel),
+            "External",
+        )
+
+        if ip.__isis_major__ >= 10:
+            self.assertEqual(
+                ip.label_attachment_enumeration("gdal"),
+                ip.LabelAttachment.GdalLabel,
+            )
+            self.assertEqual(
+                ip.label_attachment_name(ip.LabelAttachment.GdalLabel),
+                "Gdal",
+            )
+        else:
+            self.assertFalse(hasattr(ip.LabelAttachment, "GdalLabel"))
 
     def test_cube_bsq_handler_updates_core_format_to_band_sequential(self):
         temp_dir_cm = temporary_directory()
@@ -285,6 +308,19 @@ End
         self.assertEqual(attributes.minimum(), 0.0)
         self.assertEqual(attributes.maximum(), 100.1)
         self.assertEqual(attributes.label_attachment(), ip.LabelAttachment.AttachedLabel)
+
+    def test_cube_attribute_output_versioned_file_format(self):
+        default_attributes = ip.CubeAttributeOutput()
+
+        if ip.__isis_major__ >= 10:
+            self.assertTrue(default_attributes.propagate_file_format())
+            attributes = ip.CubeAttributeOutput("+GTiff")
+            self.assertFalse(attributes.propagate_file_format())
+            self.assertEqual(attributes.file_format(), ip.Cube.Format.GTiff)
+            self.assertEqual(attributes.file_format_string(), "GTiff")
+        else:
+            self.assertFalse(hasattr(default_attributes, "propagate_file_format"))
+            self.assertFalse(hasattr(ip.Cube.Format, "GTiff"))
 
     def test_cube_attribute_output_mutators_follow_upstream_serialization(self):
         attributes = ip.CubeAttributeOutput()
@@ -756,6 +792,12 @@ End
         self.assertFalse(table.is_line_associated())
         self.assertIn("Value", table.to_string())
 
+        blob = table.to_blob()
+        restored = ip.Table(blob)
+        self.assertEqual(restored.name(), "Example")
+        self.assertEqual(restored.records(), 1)
+        self.assertEqual(restored[0]["Name"].value().rstrip("\x00"), "MARS")
+
         updated_record = ip.TableRecord()
         updated_value = ip.TableField("Value", ip.TableField.Type.Double)
         updated_value.set_value(7.5)
@@ -854,6 +896,14 @@ End
 
         self.assertFalse(ip.is_blob(ip.PvlObject("NotABlob")))
         self.assertTrue(ip.is_blob(ip.PvlObject("TABLE")))
+
+    def test_blob_versioned_storage_metadata(self):
+        blob = ip.Blob("UnitTest", "Blob")
+        if hasattr(blob, "key"):
+            self.assertEqual(blob.key(), "Blob_UnitTest")
+            self.assertIsInstance(blob.start_byte(), int)
+        else:
+            self.assertFalse(hasattr(blob, "start_byte"))
 
     def test_original_label_round_trip_from_pvl_blob_and_file(self):
         temp_dir_cm = temporary_directory()

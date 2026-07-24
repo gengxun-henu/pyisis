@@ -57,7 +57,7 @@ High Level Cube I/O,JP2Exporter,已转换,2026-04-11 已在 bind_high_level_cube
 High Level Cube I/O,JP2Importer,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露；继承 ImageImporter；构造/格式查询方法
 High Level Cube I/O,Process,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessByBoxcar,已转换,流程/回调接口较多
-High Level Cube I/O,ProcessByBrick,已转换,抽象基类/纯虚接口；流程/回调接口较多
+High Level Cube I/O,ProcessByBrick,已转换,2026-07-24 ISIS 9/10兼容闭环：唯一头文件差异是内部QtConcurrent QFuture<void>到QFuture<void*>，Python可见配置接口无变化；双版本process_unit_test各6/6及smoke通过；Python回调处理facade另行设计
 High Level Cube I/O,ProcessByLine,已转换,抽象基类/纯虚接口；流程/回调接口较多
 High Level Cube I/O,ProcessByQuickFilter,已转换,流程/回调接口较多
 High Level Cube I/O,ProcessBySample,已转换,流程/回调接口较多
@@ -82,14 +82,14 @@ High Level Cube I/O,TiffExporter,已转换,2026-04-11 已在 bind_high_level_cub
 High Level Cube I/O,TiffImporter,已转换,2026-04-11 已在 bind_high_level_cube_io.cpp 暴露构造函数、convertProjection、格式查询方法；继承 ImageImporter
 Low Level Cube I/O,AlphaCube,已转换,
 Low Level Cube I/O,BandManager,已转换,2026-03-21 已在 bind_low_level_cube_io.cpp 暴露构造与 set_band(...)
-Low Level Cube I/O,Blob,已转换,2026-04-08 已在 src/bind_low_level_cube_io.cpp 暴露稳定文件/bytes/label 接口与 is_blob helper，并补 focused 单测；默认构造与流式 read/write 后续补
+Low Level Cube I/O,Blob,已转换,2026-07-24 ISIS 9/10兼容闭环：共有文件/bytes/label接口保持不变；ISIS 10新增key/start_byte只读元数据；GDAL裸指针和C++流接口不直接暴露；双版本2项focused及smoke通过
 Low Level Cube I/O,Blobber,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露构造/metadata/load/deepcopy/二维索引接口，并顺带补 Cube.read_table()/write(Table) helper；focused 单测在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
 Low Level Cube I/O,BoxcarManager,已转换,2026-03-29 已在 bind_low_level_cube_io.cpp 暴露构造函数，继承 BufferManager 迭代方法
 Low Level Cube I/O,Brick,已转换,需注意内存生命周期与数据视图映射
 Low Level Cube I/O,Buffer,已转换,2026-04-12 已在 src/bind_low_level_cube_io.cpp 补 raw_buffer（返回 raw bytes 拷贝，避免悬垂视图）；focused 单测与 smoke 已通过
 Low Level Cube I/O,BufferManager,已转换,2026-04-12 已在 src/bind_low_level_cube_io.cpp 补 setpos upstream alias 与 swap；focused 单测与 smoke 已通过
-Low Level Cube I/O,Cube,已转换,Qt 类型/信号槽较多；需注意内存生命周期与数据视图映射
-Low Level Cube I/O,CubeAttribute,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露 LabelAttachment、CubeAttributeInput、CubeAttributeOutput 与属性字符串 helper，并补 focused 单测与 smoke 覆盖
+Low Level Cube I/O,Cube,已转换,2026-07-24 ISIS 9/10兼容闭环：保持labels_attached/set_labels_attached布尔契约，新增精确LabelAttachment接口，ISIS 10暴露GTiff；双版本30项测试和smoke通过
+Low Level Cube I/O,CubeAttribute,已转换,2026-07-24 ISIS 9/10兼容闭环：统一External字符串枚举转换；ISIS 10按版本暴露GdalLabel、GTiff与propagate_file_format；双版本各7项focused测试及smoke通过
 Low Level Cube I/O,CubeBsqHandler,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 通过安全 QFile-owned wrapper 暴露构造/update_labels；focused 单测在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
 Low Level Cube I/O,CubeCachingAlgorithm,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露抽象基类符号与 Python-friendly CacheResult；focused 单测在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
 Low Level Cube I/O,CubeIoHandler,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 通过安全 QFile-owned wrapper 暴露共享 read/write/cache/get_data_size/update_labels 表面；focused 单测在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
@@ -101,7 +101,7 @@ Low Level Cube I/O,Portal,已转换,需注意内存生命周期与数据视图�
 Low Level Cube I/O,RawCubeChunk,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露 RawCubeChunk 原始字节块访问/dirty 状态接口，并补 focused 单测与 smoke 覆盖
 Low Level Cube I/O,RegionalCachingAlgorithm,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 暴露 recommend_chunks_to_free，并补 focused 单测与 smoke 覆盖
 Low Level Cube I/O,SampleManager,已转换,
-Low Level Cube I/O,Table,已转换,需注意内存生命周期与数据视图映射
+Low Level Cube I/O,Table,已转换,2026-07-24 ISIS 9/10兼容闭环：ISIS 10仅移除未绑定的无参构造；补齐Table(Blob)与to_blob往返；其余公开表面共享；双版本8项focused及smoke通过
 Low Level Cube I/O,TableField,已转换,需注意内存生命周期与数据视图映射
 Low Level Cube I/O,TableRecord,已转换,需注意内存生命周期与数据视图映射
 Low Level Cube I/O,TrackingTable,已转换,2026-04-09 已在 src/bind_low_level_cube_io.cpp 完成全部公开方法绑定；focused 单测在 tests/unitTest/low_level_cube_io_unit_test.py；smoke 已补符号
@@ -191,7 +191,7 @@ Parsing,FileName,已转换,2026-04-11 补 dir() 包装；createTempFile 之前�
 Parsing,IString,已转换,2026-04-09 已在 src/base/bind_base_utility.cpp 暴露 IString 类与自由函数 to_bool/to_int/to_big_int/to_double/to_string；focused 单测在 tests/unitTest/utility_unit_test.py；smoke 已补符号
 Parsing,iTime,已转换,2026-04-11 全部方法已绑定（CurrentGMT/CurrentLocalTime 之前已有只是台账滞后）
 Parsing,LabelTranslationManager,已转换,2026-04-09 已在 src/base/bind_base_pvl.cpp 暴露抽象基类 auto_translate/parse_specification；Python 侧不可直接实例化；继承链 PvlTranslationTable->LabelTranslationManager 已正确注册
-Parsing,Pvl,已转换,2026-04-14 全部 11/11 方法已绑定 100%；新增 set_format_template/set_format_template_file/validate_pvl；validate_pvl 使用空模板关键字安全 wrapper 规避上游段错误
+Parsing,Pvl,已转换,2026-07-24 ISIS 9/10兼容闭环：ISIS 10新增to_json返回Python容器、read_gdal路径；内部readObject helper不直接暴露；双版本PvlUnitTest各17/17及smoke通过
 Parsing,PvlContainer,已转换,
 Parsing,PvlFormat,已转换,2026-04-12 已补 format_end(name, keyword)；当前暴露构造函数/add/set_char_limit/char_limit/format_value/format_name/format_end/format_eol/type/accuracy/add_quotes/is_single_unit；focused 单测在 pvl_unit_test.py；smoke 已补符号
 Parsing,PvlFormatPds,已转换,2026-04-12 已补 format_end(name, keyword)；继承 PvlFormat 暴露 PDS-specific 格式化接口与 CRLF format_eol；focused 单测在 pvl_unit_test.py；smoke 已补符号

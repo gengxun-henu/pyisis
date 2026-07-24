@@ -1,5 +1,5 @@
 Class,Module Category,Source,Binding,Status Legend,Python Naming Note,Class Note
-SerialNumberList,Control Networks,isis/src/base/objs/SerialNumberList/SerialNumberList.h,isis_pybind_standalone/src/base/bind_base_support.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,
+SerialNumberList,Control Networks,isis/src/base/objs/SerialNumberList/SerialNumberList.h,isis_pybind_standalone/src/base/bind_base_support.cpp,Y = converted; N = not converted; Partial = partially converted,Converted entries use the current Python name; unconverted entries use the proposed Python name,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；构造/增删/查询/索引接口双版本验证通过
 
 Group,C++ Method/Content,Python Class/Function Name,Converted,Notes
 Class Symbol,SerialNumberList,isis_pybind.SerialNumberList,Y,Python class symbol is exported from `bind_base_support.cpp`

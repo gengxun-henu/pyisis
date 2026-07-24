@@ -36,7 +36,7 @@ Control Networks,LidarControlPoint,已转换,2026-04-10 已在 src/control/bind_
 Control Networks,MeasureValidationResults,已转换,2026-03-21 已在 bind_control_core.cpp 暴露验证状态/失败消息/字符串格式化接口
 Control Networks,ObservationNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 possible_serial(...)
 Control Networks,SerialNumber,已转换,2026-03-21 已在 bind_base_support.cpp 暴露 compose(...) 与 compose_observation(...)
-Control Networks,SerialNumberList,已转换,2026-03-21 已在 bind_base_support.cpp 暴露构造/增删/查询/索引/观测号辅助接口
+Control Networks,SerialNumberList,已转换,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；构造/增删/查询/索引接口双版本验证通过
 Geometry,Enlarge,已转换,已在 bind_base_geometry.cpp 暴露
 Geometry,Intercept,已转换,2026-04-08 完成 Intercept 绑定 ctor 克隆路径与单元测试补充
 Geometry,Interpolator,已转换,已在 bind_base_geometry.cpp 暴露
@@ -247,8 +247,8 @@ SensorUtilities,RaDec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 ra/
 SensorUtilities,Sensor,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
 SensorUtilities,Shape,未转换,ISIS 同级 SensorUtilities 库；抽象基类/纯虚接口
 SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z/to_list；focused 单测在 sensor_utils_unit_test.py
-"Spice, Instruments, and Cameras",Camera,已转换,抽象基类/纯虚接口；相机模型/Spice 依赖；第五批已补基础单测；已通过 Sensor 继承暴露 get_surface_point() 以支撑 measure-level 几何链路
-"Spice, Instruments, and Cameras",CameraPointInfo,已转换,2026-04-08 已在 src/bind_camera.cpp 暴露 CameraPointInfo 全部公开入口，并补本地 mosrange focused 单测与 smoke 覆盖
+"Spice, Instruments, and Cameras",Camera,已转换,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；现有抽象基类与相机/Spice Python接口不变；双版本验证通过
+"Spice, Instruments, and Cameras",CameraPointInfo,已转换,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；全部公开入口及PvlGroup所有权策略双版本验证通过
 "Spice, Instruments, and Cameras",CameraDetectorMap,已转换,第六批已补基础单测（局部几何 round-trip / framing 失败路径）
 "Spice, Instruments, and Cameras",CameraDistortionMap,已转换,第七批已补基础单测（局部畸变正反变换）
 "Spice, Instruments, and Cameras",CameraFactory,已转换,2026-07-24 ISIS9/10兼容闭环；Cube 驱动 create/camera_version/init_plugin 双版本测试通过；ISIS10 新增 CSM ISD 工厂接口因 csm::Model 生命周期与插件依赖暂不暴露
@@ -263,7 +263,7 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",LightTimeCorrectionState,已转换,2026-04-09 已在 src/bind_camera.cpp 暴露构造函数/aberration_correction/swap_observer_target/light_time_to_surface；focused 单测在 sensor_utils_unit_test.py
 "Spice, Instruments, and Cameras",LineScanCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
 "Spice, Instruments, and Cameras",LineScanCameraDetectorMap,已转换,第七批已补基础单测（独立构造/时间参数）
-"Spice, Instruments, and Cameras",LineScanCameraGroundMap,已转换,第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测
+"Spice, Instruments, and Cameras",LineScanCameraGroundMap,已转换,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；符号导出稳定；仍缺少稳定本地line-scan cube行为测试
 "Spice, Instruments, and Cameras",LineScanCameraSkyMap,已转换,第七批已补符号导出；缺少稳定本地 line-scan cube，后续补行为单测
 "Spice, Instruments, and Cameras",PixelFOV,已转换,2026-04-10 已在 src/bind_camera.cpp 暴露默认构造/copy 构造/lat_lon_vertices；focused 单测在 image_overlap_camera_unit_test.py；smoke 已补符号
 "Spice, Instruments, and Cameras",PushFrameCamera,已转换,相机模型/Spice 依赖；后续建议补真实数据单测
@@ -285,7 +285,7 @@ SensorUtilities,Vec,已转换,2026-04-09 已在 src/bind_sensor.cpp 暴露 x/y/z
 "Spice, Instruments, and Cameras",Spice,已转换,2026-07-24 ISIS 9/10兼容闭环：当前Python仅依赖共有Spice(Cube)与访问器；ISIS 10新增构造/公开load未直接暴露；双版本camera_unit_test各9/9及smoke通过
 "Spice, Instruments, and Cameras",SpicePosition,已转换,2026-07-24 ISIS 9/10兼容闭环：SpicePosition.h公开声明一致；双版本spice_navigation测试各57/57及smoke通过
 "Spice, Instruments, and Cameras",SpiceRotation,已转换,2026-07-24 ISIS 9/10兼容闭环：差异仅为内部成员初始化/布局；双版本spice_navigation测试各57/57及smoke通过
-"Spice, Instruments, and Cameras",Target,已转换,2026-04-09 已在 src/base/bind_base_target.cpp 补齐 Target(Pvl&) 与 NAIF/frame/body-rotation accessor，并在 src/bind_camera.cpp 新增 Camera.target()；显式 Spice* API 仍因无 Python Spice 绑定而保留未覆盖
+"Spice, Instruments, and Cameras",Target,已转换,2026-07-24 当前conda安装面ISIS 9/10头文件文本一致；Target与Camera.target接口双版本验证通过；显式Spice*边界继续保留
 "Spice, Instruments, and Cameras",VariableLineScanCameraDetectorMap,已转换,2026-04-10 已在 src/bind_camera_maps.cpp 暴露 set_parent/set_detector/exposure_duration
 Statistics,FourierTransform,已转换,2026-04-10 已在 src/base/bind_base_math.cpp 暴露 FourierTransform 构造/transform/inverse/helper 方法；focused 单测在 tests/unitTest/math_unit_test.py；smoke 已补符号
 Statistics,GaussianDistribution,已转换,2026-04-11 全部方法已绑定（StandardDeviation 之前已有只是台账滞后）

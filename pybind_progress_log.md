@@ -2568,3 +2568,16 @@ Chandrayaan2TmcCamera
   （含1项既有expected failure），smoke均通过。
 
 **Continuous goal:** 20/20 additional compatibility headers closed; pause for user review.
+
+### Refreshed camera/support batch（6 headers closed）
+
+- 重新对当前`asp360_new`与`asp370`安装头文件运行审计后，
+  `Camera.h`、`CameraPointInfo.h`、`CSMCamera.h`、
+  `LineScanCameraGroundMap.h`、`SerialNumberList.h`和`Target.h`
+  均从待复核变为文本一致。
+- 现有Camera层级、campt风格查询、序列号列表和Target接口无需代码分支；
+  `LineScanCameraGroundMap`仍保留“缺少稳定line-scan fixture”的测试边界。
+- ISIS 9/10的camera、camera maps、serial number和target/shape组合测试
+  各70项通过（1项环境依赖跳过），smoke均通过。
+
+**Current 19-header batch:** 6/19 closed.
